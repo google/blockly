@@ -17,6 +17,7 @@ const path = require('path');
 const {execSync} = require('child_process');
 const rimraf = require('rimraf');
 
+const buildTasks = require('./build_tasks');
 const {BUILD_DIR, RELEASE_DIR} = require('./config');
 
 const runMochaTestsInBrowser =
@@ -328,14 +329,6 @@ function node() {
   return runTestCommand('mocha tests/node --config tests/node/.mocharc.js');
 }
 
-/**
- * Attempt advanced compilation of a Blockly app.
- * @return {Promise} asynchronous result
- */
-function advancedCompile() {
-  return runTestCommand('npm run only:compile:advanced');
-}
-
 
 // Run all tests in sequence.
 const test = new Tester([
@@ -346,7 +339,7 @@ const test = new Tester([
   mocha,
   generators,
   node,
-  advancedCompile,
+  buildTasks.onlyBuildAdvancedCompilationTest,
 ]).asTask();
 
 

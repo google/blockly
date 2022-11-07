@@ -42,7 +42,6 @@
     "lint:fix": "eslint . --fix",
     "langfiles": "gulp langfiles",
     "minify": "gulp minify",
-    "only:compile:advanced": "gulp onlyBuildAdvancedCompilationTest --debug",
     "package": "gulp package",
     "postinstall": "patch-package",
     "prepare": "gulp prepare",

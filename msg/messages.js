@@ -1678,4 +1678,4 @@ Blockly.Msg.SEARCH = 'Search';
 Blockly.Msg.NEW_TAB = 'New tab';
 
 /** @type {string} */
-Blockly.Msg.OPTION_VALUE_REMOVED = 'Value removed';
+Blockly.Msg.OPTION_VALUE_REMOVED = 'Value was removed';

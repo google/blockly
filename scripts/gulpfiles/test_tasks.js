@@ -9,6 +9,7 @@
  */
 /* eslint-env node */
 
+const asyncDone = require('async-done');
 const gulp = require('gulp');
 const gzip = require('gulp-gzip');
 const fs = require('fs');
@@ -34,31 +35,33 @@ const ANSI_RESET = '\x1b[0m';
 let failerCount = 0;
 
 /**
- * Helper method for running test code block.
+ * Helper method for running test tasks.
  * @param {string} id test id
- * @param {function} block test code block
+ * @param {function} task Any gulp task
  * @return {Promise} asynchronous result
  */
-function runTestBlock(id, block) {
-  return new Promise((resolve) => {
-    console.log('=======================================');
-    console.log(`== ${id}`);
-    if (process.env.CI) console.log('::group::');
-    block()
-      .then((result) => {
-        if (process.env.CI) console.log('::endgroup::');
-        console.log(`${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${id}`);
-        resolve(result);
-      })
-      .catch((err) => {
-        failerCount++;
-        console.error(err.message);
-        if (process.env.CI) console.log('::endgroup::');
-        console.log(`${BOLD_RED}FAILED:${ANSI_RESET} ${id}`);
-        // Always continue.
-        resolve(err);
+async function runTestTask(id, task) {
+  console.log('=======================================');
+  console.log(`== ${id}`);
+  if (process.env.CI) console.log('::group::');
+
+  try {
+    try {
+      await new Promise((resolve, reject) => {
+        asyncDone(task, (error, result) => {
+          if (error) reject(error);
+          resolve(result);
+        });
       });
-  });
+    } finally {
+      if (process.env.CI) console.log('::endgroup::');
+    }
+    console.log(`${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${id}`);
+  } catch (error) {
+    failerCount++;
+    console.error(error.message);
+    console.log(`${BOLD_RED}FAILED:${ANSI_RESET} ${id}`);
+  }
 }
 
 /**
@@ -68,7 +71,7 @@ function runTestBlock(id, block) {
  * @return {Promise} asynchronous result
  */
 function runTestCommand(id, command) {
-  return runTestBlock(id, async() => {
+  return runTestTask(id, async() => {
     return execSync(command, {stdio: 'inherit'});
   }, false);
 }
@@ -166,7 +169,7 @@ function zippingFiles() {
  * @return {Promise} asynchronous result
  */
 function metadata() {
-  return runTestBlock('metadata', async() => {
+  return runTestTask('metadata', async() => {
     // Zipping the compressed files.
     await zippingFiles();
     // Read expected size from script.
@@ -200,7 +203,7 @@ function metadata() {
  * @return {Promise} asynchronous result
  */
 function mocha() {
-  return runTestBlock('mocha', async() => {
+  return runTestTask('mocha', async() => {
     const result =  await runMochaTestsInBrowser().catch(e => {
       throw e;
     });
@@ -265,7 +268,7 @@ function checkResult(suffix) {
  * @return {Promise} asynchronous result
  */
 function generators() {
-  return runTestBlock('generators', async() => {
+  return runTestTask('generators', async() => {
     // Clean up.
     rimraf.sync(OUTPUT_DIR);
     fs.mkdirSync(OUTPUT_DIR);

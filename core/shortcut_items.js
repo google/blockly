@@ -24,6 +24,7 @@ const {Gesture} = goog.require('Blockly.Gesture');
 const {ICopyable} = goog.requireType('Blockly.ICopyable');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
+const {ModuleBar} = goog.require('Blockly.ModuleBar');
 
 
 /**
@@ -40,6 +41,7 @@ const names = {
   UNDO: 'undo',
   REDO: 'redo',
   DUPLICATE: 'duplicate',
+  NEW_MODULE: 'new module',
 };
 exports.names = names;
 
@@ -322,6 +324,32 @@ const registerRedo = function() {
 exports.registerRedo = registerRedo;
 
 /**
+ * Keyboard shortcut to create new module.
+ * @alias Blockly.ShortcutItems.registerNewModule
+ */
+ const registerNewModule = function() {
+  /** @type {!ShortcutRegistry.KeyboardShortcut} */
+  const newModuleAction = {
+    name: names.NEW_MODULE,
+    preconditionFn: function(workspace) {
+      return !workspace.options.readOnly;
+    },
+    callback: function(workspace) {
+      workspace.hideChaff();
+      workspace.moduleBar_.handleCreateModule_();
+
+      return true;
+    },
+  };
+  ShortcutRegistry.registry.register(newModuleAction);
+
+  const ctrlT = ShortcutRegistry.registry.createSerializedKey(
+    KeyCodes.T, [KeyCodes.CTRL]);
+  ShortcutRegistry.registry.addKeyMapping(ctrlT, newModuleAction.name);
+};
+exports.registerNewModule = registerNewModule;
+
+/**
  * Registers all default keyboard shortcut item. This should be called once per
  * instance of KeyboardShortcutRegistry.
  * @alias Blockly.ShortcutItems.registerDefaultShortcuts
@@ -336,6 +364,7 @@ const registerDefaultShortcuts = function() {
   registerPaste();
   registerUndo();
   registerRedo();
+  registerNewModule();
 };
 exports.registerDefaultShortcuts = registerDefaultShortcuts;
 

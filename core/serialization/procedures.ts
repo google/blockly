@@ -10,7 +10,7 @@ import type {ISerializer} from '../interfaces/i_serializer.js';
 import {ObservableProcedureModel} from '../procedures/observable_procedure_model.js';
 import {ObservableParameterModel} from '../procedures/observable_parameter_model.js';
 import * as priorities from './priorities.js';
-import * as serializationRegistry from './registry.js';
+// import * as serializationRegistry from './registry.js';
 import type {Workspace} from '../workspace.js';
 
 

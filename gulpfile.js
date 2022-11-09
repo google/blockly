@@ -19,6 +19,7 @@ const licenseTasks = require('./scripts/gulpfiles/license_tasks');
 const appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
 const releaseTasks = require('./scripts/gulpfiles/release_tasks');
 const cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
+const docsTasks = require('./scripts/gulpfiles/docs_tasks');
 const testTasks = require('./scripts/gulpfiles/test_tasks');
 
 module.exports = {
@@ -50,6 +51,7 @@ module.exports = {
   testGenerators: testTasks.generators,
   buildAdvancedCompilationTest: buildTasks.buildAdvancedCompilationTest,
   gitCreateRC: gitTasks.createRC,
+  docs: docsTasks.docs,
   
   // Targets intended only for invocation by scripts; may omit prerequisites.
   onlyBuildAdvancedCompilationTest: buildTasks.onlyBuildAdvancedCompilationTest,

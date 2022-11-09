@@ -5,10 +5,13 @@
  */
 
 import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
+import {triggerProceduresUpdate} from './update_procedures.js';
 import type {Workspace} from '../workspace.js';
+import {IProcedureMap} from '../interfaces/i_procedure_map.js';
 
 
-export class ObservableProcedureMap extends Map<string, IProcedureModel> {
+export class ObservableProcedureMap extends
+    Map<string, IProcedureModel> implements IProcedureMap {
   constructor(private readonly workspace: Workspace) {
     super();
   }
@@ -17,7 +20,7 @@ export class ObservableProcedureMap extends Map<string, IProcedureModel> {
    * Adds the given procedure model to the procedure map.
    */
   override set(id: string, proc: IProcedureModel): this {
-    // TODO(#6156): Fire events.
+    // TODO(#6516): Fire events.
     super.set(id, proc);
     return this;
   }
@@ -27,16 +30,19 @@ export class ObservableProcedureMap extends Map<string, IProcedureModel> {
    * exists).
    */
   override delete(id: string): boolean {
-    // TODO(#6156): Fire events.
-    return super.delete(id);
+    // TODO(#6516): Fire events.
+    const existed = super.delete(id);
+    triggerProceduresUpdate(this.workspace);
+    return existed;
   }
 
   /**
    * Removes all ProcedureModels from the procedure map.
    */
   override clear() {
-    // TODO(#6156): Fire events.
+    // TODO(#6516): Fire events.
     super.clear();
+    triggerProceduresUpdate(this.workspace);
   }
 
   /**
@@ -44,7 +50,15 @@ export class ObservableProcedureMap extends Map<string, IProcedureModel> {
    * blocks can find it.
    */
   add(proc: IProcedureModel): this {
-    // TODO(#6156): Fire events.
+    // TODO(#6516): Fire events.
+    // TODO(#6526): See if this method is actually useful.
     return this.set(proc.getId(), proc);
+  }
+
+  /**
+   * Returns all of the procedures stored in this map.
+   */
+  getProcedures(): IProcedureModel[] {
+    return [...this.values()];
   }
 }

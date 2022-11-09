@@ -28,5 +28,5 @@ export interface IASTNodeLocationWithBlock extends IASTNodeLocation {
    *
    * @returns The source block.
    */
-  getSourceBlock(): Block;
+  getSourceBlock(): Block|null;
 }

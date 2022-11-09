@@ -30,10 +30,10 @@ import {Svg} from './utils/svg.js';
  * @alias Blockly.Warning
  */
 export class Warning extends Icon {
-  private text_: {[key: string]: string};
+  private text: {[key: string]: string};
 
   /** The top-level node of the warning text, or null if not created. */
-  private paragraphElement_: SVGTextElement|null = null;
+  private paragraphElement: SVGTextElement|null = null;
 
   /** Does this icon get hidden when the block is collapsed? */
   override collapseHidden = false;
@@ -42,8 +42,8 @@ export class Warning extends Icon {
   constructor(block: BlockSvg) {
     super(block);
     this.createIcon();
-    // The text_ object can contain multiple warnings.
-    this.text_ = Object.create(null);
+    // The text object can contain multiple warnings.
+    this.text = Object.create(null);
   }
 
   /**
@@ -91,27 +91,27 @@ export class Warning extends Icon {
     eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
         this.getBlock(), visible, 'warning'));
     if (visible) {
-      this.createBubble_();
+      this.createBubble();
     } else {
-      this.disposeBubble_();
+      this.disposeBubble();
     }
   }
 
   /** Show the bubble. */
-  private createBubble_() {
-    this.paragraphElement_ = Bubble.textToDom(this.getText());
+  private createBubble() {
+    this.paragraphElement = Bubble.textToDom(this.getText());
     this.bubble_ = Bubble.createNonEditableBubble(
-        this.paragraphElement_, this.getBlock(), this.iconXY_ as Coordinate);
+        this.paragraphElement, this.getBlock(), this.iconXY_ as Coordinate);
     this.applyColour();
   }
 
   /** Dispose of the bubble and references to it. */
-  private disposeBubble_() {
+  private disposeBubble() {
     if (this.bubble_) {
       this.bubble_.dispose();
       this.bubble_ = null;
     }
-    this.paragraphElement_ = null;
+    this.paragraphElement = null;
   }
 
   /**
@@ -122,13 +122,13 @@ export class Warning extends Icon {
    *     warnings.
    */
   setText(text: string, id: string) {
-    if (this.text_[id] === text) {
+    if (this.text[id] === text) {
       return;
     }
     if (text) {
-      this.text_[id] = text;
+      this.text[id] = text;
     } else {
-      delete this.text_[id];
+      delete this.text[id];
     }
     if (this.isVisible()) {
       this.setVisible(false);
@@ -143,8 +143,8 @@ export class Warning extends Icon {
    */
   getText(): string {
     const allWarnings = [];
-    for (const id in this.text_) {
-      allWarnings.push(this.text_[id]);
+    for (const id in this.text) {
+      allWarnings.push(this.text[id]);
     }
     return allWarnings.join('\n');
   }

@@ -21,6 +21,12 @@ goog.declareModuleId('Blockly.serialization.priorities');
  * @alias Blockly.serialization.priorities.VARIABLES
  */
 export const VARIABLES = 100;
+
+/**
+ * The priority for deserializing variable data.
+ */
+export const PROCEDURES = 75;
+
 /**
  * The priority for deserializing blocks.
  *

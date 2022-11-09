@@ -48,11 +48,18 @@ export class Scrollbar {
    * @internal
    */
   static readonly DEFAULT_SCROLLBAR_MARGIN = 0.5;
-  private readonly pair_: boolean;
-  private readonly margin_: number;
+
+  /** Whether this scrollbar is part of a pair. */
+  private readonly pair: boolean;
+
+  /**
+   * Margin around the scrollbar (between the scrollbar and the edge of the
+   * viewport in pixels).
+   */
+  private readonly margin: number;
 
   /** Previously recorded metrics from the workspace. */
-  private oldHostMetrics_: Metrics|null = null;
+  private oldHostMetrics: Metrics|null = null;
 
   /**
    * The ratio of handle position offset to workspace content displacement.
@@ -60,7 +67,14 @@ export class Scrollbar {
    * @internal
    */
   ratio = 1;
-  private origin_: Coordinate;
+
+  /**
+   * The location of the origin of the workspace that the scrollbar is in,
+   * measured in CSS pixels relative to the injection div origin.  This is
+   * usually (0, 0).  When the scrollbar is in a flyout it may have a
+   * different origin.
+   */
+  private origin = new Coordinate(0, 0);
 
   /**
    * The position of the mouse along this scrollbar's major axis at the start
@@ -69,45 +83,72 @@ export class Scrollbar {
    * coordinate of the mouse down event; for a vertical scrollbar it's the y
    * coordinate of the mouse down event.
    */
-  private startDragMouse_ = 0;
+  private startDragMouse = 0;
 
   /**
    * The length of the scrollbars (including the handle and the background),
    * in CSS pixels. This is equivalent to scrollbar background length and the
    * area within which the scrollbar handle can move.
    */
-  private scrollbarLength_ = 0;
+  private scrollbarLength = 0;
 
   /** The length of the scrollbar handle in CSS pixels. */
-  private handleLength_ = 0;
+  private handleLength = 0;
 
   /**
    * The offset of the start of the handle from the scrollbar position, in CSS
    * pixels.
    */
-  private handlePosition_ = 0;
+  private handlePosition = 0;
 
   private startDragHandle = 0;
 
   /** Whether the scrollbar handle is visible. */
-  private isVisible_ = true;
+  private isHandleVisible = true;
 
   /** Whether the workspace containing this scrollbar is visible. */
-  private containerVisible_ = true;
-  private svgBackground_: SVGRectElement|null = null;
+  private containerVisible = true;
 
-  private svgHandle_: SVGRectElement|null = null;
+  /** The transparent background behind the handle. */
+  private svgBackground: SVGRectElement;
 
-  private outerSvg_: SVGSVGElement|null = null;
+  /** The visible handle that can be dragged around. */
+  private svgHandle: SVGRectElement;
 
-  private svgGroup_: SVGGElement|null = null;
-  position: Coordinate;
+  /** The outermost SVG element, which contains all parts of the scrollbar. */
+  private outerSvg: SVGSVGElement;
 
-  lengthAttribute_ = 'width';
-  positionAttribute_ = 'x';
-  onMouseDownBarWrapper_: browserEvents.Data|null;
-  onMouseDownHandleWrapper_: browserEvents.Data|null;
+  /**
+   * The upper left corner of the scrollbar's SVG group in CSS pixels relative
+   * to the scrollbar's origin.  This is usually relative to the injection div
+   * origin.
+   *
+   * @internal
+   */
+  position = new Coordinate(0, 0);
+
+  /**
+   * The DOM attribute that controls the length of the scrollbar. Different
+   * for horizontal and vertical scrollbars.
+   */
+  lengthAttribute_: string;
+
+  /**
+   * The DOM attribute that controls the position of the scrollbar.
+   * Different for horizontal and vertical scrollbars.
+   */
+  positionAttribute_: string;
+
+  /** Handler for mouse down events on the background of the scrollbar. */
+  onMouseDownBarWrapper_: browserEvents.Data;
+
+  /** Handler for mouse down events on the handle of the scrollbar. */
+  onMouseDownHandleWrapper_: browserEvents.Data;
+
+  /** Handler for mouse move events during scrollbar drags. */
   onMouseUpWrapper_: browserEvents.Data|null = null;
+
+  /** Handler for mouse up events to end scrollbar drags. */
   onMouseMoveWrapper_: browserEvents.Data|null = null;
 
   /**
@@ -120,82 +161,92 @@ export class Scrollbar {
   constructor(
       private workspace: WorkspaceSvg, private readonly horizontal: boolean,
       opt_pair?: boolean, opt_class?: string, opt_margin?: number) {
-    /** Whether this scrollbar is part of a pair. */
-    this.pair_ = opt_pair || false;
-    /**
-     * Margin around the scrollbar (between the scrollbar and the edge of the
-     * viewport in pixels).
-     */
-    this.margin_ = opt_margin !== undefined ?
-        opt_margin :
-        Scrollbar.DEFAULT_SCROLLBAR_MARGIN;
+    this.pair = opt_pair || false;
 
-    /**
-     * The location of the origin of the workspace that the scrollbar is in,
-     * measured in CSS pixels relative to the injection div origin.  This is
-     * usually (0, 0).  When the scrollbar is in a flyout it may have a
-     * different origin.
-     */
-    this.origin_ = new Coordinate(0, 0);
+    this.margin = opt_margin !== undefined ? opt_margin :
+                                             Scrollbar.DEFAULT_SCROLLBAR_MARGIN;
 
-    this.createDom_(opt_class);
+    let className =
+        'blocklyScrollbar' + (this.horizontal ? 'Horizontal' : 'Vertical');
+    if (opt_class) {
+      className += ' ' + opt_class;
+    }
 
-    /**
-     * The upper left corner of the scrollbar's SVG group in CSS pixels relative
-     * to the scrollbar's origin.  This is usually relative to the injection div
-     * origin.
-     *
-     * @internal
-     */
-    this.position = new Coordinate(0, 0);
+    /* Create the following DOM:
+      <svg class="blocklyScrollbarHorizontal optionalClass">
+        <g>
+          <rect class="blocklyScrollbarBackground" />
+          <rect class="blocklyScrollbarHandle" rx="8" ry="8" />
+        </g>
+      </svg>
+    */
+    this.outerSvg = dom.createSvgElement(Svg.SVG, {'class': className});
+    // Child group to hold the handle and background together.
+    const group = dom.createSvgElement(Svg.G, {}, this.outerSvg);
 
-    // Store the thickness in a temp variable for readability.
-    const scrollbarThickness = Scrollbar.scrollbarThickness;
+    this.svgBackground = dom.createSvgElement(
+        Svg.RECT, {'class': 'blocklyScrollbarBackground'}, group);
+
+    const radius = Math.floor((Scrollbar.scrollbarThickness - 5) / 2);
+    this.svgHandle = dom.createSvgElement(
+        Svg.RECT,
+        {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius}, group);
+
+    this.workspace.getThemeManager().subscribe(
+        this.svgHandle, 'scrollbarColour', 'fill');
+    this.workspace.getThemeManager().subscribe(
+        this.svgHandle, 'scrollbarOpacity', 'fill-opacity');
+
+    // Add everything to the DOM.
+    dom.insertAfter(this.outerSvg, this.workspace.getParentSvg());
+
+    this.setInitialThickness();
+
     if (horizontal) {
-      this.svgBackground_!.setAttribute('height', String(scrollbarThickness));
-      this.outerSvg_!.setAttribute('height', String(scrollbarThickness));
-      this.svgHandle_!.setAttribute('height', String(scrollbarThickness - 5));
-      this.svgHandle_!.setAttribute('y', String(2.5));
+      this.lengthAttribute_ = 'width';
+      this.positionAttribute_ = 'x';
     } else {
-      this.svgBackground_!.setAttribute('width', String(scrollbarThickness));
-      this.outerSvg_!.setAttribute('width', String(scrollbarThickness));
-      this.svgHandle_!.setAttribute('width', String(scrollbarThickness - 5));
-      this.svgHandle_!.setAttribute('x', String(2.5));
-
       this.lengthAttribute_ = 'height';
       this.positionAttribute_ = 'y';
     }
+
     this.onMouseDownBarWrapper_ = browserEvents.conditionalBind(
-        this.svgBackground_!, 'mousedown', this, this.onMouseDownBar_);
+        this.svgBackground, 'mousedown', this, this.onMouseDownBar);
     this.onMouseDownHandleWrapper_ = browserEvents.conditionalBind(
-        this.svgHandle_!, 'mousedown', this, this.onMouseDownHandle_);
+        this.svgHandle, 'mousedown', this, this.onMouseDownHandle);
   }
 
   /**
-   * Dispose of this scrollbar.
-   * Unlink from all DOM elements to prevent memory leaks.
+   * Set the size of the scrollbar DOM elements along the minor axis.
+   */
+  private setInitialThickness() {
+    const scrollbarThickness = Scrollbar.scrollbarThickness;
+    if (this.horizontal) {
+      this.svgBackground.setAttribute('height', String(scrollbarThickness));
+      this.outerSvg.setAttribute('height', String(scrollbarThickness));
+      this.svgHandle.setAttribute('height', String(scrollbarThickness - 5));
+      this.svgHandle.setAttribute('y', String(2.5));
+    } else {
+      this.svgBackground.setAttribute('width', String(scrollbarThickness));
+      this.outerSvg.setAttribute('width', String(scrollbarThickness));
+      this.svgHandle.setAttribute('width', String(scrollbarThickness - 5));
+      this.svgHandle.setAttribute('x', String(2.5));
+    }
+  }
+
+  /**
+   * Dispose of this scrollbar. Remove DOM elements, event listeners,
+   * and theme subscriptions.
    *
    * @suppress {checkTypes}
    */
   dispose() {
-    this.cleanUp_();
-    if (this.onMouseDownBarWrapper_) {
-      browserEvents.unbind(this.onMouseDownBarWrapper_);
-      this.onMouseDownBarWrapper_ = null;
-    }
-    if (this.onMouseDownHandleWrapper_) {
-      browserEvents.unbind(this.onMouseDownHandleWrapper_);
-      this.onMouseDownHandleWrapper_ = null;
-    }
+    this.cleanUp();
+    browserEvents.unbind(this.onMouseDownBarWrapper_);
+    browserEvents.unbind(this.onMouseDownHandleWrapper_);
 
-    dom.removeNode(this.outerSvg_);
-    this.outerSvg_ = null;
-    this.svgGroup_ = null;
-    this.svgBackground_ = null;
-    if (this.svgHandle_) {
-      this.workspace.getThemeManager().unsubscribe(this.svgHandle_);
-      this.svgHandle_ = null;
-    }
+    dom.removeNode(this.outerSvg);
+    this.workspace.getThemeManager().unsubscribe(this.svgHandle);
   }
 
   /**
@@ -205,11 +256,11 @@ export class Scrollbar {
    * @param value Value that is potentially out of bounds, in CSS pixels.
    * @returns Constrained value, in CSS pixels.
    */
-  private constrainHandleLength_(value: number): number {
+  private constrainHandleLength(value: number): number {
     if (value <= 0 || isNaN(value)) {
       value = 0;
     } else {
-      value = Math.min(value, this.scrollbarLength_);
+      value = Math.min(value, this.scrollbarLength);
     }
     return value;
   }
@@ -220,10 +271,10 @@ export class Scrollbar {
    *
    * @param newLength The new scrollbar handle length in CSS pixels.
    */
-  private setHandleLength_(newLength: number) {
-    this.handleLength_ = newLength;
-    this.svgHandle_!.setAttribute(
-        this.lengthAttribute_, String(this.handleLength_));
+  private setHandleLength(newLength: number) {
+    this.handleLength = newLength;
+    this.svgHandle.setAttribute(
+        this.lengthAttribute_, String(this.handleLength));
   }
 
   /**
@@ -233,14 +284,14 @@ export class Scrollbar {
    * @param value Value that is potentially out of bounds, in CSS pixels.
    * @returns Constrained value, in CSS pixels.
    */
-  private constrainHandlePosition_(value: number): number {
+  private constrainHandlePosition(value: number): number {
     if (value <= 0 || isNaN(value)) {
       value = 0;
     } else {
       // Handle length should never be greater than this.scrollbarLength_.
       // If the viewSize is greater than or equal to the scrollSize, the
       // handleLength will end up equal to this.scrollbarLength_.
-      value = Math.min(value, this.scrollbarLength_ - this.handleLength_);
+      value = Math.min(value, this.scrollbarLength - this.handleLength);
     }
     return value;
   }
@@ -252,9 +303,9 @@ export class Scrollbar {
    * @param newPosition The new scrollbar handle offset in CSS pixels.
    */
   setHandlePosition(newPosition: number) {
-    this.handlePosition_ = newPosition;
-    this.svgHandle_!.setAttribute(
-        this.positionAttribute_, String(this.handlePosition_));
+    this.handlePosition = newPosition;
+    this.svgHandle.setAttribute(
+        this.positionAttribute_, String(this.handlePosition));
   }
 
   /**
@@ -263,12 +314,12 @@ export class Scrollbar {
    *
    * @param newSize The new scrollbar background length in CSS pixels.
    */
-  private setScrollbarLength_(newSize: number) {
-    this.scrollbarLength_ = newSize;
-    this.outerSvg_!.setAttribute(
-        this.lengthAttribute_, String(this.scrollbarLength_));
-    this.svgBackground_!.setAttribute(
-        this.lengthAttribute_, String(this.scrollbarLength_));
+  private setScrollbarLength(newSize: number) {
+    this.scrollbarLength = newSize;
+    this.outerSvg.setAttribute(
+        this.lengthAttribute_, String(this.scrollbarLength));
+    this.svgBackground.setAttribute(
+        this.lengthAttribute_, String(this.scrollbarLength));
   }
 
   /**
@@ -284,12 +335,10 @@ export class Scrollbar {
     this.position.x = x;
     this.position.y = y;
 
-    const tempX = this.position.x + this.origin_.x;
-    const tempY = this.position.y + this.origin_.y;
+    const tempX = this.position.x + this.origin.x;
+    const tempY = this.position.y + this.origin.y;
     const transform = 'translate(' + tempX + 'px,' + tempY + 'px)';
-    if (this.outerSvg_) {
-      dom.setCssTransform(this.outerSvg_, transform);
-    }
+    dom.setCssTransform(this.outerSvg, transform);
   }
 
   /**
@@ -309,21 +358,21 @@ export class Scrollbar {
       }
     }
 
-    if (this.oldHostMetrics_ &&
-        Scrollbar.metricsAreEquivalent_(hostMetrics, this.oldHostMetrics_)) {
+    if (this.oldHostMetrics &&
+        Scrollbar.metricsAreEquivalent(hostMetrics, this.oldHostMetrics)) {
       return;
     }
 
     if (this.horizontal) {
-      this.resizeHorizontal_(hostMetrics);
+      this.resizeHorizontal(hostMetrics);
     } else {
-      this.resizeVertical_(hostMetrics);
+      this.resizeVertical(hostMetrics);
     }
 
-    this.oldHostMetrics_ = hostMetrics;
+    this.oldHostMetrics = hostMetrics;
 
     // Resizing may have caused some scrolling.
-    this.updateMetrics_();
+    this.updateMetrics();
   }
 
   /**
@@ -334,14 +383,14 @@ export class Scrollbar {
    *     possibly fetched from the host object.
    * @returns Whether a resizeView is necessary.
    */
-  private requiresViewResize_(hostMetrics: Metrics): boolean {
-    if (!this.oldHostMetrics_) {
+  private requiresViewResize(hostMetrics: Metrics): boolean {
+    if (!this.oldHostMetrics) {
       return true;
     }
-    return this.oldHostMetrics_.viewWidth !== hostMetrics.viewWidth ||
-        this.oldHostMetrics_.viewHeight !== hostMetrics.viewHeight ||
-        this.oldHostMetrics_.absoluteLeft !== hostMetrics.absoluteLeft ||
-        this.oldHostMetrics_.absoluteTop !== hostMetrics.absoluteTop;
+    return this.oldHostMetrics.viewWidth !== hostMetrics.viewWidth ||
+        this.oldHostMetrics.viewHeight !== hostMetrics.viewHeight ||
+        this.oldHostMetrics.absoluteLeft !== hostMetrics.absoluteLeft ||
+        this.oldHostMetrics.absoluteTop !== hostMetrics.absoluteTop;
   }
 
   /**
@@ -350,8 +399,8 @@ export class Scrollbar {
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
-  private resizeHorizontal_(hostMetrics: Metrics) {
-    if (this.requiresViewResize_(hostMetrics)) {
+  private resizeHorizontal(hostMetrics: Metrics) {
+    if (this.requiresViewResize(hostMetrics)) {
       this.resizeViewHorizontal(hostMetrics);
     } else {
       this.resizeContentHorizontal(hostMetrics);
@@ -367,22 +416,22 @@ export class Scrollbar {
    *     possibly fetched from the host object.
    */
   resizeViewHorizontal(hostMetrics: Metrics) {
-    let viewSize = hostMetrics.viewWidth - this.margin_ * 2;
-    if (this.pair_) {
+    let viewSize = hostMetrics.viewWidth - this.margin * 2;
+    if (this.pair) {
       // Shorten the scrollbar to make room for the corner square.
       viewSize -= Scrollbar.scrollbarThickness;
     }
-    this.setScrollbarLength_(Math.max(0, viewSize));
+    this.setScrollbarLength(Math.max(0, viewSize));
 
-    let xCoordinate = hostMetrics.absoluteLeft + this.margin_;
-    if (this.pair_ && this.workspace.RTL) {
+    let xCoordinate = hostMetrics.absoluteLeft + this.margin;
+    if (this.pair && this.workspace.RTL) {
       xCoordinate += Scrollbar.scrollbarThickness;
     }
 
     // Horizontal toolbar should always be just above the bottom of the
     // workspace.
     const yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
-        Scrollbar.scrollbarThickness - this.margin_;
+        Scrollbar.scrollbarThickness - this.margin;
     this.setPosition(xCoordinate, yCoordinate);
 
     // If the view has been resized, a content resize will also be necessary.
@@ -401,25 +450,25 @@ export class Scrollbar {
     if (hostMetrics.viewWidth >= hostMetrics.scrollWidth) {
       // viewWidth is often greater than scrollWidth in flyouts and
       // non-scrollable workspaces.
-      this.setHandleLength_(this.scrollbarLength_);
+      this.setHandleLength(this.scrollbarLength);
       this.setHandlePosition(0);
-      if (!this.pair_) {
+      if (!this.pair) {
         // The scrollbar isn't needed.
         // This doesn't apply to scrollbar pairs because interactions with the
         // corner square aren't handled.
         this.setVisible(false);
       }
       return;
-    } else if (!this.pair_) {
+    } else if (!this.pair) {
       // The scrollbar is needed. Only non-paired scrollbars are hidden/shown.
       this.setVisible(true);
     }
 
     // Resize the handle.
     let handleLength =
-        this.scrollbarLength_ * hostMetrics.viewWidth / hostMetrics.scrollWidth;
-    handleLength = this.constrainHandleLength_(handleLength);
-    this.setHandleLength_(handleLength);
+        this.scrollbarLength * hostMetrics.viewWidth / hostMetrics.scrollWidth;
+    handleLength = this.constrainHandleLength(handleLength);
+    this.setHandleLength(handleLength);
 
     // Compute the handle offset.
     // The position of the handle can be between:
@@ -435,9 +484,9 @@ export class Scrollbar {
     // Percent of content to the left of our current position.
     const offsetRatio = contentDisplacement / maxScrollDistance;
     // Area available to scroll * percent to the left
-    const maxHandleOffset = this.scrollbarLength_ - this.handleLength_;
+    const maxHandleOffset = this.scrollbarLength - this.handleLength;
     let handleOffset = maxHandleOffset * offsetRatio;
-    handleOffset = this.constrainHandlePosition_(handleOffset);
+    handleOffset = this.constrainHandlePosition(handleOffset);
     this.setHandlePosition(handleOffset);
 
     // Compute ratio (for use with set calls, which pass in content
@@ -451,8 +500,8 @@ export class Scrollbar {
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
-  private resizeVertical_(hostMetrics: Metrics) {
-    if (this.requiresViewResize_(hostMetrics)) {
+  private resizeVertical(hostMetrics: Metrics) {
+    if (this.requiresViewResize(hostMetrics)) {
       this.resizeViewVertical(hostMetrics);
     } else {
       this.resizeContentVertical(hostMetrics);
@@ -467,19 +516,19 @@ export class Scrollbar {
    *     possibly fetched from the host object.
    */
   resizeViewVertical(hostMetrics: Metrics) {
-    let viewSize = hostMetrics.viewHeight - this.margin_ * 2;
-    if (this.pair_) {
+    let viewSize = hostMetrics.viewHeight - this.margin * 2;
+    if (this.pair) {
       // Shorten the scrollbar to make room for the corner square.
       viewSize -= Scrollbar.scrollbarThickness;
     }
-    this.setScrollbarLength_(Math.max(0, viewSize));
+    this.setScrollbarLength(Math.max(0, viewSize));
 
     const xCoordinate = this.workspace.RTL ?
-        hostMetrics.absoluteLeft + this.margin_ :
+        hostMetrics.absoluteLeft + this.margin :
         hostMetrics.absoluteLeft + hostMetrics.viewWidth -
-            Scrollbar.scrollbarThickness - this.margin_;
+            Scrollbar.scrollbarThickness - this.margin;
 
-    const yCoordinate = hostMetrics.absoluteTop + this.margin_;
+    const yCoordinate = hostMetrics.absoluteTop + this.margin;
     this.setPosition(xCoordinate, yCoordinate);
 
     // If the view has been resized, a content resize will also be necessary.
@@ -498,25 +547,25 @@ export class Scrollbar {
     if (hostMetrics.viewHeight >= hostMetrics.scrollHeight) {
       // viewHeight is often greater than scrollHeight in flyouts and
       // non-scrollable workspaces.
-      this.setHandleLength_(this.scrollbarLength_);
+      this.setHandleLength(this.scrollbarLength);
       this.setHandlePosition(0);
-      if (!this.pair_) {
+      if (!this.pair) {
         // The scrollbar isn't needed.
         // This doesn't apply to scrollbar pairs because interactions with the
         // corner square aren't handled.
         this.setVisible(false);
       }
       return;
-    } else if (!this.pair_) {
+    } else if (!this.pair) {
       // The scrollbar is needed. Only non-paired scrollbars are hidden/shown.
       this.setVisible(true);
     }
 
     // Resize the handle.
-    let handleLength = this.scrollbarLength_ * hostMetrics.viewHeight /
+    let handleLength = this.scrollbarLength * hostMetrics.viewHeight /
         hostMetrics.scrollHeight;
-    handleLength = this.constrainHandleLength_(handleLength);
-    this.setHandleLength_(handleLength);
+    handleLength = this.constrainHandleLength(handleLength);
+    this.setHandleLength(handleLength);
 
     // Compute the handle offset.
     // The position of the handle can be between:
@@ -532,50 +581,14 @@ export class Scrollbar {
     // Percent of content to the left of our current position.
     const offsetRatio = contentDisplacement / maxScrollDistance;
     // Area available to scroll * percent to the left
-    const maxHandleOffset = this.scrollbarLength_ - this.handleLength_;
+    const maxHandleOffset = this.scrollbarLength - this.handleLength;
     let handleOffset = maxHandleOffset * offsetRatio;
-    handleOffset = this.constrainHandlePosition_(handleOffset);
+    handleOffset = this.constrainHandlePosition(handleOffset);
     this.setHandlePosition(handleOffset);
 
     // Compute ratio (for use with set calls, which pass in content
     // displacement).
     this.ratio = maxHandleOffset / maxScrollDistance;
-  }
-
-  /**
-   * Create all the DOM elements required for a scrollbar.
-   * The resulting widget is not sized.
-   *
-   * @param opt_class A class to be applied to this scrollbar.
-   */
-  private createDom_(opt_class?: string) {
-    /* Create the following DOM:
-        <svg class="blocklyScrollbarHorizontal  optionalClass">
-          <g>
-            <rect class="blocklyScrollbarBackground" />
-            <rect class="blocklyScrollbarHandle" rx="8" ry="8" />
-          </g>
-        </svg>
-        */
-    let className =
-        'blocklyScrollbar' + (this.horizontal ? 'Horizontal' : 'Vertical');
-    if (opt_class) {
-      className += ' ' + opt_class;
-    }
-    this.outerSvg_ = dom.createSvgElement(Svg.SVG, {'class': className});
-    this.svgGroup_ = dom.createSvgElement(Svg.G, {}, this.outerSvg_);
-    this.svgBackground_ = dom.createSvgElement(
-        Svg.RECT, {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
-    const radius = Math.floor((Scrollbar.scrollbarThickness - 5) / 2);
-    this.svgHandle_ = dom.createSvgElement(
-        Svg.RECT,
-        {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
-        this.svgGroup_);
-    this.workspace.getThemeManager().subscribe(
-        this.svgHandle_!, 'scrollbarColour', 'fill');
-    this.workspace.getThemeManager().subscribe(
-        this.svgHandle_!, 'scrollbarOpacity', 'fill-opacity');
-    dom.insertAfter(this.outerSvg_!, this.workspace.getParentSvg());
   }
 
   /**
@@ -585,7 +598,7 @@ export class Scrollbar {
    * @returns True if visible.
    */
   isVisible(): boolean {
-    return this.isVisible_;
+    return this.isHandleVisible;
   }
 
   /**
@@ -595,9 +608,9 @@ export class Scrollbar {
    * @param visible Whether the container is visible
    */
   setContainerVisible(visible: boolean) {
-    const visibilityChanged = visible !== this.containerVisible_;
+    const visibilityChanged = visible !== this.containerVisible;
 
-    this.containerVisible_ = visible;
+    this.containerVisible = visible;
     if (visibilityChanged) {
       this.updateDisplay_();
     }
@@ -614,10 +627,10 @@ export class Scrollbar {
 
     // Ideally this would also apply to scrollbar pairs, but that's a bigger
     // headache (due to interactions with the corner square).
-    if (this.pair_) {
+    if (this.pair) {
       throw Error('Unable to toggle visibility of paired scrollbars.');
     }
-    this.isVisible_ = visible;
+    this.isHandleVisible = visible;
     if (visibilityChanged) {
       this.updateDisplay_();
     }
@@ -632,15 +645,15 @@ export class Scrollbar {
   updateDisplay_() {
     let show = true;
     // Check whether our parent/container is visible.
-    if (!this.containerVisible_) {
+    if (!this.containerVisible) {
       show = false;
     } else {
       show = this.isVisible();
     }
     if (show) {
-      this.outerSvg_!.setAttribute('display', 'block');
+      this.outerSvg.setAttribute('display', 'block');
     } else {
-      this.outerSvg_!.setAttribute('display', 'none');
+      this.outerSvg.setAttribute('display', 'none');
     }
   }
 
@@ -650,10 +663,10 @@ export class Scrollbar {
    *
    * @param e Mouse down event.
    */
-  private onMouseDownBar_(e: MouseEvent) {
+  private onMouseDownBar(e: MouseEvent) {
     this.workspace.markFocused();
     Touch.clearTouchIdentifier();  // This is really a click.
-    this.cleanUp_();
+    this.cleanUp();
     if (browserEvents.isRightButton(e)) {
       // Right-click.
       // Scrollbars have no context menu.
@@ -664,22 +677,22 @@ export class Scrollbar {
         e, this.workspace.getParentSvg(), this.workspace.getInverseScreenCTM());
     const mouseLocation = this.horizontal ? mouseXY.x : mouseXY.y;
 
-    const handleXY = svgMath.getInjectionDivXY(this.svgHandle_ as Element);
+    const handleXY = svgMath.getInjectionDivXY(this.svgHandle);
     const handleStart = this.horizontal ? handleXY.x : handleXY.y;
-    let handlePosition = this.handlePosition_;
+    let handlePosition = this.handlePosition;
 
-    const pageLength = this.handleLength_ * 0.95;
+    const pageLength = this.handleLength * 0.95;
     if (mouseLocation <= handleStart) {
       // Decrease the scrollbar's value by a page.
       handlePosition -= pageLength;
-    } else if (mouseLocation >= handleStart + this.handleLength_) {
+    } else if (mouseLocation >= handleStart + this.handleLength) {
       // Increase the scrollbar's value by a page.
       handlePosition += pageLength;
     }
 
-    this.setHandlePosition(this.constrainHandlePosition_(handlePosition));
+    this.setHandlePosition(this.constrainHandlePosition(handlePosition));
 
-    this.updateMetrics_();
+    this.updateMetrics();
     e.stopPropagation();
     e.preventDefault();
   }
@@ -690,9 +703,9 @@ export class Scrollbar {
    *
    * @param e Mouse down event.
    */
-  private onMouseDownHandle_(e: MouseEvent) {
+  private onMouseDownHandle(e: MouseEvent) {
     this.workspace.markFocused();
-    this.cleanUp_();
+    this.cleanUp();
     if (browserEvents.isRightButton(e)) {
       // Right-click.
       // Scrollbars have no context menu.
@@ -700,7 +713,7 @@ export class Scrollbar {
       return;
     }
     // Look up the current translation and record it.
-    this.startDragHandle = this.handlePosition_;
+    this.startDragHandle = this.handlePosition;
 
     // Tell the workspace to setup its drag surface since it is about to move.
     // onMouseMoveHandle will call onScroll which actually tells the workspace
@@ -708,11 +721,11 @@ export class Scrollbar {
     this.workspace.setupDragSurface();
 
     // Record the current mouse position.
-    this.startDragMouse_ = this.horizontal ? e.clientX : e.clientY;
+    this.startDragMouse = this.horizontal ? e.clientX : e.clientY;
     this.onMouseUpWrapper_ = browserEvents.conditionalBind(
-        document, 'mouseup', this, this.onMouseUpHandle_);
+        document, 'mouseup', this, this.onMouseUpHandle);
     this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
-        document, 'mousemove', this, this.onMouseMoveHandle_);
+        document, 'mousemove', this, this.onMouseMoveHandle);
     e.stopPropagation();
     e.preventDefault();
   }
@@ -722,28 +735,28 @@ export class Scrollbar {
    *
    * @param e Mouse move event.
    */
-  private onMouseMoveHandle_(e: MouseEvent) {
+  private onMouseMoveHandle(e: MouseEvent) {
     const currentMouse = this.horizontal ? e.clientX : e.clientY;
-    const mouseDelta = currentMouse - this.startDragMouse_;
+    const mouseDelta = currentMouse - this.startDragMouse;
     const handlePosition = this.startDragHandle + mouseDelta;
     // Position the bar.
-    this.setHandlePosition(this.constrainHandlePosition_(handlePosition));
-    this.updateMetrics_();
+    this.setHandlePosition(this.constrainHandlePosition(handlePosition));
+    this.updateMetrics();
   }
 
   /** Release the scrollbar handle and reset state accordingly. */
-  private onMouseUpHandle_() {
+  private onMouseUpHandle() {
     // Tell the workspace to clean up now that the workspace is done moving.
     this.workspace.resetDragSurface();
     Touch.clearTouchIdentifier();
-    this.cleanUp_();
+    this.cleanUp();
   }
 
   /**
    * Hide chaff and stop binding to mouseup and mousemove events.  Call this to
    * wrap up loose ends associated with the scrollbar.
    */
-  private cleanUp_() {
+  private cleanUp() {
     this.workspace.hideChaff(true);
     if (this.onMouseUpWrapper_) {
       browserEvents.unbind(this.onMouseUpWrapper_);
@@ -762,8 +775,8 @@ export class Scrollbar {
    * @internal
    */
   getRatio_(): number {
-    const scrollHandleRange = this.scrollbarLength_ - this.handleLength_;
-    let ratio = this.handlePosition_ / scrollHandleRange;
+    const scrollHandleRange = this.scrollbarLength - this.handleLength;
+    let ratio = this.handlePosition / scrollHandleRange;
     if (isNaN(ratio)) {
       ratio = 0;
     }
@@ -774,7 +787,7 @@ export class Scrollbar {
    * Updates workspace metrics based on new scroll ratio. Called when scrollbar
    * is moved.
    */
-  private updateMetrics_() {
+  private updateMetrics() {
     const ratio = this.getRatio_();
     if (this.horizontal) {
       this.workspace.setMetrics({x: ratio});
@@ -791,9 +804,9 @@ export class Scrollbar {
    *    Defaults to true.
    */
   set(value: number, updateMetrics?: boolean) {
-    this.setHandlePosition(this.constrainHandlePosition_(value * this.ratio));
+    this.setHandlePosition(this.constrainHandlePosition(value * this.ratio));
     if (updateMetrics || updateMetrics === undefined) {
-      this.updateMetrics_();
+      this.updateMetrics();
     }
   }
 
@@ -807,7 +820,7 @@ export class Scrollbar {
    * @param y The y coordinate of the scrollbar's origin, in CSS pixels.
    */
   setOrigin(x: number, y: number) {
-    this.origin_ = new Coordinate(x, y);
+    this.origin = new Coordinate(x, y);
   }
 
   /**
@@ -816,7 +829,7 @@ export class Scrollbar {
    *     workspace.
    * @returns Whether the two sets of metrics are equivalent.
    */
-  private static metricsAreEquivalent_(first: Metrics, second: Metrics):
+  private static metricsAreEquivalent(first: Metrics, second: Metrics):
       boolean {
     return first.viewWidth === second.viewWidth &&
         first.viewHeight === second.viewHeight &&

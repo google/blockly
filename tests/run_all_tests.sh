@@ -56,7 +56,7 @@ fi
 
 # Run the full usual build process, checking to ensure there are no
 # closure compiler warnings / errors.
-run_test_command "build-debug" "npm run build-debug"
+run_test_command "build + package" "npm run package -- --verbose --debug"
 
 # Run renaming validation test.
 run_test_command "renamings" "tests/migration/validate-renamings.js"
@@ -70,14 +70,11 @@ run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
 # Run generator tests inside a browser and check the results.
 run_test_command "generators" "tests/scripts/run_generators.sh"
 
-# Run the package build process, as Node tests depend on it.
-run_test_command "package" "npm run package"
-
 # Run Node tests.
 run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/node/.mocharc.js"
 
 # Attempt advanced compilation of a Blockly app.
-run_test_command "advanced_compile" "npm run test:compile:advanced"
+run_test_command "advanced_compile" "npm run only:compile:advanced"
 
 # End of tests.
 popd

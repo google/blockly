@@ -1360,7 +1360,7 @@
     {
       oldName: 'Blockly.PHP',
       newExport: 'phpGenerator',
-      newPath: 'Blockly.php',
+      newPath: 'Blockly.PHP',
     },
     {
       oldName: 'Blockly.Python',

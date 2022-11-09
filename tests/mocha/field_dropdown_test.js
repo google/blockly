@@ -166,7 +166,6 @@ suite('Dropdown Fields', function() {
       this.workspace = new Blockly.Workspace();
       defineRowBlock();
 
-      
       this.assertValue = (value, field) => {
         const block = this.workspace.newBlock('row_block');
         field.setValue(value);

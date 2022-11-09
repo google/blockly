@@ -20,36 +20,44 @@ const appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
 const releaseTasks = require('./scripts/gulpfiles/release_tasks');
 const cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
 const docsTasks = require('./scripts/gulpfiles/docs_tasks');
+const testTasks = require('./scripts/gulpfiles/test_tasks');
 
 module.exports = {
-  deployDemos: appengineTasks.deployDemos,
-  deployDemosBeta: appengineTasks.deployDemosBeta,
+  // Default target if gulp invoked without specifying.
   default: buildTasks.build,
-  generateLangfiles: buildTasks.generateLangfiles,
+
+  // Main sequence targets.  They already invoke prerequisites.
+  langfiles: buildTasks.langfiles,  // Build build/msg/*.js from msg/json/*.
+  tsc: buildTasks.tsc,
+  deps: buildTasks.deps,
+  minify: buildTasks.minify,
   build: buildTasks.build,
-  buildDeps: buildTasks.deps,
-  buildLangfiles: buildTasks.langfiles,
-  buildCompiled: buildTasks.compiled,
-  buildAdvancedCompilationTest: buildTasks.advancedCompilationTest,
-  buildJavaScript: buildTasks.javaScript,
-  buildJavaScriptAndDeps: buildTasks.javaScriptAndDeps,
-  checkin: gulp.parallel(buildTasks.checkinBuilt),
-  checkinBuilt: buildTasks.checkinBuilt,
-  clangFormat: buildTasks.format,
-  clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),
-  cleanBuildDir: buildTasks.cleanBuildDir,
-  cleanReleaseDir: packageTasks.cleanReleaseDir,
-  docs: docsTasks.docs,
-  gitSyncDevelop: gitTasks.syncDevelop,
-  gitSyncMaster: gitTasks.syncMaster,
-  gitCreateRC: gitTasks.createRC,
-  gitUpdateGithubPages: gitTasks.updateGithubPages,
   package: packageTasks.package,
-  prepare: buildTasks.prepare,
-  checkLicenses: licenseTasks.checkLicenses,
-  recompile: releaseTasks.recompile,
-  prepareDemos: appengineTasks.prepareDemos,
   publish: releaseTasks.publish,
   publishBeta: releaseTasks.publishBeta,
+  prepareDemos: appengineTasks.prepareDemos,
+  deployDemos: appengineTasks.deployDemos,
+  deployDemosBeta: appengineTasks.deployDemosBeta,
+  gitUpdateGithubPages: gitTasks.updateGithubPages,
+
+  // Manually-invokable targets, with prequisites where required.
+  prepare: buildTasks.prepare,
+  format: buildTasks.format,
+  messages: buildTasks.messages,  // Generate msg/json/en.json et al.
   sortRequires: cleanupTasks.sortRequires,
+  checkLicenses: licenseTasks.checkLicenses,
+  clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),
+  test: testTasks.test,
+  testGenerators: testTasks.generators,
+  buildAdvancedCompilationTest: buildTasks.buildAdvancedCompilationTest,
+  gitCreateRC: gitTasks.createRC,
+  docs: docsTasks.docs,
+  
+  // Targets intended only for invocation by scripts; may omit prerequisites.
+  onlyBuildAdvancedCompilationTest: buildTasks.onlyBuildAdvancedCompilationTest,
+
+  // Legacy targets, to be deleted.
+  recompile: releaseTasks.recompile,
+  gitSyncDevelop: gitTasks.syncDevelop,
+  gitSyncMaster: gitTasks.syncMaster,
 };

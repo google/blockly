@@ -7,7 +7,7 @@
  goog.declareModuleId('Blockly.test.touch');
 
  import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
- 
+
  suite('Touch', function() {
     setup(function() {
         sharedTestSetup.call(this);

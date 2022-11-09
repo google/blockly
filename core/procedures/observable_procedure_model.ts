@@ -4,26 +4,31 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {genUid} from '../utils/idgenerator.js';
 import type {IParameterModel} from '../interfaces/i_parameter_model.js';
 import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
+import {triggerProceduresUpdate} from './update_procedures.js';
 import type {Workspace} from '../workspace.js';
-import {genUid} from '../utils/idgenerator.js';
 
 
 export class ObservableProcedureModel implements IProcedureModel {
   private id: string;
-  private name = '';
+  private name: string;
   private parameters: IParameterModel[] = [];
   private returnTypes: string[]|null = null;
   private enabled = true;
 
-  constructor(private readonly workspace: Workspace, id?: string) {
+  constructor(
+      private readonly workspace: Workspace, name: string, id?: string) {
     this.id = id ?? genUid();
+    this.name = name;
   }
 
   /** Sets the human-readable name of the procedure. */
   setName(name: string): this {
+    // TODO(#6516): Fire events.
     this.name = name;
+    triggerProceduresUpdate(this.workspace);
     return this;
   }
 
@@ -33,23 +38,38 @@ export class ObservableProcedureModel implements IProcedureModel {
    * To move a parameter, first delete it, and then re-insert.
    */
   insertParameter(parameterModel: IParameterModel, index: number): this {
+    // TODO(#6516): Fire events.
     this.parameters.splice(index, 0, parameterModel);
+    triggerProceduresUpdate(this.workspace);
     return this;
   }
 
   /** Removes the parameter at the given index from the parameter list. */
   deleteParameter(index: number): this {
+    // TODO(#6516): Fire events.
     this.parameters.splice(index, 1);
+    triggerProceduresUpdate(this.workspace);
     return this;
   }
 
   /**
-   * Sets the return type(s) of the procedure.
+   * Sets whether the procedure has a return value (empty array) or no return
+   * value (null).
    *
-   * Pass null to represent a procedure that does not return.
+   * The built-in procedure model does not support procedures that have actual
+   * return types (i.e. non-empty arrays, e.g. ['number']). If you want your
+   * procedure block to have return types, you need to implement your own
+   * procedure model.
    */
   setReturnTypes(types: string[]|null): this {
+    if (types && types.length) {
+      throw new Error(
+          'The built-in ProcedureModel does not support typing. You need to ' +
+          'implement your own custom ProcedureModel.');
+    }
     this.returnTypes = types;
+    // TODO(#6516): Fire events.
+    triggerProceduresUpdate(this.workspace);
     return this;
   }
 
@@ -58,7 +78,9 @@ export class ObservableProcedureModel implements IProcedureModel {
    * all procedure caller blocks should be disabled as well.
    */
   setEnabled(enabled: boolean): this {
+    // TODO(#6516): Fire events.
     this.enabled = enabled;
+    triggerProceduresUpdate(this.workspace);
     return this;
   }
 

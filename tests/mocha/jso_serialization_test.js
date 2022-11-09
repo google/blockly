@@ -388,21 +388,21 @@ suite('JSO Serialization', function() {
                   '<shadow type="' + blockType + '" id="test"></shadow>'));
           return block;
         };
-  
+
         this.assertChild = function(blockType, inputName) {
           const block = this.createBlockWithChild(blockType, inputName);
           const jso = Blockly.serialization.blocks.save(block);
           this.assertInput(
               jso, inputName, {'block': {'type': blockType, 'id': 'id2'}});
         };
-  
+
         this.assertShadow = function(blockType, inputName) {
           const block = this.createBlockWithShadow(blockType, inputName);
           const jso = Blockly.serialization.blocks.save(block);
           this.assertInput(
               jso, inputName, {'shadow': {'type': blockType, 'id': 'test'}});
         };
-  
+
         this.assertOverwrittenShadow = function(blockType, inputName) {
           const block =
               this.createBlockWithShadowAndChild(blockType, inputName);
@@ -428,14 +428,14 @@ suite('JSO Serialization', function() {
               Blockly.serialization.blocks.save(block, {addInputBlocks: false});
           chai.assert.isUndefined(jso['inputs']);
         };
-  
+
         this.assertNoShadow = function(blockType, inputName) {
           const block = this.createBlockWithShadow(blockType, inputName);
           const jso =
               Blockly.serialization.blocks.save(block, {addInputBlocks: false});
           chai.assert.isUndefined(jso['inputs']);
         };
-  
+
         this.assertNoOverwrittenShadow = function(blockType, inputName) {
           const block =
               this.createBlockWithShadowAndChild(blockType, inputName);
@@ -506,11 +506,11 @@ suite('JSO Serialization', function() {
           test('Child', function() {
             this.assertChild('row_block', 'INPUT');
           });
-  
+
           test('Shadow', function() {
             this.assertShadow('row_block', 'INPUT');
           });
-  
+
           test('Overwritten shadow', function() {
             this.assertOverwrittenShadow('row_block', 'INPUT');
           });
@@ -520,11 +520,11 @@ suite('JSO Serialization', function() {
           test('Child', function() {
             this.assertNoChild('row_block', 'INPUT');
           });
-  
+
           test('Shadow', function() {
             this.assertNoShadow('row_block', 'INPUT');
           });
-  
+
           test('Overwritten shadow', function() {
             this.assertNoOverwrittenShadow('row_block', 'INPUT');
           });
@@ -536,11 +536,11 @@ suite('JSO Serialization', function() {
           test('Child', function() {
             this.assertChild('statement_block', 'NAME');
           });
-  
+
           test('Shadow', function() {
             this.assertShadow('statement_block', 'NAME');
           });
-  
+
           test('Overwritten shadow', function() {
             this.assertOverwrittenShadow('statement_block', 'NAME');
           });
@@ -577,11 +577,11 @@ suite('JSO Serialization', function() {
           test('Child', function() {
             this.assertNoChild('statement_block', 'NAME');
           });
-  
+
           test('Shadow', function() {
             this.assertNoShadow('statement_block', 'NAME');
           });
-  
+
           test('Overwritten shadow', function() {
             this.assertNoOverwrittenShadow('statement_block', 'NAME');
           });
@@ -624,14 +624,14 @@ suite('JSO Serialization', function() {
             chai.assert.deepInclude(
                 jso['next'], {'block': {'type': 'stack_block', 'id': 'id2'}});
           });
-  
+
           test('Shadow', function() {
             const block = this.createNextWithShadow();
             const jso = Blockly.serialization.blocks.save(block);
             chai.assert.deepInclude(
                 jso['next'], {'shadow': {'type': 'stack_block', 'id': 'test'}});
           });
-  
+
           test('Overwritten shadow', function() {
             const block = this.createNextWithShadowAndChild();
             const jso = Blockly.serialization.blocks.save(block);
@@ -684,7 +684,7 @@ suite('JSO Serialization', function() {
                 block, {addNextBlocks: false});
             chai.assert.isUndefined(jso['next']);
           });
-  
+
           test('Shadow', function() {
             const block = this.createNextWithShadow();
             const jso = Blockly.serialization.blocks.save(
@@ -792,6 +792,207 @@ suite('JSO Serialization', function() {
       assertProperty(variable, 'name', 'testVar');
       assertProperty(variable, 'id', 'testId');
       assertProperty(variable, 'type', 'testType');
+    });
+  });
+
+  suite('Procedures', function() {
+    class MockProcedureModel {
+      constructor() {
+        this.id = Blockly.utils.idGenerator.genUid();
+        this.name = '';
+        this.parameters = [];
+        this.returnTypes = null;
+        this.enabled = true;
+      }
+
+      setName(name) {
+        this.name = name;
+        return this;
+      }
+
+      insertParameter(parameterModel, index) {
+        this.parameters.splice(index, 0, parameterModel);
+        return this;
+      }
+
+      deleteParameter(index) {
+        this.parameters.splice(index, 1);
+        return this;
+      }
+
+      setReturnTypes(types) {
+        this.returnTypes = types;
+        return this;
+      }
+
+      setEnabled(enabled) {
+        this.enabled = enabled;
+        return this;
+      }
+
+      getId() {
+        return this.id;
+      }
+
+      getName() {
+        return this.name;
+      }
+
+      getParameter(index) {
+        return this.parameters[index];
+      }
+
+      getParameters() {
+        return [...this.parameters];
+      }
+
+      getReturnTypes() {
+        return this.returnTypes;
+      }
+
+      getEnabled() {
+        return this.enabled;
+      }
+    }
+
+    class MockParameterModel {
+      constructor(name) {
+        this.id = Blockly.utils.idGenerator.genUid();
+        this.name = name;
+        this.types = [];
+      }
+
+      setName(name) {
+        this.name = name;
+        return this;
+      }
+
+      setTypes(types) {
+        this.types = types;
+        return this;
+      }
+
+      getName() {
+        return this.name;
+      }
+
+      getTypes() {
+        return this.types;
+      }
+
+      getId() {
+        return this.id;
+      }
+    }
+
+    setup(function() {
+      this.procedureMap = this.workspace.getProcedureMap();
+    });
+
+    teardown(function() {
+      this.procedureMap = null;
+    });
+
+    suite('invariant properties', function() {
+      test('the state always has an id property', function() {
+        const procedureModel = new MockProcedureModel();
+        this.procedureMap.add(procedureModel);
+        const jso = Blockly.serialization.workspaces.save(this.workspace);
+        const procedure = jso['procedures'][0];
+        assertProperty(procedure, 'id', procedureModel.getId());
+      });
+
+      test('if the name has not been set, name is an empty string', function() {
+        const procedureModel = new MockProcedureModel();
+        this.procedureMap.add(procedureModel);
+        const jso = Blockly.serialization.workspaces.save(this.workspace);
+        const procedure = jso['procedures'][0];
+        assertProperty(procedure, 'name', '');
+      });
+
+      test('if the name has been set, name is the string', function() {
+        const procedureModel = new MockProcedureModel().setName('testName');
+        this.procedureMap.add(procedureModel);
+        const jso = Blockly.serialization.workspaces.save(this.workspace);
+        const procedure = jso['procedures'][0];
+        assertProperty(procedure, 'name', 'testName');
+      });
+    });
+
+    suite('return types', function() {
+      test('if the procedure does not return, returnTypes is null', function() {
+        const procedureModel = new MockProcedureModel();
+        this.procedureMap.add(procedureModel);
+        const jso = Blockly.serialization.workspaces.save(this.workspace);
+        const procedure = jso['procedures'][0];
+        assertProperty(procedure, 'returnTypes', null);
+      });
+
+      test(
+          'if the procedure has no return type, returnTypes is an empty array',
+          function() {
+            const procedureModel = new MockProcedureModel().setReturnTypes([]);
+            this.procedureMap.add(procedureModel);
+            const jso = Blockly.serialization.workspaces.save(this.workspace);
+            const procedure = jso['procedures'][0];
+            assertProperty(procedure, 'returnTypes', []);
+          });
+
+      test(
+          'if the procedure has return types, returnTypes is the array',
+          function() {
+            const procedureModel = new MockProcedureModel()
+                .setReturnTypes(['a type']);
+            this.procedureMap.add(procedureModel);
+            const jso = Blockly.serialization.workspaces.save(this.workspace);
+            const procedure = jso['procedures'][0];
+            assertProperty(procedure, 'returnTypes', ['a type']);
+          });
+    });
+
+    suite('parameters', function() {
+      suite('invariant properties', function() {
+        test('the state always has an id property', function() {
+          const parameterModel = new MockParameterModel('testparam');
+          this.procedureMap.add(
+              new MockProcedureModel().insertParameter(parameterModel, 0));
+          const jso = Blockly.serialization.workspaces.save(this.workspace);
+          const parameter = jso['procedures'][0]['parameters'][0];
+          assertProperty(parameter, 'id', parameterModel.getId());
+        });
+
+        test('the state always has a name property', function() {
+          const parameterModel = new MockParameterModel('testparam');
+          this.procedureMap.add(
+              new MockProcedureModel().insertParameter(parameterModel, 0));
+          const jso = Blockly.serialization.workspaces.save(this.workspace);
+          const parameter = jso['procedures'][0]['parameters'][0];
+          assertProperty(parameter, 'name', 'testparam');
+        });
+      });
+
+      suite('types', function() {
+        test(
+            'if the parameter has no type, there is no type property',
+            function() {
+              const parameterModel = new MockParameterModel('testparam');
+              this.procedureMap.add(
+                  new MockProcedureModel().insertParameter(parameterModel, 0));
+              const jso = Blockly.serialization.workspaces.save(this.workspace);
+              const parameter = jso['procedures'][0]['parameters'][0];
+              assertNoProperty(parameter, 'types');
+             });
+
+        test('if the parameter has types, types is an array', function() {
+          const parameterModel =
+              new MockParameterModel('testparam').setTypes(['a type']);
+          this.procedureMap.add(
+              new MockProcedureModel().insertParameter(parameterModel, 0));
+          const jso = Blockly.serialization.workspaces.save(this.workspace);
+          const parameter = jso['procedures'][0]['parameters'][0];
+          assertProperty(parameter, 'types', ['a type']);
+        });
+      });
     });
   });
 });

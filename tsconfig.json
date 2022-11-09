@@ -26,5 +26,18 @@
     // cannot leave it enabled.
     // See: https://github.com/microsoft/TypeScript/issues/49974
     // "importsNotUsedAsValues": "error"
+
+    // tsc has a clever and usually helpful feature ("@types support")
+    // wherein it automatically ingests any type definitions found in
+    // node_modues/@types/**/*.d.ts.  This lets you tell it about the
+    // types for your favourite framework or library just by
+    // installing the relevant @types/<whatever> npm package.
+    //
+    // We don't (as of this writing) use this feature, and it causes a
+    // problem when one of our dependencies pulls in such a package
+    // which turns out to have syntax errors (see e.g. discussion on
+    // PR #6564: https://github.com/google/blockly/pull/6564), so
+    // disable it except for the explicitly-specified types.
+    "types": [],
   }
 }

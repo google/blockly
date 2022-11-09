@@ -25,8 +25,10 @@ var closureDeps = require('google-closure-deps');
 var argv = require('yargs').argv;
 var rimraf = require('rimraf');
 
-var {BUILD_DIR, DEPS_FILE, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
+var {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 var {getPackageJson} = require('./helper_tasks');
+
+var {posixPath} = require('../helpers');
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
@@ -102,7 +104,9 @@ const NAMESPACE_PROPERTY = '__namespace__';
 const chunks = [
   {
     name: 'blockly',
-    entry: path.join(CORE_DIR, 'main.js'),
+    entry: posixPath((argv.compileTs) ?
+      path.join(TSC_OUTPUT_DIR, CORE_DIR, 'main.js') :
+      path.join(CORE_DIR, 'main.js')),
     exports: 'module$build$src$core$blockly',
     reexport: 'Blockly',
   },
@@ -174,7 +178,7 @@ function stripApacheLicense() {
  * For a full list of closure compiler groups, consult the output of
  * google-closure-compiler --help or look in the source  here:
  * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java#L117
- * 
+ *
  * The list in JSCOMP_ERROR contains all the diagnostic groups we know
  * about, but some are commented out if we don't want them, and may
  * appear in JSCOMP_WARNING or JSCOMP_OFF instead.  Items not
@@ -277,7 +281,7 @@ var JSCOMP_OFF = [
    * core/utils/*. We were downgrading access control violations
    * (including @private) to warnings, but this ends up being so
    * spammy that it makes the compiler output nearly useless.
-   * 
+   *
    * Once ES module migration is complete, they will be re-enabled and
    * an alternative to @package will be established.
    */
@@ -300,15 +304,12 @@ function prepare(done) {
     done();
     return;
   }
-  return buildJavaScriptAndDeps(done);
+  return exports.deps(done);
 }
-
-const buildJavaScriptAndDeps = gulp.series(buildJavaScript, buildDeps);
 
 /**
  * Builds Blockly as a JS program, by running tsc on all the files in
- * the core directory.  This must be run before buildDeps or
- * buildCompiled.
+ * the core directory.
  */
 function buildJavaScript(done) {
   execSync(
@@ -323,6 +324,8 @@ function buildJavaScript(done) {
  *
  * Also updates TEST_DEPS_FILE (deps.mocha.js), used by the mocha test
  * suite.
+ *
+ * Prerequisite: buildJavaScript.
  */
 function buildDeps(done) {
   const roots = [
@@ -337,6 +340,18 @@ function buildDeps(done) {
     'tests/mocha'
   ];
 
+  /**
+   * Extracts lines that contain the specified keyword.
+   * @param {string} text output text
+   * @param {string} keyword extract lines with this keyword
+   * @returns {string} modified text
+   */
+  function extractOutputs(text, keyword) {
+    return text.split('\n')
+        .filter((line) => line.includes(keyword))
+        .join('\n');
+  }
+
   function filterErrors(text) {
     return text.split('\n')
         .filter(
@@ -349,29 +364,29 @@ function buildDeps(done) {
   new Promise((resolve, reject) => {
     const args = roots.map(root => `--root '${root}' `).join('');
     exec(
-        `closure-make-deps ${args} >'${DEPS_FILE}'`,
-        {stdio: ['inherit', 'inherit', 'pipe']},
+        `closure-make-deps ${args}`,
         (error, stdout, stderr) => {
           console.warn(filterErrors(stderr));
           if (error) {
             reject(error);
           } else {
+            fs.writeFileSync(DEPS_FILE, stdout);
             resolve();
           }
         });
   }).then(() => new Promise((resolve, reject) => {
-    // Use grep to filter out the entries that are already in deps.js.
+    // Filter out the entries that are already in deps.js.
     const testArgs =
         testRoots.map(root => `--root '${root}' `).join('');
     exec(
-        `closure-make-deps ${testArgs} 2>/dev/null\
-             | grep 'tests/mocha' > '${TEST_DEPS_FILE}'`,
-        {stdio: ['inherit', 'inherit', 'pipe']},
+        `closure-make-deps ${testArgs}`,
         (error, stdout, stderr) => {
           console.warn(filterErrors(stderr));
           if (error) {
             reject(error);
           } else {
+            fs.writeFileSync(TEST_DEPS_FILE,
+              extractOutputs(stdout, 'tests/mocha'));
             resolve();
           }
         });
@@ -384,7 +399,7 @@ function buildDeps(done) {
  * This task regenrates msg/json/en.js and msg/json/qqq.js from
  * msg/messages.js.
  */
-function generateLangfiles(done) {
+function generateMessages(done) {
   // Run js_to_json.py
   const jsToJsonCmd = `python3 scripts/i18n/js_to_json.py \
       --input_file ${path.join('msg', 'messages.js')} \
@@ -399,10 +414,10 @@ Regenerated several flies in msg/json/.  Now run
 
 and check that operation has not overwritten any modifications made to
 hints, etc. by the TranslateWiki volunteers.  If it has, backport
-their changes to msg/messages.js and re-run 'npm run generate:langfiles'.
+their changes to msg/messages.js and re-run 'npm run messages'.
 
 Once you are satisfied that any new hints have been backported you may
-go ahead and commit the changes, but note that the generate script
+go ahead and commit the changes, but note that the messages script
 will have removed the translator credits - be careful not to commit
 this removal!
 `);
@@ -416,7 +431,7 @@ this removal!
  */
 function buildLangfiles(done) {
   // Create output directory.
-  const outputDir = path.join(BUILD_DIR, 'msg', 'js');
+  const outputDir = path.join(BUILD_DIR, 'msg');
   fs.mkdirSync(outputDir, {recursive: true});
 
   // Run create_messages.py.
@@ -464,7 +479,7 @@ function chunkWrapper(chunk) {
     browserDepsExpr = `root.${chunk.parent.reexport}`;
     factoryArgs = '__parent__';
     namespaceExpr = `${factoryArgs}.${NAMESPACE_PROPERTY}`;
-  }    
+  }
 
   // Code to assign the result of the factory function to the desired
   // export location when running in a browser.  When
@@ -520,9 +535,6 @@ return ${chunk.exports};
  *     closure-calculate-chunks.
  */
 function getChunkOptions() {
-  if (argv.compileTs) {
-    chunks[0].entry = path.join(TSC_OUTPUT_DIR, chunks[0].entry);
-  }
   const basePath =
       path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base_minimal.js');
   const cccArgs = [
@@ -560,7 +572,9 @@ function getChunkOptions() {
   // chunk depends on any chunk but the first), so we look for
   // one of the entrypoints amongst the files in each chunk.
   const chunkByNickname = Object.create(null);
-  const jsFiles = rawOptions.js.slice();  // Will be modified via .splice!
+  // Copy and convert to posix js file paths.
+  // Result will be modified via `.splice`!
+  const jsFiles = rawOptions.js.map(p => posixPath(p));
   const chunkList = rawOptions.chunk.map((element) => {
     const [nickname, numJsFiles, parentNick] = element.split(':');
 
@@ -639,6 +653,8 @@ function compile(options) {
  * blockly_compressed.js, blocks_compressed.js, etc.
  *
  * The deps.js file must be up-to-date.
+ *
+ * Prerequisite: buildDeps.
  */
 function buildCompiled() {
   // Get chunking.
@@ -667,12 +683,14 @@ function buildCompiled() {
       .pipe(compile(options))
       .pipe(gulp.rename({suffix: COMPILED_SUFFIX}))
       .pipe(gulp.sourcemaps.write('.'))
-      .pipe(gulp.dest(BUILD_DIR));
+      .pipe(gulp.dest(RELEASE_DIR));
 }
 
 /**
  * This task builds Blockly core, blocks and generators together and uses
  * closure compiler's ADVANCED_COMPILATION mode.
+ *
+ * Prerequisite: buildDeps.
  */
 function buildAdvancedCompilationTest() {
   const srcs = [
@@ -702,35 +720,6 @@ function buildAdvancedCompilationTest() {
 }
 
 /**
- * This task builds all of Blockly:
- *     blockly_compressed.js
- *     blocks_compressed.js
- *     javascript_compressed.js
- *     python_compressed.js
- *     php_compressed.js
- *     lua_compressed.js
- *     dart_compressed.js
- *     msg/json/*.js
- *     test/deps*.js
- */
-const build = gulp.parallel(
-    gulp.series(buildJavaScript, buildDeps, buildCompiled),
-    buildLangfiles,
-    );
-
-/**
- * This task copies built files from BUILD_DIR back to the repository
- * so they can be committed to git.
- */
-function checkinBuilt() {
-  return gulp.src([
-    `${BUILD_DIR}/*_compressed.js`,
-    `${BUILD_DIR}/*_compressed.js.map`,
-    `${BUILD_DIR}/msg/js/*.js`,
-  ], {base: BUILD_DIR}).pipe(gulp.dest('.'));
-}
-
-/**
  * This task cleans the build directory (by deleting it).
  */
 function cleanBuildDir(done) {
@@ -753,17 +742,20 @@ function format() {
       .pipe(gulp.dest('.'));
 }
 
-module.exports = {
-  prepare: prepare,
-  build: build,
-  javaScriptAndDeps: buildJavaScriptAndDeps,
-  javaScript: buildJavaScript,
-  deps: buildDeps,
-  generateLangfiles: generateLangfiles,
-  langfiles: buildLangfiles,
-  compiled: buildCompiled,
-  format: format,
-  checkinBuilt: checkinBuilt,
-  cleanBuildDir: cleanBuildDir,
-  advancedCompilationTest: buildAdvancedCompilationTest,
-}
+// Main sequence targets.  Each should invoke any immediate prerequisite(s).
+exports.cleanBuildDir = cleanBuildDir;
+exports.langfiles = buildLangfiles;  // Build build/msg/*.js from msg/json/*.
+exports.tsc = buildJavaScript;
+exports.deps = gulp.series(exports.tsc, buildDeps);
+exports.minify = gulp.series(exports.deps, buildCompiled);
+exports.build = gulp.parallel(exports.minify, exports.langfiles);
+
+// Manually-invokable targets, with prequisites where required.
+exports.prepare = prepare;
+exports.format = format;
+exports.messages = generateMessages;  // Generate msg/json/en.json et al.
+exports.buildAdvancedCompilationTest =
+    gulp.series(exports.deps, buildAdvancedCompilationTest);
+
+// Targets intended only for invocation by scripts; may omit prerequisites.
+exports.onlyBuildAdvancedCompilationTest = buildAdvancedCompilationTest;

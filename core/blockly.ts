@@ -57,7 +57,7 @@ import {Field} from './field.js';
 import {FieldAngle} from './field_angle.js';
 import {FieldCheckbox} from './field_checkbox.js';
 import {FieldColour} from './field_colour.js';
-import {FieldDropdown} from './field_dropdown.js';
+import {FieldDropdown, MenuGenerator, MenuGeneratorFunction, MenuOption} from './field_dropdown.js';
 import {FieldImage} from './field_image.js';
 import {FieldLabel} from './field_label.js';
 import {FieldLabelSerializable} from './field_label_serializable.js';
@@ -71,7 +71,7 @@ import {FlyoutButton} from './flyout_button.js';
 import {HorizontalFlyout} from './flyout_horizontal.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {VerticalFlyout} from './flyout_vertical.js';
-import {Generator} from './generator.js';
+import {CodeGenerator} from './generator.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import {Icon} from './icon.js';
@@ -567,12 +567,12 @@ WorkspaceCommentSvg.prototype.showContextMenu =
         return;
       }
       const menuOptions = [];
-    
+
       if (this.isDeletable() && this.isMovable()) {
         menuOptions.push(ContextMenu.commentDuplicateOption(this));
         menuOptions.push(ContextMenu.commentDeleteOption(this));
       }
-    
+
       ContextMenu.show(e, menuOptions, this.RTL);
     };
 
@@ -602,6 +602,7 @@ export {Css};
 export {Events};
 export {Extensions};
 export {Procedures};
+export {Procedures as procedures};
 export {ShortcutItems};
 export {Themes};
 export {Tooltip};
@@ -651,7 +652,7 @@ export {Field};
 export {FieldAngle};
 export {FieldCheckbox};
 export {FieldColour};
-export {FieldDropdown};
+export {FieldDropdown, MenuGenerator, MenuGeneratorFunction, MenuOption};
 export {FieldImage};
 export {FieldLabel};
 export {FieldLabelSerializable};
@@ -662,7 +663,8 @@ export {FieldVariable};
 export {Flyout};
 export {FlyoutButton};
 export {FlyoutMetricsManager};
-export {Generator};
+export {CodeGenerator};
+export {CodeGenerator as Generator};  // Deprecated name, October 2022.
 export {Gesture};
 export {Grid};
 export {HorizontalFlyout};

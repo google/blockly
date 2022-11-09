@@ -795,7 +795,7 @@ suite('JSO Serialization', function() {
     });
   });
 
-  suite('Procedures', function() {
+  suite.skip('Procedures', function() {
     class MockProcedureModel {
       constructor() {
         this.id = Blockly.utils.idGenerator.genUid();

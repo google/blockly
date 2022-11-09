@@ -153,4 +153,4 @@ export class ProcedureSerializer<ProcedureModel extends IProcedureModel,
 export const observableProcedureSerializer =
     new ProcedureSerializer(ObservableProcedureModel, ObservableParameterModel);
 
-serializationRegistry.register('procedures', observableProcedureSerializer);
+// serializationRegistry.register('procedures', observableProcedureSerializer);

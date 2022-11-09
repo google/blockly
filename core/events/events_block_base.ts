@@ -32,7 +32,7 @@ export class BlockBase extends AbstractEvent {
    */
   constructor(opt_block?: Block) {
     super();
-    this.isBlank = !!opt_block;
+    this.isBlank = !opt_block;
 
     if (!opt_block) return;
 

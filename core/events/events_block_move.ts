@@ -68,6 +68,12 @@ export class BlockMove extends BlockBase {
    */
   override toJson(): BlockMoveJson {
     const json = super.toJson() as BlockMoveJson;
+    json['oldParentId'] = this.oldParentId;
+    json['oldInputName'] = this.oldInputName;
+    if (this.oldCoordinate) {
+      json['oldCoordinate'] = `${Math.round(this.oldCoordinate.x)}, ` +
+          `${Math.round(this.oldCoordinate.y)}`;
+    }
     json['newParentId'] = this.newParentId;
     json['newInputName'] = this.newInputName;
     if (this.newCoordinate) {
@@ -87,6 +93,12 @@ export class BlockMove extends BlockBase {
    */
   override fromJson(json: BlockMoveJson) {
     super.fromJson(json);
+    this.oldParentId = json['oldParentId'];
+    this.oldInputName = json['oldInputName'];
+    if (json['oldCoordinate']) {
+      const xy = json['oldCoordinate'].split(',');
+      this.oldCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
+    }
     this.newParentId = json['newParentId'];
     this.newInputName = json['newInputName'];
     if (json['newCoordinate']) {
@@ -210,6 +222,9 @@ export class BlockMove extends BlockBase {
 }
 
 export interface BlockMoveJson extends BlockBaseJson {
+  oldParentId?: string;
+  oldInputName?: string;
+  oldCoordinate?: string;
   newParentId?: string;
   newInputName?: string;
   newCoordinate?: string;

@@ -71,4 +71,30 @@ suite('Block Change Event', function() {
       });
     });
   });
+
+  suite('Serialization', function() {
+    setup(function() {
+      defineMutatorBlocks();
+    });
+
+    teardown(function() {
+      Blockly.Extensions.unregister('xml_mutator');
+      Blockly.Extensions.unregister('jso_mutator');
+    });
+
+    test('events round-trip through JSON', function() {
+      const block = this.workspace.newBlock('xml_block', 'block_id');
+      block.domToMutation(
+          Blockly.Xml.textToDom('<mutation hasInput="true"/>'));
+      const origEvent = new Blockly.Events.BlockChange(
+          block, 'mutation', null, '', '<mutation hasInput="true"/>');
+
+      const json = origEvent.toJson();
+      const newEvent = new Blockly.Events.fromJson(json, this.workspace);
+
+      console.log(origEvent, newEvent);
+
+      chai.assert.deepEqual(newEvent, origEvent);
+    });
+  });
 });

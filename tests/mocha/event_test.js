@@ -547,6 +547,7 @@ suite('Events', function() {
           type: 'move',
           group: '',
           blockId: thisObj.block.id,
+          oldCoordinate: "0, 0",
         }),
       },
       {
@@ -557,6 +558,7 @@ suite('Events', function() {
           type: 'move',
           group: '',
           blockId: thisObj.shadowBlock.id,
+          oldCoordinate: "0, 0",
           recordUndo: false,
         }),
       },
@@ -637,6 +639,9 @@ suite('Events', function() {
                 const json = event.toJson();
                 const expectedJson = testCase.getExpectedJson(this);
 
+                if (safeStringify(json) !== safeStringify(expectedJson)) {
+                  console.log(safeStringify(json), safeStringify(expectedJson));
+                }
                 chai.assert.equal(
                     safeStringify(json), safeStringify(expectedJson));
               });

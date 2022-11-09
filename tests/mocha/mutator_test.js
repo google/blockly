@@ -67,4 +67,3 @@ suite('Mutator', function() {
     });
   });
 });
-

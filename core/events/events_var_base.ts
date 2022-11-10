@@ -69,6 +69,15 @@ export class VarBase extends AbstractEvent {
     this.varId = json['varId'];
   }
 
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of VarBase, but we can't specify that due to the fact that parameters
+   *     to static methods in subclasses must be supertypes of parameters to
+   *     static methods in superclasses.
+   * @internal
+   */
   static fromJson(json: VarBaseJson, workspace: Workspace, event?: any):
       VarBase {
     const newEvent =

@@ -87,9 +87,17 @@ export class BlockChange extends BlockBase {
     this.newValue = json['newValue'];
   }
 
-  static fromJson(
-      json: BlockChangeJson, workspace: Workspace,
-      event?: BlockChange): BlockChange {
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of BlockChange, but we can't specify that due to the fact that
+   *     parameters to static methods in subclasses must be supertypes of
+   *     parameters to static methods in superclasses.
+   * @internal
+   */
+  static fromJson(json: BlockChangeJson, workspace: Workspace, event?: any):
+      BlockChange {
     const newEvent =
         super.fromJson(json, workspace, event ?? new BlockChange()) as
         BlockChange;

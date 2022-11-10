@@ -71,6 +71,15 @@ export class CommentDelete extends CommentBase {
     return json;
   }
 
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of CommentDelete, but we can't specify that due to the fact that
+   *     parameters to static methods in subclasses must be supertypes of
+   *     parameters to static methods in superclasses.
+   * @internal
+   */
   static fromJson(json: CommentDeleteJson, workspace: Workspace, event?: any):
       CommentDelete {
     const newEvent =

@@ -119,6 +119,15 @@ export class CommentMove extends CommentBase {
     this.newCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
   }
 
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of CommentMove, but we can't specify that due to the fact that
+   *     parameters to static methods in subclasses must be supertypes of
+   *     parameters to static methods in superclasses.
+   * @internal
+   */
   static fromJson(json: CommentMoveJson, workspace: Workspace, event?: any):
       CommentMove {
     const newEvent =

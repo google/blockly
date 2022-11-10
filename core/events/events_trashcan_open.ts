@@ -68,6 +68,15 @@ export class TrashcanOpen extends UiBase {
     this.isOpen = json['isOpen'];
   }
 
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of TrashcanOpen, but we can't specify that due to the fact that
+   *     parameters to static methods in subclasses must be supertypes of
+   *     parameters to static methods in superclasses.
+   * @internal
+   */
   static fromJson(json: TrashcanOpenJson, workspace: Workspace, event?: any):
       TrashcanOpen {
     const newEvent =

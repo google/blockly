@@ -86,6 +86,15 @@ export class CommentBase extends AbstractEvent {
     this.commentId = json['commentId'];
   }
 
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of CommentBase, but we can't specify that due to the fact that
+   *     parameters to static methods in subclasses must be supertypes of
+   *     parameters to static methods in superclasses.
+   * @internal
+   */
   static fromJson(json: CommentBaseJson, workspace: Workspace, event?: any):
       CommentBase {
     const newEvent =

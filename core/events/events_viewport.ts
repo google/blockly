@@ -113,6 +113,15 @@ export class ViewportChange extends UiBase {
     this.oldScale = json['oldScale'];
   }
 
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of Viewport, but we can't specify that due to the fact that parameters
+   *     to static methods in subclasses must be supertypes of parameters to
+   *     static methods in superclasses.
+   * @internal
+   */
   static fromJson(json: ViewportChangeJson, workspace: Workspace, event?: any):
       ViewportChange {
     const newEvent =

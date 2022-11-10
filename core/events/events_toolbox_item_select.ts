@@ -72,6 +72,15 @@ export class ToolboxItemSelect extends UiBase {
     this.newItem = json['newItem'];
   }
 
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of ToolboxItemSelect, but we can't specify that due to the fact that
+   *     parameters to static methods in subclasses must be supertypes of
+   *     parameters to static methods in superclasses.
+   * @internal
+   */
   static fromJson(
       json: ToolboxItemSelectJson, workspace: Workspace,
       event?: any): ToolboxItemSelect {

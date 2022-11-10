@@ -73,6 +73,15 @@ export class Selected extends UiBase {
     this.newElementId = json['newElementId'];
   }
 
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of Selected, but we can't specify that due to the fact that parameters
+   *     to static methods in subclasses must be supertypes of parameters to
+   *     static methods in superclasses.
+   * @internal
+   */
   static fromJson(json: SelectedJson, workspace: Workspace, event?: any):
       Selected {
     const newEvent =

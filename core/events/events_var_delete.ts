@@ -76,6 +76,15 @@ export class VarDelete extends VarBase {
     this.varName = json['varName'];
   }
 
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of VarDelete, but we can't specify that due to the fact that parameters
+   *     to static methods in subclasses must be supertypes of parameters to
+   *     static methods in superclasses.
+   * @internal
+   */
   static fromJson(json: VarDeleteJson, workspace: Workspace, event?: any):
       VarDelete {
     const newEvent =

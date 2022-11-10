@@ -224,7 +224,7 @@ export class InsertionMarkerManager {
   update(dxy: Coordinate, dragTarget: IDragTarget|null) {
     const newCandidate = this.getCandidate(dxy);
 
-    this.wouldDeleteOnDrop = this.shouldDelete(newCandidate, dragTarget);
+    this.wouldDeleteOnDrop = this.shouldDelete(!!newCandidate, dragTarget);
 
     const shouldUpdate =
         this.wouldDeleteOnDrop || this.shouldUpdatePreviews(newCandidate, dxy);
@@ -416,21 +416,20 @@ export class InsertionMarkerManager {
   /**
    * Whether ending the drag would delete the block.
    *
-   * @param newCandidate A new candidate connection that may replace the current
-   *     best candidate.
+   * @param newCandidate Whether there is a candidate connection that the
+   *     block could connect to if the drag ended immediately.
    * @param dragTarget The drag target that the block is currently over.
    * @returns Whether dropping the block immediately would delete the block.
    */
-  private shouldDelete(
-      newCandidate: CandidateConnection|null,
-      dragTarget: IDragTarget|null): boolean {
+  private shouldDelete(newCandidate: boolean, dragTarget: IDragTarget|null):
+      boolean {
     if (dragTarget) {
       const componentManager = this.workspace.getComponentManager();
       const isDeleteArea = componentManager.hasCapability(
           dragTarget.id, ComponentManager.Capability.DELETE_AREA);
       if (isDeleteArea) {
         return (dragTarget as IDeleteArea)
-            .wouldDelete(this.topBlock, !!newCandidate);
+            .wouldDelete(this.topBlock, newCandidate);
       }
     }
     return false;

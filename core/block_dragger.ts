@@ -187,7 +187,7 @@ export class BlockDragger implements IBlockDragger {
 
     this.draggedConnectionManager_.update(delta, this.dragTarget_);
     const oldWouldDeleteBlock = this.wouldDeleteBlock_;
-    this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
+    this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock;
     if (oldWouldDeleteBlock !== this.wouldDeleteBlock_) {
       // Prevent unnecessary add/remove class calls.
       this.updateCursorDuringBlockDrag_();

@@ -205,7 +205,7 @@ suite('Insertion marker manager', function() {
         id: 'fakeDragTarget',
       };
       this.manager.update(this.dxy, fakeDragTarget);
-      chai.assert.isTrue(this.manager.wouldDeleteBlock());
+      chai.assert.isTrue(this.manager.wouldDeleteBlock);
     });
 
     test('Over delete area and rejected would not delete', function() {
@@ -218,7 +218,7 @@ suite('Insertion marker manager', function() {
         id: 'fakeDragTarget',
       };
       this.manager.update(this.dxy, fakeDragTarget);
-      chai.assert.isFalse(this.manager.wouldDeleteBlock());
+      chai.assert.isFalse(this.manager.wouldDeleteBlock);
     });
 
     test('Drag target is not a delete area would not delete', function() {
@@ -231,12 +231,12 @@ suite('Insertion marker manager', function() {
         id: 'fakeDragTarget',
       };
       this.manager.update(this.dxy, fakeDragTarget);
-      chai.assert.isFalse(this.manager.wouldDeleteBlock());
+      chai.assert.isFalse(this.manager.wouldDeleteBlock);
     });
 
     test('Not over drag target would not delete', function() {
       this.manager.update(this.dxy, null);
-      chai.assert.isFalse(this.manager.wouldDeleteBlock());
+      chai.assert.isFalse(this.manager.wouldDeleteBlock);
     });
   });
 

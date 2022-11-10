@@ -529,8 +529,8 @@ export class InsertionMarkerManager {
   }
 
   /**
-   * A preview should be hidden.  This function figures out if it is a block
-   * highlight or an insertion marker, and hides the appropriate one.
+   * A preview should be hidden. Loop through all possible preview modes
+   * and hide everything.
    */
   private hidePreview() {
     const closest = this.activeCandidate?.closest;
@@ -538,13 +538,9 @@ export class InsertionMarkerManager {
         this.workspace.getRenderer().shouldHighlightConnection(closest)) {
       closest.unhighlight();
     }
-    if (this.fadedBlock) {
-      this.hideReplacementFade(this.fadedBlock);
-    } else if (this.highlightedBlock) {
-      this.hideInsertionInputOutline(this.highlightedBlock);
-    } else if (this.markerConnection) {
-      this.hideInsertionMarker(this.markerConnection);
-    }
+    this.hideReplacementFade();
+    this.hideInsertionInputOutline();
+    this.hideInsertionMarker();
   }
 
   /**
@@ -619,33 +615,31 @@ export class InsertionMarkerManager {
   /**
    * Disconnects and hides the current insertion marker. Should return the
    * blocks to their original state.
-   *
-   * @param markerConnection Connection on the insertion marker block that
-   *     corresponds to the active candidate's local connection on the
-   *     currently dragged block.
    */
-  private hideInsertionMarker(markerConnection: RenderedConnection) {
-    const imBlock = markerConnection.getSourceBlock();
+  private hideInsertionMarker() {
+    if (!this.markerConnection) return;
+
+    const markerConn = this.markerConnection;
+    const imBlock = markerConn.getSourceBlock();
     const markerNext = imBlock.nextConnection;
     const markerPrev = imBlock.previousConnection;
     const markerOutput = imBlock.outputConnection;
 
-    const isNext = markerConnection === markerNext;
+    const isNext = markerConn === markerNext;
 
     const isFirstInStatementStack =
         isNext && !(markerPrev && markerPrev.targetConnection);
 
     const isFirstInOutputStack =
-        markerConnection.type === ConnectionType.INPUT_VALUE &&
+        markerConn.type === ConnectionType.INPUT_VALUE &&
         !(markerOutput && markerOutput.targetConnection);
     // The insertion marker is the first block in a stack.  Unplug won't do
     // anything in that case.  Instead, unplug the following block.
     if (isFirstInStatementStack || isFirstInOutputStack) {
-      markerConnection.targetBlock()!.unplug(false);
-    } else if (
-        markerConnection.type === ConnectionType.NEXT_STATEMENT && !isNext) {
+      markerConn.targetBlock()!.unplug(false);
+    } else if (markerConn.type === ConnectionType.NEXT_STATEMENT && !isNext) {
       // Inside of a C-block, first statement connection.
-      const innerConnection = markerConnection.targetConnection;
+      const innerConnection = markerConn.targetConnection;
       if (innerConnection) {
         innerConnection.getSourceBlock().unplug(false);
       }
@@ -661,7 +655,7 @@ export class InsertionMarkerManager {
       imBlock.unplug(/* healStack */ true);
     }
 
-    if (markerConnection.targetConnection) {
+    if (markerConn.targetConnection) {
       throw Error(
           'markerConnection still connected at the end of ' +
           'disconnectInsertionMarker');
@@ -687,13 +681,15 @@ export class InsertionMarkerManager {
   }
 
   /** Hides any visible input outlines. */
-  private hideInsertionInputOutline(highlightedBlock: BlockSvg) {
+  private hideInsertionInputOutline() {
+    if (!this.highlightedBlock) return;
+
     if (!this.activeCandidate) {
       throw new Error(
           'Cannot hide the insertion marker outline because ' +
           'there is no active candidate');
     }
-    highlightedBlock.highlightShapeForInput(
+    this.highlightedBlock.highlightShapeForInput(
         this.activeCandidate.closest, false);
     this.highlightedBlock = null;
   }
@@ -717,11 +713,11 @@ export class InsertionMarkerManager {
 
   /**
    * Hides/Removes any visible fade affects.
-   *
-   * @param fadedBlock The block that was previously faded out.
    */
-  private hideReplacementFade(fadedBlock: BlockSvg) {
-    fadedBlock.fadeForReplacement(false);
+  private hideReplacementFade() {
+    if (!this.fadedBlock) return;
+    
+    this.fadedBlock.fadeForReplacement(false);
     this.fadedBlock = null;
   }
 

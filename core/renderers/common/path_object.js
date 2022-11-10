@@ -230,8 +230,11 @@ class PathObject {
     if (removed) {
       this.svgPath.setAttribute('fill',
         'url(#' + this.constants.removedPatternId + ')');
-    } else if (!removed && this.svgPath.getAttribute('fill')) {
-      this.svgPath.setAttribute('fill', 'none');
+    }
+
+    const fillPattern = this.svgPath.getAttribute('fill');
+    if (!removed && fillPattern && fillPattern.includes(this.constants.removedPatternName)) {
+        this.svgPath.setAttribute('fill', 'none');
     }
   }
 

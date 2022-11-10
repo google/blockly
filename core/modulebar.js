@@ -170,7 +170,7 @@ ModuleBar.prototype.registerKey = function(module, index) {
   }
 
   ShortcutRegistry.registry.register(activateModule, true);
-  ShortcutRegistry.registry.addKeyMapping(ctrlI, activateModule.name);
+  ShortcutRegistry.registry.addKeyMapping(ctrlI, activateModule.name, true);
 };
 
 /**
@@ -213,7 +213,7 @@ ModuleBar.prototype.render = function() {
     tab.appendChild(link);
 
     if (i < this.numberKeyCodes_.length) {
-      this.registerKey(module, i);
+        this.registerKey(module, i);
     }
 
     this.htmlContainer_.appendChild(tab);

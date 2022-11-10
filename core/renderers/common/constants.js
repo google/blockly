@@ -444,6 +444,13 @@ class ConstantProvider {
     this.removedPatternId = '';
 
     /**
+     * Name of the removed pattern, or the empty string if no pattern is set.
+     * @type {string}
+     * @package
+     */
+    this.removedPatternName = 'blocklyRemovedPattern';
+
+    /**
      * The <pattern> element to use for disabled blocks, or null if not set.
      * @type {SVGElement}
      * @private
@@ -1113,7 +1120,7 @@ class ConstantProvider {
     */
     const removedPattern = Blockly.utils.dom.createSvgElement('pattern',
       {
-        'id': 'blocklyRemovedPattern' + this.randomIdentifier,
+        'id': this.removedPatternName + this.randomIdentifier,
         'patternUnits': 'userSpaceOnUse',
         'width': 10,
         'height': 10,

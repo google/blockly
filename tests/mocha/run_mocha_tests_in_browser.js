@@ -8,6 +8,7 @@
  * @fileoverview Node.js script to run Mocha tests in Chrome, via webdriver.
  */
 var webdriverio = require('webdriverio');
+var {posixPath} = require('../../scripts/helpers');
 
 module.exports = runMochaTestsInBrowser;
 
@@ -37,14 +38,14 @@ async function runMochaTestsInBrowser() {
     };
   } else {
     // --disable-gpu is needed to prevent Chrome from hanging on Linux with
-    // NVIDIA drivers older than v295.20. See 
+    // NVIDIA drivers older than v295.20. See
     // https://github.com/google/blockly/issues/5345 for details.
     options.capabilities['goog:chromeOptions'] = {
       args: ['--allow-file-access-from-files', '--disable-gpu']
     };
   }
 
-  var url = 'file://' + __dirname + '/index.html';
+  var url = 'file://' + posixPath(__dirname) + '/index.html';
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
   console.log('Initialized.\nLoading url: ' + url);

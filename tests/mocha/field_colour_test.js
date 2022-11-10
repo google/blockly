@@ -290,7 +290,7 @@ suite('Colour Fields', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
       defineRowBlock();
-      
+
       this.assertValue = (value) => {
         const block = this.workspace.newBlock('row_block');
         const field = new Blockly.FieldColour(value);

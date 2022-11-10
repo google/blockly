@@ -25,7 +25,7 @@ WorkspaceFactoryGenerator = function(model) {
   var hiddenBlocks = document.createElement('div');
   // Generate a globally unique ID for the hidden div element to avoid
   // collisions.
-  var hiddenBlocksId = Blockly.utils.genUid();
+  var hiddenBlocksId = Blockly.utils.idGenerator.genUid();
   hiddenBlocks.id = hiddenBlocksId;
   hiddenBlocks.style.display = 'none';
   document.body.appendChild(hiddenBlocks);

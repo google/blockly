@@ -17,7 +17,7 @@ import './events/events_block_change.js';
 
 import type {Block} from './block.js';
 import {Field, FieldConfig, UnattachedFieldError} from './field.js';
-import {FieldDropdown} from './field_dropdown.js';
+import {FieldDropdown, MenuGenerator, MenuOption} from './field_dropdown.js';
 import * as fieldRegistry from './field_registry.js';
 import * as internalConstants from './internal_constants.js';
 import type {Menu} from './menu.js';
@@ -37,8 +37,7 @@ import * as Xml from './xml.js';
  * @alias Blockly.FieldVariable
  */
 export class FieldVariable extends FieldDropdown {
-  protected override menuGenerator_: AnyDuringMigration[][]|
-      ((this: FieldDropdown) => AnyDuringMigration[][]);
+  protected override menuGenerator_: MenuGenerator|undefined;
   defaultVariableName: string;
 
   /** The type of the default variable for this field. */
@@ -89,9 +88,7 @@ export class FieldVariable extends FieldDropdown {
      * An array of options for a dropdown list,
      * or a function which generates these options.
      */
-    // AnyDuringMigration because:  Type '(this: FieldVariable) => any[][]' is
-    // not assignable to type 'any[][] | ((this: FieldDropdown) => any[][])'.
-    this.menuGenerator_ = FieldVariable.dropdownCreate as AnyDuringMigration;
+    this.menuGenerator_ = FieldVariable.dropdownCreate as MenuGenerator;
 
     /**
      * The initial variable name passed to this field's constructor, or an
@@ -528,14 +525,14 @@ export class FieldVariable extends FieldDropdown {
    *
    * @returns Array of variable names/id tuples.
    */
-  static dropdownCreate(this: FieldVariable): AnyDuringMigration[][] {
+  static dropdownCreate(this: FieldVariable): MenuOption[] {
     if (!this.variable_) {
       throw Error(
           'Tried to call dropdownCreate on a variable field with no' +
           ' variable selected.');
     }
     const name = this.getText();
-    let variableModelList: AnyDuringMigration[] = [];
+    let variableModelList: VariableModel[] = [];
     if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
       const variableTypes = this.getVariableTypes_();
       // Get a copy of the list, so that adding rename and new variable options
@@ -549,7 +546,7 @@ export class FieldVariable extends FieldDropdown {
     }
     variableModelList.sort(VariableModel.compareByName);
 
-    const options = [];
+    const options: [string, string][] = [];
     for (let i = 0; i < variableModelList.length; i++) {
       // Set the UUID as the internal representation of the variable.
       options[i] = [variableModelList[i].name, variableModelList[i].getId()];

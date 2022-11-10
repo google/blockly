@@ -39,7 +39,7 @@ suite('Keyboard Shortcut Registry Test', function() {
       };
       chai.assert.throws(
           shouldThrow, Error,
-          'Shortcut with name "test_shortcut" already exists.');
+          'Shortcut named "test_shortcut" already exists.');
     });
     test(
         'Registers shortcut with same name opt_allowOverrides=true',
@@ -104,7 +104,7 @@ suite('Keyboard Shortcut Registry Test', function() {
 
       const registry = this.registry;
       chai.assert.isFalse(registry.unregister('test'));
-      sinon.assert.calledOnceWithExactly(consoleStub, 'Keyboard shortcut with name "test" not found.');
+      sinon.assert.calledOnceWithExactly(consoleStub, 'Keyboard shortcut named "test" not found.');
     });
     test('Unregistering a shortcut with key mappings', function() {
       const testShortcut = {'name': 'test_shortcut'};
@@ -173,7 +173,7 @@ suite('Keyboard Shortcut Registry Test', function() {
       };
       chai.assert.throws(
           shouldThrow, Error,
-          'Shortcut with name "test_shortcut" collides with shortcuts test_shortcut_2');
+          'Shortcut named "test_shortcut" collides with shortcuts "test_shortcut_2"');
     });
   });
 
@@ -216,7 +216,7 @@ suite('Keyboard Shortcut Registry Test', function() {
       chai.assert.isFalse(isRemoved);
       sinon.assert.calledOnceWithExactly(
           consoleStub,
-          'No keyboard shortcut with name "test_shortcut" registered with key code "keyCode"');
+          'No keyboard shortcut named "test_shortcut" registered with key code "keyCode"');
     });
     test(
         'Removes a key map that does not exist from empty key mapping opt_quiet=false',
@@ -229,7 +229,7 @@ suite('Keyboard Shortcut Registry Test', function() {
           chai.assert.isFalse(isRemoved);
           sinon.assert.calledOnceWithExactly(
               consoleStub,
-              'No keyboard shortcut with name "test_shortcut" registered with key code "keyCode"');
+              'No keyboard shortcut named "test_shortcut" registered with key code "keyCode"');
         });
   });
 

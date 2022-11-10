@@ -373,7 +373,7 @@ Code.renderContent = function() {
 
 /**
  * Attempt to generate the code and display it in the UI, pretty printed.
- * @param generator {!Blockly.Generator} The generator to use.
+ * @param generator {!Blockly.CodeGenerator} The generator to use.
  */
 Code.attemptCodeGeneration = function(generator) {
   var content = document.getElementById('content_' + Code.selected);
@@ -388,7 +388,7 @@ Code.attemptCodeGeneration = function(generator) {
 
 /**
  * Check whether all blocks in use have generator functions.
- * @param generator {!Blockly.Generator} The generator to use.
+ * @param generator {!Blockly.CodeGenerator} The generator to use.
  */
 Code.checkAllGeneratorFunctionsDefined = function(generator) {
   var blocks = Code.workspace.getAllBlocks(false);
@@ -621,6 +621,6 @@ Code.discard = function() {
 // Load the Code demo's language strings.
 document.write('<script src="msg/' + Code.LANG + '.js"></script>\n');
 // Load Blockly's language strings.
-document.write('<script src="../../msg/js/' + Code.LANG + '.js"></script>\n');
+document.write('<script src="../../build/msg/' + Code.LANG + '.js"></script>\n');
 
 window.addEventListener('load', Code.init);

@@ -68,7 +68,7 @@
     depsFiles: [
       'build/deps.js',
     ],
-    
+
     // List of goog.modules to goog.require.
     requires: [
       'Blockly',
@@ -83,20 +83,20 @@
     // List of scripts to load in compressed mode, instead of
     // requires.  Paths relative to root.
     compressedScripts: [
-      'blockly_compressed.js',
-      'blocks_compressed.js',
-      'dart_compressed.js',
-      'javascript_compressed.js',
-      'lua_compressed.js',
-      'php_compressed.js',
-      'python_compressed.js',
+      'dist/blockly_compressed.js',
+      'dist/blocks_compressed.js',
+      'dist/dart_compressed.js',
+      'dist/javascript_compressed.js',
+      'dist/lua_compressed.js',
+      'dist/php_compressed.js',
+      'dist/python_compressed.js',
     ],
 
     // Additional scripts to be loaded after Blockly is loaded,
     // whether Blockly is loaded from compressed or uncompressed.
     // Paths relative to root.
     additionalScripts: [
-      'msg/messages.js',
+      'build/msg/en.js',
     ],
   };
   if (typeof window.BLOCKLY_BOOTSTRAP_OPTIONS === 'object') {

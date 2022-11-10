@@ -36,7 +36,7 @@ export interface State {
  *
  * @alias Blockly.serialization.variables.VariableSerializer
  */
-class VariableSerializer implements ISerializer {
+export class VariableSerializer implements ISerializer {
   priority: number;
 
   /* eslint-disable-next-line require-jsdoc */

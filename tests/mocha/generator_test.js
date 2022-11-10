@@ -27,7 +27,7 @@ suite('Generator', function() {
 
   suite('prefix', function() {
     setup(function() {
-      this.generator = new Blockly.Generator('INTERCAL');
+      this.generator = new Blockly.CodeGenerator('INTERCAL');
     });
 
     test('Nothing', function() {

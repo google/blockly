@@ -30,12 +30,13 @@ import type {RenderedConnection} from './rendered_connection.js';
  * @alias Blockly.Input
  */
 export class Input {
-  private sourceBlock_: Block;
+  private sourceBlock: Block;
   fieldRow: Field[] = [];
-  align: Align;
+  /** Alignment of input's fields (left, right or centre). */
+  align = Align.LEFT;
 
   /** Is the input visible? */
-  private visible_ = true;
+  private visible = true;
 
   /**
    * @param type The type of the input.
@@ -51,19 +52,16 @@ export class Input {
       throw Error(
           'Value inputs and statement inputs must have non-empty name.');
     }
-    this.sourceBlock_ = block;
-
-    /** Alignment of input's fields (left, right or centre). */
-    this.align = Align.LEFT;
+    this.sourceBlock = block;
   }
 
   /**
    * Get the source block for this input.
    *
-   * @returns The source block, or null if there is none.
+   * @returns The block this input is part of.
    */
   getSourceBlock(): Block {
-    return this.sourceBlock_;
+    return this.sourceBlock;
   }
 
   /**
@@ -108,8 +106,8 @@ export class Input {
       }) as Field;
     }
 
-    field.setSourceBlock(this.sourceBlock_);
-    if (this.sourceBlock_.rendered) {
+    field.setSourceBlock(this.sourceBlock);
+    if (this.sourceBlock.rendered) {
       field.init();
       field.applyColour();
     }
@@ -128,10 +126,10 @@ export class Input {
       index = this.insertFieldAt(index, field.suffixField);
     }
 
-    if (this.sourceBlock_.rendered) {
-      (this.sourceBlock_ as BlockSvg).render();
+    if (this.sourceBlock.rendered) {
+      (this.sourceBlock as BlockSvg).render();
       // Adding a field will cause the block to change shape.
-      this.sourceBlock_.bumpNeighbours();
+      this.sourceBlock.bumpNeighbours();
     }
     return index;
   }
@@ -150,10 +148,10 @@ export class Input {
       if (field.name === name) {
         field.dispose();
         this.fieldRow.splice(i, 1);
-        if (this.sourceBlock_.rendered) {
-          (this.sourceBlock_ as BlockSvg).render();
+        if (this.sourceBlock.rendered) {
+          (this.sourceBlock as BlockSvg).render();
           // Removing a field will cause the block to change shape.
-          this.sourceBlock_.bumpNeighbours();
+          this.sourceBlock.bumpNeighbours();
         }
         return true;
       }
@@ -170,7 +168,7 @@ export class Input {
    * @returns True if visible.
    */
   isVisible(): boolean {
-    return this.visible_;
+    return this.visible;
   }
 
   /**
@@ -186,10 +184,10 @@ export class Input {
     // because this function is package. If this function goes back to being a
     // public API tests (lots of tests) should be added.
     let renderList: AnyDuringMigration[] = [];
-    if (this.visible_ === visible) {
+    if (this.visible === visible) {
       return renderList;
     }
-    this.visible_ = visible;
+    this.visible = visible;
 
     for (let y = 0, field; field = this.fieldRow[y]; y++) {
       field.setVisible(visible);
@@ -245,8 +243,8 @@ export class Input {
    */
   setAlign(align: Align): Input {
     this.align = align;
-    if (this.sourceBlock_.rendered) {
-      const sourceBlock = this.sourceBlock_ as BlockSvg;
+    if (this.sourceBlock.rendered) {
+      const sourceBlock = this.sourceBlock as BlockSvg;
       sourceBlock.render();
     }
     return this;
@@ -280,7 +278,7 @@ export class Input {
 
   /** Initialize the fields on this input. */
   init() {
-    if (!this.sourceBlock_.workspace.rendered) {
+    if (!this.sourceBlock.workspace.rendered) {
       return;  // Headless blocks don't need fields initialized.
     }
     for (let i = 0; i < this.fieldRow.length; i++) {

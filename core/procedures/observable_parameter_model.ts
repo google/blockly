@@ -30,7 +30,7 @@ export class ObservableParameterModel implements IParameterModel {
    * Sets the name of this parameter to the given name.
    */
   setName(name: string): this {
-    if (name == this.variable.name) return this;
+    if (name === this.variable.name) return this;
     const oldName = this.variable.name;
     this.variable =
         this.workspace.getVariable(name) ?? this.workspace.createVariable(name);

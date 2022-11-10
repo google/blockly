@@ -436,7 +436,7 @@ export class InsertionMarkerManager {
    */
   private maybeShowPreview(newCandidate: CandidateConnection|null) {
     if (this.wouldDeleteBlock) return;  // Nope, don't add a marker.
-    if (!newCandidate) return;           // Nothing to connect to.
+    if (!newCandidate) return;          // Nothing to connect to.
 
     const closest = newCandidate.closest;
 

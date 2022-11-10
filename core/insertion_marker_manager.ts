@@ -102,7 +102,7 @@ export class InsertionMarkerManager {
    * Whether the block would be deleted if it were dropped immediately.
    * Updated on every mouse move.
    */
-  private wouldDeleteBlockInternal = false;
+  private wouldDeleteOnDrop = false;
 
   /**
    * Connection on the insertion marker block that corresponds to
@@ -174,7 +174,7 @@ export class InsertionMarkerManager {
    * @internal
    */
   wouldDeleteBlock(): boolean {
-    return this.wouldDeleteBlockInternal;
+    return this.wouldDeleteOnDrop;
   }
 
   /**
@@ -224,10 +224,10 @@ export class InsertionMarkerManager {
   update(dxy: Coordinate, dragTarget: IDragTarget|null) {
     const newCandidate = this.getCandidate(dxy);
 
-    this.wouldDeleteBlockInternal = this.shouldDelete(newCandidate, dragTarget);
+    this.wouldDeleteOnDrop = this.shouldDelete(newCandidate, dragTarget);
 
-    const shouldUpdate = this.wouldDeleteBlockInternal ||
-        this.shouldUpdatePreviews(newCandidate, dxy);
+    const shouldUpdate =
+        this.wouldDeleteOnDrop || this.shouldUpdatePreviews(newCandidate, dxy);
 
     if (shouldUpdate) {
       // Don't fire events for insertion marker creation or movement.
@@ -445,8 +445,8 @@ export class InsertionMarkerManager {
    *     best candidate.
    */
   private maybeShowPreview(newCandidate: CandidateConnection|null) {
-    if (this.wouldDeleteBlockInternal) return;  // Nope, don't add a marker.
-    if (!newCandidate) return;                  // Nothing to connect to.
+    if (this.wouldDeleteOnDrop) return;  // Nope, don't add a marker.
+    if (!newCandidate) return;           // Nothing to connect to.
 
     const closest = newCandidate.closest;
 
@@ -517,7 +517,7 @@ export class InsertionMarkerManager {
         // connection has changed, remove the old preview.
         // Also hide if we had a preview before but now we're going to delete
         // instead.
-        if ((closestChanged || localChanged || this.wouldDeleteBlockInternal)) {
+        if ((closestChanged || localChanged || this.wouldDeleteOnDrop)) {
           this.hidePreview();
         }
       }
@@ -716,7 +716,7 @@ export class InsertionMarkerManager {
    */
   private hideReplacementFade() {
     if (!this.fadedBlock) return;
-    
+
     this.fadedBlock.fadeForReplacement(false);
     this.fadedBlock = null;
   }

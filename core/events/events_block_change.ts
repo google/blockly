@@ -15,6 +15,7 @@ goog.declareModuleId('Blockly.Events.BlockChange');
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import * as registry from '../registry.js';
+import {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
 
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
@@ -84,6 +85,19 @@ export class BlockChange extends BlockBase {
     this.name = json['name'];
     this.oldValue = json['oldValue'];
     this.newValue = json['newValue'];
+  }
+
+  static fromJson(
+      json: BlockChangeJson, workspace: Workspace,
+      event?: BlockChange): BlockChange {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new BlockChange()) as
+        BlockChange;
+    newEvent.element = json['element'];
+    newEvent.name = json['name'];
+    newEvent.oldValue = json['oldValue'];
+    newEvent.newValue = json['newValue'];
+    return newEvent;
   }
 
   /**

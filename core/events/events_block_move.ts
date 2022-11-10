@@ -19,6 +19,7 @@ import {Coordinate} from '../utils/coordinate.js';
 
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 interface BlockLocation {
@@ -108,6 +109,28 @@ export class BlockMove extends BlockBase {
     if (json['recordUndo'] !== undefined) {
       this.recordUndo = json['recordUndo'];
     }
+  }
+
+  static fromJson(json: BlockMoveJson, workspace: Workspace, event?: any):
+      BlockMove {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new BlockMove()) as BlockMove;
+    newEvent.oldParentId = json['oldParentId'];
+    newEvent.oldInputName = json['oldInputName'];
+    if (json['oldCoordinate']) {
+      const xy = json['oldCoordinate'].split(',');
+      newEvent.oldCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
+    }
+    newEvent.newParentId = json['newParentId'];
+    newEvent.newInputName = json['newInputName'];
+    if (json['newCoordinate']) {
+      const xy = json['newCoordinate'].split(',');
+      newEvent.newCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
+    }
+    if (json['recordUndo'] !== undefined) {
+      newEvent.recordUndo = json['recordUndo'];
+    }
+    return newEvent;
   }
 
   /** Record the block's new location.  Called after the move. */

@@ -17,6 +17,7 @@ import type {VariableModel} from '../variable_model.js';
 
 import {VarBase, VarBaseJson} from './events_var_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -74,6 +75,15 @@ export class VarRename extends VarBase {
     super.fromJson(json);
     this.oldName = json['oldName'];
     this.newName = json['newName'];
+  }
+
+  static fromJson(json: VarRenameJson, workspace: Workspace, event?: any):
+      VarRename {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new VarRename()) as VarRename;
+    newEvent.oldName = json['oldName'];
+    newEvent.newName = json['newName'];
+    return newEvent;
   }
 
   /**

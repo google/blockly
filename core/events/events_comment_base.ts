@@ -20,6 +20,7 @@ import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js
 import type {CommentCreate} from './events_comment_create.js';
 import type {CommentDelete} from './events_comment_delete.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -83,6 +84,15 @@ export class CommentBase extends AbstractEvent {
   override fromJson(json: CommentBaseJson) {
     super.fromJson(json);
     this.commentId = json['commentId'];
+  }
+
+  static fromJson(json: CommentBaseJson, workspace: Workspace, event?: any):
+      CommentBase {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new CommentBase()) as
+        CommentBase;
+    newEvent.commentId = json['commentId'];
+    return newEvent;
   }
 
   /**

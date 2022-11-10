@@ -17,6 +17,7 @@ import type {WorkspaceComment} from '../workspace_comment.js';
 
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -81,6 +82,16 @@ export class CommentChange extends CommentBase {
     super.fromJson(json);
     this.oldContents_ = json['oldContents'];
     this.newContents_ = json['newContents'];
+  }
+
+  static fromJson(json: CommentChangeJson, workspace: Workspace, event?: any):
+      CommentChange {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new CommentChange()) as
+        CommentChange;
+    newEvent.oldContents_ = json['oldContents'];
+    newEvent.newContents_ = json['newContents'];
+    return newEvent;
   }
 
   /**

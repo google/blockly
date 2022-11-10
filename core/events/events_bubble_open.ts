@@ -17,6 +17,7 @@ import type {BlockSvg} from '../block_svg.js';
 import * as registry from '../registry.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -85,6 +86,17 @@ export class BubbleOpen extends UiBase {
     this.isOpen = json['isOpen'];
     this.bubbleType = json['bubbleType'];
     this.blockId = json['blockId'];
+  }
+
+  static fromJson(json: BubbleOpenJson, workspace: Workspace, event?: any):
+      BubbleOpen {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new BubbleOpen()) as
+        BubbleOpen;
+    newEvent.isOpen = json['isOpen'];
+    newEvent.bubbleType = json['bubbleType'];
+    newEvent.blockId = json['blockId'];
+    return newEvent;
   }
 }
 

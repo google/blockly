@@ -17,6 +17,7 @@ import {AbstractEventJson} from './events_abstract.js';
 
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -70,6 +71,15 @@ export class Selected extends UiBase {
     super.fromJson(json);
     this.oldElementId = json['oldElementId'];
     this.newElementId = json['newElementId'];
+  }
+
+  static fromJson(json: SelectedJson, workspace: Workspace, event?: any):
+      Selected {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new Selected()) as Selected;
+    newEvent.oldElementId = json['oldElementId'];
+    newEvent.newElementId = json['newElementId'];
+    return newEvent;
   }
 }
 

@@ -521,8 +521,10 @@ export function fromJson(
   if (!eventClass) throw Error('Unknown event type.');
 
   if (eventClassHasStaticFromJson(eventClass)) {
+    console.log('from jsoning');
     return (eventClass as any).fromJson(json, workspace);
   }
+  console.log('falling back');
 
   // Fallback to the old deserialization method.
   const event = new eventClass();

@@ -17,6 +17,7 @@ import type {VariableModel} from '../variable_model.js';
 
 import {VarBase, VarBaseJson} from './events_var_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -73,6 +74,15 @@ export class VarCreate extends VarBase {
     super.fromJson(json);
     this.varType = json['varType'];
     this.varName = json['varName'];
+  }
+
+  static fromJson(json: VarCreateJson, workspace: Workspace, event?: any):
+      VarCreate {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new VarCreate()) as VarCreate;
+    newEvent.varType = json['varType'];
+    newEvent.varName = json['varName'];
+    return newEvent;
   }
 
   /**

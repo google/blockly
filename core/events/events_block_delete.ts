@@ -19,6 +19,7 @@ import * as Xml from '../xml.js';
 
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
+import {Workspace} from '../workspace.js';
 
 
 /**
@@ -112,6 +113,22 @@ export class BlockDelete extends BlockBase {
     if (json['recordUndo'] !== undefined) {
       this.recordUndo = json['recordUndo'];
     }
+  }
+
+  static fromJson(json: BlockDeleteJson, workspace: Workspace, event?: any):
+      BlockDelete {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new BlockDelete()) as
+        BlockDelete;
+    newEvent.oldXml = Xml.textToDom(json['oldXml']);
+    newEvent.ids = json['ids'];
+    newEvent.wasShadow =
+        json['wasShadow'] || newEvent.oldXml.tagName.toLowerCase() === 'shadow';
+    newEvent.oldJson = json['oldJson'];
+    if (json['recordUndo'] !== undefined) {
+      newEvent.recordUndo = json['recordUndo'];
+    }
+    return newEvent;
   }
 
   /**

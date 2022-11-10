@@ -16,6 +16,7 @@ import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -69,6 +70,17 @@ export class ToolboxItemSelect extends UiBase {
     super.fromJson(json);
     this.oldItem = json['oldItem'];
     this.newItem = json['newItem'];
+  }
+
+  static fromJson(
+      json: ToolboxItemSelectJson, workspace: Workspace,
+      event?: any): ToolboxItemSelect {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new ToolboxItemSelect()) as
+        ToolboxItemSelect;
+    newEvent.oldItem = json['oldItem'];
+    newEvent.newItem = json['newItem'];
+    return newEvent;
   }
 }
 

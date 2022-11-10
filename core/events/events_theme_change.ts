@@ -16,6 +16,7 @@ import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -63,6 +64,15 @@ export class ThemeChange extends UiBase {
   override fromJson(json: ThemeChangeJson) {
     super.fromJson(json);
     this.themeName = json['themeName'];
+  }
+
+  static fromJson(json: ThemeChangeJson, workspace: Workspace, event?: any):
+      ThemeChange {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new ThemeChange()) as
+        ThemeChange;
+    newEvent.themeName = json['themeName'];
+    return newEvent;
   }
 }
 

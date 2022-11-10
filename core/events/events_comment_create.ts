@@ -18,6 +18,7 @@ import * as Xml from '../xml.js';
 
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -69,6 +70,15 @@ export class CommentCreate extends CommentBase {
   override fromJson(json: CommentCreateJson) {
     super.fromJson(json);
     this.xml = Xml.textToDom(json['xml']);
+  }
+
+  static fromJson(json: CommentCreateJson, workspace: Workspace, event?: any):
+      CommentCreate {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new CommentCreate()) as
+        CommentCreate;
+    newEvent.xml = Xml.textToDom(json['xml']);
+    return newEvent;
   }
 
   /**

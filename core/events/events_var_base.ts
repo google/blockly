@@ -15,6 +15,7 @@ goog.declareModuleId('Blockly.Events.VarBase');
 import type {VariableModel} from '../variable_model.js';
 
 import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -66,6 +67,14 @@ export class VarBase extends AbstractEvent {
   override fromJson(json: VarBaseJson) {
     super.fromJson(json);
     this.varId = json['varId'];
+  }
+
+  static fromJson(json: VarBaseJson, workspace: Workspace, event?: any):
+      VarBase {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new VarBase()) as VarBase;
+    newEvent.varId = json['varId'];
+    return newEvent;
   }
 }
 

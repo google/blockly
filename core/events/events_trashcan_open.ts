@@ -17,6 +17,7 @@ import {AbstractEventJson} from './events_abstract.js';
 
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -65,6 +66,15 @@ export class TrashcanOpen extends UiBase {
   override fromJson(json: TrashcanOpenJson) {
     super.fromJson(json);
     this.isOpen = json['isOpen'];
+  }
+
+  static fromJson(json: TrashcanOpenJson, workspace: Workspace, event?: any):
+      TrashcanOpen {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new TrashcanOpen()) as
+        TrashcanOpen;
+    newEvent.isOpen = json['isOpen'];
+    return newEvent;
   }
 }
 

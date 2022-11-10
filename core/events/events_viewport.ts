@@ -16,6 +16,7 @@ import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -110,6 +111,18 @@ export class ViewportChange extends UiBase {
     this.viewLeft = json['viewLeft'];
     this.scale = json['scale'];
     this.oldScale = json['oldScale'];
+  }
+
+  static fromJson(json: ViewportChangeJson, workspace: Workspace, event?: any):
+      ViewportChange {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new ViewportChange()) as
+        ViewportChange;
+    newEvent.viewTop = json['viewTop'];
+    newEvent.viewLeft = json['viewLeft'];
+    newEvent.scale = json['scale'];
+    newEvent.oldScale = json['oldScale'];
+    return newEvent;
   }
 }
 

@@ -18,6 +18,7 @@ import {AbstractEventJson} from './events_abstract.js';
 
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
+import {Workspace} from '../workspace.js';
 
 
 /**
@@ -80,6 +81,14 @@ export class Click extends UiBase {
     super.fromJson(json);
     this.targetType = json['targetType'];
     this.blockId = json['blockId'];
+  }
+
+  static fromJson(json: ClickJson, workspace: Workspace, event?: any): Click {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new Click()) as Click;
+    newEvent.targetType = json['targetType'];
+    newEvent.blockId = json['blockId'];
+    return newEvent;
   }
 }
 

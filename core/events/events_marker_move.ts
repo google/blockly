@@ -102,6 +102,18 @@ export class MarkerMove extends UiBase {
     this.oldNode = json['oldNode'];
     this.newNode = json['newNode'];
   }
+
+  static fromJson(json: MarkerMoveJson, workspace: Workspace, event?: any):
+      MarkerMove {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new MarkerMove()) as
+        MarkerMove;
+    newEvent.isCursor = json['isCursor'];
+    newEvent.blockId = json['blockId'];
+    newEvent.oldNode = json['oldNode'];
+    newEvent.newNode = json['newNode'];
+    return newEvent;
+  }
 }
 
 export interface MarkerMoveJson extends AbstractEventJson {

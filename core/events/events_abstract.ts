@@ -74,6 +74,14 @@ export abstract class Abstract {
     this.group = json['group'] || '';
   }
 
+  static fromJson(json: AbstractEventJson, workspace: Workspace, event: any):
+      Abstract {
+    event.isBlank = false;
+    event.group = json['group'] || '';
+    event.workspaceId = workspace.id;
+    return event;
+  }
+
   /**
    * Does this event record any change of state?
    *

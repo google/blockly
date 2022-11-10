@@ -13,6 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockBase');
 
 import type {Block} from '../block.js';
+import {Workspace} from '../workspace.js';
 
 import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
 
@@ -48,7 +49,7 @@ export class BlockBase extends AbstractEvent {
    *
    * @returns JSON representation.
    */
-  override toJson(): AbstractEventJson {
+  override toJson(): BlockBaseJson {
     const json = super.toJson() as BlockBaseJson;
     if (!this.blockId) {
       throw new Error(
@@ -67,6 +68,14 @@ export class BlockBase extends AbstractEvent {
   override fromJson(json: BlockBaseJson) {
     super.fromJson(json);
     this.blockId = json['blockId'];
+  }
+
+  static fromJson(json: BlockBaseJson, workspace: Workspace, event?: any):
+      BlockBase {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new BlockBase()) as BlockBase;
+    newEvent.blockId = json['blockId'];
+    return newEvent;
   }
 }
 

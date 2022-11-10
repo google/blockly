@@ -17,6 +17,7 @@ import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
+import {Workspace} from '../workspace.js';
 
 
 /**
@@ -87,6 +88,16 @@ export class BlockDrag extends UiBase {
     this.isStart = json['isStart'];
     this.blockId = json['blockId'];
     this.blocks = json['blocks'];
+  }
+
+  static fromJson(json: BlockDragJson, workspace: Workspace, event?: any):
+      BlockDrag {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new BlockDrag()) as BlockDrag;
+    newEvent.isStart = json['isStart'];
+    newEvent.blockId = json['blockId'];
+    newEvent.blocks = json['blocks'];
+    return newEvent;
   }
 }
 

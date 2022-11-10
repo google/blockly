@@ -18,6 +18,7 @@ import type {WorkspaceComment} from '../workspace_comment.js';
 
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -116,6 +117,18 @@ export class CommentMove extends CommentBase {
     this.oldCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
     xy = json['newCoordinate'].split(',');
     this.newCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
+  }
+
+  static fromJson(json: CommentMoveJson, workspace: Workspace, event?: any):
+      CommentMove {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new CommentMove()) as
+        CommentMove;
+    let xy = json['oldCoordinate'].split(',');
+    newEvent.oldCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
+    xy = json['newCoordinate'].split(',');
+    newEvent.newCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
+    return newEvent;
   }
 
   /**

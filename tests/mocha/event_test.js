@@ -583,7 +583,8 @@ suite('Events', function() {
       {title: 'Comment delete', class: Blockly.Events.CommentDelete,
         getArgs: (thisObj) => [thisObj.comment],
         getExpectedJson: (thisObj) => ({type: 'comment_delete', group: '',
-          commentId: thisObj.comment.id})},
+          commentId: thisObj.comment.id,
+          xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY())})},
       // TODO(#4577) Test serialization of move event coordinate properties.
     ];
     const testSuites = [
@@ -621,10 +622,10 @@ suite('Events', function() {
         suite('fromJson', function() {
           testSuite.testCases.forEach((testCase) => {
             test(testCase.title, function() {
+              console.log(testCase.getArgs(this));
               const event = new testCase.class(...testCase.getArgs(this));
-              const event2 = new testCase.class();
               const json = event.toJson();
-              event2.fromJson(json);
+              const event2 = Blockly.Events.fromJson(json, this.workspace);
 
               chai.assert.equal(
                   safeStringify(event2.toJson()), safeStringify(json));

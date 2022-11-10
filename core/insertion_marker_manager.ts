@@ -101,8 +101,10 @@ export class InsertionMarkerManager {
   /**
    * Whether the block would be deleted if it were dropped immediately.
    * Updated on every mouse move.
+   *
+   * @internal
    */
-  private wouldDeleteOnDrop = false;
+  public wouldDeleteBlock = false;
 
   /**
    * Connection on the insertion marker block that corresponds to
@@ -167,17 +169,6 @@ export class InsertionMarkerManager {
   }
 
   /**
-   * Return whether the block would be deleted if dropped immediately, based on
-   * information from the most recent move event.
-   *
-   * @returns True if the block would be deleted if dropped immediately.
-   * @internal
-   */
-  wouldDeleteBlock(): boolean {
-    return this.wouldDeleteOnDrop;
-  }
-
-  /**
    * Return whether the block would be connected if dropped immediately, based
    * on information from the most recent move event.
    *
@@ -224,10 +215,10 @@ export class InsertionMarkerManager {
   update(dxy: Coordinate, dragTarget: IDragTarget|null) {
     const newCandidate = this.getCandidate(dxy);
 
-    this.wouldDeleteOnDrop = this.shouldDelete(!!newCandidate, dragTarget);
+    this.wouldDeleteBlock = this.shouldDelete(!!newCandidate, dragTarget);
 
     const shouldUpdate =
-        this.wouldDeleteOnDrop || this.shouldUpdatePreviews(newCandidate, dxy);
+        this.wouldDeleteBlock || this.shouldUpdatePreviews(newCandidate, dxy);
 
     if (shouldUpdate) {
       // Don't fire events for insertion marker creation or movement.
@@ -444,7 +435,7 @@ export class InsertionMarkerManager {
    *     best candidate.
    */
   private maybeShowPreview(newCandidate: CandidateConnection|null) {
-    if (this.wouldDeleteOnDrop) return;  // Nope, don't add a marker.
+    if (this.wouldDeleteBlock) return;  // Nope, don't add a marker.
     if (!newCandidate) return;           // Nothing to connect to.
 
     const closest = newCandidate.closest;
@@ -516,7 +507,7 @@ export class InsertionMarkerManager {
         // connection has changed, remove the old preview.
         // Also hide if we had a preview before but now we're going to delete
         // instead.
-        if ((closestChanged || localChanged || this.wouldDeleteOnDrop)) {
+        if ((closestChanged || localChanged || this.wouldDeleteBlock)) {
           this.hidePreview();
         }
       }

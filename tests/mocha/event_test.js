@@ -622,7 +622,6 @@ suite('Events', function() {
         suite('fromJson', function() {
           testSuite.testCases.forEach((testCase) => {
             test(testCase.title, function() {
-              console.log(testCase.getArgs(this));
               const event = new testCase.class(...testCase.getArgs(this));
               const json = event.toJson();
               const event2 = Blockly.Events.fromJson(json, this.workspace);
@@ -640,9 +639,6 @@ suite('Events', function() {
                 const json = event.toJson();
                 const expectedJson = testCase.getExpectedJson(this);
 
-                if (safeStringify(json) !== safeStringify(expectedJson)) {
-                  console.log(safeStringify(json), safeStringify(expectedJson));
-                }
                 chai.assert.equal(
                     safeStringify(json), safeStringify(expectedJson));
               });

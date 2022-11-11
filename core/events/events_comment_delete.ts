@@ -35,7 +35,6 @@ export class CommentDelete extends CommentBase {
    *     Undefined for a blank event.
    */
   constructor(opt_comment?: WorkspaceComment) {
-    console.log(opt_comment);
     super(opt_comment);
 
     if (!opt_comment) {

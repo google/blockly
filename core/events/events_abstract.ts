@@ -74,8 +74,20 @@ export abstract class Abstract {
     this.group = json['group'] || '';
   }
 
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of Abstract (like all events), but we can't specify that due to the
+   *     fact that parameters to static methods in subclasses must be
+   *     supertypes of parameters to static methods in superclasses.
+   * @internal
+   */
   static fromJson(json: AbstractEventJson, workspace: Workspace, event: any):
       Abstract {
+    deprecation.warn(
+        'Blockly.Events.Abstract.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     event.isBlank = false;
     event.group = json['group'] || '';
     event.workspaceId = workspace.id;
@@ -96,8 +108,10 @@ export abstract class Abstract {
    *
    * @param _forward True if run forward, false if run backward (undo).
    */
-  run(_forward: boolean) {}
-  // Defined by subclasses.
+  run(_forward: boolean) {
+    // Defined by subclasses.
+  }
+  
 
   /**
    * Get workspace the event belongs to.

@@ -14,6 +14,7 @@ goog.declareModuleId('Blockly.Events.BlockMove');
 
 import type {Block} from '../block.js';
 import {ConnectionType} from '../connection_type.js';
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 
@@ -93,6 +94,9 @@ export class BlockMove extends BlockBase {
    * @param json JSON representation.
    */
   override fromJson(json: BlockMoveJson) {
+    deprecation.warn(
+        'Blockly.Events.BlockMove.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.oldParentId = json['oldParentId'];
     this.oldInputName = json['oldInputName'];

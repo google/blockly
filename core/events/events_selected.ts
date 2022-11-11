@@ -12,6 +12,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.Selected');
 
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 
@@ -68,6 +69,9 @@ export class Selected extends UiBase {
    * @param json JSON representation.
    */
   override fromJson(json: SelectedJson) {
+    deprecation.warn(
+        'Blockly.Events.Selected.prototype.fromJson', 'version 9', 'version 10',
+        'Blockly.Events.fromJson');
     super.fromJson(json);
     this.oldElementId = json['oldElementId'];
     this.newElementId = json['newElementId'];

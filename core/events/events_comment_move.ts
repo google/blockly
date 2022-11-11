@@ -12,6 +12,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.CommentMove');
 
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 import type {WorkspaceComment} from '../workspace_comment.js';
@@ -112,6 +113,9 @@ export class CommentMove extends CommentBase {
    * @param json JSON representation.
    */
   override fromJson(json: CommentMoveJson) {
+    deprecation.warn(
+        'Blockly.Events.CommentMove.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     let xy = json['oldCoordinate'].split(',');
     this.oldCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));

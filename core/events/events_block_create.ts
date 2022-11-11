@@ -13,6 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockCreate');
 
 import type {Block} from '../block.js';
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
 import * as Xml from '../xml.js';
@@ -90,6 +91,9 @@ export class BlockCreate extends BlockBase {
    * @param json JSON representation.
    */
   override fromJson(json: BlockCreateJson) {
+    deprecation.warn(
+        'Blockly.Events.BlockCreate.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.xml = Xml.textToDom(json['xml']);
     this.ids = json['ids'];

@@ -12,6 +12,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.ToolboxItemSelect');
 
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
@@ -67,6 +68,9 @@ export class ToolboxItemSelect extends UiBase {
    * @param json JSON representation.
    */
   override fromJson(json: ToolboxItemSelectJson) {
+    deprecation.warn(
+        'Blockly.Events.ToolboxItemSelect.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.oldItem = json['oldItem'];
     this.newItem = json['newItem'];

@@ -13,6 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockDrag');
 
 import type {Block} from '../block.js';
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
@@ -84,6 +85,9 @@ export class BlockDrag extends UiBase {
    * @param json JSON representation.
    */
   override fromJson(json: BlockDragJson) {
+    deprecation.warn(
+        'Blockly.Events.BlockDrag.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.isStart = json['isStart'];
     this.blockId = json['blockId'];

@@ -12,6 +12,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.TrashcanOpen');
 
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 
@@ -64,6 +65,9 @@ export class TrashcanOpen extends UiBase {
    * @param json JSON representation.
    */
   override fromJson(json: TrashcanOpenJson) {
+    deprecation.warn(
+        'Blockly.Events.TrashcanOpen.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.isOpen = json['isOpen'];
   }

@@ -62,7 +62,6 @@ export class CommentDelete extends CommentBase {
   override toJson(): CommentDeleteJson {
     const json = super.toJson() as CommentDeleteJson;
     if (!this.xml) {
-      console.trace();
       throw new Error(
           'The comment XML is undefined. Either pass a comment to ' +
           'the constructor, or call fromJson');

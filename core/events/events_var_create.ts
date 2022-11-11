@@ -12,6 +12,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.VarCreate');
 
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';
 
@@ -71,6 +72,9 @@ export class VarCreate extends VarBase {
    * @param json JSON representation.
    */
   override fromJson(json: VarCreateJson) {
+    deprecation.warn(
+        'Blockly.Events.VarCreate.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.varType = json['varType'];
     this.varName = json['varName'];

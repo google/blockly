@@ -13,6 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockDelete');
 
 import type {Block} from '../block.js';
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
 import * as Xml from '../xml.js';
@@ -104,6 +105,9 @@ export class BlockDelete extends BlockBase {
    * @param json JSON representation.
    */
   override fromJson(json: BlockDeleteJson) {
+    deprecation.warn(
+        'Blockly.Events.BlockDelete.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.oldXml = Xml.textToDom(json['oldXml']);
     this.ids = json['ids'];

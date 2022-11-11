@@ -197,7 +197,7 @@ suite('Procedure Parameter Delete Event', function() {
     });
   });
 
-  suite.skip('serialization', function() {
+  suite('serialization', function() {
     test('events round-trip through JSON', function() {
       const param = new Blockly.procedures.ObservableParameterModel(
           this.workspace, 'test param name', 'test param id');
@@ -205,6 +205,7 @@ suite('Procedure Parameter Delete Event', function() {
           new Blockly.procedures.ObservableProcedureModel(
               this.workspace, 'test name', 'test id')
               .insertParameter(param, 0);
+      this.procedureMap.add(model);
       const origEvent = new Blockly.Events.ProcedureParameterDelete(
           this.workspace, model);
 

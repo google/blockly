@@ -28,9 +28,8 @@ export class ProcedureParameterCreate extends ProcedureParameterBase {
    */
   constructor(
       workspace: Workspace, procedure: IProcedureModel,
-      public readonly parameter: IParameterModel,
-      public readonly index: number) {
-    super(workspace, procedure);
+      parameter: IParameterModel, public readonly index: number) {
+    super(workspace, procedure, parameter);
   }
 
   run(forward: boolean) {

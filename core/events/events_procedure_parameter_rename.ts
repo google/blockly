@@ -22,9 +22,8 @@ export class ProcedureParameterRename extends ProcedureParameterBase {
 
   constructor(
       workspace: Workspace, procedure: IProcedureModel,
-      public readonly parameter: IParameterModel,
-      public readonly oldName: string) {
-    super(workspace, procedure);
+      parameter: IParameterModel, public readonly oldName: string) {
+    super(workspace, procedure, parameter);
 
     this.newName = parameter.getName();
   }

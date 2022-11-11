@@ -9,7 +9,7 @@ import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
 
-import {ProcedureBase} from './events_procedure_base.js';
+import {ProcedureBase, ProcedureBaseJson} from './events_procedure_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -49,6 +49,37 @@ export class ProcedureChangeReturn extends ProcedureBase {
       procedureModel.setReturnTypes(this.oldTypes);
     }
   }
+
+  /**
+   * Encode the event as JSON.
+   *
+   * @returns JSON representation.
+   */
+  toJson(): ProcedureChangeReturnJson {
+    const json = super.toJson() as ProcedureChangeReturnJson;
+    json['oldTypes'] = this.oldTypes;
+    return json;
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @internal
+   */
+  static fromJson(json: ProcedureChangeReturnJson, workspace: Workspace):
+      ProcedureChangeReturn {
+    const model = workspace.getProcedureMap().get(json['procedureId']);
+    if (!model) {
+      throw new Error(
+          'Cannot deserialize procedure change return event because the ' +
+          'target procedure does not exist');
+    }
+    return new ProcedureChangeReturn(workspace, model, json['oldTypes']);
+  }
+}
+
+export interface ProcedureChangeReturnJson extends ProcedureBaseJson {
+  oldTypes: string[]|null;
 }
 
 registry.register(

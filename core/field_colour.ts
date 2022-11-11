@@ -589,10 +589,7 @@ export class FieldColour extends Field<string> {
 }
 
 /** The default value for this field. */
-// AnyDuringMigration because:  Property 'DEFAULT_VALUE' is protected and only
-// accessible within class 'FieldColour' and its subclasses.
-(FieldColour.prototype as AnyDuringMigration).DEFAULT_VALUE =
-    FieldColour.COLOURS[0];
+FieldColour.prototype.DEFAULT_VALUE = FieldColour.COLOURS[0];
 
 /** CSS for colour picker.  See css.js for use. */
 Css.register(`

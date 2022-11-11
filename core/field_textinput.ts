@@ -62,7 +62,7 @@ export class FieldTextInput extends FieldInput<string> {
 
 fieldRegistry.register('field_input', FieldTextInput);
 
-(FieldTextInput.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
+FieldTextInput.prototype.DEFAULT_VALUE = '';
 
 /**
  * fromJson config options for the text input field.

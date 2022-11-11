@@ -322,7 +322,7 @@ export class FieldNumber extends FieldInput<number> {
 
 fieldRegistry.register('field_number', FieldNumber);
 
-(FieldNumber.prototype as AnyDuringMigration).DEFAULT_VALUE = 0;
+FieldNumber.prototype.DEFAULT_VALUE = 0;
 
 /**
  * Config options for the number field.

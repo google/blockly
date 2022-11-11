@@ -18,6 +18,7 @@ import type {Workspace} from '../workspace.js';
  * Representation of a procedure data model.
  */
 export interface State {
+  // TODO: This should also handle enabled.
   id: string, name: string, returnTypes: string[]|null,
       parameters?: ParameterState[],
 }
@@ -50,8 +51,12 @@ type ParameterModelConstructor<ParameterModel extends IParameterModel> =
     new (workspace: Workspace, name: string, id: string) => ParameterModel;
 
 
-/** Serializes the given IProcedureModel to JSON. */
-function saveProcedure(proc: IProcedureModel): State {
+/**
+ * Serializes the given IProcedureModel to JSON.
+ *
+ * @internal
+ */
+export function saveProcedure(proc: IProcedureModel): State {
   const state: State = {
     id: proc.getId(),
     name: proc.getName(),
@@ -73,8 +78,12 @@ function saveParameter(param: IParameterModel): ParameterState {
   return state;
 }
 
-/** Deserializes the given procedure model State from JSON. */
-function
+/**
+ * Deserializes the given procedure model State from JSON.
+ *
+ * @internal
+ */
+export function
 loadProcedure<ProcedureModel extends IProcedureModel,
                                      ParameterModel extends IParameterModel>(
     procedureModelClass: ProcedureModelConstructor<ProcedureModel>,

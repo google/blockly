@@ -10,7 +10,7 @@ import {ObservableProcedureModel} from '../procedures.js';
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
 
-import {ProcedureBase} from './events_procedure_base.js';
+import {ProcedureBase, ProcedureBaseJson} from './events_procedure_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -38,7 +38,34 @@ export class ProcedureDelete extends ProcedureBase {
           workspace, this.model.getName(), this.model.getId()));
     }
   }
+
+  /**
+   * Encode the event as JSON.
+   *
+   * @returns JSON representation.
+   */
+  toJson(): ProcedureDeleteJson {
+    return super.toJson() as ProcedureDeleteJson;
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @internal
+   */
+  static fromJson(json: ProcedureDeleteJson, workspace: Workspace):
+      ProcedureDelete {
+    const model = workspace.getProcedureMap().get(json['procedureId']);
+    if (!model) {
+      throw new Error(
+          'Cannot deserialize procedure delete event because the ' +
+          'target procedure does not exist');
+    }
+    return new ProcedureDelete(workspace, model);
+  }
 }
+
+export interface ProcedureDeleteJson extends ProcedureBaseJson { }
 
 registry.register(
     registry.Type.EVENT, eventUtils.PROCEDURE_DELETE, ProcedureDelete);

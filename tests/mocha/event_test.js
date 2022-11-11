@@ -8,7 +8,7 @@ goog.declareModuleId('Blockly.test.event');
 
 import * as Blockly from '../../build/src/core/blockly.js';
 import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
-import {assertEventEquals, assertNthCallEventArgEquals, createFireChangeListenerSpy} from './test_helpers/events.js';
+import {assertEventEquals, assertNthCallEventArgEquals, createChangeListenerSpy} from './test_helpers/events.js';
 import {assertVariableValues} from './test_helpers/variables.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
@@ -962,7 +962,7 @@ suite('Events', function() {
 
   suite('Firing', function() {
     setup(function() {
-      this.changeListenerSpy = createFireChangeListenerSpy(this.workspace);
+      this.changeListenerSpy = createChangeListenerSpy(this.workspace);
     });
 
     test('Block dispose triggers Delete', function() {
@@ -984,7 +984,7 @@ suite('Events', function() {
         this.clock.runAll();
 
         this.eventsFireSpy.resetHistory();
-        const changeListenerSpy = createFireChangeListenerSpy(workspaceSvg);
+        const changeListenerSpy = createChangeListenerSpy(workspaceSvg);
         block.dispose();
 
         // Run all queued events.

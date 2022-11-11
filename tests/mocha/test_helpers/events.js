@@ -13,8 +13,10 @@ goog.declareModuleId('Blockly.test.helpers.events');
  *    calls on.
  * @return {!SinonSpy} The created spy.
  */
-export function createFireChangeListenerSpy(workspace) {
-  return sinon.spy(workspace, 'fireChangeListener');
+export function createChangeListenerSpy(workspace) {
+  const spy = sinon.spy();
+  workspace.addChangeListener(spy);
+  return spy;
 }
 
 /**
@@ -140,7 +142,6 @@ export function assertEventFired(spy, instanceType, expectedProperties,
  */
 export function assertEventNotFired(spy, instanceType, expectedProperties,
     expectedWorkspaceId, expectedBlockId) {
-  expectedProperties.type = instanceType.prototype.type;
   if (expectedWorkspaceId !== undefined) {
     expectedProperties.workspaceId = expectedWorkspaceId;
   }

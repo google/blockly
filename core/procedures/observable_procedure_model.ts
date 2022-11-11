@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as eventUtils from '../events/utils.js';
 import {genUid} from '../utils/idgenerator.js';
 import type {IParameterModel} from '../interfaces/i_parameter_model.js';
 import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
+import {isObservable} from '../interfaces/i_observable.js';
 import {triggerProceduresUpdate} from './update_procedures.js';
 import type {Workspace} from '../workspace.js';
 
@@ -17,6 +19,7 @@ export class ObservableProcedureModel implements IProcedureModel {
   private parameters: IParameterModel[] = [];
   private returnTypes: string[]|null = null;
   private enabled = true;
+  private shouldFireEvents = false;
 
   constructor(
       private readonly workspace: Workspace, name: string, id?: string) {
@@ -26,9 +29,14 @@ export class ObservableProcedureModel implements IProcedureModel {
 
   /** Sets the human-readable name of the procedure. */
   setName(name: string): this {
-    // TODO(#6516): Fire events.
+    if (name === this.name) return this;
+    const prevName = this.name;
     this.name = name;
     triggerProceduresUpdate(this.workspace);
+    if (this.shouldFireEvents) {
+      eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_RENAME))(
+          this.workspace, this, prevName));
+    }
     return this;
   }
 
@@ -38,17 +46,46 @@ export class ObservableProcedureModel implements IProcedureModel {
    * To move a parameter, first delete it, and then re-insert.
    */
   insertParameter(parameterModel: IParameterModel, index: number): this {
-    // TODO(#6516): Fire events.
+    if (this.parameters[index] &&
+        this.parameters[index].getId() === parameterModel.getId()) {
+      return this;
+    }
+
     this.parameters.splice(index, 0, parameterModel);
+    parameterModel.setProcedureModel(this);
+    if (isObservable(parameterModel)) {
+      if (this.shouldFireEvents) {
+        parameterModel.startPublishing();
+      } else {
+        parameterModel.stopPublishing();
+      }
+    }
+
     triggerProceduresUpdate(this.workspace);
+    if (this.shouldFireEvents) {
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.PROCEDURE_PARAMETER_CREATE))(
+              this.workspace, this, parameterModel, index));
+    }
     return this;
   }
 
   /** Removes the parameter at the given index from the parameter list. */
   deleteParameter(index: number): this {
-    // TODO(#6516): Fire events.
+    if (!this.parameters[index]) return this;
+    const oldParam = this.parameters[index];
+
     this.parameters.splice(index, 1);
     triggerProceduresUpdate(this.workspace);
+    if (isObservable(oldParam)) {
+      oldParam.stopPublishing();
+    }
+
+    if (this.shouldFireEvents) {
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.PROCEDURE_PARAMETER_DELETE))(
+              this.workspace, this, oldParam, index));
+    }
     return this;
   }
 
@@ -67,9 +104,15 @@ export class ObservableProcedureModel implements IProcedureModel {
           'The built-in ProcedureModel does not support typing. You need to ' +
           'implement your own custom ProcedureModel.');
     }
+    // Either they're both an empty array, or both null. Noop either way.
+    if (!!types === !!this.returnTypes) return this;
+    const oldReturnTypes = this.returnTypes;
     this.returnTypes = types;
-    // TODO(#6516): Fire events.
     triggerProceduresUpdate(this.workspace);
+    if (this.shouldFireEvents) {
+      eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_CHANGE_RETURN))(
+          this.workspace, this, oldReturnTypes));
+    }
     return this;
   }
 
@@ -78,9 +121,13 @@ export class ObservableProcedureModel implements IProcedureModel {
    * all procedure caller blocks should be disabled as well.
    */
   setEnabled(enabled: boolean): this {
-    // TODO(#6516): Fire events.
+    if (enabled === this.enabled) return this;
     this.enabled = enabled;
     triggerProceduresUpdate(this.workspace);
+    if (this.shouldFireEvents) {
+      eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_ENABLE))(
+          this.workspace, this));
+    }
     return this;
   }
 
@@ -119,5 +166,29 @@ export class ObservableProcedureModel implements IProcedureModel {
    */
   getEnabled(): boolean {
     return this.enabled;
+  }
+
+  /**
+   * Tells the procedure model it should fire events.
+   *
+   * @internal
+   */
+  startPublishing() {
+    this.shouldFireEvents = true;
+    for (const param of this.parameters) {
+      if (isObservable(param)) param.startPublishing();
+    }
+  }
+
+  /**
+   * Tells the procedure model it should not fire events.
+   *
+   * @internal
+   */
+  stopPublishing() {
+    this.shouldFireEvents = false;
+    for (const param of this.parameters) {
+      if (isObservable(param)) param.stopPublishing();
+    }
   }
 }

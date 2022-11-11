@@ -65,7 +65,7 @@ export class ProcedureDelete extends ProcedureBase {
   }
 }
 
-export interface ProcedureDeleteJson extends ProcedureBaseJson { }
+export interface ProcedureDeleteJson extends ProcedureBaseJson {}
 
 registry.register(
     registry.Type.EVENT, eventUtils.PROCEDURE_DELETE, ProcedureDelete);

@@ -70,7 +70,7 @@ export class ProcedureEnable extends ProcedureBase {
   }
 }
 
-export interface ProcedureEnableJson extends ProcedureBaseJson { }
+export interface ProcedureEnableJson extends ProcedureBaseJson {}
 
 registry.register(
     registry.Type.EVENT, eventUtils.PROCEDURE_ENABLE, ProcedureEnable);

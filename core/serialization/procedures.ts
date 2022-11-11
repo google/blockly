@@ -67,8 +67,12 @@ export function saveProcedure(proc: IProcedureModel): State {
   return state;
 }
 
-/** Serializes the given IParameterModel to JSON. */
-function saveParameter(param: IParameterModel): ParameterState {
+/**
+ * Serializes the given IParameterModel to JSON.
+ *
+ * @internal
+ */
+export function saveParameter(param: IParameterModel): ParameterState {
   const state: ParameterState = {
     id: param.getId(),
     name: param.getName(),
@@ -99,12 +103,17 @@ loadProcedure<ProcedureModel extends IProcedureModel,
   return proc;
 }
 
-/** Deserializes the given ParameterState from JSON. */
-function loadParameter<ParameterModel extends IParameterModel>(
+/**
+ * Deserializes the given ParameterState from JSON.
+ *
+ * @internal
+ */
+export function loadParameter<ParameterModel extends IParameterModel>(
     parameterModelClass: ParameterModelConstructor<ParameterModel>,
     state: ParameterState, workspace: Workspace): ParameterModel {
-  return new parameterModelClass(workspace, state.name, state.id)
-      .setTypes(state.types || []);
+  const model = new parameterModelClass(workspace, state.name, state.id);
+  if (state.types) model.setTypes(state.types);
+  return model;
 }
 
 /** Serializer for saving and loading procedure state. */

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.blockDeleteEvent');
+goog.declareModuleId('Blockly.test.eventBlockDelete');
 
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {defineRowBlock} from './test_helpers/block_definitions.js';

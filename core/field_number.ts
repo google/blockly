@@ -14,17 +14,18 @@ goog.declareModuleId('Blockly.FieldNumber');
 
 import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
+import {FieldInput, FieldInputConfig, FieldInputValidator} from './field_input.js';
 import * as aria from './utils/aria.js';
 import type {Sentinel} from './utils/sentinel.js';
 
+export type FieldNumberValidator = FieldInputValidator<number>;
 
 /**
  * Class for an editable number field.
  *
  * @alias Blockly.FieldNumber
  */
-export class FieldNumber extends FieldTextInput {
+export class FieldNumber extends FieldInput<number> {
   /** The minimum value this number field can contain. */
   protected min_ = -Infinity;
 
@@ -68,7 +69,8 @@ export class FieldNumber extends FieldTextInput {
   constructor(
       opt_value?: string|number|Sentinel, opt_min?: string|number|null,
       opt_max?: string|number|null, opt_precision?: string|number|null,
-      opt_validator?: Function|null, opt_config?: FieldNumberConfig) {
+      opt_validator?: FieldNumberValidator|null,
+      opt_config?: FieldNumberConfig) {
     // Pass SENTINEL so that we can define properties before value validation.
     super(Field.SKIP_SETUP);
 
@@ -310,7 +312,7 @@ export class FieldNumber extends FieldTextInput {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: FieldNumberFromJsonConfig): FieldNumber {
+  static fromJson(options: FieldNumberFromJsonConfig): FieldNumber {
     // `this` might be a subclass of FieldNumber if that class doesn't override
     // the static fromJson method.
     return new this(
@@ -325,7 +327,7 @@ fieldRegistry.register('field_number', FieldNumber);
 /**
  * Config options for the number field.
  */
-export interface FieldNumberConfig extends FieldTextInputConfig {
+export interface FieldNumberConfig extends FieldInputConfig {
   min?: number;
   max?: number;
   precision?: number;

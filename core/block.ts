@@ -1817,7 +1817,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param element The element to try to turn into a field.
    * @returns The field defined by the JSON, or null if one couldn't be created.
    */
-  private fieldFromJson_(element: {alt?: string, type?: string, text?: string}):
+  private fieldFromJson_(element: {alt?: string, type: string, text?: string}):
       Field|null {
     const field = fieldRegistry.fromJson(element);
     if (!field && element['alt']) {

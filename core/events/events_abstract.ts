@@ -86,8 +86,8 @@ export abstract class Abstract {
   static fromJson(json: AbstractEventJson, workspace: Workspace, event: any):
       Abstract {
     deprecation.warn(
-        'Blockly.Events.Abstract.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
+        'Blockly.Events.Abstract.prototype.fromJson', 'version 9', 'version 10',
+        'Blockly.Events.fromJson');
     event.isBlank = false;
     event.group = json['group'] || '';
     event.workspaceId = workspace.id;
@@ -111,7 +111,7 @@ export abstract class Abstract {
   run(_forward: boolean) {
     // Defined by subclasses.
   }
-  
+
 
   /**
    * Get workspace the event belongs to.

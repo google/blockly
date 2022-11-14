@@ -141,7 +141,7 @@ export class BubbleDragger {
   /**
    * Finish a bubble drag and put the bubble back on the workspace.
    *
-   * @param e The mouseup/touchend event.
+   * @param e The pointerup event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
    * @internal

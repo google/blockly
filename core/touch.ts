@@ -83,27 +83,7 @@ let longPid_: AnyDuringMigration = 0;
  */
 export function longStart(e: PointerEvent, gesture: Gesture) {
   longStop();
-  // Punt on multitouch events.
-  // AnyDuringMigration because:  Property 'changedTouches' does not exist on
-  // type 'Event'.
-  if ((e as AnyDuringMigration).changedTouches &&
-      (e as AnyDuringMigration).changedTouches.length !== 1) {
-    return;
-  }
   longPid_ = setTimeout(function() {
-    // TODO(#6097): Make types accurate, possibly by refactoring touch handling.
-    // AnyDuringMigration because:  Property 'changedTouches' does not exist on
-    // type 'Event'.
-    const typelessEvent = e as AnyDuringMigration;
-    // Additional check to distinguish between touch events and pointer events
-    if (typelessEvent.changedTouches) {
-      // TouchEvent
-      typelessEvent.button = 2;  // Simulate a right button click.
-      // e was a touch event.  It needs to pretend to be a mouse event.
-      typelessEvent.clientX = typelessEvent.changedTouches[0].clientX;
-      typelessEvent.clientY = typelessEvent.changedTouches[0].clientY;
-    }
-
     // Let the gesture route the right-click correctly.
     if (gesture) {
       gesture.handleRightClick(e);
@@ -162,15 +142,12 @@ export function getTouchIdentifierFromEvent(e: PointerEvent): string {
 }
 
 /**
- * Check whether the touch identifier on the event matches the current saved
- * identifier.  If there is no identifier, that means it's a mouse event and
- * we'll use the identifier "mouse".  This means we won't deal well with
- * multiple mice being used at the same time.  That seems okay.
- * If the current identifier was unset, save the identifier from the
- * event.  This starts a drag/gesture, during which touch events with other
- * identifiers will be silently ignored.
+ * Check whether the pointer identifier on the event matches the current saved
+ * identifier. If the current identifier was unset, save the identifier from 
+ * the event. This starts a drag/gesture, during which pointer events with 
+ * other identifiers will be silently ignored.
  *
- * @param e Mouse event or touch event.
+ * @param e Pointer event.
  * @returns Whether the identifier on the event matches the current saved
  *     identifier.
  * @alias Blockly.Touch.checkTouchIdentifier
@@ -241,6 +218,7 @@ export function isMouseOrTouchEvent(e: Event|PseudoEvent): boolean {
  * @alias Blockly.Touch.isTouchEvent
  */
 export function isTouchEvent(e: Event|PseudoEvent): boolean {
+  deprecation.warn('isTouchEvent()', 'version 10', 'version 11');
   return e.type.startsWith('touch') || e.type.startsWith('pointer');
 }
 

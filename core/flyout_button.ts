@@ -244,7 +244,7 @@ export class FlyoutButton {
   /**
    * Do something when the button is clicked.
    *
-   * @param e Mouse up event.
+   * @param e Pointer up event.
    */
   private onMouseUp_(e: PointerEvent) {
     const gesture = this.targetWorkspace.getGesture(e);

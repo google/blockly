@@ -926,7 +926,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   }
 
   /**
-   * Handle a mouse-down on an SVG block in a non-closing flyout.
+   * Handle a pointerdown on an SVG block in a non-closing flyout.
    *
    * @param block The flyout block to copy.
    * @returns Function to call when block is clicked.
@@ -942,9 +942,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   }
 
   /**
-   * Mouse down on the flyout background.  Start a vertical scroll drag.
+   * Pointer down on the flyout background.  Start a vertical scroll drag.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    */
   private onMouseDown_(e: PointerEvent) {
     const gesture = this.targetWorkspace.getGesture(e);

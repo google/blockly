@@ -205,7 +205,7 @@ export class BlockDragger implements IBlockDragger {
   /**
    * Finish a block drag and put the block back on the workspace.
    *
-   * @param e The mouseup/touchend event.
+   * @param e The pointerup event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
    */

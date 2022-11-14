@@ -38,10 +38,10 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
- * Note: In this file "start" refers to touchstart, mousedown, and pointerstart
- * events.  "End" refers to touchend, mouseup, and pointerend events.
+ * Note: In this file "start" refers to pointerdown
+ * events.  "End" refers to pointerup events.
  */
-// TODO: Consider touchcancel/pointercancel.
+// TODO: Consider pointercancel.
 /**
  * Class for one gesture.
  *
@@ -49,8 +49,8 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  */
 export class Gesture {
   /**
-   * The position of the mouse when the gesture started.  Units are CSS
-   * pixels, with (0, 0) at the top left of the browser window (mouseEvent
+   * The position of the pointer when the gesture started.  Units are CSS
+   * pixels, with (0, 0) at the top left of the browser window (pointer event
    * clientX/Y).
    */
   private mouseDownXY_ = new Coordinate(0, 0);
@@ -97,13 +97,13 @@ export class Gesture {
   private hasExceededDragRadius_ = false;
 
   /**
-   * A handle to use to unbind a mouse move listener at the end of a drag.
+   * A handle to use to unbind a pointermove listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
    */
   protected onMoveWrapper_: browserEvents.Data|null = null;
 
   /**
-   * A handle to use to unbind a mouse up listener at the end of a drag.
+   * A handle to use to unbind a pointerup listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
    */
   protected onUpWrapper_: browserEvents.Data|null = null;
@@ -145,7 +145,7 @@ export class Gesture {
     this.mostRecentEvent_ = e;
 
     /**
-     * How far the mouse has moved during this drag, in pixel units.
+     * How far the pointer has moved during this drag, in pixel units.
      * (0, 0) is at this.mouseDownXY_.
      */
     this.currentDragDeltaXY_ = new Coordinate(0, 0);
@@ -186,7 +186,7 @@ export class Gesture {
   /**
    * Update internal state based on an event.
    *
-   * @param e The most recent mouse or touch event.
+   * @param e The most recent pointer event.
    */
   private updateFromEvent_(e: PointerEvent) {
     const currentXY = new Coordinate(e.clientX, e.clientY);
@@ -200,9 +200,9 @@ export class Gesture {
   }
 
   /**
-   * DO MATH to set currentDragDeltaXY_ based on the most recent mouse position.
+   * DO MATH to set currentDragDeltaXY_ based on the most recent pointer position.
    *
-   * @param currentXY The most recent mouse/pointer position, in pixel units,
+   * @param currentXY The most recent pointer position, in pixel units,
    *     with (0, 0) at the window's top left corner.
    * @returns True if the drag just exceeded the drag radius for the first time.
    */
@@ -226,7 +226,7 @@ export class Gesture {
   /**
    * Update this gesture to record whether a block is being dragged from the
    * flyout.
-   * This function should be called on a mouse/touch move event the first time
+   * This function should be called on a pointermove event the first time
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture. If a block should be dragged from the flyout this function creates
    * the new block on the main workspace and updates targetBlock_ and
@@ -263,7 +263,7 @@ export class Gesture {
 
   /**
    * Update this gesture to record whether a bubble is being dragged.
-   * This function should be called on a mouse/touch move event the first time
+   * This function should be called on a pointermove event the first time
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture. If a bubble should be dragged this function creates the necessary
    * BubbleDragger and starts the drag.
@@ -284,7 +284,7 @@ export class Gesture {
    * from the flyout or in the workspace, create the necessary BlockDragger and
    * start the drag.
    *
-   * This function should be called on a mouse/touch move event the first time
+   * This function should be called on a pointermove event the first time
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture. If a block should be dragged, either from the flyout or in the
    * workspace, this function creates the necessary BlockDragger and starts the
@@ -312,7 +312,7 @@ export class Gesture {
    * Check whether to start a workspace drag. If a workspace is being dragged,
    * create the necessary WorkspaceDragger and start the drag.
    *
-   * This function should be called on a mouse/touch move event the first time
+   * This function should be called on a pointermove event the first time
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture. If a workspace is being dragged this function creates the
    * necessary WorkspaceDragger and starts the drag.
@@ -336,7 +336,7 @@ export class Gesture {
 
   /**
    * Update this gesture to record whether anything is being dragged.
-   * This function should be called on a mouse/touch move event the first time
+   * This function should be called on a pointermove event the first time
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture.
    */
@@ -394,9 +394,9 @@ export class Gesture {
 
   /**
    * Start a gesture: update the workspace to indicate that a gesture is in
-   * progress and bind mousemove and mouseup handlers.
+   * progress and bind pointermove and pointerup handlers.
    *
-   * @param e A mouse down or touch start event.
+   * @param e A pointerdown event.
    * @internal
    */
   doStart(e: PointerEvent) {
@@ -452,23 +452,23 @@ export class Gesture {
   /**
    * Bind gesture events.
    *
-   * @param e A mouse down or touch start event.
+   * @param e A pointerdown event.
    * @internal
    */
   bindMouseEvents(e: PointerEvent) {
     this.onMoveWrapper_ = browserEvents.conditionalBind(
-        document, 'mousemove', null, this.handleMove.bind(this));
+        document, 'pointermove', null, this.handleMove.bind(this));
     this.onUpWrapper_ = browserEvents.conditionalBind(
-        document, 'mouseup', null, this.handleUp.bind(this));
+        document, 'pointerup', null, this.handleUp.bind(this));
 
     e.preventDefault();
     e.stopPropagation();
   }
 
   /**
-   * Handle a mouse move or touch move event.
+   * Handle a pointermove event.
    *
-   * @param e A mouse move or touch move event.
+   * @param e A pointermove event.
    * @internal
    */
   handleMove(e: PointerEvent) {
@@ -486,9 +486,9 @@ export class Gesture {
   }
 
   /**
-   * Handle a mouse up or touch end event.
+   * Handle a pointerup event.
    *
-   * @param e A mouse up or touch end event.
+   * @param e A pointerup event.
    * @internal
    */
   handleUp(e: PointerEvent) {
@@ -557,7 +557,7 @@ export class Gesture {
   /**
    * Handle a real or faked right-click event by showing a context menu.
    *
-   * @param e A mouse move or touch move event.
+   * @param e A pointerdown event.
    * @internal
    */
   handleRightClick(e: PointerEvent) {
@@ -580,9 +580,9 @@ export class Gesture {
   }
 
   /**
-   * Handle a mousedown/touchstart event on a workspace.
+   * Handle a pointerdown event on a workspace.
    *
-   * @param e A mouse down or touch start event.
+   * @param e A pointerdown event.
    * @param ws The workspace the event hit.
    * @internal
    */
@@ -608,9 +608,9 @@ export class Gesture {
   }
 
   /**
-   * Handle a mousedown/touchstart event on a flyout.
+   * Handle a pointerdown event on a flyout.
    *
-   * @param e A mouse down or touch start event.
+   * @param e A pointerdown event.
    * @param flyout The flyout the event hit.
    * @internal
    */
@@ -625,9 +625,9 @@ export class Gesture {
   }
 
   /**
-   * Handle a mousedown/touchstart event on a block.
+   * Handle a pointerdown event on a block.
    *
-   * @param e A mouse down or touch start event.
+   * @param e A pointerdown event.
    * @param block The block the event hit.
    * @internal
    */
@@ -642,9 +642,9 @@ export class Gesture {
   }
 
   /**
-   * Handle a mousedown/touchstart event on a bubble.
+   * Handle a pointerdown event on a bubble.
    *
-   * @param e A mouse down or touch start event.
+   * @param e A pointerdown event.
    * @param bubble The bubble the event hit.
    * @internal
    */
@@ -717,7 +717,7 @@ export class Gesture {
    * Execute a workspace click. When in accessibility mode shift clicking will
    * move the cursor.
    *
-   * @param _e A mouse up or touch end event.
+   * @param _e A pointerup event.
    */
   private doWorkspaceClick_(_e: PointerEvent) {
     const ws = this.creatorWorkspace;
@@ -743,7 +743,7 @@ export class Gesture {
     }
   }
 
-  /* Begin functions for populating a gesture at mouse down. */
+  /* Begin functions for populating a gesture at pointerdown. */
 
   /**
    * Record the field that a gesture started on.
@@ -832,14 +832,14 @@ export class Gesture {
     }
   }
 
-  /* End functions for populating a gesture at mouse down. */
+  /* End functions for populating a gesture at pointerdown. */
 
   /* Begin helper functions defining types of clicks.  Any developer wanting
    * to change the definition of a click should modify only this code. */
 
   /**
    * Whether this gesture is a click on a bubble.  This should only be called
-   * when ending a gesture (mouse up, touch end).
+   * when ending a gesture (pointerup).
    *
    * @returns Whether this gesture was a click on a bubble.
    */
@@ -851,7 +851,7 @@ export class Gesture {
 
   /**
    * Whether this gesture is a click on a block.  This should only be called
-   * when ending a gesture (mouse up, touch end).
+   * when ending a gesture (pointerup).
    *
    * @returns Whether this gesture was a click on a block.
    */
@@ -865,7 +865,7 @@ export class Gesture {
 
   /**
    * Whether this gesture is a click on a field.  This should only be called
-   * when ending a gesture (mouse up, touch end).
+   * when ending a gesture (pointerup).
    *
    * @returns Whether this gesture was a click on a field.
    */
@@ -878,7 +878,7 @@ export class Gesture {
 
   /**
    * Whether this gesture is a click on a workspace.  This should only be called
-   * when ending a gesture (mouse up, touch end).
+   * when ending a gesture (pointerup).
    *
    * @returns Whether this gesture was a click on a workspace.
    */
@@ -904,9 +904,9 @@ export class Gesture {
   }
 
   /**
-   * Whether this gesture has already been started.  In theory every mouse down
-   * has a corresponding mouse up, but in reality it is possible to lose a
-   * mouse up, leaving an in-process gesture hanging.
+   * Whether this gesture has already been started.  In theory every pointerdown
+   * has a corresponding pointerup, but in reality it is possible to lose a
+   * pointerup, leaving an in-process gesture hanging.
    *
    * @returns Whether this gesture was a click on a workspace.
    * @internal

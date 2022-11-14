@@ -1596,17 +1596,15 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /* eslint-enable */
 
   /**
-   * Returns the drag target the mouse event is over.
+   * Returns the drag target the pointer event is over.
    *
-   * @param e Mouse move event.
+   * @param e Pointer move event.
    * @returns Null if not over a drag target, or the drag target the event is
    *     over.
    */
   getDragTarget(e: PointerEvent): IDragTarget|null {
     for (let i = 0, targetArea; targetArea = this.dragTargetAreas[i]; i++) {
-      if (targetArea.clientRect.contains(
-              (e as AnyDuringMigration).clientX,
-              (e as AnyDuringMigration).clientY)) {
+      if (targetArea.clientRect.contains(e.clientX, e.clientY)) {
         return targetArea.component;
       }
     }
@@ -1614,9 +1612,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   }
 
   /**
-   * Handle a mouse-down on SVG drawing surface.
+   * Handle a pointerdown on SVG drawing surface.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    */
   private onMouseDown_(e: PointerEvent) {
     const gesture = this.getGesture(e);
@@ -1628,7 +1626,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Start tracking a drag of an object on this workspace.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    * @param xy Starting location of object.
    */
   startDrag(e: PointerEvent, xy: Coordinate) {
@@ -1644,7 +1642,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Track a drag of an object on this workspace.
    *
-   * @param e Mouse move event.
+   * @param e Pointer move event.
    * @returns New location of object.
    */
   moveDrag(e: PointerEvent): Coordinate {
@@ -2473,14 +2471,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Look up the gesture that is tracking this touch stream on this workspace.
    * May create a new gesture.
    *
-   * @param e Mouse event or touch event.
+   * @param e Pointer event.
    * @returns The gesture that is tracking this touch stream, or null if no
    *     valid gesture exists.
    * @internal
    */
   getGesture(e: PointerEvent): TouchGesture|null {
-    const isStart = e.type === 'mousedown' || e.type === 'touchstart' ||
-        e.type === 'pointerdown';
+    const isStart = e.type === 'pointerdown';
 
     const gesture = this.currentGesture_;
     if (gesture) {

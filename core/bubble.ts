@@ -278,9 +278,9 @@ export class Bubble implements IBubble {
   }
 
   /**
-   * Handle a mouse-down on bubble's border.
+   * Handle a pointerdown on bubble's border.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    */
   private bubbleMouseDown(e: PointerEvent) {
     const gesture = this.workspace_.getGesture(e);
@@ -318,9 +318,9 @@ export class Bubble implements IBubble {
   // NOP if bubble is not deletable.
 
   /**
-   * Handle a mouse-down on bubble's resize corner.
+   * Handle a pointerdown on bubble's resize corner.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    */
   private resizeMouseDown(e: PointerEvent) {
     this.promote();
@@ -337,18 +337,18 @@ export class Bubble implements IBubble {
             this.workspace_.RTL ? -this.width : this.width, this.height));
 
     Bubble.onMouseUpWrapper = browserEvents.conditionalBind(
-        document, 'mouseup', this, Bubble.bubbleMouseUp);
+        document, 'pointerup', this, Bubble.bubbleMouseUp);
     Bubble.onMouseMoveWrapper = browserEvents.conditionalBind(
-        document, 'mousemove', this, this.resizeMouseMove);
+        document, 'pointermove', this, this.resizeMouseMove);
     this.workspace_.hideChaff();
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
   }
 
   /**
-   * Resize this bubble to follow the mouse.
+   * Resize this bubble to follow the pointer.
    *
-   * @param e Mouse move event.
+   * @param e Pointer move event.
    */
   private resizeMouseMove(e: PointerEvent) {
     this.autoLayout = false;
@@ -847,9 +847,9 @@ export class Bubble implements IBubble {
   }
 
   /**
-   * Handle a mouse-up event while dragging a bubble's border or resize handle.
+   * Handle a pointerup event while dragging a bubble's border or resize handle.
    *
-   * @param _e Mouse up event.
+   * @param _e Pointer up event.
    */
   private static bubbleMouseUp(_e: PointerEvent) {
     Touch.clearTouchIdentifier();

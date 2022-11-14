@@ -189,9 +189,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Handle a mouse-down on an SVG comment.
+   * Handle a pointerdown on an SVG comment.
    *
-   * @param e Mouse down event or touch start event.
+   * @param e Pointer down event.
    */
   private pathMouseDown_(e: PointerEvent) {
     const gesture = this.workspace.getGesture(e);
@@ -203,7 +203,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Show the context menu for this workspace comment.
    *
-   * @param e Mouse event.
+   * @param e Pointer event.
    * @internal
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -820,9 +820,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Handle a mouse-down on comment's resize corner.
+   * Handle a pointerdown on comment's resize corner.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    */
   private resizeMouseDown_(e: PointerEvent) {
     this.unbindDragEvents_();
@@ -838,18 +838,18 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
             this.workspace.RTL ? -this.width_ : this.width_, this.height_));
 
     this.onMouseUpWrapper_ = browserEvents.conditionalBind(
-        document, 'mouseup', this, this.resizeMouseUp_);
+        document, 'pointerup', this, this.resizeMouseUp_);
     this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
-        document, 'mousemove', this, this.resizeMouseMove_);
+        document, 'pointermove', this, this.resizeMouseMove_);
     this.workspace.hideChaff();
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
   }
 
   /**
-   * Handle a mouse-down on comment's delete icon.
+   * Handle a pointerdown on comment's delete icon.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    */
   private deleteMouseDown_(e: PointerEvent) {
     // Highlight the delete icon.
@@ -861,9 +861,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Handle a mouse-out on comment's delete icon.
+   * Handle a pointerout on comment's delete icon.
    *
-   * @param _e Mouse out event.
+   * @param _e Pointer out event.
    */
   private deleteMouseOut_(_e: PointerEvent) {
     // Restore highlight on the delete icon.
@@ -873,9 +873,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Handle a mouse-up on comment's delete icon.
+   * Handle a pointerup on comment's delete icon.
    *
-   * @param e Mouse up event.
+   * @param e Pointer up event.
    */
   private deleteMouseUp_(e: PointerEvent) {
     // Delete this comment.
@@ -884,7 +884,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     e.stopPropagation();
   }
 
-  /** Stop binding to the global mouseup and mousemove events. */
+  /** Stop binding to the global pointerup and pointermove events. */
   private unbindDragEvents_() {
     if (this.onMouseUpWrapper_) {
       browserEvents.unbind(this.onMouseUpWrapper_);
@@ -897,9 +897,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Handle a mouse-up event while dragging a comment's border or resize handle.
+   * Handle a pointerup event while dragging a comment's border or resize handle.
    *
-   * @param _e Mouse up event.
+   * @param _e Pointer up event.
    */
   private resizeMouseUp_(_e: PointerEvent) {
     Touch.clearTouchIdentifier();
@@ -907,9 +907,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Resize this comment to follow the mouse.
+   * Resize this comment to follow the pointer.
    *
-   * @param e Mouse move event.
+   * @param e Pointer move event.
    */
   private resizeMouseMove_(e: PointerEvent) {
     this.autoLayout_ = false;

@@ -71,7 +71,7 @@ export class TouchGesture extends Gesture {
    * @param e A mouse down, touch start or pointer down event.
    * @internal
    */
-  override doStart(e: MouseEvent) {
+  override doStart(e: PointerEvent) {
     if (!this.startWorkspace_) {
       throw new Error(
           'Cannot start the touch event becauase the start ' +
@@ -96,7 +96,7 @@ export class TouchGesture extends Gesture {
    * @param e A mouse down or touch start event.
    * @internal
    */
-  override bindMouseEvents(e: Event) {
+  override bindMouseEvents(e: PointerEvent) {
     this.onStartWrapper_ = browserEvents.conditionalBind(
         document, 'mousedown', null, this.handleStart.bind(this),
         /* opt_noCaptureIdentifier */ true);
@@ -117,7 +117,7 @@ export class TouchGesture extends Gesture {
    * @param e A mouse down, touch start, or pointer down event.
    * @internal
    */
-  handleStart(e: Event) {
+  handleStart(e: PointerEvent) {
     if (this.isDragging()) {
       // A drag has already started, so this can no longer be a pinch-zoom.
       return;
@@ -137,7 +137,7 @@ export class TouchGesture extends Gesture {
    * @param e A mouse move, touch move, or pointer move event.
    * @internal
    */
-  override handleMove(e: MouseEvent) {
+  override handleMove(e: PointerEvent) {
     if (this.isDragging()) {
       // We are in the middle of a drag, only handle the relevant events
       if (Touch.shouldHandleEvent(e)) {
@@ -161,7 +161,7 @@ export class TouchGesture extends Gesture {
    * @param e A mouse up, touch end, or pointer up event.
    * @internal
    */
-  override handleUp(e: Event) {
+  override handleUp(e: PointerEvent) {
     if (Touch.isTouchEvent(e) && !this.isDragging()) {
       this.handleTouchEnd(e);
     }
@@ -208,7 +208,7 @@ export class TouchGesture extends Gesture {
    * @param e A touch start, or pointer down event.
    * @internal
    */
-  handleTouchStart(e: Event) {
+  handleTouchStart(e: PointerEvent) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     // store the pointerId in the current list of pointers
     this.cachedPoints.set(pointerId, this.getTouchPoint(e));
@@ -230,7 +230,7 @@ export class TouchGesture extends Gesture {
    * @param e A touch move, or pointer move event.
    * @internal
    */
-  handleTouchMove(e: MouseEvent) {
+  handleTouchMove(e: PointerEvent) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     // Update the cache
     this.cachedPoints.set(pointerId, this.getTouchPoint(e));
@@ -247,7 +247,7 @@ export class TouchGesture extends Gesture {
    *
    * @param e A touch move, or pointer move event.
    */
-  private handlePinch_(e: MouseEvent) {
+  private handlePinch_(e: PointerEvent) {
     const pointers = Array.from(this.cachedPoints.keys());
     // Calculate the distance between the two pointers
     const point0 = (this.cachedPoints.get(pointers[0]))!;
@@ -279,7 +279,7 @@ export class TouchGesture extends Gesture {
    * @param e A touch end, or pointer end event.
    * @internal
    */
-  handleTouchEnd(e: Event) {
+  handleTouchEnd(e: PointerEvent) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     if (this.cachedPoints.has(pointerId)) {
       this.cachedPoints.delete(pointerId);
@@ -297,7 +297,7 @@ export class TouchGesture extends Gesture {
    * @returns The current touch point coordinate
    * @internal
    */
-  getTouchPoint(e: Event): Coordinate|null {
+  getTouchPoint(e: PointerEvent): Coordinate|null {
     if (!this.startWorkspace_) {
       return null;
     }

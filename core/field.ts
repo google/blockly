@@ -1080,7 +1080,7 @@ export abstract class Field<T = unknown> implements IASTNodeLocationSvg,
    *
    * @param e Mouse down event.
    */
-  protected onMouseDown_(e: Event) {
+  protected onMouseDown_(e: PointerEvent) {
     if (!this.sourceBlock_ || this.sourceBlock_.isDeadOrDying()) {
       return;
     }

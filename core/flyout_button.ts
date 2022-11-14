@@ -246,7 +246,7 @@ export class FlyoutButton {
    *
    * @param e Mouse up event.
    */
-  private onMouseUp_(e: Event) {
+  private onMouseUp_(e: PointerEvent) {
     const gesture = this.targetWorkspace.getGesture(e);
     if (gesture) {
       gesture.cancel();

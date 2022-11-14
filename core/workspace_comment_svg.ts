@@ -193,7 +193,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    *
    * @param e Mouse down event or touch start event.
    */
-  private pathMouseDown_(e: Event) {
+  private pathMouseDown_(e: PointerEvent) {
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleBubbleStart(e, this);
@@ -207,7 +207,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  showContextMenu(e: Event) {
+  showContextMenu(e: PointerEvent) {
     throw new Error(
         'The implementation of showContextMenu should be ' +
         'monkey-patched in by blockly.ts');
@@ -824,7 +824,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    *
    * @param e Mouse down event.
    */
-  private resizeMouseDown_(e: MouseEvent) {
+  private resizeMouseDown_(e: PointerEvent) {
     this.unbindDragEvents_();
     if (browserEvents.isRightButton(e)) {
       // No right-click.
@@ -851,7 +851,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    *
    * @param e Mouse down event.
    */
-  private deleteMouseDown_(e: Event) {
+  private deleteMouseDown_(e: PointerEvent) {
     // Highlight the delete icon.
     if (this.deleteIconBorder_) {
       dom.addClass(this.deleteIconBorder_, 'blocklyDeleteIconHighlighted');
@@ -865,7 +865,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    *
    * @param _e Mouse out event.
    */
-  private deleteMouseOut_(_e: Event) {
+  private deleteMouseOut_(_e: PointerEvent) {
     // Restore highlight on the delete icon.
     if (this.deleteIconBorder_) {
       dom.removeClass(this.deleteIconBorder_, 'blocklyDeleteIconHighlighted');
@@ -877,7 +877,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    *
    * @param e Mouse up event.
    */
-  private deleteMouseUp_(e: Event) {
+  private deleteMouseUp_(e: PointerEvent) {
     // Delete this comment.
     this.dispose();
     // This event has been handled.  No need to bubble up to the document.
@@ -901,7 +901,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    *
    * @param _e Mouse up event.
    */
-  private resizeMouseUp_(_e: Event) {
+  private resizeMouseUp_(_e: PointerEvent) {
     Touch.clearTouchIdentifier();
     this.unbindDragEvents_();
   }
@@ -911,7 +911,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    *
    * @param e Mouse move event.
    */
-  private resizeMouseMove_(e: MouseEvent) {
+  private resizeMouseMove_(e: PointerEvent) {
     this.autoLayout_ = false;
     const newXY = this.workspace.moveDrag(e);
     this.setSize_(this.RTL ? -newXY.x : newXY.x, newXY.y);

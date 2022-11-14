@@ -1602,7 +1602,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns Null if not over a drag target, or the drag target the event is
    *     over.
    */
-  getDragTarget(e: Event): IDragTarget|null {
+  getDragTarget(e: PointerEvent): IDragTarget|null {
     for (let i = 0, targetArea; targetArea = this.dragTargetAreas[i]; i++) {
       if (targetArea.clientRect.contains(
               (e as AnyDuringMigration).clientX,
@@ -1618,7 +1618,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param e Mouse down event.
    */
-  private onMouseDown_(e: MouseEvent) {
+  private onMouseDown_(e: PointerEvent) {
     const gesture = this.getGesture(e);
     if (gesture) {
       gesture.handleWsStart(e, this);
@@ -1631,7 +1631,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param e Mouse down event.
    * @param xy Starting location of object.
    */
-  startDrag(e: MouseEvent, xy: Coordinate) {
+  startDrag(e: PointerEvent, xy: Coordinate) {
     // Record the starting offset between the bubble's location and the mouse.
     const point = browserEvents.mouseToSvg(
         e, this.getParentSvg(), this.getInverseScreenCTM());
@@ -1647,7 +1647,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param e Mouse move event.
    * @returns New location of object.
    */
-  moveDrag(e: MouseEvent): Coordinate {
+  moveDrag(e: PointerEvent): Coordinate {
     const point = browserEvents.mouseToSvg(
         e, this.getParentSvg(), this.getInverseScreenCTM());
     // Fix scale of mouse event.
@@ -2478,7 +2478,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     valid gesture exists.
    * @internal
    */
-  getGesture(e: Event): TouchGesture|null {
+  getGesture(e: PointerEvent): TouchGesture|null {
     const isStart = e.type === 'mousedown' || e.type === 'touchstart' ||
         e.type === 'pointerdown';
 

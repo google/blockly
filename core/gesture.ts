@@ -134,14 +134,14 @@ export class Gesture {
   private healStack_: boolean;
 
   /** The event that most recently updated this gesture. */
-  private mostRecentEvent_: Event;
+  private mostRecentEvent_: PointerEvent;
 
   /**
    * @param e The event that kicked off this gesture.
    * @param creatorWorkspace The workspace that created this gesture and has a
    *     reference to it.
    */
-  constructor(e: Event, private readonly creatorWorkspace: WorkspaceSvg) {
+  constructor(e: PointerEvent, private readonly creatorWorkspace: WorkspaceSvg) {
     this.mostRecentEvent_ = e;
 
     /**
@@ -188,12 +188,8 @@ export class Gesture {
    *
    * @param e The most recent mouse or touch event.
    */
-  private updateFromEvent_(e: Event) {
-    // AnyDuringMigration because:  Property 'clientY' does not exist on type
-    // 'Event'. AnyDuringMigration because:  Property 'clientX' does not exist
-    // on type 'Event'.
-    const currentXY = new Coordinate(
-        (e as AnyDuringMigration).clientX, (e as AnyDuringMigration).clientY);
+  private updateFromEvent_(e: PointerEvent) {
+    const currentXY = new Coordinate(e.clientX, e.clientY);
     const changed = this.updateDragDelta_(currentXY);
     // Exceeded the drag radius for the first time.
     if (changed) {
@@ -403,7 +399,7 @@ export class Gesture {
    * @param e A mouse down or touch start event.
    * @internal
    */
-  doStart(e: MouseEvent) {
+  doStart(e: PointerEvent) {
     if (browserEvents.isTargetInput(e)) {
       this.cancel();
       return;
@@ -443,25 +439,12 @@ export class Gesture {
       return;
     }
 
-    // TODO(#6097): Make types accurate, possibly by refactoring touch handling.
-    const typelessEvent = e as AnyDuringMigration;
-    if ((e.type.toLowerCase() === 'touchstart' ||
-         e.type.toLowerCase() === 'pointerdown') &&
-        typelessEvent.pointerType !== 'mouse') {
-      Touch.longStart(typelessEvent, this);
+    if (e.type.toLowerCase() === 'pointerdown' && e.pointerType !== 'mouse') {
+      Touch.longStart(e, this);
     }
 
-    // AnyDuringMigration because:  Property 'clientY' does not exist on type
-    // 'Event'. AnyDuringMigration because:  Property 'clientX' does not exist
-    // on type 'Event'.
-    this.mouseDownXY_ = new Coordinate(
-        (e as AnyDuringMigration).clientX, (e as AnyDuringMigration).clientY);
-    // AnyDuringMigration because:  Property 'metaKey' does not exist on type
-    // 'Event'. AnyDuringMigration because:  Property 'ctrlKey' does not exist
-    // on type 'Event'. AnyDuringMigration because:  Property 'altKey' does not
-    // exist on type 'Event'.
-    this.healStack_ = (e as AnyDuringMigration).altKey ||
-        (e as AnyDuringMigration).ctrlKey || (e as AnyDuringMigration).metaKey;
+    this.mouseDownXY_ = new Coordinate(e.clientX, e.clientY);
+    this.healStack_ = e.altKey || e.ctrlKey || e.metaKey;
 
     this.bindMouseEvents(e);
   }
@@ -472,7 +455,7 @@ export class Gesture {
    * @param e A mouse down or touch start event.
    * @internal
    */
-  bindMouseEvents(e: Event) {
+  bindMouseEvents(e: PointerEvent) {
     this.onMoveWrapper_ = browserEvents.conditionalBind(
         document, 'mousemove', null, this.handleMove.bind(this));
     this.onUpWrapper_ = browserEvents.conditionalBind(
@@ -488,7 +471,7 @@ export class Gesture {
    * @param e A mouse move or touch move event.
    * @internal
    */
-  handleMove(e: Event) {
+  handleMove(e: PointerEvent) {
     this.updateFromEvent_(e);
     if (this.workspaceDragger_) {
       this.workspaceDragger_.drag(this.currentDragDeltaXY_);
@@ -508,7 +491,7 @@ export class Gesture {
    * @param e A mouse up or touch end event.
    * @internal
    */
-  handleUp(e: Event) {
+  handleUp(e: PointerEvent) {
     this.updateFromEvent_(e);
     Touch.longStop();
 
@@ -577,7 +560,7 @@ export class Gesture {
    * @param e A mouse move or touch move event.
    * @internal
    */
-  handleRightClick(e: Event) {
+  handleRightClick(e: PointerEvent) {
     if (this.targetBlock_) {
       this.bringBlockToFront_();
       this.targetBlock_.workspace.hideChaff(!!this.flyout_);
@@ -603,7 +586,7 @@ export class Gesture {
    * @param ws The workspace the event hit.
    * @internal
    */
-  handleWsStart(e: MouseEvent, ws: WorkspaceSvg) {
+  handleWsStart(e: PointerEvent, ws: WorkspaceSvg) {
     if (this.hasStarted_) {
       throw Error(
           'Tried to call gesture.handleWsStart, ' +
@@ -631,7 +614,7 @@ export class Gesture {
    * @param flyout The flyout the event hit.
    * @internal
    */
-  handleFlyoutStart(e: MouseEvent, flyout: IFlyout) {
+  handleFlyoutStart(e: PointerEvent, flyout: IFlyout) {
     if (this.hasStarted_) {
       throw Error(
           'Tried to call gesture.handleFlyoutStart, ' +
@@ -648,7 +631,7 @@ export class Gesture {
    * @param block The block the event hit.
    * @internal
    */
-  handleBlockStart(e: Event, block: BlockSvg) {
+  handleBlockStart(e: PointerEvent, block: BlockSvg) {
     if (this.hasStarted_) {
       throw Error(
           'Tried to call gesture.handleBlockStart, ' +
@@ -665,7 +648,7 @@ export class Gesture {
    * @param bubble The bubble the event hit.
    * @internal
    */
-  handleBubbleStart(e: Event, bubble: IBubble) {
+  handleBubbleStart(e: PointerEvent, bubble: IBubble) {
     if (this.hasStarted_) {
       throw Error(
           'Tried to call gesture.handleBubbleStart, ' +
@@ -736,7 +719,7 @@ export class Gesture {
    *
    * @param _e A mouse up or touch end event.
    */
-  private doWorkspaceClick_(_e: Event) {
+  private doWorkspaceClick_(_e: PointerEvent) {
     const ws = this.creatorWorkspace;
     if (common.getSelected()) {
       common.getSelected()!.unselect();

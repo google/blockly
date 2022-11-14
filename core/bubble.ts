@@ -282,7 +282,7 @@ export class Bubble implements IBubble {
    *
    * @param e Mouse down event.
    */
-  private bubbleMouseDown(e: Event) {
+  private bubbleMouseDown(e: PointerEvent) {
     const gesture = this.workspace_.getGesture(e);
     if (gesture) {
       gesture.handleBubbleStart(e, this);
@@ -322,7 +322,7 @@ export class Bubble implements IBubble {
    *
    * @param e Mouse down event.
    */
-  private resizeMouseDown(e: MouseEvent) {
+  private resizeMouseDown(e: PointerEvent) {
     this.promote();
     Bubble.unbindDragEvents();
     if (browserEvents.isRightButton(e)) {
@@ -350,7 +350,7 @@ export class Bubble implements IBubble {
    *
    * @param e Mouse move event.
    */
-  private resizeMouseMove(e: MouseEvent) {
+  private resizeMouseMove(e: PointerEvent) {
     this.autoLayout = false;
     const newXY = this.workspace_.moveDrag(e);
     this.setBubbleSize(this.workspace_.RTL ? -newXY.x : newXY.x, newXY.y);
@@ -851,7 +851,7 @@ export class Bubble implements IBubble {
    *
    * @param _e Mouse up event.
    */
-  private static bubbleMouseUp(_e: MouseEvent) {
+  private static bubbleMouseUp(_e: PointerEvent) {
     Touch.clearTouchIdentifier();
     Bubble.unbindDragEvents();
   }

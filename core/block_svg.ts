@@ -677,7 +677,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @param e Mouse down event or touch start event.
    */
-  private onMouseDown_(e: Event) {
+  private onMouseDown_(e: PointerEvent) {
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleBlockStart(e, this);

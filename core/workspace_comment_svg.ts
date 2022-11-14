@@ -170,10 +170,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     }
     if (!this.workspace.options.readOnly && !this.eventsInit_) {
       browserEvents.conditionalBind(
-          this.svgRectTarget_ as SVGRectElement, 'mousedown', this,
+          this.svgRectTarget_ as SVGRectElement, 'pointerdown', this,
           this.pathMouseDown_);
       browserEvents.conditionalBind(
-          this.svgHandleTarget_ as SVGRectElement, 'mousedown', this,
+          this.svgHandleTarget_ as SVGRectElement, 'pointerdown', this,
           this.pathMouseDown_);
     }
     this.eventsInit_ = true;
@@ -685,18 +685,18 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
     if (this.resizeGroup_) {
       browserEvents.conditionalBind(
-          (this.resizeGroup_), 'mousedown', this, this.resizeMouseDown_);
+          (this.resizeGroup_), 'pointerdown', this, this.resizeMouseDown_);
     }
 
     if (this.isDeletable()) {
       browserEvents.conditionalBind(
-          this.deleteGroup_ as SVGGElement, 'mousedown', this,
+          this.deleteGroup_ as SVGGElement, 'pointerdown', this,
           this.deleteMouseDown_);
       browserEvents.conditionalBind(
-          this.deleteGroup_ as SVGGElement, 'mouseout', this,
+          this.deleteGroup_ as SVGGElement, 'pointerout', this,
           this.deleteMouseOut_);
       browserEvents.conditionalBind(
-          this.deleteGroup_ as SVGGElement, 'mouseup', this,
+          this.deleteGroup_ as SVGGElement, 'pointerup', this,
           this.deleteMouseUp_);
     }
   }

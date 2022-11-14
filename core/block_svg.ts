@@ -227,7 +227,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     this.pathObject.updateMovable(this.isMovable());
     const svg = this.getSvgRoot();
     if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
-      browserEvents.conditionalBind(svg, 'mousedown', this, this.onMouseDown_);
+      browserEvents.conditionalBind(svg, 'pointerdown', this, this.onMouseDown_);
     }
     this.eventsInit_ = true;
 

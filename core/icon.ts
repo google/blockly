@@ -75,7 +75,7 @@ export abstract class Icon {
 
     this.getBlock().getSvgRoot().appendChild(this.iconGroup_);
     browserEvents.conditionalBind(
-        this.iconGroup_, 'mouseup', this, this.iconClick_);
+        this.iconGroup_, 'pointerup', this, this.iconClick_);
     this.updateEditable();
   }
 
@@ -104,7 +104,7 @@ export abstract class Icon {
    *
    * @param e Mouse click event.
    */
-  protected iconClick_(e: MouseEvent) {
+  protected iconClick_(e: PointerEvent) {
     if (this.getBlock().workspace.isDragging()) {
       // Drag operation is concluding.  Don't open the editor.
       return;

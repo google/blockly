@@ -249,10 +249,10 @@ export class Bubble implements IBubble {
 
     if (!this.workspace_.options.readOnly) {
       this.onMouseDownBubbleWrapper = browserEvents.conditionalBind(
-          this.bubbleBack, 'mousedown', this, this.bubbleMouseDown);
+          this.bubbleBack, 'pointerdown', this, this.bubbleMouseDown);
       if (this.resizeGroup) {
         this.onMouseDownResizeWrapper = browserEvents.conditionalBind(
-            this.resizeGroup, 'mousedown', this, this.resizeMouseDown);
+            this.resizeGroup, 'pointerdown', this, this.resizeMouseDown);
       }
     }
     this.bubbleGroup.appendChild(content);

@@ -371,7 +371,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     Array.prototype.push.apply(
         this.eventWrappers_,
         browserEvents.conditionalBind(
-            (this.svgBackground_ as SVGPathElement), 'mousedown', this,
+            (this.svgBackground_ as SVGPathElement), 'pointerdown', this,
             this.onMouseDown_));
 
     // A flyout connected to a workspace doesn't have its own current gesture.
@@ -615,7 +615,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     }
 
     this.listeners_.push(browserEvents.conditionalBind(
-        (this.svgBackground_ as SVGPathElement), 'mouseover', this,
+        (this.svgBackground_ as SVGPathElement), 'pointerover', this,
         deselectAll));
 
     if (this.horizontalLayout) {
@@ -912,17 +912,17 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   protected addBlockListeners_(
       root: SVGElement, block: BlockSvg, rect: SVGElement) {
     this.listeners_.push(browserEvents.conditionalBind(
-        root, 'mousedown', null, this.blockMouseDown_(block)));
+        root, 'pointerdown', null, this.blockMouseDown_(block)));
     this.listeners_.push(browserEvents.conditionalBind(
-        rect, 'mousedown', null, this.blockMouseDown_(block)));
+        rect, 'pointerdown', null, this.blockMouseDown_(block)));
     this.listeners_.push(
-        browserEvents.bind(root, 'mouseenter', block, block.addSelect));
+        browserEvents.bind(root, 'pointerenter', block, block.addSelect));
     this.listeners_.push(
-        browserEvents.bind(root, 'mouseleave', block, block.removeSelect));
+        browserEvents.bind(root, 'pointerleave', block, block.removeSelect));
     this.listeners_.push(
-        browserEvents.bind(rect, 'mouseenter', block, block.addSelect));
+        browserEvents.bind(rect, 'pointerenter', block, block.addSelect));
     this.listeners_.push(
-        browserEvents.bind(rect, 'mouseleave', block, block.removeSelect));
+        browserEvents.bind(rect, 'pointerleave', block, block.removeSelect));
   }
 
   /**
@@ -1027,7 +1027,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     // Clicking on a flyout button or label is a lot like clicking on the
     // flyout background.
     this.listeners_.push(browserEvents.conditionalBind(
-        buttonSvg, 'mousedown', this, this.onMouseDown_));
+        buttonSvg, 'pointerdown', this, this.onMouseDown_));
 
     this.buttons_.push(button);
   }

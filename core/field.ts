@@ -361,7 +361,7 @@ export abstract class Field<T = unknown> implements IASTNodeLocationSvg,
     if (!clickTarget) throw new Error('A click target has not been set.');
     Tooltip.bindMouseEvents(clickTarget);
     this.mouseDownWrapper_ = browserEvents.conditionalBind(
-        clickTarget, 'mousedown', this, this.onMouseDown_);
+        clickTarget, 'pointerdown', this, this.onMouseDown_);
   }
 
   /**

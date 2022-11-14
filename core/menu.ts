@@ -334,8 +334,7 @@ export class Menu {
     // Clear out the saved opening coords immediately so they're not used twice.
     this.openingCoords = null;
     if (oldCoords && typeof e.clientX === 'number') {
-      const newCoords = new Coordinate(
-          e.clientX, e.clientY);
+      const newCoords = new Coordinate(e.clientX, e.clientY);
       if (Coordinate.distance(oldCoords, newCoords) < 1) {
         // This menu was opened by a mousedown and we're handling the consequent
         // click event. The coords haven't changed, meaning this was the same

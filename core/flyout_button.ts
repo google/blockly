@@ -170,7 +170,8 @@ export class FlyoutButton {
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'EventTarget'.
     this.onMouseUpWrapper_ = browserEvents.conditionalBind(
-        this.svgGroup_ as AnyDuringMigration, 'pointerup', this, this.onMouseUp_);
+        this.svgGroup_ as AnyDuringMigration, 'pointerup', this,
+        this.onMouseUp_);
     return this.svgGroup_!;
   }
 

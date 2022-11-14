@@ -72,7 +72,6 @@ import {HorizontalFlyout} from './flyout_horizontal.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {VerticalFlyout} from './flyout_vertical.js';
 import {CodeGenerator} from './generator.js';
-import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import {Icon} from './icon.js';
 import {inject} from './inject.js';
@@ -670,7 +669,6 @@ export {FlyoutButton};
 export {FlyoutMetricsManager};
 export {CodeGenerator};
 export {CodeGenerator as Generator};  // Deprecated name, October 2022.
-export {Gesture};
 export {Grid};
 export {HorizontalFlyout};
 export {IASTNodeLocation};

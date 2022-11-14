@@ -33,7 +33,6 @@ import {ContextMenuRegistry} from './contextmenu_registry.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
 import type {FlyoutButton} from './flyout_button.js';
-import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
@@ -1722,7 +1721,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   private onMouseWheel_(e: WheelEvent) {
     // Don't scroll or zoom anything if drag is in progress.
-    if (Gesture.inProgress()) {
+    if (TouchGesture.inProgress()) {
       e.preventDefault();
       e.stopPropagation();
       return;

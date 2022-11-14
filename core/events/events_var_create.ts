@@ -12,11 +12,13 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.VarCreate');
 
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';
 
 import {VarBase, VarBaseJson} from './events_var_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -70,9 +72,30 @@ export class VarCreate extends VarBase {
    * @param json JSON representation.
    */
   override fromJson(json: VarCreateJson) {
+    deprecation.warn(
+        'Blockly.Events.VarCreate.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.varType = json['varType'];
     this.varName = json['varName'];
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of VarCreate, but we can't specify that due to the fact that parameters
+   *     to static methods in subclasses must be supertypes of parameters to
+   *     static methods in superclasses.
+   * @internal
+   */
+  static fromJson(json: VarCreateJson, workspace: Workspace, event?: any):
+      VarCreate {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new VarCreate()) as VarCreate;
+    newEvent.varType = json['varType'];
+    newEvent.varName = json['varName'];
+    return newEvent;
   }
 
   /**

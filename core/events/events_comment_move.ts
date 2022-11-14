@@ -12,12 +12,14 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.CommentMove');
 
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 import type {WorkspaceComment} from '../workspace_comment.js';
 
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -111,11 +113,35 @@ export class CommentMove extends CommentBase {
    * @param json JSON representation.
    */
   override fromJson(json: CommentMoveJson) {
+    deprecation.warn(
+        'Blockly.Events.CommentMove.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     let xy = json['oldCoordinate'].split(',');
     this.oldCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
     xy = json['newCoordinate'].split(',');
     this.newCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of CommentMove, but we can't specify that due to the fact that
+   *     parameters to static methods in subclasses must be supertypes of
+   *     parameters to static methods in superclasses.
+   * @internal
+   */
+  static fromJson(json: CommentMoveJson, workspace: Workspace, event?: any):
+      CommentMove {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new CommentMove()) as
+        CommentMove;
+    let xy = json['oldCoordinate'].split(',');
+    newEvent.oldCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
+    xy = json['newCoordinate'].split(',');
+    newEvent.newCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
+    return newEvent;
   }
 
   /**

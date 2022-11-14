@@ -14,11 +14,13 @@ goog.declareModuleId('Blockly.Events.BlockMove');
 
 import type {Block} from '../block.js';
 import {ConnectionType} from '../connection_type.js';
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 interface BlockLocation {
@@ -68,6 +70,12 @@ export class BlockMove extends BlockBase {
    */
   override toJson(): BlockMoveJson {
     const json = super.toJson() as BlockMoveJson;
+    json['oldParentId'] = this.oldParentId;
+    json['oldInputName'] = this.oldInputName;
+    if (this.oldCoordinate) {
+      json['oldCoordinate'] = `${Math.round(this.oldCoordinate.x)}, ` +
+          `${Math.round(this.oldCoordinate.y)}`;
+    }
     json['newParentId'] = this.newParentId;
     json['newInputName'] = this.newInputName;
     if (this.newCoordinate) {
@@ -86,7 +94,16 @@ export class BlockMove extends BlockBase {
    * @param json JSON representation.
    */
   override fromJson(json: BlockMoveJson) {
+    deprecation.warn(
+        'Blockly.Events.BlockMove.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
+    this.oldParentId = json['oldParentId'];
+    this.oldInputName = json['oldInputName'];
+    if (json['oldCoordinate']) {
+      const xy = json['oldCoordinate'].split(',');
+      this.oldCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
+    }
     this.newParentId = json['newParentId'];
     this.newInputName = json['newInputName'];
     if (json['newCoordinate']) {
@@ -96,6 +113,37 @@ export class BlockMove extends BlockBase {
     if (json['recordUndo'] !== undefined) {
       this.recordUndo = json['recordUndo'];
     }
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of BlockMove, but we can't specify that due to the fact that parameters
+   *     to static methods in subclasses must be supertypes of parameters to
+   *     static methods in superclasses.
+   * @internal
+   */
+  static fromJson(json: BlockMoveJson, workspace: Workspace, event?: any):
+      BlockMove {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new BlockMove()) as BlockMove;
+    newEvent.oldParentId = json['oldParentId'];
+    newEvent.oldInputName = json['oldInputName'];
+    if (json['oldCoordinate']) {
+      const xy = json['oldCoordinate'].split(',');
+      newEvent.oldCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
+    }
+    newEvent.newParentId = json['newParentId'];
+    newEvent.newInputName = json['newInputName'];
+    if (json['newCoordinate']) {
+      const xy = json['newCoordinate'].split(',');
+      newEvent.newCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
+    }
+    if (json['recordUndo'] !== undefined) {
+      newEvent.recordUndo = json['recordUndo'];
+    }
+    return newEvent;
   }
 
   /** Record the block's new location.  Called after the move. */
@@ -210,6 +258,9 @@ export class BlockMove extends BlockBase {
 }
 
 export interface BlockMoveJson extends BlockBaseJson {
+  oldParentId?: string;
+  oldInputName?: string;
+  oldCoordinate?: string;
   newParentId?: string;
   newInputName?: string;
   newCoordinate?: string;

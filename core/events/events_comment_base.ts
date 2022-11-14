@@ -12,6 +12,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.CommentBase');
 
+import * as deprecation from '../utils/deprecation.js';
 import * as utilsXml from '../utils/xml.js';
 import type {WorkspaceComment} from '../workspace_comment.js';
 import * as Xml from '../xml.js';
@@ -20,6 +21,7 @@ import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js
 import type {CommentCreate} from './events_comment_create.js';
 import type {CommentDelete} from './events_comment_delete.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -81,8 +83,29 @@ export class CommentBase extends AbstractEvent {
    * @param json JSON representation.
    */
   override fromJson(json: CommentBaseJson) {
+    deprecation.warn(
+        'Blockly.Events.CommentBase.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.commentId = json['commentId'];
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of CommentBase, but we can't specify that due to the fact that
+   *     parameters to static methods in subclasses must be supertypes of
+   *     parameters to static methods in superclasses.
+   * @internal
+   */
+  static fromJson(json: CommentBaseJson, workspace: Workspace, event?: any):
+      CommentBase {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new CommentBase()) as
+        CommentBase;
+    newEvent.commentId = json['commentId'];
+    return newEvent;
   }
 
   /**

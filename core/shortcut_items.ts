@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.ShortcutItems');
 import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import * as common from './common.js';
-import {TouchGesture} from './touch_gesture.js';
+import {Gesture} from './gesture.js';
 import type {ICopyable} from './interfaces/i_copyable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {KeyCodes} from './utils/keycodes.js';
@@ -79,7 +79,7 @@ export function registerDelete() {
       // data loss.
       e.preventDefault();
       // Don't delete while dragging.  Jeez.
-      if (TouchGesture.inProgress()) {
+      if (Gesture.inProgress()) {
         return false;
       }
       (common.getSelected() as BlockSvg).checkAndDelete();
@@ -107,7 +107,7 @@ export function registerCopy() {
     name: names.COPY,
     preconditionFn(workspace) {
       const selected = common.getSelected();
-      return !workspace.options.readOnly && !TouchGesture.inProgress() &&
+      return !workspace.options.readOnly && !Gesture.inProgress() &&
           selected != null && selected.isDeletable() && selected.isMovable();
     },
     callback(workspace, e) {
@@ -142,7 +142,7 @@ export function registerCut() {
     name: names.CUT,
     preconditionFn(workspace) {
       const selected = common.getSelected();
-      return !workspace.options.readOnly && !TouchGesture.inProgress() &&
+      return !workspace.options.readOnly && !Gesture.inProgress() &&
           selected != null && selected instanceof BlockSvg &&
           selected.isDeletable() && selected.isMovable() &&
           !selected.workspace!.isFlyout;
@@ -179,7 +179,7 @@ export function registerPaste() {
   const pasteShortcut: KeyboardShortcut = {
     name: names.PASTE,
     preconditionFn(workspace) {
-      return !workspace.options.readOnly && !TouchGesture.inProgress();
+      return !workspace.options.readOnly && !Gesture.inProgress();
     },
     callback() {
       return !!(clipboard.paste());
@@ -206,7 +206,7 @@ export function registerUndo() {
   const undoShortcut: KeyboardShortcut = {
     name: names.UNDO,
     preconditionFn(workspace) {
-      return !workspace.options.readOnly && !TouchGesture.inProgress();
+      return !workspace.options.readOnly && !Gesture.inProgress();
     },
     callback(workspace) {
       // 'z' for undo 'Z' is for redo.
@@ -239,7 +239,7 @@ export function registerRedo() {
   const redoShortcut: KeyboardShortcut = {
     name: names.REDO,
     preconditionFn(workspace) {
-      return !TouchGesture.inProgress() && !workspace.options.readOnly;
+      return !Gesture.inProgress() && !workspace.options.readOnly;
     },
     callback(workspace) {
       // 'z' for undo 'Z' is for redo.

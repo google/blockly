@@ -11,7 +11,7 @@
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.TouchGesture');
+goog.declareModuleId('Blockly.Gesture');
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_click.js';
@@ -52,9 +52,9 @@ const ZOOM_OUT_MULTIPLIER = 6;
 /**
  * Class for one gesture.
  *
- * @alias Blockly.TouchGesture
+ * @alias Blockly.Gesture
  */
-export class TouchGesture {
+export class Gesture {
   /**
    * The position of the pointer when the gesture started.  Units are CSS
    * pixels, with (0, 0) at the top left of the browser window (pointer event

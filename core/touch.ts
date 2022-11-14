@@ -12,7 +12,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Touch');
 
-import type {TouchGesture} from './touch_gesture.js';
+import type {Gesture} from './gesture.js';
 import * as deprecation from './utils/deprecation.js';
 
 
@@ -80,7 +80,7 @@ let longPid_: AnyDuringMigration = 0;
  * @alias Blockly.Touch.longStart
  * @internal
  */
-export function longStart(e: PointerEvent, gesture: TouchGesture) {
+export function longStart(e: PointerEvent, gesture: Gesture) {
   longStop();
   longPid_ = setTimeout(function() {
     // Let the gesture route the right-click correctly.

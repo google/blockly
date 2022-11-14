@@ -1420,8 +1420,8 @@
   'develop': [
     // New renamings go here!
     {
-      oldName: 'Blockly.Gesture',
-      newName: 'Blockly.TouchGesture',
+      oldName: 'Blockly.TouchGesture',
+      newName: 'Blockly.Gesture',
     },    
   ]
 }

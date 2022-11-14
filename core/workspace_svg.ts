@@ -33,6 +33,7 @@ import {ContextMenuRegistry} from './contextmenu_registry.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
 import type {FlyoutButton} from './flyout_button.js';
+import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
@@ -55,7 +56,6 @@ import type {Theme} from './theme.js';
 import {Classic} from './theme/classic.js';
 import {ThemeManager} from './theme_manager.js';
 import * as Tooltip from './tooltip.js';
-import {TouchGesture} from './touch_gesture.js';
 import type {Trashcan} from './trashcan.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -223,7 +223,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @internal
    */
-  currentGesture_: TouchGesture|null = null;
+  currentGesture_: Gesture|null = null;
 
   /** This workspace's surface for dragging blocks, if it exists. */
   private readonly blockDragSurface: BlockDragSurfaceSvg|null = null;
@@ -1721,7 +1721,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   private onMouseWheel_(e: WheelEvent) {
     // Don't scroll or zoom anything if drag is in progress.
-    if (TouchGesture.inProgress()) {
+    if (Gesture.inProgress()) {
       e.preventDefault();
       e.stopPropagation();
       return;
@@ -2475,7 +2475,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     valid gesture exists.
    * @internal
    */
-  getGesture(e: PointerEvent): TouchGesture|null {
+  getGesture(e: PointerEvent): Gesture|null {
     const isStart = e.type === 'pointerdown';
 
     const gesture = this.currentGesture_;
@@ -2493,7 +2493,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // No gesture existed on this workspace, but this looks like the start of a
     // new gesture.
     if (isStart) {
-      this.currentGesture_ = new TouchGesture(e, this);
+      this.currentGesture_ = new Gesture(e, this);
       return this.currentGesture_;
     }
     // No gesture existed and this event couldn't be the start of a new gesture.

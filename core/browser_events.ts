@@ -67,19 +67,13 @@ export function conditionalBind(
    */
   function wrapFunc(e: Event) {
     const captureIdentifier = !opt_noCaptureIdentifier;
-    // Handle each touch point separately.  If the event was a mouse event, this
-    // will hand back an array with one element, which we're fine handling.
-    const events = Touch.splitEventByTouches(e);
-    for (let i = 0; i < events.length; i++) {
-      const event = events[i];
-      if (captureIdentifier && !Touch.shouldHandleEvent(event)) {
-        continue;
-      }
-      Touch.setClientFromTouch(event);
+    
+    if (!(captureIdentifier && !Touch.shouldHandleEvent(e))) {
+      Touch.setClientFromTouch(e);
       if (thisObject) {
-        func.call(thisObject, event);
+        func.call(thisObject, e);
       } else {
-        func(event);
+        func(e);
       }
       handled = true;
     }

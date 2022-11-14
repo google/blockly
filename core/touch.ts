@@ -13,6 +13,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Touch');
 
 import type {Gesture} from './gesture.js';
+import * as deprecation from './utils/deprecation.js';
 
 
 /**
@@ -286,6 +287,7 @@ export function isTouchEvent(e: Event|PseudoEvent): boolean {
  * @alias Blockly.Touch.splitEventByTouches
  */
 export function splitEventByTouches(e: Event): Array<Event|PseudoEvent> {
+  deprecation.warn('splitEventByTouches()', 'version 10', 'version 11');
   const events = [];
   // AnyDuringMigration because:  Property 'changedTouches' does not exist on
   // type 'PseudoEvent | Event'.

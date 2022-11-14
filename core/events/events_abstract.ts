@@ -26,7 +26,10 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.Abstract
  */
 export abstract class Abstract {
-  /** Whether or not the event is blank (to be populated by fromJson). */
+  /**
+   * Whether or not the event was constructed without necessary parameters
+   * (to be populated by fromJson).
+   */
   abstract isBlank: boolean;
 
   /** The workspace identifier for this event. */

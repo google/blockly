@@ -52,7 +52,7 @@ let touchIdentifier_: string|null = null;
  *
  * @alias Blockly.Touch.TOUCH_MAP
  */
-export const TOUCH_MAP: {[key: string]: string[]} = globalThis['PointerEvent'] ?
+export const TOUCH_MAP: {[key: string]: string[]} = 
     {
       'mousedown': ['pointerdown'],
       'mouseenter': ['pointerenter'],
@@ -63,11 +63,6 @@ export const TOUCH_MAP: {[key: string]: string[]} = globalThis['PointerEvent'] ?
       'mouseup': ['pointerup', 'pointercancel'],
       'touchend': ['pointerup'],
       'touchcancel': ['pointercancel'],
-    } :
-    {
-      'mousedown': ['touchstart'],
-      'mousemove': ['touchmove'],
-      'mouseup': ['touchend', 'touchcancel'],
     };
 
 /** PID of queued long-press task. */

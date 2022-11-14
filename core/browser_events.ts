@@ -86,7 +86,7 @@ export function conditionalBind(
   }
 
   const bindData: Data = [];
-  if (globalThis['PointerEvent'] && name in Touch.TOUCH_MAP) {
+  if (name in Touch.TOUCH_MAP) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);
@@ -146,7 +146,7 @@ export function bind(
   }
 
   const bindData: Data = [];
-  if (globalThis['PointerEvent'] && name in Touch.TOUCH_MAP) {
+  if (name in Touch.TOUCH_MAP) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);

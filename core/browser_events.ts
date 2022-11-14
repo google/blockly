@@ -69,7 +69,6 @@ export function conditionalBind(
     const captureIdentifier = !opt_noCaptureIdentifier;
     
     if (!(captureIdentifier && !Touch.shouldHandleEvent(e))) {
-      Touch.setClientFromTouch(e);
       if (thisObject) {
         func.call(thisObject, e);
       } else {

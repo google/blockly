@@ -237,6 +237,7 @@ export function checkTouchIdentifier(e: Event|PseudoEvent): boolean {
  * @alias Blockly.Touch.setClientFromTouch
  */
 export function setClientFromTouch(e: Event|PseudoEvent) {
+  deprecation.warn('setClientFromTouch()', 'version 10', 'version 11');
   // AnyDuringMigration because:  Property 'changedTouches' does not exist on
   // type 'PseudoEvent | Event'.
   if (e.type.startsWith('touch') && (e as AnyDuringMigration).changedTouches) {

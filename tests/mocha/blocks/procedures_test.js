@@ -20,8 +20,226 @@ suite('Procedures', function() {
     this.workspace.createVariable(
         'preCreatedTypedVar', 'type', 'preCreatedTypedVarId');
   });
+
   teardown(function() {
     sharedTestTeardown.call(this);
+  });
+
+  suite('updating data models', function() {
+    test(
+        'renaming a procedure def block updates the procedure model',
+        function() {
+
+        });
+
+    test(
+        'disabling a procedure def block updates the procedure model',
+        function() {
+
+        });
+
+    test(
+        'enabling a procedure def block updates the procedure model',
+        function() {
+
+        });
+
+    test(
+        'adding a parameter to a procedure def updates the procedure model',
+        function() {
+
+        });
+
+    test('adding a parameter adds a variable to the variable map', function() {
+
+    });
+
+
+    test(
+        'moving a parameter in the procedure def updates the procedure model',
+        function() {
+
+        });
+
+    test(
+        'deleting a parameter from a procedure def updates the procedure model',
+        function() {
+
+        });
+
+    test('renaming a procedure parameter updates the parameter model', function() {
+
+    });
+  });
+
+  suite('responding to data model updates', function() {
+    test('renaming the procedure data model updates caller blocks', function() {
+
+    });
+
+    test('disabling a procedure data model disables caller blocks', function() {
+
+    });
+
+    test('enabling a procedure data model enables caller blocks', function() {
+
+    });
+
+    test('adding a parameter to a data model updates caller blocks', function() {
+
+    });
+
+    test('moving a parameter in the data model updates caller blocks', function() {
+
+    });
+
+    test(
+        'deleting a parameter from the data model updates caler blocks',
+        function() {
+
+        });
+
+    test(
+        'renaming a procedure parameter in the data model updates callers',
+        function() {
+
+        });
+  });
+
+  suite('Renaming procedures', function() {
+    test('callers are updated to have the new name', function() {
+
+    });
+
+    test('callers are updated on every keypress', function() {
+
+    });
+
+    test(
+        'undoing a multi-character rename reverts to the original name',
+        function() {
+
+        });
+
+    test(
+        'intermediate name conflicts result in the caller getting the legal name',
+        function() {
+
+        });
+
+    test(
+        'ending the edit with an illegal name results in both the ' +
+        'procedure and the caller getting the legal name',
+        function() {
+
+        });
+  });
+
+  suite('Adding procedure parameters', function() {
+    test('no variable create event is fired', function() {
+
+    });
+
+    test(
+        'the mutator flyout updates to avoid parameter name conflicts',
+        function() {
+
+        });
+  });
+
+  suite('Renaming procedure parameters', function() {
+    test('callers are updated for parameter renames', function() {
+
+    });
+
+    test(
+        'variables associated with procedure parameters are not renamed',
+        function() {
+
+        });
+
+    test(
+        'renaming a parameter does not result in intermediate variables',
+        function() {
+
+        });
+
+    test(
+        'the variable associated with the original name of the ' +
+        'parameter continues to exist',
+        function() {
+
+        });
+
+    test(
+        'undoing a multi-character rename reverts to the original name',
+        function() {
+
+        });
+
+    test(
+        'renaming a variable associated with a parameter renames the parameter',
+        function() {
+
+        });
+
+    test.skip(
+        'renaming a variable such that you get a parameter ' +
+        'conflict does... something!',
+        function() {
+
+        });
+  });
+
+  suite('Reordering procedure parameters', function() {
+    test('reordering procedure parameters updates the caller block', function() {
+
+    });
+
+    test(
+        'reordering procedure parameters reorders the blocks ' +
+        'attached to caller inputs', function() {
+
+        });
+  });
+
+  suite('Enabling and disabling procedure blocks', function() {
+    test(
+        'if a procedure definition is disabled, the procedure caller ' +
+        'is also disabled',
+        function() {
+
+        });
+
+    test(
+        'if a procedure definition is enabled, the procedure caller ' +
+        'is also enabled',
+        function() {
+
+        });
+
+    test(
+        'if a procedure caller block was already disabled before ' +
+        'its definition was disabled, it is not reenabled',
+        function() {
+
+        });
+  });
+
+  suite('Deleting procedure blocks', function() {
+    test(
+        'when the procedure definition block is deleted the ' +
+        'procedure model is deleted as well',
+        function() {
+
+        });
+
+    test(
+        'when the procedure definition block is deleted, all of its ' +
+        'associated callers are deleted as well',
+        function() {
+
+        });
   });
 
   suite('allProcedures', function() {
@@ -40,6 +258,7 @@ suite('Procedures', function() {
       chai.assert.lengthOf(allProcedures[1], 1);
       chai.assert.equal(allProcedures[1][0][0], 'return');
     });
+
     test('Multiple Blocks', function() {
       const noReturnBlock = new Blockly.Block(this.workspace, 'procedures_defnoreturn');
       noReturnBlock.setFieldValue('no return', 'NAME');
@@ -59,6 +278,7 @@ suite('Procedures', function() {
       chai.assert.equal(allProcedures[1][0][0], 'return');
       chai.assert.equal(allProcedures[1][1][0], 'return2');
     });
+
     test('No Procedures', function() {
       const _ = new Blockly.Block(this.workspace, 'controls_if');
       const allProcedures = Blockly.Procedures.allProcedures(this.workspace);
@@ -73,128 +293,6 @@ suite('Procedures', function() {
       chai.assert.isFalse(
           Blockly.Procedures.isNameUsed('name1', this.workspace)
       );
-    });
-  });
-
-  suite('Enable/Disable', function() {
-    setup(function() {
-      const toolbox = document.getElementById('toolbox-categories');
-      this.workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-    });
-    teardown(function() {
-      workspaceTeardown.call(this, this.workspaceSvg);
-      sinon.restore();
-    });
-    suite('Inherited disabled', function() {
-      setup(function() {
-        const dom = Blockly.Xml.textToDom(
-            '<xml xmlns="https://developers.google.com/blockly/xml">' +
-            '<block type="procedures_defreturn" id="bar-def">' +
-            '<field name="NAME">bar</field>' +
-            '<statement name="STACK">' +
-            '<block type="procedures_callnoreturn" id="foo-c1">' +
-            '<mutation name="foo"></mutation>' +
-            '</block>' +
-            '</statement>' +
-            '<value name="RETURN">' +
-            '<block type="procedures_callreturn" id="bar-c1">' +
-            '<mutation name="bar"></mutation>' +
-            '</block>' +
-            '</value>' +
-            '</block>' +
-            '<block type="procedures_defnoreturn" id="foo-def">' +
-            '<field name="NAME">foo</field>' +
-            '</block>' +
-            '<block type="procedures_defreturn" id="baz-def">' +
-            '<field name="NAME">baz</field>' +
-            '<value name="RETURN">' +
-            '<block type="procedures_callreturn" id="bar-c2">' +
-            '<mutation name="bar"></mutation>' +
-            '</block>' +
-            '</value>' +
-            '</block>' +
-            '<block type="procedures_callnoreturn" id="foo-c2">' +
-            '<mutation name="foo"></mutation>' +
-            '</block>' +
-            '<block type="procedures_callreturn" id="baz-c1">' +
-            '<mutation name="baz"></mutation>' +
-            '</block>' +
-            '</xml>');
-        Blockly.Events.disable();
-        Blockly.Xml.appendDomToWorkspace(dom, this.workspaceSvg);
-        Blockly.Events.enable();
-
-        this.barDef = this.workspaceSvg.getBlockById('bar-def');
-        this.fooDef = this.workspaceSvg.getBlockById('foo-def');
-        this.bazDef = this.workspaceSvg.getBlockById('baz-def');
-
-        this.barCalls = [
-          this.workspaceSvg.getBlockById('bar-c1'),
-          this.workspaceSvg.getBlockById('bar-c2')];
-        this.fooCalls = [
-          this.workspaceSvg.getBlockById('foo-c1'),
-          this.workspaceSvg.getBlockById('foo-c2')];
-        this.bazCall = this.workspaceSvg.getBlockById('baz-c1');
-      });
-      test('Nested caller', function() {
-        this.barDef.setEnabled(false);
-
-        for (let i = 0; i < 2; i++) {
-          chai.assert.isFalse(this.barCalls[i].isEnabled(),
-              'Callers are disabled when their definition is disabled ' +
-              '(bar call ' + i + ')');
-        }
-        chai.assert.isTrue(this.fooCalls[0].isEnabled(),
-            'Callers in definitions are disabled by inheritance');
-        chai.assert.isTrue(this.fooCalls[0].getInheritedDisabled(),
-            'Callers in definitions are disabled by inheritance');
-
-        this.fooDef.setEnabled(false);
-
-        for (let i = 0; i < 2; i++) {
-          chai.assert.isFalse(this.fooCalls[i].isEnabled(),
-              'Callers are disabled when their definition is disabled ' +
-              '(foo call ' + i + ')');
-        }
-
-        this.barDef.setEnabled(true);
-
-        for (let i = 0; i < 2; i++) {
-          chai.assert.isTrue(this.barCalls[i].isEnabled(),
-              'Callers are reenabled with their definition ' +
-              '(bar call ' + i + ')');
-        }
-        chai.assert.isFalse(this.fooCalls[0].isEnabled(),
-            'Nested disabled callers remain disabled');
-        chai.assert.isFalse(this.fooCalls[0].getInheritedDisabled(),
-            'Nested disabled callers remain disabled, not by inheritance');
-      });
-      test('Caller in return', function() {
-        this.bazDef.setEnabled(false);
-
-        chai.assert.isFalse(this.bazCall.isEnabled(),
-            'Caller is disabled with its definition');
-
-        chai.assert.isTrue(this.barCalls[1].isEnabled(),
-            'Caller in the return is disabled by inheritance');
-        chai.assert.isTrue(this.barCalls[1].getInheritedDisabled(),
-            'Caller in the return is disabled by inheritance');
-
-        this.barDef.setEnabled(false);
-
-        for (let i = 0; i < 2; i++) {
-          chai.assert.isFalse(this.barCalls[i].isEnabled(),
-              'Callers are disabled when their definition is disabled ' +
-              '(bar call ' + i + ')');
-        }
-
-        this.bazDef.setEnabled(true);
-
-        chai.assert.isFalse(this.barCalls[1].isEnabled(),
-            'Caller in return remains disabled');
-        chai.assert.isFalse(this.barCalls[1].getInheritedDisabled(),
-            'Caller in return remains disabled, not by inheritance');
-      });
     });
   });
 
@@ -232,6 +330,7 @@ suite('Procedures', function() {
       const blocks = workspace.getAllBlocks(false);
       chai.assert.lengthOf(blocks, expectedCount);
     }
+
     suite('no name renamed to unnamed', function() {
       test('defnoreturn and defreturn', function() {
         const xml = Blockly.Xml.textToDom(`
@@ -243,6 +342,7 @@ suite('Procedures', function() {
         assertDefAndCallBlocks(
             this.workspace, ['unnamed'], ['unnamed2'], false);
       });
+
       test('defreturn and defnoreturn', function() {
         const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
@@ -253,6 +353,7 @@ suite('Procedures', function() {
         assertDefAndCallBlocks(
             this.workspace, ['unnamed2'], ['unnamed'], false);
       });
+
       test('callnoreturn (no def in xml)', function() {
         const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
@@ -262,6 +363,7 @@ suite('Procedures', function() {
         assertDefAndCallBlocks(
             this.workspace, ['unnamed'], [], true);
       });
+
       test('callreturn (no def in xml)', function() {
         const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
@@ -271,6 +373,7 @@ suite('Procedures', function() {
         assertDefAndCallBlocks(
             this.workspace, [], ['unnamed'], true);
       });
+
       test('callnoreturn and callreturn (no def in xml)', function() {
         const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
@@ -281,6 +384,7 @@ suite('Procedures', function() {
         assertDefAndCallBlocks(
             this.workspace, ['unnamed'], ['unnamed2'], true);
       });
+
       test('callreturn and callnoreturn (no def in xml)', function() {
         const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
@@ -292,6 +396,7 @@ suite('Procedures', function() {
             this.workspace, ['unnamed2'], ['unnamed'], true);
       });
     });
+
     suite('caller param mismatch', function() {
       setup(function() {
         this.TEST_VAR_ID = 'test-id';
@@ -315,6 +420,7 @@ suite('Procedures', function() {
         assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
         assertCallBlockStructure(callBlock, [], [], 'do something2');
       });
+
       test('callreturn with bad args', function() {
         const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defreturn">
@@ -335,6 +441,7 @@ suite('Procedures', function() {
         assertCallBlockStructure(
             callBlock, ['y'], [this.TEST_VAR_ID], 'do something2');
       });
+
       test('callnoreturn with missing args', function() {
         const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defnoreturn">
@@ -352,6 +459,7 @@ suite('Procedures', function() {
         assertDefBlockStructure(defBlock, false, ['x'], ['arg']);
         assertCallBlockStructure(callBlock, [], [], 'do something2');
       });
+
       test('callnoreturn with bad args', function() {
         const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defnoreturn">

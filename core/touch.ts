@@ -53,18 +53,17 @@ let touchIdentifier_: string|null = null;
  *
  * @alias Blockly.Touch.TOUCH_MAP
  */
-export const TOUCH_MAP: {[key: string]: string[]} = 
-    {
-      'mousedown': ['pointerdown'],
-      'mouseenter': ['pointerenter'],
-      'mouseleave': ['pointerleave'],
-      'mousemove': ['pointermove'],
-      'mouseout': ['pointerout'],
-      'mouseover': ['pointerover'],
-      'mouseup': ['pointerup', 'pointercancel'],
-      'touchend': ['pointerup'],
-      'touchcancel': ['pointercancel'],
-    };
+export const TOUCH_MAP: {[key: string]: string[]} = {
+  'mousedown': ['pointerdown'],
+  'mouseenter': ['pointerenter'],
+  'mouseleave': ['pointerleave'],
+  'mousemove': ['pointermove'],
+  'mouseout': ['pointerout'],
+  'mouseover': ['pointerover'],
+  'mouseup': ['pointerup', 'pointercancel'],
+  'touchend': ['pointerup'],
+  'touchcancel': ['pointercancel'],
+};
 
 /** PID of queued long-press task. */
 let longPid_: AnyDuringMigration = 0;
@@ -143,8 +142,8 @@ export function getTouchIdentifierFromEvent(e: PointerEvent): string {
 
 /**
  * Check whether the pointer identifier on the event matches the current saved
- * identifier. If the current identifier was unset, save the identifier from 
- * the event. This starts a drag/gesture, during which pointer events with 
+ * identifier. If the current identifier was unset, save the identifier from
+ * the event. This starts a drag/gesture, during which pointer events with
  * other identifiers will be silently ignored.
  *
  * @param e Pointer event.

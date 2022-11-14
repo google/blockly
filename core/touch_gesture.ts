@@ -142,13 +142,13 @@ export class TouchGesture {
 
   /** The event that most recently updated this gesture. */
   private mostRecentEvent_: PointerEvent;
-  
+
   /** Boolean for whether or not this gesture is a multi-touch gesture. */
   private isMultiTouch_ = false;
-  
+
   /** A map of cached points used for tracking multi-touch gestures. */
   private cachedPoints = new Map<string, Coordinate|null>();
-  
+
   /**
    * This is the ratio between the starting distance between the touch points
    * and the most recent distance between the touch points.
@@ -156,17 +156,17 @@ export class TouchGesture {
    * Scales above 1.0 mean the most recent zoom was a zoom in.
    */
   private previousScale_ = 0;
-  
+
   /** The starting distance between two touch points. */
   private startDistance_ = 0;
-  
+
   /**
    * A handle to use to unbind the second pointerdown listener
    * at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
    */
   private onStartWrapper_: browserEvents.Data|null = null;
-  
+
   /** Boolean for whether or not the workspace supports pinch-zoom. */
   private isPinchZoomEnabled_: boolean|null = null;
 
@@ -175,7 +175,8 @@ export class TouchGesture {
    * @param creatorWorkspace The workspace that created this gesture and has a
    *     reference to it.
    */
-  constructor(e: PointerEvent, private readonly creatorWorkspace: WorkspaceSvg) {
+  constructor(
+      e: PointerEvent, private readonly creatorWorkspace: WorkspaceSvg) {
     this.mostRecentEvent_ = e;
 
     /**
@@ -215,7 +216,7 @@ export class TouchGesture {
     if (this.workspaceDragger_) {
       this.workspaceDragger_.dispose();
     }
-    
+
     if (this.onStartWrapper_) {
       browserEvents.unbind(this.onStartWrapper_);
     }
@@ -238,7 +239,8 @@ export class TouchGesture {
   }
 
   /**
-   * DO MATH to set currentDragDeltaXY_ based on the most recent pointer position.
+   * DO MATH to set currentDragDeltaXY_ based on the most recent pointer
+   * position.
    *
    * @param currentXY The most recent pointer position, in pixel units,
    *     with (0, 0) at the window's top left corner.
@@ -439,13 +441,13 @@ export class TouchGesture {
    */
   doStart(e: PointerEvent) {
     if (!this.startWorkspace_) {
-    throw new Error(
-        'Cannot start the touch event becauase the start ' +
-        'workspace is undefined');
+      throw new Error(
+          'Cannot start the touch event becauase the start ' +
+          'workspace is undefined');
     }
     this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
-      this.startWorkspace_.options.zoomOptions.pinch;
-          
+        this.startWorkspace_.options.zoomOptions.pinch;
+
     if (browserEvents.isTargetInput(e)) {
       this.cancel();
       return;
@@ -487,7 +489,7 @@ export class TouchGesture {
     this.healStack_ = e.altKey || e.ctrlKey || e.metaKey;
 
     this.bindMouseEvents(e);
-    
+
     if (!this.isEnding_) {
       this.handleTouchStart(e);
     }
@@ -501,8 +503,8 @@ export class TouchGesture {
    */
   bindMouseEvents(e: PointerEvent) {
     this.onStartWrapper_ = browserEvents.conditionalBind(
-      document, 'pointerdown', null, this.handleStart.bind(this),
-      /* opt_noCaptureIdentifier */ true);
+        document, 'pointerdown', null, this.handleStart.bind(this),
+        /* opt_noCaptureIdentifier */ true);
     this.onMoveWrapper_ = browserEvents.conditionalBind(
         document, 'pointermove', null, this.handleMove.bind(this),
         /* opt_noCaptureIdentifier */ true);
@@ -513,7 +515,7 @@ export class TouchGesture {
     e.preventDefault();
     e.stopPropagation();
   }
-  
+
   /**
    * Handle a pointerdown event.
    *
@@ -526,7 +528,7 @@ export class TouchGesture {
       return;
     }
     this.handleTouchStart(e);
-  
+
     if (this.isMultiTouch()) {
       Touch.longStop();
     }
@@ -539,18 +541,20 @@ export class TouchGesture {
    * @internal
    */
   handleMove(e: PointerEvent) {
-    if ((this.isDragging() && Touch.shouldHandleEvent(e)) || !this.isMultiTouch()) {
+    if ((this.isDragging() && Touch.shouldHandleEvent(e)) ||
+        !this.isMultiTouch()) {
       this.updateFromEvent_(e);
       if (this.workspaceDragger_) {
         this.workspaceDragger_.drag(this.currentDragDeltaXY_);
       } else if (this.blockDragger_) {
-        this.blockDragger_.drag(this.mostRecentEvent_, this.currentDragDeltaXY_);
+        this.blockDragger_.drag(
+            this.mostRecentEvent_, this.currentDragDeltaXY_);
       } else if (this.bubbleDragger_) {
         this.bubbleDragger_.dragBubble(
             this.mostRecentEvent_, this.currentDragDeltaXY_);
       }
       e.preventDefault();
-      e.stopPropagation();      
+      e.stopPropagation();
     } else if (this.isMultiTouch()) {
       this.handleTouchMove(e);
       Touch.longStop();
@@ -573,17 +577,16 @@ export class TouchGesture {
       }
       this.updateFromEvent_(e);
       Touch.longStop();
-      
+
       if (this.isEnding_) {
         console.log('Trying to end a gesture recursively.');
         return;
       }
       this.isEnding_ = true;
       // The ordering of these checks is important: drags have higher priority
-      // than clicks.  Fields have higher priority than blocks; blocks have higher
-      // priority than workspaces.
-      // The ordering within drags does not matter, because the three types of
-      // dragging are exclusive.
+      // than clicks.  Fields have higher priority than blocks; blocks have
+      // higher priority than workspaces. The ordering within drags does not
+      // matter, because the three types of dragging are exclusive.
       if (this.bubbleDragger_) {
         this.bubbleDragger_.endBubbleDrag(e, this.currentDragDeltaXY_);
       } else if (this.blockDragger_) {
@@ -600,19 +603,19 @@ export class TouchGesture {
       } else if (this.isWorkspaceClick_()) {
         this.doWorkspaceClick_(e);
       }
-      
+
       e.preventDefault();
       e.stopPropagation();
-      
+
       this.dispose();
     } else {
       e.preventDefault();
       e.stopPropagation();
-    
+
       this.dispose();
     }
   }
-  
+
   /**
    * Handle a pointerdown event and keep track of current
    * pointers.
@@ -634,7 +637,7 @@ export class TouchGesture {
       e.preventDefault();
     }
   }
-  
+
   /**
    * Handle a pointermove event and zoom in/out if two pointers
    * are on the screen.
@@ -646,14 +649,14 @@ export class TouchGesture {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     // Update the cache
     this.cachedPoints.set(pointerId, this.getTouchPoint(e));
-  
+
     if (this.isPinchZoomEnabled_ && this.cachedPoints.size === 2) {
       this.handlePinch_(e);
     } else {
       this.handleMove(e);
     }
   }
-  
+
   /**
    * Handle pinch zoom gesture.
    *
@@ -666,7 +669,7 @@ export class TouchGesture {
     const point1 = (this.cachedPoints.get(pointers[1]))!;
     const moveDistance = Coordinate.distance(point0, point1);
     const scale = moveDistance / this.startDistance_;
-  
+
     if (this.previousScale_ > 0 && this.previousScale_ < Infinity) {
       const gestureScale = scale - this.previousScale_;
       const delta = gestureScale > 0 ? gestureScale * ZOOM_IN_MULTIPLIER :
@@ -684,7 +687,7 @@ export class TouchGesture {
     this.previousScale_ = scale;
     e.preventDefault();
   }
-  
+
   /**
    * Handle a pointerup event and end the gesture.
    *
@@ -701,7 +704,7 @@ export class TouchGesture {
       this.previousScale_ = 0;
     }
   }
-  
+
   /**
    * Helper function returning the current touch point coordinate.
    *
@@ -715,7 +718,7 @@ export class TouchGesture {
     }
     return new Coordinate(e.pageX, e.pageY);
   }
-  
+
   /**
    * Whether this gesture is part of a multi-touch gesture.
    *

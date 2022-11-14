@@ -67,7 +67,7 @@ export function conditionalBind(
    */
   function wrapFunc(e: Event) {
     const captureIdentifier = !opt_noCaptureIdentifier;
-    
+
     if (!(captureIdentifier && !Touch.shouldHandleEvent(e))) {
       if (thisObject) {
         func.call(thisObject, e);

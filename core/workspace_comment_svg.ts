@@ -897,7 +897,8 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Handle a pointerup event while dragging a comment's border or resize handle.
+   * Handle a pointerup event while dragging a comment's border or resize
+   * handle.
    *
    * @param _e Pointer up event.
    */

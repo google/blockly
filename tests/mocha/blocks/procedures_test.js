@@ -25,50 +25,141 @@ suite('Procedures', function() {
     sharedTestTeardown.call(this);
   });
 
-  suite('updating data models', function() {
+  suite.skip('updating data models', function() {
     test(
         'renaming a procedure def block updates the procedure model',
         function() {
+          const defBlock = createProcDefBlock(this.workspace);
 
+          defBlock.setFieldValue('new name', 'NAME');
+
+          chai.assert.equal(
+              defBlock.getProcedureModel().getName(),
+              'new name',
+              'Expected the procedure model name to be updated');
         });
 
     test(
         'disabling a procedure def block updates the procedure model',
         function() {
+          const defBlock = createProcDefBlock(this.workspace);
 
-        });
+          defBlock.setEnabled(false);
 
-    test(
-        'enabling a procedure def block updates the procedure model',
-        function() {
-
+          chai.assert.isFalse(
+              defBlock.getProcedureModel().getEnabled(),
+              'Expected the procedure model to be disabled');
         });
 
     test(
         'adding a parameter to a procedure def updates the procedure model',
         function() {
+          // Create a stack of container, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          const containerBlock =
+              this.workspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock = this.workspace.newBlock('procedures_mutatorarg');
+          paramBlock.setFieldValue('param name', 'NAME');
+          containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
 
+          defBlock.compose(containerBlock);
+
+          chai.assert.equal(
+              defBlock.getProcedureModel().getParameter(0).getName(),
+              'param name',
+              'Expected the procedure model to have a matching parameter');
         });
 
     test('adding a parameter adds a variable to the variable map', function() {
+      // Create a stack of container, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      const containerBlock =
+          this.workspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = this.workspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param name', 'NAME');
+      containerBlock.getInput('STACK').connection
+          .connect(paramBlock.previousConnection);
 
+      defBlock.compose(containerBlock);
+
+      chai.assert.isTrue(
+          this.workspace.getVariableMap().getVariables('')
+               .some((variable) => variable.name === 'param name'),
+          'Expected the variable map to have a matching variable');
     });
 
 
     test(
         'moving a parameter in the procedure def updates the procedure model',
         function() {
+          // Create a stack of container, param1, param2.
+          const defBlock = createProcDefBlock(this.workspace);
+          const containerBlock =
+              this.workspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock1 = this.workspace.newBlock('procedures_mutatorarg');
+          paramBlock1.setFieldValue('param name1', 'NAME');
+          const paramBlock2 = this.workspace.newBlock('procedures_mutatorarg');
+          paramBlock2.setFieldValue('param name2', 'NAME');
+          containerBlock.getInput('STACK').connection
+              .connect(paramBlock1.previousConnection);
+          paramBlock1.nextConnection.connect(paramBlock2.previousConnection);
+          defBlock.compose(containerBlock);
 
+          // Reconfigure the stack to be container, param2, param1.
+          paramBlock2.previousConnection.disconnect();
+          paramBlock1.previousConnection.disconnect();
+          containerBlock.getInput('STACK').connection
+              .connect(paramBlock2.previousConnection);
+          paramBlock2.nextConnection.connect(paramBlock1.previousConnection);
+          defBlock.compose(containerBlock);
+
+          chai.assert.equal(
+              defBlock.getProcedureModel().getParameter(0).getName(),
+              'param name2',
+              'Expected the first parameter of the procedure to be param 2');
+          chai.assert.equal(
+              defBlock.getProcedureModel().getParameter(1).getName(),
+              'param name2',
+              'Expected the second parameter of the procedure to be param 1');
         });
 
     test(
         'deleting a parameter from a procedure def updates the procedure model',
         function() {
+          // Create a stack of container, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          const containerBlock =
+              this.workspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock = this.workspace.newBlock('procedures_mutatorarg');
+          containerBlock.getInput('STACK').connection
+              .connect(paramBlock.previousConnection);
+          defBlock.compose(containerBlock);
 
+          containerBlock.getInput('STACK').connection.disconnect();
+          defBlock.compose(containerBlock);
+
+          chai.assert.isEmpty(
+              defBlock.getProcedureModel().getParameters(),
+              'Expected the procedure model to have no parameters');
         });
 
     test('renaming a procedure parameter updates the parameter model', function() {
+      // Create a stack of container, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      const containerBlock =
+          this.workspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = this.workspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param name', 'NAME');
+      containerBlock.getInput('STACK').connection
+          .connect(paramBlock.previousConnection);
+      defBlock.compose(containerBlock);
 
+      paramBlock.setFieldValue('new param name', 'NAME');
+      defBlock.compose(containerBlock);
+
+      chai.assert.isEmpty(
+          defBlock.getProcedureModel().getParameters(),
+          'Expected the procedure model to have no parameters');
     });
   });
 

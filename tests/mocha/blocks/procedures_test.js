@@ -164,37 +164,69 @@ suite('Procedures', function() {
   });
 
   suite('responding to data model updates', function() {
-    test('renaming the procedure data model updates caller blocks', function() {
+    suite('def blocks', function() {
+      test('renaming the procedure data model updates blocks', function() {
 
+      });
+  
+      test('disabling a procedure data model disables blocks', function() {
+
+      });
+  
+      test('adding a parameter to a data model updates blocks', function() {
+  
+      });
+  
+      test('moving a parameter in the data model updates blocks', function() {
+  
+      });
+  
+      test(
+          'deleting a parameter from the data model updates blocks',
+          function() {
+  
+          });
+  
+      test(
+          'renaming a procedure parameter in the data model updates blocks',
+          function() {
+  
+          });
     });
 
-    test('disabling a procedure data model disables caller blocks', function() {
+    suite('caller blocks', function() {
+      test('renaming the procedure data model updates blocks', function() {
 
+      });
+  
+      test('disabling a procedure data model disables blocks', function() {
+  
+      });
+  
+      test('enabling a procedure data model enables blocks', function() {
+  
+      });
+  
+      test('adding a parameter to a data model updates blocks', function() {
+  
+      });
+  
+      test('moving a parameter in the data model updates blocks', function() {
+  
+      });
+  
+      test(
+          'deleting a parameter from the data model updates blocks',
+          function() {
+  
+          });
+  
+      test(
+          'renaming a procedure parameter in the data model updates blocks',
+          function() {
+  
+          });
     });
-
-    test('enabling a procedure data model enables caller blocks', function() {
-
-    });
-
-    test('adding a parameter to a data model updates caller blocks', function() {
-
-    });
-
-    test('moving a parameter in the data model updates caller blocks', function() {
-
-    });
-
-    test(
-        'deleting a parameter from the data model updates caler blocks',
-        function() {
-
-        });
-
-    test(
-        'renaming a procedure parameter in the data model updates callers',
-        function() {
-
-        });
   });
 
   suite('Renaming procedures', function() {

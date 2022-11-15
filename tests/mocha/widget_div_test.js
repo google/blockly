@@ -64,7 +64,7 @@ suite('WidgetDiv', function() {
         this.testWidgetPosition(
             anchorBBox, false, expectedX, expectedY, this.widgetSize.height);
       });
-  
+
       test('topConflict', function() {
         // Anchor close to the top.
         const anchorBBox =
@@ -75,7 +75,7 @@ suite('WidgetDiv', function() {
         this.testWidgetPosition(
             anchorBBox, false, expectedX, expectedY, this.widgetSize.height);
       });
-  
+
       test('bottomConflict', function() {
         // Anchor placed close to the bottom.
         const anchorBBox =
@@ -86,7 +86,7 @@ suite('WidgetDiv', function() {
         this.testWidgetPosition(
             anchorBBox, false, expectedX, expectedY, this.widgetSize.height);
       });
-  
+
       test('leftConflict', function() {
         // Anchor placed close to the left side.
         const anchorBBox =
@@ -97,7 +97,7 @@ suite('WidgetDiv', function() {
         this.testWidgetPosition(
             anchorBBox, false, expectedX, expectedY, this.widgetSize.height);
       });
-  
+
       test('rightConflict', function() {
         // Anchor placed close to the right side.
         const anchorBBox =

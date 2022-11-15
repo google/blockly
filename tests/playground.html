@@ -9,7 +9,7 @@
 <script>
   var BLOCKLY_BOOTSTRAP_OPTIONS = {
     additionalScripts: [
-      'msg/messages.js',
+      'build/msg/en.js',
       'tests/playgrounds/screenshot.js',
       'node_modules/@blockly/dev-tools/dist/index.js',
     ],
@@ -436,7 +436,7 @@ function addEventHandlers() {
   document.getElementById('hide')
       .addEventListener('click', function() { workspace.setVisible(false); });
 }
-  
+
 // Call start().  Because this <script> has type=module, it is
 // automatically deferred, so it will not be run until after the
 // document has been parsed, but before firing DOMContentLoaded.

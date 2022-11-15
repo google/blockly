@@ -280,6 +280,10 @@ export class RenderedConnection extends Connection {
 
   /** Add highlighting around this connection. */
   highlight() {
+    if (this.highlightPath) {
+      // This connection is already highlighted
+      return;
+    }
     let steps;
     const sourceBlockSvg = (this.sourceBlock_);
     const renderConstants =
@@ -495,7 +499,7 @@ export class RenderedConnection extends Connection {
    * @returns List of connections.
    * @internal
    */
-  override neighbours(maxLimit: number): Connection[] {
+  override neighbours(maxLimit: number): RenderedConnection[] {
     return this.dbOpposite_.getNeighbours(this, maxLimit);
   }
 

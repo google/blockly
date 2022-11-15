@@ -13,4 +13,4 @@
 }(this, function() {
 <%= contents %>
 return Blockly.Msg;
-})); 
+}));

@@ -26,7 +26,7 @@ suite('Registry', function() {
       Blockly.registry.unregister('test', 'test_name');
     }
   });
-  
+
   suite('Registration', function() {
     test('Simple', function() {
       Blockly.registry.register('test', 'test_name', TestClass);

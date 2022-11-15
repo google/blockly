@@ -43,7 +43,7 @@ suite('Gesture', function() {
   }
 
   function getTopFlyoutBlock(flyout) {
-    return flyout.workspace_.topBlocks_[0];
+    return flyout.workspace_.getTopBlocks(false)[0];
   }
 
   setup(function() {
@@ -73,8 +73,8 @@ suite('Gesture', function() {
   });
 
   test('Field click - Auto close flyout', function() {
-    const flyout = this.workspace.flyout_;
-    chai.assert.exists(this.workspace.flyout_,
+    const flyout = this.workspace.getFlyout(true);
+    chai.assert.exists(flyout,
         'Precondition: missing flyout');
     flyout.autoClose = true;
 
@@ -83,8 +83,8 @@ suite('Gesture', function() {
   });
 
   test('Field click - Always open flyout', function() {
-    const flyout = this.workspace.flyout_;
-    chai.assert.exists(this.workspace.flyout_,
+    const flyout = this.workspace.getFlyout(true);
+    chai.assert.exists(flyout,
         'Precondition: missing flyout');
     flyout.autoClose = false;
 

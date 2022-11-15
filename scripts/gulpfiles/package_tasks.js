@@ -19,6 +19,7 @@ gulp.replace = require('gulp-replace');
 var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
+var build = require('./build_tasks');
 var {getPackageJson} = require('./helper_tasks');
 var {BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
 
@@ -51,41 +52,6 @@ function packageCommonJS(namespace, dependencies) {
     exports: function () { return namespace; },
     template: path.join(TEMPLATE_DIR, 'node.template')
   });
-};
-
-// Sanity check that the BUILD_DIR directory exists, and that certain
-// files are in it.
-function checkBuildDir(done) {
-  // Check that directory exists.
-  if (!fs.existsSync(BUILD_DIR)) {
-    done(new Error(`The ${BUILD_DIR} directory does not exist.  ` +
-        'Has packageTasks.build been run?'));
-    return;
-  }
-  // Check files built by buildTasks.build exist in BUILD_DIR.
-  for (const fileName of [
-    'blockly_compressed.js',  // buildTasks.buildCompressed
-    'blocks_compressed.js',  // buildTasks.buildBlocks
-    'javascript_compressed.js',  // buildTasks.buildGenerators
-    'msg/js/en.js',  // buildTaks.buildLangfiles
-  ]) {
-    if (!fs.existsSync(`${BUILD_DIR}/${fileName}`)) {
-      done(new Error(
-          `Your ${BUILD_DIR} directory does not contain ${fileName}.  ` +
-          'Has packageTasks.build been run?  Try "npm run build".'));
-      return;
-    }
-  }
-  done();
-}
-
-/**
- * This task copies the compressed files and their source maps into
- * the release directory.
- */
-function packageCompressed() {
-  return gulp.src('*_compressed.js?(.map)', {cwd: BUILD_DIR})
-    .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
@@ -306,12 +272,12 @@ function packagePHP() {
 };
 
 /**
- * This task wraps each of the ${BUILD_DIR}/msg/js/* files into a UMD module.
+ * This task wraps each of the files in ${BUILD_DIR/msg/ into a UMD module.
  * @example import * as En from 'blockly/msg/en';
  */
 function packageLocales() {
   // Remove references to goog.provide and goog.require.
-  return gulp.src(`${BUILD_DIR}/msg/js/*.js`)
+  return gulp.src(`${BUILD_DIR}/msg/*.js`)
       .pipe(gulp.replace(/goog\.[^\n]+/g, ''))
       .pipe(packageUMD('Blockly.Msg', [], 'umd-msg.template'))
       .pipe(gulp.dest(`${RELEASE_DIR}/msg`));
@@ -325,10 +291,10 @@ function packageLocales() {
  */
 function packageUMDBundle() {
   var srcs = [
-    `${BUILD_DIR}/blockly_compressed.js`,
-    `${BUILD_DIR}/msg/js/en.js`,
-    `${BUILD_DIR}/blocks_compressed.js`,
-    `${BUILD_DIR}/javascript_compressed.js`,
+    `${RELEASE_DIR}/blockly_compressed.js`,
+    `${RELEASE_DIR}/msg/en.js`,
+    `${RELEASE_DIR}/blocks_compressed.js`,
+    `${RELEASE_DIR}/javascript_compressed.js`,
   ];
   return gulp.src(srcs)
       .pipe(gulp.concat('blockly.min.js'))
@@ -399,13 +365,16 @@ function cleanReleaseDir(done) {
 /**
  * This task prepares the files to be included in the NPM by copying
  * them into the release directory.
+ *
+ * Prerequisite: build.
  */
 const package = gulp.series(
-    checkBuildDir,
-    cleanReleaseDir,
+    gulp.parallel(
+        build.cleanBuildDir,
+        cleanReleaseDir),
+    build.build,
     gulp.parallel(
         packageIndex,
-        packageCompressed,
         packageBrowser,
         packageNode,
         packageCore,
@@ -417,15 +386,15 @@ const package = gulp.series(
         packageLua,
         packageDart,
         packagePHP,
-        packageLocales,
         packageMedia,
-        packageUMDBundle,
+        gulp.series(packageLocales, packageUMDBundle),
         packageJSON,
         packageReadme,
         packageDTS)
     );
 
 module.exports = {
+  // Main sequence targets.  Each should invoke any immediate prerequisite(s).
   cleanReleaseDir: cleanReleaseDir,
   package: package,
 };

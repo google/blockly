@@ -179,7 +179,7 @@ export function sharedTestTeardown() {
 }
 
 /**
- * Creates stub for Blockly.utils.genUid that returns the provided id or ids.
+ * Creates stub for Blockly.utils.idGenerator.genUid that returns the provided id or ids.
  * Recommended to also assert that the stub is called the expected number of
  * times.
  * @param {string|!Array<string>} returnIds The return values to use for the

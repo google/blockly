@@ -13,7 +13,6 @@ var fs = require('fs');
 var gulp = require('gulp');
 var readlineSync = require('readline-sync');
 
-var buildTasks = require('./build_tasks');
 var gitTasks = require('./git_tasks');
 var packageTasks = require('./package_tasks');
 var {getPackageJson} = require('./helper_tasks');
@@ -147,27 +146,18 @@ function updateBetaVersion(done) {
   done();
 }
 
-// Build Blockly and prepare to check in the resulting built files.
-const rebuildAll = gulp.series(
-  buildTasks.cleanBuildDir,
-  buildTasks.build,
-  buildTasks.checkinBuilt,
-  );
-
-// Package and publish to npm.
+// Rebuild, package and publish to npm.
 const publish = gulp.series(
-  rebuildAll,
-  packageTasks.package,
+  packageTasks.package,  // Does clean + build.
   checkBranch,
   checkReleaseDir,
   loginAndPublish
 );
 
-// Publish a beta version of Blockly.
+// Rebuild, package and publish a beta version of Blockly.
 const publishBeta = gulp.series(
   updateBetaVersion,
-  rebuildAll,
-  packageTasks.package,
+  packageTasks.package,  // Does clean + build.
   checkBranch,
   checkReleaseDir,
   loginAndPublishBeta
@@ -179,12 +169,15 @@ const recompileDevelop = gulp.series(
   gitTasks.syncDevelop(),
   gitTasks.createRebuildBranch,
   updateVersionPrompt,
-  rebuildAll,
+  packageTasks.package,  // Does clean + build.
   gitTasks.pushRebuildBranch
   );
 
 module.exports = {
+  // Main sequence targets.  Each should invoke any immediate prerequisite(s).
+  publishBeta,
+  publish,
+
+  // Legacy target, to be deleted.
   recompile: recompileDevelop,
-  publishBeta: publishBeta,
-  publish: publish
-}
+};

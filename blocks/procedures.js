@@ -150,8 +150,7 @@ const PROCEDURE_DEF_COMMON = {
           this.argumentVarModels_.push(variable);
         } else {
           console.log(
-              'Failed to create a variable with name ' + varName +
-              ', ignoring.');
+              `Failed to create a variable named "${varName}", ignoring.`);
         }
       }
     }

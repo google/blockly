@@ -14,9 +14,10 @@ var fs = require('fs');
 var rimraf = require('rimraf');
 var path = require('path');
 var execSync = require('child_process').execSync;
+const buildTasks = require('./build_tasks.js');
+const packageTasks = require('./package_tasks.js');
 
 var packageJson = require('../../package.json');
-
 const demoTmpDir = '../_deploy';
 const demoStaticTmpDir = '../_deploy/static';
 
@@ -33,13 +34,25 @@ function prepareDeployDir(done) {
 }
 
 /**
- * Copies all files into static deploy directory except for those under
- * appengine.
+ * Copies all files from current git index into static deploy
+ * directory.  We do this rather than just copying the working tree,
+ * because the working tree is probably full of leftover editor
+ * backup-save files, vesigial empty directories, etc.
  */
 function copyStaticSrc(done) {
-  execSync(`git archive HEAD | tar -x -C ${demoStaticTmpDir}`,
+  execSync(`GIT_WORK_TREE='${demoStaticTmpDir}' git checkout-index --all`,
       { stdio: 'inherit' });
-  done()
+  done();
+}
+
+/**
+ * Copies needed built files into the static deploy directory.
+ *
+ * Prerequisite: clean, build.
+ */
+function copyBuilt(done) {
+  return gulp.src(['build/msg/**/*', 'dist/*_compressed.js*'], {base: '.'})
+      .pipe(gulp.dest(demoStaticTmpDir));
 }
 
 /**
@@ -127,10 +140,21 @@ function deployBetaAndClean(done) {
 
 /**
  * Prepares demos.
+ * 
+ * Prerequisites (invoked): clean, build
  */
 const prepareDemos = gulp.series(
-    prepareDeployDir, copyStaticSrc, copyAppengineSrc, copyPlaygroundDeps);
-
+    prepareDeployDir,
+    gulp.parallel(
+        gulp.series(
+            copyStaticSrc,
+            copyAppengineSrc),
+        gulp.series(
+            gulp.parallel(buildTasks.cleanBuildDir,
+                          packageTasks.cleanReleaseDir),
+            buildTasks.build,
+            copyBuilt),
+        copyPlaygroundDeps));
 
 /**
  * Deploys demos.
@@ -143,7 +167,8 @@ const deployDemos = gulp.series(prepareDemos, deployAndClean);
 const deployDemosBeta = gulp.series(prepareDemos, deployBetaAndClean);
 
 module.exports = {
+  // Main sequence targets.  Each should invoke any immediate prerequisite(s).
   deployDemos: deployDemos,
   deployDemosBeta: deployDemosBeta,
   prepareDemos: prepareDemos
-}
+};

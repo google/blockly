@@ -406,7 +406,7 @@ suite('Variable Fields', function() {
         chai.assert.deepEqual(
             jso['fields'], {'VAR': {'id': 'id2', 'name': 'x', 'type': ''}});
       });
-  
+
       test('Typed', function() {
         const block = this.workspace.newBlock('row_block');
         const field =
@@ -429,7 +429,7 @@ suite('Variable Fields', function() {
         chai.assert.isUndefined(jso['fields']['VAR']['name']);
         chai.assert.isUndefined(jso['fields']['VAR']['type']);
       });
-  
+
       test('Typed', function() {
         const block = this.workspace.newBlock('row_block');
         const field =

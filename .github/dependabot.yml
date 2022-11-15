@@ -22,7 +22,7 @@ updates:
       - "PR: chore"
       - "PR: dependencies"
   - package-ecosystem: "github-actions" # See documentation for possible values
-    directory: "/" 
+    directory: "/"
     target-branch: "develop"
     schedule:
       interval: "weekly"

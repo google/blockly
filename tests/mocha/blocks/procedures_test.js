@@ -7,6 +7,7 @@
 goog.declareModuleId('Blockly.test.procedures');
 
 import * as Blockly from '../../../build/src/core/blockly.js';
+import {ObservableParameterModel} from '../../../build/src/core/procedures.js';
 import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} from '../test_helpers/procedures.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from '../test_helpers/setup_teardown.js';
@@ -163,34 +164,108 @@ suite('Procedures', function() {
     });
   });
 
-  suite('responding to data model updates', function() {
+  suite.skip('responding to data model updates', function() {
     suite('def blocks', function() {
       test('renaming the procedure data model updates blocks', function() {
+        const defBlock = createProcDefBlock(this.workspace);
+        const procModel = defBlock.getProcedureModel();
 
+        procModel.setEnabled(false);
+
+        chai.assert.isFalse(
+          defBlock.getEnabled(),
+          'Expected the procedure block to be disabled');
       });
   
       test('disabling a procedure data model disables blocks', function() {
+        const defBlock = createProcDefBlock(this.workspace);
+        const procModel = defBlock.getProcedureModel();
 
+        procModel.setEnabled(false);
+
+        chai.assert.isFalse(
+          defBlock.getEnabled(),
+          'Expected the procedure block to be disabled');
       });
   
       test('adding a parameter to a data model updates blocks', function() {
-  
+        const defBlock = createProcDefBlock(this.workspace);
+        const procModel = defBlock.getProcedureModel();
+
+        procModel.insertParameter(
+            new ObservableParameterModel(this.workspace, 'param1', 'id'), 0);
+
+        chai.assert.isNotNull(
+          defBlock.getField('PARAMS'),
+          'Expected the params field to exist');
+        chai.assert.isTrue(
+          defBlock.getFieldValue('PARAMS').includes('param1'),
+          'Expected the params field to contain the name of the new param');
       });
   
       test('moving a parameter in the data model updates blocks', function() {
-  
+        const defBlock = createProcDefBlock(this.workspace);
+        const procModel = defBlock.getProcedureModel();
+        const param1 =
+            new ObservableParameterModel(this.workspace, 'param1', 'id1');
+        const param2 =
+            new ObservableParameterModel(this.workspace, 'param2', 'id2');
+        procModel.insertParameter(param1, 0);
+        procModel.insertParameter(param2, 1);
+
+        procModel.deleteParameter(1);
+        procModel.insertParameter(param2, 0);
+
+        chai.assert.isNotNull(
+          defBlock.getField('PARAMS'),
+          'Expected the params field to exist');
+        chai.assert.isTrue(
+          defBlock.getFieldValue('PARAMS').includes('param2, param1'),
+          'Expected the params field order to match the parameter order');
       });
   
       test(
           'deleting a parameter from the data model updates blocks',
           function() {
-  
+            const defBlock = createProcDefBlock(this.workspace);
+            const procModel = defBlock.getProcedureModel();
+            const param1 =
+                new ObservableParameterModel(this.workspace, 'param1', 'id1');
+            const param2 =
+                new ObservableParameterModel(this.workspace, 'param2', 'id2');
+            procModel.insertParameter(param1, 0);
+            procModel.insertParameter(param2, 1);
+    
+            procModel.deleteParameter(0);
+    
+            chai.assert.isNotNull(
+              defBlock.getField('PARAMS'),
+              'Expected the params field to exist');
+            chai.assert.isTrue(
+              defBlock.getFieldValue('PARAMS').includes('param2'),
+              'Expected the params field order to contain one parameter');
+            chai.assert.isFalse(
+              defBlock.getFieldValue('PARAMS').includes('param1'),
+              'Expected the params field to not contain the deleted parameter');
           });
   
       test(
           'renaming a procedure parameter in the data model updates blocks',
           function() {
-  
+            const defBlock = createProcDefBlock(this.workspace);
+            const procModel = defBlock.getProcedureModel();
+            const param1 =
+                new ObservableParameterModel(this.workspace, 'param1', 'id1');
+            procModel.insertParameter(param1, 0);
+    
+            param1.setName('new name');
+    
+            chai.assert.isNotNull(
+              defBlock.getField('PARAMS'),
+              'Expected the params field to exist');
+            chai.assert.isTrue(
+              defBlock.getFieldValue('PARAMS').includes('new name'),
+              'Expected the params field to contain the new param name');
           });
     });
 

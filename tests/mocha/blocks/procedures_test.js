@@ -394,7 +394,7 @@ suite('Procedures', function() {
     });
   });
 
-  suite.only('Renaming procedures', function() {
+  suite('Renaming procedures', function() {
     test('callers are updated to have the new name', function() {
       const defBlock = createProcDefBlock(this.workspace);
       const callBlock = createProcCallBlock(this.workspace);
@@ -430,7 +430,7 @@ suite('Procedures', function() {
         });
   });
 
-  suite.only('Adding procedure parameters', function() {
+  suite('Adding procedure parameters', function() {
     test('no variable create event is fired', function() {
       const eventSpy = createChangeListenerSpy(this.workspace);
       const defBlock = createProcDefBlock(this.workspace);
@@ -521,40 +521,130 @@ suite('Procedures', function() {
     });
   });
 
-  suite('Renaming procedure parameters', function() {
-    test('callers are updated for parameter renames', function() {
+  suite.only('Renaming procedure parameters', function() {
+    test('defs are updated for parameter renames', function() {
+      // Create a stack of container, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock =
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param1', 'NAME');
+      containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+      defBlock.compose(containerBlock);
 
+      paramBlock.setFieldValue('new name', 'NAME');
+      defBlock.compose(containerBlock);
+
+      chai.assert.isNotNull(
+        defBlock.getField('PARAMS'),
+        'Expected the params field to exist');
+      chai.assert.isTrue(
+        defBlock.getFieldValue('PARAMS').includes('new name'),
+        'Expected the params field to contain the new name of the param');
+    });
+
+    test('callers are updated for parameter renames', function() {
+      // Create a stack of container, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      const callBlock = createProcCallBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock =
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param1', 'NAME');
+      containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+      defBlock.compose(containerBlock);
+
+      paramBlock.setFieldValue('new name', 'NAME');
+      defBlock.compose(containerBlock);
+
+      chai.assert.isNotNull(
+        callBlock.getInput('ARG0'),
+        'Expected the param input to exist');
+      chai.assert.equal(
+        callBlock.getFieldValue('ARGNAME0'),
+        'new name',
+        'Expected the params field to match the name of the new param');
     });
 
     test(
         'variables associated with procedure parameters are not renamed',
         function() {
-
+          // Create a stack of container, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          const callBlock = createProcCallBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
+          const containerBlock =
+              mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock.setFieldValue('param1', 'NAME');
+          containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+          defBlock.compose(containerBlock);
+    
+          paramBlock.setFieldValue('param2', 'NAME');
+          defBlock.compose(containerBlock);
+    
+          chai.assert.isNotNull(
+              this.workspace.getVariable('param1', ''),
+              'Expected the old variable to continue to exist');
         });
 
     test(
-        'renaming a parameter does not result in intermediate variables',
+        'renaming a variable associated with a parameter updates procedure defs',
         function() {
-
+          // Create a stack of container, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
+          const containerBlock =
+              mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock.setFieldValue('param1', 'NAME');
+          containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+          defBlock.compose(containerBlock);
+          defBlock.mutator.setVisible(false);
+    
+          const variable = this.workspace.getVariable('param1', '');
+          this.workspace.renameVariableById(variable.getId(), 'new name');
+    
+          chai.assert.isNotNull(
+              defBlock.getField('PARAMS'),
+              'Expected the params field to exist');
+          chai.assert.isTrue(
+              defBlock.getFieldValue('PARAMS').includes('new name'),
+              'Expected the params field to contain the new name of the param');
         });
 
     test(
-        'the variable associated with the original name of the ' +
-        'parameter continues to exist',
+        'renaming a variable associated with a parameter updates procedure callers',
         function() {
+          // Create a stack of container, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          const callBlock = createProcCallBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
+          const containerBlock =
+              mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock.setFieldValue('param1', 'NAME');
+          containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+          defBlock.compose(containerBlock);
+          defBlock.mutator.setVisible(false);
+    
+          const variable = this.workspace.getVariable('param1', '');
+          this.workspace.renameVariableById(variable.getId(), 'new name');
 
-        });
-
-    test(
-        'undoing a multi-character rename reverts to the original name',
-        function() {
-
-        });
-
-    test(
-        'renaming a variable associated with a parameter renames the parameter',
-        function() {
-
+          chai.assert.isNotNull(
+            callBlock.getInput('ARG0'),
+            'Expected the param input to exist');
+          chai.assert.equal(
+            callBlock.getFieldValue('ARGNAME0'),
+            'new name',
+            'Expected the params field to match the name of the new param');
         });
 
     test.skip(

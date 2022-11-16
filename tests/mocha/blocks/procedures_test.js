@@ -521,7 +521,7 @@ suite('Procedures', function() {
     });
   });
 
-  suite.only('Renaming procedure parameters', function() {
+  suite('Renaming procedure parameters', function() {
     test('defs are updated for parameter renames', function() {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
@@ -655,15 +655,118 @@ suite('Procedures', function() {
         });
   });
 
-  suite('Reordering procedure parameters', function() {
-    test('reordering procedure parameters updates the caller block', function() {
+  suite.only('Reordering procedure parameters', function() {
+    test('reordering procedure parameters updates procedure blocks', function() {
+      // Create a stack of container, parameter, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock =
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock1 = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock1.setFieldValue('param1', 'NAME');
+      const paramBlock2 = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock2.setFieldValue('param2', 'NAME');
+      containerBlock.getInput('STACK').connection.connect(paramBlock1.previousConnection);
+      paramBlock1.nextConnection.connect(paramBlock2.previousConnection);
+      defBlock.compose(containerBlock);
 
+      // Reorder the parameters.
+      paramBlock2.previousConnection.disconnect();
+      paramBlock1.previousConnection.disconnect();
+      containerBlock.getInput('STACK').connection.connect(paramBlock2.previousConnection);
+      paramBlock2.nextConnection.connect(paramBlock1.previousConnection);
+      defBlock.compose(containerBlock);
+
+      chai.assert.isNotNull(
+        defBlock.getField('PARAMS'),
+        'Expected the params field to exist');
+      chai.assert.isTrue(
+        defBlock.getFieldValue('PARAMS').includes('param2, param1'),
+        'Expected the params field order to match the parameter order');
+    });
+
+    test('reordering procedure parameters updates caller blocks', function() {
+      // Create a stack of container, parameter, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      const callBlock = createProcCallBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock =
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock1 = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock1.setFieldValue('param1', 'NAME');
+      const paramBlock2 = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock2.setFieldValue('param2', 'NAME');
+      containerBlock.getInput('STACK').connection.connect(paramBlock1.previousConnection);
+      paramBlock1.nextConnection.connect(paramBlock2.previousConnection);
+      defBlock.compose(containerBlock);
+
+      // Reorder the parameters.
+      paramBlock2.previousConnection.disconnect();
+      paramBlock1.previousConnection.disconnect();
+      containerBlock.getInput('STACK').connection.connect(paramBlock2.previousConnection);
+      paramBlock2.nextConnection.connect(paramBlock1.previousConnection);
+      defBlock.compose(containerBlock);
+
+      chai.assert.isNotNull(
+        callBlock.getInput('ARG0'),
+        'Expected the param input to exist');
+      chai.assert.equal(
+        callBlock.getFieldValue('ARGNAME0'),
+        'param2',
+        'Expected the params field to match the name of the second param');
+      chai.assert.isNotNull(
+        callBlock.getInput('ARG1'),
+        'Expected the param input to exist');
+      chai.assert.equal(
+        callBlock.getFieldValue('ARGNAME1'),
+        'param1',
+        'Expected the params field to match the name of the first param');
     });
 
     test(
         'reordering procedure parameters reorders the blocks ' +
-        'attached to caller inputs', function() {
+        'attached to caller inputs',
+        function() {
+          // Create a stack of container, parameter, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          const callBlock = createProcCallBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
+          const containerBlock =
+              mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock1 = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock1.setFieldValue('param1', 'NAME');
+          const paramBlock2 = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock2.setFieldValue('param2', 'NAME');
+          containerBlock.getInput('STACK').connection.connect(paramBlock1.previousConnection);
+          paramBlock1.nextConnection.connect(paramBlock2.previousConnection);
+          defBlock.compose(containerBlock);
 
+          // Add args to the parameter inputs on the caller.
+          const block1 = this.workspace.newBlock('text');
+          const block2 = this.workspace.newBlock('text');
+          callBlock.getInput('ARG0').connection
+              .connect(block1.outputConnection);
+          callBlock.getInput('ARG1').connection
+              .connect(block2.outputConnection);
+    
+          // Reorder the parameters.
+          paramBlock2.previousConnection.disconnect();
+          paramBlock1.previousConnection.disconnect();
+          containerBlock.getInput('STACK').connection.connect(paramBlock2.previousConnection);
+          paramBlock2.nextConnection.connect(paramBlock1.previousConnection);
+          defBlock.compose(containerBlock);
+    
+          chai.assert.equal(
+            callBlock.getInputTargetBlock('ARG0'),
+            block2,
+            'Expected the second block to be in the first slot');
+          chai.assert.equal(
+            callBlock.getInputTargetBlock('ARG1'),
+            block1,
+            'Expected the first block to be in the second slot');
         });
   });
 

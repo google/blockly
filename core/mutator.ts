@@ -317,8 +317,6 @@ export class Mutator extends Icon {
       return;
     }
     const block = this.getBlock();
-    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
-        block, visible, 'mutator'));
     if (visible) {
       // Create the bubble.
       this.bubble_ = new Bubble(
@@ -390,6 +388,8 @@ export class Mutator extends Icon {
         this.sourceListener = null;
       }
     }
+    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+        block, visible, 'mutator'));
   }
 
   /**

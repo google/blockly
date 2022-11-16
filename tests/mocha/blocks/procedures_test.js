@@ -9,6 +9,7 @@ goog.declareModuleId('Blockly.test.procedures');
 import * as Blockly from '../../../build/src/core/blockly.js';
 import {ObservableParameterModel} from '../../../build/src/core/procedures.js';
 import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} from '../test_helpers/procedures.js';
+import {assertEventNotFired, createChangeListenerSpy} from '../test_helpers/events.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from '../test_helpers/setup_teardown.js';
 
@@ -16,7 +17,7 @@ import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, worksp
 suite('Procedures', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    this.workspace = new Blockly.Workspace();
+    this.workspace = Blockly.inject('blocklyDiv', {});
     this.workspace.createVariable('preCreatedVar', '', 'preCreatedVarId');
     this.workspace.createVariable(
         'preCreatedTypedVar', 'type', 'preCreatedTypedVarId');
@@ -429,16 +430,95 @@ suite('Procedures', function() {
         });
   });
 
-  suite('Adding procedure parameters', function() {
+  suite.only('Adding procedure parameters', function() {
     test('no variable create event is fired', function() {
+      const eventSpy = createChangeListenerSpy(this.workspace);
+      const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock =
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param name', 'NAME');
+      containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
 
+      eventSpy.resetHistory();
+      defBlock.compose(containerBlock);
+
+      assertEventNotFired(
+          eventSpy, Blockly.Events.VarCreate, {}, this.workspace.id);
     });
 
     test(
         'the mutator flyout updates to avoid parameter name conflicts',
         function() {
-
+          const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
+          const origFlyoutParamName = 
+              mutatorWorkspace.getFlyout().getWorkspace().getTopBlocks(true)[0]
+                  .getFieldValue('NAME')
+          Blockly.serialization.blocks.append(
+            {
+              'type': 'procedures_mutatorarg',
+              'fields': {
+                'NAME': origFlyoutParamName,
+              },
+            },
+            mutatorWorkspace);
+          
+          const newFlyoutParamName = 
+              mutatorWorkspace.getFlyout().getWorkspace().getTopBlocks(true)[0]
+                  .getFieldValue('NAME')
+          chai.assert.notEqual(
+              newFlyoutParamName,
+              origFlyoutParamName,
+              'Expected the flyout param to have updated to not conflict');
         });
+
+    test('adding a parameter to the procedure updates procedure defs', function() {
+      // Create a stack of container, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock =
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param1', 'NAME');
+      containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+
+      defBlock.compose(containerBlock);
+
+      chai.assert.isNotNull(
+        defBlock.getField('PARAMS'),
+        'Expected the params field to exist');
+      chai.assert.isTrue(
+        defBlock.getFieldValue('PARAMS').includes('param1'),
+        'Expected the params field to contain the name of the new param');
+    });
+
+    test('adding a parameter to the procedure updates procedure callers', function() {
+      // Create a stack of container, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      const callBlock = createProcCallBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock =
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param1', 'NAME');
+      containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+
+      defBlock.compose(containerBlock);
+
+      chai.assert.isNotNull(
+        callBlock.getInput('ARG0'),
+        'Expected the param input to exist');
+      chai.assert.equal(
+        callBlock.getFieldValue('ARGNAME0'),
+        'param1',
+        'Expected the params field to match the name of the new param');
+    });
   });
 
   suite('Renaming procedure parameters', function() {

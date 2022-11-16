@@ -63,6 +63,8 @@ const ModuleBar = function(workspace) {
    */
   this.htmlContainer_ = null;
 
+  this.ulContainer_ = null;
+
   /**
    * Click event data.
    * @type {?Blockly.EventData}
@@ -124,10 +126,12 @@ ModuleBar.prototype.init = function() {
    * @type {Element}
    */
   this.htmlContainer_ = document.createElement("div");
-  // this.htmlContainer_ = document.createElement("ul");
   this.htmlContainer_.className =
-    "blocklyModuleBarContainer blocklyNonSelectable cursorNotAllowed";
-  // this.htmlContainer_.appendChild(this.htmlContainer_);
+  "blocklyModuleBarContainer blocklyNonSelectable cursorNotAllowed";
+
+  this.ulContainer_ = document.createElement("ul");
+  this.ulContainer_.className = "blocklyModuleBarContainer";
+  this.htmlContainer_.appendChild(this.ulContainer_);
 
   injectionContainer.parentNode.insertBefore(
     this.htmlContainer_,
@@ -137,6 +141,25 @@ ModuleBar.prototype.init = function() {
   if (this.workspace_.RTL) {
     this.htmlContainer_.setAttribute("dir", "rtl");
   }
+
+    // create tab
+    const newTab = document.createElement("div");
+    newTab.className = "blocklyModuleBarTab blocklyModuleBarTabCreate";
+    newTab.setAttribute("role", "create-module-control");
+    newTab.setAttribute("title", Blockly.Msg["NEW_MODULE"]);
+  
+    const newLink = document.createElement("a");
+    newLink.className = "blocklyModuleBarLink";
+    newLink.setAttribute("role", "create-module-control");
+  
+    const createIcon = document.createElement("span");
+    createIcon.innerHTML = Msg['NEW_TAB'];
+    createIcon.setAttribute("role", "create-module-control");
+  
+    newLink.appendChild(createIcon);
+    newTab.appendChild(newLink);
+    this.htmlContainer_.appendChild(newTab);
+
   this.attachEvents_();
   this.render();
 };
@@ -146,7 +169,7 @@ ModuleBar.prototype.init = function() {
  * @package
  */
 ModuleBar.prototype.render = function() {
-  this.htmlContainer_.innerHTML = "";
+  this.ulContainer_.innerHTML = "";
 
   const modules = this.workspace_.getModuleManager().getAllModules();
 
@@ -180,26 +203,8 @@ ModuleBar.prototype.render = function() {
 
     tab.appendChild(link);
 
-    this.htmlContainer_.appendChild(tab);
+    this.ulContainer_.appendChild(tab);
   }
-
-  // create tab
-  const newTab = document.createElement("li");
-  newTab.className = "blocklyModuleBarTab blocklyModuleBarTabCreate";
-  newTab.setAttribute("role", "create-module-control");
-  newTab.setAttribute("title", Blockly.Msg["NEW_MODULE"]);
-
-  const newLink = document.createElement("a");
-  newLink.className = "blocklyModuleBarLink";
-  newLink.setAttribute("role", "create-module-control");
-
-  const createIcon = document.createElement("span");
-  createIcon.innerHTML = Msg['NEW_TAB'];
-  createIcon.setAttribute("role", "create-module-control");
-
-  newLink.appendChild(createIcon);
-  newTab.appendChild(newLink);
-  this.htmlContainer_.appendChild(newTab);
 };
 
 /**
@@ -430,7 +435,7 @@ ModuleBar.prototype.onMouseMove_ = function(e) {
  */
  ModuleBar.prototype.onMouseWheel_ = function(e) {
   e.preventDefault();
-  this.htmlContainer_.scrollBy({
+  this.ulContainer_.scrollBy({
     left: e.deltaY < 0 ? -30 : 30,
   });
 };

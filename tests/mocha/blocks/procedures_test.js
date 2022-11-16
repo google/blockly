@@ -655,7 +655,7 @@ suite('Procedures', function() {
         });
   });
 
-  suite.only('Reordering procedure parameters', function() {
+  suite('Reordering procedure parameters', function() {
     test('reordering procedure parameters updates procedure blocks', function() {
       // Create a stack of container, parameter, parameter.
       const defBlock = createProcDefBlock(this.workspace);
@@ -770,26 +770,50 @@ suite('Procedures', function() {
         });
   });
 
-  suite('Enabling and disabling procedure blocks', function() {
+  suite.only('Enabling and disabling procedure blocks', function() {
     test(
         'if a procedure definition is disabled, the procedure caller ' +
         'is also disabled',
         function() {
+          const defBlock = createProcDefBlock(this.workspace);
+          const callBlock = createProcCallBlock(this.workspace);
 
+          defBlock.setEnabled(false);
+
+          chai.assert.isFalse(
+              callBlock.isEnabled(),
+              'Expected the caller block to be disabled');
         });
 
     test(
         'if a procedure definition is enabled, the procedure caller ' +
         'is also enabled',
         function() {
+          const defBlock = createProcDefBlock(this.workspace);
+          const callBlock = createProcCallBlock(this.workspace);
+          defBlock.setEnabled(false);
 
+          defBlock.setEnabled(true);
+
+          chai.assert.isTrue(
+              callBlock.isEnabled(),
+              'Expected the caller block to be enabled');
         });
 
     test(
         'if a procedure caller block was already disabled before ' +
         'its definition was disabled, it is not reenabled',
         function() {
+          const defBlock = createProcDefBlock(this.workspace);
+          const callBlock = createProcCallBlock(this.workspace);
+          callBlock.setEnabled(false);
+          defBlock.setEnabled(false);
 
+          defBlock.setEnabled(true);
+
+          chai.assert.isFalse(
+              callBlock.isEnabled(),
+              'Expected the caller block to continue to be disabled');
         });
   });
 

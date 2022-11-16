@@ -163,6 +163,16 @@ suite('Procedures', function() {
           defBlock.getProcedureModel().getParameters(),
           'Expected the procedure model to have no parameters');
     });
+
+    test('deleting a procedure deletes the procedure model', function() {
+      const defBlock = createProcDefBlock(this.workspace);
+      const model = defBlock.getProcedureModel();
+      defBlock.dispose();
+
+      chai.assert.isUndefined(
+          this.workspace.getProcedureMap().get(model.getId()),
+          'Expected the model to be removed from the procedure map');
+    });
   });
 
   suite.skip('responding to data model updates', function() {
@@ -770,7 +780,7 @@ suite('Procedures', function() {
         });
   });
 
-  suite.only('Enabling and disabling procedure blocks', function() {
+  suite('Enabling and disabling procedure blocks', function() {
     test(
         'if a procedure definition is disabled, the procedure caller ' +
         'is also disabled',
@@ -818,18 +828,20 @@ suite('Procedures', function() {
   });
 
   suite('Deleting procedure blocks', function() {
-    test(
-        'when the procedure definition block is deleted the ' +
-        'procedure model is deleted as well',
-        function() {
-
-        });
-
-    test(
+    // Currently fails because of event ordering.
+    test.skip(
         'when the procedure definition block is deleted, all of its ' +
         'associated callers are deleted as well',
         function() {
+          const defBlock = createProcDefBlock(this.workspace);
+          const callBlock1 = createProcCallBlock(this.workspace);
+          const callBlock2 = createProcCallBlock(this.workspace);
 
+          this.clock.runAll();
+          chai.assert.isTrue(
+              callBlock1.disposed, 'Expected the first caller to be disposed');
+          chai.assert.isTrue(
+              callBlock2.disposed, 'Expected the second caller to be disposed');
         });
   });
 

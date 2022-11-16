@@ -164,7 +164,7 @@ suite('Procedures', function() {
     });
   });
 
-  suite.only('responding to data model updates', function() {
+  suite.skip('responding to data model updates', function() {
     suite('def blocks', function() {
       test('renaming the procedure data model updates blocks', function() {
         const defBlock = createProcDefBlock(this.workspace);
@@ -393,32 +393,39 @@ suite('Procedures', function() {
     });
   });
 
-  suite('Renaming procedures', function() {
+  suite.only('Renaming procedures', function() {
     test('callers are updated to have the new name', function() {
+      const defBlock = createProcDefBlock(this.workspace);
+      const callBlock = createProcCallBlock(this.workspace);
 
+      defBlock.setFieldValue('new name', 'NAME');
+
+      chai.assert.equal(
+        callBlock.getFieldValue('NAME'),
+        'new name',
+        'Expected the procedure block to be renamed');
     });
 
-    test('callers are updated on every keypress', function() {
-
-    });
-
     test(
-        'undoing a multi-character rename reverts to the original name',
-        function() {
-
-        });
-
-    test(
-        'intermediate name conflicts result in the caller getting the legal name',
-        function() {
-
-        });
-
-    test(
-        'ending the edit with an illegal name results in both the ' +
+        'setting an illegal name results in both the ' +
         'procedure and the caller getting the legal name',
         function() {
-
+          createProcDefBlock(this.workspace, undefined, undefined, 'procA');
+          const defBlockB =
+              createProcDefBlock(this.workspace, undefined, undefined, 'procB');
+          const callBlockB =
+              createProcCallBlock(this.workspace, undefined, 'procB');
+    
+          defBlockB.setFieldValue('procA', 'NAME');
+    
+          chai.assert.notEqual(
+            defBlockB.getFieldValue('NAME'),
+            'procA',
+            'Expected the procedure def block to have a legal name');
+          chai.assert.notEqual(
+            callBlockB.getFieldValue('NAME'),
+            'procA',
+            'Expected the procedure call block to have a legal name');
         });
   });
 

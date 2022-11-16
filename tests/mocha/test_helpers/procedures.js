@@ -115,16 +115,16 @@ export function assertCallBlockStructure(
  * @return {Blockly.Block} The created block.
  */
 export function createProcDefBlock(
-    workspace, hasReturn = false, args = []) {
+    workspace, hasReturn = false, args = [], name = 'proc name') {
   const type = hasReturn ?
       'procedures_defreturn' : 'procedures_defnoreturn';
-  let xml = '<block type="' + type + '">';
+  let xml = `<block type="${type}">`;
   for (let i = 0; i < args.length; i ++) {
     xml +=
-        '    <mutation><arg name="' + args[i] + '"></arg></mutation>\n';
+        `    <mutation><arg name="${args[i]}"></arg></mutation>\n`;
   }
   xml +=
-      '  <field name="NAME">proc name</field>' +
+      `  <field name="NAME">${name}</field>` +
       '</block>';
   return Blockly.Xml.domToBlock(Blockly.Xml.textToDom(xml), workspace);
 }
@@ -137,12 +137,12 @@ export function createProcDefBlock(
  * @return {Blockly.Block} The created block.
  */
 export function createProcCallBlock(
-    workspace, hasReturn = false) {
+    workspace, hasReturn = false, name = 'proc name') {
   const type = hasReturn ?
       'procedures_callreturn' : 'procedures_callnoreturn';
   return Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-      '<block type="' + type + '">' +
-      '  <mutation name="proc name"/>' +
-      '</block>'
+      `<block type="${type}">` +
+      `  <mutation name="${name}"/>` +
+      `</block>`
   ), workspace);
 }

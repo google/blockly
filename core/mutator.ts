@@ -45,7 +45,7 @@ export class Mutator extends Icon {
   private quarkNames: string[];
 
   /** Workspace in the mutator's bubble. */
-  private workspace: WorkspaceSvg|null = null;
+  workspace_: WorkspaceSvg|null = null;
 
   /** Width of workspace. */
   private workspaceWidth = 0;
@@ -107,7 +107,7 @@ export class Mutator extends Icon {
    * @internal
    */
   getWorkspace(): WorkspaceSvg|null {
-    return this.workspace;
+    return this.workspace_;
   }
 
   /**
@@ -200,22 +200,22 @@ export class Mutator extends Icon {
     if (hasFlyout) {
       workspaceOptions.languageTree = toolbox.convertToolboxDefToJson(quarkXml);
     }
-    this.workspace = this.newWorkspaceSvg(workspaceOptions);
-    this.workspace.internalIsMutator = true;
-    this.workspace.addChangeListener(eventUtils.disableOrphans);
+    this.workspace_ = this.newWorkspaceSvg(workspaceOptions);
+    this.workspace_.internalIsMutator = true;
+    this.workspace_.addChangeListener(eventUtils.disableOrphans);
 
     // Mutator flyouts go inside the mutator workspace's <g> rather than in
     // a top level SVG. Instead of handling scale themselves, mutators
     // inherit scale from the parent workspace.
     // To fix this, scale needs to be applied at a different level in the DOM.
-    const flyoutSvg = hasFlyout ? this.workspace.addFlyout(Svg.G) : null;
-    const background = this.workspace.createDom('blocklyMutatorBackground');
+    const flyoutSvg = hasFlyout ? this.workspace_.addFlyout(Svg.G) : null;
+    const background = this.workspace_.createDom('blocklyMutatorBackground');
 
     if (flyoutSvg) {
       // Insert the flyout after the <rect> but before the block canvas so that
       // the flyout is underneath in z-order.  This makes blocks layering during
       // dragging work properly.
-      background.insertBefore(flyoutSvg, this.workspace.svgBlockCanvas_);
+      background.insertBefore(flyoutSvg, this.workspace_.svgBlockCanvas_);
     }
     this.svgDialog.appendChild(background);
 
@@ -253,15 +253,15 @@ export class Mutator extends Icon {
   /** Resize the bubble to match the size of the workspace. */
   private resizeBubble() {
     // If the bubble exists, the workspace also exists.
-    if (!this.workspace) {
+    if (!this.workspace_) {
       return;
     }
     const doubleBorderWidth = 2 * Bubble.BORDER_WIDTH;
-    const canvas = this.workspace.getCanvas();
+    const canvas = this.workspace_.getCanvas();
     const workspaceSize = canvas.getBBox();
     let width = workspaceSize.width + workspaceSize.x;
     let height = workspaceSize.height + doubleBorderWidth * 3;
-    const flyout = this.workspace.getFlyout();
+    const flyout = this.workspace_.getFlyout();
     if (flyout) {
       const flyoutScrollMetrics =
           flyout.getWorkspace().getMetricsManager().getScrollMetrics();
@@ -285,20 +285,20 @@ export class Mutator extends Icon {
           width + doubleBorderWidth, height + doubleBorderWidth);
       this.svgDialog!.setAttribute('width', `${width}`);
       this.svgDialog!.setAttribute('height', `${height}`);
-      this.workspace.setCachedParentSvgSize(width, height);
+      this.workspace_.setCachedParentSvgSize(width, height);
     }
 
     if (isRtl) {
       // Scroll the workspace to always left-align.
       canvas.setAttribute('transform', `translate(${this.workspaceWidth}, 0)`);
     }
-    this.workspace.resize();
+    this.workspace_.resize();
   }
 
   /** A method handler for when the bubble is moved. */
   private onBubbleMove() {
-    if (this.workspace) {
-      this.workspace.recordDragTargets();
+    if (this.workspace_) {
+      this.workspace_.recordDragTargets();
     }
   }
 
@@ -321,7 +321,7 @@ export class Mutator extends Icon {
           block.workspace, this.createEditor(), block.pathObject.svgPath,
           (this.iconXY_ as Coordinate), null, null);
       // The workspace was created in createEditor.
-      const ws = this.workspace!;
+      const ws = this.workspace_!;
       // Expose this mutator's block's ID on its top-level SVG group.
       this.bubble_.setSvgId(block.id);
       this.bubble_.registerMoveEvent(this.onBubbleMove.bind(this));
@@ -374,8 +374,8 @@ export class Mutator extends Icon {
     } else {
       // Dispose of the bubble.
       this.svgDialog = null;
-      this.workspace!.dispose();
-      this.workspace = null;
+      this.workspace_!.dispose();
+      this.workspace_ = null;
       this.rootBlock = null;
       this.bubble_?.dispose();
       this.bubble_ = null;
@@ -420,8 +420,8 @@ export class Mutator extends Icon {
    * Bump down any block that's too high.
    */
   private updateWorkspace() {
-    if (!this.workspace!.isDragging()) {
-      const blocks = this.workspace!.getTopBlocks(false);
+    if (!this.workspace_!.isDragging()) {
+      const blocks = this.workspace_!.getTopBlocks(false);
       const MARGIN = 20;
 
       for (let b = 0, block; block = blocks[b]; b++) {
@@ -434,7 +434,7 @@ export class Mutator extends Icon {
         // Bump any block overlapping the flyout back inside.
         if (block.RTL) {
           let right = -MARGIN;
-          const flyout = this.workspace!.getFlyout();
+          const flyout = this.workspace_!.getFlyout();
           if (flyout) {
             right -= flyout.getWidth();
           }
@@ -448,7 +448,7 @@ export class Mutator extends Icon {
     }
 
     // When the mutator's workspace changes, update the source block.
-    if (this.rootBlock && this.rootBlock.workspace === this.workspace) {
+    if (this.rootBlock && this.rootBlock.workspace === this.workspace_) {
       const existingGroup = eventUtils.getGroup();
       if (!existingGroup) {
         eventUtils.setGroup(true);
@@ -488,7 +488,7 @@ export class Mutator extends Icon {
 
       // Don't update the bubble until the drag has ended, to avoid moving
       // blocks under the cursor.
-      if (!this.workspace!.isDragging()) {
+      if (!this.workspace_!.isDragging()) {
         setTimeout(() => this.resizeBubble(), 0);
       }
       eventUtils.setGroup(existingGroup);
@@ -503,7 +503,7 @@ export class Mutator extends Icon {
 
   /** Update the styles on all blocks in the mutator. */
   updateBlockStyle() {
-    const ws = this.workspace;
+    const ws = this.workspace_;
 
     if (ws && ws.getAllBlocks(false)) {
       const workspaceBlocks = ws.getAllBlocks(false);

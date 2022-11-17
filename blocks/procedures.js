@@ -16,6 +16,7 @@ goog.module('Blockly.libraryBlocks.procedures');
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Events = goog.require('Blockly.Events');
+const Extensions = goog.require('Blockly.Extensions');
 const Procedures = goog.require('Blockly.Procedures');
 const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
@@ -29,9 +30,7 @@ const {Block} = goog.requireType('Blockly.Block');
 const BlockDefinition = Object;
 const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
-const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 const {Msg} = goog.require('Blockly.Msg');
 const {Mutator} = goog.require('Blockly.Mutator');
 const {Names} = goog.require('Blockly.Names');
@@ -39,7 +38,7 @@ const {Names} = goog.require('Blockly.Names');
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const {defineBlocks} = goog.require('Blockly.common');
+const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Comment');
 /** @suppress {extraRequire} */
@@ -50,14 +49,324 @@ goog.require('Blockly.Warning');
  * A dictionary of the block definitions provided by this module.
  * @type {!Object<string, !BlockDefinition>}
  */
-const blocks = {};
+const blocks = createBlockDefinitionsFromJsonArray([
+  {
+    'type': 'procedures_defnoreturn',
+    'message0': '%{BKY_PROCEDURES_DEFNORETURN_TITLE} %1 %2 %3',
+    'message1': '%{BKY_PROCEDURES_DEFNORETURN_DO} %1',
+    'args0': [
+      {
+        'type': 'field_input',
+        'name': 'NAME',
+        'text': '',
+        'spellcheck': false,
+      },
+      {
+        'type': 'field_label',
+        'name': 'PARAMS',
+        'text': '',
+      },
+      {
+        'type': 'input_dummy',
+        'name': 'TOP',
+      },
+    ],
+    'args1': [
+      {
+        'type': 'input_statement',
+        'name': 'STACK',
+      },
+    ],
+    'style': 'procedure_blocks',
+    'helpUrl': '%{BKY_PROCEDURES_DEFNORETURN_HELPURL}',
+    'tooltip': '%{BKY_PROCEDURES_DEFNORETURN_TOOLTIP}',
+    'extensions': [
+      'procedure_def_get_def_mixin',
+      'procedure_def_var_mixin',
+      'procedure_def_update_shape_mixin',
+      'procedure_def_context_menu_mixin',
+      'procedure_def_get_legal_name_helper',
+      'procedure_defnoreturn_get_caller_block_mixin',
+      'procedure_defnoreturn_set_comment_helper',
+    ],
+    'mutator': 'procedure_def_mutator',
+  },
+  {
+    'type': 'procedures_callnoreturn',
+    'message0': '%1 %2',
+    'args0': [
+      {
+        'type': 'field_label',
+        'name': 'NAME',
+      },
+      {
+        'type': 'input_dummy',
+        'name': 'TOPROW',
+      },
+    ],
+    'nextStatement': null,
+    'previousStatement': null,
+    'style': 'procedure_blocks',
+    'helpUrl': '%{BKY_PROCEDURES_CALLNORETURN_HELPURL}',
+    'extensions': [
+      'procedure_caller_get_def_mixin',
+      'procedure_caller_update_shape_mixin',
+      'procedure_caller_onchange_mixin',
+      'procedure_caller_context_menu_mixin',
+      'procedure_callernoreturn_get_def_block_mixin',
+    ],
+    'mutator': 'procedure_caller_mutator',
+  },
+  {
+    'type': 'procedures_defreturn',
+    'message0': '%{BKY_PROCEDURES_DEFRETURN_TITLE} %1 %2 %3',
+    'message1': '%{BKY_PROCEDURES_DEFRETURN_DO} %1',
+    'message2': '%{BKY_PROCEDURES_DEFRETURN_RETURN} %1',
+    'args0': [
+      {
+        'type': 'field_input',
+        'name': 'NAME',
+        'text': '',
+        'spellcheck': false,
+      },
+      {
+        'type': 'field_label',
+        'name': 'PARAMS',
+        'text': '',
+      },
+      {
+        'type': 'input_dummy',
+        'name': 'TOP',
+      },
+    ],
+    'args1': [
+      {
+        'type': 'input_statement',
+        'name': 'STACK',
+      },
+    ],
+    'args2': [
+      {
+        'type': 'input_value',
+        'align': 'right',
+        'name': 'RETURN',
+      },
+    ],
+    'style': 'procedure_blocks',
+    'helpUrl': '%{BKY_PROCEDURES_DEFRETURN_HELPURL}',
+    'tooltip': '%{BKY_PROCEDURES_DEFRETURN_TOOLTIP}',
+    'extensions': [
+      'procedure_def_get_def_mixin',
+      'procedure_def_var_mixin',
+      'procedure_def_update_shape_mixin',
+      'procedure_def_context_menu_mixin',
+      'procedure_def_get_legal_name_helper',
+      'procedure_defreturn_get_caller_block_mixin',
+      'procedure_defreturn_set_comment_helper',
+    ],
+    'mutator': 'procedure_def_mutator',
+  },
+  {
+    'type': 'procedures_callreturn',
+    'message0': '%1 %2',
+    'args0': [
+      {
+        'type': 'field_label',
+        'name': 'NAME',
+      },
+      {
+        'type': 'input_dummy',
+        'name': 'TOPROW',
+      },
+    ],
+    'output': null,
+    'style': 'procedure_blocks',
+    'helpUrl': '%{BKY_PROCEDURES_CALLRETURN_HELPURL}',
+    'extensions': [
+      'procedure_caller_get_def_mixin',
+      'procedure_caller_update_shape_mixin',
+      'procedure_caller_onchange_mixin',
+      'procedure_caller_context_menu_mixin',
+      'procedure_callerreturn_get_def_block_mixin',
+    ],
+    'mutator': 'procedure_caller_mutator',
+  },
+  {
+    'type': 'procedures_mutatorcontainer',
+    'message0': '%{BKY_PROCEDURES_MUTATORCONTAINER_TITLE} %1 %2',
+    'message1': '%{BKY_PROCEDURES_ALLOW_STATEMENTS} %1 %2',
+    'args0': [
+      {
+        'type': 'input_dummy',
+      },
+      {
+        'type': 'input_statement',
+        'name': 'STACK',
+      },
+    ],
+    'args1': [
+      {
+        'type': 'field_checkbox',
+        'checked': true,
+        'name': 'STATEMENTS',
+      },
+      {
+        'type': 'input_dummy',
+        'name': 'STATEMENT_INPUT',
+      },
+    ],
+    'style': 'procedure_blocks',
+    'tooltip': '%{BKY_PROCEDURES_MUTATORCONTAINER_TOOLTIP}',
+    'enableContextMenu': false,
+  },
+  {
+    'type': 'procedures_mutatorarg',
+    'message0': '%{BKY_PROCEDURES_MUTATORARG_TITLE} %1',
+    'args0': [
+      {
+        'type': 'field_input',
+        'name': 'NAME',
+      },
+    ],
+    'nextStatement': null,
+    'previousStatement': null,
+    'style': 'procedure_blocks',
+    'tooltip': '%{BKY_PROCEDURES_MUTATORARG_TOOLTIP}',
+    'enableContextMenu': false,
+    'extensions': [
+      'procedure_mutatorarg_validate_mixin',
+      'procedure_mutatorarg_add_validator_helper',
+    ],
+  },
+  {
+    'type': 'procedures_ifreturn',
+    'message0': '%{BKY_CONTROLS_IF_MSG_IF} %1',
+    'message1': '%{BKY_PROCEDURES_DEFRETURN_RETURN} %1',
+    'args0': [
+      {
+        'type': 'input_value',
+        'name': 'CONDITION',
+        'check': 'Boolean',
+      },
+    ],
+    'args1': [
+      {
+        'type': 'input_value',
+        'name': 'VALUE',
+      },
+    ],
+    'inputsInline': true,
+    'nextStatement': null,
+    'previousStatement': null,
+    'style': 'procedure_blocks',
+    'tooltip': '%{BKY_PROCEDURES_IFRETURN_TOOLTIP}',
+    'helpUrl': '%{BKY_PROCEDURES_IFRETURN_HELPURL}',
+    'extensions': [
+      'procedure_ifreturn_onchange_mixin',
+      'procedure_ifreturn_function_types_mixin',
+    ],
+    'mutator': 'procedure_ifreturn_mutator',
+  },
+]);
 exports.blocks = blocks;
 
-/**
- * Common properties for the procedure_defnoreturn and
- * procedure_defreturn blocks.
- */
-const PROCEDURE_DEF_COMMON = {
+
+/** @this {Block} */
+const procedureDefGetDefMixin = function() {
+  const mixin = {
+    /**
+     * Return all variables referenced by this block.
+     * @return {!Array<string>} List of variable names.
+     * @this {Block}
+     */
+    getVars: function() {
+      return this.arguments_;
+    },
+    /**
+     * Return all variables referenced by this block.
+     * @return {!Array<!VariableModel>} List of variable models.
+     * @this {Block}
+     */
+    getVarModels: function() {
+      return this.argumentVarModels_;
+    },
+  };
+
+  this.mixin(mixin, true);
+};
+// Using register instead of registerMixin to avoid triggering warnings about
+// overriding built-ins.
+Extensions.register('procedure_def_get_def_mixin', procedureDefGetDefMixin);
+
+/** @this {Block} */
+const procedureDefVarMixin = function() {
+  const mixin = {
+    /**
+     * Notification that a variable is renaming.
+     * If the ID matches one of this block's variables, rename it.
+     * @param {string} oldId ID of variable to rename.
+     * @param {string} newId ID of new variable.  May be the same as oldId, but
+     *     with an updated name.  Guaranteed to be the same type as the old
+     *     variable.
+     * @override
+     * @this {Block}
+     */
+    renameVarById: function(oldId, newId) {
+      const oldVariable = this.workspace.getVariableById(oldId);
+      if (oldVariable.type !== '') {
+        // Procedure arguments always have the empty type.
+        return;
+      }
+      const oldName = oldVariable.name;
+      const newVar = this.workspace.getVariableById(newId);
+
+      let change = false;
+      for (let i = 0; i < this.argumentVarModels_.length; i++) {
+        if (this.argumentVarModels_[i].getId() === oldId) {
+          this.arguments_[i] = newVar.name;
+          this.argumentVarModels_[i] = newVar;
+          change = true;
+        }
+      }
+      if (change) {
+        this.displayRenamedVar_(oldName, newVar.name);
+        Procedures.mutateCallers(this);
+      }
+    },
+
+    /**
+     * Notification that a variable is renaming but keeping the same ID.  If the
+     * variable is in use on this block, rerender to show the new name.
+     * @param {!VariableModel} variable The variable being renamed.
+     * @package
+     * @override
+     * @this {Block}
+     */
+    updateVarName: function(variable) {
+      const newName = variable.name;
+      let change = false;
+      let oldName;
+      for (let i = 0; i < this.argumentVarModels_.length; i++) {
+        if (this.argumentVarModels_[i].getId() === variable.getId()) {
+          oldName = this.arguments_[i];
+          this.arguments_[i] = newName;
+          change = true;
+        }
+      }
+      if (change) {
+        this.displayRenamedVar_(oldName, newName);
+        Procedures.mutateCallers(this);
+      }
+    },
+  };
+
+  this.mixin(mixin, true);
+};
+// Using register instead of registerMixin to avoid triggering warnings about
+// overriding built-ins.
+Extensions.register('procedure_def_var_mixin', procedureDefVarMixin);
+
+const procedureDefUpdateShapeMixin = {
   /**
    * Add or remove the statement block from this function definition.
    * @param {boolean} hasStatements True if a statement block is needed.
@@ -78,6 +387,7 @@ const PROCEDURE_DEF_COMMON = {
     }
     this.hasStatements_ = hasStatements;
   },
+
   /**
    * Update the display of parameters for this procedure definition block.
    * @private
@@ -99,6 +409,47 @@ const PROCEDURE_DEF_COMMON = {
       Events.enable();
     }
   },
+
+  /**
+   * Update the display to reflect a newly renamed argument.
+   * @param {string} oldName The old display name of the argument.
+   * @param {string} newName The new display name of the argument.
+   * @private
+   * @this {Block}
+   */
+  displayRenamedVar_: function(oldName, newName) {
+    this.updateParams_();
+    // Update the mutator's variables if the mutator is open.
+    if (this.mutator && this.mutator.isVisible()) {
+      const blocks = this.mutator.workspace_.getAllBlocks(false);
+      for (let i = 0, block; (block = blocks[i]); i++) {
+        if (block.type === 'procedures_mutatorarg' &&
+            Names.equals(oldName, block.getFieldValue('NAME'))) {
+          block.setFieldValue(newName, 'NAME');
+        }
+      }
+    }
+  },
+};
+Extensions.registerMixin(
+    'procedure_def_update_shape_mixin', procedureDefUpdateShapeMixin);
+
+/** @this {Block} */
+const procedureDefGetLegalNameHelper = function() {
+  const nameField = this.getField('NAME');
+  nameField.setValue(Procedures.findLegalName('', this));
+  nameField.setValidator(Procedures.rename);
+};
+Extensions.register(
+    'procedure_def_get_legal_name_helper', procedureDefGetLegalNameHelper);
+
+const procedureDefMutator = {
+  arguments_: [],
+
+  argumentVarModels_: [],
+
+  hasStatements_: true,
+
   /**
    * Create XML to represent the argument inputs.
    * Backwards compatible serialization implementation.
@@ -129,6 +480,7 @@ const PROCEDURE_DEF_COMMON = {
     }
     return container;
   },
+
   /**
    * Parse XML to restore the argument inputs.
    * Backwards compatible serialization implementation.
@@ -160,6 +512,7 @@ const PROCEDURE_DEF_COMMON = {
     // Show or hide the statement input.
     this.setStatements_(xmlElement.getAttribute('statements') !== 'false');
   },
+
   /**
    * Returns the state of this block as a JSON serializable object.
    * @return {?{params: (!Array<{name: string, id: string}>|undefined),
@@ -187,6 +540,7 @@ const PROCEDURE_DEF_COMMON = {
     }
     return state;
   },
+
   /**
    * Applies the given state to this block.
    * @param {*} state The state to apply to this block, eg the parameters and
@@ -208,6 +562,7 @@ const PROCEDURE_DEF_COMMON = {
     Procedures.mutateCallers(this);
     this.setStatements_(state['hasStatements'] === false ? false : true);
   },
+
   /**
    * Populate the mutator's dialog with this block's components.
    * @param {!Workspace} workspace Mutator's workspace.
@@ -261,6 +616,7 @@ const PROCEDURE_DEF_COMMON = {
     Procedures.mutateCallers(this);
     return containerBlock;
   },
+
   /**
    * Reconfigure this block based on the mutator dialog's components.
    * @param {!Block} containerBlock Root block in mutator.
@@ -309,98 +665,12 @@ const PROCEDURE_DEF_COMMON = {
       }
     }
   },
-  /**
-   * Return all variables referenced by this block.
-   * @return {!Array<string>} List of variable names.
-   * @this {Block}
-   */
-  getVars: function() {
-    return this.arguments_;
-  },
-  /**
-   * Return all variables referenced by this block.
-   * @return {!Array<!VariableModel>} List of variable models.
-   * @this {Block}
-   */
-  getVarModels: function() {
-    return this.argumentVarModels_;
-  },
-  /**
-   * Notification that a variable is renaming.
-   * If the ID matches one of this block's variables, rename it.
-   * @param {string} oldId ID of variable to rename.
-   * @param {string} newId ID of new variable.  May be the same as oldId, but
-   *     with an updated name.  Guaranteed to be the same type as the old
-   *     variable.
-   * @override
-   * @this {Block}
-   */
-  renameVarById: function(oldId, newId) {
-    const oldVariable = this.workspace.getVariableById(oldId);
-    if (oldVariable.type !== '') {
-      // Procedure arguments always have the empty type.
-      return;
-    }
-    const oldName = oldVariable.name;
-    const newVar = this.workspace.getVariableById(newId);
+};
+Extensions.registerMutator(
+    'procedure_def_mutator', procedureDefMutator, undefined,
+    ['procedures_mutatorarg']);
 
-    let change = false;
-    for (let i = 0; i < this.argumentVarModels_.length; i++) {
-      if (this.argumentVarModels_[i].getId() === oldId) {
-        this.arguments_[i] = newVar.name;
-        this.argumentVarModels_[i] = newVar;
-        change = true;
-      }
-    }
-    if (change) {
-      this.displayRenamedVar_(oldName, newVar.name);
-      Procedures.mutateCallers(this);
-    }
-  },
-  /**
-   * Notification that a variable is renaming but keeping the same ID.  If the
-   * variable is in use on this block, rerender to show the new name.
-   * @param {!VariableModel} variable The variable being renamed.
-   * @package
-   * @override
-   * @this {Block}
-   */
-  updateVarName: function(variable) {
-    const newName = variable.name;
-    let change = false;
-    let oldName;
-    for (let i = 0; i < this.argumentVarModels_.length; i++) {
-      if (this.argumentVarModels_[i].getId() === variable.getId()) {
-        oldName = this.arguments_[i];
-        this.arguments_[i] = newName;
-        change = true;
-      }
-    }
-    if (change) {
-      this.displayRenamedVar_(oldName, newName);
-      Procedures.mutateCallers(this);
-    }
-  },
-  /**
-   * Update the display to reflect a newly renamed argument.
-   * @param {string} oldName The old display name of the argument.
-   * @param {string} newName The new display name of the argument.
-   * @private
-   * @this {Block}
-   */
-  displayRenamedVar_: function(oldName, newName) {
-    this.updateParams_();
-    // Update the mutator's variables if the mutator is open.
-    if (this.mutator && this.mutator.isVisible()) {
-      const blocks = this.mutator.workspace_.getAllBlocks(false);
-      for (let i = 0, block; (block = blocks[i]); i++) {
-        if (block.type === 'procedures_mutatorarg' &&
-            Names.equals(oldName, block.getFieldValue('NAME'))) {
-          block.setFieldValue(newName, 'NAME');
-        }
-      }
-    }
-  },
+const procedureDefContextMenuMixin = {
   /**
    * Add custom menu options to this block's context menu.
    * @param {!Array} options List of menu options to add to.
@@ -445,36 +715,36 @@ const PROCEDURE_DEF_COMMON = {
     }
   },
 };
+Extensions.registerMixin(
+    'procedure_def_context_menu_mixin', procedureDefContextMenuMixin);
 
-blocks['procedures_defnoreturn'] = {
-  ...PROCEDURE_DEF_COMMON,
-  /**
-   * Block for defining a procedure with no return value.
-   * @this {Block}
-   */
-  init: function() {
-    const initName = Procedures.findLegalName('', this);
-    const nameField = new FieldTextInput(initName, Procedures.rename);
-    nameField.setSpellcheck(false);
-    this.appendDummyInput()
-        .appendField(Msg['PROCEDURES_DEFNORETURN_TITLE'])
-        .appendField(nameField, 'NAME')
-        .appendField('', 'PARAMS');
-    this.setMutator(new Mutator(['procedures_mutatorarg'], this));
-    if ((this.workspace.options.comments ||
-         (this.workspace.options.parentWorkspace &&
-          this.workspace.options.parentWorkspace.options.comments)) &&
-        Msg['PROCEDURES_DEFNORETURN_COMMENT']) {
-      this.setCommentText(Msg['PROCEDURES_DEFNORETURN_COMMENT']);
-    }
-    this.setStyle('procedure_blocks');
-    this.setTooltip(Msg['PROCEDURES_DEFNORETURN_TOOLTIP']);
-    this.setHelpUrl(Msg['PROCEDURES_DEFNORETURN_HELPURL']);
-    this.arguments_ = [];
-    this.argumentVarModels_ = [];
-    this.setStatements_(true);
-    this.statementConnection_ = null;
-  },
+/** @this {Block} */
+const procedureDefNoReturnSetCommentHelper = function() {
+  if ((this.workspace.options.comments ||
+       (this.workspace.options.parentWorkspace &&
+        this.workspace.options.parentWorkspace.options.comments)) &&
+      Msg['PROCEDURES_DEFNORETURN_COMMENT']) {
+    this.setCommentText(Msg['PROCEDURES_DEFNORETURN_COMMENT']);
+  }
+};
+Extensions.register(
+    'procedure_defnoreturn_set_comment_helper',
+    procedureDefNoReturnSetCommentHelper);
+
+/** @this {Block} */
+const procedureDefReturnSetCommentHelper = function() {
+  if ((this.workspace.options.comments ||
+       (this.workspace.options.parentWorkspace &&
+        this.workspace.options.parentWorkspace.options.comments)) &&
+      Msg['PROCEDURES_DEFRETURN_COMMENT']) {
+    this.setCommentText(Msg['PROCEDURES_DEFRETURN_COMMENT']);
+  }
+};
+Extensions.register(
+    'procedure_defreturn_set_comment_helper',
+    procedureDefReturnSetCommentHelper);
+
+const procedureDefNoReturnGetCallerBlockMixin = {
   /**
    * Return the signature of this procedure definition.
    * @return {!Array} Tuple containing three elements:
@@ -486,41 +756,14 @@ blocks['procedures_defnoreturn'] = {
   getProcedureDef: function() {
     return [this.getFieldValue('NAME'), this.arguments_, false];
   },
+
   callType_: 'procedures_callnoreturn',
 };
+Extensions.registerMixin(
+    'procedure_defnoreturn_get_caller_block_mixin',
+    procedureDefNoReturnGetCallerBlockMixin);
 
-blocks['procedures_defreturn'] = {
-  ...PROCEDURE_DEF_COMMON,
-  /**
-   * Block for defining a procedure with a return value.
-   * @this {Block}
-   */
-  init: function() {
-    const initName = Procedures.findLegalName('', this);
-    const nameField = new FieldTextInput(initName, Procedures.rename);
-    nameField.setSpellcheck(false);
-    this.appendDummyInput()
-        .appendField(Msg['PROCEDURES_DEFRETURN_TITLE'])
-        .appendField(nameField, 'NAME')
-        .appendField('', 'PARAMS');
-    this.appendValueInput('RETURN')
-        .setAlign(Align.RIGHT)
-        .appendField(Msg['PROCEDURES_DEFRETURN_RETURN']);
-    this.setMutator(new Mutator(['procedures_mutatorarg'], this));
-    if ((this.workspace.options.comments ||
-         (this.workspace.options.parentWorkspace &&
-          this.workspace.options.parentWorkspace.options.comments)) &&
-        Msg['PROCEDURES_DEFRETURN_COMMENT']) {
-      this.setCommentText(Msg['PROCEDURES_DEFRETURN_COMMENT']);
-    }
-    this.setStyle('procedure_blocks');
-    this.setTooltip(Msg['PROCEDURES_DEFRETURN_TOOLTIP']);
-    this.setHelpUrl(Msg['PROCEDURES_DEFRETURN_HELPURL']);
-    this.arguments_ = [];
-    this.argumentVarModels_ = [];
-    this.setStatements_(true);
-    this.statementConnection_ = null;
-  },
+const procedureDefReturnGetCallerBlockMixin = {
   /**
    * Return the signature of this procedure definition.
    * @return {!Array} Tuple containing three elements:
@@ -532,64 +775,14 @@ blocks['procedures_defreturn'] = {
   getProcedureDef: function() {
     return [this.getFieldValue('NAME'), this.arguments_, true];
   },
+
   callType_: 'procedures_callreturn',
 };
+Extensions.registerMixin(
+    'procedure_defreturn_get_caller_block_mixin',
+    procedureDefReturnGetCallerBlockMixin);
 
-blocks['procedures_mutatorcontainer'] = {
-  /**
-   * Mutator block for procedure container.
-   * @this {Block}
-   */
-  init: function() {
-    this.appendDummyInput().appendField(
-        Msg['PROCEDURES_MUTATORCONTAINER_TITLE']);
-    this.appendStatementInput('STACK');
-    this.appendDummyInput('STATEMENT_INPUT')
-        .appendField(Msg['PROCEDURES_ALLOW_STATEMENTS'])
-        .appendField(new FieldCheckbox('TRUE'), 'STATEMENTS');
-    this.setStyle('procedure_blocks');
-    this.setTooltip(Msg['PROCEDURES_MUTATORCONTAINER_TOOLTIP']);
-    this.contextMenu = false;
-  },
-};
-
-blocks['procedures_mutatorarg'] = {
-  /**
-   * Mutator block for procedure argument.
-   * @this {Block}
-   */
-  init: function() {
-    const field = new FieldTextInput(Procedures.DEFAULT_ARG, this.validator_);
-    // Hack: override showEditor to do just a little bit more work.
-    // We don't have a good place to hook into the start of a text edit.
-    field.oldShowEditorFn_ = field.showEditor_;
-    /**
-     * @this {FieldTextInput}
-     */
-    const newShowEditorFn = function() {
-      this.createdVariables_ = [];
-      this.oldShowEditorFn_();
-    };
-    field.showEditor_ = newShowEditorFn;
-
-    this.appendDummyInput()
-        .appendField(Msg['PROCEDURES_MUTATORARG_TITLE'])
-        .appendField(field, 'NAME');
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setStyle('procedure_blocks');
-    this.setTooltip(Msg['PROCEDURES_MUTATORARG_TOOLTIP']);
-    this.contextMenu = false;
-
-    // Create the default variable when we drag the block in from the flyout.
-    // Have to do this after installing the field on the block.
-    field.onFinishEditing_ = this.deleteIntermediateVars_;
-    // Create an empty list so onFinishEditing_ has something to look at, even
-    // though the editor was never opened.
-    field.createdVariables_ = [];
-    field.onFinishEditing_('x');
-  },
-
+const validateProcedureParamMixin = {
   /**
    * Obtain a valid name for the procedure argument. Create a variable if
    * necessary.
@@ -648,9 +841,8 @@ blocks['procedures_mutatorarg'] = {
    * Called when focusing away from the text field.
    * Deletes all variables that were created as the user typed their intended
    * variable name.
-   * @param {string} newText The new variable name.
-   * @private
    * @this {FieldTextInput}
+   * @param {string} newText The new variable name.
    */
   deleteIntermediateVars_: function(newText) {
     const outerWs = Mutator.findParentWs(this.getSourceBlock().workspace);
@@ -665,21 +857,156 @@ blocks['procedures_mutatorarg'] = {
     }
   },
 };
+Extensions.registerMixin(
+    'procedure_mutatorarg_validate_mixin', validateProcedureParamMixin);
 
-/**
- * Common properties for the procedure_callnoreturn and
- * procedure_callreturn blocks.
- */
-const PROCEDURE_CALL_COMMON = {
+/** @this {Block} */
+const addValidatorToParamFieldHelper = function() {
+  const nameField = this.getField('NAME');
+
+  nameField.setValidator(this.validator_);
+
+  // TODO: We can probably just handle this in onFinishedEditing_.
+  // Hack: override showEditor to do just a little bit more work.
+  // We don't have a good place to hook into the start of a text edit.
+  nameField.oldShowEditorFn_ = nameField.showEditor_;
+  /** @this {FieldTextInput} */
+  const newShowEditorFn = function() {
+    this.createdVariables_ = [];
+    this.oldShowEditorFn_();
+  };
+  nameField.showEditor_ = newShowEditorFn;
+
+  nameField.onFinishEditing_ = this.deleteIntermediateVars_;
+  // Create an empty list so onFinishEditing_ has something to look at, even
+  // though the editor was never opened.
+  nameField.createdVariables_ = [];
+  nameField.onFinishEditing_('x');
+};
+Extensions.register(
+    'procedure_mutatorarg_add_validator_helper',
+    addValidatorToParamFieldHelper);
+
+/** @this {Block} */
+const procedureCallerGetDefMixin = function() {
+  const mixin = {
+    /**
+     * Returns the name of the procedure this block calls.
+     * @return {string} Procedure name.
+     * @this {Block}
+     */
+    getProcedureCall: function() {
+      // The NAME field is guaranteed to exist, null will never be returned.
+      return /** @type {string} */ (this.getFieldValue('NAME'));
+    },
+
+    /**
+     * Return all variables referenced by this block.
+     * @return {!Array<string>} List of variable names.
+     * @this {Block}
+     */
+    getVars: function() {
+      return this.arguments_;
+    },
+
+    /**
+     * Return all variables referenced by this block.
+     * @return {!Array<!VariableModel>} List of variable models.
+     * @this {Block}
+     */
+    getVarModels: function() {
+      return this.argumentVarModels_;
+    },
+  };
+
+  this.mixin(mixin, true);
+};
+// Using register instead of registerMixin to avoid triggering warnings about
+// overriding built-ins.
+Extensions.register(
+    'procedure_caller_get_def_mixin', procedureCallerGetDefMixin);
+
+const procedureCallerMutator = {
+  arguments_: [],
+
+  argumentVarModels_: [],
+
+  quarkConnections_: {},
+
+  quarkIds_: null,
+
+  previousEnabledState_: true,
+
   /**
-   * Returns the name of the procedure this block calls.
-   * @return {string} Procedure name.
+   * Create XML to represent the (non-editable) name and arguments.
+   * Backwards compatible serialization implementation.
+   * @return {!Element} XML storage element.
    * @this {Block}
    */
-  getProcedureCall: function() {
-    // The NAME field is guaranteed to exist, null will never be returned.
-    return /** @type {string} */ (this.getFieldValue('NAME'));
+  mutationToDom: function() {
+    const container = xmlUtils.createElement('mutation');
+    container.setAttribute('name', this.getProcedureCall());
+    for (let i = 0; i < this.arguments_.length; i++) {
+      const parameter = xmlUtils.createElement('arg');
+      parameter.setAttribute('name', this.arguments_[i]);
+      container.appendChild(parameter);
+    }
+    return container;
   },
+
+  /**
+   * Parse XML to restore the (non-editable) name and parameters.
+   * Backwards compatible serialization implementation.
+   * @param {!Element} xmlElement XML storage element.
+   * @this {Block}
+   */
+  domToMutation: function(xmlElement) {
+    const name = xmlElement.getAttribute('name');
+    this.renameProcedure(this.getProcedureCall(), name);
+    const args = [];
+    const paramIds = [];
+    for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
+      if (childNode.nodeName.toLowerCase() === 'arg') {
+        args.push(childNode.getAttribute('name'));
+        paramIds.push(childNode.getAttribute('paramId'));
+      }
+    }
+    this.setProcedureParameters_(args, paramIds);
+  },
+
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * @return {{name: string, params:(!Array<string>|undefined)}} The state of
+   *     this block, ie the params and procedure name.
+   */
+  saveExtraState: function() {
+    const state = Object.create(null);
+    state['name'] = this.getProcedureCall();
+    if (this.arguments_.length) {
+      state['params'] = this.arguments_;
+    }
+    return state;
+  },
+
+  /**
+   * Applies the given state to this block.
+   * @param {*} state The state to apply to this block, ie the params and
+   *     procedure name.
+   */
+  loadExtraState: function(state) {
+    this.renameProcedure(this.getProcedureCall(), state['name']);
+    const params = state['params'];
+    if (params) {
+      const ids = [];
+      ids.length = params.length;
+      ids.fill(null);
+      this.setProcedureParameters_(params, ids);
+    }
+  },
+};
+Extensions.registerMutator('procedure_caller_mutator', procedureCallerMutator);
+
+const procedureCallerUpdateShapeMixin = {
   /**
    * Notification that a procedure is renaming.
    * If the name matches this block's procedure, rename it.
@@ -696,6 +1023,7 @@ const PROCEDURE_CALL_COMMON = {
       this.setTooltip(baseMsg.replace('%1', newName));
     }
   },
+
   /**
    * Notification that the procedure's parameters have changed.
    * @param {!Array<string>} paramNames New param names, e.g. ['x', 'y', 'z'].
@@ -790,6 +1118,7 @@ const PROCEDURE_CALL_COMMON = {
       this.render();
     }
   },
+
   /**
    * Modify this block to have the correct number of arguments.
    * @private
@@ -836,85 +1165,11 @@ const PROCEDURE_CALL_COMMON = {
       }
     }
   },
-  /**
-   * Create XML to represent the (non-editable) name and arguments.
-   * Backwards compatible serialization implementation.
-   * @return {!Element} XML storage element.
-   * @this {Block}
-   */
-  mutationToDom: function() {
-    const container = xmlUtils.createElement('mutation');
-    container.setAttribute('name', this.getProcedureCall());
-    for (let i = 0; i < this.arguments_.length; i++) {
-      const parameter = xmlUtils.createElement('arg');
-      parameter.setAttribute('name', this.arguments_[i]);
-      container.appendChild(parameter);
-    }
-    return container;
-  },
-  /**
-   * Parse XML to restore the (non-editable) name and parameters.
-   * Backwards compatible serialization implementation.
-   * @param {!Element} xmlElement XML storage element.
-   * @this {Block}
-   */
-  domToMutation: function(xmlElement) {
-    const name = xmlElement.getAttribute('name');
-    this.renameProcedure(this.getProcedureCall(), name);
-    const args = [];
-    const paramIds = [];
-    for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
-      if (childNode.nodeName.toLowerCase() === 'arg') {
-        args.push(childNode.getAttribute('name'));
-        paramIds.push(childNode.getAttribute('paramId'));
-      }
-    }
-    this.setProcedureParameters_(args, paramIds);
-  },
-  /**
-   * Returns the state of this block as a JSON serializable object.
-   * @return {{name: string, params:(!Array<string>|undefined)}} The state of
-   *     this block, ie the params and procedure name.
-   */
-  saveExtraState: function() {
-    const state = Object.create(null);
-    state['name'] = this.getProcedureCall();
-    if (this.arguments_.length) {
-      state['params'] = this.arguments_;
-    }
-    return state;
-  },
-  /**
-   * Applies the given state to this block.
-   * @param {*} state The state to apply to this block, ie the params and
-   *     procedure name.
-   */
-  loadExtraState: function(state) {
-    this.renameProcedure(this.getProcedureCall(), state['name']);
-    const params = state['params'];
-    if (params) {
-      const ids = [];
-      ids.length = params.length;
-      ids.fill(null);
-      this.setProcedureParameters_(params, ids);
-    }
-  },
-  /**
-   * Return all variables referenced by this block.
-   * @return {!Array<string>} List of variable names.
-   * @this {Block}
-   */
-  getVars: function() {
-    return this.arguments_;
-  },
-  /**
-   * Return all variables referenced by this block.
-   * @return {!Array<!VariableModel>} List of variable models.
-   * @this {Block}
-   */
-  getVarModels: function() {
-    return this.argumentVarModels_;
-  },
+};
+Extensions.registerMixin(
+    'procedure_caller_update_shape_mixin', procedureCallerUpdateShapeMixin);
+
+const procedureCallerOnChangeMixin = {
   /**
    * Procedure calls cannot exist without the corresponding procedure
    * definition.  Enforce this link whenever an event is fired.
@@ -979,7 +1234,7 @@ const PROCEDURE_CALL_COMMON = {
         Xml.domToWorkspace(xml, this.workspace);
         Events.setGroup(false);
       }
-    } else if (event.type === Events.BLOCK_DELETE) {
+    } else if (event.type === Events.BLOCK_DELETE && event.blockId != this.id) {
       // Look for the case where a procedure definition has been deleted,
       // leaving this block (a procedure call) orphaned.  In this case, delete
       // the orphan.
@@ -1015,6 +1270,11 @@ const PROCEDURE_CALL_COMMON = {
       }
     }
   },
+};
+Extensions.registerMixin(
+    'procedure_caller_onchange_mixin', procedureCallerOnChangeMixin);
+
+const procedureCallerContextMenuMixin = {
   /**
    * Add menu option to find the definition block for this call.
    * @param {!Array} options List of menu options to add to.
@@ -1041,71 +1301,26 @@ const PROCEDURE_CALL_COMMON = {
     options.push(option);
   },
 };
+Extensions.registerMixin(
+    'procedure_caller_context_menu_mixin', procedureCallerContextMenuMixin);
 
-blocks['procedures_callnoreturn'] = {
-  ...PROCEDURE_CALL_COMMON,
-  /**
-   * Block for calling a procedure with no return value.
-   * @this {Block}
-   */
-  init: function() {
-    this.appendDummyInput('TOPROW').appendField('', 'NAME');
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setStyle('procedure_blocks');
-    // Tooltip is set in renameProcedure.
-    this.setHelpUrl(Msg['PROCEDURES_CALLNORETURN_HELPURL']);
-    this.arguments_ = [];
-    this.argumentVarModels_ = [];
-    this.quarkConnections_ = {};
-    this.quarkIds_ = null;
-    this.previousEnabledState_ = true;
-  },
-
+const procedureCallerNoReturnGetDefBlockMixin = {
   defType_: 'procedures_defnoreturn',
 };
+Extensions.registerMixin(
+    'procedure_callernoreturn_get_def_block_mixin',
+    procedureCallerNoReturnGetDefBlockMixin);
 
-blocks['procedures_callreturn'] = {
-  ...PROCEDURE_CALL_COMMON,
-  /**
-   * Block for calling a procedure with a return value.
-   * @this {Block}
-   */
-  init: function() {
-    this.appendDummyInput('TOPROW').appendField('', 'NAME');
-    this.setOutput(true);
-    this.setStyle('procedure_blocks');
-    // Tooltip is set in domToMutation.
-    this.setHelpUrl(Msg['PROCEDURES_CALLRETURN_HELPURL']);
-    this.arguments_ = [];
-    this.argumentVarModels_ = [];
-    this.quarkConnections_ = {};
-    this.quarkIds_ = null;
-    this.previousEnabledState_ = true;
-  },
-
+const procedureCallerReturnGetDefBlockMixin = {
   defType_: 'procedures_defreturn',
 };
+Extensions.registerMixin(
+    'procedure_callerreturn_get_def_block_mixin',
+    procedureCallerReturnGetDefBlockMixin);
 
-blocks['procedures_ifreturn'] = {
-  /**
-   * Block for conditionally returning a value from a procedure.
-   * @this {Block}
-   */
-  init: function() {
-    this.appendValueInput('CONDITION')
-        .setCheck('Boolean')
-        .appendField(Msg['CONTROLS_IF_MSG_IF']);
-    this.appendValueInput('VALUE').appendField(
-        Msg['PROCEDURES_DEFRETURN_RETURN']);
-    this.setInputsInline(true);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setStyle('procedure_blocks');
-    this.setTooltip(Msg['PROCEDURES_IFRETURN_TOOLTIP']);
-    this.setHelpUrl(Msg['PROCEDURES_IFRETURN_HELPURL']);
-    this.hasReturnValue_ = true;
-  },
+const procedureIfReturnMutator = {
+  hasReturnValue_: true,
+
   /**
    * Create XML to represent whether this block has a return value.
    * @return {!Element} XML storage element.
@@ -1116,6 +1331,7 @@ blocks['procedures_ifreturn'] = {
     container.setAttribute('value', Number(this.hasReturnValue_));
     return container;
   },
+
   /**
    * Parse XML to restore whether this block has a return value.
    * @param {!Element} xmlElement XML storage element.
@@ -1135,7 +1351,12 @@ blocks['procedures_ifreturn'] = {
   // loadExtraState) because the state of this block is already encoded in the
   // block's position in the workspace.
   // XML hooks are kept for backwards compatibility.
+};
 
+Extensions.registerMutator(
+    'procedure_ifreturn_mutator', procedureIfReturnMutator);
+
+const procedureIfReturnOnChangeMixin = {
   /**
    * Called whenever anything on the workspace changes.
    * Add warning if this flow block is not nested inside a loop.
@@ -1183,6 +1404,12 @@ blocks['procedures_ifreturn'] = {
       Events.setGroup(group);
     }
   },
+};
+
+Extensions.registerMixin(
+    'procedure_ifreturn_onchange_mixin', procedureIfReturnOnChangeMixin);
+
+const procedureIfReturnFunctionTypesMixin = {
   /**
    * List of block types that are functions and thus do not need warnings.
    * To add a new function type add this to your code:
@@ -1190,6 +1417,10 @@ blocks['procedures_ifreturn'] = {
    */
   FUNCTION_TYPES: ['procedures_defnoreturn', 'procedures_defreturn'],
 };
+
+Extensions.registerMixin(
+    'procedure_ifreturn_function_types_mixin',
+    procedureIfReturnFunctionTypesMixin);
 
 // Register provided blocks.
 defineBlocks(blocks);

@@ -14,6 +14,11 @@ on how to help us translate Blockly](
 https://developers.google.com/blockly/guides/contribute/core/translating)
 on the Blockly Developers site.
 
+There is one notable exception: because the language is not supported
+by Translatewiki, contributors to the [Klingon translation](
+https://developers.google.com/blockly/guides/contribute/core/klingon)
+may submit PRs making changes to [`tlh.json`](tlh.json) directly.
+
 ### Building
 
 Blockly cannot use the files in this directory directly.  Instead,

@@ -173,9 +173,9 @@ function stripApacheLicense() {
 }
 
 /**
- * Closure compiler diagnostic groups we want to be treated as errors.
+ * Closure Compiler diagnostic groups we want to be treated as errors.
  * These are effected when the --debug or --strict flags are passed.
- * For a full list of closure compiler groups, consult the output of
+ * For a full list of Closure Compiler groups, consult the output of
  * google-closure-compiler --help or look in the source  here:
  * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java#L117
  *
@@ -235,7 +235,7 @@ var JSCOMP_ERROR = [
 ];
 
 /**
- * Closure compiler diagnostic groups we want to be treated as warnings.
+ * Closure Compiler diagnostic groups we want to be treated as warnings.
  * These are effected when the --debug or --strict flags are passed.
  *
  * For most (all?) diagnostic groups this is the default level, so
@@ -245,7 +245,7 @@ var JSCOMP_WARNING = [
 ];
 
 /**
- * Closure compiler diagnostic groups we want to be ignored.  These
+ * Closure Compiler diagnostic groups we want to be ignored.  These
  * suppressions are always effected by default.
  *
  * Make sure that anything added here is commented out of JSCOMP_ERROR
@@ -253,7 +253,7 @@ var JSCOMP_WARNING = [
  */
 var JSCOMP_OFF = [
   /* The removal of Closure type system types from our JSDoc
-   * annotations means that the closure compiler now generates certain
+   * annotations means that the Closure Compiler now generates certain
    * diagnostics because it no longer has enough information to be
    * sure that the input code is correct.  The following diagnostic
    * groups are turned off to suppress such errors.
@@ -315,6 +315,7 @@ function buildJavaScript(done) {
   execSync(
       `tsc -outDir "${TSC_OUTPUT_DIR}" -declarationDir "${TYPINGS_BUILD_DIR}"`,
       {stdio: 'inherit'});
+  execSync(`node scripts/tsick.js "${TSC_OUTPUT_DIR}"`, {stdio: 'inherit'});
   done();
 }
 
@@ -452,7 +453,7 @@ function buildLangfiles(done) {
 }
 
 /**
- * A helper method to return an closure compiler chunk wrapper that
+ * A helper method to return an Closure Compiler chunk wrapper that
  * wraps the compiler output for the given chunk in a Universal Module
  * Definition.
  */
@@ -612,7 +613,7 @@ function getChunkOptions() {
 const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
 
 /**
- * Helper method for calling the Closure compiler, establishing
+ * Helper method for calling the Closure Compiler, establishing
  * default options (that can be overridden by the caller).
  * @param {*} options Caller-supplied options that will override the
  *     defaultOptions.
@@ -663,7 +664,7 @@ function buildCompiled() {
   const packageJson = getPackageJson();  // For version number.
   const options = {
     // The documentation for @define claims you can't use it on a
-    // non-global, but the closure compiler turns everything in to a
+    // non-global, but the Closure Compiler turns everything in to a
     // global - you just have to know what the new name is!  With
     // declareLegacyNamespace this was very straightforward.  Without
     // it, we have to rely on implmentation details.  See
@@ -688,7 +689,7 @@ function buildCompiled() {
 
 /**
  * This task builds Blockly core, blocks and generators together and uses
- * closure compiler's ADVANCED_COMPILATION mode.
+ * Closure Compiler's ADVANCED_COMPILATION mode.
  *
  * Prerequisite: buildDeps.
  */

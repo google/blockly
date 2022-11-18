@@ -430,9 +430,7 @@ export class FieldMultilineInput extends FieldTextInput {
    * @param e Keyboard event.
    */
   protected override onHtmlInputKeyDown_(e: KeyboardEvent) {
-    // AnyDuringMigration because:  Property 'keyCode' does not exist on type
-    // 'Event'.
-    if ((e as AnyDuringMigration).keyCode !== KeyCodes.ENTER) {
+    if (e.keyCode !== KeyCodes.ENTER) {
       super.onHtmlInputKeyDown_(e);
     }
   }

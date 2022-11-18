@@ -441,21 +441,15 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T|string> {
    * @param e Keyboard event.
    */
   protected onHtmlInputKeyDown_(e: KeyboardEvent) {
-    // AnyDuringMigration because:  Property 'keyCode' does not exist on type
-    // 'Event'.
-    if ((e as AnyDuringMigration).keyCode === KeyCodes.ENTER) {
+    if (e.keyCode === KeyCodes.ENTER) {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-      // AnyDuringMigration because:  Property 'keyCode' does not exist on type
-      // 'Event'.
     } else if (e.keyCode === KeyCodes.ESC) {
       this.setValue(
           this.htmlInput_!.getAttribute('data-untyped-default-value'));
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-      // AnyDuringMigration because:  Property 'keyCode' does not exist on type
-      // 'Event'.
-    } else if ((e as AnyDuringMigration).keyCode === KeyCodes.TAB) {
+    } else if (e.keyCode === KeyCodes.TAB) {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
       // AnyDuringMigration because:  Property 'shiftKey' does not exist on type

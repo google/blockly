@@ -66,7 +66,7 @@ async function runGeneratorsInBrowser(outputDir) {
 
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
-  console.log('Initialized.\nLoading url: ' + url);
+  console.log('Loading url: ' + url);
   await browser.url(url);
 
   await browser.execute(function() {

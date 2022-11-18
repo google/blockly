@@ -694,6 +694,14 @@ function buildCompiled() {
  * Prerequisite: buildDeps.
  */
 function buildAdvancedCompilationTest() {
+  // If main_compressed.js exists (from a previous run) delete it so that
+  // a later browser-based test won't check it should the compile fail.
+  try {
+    fs.unlinkSync('./tests/compile/main_compressed.js');
+  } catch (_e) {
+    // Probably it didn't exist.
+  }
+
   const srcs = [
     TSC_OUTPUT_DIR + '/closure/goog/base_minimal.js',
     TSC_OUTPUT_DIR + '/closure/goog/goog.js',

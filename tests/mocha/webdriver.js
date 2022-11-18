@@ -48,7 +48,7 @@ async function runMochaTestsInBrowser() {
   const url = 'file://' + posixPath(__dirname) + '/index.html';
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
-  console.log('Initialized.\nLoading URL: ' + url);
+  console.log('Loading URL: ' + url);
   await browser.url(url);
 
   await browser.waitUntil(async() => {

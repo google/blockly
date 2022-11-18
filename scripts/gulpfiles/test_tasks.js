@@ -20,6 +20,7 @@ const {BUILD_DIR, RELEASE_DIR} = require('./config');
 
 const runMochaTestsInBrowser = require('../../tests/mocha/webdriver.js');
 const runGeneratorsInBrowser = require('../../tests/generators/webdriver.js');
+const runCompileCheckInBrowser = require('../../tests/compile/webdriver.js');
 
 const OUTPUT_DIR = 'build/generators';
 const GOLDEN_DIR = 'tests/generators/golden';
@@ -290,7 +291,8 @@ function generators() {
  * @return {Promise} Asynchronous result.
  */
 function node() {
-  return runTestCommand('node', 'mocha tests/node --config tests/node/.mocharc.js');
+  return runTestCommand('node',
+                        'mocha tests/node --config tests/node/.mocharc.js');
 }
 
 /**
@@ -298,7 +300,9 @@ function node() {
  * @return {Promise} Asynchronous result.
  */
 function advancedCompile() {
-  return runTestCommand('advanced_compile', 'npm run only:compile:advanced');
+  const compilePromise = runTestCommand('advanced_compile',
+                                        'npm run only:compile:advanced');
+  return compilePromise.then(runCompileCheckInBrowser);
 }
 
 /**

@@ -14,9 +14,11 @@ goog.declareModuleId('Blockly.Events.BubbleOpen');
 
 import type {AbstractEventJson} from './events_abstract.js';
 import type {BlockSvg} from '../block_svg.js';
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -81,10 +83,33 @@ export class BubbleOpen extends UiBase {
    * @param json JSON representation.
    */
   override fromJson(json: BubbleOpenJson) {
+    deprecation.warn(
+        'Blockly.Events.BubbleOpen.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.isOpen = json['isOpen'];
     this.bubbleType = json['bubbleType'];
     this.blockId = json['blockId'];
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of BubbleOpen, but we can't specify that due to the fact that
+   *     parameters to static methods in subclasses must be supertypes of
+   *     parameters to static methods in superclasses.
+   * @internal
+   */
+  static fromJson(json: BubbleOpenJson, workspace: Workspace, event?: any):
+      BubbleOpen {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new BubbleOpen()) as
+        BubbleOpen;
+    newEvent.isOpen = json['isOpen'];
+    newEvent.bubbleType = json['bubbleType'];
+    newEvent.blockId = json['blockId'];
+    return newEvent;
   }
 }
 

@@ -52,9 +52,6 @@ module.exports = {
   buildAdvancedCompilationTest: buildTasks.buildAdvancedCompilationTest,
   gitCreateRC: gitTasks.createRC,
   docs: docsTasks.docs,
-  
-  // Targets intended only for invocation by scripts; may omit prerequisites.
-  onlyBuildAdvancedCompilationTest: buildTasks.onlyBuildAdvancedCompilationTest,
 
   // Legacy targets, to be deleted.
   recompile: releaseTasks.recompile,

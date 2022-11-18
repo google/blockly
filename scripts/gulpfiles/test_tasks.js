@@ -309,7 +309,7 @@ async function generators() {
     failed += checkResult(suffix);
   });
 
-  if (failed === 0) {
+if (failed === 0) {
     console.log(`${BOLD_GREEN}All generator tests passed.${ANSI_RESET}`);
   } else {
     console.log(

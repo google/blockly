@@ -13,6 +13,8 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockBase');
 
 import type {Block} from '../block.js';
+import * as deprecation from '../utils/deprecation.js';
+import type {Workspace} from '../workspace.js';
 
 import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
 
@@ -32,7 +34,7 @@ export class BlockBase extends AbstractEvent {
    */
   constructor(opt_block?: Block) {
     super();
-    this.isBlank = !!opt_block;
+    this.isBlank = !opt_block;
 
     if (!opt_block) return;
 
@@ -48,7 +50,7 @@ export class BlockBase extends AbstractEvent {
    *
    * @returns JSON representation.
    */
-  override toJson(): AbstractEventJson {
+  override toJson(): BlockBaseJson {
     const json = super.toJson() as BlockBaseJson;
     if (!this.blockId) {
       throw new Error(
@@ -65,8 +67,28 @@ export class BlockBase extends AbstractEvent {
    * @param json JSON representation.
    */
   override fromJson(json: BlockBaseJson) {
+    deprecation.warn(
+        'Blockly.Events.BlockBase.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.blockId = json['blockId'];
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of BlockBase, but we can't specify that due to the fact that parameters
+   *     to static methods in subclasses must be supertypes of parameters to
+   *     static methods in superclasses.
+   * @internal
+   */
+  static fromJson(json: BlockBaseJson, workspace: Workspace, event?: any):
+      BlockBase {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new BlockBase()) as BlockBase;
+    newEvent.blockId = json['blockId'];
+    return newEvent;
   }
 }
 

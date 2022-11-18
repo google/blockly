@@ -44,8 +44,12 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 export class Mutator extends Icon {
   private quarkNames: string[];
 
-  /** Workspace in the mutator's bubble. */
-  workspace_: WorkspaceSvg|null = null;
+  /**
+   * Workspace in the mutator's bubble.
+   * Due to legacy code in procedure block definitions, this name
+   * cannot change.
+   */
+  private workspace_: WorkspaceSvg|null = null;
 
   /** Width of workspace. */
   private workspaceWidth = 0;

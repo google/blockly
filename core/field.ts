@@ -1069,7 +1069,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    *
    * @param newValue The value to be saved.
    */
-  protected doValueUpdate_(newValue: T|null) {
+  protected doValueUpdate_(newValue: T) {
     this.value_ = newValue;
     this.isDirty_ = true;
   }

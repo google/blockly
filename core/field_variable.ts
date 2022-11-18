@@ -322,8 +322,8 @@ export class FieldVariable extends FieldDropdown {
    * @param opt_newValue The ID of the new variable to set.
    * @returns The validated ID, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      string|null {
+  protected override doClassValidation_(opt_newValue?: string|null): string
+      |null {
     if (opt_newValue === null) {
       return null;
     }
@@ -357,7 +357,7 @@ export class FieldVariable extends FieldDropdown {
    *
    * @param newId The value to be saved.
    */
-  protected override doValueUpdate_(newId: AnyDuringMigration) {
+  protected override doValueUpdate_(newId: string) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();

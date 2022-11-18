@@ -190,7 +190,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T|string> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
-  protected override doValueUpdate_(newValue: T|string|null) {
+  protected override doValueUpdate_(newValue: T|string) {
     this.isDirty_ = true;
     this.isTextValid_ = true;
     this.value_ = newValue;

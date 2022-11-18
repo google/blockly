@@ -209,7 +209,7 @@ export class FieldMultilineInput extends FieldTextInput {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
-  protected override doValueUpdate_(newValue: AnyDuringMigration) {
+  protected override doValueUpdate_(newValue: string) {
     super.doValueUpdate_(newValue);
     if (this.value_ !== null) {
       this.isOverflowedY_ = this.value_.split('\n').length > this.maxLines_;

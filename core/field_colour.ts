@@ -134,9 +134,6 @@ export class FieldColour extends Field<string> {
    * setting. By default use the global constants for columns.
    */
   private columns_ = 0;
-  override size_: AnyDuringMigration;
-  override clickTarget_: AnyDuringMigration;
-  override value_: AnyDuringMigration;
 
   /**
    * @param opt_value The initial value of the field. Should be in '#rrggbb'
@@ -215,8 +212,8 @@ export class FieldColour extends Field<string> {
    * @param opt_newValue The input value.
    * @returns A valid colour, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      string|null {
+  protected override doClassValidation_(opt_newValue?: string|null): string
+      |null {
     if (typeof opt_newValue !== 'string') {
       return null;
     }
@@ -229,7 +226,7 @@ export class FieldColour extends Field<string> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a colour in '#rrggbb' format.
    */
-  protected override doValueUpdate_(newValue: AnyDuringMigration) {
+  protected override doValueUpdate_(newValue: string) {
     this.value_ = newValue;
     if (this.borderRect_) {
       this.borderRect_.style.fill = newValue as string;
@@ -288,8 +285,6 @@ export class FieldColour extends Field<string> {
   /** Create and show the colour field's editor. */
   protected override showEditor_() {
     this.dropdownCreate_();
-    // AnyDuringMigration because:  Argument of type 'Element | null' is not
-    // assignable to parameter of type 'Node'.
     dropDownDiv.getContentDiv().appendChild(this.picker_ as AnyDuringMigration);
 
     dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
@@ -520,7 +515,7 @@ export class FieldColour extends Field<string> {
       cell.id = idGenerator.getNextUniqueId();
       // AnyDuringMigration because:  Argument of type 'number' is not
       // assignable to parameter of type 'string'.
-      cell.setAttribute('data-index', i as AnyDuringMigration);
+      cell.setAttribute('data-index', String(i));
       aria.setRole(cell, aria.Role.GRIDCELL);
       aria.setState(cell, aria.State.LABEL, colours[i]);
       aria.setState(cell, aria.State.SELECTED, colours[i] === selectedColour);

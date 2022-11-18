@@ -60,7 +60,6 @@ export class FieldImage extends Field<string> {
 
   /** Alt text of this image. */
   private altText_ = '';
-  override value_: AnyDuringMigration;
 
   /**
    * @param src The URL of the image.
@@ -165,8 +164,8 @@ export class FieldImage extends Field<string> {
    * @param opt_newValue The input value.
    * @returns A string, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      string|null {
+  protected override doClassValidation_(opt_newValue?: string|null): string
+      |null {
     if (typeof opt_newValue !== 'string') {
       return null;
     }
@@ -179,7 +178,7 @@ export class FieldImage extends Field<string> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
-  protected override doValueUpdate_(newValue: AnyDuringMigration) {
+  protected override doValueUpdate_(newValue: string) {
     this.value_ = newValue;
     if (this.imageElement_) {
       this.imageElement_.setAttributeNS(

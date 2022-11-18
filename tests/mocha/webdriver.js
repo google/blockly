@@ -7,8 +7,8 @@
 /**
  * @fileoverview Node.js script to run Mocha tests in Chrome, via webdriver.
  */
-var webdriverio = require('webdriverio');
-var {posixPath} = require('../../scripts/helpers');
+const webdriverio = require('webdriverio');
+const {posixPath} = require('../../scripts/helpers');
 
 module.exports = runMochaTestsInBrowser;
 
@@ -19,14 +19,14 @@ module.exports = runMochaTestsInBrowser;
  * @return {number} 0 on success, 1 on failure.
  */
 async function runMochaTestsInBrowser() {
-  var options = {
+  const options = {
     capabilities: {
-      browserName: 'chrome'
+      browserName: 'chrome',
     },
     services: [
-      ['selenium-standalone']
+      ['selenium-standalone'],
     ],
-    logLevel: 'warn'
+    logLevel: 'warn',
   };
   // Run in headless mode on Github Actions.
   if (process.env.CI) {
@@ -34,41 +34,41 @@ async function runMochaTestsInBrowser() {
       args: [
         '--headless', '--no-sandbox', '--disable-dev-shm-usage',
         '--allow-file-access-from-files',
-      ]
+      ],
     };
   } else {
     // --disable-gpu is needed to prevent Chrome from hanging on Linux with
     // NVIDIA drivers older than v295.20. See
     // https://github.com/google/blockly/issues/5345 for details.
     options.capabilities['goog:chromeOptions'] = {
-      args: ['--allow-file-access-from-files', '--disable-gpu']
+      args: ['--allow-file-access-from-files', '--disable-gpu'],
     };
   }
 
-  var url = 'file://' + posixPath(__dirname) + '/index.html';
+  const url = 'file://' + posixPath(__dirname) + '/index.html';
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
-  console.log('Initialized.\nLoading url: ' + url);
+  console.log('Initialized.\nLoading URL: ' + url);
   await browser.url(url);
 
-  await browser.waitUntil(async () => {
-    var elem = await browser.$('#failureCount');
-    var text = await elem.getAttribute('tests_failed');
-    return text != 'unset';
+  await browser.waitUntil(async() => {
+    const elem = await browser.$('#failureCount');
+    const text = await elem.getAttribute('tests_failed');
+    return text !== 'unset';
   }, {
-    timeout: 50000
+    timeout: 50000,
   });
 
   const elem = await browser.$('#failureCount');
   const numOfFailure = await elem.getAttribute('tests_failed');
 
   if (numOfFailure > 0) {
-    console.log('============Blockly Mocha Test Failures================')
+    console.log('============Blockly Mocha Test Failures================');
     const failureMessagesEls = await browser.$$('#failureMessages p');
     if (!failureMessagesEls.length) {
       console.log('There is at least one test failure, but no messages reported. Mocha may be failing because no tests are being run.');
     }
-    for (let el of failureMessagesEls) {
+    for (const el of failureMessagesEls) {
       console.log(await el.getText());
     }
   }
@@ -84,7 +84,7 @@ async function runMochaTestsInBrowser() {
 }
 
 if (require.main === module) {
-  runMochaTestsInBrowser().catch(e => {
+  runMochaTestsInBrowser().catch((e) => {
     console.error(e);
     process.exit(1);
   }).then(function(result) {

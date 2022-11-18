@@ -18,11 +18,8 @@ const rimraf = require('rimraf');
 
 const {BUILD_DIR, RELEASE_DIR} = require('./config');
 
-const runMochaTestsInBrowser =
-  require('../../tests/mocha/run_mocha_tests_in_browser.js');
-
-const runGeneratorsInBrowser =
-  require('../../tests/generators/run_generators_in_browser.js');
+const runMochaTestsInBrowser = require('../../tests/mocha/webdriver.js');
+const runGeneratorsInBrowser = require('../../tests/generators/webdriver.js');
 
 const OUTPUT_DIR = 'build/generators';
 const GOLDEN_DIR = 'tests/generators/golden';
@@ -35,9 +32,9 @@ let failerCount = 0;
 
 /**
  * Helper method for running test code block.
- * @param {string} id test id
- * @param {function} block test code block
- * @return {Promise} asynchronous result
+ * @param {string} id Test ID.
+ * @param {function} block Test code block.
+ * @return {Promise} Asynchronous result.
  */
 function runTestBlock(id, block) {
   return new Promise((resolve) => {
@@ -63,9 +60,9 @@ function runTestBlock(id, block) {
 
 /**
  * Helper method for running test command.
- * @param {string} id test id
- * @param {string} command command line to run
- * @return {Promise} asynchronous result
+ * @param {string} id Test ID.
+ * @param {string} command Command line to run.
+ * @return {Promise} Asynchronous result.
  */
 function runTestCommand(id, command) {
   return runTestBlock(id, async() => {
@@ -76,7 +73,7 @@ function runTestCommand(id, command) {
 /**
  * Lint the codebase.
  * Skip for CI environments, because linting is run separately.
- * @return {Promise} asynchronous result
+ * @return {Promise} Asynchronous result.
  */
 function eslint() {
   if (process.env.CI) {
@@ -89,7 +86,7 @@ function eslint() {
 /**
  * Run the full usual build and package process, checking to ensure
  * there are no closure compiler warnings / errors.
- * @return {Promise} asynchronous result
+ * @return {Promise} Asynchronous result.
  */
 function build() {
   return runTestCommand('build + package',
@@ -98,7 +95,7 @@ function build() {
 
 /**
  * Run renaming validation test.
- * @return {Promise} asynchronous result
+ * @return {Promise} Asynchronous result.
  */
 function renamings() {
   return runTestCommand('renamings', 'node tests/migration/validate-renamings.js');
@@ -106,8 +103,8 @@ function renamings() {
 
 /**
  * Helper method for gzipping file.
- * @param {string} file target file
- * @return {Promise} asynchronous result
+ * @param {string} file Target file.
+ * @return {Promise} Asynchronous result.
  */
 function gzipFile(file) {
   return new Promise((resolve) => {
@@ -125,9 +122,9 @@ function gzipFile(file) {
 
 /**
  * Helper method for comparing file size.
- * @param {string} file target file
- * @param {number} expected expected size
- * @return {number} 0: success / 1: failed
+ * @param {string} file Target file.
+ * @param {number} expected Expected size.
+ * @return {number} 0: success / 1: failed.
  */
 function compareSize(file, expected) {
   const name = path.posix.join(RELEASE_DIR, file);
@@ -150,7 +147,7 @@ function compareSize(file, expected) {
 
 /**
  * Helper method for zipping the compressed files.
- * @return {Promise} asynchronous result
+ * @return {Promise} Asynchronous result.
  */
 function zippingFiles() {
   // GZip them for additional size comparisons (keep originals, force
@@ -163,7 +160,7 @@ function zippingFiles() {
 
 /**
  * Check the sizes of built files for unexpected growth.
- * @return {Promise} asynchronous result
+ * @return {Promise} Asynchronous result.
  */
 function metadata() {
   return runTestBlock('metadata', async() => {
@@ -197,7 +194,7 @@ function metadata() {
 
 /**
  * Run Mocha tests inside a browser.
- * @return {Promise} asynchronous result
+ * @return {Promise} Asynchronous result.
  */
 function mocha() {
   return runTestBlock('mocha', async() => {
@@ -213,9 +210,9 @@ function mocha() {
 
 /**
  * Helper method for comparison file.
- * @param {string} file1 first target file
- * @param {string} file2 second target file
- * @return {boolean} comparison result (true: same / false: different)
+ * @param {string} file1 First target file.
+ * @param {string} file2 Second target file.
+ * @return {boolean} Comparison result (true: same / false: different).
  */
 function compareFile(file1, file2) {
   const buf1 = fs.readFileSync(file1);
@@ -229,8 +226,8 @@ function compareFile(file1, file2) {
 
 /**
  * Helper method for checking the result of generator.
- * @param {string} suffix target suffix
- * @return {number} check result (0: success / 1: failed)
+ * @param {string} suffix Target suffix.
+ * @return {number} Check result (0: success / 1: failed).
  */
 function checkResult(suffix) {
   const fileName = `generated.${suffix}`;
@@ -262,7 +259,7 @@ function checkResult(suffix) {
 
 /**
  * Run generator tests inside a browser and check the results.
- * @return {Promise} asynchronous result
+ * @return {Promise} Asynchronous result.
  */
 function generators() {
   return runTestBlock('generators', async() => {
@@ -277,7 +274,7 @@ function generators() {
     generatorSuffixes.forEach((suffix) => {
       failed += checkResult(suffix);
     });
-      
+
     if (failed === 0) {
       console.log(`${BOLD_GREEN}All generator tests passed.${ANSI_RESET}`);
     } else {
@@ -290,7 +287,7 @@ function generators() {
 
 /**
  * Run Node tests.
- * @return {Promise} asynchronous result
+ * @return {Promise} Asynchronous result.
  */
 function node() {
   return runTestCommand('node', 'mocha tests/node --config tests/node/.mocharc.js');
@@ -298,7 +295,7 @@ function node() {
 
 /**
  * Attempt advanced compilation of a Blockly app.
- * @return {Promise} asynchronous result
+ * @return {Promise} Asynchronous result.
  */
 function advancedCompile() {
   return runTestCommand('advanced_compile', 'npm run only:compile:advanced');
@@ -306,7 +303,7 @@ function advancedCompile() {
 
 /**
  * Report test result.
- * @return {Promise} asynchronous result
+ * @return {Promise} Asynchronous result.
  */
 function reportTestResult() {
   console.log('=======================================');

@@ -33,15 +33,15 @@ let failerCount = 0;
 /**
  * Helper method for running test code block.
  * @param {string} id Test ID.
- * @param {function} block Test code block.
+ * @param {function} testFunction Test code block.
  * @return {Promise} Asynchronous result.
  */
-function runTestBlock(id, block) {
+function runTestFunction(id, testFuncion) {
   return new Promise((resolve) => {
     console.log('=======================================');
     console.log(`== ${id}`);
     if (process.env.CI) console.log('::group::');
-    block()
+    testFunction()
       .then((result) => {
         if (process.env.CI) console.log('::endgroup::');
         console.log(`${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${id}`);
@@ -65,7 +65,7 @@ function runTestBlock(id, block) {
  * @return {Promise} Asynchronous result.
  */
 function runTestCommand(id, command) {
-  return runTestBlock(id, async() => {
+  return runTestFunction(id, async() => {
     return execSync(command, {stdio: 'inherit'});
   }, false);
 }
@@ -98,7 +98,8 @@ function build() {
  * @return {Promise} Asynchronous result.
  */
 function renamings() {
-  return runTestCommand('renamings', 'node tests/migration/validate-renamings.js');
+  return runTestCommand('renamings',
+                        'node tests/migration/validate-renamings.js');
 }
 
 /**
@@ -163,7 +164,7 @@ function zippingFiles() {
  * @return {Promise} Asynchronous result.
  */
 function metadata() {
-  return runTestBlock('metadata', async() => {
+  return runTestFunction('metadata', async() => {
     // Zipping the compressed files.
     await zippingFiles();
     // Read expected size from script.
@@ -197,7 +198,7 @@ function metadata() {
  * @return {Promise} Asynchronous result.
  */
 function mocha() {
-  return runTestBlock('mocha', async() => {
+  return runTestFunction('mocha', async() => {
     const result =  await runMochaTestsInBrowser().catch(e => {
       throw e;
     });
@@ -262,7 +263,7 @@ function checkResult(suffix) {
  * @return {Promise} Asynchronous result.
  */
 function generators() {
-  return runTestBlock('generators', async() => {
+  return runTestFunction('generators', async() => {
     // Clean up.
     rimraf.sync(OUTPUT_DIR);
     fs.mkdirSync(OUTPUT_DIR);
@@ -317,7 +318,7 @@ function reportTestResult() {
   }
 }
 
-// Indivisual tasks.
+// Individual tasks.
 const testTasks = [
   eslint,
   build,

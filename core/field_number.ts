@@ -77,15 +77,14 @@ export class FieldNumber extends FieldInput<number> {
     // Pass SENTINEL so that we can define properties before value validation.
     super(Field.SKIP_SETUP);
 
-    if (opt_value === Field.SKIP_SETUP) {
-      return;
-    }
+    if (Field.isSentinel(opt_value)) return;
     if (opt_config) {
       this.configure_(opt_config);
     } else {
       this.setConstraints(opt_min, opt_max, opt_precision);
     }
-    this.setValue(opt_value);
+    const value = opt_value === undefined ? null : opt_value;
+    this.setValue(value);
     if (opt_validator) {
       this.setValidator(opt_validator);
     }
@@ -255,8 +254,8 @@ export class FieldNumber extends FieldInput<number> {
    * @param opt_newValue The input value.
    * @returns A valid number, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      number|null {
+  protected override doClassValidation_(opt_newValue?: number|string): number
+      |null {
     if (opt_newValue === null) {
       return null;
     }

@@ -157,13 +157,12 @@ export class FieldColour extends Field<string> {
       opt_config?: FieldColourConfig) {
     super(Field.SKIP_SETUP);
 
-    if (opt_value === Field.SKIP_SETUP) {
-      return;
-    }
+    if (Field.isSentinel(opt_value)) return;
     if (opt_config) {
       this.configure_(opt_config);
     }
-    this.setValue(opt_value);
+    const value = opt_value === undefined ? null : opt_value;
+    this.setValue(value);
     if (opt_validator) {
       this.setValidator(opt_validator);
     }
@@ -584,7 +583,7 @@ export class FieldColour extends Field<string> {
   static fromJson(options: FieldColourFromJsonConfig): FieldColour {
     // `this` might be a subclass of FieldColour if that class doesn't override
     // the static fromJson method.
-    return new this(options['colour'], undefined, options);
+    return new this(options.colour, undefined, options);
   }
 }
 

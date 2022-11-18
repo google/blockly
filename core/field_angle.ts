@@ -133,17 +133,16 @@ export class FieldAngle extends FieldInput<number> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|number|Sentinel, opt_validator?: FieldAngleValidator,
+      opt_value?: number|string|Sentinel, opt_validator?: FieldAngleValidator,
       opt_config?: FieldAngleConfig) {
     super(Field.SKIP_SETUP);
 
-    if (opt_value === Field.SKIP_SETUP) {
-      return;
-    }
+    if (Field.isSentinel(opt_value)) return;
     if (opt_config) {
       this.configure_(opt_config);
     }
-    this.setValue(opt_value);
+    const value = opt_value === undefined ? null : opt_value;
+    this.setValue(value);
     if (opt_validator) {
       this.setValidator(opt_validator);
     }
@@ -404,14 +403,14 @@ export class FieldAngle extends FieldInput<number> {
    *
    * @param e Keyboard event.
    */
-  protected override onHtmlInputKeyDown_(e: Event) {
+  protected override onHtmlInputKeyDown_(e: KeyboardEvent) {
     super.onHtmlInputKeyDown_(e);
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
     }
 
-    const keyboardEvent = e as KeyboardEvent;
+    const keyboardEvent = e;
     let multiplier;
     if (keyboardEvent.keyCode === KeyCodes.LEFT) {
       // decrement (increment in RTL)
@@ -440,8 +439,8 @@ export class FieldAngle extends FieldInput<number> {
    * @param opt_newValue The input value.
    * @returns A valid angle, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      number|null {
+  protected override doClassValidation_(opt_newValue?: number|string): number
+      |null {
     const value = Number(opt_newValue);
     if (isNaN(value) || !isFinite(value)) {
       return null;

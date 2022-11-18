@@ -45,7 +45,11 @@ import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
-export type FieldValidator<T = any> = (value?: T) => T|null|undefined;
+/**
+ * A function that is called to validate changes to the field's value. Takes in
+ * a value & returns a validated value, or null to abort the change.
+ */
+export type FieldValidator<T = any> = (value: T) => T|null;
 
 /**
  * Abstract class for an editable field.
@@ -76,6 +80,9 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * instead.
    */
   static readonly SKIP_SETUP = new Sentinel();
+  static isSentinel<T>(value: T|Sentinel): value is Sentinel {
+    return value === Field.SKIP_SETUP;
+  }
 
   /**
    * Name of field.  Unique within each block.
@@ -207,9 +214,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     /** The size of the area rendered by the field. */
     this.size_ = new Size(0, 0);
 
-    if (value === Field.SKIP_SETUP) {
-      return;
-    }
+    if (Field.isSentinel(value)) return;
     if (opt_config) {
       this.configure_(opt_config);
     }
@@ -372,7 +377,8 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @internal
    */
   fromXml(fieldElement: Element) {
-    this.setValue(fieldElement.textContent);
+    // Any because gremlins live here. No touchie!
+    this.setValue(fieldElement.textContent as any);
   }
 
   /**
@@ -384,7 +390,8 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @internal
    */
   toXml(fieldElement: Element): Element {
-    fieldElement.textContent = this.getValue();
+    // Any because gremlins live here. No touchie!
+    fieldElement.textContent = this.getValue() as any;
     return fieldElement;
   }
 
@@ -619,7 +626,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    *
    * @returns Validation function, or null.
    */
-  getValidator(): Function|null {
+  getValidator(): FieldValidator<T>|null {
     return this.validator_;
   }
 
@@ -957,7 +964,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @param newValue New value.
    * @sealed
    */
-  setValue(newValue: AnyDuringMigration) {
+  setValue(newValue: T|null) {
     const doLogging = false;
     if (newValue === null) {
       doLogging && console.log('null, return');
@@ -965,41 +972,49 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
       return;
     }
 
-    let validatedValue = this.doClassValidation_(newValue);
-    // Class validators might accidentally forget to return, we'll ignore that.
-    newValue = this.processValidation_(newValue, validatedValue);
-    if (newValue instanceof Error) {
+    const classValidatedValue = ((newValue: T): T|Error => {
+      const validatedValue = this.doClassValidation_(newValue);
+      // Class validators might accidentally forget to return, we'll ignore
+      // that.
+      return this.processValidation_(newValue, validatedValue);
+    })(newValue);
+
+    if (classValidatedValue instanceof Error) {
       doLogging && console.log('invalid class validation, return');
       return;
     }
 
-    const localValidator = this.getValidator();
-    if (localValidator) {
-      validatedValue = localValidator.call(this, newValue);
+    const validatedValue = ((newValue: T): T|Error => {
+      const localValidator = this.getValidator();
+      if (!localValidator) return newValue;
+      const validatedValue = localValidator.call(this, newValue);
       // Local validators might accidentally forget to return, we'll ignore
       // that.
-      newValue = this.processValidation_(newValue, validatedValue);
-      if (newValue instanceof Error) {
-        doLogging && console.log('invalid local validation, return');
-        return;
-      }
+      return this.processValidation_(newValue, validatedValue);
+    })(classValidatedValue);
+
+    if (validatedValue instanceof Error) {
+      doLogging && console.log('invalid local validation, return');
+      return;
     }
+
     const source = this.sourceBlock_;
     if (source && source.disposed) {
       doLogging && console.log('source disposed, return');
       return;
     }
+
     const oldValue = this.getValue();
-    if (oldValue === newValue) {
+    if (oldValue === validatedValue) {
       doLogging && console.log('same, doValueUpdate_, return');
-      this.doValueUpdate_(newValue);
+      this.doValueUpdate_(validatedValue);
       return;
     }
 
-    this.doValueUpdate_(newValue);
+    this.doValueUpdate_(validatedValue);
     if (source && eventUtils.isEnabled()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          source, 'field', this.name || null, oldValue, newValue));
+          source, 'field', this.name || null, oldValue, validatedValue));
     }
     if (this.isDirty_) {
       this.forceRerender();
@@ -1014,9 +1029,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @param validatedValue Validated value.
    * @returns New value, or an Error object.
    */
-  private processValidation_(
-      newValue: AnyDuringMigration,
-      validatedValue: AnyDuringMigration): AnyDuringMigration {
+  private processValidation_(newValue: T, validatedValue: T|null): T|Error {
     if (validatedValue === null) {
       this.doValueInvalid_(newValue);
       if (this.isDirty_) {
@@ -1024,10 +1037,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
       }
       return Error();
     }
-    if (validatedValue !== undefined) {
-      newValue = validatedValue;
-    }
-    return newValue;
+    return validatedValue !== undefined ? validatedValue : newValue;
   }
 
   /**
@@ -1035,7 +1045,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    *
    * @returns Current value.
    */
-  getValue(): AnyDuringMigration {
+  getValue(): T|null {
     return this.value_;
   }
 
@@ -1046,8 +1056,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @param opt_newValue The value to be validated.
    * @returns The validated value, same as input by default.
    */
-  protected doClassValidation_(opt_newValue?: AnyDuringMigration):
-      AnyDuringMigration {
+  protected doClassValidation_(opt_newValue?: T|null): T|null {
     if (opt_newValue === null || opt_newValue === undefined) {
       return null;
     }
@@ -1060,7 +1069,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    *
    * @param newValue The value to be saved.
    */
-  protected doValueUpdate_(newValue: AnyDuringMigration) {
+  protected doValueUpdate_(newValue: T|null) {
     this.value_ = newValue;
     this.isDirty_ = true;
   }
@@ -1072,7 +1081,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    *
    * @param _invalidValue The input value that was determined to be invalid.
    */
-  protected doValueInvalid_(_invalidValue: AnyDuringMigration) {}
+  protected doValueInvalid_(_invalidValue: T) {}
   // NOP
 
   /**

@@ -306,7 +306,7 @@ export class FieldVariable extends FieldDropdown {
    *
    * @returns Validation function, or null.
    */
-  override getValidator(): Function|null {
+  override getValidator(): FieldVariableValidator|null {
     // Validators shouldn't operate on the initial setValue call.
     // Normally this is achieved by calling setValidator after setValue, but
     // this is not a possibility with variable fields.

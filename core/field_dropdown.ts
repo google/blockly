@@ -28,14 +28,14 @@ import type {Sentinel} from './utils/sentinel.js';
 import * as utilsString from './utils/string.js';
 import {Svg} from './utils/svg.js';
 
-export type FieldDropdownValidator = FieldValidator<string>;
+export type FieldDropdownValidator = FieldValidator<string|ImageProperties>;
 
 /**
  * Class for an editable dropdown field.
  *
  * @alias Blockly.FieldDropdown
  */
-export class FieldDropdown extends Field<string> {
+export class FieldDropdown extends Field<string|ImageProperties> {
   /** Horizontal distance that a checkmark overhangs the dropdown. */
   static CHECKMARK_OVERHANG = 25;
 

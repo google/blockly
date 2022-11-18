@@ -36,7 +36,7 @@ let failerCount = 0;
  * @param {function} testFunction Test code block.
  * @return {Promise} Asynchronous result.
  */
-function runTestFunction(id, testFuncion) {
+function runTestFunction(id, testFunction) {
   return new Promise((resolve) => {
     console.log('=======================================');
     console.log(`== ${id}`);
@@ -85,7 +85,7 @@ function eslint() {
 
 /**
  * Run the full usual build and package process, checking to ensure
- * there are no closure compiler warnings / errors.
+ * there are no Closure Compiler warnings / errors.
  * @return {Promise} Asynchronous result.
  */
 function build() {
@@ -112,8 +112,8 @@ function gzipFile(file) {
     const name = path.posix.join(RELEASE_DIR, file);
 
     const stream = gulp.src(name)
-      .pipe(gzip())
-      .pipe(gulp.dest(RELEASE_DIR));
+        .pipe(gzip())
+        .pipe(gulp.dest(RELEASE_DIR));
 
     stream.on('end', () => {
       resolve();
@@ -135,12 +135,12 @@ function compareSize(file, expected) {
 
   if (size > compare) {
     const message = `Failed: ` +
-      `Size of ${name} has grown more than 10%. ${size} vs ${expected} `;
+        `Size of ${name} has grown more than 10%. ${size} vs ${expected} `;
     console.log(`${BOLD_RED}${message}${ANSI_RESET}`);
     return 1;
   } else {
     const message =
-      `Size of ${name} at ${size} compared to previous ${expected}`;
+        `Size of ${name} at ${size} compared to previous ${expected}`;
     console.log(`${BOLD_GREEN}${message}${ANSI_RESET}`);
     return 0;
   }
@@ -169,7 +169,7 @@ function metadata() {
     await zippingFiles();
     // Read expected size from script.
     const contents = fs.readFileSync('tests/scripts/check_metadata.sh')
-      .toString();
+        .toString();
     const pattern = /^readonly (?<key>[A-Z_]+)=(?<value>\d+)$/gm;
     const matches = contents.matchAll(pattern);
     const expected = {};
@@ -199,7 +199,7 @@ function metadata() {
  */
 function mocha() {
   return runTestFunction('mocha', async() => {
-    const result =  await runMochaTestsInBrowser().catch(e => {
+    const result = await runMochaTestsInBrowser().catch(e => {
       throw e;
     });
     if (result) {
@@ -221,8 +221,7 @@ function compareFile(file1, file2) {
   // Normalize the line feed.
   const code1 = buf1.toString().replace(/(?:\r\n|\r|\n)/g, '\n');
   const code2 = buf2.toString().replace(/(?:\r\n|\r|\n)/g, '\n');
-  const result = (code1 === code2);
-  return result;
+  return (code1 === code2);
 }
 
 /**
@@ -242,12 +241,12 @@ function checkResult(suffix) {
     if (fs.existsSync(goldenFileName)) {
       if (compareFile(resultFileName, goldenFileName)) {
         console.log(`${SUCCESS_PREFIX} ${suffix}: ` +
-          `${resultFileName} matches ${goldenFileName}`);
+            `${resultFileName} matches ${goldenFileName}`);
         return 0;
       } else {
         console.log(
-          `${FAILURE_PREFIX} ${suffix}: ` +
-          `${resultFileName} does not match ${goldenFileName}`);
+            `${FAILURE_PREFIX} ${suffix}: ` +
+            `${resultFileName} does not match ${goldenFileName}`);
       }
     } else {
       console.log(`File ${goldenFileName} not found!`);
@@ -280,7 +279,7 @@ function generators() {
       console.log(`${BOLD_GREEN}All generator tests passed.${ANSI_RESET}`);
     } else {
       console.log(
-        `${BOLD_RED}Failures in ${failed} generator tests.${ANSI_RESET}`);
+          `${BOLD_RED}Failures in ${failed} generator tests.${ANSI_RESET}`);
       throw new Error('Generator tests failed.');
     }
   });

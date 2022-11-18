@@ -8,27 +8,27 @@
  * @fileoverview Gulp script to build Blockly for Node & NPM.
  */
 
-var gulp = require('gulp');
+const gulp = require('gulp');
 gulp.replace = require('gulp-replace');
 gulp.rename = require('gulp-rename');
 gulp.sourcemaps = require('gulp-sourcemaps');
 
-var path = require('path');
-var fs = require('fs');
+const path = require('path');
+const fs = require('fs');
 const {exec, execSync} = require('child_process');
-var through2 = require('through2');
+const through2 = require('through2');
 
 const clangFormat = require('clang-format');
 const clangFormatter = require('gulp-clang-format');
-var closureCompiler = require('google-closure-compiler').gulp();
-var closureDeps = require('google-closure-deps');
-var argv = require('yargs').argv;
-var rimraf = require('rimraf');
+const closureCompiler = require('google-closure-compiler').gulp();
+const closureDeps = require('google-closure-deps');
+const argv = require('yargs').argv;
+const rimraf = require('rimraf');
 
-var {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
-var {getPackageJson} = require('./helper_tasks');
+const {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
+const {getPackageJson} = require('./helper_tasks');
 
-var {posixPath} = require('../helpers');
+const {posixPath} = require('../helpers');
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
@@ -185,7 +185,7 @@ function stripApacheLicense() {
  * appearing on any list will default to setting provided by the
  * compiler, which may vary depending on compilation level.
  */
-var JSCOMP_ERROR = [
+const JSCOMP_ERROR = [
   // 'accessControls',  // Deprecated; means same as visibility.
   // 'checkPrototypalTypes',  // override annotations are stripped by tsc.
   'checkRegExp',
@@ -241,7 +241,7 @@ var JSCOMP_ERROR = [
  * For most (all?) diagnostic groups this is the default level, so
  * it's generally sufficient to remove them from JSCOMP_ERROR.
  */
-var JSCOMP_WARNING = [
+const JSCOMP_WARNING = [
 ];
 
 /**
@@ -251,7 +251,7 @@ var JSCOMP_WARNING = [
  * Make sure that anything added here is commented out of JSCOMP_ERROR
  * above, as that takes precedence.)
  */
-var JSCOMP_OFF = [
+const JSCOMP_OFF = [
   /* The removal of Closure type system types from our JSDoc
    * annotations means that the Closure Compiler now generates certain
    * diagnostics because it no longer has enough information to be

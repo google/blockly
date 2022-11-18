@@ -8,7 +8,7 @@
  * @fileoverview Common configuration for Gulp scripts.
  */
 
-var path = require('path');
+const path = require('path');
 
 // Paths are all relative to the repository root.  Do not include
 // trailing slash.

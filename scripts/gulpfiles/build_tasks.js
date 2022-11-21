@@ -289,25 +289,6 @@ var JSCOMP_OFF = [
 ];
 
 /**
- * The npm prepare script, run by npm install after installing modules
- * and as part of the packaging process.
- *
- * This does just enough of the build that npm start should work.
- *
- * Exception: when running in the CI environment, we don't build
- * anything.  We don't need to, because npm test will build everything
- * needed, and we don't want to, because a tsc error would prevent
- * other workflows (like lint and format) from completing.
- */
-function prepare(done) {
-  if (process.env.CI) {
-    done();
-    return;
-  }
-  return exports.deps(done);
-}
-
-/**
  * Builds Blockly as a JS program, by running tsc on all the files in
  * the core directory.
  */
@@ -751,7 +732,6 @@ exports.minify = gulp.series(exports.deps, buildCompiled);
 exports.build = gulp.parallel(exports.minify, exports.langfiles);
 
 // Manually-invokable targets, with prequisites where required.
-exports.prepare = prepare;
 exports.format = format;
 exports.messages = generateMessages;  // Generate msg/json/en.json et al.
 exports.buildAdvancedCompilationTest =

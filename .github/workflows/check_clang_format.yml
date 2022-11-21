@@ -13,14 +13,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: DoozyX/clang-format-lint-action@v0.14
+    - uses: DoozyX/clang-format-lint-action@v0.15
       with:
         source: 'core'
         extensions: 'js,ts'
         # This should be as close as possible to the version that the npm
         # package supports. This can be found by running:
         # npx clang-format --version.
-        clangFormatVersion: 13
+        clangFormatVersion: 15
 
     # The Report clang format workflow (report_clang_format.yml) will
     # run (if required) after this one to post a comment to the PR.

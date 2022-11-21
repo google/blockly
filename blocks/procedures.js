@@ -86,6 +86,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
       'procedure_def_var_mixin',
       'procedure_def_update_shape_mixin',
       'procedure_def_context_menu_mixin',
+      'procedure_def_onchange_mixin',
       'procedure_def_validator_helper',
       'procedure_defnoreturn_get_caller_block_mixin',
       'procedure_defnoreturn_set_comment_helper',
@@ -161,6 +162,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
       'procedure_def_var_mixin',
       'procedure_def_update_shape_mixin',
       'procedure_def_context_menu_mixin',
+      'procedure_def_onchange_mixin',
       'procedure_def_validator_helper',
       'procedure_defreturn_get_caller_block_mixin',
       'procedure_defreturn_set_comment_helper',
@@ -746,6 +748,16 @@ const procedureDefContextMenuMixin = {
 };
 Extensions.registerMixin(
     'procedure_def_context_menu_mixin', procedureDefContextMenuMixin);
+
+const procedureDefOnChangeMixin = {
+  onchange: function(e) {
+    if (e.type === Events.BLOCK_CHANGE && e.element == 'disabled') {
+      this.model.setEnabled(!e.newValue);
+    }
+  },
+};
+Extensions.registerMixin(
+    'procedure_def_onchange_mixin', procedureDefOnChangeMixin);
 
 /** @this {Block} */
 const procedureDefNoReturnSetCommentHelper = function() {

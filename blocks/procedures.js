@@ -86,7 +86,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
       'procedure_def_var_mixin',
       'procedure_def_update_shape_mixin',
       'procedure_def_context_menu_mixin',
-      'procedure_def_get_legal_name_helper',
+      'procedure_def_validator_helper',
       'procedure_defnoreturn_get_caller_block_mixin',
       'procedure_defnoreturn_set_comment_helper',
     ],
@@ -161,7 +161,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
       'procedure_def_var_mixin',
       'procedure_def_update_shape_mixin',
       'procedure_def_context_menu_mixin',
-      'procedure_def_get_legal_name_helper',
+      'procedure_def_validator_helper',
       'procedure_defreturn_get_caller_block_mixin',
       'procedure_defreturn_set_comment_helper',
     ],
@@ -447,13 +447,30 @@ Extensions.registerMixin(
     'procedure_def_update_shape_mixin', procedureDefUpdateShapeMixin);
 
 /** @this {Block} */
-const procedureDefGetLegalNameHelper = function() {
+const procedureDefValidatorHelper = function() {
   const nameField = this.getField('NAME');
   nameField.setValue(Procedures.findLegalName('', this));
-  nameField.setValidator(Procedures.rename);
+
+  /**
+   * Validates the input to the procedure name field.
+   * @param {string} newName The new name of the procedure.
+   * @return {string} The validated/legal name of the procedure.
+   * @this {Field}
+   */
+  const validator = function(newName) {
+    // TODO: Remove call the rename?
+    Procedures.rename.call(this, newName);
+
+    const sourceBlock = this.getSourceBlock();
+    const legalName = Procedures.findLegalName(newName, sourceBlock);
+    sourceBlock.model.setName(legalName);
+    return legalName;
+  };
+
+  nameField.setValidator(validator);
 };
 Extensions.register(
-    'procedure_def_get_legal_name_helper', procedureDefGetLegalNameHelper);
+    'procedure_def_validator_helper', procedureDefValidatorHelper);
 
 const procedureDefMutator = {
   arguments_: [],

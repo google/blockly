@@ -11,6 +11,8 @@ import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
 import {isObservable} from '../interfaces/i_observable.js';
 import {triggerProceduresUpdate} from './update_procedures.js';
 import type {Workspace} from '../workspace.js';
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.procedures.ObservableProcedureModel');
 
 
 export class ObservableProcedureModel implements IProcedureModel {

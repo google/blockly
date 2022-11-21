@@ -28,6 +28,7 @@ const {Block} = goog.requireType('Blockly.Block');
 // TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
+const {ObservableProcedureModel} = goog.require('Blockly.procedures.ObservableProcedureModel');
 const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
@@ -274,6 +275,12 @@ exports.blocks = blocks;
 /** @this {Block} */
 const procedureDefGetDefMixin = function() {
   const mixin = {
+    model: null,
+
+    getProcedureModel() {
+      return this.model;
+    },
+
     /**
      * Return all variables referenced by this block.
      * @return {!Array<string>} List of variable names.
@@ -282,6 +289,7 @@ const procedureDefGetDefMixin = function() {
     getVars: function() {
       return this.arguments_;
     },
+
     /**
      * Return all variables referenced by this block.
      * @return {!Array<!VariableModel>} List of variable models.
@@ -291,6 +299,10 @@ const procedureDefGetDefMixin = function() {
       return this.argumentVarModels_;
     },
   };
+
+  mixin.model = new ObservableProcedureModel(
+      this.workspace, this.getFieldValue('NAME'));
+  this.workspace.getProcedureMap().add(mixin.model);
 
   this.mixin(mixin, true);
 };

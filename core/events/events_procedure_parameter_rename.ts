@@ -34,8 +34,8 @@ export class ProcedureParameterRename extends ProcedureParameterBase {
           'Cannot rename the parameter of a procedure that does not exist ' +
           'in the procedure map');
     }
-    const parameterModel = procedureModel.getParameters()
-        .find((p) => p.getId() === this.parameter.getId());
+    const parameterModel = procedureModel.getParameters().find(
+        (p) => p.getId() === this.parameter.getId());
     if (!parameterModel) {
       throw new Error(
           'Cannot rename a parameter that does not exist ' +

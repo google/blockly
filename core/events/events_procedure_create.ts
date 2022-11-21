@@ -4,21 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {IProcedureModel} from '../interfaces/i_procedure_model.js';
+import {ObservableProcedureModel} from '../procedures.js';
 import * as registry from '../registry.js';
+import {Workspace} from '../workspace.js';
 
 import {ProcedureBase} from './events_procedure_base.js';
 import * as eventUtils from './utils.js';
-import {Workspace} from '../workspace.js';
-import {IProcedureModel} from '../interfaces/i_procedure_model.js';
-import {ObservableProcedureModel} from '../procedures.js';
 
 
 export class ProcedureCreate extends ProcedureBase {
   type = eventUtils.PROCEDURE_CREATE;
 
-  constructor(
-      workspace: Workspace,
-      model: IProcedureModel) {
+  constructor(workspace: Workspace, model: IProcedureModel) {
     super(workspace, model);
   }
 

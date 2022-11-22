@@ -29,6 +29,7 @@ const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
 const {ObservableProcedureModel} = goog.require('Blockly.procedures.ObservableProcedureModel');
+const {ObservableParameterModel} = goog.require('Blockly.procedures.ObservableParameterModel');
 const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
@@ -658,10 +659,17 @@ const procedureDefMutator = {
     this.arguments_ = [];
     this.paramIds_ = [];
     this.argumentVarModels_ = [];
+
+    console.log('called');
+
+    // TODO: Remove old data handling logic?
     let paramBlock = containerBlock.getInputTargetBlock('STACK');
+    console.log(containerBlock, paramBlock);
     while (paramBlock && !paramBlock.isInsertionMarker()) {
+      console.log('looping!');
       const varName = paramBlock.getFieldValue('NAME');
       this.arguments_.push(varName);
+      console.log(this.workspace.getVariableMap().getVariablesOfType(''));
       const variable = this.workspace.getVariable(varName, '');
       this.argumentVarModels_.push(variable);
 
@@ -671,6 +679,21 @@ const procedureDefMutator = {
     }
     this.updateParams_();
     Procedures.mutateCallers(this);
+
+    for (let i = this.model.getParameters().length; i >= 0; i--) {
+      this.model.deleteParameter(i);
+    }
+    let i = 0;
+    paramBlock = containerBlock.getInputTargetBlock('STACK');
+    while (paramBlock && !paramBlock.isInsertionMarker()) {
+      this.model.insertParameter(
+          new ObservableParameterModel(
+              this.workspace, paramBlock.getFieldValue('NAME')),
+          i);
+      paramBlock =
+          paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
+      i++;
+    }
 
     // Show/hide the statement input.
     let hasStatements = containerBlock.getFieldValue('STATEMENTS');

@@ -11,6 +11,8 @@ import type {IProcedureModel} from '../interfaces/i_procedure_model';
 import {triggerProceduresUpdate} from './update_procedures.js';
 import type {VariableModel} from '../variable_model.js';
 import type {Workspace} from '../workspace.js';
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.procedures.ObservableParameterModel');
 
 
 export class ObservableParameterModel implements IParameterModel {

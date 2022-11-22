@@ -58,9 +58,11 @@ suite('Procedures', function() {
         function() {
           // Create a stack of container, parameter.
           const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
           const containerBlock =
-              this.workspace.newBlock('procedures_mutatorcontainer');
-          const paramBlock = this.workspace.newBlock('procedures_mutatorarg');
+              mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
           paramBlock.setFieldValue('param name', 'NAME');
           containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
 
@@ -75,9 +77,11 @@ suite('Procedures', function() {
     test('adding a parameter adds a variable to the variable map', function() {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
       const containerBlock =
-          this.workspace.newBlock('procedures_mutatorcontainer');
-      const paramBlock = this.workspace.newBlock('procedures_mutatorarg');
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param name', 'NAME');
       containerBlock.getInput('STACK').connection
           .connect(paramBlock.previousConnection);
@@ -85,7 +89,7 @@ suite('Procedures', function() {
       defBlock.compose(containerBlock);
 
       chai.assert.isTrue(
-          this.workspace.getVariableMap().getVariables('')
+          this.workspace.getVariableMap().getVariablesOfType('')
                .some((variable) => variable.name === 'param name'),
           'Expected the variable map to have a matching variable');
     });
@@ -96,11 +100,13 @@ suite('Procedures', function() {
         function() {
           // Create a stack of container, param1, param2.
           const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
           const containerBlock =
-              this.workspace.newBlock('procedures_mutatorcontainer');
-          const paramBlock1 = this.workspace.newBlock('procedures_mutatorarg');
+              mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock1 = mutatorWorkspace.newBlock('procedures_mutatorarg');
           paramBlock1.setFieldValue('param name1', 'NAME');
-          const paramBlock2 = this.workspace.newBlock('procedures_mutatorarg');
+          const paramBlock2 = mutatorWorkspace.newBlock('procedures_mutatorarg');
           paramBlock2.setFieldValue('param name2', 'NAME');
           containerBlock.getInput('STACK').connection
               .connect(paramBlock1.previousConnection);
@@ -121,7 +127,7 @@ suite('Procedures', function() {
               'Expected the first parameter of the procedure to be param 2');
           chai.assert.equal(
               defBlock.getProcedureModel().getParameter(1).getName(),
-              'param name2',
+              'param name1',
               'Expected the second parameter of the procedure to be param 1');
         });
 
@@ -130,9 +136,12 @@ suite('Procedures', function() {
         function() {
           // Create a stack of container, parameter.
           const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
           const containerBlock =
-              this.workspace.newBlock('procedures_mutatorcontainer');
-          const paramBlock = this.workspace.newBlock('procedures_mutatorarg');
+              mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock.setFieldValue('param name', 'NAME');
           containerBlock.getInput('STACK').connection
               .connect(paramBlock.previousConnection);
           defBlock.compose(containerBlock);
@@ -148,9 +157,11 @@ suite('Procedures', function() {
     test('renaming a procedure parameter updates the parameter model', function() {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
       const containerBlock =
-          this.workspace.newBlock('procedures_mutatorcontainer');
-      const paramBlock = this.workspace.newBlock('procedures_mutatorarg');
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param name', 'NAME');
       containerBlock.getInput('STACK').connection
           .connect(paramBlock.previousConnection);
@@ -159,9 +170,10 @@ suite('Procedures', function() {
       paramBlock.setFieldValue('new param name', 'NAME');
       defBlock.compose(containerBlock);
 
-      chai.assert.isEmpty(
-          defBlock.getProcedureModel().getParameters(),
-          'Expected the procedure model to have no parameters');
+      chai.assert.equal(
+          defBlock.getProcedureModel().getParameter(0).getName(),
+          'new param name',
+          'Expected the procedure model to have a matching parameter');
     });
 
     test('deleting a procedure deletes the procedure model', function() {

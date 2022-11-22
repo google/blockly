@@ -273,7 +273,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
   }
 
   /**
-   * Show the inline free-text editor on top of the text.
+   * Show an editor for the field.
+   * Shows the inline free-text editor on top of the text by default.
+   * Shows a prompt editor for mobile browsers if the modalInputs option is
+   * enabled.
    *
    * @param _opt_e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
@@ -283,7 +286,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
   protected override showEditor_(_opt_e?: Event, opt_quietInput?: boolean) {
     this.workspace_ = (this.sourceBlock_ as BlockSvg).workspace;
     const quietInput = opt_quietInput || false;
-    if (!quietInput &&
+    if (!quietInput && this.workspace_.options.modalInputs &&
         (userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD)) {
       this.showPromptEditor_();
     } else {
@@ -293,7 +296,8 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
 
   /**
    * Create and show a text input editor that is a prompt (usually a popup).
-   * Mobile browsers have issues with in-line textareas (focus and keyboards).
+   * Mobile browsers may have issues with in-line textareas (focus and
+   * keyboards).
    */
   private showPromptEditor_() {
     dialog.prompt(

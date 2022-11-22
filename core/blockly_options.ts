@@ -32,6 +32,7 @@ export interface BlocklyOptions {
   maxBlocks?: number;
   maxInstances?: {[blockType: string]: number};
   media?: string;
+  modalInputs?: boolean;
   move?: MoveOptions;
   oneBasedIndex?: boolean;
   readOnly?: boolean;

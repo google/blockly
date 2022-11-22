@@ -38,6 +38,7 @@ export class Options {
   readOnly: boolean;
   maxBlocks: number;
   maxInstances: {[key: string]: number}|null;
+  modalInputs: boolean;
   pathToMedia: string;
   hasCategories: boolean;
   moveOptions: MoveOptions;
@@ -155,6 +156,11 @@ export class Options {
 
     const plugins = options['plugins'] || {};
 
+    let modalInputs = options['modalInputs'];
+    if (modalInputs === undefined) {
+      modalInputs = true;
+    }
+
     this.RTL = rtl;
     this.oneBasedIndex = oneBasedIndex;
     this.collapse = hasCollapse;
@@ -163,6 +169,7 @@ export class Options {
     this.readOnly = readOnly;
     this.maxBlocks = options['maxBlocks'] || Infinity;
     this.maxInstances = options['maxInstances'] ?? null;
+    this.modalInputs = modalInputs;
     this.pathToMedia = pathToMedia;
     this.hasCategories = hasCategories;
     this.moveOptions = Options.parseMoveOptions_(options, hasCategories);

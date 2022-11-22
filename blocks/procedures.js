@@ -301,6 +301,14 @@ const procedureDefGetDefMixin = function() {
     getVarModels: function() {
       return this.argumentVarModels_;
     },
+
+    /**
+     * Disposes of the data model for this procedure block when the block is
+     * disposed.
+     */
+    destroy: function() {
+      this.workspace.getProcedureMap().delete(this.getProcedureModel().getId());
+    },
   };
 
   mixin.model = new ObservableProcedureModel(

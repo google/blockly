@@ -452,6 +452,256 @@ suite('Procedures', function() {
     });
   });
 
+  suite.only('deserializing data models', function() {
+    suite('return types', function() {
+      test('procedure defs without returns have null return types', function() {
+        const json = {
+          'blocks': {
+            'languageVersion': 0,
+            'blocks': [
+              {
+                'type': 'procedures_defnoreturn',
+                'fields': {
+                  'NAME': 'test name',
+                },
+              },
+            ],
+          },
+        };
+        Blockly.serialization.workspaces.load(json, this.workspace);
+        const procedureModel =
+            this.workspace.getProcedureMap().getProcedures()[0];
+
+        chai.assert.isNull(
+            procedureModel.getReturnTypes(),
+            'Expected the return types to be null');
+      });
+
+      test('procedure defs with returns have array return types', function() {
+        const json = {
+          'blocks': {
+            'languageVersion': 0,
+            'blocks': [
+              {
+                'type': 'procedures_defreturn',
+                'fields': {
+                  'NAME': 'test name',
+                },
+              },
+            ],
+          },
+        };
+        Blockly.serialization.workspaces.load(json, this.workspace);
+        const procedureModel =
+            this.workspace.getProcedureMap().getProcedures()[0];
+
+        chai.assert.isArray(
+            procedureModel.getReturnTypes(),
+            'Expected the return types to be an array');
+      });
+    });
+
+    suite('json', function() {
+      test('procedure names get deserialized', function() {
+        const json = {
+          'blocks': {
+            'languageVersion': 0,
+            'blocks': [
+              {
+                'type': 'procedures_defnoreturn',
+                'fields': {
+                  'NAME': 'test name',
+                },
+              },
+            ],
+          },
+        };
+        Blockly.serialization.workspaces.load(json, this.workspace);
+        const procedureModel =
+            this.workspace.getProcedureMap().getProcedures()[0];
+
+        chai.assert.equal(
+            procedureModel.name,
+            'test name',
+            'Expected the name of the procedure model to equal the name ' +
+            'being deserialized.');
+      });
+
+      test('procedure parameter names get deserialized', function() {
+        const json = {
+          'blocks': {
+            'languageVersion': 0,
+            'blocks': [
+              {
+                'type': 'procedures_defnoreturn',
+                'fields': {
+                  'NAME': 'test name',
+                },
+                'extraState': {
+                  'params': [
+                    {
+                      'id': 'test id 1',
+                      'name': 'test name 1',
+                    },
+                    {
+                      'id': 'test id 2',
+                      'name': 'test name 2',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        };
+        Blockly.serialization.workspaces.load(json, this.workspace);
+        const procedureModel =
+            this.workspace.getProcedureMap().getProcedures()[0];
+
+        chai.assert.equal(
+            procedureModel.getParameter(0).getName(),
+            'test name 1',
+            'Expected the name of the first parameter to equal the name ' +
+            'being deserialized.');
+        chai.assert.equal(
+            procedureModel.getParameter(1).getName(),
+            'test name 2',
+            'Expected the name of the second parameter to equal the name ' +
+            'being deserialized.');
+      });
+
+      test('procedure variables get matching IDs', function() {
+        const json = {
+          'blocks': {
+            'languageVersion': 0,
+            'blocks': [
+              {
+                'type': 'procedures_defnoreturn',
+                'extraState': {
+                  'params': [
+                    {
+                      'name': 'test param name',
+                      'id': 'test param id',
+                    },
+                  ],
+                },
+                'fields': {
+                  'NAME': 'test proc name',
+                },
+              },
+            ],
+          },
+          'variables': [
+            {
+              'name': 'test param name',
+              'id': 'test param id',
+            },
+          ],
+        };
+        Blockly.serialization.workspaces.load(json, this.workspace);
+        const procedureModel =
+            this.workspace.getProcedureMap().getProcedures()[0];
+
+        chai.assert.equal(
+            procedureModel.getParameter(0).getVariableModel().getId(),
+            'test param id',
+            'Expected the variable id to match the serialized param id');
+      });
+    });
+
+    suite('xml', function() {
+      test('procedure names get deserialized', function() {
+        const xml = Blockly.Xml.textToDom(
+            `<block type="procedures_defnoreturn">` +
+            `  <field name="NAME">test name</field>` +
+            `</block>`);
+        Blockly.Xml.domToBlock(xml, this.workspace);
+        const procedureModel =
+            this.workspace.getProcedureMap().getProcedures()[0];
+
+        chai.assert.equal(
+            procedureModel.name,
+            'test name',
+            'Expected the name of the procedure model to equal the name ' +
+            'being deserialized.');
+      });
+
+      test('procedure parameter names get deserialized', function() {
+        const xml = Blockly.Xml.textToDom(
+            `<block type="procedures_defnoreturn">` +
+            `  <mutation>` +
+            `    <arg name="test name 1" varid="test var id 1"/>` +
+            `    <arg name="test name 2" varid="test var id 2"/>` +
+            `  </mutation>` +
+            `  <field name="NAME">test name</field>` +
+            `</block>`);
+        Blockly.Xml.domToBlock(xml, this.workspace);
+        const procedureModel =
+            this.workspace.getProcedureMap().getProcedures()[0];
+
+        chai.assert.equal(
+            procedureModel.getParameter(0).getName(),
+            'test name 1',
+            'Expected the name of the first parameter to equal the name ' +
+            'being deserialized.');
+        chai.assert.equal(
+            procedureModel.getParameter(1).getName(),
+            'test name 2',
+            'Expected the name of the second parameter to equal the name ' +
+            'being deserialized.');
+      });
+
+      test('procedure variables get matching IDs', function() {
+        const json = {
+          'blocks': {
+            'languageVersion': 0,
+            'blocks': [
+              {
+                'type': 'procedures_defnoreturn',
+                'extraState': {
+                  'params': [
+                    {
+                      'name': 'test param name',
+                      'id': 'test param id',
+                    },
+                  ],
+                },
+                'fields': {
+                  'NAME': 'test proc name',
+                },
+              },
+            ],
+          },
+          'variables': [
+            {
+              'name': 'test param name',
+              'id': 'test param id',
+            },
+          ],
+        };
+        const xml = Blockly.Xml.textToDom(
+            `<xml>` +
+            `  <variables>` +
+            `    <variable id ="test param id">test param name</variable>` +
+            `  </variables>` +
+            `  <block type="procedures_defnoreturn">` +
+            `    <mutation>` +
+            `      <arg name="test param name" varid="test param id"/>` +
+            `    </mutation>` +
+            `    <field name="NAME">test name</field>` +
+            `  </block>` +
+            `</xml>`);
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+        const procedureModel =
+            this.workspace.getProcedureMap().getProcedures()[0];
+
+        chai.assert.equal(
+            procedureModel.getParameter(0).getVariableModel().getId(),
+            'test param id',
+            'Expected the variable id to match the serialized param id');
+      });
+    });
+  });
+
   suite('Renaming procedures', function() {
     test('callers are updated to have the new name', function() {
       const defBlock = createProcDefBlock(this.workspace);

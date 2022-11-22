@@ -92,6 +92,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
       'procedure_def_validator_helper',
       'procedure_defnoreturn_get_caller_block_mixin',
       'procedure_defnoreturn_set_comment_helper',
+      'procedure_def_set_no_return_helper',
     ],
     'mutator': 'procedure_def_mutator',
   },
@@ -168,6 +169,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
       'procedure_def_validator_helper',
       'procedure_defreturn_get_caller_block_mixin',
       'procedure_defreturn_set_comment_helper',
+      'procedure_def_set_return_helper',
     ],
     'mutator': 'procedure_def_mutator',
   },
@@ -281,6 +283,11 @@ const procedureDefGetDefMixin = function() {
   const mixin = {
     model: null,
 
+    /**
+     * Returns the data model for this procedure block.
+     * @return {!Blockly.IProcedureModel} The data model for this procedure
+     *     block.
+     */
     getProcedureModel() {
       return this.model;
     },
@@ -551,6 +558,16 @@ const procedureDefMutator = {
    * @this {Block}
    */
   domToMutation: function(xmlElement) {
+    for (let i = 0; i < xmlElement.childNodes.length; i++) {
+      const node = xmlElement.childNodes[i];
+      if (node.nodeName.toLowerCase() !== 'arg') continue;
+      this.model.insertParameter(
+          new ObservableParameterModel(
+              this.workspace, node.getAttribute('name')),
+          i);
+    }
+
+    // TODO: Remove this data update code.
     this.arguments_ = [];
     this.argumentVarModels_ = [];
     for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
@@ -610,6 +627,15 @@ const procedureDefMutator = {
    *     statements.
    */
   loadExtraState: function(state) {
+    for (let i = 0; i < state['params'].length; i++) {
+      const param = state['params'][i];
+      this.model.insertParameter(
+          new ObservableParameterModel(
+              this.workspace, param.name, param.id),
+          i);
+    }
+
+    // TODO: Remove this data update code.
     this.arguments_ = [];
     this.argumentVarModels_ = [];
     if (state['params']) {
@@ -842,6 +868,20 @@ const procedureDefReturnGetCallerBlockMixin = {
 Extensions.registerMixin(
     'procedure_defreturn_get_caller_block_mixin',
     procedureDefReturnGetCallerBlockMixin);
+
+/** @this {Blockly.Block} */
+const procedureDefSetNoReturnHelper = function() {
+  this.getProcedureModel().setReturnTypes(null);
+};
+Extensions.register(
+  'procedure_def_set_no_return_helper', procedureDefSetNoReturnHelper);
+
+/** @this {Blockly.Block} */
+const procedureDefSetReturnHelper = function() {
+  this.getProcedureModel().setReturnTypes([]);
+};
+Extensions.register(
+  'procedure_def_set_return_helper', procedureDefSetReturnHelper);
 
 const validateProcedureParamMixin = {
   /**

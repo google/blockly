@@ -573,8 +573,7 @@ class FieldDropdown extends Field {
       }
       return null;
     }
-
-    if (this.sourceBlock_ && this.sourceBlock_.isRemoved()) {
+    if (this.sourceBlock_ && this.selectedOption_[0] === Msg.OPTION_VALUE_REMOVED && this.sourceBlock_.isRemoved()) {
       this.sourceBlock_.setRemoved(false);
     }
     return /** @type {string} */ (opt_newValue);

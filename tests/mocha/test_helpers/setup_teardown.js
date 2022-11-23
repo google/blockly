@@ -110,10 +110,12 @@ export function sharedTestSetup(options = {}) {
   this.sharedSetupCalled_ = true;
   // Sandbox created for greater control when certain stubs are cleared.
   this.sharedSetupSandbox_ = sinon.createSandbox();
-  this.clock = this.sharedSetupSandbox_.useFakeTimers();
-  if (options['fireEventsNow'] === undefined || options['fireEventsNow']) {
-    // Stubs event firing unless passed option "fireEventsNow: false"
-    this.eventsFireStub = createEventsFireStubFireImmediately_(this.clock);
+  if (options['useFakeTimers'] === undefined || options['useFakeTimers']) {
+    this.clock = this.sharedSetupSandbox_.useFakeTimers();
+    if (options['fireEventsNow'] === undefined || options['fireEventsNow']) {
+      // Stubs event firing unless passed option "fireEventsNow: false"
+      this.eventsFireStub = createEventsFireStubFireImmediately_(this.clock);
+    }
   }
   this.sharedCleanup = {
     blockTypesCleanup_: [],

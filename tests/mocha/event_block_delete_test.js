@@ -10,9 +10,9 @@ import * as eventUtils from '../../build/src/core/events/utils.js';
 import {defineRowBlock} from './test_helpers/block_definitions.js';
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
-suite('Block Delete Event', function() {
+suite.only('Block Delete Event', function() {
   setup(function() {
-    sharedTestSetup.call(this);
+    sharedTestSetup.call(this, {useFakeTimers: false});
     defineRowBlock();
     this.workspace = new Blockly.Workspace();
   });
@@ -22,9 +22,9 @@ suite('Block Delete Event', function() {
   });
 
   suite('Receiving', function() {
-    test('blocks receive their own delete events', function() {
+    test('blocks receive their own delete events', function(done) {
       Blockly.Blocks['test'] = {
-        onchange: function(e) {},
+        onchange: function(e) { },
       };
       // Need to stub the definition, because the property on the definition is
       // what gets registered as an event listener.
@@ -34,8 +34,10 @@ suite('Block Delete Event', function() {
       testBlock.dispose();
 
       const deleteClass = eventUtils.get(eventUtils.BLOCK_DELETE);
-      chai.assert.isTrue(spy.calledOnce);
-      chai.assert.isTrue(spy.getCall(0).args[0] instanceof deleteClass);
+      setTimeout(function() {
+        chai.assert.isTrue(spy.calledWith(sinon.match.instanceOf(deleteClass)));
+        done();
+      }, 1);
     });
   });
 

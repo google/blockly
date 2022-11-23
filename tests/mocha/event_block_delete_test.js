@@ -10,7 +10,7 @@ import * as eventUtils from '../../build/src/core/events/utils.js';
 import {defineRowBlock} from './test_helpers/block_definitions.js';
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
-suite.only('Block Delete Event', function() {
+suite('Block Delete Event', function() {
   setup(function() {
     sharedTestSetup.call(this, {useFakeTimers: false});
     defineRowBlock();

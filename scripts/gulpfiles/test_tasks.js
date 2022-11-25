@@ -20,9 +20,9 @@ const rimraf = require('rimraf');
 const buildTasks = require('./build_tasks');
 const {BUILD_DIR, RELEASE_DIR} = require('./config');
 
-const runMochaTestsInBrowser = require('../../tests/mocha/webdriver.js');
-const runGeneratorsInBrowser = require('../../tests/generators/webdriver.js');
-const runCompileCheckInBrowser = require('../../tests/compile/webdriver.js');
+const {runMochaTestsInBrowser} = require('../../tests/mocha/webdriver.js');
+const {runGeneratorsInBrowser} = require('../../tests/generators/webdriver.js');
+const {runCompileCheckInBrowser} = require('../../tests/compile/webdriver.js');
 
 const OUTPUT_DIR = 'build/generators';
 const GOLDEN_DIR = 'tests/generators/golden';
@@ -309,7 +309,7 @@ async function generators() {
     failed += checkResult(suffix);
   });
 
-if (failed === 0) {
+  if (failed === 0) {
     console.log(`${BOLD_GREEN}All generator tests passed.${ANSI_RESET}`);
   } else {
     console.log(

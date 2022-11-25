@@ -10,7 +10,6 @@
 const webdriverio = require('webdriverio');
 const {posixPath} = require('../../scripts/helpers');
 
-module.exports = runMochaTestsInBrowser;
 
 /**
  * Runs the Mocha tests in this directory in Chrome. It uses webdriverio to
@@ -97,3 +96,5 @@ if (require.main === module) {
     }
   });
 }
+
+module.exports = {runMochaTestsInBrowser};

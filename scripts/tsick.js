@@ -56,6 +56,10 @@ function rewriteFile(path) {
  * @return {string} Rewritten code for Closure Compiler.
  */
 function rewriteEnum(code) {
+  // Find all enum definitions.  They look like this:
+  // (function (names) {
+  //   ...
+  // })(names || (names = {}));
   const enumDefs = code.match(/\s+\(function \((\w+)\) \{\n[^}]*\}\)\(\1 [^)]+\1 = \{\}\)\);/g) || [];
   for (const oldEnumDef of enumDefs) {
     // enumDef looks like a bunch of lines in one of these two formats:

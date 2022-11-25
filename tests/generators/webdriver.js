@@ -11,7 +11,6 @@ var webdriverio = require('webdriverio');
 var fs = require('fs');
 var path = require('path');
 
-module.exports = runGeneratorsInBrowser;
 
 /**
  * Run the generator for a given language and save the results to a file.
@@ -112,3 +111,5 @@ if (require.main === module) {
     }
   });
 }
+
+module.exports = {runGeneratorsInBrowser};

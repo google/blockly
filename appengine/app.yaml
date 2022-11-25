@@ -60,6 +60,12 @@ handlers:
 - url: /static/demos/plane/.*
   static_files: redirect.html
   upload: redirect.html
+- url: /static/demos/keyboard_nav/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/custom-fields/.*
+  static_files: redirect.html
+  upload: redirect.html
 
 # Blockly files.
 - url: /static

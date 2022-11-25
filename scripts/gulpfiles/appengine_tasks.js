@@ -52,7 +52,7 @@ function copyStaticSrc(done) {
  */
 function copyBuilt(done) {
   return gulp.src(['build/msg/**/*', 'dist/*_compressed.js*'], {base: '.'})
-      .pipe(gulp.dest(demoTmpDir));
+      .pipe(gulp.dest(demoStaticTmpDir));
 }
 
 /**

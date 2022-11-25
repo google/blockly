@@ -19,7 +19,6 @@
 <script src="../bootstrap.js"></script>
 <script>
 var demoWorkspace = null;
-var outputCode = '';
 
 function start() {
   demoWorkspace = Blockly.inject('blocklyDiv', {
@@ -172,31 +171,26 @@ function toJavaScript() {
   var code = '\'use strict\';\n\n'
   code += javascriptGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
-  outputCode = code;
 }
 
 function toPython() {
   var code = pythonGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
-  outputCode = code;
 }
 
 function toPhp() {
   var code = phpGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
-  outputCode = code;
 }
 
 function toLua() {
   var code = luaGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
-  outputCode = code;
 }
 
 function toDart() {
   var code = dartGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
-  outputCode = code;
 }
 
 function changeIndex() {
@@ -205,7 +199,7 @@ function changeIndex() {
   demoWorkspace.getToolbox().flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
 }
 </script>
-<script type=module>
+<script type="module">
 // Wait for Blockly to finish loading before running tests.
 import '../bootstrap_done.mjs';
 

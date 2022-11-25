@@ -5,13 +5,12 @@
  */
 
 /**
- * @fileoverview Node.js script to run generator tests in Firefox, via webdriver.
+ * @fileoverview Node.js script to run generator tests in Chrome, via webdriver.
  */
 var webdriverio = require('webdriverio');
 var fs = require('fs');
 var path = require('path');
 
-module.exports = runGeneratorsInBrowser;
 
 /**
  * Run the generator for a given language and save the results to a file.
@@ -36,8 +35,8 @@ async function runLangGeneratorInBrowser(browser, filename, codegenFn) {
  * Runs the generator tests in Chrome. It uses webdriverio to
  * launch Chrome and load index.html. Outputs a summary of the test results
  * to the console and outputs files for later validation.
- * @param {string} outputDir output directory
- * @return the Thenable managing the processing of the browser tests.
+ * @param {string} outputDir Output directory.
+ * @return The Thenable managing the processing of the browser tests.
  */
 async function runGeneratorsInBrowser(outputDir) {
   var options = {
@@ -66,7 +65,7 @@ async function runGeneratorsInBrowser(outputDir) {
 
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
-  console.log('Initialized.\nLoading url: ' + url);
+  console.log('Loading url: ' + url);
   await browser.url(url);
 
   await browser.execute(function() {
@@ -112,3 +111,5 @@ if (require.main === module) {
     }
   });
 }
+
+module.exports = {runGeneratorsInBrowser};

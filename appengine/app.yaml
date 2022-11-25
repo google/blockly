@@ -15,49 +15,49 @@ handlers:
   static_files: redirect.html
   upload: redirect.html
 # Certain demos were moved on 25 Nov 2022.
--url: /static/demos/fixed/.*
+- url: /static/demos/fixed/.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/resizable/.*
+- url: /static/demos/resizable/.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/toolbox/.*
+- url: /static/demos/toolbox/.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/maxBlocks/.*
+- url: /static/demos/maxBlocks/.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/generator/.*
+- url: /static/demos/generator/.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/headless/.*
+- url: /static/demos/headless/.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/interpreter/step-execution.*
+- url: /static/demos/interpreter/step-execution.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/interpreter/async-execution.*
+- url: /static/demos/interpreter/async-execution.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/graph/.*
+- url: /static/demos/graph/.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/rtl/.*
+- url: /static/demos/rtl/.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/custom-dialogs/.*
+- url: /static/demos/custom-dialogs/.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/custom-fields/turtle/.*
+- url: /static/demos/custom-fields/turtle/.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/custom-fields/pitch/.*
+- url: /static/demos/custom-fields/pitch/.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/mirror/.*
+- url: /static/demos/mirror/.*
   static_files: redirect.html
   upload: redirect.html
--url: /static/demos/plane/.*
+- url: /static/demos/plane/.*
   static_files: redirect.html
   upload: redirect.html
 

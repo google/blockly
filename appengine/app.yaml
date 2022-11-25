@@ -14,6 +14,52 @@ handlers:
 - url: /static/apps/.*
   static_files: redirect.html
   upload: redirect.html
+# Certain demos were moved on 25 Nov 2022.
+-url: /demos/fixed/.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/resizable/.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/toolbox/.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/maxBlocks/.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/generator/.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/headless/.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/interpreter/step-execution.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/interpreter/async-execution.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/graph/.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/rtl/.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/custom-dialogs/.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/custom-fields/turtle/.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/custom-fields/pitch/.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/mirror/.*
+  static_files: redirect.html
+  upload: redirect.html
+-url: /demos/plane/.*
+  static_files: redirect.html
+  upload: redirect.html
 
 # Blockly files.
 - url: /static
@@ -50,4 +96,3 @@ handlers:
 - url: /.*
   script: auto
   secure: always
-  

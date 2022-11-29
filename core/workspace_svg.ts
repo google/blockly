@@ -959,7 +959,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param opt_own Whether to only return the workspace's own flyout.
    * @returns The flyout on this workspace.
-   * @internal
    */
   getFlyout(opt_own?: boolean): IFlyout|null {
     if (this.flyout || opt_own) {
@@ -975,7 +974,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Getter for the toolbox associated with this workspace, if one exists.
    *
    * @returns The toolbox on this workspace.
-   * @internal
    */
   getToolbox(): IToolbox|null {
     return this.toolbox_;

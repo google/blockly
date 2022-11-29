@@ -5,10 +5,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IProcedureModel} from '../interfaces/i_procedure_model.js';
+import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
 import {ObservableProcedureModel} from '../procedures.js';
 import * as registry from '../registry.js';
-import {Workspace} from '../workspace.js';
+import type {Workspace} from '../workspace.js';
 
 import {ProcedureBase} from './events_procedure_base.js';
 import * as eventUtils from './utils.js';

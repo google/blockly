@@ -12,7 +12,8 @@ import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown
 
 suite('Block Delete Event', function() {
   setup(function() {
-    sharedTestSetup.call(this, {useFakeTimers: false});
+    const {clock} = sharedTestSetup.call(this, {fireEventsNow: false});
+    this.clock = clock;
     defineRowBlock();
     this.workspace = new Blockly.Workspace();
   });
@@ -32,12 +33,13 @@ suite('Block Delete Event', function() {
       const testBlock = this.workspace.newBlock('test');
 
       testBlock.dispose();
+      this.clock.tick(2);  // Fire events. The built-in timeout is 0.
 
       const deleteClass = eventUtils.get(eventUtils.BLOCK_DELETE);
-      setTimeout(function() {
-        chai.assert.isTrue(spy.calledWith(sinon.match.instanceOf(deleteClass)));
-        done();
-      }, 1);
+      chai.assert.isTrue(
+          spy.calledWith(sinon.match.instanceOf(deleteClass)),
+          'Expected the block to receive its own delete event.');
+      done();
     });
   });
 

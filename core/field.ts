@@ -46,10 +46,16 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 /**
- * A function that is called to validate changes to the field's value. Takes in
- * a value & returns a validated value, or null to abort the change.
+ * A function that is called to validate changes to the field's value. For more
+ * information, see
+ * https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values
+ *
+ * @param value the updated T value to validate.
+ * @returns T, the modified input value to use.
+ * @returns null to ignore the input value and invoke `doValueInvalid_`.
+ * @returns undefined to use the input value as is for the field update.
  */
-export type FieldValidator<T = any> = (value: T) => T|null;
+export type FieldValidator<T = any> = (value: T) => T|null|undefined;
 
 /**
  * Abstract class for an editable field.
@@ -965,6 +971,8 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @sealed
    */
   setValue(newValue: T|null) {
+    // TODO: Do we need to keep logging?
+    // if (newValue === null) return;
     const doLogging = false;
     if (newValue === null) {
       doLogging && console.log('null, return');
@@ -972,49 +980,37 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
       return;
     }
 
-    const classValidatedValue = ((newValue: T): T|Error => {
-      const validatedValue = this.doClassValidation_(newValue);
-      // Class validators might accidentally forget to return, we'll ignore
-      // that.
-      return this.processValidation_(newValue, validatedValue);
-    })(newValue);
+    const classValidatedValue =
+        this.processValidation_(newValue, this.doClassValidation_(newValue));
+    if (classValidatedValue instanceof Error) return;
 
-    if (classValidatedValue instanceof Error) {
-      doLogging && console.log('invalid class validation, return');
-      return;
-    }
-
-    const validatedValue = ((newValue: T): T|Error => {
-      const localValidator = this.getValidator();
-      if (!localValidator) return newValue;
-      const validatedValue = localValidator.call(this, newValue);
-      // Local validators might accidentally forget to return, we'll ignore
-      // that.
-      return this.processValidation_(newValue, validatedValue);
-    })(classValidatedValue);
-
-    if (validatedValue instanceof Error) {
+    const localValidatedValue = this.processValidation_(
+        classValidatedValue,
+        this.getValidator()?.call(this, classValidatedValue));
+    // if (localValidatedValue instanceof Error) return;
+    if (localValidatedValue instanceof Error) {
       doLogging && console.log('invalid local validation, return');
       return;
     }
 
     const source = this.sourceBlock_;
+    // if (source && source.disposed) return;
     if (source && source.disposed) {
       doLogging && console.log('source disposed, return');
       return;
     }
 
     const oldValue = this.getValue();
-    if (oldValue === validatedValue) {
+    if (oldValue === localValidatedValue) {
       doLogging && console.log('same, doValueUpdate_, return');
-      this.doValueUpdate_(validatedValue);
+      this.doValueUpdate_(localValidatedValue);
       return;
     }
 
-    this.doValueUpdate_(validatedValue);
+    this.doValueUpdate_(localValidatedValue);
     if (source && eventUtils.isEnabled()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          source, 'field', this.name || null, oldValue, validatedValue));
+          source, 'field', this.name || null, oldValue, localValidatedValue));
     }
     if (this.isDirty_) {
       this.forceRerender();
@@ -1029,7 +1025,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @param validatedValue Validated value.
    * @returns New value, or an Error object.
    */
-  private processValidation_(newValue: T, validatedValue: T|null): T|Error {
+  private processValidation_(newValue: T, validatedValue?: T|null): T|Error {
     if (validatedValue === null) {
       this.doValueInvalid_(newValue);
       if (this.isDirty_) {
@@ -1037,7 +1033,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
       }
       return Error();
     }
-    return validatedValue !== undefined ? validatedValue : newValue;
+    return validatedValue === undefined ? newValue : validatedValue;
   }
 
   /**

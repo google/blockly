@@ -20,16 +20,16 @@ import {Field, FieldConfig, FieldValidator} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import type {Sentinel} from './utils/sentinel.js';
 
-type LegacyBool = 'TRUE'|'FALSE';
-type FieldBool = LegacyBool|boolean;
-export type FieldCheckboxValidator = FieldValidator<FieldBool>;
+type BoolString = 'TRUE'|'FALSE';
+type CheckboxBool = BoolString|boolean;
+export type FieldCheckboxValidator = FieldValidator<CheckboxBool>;
 
 /**
  * Class for a checkbox field.
  *
  * @alias Blockly.FieldCheckbox
  */
-export class FieldCheckbox extends Field<FieldBool> {
+export class FieldCheckbox extends Field<CheckboxBool> {
   /** Default character for the checkmark. */
   static readonly CHECK_CHAR = '✓';
   private checkChar_: string;
@@ -46,6 +46,12 @@ export class FieldCheckbox extends Field<FieldBool> {
   override CURSOR = 'default';
 
   /**
+   * NOTE: The default value is set in `Field`, so maintain that value instead
+   * of overwriting it here or in the constructor.
+   */
+  override value_: boolean|null = this.value_;
+
+  /**
    * @param opt_value The initial value of the field. Should either be 'TRUE',
    *     'FALSE' or a boolean. Defaults to 'FALSE'. Also accepts
    *     Field.SKIP_SETUP if you wish to skip setup (only used by subclasses
@@ -60,7 +66,7 @@ export class FieldCheckbox extends Field<FieldBool> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: FieldBool|Sentinel, opt_validator?: FieldCheckboxValidator,
+      opt_value?: CheckboxBool|Sentinel, opt_validator?: FieldCheckboxValidator,
       opt_config?: FieldCheckboxConfig) {
     super(Field.SKIP_SETUP);
 
@@ -151,7 +157,7 @@ export class FieldCheckbox extends Field<FieldBool> {
    * @param opt_newValue The input value.
    * @returns A valid value ('TRUE' or 'FALSE), or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: FieldBool): LegacyBool
+  protected override doClassValidation_(opt_newValue?: CheckboxBool): BoolString
       |null {
     if (opt_newValue === true || opt_newValue === 'TRUE') {
       return 'TRUE';
@@ -168,7 +174,7 @@ export class FieldCheckbox extends Field<FieldBool> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a either 'TRUE' or 'FALSE'.
    */
-  protected override doValueUpdate_(newValue: FieldBool) {
+  protected override doValueUpdate_(newValue: BoolString) {
     this.value_ = this.convertValueToBool_(newValue);
     // Update visual.
     if (this.textElement_) {
@@ -181,8 +187,8 @@ export class FieldCheckbox extends Field<FieldBool> {
    *
    * @returns The value of this field.
    */
-  override getValue(): LegacyBool|null {
-    if (this.value_ === null || typeof this.value_ === 'string') {
+  override getValue(): BoolString|null {
+    if (this.value_ === null) {
       return this.value_;
     }
     return this.value_ ? 'TRUE' : 'FALSE';
@@ -194,8 +200,7 @@ export class FieldCheckbox extends Field<FieldBool> {
    * @returns The boolean value of this field.
    */
   getValueBoolean(): boolean|null {
-    if (this.value_ === null) return null;
-    return parseLegacyBool(this.value_);
+    return this.value_;
   }
 
   /**
@@ -216,9 +221,9 @@ export class FieldCheckbox extends Field<FieldBool> {
    * @param value The value to convert.
    * @returns The converted value.
    */
-  private convertValueToBool_(value: FieldBool|null): boolean {
-    if (value === null) return false;
-    return parseLegacyBool(value);
+  private convertValueToBool_(value: CheckboxBool|null): boolean {
+    if (typeof value === 'string') return value === 'TRUE';
+    return !!value;
   }
 
   /**
@@ -252,10 +257,4 @@ export interface FieldCheckboxConfig extends FieldConfig {
  */
 export interface FieldCheckboxFromJsonConfig extends FieldCheckboxConfig {
   checked?: boolean;
-}
-
-function parseLegacyBool(value: FieldBool): boolean {
-  if (value === 'TRUE') return true;
-  if (value === 'FALSE') return false;
-  return value;
 }

@@ -13,7 +13,11 @@ import {ProcedureBase} from './events_procedure_base.js';
 import * as eventUtils from './utils.js';
 
 
+/**
+ * Represents a procedure data model being created.
+ */
 export class ProcedureCreate extends ProcedureBase {
+  /** A string used to check the type of the event. */
   type = eventUtils.PROCEDURE_CREATE;
 
   constructor(workspace: Workspace, model: IProcedureModel) {

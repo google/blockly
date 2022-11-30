@@ -14,9 +14,17 @@ import {ProcedureParameterBase} from './events_procedure_parameter_base.js';
 import * as eventUtils from './utils.js';
 
 
+/**
+ * Represents a parameter being added to a procedure.
+ */
 export class ProcedureParameterCreate extends ProcedureParameterBase {
+  /** A string used to check the type of the event. */
   type = eventUtils.PROCEDURE_PARAMETER_CREATE;
 
+  /**
+   * @param parameter The parameter model that was just added to the procedure.
+   * @param index The index the parameter was inserted at.
+   */
   constructor(
       workspace: Workspace, procedure: IProcedureModel,
       public readonly parameter: IParameterModel,

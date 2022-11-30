@@ -14,7 +14,11 @@ import {ProcedureBase} from './events_procedure_base.js';
 import * as eventUtils from './utils.js';
 
 
+/**
+ * Represents a procedure data model being deleted.
+ */
 export class ProcedureDelete extends ProcedureBase {
+  /** A string used to check the type of the event. */
   type = eventUtils.PROCEDURE_DELETE;
 
   constructor(workspace: Workspace, model: IProcedureModel) {

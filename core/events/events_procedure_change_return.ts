@@ -13,10 +13,20 @@ import {ProcedureBase} from './events_procedure_base.js';
 import * as eventUtils from './utils.js';
 
 
+/**
+ * Represents a procedure's return type/status changing.
+ */
 export class ProcedureChangeReturn extends ProcedureBase {
+  /** A string used to check the type of the event. */
   type = eventUtils.PROCEDURE_CHANGE_RETURN;
+
+  /** The new type(s) the procedure's return has been set to. */
   private newTypes: string[]|null;
 
+  /**
+   * @param oldTypes The type(s) the procedure's return was set to before it
+   *     changed.
+   */
   constructor(
       workpace: Workspace, model: IProcedureModel,
       public readonly oldTypes: string[]|null) {

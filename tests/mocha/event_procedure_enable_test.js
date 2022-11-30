@@ -43,7 +43,7 @@ suite('Procedure Enable Event', function() {
         const event = this.createEventToState(final);
         this.procedureMap.add(initial);
 
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         chai.assert.equal(
             initial.getEnabled(),
@@ -59,7 +59,7 @@ suite('Procedure Enable Event', function() {
         this.procedureMap.add(initial);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventFiredShallow(
             this.eventSpy,
@@ -75,7 +75,7 @@ suite('Procedure Enable Event', function() {
         this.procedureMap.add(initial);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventNotFired(
             this.eventSpy,
@@ -92,7 +92,7 @@ suite('Procedure Enable Event', function() {
             const event = this.createEventToState(final);
     
             chai.assert.throws(() => {
-              event.run(true /* forward */);
+              event.run(/* forward= */ true);
             });
           });
     });
@@ -108,7 +108,7 @@ suite('Procedure Enable Event', function() {
         const event = this.createEventToState(undoable);
         this.procedureMap.add(initial);
 
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         chai.assert.equal(
             initial.getEnabled(),
@@ -127,7 +127,7 @@ suite('Procedure Enable Event', function() {
         this.procedureMap.add(initial);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         assertEventFiredShallow(
             this.eventSpy,
@@ -146,7 +146,7 @@ suite('Procedure Enable Event', function() {
         this.procedureMap.add(initial);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         assertEventNotFired(
             this.eventSpy,
@@ -167,7 +167,7 @@ suite('Procedure Enable Event', function() {
             const event = this.createEventToState(undoable);
     
             chai.assert.throws(() => {
-              event.run(false /* backward */);
+              event.run(/* forward= */ false);
             });
           });
     });

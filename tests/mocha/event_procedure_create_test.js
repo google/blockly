@@ -39,7 +39,7 @@ suite('Procedure Create Event', function() {
         const model = this.createProcedureModel('test name', 'test id');
         const event = this.createEventToState(model);
 
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         const createdProc = this.procedureMap.get('test id');
         chai.assert.isDefined(createdProc, 'Expected the procedure to exist');
@@ -58,7 +58,7 @@ suite('Procedure Create Event', function() {
         const event = this.createEventToState(model);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventFiredShallow(
             this.eventSpy,
@@ -75,7 +75,7 @@ suite('Procedure Create Event', function() {
             const event = this.createEventToState(model);
             this.procedureMap.add(model);
     
-            event.run(true /* forward */);
+            event.run(/* forward= */ true);
     
             chai.assert.equal(
                 this.procedureMap.get('test id'),
@@ -90,7 +90,7 @@ suite('Procedure Create Event', function() {
         this.procedureMap.add(model);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventNotFired(
             this.eventSpy,
@@ -108,7 +108,7 @@ suite('Procedure Create Event', function() {
             const event = this.createEventToState(model);
             this.procedureMap.add(model);
     
-            event.run(false /* backward */);
+            event.run(/* forward= */ false);
     
             chai.assert.isUndefined(
                 this.procedureMap.get('test id'),
@@ -121,7 +121,7 @@ suite('Procedure Create Event', function() {
         this.procedureMap.add(model);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         assertEventFiredShallow(
             this.eventSpy,
@@ -135,7 +135,7 @@ suite('Procedure Create Event', function() {
         const event = this.createEventToState(model);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         assertEventNotFired(
             this.eventSpy,

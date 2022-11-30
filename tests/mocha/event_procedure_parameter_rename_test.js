@@ -57,7 +57,7 @@ suite('Procedure Parameter Rename Event', function() {
         const event = this.createEventToState(finalProc, finalParam);
         this.procedureMap.add(initialProc);
 
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         chai.assert.equal(
           initialParam.getName(),
@@ -75,7 +75,7 @@ suite('Procedure Parameter Rename Event', function() {
         this.procedureMap.add(initialProc);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventFiredShallow(
             this.eventSpy,
@@ -97,7 +97,7 @@ suite('Procedure Parameter Rename Event', function() {
         this.procedureMap.add(initialProc);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventNotFired(
             this.eventSpy,
@@ -117,7 +117,7 @@ suite('Procedure Parameter Rename Event', function() {
             const event = this.createEventToState(finalProc, finalParam);
     
             chai.assert.throws(() => {
-              event.run(true /* forward */);
+              event.run(/* forward= */ true);
             });
           });
     });
@@ -134,7 +134,7 @@ suite('Procedure Parameter Rename Event', function() {
         this.procedureMap.add(initialProc);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         chai.assert.equal(
           initialParam.getName(),
@@ -153,7 +153,7 @@ suite('Procedure Parameter Rename Event', function() {
         this.procedureMap.add(initialProc);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
 
         assertEventFiredShallow(
@@ -176,7 +176,7 @@ suite('Procedure Parameter Rename Event', function() {
         const event = this.createEventToState(undoableProc, undoableParam);
         this.procedureMap.add(initialProc);
 
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
 
         assertEventNotFired(
@@ -198,7 +198,7 @@ suite('Procedure Parameter Rename Event', function() {
             const event = this.createEventToState(undoableProc, undoableParam);
 
             chai.assert.throws(() => {
-              event.run(false /* backward */);
+              event.run(/* forward= */ false);
             });
           });
     });

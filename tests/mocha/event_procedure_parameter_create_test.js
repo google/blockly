@@ -54,7 +54,7 @@ suite('Procedure Parameter Create Event', function() {
         const actualProc = this.createProcedureModel('test name', 'test id');
         this.procedureMap.add(actualProc);
 
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         const createdParam = actualProc.getParameter(0);
         chai.assert.isDefined(createdParam, 'Expected the parameter to exist');
@@ -77,7 +77,7 @@ suite('Procedure Parameter Create Event', function() {
         this.procedureMap.add(actualProc);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventFiredShallow(
             this.eventSpy,
@@ -101,7 +101,7 @@ suite('Procedure Parameter Create Event', function() {
             this.procedureMap.add(modelProc);
     
             this.eventSpy.resetHistory();
-            event.run(true /* forward */);
+            event.run(/* forward= */ true);
 
             const actualProc = this.procedureMap.get('test id');
             chai.assert.equal(
@@ -124,7 +124,7 @@ suite('Procedure Parameter Create Event', function() {
             this.procedureMap.add(modelProc);
     
             this.eventSpy.resetHistory();
-            event.run(true /* forward */);
+            event.run(/* forward= */ true);
 
             assertEventNotFired(
                 this.eventSpy,
@@ -142,7 +142,7 @@ suite('Procedure Parameter Create Event', function() {
         const event = this.createEventToState(proc, param);
         this.procedureMap.add(proc);
 
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         chai.assert.isUndefined(
             proc.getParameter(0),
@@ -157,7 +157,7 @@ suite('Procedure Parameter Create Event', function() {
         this.procedureMap.add(proc);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         assertEventFiredShallow(
             this.eventSpy,
@@ -186,7 +186,7 @@ suite('Procedure Parameter Create Event', function() {
         proc.deleteParameter(0);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         assertEventNotFired(
             this.eventSpy,

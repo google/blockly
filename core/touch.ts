@@ -179,7 +179,7 @@ export function checkTouchIdentifier(e: PointerEvent): boolean {
  * @alias Blockly.Touch.setClientFromTouch
  */
 export function setClientFromTouch(e: Event|PseudoEvent) {
-  deprecation.warn('setClientFromTouch()', 'version 10', 'version 11');
+  deprecation.warn('setClientFromTouch()', 'version 9', 'version 10');
   // AnyDuringMigration because:  Property 'changedTouches' does not exist on
   // type 'PseudoEvent | Event'.
   if (e.type.startsWith('touch') && (e as AnyDuringMigration).changedTouches) {
@@ -204,7 +204,7 @@ export function setClientFromTouch(e: Event|PseudoEvent) {
  * @alias Blockly.Touch.isMouseOrTouchEvent
  */
 export function isMouseOrTouchEvent(e: Event|PseudoEvent): boolean {
-  deprecation.warn('isMouseOrTouchEvent()', 'version 10', 'version 11');
+  deprecation.warn('isMouseOrTouchEvent()', 'version 9', 'version 10');
   return e.type.startsWith('touch') || e.type.startsWith('mouse') ||
       e.type.startsWith('pointer');
 }
@@ -217,7 +217,7 @@ export function isMouseOrTouchEvent(e: Event|PseudoEvent): boolean {
  * @alias Blockly.Touch.isTouchEvent
  */
 export function isTouchEvent(e: Event|PseudoEvent): boolean {
-  deprecation.warn('isTouchEvent()', 'version 10', 'version 11');
+  deprecation.warn('isTouchEvent()', 'version 9', 'version 10');
   return e.type.startsWith('touch') || e.type.startsWith('pointer');
 }
 
@@ -232,7 +232,7 @@ export function isTouchEvent(e: Event|PseudoEvent): boolean {
  * @alias Blockly.Touch.splitEventByTouches
  */
 export function splitEventByTouches(e: Event): Array<Event|PseudoEvent> {
-  deprecation.warn('splitEventByTouches()', 'version 10', 'version 11');
+  deprecation.warn('splitEventByTouches()', 'version 9', 'version 10');
   const events = [];
   // AnyDuringMigration because:  Property 'changedTouches' does not exist on
   // type 'PseudoEvent | Event'.

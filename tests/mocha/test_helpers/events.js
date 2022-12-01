@@ -20,6 +20,18 @@ export function createChangeListenerSpy(workspace) {
 }
 
 /**
+ * Creates a mock event for testing if arbitrary events get fired/received.
+ * @param {!Blockly.Workspace} workspace The workspace to create the mock in.
+ * @return {!Object} A mock event that can be fired via Blockly.Events.fire
+ */
+export function createMockEvent(workspace) {
+  return {
+    isNull: () => false,
+    workspaceId: workspace.id,
+  };
+}
+
+/**
  * Asserts whether the given xml property has the expected property.
  * @param {!Node} xmlValue The xml value to check.
  * @param {!Node|string} expectedValue The expected value.

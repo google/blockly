@@ -11,11 +11,12 @@ import {createDeprecationWarningStub} from './test_helpers/warnings.js';
 import {createRenderedBlock} from './test_helpers/block_definitions.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {createChangeListenerSpy, createMockEvent} from './test_helpers/events.js';
 
 
 suite('Blocks', function() {
   setup(function() {
-    sharedTestSetup.call(this, {fireEventsNow: false});
+    this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
     this.workspace = new Blockly.Workspace();
     Blockly.defineBlocksWithJsonArray([
       {
@@ -198,7 +199,70 @@ suite('Blocks', function() {
       });
     });
   });
-  suite('Disposal', function() {
+  suite.only('Disposal', function() {
+    suite('calling destroy', function() {
+      setup(function() {
+        Blockly.Blocks['destroyable_block'] = {
+          init: function() { },
+          destroy: function() { },
+        };
+        this.block = this.workspace.newBlock('destroyable_block');
+      });
+
+      teardown(function() {
+        delete Blockly.Blocks['destroyable_block'];
+      });
+
+      test('destroy is called', function() {
+        const spy = sinon.spy(this.block, 'destroy');
+
+        this.block.dispose();
+
+        chai.assert.isTrue(spy.calledOnce, 'Expected destroy to be called.');
+      });
+
+      test('disposing is set before destroy', function() {
+        let disposing = null;
+        this.block.destroy = function() {
+          disposing = this.disposing;
+        };
+
+        this.block.dispose();
+
+        chai.assert.isTrue(
+            disposing,
+            'Expected disposing to be set to true before destroy is called.');
+      });
+
+      test('disposed is not set before destroy', function() {
+        let disposed = null;
+        this.block.destroy = function() {
+          disposed = this.disposed;
+        };
+
+        this.block.dispose();
+
+        chai.assert.isFalse(
+            disposed,
+            'Expected disposed to be false when destroy is called');
+      });
+
+      test('events can be fired from destroy', function() {
+        const mockEvent = createMockEvent(this.workspace);
+        this.block.destroy = function() {
+          Blockly.Events.fire(mockEvent);
+        };
+        const spy = createChangeListenerSpy(this.workspace);
+
+        this.block.dispose();
+        this.clock.runAll();
+
+        chai.assert.isTrue(
+            spy.calledWith(mockEvent),
+            'Expected to be able to fire events from destroy');
+      });
+    });
+
     suite('stack/row healing', function() {
       function assertDisposedNoheal(blocks) {
         chai.assert.isFalse(blocks.A.disposed);

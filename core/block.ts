@@ -324,16 +324,15 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (this.isDeadOrDying()) {
       return;
     }
+    // Terminate onchange event calls.
+    if (this.onchangeWrapper_) {
+      this.workspace.removeChangeListener(this.onchangeWrapper_);
+    }
 
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
     }
-
-    if (this.onchangeWrapper_) {
-      this.workspace.removeChangeListener(this.onchangeWrapper_);
-    }
-
     eventUtils.disable();
 
     try {

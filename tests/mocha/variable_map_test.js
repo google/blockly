@@ -255,7 +255,7 @@ suite('Variable Map', function() {
     });
   });
 
-  suite.only('event firing', function() {
+  suite('event firing', function() {
     setup(function() {
       this.eventSpy = createChangeListenerSpy(this.workspace);
     });

@@ -59,6 +59,7 @@ export class VariableMap {
    * @internal
    */
   renameVariable(variable: VariableModel, newName: string) {
+    if (variable.name === newName) return;
     const type = variable.type;
     const conflictVar = this.getVariable(newName, type);
     const blocks = this.workspace.getAllBlocks(false);

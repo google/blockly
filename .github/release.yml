@@ -4,12 +4,16 @@ changelog:
   exclude:
     labels:
       - ignore-for-release
+      - "PR: chore"
     authors:
       - dependabot
   categories:
     - title: Breaking Changes 🛠
       labels:
         - breaking change
+    - title: Deprecating Changes
+      labels:
+        - deprecation
     - title: New Features
       labels:
         - "PR: feature"
@@ -18,9 +22,11 @@ changelog:
         - "PR: fix"
     - title: Cleanup ♻️
       labels:
-        - "PR: chore"
         - "PR: docs"
         - "PR: refactor"
+    - title: Reverted changes
+      labels:
+        - "PR: revert"
     - title: Other Changes
       labels:
         - "*"

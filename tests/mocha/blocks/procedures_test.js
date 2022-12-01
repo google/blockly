@@ -11,6 +11,7 @@ import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, c
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from '../test_helpers/setup_teardown.js';
 
+
 suite('Procedures', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -1206,46 +1207,6 @@ suite('Procedures', function() {
         },
       ];
       runSerializationTestSuite(testCases);
-    });
-  });
-});
-
-suite('Procedures, dont auto fire events', function() {
-  setup(function() {
-    sharedTestSetup.call(this, {fireEventsNow: false});
-    this.workspace = new Blockly.Workspace();
-  });
-  teardown(function() {
-    sharedTestTeardown.call(this);
-  });
-
-  const testSuites = [
-    {title: 'procedures_defreturn', hasReturn: true,
-      defType: 'procedures_defreturn', callType: 'procedures_callreturn'},
-    {title: 'procedures_defnoreturn', hasReturn: false,
-      defType: 'procedures_defnoreturn', callType: 'procedures_callnoreturn'},
-  ];
-
-  testSuites.forEach((testSuite) => {
-    suite(testSuite.title, function() {
-      suite('Disposal', function() {
-        test('callers are disposed when definitions are disposed', function() {
-          this.defBlock = new Blockly.Block(this.workspace, testSuite.defType);
-          this.defBlock.setFieldValue('proc name', 'NAME');
-          this.callerBlock = new Blockly.Block(
-              this.workspace, testSuite.callType);
-          this.callerBlock.setFieldValue('proc name', 'NAME');
-
-          // Run the clock now so that the create events get fired. If we fire
-          // it after disposing, a new procedure def will get created when
-          // the caller create event is heard.
-          this.clock.runAll();
-          this.defBlock.dispose();
-          this.clock.runAll();
-
-          chai.assert.isTrue(this.callerBlock.disposed);
-        });
-      });
     });
   });
 });

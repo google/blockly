@@ -21,24 +21,6 @@ suite('Block Delete Event', function() {
     sharedTestTeardown.call(this);
   });
 
-  suite('Receiving', function() {
-    test('blocks receive their own delete events', function() {
-      Blockly.Blocks['test'] = {
-        onchange: function(e) {},
-      };
-      // Need to stub the definition, because the property on the definition is
-      // what gets registered as an event listener.
-      const spy = sinon.spy(Blockly.Blocks['test'], 'onchange');
-      const testBlock = this.workspace.newBlock('test');
-
-      testBlock.dispose();
-
-      const deleteClass = eventUtils.get(eventUtils.BLOCK_DELETE);
-      chai.assert.isTrue(spy.calledOnce);
-      chai.assert.isTrue(spy.getCall(0).args[0] instanceof deleteClass);
-    });
-  });
-
   suite('Serialization', function() {
     test('events round-trip through JSON', function() {
       const block = this.workspace.newBlock('row_block', 'block_id');

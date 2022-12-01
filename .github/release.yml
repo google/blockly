@@ -8,25 +8,25 @@ changelog:
     authors:
       - dependabot
   categories:
-    - title: Breaking Changes 🛠
+    - title: Breaking changes 🛠
       labels:
         - breaking change
-    - title: Deprecating Changes
+    - title: Deprecations 🧹 - APIs that may be removed in future releases
       labels:
         - deprecation
-    - title: New Features
+    - title: New features ✨
       labels:
         - "PR: feature"
-    - title: Bug fixes
+    - title: Bug fixes 🐛
       labels:
         - "PR: fix"
     - title: Cleanup ♻️
       labels:
         - "PR: docs"
         - "PR: refactor"
-    - title: Reverted changes
+    - title: Reverted changes ⎌
       labels:
         - "PR: revert"
-    - title: Other Changes
+    - title: Other changes
       labels:
         - "*"

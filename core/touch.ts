@@ -126,7 +126,12 @@ export function clearTouchIdentifier() {
  * @alias Blockly.Touch.shouldHandleEvent
  */
 export function shouldHandleEvent(e: Event): boolean {
-  return !(e instanceof PointerEvent) || checkTouchIdentifier(e);
+  // Do not replace the startsWith with a check for `instanceof PointerEvent`.
+  // `click` and `contextmenu` are PointerEvents in some browsers,
+  // despite not starting with `pointer`, but we want to always handle them
+  // without worrying about touch identifiers.
+  return !(e.type.startsWith('pointer')) ||
+      (e instanceof PointerEvent && checkTouchIdentifier(e));
 }
 
 /**

@@ -10,8 +10,7 @@ import {assertEventFiredShallow, assertEventNotFired, createChangeListenerSpy} f
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
-// TODO (#6519): Unskip.
-suite.skip('Procedure Change Return Event', function() {
+suite('Procedure Change Return Event', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -34,10 +33,13 @@ suite.skip('Procedure Change Return Event', function() {
       };
 
       this.createEventToState = (procedureModel) => {
-        return new Blockly.Events.ProcedureChangeReturn(
+        const event = new Blockly.Events.ProcedureChangeReturn(
             this.workspace,
             procedureModel,
-            procedureModel.getReturnTypes());
+            procedureModel.getReturnTypes() === DEFAULT_TYPES ?
+                NON_DEFAULT_TYPES :
+                DEFAULT_TYPES);
+        return event;
       };
     });
 
@@ -49,7 +51,7 @@ suite.skip('Procedure Change Return Event', function() {
         const event = this.createEventToState(final);
         this.procedureMap.add(initial);
 
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         chai.assert.equal(
           initial.getReturnTypes(),
@@ -65,7 +67,7 @@ suite.skip('Procedure Change Return Event', function() {
         this.procedureMap.add(initial);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventFiredShallow(
             this.eventSpy,
@@ -84,7 +86,7 @@ suite.skip('Procedure Change Return Event', function() {
         this.procedureMap.add(initial);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventNotFired(
             this.eventSpy,
@@ -102,7 +104,7 @@ suite.skip('Procedure Change Return Event', function() {
             const event = this.createEventToState(final);
     
             chai.assert.throws(() => {
-              event.run(true /* forward */);
+              event.run(/* forward= */ true);
             });
           });
     });
@@ -116,7 +118,7 @@ suite.skip('Procedure Change Return Event', function() {
         const event = this.createEventToState(undoable);
         this.procedureMap.add(initial);
 
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         chai.assert.equal(
           initial.getReturnTypes(),
@@ -133,14 +135,14 @@ suite.skip('Procedure Change Return Event', function() {
         this.procedureMap.add(initial);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         assertEventFiredShallow(
             this.eventSpy,
             Blockly.Events.ProcedureChangeReturn,
             {
               model: initial,
-              oldTypes: DEFAULT_TYPES,
+              oldTypes: NON_DEFAULT_TYPES,
             },
             this.workspace.id);
       });
@@ -153,7 +155,7 @@ suite.skip('Procedure Change Return Event', function() {
         this.procedureMap.add(initial);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         assertEventNotFired(
             this.eventSpy,
@@ -173,7 +175,7 @@ suite.skip('Procedure Change Return Event', function() {
             const event = this.createEventToState(undoable);
     
             chai.assert.throws(() => {
-              event.run(false /* backward */);
+              event.run(/* forward= */ false);
             });
           });
     });

@@ -9,6 +9,9 @@ import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
 import type {Workspace} from '../workspace.js';
 
 
+/**
+ * The base event for an event associated with a procedure.
+ */
 export class ProcedureBase extends AbstractEvent {
   isBlank = false;
 

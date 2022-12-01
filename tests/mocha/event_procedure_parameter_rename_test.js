@@ -10,8 +10,7 @@ import {assertEventFiredShallow, assertEventNotFired, createChangeListenerSpy} f
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
-// TODO (#6519): Unskip.
-suite.skip('Procedure Parameter Rename Event', function() {
+suite('Procedure Parameter Rename Event', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -38,11 +37,13 @@ suite.skip('Procedure Parameter Rename Event', function() {
       };
 
       this.createEventToState = (procedureModel, parameterModel) => {
-        return new Blockly.Events.ProcedureRename(
+        return new Blockly.Events.ProcedureParameterRename(
             this.workspace,
             procedureModel,
             parameterModel,
-            parameterModel.getName());
+            parameterModel.getName() === DEFAULT_NAME ?
+                NON_DEFAULT_NAME :
+                DEFAULT_NAME);
       };
     });
 
@@ -56,7 +57,7 @@ suite.skip('Procedure Parameter Rename Event', function() {
         const event = this.createEventToState(finalProc, finalParam);
         this.procedureMap.add(initialProc);
 
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         chai.assert.equal(
           initialParam.getName(),
@@ -74,7 +75,7 @@ suite.skip('Procedure Parameter Rename Event', function() {
         this.procedureMap.add(initialProc);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventFiredShallow(
             this.eventSpy,
@@ -96,7 +97,7 @@ suite.skip('Procedure Parameter Rename Event', function() {
         this.procedureMap.add(initialProc);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventNotFired(
             this.eventSpy,
@@ -116,7 +117,7 @@ suite.skip('Procedure Parameter Rename Event', function() {
             const event = this.createEventToState(finalProc, finalParam);
     
             chai.assert.throws(() => {
-              event.run(true /* forward */);
+              event.run(/* forward= */ true);
             });
           });
     });
@@ -133,7 +134,7 @@ suite.skip('Procedure Parameter Rename Event', function() {
         this.procedureMap.add(initialProc);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         chai.assert.equal(
           initialParam.getName(),
@@ -152,7 +153,7 @@ suite.skip('Procedure Parameter Rename Event', function() {
         this.procedureMap.add(initialProc);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
 
         assertEventFiredShallow(
@@ -175,7 +176,7 @@ suite.skip('Procedure Parameter Rename Event', function() {
         const event = this.createEventToState(undoableProc, undoableParam);
         this.procedureMap.add(initialProc);
 
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
 
         assertEventNotFired(
@@ -195,10 +196,9 @@ suite.skip('Procedure Parameter Rename Event', function() {
             initialParam.setName(NON_DEFAULT_NAME);
             undoableParam.setName(NON_DEFAULT_NAME);
             const event = this.createEventToState(undoableProc, undoableParam);
-            this.procedureMap.add(initialProc);
 
             chai.assert.throws(() => {
-              event.run(false /* backward */);
+              event.run(/* forward= */ false);
             });
           });
     });

@@ -10,8 +10,7 @@ import {assertEventFiredShallow, assertEventNotFired, createChangeListenerSpy} f
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
-// TODO (#6519): Unskip.
-suite.skip('Procedure Create Event', function() {
+suite('Procedure Create Event', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -40,7 +39,7 @@ suite.skip('Procedure Create Event', function() {
         const model = this.createProcedureModel('test name', 'test id');
         const event = this.createEventToState(model);
 
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         const createdProc = this.procedureMap.get('test id');
         chai.assert.isDefined(createdProc, 'Expected the procedure to exist');
@@ -59,12 +58,12 @@ suite.skip('Procedure Create Event', function() {
         const event = this.createEventToState(model);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventFiredShallow(
             this.eventSpy,
             Blockly.Events.ProcedureCreate,
-            {model: this.procedureMap.get('testid')},
+            {model: this.procedureMap.get('test id')},
             this.workspace.id);
       });
 
@@ -76,7 +75,7 @@ suite.skip('Procedure Create Event', function() {
             const event = this.createEventToState(model);
             this.procedureMap.add(model);
     
-            event.run(true /* forward */);
+            event.run(/* forward= */ true);
     
             chai.assert.equal(
                 this.procedureMap.get('test id'),
@@ -91,7 +90,7 @@ suite.skip('Procedure Create Event', function() {
         this.procedureMap.add(model);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventNotFired(
             this.eventSpy,
@@ -109,7 +108,7 @@ suite.skip('Procedure Create Event', function() {
             const event = this.createEventToState(model);
             this.procedureMap.add(model);
     
-            event.run(false /* backward */);
+            event.run(/* forward= */ false);
     
             chai.assert.isUndefined(
                 this.procedureMap.get('test id'),
@@ -122,7 +121,7 @@ suite.skip('Procedure Create Event', function() {
         this.procedureMap.add(model);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         assertEventFiredShallow(
             this.eventSpy,
@@ -131,18 +130,12 @@ suite.skip('Procedure Create Event', function() {
             this.workspace.id);
       });
 
-      test.skip(
-          'a model is not deleted if no model with a matching ID exists',
-          function() {
-            // TODO: Do we want this to throw? warn? do nothing?
-          });
-          
       test('not deleting a model does not fire a delete event', function() {
         const model = this.createProcedureModel('test name', 'test id');
         const event = this.createEventToState(model);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         assertEventNotFired(
             this.eventSpy,

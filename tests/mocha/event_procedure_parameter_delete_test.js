@@ -10,8 +10,7 @@ import {assertEventFiredShallow, assertEventNotFired, createChangeListenerSpy} f
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
-// TODO (#6519): Unskip.
-suite.skip('Procedure Parameter Delete Event', function() {
+suite('Procedure Parameter Delete Event', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -41,8 +40,8 @@ suite.skip('Procedure Parameter Delete Event', function() {
         };
 
       this.createEventToState = (procedureModel, parameterModel) => {
-        return new Blockly.Events.ProcedureParameterCreate(
-            this.workspace, procedureModel, parameterModel);
+        return new Blockly.Events.ProcedureParameterDelete(
+            this.workspace, procedureModel, parameterModel, 0);
       };
     });
 
@@ -54,7 +53,7 @@ suite.skip('Procedure Parameter Delete Event', function() {
         const event = this.createEventToState(proc, param);
         this.procedureMap.add(proc);
 
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         chai.assert.isUndefined(
             proc.getParameter(0),
@@ -69,7 +68,7 @@ suite.skip('Procedure Parameter Delete Event', function() {
         this.procedureMap.add(proc);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ true);
 
         assertEventFiredShallow(
             this.eventSpy,
@@ -98,7 +97,7 @@ suite.skip('Procedure Parameter Delete Event', function() {
         proc.deleteParameter(0);
 
         this.eventSpy.resetHistory();
-        event.run(false /* backward */);
+        event.run(/* forward= */ false);
 
         assertEventNotFired(
             this.eventSpy,
@@ -117,7 +116,7 @@ suite.skip('Procedure Parameter Delete Event', function() {
         const actualProc = this.createProcedureModel('test name', 'test id');
         this.procedureMap.add(actualProc);
 
-        event.run(true /* forward */);
+        event.run(/* forward= */ false);
 
         const createdParam = actualProc.getParameter(0);
         chai.assert.isDefined(createdParam, 'Expected the parameter to exist');
@@ -140,7 +139,7 @@ suite.skip('Procedure Parameter Delete Event', function() {
         this.procedureMap.add(actualProc);
 
         this.eventSpy.resetHistory();
-        event.run(true /* forward */);
+        event.run(/* forward= */ false);
 
         assertEventFiredShallow(
             this.eventSpy,
@@ -164,7 +163,7 @@ suite.skip('Procedure Parameter Delete Event', function() {
             this.procedureMap.add(modelProc);
     
             this.eventSpy.resetHistory();
-            event.run(true /* forward */);
+            event.run(/* forward= */ false);
 
             const actualProc = this.procedureMap.get('test id');
             chai.assert.equal(
@@ -187,7 +186,7 @@ suite.skip('Procedure Parameter Delete Event', function() {
             this.procedureMap.add(modelProc);
     
             this.eventSpy.resetHistory();
-            event.run(true /* forward */);
+            event.run(/* forward= */ false);
 
             assertEventNotFired(
                 this.eventSpy,

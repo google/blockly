@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.VariableModel');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_var_create.js';
 
-import * as eventUtils from './events/utils.js';
 import * as idGenerator from './utils/idgenerator.js';
 import type {Workspace} from './workspace.js';
 
@@ -58,8 +57,6 @@ export class VariableModel {
      * UUID.
      */
     this.id_ = opt_id || idGenerator.genUid();
-
-    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(this));
   }
 
   /** @returns The ID for the variable. */

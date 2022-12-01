@@ -184,6 +184,8 @@ export class VariableMap {
     this.variableMap.delete(type);
     this.variableMap.set(type, variables);
 
+    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(variable));
+
     return variable;
   }
   /* Begin functions for variable deletion. */

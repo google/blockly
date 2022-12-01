@@ -198,123 +198,137 @@ suite('Blocks', function() {
       });
     });
   });
-  suite('Dispose', function() {
-    function assertDisposedNoheal(blocks) {
-      chai.assert.isFalse(blocks.A.disposed);
-      // A has nothing connected to it.
-      chai.assert.equal(blocks.A.getChildren().length, 0);
-      // B is disposed.
-      chai.assert.isTrue(blocks.B.disposed);
-      // And C is disposed.
-      chai.assert.isTrue(blocks.C.disposed);
-    }
-    function assertDisposedHealed(blocks) {
-      chai.assert.isFalse(blocks.A.disposed);
-      chai.assert.isFalse(blocks.C.disposed);
-      // A and C are connected.
-      chai.assert.equal(blocks.A.getChildren().length, 1);
-      chai.assert.equal(blocks.C.getParent(), blocks.A);
-      // B is disposed.
-      chai.assert.isTrue(blocks.B.disposed);
-    }
-    function assertDisposedHealFailed(blocks) {
-      chai.assert.isFalse(blocks.A.disposed);
-      chai.assert.isFalse(blocks.C.disposed);
-      // A has nothing connected to it.
-      chai.assert.equal(blocks.A.getChildren().length, 0);
-      // B is disposed.
-      chai.assert.isTrue(blocks.B.disposed);
-      // C is the top of its stack.
-      chai.assert.isNull(blocks.C.getParent());
-    }
+  suite('Disposal', function() {
+    suite('stack/row healing', function() {
+      function assertDisposedNoheal(blocks) {
+        chai.assert.isFalse(blocks.A.disposed);
+        // A has nothing connected to it.
+        chai.assert.equal(blocks.A.getChildren().length, 0);
+        // B is disposed.
+        chai.assert.isTrue(blocks.B.disposed);
+        // And C is disposed.
+        chai.assert.isTrue(blocks.C.disposed);
+      }
 
-    suite('Row', function() {
-      setup(function() {
-        this.blocks = createTestBlocks(this.workspace, true);
+      function assertDisposedHealed(blocks) {
+        chai.assert.isFalse(blocks.A.disposed);
+        chai.assert.isFalse(blocks.C.disposed);
+        // A and C are connected.
+        chai.assert.equal(blocks.A.getChildren().length, 1);
+        chai.assert.equal(blocks.C.getParent(), blocks.A);
+        // B is disposed.
+        chai.assert.isTrue(blocks.B.disposed);
+      }
+
+      function assertDisposedHealFailed(blocks) {
+        chai.assert.isFalse(blocks.A.disposed);
+        chai.assert.isFalse(blocks.C.disposed);
+        // A has nothing connected to it.
+        chai.assert.equal(blocks.A.getChildren().length, 0);
+        // B is disposed.
+        chai.assert.isTrue(blocks.B.disposed);
+        // C is the top of its stack.
+        chai.assert.isNull(blocks.C.getParent());
+      }
+
+      suite('Row', function() {
+        setup(function() {
+          this.blocks = createTestBlocks(this.workspace, true);
+        });
+  
+        test('Don\'t heal', function() {
+          this.blocks.B.dispose(false);
+          assertDisposedNoheal(this.blocks);
+        });
+
+        test('Heal', function() {
+          this.blocks.B.dispose(true);
+          // Each block has only one input, and the types work.
+          assertDisposedHealed(this.blocks);
+        });
+
+        test('Heal with bad checks', function() {
+          const blocks = this.blocks;
+  
+          // A and C can't connect, but both can connect to B.
+          blocks.A.inputList[0].connection.setCheck('type1');
+          blocks.C.outputConnection.setCheck('type2');
+  
+          // Each block has only one input, but the types don't work.
+          blocks.B.dispose(true);
+          assertDisposedHealFailed(blocks);
+        });
+
+        test('Parent has multiple inputs', function() {
+          const blocks = this.blocks;
+          // Add extra input to parent
+          blocks.A.appendValueInput("INPUT").setCheck(null);
+          blocks.B.dispose(true);
+          assertDisposedHealed(blocks);
+        });
+
+        test('Middle has multiple inputs', function() {
+          const blocks = this.blocks;
+          // Add extra input to middle block
+          blocks.B.appendValueInput("INPUT").setCheck(null);
+          blocks.B.dispose(true);
+          assertDisposedHealed(blocks);
+        });
+
+        test('Child has multiple inputs', function() {
+          const blocks = this.blocks;
+          // Add extra input to child block
+          blocks.C.appendValueInput("INPUT").setCheck(null);
+          // Child block input count doesn't matter.
+          blocks.B.dispose(true);
+          assertDisposedHealed(blocks);
+        });
+
+        test('Child is shadow', function() {
+          const blocks = this.blocks;
+          blocks.C.setShadow(true);
+          blocks.B.dispose(true);
+          // Even though we're asking to heal, it will appear as if it has not
+          // healed because shadows always get destroyed.
+          assertDisposedNoheal(blocks);
+        });
       });
 
-      test('Don\'t heal', function() {
-        this.blocks.B.dispose(false);
-        assertDisposedNoheal(this.blocks);
-      });
-      test('Heal', function() {
-        this.blocks.B.dispose(true);
-        // Each block has only one input, and the types work.
-        assertDisposedHealed(this.blocks);
-      });
-      test('Heal with bad checks', function() {
-        const blocks = this.blocks;
+      suite('Stack', function() {
+        setup(function() {
+          this.blocks = createTestBlocks(this.workspace, false);
+        });
+  
+        test('Don\'t heal', function() {
+          this.blocks.B.dispose();
+          assertDisposedNoheal(this.blocks);
+        });
 
-        // A and C can't connect, but both can connect to B.
-        blocks.A.inputList[0].connection.setCheck('type1');
-        blocks.C.outputConnection.setCheck('type2');
+        test('Heal', function() {
+          this.blocks.B.dispose(true);
+          assertDisposedHealed(this.blocks);
+        });
 
-        // Each block has only one input, but the types don't work.
-        blocks.B.dispose(true);
-        assertDisposedHealFailed(blocks);
-      });
-      test('Parent has multiple inputs', function() {
-        const blocks = this.blocks;
-        // Add extra input to parent
-        blocks.A.appendValueInput("INPUT").setCheck(null);
-        blocks.B.dispose(true);
-        assertDisposedHealed(blocks);
-      });
-      test('Middle has multiple inputs', function() {
-        const blocks = this.blocks;
-        // Add extra input to middle block
-        blocks.B.appendValueInput("INPUT").setCheck(null);
-        blocks.B.dispose(true);
-        assertDisposedHealed(blocks);
-      });
-      test('Child has multiple inputs', function() {
-        const blocks = this.blocks;
-        // Add extra input to child block
-        blocks.C.appendValueInput("INPUT").setCheck(null);
-        // Child block input count doesn't matter.
-        blocks.B.dispose(true);
-        assertDisposedHealed(blocks);
-      });
-      test('Child is shadow', function() {
-        const blocks = this.blocks;
-        blocks.C.setShadow(true);
-        blocks.B.dispose(true);
-        // Even though we're asking to heal, it will appear as if it has not
-        // healed because shadows always get destroyed.
-        assertDisposedNoheal(blocks);
-      });
-    });
-    suite('Stack', function() {
-      setup(function() {
-        this.blocks = createTestBlocks(this.workspace, false);
-      });
+        test('Heal with bad checks', function() {
+          const blocks = this.blocks;
+          // A and C can't connect, but both can connect to B.
+          blocks.A.nextConnection.setCheck('type1');
+          blocks.C.previousConnection.setCheck('type2');
+  
+          // The types don't work.
+          blocks.B.dispose(true);
+  
+          assertDisposedHealFailed(blocks);
+        });
 
-      test('Don\'t heal', function() {
-        this.blocks.B.dispose();
-        assertDisposedNoheal(this.blocks);
-      });
-      test('Heal', function() {
-        this.blocks.B.dispose(true);
-        assertDisposedHealed(this.blocks);
-      });
-      test('Heal with bad checks', function() {
-        const blocks = this.blocks;
-        // A and C can't connect, but both can connect to B.
-        blocks.A.nextConnection.setCheck('type1');
-        blocks.C.previousConnection.setCheck('type2');
-
-        // The types don't work.
-        blocks.B.dispose(true);
-
-        assertDisposedHealFailed(blocks);
-      });
-      test('Child is shadow', function() {
-        const blocks = this.blocks;
-        blocks.C.setShadow(true);
-        blocks.B.dispose(true);
-        // Even though we're asking to heal, it will appear as if it has not
-        // healed because shadows always get destroyed.
-        assertDisposedNoheal(blocks);
+        test('Child is shadow', function() {
+          const blocks = this.blocks;
+          blocks.C.setShadow(true);
+          blocks.B.dispose(true);
+          // Even though we're asking to heal, it will appear as if it has not
+          // healed because shadows always get destroyed.
+          assertDisposedNoheal(blocks);
+        });
       });
     });
   });

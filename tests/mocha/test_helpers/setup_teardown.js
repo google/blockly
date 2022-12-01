@@ -105,8 +105,6 @@ function wrapDefineBlocksWithJsonArrayWithCleanup_(sharedCleanupObj) {
  *
  * @param {Object<string, boolean>} options Options to enable/disable setup
  *    of certain stubs.
- * @return {{clock: *}} The fake clock (as part of an object to make refactoring
- *     easier).
  */
 export function sharedTestSetup(options = {}) {
   this.sharedSetupCalled_ = true;
@@ -124,9 +122,6 @@ export function sharedTestSetup(options = {}) {
   this.blockTypesCleanup_ = this.sharedCleanup.blockTypesCleanup_;
   this.messagesCleanup_ = this.sharedCleanup.messagesCleanup_;
   wrapDefineBlocksWithJsonArrayWithCleanup_(this.sharedCleanup);
-  return {
-    clock: this.clock,
-  };
 }
 
 /**

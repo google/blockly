@@ -20,7 +20,6 @@ import './events/events_block_create.js';
 import './events/events_block_delete.js';
 
 import {Blocks} from './blocks.js';
-import {BlockDelete} from './events/events_block_delete.js';
 import type {Comment} from './comment.js';
 import * as common from './common.js';
 import {Connection} from './connection.js';
@@ -329,6 +328,10 @@ export class Block implements IASTNodeLocation, IDeletable {
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
+    }
+
+    if (this.onchangeWrapper_) {
+      this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
 
     eventUtils.disable();
@@ -1024,13 +1027,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
     this.onchange = onchangeFn;
-    this.onchangeWrapper_ = (e) => {
-      onchangeFn.call(this, e);
-      if (e.type === eventUtils.BLOCK_DELETE &&
-          (e as BlockDelete).blockId === this.id) {
-        this.workspace.removeChangeListener(this.onchangeWrapper_!);
-      }
-    };
+    this.onchangeWrapper_ = onchangeFn.bind(this);
     this.workspace.addChangeListener(this.onchangeWrapper_);
   }
 

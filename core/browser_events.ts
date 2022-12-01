@@ -88,24 +88,6 @@ export function conditionalBind(
   } else {
     node.addEventListener(name, wrapFunc, false);
     bindData.push([node, name, wrapFunc]);
-
-    // Add equivalent touch event.
-    if (name in Touch.TOUCH_MAP) {
-      const touchWrapFunc = (e: Event) => {
-        wrapFunc(e);
-        // Calling preventDefault stops the browser from scrolling/zooming the
-        // page.
-        const preventDef = !opt_noPreventDefault;
-        if (handled && preventDef) {
-          e.preventDefault();
-        }
-      };
-      for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
-        const type = Touch.TOUCH_MAP[name][i];
-        node.addEventListener(type, touchWrapFunc, false);
-        bindData.push([node, type, touchWrapFunc]);
-      }
-    }
   }
   return bindData;
 }
@@ -148,32 +130,6 @@ export function bind(
   } else {
     node.addEventListener(name, wrapFunc, false);
     bindData.push([node, name, wrapFunc]);
-
-    // Add equivalent touch event.
-    if (name in Touch.TOUCH_MAP) {
-      const touchWrapFunc = (e: Event) => {
-        // Punt on multitouch events.
-        if (e instanceof TouchEvent && e.changedTouches &&
-            e.changedTouches.length === 1) {
-          // Map the touch event's properties to the event.
-          const touchPoint = e.changedTouches[0];
-          // TODO (6311): We are trying to make a touch event look like a mouse
-          //   event, which is not allowed, because it requires adding more
-          //   properties to the event. How do we want to deal with this?
-          (e as AnyDuringMigration).clientX = touchPoint.clientX;
-          (e as AnyDuringMigration).clientY = touchPoint.clientY;
-        }
-        wrapFunc(e);
-
-        // Stop the browser from scrolling/zooming the page.
-        e.preventDefault();
-      };
-      for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
-        const type = Touch.TOUCH_MAP[name][i];
-        node.addEventListener(type, touchWrapFunc, false);
-        bindData.push([node, type, touchWrapFunc]);
-      }
-    }
   }
   return bindData;
 }

@@ -199,7 +199,7 @@ suite('Blocks', function() {
       });
     });
   });
-  suite.only('Disposal', function() {
+  suite('Disposal', function() {
     suite('calling destroy', function() {
       setup(function() {
         Blockly.Blocks['destroyable_block'] = {

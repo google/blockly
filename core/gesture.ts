@@ -442,7 +442,7 @@ export class Gesture {
   doStart(e: PointerEvent) {
     if (!this.startWorkspace_) {
       throw new Error(
-          'Cannot start the touch event becauase the start ' +
+          'Cannot start the touch gesture becauase the start ' +
           'workspace is undefined');
     }
     this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&

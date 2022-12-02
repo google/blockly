@@ -2,7 +2,7 @@
 // their Blockly applications to https://blockly-demo.appspot.com/
 // Delete this file in early 2024.
 var msg = 'Compiled Blockly files should be loaded from https://unpkg.com/blockly/\n' +
-    'For help, contact https://groups.google.com/g/blockly'
+    'For help, contact https://groups.google.com/g/blockly';
 console.log(msg);
 try {
   alert(msg);

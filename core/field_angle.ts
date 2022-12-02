@@ -278,9 +278,9 @@ export class FieldAngle extends FieldInput<number> {
     // a click handler on the drag surface to update the value if the surface
     // is clicked.
     this.clickSurfaceWrapper_ = browserEvents.conditionalBind(
-        circle, 'pointerdown', this, this.onMouseMove_, true, true);
+        circle, 'pointerdown', this, this.onMouseMove_, true);
     this.moveSurfaceWrapper_ = browserEvents.conditionalBind(
-        circle, 'pointermove', this, this.onMouseMove_, true, true);
+        circle, 'pointermove', this, this.onMouseMove_, true);
     this.editor_ = svg;
   }
 

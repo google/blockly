@@ -484,9 +484,7 @@ export function unbindEvent_(bindData: browserEvents.Data): Function {
  * @param opt_noCaptureIdentifier True if triggering on this event should not
  *     block execution of other event handlers on this touch or other
  *     simultaneous touches.  False by default.
- * @param opt_noPreventDefault True if triggering on this event should prevent
- *     the default handler.  False by default.  If opt_noPreventDefault is
- *     provided, opt_noCaptureIdentifier must also be provided.
+ * @param _opt_noPreventDefault No-op, deprecated and will be removed in v10.
  * @returns Opaque data that can be passed to unbindEvent_.
  * @deprecated Use **Blockly.browserEvents.conditionalBind** instead.
  * @see browserEvents.conditionalBind
@@ -495,13 +493,12 @@ export function unbindEvent_(bindData: browserEvents.Data): Function {
 export function bindEventWithChecks_(
     node: EventTarget, name: string, thisObject: Object|null, func: Function,
     opt_noCaptureIdentifier?: boolean,
-    opt_noPreventDefault?: boolean): browserEvents.Data {
+    _opt_noPreventDefault?: boolean): browserEvents.Data {
   deprecation.warn(
       'Blockly.bindEventWithChecks_', 'December 2021', 'December 2022',
       'Blockly.browserEvents.conditionalBind');
   return browserEvents.conditionalBind(
-      node, name, thisObject, func, opt_noCaptureIdentifier,
-      opt_noPreventDefault);
+      node, name, thisObject, func, opt_noCaptureIdentifier);
 }
 
 // Aliases to allow external code to access these values for legacy reasons.

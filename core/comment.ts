@@ -150,7 +150,7 @@ export class Comment extends Icon {
     this.foreignObject!.appendChild(body);
 
     this.onMouseUpWrapper = browserEvents.conditionalBind(
-        textarea, 'focus', this, this.startEdit, true, true);
+        textarea, 'focus', this, this.startEdit, true);
     // Don't zoom with mousewheel.
     this.onWheelWrapper = browserEvents.conditionalBind(
         textarea, 'wheel', this, function(e: Event) {

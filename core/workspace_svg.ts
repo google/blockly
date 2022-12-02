@@ -773,7 +773,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     if (!this.isFlyout) {
       browserEvents.conditionalBind(
-          this.svgGroup_, 'pointerdown', this, this.onMouseDown_, false, true);
+          this.svgGroup_, 'pointerdown', this, this.onMouseDown_, false);
       // This no-op works around https://bugs.webkit.org/show_bug.cgi?id=226683,
       // which otherwise prevents zoom/scroll events from being observed in
       // Safari. Once that bug is fixed it should be removed.

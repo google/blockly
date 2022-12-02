@@ -230,12 +230,12 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     // Clicking on toolbox closes popups.
     const clickEvent = browserEvents.conditionalBind(
         container, 'pointerdown', this, this.onClick_,
-        /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
+        /* opt_noCaptureIdentifier */ false);
     this.boundEvents_.push(clickEvent);
 
     const keyDownEvent = browserEvents.conditionalBind(
         contentsContainer, 'keydown', this, this.onKeyDown_,
-        /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
+        /* opt_noCaptureIdentifier */ false);
     this.boundEvents_.push(keyDownEvent);
   }
 

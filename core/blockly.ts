@@ -670,6 +670,7 @@ export {FlyoutMetricsManager};
 export {CodeGenerator};
 export {CodeGenerator as Generator};  // Deprecated name, October 2022.
 export {Gesture};
+export {Gesture as TouchGesture};  // Remove in v10.
 export {Grid};
 export {HorizontalFlyout};
 export {IASTNodeLocation};

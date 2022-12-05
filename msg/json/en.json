@@ -34,7 +34,6 @@
 	"DEFAULT_MODULE_NAME": "General",
 	"RENAME_MODULE": "Rename",
 	"RENAME_MODULE_TITLE": "Rename to:",
-	"NEW_MODULE": "Create",
 	"NEW_MODULE_TITLE": "Name:",
 	"DELETE_ALL_SELECTED": "Delete all selected blocks",
 	"COPY_ALL_SELECTED": "Copy all selected blocks",

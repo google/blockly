@@ -29,6 +29,7 @@ const {Block} = goog.requireType('Blockly.Block');
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
+const constants = goog.require('Blockly.constants');
 
 
 /**
@@ -148,7 +149,8 @@ const svgResize = function(workspace) {
   }
 
   const width = div.offsetWidth;
-  const height = div.offsetHeight;
+  const height = div.offsetHeight - constants.MODULES_HEIGHT;
+
   if (cachedSize.width !== width && width > 0) {
     svg.setAttribute('width', width + 'px');
     mainWorkspace.setCachedParentSvgSize(width, null);

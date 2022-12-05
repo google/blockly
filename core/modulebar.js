@@ -27,10 +27,11 @@ goog.module("Blockly.ModuleBar");
 const Css = goog.require("Blockly.Css");
 // const Touch = goog.require('Blockly.Touch');
 const utils = goog.require("Blockly.utils");
+const dom = goog.require('Blockly.utils.dom');
 const utilsDom = goog.require("Blockly.utils.dom");
 const browserEvents = goog.require("Blockly.browserEvents");
 const eventUtils = goog.require("Blockly.Events.utils");
-const {Msg} = goog.require('Blockly.Msg');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 /**
  * Class for a module bar.
@@ -126,39 +127,63 @@ ModuleBar.prototype.init = function() {
    * @type {Element}
    */
   this.htmlContainer_ = document.createElement("div");
+  this.htmlContainer_.id = 'module-bar-container';
   this.htmlContainer_.className =
   "blocklyModuleBarContainer blocklyNonSelectable cursorNotAllowed";
 
   this.ulContainer_ = document.createElement("ul");
-  this.ulContainer_.className = "blocklyModuleBarContainer";
+  this.ulContainer_.className = "blocklyModuleBarUl";
   this.htmlContainer_.appendChild(this.ulContainer_);
-
-  injectionContainer.parentNode.insertBefore(
-    this.htmlContainer_,
-    injectionContainer
-  );
+  injectionContainer.appendChild(this.htmlContainer_);
 
   if (this.workspace_.RTL) {
     this.htmlContainer_.setAttribute("dir", "rtl");
   }
 
-    // create tab
-    const newTab = document.createElement("div");
-    newTab.className = "blocklyModuleBarTab blocklyModuleBarTabCreate";
-    newTab.setAttribute("role", "create-module-control");
-    newTab.setAttribute("title", Blockly.Msg["NEW_MODULE"]);
-  
-    const newLink = document.createElement("a");
-    newLink.className = "blocklyModuleBarLink";
-    newLink.setAttribute("role", "create-module-control");
-  
-    const createIcon = document.createElement("span");
-    createIcon.innerHTML = Msg['NEW_TAB'];
-    createIcon.setAttribute("role", "create-module-control");
-  
-    newLink.appendChild(createIcon);
-    newTab.appendChild(newLink);
-    this.htmlContainer_.appendChild(newTab);
+  // create tab
+  const newTab = document.createElement("div");
+  newTab.className = "blocklyModuleBarTab blocklyModuleBarTabCreate";
+  newTab.setAttribute("role", "create-module-control");
+
+  const newLink = document.createElement("a");
+  newLink.className = "blocklyModuleBarLink";
+  newLink.setAttribute("role", "create-module-control");
+  newTab.appendChild(newLink);
+  this.htmlContainer_.appendChild(newTab);
+
+  /**
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6.5" width="1" height="14" fill="white"/>
+      <rect y="7.5" width="1" height="14" transform="rotate(-90 0 7.5)" fill="white"/>
+    </svg>
+  */
+  const svgElem = dom.createSvgElement(Svg.SVG, {
+    'xmlns': dom.SVG_NS,
+    'viewBox': "0 0 14 14",
+    'width': '14',
+    'height': '14',
+    'fill': 'none',
+    'role': 'create-module-control',
+  }, newLink);
+
+  dom.createSvgElement(
+      Svg.RECT, {
+        'x': '6.5',
+        'width': '1',
+        'height': '14',
+        'fill': 'white',
+      },
+  svgElem);
+
+  dom.createSvgElement(
+    Svg.RECT, {
+      'y': '7.5',
+      'width': '1',
+      'height': '14',
+      'fill': 'white',
+      'transform': 'rotate(-90 0 7.5)',
+    },
+  svgElem);
 
   this.attachEvents_();
   this.render();
@@ -205,6 +230,13 @@ ModuleBar.prototype.render = function() {
 
     this.ulContainer_.appendChild(tab);
   }
+
+  // Hack wait when the elements rendered in document and scroll to active tab.
+  setTimeout(() => {
+    const activeTab = document.querySelector(".blocklyModuleBarLinkActive");
+    activeTab.scrollIntoView({block: "center", behavior: "smooth", inline: "center"});
+    this.needShowShadow_();
+  }, 0);
 };
 
 /**
@@ -435,9 +467,30 @@ ModuleBar.prototype.onMouseMove_ = function(e) {
  */
  ModuleBar.prototype.onMouseWheel_ = function(e) {
   e.preventDefault();
+
   this.ulContainer_.scrollBy({
     left: e.deltaY < 0 ? -30 : 30,
   });
+
+  this.needShowShadow_();
+};
+
+ModuleBar.prototype.needShowShadow_ = function() {
+  const ulElem = document.querySelector(".blocklyModuleBarUl");
+  const containerElem = document.querySelector(".blocklyModuleBarContainer");
+  const DEAD_ZONE = 10;
+
+  if (ulElem.scrollLeft > 0) {
+    containerElem.classList.add('visibleLeft');
+  } else {
+    containerElem.classList.remove('visibleLeft');
+  }
+
+  if (ulElem.offsetWidth + Math.round(ulElem.scrollLeft) + DEAD_ZONE <= ulElem.scrollWidth) {
+    containerElem.classList.add('visibleRight');
+  } else {
+    containerElem.classList.remove('visibleRight');
+  }
 };
 
 /**
@@ -499,6 +552,7 @@ ModuleBar.prototype.handleActivateModule_ = function(e) {
   }
 
   this.workspace_.getModuleManager().activateModule(module);
+  setTimeout(() => {this.needShowShadow_();}, 0);
 };
 
 /**
@@ -553,7 +607,7 @@ ModuleBar.prototype.handleCreateModule_ = function() {
         }
       }
     }
-  );
+    );
 };
 
 /**
@@ -638,18 +692,28 @@ Css.register(
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+  }
+
+  .blocklyModuleBarUl {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
     white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
     list-style: none;
     padding: 0;
     margin: 0;
+    height: 35px;
+    overflow-x: overlay;
+    position: relative;
   }
 
   .cursorNotAllowed {
     cursor: not-allowed;
   }
 
+  .blocklyModuleBarTab {
+    margin: 0 5px;
+  }
 
   .blocklyModuleBarTabDropZone {
     border-right: 5px solid #ccc;
@@ -657,16 +721,16 @@ Css.register(
   }
 
   .blocklyModuleBarLink {
-    display: block;
-    padding: 5px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
     text-decoration: none;
-    border-top: 1px solid transparent;
-    border-left: 1px solid transparent;
-    border-right: 1px solid transparent;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-radius: 8px 8px 0px 0px;
     font-family: sans-serif;
-    font-size: 16px;
+    font-size: 14px;
+    height: 35px;
+    background-color: #eee;
+    border-color: #eee;
   }
 
   .blocklyModuleName {
@@ -674,30 +738,59 @@ Css.register(
   }
 
   .blocklyModuleBarLinkActive {
-    background-color: #ddd;
+    background-color: #5867dd;
     cursor: grab;
-    border-color: #ddd;
-  }
-
-  .blocklyModuleBarContainer:not(.cursorNotAllowed) > .blocklyModuleBarTab:not(.blocklyModuleBarTabDropZone) .blocklyModuleBarTab:not(.blocklyModuleBarTabCreate) .blocklyModuleBarLink:not(.blocklyModuleBarLinkActive):hover {
-    background-color: #e4e4e4;
-    border-color: #e4e4e4;
+    border-color: #5867dd;
+    color: #fff !important;
   }
 
   .blocklyModuleBarTabMenuIcon {
-    background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='iso-8859-1'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='255px' height='255px' viewBox='0 0 255 255' style='enable-background:new 0 0 255 255;' xml:space='preserve'%3E%3Cg%3E%3Cg id='arrow-drop-down'%3E%3Cpolygon points='0,63.75 127.5,191.25 255,63.75 '/%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+    background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='iso-8859-1'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='10' height='7' viewBox='0 0 10 7' style='enable-background:new 255 255 255 255;' xml:space='preserve'%3E%3Cg%3E%3Cg id='arrow-drop-down'%3E%3Cpath d='M10 1.40446L5 6.5L0 1.40446L0.8875 0.5L5 4.69108L9.1125 0.5L10 1.40446Z' fill='white' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
   }
 
   .blocklyModuleBarTabCreate {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    background-color: #ddd;
-    opacity: 0.65;
+    background-color: #08976d;
+    height: 35px;
+  }
+
+  .blocklyModuleBarTabCreate:hover > .blocklyModuleBarLink {
+    background-color: #5867dd;
+    transition 0.15s ease-in-out;
+  }
+
+  .blocklyModuleBarTabCreate > .blocklyModuleBarLink {
+    background-color: #08976d;
+    transition 0.15s ease-in-out;
   }
    
   .blocklyModuleBarTabCreate:hover {
-    opacity: 1;
     cursor: pointer;
+    background-color: #5867dd;
+    transition 0.15s ease-in-out;
+  }
+
+  .visibleRight.blocklyModuleBarContainer::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    height: 30px;
+    width: 40px;
+    margin-right: 40px;
+    background: linear-gradient( to left, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
+  }
+
+  .visibleLeft.blocklyModuleBarContainer::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    height: 30px;
+    width: 40px;
+    margin-left: inherit;
+    background: linear-gradient( to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
   }
 
   .blocklyModuleBarTabIcon {

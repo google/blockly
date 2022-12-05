@@ -682,6 +682,7 @@ exports.RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
 exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
 exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
 exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
+exports.MODULES_HEIGHT = constants.MODULES_HEIGHT;
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.

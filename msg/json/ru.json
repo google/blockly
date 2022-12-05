@@ -54,7 +54,6 @@
 	"DEFAULT_MODULE_NAME": "Главный",
 	"RENAME_MODULE": "Переименовать",
 	"RENAME_MODULE_TITLE": "Имя:",
-	"NEW_MODULE": "Создать",
 	"NEW_MODULE_TITLE": "Имя:",
 	"LAST_MODULE_DELETE_RESTRICTION": "Невозможно удалить последний модуль.",
 	"NOT_EMPTY_MODULE_DELETE_RESTRICTION": "Невозможно удалить модуль с блоками. Сначала удалите блоки в модуле.",

@@ -76,7 +76,7 @@
     "@microsoft/api-documenter": "^7.19.16",
     "@microsoft/api-extractor": "^7.29.5",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
-    "@wdio/selenium-standalone-service": "^7.10.1",
+    "@wdio/selenium-standalone-service": "^8.0.2",
     "async-done": "^2.0.0",
     "chai": "^4.2.0",
     "clang-format": "^1.6.0",

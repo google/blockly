@@ -32,9 +32,9 @@ suite('Procedure Parameter Create Event', function() {
       this.createProcedureAndParameter =
         (procName, procId, paramName, paramId) => {
           const param = new Blockly.procedures.ObservableParameterModel(
-                  this.workspace, procName, paramId);
+                  this.workspace, paramName, paramId);
           const proc = new Blockly.procedures.ObservableProcedureModel(
-              this.workspace, paramName, procId)
+              this.workspace, procName, procId)
               .insertParameter(param, 0);
           return {param, proc};
         };
@@ -194,6 +194,24 @@ suite('Procedure Parameter Create Event', function() {
             {},
             this.workspace.id);
       });
+    });
+  });
+
+  suite.skip('serialization', function() {
+    test('events round-trip through JSON', function() {
+      const param = new Blockly.procedures.ObservableParameterModel(
+          this.workspace, 'test param name', 'test param id');
+      const model =
+          new Blockly.procedures.ObservableProcedureModel(
+              this.workspace, 'test name', 'test id')
+              .insertParameter(param, 0);
+      const origEvent = new Blockly.Events.ProcedureParameterCreate(
+          this.workspace, model);
+
+      const json = origEvent.toJson();
+      const newEvent = new Blockly.Events.fromJson(json, this.workspace);
+
+      chai.assert.deepEqual(newEvent, origEvent);
     });
   });
 });

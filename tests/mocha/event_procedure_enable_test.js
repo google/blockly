@@ -30,8 +30,7 @@ suite('Procedure Enable Event', function() {
       };
 
       this.createEventToState = (procedureModel) => {
-        return new Blockly.Events.ProcedureEnable(
-            this.workspace, procedureModel);
+        return new Blockly.Events.ProcedureEnable(this.workspace, procedureModel);
       };
     });
 
@@ -170,6 +169,19 @@ suite('Procedure Enable Event', function() {
               event.run(/* forward= */ false);
             });
           });
+    });
+  });
+
+  suite.skip('serialization', function() {
+    test('events round-trip through JSON', function() {
+      const model = new Blockly.procedures.ObservableProcedureModel(
+          this.workspace, 'test name', 'test id');
+      const origEvent = new Blockly.Events.ProcedureEnable(this.workspace, model);
+
+      const json = origEvent.toJson();
+      const newEvent = new Blockly.Events.fromJson(json, this.workspace);
+
+      chai.assert.deepEqual(newEvent, origEvent);
     });
   });
 });

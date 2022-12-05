@@ -105,13 +105,13 @@ export class Menu {
 
     // Add event handlers.
     this.mouseOverHandler = browserEvents.conditionalBind(
-        element, 'mouseover', this, this.handleMouseOver, true);
+        element, 'pointerover', this, this.handleMouseOver, true);
     this.clickHandler = browserEvents.conditionalBind(
-        element, 'click', this, this.handleClick, true);
+        element, 'pointerdown', this, this.handleClick, true);
     this.mouseEnterHandler = browserEvents.conditionalBind(
-        element, 'mouseenter', this, this.handleMouseEnter, true);
+        element, 'pointerenter', this, this.handleMouseEnter, true);
     this.mouseLeaveHandler = browserEvents.conditionalBind(
-        element, 'mouseleave', this, this.handleMouseLeave, true);
+        element, 'pointerleave', this, this.handleMouseLeave, true);
     this.onKeyDownHandler = browserEvents.conditionalBind(
         element, 'keydown', this, this.handleKeyEvent);
 
@@ -310,7 +310,7 @@ export class Menu {
    *
    * @param e Mouse event to handle.
    */
-  private handleMouseOver(e: Event) {
+  private handleMouseOver(e: PointerEvent) {
     const menuItem = this.getMenuItem(e.target as Element);
 
     if (menuItem) {
@@ -329,18 +329,12 @@ export class Menu {
    *
    * @param e Click event to handle.
    */
-  private handleClick(e: Event) {
+  private handleClick(e: PointerEvent) {
     const oldCoords = this.openingCoords;
     // Clear out the saved opening coords immediately so they're not used twice.
     this.openingCoords = null;
-    // AnyDuringMigration because:  Property 'clientX' does not exist on type
-    // 'Event'.
-    if (oldCoords && typeof (e as AnyDuringMigration).clientX === 'number') {
-      // AnyDuringMigration because:  Property 'clientY' does not exist on type
-      // 'Event'. AnyDuringMigration because:  Property 'clientX' does not exist
-      // on type 'Event'.
-      const newCoords = new Coordinate(
-          (e as AnyDuringMigration).clientX, (e as AnyDuringMigration).clientY);
+    if (oldCoords && typeof e.clientX === 'number') {
+      const newCoords = new Coordinate(e.clientX, e.clientY);
       if (Coordinate.distance(oldCoords, newCoords) < 1) {
         // This menu was opened by a mousedown and we're handling the consequent
         // click event. The coords haven't changed, meaning this was the same
@@ -362,7 +356,7 @@ export class Menu {
    *
    * @param _e Mouse event to handle.
    */
-  private handleMouseEnter(_e: Event) {
+  private handleMouseEnter(_e: PointerEvent) {
     this.focus();
   }
 
@@ -371,7 +365,7 @@ export class Menu {
    *
    * @param _e Mouse event to handle.
    */
-  private handleMouseLeave(_e: Event) {
+  private handleMouseLeave(_e: PointerEvent) {
     if (this.getElement()) {
       this.blur();
       this.setHighlighted(null);

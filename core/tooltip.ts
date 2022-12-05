@@ -231,14 +231,14 @@ export function createDom() {
 export function bindMouseEvents(element: Element) {
   // TODO (#6097): Don't stash wrapper info on the DOM.
   (element as AnyDuringMigration).mouseOverWrapper_ =
-      browserEvents.bind(element, 'mouseover', null, onMouseOver);
+      browserEvents.bind(element, 'pointerover', null, onMouseOver);
   (element as AnyDuringMigration).mouseOutWrapper_ =
-      browserEvents.bind(element, 'mouseout', null, onMouseOut);
+      browserEvents.bind(element, 'pointerout', null, onMouseOut);
 
   // Don't use bindEvent_ for mousemove since that would create a
   // corresponding touch handler, even though this only makes sense in the
   // context of a mouseover/mouseout.
-  element.addEventListener('mousemove', onMouseMove, false);
+  element.addEventListener('pointermove', onMouseMove, false);
 }
 
 /**
@@ -254,7 +254,7 @@ export function unbindMouseEvents(element: Element|null) {
   // TODO (#6097): Don't stash wrapper info on the DOM.
   browserEvents.unbind((element as AnyDuringMigration).mouseOverWrapper_);
   browserEvents.unbind((element as AnyDuringMigration).mouseOutWrapper_);
-  element.removeEventListener('mousemove', onMouseMove);
+  element.removeEventListener('pointermove', onMouseMove);
 }
 
 /**
@@ -263,7 +263,7 @@ export function unbindMouseEvents(element: Element|null) {
  *
  * @param e Mouse event.
  */
-function onMouseOver(e: Event) {
+function onMouseOver(e: PointerEvent) {
   if (blocked) {
     // Someone doesn't want us to show tooltips.
     return;
@@ -285,7 +285,7 @@ function onMouseOver(e: Event) {
  *
  * @param _e Mouse event.
  */
-function onMouseOut(_e: Event) {
+function onMouseOut(_e: PointerEvent) {
   if (blocked) {
     // Someone doesn't want us to show tooltips.
     return;

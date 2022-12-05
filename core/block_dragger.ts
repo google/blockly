@@ -176,7 +176,7 @@ export class BlockDragger implements IBlockDragger {
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
    */
-  drag(e: Event, currentDragDeltaXY: Coordinate) {
+  drag(e: PointerEvent, currentDragDeltaXY: Coordinate) {
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
     const newLoc = Coordinate.sum(this.startXY_, delta);
     this.draggingBlock_.moveDuringDrag(newLoc);
@@ -205,11 +205,11 @@ export class BlockDragger implements IBlockDragger {
   /**
    * Finish a block drag and put the block back on the workspace.
    *
-   * @param e The mouseup/touchend event.
+   * @param e The pointerup event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
    */
-  endDrag(e: Event, currentDragDeltaXY: Coordinate) {
+  endDrag(e: PointerEvent, currentDragDeltaXY: Coordinate) {
     // Make sure internal state is fresh.
     this.drag(e, currentDragDeltaXY);
     this.dragIconData_ = [];

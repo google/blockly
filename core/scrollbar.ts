@@ -211,9 +211,9 @@ export class Scrollbar {
     }
 
     this.onMouseDownBarWrapper_ = browserEvents.conditionalBind(
-        this.svgBackground, 'mousedown', this, this.onMouseDownBar);
+        this.svgBackground, 'pointerdown', this, this.onMouseDownBar);
     this.onMouseDownHandleWrapper_ = browserEvents.conditionalBind(
-        this.svgHandle, 'mousedown', this, this.onMouseDownHandle);
+        this.svgHandle, 'pointerdown', this, this.onMouseDownHandle);
   }
 
   /**
@@ -703,7 +703,7 @@ export class Scrollbar {
    *
    * @param e Mouse down event.
    */
-  private onMouseDownHandle(e: MouseEvent) {
+  private onMouseDownHandle(e: PointerEvent) {
     this.workspace.markFocused();
     this.cleanUp();
     if (browserEvents.isRightButton(e)) {
@@ -723,9 +723,9 @@ export class Scrollbar {
     // Record the current mouse position.
     this.startDragMouse = this.horizontal ? e.clientX : e.clientY;
     this.onMouseUpWrapper_ = browserEvents.conditionalBind(
-        document, 'mouseup', this, this.onMouseUpHandle);
+        document, 'pointerup', this, this.onMouseUpHandle);
     this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
-        document, 'mousemove', this, this.onMouseMoveHandle);
+        document, 'pointermove', this, this.onMouseMoveHandle);
     e.stopPropagation();
     e.preventDefault();
   }
@@ -735,7 +735,7 @@ export class Scrollbar {
    *
    * @param e Mouse move event.
    */
-  private onMouseMoveHandle(e: MouseEvent) {
+  private onMouseMoveHandle(e: PointerEvent) {
     const currentMouse = this.horizontal ? e.clientX : e.clientY;
     const mouseDelta = currentMouse - this.startDragMouse;
     const handlePosition = this.startDragHandle + mouseDelta;

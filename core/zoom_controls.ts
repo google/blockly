@@ -276,7 +276,7 @@ export class ZoomControls implements IPositionable {
 
     // Attach listener.
     this.onZoomOutWrapper = browserEvents.conditionalBind(
-        this.zoomOutGroup, 'mousedown', null, this.zoom.bind(this, -1));
+        this.zoomOutGroup, 'pointerdown', null, this.zoom.bind(this, -1));
   }
 
   /**
@@ -322,7 +322,7 @@ export class ZoomControls implements IPositionable {
 
     // Attach listener.
     this.onZoomInWrapper = browserEvents.conditionalBind(
-        this.zoomInGroup, 'mousedown', null, this.zoom.bind(this, 1));
+        this.zoomInGroup, 'pointerdown', null, this.zoom.bind(this, 1));
   }
 
   /**
@@ -333,7 +333,7 @@ export class ZoomControls implements IPositionable {
    *     positive amount values zoom in.
    * @param e A mouse down event.
    */
-  private zoom(amount: number, e: Event) {
+  private zoom(amount: number, e: PointerEvent) {
     this.workspace.markFocused();
     this.workspace.zoomCenter(amount);
     this.fireZoomEvent();
@@ -380,7 +380,7 @@ export class ZoomControls implements IPositionable {
 
     // Attach event listeners.
     this.onZoomResetWrapper = browserEvents.conditionalBind(
-        this.zoomResetGroup, 'mousedown', null, this.resetZoom.bind(this));
+        this.zoomResetGroup, 'pointerdown', null, this.resetZoom.bind(this));
   }
 
   /**
@@ -388,7 +388,7 @@ export class ZoomControls implements IPositionable {
    *
    * @param e A mouse down event.
    */
-  private resetZoom(e: Event) {
+  private resetZoom(e: PointerEvent) {
     this.workspace.markFocused();
 
     // zoom is passed amount and computes the new scale using the formula:

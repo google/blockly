@@ -306,7 +306,7 @@ export class FieldColour extends Field<string> {
    *
    * @param e Mouse event.
    */
-  private onClick_(e: MouseEvent) {
+  private onClick_(e: PointerEvent) {
     const cell = e.target as Element;
     const colour = cell && cell.getAttribute('data-colour');
     if (colour !== null) {
@@ -415,7 +415,7 @@ export class FieldColour extends Field<string> {
    *
    * @param e Mouse event.
    */
-  private onMouseMove_(e: MouseEvent) {
+  private onMouseMove_(e: PointerEvent) {
     const cell = e.target as Element;
     const index = cell && Number(cell.getAttribute('data-index'));
     if (index !== null && index !== this.highlightedIndex_) {
@@ -534,13 +534,13 @@ export class FieldColour extends Field<string> {
 
     // Configure event handler on the table to listen for any event in a cell.
     this.onClickWrapper_ = browserEvents.conditionalBind(
-        table, 'click', this, this.onClick_, true);
+        table, 'pointerdown', this, this.onClick_, true);
     this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
-        table, 'mousemove', this, this.onMouseMove_, true);
+        table, 'pointermove', this, this.onMouseMove_, true);
     this.onMouseEnterWrapper_ = browserEvents.conditionalBind(
-        table, 'mouseenter', this, this.onMouseEnter_, true);
+        table, 'pointerenter', this, this.onMouseEnter_, true);
     this.onMouseLeaveWrapper_ = browserEvents.conditionalBind(
-        table, 'mouseleave', this, this.onMouseLeave_, true);
+        table, 'pointerleave', this, this.onMouseLeave_, true);
     this.onKeyDownWrapper_ =
         browserEvents.conditionalBind(table, 'keydown', this, this.onKeyDown_);
 

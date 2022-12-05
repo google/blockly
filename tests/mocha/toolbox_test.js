@@ -163,7 +163,7 @@ suite('Toolbox', function() {
     test('Toolbox clicked -> Should close flyout', function() {
       const hideChaffStub = sinon.stub(
         Blockly.WorkspaceSvg.prototype, "hideChaff");
-      const evt = new MouseEvent('click', {});
+      const evt = new PointerEvent('pointerdown', {});
       this.toolbox.HtmlDiv.dispatchEvent(evt);
       sinon.assert.calledOnce(hideChaffStub);
     });

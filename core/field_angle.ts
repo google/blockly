@@ -278,9 +278,9 @@ export class FieldAngle extends FieldInput<number> {
     // a click handler on the drag surface to update the value if the surface
     // is clicked.
     this.clickSurfaceWrapper_ = browserEvents.conditionalBind(
-        circle, 'click', this, this.onMouseMove_, true, true);
+        circle, 'pointerdown', this, this.onMouseMove_, true);
     this.moveSurfaceWrapper_ = browserEvents.conditionalBind(
-        circle, 'mousemove', this, this.onMouseMove_, true, true);
+        circle, 'pointermove', this, this.onMouseMove_, true);
     this.editor_ = svg;
   }
 
@@ -313,15 +313,11 @@ export class FieldAngle extends FieldInput<number> {
    *
    * @param e Mouse move event.
    */
-  protected onMouseMove_(e: Event) {
+  protected onMouseMove_(e: PointerEvent) {
     // Calculate angle.
     const bBox = this.gauge_!.ownerSVGElement!.getBoundingClientRect();
-    // AnyDuringMigration because:  Property 'clientX' does not exist on type
-    // 'Event'.
-    const dx = (e as AnyDuringMigration).clientX - bBox.left - FieldAngle.HALF;
-    // AnyDuringMigration because:  Property 'clientY' does not exist on type
-    // 'Event'.
-    const dy = (e as AnyDuringMigration).clientY - bBox.top - FieldAngle.HALF;
+    const dx = e.clientX - bBox.left - FieldAngle.HALF;
+    const dy = e.clientY - bBox.top - FieldAngle.HALF;
     let angle = Math.atan(-dy / dx);
     if (isNaN(angle)) {
       // This shouldn't happen, but let's not let this error propagate further.

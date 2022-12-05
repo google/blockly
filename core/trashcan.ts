@@ -201,11 +201,11 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     // Using bindEventWithChecks_ for blocking mousedown causes issue in mobile.
     // See #4303
     browserEvents.bind(
-        this.svgGroup_, 'mousedown', this, this.blockMouseDownWhenOpenable_);
-    browserEvents.bind(this.svgGroup_, 'mouseup', this, this.click);
+        this.svgGroup_, 'pointerdown', this, this.blockMouseDownWhenOpenable_);
+    browserEvents.bind(this.svgGroup_, 'pointerup', this, this.click);
     // Bind to body instead of this.svgGroup_ so that we don't get lid jitters
-    browserEvents.bind(body, 'mouseover', this, this.mouseOver_);
-    browserEvents.bind(body, 'mouseout', this, this.mouseOut_);
+    browserEvents.bind(body, 'pointerover', this, this.mouseOver_);
+    browserEvents.bind(body, 'pointerout', this, this.mouseOut_);
     this.animateLid_();
     return this.svgGroup_;
   }
@@ -513,7 +513,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    *
    * @param e A mouse down event.
    */
-  private blockMouseDownWhenOpenable_(e: Event) {
+  private blockMouseDownWhenOpenable_(e: PointerEvent) {
     if (!this.contentsIsOpen() && this.hasContents_()) {
       // Don't start a workspace scroll.
       e.stopPropagation();

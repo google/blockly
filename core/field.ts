@@ -361,7 +361,7 @@ export abstract class Field<T = unknown> implements IASTNodeLocationSvg,
     if (!clickTarget) throw new Error('A click target has not been set.');
     Tooltip.bindMouseEvents(clickTarget);
     this.mouseDownWrapper_ = browserEvents.conditionalBind(
-        clickTarget, 'mousedown', this, this.onMouseDown_);
+        clickTarget, 'pointerdown', this, this.onMouseDown_);
   }
 
   /**
@@ -1076,11 +1076,11 @@ export abstract class Field<T = unknown> implements IASTNodeLocationSvg,
   // NOP
 
   /**
-   * Handle a mouse down event on a field.
+   * Handle a pointerdown event on a field.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    */
-  protected onMouseDown_(e: Event) {
+  protected onMouseDown_(e: PointerEvent) {
     if (!this.sourceBlock_ || this.sourceBlock_.isDeadOrDying()) {
       return;
     }

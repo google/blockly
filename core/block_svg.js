@@ -2007,6 +2007,7 @@ class BlockSvg extends Block {
 
       dom.stopTextWidthCache();
       this.updateMarkers_();
+      this.applyColour();
     } finally {
       this.renderIsInProgress_ = false;
     }

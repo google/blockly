@@ -32,6 +32,8 @@ const utilsDom = goog.require("Blockly.utils.dom");
 const browserEvents = goog.require("Blockly.browserEvents");
 const eventUtils = goog.require("Blockly.Events.utils");
 const {Svg} = goog.require('Blockly.utils.Svg');
+const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 
 /**
  * Class for a module bar.
@@ -114,6 +116,13 @@ const ModuleBar = function(workspace) {
    * @private
    */
   this.isFinishedLoading_ = false;
+
+  /**
+   * Array number key code
+   * @type {Array.<number>}
+   * @private
+   */
+  this.numberKeyCodes_ = [KeyCodes.ONE, KeyCodes.TWO, KeyCodes.THREE, KeyCodes.FOUR, KeyCodes.FIVE, KeyCodes.SIX, KeyCodes.SEVEN, KeyCodes.EIGHT, KeyCodes.NINE];
 };
 
 /**
@@ -190,6 +199,38 @@ ModuleBar.prototype.init = function() {
 };
 
 /**
+ * Register hot key for activate module.
+ * @param {ModuleModel} module Module to hotkey register.
+ * @param {number} index Module index in modules array.
+ * @private
+ */
+ModuleBar.prototype.registerKey = function(module, index) {
+  /** @type {!ShortcutRegistry.KeyboardShortcut} */
+  const activateModule = {
+    name: module.getId(),
+    preconditionFn: function(workspace) {
+      const activeModule = workspace.getModuleManager().getActiveModule();
+      return module.getId() !== activeModule.id_;
+    },
+    callback: function(workspace, e) {
+      e.preventDefault();
+      workspace.getModuleManager().activateModule(module);
+      return true;
+    },
+  };
+
+  const codeKeyNumber = this.numberKeyCodes_[index];
+  const ctrlI = ShortcutRegistry.registry.createSerializedKey(codeKeyNumber, [KeyCodes.CTRL]);
+
+  if (ShortcutRegistry.registry.getKeyCodesByShortcutName(module.getId()).length) {
+    ShortcutRegistry.registry.unregister(module.getId());
+  }
+
+  ShortcutRegistry.registry.register(activateModule, true);
+  ShortcutRegistry.registry.addKeyMapping(ctrlI, activateModule.name, true);
+};
+
+/**
  * Fill the module Bar.
  * @package
  */
@@ -198,24 +239,24 @@ ModuleBar.prototype.render = function() {
 
   const modules = this.workspace_.getModuleManager().getAllModules();
 
-  for (let i = 0; i < modules.length; i++) {
+  for (let i = 0, module; (module = modules[i]); i++) {
     const tab = document.createElement("li");
 
     tab.className = "blocklyModuleBarTab";
-    tab.setAttribute("data-module-id", modules[i].getId());
+    tab.setAttribute("data-module-id", module.getId());
     tab.setAttribute("ondragstart", "return false;");
 
     const link = document.createElement("a");
     const name = document.createElement("span");
 
     name.className = "blocklyModuleName";
-    name.appendChild(utils.xml.createTextNode(modules[i].getName()));
+    name.appendChild(utils.xml.createTextNode(module.getName()));
     link.appendChild(name);
     link.className = "blocklyModuleBarLink";
 
     const activeModule = this.workspace_.getModuleManager().getActiveModule();
 
-    if (activeModule && modules[i].getId() === activeModule.getId()) {
+    if (activeModule && module.getId() === activeModule.getId()) {
       link.className += " blocklyModuleBarLinkActive";
 
       const menuIcon = document.createElement("span");
@@ -228,7 +269,11 @@ ModuleBar.prototype.render = function() {
 
     tab.appendChild(link);
 
-    this.ulContainer_.appendChild(tab);
+    if (i < this.numberKeyCodes_.length) {
+        this.registerKey(module, i);
+    }
+
+    this.htmlContainer_.appendChild(tab);
   }
 
   // Hack wait when the elements rendered in document and scroll to active tab.
@@ -389,10 +434,9 @@ ModuleBar.prototype.onMouseDown_ = function(e) {
 
 /**
  * Mouse up handler.
- * @param {!Event} e The browser event.
  * @private
  */
-ModuleBar.prototype.onMouseUp_ = function(e) {
+ModuleBar.prototype.onMouseUp_ = function() {
   if (!this.dragDropModuleEl_) {
     return;
   }
@@ -547,6 +591,7 @@ ModuleBar.prototype.handleActivateModule_ = function(e) {
   const module = this.workspace_
     .getModuleManager()
     .getModuleById(moduleEl.getAttribute("data-module-id"));
+    
   if (!module) {
     return;
   }
@@ -592,9 +637,7 @@ ModuleBar.prototype.handleCreateModule_ = function() {
     function(moduleName) {
       if (moduleName) {
         moduleName = moduleName.replace(/[\s\xa0]+/g, " ").trim();
-      }
 
-      if (moduleName) {
         const existingGroup = Blockly.Events.getGroup();
         if (!existingGroup) {
           Blockly.Events.setGroup(true);
@@ -624,9 +667,7 @@ ModuleBar.prototype.handleRenameModule_ = function() {
     function(moduleName) {
       if (moduleName) {
         moduleName = moduleName.replace(/[\s\xa0]+/g, " ").trim();
-      }
 
-      if (moduleName) {
         workspace.getModuleManager().renameModule(activeModule, moduleName);
       }
     }
@@ -640,7 +681,7 @@ ModuleBar.prototype.handleRenameModule_ = function() {
 ModuleBar.prototype.handleDeleteModule_ = function() {
   const workspace = this.workspace_;
   const activeModule = workspace.getModuleManager().getActiveModule();
-
+  
   if (workspace.getModuleManager().getAllModules().length <= 1) {
     Blockly.dialog.alert(Blockly.Msg["LAST_MODULE_DELETE_RESTRICTION"]);
     return;
@@ -659,6 +700,7 @@ ModuleBar.prototype.handleDeleteModule_ = function() {
     const previousModule = workspace
       .getModuleManager()
       .deleteModule(activeModule);
+    ShortcutRegistry.registry.unregister(activeModule.getId());
     workspace.getModuleManager().activateModule(previousModule);
   } finally {
     Blockly.Events.setGroup(false);

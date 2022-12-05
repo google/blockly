@@ -328,9 +328,7 @@ exports.commentDeleteOption = commentDeleteOption;
         function(moduleName) {
           if (moduleName) {
             moduleName = moduleName.replace(/[\s\xa0]+/g, " ").trim();
-          }
-    
-          if (moduleName) {
+
             const existingGroup = Blockly.Events.getGroup();
             if (!existingGroup) {
               Blockly.Events.setGroup(true);

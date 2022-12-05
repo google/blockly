@@ -104,7 +104,7 @@ Blockly.Msg.DELETE_X_BLOCKS = 'Delete %1 Blocks';
 Blockly.Msg.BLOCK_MOVE_TO_MODULE = 'Move to "%1"';
 /** @type {string} */
 /// context menu - Move selected block to new module
-Blockly.Msg.BLOCK_MOVE_TO_NEW_MODULE = 'Move to new module';
+Blockly.Msg.BLOCK_MOVE_TO_NEW_MODULE = 'Move to new tab';
 /** @type {string} */
 /// confirmation prompt - Question the user if they really wanted to permanently delete all %1 blocks.\n\nParameters:\n* %1 - an integer greater than 1.
 Blockly.Msg.DELETE_ALL_BLOCKS = 'Delete all %1 blocks?';
@@ -169,7 +169,7 @@ Blockly.Msg.COPY_ALL_SELECTED = 'Copy all selected blocks'
 /** @type {string} */
 Blockly.Msg.DUPLICATE_ALL_SELECTED = 'Duplicate all selected blocks'
 /** @type {string} */
-Blockly.Msg.MOVE_SELECTED_BLOCKS_TO_MODULE = 'Move blocks to module %1'
+Blockly.Msg.MOVE_SELECTED_BLOCKS_TO_MODULE = 'Move blocks to tab %1'
 /** @type {string} */
 Blockly.Msg.SELECT_ALL = 'Select all blocks'
 
@@ -181,10 +181,10 @@ Blockly.Msg.LOADING_ERROR = 'Error loading workspace';
 // Module deletion.
 /** @type {string} */
 /// alert - Tells the user that they can't delete a module because it's last module.
-Blockly.Msg.LAST_MODULE_DELETE_RESTRICTION = 'Can\'t delete the last module.';
+Blockly.Msg.LAST_MODULE_DELETE_RESTRICTION = 'Can\'t delete the last tab.';
 /** @type {string} */
 /// alert - Tells the user that they can't delete a module because it's last module.
-Blockly.Msg.NOT_EMPTY_MODULE_DELETE_RESTRICTION = 'Can\'t delete not empty module. Delete all module blocks first.';
+Blockly.Msg.NOT_EMPTY_MODULE_DELETE_RESTRICTION = 'Can\'t delete not empty tab. Delete all tab blocks first.';
 /** @type {string} */
 /// button hint - Hint on the button used to launch the module deletion.
 Blockly.Msg.DELETE_MODULE = 'Delete';
@@ -626,7 +626,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = 'Return the cosine of a degree (not radian).
 /// tooltip - Return the [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent tangent] of an [https://en.wikipedia.org/wiki/Degree_(angle) angle in degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = 'Return the tangent of a degree (not radian).';
 /** @type {string} */
-Blockly.Msg.MOVE_SELECTED_BLOCKS_TO_MODULE = "Move blocks to module %1";
+Blockly.Msg.MOVE_SELECTED_BLOCKS_TO_MODULE = "Move blocks to tab %1";
 /** @type {string} */
 /// tooltip - The [https://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [https://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent sine function], using [https://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_ASIN = 'Return the arcsine of a number.';
@@ -1675,4 +1675,4 @@ Blockly.Msg.DIALOG_CANCEL = 'Cancel';
 Blockly.Msg.SEARCH = 'Search';
 
 /** @type {string} */
-Blockly.Msg.NEW_TAB = 'Add tab';
+Blockly.Msg.OPTION_VALUE_REMOVED = 'Value was removed';

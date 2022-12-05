@@ -371,5 +371,6 @@
 	"DIALOG_OK": "確定",
 	"DIALOG_CANCEL": "取消",
 	"SEARCH": "搜索",
-	"NEW_TAB": "新标签"
+	"NEW_TAB": "新标签",
+	"OPTION_VALUE_REMOVED": "刪除的值"
 }

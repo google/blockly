@@ -176,6 +176,11 @@ class FieldMultilineInput extends FieldTextInput {
     let formatText = '';
 
     lines.forEach((line) => {
+      if (line.length === 0) {
+        formatText += '\n';
+        return;
+      }
+
       if (line < this.maxDisplayLength) {
         formatText += line;
         return;
@@ -223,6 +228,12 @@ class FieldMultilineInput extends FieldTextInput {
 
     // Add in text elements into the group.
     const lines = this.getDisplayText_().split('\n');
+
+    // Remove last empty new line
+    if (lines.length > 1 && lines[lines.length - 1] === "") {
+      lines.pop();
+    }
+
     let y = 0;
     for (let i = 0; i < lines.length; i++) {
       const lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +

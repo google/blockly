@@ -231,7 +231,12 @@ class PathObject {
       this.svgPath.setAttribute('fill',
         'url(#' + this.constants.removedPatternId + ')');
     }
-  };
+
+    const fillPattern = this.svgPath.getAttribute('fill');
+    if (!removed && fillPattern && fillPattern.includes(this.constants.removedPatternName)) {
+        this.svgPath.setAttribute('fill', 'none');
+    }
+  }
 
   /**
    * Add or remove styling showing that a block is selected.
@@ -242,9 +247,14 @@ class PathObject {
     this.setClass_('blocklySelected', enable);
   }
 
+  /**
+   * Add or remove styling showing that a block is mass operation selected.
+   * @param {boolean} enable True if selection is enabled, false otherwise.
+   * @package
+   */
   updateMassSelected(enable) {
     this.setClass_('blocklyMassSelected', enable);
-  };
+  }
 
   /**
    * Add or remove styling showing that a block is dragged over a delete area.

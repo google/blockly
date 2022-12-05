@@ -41,7 +41,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Note: In this file "start" refers to pointerdown
  * events.  "End" refers to pointerup events.
  */
-// TODO: Consider pointercancel.
 
 /** A multiplier used to convert the gesture scale to a zoom in delta. */
 const ZOOM_IN_MULTIPLIER = 5;

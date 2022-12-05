@@ -96,7 +96,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   init?: (() => AnyDuringMigration)|null = undefined;
 
   /** An optional method called during disposal. */
-  destroy?: (() => AnyDuringMigration)|null = undefined;
+  destroy?: (() => void) = undefined;
 
   /**
    * An optional serialization method for defining how to serialize the

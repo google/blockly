@@ -102,7 +102,7 @@ export function assertCallBlockStructure(
   assertCallBlockArgsStructure(callBlock, args);
   assertBlockVarModels(callBlock, varIds);
   if (name !== undefined) {
-    chai.assert(callBlock.getFieldValue('NAME'), name);
+    chai.assert.equal(callBlock.getFieldValue('NAME'), name);
   }
 }
 

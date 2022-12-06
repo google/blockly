@@ -331,7 +331,7 @@ suite('Procedures', function() {
           });
     });
 
-    suite.only('caller blocks', function() {
+    suite('caller blocks', function() {
       test('renaming the procedure data model updates blocks', function() {
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
@@ -353,7 +353,7 @@ suite('Procedures', function() {
         procModel.setEnabled(false);
 
         chai.assert.isFalse(
-          callBlock.getEnabled(),
+          callBlock.isEnabled(),
           'Expected the procedure block to be disabled');
       });
   
@@ -396,15 +396,15 @@ suite('Procedures', function() {
           'Expected the second param input to exist');
         chai.assert.equal(
           callBlock.getFieldValue('ARGNAME0'),
-          'param1',
+          'param2',
           'Expected the first params field to match the name of the param');
         chai.assert.equal(
           callBlock.getFieldValue('ARGNAME1'),
-          'param2',
+          'param1',
           'Expected the second params field to match the name of the param');
       });
 
-      test.only(
+      test(
           'moving a parameter in the data model moves input blocks',
           function() {
             const defBlock = createProcDefBlock(this.workspace);
@@ -429,9 +429,17 @@ suite('Procedures', function() {
             chai.assert.isNotNull(
               callBlock.getInput('ARG0'),
               'Expected the first param input to exist');
+            chai.assert.equal(
+              callBlock.getInputTargetBlock('ARG0'),
+              rowBlock2,
+              'Expected the second row block to be attached to the first input');
             chai.assert.isNotNull(
               callBlock.getInput('ARG1'),
               'Expected the second param input to exist');
+            chai.assert.equal(
+              callBlock.getInputTargetBlock('ARG1'),
+              rowBlock1,
+              'Expected the first row block to be attached to the second input');
           });
   
       test(
@@ -734,7 +742,7 @@ suite('Procedures', function() {
     });
   });
 
-  suite('Renaming procedures', function() {
+  suite('renaming procedures', function() {
     test('callers are updated to have the new name', function() {
       const defBlock = createProcDefBlock(this.workspace);
       const callBlock = createProcCallBlock(this.workspace);
@@ -770,7 +778,7 @@ suite('Procedures', function() {
         });
   });
 
-  suite('Adding procedure parameters', function() {
+  suite('adding procedure parameters', function() {
     test('no variable create event is fired', function() {
       const eventSpy = createChangeListenerSpy(this.workspace);
       const defBlock = createProcDefBlock(this.workspace);
@@ -861,7 +869,7 @@ suite('Procedures', function() {
     });
   });
 
-  suite('Renaming procedure parameters', function() {
+  suite('renaming procedure parameters', function() {
     test('defs are updated for parameter renames', function() {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
@@ -995,7 +1003,7 @@ suite('Procedures', function() {
         });
   });
 
-  suite('Reordering procedure parameters', function() {
+  suite('reordering procedure parameters', function() {
     test('reordering procedure parameters updates procedure blocks', function() {
       // Create a stack of container, parameter, parameter.
       const defBlock = createProcDefBlock(this.workspace);
@@ -1110,7 +1118,7 @@ suite('Procedures', function() {
         });
   });
 
-  suite('Enabling and disabling procedure blocks', function() {
+  suite('enabling and disabling procedure blocks', function() {
     test(
         'if a procedure definition is disabled, the procedure caller ' +
         'is also disabled',
@@ -1157,9 +1165,8 @@ suite('Procedures', function() {
         });
   });
 
-  suite('Deleting procedure blocks', function() {
-    // Currently fails because of event ordering.
-    test.skip(
+  suite('deleting procedure blocks', function() {
+    test(
         'when the procedure definition block is deleted, all of its ' +
         'associated callers are deleted as well',
         function() {
@@ -1167,12 +1174,158 @@ suite('Procedures', function() {
           const callBlock1 = createProcCallBlock(this.workspace);
           const callBlock2 = createProcCallBlock(this.workspace);
 
+          defBlock.dispose();
+
           this.clock.runAll();
           chai.assert.isTrue(
               callBlock1.disposed, 'Expected the first caller to be disposed');
           chai.assert.isTrue(
               callBlock2.disposed, 'Expected the second caller to be disposed');
         });
+  });
+
+  suite('caller blocks creating new def blocks', function() {
+    setup(function() {
+      this.TEST_VAR_ID = 'test-id';
+      this.genUidStub = createGenUidStubWithReturns(this.TEST_VAR_ID);
+    });
+
+    suite('xml', function() {
+      test('callers without defs create new defs', function() {
+        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="procedures_callreturn">' +
+              '<mutation name="do something"/>' +
+            '</block>'
+        ), this.workspace);
+        assertDefBlockStructure(
+            this.workspace.getBlocksByType('procedures_defreturn')[0], true);
+        assertCallBlockStructure(callBlock, [], [], 'do something');
+      });
+
+      test('callers without mutations create unamed defs', function() {
+        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="procedures_callreturn"></block>'
+        ), this.workspace);
+        assertDefBlockStructure(
+            this.workspace.getBlocksByType('procedures_defreturn')[0], true);
+        assertCallBlockStructure(callBlock, [], [], 'unnamed');
+      });
+
+      test('callers with missing args create new defs', function() {
+        const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+            <block type="procedures_defreturn">
+              <field name="NAME">do something</field>
+              <mutation>
+                <arg name="x" varid="arg"></arg>
+              </mutation>
+            </block>
+        `), this.workspace);
+        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="procedures_callreturn">' +
+            '  <mutation name="do something"/>' +
+            '</block>'
+        ), this.workspace);
+        assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
+        assertCallBlockStructure(callBlock, [], [], 'do something2');
+      });
+
+      test('callers with mismatched args create new defs', function() {
+        const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+            <block type="procedures_defreturn">
+              <field name="NAME">do something</field>
+              <mutation>
+                <arg name="x" varid="arg"></arg>
+              </mutation>
+            </block>
+        `), this.workspace);
+        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+            <block type="procedures_callreturn">
+              <mutation name="do something">
+                <arg name="y"></arg>
+              </mutation>
+            </block>
+        `), this.workspace);
+        assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
+        assertCallBlockStructure(
+            callBlock, ['y'], [this.TEST_VAR_ID], 'do something2');
+      });
+    });
+
+    suite('json', function() {
+      test('callers without defs create new defs', function() {
+        const callBlock = Blockly.serialization.blocks.append({
+          'type': 'procedures_callreturn',
+          'extraState': {
+            'name': 'do something',
+          },
+        }, this.workspace, {recordUndo: true});
+        assertDefBlockStructure(
+            this.workspace.getBlocksByType('procedures_defreturn')[0], true);
+        assertCallBlockStructure(callBlock, [], [], 'do something');
+      });
+
+      test('callers without extra state create unamed defs', function() {
+        // recordUndo must be true to trigger change listener.
+        const callBlock = Blockly.serialization.blocks.append({
+          'type': 'procedures_callreturn',
+        }, this.workspace, {recordUndo: true});
+        assertDefBlockStructure(
+            this.workspace.getBlocksByType('procedures_defreturn')[0], true);
+        assertCallBlockStructure(callBlock, [], [], 'unnamed');
+      });
+
+      test('callers with missing args create new defs', function() {
+        const defBlock = Blockly.serialization.blocks.append({
+          'type': 'procedures_defreturn',
+          'fields': {
+            'NAME': 'do something',
+          },
+          'extraState': {
+            'params': [
+              {
+                'name': 'x',
+                'id': 'arg',
+              },
+            ],
+          },
+        }, this.workspace);
+        const callBlock = Blockly.serialization.blocks.append({
+          'type': 'procedures_callreturn',
+          'extraState': {
+            'name': 'do something',
+          },
+        }, this.workspace, {recordUndo: true});
+        assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
+        assertCallBlockStructure(callBlock, [], [], 'do something2');
+      });
+
+      test('callers with mismatched args create new defs', function() {
+        const defBlock = Blockly.serialization.blocks.append({
+          'type': 'procedures_defreturn',
+          'fields': {
+            'NAME': 'do something',
+          },
+          'extraState': {
+            'params': [
+              {
+                'name': 'x',
+                'id': 'arg',
+              },
+            ],
+          },
+        }, this.workspace);
+        const callBlock = Blockly.serialization.blocks.append({
+          'type': 'procedures_callreturn',
+          'extraState': {
+            'name': 'do something',
+            'params': ['y'],
+          },
+        }, this.workspace, {recordUndo: true});
+        assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
+        assertCallBlockStructure(
+            callBlock, ['y'], [this.TEST_VAR_ID], 'do something2');
+      });
+    });
   });
 
   suite('allProcedures', function() {
@@ -1229,7 +1382,7 @@ suite('Procedures', function() {
     });
   });
 
-  suite.skip('Multiple block serialization', function() {
+  suite('Multiple block serialization', function() {
     function assertDefAndCallBlocks(workspace, noReturnNames, returnNames, hasCallers) {
       const allProcedures = Blockly.Procedures.allProcedures(workspace);
       const defNoReturnBlocks = allProcedures[0];
@@ -1287,16 +1440,6 @@ suite('Procedures', function() {
             this.workspace, ['unnamed2'], ['unnamed'], false);
       });
 
-      test('callnoreturn (no def in xml)', function() {
-        const xml = Blockly.Xml.textToDom(`
-              <xml xmlns="https://developers.google.com/blockly/xml">
-                <block type="procedures_callnoreturn"/>
-              </xml>`);
-        Blockly.Xml.domToWorkspace(xml, this.workspace);
-        assertDefAndCallBlocks(
-            this.workspace, ['unnamed'], [], true);
-      });
-
       test('callreturn (no def in xml)', function() {
         const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
@@ -1327,91 +1470,6 @@ suite('Procedures', function() {
         Blockly.Xml.domToWorkspace(xml, this.workspace);
         assertDefAndCallBlocks(
             this.workspace, ['unnamed2'], ['unnamed'], true);
-      });
-    });
-
-    suite('caller param mismatch', function() {
-      setup(function() {
-        this.TEST_VAR_ID = 'test-id';
-        this.genUidStub = createGenUidStubWithReturns(this.TEST_VAR_ID);
-      });
-
-      test('callreturn with missing args', function() {
-        const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
-            <block type="procedures_defreturn">
-              <field name="NAME">do something</field>
-              <mutation>
-                <arg name="x" varid="arg"></arg>
-              </mutation>
-            </block>
-        `), this.workspace);
-        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-            '<block type="procedures_callreturn">' +
-            '  <mutation name="do something"/>' +
-            '</block>'
-        ), this.workspace);
-        assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
-        assertCallBlockStructure(callBlock, [], [], 'do something2');
-      });
-
-      test('callreturn with bad args', function() {
-        const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
-            <block type="procedures_defreturn">
-              <field name="NAME">do something</field>
-              <mutation>
-                <arg name="x" varid="arg"></arg>
-              </mutation>
-            </block>
-        `), this.workspace);
-        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
-            <block type="procedures_callreturn">
-              <mutation name="do something">
-                <arg name="y"></arg>
-              </mutation>
-            </block>
-        `), this.workspace);
-        assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
-        assertCallBlockStructure(
-            callBlock, ['y'], [this.TEST_VAR_ID], 'do something2');
-      });
-
-      test('callnoreturn with missing args', function() {
-        const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
-            <block type="procedures_defnoreturn">
-              <field name="NAME">do something</field>
-              <mutation>
-                <arg name="x" varid="arg"></arg>
-              </mutation>
-            </block>
-        `), this.workspace);
-        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-            '<block type="procedures_callnoreturn">' +
-            '  <mutation name="do something"/>' +
-            '</block>'
-        ), this.workspace);
-        assertDefBlockStructure(defBlock, false, ['x'], ['arg']);
-        assertCallBlockStructure(callBlock, [], [], 'do something2');
-      });
-
-      test('callnoreturn with bad args', function() {
-        const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
-            <block type="procedures_defnoreturn">
-              <field name="NAME">do something</field>
-              <mutation>
-                <arg name="x" varid="arg"></arg>
-              </mutation>
-            </block>
-        `), this.workspace);
-        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
-            <block type="procedures_callnoreturn">
-              <mutation name="do something">
-                <arg name="y"></arg>
-              </mutation>
-            </block>
-        `), this.workspace);
-        assertDefBlockStructure(defBlock, false, ['x'], ['arg']);
-        assertCallBlockStructure(
-            callBlock, ['y'], [this.TEST_VAR_ID], 'do something2');
       });
     });
   });
@@ -1480,7 +1538,9 @@ suite('Procedures', function() {
         });
 
         test('Call block', function() {
-          this.callBlock = this.workspace.newBlock(testSuite.callType);
+          this.callBlock = Blockly.serialization.blocks.append({
+            'type': testSuite.callType,
+          }, this.workspace, {recordUndo: true});
           this.callBlock.setFieldValue('proc name', 'NAME');
           assertCallBlockStructure(this.callBlock);
         });

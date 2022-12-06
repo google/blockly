@@ -14,6 +14,7 @@ import {Workspace} from '../workspace.js';
  * @internal
  */
 export function triggerProceduresUpdate(workspace: Workspace) {
+  if (workspace.isClearing) return;
   for (const block of workspace.getAllBlocks(false)) {
     if (isProcedureBlock(block)) {
       block.doProcedureUpdate();

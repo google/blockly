@@ -281,7 +281,7 @@ exports.blocks = blocks;
 /** @this {Block} */
 const procedureDefGetDefMixin = function() {
   const mixin = {
-    model: null,
+    model_: null,
 
     /**
      * Returns the data model for this procedure block.
@@ -289,7 +289,7 @@ const procedureDefGetDefMixin = function() {
      *     block.
      */
     getProcedureModel() {
-      return this.model;
+      return this.model_;
     },
 
     /**
@@ -319,9 +319,9 @@ const procedureDefGetDefMixin = function() {
     },
   };
 
-  mixin.model =
+  mixin.model_ =
       new ObservableProcedureModel(this.workspace, this.getFieldValue('NAME'));
-  this.workspace.getProcedureMap().add(mixin.model);
+  this.workspace.getProcedureMap().add(mixin.model_);
 
   this.mixin(mixin, true);
 };
@@ -402,8 +402,8 @@ const procedureDefUpdateShapeMixin = {
    * Updates the block to reflect the state of the procedure model.
    */
   doProcedureUpdate: function() {
-    this.setFieldValue(this.model.getName(), 'NAME');
-    this.setEnabled(this.model.getEnabled());
+    this.setFieldValue(this.getProcedureModel().getName(), 'NAME');
+    this.setEnabled(this.getProcedureModel().getEnabled());
     this.updateParameters_();
   },
 
@@ -412,7 +412,8 @@ const procedureDefUpdateShapeMixin = {
    * model.
    */
   updateParameters_: function() {
-    const params = this.model.getParameters().map((p) => p.getName());
+    const params =
+        this.getProcedureModel().getParameters().map((p) => p.getName());
     const paramString = params.length ?
         `${Msg['PROCEDURES_BEFORE_PARAMS']} ${params.join(', ')}` :
         '';
@@ -561,7 +562,7 @@ const procedureDefMutator = {
     for (let i = 0; i < xmlElement.childNodes.length; i++) {
       const node = xmlElement.childNodes[i];
       if (node.nodeName.toLowerCase() !== 'arg') continue;
-      this.model.insertParameter(
+      this.getProcedureModel().insertParameter(
           new ObservableParameterModel(
               this.workspace, node.getAttribute('name')),
           i);
@@ -629,7 +630,7 @@ const procedureDefMutator = {
   loadExtraState: function(state) {
     for (let i = 0; i < state['params'].length; i++) {
       const param = state['params'][i];
-      this.model.insertParameter(
+      this.getProcedureModel().insertParameter(
           new ObservableParameterModel(
               this.workspace, param.name, param.id),
           i);
@@ -720,14 +721,15 @@ const procedureDefMutator = {
     }
     this.updateParams_();
     Procedures.mutateCallers(this);
-    for (let i = this.model.getParameters().length; i >= 0; i--) {
-      this.model.deleteParameter(i);
+
+    for (let i = this.getProcedureModel().getParameters().length; i >= 0; i--) {
+      this.getProcedureModel().deleteParameter(i);
     }
 
     let i = 0;
     paramBlock = containerBlock.getInputTargetBlock('STACK');
     while (paramBlock && !paramBlock.isInsertionMarker()) {
-      this.model.insertParameter(
+      this.getProcedureModel().insertParameter(
           new ObservableParameterModel(
               this.workspace, paramBlock.getFieldValue('NAME'), paramBlock.id),
           i);

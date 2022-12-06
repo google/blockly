@@ -12,6 +12,7 @@ import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, c
 import {assertEventNotFired, createChangeListenerSpy} from '../test_helpers/events.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from '../test_helpers/setup_teardown.js';
+import {defineRowBlock} from '../test_helpers/block_definitions.js';
 
 
 suite('Procedures', function() {
@@ -21,6 +22,7 @@ suite('Procedures', function() {
     this.workspace.createVariable('preCreatedVar', '', 'preCreatedVarId');
     this.workspace.createVariable(
         'preCreatedTypedVar', 'type', 'preCreatedTypedVarId');
+    defineRowBlock();
   });
 
   teardown(function() {
@@ -329,7 +331,7 @@ suite('Procedures', function() {
           });
     });
 
-    suite.skip('caller blocks', function() {
+    suite.only('caller blocks', function() {
       test('renaming the procedure data model updates blocks', function() {
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
@@ -401,6 +403,36 @@ suite('Procedures', function() {
           'param2',
           'Expected the second params field to match the name of the param');
       });
+
+      test.only(
+          'moving a parameter in the data model moves input blocks',
+          function() {
+            const defBlock = createProcDefBlock(this.workspace);
+            const callBlock = createProcCallBlock(this.workspace);
+            const procModel = defBlock.getProcedureModel();
+            const param1 =
+                new ObservableParameterModel(this.workspace, 'param1', 'id1');
+            const param2 =
+                new ObservableParameterModel(this.workspace, 'param2', 'id2');
+            procModel.insertParameter(param1, 0);
+            procModel.insertParameter(param2, 1);
+            const rowBlock1 = this.workspace.newBlock('row_block');
+            const rowBlock2 = this.workspace.newBlock('row_block');
+            callBlock.getInput('ARG0').connection
+                .connect(rowBlock1.outputConnection);
+            callBlock.getInput('ARG1').connection
+                .connect(rowBlock2.outputConnection);
+    
+            procModel.deleteParameter(1);
+            procModel.insertParameter(param2, 0);
+    
+            chai.assert.isNotNull(
+              callBlock.getInput('ARG0'),
+              'Expected the first param input to exist');
+            chai.assert.isNotNull(
+              callBlock.getInput('ARG1'),
+              'Expected the second param input to exist');
+          });
   
       test(
           'deleting a parameter from the data model updates blocks',

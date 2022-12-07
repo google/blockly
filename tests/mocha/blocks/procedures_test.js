@@ -112,6 +112,8 @@ suite('Procedures', function() {
               .connect(paramBlock1.previousConnection);
           paramBlock1.nextConnection.connect(paramBlock2.previousConnection);
           defBlock.compose(containerBlock);
+          const id1 = defBlock.getProcedureModel().getParameter(0).getId();
+          const id2 = defBlock.getProcedureModel().getParameter(1).getId();
 
           // Reconfigure the stack to be container, param2, param1.
           paramBlock2.previousConnection.disconnect();
@@ -126,8 +128,16 @@ suite('Procedures', function() {
               'param name2',
               'Expected the first parameter of the procedure to be param 2');
           chai.assert.equal(
+              defBlock.getProcedureModel().getParameter(0).getId(),
+              id2,
+              'Expected the first parameter of the procedure to be param 2');
+          chai.assert.equal(
               defBlock.getProcedureModel().getParameter(1).getName(),
               'param name1',
+              'Expected the second parameter of the procedure to be param 1');
+          chai.assert.equal(
+              defBlock.getProcedureModel().getParameter(1).getId(),
+              id1,
               'Expected the second parameter of the procedure to be param 1');
         });
 

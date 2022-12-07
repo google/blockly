@@ -51,8 +51,32 @@ function copyStaticSrc(done) {
  * Prerequisite: clean, build.
  */
 function copyBuilt(done) {
-  return gulp.src(['build/msg/**/*', 'dist/*_compressed.js*'], {base: '.'})
+  return gulp.src(['build/msg/*', 'dist/*_compressed.js*'], {base: '.'})
       .pipe(gulp.dest(demoStaticTmpDir));
+}
+
+/**
+ * Copies compressed files into the places they used to be used from, for the
+ * benefit of our Developers site and (for now) any other websites that
+ * hotlink them.  Delete this once devsite is fixed.
+ *
+ * Prerequisite: clean, build.
+ */
+function copyCompressedToOldLocation(done) {
+  return gulp.src(['dist/*_compressed.js*'])
+      .pipe(gulp.dest(demoStaticTmpDir));
+}
+
+/**
+ * Copies messages files into the places they used to be used from, for the
+ * benefit of our Developers site and (for now) any other websites that
+ * hotlink them.  Delete this once devsite is fixed.
+ *
+ * Prerequisite: clean, build.
+ */
+function copyMessagesToOldLocation(done) {
+  return gulp.src(['build/msg/*'])
+      .pipe(gulp.dest(demoStaticTmpDir + '/msg/js'));
 }
 
 /**
@@ -153,7 +177,9 @@ const prepareDemos = gulp.series(
             gulp.parallel(buildTasks.cleanBuildDir,
                           packageTasks.cleanReleaseDir),
             buildTasks.build,
-            copyBuilt),
+            gulp.parallel(copyBuilt,
+                          copyCompressedToOldLocation,
+                          copyMessagesToOldLocation)),
         copyPlaygroundDeps));
 
 /**

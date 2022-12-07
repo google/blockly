@@ -405,7 +405,18 @@ const procedureDefUpdateShapeMixin = {
       if (this.getInput('RETURN')) {
         this.moveInputBefore('STACK', 'RETURN');
       }
+      // Restore the stack, if one was saved.
+      Mutator.reconnect(this.statementConnection_, this, 'STACK');
+      this.statementConnection_ = null;
     } else {
+      // Save the stack, then disconnect it.
+      const stackConnection = this.getInput('STACK').connection;
+      this.statementConnection_ = stackConnection.targetConnection;
+      if (this.statementConnection_) {
+        const stackBlock = stackConnection.targetBlock();
+        stackBlock.unplug();
+        stackBlock.bumpNeighbours();
+      }
       this.removeInput('STACK', true);
     }
     this.hasStatements_ = hasStatements;
@@ -704,28 +715,9 @@ const procedureDefMutator = {
     }
 
     // Show/hide the statement input.
-    let hasStatements = containerBlock.getFieldValue('STATEMENTS');
-    if (hasStatements !== null) {
-      hasStatements = hasStatements === 'TRUE';
-      if (this.hasStatements_ !== hasStatements) {
-        if (hasStatements) {
-          this.setStatements_(true);
-          // Restore the stack, if one was saved.
-          Mutator.reconnect(this.statementConnection_, this, 'STACK');
-          this.statementConnection_ = null;
-        } else {
-          // Save the stack, then disconnect it.
-          const stackConnection = this.getInput('STACK').connection;
-          this.statementConnection_ = stackConnection.targetConnection;
-          if (this.statementConnection_) {
-            const stackBlock = stackConnection.targetBlock();
-            stackBlock.unplug();
-            stackBlock.bumpNeighbours();
-          }
-          this.setStatements_(false);
-        }
-      }
-    }
+    const hasStatements = containerBlock.getFieldValue('STATEMENTS');
+    if (hasStatements === null) return;  // Handle def_noreturn.
+    this.setStatements_(hasStatements === 'TRUE');
   },
 };
 Extensions.registerMutator(

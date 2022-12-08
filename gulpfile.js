@@ -41,7 +41,6 @@ module.exports = {
   gitUpdateGithubPages: gitTasks.updateGithubPages,
 
   // Manually-invokable targets, with prequisites where required.
-  prepare: buildTasks.prepare,
   format: buildTasks.format,
   messages: buildTasks.messages,  // Generate msg/json/en.json et al.
   sortRequires: cleanupTasks.sortRequires,

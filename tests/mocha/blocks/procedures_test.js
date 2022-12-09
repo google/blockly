@@ -27,7 +27,7 @@ suite('Procedures', function() {
     sharedTestTeardown.call(this);
   });
 
-  suite.only('updating data models', function() {
+  suite('updating data models', function() {
     test(
         'renaming a procedure def block updates the procedure model',
         function() {

@@ -141,6 +141,32 @@ suite('Procedures', function() {
               'Expected the second parameter of the procedure to be param 1');
         });
 
+    test('decompositing and recomposing maintains parameter IDs', function() {
+      // Create a stack of container, param.
+      const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock =
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param name', 'NAME');
+      containerBlock.getInput('STACK').connection
+          .connect(paramBlock.previousConnection);
+      defBlock.compose(containerBlock);
+      const paramBlockId = defBlock.getProcedureModel().getParameter(0).getId();
+
+      Blockly.Events.disable();
+      mutatorWorkspace.clear();
+      Blockly.Events.enable();
+      const container = defBlock.decompose(mutatorWorkspace);
+      defBlock.compose(container);
+
+      chai.assert.equal(
+          defBlock.getProcedureModel().getParameter(0).getId(),
+          paramBlockId,
+          'Expected the parameter ID to be maintained');
+    });
+
     test(
         'deleting a parameter from a procedure def updates the procedure model',
         function() {

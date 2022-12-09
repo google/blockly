@@ -36,6 +36,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
 const {Msg} = goog.require('Blockly.Msg');
 const {Mutator} = goog.require('Blockly.Mutator');
 const {Names} = goog.require('Blockly.Names');
+const serialization = goog.require('Blockly.serialization');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
@@ -621,50 +622,39 @@ const procedureDefMutator = {
    * @this {Block}
    */
   decompose: function(workspace) {
-    /*
-     * Creates the following XML:
-     * <block type="procedures_mutatorcontainer">
-     *   <statement name="STACK">
-     *     <block type="procedures_mutatorarg">
-     *       <field name="NAME">arg1_name</field>
-     *       <next>etc...</next>
-     *     </block>
-     *   </statement>
-     * </block>
-     */
+    const containerBlockDef = {
+      'type': 'procedures_mutatorcontainer',
+      'inputs': {
+        'STACK': {},
+      },
+    };
 
-    const containerBlockNode = xmlUtils.createElement('block');
-    containerBlockNode.setAttribute('type', 'procedures_mutatorcontainer');
-    const statementNode = xmlUtils.createElement('statement');
-    statementNode.setAttribute('name', 'STACK');
-    containerBlockNode.appendChild(statementNode);
-
-    let node = statementNode;
-    for (let i = 0; i < this.arguments_.length; i++) {
-      const argBlockNode = xmlUtils.createElement('block');
-      argBlockNode.setAttribute('type', 'procedures_mutatorarg');
-      const fieldNode = xmlUtils.createElement('field');
-      fieldNode.setAttribute('name', 'NAME');
-      const argumentName = xmlUtils.createTextNode(this.arguments_[i]);
-      fieldNode.appendChild(argumentName);
-      argBlockNode.appendChild(fieldNode);
-      const nextNode = xmlUtils.createElement('next');
-      argBlockNode.appendChild(nextNode);
-
-      node.appendChild(argBlockNode);
-      node = nextNode;
+    let connDef = containerBlockDef['inputs']['STACK'];
+    for (const param of this.getProcedureModel().getParameters()) {
+      connDef['block'] = {
+        'type': 'procedures_mutatorarg',
+        'id': param.getId(),
+        'fields': {
+          'NAME': param.getName(),
+        },
+        'next': {},
+      };
+      connDef = connDef['block']['next'];
     }
+    
+    const containerBlock =
+        serialization.blocks.append(
+            containerBlockDef, workspace, {recordUndo: false});
 
-    const containerBlock = Xml.domToBlock(containerBlockNode, workspace);
-
-    if (this.type === 'procedures_defreturn') {
+    if (this.getProcedureModel().getReturnTypes()) {
       containerBlock.setFieldValue(this.hasStatements_, 'STATEMENTS');
     } else {
       containerBlock.removeInput('STATEMENT_INPUT');
     }
 
-    // Initialize procedure's callers with blank IDs.
+    // Update callers (called for backwards compatibility).
     Procedures.mutateCallers(this);
+
     return containerBlock;
   },
 
@@ -679,17 +669,13 @@ const procedureDefMutator = {
     this.paramIds_ = [];
     this.argumentVarModels_ = [];
 
-    console.log('called');
-
     // TODO: Remove old data handling logic?
     let paramBlock = containerBlock.getInputTargetBlock('STACK');
-    console.log(containerBlock, paramBlock);
     while (paramBlock && !paramBlock.isInsertionMarker()) {
-      console.log('looping!');
       const varName = paramBlock.getFieldValue('NAME');
       this.arguments_.push(varName);
-      console.log(this.workspace.getVariableMap().getVariablesOfType(''));
-      const variable = this.workspace.getVariable(varName, '');
+      const variable = Variables.getOrCreateVariablePackage(
+          this.workspace, null, varName, '');
       this.argumentVarModels_.push(variable);
 
       this.paramIds_.push(paramBlock.id);
@@ -698,26 +684,26 @@ const procedureDefMutator = {
     }
     this.updateParams_();
     Procedures.mutateCallers(this);
-
     for (let i = this.model.getParameters().length; i >= 0; i--) {
       this.model.deleteParameter(i);
     }
+
     let i = 0;
     paramBlock = containerBlock.getInputTargetBlock('STACK');
     while (paramBlock && !paramBlock.isInsertionMarker()) {
       this.model.insertParameter(
           new ObservableParameterModel(
-              this.workspace, paramBlock.getFieldValue('NAME')),
+              this.workspace, paramBlock.getFieldValue('NAME'), paramBlock.id),
           i);
       paramBlock =
           paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
       i++;
     }
 
-    // Show/hide the statement input.
     const hasStatements = containerBlock.getFieldValue('STATEMENTS');
-    if (hasStatements === null) return;  // Handle def_noreturn.
-    this.setStatements_(hasStatements === 'TRUE');
+    if (hasStatements !== null) {
+      this.setStatements_(hasStatements === 'TRUE');
+    }
   },
 };
 Extensions.registerMutator(

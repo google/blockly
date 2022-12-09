@@ -512,8 +512,6 @@ export class FieldColour extends Field<string> {
       cell.setAttribute('data-colour', colours[i]);
       cell.title = titles[i] || colours[i];
       cell.id = idGenerator.getNextUniqueId();
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
       cell.setAttribute('data-index', String(i));
       aria.setRole(cell, aria.Role.GRIDCELL);
       aria.setState(cell, aria.State.LABEL, colours[i]);

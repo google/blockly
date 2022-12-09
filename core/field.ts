@@ -53,9 +53,9 @@ export type FieldValidator<T = any> = (value?: T) => T|null|undefined;
  * @alias Blockly.Field
  */
 export abstract class Field<T = any> implements IASTNodeLocationSvg,
-                                                    IASTNodeLocationWithBlock,
-                                                    IKeyboardAccessible,
-                                                    IRegistrable {
+                                                IASTNodeLocationWithBlock,
+                                                IKeyboardAccessible,
+                                                IRegistrable {
   /**
    * To overwrite the default value which is set in **Field**, directly update
    * the prototype.

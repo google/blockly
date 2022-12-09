@@ -45,14 +45,14 @@ import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
-export type FieldValidator<T = unknown> = (value: T) => void;
+export type FieldValidator<T = any> = (value?: T) => T|null|undefined;
 
 /**
  * Abstract class for an editable field.
  *
  * @alias Blockly.Field
  */
-export abstract class Field<T = unknown> implements IASTNodeLocationSvg,
+export abstract class Field<T = any> implements IASTNodeLocationSvg,
                                                     IASTNodeLocationWithBlock,
                                                     IKeyboardAccessible,
                                                     IRegistrable {

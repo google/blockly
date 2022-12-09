@@ -201,8 +201,8 @@ export function setColour(backgroundColour: string, borderColour: string) {
  * @param opt_secondaryYOffset Optional Y offset for above-block positioning.
  * @returns True if the menu rendered below block; false if above.
  */
-export function showPositionedByBlock<T>(
-    field: Field<T>, block: BlockSvg, opt_onHide?: Function,
+export function showPositionedByBlock<T, U>(
+    field: Field<T, U>, block: BlockSvg, opt_onHide?: Function,
     opt_secondaryYOffset?: number): boolean {
   return showPositionedByRect(
       getScaledBboxOfBlock(block), field as Field, opt_onHide,
@@ -220,8 +220,8 @@ export function showPositionedByBlock<T>(
  * @param opt_secondaryYOffset Optional Y offset for above-block positioning.
  * @returns True if the menu rendered below block; false if above.
  */
-export function showPositionedByField<T>(
-    field: Field<T>, opt_onHide?: Function,
+export function showPositionedByField<T, U>(
+    field: Field<T, U>, opt_onHide?: Function,
     opt_secondaryYOffset?: number): boolean {
   positionToField = true;
   return showPositionedByRect(
@@ -309,8 +309,8 @@ function showPositionedByRect(
  * @returns True if the menu rendered at the primary origin point.
  * @internal
  */
-export function show<T>(
-    newOwner: Field<T>, rtl: boolean, primaryX: number, primaryY: number,
+export function show<T, U>(
+    newOwner: Field<T, U>, rtl: boolean, primaryX: number, primaryY: number,
     secondaryX: number, secondaryY: number, opt_onHide?: Function): boolean {
   owner = newOwner as Field;
   onHide = opt_onHide || null;
@@ -549,8 +549,8 @@ export function isVisible(): boolean {
  *     animating.
  * @returns True if hidden.
  */
-export function hideIfOwner<T>(
-    divOwner: Field<T>, opt_withoutAnimation?: boolean): boolean {
+export function hideIfOwner<T, U>(
+    divOwner: Field<T, U>, opt_withoutAnimation?: boolean): boolean {
   if (owner === divOwner) {
     if (opt_withoutAnimation) {
       hideWithoutAnimation();

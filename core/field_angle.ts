@@ -141,8 +141,7 @@ export class FieldAngle extends FieldInput<number> {
     if (opt_config) {
       this.configure_(opt_config);
     }
-    const value = opt_value === undefined ? null : opt_value;
-    this.setValue(value);
+    this.setValue(opt_value);
     if (opt_validator) {
       this.setValidator(opt_validator);
     }

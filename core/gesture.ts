@@ -969,14 +969,14 @@ export class Gesture {
    * @param field The field the gesture started on.
    * @internal
    */
-  setStartField(field: Field) {
+  setStartField<T, U>(field: Field<T, U>) {
     if (this.hasStarted_) {
       throw Error(
           'Tried to call gesture.setStartField, ' +
           'but the gesture had already been started.');
     }
     if (!this.startField_) {
-      this.startField_ = field;
+      this.startField_ = field as Field;
     }
   }
 

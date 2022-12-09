@@ -57,8 +57,7 @@ export class FieldLabel extends Field<string> {
     } else {
       this.class_ = opt_class || null;
     }
-    const value = opt_value === undefined ? null : opt_value;
-    this.setValue(value);
+    this.setValue(opt_value);
   }
 
   protected override configure_(config: FieldLabelConfig) {

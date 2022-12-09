@@ -108,8 +108,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T|string> {
     if (opt_config) {
       this.configure_(opt_config);
     }
-    const value = opt_value === undefined ? null : opt_value;
-    this.setValue(value);
+    this.setValue(opt_value);
     if (opt_validator) {
       this.setValidator(opt_validator);
     }

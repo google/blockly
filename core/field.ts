@@ -46,26 +46,54 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 /**
+ * Shorthand for `undefined`. Used in cases where a parameter should
+ * always be supplied (so it's not optional), though the value could
+ * be `undefined`.
+ */
+type Un = undefined;
+
+/**
+ * The validation response for an update to a **Field** value.
+ *
+ * @returns `T`, the modified input value to use.
+ * @returns `null` to ignore the input value and invoke `doValueInvalid_`.
+ * @returns `undefined` to use the input value as is for the field update.
+ */
+export type Validation<T> = T|null|undefined;
+
+/**
+ * Where `T` is the value stored on a **Field** and `U` is the value passed into
+ * the constructor and **setValue**, `T` and `U` are the same for most
+ * subclasses. If they are different and `U` is not compatible with `T`, it is
+ * invalid to return `undefined` since the input value *must be transformed*
+ * to store as a `T`. For example, a subclass could take in an image then use
+ * **doClassValidation_** to convert it to a string.
+ */
+type ClassValidation<T, U> = U extends T ? Validation<T>: T|null;
+
+/**
  * A function that is called to validate changes to the field's value. For more
  * information, see
  * https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values
  *
- * @param value the updated T value to validate.
- * @returns T, the modified input value to use.
- * @returns null to ignore the input value and invoke `doValueInvalid_`.
- * @returns undefined to use the input value as is for the field update.
+ * @param value The value to be validated.
+ * @returns The validated value, same as input by default.
  */
-export type FieldValidator<T = any> = (value: T) => T|null|undefined;
+export type FieldValidator<T = any> = (value?: T) => Validation<T>;
 
 /**
  * Abstract class for an editable field.
  *
  * @alias Blockly.Field
+ * @typeParam T - The value stored on the field.
+ * @typeParam U - The value passed into the constructor and `setValue`.
+ *
+ * NOTE: Subclasses where `U` does not extend `T` must override
+ * `doClassValidation_` to convert `U` into `T`.
  */
-export abstract class Field<T = any> implements IASTNodeLocationSvg,
-                                                IASTNodeLocationWithBlock,
-                                                IKeyboardAccessible,
-                                                IRegistrable {
+export abstract class Field<T = any, U = T> implements
+    IASTNodeLocationSvg, IASTNodeLocationWithBlock, IKeyboardAccessible,
+    IRegistrable {
   /**
    * To overwrite the default value which is set in **Field**, directly update
    * the prototype.
@@ -207,7 +235,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * this parameter supports.
    */
   constructor(
-      value: T|Sentinel, opt_validator?: FieldValidator<T>|null,
+      value: U|Sentinel, opt_validator?: FieldValidator<T>|null,
       opt_config?: FieldConfig) {
     /**
      * A generic value possessed by the field.
@@ -970,9 +998,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @param newValue New value.
    * @sealed
    */
-  setValue(newValue: T|null) {
-    // TODO: Do we need to keep logging?
-    // if (newValue === null) return;
+  setValue(newValue?: U|null) {
     const doLogging = false;
     if (newValue === null) {
       doLogging && console.log('null, return');
@@ -980,37 +1006,39 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
       return;
     }
 
-    const classValidatedValue =
-        this.processValidation_(newValue, this.doClassValidation_(newValue));
-    if (classValidatedValue instanceof Error) return;
+    const classValidation = this.doClassValidation_(newValue);
+    const classValue = this.processValidation_(newValue, classValidation);
+    if (classValue instanceof Error) {
+      doLogging && console.log('invalid class validation, return');
+      return;
+    }
+    // NOTE: newValue = undefined -> classValidation = null -> Error.
+    const newClassValue = classValue!;
 
-    const localValidatedValue = this.processValidation_(
-        classValidatedValue,
-        this.getValidator()?.call(this, classValidatedValue));
-    // if (localValidatedValue instanceof Error) return;
-    if (localValidatedValue instanceof Error) {
+    const localValidation = this.getValidator()?.call(this, newClassValue);
+    const localValue = this.processValidation_(newClassValue, localValidation);
+    if (localValue instanceof Error) {
       doLogging && console.log('invalid local validation, return');
       return;
     }
 
     const source = this.sourceBlock_;
-    // if (source && source.disposed) return;
     if (source && source.disposed) {
       doLogging && console.log('source disposed, return');
       return;
     }
 
     const oldValue = this.getValue();
-    if (oldValue === localValidatedValue) {
+    if (oldValue === localValue) {
       doLogging && console.log('same, doValueUpdate_, return');
-      this.doValueUpdate_(localValidatedValue);
+      this.doValueUpdate_(localValue);
       return;
     }
 
-    this.doValueUpdate_(localValidatedValue);
+    this.doValueUpdate_(localValue);
     if (source && eventUtils.isEnabled()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          source, 'field', this.name || null, oldValue, localValidatedValue));
+          source, 'field', this.name || null, oldValue, localValue));
     }
     if (this.isDirty_) {
       this.forceRerender();
@@ -1025,7 +1053,12 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @param validatedValue Validated value.
    * @returns New value, or an Error object.
    */
-  private processValidation_(newValue: T, validatedValue?: T|null): T|Error {
+  private processValidation_(newValue: T, validatedValue: Validation<T>): T
+      |Error;
+  private processValidation_(
+      newValue: U|Un, validatedValue: ClassValidation<T, U>): T|Error|Un;
+  private processValidation_(newValue: T|U|Un, validatedValue: T|null|Un): T
+      |Error|Un {
     if (validatedValue === null) {
       this.doValueInvalid_(newValue);
       if (this.isDirty_) {
@@ -1033,7 +1066,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
       }
       return Error();
     }
-    return validatedValue === undefined ? newValue : validatedValue;
+    return validatedValue === undefined ? newValue as T | Un : validatedValue;
   }
 
   /**
@@ -1052,11 +1085,16 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @param opt_newValue The value to be validated.
    * @returns The validated value, same as input by default.
    */
-  protected doClassValidation_(opt_newValue?: T|null): T|null {
+  protected doClassValidation_(opt_newValue?: U): ClassValidation<T, U> {
+    // NOTE: Although `undefined` is never returned here, it is valid for
+    // subclasses to override `doClassValidation_` and return `undefined`.
     if (opt_newValue === null || opt_newValue === undefined) {
       return null;
     }
-    return opt_newValue;
+    // NOTE: This will break when used by subclasses where U is not
+    // compatible with T. U is included to support preexisting cases
+    // where subclasses override `doClassValidation_`.
+    return opt_newValue as T;
   }
 
   /**
@@ -1077,7 +1115,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    *
    * @param _invalidValue The input value that was determined to be invalid.
    */
-  protected doValueInvalid_(_invalidValue: T) {}
+  protected doValueInvalid_(_invalidValue: T|U|Un) {}
   // NOP
 
   /**
@@ -1091,7 +1129,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     }
     const gesture = (this.sourceBlock_.workspace as WorkspaceSvg).getGesture(e);
     if (gesture) {
-      gesture.setStartField(this as Field);
+      gesture.setStartField(this);
     }
   }
 

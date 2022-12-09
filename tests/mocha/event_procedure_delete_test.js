@@ -146,10 +146,11 @@ suite('Procedure Delete Event', function() {
     });
   });
 
-  suite.skip('serialization', function() {
+  suite('serialization', function() {
     test('events round-trip through JSON', function() {
       const model = new Blockly.procedures.ObservableProcedureModel(
           this.workspace, 'test name', 'test id');
+      this.procedureMap.add(model);
       const origEvent = new Blockly.Events.ProcedureDelete(this.workspace, model);
 
       const json = origEvent.toJson();

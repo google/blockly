@@ -197,16 +197,16 @@ suite('Procedure Parameter Create Event', function() {
     });
   });
 
-  suite.skip('serialization', function() {
+  suite('serialization', function() {
     test('events round-trip through JSON', function() {
       const param = new Blockly.procedures.ObservableParameterModel(
           this.workspace, 'test param name', 'test param id');
       const model =
           new Blockly.procedures.ObservableProcedureModel(
-              this.workspace, 'test name', 'test id')
-              .insertParameter(param, 0);
+              this.workspace, 'test name', 'test id');
+      this.procedureMap.add(model);
       const origEvent = new Blockly.Events.ProcedureParameterCreate(
-          this.workspace, model);
+          this.workspace, model, param, 0);
 
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);

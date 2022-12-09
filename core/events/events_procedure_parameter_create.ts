@@ -8,9 +8,10 @@ import type {IParameterModel} from '../interfaces/i_parameter_model.js';
 import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
 import {ObservableParameterModel} from '../procedures/observable_parameter_model.js';
 import * as registry from '../registry.js';
+import {loadParameter, ParameterState, saveParameter} from '../serialization/procedures.js';
 import type {Workspace} from '../workspace.js';
 
-import {ProcedureParameterBase} from './events_procedure_parameter_base.js';
+import {ProcedureParameterBase, ProcedureParameterBaseJson} from './events_procedure_parameter_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -27,9 +28,8 @@ export class ProcedureParameterCreate extends ProcedureParameterBase {
    */
   constructor(
       workspace: Workspace, procedure: IProcedureModel,
-      public readonly parameter: IParameterModel,
-      public readonly index: number) {
-    super(workspace, procedure);
+      parameter: IParameterModel, public readonly index: number) {
+    super(workspace, procedure, parameter);
   }
 
   run(forward: boolean) {
@@ -44,6 +44,7 @@ export class ProcedureParameterCreate extends ProcedureParameterBase {
     const parameterModel = procedureModel.getParameter(this.index);
     if (forward) {
       if (this.parameterMatches(parameterModel)) return;
+      // TODO: This should just add the parameter instead of creating a dupe.
       procedureModel.insertParameter(
           new ObservableParameterModel(
               workspace, this.parameter.getName(), this.parameter.getId()),
@@ -57,6 +58,42 @@ export class ProcedureParameterCreate extends ProcedureParameterBase {
   parameterMatches(param: IParameterModel) {
     return param && param.getId() === this.parameter.getId();
   }
+
+  /**
+   * Encode the event as JSON.
+   *
+   * @returns JSON representation.
+   */
+  toJson(): ProcedureParameterCreateJson {
+    const json = super.toJson() as ProcedureParameterCreateJson;
+    json['parameter'] = saveParameter(this.parameter);
+    json['index'] = this.index;
+    return json;
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @internal
+   */
+  static fromJson(json: ProcedureParameterCreateJson, workspace: Workspace):
+      ProcedureParameterCreate {
+    const procedure = workspace.getProcedureMap().get(json['procedureId']);
+    if (!procedure) {
+      throw new Error(
+          'Cannot deserialize parameter create event because the ' +
+          'target procedure does not exist');
+    }
+    return new ProcedureParameterCreate(
+        workspace, procedure,
+        loadParameter(ObservableParameterModel, json['parameter'], workspace),
+        json['index']);
+  }
+}
+
+export interface ProcedureParameterCreateJson extends
+    ProcedureParameterBaseJson {
+  parameter: ParameterState, index: number,
 }
 
 registry.register(

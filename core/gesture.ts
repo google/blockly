@@ -22,6 +22,7 @@ import * as browserEvents from './browser_events.js';
 import {BubbleDragger} from './bubble_dragger.js';
 import * as common from './common.js';
 import {config} from './config.js';
+import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import type {IBlockDragger} from './interfaces/i_block_dragger.js';
@@ -168,6 +169,14 @@ export class Gesture {
 
   /** Boolean for whether or not the workspace supports pinch-zoom. */
   private isPinchZoomEnabled_: boolean|null = null;
+
+  /**
+   * The owner of the dropdownDiv when this gesture first starts.
+   * Needed because we'll close the dropdown before fields get to
+   * act on their events, and some fields care about who owns
+   * the dropdown.
+   */
+  currentDropdownOwner: Field|null = null;
 
   /**
    * @param e The event that kicked off this gesture.
@@ -462,6 +471,9 @@ export class Gesture {
       // dragged, the block was moved, the parent workspace zoomed, etc.
       this.startWorkspace_.resize();
     }
+
+    // Keep track of which field owns the dropdown before we close it.
+    this.currentDropdownOwner = dropDownDiv.getOwner();
     // Hide chaff also hides the flyout, so don't do it if the click is in a
     // flyout.
     this.startWorkspace_.hideChaff(!!this.flyout_);
@@ -878,7 +890,13 @@ export class Gesture {
           'Cannot do a field click because the start field is ' +
           'undefined');
     }
-    this.startField_.showEditor(this.mostRecentEvent_);
+
+    // Only show the editor if the field's editor wasn't already open
+    // right before this gesture started.
+    const dropdownAlreadyOpen = this.currentDropdownOwner === this.startField_;
+    if (!dropdownAlreadyOpen) {
+      this.startField_.showEditor(this.mostRecentEvent_);
+    }
     this.bringBlockToFront_();
   }
 

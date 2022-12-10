@@ -157,6 +157,13 @@ export function setBoundsElement(boundsElem: Element|null) {
 }
 
 /**
+ * @returns The field that currently owns this, or null.
+ */
+export function getOwner(): Field|null {
+  return owner;
+}
+
+/**
  * Provide the div for inserting content into the drop-down.
  *
  * @returns Div to populate with content.

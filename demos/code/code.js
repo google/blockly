@@ -294,7 +294,7 @@ Code.tabClick = function(clickedName) {
       }
     }
     if (json) {
-      Blockly.serialization.workspaces.load(json, Code.workspace);
+      Blockly.serialization.workspaces.load(json);
     }
   }
 
@@ -353,7 +353,7 @@ Code.renderContent = function() {
   } else if (content.id === 'content_json') {
     var jsonTextarea = document.getElementById('content_json');
     jsonTextarea.value = JSON.stringify(
-        Blockly.serialization.workspaces.save(Code.workspace), null, 2);
+        Blockly.serialization.workspaces.save(), null, 2);
     jsonTextarea.focus();
   } else if (content.id === 'content_javascript') {
     Code.attemptCodeGeneration(Blockly.JavaScript);

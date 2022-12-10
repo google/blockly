@@ -160,7 +160,7 @@ function saveXml() {
 
 function saveJson() {
   var output = document.getElementById('importExport');
-  var state = Blockly.serialization.workspaces.save(workspace);
+  var state = Blockly.serialization.workspaces.save();
   output.value = JSON.stringify(state, null, 2);
   output.focus();
   output.select();
@@ -175,7 +175,7 @@ function load() {
   var valid = saveIsValid(input.value);
   if (valid.json) {
     var state = JSON.parse(input.value);
-    Blockly.serialization.workspaces.load(state, workspace);
+    Blockly.serialization.workspaces.load(state);
   } else if (valid.xml) {
     var xml = Blockly.Xml.textToDom(input.value);
     Blockly.Xml.domToWorkspace(xml, workspace);
@@ -345,7 +345,7 @@ var spaghettiXml = [
       }
     };
     console.time('Spaghetti serialization');
-    Blockly.serialization.workspaces.load(obj, workspace);
+    Blockly.serialization.workspaces.load(obj);
     console.timeEnd('Spaghetti serialization');
   }
   var spaghettiJs = JSON.stringify({

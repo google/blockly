@@ -11,6 +11,7 @@
  * @namespace Blockly.serialization.workspaces
  */
 import * as goog from '../../closure/goog/goog.js';
+import {getMainWorkspace} from '../common.js';
 goog.declareModuleId('Blockly.serialization.workspaces');
 
 import * as eventUtils from '../events/utils.js';
@@ -26,10 +27,11 @@ import {WorkspaceSvg} from '../workspace_svg.js';
  * Returns the state of the workspace as a plain JavaScript object.
  *
  * @param workspace The workspace to serialize.
+ *     Defaults to main workspace.
  * @returns The serialized state of the workspace.
  * @alias Blockly.serialization.workspaces.save
  */
-export function save(workspace: Workspace):
+export function save(workspace: Workspace = getMainWorkspace()):
     {[key: string]: AnyDuringMigration} {
   const state = Object.create(null);
   const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
@@ -47,12 +49,14 @@ export function save(workspace: Workspace):
  *
  * @param state The state of the workspace to deserialize into the workspace.
  * @param workspace The workspace to add the new state to.
+ *     Defaults to main workspace.
  * @param param1 recordUndo: If true, events triggered by this function will be
  *     undo-able by the user. False by default.
  * @alias Blockly.serialization.workspaces.load
  */
 export function load(
-    state: {[key: string]: AnyDuringMigration}, workspace: Workspace,
+    state: {[key: string]: AnyDuringMigration},
+    workspace: Workspace = getMainWorkspace(),
     {recordUndo = false}: {recordUndo?: boolean} = {}) {
   const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
   if (!serializerMap) {

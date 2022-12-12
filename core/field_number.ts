@@ -47,6 +47,9 @@ export class FieldNumber extends FieldInput<number> {
    */
   override SERIALIZABLE = true;
 
+  /** Don't spellcheck numbers.  Our validator does a better job. */
+  protected override spellcheck_ = false;
+
   /**
    * @param opt_value The initial value of the field. Should cast to a number.
    *     Defaults to 0. Also accepts Field.SKIP_SETUP if you wish to skip setup

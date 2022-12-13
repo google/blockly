@@ -157,7 +157,7 @@ class VerticalFlyout extends Flyout {
     const x = this.getX();
     const y = this.getY();
 
-    this.positionAt_(this.width_, (this.height_ + constants.MODULES_HEIGHT), x, y);
+    this.positionAt_(this.width_, this.height_, x, y);
   }
 
   /**
@@ -181,7 +181,7 @@ class VerticalFlyout extends Flyout {
         'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, atRight ? 0 : 1,
         atRight ? -this.CORNER_RADIUS : this.CORNER_RADIUS, this.CORNER_RADIUS);
     // Side closest to workspace.
-    path.push('v', Math.max(0, (height + constants.MODULES_HEIGHT)));
+    path.push('v', Math.max(0, height));
     // Rounded corner.
     path.push(
         'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, atRight ? 0 : 1,

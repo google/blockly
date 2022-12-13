@@ -124,7 +124,6 @@ let content = (`
   overflow: hidden;  /* IE overflows by default. */
   position: absolute;
   display: block;
-  bottom: 0;
 }
 
 .blocklyWidgetDiv {
@@ -523,7 +522,6 @@ let content = (`
 .blocklyScrollbarVertical {
   position: absolute;
   outline: none;
-  margin-top: 35px;
 }
 
 .blocklyScrollbarBackground {

@@ -149,7 +149,7 @@ const svgResize = function(workspace) {
   }
 
   const width = div.offsetWidth;
-  const height = div.offsetHeight - constants.MODULES_HEIGHT;
+  const height = div.offsetHeight;
 
   if (cachedSize.width !== width && width > 0) {
     svg.setAttribute('width', width + 'px');

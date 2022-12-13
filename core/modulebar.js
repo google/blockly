@@ -117,6 +117,8 @@ const ModuleBar = function(workspace) {
    */
   this.isFinishedLoading_ = false;
 
+  this.ulWrapper_ = null;
+
   /**
    * Array number key code
    * @type {Array.<number>}
@@ -142,8 +144,16 @@ ModuleBar.prototype.init = function() {
 
   this.ulContainer_ = document.createElement("ul");
   this.ulContainer_.className = "blocklyModuleBarUl";
-  this.htmlContainer_.appendChild(this.ulContainer_);
-  injectionContainer.appendChild(this.htmlContainer_);
+
+  this.ulWrapper_ = document.createElement("div");
+  this.ulWrapper_.className = "blocklyModuleBarUlWrapper";
+  this.ulWrapper_.appendChild(this.ulContainer_);
+
+  this.htmlContainer_.appendChild(this.ulWrapper_);
+  injectionContainer.parentNode.insertBefore(
+    this.htmlContainer_,
+    injectionContainer
+  );
 
   if (this.workspace_.RTL) {
     this.htmlContainer_.setAttribute("dir", "rtl");
@@ -273,7 +283,7 @@ ModuleBar.prototype.render = function() {
         this.registerKey(module, i);
     }
 
-    this.htmlContainer_.appendChild(tab);
+    this.ulContainer_.appendChild(tab);
   }
 
   // Hack wait when the elements rendered in document and scroll to active tab.
@@ -521,19 +531,18 @@ ModuleBar.prototype.onMouseMove_ = function(e) {
 
 ModuleBar.prototype.needShowShadow_ = function() {
   const ulElem = document.querySelector(".blocklyModuleBarUl");
-  const containerElem = document.querySelector(".blocklyModuleBarContainer");
   const DEAD_ZONE = 10;
 
   if (ulElem.scrollLeft > 0) {
-    containerElem.classList.add('visibleLeft');
+    this.ulWrapper_.classList.add('visibleLeft');
   } else {
-    containerElem.classList.remove('visibleLeft');
+    this.ulWrapper_.classList.remove('visibleLeft');
   }
 
   if (ulElem.offsetWidth + Math.round(ulElem.scrollLeft) + DEAD_ZONE <= ulElem.scrollWidth) {
-    containerElem.classList.add('visibleRight');
+    this.ulWrapper_.classList.add('visibleRight');
   } else {
-    containerElem.classList.remove('visibleRight');
+    this.ulWrapper_.classList.remove('visibleRight');
   }
 };
 
@@ -715,6 +724,10 @@ ModuleBar.prototype.updateColourFromTheme = function() {
   // TODO: theme
 };
 
+ModuleBar.prototype.getUlWrapElement = function() {
+  return this.ulWrapper_;
+};
+
 /**
  * Dispose of this moduleBar.
  */
@@ -736,6 +749,7 @@ Css.register(
     display: flex;
   }
 
+  .blocklyModuleBarUlWrapper,
   .blocklyModuleBarUl {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -744,9 +758,38 @@ Css.register(
     list-style: none;
     padding: 0;
     margin: 0;
-    height: 35px;
+    height: 40px;
     overflow-x: overlay;
     position: relative;
+  }
+
+  .blocklyModuleBarUl:hover::-webkit-scrollbar { display: initial; height: 5px; }
+  .blocklyModuleBarUl::-webkit-scrollbar { display: none; }
+
+  .blocklyModuleBarUl {
+    overflow-y: hidden;
+    overflow-x: overlay;
+  }
+
+  .blocklyModuleBarUl::-webkit-scrollbar-track {
+      background-color: transparent;
+      opacity:0.2;
+      border-width: 0;
+  }
+
+  .blocklyModuleBarUl::-webkit-scrollbar-button,
+  .blocklyModuleBarUl::-webkit-scrollbar-track-piece,
+  .blocklyModuleBarUl::-webkit-scrollbar-corner,
+  .blocklyModuleBarUl::-webkit-resizer { display: none; }
+
+  .blocklyModuleBarUl::-webkit-scrollbar {
+    height: 0px;
+  }
+
+  .blocklyModuleBarUl::-webkit-scrollbar-thumb {
+    height: 0px;
+    background-color: #ccc;
+    border: none;
   }
 
   .cursorNotAllowed {
@@ -770,7 +813,7 @@ Css.register(
     border-radius: 8px 8px 0px 0px;
     font-family: sans-serif;
     font-size: 14px;
-    height: 35px;
+    height: 40px;
     background-color: #eee;
     border-color: #eee;
   }
@@ -794,7 +837,7 @@ Css.register(
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     background-color: #08976d;
-    height: 35px;
+    height: 40px;
   }
 
   .blocklyModuleBarTabCreate:hover > .blocklyModuleBarLink {
@@ -813,23 +856,22 @@ Css.register(
     transition 0.15s ease-in-out;
   }
 
-  .visibleRight.blocklyModuleBarContainer::after {
+  .visibleRight.blocklyModuleBarUlWrapper::after {
     content: '';
     position: absolute;
     z-index: 1;
     right: 0;
-    height: 30px;
+    height: 40px;
     width: 40px;
-    margin-right: 40px;
     background: linear-gradient( to left, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
   }
 
-  .visibleLeft.blocklyModuleBarContainer::before {
+  .visibleLeft.blocklyModuleBarUlWrapper::before {
     content: '';
     position: absolute;
     z-index: 1;
     left: 0;
-    height: 30px;
+    height: 40px;
     width: 40px;
     margin-left: inherit;
     background: linear-gradient( to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);

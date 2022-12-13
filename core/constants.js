@@ -31,11 +31,3 @@ exports.COLLAPSED_INPUT_NAME = COLLAPSED_INPUT_NAME;
  */
 const COLLAPSED_FIELD_NAME = '_TEMP_COLLAPSED_FIELD';
 exports.COLLAPSED_FIELD_NAME = COLLAPSED_FIELD_NAME;
-
-/**
- * Height modules element.
- * @enum {number}
- * @alias Blockly.constants.MODULES_HEIGHT
- */
-const MODULES_HEIGHT = 40;
-exports.MODULES_HEIGHT = MODULES_HEIGHT;

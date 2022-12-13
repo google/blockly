@@ -30,7 +30,7 @@ const {Scrollbar} = goog.require('Blockly.Scrollbar');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Block');
 /** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+const constants = goog.require('Blockly.constants');
 
 
 /**

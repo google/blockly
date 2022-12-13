@@ -54,7 +54,6 @@
 	"DEFAULT_MODULE_NAME": "Главный",
 	"RENAME_MODULE": "Переименовать",
 	"RENAME_MODULE_TITLE": "Имя:",
-	"NEW_MODULE": "Создать",
 	"NEW_MODULE_TITLE": "Имя:",
 	"LAST_MODULE_DELETE_RESTRICTION": "Невозможно удалить единственную вкладку.",
 	"NOT_EMPTY_MODULE_DELETE_RESTRICTION": "Невозможно удалить вкладку с блоками. Сначала удалите блоки в модуле.",
@@ -382,6 +381,5 @@
 	"DIALOG_OK": "OK",
 	"DIALOG_CANCEL": "Отмена",
 	"SEARCH": "Поиск",
-	"NEW_TAB": "Новая вкладка",
 	"OPTION_VALUE_REMOVED": "Значение удалено"
 }

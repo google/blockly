@@ -46,13 +46,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 /**
- * Shorthand for `undefined`. Used in cases where a parameter should
- * always be supplied (so it's not optional), though the value could
- * be `undefined`.
- */
-type Un = undefined;
-
-/**
  * The validation response for an update to a **Field** value.
  *
  * @returns `T`, the modified input value to use.
@@ -1051,8 +1044,8 @@ export abstract class Field<T = any, U = T> implements
    * @param validatedValue Validated value.
    * @returns New value, or an Error object.
    */
-  private processValidation_(newValue: T|U|Un, validatedValue: T|null|Un): T
-      |Error {
+  private processValidation_(
+      newValue: T|U|undefined, validatedValue: T|null|undefined): T|Error {
     if (validatedValue === null) {
       this.doValueInvalid_(newValue);
       if (this.isDirty_) {
@@ -1109,7 +1102,7 @@ export abstract class Field<T = any, U = T> implements
    *
    * @param _invalidValue The input value that was determined to be invalid.
    */
-  protected doValueInvalid_(_invalidValue: T|U|Un) {}
+  protected doValueInvalid_(_invalidValue: T|U|undefined) {}
   // NOP
 
   /**

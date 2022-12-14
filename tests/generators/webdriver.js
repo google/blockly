@@ -42,22 +42,23 @@ async function runGeneratorsInBrowser(outputDir) {
   var options = {
     capabilities: {
       browserName: 'chrome',
+      'goog:chromeOptions': {
+        args: ['--allow-file-access-from-files'],
+      },
     },
     logLevel: 'warn',
     services: ['selenium-standalone']
   };
+
   // Run in headless mode on Github Actions.
   if (process.env.CI) {
-    options.capabilities['goog:chromeOptions'] = {
-      args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage', '--allow-file-access-from-files']
-    };
+    options.capabilities['goog:chromeOptions'].args.push(
+        '--headless', '--no-sandbox', '--disable-dev-shm-usage',);
   } else {
     // --disable-gpu is needed to prevent Chrome from hanging on Linux with
     // NVIDIA drivers older than v295.20. See
     // https://github.com/google/blockly/issues/5345 for details.
-    options.capabilities['goog:chromeOptions'] = {
-      args: ['--allow-file-access-from-files', '--disable-gpu']
-    };
+    options.capabilities['goog:chromeOptions'].args.push('--disable-gpu');
   }
 
   var url = 'file://' + __dirname + '/index.html';

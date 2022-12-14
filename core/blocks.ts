@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.blocks');
 
 
 /**
- * A block definition.  For now this very lose, but it can potentially
+ * A block definition.  For now this very loose, but it can potentially
  * be refined e.g. by replacing this typedef with a class definition.
  */
 export type BlockDefinition = AnyDuringMigration;

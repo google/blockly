@@ -485,7 +485,7 @@ const procedureDefValidatorHelper = function() {
     Procedures.rename.call(this, newName);
 
     const sourceBlock = this.getSourceBlock();
-    const legalName = Procedures.findLegalName(newName, sourceBlock);
+    const legalName = Procedures.findLegalName(newName.trim(), sourceBlock);
     sourceBlock.model.setName(legalName);
     return legalName;
   };
@@ -646,7 +646,7 @@ const procedureDefMutator = {
         serialization.blocks.append(
             containerBlockDef, workspace, {recordUndo: false});
 
-    if (this.getProcedureModel().getReturnTypes()) {
+    if (this.type === 'procedures_defreturn') {
       containerBlock.setFieldValue(this.hasStatements_, 'STATEMENTS');
     } else {
       containerBlock.removeInput('STATEMENT_INPUT');

@@ -168,7 +168,7 @@ function stripApacheLicense() {
   // Closure Compiler preserves dozens of Apache licences in the Blockly code.
   // Remove these if they belong to Google or MIT.
   // MIT's permission to do this is logged in Blockly issue #2412.
-  return gulp.replace(new RegExp(licenseRegex, "g"), '\n\n\n\n');
+  return gulp.replace(new RegExp(licenseRegex, 'g'), '\n\n\n\n');
   // Replace with the same number of lines so that source-maps are not affected.
 }
 
@@ -387,7 +387,7 @@ function generateMessages(done) {
       --input_file ${path.join('msg', 'messages.js')} \
       --output_dir ${path.join('msg', 'json')} \
       --quiet`;
-  execSync(jsToJsonCmd, { stdio: 'inherit' });
+  execSync(jsToJsonCmd, {stdio: 'inherit'});
 
   console.log(`
 Regenerated several flies in msg/json/.  Now run
@@ -591,7 +591,7 @@ function getChunkOptions() {
 /**
  * RegExp that globally matches path.sep (i.e., "/" or "\").
  */
-const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
+const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), 'g');
 
 /**
  * Helper method for calling the Closure Compiler, establishing

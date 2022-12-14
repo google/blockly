@@ -179,14 +179,14 @@ export abstract class Icon {
   // No-op on base class.
 
   /**
-   * Show or hide the icon.
+   * Show or hide the bubble.
    *
-   * @param _visible True if the icon should be visible.
+   * @param _visible True if the bubble should be visible.
    */
   setVisible(_visible: boolean) {}
 
   /**
-   * Returns the block this icon is attached to.
+   * @returns The block this icon is attached to.
    */
   protected getBlock(): BlockSvg {
     if (!this.block_) {

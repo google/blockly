@@ -1012,11 +1012,9 @@ export abstract class Field<T = any, U = T> implements
       doLogging && console.log('invalid class validation, return');
       return;
     }
-    // NOTE: newValue = undefined -> classValidation = null -> Error.
-    const newClassValue = classValue!;
 
-    const localValidation = this.getValidator()?.call(this, newClassValue);
-    const localValue = this.processValidation_(newClassValue, localValidation);
+    const localValidation = this.getValidator()?.call(this, classValue);
+    const localValue = this.processValidation_(classValue, localValidation);
     if (localValue instanceof Error) {
       doLogging && console.log('invalid local validation, return');
       return;
@@ -1053,12 +1051,8 @@ export abstract class Field<T = any, U = T> implements
    * @param validatedValue Validated value.
    * @returns New value, or an Error object.
    */
-  private processValidation_(newValue: T, validatedValue: Validation<T>): T
-      |Error;
-  private processValidation_(
-      newValue: U|Un, validatedValue: ClassValidation<T, U>): T|Error|Un;
   private processValidation_(newValue: T|U|Un, validatedValue: T|null|Un): T
-      |Error|Un {
+      |Error {
     if (validatedValue === null) {
       this.doValueInvalid_(newValue);
       if (this.isDirty_) {
@@ -1066,7 +1060,7 @@ export abstract class Field<T = any, U = T> implements
       }
       return Error();
     }
-    return validatedValue === undefined ? newValue as T | Un : validatedValue;
+    return validatedValue === undefined ? newValue as T : validatedValue;
   }
 
   /**

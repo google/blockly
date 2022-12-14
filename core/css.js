@@ -502,6 +502,7 @@ let content = (`
 
 .blocklyFlyoutBookmarkFullText {
   color: transparent;
+  white-space: nowrap;
 }
 
 .blocklyFlyoutBookmark:hover {

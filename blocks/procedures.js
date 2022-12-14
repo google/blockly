@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Procedure blocks for Blockly.
+ * @fileoverview Procedure blocks for
  * @suppress {checkTypes|visibility}
  */
 'use strict';
@@ -24,7 +24,7 @@ const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+// const {BlockDefinition} = goog.requireType('blocks');
 // TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
@@ -285,7 +285,7 @@ const procedureDefGetDefMixin = function() {
 
     /**
      * Returns the data model for this procedure block.
-     * @return {!Blockly.IProcedureModel} The data model for this procedure
+     * @return {!IProcedureModel} The data model for this procedure
      *     block.
      */
     getProcedureModel() {
@@ -631,8 +631,7 @@ const procedureDefMutator = {
     for (let i = 0; i < state['params'].length; i++) {
       const param = state['params'][i];
       this.getProcedureModel().insertParameter(
-          new ObservableParameterModel(
-              this.workspace, param.name, param.id),
+          new ObservableParameterModel(this.workspace, param.name, param.id),
           i);
     }
 
@@ -871,19 +870,19 @@ Extensions.registerMixin(
     'procedure_defreturn_get_caller_block_mixin',
     procedureDefReturnGetCallerBlockMixin);
 
-/** @this {Blockly.Block} */
+/** @this {Block} */
 const procedureDefSetNoReturnHelper = function() {
   this.getProcedureModel().setReturnTypes(null);
 };
 Extensions.register(
-  'procedure_def_set_no_return_helper', procedureDefSetNoReturnHelper);
+    'procedure_def_set_no_return_helper', procedureDefSetNoReturnHelper);
 
-/** @this {Blockly.Block} */
+/** @this {Block} */
 const procedureDefSetReturnHelper = function() {
   this.getProcedureModel().setReturnTypes([]);
 };
 Extensions.register(
-  'procedure_def_set_return_helper', procedureDefSetReturnHelper);
+    'procedure_def_set_return_helper', procedureDefSetReturnHelper);
 
 const validateProcedureParamMixin = {
   /**

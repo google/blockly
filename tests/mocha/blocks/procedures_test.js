@@ -452,7 +452,7 @@ suite('Procedures', function() {
     });
   });
 
-  suite.only('deserializing data models', function() {
+  suite('deserializing data models', function() {
     suite('return types', function() {
       test('procedure defs without returns have null return types', function() {
         const json = {

@@ -275,7 +275,13 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     const contents = this.contents_.map(function(string) {
       return JSON.parse(string);
     });
-    this.flyout?.show(contents);
+    // Trashcans with lots of blocks can take a second to render.
+    const blocklyStyle = this.workspace.getParentSvg().style;
+    blocklyStyle.cursor = 'wait';
+    setTimeout(() => {
+      this.flyout?.show(contents);
+      blocklyStyle.cursor = '';
+    }, 10);
     this.fireUiEvent_(true);
   }
 

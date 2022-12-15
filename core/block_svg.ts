@@ -227,7 +227,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     this.pathObject.updateMovable(this.isMovable());
     const svg = this.getSvgRoot();
     if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
-      browserEvents.conditionalBind(svg, 'mousedown', this, this.onMouseDown_);
+      browserEvents.conditionalBind(
+          svg, 'pointerdown', this, this.onMouseDown_);
     }
     this.eventsInit_ = true;
 
@@ -673,11 +674,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
-   * Handle a mouse-down on an SVG block.
+   * Handle a pointerdown on an SVG block.
    *
-   * @param e Mouse down event or touch start event.
+   * @param e Pointer down event.
    */
-  private onMouseDown_(e: Event) {
+  private onMouseDown_(e: PointerEvent) {
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleBlockStart(e, this);

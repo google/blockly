@@ -12,10 +12,12 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.ViewportChange');
 
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -105,11 +107,35 @@ export class ViewportChange extends UiBase {
    * @param json JSON representation.
    */
   override fromJson(json: ViewportChangeJson) {
+    deprecation.warn(
+        'Blockly.Events.Viewport.prototype.fromJson', 'version 9', 'version 10',
+        'Blockly.Events.fromJson');
     super.fromJson(json);
     this.viewTop = json['viewTop'];
     this.viewLeft = json['viewLeft'];
     this.scale = json['scale'];
     this.oldScale = json['oldScale'];
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of Viewport, but we can't specify that due to the fact that parameters
+   *     to static methods in subclasses must be supertypes of parameters to
+   *     static methods in superclasses.
+   * @internal
+   */
+  static fromJson(json: ViewportChangeJson, workspace: Workspace, event?: any):
+      ViewportChange {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new ViewportChange()) as
+        ViewportChange;
+    newEvent.viewTop = json['viewTop'];
+    newEvent.viewLeft = json['viewLeft'];
+    newEvent.scale = json['scale'];
+    newEvent.oldScale = json['oldScale'];
+    return newEvent;
   }
 }
 

@@ -41,7 +41,6 @@ module.exports = {
   gitUpdateGithubPages: gitTasks.updateGithubPages,
 
   // Manually-invokable targets, with prequisites where required.
-  prepare: buildTasks.prepare,
   format: buildTasks.format,
   messages: buildTasks.messages,  // Generate msg/json/en.json et al.
   sortRequires: cleanupTasks.sortRequires,
@@ -52,9 +51,6 @@ module.exports = {
   buildAdvancedCompilationTest: buildTasks.buildAdvancedCompilationTest,
   gitCreateRC: gitTasks.createRC,
   docs: docsTasks.docs,
-  
-  // Targets intended only for invocation by scripts; may omit prerequisites.
-  onlyBuildAdvancedCompilationTest: buildTasks.onlyBuildAdvancedCompilationTest,
 
   // Legacy targets, to be deleted.
   recompile: releaseTasks.recompile,

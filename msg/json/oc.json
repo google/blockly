@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Cedric31"
+			"Cedric31",
+			"Unuaiga"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -9,6 +10,7 @@
 	"DUPLICATE_BLOCK": "Duplicar",
 	"ADD_COMMENT": "Apondre un comentari",
 	"REMOVE_COMMENT": "Suprimir un comentari",
+	"DUPLICATE_COMMENT": "Duplicar lo comentari",
 	"EXTERNAL_INPUTS": "Entradas extèrnas",
 	"INLINE_INPUTS": "Entradas en linha",
 	"DELETE_BLOCK": "Suprimir lo blòt",
@@ -34,6 +36,7 @@
 	"NEW_VARIABLE_TYPE_TITLE": "Novèl tipe de variabla :",
 	"NEW_VARIABLE_TITLE": "Nom de la novèla variabla :",
 	"VARIABLE_ALREADY_EXISTS": "Existís ja una variabla nomenada \"%1\".",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Una variabla nommada '%1' existís ja per un autre tipe ; '%2'.",
 	"DELETE_VARIABLE": "Suprimir la variabla '%1'",
 	"COLOUR_PICKER_HELPURL": "https://oc.wikipedia.org/wiki/Color",
 	"COLOUR_PICKER_TOOLTIP": "Causir una color dins la paleta.",

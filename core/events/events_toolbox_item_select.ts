@@ -12,10 +12,12 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.ToolboxItemSelect');
 
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**
@@ -66,9 +68,32 @@ export class ToolboxItemSelect extends UiBase {
    * @param json JSON representation.
    */
   override fromJson(json: ToolboxItemSelectJson) {
+    deprecation.warn(
+        'Blockly.Events.ToolboxItemSelect.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.oldItem = json['oldItem'];
     this.newItem = json['newItem'];
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of ToolboxItemSelect, but we can't specify that due to the fact that
+   *     parameters to static methods in subclasses must be supertypes of
+   *     parameters to static methods in superclasses.
+   * @internal
+   */
+  static fromJson(
+      json: ToolboxItemSelectJson, workspace: Workspace,
+      event?: any): ToolboxItemSelect {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new ToolboxItemSelect()) as
+        ToolboxItemSelect;
+    newEvent.oldItem = json['oldItem'];
+    newEvent.newItem = json['newItem'];
+    return newEvent;
   }
 }
 

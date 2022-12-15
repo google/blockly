@@ -240,6 +240,30 @@ export const COMMENT_MOVE = 'comment_move';
  */
 export const FINISHED_LOADING = 'finished_loading';
 
+/** Name of event that creates a procedure model. */
+export const PROCEDURE_CREATE = 'procedure_create';
+
+/** Name of event that deletes a procedure model. */
+export const PROCEDURE_DELETE = 'procedure_delete';
+
+/** Name of event that renames a procedure model. */
+export const PROCEDURE_RENAME = 'procedure_rename';
+
+/** Name of event that enables/disables a procedure model. */
+export const PROCEDURE_ENABLE = 'procedure_enable';
+
+/** Name of event that changes the returntype of a procedure model. */
+export const PROCEDURE_CHANGE_RETURN = 'procedure_change_return';
+
+/** Name of event that creates a procedure parameter. */
+export const PROCEDURE_PARAMETER_CREATE = 'procedure_parameter_create';
+
+/** Name of event that deletes a procedure parameter. */
+export const PROCEDURE_PARAMETER_DELETE = 'procedure_parameter_delete';
+
+/** Name of event that renames a procedure parameter. */
+export const PROCEDURE_PARAMETER_RENAME = 'procedure_parameter_rename';
+
 /**
  * Type of events that cause objects to be bumped back into the visible
  * portion of the workspace.
@@ -494,13 +518,31 @@ export function getDescendantIds(block: Block): string[] {
 export function fromJson(
     json: AnyDuringMigration, workspace: Workspace): Abstract {
   const eventClass = get(json['type']);
-  if (!eventClass) {
-    throw Error('Unknown event type.');
+  if (!eventClass) throw Error('Unknown event type.');
+
+  if (eventClassHasStaticFromJson(eventClass)) {
+    return (eventClass as any).fromJson(json, workspace);
   }
+
+  // Fallback to the old deserialization method.
   const event = new eventClass();
   event.fromJson(json);
   event.workspaceId = workspace.id;
   return event;
+}
+
+/**
+ * Returns true if the given event constructor has /its own/ static fromJson
+ * method.
+ *
+ * Returns false if no static fromJson method exists on the contructor, or if
+ * the static fromJson method is inheritted.
+ */
+function eventClassHasStaticFromJson(eventClass: new (...p: any[]) => Abstract):
+    boolean {
+  const untypedEventClass = eventClass as any;
+  return Object.getOwnPropertyDescriptors(untypedEventClass).fromJson &&
+      typeof untypedEventClass.fromJson === 'function';
 }
 
 /**

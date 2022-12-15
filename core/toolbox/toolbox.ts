@@ -229,13 +229,13 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
       container: HTMLDivElement, contentsContainer: HTMLDivElement) {
     // Clicking on toolbox closes popups.
     const clickEvent = browserEvents.conditionalBind(
-        container, 'click', this, this.onClick_,
-        /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
+        container, 'pointerdown', this, this.onClick_,
+        /* opt_noCaptureIdentifier */ false);
     this.boundEvents_.push(clickEvent);
 
     const keyDownEvent = browserEvents.conditionalBind(
         contentsContainer, 'keydown', this, this.onKeyDown_,
-        /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
+        /* opt_noCaptureIdentifier */ false);
     this.boundEvents_.push(keyDownEvent);
   }
 
@@ -244,7 +244,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    *
    * @param e Click event to handle.
    */
-  protected onClick_(e: MouseEvent) {
+  protected onClick_(e: PointerEvent) {
     if (browserEvents.isRightButton(e) || e.target === this.HtmlDiv) {
       // Close flyout.
       (common.getMainWorkspace() as WorkspaceSvg).hideChaff(false);

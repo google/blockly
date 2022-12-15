@@ -11,6 +11,7 @@ import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, c
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from '../test_helpers/setup_teardown.js';
 
+
 suite('Procedures', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -483,10 +484,9 @@ suite('Procedures', function() {
         test('Simple, Input', function() {
           const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = document.createElement('input');
-          defInput.htmlInput_.setAttribute('data-old-value', 'proc name');
           defInput.htmlInput_.setAttribute('data-untyped-default-value', 'proc name');
 
-          defInput.htmlInput_.value = defInput.htmlInput_.getAttribute('data-old-value') + '2';
+          defInput.htmlInput_.value = 'proc name2';
           defInput.onHtmlInputChange_(null);
           chai.assert.equal(
               this.defBlock.getFieldValue('NAME'), 'proc name2');
@@ -496,7 +496,6 @@ suite('Procedures', function() {
         test('lower -> CAPS', function() {
           const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = document.createElement('input');
-          defInput.htmlInput_.setAttribute('data-old-value', 'proc name');
           defInput.htmlInput_.setAttribute('data-untyped-default-value', 'proc name');
 
           defInput.htmlInput_.value = 'PROC NAME';
@@ -511,7 +510,6 @@ suite('Procedures', function() {
           this.callBlock.setFieldValue('PROC NAME', 'NAME');
           const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = document.createElement('input');
-          defInput.htmlInput_.setAttribute('data-old-value', 'PROC NAME');
           defInput.htmlInput_.setAttribute('data-untyped-default-value', 'PROC NAME');
 
           defInput.htmlInput_.value = 'proc name';
@@ -524,10 +522,9 @@ suite('Procedures', function() {
         test('Whitespace', function() {
           const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = document.createElement('input');
-          defInput.htmlInput_.setAttribute('data-old-value', 'proc name');
           defInput.htmlInput_.setAttribute('data-untyped-default-value', 'proc name');
 
-          defInput.htmlInput_.value = defInput.htmlInput_.getAttribute('data-old-value') + ' ';
+          defInput.htmlInput_.value = 'proc name ';
           defInput.onHtmlInputChange_(null);
           chai.assert.equal(
               this.defBlock.getFieldValue('NAME'), 'proc name');
@@ -537,12 +534,11 @@ suite('Procedures', function() {
         test('Whitespace then Text', function() {
           const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = document.createElement('input');
-          defInput.htmlInput_.setAttribute('data-old-value', 'proc name');
           defInput.htmlInput_.setAttribute('data-untyped-default-value', 'proc name');
 
-          defInput.htmlInput_.value = defInput.htmlInput_.getAttribute('data-old-value') + ' ';
+          defInput.htmlInput_.value = 'proc name ';
           defInput.onHtmlInputChange_(null);
-          defInput.htmlInput_.value = defInput.htmlInput_.getAttribute('data-old-value') + '2';
+          defInput.htmlInput_.value = 'proc name 2';
           defInput.onHtmlInputChange_(null);
           chai.assert.equal(
               this.defBlock.getFieldValue('NAME'), 'proc name 2');
@@ -552,7 +548,6 @@ suite('Procedures', function() {
         test('Set Empty', function() {
           const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = document.createElement('input');
-          defInput.htmlInput_.setAttribute('data-old-value', 'proc name');
           defInput.htmlInput_.setAttribute('data-untyped-default-value', 'proc name');
 
           defInput.htmlInput_.value = '';
@@ -567,7 +562,6 @@ suite('Procedures', function() {
         test('Set Empty, and Create New', function() {
           const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = document.createElement('input');
-          defInput.htmlInput_.setAttribute('data-old-value', 'proc name');
           defInput.htmlInput_.setAttribute('data-untyped-default-value', 'proc name');
 
           defInput.htmlInput_.value = '';
@@ -1206,46 +1200,6 @@ suite('Procedures', function() {
         },
       ];
       runSerializationTestSuite(testCases);
-    });
-  });
-});
-
-suite('Procedures, dont auto fire events', function() {
-  setup(function() {
-    sharedTestSetup.call(this, {fireEventsNow: false});
-    this.workspace = new Blockly.Workspace();
-  });
-  teardown(function() {
-    sharedTestTeardown.call(this);
-  });
-
-  const testSuites = [
-    {title: 'procedures_defreturn', hasReturn: true,
-      defType: 'procedures_defreturn', callType: 'procedures_callreturn'},
-    {title: 'procedures_defnoreturn', hasReturn: false,
-      defType: 'procedures_defnoreturn', callType: 'procedures_callnoreturn'},
-  ];
-
-  testSuites.forEach((testSuite) => {
-    suite(testSuite.title, function() {
-      suite('Disposal', function() {
-        test('callers are disposed when definitions are disposed', function() {
-          this.defBlock = new Blockly.Block(this.workspace, testSuite.defType);
-          this.defBlock.setFieldValue('proc name', 'NAME');
-          this.callerBlock = new Blockly.Block(
-              this.workspace, testSuite.callType);
-          this.callerBlock.setFieldValue('proc name', 'NAME');
-
-          // Run the clock now so that the create events get fired. If we fire
-          // it after disposing, a new procedure def will get created when
-          // the caller create event is heard.
-          this.clock.runAll();
-          this.defBlock.dispose();
-          this.clock.runAll();
-
-          chai.assert.isTrue(this.callerBlock.disposed);
-        });
-      });
     });
   });
 });

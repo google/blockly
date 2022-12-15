@@ -12,7 +12,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldImage');
 
-import {FieldConfig, Field} from './field.js';
+import {Field, FieldConfig} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
@@ -20,13 +20,12 @@ import type {Sentinel} from './utils/sentinel.js';
 import {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
 
-
 /**
  * Class for an image on a block.
  *
  * @alias Blockly.FieldImage
  */
-export class FieldImage extends Field {
+export class FieldImage extends Field<string> {
   /**
    * Vertical padding below the image, which is included in the reported height
    * of the field.
@@ -269,7 +268,7 @@ export class FieldImage extends Field {
 
 fieldRegistry.register('field_image', FieldImage);
 
-(FieldImage.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
+FieldImage.prototype.DEFAULT_VALUE = '';
 
 /**
  * Config options for the image field.

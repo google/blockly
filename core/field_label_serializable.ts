@@ -14,10 +14,9 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldLabelSerializable');
 
-import {FieldLabelConfig, FieldLabelFromJsonConfig, FieldLabel} from './field_label.js';
+import {FieldLabel, FieldLabelConfig, FieldLabelFromJsonConfig} from './field_label.js';
 import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
-
 
 /**
  * Class for a non-editable, serializable text field.

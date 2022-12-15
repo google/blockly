@@ -8,10 +8,10 @@
  * @fileoverview Git-related gulp tasks for Blockly.
  */
 
-var gulp = require('gulp');
-var execSync = require('child_process').execSync;
+const gulp = require('gulp');
+const execSync = require('child_process').execSync;
 
-var buildTasks = require('./build_tasks');
+const buildTasks = require('./build_tasks');
 const packageTasks = require('./package_tasks');
 
 const upstream_url = "https://github.com/google/blockly.git";
@@ -41,18 +41,18 @@ function syncMaster() {
 
 // Helper function: get a name for a rebuild branch. Format: rebuild_mm_dd_yyyy.
 function getRebuildBranchName() {
-  var date = new Date();
-  var mm = date.getMonth() + 1; // Month, 0-11
-  var dd = date.getDate(); // Day of the month, 1-31
-  var yyyy = date.getFullYear();
+  const date = new Date();
+  const mm = date.getMonth() + 1;  // Month, 0-11
+  const dd = date.getDate();  // Day of the month, 1-31
+  const yyyy = date.getFullYear();
   return 'rebuild_' + mm + '_' + dd + '_' + yyyy;
 };
 
 // Helper function: get a name for a rebuild branch. Format: rebuild_yyyy_mm.
 function getRCBranchName() {
-  var date = new Date();
-  var mm = date.getMonth() + 1; // Month, 0-11
-  var yyyy = date.getFullYear();
+  const date = new Date();
+  const mm = date.getMonth() + 1;  // Month, 0-11
+  const yyyy = date.getFullYear();
   return 'rc_' + yyyy + '_' + mm;
 };
 
@@ -68,7 +68,7 @@ function checkoutBranch(branchName) {
 const createRC = gulp.series(
   syncDevelop(),
   function(done) {
-    var branchName = getRCBranchName();
+    const branchName = getRCBranchName();
     execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
     execSync('git push ' + upstream_url + ' ' + branchName,
         { stdio: 'inherit' });
@@ -78,7 +78,7 @@ const createRC = gulp.series(
 
 // Create the rebuild branch.
 function createRebuildBranch(done) {
-  var branchName = getRebuildBranchName();
+  const branchName = getRebuildBranchName();
   console.log('make-rebuild-branch: creating branch ' + branchName);
   execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
   done();
@@ -88,7 +88,7 @@ function createRebuildBranch(done) {
 function pushRebuildBranch(done) {
   console.log('push-rebuild-branch: committing rebuild');
   execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
-  var branchName = getRebuildBranchName();
+  const branchName = getRebuildBranchName();
   execSync('git push origin ' + branchName, { stdio: 'inherit' });
   console.log('Branch ' + branchName + ' pushed to GitHub.');
   console.log('Next step: create a pull request against develop.');

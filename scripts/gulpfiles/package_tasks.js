@@ -8,7 +8,7 @@
  * @fileoverview Gulp tasks to package Blockly for distribution on NPM.
  */
 
-var gulp = require('gulp');
+const gulp = require('gulp');
 gulp.concat = require('gulp-concat');
 gulp.replace = require('gulp-replace');
 gulp.rename = require('gulp-rename');
@@ -16,12 +16,12 @@ gulp.insert = require('gulp-insert');
 gulp.umd = require('gulp-umd');
 gulp.replace = require('gulp-replace');
 
-var path = require('path');
-var fs = require('fs');
-var rimraf = require('rimraf');
-var build = require('./build_tasks');
-var {getPackageJson} = require('./helper_tasks');
-var {BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
+const path = require('path');
+const fs = require('fs');
+const rimraf = require('rimraf');
+const build = require('./build_tasks');
+const {getPackageJson} = require('./helper_tasks');
+const {BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
 
 // Path to template files for gulp-umd.
 const TEMPLATE_DIR = 'scripts/package/templates';
@@ -290,7 +290,7 @@ function packageLocales() {
  * @example <script src="https://unpkg.com/blockly/blockly.min.js"></script>
  */
 function packageUMDBundle() {
-  var srcs = [
+  const srcs = [
     `${RELEASE_DIR}/blockly_compressed.js`,
     `${RELEASE_DIR}/msg/en.js`,
     `${RELEASE_DIR}/blocks_compressed.js`,

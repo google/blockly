@@ -13,10 +13,12 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockDrag');
 
 import type {Block} from '../block.js';
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
+import {Workspace} from '../workspace.js';
 
 
 /**
@@ -83,10 +85,32 @@ export class BlockDrag extends UiBase {
    * @param json JSON representation.
    */
   override fromJson(json: BlockDragJson) {
+    deprecation.warn(
+        'Blockly.Events.BlockDrag.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.isStart = json['isStart'];
     this.blockId = json['blockId'];
     this.blocks = json['blocks'];
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of BlockDrag, but we can't specify that due to the fact that parameters
+   *     to static methods in subclasses must be supertypes of parameters to
+   *     static methods in superclasses..
+   * @internal
+   */
+  static fromJson(json: BlockDragJson, workspace: Workspace, event?: any):
+      BlockDrag {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new BlockDrag()) as BlockDrag;
+    newEvent.isStart = json['isStart'];
+    newEvent.blockId = json['blockId'];
+    newEvent.blocks = json['blocks'];
+    return newEvent;
   }
 }
 

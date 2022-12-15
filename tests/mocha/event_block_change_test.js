@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.blockChangeEvent');
+goog.declareModuleId('Blockly.test.eventBlockChange');
 
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 import {defineMutatorBlocks} from './test_helpers/block_definitions.js';
@@ -69,6 +69,30 @@ suite('Block Change Event', function() {
           chai.assert.isTrue(block.hasInput);
         });
       });
+    });
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      defineMutatorBlocks();
+    });
+
+    teardown(function() {
+      Blockly.Extensions.unregister('xml_mutator');
+      Blockly.Extensions.unregister('jso_mutator');
+    });
+
+    test('events round-trip through JSON', function() {
+      const block = this.workspace.newBlock('xml_block', 'block_id');
+      block.domToMutation(
+          Blockly.Xml.textToDom('<mutation hasInput="true"/>'));
+      const origEvent = new Blockly.Events.BlockChange(
+          block, 'mutation', null, '', '<mutation hasInput="true"/>');
+
+      const json = origEvent.toJson();
+      const newEvent = new Blockly.Events.fromJson(json, this.workspace);
+
+      chai.assert.deepEqual(newEvent, origEvent);
     });
   });
 });

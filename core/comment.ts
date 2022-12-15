@@ -149,11 +149,8 @@ export class Comment extends Icon {
     body.appendChild(textarea);
     this.foreignObject!.appendChild(body);
 
-    // Ideally this would be hooked to the focus event for the comment.
-    // However doing so in Firefox swallows the cursor for unknown reasons.
-    // So this is hooked to mouseup instead.  No big deal.
     this.onMouseUpWrapper = browserEvents.conditionalBind(
-        textarea, 'mouseup', this, this.startEdit, true, true);
+        textarea, 'focus', this, this.startEdit, true);
     // Don't zoom with mousewheel.
     this.onWheelWrapper = browserEvents.conditionalBind(
         textarea, 'wheel', this, function(e: Event) {
@@ -315,7 +312,7 @@ export class Comment extends Icon {
    *
    * @param _e Mouse up event.
    */
-  private startEdit(_e: Event) {
+  private startEdit(_e: PointerEvent) {
     if (this.bubble_?.promote()) {
       // Since the act of moving this node within the DOM causes a loss of
       // focus, we need to reapply the focus.

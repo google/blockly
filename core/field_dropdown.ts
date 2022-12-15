@@ -16,7 +16,7 @@ goog.declareModuleId('Blockly.FieldDropdown');
 
 import type {BlockSvg} from './block_svg.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {FieldConfig, Field, UnattachedFieldError} from './field.js';
+import {Field, FieldConfig, FieldValidator, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
@@ -28,12 +28,14 @@ import type {Sentinel} from './utils/sentinel.js';
 import * as utilsString from './utils/string.js';
 import {Svg} from './utils/svg.js';
 
+export type FieldDropdownValidator = FieldValidator<string>;
+
 /**
  * Class for an editable dropdown field.
  *
  * @alias Blockly.FieldDropdown
  */
-export class FieldDropdown extends Field {
+export class FieldDropdown extends Field<string> {
   /** Horizontal distance that a checkmark overhangs the dropdown. */
   static CHECKMARK_OVERHANG = 25;
 
@@ -111,13 +113,13 @@ export class FieldDropdown extends Field {
    */
   constructor(
       menuGenerator: MenuGenerator,
-      opt_validator?: Function,
+      opt_validator?: FieldDropdownValidator,
       opt_config?: FieldConfig,
   );
   constructor(menuGenerator: Sentinel);
   constructor(
       menuGenerator: MenuGenerator|Sentinel,
-      opt_validator?: Function,
+      opt_validator?: FieldDropdownValidator,
       opt_config?: FieldConfig,
   ) {
     super(Field.SKIP_SETUP);

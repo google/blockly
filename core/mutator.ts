@@ -155,7 +155,7 @@ export class Mutator extends Icon {
    *
    * @param e Mouse click event.
    */
-  protected override iconClick_(e: MouseEvent) {
+  protected override iconClick_(e: PointerEvent) {
     if (this.getBlock().isEditable()) {
       super.iconClick_(e);
     }

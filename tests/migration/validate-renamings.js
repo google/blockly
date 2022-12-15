@@ -24,7 +24,7 @@ const {posixPath} = require('../../scripts/helpers');
  * Renaming schema filename.
  * @type {string}
  */
-const SCHEMA_FILENAME = path.join(__dirname, 'renamings-schema.json');
+const SCHEMA_FILENAME = path.join(__dirname, 'renamings.schema.json');
 
 /**
  * Renamings filename.

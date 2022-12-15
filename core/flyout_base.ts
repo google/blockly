@@ -371,7 +371,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     Array.prototype.push.apply(
         this.eventWrappers_,
         browserEvents.conditionalBind(
-            (this.svgBackground_ as SVGPathElement), 'mousedown', this,
+            (this.svgBackground_ as SVGPathElement), 'pointerdown', this,
             this.onMouseDown_));
 
     // A flyout connected to a workspace doesn't have its own current gesture.
@@ -450,7 +450,6 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * Get the workspace inside the flyout.
    *
    * @returns The workspace inside the flyout.
-   * @internal
    */
   getWorkspace(): WorkspaceSvg {
     return this.workspace_;
@@ -615,7 +614,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     }
 
     this.listeners_.push(browserEvents.conditionalBind(
-        (this.svgBackground_ as SVGPathElement), 'mouseover', this,
+        (this.svgBackground_ as SVGPathElement), 'pointerover', this,
         deselectAll));
 
     if (this.horizontalLayout) {
@@ -912,27 +911,27 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   protected addBlockListeners_(
       root: SVGElement, block: BlockSvg, rect: SVGElement) {
     this.listeners_.push(browserEvents.conditionalBind(
-        root, 'mousedown', null, this.blockMouseDown_(block)));
+        root, 'pointerdown', null, this.blockMouseDown_(block)));
     this.listeners_.push(browserEvents.conditionalBind(
-        rect, 'mousedown', null, this.blockMouseDown_(block)));
+        rect, 'pointerdown', null, this.blockMouseDown_(block)));
     this.listeners_.push(
-        browserEvents.bind(root, 'mouseenter', block, block.addSelect));
+        browserEvents.bind(root, 'pointerenter', block, block.addSelect));
     this.listeners_.push(
-        browserEvents.bind(root, 'mouseleave', block, block.removeSelect));
+        browserEvents.bind(root, 'pointerleave', block, block.removeSelect));
     this.listeners_.push(
-        browserEvents.bind(rect, 'mouseenter', block, block.addSelect));
+        browserEvents.bind(rect, 'pointerenter', block, block.addSelect));
     this.listeners_.push(
-        browserEvents.bind(rect, 'mouseleave', block, block.removeSelect));
+        browserEvents.bind(rect, 'pointerleave', block, block.removeSelect));
   }
 
   /**
-   * Handle a mouse-down on an SVG block in a non-closing flyout.
+   * Handle a pointerdown on an SVG block in a non-closing flyout.
    *
    * @param block The flyout block to copy.
    * @returns Function to call when block is clicked.
    */
   private blockMouseDown_(block: BlockSvg): Function {
-    return (e: MouseEvent) => {
+    return (e: PointerEvent) => {
       const gesture = this.targetWorkspace.getGesture(e);
       if (gesture) {
         gesture.setStartBlock(block);
@@ -942,11 +941,11 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   }
 
   /**
-   * Mouse down on the flyout background.  Start a vertical scroll drag.
+   * Pointer down on the flyout background.  Start a vertical scroll drag.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    */
-  private onMouseDown_(e: MouseEvent) {
+  private onMouseDown_(e: PointerEvent) {
     const gesture = this.targetWorkspace.getGesture(e);
     if (gesture) {
       gesture.handleFlyoutStart(e, this);
@@ -1027,7 +1026,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     // Clicking on a flyout button or label is a lot like clicking on the
     // flyout background.
     this.listeners_.push(browserEvents.conditionalBind(
-        buttonSvg, 'mousedown', this, this.onMouseDown_));
+        buttonSvg, 'pointerdown', this, this.onMouseDown_));
 
     this.buttons_.push(button);
   }

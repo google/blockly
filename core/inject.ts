@@ -393,7 +393,7 @@ function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
 
   // Android ignores any sound not loaded as a result of a user action.
   soundBinds.push(browserEvents.conditionalBind(
-      document, 'mousemove', null, unbindSounds, true));
+      document, 'pointermove', null, unbindSounds, true));
   soundBinds.push(browserEvents.conditionalBind(
       document, 'touchstart', null, unbindSounds, true));
 }

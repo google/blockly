@@ -18,7 +18,7 @@ import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
+import {FieldInput, FieldInputConfig, FieldInputValidator} from './field_input.js';
 import * as dom from './utils/dom.js';
 import {KeyCodes} from './utils/keycodes.js';
 import * as math from './utils/math.js';
@@ -27,16 +27,14 @@ import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 
+export type FieldAngleValidator = FieldInputValidator<number>;
 
 /**
  * Class for an editable angle field.
  *
  * @alias Blockly.FieldAngle
  */
-export class FieldAngle extends FieldTextInput {
-  /** The default value for this field. */
-  // protected override DEFAULT_VALUE = 0;
-
+export class FieldAngle extends FieldInput<number> {
   /**
    * The default amount to round angles to when using a mouse or keyboard nav
    * input. Must be a positive integer to support keyboard navigation.
@@ -135,7 +133,7 @@ export class FieldAngle extends FieldTextInput {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|number|Sentinel, opt_validator?: Function,
+      opt_value?: string|number|Sentinel, opt_validator?: FieldAngleValidator,
       opt_config?: FieldAngleConfig) {
     super(Field.SKIP_SETUP);
 
@@ -280,9 +278,9 @@ export class FieldAngle extends FieldTextInput {
     // a click handler on the drag surface to update the value if the surface
     // is clicked.
     this.clickSurfaceWrapper_ = browserEvents.conditionalBind(
-        circle, 'click', this, this.onMouseMove_, true, true);
+        circle, 'pointerdown', this, this.onMouseMove_, true);
     this.moveSurfaceWrapper_ = browserEvents.conditionalBind(
-        circle, 'mousemove', this, this.onMouseMove_, true, true);
+        circle, 'pointermove', this, this.onMouseMove_, true);
     this.editor_ = svg;
   }
 
@@ -315,15 +313,11 @@ export class FieldAngle extends FieldTextInput {
    *
    * @param e Mouse move event.
    */
-  protected onMouseMove_(e: Event) {
+  protected onMouseMove_(e: PointerEvent) {
     // Calculate angle.
     const bBox = this.gauge_!.ownerSVGElement!.getBoundingClientRect();
-    // AnyDuringMigration because:  Property 'clientX' does not exist on type
-    // 'Event'.
-    const dx = (e as AnyDuringMigration).clientX - bBox.left - FieldAngle.HALF;
-    // AnyDuringMigration because:  Property 'clientY' does not exist on type
-    // 'Event'.
-    const dy = (e as AnyDuringMigration).clientY - bBox.top - FieldAngle.HALF;
+    const dx = e.clientX - bBox.left - FieldAngle.HALF;
+    const dy = e.clientY - bBox.top - FieldAngle.HALF;
     let angle = Math.atan(-dy / dx);
     if (isNaN(angle)) {
       // This shouldn't happen, but let's not let this error propagate further.
@@ -480,7 +474,7 @@ export class FieldAngle extends FieldTextInput {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: FieldAngleFromJsonConfig): FieldAngle {
+  static fromJson(options: FieldAngleFromJsonConfig): FieldAngle {
     // `this` might be a subclass of FieldAngle if that class doesn't override
     // the static fromJson method.
     return new this(options.angle, undefined, options);
@@ -517,7 +511,7 @@ Css.register(`
 
 fieldRegistry.register('field_angle', FieldAngle);
 
-(FieldAngle.prototype as AnyDuringMigration).DEFAULT_VALUE = 0;
+FieldAngle.prototype.DEFAULT_VALUE = 0;
 
 /**
  * The two main modes of the angle field.
@@ -541,7 +535,7 @@ export enum Mode {
 /**
  * Extra configuration options for the angle field.
  */
-export interface FieldAngleConfig extends FieldTextInputConfig {
+export interface FieldAngleConfig extends FieldInputConfig {
   mode?: Mode;
   clockwise?: boolean;
   offset?: number;

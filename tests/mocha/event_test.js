@@ -8,7 +8,7 @@ goog.declareModuleId('Blockly.test.event');
 
 import * as Blockly from '../../build/src/core/blockly.js';
 import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
-import {assertEventEquals, assertNthCallEventArgEquals, createFireChangeListenerSpy} from './test_helpers/events.js';
+import {assertEventEquals, assertNthCallEventArgEquals, createChangeListenerSpy} from './test_helpers/events.js';
 import {assertVariableValues} from './test_helpers/variables.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
@@ -547,6 +547,7 @@ suite('Events', function() {
           type: 'move',
           group: '',
           blockId: thisObj.block.id,
+          oldCoordinate: "0, 0",
         }),
       },
       {
@@ -557,6 +558,7 @@ suite('Events', function() {
           type: 'move',
           group: '',
           blockId: thisObj.shadowBlock.id,
+          oldCoordinate: "0, 0",
           recordUndo: false,
         }),
       },
@@ -581,7 +583,8 @@ suite('Events', function() {
       {title: 'Comment delete', class: Blockly.Events.CommentDelete,
         getArgs: (thisObj) => [thisObj.comment],
         getExpectedJson: (thisObj) => ({type: 'comment_delete', group: '',
-          commentId: thisObj.comment.id})},
+          commentId: thisObj.comment.id,
+          xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY())})},
       // TODO(#4577) Test serialization of move event coordinate properties.
     ];
     const testSuites = [
@@ -620,9 +623,8 @@ suite('Events', function() {
           testSuite.testCases.forEach((testCase) => {
             test(testCase.title, function() {
               const event = new testCase.class(...testCase.getArgs(this));
-              const event2 = new testCase.class();
               const json = event.toJson();
-              event2.fromJson(json);
+              const event2 = Blockly.Events.fromJson(json, this.workspace);
 
               chai.assert.equal(
                   safeStringify(event2.toJson()), safeStringify(json));
@@ -962,7 +964,7 @@ suite('Events', function() {
 
   suite('Firing', function() {
     setup(function() {
-      this.changeListenerSpy = createFireChangeListenerSpy(this.workspace);
+      this.changeListenerSpy = createChangeListenerSpy(this.workspace);
     });
 
     test('Block dispose triggers Delete', function() {
@@ -984,7 +986,7 @@ suite('Events', function() {
         this.clock.runAll();
 
         this.eventsFireSpy.resetHistory();
-        const changeListenerSpy = createFireChangeListenerSpy(workspaceSvg);
+        const changeListenerSpy = createChangeListenerSpy(workspaceSvg);
         block.dispose();
 
         // Run all queued events.

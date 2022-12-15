@@ -75,7 +75,7 @@ export abstract class Icon {
 
     this.getBlock().getSvgRoot().appendChild(this.iconGroup_);
     browserEvents.conditionalBind(
-        this.iconGroup_, 'mouseup', this, this.iconClick_);
+        this.iconGroup_, 'pointerup', this, this.iconClick_);
     this.updateEditable();
   }
 
@@ -104,7 +104,7 @@ export abstract class Icon {
    *
    * @param e Mouse click event.
    */
-  protected iconClick_(e: MouseEvent) {
+  protected iconClick_(e: PointerEvent) {
     if (this.getBlock().workspace.isDragging()) {
       // Drag operation is concluding.  Don't open the editor.
       return;
@@ -179,14 +179,14 @@ export abstract class Icon {
   // No-op on base class.
 
   /**
-   * Show or hide the icon.
+   * Show or hide the bubble.
    *
-   * @param _visible True if the icon should be visible.
+   * @param _visible True if the bubble should be visible.
    */
   setVisible(_visible: boolean) {}
 
   /**
-   * Returns the block this icon is attached to.
+   * @returns The block this icon is attached to.
    */
   protected getBlock(): BlockSvg {
     if (!this.block_) {

@@ -56,7 +56,6 @@ import type {Theme} from './theme.js';
 import {Classic} from './theme/classic.js';
 import {ThemeManager} from './theme_manager.js';
 import * as Tooltip from './tooltip.js';
-import {TouchGesture} from './touch_gesture.js';
 import type {Trashcan} from './trashcan.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -224,7 +223,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @internal
    */
-  currentGesture_: TouchGesture|null = null;
+  currentGesture_: Gesture|null = null;
 
   /** This workspace's surface for dragging blocks, if it exists. */
   private readonly blockDragSurface: BlockDragSurfaceSvg|null = null;
@@ -774,7 +773,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     if (!this.isFlyout) {
       browserEvents.conditionalBind(
-          this.svgGroup_, 'mousedown', this, this.onMouseDown_, false, true);
+          this.svgGroup_, 'pointerdown', this, this.onMouseDown_, false);
       // This no-op works around https://bugs.webkit.org/show_bug.cgi?id=226683,
       // which otherwise prevents zoom/scroll events from being observed in
       // Safari. Once that bug is fixed it should be removed.
@@ -959,7 +958,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param opt_own Whether to only return the workspace's own flyout.
    * @returns The flyout on this workspace.
-   * @internal
    */
   getFlyout(opt_own?: boolean): IFlyout|null {
     if (this.flyout || opt_own) {
@@ -975,7 +973,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Getter for the toolbox associated with this workspace, if one exists.
    *
    * @returns The toolbox on this workspace.
-   * @internal
    */
   getToolbox(): IToolbox|null {
     return this.toolbox_;
@@ -1596,17 +1593,15 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /* eslint-enable */
 
   /**
-   * Returns the drag target the mouse event is over.
+   * Returns the drag target the pointer event is over.
    *
-   * @param e Mouse move event.
+   * @param e Pointer move event.
    * @returns Null if not over a drag target, or the drag target the event is
    *     over.
    */
-  getDragTarget(e: Event): IDragTarget|null {
+  getDragTarget(e: PointerEvent): IDragTarget|null {
     for (let i = 0, targetArea; targetArea = this.dragTargetAreas[i]; i++) {
-      if (targetArea.clientRect.contains(
-              (e as AnyDuringMigration).clientX,
-              (e as AnyDuringMigration).clientY)) {
+      if (targetArea.clientRect.contains(e.clientX, e.clientY)) {
         return targetArea.component;
       }
     }
@@ -1614,11 +1609,11 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   }
 
   /**
-   * Handle a mouse-down on SVG drawing surface.
+   * Handle a pointerdown on SVG drawing surface.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    */
-  private onMouseDown_(e: MouseEvent) {
+  private onMouseDown_(e: PointerEvent) {
     const gesture = this.getGesture(e);
     if (gesture) {
       gesture.handleWsStart(e, this);
@@ -1628,10 +1623,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Start tracking a drag of an object on this workspace.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    * @param xy Starting location of object.
    */
-  startDrag(e: MouseEvent, xy: Coordinate) {
+  startDrag(e: PointerEvent, xy: Coordinate) {
     // Record the starting offset between the bubble's location and the mouse.
     const point = browserEvents.mouseToSvg(
         e, this.getParentSvg(), this.getInverseScreenCTM());
@@ -1644,10 +1639,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Track a drag of an object on this workspace.
    *
-   * @param e Mouse move event.
+   * @param e Pointer move event.
    * @returns New location of object.
    */
-  moveDrag(e: MouseEvent): Coordinate {
+  moveDrag(e: PointerEvent): Coordinate {
     const point = browserEvents.mouseToSvg(
         e, this.getParentSvg(), this.getInverseScreenCTM());
     // Fix scale of mouse event.
@@ -2473,14 +2468,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Look up the gesture that is tracking this touch stream on this workspace.
    * May create a new gesture.
    *
-   * @param e Mouse event or touch event.
+   * @param e Pointer event.
    * @returns The gesture that is tracking this touch stream, or null if no
    *     valid gesture exists.
    * @internal
    */
-  getGesture(e: Event): TouchGesture|null {
-    const isStart = e.type === 'mousedown' || e.type === 'touchstart' ||
-        e.type === 'pointerdown';
+  getGesture(e: PointerEvent): Gesture|null {
+    const isStart = e.type === 'pointerdown';
 
     const gesture = this.currentGesture_;
     if (gesture) {
@@ -2497,7 +2491,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // No gesture existed on this workspace, but this looks like the start of a
     // new gesture.
     if (isStart) {
-      this.currentGesture_ = new TouchGesture(e, this);
+      this.currentGesture_ = new Gesture(e, this);
       return this.currentGesture_;
     }
     // No gesture existed and this event couldn't be the start of a new gesture.

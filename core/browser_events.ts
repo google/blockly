@@ -13,6 +13,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.browserEvents');
 
 import * as Touch from './touch.js';
+import * as deprecation from './utils/deprecation.js';
 import * as userAgent from './utils/useragent.js';
 
 
@@ -51,42 +52,36 @@ const PAGE_MODE_MULTIPLIER = 125;
  * @param opt_noCaptureIdentifier True if triggering on this event should not
  *     block execution of other event handlers on this touch or other
  *     simultaneous touches.  False by default.
- * @param opt_noPreventDefault True if triggering on this event should prevent
- *     the default handler.  False by default.  If opt_noPreventDefault is
- *     provided, opt_noCaptureIdentifier must also be provided.
+ * @param opt_noPreventDefault No-op, deprecated and will be removed in v10.
  * @returns Opaque data that can be passed to unbindEvent_.
  * @alias Blockly.browserEvents.conditionalBind
  */
 export function conditionalBind(
     node: EventTarget, name: string, thisObject: Object|null, func: Function,
     opt_noCaptureIdentifier?: boolean, opt_noPreventDefault?: boolean): Data {
-  let handled = false;
+  if (opt_noPreventDefault !== undefined) {
+    deprecation.warn(
+        'The opt_noPreventDefault argument of conditionalBind', 'version 9',
+        'version 10');
+  }
   /**
    *
    * @param e
    */
   function wrapFunc(e: Event) {
     const captureIdentifier = !opt_noCaptureIdentifier;
-    // Handle each touch point separately.  If the event was a mouse event, this
-    // will hand back an array with one element, which we're fine handling.
-    const events = Touch.splitEventByTouches(e);
-    for (let i = 0; i < events.length; i++) {
-      const event = events[i];
-      if (captureIdentifier && !Touch.shouldHandleEvent(event)) {
-        continue;
-      }
-      Touch.setClientFromTouch(event);
+
+    if (!(captureIdentifier && !Touch.shouldHandleEvent(e))) {
       if (thisObject) {
-        func.call(thisObject, event);
+        func.call(thisObject, e);
       } else {
-        func(event);
+        func(e);
       }
-      handled = true;
     }
   }
 
   const bindData: Data = [];
-  if (globalThis['PointerEvent'] && name in Touch.TOUCH_MAP) {
+  if (name in Touch.TOUCH_MAP) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);
@@ -95,24 +90,6 @@ export function conditionalBind(
   } else {
     node.addEventListener(name, wrapFunc, false);
     bindData.push([node, name, wrapFunc]);
-
-    // Add equivalent touch event.
-    if (name in Touch.TOUCH_MAP) {
-      const touchWrapFunc = (e: Event) => {
-        wrapFunc(e);
-        // Calling preventDefault stops the browser from scrolling/zooming the
-        // page.
-        const preventDef = !opt_noPreventDefault;
-        if (handled && preventDef) {
-          e.preventDefault();
-        }
-      };
-      for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
-        const type = Touch.TOUCH_MAP[name][i];
-        node.addEventListener(type, touchWrapFunc, false);
-        bindData.push([node, type, touchWrapFunc]);
-      }
-    }
   }
   return bindData;
 }
@@ -146,7 +123,7 @@ export function bind(
   }
 
   const bindData: Data = [];
-  if (globalThis['PointerEvent'] && name in Touch.TOUCH_MAP) {
+  if (name in Touch.TOUCH_MAP) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);
@@ -155,32 +132,6 @@ export function bind(
   } else {
     node.addEventListener(name, wrapFunc, false);
     bindData.push([node, name, wrapFunc]);
-
-    // Add equivalent touch event.
-    if (name in Touch.TOUCH_MAP) {
-      const touchWrapFunc = (e: Event) => {
-        // Punt on multitouch events.
-        if (e instanceof TouchEvent && e.changedTouches &&
-            e.changedTouches.length === 1) {
-          // Map the touch event's properties to the event.
-          const touchPoint = e.changedTouches[0];
-          // TODO (6311): We are trying to make a touch event look like a mouse
-          //   event, which is not allowed, because it requires adding more
-          //   properties to the event. How do we want to deal with this?
-          (e as AnyDuringMigration).clientX = touchPoint.clientX;
-          (e as AnyDuringMigration).clientY = touchPoint.clientY;
-        }
-        wrapFunc(e);
-
-        // Stop the browser from scrolling/zooming the page.
-        e.preventDefault();
-      };
-      for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
-        const type = Touch.TOUCH_MAP[name][i];
-        node.addEventListener(type, touchWrapFunc, false);
-        bindData.push([node, type, touchWrapFunc]);
-      }
-    }
   }
   return bindData;
 }

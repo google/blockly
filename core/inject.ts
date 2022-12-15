@@ -7,7 +7,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.inject');
 
-import {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import * as bumpObjects from './bump_objects.js';
@@ -60,18 +59,9 @@ export function inject(
   containerElement!.appendChild(subContainer);
   const svg = createDom(subContainer, options);
 
-  // Create surfaces for dragging things. These are optimizations
-  // so that the browser does not repaint during the drag.
-  const blockDragSurface = new BlockDragSurfaceSvg(subContainer);
-
   const workspaceDragSurface = new WorkspaceDragSurfaceSvg(subContainer);
 
-  const workspace = createMainWorkspace(
-    svg,
-    options,
-    blockDragSurface,
-    workspaceDragSurface
-  );
+  const workspace = createMainWorkspace(svg, options, workspaceDragSurface);
 
   init(workspace);
 
@@ -147,22 +137,16 @@ function createDom(container: Element, options: Options): SVGElement {
  *
  * @param svg SVG element with pattern defined.
  * @param options Dictionary of options.
- * @param blockDragSurface Drag surface SVG for the blocks.
  * @param workspaceDragSurface Drag surface SVG for the workspace.
  * @returns Newly created main workspace.
  */
 function createMainWorkspace(
   svg: SVGElement,
   options: Options,
-  blockDragSurface: BlockDragSurfaceSvg,
   workspaceDragSurface: WorkspaceDragSurfaceSvg
 ): WorkspaceSvg {
   options.parentWorkspace = null;
-  const mainWorkspace = new WorkspaceSvg(
-    options,
-    blockDragSurface,
-    workspaceDragSurface
-  );
+  const mainWorkspace = new WorkspaceSvg(options, workspaceDragSurface);
   const wsOptions = mainWorkspace.options;
   mainWorkspace.scale = wsOptions.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));

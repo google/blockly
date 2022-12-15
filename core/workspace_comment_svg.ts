@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.WorkspaceCommentSvg');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_selected.js';
 
-import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 // import * as ContextMenu from './contextmenu.js';
@@ -93,7 +92,6 @@ export class WorkspaceCommentSvg
 
   /** Whether the comment is rendered onscreen and is a part of the DOM. */
   private rendered = false;
-  private readonly useDragSurface: boolean;
 
   /**
    * @param workspace The block's workspace.
@@ -122,12 +120,6 @@ export class WorkspaceCommentSvg
       'ry': BORDER_RADIUS,
     });
     this.svgGroup.appendChild(this.svgRect_);
-
-    /**
-     * Whether to move the comment to the drag surface when it is dragged.
-     * True if it should move, false if it should be translated directly.
-     */
-    this.useDragSurface = !!workspace.getBlockDragSurface();
 
     this.render();
   }
@@ -325,10 +317,6 @@ export class WorkspaceCommentSvg
     let x = 0;
     let y = 0;
 
-    const dragSurfaceGroup = this.useDragSurface
-      ? this.workspace.getBlockDragSurface()!.getGroup()
-      : null;
-
     let element: Node | null = this.getSvgRoot();
     if (element) {
       do {
@@ -336,24 +324,11 @@ export class WorkspaceCommentSvg
         const xy = svgMath.getRelativeXY(element as Element);
         x += xy.x;
         y += xy.y;
-        // If this element is the current element on the drag surface, include
-        // the translation of the drag surface itself.
-        if (
-          this.useDragSurface &&
-          this.workspace.getBlockDragSurface()!.getCurrentBlock() === element
-        ) {
-          const surfaceTranslation = this.workspace
-            .getBlockDragSurface()!
-            .getSurfaceTranslation();
-          x += surfaceTranslation.x;
-          y += surfaceTranslation.y;
-        }
-
         element = element.parentNode;
       } while (
         element &&
         element !== this.workspace.getBubbleCanvas() &&
-        element !== dragSurfaceGroup
+        element !== null
       );
     }
     this.xy_ = new Coordinate(x, y);
@@ -397,43 +372,14 @@ export class WorkspaceCommentSvg
   }
 
   /**
-   * Move this comment to its workspace's drag surface, accounting for
-   * positioning.  Generally should be called at the same time as
-   * setDragging(true).  Does nothing if useDragSurface_ is false.
+   * Move this comment during a drag.
    *
-   * @internal
-   */
-  moveToDragSurface() {
-    if (!this.useDragSurface) {
-      return;
-    }
-    // The translation for drag surface blocks,
-    // is equal to the current relative-to-surface position,
-    // to keep the position in sync as it move on/off the surface.
-    // This is in workspace coordinates.
-    const xy = this.getRelativeToSurfaceXY();
-    this.clearTransformAttributes();
-    this.workspace.getBlockDragSurface()!.translateSurface(xy.x, xy.y);
-    // Execute the move on the top-level SVG component
-    this.workspace.getBlockDragSurface()!.setBlocksAndShow(this.getSvgRoot());
-  }
-
-  /**
-   * Move this comment during a drag, taking into account whether we are using a
-   * drag surface to translate blocks.
-   *
-   * @param dragSurface The surface that carries rendered items during a drag,
-   *     or null if no drag surface is in use.
    * @param newLoc The location to translate to, in workspace coordinates.
    * @internal
    */
-  moveDuringDrag(dragSurface: BlockDragSurfaceSvg, newLoc: Coordinate) {
-    if (dragSurface) {
-      dragSurface.translateSurface(newLoc.x, newLoc.y);
-    } else {
-      const translation = `translate(${newLoc.x}, ${newLoc.y})`;
-      this.getSvgRoot().setAttribute('transform', translation);
-    }
+  moveDuringDrag(newLoc: Coordinate) {
+    const translation = `translate(${newLoc.x}, ${newLoc.y})`;
+    this.getSvgRoot().setAttribute('transform', translation);
   }
 
   /**

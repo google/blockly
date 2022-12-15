@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "9.1.1",
+  "version": "9.2.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -42,19 +42,17 @@
     "lint:fix": "eslint . --fix",
     "langfiles": "gulp langfiles",
     "minify": "gulp minify",
-    "only:compile:advanced": "gulp onlyBuildAdvancedCompilationTest --debug",
     "package": "gulp package",
     "postinstall": "patch-package",
-    "prepare": "gulp prepare",
     "prepareDemos": "gulp prepareDemos",
     "publish": "npm ci && gulp publish",
     "publish:beta": "npm ci && gulp publishBeta",
     "recompile": "gulp recompile",
     "release": "gulp gitCreateRC",
-    "start": "concurrently -n tsc,server \"tsc --watch --preserveWatchOutput --outDir 'build/src' --declarationDir 'build/declarations'\" \"http-server ./ -s -o /tests/playground.html -c-1\"",
+    "start": "npm run deps && concurrently -n tsc,server \"tsc --watch --preserveWatchOutput --outDir 'build/src' --declarationDir 'build/declarations'\" \"http-server ./ -s -o /tests/playground.html -c-1\"",
     "tsc": "gulp tsc",
-    "test": "gulp --silent test",
-    "test:generators": "gulp --silent testGenerators",
+    "test": "gulp test",
+    "test:generators": "gulp testGenerators",
     "test:mocha:interactive": "http-server ./ -o /tests/mocha/index.html -c-1",
     "test:compile:advanced": "gulp buildAdvancedCompilationTest --debug",
     "updateGithubPages": "npm ci && gulp gitUpdateGithubPages"
@@ -73,11 +71,12 @@
     "@blockly/block-test": "^3.0.0",
     "@blockly/dev-tools": "^5.0.0",
     "@blockly/theme-modern": "^3.0.0",
-    "@hyperjump/json-schema": "^0.18.5",
+    "@hyperjump/json-schema": "^0.23.3",
     "@microsoft/api-documenter": "^7.19.16",
     "@microsoft/api-extractor": "^7.29.5",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
-    "@wdio/selenium-standalone-service": "^7.10.1",
+    "@wdio/selenium-standalone-service": "^8.0.2",
+    "async-done": "^2.0.0",
     "chai": "^4.2.0",
     "clang-format": "^1.6.0",
     "closure-calculate-chunks": "^3.0.2",
@@ -86,7 +85,7 @@
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-jsdoc": "^39.3.6",
     "google-closure-compiler": "^20221004.0.0",
-    "google-closure-deps": "^20221004.0.0",
+    "google-closure-deps": "^20221102.0.0",
     "gulp": "^4.0.2",
     "gulp-clang-format": "^1.0.27",
     "gulp-concat": "^2.6.1",
@@ -110,10 +109,10 @@
     "selenium-standalone": "^8.0.3",
     "through2": "^4.0.2",
     "typescript": "^4.3.2",
-    "webdriverio": "^7.0.3",
+    "webdriverio": "^8.0.5",
     "yargs": "^17.2.1"
   },
   "dependencies": {
-    "jsdom": "15.2.1"
+    "jsdom": "20.0.3"
   }
 }

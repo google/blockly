@@ -170,10 +170,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     }
     if (!this.workspace.options.readOnly && !this.eventsInit_) {
       browserEvents.conditionalBind(
-          this.svgRectTarget_ as SVGRectElement, 'mousedown', this,
+          this.svgRectTarget_ as SVGRectElement, 'pointerdown', this,
           this.pathMouseDown_);
       browserEvents.conditionalBind(
-          this.svgHandleTarget_ as SVGRectElement, 'mousedown', this,
+          this.svgHandleTarget_ as SVGRectElement, 'pointerdown', this,
           this.pathMouseDown_);
     }
     this.eventsInit_ = true;
@@ -189,11 +189,11 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Handle a mouse-down on an SVG comment.
+   * Handle a pointerdown on an SVG comment.
    *
-   * @param e Mouse down event or touch start event.
+   * @param e Pointer down event.
    */
-  private pathMouseDown_(e: Event) {
+  private pathMouseDown_(e: PointerEvent) {
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleBubbleStart(e, this);
@@ -203,11 +203,11 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Show the context menu for this workspace comment.
    *
-   * @param e Mouse event.
+   * @param e Pointer event.
    * @internal
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  showContextMenu(e: Event) {
+  showContextMenu(e: PointerEvent) {
     throw new Error(
         'The implementation of showContextMenu should be ' +
         'monkey-patched in by blockly.ts');
@@ -685,18 +685,18 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
     if (this.resizeGroup_) {
       browserEvents.conditionalBind(
-          (this.resizeGroup_), 'mousedown', this, this.resizeMouseDown_);
+          (this.resizeGroup_), 'pointerdown', this, this.resizeMouseDown_);
     }
 
     if (this.isDeletable()) {
       browserEvents.conditionalBind(
-          this.deleteGroup_ as SVGGElement, 'mousedown', this,
+          this.deleteGroup_ as SVGGElement, 'pointerdown', this,
           this.deleteMouseDown_);
       browserEvents.conditionalBind(
-          this.deleteGroup_ as SVGGElement, 'mouseout', this,
+          this.deleteGroup_ as SVGGElement, 'pointerout', this,
           this.deleteMouseOut_);
       browserEvents.conditionalBind(
-          this.deleteGroup_ as SVGGElement, 'mouseup', this,
+          this.deleteGroup_ as SVGGElement, 'pointerup', this,
           this.deleteMouseUp_);
     }
   }
@@ -820,11 +820,11 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Handle a mouse-down on comment's resize corner.
+   * Handle a pointerdown on comment's resize corner.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    */
-  private resizeMouseDown_(e: MouseEvent) {
+  private resizeMouseDown_(e: PointerEvent) {
     this.unbindDragEvents_();
     if (browserEvents.isRightButton(e)) {
       // No right-click.
@@ -838,20 +838,20 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
             this.workspace.RTL ? -this.width_ : this.width_, this.height_));
 
     this.onMouseUpWrapper_ = browserEvents.conditionalBind(
-        document, 'mouseup', this, this.resizeMouseUp_);
+        document, 'pointerup', this, this.resizeMouseUp_);
     this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
-        document, 'mousemove', this, this.resizeMouseMove_);
+        document, 'pointermove', this, this.resizeMouseMove_);
     this.workspace.hideChaff();
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
   }
 
   /**
-   * Handle a mouse-down on comment's delete icon.
+   * Handle a pointerdown on comment's delete icon.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    */
-  private deleteMouseDown_(e: Event) {
+  private deleteMouseDown_(e: PointerEvent) {
     // Highlight the delete icon.
     if (this.deleteIconBorder_) {
       dom.addClass(this.deleteIconBorder_, 'blocklyDeleteIconHighlighted');
@@ -861,11 +861,11 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Handle a mouse-out on comment's delete icon.
+   * Handle a pointerout on comment's delete icon.
    *
-   * @param _e Mouse out event.
+   * @param _e Pointer out event.
    */
-  private deleteMouseOut_(_e: Event) {
+  private deleteMouseOut_(_e: PointerEvent) {
     // Restore highlight on the delete icon.
     if (this.deleteIconBorder_) {
       dom.removeClass(this.deleteIconBorder_, 'blocklyDeleteIconHighlighted');
@@ -873,18 +873,18 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Handle a mouse-up on comment's delete icon.
+   * Handle a pointerup on comment's delete icon.
    *
-   * @param e Mouse up event.
+   * @param e Pointer up event.
    */
-  private deleteMouseUp_(e: Event) {
+  private deleteMouseUp_(e: PointerEvent) {
     // Delete this comment.
     this.dispose();
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
   }
 
-  /** Stop binding to the global mouseup and mousemove events. */
+  /** Stop binding to the global pointerup and pointermove events. */
   private unbindDragEvents_() {
     if (this.onMouseUpWrapper_) {
       browserEvents.unbind(this.onMouseUpWrapper_);
@@ -897,21 +897,22 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Handle a mouse-up event while dragging a comment's border or resize handle.
+   * Handle a pointerup event while dragging a comment's border or resize
+   * handle.
    *
-   * @param _e Mouse up event.
+   * @param _e Pointer up event.
    */
-  private resizeMouseUp_(_e: Event) {
+  private resizeMouseUp_(_e: PointerEvent) {
     Touch.clearTouchIdentifier();
     this.unbindDragEvents_();
   }
 
   /**
-   * Resize this comment to follow the mouse.
+   * Resize this comment to follow the pointer.
    *
-   * @param e Mouse move event.
+   * @param e Pointer move event.
    */
-  private resizeMouseMove_(e: MouseEvent) {
+  private resizeMouseMove_(e: PointerEvent) {
     this.autoLayout_ = false;
     const newXY = this.workspace.moveDrag(e);
     this.setSize_(this.RTL ? -newXY.x : newXY.x, newXY.y);

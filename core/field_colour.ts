@@ -20,7 +20,7 @@ import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dom from './utils/dom.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {FieldConfig, Field} from './field.js';
+import {Field, FieldConfig, FieldValidator} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as aria from './utils/aria.js';
 import * as colour from './utils/colour.js';
@@ -29,13 +29,14 @@ import {KeyCodes} from './utils/keycodes.js';
 import type {Sentinel} from './utils/sentinel.js';
 import {Size} from './utils/size.js';
 
+export type FieldColourValidator = FieldValidator<string>;
 
 /**
  * Class for a colour input field.
  *
  * @alias Blockly.FieldColour
  */
-export class FieldColour extends Field {
+export class FieldColour extends Field<string> {
   /**
    * An array of colour strings for the palette.
    * Copied from goog.ui.ColorPicker.SIMPLE_GRID_COLORS
@@ -152,7 +153,7 @@ export class FieldColour extends Field {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|Sentinel, opt_validator?: Function,
+      opt_value?: string|Sentinel, opt_validator?: FieldColourValidator,
       opt_config?: FieldColourConfig) {
     super(Field.SKIP_SETUP);
 
@@ -305,7 +306,7 @@ export class FieldColour extends Field {
    *
    * @param e Mouse event.
    */
-  private onClick_(e: MouseEvent) {
+  private onClick_(e: PointerEvent) {
     const cell = e.target as Element;
     const colour = cell && cell.getAttribute('data-colour');
     if (colour !== null) {
@@ -414,7 +415,7 @@ export class FieldColour extends Field {
    *
    * @param e Mouse event.
    */
-  private onMouseMove_(e: MouseEvent) {
+  private onMouseMove_(e: PointerEvent) {
     const cell = e.target as Element;
     const index = cell && Number(cell.getAttribute('data-index'));
     if (index !== null && index !== this.highlightedIndex_) {
@@ -533,13 +534,13 @@ export class FieldColour extends Field {
 
     // Configure event handler on the table to listen for any event in a cell.
     this.onClickWrapper_ = browserEvents.conditionalBind(
-        table, 'click', this, this.onClick_, true);
+        table, 'pointerdown', this, this.onClick_, true);
     this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
-        table, 'mousemove', this, this.onMouseMove_, true);
+        table, 'pointermove', this, this.onMouseMove_, true);
     this.onMouseEnterWrapper_ = browserEvents.conditionalBind(
-        table, 'mouseenter', this, this.onMouseEnter_, true);
+        table, 'pointerenter', this, this.onMouseEnter_, true);
     this.onMouseLeaveWrapper_ = browserEvents.conditionalBind(
-        table, 'mouseleave', this, this.onMouseLeave_, true);
+        table, 'pointerleave', this, this.onMouseLeave_, true);
     this.onKeyDownWrapper_ =
         browserEvents.conditionalBind(table, 'keydown', this, this.onKeyDown_);
 
@@ -588,10 +589,7 @@ export class FieldColour extends Field {
 }
 
 /** The default value for this field. */
-// AnyDuringMigration because:  Property 'DEFAULT_VALUE' is protected and only
-// accessible within class 'FieldColour' and its subclasses.
-(FieldColour.prototype as AnyDuringMigration).DEFAULT_VALUE =
-    FieldColour.COLOURS[0];
+FieldColour.prototype.DEFAULT_VALUE = FieldColour.COLOURS[0];
 
 /** CSS for colour picker.  See css.js for use. */
 Css.register(`

@@ -55,13 +55,9 @@ suite('Tooltip', function() {
       this.block.setTooltip('Test Tooltip');
 
       // Fire pointer events directly on the relevant SVG.
-      // Note the 'pointerover', due to the events registered through
-      // Blockly.browserEvents.bind being registered as pointer events rather
-      // than mouse events. Mousemove event is registered directly on the
-      // element rather than through browserEvents.
       this.block.pathObject.svgPath.dispatchEvent(
-          new MouseEvent('pointerover'));
-      this.block.pathObject.svgPath.dispatchEvent(new MouseEvent('mousemove'));
+          new PointerEvent('pointerover'));
+      this.block.pathObject.svgPath.dispatchEvent(new PointerEvent('pointermove'));
       this.clock.runAll();
 
       chai.assert.isTrue(

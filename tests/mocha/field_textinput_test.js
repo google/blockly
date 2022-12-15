@@ -173,6 +173,7 @@ suite('Text Input Fields', function() {
               };
             },
             markFocused: function() {},
+            options: {},
           };
           field.sourceBlock_ = {
             workspace: workspace,

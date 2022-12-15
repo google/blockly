@@ -8,16 +8,16 @@
  * @fileoverview Gulp script to deploy Blockly demos on appengine.
  */
 
-var gulp = require('gulp');
+const gulp = require('gulp');
 
-var fs = require('fs');
-var rimraf = require('rimraf');
-var path = require('path');
-var execSync = require('child_process').execSync;
+const fs = require('fs');
+const rimraf = require('rimraf');
+const path = require('path');
+const execSync = require('child_process').execSync;
 const buildTasks = require('./build_tasks.js');
 const packageTasks = require('./package_tasks.js');
 
-var packageJson = require('../../package.json');
+const packageJson = require('../../package.json');
 const demoTmpDir = '../_deploy';
 const demoStaticTmpDir = '../_deploy/static';
 
@@ -51,8 +51,32 @@ function copyStaticSrc(done) {
  * Prerequisite: clean, build.
  */
 function copyBuilt(done) {
-  return gulp.src(['build/msg/**/*', 'dist/*_compressed.js*'], {base: '.'})
+  return gulp.src(['build/msg/*', 'dist/*_compressed.js*'], {base: '.'})
       .pipe(gulp.dest(demoStaticTmpDir));
+}
+
+/**
+ * Copies compressed files into the places they used to be used from, for the
+ * benefit of our Developers site and (for now) any other websites that
+ * hotlink them.  Delete this once devsite is fixed.
+ *
+ * Prerequisite: clean, build.
+ */
+function copyCompressedToOldLocation(done) {
+  return gulp.src(['dist/*_compressed.js*'])
+      .pipe(gulp.dest(demoStaticTmpDir));
+}
+
+/**
+ * Copies messages files into the places they used to be used from, for the
+ * benefit of our Developers site and (for now) any other websites that
+ * hotlink them.  Delete this once devsite is fixed.
+ *
+ * Prerequisite: clean, build.
+ */
+function copyMessagesToOldLocation(done) {
+  return gulp.src(['build/msg/*'])
+      .pipe(gulp.dest(demoStaticTmpDir + '/msg/js'));
 }
 
 /**
@@ -121,10 +145,10 @@ function deployAndClean(done) {
  * Constructs a beta demo version name based on the current date.
  */
 function getDemosBetaVersion() {
-  var date = new Date();
-  var mm = date.getMonth() + 1; // Month, 0-11
-  var dd = date.getDate(); // Day of the month, 1-31
-  var yyyy = date.getFullYear();
+  const date = new Date();
+  const mm = date.getMonth() + 1;  // Month, 0-11
+  const dd = date.getDate();  // Day of the month, 1-31
+  const yyyy = date.getFullYear();
   return `${yyyy}${mm < 10 ? '0' + mm : mm}${dd}-beta`;
 }
 
@@ -140,7 +164,7 @@ function deployBetaAndClean(done) {
 
 /**
  * Prepares demos.
- * 
+ *
  * Prerequisites (invoked): clean, build
  */
 const prepareDemos = gulp.series(
@@ -153,7 +177,9 @@ const prepareDemos = gulp.series(
             gulp.parallel(buildTasks.cleanBuildDir,
                           packageTasks.cleanReleaseDir),
             buildTasks.build,
-            copyBuilt),
+            gulp.parallel(copyBuilt,
+                          copyCompressedToOldLocation,
+                          copyMessagesToOldLocation)),
         copyPlaygroundDeps));
 
 /**

@@ -222,7 +222,7 @@ export function generateUniqueNameFromOptions(
       }
     }
     if (!inUse) {
-      return potName;
+      break;
     }
 
     letterIndex++;
@@ -233,6 +233,7 @@ export function generateUniqueNameFromOptions(
     }
     potName = letters.charAt(letterIndex) + suffix;
   }
+  return potName;
 }
 
 /**

@@ -14,7 +14,9 @@ goog.declareModuleId('Blockly.Events.BlockChange');
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
+import {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
 
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
@@ -79,11 +81,35 @@ export class BlockChange extends BlockBase {
    * @param json JSON representation.
    */
   override fromJson(json: BlockChangeJson) {
+    deprecation.warn(
+        'Blockly.Events.BlockChange.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.element = json['element'];
     this.name = json['name'];
     this.oldValue = json['oldValue'];
     this.newValue = json['newValue'];
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of BlockChange, but we can't specify that due to the fact that
+   *     parameters to static methods in subclasses must be supertypes of
+   *     parameters to static methods in superclasses.
+   * @internal
+   */
+  static fromJson(json: BlockChangeJson, workspace: Workspace, event?: any):
+      BlockChange {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new BlockChange()) as
+        BlockChange;
+    newEvent.element = json['element'];
+    newEvent.name = json['name'];
+    newEvent.oldValue = json['oldValue'];
+    newEvent.newValue = json['newValue'];
+    return newEvent;
   }
 
   /**

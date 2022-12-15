@@ -16,17 +16,18 @@ goog.declareModuleId('Blockly.FieldCheckbox');
 import './events/events_block_change.js';
 
 import * as dom from './utils/dom.js';
-import {FieldConfig, Field} from './field.js';
+import {Field, FieldConfig, FieldValidator} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import type {Sentinel} from './utils/sentinel.js';
 
+export type FieldCheckboxValidator = FieldValidator<boolean>;
 
 /**
  * Class for a checkbox field.
  *
  * @alias Blockly.FieldCheckbox
  */
-export class FieldCheckbox extends Field {
+export class FieldCheckbox extends Field<boolean> {
   /** Default character for the checkmark. */
   static readonly CHECK_CHAR = '✓';
   private checkChar_: string;
@@ -58,7 +59,8 @@ export class FieldCheckbox extends Field {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|boolean|Sentinel, opt_validator?: Function,
+      opt_value?: string|boolean|Sentinel,
+      opt_validator?: FieldCheckboxValidator,
       opt_config?: FieldCheckboxConfig) {
     super(Field.SKIP_SETUP);
 
@@ -236,7 +238,7 @@ export class FieldCheckbox extends Field {
 
 fieldRegistry.register('field_checkbox', FieldCheckbox);
 
-(FieldCheckbox.prototype as AnyDuringMigration).DEFAULT_VALUE = false;
+FieldCheckbox.prototype.DEFAULT_VALUE = false;
 
 /**
  * Config options for the checkbox field.

@@ -979,7 +979,7 @@ const PROCEDURE_CALL_COMMON = {
         Xml.domToWorkspace(xml, this.workspace);
         Events.setGroup(false);
       }
-    } else if (event.type === Events.BLOCK_DELETE && event.blockId != this.id) {
+    } else if (event.type === Events.BLOCK_DELETE) {
       // Look for the case where a procedure definition has been deleted,
       // leaving this block (a procedure call) orphaned.  In this case, delete
       // the orphan.

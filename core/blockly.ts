@@ -53,19 +53,19 @@ import {DragTarget} from './drag_target.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as Events from './events/events.js';
 import * as Extensions from './extensions.js';
-import {Field} from './field.js';
-import {FieldAngle} from './field_angle.js';
-import {FieldCheckbox} from './field_checkbox.js';
-import {FieldColour} from './field_colour.js';
-import {FieldDropdown, MenuGenerator, MenuGeneratorFunction, MenuOption} from './field_dropdown.js';
+import {Field, FieldValidator} from './field.js';
+import {FieldAngle, FieldAngleValidator} from './field_angle.js';
+import {FieldCheckbox, FieldCheckboxValidator} from './field_checkbox.js';
+import {FieldColour, FieldColourValidator} from './field_colour.js';
+import {FieldDropdown, FieldDropdownValidator, MenuGenerator, MenuGeneratorFunction, MenuOption} from './field_dropdown.js';
 import {FieldImage} from './field_image.js';
 import {FieldLabel} from './field_label.js';
 import {FieldLabelSerializable} from './field_label_serializable.js';
-import {FieldMultilineInput} from './field_multilineinput.js';
-import {FieldNumber} from './field_number.js';
+import {FieldMultilineInput, FieldMultilineInputValidator} from './field_multilineinput.js';
+import {FieldNumber, FieldNumberValidator} from './field_number.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInput} from './field_textinput.js';
-import {FieldVariable} from './field_variable.js';
+import {FieldTextInput, FieldTextInputValidator} from './field_textinput.js';
+import {FieldVariable, FieldVariableValidator} from './field_variable.js';
 import {Flyout} from './flyout_base.js';
 import {FlyoutButton} from './flyout_button.js';
 import {HorizontalFlyout} from './flyout_horizontal.js';
@@ -101,7 +101,6 @@ import {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import {IMovable} from './interfaces/i_movable.js';
 import {IPositionable} from './interfaces/i_positionable.js';
 import {IRegistrable} from './interfaces/i_registrable.js';
-import {IRegistrableField} from './interfaces/i_registrable_field.js';
 import {ISelectable} from './interfaces/i_selectable.js';
 import {ISelectableToolboxItem} from './interfaces/i_selectable_toolbox_item.js';
 import {IStyleable} from './interfaces/i_styleable.js';
@@ -146,7 +145,6 @@ import {Toolbox} from './toolbox/toolbox.js';
 import {ToolboxItem} from './toolbox/toolbox_item.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
-import {TouchGesture} from './touch_gesture.js';
 import {Trashcan} from './trashcan.js';
 import * as utils from './utils.js';
 import * as colour from './utils/colour.js';
@@ -486,9 +484,7 @@ export function unbindEvent_(bindData: browserEvents.Data): Function {
  * @param opt_noCaptureIdentifier True if triggering on this event should not
  *     block execution of other event handlers on this touch or other
  *     simultaneous touches.  False by default.
- * @param opt_noPreventDefault True if triggering on this event should prevent
- *     the default handler.  False by default.  If opt_noPreventDefault is
- *     provided, opt_noCaptureIdentifier must also be provided.
+ * @param _opt_noPreventDefault No-op, deprecated and will be removed in v10.
  * @returns Opaque data that can be passed to unbindEvent_.
  * @deprecated Use **Blockly.browserEvents.conditionalBind** instead.
  * @see browserEvents.conditionalBind
@@ -497,13 +493,12 @@ export function unbindEvent_(bindData: browserEvents.Data): Function {
 export function bindEventWithChecks_(
     node: EventTarget, name: string, thisObject: Object|null, func: Function,
     opt_noCaptureIdentifier?: boolean,
-    opt_noPreventDefault?: boolean): browserEvents.Data {
+    _opt_noPreventDefault?: boolean): browserEvents.Data {
   deprecation.warn(
       'Blockly.bindEventWithChecks_', 'December 2021', 'December 2022',
       'Blockly.browserEvents.conditionalBind');
   return browserEvents.conditionalBind(
-      node, name, thisObject, func, opt_noCaptureIdentifier,
-      opt_noPreventDefault);
+      node, name, thisObject, func, opt_noCaptureIdentifier);
 }
 
 // Aliases to allow external code to access these values for legacy reasons.
@@ -648,24 +643,31 @@ export {Cursor};
 export {DeleteArea};
 export {DragTarget};
 export const DropDownDiv = dropDownDiv;
-export {Field};
-export {FieldAngle};
-export {FieldCheckbox};
-export {FieldColour};
-export {FieldDropdown, MenuGenerator, MenuGeneratorFunction, MenuOption};
+export {Field, FieldValidator};
+export {FieldAngle, FieldAngleValidator};
+export {FieldCheckbox, FieldCheckboxValidator};
+export {FieldColour, FieldColourValidator};
+export {
+  FieldDropdown,
+  FieldDropdownValidator,
+  MenuGenerator,
+  MenuGeneratorFunction,
+  MenuOption,
+};
 export {FieldImage};
 export {FieldLabel};
 export {FieldLabelSerializable};
-export {FieldMultilineInput};
-export {FieldNumber};
-export {FieldTextInput};
-export {FieldVariable};
+export {FieldMultilineInput, FieldMultilineInputValidator};
+export {FieldNumber, FieldNumberValidator};
+export {FieldTextInput, FieldTextInputValidator};
+export {FieldVariable, FieldVariableValidator};
 export {Flyout};
 export {FlyoutButton};
 export {FlyoutMetricsManager};
 export {CodeGenerator};
 export {CodeGenerator as Generator};  // Deprecated name, October 2022.
 export {Gesture};
+export {Gesture as TouchGesture};  // Remove in v10.
 export {Grid};
 export {HorizontalFlyout};
 export {IASTNodeLocation};
@@ -693,7 +695,6 @@ export {Input};
 export {InsertionMarkerManager};
 export {IPositionable};
 export {IRegistrable};
-export {IRegistrableField};
 export {ISelectable};
 export {ISelectableToolboxItem};
 export {IStyleable};
@@ -719,7 +720,6 @@ export {Toolbox};
 export {ToolboxCategory};
 export {ToolboxItem};
 export {ToolboxSeparator};
-export {TouchGesture};
 export {Trashcan};
 export {VariableMap};
 export {VariableModel};

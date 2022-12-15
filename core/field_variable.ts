@@ -17,7 +17,7 @@ import './events/events_block_change.js';
 
 import type {Block} from './block.js';
 import {Field, FieldConfig, UnattachedFieldError} from './field.js';
-import {FieldDropdown, MenuGenerator, MenuOption} from './field_dropdown.js';
+import {FieldDropdown, FieldDropdownValidator, MenuGenerator, MenuOption} from './field_dropdown.js';
 import * as fieldRegistry from './field_registry.js';
 import * as internalConstants from './internal_constants.js';
 import type {Menu} from './menu.js';
@@ -30,6 +30,7 @@ import {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
 import * as Xml from './xml.js';
 
+export type FieldVariableValidator = FieldDropdownValidator;
 
 /**
  * Class for a variable's dropdown field.
@@ -79,7 +80,7 @@ export class FieldVariable extends FieldDropdown {
    * for a list of properties this parameter supports.
    */
   constructor(
-      varName: string|null|Sentinel, opt_validator?: Function,
+      varName: string|null|Sentinel, opt_validator?: FieldVariableValidator,
       opt_variableTypes?: string[], opt_defaultType?: string,
       opt_config?: FieldVariableConfig) {
     super(Field.SKIP_SETUP);

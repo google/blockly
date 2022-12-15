@@ -13,12 +13,14 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockCreate');
 
 import type {Block} from '../block.js';
+import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
 import * as Xml from '../xml.js';
 
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
+import {Workspace} from '../workspace.js';
 
 
 /**
@@ -89,6 +91,9 @@ export class BlockCreate extends BlockBase {
    * @param json JSON representation.
    */
   override fromJson(json: BlockCreateJson) {
+    deprecation.warn(
+        'Blockly.Events.BlockCreate.prototype.fromJson', 'version 9',
+        'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
     this.xml = Xml.textToDom(json['xml']);
     this.ids = json['ids'];
@@ -96,6 +101,29 @@ export class BlockCreate extends BlockBase {
     if (json['recordUndo'] !== undefined) {
       this.recordUndo = json['recordUndo'];
     }
+  }
+
+  /**
+   * Deserializes the JSON event.
+   *
+   * @param event The event to append new properties to. Should be a subclass
+   *     of BlockCreate, but we can't specify that due to the fact that
+   *     parameters to static methods in subclasses must be supertypes of
+   *     parameters to static methods in superclasses.
+   * @internal
+   */
+  static fromJson(json: BlockCreateJson, workspace: Workspace, event?: any):
+      BlockCreate {
+    const newEvent =
+        super.fromJson(json, workspace, event ?? new BlockCreate()) as
+        BlockCreate;
+    newEvent.xml = Xml.textToDom(json['xml']);
+    newEvent.ids = json['ids'];
+    newEvent.json = json['json'] as blocks.State;
+    if (json['recordUndo'] !== undefined) {
+      newEvent.recordUndo = json['recordUndo'];
+    }
+    return newEvent;
   }
 
   /**

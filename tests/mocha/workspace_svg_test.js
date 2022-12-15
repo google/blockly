@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.workspaceSvg');
 
-import {assertEventFired, assertEventNotFired, createFireChangeListenerSpy} from './test_helpers/events.js';
+import {assertEventFired, assertEventNotFired, createChangeListenerSpy} from './test_helpers/events.js';
 import {assertVariableValues} from './test_helpers/variables.js';
 import {defineStackBlock} from './test_helpers/block_definitions.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
@@ -163,7 +163,7 @@ suite('WorkspaceSvg', function() {
     }
     setup(function() {
       defineStackBlock();
-      this.changeListenerSpy = createFireChangeListenerSpy(this.workspace);
+      this.changeListenerSpy = createChangeListenerSpy(this.workspace);
     });
     teardown(function() {
       delete Blockly.Blocks['stack_block'];

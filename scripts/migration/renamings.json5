@@ -1339,8 +1339,13 @@
 
   '9.0.0': [
     {
-      'oldName': 'Blockly.utils.global',
-      'newPath': 'globalThis',
+      oldName: 'Blockly.utils.global',
+      exports: {
+        globalThis: {
+          oldPath: 'Blockly.utils.global',
+          newPath: 'globalThis',
+        }
+      }
     },
     {
       oldName: 'Blockly.Dart',
@@ -1366,7 +1371,7 @@
       oldName: 'Blockly.Python',
       newExport: 'pythonGenerator',
       newPath: 'Blockly.Python',
-      'oldName': 'Blockly.ContextMenuRegistry',
+      oldName: 'Blockly.ContextMenuRegistry',
       exports: {
         'ContextMenuRegistry.ScopeType': {
           oldPath: 'Blockly.ContextMenuRegistry.ScopeType',
@@ -1396,7 +1401,7 @@
       },
     },
     {
-      'oldName': 'Blockly.Input',
+      oldName: 'Blockly.Input',
       exports: {
         'Input.Align': {
           oldPath: 'Blockly.Input.Align',
@@ -1406,7 +1411,7 @@
       },
     },
     {
-      'oldName': 'Blockly.Names',
+      oldName: 'Blockly.Names',
       exports: {
         'Names.NameType': {
           oldPath: 'Blockly.Names.NameType',
@@ -1419,5 +1424,9 @@
 
   'develop': [
     // New renamings go here!
+    {
+      oldName: 'Blockly.TouchGesture',
+      newName: 'Blockly.Gesture',
+    },    
   ]
 }

@@ -45,15 +45,28 @@ import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
+export type FieldValidator<T = any> = (value?: T) => T|null|undefined;
 
 /**
  * Abstract class for an editable field.
  *
  * @alias Blockly.Field
  */
-export abstract class Field implements IASTNodeLocationSvg,
-                                       IASTNodeLocationWithBlock,
-                                       IKeyboardAccessible, IRegistrable {
+export abstract class Field<T = any> implements IASTNodeLocationSvg,
+                                                IASTNodeLocationWithBlock,
+                                                IKeyboardAccessible,
+                                                IRegistrable {
+  /**
+   * To overwrite the default value which is set in **Field**, directly update
+   * the prototype.
+   *
+   * Example:
+   * ```typescript
+   * FieldImage.prototype.DEFAULT_VALUE = null;
+   * ```
+   */
+  DEFAULT_VALUE: T|null = null;
+
   /** Non-breaking space. */
   static readonly NBSP = '\u00A0';
 
@@ -69,10 +82,10 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Static labels are usually unnamed.
    */
   name?: string = undefined;
-  protected value_: AnyDuringMigration;
+  protected value_: T|null;
 
   /** Validation function called when user edits an editable field. */
-  protected validator_: Function|null = null;
+  protected validator_: FieldValidator<T>|null = null;
 
   /**
    * Used to cache the field's tooltip value if setTooltip is called when the
@@ -181,15 +194,15 @@ export abstract class Field implements IASTNodeLocationSvg,
    * this parameter supports.
    */
   constructor(
-      value: AnyDuringMigration, opt_validator?: Function|null,
+      value: T|Sentinel, opt_validator?: FieldValidator<T>|null,
       opt_config?: FieldConfig) {
     /**
      * A generic value possessed by the field.
      * Should generally be non-null, only null when the field is created.
      */
-    this.value_ = ('DEFAULT_VALUE' in (new.target).prototype) ?
-        ((new.target).prototype as AnyDuringMigration).DEFAULT_VALUE :
-        null;
+    this.value_ = 'DEFAULT_VALUE' in new.target.prototype ?
+        new.target.prototype.DEFAULT_VALUE :
+        this.DEFAULT_VALUE;
 
     /** The size of the area rendered by the field. */
     this.size_ = new Size(0, 0);
@@ -348,7 +361,7 @@ export abstract class Field implements IASTNodeLocationSvg,
     if (!clickTarget) throw new Error('A click target has not been set.');
     Tooltip.bindMouseEvents(clickTarget);
     this.mouseDownWrapper_ = browserEvents.conditionalBind(
-        clickTarget, 'mousedown', this, this.onMouseDown_);
+        clickTarget, 'pointerdown', this, this.onMouseDown_);
   }
 
   /**
@@ -597,7 +610,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * @param handler The validator function or null to clear a previous
    *     validator.
    */
-  setValidator(handler: Function) {
+  setValidator(handler: FieldValidator<T>) {
     this.validator_ = handler;
   }
 
@@ -1063,17 +1076,17 @@ export abstract class Field implements IASTNodeLocationSvg,
   // NOP
 
   /**
-   * Handle a mouse down event on a field.
+   * Handle a pointerdown event on a field.
    *
-   * @param e Mouse down event.
+   * @param e Pointer down event.
    */
-  protected onMouseDown_(e: Event) {
+  protected onMouseDown_(e: PointerEvent) {
     if (!this.sourceBlock_ || this.sourceBlock_.isDeadOrDying()) {
       return;
     }
     const gesture = (this.sourceBlock_.workspace as WorkspaceSvg).getGesture(e);
     if (gesture) {
-      gesture.setStartField(this);
+      gesture.setStartField(this as Field);
     }
   }
 

@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as eventUtils from '../events/utils.js';
+import {IProcedureMap} from '../interfaces/i_procedure_map.js';
 import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
+import {isObservable} from '../interfaces/i_observable.js';
 import {triggerProceduresUpdate} from './update_procedures.js';
 import type {Workspace} from '../workspace.js';
-import {IProcedureMap} from '../interfaces/i_procedure_map.js';
 
 
 export class ObservableProcedureMap extends
@@ -20,8 +22,11 @@ export class ObservableProcedureMap extends
    * Adds the given procedure model to the procedure map.
    */
   override set(id: string, proc: IProcedureModel): this {
-    // TODO(#6516): Fire events.
+    if (this.get(id) === proc) return this;
     super.set(id, proc);
+    eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_CREATE))(
+        this.workspace, proc));
+    if (isObservable(proc)) proc.startPublishing();
     return this;
   }
 
@@ -30,9 +35,13 @@ export class ObservableProcedureMap extends
    * exists).
    */
   override delete(id: string): boolean {
-    // TODO(#6516): Fire events.
+    const proc = this.get(id);
     const existed = super.delete(id);
+    if (!existed) return existed;
     triggerProceduresUpdate(this.workspace);
+    eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_DELETE))(
+        this.workspace, proc));
+    if (isObservable(proc)) proc.stopPublishing();
     return existed;
   }
 
@@ -40,8 +49,13 @@ export class ObservableProcedureMap extends
    * Removes all ProcedureModels from the procedure map.
    */
   override clear() {
-    // TODO(#6516): Fire events.
-    super.clear();
+    if (!this.size) return;
+    for (const id of this.keys()) {
+      const proc = this.get(id);
+      super.delete(id);
+      eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_DELETE))(
+          this.workspace, proc));
+    }
     triggerProceduresUpdate(this.workspace);
   }
 
@@ -50,7 +64,6 @@ export class ObservableProcedureMap extends
    * blocks can find it.
    */
   add(proc: IProcedureModel): this {
-    // TODO(#6516): Fire events.
     // TODO(#6526): See if this method is actually useful.
     return this.set(proc.getId(), proc);
   }

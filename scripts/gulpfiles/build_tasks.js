@@ -8,27 +8,27 @@
  * @fileoverview Gulp script to build Blockly for Node & NPM.
  */
 
-var gulp = require('gulp');
+const gulp = require('gulp');
 gulp.replace = require('gulp-replace');
 gulp.rename = require('gulp-rename');
 gulp.sourcemaps = require('gulp-sourcemaps');
 
-var path = require('path');
-var fs = require('fs');
+const path = require('path');
+const fs = require('fs');
 const {exec, execSync} = require('child_process');
-var through2 = require('through2');
+const through2 = require('through2');
 
 const clangFormat = require('clang-format');
 const clangFormatter = require('gulp-clang-format');
-var closureCompiler = require('google-closure-compiler').gulp();
-var closureDeps = require('google-closure-deps');
-var argv = require('yargs').argv;
-var rimraf = require('rimraf');
+const closureCompiler = require('google-closure-compiler').gulp();
+const closureDeps = require('google-closure-deps');
+const argv = require('yargs').argv;
+const rimraf = require('rimraf');
 
-var {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
-var {getPackageJson} = require('./helper_tasks');
+const {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
+const {getPackageJson} = require('./helper_tasks');
 
-var {posixPath} = require('../helpers');
+const {posixPath} = require('../helpers');
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
@@ -168,14 +168,14 @@ function stripApacheLicense() {
   // Closure Compiler preserves dozens of Apache licences in the Blockly code.
   // Remove these if they belong to Google or MIT.
   // MIT's permission to do this is logged in Blockly issue #2412.
-  return gulp.replace(new RegExp(licenseRegex, "g"), '\n\n\n\n');
+  return gulp.replace(new RegExp(licenseRegex, 'g'), '\n\n\n\n');
   // Replace with the same number of lines so that source-maps are not affected.
 }
 
 /**
- * Closure compiler diagnostic groups we want to be treated as errors.
+ * Closure Compiler diagnostic groups we want to be treated as errors.
  * These are effected when the --debug or --strict flags are passed.
- * For a full list of closure compiler groups, consult the output of
+ * For a full list of Closure Compiler groups, consult the output of
  * google-closure-compiler --help or look in the source  here:
  * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java#L117
  *
@@ -185,7 +185,7 @@ function stripApacheLicense() {
  * appearing on any list will default to setting provided by the
  * compiler, which may vary depending on compilation level.
  */
-var JSCOMP_ERROR = [
+const JSCOMP_ERROR = [
   // 'accessControls',  // Deprecated; means same as visibility.
   // 'checkPrototypalTypes',  // override annotations are stripped by tsc.
   'checkRegExp',
@@ -235,25 +235,25 @@ var JSCOMP_ERROR = [
 ];
 
 /**
- * Closure compiler diagnostic groups we want to be treated as warnings.
+ * Closure Compiler diagnostic groups we want to be treated as warnings.
  * These are effected when the --debug or --strict flags are passed.
  *
  * For most (all?) diagnostic groups this is the default level, so
  * it's generally sufficient to remove them from JSCOMP_ERROR.
  */
-var JSCOMP_WARNING = [
+const JSCOMP_WARNING = [
 ];
 
 /**
- * Closure compiler diagnostic groups we want to be ignored.  These
+ * Closure Compiler diagnostic groups we want to be ignored.  These
  * suppressions are always effected by default.
  *
  * Make sure that anything added here is commented out of JSCOMP_ERROR
  * above, as that takes precedence.)
  */
-var JSCOMP_OFF = [
+const JSCOMP_OFF = [
   /* The removal of Closure type system types from our JSDoc
-   * annotations means that the closure compiler now generates certain
+   * annotations means that the Closure Compiler now generates certain
    * diagnostics because it no longer has enough information to be
    * sure that the input code is correct.  The following diagnostic
    * groups are turned off to suppress such errors.
@@ -289,25 +289,6 @@ var JSCOMP_OFF = [
 ];
 
 /**
- * The npm prepare script, run by npm install after installing modules
- * and as part of the packaging process.
- *
- * This does just enough of the build that npm start should work.
- *
- * Exception: when running in the CI environment, we don't build
- * anything.  We don't need to, because npm test will build everything
- * needed, and we don't want to, because a tsc error would prevent
- * other workflows (like lint and format) from completing.
- */
-function prepare(done) {
-  if (process.env.CI) {
-    done();
-    return;
-  }
-  return exports.deps(done);
-}
-
-/**
  * Builds Blockly as a JS program, by running tsc on all the files in
  * the core directory.
  */
@@ -315,6 +296,7 @@ function buildJavaScript(done) {
   execSync(
       `tsc -outDir "${TSC_OUTPUT_DIR}" -declarationDir "${TYPINGS_BUILD_DIR}"`,
       {stdio: 'inherit'});
+  execSync(`node scripts/tsick.js "${TSC_OUTPUT_DIR}"`, {stdio: 'inherit'});
   done();
 }
 
@@ -405,7 +387,7 @@ function generateMessages(done) {
       --input_file ${path.join('msg', 'messages.js')} \
       --output_dir ${path.join('msg', 'json')} \
       --quiet`;
-  execSync(jsToJsonCmd, { stdio: 'inherit' });
+  execSync(jsToJsonCmd, {stdio: 'inherit'});
 
   console.log(`
 Regenerated several flies in msg/json/.  Now run
@@ -452,7 +434,7 @@ function buildLangfiles(done) {
 }
 
 /**
- * A helper method to return an closure compiler chunk wrapper that
+ * A helper method to return an Closure Compiler chunk wrapper that
  * wraps the compiler output for the given chunk in a Universal Module
  * Definition.
  */
@@ -609,10 +591,10 @@ function getChunkOptions() {
 /**
  * RegExp that globally matches path.sep (i.e., "/" or "\").
  */
-const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
+const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), 'g');
 
 /**
- * Helper method for calling the Closure compiler, establishing
+ * Helper method for calling the Closure Compiler, establishing
  * default options (that can be overridden by the caller).
  * @param {*} options Caller-supplied options that will override the
  *     defaultOptions.
@@ -663,7 +645,7 @@ function buildCompiled() {
   const packageJson = getPackageJson();  // For version number.
   const options = {
     // The documentation for @define claims you can't use it on a
-    // non-global, but the closure compiler turns everything in to a
+    // non-global, but the Closure Compiler turns everything in to a
     // global - you just have to know what the new name is!  With
     // declareLegacyNamespace this was very straightforward.  Without
     // it, we have to rely on implmentation details.  See
@@ -688,11 +670,19 @@ function buildCompiled() {
 
 /**
  * This task builds Blockly core, blocks and generators together and uses
- * closure compiler's ADVANCED_COMPILATION mode.
+ * Closure Compiler's ADVANCED_COMPILATION mode.
  *
  * Prerequisite: buildDeps.
  */
 function buildAdvancedCompilationTest() {
+  // If main_compressed.js exists (from a previous run) delete it so that
+  // a later browser-based test won't check it should the compile fail.
+  try {
+    fs.unlinkSync('./tests/compile/main_compressed.js');
+  } catch (_e) {
+    // Probably it didn't exist.
+  }
+
   const srcs = [
     TSC_OUTPUT_DIR + '/closure/goog/base_minimal.js',
     TSC_OUTPUT_DIR + '/closure/goog/goog.js',
@@ -751,7 +741,6 @@ exports.minify = gulp.series(exports.deps, buildCompiled);
 exports.build = gulp.parallel(exports.minify, exports.langfiles);
 
 // Manually-invokable targets, with prequisites where required.
-exports.prepare = prepare;
 exports.format = format;
 exports.messages = generateMessages;  // Generate msg/json/en.json et al.
 exports.buildAdvancedCompilationTest =

@@ -5,8 +5,8 @@
  */
 
 /**
- * The class representing an in-progress gesture, usually a drag
- * or a tap.
+ * The class representing an in-progress gesture, e.g. a drag,
+ * tap, or pinch to zoom.
  *
  * @class
  */
@@ -22,6 +22,7 @@ import * as browserEvents from './browser_events.js';
 import {BubbleDragger} from './bubble_dragger.js';
 import * as common from './common.js';
 import {config} from './config.js';
+import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import type {IBlockDragger} from './interfaces/i_block_dragger.js';
@@ -38,10 +39,16 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
- * Note: In this file "start" refers to touchstart, mousedown, and pointerstart
- * events.  "End" refers to touchend, mouseup, and pointerend events.
+ * Note: In this file "start" refers to pointerdown
+ * events.  "End" refers to pointerup events.
  */
-// TODO: Consider touchcancel/pointercancel.
+
+/** A multiplier used to convert the gesture scale to a zoom in delta. */
+const ZOOM_IN_MULTIPLIER = 5;
+
+/** A multiplier used to convert the gesture scale to a zoom out delta. */
+const ZOOM_OUT_MULTIPLIER = 6;
+
 /**
  * Class for one gesture.
  *
@@ -49,8 +56,8 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  */
 export class Gesture {
   /**
-   * The position of the mouse when the gesture started.  Units are CSS
-   * pixels, with (0, 0) at the top left of the browser window (mouseEvent
+   * The position of the pointer when the gesture started.  Units are CSS
+   * pixels, with (0, 0) at the top left of the browser window (pointer event
    * clientX/Y).
    */
   private mouseDownXY_ = new Coordinate(0, 0);
@@ -97,13 +104,13 @@ export class Gesture {
   private hasExceededDragRadius_ = false;
 
   /**
-   * A handle to use to unbind a mouse move listener at the end of a drag.
+   * A handle to use to unbind a pointermove listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
    */
   protected onMoveWrapper_: browserEvents.Data|null = null;
 
   /**
-   * A handle to use to unbind a mouse up listener at the end of a drag.
+   * A handle to use to unbind a pointerup listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
    */
   protected onUpWrapper_: browserEvents.Data|null = null;
@@ -134,18 +141,54 @@ export class Gesture {
   private healStack_: boolean;
 
   /** The event that most recently updated this gesture. */
-  private mostRecentEvent_: Event;
+  private mostRecentEvent_: PointerEvent;
+
+  /** Boolean for whether or not this gesture is a multi-touch gesture. */
+  private isMultiTouch_ = false;
+
+  /** A map of cached points used for tracking multi-touch gestures. */
+  private cachedPoints = new Map<string, Coordinate|null>();
+
+  /**
+   * This is the ratio between the starting distance between the touch points
+   * and the most recent distance between the touch points.
+   * Scales between 0 and 1 mean the most recent zoom was a zoom out.
+   * Scales above 1.0 mean the most recent zoom was a zoom in.
+   */
+  private previousScale_ = 0;
+
+  /** The starting distance between two touch points. */
+  private startDistance_ = 0;
+
+  /**
+   * A handle to use to unbind the second pointerdown listener
+   * at the end of a drag.
+   * Opaque data returned from Blockly.bindEventWithChecks_.
+   */
+  private onStartWrapper_: browserEvents.Data|null = null;
+
+  /** Boolean for whether or not the workspace supports pinch-zoom. */
+  private isPinchZoomEnabled_: boolean|null = null;
+
+  /**
+   * The owner of the dropdownDiv when this gesture first starts.
+   * Needed because we'll close the dropdown before fields get to
+   * act on their events, and some fields care about who owns
+   * the dropdown.
+   */
+  currentDropdownOwner: Field|null = null;
 
   /**
    * @param e The event that kicked off this gesture.
    * @param creatorWorkspace The workspace that created this gesture and has a
    *     reference to it.
    */
-  constructor(e: Event, private readonly creatorWorkspace: WorkspaceSvg) {
+  constructor(
+      e: PointerEvent, private readonly creatorWorkspace: WorkspaceSvg) {
     this.mostRecentEvent_ = e;
 
     /**
-     * How far the mouse has moved during this drag, in pixel units.
+     * How far the pointer has moved during this drag, in pixel units.
      * (0, 0) is at this.mouseDownXY_.
      */
     this.currentDragDeltaXY_ = new Coordinate(0, 0);
@@ -181,19 +224,19 @@ export class Gesture {
     if (this.workspaceDragger_) {
       this.workspaceDragger_.dispose();
     }
+
+    if (this.onStartWrapper_) {
+      browserEvents.unbind(this.onStartWrapper_);
+    }
   }
 
   /**
    * Update internal state based on an event.
    *
-   * @param e The most recent mouse or touch event.
+   * @param e The most recent pointer event.
    */
-  private updateFromEvent_(e: Event) {
-    // AnyDuringMigration because:  Property 'clientY' does not exist on type
-    // 'Event'. AnyDuringMigration because:  Property 'clientX' does not exist
-    // on type 'Event'.
-    const currentXY = new Coordinate(
-        (e as AnyDuringMigration).clientX, (e as AnyDuringMigration).clientY);
+  private updateFromEvent_(e: PointerEvent) {
+    const currentXY = new Coordinate(e.clientX, e.clientY);
     const changed = this.updateDragDelta_(currentXY);
     // Exceeded the drag radius for the first time.
     if (changed) {
@@ -204,9 +247,10 @@ export class Gesture {
   }
 
   /**
-   * DO MATH to set currentDragDeltaXY_ based on the most recent mouse position.
+   * DO MATH to set currentDragDeltaXY_ based on the most recent pointer
+   * position.
    *
-   * @param currentXY The most recent mouse/pointer position, in pixel units,
+   * @param currentXY The most recent pointer position, in pixel units,
    *     with (0, 0) at the window's top left corner.
    * @returns True if the drag just exceeded the drag radius for the first time.
    */
@@ -230,7 +274,7 @@ export class Gesture {
   /**
    * Update this gesture to record whether a block is being dragged from the
    * flyout.
-   * This function should be called on a mouse/touch move event the first time
+   * This function should be called on a pointermove event the first time
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture. If a block should be dragged from the flyout this function creates
    * the new block on the main workspace and updates targetBlock_ and
@@ -267,7 +311,7 @@ export class Gesture {
 
   /**
    * Update this gesture to record whether a bubble is being dragged.
-   * This function should be called on a mouse/touch move event the first time
+   * This function should be called on a pointermove event the first time
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture. If a bubble should be dragged this function creates the necessary
    * BubbleDragger and starts the drag.
@@ -288,7 +332,7 @@ export class Gesture {
    * from the flyout or in the workspace, create the necessary BlockDragger and
    * start the drag.
    *
-   * This function should be called on a mouse/touch move event the first time
+   * This function should be called on a pointermove event the first time
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture. If a block should be dragged, either from the flyout or in the
    * workspace, this function creates the necessary BlockDragger and starts the
@@ -316,7 +360,7 @@ export class Gesture {
    * Check whether to start a workspace drag. If a workspace is being dragged,
    * create the necessary WorkspaceDragger and start the drag.
    *
-   * This function should be called on a mouse/touch move event the first time
+   * This function should be called on a pointermove event the first time
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture. If a workspace is being dragged this function creates the
    * necessary WorkspaceDragger and starts the drag.
@@ -340,7 +384,7 @@ export class Gesture {
 
   /**
    * Update this gesture to record whether anything is being dragged.
-   * This function should be called on a mouse/touch move event the first time
+   * This function should be called on a pointermove event the first time
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture.
    */
@@ -398,21 +442,23 @@ export class Gesture {
 
   /**
    * Start a gesture: update the workspace to indicate that a gesture is in
-   * progress and bind mousemove and mouseup handlers.
+   * progress and bind pointermove and pointerup handlers.
    *
-   * @param e A mouse down or touch start event.
+   * @param e A pointerdown event.
    * @internal
    */
-  doStart(e: MouseEvent) {
+  doStart(e: PointerEvent) {
+    if (!this.startWorkspace_) {
+      throw new Error(
+          'Cannot start the touch gesture becauase the start ' +
+          'workspace is undefined');
+    }
+    this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
+        this.startWorkspace_.options.zoomOptions.pinch;
+
     if (browserEvents.isTargetInput(e)) {
       this.cancel();
       return;
-    }
-
-    if (!this.startWorkspace_) {
-      throw new Error(
-          'Cannot start the gesture because the start ' +
-          'workspace is undefined');
     }
 
     this.hasStarted_ = true;
@@ -425,6 +471,9 @@ export class Gesture {
       // dragged, the block was moved, the parent workspace zoomed, etc.
       this.startWorkspace_.resize();
     }
+
+    // Keep track of which field owns the dropdown before we close it.
+    this.currentDropdownOwner = dropDownDiv.getOwner();
     // Hide chaff also hides the flyout, so don't do it if the click is in a
     // flyout.
     this.startWorkspace_.hideChaff(!!this.flyout_);
@@ -443,106 +492,252 @@ export class Gesture {
       return;
     }
 
-    // TODO(#6097): Make types accurate, possibly by refactoring touch handling.
-    const typelessEvent = e as AnyDuringMigration;
-    if ((e.type.toLowerCase() === 'touchstart' ||
-         e.type.toLowerCase() === 'pointerdown') &&
-        typelessEvent.pointerType !== 'mouse') {
-      Touch.longStart(typelessEvent, this);
+    if (e.type.toLowerCase() === 'pointerdown' && e.pointerType !== 'mouse') {
+      Touch.longStart(e, this);
     }
 
-    // AnyDuringMigration because:  Property 'clientY' does not exist on type
-    // 'Event'. AnyDuringMigration because:  Property 'clientX' does not exist
-    // on type 'Event'.
-    this.mouseDownXY_ = new Coordinate(
-        (e as AnyDuringMigration).clientX, (e as AnyDuringMigration).clientY);
-    // AnyDuringMigration because:  Property 'metaKey' does not exist on type
-    // 'Event'. AnyDuringMigration because:  Property 'ctrlKey' does not exist
-    // on type 'Event'. AnyDuringMigration because:  Property 'altKey' does not
-    // exist on type 'Event'.
-    this.healStack_ = (e as AnyDuringMigration).altKey ||
-        (e as AnyDuringMigration).ctrlKey || (e as AnyDuringMigration).metaKey;
+    this.mouseDownXY_ = new Coordinate(e.clientX, e.clientY);
+    this.healStack_ = e.altKey || e.ctrlKey || e.metaKey;
 
     this.bindMouseEvents(e);
+
+    if (!this.isEnding_) {
+      this.handleTouchStart(e);
+    }
   }
 
   /**
    * Bind gesture events.
    *
-   * @param e A mouse down or touch start event.
+   * @param e A pointerdown event.
    * @internal
    */
-  bindMouseEvents(e: Event) {
+  bindMouseEvents(e: PointerEvent) {
+    this.onStartWrapper_ = browserEvents.conditionalBind(
+        document, 'pointerdown', null, this.handleStart.bind(this),
+        /* opt_noCaptureIdentifier */ true);
     this.onMoveWrapper_ = browserEvents.conditionalBind(
-        document, 'mousemove', null, this.handleMove.bind(this));
+        document, 'pointermove', null, this.handleMove.bind(this),
+        /* opt_noCaptureIdentifier */ true);
     this.onUpWrapper_ = browserEvents.conditionalBind(
-        document, 'mouseup', null, this.handleUp.bind(this));
+        document, 'pointerup', null, this.handleUp.bind(this),
+        /* opt_noCaptureIdentifier */ true);
 
     e.preventDefault();
     e.stopPropagation();
   }
 
   /**
-   * Handle a mouse move or touch move event.
+   * Handle a pointerdown event.
    *
-   * @param e A mouse move or touch move event.
+   * @param e A pointerdown event.
    * @internal
    */
-  handleMove(e: Event) {
-    this.updateFromEvent_(e);
-    if (this.workspaceDragger_) {
-      this.workspaceDragger_.drag(this.currentDragDeltaXY_);
-    } else if (this.blockDragger_) {
-      this.blockDragger_.drag(this.mostRecentEvent_, this.currentDragDeltaXY_);
-    } else if (this.bubbleDragger_) {
-      this.bubbleDragger_.dragBubble(
-          this.mostRecentEvent_, this.currentDragDeltaXY_);
-    }
-    e.preventDefault();
-    e.stopPropagation();
-  }
-
-  /**
-   * Handle a mouse up or touch end event.
-   *
-   * @param e A mouse up or touch end event.
-   * @internal
-   */
-  handleUp(e: Event) {
-    this.updateFromEvent_(e);
-    Touch.longStop();
-
-    if (this.isEnding_) {
-      console.log('Trying to end a gesture recursively.');
+  handleStart(e: PointerEvent) {
+    if (this.isDragging()) {
+      // A drag has already started, so this can no longer be a pinch-zoom.
       return;
     }
-    this.isEnding_ = true;
-    // The ordering of these checks is important: drags have higher priority
-    // than clicks.  Fields have higher priority than blocks; blocks have higher
-    // priority than workspaces.
-    // The ordering within drags does not matter, because the three types of
-    // dragging are exclusive.
-    if (this.bubbleDragger_) {
-      this.bubbleDragger_.endBubbleDrag(e, this.currentDragDeltaXY_);
-    } else if (this.blockDragger_) {
-      this.blockDragger_.endDrag(e, this.currentDragDeltaXY_);
-    } else if (this.workspaceDragger_) {
-      this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
-    } else if (this.isBubbleClick_()) {
-      // Bubbles are in front of all fields and blocks.
-      this.doBubbleClick_();
-    } else if (this.isFieldClick_()) {
-      this.doFieldClick_();
-    } else if (this.isBlockClick_()) {
-      this.doBlockClick_();
-    } else if (this.isWorkspaceClick_()) {
-      this.doWorkspaceClick_(e);
+    this.handleTouchStart(e);
+
+    if (this.isMultiTouch()) {
+      Touch.longStop();
     }
+  }
 
+  /**
+   * Handle a pointermove event.
+   *
+   * @param e A pointermove event.
+   * @internal
+   */
+  handleMove(e: PointerEvent) {
+    if ((this.isDragging() && Touch.shouldHandleEvent(e)) ||
+        !this.isMultiTouch()) {
+      this.updateFromEvent_(e);
+      if (this.workspaceDragger_) {
+        this.workspaceDragger_.drag(this.currentDragDeltaXY_);
+      } else if (this.blockDragger_) {
+        this.blockDragger_.drag(
+            this.mostRecentEvent_, this.currentDragDeltaXY_);
+      } else if (this.bubbleDragger_) {
+        this.bubbleDragger_.dragBubble(
+            this.mostRecentEvent_, this.currentDragDeltaXY_);
+      }
+      e.preventDefault();
+      e.stopPropagation();
+    } else if (this.isMultiTouch()) {
+      this.handleTouchMove(e);
+      Touch.longStop();
+    }
+  }
+
+  /**
+   * Handle a pointerup event.
+   *
+   * @param e A pointerup event.
+   * @internal
+   */
+  handleUp(e: PointerEvent) {
+    if (!this.isDragging()) {
+      this.handleTouchEnd(e);
+    }
+    if (!this.isMultiTouch() || this.isDragging()) {
+      if (!Touch.shouldHandleEvent(e)) {
+        return;
+      }
+      this.updateFromEvent_(e);
+      Touch.longStop();
+
+      if (this.isEnding_) {
+        console.log('Trying to end a gesture recursively.');
+        return;
+      }
+      this.isEnding_ = true;
+      // The ordering of these checks is important: drags have higher priority
+      // than clicks.  Fields have higher priority than blocks; blocks have
+      // higher priority than workspaces. The ordering within drags does not
+      // matter, because the three types of dragging are exclusive.
+      if (this.bubbleDragger_) {
+        this.bubbleDragger_.endBubbleDrag(e, this.currentDragDeltaXY_);
+      } else if (this.blockDragger_) {
+        this.blockDragger_.endDrag(e, this.currentDragDeltaXY_);
+      } else if (this.workspaceDragger_) {
+        this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
+      } else if (this.isBubbleClick_()) {
+        // Bubbles are in front of all fields and blocks.
+        this.doBubbleClick_();
+      } else if (this.isFieldClick_()) {
+        this.doFieldClick_();
+      } else if (this.isBlockClick_()) {
+        this.doBlockClick_();
+      } else if (this.isWorkspaceClick_()) {
+        this.doWorkspaceClick_(e);
+      }
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      this.dispose();
+    } else {
+      e.preventDefault();
+      e.stopPropagation();
+
+      this.dispose();
+    }
+  }
+
+  /**
+   * Handle a pointerdown event and keep track of current
+   * pointers.
+   *
+   * @param e A pointerdown event.
+   * @internal
+   */
+  handleTouchStart(e: PointerEvent) {
+    const pointerId = Touch.getTouchIdentifierFromEvent(e);
+    // store the pointerId in the current list of pointers
+    this.cachedPoints.set(pointerId, this.getTouchPoint(e));
+    const pointers = Array.from(this.cachedPoints.keys());
+    // If two pointers are down, store info
+    if (pointers.length === 2) {
+      const point0 = (this.cachedPoints.get(pointers[0]))!;
+      const point1 = (this.cachedPoints.get(pointers[1]))!;
+      this.startDistance_ = Coordinate.distance(point0, point1);
+      this.isMultiTouch_ = true;
+      e.preventDefault();
+    }
+  }
+
+  /**
+   * Handle a pointermove event and zoom in/out if two pointers
+   * are on the screen.
+   *
+   * @param e A pointermove event.
+   * @internal
+   */
+  handleTouchMove(e: PointerEvent) {
+    const pointerId = Touch.getTouchIdentifierFromEvent(e);
+    // Update the cache
+    this.cachedPoints.set(pointerId, this.getTouchPoint(e));
+
+    if (this.isPinchZoomEnabled_ && this.cachedPoints.size === 2) {
+      this.handlePinch_(e);
+    } else {
+      this.handleMove(e);
+    }
+  }
+
+  /**
+   * Handle pinch zoom gesture.
+   *
+   * @param e A pointermove event.
+   */
+  private handlePinch_(e: PointerEvent) {
+    const pointers = Array.from(this.cachedPoints.keys());
+    // Calculate the distance between the two pointers
+    const point0 = (this.cachedPoints.get(pointers[0]))!;
+    const point1 = (this.cachedPoints.get(pointers[1]))!;
+    const moveDistance = Coordinate.distance(point0, point1);
+    const scale = moveDistance / this.startDistance_;
+
+    if (this.previousScale_ > 0 && this.previousScale_ < Infinity) {
+      const gestureScale = scale - this.previousScale_;
+      const delta = gestureScale > 0 ? gestureScale * ZOOM_IN_MULTIPLIER :
+                                       gestureScale * ZOOM_OUT_MULTIPLIER;
+      if (!this.startWorkspace_) {
+        throw new Error(
+            'Cannot handle a pinch because the start workspace ' +
+            'is undefined');
+      }
+      const workspace = this.startWorkspace_;
+      const position = browserEvents.mouseToSvg(
+          e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
+      workspace.zoom(position.x, position.y, delta);
+    }
+    this.previousScale_ = scale;
     e.preventDefault();
-    e.stopPropagation();
+  }
 
-    this.dispose();
+  /**
+   * Handle a pointerup event and end the gesture.
+   *
+   * @param e A pointerup event.
+   * @internal
+   */
+  handleTouchEnd(e: PointerEvent) {
+    const pointerId = Touch.getTouchIdentifierFromEvent(e);
+    if (this.cachedPoints.has(pointerId)) {
+      this.cachedPoints.delete(pointerId);
+    }
+    if (this.cachedPoints.size < 2) {
+      this.cachedPoints.clear();
+      this.previousScale_ = 0;
+    }
+  }
+
+  /**
+   * Helper function returning the current touch point coordinate.
+   *
+   * @param e A pointer event.
+   * @returns The current touch point coordinate
+   * @internal
+   */
+  getTouchPoint(e: PointerEvent): Coordinate|null {
+    if (!this.startWorkspace_) {
+      return null;
+    }
+    return new Coordinate(e.pageX, e.pageY);
+  }
+
+  /**
+   * Whether this gesture is part of a multi-touch gesture.
+   *
+   * @returns Whether this gesture is part of a multi-touch gesture.
+   * @internal
+   */
+  isMultiTouch(): boolean {
+    return this.isMultiTouch_;
   }
 
   /**
@@ -574,10 +769,10 @@ export class Gesture {
   /**
    * Handle a real or faked right-click event by showing a context menu.
    *
-   * @param e A mouse move or touch move event.
+   * @param e A pointerdown event.
    * @internal
    */
-  handleRightClick(e: Event) {
+  handleRightClick(e: PointerEvent) {
     if (this.targetBlock_) {
       this.bringBlockToFront_();
       this.targetBlock_.workspace.hideChaff(!!this.flyout_);
@@ -597,13 +792,13 @@ export class Gesture {
   }
 
   /**
-   * Handle a mousedown/touchstart event on a workspace.
+   * Handle a pointerdown event on a workspace.
    *
-   * @param e A mouse down or touch start event.
+   * @param e A pointerdown event.
    * @param ws The workspace the event hit.
    * @internal
    */
-  handleWsStart(e: MouseEvent, ws: WorkspaceSvg) {
+  handleWsStart(e: PointerEvent, ws: WorkspaceSvg) {
     if (this.hasStarted_) {
       throw Error(
           'Tried to call gesture.handleWsStart, ' +
@@ -625,13 +820,13 @@ export class Gesture {
   }
 
   /**
-   * Handle a mousedown/touchstart event on a flyout.
+   * Handle a pointerdown event on a flyout.
    *
-   * @param e A mouse down or touch start event.
+   * @param e A pointerdown event.
    * @param flyout The flyout the event hit.
    * @internal
    */
-  handleFlyoutStart(e: MouseEvent, flyout: IFlyout) {
+  handleFlyoutStart(e: PointerEvent, flyout: IFlyout) {
     if (this.hasStarted_) {
       throw Error(
           'Tried to call gesture.handleFlyoutStart, ' +
@@ -642,13 +837,13 @@ export class Gesture {
   }
 
   /**
-   * Handle a mousedown/touchstart event on a block.
+   * Handle a pointerdown event on a block.
    *
-   * @param e A mouse down or touch start event.
+   * @param e A pointerdown event.
    * @param block The block the event hit.
    * @internal
    */
-  handleBlockStart(e: Event, block: BlockSvg) {
+  handleBlockStart(e: PointerEvent, block: BlockSvg) {
     if (this.hasStarted_) {
       throw Error(
           'Tried to call gesture.handleBlockStart, ' +
@@ -659,13 +854,13 @@ export class Gesture {
   }
 
   /**
-   * Handle a mousedown/touchstart event on a bubble.
+   * Handle a pointerdown event on a bubble.
    *
-   * @param e A mouse down or touch start event.
+   * @param e A pointerdown event.
    * @param bubble The bubble the event hit.
    * @internal
    */
-  handleBubbleStart(e: Event, bubble: IBubble) {
+  handleBubbleStart(e: PointerEvent, bubble: IBubble) {
     if (this.hasStarted_) {
       throw Error(
           'Tried to call gesture.handleBubbleStart, ' +
@@ -695,7 +890,13 @@ export class Gesture {
           'Cannot do a field click because the start field is ' +
           'undefined');
     }
-    this.startField_.showEditor(this.mostRecentEvent_);
+
+    // Only show the editor if the field's editor wasn't already open
+    // right before this gesture started.
+    const dropdownAlreadyOpen = this.currentDropdownOwner === this.startField_;
+    if (!dropdownAlreadyOpen) {
+      this.startField_.showEditor(this.mostRecentEvent_);
+    }
     this.bringBlockToFront_();
   }
 
@@ -734,9 +935,9 @@ export class Gesture {
    * Execute a workspace click. When in accessibility mode shift clicking will
    * move the cursor.
    *
-   * @param _e A mouse up or touch end event.
+   * @param _e A pointerup event.
    */
-  private doWorkspaceClick_(_e: Event) {
+  private doWorkspaceClick_(_e: PointerEvent) {
     const ws = this.creatorWorkspace;
     if (common.getSelected()) {
       common.getSelected()!.unselect();
@@ -760,7 +961,7 @@ export class Gesture {
     }
   }
 
-  /* Begin functions for populating a gesture at mouse down. */
+  /* Begin functions for populating a gesture at pointerdown. */
 
   /**
    * Record the field that a gesture started on.
@@ -849,14 +1050,14 @@ export class Gesture {
     }
   }
 
-  /* End functions for populating a gesture at mouse down. */
+  /* End functions for populating a gesture at pointerdown. */
 
   /* Begin helper functions defining types of clicks.  Any developer wanting
    * to change the definition of a click should modify only this code. */
 
   /**
    * Whether this gesture is a click on a bubble.  This should only be called
-   * when ending a gesture (mouse up, touch end).
+   * when ending a gesture (pointerup).
    *
    * @returns Whether this gesture was a click on a bubble.
    */
@@ -868,7 +1069,7 @@ export class Gesture {
 
   /**
    * Whether this gesture is a click on a block.  This should only be called
-   * when ending a gesture (mouse up, touch end).
+   * when ending a gesture (pointerup).
    *
    * @returns Whether this gesture was a click on a block.
    */
@@ -882,7 +1083,7 @@ export class Gesture {
 
   /**
    * Whether this gesture is a click on a field.  This should only be called
-   * when ending a gesture (mouse up, touch end).
+   * when ending a gesture (pointerup).
    *
    * @returns Whether this gesture was a click on a field.
    */
@@ -895,7 +1096,7 @@ export class Gesture {
 
   /**
    * Whether this gesture is a click on a workspace.  This should only be called
-   * when ending a gesture (mouse up, touch end).
+   * when ending a gesture (pointerup).
    *
    * @returns Whether this gesture was a click on a workspace.
    */
@@ -921,9 +1122,9 @@ export class Gesture {
   }
 
   /**
-   * Whether this gesture has already been started.  In theory every mouse down
-   * has a corresponding mouse up, but in reality it is possible to lose a
-   * mouse up, leaving an in-process gesture hanging.
+   * Whether this gesture has already been started.  In theory every pointerdown
+   * has a corresponding pointerup, but in reality it is possible to lose a
+   * pointerup, leaving an in-process gesture hanging.
    *
    * @returns Whether this gesture was a click on a workspace.
    * @internal

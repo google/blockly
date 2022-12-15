@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as eventUtils from '../events/utils.js';
 import {genUid} from '../utils/idgenerator.js';
 import type {IParameterModel} from '../interfaces/i_parameter_model.js';
+import type {IProcedureModel} from '../interfaces/i_procedure_model';
 import {triggerProceduresUpdate} from './update_procedures.js';
 import type {VariableModel} from '../variable_model.js';
 import type {Workspace} from '../workspace.js';
@@ -14,6 +16,8 @@ import type {Workspace} from '../workspace.js';
 export class ObservableParameterModel implements IParameterModel {
   private id: string;
   private variable: VariableModel;
+  private shouldFireEvents = false;
+  private procedureModel: IProcedureModel|null = null;
 
   constructor(
       private readonly workspace: Workspace, name: string, id?: string) {
@@ -26,11 +30,16 @@ export class ObservableParameterModel implements IParameterModel {
    * Sets the name of this parameter to the given name.
    */
   setName(name: string): this {
-    // TODO(#6516): Fire events.
-    if (name == this.variable.name) return this;
+    if (name === this.variable.name) return this;
+    const oldName = this.variable.name;
     this.variable =
         this.workspace.getVariable(name) ?? this.workspace.createVariable(name);
     triggerProceduresUpdate(this.workspace);
+    if (this.shouldFireEvents) {
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.PROCEDURE_PARAMETER_RENAME))(
+              this.workspace, this.procedureModel, this, oldName));
+    }
     return this;
   }
 
@@ -75,5 +84,32 @@ export class ObservableParameterModel implements IParameterModel {
   /** Returns the variable model associated with the parameter model. */
   getVariableModel(): VariableModel {
     return this.variable;
+  }
+
+  /**
+   * Tells the parameter model it should fire events.
+   *
+   * @internal
+   */
+  startPublishing() {
+    this.shouldFireEvents = true;
+  }
+
+  /**
+   * Tells the parameter model it should not fire events.
+   *
+   * @internal
+   */
+  stopPublishing() {
+    this.shouldFireEvents = false;
+  }
+
+  /** Sets the procedure model this parameter is a part of. */
+  setProcedureModel(model: IProcedureModel): this {
+    // TODO: Not sure if we want to do this, or accept it via the constructor.
+    //   That means it could be non-null, but it would also break the fluent
+    //   API.
+    this.procedureModel = model;
+    return this;
   }
 }

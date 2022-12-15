@@ -4,11 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for the data model of a procedure parameter.
- *
- * @namespace Blockly.IParameterModel
- */
+import {IProcedureModel} from './i_procedure_model';
 
 
 /**
@@ -42,4 +38,7 @@ export interface IParameterModel {
    * over time.
    */
   getId(): string;
+
+  /** Sets the procedure model this parameter is associated with. */
+  setProcedureModel(model: IProcedureModel): this;
 }

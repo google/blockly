@@ -89,7 +89,7 @@ export class BubbleDragger {
    *     at the start of the drag, in pixel units.
    * @internal
    */
-  dragBubble(e: Event, currentDragDeltaXY: Coordinate) {
+  dragBubble(e: PointerEvent, currentDragDeltaXY: Coordinate) {
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
     const newLoc = Coordinate.sum(this.startXY_, delta);
     this.bubble.moveDuringDrag(this.dragSurface_, newLoc);
@@ -141,12 +141,12 @@ export class BubbleDragger {
   /**
    * Finish a bubble drag and put the bubble back on the workspace.
    *
-   * @param e The mouseup/touchend event.
+   * @param e The pointerup event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
    * @internal
    */
-  endBubbleDrag(e: Event, currentDragDeltaXY: Coordinate) {
+  endBubbleDrag(e: PointerEvent, currentDragDeltaXY: Coordinate) {
     // Make sure internal state is fresh.
     this.dragBubble(e, currentDragDeltaXY);
 

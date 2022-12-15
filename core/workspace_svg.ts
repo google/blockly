@@ -20,7 +20,6 @@ import './events/events_theme_change.js';
 import './events/events_viewport.js';
 
 import type {Block} from './block.js';
-import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import type {BlockSvg} from './block_svg.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
@@ -225,9 +224,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   currentGesture_: Gesture|null = null;
 
-  /** This workspace's surface for dragging blocks, if it exists. */
-  private readonly blockDragSurface: BlockDragSurfaceSvg|null = null;
-
   /** This workspace's drag surface, if it exists. */
   private readonly workspaceDragSurface: WorkspaceDragSurfaceSvg|null = null;
 
@@ -338,12 +334,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * @param options Dictionary of options.
-   * @param opt_blockDragSurface Drag surface for blocks.
    * @param opt_wsDragSurface Drag surface for the workspace.
    */
-  constructor(
-      options: Options, opt_blockDragSurface?: BlockDragSurfaceSvg,
-      opt_wsDragSurface?: WorkspaceDragSurfaceSvg) {
+  constructor(options: Options, opt_wsDragSurface?: WorkspaceDragSurfaceSvg) {
     super(options);
 
     const MetricsManagerClass = registry.getClassFromOptions(
@@ -362,10 +355,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     this.componentManager = new ComponentManager();
 
     this.connectionDBList = ConnectionDB.init(this.connectionChecker);
-
-    if (opt_blockDragSurface) {
-      this.blockDragSurface = opt_blockDragSurface;
-    }
 
     if (opt_wsDragSurface) {
       this.workspaceDragSurface = opt_wsDragSurface;
@@ -1160,10 +1149,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.svgBlockCanvas_.setAttribute('transform', translation);
       this.svgBubbleCanvas_.setAttribute('transform', translation);
     }
-    // Now update the block drag surface if we're using one.
-    if (this.blockDragSurface) {
-      this.blockDragSurface.translateAndScaleGroup(x, y, this.scale);
-    }
     // And update the grid if we're using one.
     if (this.grid) {
       this.grid.moveTo(x, y);
@@ -1229,16 +1214,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         this.getCanvas(), this.getBubbleCanvas(), previousElement, width,
         height, this.scale);
     this.workspaceDragSurface!.translateSurface(coord.x, coord.y);
-  }
-
-  /**
-   * Gets the drag surface blocks are moved to when a drag is started.
-   *
-   * @returns This workspace's block drag surface, if one is in use.
-   * @internal
-   */
-  getBlockDragSurface(): BlockDragSurfaceSvg|null {
-    return this.blockDragSurface;
   }
 
   /**

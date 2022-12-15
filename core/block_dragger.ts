@@ -124,10 +124,6 @@ export class BlockDragger implements IBlockDragger {
       this.disconnectBlock_(healStack, currentDragDeltaXY);
     }
     this.draggingBlock_.setDragging(true);
-    // For future consideration: we may be able to put moveToDragSurface inside
-    // the block dragger, which would also let the block not track the block
-    // drag surface.
-    this.draggingBlock_.moveToDragSurface();
   }
 
   /**
@@ -230,7 +226,6 @@ export class BlockDragger implements IBlockDragger {
       delta = newValues.delta;
       newLoc = newValues.newLocation;
     }
-    this.draggingBlock_.moveOffDragSurface(newLoc);
 
     if (this.dragTarget_) {
       this.dragTarget_.onDrop(this.draggingBlock_);

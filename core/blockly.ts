@@ -25,7 +25,6 @@ import './events/events_var_create.js';
 
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
-import {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import {BlockDragger} from './block_dragger.js';
 import {BlockSvg} from './block_svg.js';
 import {BlocklyOptions} from './blockly_options.js';
@@ -626,7 +625,6 @@ export {BasicCursor};
 export {Block};
 export {BlocklyOptions};
 export {BlockDragger};
-export {BlockDragSurfaceSvg};
 export {BlockSvg};
 export {Blocks};
 export {Bubble};

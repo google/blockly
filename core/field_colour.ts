@@ -228,12 +228,11 @@ export class FieldColour extends Field<string> {
   protected override doValueUpdate_(newValue: string) {
     this.value_ = newValue;
     if (this.borderRect_) {
-      this.borderRect_.style.fill = newValue as string;
+      this.borderRect_.style.fill = newValue;
     } else if (
         this.sourceBlock_ && this.sourceBlock_.rendered &&
         this.sourceBlock_ instanceof BlockSvg) {
-      this.sourceBlock_.pathObject.svgPath.setAttribute(
-          'fill', newValue as string);
+      this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
       this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }

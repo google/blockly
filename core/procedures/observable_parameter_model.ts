@@ -24,8 +24,8 @@ export class ObservableParameterModel implements IParameterModel {
   constructor(
       private readonly workspace: Workspace, name: string, id?: string) {
     this.id = id ?? genUid();
-    this.variable =
-        this.workspace.getVariable(name) ?? workspace.createVariable(name);
+    this.variable = this.workspace.getVariable(name) ??
+        workspace.createVariable(name, '', id);
   }
 
   /**

@@ -564,7 +564,8 @@ const procedureDefMutator = {
       if (node.nodeName.toLowerCase() !== 'arg') continue;
       this.getProcedureModel().insertParameter(
           new ObservableParameterModel(
-              this.workspace, node.getAttribute('name')),
+              this.workspace, node.getAttribute('name'),
+              node.getAttribute('varid')),
           i);
     }
 
@@ -628,11 +629,13 @@ const procedureDefMutator = {
    *     statements.
    */
   loadExtraState: function(state) {
-    for (let i = 0; i < state['params'].length; i++) {
-      const param = state['params'][i];
-      this.getProcedureModel().insertParameter(
-          new ObservableParameterModel(this.workspace, param.name, param.id),
-          i);
+    if (state['params']) {
+      for (let i = 0; i < state['params'].length; i++) {
+        const param = state['params'][i];
+        this.getProcedureModel().insertParameter(
+            new ObservableParameterModel(this.workspace, param.name, param.id),
+            i);
+      }
     }
 
     // TODO: Remove this data update code.
@@ -798,8 +801,8 @@ Extensions.registerMixin(
 const procedureDefOnChangeMixin = {
   onchange: function(e) {
     if (e.type === Events.BLOCK_CHANGE && e.blockId === this.id &&
-        e.element == 'disabled') {
-      this.model.setEnabled(!e.newValue);
+        e.element === 'disabled') {
+      this.getProcedureModel().setEnabled(!e.newValue);
     }
   },
 };

@@ -46,23 +46,18 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 /**
- * The validation response for an update to a **Field** value.
+ * A function that is called to validate changes to the field's value before
+ * they are set.
  *
- * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
- * @returns `T`, the modified input value to use.
- * @returns `null` to ignore the input value and invoke `doValueInvalid_`.
- * @returns `undefined` to use the input value as is for the field update.
- */
-export type Validation<T> = T|null|undefined;
-
-/**
- * A function that is called to validate changes to the field's value.
+ * **NOTE:** Validation returns one option between `T`, `null`, and `undefined`.
  *
  * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
  * @param newValue The value to be validated.
- * @returns The validated value, same as input by default.
+ * @returns `T` to set this function's returned value instead of `newValue`.
+ * @returns `null` to invoke `doValueInvalid_` and not set a value.
+ * @returns `undefined` to set `newValue` as is.
  */
-export type FieldValidator<T = any> = (newValue: T) => Validation<T>;
+export type FieldValidator<T = any> = (newValue: T) => T|null|undefined;
 
 /**
  * Abstract class for an editable field.
@@ -71,7 +66,7 @@ export type FieldValidator<T = any> = (newValue: T) => Validation<T>;
  * @typeParam T - The value stored on the field.
  * @typeParam U - The value passed into the constructor and `setValue`.
  *
- * NOTE: Subclasses where `U` does not extend `T` must override
+ * **NOTE:** Subclasses where `U` does not extend `T` must override
  * `doClassValidation_` to convert `U` into `T`.
  */
 export abstract class Field<T = any, U = T> implements
@@ -1056,25 +1051,28 @@ export abstract class Field<T = any, U = T> implements
   }
 
   /**
-   * Used to validate a value. Returns input by default. Can be overridden by
-   * subclasses, see FieldDropdown. NOTE: It is valid for a subclass to return
-   * `undefined` when `opt_newValue` exists and is compatible with `T`. This is
-   * because `undefined` tells `processValidation_` to accept the new value as
-   * is.
+   * Validate the changes to a field's value before they are set. See
+   * **FieldDropdown** for an example of subclass implementation.
    *
-   * @param opt_newValue The value to be validated.
-   * @returns The validated value, same as input by default.
+   * **NOTE:** Validation returns one option between `T`, `null`, and
+   * `undefined`. **Field**'s implementation will never return `undefined`, but
+   * it is valid for a subclass to return `undefined` if the new value is
+   * compatible with `T`.
+   *
+   * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+   * @param newValue The value to be validated.
+   * @returns `T` to set this function's returned value instead of `newValue`.
+   * @returns `null` to invoke `doValueInvalid_` and not set a value.
+   * @returns `undefined` to set `newValue` as is.
    */
-  protected doClassValidation_(opt_newValue: U): T|null|undefined;
-  protected doClassValidation_(opt_newValue?: U): T|null;
-  protected doClassValidation_(opt_newValue?: U): Validation<T> {
-    if (opt_newValue === undefined) {
+  protected doClassValidation_(newValue: T): T|null|undefined;
+  protected doClassValidation_(newValue?: U): T|null;
+  protected doClassValidation_(newValue?: T|U): T|null|undefined {
+    if (newValue === undefined) {
       return null;
     }
-    // NOTE: This will break when used by subclasses where U is not
-    // compatible with T. U is included to support preexisting cases
-    // where subclasses override `doClassValidation_`.
-    return opt_newValue as T;
+
+    return newValue as T;
   }
 
   /**

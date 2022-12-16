@@ -398,8 +398,8 @@ export class FieldDropdown extends Field<string|ImageProperties> {
    * @param opt_newValue The input value.
    * @returns A valid language-neutral option, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: MenuOption[1]): string
-      |null {
+  protected override doClassValidation_(opt_newValue?: string|
+                                        ImageProperties): string|null {
     const options = this.getOptions(true);
     const isValueValid = options.some((option) => option[1] === opt_newValue);
 

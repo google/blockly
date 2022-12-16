@@ -1075,7 +1075,7 @@ export abstract class Field<T = any, U = T> implements
   protected doClassValidation_(opt_newValue?: U): ClassValidation<T, U> {
     // NOTE: Although `undefined` is never returned here, it is valid for
     // subclasses to override `doClassValidation_` and return `undefined`.
-    if (opt_newValue === null || opt_newValue === undefined) {
+    if (opt_newValue === undefined) {
       return null;
     }
     // NOTE: This will break when used by subclasses where U is not

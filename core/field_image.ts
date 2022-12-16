@@ -164,8 +164,7 @@ export class FieldImage extends Field<string> {
    * @param opt_newValue The input value.
    * @returns A string, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: string|null): string
-      |null {
+  protected override doClassValidation_(opt_newValue?: string): string|null {
     if (typeof opt_newValue !== 'string') {
       return null;
     }

@@ -255,9 +255,6 @@ export class FieldNumber extends FieldInput<number> {
    */
   protected override doClassValidation_(opt_newValue?: number|string): number
       |null {
-    if (opt_newValue === null) {
-      return null;
-    }
     // Clean up text.
     let newValue = String(opt_newValue);
     // TODO: Handle cases like 'ten', '1.203,14', etc.

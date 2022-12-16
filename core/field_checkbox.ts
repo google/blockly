@@ -186,10 +186,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    *
    * @returns The value of this field.
    */
-  override getValue(): BoolString|null {
-    if (this.value_ === null) {
-      return this.value_;
-    }
+  override getValue(): BoolString {
     return this.value_ ? 'TRUE' : 'FALSE';
   }
 

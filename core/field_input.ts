@@ -166,7 +166,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T|string> {
    *    This is not used by the text input because its display value is stored
    * on the htmlInput_.
    */
-  protected override doValueInvalid_(_invalidValue: T) {
+  protected override doValueInvalid_(_invalidValue: T|string|undefined) {
     if (this.isBeingEdited_) {
       this.isDirty_ = true;
       this.isTextValid_ = false;

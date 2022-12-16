@@ -59,10 +59,10 @@ export type Validation<T> = T|null|undefined;
  * A function that is called to validate changes to the field's value.
  *
  * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
- * @param value The value to be validated.
+ * @param newValue The value to be validated.
  * @returns The validated value, same as input by default.
  */
-export type FieldValidator<T = any> = (value?: T) => Validation<T>;
+export type FieldValidator<T = any> = (newValue: T) => Validation<T>;
 
 /**
  * Abstract class for an editable field.

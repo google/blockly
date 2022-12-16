@@ -80,7 +80,7 @@ export class FieldColour extends Field<string> {
   static COLUMNS = 7;
 
   /** The field's colour picker element. */
-  private picker_: Element|null = null;
+  private picker_: HTMLElement|null = null;
 
   /** Index of the currently highlighted element. */
   private highlightedIndex_: number|null = null;
@@ -282,14 +282,12 @@ export class FieldColour extends Field<string> {
   /** Create and show the colour field's editor. */
   protected override showEditor_() {
     this.dropdownCreate_();
-    dropDownDiv.getContentDiv().appendChild(this.picker_ as AnyDuringMigration);
+    dropDownDiv.getContentDiv().appendChild(this.picker_!);
 
     dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
     // Focus so we can start receiving keyboard events.
-    // AnyDuringMigration because:  Property 'focus' does not exist on type
-    // 'Element'.
-    (this.picker_ as AnyDuringMigration)!.focus({preventScroll: true});
+    this.picker_!.focus({preventScroll: true});
   }
 
   /**

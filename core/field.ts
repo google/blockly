@@ -48,6 +48,7 @@ import * as Xml from './xml.js';
 /**
  * The validation response for an update to a **Field** value.
  *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
  * @returns `T`, the modified input value to use.
  * @returns `null` to ignore the input value and invoke `doValueInvalid_`.
  * @returns `undefined` to use the input value as is for the field update.
@@ -55,20 +56,9 @@ import * as Xml from './xml.js';
 export type Validation<T> = T|null|undefined;
 
 /**
- * Where `T` is the value stored on a **Field** and `U` is the value passed into
- * the constructor and **setValue**, `T` and `U` are the same for most
- * subclasses. If they are different and `U` is not compatible with `T`, it is
- * invalid to return `undefined` since the input value *must be transformed*
- * to store as a `T`. For example, a subclass could take in an image then use
- * **doClassValidation_** to convert it to a string.
- */
-type ClassValidation<T, U> = U extends T ? Validation<T>: T|null;
-
-/**
- * A function that is called to validate changes to the field's value. For more
- * information, see
- * https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values
+ * A function that is called to validate changes to the field's value.
  *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
  * @param value The value to be validated.
  * @returns The validated value, same as input by default.
  */
@@ -1067,14 +1057,17 @@ export abstract class Field<T = any, U = T> implements
 
   /**
    * Used to validate a value. Returns input by default. Can be overridden by
-   * subclasses, see FieldDropdown.
+   * subclasses, see FieldDropdown. NOTE: It is valid for a subclass to return
+   * `undefined` when `opt_newValue` exists and is compatible with `T`. This is
+   * because `undefined` tells `processValidation_` to accept the new value as
+   * is.
    *
    * @param opt_newValue The value to be validated.
    * @returns The validated value, same as input by default.
    */
-  protected doClassValidation_(opt_newValue?: U): ClassValidation<T, U> {
-    // NOTE: Although `undefined` is never returned here, it is valid for
-    // subclasses to override `doClassValidation_` and return `undefined`.
+  protected doClassValidation_(opt_newValue: U): T|null|undefined;
+  protected doClassValidation_(opt_newValue?: U): T|null;
+  protected doClassValidation_(opt_newValue?: U): Validation<T> {
     if (opt_newValue === undefined) {
       return null;
     }

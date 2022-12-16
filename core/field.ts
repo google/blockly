@@ -218,7 +218,7 @@ export abstract class Field<T = any, U = T> implements
    * this parameter supports.
    */
   constructor(
-      value: U|Sentinel, opt_validator?: FieldValidator<T>|null,
+      value?: U|Sentinel, opt_validator?: FieldValidator<T>|null,
       opt_config?: FieldConfig) {
     /**
      * A generic value possessed by the field.

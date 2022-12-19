@@ -112,19 +112,20 @@ export function assertCallBlockStructure(
  * @param {boolean=} hasReturn Whether the procedure definition should have
  *    return.
  * @param {Array<string>=} args An array of argument names.
+ * @param {string=} name The name of the def block (defaults to 'proc name').
  * @return {Blockly.Block} The created block.
  */
 export function createProcDefBlock(
-    workspace, hasReturn = false, args = []) {
+    workspace, hasReturn = false, args = [], name = 'proc name') {
   const type = hasReturn ?
       'procedures_defreturn' : 'procedures_defnoreturn';
-  let xml = '<block type="' + type + '">';
+  let xml = `<block type="${type}">`;
   for (let i = 0; i < args.length; i ++) {
     xml +=
-        '    <mutation><arg name="' + args[i] + '"></arg></mutation>\n';
+        `    <mutation><arg name="${args[i]}"></arg></mutation>\n`;
   }
   xml +=
-      '  <field name="NAME">proc name</field>' +
+      `  <field name="NAME">${name}</field>` +
       '</block>';
   return Blockly.Xml.domToBlock(Blockly.Xml.textToDom(xml), workspace);
 }
@@ -134,15 +135,16 @@ export function createProcDefBlock(
  * @param {!Blockly.Workspace} workspace The Blockly workspace.
  * @param {boolean=} hasReturn Whether the corresponding procedure definition
  *    has return.
+ * @param {string=} name The name of the caller block (defaults to 'proc name').
  * @return {Blockly.Block} The created block.
  */
 export function createProcCallBlock(
-    workspace, hasReturn = false) {
+    workspace, hasReturn = false, name = 'proc name') {
   const type = hasReturn ?
       'procedures_callreturn' : 'procedures_callnoreturn';
   return Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-      '<block type="' + type + '">' +
-      '  <mutation name="proc name"/>' +
-      '</block>'
+      `<block type="${type}">` +
+      `  <mutation name="${name}"/>` +
+      `</block>`
   ), workspace);
 }

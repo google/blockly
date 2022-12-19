@@ -528,11 +528,13 @@ const procedureDefMutator = {
     if (opt_paramIds) {
       container.setAttribute('name', this.getFieldValue('NAME'));
     }
-    for (let i = 0; i < this.argumentVarModels_.length; i++) {
+
+    const params = this.getProcedureModel().getParameters();
+    for (let i = 0; i < params.length; i++) {
       const parameter = xmlUtils.createElement('arg');
-      const argModel = this.argumentVarModels_[i];
-      parameter.setAttribute('name', argModel.name);
-      parameter.setAttribute('varid', argModel.getId());
+      const varModel = params[i].getVariableModel();
+      parameter.setAttribute('name', varModel.name);
+      parameter.setAttribute('varid', varModel.getId());
       if (opt_paramIds && this.paramIds_) {
         parameter.setAttribute('paramId', this.paramIds_[i]);
       }
@@ -596,20 +598,13 @@ const procedureDefMutator = {
    *     parameters and statements.
    */
   saveExtraState: function() {
-    if (!this.argumentVarModels_.length && this.hasStatements_) {
-      return null;
-    }
+    const params = this.getProcedureModel().getParameters();
+    if (!params.length && this.hasStatements_) return;
+
     const state = Object.create(null);
-    if (this.argumentVarModels_.length) {
-      state['params'] = [];
-      for (let i = 0; i < this.argumentVarModels_.length; i++) {
-        state['params'].push({
-          // We don't need to serialize the name, but just in case we decide
-          // to separate params from variables.
-          'name': this.argumentVarModels_[i].name,
-          'id': this.argumentVarModels_[i].getId(),
-        });
-      }
+    if (params.length) {
+      state['params'] =
+          params.map((p) => ({'name': p.getName(), 'id': p.getId()}));
     }
     if (!this.hasStatements_) {
       state['hasStatements'] = false;

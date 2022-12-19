@@ -328,7 +328,7 @@
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Izvede uporabniško določeno funkcijo »%1«.",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://sl.wikipedia.org/wiki/Subrutina",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "Izvede uporabniško funkcijo »%1« in uporabi njen izhod.",
-	"PROCEDURES_MUTATORCONTAINER_TITLE": "vnosi",
+	"PROCEDURES_MUTATORCONTAINER_TITLE": "vhodi",
 	"PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Doda, odstrani ali spremeni vrstni red vnosov za to funkcijo.",
 	"PROCEDURES_MUTATORARG_TITLE": "ime vnosa:",
 	"PROCEDURES_MUTATORARG_TOOLTIP": "Funkciji doda vnos.",

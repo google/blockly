@@ -15,7 +15,7 @@ import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, worksp
 import {defineRowBlock} from '../test_helpers/block_definitions.js';
 
 
-suite('Procedures', function() {
+suite.only('Procedures', function() {
   setup(function() {
     sharedTestSetup.call(this, {fireEventsNow: false});
     this.workspace = Blockly.inject('blocklyDiv', {});
@@ -869,9 +869,76 @@ suite('Procedures', function() {
         'param1',
         'Expected the params field to match the name of the new param');
     });
+
+    test('undoing adding a procedure parameter removes it', function() {
+      // Create a stack of container, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock =
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param1', 'NAME');
+      containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+      defBlock.compose(containerBlock);
+
+      this.workspace.undo();
+
+      chai.assert.isFalse(
+        defBlock.getFieldValue('PARAMS').includes('param1'),
+        'Expected the params field to not contain the name of the new param');
+    });
+
+    test(
+        'undoing and redoing adding a procedure parameter maintains ' +
+        'the same state',
+        function() {
+          // Create a stack of container, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
+          const containerBlock =
+              mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock.setFieldValue('param1', 'NAME');
+          containerBlock.getInput('STACK').connection.connect(
+              paramBlock.previousConnection);
+          defBlock.compose(containerBlock);
+
+          this.workspace.undo();
+          this.workspace.undo(/* redo= */ true);
+    
+          chai.assert.isNotNull(
+            defBlock.getField('PARAMS'),
+            'Expected the params field to exist');
+          chai.assert.isTrue(
+            defBlock.getFieldValue('PARAMS').includes('param1'),
+            'Expected the params field to contain the name of the new param');
+        });
   });
 
-  suite('renaming procedure parameters', function() {
+  suite.only('renaming procedure parameters', function() {
+    test('no variable event is fired', function() {
+      const eventSpy = createChangeListenerSpy(this.workspace);
+      // Create a stack of container, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock =
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param1', 'NAME');
+      containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+      defBlock.compose(containerBlock);
+
+      eventSpy.resetHistory();
+      paramBlock.setFieldValue('new name', 'NAME');
+      defBlock.compose(containerBlock);
+
+      assertEventNotFired(
+          eventSpy, Blockly.Events.VarCreate, {}, this.workspace.id);
+    });
+
     test('defs are updated for parameter renames', function() {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
@@ -1002,6 +1069,63 @@ suite('Procedures', function() {
         'conflict does... something!',
         function() {
 
+        });
+
+    test(
+        'undoing renaming a procedure parameter reverts the change',
+        function() {
+          // Create a stack of container, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
+          const containerBlock = mutatorWorkspace.getTopBlocks()[0];
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock.setFieldValue('param1', 'NAME');
+          containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+          this.clock.runAll();
+          Blockly.Events.setGroup(true);
+          paramBlock.setFieldValue('n', 'NAME');
+          this.clock.runAll();
+          paramBlock.setFieldValue('ne', 'NAME');
+          this.clock.runAll();
+          paramBlock.setFieldValue('new', 'NAME');
+          this.clock.runAll();
+          Blockly.Events.setGroup(false);
+
+          this.workspace.undo();
+    
+          chai.assert.isTrue(
+            defBlock.getFieldValue('PARAMS').includes('param1'),
+            'Expected the params field to contain the old name of the param');
+        });
+
+    test(
+        'undoing and redoing renaming a procedure maintains the same state',
+        function() {
+          // Create a stack of container, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
+          const containerBlock = mutatorWorkspace.getTopBlocks()[0];
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock.setFieldValue('param1', 'NAME');
+          containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+          this.clock.runAll();
+          Blockly.Events.setGroup(true);
+          paramBlock.setFieldValue('n', 'NAME');
+          this.clock.runAll();
+          paramBlock.setFieldValue('ne', 'NAME');
+          this.clock.runAll();
+          paramBlock.setFieldValue('new', 'NAME');
+          this.clock.runAll();
+          Blockly.Events.setGroup(false);
+
+          this.workspace.undo();
+          this.workspace.undo(/* redo= */ true);
+    
+          chai.assert.isTrue(
+            defBlock.getFieldValue('PARAMS').includes('new'),
+            'Expected the params field to contain the new name of the param');
         });
   });
 

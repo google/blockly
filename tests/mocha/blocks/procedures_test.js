@@ -1338,6 +1338,33 @@ suite('Procedures', function() {
           chai.assert.isTrue(
               callBlock2.disposed, 'Expected the second caller to be disposed');
         });
+
+    test('undoing and a procedure delete will still associate procedure ' +
+        'and caller with the same model',
+        function() {
+          const defBlock = createProcDefBlock(this.workspace);
+          createProcCallBlock(this.workspace);
+          // TODO: Apparently we need to call checkAndDelete to handle event
+          //   grouping, this seems like possibly a bug.
+          defBlock.checkAndDelete();
+          this.clock.runAll();
+
+          this.workspace.undo();
+          this.clock.runAll();
+
+          console.log(this.workspace.getTopBlocks());
+
+          const newDefBlock =
+              this.workspace.getBlocksByType('procedures_defnoreturn')[0];
+          const newCallBlock =
+              this.workspace.getBlocksByType('procedures_callnoreturn')[0];
+          console.log(newDefBlock, newCallBlock);
+
+          chai.assert.equal(
+              newDefBlock.getProcedureModel(),
+              newCallBlock.getProcedureModel(),
+              'Expected both new blocks to be associated with the same model');
+        });
   });
 
   suite('caller blocks creating new def blocks', function() {

@@ -15,7 +15,7 @@ import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, worksp
 import {defineRowBlock} from '../test_helpers/block_definitions.js';
 
 
-suite.only('Procedures', function() {
+suite('Procedures', function() {
   setup(function() {
     sharedTestSetup.call(this, {fireEventsNow: false});
     this.workspace = Blockly.inject('blocklyDiv', {});
@@ -917,28 +917,7 @@ suite.only('Procedures', function() {
         });
   });
 
-  suite.only('renaming procedure parameters', function() {
-    test('no variable event is fired', function() {
-      const eventSpy = createChangeListenerSpy(this.workspace);
-      // Create a stack of container, parameter.
-      const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
-      const containerBlock =
-          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
-      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
-      paramBlock.setFieldValue('param1', 'NAME');
-      containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
-      defBlock.compose(containerBlock);
-
-      eventSpy.resetHistory();
-      paramBlock.setFieldValue('new name', 'NAME');
-      defBlock.compose(containerBlock);
-
-      assertEventNotFired(
-          eventSpy, Blockly.Events.VarCreate, {}, this.workspace.id);
-    });
-
+  suite('renaming procedure parameters', function() {
     test('defs are updated for parameter renames', function() {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
@@ -1093,7 +1072,7 @@ suite.only('Procedures', function() {
           Blockly.Events.setGroup(false);
 
           this.workspace.undo();
-    
+
           chai.assert.isTrue(
             defBlock.getFieldValue('PARAMS').includes('param1'),
             'Expected the params field to contain the old name of the param');

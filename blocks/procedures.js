@@ -558,10 +558,10 @@ const procedureDefMutator = {
     for (let i = 0; i < xmlElement.childNodes.length; i++) {
       const node = xmlElement.childNodes[i];
       if (node.nodeName.toLowerCase() !== 'arg') continue;
+      const varId = node.getAttribute('varid');
       this.getProcedureModel().insertParameter(
           new ObservableParameterModel(
-              this.workspace, node.getAttribute('name'),
-              node.getAttribute('varid')),
+              this.workspace, node.getAttribute('name'), undefined, varId),
           i);
     }
 
@@ -604,7 +604,15 @@ const procedureDefMutator = {
     const state = Object.create(null);
     if (params.length) {
       state['params'] =
-          params.map((p) => ({'name': p.getName(), 'id': p.getId()}));
+          params.map((p) => {
+            return {
+              'name': p.getName(),
+              'id': p.getVariableModel().getId(),
+              // Ideally this would be id, and the other would be varId,
+              // but backwards compatibility :/
+              'paramId': p.getId(),
+            };
+          });
     }
     if (!this.hasStatements_) {
       state['hasStatements'] = false;
@@ -620,9 +628,9 @@ const procedureDefMutator = {
   loadExtraState: function(state) {
     if (state['params']) {
       for (let i = 0; i < state['params'].length; i++) {
-        const param = state['params'][i];
+        const {name, id, paramId} = state['params'][i];
         this.getProcedureModel().insertParameter(
-            new ObservableParameterModel(this.workspace, param.name, param.id),
+            new ObservableParameterModel(this.workspace, name, paramId, id),
             i);
       }
     }

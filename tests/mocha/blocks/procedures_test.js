@@ -885,6 +885,91 @@ suite('Procedures', function() {
         });
   });
 
+  suite('deleting procedure parameters', function() {
+    test('deleting a parameter from the procedure updates procedure defs', function() {
+      // Create a stack of container, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock = mutatorWorkspace.getTopBlocks()[0];
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param1', 'NAME');
+      containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+      this.clock.runAll();
+
+      paramBlock.checkAndDelete();
+      this.clock.runAll();
+
+      chai.assert.isFalse(
+        defBlock.getFieldValue('PARAMS').includes('param1'),
+        'Expected the params field to not contain the name of the new param');
+    });
+
+    test('deleting a parameter from the procedure udpates procedure callers', function() {
+      // Create a stack of container, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      const callBlock = createProcCallBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock = mutatorWorkspace.getTopBlocks()[0];
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param1', 'NAME');
+      containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+      this.clock.runAll();
+
+      paramBlock.checkAndDelete();
+      this.clock.runAll();
+
+      chai.assert.isNull(
+        callBlock.getInput('ARG0'),
+        'Expected the param input to not exist');
+    });
+
+    test('undoing deleting a procedure parameter adds it', function() {
+      // Create a stack of container, parameter.
+      const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock = mutatorWorkspace.getTopBlocks()[0];
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param1', 'NAME');
+      containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
+      this.clock.runAll();
+      paramBlock.checkAndDelete();
+      this.clock.runAll();
+
+      this.workspace.undo();
+
+      chai.assert.isTrue(
+        defBlock.getFieldValue('PARAMS').includes('param1'),
+        'Expected the params field to contain the name of the new param');
+    });
+
+    test('undoing and redoing deleting a procedure parameter maintains ' +
+        'the same state',
+        function() {
+          // Create a stack of container, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
+          const containerBlock = mutatorWorkspace.getTopBlocks()[0];
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock.setFieldValue('param1', 'NAME');
+          containerBlock.getInput('STACK').connection
+              .connect(paramBlock.previousConnection);
+          this.clock.runAll();
+          paramBlock.checkAndDelete();
+          this.clock.runAll();
+    
+          this.workspace.undo();
+          this.workspace.undo(/* redo= */ true);
+    
+          chai.assert.isFalse(
+            defBlock.getFieldValue('PARAMS').includes('param1'),
+            'Expected the params field to not contain the name of the new param');
+        });
+  });
+
   suite('renaming procedure parameters', function() {
     test('defs are updated for parameter renames', function() {
       // Create a stack of container, parameter.

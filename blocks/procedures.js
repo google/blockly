@@ -291,7 +291,8 @@ const procedureDefGetDefMixin = function() {
      * @this {Block}
      */
     getVars: function() {
-      return this.arguments_;
+      return this.getProcedureModel().getParameters()
+          .map((p) => p.getVariableModel().name);
     },
 
     /**
@@ -300,7 +301,8 @@ const procedureDefGetDefMixin = function() {
      * @this {Block}
      */
     getVarModels: function() {
-      return this.argumentVarModels_;
+      return this.getProcedureModel().getParameters()
+          .map((p) => p.getVariableModel());
     },
 
     /**

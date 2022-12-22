@@ -386,6 +386,7 @@ const procedureDefUpdateShapeMixin = {
     this.setFieldValue(this.getProcedureModel().getName(), 'NAME');
     this.setEnabled(this.getProcedureModel().getEnabled());
     this.updateParameters_();
+    this.updateMutator_();
   },
 
   /**
@@ -405,6 +406,19 @@ const procedureDefUpdateShapeMixin = {
       this.setFieldValue(paramString, 'PARAMS');
     } finally {
       Events.enable();
+    }
+  },
+
+  updateMutator_: function() {
+    if (!this.mutator?.isVisible()) return;
+
+    const mutatorWorkspace = this.mutator.getWorkspace();
+    for (const p of this.getProcedureModel().getParameters()) {
+      const block = mutatorWorkspace.getBlockById(p.getId());
+      if (!block) continue;  // Should not happen.
+      if (block.getFieldValue('NAME') !== p.getName()) {
+        block.setFieldValue(p.getName(), 'NAME');
+      }
     }
   },
 

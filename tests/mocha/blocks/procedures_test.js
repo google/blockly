@@ -1065,6 +1065,29 @@ suite('Procedures', function() {
         });
 
     test(
+        'renaming a variable associated with a parameter updates mutator parameters',
+        function() {
+          // Create a stack of container, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
+          const containerBlock = mutatorWorkspace.getTopBlocks()[0];
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock.setFieldValue('param1', 'NAME');
+          containerBlock.getInput('STACK').connection
+              .connect(paramBlock.previousConnection);
+          this.clock.runAll();
+    
+          const variable = this.workspace.getVariable('param1', '');
+          this.workspace.renameVariableById(variable.getId(), 'new name');
+    
+          chai.assert.equal(
+              paramBlock.getFieldValue('NAME'),
+              'new name',
+              'Expected the params field to contain the new name of the param');
+        });
+
+    test(
         'renaming a variable associated with a parameter updates procedure callers',
         function() {
           // Create a stack of container, parameter.
@@ -1115,6 +1138,29 @@ suite('Procedures', function() {
               'Expected the params field to exist');
           chai.assert.isTrue(
               defBlock.getFieldValue('PARAMS').includes('preCreatedVar'),
+              'Expected the params field to contain the new name of the param');
+        });
+
+    test(
+        'coallescing a variable associated with a parameter updates mutator parameters',
+        function() {
+          // Create a stack of container, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
+          const containerBlock = mutatorWorkspace.getTopBlocks()[0];
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock.setFieldValue('param1', 'NAME');
+          containerBlock.getInput('STACK').connection
+              .connect(paramBlock.previousConnection);
+          this.clock.runAll();
+    
+          const variable = this.workspace.getVariable('param1', '');
+          this.workspace.renameVariableById(variable.getId(), 'preCreatedVar');
+    
+          chai.assert.equal(
+              paramBlock.getFieldValue('NAME'),
+              'preCreatedVar',
               'Expected the params field to contain the new name of the param');
         });
 

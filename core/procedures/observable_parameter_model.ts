@@ -22,7 +22,8 @@ export class ObservableParameterModel implements IParameterModel {
   private procedureModel: IProcedureModel|null = null;
 
   constructor(
-      private readonly workspace: Workspace, name: string, id?: string, varId?: string) {
+      private readonly workspace: Workspace, name: string, id?: string,
+      varId?: string) {
     this.id = id ?? genUid();
     this.variable = this.workspace.getVariable(name) ??
         workspace.createVariable(name, '', varId);

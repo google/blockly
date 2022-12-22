@@ -36,6 +36,7 @@ const {Msg} = goog.require('Blockly.Msg');
 const {Mutator} = goog.require('Blockly.Mutator');
 const {Names} = goog.require('Blockly.Names');
 const serialization = goog.require('Blockly.serialization');
+const {triggerProceduresUpdate} = goog.require('Blockly.procedures.updateProcedures');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
@@ -340,26 +341,18 @@ const procedureDefVarMixin = function() {
      * @this {Block}
      */
     renameVarById: function(oldId, newId) {
-      const oldVariable = this.workspace.getVariableById(oldId);
-      if (oldVariable.type !== '') {
-        // Procedure arguments always have the empty type.
-        return;
-      }
-      const oldName = oldVariable.name;
+      const oldVar = this.workspace.getVariableById(oldId);
+      const model = this.getProcedureModel();
+      const index = model.getParameters()
+          .findIndex((p) => p.getVariableModel() === oldVar);
+      if (index === -1) return;  // Not found.
       const newVar = this.workspace.getVariableById(newId);
-
-      let change = false;
-      for (let i = 0; i < this.argumentVarModels_.length; i++) {
-        if (this.argumentVarModels_[i].getId() === oldId) {
-          this.arguments_[i] = newVar.name;
-          this.argumentVarModels_[i] = newVar;
-          change = true;
-        }
-      }
-      if (change) {
-        this.displayRenamedVar_(oldName, newVar.name);
-        Procedures.mutateCallers(this);
-      }
+      const oldParam = model.getParameter(index);
+      model.deleteParameter(index);
+      model.insertParameter(
+          new ObservableParameterModel(
+              this.workspace, newVar.name, oldParam.getId()),
+          index);
     },
 
     /**
@@ -371,19 +364,10 @@ const procedureDefVarMixin = function() {
      * @this {Block}
      */
     updateVarName: function(variable) {
-      const newName = variable.name;
-      let change = false;
-      let oldName;
-      for (let i = 0; i < this.argumentVarModels_.length; i++) {
-        if (this.argumentVarModels_[i].getId() === variable.getId()) {
-          oldName = this.arguments_[i];
-          this.arguments_[i] = newName;
-          change = true;
-        }
-      }
-      if (change) {
-        this.displayRenamedVar_(oldName, newName);
-        Procedures.mutateCallers(this);
+      const containsVar = this.getProcedureModel().getParameters()
+          .some((p) => p.getVariableModel() === variable);
+      if (containsVar) {
+        triggerProceduresUpdate(this.workspace);
       }
     },
   };
@@ -857,7 +841,7 @@ const procedureDefNoReturnGetCallerBlockMixin = {
    * @this {Block}
    */
   getProcedureDef: function() {
-    return [this.getFieldValue('NAME'), this.arguments_, false];
+    return [this.getFieldValue('NAME'), this.getVars(), false];
   },
 
   callType_: 'procedures_callnoreturn',
@@ -876,7 +860,7 @@ const procedureDefReturnGetCallerBlockMixin = {
    * @this {Block}
    */
   getProcedureDef: function() {
-    return [this.getFieldValue('NAME'), this.arguments_, true];
+    return [this.getFieldValue('NAME'), this.getVars(), true];
   },
 
   callType_: 'procedures_callreturn',

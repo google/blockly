@@ -453,49 +453,6 @@ const procedureDefUpdateShapeMixin = {
     }
     this.hasStatements_ = hasStatements;
   },
-
-  /**
-   * Update the display of parameters for this procedure definition block.
-   * @private
-   * @this {Block}
-   */
-  updateParams_: function() {
-    // Merge the arguments into a human-readable list.
-    let paramString = '';
-    if (this.arguments_.length) {
-      paramString =
-          Msg['PROCEDURES_BEFORE_PARAMS'] + ' ' + this.arguments_.join(', ');
-    }
-    // The params field is deterministic based on the mutation,
-    // no need to fire a change event.
-    Events.disable();
-    try {
-      this.setFieldValue(paramString, 'PARAMS');
-    } finally {
-      Events.enable();
-    }
-  },
-
-  /**
-   * Update the display to reflect a newly renamed argument.
-   * @param {string} oldName The old display name of the argument.
-   * @param {string} newName The new display name of the argument.
-   * @private
-   * @this {Block}
-   */
-  displayRenamedVar_: function(oldName, newName) {
-    this.updateParams_();
-    // Update the mutator's variables if the mutator is open.
-    if (this.mutator && this.mutator.isVisible()) {
-      const blocks = this.mutator.workspace_.getAllBlocks(false);
-      for (let i = 0, block; (block = blocks[i]); i++) {
-        if (block.type === 'procedures_mutatorarg' &&
-            Names.equals(oldName, block.getFieldValue('NAME'))) {
-          block.setFieldValue(newName, 'NAME');
-        }
-      }
-    }
-  },
 };
 Extensions.registerMixin(
     'procedure_def_update_shape_mixin', procedureDefUpdateShapeMixin);
@@ -585,7 +542,6 @@ const procedureDefMutator = {
         }
       }
     }
-    this.updateParams_();
     Procedures.mutateCallers(this);
 
     // Show or hide the statement input.
@@ -658,7 +614,6 @@ const procedureDefMutator = {
         this.argumentVarModels_.push(variable);
       }
     }
-    this.updateParams_();
     Procedures.mutateCallers(this);
     this.setStatements_(state['hasStatements'] === false ? false : true);
   },
@@ -729,7 +684,6 @@ const procedureDefMutator = {
       paramBlock =
           paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
     }
-    this.updateParams_();
     Procedures.mutateCallers(this);
 
     const model = this.getProcedureModel();

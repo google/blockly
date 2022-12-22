@@ -2252,18 +2252,18 @@ suite('Procedures', function() {
             }
             function assertArgs(argArray) {
               chai.assert.equal(
-                  this.defBlock.arguments_.length,
+                  this.defBlock.getVars().length,
                   argArray.length,
                   'Expected the def to have the right number of arguments');
               for (let i = 0; i < argArray.length; i++) {
-                chai.assert.equal(this.defBlock.arguments_[i], argArray[i]);
+                chai.assert.equal(this.defBlock.getVars()[i], argArray[i]);
               }
               chai.assert.equal(
-                  this.callBlock.arguments_.length,
+                  this.callBlock.getVars().length,
                   argArray.length,
                   'Expected the call to have the right number of arguments');
               for (let i = 0; i < argArray.length; i++) {
-                chai.assert.equal(this.callBlock.arguments_[i], argArray[i]);
+                chai.assert.equal(this.callBlock.getVars()[i], argArray[i]);
               }
             }
             test('Simple Add Arg', function() {

@@ -1732,7 +1732,7 @@ suite('Procedures', function() {
             this.workspace, [], ['unnamed'], true);
       });
 
-      test.skip('callnoreturn and callreturn (no def in xml)', function() {
+      test('callnoreturn and callreturn (no def in xml)', function() {
         const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_callnoreturn" id="first"/>
@@ -1744,7 +1744,7 @@ suite('Procedures', function() {
             this.workspace, ['unnamed'], ['unnamed2'], true);
       });
 
-      test.skip('callreturn and callnoreturn (no def in xml)', function() {
+      test('callreturn and callnoreturn (no def in xml)', function() {
         const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_callreturn"/>

@@ -467,10 +467,6 @@ Extensions.register(
     'procedure_def_validator_helper', procedureDefValidatorHelper);
 
 const procedureDefMutator = {
-  arguments_: [],
-
-  argumentVarModels_: [],
-
   hasStatements_: true,
 
   /**
@@ -493,8 +489,8 @@ const procedureDefMutator = {
       const varModel = params[i].getVariableModel();
       parameter.setAttribute('name', varModel.name);
       parameter.setAttribute('varid', varModel.getId());
-      if (opt_paramIds && this.paramIds_) {
-        parameter.setAttribute('paramId', this.paramIds_[i]);
+      if (opt_paramIds) {
+        parameter.setAttribute('paramId', params[i].getId());
       }
       container.appendChild(parameter);
     }
@@ -522,30 +518,10 @@ const procedureDefMutator = {
               this.workspace, node.getAttribute('name'), undefined, varId),
           i);
     }
-
-    // TODO: Remove this data update code.
-    this.arguments_ = [];
-    this.argumentVarModels_ = [];
-    for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
-      if (childNode.nodeName.toLowerCase() === 'arg') {
-        const varName = childNode.getAttribute('name');
-        const varId =
-            childNode.getAttribute('varid') || childNode.getAttribute('varId');
-        this.arguments_.push(varName);
-        const variable = Variables.getOrCreateVariablePackage(
-            this.workspace, varId, varName, '');
-        if (variable !== null) {
-          this.argumentVarModels_.push(variable);
-        } else {
-          console.log(
-              `Failed to create a variable named "${varName}", ignoring.`);
-        }
-      }
-    }
-    Procedures.mutateCallers(this);
-
-    // Show or hide the statement input.
     this.setStatements_(xmlElement.getAttribute('statements') !== 'false');
+
+    // Call mutate callers for backwards compatibility.
+    Procedures.mutateCallers(this);
   },
 
   /**
@@ -602,20 +578,10 @@ const procedureDefMutator = {
       }
     }
 
-    // TODO: Remove this data update code.
-    this.arguments_ = [];
-    this.argumentVarModels_ = [];
-    if (state['params']) {
-      for (let i = 0; i < state['params'].length; i++) {
-        const param = state['params'][i];
-        const variable = Variables.getOrCreateVariablePackage(
-            this.workspace, param['id'], param['name'], '');
-        this.arguments_.push(variable.name);
-        this.argumentVarModels_.push(variable);
-      }
-    }
-    Procedures.mutateCallers(this);
     this.setStatements_(state['hasStatements'] === false ? false : true);
+
+    // Call mutate callers for backwards compatibility.
+    Procedures.mutateCallers(this);
   },
 
   /**
@@ -666,26 +632,6 @@ const procedureDefMutator = {
    * @this {Block}
    */
   compose: function(containerBlock) {
-    // Parameter list.
-    this.arguments_ = [];
-    this.paramIds_ = [];
-    this.argumentVarModels_ = [];
-
-    // TODO: Remove old data handling logic?
-    let paramBlock = containerBlock.getInputTargetBlock('STACK');
-    while (paramBlock && !paramBlock.isInsertionMarker()) {
-      const varName = paramBlock.getFieldValue('NAME');
-      this.arguments_.push(varName);
-      const variable = Variables.getOrCreateVariablePackage(
-          this.workspace, null, varName, '');
-      this.argumentVarModels_.push(variable);
-
-      this.paramIds_.push(paramBlock.id);
-      paramBlock =
-          paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
-    }
-    Procedures.mutateCallers(this);
-
     const model = this.getProcedureModel();
     const count = model.getParameters().length;
     model.startBulkUpdate();
@@ -694,7 +640,7 @@ const procedureDefMutator = {
     }
 
     let i = 0;
-    paramBlock = containerBlock.getInputTargetBlock('STACK');
+    let paramBlock = containerBlock.getInputTargetBlock('STACK');
     while (paramBlock && !paramBlock.isInsertionMarker()) {
       model.insertParameter(
           new ObservableParameterModel(
@@ -710,6 +656,9 @@ const procedureDefMutator = {
     if (hasStatements !== null) {
       this.setStatements_(hasStatements === 'TRUE');
     }
+
+    // Call mutate callers for backwards compatibility.
+    Procedures.mutateCallers(this);
   },
 };
 Extensions.registerMutator(

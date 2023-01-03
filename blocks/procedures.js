@@ -1020,14 +1020,6 @@ Extensions.register(
     'procedure_caller_get_def_mixin', procedureCallerGetDefMixin);
 
 const procedureCallerMutator = {
-  arguments_: [],
-
-  argumentVarModels_: [],
-
-  quarkConnections_: {},
-
-  quarkIds_: null,
-
   previousEnabledState_: true,
 
   paramsFromSerializedState_: [],
@@ -1136,10 +1128,6 @@ const procedureCallerUpdateShapeMixin = {
     this.updateName_();
     this.updateEnabled_();
     this.updateParameters_();
-
-    // Temporarily maintained for code that relies on arguments_
-    this.arguments_ =
-        this.getProcedureModel().getParameters().map((p) => p.getName());
   },
 
   /**

@@ -2030,10 +2030,18 @@ suite('Procedures', function() {
       });
       suite('rename', function() {
         setup(function() {
-          this.defBlock = this.workspace.newBlock(testSuite.defType);
-          this.defBlock.setFieldValue('proc name', 'NAME');
-          this.callBlock = this.workspace.newBlock(testSuite.callType);
-          this.callBlock.setFieldValue('proc name', 'NAME');
+          this.defBlock = Blockly.serialization.blocks.append({
+            'type': testSuite.defType,
+            'fields': {
+              'NAME': 'proc name',
+            },
+          }, this.workspace);
+          this.callBlock = Blockly.serialization.blocks.append({
+            'type': testSuite.callType,
+            'fields': {
+              'NAME': 'proc name',
+            },
+          }, this.workspace);
           sinon.stub(this.defBlock.getField('NAME'), 'resizeEditor_');
         });
         test('Simple, Programmatic', function() {
@@ -2143,10 +2151,18 @@ suite('Procedures', function() {
       });
       suite('getCallers', function() {
         setup(function() {
-          this.defBlock = this.workspace.newBlock(testSuite.defType);
-          this.defBlock.setFieldValue('proc name', 'NAME');
-          this.callBlock = this.workspace.newBlock(testSuite.callType);
-          this.callBlock.setFieldValue('proc name', 'NAME');
+          this.defBlock = Blockly.serialization.blocks.append({
+            'type': testSuite.defType,
+            'fields': {
+              'NAME': 'proc name',
+            },
+          }, this.workspace);
+          this.callBlock = Blockly.serialization.blocks.append({
+            'type': testSuite.callType,
+            'fields': {
+              'NAME': 'proc name',
+            },
+          }, this.workspace);
         });
         test('Simple', function() {
           const callers =
@@ -2216,10 +2232,18 @@ suite('Procedures', function() {
       });
       suite('getDefinition', function() {
         setup(function() {
-          this.defBlock = this.workspace.newBlock(testSuite.defType);
-          this.defBlock.setFieldValue('proc name', 'NAME');
-          this.callBlock = this.workspace.newBlock(testSuite.callType);
-          this.callBlock.setFieldValue('proc name', 'NAME');
+          this.defBlock = Blockly.serialization.blocks.append({
+            'type': testSuite.defType,
+            'fields': {
+              'NAME': 'proc name',
+            },
+          }, this.workspace);
+          this.callBlock = Blockly.serialization.blocks.append({
+            'type': testSuite.callType,
+            'fields': {
+              'NAME': 'proc name',
+            },
+          }, this.workspace);
         });
         test('Simple', function() {
           const def =

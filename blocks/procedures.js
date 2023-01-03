@@ -1037,11 +1037,12 @@ const procedureCallerMutator = {
    */
   mutationToDom: function() {
     const container = xmlUtils.createElement('mutation');
-    container.setAttribute('name', this.getProcedureCall());
-    for (let i = 0; i < this.arguments_.length; i++) {
-      const parameter = xmlUtils.createElement('arg');
-      parameter.setAttribute('name', this.arguments_[i]);
-      container.appendChild(parameter);
+    const model = this.getProcedureModel();
+    container.setAttribute('name', model.getName());
+    for (const param of model.getParameters()) {
+      const arg = xmlUtils.createElement('arg');
+      arg.setAttribute('name', param.getName());
+      container.appendChild(arg);
     }
     return container;
   },
@@ -1070,9 +1071,10 @@ const procedureCallerMutator = {
    */
   saveExtraState: function() {
     const state = Object.create(null);
-    state['name'] = this.getProcedureCall();
-    if (this.arguments_.length) {
-      state['params'] = this.arguments_;
+    const model = this.getProcedureModel();
+    state['name'] = model.getName();
+    if (model.getParameters().length) {
+      state['params'] = model.getParameters().map((p) => p.getName());
     }
     return state;
   },

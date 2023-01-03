@@ -113,7 +113,6 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'extensions': [
       'procedure_caller_get_def_mixin',
       'procedure_caller_update_shape_mixin',
-      'procedure_caller_onchange_mixin',
       'procedure_caller_context_menu_mixin',
       'procedure_callernoreturn_get_def_block_mixin',
     ],
@@ -186,7 +185,6 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'extensions': [
       'procedure_caller_get_def_mixin',
       'procedure_caller_update_shape_mixin',
-      'procedure_caller_onchange_mixin',
       'procedure_caller_context_menu_mixin',
       'procedure_callerreturn_get_def_block_mixin',
     ],
@@ -937,6 +935,10 @@ const procedureCallerGetDefMixin = function() {
           (proc) => proc.getName() === name);
       if (!model) return null;
 
+      const returnTypes = model.getReturnTypes();
+      const hasMatchingReturn = this.hasReturn ? returnTypes : !returnTypes;
+      if (!hasMatchingReturn) return this.createDef_(name, params);
+
       const hasMatchingParams =
           model.getParameters().every((p, i) => p.getName() === params[i]);
       if (!hasMatchingParams) return null;
@@ -955,6 +957,7 @@ const procedureCallerGetDefMixin = function() {
     createDef_(name, params = []) {
       const xy = this.getRelativeToSurfaceXY();
       const newName = Procedures.findLegalName(name, this);
+      this.renameProcedure(name, newName);
 
       const blockDef = {
         'type': this.defType_,
@@ -1301,17 +1304,6 @@ const procedureCallerOnChangeMixin = {
             this.getFieldValue('NAME'), this.paramsFromSerializedState_);
       }
       this.initBlockWithProcedureModel_();
-    } else if (event.type === Events.BLOCK_DELETE && event.blockId != this.id) {
-      // Look for the case where a procedure definition has been deleted,
-      // leaving this block (a procedure call) orphaned.  In this case, delete
-      // the orphan.
-      const name = this.getProcedureCall();
-      const def = Procedures.getDefinition(name, this.workspace);
-      if (!def) {
-        Events.setGroup(event.group);
-        this.dispose(true);
-        Events.setGroup(false);
-      }
     }
   },
 
@@ -1354,6 +1346,7 @@ Extensions.registerMixin(
     'procedure_caller_context_menu_mixin', procedureCallerContextMenuMixin);
 
 const procedureCallerNoReturnGetDefBlockMixin = {
+  hasReturn: false,
   defType_: 'procedures_defnoreturn',
 };
 Extensions.registerMixin(
@@ -1361,6 +1354,7 @@ Extensions.registerMixin(
     procedureCallerNoReturnGetDefBlockMixin);
 
 const procedureCallerReturnGetDefBlockMixin = {
+  hasReturn: true,
   defType_: 'procedures_defreturn',
 };
 Extensions.registerMixin(

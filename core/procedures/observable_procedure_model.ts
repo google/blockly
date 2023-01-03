@@ -22,6 +22,7 @@ export class ObservableProcedureModel implements IProcedureModel {
   private returnTypes: string[]|null = null;
   private enabled = true;
   private shouldFireEvents = false;
+  private shouldTriggerUpdates = true;
 
   constructor(
       private readonly workspace: Workspace, name: string, id?: string) {
@@ -34,7 +35,7 @@ export class ObservableProcedureModel implements IProcedureModel {
     if (name === this.name) return this;
     const prevName = this.name;
     this.name = name;
-    triggerProceduresUpdate(this.workspace);
+    if (this.shouldTriggerUpdates) triggerProceduresUpdate(this.workspace);
     if (this.shouldFireEvents) {
       eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_RENAME))(
           this.workspace, this, prevName));
@@ -63,7 +64,7 @@ export class ObservableProcedureModel implements IProcedureModel {
       }
     }
 
-    triggerProceduresUpdate(this.workspace);
+    if (this.shouldTriggerUpdates) triggerProceduresUpdate(this.workspace);
     if (this.shouldFireEvents) {
       eventUtils.fire(
           new (eventUtils.get(eventUtils.PROCEDURE_PARAMETER_CREATE))(
@@ -78,7 +79,7 @@ export class ObservableProcedureModel implements IProcedureModel {
     const oldParam = this.parameters[index];
 
     this.parameters.splice(index, 1);
-    triggerProceduresUpdate(this.workspace);
+    if (this.shouldTriggerUpdates) triggerProceduresUpdate(this.workspace);
     if (isObservable(oldParam)) {
       oldParam.stopPublishing();
     }
@@ -110,7 +111,7 @@ export class ObservableProcedureModel implements IProcedureModel {
     if (!!types === !!this.returnTypes) return this;
     const oldReturnTypes = this.returnTypes;
     this.returnTypes = types;
-    triggerProceduresUpdate(this.workspace);
+    if (this.shouldTriggerUpdates) triggerProceduresUpdate(this.workspace);
     if (this.shouldFireEvents) {
       eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_CHANGE_RETURN))(
           this.workspace, this, oldReturnTypes));
@@ -125,12 +126,31 @@ export class ObservableProcedureModel implements IProcedureModel {
   setEnabled(enabled: boolean): this {
     if (enabled === this.enabled) return this;
     this.enabled = enabled;
-    triggerProceduresUpdate(this.workspace);
+    if (this.shouldTriggerUpdates) triggerProceduresUpdate(this.workspace);
     if (this.shouldFireEvents) {
       eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_ENABLE))(
           this.workspace, this));
     }
     return this;
+  }
+
+  /**
+   * Disables triggering updates to procedure blocks until the endBulkUpdate
+   * is called.
+   * @internal
+   */
+  startBulkUpdate() {
+    this.shouldTriggerUpdates = false;
+  }
+
+  /**
+   * Triggers an update to procedure blocks. Should be used with
+   * startBulkUpdate.
+   * @internal
+   */
+  endBulkUpdate() {
+    this.shouldTriggerUpdates = true;
+    triggerProceduresUpdate(this.workspace);
   }
 
   /** Returns the unique language-neutral ID for the procedure. */

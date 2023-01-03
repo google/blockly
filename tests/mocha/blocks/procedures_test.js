@@ -992,6 +992,33 @@ suite('Procedures', function() {
         'Expected the params field to contain the new name of the param');
     });
 
+    test('defs are updated for parameter renames when two params exist',
+        function() {
+          // Create a stack of container, parameter.
+          const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
+          const containerBlock = mutatorWorkspace.getTopBlocks()[0];
+          const paramBlock1 = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock1.setFieldValue('param1', 'NAME');
+          const paramBlock2 = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock2.setFieldValue('param2', 'NAME');
+          containerBlock.getInput('STACK').connection
+              .connect(paramBlock1.previousConnection);
+          paramBlock1.nextConnection.connect(paramBlock2.previousConnection);
+          this.clock.runAll();
+    
+          paramBlock1.setFieldValue('new name', 'NAME');
+          this.clock.runAll();
+    
+          chai.assert.isNotNull(
+            defBlock.getField('PARAMS'),
+            'Expected the params field to exist');
+          chai.assert.isTrue(
+            defBlock.getFieldValue('PARAMS').includes('new name'),
+            'Expected the params field to contain the new name of the param');
+        });
+
     test('callers are updated for parameter renames', function() {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);

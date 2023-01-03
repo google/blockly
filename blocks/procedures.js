@@ -688,6 +688,7 @@ const procedureDefMutator = {
 
     const model = this.getProcedureModel();
     const count = model.getParameters().length;
+    model.startBulkUpdate();
     for (let i = count - 1; i >= 0; i--) {
       model.deleteParameter(i);
     }
@@ -703,6 +704,7 @@ const procedureDefMutator = {
           paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
       i++;
     }
+    model.endBulkUpdate();
 
     const hasStatements = containerBlock.getFieldValue('STATEMENTS');
     if (hasStatements !== null) {

@@ -1697,6 +1697,57 @@ suite('Procedures', function() {
     });
   });
 
+  suite('definition block context menu', function() {
+    test('the context menu includes an option for creating the caller', function() {
+      const def = Blockly.serialization.blocks.append({
+        'type': 'procedures_defnoreturn',
+        'fields': {
+          'NAME': 'test name',
+        },
+      }, this.workspace);
+
+      const options = [];
+      def.customContextMenu(options);
+
+      chai.assert.isTrue(
+          options[0].text.includes('test name'),
+          'Expected the context menu to have an option to create the caller');
+    });
+
+    test('the context menu includes an option for each parameter', function() {
+      const def = Blockly.serialization.blocks.append({
+        'type': 'procedures_defnoreturn',
+        'fields': {
+          'NAME': 'test name',
+        },
+        'extraState': {
+          'params': [
+            {
+              'name': 'testParam1',
+              'id': 'varId1',
+              'paramId': 'paramId1',
+            },
+            {
+              'name': 'testParam2',
+              'id': 'varId2',
+              'paramId': 'paramId2',
+            },
+          ],
+        },
+      }, this.workspace);
+
+      const options = [];
+      def.customContextMenu(options);
+
+      chai.assert.isTrue(
+          options[1].text.includes('testParam1'),
+          'Expected the context menu to have an option to create the first param');
+      chai.assert.isTrue(
+          options[2].text.includes('testParam2'),
+          'Expected the context menu to have an option to create the second param');
+    });
+  });
+
   suite('allProcedures', function() {
     test('Only Procedures', function() {
       const noReturnBlock = this.workspace.newBlock('procedures_defnoreturn');

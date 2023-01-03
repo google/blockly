@@ -730,9 +730,10 @@ const procedureDefContextMenuMixin = {
     option.text = Msg['PROCEDURES_CREATE_DO'].replace('%1', name);
     const xmlMutation = xmlUtils.createElement('mutation');
     xmlMutation.setAttribute('name', name);
-    for (let i = 0; i < this.arguments_.length; i++) {
+    const params = this.getProcedureModel().getParameters();
+    for (const param of params) {
       const xmlArg = xmlUtils.createElement('arg');
-      xmlArg.setAttribute('name', this.arguments_[i]);
+      xmlArg.setAttribute('name', param.getName());
       xmlMutation.appendChild(xmlArg);
     }
     const xmlBlock = xmlUtils.createElement('block');
@@ -742,20 +743,20 @@ const procedureDefContextMenuMixin = {
     options.push(option);
 
     // Add options to create getters for each parameter.
-    if (!this.isCollapsed()) {
-      for (let i = 0; i < this.argumentVarModels_.length; i++) {
-        const argOption = {enabled: true};
-        const argVar = this.argumentVarModels_[i];
-        argOption.text =
-            Msg['VARIABLES_SET_CREATE_GET'].replace('%1', argVar.name);
+    if (this.isCollapsed()) return;
 
-        const argXmlField = Variables.generateVariableFieldDom(argVar);
-        const argXmlBlock = xmlUtils.createElement('block');
-        argXmlBlock.setAttribute('type', 'variables_get');
-        argXmlBlock.appendChild(argXmlField);
-        argOption.callback = ContextMenu.callbackFactory(this, argXmlBlock);
-        options.push(argOption);
-      }
+    for (const param of params) {
+      const argOption = {enabled: true};
+      const argVar = param.getVariableModel();
+      argOption.text =
+          Msg['VARIABLES_SET_CREATE_GET'].replace('%1', argVar.name);
+
+      const argXmlField = Variables.generateVariableFieldDom(argVar);
+      const argXmlBlock = xmlUtils.createElement('block');
+      argXmlBlock.setAttribute('type', 'variables_get');
+      argXmlBlock.appendChild(argXmlField);
+      argOption.callback = ContextMenu.callbackFactory(this, argXmlBlock);
+      options.push(argOption);
     }
   },
 };

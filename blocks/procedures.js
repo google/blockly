@@ -968,8 +968,10 @@ const procedureCallerGetDefMixin = function() {
         },
         'fields': {'NAME': newName},
       };
-      return serialization.blocks.append(blockDef, this.getTargetWorkspace_())
-          .getProcedureModel();
+      const model =
+          serialization.blocks.append(blockDef, this.getTargetWorkspace_())
+              .getProcedureModel();
+      return model;
     },
 
     /**
@@ -1032,6 +1034,7 @@ const procedureCallerMutator = {
    */
   mutationToDom: function() {
     const container = xmlUtils.createElement('mutation');
+
     const model = this.getProcedureModel();
     container.setAttribute('name', model.getName());
     for (const param of model.getParameters()) {

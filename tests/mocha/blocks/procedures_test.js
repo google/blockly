@@ -1506,10 +1506,10 @@ suite('Procedures', function() {
 
     suite('xml', function() {
       test('callers without defs create new defs', function() {
-        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-            '<block type="procedures_callreturn">' +
-              '<mutation name="do something"/>' +
-            '</block>'
+        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+            <block type="procedures_callreturn">
+              <mutation name="do something"/>
+            </block>`
         ), this.workspace);
         this.clock.runAll();
         assertDefBlockStructure(
@@ -1517,7 +1517,7 @@ suite('Procedures', function() {
         assertCallBlockStructure(callBlock, [], [], 'do something');
       });
 
-      test('callers without mutations create unamed defs', function() {
+      test('callers without mutations create unnamed defs', function() {
         const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             '<block type="procedures_callreturn"></block>'
         ), this.workspace);

@@ -67,6 +67,26 @@ export interface ProcedureBlock {
   getProcedureDef: () => ProcedureTuple;
 }
 
+interface LegacyProcedureDefBlock {
+  getProcedureDef: () => ProcedureTuple
+}
+
+function isLegacyProcedureDefBlock(block: Object):
+    block is LegacyProcedureDefBlock {
+  return (block as any).getProcedureDef !== undefined;
+}
+
+interface LegacyProcedureCallBlock {
+  getProcedureCall: () => string;
+  renameProcedure: (p1: string, p2: string) => void;
+}
+
+function isLegacyProcedureCallBlock(block: Object):
+    block is LegacyProcedureCallBlock {
+  return (block as any).getProcedureCall !== undefined &&
+      (block as any).renameProcedure !== undefined;
+}
+
 /**
  * Find all user-created procedure definitions in a workspace.
  *
@@ -78,15 +98,37 @@ export interface ProcedureBlock {
  */
 export function allProcedures(root: Workspace):
     [ProcedureTuple[], ProcedureTuple[]] {
-  const proceduresNoReturn =
-      root.getBlocksByType('procedures_defnoreturn', false)
-          .map(function(block) {
-            return (block as unknown as ProcedureBlock).getProcedureDef();
-          });
-  const proceduresReturn =
-      root.getBlocksByType('procedures_defreturn', false).map(function(block) {
-        return (block as unknown as ProcedureBlock).getProcedureDef();
-      });
+  const proceduresNoReturn: ProcedureTuple[] =
+      root.getProcedureMap()
+          .getProcedures()
+          .filter((p) => !p.getReturnTypes())
+          .map(
+              (p) =>
+                  [p.getName(),
+                   p.getParameters().map((pa) => pa.getName()),
+                   false,
+  ]);
+  root.getBlocksByType('procedures_defnoreturn', false).forEach((b) => {
+    if (!isProcedureBlock(b) && isLegacyProcedureDefBlock(b)) {
+      proceduresNoReturn.push(b.getProcedureDef());
+    }
+  });
+
+  const proceduresReturn: ProcedureTuple[] =
+      root.getProcedureMap()
+          .getProcedures()
+          .filter((p) => !!p.getReturnTypes())
+          .map(
+              (p) =>
+                  [p.getName(),
+                   p.getParameters().map((pa) => pa.getName()),
+                   true,
+  ]);
+  root.getBlocksByType('procedures_defreturn', false).forEach((b) => {
+    if (!isProcedureBlock(b) && isLegacyProcedureDefBlock(b)) {
+      proceduresReturn.push(b.getProcedureDef());
+    }
+  });
   proceduresNoReturn.sort(procTupleComparator);
   proceduresReturn.sort(procTupleComparator);
   return [proceduresNoReturn, proceduresReturn];
@@ -158,19 +200,16 @@ function isLegalName(
  */
 export function isNameUsed(
     name: string, workspace: Workspace, opt_exclude?: Block): boolean {
-  const blocks = workspace.getAllBlocks(false);
-  // Iterate through every block and check the name.
-  for (let i = 0; i < blocks.length; i++) {
-    if (blocks[i] === opt_exclude) {
-      continue;
+  for (const block of workspace.getAllBlocks(false)) {
+    if (block === opt_exclude) continue;
+
+    if (isProcedureBlock(block) && block.isProcedureDef() &&
+        Names.equals(block.getProcedureModel().getName(), name)) {
+      return true;
     }
-    // Assume it is a procedure block so we can check.
-    const procedureBlock = blocks[i] as unknown as ProcedureBlock;
-    if (procedureBlock.getProcedureDef) {
-      const procName = procedureBlock.getProcedureDef();
-      if (Names.equals(procName[0], name)) {
-        return true;
-      }
+    if (isLegacyProcedureDefBlock(block) &&
+        Names.equals(block.getProcedureDef()[0], name)) {
+      return true;
     }
   }
   return false;
@@ -382,21 +421,12 @@ function mutatorChangeListener(e: Abstract) {
  * @alias Blockly.Procedures.getCallers
  */
 export function getCallers(name: string, workspace: Workspace): Block[] {
-  const callers = [];
-  const blocks = workspace.getAllBlocks(false);
-  // Iterate through every block and check the name.
-  for (let i = 0; i < blocks.length; i++) {
-    // Assume it is a procedure block so we can check.
-    const procedureBlock = blocks[i] as unknown as ProcedureBlock;
-    if (procedureBlock.getProcedureCall) {
-      const procName = procedureBlock.getProcedureCall();
-      // Procedure name may be null if the block is only half-built.
-      if (procName && Names.equals(procName, name)) {
-        callers.push(blocks[i]);
-      }
-    }
-  }
-  return callers;
+  return workspace.getAllBlocks(false).filter((block) => {
+    return (isProcedureBlock(block) && !block.isProcedureDef() &&
+            Names.equals(block.getProcedureModel().getName(), name)) ||
+        (isLegacyProcedureCallBlock(block) &&
+         Names.equals(block.getProcedureCall(), name));
+  });
 }
 
 /**
@@ -443,16 +473,15 @@ export function mutateCallers(defBlock: Block) {
 export function getDefinition(name: string, workspace: Workspace): Block|null {
   // Do not assume procedure is a top block. Some languages allow nested
   // procedures. Also do not assume it is one of the built-in blocks. Only
-  // rely on getProcedureDef.
-  const blocks = workspace.getAllBlocks(false);
-  for (let i = 0; i < blocks.length; i++) {
-    // Assume it is a procedure block so we can check.
-    const procedureBlock = blocks[i] as unknown as ProcedureBlock;
-    if (procedureBlock.getProcedureDef) {
-      const tuple = procedureBlock.getProcedureDef();
-      if (tuple && Names.equals(tuple[0], name)) {
-        return blocks[i];  // Can't use procedureBlock var due to type check.
-      }
+  // rely on isProcedureDef and getProcedureDef.
+  for (const block of workspace.getAllBlocks(false)) {
+    if (isProcedureBlock(block) && block.isProcedureDef() &&
+        Names.equals(block.getProcedureModel().getName(), name)) {
+      return block;
+    }
+    if (isLegacyProcedureDefBlock(block) &&
+        Names.equals(block.getProcedureDef()[0], name)) {
+      return block;
     }
   }
   return null;

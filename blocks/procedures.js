@@ -286,6 +286,10 @@ const procedureDefGetDefMixin = function() {
       return this.model_;
     },
 
+    isProcedureDef() {
+      return true;
+    },
+
     /**
      * Return all variables referenced by this block.
      * @return {!Array<string>} List of variable names.
@@ -995,6 +999,10 @@ const procedureCallerGetDefMixin = function() {
     getProcedureCall: function() {
       // The NAME field is guaranteed to exist, null will never be returned.
       return /** @type {string} */ (this.getFieldValue('NAME'));
+    },
+
+    isProcedureDef() {
+      return false;
     },
 
     /**

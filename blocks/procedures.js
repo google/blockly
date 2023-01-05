@@ -312,8 +312,8 @@ const procedureDefGetDefMixin = function() {
     },
   };
 
-  mixin.model = new ObservableProcedureModel(
-      this.workspace, this.getFieldValue('NAME'));
+  mixin.model =
+      new ObservableProcedureModel(this.workspace, this.getFieldValue('NAME'));
   this.workspace.getProcedureMap().add(mixin.model);
 
   this.mixin(mixin, true);
@@ -391,6 +391,34 @@ const procedureDefVarMixin = function() {
 Extensions.register('procedure_def_var_mixin', procedureDefVarMixin);
 
 const procedureDefUpdateShapeMixin = {
+  /**
+   * Updates the block to reflect the state of the procedure model.
+   */
+  doProcedureUpdate: function() {
+    this.setFieldValue(this.model.getName(), 'NAME');
+    this.setEnabled(this.model.getEnabled());
+    this.updateParameters_();
+  },
+
+  /**
+   * Updates the parameters field to reflect the parameters in the procedure
+   * model.
+   */
+  updateParameters_: function() {
+    const params = this.model.getParameters().map((p) => p.getName());
+    const paramString = params.length ?
+        `${Msg['PROCEDURES_BEFORE_PARAMS']} ${params.join(', ')}` :
+        '';
+
+    // The field is deterministic based on other events, no need to fire.
+    Events.disable();
+    try {
+      this.setFieldValue(paramString, 'PARAMS');
+    } finally {
+      Events.enable();
+    }
+  },
+
   /**
    * Add or remove the statement block from this function definition.
    * @param {boolean} hasStatements True if a statement block is needed.
@@ -624,10 +652,9 @@ const procedureDefMutator = {
       };
       connDef = connDef['block']['next'];
     }
-    
-    const containerBlock =
-        serialization.blocks.append(
-            containerBlockDef, workspace, {recordUndo: false});
+
+    const containerBlock = serialization.blocks.append(
+        containerBlockDef, workspace, {recordUndo: false});
 
     if (this.type === 'procedures_defreturn') {
       containerBlock.setFieldValue(this.hasStatements_, 'STATEMENTS');
@@ -743,7 +770,8 @@ Extensions.registerMixin(
 
 const procedureDefOnChangeMixin = {
   onchange: function(e) {
-    if (e.type === Events.BLOCK_CHANGE && e.element == 'disabled') {
+    if (e.type === Events.BLOCK_CHANGE && e.blockId === this.id &&
+        e.element == 'disabled') {
       this.model.setEnabled(!e.newValue);
     }
   },

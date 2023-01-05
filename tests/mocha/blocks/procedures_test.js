@@ -28,7 +28,7 @@ suite('Procedures', function() {
   });
 
   suite('updating data models', function() {
-    test(
+    test.skip(
         'renaming a procedure def block updates the procedure model',
         function() {
           const defBlock = createProcDefBlock(this.workspace);

@@ -473,24 +473,7 @@ Extensions.registerMixin(
 const procedureDefValidatorHelper = function() {
   const nameField = this.getField('NAME');
   nameField.setValue(Procedures.findLegalName('', this));
-
-  /**
-   * Validates the input to the procedure name field.
-   * @param {string} newName The new name of the procedure.
-   * @return {string} The validated/legal name of the procedure.
-   * @this {Field}
-   */
-  const validator = function(newName) {
-    // TODO: Remove call the rename?
-    Procedures.rename.call(this, newName);
-
-    const sourceBlock = this.getSourceBlock();
-    const legalName = Procedures.findLegalName(newName.trim(), sourceBlock);
-    sourceBlock.model.setName(legalName);
-    return legalName;
-  };
-
-  nameField.setValidator(validator);
+  nameField.setValidator(Procedures.rename);
 };
 Extensions.register(
     'procedure_def_validator_helper', procedureDefValidatorHelper);

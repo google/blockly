@@ -92,6 +92,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
       'procedure_def_validator_helper',
       'procedure_defnoreturn_get_caller_block_mixin',
       'procedure_defnoreturn_set_comment_helper',
+      'procedure_def_set_no_return_helper',
     ],
     'mutator': 'procedure_def_mutator',
   },
@@ -168,6 +169,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
       'procedure_def_validator_helper',
       'procedure_defreturn_get_caller_block_mixin',
       'procedure_defreturn_set_comment_helper',
+      'procedure_def_set_return_helper',
     ],
     'mutator': 'procedure_def_mutator',
   },
@@ -279,10 +281,15 @@ exports.blocks = blocks;
 /** @this {Block} */
 const procedureDefGetDefMixin = function() {
   const mixin = {
-    model: null,
+    model_: null,
 
+    /**
+     * Returns the data model for this procedure block.
+     * @return {!IProcedureModel} The data model for this procedure
+     *     block.
+     */
     getProcedureModel() {
-      return this.model;
+      return this.model_;
     },
 
     /**
@@ -312,9 +319,9 @@ const procedureDefGetDefMixin = function() {
     },
   };
 
-  mixin.model =
+  mixin.model_ =
       new ObservableProcedureModel(this.workspace, this.getFieldValue('NAME'));
-  this.workspace.getProcedureMap().add(mixin.model);
+  this.workspace.getProcedureMap().add(mixin.getProcedureModel());
 
   this.mixin(mixin, true);
 };
@@ -395,8 +402,8 @@ const procedureDefUpdateShapeMixin = {
    * Updates the block to reflect the state of the procedure model.
    */
   doProcedureUpdate: function() {
-    this.setFieldValue(this.model.getName(), 'NAME');
-    this.setEnabled(this.model.getEnabled());
+    this.setFieldValue(this.getProcedureModel().getName(), 'NAME');
+    this.setEnabled(this.getProcedureModel().getEnabled());
     this.updateParameters_();
   },
 
@@ -405,7 +412,8 @@ const procedureDefUpdateShapeMixin = {
    * model.
    */
   updateParameters_: function() {
-    const params = this.model.getParameters().map((p) => p.getName());
+    const params =
+        this.getProcedureModel().getParameters().map((p) => p.getName());
     const paramString = params.length ?
         `${Msg['PROCEDURES_BEFORE_PARAMS']} ${params.join(', ')}` :
         '';
@@ -551,6 +559,17 @@ const procedureDefMutator = {
    * @this {Block}
    */
   domToMutation: function(xmlElement) {
+    for (let i = 0; i < xmlElement.childNodes.length; i++) {
+      const node = xmlElement.childNodes[i];
+      if (node.nodeName.toLowerCase() !== 'arg') continue;
+      this.getProcedureModel().insertParameter(
+          new ObservableParameterModel(
+              this.workspace, node.getAttribute('name'),
+              node.getAttribute('varid')),
+          i);
+    }
+
+    // TODO: Remove this data update code.
     this.arguments_ = [];
     this.argumentVarModels_ = [];
     for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
@@ -610,6 +629,16 @@ const procedureDefMutator = {
    *     statements.
    */
   loadExtraState: function(state) {
+    if (state['params']) {
+      for (let i = 0; i < state['params'].length; i++) {
+        const param = state['params'][i];
+        this.getProcedureModel().insertParameter(
+            new ObservableParameterModel(this.workspace, param.name, param.id),
+            i);
+      }
+    }
+
+    // TODO: Remove this data update code.
     this.arguments_ = [];
     this.argumentVarModels_ = [];
     if (state['params']) {
@@ -694,14 +723,16 @@ const procedureDefMutator = {
     }
     this.updateParams_();
     Procedures.mutateCallers(this);
-    for (let i = this.model.getParameters().length; i >= 0; i--) {
-      this.model.deleteParameter(i);
+
+    const model = this.getProcedureModel();
+    for (let i = model.getParameters().length; i >= 0; i--) {
+      model.deleteParameter(i);
     }
 
     let i = 0;
     paramBlock = containerBlock.getInputTargetBlock('STACK');
     while (paramBlock && !paramBlock.isInsertionMarker()) {
-      this.model.insertParameter(
+      model.insertParameter(
           new ObservableParameterModel(
               this.workspace, paramBlock.getFieldValue('NAME'), paramBlock.id),
           i);
@@ -771,8 +802,8 @@ Extensions.registerMixin(
 const procedureDefOnChangeMixin = {
   onchange: function(e) {
     if (e.type === Events.BLOCK_CHANGE && e.blockId === this.id &&
-        e.element == 'disabled') {
-      this.model.setEnabled(!e.newValue);
+        e.element === 'disabled') {
+      this.getProcedureModel().setEnabled(!e.newValue);
     }
   },
 };
@@ -842,6 +873,20 @@ const procedureDefReturnGetCallerBlockMixin = {
 Extensions.registerMixin(
     'procedure_defreturn_get_caller_block_mixin',
     procedureDefReturnGetCallerBlockMixin);
+
+/** @this {Block} */
+const procedureDefSetNoReturnHelper = function() {
+  this.getProcedureModel().setReturnTypes(null);
+};
+Extensions.register(
+    'procedure_def_set_no_return_helper', procedureDefSetNoReturnHelper);
+
+/** @this {Block} */
+const procedureDefSetReturnHelper = function() {
+  this.getProcedureModel().setReturnTypes([]);
+};
+Extensions.register(
+    'procedure_def_set_return_helper', procedureDefSetReturnHelper);
 
 const validateProcedureParamMixin = {
   /**

@@ -141,7 +141,7 @@ suite('Procedures', function() {
               'Expected the second parameter of the procedure to be param 1');
         });
 
-    test('decompositing and recomposing maintains parameter IDs', function() {
+    test('decomposing and recomposing maintains parameter IDs', function() {
       // Create a stack of container, param.
       const defBlock = createProcDefBlock(this.workspace);
       defBlock.mutator.setVisible(true);

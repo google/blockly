@@ -652,10 +652,9 @@ const procedureDefMutator = {
       };
       connDef = connDef['block']['next'];
     }
-    
-    const containerBlock =
-        serialization.blocks.append(
-            containerBlockDef, workspace, {recordUndo: false});
+
+    const containerBlock = serialization.blocks.append(
+        containerBlockDef, workspace, {recordUndo: false});
 
     if (this.type === 'procedures_defreturn') {
       containerBlock.setFieldValue(this.hasStatements_, 'STATEMENTS');
@@ -771,7 +770,8 @@ Extensions.registerMixin(
 
 const procedureDefOnChangeMixin = {
   onchange: function(e) {
-    if (e.type === Events.BLOCK_CHANGE && e.blockId === this.id && e.element == 'disabled') {
+    if (e.type === Events.BLOCK_CHANGE && e.blockId === this.id &&
+        e.element == 'disabled') {
       this.model.setEnabled(!e.newValue);
     }
   },

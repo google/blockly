@@ -23,6 +23,7 @@ import type {Abstract} from './events/events_abstract.js';
 import type {BubbleOpen} from './events/events_bubble_open.js';
 import * as eventUtils from './events/utils.js';
 import {Field, UnattachedFieldError} from './field.js';
+import {isProcedureBlock} from './interfaces/i_procedure_block.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
 import {ObservableProcedureMap} from './procedures/observable_procedure_map.js';
@@ -192,6 +193,7 @@ export function rename(this: Field, name: string): string {
   name = name.trim();
 
   const legalName = findLegalName(name, block);
+  if (isProcedureBlock(block)) block.getProcedureModel().setName(legalName);
   const oldName = this.getValue();
   if (oldName !== name && oldName !== legalName) {
     // Rename any callers.

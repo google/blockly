@@ -28,12 +28,15 @@ const {Block} = goog.requireType('Blockly.Block');
 // TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
+const {ObservableProcedureModel} = goog.require('Blockly.procedures.ObservableProcedureModel');
+const {ObservableParameterModel} = goog.require('Blockly.procedures.ObservableParameterModel');
 const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
 const {Msg} = goog.require('Blockly.Msg');
 const {Mutator} = goog.require('Blockly.Mutator');
 const {Names} = goog.require('Blockly.Names');
+const serialization = goog.require('Blockly.serialization');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
@@ -85,7 +88,8 @@ const blocks = createBlockDefinitionsFromJsonArray([
       'procedure_def_var_mixin',
       'procedure_def_update_shape_mixin',
       'procedure_def_context_menu_mixin',
-      'procedure_def_get_legal_name_helper',
+      'procedure_def_onchange_mixin',
+      'procedure_def_validator_helper',
       'procedure_defnoreturn_get_caller_block_mixin',
       'procedure_defnoreturn_set_comment_helper',
     ],
@@ -160,7 +164,8 @@ const blocks = createBlockDefinitionsFromJsonArray([
       'procedure_def_var_mixin',
       'procedure_def_update_shape_mixin',
       'procedure_def_context_menu_mixin',
-      'procedure_def_get_legal_name_helper',
+      'procedure_def_onchange_mixin',
+      'procedure_def_validator_helper',
       'procedure_defreturn_get_caller_block_mixin',
       'procedure_defreturn_set_comment_helper',
     ],
@@ -274,6 +279,12 @@ exports.blocks = blocks;
 /** @this {Block} */
 const procedureDefGetDefMixin = function() {
   const mixin = {
+    model: null,
+
+    getProcedureModel() {
+      return this.model;
+    },
+
     /**
      * Return all variables referenced by this block.
      * @return {!Array<string>} List of variable names.
@@ -282,6 +293,7 @@ const procedureDefGetDefMixin = function() {
     getVars: function() {
       return this.arguments_;
     },
+
     /**
      * Return all variables referenced by this block.
      * @return {!Array<!VariableModel>} List of variable models.
@@ -290,7 +302,19 @@ const procedureDefGetDefMixin = function() {
     getVarModels: function() {
       return this.argumentVarModels_;
     },
+
+    /**
+     * Disposes of the data model for this procedure block when the block is
+     * disposed.
+     */
+    destroy: function() {
+      this.workspace.getProcedureMap().delete(this.getProcedureModel().getId());
+    },
   };
+
+  mixin.model = new ObservableProcedureModel(
+      this.workspace, this.getFieldValue('NAME'));
+  this.workspace.getProcedureMap().add(mixin.model);
 
   this.mixin(mixin, true);
 };
@@ -382,7 +406,18 @@ const procedureDefUpdateShapeMixin = {
       if (this.getInput('RETURN')) {
         this.moveInputBefore('STACK', 'RETURN');
       }
+      // Restore the stack, if one was saved.
+      Mutator.reconnect(this.statementConnection_, this, 'STACK');
+      this.statementConnection_ = null;
     } else {
+      // Save the stack, then disconnect it.
+      const stackConnection = this.getInput('STACK').connection;
+      this.statementConnection_ = stackConnection.targetConnection;
+      if (this.statementConnection_) {
+        const stackBlock = stackConnection.targetBlock();
+        stackBlock.unplug();
+        stackBlock.bumpNeighbours();
+      }
       this.removeInput('STACK', true);
     }
     this.hasStatements_ = hasStatements;
@@ -435,13 +470,13 @@ Extensions.registerMixin(
     'procedure_def_update_shape_mixin', procedureDefUpdateShapeMixin);
 
 /** @this {Block} */
-const procedureDefGetLegalNameHelper = function() {
+const procedureDefValidatorHelper = function() {
   const nameField = this.getField('NAME');
   nameField.setValue(Procedures.findLegalName('', this));
   nameField.setValidator(Procedures.rename);
 };
 Extensions.register(
-    'procedure_def_get_legal_name_helper', procedureDefGetLegalNameHelper);
+    'procedure_def_validator_helper', procedureDefValidatorHelper);
 
 const procedureDefMutator = {
   arguments_: [],
@@ -570,41 +605,29 @@ const procedureDefMutator = {
    * @this {Block}
    */
   decompose: function(workspace) {
-    /*
-     * Creates the following XML:
-     * <block type="procedures_mutatorcontainer">
-     *   <statement name="STACK">
-     *     <block type="procedures_mutatorarg">
-     *       <field name="NAME">arg1_name</field>
-     *       <next>etc...</next>
-     *     </block>
-     *   </statement>
-     * </block>
-     */
+    const containerBlockDef = {
+      'type': 'procedures_mutatorcontainer',
+      'inputs': {
+        'STACK': {},
+      },
+    };
 
-    const containerBlockNode = xmlUtils.createElement('block');
-    containerBlockNode.setAttribute('type', 'procedures_mutatorcontainer');
-    const statementNode = xmlUtils.createElement('statement');
-    statementNode.setAttribute('name', 'STACK');
-    containerBlockNode.appendChild(statementNode);
-
-    let node = statementNode;
-    for (let i = 0; i < this.arguments_.length; i++) {
-      const argBlockNode = xmlUtils.createElement('block');
-      argBlockNode.setAttribute('type', 'procedures_mutatorarg');
-      const fieldNode = xmlUtils.createElement('field');
-      fieldNode.setAttribute('name', 'NAME');
-      const argumentName = xmlUtils.createTextNode(this.arguments_[i]);
-      fieldNode.appendChild(argumentName);
-      argBlockNode.appendChild(fieldNode);
-      const nextNode = xmlUtils.createElement('next');
-      argBlockNode.appendChild(nextNode);
-
-      node.appendChild(argBlockNode);
-      node = nextNode;
+    let connDef = containerBlockDef['inputs']['STACK'];
+    for (const param of this.getProcedureModel().getParameters()) {
+      connDef['block'] = {
+        'type': 'procedures_mutatorarg',
+        'id': param.getId(),
+        'fields': {
+          'NAME': param.getName(),
+        },
+        'next': {},
+      };
+      connDef = connDef['block']['next'];
     }
-
-    const containerBlock = Xml.domToBlock(containerBlockNode, workspace);
+    
+    const containerBlock =
+        serialization.blocks.append(
+            containerBlockDef, workspace, {recordUndo: false});
 
     if (this.type === 'procedures_defreturn') {
       containerBlock.setFieldValue(this.hasStatements_, 'STATEMENTS');
@@ -612,8 +635,9 @@ const procedureDefMutator = {
       containerBlock.removeInput('STATEMENT_INPUT');
     }
 
-    // Initialize procedure's callers with blank IDs.
+    // Update callers (called for backwards compatibility).
     Procedures.mutateCallers(this);
+
     return containerBlock;
   },
 
@@ -627,11 +651,14 @@ const procedureDefMutator = {
     this.arguments_ = [];
     this.paramIds_ = [];
     this.argumentVarModels_ = [];
+
+    // TODO: Remove old data handling logic?
     let paramBlock = containerBlock.getInputTargetBlock('STACK');
     while (paramBlock && !paramBlock.isInsertionMarker()) {
       const varName = paramBlock.getFieldValue('NAME');
       this.arguments_.push(varName);
-      const variable = this.workspace.getVariable(varName, '');
+      const variable = Variables.getOrCreateVariablePackage(
+          this.workspace, null, varName, '');
       this.argumentVarModels_.push(variable);
 
       this.paramIds_.push(paramBlock.id);
@@ -640,29 +667,25 @@ const procedureDefMutator = {
     }
     this.updateParams_();
     Procedures.mutateCallers(this);
+    for (let i = this.model.getParameters().length; i >= 0; i--) {
+      this.model.deleteParameter(i);
+    }
 
-    // Show/hide the statement input.
-    let hasStatements = containerBlock.getFieldValue('STATEMENTS');
+    let i = 0;
+    paramBlock = containerBlock.getInputTargetBlock('STACK');
+    while (paramBlock && !paramBlock.isInsertionMarker()) {
+      this.model.insertParameter(
+          new ObservableParameterModel(
+              this.workspace, paramBlock.getFieldValue('NAME'), paramBlock.id),
+          i);
+      paramBlock =
+          paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
+      i++;
+    }
+
+    const hasStatements = containerBlock.getFieldValue('STATEMENTS');
     if (hasStatements !== null) {
-      hasStatements = hasStatements === 'TRUE';
-      if (this.hasStatements_ !== hasStatements) {
-        if (hasStatements) {
-          this.setStatements_(true);
-          // Restore the stack, if one was saved.
-          Mutator.reconnect(this.statementConnection_, this, 'STACK');
-          this.statementConnection_ = null;
-        } else {
-          // Save the stack, then disconnect it.
-          const stackConnection = this.getInput('STACK').connection;
-          this.statementConnection_ = stackConnection.targetConnection;
-          if (this.statementConnection_) {
-            const stackBlock = stackConnection.targetBlock();
-            stackBlock.unplug();
-            stackBlock.bumpNeighbours();
-          }
-          this.setStatements_(false);
-        }
-      }
+      this.setStatements_(hasStatements === 'TRUE');
     }
   },
 };
@@ -717,6 +740,16 @@ const procedureDefContextMenuMixin = {
 };
 Extensions.registerMixin(
     'procedure_def_context_menu_mixin', procedureDefContextMenuMixin);
+
+const procedureDefOnChangeMixin = {
+  onchange: function(e) {
+    if (e.type === Events.BLOCK_CHANGE && e.element == 'disabled') {
+      this.model.setEnabled(!e.newValue);
+    }
+  },
+};
+Extensions.registerMixin(
+    'procedure_def_onchange_mixin', procedureDefOnChangeMixin);
 
 /** @this {Block} */
 const procedureDefNoReturnSetCommentHelper = function() {

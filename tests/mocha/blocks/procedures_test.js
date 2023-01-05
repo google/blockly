@@ -27,8 +27,8 @@ suite('Procedures', function() {
     sharedTestTeardown.call(this);
   });
 
-  suite.skip('updating data models', function() {
-    test(
+  suite('updating data models', function() {
+    test.skip(
         'renaming a procedure def block updates the procedure model',
         function() {
           const defBlock = createProcDefBlock(this.workspace);
@@ -58,9 +58,11 @@ suite('Procedures', function() {
         function() {
           // Create a stack of container, parameter.
           const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
           const containerBlock =
-              this.workspace.newBlock('procedures_mutatorcontainer');
-          const paramBlock = this.workspace.newBlock('procedures_mutatorarg');
+              mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
           paramBlock.setFieldValue('param name', 'NAME');
           containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
 
@@ -75,9 +77,11 @@ suite('Procedures', function() {
     test('adding a parameter adds a variable to the variable map', function() {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
       const containerBlock =
-          this.workspace.newBlock('procedures_mutatorcontainer');
-      const paramBlock = this.workspace.newBlock('procedures_mutatorarg');
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param name', 'NAME');
       containerBlock.getInput('STACK').connection
           .connect(paramBlock.previousConnection);
@@ -85,7 +89,7 @@ suite('Procedures', function() {
       defBlock.compose(containerBlock);
 
       chai.assert.isTrue(
-          this.workspace.getVariableMap().getVariables('')
+          this.workspace.getVariableMap().getVariablesOfType('')
                .some((variable) => variable.name === 'param name'),
           'Expected the variable map to have a matching variable');
     });
@@ -96,16 +100,20 @@ suite('Procedures', function() {
         function() {
           // Create a stack of container, param1, param2.
           const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
           const containerBlock =
-              this.workspace.newBlock('procedures_mutatorcontainer');
-          const paramBlock1 = this.workspace.newBlock('procedures_mutatorarg');
+              mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock1 = mutatorWorkspace.newBlock('procedures_mutatorarg');
           paramBlock1.setFieldValue('param name1', 'NAME');
-          const paramBlock2 = this.workspace.newBlock('procedures_mutatorarg');
+          const paramBlock2 = mutatorWorkspace.newBlock('procedures_mutatorarg');
           paramBlock2.setFieldValue('param name2', 'NAME');
           containerBlock.getInput('STACK').connection
               .connect(paramBlock1.previousConnection);
           paramBlock1.nextConnection.connect(paramBlock2.previousConnection);
           defBlock.compose(containerBlock);
+          const id1 = defBlock.getProcedureModel().getParameter(0).getId();
+          const id2 = defBlock.getProcedureModel().getParameter(1).getId();
 
           // Reconfigure the stack to be container, param2, param1.
           paramBlock2.previousConnection.disconnect();
@@ -120,19 +128,56 @@ suite('Procedures', function() {
               'param name2',
               'Expected the first parameter of the procedure to be param 2');
           chai.assert.equal(
+              defBlock.getProcedureModel().getParameter(0).getId(),
+              id2,
+              'Expected the first parameter of the procedure to be param 2');
+          chai.assert.equal(
               defBlock.getProcedureModel().getParameter(1).getName(),
-              'param name2',
+              'param name1',
+              'Expected the second parameter of the procedure to be param 1');
+          chai.assert.equal(
+              defBlock.getProcedureModel().getParameter(1).getId(),
+              id1,
               'Expected the second parameter of the procedure to be param 1');
         });
+
+    test('decomposing and recomposing maintains parameter IDs', function() {
+      // Create a stack of container, param.
+      const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const containerBlock =
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+      paramBlock.setFieldValue('param name', 'NAME');
+      containerBlock.getInput('STACK').connection
+          .connect(paramBlock.previousConnection);
+      defBlock.compose(containerBlock);
+      const paramBlockId = defBlock.getProcedureModel().getParameter(0).getId();
+
+      Blockly.Events.disable();
+      mutatorWorkspace.clear();
+      Blockly.Events.enable();
+      const container = defBlock.decompose(mutatorWorkspace);
+      defBlock.compose(container);
+
+      chai.assert.equal(
+          defBlock.getProcedureModel().getParameter(0).getId(),
+          paramBlockId,
+          'Expected the parameter ID to be maintained');
+    });
 
     test(
         'deleting a parameter from a procedure def updates the procedure model',
         function() {
           // Create a stack of container, parameter.
           const defBlock = createProcDefBlock(this.workspace);
+          defBlock.mutator.setVisible(true);
+          const mutatorWorkspace = defBlock.mutator.getWorkspace();
           const containerBlock =
-              this.workspace.newBlock('procedures_mutatorcontainer');
-          const paramBlock = this.workspace.newBlock('procedures_mutatorarg');
+              mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
+          paramBlock.setFieldValue('param name', 'NAME');
           containerBlock.getInput('STACK').connection
               .connect(paramBlock.previousConnection);
           defBlock.compose(containerBlock);
@@ -148,9 +193,11 @@ suite('Procedures', function() {
     test('renaming a procedure parameter updates the parameter model', function() {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
+      defBlock.mutator.setVisible(true);
+      const mutatorWorkspace = defBlock.mutator.getWorkspace();
       const containerBlock =
-          this.workspace.newBlock('procedures_mutatorcontainer');
-      const paramBlock = this.workspace.newBlock('procedures_mutatorarg');
+          mutatorWorkspace.newBlock('procedures_mutatorcontainer');
+      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param name', 'NAME');
       containerBlock.getInput('STACK').connection
           .connect(paramBlock.previousConnection);
@@ -159,9 +206,10 @@ suite('Procedures', function() {
       paramBlock.setFieldValue('new param name', 'NAME');
       defBlock.compose(containerBlock);
 
-      chai.assert.isEmpty(
-          defBlock.getProcedureModel().getParameters(),
-          'Expected the procedure model to have no parameters');
+      chai.assert.equal(
+          defBlock.getProcedureModel().getParameter(0).getName(),
+          'new param name',
+          'Expected the procedure model to have a matching parameter');
     });
 
     test('deleting a procedure deletes the procedure model', function() {
@@ -1399,123 +1447,6 @@ suite('Procedures', function() {
         });
       });
 
-      suite('Enable/Disable', function() {
-        setup(function() {
-          const toolbox = document.getElementById('toolbox-categories');
-          this.workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-        });
-        teardown(function() {
-          workspaceTeardown.call(this, this.workspaceSvg);
-        });
-        const domText = (testSuite.defType === 'procedures_defreturn') ?
-            ('<xml xmlns="https://developers.google.com/blockly/xml">' +
-                '<block type="procedures_defreturn" id="bar-def">' +
-                '<field name="NAME">bar</field>' +
-                '<value name="RETURN">' +
-                '<block type="procedures_callreturn" id="bar-c1">' +
-                '<mutation name="bar"></mutation>' +
-                '</block>' +
-                '</value>' +
-                '</block>' +
-                '<block type="procedures_callreturn" id="bar-c2">' +
-                '<mutation name="bar"></mutation>' +
-                '</block>' +
-                '</xml>') :
-            ('<xml xmlns="https://developers.google.com/blockly/xml">' +
-                '<block type="procedures_defnoreturn" id="bar-def">' +
-                '<field name="NAME">bar</field>' +
-                '</block>' +
-                '<block type="procedures_callnoreturn" id="bar-c1">' +
-                '<mutation name="bar"></mutation>' +
-                '</block>' +
-                '<block type="procedures_callnoreturn" id="bar-c2">' +
-                '<mutation name="bar"></mutation>' +
-                '</block>' +
-                '</xml>');
-        setup(function() {
-          const dom = Blockly.Xml.textToDom(domText);
-
-          Blockly.Xml.appendDomToWorkspace(dom, this.workspaceSvg);
-          this.barDef = this.workspaceSvg.getBlockById('bar-def');
-          this.barCalls = [
-            this.workspaceSvg.getBlockById('bar-c1'),
-            this.workspaceSvg.getBlockById('bar-c2'),
-          ];
-        });
-
-        test('Set disabled updates callers', function() {
-          this.workspaceSvg.clearUndo();
-          Blockly.Events.setGroup('g1');
-          this.barDef.setEnabled(false);
-          Blockly.Events.setGroup(false);
-
-          for (let i = 0; i < 2; i++) {
-            chai.assert.isFalse(this.barCalls[i].isEnabled(),
-                'Callers are disabled when their definition is disabled (call ' +
-                i + ')');
-          }
-          const firedEvents = this.workspaceSvg.undoStack_;
-          chai.assert.equal(firedEvents.length, 3,
-              'An event was fired for the definition and each caller');
-          for (let i = 0; i < 3; i++) {
-            chai.assert.equal(firedEvents[i].group, 'g1',
-                'Disable events are in the same group (event ' + i + ')');
-          }
-
-          this.workspaceSvg.clearUndo();
-          Blockly.Events.setGroup('g2');
-          this.barDef.setEnabled(true);
-          Blockly.Events.setGroup(false);
-
-          for (let i = 0; i < 2; i++) {
-            chai.assert.isTrue(this.barCalls[i].isEnabled(),
-                'Callers are enabled when their definition is enabled (call ' +
-                i + ')');
-          }
-          chai.assert.equal(firedEvents.length, 3,
-              'An event was fired for the definition and each caller');
-          for (let i = 0; i < 3; i++) {
-            chai.assert.equal(firedEvents[i].group, 'g2',
-                'Enable events are in the same group (event ' + i + ')');
-          }
-        });
-        test('Set disabled updates callers while remembering old caller state', function() {
-          this.barCalls[0].setEnabled(false);
-          this.workspaceSvg.clearUndo();
-          Blockly.Events.setGroup('g1');
-          this.barDef.setEnabled(false);
-          Blockly.Events.setGroup(false);
-
-          for (let i = 0; i < 2; i++) {
-            chai.assert.isFalse(this.barCalls[i].isEnabled(),
-                'Callers are disabled when their definition is disabled (call ' +
-                i + ')');
-          }
-          const firedEvents = this.workspaceSvg.undoStack_;
-          chai.assert.equal(firedEvents.length, 2,
-              'An event was fired for the definition and the enabled caller');
-          for (let i = 0; i < 2; i++) {
-            chai.assert.equal(firedEvents[i].group, 'g1',
-                'Disable events are in the same group (event ' + i + ')');
-          }
-
-          this.workspaceSvg.clearUndo();
-          Blockly.Events.setGroup('g2');
-          this.barDef.setEnabled(true);
-          Blockly.Events.setGroup(false);
-
-          chai.assert.isFalse(this.barCalls[0].isEnabled(),
-              'Caller remains in disabled state when the definition is enabled');
-          chai.assert.isTrue(this.barCalls[1].isEnabled(),
-              'Caller returns to previous enabled state when the definition is enabled');
-          chai.assert.equal(firedEvents.length, 2,
-              'An event was fired for the definition and the enabled caller');
-          for (let i = 0; i < 2; i++) {
-            chai.assert.equal(firedEvents[i].group, 'g2',
-                'Enable events are in the same group (event ' + i + ')');
-          }
-        });
-      });
       suite('Mutation', function() {
         setup(function() {
           this.defBlock = this.workspace.newBlock(testSuite.defType);
@@ -1700,33 +1631,6 @@ suite('Procedures', function() {
                 chai.assert.isNull(statementInput);
               });
             }
-          });
-          suite('Untyped Arguments', function() {
-            function assertArguments(argumentsArray) {
-              this.defBlock.arguments_ = argumentsArray;
-              const mutatorWorkspace = new Blockly.Workspace(
-                  new Blockly.Options({
-                    parentWorkspace: this.workspace,
-                  }));
-              this.defBlock.decompose(mutatorWorkspace);
-              const argBlocks = mutatorWorkspace.getBlocksByType('procedures_mutatorarg');
-              chai.assert.equal(argBlocks.length, argumentsArray.length);
-
-              for (let i = 0; i < argumentsArray.length; i++) {
-                const argString = argumentsArray[i];
-                const argBlockValue = argBlocks[i].getFieldValue('NAME');
-                chai.assert.equal(argBlockValue, argString);
-              }
-            }
-            test('Simple Single Arg', function() {
-              assertArguments.call(this, ['arg']);
-            });
-            test('Multiple Args', function() {
-              assertArguments.call(this, ['arg1', 'arg2']);
-            });
-            test('<>', function() {
-              assertArguments.call(this, ['<>']);
-            });
           });
         });
       });

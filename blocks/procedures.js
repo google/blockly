@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Procedure blocks for
+ * @fileoverview Procedure blocks for Blockly.
  * @suppress {checkTypes|visibility}
  */
 'use strict';
@@ -24,7 +24,7 @@ const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-// const {BlockDefinition} = goog.requireType('blocks');
+// const {BlockDefinition} = goog.requireType('Blockly.blocks');
 // TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
@@ -321,7 +321,7 @@ const procedureDefGetDefMixin = function() {
 
   mixin.model_ =
       new ObservableProcedureModel(this.workspace, this.getFieldValue('NAME'));
-  this.workspace.getProcedureMap().add(mixin.model_);
+  this.workspace.getProcedureMap().add(mixin.getProcedureModel());
 
   this.mixin(mixin, true);
 };
@@ -724,14 +724,15 @@ const procedureDefMutator = {
     this.updateParams_();
     Procedures.mutateCallers(this);
 
-    for (let i = this.getProcedureModel().getParameters().length; i >= 0; i--) {
-      this.getProcedureModel().deleteParameter(i);
+    const model = this.getProcedureModel();
+    for (let i = model.getParameters().length; i >= 0; i--) {
+      model.deleteParameter(i);
     }
 
     let i = 0;
     paramBlock = containerBlock.getInputTargetBlock('STACK');
     while (paramBlock && !paramBlock.isInsertionMarker()) {
-      this.getProcedureModel().insertParameter(
+      model.insertParameter(
           new ObservableParameterModel(
               this.workspace, paramBlock.getFieldValue('NAME'), paramBlock.id),
           i);

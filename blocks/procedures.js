@@ -528,11 +528,13 @@ const procedureDefMutator = {
     if (opt_paramIds) {
       container.setAttribute('name', this.getFieldValue('NAME'));
     }
-    for (let i = 0; i < this.argumentVarModels_.length; i++) {
+
+    const params = this.getProcedureModel().getParameters();
+    for (let i = 0; i < params.length; i++) {
       const parameter = xmlUtils.createElement('arg');
-      const argModel = this.argumentVarModels_[i];
-      parameter.setAttribute('name', argModel.name);
-      parameter.setAttribute('varid', argModel.getId());
+      const varModel = params[i].getVariableModel();
+      parameter.setAttribute('name', varModel.name);
+      parameter.setAttribute('varid', varModel.getId());
       if (opt_paramIds && this.paramIds_) {
         parameter.setAttribute('paramId', this.paramIds_[i]);
       }
@@ -556,10 +558,10 @@ const procedureDefMutator = {
     for (let i = 0; i < xmlElement.childNodes.length; i++) {
       const node = xmlElement.childNodes[i];
       if (node.nodeName.toLowerCase() !== 'arg') continue;
+      const varId = node.getAttribute('varid');
       this.getProcedureModel().insertParameter(
           new ObservableParameterModel(
-              this.workspace, node.getAttribute('name'),
-              node.getAttribute('varid')),
+              this.workspace, node.getAttribute('name'), undefined, varId),
           i);
     }
 
@@ -596,20 +598,20 @@ const procedureDefMutator = {
    *     parameters and statements.
    */
   saveExtraState: function() {
-    if (!this.argumentVarModels_.length && this.hasStatements_) {
-      return null;
-    }
+    const params = this.getProcedureModel().getParameters();
+    if (!params.length && this.hasStatements_) return null;
+
     const state = Object.create(null);
-    if (this.argumentVarModels_.length) {
-      state['params'] = [];
-      for (let i = 0; i < this.argumentVarModels_.length; i++) {
-        state['params'].push({
-          // We don't need to serialize the name, but just in case we decide
-          // to separate params from variables.
-          'name': this.argumentVarModels_[i].name,
-          'id': this.argumentVarModels_[i].getId(),
-        });
-      }
+    if (params.length) {
+      state['params'] = params.map((p) => {
+        return {
+          'name': p.getName(),
+          'id': p.getVariableModel().getId(),
+          // Ideally this would be id, and the other would be varId,
+          // but backwards compatibility :/
+          'paramId': p.getId(),
+        };
+      });
     }
     if (!this.hasStatements_) {
       state['hasStatements'] = false;
@@ -625,10 +627,9 @@ const procedureDefMutator = {
   loadExtraState: function(state) {
     if (state['params']) {
       for (let i = 0; i < state['params'].length; i++) {
-        const param = state['params'][i];
+        const {name, id, paramId} = state['params'][i];
         this.getProcedureModel().insertParameter(
-            new ObservableParameterModel(this.workspace, param.name, param.id),
-            i);
+            new ObservableParameterModel(this.workspace, name, paramId, id), i);
       }
     }
 
@@ -719,7 +720,7 @@ const procedureDefMutator = {
     Procedures.mutateCallers(this);
 
     const model = this.getProcedureModel();
-    const count = this.getProcedureModel().getParameters().length;
+    const count = model.getParameters().length;
     for (let i = count - 1; i >= 0; i--) {
       model.deleteParameter(i);
     }
@@ -935,6 +936,7 @@ const validateProcedureParamMixin = {
         this.createdVariables_.push(model);
       }
     }
+
     return varName;
   },
 
@@ -1210,6 +1212,10 @@ const procedureCallerUpdateShapeMixin = {
     this.updateName_();
     this.updateEnabled_();
     this.updateParameters_();
+
+    // Temporarily maintained for code that relies on arguments_
+    this.arguments_ =
+        this.getProcedureModel().getParameters().map((p) => p.getName());
   },
 
   /**

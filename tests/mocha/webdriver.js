@@ -53,7 +53,7 @@ async function runMochaTestsInBrowser() {
     const text = await elem.getAttribute('tests_failed');
     return text !== 'unset';
   }, {
-    timeout: 50000,
+    timeout: 100000,
   });
 
   const elem = await browser.$('#failureCount');

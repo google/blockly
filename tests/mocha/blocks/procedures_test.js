@@ -1346,24 +1346,26 @@ suite('Procedures', function() {
           createProcCallBlock(this.workspace);
           // TODO: Apparently we need to call checkAndDelete to handle event
           //   grouping, this seems like possibly a bug.
+          const oldModel = defBlock.getProcedureModel();
           defBlock.checkAndDelete();
           this.clock.runAll();
 
           this.workspace.undo();
           this.clock.runAll();
 
-          console.log(this.workspace.getTopBlocks());
-
           const newDefBlock =
               this.workspace.getBlocksByType('procedures_defnoreturn')[0];
           const newCallBlock =
               this.workspace.getBlocksByType('procedures_callnoreturn')[0];
-          console.log(newDefBlock, newCallBlock);
 
           chai.assert.equal(
               newDefBlock.getProcedureModel(),
               newCallBlock.getProcedureModel(),
               'Expected both new blocks to be associated with the same model');
+          chai.assert.equal(
+            oldModel.getId(),
+            newDefBlock.getProcedureModel().getId(),
+            'Expected the new model to have the same ID as the old model');
         });
   });
 

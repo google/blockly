@@ -629,8 +629,9 @@ const procedureDefMutator = {
    */
   loadExtraState: function(state) {
     const map = this.workspace.getProcedureMap();
-    if (state['procedureId'] && state['procedureId'] != this.model_.getId() &&
-        map.has(state['procedureId'])) {
+    const procedureId = state['procedureId'];
+    if (procedureId && procedureId != this.model_.getId() &&
+        map.has(procedureId)) {
       if (map.has(this.model_.getId())) {
         map.delete(this.model_.getId());
       }

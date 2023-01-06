@@ -9,7 +9,6 @@ goog.declareModuleId('Blockly.test.procedures');
 import * as Blockly from '../../../build/src/core/blockly.js';
 import {ObservableParameterModel} from '../../../build/src/core/procedures.js';
 import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} from '../test_helpers/procedures.js';
-import {assertEventNotFired, createChangeListenerSpy} from '../test_helpers/events.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from '../test_helpers/setup_teardown.js';
 import {defineRowBlock} from '../test_helpers/block_definitions.js';
@@ -1307,6 +1306,7 @@ suite('Procedures', function() {
         function() {
           const defBlock = createProcDefBlock(this.workspace);
           const callBlock = createProcCallBlock(this.workspace);
+          this.clock.runAll();
           callBlock.setEnabled(false);
           this.clock.runAll();
           defBlock.setEnabled(false);
@@ -2049,15 +2049,18 @@ suite('Procedures', function() {
 
       suite('Mutation', function() {
         setup(function() {
-          this.defBlock = this.workspace.newBlock(testSuite.defType);
-          this.defBlock.setFieldValue('proc name', 'NAME');
-          this.callBlock = this.workspace.newBlock(testSuite.callType);
-          this.callBlock.setFieldValue('proc name', 'NAME');
-          this.findParentStub = sinon.stub(Blockly.Mutator, 'findParentWs')
-              .returns(this.workspace);
-        });
-        teardown(function() {
-          this.findParentStub.restore();
+          this.defBlock = Blockly.serialization.blocks.append({
+            'type': testSuite.defType,
+            'fields': {
+              'NAME': 'proc name',
+            },
+          }, this.workspace);
+          this.callBlock = Blockly.serialization.blocks.append({
+            'type': testSuite.callType,
+            'extraState': {
+              'name': 'proc name',
+            },
+          }, this.workspace);
         });
         suite('Composition', function() {
           suite('Statements', function() {
@@ -2104,11 +2107,9 @@ suite('Procedures', function() {
           });
           suite('Untyped Arguments', function() {
             function createMutator(argArray) {
-              this.mutatorWorkspace = new Blockly.Workspace(
-                  new Blockly.Options({
-                    parentWorkspace: this.workspace,
-                  }));
-              this.containerBlock = this.defBlock.decompose(this.mutatorWorkspace);
+              this.defBlock.mutator.setVisible(true);
+              this.mutatorWorkspace = this.defBlock.mutator.getWorkspace();
+              this.containerBlock = this.mutatorWorkspace.getTopBlocks()[0];
               this.connection = this.containerBlock.getInput('STACK').connection;
               for (let i = 0; i < argArray.length; i++) {
                 this.argBlock = this.mutatorWorkspace.newBlock('procedures_mutatorarg');
@@ -2116,14 +2117,20 @@ suite('Procedures', function() {
                 this.connection.connect(this.argBlock.previousConnection);
                 this.connection = this.argBlock.nextConnection;
               }
-              this.defBlock.compose(this.containerBlock);
+              this.clock.runAll();
             }
             function assertArgs(argArray) {
-              chai.assert.equal(this.defBlock.arguments_.length, argArray.length);
+              chai.assert.equal(
+                  this.defBlock.arguments_.length,
+                  argArray.length,
+                  'Expected the def to have the right number of arguments');
               for (let i = 0; i < argArray.length; i++) {
                 chai.assert.equal(this.defBlock.arguments_[i], argArray[i]);
               }
-              chai.assert.equal(this.callBlock.arguments_.length, argArray.length);
+              chai.assert.equal(
+                  this.callBlock.arguments_.length,
+                  argArray.length,
+                  'Expected the call to have the right number of arguments');
               for (let i = 0; i < argArray.length; i++) {
                 chai.assert.equal(this.callBlock.arguments_[i], argArray[i]);
               }

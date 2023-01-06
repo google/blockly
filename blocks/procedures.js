@@ -720,7 +720,7 @@ const procedureDefMutator = {
     Procedures.mutateCallers(this);
 
     const model = this.getProcedureModel();
-    const count = this.getProcedureModel().getParameters().length;
+    const count = model.getParameters().length;
     for (let i = count - 1; i >= 0; i--) {
       model.deleteParameter(i);
     }
@@ -1212,6 +1212,10 @@ const procedureCallerUpdateShapeMixin = {
     this.updateName_();
     this.updateEnabled_();
     this.updateParameters_();
+
+    // Temporarily maintained for code that relies on arguments_
+    this.arguments_ =
+        this.getProcedureModel().getParameters().map((p) => p.getName());
   },
 
   /**

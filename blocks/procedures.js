@@ -19,7 +19,6 @@ const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
 const Procedures = goog.require('Blockly.Procedures');
 const Variables = goog.require('Blockly.Variables');
-const Xml = goog.require('Blockly.Xml');
 const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
@@ -100,10 +99,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'type': 'procedures_callnoreturn',
     'message0': '%1 %2',
     'args0': [
-      {
-        'type': 'field_label',
-        'name': 'NAME',
-      },
+      {'type': 'field_label', 'name': 'NAME', 'text': '%{BKY_UNNAMED_KEY}'},
       {
         'type': 'input_dummy',
         'name': 'TOPROW',
@@ -177,10 +173,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'type': 'procedures_callreturn',
     'message0': '%1 %2',
     'args0': [
-      {
-        'type': 'field_label',
-        'name': 'NAME',
-      },
+      {'type': 'field_label', 'name': 'NAME', 'text': '%{BKY_UNNAMED_KEY}'},
       {
         'type': 'input_dummy',
         'name': 'TOPROW',
@@ -319,8 +312,9 @@ const procedureDefGetDefMixin = function() {
     },
   };
 
-  mixin.model_ =
-      new ObservableProcedureModel(this.workspace, this.getFieldValue('NAME'));
+  mixin.model_ = new ObservableProcedureModel(
+      this.workspace,
+      Procedures.findLegalName(this.getFieldValue('NAME'), this));
   this.workspace.getProcedureMap().add(mixin.getProcedureModel());
 
   this.mixin(mixin, true);
@@ -725,7 +719,8 @@ const procedureDefMutator = {
     Procedures.mutateCallers(this);
 
     const model = this.getProcedureModel();
-    for (let i = model.getParameters().length; i >= 0; i--) {
+    const count = this.getProcedureModel().getParameters().length;
+    for (let i = count - 1; i >= 0; i--) {
       model.deleteParameter(i);
     }
 
@@ -996,6 +991,72 @@ Extensions.register(
 /** @this {Block} */
 const procedureCallerGetDefMixin = function() {
   const mixin = {
+    model_: null,
+
+    prevParams_: [],
+
+    argsMap_: new Map(),
+
+    /**
+     * @return {IProcedureModel} The procedure model associated with this
+     *     block.
+     */
+    getProcedureModel() {
+      return this.model_;
+    },
+
+    /**
+     * @param {string} name The name of the procedure model to find.
+     * @param {string[]} params The param names of the procedure model to find.
+     * @return {IProcedureModel} The procedure model that was found.
+     */
+    findProcedureModel_(name, params = []) {
+      const workspace = this.getTargetWorkspace_();
+      const model = workspace.getProcedureMap().getProcedures().find(
+          (proc) => proc.getName() === name);
+      if (!model) return null;
+
+      const hasMatchingParams =
+          model.getParameters().every((p, i) => p.getName() === params[i]);
+      if (!hasMatchingParams) return null;
+
+      return model;
+    },
+
+    /**
+     * Creates a procedure definition block with the given name and params,
+     * and returns the procedure model associated with it.
+     * @param {string} name The name of the procedure to create.
+     * @param {string[]} params The names of the parameters to create.
+     * @return {IProcedureModel} The procedure model associated with the new
+     *     procedure definition block.
+     */
+    createDef_(name, params = []) {
+      const xy = this.getRelativeToSurfaceXY();
+      const newName = Procedures.findLegalName(name, this);
+
+      const blockDef = {
+        'type': this.defType_,
+        'x': xy.x + config.snapRadius * (this.RTL ? -1 : 1),
+        'y': xy.y + config.snapRadius * 2,
+        'extraState': {
+          'params': params.map((p) => ({'name': p})),
+        },
+        'fields': {'NAME': newName},
+      };
+      return serialization.blocks.append(blockDef, this.getTargetWorkspace_())
+          .getProcedureModel();
+    },
+
+    /**
+     * @return {Workspace} The main workspace (i.e. not the flyout workspace)
+     *     associated with this block.
+     */
+    getTargetWorkspace_() {
+      return this.workspace.isFlyout ? this.workspace.targetWorkspace :
+                                       this.workspace;
+    },
+
     /**
      * Returns the name of the procedure this block calls.
      * @return {string} Procedure name.
@@ -1012,7 +1073,8 @@ const procedureCallerGetDefMixin = function() {
      * @this {Block}
      */
     getVars: function() {
-      return this.arguments_;
+      return this.getProcedureModel().getParameters().map(
+          (p) => p.getVariableModel().name);
     },
 
     /**
@@ -1021,7 +1083,8 @@ const procedureCallerGetDefMixin = function() {
      * @this {Block}
      */
     getVarModels: function() {
-      return this.argumentVarModels_;
+      return this.getProcedureModel().getParameters().map(
+          (p) => p.getVariableModel());
     },
   };
 
@@ -1042,6 +1105,8 @@ const procedureCallerMutator = {
   quarkIds_: null,
 
   previousEnabledState_: true,
+
+  paramsFromSerializedState_: [],
 
   /**
    * Create XML to represent the (non-editable) name and arguments.
@@ -1068,16 +1133,13 @@ const procedureCallerMutator = {
    */
   domToMutation: function(xmlElement) {
     const name = xmlElement.getAttribute('name');
-    this.renameProcedure(this.getProcedureCall(), name);
-    const args = [];
-    const paramIds = [];
-    for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
-      if (childNode.nodeName.toLowerCase() === 'arg') {
-        args.push(childNode.getAttribute('name'));
-        paramIds.push(childNode.getAttribute('paramId'));
+    const params = [];
+    for (const n of xmlElement.childNodes) {
+      if (n.nodeName.toLowerCase() === 'arg') {
+        params.push(n.getAttribute('name'));
       }
     }
-    this.setProcedureParameters_(args, paramIds);
+    this.deserialize_(name, params);
   },
 
   /**
@@ -1100,19 +1162,160 @@ const procedureCallerMutator = {
    *     procedure name.
    */
   loadExtraState: function(state) {
-    this.renameProcedure(this.getProcedureCall(), state['name']);
-    const params = state['params'];
-    if (params) {
-      const ids = [];
-      ids.length = params.length;
-      ids.fill(null);
-      this.setProcedureParameters_(params, ids);
+    this.deserialize_(state['name'], state['params'] || []);
+  },
+
+  /**
+   * Applies the given name and params from the serialized state to the block.
+   * @param {string} name The name to apply to the block.
+   * @param {!Array<!string>} params The parameters to apply to the block.
+   */
+  deserialize_: function(name, params) {
+    this.setFieldValue(name, 'NAME');
+    if (!this.model_) this.model_ = this.findProcedureModel_(name, params);
+    if (this.getProcedureModel()) {
+      this.initBlockWithProcedureModel_();
+    } else {
+      // We need to create/find our procedure def in our change listener.
+      this.paramsFromSerializedState_ = params;
+      // Create inputs based on the mutation so that children can be connected.
+      this.createArgInputs_(params);
     }
+
+    // Temporarily maintained for logic that relies on arguments_
+    this.arguments_ = params;
   },
 };
 Extensions.registerMutator('procedure_caller_mutator', procedureCallerMutator);
 
 const procedureCallerUpdateShapeMixin = {
+  /**
+   * Renders the block for the first time based on the procedure model.
+   */
+  initBlockWithProcedureModel_() {
+    this.prevParams_ = [...this.getProcedureModel().getParameters()];
+    this.doProcedureUpdate();
+  },
+
+  /**
+   * Updates the shape of this block to reflect the state of the data model.
+   */
+  doProcedureUpdate: function() {
+    if (!this.getProcedureModel()) return;
+    const id = this.getProcedureModel().getId();
+    if (!this.getTargetWorkspace_().getProcedureMap().has(id)) {
+      this.dispose();
+      return;
+    }
+    this.updateName_();
+    this.updateEnabled_();
+    this.updateParameters_();
+  },
+
+  /**
+   * Updates the name field of this block to match the state of the data model.
+   */
+  updateName_: function() {
+    const name = this.getProcedureModel().getName();
+    this.setFieldValue(name, 'NAME');
+    const baseMsg = this.outputConnection ?
+        Msg['PROCEDURES_CALLRETURN_TOOLTIP'] :
+        Msg['PROCEDURES_CALLNORETURN_TOOLTIP'];
+    this.setTooltip(baseMsg.replace('%1', name));
+  },
+
+  /**
+   * Updates the enabled state of this block to match the state of the data
+   *     model.
+   */
+  updateEnabled_: function() {
+    if (!this.getProcedureModel().getEnabled()) {
+      this.previousEnabledState_ = this.isEnabled();
+      this.setEnabled(false);
+    } else {
+      this.setEnabled(this.previousEnabledState_);
+    }
+  },
+
+  /**
+   * Updates the parameter fields/inputs of this block to match the state of the
+   * data model.
+   */
+  updateParameters_: function() {
+    this.updateArgsMap_();
+    this.deleteAllArgInputs_();
+    this.addParametersLabel__();
+    this.createArgInputs_();
+    this.reattachBlocks_();
+    this.prevParams_ = [...this.getProcedureModel().getParameters()];
+  },
+
+  /**
+   * Saves a map of parameter IDs to target blocks attached to the inputs
+   * of this caller block.
+   */
+  updateArgsMap_: function() {
+    for (const [i, p] of this.prevParams_.entries()) {
+      const target = this.getInputTargetBlock(`ARG${i}`);
+      if (target) this.argsMap_.set(p.getId(), target);
+    }
+  },
+
+  /**
+   * Deletes all the parameter inputs on this block.
+   */
+  deleteAllArgInputs_: function() {
+    let i = 0;
+    while (this.getInput(`ARG${i}`)) {
+      this.removeInput(`ARG${i}`);
+      i++;
+    }
+  },
+
+  /**
+   * Adds or removes the parameter label to match the state of the data model.
+   */
+  addParametersLabel__: function() {
+    const topRow = this.getInput('TOPROW');
+    if (this.getProcedureModel().getParameters().length) {
+      if (!this.getField('WITH')) {
+        topRow.appendField(Msg['PROCEDURES_CALL_BEFORE_PARAMS'], 'WITH');
+        topRow.init();
+      }
+    } else if (this.getField('WITH')) {
+      topRow.removeField('WITH');
+    }
+  },
+
+  /**
+   * Creates all of the parameter inputs to match the state of the data model.
+   * @param {Array<string>} params The params to add to the block, or null to
+   *     use the params defined in the procedure model.
+   */
+  createArgInputs_: function(params = null) {
+    if (!params) {
+      params = this.getProcedureModel().getParameters().map((p) => p.getName());
+    }
+    for (const [i, p] of params.entries()) {
+      this.appendValueInput(`ARG${i}`)
+          .appendField(new FieldLabel(p), `ARGNAME${i}`)
+          .setAlign(Align.RIGHT);
+    }
+  },
+
+  /**
+   * Reattaches blocks to this blocks' inputs based on the data saved in the
+   * argsMap_.
+   */
+  reattachBlocks_: function() {
+    const params = this.getProcedureModel().getParameters();
+    for (const [i, p] of params.entries()) {
+      if (!this.argsMap_.has(p.getId())) continue;
+      this.getInput(`ARG${i}`).connection.connect(
+          this.argsMap_.get(p.getId()).outputConnection);
+    }
+  },
+
   /**
    * Notification that a procedure is renaming.
    * If the name matches this block's procedure, rename it.
@@ -1291,55 +1494,28 @@ const procedureCallerOnChangeMixin = {
       // Events not generated by user. Skip handling.
       return;
     }
+    // TODO: Clean this up to call createDef_.
     if (event.type === Events.BLOCK_CREATE &&
-        event.ids.indexOf(this.id) !== -1) {
+        (event.blockId === this.id || event.ids.indexOf(this.id) !== -1)) {
       // Look for the case where a procedure call was created (usually through
       // paste) and there is no matching definition.  In this case, create
       // an empty definition block with the correct signature.
       const name = this.getProcedureCall();
       let def = Procedures.getDefinition(name, this.workspace);
-      if (def &&
-          (def.type !== this.defType_ ||
-           JSON.stringify(def.getVars()) !== JSON.stringify(this.arguments_))) {
-        // The signatures don't match.
-        def = null;
-      }
+      if (!this.defMatches_(def)) def = null;
       if (!def) {
+        // We have no def nor procedure model.
         Events.setGroup(event.group);
-        /**
-         * Create matching definition block.
-         * <xml xmlns="https://developers.google.com/blockly/xml">
-         *   <block type="procedures_defreturn" x="10" y="20">
-         *     <mutation name="test">
-         *       <arg name="x"></arg>
-         *     </mutation>
-         *     <field name="NAME">test</field>
-         *   </block>
-         * </xml>
-         */
-        const xml = xmlUtils.createElement('xml');
-        const block = xmlUtils.createElement('block');
-        block.setAttribute('type', this.defType_);
-        const xy = this.getRelativeToSurfaceXY();
-        const x = xy.x + config.snapRadius * (this.RTL ? -1 : 1);
-        const y = xy.y + config.snapRadius * 2;
-        block.setAttribute('x', x);
-        block.setAttribute('y', y);
-        const mutation = this.mutationToDom();
-        block.appendChild(mutation);
-        const field = xmlUtils.createElement('field');
-        field.setAttribute('name', 'NAME');
-        const callName = this.getProcedureCall();
-        const newName = Procedures.findLegalName(callName, this);
-        if (callName !== newName) {
-          this.renameProcedure(callName, newName);
-        }
-        field.appendChild(xmlUtils.createTextNode(callName));
-        block.appendChild(field);
-        xml.appendChild(block);
-        Xml.domToWorkspace(xml, this.workspace);
+        this.model_ = this.createDef_(
+            this.getFieldValue('NAME'), this.paramsFromSerializedState_);
         Events.setGroup(false);
       }
+      if (!this.getProcedureModel()) {
+        // We have a def, but no reference to its model.
+        this.model_ = this.findProcedureModel_(
+            this.getFieldValue('NAME'), this.paramsFromSerializedState_);
+      }
+      this.initBlockWithProcedureModel_();
     } else if (event.type === Events.BLOCK_DELETE && event.blockId != this.id) {
       // Look for the case where a procedure definition has been deleted,
       // leaving this block (a procedure call) orphaned.  In this case, delete
@@ -1351,30 +1527,12 @@ const procedureCallerOnChangeMixin = {
         this.dispose(true);
         Events.setGroup(false);
       }
-    } else if (event.type === Events.CHANGE && event.element === 'disabled') {
-      const name = this.getProcedureCall();
-      const def = Procedures.getDefinition(name, this.workspace);
-      if (def && def.id === event.blockId) {
-        // in most cases the old group should be ''
-        const oldGroup = Events.getGroup();
-        if (oldGroup) {
-          // This should only be possible programmatically and may indicate a
-          // problem with event grouping. If you see this message please
-          // investigate. If the use ends up being valid we may need to reorder
-          // events in the undo stack.
-          console.log(
-              'Saw an existing group while responding to a definition change');
-        }
-        Events.setGroup(event.group);
-        if (event.newValue) {
-          this.previousEnabledState_ = this.isEnabled();
-          this.setEnabled(false);
-        } else {
-          this.setEnabled(this.previousEnabledState_);
-        }
-        Events.setGroup(oldGroup);
-      }
     }
+  },
+
+  defMatches_(defBlock) {
+    return defBlock && defBlock.type === this.defType_ &&
+        JSON.stringify(defBlock.getVars()) === JSON.stringify(this.arguments_);
   },
 };
 Extensions.registerMixin(

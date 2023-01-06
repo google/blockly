@@ -66,6 +66,7 @@ export const runSerializationTestSuite = (testCases) => {
         block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             testCase.xml), this.workspace);
       }
+      this.clock.runAll();
       testCase.assertBlockStructure(block);
     };
   };

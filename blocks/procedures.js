@@ -599,7 +599,7 @@ const procedureDefMutator = {
    */
   saveExtraState: function() {
     const params = this.getProcedureModel().getParameters();
-    if (!params.length && this.hasStatements_) return;
+    if (!params.length && this.hasStatements_) return null;
 
     const state = Object.create(null);
     if (params.length) {

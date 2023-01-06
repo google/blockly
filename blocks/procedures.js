@@ -599,11 +599,11 @@ const procedureDefMutator = {
    *     parameters and statements.
    */
   saveExtraState: function() {
-    const params = this.getProcedureModel().getParameters();
-    if (!params.length && this.hasStatements_) return null;
-
     const state = Object.create(null);
     state['procedureId'] = this.getProcedureModel().getId();
+
+    const params = this.getProcedureModel().getParameters();
+    if (!params.length && this.hasStatements_) return state;
 
     if (params.length) {
       state['params'] = params.map((p) => {
@@ -635,7 +635,7 @@ const procedureDefMutator = {
       if (map.has(this.model_.getId())) {
         map.delete(this.model_.getId());
       }
-      this.model_ = map.get(state['procedureId']);
+      this.model_ = map.get(procedureId);
     }
 
     if (state['params']) {

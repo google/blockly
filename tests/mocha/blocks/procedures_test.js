@@ -1339,8 +1339,8 @@ suite('Procedures', function() {
               callBlock2.disposed, 'Expected the second caller to be disposed');
         });
 
-    test('undoing and a procedure delete will still associate procedure ' +
-        'and caller with the same model',
+    test('undoing and redoing a procedure delete will still associate ' +
+        'procedure and caller with the same model',
         function() {
           const defBlock = createProcDefBlock(this.workspace);
           createProcCallBlock(this.workspace);

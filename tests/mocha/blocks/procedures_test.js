@@ -390,19 +390,19 @@ suite('Procedures', function() {
         procModel.insertParameter(param2, 0);
 
         chai.assert.isNotNull(
-          callBlock.getInput('ARG0'),
-          'Expected the first param input to exist');
+            callBlock.getInput('ARG0'),
+            'Expected the first param input to exist');
         chai.assert.isNotNull(
-          callBlock.getInput('ARG1'),
-          'Expected the second param input to exist');
+            callBlock.getInput('ARG1'),
+            'Expected the second param input to exist');
         chai.assert.equal(
-          callBlock.getFieldValue('ARGNAME0'),
-          'param2',
-          'Expected the first params field to match the name of the param');
+            callBlock.getFieldValue('ARGNAME0'),
+            'param2',
+            'Expected the first params field to match the name of the param');
         chai.assert.equal(
-          callBlock.getFieldValue('ARGNAME1'),
-          'param1',
-          'Expected the second params field to match the name of the param');
+            callBlock.getFieldValue('ARGNAME1'),
+            'param1',
+            'Expected the second params field to match the name of the param');
       });
 
       test(
@@ -428,19 +428,19 @@ suite('Procedures', function() {
             procModel.insertParameter(param2, 0);
     
             chai.assert.isNotNull(
-              callBlock.getInput('ARG0'),
-              'Expected the first param input to exist');
+                callBlock.getInput('ARG0'),
+                'Expected the first param input to exist');
             chai.assert.equal(
-              callBlock.getInputTargetBlock('ARG0'),
-              rowBlock2,
-              'Expected the second row block to be attached to the first input');
+                callBlock.getInputTargetBlock('ARG0'),
+                rowBlock2,
+                'Expected the second row block to be attached to the first input');
             chai.assert.isNotNull(
-              callBlock.getInput('ARG1'),
-              'Expected the second param input to exist');
+                callBlock.getInput('ARG1'),
+                'Expected the second param input to exist');
             chai.assert.equal(
-              callBlock.getInputTargetBlock('ARG1'),
-              rowBlock1,
-              'Expected the first row block to be attached to the second input');
+                callBlock.getInputTargetBlock('ARG1'),
+                rowBlock1,
+                'Expected the first row block to be attached to the second input');
           });
   
       test(

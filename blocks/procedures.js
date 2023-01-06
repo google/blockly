@@ -19,7 +19,6 @@ const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
 const Procedures = goog.require('Blockly.Procedures');
 const Variables = goog.require('Blockly.Variables');
-const Xml = goog.require('Blockly.Xml');
 const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
@@ -1291,8 +1290,8 @@ const procedureCallerUpdateShapeMixin = {
 
   /**
    * Creates all of the parameter inputs to match the state of the data model.
-   * @param {Array<string>} params The params to add to the block, or null to use the
-   *     params defined in the procedure model.
+   * @param {Array<string>} params The params to add to the block, or null to
+   *     use the params defined in the procedure model.
    */
   createArgInputs_: function(params = null) {
     if (!params) {
@@ -1498,8 +1497,7 @@ const procedureCallerOnChangeMixin = {
     }
     // TODO: Clean this up to call createDef_.
     if (event.type === Events.BLOCK_CREATE &&
-        (event.blockId === this.id ||
-        event.ids.indexOf(this.id) !== -1)) {
+        (event.blockId === this.id || event.ids.indexOf(this.id) !== -1)) {
       // Look for the case where a procedure call was created (usually through
       // paste) and there is no matching definition.  In this case, create
       // an empty definition block with the correct signature.
@@ -1534,9 +1532,8 @@ const procedureCallerOnChangeMixin = {
   },
 
   defMatches_(defBlock) {
-    return defBlock &&
-          defBlock.type === this.defType_ &&
-           JSON.stringify(defBlock.getVars()) === JSON.stringify(this.arguments_);
+    return defBlock && defBlock.type === this.defType_ &&
+        JSON.stringify(defBlock.getVars()) === JSON.stringify(this.arguments_);
   },
 };
 Extensions.registerMixin(

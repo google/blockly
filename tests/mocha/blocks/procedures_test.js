@@ -17,7 +17,7 @@ import {defineRowBlock} from '../test_helpers/block_definitions.js';
 
 suite('Procedures', function() {
   setup(function() {
-    sharedTestSetup.call(this);
+    sharedTestSetup.call(this, {fireEventsNow: false});
     this.workspace = Blockly.inject('blocklyDiv', {});
     this.workspace.createVariable('preCreatedVar', '', 'preCreatedVarId');
     this.workspace.createVariable(
@@ -49,6 +49,7 @@ suite('Procedures', function() {
           const defBlock = createProcDefBlock(this.workspace);
 
           defBlock.setEnabled(false);
+          this.clock.runAll();
 
           chai.assert.isFalse(
               defBlock.getProcedureModel().getEnabled(),
@@ -814,6 +815,7 @@ suite('Procedures', function() {
               },
             },
             mutatorWorkspace);
+          this.clock.runAll();
           
           const newFlyoutParamName =
               mutatorWorkspace.getFlyout().getWorkspace().getTopBlocks(true)[0]
@@ -1127,6 +1129,7 @@ suite('Procedures', function() {
           const callBlock = createProcCallBlock(this.workspace);
 
           defBlock.setEnabled(false);
+          this.clock.runAll();
 
           chai.assert.isFalse(
               callBlock.isEnabled(),
@@ -1197,6 +1200,7 @@ suite('Procedures', function() {
               '<mutation name="do something"/>' +
             '</block>'
         ), this.workspace);
+        this.clock.runAll();
         assertDefBlockStructure(
             this.workspace.getBlocksByType('procedures_defreturn')[0], true);
         assertCallBlockStructure(callBlock, [], [], 'do something');
@@ -1206,6 +1210,7 @@ suite('Procedures', function() {
         const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             '<block type="procedures_callreturn"></block>'
         ), this.workspace);
+        this.clock.runAll();
         assertDefBlockStructure(
             this.workspace.getBlocksByType('procedures_defreturn')[0], true);
         assertCallBlockStructure(callBlock, [], [], 'unnamed');
@@ -1225,6 +1230,7 @@ suite('Procedures', function() {
             '  <mutation name="do something"/>' +
             '</block>'
         ), this.workspace);
+        this.clock.runAll();
         assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
         assertCallBlockStructure(callBlock, [], [], 'do something2');
       });
@@ -1245,10 +1251,42 @@ suite('Procedures', function() {
               </mutation>
             </block>
         `), this.workspace);
+        this.clock.runAll();
         assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
         assertCallBlockStructure(
             callBlock, ['y'], [this.TEST_VAR_ID], 'do something2');
       });
+
+      test(
+          'callers whose defs are deserialized later do not create defs',
+          function() {
+            Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(`
+                <xml>
+                  <block type="procedures_callreturn">
+                    <mutation name="do something">
+                      <arg name="x"></arg>
+                    </mutation>
+                  </block>
+                  <block type="procedures_defreturn">
+                    <field name="NAME">do something</field>
+                    <mutation>
+                      <arg name="x" varid="arg"></arg>
+                    </mutation>
+                  </block>
+                </xml>
+            `), this.workspace);
+            this.clock.runAll();
+            const defBlock =
+                this.workspace.getBlocksByType('procedures_defreturn')[0];
+            const callBlock =
+                this.workspace.getBlocksByType('procedures_callreturn')[0];
+            assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
+            assertCallBlockStructure(callBlock, ['x'], ['arg'], 'do something');
+            chai.assert.equal(
+                defBlock.getProcedureModel(),
+                callBlock.getProcedureModel(),
+                'Expected the blocks to have the same procedure model');
+          });
     });
 
     suite('json', function() {
@@ -1259,6 +1297,7 @@ suite('Procedures', function() {
             'name': 'do something',
           },
         }, this.workspace, {recordUndo: true});
+        this.clock.runAll();
         assertDefBlockStructure(
             this.workspace.getBlocksByType('procedures_defreturn')[0], true);
         assertCallBlockStructure(callBlock, [], [], 'do something');
@@ -1269,6 +1308,7 @@ suite('Procedures', function() {
         const callBlock = Blockly.serialization.blocks.append({
           'type': 'procedures_callreturn',
         }, this.workspace, {recordUndo: true});
+        this.clock.runAll();
         assertDefBlockStructure(
             this.workspace.getBlocksByType('procedures_defreturn')[0], true);
         assertCallBlockStructure(callBlock, [], [], 'unnamed');
@@ -1295,6 +1335,7 @@ suite('Procedures', function() {
             'name': 'do something',
           },
         }, this.workspace, {recordUndo: true});
+        this.clock.runAll();
         assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
         assertCallBlockStructure(callBlock, [], [], 'do something2');
       });
@@ -1321,10 +1362,54 @@ suite('Procedures', function() {
             'params': ['y'],
           },
         }, this.workspace, {recordUndo: true});
+        this.clock.runAll();
         assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
         assertCallBlockStructure(
             callBlock, ['y'], [this.TEST_VAR_ID], 'do something2');
       });
+
+      test(
+          'callers whose defs are deserialized later do not create defs',
+          function() {
+            Blockly.serialization.workspaces.load({
+              'blocks': {
+                'languageVersion': 0,
+                'blocks': [
+                  {
+                    'type': 'procedures_callreturn',
+                    'extraState': {
+                      'params': ['x'],
+                    },
+                  },
+                  {
+                    'type': 'procedures_defreturn',
+                    'fields': {
+                      'NAME': 'do something',
+                    },
+                    'extraState': {
+                      'params': [
+                        {
+                          'name': 'x',
+                          'id': 'arg',
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            }, this.workspace);
+            this.clock.runAll();
+            const defBlock =
+                this.workspace.getBlocksByType('procedures_defreturn')[0];
+            const callBlock =
+                this.workspace.getBlocksByType('procedures_callreturn')[0];
+            assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
+            assertCallBlockStructure(callBlock, ['x'], ['arg'], 'do something');
+            chai.assert.equal(
+                defBlock.getProcedureModel(),
+                callBlock.getProcedureModel(),
+                'Expected the blocks to have the same procedure model');
+          });
     });
   });
 
@@ -1446,6 +1531,7 @@ suite('Procedures', function() {
                 <block type="procedures_callreturn"/>
               </xml>`);
         Blockly.Xml.domToWorkspace(xml, this.workspace);
+        this.clock.runAll();
         assertDefAndCallBlocks(
             this.workspace, [], ['unnamed'], true);
       });
@@ -1457,6 +1543,7 @@ suite('Procedures', function() {
                 <block type="procedures_callreturn"/>
               </xml>`);
         Blockly.Xml.domToWorkspace(xml, this.workspace);
+        this.clock.runAll();
         assertDefAndCallBlocks(
             this.workspace, ['unnamed'], ['unnamed2'], true);
       });
@@ -1468,6 +1555,7 @@ suite('Procedures', function() {
                 <block type="procedures_callnoreturn"/>
               </xml>`);
         Blockly.Xml.domToWorkspace(xml, this.workspace);
+        this.clock.runAll();
         assertDefAndCallBlocks(
             this.workspace, ['unnamed2'], ['unnamed'], true);
       });
@@ -1542,6 +1630,7 @@ suite('Procedures', function() {
             'type': testSuite.callType,
           }, this.workspace, {recordUndo: true});
           this.callBlock.setFieldValue('proc name', 'NAME');
+          this.clock.runAll();
           assertCallBlockStructure(this.callBlock);
         });
       });

@@ -1178,10 +1178,9 @@ const procedureCallerMutator = {
     } else {
       // We need to create/find our procedure def in our change listener.
       this.paramsFromSerializedState_ = params;
+      // Create inputs based on the mutation so that children can be connected.
+      this.createArgInputs_(params);
     }
-
-    // Create inputs based on the mutation so that children can be connected.
-    this.createArgInputs_(params);
 
     // Temporarily maintained for logic that relies on arguments_
     this.arguments_ = params;

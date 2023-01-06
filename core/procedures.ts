@@ -193,7 +193,9 @@ export function rename(this: Field, name: string): string {
   name = name.trim();
 
   const legalName = findLegalName(name, block);
-  if (isProcedureBlock(block)) block.getProcedureModel().setName(legalName);
+  if (isProcedureBlock(block) && !block.isInsertionMarker()) {
+    block.getProcedureModel().setName(legalName);
+  }
   const oldName = this.getValue();
   if (oldName !== name && oldName !== legalName) {
     // Rename any callers.

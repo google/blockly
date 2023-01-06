@@ -33,14 +33,15 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 export type InputTypes = string|number;
 export type FieldInputValidator<T extends InputTypes> =
-    FieldValidator<T|string>;
+    FieldValidator<string|T>;
 
 /**
- * Class for an editable text field.
+ * Abstract class for an editable input field.
  *
  * @alias Blockly.FieldInput
+ * @typeParam T - The value stored on the field.
  */
-export abstract class FieldInput<T extends InputTypes> extends Field<T|string> {
+export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
   /**
    * Pixel size of input border radius.
    * Should match blocklyText's border-radius in CSS.
@@ -100,7 +101,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T|string> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: T|Sentinel, opt_validator?: FieldInputValidator<T>|null,
+      opt_value?: string|Sentinel, opt_validator?: FieldInputValidator<T>|null,
       opt_config?: FieldInputConfig) {
     super(Field.SKIP_SETUP);
 
@@ -166,7 +167,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T|string> {
    *    This is not used by the text input because its display value is stored
    * on the htmlInput_.
    */
-  protected override doValueInvalid_(_invalidValue: T|string|undefined) {
+  protected override doValueInvalid_(_invalidValue: AnyDuringMigration) {
     if (this.isBeingEdited_) {
       this.isDirty_ = true;
       this.isTextValid_ = false;
@@ -189,7 +190,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T|string> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
-  protected override doValueUpdate_(newValue: T|string) {
+  protected override doValueUpdate_(newValue: string|T) {
     this.isDirty_ = true;
     this.isTextValid_ = true;
     this.value_ = newValue;

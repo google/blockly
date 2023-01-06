@@ -322,7 +322,8 @@ export class FieldVariable extends FieldDropdown {
    * @param opt_newValue The ID of the new variable to set.
    * @returns The validated ID, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: string): string|null {
+  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
+      string|null {
     if (opt_newValue === null) {
       return null;
     }

@@ -64,14 +64,11 @@ export type FieldValidator<T = any> = (newValue: T) => T|null|undefined;
  *
  * @alias Blockly.Field
  * @typeParam T - The value stored on the field.
- * @typeParam U - The value passed into the constructor and `setValue`.
- *
- * **NOTE:** Subclasses where `U` does not extend `T` must override
- * `doClassValidation_` to convert `U` into `T`.
  */
-export abstract class Field<T = any, U = T> implements
-    IASTNodeLocationSvg, IASTNodeLocationWithBlock, IKeyboardAccessible,
-    IRegistrable {
+export abstract class Field<T = any> implements IASTNodeLocationSvg,
+                                                IASTNodeLocationWithBlock,
+                                                IKeyboardAccessible,
+                                                IRegistrable {
   /**
    * To overwrite the default value which is set in **Field**, directly update
    * the prototype.
@@ -213,7 +210,7 @@ export abstract class Field<T = any, U = T> implements
    * this parameter supports.
    */
   constructor(
-      value?: U|Sentinel, opt_validator?: FieldValidator<T>|null,
+      value: T|Sentinel, opt_validator?: FieldValidator<T>|null,
       opt_config?: FieldConfig) {
     /**
      * A generic value possessed by the field.
@@ -976,7 +973,7 @@ export abstract class Field<T = any, U = T> implements
    * @param newValue New value.
    * @sealed
    */
-  setValue(newValue?: U|null) {
+  setValue(newValue: AnyDuringMigration) {
     const doLogging = false;
     if (newValue === null) {
       doLogging && console.log('null, return');
@@ -1030,7 +1027,7 @@ export abstract class Field<T = any, U = T> implements
    * @returns New value, or an Error object.
    */
   private processValidation_(
-      newValue: T|U|undefined, validatedValue: T|null|undefined): T|Error {
+      newValue: AnyDuringMigration, validatedValue: T|null|undefined): T|Error {
     if (validatedValue === null) {
       this.doValueInvalid_(newValue);
       if (this.isDirty_) {
@@ -1066,9 +1063,10 @@ export abstract class Field<T = any, U = T> implements
    * @returns `undefined` to set `newValue` as is.
    */
   protected doClassValidation_(newValue: T): T|null|undefined;
-  protected doClassValidation_(newValue?: U): T|null;
-  protected doClassValidation_(newValue?: T|U): T|null|undefined {
-    if (newValue === undefined) {
+  protected doClassValidation_(newValue?: AnyDuringMigration): T|null;
+  protected doClassValidation_(newValue?: T|AnyDuringMigration): T|null
+      |undefined {
+    if (newValue === null || newValue === undefined) {
       return null;
     }
 
@@ -1093,7 +1091,7 @@ export abstract class Field<T = any, U = T> implements
    *
    * @param _invalidValue The input value that was determined to be invalid.
    */
-  protected doValueInvalid_(_invalidValue: T|U|undefined) {}
+  protected doValueInvalid_(_invalidValue: AnyDuringMigration) {}
   // NOP
 
   /**

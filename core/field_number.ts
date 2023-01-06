@@ -253,8 +253,12 @@ export class FieldNumber extends FieldInput<number> {
    * @param opt_newValue The input value.
    * @returns A valid number, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: number|string): number
-      |null {
+  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
+      number|null {
+    if (opt_newValue === null) {
+      return null;
+    }
+
     // Clean up text.
     let newValue = String(opt_newValue);
     // TODO: Handle cases like 'ten', '1.203,14', etc.

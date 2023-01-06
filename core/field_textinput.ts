@@ -22,6 +22,11 @@ import type {Sentinel} from './utils/sentinel.js';
 
 export type FieldTextInputValidator = FieldInputValidator<string>;
 
+/**
+ * Class for an editable text field.
+ *
+ * @alias Blockly.FieldTextInput
+ */
 export class FieldTextInput extends FieldInput<string> {
   /**
    * @param opt_value The initial value of the field. Should cast to a string.
@@ -49,7 +54,8 @@ export class FieldTextInput extends FieldInput<string> {
    * @param opt_newValue The input value.
    * @returns A valid string, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: string): string|null {
+  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
+      string|null {
     if (opt_newValue === undefined) {
       return null;
     }

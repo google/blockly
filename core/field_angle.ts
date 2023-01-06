@@ -133,7 +133,7 @@ export class FieldAngle extends FieldInput<number> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: number|string|Sentinel, opt_validator?: FieldAngleValidator,
+      opt_value?: string|number|Sentinel, opt_validator?: FieldAngleValidator,
       opt_config?: FieldAngleConfig) {
     super(Field.SKIP_SETUP);
 
@@ -438,8 +438,8 @@ export class FieldAngle extends FieldInput<number> {
    * @param opt_newValue The input value.
    * @returns A valid angle, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: number|string): number
-      |null {
+  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
+      number|null {
     const value = Number(opt_newValue);
     if (isNaN(value) || !isFinite(value)) {
       return null;

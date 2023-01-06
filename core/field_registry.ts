@@ -60,7 +60,7 @@ export function unregister(type: string) {
  * @alias Blockly.fieldRegistry.fromJson
  * @internal
  */
-export function fromJson<T, U>(options: RegistryOptions): Field<T, U>|null {
+export function fromJson<T>(options: RegistryOptions): Field<T>|null {
   return TEST_ONLY.fromJsonInternal(options);
 }
 
@@ -69,7 +69,7 @@ export function fromJson<T, U>(options: RegistryOptions): Field<T, U>|null {
  *
  * @param options
  */
-function fromJsonInternal<T, U>(options: RegistryOptions): Field<T, U>|null {
+function fromJsonInternal<T>(options: RegistryOptions): Field<T>|null {
   const fieldObject = registry.getObject(registry.Type.FIELD, options.type);
   if (!fieldObject) {
     console.warn(
@@ -81,7 +81,7 @@ function fromJsonInternal<T, U>(options: RegistryOptions): Field<T, U>|null {
   } else if (typeof (fieldObject as any).fromJson !== 'function') {
     throw new TypeError('returned Field was not a IRegistrableField');
   } else {
-    type fromJson = (options: {}) => Field<T, U>;
+    type fromJson = (options: {}) => Field<T>;
     return (fieldObject as unknown as {fromJson: fromJson}).fromJson(options);
   }
 }

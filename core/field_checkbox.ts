@@ -156,8 +156,8 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    * @param opt_newValue The input value.
    * @returns A valid value ('TRUE' or 'FALSE), or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: CheckboxBool): BoolString
-      |null {
+  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
+      BoolString|null {
     if (opt_newValue === true || opt_newValue === 'TRUE') {
       return 'TRUE';
     }

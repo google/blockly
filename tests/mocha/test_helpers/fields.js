@@ -73,8 +73,8 @@ export function assertFieldValue(field, expectedValue, expectedText = undefined)
   if (expectedText === undefined) {
     expectedText = String(expectedValue);
   }
-  chai.assert.deepEqual(actualValue, expectedValue);
-  chai.assert.deepEqual(actualText, expectedText);
+  chai.assert.equal(actualValue, expectedValue, 'Value');
+  chai.assert.equal(actualText, expectedText, 'Text');
 }
 
 /**

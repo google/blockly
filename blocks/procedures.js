@@ -308,6 +308,7 @@ const procedureDefGetDefMixin = function() {
      * disposed.
      */
     destroy: function() {
+      if (this.isInsertionMarker()) return;
       this.workspace.getProcedureMap().delete(this.getProcedureModel().getId());
     },
   };
@@ -598,10 +599,12 @@ const procedureDefMutator = {
    *     parameters and statements.
    */
   saveExtraState: function() {
-    const params = this.getProcedureModel().getParameters();
-    if (!params.length && this.hasStatements_) return null;
-
     const state = Object.create(null);
+    state['procedureId'] = this.getProcedureModel().getId();
+
+    const params = this.getProcedureModel().getParameters();
+    if (!params.length && this.hasStatements_) return state;
+
     if (params.length) {
       state['params'] = params.map((p) => {
         return {
@@ -625,6 +628,16 @@ const procedureDefMutator = {
    *     statements.
    */
   loadExtraState: function(state) {
+    const map = this.workspace.getProcedureMap();
+    const procedureId = state['procedureId'];
+    if (procedureId && procedureId != this.model_.getId() &&
+        map.has(procedureId)) {
+      if (map.has(this.model_.getId())) {
+        map.delete(this.model_.getId());
+      }
+      this.model_ = map.get(procedureId);
+    }
+
     if (state['params']) {
       for (let i = 0; i < state['params'].length; i++) {
         const {name, id, paramId} = state['params'][i];

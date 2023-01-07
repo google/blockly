@@ -292,8 +292,8 @@ const procedureDefGetDefMixin = function() {
      * @this {Block}
      */
     getVars: function() {
-      return this.getProcedureModel().getParameters()
-          .map((p) => p.getVariableModel().name);
+      return this.getProcedureModel().getParameters().map(
+          (p) => p.getVariableModel().name);
     },
 
     /**
@@ -302,8 +302,8 @@ const procedureDefGetDefMixin = function() {
      * @this {Block}
      */
     getVarModels: function() {
-      return this.getProcedureModel().getParameters()
-          .map((p) => p.getVariableModel());
+      return this.getProcedureModel().getParameters().map(
+          (p) => p.getVariableModel());
     },
 
     /**
@@ -343,8 +343,8 @@ const procedureDefVarMixin = function() {
     renameVarById: function(oldId, newId) {
       const oldVar = this.workspace.getVariableById(oldId);
       const model = this.getProcedureModel();
-      const index = model.getParameters()
-          .findIndex((p) => p.getVariableModel() === oldVar);
+      const index = model.getParameters().findIndex(
+          (p) => p.getVariableModel() === oldVar);
       if (index === -1) return;  // Not found.
       const newVar = this.workspace.getVariableById(newId);
       const oldParam = model.getParameter(index);
@@ -364,8 +364,8 @@ const procedureDefVarMixin = function() {
      * @this {Block}
      */
     updateVarName: function(variable) {
-      const containsVar = this.getProcedureModel().getParameters()
-          .some((p) => p.getVariableModel() === variable);
+      const containsVar = this.getProcedureModel().getParameters().some(
+          (p) => p.getVariableModel() === variable);
       if (containsVar) {
         triggerProceduresUpdate(this.workspace);
       }
@@ -1307,7 +1307,8 @@ const procedureCallerOnChangeMixin = {
 
   defMatches_(defBlock) {
     return defBlock && defBlock.type === this.defType_ &&
-        JSON.stringify(defBlock.getVars()) === JSON.stringify(this.paramsFromSerializedState_);
+        JSON.stringify(defBlock.getVars()) ===
+        JSON.stringify(this.paramsFromSerializedState_);
   },
 };
 Extensions.registerMixin(

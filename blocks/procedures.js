@@ -114,6 +114,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
       'procedure_caller_get_def_mixin',
       'procedure_caller_update_shape_mixin',
       'procedure_caller_context_menu_mixin',
+      'procedure_caller_onchange_mixin',
       'procedure_callernoreturn_get_def_block_mixin',
     ],
     'mutator': 'procedure_caller_mutator',
@@ -186,6 +187,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
       'procedure_caller_get_def_mixin',
       'procedure_caller_update_shape_mixin',
       'procedure_caller_context_menu_mixin',
+      'procedure_caller_onchange_mixin',
       'procedure_callerreturn_get_def_block_mixin',
     ],
     'mutator': 'procedure_caller_mutator',
@@ -1034,8 +1036,12 @@ const procedureCallerMutator = {
    */
   mutationToDom: function() {
     const container = xmlUtils.createElement('mutation');
-
     const model = this.getProcedureModel();
+    if (!model) {
+      console.trace('returning');
+      return container;
+    }
+
     container.setAttribute('name', model.getName());
     for (const param of model.getParameters()) {
       const arg = xmlUtils.createElement('arg');
@@ -1070,6 +1076,7 @@ const procedureCallerMutator = {
   saveExtraState: function() {
     const state = Object.create(null);
     const model = this.getProcedureModel();
+    if (!model) return state;
     state['name'] = model.getName();
     if (model.getParameters().length) {
       state['params'] = model.getParameters().map((p) => p.getName());
@@ -1097,14 +1104,10 @@ const procedureCallerMutator = {
     if (this.getProcedureModel()) {
       this.initBlockWithProcedureModel_();
     } else {
-      // We need to create/find our procedure def in our change listener.
-      this.paramsFromSerializedState_ = params;
       // Create inputs based on the mutation so that children can be connected.
       this.createArgInputs_(params);
     }
-
-    // Temporarily maintained for logic that relies on arguments_
-    this.arguments_ = params;
+    this.paramsFromSerializedState_ = params;
   },
 };
 Extensions.registerMutator('procedure_caller_mutator', procedureCallerMutator);
@@ -1265,6 +1268,7 @@ const procedureCallerOnChangeMixin = {
    * @this {Block}
    */
   onchange: function(event) {
+    console.log('got event');
     if (!this.workspace || this.workspace.isFlyout) {
       // Block is deleted or is in a flyout.
       return;
@@ -1276,11 +1280,13 @@ const procedureCallerOnChangeMixin = {
     // TODO: Clean this up to call createDef_.
     if (event.type === Events.BLOCK_CREATE &&
         (event.blockId === this.id || event.ids.indexOf(this.id) !== -1)) {
+      console.log('create event');
       // Look for the case where a procedure call was created (usually through
       // paste) and there is no matching definition.  In this case, create
       // an empty definition block with the correct signature.
       const name = this.getProcedureCall();
       let def = Procedures.getDefinition(name, this.workspace);
+      console.log(def);
       if (!this.defMatches_(def)) def = null;
       if (!def) {
         // We have no def nor procedure model.
@@ -1294,13 +1300,14 @@ const procedureCallerOnChangeMixin = {
         this.model_ = this.findProcedureModel_(
             this.getFieldValue('NAME'), this.paramsFromSerializedState_);
       }
+      console.log(this.model_);
       this.initBlockWithProcedureModel_();
     }
   },
 
   defMatches_(defBlock) {
     return defBlock && defBlock.type === this.defType_ &&
-        JSON.stringify(defBlock.getVars()) === JSON.stringify(this.arguments_);
+        JSON.stringify(defBlock.getVars()) === JSON.stringify(this.paramsFromSerializedState_);
   },
 };
 Extensions.registerMixin(

@@ -126,7 +126,7 @@ suite('Angle Fields', function() {
             function() {
               return null;
             },
-        value: 2, expectedValue: 1},
+        value: 2, expectedValue: '1'},
       {title: 'Force Mult of 30 Validator',
         validator:
             function(newValue) {
@@ -150,7 +150,7 @@ suite('Angle Fields', function() {
         });
         test('When Not Editing', function() {
           this.field.setValue(suiteInfo.value);
-          assertFieldValue(this.field, suiteInfo.expectedValue);
+          assertFieldValue(this.field, +suiteInfo.expectedValue);
         });
       });
     });

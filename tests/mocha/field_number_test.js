@@ -202,11 +202,11 @@ suite('Number Fields', function() {
             function() {
               return null;
             },
-        value: 2, expectedValue: 1},
+        value: 2, expectedValue: '1'},
       {title: 'Force End with 6 Validator',
         validator:
             function(newValue) {
-              return String(newValue).replace(/.$/, '6');
+              return +String(newValue).replace(/.$/, '6');
             },
         value: 25, expectedValue: 26},
       {title: 'Returns Undefined Validator', validator: function() {}, value: 2,
@@ -226,7 +226,7 @@ suite('Number Fields', function() {
         });
         test('When Not Editing', function() {
           this.field.setValue(suiteInfo.value);
-          assertFieldValue(this.field, suiteInfo.expectedValue);
+          assertFieldValue(this.field, +suiteInfo.expectedValue);
         });
       });
     });

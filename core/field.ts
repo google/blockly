@@ -53,9 +53,14 @@ import * as Xml from './xml.js';
  *
  * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
  * @param newValue The value to be validated.
- * @returns `T` to set this function's returned value instead of `newValue`.
- * @returns `null` to invoke `doValueInvalid_` and not set a value.
- * @returns `undefined` to set `newValue` as is.
+ * @returns One of three instructions for setting the new value: `T`, `null`,
+ * or `undefined`.
+ *
+ * - `T` to set this function's returned value instead of `newValue`.
+ *
+ * - `null` to invoke `doValueInvalid_` and not set a value.
+ *
+ * - `undefined` to set `newValue` as is.
  */
 export type FieldValidator<T = any> = (newValue: T) => T|null|undefined;
 
@@ -1057,10 +1062,15 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * compatible with `T`.
    *
    * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
-   * @param newValue The value to be validated.
-   * @returns `T` to set this function's returned value instead of `newValue`.
-   * @returns `null` to invoke `doValueInvalid_` and not set a value.
-   * @returns `undefined` to set `newValue` as is.
+   * @param newValue - The value to be validated.
+   * @returns One of three instructions for setting the new value: `T`, `null`,
+   * or `undefined`.
+   *
+   * - `T` to set this function's returned value instead of `newValue`.
+   *
+   * - `null` to invoke `doValueInvalid_` and not set a value.
+   *
+   * - `undefined` to set `newValue` as is.
    */
   protected doClassValidation_(newValue: T): T|null|undefined;
   protected doClassValidation_(newValue?: AnyDuringMigration): T|null;

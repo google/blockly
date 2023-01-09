@@ -942,7 +942,7 @@ const procedureCallerGetDefMixin = function() {
       if (!model) return null;
 
       const returnTypes = model.getReturnTypes();
-      const hasMatchingReturn = this.hasReturn ? returnTypes : !returnTypes;
+      const hasMatchingReturn = this.hasReturn_ ? returnTypes : !returnTypes;
       if (!hasMatchingReturn) return null;
 
       const hasMatchingParams =
@@ -1340,7 +1340,7 @@ Extensions.registerMixin(
     'procedure_caller_context_menu_mixin', procedureCallerContextMenuMixin);
 
 const procedureCallerNoReturnGetDefBlockMixin = {
-  hasReturn: false,
+  hasReturn_: false,
   defType_: 'procedures_defnoreturn',
 };
 Extensions.registerMixin(
@@ -1348,7 +1348,7 @@ Extensions.registerMixin(
     procedureCallerNoReturnGetDefBlockMixin);
 
 const procedureCallerReturnGetDefBlockMixin = {
-  hasReturn: true,
+  hasReturn_: true,
   defType_: 'procedures_defreturn',
 };
 Extensions.registerMixin(

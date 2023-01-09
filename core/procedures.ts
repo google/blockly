@@ -422,11 +422,20 @@ function mutatorChangeListener(e: Abstract) {
  */
 export function getCallers(name: string, workspace: Workspace): Block[] {
   return workspace.getAllBlocks(false).filter((block) => {
-    return (isProcedureBlock(block) && !block.isProcedureDef() &&
-            Names.equals(block.getProcedureModel().getName(), name)) ||
+    return blockIsModernCallerFor(block, name) ||
         (isLegacyProcedureCallBlock(block) &&
          Names.equals(block.getProcedureCall(), name));
   });
+}
+
+/**
+ * @returns True if the given block is a modern-style caller block of the given
+ *     procedure name.
+ */
+function blockIsModernCallerFor(block: Block, procName: string): boolean {
+  return isProcedureBlock(block) && !block.isProcedureDef() &&
+      block.getProcedureModel() &&
+      Names.equals(block.getProcedureModel().getName(), procName);
 }
 
 /**

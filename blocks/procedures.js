@@ -1037,10 +1037,7 @@ const procedureCallerMutator = {
   mutationToDom: function() {
     const container = xmlUtils.createElement('mutation');
     const model = this.getProcedureModel();
-    if (!model) {
-      console.trace('returning');
-      return container;
-    }
+    if (!model) return container;
 
     container.setAttribute('name', model.getName());
     for (const param of model.getParameters()) {
@@ -1268,7 +1265,6 @@ const procedureCallerOnChangeMixin = {
    * @this {Block}
    */
   onchange: function(event) {
-    console.log('got event');
     if (!this.workspace || this.workspace.isFlyout) {
       // Block is deleted or is in a flyout.
       return;
@@ -1280,13 +1276,11 @@ const procedureCallerOnChangeMixin = {
     // TODO: Clean this up to call createDef_.
     if (event.type === Events.BLOCK_CREATE &&
         (event.blockId === this.id || event.ids.indexOf(this.id) !== -1)) {
-      console.log('create event');
       // Look for the case where a procedure call was created (usually through
       // paste) and there is no matching definition.  In this case, create
       // an empty definition block with the correct signature.
       const name = this.getProcedureCall();
       let def = Procedures.getDefinition(name, this.workspace);
-      console.log(def);
       if (!this.defMatches_(def)) def = null;
       if (!def) {
         // We have no def nor procedure model.
@@ -1300,7 +1294,6 @@ const procedureCallerOnChangeMixin = {
         this.model_ = this.findProcedureModel_(
             this.getFieldValue('NAME'), this.paramsFromSerializedState_);
       }
-      console.log(this.model_);
       this.initBlockWithProcedureModel_();
     }
   },

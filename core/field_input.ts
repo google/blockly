@@ -452,11 +452,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
     } else if (e.keyCode === KeyCodes.TAB) {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-      // AnyDuringMigration because:  Property 'shiftKey' does not exist on type
-      // 'Event'. AnyDuringMigration because:  Argument of type 'this' is not
-      // assignable to parameter of type 'Field'.
-      (this.sourceBlock_ as BlockSvg)
-          .tab(this as AnyDuringMigration, !(e as AnyDuringMigration).shiftKey);
+      (this.sourceBlock_ as BlockSvg).tab(this, !e.shiftKey);
       e.preventDefault();
     }
   }

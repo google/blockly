@@ -409,18 +409,17 @@ export class FieldAngle extends FieldInput<number> {
       throw new UnattachedFieldError();
     }
 
-    const keyboardEvent = e;
     let multiplier;
-    if (keyboardEvent.keyCode === KeyCodes.LEFT) {
+    if (e.keyCode === KeyCodes.LEFT) {
       // decrement (increment in RTL)
       multiplier = block.RTL ? 1 : -1;
-    } else if (keyboardEvent.keyCode === KeyCodes.RIGHT) {
+    } else if (e.keyCode === KeyCodes.RIGHT) {
       // increment (decrement in RTL)
       multiplier = block.RTL ? -1 : 1;
-    } else if (keyboardEvent.keyCode === KeyCodes.DOWN) {
+    } else if (e.keyCode === KeyCodes.DOWN) {
       // decrement
       multiplier = -1;
-    } else if (keyboardEvent.keyCode === KeyCodes.UP) {
+    } else if (e.keyCode === KeyCodes.UP) {
       // increment
       multiplier = 1;
     }

@@ -409,6 +409,10 @@ const procedureDefUpdateShapeMixin = {
     }
   },
 
+  /**
+   * Updates the parameter blocks in the mutator (if it is open) to reflect
+   * the state of the procedure model.
+   */
   updateMutator_: function() {
     if (!this.mutator?.isVisible()) return;
 
@@ -970,10 +974,8 @@ const procedureCallerGetDefMixin = function() {
         },
         'fields': {'NAME': newName},
       };
-      const model =
-          serialization.blocks.append(blockDef, this.getTargetWorkspace_())
+      return serialization.blocks.append(blockDef, this.getTargetWorkspace_())
               .getProcedureModel();
-      return model;
     },
 
     /**

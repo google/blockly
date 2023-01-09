@@ -99,6 +99,10 @@ suite('ASTNode', function() {
     sharedTestTeardown.call(this);
   });
 
+  test('fail!!!', function() {
+    chai.assert.isTrue(false);
+  });
+
   suite('HelperFunctions', function() {
     test('findNextForInput_', function() {
       const input = this.blocks.statementInput1.inputList[0];

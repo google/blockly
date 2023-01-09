@@ -113,6 +113,6 @@
     "yargs": "^17.2.1"
   },
   "dependencies": {
-    "jsdom": "20.0.3"
+    "jsdom": "21.0.0"
   }
 }

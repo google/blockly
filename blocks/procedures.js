@@ -27,6 +27,7 @@ const {Block} = goog.requireType('Blockly.Block');
 // TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
+const {isProcedureBlock} = goog.require('Blockly.procedures.IProcedureModel');
 const {ObservableProcedureModel} = goog.require('Blockly.procedures.ObservableProcedureModel');
 const {ObservableParameterModel} = goog.require('Blockly.procedures.ObservableParameterModel');
 const {config} = goog.require('Blockly.config');
@@ -576,7 +577,9 @@ const procedureDefMutator = {
     const map = this.workspace.getProcedureMap();
     const procedureId = state['procedureId'];
     if (procedureId && procedureId != this.model_.getId() &&
-        map.has(procedureId)) {
+        map.has(procedureId) &&
+        (this.isInsertionMarker() ||
+         this.noBlockHasClaimedModel_(procedureId))) {
       if (map.has(this.model_.getId())) {
         map.delete(this.model_.getId());
       }
@@ -596,6 +599,21 @@ const procedureDefMutator = {
 
     // Call mutate callers for backwards compatibility.
     Procedures.mutateCallers(this);
+  },
+
+  /**
+   * Returns true if there is no definition block currently associated with the
+   * given procedure ID. False otherwise.
+   * @param {string} procedureId The ID of the procedure to check for a claiming
+   *     block.
+   * @return {boolean} True if there is no definition block currently associated
+   *     with the given procedure ID. False otherwise.
+   */
+  noBlockHasClaimedModel_(procedureId) {
+    const model = this.workspace.getProcedureMap().get(procedureId);
+    return this.workspace.getAllBlocks(false).every(
+        (b) => !isProcedureBlock(b) || !b.isProcedureDef() ||
+            b.getProcedureModel() !== model);
   },
 
   /**

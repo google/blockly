@@ -1143,7 +1143,7 @@ suite('Procedures', function() {
         });
 
     test(
-        'coallescing a variable associated with a parameter updates procedure defs',
+        'coalescing a variable associated with a parameter updates procedure defs',
         function() {
           // Create a stack of container, parameter.
           const defBlock = createProcDefBlock(this.workspace);
@@ -1169,7 +1169,7 @@ suite('Procedures', function() {
         });
 
     test(
-        'coallescing a variable associated with a parameter updates mutator parameters',
+        'coalescing a variable associated with a parameter updates mutator parameters',
         function() {
           // Create a stack of container, parameter.
           const defBlock = createProcDefBlock(this.workspace);
@@ -1192,7 +1192,7 @@ suite('Procedures', function() {
         });
 
     test(
-        'coallescing a variable associated with a parameter updates procedure callers',
+        'coalescing a variable associated with a parameter updates procedure callers',
         function() {
           // Create a stack of container, parameter.
           const defBlock = createProcDefBlock(this.workspace);

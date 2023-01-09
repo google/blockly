@@ -939,7 +939,7 @@ const procedureCallerGetDefMixin = function() {
 
       const returnTypes = model.getReturnTypes();
       const hasMatchingReturn = this.hasReturn ? returnTypes : !returnTypes;
-      if (!hasMatchingReturn) return this.createDef_(name, params);
+      if (!hasMatchingReturn) return null;
 
       const hasMatchingParams =
           model.getParameters().every((p, i) => p.getName() === params[i]);

@@ -137,6 +137,7 @@ export class ObservableProcedureModel implements IProcedureModel {
   /**
    * Disables triggering updates to procedure blocks until the endBulkUpdate
    * is called.
+   *
    * @internal
    */
   startBulkUpdate() {
@@ -146,6 +147,7 @@ export class ObservableProcedureModel implements IProcedureModel {
   /**
    * Triggers an update to procedure blocks. Should be used with
    * startBulkUpdate.
+   *
    * @internal
    */
   endBulkUpdate() {

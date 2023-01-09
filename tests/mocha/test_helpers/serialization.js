@@ -92,7 +92,6 @@ export const runSerializationTestSuite = (testCases) => {
             Blockly.Xml.domToPrettyText(
                 Blockly.Xml.blockToDom(block));
         const expectedXml = testCase.expectedXml || testCase.xml;
-        console.log(generatedXml, expectedXml);
         chai.assert.equal(generatedXml, expectedXml);
       }
     };

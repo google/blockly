@@ -13,7 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events');
 
 
-import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
+import {Abstract, AbstractEventJson} from './events_abstract.js';
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import {BlockChange, BlockChangeJson} from './events_block_change.js';
 import {BlockCreate, BlockCreateJson} from './events_block_create.js';
@@ -54,7 +54,7 @@ import {FinishedLoading, FinishedLoadingJson} from './workspace_events.js';
 
 
 // Events.
-export const Abstract = AbstractEvent;
+export {Abstract};
 export {AbstractEventJson};
 export {BubbleOpen};
 export {BubbleOpenJson};

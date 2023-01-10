@@ -975,7 +975,7 @@ const procedureCallerGetDefMixin = function() {
         'fields': {'NAME': newName},
       };
       return serialization.blocks.append(blockDef, this.getTargetWorkspace_())
-              .getProcedureModel();
+          .getProcedureModel();
     },
 
     /**

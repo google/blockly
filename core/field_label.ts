@@ -51,9 +51,7 @@ export class FieldLabel extends Field<string> {
       opt_config?: FieldLabelConfig) {
     super(Field.SKIP_SETUP);
 
-    if (opt_value === Field.SKIP_SETUP) {
-      return;
-    }
+    if (Field.isSentinel(opt_value)) return;
     if (opt_config) {
       this.configure_(opt_config);
     } else {

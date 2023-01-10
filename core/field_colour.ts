@@ -80,7 +80,7 @@ export class FieldColour extends Field<string> {
   static COLUMNS = 7;
 
   /** The field's colour picker element. */
-  private picker_: Element|null = null;
+  private picker_: HTMLElement|null = null;
 
   /** Index of the currently highlighted element. */
   private highlightedIndex_: number|null = null;
@@ -134,9 +134,6 @@ export class FieldColour extends Field<string> {
    * setting. By default use the global constants for columns.
    */
   private columns_ = 0;
-  override size_: AnyDuringMigration;
-  override clickTarget_: AnyDuringMigration;
-  override value_: AnyDuringMigration;
 
   /**
    * @param opt_value The initial value of the field. Should be in '#rrggbb'
@@ -157,9 +154,7 @@ export class FieldColour extends Field<string> {
       opt_config?: FieldColourConfig) {
     super(Field.SKIP_SETUP);
 
-    if (opt_value === Field.SKIP_SETUP) {
-      return;
-    }
+    if (Field.isSentinel(opt_value)) return;
     if (opt_config) {
       this.configure_(opt_config);
     }
@@ -230,15 +225,14 @@ export class FieldColour extends Field<string> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a colour in '#rrggbb' format.
    */
-  protected override doValueUpdate_(newValue: AnyDuringMigration) {
+  protected override doValueUpdate_(newValue: string) {
     this.value_ = newValue;
     if (this.borderRect_) {
-      this.borderRect_.style.fill = newValue as string;
+      this.borderRect_.style.fill = newValue;
     } else if (
         this.sourceBlock_ && this.sourceBlock_.rendered &&
         this.sourceBlock_ instanceof BlockSvg) {
-      this.sourceBlock_.pathObject.svgPath.setAttribute(
-          'fill', newValue as string);
+      this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
       this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }
@@ -289,16 +283,12 @@ export class FieldColour extends Field<string> {
   /** Create and show the colour field's editor. */
   protected override showEditor_() {
     this.dropdownCreate_();
-    // AnyDuringMigration because:  Argument of type 'Element | null' is not
-    // assignable to parameter of type 'Node'.
-    dropDownDiv.getContentDiv().appendChild(this.picker_ as AnyDuringMigration);
+    dropDownDiv.getContentDiv().appendChild(this.picker_!);
 
     dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
     // Focus so we can start receiving keyboard events.
-    // AnyDuringMigration because:  Property 'focus' does not exist on type
-    // 'Element'.
-    (this.picker_ as AnyDuringMigration)!.focus({preventScroll: true});
+    this.picker_!.focus({preventScroll: true});
   }
 
   /**
@@ -519,9 +509,7 @@ export class FieldColour extends Field<string> {
       cell.setAttribute('data-colour', colours[i]);
       cell.title = titles[i] || colours[i];
       cell.id = idGenerator.getNextUniqueId();
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      cell.setAttribute('data-index', i as AnyDuringMigration);
+      cell.setAttribute('data-index', String(i));
       aria.setRole(cell, aria.Role.GRIDCELL);
       aria.setState(cell, aria.State.LABEL, colours[i]);
       aria.setState(cell, aria.State.SELECTED, colours[i] === selectedColour);
@@ -584,7 +572,7 @@ export class FieldColour extends Field<string> {
   static fromJson(options: FieldColourFromJsonConfig): FieldColour {
     // `this` might be a subclass of FieldColour if that class doesn't override
     // the static fromJson method.
-    return new this(options['colour'], undefined, options);
+    return new this(options.colour, undefined, options);
   }
 }
 

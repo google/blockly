@@ -18,4 +18,10 @@ goog.declareModuleId('Blockly.utils.Sentinel');
  *
  * @alias Blockly.utils.Sentinel
  */
-export class Sentinel {}
+export class Sentinel {
+  /**
+   * Provide a unique key so that type guarding properly excludes values like
+   * string.
+   */
+  UNIQUE_KEY?: never;
+}

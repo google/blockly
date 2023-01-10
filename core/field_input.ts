@@ -32,14 +32,16 @@ import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 export type InputTypes = string|number;
-export type FieldInputValidator<T extends InputTypes> = FieldValidator<T>;
+export type FieldInputValidator<T extends InputTypes> =
+    FieldValidator<string|T>;
 
 /**
- * Class for an editable text field.
+ * Abstract class for an editable input field.
  *
  * @alias Blockly.FieldInput
+ * @typeParam T - The value stored on the field.
  */
-export abstract class FieldInput<T extends InputTypes> extends Field<T> {
+export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
   /**
    * Pixel size of input border radius.
    * Should match blocklyText's border-radius in CSS.
@@ -83,9 +85,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
 
   /** Mouse cursor style when over the hotspot that initiates the editor. */
   override CURSOR = 'text';
-  override clickTarget_: AnyDuringMigration;
-  override value_: AnyDuringMigration;
-  override isDirty_: AnyDuringMigration;
 
   /**
    * @param opt_value The initial value of the field. Should cast to a string.
@@ -106,9 +105,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
       opt_config?: FieldInputConfig) {
     super(Field.SKIP_SETUP);
 
-    if (opt_value === Field.SKIP_SETUP) {
-      return;
-    }
+    if (Field.isSentinel(opt_value)) return;
     if (opt_config) {
       this.configure_(opt_config);
     }
@@ -162,20 +159,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
   }
 
   /**
-   * Ensure that the input value casts to a valid string.
-   *
-   * @param opt_newValue The input value.
-   * @returns A valid string, or null if invalid.
-   */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      AnyDuringMigration {
-    if (opt_newValue === null || opt_newValue === undefined) {
-      return null;
-    }
-    return String(opt_newValue);
-  }
-
-  /**
    * Called by setValue if the text input is not valid. If the field is
    * currently being edited it reverts value of the field to the previous
    * value while allowing the display text to be handled by the htmlInput_.
@@ -207,7 +190,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
-  protected override doValueUpdate_(newValue: AnyDuringMigration) {
+  protected override doValueUpdate_(newValue: string|T) {
     this.isDirty_ = true;
     this.isTextValid_ = true;
     this.value_ = newValue;
@@ -380,7 +363,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
     div!.appendChild(htmlInput);
 
     htmlInput.value = htmlInput.defaultValue = this.getEditorText_(this.value_);
-    htmlInput.setAttribute('data-untyped-default-value', this.value_);
+    htmlInput.setAttribute('data-untyped-default-value', String(this.value_));
 
     this.resizeEditor_();
 
@@ -457,29 +440,19 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
    *
    * @param e Keyboard event.
    */
-  protected onHtmlInputKeyDown_(e: Event) {
-    // AnyDuringMigration because:  Property 'keyCode' does not exist on type
-    // 'Event'.
-    if ((e as AnyDuringMigration).keyCode === KeyCodes.ENTER) {
+  protected onHtmlInputKeyDown_(e: KeyboardEvent) {
+    if (e.keyCode === KeyCodes.ENTER) {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-      // AnyDuringMigration because:  Property 'keyCode' does not exist on type
-      // 'Event'.
-    } else if ((e as AnyDuringMigration).keyCode === KeyCodes.ESC) {
+    } else if (e.keyCode === KeyCodes.ESC) {
       this.setValue(
           this.htmlInput_!.getAttribute('data-untyped-default-value'));
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-      // AnyDuringMigration because:  Property 'keyCode' does not exist on type
-      // 'Event'.
-    } else if ((e as AnyDuringMigration).keyCode === KeyCodes.TAB) {
+    } else if (e.keyCode === KeyCodes.TAB) {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-      // AnyDuringMigration because:  Property 'shiftKey' does not exist on type
-      // 'Event'. AnyDuringMigration because:  Argument of type 'this' is not
-      // assignable to parameter of type 'Field'.
-      (this.sourceBlock_ as BlockSvg)
-          .tab(this as AnyDuringMigration, !(e as AnyDuringMigration).shiftKey);
+      (this.sourceBlock_ as BlockSvg).tab(this, !e.shiftKey);
       e.preventDefault();
     }
   }

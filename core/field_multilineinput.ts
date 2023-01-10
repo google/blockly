@@ -70,9 +70,7 @@ export class FieldMultilineInput extends FieldTextInput {
       opt_config?: FieldMultilineInputConfig) {
     super(Field.SKIP_SETUP);
 
-    if (opt_value === Field.SKIP_SETUP) {
-      return;
-    }
+    if (Field.isSentinel(opt_value)) return;
     if (opt_config) {
       this.configure_(opt_config);
     }
@@ -210,9 +208,11 @@ export class FieldMultilineInput extends FieldTextInput {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
-  protected override doValueUpdate_(newValue: AnyDuringMigration) {
+  protected override doValueUpdate_(newValue: string) {
     super.doValueUpdate_(newValue);
-    this.isOverflowedY_ = this.value_.split('\n').length > this.maxLines_;
+    if (this.value_ !== null) {
+      this.isOverflowedY_ = this.value_.split('\n').length > this.maxLines_;
+    }
   }
 
   /** Updates the text of the textElement. */
@@ -300,7 +300,7 @@ export class FieldMultilineInput extends FieldTextInput {
       // absolute longest line, even if it would be truncated after editing.
       // Otherwise we would get wrong editor width when there are more
       // lines than this.maxLines_.
-      const actualEditorLines = this.value_.split('\n');
+      const actualEditorLines = String(this.value_).split('\n');
       const dummyTextElement = dom.createSvgElement(
           Svg.TEXT, {'class': 'blocklyText blocklyMultilineText'});
 
@@ -385,7 +385,7 @@ export class FieldMultilineInput extends FieldTextInput {
     div!.appendChild(htmlInput);
 
     htmlInput.value = htmlInput.defaultValue = this.getEditorText_(this.value_);
-    htmlInput.setAttribute('data-untyped-default-value', this.value_);
+    htmlInput.setAttribute('data-untyped-default-value', String(this.value_));
     htmlInput.setAttribute('data-old-value', '');
     if (userAgent.GECKO) {
       // In FF, ensure the browser reflows before resizing to avoid issue #2777.
@@ -428,10 +428,8 @@ export class FieldMultilineInput extends FieldTextInput {
    *
    * @param e Keyboard event.
    */
-  protected override onHtmlInputKeyDown_(e: Event) {
-    // AnyDuringMigration because:  Property 'keyCode' does not exist on type
-    // 'Event'.
-    if ((e as AnyDuringMigration).keyCode !== KeyCodes.ENTER) {
+  protected override onHtmlInputKeyDown_(e: KeyboardEvent) {
+    if (e.keyCode !== KeyCodes.ENTER) {
       super.onHtmlInputKeyDown_(e);
     }
   }

@@ -1066,11 +1066,12 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns List of variable ids.
    */
   getVars(): string[] {
-    const vars = [];
+    const vars: string[] = [];
     for (let i = 0, input; input = this.inputList[i]; i++) {
       for (let j = 0, field; field = input.fieldRow[j]; j++) {
         if (field.referencesVariables()) {
-          vars.push(field.getValue());
+          // NOTE: This only applies to `FieldVariable`, a `Field<string>`
+          vars.push(field.getValue() as string);
         }
       }
     }

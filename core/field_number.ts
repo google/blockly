@@ -77,9 +77,7 @@ export class FieldNumber extends FieldInput<number> {
     // Pass SENTINEL so that we can define properties before value validation.
     super(Field.SKIP_SETUP);
 
-    if (opt_value === Field.SKIP_SETUP) {
-      return;
-    }
+    if (Field.isSentinel(opt_value)) return;
     if (opt_config) {
       this.configure_(opt_config);
     } else {
@@ -260,6 +258,7 @@ export class FieldNumber extends FieldInput<number> {
     if (opt_newValue === null) {
       return null;
     }
+
     // Clean up text.
     let newValue = String(opt_newValue);
     // TODO: Handle cases like 'ten', '1.203,14', etc.

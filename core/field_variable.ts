@@ -306,7 +306,7 @@ export class FieldVariable extends FieldDropdown {
    *
    * @returns Validation function, or null.
    */
-  override getValidator(): Function|null {
+  override getValidator(): FieldVariableValidator|null {
     // Validators shouldn't operate on the initial setValue call.
     // Normally this is achieved by calling setValidator after setValue, but
     // this is not a possibility with variable fields.
@@ -357,7 +357,7 @@ export class FieldVariable extends FieldDropdown {
    *
    * @param newId The value to be saved.
    */
-  protected override doValueUpdate_(newId: AnyDuringMigration) {
+  protected override doValueUpdate_(newId: string) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();

@@ -20,14 +20,16 @@ import {Field, FieldConfig, FieldValidator} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import type {Sentinel} from './utils/sentinel.js';
 
-export type FieldCheckboxValidator = FieldValidator<boolean>;
+type BoolString = 'TRUE'|'FALSE';
+type CheckboxBool = BoolString|boolean;
+export type FieldCheckboxValidator = FieldValidator<CheckboxBool>;
 
 /**
  * Class for a checkbox field.
  *
  * @alias Blockly.FieldCheckbox
  */
-export class FieldCheckbox extends Field<boolean> {
+export class FieldCheckbox extends Field<CheckboxBool> {
   /** Default character for the checkmark. */
   static readonly CHECK_CHAR = '✓';
   private checkChar_: string;
@@ -42,7 +44,12 @@ export class FieldCheckbox extends Field<boolean> {
    * Mouse cursor style when over the hotspot that initiates editability.
    */
   override CURSOR = 'default';
-  override value_: AnyDuringMigration;
+
+  /**
+   * NOTE: The default value is set in `Field`, so maintain that value instead
+   * of overwriting it here or in the constructor.
+   */
+  override value_: boolean|null = this.value_;
 
   /**
    * @param opt_value The initial value of the field. Should either be 'TRUE',
@@ -59,8 +66,7 @@ export class FieldCheckbox extends Field<boolean> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|boolean|Sentinel,
-      opt_validator?: FieldCheckboxValidator,
+      opt_value?: CheckboxBool|Sentinel, opt_validator?: FieldCheckboxValidator,
       opt_config?: FieldCheckboxConfig) {
     super(Field.SKIP_SETUP);
 
@@ -70,9 +76,7 @@ export class FieldCheckbox extends Field<boolean> {
      */
     this.checkChar_ = FieldCheckbox.CHECK_CHAR;
 
-    if (opt_value === Field.SKIP_SETUP) {
-      return;
-    }
+    if (Field.isSentinel(opt_value)) return;
     if (opt_config) {
       this.configure_(opt_config);
     }
@@ -153,7 +157,7 @@ export class FieldCheckbox extends Field<boolean> {
    * @returns A valid value ('TRUE' or 'FALSE), or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      string|null {
+      BoolString|null {
     if (opt_newValue === true || opt_newValue === 'TRUE') {
       return 'TRUE';
     }
@@ -169,7 +173,7 @@ export class FieldCheckbox extends Field<boolean> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a either 'TRUE' or 'FALSE'.
    */
-  protected override doValueUpdate_(newValue: AnyDuringMigration) {
+  protected override doValueUpdate_(newValue: BoolString) {
     this.value_ = this.convertValueToBool_(newValue);
     // Update visual.
     if (this.textElement_) {
@@ -182,7 +186,7 @@ export class FieldCheckbox extends Field<boolean> {
    *
    * @returns The value of this field.
    */
-  override getValue(): string {
+  override getValue(): BoolString {
     return this.value_ ? 'TRUE' : 'FALSE';
   }
 
@@ -191,8 +195,8 @@ export class FieldCheckbox extends Field<boolean> {
    *
    * @returns The boolean value of this field.
    */
-  getValueBoolean(): boolean {
-    return this.value_ as boolean;
+  getValueBoolean(): boolean|null {
+    return this.value_;
   }
 
   /**
@@ -213,12 +217,9 @@ export class FieldCheckbox extends Field<boolean> {
    * @param value The value to convert.
    * @returns The converted value.
    */
-  private convertValueToBool_(value: AnyDuringMigration): boolean {
-    if (typeof value === 'string') {
-      return value === 'TRUE';
-    } else {
-      return !!value;
-    }
+  private convertValueToBool_(value: CheckboxBool|null): boolean {
+    if (typeof value === 'string') return value === 'TRUE';
+    return !!value;
   }
 
   /**

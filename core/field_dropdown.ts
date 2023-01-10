@@ -92,7 +92,7 @@ export class FieldDropdown extends Field<string> {
    */
   override suffixField: string|null = null;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  private selectedOption_!: Array<string|ImageProperties>;
+  private selectedOption_!: MenuOption;
   override clickTarget_: SVGElement|null = null;
 
   /**
@@ -398,8 +398,7 @@ export class FieldDropdown extends Field<string> {
    * @param opt_newValue The input value.
    * @returns A valid language-neutral option, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: MenuOption[1]): string
-      |null {
+  protected override doClassValidation_(opt_newValue?: string): string|null {
     const options = this.getOptions(true);
     const isValueValid = options.some((option) => option[1] === opt_newValue);
 
@@ -421,7 +420,7 @@ export class FieldDropdown extends Field<string> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is one of the valid dropdown options.
    */
-  protected override doValueUpdate_(newValue: MenuOption[1]) {
+  protected override doValueUpdate_(newValue: string) {
     super.doValueUpdate_(newValue);
     const options = this.getOptions(true);
     for (let i = 0, option; option = options[i]; i++) {
@@ -465,7 +464,7 @@ export class FieldDropdown extends Field<string> {
     // Show correct element.
     const option = this.selectedOption_ && this.selectedOption_[0];
     if (option && typeof option === 'object') {
-      this.renderSelectedImage_((option));
+      this.renderSelectedImage_(option);
     } else {
       this.renderSelectedText_();
     }

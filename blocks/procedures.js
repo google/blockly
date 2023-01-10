@@ -36,6 +36,7 @@ const {Msg} = goog.require('Blockly.Msg');
 const {Mutator} = goog.require('Blockly.Mutator');
 const {Names} = goog.require('Blockly.Names');
 const serialization = goog.require('Blockly.serialization');
+const {triggerProceduresUpdate} = goog.require('Blockly.procedures.updateProcedures');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
@@ -112,8 +113,8 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'extensions': [
       'procedure_caller_get_def_mixin',
       'procedure_caller_update_shape_mixin',
-      'procedure_caller_onchange_mixin',
       'procedure_caller_context_menu_mixin',
+      'procedure_caller_onchange_mixin',
       'procedure_callernoreturn_get_def_block_mixin',
     ],
     'mutator': 'procedure_caller_mutator',
@@ -185,8 +186,8 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'extensions': [
       'procedure_caller_get_def_mixin',
       'procedure_caller_update_shape_mixin',
-      'procedure_caller_onchange_mixin',
       'procedure_caller_context_menu_mixin',
+      'procedure_caller_onchange_mixin',
       'procedure_callerreturn_get_def_block_mixin',
     ],
     'mutator': 'procedure_caller_mutator',
@@ -291,7 +292,8 @@ const procedureDefGetDefMixin = function() {
      * @this {Block}
      */
     getVars: function() {
-      return this.arguments_;
+      return this.getProcedureModel().getParameters().map(
+          (p) => p.getVariableModel().name);
     },
 
     /**
@@ -300,7 +302,8 @@ const procedureDefGetDefMixin = function() {
      * @this {Block}
      */
     getVarModels: function() {
-      return this.argumentVarModels_;
+      return this.getProcedureModel().getParameters().map(
+          (p) => p.getVariableModel());
     },
 
     /**
@@ -338,26 +341,18 @@ const procedureDefVarMixin = function() {
      * @this {Block}
      */
     renameVarById: function(oldId, newId) {
-      const oldVariable = this.workspace.getVariableById(oldId);
-      if (oldVariable.type !== '') {
-        // Procedure arguments always have the empty type.
-        return;
-      }
-      const oldName = oldVariable.name;
+      const oldVar = this.workspace.getVariableById(oldId);
+      const model = this.getProcedureModel();
+      const index = model.getParameters().findIndex(
+          (p) => p.getVariableModel() === oldVar);
+      if (index === -1) return;  // Not found.
       const newVar = this.workspace.getVariableById(newId);
-
-      let change = false;
-      for (let i = 0; i < this.argumentVarModels_.length; i++) {
-        if (this.argumentVarModels_[i].getId() === oldId) {
-          this.arguments_[i] = newVar.name;
-          this.argumentVarModels_[i] = newVar;
-          change = true;
-        }
-      }
-      if (change) {
-        this.displayRenamedVar_(oldName, newVar.name);
-        Procedures.mutateCallers(this);
-      }
+      const oldParam = model.getParameter(index);
+      model.deleteParameter(index);
+      model.insertParameter(
+          new ObservableParameterModel(
+              this.workspace, newVar.name, oldParam.getId()),
+          index);
     },
 
     /**
@@ -369,19 +364,10 @@ const procedureDefVarMixin = function() {
      * @this {Block}
      */
     updateVarName: function(variable) {
-      const newName = variable.name;
-      let change = false;
-      let oldName;
-      for (let i = 0; i < this.argumentVarModels_.length; i++) {
-        if (this.argumentVarModels_[i].getId() === variable.getId()) {
-          oldName = this.arguments_[i];
-          this.arguments_[i] = newName;
-          change = true;
-        }
-      }
-      if (change) {
-        this.displayRenamedVar_(oldName, newName);
-        Procedures.mutateCallers(this);
+      const containsVar = this.getProcedureModel().getParameters().some(
+          (p) => p.getVariableModel() === variable);
+      if (containsVar) {
+        triggerProceduresUpdate(this.workspace);
       }
     },
   };
@@ -400,6 +386,7 @@ const procedureDefUpdateShapeMixin = {
     this.setFieldValue(this.getProcedureModel().getName(), 'NAME');
     this.setEnabled(this.getProcedureModel().getEnabled());
     this.updateParameters_();
+    this.updateMutator_();
   },
 
   /**
@@ -419,6 +406,23 @@ const procedureDefUpdateShapeMixin = {
       this.setFieldValue(paramString, 'PARAMS');
     } finally {
       Events.enable();
+    }
+  },
+
+  /**
+   * Updates the parameter blocks in the mutator (if it is open) to reflect
+   * the state of the procedure model.
+   */
+  updateMutator_: function() {
+    if (!this.mutator?.isVisible()) return;
+
+    const mutatorWorkspace = this.mutator.getWorkspace();
+    for (const p of this.getProcedureModel().getParameters()) {
+      const block = mutatorWorkspace.getBlockById(p.getId());
+      if (!block) continue;  // Should not happen.
+      if (block.getFieldValue('NAME') !== p.getName()) {
+        block.setFieldValue(p.getName(), 'NAME');
+      }
     }
   },
 
@@ -453,49 +457,6 @@ const procedureDefUpdateShapeMixin = {
     }
     this.hasStatements_ = hasStatements;
   },
-
-  /**
-   * Update the display of parameters for this procedure definition block.
-   * @private
-   * @this {Block}
-   */
-  updateParams_: function() {
-    // Merge the arguments into a human-readable list.
-    let paramString = '';
-    if (this.arguments_.length) {
-      paramString =
-          Msg['PROCEDURES_BEFORE_PARAMS'] + ' ' + this.arguments_.join(', ');
-    }
-    // The params field is deterministic based on the mutation,
-    // no need to fire a change event.
-    Events.disable();
-    try {
-      this.setFieldValue(paramString, 'PARAMS');
-    } finally {
-      Events.enable();
-    }
-  },
-
-  /**
-   * Update the display to reflect a newly renamed argument.
-   * @param {string} oldName The old display name of the argument.
-   * @param {string} newName The new display name of the argument.
-   * @private
-   * @this {Block}
-   */
-  displayRenamedVar_: function(oldName, newName) {
-    this.updateParams_();
-    // Update the mutator's variables if the mutator is open.
-    if (this.mutator && this.mutator.isVisible()) {
-      const blocks = this.mutator.workspace_.getAllBlocks(false);
-      for (let i = 0, block; (block = blocks[i]); i++) {
-        if (block.type === 'procedures_mutatorarg' &&
-            Names.equals(oldName, block.getFieldValue('NAME'))) {
-          block.setFieldValue(newName, 'NAME');
-        }
-      }
-    }
-  },
 };
 Extensions.registerMixin(
     'procedure_def_update_shape_mixin', procedureDefUpdateShapeMixin);
@@ -510,10 +471,6 @@ Extensions.register(
     'procedure_def_validator_helper', procedureDefValidatorHelper);
 
 const procedureDefMutator = {
-  arguments_: [],
-
-  argumentVarModels_: [],
-
   hasStatements_: true,
 
   /**
@@ -536,8 +493,8 @@ const procedureDefMutator = {
       const varModel = params[i].getVariableModel();
       parameter.setAttribute('name', varModel.name);
       parameter.setAttribute('varid', varModel.getId());
-      if (opt_paramIds && this.paramIds_) {
-        parameter.setAttribute('paramId', this.paramIds_[i]);
+      if (opt_paramIds) {
+        parameter.setAttribute('paramId', params[i].getId());
       }
       container.appendChild(parameter);
     }
@@ -565,31 +522,10 @@ const procedureDefMutator = {
               this.workspace, node.getAttribute('name'), undefined, varId),
           i);
     }
-
-    // TODO: Remove this data update code.
-    this.arguments_ = [];
-    this.argumentVarModels_ = [];
-    for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
-      if (childNode.nodeName.toLowerCase() === 'arg') {
-        const varName = childNode.getAttribute('name');
-        const varId =
-            childNode.getAttribute('varid') || childNode.getAttribute('varId');
-        this.arguments_.push(varName);
-        const variable = Variables.getOrCreateVariablePackage(
-            this.workspace, varId, varName, '');
-        if (variable !== null) {
-          this.argumentVarModels_.push(variable);
-        } else {
-          console.log(
-              `Failed to create a variable named "${varName}", ignoring.`);
-        }
-      }
-    }
-    this.updateParams_();
-    Procedures.mutateCallers(this);
-
-    // Show or hide the statement input.
     this.setStatements_(xmlElement.getAttribute('statements') !== 'false');
+
+    // Call mutate callers for backwards compatibility.
+    Procedures.mutateCallers(this);
   },
 
   /**
@@ -646,21 +582,10 @@ const procedureDefMutator = {
       }
     }
 
-    // TODO: Remove this data update code.
-    this.arguments_ = [];
-    this.argumentVarModels_ = [];
-    if (state['params']) {
-      for (let i = 0; i < state['params'].length; i++) {
-        const param = state['params'][i];
-        const variable = Variables.getOrCreateVariablePackage(
-            this.workspace, param['id'], param['name'], '');
-        this.arguments_.push(variable.name);
-        this.argumentVarModels_.push(variable);
-      }
-    }
-    this.updateParams_();
-    Procedures.mutateCallers(this);
     this.setStatements_(state['hasStatements'] === false ? false : true);
+
+    // Call mutate callers for backwards compatibility.
+    Procedures.mutateCallers(this);
   },
 
   /**
@@ -711,35 +636,15 @@ const procedureDefMutator = {
    * @this {Block}
    */
   compose: function(containerBlock) {
-    // Parameter list.
-    this.arguments_ = [];
-    this.paramIds_ = [];
-    this.argumentVarModels_ = [];
-
-    // TODO: Remove old data handling logic?
-    let paramBlock = containerBlock.getInputTargetBlock('STACK');
-    while (paramBlock && !paramBlock.isInsertionMarker()) {
-      const varName = paramBlock.getFieldValue('NAME');
-      this.arguments_.push(varName);
-      const variable = Variables.getOrCreateVariablePackage(
-          this.workspace, null, varName, '');
-      this.argumentVarModels_.push(variable);
-
-      this.paramIds_.push(paramBlock.id);
-      paramBlock =
-          paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
-    }
-    this.updateParams_();
-    Procedures.mutateCallers(this);
-
     const model = this.getProcedureModel();
     const count = model.getParameters().length;
+    model.startBulkUpdate();
     for (let i = count - 1; i >= 0; i--) {
       model.deleteParameter(i);
     }
 
     let i = 0;
-    paramBlock = containerBlock.getInputTargetBlock('STACK');
+    let paramBlock = containerBlock.getInputTargetBlock('STACK');
     while (paramBlock && !paramBlock.isInsertionMarker()) {
       model.insertParameter(
           new ObservableParameterModel(
@@ -749,11 +654,15 @@ const procedureDefMutator = {
           paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
       i++;
     }
+    model.endBulkUpdate();
 
     const hasStatements = containerBlock.getFieldValue('STATEMENTS');
     if (hasStatements !== null) {
       this.setStatements_(hasStatements === 'TRUE');
     }
+
+    // Call mutate callers for backwards compatibility.
+    Procedures.mutateCallers(this);
   },
 };
 Extensions.registerMutator(
@@ -776,9 +685,10 @@ const procedureDefContextMenuMixin = {
     option.text = Msg['PROCEDURES_CREATE_DO'].replace('%1', name);
     const xmlMutation = xmlUtils.createElement('mutation');
     xmlMutation.setAttribute('name', name);
-    for (let i = 0; i < this.arguments_.length; i++) {
+    const params = this.getProcedureModel().getParameters();
+    for (const param of params) {
       const xmlArg = xmlUtils.createElement('arg');
-      xmlArg.setAttribute('name', this.arguments_[i]);
+      xmlArg.setAttribute('name', param.getName());
       xmlMutation.appendChild(xmlArg);
     }
     const xmlBlock = xmlUtils.createElement('block');
@@ -788,20 +698,20 @@ const procedureDefContextMenuMixin = {
     options.push(option);
 
     // Add options to create getters for each parameter.
-    if (!this.isCollapsed()) {
-      for (let i = 0; i < this.argumentVarModels_.length; i++) {
-        const argOption = {enabled: true};
-        const argVar = this.argumentVarModels_[i];
-        argOption.text =
-            Msg['VARIABLES_SET_CREATE_GET'].replace('%1', argVar.name);
+    if (this.isCollapsed()) return;
 
-        const argXmlField = Variables.generateVariableFieldDom(argVar);
-        const argXmlBlock = xmlUtils.createElement('block');
-        argXmlBlock.setAttribute('type', 'variables_get');
-        argXmlBlock.appendChild(argXmlField);
-        argOption.callback = ContextMenu.callbackFactory(this, argXmlBlock);
-        options.push(argOption);
-      }
+    for (const param of params) {
+      const argOption = {enabled: true};
+      const argVar = param.getVariableModel();
+      argOption.text =
+          Msg['VARIABLES_SET_CREATE_GET'].replace('%1', argVar.name);
+
+      const argXmlField = Variables.generateVariableFieldDom(argVar);
+      const argXmlBlock = xmlUtils.createElement('block');
+      argXmlBlock.setAttribute('type', 'variables_get');
+      argXmlBlock.appendChild(argXmlField);
+      argOption.callback = ContextMenu.callbackFactory(this, argXmlBlock);
+      options.push(argOption);
     }
   },
 };
@@ -855,7 +765,7 @@ const procedureDefNoReturnGetCallerBlockMixin = {
    * @this {Block}
    */
   getProcedureDef: function() {
-    return [this.getFieldValue('NAME'), this.arguments_, false];
+    return [this.getFieldValue('NAME'), this.getVars(), false];
   },
 
   callType_: 'procedures_callnoreturn',
@@ -874,7 +784,7 @@ const procedureDefReturnGetCallerBlockMixin = {
    * @this {Block}
    */
   getProcedureDef: function() {
-    return [this.getFieldValue('NAME'), this.arguments_, true];
+    return [this.getFieldValue('NAME'), this.getVars(), true];
   },
 
   callType_: 'procedures_callreturn',
@@ -1031,6 +941,10 @@ const procedureCallerGetDefMixin = function() {
           (proc) => proc.getName() === name);
       if (!model) return null;
 
+      const returnTypes = model.getReturnTypes();
+      const hasMatchingReturn = this.hasReturn_ ? returnTypes : !returnTypes;
+      if (!hasMatchingReturn) return null;
+
       const hasMatchingParams =
           model.getParameters().every((p, i) => p.getName() === params[i]);
       if (!hasMatchingParams) return null;
@@ -1049,6 +963,7 @@ const procedureCallerGetDefMixin = function() {
     createDef_(name, params = []) {
       const xy = this.getRelativeToSurfaceXY();
       const newName = Procedures.findLegalName(name, this);
+      this.renameProcedure(name, newName);
 
       const blockDef = {
         'type': this.defType_,
@@ -1060,7 +975,7 @@ const procedureCallerGetDefMixin = function() {
         'fields': {'NAME': newName},
       };
       return serialization.blocks.append(blockDef, this.getTargetWorkspace_())
-          .getProcedureModel();
+              .getProcedureModel();
     },
 
     /**
@@ -1111,14 +1026,6 @@ Extensions.register(
     'procedure_caller_get_def_mixin', procedureCallerGetDefMixin);
 
 const procedureCallerMutator = {
-  arguments_: [],
-
-  argumentVarModels_: [],
-
-  quarkConnections_: {},
-
-  quarkIds_: null,
-
   previousEnabledState_: true,
 
   paramsFromSerializedState_: [],
@@ -1131,11 +1038,14 @@ const procedureCallerMutator = {
    */
   mutationToDom: function() {
     const container = xmlUtils.createElement('mutation');
-    container.setAttribute('name', this.getProcedureCall());
-    for (let i = 0; i < this.arguments_.length; i++) {
-      const parameter = xmlUtils.createElement('arg');
-      parameter.setAttribute('name', this.arguments_[i]);
-      container.appendChild(parameter);
+    const model = this.getProcedureModel();
+    if (!model) return container;
+
+    container.setAttribute('name', model.getName());
+    for (const param of model.getParameters()) {
+      const arg = xmlUtils.createElement('arg');
+      arg.setAttribute('name', param.getName());
+      container.appendChild(arg);
     }
     return container;
   },
@@ -1164,9 +1074,11 @@ const procedureCallerMutator = {
    */
   saveExtraState: function() {
     const state = Object.create(null);
-    state['name'] = this.getProcedureCall();
-    if (this.arguments_.length) {
-      state['params'] = this.arguments_;
+    const model = this.getProcedureModel();
+    if (!model) return state;
+    state['name'] = model.getName();
+    if (model.getParameters().length) {
+      state['params'] = model.getParameters().map((p) => p.getName());
     }
     return state;
   },
@@ -1191,14 +1103,10 @@ const procedureCallerMutator = {
     if (this.getProcedureModel()) {
       this.initBlockWithProcedureModel_();
     } else {
-      // We need to create/find our procedure def in our change listener.
-      this.paramsFromSerializedState_ = params;
       // Create inputs based on the mutation so that children can be connected.
       this.createArgInputs_(params);
     }
-
-    // Temporarily maintained for logic that relies on arguments_
-    this.arguments_ = params;
+    this.paramsFromSerializedState_ = params;
   },
 };
 Extensions.registerMutator('procedure_caller_mutator', procedureCallerMutator);
@@ -1225,10 +1133,6 @@ const procedureCallerUpdateShapeMixin = {
     this.updateName_();
     this.updateEnabled_();
     this.updateParameters_();
-
-    // Temporarily maintained for code that relies on arguments_
-    this.arguments_ =
-        this.getProcedureModel().getParameters().map((p) => p.getName());
   },
 
   /**
@@ -1351,148 +1255,6 @@ const procedureCallerUpdateShapeMixin = {
       this.setTooltip(baseMsg.replace('%1', newName));
     }
   },
-
-  /**
-   * Notification that the procedure's parameters have changed.
-   * @param {!Array<string>} paramNames New param names, e.g. ['x', 'y', 'z'].
-   * @param {!Array<string>} paramIds IDs of params (consistent for each
-   *     parameter through the life of a mutator, regardless of param renaming),
-   *     e.g. ['piua', 'f8b_', 'oi.o'].
-   * @private
-   * @this {Block}
-   */
-  setProcedureParameters_: function(paramNames, paramIds) {
-    // Data structures:
-    // this.arguments = ['x', 'y']
-    //     Existing param names.
-    // this.quarkConnections_ {piua: null, f8b_: Connection}
-    //     Look-up of paramIds to connections plugged into the call block.
-    // this.quarkIds_ = ['piua', 'f8b_']
-    //     Existing param IDs.
-    // Note that quarkConnections_ may include IDs that no longer exist, but
-    // which might reappear if a param is reattached in the mutator.
-    const defBlock =
-        Procedures.getDefinition(this.getProcedureCall(), this.workspace);
-    const mutatorOpen =
-        defBlock && defBlock.mutator && defBlock.mutator.isVisible();
-    if (!mutatorOpen) {
-      this.quarkConnections_ = {};
-      this.quarkIds_ = null;
-    } else {
-      // fix #6091 - this call could cause an error when outside if-else
-      // expanding block while mutating prevents another error (ancient fix)
-      this.setCollapsed(false);
-    }
-    // Test arguments (arrays of strings) for changes. '\n' is not a valid
-    // argument name character, so it is a valid delimiter here.
-    if (paramNames.join('\n') === this.arguments_.join('\n')) {
-      // No change.
-      this.quarkIds_ = paramIds;
-      return;
-    }
-    if (paramIds.length !== paramNames.length) {
-      throw RangeError('paramNames and paramIds must be the same length.');
-    }
-    if (!this.quarkIds_) {
-      // Initialize tracking for this block.
-      this.quarkConnections_ = {};
-      this.quarkIds_ = [];
-    }
-    // Switch off rendering while the block is rebuilt.
-    const savedRendered = this.rendered;
-    this.rendered = false;
-    // Update the quarkConnections_ with existing connections.
-    for (let i = 0; i < this.arguments_.length; i++) {
-      const input = this.getInput('ARG' + i);
-      if (input) {
-        const connection = input.connection.targetConnection;
-        this.quarkConnections_[this.quarkIds_[i]] = connection;
-        if (mutatorOpen && connection &&
-            paramIds.indexOf(this.quarkIds_[i]) === -1) {
-          // This connection should no longer be attached to this block.
-          connection.disconnect();
-          connection.getSourceBlock().bumpNeighbours();
-        }
-      }
-    }
-    // Rebuild the block's arguments.
-    this.arguments_ = [].concat(paramNames);
-    // And rebuild the argument model list.
-    this.argumentVarModels_ = [];
-    for (let i = 0; i < this.arguments_.length; i++) {
-      const variable = Variables.getOrCreateVariablePackage(
-          this.workspace, null, this.arguments_[i], '');
-      this.argumentVarModels_.push(variable);
-    }
-
-    this.updateShape_();
-    this.quarkIds_ = paramIds;
-    // Reconnect any child blocks.
-    if (this.quarkIds_) {
-      for (let i = 0; i < this.arguments_.length; i++) {
-        const quarkId = this.quarkIds_[i];
-        if (quarkId in this.quarkConnections_) {
-          const connection = this.quarkConnections_[quarkId];
-          if (!Mutator.reconnect(connection, this, 'ARG' + i)) {
-            // Block no longer exists or has been attached elsewhere.
-            delete this.quarkConnections_[quarkId];
-          }
-        }
-      }
-    }
-    // Restore rendering and show the changes.
-    this.rendered = savedRendered;
-    if (this.rendered) {
-      this.render();
-    }
-  },
-
-  /**
-   * Modify this block to have the correct number of arguments.
-   * @private
-   * @this {Block}
-   */
-  updateShape_: function() {
-    for (let i = 0; i < this.arguments_.length; i++) {
-      const argField = this.getField('ARGNAME' + i);
-      if (argField) {
-        // Ensure argument name is up to date.
-        // The argument name field is deterministic based on the mutation,
-        // no need to fire a change event.
-        Events.disable();
-        try {
-          argField.setValue(this.arguments_[i]);
-        } finally {
-          Events.enable();
-        }
-      } else {
-        // Add new input.
-        const newField = new FieldLabel(this.arguments_[i]);
-        const input = this.appendValueInput('ARG' + i)
-                          .setAlign(Align.RIGHT)
-                          .appendField(newField, 'ARGNAME' + i);
-        input.init();
-      }
-    }
-    // Remove deleted inputs.
-    for (let i = this.arguments_.length; this.getInput('ARG' + i); i++) {
-      this.removeInput('ARG' + i);
-    }
-    // Add 'with:' if there are parameters, remove otherwise.
-    const topRow = this.getInput('TOPROW');
-    if (topRow) {
-      if (this.arguments_.length) {
-        if (!this.getField('WITH')) {
-          topRow.appendField(Msg['PROCEDURES_CALL_BEFORE_PARAMS'], 'WITH');
-          topRow.init();
-        }
-      } else {
-        if (this.getField('WITH')) {
-          topRow.removeField('WITH');
-        }
-      }
-    }
-  },
 };
 Extensions.registerMixin(
     'procedure_caller_update_shape_mixin', procedureCallerUpdateShapeMixin);
@@ -1535,23 +1297,13 @@ const procedureCallerOnChangeMixin = {
             this.getFieldValue('NAME'), this.paramsFromSerializedState_);
       }
       this.initBlockWithProcedureModel_();
-    } else if (event.type === Events.BLOCK_DELETE && event.blockId != this.id) {
-      // Look for the case where a procedure definition has been deleted,
-      // leaving this block (a procedure call) orphaned.  In this case, delete
-      // the orphan.
-      const name = this.getProcedureCall();
-      const def = Procedures.getDefinition(name, this.workspace);
-      if (!def) {
-        Events.setGroup(event.group);
-        this.dispose(true);
-        Events.setGroup(false);
-      }
     }
   },
 
   defMatches_(defBlock) {
     return defBlock && defBlock.type === this.defType_ &&
-        JSON.stringify(defBlock.getVars()) === JSON.stringify(this.arguments_);
+        JSON.stringify(defBlock.getVars()) ===
+        JSON.stringify(this.paramsFromSerializedState_);
   },
 };
 Extensions.registerMixin(
@@ -1588,6 +1340,7 @@ Extensions.registerMixin(
     'procedure_caller_context_menu_mixin', procedureCallerContextMenuMixin);
 
 const procedureCallerNoReturnGetDefBlockMixin = {
+  hasReturn_: false,
   defType_: 'procedures_defnoreturn',
 };
 Extensions.registerMixin(
@@ -1595,6 +1348,7 @@ Extensions.registerMixin(
     procedureCallerNoReturnGetDefBlockMixin);
 
 const procedureCallerReturnGetDefBlockMixin = {
+  hasReturn_: true,
   defType_: 'procedures_defreturn',
 };
 Extensions.registerMixin(

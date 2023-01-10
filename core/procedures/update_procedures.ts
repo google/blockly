@@ -4,8 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as goog from '../../closure/goog/goog.js';
 import {isProcedureBlock} from '../interfaces/i_procedure_block.js';
 import {Workspace} from '../workspace.js';
+
+goog.declareModuleId('Blockly.procedures.updateProcedures');
 
 
 /**

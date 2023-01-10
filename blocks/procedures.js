@@ -286,6 +286,11 @@ const procedureDefGetDefMixin = function() {
       return this.model_;
     },
 
+    /**
+     * True if this is a procedure definition block, false otherwise (i.e.
+     * it is a caller).
+     * @return {boolean} True because this is a procedure definition block.
+     */
     isProcedureDef() {
       return true;
     },
@@ -1001,6 +1006,11 @@ const procedureCallerGetDefMixin = function() {
       return /** @type {string} */ (this.getFieldValue('NAME'));
     },
 
+    /**
+     * True if this is a procedure definition block, false otherwise (i.e.
+     * it is a caller).
+     * @return {boolean} False because this is not a procedure definition block.
+     */
     isProcedureDef() {
       return false;
     },

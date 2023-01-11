@@ -962,33 +962,6 @@ const procedureCallerGetDefMixin = function() {
     },
 
     /**
-     * Creates a procedure definition block with the given name and params,
-     * and returns the procedure model associated with it.
-     * @param {string} name The name of the procedure to create.
-     * @param {string[]} params The names of the parameters to create.
-     * @return {IProcedureModel} The procedure model associated with the new
-     *     procedure definition block.
-     */
-    createDef_(name, params = []) {
-      const xy = this.getRelativeToSurfaceXY();
-      const newName = Procedures.findLegalName(name, this);
-      this.renameProcedure(name, newName);
-  
-      const blockDef = {
-        'type': this.defType_,
-        'x': xy.x + config.snapRadius * (this.RTL ? -1 : 1),
-        'y': xy.y + config.snapRadius * 2,
-        'extraState': {
-          'params': params.map((p) => ({'name': p})),
-        },
-        'fields': {'NAME': newName},
-      };
-      return serialization.blocks
-          .append(blockDef, this.getTargetWorkspace_(), {recordUndo: true})
-          .getProcedureModel();
-    },
-
-    /**
      * @return {Workspace} The main workspace (i.e. not the flyout workspace)
      *     associated with this block.
      */
@@ -1328,6 +1301,33 @@ const procedureCallerOnChangeMixin = {
     return defBlock && defBlock.type === this.defType_ &&
         JSON.stringify(defBlock.getVars()) ===
         JSON.stringify(this.paramsFromSerializedState_);
+  },
+
+  /**
+   * Creates a procedure definition block with the given name and params,
+   * and returns the procedure model associated with it.
+   * @param {string} name The name of the procedure to create.
+   * @param {string[]} params The names of the parameters to create.
+   * @return {IProcedureModel} The procedure model associated with the new
+   *     procedure definition block.
+   */
+  createDef_(name, params = []) {
+    const xy = this.getRelativeToSurfaceXY();
+    const newName = Procedures.findLegalName(name, this);
+    this.renameProcedure(name, newName);
+
+    const blockDef = {
+      'type': this.defType_,
+      'x': xy.x + config.snapRadius * (this.RTL ? -1 : 1),
+      'y': xy.y + config.snapRadius * 2,
+      'extraState': {
+        'params': params.map((p) => ({'name': p})),
+      },
+      'fields': {'NAME': newName},
+    };
+    return serialization.blocks
+        .append(blockDef, this.getTargetWorkspace_(), {recordUndo: true})
+        .getProcedureModel();
   },
 };
 Extensions.registerMixin(

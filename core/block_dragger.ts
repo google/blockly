@@ -223,15 +223,9 @@ export class BlockDragger implements IBlockDragger {
     const preventMove =
       !!this.dragTarget_ &&
       this.dragTarget_.shouldPreventMove(this.draggingBlock_);
-    let newLoc: Coordinate;
     let delta: Coordinate | null = null;
-    if (preventMove) {
-      newLoc = this.startXY_;
-    } else {
-      const newValues = this.getNewLocationAfterDrag_(currentDragDeltaXY);
-      delta = newValues.delta;
-      newLoc = newValues.newLocation;
-    }
+    const newValues = this.getNewLocationAfterDrag_(currentDragDeltaXY);
+    delta = newValues.delta;
 
     if (this.dragTarget_) {
       this.dragTarget_.onDrop(this.draggingBlock_);

@@ -94,7 +94,7 @@ export class BlockDragger implements IBlockDragger {
   }
 
   /**
-   * Start dragging a block.  This includes moving it to the drag surface.
+   * Start dragging a block.
    *
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at mouse down, in pixel units.

@@ -20,9 +20,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Class for a workspace dragger.  It moves the workspace around when it is
  * being dragged by a mouse or touch.
- * Note that the workspace itself manages whether or not it has a drag surface
- * and how to do translations based on that.  This simply passes the right
- * commands based on events.
  *
  * @alias Blockly.WorkspaceDragger
  */

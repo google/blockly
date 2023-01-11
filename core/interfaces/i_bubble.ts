@@ -55,8 +55,7 @@ export interface IBubble extends IDraggable, IContextMenu {
   setDragging(dragging: boolean): void;
 
   /**
-   * Move this bubble during a drag, taking into account whether or not there is
-   * a drag surface.
+   * Move this bubble during a drag.
    *
    * @param newLoc The location to translate to, in workspace coordinates.
    */

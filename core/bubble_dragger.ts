@@ -51,7 +51,7 @@ export class BubbleDragger {
   }
 
   /**
-   * Start dragging a bubble.  This includes moving it to the drag surface.
+   * Start dragging a bubble.
    *
    * @internal
    */

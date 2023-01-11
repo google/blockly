@@ -67,7 +67,6 @@ export class WorkspaceDragger {
     if (common.getSelected()) {
       common.getSelected()!.unselect();
     }
-    this.workspace.setupDragSurface();
   }
 
   /**
@@ -80,7 +79,6 @@ export class WorkspaceDragger {
   endDrag(currentDragDeltaXY: Coordinate) {
     // Make sure everything is up to date.
     this.drag(currentDragDeltaXY);
-    this.workspace.resetDragSurface();
   }
 
   /**

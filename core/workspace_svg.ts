@@ -74,7 +74,6 @@ import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {WorkspaceComment} from './workspace_comment.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
-import type {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
 import {ContextMenuOption} from './contextmenu_registry.js';
@@ -224,23 +223,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   currentGesture_: Gesture|null = null;
 
-  /** This workspace's drag surface, if it exists. */
-  private readonly workspaceDragSurface: WorkspaceDragSurfaceSvg|null = null;
-
-  /**
-   * Whether to move workspace to the drag surface when it is dragged.
-   * True if it should move, false if it should be translated directly.
-   */
-  private readonly useWorkspaceDragSurface;
-
-  /**
-   * Whether the drag surface is actively in use. When true, calls to
-   * translate will translate the drag surface instead of the translating the
-   * workspace directly.
-   * This is set to true in setupDragSurface and to false in resetDragSurface.
-   */
-  private isDragSurfaceActive = false;
-
   /**
    * The first parent div with 'injectionDiv' in the name, or null if not set.
    * Access this with getInjectionDiv.
@@ -334,9 +316,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * @param options Dictionary of options.
-   * @param opt_wsDragSurface Drag surface for the workspace.
    */
-  constructor(options: Options, opt_wsDragSurface?: WorkspaceDragSurfaceSvg) {
+  constructor(options: Options) {
     super(options);
 
     const MetricsManagerClass = registry.getClassFromOptions(
@@ -355,12 +336,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     this.componentManager = new ComponentManager();
 
     this.connectionDBList = ConnectionDB.init(this.connectionChecker);
-
-    if (opt_wsDragSurface) {
-      this.workspaceDragSurface = opt_wsDragSurface;
-    }
-
-    this.useWorkspaceDragSurface = !!this.workspaceDragSurface;
 
     /**
      * Object in charge of loading, storing, and playing audio for a workspace.
@@ -1141,79 +1116,16 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     the Blockly div.
    */
   translate(x: number, y: number) {
-    if (this.useWorkspaceDragSurface && this.isDragSurfaceActive) {
-      this.workspaceDragSurface?.translateSurface(x, y);
-    } else {
-      const translation = 'translate(' + x + ',' + y + ') ' +
-          'scale(' + this.scale + ')';
-      this.svgBlockCanvas_.setAttribute('transform', translation);
-      this.svgBubbleCanvas_.setAttribute('transform', translation);
-    }
+    const translation = 'translate(' + x + ',' + y + ') ' +
+        'scale(' + this.scale + ')';
+    this.svgBlockCanvas_.setAttribute('transform', translation);
+    this.svgBubbleCanvas_.setAttribute('transform', translation);
     // And update the grid if we're using one.
     if (this.grid) {
       this.grid.moveTo(x, y);
     }
 
     this.maybeFireViewportChangeEvent();
-  }
-
-  /**
-   * Called at the end of a workspace drag to take the contents
-   * out of the drag surface and put them back into the workspace SVG.
-   * Does nothing if the workspace drag surface is not enabled.
-   *
-   * @internal
-   */
-  resetDragSurface() {
-    // Don't do anything if we aren't using a drag surface.
-    if (!this.useWorkspaceDragSurface) {
-      return;
-    }
-
-    this.isDragSurfaceActive = false;
-
-    const trans = this.workspaceDragSurface!.getSurfaceTranslation();
-    this.workspaceDragSurface!.clearAndHide(this.svgGroup_);
-    const translation = 'translate(' + trans.x + ',' + trans.y + ') ' +
-        'scale(' + this.scale + ')';
-    this.svgBlockCanvas_.setAttribute('transform', translation);
-    this.svgBubbleCanvas_.setAttribute('transform', translation);
-  }
-
-  /**
-   * Called at the beginning of a workspace drag to move contents of
-   * the workspace to the drag surface.
-   * Does nothing if the drag surface is not enabled.
-   *
-   * @internal
-   */
-  setupDragSurface() {
-    // Don't do anything if we aren't using a drag surface.
-    if (!this.useWorkspaceDragSurface) {
-      return;
-    }
-
-    // This can happen if the user starts a drag, mouses up outside of the
-    // document where the mouseup listener is registered (e.g. outside of an
-    // iframe) and then moves the mouse back in the workspace.  On mobile and
-    // ff, we get the mouseup outside the frame. On chrome and safari desktop we
-    // do not.
-    if (this.isDragSurfaceActive) {
-      return;
-    }
-
-    this.isDragSurfaceActive = true;
-
-    // Figure out where we want to put the canvas back.  The order
-    // in the is important because things are layered.
-    const previousElement = this.svgBlockCanvas_.previousSibling as Element;
-    const width = parseInt(this.getParentSvg().getAttribute('width') ?? '0');
-    const height = parseInt(this.getParentSvg().getAttribute('height') ?? '0');
-    const coord = svgMath.getRelativeXY(this.getCanvas());
-    this.workspaceDragSurface!.setContentsAndShow(
-        this.getCanvas(), this.getBubbleCanvas(), previousElement, width,
-        height, this.scale);
-    this.workspaceDragSurface!.translateSurface(coord.x, coord.y);
   }
 
   /**

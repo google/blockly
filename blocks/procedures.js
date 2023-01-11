@@ -287,6 +287,15 @@ const procedureDefGetDefMixin = function() {
     },
 
     /**
+     * True if this is a procedure definition block, false otherwise (i.e.
+     * it is a caller).
+     * @return {boolean} True because this is a procedure definition block.
+     */
+    isProcedureDef() {
+      return true;
+    },
+
+    /**
      * Return all variables referenced by this block.
      * @return {!Array<string>} List of variable names.
      * @this {Block}
@@ -995,6 +1004,15 @@ const procedureCallerGetDefMixin = function() {
     getProcedureCall: function() {
       // The NAME field is guaranteed to exist, null will never be returned.
       return /** @type {string} */ (this.getFieldValue('NAME'));
+    },
+
+    /**
+     * True if this is a procedure definition block, false otherwise (i.e.
+     * it is a caller).
+     * @return {boolean} False because this is not a procedure definition block.
+     */
+    isProcedureDef() {
+      return false;
     },
 
     /**

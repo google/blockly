@@ -25,6 +25,8 @@ suite('Procedure Map', function() {
       Blockly.Blocks['procedure_mock'] = {
         init: function() { },
         doProcedureUpdate: function() { },
+        getProcedureModel: function() { },
+        isProcedureDef: function() { },
       };
 
       this.procedureBlock = this.workspace.newBlock('procedure_mock');

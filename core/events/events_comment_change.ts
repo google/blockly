@@ -22,13 +22,18 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a comment change event.
+ * Notifies the developer that the contents of a workspace comment has changed.
  *
  * @alias Blockly.Events.CommentChange
  */
 export class CommentChange extends CommentBase {
   override type = eventUtils.COMMENT_CHANGE;
+
+  /** The previous contents of the comment. */
+
   oldContents_?: string;
+
+  /** The new contents of the comment. */
   newContents_?: string;
 
   /**

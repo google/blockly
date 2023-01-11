@@ -21,12 +21,14 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a theme change event.
+ * Notifies the developer that the workspace theme has changed.
  *
  * @alias Blockly.Events.ThemeChange
  */
 export class ThemeChange extends UiBase {
+  /** The name of the new theme that has been set. */
   themeName?: string;
+
   override type = eventUtils.THEME_CHANGE;
 
   /**
@@ -36,8 +38,6 @@ export class ThemeChange extends UiBase {
    */
   constructor(opt_themeName?: string, opt_workspaceId?: string) {
     super(opt_workspaceId);
-
-    /** The theme name. */
     this.themeName = opt_themeName;
   }
 

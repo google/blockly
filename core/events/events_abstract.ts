@@ -34,7 +34,11 @@ export abstract class Abstract {
 
   /** The workspace identifier for this event. */
   workspaceId?: string = undefined;
+
+  /** An ID for the group of events this block is associated with. */
   group: string;
+
+  /** Whether this event is undoable or not. */
   recordUndo: boolean;
 
   /** Whether or not the event is a UI event. */

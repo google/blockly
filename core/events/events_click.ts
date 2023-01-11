@@ -23,12 +23,18 @@ import {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a click event.
+ * Notifies the developer that ome blockly element was clicked.
  *
  * @alias Blockly.Events.Click
  */
 export class Click extends UiBase {
+  /** The ID of the block that was clicked, if a block was clicked. */
   blockId?: string;
+
+  /**
+   * The type of element that was clicked. One of 'block', 'workspace',
+   * or 'zoom_controls'.
+   */
   targetType?: ClickTarget;
   override type = eventUtils.CLICK;
 

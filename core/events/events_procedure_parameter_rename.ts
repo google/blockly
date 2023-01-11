@@ -13,13 +13,18 @@ import {ProcedureParameterBase, ProcedureParameterBaseJson} from './events_proce
 import * as eventUtils from './utils.js';
 
 /**
- * Represents a parameter of a procedure being renamed.
+ * Notifies the developer that a procedure parameter was renamed.
  */
 export class ProcedureParameterRename extends ProcedureParameterBase {
   /** A string used to check the type of the event. */
   type = eventUtils.PROCEDURE_PARAMETER_RENAME;
+
+  /** The new name of the procedure parameter. */
   private readonly newName: string;
 
+  /**
+   * @param oldName The old name of the procedure parameter.
+   */
   constructor(
       workspace: Workspace, procedure: IProcedureModel,
       parameter: IParameterModel, public readonly oldName: string) {

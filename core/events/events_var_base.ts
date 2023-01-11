@@ -26,6 +26,7 @@ import type {Workspace} from '../workspace.js';
  */
 export class VarBase extends AbstractEvent {
   override isBlank = true;
+  /** The ID of the variable this event references. */
   varId?: string;
 
   /**

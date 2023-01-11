@@ -5,7 +5,7 @@
  */
 
 /**
- * Class for a variable rename event.
+ * Notifies the developer that a variable model was renamed.
  *
  * @class
  */
@@ -28,7 +28,11 @@ import type {Workspace} from '../workspace.js';
  */
 export class VarRename extends VarBase {
   override type = eventUtils.VAR_RENAME;
+
+  /** The previous name of the variable. */
   oldName?: string;
+
+  /** The new name of the variable. */
   newName?: string;
 
   /**

@@ -6,6 +6,7 @@
 
 /**
  * Classes for all types of variable events.
+ * Notifies the developer that a variable model has been deleted.
  *
  * @class
  */

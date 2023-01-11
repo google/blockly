@@ -20,12 +20,14 @@ import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js
 
 
 /**
- * Abstract class for a block event.
+ * Abstract class for any event related to blocks.
  *
  * @alias Blockly.Events.BlockBase
  */
 export class BlockBase extends AbstractEvent {
   override isBlank = true;
+
+  /** The ID of the block associated with this event, or null. */
   blockId?: string;
 
   /**

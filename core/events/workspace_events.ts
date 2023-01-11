@@ -19,10 +19,8 @@ import * as eventUtils from './utils.js';
 
 
 /**
- * Class for a finished loading event.
- * Used to notify the developer when the workspace has finished loading (i.e
- * domToWorkspace).
- * Finished loading events do not record undo or redo.
+ * Notifies the developer when the workspace has finished deserializing from
+ * JSON/XML.
  *
  * @alias Blockly.Events.FinishedLoading
  */

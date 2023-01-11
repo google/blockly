@@ -31,6 +31,8 @@ import type {Workspace} from '../workspace.js';
  */
 export class CommentBase extends AbstractEvent {
   override isBlank = true;
+
+  /** The ID of the comment that this event references. */
   commentId?: string;
 
   /**

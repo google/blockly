@@ -23,15 +23,20 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a comment move event.  Created before the move.
+ * Notifies the developer that a workspace comment has moved.
  *
  * @alias Blockly.Events.CommentMove
  */
 export class CommentMove extends CommentBase {
   override type = eventUtils.COMMENT_MOVE;
+
   comment_?: WorkspaceComment;
+
+  // TODO: We should probably rename these to not have underscores.
+  /** The location of the comment before the move, in workspace coordinates. */
   oldCoordinate_?: Coordinate;
-  /** The location after the move, in workspace coordinates. */
+
+  /** The location of the comment after the move, in workspace coordinates. */
   newCoordinate_?: Coordinate;
 
   /**

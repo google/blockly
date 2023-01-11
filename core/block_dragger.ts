@@ -224,8 +224,10 @@ export class BlockDragger implements IBlockDragger {
       !!this.dragTarget_ &&
       this.dragTarget_.shouldPreventMove(this.draggingBlock_);
     let delta: Coordinate | null = null;
-    const newValues = this.getNewLocationAfterDrag_(currentDragDeltaXY);
-    delta = newValues.delta;
+    if (!preventMove) {
+      const newValues = this.getNewLocationAfterDrag_(currentDragDeltaXY);
+      delta = newValues.delta;
+    }
 
     if (this.dragTarget_) {
       this.dragTarget_.onDrop(this.draggingBlock_);
@@ -450,6 +452,8 @@ function initIconData(block: BlockSvg): IconPositionData[] {
   for (let i = 0, descendant; (descendant = descendants[i]); i++) {
     const icons = descendant.getIcons();
     for (let j = 0; j < icons.length; j++) {
+      // Only bother to track icons whose bubble is visible.
+      if (!icons[j].isVisible()) continue;
       const data = {
         // Coordinate with x and y properties (workspace
         // coordinates).

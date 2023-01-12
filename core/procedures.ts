@@ -29,6 +29,7 @@ import {Names} from './names.js';
 import {ObservableProcedureMap} from './procedures/observable_procedure_map.js';
 import {ObservableProcedureModel} from './procedures/observable_procedure_model.js';
 import {ObservableParameterModel} from './procedures/observable_parameter_model.js';
+import {triggerProceduresUpdate} from './procedures/update_procedures.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
@@ -500,4 +501,5 @@ export {
   ObservableProcedureMap,
   ObservableProcedureModel,
   ObservableParameterModel,
+  triggerProceduresUpdate,
 };

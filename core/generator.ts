@@ -280,7 +280,7 @@ export class CodeGenerator {
     if (!Array.isArray(tuple)) {
       throw TypeError(
           `Expecting tuple from value block: ${targetBlock.type} See ` +
-          `developers.google.com/blockly/guides/create-custom-blocks/generating-code` +
+          `https://developers.google.com/blockly/guides/create-custom-blocks/generating-code` +
           `for more information`);
     }
     let code = tuple[0];

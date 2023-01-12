@@ -1985,7 +1985,7 @@ suite('Procedures', function() {
     });
   });
 
-  suite('extra serialization test cases', function() {
+  suite('full workspace serialization test cases', function() {
     test('definitions with parameters are properly rendered', function() {
       Blockly.serialization.workspaces.load({
         "blocks": {
@@ -2032,6 +2032,58 @@ suite('Procedures', function() {
       assertDefBlockStructure(
           this.workspace.getTopBlocks(false)[0], false, ['x'], ['varId']);
     });
+    test(
+        'multiple definitions pointing to the same model end up with ' +
+        'different models',
+        function() {
+          Blockly.serialization.workspaces.load({
+            "blocks": {
+              "languageVersion": 0,
+              "blocks": [
+                {
+                  "type": "procedures_defnoreturn",
+                  "extraState": {
+                    "procedureId": "procId",
+                  },
+                  "fields": {
+                    "NAME": "do something",
+                  },
+                },
+                {
+                  "type": "procedures_defnoreturn",
+                  "y": 10,
+                  "extraState": {
+                    "procedureId": "procId",
+                  },
+                  "fields": {
+                    "NAME": "do something",
+                  },
+                },
+              ],
+            },
+            "procedures": [
+              {
+                "id": "procId",
+                "name": "do something",
+                "returnTypes": null,
+              },
+            ],
+          }, this.workspace);
+          const def1 = this.workspace.getTopBlocks(true)[0];
+          const def2 = this.workspace.getTopBlocks(true)[1];
+          chai.assert.equal(
+              def1.getProcedureModel().getName(),
+              'do something',
+              'Expected the first procedure definition to have the name in XML');
+          chai.assert.equal(
+              def2.getProcedureModel().getName(),
+              'do something2',
+              'Expected the second procedure definition to be renamed');
+          chai.assert.notEqual(
+              def1.getProcedureModel(),
+              def2.getProcedureModel(),
+              'Expected the procedures to have different models');
+        });
   });
 
   const testSuites = [

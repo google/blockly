@@ -40,7 +40,7 @@ let firstErr;
  * @param {function} task Any Gulp task.
  * @return {Promise} Asynchronous result.
  */
-async function runTestTask(id, task) {
+function runTestTask(id, task) {
   return new Promise((resolve) => {
     console.log('=======================================');
     console.log(`== ${id}`);

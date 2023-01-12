@@ -24,7 +24,7 @@ const {runMochaTestsInBrowser} = require('../../tests/mocha/webdriver.js');
 const {runGeneratorsInBrowser} = require('../../tests/generators/webdriver.js');
 const {runCompileCheckInBrowser} = require('../../tests/compile/webdriver.js');
 
-const OUTPUT_DIR = 'temp/generators';
+const OUTPUT_DIR = 'build/generators';
 const GOLDEN_DIR = 'tests/generators/golden';
 
 const BOLD_GREEN = '\x1b[1;32m';
@@ -297,7 +297,7 @@ async function generators() {
   return runTestTask('generators', async () => {
     // Clean up.
     rimraf.sync(OUTPUT_DIR);
-    fs.mkdirSync(OUTPUT_DIR, {recursive: true});
+    fs.mkdirSync(OUTPUT_DIR);
 
     await runGeneratorsInBrowser(OUTPUT_DIR).catch(() => {});
 

@@ -591,6 +591,7 @@ const procedureDefMutator = {
       }
     }
 
+    this.doProcedureUpdate();
     this.setStatements_(state['hasStatements'] === false ? false : true);
 
     // Call mutate callers for backwards compatibility.

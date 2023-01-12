@@ -25,9 +25,7 @@ import * as deprecation from './utils/deprecation.js';
 
 /**
  * Class for an icon.
- *
- * @alias Blockly.Icon
- */
+*/
 export abstract class Icon {
   protected block_: BlockSvg|null;
   /** The icon SVG group. */

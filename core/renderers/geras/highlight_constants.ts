@@ -64,9 +64,7 @@ export interface JaggedTeeth {
  * Some highlights are simple offsets of the parent paths and can be generated
  * programmatically.  Others, especially on curves, are just made out of piles
  * of constants and are hard to tweak.
- *
- * @alias Blockly.geras.HighlightConstantProvider
- */
+*/
 export class HighlightConstantProvider {
   constantProvider: ConstantProvider;
 

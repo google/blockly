@@ -17,9 +17,7 @@ goog.declareModuleId('Blockly.IConnectionChecker');
 
 /**
  * Class for connection type checking logic.
- *
- * @alias Blockly.IConnectionChecker
- */
+*/
 export interface IConnectionChecker {
   /**
    * Check whether the current connection can connect with the target

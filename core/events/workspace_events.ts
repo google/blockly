@@ -23,9 +23,7 @@ import * as eventUtils from './utils.js';
  * Used to notify the developer when the workspace has finished loading (i.e
  * domToWorkspace).
  * Finished loading events do not record undo or redo.
- *
- * @alias Blockly.Events.FinishedLoading
- */
+*/
 export class FinishedLoading extends AbstractEvent {
   override isBlank = true;
   override recordUndo = false;

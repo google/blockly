@@ -26,9 +26,7 @@ import type {RenderedConnection} from './rendered_connection.js';
 
 /**
  * Class for an input with an optional field.
- *
- * @alias Blockly.Input
- */
+*/
 export class Input {
   private sourceBlock: Block;
   fieldRow: Field[] = [];
@@ -306,7 +304,6 @@ export namespace Input {
   /**
    * Enum for alignment of inputs.
    *
-   * @alias Blockly.Input.Align
    */
   export enum Align {
     LEFT = -1,

@@ -16,9 +16,7 @@ goog.declareModuleId('Blockly.IBlockDragger');
 
 /**
  * A block dragger interface.
- *
- * @alias Blockly.IBlockDragger
- */
+*/
 export interface IBlockDragger {
   /**
    * Start dragging a block.  This includes moving it to the drag surface.

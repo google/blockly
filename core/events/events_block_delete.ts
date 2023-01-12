@@ -25,9 +25,7 @@ import {Workspace} from '../workspace.js';
 
 /**
  * Class for a block deletion event.
- *
- * @alias Blockly.Events.BlockDelete
- */
+*/
 export class BlockDelete extends BlockBase {
   oldXml?: Element|DocumentFragment;
   ids?: string[];

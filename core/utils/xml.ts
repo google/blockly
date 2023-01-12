@@ -17,9 +17,7 @@ goog.declareModuleId('Blockly.utils.xml');
 
 /**
  * Namespace for Blockly's XML.
- *
- * @alias Blockly.utils.xml.NAME_SPACE
- */
+*/
 export const NAME_SPACE = 'https://developers.google.com/blockly/xml';
 
 /**
@@ -34,7 +32,6 @@ let xmlDocument: Document = globalThis['document'];
  * Get the document object to use for XML serialization.
  *
  * @returns The document object.
- * @alias Blockly.utils.xml.getDocument
  */
 export function getDocument(): Document {
   return xmlDocument;
@@ -44,7 +41,6 @@ export function getDocument(): Document {
  * Get the document object to use for XML serialization.
  *
  * @param document The document object to use.
- * @alias Blockly.utils.xml.setDocument
  */
 export function setDocument(document: Document) {
   xmlDocument = document;
@@ -55,7 +51,6 @@ export function setDocument(document: Document) {
  *
  * @param tagName Name of DOM element.
  * @returns New DOM element.
- * @alias Blockly.utils.xml.createElement
  */
 export function createElement(tagName: string): Element {
   return xmlDocument.createElementNS(NAME_SPACE, tagName);
@@ -66,7 +61,6 @@ export function createElement(tagName: string): Element {
  *
  * @param text Text content.
  * @returns New DOM text node.
- * @alias Blockly.utils.xml.createTextNode
  */
 export function createTextNode(text: string): Text {
   return xmlDocument.createTextNode(text);
@@ -78,7 +72,6 @@ export function createTextNode(text: string): Text {
  * @param text XML string.
  * @returns The DOM document.
  * @throws if XML doesn't parse.
- * @alias Blockly.utils.xml.textToDomDocument
  */
 export function textToDomDocument(text: string): Document {
   const oParser = new DOMParser();
@@ -91,7 +84,6 @@ export function textToDomDocument(text: string): Document {
  *
  * @param dom A tree of XML nodes.
  * @returns Text representation.
- * @alias Blockly.utils.xml.domToText
  */
 export function domToText(dom: Node): string {
   const oSerializer = new XMLSerializer();

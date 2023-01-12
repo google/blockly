@@ -21,9 +21,7 @@ import {Types} from './types.js';
 
 /**
  * An object containing information about a spacer between two rows.
- *
- * @alias Blockly.blockRendering.SpacerRow
- */
+*/
 export class SpacerRow extends Row {
   followsStatement = false;
 

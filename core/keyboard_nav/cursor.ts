@@ -22,13 +22,10 @@ import {Marker} from './marker.js';
 /**
  * Class for a cursor.
  * A cursor controls how a user navigates the Blockly AST.
- *
- * @alias Blockly.Cursor
- */
+*/
 export class Cursor extends Marker {
   override type = 'cursor';
 
-  /** @alias Blockly.Cursor */
   constructor() {
     super();
   }

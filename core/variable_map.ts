@@ -32,9 +32,7 @@ import type {Workspace} from './workspace.js';
  * Class for a variable map.  This contains a dictionary data structure with
  * variable types as keys and lists of variables as values.  The list of
  * variables are the type indicated by the key.
- *
- * @alias Blockly.VariableMap
- */
+*/
 export class VariableMap {
   /**
    * A map from variable type to list of variable names.  The lists contain

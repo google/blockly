@@ -17,9 +17,7 @@ goog.declareModuleId('Blockly.utils.Size');
 
 /**
  * Class for representing sizes consisting of a width and height.
- *
- * @alias Blockly.utils.Size
- */
+*/
 export class Size {
   /**
    * @param width Width.

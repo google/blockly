@@ -43,9 +43,7 @@ const BUMP_RANDOMNESS = 10;
 
 /**
  * Class for a connection between blocks that may be rendered on screen.
- *
- * @alias Blockly.RenderedConnection
- */
+*/
 export class RenderedConnection extends Connection {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   sourceBlock_!: BlockSvg;

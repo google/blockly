@@ -22,9 +22,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a toolbox item select event.
- *
- * @alias Blockly.Events.ToolboxItemSelect
- */
+*/
 export class ToolboxItemSelect extends UiBase {
   oldItem?: string;
   newItem?: string;

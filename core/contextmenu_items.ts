@@ -26,9 +26,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Option to undo previous action.
- *
- * @alias Blockly.ContextMenuItems.registerUndo
- */
+*/
 export function registerUndo() {
   const undoOption: RegistryItem = {
     displayText() {
@@ -52,9 +50,7 @@ export function registerUndo() {
 
 /**
  * Option to redo previous action.
- *
- * @alias Blockly.ContextMenuItems.registerRedo
- */
+*/
 export function registerRedo() {
   const redoOption: RegistryItem = {
     displayText() {
@@ -78,9 +74,7 @@ export function registerRedo() {
 
 /**
  * Option to clean up blocks.
- *
- * @alias Blockly.ContextMenuItems.registerCleanup
- */
+*/
 export function registerCleanup() {
   const cleanOption: RegistryItem = {
     displayText() {
@@ -135,9 +129,7 @@ function toggleOption_(shouldCollapse: boolean, topBlocks: BlockSvg[]) {
 
 /**
  * Option to collapse all blocks.
- *
- * @alias Blockly.ContextMenuItems.registerCollapse
- */
+*/
 export function registerCollapse() {
   const collapseOption: RegistryItem = {
     displayText() {
@@ -171,9 +163,7 @@ export function registerCollapse() {
 
 /**
  * Option to expand all blocks.
- *
- * @alias Blockly.ContextMenuItems.registerExpand
- */
+*/
 export function registerExpand() {
   const expandOption: RegistryItem = {
     displayText() {
@@ -261,9 +251,7 @@ function deleteNext_(deleteList: BlockSvg[], eventGroup: string) {
 
 /**
  * Option to delete all blocks.
- *
- * @alias Blockly.ContextMenuItems.registerDeleteAll
- */
+*/
 export function registerDeleteAll() {
   const deleteOption: RegistryItem = {
     displayText(scope: Scope) {
@@ -323,9 +311,7 @@ function registerWorkspaceOptions_() {
 
 /**
  * Option to duplicate a block.
- *
- * @alias Blockly.ContextMenuItems.registerDuplicate
- */
+*/
 export function registerDuplicate() {
   const duplicateOption: RegistryItem = {
     displayText() {
@@ -355,9 +341,7 @@ export function registerDuplicate() {
 
 /**
  * Option to add or remove block-level comment.
- *
- * @alias Blockly.ContextMenuItems.registerComment
- */
+*/
 export function registerComment() {
   const commentOption: RegistryItem = {
     displayText(scope: Scope) {
@@ -393,9 +377,7 @@ export function registerComment() {
 
 /**
  * Option to inline variables.
- *
- * @alias Blockly.ContextMenuItems.registerInline
- */
+*/
 export function registerInline() {
   const inlineOption: RegistryItem = {
     displayText(scope: Scope) {
@@ -428,9 +410,7 @@ export function registerInline() {
 
 /**
  * Option to collapse or expand a block.
- *
- * @alias Blockly.ContextMenuItems.registerCollapseExpandBlock
- */
+*/
 export function registerCollapseExpandBlock() {
   const collapseExpandOption: RegistryItem = {
     displayText(scope: Scope) {
@@ -457,9 +437,7 @@ export function registerCollapseExpandBlock() {
 
 /**
  * Option to disable or enable a block.
- *
- * @alias Blockly.ContextMenuItems.registerDisable
- */
+*/
 export function registerDisable() {
   const disableOption: RegistryItem = {
     displayText(scope: Scope) {
@@ -497,9 +475,7 @@ export function registerDisable() {
 
 /**
  * Option to delete a block.
- *
- * @alias Blockly.ContextMenuItems.registerDelete
- */
+*/
 export function registerDelete() {
   const deleteOption: RegistryItem = {
     displayText(scope: Scope) {
@@ -535,9 +511,7 @@ export function registerDelete() {
 
 /**
  * Option to open help for a block.
- *
- * @alias Blockly.ContextMenuItems.registerHelp
- */
+*/
 export function registerHelp() {
   const helpOption: RegistryItem = {
     displayText() {
@@ -577,7 +551,6 @@ function registerBlockOptions_() {
  * Registers all default context menu items. This should be called once per
  * instance of ContextMenuRegistry.
  *
- * @alias Blockly.ContextMenuItems.registerDefaultOptions
  * @internal
  */
 export function registerDefaultOptions() {

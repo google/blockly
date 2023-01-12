@@ -32,9 +32,7 @@ import {Svg} from './utils/svg.js';
 
 /**
  * Class for a comment.
- *
- * @alias Blockly.Comment
- */
+*/
 export class Comment extends Icon {
   private readonly model: CommentModel;
 

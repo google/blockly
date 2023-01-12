@@ -23,9 +23,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a selected event.
- *
- * @alias Blockly.Events.Selected
- */
+*/
 export class Selected extends UiBase {
   oldElementId?: string;
   newElementId?: string;

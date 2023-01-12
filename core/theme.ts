@@ -28,9 +28,7 @@ export interface ITheme {
 
 /**
  * Class for a theme.
- *
- * @alias Blockly.Theme
- */
+*/
 export class Theme implements ITheme {
   /** @internal */
   blockStyles: {[key: string]: BlockStyle};

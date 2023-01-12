@@ -30,9 +30,7 @@ import {ToolboxItem} from './toolbox_item.js';
 
 /**
  * Class for a category in a toolbox.
- *
- * @alias Blockly.ToolboxCategory
- */
+*/
 export class ToolboxCategory extends ToolboxItem implements
     ISelectableToolboxItem {
   /** Name used for registering a toolbox category. */

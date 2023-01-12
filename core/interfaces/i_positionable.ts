@@ -19,9 +19,7 @@ import type {IComponent} from './i_component.js';
 
 /**
  * Interface for a component that is positioned on top of the workspace.
- *
- * @alias Blockly.IPositionable
- */
+*/
 export interface IPositionable extends IComponent {
   /**
    * Positions the element. Called when the window is resized.

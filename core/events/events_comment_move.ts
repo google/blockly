@@ -24,9 +24,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a comment move event.  Created before the move.
- *
- * @alias Blockly.Events.CommentMove
- */
+*/
 export class CommentMove extends CommentBase {
   override type = eventUtils.COMMENT_MOVE;
   comment_?: WorkspaceComment;

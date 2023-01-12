@@ -25,9 +25,7 @@ import {Workspace} from '../workspace.js';
 
 /**
  * Class for a block creation event.
- *
- * @alias Blockly.Events.BlockCreate
- */
+*/
 export class BlockCreate extends BlockBase {
   override type = eventUtils.BLOCK_CREATE;
   xml?: Element|DocumentFragment;

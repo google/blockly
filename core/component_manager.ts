@@ -43,9 +43,7 @@ class Capability<_T> {
 
 /**
  * Manager for all items registered with the workspace.
- *
- * @alias Blockly.ComponentManager
- */
+*/
 export class ComponentManager {
   static Capability = Capability;
 

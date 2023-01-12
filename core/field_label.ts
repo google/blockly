@@ -21,9 +21,7 @@ import type {Sentinel} from './utils/sentinel.js';
 
 /**
  * Class for a non-editable, non-serializable text field.
- *
- * @alias Blockly.FieldLabel
- */
+*/
 export class FieldLabel extends Field<string> {
   /** The html class name to use for this field. */
   private class_: string|null = null;

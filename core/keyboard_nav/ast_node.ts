@@ -28,9 +28,7 @@ import type {Workspace} from '../workspace.js';
  * Class for an AST node.
  * It is recommended that you use one of the createNode methods instead of
  * creating a node directly.
- *
- * @alias Blockly.ASTNode
- */
+*/
 export class ASTNode {
   /**
    * True to navigate to all fields. False to only navigate to clickable fields.
@@ -56,7 +54,6 @@ export class ASTNode {
    *     Must be in ASTNode.types.
    * @param location The position in the AST.
    * @param opt_params Optional dictionary of options.
-   * @alias Blockly.ASTNode
    */
   constructor(type: string, location: IASTNodeLocation, opt_params?: Params) {
     if (!location) {

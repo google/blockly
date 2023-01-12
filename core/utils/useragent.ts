@@ -78,26 +78,18 @@ isTablet = isIPad || isAndroid && !has('Mobile') || has('Silk');
 isMobile = !isTablet && (isIPhone || isAndroid);
 })(globalThis['navigator'] && globalThis['navigator']['userAgent'] || '');
 
-/** @alias Blockly.utils.userAgent.raw */
 export const raw: string = rawUserAgent;
 
-/** @alias Blockly.utils.userAgent.JavaFx */
 export const JavaFx: boolean = isJavaFx;
 
-/** @alias Blockly.utils.userAgent.GECKO */
 export const GECKO: boolean = isGecko;
 
-/** @alias Blockly.utils.userAgent.ANDROID */
 export const ANDROID: boolean = isAndroid;
 
-/** @alias Blockly.utils.userAgent.IPAD */
 export const IPAD: boolean = isIPad;
 
-/** @alias Blockly.utils.userAgent.IPHONE */
 export const IPHONE: boolean = isIPhone;
 
-/** @alias Blockly.utils.userAgent.MAC */
 export const MAC: boolean = isMac;
 
-/** @alias Blockly.utils.userAgent.MOBILE */
 export const MOBILE: boolean = isMobile;

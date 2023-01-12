@@ -26,9 +26,7 @@ import {Types} from './types.js';
  * a block as well as spacing information for the bottom row.
  * Elements in a bottom row can consist of corners, spacers and next
  * connections.
- *
- * @alias Blockly.blockRendering.BottomRow
- */
+*/
 export class BottomRow extends Row {
   /**
    * Whether this row has a next connection.

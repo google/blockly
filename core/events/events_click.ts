@@ -24,9 +24,7 @@ import {Workspace} from '../workspace.js';
 
 /**
  * Class for a click event.
- *
- * @alias Blockly.Events.Click
- */
+*/
 export class Click extends UiBase {
   blockId?: string;
   targetType?: ClickTarget;

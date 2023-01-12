@@ -23,9 +23,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Note that the workspace itself manages whether or not it has a drag surface
  * and how to do translations based on that.  This simply passes the right
  * commands based on events.
- *
- * @alias Blockly.WorkspaceDragger
- */
+*/
 export class WorkspaceDragger {
   private readonly horizontalScrollEnabled_: boolean;
   private readonly verticalScrollEnabled_: boolean;

@@ -22,9 +22,7 @@ export type FieldNumberValidator = FieldInputValidator<number>;
 
 /**
  * Class for an editable number field.
- *
- * @alias Blockly.FieldNumber
- */
+*/
 export class FieldNumber extends FieldInput<number> {
   /** The minimum value this number field can contain. */
   protected min_ = -Infinity;

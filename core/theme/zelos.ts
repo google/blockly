@@ -83,7 +83,5 @@ const categoryStyles = {
 
 /**
  * Zelos theme.
- *
- * @alias Blockly.Themes.Zelos
- */
+*/
 export const Zelos = new Theme('zelos', defaultBlockStyles, categoryStyles);

@@ -28,9 +28,7 @@ import {Types} from './types.js';
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
- *
- * @alias Blockly.blockRendering.TopRow
- */
+*/
 export class TopRow extends Row {
   /**
    * The starting point for drawing the row, in the y direction.

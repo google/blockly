@@ -22,7 +22,6 @@ let copyData: CopyData|null = null;
  * Copy a block or workspace comment onto the local clipboard.
  *
  * @param toCopy Block or Workspace Comment to be copied.
- * @alias Blockly.clipboard.copy
  * @internal
  */
 export function copy(toCopy: ICopyable) {
@@ -40,7 +39,6 @@ function copyInternal(toCopy: ICopyable) {
  * Paste a block or workspace comment on to the main workspace.
  *
  * @returns The pasted thing if the paste was successful, null otherwise.
- * @alias Blockly.clipboard.paste
  * @internal
  */
 export function paste(): ICopyable|null {
@@ -66,7 +64,6 @@ export function paste(): ICopyable|null {
  * @param toDuplicate Block or Workspace Comment to be duplicated.
  * @returns The block or workspace comment that was duplicated, or null if the
  *     duplication failed.
- * @alias Blockly.clipboard.duplicate
  * @internal
  */
 export function duplicate(toDuplicate: ICopyable): ICopyable|null {

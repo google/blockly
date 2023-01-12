@@ -23,9 +23,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a comment deletion event.
- *
- * @alias Blockly.Events.CommentDelete
- */
+*/
 export class CommentDelete extends CommentBase {
   override type = eventUtils.COMMENT_DELETE;
   xml?: Element;

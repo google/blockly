@@ -25,9 +25,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a block change event.
- *
- * @alias Blockly.Events.BlockChange
- */
+*/
 export class BlockChange extends BlockBase {
   override type = eventUtils.BLOCK_CHANGE;
   element?: string;

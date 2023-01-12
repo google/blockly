@@ -26,9 +26,7 @@ import {Svg} from './utils/svg.js';
 
 /**
  * Class for a warning.
- *
- * @alias Blockly.Warning
- */
+*/
 export class Warning extends Icon {
   private text: {[key: string]: string};
 

@@ -15,9 +15,7 @@ goog.declareModuleId('Blockly.utils.Sentinel');
 
 /**
  * A type used to create flag values.
- *
- * @alias Blockly.utils.Sentinel
- */
+*/
 export class Sentinel {
   /**
    * Provide a unique key so that type guarding properly excludes values like

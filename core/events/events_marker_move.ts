@@ -25,9 +25,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a marker move event.
- *
- * @alias Blockly.Events.MarkerMove
- */
+*/
 export class MarkerMove extends UiBase {
   blockId?: string;
   oldNode?: ASTNode;

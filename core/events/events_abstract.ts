@@ -22,9 +22,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Abstract class for an event.
- *
- * @alias Blockly.Events.Abstract
- */
+*/
 export abstract class Abstract {
   /**
    * Whether or not the event was constructed without necessary parameters
@@ -43,7 +41,6 @@ export abstract class Abstract {
   /** Type of this event. */
   type = '';
 
-  /** @alias Blockly.Events.Abstract */
   constructor() {
     /**
      * The event group ID for the group this event belongs to. Groups define

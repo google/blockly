@@ -22,9 +22,7 @@ import * as serializationRegistry from './registry.js';
 
 /**
  * Represents the state of a given variable.
- *
- * @alias Blockly.serialization.variables.State
- */
+*/
 export interface State {
   name: string;
   id: string;
@@ -33,9 +31,7 @@ export interface State {
 
 /**
  * Serializer for saving and loading variable state.
- *
- * @alias Blockly.serialization.variables.VariableSerializer
- */
+*/
 export class VariableSerializer implements ISerializer {
   priority: number;
 

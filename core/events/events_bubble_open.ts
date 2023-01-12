@@ -23,9 +23,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a bubble open event.
- *
- * @alias Blockly.Events.BubbleOpen
- */
+*/
 export class BubbleOpen extends UiBase {
   blockId?: string;
   isOpen?: boolean;

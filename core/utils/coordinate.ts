@@ -17,9 +17,7 @@ goog.declareModuleId('Blockly.utils.Coordinate');
 
 /**
  * Class for representing coordinates and positions.
- *
- * @alias Blockly.utils.Coordinate
- */
+*/
 export class Coordinate {
   /**
    * @param x Left.

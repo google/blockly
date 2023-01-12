@@ -22,9 +22,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a viewport change event.
- *
- * @alias Blockly.Events.ViewportChange
- */
+*/
 export class ViewportChange extends UiBase {
   viewTop?: number;
   viewLeft?: number;

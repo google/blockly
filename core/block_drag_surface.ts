@@ -27,8 +27,6 @@ import * as svgMath from './utils/svg_math.js';
 /**
  * Class for a drag surface for the currently dragged block. This is a separate
  * SVG that contains only the currently moving block, or nothing.
- *
- * @alias Blockly.BlockDragSurfaceSvg
  */
 export class BlockDragSurfaceSvg {
   /**

@@ -30,9 +30,7 @@ import type {PathObject} from './path_object.js';
 
 /**
  * An object that draws a block based on the given rendering information.
- *
- * @alias Blockly.zelos.Drawer
- */
+*/
 export class Drawer extends BaseDrawer {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   override info_!: RenderInfo;

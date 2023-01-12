@@ -23,9 +23,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a trashcan open event.
- *
- * @alias Blockly.Events.TrashcanOpen
- */
+*/
 export class TrashcanOpen extends UiBase {
   isOpen?: boolean;
   override type = eventUtils.TRASHCAN_OPEN;

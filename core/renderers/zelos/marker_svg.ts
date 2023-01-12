@@ -27,9 +27,7 @@ import type {ConstantProvider as ZelosConstantProvider} from './constants.js';
 
 /**
  * Class to draw a marker.
- *
- * @alias Blockly.zelos.MarkerSvg
- */
+*/
 export class MarkerSvg extends BaseMarkerSvg {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   constants_!: ZelosConstantProvider;

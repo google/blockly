@@ -24,9 +24,7 @@ import type {Coordinate} from './utils/coordinate.js';
  * Database of connections.
  * Connections are stored in order of their vertical component.  This way
  * connections in an area may be looked up quickly using a binary search.
- *
- * @alias Blockly.ConnectionDB
- */
+*/
 export class ConnectionDB {
   /** Array of connections sorted by y position in workspace units. */
   private readonly connections_: RenderedConnection[] = [];

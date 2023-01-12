@@ -23,9 +23,7 @@ import {Workspace} from '../workspace.js';
 
 /**
  * Class for a block drag event.
- *
- * @alias Blockly.Events.BlockDrag
- */
+*/
 export class BlockDrag extends UiBase {
   blockId?: string;
   isStart?: boolean;

@@ -31,9 +31,7 @@ export type FieldAngleValidator = FieldInputValidator<number>;
 
 /**
  * Class for an editable angle field.
- *
- * @alias Blockly.FieldAngle
- */
+*/
 export class FieldAngle extends FieldInput<number> {
   /**
    * The default amount to round angles to when using a mouse or keyboard nav

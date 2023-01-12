@@ -19,9 +19,7 @@ import type {Block} from '../block.js';
 
 /**
  * An AST node location that has an associated block.
- *
- * @alias Blockly.IASTNodeLocationWithBlock
- */
+*/
 export interface IASTNodeLocationWithBlock extends IASTNodeLocation {
   /**
    * Get the source block associated with this node.

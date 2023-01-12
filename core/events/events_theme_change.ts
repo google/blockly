@@ -22,9 +22,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a theme change event.
- *
- * @alias Blockly.Events.ThemeChange
- */
+*/
 export class ThemeChange extends UiBase {
   themeName?: string;
   override type = eventUtils.THEME_CHANGE;

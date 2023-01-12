@@ -24,9 +24,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a comment creation event.
- *
- * @alias Blockly.Events.CommentCreate
- */
+*/
 export class CommentCreate extends CommentBase {
   override type = eventUtils.COMMENT_CREATE;
 

@@ -21,9 +21,7 @@ import {RenderInfo} from './info.js';
 
 /**
  * The thrasos renderer.
- *
- * @alias Blockly.thrasos.Renderer
- */
+*/
 export class Renderer extends BaseRenderer {
   /**
    * @param name The renderer name.

@@ -375,8 +375,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
         x += xy.x;
         y += xy.y;
         element = element.parentNode as SVGElement;
-      } while (element && element !== this.workspace.getCanvas() &&
-               element !== null);
+      } while (element && element !== this.workspace.getCanvas());
     }
     return new Coordinate(x, y);
   }

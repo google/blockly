@@ -19,5 +19,4 @@ if (typeof globalThis.document !== 'object') {
   const {JSDOM} = require('jsdom');
   const {window} = new JSDOM(`<!DOCTYPE html>`);
   Blockly.utils.xml.injectDependencies(window);
-  Blockly.utils.xml.injectDependencies({document: window.document});
 }

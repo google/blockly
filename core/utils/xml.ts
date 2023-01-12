@@ -27,13 +27,24 @@ import * as deprecation from './deprecation.js';
 let {document, DOMParser, XMLSerializer} = globalThis;
 
 /**
- * Inject dependencies.  Used by the Node.js wrapper for Blockly (see
- * scripts/package/node/core.js) to supply implementations from the
- * jsdom package instead.  While they may be set individually, it is
- * normally the case that all three should be supplied and sourced
- * from the same JSDOM instance.
+ * Inject implementations of document, DOMParser and/or XMLSerializer
+ * to use instead of the default ones.
  *
- * @param dependencies Options object contianing dependencies to set.
+ * Used by the Node.js wrapper for Blockly (see
+ * scripts/package/node/core.js) to supply implementations from the
+ * jsdom package instead.
+ *
+ * While they may be set individually, it is normally the case that
+ * all three will be sourced from the same JSDOM instance.  They MUST
+ * at least come from the same copy of the jsdom package.  (Typically
+ * this is hard to avoid satsifying this requirement, but it can be
+ * inadvertently violated by using webpack to build multiple bundles
+ * containing Blockly and jsdom, and then loading more than one into
+ * the same JavaScript runtime.  See
+ * https://github.com/google/blockly-samples/pull/1452#issuecomment-1364442135
+ * for an example of how this happened.)
+ *
+ * @param dependencies Options object containing dependencies to set.
  */
 export function injectDependencies(dependencies: {
   document?: Document,

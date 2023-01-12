@@ -942,7 +942,8 @@ const procedureCallerGetDefMixin = function() {
 
     /**
      * @param {string} name The name of the procedure model to find.
-     * @param {string[]} params The param names of the procedure model to find.
+     * @param {Array<string>} params The param names of the procedure model
+     *     to find.
      * @return {IProcedureModel} The procedure model that was found.
      */
     findProcedureModel_(name, params = []) {
@@ -1308,7 +1309,7 @@ const procedureCallerOnChangeMixin = {
    * Creates a procedure definition block with the given name and params,
    * and returns the procedure model associated with it.
    * @param {string} name The name of the procedure to create.
-   * @param {string[]} params The names of the parameters to create.
+   * @param {Array<string>} params The names of the parameters to create.
    * @return {IProcedureModel} The procedure model associated with the new
    *     procedure definition block.
    */

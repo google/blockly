@@ -6,8 +6,6 @@
 
 /**
  * The interface for a block dragger.
- *
- * @namespace Blockly.IBlockDragger
  */
 import * as goog from '../../closure/goog/goog.js';
 import type {Coordinate} from '../utils/coordinate.js';

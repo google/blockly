@@ -7,8 +7,6 @@
 /**
  * The interface for an object that owns a block's rendering SVG
  * elements.
- *
- * @namespace Blockly.blockRendering.IPathObject
  */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.IPathObject');

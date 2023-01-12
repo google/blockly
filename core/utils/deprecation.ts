@@ -7,8 +7,6 @@
 /**
  * Helper function for warning developers about deprecations.
  * This method is not specific to Blockly.
- *
- * @namespace Blockly.utils.deprecation
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.deprecation');

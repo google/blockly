@@ -8,8 +8,6 @@
  * A div that floats on top of Blockly.  This singleton contains
  *     temporary HTML UI widgets that the user is currently interacting with.
  *     E.g. text input areas, colour pickers, context menus.
- *
- * @namespace Blockly.WidgetDiv
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.WidgetDiv');

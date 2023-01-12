@@ -7,8 +7,6 @@
 /**
  * Module that provides constants for use inside Blockly. Do not
  * use these constants outside of the core library.
- *
- * @namespace Blockly.internalConstants
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.internalConstants');

@@ -6,8 +6,6 @@
 
 /**
  * Utility methods for objects.
- *
- * @namespace Blockly.utils.object
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.object');

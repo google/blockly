@@ -6,8 +6,6 @@
 
 /**
  * Utility functions for positioning UI elements.
- *
- * @namespace Blockly.uiPosition
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.uiPosition');

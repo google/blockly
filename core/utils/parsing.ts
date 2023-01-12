@@ -5,7 +5,6 @@
  */
 
 /**
- * @namespace Blockly.utils.parsing
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.parsing');

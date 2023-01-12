@@ -7,8 +7,6 @@
 /**
  * The interface for a component that has a handler for when a
  * block is dropped on top of it.
- *
- * @namespace Blockly.IDragTarget
  */
 import * as goog from '../../closure/goog/goog.js';
 import {Rect} from '../utils/rect.js';

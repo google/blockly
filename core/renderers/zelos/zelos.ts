@@ -8,8 +8,6 @@
 
 /**
  * Re-exports of Blockly.zelos.* modules.
- *
- * @namespace Blockly.zelos
  */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos');

@@ -6,8 +6,6 @@
 
 /**
  * A mapping of block type names to block prototype objects.
- *
- * @namespace Blockly.blocks
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blocks');

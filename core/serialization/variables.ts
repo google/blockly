@@ -7,8 +7,6 @@
 /**
  * Handles serializing variables to plain JavaScript objects, only containing
  * state.
- *
- * @namespace Blockly.serialization.variables
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.variables');

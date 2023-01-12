@@ -6,8 +6,6 @@
 
 /**
  * The interface for a bubble.
- *
- * @namespace Blockly.IBubble
  */
 import * as goog from '../../closure/goog/goog.js';
 import type {Coordinate} from '../utils/coordinate.js';

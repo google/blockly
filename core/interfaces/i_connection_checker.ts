@@ -7,8 +7,6 @@
 /**
  * The interface for an object that encapsulates logic for
  * checking whether a potential connection is safe and valid.
- *
- * @namespace Blockly.IConnectionChecker
  */
 import * as goog from '../../closure/goog/goog.js';
 import type {Connection} from '../connection.js';

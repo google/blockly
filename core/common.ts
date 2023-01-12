@@ -7,8 +7,6 @@
 /**
  * Common functions used both internally and externally, but which
  * must not be at the top level to avoid circular dependencies.
- *
- * @namespace Blockly.common
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.common');

@@ -6,8 +6,6 @@
 
 /**
  * Inject Blockly's CSS synchronously.
- *
- * @namespace Blockly.Css
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Css');

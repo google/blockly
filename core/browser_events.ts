@@ -6,8 +6,6 @@
 
 /**
  * Browser event handling.
- *
- * @namespace Blockly.browserEvents
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.browserEvents');

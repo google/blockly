@@ -6,8 +6,6 @@
 
 /**
  * Zelos theme.
- *
- * @namespace Blockly.Themes.Zelos
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Themes.Zelos');

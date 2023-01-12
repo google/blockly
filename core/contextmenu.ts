@@ -6,8 +6,6 @@
 
 /**
  * Functionality for the right-click context menus.
- *
- * @namespace Blockly.ContextMenu
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ContextMenu');

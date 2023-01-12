@@ -6,8 +6,6 @@
 
 /**
  * The interface for a bounded element.
- *
- * @namespace Blockly.IBoundedElement
  */
 import * as goog from '../../closure/goog/goog.js';
 import type {Rect} from '../utils/rect.js';

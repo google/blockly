@@ -7,8 +7,6 @@
 /**
  * Contains functions registering serializers (eg blocks, variables, plugins,
  * etc).
- *
- * @namespace Blockly.serialization.registry
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.registry');

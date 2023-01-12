@@ -6,8 +6,6 @@
 
 /**
  * XML reader and writer.
- *
- * @namespace Blockly.Xml
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Xml');

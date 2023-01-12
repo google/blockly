@@ -6,8 +6,6 @@
 
 /**
  * The interface for a selectable toolbox item.
- *
- * @namespace Blockly.ISelectableToolboxItem
  */
 import * as goog from '../../closure/goog/goog.js';
 import type {FlyoutItemInfoArray} from '../utils/toolbox';

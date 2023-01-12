@@ -6,8 +6,6 @@
 
 /**
  * Utility functions for handling typed variables.
- *
- * @namespace Blockly.VariablesDynamic
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.VariablesDynamic');

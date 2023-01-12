@@ -6,8 +6,6 @@
 
 /**
  * The interface for the data model of a procedure.
- *
- * @namespace Blockly.IProcedureModel
  */
 
 import {IParameterModel} from './i_parameter_model.js';

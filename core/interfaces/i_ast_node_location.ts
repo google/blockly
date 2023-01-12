@@ -6,8 +6,6 @@
 
 /**
  * The interface for an AST node location.
- *
- * @namespace Blockly.IASTNodeLocation
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IASTNodeLocation');

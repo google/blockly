@@ -6,8 +6,6 @@
 
 /**
  * The interface for a positionable UI element.
- *
- * @namespace Blockly.IPositionable
  */
 import * as goog from '../../closure/goog/goog.js';
 import type {Rect} from '../utils/rect.js';

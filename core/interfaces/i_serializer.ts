@@ -7,8 +7,6 @@
 /**
  * The record type for an object containing functions for
  *     serializing part of the workspace.
- *
- * @namespace Blockly.serialization.ISerializer
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.ISerializer');

@@ -7,8 +7,6 @@
 /**
  * Classic theme.
  * Contains multi-coloured border to create shadow effect.
- *
- * @namespace Blockly.Themes.Classic
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Themes.Classic');

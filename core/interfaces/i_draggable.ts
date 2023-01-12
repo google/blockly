@@ -6,8 +6,6 @@
 
 /**
  * The interface for an object that is draggable.
- *
- * @namespace Blockly.IDraggable
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IDraggable');

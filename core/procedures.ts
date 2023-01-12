@@ -6,8 +6,6 @@
 
 /**
  * Utility functions for handling procedures.
- *
- * @namespace Blockly.Procedures
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Procedures');

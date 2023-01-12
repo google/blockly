@@ -6,8 +6,6 @@
 
 /**
  * Registers default keyboard shortcuts.
- *
- * @namespace Blockly.ShortcutItems
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ShortcutItems');

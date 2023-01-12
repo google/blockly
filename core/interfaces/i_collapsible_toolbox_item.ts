@@ -6,8 +6,6 @@
 
 /**
  * The interface for a collapsible toolbox item.
- *
- * @namespace Blockly.ICollapsibleToolboxItem
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ICollapsibleToolboxItem');

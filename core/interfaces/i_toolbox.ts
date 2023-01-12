@@ -6,8 +6,6 @@
 
 /**
  * The interface for a toolbox.
- *
- * @namespace Blockly.IToolbox
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IToolbox');

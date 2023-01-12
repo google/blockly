@@ -7,8 +7,6 @@
 /**
  * Contains top-level functions for serializing workspaces to plain JavaScript
  * objects.
- *
- * @namespace Blockly.serialization.workspaces
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.workspaces');

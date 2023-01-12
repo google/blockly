@@ -8,8 +8,6 @@
  * Fields can be created based on a JSON definition. This file
  *    contains methods for registering those JSON definitions, and building the
  *    fields based on JSON.
- *
- * @namespace Blockly.fieldRegistry
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.fieldRegistry');

@@ -16,19 +16,42 @@ goog.declareModuleId('Blockly.utils.xml');
 
 
 /**
+ * Injected dependencies.  By default these are just (and have the
+ * same types as) the corresponding DOM Window properties, but the
+ * Node.js wrapper for Blockly (see scripts/package/node/core.js)
+ * calls injectDependencies to supply implementations from the jsdom
+ * package instead.
+ */
+let {document, DOMParser, XMLSerializer} = globalThis;
+
+/**
+ * Inject dependencies.  Used by the Node.js wrapper for Blockly (see
+ * scripts/package/node/core.js) to supply implementations from the
+ * jsdom package instead.  While they may be set individually, it is
+ * normally the case that all three should be supplied and sourced
+ * from the same JSDOM instance.
+ *
+ * @param dependencies Options object contianing dependencies to set.
+ */
+export function injectDependencies(dependencies: {
+  document?: Document,
+  DOMParser?: typeof DOMParser,
+  XMLSerializer?: typeof XMLSerializer,
+}) {
+  ({
+    // Default to existing value if option not supplied.
+    document = document,
+    DOMParser = DOMParser,
+    XMLSerializer = XMLSerializer,
+  } = dependencies);
+}
+
+/**
  * Namespace for Blockly's XML.
  *
  * @alias Blockly.utils.xml.NAME_SPACE
  */
 export const NAME_SPACE = 'https://developers.google.com/blockly/xml';
-
-/**
- * The Document object to use.  By default this is just document, but
- * the Node.js build of Blockly (see scripts/package/node/core.js)
- * calls setDocument to supply a Document implementation from the
- * jsdom package instead.
- */
-let xmlDocument: Document = globalThis['document'];
 
 /**
  * Get the document object to use for XML serialization.
@@ -37,17 +60,17 @@ let xmlDocument: Document = globalThis['document'];
  * @alias Blockly.utils.xml.getDocument
  */
 export function getDocument(): Document {
-  return xmlDocument;
+  return document;
 }
 
 /**
  * Get the document object to use for XML serialization.
  *
- * @param document The document object to use.
+ * @param xmlDocument The document object to use.
  * @alias Blockly.utils.xml.setDocument
  */
-export function setDocument(document: Document) {
-  xmlDocument = document;
+export function setDocument(xmlDocument: Document) {
+  document = xmlDocument;
 }
 
 /**
@@ -58,7 +81,7 @@ export function setDocument(document: Document) {
  * @alias Blockly.utils.xml.createElement
  */
 export function createElement(tagName: string): Element {
-  return xmlDocument.createElementNS(NAME_SPACE, tagName);
+  return document.createElementNS(NAME_SPACE, tagName);
 }
 
 /**
@@ -69,7 +92,7 @@ export function createElement(tagName: string): Element {
  * @alias Blockly.utils.xml.createTextNode
  */
 export function createTextNode(text: string): Text {
-  return xmlDocument.createTextNode(text);
+  return document.createTextNode(text);
 }
 
 /**

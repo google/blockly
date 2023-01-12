@@ -18,9 +18,6 @@
 if (typeof globalThis.document !== 'object') {
   const {JSDOM} = require('jsdom');
   const {window} = new JSDOM(`<!DOCTYPE html>`);
-  globalThis.DOMParser = window.DOMParser;
-  globalThis.XMLSerializer = window.XMLSerializer;
-  const xmlDocument = Blockly.utils.xml.textToDomDocument(
-      `<xml xmlns="${Blockly.utils.xml.NAME_SPACE}"></xml>`);
-  Blockly.utils.xml.setDocument(xmlDocument);
+  Blockly.utils.xml.injectDependencies(window);
+  Blockly.utils.xml.injectDependencies({document: window.document});
 }

@@ -21,7 +21,7 @@ import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js
 
 /**
  * Abstract class for a block event.
-*/
+ */
 export class BlockBase extends AbstractEvent {
   override isBlank = true;
   blockId?: string;

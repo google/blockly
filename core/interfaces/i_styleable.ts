@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.IStyleable');
 
 /**
  * Interface for an object that a style can be added to.
-*/
+ */
 export interface IStyleable {
   /**
    * Adds a style on the toolbox. Usually used to change the cursor.

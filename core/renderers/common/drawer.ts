@@ -32,7 +32,7 @@ import type {RenderInfo} from './info.js';
 
 /**
  * An object that draws a block based on the given rendering information.
-*/
+ */
 export class Drawer {
   block_: BlockSvg;
   info_: RenderInfo;

@@ -17,7 +17,7 @@ import {ConnectionType} from './connection_type.js';
 
 /**
  * Enum for the type of a connection or input.
-*/
+ */
 export enum inputTypes {
   // A right-facing value input.  E.g. 'set item to' or 'return'.
   VALUE = ConnectionType.INPUT_VALUE,

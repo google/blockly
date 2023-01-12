@@ -25,7 +25,7 @@ import type {ConstantProvider} from './constants.js';
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
-*/
+ */
 export class PathObject extends BasePathObject {
   /** @internal */
   svgPathDark: SVGElement;

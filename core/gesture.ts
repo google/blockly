@@ -51,7 +51,7 @@ const ZOOM_OUT_MULTIPLIER = 6;
 
 /**
  * Class for one gesture.
-*/
+ */
 export class Gesture {
   /**
    * The position of the pointer when the gesture started.  Units are CSS

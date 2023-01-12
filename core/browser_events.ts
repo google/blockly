@@ -20,7 +20,7 @@ import * as userAgent from './utils/useragent.js';
 /**
  * Blockly opaque event data used to unbind events when using
  * `bind` and `conditionalBind`.
-*/
+ */
 export type Data = [EventTarget, string, (e: Event) => void][];
 
 /**

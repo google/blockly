@@ -24,7 +24,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * The manager for all workspace metrics calculations.
-*/
+ */
 export class MetricsManager implements IMetricsManager {
   /** The workspace to calculate metrics for. */
   protected readonly workspace_: WorkspaceSvg;

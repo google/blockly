@@ -23,7 +23,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a variable deletion event.
-*/
+ */
 export class VarDelete extends VarBase {
   override type = eventUtils.VAR_DELETE;
   varType?: string;

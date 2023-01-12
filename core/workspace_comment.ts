@@ -22,7 +22,7 @@ import type {Workspace} from './workspace.js';
 
 /**
  * Class for a workspace comment.
-*/
+ */
 export class WorkspaceComment {
   id: string;
   protected xy_: Coordinate;

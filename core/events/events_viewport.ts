@@ -22,7 +22,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a viewport change event.
-*/
+ */
 export class ViewportChange extends UiBase {
   viewTop?: number;
   viewLeft?: number;

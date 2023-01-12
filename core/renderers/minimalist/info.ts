@@ -24,7 +24,7 @@ import type {Renderer} from './renderer.js';
  * This measure pass does not propagate changes to the block (although fields
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
-*/
+ */
 export class RenderInfo extends BaseRenderInfo {
   // Exclamation is fine b/c this is assigned by the super constructor.
   protected override renderer_!: Renderer;

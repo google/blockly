@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.IMetricsManager');
 
 /**
  * Interface for a metrics manager.
-*/
+ */
 export interface IMetricsManager {
   /**
    * Returns whether the scroll area has fixed edges.

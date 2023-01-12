@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.utils.Rect');
 
 /**
  * Class for representing rectangular regions.
-*/
+ */
 export class Rect {
   /**
    * @param top Top.

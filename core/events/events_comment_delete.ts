@@ -23,7 +23,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a comment deletion event.
-*/
+ */
 export class CommentDelete extends CommentBase {
   override type = eventUtils.COMMENT_DELETE;
   xml?: Element;

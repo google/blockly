@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.IBoundedElement');
 
 /**
  * A bounded element interface.
-*/
+ */
 export interface IBoundedElement {
   /**
    * Returns the coordinates of a bounded element describing the dimensions of

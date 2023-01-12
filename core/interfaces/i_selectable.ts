@@ -18,7 +18,7 @@ import type {IMovable} from './i_movable.js';
 
 /**
  * The interface for an object that is selectable.
-*/
+ */
 export interface ISelectable extends IDeletable, IMovable {
   id: string;
 

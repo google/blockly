@@ -18,7 +18,7 @@ import type {IToolboxItem} from './i_toolbox_item.js';
 
 /**
  * Interface for an item in the toolbox that can be selected.
-*/
+ */
 export interface ISelectableToolboxItem extends IToolboxItem {
   /**
    * Gets the name of the toolbox item. Used for emitting events.

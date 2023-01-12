@@ -23,7 +23,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a bubble open event.
-*/
+ */
 export class BubbleOpen extends UiBase {
   blockId?: string;
   isOpen?: boolean;

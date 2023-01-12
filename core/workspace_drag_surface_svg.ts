@@ -25,7 +25,7 @@ import * as svgMath from './utils/svg_math.js';
  * Blocks are moved into this SVG during a drag, improving performance.
  * The entire SVG is translated using CSS transforms instead of SVG so the
  * blocks are never repainted during drag improving performance.
-*/
+ */
 export class WorkspaceDragSurfaceSvg {
   /**
    * The SVG drag surface. Set once by WorkspaceDragSurfaceSvg.createDom.

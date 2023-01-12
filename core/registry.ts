@@ -48,12 +48,12 @@ const nameMap: {[key: string]: {[key: string]: string}} = Object.create(null);
 
 /**
  * The string used to register the default class for a type of plugin.
-*/
+ */
 export const DEFAULT = 'default';
 
 /**
  * A name with the type of the element stored in the generic.
-*/
+ */
 export class Type<_T> {
   /** @param name The name of the registry type. */
   constructor(private readonly name: string) {}

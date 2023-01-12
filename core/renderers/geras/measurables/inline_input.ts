@@ -23,7 +23,7 @@ import type {ConstantProvider as GerasConstantProvider} from '../constants.js';
 /**
  * An object containing information about the space an inline input takes up
  * during rendering.
-*/
+ */
 export class InlineInput extends BaseInlineInput {
   override constants_: GerasConstantProvider;
 

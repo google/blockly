@@ -25,7 +25,7 @@ const SOUND_LIMIT = 100;
 
 /**
  * Class for loading, storing, and playing audio for a workspace.
-*/
+ */
 export class WorkspaceAudio {
   /** Database of pre-loaded sounds. */
   private sounds = new Map<string, HTMLAudioElement>();

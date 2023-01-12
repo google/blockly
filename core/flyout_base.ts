@@ -43,7 +43,7 @@ enum FlyoutItemType {
 
 /**
  * Class for a flyout.
-*/
+ */
 export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Position the flyout.

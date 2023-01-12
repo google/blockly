@@ -31,7 +31,7 @@ interface BlockLocation {
 
 /**
  * Class for a block move event.  Created before the move.
-*/
+ */
 export class BlockMove extends BlockBase {
   override type = eventUtils.BLOCK_MOVE;
   oldParentId?: string;

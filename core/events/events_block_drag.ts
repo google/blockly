@@ -23,7 +23,7 @@ import {Workspace} from '../workspace.js';
 
 /**
  * Class for a block drag event.
-*/
+ */
 export class BlockDrag extends UiBase {
   blockId?: string;
   isStart?: boolean;

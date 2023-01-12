@@ -18,7 +18,7 @@ import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 
 /**
  * An object that provides constants for rendering blocks in Geras mode.
-*/
+ */
 export class ConstantProvider extends BaseConstantProvider {
   override FIELD_TEXT_BASELINE_CENTER = false;
 

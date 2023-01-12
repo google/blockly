@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.ConnectionType');
 
 /**
  * Enum for the type of a connection or input.
-*/
+ */
 export enum ConnectionType {
   // A right-facing value input.  E.g. 'set item to' or 'return'.
   INPUT_VALUE = 1,

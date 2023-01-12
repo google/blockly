@@ -197,7 +197,7 @@ function haltPropagation(e: Event) {
 
 /**
  * Hide the context menu.
-*/
+ */
 export function hide() {
   WidgetDiv.hideIfOwner(dummyOwner);
   currentBlock = null;
@@ -205,7 +205,7 @@ export function hide() {
 
 /**
  * Dispose of the menu.
-*/
+ */
 export function dispose() {
   if (menu_) {
     menu_.dispose();

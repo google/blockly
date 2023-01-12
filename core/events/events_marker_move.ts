@@ -25,7 +25,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a marker move event.
-*/
+ */
 export class MarkerMove extends UiBase {
   blockId?: string;
   oldNode?: ASTNode;

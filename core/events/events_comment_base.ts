@@ -26,7 +26,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Abstract class for a comment event.
-*/
+ */
 export class CommentBase extends AbstractEvent {
   override isBlank = true;
   commentId?: string;

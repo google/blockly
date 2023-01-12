@@ -20,7 +20,7 @@ import * as parsing from './utils/parsing.js';
 
 /**
  * Class for a non-editable, serializable text field.
-*/
+ */
 export class FieldLabelSerializable extends FieldLabel {
   /**
    * Editable fields usually show some sort of UI indicating they are

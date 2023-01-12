@@ -28,7 +28,7 @@ import {Types} from './types.js';
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
-*/
+ */
 export class TopRow extends Row {
   /**
    * The starting point for drawing the row, in the y direction.

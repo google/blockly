@@ -31,7 +31,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for a pure SVG scrollbar.
  * This technique offers a scrollbar that is guaranteed to work, but may not
  * look or behave like the system's scrollbars.
-*/
+ */
 export class Scrollbar {
   /**
    * Width of vertical scrollbar or height of horizontal scrollbar in CSS

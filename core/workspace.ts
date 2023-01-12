@@ -39,7 +39,7 @@ import {ObservableProcedureMap} from './procedures.js';
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
-*/
+ */
 export class Workspace implements IASTNodeLocation {
   /**
    * Angle away from the horizontal to sweep for blocks.  Order of execution is

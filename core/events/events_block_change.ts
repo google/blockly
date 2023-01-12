@@ -25,7 +25,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a block change event.
-*/
+ */
 export class BlockChange extends BlockBase {
   override type = eventUtils.BLOCK_CHANGE;
   element?: string;

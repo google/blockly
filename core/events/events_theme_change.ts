@@ -22,7 +22,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a theme change event.
-*/
+ */
 export class ThemeChange extends UiBase {
   themeName?: string;
   override type = eventUtils.THEME_CHANGE;

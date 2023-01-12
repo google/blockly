@@ -28,7 +28,7 @@ import * as Xml from './xml.js';
  * variable blocks.
  * See also Blockly.Procedures.CATEGORY_NAME and
  * Blockly.VariablesDynamic.CATEGORY_NAME.
-*/
+ */
 export const CATEGORY_NAME = 'VARIABLE';
 
 /**

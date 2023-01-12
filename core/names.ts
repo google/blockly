@@ -21,7 +21,7 @@ import type {Workspace} from './workspace.js';
 
 /**
  * Class for a database of entity names (variables, procedures, etc).
-*/
+ */
 export class Names {
   static DEVELOPER_VARIABLE_TYPE: NameType;
   private readonly variablePrefix_: string;

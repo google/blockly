@@ -27,7 +27,7 @@ import {PathObject} from './path_object.js';
 
 /**
  * The geras renderer.
-*/
+ */
 export class Renderer extends BaseRenderer {
   /** The renderer's highlight constant provider. */
   private highlightConstants_: HighlightConstantProvider|null = null;

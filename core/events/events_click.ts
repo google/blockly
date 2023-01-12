@@ -24,7 +24,7 @@ import {Workspace} from '../workspace.js';
 
 /**
  * Class for a click event.
-*/
+ */
 export class Click extends UiBase {
   blockId?: string;
   targetType?: ClickTarget;

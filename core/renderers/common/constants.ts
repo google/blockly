@@ -105,7 +105,7 @@ export function isDynamicShape(shape: Shape): shape is DynamicShape {
 
 /**
  * An object that provides constants for rendering blocks.
-*/
+ */
 export class ConstantProvider {
   /** The size of an empty spacer. */
   NO_PADDING = 0;

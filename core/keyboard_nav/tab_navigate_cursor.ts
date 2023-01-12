@@ -21,7 +21,7 @@ import {BasicCursor} from './basic_cursor.js';
 
 /**
  * A cursor for navigating between tab navigable fields.
-*/
+ */
 export class TabNavigateCursor extends BasicCursor {
   /**
    * Skip all nodes except for tab navigable fields.

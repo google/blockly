@@ -20,7 +20,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for the registry of context menu items. This is intended to be a
  * singleton. You should not create a new instance, and only access this class
  * from ContextMenuRegistry.registry.
-*/
+ */
 export class ContextMenuRegistry {
   static registry: ContextMenuRegistry;
   /** Registry of all registered RegistryItems, keyed by ID. */

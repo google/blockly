@@ -65,7 +65,7 @@ export function inject(hasCss: boolean, pathToMedia: string) {
 
 /**
  * The CSS content for Blockly.
-*/
+ */
 let content = `
 .blocklySvg {
   background-color: #fff;

@@ -23,7 +23,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a selected event.
-*/
+ */
 export class Selected extends UiBase {
   oldElementId?: string;
   newElementId?: string;

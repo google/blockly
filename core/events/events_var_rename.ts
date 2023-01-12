@@ -23,7 +23,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a variable rename event.
-*/
+ */
 export class VarRename extends VarBase {
   override type = eventUtils.VAR_RENAME;
   oldName?: string;

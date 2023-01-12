@@ -25,7 +25,7 @@ import {Workspace} from '../workspace.js';
 
 /**
  * Class for a block deletion event.
-*/
+ */
 export class BlockDelete extends BlockBase {
   oldXml?: Element|DocumentFragment;
   ids?: string[];

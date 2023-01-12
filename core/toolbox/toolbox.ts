@@ -50,7 +50,7 @@ import {CollapsibleToolboxCategory} from './collapsible_category.js';
 /**
  * Class for a Toolbox.
  * Creates the toolbox's DOM.
-*/
+ */
 export class Toolbox extends DeleteArea implements IAutoHideable,
                                                    IKeyboardAccessible,
                                                    IStyleable, IToolbox {

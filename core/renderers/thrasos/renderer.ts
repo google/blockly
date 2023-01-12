@@ -21,7 +21,7 @@ import {RenderInfo} from './info.js';
 
 /**
  * The thrasos renderer.
-*/
+ */
 export class Renderer extends BaseRenderer {
   /**
    * @param name The renderer name.

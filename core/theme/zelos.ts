@@ -83,5 +83,5 @@ const categoryStyles = {
 
 /**
  * Zelos theme.
-*/
+ */
 export const Zelos = new Theme('zelos', defaultBlockStyles, categoryStyles);

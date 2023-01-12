@@ -27,7 +27,7 @@ import type {PathObject} from './path_object.js';
 
 /**
  * An object that draws a block based on the given rendering information.
-*/
+ */
 export class Drawer extends BaseDrawer {
   highlighter_: Highlighter;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.

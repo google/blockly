@@ -23,7 +23,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a variable creation event.
-*/
+ */
 export class VarCreate extends VarBase {
   override type = eventUtils.VAR_CREATE;
   varType?: string;

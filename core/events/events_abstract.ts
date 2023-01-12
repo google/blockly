@@ -22,7 +22,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Abstract class for an event.
-*/
+ */
 export abstract class Abstract {
   /**
    * Whether or not the event was constructed without necessary parameters

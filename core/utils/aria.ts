@@ -24,7 +24,7 @@ const ROLE_ATTRIBUTE = 'role';
 /**
  * ARIA role values.
  * Copied from Closure's goog.a11y.aria.Role
-*/
+ */
 export enum Role {
   // ARIA role for an interactive control of tabular data.
   GRID = 'grid',
@@ -62,7 +62,7 @@ export enum Role {
 /**
  * ARIA states and properties.
  * Copied from Closure's goog.a11y.aria.State
-*/
+ */
 export enum State {
   // ARIA property for setting the currently active descendant of an element,
   // for example the selected item in a list box. Value: ID of an element.

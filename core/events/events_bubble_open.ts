@@ -30,10 +30,10 @@ export class BubbleOpen extends UiBase {
   /** The ID of the block the bubble is attached to. */
   blockId?: string;
 
-  /** True if the bubble is opening, false otherwise. */
+  /** True if the bubble is opening, false if closing. */
   isOpen?: boolean;
 
-  /** One of 'mutator', 'comment', or 'warning'. */
+  /** The type of bubble; one of 'mutator', 'comment', or 'warning'. */
   bubbleType?: BubbleType;
 
   override type = eventUtils.BUBBLE_OPEN;
@@ -52,11 +52,7 @@ export class BubbleOpen extends UiBase {
     if (!opt_block) return;
 
     this.blockId = opt_block.id;
-
-    /** Whether the bubble is opening (false if closing). */
     this.isOpen = opt_isOpen;
-
-    /** The type of bubble. One of 'mutator', 'comment', or 'warning'. */
     this.bubbleType = opt_bubbleType;
   }
 

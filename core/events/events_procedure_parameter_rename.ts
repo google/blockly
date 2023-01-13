@@ -22,9 +22,7 @@ export class ProcedureParameterRename extends ProcedureParameterBase {
   /** The new name of the procedure parameter. */
   private readonly newName: string;
 
-  /**
-   * @param oldName The old name of the procedure parameter.
-   */
+  /** @param oldName The old name of the procedure parameter. */
   constructor(
       workspace: Workspace, procedure: IProcedureModel,
       parameter: IParameterModel, public readonly oldName: string) {

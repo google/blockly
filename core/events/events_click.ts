@@ -32,7 +32,7 @@ export class Click extends UiBase {
   blockId?: string;
 
   /**
-   * The type of element that was clicked. One of 'block', 'workspace',
+   * The type of element that was clicked; one of 'block', 'workspace',
    * or 'zoom_controls'.
    */
   targetType?: ClickTarget;
@@ -57,8 +57,6 @@ export class Click extends UiBase {
     super(workspaceId);
 
     this.blockId = opt_block ? opt_block.id : undefined;
-
-    /** The type of element targeted by this click event. */
     this.targetType = opt_targetType;
   }
 

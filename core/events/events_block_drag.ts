@@ -22,7 +22,7 @@ import {Workspace} from '../workspace.js';
 
 
 /**
- * Notifies listeners when a is being manually dragged/dropped.
+ * Notifies listeners when a block is being manually dragged/dropped.
  *
  * @alias Blockly.Events.BlockDrag
  */
@@ -55,11 +55,7 @@ export class BlockDrag extends UiBase {
     if (!opt_block) return;
 
     this.blockId = opt_block.id;
-
-    /** Whether this is the start of a block drag. */
     this.isStart = opt_isStart;
-
-    /** The blocks affected by this drag event. */
     this.blocks = opt_blocks;
   }
 

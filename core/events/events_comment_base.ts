@@ -46,20 +46,9 @@ export class CommentBase extends AbstractEvent {
 
     if (!opt_comment) return;
 
-    /** The ID of the comment this event pertains to. */
     this.commentId = opt_comment.id;
-
-    /** The workspace identifier for this event. */
     this.workspaceId = opt_comment.workspace.id;
-
-    /**
-     * The event group ID for the group this event belongs to. Groups define
-     * events that should be treated as an single action from the user's
-     * perspective, and should be undone together.
-     */
     this.group = eventUtils.getGroup();
-
-    /** Sets whether the event should be added to the undo stack. */
     this.recordUndo = eventUtils.getRecordUndo();
   }
 

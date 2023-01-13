@@ -35,7 +35,12 @@ export abstract class Abstract {
   /** The workspace identifier for this event. */
   workspaceId?: string = undefined;
 
-  /** An ID for the group of events this block is associated with. */
+  /**
+   * An ID for the group of events this block is associated with.
+   *
+   * Groups define events that should be treated as an single action from the
+   * user's perspective, and should be undone together.
+   */
   group: string;
 
   /** Whether this event is undoable or not. */
@@ -49,14 +54,7 @@ export abstract class Abstract {
 
   /** @alias Blockly.Events.Abstract */
   constructor() {
-    /**
-     * The event group ID for the group this event belongs to. Groups define
-     * events that should be treated as an single action from the user's
-     * perspective, and should be undone together.
-     */
     this.group = eventUtils.getGroup();
-
-    /** Sets whether the event should be added to the undo stack. */
     this.recordUndo = eventUtils.getRecordUndo();
   }
 

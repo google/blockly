@@ -30,6 +30,7 @@ import type {Workspace} from '../workspace.js';
 export class CommentMove extends CommentBase {
   override type = eventUtils.COMMENT_MOVE;
 
+  /** The comment that is being moved. */
   comment_?: WorkspaceComment;
 
   // TODO: We should probably rename these to not have underscores.
@@ -50,12 +51,7 @@ export class CommentMove extends CommentBase {
       return;  // Blank event to be populated by fromJson.
     }
 
-    /**
-     * The comment that is being moved.
-     */
     this.comment_ = opt_comment;
-
-    /** The location before the move, in workspace coordinates. */
     this.oldCoordinate_ = opt_comment.getXY();
   }
 

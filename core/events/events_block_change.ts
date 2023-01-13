@@ -32,12 +32,12 @@ import * as eventUtils from './utils.js';
 export class BlockChange extends BlockBase {
   override type = eventUtils.BLOCK_CHANGE;
   /**
-   * The element that changed, one of 'field', 'comment', 'collapsed',
+   * The element that changed; one of 'field', 'comment', 'collapsed',
    * 'disabled', 'inline', or 'mutation'
    */
   element?: string;
 
-  /** The name of the field that changed if this is a change to a field. */
+  /** The name of the field that changed, if this is a change to a field. */
   name?: string;
 
   /** The original value of the element. */

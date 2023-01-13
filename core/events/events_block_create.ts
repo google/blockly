@@ -57,7 +57,6 @@ export class BlockCreate extends BlockBase {
     this.xml = Xml.blockToDomWithXY(opt_block);
     this.ids = eventUtils.getDescendantIds(opt_block);
 
-    /** JSON representation of the block that was just created. */
     this.json = blocks.save(opt_block, {addCoordinates: true}) as blocks.State;
   }
 

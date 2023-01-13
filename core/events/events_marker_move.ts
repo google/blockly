@@ -63,16 +63,9 @@ export class MarkerMove extends UiBase {
     }
     super(workspaceId);
 
-    /** The block identifier for this event. */
     this.blockId = opt_block?.id;
-
-    /** The old node the marker used to be on. */
     this.oldNode = opt_oldNode || undefined;
-
-    /** The new node the  marker is now on. */
     this.newNode = opt_newNode;
-
-    /** Whether this is a cursor event. */
     this.isCursor = isCursor;
   }
 

@@ -38,9 +38,7 @@ interface BlockLocation {
 export class BlockMove extends BlockBase {
   override type = eventUtils.BLOCK_MOVE;
 
-  /**
-   * The ID of the old parent block. Undefined if it was a top-level block.
-   */
+  /** The ID of the old parent block. Undefined if it was a top-level block. */
   oldParentId?: string;
 
   /**
@@ -51,13 +49,11 @@ export class BlockMove extends BlockBase {
 
   /**
    * The old X and Y workspace coordinates of the block if it was a top level
-   * block. Undefined if it had a parent.
+   * block. Undefined if it was not a top level block.
    */
   oldCoordinate?: Coordinate;
 
-  /**
-   * The ID of the new parent block. Undefined if it is a top-level block.
-   */
+  /** The ID of the new parent block. Undefined if it is a top-level block. */
   newParentId?: string;
 
   /**
@@ -68,7 +64,7 @@ export class BlockMove extends BlockBase {
 
   /**
    * The new X and Y workspace coordinates of the block if it is a top level
-   * block. Undefined if it has a parent.
+   * block. Undefined if it is not a top level block.
    */
   newCoordinate?: Coordinate;
 

@@ -11,18 +11,14 @@ import type {Workspace} from '../workspace.js';
 import {ProcedureBase, ProcedureBaseJson} from './events_procedure_base.js';
 import * as eventUtils from './utils.js';
 
-/**
- * Notifies listeners that a procedure model has been renamed.
- */
+/** Notifies listeners that a procedure model has been renamed. */
 export class ProcedureRename extends ProcedureBase {
   /** A string used to check the type of the event. */
   type = eventUtils.PROCEDURE_RENAME;
 
   private newName: string;
 
-  /**
-   * @param oldName The old name of the procedure model.
-   */
+  /** @param oldName The old name of the procedure model. */
   constructor(
       workspace: Workspace, model: IProcedureModel,
       public readonly oldName: string) {

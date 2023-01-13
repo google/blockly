@@ -62,11 +62,7 @@ export class BlockDelete extends BlockBase {
 
     this.oldXml = Xml.blockToDomWithXY(opt_block);
     this.ids = eventUtils.getDescendantIds(opt_block);
-
-    /** Was the block that was just deleted a shadow? */
     this.wasShadow = opt_block.isShadow();
-
-    /** JSON representation of the block that was just deleted. */
     this.oldJson =
         blocks.save(opt_block, {addCoordinates: true}) as blocks.State;
   }

@@ -35,12 +35,10 @@ export class FinishedLoading extends AbstractEvent {
    */
   constructor(opt_workspace?: Workspace) {
     super();
-    /** Whether or not the event is blank (to be populated by fromJson). */
     this.isBlank = !!opt_workspace;
 
     if (!opt_workspace) return;
 
-    /** The workspace identifier for this event. */
     this.workspaceId = opt_workspace.id;
   }
 

@@ -21,13 +21,17 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a toolbox item select event.
+ * Notifies listeners that a toolbox item has been selected.
  *
  * @alias Blockly.Events.ToolboxItemSelect
  */
 export class ToolboxItemSelect extends UiBase {
+  /** The previously selected toolbox item. */
   oldItem?: string;
+
+  /** The newly selected toolbox item. */
   newItem?: string;
+
   override type = eventUtils.TOOLBOX_ITEM_SELECT;
 
   /**
@@ -42,11 +46,7 @@ export class ToolboxItemSelect extends UiBase {
       opt_oldItem?: string|null, opt_newItem?: string|null,
       opt_workspaceId?: string) {
     super(opt_workspaceId);
-
-    /** The previously selected toolbox item. */
     this.oldItem = opt_oldItem ?? undefined;
-
-    /** The newly selected toolbox item. */
     this.newItem = opt_newItem ?? undefined;
   }
 

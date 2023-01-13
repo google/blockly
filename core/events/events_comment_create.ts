@@ -23,13 +23,14 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a comment creation event.
+ * Notifies listeners that a workspace comment was created.
  *
  * @alias Blockly.Events.CommentCreate
  */
 export class CommentCreate extends CommentBase {
   override type = eventUtils.COMMENT_CREATE;
 
+  /** The XML representation of the created workspace comment. */
   xml?: Element|DocumentFragment;
 
   /**

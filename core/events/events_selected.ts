@@ -23,12 +23,20 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a selected event.
+ * Notifies listeners that a new element has been selected.
  *
  * @alias Blockly.Events.Selected
  */
 export class Selected extends UiBase {
+  /** The id of the last selected selectable element. */
   oldElementId?: string;
+
+  /**
+   * The id of the newly selected selectable element,
+   * or undefined if unselected.
+   */
   newElementId?: string;
+
   override type = eventUtils.SELECTED;
 
   /**
@@ -44,10 +52,7 @@ export class Selected extends UiBase {
       opt_workspaceId?: string) {
     super(opt_workspaceId);
 
-    /** The id of the last selected element. */
     this.oldElementId = opt_oldElementId ?? undefined;
-
-    /** The id of the selected element. */
     this.newElementId = opt_newElementId ?? undefined;
   }
 

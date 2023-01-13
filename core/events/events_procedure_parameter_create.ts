@@ -16,7 +16,7 @@ import * as eventUtils from './utils.js';
 
 
 /**
- * Represents a parameter being added to a procedure.
+ * Notifies listeners that a parameter has been added to a procedure model.
  */
 export class ProcedureParameterCreate extends ProcedureParameterBase {
   /** A string used to check the type of the event. */

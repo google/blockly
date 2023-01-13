@@ -22,11 +22,15 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a trashcan open event.
+ * Notifies listeners when the trashcan is opening or closing.
  *
  * @alias Blockly.Events.TrashcanOpen
  */
 export class TrashcanOpen extends UiBase {
+  /**
+   * True if the trashcan is currently opening (previously closed).
+   * False if it is currently closing (previously open).
+   */
   isOpen?: boolean;
   override type = eventUtils.TRASHCAN_OPEN;
 
@@ -38,8 +42,6 @@ export class TrashcanOpen extends UiBase {
    */
   constructor(opt_isOpen?: boolean, opt_workspaceId?: string) {
     super(opt_workspaceId);
-
-    /** Whether the trashcan flyout is opening (false if closing). */
     this.isOpen = opt_isOpen;
   }
 

@@ -14,7 +14,7 @@ const gulp = require('gulp');
 const gzip = require('gulp-gzip');
 const fs = require('fs');
 const path = require('path');
-const {execSync} = require('child_process');
+const {execSync, exec} = require('child_process');
 const rimraf = require('rimraf');
 
 const buildTasks = require('./build_tasks');
@@ -371,6 +371,23 @@ function advancedCompileInBrowser() {
   return runTestTask('advanced_compile_in_browser', runCompileCheckInBrowser);
 }
 
+function supportedTypescriptExamples() {
+  const id = 'supported_typescript_examples';
+  const command = 'tsc -p ./tests/typescript/tsconfig.json';
+  return runTestTask(id, async() => {
+    return new Promise((resolve, reject) => {
+      // NOTE: execSync throws with `err` as the message, though
+      // `stdout` is needed to display the tsc error output.
+      exec(command, (err, stdout) => {
+        const tscFailed = !!err;
+        const tscLog = stdout;
+        if (tscFailed) reject(tscLog);
+        resolve();
+      });
+    });
+  });
+}
+
 // Run all tests in sequence.
 const tasks = [
   eslint,
@@ -381,6 +398,7 @@ const tasks = [
   mocha,
   generators,
   node,
+  supportedTypescriptExamples,
   // Make sure these two are in series with each other
   advancedCompile,
   advancedCompileInBrowser

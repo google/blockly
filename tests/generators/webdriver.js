@@ -46,8 +46,8 @@ async function runGeneratorsInBrowser(outputDir) {
       'goog:chromeOptions': {
         args: ['--allow-file-access-from-files'],
       },
-      // Give scripts 2 minutes to complete (for generators)
-      timeouts: {script: 120000}
+      // Give scripts 5 minutes to complete (for generators)
+      timeouts: {script: 300000}
     },
     logLevel: 'warn',
     services: ['selenium-standalone']

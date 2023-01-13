@@ -5,7 +5,7 @@
  */
 
 /**
- * Notifies the developer that a variable model was renamed.
+ * Notifies listeners that a variable model was renamed.
  *
  * @class
  */

@@ -21,7 +21,7 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Notifies the developer that a toolbox item has been selected.
+ * Notifies listeners that a toolbox item has been selected.
  *
  * @alias Blockly.Events.ToolboxItemSelect
  */

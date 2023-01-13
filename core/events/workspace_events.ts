@@ -19,7 +19,7 @@ import * as eventUtils from './utils.js';
 
 
 /**
- * Notifies the developer when the workspace has finished deserializing from
+ * Notifies listeners when the workspace has finished deserializing from
  * JSON/XML.
  *
  * @alias Blockly.Events.FinishedLoading

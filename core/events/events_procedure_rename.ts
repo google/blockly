@@ -12,7 +12,7 @@ import {ProcedureBase, ProcedureBaseJson} from './events_procedure_base.js';
 import * as eventUtils from './utils.js';
 
 /**
- * Notifies the developer that a procedure model has been renamed.
+ * Notifies listeners that a procedure model has been renamed.
  */
 export class ProcedureRename extends ProcedureBase {
   /** A string used to check the type of the event. */

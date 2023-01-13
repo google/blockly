@@ -15,7 +15,7 @@ import * as eventUtils from './utils.js';
 
 
 /**
- * Notifies the developer that a procedure data model has been created.
+ * Notifies listeners that a procedure data model has been created.
  */
 export class ProcedureCreate extends ProcedureBase {
   /** A string used to check the type of the event. */

@@ -24,7 +24,7 @@ import * as eventUtils from './utils.js';
 
 
 /**
- * Notifies the developer when some element of a block has changed (e.g.
+ * Notifies listeners when some element of a block has changed (e.g.
  * field values, comments, etc).
  *
  * @alias Blockly.Events.BlockChange

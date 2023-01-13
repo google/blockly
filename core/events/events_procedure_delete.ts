@@ -15,7 +15,7 @@ import * as eventUtils from './utils.js';
 
 
 /**
- * Notifies the developer that a procedure data model has been deleted.
+ * Notifies listeners that a procedure data model has been deleted.
  */
 export class ProcedureDelete extends ProcedureBase {
   /** A string used to check the type of the event. */

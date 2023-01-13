@@ -22,7 +22,7 @@ import {Workspace} from '../workspace.js';
 
 
 /**
- * Notifies the developer when a is being manually dragged/dropped.
+ * Notifies listeners when a is being manually dragged/dropped.
  *
  * @alias Blockly.Events.BlockDrag
  */

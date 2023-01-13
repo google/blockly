@@ -22,7 +22,7 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Notifies the developer when the trashcan is opening or closing.
+ * Notifies listeners when the trashcan is opening or closing.
  *
  * @alias Blockly.Events.TrashcanOpen
  */

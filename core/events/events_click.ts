@@ -23,7 +23,7 @@ import {Workspace} from '../workspace.js';
 
 
 /**
- * Notifies the developer that ome blockly element was clicked.
+ * Notifies listeners that ome blockly element was clicked.
  *
  * @alias Blockly.Events.Click
  */

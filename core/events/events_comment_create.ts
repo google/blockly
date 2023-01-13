@@ -23,7 +23,7 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Notifies the developer that a workspace comment was created.
+ * Notifies listeners that a workspace comment was created.
  *
  * @alias Blockly.Events.CommentCreate
  */

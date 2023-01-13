@@ -24,7 +24,7 @@ import * as eventUtils from './utils.js';
 
 
 /**
- * Notifies the developer that a marker (used for keyboard navigation) has
+ * Notifies listeners that a marker (used for keyboard navigation) has
  * moved.
  *
  * @alias Blockly.Events.MarkerMove

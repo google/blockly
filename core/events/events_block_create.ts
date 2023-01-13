@@ -24,7 +24,7 @@ import {Workspace} from '../workspace.js';
 
 
 /**
- * Notifies the developer when a block (or connected stack of blocks) is
+ * Notifies listeners when a block (or connected stack of blocks) is
  * created.
  *
  * @alias Blockly.Events.BlockCreate

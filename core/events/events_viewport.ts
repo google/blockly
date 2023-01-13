@@ -21,7 +21,7 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Notifies the developer that the workspace surface's position or scale has
+ * Notifies listeners that the workspace surface's position or scale has
  * changed.
  *
  * Does not notify when the workspace itself resizes.

@@ -14,7 +14,7 @@ import * as eventUtils from './utils.js';
 
 
 /**
- * Notifies the developer that a procedure's return type/status has changed.
+ * Notifies listeners that a procedure's return type/status has changed.
  */
 export class ProcedureChangeReturn extends ProcedureBase {
   /** A string used to check the type of the event. */

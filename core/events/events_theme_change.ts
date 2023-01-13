@@ -21,7 +21,7 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Notifies the developer that the workspace theme has changed.
+ * Notifies listeners that the workspace theme has changed.
  *
  * @alias Blockly.Events.ThemeChange
  */

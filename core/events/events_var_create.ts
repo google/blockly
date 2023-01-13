@@ -22,7 +22,7 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Notifies the developer that a variable model has been created.
+ * Notifies listeners that a variable model has been created.
  *
  * @alias Blockly.Events.VarCreate
  */

@@ -23,7 +23,7 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a selected event.
- * Notifies the developer that a new element has been selected.
+ * Notifies listeners that a new element has been selected.
  *
  * @alias Blockly.Events.Selected
  */

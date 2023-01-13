@@ -30,7 +30,7 @@ interface BlockLocation {
 }
 
 /**
- * Notifies the developer when a block is moved. This could be from one
+ * Notifies listeners when a block is moved. This could be from one
  * connection to another, or from one location on the workspace to another.
  *
  * @alias Blockly.Events.BlockMove

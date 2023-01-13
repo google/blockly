@@ -12,10 +12,10 @@ readonly RELEASE_DIR='dist'
 gzip -k "${RELEASE_DIR}/blockly_compressed.js"
 gzip -k "${RELEASE_DIR}/blocks_compressed.js"
 
-blockly_size=$(wc -c < "${RELEASE_DIR}/blockly_compressed.js")
-blocks_size=$(wc -c < "${RELEASE_DIR}/blocks_compressed.js")
-blockly_gz_size=$(wc -c < "${RELEASE_DIR}/blockly_compressed.js.gz")
-blocks_gz_size=$(wc -c < "${RELEASE_DIR}/blocks_compressed.js.gz")
+blockly_size=$(wc -c < "${RELEASE_DIR}/blockly_compressed.js" | xargs)
+blocks_size=$(wc -c < "${RELEASE_DIR}/blocks_compressed.js" | xargs)
+blockly_gz_size=$(wc -c < "${RELEASE_DIR}/blockly_compressed.js.gz" | xargs)
+blocks_gz_size=$(wc -c < "${RELEASE_DIR}/blocks_compressed.js.gz" |  xargs)
 quarters=(1 1 1 2 2 2 3 3 3 4 4 4)
 month=$(date +%-m)
 quarter=$(echo Q${quarters[$month - 1]} $(date +%Y))

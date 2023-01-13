@@ -301,6 +301,16 @@ async function generators() {
 
     await runGeneratorsInBrowser(OUTPUT_DIR).catch(() => {});
 
+    console.log('Contents of output dir:');
+    fs.readdirSync(OUTPUT_DIR).forEach(file => {
+      console.log(file);
+    });
+
+    console.log('Contents of build dir:');
+    fs.readdirSync('build/').forEach(file => {
+      console.log(file);
+    });
+
     const generatorSuffixes = ['js', 'py', 'dart', 'lua', 'php'];
     let failed = 0;
     generatorSuffixes.forEach((suffix) => {

@@ -299,7 +299,7 @@ async function generators() {
     rimraf.sync(OUTPUT_DIR);
     fs.mkdirSync(OUTPUT_DIR);
 
-    await runGeneratorsInBrowser(OUTPUT_DIR).catch(() => {});
+    await runGeneratorsInBrowser(OUTPUT_DIR).catch((e) => {console.log(e)});
 
     console.log('Contents of output dir:');
     fs.readdirSync(OUTPUT_DIR).forEach(file => {

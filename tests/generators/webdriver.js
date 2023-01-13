@@ -46,8 +46,6 @@ async function runGeneratorsInBrowser(outputDir) {
       'goog:chromeOptions': {
         args: ['--allow-file-access-from-files'],
       },
-      // Give scripts 5 minutes to complete (for generators)
-      timeouts: {script: 300000}
     },
     logLevel: 'warn',
     services: ['selenium-standalone']
@@ -69,6 +67,8 @@ async function runGeneratorsInBrowser(outputDir) {
 
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
+  // Increase the script timeouts to 2 minutes to allow the generators to finish.
+  await browser.setTimeout({ 'script': 120000 })
   console.log('Loading url: ' + url);
   await browser.url(url);
 

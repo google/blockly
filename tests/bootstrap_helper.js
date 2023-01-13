@@ -14,30 +14,60 @@
  * undeclared dependencies on them.
  */
 
-/* eslint-disable-next-line no-undef */
-for (const require of window.bootstrapInfo.requires) {
-  goog.require(require);
+(function() {
+  const info = window.bootstrapInfo;
 
-  // If require is a top-level chunk, create a global variable for it.
-  // This replaces the goog.module.declareLegacyNamespace calls that
-  // previously existed in each chunk entrypoint.
-  const exportName = {
-    'Blockly.Dart': 'dartGenerator',
-    'Blockly.Dart.all': 'dartGenerator',
-    'Blockly.JavaScript': 'javascriptGenerator',
-    'Blockly.JavaScript.all': 'javascriptGenerator',
-    'Blockly.Lua': 'luaGenerator',
-    'Blockly.Lua.all': 'luaGenerator',
-    'Blockly.PHP': 'phpGenerator',
-    'Blockly.PHP.all': 'phpGenerator',
-    'Blockly.Python': 'pythonGenerator',
-    'Blockly.Python.all': 'pythonGenerator',
-  }[require];
-  if (exportName) {
-    window[exportName] = goog.module.get(require)[exportName];
-  } else if (require === 'Blockly') {
-    window.Blockly = goog.module.get(require);
-  } else if (require === 'Blockly.libraryBlocks') {
-    window.libraryBlocks = goog.module.get(require);
+  if (!info.compressed) {
+    // Force debug module loader to finish loading all modules.
+    for (const require of info.requires) {
+      goog.require(require);
+
+      // This is a kludge to work around an issue where attempting to
+      // load Blockly.libraryBlocks (blocks/blocks.js) fails if the
+      // Blockly global variable is not defined.
+      //
+      // This is apparently because the debug module loader fails to
+      // load Blockly.libraryBlocks.lists (blocks/lists.js) and
+      // .procedures (blocks/procedures.js) first, despite they both
+      // being required from blocks.js, and that is apparently because
+      // they both depend on Blockly.Xml which the debug loader seems
+      // to think has not been loaded yet even though it has.
+      if (require === 'Blockly') {
+        window.Blockly = goog.module.get('Blockly');
+      }
+    }
   }
-}
+
+  // Create global names for named and destructured imports.
+  for (const varName in info.namedImports) {
+    const id = info.namedImports[varName];
+    const value = info.compressed ? get(id) : goog.module.get(id);
+    if (value) {
+      window[varName] = value;
+    }
+  }
+  for (const varName in info.destructuredImports) {
+    const id = info.destructuredImports[varName];
+    const value = info.compressed ? get(id) : goog.module.get(id)[varName];
+    if (value) {
+      window[varName] = value;
+    }
+  }
+
+  return;  // All done.  Only helper functions after this point.
+
+  /**
+   * Get the object referred to by a doted-itentifier path
+   * (e.g. foo.bar.baz).
+   * @param {string} path The path referring to the object.
+   * @return {string|null} The object, or null if not found.
+   */
+  function get(path) {
+    let obj = window;
+    for (const part of path.split('.')) {
+      obj = obj[part];
+      if (!obj) return null;
+    }
+    return obj;
+  }
+})();

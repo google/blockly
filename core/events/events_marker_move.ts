@@ -39,7 +39,10 @@ export class MarkerMove extends UiBase {
   /** The new node the marker is now on. */
   newNode?: ASTNode;
 
-  /** True if this is a cursor event, false otherwise. */
+  /**
+   * True if this is a cursor event, false otherwise.
+   * For information about cursors vs markers see {@link https://blocklycodelabs.dev/codelabs/keyboard-navigation/index.html?index=..%2F..index#1}.
+   */
   isCursor?: boolean;
 
   override type = eventUtils.MARKER_MOVE;

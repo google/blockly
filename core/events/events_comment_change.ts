@@ -29,8 +29,8 @@ import type {Workspace} from '../workspace.js';
 export class CommentChange extends CommentBase {
   override type = eventUtils.COMMENT_CHANGE;
 
+  // TODO(#6774): We should remove underscores.
   /** The previous contents of the comment. */
-
   oldContents_?: string;
 
   /** The new contents of the comment. */

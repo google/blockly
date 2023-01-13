@@ -33,7 +33,7 @@ export class CommentMove extends CommentBase {
   /** The comment that is being moved. */
   comment_?: WorkspaceComment;
 
-  // TODO: We should probably rename these to not have underscores.
+  // TODO(#6774): We should remove underscores.
   /** The location of the comment before the move, in workspace coordinates. */
   oldCoordinate_?: Coordinate;
 

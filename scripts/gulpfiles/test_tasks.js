@@ -299,7 +299,7 @@ async function generators() {
     rimraf.sync(OUTPUT_DIR);
     fs.mkdirSync(OUTPUT_DIR);
 
-    await runGeneratorsInBrowser(OUTPUT_DIR).catch(() => {});
+    await runGeneratorsInBrowser(OUTPUT_DIR);
 
     const generatorSuffixes = ['js', 'py', 'dart', 'lua', 'php'];
     let failed = 0;

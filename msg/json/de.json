@@ -55,7 +55,7 @@
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Die Variable „%1“ kann nicht gelöscht werden, da sie Teil der Definition der Funktion „%2“ ist.",
 	"DELETE_VARIABLE": "Die Variable „%1“ löschen",
 	"COLOUR_PICKER_HELPURL": "https://de.wikipedia.org/wiki/Farbe",
-	"COLOUR_PICKER_TOOLTIP": "Wählt eine Farbe aus der Palette aus.",
+	"COLOUR_PICKER_TOOLTIP": "Wähle eine Farbe aus der Palette.",
 	"COLOUR_RANDOM_TITLE": "zufällige Farbe",
 	"COLOUR_RANDOM_TOOLTIP": "Erzeugt eine Farbe nach dem Zufallsprinzip.",
 	"COLOUR_RGB_TITLE": "Farbe aus",

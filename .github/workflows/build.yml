@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   build:
+    timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -54,6 +55,7 @@ jobs:
         CI: true
 
   lint:
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -70,6 +72,7 @@ jobs:
       run: npm run lint
 
   clang-formatter:
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3

@@ -18,7 +18,7 @@ gulp.replace = require('gulp-replace');
 
 const path = require('path');
 const fs = require('fs');
-const rimraf = require('rimraf');
+const {rimraf} = require('rimraf');
 const build = require('./build_tasks');
 const {getPackageJson} = require('./helper_tasks');
 const {BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
@@ -354,12 +354,12 @@ function packageDTS() {
 /**
  * This task cleans the release directory (by deleting it).
  */
-function cleanReleaseDir(done) {
+function cleanReleaseDir() {
   // Sanity check.
   if (RELEASE_DIR === '.' || RELEASE_DIR === '/') {
-    throw new Error(`Refusing to rm -rf ${RELEASE_DIR}`);
+    return Promise.reject(`Refusing to rm -rf ${RELEASE_DIR}`);
   }
-  rimraf(RELEASE_DIR, done);
+  return rimraf(RELEASE_DIR);
 }
 
 /**

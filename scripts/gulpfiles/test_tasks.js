@@ -165,17 +165,23 @@ function compareSize(file, expected) {
   const stat = fs.statSync(name);
   const size = stat.size;
 
+  if (!compare) {
+    const message = `Failed: Previous size of ${name} is undefined.`;
+    console.log(`${BOLD_RED}${message}${ANSI_RESET}`);
+    return 1;
+  } 
+  
   if (size > compare) {
     const message = `Failed: ` +
         `Size of ${name} has grown more than 10%. ${size} vs ${expected}`;
     console.log(`${BOLD_RED}${message}${ANSI_RESET}`);
     return 1;
-  } else {
-    const message =
-        `Size of ${name} at ${size} compared to previous ${expected}`;
-    console.log(`${BOLD_GREEN}${message}${ANSI_RESET}`);
-    return 0;
   }
+
+  const message =
+      `Size of ${name} at ${size} compared to previous ${expected}`;
+  console.log(`${BOLD_GREEN}${message}${ANSI_RESET}`);
+  return 0;
 }
 
 /**

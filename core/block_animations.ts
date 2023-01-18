@@ -200,13 +200,12 @@ function disconnectUiStep(block: BlockSvg, magnitude: number, start: Date) {
  * @internal
  */
 export function disconnectUiStop() {
-  if (wobblingBlock) {
-    if (disconnectPid) {
-      clearTimeout(disconnectPid);
-      disconnectPid = null;
-    }
-    wobblingBlock.getSvgRoot().setAttribute(
-        'transform', wobblingBlock.getTranslation());
-    wobblingBlock = null;
+  if (!wobblingBlock) return;
+  if (disconnectPid) {
+    clearTimeout(disconnectPid);
+    disconnectPid = null;
   }
+  wobblingBlock.getSvgRoot().setAttribute(
+      'transform', wobblingBlock.getTranslation());
+  wobblingBlock = null;
 }

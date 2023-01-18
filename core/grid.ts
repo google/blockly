@@ -91,8 +91,7 @@ export class Grid {
    * @internal
    */
   update(scale: number) {
-    // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
-    const safeSpacing = this.spacing * scale || 100;
+    const safeSpacing = this.spacing * scale;
 
     this.pattern.setAttribute('width', safeSpacing.toString());
     this.pattern.setAttribute('height', safeSpacing.toString());

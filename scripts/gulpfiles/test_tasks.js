@@ -34,6 +34,7 @@ const ANSI_RESET = '\x1b[0m';
 let successCount = 0;
 let failCount = 0;
 let firstErr;
+const results = {};
 
 /**
  * Run an arbitrary Gulp task as a test.
@@ -59,6 +60,7 @@ function runTestTask(id, task) {
         successCount++;
         if (process.env.CI) console.log('::endgroup::');
         console.log(`${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${id}`);
+        results[id] = {success: true}; 
         resolve(result);
       })
       .catch((err) => {
@@ -70,10 +72,23 @@ function runTestTask(id, task) {
         console.error(err.message);
         if (process.env.CI) console.log('::endgroup::');
         console.log(`${BOLD_RED}FAILED:${ANSI_RESET} ${id}`);
+        results[id] = {success: false, message: err.message};
         // Always continue.
         resolve(err);
       });
   });
+}
+
+function createSummary() {
+  let summary = '# Test Summary\n\n';
+  summary += '|Test Name|Passed?|Error message|\n';
+  summary += '|---------|-------|-------------|\n';
+  for (const test in results) {
+    summary += `|${test}|${results[test].success
+      ? ':white_check_mark:' : ':x:'}|${results[test].message ?? ''}|\n`;
+  }
+  summary += `\n\n## Total: ${successCount} passed. ${failCount} failed.`;
+  return summary;
 }
 
 /**
@@ -81,6 +96,14 @@ function runTestTask(id, task) {
  */
 function reportTestResult() {
   console.log('=======================================');
+  if (process.env.CI && process.env.GITHUB_STEP_SUMMARY) {
+    try {
+      fs.writeFileSync(process.env.GITHUB_STEP_SUMMARY, createSummary());
+    } catch(e) {
+      // Don't fail CI just because we couldn't write the summary.
+      console.log('Failed to write job summary', e);
+    }
+  }
   // Check result.
   if (failCount === 0) {
     console.log(

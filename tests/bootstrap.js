@@ -20,11 +20,11 @@
  *
  *     See tests/playground.html for example usage.
  *
- *     Exception: for speed, if this is script is from a host other 
+ *     Exception: for speed, if this is script is from a host other
  *     than localhost, blockly_compressed.js (et al.) will be loaded
- *     instead.  Because of the sequential, non-parallel module loading 
- *     carried out by the debug module loader, loading can be painfully 
- *     tedious over a slow network connection. (This can be overridden 
+ *     instead.  Because of the sequential, non-parallel module loading
+ *     carried out by the debug module loader, loading can be painfully
+ *     tedious over a slow network connection. (This can be overridden
  *     by the page if desired.)
  *
  *     The bootstrap code will consult a BLOCKLY_BOOTSTRAP_OPTIONS

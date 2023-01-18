@@ -99,7 +99,7 @@
     "gulp-sourcemaps": "^3.0.0",
     "gulp-umd": "^2.0.0",
     "http-server": "^14.0.0",
-    "js-green-licenses": "^3.0.0",
+    "js-green-licenses": "^4.0.0",
     "json5": "^2.2.0",
     "markdown-tables-to-json": "^0.1.7",
     "mocha": "^10.0.0",

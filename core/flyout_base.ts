@@ -530,14 +530,10 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     this.svgGroup_?.setAttribute('height', height.toString());
     this.workspace_.setCachedParentSvgSize(width, height);
 
-    if (this.svgGroup_?.tagName === 'svg') {
+    if (this.svgGroup_) {
+      console.log('do the positioning');
       const transform = 'translate(' + x + 'px,' + y + 'px)';
       dom.setCssTransform(this.svgGroup_, transform);
-    } else {
-      // IE and Edge don't support CSS transforms on SVG elements so
-      // it's important to set the transform on the SVG element itself
-      const transform = 'translate(' + x + ',' + y + ')';
-      this.svgGroup_?.setAttribute('transform', transform);
     }
 
     // Update the scrollbar (if one exists).
@@ -603,19 +599,6 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     const flyoutInfo = this.createFlyoutInfo_(parsedContent);
 
     this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
-
-    // IE 11 is an incompetent browser that fails to fire mouseout events.
-    // When the mouse is over the background, deselect all blocks.
-    function deselectAll(this: Flyout) {
-      const topBlocks = this.workspace_.getTopBlocks(false);
-      for (let i = 0, block; block = topBlocks[i]; i++) {
-        block.removeSelect();
-      }
-    }
-
-    this.listeners_.push(browserEvents.conditionalBind(
-        (this.svgBackground_ as SVGPathElement), 'pointerover', this,
-        deselectAll));
 
     if (this.horizontalLayout) {
       this.height_ = 0;

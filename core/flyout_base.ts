@@ -531,7 +531,6 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     this.workspace_.setCachedParentSvgSize(width, height);
 
     if (this.svgGroup_) {
-      console.log('do the positioning');
       const transform = 'translate(' + x + 'px,' + y + 'px)';
       dom.setCssTransform(this.svgGroup_, transform);
     }

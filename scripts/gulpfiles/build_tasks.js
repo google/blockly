@@ -23,7 +23,7 @@ const clangFormatter = require('gulp-clang-format');
 const closureCompiler = require('google-closure-compiler').gulp();
 const closureDeps = require('google-closure-deps');
 const argv = require('yargs').argv;
-const rimraf = require('rimraf');
+const {rimraf} = require('rimraf');
 
 const {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 const {getPackageJson} = require('./helper_tasks');
@@ -712,12 +712,12 @@ function buildAdvancedCompilationTest() {
 /**
  * This task cleans the build directory (by deleting it).
  */
-function cleanBuildDir(done) {
+function cleanBuildDir() {
   // Sanity check.
   if (BUILD_DIR === '.' || BUILD_DIR === '/') {
-    throw new Error(`Refusing to rm -rf ${BUILD_DIR}`);
+    return Promise.reject(`Refusing to rm -rf ${BUILD_DIR}`);
   }
-  rimraf(BUILD_DIR, done);
+  return rimraf(BUILD_DIR);
 }
 
 /**

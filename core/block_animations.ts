@@ -205,7 +205,8 @@ export function disconnectUiStop() {
       clearTimeout(disconnectPid);
       disconnectPid = null;
     }
-    wobblingBlock.getSvgRoot().setAttribute('transform', wobblingBlock.getTranslation());
+    wobblingBlock.getSvgRoot().setAttribute(
+        'transform', wobblingBlock.getTranslation());
     wobblingBlock = null;
   }
 }

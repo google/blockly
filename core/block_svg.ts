@@ -143,7 +143,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   override previousConnection!: RenderedConnection;
   private readonly useDragSurface_: boolean;
-  
+
   private translation = '';
 
   /**
@@ -439,9 +439,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     this.translation = `translate(${x}, ${y})`;
     this.getSvgRoot().setAttribute('transform', this.getTranslation());
   }
-  
+
   /**
    * Returns the SVG translation of this block.
+   *
    * @internal
    */
   getTranslation(): string {
@@ -779,7 +780,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   setDragging(adding: boolean) {
     if (adding) {
-      const group = this.getSvgRoot();
       this.translation = '';
       common.draggingConnections.push(...this.getConnections_(true));
       dom.addClass(this.svgGroup_, 'blocklyDragging');

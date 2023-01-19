@@ -14,6 +14,50 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.xml');
 
+import * as deprecation from './deprecation.js';
+
+
+/**
+ * Injected dependencies.  By default these are just (and have the
+ * same types as) the corresponding DOM Window properties, but the
+ * Node.js wrapper for Blockly (see scripts/package/node/core.js)
+ * calls injectDependencies to supply implementations from the jsdom
+ * package instead.
+ */
+let {document, DOMParser, XMLSerializer} = globalThis;
+
+/**
+ * Inject implementations of document, DOMParser and/or XMLSerializer
+ * to use instead of the default ones.
+ *
+ * Used by the Node.js wrapper for Blockly (see
+ * scripts/package/node/core.js) to supply implementations from the
+ * jsdom package instead.
+ *
+ * While they may be set individually, it is normally the case that
+ * all three will be sourced from the same JSDOM instance.  They MUST
+ * at least come from the same copy of the jsdom package.  (Typically
+ * this is hard to avoid satsifying this requirement, but it can be
+ * inadvertently violated by using webpack to build multiple bundles
+ * containing Blockly and jsdom, and then loading more than one into
+ * the same JavaScript runtime.  See
+ * https://github.com/google/blockly-samples/pull/1452#issuecomment-1364442135
+ * for an example of how this happened.)
+ *
+ * @param dependencies Options object containing dependencies to set.
+ */
+export function injectDependencies(dependencies: {
+  document?: Document,
+  DOMParser?: typeof DOMParser,
+  XMLSerializer?: typeof XMLSerializer,
+}) {
+  ({
+    // Default to existing value if option not supplied.
+    document = document,
+    DOMParser = DOMParser,
+    XMLSerializer = XMLSerializer,
+  } = dependencies);
+}
 
 /**
  * Namespace for Blockly's XML.
@@ -23,31 +67,27 @@ goog.declareModuleId('Blockly.utils.xml');
 export const NAME_SPACE = 'https://developers.google.com/blockly/xml';
 
 /**
- * The Document object to use.  By default this is just document, but
- * the Node.js build of Blockly (see scripts/package/node/core.js)
- * calls setDocument to supply a Document implementation from the
- * jsdom package instead.
- */
-let xmlDocument: Document = globalThis['document'];
-
-/**
  * Get the document object to use for XML serialization.
  *
  * @returns The document object.
+ * @deprecated No longer provided by Blockly.
  * @alias Blockly.utils.xml.getDocument
  */
 export function getDocument(): Document {
-  return xmlDocument;
+  deprecation.warn('Blockly.utils.xml.getDocument', 'version 9', 'version 10');
+  return document;
 }
 
 /**
  * Get the document object to use for XML serialization.
  *
- * @param document The document object to use.
+ * @param xmlDocument The document object to use.
+ * @deprecated No longer provided by Blockly.
  * @alias Blockly.utils.xml.setDocument
  */
-export function setDocument(document: Document) {
-  xmlDocument = document;
+export function setDocument(xmlDocument: Document) {
+  deprecation.warn('Blockly.utils.xml.setDocument', 'version 9', 'version 10');
+  document = xmlDocument;
 }
 
 /**
@@ -58,7 +98,7 @@ export function setDocument(document: Document) {
  * @alias Blockly.utils.xml.createElement
  */
 export function createElement(tagName: string): Element {
-  return xmlDocument.createElementNS(NAME_SPACE, tagName);
+  return document.createElementNS(NAME_SPACE, tagName);
 }
 
 /**
@@ -69,7 +109,7 @@ export function createElement(tagName: string): Element {
  * @alias Blockly.utils.xml.createTextNode
  */
 export function createTextNode(text: string): Text {
-  return xmlDocument.createTextNode(text);
+  return document.createTextNode(text);
 }
 
 /**

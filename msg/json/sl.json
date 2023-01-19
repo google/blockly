@@ -311,6 +311,7 @@
 	"LISTS_SORT_TYPE_NUMERIC": "številsko",
 	"LISTS_SORT_TYPE_TEXT": "abecedno",
 	"LISTS_SORT_TYPE_IGNORECASE": "abecedno, prezri velikost črk",
+	"LISTS_SPLIT_HELPURL": "https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "ustvari seznam iz besedila",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "ustvari besedilo iz seznama",
 	"LISTS_SPLIT_WITH_DELIMITER": "z ločilom",

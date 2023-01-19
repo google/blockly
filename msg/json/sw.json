@@ -1,10 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
+			"Wangombe",
 			"Yasen igra"
 		]
 	},
 	"TODAY": "Leo",
 	"HELP": "Msaada",
+	"UNDO": "Tengua",
 	"DIALOG_OK": "Sawa"
 }

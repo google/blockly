@@ -94,7 +94,7 @@ export class BlockDragger implements IBlockDragger {
   }
 
   /**
-   * Start dragging a block.  This includes moving it to the drag surface.
+   * Start dragging a block.
    *
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at mouse down, in pixel units.
@@ -124,10 +124,6 @@ export class BlockDragger implements IBlockDragger {
       this.disconnectBlock_(healStack, currentDragDeltaXY);
     }
     this.draggingBlock_.setDragging(true);
-    // For future consideration: we may be able to put moveToDragSurface inside
-    // the block dragger, which would also let the block not track the block
-    // drag surface.
-    this.draggingBlock_.moveToDragSurface();
   }
 
   /**
@@ -221,16 +217,11 @@ export class BlockDragger implements IBlockDragger {
 
     const preventMove = !!this.dragTarget_ &&
         this.dragTarget_.shouldPreventMove(this.draggingBlock_);
-    let newLoc: Coordinate;
     let delta: Coordinate|null = null;
-    if (preventMove) {
-      newLoc = this.startXY_;
-    } else {
+    if (!preventMove) {
       const newValues = this.getNewLocationAfterDrag_(currentDragDeltaXY);
       delta = newValues.delta;
-      newLoc = newValues.newLocation;
     }
-    this.draggingBlock_.moveOffDragSurface(newLoc);
 
     if (this.dragTarget_) {
       this.dragTarget_.onDrop(this.draggingBlock_);
@@ -442,6 +433,8 @@ function initIconData(block: BlockSvg): IconPositionData[] {
   for (let i = 0, descendant; descendant = descendants[i]; i++) {
     const icons = descendant.getIcons();
     for (let j = 0; j < icons.length; j++) {
+      // Only bother to track icons whose bubble is visible.
+      if (!icons[j].isVisible()) continue;
       const data = {
         // Coordinate with x and y properties (workspace
         // coordinates).

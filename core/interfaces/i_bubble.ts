@@ -11,7 +11,6 @@
  */
 import * as goog from '../../closure/goog/goog.js';
 import type {Coordinate} from '../utils/coordinate.js';
-import type {BlockDragSurfaceSvg} from '../block_drag_surface.js';
 goog.declareModuleId('Blockly.IBubble');
 
 import type {IContextMenu} from './i_contextmenu.js';
@@ -56,15 +55,11 @@ export interface IBubble extends IDraggable, IContextMenu {
   setDragging(dragging: boolean): void;
 
   /**
-   * Move this bubble during a drag, taking into account whether or not there is
-   * a drag surface.
+   * Move this bubble during a drag.
    *
-   * @param dragSurface The surface that carries rendered items during a drag,
-   *     or null if no drag surface is in use.
    * @param newLoc The location to translate to, in workspace coordinates.
    */
-  moveDuringDrag(dragSurface: BlockDragSurfaceSvg|null, newLoc: Coordinate):
-      void;
+  moveDuringDrag(newLoc: Coordinate): void;
 
   /**
    * Move the bubble to the specified location in workspace coordinates.

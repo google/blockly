@@ -12,7 +12,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.inject');
 
-import {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import * as bumpObjects from './bump_objects.js';
@@ -31,7 +30,6 @@ import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
-import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 
 
@@ -69,14 +67,7 @@ export function inject(
   (container as AnyDuringMigration).appendChild(subContainer);
   const svg = createDom(subContainer, options);
 
-  // Create surfaces for dragging things. These are optimizations
-  // so that the browser does not repaint during the drag.
-  const blockDragSurface = new BlockDragSurfaceSvg(subContainer);
-
-  const workspaceDragSurface = new WorkspaceDragSurfaceSvg(subContainer);
-
-  const workspace =
-      createMainWorkspace(svg, options, blockDragSurface, workspaceDragSurface);
+  const workspace = createMainWorkspace(svg, options);
 
   init(workspace);
 
@@ -154,16 +145,11 @@ function createDom(container: Element, options: Options): Element {
  *
  * @param svg SVG element with pattern defined.
  * @param options Dictionary of options.
- * @param blockDragSurface Drag surface SVG for the blocks.
- * @param workspaceDragSurface Drag surface SVG for the workspace.
  * @returns Newly created main workspace.
  */
-function createMainWorkspace(
-    svg: Element, options: Options, blockDragSurface: BlockDragSurfaceSvg,
-    workspaceDragSurface: WorkspaceDragSurfaceSvg): WorkspaceSvg {
+function createMainWorkspace(svg: Element, options: Options): WorkspaceSvg {
   options.parentWorkspace = null;
-  const mainWorkspace =
-      new WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
+  const mainWorkspace = new WorkspaceSvg(options);
   const wsOptions = mainWorkspace.options;
   mainWorkspace.scale = wsOptions.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));

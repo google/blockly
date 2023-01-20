@@ -30,7 +30,7 @@ class FieldMitosis extends Field<CellGroup>{
         this.setValidator(validator);
     }
 
-    // Overwritten Field classes.
+    // Overwritten Field methods.
 
     protected doClassValidation_(newCell?: unknown): CellGroup | null {
         if (!this.isCell(newCell)) return null;
@@ -40,7 +40,7 @@ class FieldMitosis extends Field<CellGroup>{
         return cellGroup;
     }
 
-    // Example-specific classes.
+    // Example-specific methods.
 
     private isCell(maybeCell: unknown): maybeCell is Cell {
         if (!maybeCell) return false;

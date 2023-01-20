@@ -356,7 +356,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @param newLoc The location to translate to, in workspace coordinates.
    * @internal
    */
-  moveDuringDrag(dragSurface: BlockDragSurfaceSvg, newLoc: Coordinate) {
+  moveDuringDrag(newLoc: Coordinate) {
     const translation = `translate(${newLoc.x}, ${newLoc.y})`;
     this.getSvgRoot().setAttribute('transform', translation);
   }

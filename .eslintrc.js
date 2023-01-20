@@ -26,7 +26,8 @@ const rules = {
     ],
     // Blockly uses for exporting symbols. no-self-assign added in eslint 5.
     "no-self-assign": ["off"],
-    // Blockly uses single quotes except for JSON blobs, which must use double quotes.
+    // Blockly uses single quotes except for JSON blobs, which must use double
+    // quotes.
     "quotes": ["off"],
     "semi": ["error", "always"],
     // Blockly doesn't have space before function paren when defining functions.
@@ -127,7 +128,7 @@ function buildTSOverride({files, tsconfig}) {
             "@typescript-eslint/no-empty-function": ["off"],
             // Temporarily disable. 3 problems.
             "@typescript-eslint/no-empty-interface": ["off"],
-    
+
             // TsDoc rules (using JsDoc plugin)
             // Disable built-in jsdoc verifier.
             "valid-jsdoc": ["off"],
@@ -155,7 +156,8 @@ function buildTSOverride({files, tsconfig}) {
             // These are "types" because of Closure's @suppress {warningName}
             "jsdoc/no-undefined-types": ["off"],
             "jsdoc/valid-types": ["off"],
-            // Disabled due to not handling `this`. If re-enabled, checkDestructured option
+            // Disabled due to not handling `this`. If re-enabled,
+            // checkDestructured option
             // should be left as false.
             "jsdoc/check-param-names": ["off", {"checkDestructured": false}],
             // Allow any text in the license tag. Other checks are not relevant.

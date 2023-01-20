@@ -117,17 +117,13 @@ export class FieldColour extends Field<string> {
   protected override isDirty_ = false;
 
   /** Array of colours used by this field.  If null, use the global list. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'string[]'.
-  private colours_: string[] = null as AnyDuringMigration;
+  private colours_: string[]|null = null;
 
   /**
    * Array of colour tooltips used by this field.  If null, use the global
    * list.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'string[]'.
-  private titles_: string[] = null as AnyDuringMigration;
+  private titles_: string[]|null = null;
 
   /**
    * Number of colour columns used by this field.  If 0, use the global
@@ -211,8 +207,7 @@ export class FieldColour extends Field<string> {
    * @param opt_newValue The input value.
    * @returns A valid colour, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      string|null {
+  protected override doClassValidation_(opt_newValue?: any): string|null {
     if (typeof opt_newValue !== 'string') {
       return null;
     }
@@ -415,9 +410,7 @@ export class FieldColour extends Field<string> {
 
   /** Handle a mouse enter event. Focus the picker. */
   private onMouseEnter_() {
-    // AnyDuringMigration because:  Property 'focus' does not exist on type
-    // 'Element'.
-    (this.picker_ as AnyDuringMigration)!.focus({preventScroll: true});
+    this.picker_?.focus({preventScroll: true});
   }
 
   /**
@@ -425,9 +418,7 @@ export class FieldColour extends Field<string> {
    * the currently highlighted colour.
    */
   private onMouseLeave_() {
-    // AnyDuringMigration because:  Property 'blur' does not exist on type
-    // 'Element'.
-    (this.picker_ as AnyDuringMigration)!.blur();
+    this.picker_?.blur();
     const highlighted = this.getHighlighted_();
     if (highlighted) {
       dom.removeClass(highlighted, 'blocklyColourHighlighted');
@@ -473,11 +464,10 @@ export class FieldColour extends Field<string> {
     this.highlightedIndex_ = index;
 
     // Update accessibility roles.
-    // AnyDuringMigration because:  Argument of type 'string | null' is not
-    // assignable to parameter of type 'string | number | boolean | string[]'.
-    aria.setState(
-        this.picker_ as Element, aria.State.ACTIVEDESCENDANT,
-        cell.getAttribute('id') as AnyDuringMigration);
+    const cellId = cell.getAttribute('id');
+    if (cellId && this.picker_) {
+      aria.setState(this.picker_, aria.State.ACTIVEDESCENDANT, cellId);
+    }
   }
 
   /** Create a colour picker dropdown editor. */

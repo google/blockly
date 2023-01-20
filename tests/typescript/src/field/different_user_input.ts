@@ -1,7 +1,15 @@
 /**
+ * @license
+ * Copyright 2022 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
  * Test: Should allow a subclass of Field to have different setValue and
  * constructor input type than the type that is stored.
  */
+
+
 import { Field, FieldValidator, fieldRegistry } from 'blockly-test/core';
 
 interface Cell {
@@ -47,21 +55,20 @@ class FieldMitosis extends Field<CellGroup>{
         const cellGroup = this.getValue();
         if (!cellGroup) return;
     
-        const cells = cellGroup.cells.map((cell) => {
+        const cells = cellGroup.cells.flatMap((cell) => {
             const leftCell: Cell = {cellId: `${cell.cellId}-left`};
             const rightCell: Cell = {cellId: `${cell.cellId}-right`};
             return [leftCell, rightCell]
-        }).reduce((allCells, cellDuo) => allCells.concat(cellDuo), []);
-
+        });
         this.value_ = {cells};
     }
 }
 
 fieldRegistry.register('field_mitosis', FieldMitosis);
 
-/** Example use of the class. */
+// Example use of the class.
 
-const cellValidator: FieldMitosisValidator = (cellGroup) => {
+function cellValidator(cellGroup: CellGroup): CellGroup | undefined {
     // The cell group is good! Use it as is.
     if (cellGroup.cells.length > 0) return undefined;
 

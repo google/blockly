@@ -61,3 +61,11 @@ export interface ISelectableToolboxItem extends IToolboxItem {
    */
   onClick(_e: Event): void;
 }
+
+/**
+ * Type guard that checks whether an IToolboxItem is an ISelectableToolboxItem.
+ */
+export function isSelectableToolboxItem(toolboxItem: IToolboxItem):
+    toolboxItem is ISelectableToolboxItem {
+  return toolboxItem.isSelectable();
+}

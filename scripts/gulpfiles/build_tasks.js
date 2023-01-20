@@ -339,7 +339,7 @@ function buildDeps() {
   /**
    * Log unexpected diagnostics, after removing expected warnings.
    *
-   * @param {string} test Standard error output from closure-make-deps
+   * @param {string} text Standard error output from closure-make-deps
    */
   function log(text) {
     for (const line of text.split('\n')) {

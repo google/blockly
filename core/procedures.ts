@@ -23,12 +23,16 @@ import type {Abstract} from './events/events_abstract.js';
 import type {BubbleOpen} from './events/events_bubble_open.js';
 import * as eventUtils from './events/utils.js';
 import {Field, UnattachedFieldError} from './field.js';
-import {isProcedureBlock} from './interfaces/i_procedure_block.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
+import {IParameterModel} from './interfaces/i_parameter_model.js';
+import {IProcedureMap} from './interfaces/i_procedure_map.js';
+import {IProcedureModel} from './interfaces/i_procedure_model.js';
+import {IProcedureBlock, isProcedureBlock} from './interfaces/i_procedure_block.js';
 import {ObservableProcedureMap} from './procedures/observable_procedure_map.js';
 import {ObservableProcedureModel} from './procedures/observable_procedure_model.js';
 import {ObservableParameterModel} from './procedures/observable_parameter_model.js';
+import {triggerProceduresUpdate} from './procedures/update_procedures.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
@@ -500,4 +504,10 @@ export {
   ObservableProcedureMap,
   ObservableProcedureModel,
   ObservableParameterModel,
+  triggerProceduresUpdate,
+  IParameterModel,
+  IProcedureBlock,
+  isProcedureBlock,
+  IProcedureMap,
+  IProcedureModel,
 };

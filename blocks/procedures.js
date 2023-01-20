@@ -27,7 +27,7 @@ const {Block} = goog.requireType('Blockly.Block');
 // TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
-const {isProcedureBlock} = goog.require('Blockly.procedures.IProcedureModel');
+const {isProcedureBlock} = goog.require('Blockly.procedures.IProcedureBlock');
 const {ObservableProcedureModel} = goog.require('Blockly.procedures.ObservableProcedureModel');
 const {ObservableParameterModel} = goog.require('Blockly.procedures.ObservableParameterModel');
 const {config} = goog.require('Blockly.config');

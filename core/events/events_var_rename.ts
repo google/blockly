@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Class for a variable rename event.
- *
- * @class
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.VarRename');
 
@@ -22,13 +17,17 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a variable rename event.
+ * Notifies listeners that a variable model was renamed.
  *
- * @alias Blockly.Events.VarRename
+ * @class
  */
 export class VarRename extends VarBase {
   override type = eventUtils.VAR_RENAME;
+
+  /** The previous name of the variable. */
   oldName?: string;
+
+  /** The new name of the variable. */
   newName?: string;
 
   /**

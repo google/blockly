@@ -143,6 +143,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   override previousConnection!: RenderedConnection;
 
+  private translation = '';
+
   /**
    * @param workspace The block's workspace.
    * @param prototypeName Name of the language object containing type-specific
@@ -182,7 +184,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     /** An optional method for defining custom block context menu items. */
     this.customContextMenu = this.customContextMenu;
     this.svgGroup_ = dom.createSvgElement(Svg.G, {});
-    (this.svgGroup_ as AnyDuringMigration).translate_ = '';
 
     /** A block style object. */
     this.style = workspace.getRenderer().getConstants().getBlockStyle(null);
@@ -413,8 +414,17 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param y The y coordinate of the translation in workspace units.
    */
   translate(x: number, y: number) {
-    this.getSvgRoot().setAttribute(
-        'transform', 'translate(' + x + ',' + y + ')');
+    this.translation = `translate(${x}, ${y})`;
+    this.getSvgRoot().setAttribute('transform', this.getTranslation());
+  }
+
+  /**
+   * Returns the SVG translation of this block.
+   *
+   * @internal
+   */
+  getTranslation(): string {
+    return this.translation;
   }
 
   /**
@@ -435,13 +445,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @internal
    */
   moveDuringDrag(newLoc: Coordinate) {
-    (this.svgGroup_ as AnyDuringMigration).translate_ =
-        'translate(' + newLoc.x + ',' + newLoc.y + ')';
-    (this.svgGroup_ as AnyDuringMigration)
-        .setAttribute(
-            'transform',
-            (this.svgGroup_ as AnyDuringMigration).translate_ +
-                (this.svgGroup_ as AnyDuringMigration).skew_);
+    this.translate(newLoc.x, newLoc.y);
+    this.getSvgRoot().setAttribute('transform', this.getTranslation());
   }
 
   /**
@@ -703,9 +708,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   setDragging(adding: boolean) {
     if (adding) {
-      const group = this.getSvgRoot();
-      (group as AnyDuringMigration).translate_ = '';
-      (group as AnyDuringMigration).skew_ = '';
+      this.translation = '';
       common.draggingConnections.push(...this.getConnections_(true));
       dom.addClass(this.svgGroup_, 'blocklyDragging');
     } else {

@@ -24,15 +24,28 @@ import * as eventUtils from './utils.js';
 
 
 /**
- * Class for a marker move event.
+ * Notifies listeners that a marker (used for keyboard navigation) has
+ * moved.
  *
  * @alias Blockly.Events.MarkerMove
  */
 export class MarkerMove extends UiBase {
+  /** The ID of the block the marker is now on, if any. */
   blockId?: string;
+
+  /** The old node the marker used to be on, if any. */
   oldNode?: ASTNode;
+
+  /** The new node the marker is now on. */
   newNode?: ASTNode;
+
+  /**
+   * True if this is a cursor event, false otherwise.
+   * For information about cursors vs markers see {@link
+   * https://blocklycodelabs.dev/codelabs/keyboard-navigation/index.html?index=..%2F..index#1}.
+   */
   isCursor?: boolean;
+
   override type = eventUtils.MARKER_MOVE;
 
   /**
@@ -54,16 +67,9 @@ export class MarkerMove extends UiBase {
     }
     super(workspaceId);
 
-    /** The block identifier for this event. */
     this.blockId = opt_block?.id;
-
-    /** The old node the marker used to be on. */
     this.oldNode = opt_oldNode || undefined;
-
-    /** The new node the  marker is now on. */
     this.newNode = opt_newNode;
-
-    /** Whether this is a cursor event. */
     this.isCursor = isCursor;
   }
 

@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   build:
+    timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -54,6 +55,7 @@ jobs:
         CI: true
 
   lint:
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -68,3 +70,18 @@ jobs:
 
     - name: Lint
       run: npm run lint
+
+  clang-formatter:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: DoozyX/clang-format-lint-action@v0.15
+      with:
+        source: 'core'
+        extensions: 'js,ts'
+        # This should be as close as possible to the version that the npm
+        # package supports. This can be found by running:
+        # npx clang-format --version.
+        clangFormatVersion: 15

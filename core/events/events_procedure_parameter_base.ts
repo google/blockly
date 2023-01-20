@@ -16,6 +16,11 @@ import type {Workspace} from '../workspace.js';
  * The base event for an event associated with a procedure parameter.
  */
 export abstract class ProcedureParameterBase extends ProcedureBase {
+  /**
+   * @param workspace The workspace the parameter model exists in.
+   * @param model The procedure model the parameter model belongs to.
+   * @param parameter The parameter model associated with this event.
+   */
   constructor(
       workspace: Workspace, model: IProcedureModel,
       public readonly parameter: IParameterModel) {

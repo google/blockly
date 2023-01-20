@@ -22,14 +22,23 @@ import {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a block drag event.
+ * Notifies listeners when a block is being manually dragged/dropped.
  *
  * @alias Blockly.Events.BlockDrag
  */
 export class BlockDrag extends UiBase {
+  /** The ID of the top-level block being dragged. */
   blockId?: string;
+
+  /** True if this is the start of a drag, false if this is the end of one. */
   isStart?: boolean;
+
+  /**
+   * A list of all of the blocks (i.e. all descendants of the block associated
+   * with the block ID) being dragged.
+   */
   blocks?: Block[];
+
   override type = eventUtils.BLOCK_DRAG;
 
   /**
@@ -46,11 +55,7 @@ export class BlockDrag extends UiBase {
     if (!opt_block) return;
 
     this.blockId = opt_block.id;
-
-    /** Whether this is the start of a block drag. */
     this.isStart = opt_isStart;
-
-    /** The blocks affected by this drag event. */
     this.blocks = opt_blocks;
   }
 

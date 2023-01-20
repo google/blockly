@@ -15,6 +15,10 @@ import type {Workspace} from '../workspace.js';
 export abstract class ProcedureBase extends AbstractEvent {
   isBlank = false;
 
+  /**
+   * @param workspace The workspace the procedure model exists in.
+   * @param model The procedure model associated with this event.
+   */
   constructor(workspace: Workspace, public readonly model: IProcedureModel) {
     super();
     this.workspaceId = workspace.id;

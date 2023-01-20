@@ -30,18 +30,42 @@ interface BlockLocation {
 }
 
 /**
- * Class for a block move event.  Created before the move.
+ * Notifies listeners when a block is moved. This could be from one
+ * connection to another, or from one location on the workspace to another.
  *
  * @alias Blockly.Events.BlockMove
  */
 export class BlockMove extends BlockBase {
   override type = eventUtils.BLOCK_MOVE;
+
+  /** The ID of the old parent block. Undefined if it was a top-level block. */
   oldParentId?: string;
+
+  /**
+   * The name of the old input. Undefined if it was a top-level block or the
+   * parent's next block.
+   */
   oldInputName?: string;
+
+  /**
+   * The old X and Y workspace coordinates of the block if it was a top level
+   * block. Undefined if it was not a top level block.
+   */
   oldCoordinate?: Coordinate;
 
+  /** The ID of the new parent block. Undefined if it is a top-level block. */
   newParentId?: string;
+
+  /**
+   * The name of the new input. Undefined if it is a top-level block or the
+   * parent's next block.
+   */
   newInputName?: string;
+
+  /**
+   * The new X and Y workspace coordinates of the block if it is a top level
+   * block. Undefined if it is not a top level block.
+   */
   newCoordinate?: Coordinate;
 
   /** @param opt_block The moved block.  Undefined for a blank event. */

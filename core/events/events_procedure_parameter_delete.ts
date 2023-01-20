@@ -14,7 +14,7 @@ import {ProcedureParameterBase, ProcedureParameterBaseJson} from './events_proce
 import * as eventUtils from './utils.js';
 
 /**
- * Represents a parameter being removed from a procedure.
+ * Notifies listeners that a parameter has been removed from a procedure.
  */
 export class ProcedureParameterDelete extends ProcedureParameterBase {
   /** A string used to check the type of the event. */

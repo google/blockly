@@ -278,7 +278,10 @@ export class CodeGenerator {
     // Value blocks must return code and order of operations info.
     // Statement blocks must only return code.
     if (!Array.isArray(tuple)) {
-      throw TypeError('Expecting tuple from value block: ' + targetBlock.type);
+      throw TypeError(
+          `Expecting tuple from value block: ${targetBlock.type} See ` +
+          `https://developers.google.com/blockly/guides/create-custom-blocks/generating-code` +
+          `for more information`);
     }
     let code = tuple[0];
     const innerOrder = tuple[1];

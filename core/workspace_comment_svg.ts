@@ -106,7 +106,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       opt_id?: string) {
     super(workspace, content, height, width, opt_id);
     this.svgGroup_ = dom.createSvgElement(Svg.G, {'class': 'blocklyComment'});
-    (this.svgGroup_ as AnyDuringMigration).translate_ = '';
     this.workspace = workspace;
 
     this.svgRect_ = dom.createSvgElement(Svg.RECT, {
@@ -357,14 +356,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @param newLoc The location to translate to, in workspace coordinates.
    * @internal
    */
-  moveDuringDrag(newLoc: Coordinate) {
-    (this.svgGroup_ as AnyDuringMigration).translate_ =
-        'translate(' + newLoc.x + ',' + newLoc.y + ')';
-    (this.svgGroup_ as AnyDuringMigration)
-        .setAttribute(
-            'transform',
-            (this.svgGroup_ as AnyDuringMigration).translate_ +
-                (this.svgGroup_ as AnyDuringMigration).skew_);
+  moveDuringDrag(dragSurface: BlockDragSurfaceSvg, newLoc: Coordinate) {
+    const translation = `translate(${newLoc.x}, ${newLoc.y})`;
+    this.getSvgRoot().setAttribute('transform', translation);
   }
 
   /**
@@ -460,12 +454,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    */
   setDragging(adding: boolean) {
     if (adding) {
-      const group = this.getSvgRoot();
-      (group as AnyDuringMigration).translate_ = '';
-      (group as AnyDuringMigration).skew_ = '';
-      dom.addClass(this.svgGroup_, 'blocklyDragging');
+      dom.addClass(this.getSvgRoot(), 'blocklyDragging');
     } else {
-      dom.removeClass(this.svgGroup_, 'blocklyDragging');
+      dom.removeClass(this.getSvgRoot(), 'blocklyDragging');
     }
   }
 

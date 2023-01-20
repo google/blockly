@@ -13,7 +13,8 @@ import {ProcedureBase, ProcedureBaseJson} from './events_procedure_base.js';
 import * as eventUtils from './utils.js';
 
 /**
- * Represents a procedure data model being enabled or disabled.
+ * Notifies listeners that the procedure data model has been enabled or
+ * disabled.
  */
 export class ProcedureEnable extends ProcedureBase {
   /** A string used to check the type of the event. */

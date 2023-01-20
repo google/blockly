@@ -1,4 +1,4 @@
-{
+module.exports = {
     "rules": {
         "curly": ["error"],
         "eol-last": ["error"],
@@ -162,4 +162,4 @@
             "jsdoc/check-values": ["off"]
         }
     }]
-}
+};

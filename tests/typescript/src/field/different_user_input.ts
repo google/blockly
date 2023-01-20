@@ -10,7 +10,7 @@
  */
 
 
-import { Field, FieldValidator, fieldRegistry } from 'blockly-test/core';
+import {Field, FieldValidator, fieldRegistry} from 'blockly-test/core';
 
 interface Cell {
     cellId: string;
@@ -22,7 +22,7 @@ interface CellGroup {
 
 type FieldMitosisValidator = FieldValidator<CellGroup>;
 
-class FieldMitosis extends Field<CellGroup>{
+class FieldMitosis extends Field<CellGroup> {
     constructor(cell: Cell, validator: FieldMitosisValidator) {
         super(Field.SKIP_SETUP);
 
@@ -35,7 +35,7 @@ class FieldMitosis extends Field<CellGroup>{
     protected doClassValidation_(newCell?: unknown): CellGroup | null {
         if (!this.isCell(newCell)) return null;
 
-        const cellGroup = this.getValue() ?? { cells: [] };
+        const cellGroup = this.getValue() ?? {cells: []};
         cellGroup.cells.push(newCell);
         return cellGroup;
     }
@@ -58,7 +58,7 @@ class FieldMitosis extends Field<CellGroup>{
         const cells = cellGroup.cells.flatMap((cell) => {
             const leftCell: Cell = {cellId: `${cell.cellId}-left`};
             const rightCell: Cell = {cellId: `${cell.cellId}-right`};
-            return [leftCell, rightCell]
+            return [leftCell, rightCell];
         });
         this.value_ = {cells};
     }
@@ -73,10 +73,10 @@ function cellValidator(cellGroup: CellGroup): CellGroup | undefined {
     if (cellGroup.cells.length > 0) return undefined;
 
     // Uh oh! No cells.
-    const emergencyCell: Cell = { cellId: 'emergency-cell' };
-    return { cells: [emergencyCell] };
+    const emergencyCell: Cell = {cellId: 'emergency-cell'};
+    return {cells: [emergencyCell]};
 }
 
-const cellField = new FieldMitosis({ cellId: 'cell-A' }, cellValidator);
-cellField.setValue({ cellId: 'cell-B' });
+const cellField = new FieldMitosis({cellId: 'cell-A'}, cellValidator);
+cellField.setValue({cellId: 'cell-B'});
 cellField.doMitosis();

@@ -3,7 +3,7 @@
     "src/**/*",
   ],
   "compilerOptions": {
-    "allowJs": true,
+    "allowJs": false,
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {

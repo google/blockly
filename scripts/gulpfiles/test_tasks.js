@@ -17,8 +17,7 @@ const path = require('path');
 const {execSync} = require('child_process');
 const rimraf = require('rimraf');
 
-const buildTasks = require('./build_tasks');
-const {BUILD_DIR, RELEASE_DIR} = require('./config');
+const {RELEASE_DIR} = require('./config');
 
 const {runMochaTestsInBrowser} = require('../../tests/mocha/webdriver.js');
 const {runGeneratorsInBrowser} = require('../../tests/generators/webdriver.js');

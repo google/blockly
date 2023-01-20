@@ -31,7 +31,7 @@ export namespace ICopyable {
   export interface CopyData {
     saveInfo: Object|Element;
     source: WorkspaceSvg;
-    typeCounts: Object|null;
+    typeCounts: {[key: string]: number}|null;
   }
 }
 

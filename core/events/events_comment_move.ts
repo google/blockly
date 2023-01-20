@@ -52,7 +52,7 @@ export class CommentMove extends CommentBase {
     }
 
     this.comment_ = opt_comment;
-    this.oldCoordinate_ = opt_comment.getXY();
+    this.oldCoordinate_ = opt_comment.getRelativeToSurfaceXY();
   }
 
   /**
@@ -70,7 +70,7 @@ export class CommentMove extends CommentBase {
           'The comment is undefined. Pass a comment to ' +
           'the constructor if you want to use the record functionality');
     }
-    this.newCoordinate_ = this.comment_.getXY();
+    this.newCoordinate_ = this.comment_.getRelativeToSurfaceXY();
   }
 
   /**
@@ -180,7 +180,7 @@ export class CommentMove extends CommentBase {
           'or call fromJson');
     }
     // TODO: Check if the comment is being dragged, and give up if so.
-    const current = comment.getXY();
+    const current = comment.getRelativeToSurfaceXY();
     comment.moveBy(target.x - current.x, target.y - current.y);
   }
 }

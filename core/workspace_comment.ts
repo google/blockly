@@ -154,7 +154,7 @@ export class WorkspaceComment {
    *   This is not valid if the comment is currently being dragged.
    * @internal
    */
-  getXY(): Coordinate {
+  getRelativeToSurfaceXY(): Coordinate {
     return new Coordinate(this.xy_.x, this.xy_.y);
   }
 

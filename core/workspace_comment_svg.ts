@@ -296,7 +296,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @returns Object with .x and .y properties in workspace coordinates.
    * @internal
    */
-  getRelativeToSurfaceXY(): Coordinate {
+  override getRelativeToSurfaceXY(): Coordinate {
     let x = 0;
     let y = 0;
 

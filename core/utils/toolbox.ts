@@ -99,6 +99,7 @@ export interface StaticCategoryInfo {
   colour: string|undefined;
   cssconfig: CategoryCssConfig|undefined;
   hidden: string|undefined;
+  expanded?: string|boolean;
 }
 
 /**
@@ -114,6 +115,7 @@ export interface DynamicCategoryInfo {
   colour: string|undefined;
   cssconfig: CategoryCssConfig|undefined;
   hidden: string|undefined;
+  expanded?: string|boolean;
 }
 
 /**

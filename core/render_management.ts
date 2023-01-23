@@ -42,7 +42,7 @@ export class BlockTree {
     if (!node) return;
     this.removeRec(node);
   }
-  
+
   /** Recursively removes the given node and all children from the tree. */
   private removeRec(node: Node) {
     if (node.block) this.map.delete(node.block.id);

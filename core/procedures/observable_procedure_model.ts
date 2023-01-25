@@ -36,10 +36,6 @@ export class ObservableProcedureModel implements IProcedureModel {
     const prevName = this.name;
     this.name = name;
     if (this.shouldTriggerUpdates) triggerProceduresUpdate(this.workspace);
-    if (this.shouldFireEvents) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_RENAME))(
-          this.workspace, this, prevName));
-    }
     return this;
   }
 
@@ -65,11 +61,6 @@ export class ObservableProcedureModel implements IProcedureModel {
     }
 
     if (this.shouldTriggerUpdates) triggerProceduresUpdate(this.workspace);
-    if (this.shouldFireEvents) {
-      eventUtils.fire(
-          new (eventUtils.get(eventUtils.PROCEDURE_PARAMETER_CREATE))(
-              this.workspace, this, parameterModel, index));
-    }
     return this;
   }
 
@@ -82,12 +73,6 @@ export class ObservableProcedureModel implements IProcedureModel {
     if (this.shouldTriggerUpdates) triggerProceduresUpdate(this.workspace);
     if (isObservable(oldParam)) {
       oldParam.stopPublishing();
-    }
-
-    if (this.shouldFireEvents) {
-      eventUtils.fire(
-          new (eventUtils.get(eventUtils.PROCEDURE_PARAMETER_DELETE))(
-              this.workspace, this, oldParam, index));
     }
     return this;
   }
@@ -112,10 +97,6 @@ export class ObservableProcedureModel implements IProcedureModel {
     const oldReturnTypes = this.returnTypes;
     this.returnTypes = types;
     if (this.shouldTriggerUpdates) triggerProceduresUpdate(this.workspace);
-    if (this.shouldFireEvents) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_CHANGE_RETURN))(
-          this.workspace, this, oldReturnTypes));
-    }
     return this;
   }
 
@@ -127,10 +108,6 @@ export class ObservableProcedureModel implements IProcedureModel {
     if (enabled === this.enabled) return this;
     this.enabled = enabled;
     if (this.shouldTriggerUpdates) triggerProceduresUpdate(this.workspace);
-    if (this.shouldFireEvents) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_ENABLE))(
-          this.workspace, this));
-    }
     return this;
   }
 

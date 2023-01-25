@@ -33,7 +33,7 @@ import {VariableMap} from './variable_map.js';
 import type {VariableModel} from './variable_model.js';
 import type {WorkspaceComment} from './workspace_comment.js';
 import {IProcedureMap} from './interfaces/i_procedure_map.js';
-import {ObservableProcedureMap} from './procedures.js';
+import {ObservableProcedureMap} from './observable_procedure_map.js';
 
 
 /**

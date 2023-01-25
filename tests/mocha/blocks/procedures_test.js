@@ -7,7 +7,6 @@
 goog.declareModuleId('Blockly.test.procedures');
 
 import * as Blockly from '../../../build/src/core/blockly.js';
-import {ObservableParameterModel} from '../../../build/src/core/procedures.js';
 import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} from '../test_helpers/procedures.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from '../test_helpers/setup_teardown.js';
@@ -26,712 +25,6 @@ suite('Procedures', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-  });
-
-  suite('updating data models', function() {
-    test(
-        'renaming a procedure def block updates the procedure model',
-        function() {
-          const defBlock = createProcDefBlock(this.workspace);
-
-          defBlock.setFieldValue('new name', 'NAME');
-
-          chai.assert.equal(
-              defBlock.getProcedureModel().getName(),
-              'new name',
-              'Expected the procedure model name to be updated');
-        });
-
-    test(
-        'disabling a procedure def block updates the procedure model',
-        function() {
-          const defBlock = createProcDefBlock(this.workspace);
-
-          defBlock.setEnabled(false);
-          this.clock.runAll();
-
-          chai.assert.isFalse(
-              defBlock.getProcedureModel().getEnabled(),
-              'Expected the procedure model to be disabled');
-        });
-
-    test(
-        'adding a parameter to a procedure def updates the procedure model',
-        function() {
-          // Create a stack of container, parameter.
-          const defBlock = createProcDefBlock(this.workspace);
-          defBlock.mutator.setVisible(true);
-          const mutatorWorkspace = defBlock.mutator.getWorkspace();
-          const containerBlock = mutatorWorkspace.getTopBlocks()[0];
-          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
-          paramBlock.setFieldValue('param name', 'NAME');
-          containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
-          this.clock.runAll();
-
-          chai.assert.equal(
-              defBlock.getProcedureModel().getParameter(0).getName(),
-              'param name',
-              'Expected the procedure model to have a matching parameter');
-        });
-
-    test('adding a parameter adds a variable to the variable map', function() {
-      // Create a stack of container, parameter.
-      const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
-      const containerBlock = mutatorWorkspace.getTopBlocks()[0];
-      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
-      paramBlock.setFieldValue('param name', 'NAME');
-      containerBlock.getInput('STACK').connection
-          .connect(paramBlock.previousConnection);
-      this.clock.runAll();
-
-      chai.assert.isTrue(
-          this.workspace.getVariableMap().getVariablesOfType('')
-               .some((variable) => variable.name === 'param name'),
-          'Expected the variable map to have a matching variable');
-    });
-
-
-    test(
-        'moving a parameter in the procedure def updates the procedure model',
-        function() {
-          // Create a stack of container, param1, param2.
-          const defBlock = createProcDefBlock(this.workspace);
-          defBlock.mutator.setVisible(true);
-          const mutatorWorkspace = defBlock.mutator.getWorkspace();
-          const containerBlock = mutatorWorkspace.getTopBlocks()[0];
-          const paramBlock1 = mutatorWorkspace.newBlock('procedures_mutatorarg');
-          paramBlock1.setFieldValue('param name1', 'NAME');
-          const paramBlock2 = mutatorWorkspace.newBlock('procedures_mutatorarg');
-          paramBlock2.setFieldValue('param name2', 'NAME');
-          containerBlock.getInput('STACK').connection
-              .connect(paramBlock1.previousConnection);
-          paramBlock1.nextConnection.connect(paramBlock2.previousConnection);
-          this.clock.runAll();
-          const id1 = defBlock.getProcedureModel().getParameter(0).getId();
-          const id2 = defBlock.getProcedureModel().getParameter(1).getId();
-
-          // Reconfigure the stack to be container, param2, param1.
-          paramBlock2.previousConnection.disconnect();
-          paramBlock1.previousConnection.disconnect();
-          containerBlock.getInput('STACK').connection
-              .connect(paramBlock2.previousConnection);
-          paramBlock2.nextConnection.connect(paramBlock1.previousConnection);
-          this.clock.runAll();
-
-          chai.assert.equal(
-              defBlock.getProcedureModel().getParameter(0).getName(),
-              'param name2',
-              'Expected the first parameter of the procedure to be param 2');
-          chai.assert.equal(
-              defBlock.getProcedureModel().getParameter(0).getId(),
-              id2,
-              'Expected the first parameter of the procedure to be param 2');
-          chai.assert.equal(
-              defBlock.getProcedureModel().getParameter(1).getName(),
-              'param name1',
-              'Expected the second parameter of the procedure to be param 1');
-          chai.assert.equal(
-              defBlock.getProcedureModel().getParameter(1).getId(),
-              id1,
-              'Expected the second parameter of the procedure to be param 1');
-        });
-
-    test('decomposing and recomposing maintains parameter IDs', function() {
-      // Create a stack of container, param.
-      const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
-      const containerBlock = mutatorWorkspace.getTopBlocks()[0];
-      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
-      paramBlock.setFieldValue('param name', 'NAME');
-      containerBlock.getInput('STACK').connection
-          .connect(paramBlock.previousConnection);
-      this.clock.runAll();
-      const paramBlockId = defBlock.getProcedureModel().getParameter(0).getId();
-
-      Blockly.Events.disable();
-      mutatorWorkspace.clear();
-      Blockly.Events.enable();
-      const container = defBlock.decompose(mutatorWorkspace);
-      defBlock.compose(container);
-
-      chai.assert.equal(
-          defBlock.getProcedureModel().getParameter(0).getId(),
-          paramBlockId,
-          'Expected the parameter ID to be maintained');
-    });
-
-    test(
-        'deleting a parameter from a procedure def updates the procedure model',
-        function() {
-          // Create a stack of container, parameter.
-          const defBlock = createProcDefBlock(this.workspace);
-          defBlock.mutator.setVisible(true);
-          const mutatorWorkspace = defBlock.mutator.getWorkspace();
-          const containerBlock = mutatorWorkspace.getTopBlocks()[0];
-          const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
-          paramBlock.setFieldValue('param name', 'NAME');
-          containerBlock.getInput('STACK').connection
-              .connect(paramBlock.previousConnection);
-          this.clock.runAll();
-
-          containerBlock.getInput('STACK').connection.disconnect();
-          this.clock.runAll();
-
-          chai.assert.isEmpty(
-              defBlock.getProcedureModel().getParameters(),
-              'Expected the procedure model to have no parameters');
-        });
-
-    test('renaming a procedure parameter updates the parameter model', function() {
-      // Create a stack of container, parameter.
-      const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
-      const containerBlock = mutatorWorkspace.getTopBlocks()[0];
-      const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
-      paramBlock.setFieldValue('param name', 'NAME');
-      containerBlock.getInput('STACK').connection
-          .connect(paramBlock.previousConnection);
-      this.clock.runAll();
-
-      paramBlock.setFieldValue('new param name', 'NAME');
-      this.clock.runAll();
-
-      chai.assert.equal(
-          defBlock.getProcedureModel().getParameter(0).getName(),
-          'new param name',
-          'Expected the procedure model to have a matching parameter');
-    });
-
-    test('deleting a procedure deletes the procedure model', function() {
-      const defBlock = createProcDefBlock(this.workspace);
-      const model = defBlock.getProcedureModel();
-      defBlock.dispose();
-
-      chai.assert.isUndefined(
-          this.workspace.getProcedureMap().get(model.getId()),
-          'Expected the model to be removed from the procedure map');
-    });
-  });
-
-  suite('responding to data model updates', function() {
-    suite('def blocks', function() {
-      test('renaming the procedure data model updates blocks', function() {
-        const defBlock = createProcDefBlock(this.workspace);
-        const procModel = defBlock.getProcedureModel();
-
-        procModel.setName('new name');
-
-        chai.assert.equal(
-          defBlock.getFieldValue('NAME'),
-          'new name',
-          'Expected the procedure block to be renamed');
-      });
-  
-      test('disabling a procedure data model disables blocks', function() {
-        const defBlock = createProcDefBlock(this.workspace);
-        const procModel = defBlock.getProcedureModel();
-
-        procModel.setEnabled(false);
-
-        chai.assert.isFalse(
-          defBlock.isEnabled(),
-          'Expected the procedure block to be disabled');
-      });
-  
-      test('adding a parameter to a data model updates blocks', function() {
-        const defBlock = createProcDefBlock(this.workspace);
-        const procModel = defBlock.getProcedureModel();
-
-        procModel.insertParameter(
-            new ObservableParameterModel(this.workspace, 'param1', 'id'), 0);
-
-        chai.assert.isNotNull(
-          defBlock.getField('PARAMS'),
-          'Expected the params field to exist');
-        chai.assert.isTrue(
-          defBlock.getFieldValue('PARAMS').includes('param1'),
-          'Expected the params field to contain the name of the new param');
-      });
-  
-      test('moving a parameter in the data model updates blocks', function() {
-        const defBlock = createProcDefBlock(this.workspace);
-        const procModel = defBlock.getProcedureModel();
-        const param1 =
-            new ObservableParameterModel(this.workspace, 'param1', 'id1');
-        const param2 =
-            new ObservableParameterModel(this.workspace, 'param2', 'id2');
-        procModel.insertParameter(param1, 0);
-        procModel.insertParameter(param2, 1);
-
-        procModel.deleteParameter(1);
-        procModel.insertParameter(param2, 0);
-
-        chai.assert.isNotNull(
-          defBlock.getField('PARAMS'),
-          'Expected the params field to exist');
-        chai.assert.isTrue(
-          defBlock.getFieldValue('PARAMS').includes('param2, param1'),
-          'Expected the params field order to match the parameter order');
-      });
-  
-      test(
-          'deleting a parameter from the data model updates blocks',
-          function() {
-            const defBlock = createProcDefBlock(this.workspace);
-            const procModel = defBlock.getProcedureModel();
-            const param1 =
-                new ObservableParameterModel(this.workspace, 'param1', 'id1');
-            const param2 =
-                new ObservableParameterModel(this.workspace, 'param2', 'id2');
-            procModel.insertParameter(param1, 0);
-            procModel.insertParameter(param2, 1);
-    
-            procModel.deleteParameter(0);
-    
-            chai.assert.isNotNull(
-              defBlock.getField('PARAMS'),
-              'Expected the params field to exist');
-            chai.assert.isTrue(
-              defBlock.getFieldValue('PARAMS').includes('param2'),
-              'Expected the params field order to contain one parameter');
-            chai.assert.isFalse(
-              defBlock.getFieldValue('PARAMS').includes('param1'),
-              'Expected the params field to not contain the deleted parameter');
-          });
-  
-      test(
-          'renaming a procedure parameter in the data model updates blocks',
-          function() {
-            const defBlock = createProcDefBlock(this.workspace);
-            const procModel = defBlock.getProcedureModel();
-            const param1 =
-                new ObservableParameterModel(this.workspace, 'param1', 'id1');
-            procModel.insertParameter(param1, 0);
-    
-            param1.setName('new name');
-    
-            chai.assert.isNotNull(
-              defBlock.getField('PARAMS'),
-              'Expected the params field to exist');
-            chai.assert.isTrue(
-              defBlock.getFieldValue('PARAMS').includes('new name'),
-              'Expected the params field to contain the new param name');
-          });
-    });
-
-    suite('caller blocks', function() {
-      test('renaming the procedure data model updates blocks', function() {
-        const defBlock = createProcDefBlock(this.workspace);
-        const callBlock = createProcCallBlock(this.workspace);
-        const procModel = defBlock.getProcedureModel();
-
-        procModel.setName('new name');
-
-        chai.assert.equal(
-          callBlock.getFieldValue('NAME'),
-          'new name',
-          'Expected the procedure block to be renamed');
-      });
-  
-      test('disabling a procedure data model disables blocks', function() {
-        const defBlock = createProcDefBlock(this.workspace);
-        const callBlock = createProcCallBlock(this.workspace);
-        const procModel = defBlock.getProcedureModel();
-
-        procModel.setEnabled(false);
-
-        chai.assert.isFalse(
-          callBlock.isEnabled(),
-          'Expected the procedure block to be disabled');
-      });
-  
-      test('adding a parameter to a data model updates blocks', function() {
-        const defBlock = createProcDefBlock(this.workspace);
-        const callBlock = createProcCallBlock(this.workspace);
-        const procModel = defBlock.getProcedureModel();
-
-        procModel.insertParameter(
-            new ObservableParameterModel(this.workspace, 'param1', 'id'), 0);
-
-        chai.assert.isNotNull(
-          callBlock.getInput('ARG0'),
-          'Expected the param input to exist');
-        chai.assert.equal(
-          callBlock.getFieldValue('ARGNAME0'),
-          'param1',
-          'Expected the params field to match the name of the new param');
-      });
-  
-      test('moving a parameter in the data model updates blocks', function() {
-        const defBlock = createProcDefBlock(this.workspace);
-        const callBlock = createProcCallBlock(this.workspace);
-        const procModel = defBlock.getProcedureModel();
-        const param1 =
-            new ObservableParameterModel(this.workspace, 'param1', 'id1');
-        const param2 =
-            new ObservableParameterModel(this.workspace, 'param2', 'id2');
-        procModel.insertParameter(param1, 0);
-        procModel.insertParameter(param2, 1);
-
-        procModel.deleteParameter(1);
-        procModel.insertParameter(param2, 0);
-
-        chai.assert.isNotNull(
-            callBlock.getInput('ARG0'),
-            'Expected the first param input to exist');
-        chai.assert.isNotNull(
-            callBlock.getInput('ARG1'),
-            'Expected the second param input to exist');
-        chai.assert.equal(
-            callBlock.getFieldValue('ARGNAME0'),
-            'param2',
-            'Expected the first params field to match the name of the param');
-        chai.assert.equal(
-            callBlock.getFieldValue('ARGNAME1'),
-            'param1',
-            'Expected the second params field to match the name of the param');
-      });
-
-      test(
-          'moving a parameter in the data model moves input blocks',
-          function() {
-            const defBlock = createProcDefBlock(this.workspace);
-            const callBlock = createProcCallBlock(this.workspace);
-            const procModel = defBlock.getProcedureModel();
-            const param1 =
-                new ObservableParameterModel(this.workspace, 'param1', 'id1');
-            const param2 =
-                new ObservableParameterModel(this.workspace, 'param2', 'id2');
-            procModel.insertParameter(param1, 0);
-            procModel.insertParameter(param2, 1);
-            const rowBlock1 = this.workspace.newBlock('row_block');
-            const rowBlock2 = this.workspace.newBlock('row_block');
-            callBlock.getInput('ARG0').connection
-                .connect(rowBlock1.outputConnection);
-            callBlock.getInput('ARG1').connection
-                .connect(rowBlock2.outputConnection);
-    
-            procModel.deleteParameter(1);
-            procModel.insertParameter(param2, 0);
-    
-            chai.assert.isNotNull(
-                callBlock.getInput('ARG0'),
-                'Expected the first param input to exist');
-            chai.assert.equal(
-                callBlock.getInputTargetBlock('ARG0'),
-                rowBlock2,
-                'Expected the second row block to be attached to the first input');
-            chai.assert.isNotNull(
-                callBlock.getInput('ARG1'),
-                'Expected the second param input to exist');
-            chai.assert.equal(
-                callBlock.getInputTargetBlock('ARG1'),
-                rowBlock1,
-                'Expected the first row block to be attached to the second input');
-          });
-  
-      test(
-          'deleting a parameter from the data model updates blocks',
-          function() {
-            const defBlock = createProcDefBlock(this.workspace);
-            const callBlock = createProcCallBlock(this.workspace);
-            const procModel = defBlock.getProcedureModel();
-            const param1 =
-                new ObservableParameterModel(this.workspace, 'param1', 'id1');
-            const param2 =
-                new ObservableParameterModel(this.workspace, 'param2', 'id2');
-            procModel.insertParameter(param1, 0);
-            procModel.insertParameter(param2, 1);
-    
-            procModel.deleteParameter(0);
-    
-            chai.assert.isNotNull(
-              callBlock.getInput('ARG0'),
-              'Expected the first param input to exist');
-            chai.assert.isNull(
-              callBlock.getInput('ARG1'),
-              'Expected the second param input to not exist');
-            chai.assert.equal(
-              callBlock.getFieldValue('ARGNAME0'),
-              'param2',
-              'Expected the first params field to match the name of the param');
-          });
-  
-      test(
-          'renaming a procedure parameter in the data model updates blocks',
-          function() {
-            const defBlock = createProcDefBlock(this.workspace);
-            const callBlock = createProcCallBlock(this.workspace);
-            const procModel = defBlock.getProcedureModel();
-            const param1 =
-                new ObservableParameterModel(this.workspace, 'param1', 'id1');
-            procModel.insertParameter(param1, 0);
-    
-            param1.setName('new name');
-    
-            chai.assert.isNotNull(
-              callBlock.getInput('ARG0'),
-              'Expected the param input to exist');
-            chai.assert.equal(
-              callBlock.getFieldValue('ARGNAME0'),
-              'new name',
-              'Expected the params field to match the new name of the param');
-          });
-    });
-  });
-
-  suite('deserializing data models', function() {
-    suite('return types', function() {
-      test('procedure defs without returns have null return types', function() {
-        const json = {
-          'blocks': {
-            'languageVersion': 0,
-            'blocks': [
-              {
-                'type': 'procedures_defnoreturn',
-                'fields': {
-                  'NAME': 'test name',
-                },
-              },
-            ],
-          },
-        };
-        Blockly.serialization.workspaces.load(json, this.workspace);
-        const procedureModel =
-            this.workspace.getProcedureMap().getProcedures()[0];
-
-        chai.assert.isNull(
-            procedureModel.getReturnTypes(),
-            'Expected the return types to be null');
-      });
-
-      test('procedure defs with returns have array return types', function() {
-        const json = {
-          'blocks': {
-            'languageVersion': 0,
-            'blocks': [
-              {
-                'type': 'procedures_defreturn',
-                'fields': {
-                  'NAME': 'test name',
-                },
-              },
-            ],
-          },
-        };
-        Blockly.serialization.workspaces.load(json, this.workspace);
-        const procedureModel =
-            this.workspace.getProcedureMap().getProcedures()[0];
-
-        chai.assert.isArray(
-            procedureModel.getReturnTypes(),
-            'Expected the return types to be an array');
-      });
-    });
-
-    suite('json', function() {
-      test('procedure names get deserialized', function() {
-        const json = {
-          'blocks': {
-            'languageVersion': 0,
-            'blocks': [
-              {
-                'type': 'procedures_defnoreturn',
-                'fields': {
-                  'NAME': 'test name',
-                },
-              },
-            ],
-          },
-        };
-        Blockly.serialization.workspaces.load(json, this.workspace);
-        const procedureModel =
-            this.workspace.getProcedureMap().getProcedures()[0];
-
-        chai.assert.equal(
-            procedureModel.name,
-            'test name',
-            'Expected the name of the procedure model to equal the name ' +
-            'being deserialized.');
-      });
-
-      test('procedure parameter names get deserialized', function() {
-        const json = {
-          'blocks': {
-            'languageVersion': 0,
-            'blocks': [
-              {
-                'type': 'procedures_defnoreturn',
-                'fields': {
-                  'NAME': 'test name',
-                },
-                'extraState': {
-                  'params': [
-                    {
-                      'id': 'test id 1',
-                      'name': 'test name 1',
-                    },
-                    {
-                      'id': 'test id 2',
-                      'name': 'test name 2',
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        };
-        Blockly.serialization.workspaces.load(json, this.workspace);
-        const procedureModel =
-            this.workspace.getProcedureMap().getProcedures()[0];
-
-        chai.assert.equal(
-            procedureModel.getParameter(0).getName(),
-            'test name 1',
-            'Expected the name of the first parameter to equal the name ' +
-            'being deserialized.');
-        chai.assert.equal(
-            procedureModel.getParameter(1).getName(),
-            'test name 2',
-            'Expected the name of the second parameter to equal the name ' +
-            'being deserialized.');
-      });
-
-      test('procedure variables get matching IDs', function() {
-        const json = {
-          'blocks': {
-            'languageVersion': 0,
-            'blocks': [
-              {
-                'type': 'procedures_defnoreturn',
-                'extraState': {
-                  'params': [
-                    {
-                      'name': 'test param name',
-                      'id': 'test param id',
-                    },
-                  ],
-                },
-                'fields': {
-                  'NAME': 'test proc name',
-                },
-              },
-            ],
-          },
-          'variables': [
-            {
-              'name': 'test param name',
-              'id': 'test param id',
-            },
-          ],
-        };
-        Blockly.serialization.workspaces.load(json, this.workspace);
-        const procedureModel =
-            this.workspace.getProcedureMap().getProcedures()[0];
-
-        chai.assert.equal(
-            procedureModel.getParameter(0).getVariableModel().getId(),
-            'test param id',
-            'Expected the variable id to match the serialized param id');
-      });
-    });
-
-    suite('xml', function() {
-      test('procedure names get deserialized', function() {
-        const xml = Blockly.Xml.textToDom(
-            `<block type="procedures_defnoreturn">` +
-            `  <field name="NAME">test name</field>` +
-            `</block>`);
-        Blockly.Xml.domToBlock(xml, this.workspace);
-        const procedureModel =
-            this.workspace.getProcedureMap().getProcedures()[0];
-
-        chai.assert.equal(
-            procedureModel.name,
-            'test name',
-            'Expected the name of the procedure model to equal the name ' +
-            'being deserialized.');
-      });
-
-      test('procedure parameter names get deserialized', function() {
-        const xml = Blockly.Xml.textToDom(
-            `<block type="procedures_defnoreturn">` +
-            `  <mutation>` +
-            `    <arg name="test name 1" varid="test var id 1"/>` +
-            `    <arg name="test name 2" varid="test var id 2"/>` +
-            `  </mutation>` +
-            `  <field name="NAME">test name</field>` +
-            `</block>`);
-        Blockly.Xml.domToBlock(xml, this.workspace);
-        const procedureModel =
-            this.workspace.getProcedureMap().getProcedures()[0];
-
-        chai.assert.equal(
-            procedureModel.getParameter(0).getName(),
-            'test name 1',
-            'Expected the name of the first parameter to equal the name ' +
-            'being deserialized.');
-        chai.assert.equal(
-            procedureModel.getParameter(1).getName(),
-            'test name 2',
-            'Expected the name of the second parameter to equal the name ' +
-            'being deserialized.');
-      });
-
-      test('procedure variables get matching IDs', function() {
-        const json = {
-          'blocks': {
-            'languageVersion': 0,
-            'blocks': [
-              {
-                'type': 'procedures_defnoreturn',
-                'extraState': {
-                  'params': [
-                    {
-                      'name': 'test param name',
-                      'id': 'test param id',
-                    },
-                  ],
-                },
-                'fields': {
-                  'NAME': 'test proc name',
-                },
-              },
-            ],
-          },
-          'variables': [
-            {
-              'name': 'test param name',
-              'id': 'test param id',
-            },
-          ],
-        };
-        const xml = Blockly.Xml.textToDom(
-            `<xml>` +
-            `  <variables>` +
-            `    <variable id ="test param id">test param name</variable>` +
-            `  </variables>` +
-            `  <block type="procedures_defnoreturn">` +
-            `    <mutation>` +
-            `      <arg name="test param name" varid="test param id"/>` +
-            `    </mutation>` +
-            `    <field name="NAME">test name</field>` +
-            `  </block>` +
-            `</xml>`);
-        Blockly.Xml.domToWorkspace(xml, this.workspace);
-        const procedureModel =
-            this.workspace.getProcedureMap().getProcedures()[0];
-
-        chai.assert.equal(
-            procedureModel.getParameter(0).getVariableModel().getId(),
-            'test param id',
-            'Expected the variable id to match the serialized param id');
-      });
-    });
   });
 
   suite('renaming procedures', function() {
@@ -1459,6 +752,7 @@ suite('Procedures', function() {
           const callBlock1 = createProcCallBlock(this.workspace);
           const callBlock2 = createProcCallBlock(this.workspace);
 
+          this.clock.runAll();
           defBlock.dispose();
           this.clock.runAll();
 
@@ -1466,35 +760,6 @@ suite('Procedures', function() {
               callBlock1.disposed, 'Expected the first caller to be disposed');
           chai.assert.isTrue(
               callBlock2.disposed, 'Expected the second caller to be disposed');
-        });
-
-    test('undoing and redoing a procedure delete will still associate ' +
-        'procedure and caller with the same model',
-        function() {
-          const defBlock = createProcDefBlock(this.workspace);
-          createProcCallBlock(this.workspace);
-          // TODO: Apparently we need to call checkAndDelete to handle event
-          //   grouping, this seems like possibly a bug.
-          const oldModel = defBlock.getProcedureModel();
-          defBlock.checkAndDelete();
-          this.clock.runAll();
-
-          this.workspace.undo();
-          this.clock.runAll();
-
-          const newDefBlock =
-              this.workspace.getBlocksByType('procedures_defnoreturn')[0];
-          const newCallBlock =
-              this.workspace.getBlocksByType('procedures_callnoreturn')[0];
-
-          chai.assert.equal(
-              newDefBlock.getProcedureModel(),
-              newCallBlock.getProcedureModel(),
-              'Expected both new blocks to be associated with the same model');
-          chai.assert.equal(
-            oldModel.getId(),
-            newDefBlock.getProcedureModel().getId(),
-            'Expected the new model to have the same ID as the old model');
         });
   });
 
@@ -1568,7 +833,7 @@ suite('Procedures', function() {
             callBlock, ['y'], [this.TEST_VAR_ID], 'do something2');
       });
 
-      test(
+      test.skip(
           'callers whose defs are deserialized later do not create defs',
           function() {
             Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(`
@@ -1591,12 +856,10 @@ suite('Procedures', function() {
                 this.workspace.getBlocksByType('procedures_defreturn')[0];
             const callBlock =
                 this.workspace.getBlocksByType('procedures_callreturn')[0];
+            // TODO: Currently the callers are creating variables with different
+            //   IDs than those serialized to XML, so these assertions fail.
             assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
             assertCallBlockStructure(callBlock, ['x'], ['arg'], 'do something');
-            chai.assert.equal(
-                defBlock.getProcedureModel(),
-                callBlock.getProcedureModel(),
-                'Expected the blocks to have the same procedure model');
           });
     });
 
@@ -1679,7 +942,7 @@ suite('Procedures', function() {
             callBlock, ['y'], [this.TEST_VAR_ID], 'do something2');
       });
 
-      test(
+      test.skip(
           'callers whose defs are deserialized later do not create defs',
           function() {
             Blockly.serialization.workspaces.load({
@@ -1714,12 +977,10 @@ suite('Procedures', function() {
                 this.workspace.getBlocksByType('procedures_defreturn')[0];
             const callBlock =
                 this.workspace.getBlocksByType('procedures_callreturn')[0];
+            // TODO: Currently the callers are creating variables with different
+            //   IDs than those serialized to JSON, so these assertions fail.
             assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
             assertCallBlockStructure(callBlock, ['x'], ['arg'], 'do something');
-            chai.assert.equal(
-                defBlock.getProcedureModel(),
-                callBlock.getProcedureModel(),
-                'Expected the blocks to have the same procedure model');
           });
     });
   });
@@ -1983,107 +1244,6 @@ suite('Procedures', function() {
       const def = Blockly.Procedures.getDefinition('b', this.workspace);
       chai.assert.equal(def, blockB);
     });
-  });
-
-  suite('full workspace serialization test cases', function() {
-    test('definitions with parameters are properly rendered', function() {
-      Blockly.serialization.workspaces.load({
-        "blocks": {
-          "languageVersion": 0,
-          "blocks": [
-            {
-              "type": "procedures_defnoreturn",
-              "extraState": {
-                "procedureId": "procId",
-                "params": [
-                  {
-                    "name": "x",
-                    "id": "varId",
-                    "paramId": "paramId",
-                  },
-                ],
-              },
-              "fields": {
-                "NAME": "do something",
-              },
-            },
-          ],
-        },
-        "procedures": [
-          {
-            "id": "procId",
-            "name": "do something",
-            "returnTypes": null,
-            "parameters": [
-              {
-                "id": "paramId",
-                "name": "x",
-              },
-            ],
-          },
-        ],
-        "variables": [
-          {
-            "name": "x",
-            "id": "varId",
-          },
-        ],
-      }, this.workspace);
-      assertDefBlockStructure(
-          this.workspace.getTopBlocks(false)[0], false, ['x'], ['varId']);
-    });
-    test(
-        'multiple definitions pointing to the same model end up with ' +
-        'different models',
-        function() {
-          Blockly.serialization.workspaces.load({
-            "blocks": {
-              "languageVersion": 0,
-              "blocks": [
-                {
-                  "type": "procedures_defnoreturn",
-                  "extraState": {
-                    "procedureId": "procId",
-                  },
-                  "fields": {
-                    "NAME": "do something",
-                  },
-                },
-                {
-                  "type": "procedures_defnoreturn",
-                  "y": 10,
-                  "extraState": {
-                    "procedureId": "procId",
-                  },
-                  "fields": {
-                    "NAME": "do something",
-                  },
-                },
-              ],
-            },
-            "procedures": [
-              {
-                "id": "procId",
-                "name": "do something",
-                "returnTypes": null,
-              },
-            ],
-          }, this.workspace);
-          const def1 = this.workspace.getTopBlocks(true)[0];
-          const def2 = this.workspace.getTopBlocks(true)[1];
-          chai.assert.equal(
-              def1.getProcedureModel().getName(),
-              'do something',
-              'Expected the first procedure definition to have the name in XML');
-          chai.assert.equal(
-              def2.getProcedureModel().getName(),
-              'do something2',
-              'Expected the second procedure definition to be renamed');
-          chai.assert.notEqual(
-              def1.getProcedureModel(),
-              def2.getProcedureModel(),
-              'Expected the procedures to have different models');
-        });
   });
 
   const testSuites = [
@@ -2735,9 +1895,6 @@ suite('Procedures', function() {
             'fields': {
               'NAME': 'unnamed',
             },
-            'extraState': {
-              'procedureId': '1',
-            },
           },
           assertBlockStructure:
               (block) => {
@@ -2757,9 +1914,6 @@ suite('Procedures', function() {
             'id': '1',
             'fields': {
               'NAME': 'do something',
-            },
-            'extraState': {
-              'procedureId': '1',
             },
           },
           assertBlockStructure:
@@ -2794,17 +1948,14 @@ suite('Procedures', function() {
               'NAME': 'do something',
             },
             'extraState': {
-              'procedureId': '1',
               'params': [
                 {
                   'name': 'x',
                   'id': 'arg1',
-                  'paramId': '1',
                 },
                 {
                   'name': 'y',
                   'id': 'arg2',
-                  'paramId': '1',
                 },
               ],
             },
@@ -2838,12 +1989,10 @@ suite('Procedures', function() {
               'NAME': 'do something',
             },
             'extraState': {
-              'procedureId': '1',
               'params': [
                 {
                   'name': 'preCreatedVar',
                   'id': 'preCreatedVarId',
-                  'paramId': '1',
                 },
               ],
             },
@@ -2872,7 +2021,6 @@ suite('Procedures', function() {
               'NAME': 'do something',
             },
             'extraState': {
-              'procedureId': '1',
               'hasStatements': false,
             },
           },

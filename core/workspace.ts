@@ -112,7 +112,7 @@ export class Workspace implements IASTNodeLocation {
   private readonly blockDB = new Map<string, Block>();
   private readonly typedBlocksDB = new Map<string, Block[]>();
   private variableMap: VariableMap;
-  private procedureMap: IProcedureMap = new ObservableProcedureMap(this);
+  private procedureMap: IProcedureMap = new ObservableProcedureMap();
 
   /**
    * Blocks in the flyout can refer to variables that don't exist in the main

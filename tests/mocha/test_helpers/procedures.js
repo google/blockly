@@ -206,6 +206,10 @@ export class MockProcedureModel {
   getEnabled() {
     return this.enabled;
   }
+
+  startPublishing() { }
+
+  stopPublishing() { }
 }
 
 export class MockParameterModel {

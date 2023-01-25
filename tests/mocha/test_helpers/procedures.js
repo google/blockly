@@ -148,3 +148,92 @@ export function createProcCallBlock(
       `</block>`
   ), workspace);
 }
+
+export class MockProcedureModel {
+  constructor() {
+    this.id = Blockly.utils.idGenerator.genUid();
+    this.name = '';
+    this.parameters = [];
+    this.returnTypes = null;
+    this.enabled = true;
+  }
+
+  setName(name) {
+    this.name = name;
+    return this;
+  }
+
+  insertParameter(parameterModel, index) {
+    this.parameters.splice(index, 0, parameterModel);
+    return this;
+  }
+
+  deleteParameter(index) {
+    this.parameters.splice(index, 1);
+    return this;
+  }
+
+  setReturnTypes(types) {
+    this.returnTypes = types;
+    return this;
+  }
+
+  setEnabled(enabled) {
+    this.enabled = enabled;
+    return this;
+  }
+
+  getId() {
+    return this.id;
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  getParameter(index) {
+    return this.parameters[index];
+  }
+
+  getParameters() {
+    return [...this.parameters];
+  }
+
+  getReturnTypes() {
+    return this.returnTypes;
+  }
+
+  getEnabled() {
+    return this.enabled;
+  }
+}
+
+export class MockParameterModel {
+  constructor(name) {
+    this.id = Blockly.utils.idGenerator.genUid();
+    this.name = name;
+    this.types = [];
+  }
+
+  setName(name) {
+    this.name = name;
+    return this;
+  }
+
+  setTypes(types) {
+    this.types = types;
+    return this;
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  getTypes() {
+    return this.types;
+  }
+
+  getId() {
+    return this.id;
+  }
+}

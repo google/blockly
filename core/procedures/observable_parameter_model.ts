@@ -38,11 +38,6 @@ export class ObservableParameterModel implements IParameterModel {
     this.variable =
         this.workspace.getVariable(name) ?? this.workspace.createVariable(name);
     triggerProceduresUpdate(this.workspace);
-    if (this.shouldFireEvents) {
-      eventUtils.fire(
-          new (eventUtils.get(eventUtils.PROCEDURE_PARAMETER_RENAME))(
-              this.workspace, this.procedureModel, this, oldName));
-    }
     return this;
   }
 

@@ -33,7 +33,7 @@ import {VariableMap} from './variable_map.js';
 import type {VariableModel} from './variable_model.js';
 import type {WorkspaceComment} from './workspace_comment.js';
 import {IProcedureMap} from './interfaces/i_procedure_map.js';
-import {ObservableProcedureMap} from './procedures.js';
+import {ObservableProcedureMap} from './observable_procedure_map.js';
 
 
 /**
@@ -112,7 +112,7 @@ export class Workspace implements IASTNodeLocation {
   private readonly blockDB = new Map<string, Block>();
   private readonly typedBlocksDB = new Map<string, Block[]>();
   private variableMap: VariableMap;
-  private procedureMap: IProcedureMap = new ObservableProcedureMap(this);
+  private procedureMap: IProcedureMap = new ObservableProcedureMap();
 
   /**
    * Blocks in the flyout can refer to variables that don't exist in the main

@@ -21,49 +21,34 @@ suite('Procedure Map', function() {
     sharedTestTeardown.call(this);
   });
 
-  suite('triggering block updates', function() {
-    setup(function() {
-      Blockly.Blocks['procedure_mock'] = {
-        init: function() { },
-        doProcedureUpdate: function() { },
-        getProcedureModel: function() { },
-        isProcedureDef: function() { },
-      };
+  suite('publishing', function() {
+    test('inserting a procedure tells it to start publishing', function() {
+      const procedureModel = new MockProcedureModel();
+      const spy = sinon.spy(procedureModel, 'startPublishing');
+      this.procedureMap.set(procedureModel.getId(), procedureModel);
 
-      this.procedureBlock = this.workspace.newBlock('procedure_mock');
-
-      this.updateSpy = sinon.spy(this.procedureBlock, 'doProcedureUpdate');
+      chai.assert.isTrue(
+          spy.called, 'Expected the model to start publishing');
     });
 
-    teardown(function() {
-      delete Blockly.Blocks['procedure_mock'];
+    test('adding a procedure tells it to start publishing', function() {
+      const procedureModel = new MockProcedureModel();
+      const spy = sinon.spy(procedureModel, 'startPublishing');
+      this.procedureMap.add(procedureModel);
+
+      chai.assert.isTrue(
+          spy.called, 'Expected the model to start publishing');
     });
 
-    suite('procedure map updates', function() {
-      test('inserting a procedure does not trigger an update', function() {
-        const procedureModel = new MockProcedureModel();
-        this.procedureMap.set(procedureModel.getId(), procedureModel);
+    test('deleting a procedure tells it to stop publishing', function() {
+      const procedureModel = new MockProcedureModel();
+      const spy = sinon.spy(procedureModel, 'stopPublishing');
+      this.procedureMap.add(procedureModel);
 
-        chai.assert.isFalse(
-            this.updateSpy.called, 'Expected no update to be triggered');
-      });
+      this.procedureMap.delete(procedureModel.getId());
 
-      test('adding a procedure does not trigger an update', function() {
-        this.procedureMap.add(new MockProcedureModel());
-
-        chai.assert.isFalse(
-            this.updateSpy.called, 'Expected no update to be triggered');
-      });
-
-      test('deleting a procedure triggers an update', function() {
-        const procedureModel = new MockProcedureModel();
-        this.procedureMap.add(procedureModel);
-
-        this.procedureMap.delete(procedureModel.getId());
-
-        chai.assert.isTrue(
-            this.updateSpy.calledOnce, 'Expected an update to be triggered');
-      });
+      chai.assert.isTrue(
+          spy.calledOnce, 'Expected the model stop publishing');
     });
   });
 });

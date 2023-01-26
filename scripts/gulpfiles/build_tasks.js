@@ -309,71 +309,78 @@ function buildJavaScript(done) {
  *
  * Prerequisite: buildJavaScript.
  */
-function buildDeps(done) {
+function buildDeps() {
   const roots = [
     path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base.js'),
     TSC_OUTPUT_DIR,
     'blocks',
     'generators',
+    'tests/mocha',
   ];
 
-  const testRoots = [
-    ...roots,
-    'tests/mocha'
-  ];
+  /** Maximum buffer size, in bytes for child process stdout/stderr. */
+  const MAX_BUFFER_SIZE = 10 * 1024 * 1024;
 
   /**
-   * Extracts lines that contain the specified keyword.
-   * @param {string} text output text
-   * @param {string} keyword extract lines with this keyword
-   * @returns {string} modified text
+   * Filter a string to extract lines containing (or not containing) the
+   * specified target string.
+   *
+   * @param {string} text Text to filter.
+   * @param {string} target String to search for.
+   * @param {boolean?} exclude If true, extract only non-matching lines.
+   * @returns {string} Filtered text.
    */
-  function extractOutputs(text, keyword) {
+  function filter(text, target, exclude) {
     return text.split('\n')
-        .filter((line) => line.includes(keyword))
+        .filter((line) => Boolean(line.match(target)) !== Boolean(exclude))
         .join('\n');
   }
 
-  function filterErrors(text) {
-    return text.split('\n')
-        .filter(
-            (line) => !/^WARNING /.test(line) ||
-                !(/Missing type declaration./.test(line) ||
-                  /illegal use of unknown JSDoc tag/.test(line)))
-        .join('\n');
+  /**
+   * Log unexpected diagnostics, after removing expected warnings.
+   *
+   * @param {string} text Standard error output from closure-make-deps
+   */
+  function log(text) {
+    for (const line of text.split('\n')) {
+      if (line &&
+          !/^WARNING .*: Bounded generic semantics are currently/.test(line) &&
+          !/^WARNING .*: Missing type declaration/.test(line) &&
+          !/^WARNING .*: illegal use of unknown JSDoc tag/.test(line)) {
+        console.error(line);
+      }
+    }
   }
 
-  new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const args = roots.map(root => `--root '${root}' `).join('');
     exec(
-        `closure-make-deps ${args}`,
+        `closure-make-deps ${args}`, {maxBuffer: MAX_BUFFER_SIZE},
         (error, stdout, stderr) => {
-          console.warn(filterErrors(stderr));
           if (error) {
+            // Remove warnings from stack trace to show only errors.
+            error.stack = filter(error.stack, /^WARNING/, true);
+            // Due to some race condition, the stderr parameter is
+            // often badly truncated if an error is non-null, so the
+            // error message might not actually be shown to the user.
+            // Print a helpful message to the user to help them find
+            // out what the problem is.
+            error.stack += `
+
+If you do not see an helpful diagnostic from closure-make-deps in the
+error message above, try running:
+
+    npx closure-make-deps ${args} 2>&1 |grep -v WARNING`;
             reject(error);
           } else {
-            fs.writeFileSync(DEPS_FILE, stdout);
+            log(stderr);
+            // Anything not about mocha goes in DEPS_FILE.
+            fs.writeFileSync(DEPS_FILE, filter(stdout, 'tests/mocha', true));
+            // Anything about mocha does in TEST_DEPS_FILE.
+            fs.writeFileSync(TEST_DEPS_FILE, filter(stdout, 'tests/mocha'));
             resolve();
           }
         });
-  }).then(() => new Promise((resolve, reject) => {
-    // Filter out the entries that are already in deps.js.
-    const testArgs =
-        testRoots.map(root => `--root '${root}' `).join('');
-    exec(
-        `closure-make-deps ${testArgs}`,
-        (error, stdout, stderr) => {
-          console.warn(filterErrors(stderr));
-          if (error) {
-            reject(error);
-          } else {
-            fs.writeFileSync(TEST_DEPS_FILE,
-              extractOutputs(stdout, 'tests/mocha'));
-            resolve();
-          }
-        });
-  })).then(() => {
-    done();
   });
 }
 

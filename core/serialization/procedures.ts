@@ -7,10 +7,7 @@
 import {IParameterModel} from '../interfaces/i_parameter_model.js';
 import {IProcedureModel} from '../interfaces/i_procedure_model.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
-import {ObservableProcedureModel} from '../procedures/observable_procedure_model.js';
-import {ObservableParameterModel} from '../procedures/observable_parameter_model.js';
 import * as priorities from './priorities.js';
-import * as serializationRegistry from './registry.js';
 import type {Workspace} from '../workspace.js';
 
 
@@ -163,12 +160,3 @@ export class ProcedureSerializer<ProcedureModel extends IProcedureModel,
     workspace.getProcedureMap().clear();
   }
 }
-
-/**
- * A ProcedureSerializer that deserializes to create the built-in
- * ObservableProcedureModels and ObservableParameterModels.
- */
-export const observableProcedureSerializer =
-    new ProcedureSerializer(ObservableProcedureModel, ObservableParameterModel);
-
-serializationRegistry.register('procedures', observableProcedureSerializer);

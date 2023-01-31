@@ -114,7 +114,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     /** The JSON describing the contents of this toolbox. */
     this.toolboxDef_ =
         (workspace.options.languageTree ||
-         {'contents': new Array<toolbox.ToolboxItemInfo>()});
+         {contents: new Array<toolbox.ToolboxItemInfo>()});
 
     /** Whether the toolbox should be laid out horizontally. */
     this.horizontalLayout_ = workspace.options.horizontalLayout;

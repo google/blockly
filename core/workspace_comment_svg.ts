@@ -838,7 +838,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     this.foreignObject_?.setAttribute('width', `${size.width}`);
     this.foreignObject_?.setAttribute('height', `${size.height - topOffset}`);
     if (this.RTL) {
-      this.foreignObject_?.setAttribute('x', `${- size.width}`);
+      this.foreignObject_?.setAttribute('x', `${-size.width}`);
     }
 
     if (!this.textarea_) return;

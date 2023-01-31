@@ -532,10 +532,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     const element = this.toXml(opt_noId);
     const xy = this.getRelativeToSurfaceXY();
     element.setAttribute(
-        'x', `${Math.round(this.workspace.RTL ? width - xy.x : xy.x)}`);
-    element.setAttribute('y', `${Math.round(xy.y)}`);
-    element.setAttribute('h', `${this.getHeight()}`);
-    element.setAttribute('w', `${this.getWidth()}`);
+        'x', String(Math.round(this.workspace.RTL ? width - xy.x : xy.x)));
+    element.setAttribute('y', String(Math.round(xy.y)));
+    element.setAttribute('h', String(this.getHeight()));
+    element.setAttribute('w', String(this.getWidth()));
     return element;
   }
 

@@ -209,7 +209,7 @@ suite('WorkspaceSvg', function() {
         const block = this.workspace.newBlock('stack_block');
         block.initSvg();
         block.render();
-        runViewportEventTest(() => this.workspace.zoomToFit(block.id),
+        runViewportEventTest(() => this.workspace.centerOnBlock(block.id),
             this.eventsFireStub, this.changeListenerSpy, this.workspace,
             this.clock);
       });

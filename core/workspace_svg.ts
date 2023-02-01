@@ -1983,11 +1983,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Scroll the workspace to center on the given block. If the block has other
-   * blocks stacked below it, the workspace will be centered on the stack.
+   * blocks stacked below it, the workspace will be centered on the stack,
+   * unless blockOnly is true.
    *
    * @param id ID of block center on.
+   * @param blockOnly True to center only on the block itself, not its stack.
    */
-  centerOnBlock(id: string|null) {
+  centerOnBlock(id: string|null, blockOnly?: boolean) {
     if (!this.isMovable()) {
       console.warn(
           'Tried to move a non-movable workspace. This could result' +
@@ -2003,7 +2005,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // XY is in workspace coordinates.
     const xy = block.getRelativeToSurfaceXY();
     // Height/width is in workspace units.
-    const heightWidth = block.getHeightWidth();
+    const heightWidth = blockOnly ? {height: block.height, width: block.width} :
+                                    block.getHeightWidth();
 
     // Find the enter of the block in workspace units.
     const blockCenterY = xy.y + heightWidth.height / 2;

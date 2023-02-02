@@ -251,7 +251,8 @@ export class ConnectionChecker implements IConnectionChecker {
           return false;
         }
 
-        // Don't offer to splice into a stack where the connected block is immovable.
+        // Don't offer to splice into a stack where the connected block is
+        // immovable.
         if (b.targetBlock() && !b.targetBlock()!.isMovable()) {
           return false;
         }

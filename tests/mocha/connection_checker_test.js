@@ -369,17 +369,17 @@ suite('Connection checker', function() {
       });
 
       test('Do not splice into unmovable stack', function() {
-        // Try to connect blockC above blockB.
-        // It shouldn't work because B is not movable and is already connected to A.
+        // Try to connect blockC above blockB. It shouldn't work because B is not movable
+        // and is already connected to A's nextConnection.
         chai.assert.isFalse(
           this.checker.doDragChecks(
-            this.blockC.nextConnection, this.blockB.previousConnection, 9000),
+            this.blockC.previousConnection, this.blockA.nextConnection, 9000),
           'Should not splice in a block above an unmovable block');
       });
 
       test('Connect to bottom of unmovable stack', function() {
         // Try to connect blockC below blockB.
-        // This is allowed even though B is not movable.
+        // This is allowed even though B is not movable because it is on B's nextConnection.
         chai.assert.isTrue(
           this.checker.doDragChecks(
             this.blockC.previousConnection, this.blockB.nextConnection, 9000),
@@ -421,10 +421,11 @@ suite('Connection checker', function() {
       });
 
       test('Do not splice into unmovable block row', function() {
-        // Try to connect C's input to B's output. Should fail because B is unmovable.
-        const inputConnection = this.blockC.inputList[0].connection;
+        // Try to connect C's output to A's input. Should fail because
+        // A is already connected to B, which is unmovable.
+        const inputConnection = this.blockA.inputList[0].connection;
         chai.assert.isFalse(
-          this.checker.doDragChecks(inputConnection, this.blockB.outputConnection, 9000),
+          this.checker.doDragChecks(this.blockC.outputConnection, inputConnection, 9000),
           'Should not splice in a block before an unmovable block'
         );
       });

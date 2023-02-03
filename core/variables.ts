@@ -19,7 +19,6 @@ import * as utilsXml from './utils/xml.js';
 import {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
 
 
 /**
@@ -142,7 +141,7 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
       block.setAttribute('type', 'math_change');
       block.setAttribute('gap', Blocks['variables_get'] ? '20' : '8');
       block.appendChild(generateVariableFieldDom(mostRecentVariable));
-      const value = Xml.textToDom(
+      const value = utilsXml.textToDom(
           '<value name="DELTA">' +
           '<shadow type="math_number">' +
           '<field name="NUM">1</field>' +

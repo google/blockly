@@ -33,6 +33,7 @@ import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
 import * as Variables from './variables.js';
 import {WorkspaceSvg} from './workspace_svg.js';
+import * as utilsXml from './utils/xml.js';
 import * as Xml from './xml.js';
 
 
@@ -744,7 +745,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     let block;
     if (blockInfo['blockxml']) {
       const xml = (typeof blockInfo['blockxml'] === 'string' ?
-                       Xml.textToDom(blockInfo['blockxml']) :
+                       utilsXml.textToDom(blockInfo['blockxml']) :
                        blockInfo['blockxml']) as Element;
       block = this.getRecycledBlock_(xml.getAttribute('type')!);
       if (!block) {
@@ -803,7 +804,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
       gap = parseInt(blockInfo['gap'].toString());
     } else if (blockInfo['blockxml']) {
       const xml = (typeof blockInfo['blockxml'] === 'string' ?
-                       Xml.textToDom(blockInfo['blockxml']) :
+                       utilsXml.textToDom(blockInfo['blockxml']) :
                        blockInfo['blockxml']) as Element;
       gap = parseInt(xml.getAttribute('gap')!);
     }

@@ -43,7 +43,6 @@ import * as userAgent from './utils/useragent.js';
 import * as utilsXml from './utils/xml.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
 
 /**
  * A function that is called to validate changes to the field's value before
@@ -455,7 +454,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
         callingClass.prototype.toXml !== this.toXml) {
       const elem = utilsXml.createElement('field');
       elem.setAttribute('name', this.name || '');
-      const text = Xml.domToText(this.toXml(elem));
+      const text = utilsXml.domToText(this.toXml(elem));
       return text.replace(
           ' xmlns="https://developers.google.com/blockly/xml"', '');
     }
@@ -477,7 +476,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
       boolean {
     if (callingClass.prototype.loadState === this.loadState &&
         callingClass.prototype.fromXml !== this.fromXml) {
-      this.fromXml(Xml.textToDom(state as string));
+      this.fromXml(utilsXml.textToDom(state as string));
       return true;
     }
     // Either they called this on purpose from their loadState, or they have

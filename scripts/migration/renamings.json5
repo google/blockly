@@ -1427,6 +1427,14 @@
     {
       oldName: 'Blockly.TouchGesture',
       newName: 'Blockly.Gesture',
-    },    
-  ]
+    },
+    {
+      oldName: 'Blockly.Xml',
+      exports: {
+        textToDom: {
+          newModule: 'Blockly.utils.xml',
+        },
+      },
+    }
+  ],
 }

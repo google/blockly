@@ -15,6 +15,7 @@ goog.declareModuleId('Blockly.Xml');
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {Connection} from './connection.js';
+import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {inputTypes} from './input_types.js';
@@ -386,15 +387,14 @@ export function domToPrettyText(dom: Node): string {
  * @returns A DOM object representing the singular child of the document
  *     element.
  * @throws if the text doesn't parse.
+ * @deprecated Moved to core/utils/xml.js.
  * @alias Blockly.Xml.textToDom
  */
 export function textToDom(text: string): Element {
-  const doc = utilsXml.textToDomDocument(text);
-  if (!doc || !doc.documentElement ||
-      doc.getElementsByTagName('parsererror').length) {
-    throw Error('textToDom was unable to parse: ' + text);
-  }
-  return doc.documentElement;
+  deprecation.warn(
+      'Blockly.Xml.textToDom', 'version 9', 'version 10',
+      'Use Blockly.utils.xml.textToDom instead');
+  return utilsXml.textToDom(text);
 }
 
 /**

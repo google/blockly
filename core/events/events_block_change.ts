@@ -16,6 +16,7 @@ import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
+import * as utilsXml from '../utils/xml.js';
 import {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
 
@@ -184,7 +185,8 @@ export class BlockChange extends BlockBase {
         if (block.loadExtraState) {
           block.loadExtraState(JSON.parse(value as string || '{}'));
         } else if (block.domToMutation) {
-          block.domToMutation(Xml.textToDom(value as string || '<mutation/>'));
+          block.domToMutation(
+              utilsXml.textToDom(value as string || '<mutation/>'));
         }
         eventUtils.fire(
             new BlockChange(block, 'mutation', null, oldState, value));

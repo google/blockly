@@ -44,19 +44,22 @@ const rules = {
   'no-multi-spaces': ['error', {'ignoreEOLComments': true}],
   'operator-linebreak': ['error', 'after'],
   'spaced-comment': [
-    'error', 'always', {
+    'error',
+    'always',
+    {
       'block': {
         'balanced': true,
       },
       'exceptions': ['*'],
-    }
+    },
   ],
   // Blockly uses prefixes for optional arguments and test-only functions.
   'camelcase': [
-    'error', {
+    'error',
+    {
       'properties': 'never',
       'allow': ['^opt_', '^_opt_', '^testOnly_'],
-    }
+    },
   ],
   // Use clang-format for indentation by running `npm run format`.
   'indent': ['off'],
@@ -70,13 +73,14 @@ const rules = {
   'guard-for-in': ['off'],
   'prefer-spread': ['off'],
   'comma-dangle': [
-    'error', {
+    'error',
+    {
       'arrays': 'always-multiline',
       'objects': 'always-multiline',
       'imports': 'always-multiline',
       'exports': 'always-multiline',
       'functions': 'ignore',
-    }
+    },
   ],
 };
 
@@ -120,10 +124,11 @@ function buildTSOverride({files, tsconfig}) {
       // Use TS-specific rule.
       'no-unused-vars': ['off'],
       '@typescript-eslint/no-unused-vars': [
-        'warn', {
+        'warn',
+        {
           'argsIgnorePattern': '^_',
           'varsIgnorePattern': '^_',
-        }
+        },
       ],
       'func-call-spacing': ['off'],
       '@typescript-eslint/func-call-spacing': ['warn'],
@@ -175,41 +180,42 @@ function buildTSOverride({files, tsconfig}) {
   };
 }
 
-module.exports = {
-  'rules' : rules,
-  'env' : {
-    'es2020' : true,
-    'browser' : true,
+// NOTE: When this output is put directly in `module.exports`, the formatter
+// does not align with the linter.
+const eslintJSON = {
+  'rules': rules,
+  'env': {
+    'es2020': true,
+    'browser': true,
   },
-  'globals' : {
-    'goog' : true,
-    'exports' : true,
+  'globals': {
+    'goog': true,
+    'exports': true,
   },
-  'extends' :
-            [
-              'eslint:recommended',
-              'google',
-            ],
+  'extends': [
+    'eslint:recommended',
+    'google',
+  ],
   // TypeScript-specific config. Uses above rules plus these.
-  'overrides' :
-              [
-                buildTSOverride({
-                  files : ['./core/**/*.ts', './core/**/*.tsx'],
-                  tsconfig : './tsconfig.json',
-                }),
-                buildTSOverride({
-                  files :
-                        [
-                          './tests/typescript/**/*.ts',
-                          './tests/typescript/**/*.tsx',
-                        ],
-                  tsconfig : './tests/typescript/tsconfig.json',
-                }),
-                {
-                  'files' : ['./.eslintrc.js'],
-                  'env' : {
-                    'node' : true,
-                  },
-                },
-              ],
+  'overrides': [
+    buildTSOverride({
+      files: ['./core/**/*.ts', './core/**/*.tsx'],
+      tsconfig: './tsconfig.json',
+    }),
+    buildTSOverride({
+      files: [
+        './tests/typescript/**/*.ts',
+        './tests/typescript/**/*.tsx',
+      ],
+      tsconfig: './tests/typescript/tsconfig.json',
+    }),
+    {
+      'files': ['./.eslintrc.js'],
+      'env': {
+        'node': true,
+      },
+    },
+  ],
 };
+
+module.exports = eslintJSON;

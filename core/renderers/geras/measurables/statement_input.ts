@@ -24,8 +24,7 @@ import type {ConstantProvider as GerasConstantProvider} from '../constants.js';
  * An object containing information about the space a statement input takes up
  * during rendering.
  *
- * @alias Blockly.geras.StatementInput
- */
+  */
 export class StatementInput extends BaseStatementInput {
   override constants_: GerasConstantProvider;
 

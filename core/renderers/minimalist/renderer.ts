@@ -25,8 +25,7 @@ import {RenderInfo} from './info.js';
 /**
  * The minimalist renderer.
  *
- * @alias Blockly.minimalist.Renderer
- */
+  */
 export class Renderer extends BaseRenderer {
   /**
    * @param name The renderer name.

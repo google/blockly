@@ -23,8 +23,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Class for a pair of scrollbars.  Horizontal and vertical.
  *
- * @alias Blockly.ScrollbarPair
- */
+  */
 export class ScrollbarPair {
   hScroll: Scrollbar|null = null;
   vScroll: Scrollbar|null = null;

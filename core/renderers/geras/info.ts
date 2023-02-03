@@ -40,8 +40,7 @@ import type {Renderer} from './renderer.js';
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  *
- * @alias Blockly.geras.RenderInfo
- */
+  */
 export class RenderInfo extends BaseRenderInfo {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   override constants_!: ConstantProvider;

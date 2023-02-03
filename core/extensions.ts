@@ -36,8 +36,7 @@ export const TEST_ONLY = {allExtensions};
  * @param initFn The function to initialize an extended block.
  * @throws {Error} if the extension name is empty, the extension is already
  *     registered, or extensionFn is not a function.
- * @alias Blockly.Extensions.register
- */
+  */
 export function register(name: string, initFn: Function) {
   if (typeof name !== 'string' || name.trim() === '') {
     throw Error('Error: Invalid extension name "' + name + '"');
@@ -58,8 +57,7 @@ export function register(name: string, initFn: Function) {
  * @param mixinObj The values to mix in.
  * @throws {Error} if the extension name is empty or the extension is already
  *     registered.
- * @alias Blockly.Extensions.registerMixin
- */
+  */
 export function registerMixin(name: string, mixinObj: AnyDuringMigration) {
   if (!mixinObj || typeof mixinObj !== 'object') {
     throw Error('Error: Mixin "' + name + '" must be a object');
@@ -81,8 +79,7 @@ export function registerMixin(name: string, mixinObj: AnyDuringMigration) {
  * @param opt_blockList A list of blocks to appear in the flyout of the mutator
  *     dialog.
  * @throws {Error} if the mutation is invalid or can't be applied to the block.
- * @alias Blockly.Extensions.registerMutator
- */
+  */
 export function registerMutator(
     name: string, mixinObj: AnyDuringMigration,
     opt_helperFn?: () => AnyDuringMigration, opt_blockList?: string[]) {
@@ -113,8 +110,7 @@ export function registerMutator(
  * Unregisters the extension registered with the given name.
  *
  * @param name The name of the extension to unregister.
- * @alias Blockly.Extensions.unregister
- */
+  */
 export function unregister(name: string) {
   if (isRegistered(name)) {
     delete allExtensions[name];
@@ -129,8 +125,7 @@ export function unregister(name: string) {
  *
  * @param name The name of the extension to check for.
  * @returns True if the extension is registered.  False if it is not registered.
- * @alias Blockly.Extensions.isRegistered
- */
+  */
 export function isRegistered(name: string): boolean {
   return !!allExtensions[name];
 }
@@ -143,8 +138,7 @@ export function isRegistered(name: string): boolean {
  * @param block The block to apply the named extension to.
  * @param isMutator True if this extension defines a mutator.
  * @throws {Error} if the extension is not found.
- * @alias Blockly.Extensions.apply
- */
+  */
 export function apply(name: string, block: Block, isMutator: boolean) {
   const extensionFn = allExtensions[name];
   if (typeof extensionFn !== 'function') {
@@ -387,8 +381,7 @@ export function runAfterPageLoad(fn: () => void) {
  *     lookup table.
  * @param lookupTable The table of field values to tooltip text.
  * @returns The extension function.
- * @alias Blockly.Extensions.buildTooltipForDropdown
- */
+  */
 export function buildTooltipForDropdown(
     dropdownName: string, lookupTable: {[key: string]: string}): Function {
   // List of block types already validated, to minimize duplicate warnings.
@@ -470,8 +463,7 @@ function checkDropdownOptionsInTable(
  *     placeholder.
  * @param fieldName The field with the replacement text.
  * @returns The extension function.
- * @alias Blockly.Extensions.buildTooltipWithFieldText
- */
+  */
 export function buildTooltipWithFieldText(
     msgTemplate: string, fieldName: string): Function {
   // Check the tooltip string messages for invalid references.

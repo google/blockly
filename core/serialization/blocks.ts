@@ -33,8 +33,7 @@ import * as serializationRegistry from './registry.js';
 /**
  * Represents the state of a connection.
  *
- * @alias Blockly.serialization.blocks.ConnectionState
- */
+  */
 export interface ConnectionState {
   shadow: State|undefined;
   block: State|undefined;
@@ -43,8 +42,7 @@ export interface ConnectionState {
 /**
  * Represents the state of a given block.
  *
- * @alias Blockly.serialization.blocks.State
- */
+  */
 export interface State {
   type: string;
   id?: string;
@@ -77,8 +75,7 @@ export interface State {
  *     exist. True by default.
  * @returns The serialized state of the block, or null if the block could not be
  *     serialied (eg it was an insertion marker).
- * @alias Blockly.serialization.blocks.save
- */
+  */
 export function save(block: Block, {
   addCoordinates = false,
   addInputBlocks = true,
@@ -317,8 +314,7 @@ function saveConnection(connection: Connection, doFullSerialization: boolean):
  * @param param1 recordUndo: If true, events triggered by this function will be
  *     undo-able by the user. False by default.
  * @returns The block that was just loaded.
- * @alias Blockly.serialization.blocks.append
- */
+  */
 export function append(
     state: State, workspace: Workspace,
     {recordUndo = false}: {recordUndo?: boolean} = {}): Block {
@@ -340,8 +336,7 @@ export function append(
  *     it is created. False by default. recordUndo: If true, events triggered by
  *     this function will be undo-able by the user. False by default.
  * @returns The block that was just appended.
- * @alias Blockly.serialization.blocks.appendInternal
- * @internal
+  * @internal
  */
 export function appendInternal(
     state: State, workspace: Workspace,
@@ -663,8 +658,7 @@ const saveBlock = save;
 /**
  * Serializer for saving and loading block state.
  *
- * @alias Blockly.serialization.blocks.BlockSerializer
- */
+  */
 export class BlockSerializer implements ISerializer {
   priority: number;
 

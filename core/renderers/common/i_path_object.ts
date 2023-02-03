@@ -24,8 +24,7 @@ import {RenderedConnection} from '../../rendered_connection.js';
  *
  * @param _root The root SVG element.
  * @param _constants The renderer's constants.
- * @alias Blockly.blockRendering.IPathObject
- */
+  */
 export interface IPathObject {
   /**
    * The primary path of the block.

@@ -24,8 +24,7 @@ import type {Workspace} from '../workspace.js';
 /**
  * Notifies listeners that a workspace comment has been deleted.
  *
- * @alias Blockly.Events.CommentDelete
- */
+  */
 export class CommentDelete extends CommentBase {
   override type = eventUtils.COMMENT_DELETE;
 

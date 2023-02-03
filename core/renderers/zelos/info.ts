@@ -43,8 +43,7 @@ import type {Renderer} from './renderer.js';
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  *
- * @alias Blockly.zelos.RenderInfo
- */
+  */
 export class RenderInfo extends BaseRenderInfo {
   override topRow: TopRow;
   override bottomRow: BottomRow;

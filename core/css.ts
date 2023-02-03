@@ -21,8 +21,7 @@ let injected = false;
  * components such as fields and the toolbox to store separate CSS.
  *
  * @param cssContent Multiline CSS string or an array of single lines of CSS.
- * @alias Blockly.Css.register
- */
+  */
 export function register(cssContent: string) {
   if (injected) {
     throw Error('CSS already injected');
@@ -40,8 +39,7 @@ export function register(cssContent: string) {
  * @param hasCss If false, don't inject CSS (providing CSS becomes the
  *     document's responsibility).
  * @param pathToMedia Path from page to the Blockly media directory.
- * @alias Blockly.Css.inject
- */
+  */
 export function inject(hasCss: boolean, pathToMedia: string) {
   // Only inject the CSS once.
   if (injected) {
@@ -68,8 +66,7 @@ export function inject(hasCss: boolean, pathToMedia: string) {
 /**
  * The CSS content for Blockly.
  *
- * @alias Blockly.Css.content
- */
+  */
 let content = `
 .blocklySvg {
   background-color: #fff;

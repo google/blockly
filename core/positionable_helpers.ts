@@ -23,8 +23,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Enum for vertical positioning.
  *
- * @alias Blockly.uiPosition.verticalPosition
- * @internal
+  * @internal
  */
 export enum verticalPosition {
   TOP,
@@ -34,8 +33,7 @@ export enum verticalPosition {
 /**
  * Enum for horizontal positioning.
  *
- * @alias Blockly.uiPosition.horizontalPosition
- * @internal
+  * @internal
  */
 export enum horizontalPosition {
   LEFT,
@@ -45,8 +43,7 @@ export enum horizontalPosition {
 /**
  * An object defining a horizontal and vertical positioning.
  *
- * @alias Blockly.uiPosition.Position
- * @internal
+  * @internal
  */
 export interface Position {
   horizontal: horizontalPosition;
@@ -56,8 +53,7 @@ export interface Position {
 /**
  * Enum for bump rules to use for dealing with collisions.
  *
- * @alias Blockly.uiPosition.bumpDirection
- * @internal
+  * @internal
  */
 export enum bumpDirection {
   UP,
@@ -77,8 +73,7 @@ export enum bumpDirection {
  * @param metrics The workspace UI metrics.
  * @param workspace The workspace.
  * @returns The suggested start position.
- * @alias Blockly.uiPosition.getStartPositionRect
- * @internal
+  * @internal
  */
 export function getStartPositionRect(
     position: Position, size: Size, horizontalPadding: number,
@@ -124,8 +119,7 @@ export function getStartPositionRect(
  * @param workspace The workspace.
  * @param metrics The workspace metrics.
  * @returns The suggested corner position.
- * @alias Blockly.uiPosition.getCornerOppositeToolbox
- * @internal
+  * @internal
  */
 export function getCornerOppositeToolbox(
     workspace: WorkspaceSvg, metrics: UiMetrics): Position {
@@ -151,8 +145,7 @@ export function getCornerOppositeToolbox(
  * @param savedPositions List of rectangles that represent the positions of UI
  *     elements already placed.
  * @returns The suggested position rectangle.
- * @alias Blockly.uiPosition.bumpPositionRect
- * @internal
+  * @internal
  */
 export function bumpPositionRect(
     startRect: Rect, margin: number, bumpDir: bumpDirection,

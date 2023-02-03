@@ -24,8 +24,7 @@ import type {Workspace} from './workspace.js';
  * Holds information for the variable including name, ID, and type.
  *
  * @see {Blockly.FieldVariable}
- * @alias Blockly.VariableModel
- */
+  */
 export class VariableModel {
   type: string;
   private readonly id_: string;

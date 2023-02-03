@@ -19,8 +19,7 @@ import type {Workspace} from '../workspace.js';
 /**
  * Serializes and deserializes a plugin or system.
  *
- * @alias Blockly.serialization.ISerializer.ISerializer
- */
+  */
 export interface ISerializer {
   /**
    * A priority value used to determine the order of deserializing state.

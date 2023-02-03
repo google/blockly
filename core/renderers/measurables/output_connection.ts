@@ -24,8 +24,7 @@ import {Types} from './types.js';
  * An object containing information about the space an output connection takes
  * up during rendering.
  *
- * @alias Blockly.blockRendering.OutputConnection
- */
+  */
 export class OutputConnection extends Connection {
   startX: number;
   connectionOffsetY: number;

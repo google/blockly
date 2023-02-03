@@ -34,8 +34,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Class for a zoom controls.
  *
- * @alias Blockly.ZoomControls
- */
+  */
 export class ZoomControls implements IPositionable {
   /**
    * The unique ID for this component that is used to register with the

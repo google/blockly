@@ -19,8 +19,7 @@ import type {IComponent} from './i_component.js';
 /**
  * Interface for a component that can be automatically hidden.
  *
- * @alias Blockly.IAutoHideable
- */
+  */
 export interface IAutoHideable extends IComponent {
   /**
    * Hides the component. Called in WorkspaceSvg.hideChaff.

@@ -22,8 +22,7 @@ import {Types} from './types.js';
  * rendering.  The constructor for each non-spacer Measurable records the size
  * of the block element (e.g. field, statement input).
  *
- * @alias Blockly.blockRendering.Measurable
- */
+  */
 export class Measurable {
   width = 0;
 

@@ -23,8 +23,7 @@ import {Types} from './types.js';
  * An object containing information about the jagged edge of a collapsed block
  * takes up during rendering
  *
- * @alias Blockly.blockRendering.JaggedEdge
- */
+  */
 export class JaggedEdge extends Measurable {
   /**
    * @param constants The rendering constants provider.

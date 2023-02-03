@@ -24,8 +24,7 @@ import * as deprecation from './deprecation.js';
  * @param str The string to check.
  * @param prefix A string to look for at the start of `str`.
  * @returns True if `str` begins with `prefix`.
- * @alias Blockly.utils.string.startsWith
- * @deprecated Use built-in **string.startsWith** instead.
+  * @deprecated Use built-in **string.startsWith** instead.
  */
 export function startsWith(str: string, prefix: string): boolean {
   deprecation.warn(
@@ -39,8 +38,7 @@ export function startsWith(str: string, prefix: string): boolean {
  *
  * @param array Array of strings.
  * @returns Length of shortest string.
- * @alias Blockly.utils.string.shortestStringLength
- */
+  */
 export function shortestStringLength(array: string[]): number {
   if (!array.length) {
     return 0;
@@ -59,8 +57,7 @@ export function shortestStringLength(array: string[]): number {
  * @param array Array of strings.
  * @param opt_shortest Length of shortest string.
  * @returns Length of common prefix.
- * @alias Blockly.utils.string.commonWordPrefix
- */
+  */
 export function commonWordPrefix(
     array: string[], opt_shortest?: number): number {
   if (!array.length) {
@@ -98,8 +95,7 @@ export function commonWordPrefix(
  * @param array Array of strings.
  * @param opt_shortest Length of shortest string.
  * @returns Length of common suffix.
- * @alias Blockly.utils.string.commonWordSuffix
- */
+  */
 export function commonWordSuffix(
     array: string[], opt_shortest?: number): number {
   if (!array.length) {
@@ -136,8 +132,7 @@ export function commonWordSuffix(
  * @param text Text to wrap.
  * @param limit Width to wrap each line.
  * @returns Wrapped text.
- * @alias Blockly.utils.string.wrap
- */
+  */
 export function wrap(text: string, limit: number): string {
   const lines = text.split('\n');
   for (let i = 0; i < lines.length; i++) {
@@ -306,8 +301,7 @@ function wrapToText(words: string[], wordBreaks: boolean[]): string {
  *
  * @param str Input string.
  * @returns True if number, false otherwise.
- * @alias Blockly.utils.string.isNumber
- */
+  */
 export function isNumber(str: string): boolean {
   return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
 }

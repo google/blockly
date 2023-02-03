@@ -44,8 +44,7 @@ enum FlyoutItemType {
 /**
  * Class for a flyout.
  *
- * @alias Blockly.Flyout
- */
+  */
 export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Position the flyout.

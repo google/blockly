@@ -48,8 +48,7 @@ import type {Renderer} from './renderer.js';
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  *
- * @alias Blockly.blockRendering.RenderInfo
- */
+  */
 export class RenderInfo {
   block_: BlockSvg;
   protected constants_: ConstantProvider;

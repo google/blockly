@@ -57,8 +57,7 @@ const DUPLICATE_BLOCK_ERROR = 'The insertion marker ' +
  * responsible for finding the closest eligible connection and highlighting or
  * unhighlighting it as needed during a drag.
  *
- * @alias Blockly.InsertionMarkerManager
- */
+  */
 export class InsertionMarkerManager {
   /**
    * The top block in the stack being dragged.

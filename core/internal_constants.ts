@@ -19,8 +19,7 @@ import {ConnectionType} from './connection_type.js';
 /**
  * Number of characters to truncate a collapsed block to.
  *
- * @alias Blockly.internalConstants.COLLAPSE_CHARS
- * @internal
+  * @internal
  */
 export const COLLAPSE_CHARS = 30;
 
@@ -28,16 +27,14 @@ export const COLLAPSE_CHARS = 30;
  * When dragging a block out of a stack, split the stack in two (true), or drag
  * out the block healing the stack (false).
  *
- * @alias Blockly.internalConstants.DRAG_STACK
- * @internal
+  * @internal
  */
 export const DRAG_STACK = true;
 
 /**
  * Lookup table for determining the opposite type of a connection.
  *
- * @alias Blockly.internalConstants.OPPOSITE_TYPE
- * @internal
+  * @internal
  */
 export const OPPOSITE_TYPE: number[] = [];
 OPPOSITE_TYPE[ConnectionType.INPUT_VALUE] = ConnectionType.OUTPUT_VALUE;
@@ -52,8 +49,7 @@ OPPOSITE_TYPE[ConnectionType.PREVIOUS_STATEMENT] =
  * This string indicates that this option in the dropdown is 'Rename
  * variable...' and if selected, should trigger the prompt to rename a variable.
  *
- * @alias Blockly.internalConstants.RENAME_VARIABLE_ID
- * @internal
+  * @internal
  */
 export const RENAME_VARIABLE_ID = 'RENAME_VARIABLE_ID';
 
@@ -62,7 +58,6 @@ export const RENAME_VARIABLE_ID = 'RENAME_VARIABLE_ID';
  * This string indicates that this option in the dropdown is 'Delete the "%1"
  * variable' and if selected, should trigger the prompt to delete a variable.
  *
- * @alias Blockly.internalConstants.DELETE_VARIABLE_ID
- * @internal
+  * @internal
  */
 export const DELETE_VARIABLE_ID = 'DELETE_VARIABLE_ID';

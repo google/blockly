@@ -21,8 +21,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Calculates metrics for a flyout's workspace.
  * The metrics are mainly used to size scrollbars for the flyout.
  *
- * @alias Blockly.FlyoutMetricsManager
- */
+  */
 export class FlyoutMetricsManager extends MetricsManager {
   /** The flyout that owns the workspace to calculate metrics for. */
   protected flyout_: IFlyout;

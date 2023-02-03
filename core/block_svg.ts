@@ -62,8 +62,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for a block's SVG representation.
  * Not normally called directly, workspace.newBlock() is preferred.
  *
- * @alias Blockly.BlockSvg
- */
+  */
 export class BlockSvg extends Block implements IASTNodeLocationSvg,
                                                IBoundedElement, ICopyable,
                                                IDraggable {

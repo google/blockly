@@ -22,8 +22,7 @@ import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js
 /**
  * Abstract class for any event related to blocks.
  *
- * @alias Blockly.Events.BlockBase
- */
+  */
 export class BlockBase extends AbstractEvent {
   override isBlank = true;
 

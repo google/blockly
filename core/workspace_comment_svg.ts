@@ -46,8 +46,7 @@ const TEXTAREA_OFFSET = 2;
 /**
  * Class for a workspace comment's SVG representation.
  *
- * @alias Blockly.WorkspaceCommentSvg
- */
+  */
 export class WorkspaceCommentSvg extends WorkspaceComment implements
     IBoundedElement, IBubble, ICopyable {
   /**

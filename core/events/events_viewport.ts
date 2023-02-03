@@ -26,8 +26,7 @@ import type {Workspace} from '../workspace.js';
  *
  * Does not notify when the workspace itself resizes.
  *
- * @alias Blockly.Events.ViewportChange
- */
+  */
 export class ViewportChange extends UiBase {
   /**
    * Top edge of the visible portion of the workspace, relative to the

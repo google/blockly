@@ -23,8 +23,7 @@ import type {Workspace} from './workspace.js';
  * singleton. You should not create a new instance, and only access this class
  * from ShortcutRegistry.registry.
  *
- * @alias Blockly.ShortcutRegistry
- */
+  */
 export class ShortcutRegistry {
   static readonly registry = new ShortcutRegistry();
 

@@ -38,8 +38,7 @@ export type FieldInputValidator<T extends InputTypes> =
 /**
  * Abstract class for an editable input field.
  *
- * @alias Blockly.FieldInput
- * @typeParam T - The value stored on the field.
+  * @typeParam T - The value stored on the field.
  */
 export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
   /**

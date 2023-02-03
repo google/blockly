@@ -34,8 +34,7 @@ import {PathObject} from './path_object.js';
 /**
  * The zelos renderer.
  *
- * @alias Blockly.zelos.Renderer
- */
+  */
 export class Renderer extends BaseRenderer {
   protected override constants_!: ConstantProvider;
 

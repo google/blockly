@@ -23,8 +23,7 @@ import type {IDraggable} from './interfaces/i_draggable.js';
  * Abstract class for a component that can delete a block or bubble that is
  * dropped on top of it.
  *
- * @alias Blockly.DeleteArea
- */
+  */
 export class DeleteArea extends DragTarget implements IDeleteArea {
   /**
    * Whether the last block or bubble dragged over this delete area would be

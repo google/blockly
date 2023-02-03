@@ -28,8 +28,7 @@ import * as blocklyString from './utils/string.js';
  * returns either a string, or another arbitrarily nested function which
  * eventually unwinds to a string.
  *
- * @alias Blockly.Tooltip.TipInfo
- */
+  */
 export type TipInfo =
     string|{tooltip: AnyDuringMigration}|(() => TipInfo|string|Function);
 
@@ -39,8 +38,7 @@ export type TipInfo =
  * 2nd parameter: the element being moused over (i.e., the element for which the
  * tooltip should be shown).
  *
- * @alias Blockly.Tooltip.CustomTooltip
- */
+  */
 export type CustomTooltip = (p1: Element, p2: Element) => AnyDuringMigration;
 
 /**
@@ -55,8 +53,7 @@ let customTooltip: CustomTooltip|undefined = undefined;
  * tooltip UI.
  *
  * @param customFn A custom tooltip used to render an alternate tooltip UI.
- * @alias Blockly.Tooltip.setCustomTooltip
- */
+  */
 export function setCustomTooltip(customFn: CustomTooltip) {
   customTooltip = customFn;
 }
@@ -77,8 +74,7 @@ let visible = false;
  * Returns whether or not a tooltip is showing
  *
  * @returns True if a tooltip is showing
- * @alias Blockly.Tooltip.isVisible
- */
+  */
 export function isVisible(): boolean {
   return visible;
 }
@@ -89,8 +85,7 @@ let blocked = false;
 /**
  * Maximum width (in characters) of a tooltip.
  *
- * @alias Blockly.Tooltip.LIMIT
- */
+  */
 export const LIMIT = 50;
 
 /** PID of suspended thread to clear tooltip on mouse out. */
@@ -121,36 +116,31 @@ let poisonedElement: AnyDuringMigration = null;
 /**
  * Horizontal offset between mouse cursor and tooltip.
  *
- * @alias Blockly.Tooltip.OFFSET_X
- */
+  */
 export const OFFSET_X = 0;
 
 /**
  * Vertical offset between mouse cursor and tooltip.
  *
- * @alias Blockly.Tooltip.OFFSET_Y
- */
+  */
 export const OFFSET_Y = 10;
 
 /**
  * Radius mouse can move before killing tooltip.
  *
- * @alias Blockly.Tooltip.RADIUS_OK
- */
+  */
 export const RADIUS_OK = 10;
 
 /**
  * Delay before tooltip appears.
  *
- * @alias Blockly.Tooltip.HOVER_MS
- */
+  */
 export const HOVER_MS = 750;
 
 /**
  * Horizontal padding between tooltip and screen edge.
  *
- * @alias Blockly.Tooltip.MARGINS
- */
+  */
 export const MARGINS = 5;
 
 /** The HTML container.  Set once by createDom. */
@@ -160,8 +150,7 @@ let containerDiv: HTMLDivElement|null = null;
  * Returns the HTML tooltip container.
  *
  * @returns The HTML tooltip container.
- * @alias Blockly.Tooltip.getDiv
- */
+  */
 export function getDiv(): HTMLDivElement|null {
   return containerDiv;
 }
@@ -171,8 +160,7 @@ export function getDiv(): HTMLDivElement|null {
  *
  * @param object The object to get the tooltip text of.
  * @returns The tooltip text of the element.
- * @alias Blockly.Tooltip.getTooltipOfObject
- */
+  */
 export function getTooltipOfObject(object: AnyDuringMigration|null): string {
   const obj = getTargetObject(object);
   if (obj) {
@@ -209,8 +197,7 @@ function getTargetObject(obj: object|null): {tooltip: AnyDuringMigration}|null {
 /**
  * Create the tooltip div and inject it onto the page.
  *
- * @alias Blockly.Tooltip.createDom
- */
+  */
 export function createDom() {
   if (containerDiv) {
     return;  // Already created.
@@ -226,8 +213,7 @@ export function createDom() {
  * Binds the required mouse events onto an SVG element.
  *
  * @param element SVG element onto which tooltip is to be bound.
- * @alias Blockly.Tooltip.bindMouseEvents
- */
+  */
 export function bindMouseEvents(element: Element) {
   // TODO (#6097): Don't stash wrapper info on the DOM.
   (element as AnyDuringMigration).mouseOverWrapper_ =
@@ -245,8 +231,7 @@ export function bindMouseEvents(element: Element) {
  * Unbinds tooltip mouse events from the SVG element.
  *
  * @param element SVG element onto which tooltip is bound.
- * @alias Blockly.Tooltip.unbindMouseEvents
- */
+  */
 export function unbindMouseEvents(element: Element|null) {
   if (!element) {
     return;
@@ -346,8 +331,7 @@ function onMouseMove(e: Event) {
 /**
  * Dispose of the tooltip.
  *
- * @alias Blockly.Tooltip.dispose
- * @internal
+  * @internal
  */
 export function dispose() {
   element = null;
@@ -358,8 +342,7 @@ export function dispose() {
 /**
  * Hide the tooltip.
  *
- * @alias Blockly.Tooltip.hide
- */
+  */
 export function hide() {
   if (visible) {
     visible = false;
@@ -376,8 +359,7 @@ export function hide() {
  * Hide any in-progress tooltips and block showing new tooltips until the next
  * call to unblock().
  *
- * @alias Blockly.Tooltip.block
- * @internal
+  * @internal
  */
 export function block() {
   hide();
@@ -388,8 +370,7 @@ export function block() {
  * Unblock tooltips: allow them to be scheduled and shown according to their own
  * logic.
  *
- * @alias Blockly.Tooltip.unblock
- * @internal
+  * @internal
  */
 export function unblock() {
   blocked = false;

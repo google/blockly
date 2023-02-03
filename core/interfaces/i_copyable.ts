@@ -16,8 +16,7 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 import type {ISelectable} from './i_selectable.js';
 
 
-/** @alias Blockly.ICopyable */
-export interface ICopyable extends ISelectable {
+/*export interface ICopyable extends ISelectable {
   /**
    * Encode for copying.
    *

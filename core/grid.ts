@@ -21,8 +21,7 @@ import {GridOptions} from './options.js';
 /**
  * Class for a workspace's grid.
  *
- * @alias Blockly.Grid
- */
+  */
 export class Grid {
   private readonly spacing: number;
   private readonly length: number;

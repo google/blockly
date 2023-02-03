@@ -39,8 +39,7 @@ export interface InsideCorners {
 /**
  * An object that provides constants for rendering blocks in Zelos mode.
  *
- * @alias Blockly.zelos.ConstantProvider
- */
+  */
 export class ConstantProvider extends BaseConstantProvider {
   GRID_UNIT = 4;
   STATEMENT_INPUT_SPACER_MIN_WIDTH: number;

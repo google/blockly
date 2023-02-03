@@ -22,8 +22,7 @@ import type {Workspace} from './workspace.js';
 /**
  * Class for a database of entity names (variables, procedures, etc).
  *
- * @alias Blockly.Names
- */
+  */
 export class Names {
   static DEVELOPER_VARIABLE_TYPE: NameType;
   private readonly variablePrefix_: string;
@@ -251,8 +250,7 @@ export namespace Names {
    * getName('foo', 'VARIABLE') = 'foo'
    * getName('foo', 'PROCEDURE') = 'foo2'
    *
-   * @alias Blockly.Names.NameType
-   */
+      */
   export enum NameType {
     DEVELOPER_VARIABLE = 'DEVELOPER_VARIABLE',
     VARIABLE = 'VARIABLE',

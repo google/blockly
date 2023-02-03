@@ -23,8 +23,7 @@ goog.declareModuleId('Blockly.utils.deprecation');
  * @param deletionDate The date of deletion. Prefer 'version n.0.0'
  *     format, and fall back to 'month yyyy' or 'quarter yyyy' format.
  * @param opt_use The name of a function or property to use instead, if any.
- * @alias Blockly.utils.deprecation.warn
- * @internal
+  * @internal
  */
 export function warn(
     name: string, deprecationDate: string, deletionDate: string,

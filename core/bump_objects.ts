@@ -35,8 +35,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  *    in workspace coordinates.
  * @param object The object to bump.
  * @returns True if block was bumped.
- * @alias Blockly.bumpObjects.bumpIntoBounds
- */
+  */
 function bumpObjectIntoBounds(
     workspace: WorkspaceSvg, scrollMetrics: ContainerRegion,
     object: IBoundedElement): boolean {
@@ -87,8 +86,7 @@ export const bumpIntoBounds = bumpObjectIntoBounds;
  *
  * @param workspace The workspace to handle.
  * @returns The event handler.
- * @alias Blockly.bumpObjects.bumpIntoBoundsHandler
- */
+  */
 export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
     (p1: Abstract) => void {
   return (e) => {
@@ -167,8 +165,7 @@ function extractObjectFromEvent(
  * Bumps the top objects in the given workspace into bounds.
  *
  * @param workspace The workspace.
- * @alias Blockly.bumpObjects.bumpTopObjectsIntoBounds
- */
+  */
 export function bumpTopObjectsIntoBounds(workspace: WorkspaceSvg) {
   const metricsManager = workspace.getMetricsManager();
   if (!metricsManager.hasFixedEdges() || workspace.isDragging()) {

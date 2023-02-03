@@ -23,8 +23,7 @@ import type {IRegistrable} from './i_registrable.js';
 /**
  * Interface for a flyout.
  *
- * @alias Blockly.IFlyout
- */
+  */
 export interface IFlyout extends IRegistrable {
   /** Whether the flyout is laid out horizontally or not. */
   horizontalLayout: boolean;

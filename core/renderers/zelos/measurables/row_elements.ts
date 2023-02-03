@@ -22,8 +22,7 @@ import {Types} from '../../../renderers/measurables/types.js';
  * An object containing information about the space a right connection shape
  * takes up during rendering.
  *
- * @alias Blockly.zelos.RightConnectionShape
- */
+  */
 export class RightConnectionShape extends Measurable {
   // Size is dynamic
   override height = 0;

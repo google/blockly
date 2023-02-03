@@ -23,8 +23,7 @@ import {Svg} from './utils/svg.js';
 /**
  * Class for an image on a block.
  *
- * @alias Blockly.FieldImage
- */
+  */
 export class FieldImage extends Field<string> {
   /**
    * Vertical padding below the image, which is included in the reported height

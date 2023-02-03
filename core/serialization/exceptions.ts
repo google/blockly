@@ -16,15 +16,13 @@ import type {Block} from '../block.js';
 import type {State} from './blocks.js';
 
 
-/** @alias Blockly.serialization.exceptions.DeserializationError */
-export class DeserializationError extends Error {}
+/*export class DeserializationError extends Error {}
 
 /**
  * Represents an error where the serialized state is expected to provide a
  * block type, but it is not provided.
  *
- * @alias Blockly.serialization.exceptions.MissingBlockType
- */
+  */
 export class MissingBlockType extends DeserializationError {
   /**
    * @param state The state object which is missing the block type.
@@ -39,8 +37,7 @@ export class MissingBlockType extends DeserializationError {
  * Represents an error where deserialization encountered a block that did
  * not have a connection that was defined in the serialized state.
  *
- * @alias Blockly.serialization.exceptions.MissingConnection
- */
+  */
 export class MissingConnection extends DeserializationError {
   /**
    * @param connection The name of the connection that is missing. E.g.
@@ -59,8 +56,7 @@ connection`);
  * Represents an error where deserialization tried to connect two connections
  * that were not compatible.
  *
- * @alias Blockly.serialization.exceptions.BadConnectionCheck
- */
+  */
 export class BadConnectionCheck extends DeserializationError {
   /**
    * @param reason The reason the connections were not compatible.
@@ -84,8 +80,7 @@ ${childConnection} to its parent, because: ${reason}`);
  * This is an error because it is an invariant of Blockly that shadow blocks
  * do not have real children.
  *
- * @alias Blockly.serialization.exceptions.RealChildOfShadow
- */
+  */
 export class RealChildOfShadow extends DeserializationError {
   /**
    * @param state The state object representing the real block.

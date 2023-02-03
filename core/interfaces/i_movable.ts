@@ -16,8 +16,7 @@ goog.declareModuleId('Blockly.IMovable');
 /**
  * The interface for an object that is movable.
  *
- * @alias Blockly.IMovable
- */
+  */
 export interface IMovable {
   /**
    * Get whether this is movable or not.

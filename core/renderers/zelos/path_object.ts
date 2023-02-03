@@ -26,8 +26,7 @@ import type {ConstantProvider} from './constants.js';
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  *
- * @alias Blockly.zelos.PathObject
- */
+  */
 export class PathObject extends BasePathObject {
   /** The selected path of the block. */
   private svgPathSelected_: SVGElement|null = null;

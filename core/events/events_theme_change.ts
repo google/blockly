@@ -23,8 +23,7 @@ import type {Workspace} from '../workspace.js';
 /**
  * Notifies listeners that the workspace theme has changed.
  *
- * @alias Blockly.Events.ThemeChange
- */
+  */
 export class ThemeChange extends UiBase {
   /** The name of the new theme that has been set. */
   themeName?: string;

@@ -20,8 +20,7 @@ import type {ToolboxDefinition} from './utils/toolbox.js';
 /**
  * Blockly options.
  *
- * @alias Blockly.BlocklyOptions
- */
+  */
 export interface BlocklyOptions {
   collapse?: boolean;
   comments?: boolean;

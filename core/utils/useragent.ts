@@ -78,18 +78,18 @@ isTablet = isIPad || isAndroid && !has('Mobile') || has('Silk');
 isMobile = !isTablet && (isIPhone || isAndroid);
 })(globalThis['navigator'] && globalThis['navigator']['userAgent'] || '');
 
-/*export const raw: string = rawUserAgent;
+export const raw: string = rawUserAgent;
 
-/*export const JavaFx: boolean = isJavaFx;
+export const JavaFx: boolean = isJavaFx;
 
-/*export const GECKO: boolean = isGecko;
+export const GECKO: boolean = isGecko;
 
-/*export const ANDROID: boolean = isAndroid;
+export const ANDROID: boolean = isAndroid;
 
-/*export const IPAD: boolean = isIPad;
+export const IPAD: boolean = isIPad;
 
-/*export const IPHONE: boolean = isIPhone;
+export const IPHONE: boolean = isIPhone;
 
-/*export const MAC: boolean = isMac;
+export const MAC: boolean = isMac;
 
-/*export const MOBILE: boolean = isMobile;
+export const MOBILE: boolean = isMobile;

@@ -160,7 +160,7 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
   return xmlList;
 }
 
-/*export const VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';
+export const VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';
 
 /**
  * Return a new variable name that is not yet being used. This will try to
@@ -170,7 +170,7 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
  *
  * @param workspace The workspace to be unique in.
  * @returns New variable name.
-  */
+ */
 export function generateUniqueName(workspace: Workspace): string {
   return TEST_ONLY.generateUniqueNameInternal(workspace);
 }

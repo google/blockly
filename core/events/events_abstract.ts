@@ -50,7 +50,7 @@ export abstract class Abstract {
   /** Type of this event. */
   type = '';
 
-  /*  constructor() {
+  constructor() {
     this.group = eventUtils.getGroup();
     this.recordUndo = eventUtils.getRecordUndo();
   }

@@ -16,14 +16,14 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 import type {ISelectable} from './i_selectable.js';
 
 
-/*export interface ICopyable extends ISelectable {
+export interface ICopyable extends ISelectable {
   /**
    * Encode for copying.
    *
    * @returns Copy metadata.
    * @internal
    */
-toCopyData(): CopyData|null;
+  toCopyData(): CopyData|null;
 }
 
 export namespace ICopyable {

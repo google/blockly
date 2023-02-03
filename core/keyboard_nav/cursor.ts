@@ -26,7 +26,7 @@ import {Marker} from './marker.js';
 export class Cursor extends Marker {
   override type = 'cursor';
 
-  /*  constructor() {
+  constructor() {
     super();
   }
 

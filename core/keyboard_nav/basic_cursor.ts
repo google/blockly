@@ -28,7 +28,7 @@ export class BasicCursor extends Cursor {
   /** Name used for registering a basic cursor. */
   static readonly registrationName = 'basicCursor';
 
-  /*  constructor() {
+  constructor() {
     super();
   }
 

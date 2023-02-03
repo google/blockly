@@ -16,13 +16,13 @@ import type {Block} from '../block.js';
 import type {State} from './blocks.js';
 
 
-/*export class DeserializationError extends Error {}
+export class DeserializationError extends Error {}
 
 /**
  * Represents an error where the serialized state is expected to provide a
  * block type, but it is not provided.
  *
-  */
+ */
 export class MissingBlockType extends DeserializationError {
   /**
    * @param state The state object which is missing the block type.

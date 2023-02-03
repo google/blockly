@@ -23,7 +23,7 @@ import {Abstract as AbstractEvent} from './events_abstract.js';
  * categories).
  * UI events do not undo or redo.
  *
-  */
+ */
 export class UiBase extends AbstractEvent {
   override isBlank = true;
   override workspaceId: string;

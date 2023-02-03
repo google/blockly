@@ -44,7 +44,7 @@ const dummyOwner = {};
  * Gets the block the context menu is currently attached to.
  *
  * @returns The block the context menu is attached to.
-  */
+ */
 export function getCurrentBlock(): Block|null {
   return currentBlock;
 }
@@ -53,7 +53,7 @@ export function getCurrentBlock(): Block|null {
  * Sets the block the context menu is currently attached to.
  *
  * @param block The block the context menu is attached to.
-  */
+ */
 export function setCurrentBlock(block: Block|null) {
   currentBlock = block;
 }
@@ -69,7 +69,7 @@ let menu_: Menu|null = null;
  * @param e Mouse event.
  * @param options Array of menu options.
  * @param rtl True if RTL, false if LTR.
-  */
+ */
 export function show(
     e: Event, options: (ContextMenuOption|LegacyContextMenuOption)[],
     rtl: boolean) {
@@ -198,7 +198,7 @@ function haltPropagation(e: Event) {
 /**
  * Hide the context menu.
  *
-  */
+ */
 export function hide() {
   WidgetDiv.hideIfOwner(dummyOwner);
   currentBlock = null;
@@ -207,7 +207,7 @@ export function hide() {
 /**
  * Dispose of the menu.
  *
-  */
+ */
 export function dispose() {
   if (menu_) {
     menu_.dispose();
@@ -222,7 +222,7 @@ export function dispose() {
  * @param block Original block.
  * @param xml XML representation of new block.
  * @returns Function that creates a block.
-  */
+ */
 export function callbackFactory(block: Block, xml: Element): Function {
   return () => {
     eventUtils.disable();
@@ -257,7 +257,7 @@ export function callbackFactory(block: Block, xml: Element): Function {
  *     right-click originated.
  * @returns A menu option,
  *     containing text, enabled, and a callback.
-  * @internal
+ * @internal
  */
 export function commentDeleteOption(comment: WorkspaceCommentSvg):
     LegacyContextMenuOption {
@@ -280,7 +280,7 @@ export function commentDeleteOption(comment: WorkspaceCommentSvg):
  *     right-click originated.
  * @returns A menu option,
  *     containing text, enabled, and a callback.
-  * @internal
+ * @internal
  */
 export function commentDuplicateOption(comment: WorkspaceCommentSvg):
     LegacyContextMenuOption {
@@ -303,7 +303,7 @@ export function commentDuplicateOption(comment: WorkspaceCommentSvg):
  * @returns A menu option, containing text, enabled, and a callback.
  * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
  *     comments are not bundled in.
-  * @internal
+ * @internal
  */
 export function workspaceCommentOption(
     ws: WorkspaceSvg, e: Event): ContextMenuOption {

@@ -27,7 +27,7 @@ import * as eventUtils from './utils.js';
  * Notifies listeners when some element of a block has changed (e.g.
  * field values, comments, etc).
  *
-  */
+ */
 export class BlockChange extends BlockBase {
   override type = eventUtils.BLOCK_CHANGE;
   /**

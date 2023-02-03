@@ -26,7 +26,7 @@ import * as deprecation from './utils/deprecation.js';
 /**
  * Class for an icon.
  *
-  */
+ */
 export abstract class Icon {
   protected block_: BlockSvg|null;
   /** The icon SVG group. */

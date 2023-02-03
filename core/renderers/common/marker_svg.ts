@@ -47,7 +47,7 @@ const HEIGHT_MULTIPLIER = 3 / 4;
 /**
  * Class for a marker.
  *
-  */
+ */
 export class MarkerSvg {
   /**
    * The workspace, field, or block that the marker SVG element should be

@@ -25,7 +25,7 @@ import {Types} from './types.js';
  * The base class to represent an input that takes up space on a block
  * during rendering
  *
-  */
+ */
 export class InputConnection extends Connection {
   align: number;
   connectedBlock: BlockSvg|null;

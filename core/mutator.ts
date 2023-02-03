@@ -39,7 +39,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Class for a mutator dialog.
  *
-  */
+ */
 export class Mutator extends Icon {
   private quarkNames: string[];
 

@@ -35,7 +35,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  *    in workspace coordinates.
  * @param object The object to bump.
  * @returns True if block was bumped.
-  */
+ */
 function bumpObjectIntoBounds(
     workspace: WorkspaceSvg, scrollMetrics: ContainerRegion,
     object: IBoundedElement): boolean {
@@ -86,7 +86,7 @@ export const bumpIntoBounds = bumpObjectIntoBounds;
  *
  * @param workspace The workspace to handle.
  * @returns The event handler.
-  */
+ */
 export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
     (p1: Abstract) => void {
   return (e) => {
@@ -165,7 +165,7 @@ function extractObjectFromEvent(
  * Bumps the top objects in the given workspace into bounds.
  *
  * @param workspace The workspace.
-  */
+ */
 export function bumpTopObjectsIntoBounds(workspace: WorkspaceSvg) {
   const metricsManager = workspace.getMetricsManager();
   if (!metricsManager.hasFixedEdges() || workspace.isDragging()) {

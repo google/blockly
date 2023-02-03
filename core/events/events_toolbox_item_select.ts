@@ -23,7 +23,7 @@ import type {Workspace} from '../workspace.js';
 /**
  * Notifies listeners that a toolbox item has been selected.
  *
-  */
+ */
 export class ToolboxItemSelect extends UiBase {
   /** The previously selected toolbox item. */
   oldItem?: string;

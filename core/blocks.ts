@@ -22,5 +22,5 @@ export type BlockDefinition = AnyDuringMigration;
 /**
  * A mapping of block type names to block prototype objects.
  *
-  */
+ */
 export const Blocks: {[key: string]: BlockDefinition} = Object.create(null);

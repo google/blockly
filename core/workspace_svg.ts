@@ -86,7 +86,7 @@ const ZOOM_TO_FIT_MARGIN = 20;
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
  *
-  */
+ */
 export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * A wrapper function called when a resize event occurs.
@@ -2477,7 +2477,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
  * scrollbars accordingly.
  *
  * @param workspace The workspace to resize.
-  * @internal
+ * @internal
  */
 export function resizeSvgContents(workspace: WorkspaceSvg) {
   workspace.resizeContents();

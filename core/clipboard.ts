@@ -22,7 +22,7 @@ let copyData: CopyData|null = null;
  * Copy a block or workspace comment onto the local clipboard.
  *
  * @param toCopy Block or Workspace Comment to be copied.
-  * @internal
+ * @internal
  */
 export function copy(toCopy: ICopyable) {
   TEST_ONLY.copyInternal(toCopy);
@@ -39,7 +39,7 @@ function copyInternal(toCopy: ICopyable) {
  * Paste a block or workspace comment on to the main workspace.
  *
  * @returns The pasted thing if the paste was successful, null otherwise.
-  * @internal
+ * @internal
  */
 export function paste(): ICopyable|null {
   if (!copyData) {
@@ -64,7 +64,7 @@ export function paste(): ICopyable|null {
  * @param toDuplicate Block or Workspace Comment to be duplicated.
  * @returns The block or workspace comment that was duplicated, or null if the
  *     duplication failed.
-  * @internal
+ * @internal
  */
 export function duplicate(toDuplicate: ICopyable): ICopyable|null {
   return TEST_ONLY.duplicateInternal(toDuplicate);

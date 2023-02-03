@@ -34,7 +34,7 @@ export type FieldColourValidator = FieldValidator<string>;
 /**
  * Class for a colour input field.
  *
-  */
+ */
 export class FieldColour extends Field<string> {
   /**
    * An array of colour strings for the palette.

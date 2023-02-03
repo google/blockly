@@ -20,26 +20,26 @@ import type {Svg} from './svg.js';
 /**
  * Required name space for SVG elements.
  *
-  */
+ */
 export const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /**
  * Required name space for HTML elements.
  *
-  */
+ */
 export const HTML_NS = 'http://www.w3.org/1999/xhtml';
 
 /**
  * Required name space for XLINK elements.
  *
-  */
+ */
 export const XLINK_NS = 'http://www.w3.org/1999/xlink';
 
 /**
  * Node type constants.
  * https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
  *
-  */
+ */
 export enum NodeType {
   ELEMENT_NODE = 1,
   TEXT_NODE = 3,
@@ -63,7 +63,7 @@ let canvasContext: CanvasRenderingContext2D|null = null;
  * @param attrs Dictionary of attribute names and values.
  * @param opt_parent Optional parent on which to append the element.
  * @returns if name is a string or a more specific type if it a member of Svg.
-  */
+ */
 export function createSvgElement<T extends SVGElement>(
     name: string|Svg<T>, attrs: {[key: string]: string|number},
     opt_parent?: Element|null): T {
@@ -85,7 +85,7 @@ export function createSvgElement<T extends SVGElement>(
  * @param element DOM element to add class to.
  * @param className Name of class to add.
  * @returns True if class was added, false if already present.
-  */
+ */
 export function addClass(element: Element, className: string): boolean {
   const classNames = className.split(' ');
   if (classNames.every((name) => element.classList.contains(name))) {
@@ -100,7 +100,7 @@ export function addClass(element: Element, className: string): boolean {
  *
  * @param element DOM element to remove classes from.
  * @param classNames A string of one or multiple class names for an element.
-  */
+ */
 export function removeClasses(element: Element, classNames: string) {
   element.classList.remove(...classNames.split(' '));
 }
@@ -113,7 +113,7 @@ export function removeClasses(element: Element, classNames: string) {
  * @param element DOM element to remove class from.
  * @param className Name of class to remove.
  * @returns True if class was removed, false if never present.
-  */
+ */
 export function removeClass(element: Element, className: string): boolean {
   const classNames = className.split(' ');
   if (classNames.every((name) => !element.classList.contains(name))) {
@@ -129,7 +129,7 @@ export function removeClass(element: Element, className: string): boolean {
  * @param element DOM element to check.
  * @param className Name of class to check.
  * @returns True if class exists, false otherwise.
-  */
+ */
 export function hasClass(element: Element, className: string): boolean {
   return element.classList.contains(className);
 }
@@ -139,7 +139,7 @@ export function hasClass(element: Element, className: string): boolean {
  *
  * @param node The node to remove.
  * @returns The node removed if removed; else, null.
-  */
+ */
 // Copied from Closure goog.dom.removeNode
 export function removeNode(node: Node|null): Node|null {
   return node && node.parentNode ? node.parentNode.removeChild(node) : null;
@@ -151,7 +151,7 @@ export function removeNode(node: Node|null): Node|null {
  *
  * @param newNode New element to insert.
  * @param refNode Existing element to precede new node.
-  */
+ */
 export function insertAfter(newNode: Element, refNode: Element) {
   const siblingNode = refNode.nextSibling;
   const parentNode = refNode.parentNode;
@@ -171,7 +171,7 @@ export function insertAfter(newNode: Element, refNode: Element) {
  * @param parent The node that should contain the other node.
  * @param descendant The node to test presence of.
  * @returns Whether the parent node contains the descendant node.
-  */
+ */
 export function containsNode(parent: Node, descendant: Node): boolean {
   return !!(
       parent.compareDocumentPosition(descendant) &
@@ -185,7 +185,7 @@ export function containsNode(parent: Node, descendant: Node): boolean {
  *
  * @param element Element to which the CSS transform will be applied.
  * @param transform The value of the CSS `transform` property.
-  */
+ */
 export function setCssTransform(
     element: HTMLElement|SVGElement, transform: string) {
   element.style['transform'] = transform;
@@ -196,7 +196,7 @@ export function setCssTransform(
  * Start caching text widths. Every call to this function MUST also call
  * stopTextWidthCache. Caches must not survive between execution threads.
  *
-  */
+ */
 export function startTextWidthCache() {
   cacheReference++;
   if (!cacheWidths) {
@@ -208,7 +208,7 @@ export function startTextWidthCache() {
  * Stop caching field widths. Unless caching was already on when the
  * corresponding call to startTextWidthCache was made.
  *
-  */
+ */
 export function stopTextWidthCache() {
   cacheReference--;
   if (!cacheReference) {
@@ -221,7 +221,7 @@ export function stopTextWidthCache() {
  *
  * @param textElement An SVG 'text' element.
  * @returns Width of element.
-  */
+ */
 export function getTextWidth(textElement: SVGTextElement): number {
   const key = textElement.textContent + '\n' + textElement.className.baseVal;
   let width;
@@ -261,7 +261,7 @@ export function getTextWidth(textElement: SVGTextElement): number {
  * @param fontWeight The font weight to use.
  * @param fontFamily The font family to use.
  * @returns Width of element.
-  */
+ */
 export function getFastTextWidth(
     textElement: SVGTextElement, fontSize: number, fontWeight: string,
     fontFamily: string): number {
@@ -281,7 +281,7 @@ export function getFastTextWidth(
  * @param fontWeight The font weight to use.
  * @param fontFamily The font family to use.
  * @returns Width of element.
-  */
+ */
 export function getFastTextWidthWithSizeString(
     textElement: SVGTextElement, fontSize: string, fontWeight: string,
     fontFamily: string): number {
@@ -333,7 +333,7 @@ export function getFastTextWidthWithSizeString(
  * @param fontWeight The font weight to use.
  * @param fontFamily The font family to use.
  * @returns Font measurements.
-  */
+ */
 export function measureFontMetrics(
     text: string, fontSize: string, fontWeight: string,
     fontFamily: string): {height: number, baseline: number} {

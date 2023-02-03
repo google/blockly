@@ -48,7 +48,7 @@ import type {Renderer} from './renderer.js';
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  *
-  */
+ */
 export class RenderInfo {
   block_: BlockSvg;
   protected constants_: ConstantProvider;

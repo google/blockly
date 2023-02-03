@@ -27,7 +27,7 @@ export type FieldCheckboxValidator = FieldValidator<CheckboxBool>;
 /**
  * Class for a checkbox field.
  *
-  */
+ */
 export class FieldCheckbox extends Field<CheckboxBool> {
   /** Default character for the checkmark. */
   static readonly CHECK_CHAR = '✓';

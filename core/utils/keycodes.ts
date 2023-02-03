@@ -23,7 +23,7 @@ goog.declareModuleId('Blockly.utils.KeyCodes');
  * This list is not localized and therefore some of the key codes are not
  * correct for non US keyboard layouts. See comments below.
  *
-  */
+ */
 export enum KeyCodes {
   WIN_KEY_FF_LINUX = 0,
   MAC_ENTER = 3,

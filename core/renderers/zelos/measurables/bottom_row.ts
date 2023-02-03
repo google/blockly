@@ -23,7 +23,7 @@ import {BottomRow as BaseBottomRow} from '../../../renderers/measurables/bottom_
  * Elements in a bottom row can consist of corners, spacers and next
  * connections.
  *
-  */
+ */
 export class BottomRow extends BaseBottomRow {
   /**
    * @param constants The rendering constants provider.

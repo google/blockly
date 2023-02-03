@@ -27,7 +27,7 @@ import {Workspace} from '../workspace.js';
  * Notifies listeners when a block (or connected stack of blocks) is
  * deleted.
  *
-  */
+ */
 export class BlockDelete extends BlockBase {
   /** The XML representation of the deleted block(s). */
   oldXml?: Element|DocumentFragment;

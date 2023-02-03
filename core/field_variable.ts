@@ -35,7 +35,7 @@ export type FieldVariableValidator = FieldDropdownValidator;
 /**
  * Class for a variable's dropdown field.
  *
-  */
+ */
 export class FieldVariable extends FieldDropdown {
   protected override menuGenerator_: MenuGenerator|undefined;
   defaultVariableName: string;

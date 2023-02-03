@@ -75,7 +75,7 @@ export {
  * @param element SVG element to find the coordinates of.
  * @returns Object with .x and .y properties.
  * @deprecated Use **Blockly.utils.svgMath.getRelativeXY** instead.
-  */
+ */
 export function getRelativeXY(element: Element): Coordinate {
   deprecation.warn(
       'Blockly.utils.getRelativeXY', 'December 2021', 'December 2022',
@@ -91,7 +91,7 @@ export function getRelativeXY(element: Element): Coordinate {
  *     of the div Blockly was injected into, the behaviour is undefined.
  * @returns Object with .x and .y properties.
  * @deprecated Use **Blockly.utils.svgMath.getInjectionDivXY** instead.
-  */
+ */
 function getInjectionDivXY(element: Element): Coordinate {
   deprecation.warn(
       'Blockly.utils.getInjectionDivXY_', 'December 2021', 'December 2022',
@@ -111,7 +111,7 @@ export const getInjectionDivXY_ = getInjectionDivXY;
  *     interpolation tokens.
  * @returns Array of strings and numbers.
  * @deprecated Use **Blockly.utils.parsing.tokenizeInterpolation** instead.
-  */
+ */
 export function tokenizeInterpolation(message: string): Array<string|number> {
   deprecation.warn(
       'Blockly.utils.tokenizeInterpolation', 'December 2021', 'December 2022',
@@ -128,7 +128,7 @@ export function tokenizeInterpolation(message: string): Array<string|number> {
  *     references.
  * @returns String with message references replaced.
  * @deprecated Use **Blockly.utils.parsing.replaceMessageReferences** instead.
-  */
+ */
 export function replaceMessageReferences(message: string|any): string {
   deprecation.warn(
       'Blockly.utils.replaceMessageReferences', 'December 2021',
@@ -144,7 +144,7 @@ export function replaceMessageReferences(message: string|any): string {
  * @returns True if all message references have matching values.
  *     Otherwise, false.
  * @deprecated Use **Blockly.utils.parsing.checkMessageReferences** instead.
-  */
+ */
 export function checkMessageReferences(message: string): boolean {
   deprecation.warn(
       'Blockly.utils.checkMessageReferences', 'December 2021', 'December 2022',
@@ -158,7 +158,7 @@ export function checkMessageReferences(message: string): boolean {
  *
  * @returns True if 3D transforms are supported.
  * @deprecated Use **Blockly.utils.svgMath.is3dSupported** instead.
-  */
+ */
 export function is3dSupported(): boolean {
   deprecation.warn(
       'Blockly.utils.is3dSupported', 'December 2021', 'December 2022',
@@ -172,7 +172,7 @@ export function is3dSupported(): boolean {
  *
  * @returns An object containing window width, height, and scroll position in
  *     window coordinates.
-  * @deprecated Use **Blockly.utils.svgMath.getViewportBBox** instead.
+ * @deprecated Use **Blockly.utils.svgMath.getViewportBBox** instead.
  * @internal
  */
 export function getViewportBBox(): Rect {
@@ -188,7 +188,7 @@ export function getViewportBBox(): Rect {
  * @param arr Array from which to remove value.
  * @param value Value to remove.
  * @returns True if an element was removed.
-  * @deprecated Use **Blockly.array.removeElem** instead.
+ * @deprecated Use **Blockly.array.removeElem** instead.
  * @internal
  */
 export function arrayRemove<T>(arr: Array<T>, value: T): boolean {
@@ -204,7 +204,7 @@ export function arrayRemove<T>(arr: Array<T>, value: T): boolean {
  *
  * @returns Object with values 'x' and 'y'.
  * @deprecated Use **Blockly.utils.svgMath.getDocumentScroll** instead.
-  */
+ */
 export function getDocumentScroll(): Coordinate {
   deprecation.warn(
       'Blockly.utils.getDocumentScroll', 'December 2021', 'December 2022',
@@ -221,7 +221,7 @@ export function getDocumentScroll(): Coordinate {
  *     that are not inside a value or statement input of the block).
  * @returns Map of types to type counts for descendants of the bock.
  * @deprecated Use **Blockly.common.getBlockTypeCounts** instead.
-  */
+ */
 export function getBlockTypeCounts(
     block: Block, opt_stripFollowing?: boolean): {[key: string]: number} {
   deprecation.warn(
@@ -257,7 +257,7 @@ export function screenToWsCoordinates(
  *     the input was an HSV hue value.
  * @throws {Error} If the colour cannot be parsed.
  * @deprecated Use **Blockly.utils.parsing.parseBlockColour** instead.
-  */
+ */
 export function parseBlockColour(colour: number|
                                  string): {hue: number|null, hex: string} {
   deprecation.warn(
@@ -272,7 +272,7 @@ export function parseBlockColour(colour: number|
  * @param fn Function to run.
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
  * @deprecated No longer provided by Blockly.
-  */
+ */
 export function runAfterPageLoad(fn: () => void) {
   deprecation.warn(
       'Blockly.utils.runAfterPageLoad', 'December 2021', 'December 2022');

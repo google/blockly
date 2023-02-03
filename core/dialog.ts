@@ -37,7 +37,7 @@ let promptImplementation = function(
  *
  * @param message The message to display to the user.
  * @param opt_callback The callback when the alert is dismissed.
-  */
+ */
 export function alert(message: string, opt_callback?: () => void) {
   alertImplementation(message, opt_callback);
 }
@@ -47,7 +47,7 @@ export function alert(message: string, opt_callback?: () => void) {
  *
  * @param alertFunction The function to be run.
  * @see Blockly.dialog.alert
-  */
+ */
 export function setAlert(alertFunction: (p1: string, p2?: () => void) => void) {
   alertImplementation = alertFunction;
 }
@@ -58,7 +58,7 @@ export function setAlert(alertFunction: (p1: string, p2?: () => void) => void) {
  *
  * @param message The message to display to the user.
  * @param callback The callback for handling user response.
-  */
+ */
 export function confirm(message: string, callback: (p1: boolean) => void) {
   TEST_ONLY.confirmInternal(message, callback);
 }
@@ -76,7 +76,7 @@ function confirmInternal(message: string, callback: (p1: boolean) => void) {
  *
  * @param confirmFunction The function to be run.
  * @see Blockly.dialog.confirm
-  */
+ */
 export function setConfirm(
     confirmFunction: (p1: string, p2: (p1: boolean) => void) => void) {
   confirmImplementation = confirmFunction;
@@ -91,7 +91,7 @@ export function setConfirm(
  * @param message The message to display to the user.
  * @param defaultValue The value to initialize the prompt with.
  * @param callback The callback for handling user response.
-  */
+ */
 export function prompt(
     message: string, defaultValue: string,
     callback: (p1: string|null) => void) {
@@ -103,7 +103,7 @@ export function prompt(
  *
  * @param promptFunction The function to be run.
  * @see Blockly.dialog.prompt
-  */
+ */
 export function setPrompt(
     promptFunction: (p1: string, p2: string, p3: (p1: string|null) => void) =>
         void) {

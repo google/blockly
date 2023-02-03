@@ -62,7 +62,7 @@ export function injectDependencies(dependencies: {
 /**
  * Namespace for Blockly's XML.
  *
-  */
+ */
 export const NAME_SPACE = 'https://developers.google.com/blockly/xml';
 
 /**
@@ -70,7 +70,7 @@ export const NAME_SPACE = 'https://developers.google.com/blockly/xml';
  *
  * @returns The document object.
  * @deprecated No longer provided by Blockly.
-  */
+ */
 export function getDocument(): Document {
   deprecation.warn('Blockly.utils.xml.getDocument', 'version 9', 'version 10');
   return document;
@@ -81,7 +81,7 @@ export function getDocument(): Document {
  *
  * @param xmlDocument The document object to use.
  * @deprecated No longer provided by Blockly.
-  */
+ */
 export function setDocument(xmlDocument: Document) {
   deprecation.warn('Blockly.utils.xml.setDocument', 'version 9', 'version 10');
   document = xmlDocument;
@@ -92,7 +92,7 @@ export function setDocument(xmlDocument: Document) {
  *
  * @param tagName Name of DOM element.
  * @returns New DOM element.
-  */
+ */
 export function createElement(tagName: string): Element {
   return document.createElementNS(NAME_SPACE, tagName);
 }
@@ -102,7 +102,7 @@ export function createElement(tagName: string): Element {
  *
  * @param text Text content.
  * @returns New DOM text node.
-  */
+ */
 export function createTextNode(text: string): Text {
   return document.createTextNode(text);
 }
@@ -113,7 +113,7 @@ export function createTextNode(text: string): Text {
  * @param text XML string.
  * @returns The DOM document.
  * @throws if XML doesn't parse.
-  */
+ */
 export function textToDomDocument(text: string): Document {
   const oParser = new DOMParser();
   return oParser.parseFromString(text, 'text/xml');
@@ -125,7 +125,7 @@ export function textToDomDocument(text: string): Document {
  *
  * @param dom A tree of XML nodes.
  * @returns Text representation.
-  */
+ */
 export function domToText(dom: Node): string {
   const oSerializer = new XMLSerializer();
   return oSerializer.serializeToString(dom);

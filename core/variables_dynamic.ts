@@ -29,7 +29,7 @@ import type {FlyoutButton} from './flyout_button.js';
  * See also Blockly.Variables.CATEGORY_NAME and
  * Blockly.Procedures.CATEGORY_NAME.
  *
-  */
+ */
 export const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 
 /**
@@ -74,7 +74,7 @@ export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
  *
  * @param workspace The workspace containing variables.
  * @returns Array of XML elements.
-  */
+ */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
   let xmlList = new Array<Element>();
   let button = document.createElement('button');
@@ -107,7 +107,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
  *
  * @param workspace The workspace containing variables.
  * @returns Array of XML block elements.
-  */
+ */
 export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
   const variableModelList = workspace.getAllVariables();
 

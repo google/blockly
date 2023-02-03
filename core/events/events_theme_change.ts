@@ -23,7 +23,7 @@ import type {Workspace} from '../workspace.js';
 /**
  * Notifies listeners that the workspace theme has changed.
  *
-  */
+ */
 export class ThemeChange extends UiBase {
   /** The name of the new theme that has been set. */
   themeName?: string;

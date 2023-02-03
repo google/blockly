@@ -27,7 +27,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Parse the user-specified options, using reasonable defaults where behaviour
  * is unspecified.
  *
-  */
+ */
 export class Options {
   RTL: boolean;
   oneBasedIndex: boolean;

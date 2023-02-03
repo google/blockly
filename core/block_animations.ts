@@ -36,7 +36,7 @@ let wobblingBlock: BlockSvg|null = null;
  * Play some UI effects (sound, animation) when disposing of a block.
  *
  * @param block The block being disposed of.
-  * @internal
+ * @internal
  */
 export function disposeUiEffect(block: BlockSvg) {
   const workspace = block.workspace;
@@ -87,7 +87,7 @@ function disposeUiStep(
  * Play some UI effects (sound, ripple) after a connection has been established.
  *
  * @param block The block being connected.
-  * @internal
+ * @internal
  */
 export function connectionUiEffect(block: BlockSvg) {
   const workspace = block.workspace;
@@ -143,7 +143,7 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
  * Play some UI effects (sound, animation) when disconnecting a block.
  *
  * @param block The block being disconnected.
-  * @internal
+ * @internal
  */
 export function disconnectUiEffect(block: BlockSvg) {
   disconnectUiStop();
@@ -193,7 +193,7 @@ function disconnectUiStep(block: BlockSvg, magnitude: number, start: Date) {
 /**
  * Stop the disconnect UI animation immediately.
  *
-  * @internal
+ * @internal
  */
 export function disconnectUiStop() {
   if (!wobblingBlock) return;

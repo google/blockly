@@ -27,7 +27,7 @@ import {Types} from './types.js';
  * Elements in a bottom row can consist of corners, spacers and next
  * connections.
  *
-  */
+ */
 export class BottomRow extends Row {
   /**
    * Whether this row has a next connection.

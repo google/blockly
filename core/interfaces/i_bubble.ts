@@ -20,7 +20,7 @@ import type {IDraggable} from './i_draggable.js';
 /**
  * A bubble interface.
  *
-  */
+ */
 export interface IBubble extends IDraggable, IContextMenu {
   /**
    * Return the coordinates of the top-left corner of this bubble's body

@@ -25,7 +25,7 @@ import type {RenderedConnection} from './rendered_connection.js';
 /**
  * Class for connection type checking logic.
  *
-  */
+ */
 export class ConnectionChecker implements IConnectionChecker {
   /**
    * Check whether the current connection can connect with the target

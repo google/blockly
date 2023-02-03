@@ -44,7 +44,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Class for a trash can.
  *
-  */
+ */
 export class Trashcan extends DeleteArea implements IAutoHideable,
                                                     IPositionable {
   /**

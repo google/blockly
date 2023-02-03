@@ -27,7 +27,7 @@ import {Svg} from './utils/svg.js';
 /**
  * Class for a warning.
  *
-  */
+ */
 export class Warning extends Icon {
   private text: {[key: string]: string};
 

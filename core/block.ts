@@ -51,7 +51,7 @@ import type {Workspace} from './workspace.js';
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
  *
-  */
+ */
 export class Block implements IASTNodeLocation, IDeletable {
   /**
    * An optional callback method to use whenever the block's parent workspace

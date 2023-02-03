@@ -37,7 +37,7 @@ import type {InlineInput} from './measurables/inline_input.js';
  * or closed paths.  The highlights for tabs and notches are loosely based on
  * tab and notch shapes, but are not exactly the same.
  *
-  */
+ */
 export class Highlighter {
   info_: RenderInfo;
   steps_ = '';

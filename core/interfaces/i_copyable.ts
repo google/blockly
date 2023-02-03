@@ -23,7 +23,7 @@ import type {ISelectable} from './i_selectable.js';
    * @returns Copy metadata.
    * @internal
    */
-  toCopyData(): CopyData|null;
+toCopyData(): CopyData|null;
 }
 
 export namespace ICopyable {

@@ -22,7 +22,7 @@ import * as eventUtils from './utils.js';
  * Notifies listeners when the workspace has finished deserializing from
  * JSON/XML.
  *
-  */
+ */
 export class FinishedLoading extends AbstractEvent {
   override isBlank = true;
   override recordUndo = false;

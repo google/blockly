@@ -19,7 +19,7 @@ import type {Row} from './row.js';
 /**
  * Types of rendering elements.
  *
-  */
+ */
 class TypesContainer {
   [index: string]: number|Function;
 

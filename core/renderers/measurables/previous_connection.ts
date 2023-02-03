@@ -24,7 +24,7 @@ import {Types} from './types.js';
  * An object containing information about the space a previous connection takes
  * up during rendering.
  *
-  */
+ */
 export class PreviousConnection extends Connection {
   /**
    * @param constants The rendering constants provider.

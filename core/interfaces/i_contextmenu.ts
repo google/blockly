@@ -19,5 +19,5 @@ goog.declareModuleId('Blockly.IContextMenu');
    *
    * @param e Mouse event.
    */
-  showContextMenu(e: Event): void;
+showContextMenu(e: Event): void;
 }

@@ -67,7 +67,7 @@ export type FieldValidator<T = any> = (newValue: T) => T|null|undefined;
 /**
  * Abstract class for an editable field.
  *
-  * @typeParam T - The value stored on the field.
+ * @typeParam T - The value stored on the field.
  */
 export abstract class Field<T = any> implements IASTNodeLocationSvg,
                                                 IASTNodeLocationWithBlock,

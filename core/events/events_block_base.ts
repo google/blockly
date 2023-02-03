@@ -22,7 +22,7 @@ import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js
 /**
  * Abstract class for any event related to blocks.
  *
-  */
+ */
 export class BlockBase extends AbstractEvent {
   override isBlank = true;
 

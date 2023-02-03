@@ -33,7 +33,7 @@ interface BlockLocation {
  * Notifies listeners when a block is moved. This could be from one
  * connection to another, or from one location on the workspace to another.
  *
-  */
+ */
 export class BlockMove extends BlockBase {
   override type = eventUtils.BLOCK_MOVE;
 

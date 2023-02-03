@@ -24,7 +24,7 @@ import type {Workspace} from '../workspace.js';
 /**
  * Notifies listeners when the trashcan is opening or closing.
  *
-  */
+ */
 export class TrashcanOpen extends UiBase {
   /**
    * True if the trashcan is currently opening (previously closed).

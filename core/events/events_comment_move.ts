@@ -25,7 +25,7 @@ import type {Workspace} from '../workspace.js';
 /**
  * Notifies listeners that a workspace comment has moved.
  *
-  */
+ */
 export class CommentMove extends CommentBase {
   override type = eventUtils.COMMENT_MOVE;
 

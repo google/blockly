@@ -40,7 +40,7 @@ let containerDiv: HTMLDivElement|null;
  * Returns the HTML container for editor widgets.
  *
  * @returns The editor widget container.
-  */
+ */
 export function getDiv(): HTMLDivElement|null {
   return containerDiv;
 }
@@ -49,7 +49,7 @@ export function getDiv(): HTMLDivElement|null {
  * Allows unit tests to reset the div. Do not use outside of tests.
  *
  * @param newDiv The new value for the DIV field.
-  * @internal
+ * @internal
  */
 export function testOnly_setDiv(newDiv: HTMLDivElement|null) {
   containerDiv = newDiv;
@@ -58,7 +58,7 @@ export function testOnly_setDiv(newDiv: HTMLDivElement|null) {
 /**
  * Create the widget div and inject it onto the page.
  *
-  */
+ */
 export function createDom() {
   if (containerDiv) {
     return;  // Already created.
@@ -77,7 +77,7 @@ export function createDom() {
  * @param rtl Right-to-left (true) or left-to-right (false).
  * @param newDispose Optional cleanup function to be run when the widget is
  *     closed.
-  */
+ */
 export function show(newOwner: unknown, rtl: boolean, newDispose: () => void) {
   hide();
   owner = newOwner;
@@ -100,7 +100,7 @@ export function show(newOwner: unknown, rtl: boolean, newDispose: () => void) {
 /**
  * Destroy the widget and hide the div.
  *
-  */
+ */
 export function hide() {
   if (!isVisible()) {
     return;
@@ -131,7 +131,7 @@ export function hide() {
  * Is the container visible?
  *
  * @returns True if visible.
-  */
+ */
 export function isVisible(): boolean {
   return !!owner;
 }
@@ -141,7 +141,7 @@ export function isVisible(): boolean {
  * object.
  *
  * @param oldOwner The object that was using this container.
-  */
+ */
 export function hideIfOwner(oldOwner: unknown) {
   if (owner === oldOwner) {
     hide();
@@ -175,7 +175,7 @@ function positionInternal(x: number, y: number, height: number) {
  *     window coordinates.
  * @param rtl Whether the workspace is in RTL mode.  This determines horizontal
  *     alignment.
-  * @internal
+ * @internal
  */
 export function positionWithAnchor(
     viewportBBox: Rect, anchorBBox: Rect, widgetSize: Size, rtl: boolean) {

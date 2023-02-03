@@ -19,7 +19,7 @@ import type {Workspace} from '../workspace.js';
 /**
  * Serializes and deserializes a plugin or system.
  *
-  */
+ */
 export interface ISerializer {
   /**
    * A priority value used to determine the order of deserializing state.

@@ -79,7 +79,7 @@ let mainWorkspace: Workspace;
  * page.
  *
  * @returns The main workspace.
-  */
+ */
 export function getMainWorkspace(): Workspace {
   return mainWorkspace;
 }
@@ -88,7 +88,7 @@ export function getMainWorkspace(): Workspace {
  * Sets last used main workspace.
  *
  * @param workspace The most recently used top level workspace.
-  */
+ */
 export function setMainWorkspace(workspace: Workspace) {
   mainWorkspace = workspace;
 }
@@ -101,7 +101,7 @@ let selected: ICopyable|null = null;
 /**
  * Returns the currently selected copyable object.
  *
-  */
+ */
 export function getSelected(): ICopyable|null {
   return selected;
 }
@@ -112,7 +112,7 @@ export function getSelected(): ICopyable|null {
  * programmatically select a block, use `BlockSvg#select`.
  *
  * @param newSelection The newly selected block.
-  * @internal
+ * @internal
  */
 export function setSelected(newSelection: ICopyable|null) {
   selected = newSelection;
@@ -128,7 +128,7 @@ let parentContainer: Element|null;
  * Tooltip.
  *
  * @returns The parent container.
-  */
+ */
 export function getParentContainer(): Element|null {
   return parentContainer;
 }
@@ -140,7 +140,7 @@ export function getParentContainer(): Element|null {
  * This method is a NOP if called after the first `Blockly.inject`.
  *
  * @param newParent The container element.
-  */
+ */
 export function setParentContainer(newParent: Element) {
   parentContainer = newParent;
 }
@@ -153,7 +153,7 @@ export function setParentContainer(newParent: Element) {
  * Record the height/width of the SVG image.
  *
  * @param workspace Any workspace in the SVG.
-  */
+ */
 export function svgResize(workspace: WorkspaceSvg) {
   let mainWorkspace = workspace;
   while (mainWorkspace.options.parentWorkspace) {
@@ -194,7 +194,7 @@ export const draggingConnections: Connection[] = [];
  *    statements (blocks that are not inside a value or statement input
  *    of the block).
  * @returns Map of types to type counts for descendants of the bock.
-  */
+ */
 export function getBlockTypeCounts(
     block: Block, opt_stripFollowing?: boolean): {[key: string]: number} {
   const typeCountsMap = Object.create(null);
@@ -235,7 +235,7 @@ function jsonInitFactory(jsonDef: AnyDuringMigration): () => void {
  * by the Blockly Developer Tools.
  *
  * @param jsonArray An array of JSON block definitions.
-  */
+ */
 export function defineBlocksWithJsonArray(jsonArray: AnyDuringMigration[]) {
   TEST_ONLY.defineBlocksWithJsonArrayInternal(jsonArray);
 }
@@ -254,7 +254,7 @@ function defineBlocksWithJsonArrayInternal(jsonArray: AnyDuringMigration[]) {
  * @param jsonArray An array of JSON block definitions.
  * @returns A map of the block
  *     definitions created.
-  */
+ */
 export function createBlockDefinitionsFromJsonArray(
     jsonArray: AnyDuringMigration[]): {[key: string]: BlockDefinition} {
   const blocks: {[key: string]: BlockDefinition} = {};
@@ -282,7 +282,7 @@ export function createBlockDefinitionsFromJsonArray(
  *
  * @param blocks A map of block
  *     type names to block definitions.
-  */
+ */
 export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
   // Iterate over own enumerable properties.
   for (const type of Object.keys(blocks)) {

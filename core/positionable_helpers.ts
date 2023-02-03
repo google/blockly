@@ -23,7 +23,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Enum for vertical positioning.
  *
-  * @internal
+ * @internal
  */
 export enum verticalPosition {
   TOP,
@@ -33,7 +33,7 @@ export enum verticalPosition {
 /**
  * Enum for horizontal positioning.
  *
-  * @internal
+ * @internal
  */
 export enum horizontalPosition {
   LEFT,
@@ -43,7 +43,7 @@ export enum horizontalPosition {
 /**
  * An object defining a horizontal and vertical positioning.
  *
-  * @internal
+ * @internal
  */
 export interface Position {
   horizontal: horizontalPosition;
@@ -53,7 +53,7 @@ export interface Position {
 /**
  * Enum for bump rules to use for dealing with collisions.
  *
-  * @internal
+ * @internal
  */
 export enum bumpDirection {
   UP,
@@ -73,7 +73,7 @@ export enum bumpDirection {
  * @param metrics The workspace UI metrics.
  * @param workspace The workspace.
  * @returns The suggested start position.
-  * @internal
+ * @internal
  */
 export function getStartPositionRect(
     position: Position, size: Size, horizontalPadding: number,
@@ -119,7 +119,7 @@ export function getStartPositionRect(
  * @param workspace The workspace.
  * @param metrics The workspace metrics.
  * @returns The suggested corner position.
-  * @internal
+ * @internal
  */
 export function getCornerOppositeToolbox(
     workspace: WorkspaceSvg, metrics: UiMetrics): Position {
@@ -145,7 +145,7 @@ export function getCornerOppositeToolbox(
  * @param savedPositions List of rectangles that represent the positions of UI
  *     elements already placed.
  * @returns The suggested position rectangle.
-  * @internal
+ * @internal
  */
 export function bumpPositionRect(
     startRect: Rect, margin: number, bumpDir: bumpDirection,

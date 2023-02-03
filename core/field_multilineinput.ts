@@ -30,7 +30,7 @@ export type FieldMultilineInputValidator = FieldTextInputValidator;
 /**
  * Class for an editable text area field.
  *
-  */
+ */
 export class FieldMultilineInput extends FieldTextInput {
   /**
    * The SVG group element that will contain a text element for each text row

@@ -35,7 +35,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * @param workspace The workspace containing blocks.
  * @param opt_noId True if the encoder should skip the block IDs.
  * @returns XML DOM element.
-  */
+ */
 export function workspaceToDom(
     workspace: Workspace, opt_noId?: boolean): Element {
   const treeXml = utilsXml.createElement('xml');
@@ -62,7 +62,7 @@ export function workspaceToDom(
  *
  * @param variableList List of all variable models.
  * @returns Tree of XML elements.
-  */
+ */
 export function variablesToDom(variableList: VariableModel[]): Element {
   const variables = utilsXml.createElement('variables');
   for (let i = 0; i < variableList.length; i++) {
@@ -85,7 +85,7 @@ export function variablesToDom(variableList: VariableModel[]): Element {
  * @param opt_noId True if the encoder should skip the block ID.
  * @returns Tree of XML elements or an empty document fragment if the block was
  *     an insertion marker.
-  */
+ */
 export function blockToDomWithXY(block: Block, opt_noId?: boolean): Element|
     DocumentFragment {
   if (block.isInsertionMarker()) {  // Skip over insertion markers.
@@ -155,7 +155,7 @@ function allFieldsToDom(block: Block, element: Element) {
  * @param opt_noId True if the encoder should skip the block ID.
  * @returns Tree of XML elements or an empty document fragment if the block was
  *     an insertion marker.
-  */
+ */
 export function blockToDom(block: Block, opt_noId?: boolean): Element|
     DocumentFragment {
   // Skip over insertion markers.
@@ -333,7 +333,7 @@ function cloneShadow(shadow: Element, opt_noId?: boolean): Element {
  *
  * @param dom A tree of XML nodes.
  * @returns Text representation.
-  */
+ */
 export function domToText(dom: Node): string {
   const text = utilsXml.domToText(dom);
   // Unpack self-closing tags.  These tags fail when embedded in HTML.
@@ -346,7 +346,7 @@ export function domToText(dom: Node): string {
  *
  * @param dom A tree of XML elements.
  * @returns Text representation.
-  */
+ */
 export function domToPrettyText(dom: Node): string {
   // This function is not guaranteed to be correct for all XML.
   // But it handles the XML that Blockly generates.
@@ -380,7 +380,7 @@ export function domToPrettyText(dom: Node): string {
  * @returns A DOM object representing the singular child of the document
  *     element.
  * @throws if the text doesn't parse.
-  */
+ */
 export function textToDom(text: string): Element {
   const doc = utilsXml.textToDomDocument(text);
   if (!doc || !doc.documentElement ||
@@ -397,7 +397,7 @@ export function textToDom(text: string): Element {
  * @param xml XML DOM.
  * @param workspace The workspace.
  * @returns An array containing new block IDs.
-  */
+ */
 export function clearWorkspaceAndLoadFromXml(
     xml: Element, workspace: WorkspaceSvg): string[] {
   workspace.setResizesEnabled(false);
@@ -417,7 +417,7 @@ export function clearWorkspaceAndLoadFromXml(
  * @returns An array containing new block IDs.
  * @suppress {strictModuleDepCheck} Suppress module check while workspace
  * comments are not bundled in.
-  */
+ */
 export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
   let width = 0;  // Not used in LTR.
   if (workspace.RTL) {
@@ -503,7 +503,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
  * @param xml The XML DOM.
  * @param workspace The workspace to add to.
  * @returns An array containing new block IDs.
-  */
+ */
 export function appendDomToWorkspace(
     xml: Element, workspace: WorkspaceSvg): string[] {
   // First check if we have a WorkspaceSvg, otherwise the blocks have no shape
@@ -556,7 +556,7 @@ export function appendDomToWorkspace(
  * @param xmlBlock XML block element.
  * @param workspace The workspace.
  * @returns The root block created.
-  */
+ */
 export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
   // Create top-level block.
   eventUtils.disable();
@@ -619,7 +619,7 @@ export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
  *
  * @param xmlVariables List of XML variable elements.
  * @param workspace The workspace to which the variable should be added.
-  */
+ */
 export function domToVariables(xmlVariables: Element, workspace: Workspace) {
   for (let i = 0; i < xmlVariables.children.length; i++) {
     const xmlChild = xmlVariables.children[i];
@@ -1008,7 +1008,7 @@ function domToField(block: Block, fieldName: string, xml: Element) {
  *
  * @param xmlBlock XML block element or an empty DocumentFragment if the block
  *     was an insertion marker.
-  */
+ */
 export function deleteNext(xmlBlock: Element|DocumentFragment) {
   for (let i = 0; i < xmlBlock.childNodes.length; i++) {
     const child = xmlBlock.childNodes[i];

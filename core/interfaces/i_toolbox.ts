@@ -22,7 +22,7 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 /**
  * Interface for a toolbox.
  *
-  */
+ */
 export interface IToolbox extends IRegistrable {
   /** Initializes the toolbox. */
   init(): void;

@@ -16,5 +16,5 @@ goog.declareModuleId('Blockly.IASTNodeLocation');
 /**
  * An AST node location interface.
  *
-  */
+ */
 export interface IASTNodeLocation {}

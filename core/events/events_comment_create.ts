@@ -25,7 +25,7 @@ import type {Workspace} from '../workspace.js';
 /**
  * Notifies listeners that a workspace comment was created.
  *
-  */
+ */
 export class CommentCreate extends CommentBase {
   override type = eventUtils.COMMENT_CREATE;
 

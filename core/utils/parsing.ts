@@ -166,7 +166,7 @@ function tokenizeInterpolationInternal(
  * @param message Text which might contain string table references and
  *     interpolation tokens.
  * @returns Array of strings and numbers.
-  */
+ */
 export function tokenizeInterpolation(message: string): (string|number)[] {
   return tokenizeInterpolationInternal(message, true);
 }
@@ -179,7 +179,7 @@ export function tokenizeInterpolation(message: string): (string|number)[] {
  * @param message Message, which may be a string that contains
  *     string table references.
  * @returns String with message references replaced.
-  */
+ */
 export function replaceMessageReferences(message: string|any): string {
   if (typeof message !== 'string') {
     return message;
@@ -197,7 +197,7 @@ export function replaceMessageReferences(message: string|any): string {
  * @param message Text which might contain string table references.
  * @returns True if all message references have matching values.
  *     Otherwise, false.
-  */
+ */
 export function checkMessageReferences(message: string): boolean {
   let validSoFar = true;
 
@@ -227,7 +227,7 @@ export function checkMessageReferences(message: string): boolean {
  * @returns An object containing the colour as
  *     a #RRGGBB string, and the hue if the input was an HSV hue value.
  * @throws {Error} If the colour cannot be parsed.
-  */
+ */
 export function parseBlockColour(colour: number|
                                  string): {hue: number|null, hex: string} {
   const dereferenced =

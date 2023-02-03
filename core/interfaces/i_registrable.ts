@@ -17,5 +17,5 @@ goog.declareModuleId('Blockly.IRegistrable');
 /**
  * The interface for a Blockly component that can be registered.
  *
-  */
+ */
 export interface IRegistrable {}

@@ -17,13 +17,13 @@ goog.declareModuleId('Blockly.utils.colour');
  * The richness of block colours, regardless of the hue.
  * Must be in the range of 0 (inclusive) to 1 (exclusive).
  *
-  */
+ */
 let hsvSaturation = 0.45;
 
 /**
  * Get the richness of block colours, regardless of the hue.
  *
-  * @returns The current richness.
+ * @returns The current richness.
  * @internal
  */
 export function getHsvSaturation(): number {
@@ -35,7 +35,7 @@ export function getHsvSaturation(): number {
  *
  * @param newSaturation The new richness, in the range of  0 (inclusive) to 1
  *     (exclusive)
-  * @internal
+ * @internal
  */
 export function setHsvSaturation(newSaturation: number) {
   hsvSaturation = newSaturation;
@@ -45,13 +45,13 @@ export function setHsvSaturation(newSaturation: number) {
  * The intensity of block colours, regardless of the hue.
  * Must be in the range of 0 (inclusive) to 1 (exclusive).
  *
-  */
+ */
 let hsvValue = 0.65;
 
 /**
  * Get the intensity of block colours, regardless of the hue.
  *
-  * @returns The current intensity.
+ * @returns The current intensity.
  * @internal
  */
 export function getHsvValue(): number {
@@ -63,7 +63,7 @@ export function getHsvValue(): number {
  *
  * @param newValue The new intensity, in the range of  0 (inclusive) to 1
  *     (exclusive)
-  * @internal
+ * @internal
  */
 export function setHsvValue(newValue: number) {
   hsvValue = newValue;
@@ -80,7 +80,7 @@ export function setHsvValue(newValue: number) {
  * @param str Colour in some CSS format.
  * @returns A string containing a hex representation of the colour, or null if
  *     can't be parsed.
-  */
+ */
 export function parse(str: string|number): string|null {
   str = String(str).toLowerCase().trim();
   let hex = names[str];
@@ -118,7 +118,7 @@ export function parse(str: string|number): string|null {
  * @param g Amount of green, int between 0 and 255.
  * @param b Amount of blue, int between 0 and 255.
  * @returns Hex representation of the colour.
-  */
+ */
 export function rgbToHex(r: number, g: number, b: number): string {
   const rgb = r << 16 | g << 8 | b;
   if (r < 0x10) {
@@ -133,7 +133,7 @@ export function rgbToHex(r: number, g: number, b: number): string {
  * @param colour String representing colour in any colour format ('#ff0000',
  *     'red', '0xff000', etc).
  * @returns RGB representation of the colour.
-  */
+ */
 export function hexToRgb(colour: string): number[] {
   const hex = parse(colour);
   if (!hex) {
@@ -155,7 +155,7 @@ export function hexToRgb(colour: string): number[] {
  * @param s Saturation value in [0, 1].
  * @param v Brightness in [0, 255].
  * @returns Hex representation of the colour.
-  */
+ */
 export function hsvToHex(h: number, s: number, v: number): string {
   let red = 0;
   let green = 0;
@@ -216,7 +216,7 @@ export function hsvToHex(h: number, s: number, v: number): string {
  * @param factor The weight to be given to colour1 over colour2.
  *     Values should be in the range [0, 1].
  * @returns Combined colour represented in hex.
-  */
+ */
 export function blend(colour1: string, colour2: string, factor: number): string|
     null {
   const hex1 = parse(colour1);
@@ -241,7 +241,7 @@ export function blend(colour1: string, colour2: string, factor: number): string|
  * The keys of this map are the lowercase "readable" names of the colours,
  * while the values are the "hex" values.
  *
-  */
+ */
 export const names: {[key: string]: string} = {
   'aqua': '#00ffff',
   'black': '#000000',
@@ -266,7 +266,7 @@ export const names: {[key: string]: string} = {
  *
  * @param hue Hue on a colour wheel (0-360).
  * @returns RGB code, e.g. '#5ba65b'.
-  */
+ */
 export function hueToHex(hue: number): string {
   return hsvToHex(hue, hsvSaturation, hsvValue * 255);
 }

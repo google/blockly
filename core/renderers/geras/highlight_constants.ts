@@ -65,7 +65,7 @@ export interface JaggedTeeth {
  * programmatically.  Others, especially on curves, are just made out of piles
  * of constants and are hard to tweak.
  *
-  */
+ */
 export class HighlightConstantProvider {
   constantProvider: ConstantProvider;
 

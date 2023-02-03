@@ -27,7 +27,7 @@ import * as eventUtils from './utils.js';
  * Notifies listeners that a marker (used for keyboard navigation) has
  * moved.
  *
-  */
+ */
 export class MarkerMove extends UiBase {
   /** The ID of the block the marker is now on, if any. */
   blockId?: string;

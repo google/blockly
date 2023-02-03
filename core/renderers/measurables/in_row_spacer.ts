@@ -23,7 +23,7 @@ import {Types} from './types.js';
  * An object containing information about a spacer between two elements on a
  * row.
  *
-  */
+ */
 export class InRowSpacer extends Measurable {
   /**
    * @param constants The rendering constants provider.

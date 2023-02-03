@@ -27,7 +27,7 @@ import {WorkspaceSvg} from '../workspace_svg.js';
  *
  * @param workspace The workspace to serialize.
  * @returns The serialized state of the workspace.
-  */
+ */
 export function save(workspace: Workspace):
     {[key: string]: AnyDuringMigration} {
   const state = Object.create(null);
@@ -48,7 +48,7 @@ export function save(workspace: Workspace):
  * @param workspace The workspace to add the new state to.
  * @param param1 recordUndo: If true, events triggered by this function will be
  *     undo-able by the user. False by default.
-  */
+ */
 export function load(
     state: {[key: string]: AnyDuringMigration}, workspace: Workspace,
     {recordUndo = false}: {recordUndo?: boolean} = {}) {

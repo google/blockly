@@ -22,7 +22,7 @@ import {Types} from './types.js';
  * rendering.  The constructor for each non-spacer Measurable records the size
  * of the block element (e.g. field, statement input).
  *
-  */
+ */
 export class Measurable {
   width = 0;
 

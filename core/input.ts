@@ -27,7 +27,7 @@ import type {RenderedConnection} from './rendered_connection.js';
 /**
  * Class for an input with an optional field.
  *
-  */
+ */
 export class Input {
   private sourceBlock: Block;
   fieldRow: Field[] = [];
@@ -305,7 +305,7 @@ export namespace Input {
   /**
    * Enum for alignment of inputs.
    *
-      */
+   */
   export enum Align {
     LEFT = -1,
     CENTRE = 0,

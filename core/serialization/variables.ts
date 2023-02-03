@@ -23,7 +23,7 @@ import * as serializationRegistry from './registry.js';
 /**
  * Represents the state of a given variable.
  *
-  */
+ */
 export interface State {
   name: string;
   id: string;
@@ -33,7 +33,7 @@ export interface State {
 /**
  * Serializer for saving and loading variable state.
  *
-  */
+ */
 export class VariableSerializer implements ISerializer {
   priority: number;
 

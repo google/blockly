@@ -23,7 +23,7 @@ import {Types} from './types.js';
  * An object containing information about the space a square corner takes up
  * during rendering.
  *
-  */
+ */
 export class SquareCorner extends Measurable {
   /**
    * @param constants The rendering constants provider.

@@ -29,7 +29,7 @@ export interface ITheme {
 /**
  * Class for a theme.
  *
-  */
+ */
 export class Theme implements ITheme {
   /** @internal */
   blockStyles: {[key: string]: BlockStyle};

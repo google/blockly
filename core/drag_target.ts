@@ -22,7 +22,7 @@ import type {Rect} from './utils/rect.js';
  * Abstract class for a component with custom behaviour when a block or bubble
  * is dragged over or dropped on top of it.
  *
-  */
+ */
 export class DragTarget implements IDragTarget {
   /**
    * The unique id for this component that is used to register with the

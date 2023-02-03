@@ -16,7 +16,7 @@ goog.declareModuleId('Blockly.IToolboxItem');
 /**
  * Interface for an item in the toolbox.
  *
-  */
+ */
 export interface IToolboxItem {
   /**
    * Initializes the toolbox item.

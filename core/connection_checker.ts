@@ -203,7 +203,7 @@ export class ConnectionChecker implements IConnectionChecker {
   /**
    * Check whether this connection can be made by dragging.
    *
-   * @param a Connection to compare.
+   * @param a Connection to compare (on the block that's being dragged).
    * @param b Connection to compare against.
    * @param distance The maximum allowable distance between connections.
    * @returns True if the connection is allowed during a drag.
@@ -248,6 +248,12 @@ export class ConnectionChecker implements IConnectionChecker {
         // terminal statement is allowed.
         if (b.isConnected() && !a.getSourceBlock().nextConnection &&
             !b.targetBlock()!.isShadow() && b.targetBlock()!.nextConnection) {
+          return false;
+        }
+
+        // Don't offer to splice into a stack where the connected block is
+        // immovable.
+        if (b.targetBlock() && !b.targetBlock()!.isMovable()) {
           return false;
         }
         break;

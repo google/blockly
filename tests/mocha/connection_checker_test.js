@@ -403,17 +403,12 @@ suite('Connection checker', function() {
         this.workspace = Blockly.inject('blocklyDiv');
         // Load 3 blocks: A and B are connected (input/output); B is unmovable.
         Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
-        <block type="math_single" id="A" x="-87" y="-188">
-          <field name="OP">ROOT</field>
-          <value name="NUM">
-            <block type="math_number" movable="false" id="B">
-              <field name="NUM">123</field>
-            </block>
+        <block type="test_basic_row" id="A" x="38" y="37">
+          <value name="INPUT">
+            <block type="test_basic_row" id="B" movable="false"></block>
           </value>
         </block>
-        <block type="math_single" id="C" x="138" y="-188">
-          <field name="OP">ROOT</field>
-        </block>
+        <block type="test_basic_row" id="C" x="38" y="87"></block>
       </xml>`), this.workspace);
       [this.blockA, this.blockB, this.blockC] = this.workspace.getAllBlocks(true);
       this.checker = this.workspace.connectionChecker;

@@ -24,7 +24,6 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space a statement input takes up
  * during rendering
- *
  */
 export class StatementInput extends InputConnection {
   /**

@@ -22,7 +22,6 @@ import type {IRegistrable} from './i_registrable.js';
 
 /**
  * Interface for a flyout.
- *
  */
 export interface IFlyout extends IRegistrable {
   /** Whether the flyout is laid out horizontally or not. */

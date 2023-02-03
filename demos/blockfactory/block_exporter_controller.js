@@ -9,7 +9,6 @@
  * users to export block definitions and generator stubs of their saved blocks
  * easily using a visual interface. Depends on Block Exporter View and Block
  * Exporter Tools classes. Interacts with Export Settings in the index.html.
- *
  */
 
 'use strict';

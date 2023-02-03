@@ -27,7 +27,6 @@ import * as WidgetDiv from './widgetdiv.js';
 
 /**
  * Class for a flyout.
- *
  */
 export class VerticalFlyout extends Flyout {
   /** The name of the vertical flyout in the registry. */

@@ -45,7 +45,6 @@ const TEXTAREA_OFFSET = 2;
 
 /**
  * Class for a workspace comment's SVG representation.
- *
  */
 export class WorkspaceCommentSvg extends WorkspaceComment implements
     IBoundedElement, IBubble, ICopyable {

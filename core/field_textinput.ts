@@ -24,7 +24,6 @@ export type FieldTextInputValidator = FieldInputValidator<string>;
 
 /**
  * Class for an editable text field.
- *
  */
 export class FieldTextInput extends FieldInput<string> {
   /**

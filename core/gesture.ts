@@ -51,7 +51,6 @@ const ZOOM_OUT_MULTIPLIER = 6;
 
 /**
  * Class for one gesture.
- *
  */
 export class Gesture {
   /**

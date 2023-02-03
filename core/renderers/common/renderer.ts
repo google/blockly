@@ -35,7 +35,6 @@ import {PathObject} from './path_object.js';
 
 /**
  * The base class for a block renderer.
- *
  */
 export class Renderer implements IRegistrable {
   /** The renderer's constant provider. */

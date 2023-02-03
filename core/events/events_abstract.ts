@@ -22,7 +22,6 @@ import * as eventUtils from './utils.js';
 
 /**
  * Abstract class for an event.
- *
  */
 export abstract class Abstract {
   /**

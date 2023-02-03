@@ -26,7 +26,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Option to undo previous action.
- *
  */
 export function registerUndo() {
   const undoOption: RegistryItem = {
@@ -51,7 +50,6 @@ export function registerUndo() {
 
 /**
  * Option to redo previous action.
- *
  */
 export function registerRedo() {
   const redoOption: RegistryItem = {
@@ -76,7 +74,6 @@ export function registerRedo() {
 
 /**
  * Option to clean up blocks.
- *
  */
 export function registerCleanup() {
   const cleanOption: RegistryItem = {
@@ -132,7 +129,6 @@ function toggleOption_(shouldCollapse: boolean, topBlocks: BlockSvg[]) {
 
 /**
  * Option to collapse all blocks.
- *
  */
 export function registerCollapse() {
   const collapseOption: RegistryItem = {
@@ -167,7 +163,6 @@ export function registerCollapse() {
 
 /**
  * Option to expand all blocks.
- *
  */
 export function registerExpand() {
   const expandOption: RegistryItem = {
@@ -256,7 +251,6 @@ function deleteNext_(deleteList: BlockSvg[], eventGroup: string) {
 
 /**
  * Option to delete all blocks.
- *
  */
 export function registerDeleteAll() {
   const deleteOption: RegistryItem = {
@@ -317,7 +311,6 @@ function registerWorkspaceOptions_() {
 
 /**
  * Option to duplicate a block.
- *
  */
 export function registerDuplicate() {
   const duplicateOption: RegistryItem = {
@@ -348,7 +341,6 @@ export function registerDuplicate() {
 
 /**
  * Option to add or remove block-level comment.
- *
  */
 export function registerComment() {
   const commentOption: RegistryItem = {
@@ -385,7 +377,6 @@ export function registerComment() {
 
 /**
  * Option to inline variables.
- *
  */
 export function registerInline() {
   const inlineOption: RegistryItem = {
@@ -419,7 +410,6 @@ export function registerInline() {
 
 /**
  * Option to collapse or expand a block.
- *
  */
 export function registerCollapseExpandBlock() {
   const collapseExpandOption: RegistryItem = {
@@ -447,7 +437,6 @@ export function registerCollapseExpandBlock() {
 
 /**
  * Option to disable or enable a block.
- *
  */
 export function registerDisable() {
   const disableOption: RegistryItem = {
@@ -486,7 +475,6 @@ export function registerDisable() {
 
 /**
  * Option to delete a block.
- *
  */
 export function registerDelete() {
   const deleteOption: RegistryItem = {
@@ -523,7 +511,6 @@ export function registerDelete() {
 
 /**
  * Option to open help for a block.
- *
  */
 export function registerHelp() {
   const helpOption: RegistryItem = {

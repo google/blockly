@@ -19,7 +19,6 @@ import type {IDraggable} from './i_draggable.js';
 
 /**
  * A bubble interface.
- *
  */
 export interface IBubble extends IDraggable, IContextMenu {
   /**

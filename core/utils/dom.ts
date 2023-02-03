@@ -19,26 +19,22 @@ import type {Svg} from './svg.js';
 
 /**
  * Required name space for SVG elements.
- *
  */
 export const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /**
  * Required name space for HTML elements.
- *
  */
 export const HTML_NS = 'http://www.w3.org/1999/xhtml';
 
 /**
  * Required name space for XLINK elements.
- *
  */
 export const XLINK_NS = 'http://www.w3.org/1999/xlink';
 
 /**
  * Node type constants.
  * https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
- *
  */
 export enum NodeType {
   ELEMENT_NODE = 1,
@@ -195,7 +191,6 @@ export function setCssTransform(
 /**
  * Start caching text widths. Every call to this function MUST also call
  * stopTextWidthCache. Caches must not survive between execution threads.
- *
  */
 export function startTextWidthCache() {
   cacheReference++;
@@ -207,7 +202,6 @@ export function startTextWidthCache() {
 /**
  * Stop caching field widths. Unless caching was already on when the
  * corresponding call to startTextWidthCache was made.
- *
  */
 export function stopTextWidthCache() {
   cacheReference--;

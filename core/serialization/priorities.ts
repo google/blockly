@@ -17,7 +17,6 @@ goog.declareModuleId('Blockly.serialization.priorities');
 
 /**
  * The priority for deserializing variables.
- *
  */
 export const VARIABLES = 100;
 
@@ -28,6 +27,5 @@ export const PROCEDURES = 75;
 
 /**
  * The priority for deserializing blocks.
- *
  */
 export const BLOCKS = 50;

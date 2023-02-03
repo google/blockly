@@ -24,7 +24,6 @@ import * as style from './utils/style.js';
 
 /**
  * A basic menu class.
- *
  */
 export class Menu {
   /**

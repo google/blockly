@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.IStyleable');
 
 /**
  * Interface for an object that a style can be added to.
- *
  */
 export interface IStyleable {
   /**

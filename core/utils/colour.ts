@@ -16,7 +16,6 @@ goog.declareModuleId('Blockly.utils.colour');
 /**
  * The richness of block colours, regardless of the hue.
  * Must be in the range of 0 (inclusive) to 1 (exclusive).
- *
  */
 let hsvSaturation = 0.45;
 
@@ -44,7 +43,6 @@ export function setHsvSaturation(newSaturation: number) {
 /**
  * The intensity of block colours, regardless of the hue.
  * Must be in the range of 0 (inclusive) to 1 (exclusive).
- *
  */
 let hsvValue = 0.65;
 
@@ -240,7 +238,6 @@ export function blend(colour1: string, colour2: string, factor: number): string|
  * https://www.w3.org/TR/2018/REC-css-color-3-20180619/#html4
  * The keys of this map are the lowercase "readable" names of the colours,
  * while the values are the "hex" values.
- *
  */
 export const names: {[key: string]: string} = {
   'aqua': '#00ffff',

@@ -22,7 +22,6 @@ import type {IDraggable} from './interfaces/i_draggable.js';
 /**
  * Abstract class for a component that can delete a block or bubble that is
  * dropped on top of it.
- *
  */
 export class DeleteArea extends DragTarget implements IDeleteArea {
   /**

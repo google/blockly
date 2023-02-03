@@ -22,7 +22,6 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space a hat takes up during
  * rendering.
- *
  */
 export class Hat extends Measurable {
   ascenderHeight: number;

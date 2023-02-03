@@ -50,7 +50,6 @@ let touchIdentifier_: string|null = null;
 /**
  * The TOUCH_MAP lookup dictionary specifies additional touch events to fire,
  * in conjunction with mouse events.
- *
  */
 export const TOUCH_MAP: {[key: string]: string[]} = {
   'mousedown': ['pointerdown'],
@@ -105,7 +104,6 @@ export function longStop() {
  * Clear the touch identifier that tracks which touch stream to pay attention
  * to.  This ends the current drag/gesture and allows other pointers to be
  * captured.
- *
  */
 export function clearTouchIdentifier() {
   touchIdentifier_ = null;

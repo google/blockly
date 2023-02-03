@@ -27,7 +27,6 @@ import * as WidgetDiv from './widgetdiv.js';
 
 /**
  * Class for a flyout.
- *
  */
 export class HorizontalFlyout extends Flyout {
   override horizontalLayout = true;

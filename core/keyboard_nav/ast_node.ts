@@ -28,7 +28,6 @@ import type {Workspace} from '../workspace.js';
  * Class for an AST node.
  * It is recommended that you use one of the createNode methods instead of
  * creating a node directly.
- *
  */
 export class ASTNode {
   /**

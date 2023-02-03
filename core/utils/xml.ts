@@ -61,7 +61,6 @@ export function injectDependencies(dependencies: {
 
 /**
  * Namespace for Blockly's XML.
- *
  */
 export const NAME_SPACE = 'https://developers.google.com/blockly/xml';
 

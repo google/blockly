@@ -10,7 +10,6 @@
  * Blockly.Xml and depends on information in the model (holds a reference).
  * Depends on a hidden workspace created in the generator to load saved XML in
  * order to generate toolbox XML.
- *
  */
 
 

@@ -23,7 +23,6 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a bubble open event.
- *
  */
 export class BubbleOpen extends UiBase {
   /** The ID of the block the bubble is attached to. */

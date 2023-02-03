@@ -18,7 +18,6 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Serializes and deserializes a plugin or system.
- *
  */
 export interface ISerializer {
   /**

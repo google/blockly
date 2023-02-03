@@ -24,7 +24,6 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space an external value input
  * takes up during rendering
- *
  */
 export class ExternalValueInput extends InputConnection {
   override height = 0;

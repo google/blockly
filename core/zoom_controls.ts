@@ -33,7 +33,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a zoom controls.
- *
  */
 export class ZoomControls implements IPositionable {
   /**

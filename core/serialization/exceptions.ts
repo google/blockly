@@ -36,7 +36,6 @@ export class MissingBlockType extends DeserializationError {
 /**
  * Represents an error where deserialization encountered a block that did
  * not have a connection that was defined in the serialized state.
- *
  */
 export class MissingConnection extends DeserializationError {
   /**
@@ -55,7 +54,6 @@ connection`);
 /**
  * Represents an error where deserialization tried to connect two connections
  * that were not compatible.
- *
  */
 export class BadConnectionCheck extends DeserializationError {
   /**
@@ -79,7 +77,6 @@ ${childConnection} to its parent, because: ${reason}`);
  * was deserializing children of a shadow.
  * This is an error because it is an invariant of Blockly that shadow blocks
  * do not have real children.
- *
  */
 export class RealChildOfShadow extends DeserializationError {
   /**

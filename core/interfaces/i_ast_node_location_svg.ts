@@ -17,7 +17,6 @@ import type {IASTNodeLocation} from './i_ast_node_location.js';
 
 /**
  * An AST node location SVG interface.
- *
  */
 export interface IASTNodeLocationSvg extends IASTNodeLocation {
   /**

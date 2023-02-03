@@ -22,7 +22,6 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 
 /**
  * Class for an item in the toolbox.
- *
  */
 export class ToolboxItem implements IToolboxItem {
   protected id_: string;

@@ -25,7 +25,6 @@ import type {Workspace} from '../workspace.js';
  * changed.
  *
  * Does not notify when the workspace itself resizes.
- *
  */
 export class ViewportChange extends UiBase {
   /**

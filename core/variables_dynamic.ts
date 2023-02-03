@@ -28,7 +28,6 @@ import type {FlyoutButton} from './flyout_button.js';
  * variable blocks.
  * See also Blockly.Variables.CATEGORY_NAME and
  * Blockly.Procedures.CATEGORY_NAME.
- *
  */
 export const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 

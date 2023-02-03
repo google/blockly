@@ -32,7 +32,6 @@ import * as serializationRegistry from './registry.js';
 
 /**
  * Represents the state of a connection.
- *
  */
 export interface ConnectionState {
   shadow: State|undefined;
@@ -41,7 +40,6 @@ export interface ConnectionState {
 
 /**
  * Represents the state of a given block.
- *
  */
 export interface State {
   type: string;
@@ -657,7 +655,6 @@ const saveBlock = save;
 
 /**
  * Serializer for saving and loading block state.
- *
  */
 export class BlockSerializer implements ISerializer {
   priority: number;

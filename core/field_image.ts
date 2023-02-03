@@ -22,7 +22,6 @@ import {Svg} from './utils/svg.js';
 
 /**
  * Class for an image on a block.
- *
  */
 export class FieldImage extends Field<string> {
   /**

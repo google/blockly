@@ -13,7 +13,6 @@
  *  - delete blocks
  *  - clear their block library
  * Depends on BlockFactory functions defined in factory.js.
- *
  */
 'use strict';
 

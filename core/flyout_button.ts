@@ -25,7 +25,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a button or label in the flyout.
- *
  */
 export class FlyoutButton {
   /** The horizontal margin around the text in the button. */

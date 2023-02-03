@@ -17,7 +17,6 @@ goog.declareModuleId('Blockly.IComponent');
 /**
  * The interface for a workspace component that can be registered with the
  * ComponentManager.
- *
  */
 export interface IComponent {
   /**

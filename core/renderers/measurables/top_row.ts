@@ -28,7 +28,6 @@ import {Types} from './types.js';
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
- *
  */
 export class TopRow extends Row {
   /**

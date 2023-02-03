@@ -19,7 +19,6 @@ import type {Block} from '../block.js';
 
 /**
  * An AST node location that has an associated block.
- *
  */
 export interface IASTNodeLocationWithBlock extends IASTNodeLocation {
   /**

@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.IKeyboardAccessible');
 
 /**
  * An interface for an object that handles keyboard shortcuts.
- *
  */
 export interface IKeyboardAccessible {
   /**

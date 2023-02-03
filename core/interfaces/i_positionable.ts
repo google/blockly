@@ -19,7 +19,6 @@ import type {IComponent} from './i_component.js';
 
 /**
  * Interface for a component that is positioned on top of the workspace.
- *
  */
 export interface IPositionable extends IComponent {
   /**

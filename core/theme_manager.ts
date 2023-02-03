@@ -22,7 +22,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for storing and updating a workspace's theme and UI components.
- *
  */
 export class ThemeManager {
   /** A list of workspaces that are subscribed to this theme. */

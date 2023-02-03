@@ -27,7 +27,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for a bubble dragger.  It moves things on the bubble canvas around the
  * workspace when they are being dragged by a mouse or touch.  These can be
  * block comments, mutators, warnings, or workspace comments.
- *
  */
 export class BubbleDragger {
   /** Which drag target the mouse pointer is over, if any. */

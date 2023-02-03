@@ -25,7 +25,6 @@ import * as Xml from './xml.js';
 
 /**
  * Class for a connection between blocks.
- *
  */
 export class Connection implements IASTNodeLocationWithBlock {
   /** Constants for checking whether two connections are compatible. */

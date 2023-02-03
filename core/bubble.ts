@@ -29,7 +29,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for UI bubble.
- *
  */
 export class Bubble implements IBubble {
   /** Width of the border around the bubble. */

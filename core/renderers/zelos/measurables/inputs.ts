@@ -22,7 +22,6 @@ import {StatementInput as BaseStatementInput} from '../../../renderers/measurabl
 /**
  * An object containing information about the space a statement input takes up
  * during rendering.
- *
  */
 export class StatementInput extends BaseStatementInput {
   connectedBottomNextConnection = false;

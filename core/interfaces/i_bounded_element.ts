@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.IBoundedElement');
 
 /**
  * A bounded element interface.
- *
  */
 export interface IBoundedElement {
   /**

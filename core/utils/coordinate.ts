@@ -17,7 +17,6 @@ goog.declareModuleId('Blockly.utils.Coordinate');
 
 /**
  * Class for representing coordinates and positions.
- *
  */
 export class Coordinate {
   /**

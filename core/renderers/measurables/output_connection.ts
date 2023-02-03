@@ -23,7 +23,6 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space an output connection takes
  * up during rendering.
- *
  */
 export class OutputConnection extends Connection {
   startX: number;

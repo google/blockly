@@ -33,7 +33,6 @@ export type FieldColourValidator = FieldValidator<string>;
 
 /**
  * Class for a colour input field.
- *
  */
 export class FieldColour extends Field<string> {
   /**

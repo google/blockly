@@ -58,157 +58,131 @@ let disabled = 0;
 
 /**
  * Name of event that creates a block. Will be deprecated for BLOCK_CREATE.
- *
  */
 export const CREATE = 'create';
 
 /**
  * Name of event that creates a block.
- *
  */
 export const BLOCK_CREATE = CREATE;
 
 /**
  * Name of event that deletes a block. Will be deprecated for BLOCK_DELETE.
- *
  */
 export const DELETE = 'delete';
 
 /**
  * Name of event that deletes a block.
- *
  */
 export const BLOCK_DELETE = DELETE;
 
 /**
  * Name of event that changes a block. Will be deprecated for BLOCK_CHANGE.
- *
  */
 export const CHANGE = 'change';
 
 /**
  * Name of event that changes a block.
- *
  */
 export const BLOCK_CHANGE = CHANGE;
 
 /**
  * Name of event that moves a block. Will be deprecated for BLOCK_MOVE.
- *
  */
 export const MOVE = 'move';
 
 /**
  * Name of event that moves a block.
- *
  */
 export const BLOCK_MOVE = MOVE;
 
 /**
  * Name of event that creates a variable.
- *
  */
 export const VAR_CREATE = 'var_create';
 
 /**
  * Name of event that deletes a variable.
- *
  */
 export const VAR_DELETE = 'var_delete';
 
 /**
  * Name of event that renames a variable.
- *
  */
 export const VAR_RENAME = 'var_rename';
 
 /**
  * Name of generic event that records a UI change.
- *
  */
 export const UI = 'ui';
 
 /**
  * Name of event that record a block drags a block.
- *
  */
 export const BLOCK_DRAG = 'drag';
 
 /**
  * Name of event that records a change in selected element.
- *
  */
 export const SELECTED = 'selected';
 
 /**
  * Name of event that records a click.
- *
  */
 export const CLICK = 'click';
 
 /**
  * Name of event that records a marker move.
- *
  */
 export const MARKER_MOVE = 'marker_move';
 
 /**
  * Name of event that records a bubble open.
- *
  */
 export const BUBBLE_OPEN = 'bubble_open';
 
 /**
  * Name of event that records a trashcan open.
- *
  */
 export const TRASHCAN_OPEN = 'trashcan_open';
 
 /**
  * Name of event that records a toolbox item select.
- *
  */
 export const TOOLBOX_ITEM_SELECT = 'toolbox_item_select';
 
 /**
  * Name of event that records a theme change.
- *
  */
 export const THEME_CHANGE = 'theme_change';
 
 /**
  * Name of event that records a viewport change.
- *
  */
 export const VIEWPORT_CHANGE = 'viewport_change';
 
 /**
  * Name of event that creates a comment.
- *
  */
 export const COMMENT_CREATE = 'comment_create';
 
 /**
  * Name of event that deletes a comment.
- *
  */
 export const COMMENT_DELETE = 'comment_delete';
 
 /**
  * Name of event that changes a comment.
- *
  */
 export const COMMENT_CHANGE = 'comment_change';
 
 /**
  * Name of event that moves a comment.
- *
  */
 export const COMMENT_MOVE = 'comment_move';
 
 /**
  * Name of event that records a workspace load.
- *
  */
 export const FINISHED_LOADING = 'finished_loading';
 
@@ -218,7 +192,6 @@ export const FINISHED_LOADING = 'finished_loading';
  *
  * Not to be confused with bumping so that disconnected connections do not
  * appear connected.
- *
  */
 export type BumpEvent = BlockCreate|BlockMove|CommentCreate|CommentMove;
 
@@ -228,7 +201,6 @@ export type BumpEvent = BlockCreate|BlockMove|CommentCreate|CommentMove;
  *
  * Not to be confused with bumping so that disconnected connections do not
  * appear connected.
- *
  */
 export const BUMP_EVENTS: string[] =
     [BLOCK_CREATE, BLOCK_MOVE, COMMENT_CREATE, COMMENT_MOVE];
@@ -363,7 +335,6 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
 /**
  * Modify pending undo events so that when they are fired they don't land
  * in the undo stack.  Called by Workspace.clearUndo.
- *
  */
 export function clearPendingUndo() {
   for (let i = 0, event; event = FIRE_QUEUE[i]; i++) {
@@ -373,7 +344,6 @@ export function clearPendingUndo() {
 
 /**
  * Stop sending events.  Every call to this function MUST also call enable.
- *
  */
 export function disable() {
   disabled++;
@@ -382,7 +352,6 @@ export function disable() {
 /**
  * Start sending events.  Unless events were already disabled when the
  * corresponding call to disable was made.
- *
  */
 export function enable() {
   disabled--;

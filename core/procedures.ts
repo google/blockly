@@ -43,13 +43,11 @@ import * as Xml from './xml.js';
  * procedure blocks.
  * See also Blockly.Variables.CATEGORY_NAME and
  * Blockly.VariablesDynamic.CATEGORY_NAME.
- *
  */
 export const CATEGORY_NAME = 'PROCEDURE';
 
 /**
  * The default argument for a procedures_mutatorarg block.
- *
  */
 export const DEFAULT_ARG = 'x';
 
@@ -57,7 +55,6 @@ export type ProcedureTuple = [string, string[], boolean];
 
 /**
  * Procedure block type.
- *
  */
 export interface ProcedureBlock {
   getProcedureCall: () => string;

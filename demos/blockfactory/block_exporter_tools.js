@@ -9,7 +9,6 @@
  * block definitions and generator stubs for given block types.  Also generates
  * toolbox XML for the exporter's workspace.  Depends on the FactoryUtils for
  * its code generation functions.
- *
  */
 'use strict';
 

@@ -25,7 +25,6 @@ import type {IPathObject} from './i_path_object.js';
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
- *
  */
 export class PathObject implements IPathObject {
   svgRoot: SVGElement;

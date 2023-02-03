@@ -24,7 +24,6 @@ import {Workspace} from '../workspace.js';
 
 /**
  * Notifies listeners that ome blockly element was clicked.
- *
  */
 export class Click extends UiBase {
   /** The ID of the block that was clicked, if a block was clicked. */

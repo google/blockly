@@ -24,7 +24,6 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space an inline input takes up
  * during rendering
- *
  */
 export class InlineInput extends InputConnection {
   connectionHeight: number;

@@ -32,7 +32,6 @@ import {Svg} from './utils/svg.js';
 
 /**
  * Class for a comment.
- *
  */
 export class Comment extends Icon {
   private readonly model: CommentModel;

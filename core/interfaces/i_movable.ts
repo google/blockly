@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.IMovable');
 
 /**
  * The interface for an object that is movable.
- *
  */
 export interface IMovable {
   /**

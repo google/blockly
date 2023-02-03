@@ -31,7 +31,6 @@ export type FieldAngleValidator = FieldInputValidator<number>;
 
 /**
  * Class for an editable angle field.
- *
  */
 export class FieldAngle extends FieldInput<number> {
   /**

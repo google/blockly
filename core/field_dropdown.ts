@@ -32,7 +32,6 @@ export type FieldDropdownValidator = FieldValidator<string>;
 
 /**
  * Class for an editable dropdown field.
- *
  */
 export class FieldDropdown extends Field<string> {
   /** Horizontal distance that a checkmark overhangs the dropdown. */

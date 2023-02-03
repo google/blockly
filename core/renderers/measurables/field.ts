@@ -25,7 +25,6 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space a field takes up during
  * rendering
- *
  */
 export class Field extends Measurable {
   isEditable: boolean;

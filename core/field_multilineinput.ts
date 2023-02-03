@@ -29,7 +29,6 @@ export type FieldMultilineInputValidator = FieldTextInputValidator;
 
 /**
  * Class for an editable text area field.
- *
  */
 export class FieldMultilineInput extends FieldTextInput {
   /**

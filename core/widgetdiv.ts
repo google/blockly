@@ -57,7 +57,6 @@ export function testOnly_setDiv(newDiv: HTMLDivElement|null) {
 
 /**
  * Create the widget div and inject it onto the page.
- *
  */
 export function createDom() {
   if (containerDiv) {
@@ -99,7 +98,6 @@ export function show(newOwner: unknown, rtl: boolean, newDispose: () => void) {
 
 /**
  * Destroy the widget and hide the div.
- *
  */
 export function hide() {
   if (!isVisible()) {

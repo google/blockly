@@ -23,7 +23,6 @@ import {Workspace} from '../workspace.js';
 
 /**
  * Notifies listeners when a block is being manually dragged/dropped.
- *
  */
 export class BlockDrag extends UiBase {
   /** The ID of the top-level block being dragged. */

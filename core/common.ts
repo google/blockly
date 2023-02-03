@@ -100,7 +100,6 @@ let selected: ICopyable|null = null;
 
 /**
  * Returns the currently selected copyable object.
- *
  */
 export function getSelected(): ICopyable|null {
   return selected;

@@ -292,7 +292,6 @@ export const getMainWorkspace = common.getMainWorkspace;
 
 /**
  * Returns the currently selected copyable object.
- *
  */
 export const getSelected = common.getSelected;
 
@@ -485,7 +484,6 @@ export const COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
- *
  */
 export const VARIABLE_CATEGORY_NAME: string = Variables.CATEGORY_NAME;
 
@@ -493,7 +491,6 @@ export const VARIABLE_CATEGORY_NAME: string = Variables.CATEGORY_NAME;
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
- *
  */
 export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
     VariablesDynamic.CATEGORY_NAME;
@@ -501,7 +498,6 @@ export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * procedure blocks.
- *
  */
 export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
 

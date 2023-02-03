@@ -27,7 +27,6 @@ import * as blocklyString from './utils/string.js';
  * Either a string, an object containing a tooltip property, or a function which
  * returns either a string, or another arbitrarily nested function which
  * eventually unwinds to a string.
- *
  */
 export type TipInfo =
     string|{tooltip: AnyDuringMigration}|(() => TipInfo|string|Function);
@@ -37,7 +36,6 @@ export type TipInfo =
  * 1st parameter: the div element to render content into.
  * 2nd parameter: the element being moused over (i.e., the element for which the
  * tooltip should be shown).
- *
  */
 export type CustomTooltip = (p1: Element, p2: Element) => AnyDuringMigration;
 
@@ -84,7 +82,6 @@ let blocked = false;
 
 /**
  * Maximum width (in characters) of a tooltip.
- *
  */
 export const LIMIT = 50;
 
@@ -115,31 +112,26 @@ let poisonedElement: AnyDuringMigration = null;
 
 /**
  * Horizontal offset between mouse cursor and tooltip.
- *
  */
 export const OFFSET_X = 0;
 
 /**
  * Vertical offset between mouse cursor and tooltip.
- *
  */
 export const OFFSET_Y = 10;
 
 /**
  * Radius mouse can move before killing tooltip.
- *
  */
 export const RADIUS_OK = 10;
 
 /**
  * Delay before tooltip appears.
- *
  */
 export const HOVER_MS = 750;
 
 /**
  * Horizontal padding between tooltip and screen edge.
- *
  */
 export const MARGINS = 5;
 
@@ -196,7 +188,6 @@ function getTargetObject(obj: object|null): {tooltip: AnyDuringMigration}|null {
 
 /**
  * Create the tooltip div and inject it onto the page.
- *
  */
 export function createDom() {
   if (containerDiv) {
@@ -341,7 +332,6 @@ export function dispose() {
 
 /**
  * Hide the tooltip.
- *
  */
 export function hide() {
   if (visible) {

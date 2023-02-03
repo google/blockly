@@ -1,73 +1,73 @@
 const rules = {
-  curly: ['error'],
+  'curly': ['error'],
   'eol-last': ['error'],
   'keyword-spacing': ['error'],
   'linebreak-style': ['error', 'unix'],
   'max-len': [
     'error',
     {
-      code: 100,
-      tabWidth: 4,
-      ignoreStrings: true,
-      ignoreRegExpLiterals: true,
-      ignoreUrls: true,
+      'code': 100,
+      'tabWidth': 4,
+      'ignoreStrings': true,
+      'ignoreRegExpLiterals': true,
+      'ignoreUrls': true,
     },
   ],
-  'no-trailing-spaces': ['error', {skipBlankLines: true}],
+  'no-trailing-spaces': ['error', {'skipBlankLines': true}],
   'no-unused-vars': [
     'warn',
     {
-      args: 'after-used',
+      'args': 'after-used',
       // Ignore vars starting with an underscore.
-      varsIgnorePattern: '^_',
+      'varsIgnorePattern': '^_',
       // Ignore arguments starting with an underscore.
-      argsIgnorePattern: '^_',
+      'argsIgnorePattern': '^_',
     },
   ],
   // Blockly uses for exporting symbols. no-self-assign added in eslint 5.
   'no-self-assign': ['off'],
   // Blockly uses single quotes except for JSON blobs, which must use double
   // quotes.
-  quotes: ['off'],
-  semi: ['error', 'always'],
+  'quotes': ['off'],
+  'semi': ['error', 'always'],
   // Blockly doesn't have space before function paren when defining functions.
   'space-before-function-paren': ['error', 'never'],
   // Blockly doesn't have space before function paren when calling functions.
   'func-call-spacing': ['error', 'never'],
   'space-infix-ops': ['error'],
   // Blockly uses 'use strict' in files.
-  strict: ['off'],
+  'strict': ['off'],
   // Closure style allows redeclarations.
   'no-redeclare': ['off'],
   'valid-jsdoc': ['error'],
   'no-console': ['off'],
-  'no-multi-spaces': ['error', {ignoreEOLComments: true}],
+  'no-multi-spaces': ['error', {'ignoreEOLComments': true}],
   'operator-linebreak': ['error', 'after'],
   'spaced-comment': [
     'error',
     'always',
     {
-      block: {
-        balanced: true,
+      'block': {
+        'balanced': true,
       },
-      exceptions: ['*'],
+      'exceptions': ['*'],
     },
   ],
   // Blockly uses prefixes for optional arguments and test-only functions.
-  camelcase: [
+  'camelcase': [
     'error',
     {
-      properties: 'never',
-      allow: ['^opt_', '^_opt_', '^testOnly_'],
+      'properties': 'never',
+      'allow': ['^opt_', '^_opt_', '^testOnly_'],
     },
   ],
   // Use clang-format for indentation by running `npm run format`.
-  indent: ['off'],
+  'indent': ['off'],
   // Blockly uses capital letters for some non-constructor namespaces.
   // Keep them for legacy reasons.
   'new-cap': ['off'],
   // Mostly use default rules for brace style, but allow single-line blocks.
-  'brace-style': ['error', '1tbs', {allowSingleLine: true}],
+  'brace-style': ['error', '1tbs', {'allowSingleLine': true}],
   // Blockly uses objects as maps, but uses Object.create(null) to
   // instantiate them.
   'guard-for-in': ['off'],
@@ -75,11 +75,11 @@ const rules = {
   'comma-dangle': [
     'error',
     {
-      arrays: 'always-multiline',
-      objects: 'always-multiline',
-      imports: 'always-multiline',
-      exports: 'always-multiline',
-      functions: 'ignore',
+      'arrays': 'always-multiline',
+      'objects': 'always-multiline',
+      'imports': 'always-multiline',
+      'exports': 'always-multiline',
+      'functions': 'ignore',
     },
   ],
 };
@@ -91,28 +91,28 @@ const rules = {
  */
 function buildTSOverride({files, tsconfig}) {
   return {
-    files: files,
-    plugins: [
+    'files': files,
+    'plugins': [
       '@typescript-eslint/eslint-plugin',
       'jsdoc',
     ],
-    settings: {
-      jsdoc: {
-        mode: 'typescript',
+    'settings': {
+      'jsdoc': {
+        'mode': 'typescript',
       },
     },
-    parser: '@typescript-eslint/parser',
-    parserOptions: {
-      project: tsconfig,
-      tsconfigRootDir: '.',
-      ecmaVersion: 2020,
-      sourceType: 'module',
+    'parser': '@typescript-eslint/parser',
+    'parserOptions': {
+      'project': tsconfig,
+      'tsconfigRootDir': '.',
+      'ecmaVersion': 2020,
+      'sourceType': 'module',
     },
-    extends: [
+    'extends': [
       'plugin:@typescript-eslint/recommended',
       'plugin:jsdoc/recommended',
     ],
-    rules: {
+    'rules': {
       // TS rules
       // Blockly uses namespaces to do declaration merging in some cases.
       '@typescript-eslint/no-namespace': ['off'],
@@ -126,8 +126,8 @@ function buildTSOverride({files, tsconfig}) {
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
-          argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
+          'argsIgnorePattern': '^_',
+          'varsIgnorePattern': '^_',
         },
       ],
       'func-call-spacing': ['off'],
@@ -158,8 +158,8 @@ function buildTSOverride({files, tsconfig}) {
       'jsdoc/require-jsdoc': [
         'warn',
         {
-          enableFixer: false,
-          publicOnly: true,
+          'enableFixer': false,
+          'publicOnly': true,
         },
       ],
       // Disable because of false alarms with Closure-supported tags.
@@ -173,7 +173,7 @@ function buildTSOverride({files, tsconfig}) {
       // Disabled due to not handling `this`. If re-enabled,
       // checkDestructured option
       // should be left as false.
-      'jsdoc/check-param-names': ['off', {checkDestructured: false}],
+      'jsdoc/check-param-names': ['off', {'checkDestructured': false}],
       // Allow any text in the license tag. Other checks are not relevant.
       'jsdoc/check-values': ['off'],
     },
@@ -183,21 +183,21 @@ function buildTSOverride({files, tsconfig}) {
 // NOTE: When this output is put directly in `module.exports`, the formatter
 // does not align with the linter.
 const eslintJSON = {
-  rules: rules,
-  env: {
+  'rules': rules,
+  'env': {
     'es2020': true,
-    browser: true,
+    'browser': true,
   },
-  globals: {
-    goog: true,
-    exports: true,
+  'globals': {
+    'goog': true,
+    'exports': true,
   },
-  extends: [
+  'extends': [
     'eslint:recommended',
     'google',
   ],
   // TypeScript-specific config. Uses above rules plus these.
-  overrides: [
+  'overrides': [
     buildTSOverride({
       files: ['./core/**/*.ts', './core/**/*.tsx'],
       tsconfig: './tsconfig.json',
@@ -210,9 +210,9 @@ const eslintJSON = {
       tsconfig: './tests/typescript/tsconfig.json',
     }),
     {
-      files: ['./.eslintrc.js'],
-      env: {
-        node: true,
+      'files': ['./.eslintrc.js'],
+      'env': {
+        'node': true,
       },
     },
   ],

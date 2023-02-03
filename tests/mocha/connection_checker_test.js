@@ -347,14 +347,13 @@ suite('Connection checker', function() {
         this.workspace = Blockly.inject('blocklyDiv');
         // Load in three blocks: A and B are connected (next/prev); B is unmovable.
         Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
-        <block type="text_print" id="wlc#l2D-,6mSLKY=E$VL" x="-76" y="-112">
+        <block type="text_print" id="A" x="-76" y="-112">
           <next>
-            <block type="text_print" id="T9cdR}mwDn3Xl!*g|mw8" movable="false">
-              <comment pinned="true" h="32" w="88.5333251953125">Immovable</comment>
+            <block type="text_print" id="B" movable="false">
             </block>
           </next>
         </block>
-        <block type="text_print" id="ZgFlirwB{~}%l/BZ+j?R" x="47" y="-118"/>
+        <block type="text_print" id="C" x="47" y="-118"/>
       </xml>`), this.workspace);
       [this.blockA, this.blockB, this.blockC] = this.workspace.getAllBlocks(true);
       this.checker = this.workspace.connectionChecker;
@@ -404,15 +403,15 @@ suite('Connection checker', function() {
         this.workspace = Blockly.inject('blocklyDiv');
         // Load 3 blocks: A and B are connected (input/output); B is unmovable.
         Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
-        <block type="math_single" id="4L?aLhveXpvYaYq.n,!p" x="-87" y="-188">
+        <block type="math_single" id="A" x="-87" y="-188">
           <field name="OP">ROOT</field>
           <value name="NUM">
-            <block type="math_number" movable="false" id="U)q;b^J7HKl$(5sKtOuT">
+            <block type="math_number" movable="false" id="B">
               <field name="NUM">123</field>
             </block>
           </value>
         </block>
-        <block type="math_single" id="u|{o,wAaGRvlFB((U}h=" x="138" y="-188">
+        <block type="math_single" id="C" x="138" y="-188">
           <field name="OP">ROOT</field>
         </block>
       </xml>`), this.workspace);

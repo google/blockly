@@ -38,6 +38,10 @@ exports.TYPINGS_BUILD_DIR = path.join(exports.BUILD_DIR, 'declarations');
 // Matches the value in tsconfig.json: outDir
 exports.TSC_OUTPUT_DIR = path.join(exports.BUILD_DIR, 'src');
 
+// Directory where typescript compiler can be found for `./tests/typescript`
+// files.
+exports.TEST_TSC_OUTPUT_DIR = path.join(exports.BUILD_DIR, 'tests');
+
 // Directory in which to assemble (and from which to publish) the
 // blockly npm package.
 exports.RELEASE_DIR = 'dist';

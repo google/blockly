@@ -17,7 +17,7 @@ const path = require('path');
 const {execSync} = require('child_process');
 const rimraf = require('rimraf');
 
-const {RELEASE_DIR} = require('./config');
+const {RELEASE_DIR, TEST_TSC_OUTPUT_DIR} = require('./config');
 
 const {runMochaTestsInBrowser} = require('../../tests/mocha/webdriver.js');
 const {runGeneratorsInBrowser} = require('../../tests/generators/webdriver.js');
@@ -377,7 +377,7 @@ function advancedCompileInBrowser() {
  */
 function typeDefinitions() {
   return runTestCommand('type_definitions',
-    'tsc -p ./tests/typescript/tsconfig.json');
+    `tsc -p ./tests/typescript/tsconfig.json -outDir ${TEST_TSC_OUTPUT_DIR}`);
 }
 
 // Run all tests in sequence.

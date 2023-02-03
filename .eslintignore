@@ -11,7 +11,6 @@
 /tests/screenshot/*
 /tests/test_runner.js
 /tests/workspace_svg/*
-/tests/typescript/dist/*
 /generators/*
 /demos/*
 /appengine/*

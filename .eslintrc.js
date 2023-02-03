@@ -76,7 +76,7 @@ const rules = {
 
 /**
  * Build shared settings for TS linting and add in the config differences.
- * @return The override TS linting for given files and a given tsconfig.
+ * @return {Object} The override TS linting for given files and a given tsconfig.
  */
 function buildTSOverride({files, tsconfig}) {
     return {
@@ -142,7 +142,7 @@ function buildTSOverride({files, tsconfig}) {
             "jsdoc/require-param": ["off"],
             // Don't auto-add missing jsdoc. Only required on exported items.
             "jsdoc/require-jsdoc": [
-                "warn", 
+                "warn",
                 {
                     "enableFixer": false,
                     "publicOnly": true,
@@ -167,7 +167,6 @@ function buildTSOverride({files, tsconfig}) {
 }
 
 module.exports = {
-    "ignorePatterns": [".eslintrc.js"],
     "rules": rules,
     "env": {
         "es2020": true,
@@ -193,5 +192,11 @@ module.exports = {
             ],
             tsconfig: "./tests/typescript/tsconfig.json",
         }),
+        {
+            "files": ["./.eslintrc.js"],
+            "env": {
+                "node": true,
+            },
+        },
     ],
 };

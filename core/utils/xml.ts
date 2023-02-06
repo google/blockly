@@ -119,7 +119,6 @@ export function createTextNode(text: string): Text {
  * @returns A DOM object representing the singular child of the document
  *     element.
  * @throws if the text doesn't parse.
- * @alias Blockly.utils.xml.textToDom
  */
 export function textToDom(text: string): Element {
   const doc = textToDomDocument(text);

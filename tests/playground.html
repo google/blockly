@@ -177,7 +177,7 @@ function load() {
     var state = JSON.parse(input.value);
     Blockly.serialization.workspaces.load(state, workspace);
   } else if (valid.xml) {
-    var xml = Blockly.Xml.textToDom(input.value);
+    var xml = Blockly.utils.xml.textToDom(input.value);
     Blockly.Xml.domToWorkspace(xml, workspace);
   }
   taChange();
@@ -216,7 +216,7 @@ function saveIsValid(save) {
   }
   var validXml = true
   try {
-    Blockly.Xml.textToDom(save);
+    Blockly.utils.xml.textToDom(save);
   } catch (e) {
     validXml = false;
   }
@@ -296,7 +296,7 @@ function spaghetti(n) {
         '$1' + spaghettiXml + '</');
   }
   xml = '<xml xmlns="https://developers.google.com/blockly/xml">' + xml + '</xml>';
-  var dom = Blockly.Xml.textToDom(xml);
+  var dom = Blockly.utils.xml.textToDom(xml);
   console.time('Spaghetti domToWorkspace');
   Blockly.Xml.domToWorkspace(dom, workspace);
   console.timeEnd('Spaghetti domToWorkspace');

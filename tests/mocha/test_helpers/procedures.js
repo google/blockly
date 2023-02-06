@@ -127,7 +127,7 @@ export function createProcDefBlock(
   xml +=
       `  <field name="NAME">${name}</field>` +
       '</block>';
-  return Blockly.Xml.domToBlock(Blockly.Xml.textToDom(xml), workspace);
+  return Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(xml), workspace);
 }
 
 /**
@@ -142,7 +142,7 @@ export function createProcCallBlock(
     workspace, hasReturn = false, name = 'proc name') {
   const type = hasReturn ?
       'procedures_callreturn' : 'procedures_callnoreturn';
-  return Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+  return Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
       `<block type="${type}">` +
       `  <mutation name="${name}"/>` +
       `</block>`

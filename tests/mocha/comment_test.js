@@ -25,7 +25,7 @@ suite('Comments', function() {
       comments: true,
       scrollbars: true,
     });
-    this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+    this.block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
         '<block type="empty_block"/>'
     ), this.workspace);
     this.comment = new Blockly.Comment(this.block);

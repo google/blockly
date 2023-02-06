@@ -374,7 +374,7 @@ suite('JSO Serialization', function() {
         this.createBlockWithShadow = function(blockType, inputName) {
           const block = this.workspace.newBlock(blockType);
           block.getInput(inputName).connection.setShadowDom(
-              Blockly.Xml.textToDom(
+              Blockly.utils.xml.textToDom(
                   '<shadow type="' + blockType + '" id="test"></shadow>'));
           return block;
         };
@@ -385,7 +385,7 @@ suite('JSO Serialization', function() {
           block.getInput(inputName).connection.connect(
               childBlock.outputConnection || childBlock.previousConnection);
           block.getInput(inputName).connection.setShadowDom(
-              Blockly.Xml.textToDom(
+              Blockly.utils.xml.textToDom(
                   '<shadow type="' + blockType + '" id="test"></shadow>'));
           return block;
         };
@@ -601,7 +601,7 @@ suite('JSO Serialization', function() {
           this.createNextWithShadow = function() {
             const block = this.workspace.newBlock('stack_block');
             block.nextConnection.setShadowDom(
-                Blockly.Xml.textToDom(
+                Blockly.utils.xml.textToDom(
                     '<shadow type="stack_block" id="test"></shadow>'));
             return block;
           };
@@ -611,7 +611,7 @@ suite('JSO Serialization', function() {
             const childBlock = this.workspace.newBlock('stack_block');
             block.nextConnection.connect(childBlock.previousConnection);
             block.nextConnection.setShadowDom(
-                Blockly.Xml.textToDom(
+                Blockly.utils.xml.textToDom(
                     '<shadow type="stack_block" id="test"></shadow>'));
             return block;
           };

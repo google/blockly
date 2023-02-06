@@ -315,21 +315,21 @@ suite('Abstract Fields', function() {
         test('No implementations', function() {
           const field = new DefaultSerializationField('');
           field.fromXml(
-              Blockly.Xml.textToDom('<field name="">test value</field>'));
+              Blockly.utils.xml.textToDom('<field name="">test value</field>'));
           chai.assert.equal(field.getValue(), 'test value');
         });
 
         test('Xml implementations', function() {
           const field = new CustomXmlField('');
           field.fromXml(
-              Blockly.Xml.textToDom('<field name="">custom value</field>'));
+              Blockly.utils.xml.textToDom('<field name="">custom value</field>'));
           chai.assert.equal(field.someProperty, 'custom value');
         });
 
         test('Xml super implementation', function() {
           const field = new CustomXmlCallSuperField('');
           field.fromXml(
-              Blockly.Xml.textToDom(
+              Blockly.utils.xml.textToDom(
                   '<field attribute="custom value" name="">test value</field>'
               )
           );
@@ -340,7 +340,7 @@ suite('Abstract Fields', function() {
         test('XML andd JSO implementations', function() {
           const field = new CustomXmlAndJsoField('');
           field.fromXml(
-              Blockly.Xml.textToDom('<field name="">custom value</field>'));
+              Blockly.utils.xml.textToDom('<field name="">custom value</field>'));
           chai.assert.equal(field.someProperty, 'custom value');
         });
       });
@@ -666,7 +666,7 @@ suite('Abstract Fields', function() {
                   .appendField(field, 'TOOLTIP');
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
@@ -684,7 +684,7 @@ suite('Abstract Fields', function() {
               field.setTooltip('tooltip');
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
@@ -701,7 +701,7 @@ suite('Abstract Fields', function() {
                   .appendField(field, 'TOOLTIP');
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
@@ -724,7 +724,7 @@ suite('Abstract Fields', function() {
               return this.getFieldValue('TOOLTIP');
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
@@ -745,7 +745,7 @@ suite('Abstract Fields', function() {
               tooltip: 'tooltip',
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
@@ -763,7 +763,7 @@ suite('Abstract Fields', function() {
                   .appendField(field, 'TOOLTIP');
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
@@ -780,7 +780,7 @@ suite('Abstract Fields', function() {
                   .appendField(field, 'TOOLTIP');
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'

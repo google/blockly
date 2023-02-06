@@ -138,7 +138,7 @@ AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
 
   // Append each block node to XML DOM.
   for (var blockType in blockXmlMap) {
-    var blockXmlDom = Blockly.Xml.textToDom(blockXmlMap[blockType]);
+    var blockXmlDom = Blockly.utils.xml.textToDom(blockXmlMap[blockType]);
     var blockNode = blockXmlDom.firstElementChild;
     xmlDom.appendChild(blockNode);
   }
@@ -155,7 +155,7 @@ AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
  * @private
  */
 AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
-  var inputXml = Blockly.Xml.textToDom(xmlText);
+  var inputXml = Blockly.utils.xml.textToDom(xmlText);
   // Convert the live HTMLCollection of child Elements into a static array,
   // since the addition to editorWorkspaceXml below removes it from inputXml.
   var inputChildren = Array.from(inputXml.children);
@@ -192,7 +192,7 @@ AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
  * @private
  */
 AppController.prototype.getBlockTypeFromXml_ = function(xmlText) {
-  var xmlDom = Blockly.Xml.textToDom(xmlText);
+  var xmlDom = Blockly.utils.xml.textToDom(xmlText);
   // Find factory base block.
   var factoryBaseBlockXml = xmlDom.getElementsByTagName('block')[0];
   // Get field elements from factory base.

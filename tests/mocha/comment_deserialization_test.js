@@ -34,7 +34,7 @@ suite('Comment Deserialization', function() {
       scrollbars: true,
       trashcan: true,
       maxTrashcanContents: Infinity,
-      toolbox: Blockly.Xml.textToDom(toolboxXml),
+      toolbox: Blockly.utils.xml.textToDom(toolboxXml),
     });
   });
   teardown(function() {
@@ -46,7 +46,7 @@ suite('Comment Deserialization', function() {
       this.workspace.clear();
     });
     function createBlock(workspace) {
-      const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+      const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
         '<block type="empty_block"/>'
       ), workspace);
       block.setCommentText('test text');

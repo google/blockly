@@ -29,8 +29,6 @@ export type FieldMultilineInputValidator = FieldTextInputValidator;
 
 /**
  * Class for an editable text area field.
- *
- * @alias Blockly.FieldMultilineInput
  */
 export class FieldMultilineInput extends FieldTextInput {
   /**

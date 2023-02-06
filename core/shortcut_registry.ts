@@ -22,8 +22,6 @@ import type {Workspace} from './workspace.js';
  * Class for the registry of keyboard shortcuts. This is intended to be a
  * singleton. You should not create a new instance, and only access this class
  * from ShortcutRegistry.registry.
- *
- * @alias Blockly.ShortcutRegistry
  */
 export class ShortcutRegistry {
   static readonly registry = new ShortcutRegistry();

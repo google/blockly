@@ -46,8 +46,6 @@ const HEIGHT_MULTIPLIER = 3 / 4;
 
 /**
  * Class for a marker.
- *
- * @alias Blockly.blockRendering.MarkerSvg
  */
 export class MarkerSvg {
   /**

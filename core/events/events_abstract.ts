@@ -22,8 +22,6 @@ import * as eventUtils from './utils.js';
 
 /**
  * Abstract class for an event.
- *
- * @alias Blockly.Events.Abstract
  */
 export abstract class Abstract {
   /**
@@ -52,7 +50,6 @@ export abstract class Abstract {
   /** Type of this event. */
   type = '';
 
-  /** @alias Blockly.Events.Abstract */
   constructor() {
     this.group = eventUtils.getGroup();
     this.recordUndo = eventUtils.getRecordUndo();

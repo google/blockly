@@ -26,8 +26,6 @@ import {ToolboxSeparator} from './separator.js';
 
 /**
  * Class for a category in a toolbox that can be collapsed.
- *
- * @alias Blockly.CollapsibleToolboxCategory
  */
 export class CollapsibleToolboxCategory extends ToolboxCategory implements
     ICollapsibleToolboxItem {

@@ -22,8 +22,6 @@ import type {Workspace} from './workspace.js';
 
 /**
  * Class for a workspace comment.
- *
- * @alias Blockly.WorkspaceComment
  */
 export class WorkspaceComment {
   id: string;

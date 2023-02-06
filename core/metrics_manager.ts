@@ -24,8 +24,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * The manager for all workspace metrics calculations.
- *
- * @alias Blockly.MetricsManager
  */
 export class MetricsManager implements IMetricsManager {
   /** The workspace to calculate metrics for. */

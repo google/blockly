@@ -24,8 +24,6 @@ export type FieldTextInputValidator = FieldInputValidator<string>;
 
 /**
  * Class for an editable text field.
- *
- * @alias Blockly.FieldTextInput
  */
 export class FieldTextInput extends FieldInput<string> {
   /**

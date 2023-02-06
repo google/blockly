@@ -27,8 +27,6 @@ import * as WidgetDiv from './widgetdiv.js';
 
 /**
  * Class for a flyout.
- *
- * @alias Blockly.HorizontalFlyout
  */
 export class HorizontalFlyout extends Flyout {
   override horizontalLayout = true;

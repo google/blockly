@@ -22,8 +22,6 @@ import {StatementInput as BaseStatementInput} from '../../../renderers/measurabl
 /**
  * An object containing information about the space a statement input takes up
  * during rendering.
- *
- * @alias Blockly.zelos.StatementInput
  */
 export class StatementInput extends BaseStatementInput {
   connectedBottomNextConnection = false;

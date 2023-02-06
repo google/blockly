@@ -22,8 +22,6 @@ import {Svg} from './utils/svg.js';
 
 /**
  * Class for an image on a block.
- *
- * @alias Blockly.FieldImage
  */
 export class FieldImage extends Field<string> {
   /**

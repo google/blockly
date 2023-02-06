@@ -32,8 +32,6 @@ import type {RenderInfo} from './info.js';
 
 /**
  * An object that renders rectangles and dots for debugging rendering code.
- *
- * @alias Blockly.blockRendering.Debug
  */
 export class Debug {
   /**

@@ -32,8 +32,6 @@ import type {RenderInfo} from './info.js';
 
 /**
  * An object that draws a block based on the given rendering information.
- *
- * @alias Blockly.blockRendering.Drawer
  */
 export class Drawer {
   block_: BlockSvg;

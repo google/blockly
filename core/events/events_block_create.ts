@@ -26,8 +26,6 @@ import {Workspace} from '../workspace.js';
 /**
  * Notifies listeners when a block (or connected stack of blocks) is
  * created.
- *
- * @alias Blockly.Events.BlockCreate
  */
 export class BlockCreate extends BlockBase {
   override type = eventUtils.BLOCK_CREATE;

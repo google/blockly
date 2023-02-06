@@ -24,8 +24,6 @@ import {Types} from './types.js';
 /**
  * The base class to represent an input that takes up space on a block
  * during rendering
- *
- * @alias Blockly.blockRendering.InputConnection
  */
 export class InputConnection extends Connection {
   align: number;

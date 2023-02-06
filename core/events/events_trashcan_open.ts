@@ -23,8 +23,6 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Notifies listeners when the trashcan is opening or closing.
- *
- * @alias Blockly.Events.TrashcanOpen
  */
 export class TrashcanOpen extends UiBase {
   /**

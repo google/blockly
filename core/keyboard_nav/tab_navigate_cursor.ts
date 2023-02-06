@@ -21,8 +21,6 @@ import {BasicCursor} from './basic_cursor.js';
 
 /**
  * A cursor for navigating between tab navigable fields.
- *
- * @alias Blockly.TabNavigateCursor
  */
 export class TabNavigateCursor extends BasicCursor {
   /**

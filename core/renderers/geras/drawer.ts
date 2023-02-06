@@ -27,8 +27,6 @@ import type {PathObject} from './path_object.js';
 
 /**
  * An object that draws a block based on the given rendering information.
- *
- * @alias Blockly.geras.Drawer
  */
 export class Drawer extends BaseDrawer {
   highlighter_: Highlighter;

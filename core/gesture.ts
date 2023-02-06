@@ -51,8 +51,6 @@ const ZOOM_OUT_MULTIPLIER = 6;
 
 /**
  * Class for one gesture.
- *
- * @alias Blockly.Gesture
  */
 export class Gesture {
   /**

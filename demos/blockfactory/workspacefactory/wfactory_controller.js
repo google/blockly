@@ -16,7 +16,6 @@
  * - updating the preview workspace
  * - changing a category name
  * - moving the position of a category.
- *
  */
 
 /**

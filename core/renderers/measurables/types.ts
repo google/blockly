@@ -18,8 +18,6 @@ import type {Row} from './row.js';
 
 /**
  * Types of rendering elements.
- *
- * @alias Blockly.blockRendering.Types
  */
 class TypesContainer {
   [index: string]: number|Function;

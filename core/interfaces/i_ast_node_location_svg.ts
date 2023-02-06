@@ -17,8 +17,6 @@ import type {IASTNodeLocation} from './i_ast_node_location.js';
 
 /**
  * An AST node location SVG interface.
- *
- * @alias Blockly.IASTNodeLocationSvg
  */
 export interface IASTNodeLocationSvg extends IASTNodeLocation {
   /**

@@ -43,8 +43,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a trash can.
- *
- * @alias Blockly.Trashcan
  */
 export class Trashcan extends DeleteArea implements IAutoHideable,
                                                     IPositionable {

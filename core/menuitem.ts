@@ -19,8 +19,6 @@ import * as idGenerator from './utils/idgenerator.js';
 
 /**
  * Class representing an item in a menu.
- *
- * @alias Blockly.MenuItem
  */
 export class MenuItem {
   /** Is the menu item clickable, as opposed to greyed-out. */

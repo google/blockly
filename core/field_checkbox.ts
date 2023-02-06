@@ -26,8 +26,6 @@ export type FieldCheckboxValidator = FieldValidator<CheckboxBool>;
 
 /**
  * Class for a checkbox field.
- *
- * @alias Blockly.FieldCheckbox
  */
 export class FieldCheckbox extends Field<CheckboxBool> {
   /** Default character for the checkmark. */

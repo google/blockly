@@ -31,8 +31,6 @@ export type FieldAngleValidator = FieldInputValidator<number>;
 
 /**
  * Class for an editable angle field.
- *
- * @alias Blockly.FieldAngle
  */
 export class FieldAngle extends FieldInput<number> {
   /**

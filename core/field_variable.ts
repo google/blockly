@@ -34,8 +34,6 @@ export type FieldVariableValidator = FieldDropdownValidator;
 
 /**
  * Class for a variable's dropdown field.
- *
- * @alias Blockly.FieldVariable
  */
 export class FieldVariable extends FieldDropdown {
   protected override menuGenerator_: MenuGenerator|undefined;

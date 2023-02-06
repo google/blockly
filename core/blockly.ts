@@ -175,7 +175,6 @@ import {ZoomControls} from './zoom_controls.js';
  * compiler to override this constant.
  *
  * @define {string}
- * @alias Blockly.VERSION
  */
 export const VERSION = 'uncompiled';
 
@@ -193,19 +192,16 @@ export const VERSION = 'uncompiled';
 
 /**
  * @see Blockly.Input.Align.LEFT
- * @alias Blockly.ALIGN_LEFT
  */
 export const ALIGN_LEFT = Align.LEFT;
 
 /**
  * @see Blockly.Input.Align.CENTRE
- * @alias Blockly.ALIGN_CENTRE
  */
 export const ALIGN_CENTRE = Align.CENTRE;
 
 /**
  * @see Blockly.Input.Align.RIGHT
- * @alias Blockly.ALIGN_RIGHT
  */
 export const ALIGN_RIGHT = Align.RIGHT;
 /*
@@ -214,31 +210,26 @@ export const ALIGN_RIGHT = Align.RIGHT;
 
 /**
  * @see ConnectionType.INPUT_VALUE
- * @alias Blockly.INPUT_VALUE
  */
 export const INPUT_VALUE = ConnectionType.INPUT_VALUE;
 
 /**
  * @see ConnectionType.OUTPUT_VALUE
- * @alias Blockly.OUTPUT_VALUE
  */
 export const OUTPUT_VALUE = ConnectionType.OUTPUT_VALUE;
 
 /**
  * @see ConnectionType.NEXT_STATEMENT
- * @alias Blockly.NEXT_STATEMENT
  */
 export const NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
 
 /**
  * @see ConnectionType.PREVIOUS_STATEMENT
- * @alias Blockly.PREVIOUS_STATEMENT
  */
 export const PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
 
 /**
  * @see inputTypes.DUMMY_INPUT
- * @alias Blockly.DUMMY_INPUT
  */
 export const DUMMY_INPUT = inputTypes.DUMMY;
 
@@ -246,25 +237,21 @@ export const DUMMY_INPUT = inputTypes.DUMMY;
 
 /**
  * @see toolbox.Position.TOP
- * @alias Blockly.TOOLBOX_AT_TOP
  */
 export const TOOLBOX_AT_TOP = toolbox.Position.TOP;
 
 /**
  * @see toolbox.Position.BOTTOM
- * @alias Blockly.TOOLBOX_AT_BOTTOM
  */
 export const TOOLBOX_AT_BOTTOM = toolbox.Position.BOTTOM;
 
 /**
  * @see toolbox.Position.LEFT
- * @alias Blockly.TOOLBOX_AT_LEFT
  */
 export const TOOLBOX_AT_LEFT = toolbox.Position.LEFT;
 
 /**
  * @see toolbox.Position.RIGHT
- * @alias Blockly.TOOLBOX_AT_RIGHT
  */
 export const TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
 
@@ -281,7 +268,6 @@ export const TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
  *
  * @param workspace Any workspace in the SVG.
  * @see Blockly.common.svgResize
- * @alias Blockly.svgResize
  */
 export const svgResize = common.svgResize;
 
@@ -290,7 +276,6 @@ export const svgResize = common.svgResize;
  *
  * @param opt_onlyClosePopups Whether only popups should be closed.
  * @see Blockly.WorkspaceSvg.hideChaff
- * @alias Blockly.hideChaff
  */
 export function hideChaff(opt_onlyClosePopups?: boolean) {
   (common.getMainWorkspace() as WorkspaceSvg).hideChaff(opt_onlyClosePopups);
@@ -302,14 +287,11 @@ export function hideChaff(opt_onlyClosePopups?: boolean) {
  * Blockly instances on a page.
  *
  * @see Blockly.common.getMainWorkspace
- * @alias Blockly.getMainWorkspace
  */
 export const getMainWorkspace = common.getMainWorkspace;
 
 /**
  * Returns the currently selected copyable object.
- *
- * @alias Blockly.common.getSelected
  */
 export const getSelected = common.getSelected;
 
@@ -319,7 +301,6 @@ export const getSelected = common.getSelected;
  *
  * @param jsonArray An array of JSON block definitions.
  * @see Blockly.common.defineBlocksWithJsonArray
- * @alias Blockly.defineBlocksWithJsonArray
  */
 export const defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
 
@@ -331,7 +312,6 @@ export const defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
  *
  * @param container The container element.
  * @see Blockly.common.setParentContainer
- * @alias Blockly.setParentContainer
  */
 export const setParentContainer = common.setParentContainer;
 
@@ -342,7 +322,6 @@ export const setParentContainer = common.setParentContainer;
  * @param workspace The workspace to resize.
  * @deprecated Use **workspace.resizeContents** instead.
  * @see Blockly.WorkspaceSvg.resizeContents
- * @alias Blockly.resizeSvgContents
  */
 function resizeSvgContentsLocal(workspace: WorkspaceSvg) {
   deprecation.warn(
@@ -358,7 +337,6 @@ export const resizeSvgContents = resizeSvgContentsLocal;
  * @param toCopy Block or Workspace Comment to be copied.
  * @deprecated Use **Blockly.clipboard.copy** instead.
  * @see Blockly.clipboard.copy
- * @alias Blockly.copy
  */
 export function copy(toCopy: ICopyable) {
   deprecation.warn(
@@ -373,7 +351,6 @@ export function copy(toCopy: ICopyable) {
  * @returns True if the paste was successful, false otherwise.
  * @deprecated Use **Blockly.clipboard.paste** instead.
  * @see Blockly.clipboard.paste
- * @alias Blockly.paste
  */
 export function paste(): boolean {
   deprecation.warn(
@@ -388,7 +365,6 @@ export function paste(): boolean {
  * @param toDuplicate Block or Workspace Comment to be copied.
  * @deprecated Use **Blockly.clipboard.duplicate** instead.
  * @see Blockly.clipboard.duplicate
- * @alias Blockly.duplicate
  */
 export function duplicate(toDuplicate: ICopyable) {
   deprecation.warn(
@@ -404,7 +380,6 @@ export function duplicate(toDuplicate: ICopyable) {
  * @returns True if number, false otherwise.
  * @deprecated Use **Blockly.utils.string.isNumber** instead.
  * @see Blockly.utils.string.isNumber
- * @alias Blockly.isNumber
  */
 export function isNumber(str: string): boolean {
   deprecation.warn(
@@ -420,7 +395,6 @@ export function isNumber(str: string): boolean {
  * @returns RGB code, e.g. '#5ba65b'.
  * @deprecated Use **Blockly.utils.colour.hueToHex** instead.
  * @see Blockly.utils.colour.hueToHex
- * @alias Blockly.hueToHex
  */
 export function hueToHex(hue: number): string {
   deprecation.warn(
@@ -442,7 +416,6 @@ export function hueToHex(hue: number): string {
  * @returns Opaque data that can be passed to unbindEvent_.
  * @deprecated Use **Blockly.browserEvents.bind** instead.
  * @see Blockly.browserEvents.bind
- * @alias Blockly.bindEvent_
  */
 export function bindEvent_(
     node: EventTarget, name: string, thisObject: Object|null,
@@ -461,7 +434,6 @@ export function bindEvent_(
  * @returns The function call.
  * @deprecated Use **Blockly.browserEvents.unbind** instead.
  * @see browserEvents.unbind
- * @alias Blockly.unbindEvent_
  */
 export function unbindEvent_(bindData: browserEvents.Data): Function {
   deprecation.warn(
@@ -487,7 +459,6 @@ export function unbindEvent_(bindData: browserEvents.Data): Function {
  * @returns Opaque data that can be passed to unbindEvent_.
  * @deprecated Use **Blockly.browserEvents.conditionalBind** instead.
  * @see browserEvents.conditionalBind
- * @alias Blockly.bindEventWithChecks_
  */
 export function bindEventWithChecks_(
     node: EventTarget, name: string, thisObject: Object|null, func: Function,
@@ -513,8 +484,6 @@ export const COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
- *
- * @alias Blockly.VARIABLE_CATEGORY_NAME
  */
 export const VARIABLE_CATEGORY_NAME: string = Variables.CATEGORY_NAME;
 
@@ -522,8 +491,6 @@ export const VARIABLE_CATEGORY_NAME: string = Variables.CATEGORY_NAME;
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
- *
- * @alias Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME
  */
 export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
     VariablesDynamic.CATEGORY_NAME;
@@ -531,8 +498,6 @@ export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * procedure blocks.
- *
- * @alias Blockly.PROCEDURE_CATEGORY_NAME
  */
 export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
 

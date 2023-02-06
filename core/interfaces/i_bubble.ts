@@ -19,8 +19,6 @@ import type {IDraggable} from './i_draggable.js';
 
 /**
  * A bubble interface.
- *
- * @alias Blockly.IBubble
  */
 export interface IBubble extends IDraggable, IContextMenu {
   /**

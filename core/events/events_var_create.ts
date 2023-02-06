@@ -23,8 +23,6 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Notifies listeners that a variable model has been created.
- *
- * @alias Blockly.Events.VarCreate
  */
 export class VarCreate extends VarBase {
   override type = eventUtils.VAR_CREATE;

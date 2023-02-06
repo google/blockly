@@ -105,8 +105,6 @@ export function isDynamicShape(shape: Shape): shape is DynamicShape {
 
 /**
  * An object that provides constants for rendering blocks.
- *
- * @alias Blockly.blockRendering.ConstantProvider
  */
 export class ConstantProvider {
   /** The size of an empty spacer. */

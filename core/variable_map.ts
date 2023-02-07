@@ -46,13 +46,14 @@ export class VariableMap {
 
   /** Clear the variable map.  Fires events for every deletion. */
   clear() {
-    console.log('clearing map');
     for (const variables of this.variableMap.values()) {
-      for (const variable of variables) {
-        this.deleteVariable(variable);
+      while (variables.length > 0) {
+        this.deleteVariable(variables[0]);
       }
     }
-    if (this.variableMap.size !== 0) throw Error('Non-empty variable map');
+    if (this.variableMap.size !== 0) {
+      throw Error('Non-empty variable map');
+    }
   }
 
   /* Begin functions for renaming variables. */
@@ -149,6 +150,7 @@ export class VariableMap {
     // And remove it from the list.
     arrayUtils.removeElem(this.variableMap.get(type)!, variable);
   }
+
   /* End functions for renaming variables. */
   /**
    * Create a variable with a given name, optional type, and optional ID.
@@ -194,6 +196,7 @@ export class VariableMap {
 
     return variable;
   }
+
   /* Begin functions for variable deletion. */
   /**
    * Delete a variable.

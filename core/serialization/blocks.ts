@@ -19,6 +19,7 @@ import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../input_types.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import {Size} from '../utils/size.js';
+import * as utilsXml from '../utils/xml.js';
 import type {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
 
@@ -461,7 +462,7 @@ function loadExtraState(block: Block, state: State) {
   if (block.loadExtraState) {
     block.loadExtraState(state['extraState']);
   } else if (block.domToMutation) {
-    block.domToMutation(Xml.textToDom(state['extraState']));
+    block.domToMutation(utilsXml.textToDom(state['extraState']));
   }
 }
 

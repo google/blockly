@@ -13,7 +13,6 @@
 goog.module('Blockly.libraryBlocks.lists');
 
 const xmlUtils = goog.require('Blockly.utils.xml');
-const Xml = goog.require('Blockly.Xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -480,7 +479,7 @@ blocks['lists_getIndex'] = {
       this.updateStatement_(true);
     } else if (typeof state === 'string') {
       // backward compatible for json serialised mutations
-      this.domToMutation(Xml.textToDom(state));
+      this.domToMutation(xmlUtils.textToDom(state));
     }
   },
 

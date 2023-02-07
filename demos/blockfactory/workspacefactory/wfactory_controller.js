@@ -701,7 +701,7 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
     // Try to parse XML from file and load it into toolbox editing area.
     // Print error message if fail.
     try {
-      var tree = Blockly.Xml.textToDom(reader.result);
+      var tree = Blockly.utils.xml.textToDom(reader.result);
       if (importMode === WorkspaceFactoryController.MODE_TOOLBOX) {
         // Switch mode.
         controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);

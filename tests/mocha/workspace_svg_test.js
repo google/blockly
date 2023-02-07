@@ -46,7 +46,7 @@ suite('WorkspaceSvg', function() {
   });
 
   test('appendDomToWorkspace alignment', function() {
-    const dom = Blockly.Xml.textToDom(
+    const dom = Blockly.utils.xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '  <block type="math_random_float" inline="true" x="21" y="23">' +
         '  </block>' +
@@ -71,7 +71,7 @@ suite('WorkspaceSvg', function() {
   });
 
   test('Replacing shadow disposes svg', function() {
-    const dom = Blockly.Xml.textToDom(
+    const dom = Blockly.utils.xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '<block type="test_val_in">' +
         '<value name="NAME">' +
@@ -240,7 +240,7 @@ suite('WorkspaceSvg', function() {
       test('domToWorkspace that doesn\'t trigger scroll', function() {
         // 4 blocks with space in center.
         Blockly.Xml.domToWorkspace(
-            Blockly.Xml.textToDom(
+            Blockly.utils.xml.textToDom(
                 '<xml xmlns="https://developers.google.com/blockly/xml">' +
                 '<block type="controls_if" x="88" y="88"></block>' +
                 '<block type="controls_if" x="288" y="88"></block>' +
@@ -248,12 +248,12 @@ suite('WorkspaceSvg', function() {
                 '<block type="controls_if" x="288" y="238"></block>' +
                 '</xml>'),
             this.workspace);
-        const xmlDom = Blockly.Xml.textToDom(
+        const xmlDom = Blockly.utils.xml.textToDom(
             '<block type="controls_if" x="188" y="163"></block>');
         this.clock.runAll();
         resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
         // Add block in center of other blocks, not triggering scroll.
-        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(
+        Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(
             '<block type="controls_if" x="188" y="163"></block>'), this.workspace);
         this.clock.runAll();
         assertEventNotFired(
@@ -265,7 +265,7 @@ suite('WorkspaceSvg', function() {
       test('domToWorkspace at 0,0 that doesn\'t trigger scroll', function() {
         // 4 blocks with space in center.
         Blockly.Xml.domToWorkspace(
-            Blockly.Xml.textToDom(
+            Blockly.utils.xml.textToDom(
                 '<xml xmlns="https://developers.google.com/blockly/xml">' +
                 '<block type="controls_if" x="-75" y="-72"></block>' +
                 '<block type="controls_if" x="75" y="-72"></block>' +
@@ -273,7 +273,7 @@ suite('WorkspaceSvg', function() {
                 '<block type="controls_if" x="75" y="75"></block>' +
                 '</xml>'),
             this.workspace);
-        const xmlDom = Blockly.Xml.textToDom(
+        const xmlDom = Blockly.utils.xml.textToDom(
             '<block type="controls_if" x="0" y="0"></block>');
         this.clock.runAll();
         resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
@@ -291,7 +291,7 @@ suite('WorkspaceSvg', function() {
         // TODO: Un-skip after adding filtering for consecutive viewport events.
         const addingMultipleBlocks = () => {
           Blockly.Xml.domToWorkspace(
-              Blockly.Xml.textToDom(
+              Blockly.utils.xml.textToDom(
                   '<xml xmlns="https://developers.google.com/blockly/xml">' +
                   '<block type="controls_if" x="88" y="88"></block>' +
                   '<block type="controls_if" x="288" y="88"></block>' +

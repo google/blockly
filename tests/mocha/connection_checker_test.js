@@ -346,7 +346,7 @@ suite('Connection checker', function() {
       setup(function() {
         this.workspace = Blockly.inject('blocklyDiv');
         // Load in three blocks: A and B are connected (next/prev); B is unmovable.
-        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
+        Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
         <block type="text_print" id="A" x="-76" y="-112">
           <next>
             <block type="text_print" id="B" movable="false">
@@ -402,7 +402,7 @@ suite('Connection checker', function() {
       setup(function() {
         this.workspace = Blockly.inject('blocklyDiv');
         // Load 3 blocks: A and B are connected (input/output); B is unmovable.
-        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
+        Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
         <block type="test_basic_row" id="A" x="38" y="37">
           <value name="INPUT">
             <block type="test_basic_row" id="B" movable="false"></block>

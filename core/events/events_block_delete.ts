@@ -16,6 +16,7 @@ import type {Block} from '../block.js';
 import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
+import * as utilsXml from '../utils/xml.js';
 import * as Xml from '../xml.js';
 
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
@@ -112,7 +113,7 @@ export class BlockDelete extends BlockBase {
         'Blockly.Events.BlockDelete.prototype.fromJson', 'version 9',
         'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
-    this.oldXml = Xml.textToDom(json['oldXml']);
+    this.oldXml = utilsXml.textToDom(json['oldXml']);
     this.ids = json['ids'];
     this.wasShadow =
         json['wasShadow'] || this.oldXml.tagName.toLowerCase() === 'shadow';
@@ -136,7 +137,7 @@ export class BlockDelete extends BlockBase {
     const newEvent =
         super.fromJson(json, workspace, event ?? new BlockDelete()) as
         BlockDelete;
-    newEvent.oldXml = Xml.textToDom(json['oldXml']);
+    newEvent.oldXml = utilsXml.textToDom(json['oldXml']);
     newEvent.ids = json['ids'];
     newEvent.wasShadow =
         json['wasShadow'] || newEvent.oldXml.tagName.toLowerCase() === 'shadow';

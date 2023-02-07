@@ -107,6 +107,23 @@ export function createTextNode(text: string): Text {
 }
 
 /**
+ * Converts an XML string into a DOM structure.
+ *
+ * @param text An XML string.
+ * @returns A DOM object representing the singular child of the document
+ *     element.
+ * @throws if the text doesn't parse.
+ */
+export function textToDom(text: string): Element {
+  const doc = textToDomDocument(text);
+  if (!doc || !doc.documentElement ||
+      doc.getElementsByTagName('parsererror').length) {
+    throw Error('textToDom was unable to parse: ' + text);
+  }
+  return doc.documentElement;
+}
+
+/**
  * Converts an XML string into a DOM tree.
  *
  * @param text XML string.

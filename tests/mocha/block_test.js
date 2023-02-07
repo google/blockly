@@ -506,7 +506,7 @@ suite('Blocks', function() {
     suite('Deserialization', function() {
       setup(function() {
         this.deserializationHelper = function(text) {
-          const dom = Blockly.Xml.textToDom(text);
+          const dom = Blockly.utils.xml.textToDom(text);
           Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
           this.assertConnectionsEmpty();
           this.clock.runAll();
@@ -616,7 +616,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getInputs().length, 0);
       });
       test('Collapsed Multi-Row Middle', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        Blockly.Xml.appendDomToWorkspace(Blockly.utils.xml.textToDom(
             '<xml>' +
             '  <block type="row_block">' +
             '    <value name="INPUT">' +
@@ -735,7 +735,7 @@ suite('Blocks', function() {
     });
     suite('setCollapsed', function() {
       test('Stack', function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="stack_block"/>'
         ), this.workspace);
         this.clock.runAll();
@@ -751,7 +751,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Multi-Stack', function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="stack_block">' +
             '  <next>' +
             '    <block type="stack_block">' +
@@ -776,7 +776,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getNext().length, 3);
       });
       test('Row', function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="row_block"/>'
         ), this.workspace);
         this.clock.runAll();
@@ -792,7 +792,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getInputs().length, 1);
       });
       test('Multi-Row', function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="row_block">' +
             '  <value name="INPUT">' +
             '    <block type="row_block">' +
@@ -816,7 +816,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getInputs().length, 3);
       });
       test('Multi-Row Middle', function() {
-        let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        let block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="row_block">' +
             '  <value name="INPUT">' +
             '    <block type="row_block">' +
@@ -843,7 +843,7 @@ suite('Blocks', function() {
       test('Multi-Row Double Collapse', function() {
         // Collapse middle -> Collapse top ->
         // Uncollapse top -> Uncollapse middle
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="row_block">' +
             '  <value name="INPUT">' +
             '    <block type="row_block">' +
@@ -876,7 +876,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getInputs().length, 3);
       });
       test('Statement', function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="statement_block"/>'
         ), this.workspace);
         this.clock.runAll();
@@ -892,7 +892,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getNext().length, 2);
       });
       test('Multi-Statement', function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="statement_block">' +
             '  <statement name="STATEMENT">' +
             '    <block type="statement_block">' +
@@ -917,7 +917,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getNext().length, 6);
       });
       test('Multi-Statement Middle', function() {
-        let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        let block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="statement_block">' +
             '  <statement name="STATEMENT">' +
             '    <block type="statement_block">' +
@@ -943,7 +943,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getNext().length, 6);
       });
       test('Multi-Statement Double Collapse', function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="statement_block">' +
             '  <statement name="STATEMENT">' +
             '    <block type="statement_block">' +
@@ -979,7 +979,7 @@ suite('Blocks', function() {
     });
     suite('Setting Parent Block', function() {
       setup(function() {
-        this.printBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        this.printBlock = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="text_print">' +
             '  <value name="TEXT">' +
             '    <block type="text_join">' +
@@ -1181,7 +1181,7 @@ suite('Blocks', function() {
       });
       suite('Headless', function() {
         setup(function() {
-          this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          this.block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block"/>'
           ), this.workspace);
         });
@@ -1214,7 +1214,7 @@ suite('Blocks', function() {
             comments: true,
             scrollbars: true,
           });
-          this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          this.block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block"/>'
           ), this.workspace);
         });
@@ -1281,7 +1281,7 @@ suite('Blocks', function() {
   suite('Getting/Setting Field (Values)', function() {
     setup(function() {
       this.workspace = Blockly.inject('blocklyDiv');
-      this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+      this.block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
           '<block type="text"><field name = "TEXT">test</field></block>'
       ), this.workspace);
     });
@@ -1349,7 +1349,7 @@ suite('Blocks', function() {
       });
 
       test('Has Icon', function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="statement_block"/>'
         ), this.workspace);
         block.setCommentText('test text');
@@ -1359,7 +1359,7 @@ suite('Blocks', function() {
         chai.assert.isFalse(block.comment.isVisible());
       });
       test('Child Has Icon', function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="statement_block">' +
             '  <statement name="STATEMENT">' +
             '    <block type="statement_block"/>' +
@@ -1374,7 +1374,7 @@ suite('Blocks', function() {
         chai.assert.isFalse(childBlock.comment.isVisible());
       });
       test('Next Block Has Icon', function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="statement_block">' +
             '  <next>' +
             '    <block type="statement_block"/>' +
@@ -1873,7 +1873,7 @@ suite('Blocks', function() {
   suite('Style', function() {
     suite('Headless', function() {
       setup(function() {
-        this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        this.block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="empty_block"/>'
         ), this.workspace);
       });
@@ -1894,7 +1894,7 @@ suite('Blocks', function() {
     suite('Rendered', function() {
       setup(function() {
         this.workspace = Blockly.inject('blocklyDiv', {});
-        this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        this.block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="empty_block"/>'
         ), this.workspace);
         this.workspace.setTheme(new Blockly.Theme('test', {
@@ -2046,7 +2046,7 @@ suite('Blocks', function() {
     // Create mocha test cases for each toString test.
     toStringTests.forEach(function(t) {
       test(t.name, function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(t.xml),
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(t.xml),
             this.workspace);
         chai.assert.equal(block.toString(), t.toString);
       });

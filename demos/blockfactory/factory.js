@@ -304,7 +304,7 @@ BlockFactory.disableEnableLink = function() {
  */
 BlockFactory.showStarterBlock = function() {
   BlockFactory.mainWorkspace.clear();
-  var xml = Blockly.Xml.textToDom(BlockFactory.STARTER_BLOCK_XML_TEXT);
+  var xml = Blockly.utils.xml.textToDom(BlockFactory.STARTER_BLOCK_XML_TEXT);
   Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
 };
 

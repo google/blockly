@@ -34,7 +34,6 @@ import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
 
 
 /**
@@ -440,12 +439,12 @@ export function mutateCallers(defBlock: Block) {
   const callers = getCallers(name, defBlock.workspace);
   for (let i = 0, caller; caller = callers[i]; i++) {
     const oldMutationDom = caller.mutationToDom!();
-    const oldMutation = oldMutationDom && Xml.domToText(oldMutationDom);
+    const oldMutation = oldMutationDom && utilsXml.domToText(oldMutationDom);
     if (caller.domToMutation) {
       caller.domToMutation(xmlElement);
     }
     const newMutationDom = caller.mutationToDom!();
-    const newMutation = newMutationDom && Xml.domToText(newMutationDom);
+    const newMutation = newMutationDom && utilsXml.domToText(newMutationDom);
     if (oldMutation !== newMutation) {
       // Fire a mutation on every caller block.  But don't record this as an
       // undo action since it is deterministically tied to the procedure's

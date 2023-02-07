@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.utils.toolbox');
 import type {ConnectionState} from '../serialization/blocks.js';
 import type {CssConfig as CategoryCssConfig} from '../toolbox/category.js';
 import type {CssConfig as SeparatorCssConfig} from '../toolbox/separator.js';
-import * as Xml from '../xml.js';
+import * as utilsXml from './xml.js';
 
 
 /**
@@ -387,7 +387,7 @@ export function parseToolboxTree(toolboxDef: Element|null|string): Element|
   let parsedToolboxDef: Element|null = null;
   if (toolboxDef) {
     if (typeof toolboxDef === 'string') {
-      parsedToolboxDef = Xml.textToDom(toolboxDef);
+      parsedToolboxDef = utilsXml.textToDom(toolboxDef);
       if (parsedToolboxDef.nodeName.toLowerCase() !== 'xml') {
         throw TypeError('Toolbox should be an <xml> document.');
       }

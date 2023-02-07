@@ -1830,7 +1830,7 @@ const runSerializerTestSuite = (serializer, deserializer, testSuite) => {
   const createTestFunction = function(test) {
     return function() {
       Blockly.Xml.domToWorkspace(
-          Blockly.Xml.textToDom(test.xml), this.workspace);
+          Blockly.utils.xml.textToDom(test.xml), this.workspace);
       if (serializer && deserializer) {
         const save = serializer(workspaces.save(this.workspace));
         this.workspace.clear();

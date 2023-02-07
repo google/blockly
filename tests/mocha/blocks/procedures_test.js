@@ -771,7 +771,7 @@ suite('Procedures', function() {
 
     suite('xml', function() {
       test('callers without defs create new defs', function() {
-        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+        const callBlock = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(`
             <block type="procedures_callreturn">
               <mutation name="do something"/>
             </block>`
@@ -783,7 +783,7 @@ suite('Procedures', function() {
       });
 
       test('callers without mutations create unnamed defs', function() {
-        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const callBlock = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="procedures_callreturn"></block>'
         ), this.workspace);
         this.clock.runAll();
@@ -793,7 +793,7 @@ suite('Procedures', function() {
       });
 
       test('callers with missing args create new defs', function() {
-        const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+        const defBlock = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(`
             <block type="procedures_defreturn">
               <field name="NAME">do something</field>
               <mutation>
@@ -801,7 +801,7 @@ suite('Procedures', function() {
               </mutation>
             </block>
         `), this.workspace);
-        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const callBlock = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="procedures_callreturn">' +
             '  <mutation name="do something"/>' +
             '</block>'
@@ -812,7 +812,7 @@ suite('Procedures', function() {
       });
 
       test('callers with mismatched args create new defs', function() {
-        const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+        const defBlock = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(`
             <block type="procedures_defreturn">
               <field name="NAME">do something</field>
               <mutation>
@@ -820,7 +820,7 @@ suite('Procedures', function() {
               </mutation>
             </block>
         `), this.workspace);
-        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+        const callBlock = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(`
             <block type="procedures_callreturn">
               <mutation name="do something">
                 <arg name="y"></arg>
@@ -836,7 +836,7 @@ suite('Procedures', function() {
       test.skip(
           'callers whose defs are deserialized later do not create defs',
           function() {
-            Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(`
+            Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(`
                 <xml>
                   <block type="procedures_callreturn">
                     <mutation name="do something">
@@ -1139,7 +1139,7 @@ suite('Procedures', function() {
 
     suite('no name renamed to unnamed', function() {
       test('defnoreturn and defreturn', function() {
-        const xml = Blockly.Xml.textToDom(`
+        const xml = Blockly.utils.xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_defnoreturn"/>
                 <block type="procedures_defreturn"/>
@@ -1152,7 +1152,7 @@ suite('Procedures', function() {
       });
 
       test('defreturn and defnoreturn', function() {
-        const xml = Blockly.Xml.textToDom(`
+        const xml = Blockly.utils.xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_defreturn"/>
                 <block type="procedures_defnoreturn"/>
@@ -1165,7 +1165,7 @@ suite('Procedures', function() {
       });
 
       test('callreturn (no def in xml)', function() {
-        const xml = Blockly.Xml.textToDom(`
+        const xml = Blockly.utils.xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_callreturn"/>
               </xml>`);
@@ -1176,7 +1176,7 @@ suite('Procedures', function() {
       });
 
       test('callnoreturn and callreturn (no def in xml)', function() {
-        const xml = Blockly.Xml.textToDom(`
+        const xml = Blockly.utils.xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_callnoreturn" id="first"/>
                 <block type="procedures_callreturn" id="second"/>
@@ -1188,7 +1188,7 @@ suite('Procedures', function() {
       });
 
       test('callreturn and callnoreturn (no def in xml)', function() {
-        const xml = Blockly.Xml.textToDom(`
+        const xml = Blockly.utils.xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_callreturn"/>
                 <block type="procedures_callnoreturn"/>
@@ -1579,7 +1579,7 @@ suite('Procedures', function() {
                 chai.assert.isFalse(this.defBlock.hasStatements_);
               });
               test('Saving Statements', function() {
-                const blockXml = Blockly.Xml.textToDom(
+                const blockXml = Blockly.utils.xml.textToDom(
                     '<block type="procedures_defreturn">' +
                     '  <statement name="STACK">' +
                     '    <block type="procedures_ifreturn" id="test"></block>' +

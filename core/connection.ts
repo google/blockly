@@ -222,8 +222,8 @@ export class Connection implements IASTNodeLocationWithBlock {
 
     const checker = this.getConnectionChecker();
     if (checker.canConnect(this, otherConnection, false)) {
-      const eventGroup = eventUtils.getGroup();
-      if (!eventGroup) {
+      const existingGroup = eventUtils.getGroup();
+      if (!existingGroup) {
         eventUtils.setGroup(true);
       }
       // Determine which block is superior (higher in the source stack).
@@ -234,9 +234,7 @@ export class Connection implements IASTNodeLocationWithBlock {
         // Inferior block.
         otherConnection.connect_(this);
       }
-      if (!eventGroup) {
-        eventUtils.setGroup(false);
-      }
+      eventUtils.setGroup(existingGroup);
     }
 
     return this.isConnected();
@@ -267,8 +265,8 @@ export class Connection implements IASTNodeLocationWithBlock {
       parentConnection = otherConnection;
     }
 
-    const eventGroup = eventUtils.getGroup();
-    if (!eventGroup) {
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) {
       eventUtils.setGroup(true);
     }
     this.disconnectInternal_(parentBlock, childBlock);
@@ -276,9 +274,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       // If we were disconnecting a shadow, no need to spawn a new one.
       parentConnection.respawnShadow_();
     }
-    if (!eventGroup) {
-      eventUtils.setGroup(false);
-    }
+    eventUtils.setGroup(existingGroup);
   }
 
   /**

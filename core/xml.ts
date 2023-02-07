@@ -483,9 +483,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
       }
     }
   } finally {
-    if (!existingGroup) {
-      eventUtils.setGroup(false);
-    }
+    eventUtils.setGroup(existingGroup);
     dom.stopTextWidthCache();
   }
   // Re-enable workspace resizing.

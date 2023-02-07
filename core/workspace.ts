@@ -359,9 +359,7 @@ export class Workspace implements IASTNodeLocation {
       while (this.topComments.length) {
         this.topComments[this.topComments.length - 1].dispose();
       }
-      if (!existingGroup) {
-        eventUtils.setGroup(false);
-      }
+      eventUtils.setGroup(existingGroup);
       this.variableMap.clear();
       if (this.potentialVariableMap) {
         this.potentialVariableMap.clear();

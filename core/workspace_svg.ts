@@ -1253,21 +1253,22 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (!existingGroup) {
       eventUtils.setGroup(true);
     }
-
     let pastedThing;
-    // Checks if this is JSON. JSON has a type property, while elements don't.
-    if (state['type']) {
-      pastedThing = this.pasteBlock_(null, state as blocks.State);
-    } else {
-      const xmlBlock = state as Element;
-      if (xmlBlock.tagName.toLowerCase() === 'comment') {
-        pastedThing = this.pasteWorkspaceComment_(xmlBlock);
+    try {
+      // Checks if this is JSON. JSON has a type property, while elements don't.
+      if (state['type']) {
+        pastedThing = this.pasteBlock_(null, state as blocks.State);
       } else {
-        pastedThing = this.pasteBlock_(xmlBlock, null);
+        const xmlBlock = state as Element;
+        if (xmlBlock.tagName.toLowerCase() === 'comment') {
+          pastedThing = this.pasteWorkspaceComment_(xmlBlock);
+        } else {
+          pastedThing = this.pasteBlock_(xmlBlock, null);
+        }
       }
+    } finally {
+      eventUtils.setGroup(existingGroup);
     }
-
-    eventUtils.setGroup(existingGroup);
     return pastedThing;
   }
 

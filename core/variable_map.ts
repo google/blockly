@@ -61,7 +61,10 @@ export class VariableMap {
     const type = variable.type;
     const conflictVar = this.getVariable(newName, type);
     const blocks = this.workspace.getAllBlocks(false);
-    eventUtils.setGroup(true);
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) {
+      eventUtils.setGroup(true);
+    }
     try {
       // The IDs may match if the rename is a simple case change (name1 ->
       // Name1).
@@ -72,7 +75,7 @@ export class VariableMap {
             variable, newName, conflictVar, blocks);
       }
     } finally {
-      eventUtils.setGroup(false);
+      eventUtils.setGroup(existingGroup);
     }
   }
 
@@ -271,9 +274,7 @@ export class VariableMap {
       }
       this.deleteVariable(variable);
     } finally {
-      if (!existingGroup) {
-        eventUtils.setGroup(false);
-      }
+      eventUtils.setGroup(existingGroup);
     }
   }
   /* End functions for variable deletion. */

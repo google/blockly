@@ -424,7 +424,7 @@ export class RenderedConnection extends Connection {
   }
 
   /**
-   * Behavior after a connection attempt fails.
+   * Behaviour after a connection attempt fails.
    * Bumps this connection away from the other connection. Called when an
    * attempted connection fails.
    *

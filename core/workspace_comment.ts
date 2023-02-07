@@ -307,9 +307,7 @@ export class WorkspaceComment {
         eventUtils.fire(
             new (eventUtils.get(eventUtils.COMMENT_CREATE))(comment));
       } finally {
-        if (!existingGroup) {
-          eventUtils.setGroup(false);
-        }
+        eventUtils.setGroup(existingGroup);
       }
     }
   }

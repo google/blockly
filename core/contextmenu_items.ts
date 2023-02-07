@@ -20,7 +20,6 @@ import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
 import {inputTypes} from './input_types.js';
 import {Msg} from './msg.js';
-import * as idGenerator from './utils/idgenerator.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 
@@ -230,8 +229,8 @@ function getDeletableBlocks_(workspace: WorkspaceSvg): BlockSvg[] {
 /**
  * Deletes the given blocks. Used to delete all blocks in the workspace.
  *
- * @param deleteList list of blocks to delete.
- * @param eventGroup event group ID with which all delete events should be
+ * @param deleteList List of blocks to delete.
+ * @param eventGroup Event group ID with which all delete events should be
  *     associated.
  */
 function deleteNext_(deleteList: BlockSvg[], eventGroup: string) {
@@ -279,7 +278,8 @@ export function registerDeleteAll() {
       }
       scope.workspace.cancelCurrentGesture();
       const deletableBlocks = getDeletableBlocks_(scope.workspace);
-      const eventGroup = idGenerator.genUid();
+      eventUtils.setGroup(true);
+      const eventGroup = eventUtils.getGroup();
       if (deletableBlocks.length < 2) {
         deleteNext_(deletableBlocks, eventGroup);
       } else {
@@ -457,14 +457,12 @@ export function registerDisable() {
     },
     callback(scope: Scope) {
       const block = scope.block;
-      const group = eventUtils.getGroup();
-      if (!group) {
+      const existingGroup = eventUtils.getGroup();
+      if (!existingGroup) {
         eventUtils.setGroup(true);
       }
       block!.setEnabled(!block!.isEnabled());
-      if (!group) {
-        eventUtils.setGroup(false);
-      }
+      eventUtils.setGroup(existingGroup);
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockDisable',

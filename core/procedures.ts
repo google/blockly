@@ -34,7 +34,6 @@ import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
 
 
 /**

@@ -14,6 +14,7 @@ goog.module('Blockly.libraryBlocks.texts');
 
 const Extensions = goog.require('Blockly.Extensions');
 const {Msg} = goog.require('Blockly.Msg');
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
 /* eslint-disable-next-line no-unused-vars */
 const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
@@ -24,9 +25,6 @@ const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
-const {FieldImage} = goog.require('Blockly.FieldImage');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 const {Mutator} = goog.require('Blockly.Mutator');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
@@ -338,8 +336,11 @@ blocks['text_getSubstring'] = {
       this.removeInput('TAIL', true);
       this.appendDummyInput('TAIL').appendField(Msg['TEXT_GET_SUBSTRING_TAIL']);
     }
-    const menu = new FieldDropdown(
-        this['WHERE_OPTIONS_' + n],
+    const menu = fieldRegistry.fromJson({
+      type: 'field_dropdown',
+      options: this['WHERE_OPTIONS_' + n],
+    });
+    menu.setValidator(
         /**
          * @param {*} value The input value.
          * @this {FieldDropdown}
@@ -385,7 +386,11 @@ blocks['text_changeCase'] = {
     this.setHelpUrl(Msg['TEXT_CHANGECASE_HELPURL']);
     this.setStyle('text_blocks');
     this.appendValueInput('TEXT').setCheck('String').appendField(
-        new FieldDropdown(OPERATORS), 'CASE');
+        fieldRegistry.fromJson({
+          type: 'field_dropdown',
+          options: OPERATORS,
+        }),
+        'CASE');
     this.setOutput(true, 'String');
     this.setTooltip(Msg['TEXT_CHANGECASE_TOOLTIP']);
   },
@@ -405,7 +410,11 @@ blocks['text_trim'] = {
     this.setHelpUrl(Msg['TEXT_TRIM_HELPURL']);
     this.setStyle('text_blocks');
     this.appendValueInput('TEXT').setCheck('String').appendField(
-        new FieldDropdown(OPERATORS), 'MODE');
+        fieldRegistry.fromJson({
+          type: 'field_dropdown',
+          options: OPERATORS,
+        }),
+        'MODE');
     this.setOutput(true, 'String');
     this.setTooltip(Msg['TEXT_TRIM_TOOLTIP']);
   },
@@ -486,7 +495,11 @@ blocks['text_prompt_ext'] = {
     this.setStyle('text_blocks');
     // Assign 'this' to a variable for use in the closures below.
     const thisBlock = this;
-    const dropdown = new FieldDropdown(TYPES, function(newOp) {
+    const dropdown = fieldRegistry.fromJson({
+      type: 'field_dropdown',
+      options: TYPES,
+    });
+    dropdown.setValidator(function(newOp) {
       thisBlock.updateType_(newOp);
     });
     this.appendValueInput('TEXT').appendField(dropdown, 'TYPE');
@@ -522,13 +535,22 @@ blocks['text_prompt'] = {
     const thisBlock = this;
     this.setHelpUrl(Msg['TEXT_PROMPT_HELPURL']);
     this.setStyle('text_blocks');
-    const dropdown = new FieldDropdown(TYPES, function(newOp) {
+    const dropdown = fieldRegistry.fromJson({
+      type: 'field_dropdown',
+      options: TYPES,
+    });
+    dropdown.setValidator(function(newOp) {
       thisBlock.updateType_(newOp);
     });
     this.appendDummyInput()
         .appendField(dropdown, 'TYPE')
         .appendField(this.newQuote_(true))
-        .appendField(new FieldTextInput(''), 'TEXT')
+        .appendField(
+            fieldRegistry.fromJson({
+              type: 'field_input',
+              text: '',
+            }),
+            'TEXT')
         .appendField(this.newQuote_(false));
     this.setOutput(true, 'String');
     this.setTooltip(function() {
@@ -696,9 +718,13 @@ const QUOTE_IMAGE_MIXIN = {
     const isLeft = this.RTL ? !open : open;
     const dataUri =
         isLeft ? this.QUOTE_IMAGE_LEFT_DATAURI : this.QUOTE_IMAGE_RIGHT_DATAURI;
-    return new FieldImage(
-        dataUri, this.QUOTE_IMAGE_WIDTH, this.QUOTE_IMAGE_HEIGHT,
-        isLeft ? '\u201C' : '\u201D');
+    return fieldRegistry.fromJson({
+      type: 'field_image',
+      src: dataUri,
+      width: this.QUOTE_IMAGE_WIDTH,
+      height: this.QUOTE_IMAGE_HEIGHT,
+      alt: isLeft ? '\u201C' : '\u201D',
+    });
   },
 };
 

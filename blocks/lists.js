@@ -12,6 +12,7 @@
 
 goog.module('Blockly.libraryBlocks.lists');
 
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
@@ -21,7 +22,6 @@ const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
 const {Msg} = goog.require('Blockly.Msg');
 const {Mutator} = goog.require('Blockly.Mutator');
 /* eslint-disable-next-line no-unused-vars */
@@ -314,8 +314,11 @@ blocks['lists_indexOf'] = {
     this.setOutput(true, 'Number');
     this.appendValueInput('VALUE').setCheck('Array').appendField(
         Msg['LISTS_INDEX_OF_INPUT_IN_LIST']);
-    this.appendValueInput('FIND').appendField(
-        new FieldDropdown(OPERATORS), 'END');
+    const operatorsDropdown = fieldRegistry.fromJson({
+      type: 'field_dropdown',
+      options: OPERATORS,
+    });
+    this.appendValueInput('FIND').appendField(operatorsDropdown, 'END');
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     const thisBlock = this;
@@ -346,8 +349,11 @@ blocks['lists_getIndex'] = {
     ];
     this.setHelpUrl(Msg['LISTS_GET_INDEX_HELPURL']);
     this.setStyle('list_blocks');
-    const modeMenu = new FieldDropdown(
-        MODE,
+    const modeMenu = fieldRegistry.fromJson({
+      type: 'field_dropdown',
+      options: MODE,
+    });
+    modeMenu.setValidator(
         /**
          * @param {*} value The input value.
          * @this {FieldDropdown}
@@ -525,8 +531,11 @@ blocks['lists_getIndex'] = {
     } else {
       this.appendDummyInput('AT');
     }
-    const menu = new FieldDropdown(
-        this.WHERE_OPTIONS,
+    const menu = fieldRegistry.fromJson({
+      type: 'field_dropdown',
+      options: this.WHERE_OPTIONS,
+    });
+    menu.setValidator(
         /**
          * @param {*} value The input value.
          * @this {FieldDropdown}
@@ -575,8 +584,12 @@ blocks['lists_setIndex'] = {
     this.setStyle('list_blocks');
     this.appendValueInput('LIST').setCheck('Array').appendField(
         Msg['LISTS_SET_INDEX_INPUT_IN_LIST']);
+    const operationDropdown = fieldRegistry.fromJson({
+      type: 'field_dropdown',
+      options: MODE,
+    });
     this.appendDummyInput()
-        .appendField(new FieldDropdown(MODE), 'MODE')
+        .appendField(operationDropdown, 'MODE')
         .appendField('', 'SPACE');
     this.appendDummyInput('AT');
     this.appendValueInput('TO').appendField(Msg['LISTS_SET_INDEX_INPUT_TO']);
@@ -688,8 +701,11 @@ blocks['lists_setIndex'] = {
     } else {
       this.appendDummyInput('AT');
     }
-    const menu = new FieldDropdown(
-        this.WHERE_OPTIONS,
+    const menu = fieldRegistry.fromJson({
+      type: 'field_dropdown',
+      options: this.WHERE_OPTIONS,
+    });
+    menu.setValidator(
         /**
          * @param {*} value The input value.
          * @this {FieldDropdown}
@@ -816,8 +832,11 @@ blocks['lists_getSublist'] = {
     } else {
       this.appendDummyInput('AT' + n);
     }
-    const menu = new FieldDropdown(
-        this['WHERE_OPTIONS_' + n],
+    const menu = fieldRegistry.fromJson({
+      type: 'field_dropdown',
+      options: this['WHERE_OPTIONS_' + n],
+    });
+    menu.setValidator(
         /**
          * @param {*} value The input value.
          * @this {FieldDropdown}
@@ -898,14 +917,16 @@ blocks['lists_split'] = {
   init: function() {
     // Assign 'this' to a variable for use in the closures below.
     const thisBlock = this;
-    const dropdown = new FieldDropdown(
-        [
-          [Msg['LISTS_SPLIT_LIST_FROM_TEXT'], 'SPLIT'],
-          [Msg['LISTS_SPLIT_TEXT_FROM_LIST'], 'JOIN'],
-        ],
-        function(newMode) {
-          thisBlock.updateType_(newMode);
-        });
+    const dropdown = fieldRegistry.fromJson({
+      type: 'field_dropdown',
+      options: [
+        [Msg['LISTS_SPLIT_LIST_FROM_TEXT'], 'SPLIT'],
+        [Msg['LISTS_SPLIT_TEXT_FROM_LIST'], 'JOIN'],
+      ],
+    });
+    dropdown.setValidator(function(newMode) {
+      thisBlock.updateType_(newMode);
+    });
     this.setHelpUrl(Msg['LISTS_SPLIT_HELPURL']);
     this.setStyle('list_blocks');
     this.appendValueInput('INPUT').setCheck('String').appendField(

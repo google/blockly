@@ -19,6 +19,7 @@ const Events = goog.require('Blockly.Events');
 const Procedures = goog.require('Blockly.Procedures');
 const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
@@ -28,10 +29,6 @@ const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
 const {config} = goog.require('Blockly.config');
-/* eslint-disable-next-line no-unused-vars */
-const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');
-const {FieldLabel} = goog.require('Blockly.FieldLabel');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 const {Msg} = goog.require('Blockly.Msg');
 const {Mutator} = goog.require('Blockly.Mutator');
 const {Names} = goog.require('Blockly.Names');
@@ -454,7 +451,11 @@ blocks['procedures_defnoreturn'] = {
    */
   init: function() {
     const initName = Procedures.findLegalName('', this);
-    const nameField = new FieldTextInput(initName, Procedures.rename);
+    const nameField = fieldRegistry.fromJson({
+      type: 'field_input',
+      text: initName,
+    });
+    nameField.setValidator(Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
         .appendField(Msg['PROCEDURES_DEFNORETURN_TITLE'])
@@ -497,7 +498,11 @@ blocks['procedures_defreturn'] = {
    */
   init: function() {
     const initName = Procedures.findLegalName('', this);
-    const nameField = new FieldTextInput(initName, Procedures.rename);
+    const nameField = fieldRegistry.fromJson({
+      type: 'field_input',
+      text: initName,
+    });
+    nameField.setValidator(Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
         .appendField(Msg['PROCEDURES_DEFRETURN_TITLE'])
@@ -546,7 +551,12 @@ blocks['procedures_mutatorcontainer'] = {
     this.appendStatementInput('STACK');
     this.appendDummyInput('STATEMENT_INPUT')
         .appendField(Msg['PROCEDURES_ALLOW_STATEMENTS'])
-        .appendField(new FieldCheckbox('TRUE'), 'STATEMENTS');
+        .appendField(
+            fieldRegistry.fromJson({
+              type: 'field_checkbox',
+              checked: true,
+            }),
+            'STATEMENTS');
     this.setStyle('procedure_blocks');
     this.setTooltip(Msg['PROCEDURES_MUTATORCONTAINER_TOOLTIP']);
     this.contextMenu = false;
@@ -559,7 +569,11 @@ blocks['procedures_mutatorarg'] = {
    * @this {Block}
    */
   init: function() {
-    const field = new FieldTextInput(Procedures.DEFAULT_ARG, this.validator_);
+    const field = fieldRegistry.fromJson({
+      type: 'field_input',
+      text: Procedures.DEFAULT_ARG,
+    });
+    field.setValidator(this.validator_);
     // Hack: override showEditor to do just a little bit more work.
     // We don't have a good place to hook into the start of a text edit.
     field.oldShowEditorFn_ = field.showEditor_;
@@ -810,7 +824,10 @@ const PROCEDURE_CALL_COMMON = {
         }
       } else {
         // Add new input.
-        const newField = new FieldLabel(this.arguments_[i]);
+        const newField = fieldRegistry.fromJson({
+          type: 'field_label',
+          text: this.arguments_[i],
+        });
         const input = this.appendValueInput('ARG' + i)
                           .setAlign(Align.RIGHT)
                           .appendField(newField, 'ARGNAME' + i);

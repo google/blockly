@@ -332,7 +332,7 @@ export class FieldDropdown extends Field<string> {
   /**
    * Disposes of events and DOM-references belonging to the dropdown editor.
    */
-  private dropdownDispose_() {
+  protected dropdownDispose_() {
     if (this.menu_) {
       this.menu_.dispose();
     }

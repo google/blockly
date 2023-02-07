@@ -210,6 +210,9 @@ export class VariableMap {
           variableList.splice(i, 1);
           eventUtils.fire(
               new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
+          if (variableList.length === 0) {
+            this.variableMap.delete(variable.type);
+          }
           return;
         }
       }

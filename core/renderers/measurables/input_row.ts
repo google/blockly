@@ -24,8 +24,6 @@ import {Types} from './types.js';
 
 /**
  * An object containing information about a row that holds one or more inputs.
- *
- * @alias Blockly.blockRendering.InputRow
  */
 export class InputRow extends Row {
   /**

@@ -25,8 +25,6 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space a field takes up during
  * rendering
- *
- * @alias Blockly.blockRendering.Field
  */
 export class Field extends Measurable {
   isEditable: boolean;

@@ -10,7 +10,6 @@
  * generate a preview block and starter code for the block (block definition and
  * generator stub. Uses the Block Factory namespace. Depends on the FactoryUtils
  * for its code generation functions.
- *
  */
 'use strict';
 

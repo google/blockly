@@ -21,7 +21,6 @@ let useDebugger = false;
  * Returns whether the debugger is turned on.
  *
  * @returns Whether the debugger is turned on.
- * @alias Blockly.blockRendering.debug.isDebuggerEnabled
  * @internal
  */
 export function isDebuggerEnabled(): boolean {
@@ -31,7 +30,6 @@ export function isDebuggerEnabled(): boolean {
 /**
  * Turn on the blocks debugger.
  *
- * @alias Blockly.blockRendering.debug.startDebugger
  * @deprecated March 2022. Use the rendering debugger in @blockly/dev-tools.
  * See https://www.npmjs.com/package/@blockly/dev-tools for more information.
  * @internal
@@ -46,7 +44,6 @@ export function startDebugger() {
 /**
  * Turn off the blocks debugger.
  *
- * @alias Blockly.blockRendering.debug.stopDebugger
  * @deprecated March 2022. Use the rendering debugger in @blockly/dev-tools.
  * See https://www.npmjs.com/package/@blockly/dev-tools for more information.
  * @internal

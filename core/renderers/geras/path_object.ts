@@ -25,8 +25,6 @@ import type {ConstantProvider} from './constants.js';
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
- *
- * @alias Blockly.geras.PathObject
  */
 export class PathObject extends BasePathObject {
   /** @internal */

@@ -24,8 +24,6 @@ import {ToolboxItem} from './toolbox_item.js';
 /**
  * Class for a toolbox separator. This is the thin visual line that appears on
  * the toolbox. This item is not interactable.
- *
- * @alias Blockly.ToolboxSeparator
  */
 export class ToolboxSeparator extends ToolboxItem {
   /** Name used for registering a toolbox separator. */

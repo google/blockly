@@ -24,8 +24,6 @@ import type {RenderedConnection} from './rendered_connection.js';
 
 /**
  * Class for connection type checking logic.
- *
- * @alias Blockly.ConnectionChecker
  */
 export class ConnectionChecker implements IConnectionChecker {
   /**

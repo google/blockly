@@ -7,7 +7,6 @@
 /**
  * @fileoverview Javascript for Block Library's Storage Class.
  * Depends on Block Library for its namespace.
- *
  */
 
 'use strict';

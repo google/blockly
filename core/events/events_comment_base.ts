@@ -26,8 +26,6 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Abstract class for a comment event.
- *
- * @alias Blockly.Events.CommentBase
  */
 export class CommentBase extends AbstractEvent {
   override isBlank = true;

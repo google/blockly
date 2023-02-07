@@ -10,7 +10,6 @@
  * the lower case name of the category, and contains the Category object for
  * that particular category. Also has a list of core block types provided
  * by Blockly.
- *
  */
  'use strict';
 

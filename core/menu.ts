@@ -24,8 +24,6 @@ import * as style from './utils/style.js';
 
 /**
  * A basic menu class.
- *
- * @alias Blockly.Menu
  */
 export class Menu {
   /**

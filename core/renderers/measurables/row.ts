@@ -23,8 +23,6 @@ import {Types} from './types.js';
 /**
  * An object representing a single row on a rendered block and all of its
  * subcomponents.
- *
- * @alias Blockly.blockRendering.Row
  */
 export class Row {
   /** @internal */

@@ -24,8 +24,6 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space a statement input takes up
  * during rendering
- *
- * @alias Blockly.blockRendering.StatementInput
  */
 export class StatementInput extends InputConnection {
   /**

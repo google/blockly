@@ -39,8 +39,6 @@ import type {Renderer} from './renderer.js';
  * This measure pass does not propagate changes to the block (although fields
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
- *
- * @alias Blockly.geras.RenderInfo
  */
 export class RenderInfo extends BaseRenderInfo {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.

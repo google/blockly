@@ -33,8 +33,6 @@ export type FieldColourValidator = FieldValidator<string>;
 
 /**
  * Class for a colour input field.
- *
- * @alias Blockly.FieldColour
  */
 export class FieldColour extends Field<string> {
   /**

@@ -24,7 +24,6 @@ import * as registry from '../registry.js';
  *
  * @param name The name of the serializer to register.
  * @param serializer The serializer to register.
- * @alias Blockly.serialization.registry.register
  */
 export function register(name: string, serializer: ISerializer) {
   registry.register(registry.Type.SERIALIZER, name, serializer);
@@ -34,7 +33,6 @@ export function register(name: string, serializer: ISerializer) {
  * Unregisters the serializer associated with the given name.
  *
  * @param name The name of the serializer to unregister.
- * @alias Blockly.serialization.registry.unregister
  */
 export function unregister(name: string) {
   registry.unregister(registry.Type.SERIALIZER, name);

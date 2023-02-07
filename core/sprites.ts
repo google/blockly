@@ -7,8 +7,6 @@
 /**
  * Contains the path to a single png tat holds the images for the trashcan
  * as well as the zoom controls.
- *
- * @alias Blockly.sprite.SPRITE
  */
 export const SPRITE = {
   width: 96,

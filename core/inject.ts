@@ -39,7 +39,6 @@ import {WorkspaceSvg} from './workspace_svg.js';
  * @param container Containing element, or its ID, or a CSS selector.
  * @param opt_options Optional dictionary of options.
  * @returns Newly created main workspace.
- * @alias Blockly.inject
  */
 export function inject(
     container: Element|string, opt_options?: BlocklyOptions): WorkspaceSvg {

@@ -27,8 +27,6 @@ import {PathObject} from './path_object.js';
 
 /**
  * The geras renderer.
- *
- * @alias Blockly.geras.Renderer
  */
 export class Renderer extends BaseRenderer {
   /** The renderer's highlight constant provider. */

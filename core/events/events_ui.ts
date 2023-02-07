@@ -23,7 +23,6 @@ import * as eventUtils from './utils.js';
  * Class for a UI event.
  *
  * @deprecated December 2020. Instead use a more specific UI event.
- * @alias Blockly.Events.Ui
  */
 export class Ui extends UiBase {
   blockId: AnyDuringMigration;

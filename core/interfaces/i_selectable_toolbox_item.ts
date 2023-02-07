@@ -18,8 +18,6 @@ import type {IToolboxItem} from './i_toolbox_item.js';
 
 /**
  * Interface for an item in the toolbox that can be selected.
- *
- * @alias Blockly.ISelectableToolboxItem
  */
 export interface ISelectableToolboxItem extends IToolboxItem {
   /**

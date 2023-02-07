@@ -59,7 +59,6 @@ let nextId = 0;
  * primarily be used for IDs that end up in the DOM.
  *
  * @returns The next unique identifier.
- * @alias Blockly.utils.idGenerator.getNextUniqueId
  */
 export function getNextUniqueId(): string {
   return 'blockly-' + (nextId++).toString(36);
@@ -70,7 +69,6 @@ export function getNextUniqueId(): string {
  *
  * @see internal.genUid
  * @returns A globally unique ID string.
- * @alias Blockly.utils.idGenerator.genUid
  */
 export function genUid(): string {
   return internal.genUid();

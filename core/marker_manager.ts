@@ -19,8 +19,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class to manage the multiple markers and the cursor on a workspace.
- *
- * @alias Blockly.MarkerManager
  */
 export class MarkerManager {
   /** The name of the local marker. */

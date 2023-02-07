@@ -51,8 +51,6 @@ import {CollapsibleToolboxCategory} from './collapsible_category.js';
 /**
  * Class for a Toolbox.
  * Creates the toolbox's DOM.
- *
- * @alias Blockly.Toolbox
  */
 export class Toolbox extends DeleteArea implements IAutoHideable,
                                                    IKeyboardAccessible,

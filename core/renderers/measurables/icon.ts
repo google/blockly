@@ -24,8 +24,6 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space an icon takes up during
  * rendering
- *
- * @alias Blockly.blockRendering.Icon
  */
 export class Icon extends Measurable {
   isVisible: boolean;

@@ -23,8 +23,6 @@ import type {IComponent} from './i_component.js';
 /**
  * Interface for a component with custom behaviour when a block or bubble is
  * dragged over or dropped on top of it.
- *
- * @alias Blockly.IDragTarget
  */
 export interface IDragTarget extends IComponent {
   /**

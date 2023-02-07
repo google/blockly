@@ -12,7 +12,6 @@
  * move categories easily. Keeps track of the currently selected list
  * element. Also keeps track of all the user-created shadow blocks and
  * manipulates them as necessary.
- *
  */
 
 /**

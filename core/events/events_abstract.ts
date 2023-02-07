@@ -73,6 +73,9 @@ export abstract class Abstract {
    * @param json JSON representation.
    */
   fromJson(json: AbstractEventJson) {
+    deprecation.warn(
+        'Blockly.Events.Abstract.prototype.fromJson', 'version 9', 'version 10',
+        'Blockly.Events.fromJson');
     this.isBlank = false;
     this.group = json['group'] || '';
   }
@@ -88,9 +91,6 @@ export abstract class Abstract {
    */
   static fromJson(json: AbstractEventJson, workspace: Workspace, event: any):
       Abstract {
-    deprecation.warn(
-        'Blockly.Events.Abstract.prototype.fromJson', 'version 9', 'version 10',
-        'Blockly.Events.fromJson');
     event.isBlank = false;
     event.group = json['group'] || '';
     event.workspaceId = workspace.id;

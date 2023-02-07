@@ -330,7 +330,7 @@ export class FieldDropdown extends Field<string> {
   /**
    * Disposes of events and DOM-references belonging to the dropdown editor.
    */
-  private dropdownDispose_() {
+  protected dropdownDispose_() {
     if (this.menu_) {
       this.menu_.dispose();
     }
@@ -585,8 +585,8 @@ export class FieldDropdown extends Field<string> {
 
   /**
    * Use the `getText_` developer hook to override the field's text
-   * representation.  Get the selected option text. If the selected option is an
-   * image we return the image alt text.
+   * representation.  Get the selected option text.  If the selected option is
+   * an image we return the image alt text.
    *
    * @returns Selected option text.
    */

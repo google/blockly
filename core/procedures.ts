@@ -194,14 +194,18 @@ export function isNameUsed(
   for (const block of workspace.getAllBlocks(false)) {
     if (block === opt_exclude) continue;
 
-    if (isProcedureBlock(block) && block.isProcedureDef() &&
-        Names.equals(block.getProcedureModel().getName(), name)) {
-      return true;
-    }
     if (isLegacyProcedureDefBlock(block) &&
         Names.equals(block.getProcedureDef()[0], name)) {
       return true;
     }
+  }
+
+  const excludeModel = opt_exclude && isProcedureBlock(opt_exclude) ?
+      opt_exclude?.getProcedureModel() :
+      undefined;
+  for (const model of workspace.getProcedureMap().getProcedures()) {
+    if (model === excludeModel) continue;
+    if (Names.equals(model.getName(), name)) return true;
   }
   return false;
 }

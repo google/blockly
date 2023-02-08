@@ -7,7 +7,7 @@
 goog.declareModuleId('Blockly.test.procedures');
 
 import * as Blockly from '../../../build/src/core/blockly.js';
-import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} from '../test_helpers/procedures.js';
+import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock, MockProcedureModel} from '../test_helpers/procedures.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from '../test_helpers/setup_teardown.js';
 import {defineRowBlock} from '../test_helpers/block_definitions.js';
@@ -1083,10 +1083,35 @@ suite('Procedures', function() {
   });
 
   suite('isNameUsed', function() {
-    test('No Blocks', function() {
+    test('returns false if no blocks or models exists', function() {
       chai.assert.isFalse(
-          Blockly.Procedures.isNameUsed('name1', this.workspace)
-      );
+          Blockly.Procedures.isNameUsed('proc name', this.workspace));
+    });
+
+    test('returns true if an associated block exists', function() {
+      createProcDefBlock(this.workspace, false, [], 'proc name');
+      chai.assert.isTrue(
+          Blockly.Procedures.isNameUsed('proc name', this.workspace));
+    });
+
+    test('return false if an associated block does not exist', function() {
+      createProcDefBlock(this.workspace, false, [], 'proc name');
+      chai.assert.isFalse(
+          Blockly.Procedures.isNameUsed('other proc name', this.workspace));
+    });
+
+    test('returns true if an associated procedure model exists', function() {
+      this.workspace.getProcedureMap()
+          .add(new MockProcedureModel().setName('proc name'));
+      chai.assert.isTrue(
+          Blockly.Procedures.isNameUsed('proc name', this.workspace));
+    });
+
+    test('returns false if an associated procedure model exists', function() {
+      this.workspace.getProcedureMap()
+          .add(new MockProcedureModel().setName('proc name'));
+      chai.assert.isFalse(
+          Blockly.Procedures.isNameUsed('other proc name', this.workspace));
     });
   });
 
@@ -1271,22 +1296,6 @@ suite('Procedures', function() {
           this.callBlock.setFieldValue('proc name', 'NAME');
           this.clock.runAll();
           assertCallBlockStructure(this.callBlock);
-        });
-      });
-      suite('isNameUsed', function() {
-        setup(function() {
-          this.defBlock = this.workspace.newBlock(testSuite.defType);
-          this.defBlock.setFieldValue('proc name', 'NAME');
-          this.callBlock = this.workspace.newBlock(testSuite.callType);
-          this.callBlock.setFieldValue('proc name', 'NAME');
-        });
-        test('True', function() {
-          chai.assert.isTrue(
-              Blockly.Procedures.isNameUsed('proc name', this.workspace));
-        });
-        test('False', function() {
-          chai.assert.isFalse(
-              Blockly.Procedures.isNameUsed('unused proc name', this.workspace));
         });
       });
       suite('rename', function() {

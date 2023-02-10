@@ -14,7 +14,7 @@
         "prefer-rest-params": ["off"],
         "no-invalid-this": ["off"]
     },
-    "extends": "../../.eslintrc.json",
+    "extends": "../../.eslintrc.js",
     "parserOptions": {
       "sourceType": "module"
     }

@@ -733,7 +733,8 @@ function cleanBuildDir() {
 function format() {
   return gulp.src([
     'core/**/*.js', 'core/**/*.ts',
-    'blocks/**/*.js', 'blocks/**/*.ts'
+    'blocks/**/*.js', 'blocks/**/*.ts',
+    '.eslintrc.js'
   ], {base: '.'})
       .pipe(clangFormatter.format('file', clangFormat))
       .pipe(gulp.dest('.'));

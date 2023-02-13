@@ -291,14 +291,17 @@ export class FieldNumber extends FieldInput<number> {
    *
    * @returns The newly created number input editor.
    */
-  protected override widgetCreate_(): HTMLElement {
-    const htmlInput = super.widgetCreate_();
+  protected override widgetCreate_(): HTMLInputElement {
+    const htmlInput = super.widgetCreate_() as HTMLInputElement;
+    htmlInput.type = 'number';
 
     // Set the accessibility state
     if (this.min_ > -Infinity) {
+      htmlInput.min = `${this.min_}`;
       aria.setState(htmlInput, aria.State.VALUEMIN, this.min_);
     }
     if (this.max_ < Infinity) {
+      htmlInput.max = `${this.max_}`;
       aria.setState(htmlInput, aria.State.VALUEMAX, this.max_);
     }
     return htmlInput;

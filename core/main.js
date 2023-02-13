@@ -45,13 +45,14 @@ Object.defineProperties(Blockly, {
    */
   alert: {
     set: function(newAlert) {
-      deprecation.warn('Blockly.alert', 'December 2021', 'December 2022');
+      deprecation.warn(
+          'Blockly.alert', 'version 9', 'version 10',
+          'Blockly.dialog.setAlert');
       dialog.setAlert(newAlert);
     },
     get: function() {
       deprecation.warn(
-          'Blockly.alert', 'December 2021', 'December 2022',
-          'Blockly.dialog.alert()');
+          'Blockly.alert', 'version 9', 'version 10', 'Blockly.dialog.alert');
       return dialog.alert;
     },
   },
@@ -66,13 +67,15 @@ Object.defineProperties(Blockly, {
    */
   confirm: {
     set: function(newConfirm) {
-      deprecation.warn('Blockly.confirm', 'December 2021', 'December 2022');
+      deprecation.warn(
+          'Blockly.confirm', 'version 9', 'version 10',
+          'Blockly.dialog.setConfirm');
       dialog.setConfirm(newConfirm);
     },
     get: function() {
       deprecation.warn(
-          'Blockly.confirm', 'December 2021', 'December 2022',
-          'Blockly.dialog.confirm()');
+          'Blockly.confirm', 'version 9', 'version 10',
+          'Blockly.dialog.confirm');
       return dialog.confirm;
     },
   },
@@ -111,13 +114,14 @@ Object.defineProperties(Blockly, {
    */
   prompt: {
     set: function(newPrompt) {
-      deprecation.warn('Blockly.prompt', 'December 2021', 'December 2022');
+      deprecation.warn(
+          'Blockly.prompt', 'version 9', 'version 10',
+          'Blockly.dialog.setPrompt');
       dialog.setPrompt(newPrompt);
     },
     get: function() {
       deprecation.warn(
-          'Blockly.prompt', 'December 2021', 'December 2022',
-          'Blockly.dialog.prompt()');
+          'Blockly.prompt', 'version 9', 'version 10', 'Blockly.dialog.prompt');
       return dialog.prompt;
     },
   },

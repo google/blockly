@@ -48,6 +48,9 @@ export interface State {
   x?: number;
   y?: number;
   collapsed?: boolean;
+  deletable?: boolean;
+  movable?: boolean;
+  editable?: boolean;
   enabled?: boolean;
   inline?: boolean;
   data?: string;
@@ -141,6 +144,15 @@ function saveAttributes(block: Block, state: State) {
   }
   if (!block.isEnabled()) {
     state['enabled'] = false;
+  }
+  if (!block.isOwnDeletable()) {
+    state['deletable'] = false;
+  }
+  if (!block.isOwnMovable()) {
+    state['movable'] = false;
+  }
+  if (!block.isOwnEditable()) {
+    state['editable'] = false;
   }
   if (block.inputsInline !== undefined &&
       block.inputsInline !== block.inputsInlineDefault) {
@@ -436,6 +448,15 @@ function loadCoords(block: Block, state: State) {
 function loadAttributes(block: Block, state: State) {
   if (state['collapsed']) {
     block.setCollapsed(true);
+  }
+  if (state['deletable'] === false) {
+    block.setDeletable(false);
+  }
+  if (state['movable'] === false) {
+    block.setMovable(false);
+  }
+  if (state['editable'] === false) {
+    block.setEditable(false);
   }
   if (state['enabled'] === false) {
     block.setEnabled(false);

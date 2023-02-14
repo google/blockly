@@ -340,6 +340,17 @@ let content = `
   display: none;
 }
 
+/* Remove the increase and decrease arrows on the field number editor */
+input.blocklyHtmlInput[type=number]::-webkit-inner-spin-button,
+input.blocklyHtmlInput[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .blocklyMainBackground {
   stroke-width: 1;
   stroke: #c6c6c6;  /* Equates to #ddd due to border being off-pixel. */

@@ -185,13 +185,19 @@ export class RenderedConnection extends Connection {
    * @param y New absolute y coordinate, in workspace coordinates.
    */
   moveTo(x: number, y: number) {
+    const dx = this.x - x;
+    const dy = this.y - y;
+
     if (this.trackedState_ === RenderedConnection.TrackedState.WILL_TRACK) {
       this.db_.addConnection(this, y);
       this.trackedState_ = RenderedConnection.TrackedState.TRACKED;
-    } else if (this.trackedState_ === RenderedConnection.TrackedState.TRACKED) {
+    } else if (
+        this.trackedState_ === RenderedConnection.TrackedState.TRACKED &&
+        (dx !== 0 || dy !== 0)) {
       this.db_.removeConnection(this, this.y);
       this.db_.addConnection(this, y);
     }
+
     this.x = x;
     this.y = y;
   }

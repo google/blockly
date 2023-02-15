@@ -35,11 +35,6 @@ const {posixPath} = require('../helpers');
 ////////////////////////////////////////////////////////////
 
 /**
- * Directory in which core/ can be found after passing through tsc.
- */
-const CORE_DIR = path.join(TSC_OUTPUT_DIR, 'core');
-
-/**
  * Suffix to add to compiled output files.
  */
 const COMPILED_SUFFIX = '_compressed';
@@ -104,49 +99,47 @@ const NAMESPACE_PROPERTY = '__namespace__';
 const chunks = [
   {
     name: 'blockly',
-    entry: posixPath((argv.compileTs) ?
-      path.join(TSC_OUTPUT_DIR, CORE_DIR, 'main.js') :
-      path.join(CORE_DIR, 'main.js')),
+    entry: path.join(TSC_OUTPUT_DIR, 'core', 'main.js'),
     exports: 'module$build$src$core$blockly',
     reexport: 'Blockly',
   },
   {
     name: 'blocks',
-    entry: 'blocks/blocks.js',
+    entry: path.join(TSC_OUTPUT_DIR, 'blocks', 'blocks.js'),
     exports: 'module$exports$Blockly$libraryBlocks',
     reexport: 'Blockly.libraryBlocks',
   },
   {
     name: 'javascript',
-    entry: 'generators/javascript/all.js',
+    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'javascript', 'all.js'),
     exports: 'module$exports$Blockly$JavaScript',
     reexport: 'Blockly.JavaScript',
     reexportOnly: 'javascriptGenerator',
   },
   {
     name: 'python',
-    entry: 'generators/python/all.js',
+    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'python', 'all.js'),
     exports: 'module$exports$Blockly$Python',
     reexport: 'Blockly.Python',
     reexportOnly: 'pythonGenerator',
   },
   {
     name: 'php',
-    entry: 'generators/php/all.js',
+    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'php', 'all.js'),
     exports: 'module$exports$Blockly$PHP',
     reexport: 'Blockly.PHP',
     reexportOnly: 'phpGenerator',
   },
   {
     name: 'lua',
-    entry: 'generators/lua/all.js',
+    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'lua', 'all.js'),
     exports: 'module$exports$Blockly$Lua',
     reexport: 'Blockly.Lua',
     reexportOnly: 'luaGenerator',
   },
   {
     name: 'dart',
-    entry: 'generators/dart/all.js',
+    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'dart', 'all.js'),
     exports: 'module$exports$Blockly$Dart',
     reexport: 'Blockly.Dart',
     reexportOnly: 'dartGenerator',
@@ -313,8 +306,6 @@ function buildDeps() {
   const roots = [
     path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base.js'),
     TSC_OUTPUT_DIR,
-    'blocks',
-    'generators',
     'tests/mocha',
   ];
 
@@ -691,13 +682,12 @@ function buildAdvancedCompilationTest() {
   }
 
   const srcs = [
-    TSC_OUTPUT_DIR + '/closure/goog/base_minimal.js',
-    TSC_OUTPUT_DIR + '/closure/goog/goog.js',
-    TSC_OUTPUT_DIR + '/core/**/*.js',
-    'blocks/**/*.js',
-    'generators/**/*.js',
+    TSC_OUTPUT_DIR + '/**/*.js',
     'tests/compile/main.js',
     'tests/compile/test_blocks.js',
+  ];
+  const ignore = [
+    TSC_OUTPUT_DIR + '/closure/goog/base.js',  // Use base_minimal.js only.
   ];
 
   // Closure Compiler options.
@@ -707,7 +697,7 @@ function buildAdvancedCompilationTest() {
     entry_point: './tests/compile/main.js',
     js_output_file: 'main_compressed.js',
   };
-  return gulp.src(srcs, {base: './'})
+  return gulp.src(srcs, {base: './', ignore})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
       .pipe(compile(options))

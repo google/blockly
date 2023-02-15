@@ -288,13 +288,12 @@ export class BlockDragger implements IBlockDragger {
    *     to where it ended the drag.
    */
   protected updateBlockAfterMove_(delta: Coordinate) {
-    this.draggingBlock_.moveConnections(delta.x, delta.y);
     this.fireMoveEvent_();
     if (this.draggedConnectionManager_.wouldConnectBlock()) {
       // Applying connections also rerenders the relevant blocks.
       this.draggedConnectionManager_.applyConnections();
     } else {
-      this.draggingBlock_.render();
+      this.draggingBlock_.queueRender();
     }
     this.draggingBlock_.scheduleSnapAndBump();
   }

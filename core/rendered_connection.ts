@@ -465,11 +465,11 @@ export class RenderedConnection extends Connection {
     const renderedChild = childBlock as BlockSvg;
     // Rerender the parent so that it may reflow.
     if (renderedParent.rendered) {
-      renderedParent.render();
+      renderedParent.queueRender();
     }
     if (renderedChild.rendered) {
       renderedChild.updateDisabled();
-      renderedChild.render();
+      renderedChild.queueRender();
       // Reset visibility, since the child is now a top block.
       renderedChild.getSvgRoot().style.display = 'block';
     }
@@ -490,7 +490,7 @@ export class RenderedConnection extends Connection {
 
     const parentBlock = this.getSourceBlock();
     if (parentBlock.rendered) {
-      parentBlock.render();
+      parentBlock.queueRender();
     }
   }
 
@@ -534,11 +534,11 @@ export class RenderedConnection extends Connection {
           this.type === ConnectionType.PREVIOUS_STATEMENT) {
         // Child block may need to square off its corners if it is in a stack.
         // Rendering a child will render its parent.
-        childBlock.render();
+        childBlock.queueRender();
       } else {
         // Child block does not change shape.  Rendering the parent node will
         // move its connected children into position.
-        parentBlock.render();
+        parentBlock.queueRender();
       }
     }
 

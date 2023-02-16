@@ -1642,7 +1642,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Update all of the connections on this block with the new locations
    * calculated during rendering.  Also move all of the connected blocks based
    * on the new connection locations.
-   * 
+   *
    * @internal
    */
   updateConnectionLocations() {

@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {BlockSvg} from './block_svg';
+import {BlockSvg} from './block_svg.js';
+import {Coordinate} from './utils/coordinate.js';
 
 
-const rootBlocks = new Set<BlockSvg>();
-const dirtyBlocks = new WeakSet<BlockSvg>();
+let rootBlocks = new Set<BlockSvg>();
+let dirtyBlocks = new WeakSet<BlockSvg>();
 let pid = 0;
 
 /**
@@ -43,11 +44,22 @@ function queueBlock(block: BlockSvg) {
  * Rerenders all of the blocks in the queue.
  */
 function doRenders() {
+  const workspaces = new Set([...rootBlocks].map((block) => block.workspace));
   for (const block of rootBlocks) {
+    // No need to render a dead block.
     if (block.isDisposed()) continue;
+    // Rendering will be triggered through the real root block.
+    if (block.getParent()) continue;
+
     renderBlock(block);
+    updateConnectionLocations(block, block.getRelativeToSurfaceXY());
+  }
+  for (const workspace of workspaces) {
+    workspace.resizeContents();
   }
 
+  rootBlocks = new Set();
+  dirtyBlocks = new Set();
   pid = 0;
 }
 
@@ -58,14 +70,29 @@ function doRenders() {
  * @param block The block to rerender.
  */
 function renderBlock(block: BlockSvg) {
+  if (!dirtyBlocks.has(block)) return;
   for (const child of block.getChildren(false)) {
     renderBlock(child);
   }
-  if (dirtyBlocks.has(block)) {
-    dirtyBlocks.delete(block);
-    rootBlocks.delete(block);
-    block.render(false);
-  } else {
-    block.updateConnectionLocations();
+  block.renderEfficiently();
+}
+
+/**
+ * Updates the connection database with the new locations of all of the
+ * connections that are children of the given block.
+ *
+ * @param block The block to update the connection locations of.
+ * @param blockTL The top left of the given block in workspace coordinates.
+ */
+function updateConnectionLocations(block: BlockSvg, blockTL: Coordinate) {
+  for (const conn of block.getConnections_(false)) {
+    const moved = conn.moveToOffset(blockTL);
+    const target = conn.targetBlock();
+    if (!conn.isSuperior()) continue;
+    if (!target) continue;
+    if (moved || dirtyBlocks.has(target)) {
+      updateConnectionLocations(
+          target, Coordinate.sum(blockTL, target.relativeCoords));
+    }
   }
 }

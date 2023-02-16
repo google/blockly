@@ -283,9 +283,6 @@ export class BlockDragger implements IBlockDragger {
 
   /**
    * Updates the necessary information to place a block at a certain location.
-   *
-   * @param delta The change in location from where the block started the drag
-   *     to where it ended the drag.
    */
   protected updateBlockAfterMove_() {
     this.fireMoveEvent_();

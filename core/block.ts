@@ -796,6 +796,15 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
+   * Return whether this block's own deletable property is true or false.
+   *
+   * @returns True if the block's deletable property is true, false otherwise.
+   */
+  isOwnDeletable(): boolean {
+    return this.deletable_;
+  }
+
+  /**
    * Set whether this block is deletable or not.
    *
    * @param deletable True if deletable.
@@ -808,10 +817,21 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Get whether this block is movable or not.
    *
    * @returns True if movable.
+   * @internal
    */
   isMovable(): boolean {
     return this.movable_ && !this.isShadow_ && !this.isDeadOrDying() &&
         !this.workspace.options.readOnly;
+  }
+
+  /**
+   * Return whether this block's own movable property is true or false.
+   *
+   * @returns True if the block's movable property is true, false otherwise.
+   * @internal
+   */
+  isOwnMovable(): boolean {
+    return this.movable_;
   }
 
   /**
@@ -882,10 +902,20 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Get whether this block is editable or not.
    *
    * @returns True if editable.
+   * @internal
    */
   isEditable(): boolean {
     return this.editable_ && !this.isDeadOrDying() &&
         !this.workspace.options.readOnly;
+  }
+
+  /**
+   * Return whether this block's own editable property is true or false.
+   *
+   * @returns True if the block's editable property is true, false otherwise.
+   */
+  isOwnEditable(): boolean {
+    return this.editable_;
   }
 
   /**

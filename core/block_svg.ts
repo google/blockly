@@ -341,9 +341,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const oldXY = this.getRelativeToSurfaceXY();
     if (newParent) {
       (newParent as BlockSvg).getSvgRoot().appendChild(svgRoot);
-      const newXY = this.getRelativeToSurfaceXY();
-      // Move the connections to match the child's new position.
-      this.moveConnections(newXY.x - oldXY.x, newXY.y - oldXY.y);
     } else if (oldParent) {
       // If we are losing a parent, we want to move our DOM element to the
       // root of the workspace.

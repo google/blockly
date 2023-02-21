@@ -308,14 +308,12 @@ export class RenderedConnection extends Connection {
           (shape as unknown as PathLeftShape).pathLeft +
           svgPaths.lineOnAxis('h', xLen);
     }
-    const xy = this.sourceBlock_.getRelativeToSurfaceXY();
-    const x = this.x - xy.x;
-    const y = this.y - xy.y;
+    const offset = this.offsetInBlock_;
     this.highlightPath = dom.createSvgElement(
         Svg.PATH, {
           'class': 'blocklyHighlightedConnectionPath',
           'd': steps,
-          'transform': 'translate(' + x + ',' + y + ')' +
+          'transform': `translate(${offset.x}, ${offset.y})` +
               (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
         },
         this.sourceBlock_.getSvgRoot());

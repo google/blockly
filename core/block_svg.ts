@@ -511,7 +511,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (!collapsed) {
       this.updateCollapsed_();
     } else if (this.rendered) {
-      this.render();
+      this.queueRender();
       // Don't bump neighbours. Users like to store collapsed functions together
       // and bumping makes them go out of alignment.
     }
@@ -1255,7 +1255,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const removed = super.removeInput(name, opt_quiet);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       // Removing an input will cause the block to change shape.
       this.bumpNeighbours();
     }
@@ -1291,7 +1291,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const input = super.appendInput_(type, name);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       // Adding an input will cause the block to change shape.
       this.bumpNeighbours();
     }

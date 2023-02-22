@@ -126,7 +126,7 @@ export class Input {
     }
 
     if (this.sourceBlock.rendered) {
-      (this.sourceBlock as BlockSvg).render();
+      (this.sourceBlock as BlockSvg).queueRender();
       // Adding a field will cause the block to change shape.
       this.sourceBlock.bumpNeighbours();
     }

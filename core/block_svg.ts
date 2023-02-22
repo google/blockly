@@ -144,6 +144,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   private translation = '';
 
   /**
+   * The ID of the setTimeout callback for bumping neighbours, or 0 if no bump
+   * is currently scheduled.
+   */
+  private bumpNeighboursPid = 0;
+
+  /**
    * The location of the top left of this block (in workspace coordinates)
    * relative to either its parent block, or the workspace origin if it has no
    * parent.
@@ -151,6 +157,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @internal
    */
   relativeCoords = new Coordinate(0, 0);
+
 
   /**
    * @param workspace The block's workspace.
@@ -1441,7 +1448,15 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * up on screen, because that creates confusion for end-users.
    */
   override bumpNeighbours() {
-    this.getRootBlock().bumpNeighboursInternal();
+    if (this.bumpNeighboursPid) return;
+    const group = eventUtils.getGroup();
+
+    this.bumpNeighboursPid = setTimeout(() => {
+      eventUtils.setGroup(group);
+      this.getRootBlock().bumpNeighboursInternal();
+      eventUtils.setGroup(false);
+      this.bumpNeighboursPid = 0;
+    }, config.bumpDelay);
   }
 
   /**
@@ -1496,11 +1511,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       eventUtils.setGroup(false);
     }, config.bumpDelay / 2);
 
-    setTimeout(() => {
-      eventUtils.setGroup(group);
-      this.bumpNeighbours();
-      eventUtils.setGroup(false);
-    }, config.bumpDelay);
+    this.bumpNeighbours();
   }
 
   /**

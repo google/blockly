@@ -77,12 +77,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * the block.
    */
   static readonly COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
-  override decompose?: ((p1: Workspace) => BlockSvg);
+  override decompose?: (p1: Workspace) => BlockSvg;
   // override compose?: ((p1: BlockSvg) => void)|null;
-  saveConnections?: ((p1: BlockSvg) => AnyDuringMigration);
+  saveConnections?: (p1: BlockSvg) => void;
   customContextMenu?:
-      ((p1: Array<ContextMenuOption|LegacyContextMenuOption>) =>
-           AnyDuringMigration)|null;
+      (p1: Array<ContextMenuOption|LegacyContextMenuOption>) => void;
 
   /**
    * An property used internally to reference the block's rendering debugger.
@@ -153,34 +152,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   constructor(workspace: WorkspaceSvg, prototypeName: string, opt_id?: string) {
     super(workspace, prototypeName, opt_id);
     this.workspace = workspace;
-
-    /**
-     * An optional method called when a mutator dialog is first opened.
-     * This function must create and initialize a top-level block for the
-     * mutator dialog, and return it. This function should also populate this
-     * top-level block with any sub-blocks which are appropriate. This method
-     * must also be coupled with defining a `compose` method for the default
-     * mutation dialog button and UI to appear.
-     */
-    this.decompose = this.decompose;
-
-    /**
-     * An optional method called when a mutator dialog saves its content.
-     * This function is called to modify the original block according to new
-     * settings. This method must also be coupled with defining a `decompose`
-     * method for the default mutation dialog button and UI to appear.
-     */
-    this.compose = this.compose;
-
-    /**
-     * An optional method called by the default mutator UI which gives the block
-     * a chance to save information about what child blocks are connected to
-     * what mutated connections.
-     */
-    this.saveConnections = this.saveConnections;
-
-    /** An optional method for defining custom block context menu items. */
-    this.customContextMenu = this.customContextMenu;
     this.svgGroup_ = dom.createSvgElement(Svg.G, {});
 
     /** A block style object. */
@@ -191,7 +162,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
         workspace.getRenderer().makePathObject(this.svgGroup_, this.style);
 
     const svgPath = this.pathObject.svgPath;
-    (svgPath as AnyDuringMigration).tooltip = this;
+    (svgPath as any).tooltip = this;
     Tooltip.bindMouseEvents(svgPath);
 
     // Expose this block's ID on its top-level SVG group.
@@ -639,11 +610,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.workspace.options.readOnly || !this.contextMenu) {
       return null;
     }
-    // AnyDuringMigration because:  Argument of type '{ block: this; }' is not
-    // assignable to parameter of type 'Scope'.
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-        ContextMenuRegistry.ScopeType.BLOCK,
-        {block: this} as AnyDuringMigration);
+        ContextMenuRegistry.ScopeType.BLOCK, {block: this});
 
     // Allow the block to add or modify menuOptions.
     if (this.customContextMenu) {
@@ -839,10 +807,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
     dom.removeNode(this.svgGroup_);
     blockWorkspace.resizeContents();
-    // Sever JavaScript to DOM connections.
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'SVGGElement'.
-    this.svgGroup_ = null as AnyDuringMigration;
     dom.stopTextWidthCache();
   }
 
@@ -944,8 +908,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param text The text, or null to delete.
    */
   override setCommentText(text: string|null) {
-    // AnyDuringMigration because:  Property 'get' does not exist on type
-    // '(name: string) => void'.
     if (this.commentModel.text === text) {
       return;
     }

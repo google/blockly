@@ -541,6 +541,7 @@ suite('Procedures', function() {
           Blockly.Events.setGroup(false);
 
           this.workspace.undo();
+          this.clock.runAll();
 
           chai.assert.isTrue(
             defBlock.getFieldValue('PARAMS').includes('param1'),

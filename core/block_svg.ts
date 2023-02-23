@@ -515,13 +515,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       return;
     }
     super.setCollapsed(collapsed);
-    if (!collapsed) {
-      this.updateCollapsed_();
-    } else if (this.rendered) {
-      this.queueRender();
-      // Don't bump neighbours. Users like to store collapsed functions together
-      // and bumping makes them go out of alignment.
-    }
+    this.updateCollapsed_();
   }
 
   /**
@@ -1452,9 +1446,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const group = eventUtils.getGroup();
 
     this.bumpNeighboursPid = setTimeout(() => {
+      const oldGroup = eventUtils.getGroup();
       eventUtils.setGroup(group);
       this.getRootBlock().bumpNeighboursInternal();
-      eventUtils.setGroup(false);
+      eventUtils.setGroup(oldGroup);
       this.bumpNeighboursPid = 0;
     }, config.bumpDelay);
   }
@@ -1652,6 +1647,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
       // TODO(#4592): Update all markers on the block.
       this.workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
+    }
+    for (const input of this.inputList) {
+      for (const field of input.fieldRow) {
+        field.updateMarkers_();
+      }
     }
   }
 

@@ -184,15 +184,13 @@ export class Names {
    */
   getDistinctName(name: string, type: NameType|string): string {
     let safeName = this.safeName_(name);
-    let i = '';
-    while (this.dbReverse.has(safeName + i) ||
-           this.reservedWords.has(safeName + i)) {
+    let i: number|null = null;
+    while (this.dbReverse.has(`${safeName}${i ?? ''}`) ||
+           this.reservedWords.has(`${safeName}${i ?? ''}`)) {
       // Collision with existing name.  Create a unique name.
-      // AnyDuringMigration because:  Type 'string | 2' is not assignable to
-      // type 'string'.
-      i = (i ? i + 1 : 2) as AnyDuringMigration;
+      i = i ? i + 1 : 2;
     }
-    safeName += i;
+    safeName = `${safeName}${i ?? ''}`;
     this.dbReverse.add(safeName);
     const isVar =
         type === NameType.VARIABLE || type === NameType.DEVELOPER_VARIABLE;

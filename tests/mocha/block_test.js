@@ -1822,6 +1822,7 @@ suite('Blocks', function() {
         blockA.setCollapsed(false);
 
         // The child blocks should be enabled.
+        this.clock.runAll();
         chai.assert.isFalse(blockB.disabled);
         chai.assert.isFalse(blockB.getSvgRoot().classList.contains('blocklyDisabled'));
       });

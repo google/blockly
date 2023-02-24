@@ -84,19 +84,6 @@ suite('Events', function() {
       }, true);
     });
 
-    test('Old UI event without block', function() {
-      const TEST_GROUP_ID = 'testGroup';
-      eventUtils.setGroup(TEST_GROUP_ID);
-      const event = new Blockly.Events.Ui(null, 'foo', 'bar', 'baz');
-      assertEventEquals(event, Blockly.Events.UI, '', null, {
-        'element': 'foo',
-        'oldValue': 'bar',
-        'newValue': 'baz',
-        'recordUndo': false,
-        'group': TEST_GROUP_ID,
-      }, true);
-    });
-
     suite('With simple blocks', function() {
       setup(function() {
         this.TEST_BLOCK_ID = 'test_block_id';
@@ -138,22 +125,6 @@ suite('Events', function() {
               'recordUndo': true,
               'group': '',
             });
-      });
-
-      test('Old UI event with block', function() {
-        const TEST_GROUP_ID = 'testGroup';
-        eventUtils.setGroup(TEST_GROUP_ID);
-        const event = new Blockly.Events.Ui(this.block, 'foo', 'bar', 'baz');
-        sinon.assert.calledOnce(this.genUidStub);
-        assertEventEquals(event, Blockly.Events.UI, this.workspace.id,
-            this.TEST_BLOCK_ID,
-            {
-              'element': 'foo',
-              'oldValue': 'bar',
-              'newValue': 'baz',
-              'recordUndo': false,
-              'group': TEST_GROUP_ID,
-            }, true);
       });
 
       test('Click with block', function() {
@@ -563,12 +534,6 @@ suite('Events', function() {
         }),
       },
     ];
-    const workspaceEventTestCases = [
-      {title: 'Finished Loading', class: Blockly.Events.FinishedLoading,
-        getArgs: (thisObj) => [thisObj.workspace],
-        getExpectedJson: (thisObj) => ({type: 'finished_loading', group: '',
-          workspaceId: thisObj.workspace.id})},
-    ];
     const workspaceCommentEventTestCases = [
       {title: 'Comment change', class: Blockly.Events.CommentChange,
         getArgs: (thisObj) => [thisObj.comment, 'bar', 'foo'],
@@ -604,9 +569,6 @@ suite('Events', function() {
           thisObj.shadowBlock = createSimpleTestBlock(thisObj.workspace);
           thisObj.shadowBlock.setShadow(true);
         }},
-      {title: 'Workspace events',
-        testCases: workspaceEventTestCases,
-        setup: (_) => {}},
       {title: 'WorkspaceComment events',
         testCases: workspaceCommentEventTestCases,
         setup: (thisObj) => {
@@ -908,13 +870,13 @@ suite('Events', function() {
       const block = this.workspace.newBlock('field_variable_test_block', '1');
       const events = [
         new Blockly.Events.Click(block),
-        new Blockly.Events.Ui(block, 'stackclick', undefined, undefined),
+        new Blockly.Events.BlockDrag(block, true),
       ];
       const filteredEvents = eventUtils.filter(events, true);
       // click and stackclick should both exist
       chai.assert.equal(filteredEvents.length, 2);
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.Click);
-      chai.assert.equal(filteredEvents[1].element, 'stackclick');
+      chai.assert.equal(filteredEvents[1].isStart, true);
     });
 
     test('Merging null operations dropped', function() {

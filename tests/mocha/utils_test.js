@@ -231,16 +231,6 @@ suite('Utils', function() {
     chai.assert.equal(resultString, 'before test subref string after', 'Message ref and subref dereferenced.');
   });
 
-  test('arrayRemove', function() {
-    const arr = [1, 2, 3, 2];
-    chai.assert.isFalse(Blockly.utils.arrayRemove(arr, 0), 'Remove Not found');
-    chai.assert.equal(arr.join(','), '1,2,3,2', 'Remove Not found result');
-    chai.assert.isTrue(Blockly.utils.arrayRemove(arr, 2), 'Remove item');
-    chai.assert.equal(arr.join(','), '1,3,2', 'Remove item result');
-    chai.assert.isTrue(Blockly.utils.arrayRemove(arr, 2), 'Remove item again');
-    chai.assert.equal(arr.join(','), '1,3', 'Remove item again result');
-  });
-
   test('XY_REGEX_', function() {
     const regex = Blockly.utils.svgMath.TEST_ONLY.XY_REGEX;
     let m;

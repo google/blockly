@@ -13,7 +13,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.Abstract');
 
-import * as deprecation from '../utils/deprecation.js';
 import * as common from '../common.js';
 import type {Workspace} from '../workspace.js';
 
@@ -65,19 +64,6 @@ export abstract class Abstract {
       'type': this.type,
       'group': this.group,
     };
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  fromJson(json: AbstractEventJson) {
-    deprecation.warn(
-        'Blockly.Events.Abstract.prototype.fromJson', 'version 9', 'version 10',
-        'Blockly.Events.fromJson');
-    this.isBlank = false;
-    this.group = json['group'] || '';
   }
 
   /**

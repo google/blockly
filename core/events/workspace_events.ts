@@ -45,7 +45,7 @@ export class FinishedLoading extends AbstractEvent {
    *
    * @returns JSON representation.
    */
-  override toJson(): FinishedLoadingJson {
+  /* override toJson(): FinishedLoadingJson {
     const json = super.toJson() as FinishedLoadingJson;
     if (!this.workspaceId) {
       throw new Error(
@@ -54,17 +54,17 @@ export class FinishedLoading extends AbstractEvent {
     }
     json['workspaceId'] = this.workspaceId;
     return json;
-  }
+  } */
 
   /**
    * Decode the JSON event.
    *
    * @param json JSON representation.
    */
-  override fromJson(json: FinishedLoadingJson) {
+  /* override fromJson(json: FinishedLoadingJson) {
     super.fromJson(json);
     this.workspaceId = json['workspaceId'];
-  }
+  } */
 }
 
 export interface FinishedLoadingJson extends AbstractEventJson {

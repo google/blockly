@@ -32,7 +32,6 @@ import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
 import * as xml from './utils/xml.js';
-import * as deprecation from './utils/deprecation.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 
@@ -80,14 +79,8 @@ export class Mutator extends Icon {
   private updateWorkspacePid: ReturnType<typeof setTimeout>|null = null;
 
   /** @param quarkNames List of names of sub-blocks for flyout. */
-  constructor(quarkNames: string[], block?: BlockSvg) {
-    if (!block) {
-      deprecation.warn(
-          'Calling the Mutator constructor without passing the block it is attached to',
-          'version 9', 'version 10',
-          'the constructor by passing the list of subblocks and the block instance to attach the mutator to');
-    }
-    super(block ?? null);
+  constructor(quarkNames: string[], block: BlockSvg) {
+    super(block);
     this.quarkNames = quarkNames;
   }
 

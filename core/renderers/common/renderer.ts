@@ -24,8 +24,6 @@ import type {BlockStyle, Theme} from '../../theme.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
 
 import {ConstantProvider} from './constants.js';
-import * as debug from './debug.js';
-import {Debug} from './debugger.js';
 import {Drawer} from './drawer.js';
 import type {IPathObject} from './i_path_object.js';
 import {RenderInfo} from './info.js';
@@ -164,17 +162,6 @@ export class Renderer implements IRegistrable {
   }
 
   /**
-   * Create a new instance of the renderer's debugger.
-   *
-   * @returns The renderer debugger.
-   * @suppress {strictModuleDepCheck} Debug renderer only included in
-   * playground.
-   */
-  protected makeDebugger_(): Debug {
-    return new Debug(this.getConstants());
-  }
-
-  /**
    * Create a new instance of the renderer's marker drawer.
    *
    * @param workspace The workspace the marker belongs to.
@@ -275,9 +262,6 @@ export class Renderer implements IRegistrable {
    * @internal
    */
   render(block: BlockSvg) {
-    if (debug.isDebuggerEnabled() && !block.renderingDebugger) {
-      block.renderingDebugger = this.makeDebugger_();
-    }
     const info = this.makeRenderInfo_(block);
     info.measure();
     this.makeDrawer_(block, info).draw();

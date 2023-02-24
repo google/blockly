@@ -14,9 +14,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.xml');
 
-import * as deprecation from './deprecation.js';
-
-
 /**
  * Injected dependencies.  By default these are just (and have the
  * same types as) the corresponding DOM Window properties, but the
@@ -63,28 +60,6 @@ export function injectDependencies(dependencies: {
  * Namespace for Blockly's XML.
  */
 export const NAME_SPACE = 'https://developers.google.com/blockly/xml';
-
-/**
- * Get the document object to use for XML serialization.
- *
- * @returns The document object.
- * @deprecated No longer provided by Blockly.
- */
-export function getDocument(): Document {
-  deprecation.warn('Blockly.utils.xml.getDocument', 'version 9', 'version 10');
-  return document;
-}
-
-/**
- * Get the document object to use for XML serialization.
- *
- * @param xmlDocument The document object to use.
- * @deprecated No longer provided by Blockly.
- */
-export function setDocument(xmlDocument: Document) {
-  deprecation.warn('Blockly.utils.xml.setDocument', 'version 9', 'version 10');
-  document = xmlDocument;
-}
 
 /**
  * Create DOM element for XML.

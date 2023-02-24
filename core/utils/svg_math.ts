@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.utils.svgMath');
 import type {WorkspaceSvg} from '../workspace_svg.js';
 
 import {Coordinate} from './coordinate.js';
-import * as deprecation from './deprecation.js';
 import {Rect} from './rect.js';
 import * as style from './style.js';
 
@@ -104,20 +103,6 @@ export function getInjectionDivXY(element: Element): Coordinate {
     element = element.parentNode as Element;
   }
   return new Coordinate(x, y);
-}
-
-/**
- * Check if 3D transforms are supported by adding an element
- * and attempting to set the property.
- *
- * @returns True if 3D transforms are supported.
- * @deprecated No longer provided by Blockly.
- */
-export function is3dSupported(): boolean {
-  // All browsers support translate3d in 2022.
-  deprecation.warn(
-      'Blockly.utils.svgMath.is3dSupported', 'version 9', 'version 10');
-  return true;
 }
 
 /**

@@ -20,14 +20,13 @@ import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
-import * as deprecation from './utils/deprecation.js';
 
 
 /**
  * Class for an icon.
  */
 export abstract class Icon {
-  protected block_: BlockSvg|null;
+  protected block_: BlockSvg;
   /** The icon SVG group. */
   iconGroup_: SVGGElement|null = null;
 
@@ -44,12 +43,7 @@ export abstract class Icon {
   protected iconXY_: Coordinate|null = null;
 
   /** @param block The block associated with this icon. */
-  constructor(block: BlockSvg|null) {
-    if (!block) {
-      deprecation.warn(
-          'Calling the Icon constructor with a null block', 'version 9',
-          'version 10', 'a non-null block');
-    }
+  constructor(block: BlockSvg) {
     this.block_ = block;
   }
 
@@ -187,10 +181,6 @@ export abstract class Icon {
    * @returns The block this icon is attached to.
    */
   protected getBlock(): BlockSvg {
-    if (!this.block_) {
-      throw new Error('Block is not set for this icon.');
-    }
-
     return this.block_;
   }
 }

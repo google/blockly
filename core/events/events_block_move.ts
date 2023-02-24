@@ -14,7 +14,6 @@ goog.declareModuleId('Blockly.Events.BlockMove');
 
 import type {Block} from '../block.js';
 import {ConnectionType} from '../connection_type.js';
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 
@@ -108,33 +107,6 @@ export class BlockMove extends BlockBase {
       json['recordUndo'] = this.recordUndo;
     }
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: BlockMoveJson) {
-    deprecation.warn(
-        'Blockly.Events.BlockMove.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
-    super.fromJson(json);
-    this.oldParentId = json['oldParentId'];
-    this.oldInputName = json['oldInputName'];
-    if (json['oldCoordinate']) {
-      const xy = json['oldCoordinate'].split(',');
-      this.oldCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
-    }
-    this.newParentId = json['newParentId'];
-    this.newInputName = json['newInputName'];
-    if (json['newCoordinate']) {
-      const xy = json['newCoordinate'].split(',');
-      this.newCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
-    }
-    if (json['recordUndo'] !== undefined) {
-      this.recordUndo = json['recordUndo'];
-    }
   }
 
   /**

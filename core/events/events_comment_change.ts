@@ -12,7 +12,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.CommentChange');
 
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import type {WorkspaceComment} from '../workspace_comment.js';
 
@@ -75,20 +74,6 @@ export class CommentChange extends CommentBase {
     json['oldContents'] = this.oldContents_;
     json['newContents'] = this.newContents_;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: CommentChangeJson) {
-    deprecation.warn(
-        'Blockly.Events.CommentChange.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
-    super.fromJson(json);
-    this.oldContents_ = json['oldContents'];
-    this.newContents_ = json['newContents'];
   }
 
   /**

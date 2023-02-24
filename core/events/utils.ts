@@ -425,29 +425,7 @@ export function fromJson(
   const eventClass = get(json['type']);
   if (!eventClass) throw Error('Unknown event type.');
 
-  if (eventClassHasStaticFromJson(eventClass)) {
-    return (eventClass as any).fromJson(json, workspace);
-  }
-
-  // Fallback to the old deserialization method.
-  const event = new eventClass();
-  event.fromJson(json);
-  event.workspaceId = workspace.id;
-  return event;
-}
-
-/**
- * Returns true if the given event constructor has /its own/ static fromJson
- * method.
- *
- * Returns false if no static fromJson method exists on the contructor, or if
- * the static fromJson method is inheritted.
- */
-function eventClassHasStaticFromJson(eventClass: new (...p: any[]) => Abstract):
-    boolean {
-  const untypedEventClass = eventClass as any;
-  return Object.getOwnPropertyDescriptors(untypedEventClass).fromJson &&
-      typeof untypedEventClass.fromJson === 'function';
+  return (eventClass as any).fromJson(json, workspace);
 }
 
 /**

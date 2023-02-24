@@ -12,7 +12,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.VarBase');
 
-import * as deprecation from '../utils/deprecation.js';
 import type {VariableModel} from '../variable_model.js';
 
 import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
@@ -54,19 +53,6 @@ export class VarBase extends AbstractEvent {
     }
     json['varId'] = this.varId;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: VarBaseJson) {
-    deprecation.warn(
-        'Blockly.Events.VarBase.prototype.fromJson', 'version 9', 'version 10',
-        'Blockly.Events.fromJson');
-    super.fromJson(json);
-    this.varId = json['varId'];
   }
 
   /**

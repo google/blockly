@@ -14,7 +14,6 @@ goog.declareModuleId('Blockly.blockRendering');
 
 import * as registry from '../../registry.js';
 import type {Theme} from '../../theme.js';
-import * as deprecation from '../../utils/deprecation.js';
 import {Measurable} from '../measurables/base.js';
 import {BottomRow} from '../measurables/bottom_row.js';
 import {Connection} from '../measurables/connection.js';
@@ -39,7 +38,6 @@ import {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 
 import {ConstantProvider} from './constants.js';
-import * as debug from './debug.js';
 import {Debug} from './debugger.js';
 import {Drawer} from './drawer.js';
 import type {IPathObject} from './i_path_object.js';
@@ -66,21 +64,6 @@ export function register(name: string, rendererClass: Function) {
  */
 export function unregister(name: string) {
   registry.unregister(registry.Type.RENDERER, name);
-}
-
-/**
- * Turn off the blocks debugger.
- *
- * @deprecated Use the debug renderer in **\@blockly/dev-tools** (See {@link
- *     https://www.npmjs.com/package/@blockly/dev-tools}.)
- * @internal
- */
-export function stopDebugger() {
-  deprecation.warn(
-      'Blockly.blockRendering.stopDebugger()', 'September 2021',
-      'September 2022',
-      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
-  debug.stopDebugger();
 }
 
 /**

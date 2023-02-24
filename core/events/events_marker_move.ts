@@ -14,7 +14,6 @@ goog.declareModuleId('Blockly.Events.MarkerMove');
 
 import type {Block} from '../block.js';
 import {ASTNode} from '../keyboard_nav/ast_node.js';
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
 import {AbstractEventJson} from './events_abstract.js';
@@ -93,22 +92,6 @@ export class MarkerMove extends UiBase {
     json['oldNode'] = this.oldNode;
     json['newNode'] = this.newNode;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: MarkerMoveJson) {
-    deprecation.warn(
-        'Blockly.Events.MarkerMove.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
-    super.fromJson(json);
-    this.isCursor = json['isCursor'];
-    this.blockId = json['blockId'];
-    this.oldNode = json['oldNode'];
-    this.newNode = json['newNode'];
   }
 
   /**

@@ -7,7 +7,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.VarDelete');
 
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';
 
@@ -61,20 +60,6 @@ export class VarDelete extends VarBase {
     json['varType'] = this.varType;
     json['varName'] = this.varName;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: VarDeleteJson) {
-    deprecation.warn(
-        'Blockly.Events.VarDelete.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
-    super.fromJson(json);
-    this.varType = json['varType'];
-    this.varName = json['varName'];
   }
 
   /**

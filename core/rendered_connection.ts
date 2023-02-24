@@ -492,7 +492,6 @@ export class RenderedConnection extends Connection {
       renderedParent.queueRender();
     }
     if (renderedChild.rendered) {
-      renderedChild.updateDisabled();
       renderedChild.queueRender();
       // Reset visibility, since the child is now a top block.
       renderedChild.getSvgRoot().style.display = 'block';
@@ -547,12 +546,6 @@ export class RenderedConnection extends Connection {
     const parentRendered = parentBlock.rendered;
     const childRendered = childBlock.rendered;
 
-    if (parentRendered) {
-      parentBlock.updateDisabled();
-    }
-    if (childRendered) {
-      childBlock.updateDisabled();
-    }
     if (parentRendered && childRendered) {
       if (this.type === ConnectionType.NEXT_STATEMENT ||
           this.type === ConnectionType.PREVIOUS_STATEMENT) {

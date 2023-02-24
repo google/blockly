@@ -334,8 +334,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       this.workspace.getCanvas().appendChild(svgRoot);
       this.translate(oldXY.x, oldXY.y);
     }
-
-    this.applyColour();
   }
 
   /**
@@ -534,7 +532,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
 
     if (!collapsed) {
-      this.updateDisabled();
       this.removeInput(collapsedInputName);
       return;
     }
@@ -1616,6 +1613,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       this.updateCollapsed_();
     }
     this.workspace.getRenderer().render(this);
+    this.applyColour();
     this.tightenChildrenEfficiently();
 
     dom.stopTextWidthCache();

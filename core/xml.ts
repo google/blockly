@@ -565,7 +565,6 @@ export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
           topBlockSvg.setConnectionTracking(true);
         }
       }, 1);
-      topBlockSvg.updateDisabled();
       // Allow the scrollbars to resize and move based on the new contents.
       // TODO(@picklesrus): #387. Remove when domToBlock avoids resizing.
       (workspace as WorkspaceSvg).resizeContents();

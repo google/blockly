@@ -185,12 +185,12 @@ export class Names {
   getDistinctName(name: string, type: NameType|string): string {
     let safeName = this.safeName_(name);
     let i: number|null = null;
-    while (this.dbReverse.has(`${safeName}${i ?? ''}`) ||
-           this.reservedWords.has(`${safeName}${i ?? ''}`)) {
+    while (this.dbReverse.has(safeName + (i ?? '')) ||
+           this.reservedWords.has(safeName + (i ?? ''))) {
       // Collision with existing name.  Create a unique name.
       i = i ? i + 1 : 2;
     }
-    safeName = `${safeName}${i ?? ''}`;
+    safeName += (i ?? '');
     this.dbReverse.add(safeName);
     const isVar =
         type === NameType.VARIABLE || type === NameType.DEVELOPER_VARIABLE;

@@ -70,7 +70,7 @@ suite('WorkspaceSvg', function() {
         'Block 2 position y');
   });
 
-  test('Replacing shadow disposes svg', function() {
+  test('Replacing shadow disposes of old shadow', function() {
     const dom = Blockly.utils.xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '<block type="test_val_in">' +
@@ -84,7 +84,7 @@ suite('WorkspaceSvg', function() {
     const blocks = this.workspace.getAllBlocks(false);
     chai.assert.equal(blocks.length, 2, 'Block count');
     const shadowBlock = blocks[1];
-    chai.assert.exists(shadowBlock.getSvgRoot());
+    chai.assert.equal(false, shadowBlock.isDeadOrDying());
 
     const block = this.workspace.newBlock('simple_test_block');
     block.initSvg();

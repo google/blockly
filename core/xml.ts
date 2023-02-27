@@ -710,8 +710,8 @@ function applyCommentTagNodes(xmlChildren: Element[], block: Block) {
     const xmlChild = xmlChildren[i];
     const text = xmlChild.textContent;
     const pinned = xmlChild.getAttribute('pinned') === 'true';
-    const width = parseInt(xmlChild.getAttribute('w') ?? 'NaN', 10);
-    const height = parseInt(xmlChild.getAttribute('h') ?? 'NaN', 10);
+    const width = parseInt(xmlChild.getAttribute('w') ?? '50', 10);
+    const height = parseInt(xmlChild.getAttribute('h') ?? '50', 10);
 
     block.setCommentText(text);
     block.commentModel.pinned = pinned;

@@ -48,7 +48,7 @@ export class VarDelete extends VarBase {
    */
   override toJson(): VarDeleteJson {
     const json = super.toJson() as VarDeleteJson;
-    if (!this.varType) {
+    if (this.varType === undefined) {
       throw new Error(
           'The var type is undefined. Either pass a variable to ' +
           'the constructor, or call fromJson');

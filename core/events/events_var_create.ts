@@ -53,7 +53,7 @@ export class VarCreate extends VarBase {
    */
   override toJson(): VarCreateJson {
     const json = super.toJson() as VarCreateJson;
-    if (!this.varType) {
+    if (this.varType === undefined) {
       throw new Error(
           'The var type is undefined. Either pass a variable to ' +
           'the constructor, or call fromJson');

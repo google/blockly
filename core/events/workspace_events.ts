@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Events.FinishedLoading');
 
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
-import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
+import {Abstract as AbstractEvent} from './events_abstract.js';
 import * as eventUtils from './utils.js';
 
 
@@ -39,36 +39,6 @@ export class FinishedLoading extends AbstractEvent {
 
     this.workspaceId = opt_workspace.id;
   }
-
-  /**
-   * Encode the event as JSON.
-   *
-   * @returns JSON representation.
-   */
-  /* override toJson(): FinishedLoadingJson {
-    const json = super.toJson() as FinishedLoadingJson;
-    if (!this.workspaceId) {
-      throw new Error(
-          'The workspace ID is undefined. Either pass a workspace to ' +
-          'the constructor, or call fromJson');
-    }
-    json['workspaceId'] = this.workspaceId;
-    return json;
-  } */
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  /* override fromJson(json: FinishedLoadingJson) {
-    super.fromJson(json);
-    this.workspaceId = json['workspaceId'];
-  } */
-}
-
-export interface FinishedLoadingJson extends AbstractEventJson {
-  workspaceId: string;
 }
 
 registry.register(

@@ -39,7 +39,7 @@ import {VarDelete, VarDeleteJson} from './events_var_delete.js';
 import {VarRename, VarRenameJson} from './events_var_rename.js';
 import {ViewportChange, ViewportChangeJson} from './events_viewport.js';
 import * as eventUtils from './utils.js';
-import {FinishedLoading, FinishedLoadingJson} from './workspace_events.js';
+import {FinishedLoading} from './workspace_events.js';
 
 
 // Events.
@@ -73,7 +73,6 @@ export {CommentDelete};
 export {CommentMove};
 export {CommentMoveJson};
 export {FinishedLoading};
-export {FinishedLoadingJson};
 export {MarkerMove};
 export {MarkerMoveJson};
 export {Selected};

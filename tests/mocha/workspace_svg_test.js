@@ -92,7 +92,7 @@ suite('WorkspaceSvg', function() {
     const inputConnection =
         this.workspace.getTopBlocks()[0].getInput('NAME').connection;
     inputConnection.connect(block.outputConnection);
-    chai.assert.exists(block.getSvgRoot());
+    chai.assert.equal(false, block.isDeadOrDying());
     chai.assert.equal(true, shadowBlock.isDeadOrDying());
   });
 

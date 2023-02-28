@@ -127,8 +127,9 @@ export class Connection implements IASTNodeLocationWithBlock {
     if (orphan) {
       const orphanConnection = this.type === INPUT ? orphan.outputConnection :
                                                      orphan.previousConnection;
+      if (!orphanConnection) return;
       const connection = Connection.getConnectionForOrphanedConnection(
-          childBlock, (orphanConnection));
+          childBlock, orphanConnection);
       if (connection) {
         orphanConnection.connect(connection);
       } else {
@@ -676,11 +677,11 @@ function getSingleConnection(block: Block, orphanBlock: Block): Connection|
     null {
   let foundConnection = null;
   const output = orphanBlock.outputConnection;
-  const typeChecker = output.getConnectionChecker();
+  const typeChecker = output?.getConnectionChecker();
 
   for (let i = 0, input; input = block.inputList[i]; i++) {
     const connection = input.connection;
-    if (connection && typeChecker.canConnect(output, connection, false)) {
+    if (connection && typeChecker?.canConnect(output, connection, false)) {
       if (foundConnection) {
         return null;  // More than one connection.
       }

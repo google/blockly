@@ -144,6 +144,15 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   private translation = '';
 
   /**
+   * The location of the top left of this block (in workspace coordinates)
+   * relative to either its parent block, or the workspace origin if it has no
+   * parent.
+   *
+   * @internal
+   */
+  relativeCoords = new Coordinate(0, 0);
+
+  /**
    * @param workspace The block's workspace.
    * @param prototypeName Name of the language object containing type-specific
    *     functions for this block.
@@ -382,6 +391,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   translate(x: number, y: number) {
     this.translation = `translate(${x}, ${y})`;
+    this.relativeCoords = new Coordinate(x, y);
     this.getSvgRoot().setAttribute('transform', this.getTranslation());
   }
 
@@ -1339,7 +1349,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @param all If true, return all connections even hidden ones.
    *     Otherwise, for a non-rendered block return an empty list, and for a
-   * collapsed block don't return inputs connections.
+   *     collapsed block don't return inputs connections.
    * @returns Array of connections.
    * @internal
    */
@@ -1584,6 +1594,43 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     } finally {
       this.renderIsInProgress_ = false;
     }
+  }
+
+  /**
+   * Renders this block in a way that's compatible with the more efficient
+   * render management system.
+   *
+   * @internal
+   */
+  renderEfficiently() {
+    this.rendered = true;
+    dom.startTextWidthCache();
+
+    if (this.isCollapsed()) {
+      this.updateCollapsed_();
+    }
+    this.workspace.getRenderer().render(this);
+    this.tightenChildrenEfficiently();
+
+    dom.stopTextWidthCache();
+    this.updateMarkers_();
+  }
+
+  /**
+   * Tightens all children of this block so they are snuggly rendered against
+   * their parent connections.
+   *
+   * Does not update connection locations, so that they can be updated more
+   * efficiently by the render management system.
+   *
+   * @internal
+   */
+  tightenChildrenEfficiently() {
+    for (const input of this.inputList) {
+      const conn = input.connection as RenderedConnection;
+      if (conn) conn.tightenEfficiently();
+    }
+    if (this.nextConnection) this.nextConnection.tightenEfficiently();
   }
 
   /** Redraw any attached marker or cursor svgs if needed. */

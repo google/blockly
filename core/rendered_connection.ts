@@ -183,23 +183,31 @@ export class RenderedConnection extends Connection {
    *
    * @param x New absolute x coordinate, in workspace coordinates.
    * @param y New absolute y coordinate, in workspace coordinates.
+   * @return True if the position of the connection in the connection db
+   *     was updated.
    */
-  moveTo(x: number, y: number) {
+  moveTo(x: number, y: number): boolean {
     const dx = this.x - x;
     const dy = this.y - y;
+
+    let moved = false;
 
     if (this.trackedState_ === RenderedConnection.TrackedState.WILL_TRACK) {
       this.db_.addConnection(this, y);
       this.trackedState_ = RenderedConnection.TrackedState.TRACKED;
+      moved = true;
     } else if (
         this.trackedState_ === RenderedConnection.TrackedState.TRACKED &&
         (dx !== 0 || dy !== 0)) {
       this.db_.removeConnection(this, this.y);
       this.db_.addConnection(this, y);
+      moved = true;
     }
 
     this.x = x;
     this.y = y;
+
+    return moved;
   }
 
   /**
@@ -207,9 +215,11 @@ export class RenderedConnection extends Connection {
    *
    * @param dx Change to x coordinate, in workspace units.
    * @param dy Change to y coordinate, in workspace units.
+   * @return True if the position of the connection in the connection db
+   *     was updated.
    */
-  moveBy(dx: number, dy: number) {
-    this.moveTo(this.x + dx, this.y + dy);
+  moveBy(dx: number, dy: number): boolean {
+    return this.moveTo(this.x + dx, this.y + dy);
   }
 
   /**
@@ -218,9 +228,11 @@ export class RenderedConnection extends Connection {
    *
    * @param blockTL The location of the top left corner of the block, in
    *     workspace coordinates.
+   * @return True if the position of the connection in the connection db
+   *     was updated.
    */
-  moveToOffset(blockTL: Coordinate) {
-    this.moveTo(
+  moveToOffset(blockTL: Coordinate): boolean {
+    return this.moveTo(
         blockTL.x + this.offsetInBlock_.x, blockTL.y + this.offsetInBlock_.y);
   }
 
@@ -261,10 +273,24 @@ export class RenderedConnection extends Connection {
       }
       // Workspace coordinates.
       const xy = svgMath.getRelativeXY(svgRoot);
-      block!.getSvgRoot().setAttribute(
-          'transform', 'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
+      block!.translate(xy.x - dx, xy.y - dy);
       block!.moveConnections(-dx, -dy);
     }
+  }
+
+  /**
+   * Moves the blocks on either side of this connection right next to
+   * each other, based on their local offsets, not global positions.
+   *
+   * @internal
+   */
+  tightenEfficiently() {
+    const target = this.targetConnection;
+    const block = this.targetBlock();
+    if (!target || !block) return;
+    const offset =
+        Coordinate.difference(this.offsetInBlock_, target.offsetInBlock_);
+    block.translate(offset.x, offset.y);
   }
 
   /**

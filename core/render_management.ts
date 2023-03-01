@@ -72,11 +72,14 @@ function doRenders() {
  * @param block The block to rerender.
  */
 function renderBlock(block: BlockSvg) {
-  if (!dirtyBlocks.has(block)) return;
   for (const child of block.getChildren(false)) {
     renderBlock(child);
   }
-  block.renderEfficiently();
+  if (dirtyBlocks.has(block)) {
+    block.renderEfficiently();
+  } else {
+    block.applyColour();
+  }
 }
 
 /**

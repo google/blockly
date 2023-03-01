@@ -303,15 +303,9 @@ export class InsertionMarkerManager {
     if (lastOnStack && lastOnStack !== this.topBlock.nextConnection) {
       available.push(lastOnStack);
       this.lastOnStack = lastOnStack;
-      if (this.lastMarker) {
-        eventUtils.disable();
-        try {
-          this.lastMarker.dispose();
-        } finally {
-          eventUtils.enable();
-        }
+      if (!this.lastMarker) {
+        this.lastMarker = this.createMarkerBlock(lastOnStack.getSourceBlock());
       }
-      this.lastMarker = this.createMarkerBlock(lastOnStack.getSourceBlock());
     }
     return available;
   }
@@ -561,8 +555,31 @@ export class InsertionMarkerManager {
       // probably recreate the marker block (e.g. in getCandidate_), which is
       // called more often during the drag, but creating a block that often
       // might be too slow, so we only do it if necessary.
-      this.firstMarker = this.createMarkerBlock(this.topBlock);
-      insertionMarker = isLastInStack ? this.lastMarker : this.firstMarker;
+      if (isLastInStack && this.lastOnStack) {
+        if (this.lastMarker) {
+          eventUtils.disable();
+          try {
+            this.lastMarker.dispose();
+          } finally {
+            eventUtils.enable();
+          }
+        }
+        this.lastMarker =
+            this.createMarkerBlock(this.lastOnStack.getSourceBlock());
+        insertionMarker = this.lastMarker;
+      } else {
+        if (this.firstMarker) {
+          eventUtils.disable();
+          try {
+            this.firstMarker.dispose();
+          } finally {
+            eventUtils.enable();
+          }
+        }
+        this.firstMarker = this.createMarkerBlock(this.topBlock);
+        insertionMarker = this.firstMarker;
+      }
+
       if (!insertionMarker) {
         throw new Error(
             'Cannot show the insertion marker because there is no insertion ' +

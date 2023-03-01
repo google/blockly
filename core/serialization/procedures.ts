@@ -138,8 +138,9 @@ export class ProcedureSerializer<ProcedureModel extends IProcedureModel,
 
   /** Serializes the procedure models of the given workspace. */
   save(workspace: Workspace): State[]|null {
-    return workspace.getProcedureMap().getProcedures().map(
+    const save = workspace.getProcedureMap().getProcedures().map(
         (proc) => saveProcedure(proc));
+    return save.length ? save : null;
   }
 
   /**

@@ -279,8 +279,8 @@ export class RenderedConnection extends Connection {
   }
 
   /**
-   * Moves the block son either side of this connection right next to eachother,
-   * based on their local offsets, not global positions.
+   * Moves the blocks on either side of this connection right next to
+   * each other, based on their local offsets, not global positions.
    *
    * @internal
    */

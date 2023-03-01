@@ -8,7 +8,7 @@ import {BlockSvg} from './block_svg.js';
 import {Coordinate} from './utils/coordinate.js';
 
 
-let rootBlocks = new Set<BlockSvg>();
+const rootBlocks = new Set<BlockSvg>();
 let dirtyBlocks = new WeakSet<BlockSvg>();
 let pid = 0;
 
@@ -48,6 +48,8 @@ function doRenders() {
   for (const block of rootBlocks) {
     // No need to render a dead block.
     if (block.isDisposed()) continue;
+    // A render for this block may have been queued, and then the block was
+    // connected to a parent, so it is no longer a root block.
     // Rendering will be triggered through the real root block.
     if (block.getParent()) continue;
 
@@ -58,7 +60,7 @@ function doRenders() {
     workspace.resizeContents();
   }
 
-  rootBlocks = new Set();
+  rootBlocks.clear();
   dirtyBlocks = new Set();
   pid = 0;
 }
@@ -82,17 +84,17 @@ function renderBlock(block: BlockSvg) {
  * connections that are children of the given block.
  *
  * @param block The block to update the connection locations of.
- * @param blockTL The top left of the given block in workspace coordinates.
+ * @param blockOrigin The top left of the given block in workspace coordinates.
  */
-function updateConnectionLocations(block: BlockSvg, blockTL: Coordinate) {
+function updateConnectionLocations(block: BlockSvg, blockOrigin: Coordinate) {
   for (const conn of block.getConnections_(false)) {
-    const moved = conn.moveToOffset(blockTL);
+    const moved = conn.moveToOffset(blockOrigin);
     const target = conn.targetBlock();
     if (!conn.isSuperior()) continue;
     if (!target) continue;
     if (moved || dirtyBlocks.has(target)) {
       updateConnectionLocations(
-          target, Coordinate.sum(blockTL, target.relativeCoords));
+          target, Coordinate.sum(blockOrigin, target.relativeCoords));
     }
   }
 }

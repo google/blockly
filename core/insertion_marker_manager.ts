@@ -133,6 +133,11 @@ export class InsertionMarkerManager {
     this.firstMarker = this.createMarkerBlock(this.topBlock);
 
     this.availableConnections = this.initAvailableConnections();
+
+    if (this.lastOnStack) {
+      this.lastMarker =
+          this.createMarkerBlock(this.lastOnStack.getSourceBlock());
+    }
   }
 
   /**
@@ -142,18 +147,8 @@ export class InsertionMarkerManager {
    */
   dispose() {
     this.availableConnections.length = 0;
-
-    eventUtils.disable();
-    try {
-      if (this.firstMarker) {
-        this.firstMarker.dispose();
-      }
-      if (this.lastMarker) {
-        this.lastMarker.dispose();
-      }
-    } finally {
-      eventUtils.enable();
-    }
+    this.disposeInsertionMarker(this.firstMarker);
+    this.disposeInsertionMarker(this.lastMarker);
   }
 
   /**
@@ -289,10 +284,8 @@ export class InsertionMarkerManager {
   }
 
   /**
-   * Populate the list of available connections on this block stack.  This
-   * should only be called once, at the beginning of a drag. If the stack has
-   * more than one block, this function will populate lastOnStack and create
-   * the corresponding insertion marker.
+   * Populate the list of available connections on this block stack. If the
+   * stack has more than one block, this function will also update lastOnStack.
    *
    * @returns A list of available connections.
    */
@@ -303,9 +296,6 @@ export class InsertionMarkerManager {
     if (lastOnStack && lastOnStack !== this.topBlock.nextConnection) {
       available.push(lastOnStack);
       this.lastOnStack = lastOnStack;
-      if (!this.lastMarker) {
-        this.lastMarker = this.createMarkerBlock(lastOnStack.getSourceBlock());
-      }
     }
     return available;
   }
@@ -556,26 +546,12 @@ export class InsertionMarkerManager {
       // called more often during the drag, but creating a block that often
       // might be too slow, so we only do it if necessary.
       if (isLastInStack && this.lastOnStack) {
-        if (this.lastMarker) {
-          eventUtils.disable();
-          try {
-            this.lastMarker.dispose();
-          } finally {
-            eventUtils.enable();
-          }
-        }
+        this.disposeInsertionMarker(this.lastMarker);
         this.lastMarker =
             this.createMarkerBlock(this.lastOnStack.getSourceBlock());
         insertionMarker = this.lastMarker;
       } else {
-        if (this.firstMarker) {
-          eventUtils.disable();
-          try {
-            this.firstMarker.dispose();
-          } finally {
-            eventUtils.enable();
-          }
-        }
+        this.disposeInsertionMarker(this.firstMarker);
         this.firstMarker = this.createMarkerBlock(this.topBlock);
         insertionMarker = this.firstMarker;
       }
@@ -744,6 +720,20 @@ export class InsertionMarkerManager {
       result.push(this.lastMarker);
     }
     return result;
+  }
+
+  /**
+   * Safely disposes of an insertion marker.
+   */
+  private disposeInsertionMarker(marker: BlockSvg|null) {
+    if (marker) {
+      eventUtils.disable();
+      try {
+        marker.dispose();
+      } finally {
+        eventUtils.enable();
+      }
+    }
   }
 }
 

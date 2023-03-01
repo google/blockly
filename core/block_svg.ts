@@ -56,6 +56,7 @@ import * as svgMath from './utils/svg_math.js';
 import {Warning} from './warning.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import {queueRender} from './render_management.js';
 
 
 /**
@@ -311,9 +312,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const oldXY = this.getRelativeToSurfaceXY();
     if (newParent) {
       (newParent as BlockSvg).getSvgRoot().appendChild(svgRoot);
-      const newXY = this.getRelativeToSurfaceXY();
-      // Move the connections to match the child's new position.
-      this.moveConnections(newXY.x - oldXY.x, newXY.y - oldXY.y);
     } else if (oldParent) {
       // If we are losing a parent, we want to move our DOM element to the
       // root of the workspace.
@@ -1541,7 +1539,17 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
-   * Lays out and reflows a block based on its contents and settings.
+   * Triggers a rerender after a delay to allow for batching.
+   *
+   * @internal
+   */
+  queueRender() {
+    queueRender(this);
+  }
+
+  /**
+   * Immediately lays out and reflows a block based on its contents and
+   * settings.
    *
    * @param opt_bubble If false, just render this block.
    *   If true, also render block's parent, grandparent, etc.  Defaults to true.
@@ -1559,7 +1567,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
         this.updateCollapsed_();
       }
       this.workspace.getRenderer().render(this);
-      this.updateConnectionLocations_();
+      this.updateConnectionLocations();
 
       if (opt_bubble !== false) {
         const parentBlock = this.getParent();
@@ -1593,8 +1601,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Update all of the connections on this block with the new locations
    * calculated during rendering.  Also move all of the connected blocks based
    * on the new connection locations.
+   *
+   * @internal
    */
-  private updateConnectionLocations_() {
+  updateConnectionLocations() {
     const blockTL = this.getRelativeToSurfaceXY();
     // Don't tighten previous or output connections because they are inferior
     // connections.

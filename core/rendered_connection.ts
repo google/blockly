@@ -185,13 +185,19 @@ export class RenderedConnection extends Connection {
    * @param y New absolute y coordinate, in workspace coordinates.
    */
   moveTo(x: number, y: number) {
+    const dx = this.x - x;
+    const dy = this.y - y;
+
     if (this.trackedState_ === RenderedConnection.TrackedState.WILL_TRACK) {
       this.db_.addConnection(this, y);
       this.trackedState_ = RenderedConnection.TrackedState.TRACKED;
-    } else if (this.trackedState_ === RenderedConnection.TrackedState.TRACKED) {
+    } else if (
+        this.trackedState_ === RenderedConnection.TrackedState.TRACKED &&
+        (dx !== 0 || dy !== 0)) {
       this.db_.removeConnection(this, this.y);
       this.db_.addConnection(this, y);
     }
+
     this.x = x;
     this.y = y;
   }
@@ -302,14 +308,12 @@ export class RenderedConnection extends Connection {
           (shape as unknown as PathLeftShape).pathLeft +
           svgPaths.lineOnAxis('h', xLen);
     }
-    const xy = this.sourceBlock_.getRelativeToSurfaceXY();
-    const x = this.x - xy.x;
-    const y = this.y - xy.y;
+    const offset = this.offsetInBlock_;
     this.highlightPath = dom.createSvgElement(
         Svg.PATH, {
           'class': 'blocklyHighlightedConnectionPath',
           'd': steps,
-          'transform': 'translate(' + x + ',' + y + ')' +
+          'transform': `translate(${offset.x}, ${offset.y})` +
               (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
         },
         this.sourceBlock_.getSvgRoot());
@@ -459,11 +463,11 @@ export class RenderedConnection extends Connection {
     const renderedChild = childBlock as BlockSvg;
     // Rerender the parent so that it may reflow.
     if (renderedParent.rendered) {
-      renderedParent.render();
+      renderedParent.queueRender();
     }
     if (renderedChild.rendered) {
       renderedChild.updateDisabled();
-      renderedChild.render();
+      renderedChild.queueRender();
       // Reset visibility, since the child is now a top block.
       renderedChild.getSvgRoot().style.display = 'block';
     }
@@ -484,7 +488,7 @@ export class RenderedConnection extends Connection {
 
     const parentBlock = this.getSourceBlock();
     if (parentBlock.rendered) {
-      parentBlock.render();
+      parentBlock.queueRender();
     }
   }
 
@@ -528,11 +532,11 @@ export class RenderedConnection extends Connection {
           this.type === ConnectionType.PREVIOUS_STATEMENT) {
         // Child block may need to square off its corners if it is in a stack.
         // Rendering a child will render its parent.
-        childBlock.render();
+        childBlock.queueRender();
       } else {
         // Child block does not change shape.  Rendering the parent node will
         // move its connected children into position.
-        parentBlock.render();
+        parentBlock.queueRender();
       }
     }
 

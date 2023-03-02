@@ -479,8 +479,8 @@ export class RenderedConnection extends Connection {
   /**
    * Disconnect two blocks that are connected by this connection.
    *
-   * @param parentBlock The superior block.
-   * @param childBlock The inferior block.
+   * @param setParent Whether to set the parent of the disconnected block or
+   *     not, defaults to true.
    */
   override disconnect(setParent = true) {
     const {parentConnection, childConnection} =

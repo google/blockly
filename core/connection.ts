@@ -243,7 +243,12 @@ export class Connection implements IASTNodeLocationWithBlock {
     return this.isConnected();
   }
 
-  /** Disconnect this connection. */
+  /**
+   * Disconnect this connection.
+   *
+   * @param setParent Whether to set the parent of the disconnected block or
+   *     not, defaults to true.
+   */
   disconnect(setParent = true) {
     const {parentConnection, childConnection} =
         this.getParentAndChildConnections();
@@ -278,6 +283,10 @@ export class Connection implements IASTNodeLocationWithBlock {
     if (!eventGroup) eventUtils.setGroup(false);
   }
 
+  /**
+   * @returns The parent connection and child connection, given this connection
+   *     and the connection it is connected to.
+   */
   protected getParentAndChildConnections():
       {parentConnection?: Connection, childConnection?: Connection} {
     if (!this.targetConnection) return {};

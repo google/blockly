@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Class representing inline inputs with connections on a rendered
- * block.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.InlineInput');
 
@@ -23,7 +17,7 @@ import {Types} from './types.js';
 
 /**
  * An object containing information about the space an inline input takes up
- * during rendering
+ * during rendering.
  */
 export class InlineInput extends InputConnection {
   connectionHeight: number;
@@ -32,7 +26,6 @@ export class InlineInput extends InputConnection {
   /**
    * @param constants The rendering constants provider.
    * @param input The inline input to measure and store information for.
-   * @internal
    */
   constructor(constants: ConstantProvider, input: Input) {
     super(constants, input);

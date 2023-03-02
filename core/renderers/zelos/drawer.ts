@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Zelos renderer.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.Drawer');
 
@@ -39,7 +34,6 @@ export class Drawer extends BaseDrawer {
    * @param block The block to render.
    * @param info An object containing all information needed to render this
    *     block.
-   * @internal
    */
   constructor(block: BlockSvg, info: RenderInfo) {
     super(block, info);

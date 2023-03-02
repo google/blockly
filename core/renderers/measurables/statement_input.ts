@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Class representing statement inputs with connections on a
- * rendered block.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.StatementInput');
 
@@ -29,7 +23,6 @@ export class StatementInput extends InputConnection {
   /**
    * @param constants The rendering constants provider.
    * @param input The statement input to measure and store information for.
-   * @internal
    */
   constructor(constants: ConstantProvider, input: Input) {
     super(constants, input);

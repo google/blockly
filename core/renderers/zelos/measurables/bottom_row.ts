@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * An object representing the bottom row of a rendered block.
- *
- * @class
- */
 import * as goog from '../../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.BottomRow');
 
@@ -26,7 +21,6 @@ import {BottomRow as BaseBottomRow} from '../../../renderers/measurables/bottom_
 export class BottomRow extends BaseBottomRow {
   /**
    * @param constants The rendering constants provider.
-   * @internal
    */
   constructor(constants: ConstantProvider) {
     super(constants);

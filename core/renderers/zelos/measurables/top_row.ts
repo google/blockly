@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * An object representing the top row of a rendered block.
- *
- * @class
- */
 import * as goog from '../../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.TopRow');
 
@@ -28,7 +23,6 @@ import {TopRow as BaseTopRow} from '../../../renderers/measurables/top_row.js';
 export class TopRow extends BaseTopRow {
   /**
    * @param constants The rendering constants provider.
-   * @internal
    */
   constructor(constants: ConstantProvider) {
     super(constants);

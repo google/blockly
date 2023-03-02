@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Zelos renderer.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.Renderer');
 
@@ -32,14 +27,15 @@ import {PathObject} from './path_object.js';
 
 
 /**
- * The zelos renderer.
+ * The zelos renderer. This renderer emulates Scratch-style and MakeCode-style rendering.
+ *
+ * Zelos is the ancient Greek spirit of rivalry and emulation.
  */
 export class Renderer extends BaseRenderer {
   protected override constants_!: ConstantProvider;
 
   /**
    * @param name The renderer name.
-   * @internal
    */
   constructor(name: string) {
     super(name);
@@ -83,7 +79,6 @@ export class Renderer extends BaseRenderer {
    * @param workspace The workspace the cursor belongs to.
    * @param marker The marker.
    * @returns The object in charge of drawing the marker.
-   * @internal
    */
   override makeMarkerDrawer(workspace: WorkspaceSvg, marker: Marker):
       MarkerSvg {
@@ -96,7 +91,6 @@ export class Renderer extends BaseRenderer {
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
    * @returns The renderer path object.
-   * @internal
    */
   override makePathObject(root: SVGElement, style: BlockStyle): PathObject {
     return new PathObject(

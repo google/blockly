@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Methods for rendering debug graphics.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Debug');
 
@@ -62,16 +57,13 @@ export class Debug {
 
   /**
    * @param constants The renderer's constants.
-   * @internal
    */
   constructor(private readonly constants: ConstantProvider) {}
 
   /**
    * Remove all elements the this object created on the last pass.
-   *
-   * @internal
    */
-  clearElems() {
+  protected clearElems() {
     for (let i = 0; i < this.debugElements_.length; i++) {
       const elem = this.debugElements_[i];
       dom.removeNode(elem);
@@ -86,9 +78,8 @@ export class Debug {
    * @param row The row to render.
    * @param cursorY The y position of the top of the row.
    * @param isRtl Whether the block is rendered RTL.
-   * @internal
    */
-  drawSpacerRow(row: Row, cursorY: number, isRtl: boolean) {
+  protected drawSpacerRow(row: Row, cursorY: number, isRtl: boolean) {
     if (!Debug.config.rowSpacers) {
       return;
     }
@@ -120,9 +111,8 @@ export class Debug {
    * @param elem The spacer to render.
    * @param rowHeight The height of the container row.
    * @param isRtl Whether the block is rendered RTL.
-   * @internal
    */
-  drawSpacerElem(elem: InRowSpacer, rowHeight: number, isRtl: boolean) {
+  protected drawSpacerElem(elem: InRowSpacer, rowHeight: number, isRtl: boolean) {
     if (!Debug.config.elemSpacers) {
       return;
     }
@@ -154,9 +144,8 @@ export class Debug {
    *
    * @param elem The element to render.
    * @param isRtl Whether the block is rendered RTL.
-   * @internal
    */
-  drawRenderedElem(elem: Measurable, isRtl: boolean) {
+  protected drawRenderedElem(elem: Measurable, isRtl: boolean) {
     if (Debug.config.elems) {
       let xPos = elem.xPos;
       if (isRtl) {
@@ -208,9 +197,8 @@ export class Debug {
    * @param conn The connection to circle.
    * @suppress {visibility} Suppress visibility of conn.offsetInBlock_ since
    * this is a debug module.
-   * @internal
    */
-  drawConnection(conn: RenderedConnection) {
+  protected drawConnection(conn: RenderedConnection) {
     if (!Debug.config.connections) {
       return;
     }
@@ -253,9 +241,8 @@ export class Debug {
    * @param row The non-empty row to render.
    * @param cursorY The y position of the top of the row.
    * @param isRtl Whether the block is rendered RTL.
-   * @internal
    */
-  drawRenderedRow(row: Row, cursorY: number, isRtl: boolean) {
+  protected drawRenderedRow(row: Row, cursorY: number, isRtl: boolean) {
     if (!Debug.config.rows) {
       return;
     }
@@ -299,9 +286,8 @@ export class Debug {
    * @param row The non-empty row to render.
    * @param cursorY The y position of the top of the row.
    * @param isRtl Whether the block is rendered RTL.
-   * @internal
    */
-  drawRowWithElements(row: Row, cursorY: number, isRtl: boolean) {
+  protected drawRowWithElements(row: Row, cursorY: number, isRtl: boolean) {
     for (let i = 0; i < row.elements.length; i++) {
       const elem = row.elements[i];
       if (!elem) {
@@ -321,9 +307,8 @@ export class Debug {
    * Draw a debug rectangle around the entire block.
    *
    * @param info Rendering information about the block to debug.
-   * @internal
    */
-  drawBoundingBox(info: RenderInfo) {
+  protected drawBoundingBox(info: RenderInfo) {
     if (!Debug.config.blockBounds) {
       return;
     }
@@ -368,7 +353,6 @@ export class Debug {
    *
    * @param block The block to draw debug information for.
    * @param info Rendering information about the block to debug.
-   * @internal
    */
   drawDebug(block: BlockSvg, info: RenderInfo) {
     this.clearElems();
@@ -415,9 +399,8 @@ export class Debug {
    * Show a debug filter to highlight that a block has been rendered.
    *
    * @param svgPath The block's SVG path.
-   * @internal
    */
-  drawRender(svgPath: SVGElement) {
+  protected drawRender(svgPath: SVGElement) {
     if (!Debug.config.render) {
       return;
     }

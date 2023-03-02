@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Renderer that preserves the look and feel of Blockly pre-2019.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.Drawer');
 
@@ -26,7 +21,8 @@ import type {PathObject} from './path_object.js';
 
 
 /**
- * An object that draws a block based on the given rendering information.
+ * An object that draws a block based on the given rendering information,
+ * customized for the geras renderer.
  */
 export class Drawer extends BaseDrawer {
   highlighter_: Highlighter;
@@ -37,7 +33,6 @@ export class Drawer extends BaseDrawer {
    * @param block The block to render.
    * @param info An object containing all information needed to render this
    *     block.
-   * @internal
    */
   constructor(block: BlockSvg, info: RenderInfo) {
     super(block, info);

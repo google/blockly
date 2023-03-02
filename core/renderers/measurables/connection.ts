@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Base class representing the space a connection takes up during
- * rendering.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Connection');
 
@@ -33,7 +27,6 @@ export class Connection extends Measurable {
    * @param constants The rendering constants provider.
    * @param connectionModel The connection object on the block that this
    *     represents.
-   * @internal
    */
   constructor(
       constants: ConstantProvider, public connectionModel: RenderedConnection) {

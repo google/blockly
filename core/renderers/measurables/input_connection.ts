@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Class representing inputs with connections on a rendered block.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.InputConnection');
 
@@ -23,7 +18,7 @@ import {Types} from './types.js';
 
 /**
  * The base class to represent an input that takes up space on a block
- * during rendering
+ * during rendering.
  */
 export class InputConnection extends Connection {
   align: number;
@@ -36,7 +31,6 @@ export class InputConnection extends Connection {
   /**
    * @param constants The rendering constants provider.
    * @param input The input to measure and store information for.
-   * @internal
    */
   constructor(constants: ConstantProvider, public input: Input) {
     super(constants, input.connection as RenderedConnection);

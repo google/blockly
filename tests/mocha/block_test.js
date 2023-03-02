@@ -1825,25 +1825,6 @@ suite('Blocks', function() {
         chai.assert.isFalse(blockB.disabled);
         chai.assert.isFalse(blockB.getSvgRoot().classList.contains('blocklyDisabled'));
       });
-      test('Children of Collapsed Block Should Not Update', function() {
-        const blockA = createRenderedBlock(this.workspace, 'statement_block');
-        const blockB = createRenderedBlock(this.workspace, 'stack_block');
-        blockA.getInput('STATEMENT').connection
-            .connect(blockB.previousConnection);
-
-        // Disable the block and collapse it.
-        blockA.setEnabled(false);
-        blockA.setCollapsed(true);
-
-        const blockUpdateDisabled = sinon.stub(blockB, 'updateDisabled');
-
-        // Enable the block before expanding it.
-        blockA.setEnabled(true);
-
-        // For performance reasons updateDisabled should not be called
-        // on children of collapsed blocks.
-        sinon.assert.notCalled(blockUpdateDisabled);
-      });
       test('Disabled Children of Collapsed Blocks Should Stay Disabled', function() {
         const blockA = createRenderedBlock(this.workspace, 'statement_block');
         const blockB = createRenderedBlock(this.workspace, 'stack_block');

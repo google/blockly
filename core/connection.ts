@@ -93,7 +93,7 @@ export class Connection implements IASTNodeLocationWithBlock {
 
     // Make sure the childConnection is available.
     if (childConnection.isConnected()) {
-      childConnection.disconnect();
+      childConnection.disconnect(false);
     }
 
     // Make sure the parentConnection is available.
@@ -244,7 +244,7 @@ export class Connection implements IASTNodeLocationWithBlock {
   }
 
   /** Disconnect this connection. */
-  disconnect() {
+  disconnect(setParent = true) {
     const {parentConnection, childConnection} =
         this.getParentAndChildConnections();
     if (!parentConnection || !childConnection) {
@@ -264,7 +264,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       otherConnection.targetConnection = null;
     }
     this.targetConnection = null;
-    childConnection.getSourceBlock().setParent(null);
+    if (setParent) childConnection.getSourceBlock().setParent(null);
     if (event) {
       event.recordNew();
       eventUtils.fire(event);

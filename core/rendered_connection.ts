@@ -482,7 +482,7 @@ export class RenderedConnection extends Connection {
    * @param parentBlock The superior block.
    * @param childBlock The inferior block.
    */
-  override disconnect() {
+  override disconnect(setParent = true) {
     const {parentConnection, childConnection} =
         this.getParentAndChildConnections();
     if (!parentConnection || !childConnection) return;
@@ -498,7 +498,7 @@ export class RenderedConnection extends Connection {
       // Reset visibility, since the child is now a top block.
       child.getSvgRoot().style.display = 'block';
     }
-    super.disconnect();
+    super.disconnect(setParent);
   }
 
   /**

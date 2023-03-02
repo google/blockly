@@ -123,6 +123,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /** @internal */
   pathObject: IPathObject;
   override rendered = false;
+  private visuallyDisabled = false;
 
   /**
    * Is this block currently rendering? Used to stop recursive render calls
@@ -889,15 +890,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @internal
    */
   updateDisabled() {
-    const children = (this.getChildren(false));
+    const disabled = !this.isEnabled() || this.getInheritedDisabled();
+    if (this.visuallyDisabled === disabled) return;
     this.applyColour();
-    if (this.isCollapsed()) {
-      return;
-    }
-    for (let i = 0, child; child = children[i]; i++) {
-      if (child.rendered) {
-        child.updateDisabled();
-      }
+    this.visuallyDisabled = disabled;
+    for (const child of this.getChildren(false)) {
+      child.updateDisabled();
     }
   }
 

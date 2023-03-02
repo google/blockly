@@ -180,19 +180,14 @@ export class InsertionMarkerManager {
    */
   applyConnections() {
     if (!this.activeCandidate) return;
-    // Don't fire events for insertion markers.
+    const {local, closest} = this.activeCandidate;
+    local.connect(closest);
     eventUtils.disable();
     this.hidePreview();
     eventUtils.enable();
-    const {local, closest} = this.activeCandidate;
-    // Connect two blocks together.
-    local.connect(closest);
     if (this.topBlock.rendered) {
-      // Trigger a connection animation.
-      // Determine which connection is inferior (lower in the source stack).
       const inferiorConnection = local.isSuperior() ? closest : local;
       blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
-      // Bring the just-edited stack to the front.
       const rootBlock = this.topBlock.getRootBlock();
       setTimeout(() => {
         rootBlock.bringToFront();

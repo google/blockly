@@ -482,21 +482,23 @@ export class RenderedConnection extends Connection {
    * @param parentBlock The superior block.
    * @param childBlock The inferior block.
    */
-  protected override disconnectInternal_(
-      parentBlock: Block, childBlock: Block) {
-    super.disconnectInternal_(parentBlock, childBlock);
-    const renderedParent = parentBlock as BlockSvg;
-    const renderedChild = childBlock as BlockSvg;
+  override disconnect() {
+    const {parentConnection, childConnection} =
+        this.getParentAndChildConnections();
+    if (!parentConnection || !childConnection) return;
+    const parent = parentConnection.getSourceBlock() as BlockSvg;
+    const child = childConnection.getSourceBlock() as BlockSvg;
     // Rerender the parent so that it may reflow.
-    if (renderedParent.rendered) {
-      renderedParent.queueRender();
+    if (parent.rendered) {
+      parent.queueRender();
     }
-    if (renderedChild.rendered) {
-      renderedChild.updateDisabled();
-      renderedChild.queueRender();
+    if (child.rendered) {
+      child.updateDisabled();
+      child.queueRender();
       // Reset visibility, since the child is now a top block.
-      renderedChild.getSvgRoot().style.display = 'block';
+      child.getSvgRoot().style.display = 'block';
     }
+    super.disconnect();
   }
 
   /**

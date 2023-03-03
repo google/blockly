@@ -52,7 +52,7 @@ import {DragTarget} from './drag_target.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as Events from './events/events.js';
 import * as Extensions from './extensions.js';
-import {Field, FieldConfig, FieldValidator} from './field.js';
+import {Field, FieldConfig, FieldValidator, UnattachedFieldError} from './field.js';
 import {FieldAngle, FieldAngleConfig, FieldAngleFromJsonConfig, FieldAngleValidator} from './field_angle.js';
 import {FieldCheckbox, FieldCheckboxConfig, FieldCheckboxFromJsonConfig, FieldCheckboxValidator} from './field_checkbox.js';
 import {FieldColour, FieldColourConfig, FieldColourFromJsonConfig, FieldColourValidator} from './field_colour.js';
@@ -606,7 +606,7 @@ export {Cursor};
 export {DeleteArea};
 export {DragTarget};
 export const DropDownDiv = dropDownDiv;
-export {Field, FieldConfig, FieldValidator};
+export {Field, FieldConfig, FieldValidator, UnattachedFieldError};
 export {
   FieldAngle,
   FieldAngleConfig,

@@ -658,6 +658,8 @@ export interface FieldDropdownFromJsonConfig extends FieldConfig {
   options?: MenuOption[];
 }
 
+export {FieldConfig as FieldDropdownConfig};
+
 /**
  * The y offset from the top of the field to the top of the image, if an image
  * is selected.

@@ -727,7 +727,7 @@ if (!COMPILED) {
 
   // NOTE: We add goog.module as an implicit namespace as goog.module is defined
   // here and because the existing module package has not been moved yet out of
-  // the goog.module namespace. This satisifies both the debug loader and
+  // the goog.module namespace. This satisfies both the debug loader and
   // ahead-of-time dependency management.
 }
 

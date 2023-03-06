@@ -1112,11 +1112,9 @@ suite('Blocks', function() {
     suite('Add Connections Programmatically', function() {
       test('Output', function() {
         const block = createRenderedBlock(this.workspace, 'empty_block');
-        // this.workspace.newBlock('empty_block');
-        // block.initSvg();
-        // block.render();
 
         block.setOutput(true);
+        this.clock.runAll();
 
         chai.assert.equal(this.getOutputs().length, 1);
       });
@@ -1135,6 +1133,7 @@ suite('Blocks', function() {
         block.render();
 
         block.setPreviousStatement(true);
+        this.clock.runAll();
 
         chai.assert.equal(this.getPrevious().length, 1);
       });
@@ -1144,6 +1143,7 @@ suite('Blocks', function() {
         block.render();
 
         block.setNextStatement(true);
+        this.clock.runAll();
 
         chai.assert.equal(this.getNext().length, 1);
       });

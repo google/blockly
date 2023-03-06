@@ -14,7 +14,10 @@ goog.declareModuleId('Blockly.Variables');
 
 import {Blocks} from './blocks.js';
 import * as dialog from './dialog.js';
+import {isVariableHolder, IVariableHolder} from './interfaces/i_variable_holder.js';
 import {Msg} from './msg.js';
+import type {IParameterModel} from './procedures.js';
+import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.js';
 import * as utilsXml from './utils/xml.js';
 import {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
@@ -301,15 +304,24 @@ export function renameVariable(
       }
 
       const existing = nameUsedWithOtherType(newName, variable.type, workspace);
-      if (!existing) {  // No conflict.
+      const procedure =
+          nameUsedWithConflictingParam(variable.name, newName, workspace);
+      if (!existing && !procedure) {  // No conflict.
         workspace.renameVariableById(variable.getId(), newName);
         if (opt_callback) opt_callback(newName);
         return;
       }
-      
-      const msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
-                      .replace('%1', existing.name)
-                      .replace('%2', existing.type);
+
+      let msg = '';
+      if (existing) {
+        msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
+                  .replace('%1', existing.name)
+                  .replace('%2', existing.type);
+      } else if (procedure) {
+        msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER']
+                  .replace('%1', newName)
+                  .replace('%2', procedure);
+      }
       dialog.alert(msg, function() {
         promptAndCheckWithAlert(newName);
       });
@@ -383,6 +395,49 @@ export function nameUsedWithAnyType(
     }
   }
   return null;
+}
+
+/**
+ * Returns the name of the procedure with a conflicting parameter name, or null
+ * if one does not exist.
+ *
+ * This checks both legacy procedure blocks, and the procedure map.
+ *
+ * @param name The name to check for conflicts.
+ * @param workspace The workspace to search for conflicting parameters.
+ */
+function nameUsedWithConflictingParam(
+    oldName: string, newName: string, workspace: Workspace): string|null {
+  oldName = oldName.toLowerCase();
+  newName = newName.toLowerCase();
+
+  const blocks = workspace.getAllBlocks(false);
+  for (const block of blocks) {
+    if (!isLegacyProcedureDefBlock(block)) continue;
+    const def = block.getProcedureDef();
+    const params = def[1];
+    const blockHasOld = params.some((param) => param.toLowerCase() === oldName);
+    const blockHasNew = params.some((param) => param.toLowerCase() === newName);
+    if (blockHasOld && blockHasNew) return def[0];
+  }
+
+  const procedures = workspace.getProcedureMap().getProcedures();
+  for (const procedure of procedures) {
+    const params = procedure.getParameters()
+                       .filter(parameterWrapsVariable)
+                       .map((param) => param.getVariableModel().name);
+    if (!params) continue;
+    const procHasOld = params.some((param) => param.toLowerCase() === oldName);
+    const procHasNew = params.some((param) => param.toLowerCase() === newName);
+    if (procHasOld && procHasNew) return procedure.getName();
+  }
+  return null;
+}
+
+/** Returns whether the tiven parameter wraps a variable model or not. */
+function parameterWrapsVariable(param: IParameterModel):
+    param is IParameterModel&IVariableHolder {
+  return isVariableHolder(param);
 }
 
 /**

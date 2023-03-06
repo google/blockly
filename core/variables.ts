@@ -405,8 +405,9 @@ export function nameUsedWithAnyType(
  *
  * @param name The name to check for conflicts.
  * @param workspace The workspace to search for conflicting parameters.
+ * @internal
  */
-function nameUsedWithConflictingParam(
+export function nameUsedWithConflictingParam(
     oldName: string, newName: string, workspace: Workspace): string|null {
   oldName = oldName.toLowerCase();
   newName = newName.toLowerCase();

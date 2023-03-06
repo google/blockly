@@ -249,32 +249,28 @@ export function createVariableButtonHandler(
   // This function needs to be named so it can be called recursively.
   function promptAndCheckWithAlert(defaultName: string) {
     promptName(Msg['NEW_VARIABLE_TITLE'], defaultName, function(text) {
-      if (text) {
-        const existing = nameUsedWithAnyType(text, workspace);
-        if (existing) {
-          let msg;
-          if (existing.type === type) {
-            msg = Msg['VARIABLE_ALREADY_EXISTS'].replace('%1', existing.name);
-          } else {
-            msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
-            msg = msg.replace('%1', existing.name).replace('%2', existing.type);
-          }
-          dialog.alert(msg, function() {
-            promptAndCheckWithAlert(text);
-          });
-        } else {
-          // No conflict
-          workspace.createVariable(text, type);
-          if (opt_callback) {
-            opt_callback(text);
-          }
-        }
-      } else {
-        // User canceled prompt.
-        if (opt_callback) {
-          opt_callback(null);
-        }
+      if (!text) {  // User canceled prompt.
+        if (opt_callback) opt_callback(null);
+        return;
       }
+
+      const existing = nameUsedWithAnyType(text, workspace);
+      if (!existing) {  // No conflict
+        workspace.createVariable(text, type);
+        if (opt_callback) opt_callback(text);
+        return;
+      }
+
+      let msg;
+      if (existing.type === type) {
+        msg = Msg['VARIABLE_ALREADY_EXISTS'].replace('%1', existing.name);
+      } else {
+        msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
+        msg = msg.replace('%1', existing.name).replace('%2', existing.type);
+      }
+      dialog.alert(msg, function() {
+        promptAndCheckWithAlert(text);
+      });
     });
   }
   promptAndCheckWithAlert('');
@@ -299,28 +295,24 @@ export function renameVariable(
     const promptText =
         Msg['RENAME_VARIABLE_TITLE'].replace('%1', variable.name);
     promptName(promptText, defaultName, function(newName) {
-      if (newName) {
-        const existing =
-            nameUsedWithOtherType(newName, variable.type, workspace);
-        if (existing) {
-          const msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
-                          .replace('%1', existing.name)
-                          .replace('%2', existing.type);
-          dialog.alert(msg, function() {
-            promptAndCheckWithAlert(newName);
-          });
-        } else {
-          workspace.renameVariableById(variable.getId(), newName);
-          if (opt_callback) {
-            opt_callback(newName);
-          }
-        }
-      } else {
-        // User canceled prompt.
-        if (opt_callback) {
-          opt_callback(null);
-        }
+      if (!newName) {  // User canceled prompt.
+        if (opt_callback) opt_callback(null);
+        return;
       }
+
+      const existing = nameUsedWithOtherType(newName, variable.type, workspace);
+      if (!existing) {  // No conflict.
+        workspace.renameVariableById(variable.getId(), newName);
+        if (opt_callback) opt_callback(newName);
+        return;
+      }
+      
+      const msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
+                      .replace('%1', existing.name)
+                      .replace('%2', existing.type);
+      dialog.alert(msg, function() {
+        promptAndCheckWithAlert(newName);
+      });
     });
   }
   promptAndCheckWithAlert('');

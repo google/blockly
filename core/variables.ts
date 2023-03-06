@@ -403,7 +403,8 @@ export function nameUsedWithAnyType(
  *
  * This checks both legacy procedure blocks, and the procedure map.
  *
- * @param name The name to check for conflicts.
+ * @param oldName The old name of the variable.
+ * @param newName The proposed name of the variable.
  * @param workspace The workspace to search for conflicting parameters.
  * @internal
  */

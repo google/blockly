@@ -258,12 +258,10 @@ export class FieldAngle extends FieldInput<number> {
     // On touch devices, the picker's value is only updated with a drag. Add
     // a click handler on the drag surface to update the value if the surface
     // is clicked.
-    this.boundEvents.push(
-        browserEvents.conditionalBind(
-            circle, 'pointerdown', this, this.onMouseMove, true));
-    this.boundEvents.push(
-        browserEvents.conditionalBind(
-            circle, 'pointermove', this, this.onMouseMove, true));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        circle, 'pointerdown', this, this.onMouseMove, true));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        circle, 'pointermove', this, this.onMouseMove, true));
     return svg;
   }
 

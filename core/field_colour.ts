@@ -391,7 +391,7 @@ export class FieldColour extends Field<string> {
    *
    * @param e Mouse event.
    */
-  private onMouseMove_(e: PointerEvent) {
+  private onMouseMove(e: PointerEvent) {
     const cell = e.target as Element;
     const index = cell && Number(cell.getAttribute('data-index'));
     if (index !== null && index !== this.highlightedIndex) {
@@ -400,7 +400,7 @@ export class FieldColour extends Field<string> {
   }
 
   /** Handle a mouse enter event. Focus the picker. */
-  private onMouseEnter_() {
+  private onMouseEnter() {
     this.picker?.focus({preventScroll: true});
   }
 
@@ -408,7 +408,7 @@ export class FieldColour extends Field<string> {
    * Handle a mouse leave event. Blur the picker and unhighlight
    * the currently highlighted colour.
    */
-  private onMouseLeave_() {
+  private onMouseLeave() {
     this.picker?.blur();
     const highlighted = this.getHighlighted_();
     if (highlighted) {
@@ -504,13 +504,13 @@ export class FieldColour extends Field<string> {
     this.boundEvents.push(browserEvents.conditionalBind(
         table, 'pointerdown', this, this.onClick, true));
     this.boundEvents.push(browserEvents.conditionalBind(
-        table, 'pointermove', this, this.onMouseMove_, true));
+        table, 'pointermove', this, this.onMouseMove, true));
     this.boundEvents.push(browserEvents.conditionalBind(
-        table, 'pointerenter', this, this.onMouseEnter_, true));
+        table, 'pointerenter', this, this.onMouseEnter, true));
     this.boundEvents.push(browserEvents.conditionalBind(
-        table, 'pointerleave', this, this.onMouseLeave_, true));
+        table, 'pointerleave', this, this.onMouseLeave, true));
     this.boundEvents.push(browserEvents.conditionalBind(
-        table, 'keydown', this, this.onKeyDown));
+        table, 'keydown', this, this.onKeyDown, false));
 
     this.picker = table;
   }

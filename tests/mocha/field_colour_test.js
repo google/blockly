@@ -175,7 +175,7 @@ suite('Colour Fields', function() {
       function assertColoursAndTitles(field, colours, titles) {
         field.dropdownCreate_();
         let index = 0;
-        let node = field.picker_.firstChild.firstChild;
+        let node = field.picker.firstChild.firstChild;
         while (node) {
           chai.assert.equal(node.getAttribute('title'), titles[index]);
           chai.assert.equal(
@@ -252,7 +252,7 @@ suite('Colour Fields', function() {
     suite('Columns', function() {
       function assertColumns(field, columns) {
         field.dropdownCreate_();
-        chai.assert.equal(field.picker_.firstChild.children.length, columns);
+        chai.assert.equal(field.picker.firstChild.children.length, columns);
       }
       test('Constants', function() {
         const columns = Blockly.FieldColour.COLUMNS;

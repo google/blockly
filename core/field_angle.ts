@@ -20,7 +20,6 @@ import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {FieldInput, FieldInputConfig, FieldInputValidator} from './field_input.js';
 import * as dom from './utils/dom.js';
-import {KeyCodes} from './utils/keycodes.js';
 import * as math from './utils/math.js';
 import type {Sentinel} from './utils/sentinel.js';
 import {Svg} from './utils/svg.js';
@@ -69,49 +68,38 @@ export class FieldAngle extends FieldInput<number> {
    * Whether the angle should increase as the angle picker is moved clockwise
    * (true) or counterclockwise (false).
    */
-  private clockwise_ = FieldAngle.CLOCKWISE;
+  private clockwise = FieldAngle.CLOCKWISE;
 
   /**
    * The offset of zero degrees (and all other angles).
    */
-  private offset_ = FieldAngle.OFFSET;
+  private offset = FieldAngle.OFFSET;
 
   /**
    * The maximum angle to allow before wrapping.
    */
-  private wrap_ = FieldAngle.WRAP;
+  private wrap = FieldAngle.WRAP;
 
   /**
    * The amount to round angles to when using a mouse or keyboard nav input.
    */
-  private round_ = FieldAngle.ROUND;
-
-  /** The angle picker's SVG element. */
-  private editor_: SVGSVGElement|null = null;
-
-  /** The angle picker's gauge path depending on the value. */
-  gauge_: SVGPathElement|null = null;
-
-  /** The angle picker's line drawn representing the value's angle. */
-  line_: SVGLineElement|null = null;
-
-  /** The degree symbol for this field. */
-  protected symbol_: SVGTSpanElement|null = null;
-
-  /** Wrapper click event data. */
-  private clickWrapper_: browserEvents.Data|null = null;
-
-  /** Surface click event data. */
-  private clickSurfaceWrapper_: browserEvents.Data|null = null;
-
-  /** Surface mouse move event data. */
-  private moveSurfaceWrapper_: browserEvents.Data|null = null;
+  private round = FieldAngle.ROUND;
 
   /**
-   * Serializable fields are saved by the serializer, non-serializable fields
-   * are not. Editable fields should also be serializable.
+   * Array holding info needed to unbind events.
+   * Used for disposing.
+   * Ex: [[node, name, func], [node, name, func]].
    */
-  override SERIALIZABLE = true;
+  private boundEvents: browserEvents.Data[] = [];
+
+  /** The angle picker's line drawn representing the value's angle. */
+  line: SVGLineElement|null = null;
+
+  /** The angle picker's gauge path depending on the value. */
+  gauge: SVGPathElement|null = null;
+
+  /** The degree symbol for this field. */
+  protected symbol: SVGTSpanElement|null = null;
 
   /**
    * @param opt_value The initial value of the field. Should cast to a number.
@@ -151,22 +139,22 @@ export class FieldAngle extends FieldInput<number> {
 
     switch (config.mode) {
       case Mode.COMPASS:
-        this.clockwise_ = true;
-        this.offset_ = 90;
+        this.clockwise = true;
+        this.offset = 90;
         break;
       case Mode.PROTRACTOR:
         // This is the default mode, so we could do nothing. But just to
         // future-proof, we'll set it anyway.
-        this.clockwise_ = false;
-        this.offset_ = 0;
+        this.clockwise = false;
+        this.offset = 0;
         break;
     }
 
     // Allow individual settings to override the mode setting.
-    if (config.clockwise) this.clockwise_ = config.clockwise;
-    if (config.offset) this.offset_ = config.offset;
-    if (config.wrap) this.wrap_ = config.wrap;
-    if (config.round) this.round_ = config.round;
+    if (config.clockwise) this.clockwise = config.clockwise;
+    if (config.offset) this.offset = config.offset;
+    if (config.wrap) this.wrap = config.wrap;
+    if (config.round) this.round = config.round;
   }
 
   /**
@@ -178,30 +166,30 @@ export class FieldAngle extends FieldInput<number> {
     super.initView();
     // Add the degree symbol to the left of the number, even in RTL (issue
     // #2380)
-    this.symbol_ = dom.createSvgElement(Svg.TSPAN, {});
-    this.symbol_.appendChild(document.createTextNode('°'));
-    this.getTextElement().appendChild(this.symbol_);
+    this.symbol = dom.createSvgElement(Svg.TSPAN, {});
+    this.symbol.appendChild(document.createTextNode('°'));
+    this.getTextElement().appendChild(this.symbol);
   }
 
   /** Updates the graph when the field rerenders. */
   protected override render_() {
     super.render_();
-    this.updateGraph_();
+    this.updateGraph();
   }
 
   /**
    * Create and show the angle field's editor.
    *
-   * @param opt_e Optional mouse event that triggered the field to open, or
+   * @param e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    */
-  protected override showEditor_(opt_e?: Event) {
+  protected override showEditor_(e?: Event) {
     // Mobile browsers have issues with in-line textareas (focus & keyboards).
     const noFocus = userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD;
-    super.showEditor_(opt_e, noFocus);
+    super.showEditor_(e, noFocus);
 
-    this.dropdownCreate_();
-    dropDownDiv.getContentDiv().appendChild(this.editor_!);
+    const editor = this.dropdownCreate();
+    dropDownDiv.getContentDiv().appendChild(editor);
 
     if (this.sourceBlock_ instanceof BlockSvg) {
       dropDownDiv.setColour(
@@ -211,11 +199,15 @@ export class FieldAngle extends FieldInput<number> {
 
     dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
-    this.updateGraph_();
+    this.updateGraph();
   }
 
-  /** Create the angle dropdown editor. */
-  private dropdownCreate_() {
+  /**
+   * Creates the angle dropdown editor.
+   *
+   * @returns The newly created slider.
+   */
+  private dropdownCreate() {
     const svg = dom.createSvgElement(Svg.SVG, {
       'xmlns': dom.SVG_NS,
       'xmlns:html': dom.HTML_NS,
@@ -233,9 +225,9 @@ export class FieldAngle extends FieldInput<number> {
           'class': 'blocklyAngleCircle',
         },
         svg);
-    this.gauge_ =
+    this.gauge =
         dom.createSvgElement(Svg.PATH, {'class': 'blocklyAngleGauge'}, svg);
-    this.line_ = dom.createSvgElement(
+    this.line = dom.createSvgElement(
         Svg.LINE, {
           'x1': FieldAngle.HALF,
           'y1': FieldAngle.HALF,
@@ -261,34 +253,28 @@ export class FieldAngle extends FieldInput<number> {
     // The angle picker is different from other fields in that it updates on
     // mousemove even if it's not in the middle of a drag.  In future we may
     // change this behaviour.
-    this.clickWrapper_ =
-        browserEvents.conditionalBind(svg, 'click', this, this.hide_);
+    this.boundEvents.push(
+        browserEvents.conditionalBind(svg, 'click', this, this.hide_));
     // On touch devices, the picker's value is only updated with a drag. Add
     // a click handler on the drag surface to update the value if the surface
     // is clicked.
-    this.clickSurfaceWrapper_ = browserEvents.conditionalBind(
-        circle, 'pointerdown', this, this.onMouseMove_, true);
-    this.moveSurfaceWrapper_ = browserEvents.conditionalBind(
-        circle, 'pointermove', this, this.onMouseMove_, true);
-    this.editor_ = svg;
+    this.boundEvents.push(
+        browserEvents.conditionalBind(
+            circle, 'pointerdown', this, this.onMouseMove, true));
+    this.boundEvents.push(
+        browserEvents.conditionalBind(
+            circle, 'pointermove', this, this.onMouseMove, true));
+    return svg;
   }
 
   /** Disposes of events and DOM-references belonging to the angle editor. */
   private dropdownDispose_() {
-    if (this.clickWrapper_) {
-      browserEvents.unbind(this.clickWrapper_);
-      this.clickWrapper_ = null;
+    for (const event of this.boundEvents) {
+      browserEvents.unbind(event);
     }
-    if (this.clickSurfaceWrapper_) {
-      browserEvents.unbind(this.clickSurfaceWrapper_);
-      this.clickSurfaceWrapper_ = null;
-    }
-    if (this.moveSurfaceWrapper_) {
-      browserEvents.unbind(this.moveSurfaceWrapper_);
-      this.moveSurfaceWrapper_ = null;
-    }
-    this.gauge_ = null;
-    this.line_ = null;
+    this.boundEvents.length = 0;
+    this.gauge = null;
+    this.line = null;
   }
 
   /** Hide the editor. */
@@ -302,9 +288,9 @@ export class FieldAngle extends FieldInput<number> {
    *
    * @param e Mouse move event.
    */
-  protected onMouseMove_(e: PointerEvent) {
+  protected onMouseMove(e: PointerEvent) {
     // Calculate angle.
-    const bBox = this.gauge_!.ownerSVGElement!.getBoundingClientRect();
+    const bBox = this.gauge!.ownerSVGElement!.getBoundingClientRect();
     const dx = e.clientX - bBox.left - FieldAngle.HALF;
     const dy = e.clientY - bBox.top - FieldAngle.HALF;
     let angle = Math.atan(-dy / dx);
@@ -321,13 +307,13 @@ export class FieldAngle extends FieldInput<number> {
     }
 
     // Do offsetting.
-    if (this.clockwise_) {
-      angle = this.offset_ + 360 - angle;
+    if (this.clockwise) {
+      angle = this.offset + 360 - angle;
     } else {
-      angle = 360 - (this.offset_ - angle);
+      angle = 360 - (this.offset - angle);
     }
 
-    this.displayMouseOrKeyboardValue_(angle);
+    this.displayMouseOrKeyboardValue(angle);
   }
 
   /**
@@ -337,31 +323,31 @@ export class FieldAngle extends FieldInput<number> {
    *
    * @param angle New angle.
    */
-  private displayMouseOrKeyboardValue_(angle: number) {
-    if (this.round_) {
-      angle = Math.round(angle / this.round_) * this.round_;
+  private displayMouseOrKeyboardValue(angle: number) {
+    if (this.round) {
+      angle = Math.round(angle / this.round) * this.round;
     }
-    angle = this.wrapValue_(angle);
+    angle = this.wrapValue(angle);
     if (angle !== this.value_) {
       this.setEditorValue_(angle);
     }
   }
 
   /** Redraw the graph with the current angle. */
-  private updateGraph_() {
-    if (!this.gauge_) {
+  private updateGraph() {
+    if (!this.gauge) {
       return;
     }
     // Always display the input (i.e. getText) even if it is invalid.
-    let angleDegrees = Number(this.getText()) + this.offset_;
+    let angleDegrees = Number(this.getText()) + this.offset;
     angleDegrees %= 360;
     let angleRadians = math.toRadians(angleDegrees);
     const path = ['M ', FieldAngle.HALF, ',', FieldAngle.HALF];
     let x2 = FieldAngle.HALF;
     let y2 = FieldAngle.HALF;
     if (!isNaN(angleRadians)) {
-      const clockwiseFlag = Number(this.clockwise_);
-      const angle1 = math.toRadians(this.offset_);
+      const clockwiseFlag = Number(this.clockwise);
+      const angle1 = math.toRadians(this.offset);
       const x1 = Math.cos(angle1) * FieldAngle.RADIUS;
       const y1 = Math.sin(angle1) * -FieldAngle.RADIUS;
       if (clockwiseFlag) {
@@ -379,9 +365,9 @@ export class FieldAngle extends FieldInput<number> {
           ' l ', x1, ',', y1, ' A ', FieldAngle.RADIUS, ',', FieldAngle.RADIUS,
           ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
     }
-    this.gauge_.setAttribute('d', path.join(''));
-    this.line_?.setAttribute('x2', `${x2}`);
-    this.line_?.setAttribute('y2', `${y2}`);
+    this.gauge.setAttribute('d', path.join(''));
+    this.line?.setAttribute('x2', `${x2}`);
+    this.line?.setAttribute('y2', `${y2}`);
   }
 
   /**
@@ -396,23 +382,28 @@ export class FieldAngle extends FieldInput<number> {
       throw new UnattachedFieldError();
     }
 
-    let multiplier;
-    if (e.keyCode === KeyCodes.LEFT) {
-      // decrement (increment in RTL)
-      multiplier = block.RTL ? 1 : -1;
-    } else if (e.keyCode === KeyCodes.RIGHT) {
-      // increment (decrement in RTL)
-      multiplier = block.RTL ? -1 : 1;
-    } else if (e.keyCode === KeyCodes.DOWN) {
-      // decrement
-      multiplier = -1;
-    } else if (e.keyCode === KeyCodes.UP) {
-      // increment
-      multiplier = 1;
+    let multiplier = 0;
+    switch (e.key) {
+      case 'ArrowLeft':
+        // decrement (increment in RTL)
+        multiplier = block.RTL ? 1 : -1;
+        break;
+      case 'ArrowRight':
+        // increment (decrement in RTL)
+        multiplier = block.RTL ? -1 : 1;
+        break;
+      case 'ArrowDown':
+        // decrement
+        multiplier = -1;
+        break;
+      case 'ArrowUp':
+        // increment
+        multiplier = 1;
+        break;
     }
     if (multiplier) {
       const value = this.getValue() as number;
-      this.displayMouseOrKeyboardValue_(value + multiplier * this.round_);
+      this.displayMouseOrKeyboardValue(value + multiplier * this.round);
       e.preventDefault();
       e.stopPropagation();
     }
@@ -429,7 +420,7 @@ export class FieldAngle extends FieldInput<number> {
     if (isNaN(value) || !isFinite(value)) {
       return null;
     }
-    return this.wrapValue_(value);
+    return this.wrapValue(value);
   }
 
   /**
@@ -438,12 +429,12 @@ export class FieldAngle extends FieldInput<number> {
    * @param value The value to wrap.
    * @returns The wrapped value.
    */
-  private wrapValue_(value: number): number {
+  private wrapValue(value: number): number {
     value %= 360;
     if (value < 0) {
       value += 360;
     }
-    if (value > this.wrap_) {
+    if (value > this.wrap) {
       value -= 360;
     }
     return value;
@@ -470,7 +461,7 @@ Css.register(`
   stroke: #444;
   stroke-width: 1;
   fill: #ddd;
-  fill-opacity: .8;
+  fill-opacity: 0.8;
 }
 
 .blocklyAngleMarks {
@@ -480,7 +471,7 @@ Css.register(`
 
 .blocklyAngleGauge {
   fill: #f88;
-  fill-opacity: .8;
+  fill-opacity: 0.8;
   pointer-events: none;
 }
 

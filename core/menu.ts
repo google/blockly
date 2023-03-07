@@ -17,7 +17,6 @@ import type {MenuItem} from './menuitem.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import {KeyCodes} from './utils/keycodes.js';
 import type {Size} from './utils/size.js';
 import * as style from './utils/style.js';
 
@@ -392,29 +391,29 @@ export class Menu {
     }
 
     const highlighted = this.highlightedItem;
-    switch (keyboardEvent.keyCode) {
-      case KeyCodes.ENTER:
-      case KeyCodes.SPACE:
+    switch (keyboardEvent.key) {
+      case 'Enter':
+      case ' ':
         if (highlighted) {
           highlighted.performAction();
         }
         break;
 
-      case KeyCodes.UP:
+      case 'ArrowUp':
         this.highlightPrevious();
         break;
 
-      case KeyCodes.DOWN:
+      case 'ArrowDown':
         this.highlightNext();
         break;
 
-      case KeyCodes.PAGE_UP:
-      case KeyCodes.HOME:
+      case 'PageUp':
+      case 'Home':
         this.highlightFirst();
         break;
 
-      case KeyCodes.PAGE_DOWN:
-      case KeyCodes.END:
+      case 'PageDown':
+      case 'End':
         this.highlightLast();
         break;
 

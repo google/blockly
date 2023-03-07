@@ -25,7 +25,6 @@ import {Field, FieldConfig, FieldValidator, UnattachedFieldError} from './field.
 import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
-import {KeyCodes} from './utils/keycodes.js';
 import type {Sentinel} from './utils/sentinel.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
@@ -358,7 +357,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
       div!.style.transition = 'box-shadow 0.25s ease 0s';
       if (this.getConstants()!.FIELD_TEXTINPUT_BOX_SHADOW) {
         div!.style.boxShadow =
-            'rgba(255, 255, 255, 0.3) 0 0 0 ' + 4 * scale + 'px';
+            'rgba(255, 255, 255, 0.3) 0 0 0 ' + (4 * scale) + 'px';
       }
     }
     htmlInput.style.borderRadius = borderRadius;
@@ -444,15 +443,15 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    * @param e Keyboard event.
    */
   protected onHtmlInputKeyDown_(e: KeyboardEvent) {
-    if (e.keyCode === KeyCodes.ENTER) {
+    if (e.key === 'Enter') {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-    } else if (e.keyCode === KeyCodes.ESC) {
+    } else if (e.key === 'Esc') {
       this.setValue(
           this.htmlInput_!.getAttribute('data-untyped-default-value'));
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-    } else if (e.keyCode === KeyCodes.TAB) {
+    } else if (e.key === 'Tab') {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
       (this.sourceBlock_ as BlockSvg).tab(this, !e.shiftKey);

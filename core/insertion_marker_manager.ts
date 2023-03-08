@@ -599,38 +599,16 @@ export class InsertionMarkerManager {
 
     const markerConn = this.markerConnection;
     const imBlock = markerConn.getSourceBlock();
-    const markerNext = imBlock.nextConnection;
     const markerPrev = imBlock.previousConnection;
     const markerOutput = imBlock.outputConnection;
 
-    const isNext = markerConn === markerNext;
-
-    const isFirstInStatementStack =
-        isNext && !(markerPrev && markerPrev.targetConnection);
-
-    const isFirstInOutputStack =
-        markerConn.type === ConnectionType.INPUT_VALUE &&
-        !(markerOutput && markerOutput.targetConnection);
-    // The insertion marker is the first block in a stack.  Unplug won't do
-    // anything in that case.  Instead, unplug the following block.
-    if (isFirstInStatementStack || isFirstInOutputStack) {
-      markerConn.targetBlock()!.unplug(false);
-    } else if (markerConn.type === ConnectionType.NEXT_STATEMENT && !isNext) {
-      // Inside of a C-block, first statement connection.
-      const innerConnection = markerConn.targetConnection;
-      if (innerConnection) {
-        innerConnection.getSourceBlock().unplug(false);
-      }
-
-      const previousBlockNextConnection =
-          markerPrev ? markerPrev.targetConnection : null;
-
-      imBlock.unplug(true);
-      if (previousBlockNextConnection && innerConnection) {
-        previousBlockNextConnection.connect(innerConnection);
-      }
+    if (!markerPrev?.targetConnection && !markerOutput?.targetConnection) {
+      // If we are the top block, unplugging doesn't do anything.
+      // The marker connection may not have a target block if we are hiding
+      // as part of applying connections.
+      markerConn.targetBlock()?.unplug(false);
     } else {
-      imBlock.unplug(/* healStack */ true);
+      imBlock.unplug(true);
     }
 
     if (markerConn.targetConnection) {

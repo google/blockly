@@ -276,6 +276,7 @@ function onMouseOut(_e: PointerEvent) {
     hide();
   }, 1);
   clearTimeout(showPid);
+  showPid = 0;
 }
 
 /**
@@ -342,6 +343,7 @@ export function hide() {
   }
   if (showPid) {
     clearTimeout(showPid);
+    showPid = 0;
   }
 }
 

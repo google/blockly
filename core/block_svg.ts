@@ -815,7 +815,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     super.dispose(!!healStack);
 
     dom.removeNode(this.svgGroup_);
-    blockWorkspace.resizeContents();
     dom.stopTextWidthCache();
   }
 

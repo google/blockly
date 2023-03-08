@@ -1112,48 +1112,42 @@ suite('Blocks', function() {
     suite('Add Connections Programmatically', function() {
       test('Output', function() {
         const block = createRenderedBlock(this.workspace, 'empty_block');
-        // this.workspace.newBlock('empty_block');
-        // block.initSvg();
-        // block.render();
 
         block.setOutput(true);
 
+        this.clock.runAll();
         chai.assert.equal(this.getOutputs().length, 1);
       });
       test('Value', function() {
-        const block = this.workspace.newBlock('empty_block');
-        block.initSvg();
-        block.render();
+        const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.appendValueInput('INPUT');
 
+        this.clock.runAll();
         chai.assert.equal(this.getInputs().length, 1);
       });
       test('Previous', function() {
-        const block = this.workspace.newBlock('empty_block');
-        block.initSvg();
-        block.render();
+        const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.setPreviousStatement(true);
 
+        this.clock.runAll();
         chai.assert.equal(this.getPrevious().length, 1);
       });
       test('Next', function() {
-        const block = this.workspace.newBlock('empty_block');
-        block.initSvg();
-        block.render();
+        const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.setNextStatement(true);
 
+        this.clock.runAll();
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Statement', function() {
-        const block = this.workspace.newBlock('empty_block');
-        block.initSvg();
-        block.render();
+        const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.appendStatementInput('STATEMENT');
 
+        this.clock.runAll();
         chai.assert.equal(this.getNext().length, 1);
       });
     });
@@ -1719,8 +1713,10 @@ suite('Blocks', function() {
       test('Add Input', function() {
         const blockA = createRenderedBlock(this.workspace, 'empty_block');
         blockA.setCollapsed(true);
-        assertCollapsed(blockA);
+
         blockA.appendDummyInput('NAME');
+
+        this.clock.runAll();
         assertCollapsed(blockA);
         chai.assert.isNotNull(blockA.getInput('NAME'));
       });
@@ -1794,20 +1790,20 @@ suite('Blocks', function() {
         const blockA = createRenderedBlock(this.workspace, 'variable_block');
 
         blockA.setCollapsed(true);
-        assertCollapsed(blockA, 'x');
-
         const variable = this.workspace.getVariable('x', '');
         this.workspace.renameVariableById(variable.getId(), 'y');
+
+        this.clock.runAll();
         assertCollapsed(blockA, 'y');
       });
       test('Coalesce, Different Case', function() {
         const blockA = createRenderedBlock(this.workspace, 'variable_block');
 
         blockA.setCollapsed(true);
-        assertCollapsed(blockA, 'x');
-
         const variable = this.workspace.createVariable('y');
         this.workspace.renameVariableById(variable.getId(), 'X');
+
+        this.clock.runAll();
         assertCollapsed(blockA, 'X');
       });
     });

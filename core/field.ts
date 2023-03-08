@@ -960,9 +960,8 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
   forceRerender() {
     this.isDirty_ = true;
     if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-      (this.sourceBlock_ as BlockSvg).render();
+      (this.sourceBlock_ as BlockSvg).queueRender();
       (this.sourceBlock_ as BlockSvg).bumpNeighbours();
-      this.updateMarkers_();
     }
   }
 
@@ -1286,8 +1285,12 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     this.markerSvg_ = markerSvg;
   }
 
-  /** Redraw any attached marker or cursor svgs if needed. */
-  protected updateMarkers_() {
+  /**
+   * Redraw any attached marker or cursor svgs if needed.
+   *
+   * @internal
+   */
+  updateMarkers_() {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();

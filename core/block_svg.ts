@@ -144,6 +144,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   private translation = '';
 
   /**
+   * The ID of the setTimeout callback for bumping neighbours, or 0 if no bump
+   * is currently scheduled.
+   */
+  private bumpNeighboursPid = 0;
+
+  /**
    * The location of the top left of this block (in workspace coordinates)
    * relative to either its parent block, or the workspace origin if it has no
    * parent.
@@ -151,6 +157,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @internal
    */
   relativeCoords = new Coordinate(0, 0);
+
 
   /**
    * @param workspace The block's workspace.
@@ -508,13 +515,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       return;
     }
     super.setCollapsed(collapsed);
-    if (!collapsed) {
-      this.updateCollapsed_();
-    } else if (this.rendered) {
-      this.render();
-      // Don't bump neighbours. Users like to store collapsed functions together
-      // and bumping makes them go out of alignment.
-    }
+    this.updateCollapsed_();
   }
 
   /**
@@ -1255,7 +1256,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const removed = super.removeInput(name, opt_quiet);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       // Removing an input will cause the block to change shape.
       this.bumpNeighbours();
     }
@@ -1291,7 +1292,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const input = super.appendInput_(type, name);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       // Adding an input will cause the block to change shape.
       this.bumpNeighbours();
     }
@@ -1441,7 +1442,16 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * up on screen, because that creates confusion for end-users.
    */
   override bumpNeighbours() {
-    this.getRootBlock().bumpNeighboursInternal();
+    if (this.bumpNeighboursPid) return;
+    const group = eventUtils.getGroup();
+
+    this.bumpNeighboursPid = setTimeout(() => {
+      const oldGroup = eventUtils.getGroup();
+      eventUtils.setGroup(group);
+      this.getRootBlock().bumpNeighboursInternal();
+      eventUtils.setGroup(oldGroup);
+      this.bumpNeighboursPid = 0;
+    }, config.bumpDelay);
   }
 
   /**
@@ -1496,11 +1506,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       eventUtils.setGroup(false);
     }, config.bumpDelay / 2);
 
-    setTimeout(() => {
-      eventUtils.setGroup(group);
-      this.bumpNeighbours();
-      eventUtils.setGroup(false);
-    }, config.bumpDelay);
+    this.bumpNeighbours();
   }
 
   /**
@@ -1641,6 +1647,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
       // TODO(#4592): Update all markers on the block.
       this.workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
+    }
+    for (const input of this.inputList) {
+      for (const field of input.fieldRow) {
+        field.updateMarkers_();
+      }
     }
   }
 

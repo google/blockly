@@ -488,6 +488,7 @@ export class RenderedConnection extends Connection {
     if (!parentConnection || !childConnection) return;
     const parent = parentConnection.getSourceBlock() as BlockSvg;
     const child = childConnection.getSourceBlock() as BlockSvg;
+    super.disconnect(setParent);
     // Rerender the parent so that it may reflow.
     if (parent.rendered) {
       parent.queueRender();
@@ -498,7 +499,6 @@ export class RenderedConnection extends Connection {
       // Reset visibility, since the child is now a top block.
       child.getSvgRoot().style.display = 'block';
     }
-    super.disconnect(setParent);
   }
 
   /**

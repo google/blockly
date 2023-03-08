@@ -21,9 +21,10 @@ import {PathObject} from './path_object.js';
 
 
 /**
- * The geras renderer. This renderer was designed to be backwards compatible with pre-2019 Blockly.
- * Newer projects that are not constrained by backwards compatibility may wish to use thrasos,
- * which is a more modern take on this renderer.
+ * The geras renderer. This renderer was designed to be backwards compatible
+ * with pre-2019 Blockly. Newer projects that are not constrained by backwards
+ * compatibility may wish to use thrasos, which is a more modern take on this
+ * renderer.
  *
  * Geras is the ancient Greek spirit of old age.
  */

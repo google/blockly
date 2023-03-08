@@ -112,7 +112,8 @@ export class Debug {
    * @param rowHeight The height of the container row.
    * @param isRtl Whether the block is rendered RTL.
    */
-  protected drawSpacerElem(elem: InRowSpacer, rowHeight: number, isRtl: boolean) {
+  protected drawSpacerElem(
+      elem: InRowSpacer, rowHeight: number, isRtl: boolean) {
     if (!Debug.config.elemSpacers) {
       return;
     }

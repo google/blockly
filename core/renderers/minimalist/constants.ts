@@ -11,7 +11,8 @@ import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 
 
 /**
- * An object that provides constants for rendering blocks in the minimalist renderer.
+ * An object that provides constants for rendering blocks in the minimalist
+ * renderer.
  */
 export class ConstantProvider extends BaseConstantProvider {
   constructor() {

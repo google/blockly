@@ -15,7 +15,8 @@ import {RenderInfo} from './info.js';
 
 
 /**
- * The thrasos renderer. This is a more modern take on the legacy geras renderer.
+ * The thrasos renderer. This is a more modern take on the legacy geras
+ * renderer.
  *
  * Thrasos is the ancient Greek spirit of boldness.
  */

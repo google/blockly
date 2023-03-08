@@ -27,7 +27,8 @@ import {PathObject} from './path_object.js';
 
 
 /**
- * The zelos renderer. This renderer emulates Scratch-style and MakeCode-style rendering.
+ * The zelos renderer. This renderer emulates Scratch-style and MakeCode-style
+ * rendering.
  *
  * Zelos is the ancient Greek spirit of rivalry and emulation.
  */

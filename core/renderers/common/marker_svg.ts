@@ -40,7 +40,8 @@ const MARKER_CLASS = 'blocklyMarker';
 const HEIGHT_MULTIPLIER = 3 / 4;
 
 /**
- * Class for a marker, containing methods for graphically rendering a marker as SVG.
+ * Class for a marker, containing methods for graphically rendering a marker as
+ * SVG.
  */
 export class MarkerSvg {
   /**

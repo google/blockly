@@ -419,6 +419,7 @@ export class ASTNode {
       case ASTNode.types.BLOCK: {
         const block = this.location_ as Block;
         const nextConnection = block.nextConnection;
+        if (!nextConnection) return null;
         return ASTNode.createConnectionNode(nextConnection);
       }
       case ASTNode.types.PREVIOUS: {
@@ -493,6 +494,7 @@ export class ASTNode {
       case ASTNode.types.BLOCK: {
         const block = this.location_ as Block;
         const topConnection = getParentConnection(block);
+        if (!topConnection) return null;
         return ASTNode.createConnectionNode(topConnection);
       }
       case ASTNode.types.PREVIOUS: {
@@ -743,7 +745,7 @@ export type Params = ASTNode.Params;
  * @param block The block to find the parent connection on.
  * @returns The connection connecting to the parent of the block.
  */
-function getParentConnection(block: Block): Connection {
+function getParentConnection(block: Block): Connection|null {
   let topConnection = block.outputConnection;
   if (!topConnection ||
       block.previousConnection && block.previousConnection.isConnected()) {

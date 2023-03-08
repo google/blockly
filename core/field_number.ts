@@ -18,8 +18,6 @@ import {FieldInput, FieldInputConfig, FieldInputValidator} from './field_input.j
 import * as aria from './utils/aria.js';
 import type {Sentinel} from './utils/sentinel.js';
 
-export type FieldNumberValidator = FieldInputValidator<number>;
-
 /**
  * Class for an editable number field.
  */
@@ -342,3 +340,20 @@ export interface FieldNumberConfig extends FieldInputConfig {
 export interface FieldNumberFromJsonConfig extends FieldNumberConfig {
   value?: number;
 }
+
+/**
+ * A function that is called to validate changes to the field's value before
+ * they are set.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+ * @param newValue The value to be validated.
+ * @returns One of three instructions for setting the new value: `T`, `null`,
+ * or `undefined`.
+ *
+ * - `T` to set this function's returned value instead of `newValue`.
+ *
+ * - `null` to invoke `doValueInvalid_` and not set a value.
+ *
+ * - `undefined` to set `newValue` as is.
+ */
+export type FieldNumberValidator = FieldInputValidator<number>;

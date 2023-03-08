@@ -48,8 +48,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * A function that is called to validate changes to the field's value before
  * they are set.
  *
- * **NOTE:** Validation returns one option between `T`, `null`, and `undefined`.
- *
  * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
  * @param newValue The value to be validated.
  * @returns One of three instructions for setting the new value: `T`, `null`,
@@ -962,9 +960,8 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
   forceRerender() {
     this.isDirty_ = true;
     if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-      (this.sourceBlock_ as BlockSvg).render();
+      (this.sourceBlock_ as BlockSvg).queueRender();
       (this.sourceBlock_ as BlockSvg).bumpNeighbours();
-      this.updateMarkers_();
     }
   }
 
@@ -1288,8 +1285,12 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     this.markerSvg_ = markerSvg;
   }
 
-  /** Redraw any attached marker or cursor svgs if needed. */
-  protected updateMarkers_() {
+  /**
+   * Redraw any attached marker or cursor svgs if needed.
+   *
+   * @internal
+   */
+  updateMarkers_() {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -1315,6 +1316,8 @@ export interface FieldConfig {
 /**
  * For use by Field and descendants of Field. Constructors can change
  * in descendants, though they should contain all of Field's prototype methods.
+ *
+ * @internal
  */
 export type FieldProto = Pick<typeof Field, 'prototype'>;
 

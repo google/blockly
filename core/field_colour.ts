@@ -29,8 +29,6 @@ import {KeyCodes} from './utils/keycodes.js';
 import type {Sentinel} from './utils/sentinel.js';
 import {Size} from './utils/size.js';
 
-export type FieldColourValidator = FieldValidator<string>;
-
 /**
  * Class for a colour input field.
  */
@@ -616,3 +614,20 @@ export interface FieldColourConfig extends FieldConfig {
 export interface FieldColourFromJsonConfig extends FieldColourConfig {
   colour?: string;
 }
+
+/**
+ * A function that is called to validate changes to the field's value before
+ * they are set.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+ * @param newValue The value to be validated.
+ * @returns One of three instructions for setting the new value: `T`, `null`,
+ * or `undefined`.
+ *
+ * - `T` to set this function's returned value instead of `newValue`.
+ *
+ * - `null` to invoke `doValueInvalid_` and not set a value.
+ *
+ * - `undefined` to set `newValue` as is.
+ */
+export type FieldColourValidator = FieldValidator<string>;

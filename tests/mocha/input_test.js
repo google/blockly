@@ -23,7 +23,7 @@ suite('Inputs', function() {
         '<block type="empty_block"/>'
     ), this.workspace);
 
-    this.renderStub = sinon.stub(this.block, 'render');
+    this.renderStub = sinon.stub(this.block, 'queueRender');
     this.bumpNeighboursStub = sinon.stub(this.block, 'bumpNeighbours');
 
     this.dummy = this.block.appendDummyInput('DUMMY');

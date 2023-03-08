@@ -31,14 +31,18 @@ import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-export type InputTypes = string|number;
-export type FieldInputValidator<T extends InputTypes> =
-    FieldValidator<string|T>;
+/**
+ * Supported types for FieldInput subclasses.
+ *
+ * @internal
+ */
+type InputTypes = string|number;
 
 /**
  * Abstract class for an editable input field.
  *
  * @typeParam T - The value stored on the field.
+ * @internal
  */
 export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
   /**
@@ -559,7 +563,28 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
 
 /**
  * Config options for the input field.
+ *
+ * @internal
  */
 export interface FieldInputConfig extends FieldConfig {
   spellcheck?: boolean;
 }
+
+/**
+ * A function that is called to validate changes to the field's value before
+ * they are set.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+ * @param newValue The value to be validated.
+ * @returns One of three instructions for setting the new value: `T`, `null`,
+ * or `undefined`.
+ *
+ * - `T` to set this function's returned value instead of `newValue`.
+ *
+ * - `null` to invoke `doValueInvalid_` and not set a value.
+ *
+ * - `undefined` to set `newValue` as is.
+ * @internal
+ */
+export type FieldInputValidator<T extends InputTypes> =
+    FieldValidator<string|T>;

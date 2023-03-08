@@ -27,7 +27,6 @@ export class ThemeManager {
   /** A list of workspaces that are subscribed to this theme. */
   private subscribedWorkspaces_: Workspace[] = [];
   private componentDB = new Map<string, Component[]>();
-  owner_: AnyDuringMigration;
 
   /**
    * @param workspace The main workspace.
@@ -81,9 +80,7 @@ export class ThemeManager {
         const element = component.element;
         const propertyName = component.propertyName;
         const style = this.theme && this.theme.getComponentStyle(key);
-        // AnyDuringMigration because:  Property 'style' does not exist on type
-        // 'Element'.
-        (element as AnyDuringMigration).style[propertyName] = style || '';
+        element.style.setProperty(propertyName, style || '');
       }
     }
 
@@ -126,7 +123,9 @@ export class ThemeManager {
    * @param propertyName The inline style property name to update.
    * @internal
    */
-  subscribe(element: Element, componentName: string, propertyName: string) {
+  subscribe(
+      element: HTMLElement|SVGElement, componentName: string,
+      propertyName: string) {
     if (!this.componentDB.has(componentName)) {
       this.componentDB.set(componentName, []);
     }
@@ -136,9 +135,7 @@ export class ThemeManager {
 
     // Initialize the element with its corresponding theme style.
     const style = this.theme && this.theme.getComponentStyle(componentName);
-    // AnyDuringMigration because:  Property 'style' does not exist on type
-    // 'Element'.
-    (element as AnyDuringMigration).style[propertyName] = style || '';
+    element.style.setProperty(propertyName, style || '');
   }
 
   /**
@@ -147,7 +144,7 @@ export class ThemeManager {
    * @param element The element to unsubscribe.
    * @internal
    */
-  unsubscribe(element: Element) {
+  unsubscribe(element: HTMLElement|SVGElement) {
     if (!element) {
       return;
     }
@@ -172,13 +169,7 @@ export class ThemeManager {
    * @internal
    */
   dispose() {
-    this.owner_ = null;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'Theme'.
-    this.theme = null as AnyDuringMigration;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'Workspace[]'.
-    this.subscribedWorkspaces_ = null as AnyDuringMigration;
+    this.subscribedWorkspaces_.length = 0;
     this.componentDB.clear();
   }
 }
@@ -186,7 +177,7 @@ export class ThemeManager {
 export namespace ThemeManager {
   /** The type for a Blockly UI Component. */
   export interface Component {
-    element: Element;
+    element: HTMLElement|SVGElement;
     propertyName: string;
   }
 }

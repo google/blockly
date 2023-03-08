@@ -145,7 +145,7 @@ suite('Variables', function() {
   suite('renaming variables creating conflicts', function() {
     suite('renaming variables creating parameter conflicts', function() {
       test(
-          'conflicts within legacy procdure blocks return the procedure name',
+          'conflicts within legacy procedure blocks return the procedure name',
           function() {
             Blockly.serialization.blocks.append({
               'type': 'procedures_defnoreturn',

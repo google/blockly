@@ -106,7 +106,7 @@ import {ISelectableToolboxItem} from './interfaces/i_selectable_toolbox_item.js'
 import {IStyleable} from './interfaces/i_styleable.js';
 import {IToolbox} from './interfaces/i_toolbox.js';
 import {IToolboxItem} from './interfaces/i_toolbox_item.js';
-import {IVariableHolder} from './interfaces/i_variable_holder.js';
+import {IVariableBackedParameterModel, isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
 import {BasicCursor} from './keyboard_nav/basic_cursor.js';
@@ -702,7 +702,7 @@ export {ISelectableToolboxItem};
 export {IStyleable};
 export {IToolbox};
 export {IToolboxItem};
-export {IVariableHolder};
+export {IVariableBackedParameterModel, isVariableBackedParameterModel};
 export {Marker};
 export {MarkerManager};
 export {Menu};

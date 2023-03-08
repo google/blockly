@@ -14,9 +14,8 @@ goog.declareModuleId('Blockly.Variables');
 
 import {Blocks} from './blocks.js';
 import * as dialog from './dialog.js';
-import {isVariableHolder, IVariableHolder} from './interfaces/i_variable_holder.js';
+import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
 import {Msg} from './msg.js';
-import type {IParameterModel} from './procedures.js';
 import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.js';
 import * as utilsXml from './utils/xml.js';
 import {VariableModel} from './variable_model.js';
@@ -428,7 +427,7 @@ function checkForConflictingParamWithProcedureModels(
   const procedures = workspace.getProcedureMap().getProcedures();
   for (const procedure of procedures) {
     const params = procedure.getParameters()
-                       .filter(parameterWrapsVariable)
+                       .filter(isVariableBackedParameterModel)
                        .map((param) => param.getVariableModel().name);
     if (!params) continue;
     const procHasOld = params.some((param) => param.toLowerCase() === oldName);
@@ -457,12 +456,6 @@ function checkForConflictingParamWithLegacyProcedures(
     if (blockHasOld && blockHasNew) return def[0];
   }
   return null;
-}
-
-/** Returns whether the given parameter wraps a variable model or not. */
-function parameterWrapsVariable(param: IParameterModel):
-    param is IParameterModel&IVariableHolder {
-  return isVariableHolder(param);
 }
 
 /**

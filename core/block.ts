@@ -313,10 +313,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @suppress {checkTypes}
    */
   dispose(healStack: boolean) {
-    if (this.isDeadOrDying()) {
-      return;
-    }
-    // Terminate onchange event calls.
+    if (this.isDeadOrDying()) return;
+
     if (this.onchangeWrapper_) {
       this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
@@ -328,29 +326,15 @@ export class Block implements IASTNodeLocation, IDeletable {
     eventUtils.disable();
 
     try {
-      // This block is now at the top of the workspace.
-      // Remove this block from the workspace's list of top-most blocks.
       this.workspace.removeTopBlock(this);
       this.workspace.removeTypedBlock(this);
-      // Remove from block database.
       this.workspace.removeBlockById(this.id);
       this.disposing = true;
 
-      // First, dispose of all my children.
-      for (let i = this.childBlocks_.length - 1; i >= 0; i--) {
-        this.childBlocks_[i].dispose(false);
-      }
-      // Then dispose of myself.
-      // Dispose of all inputs and their fields.
-      for (let i = 0, input; input = this.inputList[i]; i++) {
-        input.dispose();
-      }
+      [...this.childBlocks_].forEach((c) => c.dispose(false));
+      this.inputList.forEach((i) => i.dispose());
       this.inputList.length = 0;
-      // Dispose of any remaining connections (next/previous/output).
-      const connections = this.getConnections_(true);
-      for (let i = 0, connection; connection = connections[i]; i++) {
-        connection.dispose();
-      }
+      this.getConnections_(true).forEach((c) => c.dispose());
     } finally {
       eventUtils.enable();
       if (typeof this.destroy === 'function') {

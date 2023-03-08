@@ -401,7 +401,8 @@ export function nameUsedWithAnyType(
  * Returns the name of the procedure with a conflicting parameter name, or null
  * if one does not exist.
  *
- * This checks both legacy procedure blocks, and the procedure map.
+ * This checks the procedure map if it contains models, and the legacy procedure
+ * blocks otherwise.
  *
  * @param oldName The old name of the variable.
  * @param newName The proposed name of the variable.
@@ -410,18 +411,19 @@ export function nameUsedWithAnyType(
  */
 export function nameUsedWithConflictingParam(
     oldName: string, newName: string, workspace: Workspace): string|null {
+  return workspace.getProcedureMap().getProcedures().length ?
+      checkForConflictingParamWithProcedureModels(oldName, newName, workspace) :
+      checkForConflictingParamWithLegacyProcedures(oldName, newName, workspace);
+}
+
+/**
+ * Returns the name of the procedure model with a conflicting param name, or
+ * null if one does not exist.
+ */
+function checkForConflictingParamWithProcedureModels(
+    oldName: string, newName: string, workspace: Workspace): string|null {
   oldName = oldName.toLowerCase();
   newName = newName.toLowerCase();
-
-  const blocks = workspace.getAllBlocks(false);
-  for (const block of blocks) {
-    if (!isLegacyProcedureDefBlock(block)) continue;
-    const def = block.getProcedureDef();
-    const params = def[1];
-    const blockHasOld = params.some((param) => param.toLowerCase() === oldName);
-    const blockHasNew = params.some((param) => param.toLowerCase() === newName);
-    if (blockHasOld && blockHasNew) return def[0];
-  }
 
   const procedures = workspace.getProcedureMap().getProcedures();
   for (const procedure of procedures) {
@@ -436,7 +438,28 @@ export function nameUsedWithConflictingParam(
   return null;
 }
 
-/** Returns whether the tiven parameter wraps a variable model or not. */
+/**
+ * Returns the name of the procedure block with a conflicting param name, or
+ * null if one does not exist.
+ */
+function checkForConflictingParamWithLegacyProcedures(
+    oldName: string, newName: string, workspace: Workspace): string|null {
+  oldName = oldName.toLowerCase();
+  newName = newName.toLowerCase();
+
+  const blocks = workspace.getAllBlocks(false);
+  for (const block of blocks) {
+    if (!isLegacyProcedureDefBlock(block)) continue;
+    const def = block.getProcedureDef();
+    const params = def[1];
+    const blockHasOld = params.some((param) => param.toLowerCase() === oldName);
+    const blockHasNew = params.some((param) => param.toLowerCase() === newName);
+    if (blockHasOld && blockHasNew) return def[0];
+  }
+  return null;
+}
+
+/** Returns whether the given parameter wraps a variable model or not. */
 function parameterWrapsVariable(param: IParameterModel):
     param is IParameterModel&IVariableHolder {
   return isVariableHolder(param);

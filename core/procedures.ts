@@ -462,4 +462,5 @@ export {
   isProcedureBlock,
   IProcedureMap,
   IProcedureModel,
+  ProcedureTuple,
 };

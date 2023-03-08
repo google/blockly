@@ -13,6 +13,7 @@ export type ProcedureTuple = [string, string[], boolean];
 
 /**
  * Procedure block type.
+ * @internal
  */
 export interface ProcedureBlock {
   getProcedureCall: () => string;

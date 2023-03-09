@@ -489,11 +489,6 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
   dispose() {
     dropDownDiv.hideIfOwner(this);
     WidgetDiv.hideIfOwner(this);
-    Tooltip.unbindMouseEvents(this.getClickTarget_());
-
-    if (this.mouseDownWrapper_) {
-      browserEvents.unbind(this.mouseDownWrapper_);
-    }
 
     if (!this.getSourceBlock()?.isDeadOrDying()) {
       dom.removeNode(this.fieldGroup_);

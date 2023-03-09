@@ -788,8 +788,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
     this.rendered = false;
 
-    Tooltip.unbindMouseEvents(this.pathObject.svgPath);
-
     if (common.getSelected() === this) {
       this.unselect();
       this.workspace.cancelCurrentGesture();

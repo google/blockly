@@ -316,7 +316,10 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (this.isDeadOrDying()) return;
 
     this.unplug(healStack);
-    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
+    if (Blockly.Events.isEnabled()) {
+      // Constructing the delete event is costly. Only perform if necessary.
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
+    }
     this.workspace.removeTopBlock(this);
     this.disposeInternal();
   }

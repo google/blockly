@@ -495,7 +495,9 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
       browserEvents.unbind(this.mouseDownWrapper_);
     }
 
-    dom.removeNode(this.fieldGroup_);
+    if (!this.getSourceBlock()?.isDeadOrDying()) {
+      dom.removeNode(this.fieldGroup_);
+    }
 
     this.disposed = true;
   }

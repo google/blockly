@@ -779,10 +779,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
 
     super.dispose(!!healStack);
+    dom.removeNode(this.svgGroup_);
   }
 
   override disposeInternal() {
     if (this.isDeadOrDying()) return;
+    super.disposeInternal();
 
     this.rendered = false;
 
@@ -797,9 +799,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     this.warningTextDb.clear();
 
     this.getIcons().forEach((i) => i.dispose());
-
-    super.disposeInternal();
-    dom.removeNode(this.svgGroup_);
   }
 
   /**

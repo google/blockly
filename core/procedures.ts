@@ -29,6 +29,7 @@ import {IParameterModel} from './interfaces/i_parameter_model.js';
 import {IProcedureMap} from './interfaces/i_procedure_map.js';
 import {IProcedureModel} from './interfaces/i_procedure_model.js';
 import {IProcedureBlock, isProcedureBlock} from './interfaces/i_procedure_block.js';
+import {isLegacyProcedureCallBlock, isLegacyProcedureDefBlock, ProcedureBlock, ProcedureTuple} from './interfaces/i_legacy_procedure_blocks.js';
 import {ObservableProcedureMap} from './observable_procedure_map.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
@@ -49,37 +50,6 @@ export const CATEGORY_NAME = 'PROCEDURE';
  * The default argument for a procedures_mutatorarg block.
  */
 export const DEFAULT_ARG = 'x';
-
-export type ProcedureTuple = [string, string[], boolean];
-
-/**
- * Procedure block type.
- */
-export interface ProcedureBlock {
-  getProcedureCall: () => string;
-  renameProcedure: (p1: string, p2: string) => void;
-  getProcedureDef: () => ProcedureTuple;
-}
-
-interface LegacyProcedureDefBlock {
-  getProcedureDef: () => ProcedureTuple
-}
-
-function isLegacyProcedureDefBlock(block: Object):
-    block is LegacyProcedureDefBlock {
-  return (block as any).getProcedureDef !== undefined;
-}
-
-interface LegacyProcedureCallBlock {
-  getProcedureCall: () => string;
-  renameProcedure: (p1: string, p2: string) => void;
-}
-
-function isLegacyProcedureCallBlock(block: Object):
-    block is LegacyProcedureCallBlock {
-  return (block as any).getProcedureCall !== undefined &&
-      (block as any).renameProcedure !== undefined;
-}
 
 /**
  * Find all user-created procedure definitions in a workspace.
@@ -492,4 +462,5 @@ export {
   isProcedureBlock,
   IProcedureMap,
   IProcedureModel,
+  ProcedureTuple,
 };

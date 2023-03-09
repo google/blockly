@@ -771,6 +771,21 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.isDeadOrDying()) return;
 
     Tooltip.dispose();
+    ContextMenu.hide();
+
+    if (animate && this.rendered) {
+      this.unplug(healStack);
+      blockAnimations.disposeUiEffect(this);
+    }
+
+    super.dispose(!!healStack);
+  }
+
+  override disposeInternal() {
+    if (this.isDeadOrDying()) return;
+
+    this.rendered = false;
+
     Tooltip.unbindMouseEvents(this.pathObject.svgPath);
 
     if (common.getSelected() === this) {
@@ -778,20 +793,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       this.workspace.cancelCurrentGesture();
     }
 
-    ContextMenu.hide();
-
-    if (animate && this.rendered) {
-      this.unplug(healStack);
-      blockAnimations.disposeUiEffect(this);
-    }
-    this.rendered = false;
-
     [...this.warningTextDb.values()].forEach((n) => clearTimeout(n));
     this.warningTextDb.clear();
 
     this.getIcons().forEach((i) => i.dispose());
 
-    super.dispose(!!healStack);
+    super.disposeInternal();
     dom.removeNode(this.svgGroup_);
   }
 

@@ -150,7 +150,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       this.setShadowStateInternal_();
 
       const targetBlock = this.targetBlock();
-      if (targetBlock) {
+      if (targetBlock && !targetBlock.isDeadOrDying()) {
         // Disconnect the attached normal block.
         targetBlock.unplug();
       }

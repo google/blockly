@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Thrasos renderer.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.thrasos.Renderer');
 
@@ -20,12 +15,14 @@ import {RenderInfo} from './info.js';
 
 
 /**
- * The thrasos renderer.
+ * The thrasos renderer. This is a more modern take on the legacy geras
+ * renderer.
+ *
+ * Thrasos is the ancient Greek spirit of boldness.
  */
 export class Renderer extends BaseRenderer {
   /**
    * @param name The renderer name.
-   * @internal
    */
   constructor(name: string) {
     super(name);

@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Geras renderer.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.Renderer');
 
@@ -26,7 +21,12 @@ import {PathObject} from './path_object.js';
 
 
 /**
- * The geras renderer.
+ * The geras renderer. This renderer was designed to be backwards compatible
+ * with pre-2019 Blockly. Newer projects that are not constrained by backwards
+ * compatibility should use thrasos, which is a more modern take on this
+ * renderer.
+ *
+ * Geras is the ancient Greek spirit of old age.
  */
 export class Renderer extends BaseRenderer {
   /** The renderer's highlight constant provider. */
@@ -34,7 +34,6 @@ export class Renderer extends BaseRenderer {
 
   /**
    * @param name The renderer name.
-   * @internal
    */
   constructor(name: string) {
     super(name);
@@ -43,8 +42,6 @@ export class Renderer extends BaseRenderer {
   /**
    * Initialize the renderer.  Geras has a highlight provider in addition to
    * the normal constant provider.
-   *
-   * @internal
    */
   override init(
       theme: Theme, opt_rendererOverrides?: {[rendererConstant: string]: any}) {
@@ -91,7 +88,6 @@ export class Renderer extends BaseRenderer {
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
    * @returns The renderer path object.
-   * @internal
    */
   override makePathObject(root: SVGElement, style: BlockStyle): PathObject {
     return new PathObject(
@@ -112,7 +108,6 @@ export class Renderer extends BaseRenderer {
    * is called, the renderer has already been initialized.
    *
    * @returns The highlight constant provider.
-   * @internal
    */
   getHighlightConstants(): HighlightConstantProvider {
     if (!this.highlightConstants_) {

@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Zelos specific objects representing inputs with connections on
- * a rendered block.
- *
- * @class
- */
 import * as goog from '../../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.StatementInput');
 
@@ -29,7 +23,6 @@ export class StatementInput extends BaseStatementInput {
   /**
    * @param constants The rendering constants provider.
    * @param input The statement input to measure and store information for.
-   * @internal
    */
   constructor(constants: ConstantProvider, input: Input) {
     super(constants, input);

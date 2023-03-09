@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Objects for rendering highlights on blocks.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.HighlightConstantProvider');
 
@@ -86,7 +81,6 @@ export class HighlightConstantProvider {
 
   /**
    * @param constants The rendering constants provider.
-   * @internal
    */
   constructor(constants: ConstantProvider) {
     /** The renderer's constant provider. */
@@ -94,16 +88,12 @@ export class HighlightConstantProvider {
 
     /**
      * The start point, which is offset in both X and Y, as an SVG path chunk.
-     *
-     * @internal
      */
     this.START_POINT = svgPaths.moveBy(this.OFFSET, this.OFFSET);
   }
 
   /**
    * Initialize shape objects based on the constants set in the constructor.
-   *
-   * @internal
    */
   init() {
     /**
@@ -145,9 +135,8 @@ export class HighlightConstantProvider {
   /**
    * @returns An object containing sizing and path information about inside
    *     corner highlights.
-   * @internal
    */
-  makeInsideCorner(): InsideCorner {
+  protected makeInsideCorner(): InsideCorner {
     const radius = this.constantProvider.CORNER_RADIUS;
     const offset = this.OFFSET;
 
@@ -189,9 +178,8 @@ export class HighlightConstantProvider {
   /**
    * @returns An object containing sizing and path information about outside
    *     corner highlights.
-   * @internal
    */
-  makeOutsideCorner(): OutsideCorner {
+  protected makeOutsideCorner(): OutsideCorner {
     const radius = this.constantProvider.CORNER_RADIUS;
     const offset = this.OFFSET;
 
@@ -238,9 +226,8 @@ export class HighlightConstantProvider {
   /**
    * @returns An object containing sizing and path information about puzzle tab
    *     highlights.
-   * @internal
    */
-  makePuzzleTab(): PuzzleTab {
+  protected makePuzzleTab(): PuzzleTab {
     const width = this.constantProvider.TAB_WIDTH;
     const height = this.constantProvider.TAB_HEIGHT;
 
@@ -288,9 +275,8 @@ export class HighlightConstantProvider {
   /**
    * @returns An object containing sizing and path information about notch
    *     highlights.
-   * @internal
    */
-  makeNotch(): Notch {
+  protected makeNotch(): Notch {
     // This is only for the previous connection.
     const pathLeft = svgPaths.lineOnAxis('h', this.OFFSET) +
         this.constantProvider.NOTCH.pathLeft;
@@ -300,9 +286,8 @@ export class HighlightConstantProvider {
   /**
    * @returns An object containing sizing and path information about collapsed
    *     block edge highlights.
-   * @internal
    */
-  makeJaggedTeeth(): JaggedTeeth {
+  protected makeJaggedTeeth(): JaggedTeeth {
     const pathLeft = svgPaths.lineTo(5.1, 2.6) + svgPaths.moveBy(-10.2, 6.8) +
         svgPaths.lineTo(5.1, 2.6);
     return {pathLeft, height: 12, width: 10.2};
@@ -311,9 +296,8 @@ export class HighlightConstantProvider {
   /**
    * @returns An object containing sizing and path information about start
    *     highlights.
-   * @internal
    */
-  makeStartHat(): StartHat {
+  protected makeStartHat(): StartHat {
     const hatHeight = this.constantProvider.START_HAT.height;
     const pathRtl = svgPaths.moveBy(25, -8.7) + svgPaths.curve('c', [
       svgPaths.point(29.7, -6.2),

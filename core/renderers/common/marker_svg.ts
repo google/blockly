@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Methods for graphically rendering a marker as SVG.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.MarkerSvg');
 
@@ -45,7 +40,8 @@ const MARKER_CLASS = 'blocklyMarker';
 const HEIGHT_MULTIPLIER = 3 / 4;
 
 /**
- * Class for a marker.
+ * Class for a marker, containing methods for graphically rendering a marker as
+ * SVG.
  */
 export class MarkerSvg {
   /**
@@ -121,7 +117,6 @@ export class MarkerSvg {
    * Create the DOM element for the marker.
    *
    * @returns The marker controls SVG group.
-   * @internal
    */
   createDom(): SVGElement {
     const className = this.isCursor() ? CURSOR_CLASS : MARKER_CLASS;

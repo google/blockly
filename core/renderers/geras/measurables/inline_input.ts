@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Objects representing inline inputs with connections on a
- * rendered block.
- *
- * @class
- */
 import * as goog from '../../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.InlineInput');
 
@@ -30,7 +24,6 @@ export class InlineInput extends BaseInlineInput {
   /**
    * @param constants The rendering constants provider.
    * @param input The inline input to measure and store information for.
-   * @internal
    */
   constructor(constants: BaseConstantProvider, input: Input) {
     super(constants, input);

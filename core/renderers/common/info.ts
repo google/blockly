@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Methods for graphically rendering a block as SVG.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.RenderInfo');
 
@@ -92,7 +87,6 @@ export class RenderInfo {
   /**
    * @param renderer The renderer in use.
    * @param block The block to measure.
-   * @internal
    */
   constructor(renderer: Renderer, block: BlockSvg) {
     this.renderer_ = renderer;
@@ -143,7 +137,6 @@ export class RenderInfo {
    * Get the block renderer in use.
    *
    * @returns The block renderer in use.
-   * @internal
    */
   getRenderer(): Renderer {
     return this.renderer_;
@@ -156,8 +149,6 @@ export class RenderInfo {
    * This measure pass does not propagate changes to the block (although fields
    * may choose to rerender when getSize() is called).  However, calling it
    * repeatedly may be expensive.
-   *
-   * @internal
    */
   measure() {
     this.createRows_();
@@ -225,10 +216,8 @@ export class RenderInfo {
 
   /**
    * Create all non-spacer elements that belong on the top row.
-   *
-   * @internal
    */
-  populateTopRow_() {
+  protected populateTopRow_() {
     const hasPrevious = !!this.block_.previousConnection;
     const hasHat = (this.block_.hat ? this.block_.hat === 'cap' :
                                       this.constants_.ADD_START_HATS) &&
@@ -270,10 +259,8 @@ export class RenderInfo {
 
   /**
    * Create all non-spacer elements that belong on the bottom row.
-   *
-   * @internal
    */
-  populateBottomRow_() {
+  protected populateBottomRow_() {
     this.bottomRow.hasNextConnection = !!this.block_.nextConnection;
 
     const followsStatement = this.block_.inputList.length &&

@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Minimalist render info object.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.minimalist.RenderInfo');
 
@@ -32,7 +27,6 @@ export class RenderInfo extends BaseRenderInfo {
   /**
    * @param renderer The renderer in use.
    * @param block The block to measure.
-   * @internal
    */
   constructor(renderer: Renderer, block: BlockSvg) {
     super(renderer, block);
@@ -42,7 +36,6 @@ export class RenderInfo extends BaseRenderInfo {
    * Get the block renderer in use.
    *
    * @returns The block renderer in use.
-   * @internal
    */
   override getRenderer(): Renderer {
     return this.renderer_;

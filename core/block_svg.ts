@@ -140,6 +140,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   override nextConnection!: RenderedConnection;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   override previousConnection!: RenderedConnection;
+  private readonly useDragSurface_: boolean;
 
   private translation = '';
 
@@ -177,6 +178,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     /** The renderer's path object. */
     this.pathObject =
         workspace.getRenderer().makePathObject(this.svgGroup_, this.style);
+
+    /**
+     * Whether to move the block to the drag surface when it is dragged.
+     * True if it should move, false if it should be translated directly.
+     */
+    this.useDragSurface_ = !!workspace.getBlockDragSurface();
 
     const svgPath = this.pathObject.svgPath;
     (svgPath as any).tooltip = this;
@@ -351,6 +358,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     let x = 0;
     let y = 0;
 
+    const dragSurfaceGroup = this.useDragSurface_ ?
+        this.workspace.getBlockDragSurface()!.getGroup() :
+        null;
+
     let element: SVGElement = this.getSvgRoot();
     if (element) {
       do {
@@ -358,8 +369,19 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
         const xy = svgMath.getRelativeXY(element);
         x += xy.x;
         y += xy.y;
+        // If this element is the current element on the drag surface, include
+        // the translation of the drag surface itself.
+        if (this.useDragSurface_ &&
+            this.workspace.getBlockDragSurface()!.getCurrentBlock() ===
+                element) {
+          const surfaceTranslation =
+              this.workspace.getBlockDragSurface()!.getSurfaceTranslation();
+          x += surfaceTranslation.x;
+          y += surfaceTranslation.y;
+        }
         element = element.parentNode as SVGElement;
-      } while (element && element !== this.workspace.getCanvas());
+      } while (element && element !== this.workspace.getCanvas() &&
+               element !== dragSurfaceGroup);
     }
     return new Coordinate(x, y);
   }
@@ -412,6 +434,31 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
+   * Move this block to its workspace's drag surface, accounting for
+   * positioning. Generally should be called at the same time as
+   * setDragging_(true). Does nothing if useDragSurface_ is false.
+   *
+   * @internal
+   */
+  moveToDragSurface() {
+    if (!this.useDragSurface_) {
+      return;
+    }
+    // The translation for drag surface blocks,
+    // is equal to the current relative-to-surface position,
+    // to keep the position in sync as it move on/off the surface.
+    // This is in workspace coordinates.
+    const xy = this.getRelativeToSurfaceXY();
+    this.clearTransformAttributes_();
+    this.workspace.getBlockDragSurface()!.translateSurface(xy.x, xy.y);
+    // Execute the move on the top-level SVG component
+    const svg = this.getSvgRoot();
+    if (svg) {
+      this.workspace.getBlockDragSurface()!.setBlocksAndShow(svg);
+    }
+  }
+
+  /**
    * Move a block to a position.
    *
    * @param xy The position to move to in workspace units.
@@ -422,15 +469,40 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
-   * Move this block during a drag.
+   * Move this block back to the workspace block canvas.
+   * Generally should be called at the same time as setDragging_(false).
+   * Does nothing if useDragSurface_ is false.
+   *
+   * @param newXY The position the block should take on on the workspace canvas,
+   *     in workspace coordinates.
+   * @internal
+   */
+  moveOffDragSurface(newXY: Coordinate) {
+    if (!this.useDragSurface_) {
+      return;
+    }
+    // Translate to current position, turning off 3d.
+    this.translate(newXY.x, newXY.y);
+    this.workspace.getBlockDragSurface()!.clearAndHide(
+        this.workspace.getCanvas());
+  }
+
+  /**
+   * Move this block during a drag, taking into account whether we are using a
+   * drag surface to translate blocks.
    * This block must be a top-level block.
    *
    * @param newLoc The location to translate to, in workspace coordinates.
    * @internal
    */
   moveDuringDrag(newLoc: Coordinate) {
-    this.translate(newLoc.x, newLoc.y);
-    this.getSvgRoot().setAttribute('transform', this.getTranslation());
+    if (this.useDragSurface_) {
+      this.workspace.getBlockDragSurface()!.translateSurface(
+          newLoc.x, newLoc.y);
+    } else {
+      this.translate(newLoc.x, newLoc.y);
+      this.getSvgRoot().setAttribute('transform', this.getTranslation());
+    }
   }
 
   /**

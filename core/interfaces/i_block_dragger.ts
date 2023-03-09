@@ -19,7 +19,7 @@ goog.declareModuleId('Blockly.IBlockDragger');
  */
 export interface IBlockDragger {
   /**
-   * Start dragging a block.
+   * Start dragging a block.  This includes moving it to the drag surface.
    *
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at mouse down, in pixel units.

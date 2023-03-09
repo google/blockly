@@ -93,39 +93,39 @@ export class FieldAngle extends FieldInput<number> {
   private boundEvents: browserEvents.Data[] = [];
 
   /** The angle picker's line drawn representing the value's angle. */
-  line: SVGLineElement|null = null;
+  private line: SVGLineElement|null = null;
 
   /** The angle picker's gauge path depending on the value. */
-  gauge: SVGPathElement|null = null;
+  private gauge: SVGPathElement|null = null;
 
   /** The degree symbol for this field. */
-  protected symbol: SVGTSpanElement|null = null;
+  protected symbol_: SVGTSpanElement|null = null;
 
   /**
-   * @param opt_value The initial value of the field. Should cast to a number.
+   * @param value The initial value of the field. Should cast to a number.
    *     Defaults to 0. Also accepts Field.SKIP_SETUP if you wish to skip setup
    *     (only used by subclasses that want to handle configuration and setting
    *     the field value after their own constructors have run).
-   * @param opt_validator A function that is called to validate changes to the
+   * @param validator A function that is called to validate changes to the
    *     field's value. Takes in a number & returns a validated number, or null
    *     to abort the change.
-   * @param opt_config A map of options used to configure the field.
+   * @param config A map of options used to configure the field.
    *     See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/angle#creation}
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|number|Sentinel, opt_validator?: FieldAngleValidator,
-      opt_config?: FieldAngleConfig) {
+      value?: string|number|Sentinel, validator?: FieldAngleValidator,
+      config?: FieldAngleConfig) {
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(opt_value)) return;
-    if (opt_config) {
-      this.configure_(opt_config);
+    if (Field.isSentinel(value)) return;
+    if (config) {
+      this.configure_(config);
     }
-    this.setValue(opt_value);
-    if (opt_validator) {
-      this.setValidator(opt_validator);
+    this.setValue(value);
+    if (validator) {
+      this.setValidator(validator);
     }
   }
 
@@ -166,9 +166,9 @@ export class FieldAngle extends FieldInput<number> {
     super.initView();
     // Add the degree symbol to the left of the number, even in RTL (issue
     // #2380)
-    this.symbol = dom.createSvgElement(Svg.TSPAN, {});
-    this.symbol.appendChild(document.createTextNode('°'));
-    this.getTextElement().appendChild(this.symbol);
+    this.symbol_ = dom.createSvgElement(Svg.TSPAN, {});
+    this.symbol_.appendChild(document.createTextNode('°'));
+    this.getTextElement().appendChild(this.symbol_);
   }
 
   /** Updates the graph when the field rerenders. */
@@ -197,7 +197,7 @@ export class FieldAngle extends FieldInput<number> {
           this.sourceBlock_.style.colourTertiary);
     }
 
-    dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
+    dropDownDiv.showPositionedByField(this, this.dropdownDispose.bind(this));
 
     this.updateGraph();
   }
@@ -207,7 +207,7 @@ export class FieldAngle extends FieldInput<number> {
    *
    * @returns The newly created slider.
    */
-  private dropdownCreate() {
+  private dropdownCreate(): SVGSVGElement {
     const svg = dom.createSvgElement(Svg.SVG, {
       'xmlns': dom.SVG_NS,
       'xmlns:html': dom.HTML_NS,
@@ -254,19 +254,19 @@ export class FieldAngle extends FieldInput<number> {
     // mousemove even if it's not in the middle of a drag.  In future we may
     // change this behaviour.
     this.boundEvents.push(
-        browserEvents.conditionalBind(svg, 'click', this, this.hide_));
+        browserEvents.conditionalBind(svg, 'click', this, this.hide));
     // On touch devices, the picker's value is only updated with a drag. Add
     // a click handler on the drag surface to update the value if the surface
     // is clicked.
     this.boundEvents.push(browserEvents.conditionalBind(
-        circle, 'pointerdown', this, this.onMouseMove, true));
+        circle, 'pointerdown', this, this.onMouseMove_, true));
     this.boundEvents.push(browserEvents.conditionalBind(
-        circle, 'pointermove', this, this.onMouseMove, true));
+        circle, 'pointermove', this, this.onMouseMove_, true));
     return svg;
   }
 
   /** Disposes of events and DOM-references belonging to the angle editor. */
-  private dropdownDispose_() {
+  private dropdownDispose() {
     for (const event of this.boundEvents) {
       browserEvents.unbind(event);
     }
@@ -276,7 +276,7 @@ export class FieldAngle extends FieldInput<number> {
   }
 
   /** Hide the editor. */
-  private hide_() {
+  private hide() {
     dropDownDiv.hideIfOwner(this);
     WidgetDiv.hide();
   }
@@ -286,7 +286,7 @@ export class FieldAngle extends FieldInput<number> {
    *
    * @param e Mouse move event.
    */
-  protected onMouseMove(e: PointerEvent) {
+  protected onMouseMove_(e: PointerEvent) {
     // Calculate angle.
     const bBox = this.gauge!.ownerSVGElement!.getBoundingClientRect();
     const dx = e.clientX - bBox.left - FieldAngle.HALF;
@@ -410,11 +410,11 @@ export class FieldAngle extends FieldInput<number> {
   /**
    * Ensure that the input value is a valid angle.
    *
-   * @param opt_newValue The input value.
+   * @param newValue The input value.
    * @returns A valid angle, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: any): number|null {
-    const value = Number(opt_newValue);
+  protected override doClassValidation_(newValue?: any): number|null {
+    const value = Number(newValue);
     if (isNaN(value) || !isFinite(value)) {
       return null;
     }

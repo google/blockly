@@ -89,31 +89,31 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
   override CURSOR = 'text';
 
   /**
-   * @param opt_value The initial value of the field. Should cast to a string.
+   * @param value The initial value of the field. Should cast to a string.
    *     Defaults to an empty string if null or undefined. Also accepts
    *     Field.SKIP_SETUP if you wish to skip setup (only used by subclasses
    *     that want to handle configuration and setting the field value after
    *     their own constructors have run).
-   * @param opt_validator A function that is called to validate changes to the
+   * @param validator A function that is called to validate changes to the
    *     field's value. Takes in a string & returns a validated string, or null
    *     to abort the change.
-   * @param opt_config A map of options used to configure the field.
+   * @param config A map of options used to configure the field.
    *     See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|Sentinel, opt_validator?: FieldInputValidator<T>|null,
-      opt_config?: FieldInputConfig) {
+      value?: string|Sentinel, validator?: FieldInputValidator<T>|null,
+      config?: FieldInputConfig) {
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(opt_value)) return;
-    if (opt_config) {
-      this.configure_(opt_config);
+    if (Field.isSentinel(value)) return;
+    if (config) {
+      this.configure_(config);
     }
-    this.setValue(opt_value);
-    if (opt_validator) {
-      this.setValidator(opt_validator);
+    this.setValue(value);
+    if (validator) {
+      this.setValidator(validator);
     }
   }
 
@@ -261,14 +261,13 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    * Shows a prompt editor for mobile browsers if the modalInputs option is
    * enabled.
    *
-   * @param _opt_e Optional mouse event that triggered the field to open, or
+   * @param _e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
-   * @param opt_quietInput True if editor should be created without focus.
+   * @param quietInput True if editor should be created without focus.
    *     Defaults to false.
    */
-  protected override showEditor_(_opt_e?: Event, opt_quietInput?: boolean) {
+  protected override showEditor_(_e?: Event, quietInput = false) {
     this.workspace_ = (this.sourceBlock_ as BlockSvg).workspace;
-    const quietInput = opt_quietInput || false;
     if (!quietInput && this.workspace_.options.modalInputs &&
         (userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD)) {
       this.showPromptEditor_();

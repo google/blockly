@@ -33,29 +33,29 @@ export class FieldLabel extends Field<string> {
   override EDITABLE = false;
 
   /**
-   * @param opt_value The initial value of the field. Should cast to a string.
+   * @param value The initial value of the field. Should cast to a string.
    *     Defaults to an empty string if null or undefined. Also accepts
    *     Field.SKIP_SETUP if you wish to skip setup (only used by subclasses
    *     that want to handle configuration and setting the field value after
    *     their own constructors have run).
-   * @param opt_class Optional CSS class for the field's text.
-   * @param opt_config A map of options used to configure the field.
+   * @param textClass Optional CSS class for the field's text.
+   * @param config A map of options used to configure the field.
    *    See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label#creation}
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|Sentinel, opt_class?: string,
-      opt_config?: FieldLabelConfig) {
+      value?: string|Sentinel, textClass?: string,
+      config?: FieldLabelConfig) {
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(opt_value)) return;
-    if (opt_config) {
-      this.configure_(opt_config);
+    if (Field.isSentinel(value)) return;
+    if (config) {
+      this.configure_(config);
     } else {
-      this.class_ = opt_class || null;
+      this.class_ = textClass || null;
     }
-    this.setValue(opt_value);
+    this.setValue(value);
   }
 
   protected override configure_(config: FieldLabelConfig) {
@@ -78,15 +78,15 @@ export class FieldLabel extends Field<string> {
   /**
    * Ensure that the input value casts to a valid string.
    *
-   * @param opt_newValue The input value.
+   * @param newValue The input value.
    * @returns A valid string, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
+  protected override doClassValidation_(newValue?: AnyDuringMigration):
       string|null {
-    if (opt_newValue === null || opt_newValue === undefined) {
+    if (newValue === null || newValue === undefined) {
       return null;
     }
-    return String(opt_newValue);
+    return String(newValue);
   }
 
   /**

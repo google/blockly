@@ -49,22 +49,22 @@ export class FieldCheckbox extends Field<CheckboxBool> {
   override value_: boolean|null = this.value_;
 
   /**
-   * @param opt_value The initial value of the field. Should either be 'TRUE',
+   * @param value The initial value of the field. Should either be 'TRUE',
    *     'FALSE' or a boolean. Defaults to 'FALSE'. Also accepts
    *     Field.SKIP_SETUP if you wish to skip setup (only used by subclasses
    *     that want to handle configuration and setting the field value after
    *     their own constructors have run).
-   * @param opt_validator  A function that is called to validate changes to the
+   * @param validator  A function that is called to validate changes to the
    *     field's value. Takes in a value ('TRUE' or 'FALSE') & returns a
    *     validated value ('TRUE' or 'FALSE'), or null to abort the change.
-   * @param opt_config A map of options used to configure the field.
+   * @param config A map of options used to configure the field.
    *     See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/checkbox#creation}
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: CheckboxBool|Sentinel, opt_validator?: FieldCheckboxValidator,
-      opt_config?: FieldCheckboxConfig) {
+      value?: CheckboxBool|Sentinel, validator?: FieldCheckboxValidator,
+      config?: FieldCheckboxConfig) {
     super(Field.SKIP_SETUP);
 
     /**
@@ -73,13 +73,13 @@ export class FieldCheckbox extends Field<CheckboxBool> {
      */
     this.checkChar_ = FieldCheckbox.CHECK_CHAR;
 
-    if (Field.isSentinel(opt_value)) return;
-    if (opt_config) {
-      this.configure_(opt_config);
+    if (Field.isSentinel(value)) return;
+    if (config) {
+      this.configure_(config);
     }
-    this.setValue(opt_value);
-    if (opt_validator) {
-      this.setValidator(opt_validator);
+    this.setValue(value);
+    if (validator) {
+      this.setValidator(validator);
     }
   }
 
@@ -150,15 +150,15 @@ export class FieldCheckbox extends Field<CheckboxBool> {
   /**
    * Ensure that the input value is valid ('TRUE' or 'FALSE').
    *
-   * @param opt_newValue The input value.
+   * @param newValue The input value.
    * @returns A valid value ('TRUE' or 'FALSE), or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
+  protected override doClassValidation_(newValue?: AnyDuringMigration):
       BoolString|null {
-    if (opt_newValue === true || opt_newValue === 'TRUE') {
+    if (newValue === true || newValue === 'TRUE') {
       return 'TRUE';
     }
-    if (opt_newValue === false || opt_newValue === 'FALSE') {
+    if (newValue === false || newValue === 'FALSE') {
       return 'FALSE';
     }
     return null;

@@ -97,11 +97,11 @@ export class FieldDropdown extends Field<string> {
    *     if you wish to skip setup (only used by subclasses that want to handle
    *     configuration and setting the field value after their own constructors
    *     have run).
-   * @param opt_validator A function that is called to validate changes to the
+   * @param validator A function that is called to validate changes to the
    *     field's value. Takes in a language-neutral dropdown option & returns a
    *     validated language-neutral dropdown option, or null to abort the
    *     change.
-   * @param opt_config A map of options used to configure the field.
+   * @param config A map of options used to configure the field.
    *     See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/dropdown#creation}
    * for a list of properties this parameter supports.
@@ -109,14 +109,14 @@ export class FieldDropdown extends Field<string> {
    */
   constructor(
       menuGenerator: MenuGenerator,
-      opt_validator?: FieldDropdownValidator,
-      opt_config?: FieldDropdownConfig,
+      validator?: FieldDropdownValidator,
+      config?: FieldDropdownConfig,
   );
   constructor(menuGenerator: Sentinel);
   constructor(
       menuGenerator: MenuGenerator|Sentinel,
-      opt_validator?: FieldDropdownValidator,
-      opt_config?: FieldDropdownConfig,
+      validator?: FieldDropdownValidator,
+      config?: FieldDropdownConfig,
   ) {
     super(Field.SKIP_SETUP);
 
@@ -139,12 +139,12 @@ export class FieldDropdown extends Field<string> {
      */
     this.selectedOption_ = this.getOptions(false)[0];
 
-    if (opt_config) {
-      this.configure_(opt_config);
+    if (config) {
+      this.configure_(config);
     }
     this.setValue(this.selectedOption_[1]);
-    if (opt_validator) {
-      this.setValidator(opt_validator);
+    if (validator) {
+      this.setValidator(validator);
     }
   }
 
@@ -244,17 +244,17 @@ export class FieldDropdown extends Field<string> {
   /**
    * Create a dropdown menu under the text.
    *
-   * @param opt_e Optional mouse event that triggered the field to open, or
+   * @param e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    */
-  protected override showEditor_(opt_e?: MouseEvent) {
+  protected override showEditor_(e?: MouseEvent) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
     }
     this.dropdownCreate_();
-    if (opt_e && typeof opt_e.clientX === 'number') {
-      this.menu_!.openingCoords = new Coordinate(opt_e.clientX, opt_e.clientY);
+    if (e && typeof e.clientX === 'number') {
+      this.menu_!.openingCoords = new Coordinate(e.clientX, e.clientY);
     } else {
       this.menu_!.openingCoords = null;
     }
@@ -368,20 +368,20 @@ export class FieldDropdown extends Field<string> {
   /**
    * Return a list of the options for this dropdown.
    *
-   * @param opt_useCache For dynamic options, whether or not to use the cached
+   * @param useCache For dynamic options, whether or not to use the cached
    *     options or to re-generate them.
    * @returns A non-empty array of option tuples:
    *     (human-readable text or image, language-neutral name).
    * @throws {TypeError} If generated options are incorrectly structured.
    */
-  getOptions(opt_useCache?: boolean): MenuOption[] {
+  getOptions(useCache?: boolean): MenuOption[] {
     if (!this.menuGenerator_) {
       // A subclass improperly skipped setup without defining the menu
       // generator.
       throw TypeError('A menu generator was never defined.');
     }
     if (Array.isArray(this.menuGenerator_)) return this.menuGenerator_;
-    if (opt_useCache && this.generatedOptions_) return this.generatedOptions_;
+    if (useCache && this.generatedOptions_) return this.generatedOptions_;
 
     this.generatedOptions_ = this.menuGenerator_();
     validateOptions(this.generatedOptions_);
@@ -391,23 +391,23 @@ export class FieldDropdown extends Field<string> {
   /**
    * Ensure that the input value is a valid language-neutral option.
    *
-   * @param opt_newValue The input value.
+   * @param newValue The input value.
    * @returns A valid language-neutral option, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: string): string|null {
+  protected override doClassValidation_(newValue?: string): string|null {
     const options = this.getOptions(true);
-    const isValueValid = options.some((option) => option[1] === opt_newValue);
+    const isValueValid = options.some((option) => option[1] === newValue);
 
     if (!isValueValid) {
       if (this.sourceBlock_) {
         console.warn(
             'Cannot set the dropdown\'s value to an unavailable option.' +
             ' Block type: ' + this.sourceBlock_.type +
-            ', Field name: ' + this.name + ', Value: ' + opt_newValue);
+            ', Field name: ' + this.name + ', Value: ' + newValue);
       }
       return null;
     }
-    return opt_newValue as string;
+    return newValue as string;
   }
 
   /**

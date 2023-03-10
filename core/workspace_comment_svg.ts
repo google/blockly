@@ -673,7 +673,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     dom.createSvgElement(
         Svg.POLYGON, {
           'points':
-              `0,${RESIZE_SIZE} ${RESIZE_SIZE},${RESIZE_SIZE} ${RESIZE_SIZE},0`
+              `0,${RESIZE_SIZE} ${RESIZE_SIZE},${RESIZE_SIZE} ${RESIZE_SIZE},0`,
         },
         this.resizeGroup_);
     dom.createSvgElement(

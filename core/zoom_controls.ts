@@ -42,22 +42,11 @@ export class ZoomControls implements IPositionable {
   id = 'zoomControls';
 
   /**
-   * A handle to use to unbind the mouse down event handler for zoom reset
-   *    button. Opaque data returned from browserEvents.conditionalBind.
+   * Array holding info needed to unbind events.
+   * Used for disposing.
+   * Ex: [[node, name, func], [node, name, func]].
    */
-  private onZoomResetWrapper: browserEvents.Data|null = null;
-
-  /**
-   * A handle to use to unbind the mouse down event handler for zoom in
-   * button. Opaque data returned from browserEvents.conditionalBind.
-   */
-  private onZoomInWrapper: browserEvents.Data|null = null;
-
-  /**
-   * A handle to use to unbind the mouse down event handler for zoom out
-   * button. Opaque data returned from browserEvents.conditionalBind.
-   */
-  private onZoomOutWrapper: browserEvents.Data|null = null;
+  private boundEvents: browserEvents.Data[] = [];
 
   /** The zoom in svg <g> element. */
   private zoomInGroup: SVGGElement|null = null;
@@ -144,14 +133,8 @@ export class ZoomControls implements IPositionable {
     if (this.svgGroup) {
       dom.removeNode(this.svgGroup);
     }
-    if (this.onZoomResetWrapper) {
-      browserEvents.unbind(this.onZoomResetWrapper);
-    }
-    if (this.onZoomInWrapper) {
-      browserEvents.unbind(this.onZoomInWrapper);
-    }
-    if (this.onZoomOutWrapper) {
-      browserEvents.unbind(this.onZoomOutWrapper);
+    for (const event of this.boundEvents) {
+      browserEvents.unbind(event);
     }
   }
 
@@ -273,8 +256,8 @@ export class ZoomControls implements IPositionable {
         this.workspace.options.pathToMedia + SPRITE.url);
 
     // Attach listener.
-    this.onZoomOutWrapper = browserEvents.conditionalBind(
-        this.zoomOutGroup, 'pointerdown', null, this.zoom.bind(this, -1));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        this.zoomOutGroup, 'pointerdown', null, this.zoom.bind(this, -1)));
   }
 
   /**
@@ -319,8 +302,8 @@ export class ZoomControls implements IPositionable {
         this.workspace.options.pathToMedia + SPRITE.url);
 
     // Attach listener.
-    this.onZoomInWrapper = browserEvents.conditionalBind(
-        this.zoomInGroup, 'pointerdown', null, this.zoom.bind(this, 1));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        this.zoomInGroup, 'pointerdown', null, this.zoom.bind(this, 1)));
   }
 
   /**
@@ -377,8 +360,8 @@ export class ZoomControls implements IPositionable {
         this.workspace.options.pathToMedia + SPRITE.url);
 
     // Attach event listeners.
-    this.onZoomResetWrapper = browserEvents.conditionalBind(
-        this.zoomResetGroup, 'pointerdown', null, this.resetZoom.bind(this));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        this.zoomResetGroup, 'pointerdown', null, this.resetZoom.bind(this)));
   }
 
   /**

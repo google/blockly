@@ -261,9 +261,8 @@ export function registerDeleteAll() {
       const deletableBlocksLength = getDeletableBlocks_(scope.workspace).length;
       if (deletableBlocksLength === 1) {
         return Msg['DELETE_BLOCK'];
-      } else {
-        return Msg['DELETE_X_BLOCKS'].replace('%1', `${deletableBlocksLength}`);
       }
+      return Msg['DELETE_X_BLOCKS'].replace('%1', `${deletableBlocksLength}`);
     },
     preconditionFn(scope: Scope) {
       if (!scope.workspace) {

@@ -128,9 +128,11 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   protected toolboxPosition_: number;
 
   /**
-   * Opaque data that can be passed to Blockly.unbindEvent_.
+   * Array holding info needed to unbind events.
+   * Used for disposing.
+   * Ex: [[node, name, func], [node, name, func]].
    */
-  private eventWrappers_: browserEvents.Data = [];
+  private boundEvents: browserEvents.Data[] = [];
 
   /**
    * Function that will be registered as a change listener on the workspace
@@ -357,21 +359,17 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
     this.hide();
 
-    Array.prototype.push.apply(
-        this.eventWrappers_,
-        browserEvents.conditionalBind(
-            (this.svgGroup_ as SVGGElement), 'wheel', this, this.wheel_));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        (this.svgGroup_ as SVGGElement), 'wheel', this, this.wheel_));
     if (!this.autoClose) {
       this.filterWrapper_ = this.filterForCapacity_.bind(this);
       this.targetWorkspace.addChangeListener(this.filterWrapper_);
     }
 
     // Dragging the flyout up and down.
-    Array.prototype.push.apply(
-        this.eventWrappers_,
-        browserEvents.conditionalBind(
-            (this.svgBackground_ as SVGPathElement), 'pointerdown', this,
-            this.onMouseDown_));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        (this.svgBackground_ as SVGPathElement), 'pointerdown', this,
+        this.onMouseDown_));
 
     // A flyout connected to a workspace doesn't have its own current gesture.
     this.workspace_.getGesture =
@@ -401,7 +399,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   dispose() {
     this.hide();
     this.workspace_.getComponentManager().removeComponent(this.id);
-    browserEvents.unbind(this.eventWrappers_);
+    for (const event of this.boundEvents) {
+      browserEvents.unbind(event);
+    }
     if (this.filterWrapper_) {
       this.targetWorkspace.removeChangeListener(this.filterWrapper_);
       this.filterWrapper_ = null;

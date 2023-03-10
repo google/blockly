@@ -219,8 +219,7 @@ export class Bubble implements IBubble {
           this.bubbleGroup);
       const size = 2 * Bubble.BORDER_WIDTH;
       dom.createSvgElement(
-          Svg.POLYGON,
-          {'points': `0,${size} ${size},${size} ${size},0`},
+          Svg.POLYGON, {'points': `0,${size} ${size},${size} ${size},0`},
           this.resizeGroup);
       dom.createSvgElement(
           Svg.LINE, {

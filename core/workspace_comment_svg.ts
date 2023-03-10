@@ -671,8 +671,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
         Svg.G, {'class': this.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'},
         this.svgGroup_);
     dom.createSvgElement(
-        Svg.POLYGON,
-        {'points': `0,${RESIZE_SIZE} ${RESIZE_SIZE},${RESIZE_SIZE} ${RESIZE_SIZE},0`},
+        Svg.POLYGON, {
+          'points':
+              `0,${RESIZE_SIZE} ${RESIZE_SIZE},${RESIZE_SIZE} ${RESIZE_SIZE},0`
+        },
         this.resizeGroup_);
     dom.createSvgElement(
         Svg.LINE, {

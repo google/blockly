@@ -783,9 +783,8 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
 
     this.textElement_.setAttribute(
         'x',
-        this.getSourceBlock()?.RTL ?
-            this.size_.width - contentWidth - xOffset :
-            xOffset);
+        this.getSourceBlock()?.RTL ? this.size_.width - contentWidth - xOffset :
+                                     xOffset);
     this.textElement_.setAttribute(
         'y',
         constants!.FIELD_TEXT_BASELINE_CENTER ?

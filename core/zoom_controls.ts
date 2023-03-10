@@ -136,6 +136,7 @@ export class ZoomControls implements IPositionable {
     for (const event of this.boundEvents) {
       browserEvents.unbind(event);
     }
+    this.boundEvents.length = 0;
   }
 
   /**

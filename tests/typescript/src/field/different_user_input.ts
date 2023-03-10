@@ -54,7 +54,7 @@ class FieldMitosis extends Field<CellGroup> {
     doMitosis(): void {
         const cellGroup = this.getValue();
         if (!cellGroup) return;
-    
+
         const cells = cellGroup.cells.flatMap((cell) => {
             const leftCell: Cell = {cellId: `${cell.cellId}-left`};
             const rightCell: Cell = {cellId: `${cell.cellId}-right`};

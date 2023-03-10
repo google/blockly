@@ -275,6 +275,7 @@ export class Comment extends Icon {
     for (const event of this.boundEvents) {
       browserEvents.unbind(event);
     }
+    this.boundEvents.length = 0;
     if (this.bubble_) {
       this.bubble_.dispose();
       this.bubble_ = null;

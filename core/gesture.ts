@@ -200,6 +200,7 @@ export class Gesture {
     for (const event of this.boundEvents) {
       browserEvents.unbind(event);
     }
+    this.boundEvents.length = 0;
 
     if (this.blockDragger_) {
       this.blockDragger_.dispose();

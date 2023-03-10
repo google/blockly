@@ -74,8 +74,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Lay out the blocks in the flyout.
    *
-   * @param contents The blocks and buttons to lay
-   *     out.
+   * @param contents The blocks and buttons to lay out.
    * @param gaps The visible gaps between blocks.
    */
   protected abstract layout_(contents: FlyoutItem[], gaps: number[]): void;
@@ -402,6 +401,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     for (const event of this.boundEvents) {
       browserEvents.unbind(event);
     }
+    this.boundEvents.length = 0;
     if (this.filterWrapper_) {
       this.targetWorkspace.removeChangeListener(this.filterWrapper_);
       this.filterWrapper_ = null;
@@ -567,7 +567,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     }
     this.setVisible(false);
     // Delete all the event listeners.
-    for (let i = 0, listen; listen = this.listeners_[i]; i++) {
+    for (const listen of this.listeners_) {
       browserEvents.unbind(listen);
     }
     this.listeners_.length = 0;

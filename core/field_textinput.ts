@@ -50,12 +50,12 @@ export class FieldTextInput extends FieldInput<string> {
    * @param newValue The input value.
    * @returns A valid string, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: AnyDuringMigration):
-      string|null {
+  protected override doClassValidation_(newValue?: AnyDuringMigration): string
+      |null {
     if (newValue === undefined) {
       return null;
     }
-    return String(newValue);
+    return `${newValue}`;
   }
 
   /**

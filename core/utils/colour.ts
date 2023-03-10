@@ -80,7 +80,7 @@ export function setHsvValue(newValue: number) {
  *     can't be parsed.
  */
 export function parse(str: string|number): string|null {
-  str = String(str).toLowerCase().trim();
+  str = `${str}`.toLowerCase().trim();
   let hex = names[str];
   if (hex) {
     // e.g. 'red'

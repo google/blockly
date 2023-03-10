@@ -44,8 +44,7 @@ export class FieldLabelSerializable extends FieldLabel {
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label-serializable#creation}
    * for a list of properties this parameter supports.
    */
-  constructor(
-      value?: string, textClass?: string, config?: FieldLabelConfig) {
+  constructor(value?: string, textClass?: string, config?: FieldLabelConfig) {
     super(String(value ?? ''), textClass, config);
   }
 

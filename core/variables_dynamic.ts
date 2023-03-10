@@ -116,7 +116,7 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
       const firstVariable = variableModelList[variableModelList.length - 1];
       const block = xml.createElement('block');
       block.setAttribute('type', 'variables_set_dynamic');
-      block.setAttribute('gap', '24');
+      block.setAttribute('gap', 24);
       block.appendChild(Variables.generateVariableFieldDom(firstVariable));
       xmlList.push(block);
     }
@@ -125,7 +125,7 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
       for (let i = 0, variable; variable = variableModelList[i]; i++) {
         const block = xml.createElement('block');
         block.setAttribute('type', 'variables_get_dynamic');
-        block.setAttribute('gap', '8');
+        block.setAttribute('gap', 8);
         block.appendChild(Variables.generateVariableFieldDom(variable));
         xmlList.push(block);
       }

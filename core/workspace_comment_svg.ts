@@ -530,10 +530,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     const element = this.toXml(opt_noId);
     const xy = this.getRelativeToSurfaceXY();
     element.setAttribute(
-        'x', String(Math.round(this.workspace.RTL ? width - xy.x : xy.x)));
-    element.setAttribute('y', String(Math.round(xy.y)));
-    element.setAttribute('h', String(this.getHeight()));
-    element.setAttribute('w', String(this.getWidth()));
+        'x', Math.round(this.workspace.RTL ? width - xy.x : xy.x));
+    element.setAttribute('y', Math.round(xy.y));
+    element.setAttribute('h', this.getHeight());
+    element.setAttribute('w', this.getWidth());
     return element;
   }
 
@@ -833,10 +833,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     const topOffset = WorkspaceCommentSvg.TOP_OFFSET;
     const textOffset = TEXTAREA_OFFSET * 2;
 
-    this.foreignObject_?.setAttribute('width', `${size.width}`);
-    this.foreignObject_?.setAttribute('height', `${size.height - topOffset}`);
+    this.foreignObject_?.setAttribute('width', size.width);
+    this.foreignObject_?.setAttribute('height', size.height - topOffset);
     if (this.RTL) {
-      this.foreignObject_?.setAttribute('x', `${- size.width}`);
+      this.foreignObject_?.setAttribute('x', -size.width);
     }
 
     if (!this.textarea_) return;
@@ -856,13 +856,13 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     height = Math.max(height, 20 + WorkspaceCommentSvg.TOP_OFFSET);
     this.width_ = width;
     this.height_ = height;
-    this.svgRect_.setAttribute('width', `${width}`);
-    this.svgRect_.setAttribute('height', `${height}`);
-    this.svgRectTarget_?.setAttribute('width', `${width}`);
-    this.svgRectTarget_?.setAttribute('height', `${height}`);
-    this.svgHandleTarget_?.setAttribute('width', `${width}`);
+    this.svgRect_.setAttribute('width', width);
+    this.svgRect_.setAttribute('height', height);
+    this.svgRectTarget_?.setAttribute('width', width);
+    this.svgRectTarget_?.setAttribute('height', height);
+    this.svgHandleTarget_?.setAttribute('width', width);
     this.svgHandleTarget_?.setAttribute(
-        'height', `${WorkspaceCommentSvg.TOP_OFFSET}`);
+        'height', WorkspaceCommentSvg.TOP_OFFSET);
     if (this.RTL) {
       this.svgRect_.setAttribute('transform', 'scale(-1 1)');
       this.svgRectTarget_?.setAttribute('transform', 'scale(-1 1)');
@@ -990,7 +990,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       eventUtils.enable();
     }
 
-    WorkspaceComment.fireCreateEvent((comment));
+    WorkspaceComment.fireCreateEvent(comment);
     return comment;
   }
 }

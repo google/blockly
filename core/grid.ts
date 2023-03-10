@@ -92,8 +92,8 @@ export class Grid {
     // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
     const safeSpacing = this.spacing * scale || 100;
 
-    this.pattern.setAttribute('width', safeSpacing.toString());
-    this.pattern.setAttribute('height', safeSpacing.toString());
+    this.pattern.setAttribute('width', safeSpacing);
+    this.pattern.setAttribute('height', safeSpacing);
 
     let half = Math.floor(this.spacing / 2) + 0.5;
     let start = half - this.length / 2;
@@ -122,11 +122,11 @@ export class Grid {
       line: SVGElement, width: number, x1: number, x2: number, y1: number,
       y2: number) {
     if (line) {
-      line.setAttribute('stroke-width', width.toString());
-      line.setAttribute('x1', x1.toString());
-      line.setAttribute('y1', y1.toString());
-      line.setAttribute('x2', x2.toString());
-      line.setAttribute('y2', y2.toString());
+      line.setAttribute('stroke-width', width);
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
     }
   }
 
@@ -139,8 +139,8 @@ export class Grid {
    * @internal
    */
   moveTo(x: number, y: number) {
-    this.pattern.setAttribute('x', x.toString());
-    this.pattern.setAttribute('y', y.toString());
+    this.pattern.setAttribute('x', x);
+    this.pattern.setAttribute('y', y);
   }
 
   /**

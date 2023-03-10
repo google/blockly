@@ -38,10 +38,10 @@ export class FieldMultilineInput extends FieldTextInput {
    * Defines the maximum number of lines of field.
    * If exceeded, scrolling functionality is enabled.
    */
-  protected maxLines = Infinity;
+  protected maxLines_ = Infinity;
 
   /** Whether Y overflow is currently occurring. */
-  protected isOverflowedY = false;
+  protected isOverflowedY_ = false;
 
   /**
    * @param value The initial content of the field. Should cast to a string.
@@ -75,7 +75,7 @@ export class FieldMultilineInput extends FieldTextInput {
 
   protected override configure_(config: FieldMultilineInputConfig) {
     super.configure_(config);
-    if (config.maxLines) this.setMaxLines(config.maxLines);
+    if (config.maxLines_) this.setMaxLines(config.maxLines_);
   }
 
   /**
@@ -167,13 +167,13 @@ export class FieldMultilineInput extends FieldTextInput {
     const lines = textLines.split('\n');
     textLines = '';
     const displayLinesNumber =
-        this.isOverflowedY ? this.maxLines : lines.length;
+        this.isOverflowedY_ ? this.maxLines_ : lines.length;
     for (let i = 0; i < displayLinesNumber; i++) {
       let text = lines[i];
       if (text.length > this.maxDisplayLength) {
         // Truncate displayed string and add an ellipsis ('...').
         text = text.substring(0, this.maxDisplayLength - 4) + '...';
-      } else if (this.isOverflowedY && i === displayLinesNumber - 1) {
+      } else if (this.isOverflowedY_ && i === displayLinesNumber - 1) {
         text = text.substring(0, text.length - 3) + '...';
       }
       // Replace whitespace with non-breaking spaces so the text doesn't
@@ -204,7 +204,7 @@ export class FieldMultilineInput extends FieldTextInput {
   protected override doValueUpdate_(newValue: string) {
     super.doValueUpdate_(newValue);
     if (this.value_ !== null) {
-      this.isOverflowedY = this.value_.split('\n').length > this.maxLines;
+      this.isOverflowedY_ = this.value_.split('\n').length > this.maxLines_;
     }
   }
 
@@ -216,9 +216,9 @@ export class FieldMultilineInput extends FieldTextInput {
     }
     // Remove all text group children.
     let currentChild;
-    const textGroup = this.textGroup as SVGGElement;
-    while (currentChild = textGroup.firstChild) {
-      textGroup.removeChild(currentChild);
+    const textGroup = this.textGroup;
+    while (currentChild = textGroup!.firstChild) {
+      textGroup!.removeChild(currentChild);
     }
 
     // Add in text elements into the group.
@@ -241,7 +241,7 @@ export class FieldMultilineInput extends FieldTextInput {
 
     if (this.isBeingEdited_) {
       const htmlInput = this.htmlInput_ as HTMLElement;
-      if (this.isOverflowedY) {
+      if (this.isOverflowedY_) {
         dom.addClass(htmlInput, 'blocklyHtmlTextAreaInputOverflowedY');
       } else {
         dom.removeClass(htmlInput, 'blocklyHtmlTextAreaInputOverflowedY');
@@ -293,7 +293,7 @@ export class FieldMultilineInput extends FieldTextInput {
       // but when it's being edited, width should be calculated based on the
       // absolute longest line, even if it would be truncated after editing.
       // Otherwise we would get wrong editor width when there are more
-      // lines than this.maxLines.
+      // lines than this.maxLines_.
       const actualEditorLines = String(this.value_).split('\n');
       const dummyTextElement = dom.createSvgElement(
           Svg.TEXT, {'class': 'blocklyText blocklyMultilineText'});
@@ -318,8 +318,8 @@ export class FieldMultilineInput extends FieldTextInput {
     if (this.borderRect_) {
       totalHeight += this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING * 2;
       totalWidth += this.getConstants()!.FIELD_BORDER_RECT_X_PADDING * 2;
-      this.borderRect_.setAttribute('width', String(totalWidth));
-      this.borderRect_.setAttribute('height', String(totalHeight));
+      this.borderRect_.setAttribute('width', totalWidth);
+      this.borderRect_.setAttribute('height', totalHeight);
     }
     this.size_.width = totalWidth;
     this.size_.height = totalHeight;
@@ -386,26 +386,26 @@ export class FieldMultilineInput extends FieldTextInput {
   }
 
   /**
-   * Sets the maxLines config for this field.
+   * Sets the maxLines_ config for this field.
    *
-   * @param maxLines Defines the maximum number of lines allowed, before
+   * @param maxLines_ Defines the maximum number of lines allowed, before
    *     scrolling functionality is enabled.
    */
-  setMaxLines(maxLines: number) {
-    if (typeof maxLines === 'number' && maxLines > 0 &&
-        maxLines !== this.maxLines) {
-      this.maxLines = maxLines;
+  setMaxLines(maxLines_: number) {
+    if (typeof maxLines_ === 'number' && maxLines_ > 0 &&
+        maxLines_ !== this.maxLines_) {
+      this.maxLines_ = maxLines_;
       this.forceRerender();
     }
   }
 
   /**
-   * Returns the maxLines config of this field.
+   * Returns the maxLines_ config of this field.
    *
-   * @returns The maxLines config value.
+   * @returns The maxLines_ config value.
    */
   getMaxLines(): number {
-    return this.maxLines;
+    return this.maxLines_;
   }
 
   /**
@@ -460,7 +460,7 @@ Css.register(`
  * Config options for the multiline input field.
  */
 export interface FieldMultilineInputConfig extends FieldTextInputConfig {
-  maxLines?: number;
+  maxLines_?: number;
 }
 
 /**

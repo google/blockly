@@ -126,14 +126,14 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
     if (Blocks['variables_set']) {
       const block = utilsXml.createElement('block');
       block.setAttribute('type', 'variables_set');
-      block.setAttribute('gap', Blocks['math_change'] ? '8' : '24');
+      block.setAttribute('gap', Blocks['math_change'] ? 8 : 24);
       block.appendChild(generateVariableFieldDom(mostRecentVariable));
       xmlList.push(block);
     }
     if (Blocks['math_change']) {
       const block = utilsXml.createElement('block');
       block.setAttribute('type', 'math_change');
-      block.setAttribute('gap', Blocks['variables_get'] ? '20' : '8');
+      block.setAttribute('gap', Blocks['variables_get'] ? 20 : 8);
       block.appendChild(generateVariableFieldDom(mostRecentVariable));
       const value = utilsXml.textToDom(
           '<value name="DELTA">' +
@@ -150,7 +150,7 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
       for (let i = 0, variable; variable = variableModelList[i]; i++) {
         const block = utilsXml.createElement('block');
         block.setAttribute('type', 'variables_get');
-        block.setAttribute('gap', '8');
+        block.setAttribute('gap', 8);
         block.appendChild(generateVariableFieldDom(variable));
         xmlList.push(block);
       }

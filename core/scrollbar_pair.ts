@@ -144,12 +144,12 @@ export class ScrollbarPair {
       if (!this.oldHostMetrics_ ||
           this.oldHostMetrics_.viewWidth !== hostMetrics.viewWidth ||
           this.oldHostMetrics_.absoluteLeft !== hostMetrics.absoluteLeft) {
-        this.corner_?.setAttribute('x', String(this.vScroll.position.x));
+        this.corner_?.setAttribute('x', this.vScroll.position.x);
       }
       if (!this.oldHostMetrics_ ||
           this.oldHostMetrics_.viewHeight !== hostMetrics.viewHeight ||
           this.oldHostMetrics_.absoluteTop !== hostMetrics.absoluteTop) {
-        this.corner_?.setAttribute('y', String(this.hScroll.position.y));
+        this.corner_?.setAttribute('y', this.hScroll.position.y);
       }
     }
 

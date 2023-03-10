@@ -177,7 +177,7 @@ export class ASTNode {
       throw new Error(
           'The current AST location is not associated with a block');
     }
-    const curIdx = block.inputList.indexOf((input));
+    const curIdx = block.inputList.indexOf(input);
     let fieldIdx = input.fieldRow.indexOf(location) + 1;
     for (let i = curIdx; i < block.inputList.length; i++) {
       const newInput = block.inputList[i];
@@ -240,7 +240,7 @@ export class ASTNode {
       throw new Error(
           'The current AST location is not associated with a block');
     }
-    const curIdx = block.inputList.indexOf((parentInput));
+    const curIdx = block.inputList.indexOf(parentInput);
     let fieldIdx = parentInput.fieldRow.indexOf(location) - 1;
     for (let i = curIdx; i >= 0; i--) {
       const input = block.inputList[i];

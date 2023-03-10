@@ -318,8 +318,8 @@ export class FieldVariable extends FieldDropdown {
    * @param newValue The ID of the new variable to set.
    * @returns The validated ID, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: AnyDuringMigration):
-      string|null {
+  protected override doClassValidation_(newValue?: AnyDuringMigration): string
+      |null {
     if (newValue === null) {
       return null;
     }
@@ -416,14 +416,12 @@ export class FieldVariable extends FieldDropdown {
    * @param defaultType The type of the variable to create if this field's
    *     value is not explicitly set.  Defaults to ''.
    */
-  private setTypes_(variableTypes?: string[]|null, defaultType = '') {
+  private setTypes_(variableTypes: string[]|null = null, defaultType = '') {
     // If you expected that the default type would be the same as the only entry
     // in the variable types array, tell the Blockly team by commenting on
     // #1499.
     // Set the allowable variable types.  Null means all types on the workspace.
-    if (variableTypes === null || variableTypes === undefined) {
-      variableTypes = null;
-    } else if (Array.isArray(variableTypes)) {
+    if (Array.isArray(variableTypes)) {
       variableTypes = variableTypes;
       // Make sure the default type is valid.
       let isInArray = false;
@@ -437,7 +435,7 @@ export class FieldVariable extends FieldDropdown {
             'Invalid default type \'' + defaultType + '\' in ' +
             'the definition of a FieldVariable');
       }
-    } else {
+    } else if (variableTypes !== null) {
       throw Error(
           '\'variableTypes\' was not an array in the definition of ' +
           'a FieldVariable');

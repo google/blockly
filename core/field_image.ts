@@ -75,8 +75,8 @@ export class FieldImage extends Field<string> {
    */
   constructor(
       src: string|Sentinel, width: string|number, height: string|number,
-      alt?: string, onClick?: (p1: FieldImage) => void,
-      flipRtl?: boolean, config?: FieldImageConfig) {
+      alt?: string, onClick?: (p1: FieldImage) => void, flipRtl?: boolean,
+      config?: FieldImageConfig) {
     super(Field.SKIP_SETUP);
 
     const imageHeight = Number(parsing.replaceMessageReferences(height));
@@ -177,7 +177,7 @@ export class FieldImage extends Field<string> {
     this.value_ = newValue;
     if (this.imageElement_) {
       this.imageElement_.setAttributeNS(
-          dom.XLINK_NS, 'xlink:href', String(this.value_));
+          dom.XLINK_NS, 'xlink:href', this.value_);
     }
   }
 

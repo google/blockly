@@ -92,10 +92,10 @@ export class FieldAngle extends FieldInput<number> {
    */
   private boundEvents: browserEvents.Data[] = [];
 
-  /** The angle picker's line drawn representing the value's angle. */
+  /** Dynamic red line pointing at the value's angle. */
   private line: SVGLineElement|null = null;
 
-  /** The angle picker's gauge path depending on the value. */
+  /** Dynamic pink area extending from 0 to the value's angle. */
   private gauge: SVGPathElement|null = null;
 
   /** The degree symbol for this field. */
@@ -164,14 +164,14 @@ export class FieldAngle extends FieldInput<number> {
    */
   override initView() {
     super.initView();
-    // Add the degree symbol to the left of the number, even in RTL (issue
-    // #2380)
+    // Add the degree symbol to the left of the number,
+    // even in RTL (issue #2380).
     this.symbol_ = dom.createSvgElement(Svg.TSPAN, {});
     this.symbol_.appendChild(document.createTextNode('°'));
     this.getTextElement().appendChild(this.symbol_);
   }
 
-  /** Updates the graph when the field rerenders. */
+  /** Updates the angle when the field rerenders. */
   protected override render_() {
     super.render_();
     this.updateGraph();
@@ -180,8 +180,8 @@ export class FieldAngle extends FieldInput<number> {
   /**
    * Create and show the angle field's editor.
    *
-   * @param e Optional mouse event that triggered the field to open, or
-   *     undefined if triggered programmatically.
+   * @param e Optional mouse event that triggered the field to open,
+   *     or undefined if triggered programmatically.
    */
   protected override showEditor_(e?: Event) {
     // Mobile browsers have issues with in-line textareas (focus & keyboards).
@@ -364,8 +364,8 @@ export class FieldAngle extends FieldInput<number> {
           ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
     }
     this.gauge.setAttribute('d', path.join(''));
-    this.line?.setAttribute('x2', `${x2}`);
-    this.line?.setAttribute('y2', `${y2}`);
+    this.line?.setAttribute('x2', x2);
+    this.line?.setAttribute('y2', y2);
   }
 
   /**

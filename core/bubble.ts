@@ -659,8 +659,8 @@ export class Bubble implements IBubble {
     height = Math.max(height, doubleBorderWidth + 20);
     this.width = width;
     this.height = height;
-    this.bubbleBack?.setAttribute('width', width.toString());
-    this.bubbleBack?.setAttribute('height', height.toString());
+    this.bubbleBack?.setAttribute('width', width);
+    this.bubbleBack?.setAttribute('height', height);
     if (this.resizeGroup) {
       if (this.workspace_.RTL) {
         // Mirror the resize group.
@@ -893,8 +893,7 @@ export class Bubble implements IBubble {
            textElement = paragraphElement.childNodes[i] as SVGTSpanElement;
            i++) {
         textElement.setAttribute('text-anchor', 'end');
-        textElement.setAttribute(
-            'x', (maxWidth + Bubble.BORDER_WIDTH).toString());
+        textElement.setAttribute('x', maxWidth + Bubble.BORDER_WIDTH);
       }
     }
     return bubble;

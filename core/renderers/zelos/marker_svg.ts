@@ -92,8 +92,8 @@ export class MarkerSvg extends BaseMarkerSvg {
    * @param y The y position of the circle.
    */
   private positionCircle_(x: number, y: number) {
-    this.markerCircle_?.setAttribute('cx', x.toString());
-    this.markerCircle_?.setAttribute('cy', y.toString());
+    this.markerCircle_?.setAttribute('cx', x);
+    this.markerCircle_?.setAttribute('cy', y);
     this.currentMarkerSvg = this.markerCircle_;
   }
 

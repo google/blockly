@@ -106,8 +106,8 @@ export function blockToDomWithXY(block: Block, opt_noId?: boolean): Element|
   if (isElement(element)) {
     const xy = block.getRelativeToSurfaceXY();
     element.setAttribute(
-        'x', `${Math.round(block.workspace.RTL ? width - xy.x : xy.x)}`);
-    element.setAttribute('y', `${Math.round(xy.y)}`);
+        'x', Math.round(block.workspace.RTL ? width - xy.x : xy.x));
+    element.setAttribute('y', Math.round(xy.y));
   }
   return element;
 }
@@ -193,8 +193,8 @@ export function blockToDom(block: Block, opt_noId?: boolean): Element|
     const commentElement = utilsXml.createElement('comment');
     commentElement.appendChild(utilsXml.createTextNode(commentText));
     commentElement.setAttribute('pinned', `${pinned}`);
-    commentElement.setAttribute('h', `${size.height}`);
-    commentElement.setAttribute('w', `${size.width}`);
+    commentElement.setAttribute('h', size.height);
+    commentElement.setAttribute('w', size.width);
 
     element.appendChild(commentElement);
   }
@@ -237,7 +237,7 @@ export function blockToDom(block: Block, opt_noId?: boolean): Element|
   }
   if (block.inputsInline !== undefined &&
       block.inputsInline !== block.inputsInlineDefault) {
-    element.setAttribute('inline', block.inputsInline.toString());
+    element.setAttribute('inline', String(block.inputsInline));
   }
   if (block.isCollapsed()) {
     element.setAttribute('collapsed', 'true');

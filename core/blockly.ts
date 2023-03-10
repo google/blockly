@@ -165,6 +165,13 @@ import {resizeSvgContents as realResizeSvgContents, WorkspaceSvg} from './worksp
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
 
+declare global {
+  // By default TypeScript requires attributes to be strings.
+  // Add the ability to set a numeric attribute to an Element.
+  interface Element {
+    setAttribute(name: string, value: number): void;
+  }
+}
 
 /**
  * Blockly core version.

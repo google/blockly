@@ -541,7 +541,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    * @returns The text to show on the HTML input.
    */
   protected getEditorText_(value: AnyDuringMigration): string {
-    return String(value);
+    return `${value}`;
   }
 
   /**

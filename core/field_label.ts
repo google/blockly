@@ -45,8 +45,7 @@ export class FieldLabel extends Field<string> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|Sentinel, textClass?: string,
-      config?: FieldLabelConfig) {
+      value?: string|Sentinel, textClass?: string, config?: FieldLabelConfig) {
     super(Field.SKIP_SETUP);
 
     if (Field.isSentinel(value)) return;
@@ -81,12 +80,12 @@ export class FieldLabel extends Field<string> {
    * @param newValue The input value.
    * @returns A valid string, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: AnyDuringMigration):
-      string|null {
+  protected override doClassValidation_(newValue?: AnyDuringMigration): string
+      |null {
     if (newValue === null || newValue === undefined) {
       return null;
     }
-    return String(newValue);
+    return `${newValue}`;
   }
 
   /**

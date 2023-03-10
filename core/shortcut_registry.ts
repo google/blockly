@@ -103,7 +103,7 @@ export class ShortcutRegistry {
   addKeyMapping(
       keyCode: string|number|KeyCodes, shortcutName: string,
       opt_allowCollision?: boolean) {
-    keyCode = String(keyCode);
+    keyCode = `${keyCode}`;
     const shortcutNames = this.keyMap.get(keyCode);
     if (shortcutNames && !opt_allowCollision) {
       throw new Error(`Shortcut named "${

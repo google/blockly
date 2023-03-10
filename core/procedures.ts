@@ -258,7 +258,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     // </block>
     const block = utilsXml.createElement('block');
     block.setAttribute('type', 'procedures_defnoreturn');
-    block.setAttribute('gap', '16');
+    block.setAttribute('gap', 16);
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
@@ -272,7 +272,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     // </block>
     const block = utilsXml.createElement('block');
     block.setAttribute('type', 'procedures_defreturn');
-    block.setAttribute('gap', '16');
+    block.setAttribute('gap', 16);
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
@@ -284,12 +284,12 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     // <block type="procedures_ifreturn" gap="16"></block>
     const block = utilsXml.createElement('block');
     block.setAttribute('type', 'procedures_ifreturn');
-    block.setAttribute('gap', '16');
+    block.setAttribute('gap', 16);
     xmlList.push(block);
   }
   if (xmlList.length) {
     // Add slightly larger gap between system blocks and user calls.
-    xmlList[xmlList.length - 1].setAttribute('gap', '24');
+    xmlList[xmlList.length - 1].setAttribute('gap', 24);
   }
 
   /**
@@ -311,7 +311,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
       // </block>
       const block = utilsXml.createElement('block');
       block.setAttribute('type', templateName);
-      block.setAttribute('gap', '16');
+      block.setAttribute('gap', 16);
       const mutation = utilsXml.createElement('mutation');
       mutation.setAttribute('name', name);
       block.appendChild(mutation);

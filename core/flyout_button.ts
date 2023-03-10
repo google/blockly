@@ -155,17 +155,16 @@ export class FlyoutButton {
     if (!this.isLabel_) {
       this.width += 2 * FlyoutButton.TEXT_MARGIN_X;
       this.height += 2 * FlyoutButton.TEXT_MARGIN_Y;
-      shadow?.setAttribute('width', this.width.toString());
-      shadow?.setAttribute('height', this.height.toString());
+      shadow?.setAttribute('width', this.width);
+      shadow?.setAttribute('height', this.height);
     }
-    rect.setAttribute('width', this.width.toString());
-    rect.setAttribute('height', this.height.toString());
+    rect.setAttribute('width', this.width);
+    rect.setAttribute('height', this.height);
 
-    svgText.setAttribute('x', (this.width / 2).toString());
+    svgText.setAttribute('x', this.width / 2);
     svgText.setAttribute(
         'y',
-        (this.height / 2 - fontMetrics.height / 2 + fontMetrics.baseline)
-            .toString());
+        this.height / 2 - fontMetrics.height / 2 + fontMetrics.baseline);
 
     this.updateTransform_();
 

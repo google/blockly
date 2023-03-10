@@ -62,8 +62,7 @@ export class FieldNumber extends FieldInput<number> {
   constructor(
       value?: string|number|Sentinel, min?: string|number|null,
       max?: string|number|null, precision?: string|number|null,
-      validator?: FieldNumberValidator|null,
-      config?: FieldNumberConfig) {
+      validator?: FieldNumberValidator|null, config?: FieldNumberConfig) {
     // Pass SENTINEL so that we can define properties before value validation.
     super(Field.SKIP_SETUP);
 
@@ -243,14 +242,14 @@ export class FieldNumber extends FieldInput<number> {
    * @param newValue The input value.
    * @returns A valid number, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: AnyDuringMigration):
-      number|null {
+  protected override doClassValidation_(newValue?: AnyDuringMigration): number
+      |null {
     if (newValue === null) {
       return null;
     }
 
     // Clean up text.
-    newValue = String(newValue);
+    newValue = `${newValue}`;
     // TODO: Handle cases like 'ten', '1.203,14', etc.
     // 'O' is sometimes mistaken for '0' by inexperienced users.
     newValue = newValue.replace(/O/ig, '0');

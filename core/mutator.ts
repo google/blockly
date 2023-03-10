@@ -285,8 +285,8 @@ export class Mutator extends Icon {
       // Resize the bubble.
       this.bubble_!.setBubbleSize(
           width + doubleBorderWidth, height + doubleBorderWidth);
-      this.svgDialog!.setAttribute('width', `${width}`);
-      this.svgDialog!.setAttribute('height', `${height}`);
+      this.svgDialog!.setAttribute('width', width);
+      this.svgDialog!.setAttribute('height', height);
       this.workspace_.setCachedParentSvgSize(width, height);
     }
 

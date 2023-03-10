@@ -217,27 +217,27 @@ export class Bubble implements IBubble {
                                            'blocklyResizeSE',
           },
           this.bubbleGroup);
-      const resizeSize = 2 * Bubble.BORDER_WIDTH;
+      const size = 2 * Bubble.BORDER_WIDTH;
       dom.createSvgElement(
           Svg.POLYGON,
-          {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
+          {'points': `0,${size} ${size},${size} ${size},0`},
           this.resizeGroup);
       dom.createSvgElement(
           Svg.LINE, {
             'class': 'blocklyResizeLine',
-            'x1': resizeSize / 3,
-            'y1': resizeSize - 1,
-            'x2': resizeSize - 1,
-            'y2': resizeSize / 3,
+            'x1': size / 3,
+            'y1': size - 1,
+            'x2': size - 1,
+            'y2': size / 3,
           },
           this.resizeGroup);
       dom.createSvgElement(
           Svg.LINE, {
             'class': 'blocklyResizeLine',
-            'x1': resizeSize * 2 / 3,
-            'y1': resizeSize - 1,
-            'x2': resizeSize - 1,
-            'y2': resizeSize * 2 / 3,
+            'x1': size * 2 / 3,
+            'y1': size - 1,
+            'x2': size - 1,
+            'y2': size * 2 / 3,
           },
           this.resizeGroup);
     } else {

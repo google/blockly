@@ -304,9 +304,7 @@ export function getAllItems<T>(
   }
   const nameRegistry = nameMap[type];
   const casedRegistry = Object.create(null);
-  const keys = Object.keys(typeRegistry);
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
+  for (const key of Object.keys(typeRegistry)) {
     casedRegistry[nameRegistry[key]] = typeRegistry[key];
   }
   return casedRegistry;
@@ -325,8 +323,7 @@ export function getAllItems<T>(
 export function getClassFromOptions<T>(
     type: Type<T>, options: Options, opt_throwIfMissing?: boolean):
     (new (...p1: AnyDuringMigration[]) => T)|null {
-  const typeName = type.toString();
-  const plugin = options.plugins[typeName] || DEFAULT;
+  const plugin = options.plugins[String(type)] || DEFAULT;
 
   // If the user passed in a plugin class instead of a registered plugin name.
   if (typeof plugin === 'function') {

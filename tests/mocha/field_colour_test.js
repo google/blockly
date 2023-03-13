@@ -173,7 +173,7 @@ suite('Colour Fields', function() {
   suite('Customizations', function() {
     suite('Colours and Titles', function() {
       function assertColoursAndTitles(field, colours, titles) {
-        field.dropdownCreate_();
+        field.dropdownCreate();
         let index = 0;
         let node = field.picker.firstChild.firstChild;
         while (node) {
@@ -251,7 +251,7 @@ suite('Colour Fields', function() {
     });
     suite('Columns', function() {
       function assertColumns(field, columns) {
-        field.dropdownCreate_();
+        field.dropdownCreate();
         chai.assert.equal(field.picker.firstChild.children.length, columns);
       }
       test('Constants', function() {

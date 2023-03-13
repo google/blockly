@@ -243,7 +243,7 @@ export class FieldMultilineInput extends FieldTextInput {
             'y': y + this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING,
             'dy': this.getConstants()!.FIELD_TEXT_BASELINE,
           },
-          this.textGroup);
+          textGroup);
       span.appendChild(document.createTextNode(lines[i]));
       y += lineHeight;
     }

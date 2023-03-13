@@ -30,14 +30,14 @@ import * as WidgetDiv from './widgetdiv.js';
  * Class for an editable angle field.
  */
 export class FieldAngle extends FieldInput<number> {
-  /**
-   * The default amount to round angles to when using a mouse or keyboard nav
-   * input. Must be a positive integer to support keyboard navigation.
-   */
-  static readonly ROUND = 15;
-
   /** Half the width of protractor image. */
   static readonly HALF = 100 / 2;
+
+  /**
+   * Radius of protractor circle.  Slightly smaller than protractor size since
+   * otherwise SVG crops off half the border at the edges.
+   */
+  static readonly RADIUS: number = FieldAngle.HALF - 1;
 
   /**
    * Default property describing which direction makes an angle field's value
@@ -59,10 +59,10 @@ export class FieldAngle extends FieldInput<number> {
   static readonly WRAP = 360;
 
   /**
-   * Radius of protractor circle.  Slightly smaller than protractor size since
-   * otherwise SVG crops off half the border at the edges.
+   * The default amount to round angles to when using a mouse or keyboard nav
+   * input. Must be a positive integer to support keyboard navigation.
    */
-  static readonly RADIUS: number = FieldAngle.HALF - 1;
+  static readonly ROUND = 15;
 
   /**
    * Whether the angle should increase as the angle picker is moved clockwise
@@ -333,7 +333,7 @@ export class FieldAngle extends FieldInput<number> {
 
   /** Redraw the graph with the current angle. */
   private updateGraph() {
-    if (!this.gauge) {
+    if (!this.gauge || !this.line) {
       return;
     }
     // Always display the input (i.e. getText) even if it is invalid.
@@ -364,8 +364,8 @@ export class FieldAngle extends FieldInput<number> {
           ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
     }
     this.gauge.setAttribute('d', path.join(''));
-    this.line?.setAttribute('x2', x2);
-    this.line?.setAttribute('y2', y2);
+    this.line.setAttribute('x2', x2);
+    this.line.setAttribute('y2', y2);
   }
 
   /**
@@ -455,6 +455,8 @@ export class FieldAngle extends FieldInput<number> {
 
 fieldRegistry.register('field_angle', FieldAngle);
 
+FieldAngle.prototype.DEFAULT_VALUE = 0;
+
 
 /**
  * CSS for angle field.
@@ -485,8 +487,6 @@ Css.register(`
   pointer-events: none;
 }
 `);
-
-FieldAngle.prototype.DEFAULT_VALUE = 0;
 
 /**
  * The two main modes of the angle field.

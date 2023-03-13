@@ -176,6 +176,11 @@ export class FieldColour extends Field<string> {
     }
   }
 
+  /**
+   * Updates text field to match the colour/style of the block.
+   *
+   * @internal
+   */
   override applyColour() {
     if (!this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) {
       if (this.borderRect_) {
@@ -211,8 +216,7 @@ export class FieldColour extends Field<string> {
     this.value_ = newValue;
     if (this.borderRect_) {
       this.borderRect_.style.fill = newValue;
-    } else if (
-        this.sourceBlock_ && this.sourceBlock_.rendered &&
+    } else if (this.sourceBlock_ && this.sourceBlock_.rendered &&
         this.sourceBlock_ instanceof BlockSvg) {
       this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
       this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');

@@ -73,9 +73,14 @@ export class FieldMultilineInput extends FieldTextInput {
     }
   }
 
+  /**
+   * Configure the field based on the given map of options.
+   *
+   * @param config A map of options to configure the field based on.
+   */
   protected override configure_(config: FieldMultilineInputConfig) {
     super.configure_(config);
-    if (config.maxLines_) this.setMaxLines(config.maxLines_);
+    if (config.maxLines) this.setMaxLines(config.maxLines);
   }
 
   /**
@@ -109,6 +114,8 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Saves this field's value.
+   * This function only exists for subclasses of FieldMultilineInput which
+   * predate the load/saveState API and only define to/fromXml.
    *
    * @returns The state of this field.
    * @internal
@@ -123,6 +130,8 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Sets the field's value based on the given state.
+   * This function only exists for subclasses of FieldMultilineInput which
+   * predate the load/saveState API and only define to/fromXml.
    *
    * @param state The state of the variable to assign to this variable field.
    * @internal
@@ -386,23 +395,23 @@ export class FieldMultilineInput extends FieldTextInput {
   }
 
   /**
-   * Sets the maxLines_ config for this field.
+   * Sets the maxLines config for this field.
    *
-   * @param maxLines_ Defines the maximum number of lines allowed, before
+   * @param maxLines Defines the maximum number of lines allowed, before
    *     scrolling functionality is enabled.
    */
-  setMaxLines(maxLines_: number) {
-    if (typeof maxLines_ === 'number' && maxLines_ > 0 &&
-        maxLines_ !== this.maxLines_) {
-      this.maxLines_ = maxLines_;
+  setMaxLines(maxLines: number) {
+    if (typeof maxLines === 'number' && maxLines > 0 &&
+        maxLines !== this.maxLines_) {
+      this.maxLines_ = maxLines;
       this.forceRerender();
     }
   }
 
   /**
-   * Returns the maxLines_ config of this field.
+   * Returns the maxLines config of this field.
    *
-   * @returns The maxLines_ config value.
+   * @returns The maxLines config value.
    */
   getMaxLines(): number {
     return this.maxLines_;
@@ -441,7 +450,9 @@ export class FieldMultilineInput extends FieldTextInput {
 fieldRegistry.register('field_multilinetext', FieldMultilineInput);
 
 
-/** CSS for multiline field.  See css.js for use. */
+/**
+ * CSS for multiline field.
+ */
 Css.register(`
 .blocklyHtmlTextAreaInput {
   font-family: monospace;
@@ -460,7 +471,7 @@ Css.register(`
  * Config options for the multiline input field.
  */
 export interface FieldMultilineInputConfig extends FieldTextInputConfig {
-  maxLines_?: number;
+  maxLines?: number;
 }
 
 /**

@@ -264,10 +264,10 @@ export class FieldColour extends Field<string> {
 
   /** Create and show the colour field's editor. */
   protected override showEditor_() {
-    this.dropdownCreate_();
+    this.dropdownCreate();
     dropDownDiv.getContentDiv().appendChild(this.picker!);
 
-    dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
+    dropDownDiv.showPositionedByField(this, this.dropdownDispose.bind(this));
 
     // Focus so we can start receiving keyboard events.
     this.picker!.focus({preventScroll: true});
@@ -311,7 +311,7 @@ export class FieldColour extends Field<string> {
         break;
       case 'Enter':
         // Select the highlighted colour.
-        highlighted = this.getHighlighted_();
+        highlighted = this.getHighlighted();
         if (highlighted) {
           const colour = highlighted.getAttribute('data-colour');
           if (colour !== null) {
@@ -383,7 +383,7 @@ export class FieldColour extends Field<string> {
     // Move the highlight to the new coordinates.
     const cell = this.picker!.childNodes[y].childNodes[x] as Element;
     const index = y * columns + x;
-    this.setHighlightedCell_(cell, index);
+    this.setHighlightedCell(cell, index);
   }
 
   /**
@@ -395,7 +395,7 @@ export class FieldColour extends Field<string> {
     const cell = e.target as Element;
     const index = cell && Number(cell.getAttribute('data-index'));
     if (index !== null && index !== this.highlightedIndex) {
-      this.setHighlightedCell_(cell, index);
+      this.setHighlightedCell(cell, index);
     }
   }
 
@@ -410,7 +410,7 @@ export class FieldColour extends Field<string> {
    */
   private onMouseLeave() {
     this.picker?.blur();
-    const highlighted = this.getHighlighted_();
+    const highlighted = this.getHighlighted();
     if (highlighted) {
       dom.removeClass(highlighted, 'blocklyColourHighlighted');
     }
@@ -421,7 +421,7 @@ export class FieldColour extends Field<string> {
    *
    * @returns Highlighted item (null if none).
    */
-  private getHighlighted_(): HTMLElement|null {
+  private getHighlighted(): HTMLElement|null {
     if (!this.highlightedIndex) {
       return null;
     }
@@ -439,12 +439,12 @@ export class FieldColour extends Field<string> {
   /**
    * Update the currently highlighted cell.
    *
-   * @param cell the new cell to highlight
-   * @param index the index of the new cell
+   * @param cell The new cell to highlight.
+   * @param index The index of the new cell.
    */
-  private setHighlightedCell_(cell: Element, index: number) {
+  private setHighlightedCell(cell: Element, index: number) {
     // Unhighlight the current item.
-    const highlighted = this.getHighlighted_();
+    const highlighted = this.getHighlighted();
     if (highlighted) {
       dom.removeClass(highlighted, 'blocklyColourHighlighted');
     }
@@ -461,7 +461,7 @@ export class FieldColour extends Field<string> {
   }
 
   /** Create a colour picker dropdown editor. */
-  private dropdownCreate_() {
+  private dropdownCreate() {
     const columns = this.columns || FieldColour.COLUMNS;
     const colours = this.colours || FieldColour.COLOURS;
     const titles = this.titles || FieldColour.TITLES;
@@ -516,7 +516,7 @@ export class FieldColour extends Field<string> {
   }
 
   /** Disposes of events and DOM-references belonging to the colour editor. */
-  private dropdownDispose_() {
+  private dropdownDispose() {
     for (const event of this.boundEvents) {
       browserEvents.unbind(event);
     }
@@ -546,7 +546,9 @@ FieldColour.prototype.DEFAULT_VALUE = FieldColour.COLOURS[0];
 fieldRegistry.register('field_colour', FieldColour);
 
 
-/** CSS for colour picker.  See css.js for use. */
+/**
+ * CSS for colour picker.
+ */
 Css.register(`
 .blocklyColourTable {
   border-collapse: collapse;
@@ -556,7 +558,7 @@ Css.register(`
 }
 
 .blocklyColourTable>tr>td {
-  border: .5px solid #888;
+  border: 0.5px solid #888;
   box-sizing: border-box;
   cursor: pointer;
   display: inline-block;
@@ -567,7 +569,7 @@ Css.register(`
 
 .blocklyColourTable>tr>td.blocklyColourHighlighted {
   border-color: #eee;
-  box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);
+  box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);
   position: relative;
 }
 

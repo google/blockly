@@ -453,7 +453,12 @@ export class FieldAngle extends FieldInput<number> {
   }
 }
 
-/** CSS for angle field.  See css.js for use. */
+fieldRegistry.register('field_angle', FieldAngle);
+
+
+/**
+ * CSS for angle field.
+ */
 Css.register(`
 .blocklyAngleCircle {
   stroke: #444;
@@ -480,8 +485,6 @@ Css.register(`
   pointer-events: none;
 }
 `);
-
-fieldRegistry.register('field_angle', FieldAngle);
 
 FieldAngle.prototype.DEFAULT_VALUE = 0;
 

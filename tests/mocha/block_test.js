@@ -1114,6 +1114,7 @@ suite('Blocks', function() {
         const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.setOutput(true);
+        this.clock.runAll();
 
         this.clock.runAll();
         chai.assert.equal(this.getOutputs().length, 1);
@@ -1130,6 +1131,7 @@ suite('Blocks', function() {
         const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.setPreviousStatement(true);
+        this.clock.runAll();
 
         this.clock.runAll();
         chai.assert.equal(this.getPrevious().length, 1);
@@ -1138,6 +1140,7 @@ suite('Blocks', function() {
         const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.setNextStatement(true);
+        this.clock.runAll();
 
         this.clock.runAll();
         chai.assert.equal(this.getNext().length, 1);

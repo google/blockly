@@ -1263,7 +1263,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     super.setPreviousStatement(newBoolean, opt_check);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       this.bumpNeighbours();
     }
   }
@@ -1280,7 +1280,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     super.setNextStatement(newBoolean, opt_check);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       this.bumpNeighbours();
     }
   }
@@ -1296,7 +1296,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     super.setOutput(newBoolean, opt_check);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       this.bumpNeighbours();
     }
   }
@@ -1310,7 +1310,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     super.setInputsInline(newBoolean);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       this.bumpNeighbours();
     }
   }
@@ -1346,7 +1346,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     super.moveNumberedInputBefore(inputIndex, refIndex);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       // Moving an input will cause the block to change shape.
       this.bumpNeighbours();
     }

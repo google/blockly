@@ -244,7 +244,7 @@ export class Input {
     this.align = align;
     if (this.sourceBlock.rendered) {
       const sourceBlock = this.sourceBlock as BlockSvg;
-      sourceBlock.render();
+      sourceBlock.queueRender();
     }
     return this;
   }

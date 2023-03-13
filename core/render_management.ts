@@ -66,8 +66,8 @@ function doRenders() {
 }
 
 /**
- * Recursively renders all of the children of the given block, and then renders
- * the block.
+ * Recursively renders all of the dirty children of the given block, and
+ * then renders the block.
  *
  * @param block The block to rerender.
  */

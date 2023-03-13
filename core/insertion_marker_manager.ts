@@ -194,9 +194,13 @@ export class InsertionMarkerManager {
       blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
       // Bring the just-edited stack to the front.
       const rootBlock = this.topBlock.getRootBlock();
-      setTimeout(() => {
-        rootBlock.bringToFront();
-      }, 0);
+
+      // bringToFront is incredibly expensive. Delay by at least a frame.
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          rootBlock.bringToFront();
+        }, 0);
+      });
     }
   }
 

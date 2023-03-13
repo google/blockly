@@ -187,27 +187,25 @@ export class RenderedConnection extends Connection {
    *     was updated.
    */
   moveTo(x: number, y: number): boolean {
-    const dx = this.x - x;
-    const dy = this.y - y;
-
-    let moved = false;
+    const moved = this.x !== x || this.y !== y;
+    let updated = false;
 
     if (this.trackedState_ === RenderedConnection.TrackedState.WILL_TRACK) {
       this.db_.addConnection(this, y);
       this.trackedState_ = RenderedConnection.TrackedState.TRACKED;
-      moved = true;
+      updated = true;
     } else if (
         this.trackedState_ === RenderedConnection.TrackedState.TRACKED &&
-        (dx !== 0 || dy !== 0)) {
+        moved) {
       this.db_.removeConnection(this, this.y);
       this.db_.addConnection(this, y);
-      moved = true;
+      updated = true;
     }
 
     this.x = x;
     this.y = y;
 
-    return moved;
+    return updated;
   }
 
   /**

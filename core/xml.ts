@@ -171,9 +171,7 @@ export function blockToDom(block: Block, opt_noId?: boolean): Element|
   const element = utilsXml.createElement(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
   if (!opt_noId) {
-    // It's important to use setAttribute here otherwise IE11 won't serialize
-    // the block's ID when domToText is called.
-    element.setAttribute('id', block.id);
+    element.id = block.id;
   }
   if (block.mutationToDom) {
     // Custom data for an advanced block.

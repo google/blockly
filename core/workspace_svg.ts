@@ -1890,39 +1890,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       common.setMainWorkspace(this);
       // We call e.preventDefault in many event handlers which means we
       // need to explicitly grab focus (e.g from a textarea) because
-      // the browser will not do it for us.  How to do this is browser
-      // dependent.
-      this.setBrowserFocus();
-    }
-  }
-
-  /** Set the workspace to have focus in the browser. */
-  private setBrowserFocus() {
-    // Blur whatever was focused since explicitly grabbing focus below does not
-    // work in Edge.
-    // In IE, SVGs can't be blurred or focused. Check to make sure the current
-    // focus can be blurred before doing so.
-    // See https://github.com/google/blockly/issues/4440
-    if (document.activeElement &&
-        document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
-    try {
-      // Focus the workspace SVG - this is for Chrome and Firefox.
+      // the browser will not do it for us.
       this.getParentSvg().focus({preventScroll: true});
-    } catch (e) {
-      // IE and Edge do not support focus on SVG elements. When that fails
-      // above, get the injectionDiv (the workspace's parent) and focus that
-      // instead.  This doesn't work in Chrome.
-      try {
-        // In IE11, use setActive (which is IE only) so the page doesn't scroll
-        // to the workspace gaining focus.
-        (this.getParentSvg().parentElement as any).setActive();
-      } catch (e) {
-        // setActive support was discontinued in Edge so when that fails, call
-        // focus instead.
-        this.getParentSvg().parentElement!.focus({preventScroll: true});
-      }
     }
   }
 

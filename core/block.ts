@@ -1400,91 +1400,15 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Create a human-readable text representation of this block and any children.
    *
    * @param opt_maxLength Truncate the string to this length.
-   * @param opt_emptyToken The placeholder string used to denote an empty field.
+   * @param opt_emptyToken The placeholder string used to denote an empty input.
    *     If not specified, '?' is used.
    * @returns Text of block.
    */
   toString(opt_maxLength?: number, opt_emptyToken?: string): string {
-    const tokens = [];
-    const emptyFieldPlaceholder = opt_emptyToken || '?';
+    const tokens = this.toTokens(opt_emptyToken);
 
-    // Temporarily set flag to navigate to all fields.
-    const prevNavigateFields = ASTNode.NAVIGATE_ALL_FIELDS;
-    ASTNode.NAVIGATE_ALL_FIELDS = true;
-
-    let node = ASTNode.createBlockNode(this);
-    const rootNode = node;
-
-    /**
-     * Whether or not to add parentheses around an input.
-     *
-     * @param connection The connection.
-     * @returns True if we should add parentheses around the input.
-     */
-    function shouldAddParentheses(connection: Connection): boolean {
-      let checks = connection.getCheck();
-      if (!checks && connection.targetConnection) {
-        checks = connection.targetConnection.getCheck();
-      }
-      return !!checks &&
-          (checks.indexOf('Boolean') !== -1 || checks.indexOf('Number') !== -1);
-    }
-
-    /** Check that we haven't circled back to the original root node. */
-    function checkRoot() {
-      if (node && node.getType() === rootNode?.getType() &&
-          node.getLocation() === rootNode?.getLocation()) {
-        node = null;
-      }
-    }
-
-    // Traverse the AST building up our text string.
-    while (node) {
-      switch (node.getType()) {
-        case ASTNode.types.INPUT: {
-          const connection = node.getLocation() as Connection;
-          if (!node.in()) {
-            tokens.push(emptyFieldPlaceholder);
-          } else if (shouldAddParentheses(connection)) {
-            tokens.push('(');
-          }
-          break;
-        }
-        case ASTNode.types.FIELD: {
-          const field = node.getLocation() as Field;
-          if (field.name !== constants.COLLAPSED_FIELD_NAME) {
-            tokens.push(field.getText());
-          }
-          break;
-        }
-      }
-
-      const current = node;
-      node = current.in() || current.next();
-      if (!node) {
-        // Can't go in or next, keep going out until we can go next.
-        node = current.out();
-        checkRoot();
-        while (node && !node.next()) {
-          node = node.out();
-          checkRoot();
-          // If we hit an input on the way up, possibly close out parentheses.
-          if (node && node.getType() === ASTNode.types.INPUT &&
-              shouldAddParentheses(node.getLocation() as Connection)) {
-            tokens.push(')');
-          }
-        }
-        if (node) {
-          node = node.next();
-        }
-      }
-    }
-
-    // Restore state of NAVIGATE_ALL_FIELDS.
-    ASTNode.NAVIGATE_ALL_FIELDS = prevNavigateFields;
-
-    // Run through our text array and simplify expression to remove parentheses
-    // around single field blocks.
+    // Run through our tokens array and simplify expression to remove
+    // parentheses around single field blocks.
     // E.g. ['repeat', '(', '10', ')', 'times', 'do', '?']
     for (let i = 2; i < tokens.length; i++) {
       if (tokens[i - 2] === '(' && tokens[i] === ')') {
@@ -1512,6 +1436,52 @@ export class Block implements IASTNodeLocation, IDeletable {
       }
     }
     return text;
+  }
+
+  /**
+   * Converts this block into string tokens.
+   *
+   * @param emptyToken The token to use in place of an empty input.
+   *     Defaults to '?'.
+   * @returns The array of string tokens represneting this block.
+   */
+  private toTokens(emptyToken = '?'): string[] {
+    const tokens = [];
+    /**
+     * Whether or not to add parentheses around an input.
+     *
+     * @param connection The connection.
+     * @returns True if we should add parentheses around the input.
+     */
+    function shouldAddParentheses(connection: Connection): boolean {
+      let checks = connection.getCheck();
+      if (!checks && connection.targetConnection) {
+        checks = connection.targetConnection.getCheck();
+      }
+      return !!checks &&
+          (checks.indexOf('Boolean') !== -1 || checks.indexOf('Number') !== -1);
+    }
+
+    for (const input of this.inputList) {
+      if (input.name == Blockly.Block.COLLAPSED_INPUT_NAME) {
+        continue;
+      }
+      for (const field of input.fieldRow) {
+        tokens.push(field.getText());
+      }
+      if (input.connection) {
+        const child = input.connection.targetBlock();
+        if (child) {
+          const shouldAddParens = shouldAddParentheses(input.connection);
+          if (shouldAddParens) tokens.push('(');
+          tokens.push(...child.toTokens(emptyToken));
+          if (shouldAddParens) tokens.push(')');
+        } else {
+          tokens.push(emptyToken);
+        }
+      }
+    }
+    return tokens;
   }
 
   /**

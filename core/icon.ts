@@ -83,7 +83,7 @@ export abstract class Icon {
       dom.removeNode(this.iconGroup_);
     }
     // TODO: Check if this is necessary.
-    this.setVisible(false); // Dispose of and unlink the bubble.
+    this.setVisible(false);  // Dispose of and unlink the bubble.
   }
 
   /** Add or remove the UI indicating if this icon may be clicked or not. */

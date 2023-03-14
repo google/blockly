@@ -336,7 +336,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       this.workspace.removeTypedBlock(this);
       this.workspace.removeBlockById(this.id);
       this.disposing = true;
-  
+
       [...this.childBlocks_].forEach((c) => c.disposeInternal());
       this.inputList.forEach((i) => i.dispose());
       this.inputList.length = 0;

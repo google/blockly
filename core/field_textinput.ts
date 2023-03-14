@@ -20,12 +20,8 @@ import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
 import type {Sentinel} from './utils/sentinel.js';
 
-export type FieldTextInputValidator = FieldInputValidator<string>;
-
 /**
  * Class for an editable text field.
- *
- * @alias Blockly.FieldTextInput
  */
 export class FieldTextInput extends FieldInput<string> {
   /**
@@ -44,7 +40,7 @@ export class FieldTextInput extends FieldInput<string> {
    */
   constructor(
       opt_value?: string|Sentinel, opt_validator?: FieldTextInputValidator|null,
-      opt_config?: FieldInputConfig) {
+      opt_config?: FieldTextInputConfig) {
     super(opt_value, opt_validator, opt_config);
   }
 
@@ -84,10 +80,30 @@ fieldRegistry.register('field_input', FieldTextInput);
 FieldTextInput.prototype.DEFAULT_VALUE = '';
 
 /**
+ *  Config options for the text input field.
+ */
+export type FieldTextInputConfig = FieldInputConfig;
+
+/**
  * fromJson config options for the text input field.
  */
-export interface FieldTextInputFromJsonConfig extends FieldInputConfig {
+export interface FieldTextInputFromJsonConfig extends FieldTextInputConfig {
   text?: string;
 }
 
-export {FieldInputConfig as FieldTextInputConfig};
+/**
+ * A function that is called to validate changes to the field's value before
+ * they are set.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+ * @param newValue The value to be validated.
+ * @returns One of three instructions for setting the new value: `T`, `null`,
+ * or `undefined`.
+ *
+ * - `T` to set this function's returned value instead of `newValue`.
+ *
+ * - `null` to invoke `doValueInvalid_` and not set a value.
+ *
+ * - `undefined` to set `newValue` as is.
+ */
+export type FieldTextInputValidator = FieldInputValidator<string>;

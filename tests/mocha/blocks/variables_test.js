@@ -7,6 +7,8 @@
 goog.declareModuleId('Blockly.test.variables');
 
 import {sharedTestSetup, sharedTestTeardown} from '../test_helpers/setup_teardown.js';
+import {nameUsedWithConflictingParam} from '../../../build/src/core/variables.js';
+import {MockParameterModelWithVar, MockProcedureModel} from '../test_helpers/procedures.js';
 
 
 suite('Variables', function() {
@@ -137,6 +139,102 @@ suite('Variables', function() {
       chai.assert.equal(var1, result1);
       chai.assert.equal(var2, result2);
       chai.assert.equal(var3, result3);
+    });
+  });
+
+  suite('renaming variables creating conflicts', function() {
+    suite('renaming variables creating parameter conflicts', function() {
+      test(
+          'conflicts within legacy procedure blocks return the procedure name',
+          function() {
+            Blockly.serialization.blocks.append({
+              'type': 'procedures_defnoreturn',
+              'extraState': {
+                'params': [
+                  {
+                    'name': 'x',
+                    'id': '6l3P%Y!9EgA(Nh{E`Tl,',
+                  },
+                  {
+                    'name': 'y',
+                    'id': 'l1EtlJe%z_M[O-@uPAQ8',
+                  },
+                ],
+              },
+              'fields': {
+                'NAME': 'test name',
+              },
+            }, this.workspace);
+
+            chai.assert.equal(
+                'test name',
+                nameUsedWithConflictingParam('x', 'y', this.workspace),
+                'Expected the name of the procedure with the conflicting ' +
+                'param to be returned');
+          });
+
+      test(
+          'if no legacy block has the old var name, no procedure ' +
+          'name is returned',
+          function() {
+            Blockly.serialization.blocks.append({
+              'type': 'procedures_defnoreturn',
+              'extraState': {
+                'params': [
+                  {
+                    'name': 'definitely not x',
+                    'id': '6l3P%Y!9EgA(Nh{E`Tl,',
+                  },
+                  {
+                    'name': 'y',
+                    'id': 'l1EtlJe%z_M[O-@uPAQ8',
+                  },
+                ],
+              },
+              'fields': {
+                'NAME': 'test name',
+              },
+            }, this.workspace);
+
+            chai.assert.isNull(
+                nameUsedWithConflictingParam('x', 'y', this.workspace),
+                'Expected there to be no conflict');
+          });
+
+      test(
+          'conflicts within procedure models return the procedure name',
+          function() {
+            this.workspace.getProcedureMap().add(
+              new MockProcedureModel('test name')
+                .insertParameter(
+                    new MockParameterModelWithVar('x', this.workspace), 0)
+                .insertParameter(
+                    new MockParameterModelWithVar('y', this.workspace), 0));
+
+            chai.assert.equal(
+                'test name',
+                nameUsedWithConflictingParam('x', 'y', this.workspace),
+                'Expected the name of the procedure with the conflicting ' +
+                'param to be returned');
+          });
+
+      test(
+          'if no procedure model has the old var, no procedure ' +
+          'name is returned',
+          function() {
+            this.workspace.getProcedureMap().add(
+              new MockProcedureModel('test name')
+                .insertParameter(
+                    new MockParameterModelWithVar(
+                        'definitely not x', this.workspace),
+                    0)
+                .insertParameter(
+                    new MockParameterModelWithVar('y', this.workspace), 0));
+
+            chai.assert.isNull(
+                nameUsedWithConflictingParam('x', 'y', this.workspace),
+                'Expected there to be no conflict');
+          });
     });
   });
 });

@@ -27,12 +27,8 @@ import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 
-export type FieldAngleValidator = FieldInputValidator<number>;
-
 /**
  * Class for an editable angle field.
- *
- * @alias Blockly.FieldAngle
  */
 export class FieldAngle extends FieldInput<number> {
   /**
@@ -100,9 +96,7 @@ export class FieldAngle extends FieldInput<number> {
   line_: SVGLineElement|null = null;
 
   /** The degree symbol for this field. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGTSpanElement'.
-  protected symbol_: SVGTSpanElement = null as AnyDuringMigration;
+  protected symbol_: SVGTSpanElement|null = null;
 
   /** Wrapper click event data. */
   private clickWrapper_: browserEvents.Data|null = null;
@@ -215,10 +209,7 @@ export class FieldAngle extends FieldInput<number> {
           this.sourceBlock_.style.colourTertiary);
     }
 
-    // AnyDuringMigration because:  Argument of type 'this' is not assignable to
-    // parameter of type 'Field'.
-    dropDownDiv.showPositionedByField(
-        this as AnyDuringMigration, this.dropdownDispose_.bind(this));
+    dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
     this.updateGraph_();
   }
@@ -389,12 +380,8 @@ export class FieldAngle extends FieldInput<number> {
           ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
     }
     this.gauge_.setAttribute('d', path.join(''));
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.line_!.setAttribute('x2', x2 as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.line_!.setAttribute('y2', y2 as AnyDuringMigration);
+    this.line_?.setAttribute('x2', `${x2}`);
+    this.line_?.setAttribute('y2', `${y2}`);
   }
 
   /**
@@ -437,8 +424,7 @@ export class FieldAngle extends FieldInput<number> {
    * @param opt_newValue The input value.
    * @returns A valid angle, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      number|null {
+  protected override doClassValidation_(opt_newValue?: any): number|null {
     const value = Number(opt_newValue);
     if (isNaN(value) || !isFinite(value)) {
       return null;
@@ -546,3 +532,20 @@ export interface FieldAngleConfig extends FieldInputConfig {
 export interface FieldAngleFromJsonConfig extends FieldAngleConfig {
   angle?: number;
 }
+
+/**
+ * A function that is called to validate changes to the field's value before
+ * they are set.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+ * @param newValue The value to be validated.
+ * @returns One of three instructions for setting the new value: `T`, `null`,
+ * or `undefined`.
+ *
+ * - `T` to set this function's returned value instead of `newValue`.
+ *
+ * - `null` to invoke `doValueInvalid_` and not set a value.
+ *
+ * - `undefined` to set `newValue` as is.
+ */
+export type FieldAngleValidator = FieldInputValidator<number>;

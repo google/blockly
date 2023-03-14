@@ -152,14 +152,14 @@ suite('Workspace comment', function() {
     });
 
     test('Initial position', function() {
-      const xy = this.comment.getXY();
+      const xy = this.comment.getRelativeToSurfaceXY();
       chai.assert.equal(xy.x, 0, 'Initial X position');
       chai.assert.equal(xy.y, 0, 'Initial Y position');
     });
 
     test('moveBy', function() {
       this.comment.moveBy(10, 100);
-      const xy = this.comment.getXY();
+      const xy = this.comment.getRelativeToSurfaceXY();
       chai.assert.equal(xy.x, 10, 'New X position');
       chai.assert.equal(xy.y, 100, 'New Y position');
     });

@@ -42,7 +42,7 @@ jobs:
           path: _deploy/
 
       - name: Deploy to App Engine
-        uses: google-github-actions/deploy-appengine@v1.1.0
+        uses: google-github-actions/deploy-appengine@v1.2.2
         # For parameters see:
         # https://github.com/google-github-actions/deploy-appengine#inputs
         with:

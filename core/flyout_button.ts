@@ -25,8 +25,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a button or label in the flyout.
- *
- * @alias Blockly.FlyoutButton
  */
 export class FlyoutButton {
   /** The horizontal margin around the text in the button. */
@@ -34,6 +32,10 @@ export class FlyoutButton {
 
   /** The vertical margin around the text in the button. */
   static TEXT_MARGIN_Y = 2;
+
+  /** The radius of the flyout button's borders. */
+  static BORDER_RADIUS = 4;
+
   private readonly text_: string;
   private readonly position_: Coordinate;
   private readonly callbackKey_: string;
@@ -104,8 +106,8 @@ export class FlyoutButton {
       shadow = dom.createSvgElement(
           Svg.RECT, {
             'class': 'blocklyFlyoutButtonShadow',
-            'rx': 4,
-            'ry': 4,
+            'rx': FlyoutButton.BORDER_RADIUS,
+            'ry': FlyoutButton.BORDER_RADIUS,
             'x': 1,
             'y': 1,
           },
@@ -116,8 +118,8 @@ export class FlyoutButton {
         Svg.RECT, {
           'class': this.isLabel_ ? 'blocklyFlyoutLabelBackground' :
                                    'blocklyFlyoutButtonBackground',
-          'rx': 4,
-          'ry': 4,
+          'rx': FlyoutButton.BORDER_RADIUS,
+          'ry': FlyoutButton.BORDER_RADIUS,
         },
         this.svgGroup_!);
 

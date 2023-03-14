@@ -75,7 +75,7 @@ suite('XML', function() {
   });
   suite('textToDom', function() {
     test('Basic', function() {
-      const dom = Blockly.Xml.textToDom(this.complexXmlText);
+      const dom = Blockly.utils.xml.textToDom(this.complexXmlText);
       chai.assert.equal(dom.nodeName, 'xml', 'XML tag');
       chai.assert.equal(dom.getElementsByTagName('block').length, 6, 'Block tags');
     });
@@ -306,7 +306,7 @@ suite('XML', function() {
     suite('Comments', function() {
       suite('Headless', function() {
         setup(function() {
-          this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          this.block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block"/>'
           ), this.workspace);
         });
@@ -331,7 +331,7 @@ suite('XML', function() {
         setup(function() {
           // Let the parent teardown dispose of it.
           this.workspace = Blockly.inject('blocklyDiv', {comments: true});
-          this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          this.block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block"/>'
           ), this.workspace);
         });
@@ -435,7 +435,7 @@ suite('XML', function() {
   });
   suite('domToText', function() {
     test('Round tripping', function() {
-      const dom = Blockly.Xml.textToDom(this.complexXmlText);
+      const dom = Blockly.utils.xml.textToDom(this.complexXmlText);
       const text = Blockly.Xml.domToText(dom);
       chai.assert.equal(text.replace(/\s+/g, ''),
           this.complexXmlText.replace(/\s+/g, ''), 'Round trip');
@@ -443,7 +443,7 @@ suite('XML', function() {
   });
   suite('domToPrettyText', function() {
     test('Round tripping', function() {
-      const dom = Blockly.Xml.textToDom(this.complexXmlText);
+      const dom = Blockly.utils.xml.textToDom(this.complexXmlText);
       const text = Blockly.Xml.domToPrettyText(dom);
       chai.assert.equal(text.replace(/\s+/g, ''),
           this.complexXmlText.replace(/\s+/g, ''), 'Round trip');
@@ -479,7 +479,7 @@ suite('XML', function() {
     suite('Comments', function() {
       suite('Headless', function() {
         test('Text', function() {
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block">' +
               '  <comment>test text</comment>' +
               '</block>'
@@ -487,7 +487,7 @@ suite('XML', function() {
           chai.assert.equal(block.getCommentText(), 'test text');
         });
         test('No Text', function() {
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block">' +
               '  <comment></comment>' +
               '</block>'
@@ -495,7 +495,7 @@ suite('XML', function() {
           chai.assert.equal(block.getCommentText(), '');
         });
         test('Size', function() {
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block">' +
               '  <comment w="100" h="200">test text</comment>' +
               '</block>'
@@ -504,7 +504,7 @@ suite('XML', function() {
               {width: 100, height: 200});
         });
         test('Pinned True', function() {
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block">' +
               '  <comment pinned="true">test text</comment>' +
               '</block>'
@@ -512,7 +512,7 @@ suite('XML', function() {
           chai.assert.isTrue(block.commentModel.pinned);
         });
         test('Pinned False', function() {
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block">' +
               '  <comment pinned="false">test text</comment>' +
               '</block>'
@@ -520,7 +520,7 @@ suite('XML', function() {
           chai.assert.isFalse(block.commentModel.pinned);
         });
         test('Pinned Undefined', function() {
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block">' +
               '  <comment>test text</comment>' +
               '</block>'
@@ -537,7 +537,7 @@ suite('XML', function() {
         });
 
         test('Text', function() {
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block">' +
               '  <comment>test text</comment>' +
               '</block>'
@@ -546,7 +546,7 @@ suite('XML', function() {
           chai.assert.isNotNull(block.getCommentIcon());
         });
         test('No Text', function() {
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block">' +
               '  <comment></comment>' +
               '</block>'
@@ -555,7 +555,7 @@ suite('XML', function() {
           chai.assert.isNotNull(block.getCommentIcon());
         });
         test('Size', function() {
-          const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
               '<block type="empty_block">' +
               '  <comment w="100" h="200">test text</comment>' +
               '</block>'
@@ -568,7 +568,7 @@ suite('XML', function() {
         });
         suite('Pinned', function() {
           test('Pinned True', function() {
-            const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
                 '<block type="empty_block">' +
                 '  <comment pinned="true">test text</comment>' +
                 '</block>'
@@ -579,7 +579,7 @@ suite('XML', function() {
             chai.assert.isTrue(block.getCommentIcon().isVisible());
           });
           test('Pinned False', function() {
-            const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
                 '<block type="empty_block">' +
                 '  <comment pinned="false">test text</comment>' +
                 '</block>'
@@ -590,7 +590,7 @@ suite('XML', function() {
             chai.assert.isFalse(block.getCommentIcon().isVisible());
           });
           test('Pinned Undefined', function() {
-            const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
                 '<block type="empty_block">' +
                 '  <comment>test text</comment>' +
                 '</block>'
@@ -624,7 +624,7 @@ suite('XML', function() {
     });
     test('Backwards compatibility', function() {
       createGenUidStubWithReturns('1');
-      const dom = Blockly.Xml.textToDom(
+      const dom = Blockly.utils.xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="field_variable_test_block" id="block_id">' +
           '    <field name="VAR">name1</field>' +
@@ -635,7 +635,7 @@ suite('XML', function() {
       assertVariableValues(this.workspace, 'name1', '', '1');
     });
     test('Variables at top', function() {
-      const dom = Blockly.Xml.textToDom(
+      const dom = Blockly.utils.xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <variables>' +
           '    <variable type="type1" id="id1">name1</variable>' +
@@ -653,7 +653,7 @@ suite('XML', function() {
       assertVariableValues(this.workspace, 'name3', '', 'id3');
     });
     test('Variables at top duplicated variables tag', function() {
-      const dom = Blockly.Xml.textToDom(
+      const dom = Blockly.utils.xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <variables>' +
           '  </variables>' +
@@ -665,7 +665,7 @@ suite('XML', function() {
       });
     });
     test('Variables at top missing type', function() {
-      const dom = Blockly.Xml.textToDom(
+      const dom = Blockly.utils.xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <variables>' +
           '    <variable id="id1">name1</variable>' +
@@ -679,7 +679,7 @@ suite('XML', function() {
       });
     });
     test('Variables at top mismatch block type', function() {
-      const dom = Blockly.Xml.textToDom(
+      const dom = Blockly.utils.xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <variables>' +
           '    <variable type="type1" id="id1">name1</variable>' +
@@ -709,7 +709,7 @@ suite('XML', function() {
       workspaceTeardown.call(this, this.workspace);
     });
     test('Headless', function() {
-      const dom = Blockly.Xml.textToDom(
+      const dom = Blockly.utils.xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="test_block" inline="true" x="21" y="23">' +
           '  </block>' +
@@ -746,7 +746,7 @@ suite('XML', function() {
     };
     suite('Rendered -> XML -> Headless -> XML', function() {
       test('Comment', function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="empty_block"/>'
         ), this.renderedWorkspace);
         block.setCommentText('test text');
@@ -757,7 +757,7 @@ suite('XML', function() {
     });
     suite('Headless -> XML -> Rendered -> XML', function() {
       test('Comment', function() {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="empty_block"/>'
         ), this.headlessWorkspace);
         block.setCommentText('test text');

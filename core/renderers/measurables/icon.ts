@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Objects representing an icon in a row of a rendered
- * block.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Icon');
 
@@ -23,9 +17,7 @@ import {Types} from './types.js';
 
 /**
  * An object containing information about the space an icon takes up during
- * rendering
- *
- * @alias Blockly.blockRendering.Icon
+ * rendering.
  */
 export class Icon extends Measurable {
   isVisible: boolean;
@@ -33,11 +25,10 @@ export class Icon extends Measurable {
 
   /**
    * An object containing information about the space an icon takes up during
-   * rendering
+   * rendering.
    *
    * @param constants The rendering constants provider.
    * @param icon The icon to measure and store information for.
-   * @internal
    */
   constructor(constants: ConstantProvider, public icon: BlocklyIcon) {
     super(constants);

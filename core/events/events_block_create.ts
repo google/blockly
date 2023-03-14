@@ -16,6 +16,7 @@ import type {Block} from '../block.js';
 import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
+import * as utilsXml from '../utils/xml.js';
 import * as Xml from '../xml.js';
 
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
@@ -26,8 +27,6 @@ import {Workspace} from '../workspace.js';
 /**
  * Notifies listeners when a block (or connected stack of blocks) is
  * created.
- *
- * @alias Blockly.Events.BlockCreate
  */
 export class BlockCreate extends BlockBase {
   override type = eventUtils.BLOCK_CREATE;
@@ -101,7 +100,7 @@ export class BlockCreate extends BlockBase {
         'Blockly.Events.BlockCreate.prototype.fromJson', 'version 9',
         'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
-    this.xml = Xml.textToDom(json['xml']);
+    this.xml = utilsXml.textToDom(json['xml']);
     this.ids = json['ids'];
     this.json = json['json'] as blocks.State;
     if (json['recordUndo'] !== undefined) {
@@ -123,7 +122,7 @@ export class BlockCreate extends BlockBase {
     const newEvent =
         super.fromJson(json, workspace, event ?? new BlockCreate()) as
         BlockCreate;
-    newEvent.xml = Xml.textToDom(json['xml']);
+    newEvent.xml = utilsXml.textToDom(json['xml']);
     newEvent.ids = json['ids'];
     newEvent.json = json['json'] as blocks.State;
     if (json['recordUndo'] !== undefined) {

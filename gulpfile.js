@@ -40,7 +40,7 @@ module.exports = {
   deployDemosBeta: appengineTasks.deployDemosBeta,
   gitUpdateGithubPages: gitTasks.updateGithubPages,
 
-  // Manually-invokable targets, with prequisites where required.
+  // Manually-invokable targets, with prerequisites where required.
   format: buildTasks.format,
   messages: buildTasks.messages,  // Generate msg/json/en.json et al.
   sortRequires: cleanupTasks.sortRequires,

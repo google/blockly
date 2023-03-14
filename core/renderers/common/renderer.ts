@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Base renderer.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Renderer');
 
@@ -35,26 +30,20 @@ import {PathObject} from './path_object.js';
 
 /**
  * The base class for a block renderer.
- *
- * @alias Blockly.blockRendering.Renderer
  */
 export class Renderer implements IRegistrable {
   /** The renderer's constant provider. */
   protected constants_!: ConstantProvider;
 
-  /** @internal */
-  name: string;
+  protected name: string;
 
   /**
    * Rendering constant overrides, passed in through options.
-   *
-   * @internal
    */
-  overrides: object|null = null;
+  protected overrides: object|null = null;
 
   /**
    * @param name The renderer name.
-   * @internal
    */
   constructor(name: string) {
     this.name = name;
@@ -64,7 +53,6 @@ export class Renderer implements IRegistrable {
    * Gets the class name that identifies this renderer.
    *
    * @returns The CSS class name.
-   * @internal
    */
   getClassName(): string {
     return this.name + '-renderer';
@@ -75,7 +63,6 @@ export class Renderer implements IRegistrable {
    *
    * @param theme The workspace theme object.
    * @param opt_rendererOverrides Rendering constant overrides.
-   * @internal
    */
   init(
       theme: Theme, opt_rendererOverrides?: {[rendererConstant: string]: any}) {
@@ -90,6 +77,8 @@ export class Renderer implements IRegistrable {
 
   /**
    * Create any DOM elements that this renderer needs.
+   * If you need to create additional DOM elements, override the
+   * {@link ConstantProvider#createDom} method instead.
    *
    * @param svg The root of the workspace's SVG.
    * @param theme The workspace theme object.
@@ -106,7 +95,6 @@ export class Renderer implements IRegistrable {
    *
    * @param svg The root of the workspace's SVG.
    * @param theme The workspace theme object.
-   * @internal
    */
   refreshDom(svg: SVGElement, theme: Theme) {
     const previousConstants = this.getConstants();
@@ -125,8 +113,6 @@ export class Renderer implements IRegistrable {
   /**
    * Dispose of this renderer.
    * Delete all DOM elements that this renderer and its constants created.
-   *
-   * @internal
    */
   dispose() {
     if (this.constants_) {
@@ -182,7 +168,6 @@ export class Renderer implements IRegistrable {
    * @param workspace The workspace the marker belongs to.
    * @param marker The marker.
    * @returns The object in charge of drawing the marker.
-   * @internal
    */
   makeMarkerDrawer(workspace: WorkspaceSvg, marker: Marker): MarkerSvg {
     return new MarkerSvg(workspace, this.getConstants(), marker);
@@ -194,7 +179,6 @@ export class Renderer implements IRegistrable {
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
    * @returns The renderer path object.
-   * @internal
    */
   makePathObject(root: SVGElement, style: BlockStyle): IPathObject {
     return new PathObject(root, style, (this.constants_));
@@ -205,7 +189,6 @@ export class Renderer implements IRegistrable {
    * called, the renderer has already been initialized.
    *
    * @returns The constant provider.
-   * @internal
    */
   getConstants(): ConstantProvider {
     return this.constants_;
@@ -216,7 +199,6 @@ export class Renderer implements IRegistrable {
    *
    * @param _conn The connection to determine whether or not to highlight.
    * @returns True if we should highlight the connection.
-   * @internal
    */
   shouldHighlightConnection(_conn: Connection): boolean {
     return true;
@@ -233,9 +215,8 @@ export class Renderer implements IRegistrable {
    * @param orphanBlock The orphan block that wants to find a home.
    * @param localType The type of the connection being dragged.
    * @returns Whether there is a home for the orphan or not.
-   * @internal
    */
-  orphanCanConnectAtEnd(
+  protected orphanCanConnectAtEnd(
       topBlock: BlockSvg, orphanBlock: BlockSvg, localType: number): boolean {
     const orphanConnection = localType === ConnectionType.OUTPUT_VALUE ?
         orphanBlock.outputConnection :
@@ -252,7 +233,6 @@ export class Renderer implements IRegistrable {
    * @param local The connection currently being dragged.
    * @param topBlock The block currently being dragged.
    * @returns The preview type to display.
-   * @internal
    */
   getConnectionPreviewMethod(
       closest: RenderedConnection, local: RenderedConnection,

@@ -28,12 +28,8 @@ import type {Sentinel} from './utils/sentinel.js';
 import * as utilsString from './utils/string.js';
 import {Svg} from './utils/svg.js';
 
-export type FieldDropdownValidator = FieldValidator<string>;
-
 /**
  * Class for an editable dropdown field.
- *
- * @alias Blockly.FieldDropdown
  */
 export class FieldDropdown extends Field<string> {
   /** Horizontal distance that a checkmark overhangs the dropdown. */
@@ -114,13 +110,13 @@ export class FieldDropdown extends Field<string> {
   constructor(
       menuGenerator: MenuGenerator,
       opt_validator?: FieldDropdownValidator,
-      opt_config?: FieldConfig,
+      opt_config?: FieldDropdownConfig,
   );
   constructor(menuGenerator: Sentinel);
   constructor(
       menuGenerator: MenuGenerator|Sentinel,
       opt_validator?: FieldDropdownValidator,
-      opt_config?: FieldConfig,
+      opt_config?: FieldDropdownConfig,
   ) {
     super(Field.SKIP_SETUP);
 
@@ -332,7 +328,7 @@ export class FieldDropdown extends Field<string> {
   /**
    * Disposes of events and DOM-references belonging to the dropdown editor.
    */
-  private dropdownDispose_() {
+  protected dropdownDispose_() {
     if (this.menu_) {
       this.menu_.dispose();
     }
@@ -587,8 +583,8 @@ export class FieldDropdown extends Field<string> {
 
   /**
    * Use the `getText_` developer hook to override the field's text
-   * representation.  Get the selected option text. If the selected option is an
-   * image we return the image alt text.
+   * representation.  Get the selected option text.  If the selected option is
+   * an image we return the image alt text.
    *
    * @returns Selected option text.
    */
@@ -654,11 +650,33 @@ export type MenuGeneratorFunction = (this: FieldDropdown) => MenuOption[];
 export type MenuGenerator = MenuOption[]|MenuGeneratorFunction;
 
 /**
+ * Config options for the dropdown field.
+ */
+export type FieldDropdownConfig = FieldConfig;
+
+/**
  * fromJson config for the dropdown field.
  */
-export interface FieldDropdownFromJsonConfig extends FieldConfig {
+export interface FieldDropdownFromJsonConfig extends FieldDropdownConfig {
   options?: MenuOption[];
 }
+
+/**
+ * A function that is called to validate changes to the field's value before
+ * they are set.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+ * @param newValue The value to be validated.
+ * @returns One of three instructions for setting the new value: `T`, `null`,
+ * or `undefined`.
+ *
+ * - `T` to set this function's returned value instead of `newValue`.
+ *
+ * - `null` to invoke `doValueInvalid_` and not set a value.
+ *
+ * - `undefined` to set `newValue` as is.
+ */
+export type FieldDropdownValidator = FieldValidator<string>;
 
 /**
  * The y offset from the top of the field to the top of the image, if an image

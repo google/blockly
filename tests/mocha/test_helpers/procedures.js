@@ -6,6 +6,7 @@
 goog.declareModuleId('Blockly.test.helpers.procedures');
 
 import {ConnectionType} from '../../../build/src/core/connection_type.js';
+import {VariableModel} from '../../../build/src/core/variable_model.js';
 
 
 /**
@@ -127,7 +128,7 @@ export function createProcDefBlock(
   xml +=
       `  <field name="NAME">${name}</field>` +
       '</block>';
-  return Blockly.Xml.domToBlock(Blockly.Xml.textToDom(xml), workspace);
+  return Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(xml), workspace);
 }
 
 /**
@@ -142,9 +143,113 @@ export function createProcCallBlock(
     workspace, hasReturn = false, name = 'proc name') {
   const type = hasReturn ?
       'procedures_callreturn' : 'procedures_callnoreturn';
-  return Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+  return Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
       `<block type="${type}">` +
       `  <mutation name="${name}"/>` +
       `</block>`
   ), workspace);
+}
+
+export class MockProcedureModel {
+  constructor(name = '') {
+    this.id = Blockly.utils.idGenerator.genUid();
+    this.name = name;
+    this.parameters = [];
+    this.returnTypes = null;
+    this.enabled = true;
+  }
+
+  setName(name) {
+    this.name = name;
+    return this;
+  }
+
+  insertParameter(parameterModel, index) {
+    this.parameters.splice(index, 0, parameterModel);
+    return this;
+  }
+
+  deleteParameter(index) {
+    this.parameters.splice(index, 1);
+    return this;
+  }
+
+  setReturnTypes(types) {
+    this.returnTypes = types;
+    return this;
+  }
+
+  setEnabled(enabled) {
+    this.enabled = enabled;
+    return this;
+  }
+
+  getId() {
+    return this.id;
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  getParameter(index) {
+    return this.parameters[index];
+  }
+
+  getParameters() {
+    return [...this.parameters];
+  }
+
+  getReturnTypes() {
+    return this.returnTypes;
+  }
+
+  getEnabled() {
+    return this.enabled;
+  }
+
+  startPublishing() { }
+
+  stopPublishing() { }
+}
+
+export class MockParameterModel {
+  constructor(name) {
+    this.id = Blockly.utils.idGenerator.genUid();
+    this.name = name;
+    this.types = [];
+  }
+
+  setName(name) {
+    this.name = name;
+    return this;
+  }
+
+  setTypes(types) {
+    this.types = types;
+    return this;
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  getTypes() {
+    return this.types;
+  }
+
+  getId() {
+    return this.id;
+  }
+}
+
+export class MockParameterModelWithVar extends MockParameterModel {
+  constructor(name, workspace) {
+    super(name);
+    this.variable = new VariableModel(workspace, name);
+  }
+
+  getVariableModel() {
+    return this.variable;
+  }
 }

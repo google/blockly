@@ -22,8 +22,6 @@ import type {Workspace} from './workspace.js';
 
 /**
  * Class for a workspace comment.
- *
- * @alias Blockly.WorkspaceComment
  */
 export class WorkspaceComment {
   id: string;
@@ -154,7 +152,7 @@ export class WorkspaceComment {
    *   This is not valid if the comment is currently being dragged.
    * @internal
    */
-  getXY(): Coordinate {
+  getRelativeToSurfaceXY(): Coordinate {
     return new Coordinate(this.xy_.x, this.xy_.y);
   }
 

@@ -50,8 +50,6 @@ import type {Workspace} from './workspace.js';
 /**
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
- *
- * @alias Blockly.Block
  */
 export class Block implements IASTNodeLocation, IDeletable {
   /**
@@ -59,7 +57,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * changes. This is usually only called from the constructor, the block type
    * initializer function, or an extension initializer function.
    */
-  onchange?: ((p1: Abstract) => AnyDuringMigration)|null;
+  onchange?: ((p1: Abstract) => void)|null;
 
   /** The language-neutral ID given to the collapsed input. */
   static readonly COLLAPSED_INPUT_NAME: string = constants.COLLAPSED_INPUT_NAME;
@@ -93,39 +91,38 @@ export class Block implements IASTNodeLocation, IDeletable {
   protected styleName_ = '';
 
   /** An optional method called during initialization. */
-  init?: (() => AnyDuringMigration)|null = undefined;
+  init?: (() => void);
 
   /** An optional method called during disposal. */
-  destroy?: (() => void) = undefined;
+  destroy?: (() => void);
 
   /**
    * An optional serialization method for defining how to serialize the
    * mutation state to XML. This must be coupled with defining
    * `domToMutation`.
    */
-  mutationToDom?: ((...p1: AnyDuringMigration[]) => Element)|null = undefined;
+  mutationToDom?: (...p1: AnyDuringMigration[]) => Element;
 
   /**
    * An optional deserialization method for defining how to deserialize the
    * mutation state from XML. This must be coupled with defining
    * `mutationToDom`.
    */
-  domToMutation?: ((p1: Element) => AnyDuringMigration)|null = undefined;
+  domToMutation?: (p1: Element) => void;
 
   /**
    * An optional serialization method for defining how to serialize the
    * block's extra state (eg mutation state) to something JSON compatible.
    * This must be coupled with defining `loadExtraState`.
    */
-  saveExtraState?: (() => AnyDuringMigration)|null = undefined;
+  saveExtraState?: () => AnyDuringMigration;
 
   /**
    * An optional serialization method for defining how to deserialize the
    * block's extra state (eg mutation state) from something JSON compatible.
    * This must be coupled with defining `saveExtraState`.
    */
-  loadExtraState?:
-      ((p1: AnyDuringMigration) => AnyDuringMigration)|null = undefined;
+  loadExtraState?: (p1: AnyDuringMigration) => void;
 
   /**
    * An optional property for suppressing adding STATEMENT_PREFIX and
@@ -139,31 +136,25 @@ export class Block implements IASTNodeLocation, IDeletable {
    * shown to the user, but are declared as global variables in the generated
    * code.
    */
-  getDeveloperVariables?: (() => string[]) = undefined;
+  getDeveloperVariables?: () => string[];
 
   /**
    * An optional function that reconfigures the block based on the contents of
    * the mutator dialog.
    */
-  compose?: ((p1: Block) => void) = undefined;
+  compose?: (p1: Block) => void;
 
   /**
    * An optional function that populates the mutator's dialog with
    * this block's components.
    */
-  decompose?: ((p1: Workspace) => Block) = undefined;
+  decompose?: (p1: Workspace) => Block;
   id: string;
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Connection'.
-  outputConnection: Connection = null as AnyDuringMigration;
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Connection'.
-  nextConnection: Connection = null as AnyDuringMigration;
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Connection'.
-  previousConnection: Connection = null as AnyDuringMigration;
+  outputConnection: Connection|null = null;
+  nextConnection: Connection|null = null;
+  previousConnection: Connection|null = null;
   inputList: Input[] = [];
-  inputsInline?: boolean = undefined;
+  inputsInline?: boolean;
   private disabled = false;
   tooltip: Tooltip.TipInfo = '';
   contextMenu = true;
@@ -205,19 +196,17 @@ export class Block implements IASTNodeLocation, IDeletable {
   protected isInsertionMarker_ = false;
 
   /** Name of the type of hat. */
-  hat?: string = undefined;
+  hat?: string;
 
   rendered: boolean|null = null;
 
   /**
    * String for block help, or function that returns a URL. Null for no help.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type 'string
-  // | Function'.
-  helpUrl: string|Function = null as AnyDuringMigration;
+  helpUrl: string|Function|null = null;
 
   /** A bound callback function to use when the parent workspace changes. */
-  private onchangeWrapper_: ((p1: Abstract) => AnyDuringMigration)|null = null;
+  private onchangeWrapper_: ((p1: Abstract) => void)|null = null;
 
   /**
    * A count of statement inputs on the block.
@@ -424,7 +413,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   private unplugFromRow_(opt_healStack?: boolean) {
     let parentConnection = null;
-    if (this.outputConnection.isConnected()) {
+    if (this.outputConnection?.isConnected()) {
       parentConnection = this.outputConnection.targetConnection;
       // Disconnect from any superior block.
       this.outputConnection.disconnect();
@@ -489,7 +478,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   private unplugFromStack_(opt_healStack?: boolean) {
     let previousTarget = null;
-    if (this.previousConnection.isConnected()) {
+    if (this.previousConnection?.isConnected()) {
       // Remember the connection that any next statements need to connect to.
       previousTarget = this.previousConnection.targetConnection;
       // Detach this block from the parent's tree.
@@ -498,7 +487,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     const nextBlock = this.getNextBlock();
     if (opt_healStack && nextBlock && !nextBlock.isShadow()) {
       // Disconnect the next statement.
-      const nextTarget = this.nextConnection.targetConnection;
+      const nextTarget = this.nextConnection?.targetConnection ?? null;
       nextTarget?.disconnect();
       if (previousTarget &&
           this.workspace.connectionChecker.canConnect(
@@ -798,6 +787,15 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
+   * Return whether this block's own deletable property is true or false.
+   *
+   * @returns True if the block's deletable property is true, false otherwise.
+   */
+  isOwnDeletable(): boolean {
+    return this.deletable_;
+  }
+
+  /**
    * Set whether this block is deletable or not.
    *
    * @param deletable True if deletable.
@@ -810,10 +808,21 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Get whether this block is movable or not.
    *
    * @returns True if movable.
+   * @internal
    */
   isMovable(): boolean {
     return this.movable_ && !this.isShadow_ && !this.isDeadOrDying() &&
         !this.workspace.options.readOnly;
+  }
+
+  /**
+   * Return whether this block's own movable property is true or false.
+   *
+   * @returns True if the block's movable property is true, false otherwise.
+   * @internal
+   */
+  isOwnMovable(): boolean {
+    return this.movable_;
   }
 
   /**
@@ -884,10 +893,20 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Get whether this block is editable or not.
    *
    * @returns True if editable.
+   * @internal
    */
   isEditable(): boolean {
     return this.editable_ && !this.isDeadOrDying() &&
         !this.workspace.options.readOnly;
+  }
+
+  /**
+   * Return whether this block's own editable property is true or false.
+   *
+   * @returns True if the block's editable property is true, false otherwise.
+   */
+  isOwnEditable(): boolean {
+    return this.editable_;
   }
 
   /**
@@ -1024,7 +1043,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param onchangeFn The callback to call when the block's workspace changes.
    * @throws {Error} if onchangeFn is not falsey and not a function.
    */
-  setOnChange(onchangeFn: (p1: Abstract) => AnyDuringMigration) {
+  setOnChange(onchangeFn: (p1: Abstract) => void) {
     if (onchangeFn && typeof onchangeFn !== 'function') {
       throw Error('onchange must be a function.');
     }
@@ -1191,9 +1210,7 @@ export class Block implements IASTNodeLocation, IDeletable {
               'connection.');
         }
         this.previousConnection.dispose();
-        // AnyDuringMigration because:  Type 'null' is not assignable to type
-        // 'Connection'.
-        this.previousConnection = null as AnyDuringMigration;
+        this.previousConnection = null;
       }
     }
   }
@@ -1223,9 +1240,7 @@ export class Block implements IASTNodeLocation, IDeletable {
               'connection.');
         }
         this.nextConnection.dispose();
-        // AnyDuringMigration because:  Type 'null' is not assignable to type
-        // 'Connection'.
-        this.nextConnection = null as AnyDuringMigration;
+        this.nextConnection = null;
       }
     }
   }
@@ -1254,9 +1269,7 @@ export class Block implements IASTNodeLocation, IDeletable {
               'Must disconnect output value before removing connection.');
         }
         this.outputConnection.dispose();
-        // AnyDuringMigration because:  Type 'null' is not assignable to type
-        // 'Connection'.
-        this.outputConnection = null as AnyDuringMigration;
+        this.outputConnection = null;
       }
     }
   }
@@ -1934,10 +1947,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (type === inputTypes.STATEMENT) {
       this.statementInputCount++;
     }
-    // AnyDuringMigration because:  Argument of type 'Connection | null' is not
-    // assignable to parameter of type 'Connection'.
-    const input =
-        new Input(type, name, this, (connection as AnyDuringMigration));
+    const input = new Input(type, name, this, connection);
     // Append input to list.
     this.inputList.push(input);
     return input;
@@ -2081,9 +2091,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this, 'comment', null, this.commentModel.text, text));
     this.commentModel.text = text;
-    // AnyDuringMigration because:  Type 'string | null' is not assignable to
-    // type 'string | Comment'.
-    this.comment = text as AnyDuringMigration;  // For backwards compatibility.
+    this.comment = text;  // For backwards compatibility.
   }
 
   /**

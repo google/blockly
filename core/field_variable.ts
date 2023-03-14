@@ -30,12 +30,8 @@ import {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
 import * as Xml from './xml.js';
 
-export type FieldVariableValidator = FieldDropdownValidator;
-
 /**
  * Class for a variable's dropdown field.
- *
- * @alias Blockly.FieldVariable
  */
 export class FieldVariable extends FieldDropdown {
   protected override menuGenerator_: MenuGenerator|undefined;
@@ -581,3 +577,20 @@ export interface FieldVariableConfig extends FieldConfig {
 export interface FieldVariableFromJsonConfig extends FieldVariableConfig {
   variable?: string;
 }
+
+/**
+ * A function that is called to validate changes to the field's value before
+ * they are set.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+ * @param newValue The value to be validated.
+ * @returns One of three instructions for setting the new value: `T`, `null`,
+ * or `undefined`.
+ *
+ * - `T` to set this function's returned value instead of `newValue`.
+ *
+ * - `null` to invoke `doValueInvalid_` and not set a value.
+ *
+ * - `undefined` to set `newValue` as is.
+ */
+export type FieldVariableValidator = FieldDropdownValidator;

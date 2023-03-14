@@ -29,6 +29,7 @@ import type {IDraggable} from '../interfaces/i_draggable.js';
 import type {IFlyout} from '../interfaces/i_flyout.js';
 import type {IKeyboardAccessible} from '../interfaces/i_keyboard_accessible.js';
 import type {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
+import {isSelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
 import type {IStyleable} from '../interfaces/i_styleable.js';
 import type {IToolbox} from '../interfaces/i_toolbox.js';
 import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
@@ -50,8 +51,6 @@ import {CollapsibleToolboxCategory} from './collapsible_category.js';
 /**
  * Class for a Toolbox.
  * Creates the toolbox's DOM.
- *
- * @alias Blockly.Toolbox
  */
 export class Toolbox extends DeleteArea implements IAutoHideable,
                                                    IKeyboardAccessible,
@@ -100,7 +99,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * Ex: [[node, name, func], [node, name, func]].
    */
   protected boundEvents_: browserEvents.Data[] = [];
-  override wouldDelete_: AnyDuringMigration;
 
   /** The workspace this toolbox is on. */
   protected readonly workspace_: WorkspaceSvg;
@@ -112,10 +110,9 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     this.workspace_ = workspace;
 
     /** The JSON describing the contents of this toolbox. */
-    // AnyDuringMigration because:  Type 'ToolboxInfo | { contents: never[]; }'
-    // is not assignable to type 'ToolboxInfo'.
-    this.toolboxDef_ = (workspace.options.languageTree || {'contents': []}) as
-        AnyDuringMigration;
+    this.toolboxDef_ =
+        (workspace.options.languageTree ||
+         {contents: new Array<toolbox.ToolboxItemInfo>()});
 
     /** Whether the toolbox should be laid out horizontally. */
     this.horizontalLayout_ = workspace.options.horizontalLayout;
@@ -299,9 +296,8 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     if (!handled && this.selectedItem_) {
       // TODO(#6097): Figure out who implements onKeyDown and which interface it
       // should be part of.
-      const untypedItem = this.selectedItem_ as AnyDuringMigration;
-      if (untypedItem.onKeyDown) {
-        handled = untypedItem.onKeyDown(e);
+      if ((this.selectedItem_ as any).onKeyDown) {
+        handled = (this.selectedItem_ as any).onKeyDown(e);
       }
     }
 
@@ -796,33 +792,20 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   setSelectedItem(newItem: IToolboxItem|null) {
     const oldItem = this.selectedItem_;
 
-    if (!newItem && !oldItem || newItem && !newItem.isSelectable()) {
+    if (!newItem && !oldItem || newItem && !isSelectableToolboxItem(newItem)) {
       return;
     }
-    newItem = newItem as ISelectableToolboxItem;
 
-    // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
-    // assignable to parameter of type 'ISelectableToolboxItem'.
-    if (this.shouldDeselectItem_(oldItem, newItem as AnyDuringMigration) &&
-        oldItem !== null) {
+    if (this.shouldDeselectItem_(oldItem, newItem) && oldItem !== null) {
       this.deselectItem_(oldItem);
     }
 
-    // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
-    // assignable to parameter of type 'ISelectableToolboxItem'.
-    if (this.shouldSelectItem_(oldItem, newItem as AnyDuringMigration) &&
-        newItem !== null) {
-      // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
-      // assignable to parameter of type 'ISelectableToolboxItem'.
-      this.selectItem_(oldItem, newItem as AnyDuringMigration);
+    if (this.shouldSelectItem_(oldItem, newItem) && newItem !== null) {
+      this.selectItem_(oldItem, newItem);
     }
 
-    // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
-    // assignable to parameter of type 'ISelectableToolboxItem'.
-    this.updateFlyout_(oldItem, newItem as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
-    // assignable to parameter of type 'ISelectableToolboxItem'.
-    this.fireSelectEvent_(oldItem, newItem as AnyDuringMigration);
+    this.updateFlyout_(oldItem, newItem);
+    this.fireSelectEvent_(oldItem, newItem);
   }
 
   /**
@@ -1044,11 +1027,10 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     this.boundEvents_ = [];
     this.contents_ = [];
 
-    // AnyDuringMigration because:  Argument of type 'HTMLDivElement | null' is
-    // not assignable to parameter of type 'Element'.
-    this.workspace_.getThemeManager().unsubscribe(
-        this.HtmlDiv as AnyDuringMigration);
-    dom.removeNode(this.HtmlDiv);
+    if (this.HtmlDiv) {
+      this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
+      dom.removeNode(this.HtmlDiv);
+    }
   }
 }
 

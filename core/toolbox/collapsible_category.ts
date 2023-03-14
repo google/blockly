@@ -26,8 +26,6 @@ import {ToolboxSeparator} from './separator.js';
 
 /**
  * Class for a category in a toolbox that can be collapsed.
- *
- * @alias Blockly.CollapsibleToolboxCategory
  */
 export class CollapsibleToolboxCategory extends ToolboxCategory implements
     ICollapsibleToolboxItem {
@@ -42,8 +40,6 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
 
   /** The child toolbox items for this category. */
   protected toolboxItems_: IToolboxItem[] = [];
-  override flyoutItems_: AnyDuringMigration;
-  override isHidden_: AnyDuringMigration;
 
   /**
    * @param categoryDef The information needed to create a category in the
@@ -60,25 +56,18 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
 
   override makeDefaultCssConfig_() {
     const cssConfig = super.makeDefaultCssConfig_();
-    (cssConfig as AnyDuringMigration)['contents'] = 'blocklyToolboxContents';
+    cssConfig['contents'] = 'blocklyToolboxContents';
     return cssConfig;
   }
 
   override parseContents_(categoryDef: toolbox.CategoryInfo) {
-    // AnyDuringMigration because:  Element implicitly has an 'any' type because
-    // expression of type '"contents"' can't be used to index type
-    // 'CategoryInfo'.
-    const contents = (categoryDef as AnyDuringMigration)['contents'];
-    let prevIsFlyoutItem = true;
-
-    // AnyDuringMigration because:  Element implicitly has an 'any' type because
-    // expression of type '"custom"' can't be used to index type 'CategoryInfo'.
-    if ((categoryDef as AnyDuringMigration)['custom']) {
-      // AnyDuringMigration because:  Element implicitly has an 'any' type
-      // because expression of type '"custom"' can't be used to index type
-      // 'CategoryInfo'.
-      this.flyoutItems_ = (categoryDef as AnyDuringMigration)['custom'];
-    } else if (contents) {
+    if ('custom' in categoryDef) {
+      this.flyoutItems_ = categoryDef['custom'];
+    } else {
+      const contents = categoryDef['contents'];
+      if (!contents) return;
+      this.flyoutItems_ = [];
+      let prevIsFlyoutItem = true;
       for (let i = 0; i < contents.length; i++) {
         const itemDef = contents[i];
         // Separators can exist as either a flyout item or a toolbox item so
@@ -123,8 +112,8 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
     super.init();
 
     this.setExpanded(
-        (this.toolboxItemDef_ as AnyDuringMigration)['expanded'] === 'true' ||
-        (this.toolboxItemDef_ as AnyDuringMigration)['expanded']);
+        this.toolboxItemDef_['expanded'] === 'true' ||
+        !!this.toolboxItemDef_['expanded']);
   }
 
   override createDom_() {
@@ -141,7 +130,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
   override createIconDom_() {
     const toolboxIcon = document.createElement('span');
     if (!this.parentToolbox_.isHorizontal()) {
-      const className = (this.cssConfig_ as AnyDuringMigration)['icon'];
+      const className = this.cssConfig_['icon'];
       if (className) {
         dom.addClass(toolboxIcon, className);
       }
@@ -161,7 +150,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
   protected createSubCategoriesDom_(subcategories: IToolboxItem[]):
       HTMLDivElement {
     const contentsContainer = document.createElement('div');
-    const className = (this.cssConfig_ as AnyDuringMigration)['contents'];
+    const className = this.cssConfig_['contents'];
     if (className) {
       dom.addClass(contentsContainer, className);
     }

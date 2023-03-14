@@ -32,8 +32,6 @@ interface BlockLocation {
 /**
  * Notifies listeners when a block is moved. This could be from one
  * connection to another, or from one location on the workspace to another.
- *
- * @alias Blockly.Events.BlockMove
  */
 export class BlockMove extends BlockBase {
   override type = eventUtils.BLOCK_MOVE;
@@ -263,7 +261,7 @@ export class BlockMove extends BlockBase {
         blockConnection = block.previousConnection;
       }
       let parentConnection;
-      const connectionType = blockConnection.type;
+      const connectionType = blockConnection?.type;
       if (inputName) {
         const input = parentBlock!.getInput(inputName);
         if (input) {
@@ -272,7 +270,7 @@ export class BlockMove extends BlockBase {
       } else if (connectionType === ConnectionType.PREVIOUS_STATEMENT) {
         parentConnection = parentBlock!.nextConnection;
       }
-      if (parentConnection) {
+      if (parentConnection && blockConnection) {
         blockConnection.connect(parentConnection);
       } else {
         console.warn('Can\'t connect to non-existent input: ' + inputName);

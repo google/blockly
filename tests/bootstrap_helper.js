@@ -10,7 +10,7 @@
  * This is loaded, via goog.bootstrap(), after the other top-level
  * Blockly modules.  It simply calls goog.require() for each of them,
  * to force the debug module loader to finish loading them before any
- * non-module scripts (like msg/messages.js) that might have
+ * non-module scripts (like msg/en.js) that might have
  * undeclared dependencies on them.
  */
 
@@ -21,20 +21,6 @@
     // Force debug module loader to finish loading all modules.
     for (const require of info.requires) {
       goog.require(require);
-
-      // This is a kludge to work around an issue where attempting to
-      // load Blockly.libraryBlocks (blocks/blocks.js) fails if the
-      // Blockly global variable is not defined.
-      //
-      // This is apparently because the debug module loader fails to
-      // load Blockly.libraryBlocks.lists (blocks/lists.js) and
-      // .procedures (blocks/procedures.js) first, despite they both
-      // being required from blocks.js, and that is apparently because
-      // they both depend on Blockly.Xml which the debug loader seems
-      // to think has not been loaded yet even though it has.
-      if (require === 'Blockly') {
-        window.Blockly = goog.module.get('Blockly');
-      }
     }
   }
 

@@ -697,7 +697,7 @@ export function testAWorkspace() {
       });
 
       function testUndoDelete(xmlText) {
-        const xml = Blockly.Xml.textToDom(xmlText);
+        const xml = Blockly.utils.xml.textToDom(xmlText);
         Blockly.Xml.domToBlock(xml, this.workspace);
         this.workspace.getTopBlocks()[0].dispose(false);
         this.workspace.undo();
@@ -819,7 +819,7 @@ export function testAWorkspace() {
       });
 
       function testUndoConnect(xmlText, parentId, childId, func) {
-        const xml = Blockly.Xml.textToDom(xmlText);
+        const xml = Blockly.utils.xml.textToDom(xmlText);
         Blockly.Xml.domToWorkspace(xml, this.workspace);
 
         const parent = this.workspace.getBlockById(parentId);
@@ -1008,7 +1008,7 @@ export function testAWorkspace() {
       });
 
       function testUndoDisconnect(xmlText, childId) {
-        const xml = Blockly.Xml.textToDom(xmlText);
+        const xml = Blockly.utils.xml.textToDom(xmlText);
         Blockly.Xml.domToWorkspace(xml, this.workspace);
 
         const child = this.workspace.getBlockById(childId);

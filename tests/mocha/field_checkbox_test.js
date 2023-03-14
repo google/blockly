@@ -152,7 +152,7 @@ suite('Checkbox Fields', function() {
           workspace: {
             keyboardAccessibilityMode: false,
           },
-          render: function() {field.render_();},
+          queueRender: function() {field.render_();},
           bumpNeighbours: function() {},
         };
         field.constants_ = {

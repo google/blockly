@@ -1047,7 +1047,7 @@ suite('Events', function() {
     test('New block new var xml', function() {
       const TEST_GROUP_ID = 'test_group_id';
       const genUidStub = createGenUidStubWithReturns(TEST_GROUP_ID);
-      const dom = Blockly.Xml.textToDom(
+      const dom = Blockly.utils.xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="field_variable_test_block" id="test_block_id">' +
           '    <field name="VAR" id="test_var_id">name1</field>' +

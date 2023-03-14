@@ -30,7 +30,6 @@
  *     The bootstrap code will consult a BLOCKLY_BOOTSTRAP_OPTIONS
  *     global variable to determine what to load.  This must be set
  *     before loading this script.  See documentation inline below.
- *
  */
 'use strict';
 

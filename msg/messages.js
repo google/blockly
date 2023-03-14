@@ -166,6 +166,9 @@ Blockly.Msg.VARIABLE_ALREADY_EXISTS = 'A variable named "%1" already exists.';
 /** @type {string} */
 /// alert - Tells the user that the name they entered is already in use for another type.
 Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = 'A variable named "%1" already exists for another type: "%2".';
+/** @type {string} */
+/// alert - Tells the user that the name they entered is already in use as a parameter to a procedure, that the variable they are renaming also exists on. Renaming would create two parameters with the same name, which is not allowed.
+Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER = 'A variable named "%1" already exists as a parameter in the procedure "%2".';
 
 // Variable deletion.
 /** @type {string} */

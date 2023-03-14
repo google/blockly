@@ -21,8 +21,6 @@ import type {Workspace} from './workspace.js';
 
 /**
  * Class for a database of entity names (variables, procedures, etc).
- *
- * @alias Blockly.Names
  */
 export class Names {
   static DEVELOPER_VARIABLE_TYPE: NameType;
@@ -186,15 +184,13 @@ export class Names {
    */
   getDistinctName(name: string, type: NameType|string): string {
     let safeName = this.safeName_(name);
-    let i = '';
-    while (this.dbReverse.has(safeName + i) ||
-           this.reservedWords.has(safeName + i)) {
+    let i: number|null = null;
+    while (this.dbReverse.has(safeName + (i ?? '')) ||
+           this.reservedWords.has(safeName + (i ?? ''))) {
       // Collision with existing name.  Create a unique name.
-      // AnyDuringMigration because:  Type 'string | 2' is not assignable to
-      // type 'string'.
-      i = (i ? i + 1 : 2) as AnyDuringMigration;
+      i = i ? i + 1 : 2;
     }
-    safeName += i;
+    safeName += (i ?? '');
     this.dbReverse.add(safeName);
     const isVar =
         type === NameType.VARIABLE || type === NameType.DEVELOPER_VARIABLE;
@@ -251,7 +247,6 @@ export namespace Names {
    * getName('foo', 'VARIABLE') = 'foo'
    * getName('foo', 'PROCEDURE') = 'foo2'
    *
-   * @alias Blockly.Names.NameType
    */
   export enum NameType {
     DEVELOPER_VARIABLE = 'DEVELOPER_VARIABLE',

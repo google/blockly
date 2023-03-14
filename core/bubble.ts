@@ -30,8 +30,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for UI bubble.
- *
- * @alias Blockly.Bubble
  */
 export class Bubble implements IBubble {
   /** Width of the border around the bubble. */

@@ -43,8 +43,6 @@ const BUMP_RANDOMNESS = 10;
 
 /**
  * Class for a connection between blocks that may be rendered on screen.
- *
- * @alias Blockly.RenderedConnection
  */
 export class RenderedConnection extends Connection {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -185,17 +183,29 @@ export class RenderedConnection extends Connection {
    *
    * @param x New absolute x coordinate, in workspace coordinates.
    * @param y New absolute y coordinate, in workspace coordinates.
+   * @return True if the position of the connection in the connection db
+   *     was updated.
    */
-  moveTo(x: number, y: number) {
+  moveTo(x: number, y: number): boolean {
+    const moved = this.x !== x || this.y !== y;
+    let updated = false;
+
     if (this.trackedState_ === RenderedConnection.TrackedState.WILL_TRACK) {
       this.db_.addConnection(this, y);
       this.trackedState_ = RenderedConnection.TrackedState.TRACKED;
-    } else if (this.trackedState_ === RenderedConnection.TrackedState.TRACKED) {
+      updated = true;
+    } else if (
+        this.trackedState_ === RenderedConnection.TrackedState.TRACKED &&
+        moved) {
       this.db_.removeConnection(this, this.y);
       this.db_.addConnection(this, y);
+      updated = true;
     }
+
     this.x = x;
     this.y = y;
+
+    return updated;
   }
 
   /**
@@ -203,9 +213,11 @@ export class RenderedConnection extends Connection {
    *
    * @param dx Change to x coordinate, in workspace units.
    * @param dy Change to y coordinate, in workspace units.
+   * @return True if the position of the connection in the connection db
+   *     was updated.
    */
-  moveBy(dx: number, dy: number) {
-    this.moveTo(this.x + dx, this.y + dy);
+  moveBy(dx: number, dy: number): boolean {
+    return this.moveTo(this.x + dx, this.y + dy);
   }
 
   /**
@@ -214,9 +226,11 @@ export class RenderedConnection extends Connection {
    *
    * @param blockTL The location of the top left corner of the block, in
    *     workspace coordinates.
+   * @return True if the position of the connection in the connection db
+   *     was updated.
    */
-  moveToOffset(blockTL: Coordinate) {
-    this.moveTo(
+  moveToOffset(blockTL: Coordinate): boolean {
+    return this.moveTo(
         blockTL.x + this.offsetInBlock_.x, blockTL.y + this.offsetInBlock_.y);
   }
 
@@ -257,10 +271,24 @@ export class RenderedConnection extends Connection {
       }
       // Workspace coordinates.
       const xy = svgMath.getRelativeXY(svgRoot);
-      block!.getSvgRoot().setAttribute(
-          'transform', 'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
+      block!.translate(xy.x - dx, xy.y - dy);
       block!.moveConnections(-dx, -dy);
     }
+  }
+
+  /**
+   * Moves the blocks on either side of this connection right next to
+   * each other, based on their local offsets, not global positions.
+   *
+   * @internal
+   */
+  tightenEfficiently() {
+    const target = this.targetConnection;
+    const block = this.targetBlock();
+    if (!target || !block) return;
+    const offset =
+        Coordinate.difference(this.offsetInBlock_, target.offsetInBlock_);
+    block.translate(offset.x, offset.y);
   }
 
   /**
@@ -304,14 +332,12 @@ export class RenderedConnection extends Connection {
           (shape as unknown as PathLeftShape).pathLeft +
           svgPaths.lineOnAxis('h', xLen);
     }
-    const xy = this.sourceBlock_.getRelativeToSurfaceXY();
-    const x = this.x - xy.x;
-    const y = this.y - xy.y;
+    const offset = this.offsetInBlock_;
     this.highlightPath = dom.createSvgElement(
         Svg.PATH, {
           'class': 'blocklyHighlightedConnectionPath',
           'd': steps,
-          'transform': 'translate(' + x + ',' + y + ')' +
+          'transform': `translate(${offset.x}, ${offset.y})` +
               (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
         },
         this.sourceBlock_.getSvgRoot());
@@ -461,11 +487,11 @@ export class RenderedConnection extends Connection {
     const renderedChild = childBlock as BlockSvg;
     // Rerender the parent so that it may reflow.
     if (renderedParent.rendered) {
-      renderedParent.render();
+      renderedParent.queueRender();
     }
     if (renderedChild.rendered) {
       renderedChild.updateDisabled();
-      renderedChild.render();
+      renderedChild.queueRender();
       // Reset visibility, since the child is now a top block.
       renderedChild.getSvgRoot().style.display = 'block';
     }
@@ -486,7 +512,7 @@ export class RenderedConnection extends Connection {
 
     const parentBlock = this.getSourceBlock();
     if (parentBlock.rendered) {
-      parentBlock.render();
+      parentBlock.queueRender();
     }
   }
 
@@ -530,11 +556,11 @@ export class RenderedConnection extends Connection {
           this.type === ConnectionType.PREVIOUS_STATEMENT) {
         // Child block may need to square off its corners if it is in a stack.
         // Rendering a child will render its parent.
-        childBlock.render();
+        childBlock.queueRender();
       } else {
         // Child block does not change shape.  Rendering the parent node will
         // move its connected children into position.
-        parentBlock.render();
+        parentBlock.queueRender();
       }
     }
 

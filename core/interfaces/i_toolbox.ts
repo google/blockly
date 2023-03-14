@@ -21,8 +21,6 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 
 /**
  * Interface for a toolbox.
- *
- * @alias Blockly.IToolbox
  */
 export interface IToolbox extends IRegistrable {
   /** Initializes the toolbox. */

@@ -23,8 +23,6 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Notifies listeners that a variable model has been created.
- *
- * @alias Blockly.Events.VarCreate
  */
 export class VarCreate extends VarBase {
   override type = eventUtils.VAR_CREATE;
@@ -55,7 +53,7 @@ export class VarCreate extends VarBase {
    */
   override toJson(): VarCreateJson {
     const json = super.toJson() as VarCreateJson;
-    if (!this.varType) {
+    if (this.varType === undefined) {
       throw new Error(
           'The var type is undefined. Either pass a variable to ' +
           'the constructor, or call fromJson');

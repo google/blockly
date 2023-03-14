@@ -9,6 +9,7 @@ goog.declareModuleId('Blockly.test.jsoSerialization');
 import * as Blockly from '../../build/src/core/blockly.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 import {defineRowBlock, defineStackBlock, defineStatementBlock} from './test_helpers/block_definitions.js';
+import {MockParameterModel, MockProcedureModel} from './test_helpers/procedures.js';
 
 
 suite('JSO Serialization', function() {
@@ -373,7 +374,7 @@ suite('JSO Serialization', function() {
         this.createBlockWithShadow = function(blockType, inputName) {
           const block = this.workspace.newBlock(blockType);
           block.getInput(inputName).connection.setShadowDom(
-              Blockly.Xml.textToDom(
+              Blockly.utils.xml.textToDom(
                   '<shadow type="' + blockType + '" id="test"></shadow>'));
           return block;
         };
@@ -384,7 +385,7 @@ suite('JSO Serialization', function() {
           block.getInput(inputName).connection.connect(
               childBlock.outputConnection || childBlock.previousConnection);
           block.getInput(inputName).connection.setShadowDom(
-              Blockly.Xml.textToDom(
+              Blockly.utils.xml.textToDom(
                   '<shadow type="' + blockType + '" id="test"></shadow>'));
           return block;
         };
@@ -600,7 +601,7 @@ suite('JSO Serialization', function() {
           this.createNextWithShadow = function() {
             const block = this.workspace.newBlock('stack_block');
             block.nextConnection.setShadowDom(
-                Blockly.Xml.textToDom(
+                Blockly.utils.xml.textToDom(
                     '<shadow type="stack_block" id="test"></shadow>'));
             return block;
           };
@@ -610,7 +611,7 @@ suite('JSO Serialization', function() {
             const childBlock = this.workspace.newBlock('stack_block');
             block.nextConnection.connect(childBlock.previousConnection);
             block.nextConnection.setShadowDom(
-                Blockly.Xml.textToDom(
+                Blockly.utils.xml.textToDom(
                     '<shadow type="stack_block" id="test"></shadow>'));
             return block;
           };
@@ -796,125 +797,40 @@ suite('JSO Serialization', function() {
   });
 
   suite('Procedures', function() {
-    class MockProcedureModel {
-      constructor() {
-        this.id = Blockly.utils.idGenerator.genUid();
-        this.name = '';
-        this.parameters = [];
-        this.returnTypes = null;
-        this.enabled = true;
-      }
-
-      setName(name) {
-        this.name = name;
-        return this;
-      }
-
-      insertParameter(parameterModel, index) {
-        this.parameters.splice(index, 0, parameterModel);
-        return this;
-      }
-
-      deleteParameter(index) {
-        this.parameters.splice(index, 1);
-        return this;
-      }
-
-      setReturnTypes(types) {
-        this.returnTypes = types;
-        return this;
-      }
-
-      setEnabled(enabled) {
-        this.enabled = enabled;
-        return this;
-      }
-
-      getId() {
-        return this.id;
-      }
-
-      getName() {
-        return this.name;
-      }
-
-      getParameter(index) {
-        return this.parameters[index];
-      }
-
-      getParameters() {
-        return [...this.parameters];
-      }
-
-      getReturnTypes() {
-        return this.returnTypes;
-      }
-
-      getEnabled() {
-        return this.enabled;
-      }
-    }
-
-    class MockParameterModel {
-      constructor(name) {
-        this.id = Blockly.utils.idGenerator.genUid();
-        this.name = name;
-        this.types = [];
-      }
-
-      setName(name) {
-        this.name = name;
-        return this;
-      }
-
-      setTypes(types) {
-        this.types = types;
-        return this;
-      }
-
-      getName() {
-        return this.name;
-      }
-
-      getTypes() {
-        return this.types;
-      }
-
-      getId() {
-        return this.id;
-      }
-    }
-
     setup(function() {
       this.procedureMap = this.workspace.getProcedureMap();
+      this.serializer =
+          new Blockly.serialization.procedures.ProcedureSerializer(
+              MockProcedureModel, MockParameterModel);
     });
 
     teardown(function() {
       this.procedureMap = null;
+      this.serializer = null;
     });
 
     suite('invariant properties', function() {
       test('the state always has an id property', function() {
         const procedureModel = new MockProcedureModel();
         this.procedureMap.add(procedureModel);
-        const jso = Blockly.serialization.workspaces.save(this.workspace);
-        const procedure = jso['procedures'][0];
+        const jso = this.serializer.save(this.workspace);
+        const procedure = jso[0];
         assertProperty(procedure, 'id', procedureModel.getId());
       });
 
       test('if the name has not been set, name is an empty string', function() {
         const procedureModel = new MockProcedureModel();
         this.procedureMap.add(procedureModel);
-        const jso = Blockly.serialization.workspaces.save(this.workspace);
-        const procedure = jso['procedures'][0];
+        const jso = this.serializer.save(this.workspace);
+        const procedure = jso[0];
         assertProperty(procedure, 'name', '');
       });
 
       test('if the name has been set, name is the string', function() {
         const procedureModel = new MockProcedureModel().setName('testName');
         this.procedureMap.add(procedureModel);
-        const jso = Blockly.serialization.workspaces.save(this.workspace);
-        const procedure = jso['procedures'][0];
+        const jso = this.serializer.save(this.workspace);
+        const procedure = jso[0];
         assertProperty(procedure, 'name', 'testName');
       });
     });
@@ -923,8 +839,8 @@ suite('JSO Serialization', function() {
       test('if the procedure does not return, returnTypes is null', function() {
         const procedureModel = new MockProcedureModel();
         this.procedureMap.add(procedureModel);
-        const jso = Blockly.serialization.workspaces.save(this.workspace);
-        const procedure = jso['procedures'][0];
+        const jso = this.serializer.save(this.workspace);
+        const procedure = jso[0];
         assertProperty(procedure, 'returnTypes', null);
       });
 
@@ -933,8 +849,8 @@ suite('JSO Serialization', function() {
           function() {
             const procedureModel = new MockProcedureModel().setReturnTypes([]);
             this.procedureMap.add(procedureModel);
-            const jso = Blockly.serialization.workspaces.save(this.workspace);
-            const procedure = jso['procedures'][0];
+            const jso = this.serializer.save(this.workspace);
+            const procedure = jso[0];
             assertProperty(procedure, 'returnTypes', []);
           });
 
@@ -944,8 +860,8 @@ suite('JSO Serialization', function() {
             const procedureModel = new MockProcedureModel()
                 .setReturnTypes(['a type']);
             this.procedureMap.add(procedureModel);
-            const jso = Blockly.serialization.workspaces.save(this.workspace);
-            const procedure = jso['procedures'][0];
+            const jso = this.serializer.save(this.workspace);
+            const procedure = jso[0];
             assertProperty(procedure, 'returnTypes', ['a type']);
           });
     });
@@ -956,8 +872,8 @@ suite('JSO Serialization', function() {
           const parameterModel = new MockParameterModel('testparam');
           this.procedureMap.add(
               new MockProcedureModel().insertParameter(parameterModel, 0));
-          const jso = Blockly.serialization.workspaces.save(this.workspace);
-          const parameter = jso['procedures'][0]['parameters'][0];
+          const jso = this.serializer.save(this.workspace);
+          const parameter = jso[0]['parameters'][0];
           assertProperty(parameter, 'id', parameterModel.getId());
         });
 
@@ -965,8 +881,8 @@ suite('JSO Serialization', function() {
           const parameterModel = new MockParameterModel('testparam');
           this.procedureMap.add(
               new MockProcedureModel().insertParameter(parameterModel, 0));
-          const jso = Blockly.serialization.workspaces.save(this.workspace);
-          const parameter = jso['procedures'][0]['parameters'][0];
+          const jso = this.serializer.save(this.workspace);
+          const parameter = jso[0]['parameters'][0];
           assertProperty(parameter, 'name', 'testparam');
         });
       });
@@ -978,8 +894,8 @@ suite('JSO Serialization', function() {
               const parameterModel = new MockParameterModel('testparam');
               this.procedureMap.add(
                   new MockProcedureModel().insertParameter(parameterModel, 0));
-              const jso = Blockly.serialization.workspaces.save(this.workspace);
-              const parameter = jso['procedures'][0]['parameters'][0];
+              const jso = this.serializer.save(this.workspace);
+              const parameter = jso[0]['parameters'][0];
               assertNoProperty(parameter, 'types');
              });
 
@@ -988,8 +904,8 @@ suite('JSO Serialization', function() {
               new MockParameterModel('testparam').setTypes(['a type']);
           this.procedureMap.add(
               new MockProcedureModel().insertParameter(parameterModel, 0));
-          const jso = Blockly.serialization.workspaces.save(this.workspace);
-          const parameter = jso['procedures'][0]['parameters'][0];
+          const jso = this.serializer.save(this.workspace);
+          const parameter = jso[0]['parameters'][0];
           assertProperty(parameter, 'types', ['a type']);
         });
       });

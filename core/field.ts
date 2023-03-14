@@ -43,13 +43,10 @@ import * as userAgent from './utils/useragent.js';
 import * as utilsXml from './utils/xml.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
 
 /**
  * A function that is called to validate changes to the field's value before
  * they are set.
- *
- * **NOTE:** Validation returns one option between `T`, `null`, and `undefined`.
  *
  * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
  * @param newValue The value to be validated.
@@ -67,7 +64,6 @@ export type FieldValidator<T = any> = (newValue: T) => T|null|undefined;
 /**
  * Abstract class for an editable field.
  *
- * @alias Blockly.Field
  * @typeParam T - The value stored on the field.
  */
 export abstract class Field<T = any> implements IASTNodeLocationSvg,
@@ -455,7 +451,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
         callingClass.prototype.toXml !== this.toXml) {
       const elem = utilsXml.createElement('field');
       elem.setAttribute('name', this.name || '');
-      const text = Xml.domToText(this.toXml(elem));
+      const text = utilsXml.domToText(this.toXml(elem));
       return text.replace(
           ' xmlns="https://developers.google.com/blockly/xml"', '');
     }
@@ -477,7 +473,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
       boolean {
     if (callingClass.prototype.loadState === this.loadState &&
         callingClass.prototype.fromXml !== this.fromXml) {
-      this.fromXml(Xml.textToDom(state as string));
+      this.fromXml(utilsXml.textToDom(state as string));
       return true;
     }
     // Either they called this on purpose from their loadState, or they have
@@ -964,9 +960,8 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
   forceRerender() {
     this.isDirty_ = true;
     if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-      (this.sourceBlock_ as BlockSvg).render();
+      (this.sourceBlock_ as BlockSvg).queueRender();
       (this.sourceBlock_ as BlockSvg).bumpNeighbours();
-      this.updateMarkers_();
     }
   }
 
@@ -1290,8 +1285,12 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     this.markerSvg_ = markerSvg;
   }
 
-  /** Redraw any attached marker or cursor svgs if needed. */
-  protected updateMarkers_() {
+  /**
+   * Redraw any attached marker or cursor svgs if needed.
+   *
+   * @internal
+   */
+  updateMarkers_() {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -1317,6 +1316,8 @@ export interface FieldConfig {
 /**
  * For use by Field and descendants of Field. Constructors can change
  * in descendants, though they should contain all of Field's prototype methods.
+ *
+ * @internal
  */
 export type FieldProto = Pick<typeof Field, 'prototype'>;
 

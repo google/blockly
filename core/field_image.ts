@@ -22,8 +22,6 @@ import {Svg} from './utils/svg.js';
 
 /**
  * Class for an image on a block.
- *
- * @alias Blockly.FieldImage
  */
 export class FieldImage extends Field<string> {
   /**
@@ -35,12 +33,10 @@ export class FieldImage extends Field<string> {
   private readonly imageHeight_: number;
 
   /** The function to be called when this field is clicked. */
-  private clickHandler_: ((p1: FieldImage) => AnyDuringMigration)|null = null;
+  private clickHandler_: ((p1: FieldImage) => void)|null = null;
 
   /** The rendered field's image element. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGImageElement'.
-  private imageElement_: SVGImageElement = null as AnyDuringMigration;
+  private imageElement_: SVGImageElement|null = null;
 
   /**
    * Editable fields usually show some sort of UI indicating they are
@@ -79,7 +75,7 @@ export class FieldImage extends Field<string> {
    */
   constructor(
       src: string|Sentinel, width: string|number, height: string|number,
-      opt_alt?: string, opt_onClick?: (p1: FieldImage) => AnyDuringMigration,
+      opt_alt?: string, opt_onClick?: (p1: FieldImage) => void,
       opt_flipRtl?: boolean, opt_config?: FieldImageConfig) {
     super(Field.SKIP_SETUP);
 
@@ -164,8 +160,7 @@ export class FieldImage extends Field<string> {
    * @param opt_newValue The input value.
    * @returns A string, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      string|null {
+  protected override doClassValidation_(opt_newValue?: any): string|null {
     if (typeof opt_newValue !== 'string') {
       return null;
     }
@@ -226,7 +221,7 @@ export class FieldImage extends Field<string> {
    * @param func The function that is called when the image is clicked, or null
    *     to remove.
    */
-  setOnClickHandler(func: ((p1: FieldImage) => AnyDuringMigration)|null) {
+  setOnClickHandler(func: ((p1: FieldImage) => void)|null) {
     this.clickHandler_ = func;
   }
 

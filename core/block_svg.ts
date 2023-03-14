@@ -56,13 +56,12 @@ import * as svgMath from './utils/svg_math.js';
 import {Warning} from './warning.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import {queueRender} from './render_management.js';
 
 
 /**
  * Class for a block's SVG representation.
  * Not normally called directly, workspace.newBlock() is preferred.
- *
- * @alias Blockly.BlockSvg
  */
 export class BlockSvg extends Block implements IASTNodeLocationSvg,
                                                IBoundedElement, ICopyable,
@@ -79,12 +78,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * the block.
    */
   static readonly COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
-  override decompose?: ((p1: Workspace) => BlockSvg);
+  override decompose?: (p1: Workspace) => BlockSvg;
   // override compose?: ((p1: BlockSvg) => void)|null;
-  saveConnections?: ((p1: BlockSvg) => AnyDuringMigration);
+  saveConnections?: (p1: BlockSvg) => void;
   customContextMenu?:
-      ((p1: Array<ContextMenuOption|LegacyContextMenuOption>) =>
-           AnyDuringMigration)|null;
+      (p1: Array<ContextMenuOption|LegacyContextMenuOption>) => void;
 
   /**
    * An property used internally to reference the block's rendering debugger.
@@ -144,6 +142,24 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   override previousConnection!: RenderedConnection;
   private readonly useDragSurface_: boolean;
 
+  private translation = '';
+
+  /**
+   * The ID of the setTimeout callback for bumping neighbours, or 0 if no bump
+   * is currently scheduled.
+   */
+  private bumpNeighboursPid = 0;
+
+  /**
+   * The location of the top left of this block (in workspace coordinates)
+   * relative to either its parent block, or the workspace origin if it has no
+   * parent.
+   *
+   * @internal
+   */
+  relativeCoords = new Coordinate(0, 0);
+
+
   /**
    * @param workspace The block's workspace.
    * @param prototypeName Name of the language object containing type-specific
@@ -154,36 +170,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   constructor(workspace: WorkspaceSvg, prototypeName: string, opt_id?: string) {
     super(workspace, prototypeName, opt_id);
     this.workspace = workspace;
-
-    /**
-     * An optional method called when a mutator dialog is first opened.
-     * This function must create and initialize a top-level block for the
-     * mutator dialog, and return it. This function should also populate this
-     * top-level block with any sub-blocks which are appropriate. This method
-     * must also be coupled with defining a `compose` method for the default
-     * mutation dialog button and UI to appear.
-     */
-    this.decompose = this.decompose;
-
-    /**
-     * An optional method called when a mutator dialog saves its content.
-     * This function is called to modify the original block according to new
-     * settings. This method must also be coupled with defining a `decompose`
-     * method for the default mutation dialog button and UI to appear.
-     */
-    this.compose = this.compose;
-
-    /**
-     * An optional method called by the default mutator UI which gives the block
-     * a chance to save information about what child blocks are connected to
-     * what mutated connections.
-     */
-    this.saveConnections = this.saveConnections;
-
-    /** An optional method for defining custom block context menu items. */
-    this.customContextMenu = this.customContextMenu;
     this.svgGroup_ = dom.createSvgElement(Svg.G, {});
-    (this.svgGroup_ as AnyDuringMigration).translate_ = '';
 
     /** A block style object. */
     this.style = workspace.getRenderer().getConstants().getBlockStyle(null);
@@ -199,7 +186,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     this.useDragSurface_ = !!workspace.getBlockDragSurface();
 
     const svgPath = this.pathObject.svgPath;
-    (svgPath as AnyDuringMigration).tooltip = this;
+    (svgPath as any).tooltip = this;
     Tooltip.bindMouseEvents(svgPath);
 
     // Expose this block's ID on its top-level SVG group.
@@ -348,9 +335,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const oldXY = this.getRelativeToSurfaceXY();
     if (newParent) {
       (newParent as BlockSvg).getSvgRoot().appendChild(svgRoot);
-      const newXY = this.getRelativeToSurfaceXY();
-      // Move the connections to match the child's new position.
-      this.moveConnections(newXY.x - oldXY.x, newXY.y - oldXY.y);
     } else if (oldParent) {
       // If we are losing a parent, we want to move our DOM element to the
       // root of the workspace.
@@ -435,8 +419,18 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param y The y coordinate of the translation in workspace units.
    */
   translate(x: number, y: number) {
-    this.getSvgRoot().setAttribute(
-        'transform', 'translate(' + x + ',' + y + ')');
+    this.translation = `translate(${x}, ${y})`;
+    this.relativeCoords = new Coordinate(x, y);
+    this.getSvgRoot().setAttribute('transform', this.getTranslation());
+  }
+
+  /**
+   * Returns the SVG translation of this block.
+   *
+   * @internal
+   */
+  getTranslation(): string {
+    return this.translation;
   }
 
   /**
@@ -506,13 +500,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       this.workspace.getBlockDragSurface()!.translateSurface(
           newLoc.x, newLoc.y);
     } else {
-      (this.svgGroup_ as AnyDuringMigration).translate_ =
-          'translate(' + newLoc.x + ',' + newLoc.y + ')';
-      (this.svgGroup_ as AnyDuringMigration)
-          .setAttribute(
-              'transform',
-              (this.svgGroup_ as AnyDuringMigration).translate_ +
-                  (this.svgGroup_ as AnyDuringMigration).skew_);
+      this.translate(newLoc.x, newLoc.y);
+      this.getSvgRoot().setAttribute('transform', this.getTranslation());
     }
   }
 
@@ -598,13 +587,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       return;
     }
     super.setCollapsed(collapsed);
-    if (!collapsed) {
-      this.updateCollapsed_();
-    } else if (this.rendered) {
-      this.render();
-      // Don't bump neighbours. Users like to store collapsed functions together
-      // and bumping makes them go out of alignment.
-    }
+    this.updateCollapsed_();
   }
 
   /**
@@ -708,11 +691,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.workspace.options.readOnly || !this.contextMenu) {
       return null;
     }
-    // AnyDuringMigration because:  Argument of type '{ block: this; }' is not
-    // assignable to parameter of type 'Scope'.
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-        ContextMenuRegistry.ScopeType.BLOCK,
-        {block: this} as AnyDuringMigration);
+        ContextMenuRegistry.ScopeType.BLOCK, {block: this});
 
     // Allow the block to add or modify menuOptions.
     if (this.customContextMenu) {
@@ -775,9 +755,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   setDragging(adding: boolean) {
     if (adding) {
-      const group = this.getSvgRoot();
-      (group as AnyDuringMigration).translate_ = '';
-      (group as AnyDuringMigration).skew_ = '';
+      this.translation = '';
       common.draggingConnections.push(...this.getConnections_(true));
       dom.addClass(this.svgGroup_, 'blocklyDragging');
     } else {
@@ -910,10 +888,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
     dom.removeNode(this.svgGroup_);
     blockWorkspace.resizeContents();
-    // Sever JavaScript to DOM connections.
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'SVGGElement'.
-    this.svgGroup_ = null as AnyDuringMigration;
     dom.stopTextWidthCache();
   }
 
@@ -1015,8 +989,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param text The text, or null to delete.
    */
   override setCommentText(text: string|null) {
-    // AnyDuringMigration because:  Property 'get' does not exist on type
-    // '(name: string) => void'.
     if (this.commentModel.text === text) {
       return;
     }
@@ -1291,7 +1263,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     super.setPreviousStatement(newBoolean, opt_check);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       this.bumpNeighbours();
     }
   }
@@ -1308,7 +1280,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     super.setNextStatement(newBoolean, opt_check);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       this.bumpNeighbours();
     }
   }
@@ -1324,7 +1296,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     super.setOutput(newBoolean, opt_check);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       this.bumpNeighbours();
     }
   }
@@ -1338,7 +1310,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     super.setInputsInline(newBoolean);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       this.bumpNeighbours();
     }
   }
@@ -1356,7 +1328,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const removed = super.removeInput(name, opt_quiet);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       // Removing an input will cause the block to change shape.
       this.bumpNeighbours();
     }
@@ -1374,7 +1346,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     super.moveNumberedInputBefore(inputIndex, refIndex);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       // Moving an input will cause the block to change shape.
       this.bumpNeighbours();
     }
@@ -1392,7 +1364,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const input = super.appendInput_(type, name);
 
     if (this.rendered) {
-      this.render();
+      this.queueRender();
       // Adding an input will cause the block to change shape.
       this.bumpNeighbours();
     }
@@ -1450,7 +1422,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @param all If true, return all connections even hidden ones.
    *     Otherwise, for a non-rendered block return an empty list, and for a
-   * collapsed block don't return inputs connections.
+   *     collapsed block don't return inputs connections.
    * @returns Array of connections.
    * @internal
    */
@@ -1542,7 +1514,16 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * up on screen, because that creates confusion for end-users.
    */
   override bumpNeighbours() {
-    this.getRootBlock().bumpNeighboursInternal();
+    if (this.bumpNeighboursPid) return;
+    const group = eventUtils.getGroup();
+
+    this.bumpNeighboursPid = setTimeout(() => {
+      const oldGroup = eventUtils.getGroup();
+      eventUtils.setGroup(group);
+      this.getRootBlock().bumpNeighboursInternal();
+      eventUtils.setGroup(oldGroup);
+      this.bumpNeighboursPid = 0;
+    }, config.bumpDelay);
   }
 
   /**
@@ -1597,11 +1578,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       eventUtils.setGroup(false);
     }, config.bumpDelay / 2);
 
-    setTimeout(() => {
-      eventUtils.setGroup(group);
-      this.bumpNeighbours();
-      eventUtils.setGroup(false);
-    }, config.bumpDelay);
+    this.bumpNeighbours();
   }
 
   /**
@@ -1650,7 +1627,17 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
-   * Lays out and reflows a block based on its contents and settings.
+   * Triggers a rerender after a delay to allow for batching.
+   *
+   * @internal
+   */
+  queueRender() {
+    queueRender(this);
+  }
+
+  /**
+   * Immediately lays out and reflows a block based on its contents and
+   * settings.
    *
    * @param opt_bubble If false, just render this block.
    *   If true, also render block's parent, grandparent, etc.  Defaults to true.
@@ -1668,7 +1655,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
         this.updateCollapsed_();
       }
       this.workspace.getRenderer().render(this);
-      this.updateConnectionLocations_();
+      this.updateConnectionLocations();
 
       if (opt_bubble !== false) {
         const parentBlock = this.getParent();
@@ -1687,6 +1674,43 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
   }
 
+  /**
+   * Renders this block in a way that's compatible with the more efficient
+   * render management system.
+   *
+   * @internal
+   */
+  renderEfficiently() {
+    this.rendered = true;
+    dom.startTextWidthCache();
+
+    if (this.isCollapsed()) {
+      this.updateCollapsed_();
+    }
+    this.workspace.getRenderer().render(this);
+    this.tightenChildrenEfficiently();
+
+    dom.stopTextWidthCache();
+    this.updateMarkers_();
+  }
+
+  /**
+   * Tightens all children of this block so they are snuggly rendered against
+   * their parent connections.
+   *
+   * Does not update connection locations, so that they can be updated more
+   * efficiently by the render management system.
+   *
+   * @internal
+   */
+  tightenChildrenEfficiently() {
+    for (const input of this.inputList) {
+      const conn = input.connection as RenderedConnection;
+      if (conn) conn.tightenEfficiently();
+    }
+    if (this.nextConnection) this.nextConnection.tightenEfficiently();
+  }
+
   /** Redraw any attached marker or cursor svgs if needed. */
   protected updateMarkers_() {
     if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg) {
@@ -1696,14 +1720,21 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       // TODO(#4592): Update all markers on the block.
       this.workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
     }
+    for (const input of this.inputList) {
+      for (const field of input.fieldRow) {
+        field.updateMarkers_();
+      }
+    }
   }
 
   /**
    * Update all of the connections on this block with the new locations
    * calculated during rendering.  Also move all of the connected blocks based
    * on the new connection locations.
+   *
+   * @internal
    */
-  private updateConnectionLocations_() {
+  updateConnectionLocations() {
     const blockTL = this.getRelativeToSurfaceXY();
     // Don't tighten previous or output connections because they are inferior
     // connections.

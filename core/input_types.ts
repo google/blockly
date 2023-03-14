@@ -17,8 +17,6 @@ import {ConnectionType} from './connection_type.js';
 
 /**
  * Enum for the type of a connection or input.
- *
- * @alias Blockly.inputTypes
  */
 export enum inputTypes {
   // A right-facing value input.  E.g. 'set item to' or 'return'.

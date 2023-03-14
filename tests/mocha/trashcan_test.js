@@ -15,7 +15,7 @@ import {simulateClick} from './test_helpers/user_input.js';
 
 suite("Trashcan", function() {
   function fireDeleteEvent(workspace, xmlString) {
-    let xml = Blockly.Xml.textToDom(
+    let xml = Blockly.utils.xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
         xmlString + '</xml>');
     xml = xml.children[0];
@@ -63,7 +63,7 @@ suite("Trashcan", function() {
       chai.assert.equal(this.trashcan.contents_.length, 0);
     });
     test("Non-Delete w/ oldXml", function() {
-      let xml = Blockly.Xml.textToDom(
+      let xml = Blockly.utils.xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="test_field_block"/>' +
           '</xml>'

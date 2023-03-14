@@ -22,12 +22,9 @@ import type {Sentinel} from './utils/sentinel.js';
 
 type BoolString = 'TRUE'|'FALSE';
 type CheckboxBool = BoolString|boolean;
-export type FieldCheckboxValidator = FieldValidator<CheckboxBool>;
 
 /**
  * Class for a checkbox field.
- *
- * @alias Blockly.FieldCheckbox
  */
 export class FieldCheckbox extends Field<CheckboxBool> {
   /** Default character for the checkmark. */
@@ -254,3 +251,20 @@ export interface FieldCheckboxConfig extends FieldConfig {
 export interface FieldCheckboxFromJsonConfig extends FieldCheckboxConfig {
   checked?: boolean;
 }
+
+/**
+ * A function that is called to validate changes to the field's value before
+ * they are set.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+ * @param newValue The value to be validated.
+ * @returns One of three instructions for setting the new value: `T`, `null`,
+ * or `undefined`.
+ *
+ * - `T` to set this function's returned value instead of `newValue`.
+ *
+ * - `null` to invoke `doValueInvalid_` and not set a value.
+ *
+ * - `undefined` to set `newValue` as is.
+ */
+export type FieldCheckboxValidator = FieldValidator<CheckboxBool>;

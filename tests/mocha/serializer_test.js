@@ -73,10 +73,25 @@ Serializer.Attributes.Disabled = new SerializerTestCase('Disabled',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" disabled="true" x="42" y="42"></block>' +
     '</xml>');
+Serializer.Attributes.NotDeletable = new SerializerTestCase('Deletable',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id******************" deletable="false" x="42" y="42"></block>' +
+    '</xml>');
+Serializer.Attributes.NotMovable = new SerializerTestCase('Movable',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id******************" movable="false" x="42" y="42"></block>' +
+    '</xml>');
+Serializer.Attributes.NotEditable = new SerializerTestCase('Editable',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id******************" editable="false" x="42" y="42"></block>' +
+    '</xml>');
 Serializer.Attributes.testCases = [
   Serializer.Attributes.Basic,
   Serializer.Attributes.Collapsed,
   Serializer.Attributes.Disabled,
+  Serializer.Attributes.NotDeletable,
+  Serializer.Attributes.NotMovable,
+  Serializer.Attributes.NotEditable,
 ];
 
 Serializer.Attributes.Inline = new SerializerTestSuite('Inline');
@@ -1830,7 +1845,7 @@ const runSerializerTestSuite = (serializer, deserializer, testSuite) => {
   const createTestFunction = function(test) {
     return function() {
       Blockly.Xml.domToWorkspace(
-          Blockly.Xml.textToDom(test.xml), this.workspace);
+          Blockly.utils.xml.textToDom(test.xml), this.workspace);
       if (serializer && deserializer) {
         const save = serializer(workspaces.save(this.workspace));
         this.workspace.clear();

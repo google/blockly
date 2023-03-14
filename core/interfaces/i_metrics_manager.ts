@@ -17,8 +17,6 @@ goog.declareModuleId('Blockly.IMetricsManager');
 
 /**
  * Interface for a metrics manager.
- *
- * @alias Blockly.IMetricsManager
  */
 export interface IMetricsManager {
   /**

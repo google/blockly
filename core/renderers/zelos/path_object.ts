@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * An object that owns a block's rendering SVG elements.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.PathObject');
 
@@ -25,8 +20,6 @@ import type {ConstantProvider} from './constants.js';
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
- *
- * @alias Blockly.zelos.PathObject
  */
 export class PathObject extends BasePathObject {
   /** The selected path of the block. */
@@ -49,14 +42,12 @@ export class PathObject extends BasePathObject {
    */
   outputShapeType: number|null = null;
 
-  /** @internal */
   public override constants: ConstantProvider;
 
   /**
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
    * @param constants The renderer's constants.
-   * @internal
    */
   constructor(
       root: SVGElement, style: BlockStyle, constants: ConstantProvider) {
@@ -138,8 +129,6 @@ export class PathObject extends BasePathObject {
 
   /**
    * Method that's called when the drawer is about to draw the block.
-   *
-   * @internal
    */
   beginDrawing() {
     this.remainingOutlines.clear();
@@ -150,8 +139,6 @@ export class PathObject extends BasePathObject {
 
   /**
    * Method that's called when the drawer is done drawing.
-   *
-   * @internal
    */
   endDrawing() {
     // Go through all remaining outlines that were not used this draw pass, and
@@ -170,7 +157,6 @@ export class PathObject extends BasePathObject {
    *
    * @param name The input name.
    * @param pathString The path.
-   * @internal
    */
   setOutlinePath(name: string, pathString: string) {
     const outline = this.getOutlinePath_(name);

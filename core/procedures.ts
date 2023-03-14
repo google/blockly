@@ -23,17 +23,18 @@ import type {Abstract} from './events/events_abstract.js';
 import type {BubbleOpen} from './events/events_bubble_open.js';
 import * as eventUtils from './events/utils.js';
 import {Field, UnattachedFieldError} from './field.js';
-import {isProcedureBlock} from './interfaces/i_procedure_block.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
-import {ObservableProcedureMap} from './procedures/observable_procedure_map.js';
-import {ObservableProcedureModel} from './procedures/observable_procedure_model.js';
-import {ObservableParameterModel} from './procedures/observable_parameter_model.js';
+import {IParameterModel} from './interfaces/i_parameter_model.js';
+import {IProcedureMap} from './interfaces/i_procedure_map.js';
+import {IProcedureModel} from './interfaces/i_procedure_model.js';
+import {IProcedureBlock, isProcedureBlock} from './interfaces/i_procedure_block.js';
+import {isLegacyProcedureCallBlock, isLegacyProcedureDefBlock, ProcedureBlock, ProcedureTuple} from './interfaces/i_legacy_procedure_blocks.js';
+import {ObservableProcedureMap} from './observable_procedure_map.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
 
 
 /**
@@ -42,50 +43,13 @@ import * as Xml from './xml.js';
  * procedure blocks.
  * See also Blockly.Variables.CATEGORY_NAME and
  * Blockly.VariablesDynamic.CATEGORY_NAME.
- *
- * @alias Blockly.Procedures.CATEGORY_NAME
  */
 export const CATEGORY_NAME = 'PROCEDURE';
 
 /**
  * The default argument for a procedures_mutatorarg block.
- *
- * @alias Blockly.Procedures.DEFAULT_ARG
  */
 export const DEFAULT_ARG = 'x';
-
-export type ProcedureTuple = [string, string[], boolean];
-
-/**
- * Procedure block type.
- *
- * @alias Blockly.Procedures.ProcedureBlock
- */
-export interface ProcedureBlock {
-  getProcedureCall: () => string;
-  renameProcedure: (p1: string, p2: string) => void;
-  getProcedureDef: () => ProcedureTuple;
-}
-
-interface LegacyProcedureDefBlock {
-  getProcedureDef: () => ProcedureTuple
-}
-
-function isLegacyProcedureDefBlock(block: Object):
-    block is LegacyProcedureDefBlock {
-  return (block as any).getProcedureDef !== undefined;
-}
-
-interface LegacyProcedureCallBlock {
-  getProcedureCall: () => string;
-  renameProcedure: (p1: string, p2: string) => void;
-}
-
-function isLegacyProcedureCallBlock(block: Object):
-    block is LegacyProcedureCallBlock {
-  return (block as any).getProcedureCall !== undefined &&
-      (block as any).renameProcedure !== undefined;
-}
 
 /**
  * Find all user-created procedure definitions in a workspace.
@@ -94,7 +58,6 @@ function isLegacyProcedureCallBlock(block: Object):
  * @returns Pair of arrays, the first contains procedures without return
  *     variables, the second with. Each procedure is defined by a three-element
  *     list of name, parameter list, and return value boolean.
- * @alias Blockly.Procedures.allProcedures
  */
 export function allProcedures(root: Workspace):
     [ProcedureTuple[], ProcedureTuple[]] {
@@ -154,7 +117,6 @@ function procTupleComparator(ta: ProcedureTuple, tb: ProcedureTuple): number {
  * @param name Proposed procedure name.
  * @param block Block to disambiguate.
  * @returns Non-colliding name.
- * @alias Blockly.Procedures.findLegalName
  */
 export function findLegalName(name: string, block: Block): string {
   if (block.isInFlyout) {
@@ -196,21 +158,24 @@ function isLegalName(
  * @param opt_exclude Optional block to exclude from comparisons (one doesn't
  *     want to collide with oneself).
  * @returns True if the name is used, otherwise return false.
- * @alias Blockly.Procedures.isNameUsed
  */
 export function isNameUsed(
     name: string, workspace: Workspace, opt_exclude?: Block): boolean {
   for (const block of workspace.getAllBlocks(false)) {
     if (block === opt_exclude) continue;
 
-    if (isProcedureBlock(block) && block.isProcedureDef() &&
-        Names.equals(block.getProcedureModel().getName(), name)) {
-      return true;
-    }
     if (isLegacyProcedureDefBlock(block) &&
         Names.equals(block.getProcedureDef()[0], name)) {
       return true;
     }
+  }
+
+  const excludeModel = opt_exclude && isProcedureBlock(opt_exclude) ?
+      opt_exclude?.getProcedureModel() :
+      undefined;
+  for (const model of workspace.getProcedureMap().getProcedures()) {
+    if (model === excludeModel) continue;
+    if (Names.equals(model.getName(), name)) return true;
   }
   return false;
 }
@@ -220,7 +185,6 @@ export function isNameUsed(
  *
  * @param name The proposed new name.
  * @returns The accepted name.
- * @alias Blockly.Procedures.rename
  */
 export function rename(this: Field, name: string): string {
   const block = this.getSourceBlock();
@@ -255,7 +219,6 @@ export function rename(this: Field, name: string): string {
  *
  * @param workspace The workspace containing procedures.
  * @returns Array of XML block elements.
- * @alias Blockly.Procedures.flyoutCategory
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
   const xmlList = [];
@@ -372,7 +335,6 @@ function updateMutatorFlyout(workspace: WorkspaceSvg) {
  * update and adds a mutator change listener to the mutator workspace.
  *
  * @param e The event that triggered this listener.
- * @alias Blockly.Procedures.mutatorOpenListener
  * @internal
  */
 export function mutatorOpenListener(e: Abstract) {
@@ -418,7 +380,6 @@ function mutatorChangeListener(e: Abstract) {
  * @param name Name of procedure.
  * @param workspace The workspace to find callers in.
  * @returns Array of caller blocks.
- * @alias Blockly.Procedures.getCallers
  */
 export function getCallers(name: string, workspace: Workspace): Block[] {
   return workspace.getAllBlocks(false).filter((block) => {
@@ -443,7 +404,6 @@ function blockIsModernCallerFor(block: Block, procName: string): boolean {
  * callers.
  *
  * @param defBlock Procedure definition block.
- * @alias Blockly.Procedures.mutateCallers
  */
 export function mutateCallers(defBlock: Block) {
   const oldRecordUndo = eventUtils.getRecordUndo();
@@ -453,12 +413,12 @@ export function mutateCallers(defBlock: Block) {
   const callers = getCallers(name, defBlock.workspace);
   for (let i = 0, caller; caller = callers[i]; i++) {
     const oldMutationDom = caller.mutationToDom!();
-    const oldMutation = oldMutationDom && Xml.domToText(oldMutationDom);
+    const oldMutation = oldMutationDom && utilsXml.domToText(oldMutationDom);
     if (caller.domToMutation) {
       caller.domToMutation(xmlElement);
     }
     const newMutationDom = caller.mutationToDom!();
-    const newMutation = newMutationDom && Xml.domToText(newMutationDom);
+    const newMutation = newMutationDom && utilsXml.domToText(newMutationDom);
     if (oldMutation !== newMutation) {
       // Fire a mutation on every caller block.  But don't record this as an
       // undo action since it is deterministically tied to the procedure's
@@ -477,7 +437,6 @@ export function mutateCallers(defBlock: Block) {
  * @param name Name of procedure.
  * @param workspace The workspace to search.
  * @returns The procedure definition block, or null not found.
- * @alias Blockly.Procedures.getDefinition
  */
 export function getDefinition(name: string, workspace: Workspace): Block|null {
   // Do not assume procedure is a top block. Some languages allow nested
@@ -498,6 +457,10 @@ export function getDefinition(name: string, workspace: Workspace): Block|null {
 
 export {
   ObservableProcedureMap,
-  ObservableProcedureModel,
-  ObservableParameterModel,
+  IParameterModel,
+  IProcedureBlock,
+  isProcedureBlock,
+  IProcedureMap,
+  IProcedureModel,
+  ProcedureTuple,
 };

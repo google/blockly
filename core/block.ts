@@ -35,7 +35,6 @@ import {Align, Input} from './input.js';
 import {inputTypes} from './input_types.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IDeletable} from './interfaces/i_deletable.js';
-import {ASTNode} from './keyboard_nav/ast_node.js';
 import type {Mutator} from './mutator.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
@@ -1418,13 +1417,11 @@ export class Block implements IASTNodeLocation, IDeletable {
     }
 
     let prev = '';
-    let text: string = tokens.reduce(
-        (acc, curr) => {
-          const val = acc + ((prev === '(' || curr === ')') ? '' : ' ') + curr;
-          prev = curr[curr.length - 1];
-          return val;
-        },
-        '');
+    let text: string = tokens.reduce((acc, curr) => {
+      const val = acc + ((prev === '(' || curr === ')') ? '' : ' ') + curr;
+      prev = curr[curr.length - 1];
+      return val;
+    }, '');
 
     text = text.trim() || '???';
     if (opt_maxLength) {
@@ -1443,7 +1440,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @param emptyToken The token to use in place of an empty input.
    *     Defaults to '?'.
-   * @returns The array of string tokens represneting this block.
+   * @returns The array of string tokens representing this block.
    */
   private toTokens(emptyToken = '?'): string[] {
     const tokens = [];

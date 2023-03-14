@@ -254,7 +254,7 @@ const JSCOMP_OFF = [
    * When adding additional items to this list it may be helpful to
    * search the compiler source code
    * (https://github.com/google/closure-compiler/) for the JSC_*
-   * disagnostic name (omitting the JSC_ prefix) to find the corresponding
+   * diagnostic name (omitting the JSC_ prefix) to find the corresponding
    * DiagnosticGroup.
    */
   'checkTypes',
@@ -376,7 +376,7 @@ error message above, try running:
 }
 
 /**
- * This task regenrates msg/json/en.js and msg/json/qqq.js from
+ * This task regenerates msg/json/en.js and msg/json/qqq.js from
  * msg/messages.js.
  */
 function generateMessages(done) {
@@ -738,7 +738,7 @@ exports.deps = gulp.series(exports.tsc, buildDeps);
 exports.minify = gulp.series(exports.deps, buildCompiled);
 exports.build = gulp.parallel(exports.minify, exports.langfiles);
 
-// Manually-invokable targets, with prequisites where required.
+// Manually-invokable targets, with prerequisites where required.
 exports.format = format;
 exports.messages = generateMessages;  // Generate msg/json/en.json et al.
 exports.buildAdvancedCompilationTest =

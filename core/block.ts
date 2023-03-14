@@ -1460,7 +1460,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     }
 
     for (const input of this.inputList) {
-      if (input.name == Blockly.Block.COLLAPSED_INPUT_NAME) {
+      if (input.name == constants.COLLAPSED_INPUT_NAME) {
         continue;
       }
       for (const field of input.fieldRow) {

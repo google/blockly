@@ -544,6 +544,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       }
     } else if (target.isShadow()) {
       target.dispose(false);
+      if (this.getSourceBlock().isDeadOrDying()) return;
       this.respawnShadow_();
       if (this.targetBlock() && this.targetBlock()!.isShadow()) {
         this.serializeShadow_(this.targetBlock());

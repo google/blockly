@@ -1866,7 +1866,7 @@ const runSerializerTestSuite = (serializer, deserializer, testSuite) => {
 
   suiteCall(testSuite.title, function() {
     setup(function() {
-      sharedTestSetup.call(this);
+      sharedTestSetup.call(this, {fireEventsNow: false});
       this.workspace = new Blockly.Workspace();
     });
 

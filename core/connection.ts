@@ -293,6 +293,9 @@ export class Connection implements IASTNodeLocationWithBlock {
   }
 
   /**
+   * Returns the parent connection (superior) and child connection (inferior)
+   * given this connection and the connection it is connected to.
+   *
    * @returns The parent connection and child connection, given this connection
    *     and the connection it is connected to.
    */

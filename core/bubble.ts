@@ -218,27 +218,26 @@ export class Bubble implements IBubble {
                                            'blocklyResizeSE',
           },
           this.bubbleGroup);
-      const resizeSize = 2 * Bubble.BORDER_WIDTH;
+      const size = 2 * Bubble.BORDER_WIDTH;
       dom.createSvgElement(
-          Svg.POLYGON,
-          {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
+          Svg.POLYGON, {'points': `0,${size} ${size},${size} ${size},0`},
           this.resizeGroup);
       dom.createSvgElement(
           Svg.LINE, {
             'class': 'blocklyResizeLine',
-            'x1': resizeSize / 3,
-            'y1': resizeSize - 1,
-            'x2': resizeSize - 1,
-            'y2': resizeSize / 3,
+            'x1': size / 3,
+            'y1': size - 1,
+            'x2': size - 1,
+            'y2': size / 3,
           },
           this.resizeGroup);
       dom.createSvgElement(
           Svg.LINE, {
             'class': 'blocklyResizeLine',
-            'x1': resizeSize * 2 / 3,
-            'y1': resizeSize - 1,
-            'x2': resizeSize - 1,
-            'y2': resizeSize * 2 / 3,
+            'x1': size * 2 / 3,
+            'y1': size - 1,
+            'x2': size - 1,
+            'y2': size * 2 / 3,
           },
           this.resizeGroup);
     } else {
@@ -660,8 +659,8 @@ export class Bubble implements IBubble {
     height = Math.max(height, doubleBorderWidth + 20);
     this.width = width;
     this.height = height;
-    this.bubbleBack?.setAttribute('width', width.toString());
-    this.bubbleBack?.setAttribute('height', height.toString());
+    this.bubbleBack?.setAttribute('width', `${width}`);
+    this.bubbleBack?.setAttribute('height', `${height}`);
     if (this.resizeGroup) {
       if (this.workspace_.RTL) {
         // Mirror the resize group.
@@ -901,8 +900,7 @@ export class Bubble implements IBubble {
            textElement = paragraphElement.childNodes[i] as SVGTSpanElement;
            i++) {
         textElement.setAttribute('text-anchor', 'end');
-        textElement.setAttribute(
-            'x', (maxWidth + Bubble.BORDER_WIDTH).toString());
+        textElement.setAttribute('x', String(maxWidth + Bubble.BORDER_WIDTH));
       }
     }
     return bubble;

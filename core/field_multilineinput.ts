@@ -18,7 +18,6 @@ import * as fieldRegistry from './field_registry.js';
 import {FieldTextInput, FieldTextInputConfig, FieldTextInputValidator} from './field_textinput.js';
 import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
-import {KeyCodes} from './utils/keycodes.js';
 import * as parsing from './utils/parsing.js';
 import type {Sentinel} from './utils/sentinel.js';
 import {Svg} from './utils/svg.js';
@@ -33,9 +32,7 @@ export class FieldMultilineInput extends FieldTextInput {
    * The SVG group element that will contain a text element for each text row
    *     when initialized.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGGElement'.
-  textGroup_: SVGGElement = null as AnyDuringMigration;
+  textGroup: SVGGElement|null = null;
 
   /**
    * Defines the maximum number of lines of field.
@@ -47,35 +44,40 @@ export class FieldMultilineInput extends FieldTextInput {
   protected isOverflowedY_ = false;
 
   /**
-   * @param opt_value The initial content of the field. Should cast to a string.
+   * @param value The initial content of the field. Should cast to a string.
    *     Defaults to an empty string if null or undefined. Also accepts
    *     Field.SKIP_SETUP if you wish to skip setup (only used by subclasses
    *     that want to handle configuration and setting the field value after
    *     their own constructors have run).
-   * @param opt_validator An optional function that is called to validate any
+   * @param validator An optional function that is called to validate any
    *     constraints on what the user entered.  Takes the new text as an
    *     argument and returns either the accepted text, a replacement text, or
    *     null to abort the change.
-   * @param opt_config A map of options used to configure the field.
+   * @param config A map of options used to configure the field.
    *     See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/multiline-text-input#creation}
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|Sentinel, opt_validator?: FieldMultilineInputValidator,
-      opt_config?: FieldMultilineInputConfig) {
+      value?: string|Sentinel, validator?: FieldMultilineInputValidator,
+      config?: FieldMultilineInputConfig) {
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(opt_value)) return;
-    if (opt_config) {
-      this.configure_(opt_config);
+    if (Field.isSentinel(value)) return;
+    if (config) {
+      this.configure_(config);
     }
-    this.setValue(opt_value);
-    if (opt_validator) {
-      this.setValidator(opt_validator);
+    this.setValue(value);
+    if (validator) {
+      this.setValidator(validator);
     }
   }
 
+  /**
+   * Configure the field based on the given map of options.
+   *
+   * @param config A map of options to configure the field based on.
+   */
   protected override configure_(config: FieldMultilineInputConfig) {
     super.configure_(config);
     if (config.maxLines) this.setMaxLines(config.maxLines);
@@ -112,6 +114,8 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Saves this field's value.
+   * This function only exists for subclasses of FieldMultilineInput which
+   * predate the load/saveState API and only define to/fromXml.
    *
    * @returns The state of this field.
    * @internal
@@ -126,6 +130,8 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Sets the field's value based on the given state.
+   * This function only exists for subclasses of FieldMultilineInput which
+   * predate the load/saveState API and only define to/fromXml.
    *
    * @param state The state of the variable to assign to this variable field.
    * @internal
@@ -144,7 +150,7 @@ export class FieldMultilineInput extends FieldTextInput {
    */
   override initView() {
     this.createBorderRect_();
-    this.textGroup_ = dom.createSvgElement(
+    this.textGroup = dom.createSvgElement(
         Svg.G, {
           'class': 'blocklyEditableText',
         },
@@ -219,8 +225,9 @@ export class FieldMultilineInput extends FieldTextInput {
     }
     // Remove all text group children.
     let currentChild;
-    while (currentChild = this.textGroup_.firstChild) {
-      this.textGroup_.removeChild(currentChild);
+    const textGroup = this.textGroup;
+    while (currentChild = textGroup!.firstChild) {
+      textGroup!.removeChild(currentChild);
     }
 
     // Add in text elements into the group.
@@ -236,7 +243,7 @@ export class FieldMultilineInput extends FieldTextInput {
             'y': y + this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING,
             'dy': this.getConstants()!.FIELD_TEXT_BASELINE,
           },
-          this.textGroup_);
+          textGroup);
       span.appendChild(document.createTextNode(lines[i]));
       y += lineHeight;
     }
@@ -274,7 +281,7 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /** Updates the size of the field based on the text. */
   protected override updateSize_() {
-    const nodes = this.textGroup_.childNodes;
+    const nodes = (this.textGroup as SVGElement).childNodes;
     const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE;
     const fontWeight = this.getConstants()!.FIELD_TEXT_FONTWEIGHT;
     const fontFamily = this.getConstants()!.FIELD_TEXT_FONTFAMILY;
@@ -320,13 +327,8 @@ export class FieldMultilineInput extends FieldTextInput {
     if (this.borderRect_) {
       totalHeight += this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING * 2;
       totalWidth += this.getConstants()!.FIELD_BORDER_RECT_X_PADDING * 2;
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      this.borderRect_.setAttribute('width', totalWidth as AnyDuringMigration);
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      this.borderRect_.setAttribute(
-          'height', totalHeight as AnyDuringMigration);
+      this.borderRect_.setAttribute('width', `${totalWidth}`);
+      this.borderRect_.setAttribute('height', `${totalHeight}`);
     }
     this.size_.width = totalWidth;
     this.size_.height = totalHeight;
@@ -339,13 +341,13 @@ export class FieldMultilineInput extends FieldTextInput {
    * Overrides the default behaviour to force rerender in order to
    * correct block size, based on editor text.
    *
-   * @param _opt_e Optional mouse event that triggered the field to open, or
+   * @param e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
-   * @param opt_quietInput True if editor should be created without focus.
+   * @param quietInput True if editor should be created without focus.
    *     Defaults to false.
    */
-  override showEditor_(_opt_e?: Event, opt_quietInput?: boolean) {
-    super.showEditor_(_opt_e, opt_quietInput);
+  override showEditor_(e?: Event, quietInput?: boolean) {
+    super.showEditor_(e, quietInput);
     this.forceRerender();
   }
 
@@ -360,10 +362,7 @@ export class FieldMultilineInput extends FieldTextInput {
 
     const htmlInput = (document.createElement('textarea'));
     htmlInput.className = 'blocklyHtmlInput blocklyHtmlTextAreaInput';
-    // AnyDuringMigration because:  Argument of type 'boolean' is not assignable
-    // to parameter of type 'string'.
-    htmlInput.setAttribute(
-        'spellcheck', this.spellcheck_ as AnyDuringMigration);
+    htmlInput.setAttribute('spellcheck', String(this.spellcheck_));
     const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE * scale + 'pt';
     div!.style.fontSize = fontSize;
     htmlInput.style.fontSize = fontSize;
@@ -425,7 +424,7 @@ export class FieldMultilineInput extends FieldTextInput {
    * @param e Keyboard event.
    */
   protected override onHtmlInputKeyDown_(e: KeyboardEvent) {
-    if (e.keyCode !== KeyCodes.ENTER) {
+    if (e.key !== 'Enter') {
       super.onHtmlInputKeyDown_(e);
     }
   }
@@ -448,7 +447,12 @@ export class FieldMultilineInput extends FieldTextInput {
   }
 }
 
-/** CSS for multiline field.  See css.js for use. */
+fieldRegistry.register('field_multilinetext', FieldMultilineInput);
+
+
+/**
+ * CSS for multiline field.
+ */
 Css.register(`
 .blocklyHtmlTextAreaInput {
   font-family: monospace;
@@ -462,8 +466,6 @@ Css.register(`
   overflow-y: scroll;
 }
 `);
-
-fieldRegistry.register('field_multilinetext', FieldMultilineInput);
 
 /**
  * Config options for the multiline input field.

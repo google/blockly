@@ -203,16 +203,16 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
    * subclasses that want to handle configuration and setting the field value
    * after their own constructors have run).
-   * @param opt_validator  A function that is called to validate changes to the
+   * @param validator  A function that is called to validate changes to the
    *     field's value. Takes in a value & returns a validated value, or null to
    *     abort the change.
-   * @param opt_config A map of options used to configure the field.
+   * @param config A map of options used to configure the field.
    *    Refer to the individual field's documentation for a list of properties
    * this parameter supports.
    */
   constructor(
-      value: T|Sentinel, opt_validator?: FieldValidator<T>|null,
-      opt_config?: FieldConfig) {
+      value: T|Sentinel, validator?: FieldValidator<T>|null,
+      config?: FieldConfig) {
     /**
      * A generic value possessed by the field.
      * Should generally be non-null, only null when the field is created.
@@ -225,12 +225,12 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     this.size_ = new Size(0, 0);
 
     if (Field.isSentinel(value)) return;
-    if (opt_config) {
-      this.configure_(opt_config);
+    if (config) {
+      this.configure_(config);
     }
     this.setValue(value);
-    if (opt_validator) {
-      this.setValidator(opt_validator);
+    if (validator) {
+      this.setValidator(validator);
     }
   }
 
@@ -715,14 +715,14 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * Calls showEditor_ when the field is clicked if the field is clickable.
    * Do not override.
    *
-   * @param opt_e Optional mouse event that triggered the field to open, or
+   * @param e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    * @sealed
    * @internal
    */
-  showEditor(opt_e?: Event) {
+  showEditor(e?: Event) {
     if (this.isClickable()) {
-      this.showEditor_(opt_e);
+      this.showEditor_(e);
     }
   }
 
@@ -739,11 +739,11 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
   /**
    * Updates the size of the field based on the text.
    *
-   * @param opt_margin margin to use when positioning the text element.
+   * @param margin margin to use when positioning the text element.
    */
-  protected updateSize_(opt_margin?: number) {
+  protected updateSize_(margin?: number) {
     const constants = this.getConstants();
-    const xOffset = opt_margin !== undefined ? opt_margin :
+    const xOffset = margin !== undefined ? margin :
         this.borderRect_ ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING :
                            0;
     let totalWidth = xOffset * 2;
@@ -783,17 +783,17 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
 
     this.textElement_.setAttribute(
         'x',
-        `${
+        String(
             this.getSourceBlock()?.RTL ?
                 this.size_.width - contentWidth - xOffset :
-                xOffset}`);
+                xOffset));
     this.textElement_.setAttribute(
         'y',
-        `${
+        String(
             constants!.FIELD_TEXT_BASELINE_CENTER ?
                 halfHeight :
                 halfHeight - constants!.FIELD_TEXT_HEIGHT / 2 +
-                    constants!.FIELD_TEXT_BASELINE}`);
+                    constants!.FIELD_TEXT_BASELINE));
   }
 
   /** Position a field's border rect after a size change. */
@@ -801,12 +801,12 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     if (!this.borderRect_) {
       return;
     }
-    this.borderRect_.setAttribute('width', `${this.size_.width}`);
-    this.borderRect_.setAttribute('height', `${this.size_.height}`);
+    this.borderRect_.setAttribute('width', String(this.size_.width));
+    this.borderRect_.setAttribute('height', String(this.size_.height));
     this.borderRect_.setAttribute(
-        'rx', `${this.getConstants()!.FIELD_BORDER_RECT_RADIUS}`);
+        'rx', String(this.getConstants()!.FIELD_BORDER_RECT_RADIUS));
     this.borderRect_.setAttribute(
-        'ry', `${this.getConstants()!.FIELD_BORDER_RECT_RADIUS}`);
+        'ry', String(this.getConstants()!.FIELD_BORDER_RECT_RADIUS));
   }
 
   /**

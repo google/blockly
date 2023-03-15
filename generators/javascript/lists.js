@@ -356,9 +356,9 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(type, direction) {
     'NUMERIC': function(a, b) {
         return Number(a) - Number(b); },
     'TEXT': function(a, b) {
-        return a.toString() > b.toString() ? 1 : -1; },
+        return String(a) > String(b) ? 1 : -1; },
     'IGNORE_CASE': function(a, b) {
-        return a.toString().toLowerCase() > b.toString().toLowerCase() ? 1 : -1; },
+        return String(a).toLowerCase() > String(b).toLowerCase() ? 1 : -1; },
   };
   var compare = compareFuncs[type];
   return function(a, b) { return compare(a, b) * direction; };

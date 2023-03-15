@@ -63,7 +63,7 @@ let canvasContext: CanvasRenderingContext2D|null = null;
 export function createSvgElement<T extends SVGElement>(
     name: string|Svg<T>, attrs: {[key: string]: string|number},
     opt_parent?: Element|null): T {
-  const e = document.createElementNS(SVG_NS, String(name)) as T;
+  const e = document.createElementNS(SVG_NS, `${name}`) as T;
   for (const key in attrs) {
     e.setAttribute(key, `${attrs[key]}`);
   }

@@ -723,8 +723,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
         Svg.G, {'class': this.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'},
         this.svgGroup_);
     dom.createSvgElement(
-        Svg.POLYGON,
-        {'points': '0,x x,x x,0'.replace(/x/g, RESIZE_SIZE.toString())},
+        Svg.POLYGON, {
+          'points':
+              `0,${RESIZE_SIZE} ${RESIZE_SIZE},${RESIZE_SIZE} ${RESIZE_SIZE},0`,
+        },
         this.resizeGroup_);
     dom.createSvgElement(
         Svg.LINE, {
@@ -885,10 +887,11 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     const topOffset = WorkspaceCommentSvg.TOP_OFFSET;
     const textOffset = TEXTAREA_OFFSET * 2;
 
-    this.foreignObject_?.setAttribute('width', `${size.width}`);
-    this.foreignObject_?.setAttribute('height', `${size.height - topOffset}`);
+    this.foreignObject_?.setAttribute('width', String(size.width));
+    this.foreignObject_?.setAttribute(
+        'height', String(size.height - topOffset));
     if (this.RTL) {
-      this.foreignObject_?.setAttribute('x', `${- size.width}`);
+      this.foreignObject_?.setAttribute('x', String(-size.width));
     }
 
     if (!this.textarea_) return;
@@ -914,7 +917,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     this.svgRectTarget_?.setAttribute('height', `${height}`);
     this.svgHandleTarget_?.setAttribute('width', `${width}`);
     this.svgHandleTarget_?.setAttribute(
-        'height', `${WorkspaceCommentSvg.TOP_OFFSET}`);
+        'height', String(WorkspaceCommentSvg.TOP_OFFSET));
     if (this.RTL) {
       this.svgRect_.setAttribute('transform', 'scale(-1 1)');
       this.svgRectTarget_?.setAttribute('transform', 'scale(-1 1)');
@@ -1042,7 +1045,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       eventUtils.enable();
     }
 
-    WorkspaceComment.fireCreateEvent((comment));
+    WorkspaceComment.fireCreateEvent(comment);
     return comment;
   }
 }

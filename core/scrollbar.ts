@@ -223,12 +223,12 @@ export class Scrollbar {
       this.svgBackground.setAttribute('height', String(scrollbarThickness));
       this.outerSvg.setAttribute('height', String(scrollbarThickness));
       this.svgHandle.setAttribute('height', String(scrollbarThickness - 5));
-      this.svgHandle.setAttribute('y', String(2.5));
+      this.svgHandle.setAttribute('y', '2.5');
     } else {
       this.svgBackground.setAttribute('width', String(scrollbarThickness));
       this.outerSvg.setAttribute('width', String(scrollbarThickness));
       this.svgHandle.setAttribute('width', String(scrollbarThickness - 5));
-      this.svgHandle.setAttribute('x', String(2.5));
+      this.svgHandle.setAttribute('x', '2.5');
     }
   }
 

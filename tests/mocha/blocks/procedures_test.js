@@ -49,9 +49,9 @@ suite('Procedures', function() {
               createProcDefBlock(this.workspace, undefined, undefined, 'procB');
           const callBlockB =
               createProcCallBlock(this.workspace, undefined, 'procB');
-    
+
           defBlockB.setFieldValue('procA', 'NAME');
-    
+
           chai.assert.notEqual(
             defBlockB.getFieldValue('NAME'),
             'procA',
@@ -82,7 +82,7 @@ suite('Procedures', function() {
             },
             mutatorWorkspace);
           this.clock.runAll();
-          
+
           const newFlyoutParamName =
               mutatorWorkspace.getFlyout().getWorkspace().getTopBlocks(true)[0]
                   .getFieldValue('NAME');
@@ -167,7 +167,7 @@ suite('Procedures', function() {
 
           this.workspace.undo();
           this.workspace.undo(/* redo= */ true);
-    
+
           chai.assert.isNotNull(
             defBlock.getField('PARAMS'),
             'Expected the params field to exist');
@@ -252,10 +252,10 @@ suite('Procedures', function() {
           this.clock.runAll();
           paramBlock.checkAndDelete();
           this.clock.runAll();
-    
+
           this.workspace.undo();
           this.workspace.undo(/* redo= */ true);
-    
+
           chai.assert.isFalse(
             defBlock.getFieldValue('PARAMS').includes('param1'),
             'Expected the params field to not contain the name of the new param');
@@ -300,10 +300,10 @@ suite('Procedures', function() {
               .connect(paramBlock1.previousConnection);
           paramBlock1.nextConnection.connect(paramBlock2.previousConnection);
           this.clock.runAll();
-    
+
           paramBlock1.setFieldValue('new name', 'NAME');
           this.clock.runAll();
-    
+
           chai.assert.isNotNull(
             defBlock.getField('PARAMS'),
             'Expected the params field to exist');
@@ -349,10 +349,10 @@ suite('Procedures', function() {
           paramBlock.setFieldValue('param1', 'NAME');
           containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
           this.clock.runAll();
-    
+
           paramBlock.setFieldValue('param2', 'NAME');
           this.clock.runAll();
-    
+
           chai.assert.isNotNull(
               this.workspace.getVariable('param1', ''),
               'Expected the old variable to continue to exist');
@@ -372,10 +372,10 @@ suite('Procedures', function() {
               .connect(paramBlock.previousConnection);
           this.clock.runAll();
           defBlock.mutator.setVisible(false);
-    
+
           const variable = this.workspace.getVariable('param1', '');
           this.workspace.renameVariableById(variable.getId(), 'new name');
-    
+
           chai.assert.isNotNull(
               defBlock.getField('PARAMS'),
               'Expected the params field to exist');
@@ -397,10 +397,10 @@ suite('Procedures', function() {
           containerBlock.getInput('STACK').connection
               .connect(paramBlock.previousConnection);
           this.clock.runAll();
-    
+
           const variable = this.workspace.getVariable('param1', '');
           this.workspace.renameVariableById(variable.getId(), 'new name');
-    
+
           chai.assert.equal(
               paramBlock.getFieldValue('NAME'),
               'new name',
@@ -422,7 +422,7 @@ suite('Procedures', function() {
               .connect(paramBlock.previousConnection);
           this.clock.runAll();
           defBlock.mutator.setVisible(false);
-    
+
           const variable = this.workspace.getVariable('param1', '');
           this.workspace.renameVariableById(variable.getId(), 'new name');
 
@@ -449,10 +449,10 @@ suite('Procedures', function() {
               .connect(paramBlock.previousConnection);
           this.clock.runAll();
           defBlock.mutator.setVisible(false);
-    
+
           const variable = this.workspace.getVariable('param1', '');
           this.workspace.renameVariableById(variable.getId(), 'preCreatedVar');
-    
+
           chai.assert.isNotNull(
               defBlock.getField('PARAMS'),
               'Expected the params field to exist');
@@ -474,10 +474,10 @@ suite('Procedures', function() {
           containerBlock.getInput('STACK').connection
               .connect(paramBlock.previousConnection);
           this.clock.runAll();
-    
+
           const variable = this.workspace.getVariable('param1', '');
           this.workspace.renameVariableById(variable.getId(), 'preCreatedVar');
-    
+
           chai.assert.equal(
               paramBlock.getFieldValue('NAME'),
               'preCreatedVar',
@@ -499,7 +499,7 @@ suite('Procedures', function() {
               .connect(paramBlock.previousConnection);
           this.clock.runAll();
           defBlock.mutator.setVisible(false);
-    
+
           const variable = this.workspace.getVariable('param1', '');
           this.workspace.renameVariableById(variable.getId(), 'preCreatedVar');
 
@@ -571,7 +571,7 @@ suite('Procedures', function() {
 
           this.workspace.undo();
           this.workspace.undo(/* redo= */ true);
-    
+
           chai.assert.isTrue(
             defBlock.getFieldValue('PARAMS').includes('new'),
             'Expected the params field to contain the new name of the param');
@@ -671,14 +671,14 @@ suite('Procedures', function() {
               .connect(block1.outputConnection);
           callBlock.getInput('ARG1').connection
               .connect(block2.outputConnection);
-    
+
           // Reorder the parameters.
           paramBlock2.previousConnection.disconnect();
           paramBlock1.previousConnection.disconnect();
           containerBlock.getInput('STACK').connection.connect(paramBlock2.previousConnection);
           paramBlock2.nextConnection.connect(paramBlock1.previousConnection);
           this.clock.runAll();
-    
+
           chai.assert.equal(
             callBlock.getInputTargetBlock('ARG0'),
             block2,

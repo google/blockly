@@ -189,15 +189,15 @@ suite('Toolbox', function() {
       this.toolbox.dispose();
     });
 
-    function createKeyDownMock(keyCode) {
+    function createKeyDownMock(key) {
       return {
-        'keyCode': keyCode,
+        'key': key,
         'preventDefault': function() {},
       };
     }
 
-    function testCorrectFunctionCalled(toolbox, keyCode, funcName) {
-      const event = createKeyDownMock(keyCode);
+    function testCorrectFunctionCalled(toolbox, key, funcName) {
+      const event = createKeyDownMock(key);
       const preventDefaultEvent = sinon.stub(event, 'preventDefault');
       const selectMethodStub = sinon.stub(toolbox, funcName);
       selectMethodStub.returns(true);
@@ -207,21 +207,21 @@ suite('Toolbox', function() {
     }
 
     test('Down button is pushed -> Should call selectNext_', function() {
-      testCorrectFunctionCalled(this.toolbox, Blockly.utils.KeyCodes.DOWN, 'selectNext_', true);
+      testCorrectFunctionCalled(this.toolbox, 'ArrowDown', 'selectNext_', true);
     });
     test('Up button is pushed -> Should call selectPrevious_', function() {
-      testCorrectFunctionCalled(this.toolbox, Blockly.utils.KeyCodes.UP, 'selectPrevious_', true);
+      testCorrectFunctionCalled(this.toolbox, 'ArrowUp', 'selectPrevious_', true);
     });
     test('Left button is pushed -> Should call selectParent_', function() {
-      testCorrectFunctionCalled(this.toolbox, Blockly.utils.KeyCodes.LEFT, 'selectParent_', true);
+      testCorrectFunctionCalled(this.toolbox, 'ArrowLeft', 'selectParent_', true);
     });
     test('Right button is pushed -> Should call selectChild_', function() {
-      testCorrectFunctionCalled(this.toolbox, Blockly.utils.KeyCodes.RIGHT, 'selectChild_', true);
+      testCorrectFunctionCalled(this.toolbox, 'ArrowRight', 'selectChild_', true);
     });
-    test('Enter button is pushed -> Should toggle expandedd', function() {
+    test('Enter button is pushed -> Should toggle expanded', function() {
       this.toolbox.selectedItem_ = getCollapsibleItem(this.toolbox);
       const toggleExpandedStub = sinon.stub(this.toolbox.selectedItem_, 'toggleExpanded');
-      const event = createKeyDownMock(Blockly.utils.KeyCodes.ENTER);
+      const event = createKeyDownMock('Enter');
       const preventDefaultEvent = sinon.stub(event, 'preventDefault');
       this.toolbox.onKeyDown_(event);
       sinon.assert.called(toggleExpandedStub);
@@ -229,7 +229,7 @@ suite('Toolbox', function() {
     });
     test('Enter button is pushed when no item is selected -> Should not call prevent default', function() {
       this.toolbox.selectedItem_ = null;
-      const event = createKeyDownMock(Blockly.utils.KeyCodes.ENTER);
+      const event = createKeyDownMock('Enter');
       const preventDefaultEvent = sinon.stub(event, 'preventDefault');
       this.toolbox.onKeyDown_(event);
       sinon.assert.notCalled(preventDefaultEvent);

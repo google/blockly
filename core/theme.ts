@@ -116,10 +116,16 @@ export class Theme implements ITheme {
    */
   getComponentStyle(componentName: string): string|null {
     const style = (this.componentStyles as AnyDuringMigration)[componentName];
-    if (style && typeof style === 'string' && this.getComponentStyle((style))) {
-      return this.getComponentStyle((style));
+    if (!style) {
+      return null;
     }
-    return style ? String(style) : null;
+    if (typeof style === 'string') {
+      const recursiveStyle = this.getComponentStyle(style);
+      if (recursiveStyle) {
+        return recursiveStyle;
+      }
+    }
+    return `${style}`;
   }
 
   /**

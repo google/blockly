@@ -299,7 +299,7 @@ suite('Blocks', function() {
         setup(function() {
           this.blocks = createTestBlocks(this.workspace, true);
         });
-  
+
         test('Don\'t heal', function() {
           this.blocks.B.dispose(false);
           assertDisposedNoheal(this.blocks);
@@ -313,11 +313,11 @@ suite('Blocks', function() {
 
         test('Heal with bad checks', function() {
           const blocks = this.blocks;
-  
+
           // A and C can't connect, but both can connect to B.
           blocks.A.inputList[0].connection.setCheck('type1');
           blocks.C.outputConnection.setCheck('type2');
-  
+
           // Each block has only one input, but the types don't work.
           blocks.B.dispose(true);
           assertDisposedHealFailed(blocks);
@@ -362,7 +362,7 @@ suite('Blocks', function() {
         setup(function() {
           this.blocks = createTestBlocks(this.workspace, false);
         });
-  
+
         test('Don\'t heal', function() {
           this.blocks.B.dispose();
           assertDisposedNoheal(this.blocks);
@@ -378,10 +378,10 @@ suite('Blocks', function() {
           // A and C can't connect, but both can connect to B.
           blocks.A.nextConnection.setCheck('type1');
           blocks.C.previousConnection.setCheck('type2');
-  
+
           // The types don't work.
           blocks.B.dispose(true);
-  
+
           assertDisposedHealFailed(blocks);
         });
 

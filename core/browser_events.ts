@@ -145,10 +145,7 @@ export function unbind(bindData: Data): (e: Event) => void {
   // should only pass Data from bind or conditionalBind.
   const callback = bindData[bindData.length - 1][2];
   while (bindData.length) {
-    const bindDatum = bindData.pop();
-    const node = bindDatum![0];
-    const name = bindDatum![1];
-    const func = bindDatum![2];
+    const [node, name, func] = bindData.pop()!;
     node.removeEventListener(name, func, false);
   }
   return callback;

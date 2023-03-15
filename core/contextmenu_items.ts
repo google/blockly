@@ -261,10 +261,8 @@ export function registerDeleteAll() {
       const deletableBlocksLength = getDeletableBlocks_(scope.workspace).length;
       if (deletableBlocksLength === 1) {
         return Msg['DELETE_BLOCK'];
-      } else {
-        return Msg['DELETE_X_BLOCKS'].replace(
-            '%1', String(deletableBlocksLength));
       }
+      return Msg['DELETE_X_BLOCKS'].replace('%1', `${deletableBlocksLength}`);
     },
     preconditionFn(scope: Scope) {
       if (!scope.workspace) {
@@ -489,7 +487,7 @@ export function registerDelete() {
       }
       return descendantCount === 1 ?
           Msg['DELETE_BLOCK'] :
-          Msg['DELETE_X_BLOCKS'].replace('%1', String(descendantCount));
+          Msg['DELETE_X_BLOCKS'].replace('%1', `${descendantCount}`);
     },
     preconditionFn(scope: Scope) {
       if (!scope.block!.isInFlyout && scope.block!.isDeletable()) {

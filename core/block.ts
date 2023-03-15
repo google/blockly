@@ -35,7 +35,6 @@ import {Align, Input} from './input.js';
 import {inputTypes} from './input_types.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IDeletable} from './interfaces/i_deletable.js';
-import {ASTNode} from './keyboard_nav/ast_node.js';
 import type {Mutator} from './mutator.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
@@ -1400,21 +1399,52 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Create a human-readable text representation of this block and any children.
    *
    * @param opt_maxLength Truncate the string to this length.
-   * @param opt_emptyToken The placeholder string used to denote an empty field.
+   * @param opt_emptyToken The placeholder string used to denote an empty input.
    *     If not specified, '?' is used.
    * @returns Text of block.
    */
   toString(opt_maxLength?: number, opt_emptyToken?: string): string {
+    const tokens = this.toTokens(opt_emptyToken);
+
+    // Run through our tokens array and simplify expression to remove
+    // parentheses around single field blocks.
+    // E.g. ['repeat', '(', '10', ')', 'times', 'do', '?']
+    for (let i = 2; i < tokens.length; i++) {
+      if (tokens[i - 2] === '(' && tokens[i] === ')') {
+        tokens[i - 2] = tokens[i - 1];
+        tokens.splice(i - 1, 2);
+      }
+    }
+
+    // Join the text array, removing the spaces around added parentheses.
+    let prev = '';
+    let text: string = tokens.reduce((acc, curr) => {
+      const val = acc + ((prev === '(' || curr === ')') ? '' : ' ') + curr;
+      prev = curr[curr.length - 1];
+      return val;
+    }, '');
+
+    text = text.trim() || '???';
+    if (opt_maxLength) {
+      // TODO: Improve truncation so that text from this block is given
+      // priority. E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not
+      // "1+2+3+4+5...". E.g. "1+2+3+4+5=6+7+8+9+0" should be "...4+5=6+7...".
+      if (text.length > opt_maxLength) {
+        text = text.substring(0, opt_maxLength - 3) + '...';
+      }
+    }
+    return text;
+  }
+
+  /**
+   * Converts this block into string tokens.
+   *
+   * @param emptyToken The token to use in place of an empty input.
+   *     Defaults to '?'.
+   * @returns The array of string tokens representing this block.
+   */
+  private toTokens(emptyToken = '?'): string[] {
     const tokens = [];
-    const emptyFieldPlaceholder = opt_emptyToken || '?';
-
-    // Temporarily set flag to navigate to all fields.
-    const prevNavigateFields = ASTNode.NAVIGATE_ALL_FIELDS;
-    ASTNode.NAVIGATE_ALL_FIELDS = true;
-
-    let node = ASTNode.createBlockNode(this);
-    const rootNode = node;
-
     /**
      * Whether or not to add parentheses around an input.
      *
@@ -1430,84 +1460,26 @@ export class Block implements IASTNodeLocation, IDeletable {
           (checks.indexOf('Boolean') !== -1 || checks.indexOf('Number') !== -1);
     }
 
-    /** Check that we haven't circled back to the original root node. */
-    function checkRoot() {
-      if (node && node.getType() === rootNode?.getType() &&
-          node.getLocation() === rootNode?.getLocation()) {
-        node = null;
+    for (const input of this.inputList) {
+      if (input.name == constants.COLLAPSED_INPUT_NAME) {
+        continue;
       }
-    }
-
-    // Traverse the AST building up our text string.
-    while (node) {
-      switch (node.getType()) {
-        case ASTNode.types.INPUT: {
-          const connection = node.getLocation() as Connection;
-          if (!node.in()) {
-            tokens.push(emptyFieldPlaceholder);
-          } else if (shouldAddParentheses(connection)) {
-            tokens.push('(');
-          }
-          break;
-        }
-        case ASTNode.types.FIELD: {
-          const field = node.getLocation() as Field;
-          if (field.name !== constants.COLLAPSED_FIELD_NAME) {
-            tokens.push(field.getText());
-          }
-          break;
-        }
+      for (const field of input.fieldRow) {
+        tokens.push(field.getText());
       }
-
-      const current = node;
-      node = current.in() || current.next();
-      if (!node) {
-        // Can't go in or next, keep going out until we can go next.
-        node = current.out();
-        checkRoot();
-        while (node && !node.next()) {
-          node = node.out();
-          checkRoot();
-          // If we hit an input on the way up, possibly close out parentheses.
-          if (node && node.getType() === ASTNode.types.INPUT &&
-              shouldAddParentheses(node.getLocation() as Connection)) {
-            tokens.push(')');
-          }
-        }
-        if (node) {
-          node = node.next();
+      if (input.connection) {
+        const child = input.connection.targetBlock();
+        if (child) {
+          const shouldAddParens = shouldAddParentheses(input.connection);
+          if (shouldAddParens) tokens.push('(');
+          tokens.push(...child.toTokens(emptyToken));
+          if (shouldAddParens) tokens.push(')');
+        } else {
+          tokens.push(emptyToken);
         }
       }
     }
-
-    // Restore state of NAVIGATE_ALL_FIELDS.
-    ASTNode.NAVIGATE_ALL_FIELDS = prevNavigateFields;
-
-    // Run through our text array and simplify expression to remove parentheses
-    // around single field blocks.
-    // E.g. ['repeat', '(', '10', ')', 'times', 'do', '?']
-    for (let i = 2; i < tokens.length; i++) {
-      if (tokens[i - 2] === '(' && tokens[i] === ')') {
-        tokens[i - 2] = tokens[i - 1];
-        tokens.splice(i - 1, 2);
-      }
-    }
-
-    // Join the text array, removing spaces around added parentheses.
-    let text: string = tokens.reduce(function(acc, value) {
-      return acc + (acc.substr(-1) === '(' || value === ')' ? '' : ' ') + value;
-    }, '');
-
-    text = text.trim() || '???';
-    if (opt_maxLength) {
-      // TODO: Improve truncation so that text from this block is given
-      // priority. E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not
-      // "1+2+3+4+5...". E.g. "1+2+3+4+5=6+7+8+9+0" should be "...4+5=6+7...".
-      if (text.length > opt_maxLength) {
-        text = text.substring(0, opt_maxLength - 3) + '...';
-      }
-    }
-    return text;
+    return tokens;
   }
 
   /**

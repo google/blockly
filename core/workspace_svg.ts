@@ -1038,13 +1038,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.cachedParentSvgSize.width = width;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
-      svg.setAttribute('data-cached-width', width);
+      svg.setAttribute('data-cached-width', `${width}`);
     }
     if (height != null) {
       this.cachedParentSvgSize.height = height;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
-      svg.setAttribute('data-cached-height', height);
+      svg.setAttribute('data-cached-height', `${height}`);
     }
   }
 

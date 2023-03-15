@@ -494,7 +494,7 @@ export class FieldColour extends Field<string> {
       cell.setAttribute('data-colour', colours[i]);
       cell.title = titles[i] || colours[i];
       cell.id = idGenerator.getNextUniqueId();
-      cell.setAttribute('data-index', i);
+      cell.setAttribute('data-index', `${i}`);
       aria.setRole(cell, aria.Role.GRIDCELL);
       aria.setState(cell, aria.State.LABEL, colours[i]);
       aria.setState(cell, aria.State.SELECTED, colours[i] === selectedColour);

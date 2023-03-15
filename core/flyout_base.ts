@@ -525,8 +525,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * @param y The computed y origin of the flyout's SVG group.
    */
   protected positionAt_(width: number, height: number, x: number, y: number) {
-    this.svgGroup_?.setAttribute('width', width);
-    this.svgGroup_?.setAttribute('height', height);
+    this.svgGroup_?.setAttribute('width', `${width}`);
+    this.svgGroup_?.setAttribute('height', `${height}`);
     this.workspace_.setCachedParentSvgSize(width, height);
 
     if (this.svgGroup_?.tagName === 'svg') {
@@ -1074,12 +1074,13 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    */
   protected moveRectToBlock_(rect: SVGElement, block: BlockSvg) {
     const blockHW = block.getHeightWidth();
-    rect.setAttribute('width', blockHW.width);
-    rect.setAttribute('height', blockHW.height);
+    rect.setAttribute('width', String(blockHW.width));
+    rect.setAttribute('height', String(blockHW.height));
 
     const blockXY = block.getRelativeToSurfaceXY();
-    rect.setAttribute('y', blockXY.y);
-    rect.setAttribute('x', this.RTL ? blockXY.x - blockHW.width : blockXY.x);
+    rect.setAttribute('y', String(blockXY.y));
+    rect.setAttribute('x',
+        String(this.RTL ? blockXY.x - blockHW.width : blockXY.x));
   }
 
   /**

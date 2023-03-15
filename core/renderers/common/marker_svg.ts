@@ -445,9 +445,9 @@ export class MarkerSvg {
     if (!this.markerSvgLine_) {
       throw new Error('createDom should be called before positioning the line');
     }
-    this.markerSvgLine_.setAttribute('x', x);
-    this.markerSvgLine_.setAttribute('y', y);
-    this.markerSvgLine_.setAttribute('width', width);
+    this.markerSvgLine_.setAttribute('x', `${x}`);
+    this.markerSvgLine_.setAttribute('y', `${y}`);
+    this.markerSvgLine_.setAttribute('width', `${width}`);
     this.currentMarkerSvg = this.markerSvgLine_;
   }
 
@@ -520,10 +520,10 @@ export class MarkerSvg {
     if (!this.markerSvgRect_) {
       throw new Error('createDom should be called before positioning the rect');
     }
-    this.markerSvgRect_.setAttribute('x', x);
-    this.markerSvgRect_.setAttribute('y', y);
-    this.markerSvgRect_.setAttribute('width', width);
-    this.markerSvgRect_.setAttribute('height', height);
+    this.markerSvgRect_.setAttribute('x', `${x}`);
+    this.markerSvgRect_.setAttribute('y', `${y}`);
+    this.markerSvgRect_.setAttribute('width', `${width}`);
+    this.markerSvgRect_.setAttribute('height', `${height}`);
     this.currentMarkerSvg = this.markerSvgRect_;
   }
 

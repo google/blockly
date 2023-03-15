@@ -133,7 +133,7 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
   if (percent > 1) {
     dom.removeNode(ripple);
   } else {
-    ripple.setAttribute('r', percent * 25 * scale);
+    ripple.setAttribute('r', String(percent * 25 * scale));
     ripple.style.opacity = String(1 - percent);
     disconnectPid = setTimeout(connectionUiStep, 10, ripple, start, scale);
   }

@@ -220,15 +220,15 @@ export class Scrollbar {
   private setInitialThickness() {
     const scrollbarThickness = Scrollbar.scrollbarThickness;
     if (this.horizontal) {
-      this.svgBackground.setAttribute('height', scrollbarThickness);
-      this.outerSvg.setAttribute('height', scrollbarThickness);
-      this.svgHandle.setAttribute('height', scrollbarThickness - 5);
-      this.svgHandle.setAttribute('y', String(2.5));
+      this.svgBackground.setAttribute('height', String(scrollbarThickness));
+      this.outerSvg.setAttribute('height', String(scrollbarThickness));
+      this.svgHandle.setAttribute('height', String(scrollbarThickness - 5));
+      this.svgHandle.setAttribute('y', '2.5');
     } else {
-      this.svgBackground.setAttribute('width', scrollbarThickness);
-      this.outerSvg.setAttribute('width', scrollbarThickness);
-      this.svgHandle.setAttribute('width', scrollbarThickness - 5);
-      this.svgHandle.setAttribute('x', 2.5);
+      this.svgBackground.setAttribute('width', String(scrollbarThickness));
+      this.outerSvg.setAttribute('width', String(scrollbarThickness));
+      this.svgHandle.setAttribute('width', String(scrollbarThickness - 5));
+      this.svgHandle.setAttribute('x', '2.5');
     }
   }
 
@@ -271,7 +271,8 @@ export class Scrollbar {
    */
   private setHandleLength(newLength: number) {
     this.handleLength = newLength;
-    this.svgHandle.setAttribute(this.lengthAttribute_, this.handleLength);
+    this.svgHandle.setAttribute(
+        this.lengthAttribute_, String(this.handleLength));
   }
 
   /**
@@ -301,7 +302,8 @@ export class Scrollbar {
    */
   setHandlePosition(newPosition: number) {
     this.handlePosition = newPosition;
-    this.svgHandle.setAttribute(this.positionAttribute_, this.handlePosition);
+    this.svgHandle.setAttribute(
+        this.positionAttribute_, String(this.handlePosition));
   }
 
   /**
@@ -312,9 +314,10 @@ export class Scrollbar {
    */
   private setScrollbarLength(newSize: number) {
     this.scrollbarLength = newSize;
-    this.outerSvg.setAttribute(this.lengthAttribute_, this.scrollbarLength);
+    this.outerSvg.setAttribute(
+        this.lengthAttribute_, String(this.scrollbarLength));
     this.svgBackground.setAttribute(
-        this.lengthAttribute_, this.scrollbarLength);
+        this.lengthAttribute_, String(this.scrollbarLength));
   }
 
   /**

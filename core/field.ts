@@ -783,14 +783,15 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
 
     this.textElement_.setAttribute(
         'x',
-        this.getSourceBlock()?.RTL ? this.size_.width - contentWidth - xOffset :
-                                     xOffset);
+        String(this.getSourceBlock()?.RTL ?
+            this.size_.width - contentWidth - xOffset :
+            xOffset));
     this.textElement_.setAttribute(
         'y',
-        constants!.FIELD_TEXT_BASELINE_CENTER ?
+        String(constants!.FIELD_TEXT_BASELINE_CENTER ?
             halfHeight :
             halfHeight - constants!.FIELD_TEXT_HEIGHT / 2 +
-                constants!.FIELD_TEXT_BASELINE);
+                constants!.FIELD_TEXT_BASELINE));
   }
 
   /** Position a field's border rect after a size change. */
@@ -798,12 +799,12 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     if (!this.borderRect_) {
       return;
     }
-    this.borderRect_.setAttribute('width', this.size_.width);
-    this.borderRect_.setAttribute('height', this.size_.height);
+    this.borderRect_.setAttribute('width', String(this.size_.width));
+    this.borderRect_.setAttribute('height', String(this.size_.height));
     this.borderRect_.setAttribute(
-        'rx', this.getConstants()!.FIELD_BORDER_RECT_RADIUS);
+        'rx', String(this.getConstants()!.FIELD_BORDER_RECT_RADIUS));
     this.borderRect_.setAttribute(
-        'ry', this.getConstants()!.FIELD_BORDER_RECT_RADIUS);
+        'ry', String(this.getConstants()!.FIELD_BORDER_RECT_RADIUS));
   }
 
   /**

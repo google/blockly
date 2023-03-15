@@ -265,10 +265,10 @@ export class WorkspaceComment {
    */
   toXmlWithXY(opt_noId?: boolean): Element {
     const element = this.toXml(opt_noId);
-    element.setAttribute('x', Math.round(this.xy_.x));
-    element.setAttribute('y', Math.round(this.xy_.y));
-    element.setAttribute('h', this.height_);
-    element.setAttribute('w', this.width_);
+    element.setAttribute('x', String(Math.round(this.xy_.x)));
+    element.setAttribute('y', String(Math.round(this.xy_.y)));
+    element.setAttribute('h', String(this.height_));
+    element.setAttribute('w', String(this.width_));
     return element;
   }
 

@@ -481,8 +481,8 @@ export class FieldDropdown extends Field<string> {
     this.imageElement_!.style.display = '';
     this.imageElement_!.setAttributeNS(
         dom.XLINK_NS, 'xlink:href', imageJson.src);
-    this.imageElement_!.setAttribute('height', imageJson.height);
-    this.imageElement_!.setAttribute('width', imageJson.width);
+    this.imageElement_!.setAttribute('height', String(imageJson.height));
+    this.imageElement_!.setAttribute('width', String(imageJson.width));
 
     const imageHeight = Number(imageJson.height);
     const imageWidth = Number(imageJson.width);
@@ -512,13 +512,13 @@ export class FieldDropdown extends Field<string> {
     let arrowX = 0;
     if (block.RTL) {
       const imageX = xPadding + arrowWidth;
-      this.imageElement_!.setAttribute('x', imageX);
+      this.imageElement_!.setAttribute('x', `${imageX}`);
     } else {
       arrowX = imageWidth + arrowWidth;
       this.getTextElement().setAttribute('text-anchor', 'end');
-      this.imageElement_!.setAttribute('x', xPadding);
+      this.imageElement_!.setAttribute('x', `${xPadding}`);
     }
-    this.imageElement_!.setAttribute('y', height / 2 - imageHeight / 2);
+    this.imageElement_!.setAttribute('y', String(height / 2 - imageHeight / 2));
 
     this.positionTextElement_(arrowX + xPadding, imageWidth + arrowWidth);
   }

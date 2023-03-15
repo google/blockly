@@ -327,8 +327,8 @@ export class FieldMultilineInput extends FieldTextInput {
     if (this.borderRect_) {
       totalHeight += this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING * 2;
       totalWidth += this.getConstants()!.FIELD_BORDER_RECT_X_PADDING * 2;
-      this.borderRect_.setAttribute('width', totalWidth);
-      this.borderRect_.setAttribute('height', totalHeight);
+      this.borderRect_.setAttribute('width', `${totalWidth}`);
+      this.borderRect_.setAttribute('height', `${totalHeight}`);
     }
     this.size_.width = totalWidth;
     this.size_.height = totalHeight;

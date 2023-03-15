@@ -364,8 +364,8 @@ export class FieldAngle extends FieldInput<number> {
           ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
     }
     this.gauge.setAttribute('d', path.join(''));
-    this.line.setAttribute('x2', x2);
-    this.line.setAttribute('y2', y2);
+    this.line.setAttribute('x2', `${x2}`);
+    this.line.setAttribute('y2', `${y2}`);
   }
 
   /**

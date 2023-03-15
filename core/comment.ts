@@ -210,8 +210,8 @@ export class Comment extends Icon {
     const doubleBorderWidth = 2 * Bubble.BORDER_WIDTH;
     const widthMinusBorder = size.width - doubleBorderWidth;
     const heightMinusBorder = size.height - doubleBorderWidth;
-    this.foreignObject.setAttribute('width', widthMinusBorder);
-    this.foreignObject.setAttribute('height', heightMinusBorder);
+    this.foreignObject.setAttribute('width', `${widthMinusBorder}`);
+    this.foreignObject.setAttribute('height', `${heightMinusBorder}`);
     this.textarea_.style.width = widthMinusBorder - 4 + 'px';
     this.textarea_.style.height = heightMinusBorder - 4 + 'px';
   }

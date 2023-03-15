@@ -783,15 +783,17 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
 
     this.textElement_.setAttribute(
         'x',
-        String(this.getSourceBlock()?.RTL ?
-            this.size_.width - contentWidth - xOffset :
-            xOffset));
+        String(
+            this.getSourceBlock()?.RTL ?
+                this.size_.width - contentWidth - xOffset :
+                xOffset));
     this.textElement_.setAttribute(
         'y',
-        String(constants!.FIELD_TEXT_BASELINE_CENTER ?
-            halfHeight :
-            halfHeight - constants!.FIELD_TEXT_HEIGHT / 2 +
-                constants!.FIELD_TEXT_BASELINE));
+        String(
+            constants!.FIELD_TEXT_BASELINE_CENTER ?
+                halfHeight :
+                halfHeight - constants!.FIELD_TEXT_HEIGHT / 2 +
+                    constants!.FIELD_TEXT_BASELINE));
   }
 
   /** Position a field's border rect after a size change. */

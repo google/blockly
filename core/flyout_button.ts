@@ -164,8 +164,8 @@ export class FlyoutButton {
     svgText.setAttribute('x', String(this.width / 2));
     svgText.setAttribute(
         'y',
-        String(this.height / 2 - fontMetrics.height / 2 +
-            fontMetrics.baseline));
+        String(
+            this.height / 2 - fontMetrics.height / 2 + fontMetrics.baseline));
 
     this.updateTransform_();
 

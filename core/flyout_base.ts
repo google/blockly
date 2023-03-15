@@ -1079,8 +1079,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
     const blockXY = block.getRelativeToSurfaceXY();
     rect.setAttribute('y', String(blockXY.y));
-    rect.setAttribute('x',
-        String(this.RTL ? blockXY.x - blockHW.width : blockXY.x));
+    rect.setAttribute(
+        'x', String(this.RTL ? blockXY.x - blockHW.width : blockXY.x));
   }
 
   /**

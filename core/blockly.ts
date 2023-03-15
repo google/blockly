@@ -165,6 +165,7 @@ import {resizeSvgContents as realResizeSvgContents, WorkspaceSvg} from './worksp
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
 
+
 /**
  * Blockly core version.
  * This constant is overridden by the build script (npm run build) to the value

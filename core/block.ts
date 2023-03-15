@@ -1416,6 +1416,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       }
     }
 
+    // Join the text array, removing the spaces around added parentheses.
     let prev = '';
     let text: string = tokens.reduce((acc, curr) => {
       const val = acc + ((prev === '(' || curr === ')') ? '' : ' ') + curr;

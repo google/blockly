@@ -481,14 +481,16 @@ export class RenderedConnection extends Connection {
    *
    * @param setParent Whether to set the parent of the disconnected block or
    *     not, defaults to true.
+   *     If you do not set the parent, ensure that a subsequent action does,
+   *     otherwise the view and model will be out of sync.
    */
-  override disconnect(setParent = true) {
+  override disconnectInternal(setParent = true) {
     const {parentConnection, childConnection} =
         this.getParentAndChildConnections();
     if (!parentConnection || !childConnection) return;
     const parent = parentConnection.getSourceBlock() as BlockSvg;
     const child = childConnection.getSourceBlock() as BlockSvg;
-    super.disconnect(setParent);
+    super.disconnectInternal(setParent);
     // Rerender the parent so that it may reflow.
     if (parent.rendered) {
       parent.queueRender();

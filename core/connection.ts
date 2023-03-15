@@ -93,7 +93,7 @@ export class Connection implements IASTNodeLocationWithBlock {
 
     // Make sure the childConnection is available.
     if (childConnection.isConnected()) {
-      childConnection.disconnect(false);
+      childConnection.disconnectInternal(false);
     }
 
     // Make sure the parentConnection is available.
@@ -104,7 +104,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       if (target!.isShadow()) {
         target!.dispose(false);
       } else {
-        this.disconnect();
+        this.disconnectInternal();
         orphan = target;
       }
       this.applyShadowState_(shadowState);
@@ -245,11 +245,20 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Disconnect this connection.
+   */
+  disconnect() {
+    this.disconnectInternal();
+  }
+
+  /**
+   * Disconnect two blocks that are connected by this connection.
    *
    * @param setParent Whether to set the parent of the disconnected block or
    *     not, defaults to true.
+   *     If you do not set the parent, ensure that a subsequent action does,
+   *     otherwise the view and model will be out of sync.
    */
-  disconnect(setParent = true) {
+  protected disconnectInternal(setParent = true) {
     const {parentConnection, childConnection} =
         this.getParentAndChildConnections();
     if (!parentConnection || !childConnection) {

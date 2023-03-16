@@ -494,10 +494,8 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN: BlockDefinition = {
  */
 const IS_DIVISIBLE_MUTATOR_EXTENSION = function(this: Block) {
   this.getField('PROPERTY')!.setValidator(
-      /**
-       * @param option The selected dropdown option.
-       */
-      function(this: FieldDropdown, option) {
+      /** @param option The selected dropdown option. */
+      function(this: FieldDropdown, option: string) {
         const divisorInput = (option === 'DIVISIBLE_BY');
         (this.getSourceBlock() as AnyDuringMigration)
             .updateShape_(divisorInput);
@@ -525,9 +523,9 @@ const LIST_MODES_MUTATOR_MIXIN: BlockDefinition = {
    */
   updateType_: function(this: Block, newOp: string) {
     if (newOp === 'MODE') {
-      this.outputConnection!.setCheck('Array');
+      this.outputConnection?.setCheck('Array');
     } else {
-      this.outputConnection!.setCheck('Number');
+      this.outputConnection?.setCheck('Number');
     }
   },
   /**

@@ -150,7 +150,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       this.setShadowStateInternal_();
 
       const targetBlock = this.targetBlock();
-      if (targetBlock) {
+      if (targetBlock && !targetBlock.isDeadOrDying()) {
         // Disconnect the attached normal block.
         targetBlock.unplug();
       }
@@ -552,6 +552,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       }
     } else if (target.isShadow()) {
       target.dispose(false);
+      if (this.getSourceBlock().isDeadOrDying()) return;
       this.respawnShadow_();
       if (this.targetBlock() && this.targetBlock()!.isShadow()) {
         this.serializeShadow_(this.targetBlock());

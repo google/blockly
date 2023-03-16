@@ -841,55 +841,39 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @suppress {checkTypes}
    */
   override dispose(healStack?: boolean, animate?: boolean) {
-    if (this.isDeadOrDying()) {
-      return;
-    }
+    if (this.isDeadOrDying()) return;
+
     Tooltip.dispose();
-    Tooltip.unbindMouseEvents(this.pathObject.svgPath);
-    dom.startTextWidthCache();
-    // Save the block's workspace temporarily so we can resize the
-    // contents once the block is disposed.
-    const blockWorkspace = this.workspace;
-    // If this block is being dragged, unlink the mouse events.
-    if (common.getSelected() === this) {
-      this.unselect();
-      this.workspace.cancelCurrentGesture();
-    }
-    // If this block has a context menu open, close it.
-    if (ContextMenu.getCurrentBlock() === this) {
-      ContextMenu.hide();
-    }
+    ContextMenu.hide();
 
     if (animate && this.rendered) {
       this.unplug(healStack);
       blockAnimations.disposeUiEffect(this);
     }
-    // Stop rerendering.
-    this.rendered = false;
-
-    // Clear pending warnings.
-    for (const n of this.warningTextDb.values()) {
-      clearTimeout(n);
-    }
-    this.warningTextDb.clear();
-
-    const icons = this.getIcons();
-    for (let i = 0; i < icons.length; i++) {
-      icons[i].dispose();
-    }
-
-    // Just deleting this block from the DOM would result in a memory leak as
-    // well as corruption of the connection database.  Therefore we must
-    // methodically step through the blocks and carefully disassemble them.
-    if (common.getSelected() === this) {
-      common.setSelected(null);
-    }
 
     super.dispose(!!healStack);
-
     dom.removeNode(this.svgGroup_);
-    blockWorkspace.resizeContents();
-    dom.stopTextWidthCache();
+  }
+
+  /**
+   * Disposes of this block without doing things required by the top block.
+   * E.g. does trigger UI effects, remove nodes, etc.
+   */
+  override disposeInternal() {
+    if (this.isDeadOrDying()) return;
+    super.disposeInternal();
+
+    this.rendered = false;
+
+    if (common.getSelected() === this) {
+      this.unselect();
+      this.workspace.cancelCurrentGesture();
+    }
+
+    [...this.warningTextDb.values()].forEach((n) => clearTimeout(n));
+    this.warningTextDb.clear();
+
+    this.getIcons().forEach((i) => i.dispose());
   }
 
   /**

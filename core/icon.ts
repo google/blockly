@@ -82,7 +82,6 @@ export abstract class Icon {
     if (!this.getBlock().isDeadOrDying()) {
       dom.removeNode(this.iconGroup_);
     }
-    // TODO: Check if this is necessary.
     this.setVisible(false);  // Dispose of and unlink the bubble.
   }
 

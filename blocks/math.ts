@@ -493,16 +493,15 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN: BlockDefinition = {
  * property is "divisible by".
  */
 const IS_DIVISIBLE_MUTATOR_EXTENSION = function(this: Block) {
-  this.getField('PROPERTY')!.
-      setValidator(
-          /**
-           * @param option The selected dropdown option.
-           */
-          function(this: FieldDropdown, option) {
-            const divisorInput = (option === 'DIVISIBLE_BY');
-            (this.getSourceBlock() as AnyDuringMigration)
-                .updateShape_(divisorInput);
-          });
+  this.getField('PROPERTY')!.setValidator(
+      /**
+       * @param option The selected dropdown option.
+       */
+      function(this: FieldDropdown, option) {
+        const divisorInput = (option === 'DIVISIBLE_BY');
+        (this.getSourceBlock() as AnyDuringMigration)
+            .updateShape_(divisorInput);
+      });
 };
 
 Extensions.registerMutator(

@@ -8,35 +8,35 @@
  * @fileoverview Math blocks for Blockly.
  * @suppress {checkTypes}
  */
-'use strict';
 
-goog.module('Blockly.libraryBlocks.math');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.libraryBlocks.math');
 
-const Extensions = goog.require('Blockly.Extensions');
+import * as Extensions from '../core/extensions.js';
 // N.B.: Blockly.FieldDropdown needed for type AND side-effects.
 /* eslint-disable-next-line no-unused-vars */
-const FieldDropdown = goog.require('Blockly.FieldDropdown');
-const xmlUtils = goog.require('Blockly.utils.xml');
+import * as FieldDropdown from '../core/field_dropdown.js';
+import * as xmlUtils from '../core/utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+import type {Block} from '../core/block.js';
+// import type {BlockDefinition} from '../core/blocks.js';
 // TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
-const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
+import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldLabel');
+import '../core/field_label.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldNumber');
+import '../core/field_number.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldVariable');
+import '../core/field_variable.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
  * @type {!Object<string, !BlockDefinition>}
  */
-const blocks = createBlockDefinitionsFromJsonArray([
+export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for numeric value.
   {
     'type': 'math_number',
@@ -391,7 +391,6 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'helpUrl': '%{BKY_MATH_ATAN2_HELPURL}',
   },
 ]);
-exports.blocks = blocks;
 
 /**
  * Mapping of math block OP value to tooltip message for blocks

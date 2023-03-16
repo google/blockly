@@ -180,19 +180,14 @@ export class InsertionMarkerManager {
    */
   applyConnections() {
     if (!this.activeCandidate) return;
-    // Don't fire events for insertion markers.
+    const {local, closest} = this.activeCandidate;
+    local.connect(closest);
     eventUtils.disable();
     this.hidePreview();
     eventUtils.enable();
-    const {local, closest} = this.activeCandidate;
-    // Connect two blocks together.
-    local.connect(closest);
     if (this.topBlock.rendered) {
-      // Trigger a connection animation.
-      // Determine which connection is inferior (lower in the source stack).
       const inferiorConnection = local.isSuperior() ? closest : local;
       blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
-      // Bring the just-edited stack to the front.
       const rootBlock = this.topBlock.getRootBlock();
 
       // bringToFront is incredibly expensive. Delay by at least a frame.
@@ -608,38 +603,16 @@ export class InsertionMarkerManager {
 
     const markerConn = this.markerConnection;
     const imBlock = markerConn.getSourceBlock();
-    const markerNext = imBlock.nextConnection;
     const markerPrev = imBlock.previousConnection;
     const markerOutput = imBlock.outputConnection;
 
-    const isNext = markerConn === markerNext;
-
-    const isFirstInStatementStack =
-        isNext && !(markerPrev && markerPrev.targetConnection);
-
-    const isFirstInOutputStack =
-        markerConn.type === ConnectionType.INPUT_VALUE &&
-        !(markerOutput && markerOutput.targetConnection);
-    // The insertion marker is the first block in a stack.  Unplug won't do
-    // anything in that case.  Instead, unplug the following block.
-    if (isFirstInStatementStack || isFirstInOutputStack) {
-      markerConn.targetBlock()!.unplug(false);
-    } else if (markerConn.type === ConnectionType.NEXT_STATEMENT && !isNext) {
-      // Inside of a C-block, first statement connection.
-      const innerConnection = markerConn.targetConnection;
-      if (innerConnection) {
-        innerConnection.getSourceBlock().unplug(false);
-      }
-
-      const previousBlockNextConnection =
-          markerPrev ? markerPrev.targetConnection : null;
-
-      imBlock.unplug(true);
-      if (previousBlockNextConnection && innerConnection) {
-        previousBlockNextConnection.connect(innerConnection);
-      }
+    if (!markerPrev?.targetConnection && !markerOutput?.targetConnection) {
+      // If we are the top block, unplugging doesn't do anything.
+      // The marker connection may not have a target block if we are hiding
+      // as part of applying connections.
+      markerConn.targetBlock()?.unplug(false);
     } else {
-      imBlock.unplug(/* healStack */ true);
+      imBlock.unplug(true);
     }
 
     if (markerConn.targetConnection) {

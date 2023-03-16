@@ -117,11 +117,15 @@ function populate_(
     if (option.enabled) {
       const actionHandler = function() {
         hide();
-        // If .scope does not exist on the option, then the callback will not
-        // be expecting a scope parameter, so there should be no problems. Just
-        // assume it is a ContextMenuOption and we'll pass undefined if it's
-        // not.
-        option.callback((option as ContextMenuOption).scope);
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            // If .scope does not exist on the option, then the callback
+            // will not be expecting a scope parameter, so there should be
+            // no problems. Just assume it is a ContextMenuOption and we'll
+            // pass undefined if it's not.
+            option.callback((option as ContextMenuOption).scope);
+          }, 0);
+        });
       };
       menuItem.onAction(actionHandler, {});
     }

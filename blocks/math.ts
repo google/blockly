@@ -6,35 +6,26 @@
 
 /**
  * @fileoverview Math blocks for Blockly.
- * @suppress {checkTypes}
  */
 
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.math');
 
 import * as Extensions from '../core/extensions.js';
-// N.B.: Blockly.FieldDropdown needed for type AND side-effects.
-/* eslint-disable-next-line no-unused-vars */
-import * as FieldDropdown from '../core/field_dropdown.js';
+import type {Field} from '../core/field.js';
+import type {FieldDropdown} from '../core/field_dropdown.js';
 import * as xmlUtils from '../core/utils/xml.js';
-/* eslint-disable-next-line no-unused-vars */
 import type {Block} from '../core/block.js';
-// import type {BlockDefinition} from '../core/blocks.js';
-// TODO (6248): Properly import the BlockDefinition type.
-/* eslint-disable-next-line no-unused-vars */
-const BlockDefinition = Object;
+import type {BlockDefinition} from '../core/blocks.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
-/** @suppress {extraRequire} */
+import '../core/field_dropdown.js';
 import '../core/field_label.js';
-/** @suppress {extraRequire} */
 import '../core/field_number.js';
-/** @suppress {extraRequire} */
 import '../core/field_variable.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
- * @type {!Object<string, !BlockDefinition>}
  */
 export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for numeric value.
@@ -395,6 +386,7 @@ export const blocks = createBlockDefinitionsFromJsonArray([
 /**
  * Mapping of math block OP value to tooltip message for blocks
  * math_arithmetic, math_simple, math_trig, and math_on_lists.
+ *
  * @see {Extensions#buildTooltipForDropdown}
  * @package
  * @readonly
@@ -443,32 +435,33 @@ Extensions.register(
 /**
  * Mixin for mutator functions in the 'math_is_divisibleby_mutator'
  * extension.
+ *
  * @mixin
  * @augments Block
  * @package
  */
-const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
+const IS_DIVISIBLEBY_MUTATOR_MIXIN: BlockDefinition = {
   /**
    * Create XML to represent whether the 'divisorInput' should be present.
    * Backwards compatible serialization implementation.
-   * @return {!Element} XML storage element.
-   * @this {Block}
+   *
+   * @returns XML storage element.
    */
-  mutationToDom: function() {
+  mutationToDom: function(this: Block): Element {
     const container = xmlUtils.createElement('mutation');
     const divisorInput = (this.getFieldValue('PROPERTY') === 'DIVISIBLE_BY');
-    container.setAttribute('divisor_input', divisorInput);
+    container.setAttribute('divisor_input', String(divisorInput));
     return container;
   },
   /**
    * Parse XML to restore the 'divisorInput'.
    * Backwards compatible serialization implementation.
-   * @param {!Element} xmlElement XML storage element.
-   * @this {Block}
+   *
+   * @param xmlElement XML storage element.
    */
-  domToMutation: function(xmlElement) {
+  domToMutation: function(this: Block, xmlElement: Element) {
     const divisorInput = (xmlElement.getAttribute('divisor_input') === 'true');
-    this.updateShape_(divisorInput);
+    (this as AnyDuringMigration).updateShape_(divisorInput);
   },
 
   // This block does not need JSO serialization hooks (saveExtraState and
@@ -478,11 +471,10 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
 
   /**
    * Modify this block to have (or not have) an input for 'is divisible by'.
-   * @param {boolean} divisorInput True if this block has a divisor input.
-   * @private
-   * @this {Block}
+   *
+   * @param divisorInput True if this block has a divisor input.
    */
-  updateShape_: function(divisorInput) {
+  updateShape_: function(this: Block, divisorInput: boolean) {
     // Add or remove a Value Input.
     const inputExists = this.getInput('DIVISOR');
     if (divisorInput) {
@@ -499,19 +491,17 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
  * 'math_is_divisibleby_mutator' extension to the 'math_property' block that
  * can update the block shape (add/remove divisor input) based on whether
  * property is "divisible by".
- * @this {Block}
- * @package
  */
-const IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
-  this.getField('PROPERTY')
-      .setValidator(
+const IS_DIVISIBLE_MUTATOR_EXTENSION = function(this: Block) {
+  this.getField('PROPERTY')!.
+      setValidator(
           /**
-           * @this {FieldDropdown}
-           * @param {*} option The selected dropdown option.
+           * @param option The selected dropdown option.
            */
-          function(option) {
+          function(this: FieldDropdown, option) {
             const divisorInput = (option === 'DIVISIBLE_BY');
-            this.getSourceBlock().updateShape_(divisorInput);
+            (this.getSourceBlock() as AnyDuringMigration)
+                .updateShape_(divisorInput);
           });
 };
 
@@ -527,32 +517,27 @@ Extensions.register(
 /**
  * Mixin with mutator methods to support alternate output based if the
  * 'math_on_list' block uses the 'MODE' operation.
- * @mixin
- * @augments Block
- * @package
- * @readonly
  */
-const LIST_MODES_MUTATOR_MIXIN = {
+const LIST_MODES_MUTATOR_MIXIN: BlockDefinition = {
   /**
    * Modify this block to have the correct output type.
-   * @param {string} newOp Either 'MODE' or some op than returns a number.
-   * @private
-   * @this {Block}
+   *
+   * @param newOp Either 'MODE' or some op than returns a number.
    */
-  updateType_: function(newOp) {
+  updateType_: function(this: Block, newOp: string) {
     if (newOp === 'MODE') {
-      this.outputConnection.setCheck('Array');
+      this.outputConnection!.setCheck('Array');
     } else {
-      this.outputConnection.setCheck('Number');
+      this.outputConnection!.setCheck('Number');
     }
   },
   /**
    * Create XML to represent the output type.
    * Backwards compatible serialization implementation.
-   * @return {!Element} XML storage element.
-   * @this {Block}
+   *
+   * @returns XML storage element.
    */
-  mutationToDom: function() {
+  mutationToDom: function(this: Block): Element {
     const container = xmlUtils.createElement('mutation');
     container.setAttribute('op', this.getFieldValue('OP'));
     return container;
@@ -560,11 +545,11 @@ const LIST_MODES_MUTATOR_MIXIN = {
   /**
    * Parse XML to restore the output type.
    * Backwards compatible serialization implementation.
-   * @param {!Element} xmlElement XML storage element.
-   * @this {Block}
+   *
+   * @param xmlElement XML storage element.
    */
-  domToMutation: function(xmlElement) {
-    this.updateType_(xmlElement.getAttribute('op'));
+  domToMutation: function(this: Block, xmlElement: Element) {
+    (this as AnyDuringMigration).updateType_(xmlElement.getAttribute('op'));
   },
 
   // This block does not need JSO serialization hooks (saveExtraState and
@@ -576,13 +561,11 @@ const LIST_MODES_MUTATOR_MIXIN = {
 /**
  * Extension to 'math_on_list' blocks that allows support of
  * modes operation (outputs a list of numbers).
- * @this {Block}
- * @package
  */
-const LIST_MODES_MUTATOR_EXTENSION = function() {
-  this.getField('OP').setValidator(function(newOp) {
-    this.updateType_(newOp);
-  }.bind(this));
+const LIST_MODES_MUTATOR_EXTENSION = function(this: Block) {
+  this.getField('OP')!.setValidator(function(this: Field, newOp: string) {
+    (this as AnyDuringMigration).updateType_(newOp);
+  }.bind(this as AnyDuringMigration));
 };
 
 Extensions.registerMutator(

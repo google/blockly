@@ -39,7 +39,7 @@ let wobblingBlock: BlockSvg|null = null;
  * @internal
  */
 export function disposeUiEffect(block: BlockSvg) {
-  // Disposing is going to take so long the animation won't playanyway.
+  // Disposing is going to take so long the animation won't play anyway.
   if (block.getDescendants(false).length > 100) return;
 
   const workspace = block.workspace;

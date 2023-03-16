@@ -782,6 +782,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     dom.removeNode(this.svgGroup_);
   }
 
+  /**
+   * Disposes of this block without doing things required by the top block.
+   * E.g. does trigger UI effects, remove nodes, etc.
+   */
   override disposeInternal() {
     if (this.isDeadOrDying()) return;
     super.disposeInternal();

@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The top level namespace used to access the Blockly library.
- *
- * @namespace Blockly
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly');
 

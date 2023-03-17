@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Methods animating a block on connection and disconnection.
- *
- * @namespace Blockly.blockAnimations
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockAnimations');
 

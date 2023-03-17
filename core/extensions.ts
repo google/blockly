@@ -4,14 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Extensions are functions that help initialize blocks, usually
- *      adding dynamic behavior such as onchange handlers and mutators. These
- *      are applied using Block.applyExtension(), or the JSON "extensions"
- *      array attribute.
- *
- * @namespace Blockly.Extensions
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Extensions');
 

@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for a bubble.
- *
- * @namespace Blockly.IBubble
- */
 import * as goog from '../../closure/goog/goog.js';
 import type {Coordinate} from '../utils/coordinate.js';
 import type {BlockDragSurfaceSvg} from '../block_drag_surface.js';

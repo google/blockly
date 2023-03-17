@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * This file is a universal registry that provides generic methods
- *    for registering and unregistering different types of classes.
- *
- * @namespace Blockly.registry
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.registry');
 

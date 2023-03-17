@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Utility functions for handling variables.
- *
- * @namespace Blockly.Variables
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Variables');
 

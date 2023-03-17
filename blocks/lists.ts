@@ -176,7 +176,8 @@ blocks['lists_create_with'] = {
    * @return Root block in mutator.
    */
   decompose: function(this: CreateWithBlock, workspace: Workspace): Block {
-    const containerBlock: ContainerBlock = workspace.newBlock('lists_create_with_container');
+    const containerBlock: ContainerBlock =
+        workspace.newBlock('lists_create_with_container');
     containerBlock.initSvg();
     let connection = containerBlock.getInput('STACK').connection;
     for (let i = 0; i < this.itemCount_; i++) {
@@ -356,7 +357,8 @@ blocks['lists_getIndex'] = {
         /** @param value The input value. */
         function(this: FieldDropdown, value: string) {
           const isStatement = (value === 'REMOVE');
-          (this.getSourceBlock() as GetIndexBlock).updateStatement_(isStatement);
+          (this.getSourceBlock() as GetIndexBlock)
+              .updateStatement_(isStatement);
           return undefined;
         });
     this.appendValueInput('VALUE').setCheck('Array').appendField(

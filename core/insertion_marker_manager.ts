@@ -17,7 +17,6 @@ import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
 import {config} from './config.js';
-import {ConnectionType} from './connection_type.js';
 import * as constants from './constants.js';
 import * as eventUtils from './events/utils.js';
 import type {IDeleteArea} from './interfaces/i_delete_area.js';

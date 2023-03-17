@@ -112,7 +112,8 @@ const updateGithubPages = gulp.series(
   packageTasks.cleanReleaseDir,
   buildTasks.build,
   function(done) {
-    execSync('git add build/msg/* dist/*_compressed.js*', {stdio: 'inherit'});
+    // The build and dist directories are normally gitignored, so we have to force add.
+    execSync('git add -f build/msg/* dist/*_compressed.js*', {stdio: 'inherit'});
     execSync('git commit -am "Rebuild"', {stdio: 'inherit'});
     execSync('git push ' + upstream_url + ' gh-pages --force',
         {stdio: 'inherit'});

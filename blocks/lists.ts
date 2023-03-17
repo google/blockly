@@ -8,34 +8,34 @@
  * @fileoverview List blocks for Blockly.
  * @suppress {checkTypes}
  */
-'use strict';
 
-goog.module('Blockly.libraryBlocks.lists');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.libraryBlocks.lists');
 
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const xmlUtils = goog.require('Blockly.utils.xml');
-const {Align} = goog.require('Blockly.Input');
+import * as fieldRegistry from '../core/field_registry.js';
+import * as xmlUtils from '../core/utils/xml.js';
+import {Align} from '../core/input.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+import type {Block} from '../core/block.js';
+// import type {BlockDefinition} from '../core/blocks.js';
 // TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {Msg} = goog.require('Blockly.Msg');
-const {Mutator} = goog.require('Blockly.Mutator');
+import {ConnectionType} from '../core/connection_type.js';
+import {Msg} from '../core/msg.js';
+import {Mutator} from '../core/mutator.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
-const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
+import type {Workspace} from '../core/workspace.js';
+import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldDropdown');
+import '../core/field_dropdown.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
  * @type {!Object<string, !BlockDefinition>}
  */
-const blocks = createBlockDefinitionsFromJsonArray([
+export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for creating an empty list
   // The 'list_create_with' block is preferred as it is more flexible.
   // <block type="lists_create_with">
@@ -119,7 +119,6 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'helpUrl': '%{BKY_LISTS_LENGTH_HELPURL}',
   },
 ]);
-exports.blocks = blocks;
 
 blocks['lists_create_with'] = {
   /**

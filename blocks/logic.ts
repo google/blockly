@@ -8,39 +8,39 @@
  * @fileoverview Logic blocks for Blockly.
  * @suppress {checkTypes}
  */
-'use strict';
 
-goog.module('Blockly.libraryBlocks.logic');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.libraryBlocks.logic');
 
 /* eslint-disable-next-line no-unused-vars */
-const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
-const Events = goog.require('Blockly.Events');
-const Extensions = goog.require('Blockly.Extensions');
-const xmlUtils = goog.require('Blockly.utils.xml');
+import type * as AbstractEvent from '../core/events/events_abstract.js';
+import * as Events from '../core/events/events.js';
+import * as Extensions from '../core/extensions.js';
+import * as xmlUtils from '../core/utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+import type {Block} from '../core/block.js';
+// import type {BlockDefinition} from '../core/blocks.js';
 // TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
-const {Msg} = goog.require('Blockly.Msg');
-const {Mutator} = goog.require('Blockly.Mutator');
+import {Msg} from '../core/msg.js';
+import {Mutator} from '../core/mutator.js';
 /* eslint-disable-next-line no-unused-vars */
-const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+import type {RenderedConnection} from '../core/rendered_connection.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
-const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
+import type {Workspace} from '../core/workspace.js';
+import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldDropdown');
+import '../core/field_dropdown.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldLabel');
+import '../core/field_label.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
  * @type {!Object<string, !BlockDefinition>}
  */
-const blocks = createBlockDefinitionsFromJsonArray([
+export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for boolean data type: true and false.
   {
     'type': 'logic_boolean',
@@ -266,7 +266,6 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'tooltip': '%{BKY_CONTROLS_IF_ELSE_TOOLTIP}',
   },
 ]);
-exports.blocks = blocks;
 
 /**
  * Tooltip text, keyed by block OP value. Used by logic_compare and

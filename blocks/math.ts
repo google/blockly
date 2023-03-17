@@ -431,6 +431,8 @@ Extensions.register(
     'math_op_tooltip',
     Extensions.buildTooltipForDropdown('OP', TOOLTIPS_BY_OP));
 
+/** Type of a block that has IS_DIVISBLEBY_MUTATOR_MIXIN */
+type DivisiblebyBlock = Block|typeof IS_DIVISIBLEBY_MUTATOR_MIXIN;
 
 /**
  * Mixin for mutator functions in the 'math_is_divisibleby_mutator'
@@ -447,7 +449,7 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN: BlockDefinition = {
    *
    * @returns XML storage element.
    */
-  mutationToDom: function(this: Block): Element {
+  mutationToDom: function(this: DivisiblebyBlock): Element {
     const container = xmlUtils.createElement('mutation');
     const divisorInput = (this.getFieldValue('PROPERTY') === 'DIVISIBLE_BY');
     container.setAttribute('divisor_input', String(divisorInput));
@@ -459,9 +461,9 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN: BlockDefinition = {
    *
    * @param xmlElement XML storage element.
    */
-  domToMutation: function(this: Block, xmlElement: Element) {
+  domToMutation: function(this: DivisiblebyBlock, xmlElement: Element) {
     const divisorInput = (xmlElement.getAttribute('divisor_input') === 'true');
-    (this as AnyDuringMigration).updateShape_(divisorInput);
+    this.updateShape_(divisorInput);
   },
 
   // This block does not need JSO serialization hooks (saveExtraState and
@@ -474,7 +476,7 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN: BlockDefinition = {
    *
    * @param divisorInput True if this block has a divisor input.
    */
-  updateShape_: function(this: Block, divisorInput: boolean) {
+  updateShape_: function(this: DivisiblebyBlock, divisorInput: boolean) {
     // Add or remove a Value Input.
     const inputExists = this.getInput('DIVISOR');
     if (divisorInput) {
@@ -492,13 +494,12 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN: BlockDefinition = {
  * can update the block shape (add/remove divisor input) based on whether
  * property is "divisible by".
  */
-const IS_DIVISIBLE_MUTATOR_EXTENSION = function(this: Block) {
+const IS_DIVISIBLE_MUTATOR_EXTENSION = function(this: DivisiblebyBlock) {
   this.getField('PROPERTY')!.setValidator(
       /** @param option The selected dropdown option. */
       function(this: FieldDropdown, option: string) {
         const divisorInput = (option === 'DIVISIBLE_BY');
-        (this.getSourceBlock() as AnyDuringMigration)
-            .updateShape_(divisorInput);
+        (this.getSourceBlock() as DivisiblebyBlock).updateShape_(divisorInput);
       });
 };
 
@@ -511,6 +512,9 @@ Extensions.register(
     'math_change_tooltip',
     Extensions.buildTooltipWithFieldText('%{BKY_MATH_CHANGE_TOOLTIP}', 'VAR'));
 
+/** Type of a block that has LIST_MODES_MUTATOR_MIXIN */
+type ListModesBlock = Block|typeof LIST_MODES_MUTATOR_MIXIN;
+
 /**
  * Mixin with mutator methods to support alternate output based if the
  * 'math_on_list' block uses the 'MODE' operation.
@@ -521,7 +525,7 @@ const LIST_MODES_MUTATOR_MIXIN: BlockDefinition = {
    *
    * @param newOp Either 'MODE' or some op than returns a number.
    */
-  updateType_: function(this: Block, newOp: string) {
+  updateType_: function(this: ListModesBlock, newOp: string) {
     if (newOp === 'MODE') {
       this.outputConnection?.setCheck('Array');
     } else {
@@ -534,7 +538,7 @@ const LIST_MODES_MUTATOR_MIXIN: BlockDefinition = {
    *
    * @returns XML storage element.
    */
-  mutationToDom: function(this: Block): Element {
+  mutationToDom: function(this: ListModesBlock): Element {
     const container = xmlUtils.createElement('mutation');
     container.setAttribute('op', this.getFieldValue('OP'));
     return container;
@@ -545,8 +549,8 @@ const LIST_MODES_MUTATOR_MIXIN: BlockDefinition = {
    *
    * @param xmlElement XML storage element.
    */
-  domToMutation: function(this: Block, xmlElement: Element) {
-    (this as AnyDuringMigration).updateType_(xmlElement.getAttribute('op'));
+  domToMutation: function(this: ListModesBlock, xmlElement: Element) {
+    this.updateType_(xmlElement.getAttribute('op'));
   },
 
   // This block does not need JSO serialization hooks (saveExtraState and
@@ -559,10 +563,12 @@ const LIST_MODES_MUTATOR_MIXIN: BlockDefinition = {
  * Extension to 'math_on_list' blocks that allows support of
  * modes operation (outputs a list of numbers).
  */
-const LIST_MODES_MUTATOR_EXTENSION = function(this: Block) {
-  this.getField('OP')!.setValidator(function(this: Field, newOp: string) {
-    (this as AnyDuringMigration).updateType_(newOp);
-  }.bind(this as AnyDuringMigration));
+const LIST_MODES_MUTATOR_EXTENSION = function(this: ListModesBlock) {
+  this.getField('OP')!.setValidator(
+      function(this: typeof LIST_MODES_MUTATOR_MIXIN|Block, newOp: string) {
+        this.updateType_(newOp);
+        return undefined;
+      }.bind(this));
 };
 
 Extensions.registerMutator(

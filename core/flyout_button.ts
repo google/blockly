@@ -32,6 +32,10 @@ export class FlyoutButton {
 
   /** The vertical margin around the text in the button. */
   static TEXT_MARGIN_Y = 2;
+
+  /** The radius of the flyout button's borders. */
+  static BORDER_RADIUS = 4;
+
   private readonly text_: string;
   private readonly position_: Coordinate;
   private readonly callbackKey_: string;
@@ -102,8 +106,8 @@ export class FlyoutButton {
       shadow = dom.createSvgElement(
           Svg.RECT, {
             'class': 'blocklyFlyoutButtonShadow',
-            'rx': 4,
-            'ry': 4,
+            'rx': FlyoutButton.BORDER_RADIUS,
+            'ry': FlyoutButton.BORDER_RADIUS,
             'x': 1,
             'y': 1,
           },
@@ -114,8 +118,8 @@ export class FlyoutButton {
         Svg.RECT, {
           'class': this.isLabel_ ? 'blocklyFlyoutLabelBackground' :
                                    'blocklyFlyoutButtonBackground',
-          'rx': 4,
-          'ry': 4,
+          'rx': FlyoutButton.BORDER_RADIUS,
+          'ry': FlyoutButton.BORDER_RADIUS,
         },
         this.svgGroup_!);
 
@@ -151,17 +155,17 @@ export class FlyoutButton {
     if (!this.isLabel_) {
       this.width += 2 * FlyoutButton.TEXT_MARGIN_X;
       this.height += 2 * FlyoutButton.TEXT_MARGIN_Y;
-      shadow?.setAttribute('width', this.width.toString());
-      shadow?.setAttribute('height', this.height.toString());
+      shadow?.setAttribute('width', String(this.width));
+      shadow?.setAttribute('height', String(this.height));
     }
-    rect.setAttribute('width', this.width.toString());
-    rect.setAttribute('height', this.height.toString());
+    rect.setAttribute('width', String(this.width));
+    rect.setAttribute('height', String(this.height));
 
-    svgText.setAttribute('x', (this.width / 2).toString());
+    svgText.setAttribute('x', String(this.width / 2));
     svgText.setAttribute(
         'y',
-        (this.height / 2 - fontMetrics.height / 2 + fontMetrics.baseline)
-            .toString());
+        String(
+            this.height / 2 - fontMetrics.height / 2 + fontMetrics.baseline));
 
     this.updateTransform_();
 

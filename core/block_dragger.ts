@@ -92,7 +92,7 @@ export class BlockDragger implements IBlockDragger {
   }
 
   /**
-   * Start dragging a block.
+   * Start dragging a block.  This includes moving it to the drag surface.
    *
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at mouse down, in pixel units.
@@ -122,6 +122,10 @@ export class BlockDragger implements IBlockDragger {
       this.disconnectBlock_(healStack, currentDragDeltaXY);
     }
     this.draggingBlock_.setDragging(true);
+    // For future consideration: we may be able to put moveToDragSurface inside
+    // the block dragger, which would also let the block not track the block
+    // drag surface.
+    this.draggingBlock_.moveToDragSurface();
   }
 
   /**
@@ -215,11 +219,16 @@ export class BlockDragger implements IBlockDragger {
 
     const preventMove = !!this.dragTarget_ &&
         this.dragTarget_.shouldPreventMove(this.draggingBlock_);
+    let newLoc: Coordinate;
     let delta: Coordinate|null = null;
-    if (!preventMove) {
+    if (preventMove) {
+      newLoc = this.startXY_;
+    } else {
       const newValues = this.getNewLocationAfterDrag_(currentDragDeltaXY);
       delta = newValues.delta;
+      newLoc = newValues.newLocation;
     }
+    this.draggingBlock_.moveOffDragSurface(newLoc);
 
     if (this.dragTarget_) {
       this.dragTarget_.onDrop(this.draggingBlock_);
@@ -230,7 +239,7 @@ export class BlockDragger implements IBlockDragger {
       // These are expensive and don't need to be done if we're deleting.
       this.draggingBlock_.setDragging(false);
       if (delta) {  // !preventMove
-        this.updateBlockAfterMove_(delta);
+        this.updateBlockAfterMove_();
       } else {
         // Blocks dragged directly from a flyout may need to be bumped into
         // bounds.
@@ -283,18 +292,14 @@ export class BlockDragger implements IBlockDragger {
 
   /**
    * Updates the necessary information to place a block at a certain location.
-   *
-   * @param delta The change in location from where the block started the drag
-   *     to where it ended the drag.
    */
-  protected updateBlockAfterMove_(delta: Coordinate) {
-    this.draggingBlock_.moveConnections(delta.x, delta.y);
+  protected updateBlockAfterMove_() {
     this.fireMoveEvent_();
     if (this.draggedConnectionManager_.wouldConnectBlock()) {
       // Applying connections also rerenders the relevant blocks.
       this.draggedConnectionManager_.applyConnections();
     } else {
-      this.draggingBlock_.render();
+      this.draggingBlock_.queueRender();
     }
     this.draggingBlock_.scheduleSnapAndBump();
   }
@@ -431,8 +436,6 @@ function initIconData(block: BlockSvg): IconPositionData[] {
   for (let i = 0, descendant; descendant = descendants[i]; i++) {
     const icons = descendant.getIcons();
     for (let j = 0; j < icons.length; j++) {
-      // Only bother to track icons whose bubble is visible.
-      if (!icons[j].isVisible()) continue;
       const data = {
         // Coordinate with x and y properties (workspace
         // coordinates).

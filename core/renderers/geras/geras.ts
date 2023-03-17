@@ -6,11 +6,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Re-exports of Blockly.geras.* modules.
- *
- * @namespace Blockly.geras
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras');
 

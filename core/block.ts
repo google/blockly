@@ -35,7 +35,6 @@ import {Align, Input} from './input.js';
 import {inputTypes} from './input_types.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IDeletable} from './interfaces/i_deletable.js';
-import {ASTNode} from './keyboard_nav/ast_node.js';
 import type {Mutator} from './mutator.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
@@ -57,7 +56,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * changes. This is usually only called from the constructor, the block type
    * initializer function, or an extension initializer function.
    */
-  onchange?: ((p1: Abstract) => AnyDuringMigration)|null;
+  onchange?: ((p1: Abstract) => void)|null;
 
   /** The language-neutral ID given to the collapsed input. */
   static readonly COLLAPSED_INPUT_NAME: string = constants.COLLAPSED_INPUT_NAME;
@@ -91,39 +90,38 @@ export class Block implements IASTNodeLocation, IDeletable {
   protected styleName_ = '';
 
   /** An optional method called during initialization. */
-  init?: (() => AnyDuringMigration)|null = undefined;
+  init?: (() => void);
 
   /** An optional method called during disposal. */
-  destroy?: (() => void) = undefined;
+  destroy?: (() => void);
 
   /**
    * An optional serialization method for defining how to serialize the
    * mutation state to XML. This must be coupled with defining
    * `domToMutation`.
    */
-  mutationToDom?: ((...p1: AnyDuringMigration[]) => Element)|null = undefined;
+  mutationToDom?: (...p1: AnyDuringMigration[]) => Element;
 
   /**
    * An optional deserialization method for defining how to deserialize the
    * mutation state from XML. This must be coupled with defining
    * `mutationToDom`.
    */
-  domToMutation?: ((p1: Element) => AnyDuringMigration)|null = undefined;
+  domToMutation?: (p1: Element) => void;
 
   /**
    * An optional serialization method for defining how to serialize the
    * block's extra state (eg mutation state) to something JSON compatible.
    * This must be coupled with defining `loadExtraState`.
    */
-  saveExtraState?: (() => AnyDuringMigration)|null = undefined;
+  saveExtraState?: () => AnyDuringMigration;
 
   /**
    * An optional serialization method for defining how to deserialize the
    * block's extra state (eg mutation state) from something JSON compatible.
    * This must be coupled with defining `saveExtraState`.
    */
-  loadExtraState?:
-      ((p1: AnyDuringMigration) => AnyDuringMigration)|null = undefined;
+  loadExtraState?: (p1: AnyDuringMigration) => void;
 
   /**
    * An optional property for suppressing adding STATEMENT_PREFIX and
@@ -137,31 +135,25 @@ export class Block implements IASTNodeLocation, IDeletable {
    * shown to the user, but are declared as global variables in the generated
    * code.
    */
-  getDeveloperVariables?: (() => string[]) = undefined;
+  getDeveloperVariables?: () => string[];
 
   /**
    * An optional function that reconfigures the block based on the contents of
    * the mutator dialog.
    */
-  compose?: ((p1: Block) => void) = undefined;
+  compose?: (p1: Block) => void;
 
   /**
    * An optional function that populates the mutator's dialog with
    * this block's components.
    */
-  decompose?: ((p1: Workspace) => Block) = undefined;
+  decompose?: (p1: Workspace) => Block;
   id: string;
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Connection'.
-  outputConnection: Connection = null as AnyDuringMigration;
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Connection'.
-  nextConnection: Connection = null as AnyDuringMigration;
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Connection'.
-  previousConnection: Connection = null as AnyDuringMigration;
+  outputConnection: Connection|null = null;
+  nextConnection: Connection|null = null;
+  previousConnection: Connection|null = null;
   inputList: Input[] = [];
-  inputsInline?: boolean = undefined;
+  inputsInline?: boolean;
   private disabled = false;
   tooltip: Tooltip.TipInfo = '';
   contextMenu = true;
@@ -203,19 +195,17 @@ export class Block implements IASTNodeLocation, IDeletable {
   protected isInsertionMarker_ = false;
 
   /** Name of the type of hat. */
-  hat?: string = undefined;
+  hat?: string;
 
   rendered: boolean|null = null;
 
   /**
    * String for block help, or function that returns a URL. Null for no help.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type 'string
-  // | Function'.
-  helpUrl: string|Function = null as AnyDuringMigration;
+  helpUrl: string|Function|null = null;
 
   /** A bound callback function to use when the parent workspace changes. */
-  private onchangeWrapper_: ((p1: Abstract) => AnyDuringMigration)|null = null;
+  private onchangeWrapper_: ((p1: Abstract) => void)|null = null;
 
   /**
    * A count of statement inputs on the block.
@@ -320,44 +310,45 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @suppress {checkTypes}
    */
   dispose(healStack: boolean) {
-    if (this.isDeadOrDying()) {
-      return;
-    }
-    // Terminate onchange event calls.
+    if (this.isDeadOrDying()) return;
+
+    // Dispose of this change listener before unplugging.
+    // Technically not necessary due to the event firing delay.
+    // But future-proofing.
     if (this.onchangeWrapper_) {
       this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
 
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
+      // Constructing the delete event is costly. Only perform if necessary.
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
     }
-    eventUtils.disable();
+    this.workspace.removeTopBlock(this);
+    this.disposeInternal();
+  }
 
+  /**
+   * Disposes of this block without doing things required by the top block.
+   * E.g. does not fire events, unplug the block, etc.
+   */
+  protected disposeInternal() {
+    if (this.isDeadOrDying()) return;
+
+    if (this.onchangeWrapper_) {
+      this.workspace.removeChangeListener(this.onchangeWrapper_);
+    }
+
+    eventUtils.disable();
     try {
-      // This block is now at the top of the workspace.
-      // Remove this block from the workspace's list of top-most blocks.
-      this.workspace.removeTopBlock(this);
       this.workspace.removeTypedBlock(this);
-      // Remove from block database.
       this.workspace.removeBlockById(this.id);
       this.disposing = true;
 
-      // First, dispose of all my children.
-      for (let i = this.childBlocks_.length - 1; i >= 0; i--) {
-        this.childBlocks_[i].dispose(false);
-      }
-      // Then dispose of myself.
-      // Dispose of all inputs and their fields.
-      for (let i = 0, input; input = this.inputList[i]; i++) {
-        input.dispose();
-      }
+      this.childBlocks_.forEach((c) => c.disposeInternal());
+      this.inputList.forEach((i) => i.dispose());
       this.inputList.length = 0;
-      // Dispose of any remaining connections (next/previous/output).
-      const connections = this.getConnections_(true);
-      for (let i = 0, connection; connection = connections[i]; i++) {
-        connection.dispose();
-      }
+      this.getConnections_(true).forEach((c) => c.dispose());
     } finally {
       eventUtils.enable();
       if (typeof this.destroy === 'function') {
@@ -420,7 +411,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   private unplugFromRow_(opt_healStack?: boolean) {
     let parentConnection = null;
-    if (this.outputConnection.isConnected()) {
+    if (this.outputConnection?.isConnected()) {
       parentConnection = this.outputConnection.targetConnection;
       // Disconnect from any superior block.
       this.outputConnection.disconnect();
@@ -485,7 +476,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   private unplugFromStack_(opt_healStack?: boolean) {
     let previousTarget = null;
-    if (this.previousConnection.isConnected()) {
+    if (this.previousConnection?.isConnected()) {
       // Remember the connection that any next statements need to connect to.
       previousTarget = this.previousConnection.targetConnection;
       // Detach this block from the parent's tree.
@@ -494,7 +485,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     const nextBlock = this.getNextBlock();
     if (opt_healStack && nextBlock && !nextBlock.isShadow()) {
       // Disconnect the next statement.
-      const nextTarget = this.nextConnection.targetConnection;
+      const nextTarget = this.nextConnection?.targetConnection ?? null;
       nextTarget?.disconnect();
       if (previousTarget &&
           this.workspace.connectionChecker.canConnect(
@@ -794,6 +785,15 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
+   * Return whether this block's own deletable property is true or false.
+   *
+   * @returns True if the block's deletable property is true, false otherwise.
+   */
+  isOwnDeletable(): boolean {
+    return this.deletable_;
+  }
+
+  /**
    * Set whether this block is deletable or not.
    *
    * @param deletable True if deletable.
@@ -806,10 +806,21 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Get whether this block is movable or not.
    *
    * @returns True if movable.
+   * @internal
    */
   isMovable(): boolean {
     return this.movable_ && !this.isShadow_ && !this.isDeadOrDying() &&
         !this.workspace.options.readOnly;
+  }
+
+  /**
+   * Return whether this block's own movable property is true or false.
+   *
+   * @returns True if the block's movable property is true, false otherwise.
+   * @internal
+   */
+  isOwnMovable(): boolean {
+    return this.movable_;
   }
 
   /**
@@ -880,10 +891,20 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Get whether this block is editable or not.
    *
    * @returns True if editable.
+   * @internal
    */
   isEditable(): boolean {
     return this.editable_ && !this.isDeadOrDying() &&
         !this.workspace.options.readOnly;
+  }
+
+  /**
+   * Return whether this block's own editable property is true or false.
+   *
+   * @returns True if the block's editable property is true, false otherwise.
+   */
+  isOwnEditable(): boolean {
+    return this.editable_;
   }
 
   /**
@@ -1020,7 +1041,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param onchangeFn The callback to call when the block's workspace changes.
    * @throws {Error} if onchangeFn is not falsey and not a function.
    */
-  setOnChange(onchangeFn: (p1: Abstract) => AnyDuringMigration) {
+  setOnChange(onchangeFn: (p1: Abstract) => void) {
     if (onchangeFn && typeof onchangeFn !== 'function') {
       throw Error('onchange must be a function.');
     }
@@ -1187,9 +1208,7 @@ export class Block implements IASTNodeLocation, IDeletable {
               'connection.');
         }
         this.previousConnection.dispose();
-        // AnyDuringMigration because:  Type 'null' is not assignable to type
-        // 'Connection'.
-        this.previousConnection = null as AnyDuringMigration;
+        this.previousConnection = null;
       }
     }
   }
@@ -1219,9 +1238,7 @@ export class Block implements IASTNodeLocation, IDeletable {
               'connection.');
         }
         this.nextConnection.dispose();
-        // AnyDuringMigration because:  Type 'null' is not assignable to type
-        // 'Connection'.
-        this.nextConnection = null as AnyDuringMigration;
+        this.nextConnection = null;
       }
     }
   }
@@ -1250,9 +1267,7 @@ export class Block implements IASTNodeLocation, IDeletable {
               'Must disconnect output value before removing connection.');
         }
         this.outputConnection.dispose();
-        // AnyDuringMigration because:  Type 'null' is not assignable to type
-        // 'Connection'.
-        this.outputConnection = null as AnyDuringMigration;
+        this.outputConnection = null;
       }
     }
   }
@@ -1383,21 +1398,52 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Create a human-readable text representation of this block and any children.
    *
    * @param opt_maxLength Truncate the string to this length.
-   * @param opt_emptyToken The placeholder string used to denote an empty field.
+   * @param opt_emptyToken The placeholder string used to denote an empty input.
    *     If not specified, '?' is used.
    * @returns Text of block.
    */
   toString(opt_maxLength?: number, opt_emptyToken?: string): string {
+    const tokens = this.toTokens(opt_emptyToken);
+
+    // Run through our tokens array and simplify expression to remove
+    // parentheses around single field blocks.
+    // E.g. ['repeat', '(', '10', ')', 'times', 'do', '?']
+    for (let i = 2; i < tokens.length; i++) {
+      if (tokens[i - 2] === '(' && tokens[i] === ')') {
+        tokens[i - 2] = tokens[i - 1];
+        tokens.splice(i - 1, 2);
+      }
+    }
+
+    // Join the text array, removing the spaces around added parentheses.
+    let prev = '';
+    let text: string = tokens.reduce((acc, curr) => {
+      const val = acc + ((prev === '(' || curr === ')') ? '' : ' ') + curr;
+      prev = curr[curr.length - 1];
+      return val;
+    }, '');
+
+    text = text.trim() || '???';
+    if (opt_maxLength) {
+      // TODO: Improve truncation so that text from this block is given
+      // priority. E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not
+      // "1+2+3+4+5...". E.g. "1+2+3+4+5=6+7+8+9+0" should be "...4+5=6+7...".
+      if (text.length > opt_maxLength) {
+        text = text.substring(0, opt_maxLength - 3) + '...';
+      }
+    }
+    return text;
+  }
+
+  /**
+   * Converts this block into string tokens.
+   *
+   * @param emptyToken The token to use in place of an empty input.
+   *     Defaults to '?'.
+   * @returns The array of string tokens representing this block.
+   */
+  private toTokens(emptyToken = '?'): string[] {
     const tokens = [];
-    const emptyFieldPlaceholder = opt_emptyToken || '?';
-
-    // Temporarily set flag to navigate to all fields.
-    const prevNavigateFields = ASTNode.NAVIGATE_ALL_FIELDS;
-    ASTNode.NAVIGATE_ALL_FIELDS = true;
-
-    let node = ASTNode.createBlockNode(this);
-    const rootNode = node;
-
     /**
      * Whether or not to add parentheses around an input.
      *
@@ -1413,84 +1459,26 @@ export class Block implements IASTNodeLocation, IDeletable {
           (checks.indexOf('Boolean') !== -1 || checks.indexOf('Number') !== -1);
     }
 
-    /** Check that we haven't circled back to the original root node. */
-    function checkRoot() {
-      if (node && node.getType() === rootNode?.getType() &&
-          node.getLocation() === rootNode?.getLocation()) {
-        node = null;
+    for (const input of this.inputList) {
+      if (input.name == constants.COLLAPSED_INPUT_NAME) {
+        continue;
       }
-    }
-
-    // Traverse the AST building up our text string.
-    while (node) {
-      switch (node.getType()) {
-        case ASTNode.types.INPUT: {
-          const connection = node.getLocation() as Connection;
-          if (!node.in()) {
-            tokens.push(emptyFieldPlaceholder);
-          } else if (shouldAddParentheses(connection)) {
-            tokens.push('(');
-          }
-          break;
-        }
-        case ASTNode.types.FIELD: {
-          const field = node.getLocation() as Field;
-          if (field.name !== constants.COLLAPSED_FIELD_NAME) {
-            tokens.push(field.getText());
-          }
-          break;
-        }
+      for (const field of input.fieldRow) {
+        tokens.push(field.getText());
       }
-
-      const current = node;
-      node = current.in() || current.next();
-      if (!node) {
-        // Can't go in or next, keep going out until we can go next.
-        node = current.out();
-        checkRoot();
-        while (node && !node.next()) {
-          node = node.out();
-          checkRoot();
-          // If we hit an input on the way up, possibly close out parentheses.
-          if (node && node.getType() === ASTNode.types.INPUT &&
-              shouldAddParentheses(node.getLocation() as Connection)) {
-            tokens.push(')');
-          }
-        }
-        if (node) {
-          node = node.next();
+      if (input.connection) {
+        const child = input.connection.targetBlock();
+        if (child) {
+          const shouldAddParens = shouldAddParentheses(input.connection);
+          if (shouldAddParens) tokens.push('(');
+          tokens.push(...child.toTokens(emptyToken));
+          if (shouldAddParens) tokens.push(')');
+        } else {
+          tokens.push(emptyToken);
         }
       }
     }
-
-    // Restore state of NAVIGATE_ALL_FIELDS.
-    ASTNode.NAVIGATE_ALL_FIELDS = prevNavigateFields;
-
-    // Run through our text array and simplify expression to remove parentheses
-    // around single field blocks.
-    // E.g. ['repeat', '(', '10', ')', 'times', 'do', '?']
-    for (let i = 2; i < tokens.length; i++) {
-      if (tokens[i - 2] === '(' && tokens[i] === ')') {
-        tokens[i - 2] = tokens[i - 1];
-        tokens.splice(i - 1, 2);
-      }
-    }
-
-    // Join the text array, removing spaces around added parentheses.
-    let text: string = tokens.reduce(function(acc, value) {
-      return acc + (acc.substr(-1) === '(' || value === ')' ? '' : ' ') + value;
-    }, '');
-
-    text = text.trim() || '???';
-    if (opt_maxLength) {
-      // TODO: Improve truncation so that text from this block is given
-      // priority. E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not
-      // "1+2+3+4+5...". E.g. "1+2+3+4+5=6+7+8+9+0" should be "...4+5=6+7...".
-      if (text.length > opt_maxLength) {
-        text = text.substring(0, opt_maxLength - 3) + '...';
-      }
-    }
-    return text;
+    return tokens;
   }
 
   /**
@@ -1930,10 +1918,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (type === inputTypes.STATEMENT) {
       this.statementInputCount++;
     }
-    // AnyDuringMigration because:  Argument of type 'Connection | null' is not
-    // assignable to parameter of type 'Connection'.
-    const input =
-        new Input(type, name, this, (connection as AnyDuringMigration));
+    const input = new Input(type, name, this, connection);
     // Append input to list.
     this.inputList.push(input);
     return input;
@@ -2077,9 +2062,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this, 'comment', null, this.commentModel.text, text));
     this.commentModel.text = text;
-    // AnyDuringMigration because:  Type 'string | null' is not assignable to
-    // type 'string | Comment'.
-    this.comment = text as AnyDuringMigration;  // For backwards compatibility.
+    this.comment = text;  // For backwards compatibility.
   }
 
   /**

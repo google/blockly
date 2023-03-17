@@ -299,7 +299,7 @@ suite('Blocks', function() {
         setup(function() {
           this.blocks = createTestBlocks(this.workspace, true);
         });
-  
+
         test('Don\'t heal', function() {
           this.blocks.B.dispose(false);
           assertDisposedNoheal(this.blocks);
@@ -313,11 +313,11 @@ suite('Blocks', function() {
 
         test('Heal with bad checks', function() {
           const blocks = this.blocks;
-  
+
           // A and C can't connect, but both can connect to B.
           blocks.A.inputList[0].connection.setCheck('type1');
           blocks.C.outputConnection.setCheck('type2');
-  
+
           // Each block has only one input, but the types don't work.
           blocks.B.dispose(true);
           assertDisposedHealFailed(blocks);
@@ -362,7 +362,7 @@ suite('Blocks', function() {
         setup(function() {
           this.blocks = createTestBlocks(this.workspace, false);
         });
-  
+
         test('Don\'t heal', function() {
           this.blocks.B.dispose();
           assertDisposedNoheal(this.blocks);
@@ -378,10 +378,10 @@ suite('Blocks', function() {
           // A and C can't connect, but both can connect to B.
           blocks.A.nextConnection.setCheck('type1');
           blocks.C.previousConnection.setCheck('type2');
-  
+
           // The types don't work.
           blocks.B.dispose(true);
-  
+
           assertDisposedHealFailed(blocks);
         });
 
@@ -1112,48 +1112,45 @@ suite('Blocks', function() {
     suite('Add Connections Programmatically', function() {
       test('Output', function() {
         const block = createRenderedBlock(this.workspace, 'empty_block');
-        // this.workspace.newBlock('empty_block');
-        // block.initSvg();
-        // block.render();
 
         block.setOutput(true);
+        this.clock.runAll();
 
+        this.clock.runAll();
         chai.assert.equal(this.getOutputs().length, 1);
       });
       test('Value', function() {
-        const block = this.workspace.newBlock('empty_block');
-        block.initSvg();
-        block.render();
+        const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.appendValueInput('INPUT');
 
+        this.clock.runAll();
         chai.assert.equal(this.getInputs().length, 1);
       });
       test('Previous', function() {
-        const block = this.workspace.newBlock('empty_block');
-        block.initSvg();
-        block.render();
+        const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.setPreviousStatement(true);
+        this.clock.runAll();
 
+        this.clock.runAll();
         chai.assert.equal(this.getPrevious().length, 1);
       });
       test('Next', function() {
-        const block = this.workspace.newBlock('empty_block');
-        block.initSvg();
-        block.render();
+        const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.setNextStatement(true);
+        this.clock.runAll();
 
+        this.clock.runAll();
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Statement', function() {
-        const block = this.workspace.newBlock('empty_block');
-        block.initSvg();
-        block.render();
+        const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.appendStatementInput('STATEMENT');
 
+        this.clock.runAll();
         chai.assert.equal(this.getNext().length, 1);
       });
     });
@@ -1719,8 +1716,10 @@ suite('Blocks', function() {
       test('Add Input', function() {
         const blockA = createRenderedBlock(this.workspace, 'empty_block');
         blockA.setCollapsed(true);
-        assertCollapsed(blockA);
+
         blockA.appendDummyInput('NAME');
+
+        this.clock.runAll();
         assertCollapsed(blockA);
         chai.assert.isNotNull(blockA.getInput('NAME'));
       });
@@ -1794,20 +1793,20 @@ suite('Blocks', function() {
         const blockA = createRenderedBlock(this.workspace, 'variable_block');
 
         blockA.setCollapsed(true);
-        assertCollapsed(blockA, 'x');
-
         const variable = this.workspace.getVariable('x', '');
         this.workspace.renameVariableById(variable.getId(), 'y');
+
+        this.clock.runAll();
         assertCollapsed(blockA, 'y');
       });
       test('Coalesce, Different Case', function() {
         const blockA = createRenderedBlock(this.workspace, 'variable_block');
 
         blockA.setCollapsed(true);
-        assertCollapsed(blockA, 'x');
-
         const variable = this.workspace.createVariable('y');
         this.workspace.renameVariableById(variable.getId(), 'X');
+
+        this.clock.runAll();
         assertCollapsed(blockA, 'X');
       });
     });
@@ -1828,25 +1827,6 @@ suite('Blocks', function() {
         // The child blocks should be enabled.
         chai.assert.isFalse(blockB.disabled);
         chai.assert.isFalse(blockB.getSvgRoot().classList.contains('blocklyDisabled'));
-      });
-      test('Children of Collapsed Block Should Not Update', function() {
-        const blockA = createRenderedBlock(this.workspace, 'statement_block');
-        const blockB = createRenderedBlock(this.workspace, 'stack_block');
-        blockA.getInput('STATEMENT').connection
-            .connect(blockB.previousConnection);
-
-        // Disable the block and collapse it.
-        blockA.setEnabled(false);
-        blockA.setCollapsed(true);
-
-        const blockUpdateDisabled = sinon.stub(blockB, 'updateDisabled');
-
-        // Enable the block before expanding it.
-        blockA.setEnabled(true);
-
-        // For performance reasons updateDisabled should not be called
-        // on children of collapsed blocks.
-        sinon.assert.notCalled(blockUpdateDisabled);
       });
       test('Disabled Children of Collapsed Blocks Should Stay Disabled', function() {
         const blockA = createRenderedBlock(this.workspace, 'statement_block');

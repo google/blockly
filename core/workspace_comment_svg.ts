@@ -15,6 +15,7 @@ goog.declareModuleId('Blockly.WorkspaceCommentSvg');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_selected.js';
 
+import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 // import * as ContextMenu from './contextmenu.js';
@@ -90,6 +91,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /** Whether the comment is rendered onscreen and is a part of the DOM. */
   private rendered_ = false;
+  private readonly useDragSurface_: boolean;
 
   /**
    * @param workspace The block's workspace.
@@ -114,6 +116,12 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       'ry': BORDER_RADIUS,
     });
     this.svgGroup_.appendChild(this.svgRect_);
+
+    /**
+     * Whether to move the comment to the drag surface when it is dragged.
+     * True if it should move, false if it should be translated directly.
+     */
+    this.useDragSurface_ = !!workspace.getBlockDragSurface();
 
     this.render();
   }
@@ -298,6 +306,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     let x = 0;
     let y = 0;
 
+    const dragSurfaceGroup = this.useDragSurface_ ?
+        this.workspace.getBlockDragSurface()!.getGroup() :
+        null;
+
     let element: Node|null = this.getSvgRoot();
     if (element) {
       do {
@@ -305,9 +317,20 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
         const xy = svgMath.getRelativeXY(element as Element);
         x += xy.x;
         y += xy.y;
+        // If this element is the current element on the drag surface, include
+        // the translation of the drag surface itself.
+        if (this.useDragSurface_ &&
+            this.workspace.getBlockDragSurface()!.getCurrentBlock() ===
+                element) {
+          const surfaceTranslation =
+              this.workspace.getBlockDragSurface()!.getSurfaceTranslation();
+          x += surfaceTranslation.x;
+          y += surfaceTranslation.y;
+        }
+
         element = element.parentNode;
       } while (element && element !== this.workspace.getBubbleCanvas() &&
-               element !== null);
+               element !== dragSurfaceGroup);
     }
     this.xy_ = new Coordinate(x, y);
     return this.xy_;
@@ -347,14 +370,43 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   }
 
   /**
-   * Move this comment during a drag.
+   * Move this comment to its workspace's drag surface, accounting for
+   * positioning.  Generally should be called at the same time as
+   * setDragging(true).  Does nothing if useDragSurface_ is false.
    *
+   * @internal
+   */
+  moveToDragSurface() {
+    if (!this.useDragSurface_) {
+      return;
+    }
+    // The translation for drag surface blocks,
+    // is equal to the current relative-to-surface position,
+    // to keep the position in sync as it move on/off the surface.
+    // This is in workspace coordinates.
+    const xy = this.getRelativeToSurfaceXY();
+    this.clearTransformAttributes_();
+    this.workspace.getBlockDragSurface()!.translateSurface(xy.x, xy.y);
+    // Execute the move on the top-level SVG component
+    this.workspace.getBlockDragSurface()!.setBlocksAndShow(this.getSvgRoot());
+  }
+
+  /**
+   * Move this comment during a drag, taking into account whether we are using a
+   * drag surface to translate blocks.
+   *
+   * @param dragSurface The surface that carries rendered items during a drag,
+   *     or null if no drag surface is in use.
    * @param newLoc The location to translate to, in workspace coordinates.
    * @internal
    */
-  moveDuringDrag(newLoc: Coordinate) {
-    const translation = `translate(${newLoc.x}, ${newLoc.y})`;
-    this.getSvgRoot().setAttribute('transform', translation);
+  moveDuringDrag(dragSurface: BlockDragSurfaceSvg, newLoc: Coordinate) {
+    if (dragSurface) {
+      dragSurface.translateSurface(newLoc.x, newLoc.y);
+    } else {
+      const translation = `translate(${newLoc.x}, ${newLoc.y})`;
+      this.getSvgRoot().setAttribute('transform', translation);
+    }
   }
 
   /**
@@ -671,8 +723,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
         Svg.G, {'class': this.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'},
         this.svgGroup_);
     dom.createSvgElement(
-        Svg.POLYGON,
-        {'points': '0,x x,x x,0'.replace(/x/g, RESIZE_SIZE.toString())},
+        Svg.POLYGON, {
+          'points':
+              `0,${RESIZE_SIZE} ${RESIZE_SIZE},${RESIZE_SIZE} ${RESIZE_SIZE},0`,
+        },
         this.resizeGroup_);
     dom.createSvgElement(
         Svg.LINE, {
@@ -833,10 +887,11 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     const topOffset = WorkspaceCommentSvg.TOP_OFFSET;
     const textOffset = TEXTAREA_OFFSET * 2;
 
-    this.foreignObject_?.setAttribute('width', `${size.width}`);
-    this.foreignObject_?.setAttribute('height', `${size.height - topOffset}`);
+    this.foreignObject_?.setAttribute('width', String(size.width));
+    this.foreignObject_?.setAttribute(
+        'height', String(size.height - topOffset));
     if (this.RTL) {
-      this.foreignObject_?.setAttribute('x', `${- size.width}`);
+      this.foreignObject_?.setAttribute('x', String(-size.width));
     }
 
     if (!this.textarea_) return;
@@ -862,7 +917,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     this.svgRectTarget_?.setAttribute('height', `${height}`);
     this.svgHandleTarget_?.setAttribute('width', `${width}`);
     this.svgHandleTarget_?.setAttribute(
-        'height', `${WorkspaceCommentSvg.TOP_OFFSET}`);
+        'height', String(WorkspaceCommentSvg.TOP_OFFSET));
     if (this.RTL) {
       this.svgRect_.setAttribute('transform', 'scale(-1 1)');
       this.svgRectTarget_?.setAttribute('transform', 'scale(-1 1)');
@@ -990,7 +1045,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       eventUtils.enable();
     }
 
-    WorkspaceComment.fireCreateEvent((comment));
+    WorkspaceComment.fireCreateEvent(comment);
     return comment;
   }
 }

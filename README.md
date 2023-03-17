@@ -83,4 +83,4 @@ We typically triage all bugs within 2 working days, which includes adding any ap
 ## Good to Know
 
 * Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com)
-* We support IE11 and test it using [BrowserStack](https://browserstack.com)
+* We test browsers using [BrowserStack](https://browserstack.com)

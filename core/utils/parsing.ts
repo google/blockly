@@ -109,7 +109,7 @@ function tokenizeInterpolationInternal(
               // When parsing interpolation tokens, numbers are special
               // placeholders (%1, %2, etc). Make sure all other values are
               // strings.
-              tokens.push(String(rawValue));
+              tokens.push(`${rawValue}`);
             } else {
               tokens.push(rawValue);
             }

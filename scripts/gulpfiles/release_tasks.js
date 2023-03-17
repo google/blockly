@@ -102,7 +102,7 @@ function checkReleaseDir(done) {
 // Check with the user that the version number is correct, then login and publish to npm.
 function loginAndPublish_(done, isBeta) {
   const { version } = getPackageJson();
-  if(readlineSync.keyInYN(`You are about to publish blockly with the version number:${version}. Do you want to continue?`)) {
+  if (readlineSync.keyInYN(`You are about to publish blockly with the version number:${version}. Do you want to continue?`)) {
     execSync(`npm login --registry https://wombat-dressing-room.appspot.com`, {stdio: 'inherit'});
     execSync(`npm publish --registry https://wombat-dressing-room.appspot.com ${isBeta ? '--tag beta' : ''}`, {cwd: RELEASE_DIR, stdio: 'inherit'});
     done();
@@ -129,7 +129,7 @@ function updateBetaVersion(done) {
   const blocklyVersions = JSON.parse(execSync('npm view blockly versions --json').toString());
   const re = new RegExp(/-beta\.(\d)/);
   const latestBetaVersion = execSync('npm show blockly version --tag beta').toString().trim();
-  while(!isValid) {
+  while (!isValid) {
     newVersion = readlineSync.question(`What is the new beta version? (latest beta version: ${latestBetaVersion})`);
     const existsOnNpm = blocklyVersions.indexOf(newVersion) > -1;
     const isFormatted = newVersion.search(re) > -1;

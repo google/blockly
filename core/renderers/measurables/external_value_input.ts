@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Class representing external value inputs with connections on a
- * rendered block.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.ExternalValueInput');
 
@@ -35,7 +29,6 @@ export class ExternalValueInput extends InputConnection {
   /**
    * @param constants The rendering constants provider.
    * @param input The external value input to measure and store information for.
-   * @internal
    */
   constructor(constants: ConstantProvider, input: Input) {
     super(constants, input);

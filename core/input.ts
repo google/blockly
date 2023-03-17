@@ -126,7 +126,7 @@ export class Input {
     }
 
     if (this.sourceBlock.rendered) {
-      (this.sourceBlock as BlockSvg).render();
+      (this.sourceBlock as BlockSvg).queueRender();
       // Adding a field will cause the block to change shape.
       this.sourceBlock.bumpNeighbours();
     }
@@ -148,7 +148,7 @@ export class Input {
         field.dispose();
         this.fieldRow.splice(i, 1);
         if (this.sourceBlock.rendered) {
-          (this.sourceBlock as BlockSvg).render();
+          (this.sourceBlock as BlockSvg).queueRender();
           // Removing a field will cause the block to change shape.
           this.sourceBlock.bumpNeighbours();
         }
@@ -244,7 +244,7 @@ export class Input {
     this.align = align;
     if (this.sourceBlock.rendered) {
       const sourceBlock = this.sourceBlock as BlockSvg;
-      sourceBlock.render();
+      sourceBlock.queueRender();
     }
     return this;
   }

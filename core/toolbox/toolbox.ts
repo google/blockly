@@ -39,7 +39,6 @@ import type {KeyboardShortcut} from '../shortcut_registry.js';
 import * as Touch from '../touch.js';
 import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';
-import {KeyCodes} from '../utils/keycodes.js';
 import {Rect} from '../utils/rect.js';
 import * as toolbox from '../utils/toolbox.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
@@ -63,10 +62,10 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   protected toolboxDef_: toolbox.ToolboxInfo;
   private readonly horizontalLayout_: boolean;
 
-  /** The html container for the toolbox. */
+  /** The HTML container for the toolbox. */
   HtmlDiv: HTMLDivElement|null = null;
 
-  /** The html container for the contents of a toolbox. */
+  /** The HTML container for the contents of a toolbox. */
   protected contentsDiv_: HTMLDivElement|null = null;
 
   /** Whether the Toolbox is visible. */
@@ -268,21 +267,21 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    */
   protected onKeyDown_(e: KeyboardEvent) {
     let handled = false;
-    switch (e.keyCode) {
-      case KeyCodes.DOWN:
+    switch (e.key) {
+      case 'ArrowDown':
         handled = this.selectNext_();
         break;
-      case KeyCodes.UP:
+      case 'ArrowUp':
         handled = this.selectPrevious_();
         break;
-      case KeyCodes.LEFT:
+      case 'ArrowLeft':
         handled = this.selectParent_();
         break;
-      case KeyCodes.RIGHT:
+      case 'ArrowRight':
         handled = this.selectChild_();
         break;
-      case KeyCodes.ENTER:
-      case KeyCodes.SPACE:
+      case 'Enter':
+      case ' ':
         if (this.selectedItem_ && this.selectedItem_.isCollapsible()) {
           const collapsibleItem = this.selectedItem_ as ICollapsibleToolboxItem;
           collapsibleItem.toggleExpanded();

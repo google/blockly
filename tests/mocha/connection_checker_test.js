@@ -386,7 +386,7 @@ suite('Connection checker', function() {
       });
 
       test('Connect to unconnected unmovable block', function() {
-        // Delete blockA.
+        this.blockB.previousConnection.disconnect();
         this.blockA.dispose();
 
         // Try to connect blockC above blockB.
@@ -436,7 +436,7 @@ suite('Connection checker', function() {
       });
 
       test('Connect to unconnected unmovable block', function() {
-        // Delete blockA
+        this.blockB.outputConnection.disconnect();
         this.blockA.dispose();
 
         // Try to connect C's input to B's output. Allowed because B is now unconnected.

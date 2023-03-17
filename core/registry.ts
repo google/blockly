@@ -115,12 +115,12 @@ export function register<T>(
     AnyDuringMigration,
     opt_allowOverrides?: boolean): void {
   if (!(type instanceof Type) && typeof type !== 'string' ||
-      String(type).trim() === '') {
+      `${type}`.trim() === '') {
     throw Error(
         'Invalid type "' + type + '". The type must be a' +
         ' non-empty string or a Blockly.registry.Type.');
   }
-  type = String(type).toLowerCase();
+  type = `${type}`.toLowerCase();
 
   if (typeof name !== 'string' || name.trim() === '') {
     throw Error(
@@ -178,7 +178,7 @@ function validate(type: string, registryItem: Function|AnyDuringMigration) {
  * @param name The plugin's name. (Ex. field_angle, geras)
  */
 export function unregister<T>(type: string|Type<T>, name: string) {
-  type = String(type).toLowerCase();
+  type = `${type}`.toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry || !typeRegistry[name]) {
@@ -206,7 +206,7 @@ export function unregister<T>(type: string|Type<T>, name: string) {
 function getItem<T>(
     type: string|Type<T>, name: string, opt_throwIfMissing?: boolean):
     (new (...p1: AnyDuringMigration[]) => T)|null|AnyDuringMigration {
-  type = String(type).toLowerCase();
+  type = `${type}`.toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry || !typeRegistry[name]) {
@@ -233,7 +233,7 @@ function getItem<T>(
  *     otherwise.
  */
 export function hasItem<T>(type: string|Type<T>, name: string): boolean {
-  type = String(type).toLowerCase();
+  type = `${type}`.toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry) {
@@ -288,7 +288,7 @@ export function getObject<T>(
 export function getAllItems<T>(
     type: string|Type<T>, opt_cased?: boolean, opt_throwIfMissing?: boolean):
     {[key: string]: T|null|(new (...p1: AnyDuringMigration[]) => T)}|null {
-  type = String(type).toLowerCase();
+  type = `${type}`.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry) {
     const msg = `Unable to find [${type}] in the registry.`;
@@ -304,9 +304,7 @@ export function getAllItems<T>(
   }
   const nameRegistry = nameMap[type];
   const casedRegistry = Object.create(null);
-  const keys = Object.keys(typeRegistry);
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
+  for (const key of Object.keys(typeRegistry)) {
     casedRegistry[nameRegistry[key]] = typeRegistry[key];
   }
   return casedRegistry;
@@ -325,8 +323,7 @@ export function getAllItems<T>(
 export function getClassFromOptions<T>(
     type: Type<T>, options: Options, opt_throwIfMissing?: boolean):
     (new (...p1: AnyDuringMigration[]) => T)|null {
-  const typeName = type.toString();
-  const plugin = options.plugins[typeName] || DEFAULT;
+  const plugin = options.plugins[String(type)] || DEFAULT;
 
   // If the user passed in a plugin class instead of a registered plugin name.
   if (typeof plugin === 'function') {

@@ -25,6 +25,7 @@ import './events/events_var_create.js';
 
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
+import {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import {BlockDragger} from './block_dragger.js';
 import {BlockSvg} from './block_svg.js';
 import {BlocklyOptions} from './blockly_options.js';
@@ -52,19 +53,19 @@ import {DragTarget} from './drag_target.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as Events from './events/events.js';
 import * as Extensions from './extensions.js';
-import {Field, FieldValidator} from './field.js';
-import {FieldAngle, FieldAngleValidator} from './field_angle.js';
-import {FieldCheckbox, FieldCheckboxValidator} from './field_checkbox.js';
-import {FieldColour, FieldColourValidator} from './field_colour.js';
-import {FieldDropdown, FieldDropdownValidator, MenuGenerator, MenuGeneratorFunction, MenuOption} from './field_dropdown.js';
-import {FieldImage} from './field_image.js';
-import {FieldLabel} from './field_label.js';
+import {Field, FieldConfig, FieldValidator, UnattachedFieldError} from './field.js';
+import {FieldAngle, FieldAngleConfig, FieldAngleFromJsonConfig, FieldAngleValidator} from './field_angle.js';
+import {FieldCheckbox, FieldCheckboxConfig, FieldCheckboxFromJsonConfig, FieldCheckboxValidator} from './field_checkbox.js';
+import {FieldColour, FieldColourConfig, FieldColourFromJsonConfig, FieldColourValidator} from './field_colour.js';
+import {FieldDropdown, FieldDropdownConfig, FieldDropdownFromJsonConfig, FieldDropdownValidator, MenuGenerator, MenuGeneratorFunction, MenuOption} from './field_dropdown.js';
+import {FieldImage, FieldImageConfig, FieldImageFromJsonConfig} from './field_image.js';
+import {FieldLabel, FieldLabelConfig, FieldLabelFromJsonConfig} from './field_label.js';
 import {FieldLabelSerializable} from './field_label_serializable.js';
-import {FieldMultilineInput, FieldMultilineInputValidator} from './field_multilineinput.js';
-import {FieldNumber, FieldNumberValidator} from './field_number.js';
+import {FieldMultilineInput, FieldMultilineInputConfig, FieldMultilineInputFromJsonConfig, FieldMultilineInputValidator} from './field_multilineinput.js';
+import {FieldNumber, FieldNumberConfig, FieldNumberFromJsonConfig, FieldNumberValidator} from './field_number.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInput, FieldTextInputValidator} from './field_textinput.js';
-import {FieldVariable, FieldVariableValidator} from './field_variable.js';
+import {FieldTextInput, FieldTextInputConfig, FieldTextInputFromJsonConfig, FieldTextInputValidator} from './field_textinput.js';
+import {FieldVariable, FieldVariableConfig, FieldVariableFromJsonConfig, FieldVariableValidator} from './field_variable.js';
 import {Flyout} from './flyout_base.js';
 import {FlyoutButton} from './flyout_button.js';
 import {HorizontalFlyout} from './flyout_horizontal.js';
@@ -106,6 +107,7 @@ import {ISelectableToolboxItem} from './interfaces/i_selectable_toolbox_item.js'
 import {IStyleable} from './interfaces/i_styleable.js';
 import {IToolbox} from './interfaces/i_toolbox.js';
 import {IToolboxItem} from './interfaces/i_toolbox_item.js';
+import {IVariableBackedParameterModel, isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
 import {BasicCursor} from './keyboard_nav/basic_cursor.js';
@@ -160,6 +162,7 @@ import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {WorkspaceComment} from './workspace_comment.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import {resizeSvgContents as realResizeSvgContents, WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
@@ -590,6 +593,7 @@ export {BasicCursor};
 export {Block};
 export {BlocklyOptions};
 export {BlockDragger};
+export {BlockDragSurfaceSvg};
 export {BlockSvg};
 export {Blocks};
 export {Bubble};
@@ -606,24 +610,61 @@ export {Cursor};
 export {DeleteArea};
 export {DragTarget};
 export const DropDownDiv = dropDownDiv;
-export {Field, FieldValidator};
-export {FieldAngle, FieldAngleValidator};
-export {FieldCheckbox, FieldCheckboxValidator};
-export {FieldColour, FieldColourValidator};
+export {Field, FieldConfig, FieldValidator, UnattachedFieldError};
+export {
+  FieldAngle,
+  FieldAngleConfig,
+  FieldAngleFromJsonConfig,
+  FieldAngleValidator,
+};
+export {
+  FieldCheckbox,
+  FieldCheckboxConfig,
+  FieldCheckboxFromJsonConfig,
+  FieldCheckboxValidator,
+};
+export {
+  FieldColour,
+  FieldColourConfig,
+  FieldColourFromJsonConfig,
+  FieldColourValidator,
+};
 export {
   FieldDropdown,
+  FieldDropdownConfig,
+  FieldDropdownFromJsonConfig,
   FieldDropdownValidator,
   MenuGenerator,
   MenuGeneratorFunction,
   MenuOption,
 };
-export {FieldImage};
-export {FieldLabel};
+export {FieldImage, FieldImageConfig, FieldImageFromJsonConfig};
+export {FieldLabel, FieldLabelConfig, FieldLabelFromJsonConfig};
 export {FieldLabelSerializable};
-export {FieldMultilineInput, FieldMultilineInputValidator};
-export {FieldNumber, FieldNumberValidator};
-export {FieldTextInput, FieldTextInputValidator};
-export {FieldVariable, FieldVariableValidator};
+export {
+  FieldMultilineInput,
+  FieldMultilineInputConfig,
+  FieldMultilineInputFromJsonConfig,
+  FieldMultilineInputValidator,
+};
+export {
+  FieldNumber,
+  FieldNumberConfig,
+  FieldNumberFromJsonConfig,
+  FieldNumberValidator,
+};
+export {
+  FieldTextInput,
+  FieldTextInputConfig,
+  FieldTextInputFromJsonConfig,
+  FieldTextInputValidator,
+};
+export {
+  FieldVariable,
+  FieldVariableConfig,
+  FieldVariableFromJsonConfig,
+  FieldVariableValidator,
+};
 export {Flyout};
 export {FlyoutButton};
 export {FlyoutMetricsManager};
@@ -664,6 +705,7 @@ export {ISelectableToolboxItem};
 export {IStyleable};
 export {IToolbox};
 export {IToolboxItem};
+export {IVariableBackedParameterModel, isVariableBackedParameterModel};
 export {Marker};
 export {MarkerManager};
 export {Menu};
@@ -693,6 +735,7 @@ export {Workspace};
 export {WorkspaceAudio};
 export {WorkspaceComment};
 export {WorkspaceCommentSvg};
+export {WorkspaceDragSurfaceSvg};
 export {WorkspaceDragger};
 export {WorkspaceSvg};
 export {ZoomControls};

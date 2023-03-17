@@ -94,6 +94,31 @@ let content = `
   -webkit-user-select: none;
 }
 
+.blocklyWsDragSurface {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Added as a separate rule with multiple classes to make it more specific
+   than a bootstrap rule that selects svg:root. See issue #1275 for context.
+*/
+.blocklyWsDragSurface.blocklyOverflowVisible {
+  overflow: visible;
+}
+
+.blocklyBlockDragSurface {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: visible !important;
+  z-index: 50;  /* Display below toolbox, but above everything else. */
+}
+
 .blocklyBlockCanvas.blocklyCanvasTransitioning,
 .blocklyBubbleCanvas.blocklyCanvasTransitioning {
   transition: transform .5s;
@@ -206,16 +231,11 @@ let content = `
 }
 
 .blocklyDraggable {
-  /* backup for browsers (e.g. IE11) that don't support grab */
-  cursor: url("<<<PATH>>>/handopen.cur"), auto;
   cursor: grab;
   cursor: -webkit-grab;
 }
 
-  /* backup for browsers (e.g. IE11) that don't support grabbing */
 .blocklyDragging {
-  /* backup for browsers (e.g. IE11) that don't support grabbing */
-  cursor: url("<<<PATH>>>/handclosed.cur"), auto;
   cursor: grabbing;
   cursor: -webkit-grabbing;
 }
@@ -223,8 +243,14 @@ let content = `
   /* Changes cursor on mouse down. Not effective in Firefox because of
      https://bugzilla.mozilla.org/show_bug.cgi?id=771241 */
 .blocklyDraggable:active {
-  /* backup for browsers (e.g. IE11) that don't support grabbing */
-  cursor: url("<<<PATH>>>/handclosed.cur"), auto;
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+}
+
+/* Change the cursor on the whole drag surface in case the mouse gets
+   ahead of block during a drag. This way the cursor is still a closed hand.
+  */
+.blocklyBlockDragSurface .blocklyDraggable {
   cursor: grabbing;
   cursor: -webkit-grabbing;
 }
@@ -281,7 +307,8 @@ let content = `
   Don't allow users to select text.  It gets annoying when trying to
   drag a block and selected text moves instead.
 */
-.blocklySvg text {
+.blocklySvg text,
+.blocklyBlockDragSurface text {
   user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;
@@ -333,11 +360,15 @@ let content = `
   box-sizing: border-box;
 }
 
-/* Edge and IE introduce a close icon when the input value is longer than a
-   certain length. This affects our sizing calculations of the text input.
-   Hiding the close icon to avoid that. */
-.blocklyHtmlInput::-ms-clear {
-  display: none;
+/* Remove the increase and decrease arrows on the field number editor */
+input.blocklyHtmlInput[type=number]::-webkit-inner-spin-button,
+input.blocklyHtmlInput[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .blocklyMainBackground {

@@ -161,14 +161,14 @@ suite('Angle Fields', function() {
         const field = new Blockly.FieldAngle(0, null, {
           clockwise: true,
         });
-        chai.assert.isTrue(field.clockwise_);
+        chai.assert.isTrue(field.clockwise);
       });
       test('JSON Definition', function() {
         const field = Blockly.FieldAngle.fromJson({
           value: 0,
           clockwise: true,
         });
-        chai.assert.isTrue(field.clockwise_);
+        chai.assert.isTrue(field.clockwise);
       });
       test('Constant', function() {
         // Note: Generally constants should be set at compile time, not
@@ -176,7 +176,7 @@ suite('Angle Fields', function() {
         // can do this.
         Blockly.FieldAngle.CLOCKWISE = true;
         const field = new Blockly.FieldAngle();
-        chai.assert.isTrue(field.clockwise_);
+        chai.assert.isTrue(field.clockwise);
       });
     });
     suite('Offset', function() {
@@ -184,14 +184,14 @@ suite('Angle Fields', function() {
         const field = new Blockly.FieldAngle(0, null, {
           offset: 90,
         });
-        chai.assert.equal(field.offset_, 90);
+        chai.assert.equal(field.offset, 90);
       });
       test('JSON Definition', function() {
         const field = Blockly.FieldAngle.fromJson({
           value: 0,
           offset: 90,
         });
-        chai.assert.equal(field.offset_, 90);
+        chai.assert.equal(field.offset, 90);
       });
       test('Constant', function() {
         // Note: Generally constants should be set at compile time, not
@@ -199,7 +199,7 @@ suite('Angle Fields', function() {
         // can do this.
         Blockly.FieldAngle.OFFSET = 90;
         const field = new Blockly.FieldAngle();
-        chai.assert.equal(field.offset_, 90);
+        chai.assert.equal(field.offset, 90);
       });
       test('Null', function() {
         // Note: Generally constants should be set at compile time, not
@@ -210,7 +210,7 @@ suite('Angle Fields', function() {
           value: 0,
           offset: null,
         });
-        chai.assert.equal(field.offset_, 90);
+        chai.assert.equal(field.offset, 90);
       });
     });
     suite('Wrap', function() {
@@ -218,14 +218,14 @@ suite('Angle Fields', function() {
         const field = new Blockly.FieldAngle(0, null, {
           wrap: 180,
         });
-        chai.assert.equal(field.wrap_, 180);
+        chai.assert.equal(field.wrap, 180);
       });
       test('JSON Definition', function() {
         const field = Blockly.FieldAngle.fromJson({
           value: 0,
           wrap: 180,
         });
-        chai.assert.equal(field.wrap_, 180);
+        chai.assert.equal(field.wrap, 180);
       });
       test('Constant', function() {
         // Note: Generally constants should be set at compile time, not
@@ -233,7 +233,7 @@ suite('Angle Fields', function() {
         // can do this.
         Blockly.FieldAngle.WRAP = 180;
         const field = new Blockly.FieldAngle();
-        chai.assert.equal(field.wrap_, 180);
+        chai.assert.equal(field.wrap, 180);
       });
       test('Null', function() {
         // Note: Generally constants should be set at compile time, not
@@ -244,7 +244,7 @@ suite('Angle Fields', function() {
           value: 0,
           wrap: null,
         });
-        chai.assert.equal(field.wrap_, 180);
+        chai.assert.equal(field.wrap, 180);
       });
     });
     suite('Round', function() {
@@ -252,14 +252,14 @@ suite('Angle Fields', function() {
         const field = new Blockly.FieldAngle(0, null, {
           round: 30,
         });
-        chai.assert.equal(field.round_, 30);
+        chai.assert.equal(field.round, 30);
       });
       test('JSON Definition', function() {
         const field = Blockly.FieldAngle.fromJson({
           value: 0,
           round: 30,
         });
-        chai.assert.equal(field.round_, 30);
+        chai.assert.equal(field.round, 30);
       });
       test('Constant', function() {
         // Note: Generally constants should be set at compile time, not
@@ -267,7 +267,7 @@ suite('Angle Fields', function() {
         // can do this.
         Blockly.FieldAngle.ROUND = 30;
         const field = new Blockly.FieldAngle();
-        chai.assert.equal(field.round_, 30);
+        chai.assert.equal(field.round, 30);
       });
       test('Null', function() {
         // Note: Generally constants should be set at compile time, not
@@ -278,7 +278,7 @@ suite('Angle Fields', function() {
           value: 0,
           round: null,
         });
-        chai.assert.equal(field.round_, 30);
+        chai.assert.equal(field.round, 30);
       });
     });
     suite('Mode', function() {
@@ -287,16 +287,16 @@ suite('Angle Fields', function() {
           const field = new Blockly.FieldAngle(0, null, {
             mode: 'compass',
           });
-          chai.assert.equal(field.offset_, 90);
-          chai.assert.isTrue(field.clockwise_);
+          chai.assert.equal(field.offset, 90);
+          chai.assert.isTrue(field.clockwise);
         });
         test('JS Configuration', function() {
           const field = Blockly.FieldAngle.fromJson({
             value: 0,
             mode: 'compass',
           });
-          chai.assert.equal(field.offset_, 90);
-          chai.assert.isTrue(field.clockwise_);
+          chai.assert.equal(field.offset, 90);
+          chai.assert.isTrue(field.clockwise);
         });
       });
       suite('Protractor', function() {
@@ -304,16 +304,16 @@ suite('Angle Fields', function() {
           const field = new Blockly.FieldAngle(0, null, {
             mode: 'protractor',
           });
-          chai.assert.equal(field.offset_, 0);
-          chai.assert.isFalse(field.clockwise_);
+          chai.assert.equal(field.offset, 0);
+          chai.assert.isFalse(field.clockwise);
         });
         test('JS Configuration', function() {
           const field = Blockly.FieldAngle.fromJson({
             value: 0,
             mode: 'protractor',
           });
-          chai.assert.equal(field.offset_, 0);
-          chai.assert.isFalse(field.clockwise_);
+          chai.assert.equal(field.offset, 0);
+          chai.assert.isFalse(field.clockwise);
         });
       });
     });

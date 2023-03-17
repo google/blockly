@@ -12,6 +12,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Bubble');
 
+import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import type {IBubble} from './interfaces/i_bubble.js';
@@ -217,27 +218,26 @@ export class Bubble implements IBubble {
                                            'blocklyResizeSE',
           },
           this.bubbleGroup);
-      const resizeSize = 2 * Bubble.BORDER_WIDTH;
+      const size = 2 * Bubble.BORDER_WIDTH;
       dom.createSvgElement(
-          Svg.POLYGON,
-          {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
+          Svg.POLYGON, {'points': `0,${size} ${size},${size} ${size},0`},
           this.resizeGroup);
       dom.createSvgElement(
           Svg.LINE, {
             'class': 'blocklyResizeLine',
-            'x1': resizeSize / 3,
-            'y1': resizeSize - 1,
-            'x2': resizeSize - 1,
-            'y2': resizeSize / 3,
+            'x1': size / 3,
+            'y1': size - 1,
+            'x2': size - 1,
+            'y2': size / 3,
           },
           this.resizeGroup);
       dom.createSvgElement(
           Svg.LINE, {
             'class': 'blocklyResizeLine',
-            'x1': resizeSize * 2 / 3,
-            'y1': resizeSize - 1,
-            'x2': resizeSize - 1,
-            'y2': resizeSize * 2 / 3,
+            'x1': size * 2 / 3,
+            'y1': size - 1,
+            'x2': size - 1,
+            'y2': size * 2 / 3,
           },
           this.resizeGroup);
     } else {
@@ -659,8 +659,8 @@ export class Bubble implements IBubble {
     height = Math.max(height, doubleBorderWidth + 20);
     this.width = width;
     this.height = height;
-    this.bubbleBack?.setAttribute('width', width.toString());
-    this.bubbleBack?.setAttribute('height', height.toString());
+    this.bubbleBack?.setAttribute('width', `${width}`);
+    this.bubbleBack?.setAttribute('height', `${height}`);
     if (this.resizeGroup) {
       if (this.workspace_.RTL) {
         // Mirror the resize group.
@@ -782,13 +782,20 @@ export class Bubble implements IBubble {
   }
 
   /**
-   * Move this bubble during a drag.
+   * Move this bubble during a drag, taking into account whether or not there is
+   * a drag surface.
    *
+   * @param dragSurface The surface that carries rendered items during a drag,
+   *     or null if no drag surface is in use.
    * @param newLoc The location to translate to, in workspace coordinates.
    * @internal
    */
-  moveDuringDrag(newLoc: Coordinate) {
-    this.moveTo(newLoc.x, newLoc.y);
+  moveDuringDrag(dragSurface: BlockDragSurfaceSvg, newLoc: Coordinate) {
+    if (dragSurface) {
+      dragSurface.translateSurface(newLoc.x, newLoc.y);
+    } else {
+      this.moveTo(newLoc.x, newLoc.y);
+    }
     if (this.workspace_.RTL) {
       this.relativeLeft = this.anchorXY.x - newLoc.x - this.width;
     } else {
@@ -893,8 +900,7 @@ export class Bubble implements IBubble {
            textElement = paragraphElement.childNodes[i] as SVGTSpanElement;
            i++) {
         textElement.setAttribute('text-anchor', 'end');
-        textElement.setAttribute(
-            'x', (maxWidth + Bubble.BORDER_WIDTH).toString());
+        textElement.setAttribute('x', String(maxWidth + Bubble.BORDER_WIDTH));
       }
     }
     return bubble;

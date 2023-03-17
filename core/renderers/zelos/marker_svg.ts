@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Methods for graphically rendering a marker as SVG.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.MarkerSvg');
 
@@ -92,8 +87,8 @@ export class MarkerSvg extends BaseMarkerSvg {
    * @param y The y position of the circle.
    */
   private positionCircle_(x: number, y: number) {
-    this.markerCircle_?.setAttribute('cx', x.toString());
-    this.markerCircle_?.setAttribute('cy', y.toString());
+    this.markerCircle_?.setAttribute('cx', `${x}`);
+    this.markerCircle_?.setAttribute('cy', `${y}`);
     this.currentMarkerSvg = this.markerCircle_;
   }
 

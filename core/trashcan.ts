@@ -447,7 +447,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     // Linear interpolation between min and max.
     const opacity = OPACITY_MIN + this.lidOpen_ * (OPACITY_MAX - OPACITY_MIN);
     if (this.svgGroup_) {
-      this.svgGroup_.style.opacity = opacity.toString();
+      this.svgGroup_.style.opacity = `${opacity}`;
     }
 
     if (this.lidOpen_ > this.minOpenness_ && this.lidOpen_ < 1) {

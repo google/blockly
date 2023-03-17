@@ -6,6 +6,7 @@
 goog.declareModuleId('Blockly.test.helpers.procedures');
 
 import {ConnectionType} from '../../../build/src/core/connection_type.js';
+import {VariableModel} from '../../../build/src/core/variable_model.js';
 
 
 /**
@@ -150,9 +151,9 @@ export function createProcCallBlock(
 }
 
 export class MockProcedureModel {
-  constructor() {
+  constructor(name = '') {
     this.id = Blockly.utils.idGenerator.genUid();
-    this.name = '';
+    this.name = name;
     this.parameters = [];
     this.returnTypes = null;
     this.enabled = true;
@@ -239,5 +240,16 @@ export class MockParameterModel {
 
   getId() {
     return this.id;
+  }
+}
+
+export class MockParameterModelWithVar extends MockParameterModel {
+  constructor(name, workspace) {
+    super(name);
+    this.variable = new VariableModel(workspace, name);
+  }
+
+  getVariableModel() {
+    return this.variable;
   }
 }

@@ -133,6 +133,11 @@ export class InsertionMarkerManager {
     this.firstMarker = this.createMarkerBlock(this.topBlock);
 
     this.availableConnections = this.initAvailableConnections();
+
+    if (this.lastOnStack) {
+      this.lastMarker =
+          this.createMarkerBlock(this.lastOnStack.getSourceBlock());
+    }
   }
 
   /**
@@ -142,18 +147,8 @@ export class InsertionMarkerManager {
    */
   dispose() {
     this.availableConnections.length = 0;
-
-    eventUtils.disable();
-    try {
-      if (this.firstMarker) {
-        this.firstMarker.dispose();
-      }
-      if (this.lastMarker) {
-        this.lastMarker.dispose();
-      }
-    } finally {
-      eventUtils.enable();
-    }
+    this.disposeInsertionMarker(this.firstMarker);
+    this.disposeInsertionMarker(this.lastMarker);
   }
 
   /**
@@ -185,21 +180,22 @@ export class InsertionMarkerManager {
    */
   applyConnections() {
     if (!this.activeCandidate) return;
-    // Don't fire events for insertion markers.
+    const {local, closest} = this.activeCandidate;
+    local.connect(closest);
     eventUtils.disable();
     this.hidePreview();
     eventUtils.enable();
-    const {local, closest} = this.activeCandidate;
-    // Connect two blocks together.
-    local.connect(closest);
     if (this.topBlock.rendered) {
-      // Trigger a connection animation.
-      // Determine which connection is inferior (lower in the source stack).
       const inferiorConnection = local.isSuperior() ? closest : local;
       blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
-      // Bring the just-edited stack to the front.
       const rootBlock = this.topBlock.getRootBlock();
-      rootBlock.bringToFront();
+
+      // bringToFront is incredibly expensive. Delay by at least a frame.
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          rootBlock.bringToFront();
+        }, 0);
+      });
     }
   }
 
@@ -287,10 +283,8 @@ export class InsertionMarkerManager {
   }
 
   /**
-   * Populate the list of available connections on this block stack.  This
-   * should only be called once, at the beginning of a drag. If the stack has
-   * more than one block, this function will populate lastOnStack and create
-   * the corresponding insertion marker.
+   * Populate the list of available connections on this block stack. If the
+   * stack has more than one block, this function will also update lastOnStack.
    *
    * @returns A list of available connections.
    */
@@ -301,15 +295,6 @@ export class InsertionMarkerManager {
     if (lastOnStack && lastOnStack !== this.topBlock.nextConnection) {
       available.push(lastOnStack);
       this.lastOnStack = lastOnStack;
-      if (this.lastMarker) {
-        eventUtils.disable();
-        try {
-          this.lastMarker.dispose();
-        } finally {
-          eventUtils.enable();
-        }
-      }
-      this.lastMarker = this.createMarkerBlock(lastOnStack.getSourceBlock());
     }
     return available;
   }
@@ -559,8 +544,17 @@ export class InsertionMarkerManager {
       // probably recreate the marker block (e.g. in getCandidate_), which is
       // called more often during the drag, but creating a block that often
       // might be too slow, so we only do it if necessary.
-      this.firstMarker = this.createMarkerBlock(this.topBlock);
-      insertionMarker = isLastInStack ? this.lastMarker : this.firstMarker;
+      if (isLastInStack && this.lastOnStack) {
+        this.disposeInsertionMarker(this.lastMarker);
+        this.lastMarker =
+            this.createMarkerBlock(this.lastOnStack.getSourceBlock());
+        insertionMarker = this.lastMarker;
+      } else {
+        this.disposeInsertionMarker(this.firstMarker);
+        this.firstMarker = this.createMarkerBlock(this.topBlock);
+        insertionMarker = this.firstMarker;
+      }
+
       if (!insertionMarker) {
         throw new Error(
             'Cannot show the insertion marker because there is no insertion ' +
@@ -609,38 +603,16 @@ export class InsertionMarkerManager {
 
     const markerConn = this.markerConnection;
     const imBlock = markerConn.getSourceBlock();
-    const markerNext = imBlock.nextConnection;
     const markerPrev = imBlock.previousConnection;
     const markerOutput = imBlock.outputConnection;
 
-    const isNext = markerConn === markerNext;
-
-    const isFirstInStatementStack =
-        isNext && !(markerPrev && markerPrev.targetConnection);
-
-    const isFirstInOutputStack =
-        markerConn.type === ConnectionType.INPUT_VALUE &&
-        !(markerOutput && markerOutput.targetConnection);
-    // The insertion marker is the first block in a stack.  Unplug won't do
-    // anything in that case.  Instead, unplug the following block.
-    if (isFirstInStatementStack || isFirstInOutputStack) {
-      markerConn.targetBlock()!.unplug(false);
-    } else if (markerConn.type === ConnectionType.NEXT_STATEMENT && !isNext) {
-      // Inside of a C-block, first statement connection.
-      const innerConnection = markerConn.targetConnection;
-      if (innerConnection) {
-        innerConnection.getSourceBlock().unplug(false);
-      }
-
-      const previousBlockNextConnection =
-          markerPrev ? markerPrev.targetConnection : null;
-
-      imBlock.unplug(true);
-      if (previousBlockNextConnection && innerConnection) {
-        previousBlockNextConnection.connect(innerConnection);
-      }
+    if (!markerPrev?.targetConnection && !markerOutput?.targetConnection) {
+      // If we are the top block, unplugging doesn't do anything.
+      // The marker connection may not have a target block if we are hiding
+      // as part of applying connections.
+      markerConn.targetBlock()?.unplug(false);
     } else {
-      imBlock.unplug(/* healStack */ true);
+      imBlock.unplug(true);
     }
 
     if (markerConn.targetConnection) {
@@ -725,6 +697,20 @@ export class InsertionMarkerManager {
       result.push(this.lastMarker);
     }
     return result;
+  }
+
+  /**
+   * Safely disposes of an insertion marker.
+   */
+  private disposeInsertionMarker(marker: BlockSvg|null) {
+    if (marker) {
+      eventUtils.disable();
+      try {
+        marker.dispose();
+      } finally {
+        eventUtils.enable();
+      }
+    }
   }
 }
 

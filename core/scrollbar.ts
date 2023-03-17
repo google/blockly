@@ -223,12 +223,12 @@ export class Scrollbar {
       this.svgBackground.setAttribute('height', String(scrollbarThickness));
       this.outerSvg.setAttribute('height', String(scrollbarThickness));
       this.svgHandle.setAttribute('height', String(scrollbarThickness - 5));
-      this.svgHandle.setAttribute('y', String(2.5));
+      this.svgHandle.setAttribute('y', '2.5');
     } else {
       this.svgBackground.setAttribute('width', String(scrollbarThickness));
       this.outerSvg.setAttribute('width', String(scrollbarThickness));
       this.svgHandle.setAttribute('width', String(scrollbarThickness - 5));
-      this.svgHandle.setAttribute('x', String(2.5));
+      this.svgHandle.setAttribute('x', '2.5');
     }
   }
 
@@ -713,6 +713,11 @@ export class Scrollbar {
     // Look up the current translation and record it.
     this.startDragHandle = this.handlePosition;
 
+    // Tell the workspace to setup its drag surface since it is about to move.
+    // onMouseMoveHandle will call onScroll which actually tells the workspace
+    // to move.
+    this.workspace.setupDragSurface();
+
     // Record the current mouse position.
     this.startDragMouse = this.horizontal ? e.clientX : e.clientY;
     this.onMouseUpWrapper_ = browserEvents.conditionalBind(
@@ -739,6 +744,8 @@ export class Scrollbar {
 
   /** Release the scrollbar handle and reset state accordingly. */
   private onMouseUpHandle() {
+    // Tell the workspace to clean up now that the workspace is done moving.
+    this.workspace.resetDragSurface();
     Touch.clearTouchIdentifier();
     this.cleanUp();
   }

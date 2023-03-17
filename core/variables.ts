@@ -14,7 +14,9 @@ goog.declareModuleId('Blockly.Variables');
 
 import {Blocks} from './blocks.js';
 import * as dialog from './dialog.js';
+import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
 import {Msg} from './msg.js';
+import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.js';
 import * as utilsXml from './utils/xml.js';
 import {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
@@ -249,32 +251,28 @@ export function createVariableButtonHandler(
   // This function needs to be named so it can be called recursively.
   function promptAndCheckWithAlert(defaultName: string) {
     promptName(Msg['NEW_VARIABLE_TITLE'], defaultName, function(text) {
-      if (text) {
-        const existing = nameUsedWithAnyType(text, workspace);
-        if (existing) {
-          let msg;
-          if (existing.type === type) {
-            msg = Msg['VARIABLE_ALREADY_EXISTS'].replace('%1', existing.name);
-          } else {
-            msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
-            msg = msg.replace('%1', existing.name).replace('%2', existing.type);
-          }
-          dialog.alert(msg, function() {
-            promptAndCheckWithAlert(text);
-          });
-        } else {
-          // No conflict
-          workspace.createVariable(text, type);
-          if (opt_callback) {
-            opt_callback(text);
-          }
-        }
-      } else {
-        // User canceled prompt.
-        if (opt_callback) {
-          opt_callback(null);
-        }
+      if (!text) {  // User canceled prompt.
+        if (opt_callback) opt_callback(null);
+        return;
       }
+
+      const existing = nameUsedWithAnyType(text, workspace);
+      if (!existing) {  // No conflict
+        workspace.createVariable(text, type);
+        if (opt_callback) opt_callback(text);
+        return;
+      }
+
+      let msg;
+      if (existing.type === type) {
+        msg = Msg['VARIABLE_ALREADY_EXISTS'].replace('%1', existing.name);
+      } else {
+        msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
+        msg = msg.replace('%1', existing.name).replace('%2', existing.type);
+      }
+      dialog.alert(msg, function() {
+        promptAndCheckWithAlert(text);
+      });
     });
   }
   promptAndCheckWithAlert('');
@@ -299,28 +297,33 @@ export function renameVariable(
     const promptText =
         Msg['RENAME_VARIABLE_TITLE'].replace('%1', variable.name);
     promptName(promptText, defaultName, function(newName) {
-      if (newName) {
-        const existing =
-            nameUsedWithOtherType(newName, variable.type, workspace);
-        if (existing) {
-          const msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
-                          .replace('%1', existing.name)
-                          .replace('%2', existing.type);
-          dialog.alert(msg, function() {
-            promptAndCheckWithAlert(newName);
-          });
-        } else {
-          workspace.renameVariableById(variable.getId(), newName);
-          if (opt_callback) {
-            opt_callback(newName);
-          }
-        }
-      } else {
-        // User canceled prompt.
-        if (opt_callback) {
-          opt_callback(null);
-        }
+      if (!newName) {  // User canceled prompt.
+        if (opt_callback) opt_callback(null);
+        return;
       }
+
+      const existing = nameUsedWithOtherType(newName, variable.type, workspace);
+      const procedure =
+          nameUsedWithConflictingParam(variable.name, newName, workspace);
+      if (!existing && !procedure) {  // No conflict.
+        workspace.renameVariableById(variable.getId(), newName);
+        if (opt_callback) opt_callback(newName);
+        return;
+      }
+
+      let msg = '';
+      if (existing) {
+        msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
+                  .replace('%1', existing.name)
+                  .replace('%2', existing.type);
+      } else if (procedure) {
+        msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER']
+                  .replace('%1', newName)
+                  .replace('%2', procedure);
+      }
+      dialog.alert(msg, function() {
+        promptAndCheckWithAlert(newName);
+      });
     });
   }
   promptAndCheckWithAlert('');
@@ -389,6 +392,68 @@ export function nameUsedWithAnyType(
     if (variable.name.toLowerCase() === name) {
       return variable;
     }
+  }
+  return null;
+}
+
+/**
+ * Returns the name of the procedure with a conflicting parameter name, or null
+ * if one does not exist.
+ *
+ * This checks the procedure map if it contains models, and the legacy procedure
+ * blocks otherwise.
+ *
+ * @param oldName The old name of the variable.
+ * @param newName The proposed name of the variable.
+ * @param workspace The workspace to search for conflicting parameters.
+ * @internal
+ */
+export function nameUsedWithConflictingParam(
+    oldName: string, newName: string, workspace: Workspace): string|null {
+  return workspace.getProcedureMap().getProcedures().length ?
+      checkForConflictingParamWithProcedureModels(oldName, newName, workspace) :
+      checkForConflictingParamWithLegacyProcedures(oldName, newName, workspace);
+}
+
+/**
+ * Returns the name of the procedure model with a conflicting param name, or
+ * null if one does not exist.
+ */
+function checkForConflictingParamWithProcedureModels(
+    oldName: string, newName: string, workspace: Workspace): string|null {
+  oldName = oldName.toLowerCase();
+  newName = newName.toLowerCase();
+
+  const procedures = workspace.getProcedureMap().getProcedures();
+  for (const procedure of procedures) {
+    const params = procedure.getParameters()
+                       .filter(isVariableBackedParameterModel)
+                       .map((param) => param.getVariableModel().name);
+    if (!params) continue;
+    const procHasOld = params.some((param) => param.toLowerCase() === oldName);
+    const procHasNew = params.some((param) => param.toLowerCase() === newName);
+    if (procHasOld && procHasNew) return procedure.getName();
+  }
+  return null;
+}
+
+/**
+ * Returns the name of the procedure block with a conflicting param name, or
+ * null if one does not exist.
+ */
+function checkForConflictingParamWithLegacyProcedures(
+    oldName: string, newName: string, workspace: Workspace): string|null {
+  oldName = oldName.toLowerCase();
+  newName = newName.toLowerCase();
+
+  const blocks = workspace.getAllBlocks(false);
+  for (const block of blocks) {
+    if (!isLegacyProcedureDefBlock(block)) continue;
+    const def = block.getProcedureDef();
+    const params = def[1];
+    const blockHasOld = params.some((param) => param.toLowerCase() === oldName);
+    const blockHasNew = params.some((param) => param.toLowerCase() === newName);
+    if (blockHasOld && blockHasNew) return def[0];
   }
   return null;
 }

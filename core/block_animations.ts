@@ -39,6 +39,9 @@ let wobblingBlock: BlockSvg|null = null;
  * @internal
  */
 export function disposeUiEffect(block: BlockSvg) {
+  // Disposing is going to take so long the animation won't play anyway.
+  if (block.getDescendants(false).length > 100) return;
+
   const workspace = block.workspace;
   const svgGroup = block.getSvgRoot();
   workspace.getAudioManager().play('delete');
@@ -133,8 +136,8 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
   if (percent > 1) {
     dom.removeNode(ripple);
   } else {
-    ripple.setAttribute('r', (percent * 25 * scale).toString());
-    ripple.style.opacity = (1 - percent).toString();
+    ripple.setAttribute('r', String(percent * 25 * scale));
+    ripple.style.opacity = String(1 - percent);
     disconnectPid = setTimeout(connectionUiStep, 10, ripple, start, scale);
   }
 }

@@ -103,7 +103,7 @@ export class ShortcutRegistry {
   addKeyMapping(
       keyCode: string|number|KeyCodes, shortcutName: string,
       opt_allowCollision?: boolean) {
-    keyCode = String(keyCode);
+    keyCode = `${keyCode}`;
     const shortcutNames = this.keyMap.get(keyCode);
     if (shortcutNames && !opt_allowCollision) {
       throw new Error(`Shortcut named "${
@@ -280,7 +280,7 @@ export class ShortcutRegistry {
     if (serializedKey !== '' && e.keyCode) {
       serializedKey = serializedKey + '+' + e.keyCode;
     } else if (e.keyCode) {
-      serializedKey = e.keyCode.toString();
+      serializedKey = String(e.keyCode);
     }
     return serializedKey;
   }
@@ -327,7 +327,7 @@ export class ShortcutRegistry {
     if (serializedKey !== '' && keyCode) {
       serializedKey = serializedKey + '+' + keyCode;
     } else if (keyCode) {
-      serializedKey = keyCode.toString();
+      serializedKey = `${keyCode}`;
     }
     return serializedKey;
   }

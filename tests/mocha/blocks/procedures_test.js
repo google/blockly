@@ -7,7 +7,7 @@
 goog.declareModuleId('Blockly.test.procedures');
 
 import * as Blockly from '../../../build/src/core/blockly.js';
-import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} from '../test_helpers/procedures.js';
+import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock, MockProcedureModel} from '../test_helpers/procedures.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from '../test_helpers/setup_teardown.js';
 import {defineRowBlock} from '../test_helpers/block_definitions.js';
@@ -49,9 +49,9 @@ suite('Procedures', function() {
               createProcDefBlock(this.workspace, undefined, undefined, 'procB');
           const callBlockB =
               createProcCallBlock(this.workspace, undefined, 'procB');
-    
+
           defBlockB.setFieldValue('procA', 'NAME');
-    
+
           chai.assert.notEqual(
             defBlockB.getFieldValue('NAME'),
             'procA',
@@ -82,7 +82,7 @@ suite('Procedures', function() {
             },
             mutatorWorkspace);
           this.clock.runAll();
-          
+
           const newFlyoutParamName =
               mutatorWorkspace.getFlyout().getWorkspace().getTopBlocks(true)[0]
                   .getFieldValue('NAME');
@@ -167,7 +167,7 @@ suite('Procedures', function() {
 
           this.workspace.undo();
           this.workspace.undo(/* redo= */ true);
-    
+
           chai.assert.isNotNull(
             defBlock.getField('PARAMS'),
             'Expected the params field to exist');
@@ -252,10 +252,10 @@ suite('Procedures', function() {
           this.clock.runAll();
           paramBlock.checkAndDelete();
           this.clock.runAll();
-    
+
           this.workspace.undo();
           this.workspace.undo(/* redo= */ true);
-    
+
           chai.assert.isFalse(
             defBlock.getFieldValue('PARAMS').includes('param1'),
             'Expected the params field to not contain the name of the new param');
@@ -300,10 +300,10 @@ suite('Procedures', function() {
               .connect(paramBlock1.previousConnection);
           paramBlock1.nextConnection.connect(paramBlock2.previousConnection);
           this.clock.runAll();
-    
+
           paramBlock1.setFieldValue('new name', 'NAME');
           this.clock.runAll();
-    
+
           chai.assert.isNotNull(
             defBlock.getField('PARAMS'),
             'Expected the params field to exist');
@@ -349,10 +349,10 @@ suite('Procedures', function() {
           paramBlock.setFieldValue('param1', 'NAME');
           containerBlock.getInput('STACK').connection.connect(paramBlock.previousConnection);
           this.clock.runAll();
-    
+
           paramBlock.setFieldValue('param2', 'NAME');
           this.clock.runAll();
-    
+
           chai.assert.isNotNull(
               this.workspace.getVariable('param1', ''),
               'Expected the old variable to continue to exist');
@@ -372,10 +372,10 @@ suite('Procedures', function() {
               .connect(paramBlock.previousConnection);
           this.clock.runAll();
           defBlock.mutator.setVisible(false);
-    
+
           const variable = this.workspace.getVariable('param1', '');
           this.workspace.renameVariableById(variable.getId(), 'new name');
-    
+
           chai.assert.isNotNull(
               defBlock.getField('PARAMS'),
               'Expected the params field to exist');
@@ -397,10 +397,10 @@ suite('Procedures', function() {
           containerBlock.getInput('STACK').connection
               .connect(paramBlock.previousConnection);
           this.clock.runAll();
-    
+
           const variable = this.workspace.getVariable('param1', '');
           this.workspace.renameVariableById(variable.getId(), 'new name');
-    
+
           chai.assert.equal(
               paramBlock.getFieldValue('NAME'),
               'new name',
@@ -422,7 +422,7 @@ suite('Procedures', function() {
               .connect(paramBlock.previousConnection);
           this.clock.runAll();
           defBlock.mutator.setVisible(false);
-    
+
           const variable = this.workspace.getVariable('param1', '');
           this.workspace.renameVariableById(variable.getId(), 'new name');
 
@@ -449,10 +449,10 @@ suite('Procedures', function() {
               .connect(paramBlock.previousConnection);
           this.clock.runAll();
           defBlock.mutator.setVisible(false);
-    
+
           const variable = this.workspace.getVariable('param1', '');
           this.workspace.renameVariableById(variable.getId(), 'preCreatedVar');
-    
+
           chai.assert.isNotNull(
               defBlock.getField('PARAMS'),
               'Expected the params field to exist');
@@ -474,10 +474,10 @@ suite('Procedures', function() {
           containerBlock.getInput('STACK').connection
               .connect(paramBlock.previousConnection);
           this.clock.runAll();
-    
+
           const variable = this.workspace.getVariable('param1', '');
           this.workspace.renameVariableById(variable.getId(), 'preCreatedVar');
-    
+
           chai.assert.equal(
               paramBlock.getFieldValue('NAME'),
               'preCreatedVar',
@@ -499,7 +499,7 @@ suite('Procedures', function() {
               .connect(paramBlock.previousConnection);
           this.clock.runAll();
           defBlock.mutator.setVisible(false);
-    
+
           const variable = this.workspace.getVariable('param1', '');
           this.workspace.renameVariableById(variable.getId(), 'preCreatedVar');
 
@@ -541,6 +541,7 @@ suite('Procedures', function() {
           Blockly.Events.setGroup(false);
 
           this.workspace.undo();
+          this.clock.runAll();
 
           chai.assert.isTrue(
             defBlock.getFieldValue('PARAMS').includes('param1'),
@@ -570,7 +571,7 @@ suite('Procedures', function() {
 
           this.workspace.undo();
           this.workspace.undo(/* redo= */ true);
-    
+
           chai.assert.isTrue(
             defBlock.getFieldValue('PARAMS').includes('new'),
             'Expected the params field to contain the new name of the param');
@@ -670,14 +671,14 @@ suite('Procedures', function() {
               .connect(block1.outputConnection);
           callBlock.getInput('ARG1').connection
               .connect(block2.outputConnection);
-    
+
           // Reorder the parameters.
           paramBlock2.previousConnection.disconnect();
           paramBlock1.previousConnection.disconnect();
           containerBlock.getInput('STACK').connection.connect(paramBlock2.previousConnection);
           paramBlock2.nextConnection.connect(paramBlock1.previousConnection);
           this.clock.runAll();
-    
+
           chai.assert.equal(
             callBlock.getInputTargetBlock('ARG0'),
             block2,
@@ -1083,10 +1084,35 @@ suite('Procedures', function() {
   });
 
   suite('isNameUsed', function() {
-    test('No Blocks', function() {
+    test('returns false if no blocks or models exists', function() {
       chai.assert.isFalse(
-          Blockly.Procedures.isNameUsed('name1', this.workspace)
-      );
+          Blockly.Procedures.isNameUsed('proc name', this.workspace));
+    });
+
+    test('returns true if an associated block exists', function() {
+      createProcDefBlock(this.workspace, false, [], 'proc name');
+      chai.assert.isTrue(
+          Blockly.Procedures.isNameUsed('proc name', this.workspace));
+    });
+
+    test('return false if an associated block does not exist', function() {
+      createProcDefBlock(this.workspace, false, [], 'proc name');
+      chai.assert.isFalse(
+          Blockly.Procedures.isNameUsed('other proc name', this.workspace));
+    });
+
+    test('returns true if an associated procedure model exists', function() {
+      this.workspace.getProcedureMap()
+          .add(new MockProcedureModel().setName('proc name'));
+      chai.assert.isTrue(
+          Blockly.Procedures.isNameUsed('proc name', this.workspace));
+    });
+
+    test('returns false if an associated procedure model exists', function() {
+      this.workspace.getProcedureMap()
+          .add(new MockProcedureModel().setName('proc name'));
+      chai.assert.isFalse(
+          Blockly.Procedures.isNameUsed('other proc name', this.workspace));
     });
   });
 
@@ -1271,22 +1297,6 @@ suite('Procedures', function() {
           this.callBlock.setFieldValue('proc name', 'NAME');
           this.clock.runAll();
           assertCallBlockStructure(this.callBlock);
-        });
-      });
-      suite('isNameUsed', function() {
-        setup(function() {
-          this.defBlock = this.workspace.newBlock(testSuite.defType);
-          this.defBlock.setFieldValue('proc name', 'NAME');
-          this.callBlock = this.workspace.newBlock(testSuite.callType);
-          this.callBlock.setFieldValue('proc name', 'NAME');
-        });
-        test('True', function() {
-          chai.assert.isTrue(
-              Blockly.Procedures.isNameUsed('proc name', this.workspace));
-        });
-        test('False', function() {
-          chai.assert.isFalse(
-              Blockly.Procedures.isNameUsed('unused proc name', this.workspace));
         });
       });
       suite('rename', function() {

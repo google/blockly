@@ -17,8 +17,7 @@ const path = require('path');
 const {execSync} = require('child_process');
 const rimraf = require('rimraf');
 
-const buildTasks = require('./build_tasks');
-const {BUILD_DIR, RELEASE_DIR} = require('./config');
+const {RELEASE_DIR, TEST_TSC_OUTPUT_DIR} = require('./config');
 
 const {runMochaTestsInBrowser} = require('../../tests/mocha/webdriver.js');
 const {runGeneratorsInBrowser} = require('../../tests/generators/webdriver.js');
@@ -60,7 +59,7 @@ function runTestTask(id, task) {
         successCount++;
         if (process.env.CI) console.log('::endgroup::');
         console.log(`${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${id}`);
-        results[id] = {success: true}; 
+        results[id] = {success: true};
         resolve(result);
       })
       .catch((err) => {
@@ -192,8 +191,8 @@ function compareSize(file, expected) {
     const message = `Failed: Previous size of ${name} is undefined.`;
     console.log(`${BOLD_RED}${message}${ANSI_RESET}`);
     return 1;
-  } 
-  
+  }
+
   if (size > compare) {
     const message = `Failed: ` +
         `Size of ${name} has grown more than 10%. ${size} vs ${expected}`;
@@ -371,6 +370,16 @@ function advancedCompileInBrowser() {
   return runTestTask('advanced_compile_in_browser', runCompileCheckInBrowser);
 }
 
+/**
+ * Verify the built Blockly type definitions compile with the supported
+ * TypeScript examples included in `./tests/typescript`.
+ * @returns {Promise} Asynchronous result.
+ */
+function typeDefinitions() {
+  return runTestCommand('type_definitions',
+    `tsc -p ./tests/typescript/tsconfig.json -outDir ${TEST_TSC_OUTPUT_DIR}`);
+}
+
 // Run all tests in sequence.
 const tasks = [
   eslint,
@@ -381,6 +390,7 @@ const tasks = [
   mocha,
   generators,
   node,
+  typeDefinitions,
   // Make sure these two are in series with each other
   advancedCompile,
   advancedCompileInBrowser

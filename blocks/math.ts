@@ -432,7 +432,9 @@ Extensions.register(
     Extensions.buildTooltipForDropdown('OP', TOOLTIPS_BY_OP));
 
 /** Type of a block that has IS_DIVISBLEBY_MUTATOR_MIXIN */
-type DivisiblebyBlock = Block|typeof IS_DIVISIBLEBY_MUTATOR_MIXIN;
+type DivisiblebyBlock = Block&DivisiblebyMixin;
+interface DivisiblebyMixin extends DivisiblebyMixinType {};
+type DivisiblebyMixinType = typeof IS_DIVISIBLEBY_MUTATOR_MIXIN;
 
 /**
  * Mixin for mutator functions in the 'math_is_divisibleby_mutator'
@@ -442,7 +444,7 @@ type DivisiblebyBlock = Block|typeof IS_DIVISIBLEBY_MUTATOR_MIXIN;
  * @augments Block
  * @package
  */
-const IS_DIVISIBLEBY_MUTATOR_MIXIN: BlockDefinition = {
+const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
   /**
    * Create XML to represent whether the 'divisorInput' should be present.
    * Backwards compatible serialization implementation.
@@ -514,13 +516,15 @@ Extensions.register(
     Extensions.buildTooltipWithFieldText('%{BKY_MATH_CHANGE_TOOLTIP}', 'VAR'));
 
 /** Type of a block that has LIST_MODES_MUTATOR_MIXIN */
-type ListModesBlock = Block|typeof LIST_MODES_MUTATOR_MIXIN;
+type ListModesBlock = Block&ListModesMixin;
+interface ListModesMixin extends ListModesMixinType {};
+type ListModesMixinType = typeof LIST_MODES_MUTATOR_MIXIN;
 
 /**
  * Mixin with mutator methods to support alternate output based if the
  * 'math_on_list' block uses the 'MODE' operation.
  */
-const LIST_MODES_MUTATOR_MIXIN: BlockDefinition = {
+const LIST_MODES_MUTATOR_MIXIN = {
   /**
    * Modify this block to have the correct output type.
    *
@@ -551,7 +555,9 @@ const LIST_MODES_MUTATOR_MIXIN: BlockDefinition = {
    * @param xmlElement XML storage element.
    */
   domToMutation: function(this: ListModesBlock, xmlElement: Element) {
-    this.updateType_(xmlElement.getAttribute('op'));
+    const op = xmlElement.getAttribute('op');
+    if (op === null) throw new TypeError('xmlElement had no op attribute');
+    this.updateType_(op);
   },
 
   // This block does not need JSO serialization hooks (saveExtraState and
@@ -566,7 +572,7 @@ const LIST_MODES_MUTATOR_MIXIN: BlockDefinition = {
  */
 const LIST_MODES_MUTATOR_EXTENSION = function(this: ListModesBlock) {
   this.getField('OP')!.setValidator(
-      function(this: typeof LIST_MODES_MUTATOR_MIXIN|Block, newOp: string) {
+      function(this: ListModesBlock, newOp: string) {
         this.updateType_(newOp);
         return undefined;
       }.bind(this));

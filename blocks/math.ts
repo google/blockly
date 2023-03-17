@@ -500,6 +500,7 @@ const IS_DIVISIBLE_MUTATOR_EXTENSION = function(this: DivisiblebyBlock) {
       function(this: FieldDropdown, option: string) {
         const divisorInput = (option === 'DIVISIBLE_BY');
         (this.getSourceBlock() as DivisiblebyBlock).updateShape_(divisorInput);
+        return undefined;  // FieldValidators can't be void.  Use option as-is.
       });
 };
 
@@ -527,9 +528,9 @@ const LIST_MODES_MUTATOR_MIXIN: BlockDefinition = {
    */
   updateType_: function(this: ListModesBlock, newOp: string) {
     if (newOp === 'MODE') {
-      this.outputConnection?.setCheck('Array');
+      this.outputConnection!.setCheck('Array');
     } else {
-      this.outputConnection?.setCheck('Number');
+      this.outputConnection!.setCheck('Number');
     }
   },
   /**

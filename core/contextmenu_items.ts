@@ -231,11 +231,16 @@ function getDeletableBlocks_(workspace: WorkspaceSvg): BlockSvg[] {
  *
  * @param deleteList List of blocks to delete.
  * @param eventGroup Event group ID with which all delete events should be
- *     associated.
+ *     associated.  If not specified, create a new group.
  */
-function deleteNext_(deleteList: BlockSvg[], eventGroup: string) {
+function deleteNext_(deleteList: BlockSvg[], eventGroup?: string) {
   const DELAY = 10;
-  eventUtils.setGroup(eventGroup);
+  if (eventGroup) {
+    eventUtils.setGroup(eventGroup);
+  } else {
+    eventUtils.setGroup(true);
+    eventGroup = eventUtils.getGroup();
+  }
   const block = deleteList.shift();
   if (block) {
     if (!block.isDeadOrDying()) {
@@ -278,17 +283,15 @@ export function registerDeleteAll() {
       }
       scope.workspace.cancelCurrentGesture();
       const deletableBlocks = getDeletableBlocks_(scope.workspace);
-      eventUtils.setGroup(true);
-      const eventGroup = eventUtils.getGroup();
       if (deletableBlocks.length < 2) {
-        deleteNext_(deletableBlocks, eventGroup);
+        deleteNext_(deletableBlocks);
       } else {
         dialog.confirm(
             Msg['DELETE_ALL_BLOCKS'].replace(
                 '%1', String(deletableBlocks.length)),
             function(ok) {
               if (ok) {
-                deleteNext_(deletableBlocks, eventGroup);
+                deleteNext_(deletableBlocks);
               }
             });
       }

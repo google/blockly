@@ -11,18 +11,13 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.colour');
 
-// import type {BlockDefinition} from '../core/blocks.js';
-// TODO (6248): Properly import the BlockDefinition type.
-/* eslint-disable-next-line no-unused-vars */
-const BlockDefinition = Object;
+import type {BlockDefinition} from '../core/blocks.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
-/** @suppress {extraRequire} */
 import '../core/field_colour.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
- * @type {!Object<string, !BlockDefinition>}
  */
 export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for colour picker.

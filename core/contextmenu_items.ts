@@ -20,7 +20,6 @@ import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
 import {inputTypes} from './input_types.js';
 import {Msg} from './msg.js';
-import * as idGenerator from './utils/idgenerator.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 
@@ -230,13 +229,18 @@ function getDeletableBlocks_(workspace: WorkspaceSvg): BlockSvg[] {
 /**
  * Deletes the given blocks. Used to delete all blocks in the workspace.
  *
- * @param deleteList list of blocks to delete.
- * @param eventGroup event group ID with which all delete events should be
- *     associated.
+ * @param deleteList List of blocks to delete.
+ * @param eventGroup Event group ID with which all delete events should be
+ *     associated.  If not specified, create a new group.
  */
-function deleteNext_(deleteList: BlockSvg[], eventGroup: string) {
+function deleteNext_(deleteList: BlockSvg[], eventGroup?: string) {
   const DELAY = 10;
-  eventUtils.setGroup(eventGroup);
+  if (eventGroup) {
+    eventUtils.setGroup(eventGroup);
+  } else {
+    eventUtils.setGroup(true);
+    eventGroup = eventUtils.getGroup();
+  }
   const block = deleteList.shift();
   if (block) {
     if (!block.isDeadOrDying()) {
@@ -277,16 +281,15 @@ export function registerDeleteAll() {
       }
       scope.workspace.cancelCurrentGesture();
       const deletableBlocks = getDeletableBlocks_(scope.workspace);
-      const eventGroup = idGenerator.genUid();
       if (deletableBlocks.length < 2) {
-        deleteNext_(deletableBlocks, eventGroup);
+        deleteNext_(deletableBlocks);
       } else {
         dialog.confirm(
             Msg['DELETE_ALL_BLOCKS'].replace(
                 '%1', String(deletableBlocks.length)),
             function(ok) {
               if (ok) {
-                deleteNext_(deletableBlocks, eventGroup);
+                deleteNext_(deletableBlocks);
               }
             });
       }
@@ -455,14 +458,12 @@ export function registerDisable() {
     },
     callback(scope: Scope) {
       const block = scope.block;
-      const group = eventUtils.getGroup();
-      if (!group) {
+      const existingGroup = eventUtils.getGroup();
+      if (!existingGroup) {
         eventUtils.setGroup(true);
       }
       block!.setEnabled(!block!.isEnabled());
-      if (!group) {
-        eventUtils.setGroup(false);
-      }
+      eventUtils.setGroup(existingGroup);
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockDisable',

@@ -289,9 +289,7 @@ export class Block implements IASTNodeLocation, IDeletable {
         eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(this));
       }
     } finally {
-      if (!existingGroup) {
-        eventUtils.setGroup(false);
-      }
+      eventUtils.setGroup(existingGroup);
       // In case init threw, recordUndo flag should still be reset.
       eventUtils.setRecordUndo(initialUndoFlag);
     }

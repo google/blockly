@@ -105,7 +105,7 @@ export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
         return;
       }
       // Handle undo.
-      const oldGroup = eventUtils.getGroup();
+      const existingGroup = eventUtils.getGroup() || false;
       eventUtils.setGroup(e.group);
 
       const wasBumped = bumpObjectIntoBounds(
@@ -116,9 +116,7 @@ export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
             'Moved object in bounds but there was no' +
             ' event group. This may break undo.');
       }
-      if (oldGroup !== null) {
-        eventUtils.setGroup(oldGroup);
-      }
+      eventUtils.setGroup(existingGroup);
     } else if (e.type === eventUtils.VIEWPORT_CHANGE) {
       const viewportEvent = (e as ViewportChange);
       if (viewportEvent.scale && viewportEvent.oldScale &&

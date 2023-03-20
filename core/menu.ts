@@ -104,7 +104,7 @@ export class Menu {
     this.mouseOverHandler = browserEvents.conditionalBind(
         element, 'pointerover', this, this.handleMouseOver, true);
     this.clickHandler = browserEvents.conditionalBind(
-        element, 'pointerdown', this, this.handleClick, true);
+        element, 'pointerup', this, this.handleClick, true);
     this.mouseEnterHandler = browserEvents.conditionalBind(
         element, 'pointerenter', this, this.handleMouseEnter, true);
     this.mouseLeaveHandler = browserEvents.conditionalBind(

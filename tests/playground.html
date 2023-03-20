@@ -115,18 +115,31 @@ function getToolboxSuffix() {
 }
 
 function getToolboxElement() {
-  var toolboxSuffix = getToolboxSuffix();
-  if (toolboxSuffix == 'test-blocks') {
-    if (typeof window.toolboxTestBlocks !== 'undefined') {
-      return toolboxTestBlocks;
-    } else {
-      alert('You need to run \'npm install\' in order to use the test blocks.');
-      toolboxSuffix = 'categories';
-    }
-  }
-  // The three possible values are: "simple", "categories",
-  // "categories-typed-variables".
-  return document.getElementById('toolbox-' + toolboxSuffix);
+  return {
+    "kind": "flyoutToolbox",
+    "contents": [
+      {
+        "kind": "block",
+        "type": "controls_if"
+      },
+      {
+        "kind": "category",
+        "custom": "VARIABLE"
+      }
+    ]
+  };
+  // var toolboxSuffix = getToolboxSuffix();
+  // if (toolboxSuffix == 'test-blocks') {
+  //   if (typeof window.toolboxTestBlocks !== 'undefined') {
+  //     return toolboxTestBlocks;
+  //   } else {
+  //     alert('You need to run \'npm install\' in order to use the test blocks.');
+  //     toolboxSuffix = 'categories';
+  //   }
+  // }
+  // // The three possible values are: "simple", "categories",
+  // // "categories-typed-variables".
+  // return document.getElementById('toolbox-' + toolboxSuffix);
 }
 
 function setToolboxDropdown() {

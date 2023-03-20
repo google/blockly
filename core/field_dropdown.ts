@@ -285,8 +285,7 @@ export class FieldDropdown extends Field<string> {
     if (this.selectedMenuItem_) {
       this.menu_!.setHighlighted(this.selectedMenuItem_);
       style.scrollIntoContainerView(
-          this.selectedMenuItem_.getElement()!,
-          dropDownDiv.getContentDiv(),
+          this.selectedMenuItem_.getElement()!, dropDownDiv.getContentDiv(),
           true);
     }
 

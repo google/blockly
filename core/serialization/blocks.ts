@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Handles serializing blocks to plain JavaScript objects only containing state.
- *
- * @namespace Blockly.serialization.blocks
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.blocks');
 

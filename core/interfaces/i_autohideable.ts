@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for a component that is automatically hidden
- * when WorkspaceSvg.hideChaff is called.
- *
- * @namespace Blockly.IAutoHideable
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IAutoHideable');
 

@@ -4,13 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Utilities for element styles.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- *
- * @namespace Blockly.utils.style
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.style');
 

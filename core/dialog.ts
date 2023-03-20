@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Wrapper functions around JS functions for showing alert/confirmation dialogs.
- *
- * @namespace Blockly.dialog
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.dialog');
 

@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for a positionable UI element.
- *
- * @namespace Blockly.IPositionable
- */
 import * as goog from '../../closure/goog/goog.js';
 import type {Rect} from '../utils/rect.js';
 import type {UiMetrics} from '../metrics_manager.js';

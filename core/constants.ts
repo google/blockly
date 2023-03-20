@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Blockly constants.
- *
- * @namespace Blockly.constants
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.constants');
 

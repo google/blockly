@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Utility methods.
- *
- * @namespace Blockly.utils
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils');
 

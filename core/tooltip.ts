@@ -4,16 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Library to create tooltips for Blockly.
- * First, call createDom() after onload.
- * Second, set the 'tooltip' property on any SVG element that needs a tooltip.
- * If the tooltip is a string, or a function that returns a string, that message
- * will be displayed. If the tooltip is an SVG element, then that object's
- * tooltip will be used. Third, call bindMouseEvents(e) passing the SVG element.
- *
- * @namespace Blockly.Tooltip
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Tooltip');
 

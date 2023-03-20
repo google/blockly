@@ -4,13 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * All the values that we expect developers to be able to change
- * before injecting Blockly. Changing these values during run time is not
- * generally recommended.
- *
- * @namespace Blockly.config
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.config');
 

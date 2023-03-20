@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/** @namespace Blockly.utils.array */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.array');
 

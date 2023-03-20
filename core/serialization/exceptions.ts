@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Contains custom errors thrown by the serialization system.
- *
- * @namespace Blockly.serialization.exceptions
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.exceptions');
 

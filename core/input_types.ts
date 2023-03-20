@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * An enum for the possible types of inputs.
- *
- * @namespace Blockly.inputTypes
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.inputTypes');
 

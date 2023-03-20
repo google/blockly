@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for a metrics manager.
- *
- * @namespace Blockly.IMetricsManager
- */
 import * as goog from '../../closure/goog/goog.js';
 import type {ContainerRegion, ToolboxMetrics, AbsoluteMetrics, UiMetrics} from '../metrics_manager.js';
 import type {Size} from '../utils/size.js';

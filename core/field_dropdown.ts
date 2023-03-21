@@ -20,6 +20,7 @@ import {Field, FieldConfig, FieldValidator, UnattachedFieldError} from './field.
 import * as fieldRegistry from './field_registry.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
+import * as style from './utils/style.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
@@ -283,6 +284,9 @@ export class FieldDropdown extends Field<string> {
 
     if (this.selectedMenuItem_) {
       this.menu_!.setHighlighted(this.selectedMenuItem_);
+      style.scrollIntoContainerView(
+          this.selectedMenuItem_.getElement()!, dropDownDiv.getContentDiv(),
+          true);
     }
 
     this.applyColour();

@@ -220,9 +220,16 @@ function fireInternal(event: Abstract) {
   }
   if (!FIRE_QUEUE.length) {
     // First event added; schedule a firing of the event queue.
-    requestAnimationFrame(() => {
+    if (requestAnimationFrame) {
+      // If we are in a browser context, we want to make sure that the event
+      // fires after blocks have been rerendered this frame.
+      requestAnimationFrame(() => {
+        setTimeout(fireNow, 0);
+      });
+    } else {
+      // Otherwise we just want to delay so events can be coallesced.
       setTimeout(fireNow, 0);
-    });
+    }
   }
   FIRE_QUEUE.push(event);
 }

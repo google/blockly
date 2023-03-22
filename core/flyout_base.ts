@@ -630,15 +630,17 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     const gaps: number[] = [];
     this.permanentlyDisabled_.length = 0;
     const defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
-    const createItem = (info: toolbox.FlyoutItemInfo) => {
+    for (const info of parsedContent) {
       if ('custom' in info) {
         const customInfo = (info as toolbox.DynamicCategoryInfo);
         const categoryName = customInfo['custom'];
         const flyoutDef = this.getDynamicCategoryContents_(categoryName);
         const parsedDynamicContent =
             toolbox.convertFlyoutDefToJsonArray(flyoutDef);
-        parsedDynamicContent.forEach(createItem);
-        return;
+        const {contents: dynamicContents, gaps: dynamicGaps} =
+            this.createFlyoutInfo_(parsedDynamicContent);
+        contents.push(...dynamicContents);
+        gaps.push(...dynamicGaps);
       }
 
       switch (info['kind'].toUpperCase()) {
@@ -670,8 +672,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
           break;
         }
       }
-    };
-    parsedContent.forEach(createItem);
+    }
 
     return {contents: contents, gaps: gaps};
   }

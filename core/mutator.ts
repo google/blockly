@@ -367,7 +367,9 @@ export class Mutator extends Icon {
       }
       this.resizeBubble();
       // When the mutator's workspace changes, update the source block.
-      ws.addChangeListener(this.workspaceChanged.bind(this));
+      const boundListener = this.workspaceChanged.bind(this);
+      ws.addChangeListener(boundListener);
+      if (flyout) flyout.getWorkspace().addChangeListener(boundListener);
       // Update the source block immediately after the bubble becomes visible.
       this.updateWorkspace();
       this.applyColour();

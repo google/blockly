@@ -570,9 +570,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
       this.workspace_.removeChangeListener(this.reflowWrapper_);
       this.reflowWrapper_ = null;
     }
+    // Do NOT delete the blocks here.  Wait until Flyout.show.
+    // https://neil.fraser.name/news/2014/08/09/
   }
-  // Do NOT delete the blocks here.  Wait until Flyout.show.
-  // https://neil.fraser.name/news/2014/08/09/
 
   /**
    * Show and populate the flyout.
@@ -630,34 +630,34 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     const gaps: number[] = [];
     this.permanentlyDisabled_.length = 0;
     const defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
-    for (let i = 0, contentInfo; contentInfo = parsedContent[i]; i++) {
-      if ('custom' in contentInfo) {
-        const customInfo = (contentInfo as toolbox.DynamicCategoryInfo);
+    for (const info of parsedContent) {
+      if ('custom' in info) {
+        const customInfo = (info as toolbox.DynamicCategoryInfo);
         const categoryName = customInfo['custom'];
         const flyoutDef = this.getDynamicCategoryContents_(categoryName);
         const parsedDynamicContent =
             toolbox.convertFlyoutDefToJsonArray(flyoutDef);
-        // Replace the element at i with the dynamic content it represents.
-        parsedContent.splice.apply(
-            parsedContent, [i, 1, ...parsedDynamicContent]);
-        contentInfo = parsedContent[i];
+        const {contents: dynamicContents, gaps: dynamicGaps} =
+            this.createFlyoutInfo_(parsedDynamicContent);
+        contents.push(...dynamicContents);
+        gaps.push(...dynamicGaps);
       }
 
-      switch (contentInfo['kind'].toUpperCase()) {
+      switch (info['kind'].toUpperCase()) {
         case 'BLOCK': {
-          const blockInfo = (contentInfo as toolbox.BlockInfo);
+          const blockInfo = (info as toolbox.BlockInfo);
           const block = this.createFlyoutBlock_(blockInfo);
           contents.push({type: FlyoutItemType.BLOCK, block: block});
           this.addBlockGap_(blockInfo, gaps, defaultGap);
           break;
         }
         case 'SEP': {
-          const sepInfo = (contentInfo as toolbox.SeparatorInfo);
+          const sepInfo = (info as toolbox.SeparatorInfo);
           this.addSeparatorGap_(sepInfo, gaps, defaultGap);
           break;
         }
         case 'LABEL': {
-          const labelInfo = (contentInfo as toolbox.LabelInfo);
+          const labelInfo = (info as toolbox.LabelInfo);
           // A label is a button with different styling.
           const label = this.createButton_(labelInfo, /** isLabel */ true);
           contents.push({type: FlyoutItemType.BUTTON, button: label});
@@ -665,7 +665,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
           break;
         }
         case 'BUTTON': {
-          const buttonInfo = (contentInfo as toolbox.ButtonInfo);
+          const buttonInfo = (info as toolbox.ButtonInfo);
           const button = this.createButton_(buttonInfo, /** isLabel */ false);
           contents.push({type: FlyoutItemType.BUTTON, button: button});
           gaps.push(defaultGap);
@@ -673,6 +673,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
         }
       }
     }
+
     return {contents: contents, gaps: gaps};
   }
 

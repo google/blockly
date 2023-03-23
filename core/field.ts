@@ -35,7 +35,6 @@ import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import {Rect} from './utils/rect.js';
-import {Sentinel} from './utils/sentinel.js';
 import {Size} from './utils/size.js';
 import * as style from './utils/style.js';
 import {Svg} from './utils/svg.js';
@@ -89,10 +88,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * field's value or run configure_, and should allow a subclass to do that
    * instead.
    */
-  static readonly SKIP_SETUP = new Sentinel();
-  static isSentinel<T>(value: T|Sentinel): value is Sentinel {
-    return value === Field.SKIP_SETUP;
-  }
+  static readonly SKIP_SETUP = Symbol('SKIP_SETUP');
 
   /**
    * Name of field.  Unique within each block.
@@ -211,7 +207,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * this parameter supports.
    */
   constructor(
-      value: T|Sentinel, validator?: FieldValidator<T>|null,
+      value: T|typeof Field.SKIP_SETUP, validator?: FieldValidator<T>|null,
       config?: FieldConfig) {
     /**
      * A generic value possessed by the field.
@@ -224,7 +220,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     /** The size of the area rendered by the field. */
     this.size_ = new Size(0, 0);
 
-    if (Field.isSentinel(value)) return;
+    if (value === Field.SKIP_SETUP) return;
     if (config) {
       this.configure_(config);
     }

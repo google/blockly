@@ -19,7 +19,6 @@ import {FieldTextInput, FieldTextInputConfig, FieldTextInputValidator} from './f
 import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
-import type {Sentinel} from './utils/sentinel.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
@@ -59,11 +58,12 @@ export class FieldMultilineInput extends FieldTextInput {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|Sentinel, validator?: FieldMultilineInputValidator,
+      value?: string|typeof Field.SKIP_SETUP,
+      validator?: FieldMultilineInputValidator,
       config?: FieldMultilineInputConfig) {
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(value)) return;
+    if (value === Field.SKIP_SETUP) return;
     if (config) {
       this.configure_(config);
     }

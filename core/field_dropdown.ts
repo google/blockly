@@ -25,7 +25,6 @@ import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
-import type {Sentinel} from './utils/sentinel.js';
 import * as utilsString from './utils/string.js';
 import {Svg} from './utils/svg.js';
 
@@ -113,16 +112,16 @@ export class FieldDropdown extends Field<string> {
       validator?: FieldDropdownValidator,
       config?: FieldDropdownConfig,
   );
-  constructor(menuGenerator: Sentinel);
+  constructor(menuGenerator: typeof Field.SKIP_SETUP);
   constructor(
-      menuGenerator: MenuGenerator|Sentinel,
+      menuGenerator: MenuGenerator|typeof Field.SKIP_SETUP,
       validator?: FieldDropdownValidator,
       config?: FieldDropdownConfig,
   ) {
     super(Field.SKIP_SETUP);
 
     // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
-    if (!isMenuGenerator(menuGenerator)) return;
+    if (menuGenerator === Field.SKIP_SETUP) return;
 
     if (Array.isArray(menuGenerator)) {
       validateOptions(menuGenerator);
@@ -689,15 +688,6 @@ const IMAGE_Y_OFFSET = 5;
 
 /** The total vertical padding above and below an image. */
 const IMAGE_Y_PADDING: number = IMAGE_Y_OFFSET * 2;
-
-/**
- * NOTE: Because Sentinel is an empty class, proving a value is Sentinel does
- * not resolve in TS that it isn't a MenuGenerator.
- */
-function isMenuGenerator(menuGenerator: MenuGenerator|
-                         Sentinel): menuGenerator is MenuGenerator {
-  return menuGenerator !== Field.SKIP_SETUP;
-}
 
 /**
  * Factor out common words in statically defined options.

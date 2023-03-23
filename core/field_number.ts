@@ -16,7 +16,6 @@ import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {FieldInput, FieldInputConfig, FieldInputValidator} from './field_input.js';
 import * as aria from './utils/aria.js';
-import type {Sentinel} from './utils/sentinel.js';
 
 /**
  * Class for an editable number field.
@@ -60,13 +59,13 @@ export class FieldNumber extends FieldInput<number> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|number|Sentinel, min?: string|number|null,
+      value?: string|number|typeof Field.SKIP_SETUP, min?: string|number|null,
       max?: string|number|null, precision?: string|number|null,
       validator?: FieldNumberValidator|null, config?: FieldNumberConfig) {
     // Pass SENTINEL so that we can define properties before value validation.
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(value)) return;
+    if (value === Field.SKIP_SETUP) return;
     if (config) {
       this.configure_(config);
     } else {

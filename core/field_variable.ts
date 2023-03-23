@@ -24,7 +24,6 @@ import type {Menu} from './menu.js';
 import type {MenuItem} from './menuitem.js';
 import {Msg} from './msg.js';
 import * as parsing from './utils/parsing.js';
-import type {Sentinel} from './utils/sentinel.js';
 import {Size} from './utils/size.js';
 import {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
@@ -76,9 +75,9 @@ export class FieldVariable extends FieldDropdown {
    * for a list of properties this parameter supports.
    */
   constructor(
-      varName: string|null|Sentinel, validator?: FieldVariableValidator,
-      variableTypes?: string[], defaultType?: string,
-      config?: FieldVariableConfig) {
+      varName: string|null|typeof Field.SKIP_SETUP,
+      validator?: FieldVariableValidator, variableTypes?: string[],
+      defaultType?: string, config?: FieldVariableConfig) {
     super(Field.SKIP_SETUP);
 
     /**
@@ -97,9 +96,7 @@ export class FieldVariable extends FieldDropdown {
     /** The size of the area rendered by the field. */
     this.size_ = new Size(0, 0);
 
-    if (varName === Field.SKIP_SETUP) {
-      return;
-    }
+    if (varName === Field.SKIP_SETUP) return;
 
     if (config) {
       this.configure_(config);

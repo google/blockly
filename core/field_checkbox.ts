@@ -18,7 +18,6 @@ import './events/events_block_change.js';
 import * as dom from './utils/dom.js';
 import {Field, FieldConfig, FieldValidator} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import type {Sentinel} from './utils/sentinel.js';
 
 type BoolString = 'TRUE'|'FALSE';
 type CheckboxBool = BoolString|boolean;
@@ -63,8 +62,8 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: CheckboxBool|Sentinel, validator?: FieldCheckboxValidator,
-      config?: FieldCheckboxConfig) {
+      value?: CheckboxBool|typeof Field.SKIP_SETUP,
+      validator?: FieldCheckboxValidator, config?: FieldCheckboxConfig) {
     super(Field.SKIP_SETUP);
 
     /**
@@ -73,7 +72,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
      */
     this.checkChar_ = FieldCheckbox.CHECK_CHAR;
 
-    if (Field.isSentinel(value)) return;
+    if (value === Field.SKIP_SETUP) return;
     if (config) {
       this.configure_(config);
     }

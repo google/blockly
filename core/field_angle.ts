@@ -21,7 +21,6 @@ import * as fieldRegistry from './field_registry.js';
 import {FieldInput, FieldInputConfig, FieldInputValidator} from './field_input.js';
 import * as dom from './utils/dom.js';
 import * as math from './utils/math.js';
-import type {Sentinel} from './utils/sentinel.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
@@ -115,11 +114,11 @@ export class FieldAngle extends FieldInput<number> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|number|Sentinel, validator?: FieldAngleValidator,
-      config?: FieldAngleConfig) {
+      value?: string|number|typeof Field.SKIP_SETUP,
+      validator?: FieldAngleValidator, config?: FieldAngleConfig) {
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(value)) return;
+    if (value === Field.SKIP_SETUP) return;
     if (config) {
       this.configure_(config);
     }

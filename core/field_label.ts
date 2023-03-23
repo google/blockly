@@ -17,7 +17,6 @@ import * as dom from './utils/dom.js';
 import {Field, FieldConfig} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
-import type {Sentinel} from './utils/sentinel.js';
 
 /**
  * Class for a non-editable, non-serializable text field.
@@ -45,10 +44,11 @@ export class FieldLabel extends Field<string> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|Sentinel, textClass?: string, config?: FieldLabelConfig) {
+      value?: string|typeof Field.SKIP_SETUP, textClass?: string,
+      config?: FieldLabelConfig) {
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(value)) return;
+    if (value === Field.SKIP_SETUP) return;
     if (config) {
       this.configure_(config);
     } else {

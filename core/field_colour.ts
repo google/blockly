@@ -25,7 +25,6 @@ import * as fieldRegistry from './field_registry.js';
 import * as aria from './utils/aria.js';
 import * as colour from './utils/colour.js';
 import * as idGenerator from './utils/idgenerator.js';
-import type {Sentinel} from './utils/sentinel.js';
 import {Size} from './utils/size.js';
 
 /**
@@ -133,11 +132,11 @@ export class FieldColour extends Field<string> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|Sentinel, validator?: FieldColourValidator,
+      value?: string|typeof Field.SKIP_SETUP, validator?: FieldColourValidator,
       config?: FieldColourConfig) {
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(value)) return;
+    if (value === Field.SKIP_SETUP) return;
     if (config) {
       this.configure_(config);
     }

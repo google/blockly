@@ -25,7 +25,6 @@ import {Field, FieldConfig, FieldValidator, UnattachedFieldError} from './field.
 import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
-import type {Sentinel} from './utils/sentinel.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
@@ -103,11 +102,11 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|Sentinel, validator?: FieldInputValidator<T>|null,
-      config?: FieldInputConfig) {
+      value?: string|typeof Field.SKIP_SETUP,
+      validator?: FieldInputValidator<T>|null, config?: FieldInputConfig) {
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(value)) return;
+    if (value === Field.SKIP_SETUP) return;
     if (config) {
       this.configure_(config);
     }

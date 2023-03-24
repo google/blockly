@@ -187,7 +187,7 @@ export class RenderedConnection extends Connection {
    *     was updated.
    */
   moveTo(x: number, y: number): boolean {
-    // TODO: add TODO.
+    // TODO(#6922): Readd this optimization.
     // const moved = this.x !== x || this.y !== y;
     const moved = true;
     let updated = false;

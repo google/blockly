@@ -16,6 +16,8 @@ import * as fieldRegistry from '../core/field_registry.js';
 import * as xmlUtils from '../core/utils/xml.js';
 import {Align} from '../core/input.js';
 import type {Block} from '../core/block.js';
+import type {Connection} from '../core/connection.js';
+import type {BlockSvg} from '../core/block_svg.js';
 import type {BlockDefinition} from '../core/blocks.js';
 import {ConnectionType} from '../core/connection_type.js';
 import type {FieldDropdown} from '../core/field_dropdown.js';
@@ -114,9 +116,15 @@ export const blocks = createBlockDefinitionsFromJsonArray([
   },
 ]);
 
-type CreateWithBlock = Block|typeof blocks['lists_create_with'];
 
-blocks['lists_create_with'] = {
+/** Type of a 'lists_create_with' block. */
+type CreateWithBlock = Block&ListCreateWithMixin;
+interface ListCreateWithMixin extends ListCreateWithMixinType {
+  itemCount_: number;
+}
+type ListCreateWithMixinType = typeof LISTS_CREATE_WITH;
+
+const LISTS_CREATE_WITH = {
   /**
    * Block for creating a list with any number of elements of any type.
    */
@@ -126,7 +134,9 @@ blocks['lists_create_with'] = {
     this.itemCount_ = 3;
     this.updateShape_();
     this.setOutput(true, 'Array');
-    this.setMutator(new Mutator(['lists_create_with_item'], this));
+    this.setMutator(new Mutator(
+        ['lists_create_with_item'],
+        this as unknown as BlockSvg));  // BUG(#6905)
     this.setTooltip(Msg['LISTS_CREATE_WITH_TOOLTIP']);
   },
   /**
@@ -135,7 +145,7 @@ blocks['lists_create_with'] = {
    */
   mutationToDom: function(this: CreateWithBlock): Element {
     const container = xmlUtils.createElement('mutation');
-    container.setAttribute('items', this.itemCount_);
+    container.setAttribute('items', String(this.itemCount_));
     return container;
   },
   /**
@@ -146,7 +156,7 @@ blocks['lists_create_with'] = {
    */
   domToMutation: function(this: CreateWithBlock, xmlElement: Element) {
     const items = xmlElement.getAttribute('items');
-    if (items === null) throw new TypeError('element did not have items');
+    if (!items) throw new TypeError('element did not have items');
     this.itemCount_ = parseInt(items, 10);
     this.updateShape_();
   },
@@ -155,7 +165,7 @@ blocks['lists_create_with'] = {
    *
    * @return The state of this block, ie the item count.
    */
-  saveExtraState: function(): {itemCount: number} {
+  saveExtraState: function(this: CreateWithBlock): {itemCount: number} {
     return {
       'itemCount': this.itemCount_,
     };
@@ -165,7 +175,7 @@ blocks['lists_create_with'] = {
    *
    * @param state The state to apply to this block, ie the item count.
    */
-  loadExtraState: function(state: AnyDuringMigration) {
+  loadExtraState: function(this: CreateWithBlock, state: AnyDuringMigration) {
     this.itemCount_ = state['itemCount'];
     this.updateShape_();
   },
@@ -176,14 +186,18 @@ blocks['lists_create_with'] = {
    * @return Root block in mutator.
    */
   decompose: function(this: CreateWithBlock, workspace: Workspace): Block {
-    const containerBlock: ContainerBlock =
-        workspace.newBlock('lists_create_with_container');
-    containerBlock.initSvg();
-    let connection = containerBlock.getInput('STACK').connection;
+    const containerBlock =
+        workspace.newBlock('lists_create_with_container') as ContainerBlock;
+    (containerBlock as BlockSvg).initSvg();
+    let connection = containerBlock.getInput('STACK')!.connection;
     for (let i = 0; i < this.itemCount_; i++) {
-      const itemBlock: ItemBlock = workspace.newBlock('lists_create_with_item');
-      itemBlock.initSvg();
-      connection.connect(itemBlock.previousConnection);
+      const itemBlock =
+          workspace.newBlock('lists_create_with_item') as ItemBlock;
+      (itemBlock as BlockSvg).initSvg();
+      if (!itemBlock.previousConnection) {
+        throw new Error('itemBlock has no previousConnection');
+      }
+      connection!.connect(itemBlock.previousConnection);
       connection = itemBlock.nextConnection;
     }
     return containerBlock;
@@ -194,20 +208,21 @@ blocks['lists_create_with'] = {
    * @param containerBlock Root block in mutator.
    */
   compose: function(this: CreateWithBlock, containerBlock: Block) {
-    let itemBlock: ItemBlock = containerBlock.getInputTargetBlock('STACK');
+    let itemBlock: ItemBlock|null =
+        containerBlock.getInputTargetBlock('STACK') as ItemBlock;
     // Count number of inputs.
-    const connections = [];
+    const connections: Connection[] = [];
     while (itemBlock) {
       if (itemBlock.isInsertionMarker()) {
-        itemBlock = itemBlock.getNextBlock();
+        itemBlock = itemBlock.getNextBlock() as ItemBlock | null;
         continue;
       }
-      connections.push(itemBlock.valueConnection_);
-      itemBlock = itemBlock.getNextBlock();
+      connections.push(itemBlock.valueConnection_ as Connection);
+      itemBlock = itemBlock.getNextBlock() as ItemBlock | null;
     }
     // Disconnect any children that don't belong.
     for (let i = 0; i < this.itemCount_; i++) {
-      const connection = this.getInput('ADD' + i).connection.targetConnection;
+      const connection = this.getInput('ADD' + i)!.connection!.targetConnection;
       if (connection && connections.indexOf(connection) === -1) {
         connection.disconnect();
       }
@@ -225,16 +240,18 @@ blocks['lists_create_with'] = {
    * @param containerBlock Root block in mutator.
    */
   saveConnections: function(this: CreateWithBlock, containerBlock: Block) {
-    let itemBlock: ItemBlock = containerBlock.getInputTargetBlock('STACK');
+    let itemBlock: ItemBlock|null =
+        containerBlock.getInputTargetBlock('STACK') as ItemBlock;
     let i = 0;
     while (itemBlock) {
       if (itemBlock.isInsertionMarker()) {
-        itemBlock = itemBlock.getNextBlock();
+        itemBlock = itemBlock.getNextBlock() as ItemBlock | null;
         continue;
       }
       const input = this.getInput('ADD' + i);
-      itemBlock.valueConnection_ = input && input.connection.targetConnection;
-      itemBlock = itemBlock.getNextBlock();
+      itemBlock.valueConnection_ =
+          input?.connection!.targetConnection as Connection;
+      itemBlock = itemBlock.getNextBlock() as ItemBlock | null;
       i++;
     }
   },
@@ -263,10 +280,14 @@ blocks['lists_create_with'] = {
     }
   },
 };
+blocks['lists_create_with'] = LISTS_CREATE_WITH;
 
-type ContainerBlock = Block|typeof blocks['lists_create_with_container'];
+/** Type for a 'lists_create_with_container' block. */
+type ContainerBlock = Block&ContainerMutator;
+interface ContainerMutator extends ContainerMutatorType {}
+type ContainerMutatorType = typeof LISTS_CREATE_WITH_CONTAINER;
 
-blocks['lists_create_with_container'] = {
+const LISTS_CREATE_WITH_CONTAINER = {
   /**
    * Mutator block for list container.
    */
@@ -279,10 +300,16 @@ blocks['lists_create_with_container'] = {
     this.contextMenu = false;
   },
 };
+blocks['lists_create_with_container'] = LISTS_CREATE_WITH_CONTAINER;
 
-type ItemBlock = Block|typeof blocks['lists_create_with_item'];
+/** Type for a 'lists_create_with_item' block. */
+type ItemBlock = Block&ItemMutator;
+interface ItemMutator extends ItemMutatorType {
+  valueConnection_?: Connection;
+}
+type ItemMutatorType = typeof LISTS_CREATE_WITH_ITEM;
 
-blocks['lists_create_with_item'] = {
+const LISTS_CREATE_WITH_ITEM = {
   /**
    * Mutator block for adding items.
    */
@@ -295,10 +322,14 @@ blocks['lists_create_with_item'] = {
     this.contextMenu = false;
   },
 };
+blocks['lists_create_with_item'] = LISTS_CREATE_WITH_ITEM;
 
-type IndexOfBlock = Block|typeof blocks['lists_indexOf'];
+/** Type for a 'lists_indexOf' block. */
+type IndexOfBlock = Block&IndexOfMutator;
+interface IndexOfMutator extends IndexOfMutatorType {}
+type IndexOfMutatorType = typeof LISTS_INDEXOF;
 
-blocks['lists_indexOf'] = {
+const LISTS_INDEXOF = {
   /**
    * Block for finding an item in the list.
    */
@@ -316,7 +347,7 @@ blocks['lists_indexOf'] = {
       type: 'field_dropdown',
       options: OPERATORS,
     });
-    if (operatorsDropdown === null) throw new Error('field_dropdown not found');
+    if (!operatorsDropdown) throw new Error('field_dropdown not found');
     this.appendValueInput('FIND').appendField(operatorsDropdown, 'END');
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
@@ -327,10 +358,16 @@ blocks['lists_indexOf'] = {
     });
   },
 };
+blocks['lists_indexOf'] = LISTS_INDEXOF;
 
-type GetIndexBlock = Block|typeof blocks['lists_getIndex'];
+/** Type for a 'lists_getIndex' block. */
+type GetIndexBlock = Block&GetIndexMutator;
+interface GetIndexMutator extends GetIndexMutatorType {
+  WHERE_OPTIONS: Array<[string, string]>;
+}
+type GetIndexMutatorType = typeof LISTS_GETINDEX;
 
-blocks['lists_getIndex'] = {
+const LISTS_GETINDEX = {
   /**
    * Block for getting element at index.
    */
@@ -441,7 +478,7 @@ blocks['lists_getIndex'] = {
     const container = xmlUtils.createElement('mutation');
     const isStatement = !this.outputConnection;
     container.setAttribute('statement', String(isStatement));
-    const isAt = this.getInput('AT').type === ConnectionType.INPUT_VALUE;
+    const isAt = this.getInput('AT')!.type === ConnectionType.INPUT_VALUE;
     container.setAttribute('at', String(isAt));
     return container;
   },
@@ -458,17 +495,18 @@ blocks['lists_getIndex'] = {
     const isAt = (xmlElement.getAttribute('at') !== 'false');
     this.updateAt_(isAt);
   },
-
   /**
    * Returns the state of this block as a JSON serializable object.
    * Returns null for efficiency if no state is needed (not a statement)
    *
    * @return The state of this block, ie whether it's a statement.
    */
-  saveExtraState: function(this: GetIndexBlock): {isStatement: boolean} | null {
+  saveExtraState: function(this: GetIndexBlock): ({
+    isStatement: boolean
+  } | null) {
     if (!this.outputConnection) {
       return {
-        'isStatement': true,
+        isStatement: true,
       };
     }
     return null;
@@ -498,7 +536,8 @@ blocks['lists_getIndex'] = {
   updateStatement_: function(this: GetIndexBlock, newStatement: boolean) {
     const oldStatement = !this.outputConnection;
     if (newStatement !== oldStatement) {
-      this.unplug(true, true);
+      // TODO(#6920): The .unplug only has one parameter.
+      (this.unplug as (arg0?: boolean, arg1?: boolean) => void)(true, true);
       if (newStatement) {
         this.setOutput(false);
         this.setPreviousStatement(true);
@@ -552,16 +591,22 @@ blocks['lists_getIndex'] = {
           }
           return undefined;
         });
-    this.getInput('AT').appendField(menu, 'WHERE');
+    this.getInput('AT')!.appendField(menu, 'WHERE');
     if (Msg['LISTS_GET_INDEX_TAIL']) {
       this.moveInputBefore('TAIL', null);
     }
   },
 };
+blocks['lists_getIndex'] = LISTS_GETINDEX;
 
-type SetIndexBlock = Block | typeof blocks['lists_setIndex'];
+/** Type for a 'lists_setIndex' block. */
+type SetIndexBlock = Block&SetIndexMutator;
+interface SetIndexMutator extends SetIndexMutatorType {
+  WHERE_OPTIONS: Array<[string, string]>;
+}
+type SetIndexMutatorType = typeof LISTS_SETINDEX;
 
-blocks['lists_setIndex'] = {
+const LISTS_SETINDEX = {
   /**
    * Block for setting the element at index.
    */
@@ -584,7 +629,7 @@ blocks['lists_setIndex'] = {
     const operationDropdown = fieldRegistry.fromJson({
       type: 'field_dropdown',
       options: MODE,
-    });
+    }) as FieldDropdown;
     this.appendDummyInput()
         .appendField(operationDropdown, 'MODE')
         .appendField('', 'SPACE');
@@ -644,7 +689,7 @@ blocks['lists_setIndex'] = {
    */
   mutationToDom: function(this: SetIndexBlock): Element {
     const container = xmlUtils.createElement('mutation');
-    const isAt = this.getInput('AT').type === ConnectionType.INPUT_VALUE;
+    const isAt = this.getInput('AT')!.type === ConnectionType.INPUT_VALUE;
     container.setAttribute('at', String(isAt));
     return container;
   },
@@ -726,13 +771,20 @@ blocks['lists_setIndex'] = {
       this.moveInputBefore('ORDINAL', 'TO');
     }
 
-    this.getInput('AT').appendField(menu, 'WHERE');
+    this.getInput('AT')!.appendField(menu, 'WHERE');
   },
 };
+blocks['lists_setIndex'] = LISTS_SETINDEX;
 
-type GetSublistBlock = Block | typeof blocks['lists_getSublist'];
+/** Type for a 'lists_getSublist' block. */
+type GetSublistBlock = Block&GetSublistMutator;
+interface GetSublistMutator extends GetSublistMutatorType {
+  WHERE_OPTIONS_1: Array<[string, string]>;
+  WHERE_OPTIONS_2: Array<[string, string]>;
+}
+type GetSublistMutatorType = typeof LISTS_GETSUBLIST;
 
-blocks['lists_getSublist'] = {
+const LISTS_GETSUBLIST = {
   /**
    * Block for getting sublist.
    */
@@ -769,9 +821,9 @@ blocks['lists_getSublist'] = {
    */
   mutationToDom: function(this: GetSublistBlock): Element {
     const container = xmlUtils.createElement('mutation');
-    const isAt1 = this.getInput('AT1').type === ConnectionType.INPUT_VALUE;
+    const isAt1 = this.getInput('AT1')!.type === ConnectionType.INPUT_VALUE;
     container.setAttribute('at1', String(isAt1));
-    const isAt2 = this.getInput('AT2').type === ConnectionType.INPUT_VALUE;
+    const isAt2 = this.getInput('AT2')!.type === ConnectionType.INPUT_VALUE;
     container.setAttribute('at2', String(isAt2));
     return container;
   },
@@ -813,7 +865,7 @@ blocks['lists_getSublist'] = {
    * @param n Specify first or second input (1 or 2).
    * @param isAt True if the input should exist.
    */
-  updateAt_: function(this: GetSublistBlock, n: number, isAt: boolean) {
+  updateAt_: function(this: GetSublistBlock, n: 1|2, isAt: boolean) {
     // Create or delete an input for the numeric index.
     // Destroy old 'AT' and 'ORDINAL' inputs.
     this.removeInput('AT' + n);
@@ -830,7 +882,10 @@ blocks['lists_getSublist'] = {
     }
     const menu = fieldRegistry.fromJson({
       type: 'field_dropdown',
-      options: this['WHERE_OPTIONS_' + n],
+      // TODO(#6920): Rewrite this so that clang-format doesn't make such an
+      // awful unreadable mess of it.
+      options: this
+          [('WHERE_OPTIONS_' + n) as ('WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2')],
     }) as FieldDropdown;
     menu.setValidator(
         /**
@@ -850,7 +905,7 @@ blocks['lists_getSublist'] = {
             return null;
           }
         });
-    this.getInput('AT' + n).appendField(menu, 'WHERE' + n);
+    this.getInput('AT' + n)!.appendField(menu, 'WHERE' + n);
     if (n === 1) {
       this.moveInputBefore('AT1', 'AT2');
       if (this.getInput('ORDINAL1')) {
@@ -862,8 +917,9 @@ blocks['lists_getSublist'] = {
     }
   },
 };
+blocks['lists_getSublist'] = LISTS_GETSUBLIST;
 
-type SortBlock = Block | typeof blocks['lists_sort'];
+type SortBlock = Block|typeof blocks['lists_sort'];
 
 blocks['lists_sort'] = {
   /**
@@ -904,7 +960,7 @@ blocks['lists_sort'] = {
   },
 };
 
-type SplitBlock = Block | typeof blocks['lists_split'];
+type SplitBlock = Block|typeof blocks['lists_split'];
 
 blocks['lists_split'] = {
   /**
@@ -920,7 +976,7 @@ blocks['lists_split'] = {
         [Msg['LISTS_SPLIT_TEXT_FROM_LIST'], 'JOIN'],
       ],
     });
-    if (dropdown === null) throw new Error('field_dropdown not found');
+    if (!dropdown) throw new Error('field_dropdown not found');
     dropdown.setValidator(function(newMode) {
       thisBlock.updateType_(newMode);
     });

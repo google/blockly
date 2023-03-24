@@ -444,7 +444,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
     if (e.key === 'Enter') {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-    } else if (e.key === 'Esc') {
+    } else if (e.key === 'Escape') {
       this.setValue(
           this.htmlInput_!.getAttribute('data-untyped-default-value'));
       WidgetDiv.hide();

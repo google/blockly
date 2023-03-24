@@ -185,7 +185,7 @@ const LISTS_CREATE_WITH = {
    * @param workspace Mutator's workspace.
    * @return Root block in mutator.
    */
-  decompose: function(this: CreateWithBlock, workspace: Workspace): Block {
+  decompose: function(this: CreateWithBlock, workspace: Workspace): ContainerBlock {
     const containerBlock =
         workspace.newBlock('lists_create_with_container') as ContainerBlock;
     (containerBlock as BlockSvg).initSvg();
@@ -713,7 +713,7 @@ const LISTS_SETINDEX = {
    *
    * @return The state of this block.
    */
-  saveExtraState: function(): null {
+  saveExtraState: function(this: SetIndexBlock): null {
     return null;
   },
 
@@ -722,7 +722,7 @@ const LISTS_SETINDEX = {
    * No extra state is needed or expected as it is already encoded in the
    * dropdown values.
    */
-  loadExtraState: function() {},
+  loadExtraState: function(this: SetIndexBlock) {},
 
   /**
    * Create or delete an input for the numeric index.
@@ -847,7 +847,7 @@ const LISTS_GETSUBLIST = {
    *
    * @return The state of this block.
    */
-  saveExtraState: function(): null {
+  saveExtraState: function(this: GetSublistBlock): null {
     return null;
   },
 
@@ -856,7 +856,7 @@ const LISTS_GETSUBLIST = {
    * No extra state is needed or expected as it is already encoded in the
    * dropdown values.
    */
-  loadExtraState: function() {},
+  loadExtraState: function(this: GetSublistBlock) {},
 
   /**
    * Create or delete an input for a numeric index.
@@ -1009,6 +1009,7 @@ blocks['lists_split'] = {
       const inputConnection = this.getInput('INPUT')!.connection;
       inputConnection!.setShadowDom(null);
       const inputBlock = inputConnection!.targetBlock();
+      // TODO(#6920): This is probably not needed; see details in bug.
       if (inputBlock) {
         inputConnection!.disconnect();
         if (inputBlock.isShadow()) {
@@ -1053,7 +1054,7 @@ blocks['lists_split'] = {
    *
    * @return The state of this block.
    */
-  saveExtraState: function(): null {
+  saveExtraState: function(this: SplitBlock): null {
     return null;
   },
 
@@ -1062,7 +1063,7 @@ blocks['lists_split'] = {
    * No extra state is needed or expected as it is already encoded in the
    * dropdown values.
    */
-  loadExtraState: function() {},
+  loadExtraState: function(this: SplitBlock) {},
 };
 
 // Register provided blocks.

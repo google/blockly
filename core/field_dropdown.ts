@@ -498,8 +498,7 @@ export class FieldDropdown extends Field<string> {
     const height = Math.max(
         hasBorder ? constants!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
         imageHeight + IMAGE_Y_PADDING);
-    const xPadding =
-        hasBorder ? constants!.FIELD_BORDER_RECT_X_PADDING : 0;
+    const xPadding = hasBorder ? constants!.FIELD_BORDER_RECT_X_PADDING : 0;
     let arrowWidth = 0;
     if (this.svgArrow_) {
       arrowWidth = this.positionSVGArrow_(
@@ -507,10 +506,8 @@ export class FieldDropdown extends Field<string> {
           height / 2 - constants!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
     } else {
       arrowWidth = dom.getFastTextWidth(
-          this.arrow_ as SVGTSpanElement,
-          constants!.FIELD_TEXT_FONTSIZE,
-          constants!.FIELD_TEXT_FONTWEIGHT,
-          constants!.FIELD_TEXT_FONTFAMILY);
+          this.arrow_ as SVGTSpanElement, constants!.FIELD_TEXT_FONTSIZE,
+          constants!.FIELD_TEXT_FONTWEIGHT, constants!.FIELD_TEXT_FONTFAMILY);
     }
     this.size_.width = imageWidth + arrowWidth + xPadding * 2;
     this.size_.height = height;
@@ -545,10 +542,8 @@ export class FieldDropdown extends Field<string> {
         constants!.FIELD_TEXT_HEIGHT);
     const textWidth = dom.getFastTextWidth(
         this.getTextElement(), constants!.FIELD_TEXT_FONTSIZE,
-        constants!.FIELD_TEXT_FONTWEIGHT,
-        constants!.FIELD_TEXT_FONTFAMILY);
-    const xPadding =
-        hasBorder ? constants!.FIELD_BORDER_RECT_X_PADDING : 0;
+        constants!.FIELD_TEXT_FONTWEIGHT, constants!.FIELD_TEXT_FONTFAMILY);
+    const xPadding = hasBorder ? constants!.FIELD_BORDER_RECT_X_PADDING : 0;
     let arrowWidth = 0;
     if (this.svgArrow_) {
       arrowWidth = this.positionSVGArrow_(
@@ -578,8 +573,7 @@ export class FieldDropdown extends Field<string> {
     }
     const constants = this.getConstants();
     const hasBorder = !!this.borderRect_;
-    const xPadding =
-        hasBorder ? constants!.FIELD_BORDER_RECT_X_PADDING : 0;
+    const xPadding = hasBorder ? constants!.FIELD_BORDER_RECT_X_PADDING : 0;
     const textPadding = constants!.FIELD_DROPDOWN_SVG_ARROW_PADDING;
     const svgArrowSize = constants!.FIELD_DROPDOWN_SVG_ARROW_SIZE;
     const arrowX = block.RTL ? xPadding : x + textPadding;

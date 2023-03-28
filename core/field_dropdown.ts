@@ -210,8 +210,9 @@ export class FieldDropdown extends Field<string> {
    * @returns True if the dropdown field should add a border rect.
    */
   protected shouldAddBorderRect_(): boolean {
-    return !this.getConstants()!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
-        this.getConstants()!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW &&
+    const constants = this.getConstants();
+    return !constants!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
+        constants!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW &&
         !this.getSourceBlock()?.isShadow();
   }
 
@@ -230,15 +231,16 @@ export class FieldDropdown extends Field<string> {
 
   /** Create an SVG based arrow. */
   protected createSVGArrow_() {
+    const constants = this.getConstants();
     this.svgArrow_ = dom.createSvgElement(
         Svg.IMAGE, {
-          'height': this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
-          'width': this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
+          'height': constants!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
+          'width': constants!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
         },
         this.fieldGroup_);
     this.svgArrow_!.setAttributeNS(
         dom.XLINK_NS, 'xlink:href',
-        this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_DATAURI);
+        constants!.FIELD_DROPDOWN_SVG_ARROW_DATAURI);
   }
 
   /**
@@ -491,23 +493,24 @@ export class FieldDropdown extends Field<string> {
     const imageWidth = Number(imageJson.width);
 
     // Height and width include the border rect.
+    const constants = this.getConstants();
     const hasBorder = !!this.borderRect_;
     const height = Math.max(
-        hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
+        hasBorder ? constants!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
         imageHeight + IMAGE_Y_PADDING);
     const xPadding =
-        hasBorder ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING : 0;
+        hasBorder ? constants!.FIELD_BORDER_RECT_X_PADDING : 0;
     let arrowWidth = 0;
     if (this.svgArrow_) {
       arrowWidth = this.positionSVGArrow_(
           imageWidth + xPadding,
-          height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
+          height / 2 - constants!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
     } else {
       arrowWidth = dom.getFastTextWidth(
           this.arrow_ as SVGTSpanElement,
-          this.getConstants()!.FIELD_TEXT_FONTSIZE,
-          this.getConstants()!.FIELD_TEXT_FONTWEIGHT,
-          this.getConstants()!.FIELD_TEXT_FONTFAMILY);
+          constants!.FIELD_TEXT_FONTSIZE,
+          constants!.FIELD_TEXT_FONTWEIGHT,
+          constants!.FIELD_TEXT_FONTFAMILY);
     }
     this.size_.width = imageWidth + arrowWidth + xPadding * 2;
     this.size_.height = height;
@@ -535,21 +538,22 @@ export class FieldDropdown extends Field<string> {
     textElement.setAttribute('text-anchor', 'start');
 
     // Height and width include the border rect.
+    const constants = this.getConstants();
     const hasBorder = !!this.borderRect_;
     const height = Math.max(
-        hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
-        this.getConstants()!.FIELD_TEXT_HEIGHT);
+        hasBorder ? constants!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
+        constants!.FIELD_TEXT_HEIGHT);
     const textWidth = dom.getFastTextWidth(
-        this.getTextElement(), this.getConstants()!.FIELD_TEXT_FONTSIZE,
-        this.getConstants()!.FIELD_TEXT_FONTWEIGHT,
-        this.getConstants()!.FIELD_TEXT_FONTFAMILY);
+        this.getTextElement(), constants!.FIELD_TEXT_FONTSIZE,
+        constants!.FIELD_TEXT_FONTWEIGHT,
+        constants!.FIELD_TEXT_FONTFAMILY);
     const xPadding =
-        hasBorder ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING : 0;
+        hasBorder ? constants!.FIELD_BORDER_RECT_X_PADDING : 0;
     let arrowWidth = 0;
     if (this.svgArrow_) {
       arrowWidth = this.positionSVGArrow_(
           textWidth + xPadding,
-          height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
+          height / 2 - constants!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
     }
     this.size_.width = textWidth + arrowWidth + xPadding * 2;
     this.size_.height = height;
@@ -572,11 +576,12 @@ export class FieldDropdown extends Field<string> {
     if (!block) {
       throw new UnattachedFieldError();
     }
+    const constants = this.getConstants();
     const hasBorder = !!this.borderRect_;
     const xPadding =
-        hasBorder ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING : 0;
-    const textPadding = this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_PADDING;
-    const svgArrowSize = this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE;
+        hasBorder ? constants!.FIELD_BORDER_RECT_X_PADDING : 0;
+    const textPadding = constants!.FIELD_DROPDOWN_SVG_ARROW_PADDING;
+    const svgArrowSize = constants!.FIELD_DROPDOWN_SVG_ARROW_SIZE;
     const arrowX = block.RTL ? xPadding : x + textPadding;
     this.svgArrow_.setAttribute(
         'transform', 'translate(' + arrowX + ',' + y + ')');

@@ -22,8 +22,6 @@ import * as eventUtils from './utils.js';
 
 /**
  * Abstract class for an event.
- *
- * @alias Blockly.Events.Abstract
  */
 export abstract class Abstract {
   /**
@@ -34,7 +32,16 @@ export abstract class Abstract {
 
   /** The workspace identifier for this event. */
   workspaceId?: string = undefined;
+
+  /**
+   * An ID for the group of events this block is associated with.
+   *
+   * Groups define events that should be treated as an single action from the
+   * user's perspective, and should be undone together.
+   */
   group: string;
+
+  /** Whether this event is undoable or not. */
   recordUndo: boolean;
 
   /** Whether or not the event is a UI event. */
@@ -43,16 +50,8 @@ export abstract class Abstract {
   /** Type of this event. */
   type = '';
 
-  /** @alias Blockly.Events.Abstract */
   constructor() {
-    /**
-     * The event group ID for the group this event belongs to. Groups define
-     * events that should be treated as an single action from the user's
-     * perspective, and should be undone together.
-     */
     this.group = eventUtils.getGroup();
-
-    /** Sets whether the event should be added to the undo stack. */
     this.recordUndo = eventUtils.getRecordUndo();
   }
 
@@ -74,6 +73,9 @@ export abstract class Abstract {
    * @param json JSON representation.
    */
   fromJson(json: AbstractEventJson) {
+    deprecation.warn(
+        'Blockly.Events.Abstract.prototype.fromJson', 'version 9', 'version 10',
+        'Blockly.Events.fromJson');
     this.isBlank = false;
     this.group = json['group'] || '';
   }
@@ -89,9 +91,6 @@ export abstract class Abstract {
    */
   static fromJson(json: AbstractEventJson, workspace: Workspace, event: any):
       Abstract {
-    deprecation.warn(
-        'Blockly.Events.Abstract.prototype.fromJson', 'version 9', 'version 10',
-        'Blockly.Events.fromJson');
     event.isBlank = false;
     event.group = json['group'] || '';
     event.workspaceId = workspace.id;

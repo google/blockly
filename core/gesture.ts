@@ -51,8 +51,6 @@ const ZOOM_OUT_MULTIPLIER = 6;
 
 /**
  * Class for one gesture.
- *
- * @alias Blockly.Gesture
  */
 export class Gesture {
   /**
@@ -104,16 +102,11 @@ export class Gesture {
   private hasExceededDragRadius_ = false;
 
   /**
-   * A handle to use to unbind a pointermove listener at the end of a drag.
-   * Opaque data returned from Blockly.bindEventWithChecks_.
+   * Array holding info needed to unbind events.
+   * Used for disposing.
+   * Ex: [[node, name, func], [node, name, func]].
    */
-  protected onMoveWrapper_: browserEvents.Data|null = null;
-
-  /**
-   * A handle to use to unbind a pointerup listener at the end of a drag.
-   * Opaque data returned from Blockly.bindEventWithChecks_.
-   */
-  protected onUpWrapper_: browserEvents.Data|null = null;
+  private boundEvents: browserEvents.Data[] = [];
 
   /** The object tracking a bubble drag, or null if none is in progress. */
   private bubbleDragger_: BubbleDragger|null = null;
@@ -160,13 +153,6 @@ export class Gesture {
   /** The starting distance between two touch points. */
   private startDistance_ = 0;
 
-  /**
-   * A handle to use to unbind the second pointerdown listener
-   * at the end of a drag.
-   * Opaque data returned from Blockly.bindEventWithChecks_.
-   */
-  private onStartWrapper_: browserEvents.Data|null = null;
-
   /** Boolean for whether or not the workspace supports pinch-zoom. */
   private isPinchZoomEnabled_: boolean|null = null;
 
@@ -211,22 +197,16 @@ export class Gesture {
     // Clear the owner's reference to this gesture.
     this.creatorWorkspace.clearGesture();
 
-    if (this.onMoveWrapper_) {
-      browserEvents.unbind(this.onMoveWrapper_);
+    for (const event of this.boundEvents) {
+      browserEvents.unbind(event);
     }
-    if (this.onUpWrapper_) {
-      browserEvents.unbind(this.onUpWrapper_);
-    }
+    this.boundEvents.length = 0;
 
     if (this.blockDragger_) {
       this.blockDragger_.dispose();
     }
     if (this.workspaceDragger_) {
       this.workspaceDragger_.dispose();
-    }
-
-    if (this.onStartWrapper_) {
-      browserEvents.unbind(this.onStartWrapper_);
     }
   }
 
@@ -513,15 +493,15 @@ export class Gesture {
    * @internal
    */
   bindMouseEvents(e: PointerEvent) {
-    this.onStartWrapper_ = browserEvents.conditionalBind(
+    this.boundEvents.push(browserEvents.conditionalBind(
         document, 'pointerdown', null, this.handleStart.bind(this),
-        /* opt_noCaptureIdentifier */ true);
-    this.onMoveWrapper_ = browserEvents.conditionalBind(
+        /* opt_noCaptureIdentifier */ true));
+    this.boundEvents.push(browserEvents.conditionalBind(
         document, 'pointermove', null, this.handleMove.bind(this),
-        /* opt_noCaptureIdentifier */ true);
-    this.onUpWrapper_ = browserEvents.conditionalBind(
+        /* opt_noCaptureIdentifier */ true));
+    this.boundEvents.push(browserEvents.conditionalBind(
         document, 'pointerup', null, this.handleUp.bind(this),
-        /* opt_noCaptureIdentifier */ true);
+        /* opt_noCaptureIdentifier */ true));
 
     e.preventDefault();
     e.stopPropagation();
@@ -969,14 +949,14 @@ export class Gesture {
    * @param field The field the gesture started on.
    * @internal
    */
-  setStartField(field: Field) {
+  setStartField<T>(field: Field<T>) {
     if (this.hasStarted_) {
       throw Error(
           'Tried to call gesture.setStartField, ' +
           'but the gesture had already been started.');
     }
     if (!this.startField_) {
-      this.startField_ = field;
+      this.startField_ = field as Field;
     }
   }
 

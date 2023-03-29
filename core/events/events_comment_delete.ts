@@ -17,17 +17,18 @@ import type {WorkspaceComment} from '../workspace_comment.js';
 
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
+import * as utilsXml from '../utils/xml.js';
 import * as Xml from '../xml.js';
 import type {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a comment deletion event.
- *
- * @alias Blockly.Events.CommentDelete
+ * Notifies listeners that a workspace comment has been deleted.
  */
 export class CommentDelete extends CommentBase {
   override type = eventUtils.COMMENT_DELETE;
+
+  /** The XML representation of the deleted workspace comment. */
   xml?: Element;
 
   /**
@@ -83,7 +84,7 @@ export class CommentDelete extends CommentBase {
     const newEvent =
         super.fromJson(json, workspace, event ?? new CommentDelete()) as
         CommentDelete;
-    newEvent.xml = Xml.textToDom(json['xml']);
+    newEvent.xml = utilsXml.textToDom(json['xml']);
     return newEvent;
   }
 }

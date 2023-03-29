@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for an object that encapsulates logic for
- * checking whether a potential connection is safe and valid.
- *
- * @namespace Blockly.IConnectionChecker
- */
 import * as goog from '../../closure/goog/goog.js';
 import type {Connection} from '../connection.js';
 import type {RenderedConnection} from '../rendered_connection.js';
@@ -17,8 +11,6 @@ goog.declareModuleId('Blockly.IConnectionChecker');
 
 /**
  * Class for connection type checking logic.
- *
- * @alias Blockly.IConnectionChecker
  */
 export interface IConnectionChecker {
   /**

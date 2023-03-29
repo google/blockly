@@ -6,11 +6,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Re-exports of Blockly.minimalist.* modules.
- *
- * @namespace Blockly.minimalist
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.minimalist');
 

@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for a flyout.
- *
- * @namespace Blockly.IFlyout
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IFlyout');
 
@@ -22,8 +17,6 @@ import type {IRegistrable} from './i_registrable.js';
 
 /**
  * Interface for a flyout.
- *
- * @alias Blockly.IFlyout
  */
 export interface IFlyout extends IRegistrable {
   /** Whether the flyout is laid out horizontally or not. */

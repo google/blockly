@@ -41,7 +41,7 @@
 	"REDO": "Tee uudelleen",
 	"CHANGE_VALUE_TITLE": "Muuta arvoa:",
 	"RENAME_VARIABLE": "Nimeä uudelleen muuttuja...",
-	"RENAME_VARIABLE_TITLE": "Nimeä uudelleen kaikki '%1' muuttujaa:",
+	"RENAME_VARIABLE_TITLE": "Nimeä uudelleen muuttuja '%1' kaikkialla:",
 	"NEW_VARIABLE": "Luo muuttuja...",
 	"NEW_STRING_VARIABLE": "Luo merkkijonomuuttuja...",
 	"NEW_NUMBER_VARIABLE": "Luo numeromuuttuja...",

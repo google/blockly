@@ -24,8 +24,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * The manager for all workspace metrics calculations.
- *
- * @alias Blockly.MetricsManager
  */
 export class MetricsManager implements IMetricsManager {
   /** The workspace to calculate metrics for. */
@@ -55,11 +53,14 @@ export class MetricsManager implements IMetricsManager {
   }
 
   /**
-   * Gets the width and the height of the flyout on the workspace in pixel
-   * coordinates. Returns 0 for the width and height if the workspace has a
-   * category toolbox instead of a simple toolbox.
+   * Gets the width and the height of the flyout in pixel
+   * coordinates. By default, will get metrics for either a simple flyout (owned
+   * directly by the workspace) or for the flyout owned by the toolbox. If you
+   * pass `opt_own` as `true` then only metrics for the simple flyout will be
+   * returned, and it will return 0 for the width and height if the workspace
+   * has a category toolbox instead of a simple toolbox.
    *
-   * @param opt_own Whether to only return the workspace's own flyout.
+   * @param opt_own Whether to only return the workspace's own flyout metrics.
    * @returns The width and height of the flyout.
    */
   getFlyoutMetrics(opt_own?: boolean): ToolboxMetrics {
@@ -76,8 +77,7 @@ export class MetricsManager implements IMetricsManager {
    * Gets the width, height and position of the toolbox on the workspace in
    * pixel coordinates. Returns 0 for the width and height if the workspace has
    * a simple toolbox instead of a category toolbox. To get the width and height
-   * of a
-   * simple toolbox @see {@link MetricsManager#getFlyoutMetrics}.
+   * of a simple toolbox, see {@link MetricsManager#getFlyoutMetrics}.
    *
    * @returns The object with the width, height and position of the toolbox.
    */

@@ -35,7 +35,6 @@ import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import {Rect} from './utils/rect.js';
-import {Sentinel} from './utils/sentinel.js';
 import {Size} from './utils/size.js';
 import * as style from './utils/style.js';
 import {Svg} from './utils/svg.js';
@@ -43,14 +42,28 @@ import * as userAgent from './utils/useragent.js';
 import * as utilsXml from './utils/xml.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
 
-export type FieldValidator<T = any> = (value?: T) => T|null|undefined;
+/**
+ * A function that is called to validate changes to the field's value before
+ * they are set.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+ * @param newValue The value to be validated.
+ * @returns One of three instructions for setting the new value: `T`, `null`,
+ * or `undefined`.
+ *
+ * - `T` to set this function's returned value instead of `newValue`.
+ *
+ * - `null` to invoke `doValueInvalid_` and not set a value.
+ *
+ * - `undefined` to set `newValue` as is.
+ */
+export type FieldValidator<T = any> = (newValue: T) => T|null|undefined;
 
 /**
  * Abstract class for an editable field.
  *
- * @alias Blockly.Field
+ * @typeParam T - The value stored on the field.
  */
 export abstract class Field<T = any> implements IASTNodeLocationSvg,
                                                 IASTNodeLocationWithBlock,
@@ -75,7 +88,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * field's value or run configure_, and should allow a subclass to do that
    * instead.
    */
-  static readonly SKIP_SETUP = new Sentinel();
+  static readonly SKIP_SETUP = Symbol('SKIP_SETUP');
 
   /**
    * Name of field.  Unique within each block.
@@ -186,16 +199,16 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
    * subclasses that want to handle configuration and setting the field value
    * after their own constructors have run).
-   * @param opt_validator  A function that is called to validate changes to the
+   * @param validator  A function that is called to validate changes to the
    *     field's value. Takes in a value & returns a validated value, or null to
    *     abort the change.
-   * @param opt_config A map of options used to configure the field.
+   * @param config A map of options used to configure the field.
    *    Refer to the individual field's documentation for a list of properties
    * this parameter supports.
    */
   constructor(
-      value: T|Sentinel, opt_validator?: FieldValidator<T>|null,
-      opt_config?: FieldConfig) {
+      value: T|typeof Field.SKIP_SETUP, validator?: FieldValidator<T>|null,
+      config?: FieldConfig) {
     /**
      * A generic value possessed by the field.
      * Should generally be non-null, only null when the field is created.
@@ -207,15 +220,13 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     /** The size of the area rendered by the field. */
     this.size_ = new Size(0, 0);
 
-    if (value === Field.SKIP_SETUP) {
-      return;
-    }
-    if (opt_config) {
-      this.configure_(opt_config);
+    if (value === Field.SKIP_SETUP) return;
+    if (config) {
+      this.configure_(config);
     }
     this.setValue(value);
-    if (opt_validator) {
-      this.setValidator(opt_validator);
+    if (validator) {
+      this.setValidator(validator);
     }
   }
 
@@ -372,7 +383,8 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @internal
    */
   fromXml(fieldElement: Element) {
-    this.setValue(fieldElement.textContent);
+    // Any because gremlins live here. No touchie!
+    this.setValue(fieldElement.textContent as any);
   }
 
   /**
@@ -384,7 +396,8 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @internal
    */
   toXml(fieldElement: Element): Element {
-    fieldElement.textContent = this.getValue();
+    // Any because gremlins live here. No touchie!
+    fieldElement.textContent = this.getValue() as any;
     return fieldElement;
   }
 
@@ -434,7 +447,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
         callingClass.prototype.toXml !== this.toXml) {
       const elem = utilsXml.createElement('field');
       elem.setAttribute('name', this.name || '');
-      const text = Xml.domToText(this.toXml(elem));
+      const text = utilsXml.domToText(this.toXml(elem));
       return text.replace(
           ' xmlns="https://developers.google.com/blockly/xml"', '');
     }
@@ -456,7 +469,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
       boolean {
     if (callingClass.prototype.loadState === this.loadState &&
         callingClass.prototype.fromXml !== this.fromXml) {
-      this.fromXml(Xml.textToDom(state as string));
+      this.fromXml(utilsXml.textToDom(state as string));
       return true;
     }
     // Either they called this on purpose from their loadState, or they have
@@ -472,13 +485,10 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
   dispose() {
     dropDownDiv.hideIfOwner(this);
     WidgetDiv.hideIfOwner(this);
-    Tooltip.unbindMouseEvents(this.getClickTarget_());
 
-    if (this.mouseDownWrapper_) {
-      browserEvents.unbind(this.mouseDownWrapper_);
+    if (!this.getSourceBlock()?.isDeadOrDying()) {
+      dom.removeNode(this.fieldGroup_);
     }
-
-    dom.removeNode(this.fieldGroup_);
 
     this.disposed = true;
   }
@@ -619,7 +629,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    *
    * @returns Validation function, or null.
    */
-  getValidator(): Function|null {
+  getValidator(): FieldValidator<T>|null {
     return this.validator_;
   }
 
@@ -698,14 +708,14 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * Calls showEditor_ when the field is clicked if the field is clickable.
    * Do not override.
    *
-   * @param opt_e Optional mouse event that triggered the field to open, or
+   * @param e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    * @sealed
    * @internal
    */
-  showEditor(opt_e?: Event) {
+  showEditor(e?: Event) {
     if (this.isClickable()) {
-      this.showEditor_(opt_e);
+      this.showEditor_(e);
     }
   }
 
@@ -722,11 +732,11 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
   /**
    * Updates the size of the field based on the text.
    *
-   * @param opt_margin margin to use when positioning the text element.
+   * @param margin margin to use when positioning the text element.
    */
-  protected updateSize_(opt_margin?: number) {
+  protected updateSize_(margin?: number) {
     const constants = this.getConstants();
-    const xOffset = opt_margin !== undefined ? opt_margin :
+    const xOffset = margin !== undefined ? margin :
         this.borderRect_ ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING :
                            0;
     let totalWidth = xOffset * 2;
@@ -766,17 +776,17 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
 
     this.textElement_.setAttribute(
         'x',
-        `${
+        String(
             this.getSourceBlock()?.RTL ?
                 this.size_.width - contentWidth - xOffset :
-                xOffset}`);
+                xOffset));
     this.textElement_.setAttribute(
         'y',
-        `${
+        String(
             constants!.FIELD_TEXT_BASELINE_CENTER ?
                 halfHeight :
                 halfHeight - constants!.FIELD_TEXT_HEIGHT / 2 +
-                    constants!.FIELD_TEXT_BASELINE}`);
+                    constants!.FIELD_TEXT_BASELINE));
   }
 
   /** Position a field's border rect after a size change. */
@@ -784,12 +794,12 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     if (!this.borderRect_) {
       return;
     }
-    this.borderRect_.setAttribute('width', `${this.size_.width}`);
-    this.borderRect_.setAttribute('height', `${this.size_.height}`);
+    this.borderRect_.setAttribute('width', String(this.size_.width));
+    this.borderRect_.setAttribute('height', String(this.size_.height));
     this.borderRect_.setAttribute(
-        'rx', `${this.getConstants()!.FIELD_BORDER_RECT_RADIUS}`);
+        'rx', String(this.getConstants()!.FIELD_BORDER_RECT_RADIUS));
     this.borderRect_.setAttribute(
-        'ry', `${this.getConstants()!.FIELD_BORDER_RECT_RADIUS}`);
+        'ry', String(this.getConstants()!.FIELD_BORDER_RECT_RADIUS));
   }
 
   /**
@@ -943,9 +953,8 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
   forceRerender() {
     this.isDirty_ = true;
     if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-      (this.sourceBlock_ as BlockSvg).render();
+      (this.sourceBlock_ as BlockSvg).queueRender();
       (this.sourceBlock_ as BlockSvg).bumpNeighbours();
-      this.updateMarkers_();
     }
   }
 
@@ -965,41 +974,37 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
       return;
     }
 
-    let validatedValue = this.doClassValidation_(newValue);
-    // Class validators might accidentally forget to return, we'll ignore that.
-    newValue = this.processValidation_(newValue, validatedValue);
-    if (newValue instanceof Error) {
+    const classValidation = this.doClassValidation_(newValue);
+    const classValue = this.processValidation_(newValue, classValidation);
+    if (classValue instanceof Error) {
       doLogging && console.log('invalid class validation, return');
       return;
     }
 
-    const localValidator = this.getValidator();
-    if (localValidator) {
-      validatedValue = localValidator.call(this, newValue);
-      // Local validators might accidentally forget to return, we'll ignore
-      // that.
-      newValue = this.processValidation_(newValue, validatedValue);
-      if (newValue instanceof Error) {
-        doLogging && console.log('invalid local validation, return');
-        return;
-      }
+    const localValidation = this.getValidator()?.call(this, classValue);
+    const localValue = this.processValidation_(classValue, localValidation);
+    if (localValue instanceof Error) {
+      doLogging && console.log('invalid local validation, return');
+      return;
     }
+
     const source = this.sourceBlock_;
     if (source && source.disposed) {
       doLogging && console.log('source disposed, return');
       return;
     }
+
     const oldValue = this.getValue();
-    if (oldValue === newValue) {
+    if (oldValue === localValue) {
       doLogging && console.log('same, doValueUpdate_, return');
-      this.doValueUpdate_(newValue);
+      this.doValueUpdate_(localValue);
       return;
     }
 
-    this.doValueUpdate_(newValue);
+    this.doValueUpdate_(localValue);
     if (source && eventUtils.isEnabled()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          source, 'field', this.name || null, oldValue, newValue));
+          source, 'field', this.name || null, oldValue, localValue));
     }
     if (this.isDirty_) {
       this.forceRerender();
@@ -1015,8 +1020,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * @returns New value, or an Error object.
    */
   private processValidation_(
-      newValue: AnyDuringMigration,
-      validatedValue: AnyDuringMigration): AnyDuringMigration {
+      newValue: AnyDuringMigration, validatedValue: T|null|undefined): T|Error {
     if (validatedValue === null) {
       this.doValueInvalid_(newValue);
       if (this.isDirty_) {
@@ -1024,10 +1028,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
       }
       return Error();
     }
-    if (validatedValue !== undefined) {
-      newValue = validatedValue;
-    }
-    return newValue;
+    return validatedValue === undefined ? newValue as T : validatedValue;
   }
 
   /**
@@ -1035,23 +1036,39 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    *
    * @returns Current value.
    */
-  getValue(): AnyDuringMigration {
+  getValue(): T|null {
     return this.value_;
   }
 
   /**
-   * Used to validate a value. Returns input by default. Can be overridden by
-   * subclasses, see FieldDropdown.
+   * Validate the changes to a field's value before they are set. See
+   * **FieldDropdown** for an example of subclass implementation.
    *
-   * @param opt_newValue The value to be validated.
-   * @returns The validated value, same as input by default.
+   * **NOTE:** Validation returns one option between `T`, `null`, and
+   * `undefined`. **Field**'s implementation will never return `undefined`, but
+   * it is valid for a subclass to return `undefined` if the new value is
+   * compatible with `T`.
+   *
+   * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+   * @param newValue - The value to be validated.
+   * @returns One of three instructions for setting the new value: `T`, `null`,
+   * or `undefined`.
+   *
+   * - `T` to set this function's returned value instead of `newValue`.
+   *
+   * - `null` to invoke `doValueInvalid_` and not set a value.
+   *
+   * - `undefined` to set `newValue` as is.
    */
-  protected doClassValidation_(opt_newValue?: AnyDuringMigration):
-      AnyDuringMigration {
-    if (opt_newValue === null || opt_newValue === undefined) {
+  protected doClassValidation_(newValue: T): T|null|undefined;
+  protected doClassValidation_(newValue?: AnyDuringMigration): T|null;
+  protected doClassValidation_(newValue?: T|AnyDuringMigration): T|null
+      |undefined {
+    if (newValue === null || newValue === undefined) {
       return null;
     }
-    return opt_newValue;
+
+    return newValue as T;
   }
 
   /**
@@ -1060,7 +1077,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    *
    * @param newValue The value to be saved.
    */
-  protected doValueUpdate_(newValue: AnyDuringMigration) {
+  protected doValueUpdate_(newValue: T) {
     this.value_ = newValue;
     this.isDirty_ = true;
   }
@@ -1086,7 +1103,7 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     }
     const gesture = (this.sourceBlock_.workspace as WorkspaceSvg).getGesture(e);
     if (gesture) {
-      gesture.setStartField(this as Field);
+      gesture.setStartField(this);
     }
   }
 
@@ -1261,8 +1278,12 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     this.markerSvg_ = markerSvg;
   }
 
-  /** Redraw any attached marker or cursor svgs if needed. */
-  protected updateMarkers_() {
+  /**
+   * Redraw any attached marker or cursor svgs if needed.
+   *
+   * @internal
+   */
+  updateMarkers_() {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -1288,6 +1309,8 @@ export interface FieldConfig {
 /**
  * For use by Field and descendants of Field. Constructors can change
  * in descendants, though they should contain all of Field's prototype methods.
+ *
+ * @internal
  */
 export type FieldProto = Pick<typeof Field, 'prototype'>;
 

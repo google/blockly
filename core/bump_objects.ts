@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Utilities for bumping objects back into worksapce bounds.
- *
- * @namespace Blockly.bumpObjects
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.bumpObjects');
 
@@ -35,7 +30,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  *    in workspace coordinates.
  * @param object The object to bump.
  * @returns True if block was bumped.
- * @alias Blockly.bumpObjects.bumpIntoBounds
  */
 function bumpObjectIntoBounds(
     workspace: WorkspaceSvg, scrollMetrics: ContainerRegion,
@@ -87,7 +81,6 @@ export const bumpIntoBounds = bumpObjectIntoBounds;
  *
  * @param workspace The workspace to handle.
  * @returns The event handler.
- * @alias Blockly.bumpObjects.bumpIntoBoundsHandler
  */
 export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
     (p1: Abstract) => void {
@@ -107,7 +100,7 @@ export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
         return;
       }
       // Handle undo.
-      const oldGroup = eventUtils.getGroup();
+      const existingGroup = eventUtils.getGroup() || false;
       eventUtils.setGroup(e.group);
 
       const wasBumped = bumpObjectIntoBounds(
@@ -118,9 +111,7 @@ export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
             'Moved object in bounds but there was no' +
             ' event group. This may break undo.');
       }
-      if (oldGroup !== null) {
-        eventUtils.setGroup(oldGroup);
-      }
+      eventUtils.setGroup(existingGroup);
     } else if (e.type === eventUtils.VIEWPORT_CHANGE) {
       const viewportEvent = (e as ViewportChange);
       if (viewportEvent.scale && viewportEvent.oldScale &&
@@ -167,7 +158,6 @@ function extractObjectFromEvent(
  * Bumps the top objects in the given workspace into bounds.
  *
  * @param workspace The workspace.
- * @alias Blockly.bumpObjects.bumpTopObjectsIntoBounds
  */
 export function bumpTopObjectsIntoBounds(workspace: WorkspaceSvg) {
   const metricsManager = workspace.getMetricsManager();

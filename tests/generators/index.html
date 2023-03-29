@@ -121,7 +121,7 @@ function fromXml(filename, xmlText, opt_append) {
     demoWorkspace.clear();
   }
   try {
-    var xmlDoc = Blockly.Xml.textToDom(xmlText);
+    var xmlDoc = Blockly.utils.xml.textToDom(xmlText);
     if (opt_append) {
       Blockly.Xml.appendDomToWorkspace(xmlDoc, demoWorkspace);
     } else {

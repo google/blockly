@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for a toolbox.
- *
- * @namespace Blockly.IToolbox
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IToolbox');
 
@@ -21,8 +16,6 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 
 /**
  * Interface for a toolbox.
- *
- * @alias Blockly.IToolbox
  */
 export interface IToolbox extends IRegistrable {
   /** Initializes the toolbox. */

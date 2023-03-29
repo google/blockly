@@ -25,21 +25,24 @@ import {Field, FieldConfig, FieldValidator, UnattachedFieldError} from './field.
 import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
-import {KeyCodes} from './utils/keycodes.js';
-import type {Sentinel} from './utils/sentinel.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-export type InputTypes = string|number;
-export type FieldInputValidator<T extends InputTypes> = FieldValidator<T>;
+/**
+ * Supported types for FieldInput subclasses.
+ *
+ * @internal
+ */
+type InputTypes = string|number;
 
 /**
- * Class for an editable text field.
+ * Abstract class for an editable input field.
  *
- * @alias Blockly.FieldInput
+ * @typeParam T - The value stored on the field.
+ * @internal
  */
-export abstract class FieldInput<T extends InputTypes> extends Field<T> {
+export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
   /**
    * Pixel size of input border radius.
    * Should match blocklyText's border-radius in CSS.
@@ -83,38 +86,33 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
 
   /** Mouse cursor style when over the hotspot that initiates the editor. */
   override CURSOR = 'text';
-  override clickTarget_: AnyDuringMigration;
-  override value_: AnyDuringMigration;
-  override isDirty_: AnyDuringMigration;
 
   /**
-   * @param opt_value The initial value of the field. Should cast to a string.
+   * @param value The initial value of the field. Should cast to a string.
    *     Defaults to an empty string if null or undefined. Also accepts
    *     Field.SKIP_SETUP if you wish to skip setup (only used by subclasses
    *     that want to handle configuration and setting the field value after
    *     their own constructors have run).
-   * @param opt_validator A function that is called to validate changes to the
+   * @param validator A function that is called to validate changes to the
    *     field's value. Takes in a string & returns a validated string, or null
    *     to abort the change.
-   * @param opt_config A map of options used to configure the field.
+   * @param config A map of options used to configure the field.
    *     See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|Sentinel, opt_validator?: FieldInputValidator<T>|null,
-      opt_config?: FieldInputConfig) {
+      value?: string|typeof Field.SKIP_SETUP,
+      validator?: FieldInputValidator<T>|null, config?: FieldInputConfig) {
     super(Field.SKIP_SETUP);
 
-    if (opt_value === Field.SKIP_SETUP) {
-      return;
+    if (value === Field.SKIP_SETUP) return;
+    if (config) {
+      this.configure_(config);
     }
-    if (opt_config) {
-      this.configure_(opt_config);
-    }
-    this.setValue(opt_value);
-    if (opt_validator) {
-      this.setValidator(opt_validator);
+    this.setValue(value);
+    if (validator) {
+      this.setValidator(validator);
     }
   }
 
@@ -162,20 +160,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
   }
 
   /**
-   * Ensure that the input value casts to a valid string.
-   *
-   * @param opt_newValue The input value.
-   * @returns A valid string, or null if invalid.
-   */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      AnyDuringMigration {
-    if (opt_newValue === null || opt_newValue === undefined) {
-      return null;
-    }
-    return String(opt_newValue);
-  }
-
-  /**
    * Called by setValue if the text input is not valid. If the field is
    * currently being edited it reverts value of the field to the previous
    * value while allowing the display text to be handled by the htmlInput_.
@@ -207,7 +191,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
-  protected override doValueUpdate_(newValue: AnyDuringMigration) {
+  protected override doValueUpdate_(newValue: string|T) {
     this.isDirty_ = true;
     this.isTextValid_ = true;
     this.value_ = newValue;
@@ -276,14 +260,13 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
    * Shows a prompt editor for mobile browsers if the modalInputs option is
    * enabled.
    *
-   * @param _opt_e Optional mouse event that triggered the field to open, or
+   * @param _e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
-   * @param opt_quietInput True if editor should be created without focus.
+   * @param quietInput True if editor should be created without focus.
    *     Defaults to false.
    */
-  protected override showEditor_(_opt_e?: Event, opt_quietInput?: boolean) {
+  protected override showEditor_(_e?: Event, quietInput = false) {
     this.workspace_ = (this.sourceBlock_ as BlockSvg).workspace;
-    const quietInput = opt_quietInput || false;
     if (!quietInput && this.workspace_.options.modalInputs &&
         (userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD)) {
       this.showPromptEditor_();
@@ -372,7 +355,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
       div!.style.transition = 'box-shadow 0.25s ease 0s';
       if (this.getConstants()!.FIELD_TEXTINPUT_BOX_SHADOW) {
         div!.style.boxShadow =
-            'rgba(255, 255, 255, 0.3) 0 0 0 ' + 4 * scale + 'px';
+            'rgba(255, 255, 255, 0.3) 0 0 0 ' + (4 * scale) + 'px';
       }
     }
     htmlInput.style.borderRadius = borderRadius;
@@ -380,7 +363,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
     div!.appendChild(htmlInput);
 
     htmlInput.value = htmlInput.defaultValue = this.getEditorText_(this.value_);
-    htmlInput.setAttribute('data-untyped-default-value', this.value_);
+    htmlInput.setAttribute('data-untyped-default-value', String(this.value_));
 
     this.resizeEditor_();
 
@@ -457,29 +440,19 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
    *
    * @param e Keyboard event.
    */
-  protected onHtmlInputKeyDown_(e: Event) {
-    // AnyDuringMigration because:  Property 'keyCode' does not exist on type
-    // 'Event'.
-    if ((e as AnyDuringMigration).keyCode === KeyCodes.ENTER) {
+  protected onHtmlInputKeyDown_(e: KeyboardEvent) {
+    if (e.key === 'Enter') {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-      // AnyDuringMigration because:  Property 'keyCode' does not exist on type
-      // 'Event'.
-    } else if ((e as AnyDuringMigration).keyCode === KeyCodes.ESC) {
+    } else if (e.key === 'Escape') {
       this.setValue(
           this.htmlInput_!.getAttribute('data-untyped-default-value'));
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-      // AnyDuringMigration because:  Property 'keyCode' does not exist on type
-      // 'Event'.
-    } else if ((e as AnyDuringMigration).keyCode === KeyCodes.TAB) {
+    } else if (e.key === 'Tab') {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-      // AnyDuringMigration because:  Property 'shiftKey' does not exist on type
-      // 'Event'. AnyDuringMigration because:  Argument of type 'this' is not
-      // assignable to parameter of type 'Field'.
-      (this.sourceBlock_ as BlockSvg)
-          .tab(this as AnyDuringMigration, !(e as AnyDuringMigration).shiftKey);
+      (this.sourceBlock_ as BlockSvg).tab(this, !e.shiftKey);
       e.preventDefault();
     }
   }
@@ -567,7 +540,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
    * @returns The text to show on the HTML input.
    */
   protected getEditorText_(value: AnyDuringMigration): string {
-    return String(value);
+    return `${value}`;
   }
 
   /**
@@ -587,7 +560,28 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
 
 /**
  * Config options for the input field.
+ *
+ * @internal
  */
 export interface FieldInputConfig extends FieldConfig {
   spellcheck?: boolean;
 }
+
+/**
+ * A function that is called to validate changes to the field's value before
+ * they are set.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+ * @param newValue The value to be validated.
+ * @returns One of three instructions for setting the new value: `T`, `null`,
+ * or `undefined`.
+ *
+ * - `T` to set this function's returned value instead of `newValue`.
+ *
+ * - `null` to invoke `doValueInvalid_` and not set a value.
+ *
+ * - `undefined` to set `newValue` as is.
+ * @internal
+ */
+export type FieldInputValidator<T extends InputTypes> =
+    FieldValidator<string|T>;

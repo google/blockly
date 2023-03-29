@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * An object that provides constants for rendering blocks in Geras
- * mode.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.ConstantProvider');
 
@@ -18,8 +12,6 @@ import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 
 /**
  * An object that provides constants for rendering blocks in Geras mode.
- *
- * @alias Blockly.geras.ConstantProvider
  */
 export class ConstantProvider extends BaseConstantProvider {
   override FIELD_TEXT_BASELINE_CENTER = false;
@@ -35,9 +27,6 @@ export class ConstantProvider extends BaseConstantProvider {
   MAX_BOTTOM_WIDTH = 30;
   override STATEMENT_BOTTOM_SPACER = -this.NOTCH_HEIGHT / 2;
 
-  /**
-   * @internal
-   */
   constructor() {
     super();
   }

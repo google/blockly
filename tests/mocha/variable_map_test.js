@@ -301,7 +301,7 @@ suite('Variable Map', function() {
           const variable =
               this.variableMap.createVariable('test name', 'test type', 'test id');
           this.variableMap.deleteVariable(variable);
-  
+
           assertEventFired(
             this.eventSpy,
             Blockly.Events.VarDelete,
@@ -320,7 +320,7 @@ suite('Variable Map', function() {
               new Blockly.VariableModel(
                   this.workspace, 'test name', 'test type', 'test id');
           this.variableMap.deleteVariable(variable);
-  
+
           assertEventNotFired(
             this.eventSpy,
             Blockly.Events.VarDelete,
@@ -335,7 +335,7 @@ suite('Variable Map', function() {
             function() {
               this.variableMap.createVariable('test name', 'test type', 'test id');
               this.variableMap.deleteVariableById('test id');
-      
+
               assertEventFired(
                 this.eventSpy,
                 Blockly.Events.VarDelete,
@@ -351,7 +351,7 @@ suite('Variable Map', function() {
             'delete events are not fired when a variable does not exist',
             function() {
               this.variableMap.deleteVariableById('test id');
-      
+
               assertEventNotFired(
                 this.eventSpy,
                 Blockly.Events.VarDelete,
@@ -379,7 +379,7 @@ suite('Variable Map', function() {
             },
             this.workspace.id);
         });
-  
+
         test(
             'rename events are not fired if the variable name already matches',
             function() {
@@ -387,14 +387,14 @@ suite('Variable Map', function() {
                   this.variableMap.createVariable(
                       'test name', 'test type', 'test id');
               this.variableMap.renameVariable(variable, 'test name');
-    
+
               assertEventNotFired(
                 this.eventSpy,
                 Blockly.Events.VarRename,
                 {},
                 this.workspace.id);
             });
-  
+
         test(
             'rename events are not fired if the variable does not exist',
             function() {
@@ -402,7 +402,7 @@ suite('Variable Map', function() {
                   new Blockly.VariableModel(
                       'test name', 'test type', 'test id');
               this.variableMap.renameVariable(variable, 'test name');
-    
+
               assertEventNotFired(
                 this.eventSpy,
                 Blockly.Events.VarRename,
@@ -426,21 +426,21 @@ suite('Variable Map', function() {
             },
             this.workspace.id);
         });
-  
+
         test(
             'rename events are not fired if the variable name already matches',
             function() {
               this.variableMap.createVariable(
                   'test name', 'test type', 'test id');
               this.variableMap.renameVariableById('test id', 'test name');
-    
+
               assertEventNotFired(
                 this.eventSpy,
                 Blockly.Events.VarRename,
                 {},
                 this.workspace.id);
             });
-  
+
         test(
             'renaming throws if the variable does not exist',
             function() {

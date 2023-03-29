@@ -23,15 +23,19 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a comment move event.  Created before the move.
- *
- * @alias Blockly.Events.CommentMove
+ * Notifies listeners that a workspace comment has moved.
  */
 export class CommentMove extends CommentBase {
   override type = eventUtils.COMMENT_MOVE;
+
+  /** The comment that is being moved. */
   comment_?: WorkspaceComment;
+
+  // TODO(#6774): We should remove underscores.
+  /** The location of the comment before the move, in workspace coordinates. */
   oldCoordinate_?: Coordinate;
-  /** The location after the move, in workspace coordinates. */
+
+  /** The location of the comment after the move, in workspace coordinates. */
   newCoordinate_?: Coordinate;
 
   /**
@@ -45,13 +49,8 @@ export class CommentMove extends CommentBase {
       return;  // Blank event to be populated by fromJson.
     }
 
-    /**
-     * The comment that is being moved.
-     */
     this.comment_ = opt_comment;
-
-    /** The location before the move, in workspace coordinates. */
-    this.oldCoordinate_ = opt_comment.getXY();
+    this.oldCoordinate_ = opt_comment.getRelativeToSurfaceXY();
   }
 
   /**
@@ -69,7 +68,7 @@ export class CommentMove extends CommentBase {
           'The comment is undefined. Pass a comment to ' +
           'the constructor if you want to use the record functionality');
     }
-    this.newCoordinate_ = this.comment_.getXY();
+    this.newCoordinate_ = this.comment_.getRelativeToSurfaceXY();
   }
 
   /**
@@ -179,7 +178,7 @@ export class CommentMove extends CommentBase {
           'or call fromJson');
     }
     // TODO: Check if the comment is being dragged, and give up if so.
-    const current = comment.getXY();
+    const current = comment.getRelativeToSurfaceXY();
     comment.moveBy(target.x - current.x, target.y - current.y);
   }
 }

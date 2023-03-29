@@ -9,7 +9,6 @@
  * Adds click handlers to buttons and dropdowns, adds event listeners for
  * keydown events and Blockly events, and configures the initial setup of
  * the page.
- *
  */
 
 /**

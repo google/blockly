@@ -16,6 +16,7 @@ import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
+import * as utilsXml from '../utils/xml.js';
 import {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
 
@@ -24,15 +25,24 @@ import * as eventUtils from './utils.js';
 
 
 /**
- * Class for a block change event.
- *
- * @alias Blockly.Events.BlockChange
+ * Notifies listeners when some element of a block has changed (e.g.
+ * field values, comments, etc).
  */
 export class BlockChange extends BlockBase {
   override type = eventUtils.BLOCK_CHANGE;
+  /**
+   * The element that changed; one of 'field', 'comment', 'collapsed',
+   * 'disabled', 'inline', or 'mutation'
+   */
   element?: string;
+
+  /** The name of the field that changed, if this is a change to a field. */
   name?: string;
+
+  /** The original value of the element. */
   oldValue: unknown;
+
+  /** The new value of the element. */
   newValue: unknown;
 
   /**
@@ -173,7 +183,8 @@ export class BlockChange extends BlockBase {
         if (block.loadExtraState) {
           block.loadExtraState(JSON.parse(value as string || '{}'));
         } else if (block.domToMutation) {
-          block.domToMutation(Xml.textToDom(value as string || '<mutation/>'));
+          block.domToMutation(
+              utilsXml.textToDom(value as string || '<mutation/>'));
         }
         eventUtils.fire(
             new BlockChange(block, 'mutation', null, oldState, value));

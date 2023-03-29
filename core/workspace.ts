@@ -33,14 +33,12 @@ import {VariableMap} from './variable_map.js';
 import type {VariableModel} from './variable_model.js';
 import type {WorkspaceComment} from './workspace_comment.js';
 import {IProcedureMap} from './interfaces/i_procedure_map.js';
-import {ObservableProcedureMap} from './procedures.js';
+import {ObservableProcedureMap} from './observable_procedure_map.js';
 
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
- *
- * @alias Blockly.Workspace
  */
 export class Workspace implements IASTNodeLocation {
   /**
@@ -112,7 +110,7 @@ export class Workspace implements IASTNodeLocation {
   private readonly blockDB = new Map<string, Block>();
   private readonly typedBlocksDB = new Map<string, Block[]>();
   private variableMap: VariableMap;
-  private procedureMap: IProcedureMap = new ObservableProcedureMap(this);
+  private procedureMap: IProcedureMap = new ObservableProcedureMap();
 
   /**
    * Blocks in the flyout can refer to variables that don't exist in the main
@@ -172,22 +170,11 @@ export class Workspace implements IASTNodeLocation {
    */
   private sortObjects_(a: Block|WorkspaceComment, b: Block|WorkspaceComment):
       number {
-    // AnyDuringMigration because:  Property 'getRelativeToSurfaceXY' does not
-    // exist on type 'Block | WorkspaceComment'.
-    const aXY = (a as AnyDuringMigration).getRelativeToSurfaceXY();
-    // AnyDuringMigration because:  Property 'getRelativeToSurfaceXY' does not
-    // exist on type 'Block | WorkspaceComment'.
-    const bXY = (b as AnyDuringMigration).getRelativeToSurfaceXY();
-    // AnyDuringMigration because:  Property 'offset' does not exist on type
-    // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
-    // AnyDuringMigration because:  Property 'offset' does not exist on type
-    // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
-    return aXY.y +
-        (Workspace.prototype.sortObjects_ as AnyDuringMigration).offset *
-        aXY.x -
-        (bXY.y +
-         (Workspace.prototype.sortObjects_ as AnyDuringMigration).offset *
-             bXY.x);
+    const offset =
+        Math.sin(math.toRadians(Workspace.SCAN_ANGLE)) * (this.RTL ? -1 : 1);
+    const aXY = a.getRelativeToSurfaceXY();
+    const bXY = b.getRelativeToSurfaceXY();
+    return aXY.y + offset * aXY.x - (bXY.y + offset * bXY.x);
   }
 
   /**
@@ -221,17 +208,7 @@ export class Workspace implements IASTNodeLocation {
     // Copy the topBlocks list.
     const blocks = (new Array<Block>()).concat(this.topBlocks);
     if (ordered && blocks.length > 1) {
-      // AnyDuringMigration because:  Property 'offset' does not exist on type
-      // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
-      (this.sortObjects_ as AnyDuringMigration).offset =
-          Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
-      if (this.RTL) {
-        // AnyDuringMigration because:  Property 'offset' does not exist on type
-        // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) =>
-        // number'.
-        (this.sortObjects_ as AnyDuringMigration).offset *= -1;
-      }
-      blocks.sort(this.sortObjects_);
+      blocks.sort(this.sortObjects_.bind(this));
     }
     return blocks;
   }
@@ -274,20 +251,10 @@ export class Workspace implements IASTNodeLocation {
     }
     const blocks = this.typedBlocksDB.get(type)!.slice(0);
     if (ordered && blocks && blocks.length > 1) {
-      // AnyDuringMigration because:  Property 'offset' does not exist on type
-      // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
-      (this.sortObjects_ as AnyDuringMigration).offset =
-          Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
-      if (this.RTL) {
-        // AnyDuringMigration because:  Property 'offset' does not exist on type
-        // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) =>
-        // number'.
-        (this.sortObjects_ as AnyDuringMigration).offset *= -1;
-      }
-      blocks.sort(this.sortObjects_);
+      blocks.sort(this.sortObjects_.bind(this));
     }
 
-    return blocks.filter(function(block: AnyDuringMigration) {
+    return blocks.filter(function(block: Block) {
       return !block.isInsertionMarker();
     });
   }
@@ -340,17 +307,7 @@ export class Workspace implements IASTNodeLocation {
     // Copy the topComments list.
     const comments = (new Array<WorkspaceComment>()).concat(this.topComments);
     if (ordered && comments.length > 1) {
-      // AnyDuringMigration because:  Property 'offset' does not exist on type
-      // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
-      (this.sortObjects_ as AnyDuringMigration).offset =
-          Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
-      if (this.RTL) {
-        // AnyDuringMigration because:  Property 'offset' does not exist on type
-        // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) =>
-        // number'.
-        (this.sortObjects_ as AnyDuringMigration).offset *= -1;
-      }
-      comments.sort(this.sortObjects_);
+      comments.sort(this.sortObjects_.bind(this));
     }
     return comments;
   }
@@ -363,7 +320,7 @@ export class Workspace implements IASTNodeLocation {
    * @returns Array of blocks.
    */
   getAllBlocks(ordered: boolean): Block[] {
-    let blocks: AnyDuringMigration[];
+    let blocks: Block[];
     if (ordered) {
       // Slow, but ordered.
       const topBlocks = this.getTopBlocks(true);
@@ -402,9 +359,7 @@ export class Workspace implements IASTNodeLocation {
       while (this.topComments.length) {
         this.topComments[this.topComments.length - 1].dispose();
       }
-      if (!existingGroup) {
-        eventUtils.setGroup(false);
-      }
+      eventUtils.setGroup(existingGroup);
       this.variableMap.clear();
       if (this.potentialVariableMap) {
         this.potentialVariableMap.clear();
@@ -598,7 +553,7 @@ export class Workspace implements IASTNodeLocation {
    *     to be created).
    * @returns True if there is capacity for the given map, false otherwise.
    */
-  isCapacityAvailable(typeCountsMap: AnyDuringMigration): boolean {
+  isCapacityAvailable(typeCountsMap: {[key: string]: number}): boolean {
     if (!this.hasBlockLimits()) {
       return true;
     }
@@ -661,9 +616,9 @@ export class Workspace implements IASTNodeLocation {
     // Do another undo/redo if the next one is of the same group.
     while (inputStack.length && inputEvent.group &&
            inputEvent.group === inputStack[inputStack.length - 1].group) {
-      // AnyDuringMigration because:  Argument of type 'Abstract | undefined' is
-      // not assignable to parameter of type 'Abstract'.
-      events.push(inputStack.pop() as AnyDuringMigration);
+      const event = inputStack.pop();
+      if (!event) continue;
+      events.push(event);
     }
     // Push these popped events on the opposite stack.
     for (let i = 0; i < events.length; i++) {

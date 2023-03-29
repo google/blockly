@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Aftabuzzaman",
+			"Aishik Rehman",
 			"MasterMinhaz",
 			"Rakibul",
 			"Rasal Lia",
@@ -15,8 +16,8 @@
 	"TODAY": "আজ",
 	"DUPLICATE_BLOCK": "প্রতিলিপি",
 	"ADD_COMMENT": "মন্তব্য যোগ করুন",
-	"REMOVE_COMMENT": "মন্তব্য সরাও",
-	"EXTERNAL_INPUTS": "বহি:স্থ ইনপুট",
+	"REMOVE_COMMENT": "মন্তব্য সরান",
+	"EXTERNAL_INPUTS": "বহিস্থ ইনপুট",
 	"INLINE_INPUTS": "সারি ইনপুট",
 	"DELETE_BLOCK": "ব্লকটি মুছে ফেল",
 	"DELETE_X_BLOCKS": "%1 ব্লক অপসারণ কর",

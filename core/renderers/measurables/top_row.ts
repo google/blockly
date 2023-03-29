@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Object representing a top row on a rendered block.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.TopRow');
 
@@ -28,16 +23,12 @@ import {Types} from './types.js';
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
- *
- * @alias Blockly.blockRendering.TopRow
  */
 export class TopRow extends Row {
   /**
    * The starting point for drawing the row, in the y direction.
    * This allows us to draw hats and similar shapes that don't start at the
    * origin. Must be non-negative (see #2820).
-   *
-   * @internal
    */
   capline = 0;
 
@@ -52,7 +43,6 @@ export class TopRow extends Row {
 
   /**
    * @param constants The rendering constants provider.
-   * @internal
    */
   constructor(constants: ConstantProvider) {
     super(constants);
@@ -65,7 +55,6 @@ export class TopRow extends Row {
    *
    * @param block The block whose top row this represents.
    * @returns Whether or not the top row has a left square corner.
-   * @internal
    */
   hasLeftSquareCorner(block: BlockSvg): boolean {
     const hasHat =

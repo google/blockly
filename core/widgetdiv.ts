@@ -4,13 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * A div that floats on top of Blockly.  This singleton contains
- *     temporary HTML UI widgets that the user is currently interacting with.
- *     E.g. text input areas, colour pickers, context menus.
- *
- * @namespace Blockly.WidgetDiv
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.WidgetDiv');
 
@@ -40,7 +33,6 @@ let containerDiv: HTMLDivElement|null;
  * Returns the HTML container for editor widgets.
  *
  * @returns The editor widget container.
- * @alias Blockly.WidgetDiv.getDiv
  */
 export function getDiv(): HTMLDivElement|null {
   return containerDiv;
@@ -50,7 +42,6 @@ export function getDiv(): HTMLDivElement|null {
  * Allows unit tests to reset the div. Do not use outside of tests.
  *
  * @param newDiv The new value for the DIV field.
- * @alias Blockly.WidgetDiv.testOnly_setDiv
  * @internal
  */
 export function testOnly_setDiv(newDiv: HTMLDivElement|null) {
@@ -59,8 +50,6 @@ export function testOnly_setDiv(newDiv: HTMLDivElement|null) {
 
 /**
  * Create the widget div and inject it onto the page.
- *
- * @alias Blockly.WidgetDiv.createDom
  */
 export function createDom() {
   if (containerDiv) {
@@ -80,7 +69,6 @@ export function createDom() {
  * @param rtl Right-to-left (true) or left-to-right (false).
  * @param newDispose Optional cleanup function to be run when the widget is
  *     closed.
- * @alias Blockly.WidgetDiv.show
  */
 export function show(newOwner: unknown, rtl: boolean, newDispose: () => void) {
   hide();
@@ -103,8 +91,6 @@ export function show(newOwner: unknown, rtl: boolean, newDispose: () => void) {
 
 /**
  * Destroy the widget and hide the div.
- *
- * @alias Blockly.WidgetDiv.hide
  */
 export function hide() {
   if (!isVisible()) {
@@ -136,7 +122,6 @@ export function hide() {
  * Is the container visible?
  *
  * @returns True if visible.
- * @alias Blockly.WidgetDiv.isVisible
  */
 export function isVisible(): boolean {
   return !!owner;
@@ -147,7 +132,6 @@ export function isVisible(): boolean {
  * object.
  *
  * @param oldOwner The object that was using this container.
- * @alias Blockly.WidgetDiv.hideIfOwner
  */
 export function hideIfOwner(oldOwner: unknown) {
   if (owner === oldOwner) {
@@ -182,7 +166,6 @@ function positionInternal(x: number, y: number, height: number) {
  *     window coordinates.
  * @param rtl Whether the workspace is in RTL mode.  This determines horizontal
  *     alignment.
- * @alias Blockly.WidgetDiv.positionWithAnchor
  * @internal
  */
 export function positionWithAnchor(

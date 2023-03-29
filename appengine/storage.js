@@ -44,7 +44,7 @@ BlocklyStorage.restoreBlocks = function(opt_workspace) {
   var url = window.location.href.split('#')[0];
   if ('localStorage' in window && window.localStorage[url]) {
     var workspace = opt_workspace || Blockly.getMainWorkspace();
-    var xml = Blockly.Xml.textToDom(window.localStorage[url]);
+    var xml = Blockly.utils.xml.textToDom(window.localStorage[url]);
     Blockly.Xml.domToWorkspace(xml, workspace);
   }
 };
@@ -168,7 +168,7 @@ BlocklyStorage.monitorChanges_ = function(workspace) {
  */
 BlocklyStorage.loadXml_ = function(xml, workspace) {
   try {
-    xml = Blockly.Xml.textToDom(xml);
+    xml = Blockly.utils.xml.textToDom(xml);
   } catch (e) {
     BlocklyStorage.alert(BlocklyStorage.XML_ERROR + '\nXML: ' + xml);
     return;

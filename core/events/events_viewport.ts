@@ -21,15 +21,30 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a viewport change event.
+ * Notifies listeners that the workspace surface's position or scale has
+ * changed.
  *
- * @alias Blockly.Events.ViewportChange
+ * Does not notify when the workspace itself resizes.
  */
 export class ViewportChange extends UiBase {
+  /**
+   * Top edge of the visible portion of the workspace, relative to the
+   * workspace origin.
+   */
   viewTop?: number;
+
+  /**
+   * The left edge of the visible portion of the workspace, relative to
+   * the workspace origin.
+   */
   viewLeft?: number;
+
+  /** The scale of the workpace. */
   scale?: number;
+
+  /** The previous scale of the workspace. */
   oldScale?: number;
+
   override type = eventUtils.VIEWPORT_CHANGE;
 
   /**
@@ -48,22 +63,9 @@ export class ViewportChange extends UiBase {
       opt_workspaceId?: string, opt_oldScale?: number) {
     super(opt_workspaceId);
 
-    /**
-     * Top-edge of the visible portion of the workspace, relative to the
-     * workspace origin.
-     */
     this.viewTop = opt_top;
-
-    /**
-     * Left-edge of the visible portion of the workspace, relative to the
-     * workspace origin.
-     */
     this.viewLeft = opt_left;
-
-    /** The scale of the workspace. */
     this.scale = opt_scale;
-
-    /** The old scale of the workspace. */
     this.oldScale = opt_oldScale;
   }
 

@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Utility functions for handling typed variables.
- *
- * @namespace Blockly.VariablesDynamic
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.VariablesDynamic');
 
@@ -28,8 +23,6 @@ import type {FlyoutButton} from './flyout_button.js';
  * variable blocks.
  * See also Blockly.Variables.CATEGORY_NAME and
  * Blockly.Procedures.CATEGORY_NAME.
- *
- * @alias Blockly.VariablesDynamic.CATEGORY_NAME
  */
 export const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 
@@ -75,7 +68,6 @@ export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
  *
  * @param workspace The workspace containing variables.
  * @returns Array of XML elements.
- * @alias Blockly.VariablesDynamic.flyoutCategory
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
   let xmlList = new Array<Element>();
@@ -109,7 +101,6 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
  *
  * @param workspace The workspace containing variables.
  * @returns Array of XML block elements.
- * @alias Blockly.VariablesDynamic.flyoutCategoryBlocks
  */
 export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
   const variableModelList = workspace.getAllVariables();

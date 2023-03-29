@@ -4,13 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Constant declarations for common key codes.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- *
- * @namespace Blockly.utils.KeyCodes
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.KeyCodes');
 
@@ -22,8 +15,6 @@ goog.declareModuleId('Blockly.utils.KeyCodes');
  *
  * This list is not localized and therefore some of the key codes are not
  * correct for non US keyboard layouts. See comments below.
- *
- * @alias Blockly.utils.KeyCodes
  */
 export enum KeyCodes {
   WIN_KEY_FF_LINUX = 0,

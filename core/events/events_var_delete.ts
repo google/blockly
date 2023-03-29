@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Classes for all types of variable events.
- *
- * @class
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.VarDelete');
 
@@ -22,13 +17,15 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a variable deletion event.
+ * Notifies listeners that a variable model has been deleted.
  *
- * @alias Blockly.Events.VarDelete
+ * @class
  */
 export class VarDelete extends VarBase {
   override type = eventUtils.VAR_DELETE;
+  /** The type of the variable that was deleted. */
   varType?: string;
+  /** The name of the variable that was deleted. */
   varName?: string;
 
   /**
@@ -51,7 +48,7 @@ export class VarDelete extends VarBase {
    */
   override toJson(): VarDeleteJson {
     const json = super.toJson() as VarDeleteJson;
-    if (!this.varType) {
+    if (this.varType === undefined) {
       throw new Error(
           'The var type is undefined. Either pass a variable to ' +
           'the constructor, or call fromJson');

@@ -28,8 +28,6 @@ import type {Workspace} from '../workspace.js';
  * Class for an AST node.
  * It is recommended that you use one of the createNode methods instead of
  * creating a node directly.
- *
- * @alias Blockly.ASTNode
  */
 export class ASTNode {
   /**
@@ -56,7 +54,6 @@ export class ASTNode {
    *     Must be in ASTNode.types.
    * @param location The position in the AST.
    * @param opt_params Optional dictionary of options.
-   * @alias Blockly.ASTNode
    */
   constructor(type: string, location: IASTNodeLocation, opt_params?: Params) {
     if (!location) {
@@ -180,7 +177,7 @@ export class ASTNode {
       throw new Error(
           'The current AST location is not associated with a block');
     }
-    const curIdx = block.inputList.indexOf((input));
+    const curIdx = block.inputList.indexOf(input);
     let fieldIdx = input.fieldRow.indexOf(location) + 1;
     for (let i = curIdx; i < block.inputList.length; i++) {
       const newInput = block.inputList[i];
@@ -243,7 +240,7 @@ export class ASTNode {
       throw new Error(
           'The current AST location is not associated with a block');
     }
-    const curIdx = block.inputList.indexOf((parentInput));
+    const curIdx = block.inputList.indexOf(parentInput);
     let fieldIdx = parentInput.fieldRow.indexOf(location) - 1;
     for (let i = curIdx; i >= 0; i--) {
       const input = block.inputList[i];
@@ -422,6 +419,7 @@ export class ASTNode {
       case ASTNode.types.BLOCK: {
         const block = this.location_ as Block;
         const nextConnection = block.nextConnection;
+        if (!nextConnection) return null;
         return ASTNode.createConnectionNode(nextConnection);
       }
       case ASTNode.types.PREVIOUS: {
@@ -496,6 +494,7 @@ export class ASTNode {
       case ASTNode.types.BLOCK: {
         const block = this.location_ as Block;
         const topConnection = getParentConnection(block);
+        if (!topConnection) return null;
         return ASTNode.createConnectionNode(topConnection);
       }
       case ASTNode.types.PREVIOUS: {
@@ -746,7 +745,7 @@ export type Params = ASTNode.Params;
  * @param block The block to find the parent connection on.
  * @returns The connection connecting to the parent of the block.
  */
-function getParentConnection(block: Block): Connection {
+function getParentConnection(block: Block): Connection|null {
   let topConnection = block.outputConnection;
   if (!topConnection ||
       block.previousConnection && block.previousConnection.isConnected()) {

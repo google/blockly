@@ -19,12 +19,8 @@ import * as eventUtils from './utils.js';
 
 
 /**
- * Class for a finished loading event.
- * Used to notify the developer when the workspace has finished loading (i.e
- * domToWorkspace).
- * Finished loading events do not record undo or redo.
- *
- * @alias Blockly.Events.FinishedLoading
+ * Notifies listeners when the workspace has finished deserializing from
+ * JSON/XML.
  */
 export class FinishedLoading extends AbstractEvent {
   override isBlank = true;
@@ -37,12 +33,10 @@ export class FinishedLoading extends AbstractEvent {
    */
   constructor(opt_workspace?: Workspace) {
     super();
-    /** Whether or not the event is blank (to be populated by fromJson). */
     this.isBlank = !!opt_workspace;
 
     if (!opt_workspace) return;
 
-    /** The workspace identifier for this event. */
     this.workspaceId = opt_workspace.id;
   }
 

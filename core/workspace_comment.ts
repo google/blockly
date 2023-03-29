@@ -22,8 +22,6 @@ import type {Workspace} from './workspace.js';
 
 /**
  * Class for a workspace comment.
- *
- * @alias Blockly.WorkspaceComment
  */
 export class WorkspaceComment {
   id: string;
@@ -154,7 +152,7 @@ export class WorkspaceComment {
    *   This is not valid if the comment is currently being dragged.
    * @internal
    */
-  getXY(): Coordinate {
+  getRelativeToSurfaceXY(): Coordinate {
     return new Coordinate(this.xy_.x, this.xy_.y);
   }
 
@@ -267,10 +265,10 @@ export class WorkspaceComment {
    */
   toXmlWithXY(opt_noId?: boolean): Element {
     const element = this.toXml(opt_noId);
-    element.setAttribute('x', `${Math.round(this.xy_.x)}`);
-    element.setAttribute('y', `${Math.round(this.xy_.y)}`);
-    element.setAttribute('h', `${this.height_}`);
-    element.setAttribute('w', `${this.width_}`);
+    element.setAttribute('x', String(Math.round(this.xy_.x)));
+    element.setAttribute('y', String(Math.round(this.xy_.y)));
+    element.setAttribute('h', String(this.height_));
+    element.setAttribute('w', String(this.width_));
     return element;
   }
 
@@ -309,9 +307,7 @@ export class WorkspaceComment {
         eventUtils.fire(
             new (eventUtils.get(eventUtils.COMMENT_CREATE))(comment));
       } finally {
-        if (!existingGroup) {
-          eventUtils.setGroup(false);
-        }
+        eventUtils.setGroup(existingGroup);
       }
     }
   }

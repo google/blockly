@@ -43,8 +43,6 @@ class Capability<_T> {
 
 /**
  * Manager for all items registered with the workspace.
- *
- * @alias Blockly.ComponentManager
  */
 export class ComponentManager {
   static Capability = Capability;
@@ -120,7 +118,7 @@ export class ComponentManager {
           'Plugin "' + id + 'already has capability "' + capability + '"');
       return;
     }
-    capability = String(capability).toLowerCase();
+    capability = `${capability}`.toLowerCase();
     this.componentData.get(id)?.capabilities.push(capability);
     this.capabilityToComponentIds.get(capability)?.push(id);
   }
@@ -143,7 +141,7 @@ export class ComponentManager {
           '" to remove');
       return;
     }
-    capability = String(capability).toLowerCase();
+    capability = `${capability}`.toLowerCase();
     arrayUtils.removeElem(this.componentData.get(id)!.capabilities, capability);
     arrayUtils.removeElem(this.capabilityToComponentIds.get(capability)!, id);
   }
@@ -156,7 +154,7 @@ export class ComponentManager {
    * @returns Whether the component has the capability.
    */
   hasCapability<T>(id: string, capability: string|Capability<T>): boolean {
-    capability = String(capability).toLowerCase();
+    capability = `${capability}`.toLowerCase();
     return this.componentData.has(id) &&
         this.componentData.get(id)!.capabilities.indexOf(capability) !== -1;
   }
@@ -180,7 +178,7 @@ export class ComponentManager {
    */
   getComponents<T extends IComponent>(
       capability: string|Capability<T>, sorted: boolean): T[] {
-    capability = String(capability).toLowerCase();
+    capability = `${capability}`.toLowerCase();
     const componentIds = this.capabilityToComponentIds.get(capability);
     if (!componentIds) {
       return [];

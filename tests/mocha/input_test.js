@@ -19,11 +19,11 @@ suite('Inputs', function() {
     }]);
 
     this.workspace = Blockly.inject('blocklyDiv');
-    this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+    this.block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
         '<block type="empty_block"/>'
     ), this.workspace);
 
-    this.renderStub = sinon.stub(this.block, 'render');
+    this.renderStub = sinon.stub(this.block, 'queueRender');
     this.bumpNeighboursStub = sinon.stub(this.block, 'bumpNeighbours');
 
     this.dummy = this.block.appendDummyInput('DUMMY');

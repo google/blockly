@@ -8,5 +8,5 @@
         "console": true,
         "require": true
     },
-    "extends": "../../.eslintrc.json"
+    "extends": "../../.eslintrc.js"
 }

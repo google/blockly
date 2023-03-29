@@ -799,7 +799,7 @@ function init() {
                                mainWorkspace);
   } else {
     var xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="factory_base" deletable="false" movable="false"></block></xml>';
-    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), mainWorkspace);
+    Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml), mainWorkspace);
   }
   mainWorkspace.clearUndo();
 

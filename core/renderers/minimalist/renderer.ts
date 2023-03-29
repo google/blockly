@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Minimalist renderer.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.minimalist.Renderer');
 
@@ -24,13 +19,10 @@ import {RenderInfo} from './info.js';
 
 /**
  * The minimalist renderer.
- *
- * @alias Blockly.minimalist.Renderer
  */
 export class Renderer extends BaseRenderer {
   /**
    * @param name The renderer name.
-   * @internal
    */
   constructor(name: string) {
     super(name);

@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Functionality for the right-click context menus.
- *
- * @namespace Blockly.ContextMenu
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ContextMenu');
 
@@ -44,7 +39,6 @@ const dummyOwner = {};
  * Gets the block the context menu is currently attached to.
  *
  * @returns The block the context menu is attached to.
- * @alias Blockly.ContextMenu.getCurrentBlock
  */
 export function getCurrentBlock(): Block|null {
   return currentBlock;
@@ -54,7 +48,6 @@ export function getCurrentBlock(): Block|null {
  * Sets the block the context menu is currently attached to.
  *
  * @param block The block the context menu is attached to.
- * @alias Blockly.ContextMenu.setCurrentBlock
  */
 export function setCurrentBlock(block: Block|null) {
   currentBlock = block;
@@ -71,7 +64,6 @@ let menu_: Menu|null = null;
  * @param e Mouse event.
  * @param options Array of menu options.
  * @param rtl True if RTL, false if LTR.
- * @alias Blockly.ContextMenu.show
  */
 export function show(
     e: Event, options: (ContextMenuOption|LegacyContextMenuOption)[],
@@ -120,11 +112,15 @@ function populate_(
     if (option.enabled) {
       const actionHandler = function() {
         hide();
-        // If .scope does not exist on the option, then the callback will not
-        // be expecting a scope parameter, so there should be no problems. Just
-        // assume it is a ContextMenuOption and we'll pass undefined if it's
-        // not.
-        option.callback((option as ContextMenuOption).scope);
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            // If .scope does not exist on the option, then the callback
+            // will not be expecting a scope parameter, so there should be
+            // no problems. Just assume it is a ContextMenuOption and we'll
+            // pass undefined if it's not.
+            option.callback((option as ContextMenuOption).scope);
+          }, 0);
+        });
       };
       menuItem.onAction(actionHandler, {});
     }
@@ -200,8 +196,6 @@ function haltPropagation(e: Event) {
 
 /**
  * Hide the context menu.
- *
- * @alias Blockly.ContextMenu.hide
  */
 export function hide() {
   WidgetDiv.hideIfOwner(dummyOwner);
@@ -210,8 +204,6 @@ export function hide() {
 
 /**
  * Dispose of the menu.
- *
- * @alias Blockly.ContextMenu.dispose
  */
 export function dispose() {
   if (menu_) {
@@ -227,7 +219,6 @@ export function dispose() {
  * @param block Original block.
  * @param xml XML representation of new block.
  * @returns Function that creates a block.
- * @alias Blockly.ContextMenu.callbackFactory
  */
 export function callbackFactory(block: Block, xml: Element): Function {
   return () => {
@@ -263,7 +254,6 @@ export function callbackFactory(block: Block, xml: Element): Function {
  *     right-click originated.
  * @returns A menu option,
  *     containing text, enabled, and a callback.
- * @alias Blockly.ContextMenu.commentDeleteOption
  * @internal
  */
 export function commentDeleteOption(comment: WorkspaceCommentSvg):
@@ -287,7 +277,6 @@ export function commentDeleteOption(comment: WorkspaceCommentSvg):
  *     right-click originated.
  * @returns A menu option,
  *     containing text, enabled, and a callback.
- * @alias Blockly.ContextMenu.commentDuplicateOption
  * @internal
  */
 export function commentDuplicateOption(comment: WorkspaceCommentSvg):
@@ -311,7 +300,6 @@ export function commentDuplicateOption(comment: WorkspaceCommentSvg):
  * @returns A menu option, containing text, enabled, and a callback.
  * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
  *     comments are not bundled in.
- * @alias Blockly.ContextMenu.workspaceCommentOption
  * @internal
  */
 export function workspaceCommentOption(

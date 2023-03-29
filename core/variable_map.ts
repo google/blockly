@@ -32,8 +32,6 @@ import type {Workspace} from './workspace.js';
  * Class for a variable map.  This contains a dictionary data structure with
  * variable types as keys and lists of variables as values.  The list of
  * variables are the type indicated by the key.
- *
- * @alias Blockly.VariableMap
  */
 export class VariableMap {
   /**
@@ -46,10 +44,18 @@ export class VariableMap {
   /** @param workspace The workspace this map belongs to. */
   constructor(public workspace: Workspace) {}
 
-  /** Clear the variable map. */
+  /** Clear the variable map.  Fires events for every deletion. */
   clear() {
-    this.variableMap.clear();
+    for (const variables of this.variableMap.values()) {
+      while (variables.length > 0) {
+        this.deleteVariable(variables[0]);
+      }
+    }
+    if (this.variableMap.size !== 0) {
+      throw Error('Non-empty variable map');
+    }
   }
+
   /* Begin functions for renaming variables. */
   /**
    * Rename the given variable by updating its name in the variable map.
@@ -63,7 +69,10 @@ export class VariableMap {
     const type = variable.type;
     const conflictVar = this.getVariable(newName, type);
     const blocks = this.workspace.getAllBlocks(false);
-    eventUtils.setGroup(true);
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) {
+      eventUtils.setGroup(true);
+    }
     try {
       // The IDs may match if the rename is a simple case change (name1 ->
       // Name1).
@@ -74,7 +83,7 @@ export class VariableMap {
             variable, newName, conflictVar, blocks);
       }
     } finally {
-      eventUtils.setGroup(false);
+      eventUtils.setGroup(existingGroup);
     }
   }
 
@@ -144,6 +153,7 @@ export class VariableMap {
     // And remove it from the list.
     arrayUtils.removeElem(this.variableMap.get(type)!, variable);
   }
+
   /* End functions for renaming variables. */
   /**
    * Create a variable with a given name, optional type, and optional ID.
@@ -189,6 +199,7 @@ export class VariableMap {
 
     return variable;
   }
+
   /* Begin functions for variable deletion. */
   /**
    * Delete a variable.
@@ -205,6 +216,9 @@ export class VariableMap {
           variableList.splice(i, 1);
           eventUtils.fire(
               new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
+          if (variableList.length === 0) {
+            this.variableMap.delete(variable.type);
+          }
           return;
         }
       }
@@ -273,9 +287,7 @@ export class VariableMap {
       }
       this.deleteVariable(variable);
     } finally {
-      if (!existingGroup) {
-        eventUtils.setGroup(false);
-      }
+      eventUtils.setGroup(existingGroup);
     }
   }
   /* End functions for variable deletion. */
@@ -308,7 +320,7 @@ export class VariableMap {
    * @returns The variable with the given ID.
    */
   getVariableById(id: string): VariableModel|null {
-    for (const [_key, variables] of this.variableMap) {
+    for (const variables of this.variableMap.values()) {
       for (const variable of variables) {
         if (variable.getId() === id) {
           return variable;

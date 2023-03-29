@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * An object that provides constants for rendering blocks in Zelos
- * mode.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.ConstantProvider');
 
@@ -38,8 +32,6 @@ export interface InsideCorners {
 
 /**
  * An object that provides constants for rendering blocks in Zelos mode.
- *
- * @alias Blockly.zelos.ConstantProvider
  */
 export class ConstantProvider extends BaseConstantProvider {
   GRID_UNIT = 4;
@@ -49,8 +41,6 @@ export class ConstantProvider extends BaseConstantProvider {
 
   /**
    * Radius of the cursor for input and output connections.
-   *
-   * @internal
    */
   CURSOR_RADIUS = 5;
 
@@ -69,8 +59,6 @@ export class ConstantProvider extends BaseConstantProvider {
    * When a block with the outer shape contains an input block with the inner
    * shape on its left or right edge, the block elements are aligned such that
    * the padding specified is reached.
-   *
-   * @internal
    */
   SHAPE_IN_SHAPE_PADDING: {[key: number]: {[key: number]: number}} = {
     1: {
@@ -128,8 +116,6 @@ export class ConstantProvider extends BaseConstantProvider {
   /**
    * The ID of the selected glow filter, or the empty string if no filter is
    * set.
-   *
-   * @internal
    */
   selectedGlowFilterId = '';
 
@@ -141,8 +127,6 @@ export class ConstantProvider extends BaseConstantProvider {
   /**
    * The ID of the replacement glow filter, or the empty string if no filter
    * is set.
-   *
-   * @internal
    */
   replacementGlowFilterId = '';
 
@@ -169,7 +153,6 @@ export class ConstantProvider extends BaseConstantProvider {
    */
   SQUARED: Shape|null = null;
 
-  /** @internal */
   constructor() {
     super();
 
@@ -312,9 +295,8 @@ export class ConstantProvider extends BaseConstantProvider {
    *
    * @returns An object containing sizing and path information about a hexagonal
    *     shape for connections.
-   * @internal
    */
-  makeHexagonal(): Shape {
+  protected makeHexagonal(): Shape {
     const maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
 
     /**
@@ -376,9 +358,8 @@ export class ConstantProvider extends BaseConstantProvider {
    *
    * @returns An object containing sizing and path information about a rounded
    *     shape for connections.
-   * @internal
    */
-  makeRounded(): Shape {
+  protected makeRounded(): Shape {
     const maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
     const maxHeight = maxWidth * 2;
 
@@ -449,9 +430,8 @@ export class ConstantProvider extends BaseConstantProvider {
    *
    * @returns An object containing sizing and path information about a squared
    *     shape for connections.
-   * @internal
    */
-  makeSquared(): Shape {
+  protected makeSquared(): Shape {
     const radius = this.CORNER_RADIUS;
 
     /**

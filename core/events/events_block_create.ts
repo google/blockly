@@ -16,6 +16,7 @@ import type {Block} from '../block.js';
 import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
+import * as utilsXml from '../utils/xml.js';
 import * as Xml from '../xml.js';
 
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
@@ -24,15 +25,20 @@ import {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a block creation event.
- *
- * @alias Blockly.Events.BlockCreate
+ * Notifies listeners when a block (or connected stack of blocks) is
+ * created.
  */
 export class BlockCreate extends BlockBase {
   override type = eventUtils.BLOCK_CREATE;
+
+  /** The XML representation of the created block(s). */
   xml?: Element|DocumentFragment;
-  ids?: string[];
+
+  /** The JSON respresentation of the created block(s). */
   json?: blocks.State;
+
+  /** All of the IDs of created blocks. */
+  ids?: string[];
 
   /** @param opt_block The created block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
@@ -50,7 +56,6 @@ export class BlockCreate extends BlockBase {
     this.xml = Xml.blockToDomWithXY(opt_block);
     this.ids = eventUtils.getDescendantIds(opt_block);
 
-    /** JSON representation of the block that was just created. */
     this.json = blocks.save(opt_block, {addCoordinates: true}) as blocks.State;
   }
 
@@ -95,7 +100,7 @@ export class BlockCreate extends BlockBase {
         'Blockly.Events.BlockCreate.prototype.fromJson', 'version 9',
         'version 10', 'Blockly.Events.fromJson');
     super.fromJson(json);
-    this.xml = Xml.textToDom(json['xml']);
+    this.xml = utilsXml.textToDom(json['xml']);
     this.ids = json['ids'];
     this.json = json['json'] as blocks.State;
     if (json['recordUndo'] !== undefined) {
@@ -117,7 +122,7 @@ export class BlockCreate extends BlockBase {
     const newEvent =
         super.fromJson(json, workspace, event ?? new BlockCreate()) as
         BlockCreate;
-    newEvent.xml = Xml.textToDom(json['xml']);
+    newEvent.xml = utilsXml.textToDom(json['xml']);
     newEvent.ids = json['ids'];
     newEvent.json = json['json'] as blocks.State;
     if (json['recordUndo'] !== undefined) {

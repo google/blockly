@@ -7,24 +7,19 @@
 /**
  * @fileoverview Colour blocks for Blockly.
  */
-'use strict';
 
-goog.module('Blockly.libraryBlocks.colour');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.libraryBlocks.colour');
 
-// const {BlockDefinition} = goog.requireType('Blockly.blocks');
-// TODO (6248): Properly import the BlockDefinition type.
-/* eslint-disable-next-line no-unused-vars */
-const BlockDefinition = Object;
-const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
-/** @suppress {extraRequire} */
-goog.require('Blockly.FieldColour');
+import type {BlockDefinition} from '../core/blocks.js';
+import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
+import '../core/field_colour.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
- * @type {!Object<string, !BlockDefinition>}
  */
-const blocks = createBlockDefinitionsFromJsonArray([
+export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for colour picker.
   {
     'type': 'colour_picker',
@@ -115,7 +110,6 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'tooltip': '%{BKY_COLOUR_BLEND_TOOLTIP}',
   },
 ]);
-exports.blocks = blocks;
 
 // Register provided blocks.
 defineBlocks(blocks);

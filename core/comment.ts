@@ -32,8 +32,6 @@ import {Svg} from './utils/svg.js';
 
 /**
  * Class for a comment.
- *
- * @alias Blockly.Comment
  */
 export class Comment extends Icon {
   private readonly model: CommentModel;
@@ -44,17 +42,12 @@ export class Comment extends Icon {
    */
   private cachedText: string|null = '';
 
-  /** Mouse up event data. */
-  private onMouseUpWrapper: browserEvents.Data|null = null;
-
-  /** Wheel event data. */
-  private onWheelWrapper: browserEvents.Data|null = null;
-
-  /** Change event data. */
-  private onChangeWrapper: browserEvents.Data|null = null;
-
-  /** Input event data. */
-  private onInputWrapper: browserEvents.Data|null = null;
+  /**
+   * Array holding info needed to unbind events.
+   * Used for disposing.
+   * Ex: [[node, name, func], [node, name, func]].
+   */
+  private boundEvents: browserEvents.Data[] = [];
 
   /**
    * The SVG element that contains the text edit area, or null if not created.
@@ -149,14 +142,14 @@ export class Comment extends Icon {
     body.appendChild(textarea);
     this.foreignObject!.appendChild(body);
 
-    this.onMouseUpWrapper = browserEvents.conditionalBind(
-        textarea, 'focus', this, this.startEdit, true);
+    this.boundEvents.push(browserEvents.conditionalBind(
+        textarea, 'focus', this, this.startEdit, true));
     // Don't zoom with mousewheel.
-    this.onWheelWrapper = browserEvents.conditionalBind(
+    this.boundEvents.push(browserEvents.conditionalBind(
         textarea, 'wheel', this, function(e: Event) {
           e.stopPropagation();
-        });
-    this.onChangeWrapper = browserEvents.conditionalBind(
+        }));
+    this.boundEvents.push(browserEvents.conditionalBind(
         textarea, 'change', this,
         /**
          * @param _e Unused event parameter.
@@ -167,15 +160,15 @@ export class Comment extends Icon {
                 this.getBlock(), 'comment', null, this.cachedText,
                 this.model.text));
           }
-        });
-    this.onInputWrapper = browserEvents.conditionalBind(
+        }));
+    this.boundEvents.push(browserEvents.conditionalBind(
         textarea, 'input', this,
         /**
          * @param _e Unused event parameter.
          */
         function(this: Comment, _e: Event) {
           this.model.text = textarea.value;
-        });
+        }));
 
     setTimeout(textarea.focus.bind(textarea), 0);
 
@@ -279,22 +272,10 @@ export class Comment extends Icon {
    * Dispose of the bubble.
    */
   private disposeBubble() {
-    if (this.onMouseUpWrapper) {
-      browserEvents.unbind(this.onMouseUpWrapper);
-      this.onMouseUpWrapper = null;
+    for (const event of this.boundEvents) {
+      browserEvents.unbind(event);
     }
-    if (this.onWheelWrapper) {
-      browserEvents.unbind(this.onWheelWrapper);
-      this.onWheelWrapper = null;
-    }
-    if (this.onChangeWrapper) {
-      browserEvents.unbind(this.onChangeWrapper);
-      this.onChangeWrapper = null;
-    }
-    if (this.onInputWrapper) {
-      browserEvents.unbind(this.onInputWrapper);
-      this.onInputWrapper = null;
-    }
+    this.boundEvents.length = 0;
     if (this.bubble_) {
       this.bubble_.dispose();
       this.bubble_ = null;

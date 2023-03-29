@@ -7,7 +7,6 @@
 /**
  * @fileoverview Javascript for BlockLibraryView class. It manages the display
  * of the Block Library dropdown, save, and delete buttons.
- *
  */
 
 'use strict';

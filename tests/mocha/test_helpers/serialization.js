@@ -61,11 +61,12 @@ export const runSerializationTestSuite = (testCases) => {
       let block;
       if (testCase.json) {
         block = Blockly.serialization.blocks.append(
-            testCase.json, this.workspace);
+            testCase.json, this.workspace, {recordUndo: true});
       } else {
-        block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             testCase.xml), this.workspace);
       }
+      this.clock.runAll();
       testCase.assertBlockStructure(block);
     };
   };
@@ -78,13 +79,15 @@ export const runSerializationTestSuite = (testCases) => {
     return function() {
       if (testCase.json) {
         const block = Blockly.serialization.blocks.append(
-            testCase.json, this.workspace);
+            testCase.json, this.workspace, {recordUndo: true});
+        this.clock.runAll();
         const generatedJson = Blockly.serialization.blocks.save(block);
         const expectedJson = testCase.expectedJson || testCase.json;
         chai.assert.deepEqual(generatedJson, expectedJson);
       } else {
-        const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             testCase.xml), this.workspace);
+        this.clock.runAll();
         const generatedXml =
             Blockly.Xml.domToPrettyText(
                 Blockly.Xml.blockToDom(block));

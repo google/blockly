@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Objects representing a round corner in a row of a rendered
- * block.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.RoundCorner');
 
@@ -22,14 +16,11 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space a rounded corner takes up
  * during rendering.
- *
- * @alias Blockly.blockRendering.RoundCorner
  */
 export class RoundCorner extends Measurable {
   /**
    * @param constants The rendering constants provider.
    * @param opt_position The position of this corner.
-   * @internal
    */
   constructor(constants: ConstantProvider, opt_position?: string) {
     super(constants);

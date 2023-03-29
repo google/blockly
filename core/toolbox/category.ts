@@ -30,8 +30,6 @@ import {ToolboxItem} from './toolbox_item.js';
 
 /**
  * Class for a category in a toolbox.
- *
- * @alias Blockly.ToolboxCategory
  */
 export class ToolboxCategory extends ToolboxItem implements
     ISelectableToolboxItem {
@@ -59,19 +57,19 @@ export class ToolboxCategory extends ToolboxItem implements
   /** The colour of the category. */
   protected colour_ = '';
 
-  /** The html container for the category. */
+  /** The HTML container for the category. */
   protected htmlDiv_: HTMLDivElement|null = null;
 
-  /** The html element for the category row. */
+  /** The HTML element for the category row. */
   protected rowDiv_: HTMLDivElement|null = null;
 
-  /** The html element that holds children elements of the category row. */
+  /** The HTML element that holds children elements of the category row. */
   protected rowContents_: HTMLDivElement|null = null;
 
-  /** The html element for the toolbox icon. */
+  /** The HTML element for the toolbox icon. */
   protected iconDom_: Element|null = null;
 
-  /** The html element for the toolbox label. */
+  /** The HTML element for the toolbox label. */
   protected labelDom_: Element|null = null;
   protected cssConfig_: CssConfig;
 

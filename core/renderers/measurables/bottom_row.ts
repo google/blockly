@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Object representing a bottom row on a rendered block.
- * of its subcomponents.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.BottomRow');
 
@@ -26,21 +20,15 @@ import {Types} from './types.js';
  * a block as well as spacing information for the bottom row.
  * Elements in a bottom row can consist of corners, spacers and next
  * connections.
- *
- * @alias Blockly.blockRendering.BottomRow
  */
 export class BottomRow extends Row {
   /**
    * Whether this row has a next connection.
-   *
-   * @internal
    */
   hasNextConnection = false;
 
   /**
    * The next connection on the row, if any.
-   *
-   * @internal
    */
   connection: NextConnection|null = null;
 
@@ -48,8 +36,6 @@ export class BottomRow extends Row {
    * The amount that the bottom of the block extends below the horizontal
    * edge, e.g. because of a next connection.  Must be non-negative (see
    * #2820).
-   *
-   * @internal
    */
   descenderHeight = 0;
 
@@ -61,7 +47,6 @@ export class BottomRow extends Row {
 
   /**
    * @param constants The rendering constants provider.
-   * @internal
    */
   constructor(constants: ConstantProvider) {
     super(constants);

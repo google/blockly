@@ -38,8 +38,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a mutator dialog.
- *
- * @alias Blockly.Mutator
  */
 export class Mutator extends Icon {
   private quarkNames: string[];
@@ -317,8 +315,6 @@ export class Mutator extends Icon {
       return;
     }
     const block = this.getBlock();
-    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
-        block, visible, 'mutator'));
     if (visible) {
       // Create the bubble.
       this.bubble_ = new Bubble(
@@ -371,7 +367,9 @@ export class Mutator extends Icon {
       }
       this.resizeBubble();
       // When the mutator's workspace changes, update the source block.
-      ws.addChangeListener(this.workspaceChanged.bind(this));
+      const boundListener = this.workspaceChanged.bind(this);
+      ws.addChangeListener(boundListener);
+      if (flyout) flyout.getWorkspace().addChangeListener(boundListener);
       // Update the source block immediately after the bubble becomes visible.
       this.updateWorkspace();
       this.applyColour();
@@ -390,6 +388,8 @@ export class Mutator extends Icon {
         this.sourceListener = null;
       }
     }
+    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+        block, visible, 'mutator'));
   }
 
   /**

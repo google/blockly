@@ -20,7 +20,18 @@ suite('Var Delete Event', function() {
   });
 
   suite('Serialization', function() {
-    test('events round-trip through JSON', function() {
+    test('untyped variable events round-trip through JSON', function() {
+      const varModel =
+          new Blockly.VariableModel(this.workspace, 'name', '', 'id');
+      const origEvent = new Blockly.Events.VarDelete(varModel);
+
+      const json = origEvent.toJson();
+      const newEvent = new Blockly.Events.fromJson(json, this.workspace);
+
+      chai.assert.deepEqual(newEvent, origEvent);
+    });
+
+    test('typed variable events round-trip through JSON', function() {
       const varModel =
           new Blockly.VariableModel(this.workspace, 'name', 'type', 'id');
       const origEvent = new Blockly.Events.VarDelete(varModel);

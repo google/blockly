@@ -4,17 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * XML reader and writer.
- *
- * @namespace Blockly.Xml
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Xml');
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {Connection} from './connection.js';
+import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {inputTypes} from './input_types.js';
@@ -35,7 +31,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * @param workspace The workspace containing blocks.
  * @param opt_noId True if the encoder should skip the block IDs.
  * @returns XML DOM element.
- * @alias Blockly.Xml.workspaceToDom
  */
 export function workspaceToDom(
     workspace: Workspace, opt_noId?: boolean): Element {
@@ -63,7 +58,6 @@ export function workspaceToDom(
  *
  * @param variableList List of all variable models.
  * @returns Tree of XML elements.
- * @alias Blockly.Xml.variablesToDom
  */
 export function variablesToDom(variableList: VariableModel[]): Element {
   const variables = utilsXml.createElement('variables');
@@ -87,7 +81,6 @@ export function variablesToDom(variableList: VariableModel[]): Element {
  * @param opt_noId True if the encoder should skip the block ID.
  * @returns Tree of XML elements or an empty document fragment if the block was
  *     an insertion marker.
- * @alias Blockly.Xml.blockToDomWithXY
  */
 export function blockToDomWithXY(block: Block, opt_noId?: boolean): Element|
     DocumentFragment {
@@ -105,14 +98,12 @@ export function blockToDomWithXY(block: Block, opt_noId?: boolean): Element|
   }
 
   const element = blockToDom(block, opt_noId);
-  const xy = block.getRelativeToSurfaceXY();
-  // AnyDuringMigration because:  Property 'setAttribute' does not exist on type
-  // 'Element | DocumentFragment'.
-  (element as AnyDuringMigration)
-      .setAttribute('x', Math.round(block.workspace.RTL ? width - xy.x : xy.x));
-  // AnyDuringMigration because:  Property 'setAttribute' does not exist on type
-  // 'Element | DocumentFragment'.
-  (element as AnyDuringMigration).setAttribute('y', Math.round(xy.y));
+  if (isElement(element)) {
+    const xy = block.getRelativeToSurfaceXY();
+    element.setAttribute(
+        'x', String(Math.round(block.workspace.RTL ? width - xy.x : xy.x)));
+    element.setAttribute('y', String(Math.round(xy.y)));
+  }
   return element;
 }
 
@@ -158,7 +149,6 @@ function allFieldsToDom(block: Block, element: Element) {
  * @param opt_noId True if the encoder should skip the block ID.
  * @returns Tree of XML elements or an empty document fragment if the block was
  *     an insertion marker.
- * @alias Blockly.Xml.blockToDom
  */
 export function blockToDom(block: Block, opt_noId?: boolean): Element|
     DocumentFragment {
@@ -176,9 +166,7 @@ export function blockToDom(block: Block, opt_noId?: boolean): Element|
   const element = utilsXml.createElement(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
   if (!opt_noId) {
-    // It's important to use setAttribute here otherwise IE11 won't serialize
-    // the block's ID when domToText is called.
-    element.setAttribute('id', block.id);
+    element.id = block.id;
   }
   if (block.mutationToDom) {
     // Custom data for an advanced block.
@@ -197,15 +185,9 @@ export function blockToDom(block: Block, opt_noId?: boolean): Element|
 
     const commentElement = utilsXml.createElement('comment');
     commentElement.appendChild(utilsXml.createTextNode(commentText));
-    // AnyDuringMigration because:  Argument of type 'boolean' is not assignable
-    // to parameter of type 'string'.
-    commentElement.setAttribute('pinned', pinned as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    commentElement.setAttribute('h', size.height as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    commentElement.setAttribute('w', size.width as AnyDuringMigration);
+    commentElement.setAttribute('pinned', `${pinned}`);
+    commentElement.setAttribute('h', String(size.height));
+    commentElement.setAttribute('w', String(size.width));
 
     element.appendChild(commentElement);
   }
@@ -248,7 +230,7 @@ export function blockToDom(block: Block, opt_noId?: boolean): Element|
   }
   if (block.inputsInline !== undefined &&
       block.inputsInline !== block.inputsInlineDefault) {
-    element.setAttribute('inline', block.inputsInline.toString());
+    element.setAttribute('inline', String(block.inputsInline));
   }
   if (block.isCollapsed()) {
     element.setAttribute('collapsed', 'true');
@@ -337,7 +319,6 @@ function cloneShadow(shadow: Element, opt_noId?: boolean): Element {
  *
  * @param dom A tree of XML nodes.
  * @returns Text representation.
- * @alias Blockly.Xml.domToText
  */
 export function domToText(dom: Node): string {
   const text = utilsXml.domToText(dom);
@@ -351,7 +332,6 @@ export function domToText(dom: Node): string {
  *
  * @param dom A tree of XML elements.
  * @returns Text representation.
- * @alias Blockly.Xml.domToPrettyText
  */
 export function domToPrettyText(dom: Node): string {
   // This function is not guaranteed to be correct for all XML.
@@ -386,15 +366,13 @@ export function domToPrettyText(dom: Node): string {
  * @returns A DOM object representing the singular child of the document
  *     element.
  * @throws if the text doesn't parse.
- * @alias Blockly.Xml.textToDom
+ * @deprecated Moved to core/utils/xml.js.
  */
 export function textToDom(text: string): Element {
-  const doc = utilsXml.textToDomDocument(text);
-  if (!doc || !doc.documentElement ||
-      doc.getElementsByTagName('parsererror').length) {
-    throw Error('textToDom was unable to parse: ' + text);
-  }
-  return doc.documentElement;
+  deprecation.warn(
+      'Blockly.Xml.textToDom', 'version 9', 'version 10',
+      'Use Blockly.utils.xml.textToDom instead');
+  return utilsXml.textToDom(text);
 }
 
 /**
@@ -404,15 +382,12 @@ export function textToDom(text: string): Element {
  * @param xml XML DOM.
  * @param workspace The workspace.
  * @returns An array containing new block IDs.
- * @alias Blockly.Xml.clearWorkspaceAndLoadFromXml
  */
 export function clearWorkspaceAndLoadFromXml(
     xml: Element, workspace: WorkspaceSvg): string[] {
   workspace.setResizesEnabled(false);
   workspace.clear();
-  // AnyDuringMigration because:  Argument of type 'WorkspaceSvg' is not
-  // assignable to parameter of type 'Workspace'.
-  const blockIds = domToWorkspace(xml, workspace as AnyDuringMigration);
+  const blockIds = domToWorkspace(xml, workspace);
   workspace.setResizesEnabled(true);
   return blockIds;
 }
@@ -425,7 +400,6 @@ export function clearWorkspaceAndLoadFromXml(
  * @returns An array containing new block IDs.
  * @suppress {strictModuleDepCheck} Suppress module check while workspace
  * comments are not bundled in.
- * @alias Blockly.Xml.domToWorkspace
  */
 export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
   let width = 0;  // Not used in LTR.
@@ -456,16 +430,8 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
         // to be moved to a nested destination in the next operation.
         const block = domToBlock(xmlChildElement, workspace);
         newBlockIds.push(block.id);
-        // AnyDuringMigration because:  Argument of type 'string | null' is not
-        // assignable to parameter of type 'string'.
-        const blockX = xmlChildElement.hasAttribute('x') ?
-            parseInt(xmlChildElement.getAttribute('x') as AnyDuringMigration) :
-            10;
-        // AnyDuringMigration because:  Argument of type 'string | null' is not
-        // assignable to parameter of type 'string'.
-        const blockY = xmlChildElement.hasAttribute('y') ?
-            parseInt(xmlChildElement.getAttribute('y') as AnyDuringMigration) :
-            10;
+        const blockX = parseInt(xmlChildElement.getAttribute('x') ?? '10', 10);
+        const blockY = parseInt(xmlChildElement.getAttribute('y') ?? '10', 10);
         if (!isNaN(blockX) && !isNaN(blockY)) {
           block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
         }
@@ -492,9 +458,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
       }
     }
   } finally {
-    if (!existingGroup) {
-      eventUtils.setGroup(false);
-    }
+    eventUtils.setGroup(existingGroup);
     dom.stopTextWidthCache();
   }
   // Re-enable workspace resizing.
@@ -512,7 +476,6 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
  * @param xml The XML DOM.
  * @param workspace The workspace to add to.
  * @returns An array containing new block IDs.
- * @alias Blockly.Xml.appendDomToWorkspace
  */
 export function appendDomToWorkspace(
     xml: Element, workspace: WorkspaceSvg): string[] {
@@ -566,7 +529,6 @@ export function appendDomToWorkspace(
  * @param xmlBlock XML block element.
  * @param workspace The workspace.
  * @returns The root block created.
- * @alias Blockly.Xml.domToBlock
  */
 export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
   // Create top-level block.
@@ -608,8 +570,6 @@ export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
     eventUtils.enable();
   }
   if (eventUtils.isEnabled()) {
-    // AnyDuringMigration because:  Property 'get' does not exist on type
-    // '(name: string) => void'.
     const newVariables =
         Variables.getAddedVariables(workspace, variablesBeforeCreation);
     // Fire a VarCreate event for each (if any) new variable created.
@@ -630,7 +590,6 @@ export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
  *
  * @param xmlVariables List of XML variable elements.
  * @param workspace The workspace to which the variable should be added.
- * @alias Blockly.Xml.domToVariables
  */
 export function domToVariables(xmlVariables: Element, workspace: Workspace) {
   for (let i = 0; i < xmlVariables.children.length; i++) {
@@ -639,9 +598,8 @@ export function domToVariables(xmlVariables: Element, workspace: Workspace) {
     const id = xmlChild.getAttribute('id');
     const name = xmlChild.textContent;
 
-    // AnyDuringMigration because:  Argument of type 'string | null' is not
-    // assignable to parameter of type 'string'.
-    workspace.createVariable(name as AnyDuringMigration, type, id);
+    if (!name) return;
+    workspace.createVariable(name, type, id);
   }
 }
 
@@ -743,12 +701,8 @@ function applyCommentTagNodes(xmlChildren: Element[], block: Block) {
     const xmlChild = xmlChildren[i];
     const text = xmlChild.textContent;
     const pinned = xmlChild.getAttribute('pinned') === 'true';
-    // AnyDuringMigration because:  Argument of type 'string | null' is not
-    // assignable to parameter of type 'string'.
-    const width = parseInt(xmlChild.getAttribute('w') as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'string | null' is not
-    // assignable to parameter of type 'string'.
-    const height = parseInt(xmlChild.getAttribute('h') as AnyDuringMigration);
+    const width = parseInt(xmlChild.getAttribute('w') ?? '50', 10);
+    const height = parseInt(xmlChild.getAttribute('h') ?? '50', 10);
 
     block.setCommentText(text);
     block.commentModel.pinned = pinned;
@@ -788,9 +742,11 @@ function applyFieldTagNodes(xmlChildren: Element[], block: Block) {
   for (let i = 0; i < xmlChildren.length; i++) {
     const xmlChild = xmlChildren[i];
     const nodeName = xmlChild.getAttribute('name');
-    // AnyDuringMigration because:  Argument of type 'string | null' is not
-    // assignable to parameter of type 'string'.
-    domToField(block, nodeName as AnyDuringMigration, xmlChild);
+    if (!nodeName) {
+      console.warn(`Ignoring unnamed field in block ${block.type}`);
+      continue;
+    }
+    domToField(block, nodeName, xmlChild);
   }
 }
 
@@ -802,24 +758,19 @@ function applyFieldTagNodes(xmlChildren: Element[], block: Block) {
  */
 function findChildBlocks(xmlNode: Element):
     {childBlockElement: Element|null, childShadowElement: Element|null} {
-  const childBlockInfo = {childBlockElement: null, childShadowElement: null};
+  let childBlockElement: Element|null = null;
+  let childShadowElement: Element|null = null;
   for (let i = 0; i < xmlNode.childNodes.length; i++) {
     const xmlChild = xmlNode.childNodes[i];
-    if (xmlChild.nodeType === dom.NodeType.ELEMENT_NODE) {
+    if (isElement(xmlChild)) {
       if (xmlChild.nodeName.toLowerCase() === 'block') {
-        // AnyDuringMigration because:  Type 'Element' is not assignable to type
-        // 'null'.
-        childBlockInfo.childBlockElement =
-            xmlChild as Element as AnyDuringMigration;
+        childBlockElement = xmlChild;
       } else if (xmlChild.nodeName.toLowerCase() === 'shadow') {
-        // AnyDuringMigration because:  Type 'Element' is not assignable to type
-        // 'null'.
-        childBlockInfo.childShadowElement =
-            xmlChild as Element as AnyDuringMigration;
+        childShadowElement = xmlChild;
       }
     }
   }
-  return childBlockInfo;
+  return {childBlockElement, childShadowElement};
 }
 /**
  * Applies input child nodes (value or statement) to the given block.
@@ -835,9 +786,7 @@ function applyInputTagNodes(
   for (let i = 0; i < xmlChildren.length; i++) {
     const xmlChild = xmlChildren[i];
     const nodeName = xmlChild.getAttribute('name');
-    // AnyDuringMigration because:  Argument of type 'string | null' is not
-    // assignable to parameter of type 'string'.
-    const input = block.getInput(nodeName as AnyDuringMigration);
+    const input = nodeName ? block.getInput(nodeName) : null;
     if (!input) {
       console.warn(
           'Ignoring non-existent input ' + nodeName + ' in block ' +
@@ -911,10 +860,8 @@ function domToBlockHeadless(
   if (!prototypeName) {
     throw TypeError('Block type unspecified: ' + xmlBlock.outerHTML);
   }
-  const id = xmlBlock.getAttribute('id');
-  // AnyDuringMigration because:  Argument of type 'string | null' is not
-  // assignable to parameter of type 'string | undefined'.
-  block = workspace.newBlock(prototypeName, id as AnyDuringMigration);
+  const id = xmlBlock.getAttribute('id') ?? undefined;
+  block = workspace.newBlock(prototypeName, id);
 
   // Preprocess childNodes so tags can be processed in a consistent order.
   const xmlChildNameMap = mapSupportedXmlTags(xmlBlock);
@@ -1020,7 +967,6 @@ function domToField(block: Block, fieldName: string, xml: Element) {
  *
  * @param xmlBlock XML block element or an empty DocumentFragment if the block
  *     was an insertion marker.
- * @alias Blockly.Xml.deleteNext
  */
 export function deleteNext(xmlBlock: Element|DocumentFragment) {
   for (let i = 0; i < xmlBlock.childNodes.length; i++) {
@@ -1030,4 +976,8 @@ export function deleteNext(xmlBlock: Element|DocumentFragment) {
       break;
     }
   }
+}
+
+function isElement(node: Node): node is Element {
+  return node.nodeType === dom.NodeType.ELEMENT_NODE;
 }

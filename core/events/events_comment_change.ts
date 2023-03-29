@@ -22,13 +22,16 @@ import type {Workspace} from '../workspace.js';
 
 
 /**
- * Class for a comment change event.
- *
- * @alias Blockly.Events.CommentChange
+ * Notifies listeners that the contents of a workspace comment has changed.
  */
 export class CommentChange extends CommentBase {
   override type = eventUtils.COMMENT_CHANGE;
+
+  // TODO(#6774): We should remove underscores.
+  /** The previous contents of the comment. */
   oldContents_?: string;
+
+  /** The new contents of the comment. */
   newContents_?: string;
 
   /**

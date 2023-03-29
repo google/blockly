@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Object representing a row that holds one or more inputs on a
- * rendered block.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.InputRow');
 
@@ -24,20 +18,15 @@ import {Types} from './types.js';
 
 /**
  * An object containing information about a row that holds one or more inputs.
- *
- * @alias Blockly.blockRendering.InputRow
  */
 export class InputRow extends Row {
   /**
    * The total width of all blocks connected to this row.
-   *
-   * @internal
    */
   connectedBlockWidths = 0;
 
   /**
    * @param constants The rendering constants provider.
-   * @internal
    */
   constructor(constants: ConstantProvider) {
     super(constants);
@@ -46,8 +35,6 @@ export class InputRow extends Row {
 
   /**
    * Inspect all subcomponents and populate all size properties on the row.
-   *
-   * @internal
    */
   override measure() {
     this.width = this.minWidth;

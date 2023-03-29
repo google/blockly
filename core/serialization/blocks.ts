@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Handles serializing blocks to plain JavaScript objects only containing state.
- *
- * @namespace Blockly.serialization.blocks
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.blocks');
 
@@ -19,6 +14,7 @@ import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../input_types.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import {Size} from '../utils/size.js';
+import * as utilsXml from '../utils/xml.js';
 import type {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
 
@@ -32,8 +28,6 @@ import * as serializationRegistry from './registry.js';
 
 /**
  * Represents the state of a connection.
- *
- * @alias Blockly.serialization.blocks.ConnectionState
  */
 export interface ConnectionState {
   shadow: State|undefined;
@@ -42,8 +36,6 @@ export interface ConnectionState {
 
 /**
  * Represents the state of a given block.
- *
- * @alias Blockly.serialization.blocks.State
  */
 export interface State {
   type: string;
@@ -51,6 +43,9 @@ export interface State {
   x?: number;
   y?: number;
   collapsed?: boolean;
+  deletable?: boolean;
+  movable?: boolean;
+  editable?: boolean;
   enabled?: boolean;
   inline?: boolean;
   data?: string;
@@ -77,7 +72,6 @@ export interface State {
  *     exist. True by default.
  * @returns The serialized state of the block, or null if the block could not be
  *     serialied (eg it was an insertion marker).
- * @alias Blockly.serialization.blocks.save
  */
 export function save(block: Block, {
   addCoordinates = false,
@@ -145,6 +139,15 @@ function saveAttributes(block: Block, state: State) {
   }
   if (!block.isEnabled()) {
     state['enabled'] = false;
+  }
+  if (!block.isOwnDeletable()) {
+    state['deletable'] = false;
+  }
+  if (!block.isOwnMovable()) {
+    state['movable'] = false;
+  }
+  if (!block.isOwnEditable()) {
+    state['editable'] = false;
   }
   if (block.inputsInline !== undefined &&
       block.inputsInline !== block.inputsInlineDefault) {
@@ -317,7 +320,6 @@ function saveConnection(connection: Connection, doFullSerialization: boolean):
  * @param param1 recordUndo: If true, events triggered by this function will be
  *     undo-able by the user. False by default.
  * @returns The block that was just loaded.
- * @alias Blockly.serialization.blocks.append
  */
 export function append(
     state: State, workspace: Workspace,
@@ -340,7 +342,6 @@ export function append(
  *     it is created. False by default. recordUndo: If true, events triggered by
  *     this function will be undo-able by the user. False by default.
  * @returns The block that was just appended.
- * @alias Blockly.serialization.blocks.appendInternal
  * @internal
  */
 export function appendInternal(
@@ -443,6 +444,15 @@ function loadAttributes(block: Block, state: State) {
   if (state['collapsed']) {
     block.setCollapsed(true);
   }
+  if (state['deletable'] === false) {
+    block.setDeletable(false);
+  }
+  if (state['movable'] === false) {
+    block.setMovable(false);
+  }
+  if (state['editable'] === false) {
+    block.setEditable(false);
+  }
   if (state['enabled'] === false) {
     block.setEnabled(false);
   }
@@ -468,7 +478,7 @@ function loadExtraState(block: Block, state: State) {
   if (block.loadExtraState) {
     block.loadExtraState(state['extraState']);
   } else if (block.domToMutation) {
-    block.domToMutation(Xml.textToDom(state['extraState']));
+    block.domToMutation(utilsXml.textToDom(state['extraState']));
   }
 }
 
@@ -662,8 +672,6 @@ const saveBlock = save;
 
 /**
  * Serializer for saving and loading block state.
- *
- * @alias Blockly.serialization.blocks.BlockSerializer
  */
 export class BlockSerializer implements ISerializer {
   priority: number;

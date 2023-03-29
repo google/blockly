@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Functions for injecting Blockly into a web page.
- *
- * @namespace Blockly.inject
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.inject');
 
@@ -41,7 +36,6 @@ import {WorkspaceSvg} from './workspace_svg.js';
  * @param container Containing element, or its ID, or a CSS selector.
  * @param opt_options Optional dictionary of options.
  * @returns Newly created main workspace.
- * @alias Blockly.inject
  */
 export function inject(
     container: Element|string, opt_options?: BlocklyOptions): WorkspaceSvg {
@@ -104,7 +98,7 @@ export function inject(
  * @param options Dictionary of options.
  * @returns Newly created SVG image.
  */
-function createDom(container: Element, options: Options): Element {
+function createDom(container: Element, options: Options): SVGElement {
   // Sadly browsers (Chrome vs Firefox) are currently inconsistent in laying
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
@@ -159,7 +153,7 @@ function createDom(container: Element, options: Options): Element {
  * @returns Newly created main workspace.
  */
 function createMainWorkspace(
-    svg: Element, options: Options, blockDragSurface: BlockDragSurfaceSvg,
+    svg: SVGElement, options: Options, blockDragSurface: BlockDragSurfaceSvg,
     workspaceDragSurface: WorkspaceDragSurfaceSvg): WorkspaceSvg {
   options.parentWorkspace = null;
   const mainWorkspace =

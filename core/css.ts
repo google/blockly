@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Inject Blockly's CSS synchronously.
- *
- * @namespace Blockly.Css
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Css');
 
@@ -21,7 +16,6 @@ let injected = false;
  * components such as fields and the toolbox to store separate CSS.
  *
  * @param cssContent Multiline CSS string or an array of single lines of CSS.
- * @alias Blockly.Css.register
  */
 export function register(cssContent: string) {
   if (injected) {
@@ -40,7 +34,6 @@ export function register(cssContent: string) {
  * @param hasCss If false, don't inject CSS (providing CSS becomes the
  *     document's responsibility).
  * @param pathToMedia Path from page to the Blockly media directory.
- * @alias Blockly.Css.inject
  */
 export function inject(hasCss: boolean, pathToMedia: string) {
   // Only inject the CSS once.
@@ -67,8 +60,6 @@ export function inject(hasCss: boolean, pathToMedia: string) {
 
 /**
  * The CSS content for Blockly.
- *
- * @alias Blockly.Css.content
  */
 let content = `
 .blocklySvg {
@@ -235,16 +226,11 @@ let content = `
 }
 
 .blocklyDraggable {
-  /* backup for browsers (e.g. IE11) that don't support grab */
-  cursor: url("<<<PATH>>>/handopen.cur"), auto;
   cursor: grab;
   cursor: -webkit-grab;
 }
 
-  /* backup for browsers (e.g. IE11) that don't support grabbing */
 .blocklyDragging {
-  /* backup for browsers (e.g. IE11) that don't support grabbing */
-  cursor: url("<<<PATH>>>/handclosed.cur"), auto;
   cursor: grabbing;
   cursor: -webkit-grabbing;
 }
@@ -252,8 +238,6 @@ let content = `
   /* Changes cursor on mouse down. Not effective in Firefox because of
      https://bugzilla.mozilla.org/show_bug.cgi?id=771241 */
 .blocklyDraggable:active {
-  /* backup for browsers (e.g. IE11) that don't support grabbing */
-  cursor: url("<<<PATH>>>/handclosed.cur"), auto;
   cursor: grabbing;
   cursor: -webkit-grabbing;
 }
@@ -262,8 +246,6 @@ let content = `
    ahead of block during a drag. This way the cursor is still a closed hand.
   */
 .blocklyBlockDragSurface .blocklyDraggable {
-  /* backup for browsers (e.g. IE11) that don't support grabbing */
-  cursor: url("<<<PATH>>>/handclosed.cur"), auto;
   cursor: grabbing;
   cursor: -webkit-grabbing;
 }
@@ -373,11 +355,15 @@ let content = `
   box-sizing: border-box;
 }
 
-/* Edge and IE introduce a close icon when the input value is longer than a
-   certain length. This affects our sizing calculations of the text input.
-   Hiding the close icon to avoid that. */
-.blocklyHtmlInput::-ms-clear {
-  display: none;
+/* Remove the increase and decrease arrows on the field number editor */
+input.blocklyHtmlInput[type=number]::-webkit-inner-spin-button,
+input.blocklyHtmlInput[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .blocklyMainBackground {

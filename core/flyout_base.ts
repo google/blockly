@@ -33,6 +33,7 @@ import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
 import * as Variables from './variables.js';
 import {WorkspaceSvg} from './workspace_svg.js';
+import * as utilsXml from './utils/xml.js';
 import * as Xml from './xml.js';
 
 
@@ -43,8 +44,6 @@ enum FlyoutItemType {
 
 /**
  * Class for a flyout.
- *
- * @alias Blockly.Flyout
  */
 export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
@@ -75,8 +74,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Lay out the blocks in the flyout.
    *
-   * @param contents The blocks and buttons to lay
-   *     out.
+   * @param contents The blocks and buttons to lay out.
    * @param gaps The visible gaps between blocks.
    */
   protected abstract layout_(contents: FlyoutItem[], gaps: number[]): void;
@@ -129,9 +127,11 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   protected toolboxPosition_: number;
 
   /**
-   * Opaque data that can be passed to Blockly.unbindEvent_.
+   * Array holding info needed to unbind events.
+   * Used for disposing.
+   * Ex: [[node, name, func], [node, name, func]].
    */
-  private eventWrappers_: browserEvents.Data = [];
+  private boundEvents: browserEvents.Data[] = [];
 
   /**
    * Function that will be registered as a change listener on the workspace
@@ -358,21 +358,17 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
     this.hide();
 
-    Array.prototype.push.apply(
-        this.eventWrappers_,
-        browserEvents.conditionalBind(
-            (this.svgGroup_ as SVGGElement), 'wheel', this, this.wheel_));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        (this.svgGroup_ as SVGGElement), 'wheel', this, this.wheel_));
     if (!this.autoClose) {
       this.filterWrapper_ = this.filterForCapacity_.bind(this);
       this.targetWorkspace.addChangeListener(this.filterWrapper_);
     }
 
     // Dragging the flyout up and down.
-    Array.prototype.push.apply(
-        this.eventWrappers_,
-        browserEvents.conditionalBind(
-            (this.svgBackground_ as SVGPathElement), 'pointerdown', this,
-            this.onMouseDown_));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        (this.svgBackground_ as SVGPathElement), 'pointerdown', this,
+        this.onMouseDown_));
 
     // A flyout connected to a workspace doesn't have its own current gesture.
     this.workspace_.getGesture =
@@ -402,7 +398,10 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   dispose() {
     this.hide();
     this.workspace_.getComponentManager().removeComponent(this.id);
-    browserEvents.unbind(this.eventWrappers_);
+    for (const event of this.boundEvents) {
+      browserEvents.unbind(event);
+    }
+    this.boundEvents.length = 0;
     if (this.filterWrapper_) {
       this.targetWorkspace.removeChangeListener(this.filterWrapper_);
       this.filterWrapper_ = null;
@@ -526,18 +525,13 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * @param y The computed y origin of the flyout's SVG group.
    */
   protected positionAt_(width: number, height: number, x: number, y: number) {
-    this.svgGroup_?.setAttribute('width', width.toString());
-    this.svgGroup_?.setAttribute('height', height.toString());
+    this.svgGroup_?.setAttribute('width', `${width}`);
+    this.svgGroup_?.setAttribute('height', `${height}`);
     this.workspace_.setCachedParentSvgSize(width, height);
 
-    if (this.svgGroup_?.tagName === 'svg') {
+    if (this.svgGroup_) {
       const transform = 'translate(' + x + 'px,' + y + 'px)';
       dom.setCssTransform(this.svgGroup_, transform);
-    } else {
-      // IE and Edge don't support CSS transforms on SVG elements so
-      // it's important to set the transform on the SVG element itself
-      const transform = 'translate(' + x + ',' + y + ')';
-      this.svgGroup_?.setAttribute('transform', transform);
     }
 
     // Update the scrollbar (if one exists).
@@ -568,7 +562,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     }
     this.setVisible(false);
     // Delete all the event listeners.
-    for (let i = 0, listen; listen = this.listeners_[i]; i++) {
+    for (const listen of this.listeners_) {
       browserEvents.unbind(listen);
     }
     this.listeners_.length = 0;
@@ -576,9 +570,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
       this.workspace_.removeChangeListener(this.reflowWrapper_);
       this.reflowWrapper_ = null;
     }
+    // Do NOT delete the blocks here.  Wait until Flyout.show.
+    // https://neil.fraser.name/news/2014/08/09/
   }
-  // Do NOT delete the blocks here.  Wait until Flyout.show.
-  // https://neil.fraser.name/news/2014/08/09/
 
   /**
    * Show and populate the flyout.
@@ -603,19 +597,6 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     const flyoutInfo = this.createFlyoutInfo_(parsedContent);
 
     this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
-
-    // IE 11 is an incompetent browser that fails to fire mouseout events.
-    // When the mouse is over the background, deselect all blocks.
-    function deselectAll(this: Flyout) {
-      const topBlocks = this.workspace_.getTopBlocks(false);
-      for (let i = 0, block; block = topBlocks[i]; i++) {
-        block.removeSelect();
-      }
-    }
-
-    this.listeners_.push(browserEvents.conditionalBind(
-        (this.svgBackground_ as SVGPathElement), 'pointerover', this,
-        deselectAll));
 
     if (this.horizontalLayout) {
       this.height_ = 0;
@@ -649,34 +630,34 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     const gaps: number[] = [];
     this.permanentlyDisabled_.length = 0;
     const defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
-    for (let i = 0, contentInfo; contentInfo = parsedContent[i]; i++) {
-      if ('custom' in contentInfo) {
-        const customInfo = (contentInfo as toolbox.DynamicCategoryInfo);
+    for (const info of parsedContent) {
+      if ('custom' in info) {
+        const customInfo = (info as toolbox.DynamicCategoryInfo);
         const categoryName = customInfo['custom'];
         const flyoutDef = this.getDynamicCategoryContents_(categoryName);
         const parsedDynamicContent =
             toolbox.convertFlyoutDefToJsonArray(flyoutDef);
-        // Replace the element at i with the dynamic content it represents.
-        parsedContent.splice.apply(
-            parsedContent, [i, 1, ...parsedDynamicContent]);
-        contentInfo = parsedContent[i];
+        const {contents: dynamicContents, gaps: dynamicGaps} =
+            this.createFlyoutInfo_(parsedDynamicContent);
+        contents.push(...dynamicContents);
+        gaps.push(...dynamicGaps);
       }
 
-      switch (contentInfo['kind'].toUpperCase()) {
+      switch (info['kind'].toUpperCase()) {
         case 'BLOCK': {
-          const blockInfo = (contentInfo as toolbox.BlockInfo);
+          const blockInfo = (info as toolbox.BlockInfo);
           const block = this.createFlyoutBlock_(blockInfo);
           contents.push({type: FlyoutItemType.BLOCK, block: block});
           this.addBlockGap_(blockInfo, gaps, defaultGap);
           break;
         }
         case 'SEP': {
-          const sepInfo = (contentInfo as toolbox.SeparatorInfo);
+          const sepInfo = (info as toolbox.SeparatorInfo);
           this.addSeparatorGap_(sepInfo, gaps, defaultGap);
           break;
         }
         case 'LABEL': {
-          const labelInfo = (contentInfo as toolbox.LabelInfo);
+          const labelInfo = (info as toolbox.LabelInfo);
           // A label is a button with different styling.
           const label = this.createButton_(labelInfo, /** isLabel */ true);
           contents.push({type: FlyoutItemType.BUTTON, button: label});
@@ -684,7 +665,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
           break;
         }
         case 'BUTTON': {
-          const buttonInfo = (contentInfo as toolbox.ButtonInfo);
+          const buttonInfo = (info as toolbox.ButtonInfo);
           const button = this.createButton_(buttonInfo, /** isLabel */ false);
           contents.push({type: FlyoutItemType.BUTTON, button: button});
           gaps.push(defaultGap);
@@ -692,6 +673,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
         }
       }
     }
+
     return {contents: contents, gaps: gaps};
   }
 
@@ -744,7 +726,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     let block;
     if (blockInfo['blockxml']) {
       const xml = (typeof blockInfo['blockxml'] === 'string' ?
-                       Xml.textToDom(blockInfo['blockxml']) :
+                       utilsXml.textToDom(blockInfo['blockxml']) :
                        blockInfo['blockxml']) as Element;
       block = this.getRecycledBlock_(xml.getAttribute('type')!);
       if (!block) {
@@ -800,10 +782,10 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
       blockInfo: toolbox.BlockInfo, gaps: number[], defaultGap: number) {
     let gap;
     if (blockInfo['gap']) {
-      gap = parseInt(blockInfo['gap'].toString());
+      gap = parseInt(String(blockInfo['gap']));
     } else if (blockInfo['blockxml']) {
       const xml = (typeof blockInfo['blockxml'] === 'string' ?
-                       Xml.textToDom(blockInfo['blockxml']) :
+                       utilsXml.textToDom(blockInfo['blockxml']) :
                        blockInfo['blockxml']) as Element;
       gap = parseInt(xml.getAttribute('gap')!);
     }
@@ -825,7 +807,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     // <sep gap="36"></sep>
     // The default gap is 24, can be set larger or smaller.
     // This overwrites the gap attribute on the previous element.
-    const newGap = parseInt(sepInfo['gap']!.toString());
+    const newGap = parseInt(String(sepInfo['gap']));
     // Ignore gaps before the first block.
     if (!isNaN(newGap) && gaps.length > 0) {
       gaps[gaps.length - 1] = newGap;
@@ -1075,13 +1057,13 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    */
   protected moveRectToBlock_(rect: SVGElement, block: BlockSvg) {
     const blockHW = block.getHeightWidth();
-    rect.setAttribute('width', blockHW.width.toString());
-    rect.setAttribute('height', blockHW.height.toString());
+    rect.setAttribute('width', String(blockHW.width));
+    rect.setAttribute('height', String(blockHW.height));
 
     const blockXY = block.getRelativeToSurfaceXY();
-    rect.setAttribute('y', blockXY.y.toString());
+    rect.setAttribute('y', String(blockXY.y));
     rect.setAttribute(
-        'x', (this.RTL ? blockXY.x - blockHW.width : blockXY.x).toString());
+        'x', String(this.RTL ? blockXY.x - blockHW.width : blockXY.x));
   }
 
   /**

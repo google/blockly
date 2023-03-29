@@ -31,8 +31,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for a pure SVG scrollbar.
  * This technique offers a scrollbar that is guaranteed to work, but may not
  * look or behave like the system's scrollbars.
- *
- * @alias Blockly.Scrollbar
  */
 export class Scrollbar {
   /**
@@ -225,12 +223,12 @@ export class Scrollbar {
       this.svgBackground.setAttribute('height', String(scrollbarThickness));
       this.outerSvg.setAttribute('height', String(scrollbarThickness));
       this.svgHandle.setAttribute('height', String(scrollbarThickness - 5));
-      this.svgHandle.setAttribute('y', String(2.5));
+      this.svgHandle.setAttribute('y', '2.5');
     } else {
       this.svgBackground.setAttribute('width', String(scrollbarThickness));
       this.outerSvg.setAttribute('width', String(scrollbarThickness));
       this.svgHandle.setAttribute('width', String(scrollbarThickness - 5));
-      this.svgHandle.setAttribute('x', String(2.5));
+      this.svgHandle.setAttribute('x', '2.5');
     }
   }
 

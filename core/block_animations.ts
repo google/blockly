@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Methods animating a block on connection and disconnection.
- *
- * @namespace Blockly.blockAnimations
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockAnimations');
 
@@ -28,18 +23,20 @@ interface CloneRect {
 /** PID of disconnect UI animation.  There can only be one at a time. */
 let disconnectPid: ReturnType<typeof setTimeout>|null = null;
 
-/** SVG group of wobbling block.  There can only be one at a time. */
-let disconnectGroup: SVGElement|null = null;
+/** The wobbling block.  There can only be one at a time. */
+let wobblingBlock: BlockSvg|null = null;
 
 
 /**
  * Play some UI effects (sound, animation) when disposing of a block.
  *
  * @param block The block being disposed of.
- * @alias Blockly.blockAnimations.disposeUiEffect
  * @internal
  */
 export function disposeUiEffect(block: BlockSvg) {
+  // Disposing is going to take so long the animation won't play anyway.
+  if (block.getDescendants(false).length > 100) return;
+
   const workspace = block.workspace;
   const svgGroup = block.getSvgRoot();
   workspace.getAudioManager().play('delete');
@@ -88,7 +85,6 @@ function disposeUiStep(
  * Play some UI effects (sound, ripple) after a connection has been established.
  *
  * @param block The block being connected.
- * @alias Blockly.blockAnimations.connectionUiEffect
  * @internal
  */
 export function connectionUiEffect(block: BlockSvg) {
@@ -135,8 +131,8 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
   if (percent > 1) {
     dom.removeNode(ripple);
   } else {
-    ripple.setAttribute('r', (percent * 25 * scale).toString());
-    ripple.style.opacity = (1 - percent).toString();
+    ripple.setAttribute('r', String(percent * 25 * scale));
+    ripple.style.opacity = String(1 - percent);
     disconnectPid = setTimeout(connectionUiStep, 10, ripple, start, scale);
   }
 }
@@ -145,7 +141,6 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
  * Play some UI effects (sound, animation) when disconnecting a block.
  *
  * @param block The block being disconnected.
- * @alias Blockly.blockAnimations.disconnectUiEffect
  * @internal
  */
 export function disconnectUiEffect(block: BlockSvg) {
@@ -163,18 +158,18 @@ export function disconnectUiEffect(block: BlockSvg) {
     magnitude *= -1;
   }
   // Start the animation.
-  disconnectGroup = block.getSvgRoot();
-  disconnectUiStep(disconnectGroup, magnitude, new Date());
+  wobblingBlock = block;
+  disconnectUiStep(block, magnitude, new Date());
 }
 
 /**
  * Animate a brief wiggle of a disconnected block.
  *
- * @param group SVG element to animate.
+ * @param block Block to animate.
  * @param magnitude Maximum degrees skew (reversed for RTL).
  * @param start Date of animation's start.
  */
-function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
+function disconnectUiStep(block: BlockSvg, magnitude: number, start: Date) {
   const DURATION = 200;  // Milliseconds.
   const WIGGLES = 3;     // Half oscillations.
 
@@ -186,29 +181,25 @@ function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
     const val = Math.round(
         Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
     skew = `skewX(${val})`;
-    disconnectPid = setTimeout(disconnectUiStep, 10, group, magnitude, start);
+    disconnectPid = setTimeout(disconnectUiStep, 10, block, magnitude, start);
   }
-  (group as AnyDuringMigration).skew_ = skew;
-  group.setAttribute(
-      'transform',
-      (group as AnyDuringMigration).translate_ +
-          (group as AnyDuringMigration).skew_);
+
+  block.getSvgRoot().setAttribute(
+      'transform', `${block.getTranslation()} ${skew}`);
 }
 
 /**
  * Stop the disconnect UI animation immediately.
  *
- * @alias Blockly.blockAnimations.disconnectUiStop
  * @internal
  */
 export function disconnectUiStop() {
-  if (disconnectGroup) {
-    if (disconnectPid) {
-      clearTimeout(disconnectPid);
-    }
-    const group = disconnectGroup;
-    (group as AnyDuringMigration).skew_ = '';
-    group.setAttribute('transform', (group as AnyDuringMigration).translate_);
-    disconnectGroup = null;
+  if (!wobblingBlock) return;
+  if (disconnectPid) {
+    clearTimeout(disconnectPid);
+    disconnectPid = null;
   }
+  wobblingBlock.getSvgRoot().setAttribute(
+      'transform', wobblingBlock.getTranslation());
+  wobblingBlock = null;
 }

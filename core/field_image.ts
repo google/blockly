@@ -16,14 +16,11 @@ import {Field, FieldConfig} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
-import type {Sentinel} from './utils/sentinel.js';
 import {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
 
 /**
  * Class for an image on a block.
- *
- * @alias Blockly.FieldImage
  */
 export class FieldImage extends Field<string> {
   /**
@@ -35,12 +32,10 @@ export class FieldImage extends Field<string> {
   private readonly imageHeight_: number;
 
   /** The function to be called when this field is clicked. */
-  private clickHandler_: ((p1: FieldImage) => AnyDuringMigration)|null = null;
+  private clickHandler_: ((p1: FieldImage) => void)|null = null;
 
   /** The rendered field's image element. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGImageElement'.
-  private imageElement_: SVGImageElement = null as AnyDuringMigration;
+  private imageElement_: SVGImageElement|null = null;
 
   /**
    * Editable fields usually show some sort of UI indicating they are
@@ -60,7 +55,6 @@ export class FieldImage extends Field<string> {
 
   /** Alt text of this image. */
   private altText_ = '';
-  override value_: AnyDuringMigration;
 
   /**
    * @param src The URL of the image.
@@ -69,19 +63,19 @@ export class FieldImage extends Field<string> {
    * after their own constructors have run).
    * @param width Width of the image.
    * @param height Height of the image.
-   * @param opt_alt Optional alt text for when block is collapsed.
-   * @param opt_onClick Optional function to be called when the image is
-   *     clicked. If opt_onClick is defined, opt_alt must also be defined.
-   * @param opt_flipRtl Whether to flip the icon in RTL.
-   * @param opt_config A map of options used to configure the field.
+   * @param alt Optional alt text for when block is collapsed.
+   * @param onClick Optional function to be called when the image is
+   *     clicked. If onClick is defined, alt must also be defined.
+   * @param flipRtl Whether to flip the icon in RTL.
+   * @param config A map of options used to configure the field.
    *     See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/image#creation}
    * for a list of properties this parameter supports.
    */
   constructor(
-      src: string|Sentinel, width: string|number, height: string|number,
-      opt_alt?: string, opt_onClick?: (p1: FieldImage) => AnyDuringMigration,
-      opt_flipRtl?: boolean, opt_config?: FieldImageConfig) {
+      src: string|typeof Field.SKIP_SETUP, width: string|number,
+      height: string|number, alt?: string, onClick?: (p1: FieldImage) => void,
+      flipRtl?: boolean, config?: FieldImageConfig) {
     super(Field.SKIP_SETUP);
 
     const imageHeight = Number(parsing.replaceMessageReferences(height));
@@ -105,19 +99,17 @@ export class FieldImage extends Field<string> {
      */
     this.imageHeight_ = imageHeight;
 
-    if (typeof opt_onClick === 'function') {
-      this.clickHandler_ = opt_onClick;
+    if (typeof onClick === 'function') {
+      this.clickHandler_ = onClick;
     }
 
-    if (src === Field.SKIP_SETUP) {
-      return;
-    }
+    if (src === Field.SKIP_SETUP) return;
 
-    if (opt_config) {
-      this.configure_(opt_config);
+    if (config) {
+      this.configure_(config);
     } else {
-      this.flipRtl_ = !!opt_flipRtl;
-      this.altText_ = parsing.replaceMessageReferences(opt_alt) || '';
+      this.flipRtl_ = !!flipRtl;
+      this.altText_ = parsing.replaceMessageReferences(alt) || '';
     }
     this.setValue(parsing.replaceMessageReferences(src));
   }
@@ -162,15 +154,14 @@ export class FieldImage extends Field<string> {
   /**
    * Ensure that the input value (the source URL) is a string.
    *
-   * @param opt_newValue The input value.
+   * @param newValue The input value.
    * @returns A string, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      string|null {
-    if (typeof opt_newValue !== 'string') {
+  protected override doClassValidation_(newValue?: any): string|null {
+    if (typeof newValue !== 'string') {
       return null;
     }
-    return opt_newValue;
+    return newValue;
   }
 
   /**
@@ -179,11 +170,11 @@ export class FieldImage extends Field<string> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
-  protected override doValueUpdate_(newValue: AnyDuringMigration) {
+  protected override doValueUpdate_(newValue: string) {
     this.value_ = newValue;
     if (this.imageElement_) {
       this.imageElement_.setAttributeNS(
-          dom.XLINK_NS, 'xlink:href', String(this.value_));
+          dom.XLINK_NS, 'xlink:href', this.value_);
     }
   }
 
@@ -227,7 +218,7 @@ export class FieldImage extends Field<string> {
    * @param func The function that is called when the image is clicked, or null
    *     to remove.
    */
-  setOnClickHandler(func: ((p1: FieldImage) => AnyDuringMigration)|null) {
+  setOnClickHandler(func: ((p1: FieldImage) => void)|null) {
     this.clickHandler_ = func;
   }
 

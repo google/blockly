@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for an AST node location SVG.
- *
- * @namespace Blockly.IASTNodeLocationSvg
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IASTNodeLocationSvg');
 
@@ -17,8 +12,6 @@ import type {IASTNodeLocation} from './i_ast_node_location.js';
 
 /**
  * An AST node location SVG interface.
- *
- * @alias Blockly.IASTNodeLocationSvg
  */
 export interface IASTNodeLocationSvg extends IASTNodeLocation {
   /**

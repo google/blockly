@@ -87,8 +87,6 @@ const ZOOM_TO_FIT_MARGIN = 20;
 /**
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
- *
- * @alias Blockly.WorkspaceSvg
  */
 export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
@@ -1076,13 +1074,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.cachedParentSvgSize.width = width;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
-      svg.setAttribute('data-cached-width', width.toString());
+      svg.setAttribute('data-cached-width', `${width}`);
     }
     if (height != null) {
       this.cachedParentSvgSize.height = height;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
-      svg.setAttribute('data-cached-height', height.toString());
+      svg.setAttribute('data-cached-height', `${height}`);
     }
   }
 
@@ -1368,21 +1366,22 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (!existingGroup) {
       eventUtils.setGroup(true);
     }
-
     let pastedThing;
-    // Checks if this is JSON. JSON has a type property, while elements don't.
-    if (state['type']) {
-      pastedThing = this.pasteBlock_(null, state as blocks.State);
-    } else {
-      const xmlBlock = state as Element;
-      if (xmlBlock.tagName.toLowerCase() === 'comment') {
-        pastedThing = this.pasteWorkspaceComment_(xmlBlock);
+    try {
+      // Checks if this is JSON. JSON has a type property, while elements don't.
+      if (state['type']) {
+        pastedThing = this.pasteBlock_(null, state as blocks.State);
       } else {
-        pastedThing = this.pasteBlock_(xmlBlock, null);
+        const xmlBlock = state as Element;
+        if (xmlBlock.tagName.toLowerCase() === 'comment') {
+          pastedThing = this.pasteWorkspaceComment_(xmlBlock);
+        } else {
+          pastedThing = this.pasteBlock_(xmlBlock, null);
+        }
       }
+    } finally {
+      eventUtils.setGroup(existingGroup);
     }
-
-    eventUtils.setGroup(existingGroup);
     return pastedThing;
   }
 
@@ -1892,39 +1891,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       common.setMainWorkspace(this);
       // We call e.preventDefault in many event handlers which means we
       // need to explicitly grab focus (e.g from a textarea) because
-      // the browser will not do it for us.  How to do this is browser
-      // dependent.
-      this.setBrowserFocus();
-    }
-  }
-
-  /** Set the workspace to have focus in the browser. */
-  private setBrowserFocus() {
-    // Blur whatever was focused since explicitly grabbing focus below does not
-    // work in Edge.
-    // In IE, SVGs can't be blurred or focused. Check to make sure the current
-    // focus can be blurred before doing so.
-    // See https://github.com/google/blockly/issues/4440
-    if (document.activeElement &&
-        document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
-    try {
-      // Focus the workspace SVG - this is for Chrome and Firefox.
+      // the browser will not do it for us.
       this.getParentSvg().focus({preventScroll: true});
-    } catch (e) {
-      // IE and Edge do not support focus on SVG elements. When that fails
-      // above, get the injectionDiv (the workspace's parent) and focus that
-      // instead.  This doesn't work in Chrome.
-      try {
-        // In IE11, use setActive (which is IE only) so the page doesn't scroll
-        // to the workspace gaining focus.
-        (this.getParentSvg().parentElement as any).setActive();
-      } catch (e) {
-        // setActive support was discontinued in Edge so when that fails, call
-        // focus instead.
-        this.getParentSvg().parentElement!.focus({preventScroll: true});
-      }
     }
   }
 
@@ -2096,11 +2064,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Scroll the workspace to center on the given block. If the block has other
-   * blocks stacked below it, the workspace will be centered on the stack.
+   * blocks stacked below it, the workspace will be centered on the stack,
+   * unless blockOnly is true.
    *
    * @param id ID of block center on.
+   * @param blockOnly True to center only on the block itself, not its stack.
    */
-  centerOnBlock(id: string|null) {
+  centerOnBlock(id: string|null, blockOnly?: boolean) {
     if (!this.isMovable()) {
       console.warn(
           'Tried to move a non-movable workspace. This could result' +
@@ -2116,7 +2086,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // XY is in workspace coordinates.
     const xy = block.getRelativeToSurfaceXY();
     // Height/width is in workspace units.
-    const heightWidth = block.getHeightWidth();
+    const heightWidth = blockOnly ? {height: block.height, width: block.width} :
+                                    block.getHeightWidth();
 
     // Find the enter of the block in workspace units.
     const blockCenterY = xy.y + heightWidth.height / 2;
@@ -2588,7 +2559,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
  * scrollbars accordingly.
  *
  * @param workspace The workspace to resize.
- * @alias Blockly.WorkspaceSvg.resizeSvgContents
  * @internal
  */
 export function resizeSvgContents(workspace: WorkspaceSvg) {

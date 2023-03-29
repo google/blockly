@@ -26,11 +26,11 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Abstract class for a comment event.
- *
- * @alias Blockly.Events.CommentBase
  */
 export class CommentBase extends AbstractEvent {
   override isBlank = true;
+
+  /** The ID of the comment that this event references. */
   commentId?: string;
 
   /**
@@ -44,20 +44,9 @@ export class CommentBase extends AbstractEvent {
 
     if (!opt_comment) return;
 
-    /** The ID of the comment this event pertains to. */
     this.commentId = opt_comment.id;
-
-    /** The workspace identifier for this event. */
     this.workspaceId = opt_comment.workspace.id;
-
-    /**
-     * The event group ID for the group this event belongs to. Groups define
-     * events that should be treated as an single action from the user's
-     * perspective, and should be undone together.
-     */
     this.group = eventUtils.getGroup();
-
-    /** Sets whether the event should be added to the undo stack. */
     this.recordUndo = eventUtils.getRecordUndo();
   }
 

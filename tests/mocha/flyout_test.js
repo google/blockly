@@ -360,7 +360,7 @@ suite('Flyout', function() {
 
       suite('XML', function() {
         test('True string', function() {
-          const xml = Blockly.Xml.textToDom(
+          const xml = Blockly.utils.xml.textToDom(
               '<xml>' +
               '<block type="text_print" disabled="true"></block>' +
               '</xml>'
@@ -370,7 +370,7 @@ suite('Flyout', function() {
         });
 
         test('False string', function() {
-          const xml = Blockly.Xml.textToDom(
+          const xml = Blockly.utils.xml.textToDom(
               '<xml>' +
               '<block type="text_print" disabled="false"></block>' +
               '</xml>'
@@ -381,7 +381,7 @@ suite('Flyout', function() {
 
         test('Disabled string', function() {
           // The XML system supports this for some reason!?
-          const xml = Blockly.Xml.textToDom(
+          const xml = Blockly.utils.xml.textToDom(
               '<xml>' +
               '<block type="text_print" disabled="disabled"></block>' +
               '</xml>'
@@ -391,7 +391,7 @@ suite('Flyout', function() {
         });
 
         test('Different string', function() {
-          const xml = Blockly.Xml.textToDom(
+          const xml = Blockly.utils.xml.textToDom(
               '<xml>' +
               '<block type="text_print" disabled="random"></block>' +
               '</xml>'

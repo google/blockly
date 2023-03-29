@@ -617,8 +617,10 @@ goog.declareModuleId = function(namespace) {
           'within an ES6 module');
     }
     if (goog.moduleLoaderState_ && goog.moduleLoaderState_.moduleName) {
-      // throw new Error(
-      //     'goog.declareModuleId may only be called once per module.');
+      throw new Error(
+          'goog.declareModuleId may only be called once per module.' +
+          'This error can also be caused by circular imports, which ' +
+          'are not supported by debug module loader.');
     }
     if (namespace in goog.loadedModules_) {
       throw new Error(
@@ -725,7 +727,7 @@ if (!COMPILED) {
 
   // NOTE: We add goog.module as an implicit namespace as goog.module is defined
   // here and because the existing module package has not been moved yet out of
-  // the goog.module namespace. This satisifies both the debug loader and
+  // the goog.module namespace. This satisfies both the debug loader and
   // ahead-of-time dependency management.
 }
 

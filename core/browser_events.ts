@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Browser event handling.
- *
- * @namespace Blockly.browserEvents
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.browserEvents');
 
@@ -20,8 +15,6 @@ import * as userAgent from './utils/useragent.js';
 /**
  * Blockly opaque event data used to unbind events when using
  * `bind` and `conditionalBind`.
- *
- * @alias Blockly.browserEvents.Data
  */
 export type Data = [EventTarget, string, (e: Event) => void][];
 
@@ -54,7 +47,6 @@ const PAGE_MODE_MULTIPLIER = 125;
  *     simultaneous touches.  False by default.
  * @param opt_noPreventDefault No-op, deprecated and will be removed in v10.
  * @returns Opaque data that can be passed to unbindEvent_.
- * @alias Blockly.browserEvents.conditionalBind
  */
 export function conditionalBind(
     node: EventTarget, name: string, thisObject: Object|null, func: Function,
@@ -105,7 +97,6 @@ export function conditionalBind(
  * @param thisObject The value of 'this' in the function.
  * @param func Function to call when event is triggered.
  * @returns Opaque data that can be passed to unbindEvent_.
- * @alias Blockly.browserEvents.bind
  */
 export function bind(
     node: EventTarget, name: string, thisObject: Object|null,
@@ -142,7 +133,6 @@ export function bind(
  * @param bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @returns The function call.
- * @alias Blockly.browserEvents.unbind
  */
 export function unbind(bindData: Data): (e: Event) => void {
   // Accessing an element of the last property of the array is unsafe if the
@@ -150,10 +140,7 @@ export function unbind(bindData: Data): (e: Event) => void {
   // should only pass Data from bind or conditionalBind.
   const callback = bindData[bindData.length - 1][2];
   while (bindData.length) {
-    const bindDatum = bindData.pop();
-    const node = bindDatum![0];
-    const name = bindDatum![1];
-    const func = bindDatum![2];
+    const [node, name, func] = bindData.pop()!;
     node.removeEventListener(name, func, false);
   }
   return callback;
@@ -164,7 +151,6 @@ export function unbind(bindData: Data): (e: Event) => void {
  *
  * @param e An event.
  * @returns True if text input.
- * @alias Blockly.browserEvents.isTargetInput
  */
 export function isTargetInput(e: Event): boolean {
   if (e.target instanceof HTMLElement) {
@@ -194,7 +180,6 @@ export function isTargetInput(e: Event): boolean {
  *
  * @param e Mouse event.
  * @returns True if right-click.
- * @alias Blockly.browserEvents.isRightButton
  */
 export function isRightButton(e: MouseEvent): boolean {
   if (e.ctrlKey && userAgent.MAC) {
@@ -213,7 +198,6 @@ export function isRightButton(e: MouseEvent): boolean {
  * @param svg SVG element.
  * @param matrix Inverted screen CTM to use.
  * @returns Object with .x and .y properties.
- * @alias Blockly.browserEvents.mouseToSvg
  */
 export function mouseToSvg(
     e: MouseEvent, svg: SVGSVGElement, matrix: SVGMatrix|null): SVGPoint {
@@ -232,7 +216,6 @@ export function mouseToSvg(
  *
  * @param e Mouse event.
  * @returns Scroll delta object with .x and .y properties.
- * @alias Blockly.browserEvents.getScrollDeltaPixels
  */
 export function getScrollDeltaPixels(e: WheelEvent): {x: number, y: number} {
   switch (e.deltaMode) {

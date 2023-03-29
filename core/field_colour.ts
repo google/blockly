@@ -25,16 +25,10 @@ import * as fieldRegistry from './field_registry.js';
 import * as aria from './utils/aria.js';
 import * as colour from './utils/colour.js';
 import * as idGenerator from './utils/idgenerator.js';
-import {KeyCodes} from './utils/keycodes.js';
-import type {Sentinel} from './utils/sentinel.js';
 import {Size} from './utils/size.js';
-
-export type FieldColourValidator = FieldValidator<string>;
 
 /**
  * Class for a colour input field.
- *
- * @alias Blockly.FieldColour
  */
 export class FieldColour extends Field<string> {
   /**
@@ -80,25 +74,17 @@ export class FieldColour extends Field<string> {
   static COLUMNS = 7;
 
   /** The field's colour picker element. */
-  private picker_: Element|null = null;
+  private picker: HTMLElement|null = null;
 
   /** Index of the currently highlighted element. */
-  private highlightedIndex_: number|null = null;
+  private highlightedIndex: number|null = null;
 
-  /** Mouse click event data. */
-  private onClickWrapper_: browserEvents.Data|null = null;
-
-  /** Mouse move event data. */
-  private onMouseMoveWrapper_: browserEvents.Data|null = null;
-
-  /** Mouse enter event data. */
-  private onMouseEnterWrapper_: browserEvents.Data|null = null;
-
-  /** Mouse leave event data. */
-  private onMouseLeaveWrapper_: browserEvents.Data|null = null;
-
-  /** Key down event data. */
-  private onKeyDownWrapper_: browserEvents.Data|null = null;
+  /**
+   * Array holding info needed to unbind events.
+   * Used for disposing.
+   * Ex: [[node, name, func], [node, name, func]].
+   */
+  private boundEvents: browserEvents.Data[] = [];
 
   /**
    * Serializable fields are saved by the serializer, non-serializable fields
@@ -117,55 +103,46 @@ export class FieldColour extends Field<string> {
   protected override isDirty_ = false;
 
   /** Array of colours used by this field.  If null, use the global list. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'string[]'.
-  private colours_: string[] = null as AnyDuringMigration;
+  private colours: string[]|null = null;
 
   /**
    * Array of colour tooltips used by this field.  If null, use the global
    * list.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'string[]'.
-  private titles_: string[] = null as AnyDuringMigration;
+  private titles: string[]|null = null;
 
   /**
    * Number of colour columns used by this field.  If 0, use the global
    * setting. By default use the global constants for columns.
    */
-  private columns_ = 0;
-  override size_: AnyDuringMigration;
-  override clickTarget_: AnyDuringMigration;
-  override value_: AnyDuringMigration;
+  private columns = 0;
 
   /**
-   * @param opt_value The initial value of the field. Should be in '#rrggbb'
+   * @param value The initial value of the field. Should be in '#rrggbb'
    *     format. Defaults to the first value in the default colour array. Also
    *     accepts Field.SKIP_SETUP if you wish to skip setup (only used by
    *     subclasses that want to handle configuration and setting the field
    *     value after their own constructors have run).
-   * @param opt_validator A function that is called to validate changes to the
+   * @param validator A function that is called to validate changes to the
    *     field's value. Takes in a colour string & returns a validated colour
-   *     string ('#rrggbb' format), or null to abort the change.Blockly.
-   * @param opt_config A map of options used to configure the field.
+   *     string ('#rrggbb' format), or null to abort the change.
+   * @param config A map of options used to configure the field.
    *     See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour}
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|Sentinel, opt_validator?: FieldColourValidator,
-      opt_config?: FieldColourConfig) {
+      value?: string|typeof Field.SKIP_SETUP, validator?: FieldColourValidator,
+      config?: FieldColourConfig) {
     super(Field.SKIP_SETUP);
 
-    if (opt_value === Field.SKIP_SETUP) {
-      return;
+    if (value === Field.SKIP_SETUP) return;
+    if (config) {
+      this.configure_(config);
     }
-    if (opt_config) {
-      this.configure_(opt_config);
-    }
-    this.setValue(opt_value);
-    if (opt_validator) {
-      this.setValidator(opt_validator);
+    this.setValue(value);
+    if (validator) {
+      this.setValidator(validator);
     }
   }
 
@@ -176,9 +153,9 @@ export class FieldColour extends Field<string> {
    */
   protected override configure_(config: FieldColourConfig) {
     super.configure_(config);
-    if (config.colourOptions) this.colours_ = config.colourOptions;
-    if (config.colourTitles) this.titles_ = config.colourTitles;
-    if (config.columns) this.columns_ = config.columns;
+    if (config.colourOptions) this.colours = config.colourOptions;
+    if (config.colourTitles) this.titles = config.colourTitles;
+    if (config.columns) this.columns = config.columns;
   }
 
   /**
@@ -198,6 +175,11 @@ export class FieldColour extends Field<string> {
     }
   }
 
+  /**
+   * Updates text field to match the colour/style of the block.
+   *
+   * @internal
+   */
   override applyColour() {
     if (!this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) {
       if (this.borderRect_) {
@@ -213,15 +195,14 @@ export class FieldColour extends Field<string> {
   /**
    * Ensure that the input value is a valid colour.
    *
-   * @param opt_newValue The input value.
+   * @param newValue The input value.
    * @returns A valid colour, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      string|null {
-    if (typeof opt_newValue !== 'string') {
+  protected override doClassValidation_(newValue?: any): string|null {
+    if (typeof newValue !== 'string') {
       return null;
     }
-    return colour.parse(opt_newValue);
+    return colour.parse(newValue);
   }
 
   /**
@@ -230,15 +211,14 @@ export class FieldColour extends Field<string> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a colour in '#rrggbb' format.
    */
-  protected override doValueUpdate_(newValue: AnyDuringMigration) {
+  protected override doValueUpdate_(newValue: string) {
     this.value_ = newValue;
     if (this.borderRect_) {
-      this.borderRect_.style.fill = newValue as string;
+      this.borderRect_.style.fill = newValue;
     } else if (
         this.sourceBlock_ && this.sourceBlock_.rendered &&
         this.sourceBlock_ instanceof BlockSvg) {
-      this.sourceBlock_.pathObject.svgPath.setAttribute(
-          'fill', newValue as string);
+      this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
       this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }
@@ -262,14 +242,14 @@ export class FieldColour extends Field<string> {
    *
    * @param colours Array of colours for this block, or null to use default
    *     (FieldColour.COLOURS).
-   * @param opt_titles Optional array of colour tooltips, or null to use default
+   * @param titles Optional array of colour tooltips, or null to use default
    *     (FieldColour.TITLES).
    * @returns Returns itself (for method chaining).
    */
-  setColours(colours: string[], opt_titles?: string[]): FieldColour {
-    this.colours_ = colours;
-    if (opt_titles) {
-      this.titles_ = opt_titles;
+  setColours(colours: string[], titles?: string[]): FieldColour {
+    this.colours = colours;
+    if (titles) {
+      this.titles = titles;
     }
     return this;
   }
@@ -282,23 +262,19 @@ export class FieldColour extends Field<string> {
    * @returns Returns itself (for method chaining).
    */
   setColumns(columns: number): FieldColour {
-    this.columns_ = columns;
+    this.columns = columns;
     return this;
   }
 
   /** Create and show the colour field's editor. */
   protected override showEditor_() {
-    this.dropdownCreate_();
-    // AnyDuringMigration because:  Argument of type 'Element | null' is not
-    // assignable to parameter of type 'Node'.
-    dropDownDiv.getContentDiv().appendChild(this.picker_ as AnyDuringMigration);
+    this.dropdownCreate();
+    dropDownDiv.getContentDiv().appendChild(this.picker!);
 
-    dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
+    dropDownDiv.showPositionedByField(this, this.dropdownDispose.bind(this));
 
     // Focus so we can start receiving keyboard events.
-    // AnyDuringMigration because:  Property 'focus' does not exist on type
-    // 'Element'.
-    (this.picker_ as AnyDuringMigration)!.focus({preventScroll: true});
+    this.picker!.focus({preventScroll: true});
   }
 
   /**
@@ -306,7 +282,7 @@ export class FieldColour extends Field<string> {
    *
    * @param e Mouse event.
    */
-  private onClick_(e: PointerEvent) {
+  private onClick(e: PointerEvent) {
     const cell = e.target as Element;
     const colour = cell && cell.getAttribute('data-colour');
     if (colour !== null) {
@@ -321,31 +297,35 @@ export class FieldColour extends Field<string> {
    *
    * @param e Keyboard event.
    */
-  private onKeyDown_(e: KeyboardEvent) {
-    let handled = false;
-    if (e.keyCode === KeyCodes.UP) {
-      this.moveHighlightBy_(0, -1);
-      handled = true;
-    } else if (e.keyCode === KeyCodes.DOWN) {
-      this.moveHighlightBy_(0, 1);
-      handled = true;
-    } else if (e.keyCode === KeyCodes.LEFT) {
-      this.moveHighlightBy_(-1, 0);
-      handled = true;
-    } else if (e.keyCode === KeyCodes.RIGHT) {
-      this.moveHighlightBy_(1, 0);
-      handled = true;
-    } else if (e.keyCode === KeyCodes.ENTER) {
-      // Select the highlighted colour.
-      const highlighted = this.getHighlighted_();
-      if (highlighted) {
-        const colour = highlighted && highlighted.getAttribute('data-colour');
-        if (colour !== null) {
-          this.setValue(colour);
+  private onKeyDown(e: KeyboardEvent) {
+    let handled = true;
+    let highlighted: HTMLElement|null;
+    switch (e.key) {
+      case 'ArrowUp':
+        this.moveHighlightBy(0, -1);
+        break;
+      case 'ArrowDown':
+        this.moveHighlightBy(0, 1);
+        break;
+      case 'ArrowLeft':
+        this.moveHighlightBy(-1, 0);
+        break;
+      case 'ArrowRight':
+        this.moveHighlightBy(1, 0);
+        break;
+      case 'Enter':
+        // Select the highlighted colour.
+        highlighted = this.getHighlighted();
+        if (highlighted) {
+          const colour = highlighted.getAttribute('data-colour');
+          if (colour !== null) {
+            this.setValue(colour);
+          }
         }
-      }
-      dropDownDiv.hideWithoutAnimation();
-      handled = true;
+        dropDownDiv.hideWithoutAnimation();
+        break;
+      default:
+        handled = false;
     }
     if (handled) {
       e.stopPropagation();
@@ -355,22 +335,22 @@ export class FieldColour extends Field<string> {
   /**
    * Move the currently highlighted position by dx and dy.
    *
-   * @param dx Change of x
-   * @param dy Change of y
+   * @param dx Change of x.
+   * @param dy Change of y.
    */
-  private moveHighlightBy_(dx: number, dy: number) {
-    if (!this.highlightedIndex_) {
+  private moveHighlightBy(dx: number, dy: number) {
+    if (!this.highlightedIndex) {
       return;
     }
 
-    const colours = this.colours_ || FieldColour.COLOURS;
-    const columns = this.columns_ || FieldColour.COLUMNS;
+    const colours = this.colours || FieldColour.COLOURS;
+    const columns = this.columns || FieldColour.COLUMNS;
 
-    // Get the current x and y coordinates
-    let x = this.highlightedIndex_ % columns;
-    let y = Math.floor(this.highlightedIndex_ / columns);
+    // Get the current x and y coordinates.
+    let x = this.highlightedIndex % columns;
+    let y = Math.floor(this.highlightedIndex / columns);
 
-    // Add the offset
+    // Add the offset.
     x += dx;
     y += dy;
 
@@ -405,9 +385,9 @@ export class FieldColour extends Field<string> {
     }
 
     // Move the highlight to the new coordinates.
-    const cell = this.picker_!.childNodes[y].childNodes[x] as Element;
+    const cell = this.picker!.childNodes[y].childNodes[x] as Element;
     const index = y * columns + x;
-    this.setHighlightedCell_(cell, index);
+    this.setHighlightedCell(cell, index);
   }
 
   /**
@@ -415,30 +395,26 @@ export class FieldColour extends Field<string> {
    *
    * @param e Mouse event.
    */
-  private onMouseMove_(e: PointerEvent) {
+  private onMouseMove(e: PointerEvent) {
     const cell = e.target as Element;
     const index = cell && Number(cell.getAttribute('data-index'));
-    if (index !== null && index !== this.highlightedIndex_) {
-      this.setHighlightedCell_(cell, index);
+    if (index !== null && index !== this.highlightedIndex) {
+      this.setHighlightedCell(cell, index);
     }
   }
 
   /** Handle a mouse enter event. Focus the picker. */
-  private onMouseEnter_() {
-    // AnyDuringMigration because:  Property 'focus' does not exist on type
-    // 'Element'.
-    (this.picker_ as AnyDuringMigration)!.focus({preventScroll: true});
+  private onMouseEnter() {
+    this.picker?.focus({preventScroll: true});
   }
 
   /**
    * Handle a mouse leave event. Blur the picker and unhighlight
    * the currently highlighted colour.
    */
-  private onMouseLeave_() {
-    // AnyDuringMigration because:  Property 'blur' does not exist on type
-    // 'Element'.
-    (this.picker_ as AnyDuringMigration)!.blur();
-    const highlighted = this.getHighlighted_();
+  private onMouseLeave() {
+    this.picker?.blur();
+    const highlighted = this.getHighlighted();
     if (highlighted) {
       dom.removeClass(highlighted, 'blocklyColourHighlighted');
     }
@@ -449,55 +425,53 @@ export class FieldColour extends Field<string> {
    *
    * @returns Highlighted item (null if none).
    */
-  private getHighlighted_(): HTMLElement|null {
-    if (!this.highlightedIndex_) {
+  private getHighlighted(): HTMLElement|null {
+    if (!this.highlightedIndex) {
       return null;
     }
 
-    const columns = this.columns_ || FieldColour.COLUMNS;
-    const x = this.highlightedIndex_ % columns;
-    const y = Math.floor(this.highlightedIndex_ / columns);
-    const row = this.picker_!.childNodes[y];
+    const columns = this.columns || FieldColour.COLUMNS;
+    const x = this.highlightedIndex % columns;
+    const y = Math.floor(this.highlightedIndex / columns);
+    const row = this.picker!.childNodes[y];
     if (!row) {
       return null;
     }
-    const col = row.childNodes[x] as HTMLElement;
-    return col;
+    return row.childNodes[x] as HTMLElement;
   }
 
   /**
    * Update the currently highlighted cell.
    *
-   * @param cell the new cell to highlight
-   * @param index the index of the new cell
+   * @param cell The new cell to highlight.
+   * @param index The index of the new cell.
    */
-  private setHighlightedCell_(cell: Element, index: number) {
+  private setHighlightedCell(cell: Element, index: number) {
     // Unhighlight the current item.
-    const highlighted = this.getHighlighted_();
+    const highlighted = this.getHighlighted();
     if (highlighted) {
       dom.removeClass(highlighted, 'blocklyColourHighlighted');
     }
     // Highlight new item.
     dom.addClass(cell, 'blocklyColourHighlighted');
     // Set new highlighted index.
-    this.highlightedIndex_ = index;
+    this.highlightedIndex = index;
 
     // Update accessibility roles.
-    // AnyDuringMigration because:  Argument of type 'string | null' is not
-    // assignable to parameter of type 'string | number | boolean | string[]'.
-    aria.setState(
-        this.picker_ as Element, aria.State.ACTIVEDESCENDANT,
-        cell.getAttribute('id') as AnyDuringMigration);
+    const cellId = cell.getAttribute('id');
+    if (cellId && this.picker) {
+      aria.setState(this.picker, aria.State.ACTIVEDESCENDANT, cellId);
+    }
   }
 
   /** Create a colour picker dropdown editor. */
-  private dropdownCreate_() {
-    const columns = this.columns_ || FieldColour.COLUMNS;
-    const colours = this.colours_ || FieldColour.COLOURS;
-    const titles = this.titles_ || FieldColour.TITLES;
+  private dropdownCreate() {
+    const columns = this.columns || FieldColour.COLUMNS;
+    const colours = this.colours || FieldColour.COLOURS;
+    const titles = this.titles || FieldColour.TITLES;
     const selectedColour = this.getValue();
     // Create the palette.
-    const table = (document.createElement('table'));
+    const table = document.createElement('table');
     table.className = 'blocklyColourTable';
     table.tabIndex = 0;
     table.dir = 'ltr';
@@ -519,58 +493,40 @@ export class FieldColour extends Field<string> {
       cell.setAttribute('data-colour', colours[i]);
       cell.title = titles[i] || colours[i];
       cell.id = idGenerator.getNextUniqueId();
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      cell.setAttribute('data-index', i as AnyDuringMigration);
+      cell.setAttribute('data-index', `${i}`);
       aria.setRole(cell, aria.Role.GRIDCELL);
       aria.setState(cell, aria.State.LABEL, colours[i]);
       aria.setState(cell, aria.State.SELECTED, colours[i] === selectedColour);
       cell.style.backgroundColor = colours[i];
       if (colours[i] === selectedColour) {
         cell.className = 'blocklyColourSelected';
-        this.highlightedIndex_ = i;
+        this.highlightedIndex = i;
       }
     }
 
     // Configure event handler on the table to listen for any event in a cell.
-    this.onClickWrapper_ = browserEvents.conditionalBind(
-        table, 'pointerdown', this, this.onClick_, true);
-    this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
-        table, 'pointermove', this, this.onMouseMove_, true);
-    this.onMouseEnterWrapper_ = browserEvents.conditionalBind(
-        table, 'pointerenter', this, this.onMouseEnter_, true);
-    this.onMouseLeaveWrapper_ = browserEvents.conditionalBind(
-        table, 'pointerleave', this, this.onMouseLeave_, true);
-    this.onKeyDownWrapper_ =
-        browserEvents.conditionalBind(table, 'keydown', this, this.onKeyDown_);
+    this.boundEvents.push(browserEvents.conditionalBind(
+        table, 'pointerdown', this, this.onClick, true));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        table, 'pointermove', this, this.onMouseMove, true));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        table, 'pointerenter', this, this.onMouseEnter, true));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        table, 'pointerleave', this, this.onMouseLeave, true));
+    this.boundEvents.push(browserEvents.conditionalBind(
+        table, 'keydown', this, this.onKeyDown, false));
 
-    this.picker_ = table;
+    this.picker = table;
   }
 
   /** Disposes of events and DOM-references belonging to the colour editor. */
-  private dropdownDispose_() {
-    if (this.onClickWrapper_) {
-      browserEvents.unbind(this.onClickWrapper_);
-      this.onClickWrapper_ = null;
+  private dropdownDispose() {
+    for (const event of this.boundEvents) {
+      browserEvents.unbind(event);
     }
-    if (this.onMouseMoveWrapper_) {
-      browserEvents.unbind(this.onMouseMoveWrapper_);
-      this.onMouseMoveWrapper_ = null;
-    }
-    if (this.onMouseEnterWrapper_) {
-      browserEvents.unbind(this.onMouseEnterWrapper_);
-      this.onMouseEnterWrapper_ = null;
-    }
-    if (this.onMouseLeaveWrapper_) {
-      browserEvents.unbind(this.onMouseLeaveWrapper_);
-      this.onMouseLeaveWrapper_ = null;
-    }
-    if (this.onKeyDownWrapper_) {
-      browserEvents.unbind(this.onKeyDownWrapper_);
-      this.onKeyDownWrapper_ = null;
-    }
-    this.picker_ = null;
-    this.highlightedIndex_ = null;
+    this.boundEvents.length = 0;
+    this.picker = null;
+    this.highlightedIndex = null;
   }
 
   /**
@@ -584,14 +540,19 @@ export class FieldColour extends Field<string> {
   static fromJson(options: FieldColourFromJsonConfig): FieldColour {
     // `this` might be a subclass of FieldColour if that class doesn't override
     // the static fromJson method.
-    return new this(options['colour'], undefined, options);
+    return new this(options.colour, undefined, options);
   }
 }
 
 /** The default value for this field. */
 FieldColour.prototype.DEFAULT_VALUE = FieldColour.COLOURS[0];
 
-/** CSS for colour picker.  See css.js for use. */
+fieldRegistry.register('field_colour', FieldColour);
+
+
+/**
+ * CSS for colour picker.
+ */
 Css.register(`
 .blocklyColourTable {
   border-collapse: collapse;
@@ -601,7 +562,7 @@ Css.register(`
 }
 
 .blocklyColourTable>tr>td {
-  border: .5px solid #888;
+  border: 0.5px solid #888;
   box-sizing: border-box;
   cursor: pointer;
   display: inline-block;
@@ -612,7 +573,7 @@ Css.register(`
 
 .blocklyColourTable>tr>td.blocklyColourHighlighted {
   border-color: #eee;
-  box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);
+  box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);
   position: relative;
 }
 
@@ -622,8 +583,6 @@ Css.register(`
   position: relative;
 }
 `);
-
-fieldRegistry.register('field_colour', FieldColour);
 
 /**
  * Config options for the colour field.
@@ -640,3 +599,20 @@ export interface FieldColourConfig extends FieldConfig {
 export interface FieldColourFromJsonConfig extends FieldColourConfig {
   colour?: string;
 }
+
+/**
+ * A function that is called to validate changes to the field's value before
+ * they are set.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators#return_values}
+ * @param newValue The value to be validated.
+ * @returns One of three instructions for setting the new value: `T`, `null`,
+ * or `undefined`.
+ *
+ * - `T` to set this function's returned value instead of `newValue`.
+ *
+ * - `null` to invoke `doValueInvalid_` and not set a value.
+ *
+ * - `undefined` to set `newValue` as is.
+ */
+export type FieldColourValidator = FieldValidator<string>;

@@ -341,4 +341,111 @@ suite('Connection checker', function() {
       chai.assert.isFalse(this.checker.doTypeChecks(this.con1, this.con2));
     });
   });
+  suite('Dragging Checks', function() {
+    suite('Stacks', function() {
+      setup(function() {
+        this.workspace = Blockly.inject('blocklyDiv');
+        // Load in three blocks: A and B are connected (next/prev); B is unmovable.
+        Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
+        <block type="text_print" id="A" x="-76" y="-112">
+          <next>
+            <block type="text_print" id="B" movable="false">
+            </block>
+          </next>
+        </block>
+        <block type="text_print" id="C" x="47" y="-118"/>
+      </xml>`), this.workspace);
+      [this.blockA, this.blockB, this.blockC] = this.workspace.getAllBlocks(true);
+      this.checker = this.workspace.connectionChecker;
+      });
+
+      test('Connect a stack', function() {
+        // block C is not connected to block A; both are movable.
+        chai.assert.isTrue(
+          this.checker.doDragChecks(
+            this.blockC.nextConnection, this.blockA.previousConnection, 9000),
+          'Should connect two compatible stack blocks');
+      });
+
+      test('Do not splice into unmovable stack', function() {
+        // Try to connect blockC above blockB. It shouldn't work because B is not movable
+        // and is already connected to A's nextConnection.
+        chai.assert.isFalse(
+          this.checker.doDragChecks(
+            this.blockC.previousConnection, this.blockA.nextConnection, 9000),
+          'Should not splice in a block above an unmovable block');
+      });
+
+      test('Connect to bottom of unmovable stack', function() {
+        // Try to connect blockC below blockB.
+        // This is allowed even though B is not movable because it is on B's nextConnection.
+        chai.assert.isTrue(
+          this.checker.doDragChecks(
+            this.blockC.previousConnection, this.blockB.nextConnection, 9000),
+          'Should connect below an unmovable stack block');
+      });
+
+      test('Connect to unconnected unmovable block', function() {
+        this.blockB.previousConnection.disconnect();
+        this.blockA.dispose();
+
+        // Try to connect blockC above blockB.
+        // This is allowed because we're not splicing into a stack.
+        chai.assert.isTrue(
+          this.checker.doDragChecks(
+            this.blockC.nextConnection, this.blockB.previousConnection, 9000),
+          'Should connect above an unconnected unmovable block'
+        );
+      });
+    });
+    suite('Rows', function() {
+      setup(function() {
+        this.workspace = Blockly.inject('blocklyDiv');
+        // Load 3 blocks: A and B are connected (input/output); B is unmovable.
+        Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
+        <block type="test_basic_row" id="A" x="38" y="37">
+          <value name="INPUT">
+            <block type="test_basic_row" id="B" movable="false"></block>
+          </value>
+        </block>
+        <block type="test_basic_row" id="C" x="38" y="87"></block>
+      </xml>`), this.workspace);
+      [this.blockA, this.blockB, this.blockC] = this.workspace.getAllBlocks(true);
+      this.checker = this.workspace.connectionChecker;
+      });
+
+      test('Do not splice into unmovable block row', function() {
+        // Try to connect C's output to A's input. Should fail because
+        // A is already connected to B, which is unmovable.
+        const inputConnection = this.blockA.inputList[0].connection;
+        chai.assert.isFalse(
+          this.checker.doDragChecks(this.blockC.outputConnection, inputConnection, 9000),
+          'Should not splice in a block before an unmovable block'
+        );
+      });
+
+      test('Connect to end of unmovable block', function() {
+        // Make blockC unmovable
+        this.blockC.setMovable(false);
+        // Try to connect A's output to C's input. This is allowed.
+        const inputConnection = this.blockC.inputList[0].connection;
+        chai.assert.isTrue(
+          this.checker.doDragChecks(this.blockA.outputConnection, inputConnection, 9000),
+          'Should connect to end of unmovable block'
+        );
+      });
+
+      test('Connect to unconnected unmovable block', function() {
+        this.blockB.outputConnection.disconnect();
+        this.blockA.dispose();
+
+        // Try to connect C's input to B's output. Allowed because B is now unconnected.
+        const inputConnection = this.blockC.inputList[0].connection;
+        chai.assert.isTrue(
+          this.checker.doDragChecks(inputConnection, this.blockB.outputConnection, 9000),
+          'Should connect to unconnected unmovable block'
+        );
+      });
+    });
+  });
 });

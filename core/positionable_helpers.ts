@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Utility functions for positioning UI elements.
- *
- * @namespace Blockly.uiPosition
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.uiPosition');
 
@@ -23,7 +18,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Enum for vertical positioning.
  *
- * @alias Blockly.uiPosition.verticalPosition
  * @internal
  */
 export enum verticalPosition {
@@ -34,7 +28,6 @@ export enum verticalPosition {
 /**
  * Enum for horizontal positioning.
  *
- * @alias Blockly.uiPosition.horizontalPosition
  * @internal
  */
 export enum horizontalPosition {
@@ -45,7 +38,6 @@ export enum horizontalPosition {
 /**
  * An object defining a horizontal and vertical positioning.
  *
- * @alias Blockly.uiPosition.Position
  * @internal
  */
 export interface Position {
@@ -56,7 +48,6 @@ export interface Position {
 /**
  * Enum for bump rules to use for dealing with collisions.
  *
- * @alias Blockly.uiPosition.bumpDirection
  * @internal
  */
 export enum bumpDirection {
@@ -77,7 +68,6 @@ export enum bumpDirection {
  * @param metrics The workspace UI metrics.
  * @param workspace The workspace.
  * @returns The suggested start position.
- * @alias Blockly.uiPosition.getStartPositionRect
  * @internal
  */
 export function getStartPositionRect(
@@ -124,7 +114,6 @@ export function getStartPositionRect(
  * @param workspace The workspace.
  * @param metrics The workspace metrics.
  * @returns The suggested corner position.
- * @alias Blockly.uiPosition.getCornerOppositeToolbox
  * @internal
  */
 export function getCornerOppositeToolbox(
@@ -151,7 +140,6 @@ export function getCornerOppositeToolbox(
  * @param savedPositions List of rectangles that represent the positions of UI
  *     elements already placed.
  * @returns The suggested position rectangle.
- * @alias Blockly.uiPosition.bumpPositionRect
  * @internal
  */
 export function bumpPositionRect(

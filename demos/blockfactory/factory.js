@@ -10,7 +10,6 @@
  * generate a preview block and starter code for the block (block definition and
  * generator stub. Uses the Block Factory namespace. Depends on the FactoryUtils
  * for its code generation functions.
- *
  */
 'use strict';
 
@@ -305,7 +304,7 @@ BlockFactory.disableEnableLink = function() {
  */
 BlockFactory.showStarterBlock = function() {
   BlockFactory.mainWorkspace.clear();
-  var xml = Blockly.Xml.textToDom(BlockFactory.STARTER_BLOCK_XML_TEXT);
+  var xml = Blockly.utils.xml.textToDom(BlockFactory.STARTER_BLOCK_XML_TEXT);
   Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
 };
 

@@ -66,6 +66,10 @@ async function runGeneratorsInBrowser(outputDir) {
 
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
+
+  // Increase the script timeouts to 2 minutes to allow the generators to finish.
+  await browser.setTimeout({ 'script': 120000 })
+
   console.log('Loading url: ' + url);
   await browser.url(url);
 

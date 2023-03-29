@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Utility methods for objects.
- *
- * @namespace Blockly.utils.object
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.object');
 
@@ -22,7 +17,6 @@ import * as deprecation from './deprecation.js';
  * @param parentCtor Parent class.
  * @suppress {strictMissingProperties} superClass_ is not defined on Function.
  * @deprecated No longer provided by Blockly.
- * @alias Blockly.utils.object.inherits
  */
 export function inherits(childCtor: Function, parentCtor: Function) {
   deprecation.warn('Blockly.utils.object.inherits', 'version 9', 'version 10');
@@ -50,7 +44,6 @@ export function inherits(childCtor: Function, parentCtor: Function) {
  * @param target Target.
  * @param source Source.
  * @deprecated Use the built-in **Object.assign** instead.
- * @alias Blockly.utils.object.mixin
  */
 export function mixin(target: AnyDuringMigration, source: AnyDuringMigration) {
   deprecation.warn(
@@ -66,7 +59,6 @@ export function mixin(target: AnyDuringMigration, source: AnyDuringMigration) {
  * @param target Target.
  * @param source Source.
  * @returns The resulting object.
- * @alias Blockly.utils.object.deepMerge
  */
 export function deepMerge(
     target: AnyDuringMigration,
@@ -87,7 +79,6 @@ export function deepMerge(
  * @param obj Object containing values.
  * @returns Array of values.
  * @deprecated Use the built-in **Object.values** instead.
- * @alias Blockly.utils.object.values
  */
 export function values(obj: AnyDuringMigration): AnyDuringMigration[] {
   deprecation.warn(

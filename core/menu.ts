@@ -17,15 +17,12 @@ import type {MenuItem} from './menuitem.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import {KeyCodes} from './utils/keycodes.js';
 import type {Size} from './utils/size.js';
 import * as style from './utils/style.js';
 
 
 /**
  * A basic menu class.
- *
- * @alias Blockly.Menu
  */
 export class Menu {
   /**
@@ -107,7 +104,7 @@ export class Menu {
     this.mouseOverHandler = browserEvents.conditionalBind(
         element, 'pointerover', this, this.handleMouseOver, true);
     this.clickHandler = browserEvents.conditionalBind(
-        element, 'pointerdown', this, this.handleClick, true);
+        element, 'pointerup', this, this.handleClick, true);
     this.mouseEnterHandler = browserEvents.conditionalBind(
         element, 'pointerenter', this, this.handleMouseEnter, true);
     this.mouseLeaveHandler = browserEvents.conditionalBind(
@@ -394,29 +391,29 @@ export class Menu {
     }
 
     const highlighted = this.highlightedItem;
-    switch (keyboardEvent.keyCode) {
-      case KeyCodes.ENTER:
-      case KeyCodes.SPACE:
+    switch (keyboardEvent.key) {
+      case 'Enter':
+      case ' ':
         if (highlighted) {
           highlighted.performAction();
         }
         break;
 
-      case KeyCodes.UP:
+      case 'ArrowUp':
         this.highlightPrevious();
         break;
 
-      case KeyCodes.DOWN:
+      case 'ArrowDown':
         this.highlightNext();
         break;
 
-      case KeyCodes.PAGE_UP:
-      case KeyCodes.HOME:
+      case 'PageUp':
+      case 'Home':
         this.highlightFirst();
         break;
 
-      case KeyCodes.PAGE_DOWN:
-      case KeyCodes.END:
+      case 'PageDown':
+      case 'End':
         this.highlightLast();
         break;
 

@@ -35,7 +35,7 @@ suite('Block Change Event', function() {
         test('Undo', function() {
           const block = this.workspace.newBlock('xml_block', 'block_id');
           block.domToMutation(
-              Blockly.Xml.textToDom('<mutation hasInput="true"/>'));
+              Blockly.utils.xml.textToDom('<mutation hasInput="true"/>'));
           const blockChange = new Blockly.Events.BlockChange(
               block, 'mutation', null, '', '<mutation hasInput="true"/>');
           blockChange.run(false);
@@ -85,7 +85,7 @@ suite('Block Change Event', function() {
     test('events round-trip through JSON', function() {
       const block = this.workspace.newBlock('xml_block', 'block_id');
       block.domToMutation(
-          Blockly.Xml.textToDom('<mutation hasInput="true"/>'));
+          Blockly.utils.xml.textToDom('<mutation hasInput="true"/>'));
       const origEvent = new Blockly.Events.BlockChange(
           block, 'mutation', null, '', '<mutation hasInput="true"/>');
 

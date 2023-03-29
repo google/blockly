@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for a component that can delete a block or bubble
- * that is dropped on top of it.
- *
- * @namespace Blockly.IDeleteArea
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IDeleteArea');
 
@@ -20,8 +14,6 @@ import type {IDraggable} from './i_draggable.js';
 /**
  * Interface for a component that can delete a block or bubble that is dropped
  * on top of it.
- *
- * @alias Blockly.IDeleteArea
  */
 export interface IDeleteArea extends IDragTarget {
   /**

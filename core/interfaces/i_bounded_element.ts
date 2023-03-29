@@ -4,19 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for a bounded element.
- *
- * @namespace Blockly.IBoundedElement
- */
 import * as goog from '../../closure/goog/goog.js';
 import type {Rect} from '../utils/rect.js';
 goog.declareModuleId('Blockly.IBoundedElement');
 
 /**
  * A bounded element interface.
- *
- * @alias Blockly.IBoundedElement
  */
 export interface IBoundedElement {
   /**

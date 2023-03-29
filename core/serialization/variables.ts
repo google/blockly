@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Handles serializing variables to plain JavaScript objects, only containing
- * state.
- *
- * @namespace Blockly.serialization.variables
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.variables');
 
@@ -22,8 +16,6 @@ import * as serializationRegistry from './registry.js';
 
 /**
  * Represents the state of a given variable.
- *
- * @alias Blockly.serialization.variables.State
  */
 export interface State {
   name: string;
@@ -33,8 +25,6 @@ export interface State {
 
 /**
  * Serializer for saving and loading variable state.
- *
- * @alias Blockly.serialization.variables.VariableSerializer
  */
 export class VariableSerializer implements ISerializer {
   priority: number;

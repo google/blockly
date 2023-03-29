@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * This file is a universal registry that provides generic methods
- *    for registering and unregistering different types of classes.
- *
- * @namespace Blockly.registry
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.registry');
 
@@ -48,15 +42,11 @@ const nameMap: {[key: string]: {[key: string]: string}} = Object.create(null);
 
 /**
  * The string used to register the default class for a type of plugin.
- *
- * @alias Blockly.registry.DEFAULT
  */
 export const DEFAULT = 'default';
 
 /**
  * A name with the type of the element stored in the generic.
- *
- * @alias Blockly.registry.Type
  */
 export class Type<_T> {
   /** @param name The name of the registry type. */
@@ -112,7 +102,6 @@ export class Type<_T> {
  * @throws {Error} if the type or name is empty, a name with the given type has
  *     already been registered, or if the given class or object is not valid for
  *     its type.
- * @alias Blockly.registry.register
  */
 export function register<T>(
     type: string|Type<T>, name: string,
@@ -120,12 +109,12 @@ export function register<T>(
     AnyDuringMigration,
     opt_allowOverrides?: boolean): void {
   if (!(type instanceof Type) && typeof type !== 'string' ||
-      String(type).trim() === '') {
+      `${type}`.trim() === '') {
     throw Error(
         'Invalid type "' + type + '". The type must be a' +
         ' non-empty string or a Blockly.registry.Type.');
   }
-  type = String(type).toLowerCase();
+  type = `${type}`.toLowerCase();
 
   if (typeof name !== 'string' || name.trim() === '') {
     throw Error(
@@ -181,10 +170,9 @@ function validate(type: string, registryItem: Function|AnyDuringMigration) {
  * @param type The type of the plugin.
  *     (e.g. Field, Renderer)
  * @param name The plugin's name. (Ex. field_angle, geras)
- * @alias Blockly.registry.unregister
  */
 export function unregister<T>(type: string|Type<T>, name: string) {
-  type = String(type).toLowerCase();
+  type = `${type}`.toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry || !typeRegistry[name]) {
@@ -212,7 +200,7 @@ export function unregister<T>(type: string|Type<T>, name: string) {
 function getItem<T>(
     type: string|Type<T>, name: string, opt_throwIfMissing?: boolean):
     (new (...p1: AnyDuringMigration[]) => T)|null|AnyDuringMigration {
-  type = String(type).toLowerCase();
+  type = `${type}`.toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry || !typeRegistry[name]) {
@@ -237,10 +225,9 @@ function getItem<T>(
  * @param name The plugin's name. (Ex. field_angle, geras)
  * @returns True if the registry has an item with the given type and name, false
  *     otherwise.
- * @alias Blockly.registry.hasItem
  */
 export function hasItem<T>(type: string|Type<T>, name: string): boolean {
-  type = String(type).toLowerCase();
+  type = `${type}`.toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry) {
@@ -258,7 +245,6 @@ export function hasItem<T>(type: string|Type<T>, name: string): boolean {
  * @param opt_throwIfMissing Whether or not to throw an error if we are unable
  *     to find the plugin.
  * @returns The class with the given name and type or null if none exists.
- * @alias Blockly.registry.getClass
  */
 export function getClass<T>(
     type: string|Type<T>, name: string, opt_throwIfMissing?: boolean):
@@ -277,7 +263,6 @@ export function getClass<T>(
  * @param opt_throwIfMissing Whether or not to throw an error if we are unable
  *     to find the object.
  * @returns The object with the given name and type or null if none exists.
- * @alias Blockly.registry.getObject
  */
 export function getObject<T>(
     type: string|Type<T>, name: string, opt_throwIfMissing?: boolean): T|null {
@@ -293,12 +278,11 @@ export function getObject<T>(
  * @param opt_throwIfMissing Whether or not to throw an error if we are unable
  *     to find the object. False by default.
  * @returns A map of objects with the given type, or null if none exists.
- * @alias Blockly.registry.getAllItems
  */
 export function getAllItems<T>(
     type: string|Type<T>, opt_cased?: boolean, opt_throwIfMissing?: boolean):
     {[key: string]: T|null|(new (...p1: AnyDuringMigration[]) => T)}|null {
-  type = String(type).toLowerCase();
+  type = `${type}`.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry) {
     const msg = `Unable to find [${type}] in the registry.`;
@@ -314,9 +298,7 @@ export function getAllItems<T>(
   }
   const nameRegistry = nameMap[type];
   const casedRegistry = Object.create(null);
-  const keys = Object.keys(typeRegistry);
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
+  for (const key of Object.keys(typeRegistry)) {
     casedRegistry[nameRegistry[key]] = typeRegistry[key];
   }
   return casedRegistry;
@@ -331,13 +313,11 @@ export function getAllItems<T>(
  * @param opt_throwIfMissing Whether or not to throw an error if we are unable
  *     to find the plugin.
  * @returns The class for the plugin.
- * @alias Blockly.registry.getClassFromOptions
  */
 export function getClassFromOptions<T>(
     type: Type<T>, options: Options, opt_throwIfMissing?: boolean):
     (new (...p1: AnyDuringMigration[]) => T)|null {
-  const typeName = type.toString();
-  const plugin = options.plugins[typeName] || DEFAULT;
+  const plugin = options.plugins[String(type)] || DEFAULT;
 
   // If the user passed in a plugin class instead of a registered plugin name.
   if (typeof plugin === 'function') {

@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Object representing a spacer between two rows.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.SpacerRow');
 
@@ -21,8 +16,6 @@ import {Types} from './types.js';
 
 /**
  * An object containing information about a spacer between two rows.
- *
- * @alias Blockly.blockRendering.SpacerRow
  */
 export class SpacerRow extends Row {
   followsStatement = false;
@@ -36,7 +29,6 @@ export class SpacerRow extends Row {
    * @param constants The rendering constants provider.
    * @param height The height of the spacer.
    * @param width The width of the spacer.
-   * @internal
    */
   constructor(
       constants: ConstantProvider, public override height: number,

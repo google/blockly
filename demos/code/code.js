@@ -127,11 +127,11 @@ Code.loadBlocks = function(defaultXml) {
   } else if (loadOnce) {
     // Language switching stores the blocks during the reload.
     delete window.sessionStorage.loadOnceBlocks;
-    var xml = Blockly.Xml.textToDom(loadOnce);
+    var xml = Blockly.utils.xml.textToDom(loadOnce);
     Blockly.Xml.domToWorkspace(xml, Code.workspace);
   } else if (defaultXml) {
     // Load the editor with default starting blocks.
-    var xml = Blockly.Xml.textToDom(defaultXml);
+    var xml = Blockly.utils.xml.textToDom(defaultXml);
     Blockly.Xml.domToWorkspace(xml, Code.workspace);
   } else if ('BlocklyStorage' in window) {
     // Restore saved blocks in a separate thread so that subsequent
@@ -264,7 +264,7 @@ Code.tabClick = function(clickedName) {
     var xmlText = xmlTextarea.value;
     var xmlDom = null;
     try {
-      xmlDom = Blockly.Xml.textToDom(xmlText);
+      xmlDom = Blockly.utils.xml.textToDom(xmlText);
     } catch (e) {
       var q = window.confirm(
           MSG['parseError'].replace(/%1/g, 'XML').replace('%2', e));
@@ -459,7 +459,7 @@ Code.init = function() {
   var toolboxText = document.getElementById('toolbox').outerHTML;
   toolboxText = toolboxText.replace(/(^|[^%]){(\w+)}/g,
       function(m, p1, p2) {return p1 + MSG[p2];});
-  var toolboxXml = Blockly.Xml.textToDom(toolboxText);
+  var toolboxXml = Blockly.utils.xml.textToDom(toolboxText);
 
   Code.workspace = Blockly.inject('content_blocks',
       {grid:

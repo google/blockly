@@ -10,7 +10,6 @@
  * the lower case name of the category, and contains the Category object for
  * that particular category. Also has a list of core block types provided
  * by Blockly.
- *
  */
  'use strict';
 
@@ -27,7 +26,7 @@ StandardCategories.categoryMap = Object.create(null);
 StandardCategories.categoryMap['logic'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Logic');
 StandardCategories.categoryMap['logic'].xml =
-    Blockly.Xml.textToDom(
+    Blockly.utils.xml.textToDom(
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
       '<block type="controls_if"></block>' +
       '<block type="logic_compare"></block>' +
@@ -42,7 +41,7 @@ StandardCategories.categoryMap['logic'].hue = 210;
 StandardCategories.categoryMap['loops'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Loops');
 StandardCategories.categoryMap['loops'].xml =
-    Blockly.Xml.textToDom(
+    Blockly.utils.xml.textToDom(
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
       '<block type="controls_repeat_ext">' +
         '<value name="TIMES">' +
@@ -77,7 +76,7 @@ StandardCategories.categoryMap['loops'].hue = 120;
 StandardCategories.categoryMap['math'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Math');
 StandardCategories.categoryMap['math'].xml =
-    Blockly.Xml.textToDom(
+    Blockly.utils.xml.textToDom(
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
       '<block type="math_number"></block>' +
       '<block type="math_arithmetic">' +
@@ -170,7 +169,7 @@ StandardCategories.categoryMap['math'].hue = 230;
 StandardCategories.categoryMap['text'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Text');
 StandardCategories.categoryMap['text'].xml =
-    Blockly.Xml.textToDom(
+    Blockly.utils.xml.textToDom(
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
       '<block type="text"></block>' +
       '<block type="text_join"></block>' +
@@ -253,7 +252,7 @@ StandardCategories.categoryMap['text'].hue = 160;
 StandardCategories.categoryMap['lists'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Lists');
 StandardCategories.categoryMap['lists'].xml =
-    Blockly.Xml.textToDom(
+    Blockly.utils.xml.textToDom(
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
       '<block type="lists_create_with">' +
         '<mutation items="0"></mutation>' +
@@ -310,7 +309,7 @@ StandardCategories.categoryMap['lists'].hue = 260;
 StandardCategories.categoryMap['colour'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Colour');
 StandardCategories.categoryMap['colour'].xml =
-    Blockly.Xml.textToDom(
+    Blockly.utils.xml.textToDom(
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
       '<block type="colour_picker"></block>' +
       '<block type="colour_random"></block>' +

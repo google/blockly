@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Makecode/scratch-style renderer.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.RenderInfo');
 
@@ -42,8 +37,6 @@ import type {Renderer} from './renderer.js';
  * This measure pass does not propagate changes to the block (although fields
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
- *
- * @alias Blockly.zelos.RenderInfo
  */
 export class RenderInfo extends BaseRenderInfo {
   override topRow: TopRow;
@@ -60,7 +53,6 @@ export class RenderInfo extends BaseRenderInfo {
   /**
    * @param renderer The renderer in use.
    * @param block The block to measure.
-   * @internal
    */
   constructor(renderer: Renderer, block: BlockSvg) {
     super(renderer, block);
@@ -108,7 +100,6 @@ export class RenderInfo extends BaseRenderInfo {
    * Get the block renderer in use.
    *
    * @returns The block renderer in use.
-   * @internal
    */
   override getRenderer(): Renderer {
     return this.renderer_ as Renderer;

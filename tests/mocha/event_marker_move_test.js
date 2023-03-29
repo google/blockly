@@ -7,7 +7,7 @@
 
 goog.declareModuleId('Blockly.test.eventMarkerMove');
 
-import {defineRowBlock} from './test_helpers/block_definitions.js;';
+import {defineRowBlock} from './test_helpers/block_definitions.js';
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
@@ -22,7 +22,7 @@ suite('Marker Move Event', function() {
     sharedTestTeardown.call(this);
   });
 
-  suite.only('Serialization', function() {
+  suite('Serialization', function() {
     test('events round-trip through JSON', function() {
       const block1 = this.workspace.newBlock('row_block', 'test_id1');
       const block2 = this.workspace.newBlock('row_block', 'test_id2');

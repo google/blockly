@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Objects representing a field in a row of a rendered
- * block.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Field');
 
@@ -25,8 +19,6 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space a field takes up during
  * rendering
- *
- * @alias Blockly.blockRendering.Field
  */
 export class Field extends Measurable {
   isEditable: boolean;
@@ -38,7 +30,6 @@ export class Field extends Measurable {
    * @param constants The rendering constants provider.
    * @param field The field to measure and store information for.
    * @param parentInput The parent input for the field.
-   * @internal
    */
   constructor(
       constants: ConstantProvider, public field: BlocklyField,

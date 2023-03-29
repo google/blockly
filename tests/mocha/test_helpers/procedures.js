@@ -6,6 +6,7 @@
 goog.declareModuleId('Blockly.test.helpers.procedures');
 
 import {ConnectionType} from '../../../build/src/core/connection_type.js';
+import {VariableModel} from '../../../build/src/core/variable_model.js';
 
 
 /**
@@ -102,7 +103,7 @@ export function assertCallBlockStructure(
   assertCallBlockArgsStructure(callBlock, args);
   assertBlockVarModels(callBlock, varIds);
   if (name !== undefined) {
-    chai.assert(callBlock.getFieldValue('NAME'), name);
+    chai.assert.equal(callBlock.getFieldValue('NAME'), name);
   }
 }
 
@@ -112,21 +113,22 @@ export function assertCallBlockStructure(
  * @param {boolean=} hasReturn Whether the procedure definition should have
  *    return.
  * @param {Array<string>=} args An array of argument names.
+ * @param {string=} name The name of the def block (defaults to 'proc name').
  * @return {Blockly.Block} The created block.
  */
 export function createProcDefBlock(
-    workspace, hasReturn = false, args = []) {
+    workspace, hasReturn = false, args = [], name = 'proc name') {
   const type = hasReturn ?
       'procedures_defreturn' : 'procedures_defnoreturn';
-  let xml = '<block type="' + type + '">';
+  let xml = `<block type="${type}">`;
   for (let i = 0; i < args.length; i ++) {
     xml +=
-        '    <mutation><arg name="' + args[i] + '"></arg></mutation>\n';
+        `    <mutation><arg name="${args[i]}"></arg></mutation>\n`;
   }
   xml +=
-      '  <field name="NAME">proc name</field>' +
+      `  <field name="NAME">${name}</field>` +
       '</block>';
-  return Blockly.Xml.domToBlock(Blockly.Xml.textToDom(xml), workspace);
+  return Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(xml), workspace);
 }
 
 /**
@@ -134,15 +136,120 @@ export function createProcDefBlock(
  * @param {!Blockly.Workspace} workspace The Blockly workspace.
  * @param {boolean=} hasReturn Whether the corresponding procedure definition
  *    has return.
+ * @param {string=} name The name of the caller block (defaults to 'proc name').
  * @return {Blockly.Block} The created block.
  */
 export function createProcCallBlock(
-    workspace, hasReturn = false) {
+    workspace, hasReturn = false, name = 'proc name') {
   const type = hasReturn ?
       'procedures_callreturn' : 'procedures_callnoreturn';
-  return Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-      '<block type="' + type + '">' +
-      '  <mutation name="proc name"/>' +
-      '</block>'
+  return Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
+      `<block type="${type}">` +
+      `  <mutation name="${name}"/>` +
+      `</block>`
   ), workspace);
+}
+
+export class MockProcedureModel {
+  constructor(name = '') {
+    this.id = Blockly.utils.idGenerator.genUid();
+    this.name = name;
+    this.parameters = [];
+    this.returnTypes = null;
+    this.enabled = true;
+  }
+
+  setName(name) {
+    this.name = name;
+    return this;
+  }
+
+  insertParameter(parameterModel, index) {
+    this.parameters.splice(index, 0, parameterModel);
+    return this;
+  }
+
+  deleteParameter(index) {
+    this.parameters.splice(index, 1);
+    return this;
+  }
+
+  setReturnTypes(types) {
+    this.returnTypes = types;
+    return this;
+  }
+
+  setEnabled(enabled) {
+    this.enabled = enabled;
+    return this;
+  }
+
+  getId() {
+    return this.id;
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  getParameter(index) {
+    return this.parameters[index];
+  }
+
+  getParameters() {
+    return [...this.parameters];
+  }
+
+  getReturnTypes() {
+    return this.returnTypes;
+  }
+
+  getEnabled() {
+    return this.enabled;
+  }
+
+  startPublishing() { }
+
+  stopPublishing() { }
+}
+
+export class MockParameterModel {
+  constructor(name) {
+    this.id = Blockly.utils.idGenerator.genUid();
+    this.name = name;
+    this.types = [];
+  }
+
+  setName(name) {
+    this.name = name;
+    return this;
+  }
+
+  setTypes(types) {
+    this.types = types;
+    return this;
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  getTypes() {
+    return this.types;
+  }
+
+  getId() {
+    return this.id;
+  }
+}
+
+export class MockParameterModelWithVar extends MockParameterModel {
+  constructor(name, workspace) {
+    super(name);
+    this.variable = new VariableModel(workspace, name);
+  }
+
+  getVariableModel() {
+    return this.variable;
+  }
 }

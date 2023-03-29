@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Helper function for warning developers about deprecations.
- * This method is not specific to Blockly.
- *
- * @namespace Blockly.utils.deprecation
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.deprecation');
 
@@ -23,7 +17,6 @@ goog.declareModuleId('Blockly.utils.deprecation');
  * @param deletionDate The date of deletion. Prefer 'version n.0.0'
  *     format, and fall back to 'month yyyy' or 'quarter yyyy' format.
  * @param opt_use The name of a function or property to use instead, if any.
- * @alias Blockly.utils.deprecation.warn
  * @internal
  */
 export function warn(

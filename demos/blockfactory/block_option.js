@@ -9,7 +9,6 @@
  * of the various blocks that you may select in the Block Selector. Each block
  * option has a checkbox, a label, and a preview workspace through which to
  * view the block.
- *
  */
 'use strict';
 

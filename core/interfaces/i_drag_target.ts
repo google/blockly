@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for a component that has a handler for when a
- * block is dropped on top of it.
- *
- * @namespace Blockly.IDragTarget
- */
 import * as goog from '../../closure/goog/goog.js';
 import {Rect} from '../utils/rect.js';
 
@@ -23,8 +17,6 @@ import type {IComponent} from './i_component.js';
 /**
  * Interface for a component with custom behaviour when a block or bubble is
  * dragged over or dropped on top of it.
- *
- * @alias Blockly.IDragTarget
  */
 export interface IDragTarget extends IComponent {
   /**

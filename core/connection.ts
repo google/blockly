@@ -25,8 +25,6 @@ import * as Xml from './xml.js';
 
 /**
  * Class for a connection between blocks.
- *
- * @alias Blockly.Connection
  */
 export class Connection implements IASTNodeLocationWithBlock {
   /** Constants for checking whether two connections are compatible. */
@@ -95,7 +93,7 @@ export class Connection implements IASTNodeLocationWithBlock {
 
     // Make sure the childConnection is available.
     if (childConnection.isConnected()) {
-      childConnection.disconnect();
+      childConnection.disconnectInternal(false);
     }
 
     // Make sure the parentConnection is available.
@@ -106,7 +104,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       if (target!.isShadow()) {
         target!.dispose(false);
       } else {
-        this.disconnect();
+        this.disconnectInternal();
         orphan = target;
       }
       this.applyShadowState_(shadowState);
@@ -129,8 +127,9 @@ export class Connection implements IASTNodeLocationWithBlock {
     if (orphan) {
       const orphanConnection = this.type === INPUT ? orphan.outputConnection :
                                                      orphan.previousConnection;
+      if (!orphanConnection) return;
       const connection = Connection.getConnectionForOrphanedConnection(
-          childBlock, (orphanConnection));
+          childBlock, orphanConnection);
       if (connection) {
         orphanConnection.connect(connection);
       } else {
@@ -151,7 +150,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       this.setShadowStateInternal_();
 
       const targetBlock = this.targetBlock();
-      if (targetBlock) {
+      if (targetBlock && !targetBlock.isDeadOrDying()) {
         // Disconnect the attached normal block.
         targetBlock.unplug();
       }
@@ -224,8 +223,8 @@ export class Connection implements IASTNodeLocationWithBlock {
 
     const checker = this.getConnectionChecker();
     if (checker.canConnect(this, otherConnection, false)) {
-      const eventGroup = eventUtils.getGroup();
-      if (!eventGroup) {
+      const existingGroup = eventUtils.getGroup();
+      if (!existingGroup) {
         eventUtils.setGroup(true);
       }
       // Determine which block is superior (higher in the source stack).
@@ -236,75 +235,83 @@ export class Connection implements IASTNodeLocationWithBlock {
         // Inferior block.
         otherConnection.connect_(this);
       }
-      if (!eventGroup) {
-        eventUtils.setGroup(false);
-      }
+      eventUtils.setGroup(existingGroup);
     }
 
     return this.isConnected();
   }
 
-  /** Disconnect this connection. */
+  /**
+   * Disconnect this connection.
+   */
   disconnect() {
-    const otherConnection = this.targetConnection;
-    if (!otherConnection) {
-      throw Error('Source connection not connected.');
-    }
-    if (otherConnection.targetConnection !== this) {
-      throw Error('Target connection not connected to source connection.');
-    }
-    let parentBlock;
-    let childBlock;
-    let parentConnection;
-    if (this.isSuperior()) {
-      // Superior block.
-      parentBlock = this.sourceBlock_;
-      childBlock = otherConnection.getSourceBlock();
-      /* eslint-disable-next-line @typescript-eslint/no-this-alias */
-      parentConnection = this;
-    } else {
-      // Inferior block.
-      parentBlock = otherConnection.getSourceBlock();
-      childBlock = this.sourceBlock_;
-      parentConnection = otherConnection;
-    }
-
-    const eventGroup = eventUtils.getGroup();
-    if (!eventGroup) {
-      eventUtils.setGroup(true);
-    }
-    this.disconnectInternal_(parentBlock, childBlock);
-    if (!childBlock.isShadow()) {
-      // If we were disconnecting a shadow, no need to spawn a new one.
-      parentConnection.respawnShadow_();
-    }
-    if (!eventGroup) {
-      eventUtils.setGroup(false);
-    }
+    this.disconnectInternal();
   }
 
   /**
    * Disconnect two blocks that are connected by this connection.
    *
-   * @param parentBlock The superior block.
-   * @param childBlock The inferior block.
+   * @param setParent Whether to set the parent of the disconnected block or
+   *     not, defaults to true.
+   *     If you do not set the parent, ensure that a subsequent action does,
+   *     otherwise the view and model will be out of sync.
    */
-  protected disconnectInternal_(parentBlock: Block, childBlock: Block) {
+  protected disconnectInternal(setParent = true) {
+    const {parentConnection, childConnection} =
+        this.getParentAndChildConnections();
+    if (!parentConnection || !childConnection) {
+      throw Error('Source connection not connected.');
+    }
+
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) {
+      eventUtils.setGroup(true);
+    }
+
     let event;
     if (eventUtils.isEnabled()) {
-      event =
-          new (eventUtils.get(eventUtils.BLOCK_MOVE))(childBlock) as BlockMove;
+      event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
+                  childConnection.getSourceBlock()) as BlockMove;
     }
     const otherConnection = this.targetConnection;
     if (otherConnection) {
       otherConnection.targetConnection = null;
     }
     this.targetConnection = null;
-    childBlock.setParent(null);
+    if (setParent) childConnection.getSourceBlock().setParent(null);
     if (event) {
       event.recordNew();
       eventUtils.fire(event);
     }
+
+    if (!childConnection.getSourceBlock().isShadow()) {
+      // If we were disconnecting a shadow, no need to spawn a new one.
+      parentConnection.respawnShadow_();
+    }
+
+    eventUtils.setGroup(existingGroup);
+  }
+
+  /**
+   * Returns the parent connection (superior) and child connection (inferior)
+   * given this connection and the connection it is connected to.
+   *
+   * @returns The parent connection and child connection, given this connection
+   *     and the connection it is connected to.
+   */
+  protected getParentAndChildConnections():
+      {parentConnection?: Connection, childConnection?: Connection} {
+    if (!this.targetConnection) return {};
+    if (this.isSuperior()) {
+      return {
+        parentConnection: this,
+        childConnection: this.targetConnection,
+      };
+    }
+    return {
+      parentConnection: this.targetConnection,
+      childConnection: this,
+    };
   }
 
   /**
@@ -545,6 +552,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       }
     } else if (target.isShadow()) {
       target.dispose(false);
+      if (this.getSourceBlock().isDeadOrDying()) return;
       this.respawnShadow_();
       if (this.targetBlock() && this.targetBlock()!.isShadow()) {
         this.serializeShadow_(this.targetBlock());
@@ -678,11 +686,11 @@ function getSingleConnection(block: Block, orphanBlock: Block): Connection|
     null {
   let foundConnection = null;
   const output = orphanBlock.outputConnection;
-  const typeChecker = output.getConnectionChecker();
+  const typeChecker = output?.getConnectionChecker();
 
   for (let i = 0, input; input = block.inputList[i]; i++) {
     const connection = input.connection;
-    if (connection && typeChecker.canConnect(output, connection, false)) {
+    if (connection && typeChecker?.canConnect(output, connection, false)) {
       if (foundConnection) {
         return null;  // More than one connection.
       }

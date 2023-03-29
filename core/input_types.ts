@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * An enum for the possible types of inputs.
- *
- * @namespace Blockly.inputTypes
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.inputTypes');
 
@@ -17,8 +12,6 @@ import {ConnectionType} from './connection_type.js';
 
 /**
  * Enum for the type of a connection or input.
- *
- * @alias Blockly.inputTypes
  */
 export enum inputTypes {
   // A right-facing value input.  E.g. 'set item to' or 'return'.

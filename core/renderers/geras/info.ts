@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Old (compatibility) renderer.
- * Geras: spirit of old age.
- *
- * @class
- */
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.RenderInfo');
 
@@ -34,13 +28,12 @@ import type {Renderer} from './renderer.js';
 
 
 /**
- * An object containing all sizing information needed to draw this block.
+ * An object containing all sizing information needed to draw this block,
+ * customized for the geras renderer.
  *
  * This measure pass does not propagate changes to the block (although fields
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
- *
- * @alias Blockly.geras.RenderInfo
  */
 export class RenderInfo extends BaseRenderInfo {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -51,7 +44,6 @@ export class RenderInfo extends BaseRenderInfo {
   /**
    * @param renderer The renderer in use.
    * @param block The block to measure.
-   * @internal
    */
   constructor(renderer: Renderer, block: BlockSvg) {
     super(renderer, block);
@@ -62,7 +54,6 @@ export class RenderInfo extends BaseRenderInfo {
    * Get the block renderer in use.
    *
    * @returns The block renderer in use.
-   * @internal
    */
   override getRenderer(): Renderer {
     return this.renderer_;

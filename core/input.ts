@@ -26,8 +26,6 @@ import type {RenderedConnection} from './rendered_connection.js';
 
 /**
  * Class for an input with an optional field.
- *
- * @alias Blockly.Input
  */
 export class Input {
   private sourceBlock: Block;
@@ -128,7 +126,7 @@ export class Input {
     }
 
     if (this.sourceBlock.rendered) {
-      (this.sourceBlock as BlockSvg).render();
+      (this.sourceBlock as BlockSvg).queueRender();
       // Adding a field will cause the block to change shape.
       this.sourceBlock.bumpNeighbours();
     }
@@ -150,7 +148,7 @@ export class Input {
         field.dispose();
         this.fieldRow.splice(i, 1);
         if (this.sourceBlock.rendered) {
-          (this.sourceBlock as BlockSvg).render();
+          (this.sourceBlock as BlockSvg).queueRender();
           // Removing a field will cause the block to change shape.
           this.sourceBlock.bumpNeighbours();
         }
@@ -246,7 +244,7 @@ export class Input {
     this.align = align;
     if (this.sourceBlock.rendered) {
       const sourceBlock = this.sourceBlock as BlockSvg;
-      sourceBlock.render();
+      sourceBlock.queueRender();
     }
     return this;
   }
@@ -306,7 +304,6 @@ export namespace Input {
   /**
    * Enum for alignment of inputs.
    *
-   * @alias Blockly.Input.Align
    */
   export enum Align {
     LEFT = -1,

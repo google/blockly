@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for a selectable toolbox item.
- *
- * @namespace Blockly.ISelectableToolboxItem
- */
 import * as goog from '../../closure/goog/goog.js';
 import type {FlyoutItemInfoArray} from '../utils/toolbox';
 goog.declareModuleId('Blockly.ISelectableToolboxItem');
@@ -18,8 +13,6 @@ import type {IToolboxItem} from './i_toolbox_item.js';
 
 /**
  * Interface for an item in the toolbox that can be selected.
- *
- * @alias Blockly.ISelectableToolboxItem
  */
 export interface ISelectableToolboxItem extends IToolboxItem {
   /**
@@ -60,4 +53,12 @@ export interface ISelectableToolboxItem extends IToolboxItem {
    * @param _e Click event to handle.
    */
   onClick(_e: Event): void;
+}
+
+/**
+ * Type guard that checks whether an IToolboxItem is an ISelectableToolboxItem.
+ */
+export function isSelectableToolboxItem(toolboxItem: IToolboxItem):
+    toolboxItem is ISelectableToolboxItem {
+  return toolboxItem.isSelectable();
 }

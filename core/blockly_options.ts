@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Object that defines user-specified options for the workspace.
- *
- * @namespace Blockly.BlocklyOptions
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.BlocklyOptions');
 
@@ -19,8 +14,6 @@ import type {ToolboxDefinition} from './utils/toolbox.js';
 
 /**
  * Blockly options.
- *
- * @alias Blockly.BlocklyOptions
  */
 export interface BlocklyOptions {
   collapse?: boolean;

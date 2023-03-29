@@ -1422,12 +1422,14 @@
     },
   ],
 
-  'develop': [
-    // New renamings go here!
+  '9.2.0': [
     {
       oldName: 'Blockly.TouchGesture',
       newName: 'Blockly.Gesture',
     },
+  ],
+
+  '9.3.0': [
     {
       oldName: 'Blockly.Xml',
       exports: {
@@ -1436,5 +1438,9 @@
         },
       },
     }
+  ],
+
+  'develop': [
+    // New renamings go here!
   ],
 }

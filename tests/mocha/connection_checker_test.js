@@ -367,6 +367,31 @@ suite('Connection checker', function() {
           'Should connect two compatible stack blocks');
       });
 
+      test('Connect to unmovable shadow block', function() {
+        // Remove original test blocks.
+        this.workspace.clear();
+
+        // Add the same test blocks, but this time block B is a shadow block.
+        Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
+        <block type="text_print" id="A" x="-76" y="-112">
+          <next>
+            <shadow type="text_print" id="B" movable="false">
+            </shadow>
+          </next>
+        </block>
+        <block type="text_print" id="C" x="47" y="-118"/>
+      </xml>`), this.workspace);
+      [this.blockA, this.blockB, this.blockC] = this.workspace.getAllBlocks(true);
+
+      // Try to connect blockC into the input connection of blockA, replacing blockB.
+      // This is allowed because shadow blocks can always be replaced, even though
+      // they are unmovable.
+      chai.assert.isTrue(
+        this.checker.doDragChecks(
+          this.blockC.previousConnection, this.blockA.nextConnection, 9000),
+        'Should connect in place of a shadow block');
+      });
+
       test('Do not splice into unmovable stack', function() {
         // Try to connect blockC above blockB. It shouldn't work because B is not movable
         // and is already connected to A's nextConnection.

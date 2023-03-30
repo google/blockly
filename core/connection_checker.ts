@@ -250,8 +250,8 @@ export class ConnectionChecker implements IConnectionChecker {
         }
 
         // Don't offer to splice into a stack where the connected block is
-        // immovable.
-        if (b.targetBlock() && !b.targetBlock()!.isMovable()) {
+        // immovable, unless the block is a shadow block.
+        if (b.targetBlock() && !b.targetBlock()!.isMovable() && !b.targetBlock()!.isShadow()) {
           return false;
         }
         break;

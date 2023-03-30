@@ -113,7 +113,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
 
     this.setExpanded(
         this.toolboxItemDef_['expanded'] === 'true' ||
-        !!this.toolboxItemDef_['expanded']);
+        this.toolboxItemDef_['expanded'] === true);
   }
 
   override createDom_() {
@@ -123,6 +123,8 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
     this.subcategoriesDiv_ = this.createSubCategoriesDom_(subCategories);
     aria.setRole(this.subcategoriesDiv_, aria.Role.GROUP);
     this.htmlDiv_!.appendChild(this.subcategoriesDiv_);
+    this.closeIcon_(this.iconDom_);
+    aria.setState(this.htmlDiv_ as HTMLDivElement, aria.State.EXPANDED, false);
 
     return this.htmlDiv_!;
   }
@@ -150,6 +152,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
   protected createSubCategoriesDom_(subcategories: IToolboxItem[]):
       HTMLDivElement {
     const contentsContainer = document.createElement('div');
+    contentsContainer.style.display = 'none';
     const className = this.cssConfig_['contents'];
     if (className) {
       dom.addClass(contentsContainer, className);
@@ -173,9 +176,8 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
    * @param isExpanded True to expand the category, false to close.
    */
   setExpanded(isExpanded: boolean) {
-    if (this.expanded_ === isExpanded) {
-      return;
-    }
+    if (this.expanded_ === isExpanded) return;
+
     this.expanded_ = isExpanded;
     if (isExpanded) {
       this.subcategoriesDiv_!.style.display = 'block';

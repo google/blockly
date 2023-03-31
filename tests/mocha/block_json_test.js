@@ -65,6 +65,10 @@ suite('Block JSON initialization', function() {
       this.assertError(['test', 2, 'test'], 1,
           'Block "test": Message index %2 out of range.');
     });
+
+    test('Accepts newline token', function() {
+      this.assertNoError(['test', '\n', 'test'], 0);
+    });
   });
 
   suite('interpolateArguments_', function() {
@@ -278,6 +282,80 @@ suite('Block JSON initialization', function() {
             {
               'type': 'field_label',
               'text': 'test3',
+            },
+            {
+              'type': 'input_dummy',
+              'align': 'CENTER',
+            },
+          ]);
+    });
+
+    test('Includes endOfRow', function() {
+      this.assertInterpolation(
+          ['test1', {'type': 'input_dummy', 'endOfRow': true}, 'test2'],
+          [],
+          undefined,
+          [
+            {
+              'type': 'field_label',
+              'text': 'test1',
+            },
+            {
+              'type': 'input_dummy',
+              'endOfRow': true,
+            },
+            {
+              'type': 'field_label',
+              'text': 'test2',
+            },
+            {
+              'type': 'input_dummy',
+            },
+          ]);
+    });
+
+    test('Converts newline to endOfRow', function() {
+      this.assertInterpolation(
+          ['test1', '\n', 'test2'],
+          [],
+          undefined,
+          [
+            {
+              'type': 'field_label',
+              'text': 'test1',
+            },
+            {
+              'type': 'input_dummy',
+              'endOfRow': true,
+            },
+            {
+              'type': 'field_label',
+              'text': 'test2',
+            },
+            {
+              'type': 'input_dummy',
+            },
+          ]);
+    });
+
+    test('Aligns endOfRow like last dummy', function() {
+      this.assertInterpolation(
+          ['test1', '\n', 'test2'],
+          [],
+          'CENTER',
+          [
+            {
+              'type': 'field_label',
+              'text': 'test1',
+            },
+            {
+              'type': 'input_dummy',
+              'endOfRow': true,
+              'align': 'CENTER',
+            },
+            {
+              'type': 'field_label',
+              'text': 'test2',
             },
             {
               'type': 'input_dummy',

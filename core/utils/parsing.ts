@@ -48,6 +48,15 @@ function tokenizeInterpolationInternal(
         }
         buffer.length = 0;
         state = 1;
+      } else if (c === '\n') {
+        // Output newline characters as single-character tokens, to be replaced
+        // with endOfRow dummies during interpolation.
+        const text = buffer.join('');
+        if (text) {
+          tokens.push(text);
+        }
+        buffer.length = 0;
+        tokens.push(c);
       } else {
         buffer.push(c);  // Regular char.
       }
@@ -132,11 +141,11 @@ function tokenizeInterpolationInternal(
     tokens.push(text);
   }
 
-  // Merge adjacent text tokens into a single string.
+  // Merge adjacent text tokens into a single string (excluding newline tokens).
   const mergedTokens = [];
   buffer.length = 0;
   for (let i = 0; i < tokens.length; i++) {
-    if (typeof tokens[i] === 'string') {
+    if (typeof tokens[i] === 'string' && tokens[i] !== '\n') {
       buffer.push(tokens[i] as string);
     } else {
       text = buffer.join('');

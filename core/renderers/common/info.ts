@@ -345,6 +345,11 @@ export class RenderInfo {
     if (!lastInput) {
       return false;
     }
+    // If the last input was marked as the end of a row, then the next input
+    // should always be on the next row.
+    if (lastInput.isEndOfRow()) {
+      return true;
+    }
     // A statement input or an input following one always gets a new row.
     if (input.type === inputTypes.STATEMENT ||
         lastInput.type === inputTypes.STATEMENT) {

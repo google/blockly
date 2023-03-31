@@ -2062,4 +2062,23 @@ suite('Blocks', function() {
       chai.assert.isTrue(initCalled, 'expected init function to be called');
     });
   });
+
+  suite('EndOfRow', function() {
+    setup(function() {
+      Blockly.defineBlocksWithJsonArray([
+        {
+          "type": "endOfRow_test_block",
+          "message0": "Row1\nRow2",
+          'inputsInline': true,
+        },
+      ]);
+    });
+    test('Converts newline to dummy with endOfRow', function() {
+      const block = this.workspace.newBlock('endOfRow_test_block');
+      chai.assert.equal(block.inputList[0].fieldRow[0].getValue(), 'Row1');
+      chai.assert.isTrue(block.inputList[0].isEndOfRow(),
+          'newline should be converted to dummy with endOfRow');
+      chai.assert.equal(block.inputList[1].fieldRow[0].getValue(), 'Row2');
+    });
+  });
 });

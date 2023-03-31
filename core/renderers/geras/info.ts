@@ -360,7 +360,8 @@ export class RenderInfo extends BaseRenderInfo {
             row.width < prevInput.width) {
           rowNextRightEdges.set(row, prevInput.width);
         } else {
-          nextRightEdge = row.width;
+          // To avoid jagged right edges, use the maximum width.
+          nextRightEdge = Math.max(nextRightEdge, row.width);
         }
         prevInput = row;
       }

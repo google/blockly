@@ -32,6 +32,12 @@ export class Input {
   fieldRow: Field[] = [];
   /** Alignment of input's fields (left, right or centre). */
   align = Align.LEFT;
+  
+  /**
+   * If true, any following input should always be rendered on a new row even if
+   * this input is rendered inline.
+   */
+  private endOfRow = false;
 
   /** Is the input visible? */
   private visible = true;
@@ -242,6 +248,31 @@ export class Input {
    */
   setAlign(align: Align): Input {
     this.align = align;
+    if (this.sourceBlock.rendered) {
+      const sourceBlock = this.sourceBlock as BlockSvg;
+      sourceBlock.queueRender();
+    }
+    return this;
+  }
+
+  /**
+   * If true, any following input should always be rendered on a new row even if
+   * this input is rendered inline.
+   *
+   * @returns True if this input should be the last input on its row.
+   */
+  isEndOfRow(): boolean {
+    return this.endOfRow;
+  }
+
+  /**
+   * Set whether the input should be the last input on its row.
+   *
+   * @param endOfRow Whether the input should be the last input on its row.
+   * @returns The input being modified (to allow chaining).
+   */
+  setEndOfRow(endOfRow: boolean): Input {
+    this.endOfRow = endOfRow;
     if (this.sourceBlock.rendered) {
       const sourceBlock = this.sourceBlock as BlockSvg;
       sourceBlock.queueRender();

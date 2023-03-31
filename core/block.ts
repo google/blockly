@@ -1684,7 +1684,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *     with fields or inputs defined in the args array.
    * @param args Array of arguments to be interpolated.
    * @param lastDummyAlign If a dummy input is added at the end, how should it
-   *     be aligned?
+   *     be aligned? Also affects dummies created from newline tokens.
    * @param warningPrefix Warning prefix string identifying block.
    */
   private interpolate_(
@@ -1775,11 +1775,21 @@ export class Block implements IASTNodeLocation, IDeletable {
       }
       // Args can be strings, which is why this isn't elseif.
       if (typeof element === 'string') {
-        // AnyDuringMigration because:  Type '{ text: string; type: string; } |
-        // null' is not assignable to type 'string | number'.
-        element = this.stringToFieldJson_(element) as AnyDuringMigration;
-        if (!element) {
-          continue;
+        if (element === '\n') {
+          // Convert newline tokens to dummies with endOfRow enabled.
+          const newlineInput = {'type': 'input_dummy', 'endOfRow': true};
+          // Treat these as the "last" dummy for alignment purposes.
+          if (lastDummyAlign) {
+            (newlineInput as AnyDuringMigration)['align'] = lastDummyAlign;
+          }
+          element = newlineInput as AnyDuringMigration;
+        } else {
+          // AnyDuringMigration because:  Type '{ text: string; type: string; } |
+          // null' is not assignable to type 'string | number'.
+          element = this.stringToFieldJson_(element) as AnyDuringMigration;
+          if (!element) {
+            continue;
+          }
         }
       }
       elements.push(element);
@@ -1868,6 +1878,9 @@ export class Block implements IASTNodeLocation, IDeletable {
       } else {
         input.setAlign(alignment);
       }
+    }
+    if (element['endOfRow'] != undefined) {
+      input.setEndOfRow(!!element['endOfRow']);
     }
     return input;
   }

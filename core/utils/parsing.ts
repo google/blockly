@@ -21,8 +21,8 @@ import * as colourUtils from './colour.js';
  *
  * @param message Text which might contain string table references and
  *     interpolation tokens.
- * @param parseInterpolationTokens Option to parse numeric
- *     interpolation tokens (%1, %2, ...) when true.
+ * @param parseInterpolationTokens Option to parse numeric interpolation
+ *     tokens (%1, %2, ...) and newline characters when true.
  * @returns Array of strings and numbers.
  */
 function tokenizeInterpolationInternal(
@@ -48,7 +48,7 @@ function tokenizeInterpolationInternal(
         }
         buffer.length = 0;
         state = 1;
-      } else if (c === '\n') {
+      } else if (parseInterpolationTokens && c === '\n') {
         // Output newline characters as single-character tokens, to be replaced
         // with endOfRow dummies during interpolation.
         const text = buffer.join('');

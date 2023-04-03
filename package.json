@@ -80,7 +80,7 @@
     "chai": "^4.2.0",
     "clang-format": "^1.6.0",
     "closure-calculate-chunks": "^3.0.2",
-    "concurrently": "^7.4.0",
+    "concurrently": "^8.0.1",
     "eslint": "^8.4.1",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-jsdoc": "^40.0.0",

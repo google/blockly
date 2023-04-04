@@ -57,6 +57,9 @@ export function injectDependencies(dependencies: {
  */
 export const NAME_SPACE = 'https://developers.google.com/blockly/xml';
 
+// eslint-disable-next-line no-control-regex
+const INVALID_CONTROL_CHARS = /[\x00-\x09\x0B\x0C\x0E-\x1F]/g;
+
 /**
  * Get the document object to use for XML serialization.
  *
@@ -108,10 +111,16 @@ export function createTextNode(text: string): Text {
  * @throws if the text doesn't parse.
  */
 export function textToDom(text: string): Element {
-  const doc = textToDomDocument(text);
+  let doc = textToDomDocument(text);
   if (!doc || !doc.documentElement ||
       doc.getElementsByTagName('parsererror').length) {
-    throw Error('textToDom was unable to parse: ' + text);
+    const oParser = new DOMParser();
+    doc = oParser.parseFromString(text, 'text/html');
+    if (!doc || !doc.body.firstChild ||
+        doc.body.firstChild.nodeName.toLowerCase() != 'xml') {
+      throw new Error(`DOMParser was unable to parse: ${text}`);
+    }
+    return doc.body.firstChild as Element;
   }
   return doc.documentElement;
 }
@@ -137,5 +146,11 @@ export function textToDomDocument(text: string): Document {
  */
 export function domToText(dom: Node): string {
   const oSerializer = new XMLSerializer();
-  return oSerializer.serializeToString(dom);
+  return sanitizeText(oSerializer.serializeToString(dom));
+}
+
+function sanitizeText(text: string) {
+  return text.replace(
+      INVALID_CONTROL_CHARS,
+      (match) => `&#x${match.charCodeAt(0).toString(16)};`);
 }

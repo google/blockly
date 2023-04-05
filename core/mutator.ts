@@ -460,21 +460,7 @@ export class Mutator extends Icon {
       const block = this.getBlock();
       const oldExtraState = BlockChange.getExtraBlockState_(block);
 
-      // Switch off rendering while the source block is rebuilt.
-      const savedRendered = block.rendered;
-      // TODO(#4288): We should not be setting the rendered property to false.
-      block.rendered = false;
-
-      // Allow the source block to rebuild itself.
       block.compose!(this.rootBlock);
-      // Restore rendering and show the changes.
-      block.rendered = savedRendered;
-      // Mutation may have added some elements that need initializing.
-      block.initSvg();
-
-      if (block.rendered) {
-        block.render();
-      }
 
       const newExtraState = BlockChange.getExtraBlockState_(block);
       if (oldExtraState !== newExtraState) {

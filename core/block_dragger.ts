@@ -346,6 +346,7 @@ export class BlockDragger implements IBlockDragger {
 
   /** Fire a move event at the end of a block drag. */
   protected fireMoveEvent_() {
+    if (this.draggingBlock_.isDeadOrDying()) return;
     const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
                       this.draggingBlock_) as BlockMove;
     event.oldCoordinate = this.startXY_;

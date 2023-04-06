@@ -117,7 +117,7 @@ export function textToDom(text: string): Element {
     const oParser = new DOMParser();
     doc = oParser.parseFromString(text, 'text/html');
     if (!doc || !doc.body.firstChild ||
-        doc.body.firstChild.nodeName.toLowerCase() != 'xml') {
+        doc.body.firstChild.nodeName.toLowerCase() !== 'xml') {
       throw new Error(`DOMParser was unable to parse: ${text}`);
     }
     return doc.body.firstChild as Element;
@@ -145,12 +145,11 @@ export function textToDomDocument(text: string): Document {
  * @returns Text representation.
  */
 export function domToText(dom: Node): string {
-  const oSerializer = new XMLSerializer();
-  return sanitizeText(oSerializer.serializeToString(dom));
+  return sanitizeText(new XMLSerializer().serializeToString(dom));
 }
 
 function sanitizeText(text: string) {
   return text.replace(
       INVALID_CONTROL_CHARS,
-      (match) => `&#x${match.charCodeAt(0).toString(16)};`);
+      (match) => `&#x${match.charCodeAt(0)};`);
 }

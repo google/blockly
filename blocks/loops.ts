@@ -6,42 +6,32 @@
 
 /**
  * @fileoverview Loop blocks for Blockly.
- * @suppress {checkTypes}
  */
 
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.loops');
 
-/* eslint-disable-next-line no-unused-vars */
-import type * as AbstractEvent from '../core/events/events_abstract.js';
+import type {Abstract} from '../core/events/events_abstract.js';
+import type {Block} from '../core/block.js';
+import type {BlockDefinition} from '../core/blocks.js';
 import * as ContextMenu from '../core/contextmenu.js';
 import * as Events from '../core/events/events.js';
 import * as Extensions from '../core/extensions.js';
 import * as Variables from '../core/variables.js';
 import * as xmlUtils from '../core/utils/xml.js';
-/* eslint-disable-next-line no-unused-vars */
-import type {Block} from '../core/block.js';
-// import type {BlockDefinition} from '../core/blocks.js';
-// TODO (6248): Properly import the BlockDefinition type.
-/* eslint-disable-next-line no-unused-vars */
-const BlockDefinition = Object;
 import {Msg} from '../core/msg.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
-/** @suppress {extraRequire} */
 import '../core/field_dropdown.js';
-/** @suppress {extraRequire} */
 import '../core/field_label.js';
-/** @suppress {extraRequire} */
 import '../core/field_number.js';
-/** @suppress {extraRequire} */
 import '../core/field_variable.js';
-/** @suppress {extraRequire} */
 import '../core/warning.js';
+import {FieldVariable} from '../core/field_variable.js';
+import {WorkspaceSvg} from '../core/workspace_svg.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
- * @type {!Object<string, !BlockDefinition>}
  */
 export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for repeat n times (external number).
@@ -216,6 +206,7 @@ export const blocks = createBlockDefinitionsFromJsonArray([
 
 /**
  * Tooltips for the 'controls_whileUntil' block, keyed by MODE value.
+ *
  * @see {Extensions#buildTooltipForDropdown}
  * @readonly
  */
@@ -230,6 +221,7 @@ Extensions.register(
 
 /**
  * Tooltips for the 'controls_flow_statements' block, keyed by FLOW value.
+ *
  * @see {Extensions#buildTooltipForDropdown}
  * @readonly
  */
@@ -242,9 +234,15 @@ Extensions.register(
     'controls_flow_tooltip',
     Extensions.buildTooltipForDropdown('FLOW', BREAK_CONTINUE_TOOLTIPS));
 
+/** Type of a block that has CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN */
+type CustomContextMenuBlock = Block&CustomContextMenuMixin;
+interface CustomContextMenuMixin extends CustomContextMenuMixinType {};
+type CustomContextMenuMixinType =
+    typeof CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN;
 /**
  * Mixin to add a context menu item to create a 'variables_get' block.
  * Used by blocks 'controls_for' and 'controls_forEach'.
+ *
  * @mixin
  * @augments Block
  * @package
@@ -254,24 +252,28 @@ const CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
   /**
    * Add context menu option to create getter block for the loop's variable.
    * (customContextMenu support limited to web BlockSvg.)
-   * @param {!Array} options List of menu options to add to.
-   * @this {Block}
+   *
+   * @param options List of menu options to add to.
    */
-  customContextMenu: function(options) {
+  customContextMenu: function(
+      this: CustomContextMenuBlock, options: Array<any>) {
     if (this.isInFlyout) {
       return;
     }
-    const variable = this.getField('VAR').getVariable();
+    const varField = this.getField('VAR') as FieldVariable;
+    const variable = varField.getVariable()!;
     const varName = variable.name;
     if (!this.isCollapsed() && varName !== null) {
-      const option = {enabled: true};
-      option.text = Msg['VARIABLES_SET_CREATE_GET'].replace('%1', varName);
       const xmlField = Variables.generateVariableFieldDom(variable);
       const xmlBlock = xmlUtils.createElement('block');
       xmlBlock.setAttribute('type', 'variables_get');
       xmlBlock.appendChild(xmlField);
-      option.callback = ContextMenu.callbackFactory(this, xmlBlock);
-      options.push(option);
+
+      options.push({
+        enabled: true,
+        text: Msg['VARIABLES_SET_CREATE_GET'].replace('%1', varName),
+        callback: ContextMenu.callbackFactory(this, xmlBlock)
+      });
     }
   },
 };
@@ -303,10 +305,8 @@ Extensions.register(
  *
  * // Else if using blockly_compressed + blockss_compressed.js in browser:
  * Blockly.libraryBlocks.loopTypes.add('custom_loop');
- *
- * @type {!Set<string>}
  */
-export const loopTypes = new Set([
+export const loopTypes: Set<string> = new Set([
   'controls_repeat',
   'controls_repeat_ext',
   'controls_forEach',
@@ -314,9 +314,15 @@ export const loopTypes = new Set([
   'controls_whileUntil',
 ]);
 
+/** Type of a block that has CONTROL_FLOW_IN_LOOP_CHECK_MIXIN */
+type ControlFlowInLoopBlock = Block&ControlFlowInLoopMixin;
+interface ControlFlowInLoopMixin extends ControlFlowInLoopMixinType {};
+type ControlFlowInLoopMixinType = typeof CONTROL_FLOW_IN_LOOP_CHECK_MIXIN;
+
 /**
  * This mixin adds a check to make sure the 'controls_flow_statements' block
  * is contained in a loop. Otherwise a warning is added to the block.
+ *
  * @mixin
  * @augments Block
  * @public
@@ -325,11 +331,11 @@ export const loopTypes = new Set([
 const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
   /**
    * Is this block enclosed (at any level) by a loop?
-   * @return {Block} The nearest surrounding loop, or null if none.
-   * @this {Block}
+   *
+   * @returns The nearest surrounding loop, or null if none.
    */
-  getSurroundLoop: function() {
-    let block = this;
+  getSurroundLoop: function(this: ControlFlowInLoopBlock): Block | null {
+    let block: Block|null = this;
     do {
       if (loopTypes.has(block.type)) {
         return block;
@@ -342,18 +348,16 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
   /**
    * Called whenever anything on the workspace changes.
    * Add warning if this flow block is not nested inside a loop.
-   * @param {!AbstractEvent} e Move event.
-   * @this {Block}
    */
-  onchange: function(e) {
+  onchange: function(this: ControlFlowInLoopBlock, e: Abstract) {
+    const ws = this.workspace as WorkspaceSvg;
     // Don't change state if:
     //   * It's at the start of a drag.
     //   * It's not a move event.
-    if (!this.workspace.isDragging || this.workspace.isDragging() ||
-        e.type !== Events.BLOCK_MOVE) {
+    if (!ws.isDragging || ws.isDragging() || e.type !== Events.BLOCK_MOVE) {
       return;
     }
-    const enabled = this.getSurroundLoop(this);
+    const enabled = !!this.getSurroundLoop();
     this.setWarningText(
         enabled ? null : Msg['CONTROLS_FLOW_STATEMENTS_WARNING']);
     if (!this.isInFlyout) {

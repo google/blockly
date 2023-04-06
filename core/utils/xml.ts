@@ -118,16 +118,20 @@ export function createTextNode(text: string): Text {
  */
 export function textToDom(text: string): Element {
   let doc = domParser.parseFromString(text, 'text/xml');
-  if (!doc || !doc.documentElement ||
-      doc.getElementsByTagName('parsererror').length) {
-    doc = domParser.parseFromString(text, 'text/html');
-    if (!doc || !doc.body.firstChild ||
-        doc.body.firstChild.nodeName.toLowerCase() !== 'xml') {
-      throw new Error(`DOMParser was unable to parse: ${text}`);
-    }
+  if (doc && doc.documentElement &&
+      !doc.getElementsByTagName('parsererror').length) {
+    return doc.documentElement;
+  }
+
+  // Attempt to parse as HTML to deserialize control characters that were
+  // serialized before the serializer did proper escaping.
+  doc = domParser.parseFromString(text, 'text/html');
+  if (doc && doc.body.firstChild &&
+      doc.body.firstChild.nodeName.toLowerCase() === 'xml') {
     return doc.body.firstChild as Element;
   }
-  return doc.documentElement;
+
+  throw new Error(`DOMParser was unable to parse: ${text}`);
 }
 
 /**

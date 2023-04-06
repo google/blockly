@@ -150,6 +150,5 @@ export function domToText(dom: Node): string {
 
 function sanitizeText(text: string) {
   return text.replace(
-      INVALID_CONTROL_CHARS,
-      (match) => `&#x${match.charCodeAt(0)};`);
+      INVALID_CONTROL_CHARS, (match) => `&#x${match.charCodeAt(0)};`);
 }

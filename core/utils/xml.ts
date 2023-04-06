@@ -19,6 +19,9 @@ import * as deprecation from './deprecation.js';
  */
 let {document, DOMParser, XMLSerializer} = globalThis;
 
+let domParser = new DOMParser();
+let xmlSerializer = new XMLSerializer();
+
 /**
  * Inject implementations of document, DOMParser and/or XMLSerializer
  * to use instead of the default ones.
@@ -50,6 +53,9 @@ export function injectDependencies(dependencies: {
     DOMParser = DOMParser,
     XMLSerializer = XMLSerializer,
   } = dependencies);
+
+  domParser = new DOMParser();
+  xmlSerializer = new XMLSerializer();
 }
 
 /**
@@ -111,11 +117,10 @@ export function createTextNode(text: string): Text {
  * @throws if the text doesn't parse.
  */
 export function textToDom(text: string): Element {
-  let doc = textToDomDocument(text);
+  let doc = domParser.parseFromString(text, 'text/xml');
   if (!doc || !doc.documentElement ||
       doc.getElementsByTagName('parsererror').length) {
-    const oParser = new DOMParser();
-    doc = oParser.parseFromString(text, 'text/html');
+    doc = domParser.parseFromString(text, 'text/html');
     if (!doc || !doc.body.firstChild ||
         doc.body.firstChild.nodeName.toLowerCase() !== 'xml') {
       throw new Error(`DOMParser was unable to parse: ${text}`);
@@ -133,8 +138,9 @@ export function textToDom(text: string): Element {
  * @throws if XML doesn't parse.
  */
 export function textToDomDocument(text: string): Document {
-  const oParser = new DOMParser();
-  return oParser.parseFromString(text, 'text/xml');
+  deprecation.warn(
+      'Blockly.utils.xml.textToDomDocument', 'version 10', 'version 11');
+  return domParser.parseFromString(text, 'text/xml');
 }
 
 /**
@@ -145,10 +151,10 @@ export function textToDomDocument(text: string): Document {
  * @returns Text representation.
  */
 export function domToText(dom: Node): string {
-  return sanitizeText(new XMLSerializer().serializeToString(dom));
+  return sanitizeText(xmlSerializer.serializeToString(dom));
 }
 
 function sanitizeText(text: string) {
   return text.replace(
-      INVALID_CONTROL_CHARS, (match) => `&#x${match.charCodeAt(0)};`);
+      INVALID_CONTROL_CHARS, (match) => `&#${match.charCodeAt(0)};`);
 }

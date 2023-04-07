@@ -71,7 +71,7 @@ suite('Comment Deserialization', function() {
       this.block.checkAndDelete();
       chai.assert.equal(this.workspace.getAllBlocks().length, 0);
       // Open trashcan.
-      simulateClick(this.workspace.trashcan.svgGroup_);
+      simulateClick(this.workspace.trashcan.svgGroup);
       // Place from trashcan.
       simulateClick(this.workspace.trashcan.flyout.svgGroup_.querySelector('.blocklyDraggable'));
       chai.assert.equal(this.workspace.getAllBlocks().length, 1);

@@ -30,11 +30,11 @@ export class WorkspaceComment {
   protected width_: number;
   protected RTL: boolean;
 
-  private deletable_ = true;
+  private deletable = true;
 
-  private movable_ = true;
+  private movable = true;
 
-  private editable_ = true;
+  private editable = true;
   protected content_: string;
 
   /** Whether this comment has been disposed. */
@@ -178,7 +178,7 @@ export class WorkspaceComment {
    * @internal
    */
   isDeletable(): boolean {
-    return this.deletable_ &&
+    return this.deletable &&
         !(this.workspace && this.workspace.options.readOnly);
   }
 
@@ -189,7 +189,7 @@ export class WorkspaceComment {
    * @internal
    */
   setDeletable(deletable: boolean) {
-    this.deletable_ = deletable;
+    this.deletable = deletable;
   }
 
   /**
@@ -199,7 +199,7 @@ export class WorkspaceComment {
    * @internal
    */
   isMovable(): boolean {
-    return this.movable_ &&
+    return this.movable &&
         !(this.workspace && this.workspace.options.readOnly);
   }
 
@@ -210,7 +210,7 @@ export class WorkspaceComment {
    * @internal
    */
   setMovable(movable: boolean) {
-    this.movable_ = movable;
+    this.movable = movable;
   }
 
   /**
@@ -219,7 +219,7 @@ export class WorkspaceComment {
    * @returns True if editable.
    */
   isEditable(): boolean {
-    return this.editable_ &&
+    return this.editable &&
         !(this.workspace && this.workspace.options.readOnly);
   }
 
@@ -229,7 +229,7 @@ export class WorkspaceComment {
    * @param editable True if editable.
    */
   setEditable(editable: boolean) {
-    this.editable_ = editable;
+    this.editable = editable;
   }
 
   /**

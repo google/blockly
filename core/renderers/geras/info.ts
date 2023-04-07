@@ -359,8 +359,11 @@ export class RenderInfo extends BaseRenderInfo {
         if (prevInput && prevInput.hasStatement &&
             row.width < prevInput.width) {
           rowNextRightEdges.set(row, prevInput.width);
+        } else if (row.hasStatement) {
+          nextRightEdge = row.width;
         } else {
-          // To avoid jagged right edges, use the maximum width.
+          // To avoid jagged right edges along consecutive non-statement rows,
+          // use the maximum width.
           nextRightEdge = Math.max(nextRightEdge, row.width);
         }
         prevInput = row;

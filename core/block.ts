@@ -1784,8 +1784,8 @@ export class Block implements IASTNodeLocation, IDeletable {
           }
           element = newlineInput as AnyDuringMigration;
         } else {
-          // AnyDuringMigration because:  Type '{ text: string; type: string; } |
-          // null' is not assignable to type 'string | number'.
+          // AnyDuringMigration because:  Type '{ text: string; type: string; }
+          // | null' is not assignable to type 'string | number'.
           element = this.stringToFieldJson_(element) as AnyDuringMigration;
           if (!element) {
             continue;

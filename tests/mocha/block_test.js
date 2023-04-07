@@ -2073,7 +2073,7 @@ suite('Blocks', function() {
         },
       ]);
     });
-    test('Converts newline to dummy with endOfRow', function() {
+    test('Newline is converted to a dummy with endOfRow set', function() {
       const block = this.workspace.newBlock('endOfRow_test_block');
       chai.assert.equal(block.inputList[0].fieldRow[0].getValue(), 'Row1');
       chai.assert.isTrue(block.inputList[0].isEndOfRow(),

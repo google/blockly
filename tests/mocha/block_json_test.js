@@ -66,7 +66,7 @@ suite('Block JSON initialization', function() {
           'Block "test": Message index %2 out of range.');
     });
 
-    test('Accepts newline token', function() {
+    test('Newline tokens are valid', function() {
       this.assertNoError(['test', '\n', 'test'], 0);
     });
   });
@@ -290,7 +290,7 @@ suite('Block JSON initialization', function() {
           ]);
     });
 
-    test('Includes endOfRow', function() {
+    test('endOfRow property is included in interpolation output', function() {
       this.assertInterpolation(
           ['test1', {'type': 'input_dummy', 'endOfRow': true}, 'test2'],
           [],
@@ -314,7 +314,7 @@ suite('Block JSON initialization', function() {
           ]);
     });
 
-    test('Converts newline to endOfRow', function() {
+    test('Newline is converted to dummy with endOfRow', function() {
       this.assertInterpolation(
           ['test1', '\n', 'test2'],
           [],
@@ -338,7 +338,7 @@ suite('Block JSON initialization', function() {
           ]);
     });
 
-    test('Aligns endOfRow like last dummy', function() {
+    test('Newline converted to dummy aligned like last dummy', function() {
       this.assertInterpolation(
           ['test1', '\n', 'test2'],
           [],

@@ -141,11 +141,13 @@ function tokenizeInterpolationInternal(
     tokens.push(text);
   }
 
-  // Merge adjacent text tokens into a single string (excluding newline tokens).
+  // Merge adjacent text tokens into a single string (but if newlines should be
+  // tokenized, don't merge those with adjacent text).
   const mergedTokens = [];
   buffer.length = 0;
   for (let i = 0; i < tokens.length; i++) {
-    if (typeof tokens[i] === 'string' && tokens[i] !== '\n') {
+    if (typeof tokens[i] === 'string' &&
+        !(parseInterpolationTokens && tokens[i] == '\n')) {
       buffer.push(tokens[i] as string);
     } else {
       text = buffer.join('');
@@ -170,7 +172,8 @@ function tokenizeInterpolationInternal(
  * It will also replace string table references (e.g., %{bky_my_msg} and
  * %{BKY_MY_MSG} will both be replaced with the value in
  * Msg['MY_MSG']). Percentage sign characters '%' may be self-escaped
- * (e.g., '%%').
+ * (e.g., '%%'). Newline characters will also be output as string tokens
+ * containing a single newline character.
  *
  * @param message Text which might contain string table references and
  *     interpolation tokens.

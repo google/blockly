@@ -49,6 +49,12 @@ suite('Utils', function() {
             Blockly.utils.parsing.tokenizeInterpolation('Hello%%World'),
             ['Hello%World']);
       });
+
+      test('Newlines are tokenized', function() {
+        chai.assert.deepEqual(
+            Blockly.utils.parsing.tokenizeInterpolation('Hello\nWorld'),
+            ['Hello', '\n', 'World']);
+      });
     });
 
     suite('Number interpolation', function() {
@@ -197,6 +203,9 @@ suite('Utils', function() {
 
     resultString = Blockly.utils.parsing.replaceMessageReferences('%a');
     chai.assert.equal(resultString, '%a', 'Unrecognized % escape code treated as literal');
+
+    resultString = Blockly.utils.parsing.replaceMessageReferences('Hello\nWorld');
+    chai.assert.equal(resultString, 'Hello\nWorld', 'Newlines are not tokenized');
 
     resultString = Blockly.utils.parsing.replaceMessageReferences('%1');
     chai.assert.equal(resultString, '%1', 'Interpolation tokens ignored.');

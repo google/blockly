@@ -241,10 +241,10 @@ suite('Flyout', function() {
     });
   });
 
-  suite('createFlyoutInfo_', function() {
+  suite('createFlyoutInfo', function() {
     setup(function() {
       this.flyout = this.workspace.getFlyout();
-      this.createFlyoutSpy = sinon.spy(this.flyout, 'createFlyoutInfo_');
+      this.createFlyoutSpy = sinon.spy(this.flyout, 'createFlyoutInfo');
     });
 
     function checkFlyoutInfo(flyoutSpy) {

@@ -47,10 +47,10 @@ const BUMP_RANDOMNESS = 10;
 export class RenderedConnection extends Connection {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   sourceBlock_!: BlockSvg;
-  private readonly db_: ConnectionDB;
-  private readonly dbOpposite_: ConnectionDB;
-  private readonly offsetInBlock_: Coordinate;
-  private trackedState_: TrackedState;
+  private readonly db: ConnectionDB;
+  private readonly dbOpposite: ConnectionDB;
+  private readonly offsetInBlock: Coordinate;
+  private trackedState: TrackedState;
   private highlightPath: SVGPathElement|null = null;
 
   /** Connection this connection connects to.  Null if not connected. */
@@ -67,21 +67,21 @@ export class RenderedConnection extends Connection {
      * Connection database for connections of this type on the current
      * workspace.
      */
-    this.db_ = source.workspace.connectionDBList[type];
+    this.db = source.workspace.connectionDBList[type];
 
     /**
      * Connection database for connections compatible with this type on the
      * current workspace.
      */
-    this.dbOpposite_ =
+    this.dbOpposite =
         source.workspace
             .connectionDBList[internalConstants.OPPOSITE_TYPE[type]];
 
     /** Workspace units, (0, 0) is top left of block. */
-    this.offsetInBlock_ = new Coordinate(0, 0);
+    this.offsetInBlock = new Coordinate(0, 0);
 
     /** Describes the state of this connection's tracked-ness. */
-    this.trackedState_ = RenderedConnection.TrackedState.WILL_TRACK;
+    this.trackedState = RenderedConnection.TrackedState.WILL_TRACK;
   }
 
   /**
@@ -92,8 +92,8 @@ export class RenderedConnection extends Connection {
    */
   override dispose() {
     super.dispose();
-    if (this.trackedState_ === RenderedConnection.TrackedState.TRACKED) {
-      this.db_.removeConnection(this, this.y);
+    if (this.trackedState === RenderedConnection.TrackedState.TRACKED) {
+      this.db.removeConnection(this, this.y);
     }
   }
 
@@ -192,15 +192,15 @@ export class RenderedConnection extends Connection {
     const moved = true;
     let updated = false;
 
-    if (this.trackedState_ === RenderedConnection.TrackedState.WILL_TRACK) {
-      this.db_.addConnection(this, y);
-      this.trackedState_ = RenderedConnection.TrackedState.TRACKED;
+    if (this.trackedState === RenderedConnection.TrackedState.WILL_TRACK) {
+      this.db.addConnection(this, y);
+      this.trackedState = RenderedConnection.TrackedState.TRACKED;
       updated = true;
     } else if (
-        this.trackedState_ === RenderedConnection.TrackedState.TRACKED &&
+        this.trackedState === RenderedConnection.TrackedState.TRACKED &&
         moved) {
-      this.db_.removeConnection(this, this.y);
-      this.db_.addConnection(this, y);
+      this.db.removeConnection(this, this.y);
+      this.db.addConnection(this, y);
       updated = true;
     }
 
@@ -233,7 +233,7 @@ export class RenderedConnection extends Connection {
    */
   moveToOffset(blockTL: Coordinate): boolean {
     return this.moveTo(
-        blockTL.x + this.offsetInBlock_.x, blockTL.y + this.offsetInBlock_.y);
+        blockTL.x + this.offsetInBlock.x, blockTL.y + this.offsetInBlock.y);
   }
 
   /**
@@ -243,8 +243,8 @@ export class RenderedConnection extends Connection {
    * @param y The new relative y, in workspace units.
    */
   setOffsetInBlock(x: number, y: number) {
-    this.offsetInBlock_.x = x;
-    this.offsetInBlock_.y = y;
+    this.offsetInBlock.x = x;
+    this.offsetInBlock.y = y;
   }
 
   /**
@@ -254,7 +254,7 @@ export class RenderedConnection extends Connection {
    * @internal
    */
   getOffsetInBlock(): Coordinate {
-    return this.offsetInBlock_;
+    return this.offsetInBlock;
   }
 
   /**
@@ -289,7 +289,7 @@ export class RenderedConnection extends Connection {
     const block = this.targetBlock();
     if (!target || !block) return;
     const offset =
-        Coordinate.difference(this.offsetInBlock_, target.offsetInBlock_);
+        Coordinate.difference(this.offsetInBlock, target.offsetInBlock);
     block.translate(offset.x, offset.y);
   }
 
@@ -305,7 +305,7 @@ export class RenderedConnection extends Connection {
    */
   closest(maxLimit: number, dxy: Coordinate):
       {connection: RenderedConnection|null, radius: number} {
-    return this.dbOpposite_.searchForClosest(this, maxLimit, dxy);
+    return this.dbOpposite.searchForClosest(this, maxLimit, dxy);
   }
 
   /** Add highlighting around this connection. */
@@ -334,7 +334,7 @@ export class RenderedConnection extends Connection {
           (shape as unknown as PathLeftShape).pathLeft +
           svgPaths.lineOnAxis('h', xLen);
     }
-    const offset = this.offsetInBlock_;
+    const offset = this.offsetInBlock;
     this.highlightPath = dom.createSvgElement(
         Svg.PATH, {
           'class': 'blocklyHighlightedConnectionPath',
@@ -361,9 +361,9 @@ export class RenderedConnection extends Connection {
    */
   setTracking(doTracking: boolean) {
     if (doTracking &&
-            this.trackedState_ === RenderedConnection.TrackedState.TRACKED ||
+            this.trackedState === RenderedConnection.TrackedState.TRACKED ||
         !doTracking &&
-            this.trackedState_ === RenderedConnection.TrackedState.UNTRACKED) {
+            this.trackedState === RenderedConnection.TrackedState.UNTRACKED) {
       return;
     }
     if (this.sourceBlock_.isInFlyout) {
@@ -371,14 +371,14 @@ export class RenderedConnection extends Connection {
       return;
     }
     if (doTracking) {
-      this.db_.addConnection(this, this.y);
-      this.trackedState_ = RenderedConnection.TrackedState.TRACKED;
+      this.db.addConnection(this, this.y);
+      this.trackedState = RenderedConnection.TrackedState.TRACKED;
       return;
     }
-    if (this.trackedState_ === RenderedConnection.TrackedState.TRACKED) {
-      this.db_.removeConnection(this, this.y);
+    if (this.trackedState === RenderedConnection.TrackedState.TRACKED) {
+      this.db.removeConnection(this, this.y);
     }
-    this.trackedState_ = RenderedConnection.TrackedState.UNTRACKED;
+    this.trackedState = RenderedConnection.TrackedState.UNTRACKED;
   }
 
   /**
@@ -532,7 +532,7 @@ export class RenderedConnection extends Connection {
    * @internal
    */
   override neighbours(maxLimit: number): RenderedConnection[] {
-    return this.dbOpposite_.getNeighbours(this, maxLimit);
+    return this.dbOpposite.getNeighbours(this, maxLimit);
   }
 
   /**

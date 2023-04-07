@@ -8,38 +8,38 @@
  * @fileoverview Text blocks for Blockly.
  * @suppress {checkTypes}
  */
-'use strict';
 
-goog.module('Blockly.libraryBlocks.texts');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.libraryBlocks.texts');
 
-const Extensions = goog.require('Blockly.Extensions');
-const {Msg} = goog.require('Blockly.Msg');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
+import * as Extensions from '../core/extensions.js';
+import {Msg} from '../core/msg.js';
+import * as fieldRegistry from '../core/field_registry.js';
 /* eslint-disable-next-line no-unused-vars */
-const xmlUtils = goog.require('Blockly.utils.xml');
-const {Align} = goog.require('Blockly.Input');
+import * as xmlUtils from '../core/utils/xml.js';
+import {Align} from '../core/input.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+import type {Block} from '../core/block.js';
+// import type {BlockDefinition} from '../core/blocks.js';
 // TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {Mutator} = goog.require('Blockly.Mutator');
+import {ConnectionType} from '../core/connection_type.js';
+import {Mutator} from '../core/mutator.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
-const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
+import type {Workspace} from '../core/workspace.js';
+import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldMultilineInput');
+import '../core/field_multilineinput.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldVariable');
+import '../core/field_variable.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
  * @type {!Object<string, !BlockDefinition>}
  */
-const blocks = createBlockDefinitionsFromJsonArray([
+export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for text value
   {
     'type': 'text',
@@ -243,7 +243,6 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'mutator': 'text_charAt_mutator',
   },
 ]);
-exports.blocks = blocks;
 
 blocks['text_getSubstring'] = {
   /**

@@ -199,8 +199,7 @@ export class WorkspaceComment {
    * @internal
    */
   isMovable(): boolean {
-    return this.movable &&
-        !(this.workspace && this.workspace.options.readOnly);
+    return this.movable && !(this.workspace && this.workspace.options.readOnly);
   }
 
   /**

@@ -889,8 +889,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     const textOffset = TEXTAREA_OFFSET * 2;
 
     this.foreignObject?.setAttribute('width', String(size.width));
-    this.foreignObject?.setAttribute(
-        'height', String(size.height - topOffset));
+    this.foreignObject?.setAttribute('height', String(size.height - topOffset));
     if (this.RTL) {
       this.foreignObject?.setAttribute('x', String(-size.width));
     }
@@ -977,8 +976,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
         dom.addClass(this.svgRectTarget, 'blocklyCommentTargetFocused');
       }
       if (this.svgHandleTarget) {
-        dom.addClass(
-            this.svgHandleTarget, 'blocklyCommentHandleTargetFocused');
+        dom.addClass(this.svgHandleTarget, 'blocklyCommentHandleTargetFocused');
       }
     }, 0);
   }

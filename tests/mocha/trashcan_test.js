@@ -56,11 +56,11 @@ suite("Trashcan", function() {
   suite("Events", function() {
     test("Delete", function() {
       fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
-      chai.assert.equal(this.trashcan.contents_.length, 1);
+      chai.assert.equal(this.trashcan.contents.length, 1);
     });
     test("Non-Delete", function() {
       fireNonDeleteEvent(this.workspace);
-      chai.assert.equal(this.trashcan.contents_.length, 0);
+      chai.assert.equal(this.trashcan.contents.length, 0);
     });
     test("Non-Delete w/ oldXml", function() {
       let xml = Blockly.utils.xml.textToDom(
@@ -70,14 +70,14 @@ suite("Trashcan", function() {
       );
       xml = xml.children[0];
       fireNonDeleteEvent(this.workspace, xml);
-      chai.assert.equal(this.trashcan.contents_.length, 0);
+      chai.assert.equal(this.trashcan.contents.length, 0);
     });
     test("Shadow Delete", function() {
       fireDeleteEvent(this.workspace, '<shadow type="test_field_block"/>');
-      chai.assert.equal(this.trashcan.contents_.length, 0);
+      chai.assert.equal(this.trashcan.contents.length, 0);
     });
     test("Click without contents - fires workspace click", function() {
-      simulateClick(this.trashcan.svgGroup_);
+      simulateClick(this.trashcan.svgGroup);
 
       assertEventNotFired(
           this.eventsFireStub, Blockly.Events.TrashcanOpen, {type: eventUtils.CLICK});
@@ -87,11 +87,11 @@ suite("Trashcan", function() {
     });
     test("Click with contents - fires trashcanOpen", function() {
       fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
-      chai.assert.equal(this.trashcan.contents_.length, 1);
+      chai.assert.equal(this.trashcan.contents.length, 1);
       // Stub flyout interaction.
       const showFlyoutStub = sinon.stub(this.trashcan.flyout, "show");
 
-      simulateClick(this.trashcan.svgGroup_);
+      simulateClick(this.trashcan.svgGroup);
 
       sinon.assert.calledOnce(showFlyoutStub);
 
@@ -122,21 +122,21 @@ suite("Trashcan", function() {
     test("Simple", function() {
       fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
       fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
-      chai.assert.equal(this.trashcan.contents_.length, 1);
+      chai.assert.equal(this.trashcan.contents.length, 1);
     });
     test("Different Coords", function() {
       fireDeleteEvent(
           this.workspace, '<block type="test_field_block" x="10" y="10"/>');
       fireDeleteEvent(
           this.workspace, '<block type="test_field_block" x="20" y="20"/>');
-      chai.assert.equal(this.trashcan.contents_.length, 1);
+      chai.assert.equal(this.trashcan.contents.length, 1);
     });
     test("Different IDs", function() {
       fireDeleteEvent(
           this.workspace, '<block type="test_field_block" id="id1"/>');
       fireDeleteEvent(
           this.workspace, '<block type="test_field_block" id="id2"/>');
-      chai.assert.equal(this.trashcan.contents_.length, 1);
+      chai.assert.equal(this.trashcan.contents.length, 1);
     });
     test("No Disabled - Disabled True", function() {
       fireDeleteEvent(
@@ -145,7 +145,7 @@ suite("Trashcan", function() {
           this.workspace, '<block type="test_field_block" disabled="true"/>');
       // Disabled tags get removed because disabled blocks aren't allowed to
       // be dragged from flyouts. See #2239 and #3243.
-      chai.assert.equal(this.trashcan.contents_.length, 1);
+      chai.assert.equal(this.trashcan.contents.length, 1);
     });
     test("Different Field Values", function() {
       fireDeleteEvent(this.workspace,
@@ -158,7 +158,7 @@ suite("Trashcan", function() {
           '  <field name="NAME">dummy_value2</field>' +
           '</block>'
       );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
+      chai.assert.equal(this.trashcan.contents.length, 2);
     });
     test("No Values - Values", function() {
       fireDeleteEvent(this.workspace, '<block type="row_block"/>');
@@ -169,7 +169,7 @@ suite("Trashcan", function() {
           '  </value>' +
           '</block>'
       );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
+      chai.assert.equal(this.trashcan.contents.length, 2);
     });
     test("Different Value Blocks", function() {
       fireDeleteEvent(this.workspace,
@@ -186,7 +186,7 @@ suite("Trashcan", function() {
           '  </value>' +
           '</block>'
       );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
+      chai.assert.equal(this.trashcan.contents.length, 2);
     });
     test("No Statements - Statements", function() {
       fireDeleteEvent(this.workspace, '<block type="statement_block"/>');
@@ -197,7 +197,7 @@ suite("Trashcan", function() {
           '  </statement>' +
           '</block>'
       );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
+      chai.assert.equal(this.trashcan.contents.length, 2);
     });
     test("Different Statement Blocks", function() {
       fireDeleteEvent(this.workspace,
@@ -214,7 +214,7 @@ suite("Trashcan", function() {
           '  </statement>' +
           '</block>'
       );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
+      chai.assert.equal(this.trashcan.contents.length, 2);
     });
     test("No Next - Next", function() {
       fireDeleteEvent(this.workspace, '<block type="stack_block"/>');
@@ -225,7 +225,7 @@ suite("Trashcan", function() {
           '  </next>' +
           '</block>'
       );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
+      chai.assert.equal(this.trashcan.contents.length, 2);
     });
     test("Different Next Blocks", function() {
       fireDeleteEvent(this.workspace,
@@ -242,7 +242,7 @@ suite("Trashcan", function() {
           '  </next>' +
           '</block>'
       );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
+      chai.assert.equal(this.trashcan.contents.length, 2);
     });
     test("No Comment - Comment", function() {
       fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
@@ -251,7 +251,7 @@ suite("Trashcan", function() {
           '  <comment>comment_text</comment>' +
           '</block>'
       );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
+      chai.assert.equal(this.trashcan.contents.length, 2);
     });
     test("Different Comment Text", function() {
       fireDeleteEvent(this.workspace,
@@ -264,7 +264,7 @@ suite("Trashcan", function() {
           '  <comment>comment_text2</comment>' +
           '</block>'
       );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
+      chai.assert.equal(this.trashcan.contents.length, 2);
     });
     test("Different Comment Size", function() {
       fireDeleteEvent(this.workspace,
@@ -278,7 +278,7 @@ suite("Trashcan", function() {
           '</block>'
       );
       // h & w tags are removed b/c the blocks appear the same.
-      chai.assert.equal(this.trashcan.contents_.length, 1);
+      chai.assert.equal(this.trashcan.contents.length, 1);
     });
     test("Different Comment Pinned", function() {
       fireDeleteEvent(this.workspace,
@@ -292,7 +292,7 @@ suite("Trashcan", function() {
           '</block>'
       );
       // pinned tags are removed b/c the blocks appear the same.
-      chai.assert.equal(this.trashcan.contents_.length, 1);
+      chai.assert.equal(this.trashcan.contents.length, 1);
     });
     test("Different Mutator", function() {
       fireDeleteEvent(this.workspace,
@@ -305,7 +305,7 @@ suite("Trashcan", function() {
           '  <mutation hasInputt="false"></mutation>' +
           '</block>'
       );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
+      chai.assert.equal(this.trashcan.contents.length, 2);
     });
   });
   suite("Max Contents", function() {
@@ -314,7 +314,7 @@ suite("Trashcan", function() {
       fireDeleteEvent(this.workspace,
           '<block type="test_field_block"/>'
       );
-      chai.assert.equal(this.trashcan.contents_.length, 0);
+      chai.assert.equal(this.trashcan.contents.length, 0);
       this.workspace.options.maxTrashcanContents = Infinity;
     });
   });

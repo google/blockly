@@ -32,8 +32,8 @@ let xmlSerializer: XMLSerializer = {
  * package instead.
  */
 let {document, DOMParser, XMLSerializer} = globalThis;
-domParser = new DOMParser();
-xmlSerializer = new XMLSerializer();
+if (DOMParser) domParser = new DOMParser();
+if (XMLSerializer) xmlSerializer = new XMLSerializer();
 
 /**
  * Inject implementations of document, DOMParser and/or XMLSerializer

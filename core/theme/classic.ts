@@ -39,5 +39,4 @@ const categoryStyles = {
  * Classic theme.
  * Contains multi-coloured border to create shadow effect.
  */
-export const Classic = new Theme(
-    'classic', defaultBlockStyles as AnyDuringMigration, categoryStyles);
+export const Classic = new Theme('classic', defaultBlockStyles, categoryStyles);

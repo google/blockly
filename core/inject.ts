@@ -39,17 +39,15 @@ import {WorkspaceSvg} from './workspace_svg.js';
  */
 export function inject(
     container: Element|string, opt_options?: BlocklyOptions): WorkspaceSvg {
+  let containerElement: Element|null = null;
   if (typeof container === 'string') {
-    // AnyDuringMigration because:  Type 'Element | null' is not assignable to
-    // type 'string | Element'.
-    container = (document.getElementById(container) ||
-                 document.querySelector(container)) as AnyDuringMigration;
+    containerElement =
+        document.getElementById(container) || document.querySelector(container);
+  } else {
+    containerElement = container;
   }
   // Verify that the container is in document.
-  // AnyDuringMigration because:  Argument of type 'string | Element' is not
-  // assignable to parameter of type 'Node'.
-  if (!container ||
-      !dom.containsNode(document, container as AnyDuringMigration)) {
+  if (!containerElement || !dom.containsNode(document, containerElement)) {
     throw Error('Error: container is not in current document.');
   }
   const options = new Options(opt_options || {} as BlocklyOptions);
@@ -58,9 +56,7 @@ export function inject(
   subContainer.tabIndex = 0;
   aria.setState(subContainer, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
 
-  // AnyDuringMigration because:  Property 'appendChild' does not exist on type
-  // 'string | Element'.
-  (container as AnyDuringMigration).appendChild(subContainer);
+  containerElement.appendChild(subContainer);
   const svg = createDom(subContainer, options);
 
   // Create surfaces for dragging things. These are optimizations
@@ -76,16 +72,12 @@ export function inject(
 
   // Keep focus on the first workspace so entering keyboard navigation looks
   // correct.
-  // AnyDuringMigration because:  Argument of type 'WorkspaceSvg' is not
-  // assignable to parameter of type 'Workspace'.
-  common.setMainWorkspace(workspace as AnyDuringMigration);
+  common.setMainWorkspace(workspace);
 
   common.svgResize(workspace);
 
   subContainer.addEventListener('focusin', function() {
-    // AnyDuringMigration because:  Argument of type 'WorkspaceSvg' is not
-    // assignable to parameter of type 'Workspace'.
-    common.setMainWorkspace(workspace as AnyDuringMigration);
+    common.setMainWorkspace(workspace);
   });
 
   return workspace;
@@ -213,8 +205,7 @@ function init(mainWorkspace: WorkspaceSvg) {
 
   // Suppress the browser's context menu.
   browserEvents.conditionalBind(
-      svg.parentNode as Element, 'contextmenu', null,
-      function(e: AnyDuringMigration) {
+      svg.parentNode as Element, 'contextmenu', null, function(e: Event) {
         if (!browserEvents.isTargetInput(e)) {
           e.preventDefault();
         }
@@ -369,13 +360,16 @@ function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
       'delete');
 
   // Bind temporary hooks that preload the sounds.
-  const soundBinds: AnyDuringMigration[] = [];
+  const soundBinds: browserEvents.Data[] = [];
   /**
    *
    */
   function unbindSounds() {
     while (soundBinds.length) {
-      browserEvents.unbind(soundBinds.pop());
+      const oldSoundBinding = soundBinds.pop();
+      if (oldSoundBinding) {
+        browserEvents.unbind(oldSoundBinding);
+      }
     }
     audioMgr.preload();
   }

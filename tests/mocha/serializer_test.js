@@ -370,7 +370,7 @@ Serializer.Fields.LabelSerializable.ControlChars = new SerializerTestCase(
     'ControlChars',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="test_fields_label_serializable" id="id******************" x="42" y="42">' +
-    '<field name="LABEL">&#x01;&#xa1;</field>' +
+    '<field name="LABEL">&#01;&#a1;</field>' +
     '</block>' +
     '</xml>');
 Serializer.Fields.LabelSerializable.testCases = [
@@ -487,7 +487,7 @@ Serializer.Fields.MultilineInput.ControlChars = new SerializerTestCase(
     'ControlChars',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
-    '<field name="CODE">&#x01;&#xa1;</field>' +
+    '<field name="CODE">&#01;&#a1;</field>' +
     '</block>' +
     '</xml>');
 Serializer.Fields.MultilineInput.testCases = [
@@ -658,7 +658,7 @@ Serializer.Fields.TextInput.ControlChars = new SerializerTestCase(
     'ControlChars',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
-    '<field name="TEXT_INPUT">&#x01;&#xa1;</field>' +
+    '<field name="TEXT_INPUT">&#01;&#a1;</field>' +
     '</block>' +
     '</xml>');
 Serializer.Fields.TextInput.testCases = [
@@ -808,10 +808,10 @@ Serializer.Fields.Variable.ControlChars = new SerializerTestCase(
     'ControlChars',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<variables>' +
-    '<variable id="aaaaaaaaaaaaaaaaaaaa">&#x01;&#xa1;</variable>' +
+    '<variable id="aaaaaaaaaaaaaaaaaaaa">&#01;&#a1;</variable>' +
     '</variables>' +
     '<block type="variables_get" id="id******************" x="42" y="42">' +
-    '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">&#x01;&#xa1;</field>' +
+    '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">&#01;&#a1;</field>' +
     '</block>' +
     '</xml>');
 Serializer.Fields.Variable.testCases = [
@@ -1047,7 +1047,7 @@ Serializer.Icons.Comment.Text.ControlChars = new SerializerTestCase(
     'ControlChars',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
-    '<comment pinned="false" h="80" w="160">&#x01;&#xa1;</comment>' +
+    '<comment pinned="false" h="80" w="160">&#01;&#a1;</comment>' +
     '</block>' +
     '</xml>');
 Serializer.Icons.Comment.Text.testCases = [
@@ -1804,7 +1804,7 @@ Serializer.Mutations.Procedure.Names.ControlChars = new SerializerTestCase(
     'ControlChars',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="procedures_defreturn" id="id******************" x="42" y="42">' +
-    '<field name="NAME">&#x01;&#xa1;</field>' +
+    '<field name="NAME">&#01;&#a1;</field>' +
     '</block>' +
     '</xml>');
 Serializer.Mutations.Procedure.Names.testCases = [

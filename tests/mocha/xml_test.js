@@ -466,7 +466,7 @@ suite('XML', function() {
       dom.appendChild(Blockly.utils.xml.createTextNode('')); // u0001
       chai.assert.equal(
           Blockly.utils.xml.domToText(dom),
-          '<xml xmlns="https://developers.google.com/blockly/xml">&#x1;</xml>'
+          '<xml xmlns="https://developers.google.com/blockly/xml">&#1;</xml>'
       );
     });
 

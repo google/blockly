@@ -10,6 +10,20 @@ goog.declareModuleId('Blockly.utils.xml');
 import * as deprecation from './deprecation.js';
 
 
+let domParser: DOMParser = {
+  parseFromString: function() {
+    throw new Error(
+        'DOMParser was not properly injected using injectDependencies');
+  },
+};
+
+let xmlSerializer: XMLSerializer = {
+  serializeToString: function() {
+    throw new Error(
+        'XMLSerializer was not properly injected using injectDependencies');
+  },
+};
+
 /**
  * Injected dependencies.  By default these are just (and have the
  * same types as) the corresponding DOM Window properties, but the
@@ -18,9 +32,8 @@ import * as deprecation from './deprecation.js';
  * package instead.
  */
 let {document, DOMParser, XMLSerializer} = globalThis;
-
-let domParser = new DOMParser();
-let xmlSerializer = new XMLSerializer();
+domParser = new DOMParser();
+xmlSerializer = new XMLSerializer();
 
 /**
  * Inject implementations of document, DOMParser and/or XMLSerializer

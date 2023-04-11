@@ -48,7 +48,7 @@ export class MarkerSvg {
    * The workspace, field, or block that the marker SVG element should be
    * attached to.
    */
-  private parent_: IASTNodeLocationSvg|null = null;
+  private parent: IASTNodeLocationSvg|null = null;
 
   /** The current SVG element for the marker. */
   currentMarkerSvg: SVGElement|null = null;
@@ -135,17 +135,17 @@ export class MarkerSvg {
    */
   protected setParent_(newParent: IASTNodeLocationSvg) {
     if (!this.isCursor()) {
-      if (this.parent_) {
-        this.parent_.setMarkerSvg(null);
+      if (this.parent) {
+        this.parent.setMarkerSvg(null);
       }
       newParent.setMarkerSvg(this.getSvgRoot());
     } else {
-      if (this.parent_) {
-        this.parent_.setCursorSvg(null);
+      if (this.parent) {
+        this.parent.setCursorSvg(null);
       }
       newParent.setCursorSvg(this.getSvgRoot());
     }
-    this.parent_ = newParent;
+    this.parent = newParent;
   }
 
   /**
@@ -169,7 +169,7 @@ export class MarkerSvg {
 
     this.showAtLocation_(curNode);
 
-    this.fireMarkerEvent_(oldNode, curNode);
+    this.fireMarkerEvent(oldNode, curNode);
 
     // Ensures the marker will be visible immediately after the move.
     const animate = this.currentMarkerSvg!.childNodes[0];
@@ -216,7 +216,7 @@ export class MarkerSvg {
    *
    * @param curNode The node to draw the marker for.
    */
-  private showWithBlockPrevOutput_(curNode: ASTNode) {
+  private showWithBlockPrevOutput(curNode: ASTNode) {
     const block = curNode.getSourceBlock() as BlockSvg;
     const width = block.width;
     const height = block.height;
@@ -245,7 +245,7 @@ export class MarkerSvg {
    * @param curNode The node to draw the marker for.
    */
   protected showWithBlock_(curNode: ASTNode) {
-    this.showWithBlockPrevOutput_(curNode);
+    this.showWithBlockPrevOutput(curNode);
   }
 
   /**
@@ -254,7 +254,7 @@ export class MarkerSvg {
    * @param curNode The node to draw the marker for.
    */
   protected showWithPrevious_(curNode: ASTNode) {
-    this.showWithBlockPrevOutput_(curNode);
+    this.showWithBlockPrevOutput(curNode);
   }
 
   /**
@@ -263,7 +263,7 @@ export class MarkerSvg {
    * @param curNode The node to draw the marker for.
    */
   protected showWithOutput_(curNode: ASTNode) {
-    this.showWithBlockPrevOutput_(curNode);
+    this.showWithBlockPrevOutput(curNode);
   }
 
   /**
@@ -402,7 +402,7 @@ export class MarkerSvg {
     }
     this.markerBlock_.setAttribute('d', markerPath);
     if (this.workspace.RTL) {
-      this.flipRtl_(this.markerBlock_);
+      this.flipRtl(this.markerBlock_);
     }
     this.currentMarkerSvg = this.markerBlock_;
   }
@@ -467,7 +467,7 @@ export class MarkerSvg {
         svgPaths.lineOnAxis('H', width);
     this.markerBlock_.setAttribute('d', markerPath);
     if (this.workspace.RTL) {
-      this.flipRtl_(this.markerBlock_);
+      this.flipRtl(this.markerBlock_);
     }
     this.currentMarkerSvg = this.markerBlock_;
   }
@@ -497,7 +497,7 @@ export class MarkerSvg {
         svgPaths.lineOnAxis('V', markerHeight);
     this.markerBlock_.setAttribute('d', markerPath);
     if (this.workspace.RTL) {
-      this.flipRtl_(this.markerBlock_);
+      this.flipRtl(this.markerBlock_);
     }
     this.currentMarkerSvg = this.markerBlock_;
   }
@@ -527,7 +527,7 @@ export class MarkerSvg {
    *
    * @param markerSvg The marker that we want to flip.
    */
-  private flipRtl_(markerSvg: SVGElement) {
+  private flipRtl(markerSvg: SVGElement) {
     markerSvg.setAttribute('transform', 'scale(-1 1)');
   }
 
@@ -549,7 +549,7 @@ export class MarkerSvg {
    * @param oldNode The old node the marker used to be on.
    * @param curNode The new node the marker is currently on.
    */
-  private fireMarkerEvent_(oldNode: ASTNode, curNode: ASTNode) {
+  private fireMarkerEvent(oldNode: ASTNode, curNode: ASTNode) {
     const curBlock = curNode.getSourceBlock();
     const event = new (eventUtils.get(eventUtils.MARKER_MOVE))(
         curBlock, this.isCursor(), oldNode, curNode);

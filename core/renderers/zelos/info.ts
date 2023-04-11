@@ -48,7 +48,7 @@ export class RenderInfo extends BaseRenderInfo {
   isMultiRow: boolean;
   hasStatementInput: boolean;
   rightSide: RightConnectionShape|null;
-  private readonly rightAlignedDummyInputs_: WeakMap<Row, Input>;
+  private readonly rightAlignedDummyInputs: WeakMap<Row, Input>;
 
   /**
    * @param renderer The renderer in use.
@@ -93,7 +93,7 @@ export class RenderInfo extends BaseRenderInfo {
      * A map of rows to right aligned dummy inputs within those rows. Used to
      * add padding between left and right aligned inputs.
      */
-    this.rightAlignedDummyInputs_ = new WeakMap();
+    this.rightAlignedDummyInputs = new WeakMap();
   }
 
   /**
@@ -246,7 +246,7 @@ export class RenderInfo extends BaseRenderInfo {
     // padding later.
     if (input.type === inputTypes.DUMMY && activeRow.hasDummyInput &&
         activeRow.align === Align.LEFT && input.align === Align.RIGHT) {
-      this.rightAlignedDummyInputs_.set(activeRow, input);
+      this.rightAlignedDummyInputs.set(activeRow, input);
     } else if (input.type === inputTypes.STATEMENT) {
       // Handle statements without next connections correctly.
       activeRow.elements.push(new StatementInput(this.constants_, input));
@@ -261,7 +261,7 @@ export class RenderInfo extends BaseRenderInfo {
   }
 
   override addAlignmentPadding_(row: Row, missingSpace: number) {
-    if (this.rightAlignedDummyInputs_.get(row)) {
+    if (this.rightAlignedDummyInputs.get(row)) {
       let alignmentDivider;
       for (let i = 0; i < row.elements.length; i++) {
         const elem = row.elements[i];
@@ -269,7 +269,7 @@ export class RenderInfo extends BaseRenderInfo {
           alignmentDivider = elem;
         }
         if (Types.isField(elem) && elem instanceof Field &&
-            elem.parentInput === this.rightAlignedDummyInputs_.get(row)) {
+            elem.parentInput === this.rightAlignedDummyInputs.get(row)) {
           break;
         }
       }

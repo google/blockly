@@ -30,7 +30,7 @@ import {PathObject} from './path_object.js';
  */
 export class Renderer extends BaseRenderer {
   /** The renderer's highlight constant provider. */
-  private highlightConstants_: HighlightConstantProvider|null = null;
+  private highlightConstants: HighlightConstantProvider|null = null;
 
   /**
    * @param name The renderer name.
@@ -46,8 +46,8 @@ export class Renderer extends BaseRenderer {
   override init(
       theme: Theme, opt_rendererOverrides?: {[rendererConstant: string]: any}) {
     super.init(theme, opt_rendererOverrides);
-    this.highlightConstants_ = this.makeHighlightConstants_();
-    this.highlightConstants_.init();
+    this.highlightConstants = this.makeHighlightConstants_();
+    this.highlightConstants.init();
   }
 
   override refreshDom(svg: SVGElement, theme: Theme) {
@@ -110,12 +110,12 @@ export class Renderer extends BaseRenderer {
    * @returns The highlight constant provider.
    */
   getHighlightConstants(): HighlightConstantProvider {
-    if (!this.highlightConstants_) {
+    if (!this.highlightConstants) {
       throw new Error(
           'Cannot access the highlight constants because init has not ' +
           'been called');
     }
-    return this.highlightConstants_;
+    return this.highlightConstants;
   }
 }
 

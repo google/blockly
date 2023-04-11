@@ -279,7 +279,7 @@ export class ConstantProvider {
    * The defs tag that contains all filters and patterns for this Blockly
    * instance.
    */
-  private defs_: SVGElement|null = null;
+  private defs: SVGElement|null = null;
 
   /**
    * The ID of the emboss filter, or the empty string if no filter is set.
@@ -287,7 +287,7 @@ export class ConstantProvider {
   embossFilterId = '';
 
   /** The <filter> element to use for highlighting, or null if not set. */
-  private embossFilter_: SVGElement|null = null;
+  private embossFilter: SVGElement|null = null;
 
   /**
    * The ID of the disabled pattern, or the empty string if no pattern is set.
@@ -297,7 +297,7 @@ export class ConstantProvider {
   /**
    * The <pattern> element to use for disabled blocks, or null if not set.
    */
-  private disabledPattern_: SVGElement|null = null;
+  private disabledPattern: SVGElement|null = null;
 
   /**
    * The ID of the debug filter, or the empty string if no pattern is set.
@@ -307,10 +307,10 @@ export class ConstantProvider {
   /**
    * The <filter> element to use for a debug highlight, or null if not set.
    */
-  private debugFilter_: SVGElement|null = null;
+  private debugFilter: SVGElement|null = null;
 
   /** The <style> element to use for injecting renderer specific CSS. */
-  private cssNode_: HTMLStyleElement|null = null;
+  private cssNode: HTMLStyleElement|null = null;
 
   /**
    * Cursor colour.
@@ -663,16 +663,16 @@ export class ConstantProvider {
    * Delete all DOM elements that this provider created.
    */
   dispose() {
-    if (this.embossFilter_) {
-      dom.removeNode(this.embossFilter_);
+    if (this.embossFilter) {
+      dom.removeNode(this.embossFilter);
     }
-    if (this.disabledPattern_) {
-      dom.removeNode(this.disabledPattern_);
+    if (this.disabledPattern) {
+      dom.removeNode(this.disabledPattern);
     }
-    if (this.debugFilter_) {
-      dom.removeNode(this.debugFilter_);
+    if (this.debugFilter) {
+      dom.removeNode(this.debugFilter);
     }
-    this.cssNode_ = null;
+    this.cssNode = null;
   }
 
   /**
@@ -887,7 +887,7 @@ export class ConstantProvider {
           ... filters go here ...
         </defs>
         */
-    this.defs_ = dom.createSvgElement(Svg.DEFS, {}, svg);
+    this.defs = dom.createSvgElement(Svg.DEFS, {}, svg);
     /*
           <filter id="blocklyEmbossFilter837493">
             <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />
@@ -904,7 +904,7 @@ export class ConstantProvider {
         */
     const embossFilter = dom.createSvgElement(
         Svg.FILTER, {'id': 'blocklyEmbossFilter' + this.randomIdentifier},
-        this.defs_);
+        this.defs);
     dom.createSvgElement(
         Svg.FEGAUSSIANBLUR,
         {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'},
@@ -942,7 +942,7 @@ export class ConstantProvider {
         },
         embossFilter);
     this.embossFilterId = embossFilter.id;
-    this.embossFilter_ = embossFilter;
+    this.embossFilter = embossFilter;
 
     /*
           <pattern id="blocklyDisabledPattern837493"
@@ -958,14 +958,14 @@ export class ConstantProvider {
           'width': 10,
           'height': 10,
         },
-        this.defs_);
+        this.defs);
     dom.createSvgElement(
         Svg.RECT, {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
     dom.createSvgElement(
         Svg.PATH, {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'},
         disabledPattern);
     this.disabledPatternId = disabledPattern.id;
-    this.disabledPattern_ = disabledPattern;
+    this.disabledPattern = disabledPattern;
 
     this.createDebugFilter();
   }
@@ -976,7 +976,7 @@ export class ConstantProvider {
    */
   private createDebugFilter() {
     // Only create the debug filter once.
-    if (!this.debugFilter_) {
+    if (!this.debugFilter) {
       const debugFilter = dom.createSvgElement(
           Svg.FILTER, {
             'id': 'blocklyDebugFilter' + this.randomIdentifier,
@@ -985,7 +985,7 @@ export class ConstantProvider {
             'y': '-30%',
             'x': '-40%',
           },
-          this.defs_);
+          this.defs);
       // Set all gaussian blur pixels to 1 opacity before applying flood
       const debugComponentTransfer = dom.createSvgElement(
           Svg.FECOMPONENTTRANSFER, {'result': 'outBlur'}, debugFilter);
@@ -1010,7 +1010,7 @@ export class ConstantProvider {
           },
           debugFilter);
       this.debugFilterId = debugFilter.id;
-      this.debugFilter_ = debugFilter;
+      this.debugFilter = debugFilter;
     }
   }
 
@@ -1023,11 +1023,11 @@ export class ConstantProvider {
   protected injectCSS_(tagName: string, selector: string) {
     const cssArray = this.getCSS_(selector);
     const cssNodeId = 'blockly-renderer-style-' + tagName;
-    this.cssNode_ = document.getElementById(cssNodeId) as HTMLStyleElement;
+    this.cssNode = document.getElementById(cssNodeId) as HTMLStyleElement;
     const text = cssArray.join('\n');
-    if (this.cssNode_) {
+    if (this.cssNode) {
       // Already injected, update if the theme changed.
-      this.cssNode_.firstChild!.textContent = text;
+      this.cssNode.firstChild!.textContent = text;
       return;
     }
     // Inject CSS tag at start of head.
@@ -1036,7 +1036,7 @@ export class ConstantProvider {
     const cssTextNode = document.createTextNode(text);
     cssNode.appendChild(cssTextNode);
     document.head.insertBefore(cssNode, document.head.firstChild);
-    this.cssNode_ = cssNode;
+    this.cssNode = cssNode;
   }
 
   /**

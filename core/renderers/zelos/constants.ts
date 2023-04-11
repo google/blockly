@@ -122,7 +122,7 @@ export class ConstantProvider extends BaseConstantProvider {
   /**
    * The <filter> element to use for a selected glow, or null if not set.
    */
-  private selectedGlowFilter_: SVGElement|null = null;
+  private selectedGlowFilter: SVGElement|null = null;
 
   /**
    * The ID of the replacement glow filter, or the empty string if no filter
@@ -133,7 +133,7 @@ export class ConstantProvider extends BaseConstantProvider {
   /**
    * The <filter> element to use for a replacement glow, or null if not set.
    */
-  private replacementGlowFilter_: SVGElement|null = null;
+  private replacementGlowFilter: SVGElement|null = null;
 
   /**
    * The object containing information about the hexagon used for a boolean
@@ -270,11 +270,11 @@ export class ConstantProvider extends BaseConstantProvider {
 
   override dispose() {
     super.dispose();
-    if (this.selectedGlowFilter_) {
-      dom.removeNode(this.selectedGlowFilter_);
+    if (this.selectedGlowFilter) {
+      dom.removeNode(this.selectedGlowFilter);
     }
-    if (this.replacementGlowFilter_) {
-      dom.removeNode(this.replacementGlowFilter_);
+    if (this.replacementGlowFilter) {
+      dom.removeNode(this.replacementGlowFilter);
     }
   }
 
@@ -673,7 +673,7 @@ export class ConstantProvider extends BaseConstantProvider {
         },
         selectedGlowFilter);
     this.selectedGlowFilterId = selectedGlowFilter.id;
-    this.selectedGlowFilter_ = selectedGlowFilter;
+    this.selectedGlowFilter = selectedGlowFilter;
 
     // Using a dilate distorts the block shape.
     // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
@@ -721,7 +721,7 @@ export class ConstantProvider extends BaseConstantProvider {
         },
         replacementGlowFilter);
     this.replacementGlowFilterId = replacementGlowFilter.id;
-    this.replacementGlowFilter_ = replacementGlowFilter;
+    this.replacementGlowFilter = replacementGlowFilter;
   }
 
   override getCSS_(selector: string) {

@@ -951,10 +951,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /** Dispose of any rendered comment components. */
   private disposeInternal() {
-    this.textarea = null;
-    this.foreignObject = null;
-    this.svgRectTarget = null;
-    this.svgHandleTarget = null;
     this.disposed_ = true;
   }
 

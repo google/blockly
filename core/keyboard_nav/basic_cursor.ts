@@ -116,7 +116,7 @@ export class BasicCursor extends Cursor {
     } else if (newNode) {
       return this.getNextNode_(newNode, isValid);
     }
-    const siblingOrParent = this.findSiblingOrParent_(node.out());
+    const siblingOrParent = this.findSiblingOrParent(node.out());
     if (isValid(siblingOrParent)) {
       return siblingOrParent;
     } else if (siblingOrParent) {
@@ -145,7 +145,7 @@ export class BasicCursor extends Cursor {
     let newNode: ASTNode|null = node.prev();
 
     if (newNode) {
-      newNode = this.getRightMostChild_(newNode);
+      newNode = this.getRightMostChild(newNode);
     } else {
       newNode = node.out();
     }
@@ -181,7 +181,7 @@ export class BasicCursor extends Cursor {
    * @param node The current position in the AST.
    * @returns The parent AST node or null if there are no valid parents.
    */
-  private findSiblingOrParent_(node: ASTNode|null): ASTNode|null {
+  private findSiblingOrParent(node: ASTNode|null): ASTNode|null {
     if (!node) {
       return null;
     }
@@ -189,7 +189,7 @@ export class BasicCursor extends Cursor {
     if (nextNode) {
       return nextNode;
     }
-    return this.findSiblingOrParent_(node.out());
+    return this.findSiblingOrParent(node.out());
   }
 
   /**
@@ -199,7 +199,7 @@ export class BasicCursor extends Cursor {
    * @returns The right most child of the given node, or the node if no child
    *     exists.
    */
-  private getRightMostChild_(node: ASTNode|null): ASTNode|null {
+  private getRightMostChild(node: ASTNode|null): ASTNode|null {
     if (!node!.in()) {
       return node;
     }
@@ -207,7 +207,7 @@ export class BasicCursor extends Cursor {
     while (newNode && newNode.next()) {
       newNode = newNode.next();
     }
-    return this.getRightMostChild_(newNode);
+    return this.getRightMostChild(newNode);
   }
 }
 

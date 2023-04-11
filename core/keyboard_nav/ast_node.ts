@@ -40,14 +40,14 @@ export class ASTNode {
    * workspace.
    */
   private static readonly DEFAULT_OFFSET_Y: number = -20;
-  private readonly type_: string;
-  private readonly isConnection_: boolean;
-  private readonly location_: IASTNodeLocation;
+  private readonly type: string;
+  private readonly isConnectionLocation: boolean;
+  private readonly location: IASTNodeLocation;
 
   /** The coordinate on the workspace. */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
   // 'Coordinate'.
-  private wsCoordinate_: Coordinate = null as AnyDuringMigration;
+  private wsCoordinate: Coordinate = null as AnyDuringMigration;
 
   /**
    * @param type The type of the location.
@@ -64,15 +64,15 @@ export class ASTNode {
      * The type of the location.
      * One of ASTNode.types
      */
-    this.type_ = type;
+    this.type = type;
 
     /** Whether the location points to a connection. */
-    this.isConnection_ = ASTNode.isConnectionType_(type);
+    this.isConnectionLocation = ASTNode.isConnectionType(type);
 
     /** The location of the AST node. */
-    this.location_ = location;
+    this.location = location;
 
-    this.processParams_(opt_params || null);
+    this.processParams(opt_params || null);
   }
 
   /**
@@ -80,12 +80,12 @@ export class ASTNode {
    *
    * @param params The user specified parameters.
    */
-  private processParams_(params: Params|null) {
+  private processParams(params: Params|null) {
     if (!params) {
       return;
     }
     if (params.wsCoordinate) {
-      this.wsCoordinate_ = params.wsCoordinate;
+      this.wsCoordinate = params.wsCoordinate;
     }
   }
 
@@ -98,7 +98,7 @@ export class ASTNode {
    *     on.
    */
   getLocation(): IASTNodeLocation {
-    return this.location_;
+    return this.location;
   }
 
   /**
@@ -108,7 +108,7 @@ export class ASTNode {
    * @returns The type of the location.
    */
   getType(): string {
-    return this.type_;
+    return this.type;
   }
 
   /**
@@ -118,7 +118,7 @@ export class ASTNode {
    *     workspace.
    */
   getWsCoordinate(): Coordinate {
-    return this.wsCoordinate_;
+    return this.wsCoordinate;
   }
 
   /**
@@ -128,7 +128,7 @@ export class ASTNode {
    * @internal
    */
   isConnection(): boolean {
-    return this.isConnection_;
+    return this.isConnectionLocation;
   }
 
   /**
@@ -139,8 +139,8 @@ export class ASTNode {
    * @returns The AST node holding the next field or connection or null if there
    *     is no editable field or input connection after the given input.
    */
-  private findNextForInput_(): ASTNode|null {
-    const location = this.location_ as Connection;
+  private findNextForInput(): ASTNode|null {
+    const location = this.location as Connection;
     const parentInput = location.getParentInput();
     const block = parentInput!.getSourceBlock();
     // AnyDuringMigration because:  Argument of type 'Input | null' is not
@@ -169,8 +169,8 @@ export class ASTNode {
    * @returns The AST node pointing to the next field or connection or null if
    *     there is no editable field or input connection after the given input.
    */
-  private findNextForField_(): ASTNode|null {
-    const location = this.location_ as Field;
+  private findNextForField(): ASTNode|null {
+    const location = this.location as Field;
     const input = location.getParentInput();
     const block = location.getSourceBlock();
     if (!block) {
@@ -203,8 +203,8 @@ export class ASTNode {
    *
    * @returns The AST node holding the previous field or connection.
    */
-  private findPrevForInput_(): ASTNode|null {
-    const location = this.location_ as Connection;
+  private findPrevForInput(): ASTNode|null {
+    const location = this.location as Connection;
     const parentInput = location.getParentInput();
     const block = parentInput!.getSourceBlock();
     // AnyDuringMigration because:  Argument of type 'Input | null' is not
@@ -232,8 +232,8 @@ export class ASTNode {
    *
    * @returns The AST node holding the previous input or field.
    */
-  private findPrevForField_(): ASTNode|null {
-    const location = this.location_ as Field;
+  private findPrevForField(): ASTNode|null {
+    const location = this.location as Field;
     const parentInput = location.getParentInput();
     const block = location.getSourceBlock();
     if (!block) {
@@ -270,7 +270,7 @@ export class ASTNode {
    * @returns The first block of the next stack or null if there are no blocks
    *     on the workspace.
    */
-  private navigateBetweenStacks_(forward: boolean): ASTNode|null {
+  private navigateBetweenStacks(forward: boolean): ASTNode|null {
     let curLocation = this.getLocation();
     // TODO(#6097): Use instanceof checks to exit early for values of
     // curLocation that don't make sense.
@@ -311,7 +311,7 @@ export class ASTNode {
    * @param block The block that we want to find the top connection on.
    * @returns The AST node containing the top connection.
    */
-  private findTopASTNodeForBlock_(block: Block): ASTNode|null {
+  private findTopASTNodeForBlock(block: Block): ASTNode|null {
     const topConnection = getParentConnection(block);
     if (topConnection) {
       return ASTNode.createConnectionNode(topConnection);
@@ -328,7 +328,7 @@ export class ASTNode {
    * @returns The AST node pointing to the input connection or the top block of
    *     the stack this block is in.
    */
-  private getOutAstNodeForBlock_(block: Block): ASTNode|null {
+  private getOutAstNodeForBlock(block: Block): ASTNode|null {
     if (!block) {
       return null;
     }
@@ -359,7 +359,7 @@ export class ASTNode {
    * Null if there are no editable fields or inputs with connections on the
    * block.
    */
-  private findFirstFieldOrInput_(block: Block): ASTNode|null {
+  private findFirstFieldOrInput(block: Block): ASTNode|null {
     const inputs = block.inputList;
     for (let i = 0; i < inputs.length; i++) {
       const input = inputs[i];
@@ -402,32 +402,32 @@ export class ASTNode {
    *     workspace. Or null if there is no node to the right.
    */
   next(): ASTNode|null {
-    switch (this.type_) {
+    switch (this.type) {
       case ASTNode.types.STACK:
-        return this.navigateBetweenStacks_(true);
+        return this.navigateBetweenStacks(true);
 
       case ASTNode.types.OUTPUT: {
-        const connection = this.location_ as Connection;
+        const connection = this.location as Connection;
         return ASTNode.createBlockNode(connection.getSourceBlock());
       }
       case ASTNode.types.FIELD:
-        return this.findNextForField_();
+        return this.findNextForField();
 
       case ASTNode.types.INPUT:
-        return this.findNextForInput_();
+        return this.findNextForInput();
 
       case ASTNode.types.BLOCK: {
-        const block = this.location_ as Block;
+        const block = this.location as Block;
         const nextConnection = block.nextConnection;
         if (!nextConnection) return null;
         return ASTNode.createConnectionNode(nextConnection);
       }
       case ASTNode.types.PREVIOUS: {
-        const connection = this.location_ as Connection;
+        const connection = this.location as Connection;
         return ASTNode.createBlockNode(connection.getSourceBlock());
       }
       case ASTNode.types.NEXT: {
-        const connection = this.location_ as Connection;
+        const connection = this.location as Connection;
         const targetConnection = connection.targetConnection;
         return ASTNode.createConnectionNode(targetConnection!);
       }
@@ -444,9 +444,9 @@ export class ASTNode {
    *     block. Or null if there is nothing below this node.
    */
   in(): ASTNode|null {
-    switch (this.type_) {
+    switch (this.type) {
       case ASTNode.types.WORKSPACE: {
-        const workspace = this.location_ as Workspace;
+        const workspace = this.location as Workspace;
         const topBlocks = workspace.getTopBlocks(true);
         if (topBlocks.length > 0) {
           return ASTNode.createStackNode(topBlocks[0]);
@@ -454,15 +454,15 @@ export class ASTNode {
         break;
       }
       case ASTNode.types.STACK: {
-        const block = this.location_ as Block;
-        return this.findTopASTNodeForBlock_(block);
+        const block = this.location as Block;
+        return this.findTopASTNodeForBlock(block);
       }
       case ASTNode.types.BLOCK: {
-        const block = this.location_ as Block;
-        return this.findFirstFieldOrInput_(block);
+        const block = this.location as Block;
+        return this.findFirstFieldOrInput(block);
       }
       case ASTNode.types.INPUT: {
-        const connection = this.location_ as Connection;
+        const connection = this.location as Connection;
         const targetConnection = connection.targetConnection;
         return ASTNode.createConnectionNode(targetConnection!);
       }
@@ -478,27 +478,27 @@ export class ASTNode {
    *     or block. Or null if no node exists to the left. null.
    */
   prev(): ASTNode|null {
-    switch (this.type_) {
+    switch (this.type) {
       case ASTNode.types.STACK:
-        return this.navigateBetweenStacks_(false);
+        return this.navigateBetweenStacks(false);
 
       case ASTNode.types.OUTPUT:
         return null;
 
       case ASTNode.types.FIELD:
-        return this.findPrevForField_();
+        return this.findPrevForField();
 
       case ASTNode.types.INPUT:
-        return this.findPrevForInput_();
+        return this.findPrevForInput();
 
       case ASTNode.types.BLOCK: {
-        const block = this.location_ as Block;
+        const block = this.location as Block;
         const topConnection = getParentConnection(block);
         if (!topConnection) return null;
         return ASTNode.createConnectionNode(topConnection);
       }
       case ASTNode.types.PREVIOUS: {
-        const connection = this.location_ as Connection;
+        const connection = this.location as Connection;
         const targetConnection = connection.targetConnection;
         if (targetConnection && !targetConnection.getParentInput()) {
           return ASTNode.createConnectionNode(targetConnection);
@@ -506,7 +506,7 @@ export class ASTNode {
         break;
       }
       case ASTNode.types.NEXT: {
-        const connection = this.location_ as Connection;
+        const connection = this.location as Connection;
         return ASTNode.createBlockNode(connection.getSourceBlock());
       }
     }
@@ -522,9 +522,9 @@ export class ASTNode {
    *     block. Or null if we are at the workspace level.
    */
   out(): ASTNode|null {
-    switch (this.type_) {
+    switch (this.type) {
       case ASTNode.types.STACK: {
-        const block = this.location_ as Block;
+        const block = this.location as Block;
         const blockPos = block.getRelativeToSurfaceXY();
         // TODO: Make sure this is in the bounds of the workspace.
         const wsCoordinate =
@@ -532,7 +532,7 @@ export class ASTNode {
         return ASTNode.createWorkspaceNode(block.workspace, wsCoordinate);
       }
       case ASTNode.types.OUTPUT: {
-        const connection = this.location_ as Connection;
+        const connection = this.location as Connection;
         const target = connection.targetConnection;
         if (target) {
           return ASTNode.createConnectionNode(target);
@@ -540,7 +540,7 @@ export class ASTNode {
         return ASTNode.createStackNode(connection.getSourceBlock());
       }
       case ASTNode.types.FIELD: {
-        const field = this.location_ as Field;
+        const field = this.location as Field;
         const block = field.getSourceBlock();
         if (!block) {
           throw new Error(
@@ -549,20 +549,20 @@ export class ASTNode {
         return ASTNode.createBlockNode(block);
       }
       case ASTNode.types.INPUT: {
-        const connection = this.location_ as Connection;
+        const connection = this.location as Connection;
         return ASTNode.createBlockNode(connection.getSourceBlock());
       }
       case ASTNode.types.BLOCK: {
-        const block = this.location_ as Block;
-        return this.getOutAstNodeForBlock_(block);
+        const block = this.location as Block;
+        return this.getOutAstNodeForBlock(block);
       }
       case ASTNode.types.PREVIOUS: {
-        const connection = this.location_ as Connection;
-        return this.getOutAstNodeForBlock_(connection.getSourceBlock());
+        const connection = this.location as Connection;
+        return this.getOutAstNodeForBlock(connection.getSourceBlock());
       }
       case ASTNode.types.NEXT: {
-        const connection = this.location_ as Connection;
-        return this.getOutAstNodeForBlock_(connection.getSourceBlock());
+        const connection = this.location as Connection;
+        return this.getOutAstNodeForBlock(connection.getSourceBlock());
       }
     }
 
@@ -575,7 +575,7 @@ export class ASTNode {
    * @param type The type to check.  One of ASTNode.types.
    * @returns True if a node of the given type points to a connection.
    */
-  private static isConnectionType_(type: string): boolean {
+  private static isConnectionType(type: string): boolean {
     switch (type) {
       case ASTNode.types.PREVIOUS:
       case ASTNode.types.NEXT:

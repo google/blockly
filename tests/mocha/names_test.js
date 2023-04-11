@@ -19,12 +19,12 @@ suite('Names', function() {
 
   test('Safe name', function() {
     const varDB = new Blockly.Names('window,door');
-    chai.assert.equal(varDB.safeName_(''), 'unnamed', 'SafeName empty.');
-    chai.assert.equal(varDB.safeName_('foobar'), 'foobar', 'SafeName ok.');
-    chai.assert.equal(varDB.safeName_('9lives'), 'my_9lives', 'SafeName number start.');
-    chai.assert.equal(varDB.safeName_('lives9'), 'lives9', 'SafeName number end.');
-    chai.assert.equal(varDB.safeName_('!@#$'), '____', 'SafeName special chars.');
-    chai.assert.equal(varDB.safeName_('door'), 'door', 'SafeName reserved.');
+    chai.assert.equal(varDB.safeName(''), 'unnamed', 'SafeName empty.');
+    chai.assert.equal(varDB.safeName('foobar'), 'foobar', 'SafeName ok.');
+    chai.assert.equal(varDB.safeName('9lives'), 'my_9lives', 'SafeName number start.');
+    chai.assert.equal(varDB.safeName('lives9'), 'lives9', 'SafeName number end.');
+    chai.assert.equal(varDB.safeName('!@#$'), '____', 'SafeName special chars.');
+    chai.assert.equal(varDB.safeName('door'), 'door', 'SafeName reserved.');
   });
 
   test('Get name', function() {

@@ -69,7 +69,7 @@ suite('Cursor', function() {
     blockA.nextConnection.connect(blockB.previousConnection);
     blockA.inputList[0].connection.connect(blockE.outputConnection);
     blockB.inputList[1].connection.connect(blockC.previousConnection);
-    this.cursor.drawer_ = null;
+    this.cursor.drawer = null;
     this.blocks = {
       A: blockA,
       B: blockB,

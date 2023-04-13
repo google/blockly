@@ -34,7 +34,7 @@ export class FieldNumber extends FieldInput<number> {
    * The number of decimal places to allow, or null to allow any number of
    * decimal digits.
    */
-  private decimalPlaces_: number|null = null;
+  private decimalPlaces: number|null = null;
 
   /** Don't spellcheck numbers.  Our validator does a better job. */
   protected override spellcheck_ = false;
@@ -84,9 +84,9 @@ export class FieldNumber extends FieldInput<number> {
    */
   protected override configure_(config: FieldNumberConfig) {
     super.configure_(config);
-    this.setMinInternal_(config.min);
-    this.setMaxInternal_(config.max);
-    this.setPrecisionInternal_(config.precision);
+    this.setMinInternal(config.min);
+    this.setMaxInternal(config.max);
+    this.setPrecisionInternal(config.precision);
   }
 
   /**
@@ -105,9 +105,9 @@ export class FieldNumber extends FieldInput<number> {
   setConstraints(
       min: number|string|undefined|null, max: number|string|undefined|null,
       precision: number|string|undefined|null) {
-    this.setMinInternal_(min);
-    this.setMaxInternal_(max);
-    this.setPrecisionInternal_(precision);
+    this.setMinInternal(min);
+    this.setMaxInternal(max);
+    this.setPrecisionInternal(precision);
     this.setValue(this.getValue());
   }
 
@@ -118,7 +118,7 @@ export class FieldNumber extends FieldInput<number> {
    * @param min Minimum value.
    */
   setMin(min: number|string|undefined|null) {
-    this.setMinInternal_(min);
+    this.setMinInternal(min);
     this.setValue(this.getValue());
   }
 
@@ -128,7 +128,7 @@ export class FieldNumber extends FieldInput<number> {
    *
    * @param min Minimum value.
    */
-  private setMinInternal_(min: number|string|undefined|null) {
+  private setMinInternal(min: number|string|undefined|null) {
     if (min == null) {
       this.min_ = -Infinity;
     } else {
@@ -156,7 +156,7 @@ export class FieldNumber extends FieldInput<number> {
    * @param max Maximum value.
    */
   setMax(max: number|string|undefined|null) {
-    this.setMaxInternal_(max);
+    this.setMaxInternal(max);
     this.setValue(this.getValue());
   }
 
@@ -166,7 +166,7 @@ export class FieldNumber extends FieldInput<number> {
    *
    * @param max Maximum value.
    */
-  private setMaxInternal_(max: number|string|undefined|null) {
+  private setMaxInternal(max: number|string|undefined|null) {
     if (max == null) {
       this.max_ = Infinity;
     } else {
@@ -194,7 +194,7 @@ export class FieldNumber extends FieldInput<number> {
    * @param precision The number to which the field's value is rounded.
    */
   setPrecision(precision: number|string|undefined|null) {
-    this.setPrecisionInternal_(precision);
+    this.setPrecisionInternal(precision);
     this.setValue(this.getValue());
   }
 
@@ -204,7 +204,7 @@ export class FieldNumber extends FieldInput<number> {
    *
    * @param precision The number to which the field's value is rounded.
    */
-  private setPrecisionInternal_(precision: number|string|undefined|null) {
+  private setPrecisionInternal(precision: number|string|undefined|null) {
     this.precision_ = Number(precision) || 0;
     let precisionString = String(this.precision_);
     if (precisionString.indexOf('e') !== -1) {
@@ -217,9 +217,9 @@ export class FieldNumber extends FieldInput<number> {
     if (decimalIndex === -1) {
       // If the precision is 0 (float) allow any number of decimals,
       // otherwise allow none.
-      this.decimalPlaces_ = precision ? 0 : null;
+      this.decimalPlaces = precision ? 0 : null;
     } else {
-      this.decimalPlaces_ = precisionString.length - decimalIndex - 1;
+      this.decimalPlaces = precisionString.length - decimalIndex - 1;
     }
   }
 
@@ -270,8 +270,8 @@ export class FieldNumber extends FieldInput<number> {
       n = Math.round(n / this.precision_) * this.precision_;
     }
     // Clean up floating point errors.
-    if (this.decimalPlaces_ !== null) {
-      n = Number(n.toFixed(this.decimalPlaces_));
+    if (this.decimalPlaces !== null) {
+      n = Number(n.toFixed(this.decimalPlaces));
     }
     return n;
   }

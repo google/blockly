@@ -28,7 +28,7 @@ type CheckboxBool = BoolString|boolean;
 export class FieldCheckbox extends Field<CheckboxBool> {
   /** Default character for the checkmark. */
   static readonly CHECK_CHAR = '✓';
-  private checkChar_: string;
+  private checkChar: string;
 
   /**
    * Serializable fields are saved by the serializer, non-serializable fields
@@ -70,7 +70,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
      * Character for the check mark. Used to apply a different check mark
      * character to individual fields.
      */
-    this.checkChar_ = FieldCheckbox.CHECK_CHAR;
+    this.checkChar = FieldCheckbox.CHECK_CHAR;
 
     if (value === Field.SKIP_SETUP) return;
     if (config) {
@@ -89,7 +89,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    */
   protected override configure_(config: FieldCheckboxConfig) {
     super.configure_(config);
-    if (config.checkCharacter) this.checkChar_ = config.checkCharacter;
+    if (config.checkCharacter) this.checkChar = config.checkCharacter;
   }
 
   /**
@@ -127,7 +127,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
   }
 
   override getDisplayText_() {
-    return this.checkChar_;
+    return this.checkChar;
   }
 
   /**
@@ -137,7 +137,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    *     the default.
    */
   setCheckCharacter(character: string|null) {
-    this.checkChar_ = character || FieldCheckbox.CHECK_CHAR;
+    this.checkChar = character || FieldCheckbox.CHECK_CHAR;
     this.forceRerender();
   }
 

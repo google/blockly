@@ -23,7 +23,7 @@ import * as parsing from './utils/parsing.js';
  */
 export class FieldLabel extends Field<string> {
   /** The HTML class name to use for this field. */
-  private class_: string|null = null;
+  private class: string|null = null;
 
   /**
    * Editable fields usually show some sort of UI indicating they are
@@ -52,14 +52,14 @@ export class FieldLabel extends Field<string> {
     if (config) {
       this.configure_(config);
     } else {
-      this.class_ = textClass || null;
+      this.class = textClass || null;
     }
     this.setValue(value);
   }
 
   protected override configure_(config: FieldLabelConfig) {
     super.configure_(config);
-    if (config.class) this.class_ = config.class;
+    if (config.class) this.class = config.class;
   }
 
   /**
@@ -69,8 +69,8 @@ export class FieldLabel extends Field<string> {
    */
   override initView() {
     this.createTextElement_();
-    if (this.class_) {
-      dom.addClass(this.getTextElement(), this.class_);
+    if (this.class) {
+      dom.addClass(this.getTextElement(), this.class);
     }
   }
 
@@ -95,14 +95,14 @@ export class FieldLabel extends Field<string> {
    */
   setClass(cssClass: string|null) {
     if (this.textElement_) {
-      if (this.class_) {
-        dom.removeClass(this.textElement_, this.class_);
+      if (this.class) {
+        dom.removeClass(this.textElement_, this.class);
       }
       if (cssClass) {
         dom.addClass(this.textElement_, cssClass);
       }
     }
-    this.class_ = cssClass;
+    this.class = cssClass;
   }
 
   /**

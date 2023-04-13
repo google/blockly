@@ -29,13 +29,13 @@ export class FieldImage extends Field<string> {
    */
   private static readonly Y_PADDING = 1;
   protected override size_: Size;
-  private readonly imageHeight_: number;
+  private readonly imageHeight: number;
 
   /** The function to be called when this field is clicked. */
-  private clickHandler_: ((p1: FieldImage) => void)|null = null;
+  private clickHandler: ((p1: FieldImage) => void)|null = null;
 
   /** The rendered field's image element. */
-  private imageElement_: SVGImageElement|null = null;
+  private imageElement: SVGImageElement|null = null;
 
   /**
    * Editable fields usually show some sort of UI indicating they are
@@ -51,10 +51,10 @@ export class FieldImage extends Field<string> {
   protected override isDirty_ = false;
 
   /** Whether to flip this image in RTL. */
-  private flipRtl_ = false;
+  private flipRtl = false;
 
   /** Alt text of this image. */
-  private altText_ = '';
+  private altText = '';
 
   /**
    * @param src The URL of the image.
@@ -97,10 +97,10 @@ export class FieldImage extends Field<string> {
     /**
      * Store the image height, since it is different from the field height.
      */
-    this.imageHeight_ = imageHeight;
+    this.imageHeight = imageHeight;
 
     if (typeof onClick === 'function') {
-      this.clickHandler_ = onClick;
+      this.clickHandler = onClick;
     }
 
     if (src === Field.SKIP_SETUP) return;
@@ -108,8 +108,8 @@ export class FieldImage extends Field<string> {
     if (config) {
       this.configure_(config);
     } else {
-      this.flipRtl_ = !!flipRtl;
-      this.altText_ = parsing.replaceMessageReferences(alt) || '';
+      this.flipRtl = !!flipRtl;
+      this.altText = parsing.replaceMessageReferences(alt) || '';
     }
     this.setValue(parsing.replaceMessageReferences(src));
   }
@@ -121,9 +121,9 @@ export class FieldImage extends Field<string> {
    */
   protected override configure_(config: FieldImageConfig) {
     super.configure_(config);
-    if (config.flipRtl) this.flipRtl_ = config.flipRtl;
+    if (config.flipRtl) this.flipRtl = config.flipRtl;
     if (config.alt) {
-      this.altText_ = parsing.replaceMessageReferences(config.alt);
+      this.altText = parsing.replaceMessageReferences(config.alt);
     }
   }
 
@@ -133,18 +133,18 @@ export class FieldImage extends Field<string> {
    * @internal
    */
   override initView() {
-    this.imageElement_ = dom.createSvgElement(
+    this.imageElement = dom.createSvgElement(
         Svg.IMAGE, {
-          'height': this.imageHeight_ + 'px',
+          'height': this.imageHeight + 'px',
           'width': this.size_.width + 'px',
-          'alt': this.altText_,
+          'alt': this.altText,
         },
         this.fieldGroup_);
-    this.imageElement_.setAttributeNS(
+    this.imageElement.setAttributeNS(
         dom.XLINK_NS, 'xlink:href', this.value_ as string);
 
-    if (this.clickHandler_) {
-      this.imageElement_.style.cursor = 'pointer';
+    if (this.clickHandler) {
+      this.imageElement.style.cursor = 'pointer';
     }
   }
 
@@ -172,8 +172,8 @@ export class FieldImage extends Field<string> {
    */
   protected override doValueUpdate_(newValue: string) {
     this.value_ = newValue;
-    if (this.imageElement_) {
-      this.imageElement_.setAttributeNS(
+    if (this.imageElement) {
+      this.imageElement.setAttributeNS(
           dom.XLINK_NS, 'xlink:href', this.value_);
     }
   }
@@ -184,7 +184,7 @@ export class FieldImage extends Field<string> {
    * @returns True if we should flip in RTL.
    */
   override getFlipRtl(): boolean {
-    return this.flipRtl_;
+    return this.flipRtl;
   }
 
   /**
@@ -193,12 +193,12 @@ export class FieldImage extends Field<string> {
    * @param alt New alt text.
    */
   setAlt(alt: string|null) {
-    if (alt === this.altText_) {
+    if (alt === this.altText) {
       return;
     }
-    this.altText_ = alt || '';
-    if (this.imageElement_) {
-      this.imageElement_.setAttribute('alt', this.altText_);
+    this.altText = alt || '';
+    if (this.imageElement) {
+      this.imageElement.setAttribute('alt', this.altText);
     }
   }
 
@@ -207,8 +207,8 @@ export class FieldImage extends Field<string> {
    * call the handler.
    */
   protected override showEditor_() {
-    if (this.clickHandler_) {
-      this.clickHandler_(this);
+    if (this.clickHandler) {
+      this.clickHandler(this);
     }
   }
 
@@ -219,7 +219,7 @@ export class FieldImage extends Field<string> {
    *     to remove.
    */
   setOnClickHandler(func: ((p1: FieldImage) => void)|null) {
-    this.clickHandler_ = func;
+    this.clickHandler = func;
   }
 
   /**
@@ -230,7 +230,7 @@ export class FieldImage extends Field<string> {
    * @returns The image alt text.
    */
   protected override getText_(): string|null {
-    return this.altText_;
+    return this.altText;
   }
 
   /**

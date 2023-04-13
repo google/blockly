@@ -173,8 +173,7 @@ export class FieldImage extends Field<string> {
   protected override doValueUpdate_(newValue: string) {
     this.value_ = newValue;
     if (this.imageElement) {
-      this.imageElement.setAttributeNS(
-          dom.XLINK_NS, 'xlink:href', this.value_);
+      this.imageElement.setAttributeNS(dom.XLINK_NS, 'xlink:href', this.value_);
     }
   }
 

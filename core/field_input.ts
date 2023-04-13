@@ -15,7 +15,8 @@ goog.declareModuleId('Blockly.FieldInput');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
 
-import type {BlockSvg} from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
+import * as bumpObjects from './bump_objects.js';
 import * as browserEvents from './browser_events.js';
 import * as dialog from './dialog.js';
 import * as dom from './utils/dom.js';
@@ -503,6 +504,29 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
 
     div!.style.left = xy.x + 'px';
     div!.style.top = xy.y + 'px';
+  }
+
+  /**
+   * Handles repositioning the WidgetDiv used for input fields when the
+   * workspace is resized. Will bump the block into the viewport and update the
+   * position of the field if necessary.
+   *
+   * @returns True for rendered workspaces, as we never want to hide the widget
+   *     div.
+   */
+  override repositionForWindowResize(): boolean {
+    const block = this.getSourceBlock();
+    // This shouldn't be possible. We should never have a WidgetDiv if not using
+    // rendered blocks.
+    if (!(block instanceof BlockSvg)) return false;
+
+    bumpObjects.bumpIntoBounds(
+        this.workspace_!,
+        this.workspace_!.getMetricsManager().getViewMetrics(true), block);
+
+    this.resizeEditor_();
+
+    return true;
   }
 
   /**

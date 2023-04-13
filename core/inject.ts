@@ -213,7 +213,12 @@ function init(mainWorkspace: WorkspaceSvg) {
 
   const workspaceResizeHandler =
       browserEvents.conditionalBind(window, 'resize', null, function() {
-        mainWorkspace.hideChaff(true);
+        // Don't hide all the chaff. Leave the dropdown and widget divs open if
+        // possible.
+        Tooltip.hide();
+        mainWorkspace.hideComponents(true);
+        dropDownDiv.repositionForWindowResize();
+        WidgetDiv.repositionForWindowResize();
         common.svgResize(mainWorkspace);
         bumpObjects.bumpTopObjectsIntoBounds(mainWorkspace);
       });

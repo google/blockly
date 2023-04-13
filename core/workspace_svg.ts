@@ -2511,14 +2511,25 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Close tooltips, context menus, dropdown selections, etc.
    *
-   * @param opt_onlyClosePopups Whether only popups should be closed.
+   * @param onlyClosePopups Whether only popups should be closed. Defaults to
+   *     false.
    */
-  hideChaff(opt_onlyClosePopups?: boolean) {
+  hideChaff(onlyClosePopups = false) {
     Tooltip.hide();
     WidgetDiv.hide();
     dropDownDiv.hideWithoutAnimation();
 
-    const onlyClosePopups = !!opt_onlyClosePopups;
+    this.hideComponents(onlyClosePopups);
+  }
+
+  /**
+   * Hide any autohideable components (like flyout, trashcan, and any
+   * user-registered components).
+   *
+   * @param onlyClosePopups Whether only popups should be closed. Defaults to
+   *     false.
+   */
+  hideComponents(onlyClosePopups = false) {
     const autoHideables = this.getComponentManager().getComponents(
         ComponentManager.Capability.AUTOHIDEABLE, true);
     autoHideables.forEach(

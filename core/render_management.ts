@@ -11,17 +11,44 @@ import {Coordinate} from './utils/coordinate.js';
 const rootBlocks = new Set<BlockSvg>();
 let dirtyBlocks = new WeakSet<BlockSvg>();
 let pid = 0;
+let afterRendersPromise: Promise<void>|null = null;
+let resolveAfterRenders = () => {};
 
 /**
  * Registers that the given block and all of its parents need to be rerendered,
  * and registers a callback to do so after a delay, to allowf or batching.
  *
  * @param block The block to rerender.
+ * @return A promise that resolves after the currently queued renders have been
+ *     completed. Used for triggering other behavior that relies on updated
+ *     size/position location for the block.
  * @internal
  */
-export function queueRender(block: BlockSvg) {
+export function queueRender(block: BlockSvg): Promise<void> {
   queueBlock(block);
   if (!pid) pid = window.requestAnimationFrame(doRenders);
+  if (!afterRendersPromise) {
+    afterRendersPromise = new Promise((resolve) => {
+      resolveAfterRenders = resolve;
+    });
+  }
+  return afterRendersPromise;
+}
+
+/**
+ * Registers that the given callback should be called after any queued renders
+ * have been completed. If there are no queued renders, triggers the callback
+ * immediately.
+ *
+ * @param callback The function to call after queued renders have completed.
+ * @returns A promise that resolves after the currently queued renders have
+ *     been completed, to support further chaining.
+ */
+export function afterQueuedRenders(callback: () => void): Promise<void> {
+  if (afterRendersPromise) return afterRendersPromise.then(callback);
+
+  // No renders queued, resolve immediately.
+  return Promise.resolve().then(callback);
 }
 
 /**
@@ -63,6 +90,10 @@ function doRenders() {
   rootBlocks.clear();
   dirtyBlocks = new Set();
   pid = 0;
+
+  resolveAfterRenders();
+  resolveAfterRenders = () => {};
+  afterRendersPromise = null;
 }
 
 /**

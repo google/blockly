@@ -192,7 +192,9 @@ export class InsertionMarkerManager {
       afterQueuedRenders(() => {
         blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
         // bringToFront is incredibly expensive. Delay until the next frame.
-        setTimeout(() => {rootBlock.bringToFront();}, 0);
+        setTimeout(() => {
+          rootBlock.bringToFront();
+        }, 0);
       });
     }
   }

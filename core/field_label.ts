@@ -31,6 +31,9 @@ export class FieldLabel extends Field<string> {
    */
   override EDITABLE = false;
 
+  /** Text labels should not truncate. */
+  override maxDisplayLength = Infinity;
+
   /**
    * @param value The initial value of the field. Should cast to a string.
    *     Defaults to an empty string if null or undefined. Also accepts

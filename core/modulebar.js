@@ -289,6 +289,7 @@ ModuleBar.prototype.render = function() {
   // Hack wait when the elements rendered in document and scroll to active tab.
   setTimeout(() => {
     const activeTab = document.querySelector(".blocklyModuleBarLinkActive");
+    if (!activeTab) return;
     activeTab.scrollIntoView({block: "center", behavior: "smooth", inline: "center"});
     this.needShowShadow_();
   }, 0);
@@ -600,7 +601,7 @@ ModuleBar.prototype.handleActivateModule_ = function(e) {
   const module = this.workspace_
     .getModuleManager()
     .getModuleById(moduleEl.getAttribute("data-module-id"));
-    
+
   if (!module) {
     return;
   }
@@ -690,7 +691,7 @@ ModuleBar.prototype.handleRenameModule_ = function() {
 ModuleBar.prototype.handleDeleteModule_ = function() {
   const workspace = this.workspace_;
   const activeModule = workspace.getModuleManager().getActiveModule();
-  
+
   if (workspace.getModuleManager().getAllModules().length <= 1) {
     Blockly.dialog.alert(Blockly.Msg["LAST_MODULE_DELETE_RESTRICTION"]);
     return;
@@ -849,7 +850,7 @@ Css.register(
     background-color: #08976d;
     transition 0.15s ease-in-out;
   }
-   
+
   .blocklyModuleBarTabCreate:hover {
     cursor: pointer;
     background-color: #5867dd;

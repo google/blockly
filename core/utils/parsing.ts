@@ -22,11 +22,15 @@ import * as colourUtils from './colour.js';
  * @param message Text which might contain string table references and
  *     interpolation tokens.
  * @param parseInterpolationTokens Option to parse numeric interpolation
- *     tokens (%1, %2, ...) and newline characters when true.
+ *     tokens (%1, %2, ...) when true.
+ * @param tokenizeNewlines Split individual newline characters into separate
+ *     tokens when true.
  * @returns Array of strings and numbers.
  */
 function tokenizeInterpolationInternal(
-    message: string, parseInterpolationTokens: boolean): (string|number)[] {
+    message: string,
+    parseInterpolationTokens: boolean,
+    tokenizeNewlines: boolean): (string|number)[] {
   const tokens = [];
   const chars = message.split('');
   chars.push('');  // End marker.
@@ -48,7 +52,7 @@ function tokenizeInterpolationInternal(
         }
         buffer.length = 0;
         state = 1;
-      } else if (parseInterpolationTokens && c === '\n') {
+      } else if (tokenizeNewlines && c === '\n') {
         // Output newline characters as single-character tokens, to be replaced
         // with endOfRow dummies during interpolation.
         const text = buffer.join('');
@@ -113,7 +117,7 @@ function tokenizeInterpolationInternal(
               Array.prototype.push.apply(
                   tokens,
                   tokenizeInterpolationInternal(
-                      rawValue, parseInterpolationTokens));
+                      rawValue, parseInterpolationTokens, tokenizeNewlines));
             } else if (parseInterpolationTokens) {
               // When parsing interpolation tokens, numbers are special
               // placeholders (%1, %2, etc). Make sure all other values are
@@ -147,7 +151,7 @@ function tokenizeInterpolationInternal(
   buffer.length = 0;
   for (let i = 0; i < tokens.length; i++) {
     if (typeof tokens[i] === 'string' &&
-        !(parseInterpolationTokens && tokens[i] == '\n')) {
+        !(tokenizeNewlines && tokens[i] === '\n')) {
       buffer.push(tokens[i] as string);
     } else {
       text = buffer.join('');
@@ -180,7 +184,7 @@ function tokenizeInterpolationInternal(
  * @returns Array of strings and numbers.
  */
 export function tokenizeInterpolation(message: string): (string|number)[] {
-  return tokenizeInterpolationInternal(message, true);
+  return tokenizeInterpolationInternal(message, true, true);
 }
 
 /**
@@ -196,9 +200,10 @@ export function replaceMessageReferences(message: string|any): string {
   if (typeof message !== 'string') {
     return message;
   }
-  const interpolatedResult = tokenizeInterpolationInternal(message, false);
-  // When parseInterpolationTokens === false, interpolatedResult should be at
-  // most length 1.
+  const interpolatedResult =
+      tokenizeInterpolationInternal(message, false, false);
+  // When parseInterpolationTokens and tokenizeNewlines are false,
+  // interpolatedResult should be at most length 1.
   return interpolatedResult.length ? String(interpolatedResult[0]) : '';
 }
 

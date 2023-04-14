@@ -1551,8 +1551,11 @@ export class Block implements IASTNodeLocation, IDeletable {
     let i = 0;
     while (json['message' + i] !== undefined) {
       this.interpolate_(
-          json['message' + i], json['args' + i] || [],
-          json['lastDummyAlign' + i], warningPrefix);
+          json['message' + i],
+          json['args' + i] || [],
+          // Backwards compatibility: lastDummyAlign aliases implicitDummyAlign.
+          json['lastDummyAlign' + i] || json['implicitDummyAlign' + i],
+          warningPrefix);
       i++;
     }
 
@@ -1683,16 +1686,17 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param message Text contains interpolation tokens (%1, %2, ...) that match
    *     with fields or inputs defined in the args array.
    * @param args Array of arguments to be interpolated.
-   * @param lastDummyAlign If a dummy input is added at the end, how should it
-   *     be aligned? Also affects dummies created from newline tokens.
+   * @param implicitDummyAlign If an implicit dummy input is added at the end or
+   *     in place of newline tokens, how should it be aligned?
    * @param warningPrefix Warning prefix string identifying block.
    */
   private interpolate_(
       message: string, args: AnyDuringMigration[],
-      lastDummyAlign: string|undefined, warningPrefix: string) {
+      implicitDummyAlign: string|undefined, warningPrefix: string) {
     const tokens = parsing.tokenizeInterpolation(message);
     this.validateTokens_(tokens, args.length);
-    const elements = this.interpolateArguments_(tokens, args, lastDummyAlign);
+    const elements = this.interpolateArguments_(
+        tokens, args, implicitDummyAlign);
 
     // An array of [field, fieldName] tuples.
     const fieldStack = [];
@@ -1760,13 +1764,13 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @param tokens The tokens to interpolate
    * @param args The arguments to insert.
-   * @param lastDummyAlign The alignment the added dummy input should have, if
-   *     we are required to add one.
+   * @param implicitDummyAlign The alignment any added implicit dummies input
+   *     should have, if we are required to add one.
    * @returns The JSON definitions of field and inputs to add to the block.
    */
   private interpolateArguments_(
       tokens: Array<string|number>, args: Array<AnyDuringMigration|string>,
-      lastDummyAlign: string|undefined): AnyDuringMigration[] {
+      implicitDummyAlign: string|undefined): AnyDuringMigration[] {
     const elements = [];
     for (let i = 0; i < tokens.length; i++) {
       let element = tokens[i];
@@ -1778,9 +1782,8 @@ export class Block implements IASTNodeLocation, IDeletable {
         if (element === '\n') {
           // Convert newline tokens to dummies with endOfRow enabled.
           const newlineInput = {'type': 'input_dummy', 'endOfRow': true};
-          // Treat these as the "last" dummy for alignment purposes.
-          if (lastDummyAlign) {
-            (newlineInput as AnyDuringMigration)['align'] = lastDummyAlign;
+          if (implicitDummyAlign) {
+            (newlineInput as AnyDuringMigration)['align'] = implicitDummyAlign;
           }
           element = newlineInput as AnyDuringMigration;
         } else {
@@ -1800,8 +1803,8 @@ export class Block implements IASTNodeLocation, IDeletable {
         !this.isInputKeyword_(
             (elements as AnyDuringMigration)[length - 1]['type'])) {
       const dummyInput = {'type': 'input_dummy'};
-      if (lastDummyAlign) {
-        (dummyInput as AnyDuringMigration)['align'] = lastDummyAlign;
+      if (implicitDummyAlign) {
+        (dummyInput as AnyDuringMigration)['align'] = implicitDummyAlign;
       }
       elements.push(dummyInput);
     }

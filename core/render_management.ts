@@ -8,10 +8,28 @@ import {BlockSvg} from './block_svg.js';
 import {Coordinate} from './utils/coordinate.js';
 
 
+/** The set of all blocks in need of rendering which don't have parents. */
 const rootBlocks = new Set<BlockSvg>();
+
+/** The set of all blocks in need of rendering. */
 let dirtyBlocks = new WeakSet<BlockSvg>();
+
+/**
+ * The ID of the current requestAnimationFrame callback, or 0 if there is no
+ * current callback.
+ */
 let pid = 0;
+
+/**
+ * The promise which resolves after the current set of renders is completed. Or
+ * null if there are no queued renders.
+ */
 let afterRendersPromise: Promise<void>|null = null;
+
+/**
+ * The callback to resolve the `afterRendersPromise`. Or a noop function if
+ * there are no queued renders.
+ */
 let resolveAfterRenders = () => {};
 
 /**

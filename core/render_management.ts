@@ -54,19 +54,13 @@ export function queueRender(block: BlockSvg): Promise<void> {
 }
 
 /**
- * Registers that the given callback should be called after any queued renders
- * have been completed. If there are no queued renders, triggers the callback
- * immediately.
- *
- * @param callback The function to call after queued renders have completed.
  * @returns A promise that resolves after the currently queued renders have
- *     been completed, to support further chaining.
+ *     been completed.
  */
-export function afterQueuedRenders(callback: () => void): Promise<void> {
-  if (afterRendersPromise) return afterRendersPromise.then(callback);
-
-  // No renders queued, resolve immediately.
-  return Promise.resolve().then(callback);
+export function afterQueuedRenders(): Promise<void> {
+  // If there are no queued renders, return a resolved promise so `then`
+  // callbacks trigger immediately.
+  return afterRendersPromise ? afterRendersPromise : Promise.resolve();
 }
 
 /**

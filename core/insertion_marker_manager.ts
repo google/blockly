@@ -189,7 +189,7 @@ export class InsertionMarkerManager {
       const inferiorConnection = local.isSuperior() ? closest : local;
       const rootBlock = this.topBlock.getRootBlock();
 
-      afterQueuedRenders(() => {
+      afterQueuedRenders().then(() => {
         blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
         // bringToFront is incredibly expensive. Delay until the next frame.
         setTimeout(() => {

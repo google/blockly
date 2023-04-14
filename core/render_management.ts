@@ -15,22 +15,12 @@ const rootBlocks = new Set<BlockSvg>();
 let dirtyBlocks = new WeakSet<BlockSvg>();
 
 /**
- * The ID of the current requestAnimationFrame callback, or 0 if there is no
- * current callback.
- */
-let pid = 0;
-
-/**
  * The promise which resolves after the current set of renders is completed. Or
  * null if there are no queued renders.
+ *
+ * Stored so that we can return it from afterQueuedRenders.
  */
 let afterRendersPromise: Promise<void>|null = null;
-
-/**
- * The callback to resolve the `afterRendersPromise`. Or a noop function if
- * there are no queued renders.
- */
-let resolveAfterRenders = () => {};
 
 /**
  * Registers that the given block and all of its parents need to be rerendered,
@@ -44,10 +34,12 @@ let resolveAfterRenders = () => {};
  */
 export function queueRender(block: BlockSvg): Promise<void> {
   queueBlock(block);
-  if (!pid) pid = window.requestAnimationFrame(doRenders);
   if (!afterRendersPromise) {
     afterRendersPromise = new Promise((resolve) => {
-      resolveAfterRenders = resolve;
+      window.requestAnimationFrame(() => {
+        doRenders();
+        resolve();
+      });
     });
   }
   return afterRendersPromise;
@@ -101,10 +93,6 @@ function doRenders() {
 
   rootBlocks.clear();
   dirtyBlocks = new Set();
-  pid = 0;
-
-  resolveAfterRenders();
-  resolveAfterRenders = () => {};
   afterRendersPromise = null;
 }
 

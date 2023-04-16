@@ -163,10 +163,10 @@ export function insertAfter(newNode: Element, refNode: Element) {
  * @deprecated Use native 'contains' DOM method.
  */
 export function containsNode(parent: Node, descendant: Node): boolean {
- deprecation.warn(
+  deprecation.warn(
       'Blockly.utils.dom.containsNode', 'version 10', 'version 11',
       'Use native "contains" DOM method');
- return parent.contains(descendant);
+  return parent.contains(descendant);
 }
 
 /**

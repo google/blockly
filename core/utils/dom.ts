@@ -5,9 +5,9 @@
  */
 
 import * as goog from '../../closure/goog/goog.js';
-import * as deprecation from './deprecation.js';
 goog.declareModuleId('Blockly.utils.dom');
 
+import * as deprecation from './deprecation.js';
 import type {Svg} from './svg.js';
 
 

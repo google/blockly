@@ -47,8 +47,8 @@ export function inject(
     containerElement = container;
   }
   // Verify that the container is in document.
-  if (!containerElement || !dom.containsNode(document, containerElement)) {
-    throw Error('Error: container is not in current document.');
+  if (!document.contains(containerElement)) {
+    throw Error('Error: container is not in current document');
   }
   const options = new Options(opt_options || {} as BlocklyOptions);
   const subContainer = (document.createElement('div'));
@@ -56,7 +56,7 @@ export function inject(
   subContainer.tabIndex = 0;
   aria.setState(subContainer, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
 
-  containerElement.appendChild(subContainer);
+  containerElement!.appendChild(subContainer);
   const svg = createDom(subContainer, options);
 
   // Create surfaces for dragging things. These are optimizations

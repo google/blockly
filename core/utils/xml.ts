@@ -13,14 +13,16 @@ import * as deprecation from './deprecation.js';
 let domParser: DOMParser = {
   parseFromString: function() {
     throw new Error(
-        'DOMParser was not properly injected using injectDependencies');
+        'DOMParser was not found in the global scope and was not properly ' +
+        'injected using injectDependencies');
   },
 };
 
 let xmlSerializer: XMLSerializer = {
   serializeToString: function() {
     throw new Error(
-        'XMLSerializer was not properly injected using injectDependencies');
+        'XMLSerializer was not foundin the global scope and was not properly ' +
+        'injected using injectDependencies');
   },
 };
 

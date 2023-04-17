@@ -33,6 +33,9 @@ suite('XML', function() {
     chai.assert.equal(fieldDom.getAttribute('id'), id);
     chai.assert.equal(fieldDom.textContent, text);
   };
+  const assertXmlDoc = function(doc) {
+    chai.assert.equal(doc.nodeName.toLowerCase(), 'xml', 'XML tag');
+  };
   setup(function() {
     sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([
@@ -73,13 +76,40 @@ suite('XML', function() {
   teardown(function() {
     sharedTestTeardown.call(this);
   });
+
   suite('textToDom', function() {
     test('Basic', function() {
       const dom = Blockly.utils.xml.textToDom(this.complexXmlText);
-      chai.assert.equal(dom.nodeName, 'xml', 'XML tag');
-      chai.assert.equal(dom.getElementsByTagName('block').length, 6, 'Block tags');
+      assertXmlDoc(dom);
+      chai.assert.equal(
+          dom.getElementsByTagName('block').length, 6, 'Block tags');
+    });
+
+    test(
+        'text with hex-encoded NCR Control characters are properly ' +
+        'deserialized',
+        function() {
+          const dom = Blockly.utils.xml.textToDom('<xml>&#x1;&#x9;&#x1F;</xml>');
+          assertXmlDoc(dom);
+          chai.assert.equal(dom.firstChild.textContent, '\u0001\t\u001f');
+        });
+
+    test(
+        'text with dec-encoded NCR Control characters are properly ' +
+        'deserialized',
+        function() {
+          const dom = Blockly.utils.xml.textToDom('<xml>&#1;&#9;&#31</xml>');
+          assertXmlDoc(dom);
+          chai.assert.equal(dom.firstChild.textContent, '\u0001\u0009\u001f');
+        });
+
+    test('text with an escaped ampersand is properly deserialized', function() {
+      const dom = Blockly.utils.xml.textToDom('<xml>&amp;</xml>');
+      assertXmlDoc(dom);
+      chai.assert.equal(dom.firstChild.textContent, '&');
     });
   });
+
   suite('blockToDom', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
@@ -433,6 +463,7 @@ suite('XML', function() {
       chai.assert.equal(resultDom.children.length, 0);
     });
   });
+
   suite('domToText', function() {
     test('Round tripping', function() {
       const dom = Blockly.utils.xml.textToDom(this.complexXmlText);
@@ -440,7 +471,26 @@ suite('XML', function() {
       chai.assert.equal(text.replace(/\s+/g, ''),
           this.complexXmlText.replace(/\s+/g, ''), 'Round trip');
     });
+
+    test('control characters are escaped', function() {
+      const dom = Blockly.utils.xml.createElement('xml');
+      dom.appendChild(Blockly.utils.xml.createTextNode('')); // u0001
+      chai.assert.equal(
+          Blockly.utils.xml.domToText(dom),
+          '<xml xmlns="https://developers.google.com/blockly/xml">&#1;</xml>'
+      );
+    });
+
+    test('ampersands are escaped', function() {
+      const dom = Blockly.utils.xml.createElement('xml');
+      dom.appendChild(Blockly.utils.xml.createTextNode('&'));
+      chai.assert.equal(
+          Blockly.Xml.domToText(dom),
+          '<xml xmlns="https://developers.google.com/blockly/xml">&amp;</xml>'
+      );
+    });
   });
+
   suite('domToPrettyText', function() {
     test('Round tripping', function() {
       const dom = Blockly.utils.xml.textToDom(this.complexXmlText);

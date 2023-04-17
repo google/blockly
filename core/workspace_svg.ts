@@ -641,8 +641,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     let x = 0;
     let y = 0;
     let scale = 1;
-    if (dom.containsNode(this.getCanvas(), element) ||
-        dom.containsNode(this.getBubbleCanvas(), element)) {
+    if (this.getCanvas().contains(element) ||
+        this.getBubbleCanvas().contains(element)) {
       // Before the SVG canvas, scale the coordinates.
       scale = this.scale;
     }

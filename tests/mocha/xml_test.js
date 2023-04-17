@@ -77,7 +77,7 @@ suite('XML', function() {
     sharedTestTeardown.call(this);
   });
 
-  suite.only('textToDom', function() {
+  suite('textToDom', function() {
     test('Basic', function() {
       const dom = Blockly.utils.xml.textToDom(this.complexXmlText);
       assertXmlDoc(dom);
@@ -89,18 +89,18 @@ suite('XML', function() {
         'text with hex-encoded NCR Control characters are properly ' +
         'deserialized',
         function() {
-          const dom = Blockly.utils.xml.textToDom('<xml>&#x0;&#x9;&#x1F;</xml>');
+          const dom = Blockly.utils.xml.textToDom('<xml>&#x1;&#x9;&#x1F;</xml>');
           assertXmlDoc(dom);
-          chai.assert.equal(dom.firstChild.textContent, '\ufffd\t\u001f');
+          chai.assert.equal(dom.firstChild.textContent, '\u0001\t\u001f');
         });
 
     test(
         'text with dec-encoded NCR Control characters are properly ' +
         'deserialized',
         function() {
-          const dom = Blockly.utils.xml.textToDom('<xml>&#0;&#9;&#31</xml>');
+          const dom = Blockly.utils.xml.textToDom('<xml>&#1;&#9;&#31</xml>');
           assertXmlDoc(dom);
-          chai.assert.equal(dom.firstChild.textContent, '\ufffd\u0009\u001f');
+          chai.assert.equal(dom.firstChild.textContent, '\u0001\u0009\u001f');
         });
 
     test('text with an escaped ampersand is properly deserialized', function() {

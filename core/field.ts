@@ -730,6 +730,28 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
   // NOP
 
   /**
+   * A developer hook to reposition the WidgetDiv during a window resize. You
+   * need to define this hook if your field has a WidgetDiv that needs to
+   * reposition itself when the window is resized. For example, text input
+   * fields define this hook so that the input WidgetDiv can reposition itself
+   * on a window resize event. This is especially important when modal inputs
+   * have been disabled, as Android devices will fire a window resize event when
+   * the soft keyboard opens.
+   *
+   * If you want the WidgetDiv to hide itself instead of repositioning, return
+   * false. This is the default behavior.
+   *
+   * DropdownDivs already handle their own positioning logic, so you do not need
+   * to override this function if your field only has a DropdownDiv.
+   *
+   * @returns True if the field should be repositioned,
+   *    false if the WidgetDiv should hide itself instead.
+   */
+  repositionForWindowResize(): boolean {
+    return false;
+  }
+
+  /**
    * Updates the size of the field based on the text.
    *
    * @param margin margin to use when positioning the text element.

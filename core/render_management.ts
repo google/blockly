@@ -49,7 +49,7 @@ export function queueRender(block: BlockSvg): Promise<void> {
  * @returns A promise that resolves after the currently queued renders have
  *     been completed.
  */
-export function afterQueuedRenders(): Promise<void> {
+export function finishQueuedRenders(): Promise<void> {
   // If there are no queued renders, return a resolved promise so `then`
   // callbacks trigger immediately.
   return afterRendersPromise ? afterRendersPromise : Promise.resolve();

@@ -490,110 +490,116 @@ suite('Block JSON initialization', function() {
       };
     });
 
-    test('Dummy', function() {
-      this.assertInput(
-          {
-            'type': 'input_dummy',
-          },
-          'input_dummy');
+    suite('input types', function() {
+      test('Dummy', function() {
+        this.assertInput(
+            {
+              'type': 'input_dummy',
+            },
+            'input_dummy');
+      });
+  
+      test('Value', function() {
+        this.assertInput(
+            {
+              'type': 'input_value',
+            },
+            'input_value');
+      });
+  
+      test('Statement', function() {
+        this.assertInput(
+            {
+              'type': 'input_statement',
+            },
+            'input_statement');
+      });
+  
+      test('Bad input type', function() {
+        this.assertInput(
+            {
+              'type': 'input_bad',
+            },
+            'input_bad');
+      });
     });
 
-    test('Value', function() {
-      this.assertInput(
-          {
-            'type': 'input_value',
-          },
-          'input_value');
+    suite('connection checks', function() {
+      test('String Check', function() {
+        this.assertInput(
+            {
+              'type': 'input_dummy',
+              'check': 'Integer',
+            },
+            'input_dummy',
+            'Integer');
+      });
+  
+      test('Array check', function() {
+        this.assertInput(
+            {
+              'type': 'input_dummy',
+              'check': ['Integer', 'Number'],
+            },
+            'input_dummy',
+            ['Integer', 'Number']);
+      });
+  
+      test('Empty check', function() {
+        this.assertInput(
+            {
+              'type': 'input_dummy',
+              'check': '',
+            },
+            'input_dummy');
+      });
+  
+      test('Null check', function() {
+        this.assertInput(
+            {
+              'type': 'input_dummy',
+              'check': null,
+            },
+            'input_dummy');
+      });
     });
 
-    test('Statement', function() {
-      this.assertInput(
-          {
-            'type': 'input_statement',
-          },
-          'input_statement');
-    });
-
-    test('Bad input type', function() {
-      this.assertInput(
-          {
-            'type': 'input_bad',
-          },
-          'input_bad');
-    });
-
-    test('String Check', function() {
-      this.assertInput(
-          {
-            'type': 'input_dummy',
-            'check': 'Integer',
-          },
-          'input_dummy',
-          'Integer');
-    });
-
-    test('Array check', function() {
-      this.assertInput(
-          {
-            'type': 'input_dummy',
-            'check': ['Integer', 'Number'],
-          },
-          'input_dummy',
-          ['Integer', 'Number']);
-    });
-
-    test('Empty check', function() {
-      this.assertInput(
-          {
-            'type': 'input_dummy',
-            'check': '',
-          },
-          'input_dummy');
-    });
-
-    test('Null check', function() {
-      this.assertInput(
-          {
-            'type': 'input_dummy',
-            'check': null,
-          },
-          'input_dummy');
-    });
-
-    test('"Left" align', function() {
-      this.assertInput(
-          {
-            'type': 'input_dummy',
-            'align': 'LEFT',
-          },
-          'input_dummy', undefined, Align.LEFT);
-    });
-
-    test('"Right" align', function() {
-      this.assertInput(
-          {
-            'type': 'input_dummy',
-            'align': 'RIGHT',
-          },
-          'input_dummy', undefined, Align.RIGHT);
-    });
-
-    test('"Center" align', function() {
-      this.assertInput(
-          {
-            'type': 'input_dummy',
-            'align': 'CENTER',
-          },
-          'input_dummy', undefined, Align.CENTRE);
-    });
-
-    test('"Centre" align', function() {
-      this.assertInput(
-          {
-            'type': 'input_dummy',
-            'align': 'CENTRE',
-          },
-          'input_dummy', undefined, Align.CENTRE);
+    suite('alignment', function() {
+      test('"Left" align', function() {
+        this.assertInput(
+            {
+              'type': 'input_dummy',
+              'align': 'LEFT',
+            },
+            'input_dummy', undefined, Align.LEFT);
+      });
+  
+      test('"Right" align', function() {
+        this.assertInput(
+            {
+              'type': 'input_dummy',
+              'align': 'RIGHT',
+            },
+            'input_dummy', undefined, Align.RIGHT);
+      });
+  
+      test('"Center" align', function() {
+        this.assertInput(
+            {
+              'type': 'input_dummy',
+              'align': 'CENTER',
+            },
+            'input_dummy', undefined, Align.CENTRE);
+      });
+  
+      test('"Centre" align', function() {
+        this.assertInput(
+            {
+              'type': 'input_dummy',
+              'align': 'CENTRE',
+            },
+            'input_dummy', undefined, Align.CENTRE);
+      });
     });
   });
 });

@@ -12,6 +12,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.HorizontalFlyout');
 
+import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {Flyout, FlyoutItem} from './flyout_base.js';
@@ -23,6 +24,7 @@ import type {Coordinate} from './utils/coordinate.js';
 import {Rect} from './utils/rect.js';
 import * as toolbox from './utils/toolbox.js';
 import * as WidgetDiv from './widgetdiv.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -82,7 +84,8 @@ export class HorizontalFlyout extends Flyout {
     if (!this.isVisible()) {
       return 0;
     }
-    const metricsManager = this.targetWorkspace!.getMetricsManager();
+    const targetWorkspace = this.targetWorkspace as WorkspaceSvg;
+    const metricsManager = targetWorkspace.getMetricsManager();
     const absoluteMetrics = metricsManager.getAbsoluteMetrics();
     const viewMetrics = metricsManager.getViewMetrics();
     const toolboxMetrics = metricsManager.getToolboxMetrics();
@@ -91,10 +94,10 @@ export class HorizontalFlyout extends Flyout {
     const atTop = this.toolboxPosition_ === toolbox.Position.TOP;
     // If this flyout is not the trashcan flyout (e.g. toolbox or mutator).
     // Trashcan flyout is opposite the main flyout.
-    if (this.targetWorkspace!.toolboxPosition === this.toolboxPosition_) {
+    if (targetWorkspace.toolboxPosition === this.toolboxPosition_) {
       // If there is a category toolbox.
       // Simple (flyout-only) toolbox.
-      if (this.targetWorkspace!.getToolbox()) {
+      if (targetWorkspace.getToolbox()) {
         if (atTop) {
           y = toolboxMetrics.height;
         } else {
@@ -125,10 +128,14 @@ export class HorizontalFlyout extends Flyout {
 
   /** Move the flyout to the edge of the workspace. */
   override position() {
-    if (!this.isVisible() || !this.targetWorkspace!.isVisible()) {
+    if (!this.isVisible()) {
       return;
     }
-    const metricsManager = this.targetWorkspace!.getMetricsManager();
+    const targetWorkspace = this.targetWorkspace as WorkspaceSvg;
+    if (!targetWorkspace.isVisible()) {
+      return;
+    }
+    const metricsManager = targetWorkspace.getMetricsManager();
     const targetWorkspaceViewMetrics = metricsManager.getViewMetrics();
     this.width_ = targetWorkspaceViewMetrics.width;
 
@@ -151,7 +158,8 @@ export class HorizontalFlyout extends Flyout {
   private setBackgroundPath(width: number, height: number) {
     const atTop = this.toolboxPosition_ === toolbox.Position.TOP;
     // Start at top left.
-    const path: (string|number)[] = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
+    const path: Array<string|number> =
+        ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
 
     if (atTop) {
       // Top.
@@ -236,31 +244,31 @@ export class HorizontalFlyout extends Flyout {
 
     for (let i = 0, item; item = contents[i]; i++) {
       if (item.type === 'block') {
-        const block = item.block;
-        const allBlocks = block!.getDescendants(false);
+        const block = item.block as BlockSvg;
+        const allBlocks = block.getDescendants(false);
         for (let j = 0, child; child = allBlocks[j]; j++) {
           // Mark blocks as being inside a flyout.  This is used to detect and
           // prevent the closure of the flyout if the user right-clicks on such
           // a block.
           child.isInFlyout = true;
         }
-        block!.render();
-        const root = block!.getSvgRoot();
-        const blockHW = block!.getHeightWidth();
+        block.render();
+        const root = block.getSvgRoot();
+        const blockHW = block.getHeightWidth();
         // Figure out where to place the block.
-        const tab = block!.outputConnection ? this.tabWidth_ : 0;
+        const tab = block.outputConnection ? this.tabWidth_ : 0;
         let moveX;
         if (this.RTL) {
           moveX = cursorX + blockHW.width;
         } else {
           moveX = cursorX - tab;
         }
-        block!.moveBy(moveX, cursorY);
+        block.moveBy(moveX, cursorY);
 
-        const rect = this.createRect_(block!, moveX, cursorY, blockHW, i);
+        const rect = this.createRect_(block, moveX, cursorY, blockHW, i);
         cursorX += blockHW.width + gaps[i];
 
-        this.addBlockListeners_(root, block!, rect);
+        this.addBlockListeners_(root, block, rect);
       } else if (item.type === 'button') {
         const button = item.button as FlyoutButton;
         this.initFlyoutButton_(button, cursorX, cursorY);
@@ -309,18 +317,18 @@ export class HorizontalFlyout extends Flyout {
     }
 
     const flyoutRect = this.svgGroup_.getBoundingClientRect();
-    // BIG_NUM is offscreen padding so that blocks dragged beyond the shown
+    // bigNum is offscreen padding so that blocks dragged beyond the shown
     // flyout area are still deleted.  Must be larger than the largest screen
     // size, but be smaller than half Number.MAX_SAFE_INTEGER (not available on
     // IE).
-    const BIG_NUM = 1000000000;
+    const bigNum = 1000000000;
     const top = flyoutRect.top;
 
     if (this.toolboxPosition_ === toolbox.Position.TOP) {
       const height = flyoutRect.height;
-      return new Rect(-BIG_NUM, top + height, -BIG_NUM, BIG_NUM);
+      return new Rect(-bigNum, top + height, -bigNum, bigNum);
     } else {  // Bottom.
-      return new Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
+      return new Rect(top, bigNum, -bigNum, bigNum);
     }
   }
 
@@ -344,25 +352,24 @@ export class HorizontalFlyout extends Flyout {
     flyoutHeight += Scrollbar.scrollbarThickness;
 
     if (this.height_ !== flyoutHeight) {
-      for (let i = 0, block; block = blocks[i]; i++) {
+      for (let i = 0, block: BlockSvg; block = blocks[i]; i++) {
         if (this.rectMap_.has(block)) {
           this.moveRectToBlock_(this.rectMap_.get(block)!, block);
         }
       }
-
-      if (this.targetWorkspace!.toolboxPosition === this.toolboxPosition_ &&
+      const targetWorkspace = this.targetWorkspace as WorkspaceSvg;
+      if (targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
           this.toolboxPosition_ === toolbox.Position.TOP &&
-          !this.targetWorkspace!.getToolbox()) {
+          !targetWorkspace.getToolbox()) {
         // This flyout is a simple toolbox. Reposition the workspace so that
         // (0,0) is in the correct position relative to the new absolute edge
         // (ie toolbox edge).
-        this.targetWorkspace!.translate(
-            this.targetWorkspace!.scrollX,
-            this.targetWorkspace!.scrollY + flyoutHeight);
+        targetWorkspace.translate(
+            targetWorkspace.scrollX, targetWorkspace.scrollY + flyoutHeight);
       }
       this.height_ = flyoutHeight;
       this.position();
-      this.targetWorkspace!.recordDragTargets();
+      targetWorkspace.recordDragTargets();
     }
   }
 }

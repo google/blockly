@@ -1863,9 +1863,11 @@ export class Block implements IASTNodeLocation, IDeletable {
         break;
       default: {
         const inputConstructor =
-            registry.getClass(registry.Type.INPUT, element['type'], false)!;
+            registry.getClass(registry.Type.INPUT, element['type'], false);
+        if (!inputConstructor) return null;
         input = new inputConstructor(
             inputTypes.CUSTOM, element['name'], this, null);
+        this.appendInput(input);
         break;
       }
     }

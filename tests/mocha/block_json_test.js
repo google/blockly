@@ -7,9 +7,18 @@
 goog.declareModuleId('Blockly.test.blockJson');
 
 import {Align} from '../../build/src/core/input.js';
-
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 suite('Block JSON initialization', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+    this.workspace = new Blockly.Workspace();
+  });
+
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
+
   suite('validateTokens_', function() {
     setup(function() {
       this.assertError = function(tokens, count, error) {
@@ -434,21 +443,12 @@ suite('Block JSON initialization', function() {
 
   suite('inputFromJson_', function() {
     setup(function() {
-      const Input = function(type) {
-        this.type = type;
-        this.setCheck = sinon.fake();
-        this.setAlign = sinon.fake();
-      };
-      const Block = function() {
-        this.type = 'test';
-        this.appendDummyInput = sinon.fake.returns(new Input());
-        this.appendValueInput = sinon.fake.returns(new Input());
-        this.appendStatementInput = sinon.fake.returns(new Input());
-        this.inputFromJson_ = Blockly.Block.prototype.inputFromJson_;
-      };
-
       this.assertInput = function(json, type, check, align) {
-        const block = new Block();
+        const block = this.workspace.newBlock('test_basic_empty');
+        sinon.spy(block, 'appendDummyInput');
+        sinon.spy(block, 'appendValueInput');
+        sinon.spy(block, 'appendStatementInput');
+
         const input = block.inputFromJson_(json);
         switch (type) {
           case 'input_dummy':
@@ -474,18 +474,14 @@ suite('Block JSON initialization', function() {
             return;
         }
         if (check) {
-          chai.assert.isTrue(input.setCheck.calledWith(check),
-              'Expected setCheck to be called with', check);
-        } else {
-          chai.assert.isTrue(input.setCheck.notCalled,
-              'Expected setCheck to not be called');
+          if (Array.isArray(check)) {
+            chai.assert.deepEqual(check, input.connection.getCheck());
+          } else {
+            chai.assert.deepEqual([check], input.connection.getCheck());
+          }
         }
         if (align !== undefined) {
-          chai.assert.isTrue(input.setAlign.calledWith(align),
-              'Expected setAlign to be called with', align);
-        } else {
-          chai.assert.isTrue(input.setAlign.notCalled,
-              'Expected setAlign to not be called');
+          chai.assert.equal(align, input.align);
         }
       };
     });
@@ -503,6 +499,7 @@ suite('Block JSON initialization', function() {
         this.assertInput(
             {
               'type': 'input_value',
+              'name': 'NAME',
             },
             'input_value');
       });
@@ -511,6 +508,7 @@ suite('Block JSON initialization', function() {
         this.assertInput(
             {
               'type': 'input_statement',
+              'name': 'NAME',
             },
             'input_statement');
       });
@@ -522,45 +520,61 @@ suite('Block JSON initialization', function() {
             },
             'input_bad');
       });
+
+      test('custom input types are constructed from the registry', function() {
+        class CustomInput extends Blockly.Input { }
+        Blockly.registry.register(
+            Blockly.registry.Type.INPUT, 'custom', CustomInput);
+        const block = this.workspace.newBlock('test_basic_empty');
+        block.inputFromJson_({'type': 'custom'});
+        chai.assert.instanceOf(
+            block.inputList[0],
+            CustomInput,
+            'Expected the registered input to be constructed');
+      });
     });
 
     suite('connection checks', function() {
       test('String Check', function() {
         this.assertInput(
             {
-              'type': 'input_dummy',
+              'type': 'input_value',
+              'name': 'NAME',
               'check': 'Integer',
             },
-            'input_dummy',
+            'input_value',
             'Integer');
       });
   
       test('Array check', function() {
         this.assertInput(
             {
-              'type': 'input_dummy',
+              'type': 'input_value',
+              'name': 'NAME',
               'check': ['Integer', 'Number'],
             },
-            'input_dummy',
+            'input_value',
             ['Integer', 'Number']);
       });
   
       test('Empty check', function() {
         this.assertInput(
             {
-              'type': 'input_dummy',
+              'type': 'input_value',
+              'name': 'NAME',
               'check': '',
             },
-            'input_dummy');
+            'input_value');
       });
   
       test('Null check', function() {
         this.assertInput(
             {
-              'type': 'input_dummy',
+              'type': 'input_value',
+              'name': 'NAME',
               'check': null,
             },
-            'input_dummy');
+            'input_value');
       });
     });
 

@@ -19,5 +19,7 @@ export enum inputTypes {
   // A down-facing block stack.  E.g. 'if-do' or 'else'.
   STATEMENT = ConnectionType.NEXT_STATEMENT,
   // A dummy input.  Used to add field(s) with no input.
-  DUMMY = 5
+  DUMMY = 5,
+  // An unknown type of input defined by an external developer.
+  CUSTOM = 5
 }

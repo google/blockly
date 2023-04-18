@@ -41,7 +41,9 @@ export class Input {
    * @param name Language-neutral identifier which may used to find this input
    *     again.
    * @param block The block containing this input.
-   * @param connection Optional connection for this input.
+   * @param connection Optional connection for this input. If this is a custom
+   *     input, `null` will always be passed, and then the subclass can
+   *     optionally construct a connection.
    */
   constructor(
       public type: number, public name: string, block: Block,

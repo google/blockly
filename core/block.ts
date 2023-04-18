@@ -41,6 +41,7 @@ import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as parsing from './utils/parsing.js';
+import * as registry from './registry.js';
 import {Size} from './utils/size.js';
 import type {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
@@ -1860,6 +1861,13 @@ export class Block implements IASTNodeLocation, IDeletable {
       case 'input_dummy':
         input = this.appendDummyInput(element['name']);
         break;
+      default: {
+        const inputConstructor =
+            registry.getClass(registry.Type.INPUT, element['type'], false)!;
+        input = new inputConstructor(
+            inputTypes.CUSTOM, element['name'], this, null);
+        break;
+      }
     }
     // Should never be hit because of interpolate_'s checks, but just in case.
     if (!input) {
@@ -1891,7 +1899,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   private isInputKeyword_(str: string): boolean {
     return str === 'input_value' || str === 'input_statement' ||
-        str === 'input_dummy';
+        str === 'input_dummy' || registry.hasItem(registry.Type.INPUT, str);
   }
 
   /**

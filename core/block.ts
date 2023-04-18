@@ -1482,7 +1482,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Shortcut for appending a value input row.
+   * Appends a value input row.
    *
    * @param name Language-neutral identifier which may used to find this input
    *     again.  Should be unique to this block.
@@ -1493,7 +1493,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Shortcut for appending a statement input row.
+   * Appends a statement input row.
    *
    * @param name Language-neutral identifier which may used to find this input
    *     again.  Should be unique to this block.
@@ -1504,7 +1504,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Shortcut for appending a dummy input row.
+   * Appends a dummy input row.
    *
    * @param opt_name Language-neutral identifier which may used to find this
    *     input again.  Should be unique to this block.
@@ -1512,6 +1512,16 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   appendDummyInput(opt_name?: string): Input {
     return this.appendInput_(inputTypes.DUMMY, opt_name || '');
+  }
+
+  /**
+   * Appends the given input row.
+   *
+   * Allows for custom inputs to be appended to the block.
+   */
+  appendInput(input: Input): Input {
+    this.inputList.push(input);
+    return input;
   }
 
   /**

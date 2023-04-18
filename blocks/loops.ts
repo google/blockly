@@ -11,9 +11,8 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.loops');
 
-import type {Abstract} from '../core/events/events_abstract.js';
+import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import type {Block} from '../core/block.js';
-import type {BlockDefinition} from '../core/blocks.js';
 import * as ContextMenu from '../core/contextmenu.js';
 import * as Events from '../core/events/events.js';
 import * as Extensions from '../core/extensions.js';
@@ -208,7 +207,6 @@ export const blocks = createBlockDefinitionsFromJsonArray([
  * Tooltips for the 'controls_whileUntil' block, keyed by MODE value.
  *
  * @see {Extensions#buildTooltipForDropdown}
- * @readonly
  */
 const WHILE_UNTIL_TOOLTIPS = {
   'WHILE': '%{BKY_CONTROLS_WHILEUNTIL_TOOLTIP_WHILE}',
@@ -223,7 +221,6 @@ Extensions.register(
  * Tooltips for the 'controls_flow_statements' block, keyed by FLOW value.
  *
  * @see {Extensions#buildTooltipForDropdown}
- * @readonly
  */
 const BREAK_CONTINUE_TOOLTIPS = {
   'BREAK': '%{BKY_CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK}',
@@ -236,17 +233,13 @@ Extensions.register(
 
 /** Type of a block that has CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN */
 type CustomContextMenuBlock = Block&CustomContextMenuMixin;
-interface CustomContextMenuMixin extends CustomContextMenuMixinType {};
+interface CustomContextMenuMixin extends CustomContextMenuMixinType {}
 type CustomContextMenuMixinType =
     typeof CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN;
+
 /**
  * Mixin to add a context menu item to create a 'variables_get' block.
  * Used by blocks 'controls_for' and 'controls_forEach'.
- *
- * @mixin
- * @augments Block
- * @package
- * @readonly
  */
 const CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
   /**
@@ -316,17 +309,12 @@ export const loopTypes: Set<string> = new Set([
 
 /** Type of a block that has CONTROL_FLOW_IN_LOOP_CHECK_MIXIN */
 type ControlFlowInLoopBlock = Block&ControlFlowInLoopMixin;
-interface ControlFlowInLoopMixin extends ControlFlowInLoopMixinType {};
+interface ControlFlowInLoopMixin extends ControlFlowInLoopMixinType {}
 type ControlFlowInLoopMixinType = typeof CONTROL_FLOW_IN_LOOP_CHECK_MIXIN;
 
 /**
  * This mixin adds a check to make sure the 'controls_flow_statements' block
  * is contained in a loop. Otherwise a warning is added to the block.
- *
- * @mixin
- * @augments Block
- * @public
- * @readonly
  */
 const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
   /**
@@ -349,7 +337,7 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
    * Called whenever anything on the workspace changes.
    * Add warning if this flow block is not nested inside a loop.
    */
-  onchange: function(this: ControlFlowInLoopBlock, e: Abstract) {
+  onchange: function(this: ControlFlowInLoopBlock, e: AbstractEvent) {
     const ws = this.workspace as WorkspaceSvg;
     // Don't change state if:
     //   * It's at the start of a drag.

@@ -18,7 +18,7 @@ suite('Render Management', function() {
     sharedTestTeardown.call(this);
   });
 
-  suite('after queued renders callback', function() {
+  suite('finish queued renders callback', function() {
     function createMockBlock() {
       return {
         hasRendered: false,
@@ -49,11 +49,11 @@ suite('Render Management', function() {
         });
 
     test(
-        'the after queued renders promise is properly resolved after rendering',
+        'the finish queued renders promise is properly resolved after rendering',
         function() {
           const block = createMockBlock();
           Blockly.renderManagement.queueRender(block);
-          const promise = Blockly.renderManagement.afterQueuedRenders(() => {
+          const promise = Blockly.renderManagement.finishQueuedRenders(() => {
               chai.assert.isTrue(
                   block.hasRendered, 'Expected block to be rendered');
              });

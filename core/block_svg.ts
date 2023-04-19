@@ -948,11 +948,13 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   updateDisabled() {
     const disabled = !this.isEnabled() || this.getInheritedDisabled();
 
-    if (this.visuallyDisabled !== disabled) {
-      this.applyColour();
-      this.visuallyDisabled = disabled;
+    if (this.visuallyDisabled === disabled) {
+      this.getNextBlock()?.updateDisabled();
+      return;
     }
 
+    this.applyColour();
+    this.visuallyDisabled = disabled;
     for (const child of this.getChildren(false)) {
       child.updateDisabled();
     }

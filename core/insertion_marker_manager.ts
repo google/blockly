@@ -12,6 +12,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.InsertionMarkerManager');
 
+import {finishQueuedRenders} from './render_management.js';
 import * as blockAnimations from './block_animations.js';
 import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
@@ -188,9 +189,9 @@ export class InsertionMarkerManager {
       const inferiorConnection = local.isSuperior() ? closest : local;
       const rootBlock = this.topBlock.getRootBlock();
 
-      // bringToFront is incredibly expensive. Delay by at least a frame.
-      requestAnimationFrame(() => {
+      finishQueuedRenders().then(() => {
         blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
+        // bringToFront is incredibly expensive. Delay until the next frame.
         setTimeout(() => {
           rootBlock.bringToFront();
         }, 0);

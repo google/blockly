@@ -21,5 +21,5 @@ export enum inputTypes {
   // A dummy input.  Used to add field(s) with no input.
   DUMMY = 5,
   // An unknown type of input defined by an external developer.
-  CUSTOM = 5
+  CUSTOM = 6,
 }

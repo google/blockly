@@ -520,7 +520,8 @@ export class Mutator extends Icon {
    * @returns True iff a reconnection was made, false otherwise.
    */
   static reconnect(
-      connectionChild: Connection, block: Block, inputName: string): boolean {
+      connectionChild: Connection|null, block: Block,
+      inputName: string): boolean {
     if (!connectionChild || !connectionChild.getSourceBlock().workspace) {
       return false;  // No connection or block has been deleted.
     }

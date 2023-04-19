@@ -12,33 +12,25 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.logic');
 
-/* eslint-disable-next-line no-unused-vars */
-import type * as AbstractEvent from '../core/events/events_abstract.js';
+import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import * as Events from '../core/events/events.js';
 import * as Extensions from '../core/extensions.js';
 import * as xmlUtils from '../core/utils/xml.js';
-/* eslint-disable-next-line no-unused-vars */
 import type {Block} from '../core/block.js';
-// import type {BlockDefinition} from '../core/blocks.js';
-// TODO (6248): Properly import the BlockDefinition type.
-/* eslint-disable-next-line no-unused-vars */
-const BlockDefinition = Object;
+import type {BlockSvg} from '../core/block_svg.js';
+import type {BlockDefinition} from '../core/blocks.js';
+import type {Connection} from '../core/connection.js';
 import {Msg} from '../core/msg.js';
 import {Mutator} from '../core/mutator.js';
-/* eslint-disable-next-line no-unused-vars */
 import type {RenderedConnection} from '../core/rendered_connection.js';
-/* eslint-disable-next-line no-unused-vars */
 import type {Workspace} from '../core/workspace.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
-/** @suppress {extraRequire} */
 import '../core/field_dropdown.js';
-/** @suppress {extraRequire} */
 import '../core/field_label.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
- * @type {!Object<string, !BlockDefinition>}
  */
 export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for boolean data type: true and false.
@@ -270,8 +262,8 @@ export const blocks = createBlockDefinitionsFromJsonArray([
 /**
  * Tooltip text, keyed by block OP value. Used by logic_compare and
  * logic_operation blocks.
+ *
  * @see {Extensions#buildTooltipForDropdown}
- * @readonly
  */
 const TOOLTIPS_BY_OP = {
   // logic_compare
@@ -291,11 +283,29 @@ Extensions.register(
     'logic_op_tooltip',
     Extensions.buildTooltipForDropdown('OP', TOOLTIPS_BY_OP));
 
+/** Type of a block that has CONTROLS_IF_MUTATOR_MIXIN */
+type IfBlock = Block&IfMixin;
+interface IfMixin extends IfMixinType {}
+type IfMixinType = typeof CONTROLS_IF_MUTATOR_MIXIN;
+
+// Types for quarks defined in JSON.
+/** Type of a controls_if_if (if mutator container) block. */
+interface ContainerBlock extends Block {}
+
+/** Type of a controls_if_elseif or controls_if_else block. */
+interface ClauseBlock extends Block {
+  valueConnection_: Connection|null;
+  statementConnection_: Connection|null;
+}
+
+/** Extra state for serialising controls_if blocks. */
+type IfExtraState = {
+  elseIfCount?: number,
+  hasElse?: boolean
+};
+
 /**
  * Mutator methods added to controls_if blocks.
- * @mixin
- * @augments Block
- * @readonly
  */
 const CONTROLS_IF_MUTATOR_MIXIN = {
   elseifCount_: 0,
@@ -304,100 +314,107 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
   /**
    * Create XML to represent the number of else-if and else inputs.
    * Backwards compatible serialization implementation.
-   * @return {Element} XML storage element.
-   * @this {Block}
+   *
+   * @return XML storage element.
    */
-  mutationToDom: function() {
+  mutationToDom: function(this: IfBlock): Element|null {
     if (!this.elseifCount_ && !this.elseCount_) {
       return null;
     }
     const container = xmlUtils.createElement('mutation');
     if (this.elseifCount_) {
-      container.setAttribute('elseif', this.elseifCount_);
+      container.setAttribute('elseif', String(this.elseifCount_));
     }
     if (this.elseCount_) {
-      container.setAttribute('else', 1);
+      container.setAttribute('else', '1');
     }
     return container;
   },
   /**
    * Parse XML to restore the else-if and else inputs.
    * Backwards compatible serialization implementation.
-   * @param {!Element} xmlElement XML storage element.
-   * @this {Block}
+   *
+   * @param xmlElement XML storage element.
    */
-  domToMutation: function(xmlElement) {
-    this.elseifCount_ = parseInt(xmlElement.getAttribute('elseif'), 10) || 0;
-    this.elseCount_ = parseInt(xmlElement.getAttribute('else'), 10) || 0;
+  domToMutation: function(this: IfBlock, xmlElement: Element) {
+    const elseifAttribute = xmlElement.getAttribute('elseif');
+    if (elseifAttribute === null) {
+      throw new TypeError('xmlElement did not elseif attribute');
+    }
+    this.elseifCount_ = parseInt(elseifAttribute, 10) || 0;
+    this.elseCount_ = parseInt(xmlElement.getAttribute('else')!, 10) || 0;
     this.rebuildShape_();
   },
   /**
    * Returns the state of this block as a JSON serializable object.
-   * @return {?{elseIfCount: (number|undefined), haseElse: (boolean|undefined)}}
-   *     The state of this block, ie the else if count and else state.
+   * @return The state of this block, ie the else if count and else state.
    */
-  saveExtraState: function() {
-    if (!this.elseifCount_ && !this.elseCount_) {
-      return null;
-    }
-    const state = Object.create(null);
-    if (this.elseifCount_) {
-      state['elseIfCount'] = this.elseifCount_;
-    }
-    if (this.elseCount_) {
-      state['hasElse'] = true;
-    }
-    return state;
-  },
+  saveExtraState: function(this: IfBlock): IfExtraState |
+      null {
+        if (!this.elseifCount_ && !this.elseCount_) {
+          return null;
+        }
+        const state = Object.create(null);
+        if (this.elseifCount_) {
+          state['elseIfCount'] = this.elseifCount_;
+        }
+        if (this.elseCount_) {
+          state['hasElse'] = true;
+        }
+        return state;
+      },
   /**
    * Applies the given state to this block.
-   * @param {*} state The state to apply to this block, ie the else if count and
+   *
+   * @param state The state to apply to this block, ie the else if count
+   and
    *     else state.
    */
-  loadExtraState: function(state) {
+  loadExtraState: function(this: IfBlock, state: IfExtraState) {
     this.elseifCount_ = state['elseIfCount'] || 0;
     this.elseCount_ = state['hasElse'] ? 1 : 0;
     this.updateShape_();
   },
   /**
    * Populate the mutator's dialog with this block's components.
-   * @param {!Workspace} workspace Mutator's workspace.
-   * @return {!Block} Root block in mutator.
-   * @this {Block}
+   *
+   * @param workspace Mutator's workspace.
+   * @return Root block in mutator.
    */
-  decompose: function(workspace) {
+  decompose: function(this: IfBlock, workspace: Workspace): Block {
     const containerBlock = workspace.newBlock('controls_if_if');
-    containerBlock.initSvg();
-    let connection = containerBlock.nextConnection;
+    (containerBlock as BlockSvg).initSvg();
+    let connection = containerBlock.nextConnection!;
     for (let i = 1; i <= this.elseifCount_; i++) {
       const elseifBlock = workspace.newBlock('controls_if_elseif');
-      elseifBlock.initSvg();
-      connection.connect(elseifBlock.previousConnection);
-      connection = elseifBlock.nextConnection;
+      (elseifBlock as BlockSvg).initSvg();
+      connection.connect(elseifBlock.previousConnection!);
+      connection = elseifBlock.nextConnection!;
     }
     if (this.elseCount_) {
       const elseBlock = workspace.newBlock('controls_if_else');
-      elseBlock.initSvg();
-      connection.connect(elseBlock.previousConnection);
+      (elseBlock as BlockSvg).initSvg();
+      connection.connect(elseBlock.previousConnection!);
     }
     return containerBlock;
   },
   /**
    * Reconfigure this block based on the mutator dialog's components.
-   * @param {!Block} containerBlock Root block in mutator.
-   * @this {Block}
+   *
+   * @param containerBlock Root block in mutator.
    */
-  compose: function(containerBlock) {
-    let clauseBlock = containerBlock.nextConnection.targetBlock();
+  compose: function(this: IfBlock, containerBlock: ContainerBlock) {
+    let clauseBlock =
+        containerBlock.nextConnection!.targetBlock() as ClauseBlock | null;
     // Count number of inputs.
     this.elseifCount_ = 0;
     this.elseCount_ = 0;
-    const valueConnections = [null];
-    const statementConnections = [null];
-    let elseStatementConnection = null;
+    const valueConnections: Array<Connection|null> = [null];
+    const statementConnections: Array<Connection|null> = [null];
+    let elseStatementConnection: Connection|null = null;
     while (clauseBlock) {
       if (clauseBlock.isInsertionMarker()) {
-        clauseBlock = clauseBlock.getNextBlock();
+        clauseBlock = clauseBlock.getNextBlock() as ClauseBlock | null;
         continue;
       }
       switch (clauseBlock.type) {
@@ -413,7 +430,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
         default:
           throw TypeError('Unknown block type: ' + clauseBlock.type);
       }
-      clauseBlock = clauseBlock.getNextBlock();
+      clauseBlock = clauseBlock.getNextBlock() as ClauseBlock | null;
     }
     this.updateShape_();
     // Reconnect any child blocks.
@@ -422,15 +439,16 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Store pointers to any connected child blocks.
-   * @param {!Block} containerBlock Root block in mutator.
-   * @this {Block}
+   *
+   * @param containerBlock Root block in mutator.
    */
-  saveConnections: function(containerBlock) {
-    let clauseBlock = containerBlock.nextConnection.targetBlock();
+  saveConnections: function(this: IfBlock, containerBlock: ContainerBlock) {
+    let clauseBlock =
+        containerBlock!.nextConnection!.targetBlock() as ClauseBlock | null;
     let i = 1;
     while (clauseBlock) {
       if (clauseBlock.isInsertionMarker()) {
-        clauseBlock = clauseBlock.getNextBlock();
+        clauseBlock = clauseBlock.getNextBlock() as ClauseBlock | null;
         continue;
       }
       switch (clauseBlock.type) {
@@ -438,42 +456,41 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
           const inputIf = this.getInput('IF' + i);
           const inputDo = this.getInput('DO' + i);
           clauseBlock.valueConnection_ =
-              inputIf && inputIf.connection.targetConnection;
+              inputIf && inputIf.connection!.targetConnection;
           clauseBlock.statementConnection_ =
-              inputDo && inputDo.connection.targetConnection;
+              inputDo && inputDo.connection!.targetConnection;
           i++;
           break;
         }
         case 'controls_if_else': {
           const inputDo = this.getInput('ELSE');
           clauseBlock.statementConnection_ =
-              inputDo && inputDo.connection.targetConnection;
+              inputDo && inputDo.connection!.targetConnection;
           break;
         }
         default:
           throw TypeError('Unknown block type: ' + clauseBlock.type);
       }
-      clauseBlock = clauseBlock.getNextBlock();
+      clauseBlock = clauseBlock.getNextBlock() as ClauseBlock | null;
     }
   },
   /**
    * Reconstructs the block with all child blocks attached.
-   * @this {Block}
    */
-  rebuildShape_: function() {
-    const valueConnections = [null];
-    const statementConnections = [null];
-    let elseStatementConnection = null;
+  rebuildShape_: function(this: IfBlock) {
+    const valueConnections: Array<Connection|null> = [null];
+    const statementConnections: Array<Connection|null> = [null];
+    let elseStatementConnection: Connection|null = null;
 
     if (this.getInput('ELSE')) {
       elseStatementConnection =
-          this.getInput('ELSE').connection.targetConnection;
+          this.getInput('ELSE')!.connection!.targetConnection;
     }
     for (let i = 1; this.getInput('IF' + i); i++) {
       const inputIf = this.getInput('IF' + i);
       const inputDo = this.getInput('DO' + i);
-      valueConnections.push(inputIf.connection.targetConnection);
-      statementConnections.push(inputDo.connection.targetConnection);
+      valueConnections.push(inputIf!.connection!.targetConnection);
+      statementConnections.push(inputDo!.connection!.targetConnection);
     }
     this.updateShape_();
     this.reconnectChildBlocks_(
@@ -481,10 +498,8 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Modify this block to have the correct number of inputs.
-   * @this {Block}
-   * @private
    */
-  updateShape_: function() {
+  updateShape_: function(this: IfBlock) {
     // Delete everything.
     if (this.getInput('ELSE')) {
       this.removeInput('ELSE');
@@ -507,16 +522,16 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Reconnects child blocks.
-   * @param {!Array<?RenderedConnection>} valueConnections List of
-   * value connections for 'if' input.
-   * @param {!Array<?RenderedConnection>} statementConnections List of
-   * statement connections for 'do' input.
-   * @param {?RenderedConnection} elseStatementConnection Statement
-   * connection for else input.
-   * @this {Block}
+   *
+   * @param valueConnections List of value connections for 'if' input.
+   * @param statementConnections List of statement connections for 'do'
+   input.
+   * @param elseStatementConnection Statement connection for else input.
    */
   reconnectChildBlocks_: function(
-      valueConnections, statementConnections, elseStatementConnection) {
+      this: IfBlock, valueConnections: Array<Connection|null>,
+      statementConnections: Array<Connection|null>,
+      elseStatementConnection: Connection|null) {
     for (let i = 1; i <= this.elseifCount_; i++) {
       Mutator.reconnect(valueConnections[i], this, 'IF' + i);
       Mutator.reconnect(statementConnections[i], this, 'DO' + i);
@@ -526,15 +541,16 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
 };
 
 Extensions.registerMutator(
-    'controls_if_mutator', CONTROLS_IF_MUTATOR_MIXIN, null,
+    'controls_if_mutator', CONTROLS_IF_MUTATOR_MIXIN,
+    null as unknown as undefined,  // BUG(#6920)
     ['controls_if_elseif', 'controls_if_else']);
+
 /**
- * "controls_if" extension function. Adds mutator, shape updating methods, and
- * dynamic tooltip to "controls_if" blocks.
- * @this {Block}
+ * "controls_if" extension function. Adds mutator, shape updating methods,
+ * and dynamic tooltip to "controls_if" blocks.
  */
-const CONTROLS_IF_TOOLTIP_EXTENSION = function() {
-  this.setTooltip(function() {
+const CONTROLS_IF_TOOLTIP_EXTENSION = function(this: IfBlock) {
+  this.setTooltip(function(this: IfBlock) {
     if (!this.elseifCount_ && !this.elseCount_) {
       return Msg['CONTROLS_IF_TOOLTIP_1'];
     } else if (!this.elseifCount_ && this.elseCount_) {
@@ -550,31 +566,36 @@ const CONTROLS_IF_TOOLTIP_EXTENSION = function() {
 
 Extensions.register('controls_if_tooltip', CONTROLS_IF_TOOLTIP_EXTENSION);
 
+/** Type of a block that has LOGIC_COMPARE_ONCHANGE_MIXIN */
+type CompareBlock = Block&CompareMixin;
+interface CompareMixin extends CompareMixinType {
+  prevBlocks_: Array<Block|null>;
+}
+type CompareMixinType = typeof LOGIC_COMPARE_ONCHANGE_MIXIN;
+
 /**
- * Adds dynamic type validation for the left and right sides of a logic_compare
- * block.
- * @mixin
- * @augments Block
- * @readonly
+ * Adds dynamic type validation for the left and right sides of a
+ * logic_compare block.
  */
 const LOGIC_COMPARE_ONCHANGE_MIXIN = {
   /**
    * Called whenever anything on the workspace changes.
    * Prevent mismatched types from being compared.
-   * @param {!AbstractEvent} e Change event.
-   * @this {Block}
+   *
+   * @param e Change event.
    */
-  onchange: function(e) {
+  onchange: function(this: CompareBlock, e: AbstractEvent) {
     if (!this.prevBlocks_) {
       this.prevBlocks_ = [null, null];
     }
 
     const blockA = this.getInputTargetBlock('A');
     const blockB = this.getInputTargetBlock('B');
-    // Disconnect blocks that existed prior to this change if they don't match.
+    // Disconnect blocks that existed prior to this change if they don't
+    // match.
     if (blockA && blockB &&
         !this.workspace.connectionChecker.doTypeChecks(
-            blockA.outputConnection, blockB.outputConnection)) {
+            blockA.outputConnection!, blockB.outputConnection!)) {
       // Mismatch between two inputs.  Revert the block connections,
       // bumping away the newly connected block(s).
       Events.setGroup(e.group);
@@ -583,7 +604,7 @@ const LOGIC_COMPARE_ONCHANGE_MIXIN = {
         blockA.unplug();
         if (prevA && !prevA.isDisposed() && !prevA.isShadow()) {
           // The shadow block is automatically replaced during unplug().
-          this.getInput('A').connection.connect(prevA.outputConnection);
+          this.getInput('A')!.connection!.connect(prevA.outputConnection!);
         }
       }
       const prevB = this.prevBlocks_[1];
@@ -591,7 +612,7 @@ const LOGIC_COMPARE_ONCHANGE_MIXIN = {
         blockB.unplug();
         if (prevB && !prevB.isDisposed() && !prevB.isShadow()) {
           // The shadow block is automatically replaced during unplug().
-          this.getInput('B').connection.connect(prevB.outputConnection);
+          this.getInput('B')!.connection!.connect(prevB.outputConnection!);
         }
       }
       this.bumpNeighbours();
@@ -605,43 +626,43 @@ const LOGIC_COMPARE_ONCHANGE_MIXIN = {
 /**
  * "logic_compare" extension function. Adds type left and right side type
  * checking to "logic_compare" blocks.
- * @this {Block}
- * @readonly
  */
-const LOGIC_COMPARE_EXTENSION = function() {
+const LOGIC_COMPARE_EXTENSION = function(this: CompareBlock) {
   // Add onchange handler to ensure types are compatible.
   this.mixin(LOGIC_COMPARE_ONCHANGE_MIXIN);
 };
 
 Extensions.register('logic_compare', LOGIC_COMPARE_EXTENSION);
 
+/** Type of a block that has LOGIC_TERNARY_ONCHANGE_MIXIN */
+type TernaryBlock = Block&TernaryMixin;
+interface TernaryMixin extends TernaryMixinType {}
+type TernaryMixinType = typeof LOGIC_TERNARY_ONCHANGE_MIXIN;
+
 /**
  * Adds type coordination between inputs and output.
- * @mixin
- * @augments Block
- * @readonly
  */
 const LOGIC_TERNARY_ONCHANGE_MIXIN = {
-  prevParentConnection_: null,
+  prevParentConnection_: null as Connection|null,
 
   /**
    * Called whenever anything on the workspace changes.
    * Prevent mismatched types.
-   * @param {!AbstractEvent} e Change event.
-   * @this {Block}
    */
-  onchange: function(e) {
+  onchange: function(this: TernaryBlock, e: AbstractEvent) {
     const blockA = this.getInputTargetBlock('THEN');
     const blockB = this.getInputTargetBlock('ELSE');
-    const parentConnection = this.outputConnection.targetConnection;
-    // Disconnect blocks that existed prior to this change if they don't match.
+    const parentConnection = this.outputConnection!.targetConnection;
+    // Disconnect blocks that existed prior to this change if they don't
+    // match.
     if ((blockA || blockB) && parentConnection) {
       for (let i = 0; i < 2; i++) {
         const block = (i === 1) ? blockA : blockB;
         if (block &&
             !block.workspace.connectionChecker.doTypeChecks(
-                block.outputConnection, parentConnection)) {
-          // Ensure that any disconnections are grouped with the causing event.
+                block.outputConnection!, parentConnection)) {
+          // Ensure that any disconnections are grouped with the causing
+          // event.
           Events.setGroup(e.group);
           if (parentConnection === this.prevParentConnection_) {
             this.unplug();

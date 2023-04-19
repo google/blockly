@@ -1526,6 +1526,23 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
+   * Appends an input with the given input type and name to the block after
+   * constructing it from the registry.
+   *
+   * @param type The name the input is registered under in the registry.
+   * @param name The name the input will have within the block.
+   * @returns The constucted input, or null if there was no constructor
+   *     associated with the type.
+   */
+  private appendInputFromRegistry(type: string, name: string): Input|null {
+    const inputConstructor =
+        registry.getClass(registry.Type.INPUT, type, false);
+    if (!inputConstructor) return null;
+    return this.appendInput(
+        new inputConstructor(inputTypes.CUSTOM, name, this, null));
+  }
+
+  /**
    * Initialize this block using a cross-platform, internationalization-friendly
    * JSON description.
    *
@@ -1862,12 +1879,7 @@ export class Block implements IASTNodeLocation, IDeletable {
         input = this.appendDummyInput(element['name']);
         break;
       default: {
-        const inputConstructor =
-            registry.getClass(registry.Type.INPUT, element['type'], false);
-        if (!inputConstructor) return null;
-        input = new inputConstructor(
-            inputTypes.CUSTOM, element['name'], this, null);
-        this.appendInput(input);
+        input = this.appendInputFromRegistry(element['type'], element['name']);
         break;
       }
     }

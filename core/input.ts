@@ -48,7 +48,7 @@ export class Input {
   constructor(
       public type: number, public name: string, block: Block,
       public connection: Connection|null) {
-    if (type !== inputTypes.DUMMY && !name) {
+    if ((type === inputTypes.VALUE || type === inputTypes.STATEMENT) && !name) {
       throw Error(
           'Value inputs and statement inputs must have non-empty name.');
     }

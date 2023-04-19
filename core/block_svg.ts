@@ -1611,10 +1611,13 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Triggers a rerender after a delay to allow for batching.
    *
+   * @returns A promise that resolves after the currently queued renders have
+   *     been completed. Used for triggering other behavior that relies on
+   *     updated size/position location for the block.
    * @internal
    */
-  queueRender() {
-    queueRender(this);
+  queueRender(): Promise<void> {
+    return queueRender(this);
   }
 
   /**

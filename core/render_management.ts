@@ -8,20 +8,51 @@ import {BlockSvg} from './block_svg.js';
 import {Coordinate} from './utils/coordinate.js';
 
 
+/** The set of all blocks in need of rendering which don't have parents. */
 const rootBlocks = new Set<BlockSvg>();
+
+/** The set of all blocks in need of rendering. */
 let dirtyBlocks = new WeakSet<BlockSvg>();
-let pid = 0;
+
+/**
+ * The promise which resolves after the current set of renders is completed. Or
+ * null if there are no queued renders.
+ *
+ * Stored so that we can return it from afterQueuedRenders.
+ */
+let afterRendersPromise: Promise<void>|null = null;
 
 /**
  * Registers that the given block and all of its parents need to be rerendered,
  * and registers a callback to do so after a delay, to allowf or batching.
  *
  * @param block The block to rerender.
+ * @return A promise that resolves after the currently queued renders have been
+ *     completed. Used for triggering other behavior that relies on updated
+ *     size/position location for the block.
  * @internal
  */
-export function queueRender(block: BlockSvg) {
+export function queueRender(block: BlockSvg): Promise<void> {
   queueBlock(block);
-  if (!pid) pid = window.requestAnimationFrame(doRenders);
+  if (!afterRendersPromise) {
+    afterRendersPromise = new Promise((resolve) => {
+      window.requestAnimationFrame(() => {
+        doRenders();
+        resolve();
+      });
+    });
+  }
+  return afterRendersPromise;
+}
+
+/**
+ * @returns A promise that resolves after the currently queued renders have
+ *     been completed.
+ */
+export function finishQueuedRenders(): Promise<void> {
+  // If there are no queued renders, return a resolved promise so `then`
+  // callbacks trigger immediately.
+  return afterRendersPromise ? afterRendersPromise : Promise.resolve();
 }
 
 /**
@@ -62,7 +93,7 @@ function doRenders() {
 
   rootBlocks.clear();
   dirtyBlocks = new Set();
-  pid = 0;
+  afterRendersPromise = null;
 }
 
 /**

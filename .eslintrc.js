@@ -6,9 +6,11 @@ const rules = {
   'max-len': [
     'error',
     {
-      'code': 100,
+      'code': 80,
       'tabWidth': 4,
+      'ignorePattern': '^(import|export)',
       'ignoreStrings': true,
+      'ignoreTemplateLiterals': true,
       'ignoreRegExpLiterals': true,
       'ignoreUrls': true,
     },

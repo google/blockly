@@ -8,33 +8,33 @@
  * @fileoverview Variable blocks for Blockly.
  * @suppress {checkTypes}
  */
-'use strict';
 
-goog.module('Blockly.libraryBlocks.variables');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.libraryBlocks.variables');
 
-const ContextMenu = goog.require('Blockly.ContextMenu');
-const Extensions = goog.require('Blockly.Extensions');
-const Variables = goog.require('Blockly.Variables');
-const xmlUtils = goog.require('Blockly.utils.xml');
+import * as ContextMenu from '../core/contextmenu.js';
+import * as Extensions from '../core/extensions.js';
+import * as Variables from '../core/variables.js';
+import * as xmlUtils from '../core/utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+import type {Block} from '../core/block.js';
+// import type {BlockDefinition} from '../core/blocks.js';
 // TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
-const {Msg} = goog.require('Blockly.Msg');
-const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
+import {Msg} from '../core/msg.js';
+import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldLabel');
+import '../core/field_label.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldVariable');
+import '../core/field_variable.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
  * @type {!Object<string, !BlockDefinition>}
  */
-const blocks = createBlockDefinitionsFromJsonArray([
+export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for variable getter.
   {
     'type': 'variables_get',
@@ -75,7 +75,6 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'extensions': ['contextMenu_variableSetterGetter'],
   },
 ]);
-exports.blocks = blocks;
 
 
 /**

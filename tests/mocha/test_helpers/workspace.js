@@ -715,7 +715,7 @@ export function testAWorkspace() {
             ],
             "previousStatement": null,
             "nextStatement": null,
-          }
+          },
         ]);
       });
 
@@ -838,7 +838,7 @@ export function testAWorkspace() {
             ],
             "previousStatement": null,
             "nextStatement": null,
-          }
+          },
         ]);
       });
 
@@ -1019,7 +1019,7 @@ export function testAWorkspace() {
             ],
             "previousStatement": null,
             "nextStatement": null,
-          }
+          },
         ]);
       });
 

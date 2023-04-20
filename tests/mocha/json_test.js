@@ -46,8 +46,10 @@ suite('JSON Block Definitions', function() {
 
       assertWarnings(() => {
         Blockly.defineBlocksWithJsonArray([
-          {"type": BLOCK_TYPE1}, {"type": undefined}, {"type": null},
-          {"type": BLOCK_TYPE2}
+          {"type": BLOCK_TYPE1},
+          {"type": undefined},
+          {"type": null},
+          {"type": BLOCK_TYPE2},
         ]);
       }, [/missing a type attribute/, /missing a type attribute/]);
       chai.assert.isNotNull(
@@ -73,10 +75,11 @@ suite('JSON Block Definitions', function() {
             "type": BLOCK_TYPE1,
             "message0": 'before',
           },
-          null, {
+          null,
+          {
             "type": BLOCK_TYPE2,
             "message0": 'after',
-          }
+          },
         ]);
       }, /is null/);
       chai.assert.isNotNull(
@@ -101,10 +104,11 @@ suite('JSON Block Definitions', function() {
             "type": BLOCK_TYPE1,
             "message0": 'before',
           },
-          undefined, {
+          undefined,
+          {
             "type": BLOCK_TYPE2,
             "message0": 'after',
-          }
+          },
         ]);
       }, /is undefined/);
       chai.assert.isNotNull(

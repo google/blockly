@@ -39,7 +39,7 @@ suite('Theme', function() {
           },
         ],
         "output": null,
-      }
+      },
     ]);
   }
 

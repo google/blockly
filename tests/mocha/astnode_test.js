@@ -290,7 +290,7 @@ suite('ASTNode', function() {
           "tooltip": "",
           "helpUrl": "",
           "nextStatement": null,
-        }
+        },
       ]);
       const noNextConnection = this.workspace.newBlock('top_connection');
       const fieldAndInputs = this.workspace.newBlock('fields_and_input');

@@ -43,61 +43,61 @@ suite('Colour Fields', function() {
       title: '#AAAAAA',
       value: '#AAAAAA',
       expectedValue: '#aaaaaa',
-      expectedText: '#aaa'
+      expectedText: '#aaa',
     },
     {
       title: '#aaaaaa',
       value: '#aaaaaa',
       expectedValue: '#aaaaaa',
-      expectedText: '#aaa'
+      expectedText: '#aaa',
     },
     {
       title: '#AAAA00',
       value: '#AAAA00',
       expectedValue: '#aaaa00',
-      expectedText: '#aa0'
+      expectedText: '#aa0',
     },
     {
       title: '#aaaA00',
       value: '#aaaA00',
       expectedValue: '#aaaa00',
-      expectedText: '#aa0'
+      expectedText: '#aa0',
     },
     {
       title: '#BCBCBC',
       value: '#BCBCBC',
       expectedValue: '#bcbcbc',
-      expectedText: '#bcbcbc'
+      expectedText: '#bcbcbc',
     },
     {
       title: '#bcbcbc',
       value: '#bcbcbc',
       expectedValue: '#bcbcbc',
-      expectedText: '#bcbcbc'
+      expectedText: '#bcbcbc',
     },
     {
       title: '#AA0',
       value: '#AA0',
       expectedValue: '#aaaa00',
-      expectedText: '#aa0'
+      expectedText: '#aa0',
     },
     {
       title: '#aa0',
       value: '#aa0',
       expectedValue: '#aaaa00',
-      expectedText: '#aa0'
+      expectedText: '#aa0',
     },
     {
       title: 'rgb(170, 170, 0)',
       value: 'rgb(170, 170, 0)',
       expectedValue: '#aaaa00',
-      expectedText: '#aa0'
+      expectedText: '#aa0',
     },
     {
       title: 'red',
       value: 'red',
       expectedValue: '#ff0000',
-      expectedText: '#f00'
+      expectedText: '#f00',
     },
   ];
   const addArgsAndJson = function(testCase) {
@@ -187,7 +187,7 @@ suite('Colour Fields', function() {
         },
         value: '#000000',
         expectedValue: '#aaaaaa',
-        expectedText: '#aaa'
+        expectedText: '#aaa',
       },
       {
         title: 'Force Full Red Validator',
@@ -196,14 +196,14 @@ suite('Colour Fields', function() {
         },
         value: '#000000',
         expectedValue: '#ff0000',
-        expectedText: '#f00'
+        expectedText: '#f00',
       },
       {
         title: 'Returns Undefined Validator',
         validator: function() {},
         value: '#000000',
         expectedValue: '#000000',
-        expectedText: '#000'
+        expectedText: '#000',
       },
     ];
     testSuites.forEach(function(suiteInfo) {

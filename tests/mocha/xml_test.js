@@ -71,7 +71,7 @@ suite('XML', function() {
       '      </block>',
       '    </statement>',
       '  </block>',
-      '</xml>'
+      '</xml>',
     ].join('\n');
   });
   teardown(function() {

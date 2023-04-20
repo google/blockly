@@ -84,7 +84,7 @@ suite('Toolbox', function() {
             'contents': [
               {'kind': 'category', 'contents': []},
               {'kind': 'category', 'contents': []},
-            ]
+            ],
           });
           chai.assert.lengthOf(this.toolbox.contents_, 2);
           sinon.assert.called(positionStub);
@@ -144,7 +144,7 @@ suite('Toolbox', function() {
                   },
                 ],
               },
-            ]
+            ],
           };
           this.toolbox.render(jsonDef);
           chai.assert.lengthOf(this.toolbox.contents_, 1);
@@ -165,7 +165,7 @@ suite('Toolbox', function() {
               },
             ],
           },
-        ]
+        ],
       };
       chai.assert.doesNotThrow(() => {
         this.toolbox.render(jsonDef);

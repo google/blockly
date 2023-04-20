@@ -44,8 +44,8 @@ export function getCategoryJSON() {
           },
         ],
         "name": "Second",
-      }
-    ]
+      },
+    ],
   };
 }
 
@@ -86,7 +86,7 @@ export function getSimpleJson() {
         "kind": "LABEL",
         "text": "tooltips",
       },
-    ]
+    ],
   };
 }
 
@@ -131,7 +131,7 @@ export function getProperSimpleJson() {
         "kind": "LABEL",
         "text": "tooltips",
       },
-    ]
+    ],
   };
 }
 
@@ -180,8 +180,8 @@ export function getDeeplyNestedJSON() {
           },
         ],
         "name": "Second",
-      }
-    ]
+      },
+    ],
   };
 }
 

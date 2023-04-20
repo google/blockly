@@ -48,7 +48,7 @@ suite('Variable Fields', function() {
       value: 'id2',
       args: ['name2'],
       expectedValue: 'id2',
-      expectedText: 'name2'
+      expectedText: 'name2',
     },
   ];
   const addJson = function(testCase) {
@@ -133,7 +133,7 @@ suite('Variable Fields', function() {
       value: 'id3',
       args: ['name2'],
       expectedValue: 'id2',
-      expectedText: 'name2'
+      expectedText: 'name2',
     },
   ];
   /**
@@ -146,7 +146,7 @@ suite('Variable Fields', function() {
       value: 'id2',
       args: ['name2'],
       expectedValue: 'id2',
-      expectedText: 'name2'
+      expectedText: 'name2',
     },
   ];
 

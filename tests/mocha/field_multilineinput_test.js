@@ -43,7 +43,7 @@ suite('Multiline Input Fields', function() {
     {
       title: 'String with newline',
       value: 'bark bark\n bark bark bark\n bark bar bark bark\n',
-      expectedValue: 'bark bark\n bark bark bark\n bark bar bark bark\n'
+      expectedValue: 'bark bark\n bark bark bark\n bark bar bark bark\n',
     },
     {title: 'Boolean true', value: true, expectedValue: 'true'},
     {title: 'Boolean false', value: false, expectedValue: 'false'},
@@ -140,16 +140,16 @@ suite('Multiline Input Fields', function() {
           {
             title: 'Empty string',
             expectedCode: '\'\'',
-            createBlock: createBlockFn('')
+            createBlock: createBlockFn(''),
           },
           {
             title: 'String with newline',
             expectedCode:
                 '\'bark bark\' + \'\\n\' + \n\' bark bark bark\' + \'\\n\' + \n\' bark bar bark bark\' + \'\\n\' + \n\'\'',
             createBlock: createBlockFn(
-                'bark bark\n bark bark bark\n bark bar bark bark\n')
+                'bark bark\n bark bark bark\n bark bar bark bark\n'),
           },
-        ]
+        ],
       },
       {
         title: 'JavaScript',
@@ -158,16 +158,16 @@ suite('Multiline Input Fields', function() {
           {
             title: 'Empty string',
             expectedCode: '\'\'',
-            createBlock: createBlockFn('')
+            createBlock: createBlockFn(''),
           },
           {
             title: 'String with newline',
             expectedCode:
                 '\'bark bark\' + \'\\n\' +\n\' bark bark bark\' + \'\\n\' +\n\' bark bar bark bark\' + \'\\n\' +\n\'\'',
             createBlock: createBlockFn(
-                'bark bark\n bark bark bark\n bark bar bark bark\n')
+                'bark bark\n bark bark bark\n bark bar bark bark\n'),
           },
-        ]
+        ],
       },
       {
         title: 'Lua',
@@ -176,16 +176,16 @@ suite('Multiline Input Fields', function() {
           {
             title: 'Empty string',
             expectedCode: '\'\'',
-            createBlock: createBlockFn('')
+            createBlock: createBlockFn(''),
           },
           {
             title: 'String with newline',
             expectedCode:
                 '\'bark bark\' .. \'\\n\' ..\n\' bark bark bark\' .. \'\\n\' ..\n\' bark bar bark bark\' .. \'\\n\' ..\n\'\'',
             createBlock: createBlockFn(
-                'bark bark\n bark bark bark\n bark bar bark bark\n')
+                'bark bark\n bark bark bark\n bark bar bark bark\n'),
           },
-        ]
+        ],
       },
       {
         title: 'PHP',
@@ -194,16 +194,16 @@ suite('Multiline Input Fields', function() {
           {
             title: 'Empty string',
             expectedCode: '\'\'',
-            createBlock: createBlockFn('')
+            createBlock: createBlockFn(''),
           },
           {
             title: 'String with newline',
             expectedCode:
                 '\'bark bark\' . "\\n" .\n\' bark bark bark\' . "\\n" .\n\' bark bar bark bark\' . "\\n" .\n\'\'',
             createBlock: createBlockFn(
-                'bark bark\n bark bark bark\n bark bar bark bark\n')
+                'bark bark\n bark bark bark\n bark bar bark bark\n'),
           },
-        ]
+        ],
       },
       {
         title: 'Python',
@@ -212,16 +212,16 @@ suite('Multiline Input Fields', function() {
           {
             title: 'Empty string',
             expectedCode: '\'\'',
-            createBlock: createBlockFn('')
+            createBlock: createBlockFn(''),
           },
           {
             title: 'String with newline',
             expectedCode:
                 '\'bark bark\' + \'\\n\' + \n\' bark bark bark\' + \'\\n\' + \n\' bark bar bark bark\' + \'\\n\' + \n\'\'',
             createBlock: createBlockFn(
-                'bark bark\n bark bark bark\n bark bar bark bark\n')
+                'bark bark\n bark bark bark\n bark bar bark bark\n'),
           },
-        ]
+        ],
       },
     ];
     runCodeGenerationTestSuites(testSuites);

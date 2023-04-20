@@ -26,13 +26,13 @@ suite('Image Fields', function() {
     {
       title: 'Undefined Size',
       value: 'src',
-      args: ['src', undefined, undefined]
+      args: ['src', undefined, undefined],
     },
     {title: 'Zero Size', value: 'src', args: ['src', 0, 0]},
     {
       title: 'Non-Parsable String for Size',
       value: 'src',
-      args: ['src', 'bad', 'bad']
+      args: ['src', 'bad', 'bad'],
     },
   ];
   /**
@@ -45,14 +45,14 @@ suite('Image Fields', function() {
       value: 'src',
       expectedValue: 'src',
       args: ['src', 1, 1, 'alt'],
-      expectedText: 'alt'
+      expectedText: 'alt',
     },
     {
       title: 'Without Alt',
       value: 'src',
       expectedValue: 'src',
       args: ['src', 1, 1],
-      expectedText: ''
+      expectedText: '',
     },
   ];
   /**
@@ -63,7 +63,7 @@ suite('Image Fields', function() {
     testCase.json = {
       'src': testCase.args[0],
       'width': testCase.args[1],
-      'height': testCase.args[2]
+      'height': testCase.args[2],
     };
     if (testCase.args[3]) {
       testCase.json['alt'] = testCase.args[3];
@@ -98,7 +98,7 @@ suite('Image Fields', function() {
       title: 'Good src',
       value: 'newSrc',
       expectedValue: 'newSrc',
-      expectedText: 'alt'
+      expectedText: 'alt',
     },
   ];
 

@@ -51,7 +51,7 @@ suite('Blocks', function() {
         ],
         "previousStatement": null,
         "nextStatement": null,
-      }
+      },
     ]);
   });
   teardown(function() {

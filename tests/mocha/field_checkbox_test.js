@@ -42,25 +42,25 @@ suite('Checkbox Fields', function() {
       title: 'Boolean true',
       value: true,
       expectedValue: 'TRUE',
-      expectedText: 'true'
+      expectedText: 'true',
     },
     {
       title: 'Boolean false',
       value: false,
       expectedValue: 'FALSE',
-      expectedText: 'false'
+      expectedText: 'false',
     },
     {
       title: 'String TRUE',
       value: 'TRUE',
       expectedValue: 'TRUE',
-      expectedText: 'true'
+      expectedText: 'true',
     },
     {
       title: 'String FALSE',
       value: 'FALSE',
       expectedValue: 'FALSE',
-      expectedText: 'false'
+      expectedText: 'false',
     },
   ];
   const addArgsAndJson = function(testCase) {
@@ -127,7 +127,7 @@ suite('Checkbox Fields', function() {
           return null;
         },
         value: 'FALSE',
-        expectedValue: 'TRUE'
+        expectedValue: 'TRUE',
       },
       {
         title: 'Always True Validator',
@@ -135,7 +135,7 @@ suite('Checkbox Fields', function() {
           return 'TRUE';
         },
         value: 'FALSE',
-        expectedValue: 'TRUE'
+        expectedValue: 'TRUE',
       },
       {
         title: 'Always False Validator',
@@ -143,13 +143,13 @@ suite('Checkbox Fields', function() {
           return 'TRUE';
         },
         value: 'FALSE',
-        expectedValue: 'TRUE'
+        expectedValue: 'TRUE',
       },
       {
         title: 'Returns Undefined Validator',
         validator: function() {},
         value: 'FALSE',
-        expectedValue: 'FALSE'
+        expectedValue: 'FALSE',
       },
     ];
     testSuites.forEach(function(suiteInfo) {

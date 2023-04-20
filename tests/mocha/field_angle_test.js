@@ -34,7 +34,7 @@ suite('Angle Fields', function() {
     {
       title: 'Negative Infinity String',
       value: '-Infinity',
-      expectedValue: -Infinity
+      expectedValue: -Infinity,
     },
   ];
   /**
@@ -130,7 +130,7 @@ suite('Angle Fields', function() {
           return null;
         },
         value: 2,
-        expectedValue: '1'
+        expectedValue: '1',
       },
       {
         title: 'Force Mult of 30 Validator',
@@ -138,13 +138,13 @@ suite('Angle Fields', function() {
           return Math.round(newValue / 30) * 30;
         },
         value: 25,
-        expectedValue: 30
+        expectedValue: 30,
       },
       {
         title: 'Returns Undefined Validator',
         validator: function() {},
         value: 2,
-        expectedValue: 2
+        expectedValue: 2,
       },
     ];
     testSuites.forEach(function(suiteInfo) {

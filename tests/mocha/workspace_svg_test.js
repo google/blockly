@@ -34,7 +34,7 @@ suite('WorkspaceSvg', function() {
             'name': 'NAME',
           },
         ],
-      }
+      },
     ]);
   });
 

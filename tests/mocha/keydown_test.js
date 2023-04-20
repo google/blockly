@@ -114,17 +114,17 @@ suite('Key Down', function() {
       [
         'Control C',
         createKeyDownEvent(
-            Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.CTRL])
+            Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.CTRL]),
       ],
       [
         'Meta C',
         createKeyDownEvent(
-            Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.META])
+            Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.META]),
       ],
       [
         'Alt C',
         createKeyDownEvent(
-            Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.ALT])
+            Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.ALT]),
       ],
     ];
     // Copy a block.
@@ -199,17 +199,17 @@ suite('Key Down', function() {
       [
         'Control Z',
         createKeyDownEvent(
-            Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.CTRL])
+            Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.CTRL]),
       ],
       [
         'Meta Z',
         createKeyDownEvent(
-            Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.META])
+            Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.META]),
       ],
       [
         'Alt Z',
         createKeyDownEvent(
-            Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.ALT])
+            Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.ALT]),
       ],
     ];
     // Undo.
@@ -259,19 +259,19 @@ suite('Key Down', function() {
         'Control Shift Z',
         createKeyDownEvent(
             Blockly.utils.KeyCodes.Z,
-            [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT])
+            [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT]),
       ],
       [
         'Meta Shift Z',
         createKeyDownEvent(
             Blockly.utils.KeyCodes.Z,
-            [Blockly.utils.KeyCodes.META, Blockly.utils.KeyCodes.SHIFT])
+            [Blockly.utils.KeyCodes.META, Blockly.utils.KeyCodes.SHIFT]),
       ],
       [
         'Alt Shift Z',
         createKeyDownEvent(
             Blockly.utils.KeyCodes.Z,
-            [Blockly.utils.KeyCodes.ALT, Blockly.utils.KeyCodes.SHIFT])
+            [Blockly.utils.KeyCodes.ALT, Blockly.utils.KeyCodes.SHIFT]),
       ],
     ];
     // Undo.

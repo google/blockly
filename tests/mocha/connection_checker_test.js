@@ -137,12 +137,12 @@ suite('Connection checker', function() {
         const prevBlock = {
           isShadow: function() {
             return true;
-          }
+          },
         };
         const nextBlock = {
           isShadow: function() {
             return false;
-          }
+          },
         };
         const prev = new Blockly.Connection(
             prevBlock, ConnectionType.PREVIOUS_STATEMENT);
@@ -156,12 +156,12 @@ suite('Connection checker', function() {
         const prevBlock = {
           isShadow: function() {
             return false;
-          }
+          },
         };
         const nextBlock = {
           isShadow: function() {
             return true;
-          }
+          },
         };
         const prev = new Blockly.Connection(
             prevBlock, ConnectionType.PREVIOUS_STATEMENT);
@@ -175,12 +175,12 @@ suite('Connection checker', function() {
         const prevBlock = {
           isShadow: function() {
             return true;
-          }
+          },
         };
         const nextBlock = {
           isShadow: function() {
             return true;
-          }
+          },
         };
         const prev = new Blockly.Connection(
             prevBlock, ConnectionType.PREVIOUS_STATEMENT);
@@ -194,12 +194,12 @@ suite('Connection checker', function() {
         const outBlock = {
           isShadow: function() {
             return true;
-          }
+          },
         };
         const inBlock = {
           isShadow: function() {
             return false;
-          }
+          },
         };
         const outCon =
             new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
@@ -213,12 +213,12 @@ suite('Connection checker', function() {
         const outBlock = {
           isShadow: function() {
             return false;
-          }
+          },
         };
         const inBlock = {
           isShadow: function() {
             return true;
-          }
+          },
         };
         const outCon =
             new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
@@ -233,12 +233,12 @@ suite('Connection checker', function() {
         const outBlock = {
           isShadow: function() {
             return true;
-          }
+          },
         };
         const inBlock = {
           isShadow: function() {
             return true;
-          }
+          },
         };
         const outCon =
             new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);

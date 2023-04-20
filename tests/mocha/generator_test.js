@@ -70,7 +70,7 @@ suite('Generator', function() {
           ],
           "output": null,
           "nextStatement": null,
-        }
+        },
       ]);
       const rowBlock = this.workspace.newBlock('row_block');
       const stackBlock = this.workspace.newBlock('stack_block');
@@ -92,8 +92,11 @@ suite('Generator', function() {
     });
 
     const testCase = [
-      [dartGenerator, 'Dart'], [javascriptGenerator, 'JavaScript'],
-      [luaGenerator, 'Lua'], [phpGenerator, 'PHP'], [pythonGenerator, 'Python']
+      [dartGenerator, 'Dart'],
+      [javascriptGenerator, 'JavaScript'],
+      [luaGenerator, 'Lua'],
+      [phpGenerator, 'PHP'],
+      [pythonGenerator, 'Python'],
     ];
 
     suite('Trivial', function() {

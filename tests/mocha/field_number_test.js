@@ -45,7 +45,7 @@ suite('Number Fields', function() {
     {
       title: 'Negative Infinity String',
       value: '-Infinity',
-      expectedValue: -Infinity
+      expectedValue: -Infinity,
     },
   ];
   const addArgsAndJson = function(testCase) {
@@ -54,7 +54,7 @@ suite('Number Fields', function() {
       'value': testCase.value,
       'min': testCase.value,
       'max': testCase.value,
-      'precision': testCase.value
+      'precision': testCase.value,
     };
   };
   invalidValueTestCases.forEach(addArgsAndJson);
@@ -129,26 +129,26 @@ suite('Number Fields', function() {
           title: '0.01',
           json: {precision: .01},
           value: 123.456,
-          expectedValue: 123.46
+          expectedValue: 123.46,
         },
         {
           title: '1e-7',
           json: {precision: .0000001},
           value: 123.00000456,
-          expectedValue: 123.0000046
+          expectedValue: 123.0000046,
         },
         {
           title: '0.5',
           json: {precision: .5},
           value: 123.456,
-          expectedValue: 123.5
+          expectedValue: 123.5,
         },
         {title: '1', json: {precision: 1}, value: 123.456, expectedValue: 123},
         {
           title: '1.5',
           json: {precision: 1.5},
           value: 123.456,
-          expectedValue: 123
+          expectedValue: 123,
         },
       ];
       suite('Precision', function() {
@@ -179,19 +179,19 @@ suite('Number Fields', function() {
             title: '-10',
             json: {min: -10},
             values: [-20, 0, 20],
-            expectedValues: [-10, 0, 20]
+            expectedValues: [-10, 0, 20],
           },
           {
             title: '0',
             json: {min: 0},
             values: [-20, 0, 20],
-            expectedValues: [0, 0, 20]
+            expectedValues: [0, 0, 20],
           },
           {
             title: '+10',
             json: {min: 10},
             values: [-20, 0, 20],
-            expectedValues: [10, 10, 20]
+            expectedValues: [10, 10, 20],
           },
         ];
         runTestCases(testCases, setValueBoundsTestFn);
@@ -206,19 +206,19 @@ suite('Number Fields', function() {
             title: '-10',
             json: {max: -10},
             values: [-20, 0, 20],
-            expectedValues: [-20, -10, -10]
+            expectedValues: [-20, -10, -10],
           },
           {
             title: '0',
             json: {max: 0},
             values: [-20, 0, 20],
-            expectedValues: [-20, 0, 0]
+            expectedValues: [-20, 0, 0],
           },
           {
             title: '+10',
             json: {max: 10},
             values: [-20, 0, 20],
-            expectedValues: [-20, 0, 10]
+            expectedValues: [-20, 0, 10],
           },
         ];
         runTestCases(testCases, setValueBoundsTestFn);
@@ -247,7 +247,7 @@ suite('Number Fields', function() {
           return null;
         },
         value: 2,
-        expectedValue: '1'
+        expectedValue: '1',
       },
       {
         title: 'Force End with 6 Validator',
@@ -255,13 +255,13 @@ suite('Number Fields', function() {
           return +String(newValue).replace(/.$/, '6');
         },
         value: 25,
-        expectedValue: 26
+        expectedValue: 26,
       },
       {
         title: 'Returns Undefined Validator',
         validator: function() {},
         value: 2,
-        expectedValue: 2
+        expectedValue: 2,
       },
     ];
     testSuites.forEach(function(suiteInfo) {

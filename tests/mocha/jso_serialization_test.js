@@ -347,7 +347,7 @@ suite('JSO Serialization', function() {
             'prop1': 'state1',
             'prop2': 42,
             'prop3': true,
-          }
+          },
         });
       });
 

@@ -35,7 +35,7 @@ suite('Events', function() {
       {
         'type': 'simple_test_block',
         'message0': 'simple test block',
-      }
+      },
     ]);
   });
 
@@ -353,8 +353,8 @@ suite('Events', function() {
           group: '',
           varId: 'id1',
           varType: 'type1',
-          varName: 'name1'
-        })
+          varName: 'name1',
+        }),
       },
       {
         title: 'Var delete',
@@ -365,8 +365,8 @@ suite('Events', function() {
           group: '',
           varId: 'id1',
           varType: 'type1',
-          varName: 'name1'
-        })
+          varName: 'name1',
+        }),
       },
       {
         title: 'Var rename',
@@ -377,8 +377,8 @@ suite('Events', function() {
           group: '',
           varId: 'id1',
           oldName: 'name1',
-          newName: 'name2'
-        })
+          newName: 'name2',
+        }),
       },
     ];
     const uiEventTestCases = [
@@ -391,8 +391,8 @@ suite('Events', function() {
           group: '',
           isOpen: true,
           bubbleType: 'mutator',
-          blockId: thisObj.block.id
-        })
+          blockId: thisObj.block.id,
+        }),
       },
       {
         title: 'Block click',
@@ -402,15 +402,15 @@ suite('Events', function() {
           type: 'click',
           group: '',
           targetType: 'block',
-          blockId: thisObj.block.id
-        })
+          blockId: thisObj.block.id,
+        }),
       },
       {
         title: 'Workspace click',
         class: Blockly.Events.Click,
         getArgs: (thisObj) => [null, thisObj.workspace.id, 'workspace'],
         getExpectedJson: (thisObj) =>
-            ({type: 'click', group: '', targetType: 'workspace'})
+            ({type: 'click', group: '', targetType: 'workspace'}),
       },
       {
         title: 'Drag start',
@@ -421,8 +421,8 @@ suite('Events', function() {
           group: '',
           isStart: true,
           blockId: thisObj.block.id,
-          blocks: [thisObj.block]
-        })
+          blocks: [thisObj.block],
+        }),
       },
       {
         title: 'Drag end',
@@ -433,8 +433,8 @@ suite('Events', function() {
           group: '',
           isStart: false,
           blockId: thisObj.block.id,
-          blocks: [thisObj.block]
-        })
+          blocks: [thisObj.block],
+        }),
       },
       {
         title: 'null to Block Marker move',
@@ -448,8 +448,8 @@ suite('Events', function() {
           isCursor: true,
           blockId: thisObj.block.id,
           oldNode: undefined,
-          newNode: new ASTNode(ASTNode.types.BLOCK, thisObj.block)
-        })
+          newNode: new ASTNode(ASTNode.types.BLOCK, thisObj.block),
+        }),
       },
       {
         title: 'null to Workspace Marker move',
@@ -465,8 +465,8 @@ suite('Events', function() {
           blockId: undefined,
           oldNode: undefined,
           newNode: ASTNode.createWorkspaceNode(
-              thisObj.workspace, new Blockly.utils.Coordinate(0, 0))
-        })
+              thisObj.workspace, new Blockly.utils.Coordinate(0, 0)),
+        }),
       },
       {
         title: 'Workspace to Block Marker move',
@@ -483,8 +483,8 @@ suite('Events', function() {
           blockId: thisObj.block.id,
           oldNode: ASTNode.createWorkspaceNode(
               thisObj.workspace, new Blockly.utils.Coordinate(0, 0)),
-          newNode: new ASTNode(ASTNode.types.BLOCK, thisObj.block)
-        })
+          newNode: new ASTNode(ASTNode.types.BLOCK, thisObj.block),
+        }),
       },
       {
         title: 'Block to Workspace Marker move',
@@ -492,28 +492,28 @@ suite('Events', function() {
         getArgs: (thisObj) =>
             [null, true, new ASTNode(ASTNode.types.BLOCK, thisObj.block),
              ASTNode.createWorkspaceNode(
-                 thisObj.workspace, new Blockly.utils.Coordinate(0, 0))]
+                 thisObj.workspace, new Blockly.utils.Coordinate(0, 0))],
       },
       {
         title: 'Selected',
         class: Blockly.Events.Selected,
         getArgs: (thisObj) => [null, thisObj.block.id, thisObj.workspace.id],
         getExpectedJson: (thisObj) =>
-            ({type: 'selected', group: '', newElementId: thisObj.block.id})
+            ({type: 'selected', group: '', newElementId: thisObj.block.id}),
       },
       {
         title: 'Selected (deselect)',
         class: Blockly.Events.Selected,
         getArgs: (thisObj) => [thisObj.block.id, null, thisObj.workspace.id],
         getExpectedJson: (thisObj) =>
-            ({type: 'selected', group: '', oldElementId: thisObj.block.id})
+            ({type: 'selected', group: '', oldElementId: thisObj.block.id}),
       },
       {
         title: 'Theme Change',
         class: Blockly.Events.ThemeChange,
         getArgs: (thisObj) => ['classic', thisObj.workspace.id],
         getExpectedJson: () =>
-            ({type: 'theme_change', group: '', themeName: 'classic'})
+            ({type: 'theme_change', group: '', themeName: 'classic'}),
       },
       {
         title: 'Toolbox item select',
@@ -523,29 +523,29 @@ suite('Events', function() {
           type: 'toolbox_item_select',
           group: '',
           oldItem: 'Math',
-          newItem: 'Loops'
-        })
+          newItem: 'Loops',
+        }),
       },
       {
         title: 'Toolbox item select (no previous)',
         class: Blockly.Events.ToolboxItemSelect,
         getArgs: (thisObj) => [null, 'Loops', thisObj.workspace.id],
         getExpectedJson: () =>
-            ({type: 'toolbox_item_select', group: '', newItem: 'Loops'})
+            ({type: 'toolbox_item_select', group: '', newItem: 'Loops'}),
       },
       {
         title: 'Toolbox item select (deselect)',
         class: Blockly.Events.ToolboxItemSelect,
         getArgs: (thisObj) => ['Math', null, thisObj.workspace.id],
         getExpectedJson: () =>
-            ({type: 'toolbox_item_select', group: '', oldItem: 'Math'})
+            ({type: 'toolbox_item_select', group: '', oldItem: 'Math'}),
       },
       {
         title: 'Trashcan open',
         class: Blockly.Events.TrashcanOpen,
         getArgs: (thisObj) => [true, thisObj.workspace.id],
         getExpectedJson: () =>
-            ({type: 'trashcan_open', group: '', isOpen: true})
+            ({type: 'trashcan_open', group: '', isOpen: true}),
       },
       {
         title: 'Viewport change',
@@ -557,8 +557,8 @@ suite('Events', function() {
           viewTop: 2.666,
           viewLeft: 1.333,
           scale: 1.2,
-          oldScale: 1
-        })
+          oldScale: 1,
+        }),
       },
       {
         title: 'Viewport change (0,0)',
@@ -570,8 +570,8 @@ suite('Events', function() {
           viewTop: 0,
           viewLeft: 0,
           scale: 1.2,
-          oldScale: 1
-        })
+          oldScale: 1,
+        }),
       },
     ];
     const blockEventTestCases = [
@@ -705,8 +705,8 @@ suite('Events', function() {
         getExpectedJson: (thisObj) => ({
           type: 'finished_loading',
           group: '',
-          workspaceId: thisObj.workspace.id
-        })
+          workspaceId: thisObj.workspace.id,
+        }),
       },
     ];
     const workspaceCommentEventTestCases = [
@@ -719,8 +719,8 @@ suite('Events', function() {
           group: '',
           commentId: thisObj.comment.id,
           oldContents: 'bar',
-          newContents: 'foo'
-        })
+          newContents: 'foo',
+        }),
       },
       {
         title: 'Comment create',
@@ -730,8 +730,8 @@ suite('Events', function() {
           type: 'comment_create',
           group: '',
           commentId: thisObj.comment.id,
-          xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY())
-        })
+          xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY()),
+        }),
       },
       {
         title: 'Comment delete',
@@ -741,8 +741,8 @@ suite('Events', function() {
           type: 'comment_delete',
           group: '',
           commentId: thisObj.comment.id,
-          xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY())
-        })
+          xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY()),
+        }),
       },
       // TODO(#4577) Test serialization of move event coordinate properties.
     ];
@@ -753,14 +753,14 @@ suite('Events', function() {
         setup: (thisObj) => {
           thisObj.variable =
               thisObj.workspace.createVariable('name1', 'type1', 'id1');
-        }
+        },
       },
       {
         title: 'UI events',
         testCases: uiEventTestCases,
         setup: (thisObj) => {
           thisObj.block = createSimpleTestBlock(thisObj.workspace);
-        }
+        },
       },
       {
         title: 'Block events',
@@ -770,12 +770,12 @@ suite('Events', function() {
           thisObj.block = createSimpleTestBlock(thisObj.workspace);
           thisObj.shadowBlock = createSimpleTestBlock(thisObj.workspace);
           thisObj.shadowBlock.setShadow(true);
-        }
+        },
       },
       {
         title: 'Workspace events',
         testCases: workspaceEventTestCases,
-        setup: (_) => {}
+        setup: (_) => {},
       },
       {
         title: 'WorkspaceComment events',
@@ -783,7 +783,7 @@ suite('Events', function() {
         setup: (thisObj) => {
           thisObj.comment = new Blockly.WorkspaceComment(
               thisObj.workspace, 'comment text', 0, 0, 'comment id');
-        }
+        },
       },
     ];
     testSuites.forEach((testSuite) => {
@@ -895,7 +895,7 @@ suite('Events', function() {
           type: "var_create",
           varId: "id2",
           varType: "type2",
-          varName: "name2"
+          varName: "name2",
         };
         const event = eventUtils.fromJson(json, this.workspace);
         const x = this.workspace.getVariableById('id2');
@@ -930,7 +930,7 @@ suite('Events', function() {
           type: "var_delete",
           varId: "id2",
           varType: "type2",
-          varName: "name2"
+          varName: "name2",
         };
         const event = eventUtils.fromJson(json, this.workspace);
         chai.assert.isNull(this.workspace.getVariableById('id2'));

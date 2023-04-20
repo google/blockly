@@ -42,7 +42,7 @@ suite('InsertionMarkers', function() {
         ],
         "previousStatement": null,
         "nextStatement": null,
-      }
+      },
     ]);
   });
   teardown(function() {

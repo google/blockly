@@ -1319,13 +1319,13 @@ suite('Procedures', function() {
       title: 'procedures_defreturn',
       hasReturn: true,
       defType: 'procedures_defreturn',
-      callType: 'procedures_callreturn'
+      callType: 'procedures_callreturn',
     },
     {
       title: 'procedures_defnoreturn',
       hasReturn: false,
       defType: 'procedures_defnoreturn',
-      callType: 'procedures_callnoreturn'
+      callType: 'procedures_callnoreturn',
     },
   ];
 

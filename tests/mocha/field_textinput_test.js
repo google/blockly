@@ -121,7 +121,7 @@ suite('Text Input Fields', function() {
           return null;
         },
         value: 'newValue',
-        expectedValue: 'value'
+        expectedValue: 'value',
       },
       {
         title: 'Remove \'a\' Validator',
@@ -129,14 +129,14 @@ suite('Text Input Fields', function() {
           return newValue.replace(/a/g, '');
         },
         value: 'bbbaaa',
-        expectedValue: 'bbb'
+        expectedValue: 'bbb',
       },
       {
         title: 'Returns Undefined Validator',
         validator: function() {},
         value: 'newValue',
         expectedValue: 'newValue',
-        expectedText: 'newValue'
+        expectedText: 'newValue',
       },
     ];
     testSuites.forEach(function(suiteInfo) {

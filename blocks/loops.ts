@@ -14,6 +14,7 @@ goog.declareModuleId('Blockly.libraryBlocks.loops');
 import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import type {Block} from '../core/block.js';
 import * as ContextMenu from '../core/contextmenu.js';
+import type {ContextMenuOption, LegacyContextMenuOption} from '../core/contextmenu_registry.js';
 import * as Events from '../core/events/events.js';
 import * as Extensions from '../core/extensions.js';
 import * as Variables from '../core/variables.js';
@@ -249,7 +250,8 @@ const CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
    * @param options List of menu options to add to.
    */
   customContextMenu: function(
-      this: CustomContextMenuBlock, options: Array<any>) {
+      this: CustomContextMenuBlock,
+      options: Array<ContextMenuOption|LegacyContextMenuOption>) {
     if (this.isInFlyout) {
       return;
     }

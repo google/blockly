@@ -58,8 +58,7 @@ Lua['text_append'] = function(block) {
   // Append to a variable in place.
   const varName =
       Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-  const value =
-      Lua.valueToCode(block, 'TEXT', Lua.ORDER_CONCATENATION) || "''";
+  const value = Lua.valueToCode(block, 'TEXT', Lua.ORDER_CONCATENATION) || "''";
   return varName + ' = ' + varName + ' .. ' + value + '\n';
 };
 

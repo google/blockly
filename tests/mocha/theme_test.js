@@ -22,23 +22,25 @@ suite('Theme', function() {
   });
 
   function defineThemeTestBlocks() {
-    Blockly.defineBlocksWithJsonArray([{
-      "type": "stack_block",
-      "message0": "",
-      "previousStatement": null,
-      "nextStatement": null,
-    },
-    {
-      "type": "row_block",
-      "message0": "%1",
-      "args0": [
-        {
-          "type": "input_value",
-          "name": "INPUT",
-        },
-      ],
-      "output": null,
-    }]);
+    Blockly.defineBlocksWithJsonArray([
+      {
+        "type": "stack_block",
+        "message0": "",
+        "previousStatement": null,
+        "nextStatement": null,
+      },
+      {
+        "type": "row_block",
+        "message0": "%1",
+        "args0": [
+          {
+            "type": "input_value",
+            "name": "INPUT",
+          },
+        ],
+        "output": null,
+      }
+    ]);
   }
 
   function createBlockStyles() {
@@ -126,7 +128,9 @@ suite('Theme', function() {
       workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
       const blockA = workspace.newBlock('stack_block');
 
-      blockA.setStyle = function() {this.styleName_ = 'styleTwo';};
+      blockA.setStyle = function() {
+        this.styleName_ = 'styleTwo';
+      };
       const refreshToolboxSelectionStub =
           sinon.stub(workspace, 'refreshToolboxSelection');
       blockA.styleName_ = 'styleOne';
@@ -144,7 +148,8 @@ suite('Theme', function() {
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.ThemeChange,
-          {themeName: 'themeName', type: eventUtils.THEME_CHANGE}, workspace.id);
+          {themeName: 'themeName', type: eventUtils.THEME_CHANGE},
+          workspace.id);
     } finally {
       workspaceTeardown.call(this, workspace);
     }

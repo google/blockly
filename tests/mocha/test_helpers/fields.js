@@ -67,7 +67,8 @@ export class FieldCreationTestCase {
  * @param {*} expectedValue The expected value.
  * @param {string=} expectedText The expected text.
  */
-export function assertFieldValue(field, expectedValue, expectedText = undefined) {
+export function assertFieldValue(
+    field, expectedValue, expectedText = undefined) {
   const actualValue = field.getValue();
   const actualText = field.getText();
   if (expectedText === undefined) {
@@ -142,21 +143,21 @@ function runCreationTestsAssertThrows_(testCases, creation) {
  * @param {function(!FieldCreationTestCase=)=} customCreateWithJs Custom
  *    creation function to use in tests.
  */
-export function runConstructorSuiteTests(TestedField, validValueTestCases,
-    invalidValueTestCases, validRunAssertField, assertFieldDefault,
-    customCreateWithJs) {
+export function runConstructorSuiteTests(
+    TestedField, validValueTestCases, invalidValueTestCases,
+    validRunAssertField, assertFieldDefault, customCreateWithJs) {
   suite('Constructor', function() {
     if (assertFieldDefault) {
       test('Empty', function() {
         const field = customCreateWithJs ? customCreateWithJs.call(this) :
-            new TestedField();
+                                           new TestedField();
         assertFieldDefault(field);
       });
     } else {
       test('Empty', function() {
         chai.assert.throws(function() {
           customCreateWithJs ? customCreateWithJs.call(this) :
-              new TestedField();
+                               new TestedField();
         });
       });
     }
@@ -168,7 +169,7 @@ export function runConstructorSuiteTests(TestedField, validValueTestCases,
      */
     const createWithJs = function(testCase) {
       return customCreateWithJs ? customCreateWithJs.call(this, testCase) :
-          new TestedField(...testCase.args);
+                                  new TestedField(...testCase.args);
     };
     if (assertFieldDefault) {
       runCreationTests_(
@@ -196,21 +197,21 @@ export function runConstructorSuiteTests(TestedField, validValueTestCases,
  * @param {function(!FieldCreationTestCase=)=} customCreateWithJson Custom
  *    creation function to use in tests.
  */
-export function runFromJsonSuiteTests(TestedField, validValueTestCases,
-    invalidValueTestCases, validRunAssertField, assertFieldDefault,
-    customCreateWithJson) {
+export function runFromJsonSuiteTests(
+    TestedField, validValueTestCases, invalidValueTestCases,
+    validRunAssertField, assertFieldDefault, customCreateWithJson) {
   suite('fromJson', function() {
     if (assertFieldDefault) {
       test('Empty', function() {
         const field = customCreateWithJson ? customCreateWithJson.call(this) :
-            TestedField.fromJson({});
+                                             TestedField.fromJson({});
         assertFieldDefault(field);
       });
     } else {
       test('Empty', function() {
         chai.assert.throws(function() {
           customCreateWithJson ? customCreateWithJson.call(this) :
-              TestedField.fromJson({});
+                                 TestedField.fromJson({});
         });
       });
     }
@@ -222,7 +223,7 @@ export function runFromJsonSuiteTests(TestedField, validValueTestCases,
      */
     const createWithJson = function(testCase) {
       return customCreateWithJson ? customCreateWithJson.call(this, testCase) :
-          TestedField.fromJson(testCase.json);
+                                    TestedField.fromJson(testCase.json);
     };
     if (assertFieldDefault) {
       runCreationTests_(
@@ -245,8 +246,9 @@ export function runFromJsonSuiteTests(TestedField, validValueTestCases,
  * @param {string=} invalidRunExpectedText Expected text for field after invalid
  *    call to setValue.
  */
-export function runSetValueTests(validValueTestCases, invalidValueTestCases,
-    invalidRunExpectedValue, invalidRunExpectedText) {
+export function runSetValueTests(
+    validValueTestCases, invalidValueTestCases, invalidRunExpectedValue,
+    invalidRunExpectedText) {
   /**
    * Creates test callback for invalid setValue test.
    * @param {!FieldValueTestCase} testCase The test case information.

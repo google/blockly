@@ -29,7 +29,7 @@ suite('Comment Create Event', function() {
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);
       delete origEvent.xml;  // xml fails deep equals for some reason.
-      delete newEvent.xml;  // xml fails deep equals for some reason.
+      delete newEvent.xml;   // xml fails deep equals for some reason.
 
       chai.assert.deepEqual(newEvent, origEvent);
     });

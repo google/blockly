@@ -24,9 +24,8 @@ suite('Click Event', function() {
   suite('Serialization', function() {
     test('events round-trip through JSON', function() {
       const block = this.workspace.newBlock('row_block', 'block_id');
-      const origEvent =
-          new Blockly.Events.Click(
-              block, undefined, Blockly.Events.ClickTarget.BLOCK);
+      const origEvent = new Blockly.Events.Click(
+          block, undefined, Blockly.Events.ClickTarget.BLOCK);
 
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);

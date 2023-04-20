@@ -53,13 +53,12 @@ suite('Lists', function() {
           chai.assert.equal(block.type, 'lists_getIndex');
           chai.assert.isNotTrue(block.outputConnection);
           chai.assert.isTrue(
-            block.getInput('AT').type === ConnectionType.INPUT_VALUE
-          );
+              block.getInput('AT').type === ConnectionType.INPUT_VALUE);
         },
       },
       {
         title:
-          'JSON requiring mutations and extra state for previous connection',
+            'JSON requiring mutations and extra state for previous connection',
         json: {
           type: 'statement_block',
           id: '1',
@@ -75,8 +74,7 @@ suite('Lists', function() {
         assertBlockStructure: (block) => {},
       },
       {
-        title:
-          'JSON requiring mutations with XML extra state',
+        title: 'JSON requiring mutations with XML extra state',
         json: {
           type: 'statement_block',
           id: '1',
@@ -111,10 +109,12 @@ suite('Lists', function() {
    * Test cases for serialization where JSON hooks should have null
    * implementation to avoid serializing xml mutations in json.
    * @param {!Object} serializedJson basic serialized json
-   * @param {!string} xmlMutation xml mutation that should be ignored/not reserialized in round trip
+   * @param {!string} xmlMutation xml mutation that should be ignored/not
+   *     reserialized in round trip
    * @return {Array<SerializationTestCase>} test cases
    */
-  function makeTestCasesForBlockNotNeedingExtraState_(serializedJson, xmlMutation) {
+  function makeTestCasesForBlockNotNeedingExtraState_(
+      serializedJson, xmlMutation) {
     return [
       {
         title: 'JSON not requiring mutations',
@@ -124,8 +124,7 @@ suite('Lists', function() {
         },
       },
       {
-        title:
-          'JSON with XML extra state',
+        title: 'JSON with XML extra state',
         json: {
           ...serializedJson,
           "extraState": xmlMutation,
@@ -142,16 +141,15 @@ suite('Lists', function() {
      * @type {Array<SerializationTestCase>}
      */
     const testCases = makeTestCasesForBlockNotNeedingExtraState_(
-      {
-        "type": "lists_setIndex",
-        "id": "1",
-        "fields": {
-          "MODE": "SET",
-          "WHERE": "FROM_START",
+        {
+          "type": "lists_setIndex",
+          "id": "1",
+          "fields": {
+            "MODE": "SET",
+            "WHERE": "FROM_START",
+          },
         },
-      },
-      "<mutation at=\"true\"></mutation>"
-    );
+        "<mutation at=\"true\"></mutation>");
     runSerializationTestSuite(testCases);
   });
 
@@ -160,17 +158,16 @@ suite('Lists', function() {
      * Test cases for serialization tests.
      * @type {Array<SerializationTestCase>}
      */
-     const testCases = makeTestCasesForBlockNotNeedingExtraState_(
-      {
-        "type": "lists_getSublist",
-        "id": "1",
-        "fields": {
-          "WHERE1": "FROM_START",
-          "WHERE2": "FROM_START",
+    const testCases = makeTestCasesForBlockNotNeedingExtraState_(
+        {
+          "type": "lists_getSublist",
+          "id": "1",
+          "fields": {
+            "WHERE1": "FROM_START",
+            "WHERE2": "FROM_START",
+          },
         },
-      },
-      "<mutation at1=\"true\" at2=\"true\"></mutation>"
-    );
+        "<mutation at1=\"true\" at2=\"true\"></mutation>");
     runSerializationTestSuite(testCases);
   });
 
@@ -180,15 +177,14 @@ suite('Lists', function() {
      * @type {Array<SerializationTestCase>}
      */
     const testCases = makeTestCasesForBlockNotNeedingExtraState_(
-      {
-        "type": "lists_split",
-        "id": "1",
-        "fields": {
-          "MODE": "SPLIT",
+        {
+          "type": "lists_split",
+          "id": "1",
+          "fields": {
+            "MODE": "SPLIT",
+          },
         },
-      },
-      "<mutation mode=\"SPLIT\"></mutation>"
-    );
+        "<mutation mode=\"SPLIT\"></mutation>");
     runSerializationTestSuite(testCases);
   });
 });

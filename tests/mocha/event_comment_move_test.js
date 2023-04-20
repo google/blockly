@@ -31,7 +31,7 @@ suite('Comment Move Event', function() {
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);
       delete origEvent.comment_;  // Ignore private properties.
-      delete newEvent.comment_;  // Ignore private properties.
+      delete newEvent.comment_;   // Ignore private properties.
 
       chai.assert.deepEqual(newEvent, origEvent);
     });

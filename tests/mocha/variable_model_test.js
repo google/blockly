@@ -28,20 +28,20 @@ suite('Variable Model', function() {
   });
 
   test('Null type', function() {
-    const variable = new Blockly.VariableModel(
-        this.workspace, 'test', null, 'test_id');
+    const variable =
+        new Blockly.VariableModel(this.workspace, 'test', null, 'test_id');
     chai.assert.equal(variable.type, '');
   });
 
   test('Undefined type', function() {
-    const variable = new Blockly.VariableModel(
-        this.workspace, 'test', undefined, 'test_id');
+    const variable =
+        new Blockly.VariableModel(this.workspace, 'test', undefined, 'test_id');
     chai.assert.equal(variable.type, '');
   });
 
   test('Null id', function() {
-    const variable = new Blockly.VariableModel(
-        this.workspace, 'test', 'test_type', null);
+    const variable =
+        new Blockly.VariableModel(this.workspace, 'test', 'test_type', null);
     chai.assert.equal(variable.name, 'test');
     chai.assert.equal(variable.type, 'test_type');
     chai.assert.exists(variable.id_);

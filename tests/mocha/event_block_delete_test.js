@@ -23,7 +23,7 @@ suite('Block Delete Event', function() {
   suite('Receiving', function() {
     test('blocks do not receive their own delete events', function() {
       Blockly.Blocks['test'] = {
-        onchange: function(e) { },
+        onchange: function(e) {},
       };
       // Need to stub the definition, because the property on the definition is
       // what gets registered as an event listener.
@@ -45,7 +45,7 @@ suite('Block Delete Event', function() {
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);
       delete origEvent.oldXml;  // xml fails deep equals for some reason.
-      delete newEvent.oldXml;  // xml fails deep equals for some reason.
+      delete newEvent.oldXml;   // xml fails deep equals for some reason.
 
       chai.assert.deepEqual(newEvent, origEvent);
     });

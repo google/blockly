@@ -39,26 +39,66 @@ suite('Colour Fields', function() {
    */
 
   const validValueTestCases = [
-    {title: '#AAAAAA', value: '#AAAAAA', expectedValue: '#aaaaaa',
-      expectedText: '#aaa'},
-    {title: '#aaaaaa', value: '#aaaaaa', expectedValue: '#aaaaaa',
-      expectedText: '#aaa'},
-    {title: '#AAAA00', value: '#AAAA00', expectedValue: '#aaaa00',
-      expectedText: '#aa0'},
-    {title: '#aaaA00', value: '#aaaA00', expectedValue: '#aaaa00',
-      expectedText: '#aa0'},
-    {title: '#BCBCBC', value: '#BCBCBC', expectedValue: '#bcbcbc',
-      expectedText: '#bcbcbc'},
-    {title: '#bcbcbc', value: '#bcbcbc', expectedValue: '#bcbcbc',
-      expectedText: '#bcbcbc'},
-    {title: '#AA0', value: '#AA0', expectedValue: '#aaaa00',
-      expectedText: '#aa0'},
-    {title: '#aa0', value: '#aa0', expectedValue: '#aaaa00',
-      expectedText: '#aa0'},
-    {title: 'rgb(170, 170, 0)', value: 'rgb(170, 170, 0)',
-      expectedValue: '#aaaa00', expectedText: '#aa0'},
-    {title: 'red', value: 'red', expectedValue: '#ff0000',
-      expectedText: '#f00'},
+    {
+      title: '#AAAAAA',
+      value: '#AAAAAA',
+      expectedValue: '#aaaaaa',
+      expectedText: '#aaa'
+    },
+    {
+      title: '#aaaaaa',
+      value: '#aaaaaa',
+      expectedValue: '#aaaaaa',
+      expectedText: '#aaa'
+    },
+    {
+      title: '#AAAA00',
+      value: '#AAAA00',
+      expectedValue: '#aaaa00',
+      expectedText: '#aa0'
+    },
+    {
+      title: '#aaaA00',
+      value: '#aaaA00',
+      expectedValue: '#aaaa00',
+      expectedText: '#aa0'
+    },
+    {
+      title: '#BCBCBC',
+      value: '#BCBCBC',
+      expectedValue: '#bcbcbc',
+      expectedText: '#bcbcbc'
+    },
+    {
+      title: '#bcbcbc',
+      value: '#bcbcbc',
+      expectedValue: '#bcbcbc',
+      expectedText: '#bcbcbc'
+    },
+    {
+      title: '#AA0',
+      value: '#AA0',
+      expectedValue: '#aaaa00',
+      expectedText: '#aa0'
+    },
+    {
+      title: '#aa0',
+      value: '#aa0',
+      expectedValue: '#aaaa00',
+      expectedText: '#aa0'
+    },
+    {
+      title: 'rgb(170, 170, 0)',
+      value: 'rgb(170, 170, 0)',
+      expectedValue: '#aaaa00',
+      expectedText: '#aa0'
+    },
+    {
+      title: 'red',
+      value: 'red',
+      expectedValue: '#ff0000',
+      expectedText: '#f00'
+    },
   ];
   const addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
@@ -76,15 +116,14 @@ suite('Colour Fields', function() {
    * The expected default text for the field being tested.
    * @type {*}
    */
-  const defaultTextValue = (
-    function() {
-      let expectedText = defaultFieldValue;
-      const m = defaultFieldValue.match(/^#(.)\1(.)\2(.)\3$/);
-      if (m) {
-        expectedText = '#' + m[1] + m[2] + m[3];
-      }
-      return expectedText;
-    })();
+  const defaultTextValue = (function() {
+    let expectedText = defaultFieldValue;
+    const m = defaultFieldValue.match(/^#(.)\1(.)\2(.)\3$/);
+    if (m) {
+      expectedText = '#' + m[1] + m[2] + m[3];
+    }
+    return expectedText;
+  })();
   /**
    * Asserts that the field property values are set to default.
    * @param {FieldTemplate} field The field to check.
@@ -98,8 +137,7 @@ suite('Colour Fields', function() {
    * @param {!FieldValueTestCase} testCase The test case.
    */
   const validTestCaseAssertField = function(field, testCase) {
-    assertFieldValue(
-        field, testCase.expectedValue, testCase.expectedText);
+    assertFieldValue(field, testCase.expectedValue, testCase.expectedText);
   };
 
   runConstructorSuiteTests(
@@ -142,20 +180,31 @@ suite('Colour Fields', function() {
       this.field = new Blockly.FieldColour('#aaaaaa');
     });
     const testSuites = [
-      {title: 'Null Validator',
-        validator:
-            function() {
-              return null;
-            },
-        value: '#000000', expectedValue: '#aaaaaa', expectedText: '#aaa'},
-      {title: 'Force Full Red Validator',
-        validator:
-            function(newValue) {
-              return '#ff' + newValue.substr(3, 4);
-            },
-        value: '#000000', expectedValue: '#ff0000', expectedText: '#f00'},
-      {title: 'Returns Undefined Validator', validator: function() {},
-        value: '#000000', expectedValue: '#000000', expectedText: '#000'},
+      {
+        title: 'Null Validator',
+        validator: function() {
+          return null;
+        },
+        value: '#000000',
+        expectedValue: '#aaaaaa',
+        expectedText: '#aaa'
+      },
+      {
+        title: 'Force Full Red Validator',
+        validator: function(newValue) {
+          return '#ff' + newValue.substr(3, 4);
+        },
+        value: '#000000',
+        expectedValue: '#ff0000',
+        expectedText: '#f00'
+      },
+      {
+        title: 'Returns Undefined Validator',
+        validator: function() {},
+        value: '#000000',
+        expectedValue: '#000000',
+        expectedText: '#000'
+      },
     ];
     testSuites.forEach(function(suiteInfo) {
       suite(suiteInfo.title, function() {
@@ -179,8 +228,7 @@ suite('Colour Fields', function() {
         while (node) {
           chai.assert.equal(node.getAttribute('title'), titles[index]);
           chai.assert.equal(
-              Blockly.utils.colour.parse(
-                  node.style.backgroundColor),
+              Blockly.utils.colour.parse(node.style.backgroundColor),
               colours[index]);
 
           let nextNode = node.nextSibling;
@@ -238,8 +286,8 @@ suite('Colour Fields', function() {
       test('Some Titles Undefined', function() {
         const field = new Blockly.FieldColour();
         field.setColours(['#aaaaaa', '#ff0000'], ['grey']);
-        assertColoursAndTitles(field,
-            ['#aaaaaa', '#ff0000'], ['grey', '#ff0000']);
+        assertColoursAndTitles(
+            field, ['#aaaaaa', '#ff0000'], ['grey', '#ff0000']);
       });
       // This is kinda derpy behavior, but I wanted to document it.
       test('Overwriting Colours While Leaving Titles', function() {

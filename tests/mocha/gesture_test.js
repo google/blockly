@@ -17,8 +17,8 @@ suite('Gesture', function() {
   function testGestureIsFieldClick(block, isFieldClick, eventsFireStub) {
     const field = block.getField('NAME');
     const eventTarget = field.getClickTarget_();
-    chai.assert.exists(eventTarget,
-        'Precondition: missing click target for field');
+    chai.assert.exists(
+        eventTarget, 'Precondition: missing click target for field');
 
     eventsFireStub.resetHistory();
     dispatchPointerEvent(eventTarget, 'pointerdown');
@@ -37,9 +37,11 @@ suite('Gesture', function() {
     chai.assert.isTrue(isFieldClickSpy.alwaysReturned(isFieldClick));
 
 
-    assertEventFired(eventsFireStub, Blockly.Events.Selected,
+    assertEventFired(
+        eventsFireStub, Blockly.Events.Selected,
         {newElementId: block.id, type: eventUtils.SELECTED}, fieldWorkspace.id);
-    assertEventNotFired(eventsFireStub, Blockly.Events.Click, {type: eventUtils.CLICK});
+    assertEventNotFired(
+        eventsFireStub, Blockly.Events.Click, {type: eventUtils.CLICK});
   }
 
   function getTopFlyoutBlock(flyout) {
@@ -74,8 +76,7 @@ suite('Gesture', function() {
 
   test('Field click - Auto close flyout', function() {
     const flyout = this.workspace.getFlyout(true);
-    chai.assert.exists(flyout,
-        'Precondition: missing flyout');
+    chai.assert.exists(flyout, 'Precondition: missing flyout');
     flyout.autoClose = true;
 
     const block = getTopFlyoutBlock(flyout);
@@ -84,8 +85,7 @@ suite('Gesture', function() {
 
   test('Field click - Always open flyout', function() {
     const flyout = this.workspace.getFlyout(true);
-    chai.assert.exists(flyout,
-        'Precondition: missing flyout');
+    chai.assert.exists(flyout, 'Precondition: missing flyout');
     flyout.autoClose = false;
 
     const block = getTopFlyoutBlock(flyout);

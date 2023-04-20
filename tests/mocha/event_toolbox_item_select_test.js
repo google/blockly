@@ -49,9 +49,8 @@ suite('Toolbox Item Select Event', function() {
   suite('Serialization', function() {
     test('events round-trip through JSON', function() {
       const items = this.workspace.getToolbox().getToolboxItems();
-      const origEvent =
-          new Blockly.Events.ToolboxItemSelect(
-              items[0].getName(), items[1].getName(), this.workspace.id);
+      const origEvent = new Blockly.Events.ToolboxItemSelect(
+          items[0].getName(), items[1].getName(), this.workspace.id);
 
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);

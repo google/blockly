@@ -31,7 +31,8 @@ function assertBlockVarModels(block, varIds) {
  */
 function assertCallBlockArgsStructure(callBlock, args) {
   // inputList also contains "TOPROW"
-  chai.assert.equal(callBlock.inputList.length - 1, args.length,
+  chai.assert.equal(
+      callBlock.inputList.length - 1, args.length,
       'call block has the expected number of args');
 
   for (let i = 0; i < args.length; i++) {
@@ -39,7 +40,8 @@ function assertCallBlockArgsStructure(callBlock, args) {
     const callInput = callBlock.inputList[i + 1];
     chai.assert.equal(callInput.type, ConnectionType.INPUT_VALUE);
     chai.assert.equal(callInput.name, 'ARG' + i);
-    chai.assert.equal(callInput.fieldRow[0].getValue(), expectedName,
+    chai.assert.equal(
+        callInput.fieldRow[0].getValue(), expectedName,
         'Call block consts did not match expected.');
   }
   chai.assert.sameOrderedMembers(callBlock.getVars(), args);
@@ -56,27 +58,28 @@ function assertCallBlockArgsStructure(callBlock, args) {
  * @param {boolean=} hasStatements If we expect the procedure def to have a
  *     statement input or not.
  */
-export function assertDefBlockStructure(defBlock, hasReturn = false,
-    args = [], varIds = [], hasStatements = true) {
+export function assertDefBlockStructure(
+    defBlock, hasReturn = false, args = [], varIds = [], hasStatements = true) {
   if (hasStatements) {
-    chai.assert.isNotNull(defBlock.getInput('STACK'),
-        'Def block should have STACK input');
+    chai.assert.isNotNull(
+        defBlock.getInput('STACK'), 'Def block should have STACK input');
   } else {
-    chai.assert.isNull(defBlock.getInput('STACK'),
-        'Def block should not have STACK input');
+    chai.assert.isNull(
+        defBlock.getInput('STACK'), 'Def block should not have STACK input');
   }
   if (hasReturn) {
-    chai.assert.isNotNull(defBlock.getInput('RETURN'),
-        'Def block should have RETURN input');
+    chai.assert.isNotNull(
+        defBlock.getInput('RETURN'), 'Def block should have RETURN input');
   } else {
-    chai.assert.isNull(defBlock.getInput('RETURN'),
-        'Def block should not have RETURN input');
+    chai.assert.isNull(
+        defBlock.getInput('RETURN'), 'Def block should not have RETURN input');
   }
   if (args.length) {
-    chai.assert.include(defBlock.toString(), 'with',
-        'Def block string should include "with"');
+    chai.assert.include(
+        defBlock.toString(), 'with', 'Def block string should include "with"');
   } else {
-    chai.assert.notInclude(defBlock.toString(), 'with',
+    chai.assert.notInclude(
+        defBlock.toString(), 'with',
         'Def block string should not include "with"');
   }
 
@@ -93,7 +96,7 @@ export function assertDefBlockStructure(defBlock, hasReturn = false,
  * @param {string=} name The name we expect the caller to have.
  */
 export function assertCallBlockStructure(
-  callBlock, args = [], varIds = [], name = undefined) {
+    callBlock, args = [], varIds = [], name = undefined) {
   if (args.length) {
     chai.assert.include(callBlock.toString(), 'with');
   } else {
@@ -118,15 +121,12 @@ export function assertCallBlockStructure(
  */
 export function createProcDefBlock(
     workspace, hasReturn = false, args = [], name = 'proc name') {
-  const type = hasReturn ?
-      'procedures_defreturn' : 'procedures_defnoreturn';
+  const type = hasReturn ? 'procedures_defreturn' : 'procedures_defnoreturn';
   let xml = `<block type="${type}">`;
-  for (let i = 0; i < args.length; i ++) {
-    xml +=
-        `    <mutation><arg name="${args[i]}"></arg></mutation>\n`;
+  for (let i = 0; i < args.length; i++) {
+    xml += `    <mutation><arg name="${args[i]}"></arg></mutation>\n`;
   }
-  xml +=
-      `  <field name="NAME">${name}</field>` +
+  xml += `  <field name="NAME">${name}</field>` +
       '</block>';
   return Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(xml), workspace);
 }
@@ -141,13 +141,13 @@ export function createProcDefBlock(
  */
 export function createProcCallBlock(
     workspace, hasReturn = false, name = 'proc name') {
-  const type = hasReturn ?
-      'procedures_callreturn' : 'procedures_callnoreturn';
-  return Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
-      `<block type="${type}">` +
-      `  <mutation name="${name}"/>` +
-      `</block>`
-  ), workspace);
+  const type = hasReturn ? 'procedures_callreturn' : 'procedures_callnoreturn';
+  return Blockly.Xml.domToBlock(
+      Blockly.utils.xml.textToDom(
+          `<block type="${type}">` +
+          `  <mutation name="${name}"/>` +
+          `</block>`),
+      workspace);
 }
 
 export class MockProcedureModel {
@@ -208,9 +208,9 @@ export class MockProcedureModel {
     return this.enabled;
   }
 
-  startPublishing() { }
+  startPublishing() {}
 
-  stopPublishing() { }
+  stopPublishing() {}
 }
 
 export class MockParameterModel {

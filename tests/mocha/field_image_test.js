@@ -23,27 +23,48 @@ suite('Image Fields', function() {
    * @type {!Array<!FieldCreationTestCase>}
    */
   const invalidValueTestCases = [
-    {title: 'Undefined Size', value: 'src', args: ['src', undefined, undefined]},
+    {
+      title: 'Undefined Size',
+      value: 'src',
+      args: ['src', undefined, undefined]
+    },
     {title: 'Zero Size', value: 'src', args: ['src', 0, 0]},
-    {title: 'Non-Parsable String for Size', value: 'src', args: ['src', 'bad', 'bad']},
+    {
+      title: 'Non-Parsable String for Size',
+      value: 'src',
+      args: ['src', 'bad', 'bad']
+    },
   ];
   /**
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
   const validValueCreationTestCases = [
-    {title: 'With Alt', value: 'src', expectedValue: 'src',
-      args: ['src', 1, 1, 'alt'], expectedText: 'alt'},
-    {title: 'Without Alt', value: 'src', expectedValue: 'src',
-      args: ['src', 1, 1], expectedText: ''},
+    {
+      title: 'With Alt',
+      value: 'src',
+      expectedValue: 'src',
+      args: ['src', 1, 1, 'alt'],
+      expectedText: 'alt'
+    },
+    {
+      title: 'Without Alt',
+      value: 'src',
+      expectedValue: 'src',
+      args: ['src', 1, 1],
+      expectedText: ''
+    },
   ];
   /**
    * Adds json property to test cases based on args property.
    * @param {!Array<!FieldCreationTestCase>} testCase The test case to modify.
    */
   const addJson = function(testCase) {
-    testCase.json = {'src': testCase.args[0], 'width': testCase.args[1],
-      'height': testCase.args[2]};
+    testCase.json = {
+      'src': testCase.args[0],
+      'width': testCase.args[1],
+      'height': testCase.args[2]
+    };
     if (testCase.args[3]) {
       testCase.json['alt'] = testCase.args[3];
     }
@@ -73,8 +94,12 @@ suite('Image Fields', function() {
    * @type {!Array<!FieldValueTestCase>}
    */
   const validValueSetValueTestCases = [
-    {title: 'Good src', value: 'newSrc', expectedValue: 'newSrc',
-      expectedText: 'alt'},
+    {
+      title: 'Good src',
+      value: 'newSrc',
+      expectedValue: 'newSrc',
+      expectedText: 'alt'
+    },
   ];
 
   suite('setValue', function() {

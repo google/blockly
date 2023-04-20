@@ -38,8 +38,7 @@ suite('Keyboard Shortcut Registry Test', function() {
         registry.register(testShortcut);
       };
       chai.assert.throws(
-          shouldThrow, Error,
-          'Shortcut named "test_shortcut" already exists.');
+          shouldThrow, Error, 'Shortcut named "test_shortcut" already exists.');
     });
     test(
         'Registers shortcut with same name opt_allowOverrides=true',
@@ -104,7 +103,8 @@ suite('Keyboard Shortcut Registry Test', function() {
 
       const registry = this.registry;
       chai.assert.isFalse(registry.unregister('test'));
-      sinon.assert.calledOnceWithExactly(consoleStub, 'Keyboard shortcut named "test" not found.');
+      sinon.assert.calledOnceWithExactly(
+          consoleStub, 'Keyboard shortcut named "test" not found.');
     });
     test('Unregistering a shortcut with key mappings', function() {
       const testShortcut = {'name': 'test_shortcut'};
@@ -237,7 +237,8 @@ suite('Keyboard Shortcut Registry Test', function() {
     test('Sets the key map', function() {
       this.registry.setKeyMap({'keyCode': ['test_shortcut']});
       chai.assert.equal(Object.keys(this.registry.getKeyMap()).length, 1);
-      chai.assert.equal(this.registry.getKeyMap()['keyCode'][0], 'test_shortcut');
+      chai.assert.equal(
+          this.registry.getKeyMap()['keyCode'][0], 'test_shortcut');
     });
     test('Gets a copy of the key map', function() {
       this.registry.setKeyMap({'keyCode': ['a']});
@@ -259,7 +260,8 @@ suite('Keyboard Shortcut Registry Test', function() {
       chai.assert.equal(shortcutNames[0], 'shortcutName');
     });
     test('Gets keycodes by shortcut name', function() {
-      this.registry.setKeyMap({'keyCode': ['shortcutName'], 'keyCode1': ['shortcutName']});
+      this.registry.setKeyMap(
+          {'keyCode': ['shortcutName'], 'keyCode1': ['shortcutName']});
       const shortcutNames =
           this.registry.getKeyCodesByShortcutName('shortcutName');
       chai.assert.lengthOf(shortcutNames, 2);
@@ -285,8 +287,8 @@ suite('Keyboard Shortcut Registry Test', function() {
           return true;
         },
       };
-      this.callBackStub =
-          addShortcut(this.registry, this.testShortcut, Blockly.utils.KeyCodes.C, true);
+      this.callBackStub = addShortcut(
+          this.registry, this.testShortcut, Blockly.utils.KeyCodes.C, true);
     });
     test('Execute a shortcut from event', function() {
       const event = createKeyDownEvent(Blockly.utils.KeyCodes.C);
@@ -314,8 +316,8 @@ suite('Keyboard Shortcut Registry Test', function() {
           return false;
         },
       };
-      const testShortcut2Stub =
-          addShortcut(this.registry, testShortcut2, Blockly.utils.KeyCodes.C, false);
+      const testShortcut2Stub = addShortcut(
+          this.registry, testShortcut2, Blockly.utils.KeyCodes.C, false);
       chai.assert.isTrue(this.registry.onKeyDown(this.workspace, event));
       sinon.assert.calledOnce(testShortcut2Stub);
       sinon.assert.calledOnce(this.callBackStub);
@@ -331,8 +333,8 @@ suite('Keyboard Shortcut Registry Test', function() {
           return false;
         },
       };
-      const testShortcut2Stub =
-          addShortcut(this.registry, testShortcut2, Blockly.utils.KeyCodes.C, true);
+      const testShortcut2Stub = addShortcut(
+          this.registry, testShortcut2, Blockly.utils.KeyCodes.C, true);
       chai.assert.isTrue(this.registry.onKeyDown(this.workspace, event));
       sinon.assert.calledOnce(testShortcut2Stub);
       sinon.assert.notCalled(this.callBackStub);
@@ -384,15 +386,13 @@ suite('Keyboard Shortcut Registry Test', function() {
       chai.assert.equal(serializedKey, 'Control+65');
     });
     test('Serialize only a modifier', function() {
-      const mockEvent =
-          createKeyDownEvent(null, [Blockly.utils.KeyCodes.CTRL]);
+      const mockEvent = createKeyDownEvent(null, [Blockly.utils.KeyCodes.CTRL]);
       const serializedKey = this.registry.serializeKeyEvent_(mockEvent);
       chai.assert.equal(serializedKey, 'Control');
     });
     test('Serialize multiple modifiers', function() {
       const mockEvent = createKeyDownEvent(
-          null,
-          [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT]);
+          null, [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT]);
       const serializedKey = this.registry.serializeKeyEvent_(mockEvent);
       chai.assert.equal(serializedKey, 'Shift+Control');
     });

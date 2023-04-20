@@ -100,7 +100,8 @@ suite('Registry', function() {
     suite('Does not have', function() {
       test('Type', function() {
         assertWarnings(() => {
-          chai.assert.isNull(Blockly.registry.getClass('bad_type', 'test_name'));
+          chai.assert.isNull(
+              Blockly.registry.getClass('bad_type', 'test_name'));
         }, /Unable to find/);
       });
 
@@ -140,7 +141,8 @@ suite('Registry', function() {
     suite('Does not have', function() {
       test('Type', function() {
         assertWarnings(() => {
-          chai.assert.isNull(Blockly.registry.getObject('bad_type', 'test_name'));
+          chai.assert.isNull(
+              Blockly.registry.getObject('bad_type', 'test_name'));
         }, /Unable to find/);
       });
 
@@ -199,22 +201,18 @@ suite('Registry', function() {
     });
 
     test('Respect name case', function() {
-      chai.assert.deepEqual(
-          Blockly.registry.getAllItems('test', true),
-          {
-            'test_name': {},
-            'casedNAME': {},
-          });
+      chai.assert.deepEqual(Blockly.registry.getAllItems('test', true), {
+        'test_name': {},
+        'casedNAME': {},
+      });
     });
 
     test('Respect overwriting name case', function() {
       Blockly.registry.register('test', 'CASEDname', {}, true);
-      chai.assert.deepEqual(
-          Blockly.registry.getAllItems('test', true),
-          {
-            'test_name': {},
-            'CASEDname': {},
-          });
+      chai.assert.deepEqual(Blockly.registry.getAllItems('test', true), {
+        'test_name': {},
+        'CASEDname': {},
+      });
     });
   });
 
@@ -238,19 +236,22 @@ suite('Registry', function() {
     });
 
     test('Simple - Plugin name given', function() {
-      const testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      const testClass =
+          Blockly.registry.getClassFromOptions('test', this.options);
       chai.assert.instanceOf(new testClass(), TestClass);
     });
 
     test('Simple - Plugin class given', function() {
       this.options.plugins['test'] = TestClass;
-      const testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      const testClass =
+          Blockly.registry.getClassFromOptions('test', this.options);
       chai.assert.instanceOf(new testClass(), TestClass);
     });
 
     test('No Plugin Name Given', function() {
       delete this.options['plugins']['test'];
-      const testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      const testClass =
+          Blockly.registry.getClassFromOptions('test', this.options);
       chai.assert.instanceOf(new testClass(), this.defaultClass);
     });
 

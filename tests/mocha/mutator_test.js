@@ -35,8 +35,9 @@ suite('Mutator', function() {
       const mutatorWorkspace = block.mutator.getWorkspace();
       // Trigger mutator change listener.
       createRenderedBlock(mutatorWorkspace, 'checkbox_block');
-      assertEventNotFired(this.eventsFireStub, Blockly.Events.BlockChange,
-        {element: 'mutation'});
+      assertEventNotFired(
+          this.eventsFireStub, Blockly.Events.BlockChange,
+          {element: 'mutation'});
     });
 
     test('XML', function() {
@@ -45,12 +46,10 @@ suite('Mutator', function() {
       const mutatorWorkspace = block.mutator.getWorkspace();
       mutatorWorkspace.getBlockById('check_block')
           .setFieldValue('TRUE', 'CHECK');
-      chai.assert.isTrue(
-          this.eventsFireStub.getCalls().some(
-              ({args}) =>
-                args[0].type === Blockly.Events.BLOCK_CHANGE &&
-                args[0].element === 'mutation' &&
-                /<mutation.*><\/mutation>/.test(args[0].newValue)));
+      chai.assert.isTrue(this.eventsFireStub.getCalls().some(
+          ({args}) => args[0].type === Blockly.Events.BLOCK_CHANGE &&
+              args[0].element === 'mutation' &&
+              /<mutation.*><\/mutation>/.test(args[0].newValue)));
     });
 
     test('JSO', function() {
@@ -59,11 +58,12 @@ suite('Mutator', function() {
       const mutatorWorkspace = block.mutator.getWorkspace();
       mutatorWorkspace.getBlockById('check_block')
           .setFieldValue('TRUE', 'CHECK');
-      assertEventFired(this.eventsFireStub, Blockly.Events.BlockChange,
-        {
-          element: 'mutation',
-          newValue: '{"hasInput":true}',
-        }, this.workspace.id, block.id);
+      assertEventFired(
+          this.eventsFireStub, Blockly.Events.BlockChange, {
+            element: 'mutation',
+            newValue: '{"hasInput":true}',
+          },
+          this.workspace.id, block.id);
     });
   });
 });

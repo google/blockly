@@ -56,23 +56,22 @@ suite('Logic ternary', function() {
    * @type {Array<SerializationTestCase>}
    */
   const testCases = [
-    {title: 'Empty XML', xml: '<block type="logic_ternary"/>',
-      expectedXml:
-          '<block xmlns="https://developers.google.com/blockly/xml" ' +
+    {
+      title: 'Empty XML',
+      xml: '<block type="logic_ternary"/>',
+      expectedXml: '<block xmlns="https://developers.google.com/blockly/xml" ' +
           'type="logic_ternary" id="1"></block>',
-      assertBlockStructure:
-          (block) => {
-            assertBlockStructure(block);
-          },
+      assertBlockStructure: (block) => {
+        assertBlockStructure(block);
+      },
     },
-    {title: 'Inputs inline',
-      xml:
-          '<block xmlns="https://developers.google.com/blockly/xml" ' +
+    {
+      title: 'Inputs inline',
+      xml: '<block xmlns="https://developers.google.com/blockly/xml" ' +
           'type="logic_ternary" id="1" inline="true"></block>',
-      assertBlockStructure:
-          (block) => {
-            assertBlockStructure(block, true);
-          },
+      assertBlockStructure: (block) => {
+        assertBlockStructure(block, true);
+      },
     },
   ];
   runSerializationTestSuite(testCases);
@@ -80,16 +79,19 @@ suite('Logic ternary', function() {
   suite('Connections', function() {
     function connectParentAndCheckConnections(
         block, parent, parentInputName, opt_thenInput, opt_elseInput) {
-      parent.getInput(parentInputName).connection.connect(block.outputConnection);
+      parent.getInput(parentInputName)
+          .connection.connect(block.outputConnection);
       eventUtils.TEST_ONLY.fireNow();  // Force synchronous onchange() call.
-      chai.assert.equal(block.getParent(), parent,
-          'Successful connection to parent');
+      chai.assert.equal(
+          block.getParent(), parent, 'Successful connection to parent');
       if (opt_thenInput) {
-        chai.assert.equal(opt_thenInput.getParent(), block,
+        chai.assert.equal(
+            opt_thenInput.getParent(), block,
             'Input THEN still connected after connecting parent');
       }
       if (opt_elseInput) {
-        chai.assert.equal(opt_elseInput.getParent(), block,
+        chai.assert.equal(
+            opt_elseInput.getParent(), block,
             'Input ELSE still connected after connecting parent');
       }
     }
@@ -99,11 +101,13 @@ suite('Logic ternary', function() {
       eventUtils.TEST_ONLY.fireNow();  // Force synchronous onchange() call.
       chai.assert.equal(thenInput.getParent(), block, 'THEN is connected');
       if (opt_parent) {
-        chai.assert.equal(block.getParent(), opt_parent,
+        chai.assert.equal(
+            block.getParent(), opt_parent,
             'Still connected to parent after connecting THEN');
       }
       if (opt_elseInput) {
-        chai.assert.equal(opt_elseInput.getParent(), block,
+        chai.assert.equal(
+            opt_elseInput.getParent(), block,
             'Input ELSE still connected after connecting THEN');
       }
     }
@@ -113,18 +117,21 @@ suite('Logic ternary', function() {
       eventUtils.TEST_ONLY.fireNow();  // Force synchronous onchange() call.
       chai.assert.equal(elseInput.getParent(), block, 'ELSE is connected');
       if (opt_parent) {
-        chai.assert.equal(block.getParent(), opt_parent,
+        chai.assert.equal(
+            block.getParent(), opt_parent,
             'Still connected to parent after connecting ELSE');
       }
       if (opt_thenInput) {
-        chai.assert.equal(opt_thenInput.getParent(), block,
+        chai.assert.equal(
+            opt_thenInput.getParent(), block,
             'Input THEN still connected after connecting ELSE');
       }
     }
     function connectInputsAndCheckConnections(
         block, thenInput, elseInput, opt_parent) {
       connectThenInputAndCheckConnections(block, thenInput, null, opt_parent);
-      connectElseInputAndCheckConnections(block, elseInput, thenInput, opt_parent);
+      connectElseInputAndCheckConnections(
+          block, elseInput, thenInput, opt_parent);
     }
     setup(function() {
       this.block = this.workspace.newBlock('logic_ternary');
@@ -165,7 +172,8 @@ suite('Logic ternary', function() {
         connectInputsAndCheckConnections(this.block, string, number, parent);
       });
       test('Attach inputs different types with permissive parent', function() {
-        const parent = this.workspace.newBlock('text_length');  // Allows String or Array
+        const parent =
+            this.workspace.newBlock('text_length');  // Allows String or Array
 
         connectParentAndCheckConnections(this.block, parent, 'VALUE');
 
@@ -175,7 +183,8 @@ suite('Logic ternary', function() {
         connectInputsAndCheckConnections(this.block, string, array, parent);
       });
       test('Attach mismatch type to then causes break with parent', function() {
-        const parent = this.workspace.newBlock('text_length');  // Allows String or Array
+        const parent =
+            this.workspace.newBlock('text_length');  // Allows String or Array
 
         connectParentAndCheckConnections(this.block, parent, 'VALUE');
 
@@ -186,11 +195,12 @@ suite('Logic ternary', function() {
 
         // Adding mismatching number.
         connectThenInputAndCheckConnections(this.block, number, string);
-        chai.assert.equal(this.block.getRootBlock(), this.block,
-            'Disconnected from parent');
+        chai.assert.equal(
+            this.block.getRootBlock(), this.block, 'Disconnected from parent');
       });
       test('Attach mismatch type to else causes break with parent', function() {
-        const parent = this.workspace.newBlock('text_length');  // Allows String or Array
+        const parent =
+            this.workspace.newBlock('text_length');  // Allows String or Array
 
         connectParentAndCheckConnections(this.block, parent, 'VALUE');
 
@@ -201,8 +211,8 @@ suite('Logic ternary', function() {
 
         // Adding mismatching number.
         connectElseInputAndCheckConnections(this.block, number, string);
-        chai.assert.equal(this.block.getRootBlock(), this.block,
-            'Disconnected from parent');
+        chai.assert.equal(
+            this.block.getRootBlock(), this.block, 'Disconnected from parent');
       });
     });
     suite('Attaching parent after inputs', function() {
@@ -235,8 +245,8 @@ suite('Logic ternary', function() {
         const parent = this.workspace.newBlock('text_trim');
         connectParentAndCheckConnections(
             this.block, parent, 'TEXT', null, string);
-        chai.assert.equal(number.getRootBlock(), number,
-            'Input THEN disconnected');
+        chai.assert.equal(
+            number.getRootBlock(), number, 'Input THEN disconnected');
       });
       test('Mismatch with else causes break with else', function() {
         const string = this.workspace.newBlock('text');
@@ -246,8 +256,8 @@ suite('Logic ternary', function() {
 
         const parent = this.workspace.newBlock('text_trim');
         connectParentAndCheckConnections(this.block, parent, 'TEXT', string);
-        chai.assert.equal(number.getRootBlock(), number,
-            'Input ELSE disconnected');
+        chai.assert.equal(
+            number.getRootBlock(), number, 'Input ELSE disconnected');
       });
     });
   });

@@ -342,11 +342,13 @@ suite('JSO Serialization', function() {
         const block = this.workspace.newBlock('row_block');
         block.getInput('INPUT').appendField(new ObjectStateField(''), 'FIELD');
         const jso = Blockly.serialization.blocks.save(block);
-        assertProperty(jso, 'fields', {'FIELD': {
-          'prop1': 'state1',
-          'prop2': 42,
-          'prop3': true,
-        }});
+        assertProperty(jso, 'fields', {
+          'FIELD': {
+            'prop1': 'state1',
+            'prop2': 42,
+            'prop3': true,
+          }
+        });
       });
 
       test('Array', function() {
@@ -408,19 +410,16 @@ suite('JSO Serialization', function() {
           const block =
               this.createBlockWithShadowAndChild(blockType, inputName);
           const jso = Blockly.serialization.blocks.save(block);
-          this.assertInput(
-              jso,
-              inputName,
-              {
-                'block': {
-                  'type': blockType,
-                  'id': 'id2',
-                },
-                'shadow': {
-                  'type': blockType,
-                  'id': 'test',
-                },
-              });
+          this.assertInput(jso, inputName, {
+            'block': {
+              'type': blockType,
+              'id': 'id2',
+            },
+            'shadow': {
+              'type': blockType,
+              'id': 'test',
+            },
+          });
         };
 
         this.assertNoChild = function(blockType, inputName) {
@@ -455,18 +454,15 @@ suite('JSO Serialization', function() {
           });
           block.getInputTargetBlock('TEXT').setFieldValue('new value', 'TEXT');
           const jso = Blockly.serialization.blocks.save(block);
-          this.assertInput(
-              jso,
-              'TEXT',
-              {
-                'shadow': {
-                  'type': 'text',
-                  'id': 'id',
-                  'fields': {
-                    'TEXT': 'new value',
-                  },
-                },
-              });
+          this.assertInput(jso, 'TEXT', {
+            'shadow': {
+              'type': 'text',
+              'id': 'id',
+              'fields': {
+                'TEXT': 'new value',
+              },
+            },
+          });
         });
 
         test('Overwritten', function() {
@@ -480,25 +476,22 @@ suite('JSO Serialization', function() {
           block.getInput('TEXT').connection.connect(
               childBlock.outputConnection);
           const jso = Blockly.serialization.blocks.save(block);
-          this.assertInput(
-              jso,
-              'TEXT',
-              {
-                'shadow': {
-                  'type': 'text',
-                  'id': 'id',
-                  'fields': {
-                    'TEXT': 'new value',
-                  },
-                },
-                'block': {
-                  'type': 'text',
-                  'id': 'id3',
-                  'fields': {
-                    'TEXT': '',
-                  },
-                },
-              });
+          this.assertInput(jso, 'TEXT', {
+            'shadow': {
+              'type': 'text',
+              'id': 'id',
+              'fields': {
+                'TEXT': 'new value',
+              },
+            },
+            'block': {
+              'type': 'text',
+              'id': 'id3',
+              'fields': {
+                'TEXT': '',
+              },
+            },
+          });
         });
       });
 
@@ -550,27 +543,23 @@ suite('JSO Serialization', function() {
             const block = this.workspace.newBlock('statement_block');
             const childBlock = this.workspace.newBlock('stack_block');
             const grandChildBlock = this.workspace.newBlock('stack_block');
-            block.getInput('NAME').connection
-                .connect(childBlock.previousConnection);
-            childBlock.nextConnection
-                .connect(grandChildBlock.previousConnection);
+            block.getInput('NAME').connection.connect(
+                childBlock.previousConnection);
+            childBlock.nextConnection.connect(
+                grandChildBlock.previousConnection);
             const jso = Blockly.serialization.blocks.save(block);
-            this.assertInput(
-                jso,
-                'NAME',
-                {
+            this.assertInput(jso, 'NAME', {
+              'block': {
+                'type': 'stack_block',
+                'id': 'id2',
+                'next': {
                   'block': {
                     'type': 'stack_block',
-                    'id': 'id2',
-                    'next': {
-                      'block': {
-                        'type': 'stack_block',
-                        'id': 'id4',
-                      },
-                    },
+                    'id': 'id4',
                   },
-                }
-            );
+                },
+              },
+            });
           });
         });
 
@@ -600,9 +589,8 @@ suite('JSO Serialization', function() {
 
           this.createNextWithShadow = function() {
             const block = this.workspace.newBlock('stack_block');
-            block.nextConnection.setShadowDom(
-                Blockly.utils.xml.textToDom(
-                    '<shadow type="stack_block" id="test"></shadow>'));
+            block.nextConnection.setShadowDom(Blockly.utils.xml.textToDom(
+                '<shadow type="stack_block" id="test"></shadow>'));
             return block;
           };
 
@@ -610,9 +598,8 @@ suite('JSO Serialization', function() {
             const block = this.workspace.newBlock('stack_block');
             const childBlock = this.workspace.newBlock('stack_block');
             block.nextConnection.connect(childBlock.previousConnection);
-            block.nextConnection.setShadowDom(
-                Blockly.utils.xml.textToDom(
-                    '<shadow type="stack_block" id="test"></shadow>'));
+            block.nextConnection.setShadowDom(Blockly.utils.xml.textToDom(
+                '<shadow type="stack_block" id="test"></shadow>'));
             return block;
           };
         });
@@ -620,8 +607,7 @@ suite('JSO Serialization', function() {
         suite('With serialization', function() {
           test('Child', function() {
             const block = this.createNextWithChild();
-            const jso =
-                Blockly.serialization.blocks.save(block);
+            const jso = Blockly.serialization.blocks.save(block);
             chai.assert.deepInclude(
                 jso['next'], {'block': {'type': 'stack_block', 'id': 'id2'}});
           });
@@ -636,18 +622,16 @@ suite('JSO Serialization', function() {
           test('Overwritten shadow', function() {
             const block = this.createNextWithShadowAndChild();
             const jso = Blockly.serialization.blocks.save(block);
-            chai.assert.deepInclude(
-                jso['next'],
-                {
-                  'block': {
-                    'type': 'stack_block',
-                    'id': 'id2',
-                  },
-                  'shadow': {
-                    'type': 'stack_block',
-                    'id': 'test',
-                  },
-                });
+            chai.assert.deepInclude(jso['next'], {
+              'block': {
+                'type': 'stack_block',
+                'id': 'id2',
+              },
+              'shadow': {
+                'type': 'stack_block',
+                'id': 'test',
+              },
+            });
           });
 
           test('Next block with inputs', function() {
@@ -655,26 +639,23 @@ suite('JSO Serialization', function() {
             const childBlock = this.workspace.newBlock('statement_block');
             const grandChildBlock = this.workspace.newBlock('stack_block');
             block.nextConnection.connect(childBlock.previousConnection);
-            childBlock.getInput('NAME').connection
-                .connect(grandChildBlock.previousConnection);
+            childBlock.getInput('NAME').connection.connect(
+                grandChildBlock.previousConnection);
             const jso = Blockly.serialization.blocks.save(block);
-            chai.assert.deepInclude(
-                jso['next'],
-                {
-                  'block': {
-                    'type': 'statement_block',
-                    'id': 'id2',
-                    'inputs': {
-                      'NAME': {
-                        'block': {
-                          'type': 'stack_block',
-                          'id': 'id4',
-                        },
-                      },
+            chai.assert.deepInclude(jso['next'], {
+              'block': {
+                'type': 'statement_block',
+                'id': 'id2',
+                'inputs': {
+                  'NAME': {
+                    'block': {
+                      'type': 'stack_block',
+                      'id': 'id4',
                     },
                   },
-                }
-            );
+                },
+              },
+            });
           });
         });
 
@@ -857,8 +838,8 @@ suite('JSO Serialization', function() {
       test(
           'if the procedure has return types, returnTypes is the array',
           function() {
-            const procedureModel = new MockProcedureModel()
-                .setReturnTypes(['a type']);
+            const procedureModel =
+                new MockProcedureModel().setReturnTypes(['a type']);
             this.procedureMap.add(procedureModel);
             const jso = this.serializer.save(this.workspace);
             const procedure = jso[0];
@@ -897,7 +878,7 @@ suite('JSO Serialization', function() {
               const jso = this.serializer.save(this.workspace);
               const parameter = jso[0]['parameters'][0];
               assertNoProperty(parameter, 'types');
-             });
+            });
 
         test('if the parameter has types, types is an array', function() {
           const parameterModel =

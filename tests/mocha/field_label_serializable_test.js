@@ -72,8 +72,8 @@ suite('Label Serializable Fields', function() {
       invalidValueTestCases, validTestCaseAssertField, assertFieldDefault);
 
   runFromJsonSuiteTests(
-      Blockly.FieldLabelSerializable, validValueTestCases, invalidValueTestCases,
-      validTestCaseAssertField, assertFieldDefault);
+      Blockly.FieldLabelSerializable, validValueTestCases,
+      invalidValueTestCases, validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {
     suite('Empty -> New Value', function() {
@@ -105,24 +105,24 @@ suite('Label Serializable Fields', function() {
 
   suite('Customizations', function() {
     function assertHasClass(labelField, cssClass) {
-      labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-          Blockly.utils.Svg.G, {}, null);
+      labelField.fieldGroup_ =
+          Blockly.utils.dom.createSvgElement(Blockly.utils.Svg.G, {}, null);
       labelField.constants_ = {
         FIELD_TEXT_BASELINE_Y: 13,
       };
       labelField.initView();
-      chai.assert.isTrue(Blockly.utils.dom.hasClass(
-          labelField.textElement_, cssClass));
+      chai.assert.isTrue(
+          Blockly.utils.dom.hasClass(labelField.textElement_, cssClass));
     }
     function assertDoesNotHaveClass(labelField, cssClass) {
-      labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-          Blockly.utils.Svg.G, {}, null);
+      labelField.fieldGroup_ =
+          Blockly.utils.dom.createSvgElement(Blockly.utils.Svg.G, {}, null);
       labelField.constants_ = {
         FIELD_TEXT_BASELINE_Y: 13,
       };
       labelField.initView();
-      chai.assert.isFalse(Blockly.utils.dom.hasClass(
-          labelField.textElement_, cssClass));
+      chai.assert.isFalse(
+          Blockly.utils.dom.hasClass(labelField.textElement_, cssClass));
     }
     test('JS Constructor', function() {
       const field = new Blockly.FieldLabelSerializable('text', 'testClass');
@@ -162,16 +162,16 @@ suite('Label Serializable Fields', function() {
     suite('setClass', function() {
       test('setClass', function() {
         const field = new Blockly.FieldLabelSerializable();
-        field.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-            Blockly.utils.Svg.G, {}, null);
+        field.fieldGroup_ =
+            Blockly.utils.dom.createSvgElement(Blockly.utils.Svg.G, {}, null);
         field.constants_ = {
           FIELD_TEXT_BASELINE_Y: 13,
         };
         field.initView();
         field.setClass('testClass');
         // Don't call assertHasClass b/c we don't want to re-initialize.
-        chai.assert.isTrue(Blockly.utils.dom.hasClass(
-            field.textElement_, 'testClass'));
+        chai.assert.isTrue(
+            Blockly.utils.dom.hasClass(field.textElement_, 'testClass'));
       });
       test('setClass Before Initialization', function() {
         const field = new Blockly.FieldLabelSerializable();
@@ -184,8 +184,8 @@ suite('Label Serializable Fields', function() {
         });
         assertHasClass(field, 'testClass');
         field.setClass(null);
-        chai.assert.isFalse(Blockly.utils.dom.hasClass(
-            field.textElement_, 'testClass'));
+        chai.assert.isFalse(
+            Blockly.utils.dom.hasClass(field.textElement_, 'testClass'));
       });
     });
   });

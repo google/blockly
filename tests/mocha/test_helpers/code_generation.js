@@ -55,7 +55,8 @@ export class CodeGenerationTestSuite {
    */
   constructor() {
     /**
-     * @type {!Blockly.CodeGenerator} The generator to use for running test cases.
+     * @type {!Blockly.CodeGenerator} The generator to use for running test
+     *     cases.
      */
     this.generator;
   }
@@ -86,7 +87,8 @@ const createCodeGenerationTestFn_ = (generator) => {
         }
       }
       const assertFunc = (typeof testCase.expectedCode === 'string') ?
-          chai.assert.equal : chai.assert.match;
+          chai.assert.equal :
+          chai.assert.match;
       assertFunc(code, testCase.expectedCode);
       if (!testCase.useWorkspaceToCode &&
           testCase.expectedInnerOrder !== undefined) {

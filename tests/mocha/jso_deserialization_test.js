@@ -38,10 +38,8 @@ suite('JSO Deserialization', function() {
         };
         Blockly.serialization.workspaces.load(state, this.workspace);
         assertEventFired(
-            this.eventsFireStub,
-            Blockly.Events.FinishedLoading,
-            {type: eventUtils.FINISHED_LOADING},
-            this.workspace.id);
+            this.eventsFireStub, Blockly.Events.FinishedLoading,
+            {type: eventUtils.FINISHED_LOADING}, this.workspace.id);
       });
 
       test('Explicit group', function() {
@@ -127,7 +125,8 @@ suite('JSO Deserialization', function() {
             },
           ],
         };
-        Blockly.serialization.workspaces.load(state, this.workspace, {recordUndo: true});
+        Blockly.serialization.workspaces.load(
+            state, this.workspace, {recordUndo: true});
         assertEventFired(
             this.eventsFireStub, Blockly.Events.VarCreate, {
               'varName': 'test',
@@ -241,11 +240,9 @@ suite('JSO Deserialization', function() {
           };
           Blockly.serialization.workspaces.load(state, this.workspace);
           assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.BlockCreate,
+              this.eventsFireStub, Blockly.Events.BlockCreate,
               {'recordUndo': false, "type": eventUtils.BLOCK_CREATE},
-              this.workspace.id,
-              'testId');
+              this.workspace.id, 'testId');
         });
 
         test('Record undo', function() {
@@ -261,13 +258,12 @@ suite('JSO Deserialization', function() {
               ],
             },
           };
-          Blockly.serialization.workspaces.load(state, this.workspace, {'recordUndo': true});
+          Blockly.serialization.workspaces.load(
+              state, this.workspace, {'recordUndo': true});
           assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.BlockCreate,
+              this.eventsFireStub, Blockly.Events.BlockCreate,
               {'recordUndo': true, "type": eventUtils.BLOCK_CREATE},
-              this.workspace.id,
-              'testId');
+              this.workspace.id, 'testId');
         });
 
         test('Grouping', function() {
@@ -286,11 +282,9 @@ suite('JSO Deserialization', function() {
           Blockly.Events.setGroup('my group');
           Blockly.serialization.workspaces.load(state, this.workspace);
           assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.BlockCreate,
+              this.eventsFireStub, Blockly.Events.BlockCreate,
               {'group': 'my group', "type": eventUtils.BLOCK_CREATE},
-              this.workspace.id,
-              'testId');
+              this.workspace.id, 'testId');
         });
 
         test('Multiple blocks grouped', function() {
@@ -315,7 +309,8 @@ suite('JSO Deserialization', function() {
           Blockly.serialization.workspaces.load(state, this.workspace);
           const calls = this.eventsFireStub.getCalls();
           const group = calls[0].args[0].group;
-          chai.assert.isTrue(calls.every((call) => call.args[0].group == group));
+          chai.assert.isTrue(
+              calls.every((call) => call.args[0].group == group));
         });
 
         test('With children', function() {
@@ -347,11 +342,8 @@ suite('JSO Deserialization', function() {
           };
           Blockly.serialization.workspaces.load(state, this.workspace);
           assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.BlockCreate,
-              {type: eventUtils.BLOCK_CREATE},
-              this.workspace.id,
-              'id1');
+              this.eventsFireStub, Blockly.Events.BlockCreate,
+              {type: eventUtils.BLOCK_CREATE}, this.workspace.id, 'id1');
         });
       });
 
@@ -365,11 +357,8 @@ suite('JSO Deserialization', function() {
           };
           Blockly.serialization.blocks.append(state, this.workspace);
           assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.BlockCreate,
-              {'recordUndo': false},
-              this.workspace.id,
-              'testId');
+              this.eventsFireStub, Blockly.Events.BlockCreate,
+              {'recordUndo': false}, this.workspace.id, 'testId');
         });
 
         test('Record undo', function() {
@@ -382,11 +371,9 @@ suite('JSO Deserialization', function() {
           Blockly.serialization.blocks.append(
               state, this.workspace, {'recordUndo': true});
           assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.BlockCreate,
+              this.eventsFireStub, Blockly.Events.BlockCreate,
               {'recordUndo': true, "type": eventUtils.BLOCK_CREATE},
-              this.workspace.id,
-              'testId');
+              this.workspace.id, 'testId');
         });
 
         test('Grouping', function() {
@@ -399,11 +386,9 @@ suite('JSO Deserialization', function() {
           Blockly.Events.setGroup('my group');
           Blockly.serialization.blocks.append(state, this.workspace);
           assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.BlockCreate,
+              this.eventsFireStub, Blockly.Events.BlockCreate,
               {'group': 'my group', "type": eventUtils.BLOCK_CREATE},
-              this.workspace.id,
-              'testId');
+              this.workspace.id, 'testId');
         });
       });
     });
@@ -628,8 +613,8 @@ suite('JSO Deserialization', function() {
   });
 
   test('Priority', function() {
-    const blocksSerializer = Blockly.registry.getClass(
-        Blockly.registry.Type.SERIALIZER, 'blocks');
+    const blocksSerializer =
+        Blockly.registry.getClass(Blockly.registry.Type.SERIALIZER, 'blocks');
     const variablesSerializer = Blockly.registry.getClass(
         Blockly.registry.Type.SERIALIZER, 'variables');
 
@@ -671,16 +656,14 @@ suite('JSO Deserialization', function() {
     Blockly.serialization.registry.register('blocks', blocksSerializer);
     Blockly.serialization.registry.register('variables', variablesSerializer);
 
-    chai.assert.deepEqual(
-        calls,
-        [
-          'third-clear',
-          'second-clear',
-          'first-clear',
-          'first-load',
-          'second-load',
-          'third-load',
-        ]);
+    chai.assert.deepEqual(calls, [
+      'third-clear',
+      'second-clear',
+      'first-clear',
+      'first-load',
+      'second-load',
+      'third-load',
+    ]);
   });
 
   suite('Extra state', function() {
@@ -688,7 +671,7 @@ suite('JSO Deserialization', function() {
     // for old xml hooks.
     test('Xml hooks', function() {
       Blockly.Blocks['test_block'] = {
-        init: function() { },
+        init: function() {},
 
         mutationToDom: function() {
           const container = Blockly.utils.xml.createElement('mutation');
@@ -805,9 +788,9 @@ suite('JSO Deserialization', function() {
     }
 
     setup(function() {
-      this.procedureSerializer = new
-          Blockly.serialization.procedures.ProcedureSerializer(
-            MockProcedureModel, MockParameterModel);
+      this.procedureSerializer =
+          new Blockly.serialization.procedures.ProcedureSerializer(
+              MockProcedureModel, MockParameterModel);
       this.procedureMap = this.workspace.getProcedureMap();
     });
 
@@ -830,8 +813,7 @@ suite('JSO Deserialization', function() {
         chai.assert.isNotNull(
             procedureModel, 'Expected a procedure model to exist');
         chai.assert.equal(
-            procedureModel.getId(),
-            'test id',
+            procedureModel.getId(), 'test id',
             'Expected the procedure model ID to match the serialized ID');
       });
 
@@ -848,8 +830,7 @@ suite('JSO Deserialization', function() {
         chai.assert.isNotNull(
             procedureModel, 'Expected a procedure model to exist');
         chai.assert.equal(
-            procedureModel.getName(),
-            'test name',
+            procedureModel.getName(), 'test name',
             'Expected the procedure model name to match the serialized name');
       });
     });
@@ -872,47 +853,50 @@ suite('JSO Deserialization', function() {
             'Expected the procedure model types to be null');
       });
 
-      test('if the return type property is an empty array it is assigned', function() {
-        const jso = {
-          'id': 'test id',
-          'name': 'test name',
-          'returnTypes': [],
-        };
+      test(
+          'if the return type property is an empty array it is assigned',
+          function() {
+            const jso = {
+              'id': 'test id',
+              'name': 'test name',
+              'returnTypes': [],
+            };
 
-        this.procedureSerializer.load([jso], this.workspace);
+            this.procedureSerializer.load([jso], this.workspace);
 
-        const procedureModel = this.procedureMap.getProcedures()[0];
-        chai.assert.isNotNull(
-            procedureModel, 'Expected a procedure model to exist');
-        chai.assert.isArray(
-            procedureModel.getReturnTypes(),
-            'Expected the procedure model types to be an array');
-        chai.assert.isEmpty(
-            procedureModel.getReturnTypes(),
-            'Expected the procedure model types array to be empty');
-      });
+            const procedureModel = this.procedureMap.getProcedures()[0];
+            chai.assert.isNotNull(
+                procedureModel, 'Expected a procedure model to exist');
+            chai.assert.isArray(
+                procedureModel.getReturnTypes(),
+                'Expected the procedure model types to be an array');
+            chai.assert.isEmpty(
+                procedureModel.getReturnTypes(),
+                'Expected the procedure model types array to be empty');
+          });
 
-      test('if the return type property is a string array it is assigned', function() {
-        const jso = {
-          'id': 'test id',
-          'name': 'test name',
-          'returnTypes': ['test type 1', 'test type 2'],
-        };
+      test(
+          'if the return type property is a string array it is assigned',
+          function() {
+            const jso = {
+              'id': 'test id',
+              'name': 'test name',
+              'returnTypes': ['test type 1', 'test type 2'],
+            };
 
-        this.procedureSerializer.load([jso], this.workspace);
+            this.procedureSerializer.load([jso], this.workspace);
 
-        const procedureModel = this.procedureMap.getProcedures()[0];
-        chai.assert.isNotNull(
-            procedureModel, 'Expected a procedure model to exist');
-        chai.assert.isArray(
-            procedureModel.getReturnTypes(),
-            'Expected the procedure model types to be an array');
-        chai.assert.deepEqual(
-            procedureModel.getReturnTypes(),
-            ['test type 1', 'test type 2'],
-            'Expected the procedure model types array to be match the ' +
-            'serialized array');
-      });
+            const procedureModel = this.procedureMap.getProcedures()[0];
+            chai.assert.isNotNull(
+                procedureModel, 'Expected a procedure model to exist');
+            chai.assert.isArray(
+                procedureModel.getReturnTypes(),
+                'Expected the procedure model types to be an array');
+            chai.assert.deepEqual(
+                procedureModel.getReturnTypes(), ['test type 1', 'test type 2'],
+                'Expected the procedure model types array to be match the ' +
+                    'serialized array');
+          });
     });
 
     suite('parameters', function() {
@@ -937,8 +921,7 @@ suite('JSO Deserialization', function() {
           chai.assert.isNotNull(
               parameterModel, 'Expected a parameter model to exist');
           chai.assert.equal(
-              parameterModel.getId(),
-              'test id',
+              parameterModel.getId(), 'test id',
               'Expected the parameter model ID to match the serialized ID');
         });
 
@@ -962,8 +945,7 @@ suite('JSO Deserialization', function() {
           chai.assert.isNotNull(
               parameterModel, 'Expected a parameter model to exist');
           chai.assert.equal(
-              parameterModel.getName(),
-              'test name',
+              parameterModel.getName(), 'test name',
               'Expected the parameter model name to match the serialized name');
         });
       });
@@ -982,11 +964,9 @@ suite('JSO Deserialization', function() {
             ],
           };
 
-          chai.assert.doesNotThrow(
-            () => {
-              this.procedureMap.getProcedures()[0].getParameters()[0];
-            },
-            'Expected the deserializer to skip the non-existant type property');
+          chai.assert.doesNotThrow(() => {
+            this.procedureMap.getProcedures()[0].getParameters()[0];
+          }, 'Expected the deserializer to skip the non-existant type property');
         });
 
         test('if the type property exists, it is assigned', function() {
@@ -1010,8 +990,7 @@ suite('JSO Deserialization', function() {
           chai.assert.isNotNull(
               parameterModel, 'Expected a parameter model to exist');
           chai.assert.deepEqual(
-              parameterModel.getTypes(),
-              ['test type 1', 'test type 2'],
+              parameterModel.getTypes(), ['test type 1', 'test type 2'],
               'Expected the parameter model types to match the serialized types');
         });
       });

@@ -19,9 +19,9 @@ suite('Inputs', function() {
     }]);
 
     this.workspace = Blockly.inject('blocklyDiv');
-    this.block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
-        '<block type="empty_block"/>'
-    ), this.workspace);
+    this.block = Blockly.Xml.domToBlock(
+        Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
+        this.workspace);
 
     this.renderStub = sinon.stub(this.block, 'queueRender');
     this.bumpNeighboursStub = sinon.stub(this.block, 'bumpNeighbours');
@@ -117,34 +117,28 @@ suite('Inputs', function() {
         chai.assert.deepEqual(this.dummy.fieldRow, [prefix, field, suffix]);
       });
       test('Dropdown - Prefix', function() {
-        const field = new Blockly.FieldDropdown(
-            [
-              ['prefix option1', 'OPTION1'],
-              ['prefix option2', 'OPTION2'],
-            ]
-        );
+        const field = new Blockly.FieldDropdown([
+          ['prefix option1', 'OPTION1'],
+          ['prefix option2', 'OPTION2'],
+        ]);
 
         this.dummy.appendField(field);
         chai.assert.equal(this.dummy.fieldRow.length, 2);
       });
       test('Dropdown - Suffix', function() {
-        const field = new Blockly.FieldDropdown(
-            [
-              ['option1 suffix', 'OPTION1'],
-              ['option2 suffix', 'OPTION2'],
-            ]
-        );
+        const field = new Blockly.FieldDropdown([
+          ['option1 suffix', 'OPTION1'],
+          ['option2 suffix', 'OPTION2'],
+        ]);
 
         this.dummy.appendField(field);
         chai.assert.equal(this.dummy.fieldRow.length, 2);
       });
       test('Dropdown - Prefix and Suffix', function() {
-        const field = new Blockly.FieldDropdown(
-            [
-              ['prefix option1 suffix', 'OPTION1'],
-              ['prefix option2 suffix', 'OPTION2'],
-            ]
-        );
+        const field = new Blockly.FieldDropdown([
+          ['prefix option1 suffix', 'OPTION1'],
+          ['prefix option2 suffix', 'OPTION2'],
+        ]);
 
         this.dummy.appendField(field);
         chai.assert.equal(this.dummy.fieldRow.length, 3);

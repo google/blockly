@@ -74,7 +74,8 @@ export function addBlockTypeToCleanup(sharedCleanupObj, blockType) {
  * @private
  */
 function wrapDefineBlocksWithJsonArrayWithCleanup_(sharedCleanupObj) {
-  const stub = sinon.stub(Blockly.common.TEST_ONLY, 'defineBlocksWithJsonArrayInternal');
+  const stub =
+      sinon.stub(Blockly.common.TEST_ONLY, 'defineBlocksWithJsonArrayInternal');
   stub.callsFake(function(jsonArray) {
     if (jsonArray) {
       jsonArray.forEach((jsonBlock) => {
@@ -161,7 +162,8 @@ export function sharedTestTeardown() {
       // (i.e. a previous test added an event to the queue on a timeout that
       // did not use a stubbed clock).
       eventUtils.TEST_ONLY.FIRE_QUEUE.length = 0;
-      console.warn('"' + testRef.fullTitle() +
+      console.warn(
+          '"' + testRef.fullTitle() +
           '" needed cleanup of Blockly.Events.TEST_ONLY.FIRE_QUEUE. This may ' +
           'indicate leakage from an earlier test');
     }
@@ -184,9 +186,9 @@ export function sharedTestTeardown() {
 }
 
 /**
- * Creates stub for Blockly.utils.idGenerator.genUid that returns the provided id or ids.
- * Recommended to also assert that the stub is called the expected number of
- * times.
+ * Creates stub for Blockly.utils.idGenerator.genUid that returns the provided
+ * id or ids. Recommended to also assert that the stub is called the expected
+ * number of times.
  * @param {string|!Array<string>} returnIds The return values to use for the
  *    created stub. If a single value is passed, then the stub always returns
  *    that value.

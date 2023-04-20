@@ -15,8 +15,7 @@ import {simulateClick} from './test_helpers/user_input.js';
 suite("Zoom Controls", function() {
   setup(function() {
     sharedTestSetup.call(this);
-    this.workspace = Blockly.inject('blocklyDiv',
-        {'zoom': {'controls': true}});
+    this.workspace = Blockly.inject('blocklyDiv', {'zoom': {'controls': true}});
     this.zoomControls = this.workspace.zoomControls_;
   });
   teardown(function() {
@@ -34,7 +33,8 @@ suite("Zoom Controls", function() {
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.Click,
-          {targetType: 'zoom_controls', type: eventUtils.CLICK}, this.workspace.id, undefined);
+          {targetType: 'zoom_controls', type: eventUtils.CLICK},
+          this.workspace.id, undefined);
       assertEventNotFired(
           this.eventsFireStub, Blockly.Events.Click,
           {targetType: 'workspace', type: eventUtils.CLICK});
@@ -45,7 +45,8 @@ suite("Zoom Controls", function() {
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.Click,
-          {targetType: 'zoom_controls', type: eventUtils.CLICK}, this.workspace.id, undefined);
+          {targetType: 'zoom_controls', type: eventUtils.CLICK},
+          this.workspace.id, undefined);
       assertEventNotFired(
           this.eventsFireStub, Blockly.Events.Click,
           {targetType: 'workspace', type: eventUtils.CLICK});
@@ -56,7 +57,8 @@ suite("Zoom Controls", function() {
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.Click,
-          {targetType: 'zoom_controls', type: eventUtils.CLICK}, this.workspace.id, undefined);
+          {targetType: 'zoom_controls', type: eventUtils.CLICK},
+          this.workspace.id, undefined);
       assertEventNotFired(
           this.eventsFireStub, Blockly.Events.Click,
           {targetType: 'workspace', type: eventUtils.CLICK});

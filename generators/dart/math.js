@@ -175,13 +175,12 @@ Dart['math_number_property'] = function(block) {
   };
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
-  const numberToCheck = Dart.valueToCode(block, 'NUMBER_TO_CHECK',
-      inputOrder) || '0';
+  const numberToCheck =
+      Dart.valueToCode(block, 'NUMBER_TO_CHECK', inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    Dart.definitions_['import_dart_math'] =
-        'import \'dart:math\' as Math;';
+    Dart.definitions_['import_dart_math'] = 'import \'dart:math\' as Math;';
     const functionName = Dart.provideFunction_('math_isPrime', `
 bool ${Dart.FUNCTION_NAME_PLACEHOLDER_}(n) {
   // https://en.wikipedia.org/wiki/Primality_test#Naive_methods
@@ -204,8 +203,8 @@ bool ${Dart.FUNCTION_NAME_PLACEHOLDER_}(n) {
 `);
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = Dart.valueToCode(block, 'DIVISOR',
-        Dart.ORDER_MULTIPLICATIVE) || '0';
+    const divisor =
+        Dart.valueToCode(block, 'DIVISOR', Dart.ORDER_MULTIPLICATIVE) || '0';
     if (divisor === '0') {
       return ['false', Dart.ORDER_ATOMIC];
     }

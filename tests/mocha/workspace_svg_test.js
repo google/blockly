@@ -19,21 +19,23 @@ suite('WorkspaceSvg', function() {
     sharedTestSetup.call(this);
     const toolbox = document.getElementById('toolbox-categories');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-    Blockly.defineBlocksWithJsonArray([{
-      'type': 'simple_test_block',
-      'message0': 'simple test block',
-      'output': null,
-    },
-    {
-      'type': 'test_val_in',
-      'message0': 'test in %1',
-      'args0': [
-        {
-          'type': 'input_value',
-          'name': 'NAME',
-        },
-      ],
-    }]);
+    Blockly.defineBlocksWithJsonArray([
+      {
+        'type': 'simple_test_block',
+        'message0': 'simple test block',
+        'output': null,
+      },
+      {
+        'type': 'test_val_in',
+        'message0': 'test in %1',
+        'args0': [
+          {
+            'type': 'input_value',
+            'name': 'NAME',
+          },
+        ],
+      }
+    ]);
   });
 
   teardown(function() {
@@ -52,22 +54,22 @@ suite('WorkspaceSvg', function() {
         '  </block>' +
         '</xml>');
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-    chai.assert.equal(this.workspace.getAllBlocks(false).length, 1,
-        'Block count');
+    chai.assert.equal(
+        this.workspace.getAllBlocks(false).length, 1, 'Block count');
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-    chai.assert.equal(this.workspace.getAllBlocks(false).length, 2,
-        'Block count');
+    chai.assert.equal(
+        this.workspace.getAllBlocks(false).length, 2, 'Block count');
     const blocks = this.workspace.getAllBlocks(false);
-    chai.assert.equal(blocks[0].getRelativeToSurfaceXY().x, 21,
-        'Block 1 position x');
-    chai.assert.equal(blocks[0].getRelativeToSurfaceXY().y, 23,
-        'Block 1 position y');
-    chai.assert.equal(blocks[1].getRelativeToSurfaceXY().x, 21,
-        'Block 2 position x');
+    chai.assert.equal(
+        blocks[0].getRelativeToSurfaceXY().x, 21, 'Block 1 position x');
+    chai.assert.equal(
+        blocks[0].getRelativeToSurfaceXY().y, 23, 'Block 1 position y');
+    chai.assert.equal(
+        blocks[1].getRelativeToSurfaceXY().x, 21, 'Block 2 position x');
     // Y separation value defined in appendDomToWorkspace as 10
-    chai.assert.equal(blocks[1].getRelativeToSurfaceXY().y,
-        23 + blocks[0].getHeightWidth().height + 10,
-        'Block 2 position y');
+    chai.assert.equal(
+        blocks[1].getRelativeToSurfaceXY().y,
+        23 + blocks[0].getHeightWidth().height + 10, 'Block 2 position y');
   });
 
   test('Replacing shadow disposes of old shadow', function() {
@@ -109,14 +111,16 @@ suite('WorkspaceSvg', function() {
       }.bind(this), 'Existing toolbox is null.  Can\'t create new toolbox.');
     });
     test('Existing toolbox has no categories', function() {
-      sinon.stub(Blockly.utils.toolbox.TEST_ONLY, 'hasCategoriesInternal').returns(true);
+      sinon.stub(Blockly.utils.toolbox.TEST_ONLY, 'hasCategoriesInternal')
+          .returns(true);
       this.workspace.toolbox_ = null;
       chai.assert.throws(function() {
         this.workspace.updateToolbox({'contents': []});
       }.bind(this), 'Existing toolbox has no categories.  Can\'t change mode.');
     });
     test('Existing toolbox has categories', function() {
-      sinon.stub(Blockly.utils.toolbox.TEST_ONLY, 'hasCategoriesInternal').returns(false);
+      sinon.stub(Blockly.utils.toolbox.TEST_ONLY, 'hasCategoriesInternal')
+          .returns(false);
       this.workspace.flyout_ = null;
       chai.assert.throws(function() {
         this.workspace.updateToolbox({'contents': []});
@@ -131,13 +135,12 @@ suite('WorkspaceSvg', function() {
     }
     function assertSpyFiredViewportEvent(spy, workspace, expectedProperties) {
       assertEventFired(
-          spy, Blockly.Events.ViewportChange, expectedProperties,
-          workspace.id);
-      assertEventFired(spy, Blockly.Events.ViewportChange, expectedProperties,
-          workspace.id);
+          spy, Blockly.Events.ViewportChange, expectedProperties, workspace.id);
+      assertEventFired(
+          spy, Blockly.Events.ViewportChange, expectedProperties, workspace.id);
     }
-    function assertViewportEventFired(eventsFireStub, changeListenerSpy,
-        workspace, expectedEventCount = 1) {
+    function assertViewportEventFired(
+        eventsFireStub, changeListenerSpy, workspace, expectedEventCount = 1) {
       const metrics = workspace.getMetrics();
       const expectedProperties = {
         scale: workspace.scale,
@@ -153,8 +156,9 @@ suite('WorkspaceSvg', function() {
       sinon.assert.callCount(changeListenerSpy, expectedEventCount);
       sinon.assert.callCount(eventsFireStub, expectedEventCount);
     }
-    function runViewportEventTest(eventTriggerFunc, eventsFireStub,
-        changeListenerSpy, workspace, clock, expectedEventCount = 1) {
+    function runViewportEventTest(
+        eventTriggerFunc, eventsFireStub, changeListenerSpy, workspace, clock,
+        expectedEventCount = 1) {
       clock.runAll();
       resetEventHistory(eventsFireStub, changeListenerSpy);
       eventTriggerFunc();
@@ -171,37 +175,37 @@ suite('WorkspaceSvg', function() {
 
     suite('zoom', function() {
       test('setScale', function() {
-        runViewportEventTest(() => this.workspace.setScale(2),
-            this.eventsFireStub, this.changeListenerSpy, this.workspace,
-            this.clock);
+        runViewportEventTest(
+            () => this.workspace.setScale(2), this.eventsFireStub,
+            this.changeListenerSpy, this.workspace, this.clock);
       });
       test('zoom(50, 50, 1)', function() {
-        runViewportEventTest(() => this.workspace.zoom(50, 50, 1),
-            this.eventsFireStub, this.changeListenerSpy, this.workspace,
-            this.clock);
+        runViewportEventTest(
+            () => this.workspace.zoom(50, 50, 1), this.eventsFireStub,
+            this.changeListenerSpy, this.workspace, this.clock);
       });
       test('zoom(50, 50, -1)', function() {
-        runViewportEventTest(() => this.workspace.zoom(50, 50, -1),
-            this.eventsFireStub, this.changeListenerSpy, this.workspace,
-            this.clock);
+        runViewportEventTest(
+            () => this.workspace.zoom(50, 50, -1), this.eventsFireStub,
+            this.changeListenerSpy, this.workspace, this.clock);
       });
       test('zoomCenter(1)', function() {
-        runViewportEventTest(() => this.workspace.zoomCenter(1),
-            this.eventsFireStub, this.changeListenerSpy, this.workspace,
-            this.clock);
+        runViewportEventTest(
+            () => this.workspace.zoomCenter(1), this.eventsFireStub,
+            this.changeListenerSpy, this.workspace, this.clock);
       });
       test('zoomCenter(-1)', function() {
-        runViewportEventTest(() => this.workspace.zoomCenter(-1),
-            this.eventsFireStub, this.changeListenerSpy, this.workspace,
-            this.clock);
+        runViewportEventTest(
+            () => this.workspace.zoomCenter(-1), this.eventsFireStub,
+            this.changeListenerSpy, this.workspace, this.clock);
       });
       test('zoomToFit', function() {
         const block = this.workspace.newBlock('stack_block');
         block.initSvg();
         block.render();
-        runViewportEventTest(() => this.workspace.zoomToFit(),
-            this.eventsFireStub, this.changeListenerSpy, this.workspace,
-            this.clock);
+        runViewportEventTest(
+            () => this.workspace.zoomToFit(), this.eventsFireStub,
+            this.changeListenerSpy, this.workspace, this.clock);
       });
     });
     suite('scroll', function() {
@@ -209,19 +213,19 @@ suite('WorkspaceSvg', function() {
         const block = this.workspace.newBlock('stack_block');
         block.initSvg();
         block.render();
-        runViewportEventTest(() => this.workspace.centerOnBlock(block.id),
-            this.eventsFireStub, this.changeListenerSpy, this.workspace,
-            this.clock);
+        runViewportEventTest(
+            () => this.workspace.centerOnBlock(block.id), this.eventsFireStub,
+            this.changeListenerSpy, this.workspace, this.clock);
       });
       test('scroll', function() {
-        runViewportEventTest(() => this.workspace.scroll(50, 50),
-            this.eventsFireStub, this.changeListenerSpy, this.workspace,
-            this.clock);
+        runViewportEventTest(
+            () => this.workspace.scroll(50, 50), this.eventsFireStub,
+            this.changeListenerSpy, this.workspace, this.clock);
       });
       test('scrollCenter', function() {
-        runViewportEventTest(() => this.workspace.scrollCenter(),
-            this.eventsFireStub, this.changeListenerSpy, this.workspace,
-            this.clock);
+        runViewportEventTest(
+            () => this.workspace.scrollCenter(), this.eventsFireStub,
+            this.changeListenerSpy, this.workspace, this.clock);
       });
     });
     suite('Blocks triggering viewport changes', function() {
@@ -232,10 +236,12 @@ suite('WorkspaceSvg', function() {
         this.clock.runAll();
         resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
         // Expect 2 events, 1 move, 1 viewport
-        runViewportEventTest(() => {
-          block.moveBy(1000, 1000);
-        }, this.eventsFireStub, this.changeListenerSpy, this.workspace,
-        this.clock, 2);
+        runViewportEventTest(
+            () => {
+              block.moveBy(1000, 1000);
+            },
+            this.eventsFireStub, this.changeListenerSpy, this.workspace,
+            this.clock, 2);
       });
       test('domToWorkspace that doesn\'t trigger scroll', function() {
         // 4 blocks with space in center.
@@ -253,11 +259,14 @@ suite('WorkspaceSvg', function() {
         this.clock.runAll();
         resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
         // Add block in center of other blocks, not triggering scroll.
-        Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(
-            '<block type="controls_if" x="188" y="163"></block>'), this.workspace);
+        Blockly.Xml.domToWorkspace(
+            Blockly.utils.xml.textToDom(
+                '<block type="controls_if" x="188" y="163"></block>'),
+            this.workspace);
         this.clock.runAll();
         assertEventNotFired(
-            this.eventsFireStub, Blockly.Events.ViewportChange, {type: eventUtils.VIEWPORT_CHANGE});
+            this.eventsFireStub, Blockly.Events.ViewportChange,
+            {type: eventUtils.VIEWPORT_CHANGE});
         assertEventNotFired(
             this.changeListenerSpy, Blockly.Events.ViewportChange,
             {type: eventUtils.VIEWPORT_CHANGE});
@@ -287,23 +296,28 @@ suite('WorkspaceSvg', function() {
             this.changeListenerSpy, Blockly.Events.ViewportChange,
             {type: eventUtils.VIEWPORT_CHANGE});
       });
-      test.skip('domToWorkspace multiple blocks triggers one viewport event', function() {
-        // TODO: Un-skip after adding filtering for consecutive viewport events.
-        const addingMultipleBlocks = () => {
-          Blockly.Xml.domToWorkspace(
-              Blockly.utils.xml.textToDom(
-                  '<xml xmlns="https://developers.google.com/blockly/xml">' +
-                  '<block type="controls_if" x="88" y="88"></block>' +
-                  '<block type="controls_if" x="288" y="88"></block>' +
-                  '<block type="controls_if" x="88" y="238"></block>' +
-                  '<block type="controls_if" x="288" y="238"></block>' +
-                  '</xml>'),
-              this.workspace);
-        };
-        // Expect 10 events, 4 create, 4 move, 1 viewport, 1 finished loading
-        runViewportEventTest(addingMultipleBlocks, this.eventsFireStub,
-            this.changeListenerSpy, this.workspace, this.clock, 10);
-      });
+      test.skip(
+          'domToWorkspace multiple blocks triggers one viewport event',
+          function() {
+            // TODO: Un-skip after adding filtering for consecutive viewport
+            // events.
+            const addingMultipleBlocks = () => {
+              Blockly.Xml.domToWorkspace(
+                  Blockly.utils.xml.textToDom(
+                      '<xml xmlns="https://developers.google.com/blockly/xml">' +
+                      '<block type="controls_if" x="88" y="88"></block>' +
+                      '<block type="controls_if" x="288" y="88"></block>' +
+                      '<block type="controls_if" x="88" y="238"></block>' +
+                      '<block type="controls_if" x="288" y="238"></block>' +
+                      '</xml>'),
+                  this.workspace);
+            };
+            // Expect 10 events, 4 create, 4 move, 1 viewport, 1 finished
+            // loading
+            runViewportEventTest(
+                addingMultipleBlocks, this.eventsFireStub,
+                this.changeListenerSpy, this.workspace, this.clock, 10);
+          });
     });
   });
   suite('Workspace Base class', function() {

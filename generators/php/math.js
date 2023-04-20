@@ -152,9 +152,10 @@ PHP['math_number_property'] = function(block) {
     'PRIME': [null, null, PHP.ORDER_NONE, PHP.ORDER_FUNCTION_CALL],
   };
   const dropdownProperty = block.getFieldValue('PROPERTY');
-  const [prefix, suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
-  const numberToCheck = PHP.valueToCode(block, 'NUMBER_TO_CHECK',
-      inputOrder) || '0';
+  const [prefix, suffix, inputOrder, outputOrder] =
+      PROPERTIES[dropdownProperty];
+  const numberToCheck =
+      PHP.valueToCode(block, 'NUMBER_TO_CHECK', inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
@@ -180,11 +181,9 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($n) {
 `);
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = PHP.valueToCode(block, 'DIVISOR',
-        PHP.ORDER_MODULUS) || '0';
+    const divisor = PHP.valueToCode(block, 'DIVISOR', PHP.ORDER_MODULUS) || '0';
     if (divisor === '0') {
       return ['false', PHP.ORDER_ATOMIC];
-
     }
     code = numberToCheck + ' % ' + divisor + ' == 0';
   } else {

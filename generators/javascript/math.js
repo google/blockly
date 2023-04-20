@@ -19,8 +19,8 @@ const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
 JavaScript['math_number'] = function(block) {
   // Numeric value.
   const code = Number(block.getFieldValue('NUM'));
-  const order = code >= 0 ? JavaScript.ORDER_ATOMIC :
-              JavaScript.ORDER_UNARY_NEGATION;
+  const order =
+      code >= 0 ? JavaScript.ORDER_ATOMIC : JavaScript.ORDER_UNARY_NEGATION;
   return [code, order];
 };
 
@@ -55,8 +55,9 @@ JavaScript['math_single'] = function(block) {
   let arg;
   if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
-    arg = JavaScript.valueToCode(block, 'NUM',
-        JavaScript.ORDER_UNARY_NEGATION) || '0';
+    arg =
+        JavaScript.valueToCode(block, 'NUM', JavaScript.ORDER_UNARY_NEGATION) ||
+        '0';
     if (arg[0] === '-') {
       // --3 is not legal in JS.
       arg = ' ' + arg;
@@ -65,11 +66,10 @@ JavaScript['math_single'] = function(block) {
     return [code, JavaScript.ORDER_UNARY_NEGATION];
   }
   if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
-    arg = JavaScript.valueToCode(block, 'NUM',
-        JavaScript.ORDER_DIVISION) || '0';
+    arg =
+        JavaScript.valueToCode(block, 'NUM', JavaScript.ORDER_DIVISION) || '0';
   } else {
-    arg = JavaScript.valueToCode(block, 'NUM',
-        JavaScript.ORDER_NONE) || '0';
+    arg = JavaScript.valueToCode(block, 'NUM', JavaScript.ORDER_NONE) || '0';
   }
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
@@ -151,19 +151,19 @@ JavaScript['math_number_property'] = function(block) {
   const PROPERTIES = {
     'EVEN': [' % 2 === 0', JavaScript.ORDER_MODULUS, JavaScript.ORDER_EQUALITY],
     'ODD': [' % 2 === 1', JavaScript.ORDER_MODULUS, JavaScript.ORDER_EQUALITY],
-    'WHOLE': [' % 1 === 0', JavaScript.ORDER_MODULUS,
-        JavaScript.ORDER_EQUALITY],
-    'POSITIVE': [' > 0', JavaScript.ORDER_RELATIONAL,
-        JavaScript.ORDER_RELATIONAL],
-    'NEGATIVE': [' < 0', JavaScript.ORDER_RELATIONAL,
-        JavaScript.ORDER_RELATIONAL],
+    'WHOLE':
+        [' % 1 === 0', JavaScript.ORDER_MODULUS, JavaScript.ORDER_EQUALITY],
+    'POSITIVE':
+        [' > 0', JavaScript.ORDER_RELATIONAL, JavaScript.ORDER_RELATIONAL],
+    'NEGATIVE':
+        [' < 0', JavaScript.ORDER_RELATIONAL, JavaScript.ORDER_RELATIONAL],
     'DIVISIBLE_BY': [null, JavaScript.ORDER_MODULUS, JavaScript.ORDER_EQUALITY],
     'PRIME': [null, JavaScript.ORDER_NONE, JavaScript.ORDER_FUNCTION_CALL],
   };
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
-  const numberToCheck = JavaScript.valueToCode(block, 'NUMBER_TO_CHECK',
-      inputOrder) || '0';
+  const numberToCheck =
+      JavaScript.valueToCode(block, 'NUMBER_TO_CHECK', inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
@@ -189,8 +189,9 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(n) {
 `);
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = JavaScript.valueToCode(block, 'DIVISOR',
-        JavaScript.ORDER_MODULUS) || '0';
+    const divisor =
+        JavaScript.valueToCode(block, 'DIVISOR', JavaScript.ORDER_MODULUS) ||
+        '0';
     code = numberToCheck + ' % ' + divisor + ' === 0';
   } else {
     code = numberToCheck + suffix;
@@ -200,10 +201,10 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(n) {
 
 JavaScript['math_change'] = function(block) {
   // Add to a variable in place.
-  const argument0 = JavaScript.valueToCode(block, 'DELTA',
-      JavaScript.ORDER_ADDITION) || '0';
-  const varName = JavaScript.nameDB_.getName(
-      block.getFieldValue('VAR'), NameType.VARIABLE);
+  const argument0 =
+      JavaScript.valueToCode(block, 'DELTA', JavaScript.ORDER_ADDITION) || '0';
+  const varName =
+      JavaScript.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = (typeof ' + varName + ' === \'number\' ? ' + varName +
       ' : 0) + ' + argument0 + ';\n';
 };
@@ -220,18 +221,18 @@ JavaScript['math_on_list'] = function(block) {
   let code;
   switch (func) {
     case 'SUM':
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_MEMBER) || '[]';
+      list = JavaScript.valueToCode(block, 'LIST', JavaScript.ORDER_MEMBER) ||
+          '[]';
       code = list + '.reduce(function(x, y) {return x + y;}, 0)';
       break;
     case 'MIN':
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list =
+          JavaScript.valueToCode(block, 'LIST', JavaScript.ORDER_NONE) || '[]';
       code = 'Math.min.apply(null, ' + list + ')';
       break;
     case 'MAX':
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list =
+          JavaScript.valueToCode(block, 'LIST', JavaScript.ORDER_NONE) || '[]';
       code = 'Math.max.apply(null, ' + list + ')';
       break;
     case 'AVERAGE': {
@@ -241,8 +242,8 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
   return myList.reduce(function(x, y) {return x + y;}, 0) / myList.length;
 }
 `);
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list =
+          JavaScript.valueToCode(block, 'LIST', JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
@@ -260,8 +261,8 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
   }
 }
 `);
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list =
+          JavaScript.valueToCode(block, 'LIST', JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
@@ -299,13 +300,14 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(values) {
   return modes;
 }
 `);
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list =
+          JavaScript.valueToCode(block, 'LIST', JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'STD_DEV': {
-      const functionName = JavaScript.provideFunction_('mathStandardDeviation', `
+      const functionName =
+          JavaScript.provideFunction_('mathStandardDeviation', `
 function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(numbers) {
   var n = numbers.length;
   if (!n) return null;
@@ -318,8 +320,8 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(numbers) {
   return Math.sqrt(variance);
 }
 `);
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list =
+          JavaScript.valueToCode(block, 'LIST', JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
@@ -330,8 +332,8 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(list) {
   return list[x];
 }
 `);
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list =
+          JavaScript.valueToCode(block, 'LIST', JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
@@ -343,22 +345,24 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(list) {
 
 JavaScript['math_modulo'] = function(block) {
   // Remainder computation.
-  const argument0 = JavaScript.valueToCode(block, 'DIVIDEND',
-      JavaScript.ORDER_MODULUS) || '0';
-  const argument1 = JavaScript.valueToCode(block, 'DIVISOR',
-      JavaScript.ORDER_MODULUS) || '0';
+  const argument0 =
+      JavaScript.valueToCode(block, 'DIVIDEND', JavaScript.ORDER_MODULUS) ||
+      '0';
+  const argument1 =
+      JavaScript.valueToCode(block, 'DIVISOR', JavaScript.ORDER_MODULUS) || '0';
   const code = argument0 + ' % ' + argument1;
   return [code, JavaScript.ORDER_MODULUS];
 };
 
 JavaScript['math_constrain'] = function(block) {
   // Constrain a number between two limits.
-  const argument0 = JavaScript.valueToCode(block, 'VALUE',
-      JavaScript.ORDER_NONE) || '0';
-  const argument1 = JavaScript.valueToCode(block, 'LOW',
-      JavaScript.ORDER_NONE) || '0';
-  const argument2 = JavaScript.valueToCode(block, 'HIGH',
-      JavaScript.ORDER_NONE) || 'Infinity';
+  const argument0 =
+      JavaScript.valueToCode(block, 'VALUE', JavaScript.ORDER_NONE) || '0';
+  const argument1 =
+      JavaScript.valueToCode(block, 'LOW', JavaScript.ORDER_NONE) || '0';
+  const argument2 =
+      JavaScript.valueToCode(block, 'HIGH', JavaScript.ORDER_NONE) ||
+      'Infinity';
   const code = 'Math.min(Math.max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
   return [code, JavaScript.ORDER_FUNCTION_CALL];
@@ -366,10 +370,10 @@ JavaScript['math_constrain'] = function(block) {
 
 JavaScript['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
-  const argument0 = JavaScript.valueToCode(block, 'FROM',
-      JavaScript.ORDER_NONE) || '0';
-  const argument1 = JavaScript.valueToCode(block, 'TO',
-      JavaScript.ORDER_NONE) || '0';
+  const argument0 =
+      JavaScript.valueToCode(block, 'FROM', JavaScript.ORDER_NONE) || '0';
+  const argument1 =
+      JavaScript.valueToCode(block, 'TO', JavaScript.ORDER_NONE) || '0';
   const functionName = JavaScript.provideFunction_('mathRandomInt', `
 function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(a, b) {
   if (a > b) {
@@ -392,10 +396,12 @@ JavaScript['math_random_float'] = function(block) {
 
 JavaScript['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  const argument0 = JavaScript.valueToCode(block, 'X',
-      JavaScript.ORDER_NONE) || '0';
-  const argument1 = JavaScript.valueToCode(block, 'Y',
-      JavaScript.ORDER_NONE) || '0';
-  return ['Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.PI * 180',
-      JavaScript.ORDER_DIVISION];
+  const argument0 =
+      JavaScript.valueToCode(block, 'X', JavaScript.ORDER_NONE) || '0';
+  const argument1 =
+      JavaScript.valueToCode(block, 'Y', JavaScript.ORDER_NONE) || '0';
+  return [
+    'Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.PI * 180',
+    JavaScript.ORDER_DIVISION
+  ];
 };

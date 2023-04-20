@@ -30,7 +30,8 @@ suite('Utils', function() {
   suite('tokenizeInterpolation', function() {
     suite('Basic', function() {
       test('Empty string', function() {
-        chai.assert.deepEqual(Blockly.utils.parsing.tokenizeInterpolation(''), []);
+        chai.assert.deepEqual(
+            Blockly.utils.parsing.tokenizeInterpolation(''), []);
       });
 
       test('No interpolation', function() {
@@ -60,7 +61,8 @@ suite('Utils', function() {
 
       test('Multi-digit number interpolation', function() {
         chai.assert.deepEqual(
-            Blockly.utils.parsing.tokenizeInterpolation('%123Hello%456World%789'),
+            Blockly.utils.parsing.tokenizeInterpolation(
+                '%123Hello%456World%789'),
             [123, 'Hello', 456, 'World', 789]);
       });
 
@@ -120,7 +122,8 @@ suite('Utils', function() {
       test('Number reference', function() {
         Blockly.Msg['1'] = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.parsing.tokenizeInterpolation('%{bky_1}'), ['test string']);
+            Blockly.utils.parsing.tokenizeInterpolation('%{bky_1}'),
+            ['test string']);
       });
 
       test('Undefined reference', function() {
@@ -139,8 +142,7 @@ suite('Utils', function() {
       test('Not prefixed, number', function() {
         Blockly.Msg['1'] = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.parsing.tokenizeInterpolation('%{1}'),
-            ['%{1}']);
+            Blockly.utils.parsing.tokenizeInterpolation('%{1}'), ['%{1}']);
       });
 
       test('Space in ref', function() {
@@ -196,7 +198,8 @@ suite('Utils', function() {
     chai.assert.equal(resultString, '%{bky_string_ref}', 'Escaped %');
 
     resultString = Blockly.utils.parsing.replaceMessageReferences('%a');
-    chai.assert.equal(resultString, '%a', 'Unrecognized % escape code treated as literal');
+    chai.assert.equal(
+        resultString, '%a', 'Unrecognized % escape code treated as literal');
 
     resultString = Blockly.utils.parsing.replaceMessageReferences('%1');
     chai.assert.equal(resultString, '%1', 'Interpolation tokens ignored.');
@@ -204,7 +207,8 @@ suite('Utils', function() {
     chai.assert.equal(resultString, '%1 %2', 'Interpolation tokens ignored.');
     resultString =
         Blockly.utils.parsing.replaceMessageReferences('before %1 after');
-    chai.assert.equal(resultString, 'before %1 after', 'Interpolation tokens ignored.');
+    chai.assert.equal(
+        resultString, 'before %1 after', 'Interpolation tokens ignored.');
 
     // Blockly.Msg.STRING_REF cases:
     resultString =
@@ -212,23 +216,32 @@ suite('Utils', function() {
     chai.assert.equal(resultString, 'test string', 'Message ref dereferenced.');
     resultString = Blockly.utils.parsing.replaceMessageReferences(
         'before %{bky_string_ref} after');
-    chai.assert.equal(resultString, 'before test string after', 'Message ref dereferenced.');
+    chai.assert.equal(
+        resultString, 'before test string after', 'Message ref dereferenced.');
 
     // Blockly.Msg.STRING_REF_WITH_ARG cases:
     resultString = Blockly.utils.parsing.replaceMessageReferences(
         '%{bky_string_ref_with_arg}');
-    chai.assert.equal(resultString, 'test %1 string', 'Message ref dereferenced with argument preserved.');
+    chai.assert.equal(
+        resultString, 'test %1 string',
+        'Message ref dereferenced with argument preserved.');
     resultString = Blockly.utils.parsing.replaceMessageReferences(
         'before %{bky_string_ref_with_arg} after');
-    chai.assert.equal(resultString, 'before test %1 string after', 'Message ref dereferenced with argument preserved.');
+    chai.assert.equal(
+        resultString, 'before test %1 string after',
+        'Message ref dereferenced with argument preserved.');
 
     // Blockly.Msg.STRING_REF_WITH_SUBREF cases:
     resultString = Blockly.utils.parsing.replaceMessageReferences(
         '%{bky_string_ref_with_subref}');
-    chai.assert.equal(resultString, 'test subref string', 'Message ref and subref dereferenced.');
+    chai.assert.equal(
+        resultString, 'test subref string',
+        'Message ref and subref dereferenced.');
     resultString = Blockly.utils.parsing.replaceMessageReferences(
         'before %{bky_string_ref_with_subref} after');
-    chai.assert.equal(resultString, 'before test subref string after', 'Message ref and subref dereferenced.');
+    chai.assert.equal(
+        resultString, 'before test subref string after',
+        'Message ref and subref dereferenced.');
   });
 
   test('arrayRemove', function() {
@@ -264,8 +277,10 @@ suite('Utils', function() {
     chai.assert.equal(m[3], '16', 'translate(15 16), y');
 
     m = 'translate(1.23456e+42 0.123456e-42)'.match(regex);
-    chai.assert.equal(m[1], '1.23456e+42', 'translate(1.23456e+42 0.123456e-42), x');
-    chai.assert.equal(m[3], '0.123456e-42', 'translate(1.23456e+42 0.123456e-42), y');
+    chai.assert.equal(
+        m[1], '1.23456e+42', 'translate(1.23456e+42 0.123456e-42), x');
+    chai.assert.equal(
+        m[3], '0.123456e-42', 'translate(1.23456e+42 0.123456e-42), y');
   });
 
   test('XY_STYLE_REGEX_', function() {
@@ -295,8 +310,12 @@ suite('Utils', function() {
     chai.assert.equal(m[3], '16', 'transform: translate(15px 16px), y');
 
     m = 'transform: translate(1.23456e+42px 0.123456e-42px)'.match(regex);
-    chai.assert.equal(m[1], '1.23456e+42', 'transform: translate(1.23456e+42px 0.123456e-42px), x');
-    chai.assert.equal(m[3], '0.123456e-42', 'transform: translate(1.23456e+42px 0.123456e-42px), y');
+    chai.assert.equal(
+        m[1], '1.23456e+42',
+        'transform: translate(1.23456e+42px 0.123456e-42px), x');
+    chai.assert.equal(
+        m[3], '0.123456e-42',
+        'transform: translate(1.23456e+42px 0.123456e-42px), y');
 
     m = 'transform:translate3d(20px, 21px, 22px)'.match(regex);
     chai.assert.equal(m[1], '20', 'transform:translate3d(20px, 21px, 22px), x');
@@ -311,8 +330,12 @@ suite('Utils', function() {
     chai.assert.equal(m[3], '27', 'transform:translate3d(26px 27px 28px), y');
 
     m = 'transform:translate3d(1.23456e+42px 0.123456e-42px 42px)'.match(regex);
-    chai.assert.equal(m[1], '1.23456e+42', 'transform:translate3d(1.23456e+42px 0.123456e-42px 42px), x');
-    chai.assert.equal(m[3], '0.123456e-42', 'transform:translate3d(1.23456e+42px 0.123456e-42px 42px), y');
+    chai.assert.equal(
+        m[1], '1.23456e+42',
+        'transform:translate3d(1.23456e+42px 0.123456e-42px 42px), x');
+    chai.assert.equal(
+        m[3], '0.123456e-42',
+        'transform:translate3d(1.23456e+42px 0.123456e-42px 42px), y');
   });
 
   suite('DOM', function() {
@@ -336,7 +359,8 @@ suite('Utils', function() {
       chai.assert.isTrue(Blockly.utils.dom.hasClass(p, 'one'), 'Has "one"');
       chai.assert.isTrue(Blockly.utils.dom.hasClass(p, 'two'), 'Has "two"');
       chai.assert.isTrue(Blockly.utils.dom.hasClass(p, 'three'), 'Has "three"');
-      chai.assert.isFalse(Blockly.utils.dom.hasClass(p, 'four'), 'Has no "four"');
+      chai.assert.isFalse(
+          Blockly.utils.dom.hasClass(p, 'four'), 'Has no "four"');
       chai.assert.isFalse(Blockly.utils.dom.hasClass(p, 't'), 'Has no "t"');
     });
 
@@ -360,9 +384,11 @@ suite('Utils', function() {
 
   suite('String', function() {
     test('shortest string length', function() {
-      let len = Blockly.utils.string.shortestStringLength('one,two,three,four,five'.split(','));
+      let len = Blockly.utils.string.shortestStringLength(
+          'one,two,three,four,five'.split(','));
       chai.assert.equal(len, 3, 'Length of "one"');
-      len = Blockly.utils.string.shortestStringLength('one,two,three,four,five,'.split(','));
+      len = Blockly.utils.string.shortestStringLength(
+          'one,two,three,four,five,'.split(','));
       chai.assert.equal(len, 0, 'Length of ""');
       len = Blockly.utils.string.shortestStringLength(['Hello World']);
       chai.assert.equal(len, 11, 'List of one');
@@ -371,11 +397,14 @@ suite('Utils', function() {
     });
 
     test('comment word prefix', function() {
-      let len = Blockly.utils.string.commonWordPrefix('one,two,three,four,five'.split(','));
+      let len = Blockly.utils.string.commonWordPrefix(
+          'one,two,three,four,five'.split(','));
       chai.assert.equal(len, 0, 'No prefix');
-      len = Blockly.utils.string.commonWordPrefix('Xone,Xtwo,Xthree,Xfour,Xfive'.split(','));
+      len = Blockly.utils.string.commonWordPrefix(
+          'Xone,Xtwo,Xthree,Xfour,Xfive'.split(','));
       chai.assert.equal(len, 0, 'No word prefix');
-      len = Blockly.utils.string.commonWordPrefix('abc de,abc de,abc de,abc de'.split(','));
+      len = Blockly.utils.string.commonWordPrefix(
+          'abc de,abc de,abc de,abc de'.split(','));
       chai.assert.equal(len, 6, 'Full equality');
       len = Blockly.utils.string.commonWordPrefix('abc deX,abc deY'.split(','));
       chai.assert.equal(len, 4, 'One word prefix');
@@ -387,18 +416,23 @@ suite('Utils', function() {
       chai.assert.equal(len, 11, 'List of one');
       len = Blockly.utils.string.commonWordPrefix([]);
       chai.assert.equal(len, 0, 'Empty list');
-      len = Blockly.utils.string.commonWordPrefix('turn&nbsp;left,turn&nbsp;right'.split(','));
+      len = Blockly.utils.string.commonWordPrefix(
+          'turn&nbsp;left,turn&nbsp;right'.split(','));
       chai.assert.equal(len, 0, 'No prefix due to &amp;nbsp;');
-      len = Blockly.utils.string.commonWordPrefix('turn\u00A0left,turn\u00A0right'.split(','));
+      len = Blockly.utils.string.commonWordPrefix(
+          'turn\u00A0left,turn\u00A0right'.split(','));
       chai.assert.equal(len, 0, 'No prefix due to \\u00A0');
     });
 
     test('comment word suffix', function() {
-      let len = Blockly.utils.string.commonWordSuffix('one,two,three,four,five'.split(','));
+      let len = Blockly.utils.string.commonWordSuffix(
+          'one,two,three,four,five'.split(','));
       chai.assert.equal(len, 0, 'No suffix');
-      len = Blockly.utils.string.commonWordSuffix('oneX,twoX,threeX,fourX,fiveX'.split(','));
+      len = Blockly.utils.string.commonWordSuffix(
+          'oneX,twoX,threeX,fourX,fiveX'.split(','));
       chai.assert.equal(len, 0, 'No word suffix');
-      len = Blockly.utils.string.commonWordSuffix('abc de,abc de,abc de,abc de'.split(','));
+      len = Blockly.utils.string.commonWordSuffix(
+          'abc de,abc de,abc de,abc de'.split(','));
       chai.assert.equal(len, 6, 'Full equality');
       len = Blockly.utils.string.commonWordSuffix('Xabc de,Yabc de'.split(','));
       chai.assert.equal(len, 3, 'One word suffix');
@@ -422,7 +456,8 @@ suite('Utils', function() {
       chai.assert.equal(Blockly.utils.math.toRadians(180), 2 * quarter, '180');
       chai.assert.equal(Blockly.utils.math.toRadians(270), 3 * quarter, '270');
       chai.assert.equal(Blockly.utils.math.toRadians(360), 4 * quarter, '360');
-      chai.assert.equal(Blockly.utils.math.toRadians(360 + 90), 5 * quarter, '450');
+      chai.assert.equal(
+          Blockly.utils.math.toRadians(360 + 90), 5 * quarter, '450');
     });
 
     test('toDegrees', function() {
@@ -433,7 +468,8 @@ suite('Utils', function() {
       chai.assert.equal(Blockly.utils.math.toDegrees(2 * quarter), 180, '180');
       chai.assert.equal(Blockly.utils.math.toDegrees(3 * quarter), 270, '270');
       chai.assert.equal(Blockly.utils.math.toDegrees(4 * quarter), 360, '360');
-      chai.assert.equal(Blockly.utils.math.toDegrees(5 * quarter), 360 + 90, '450');
+      chai.assert.equal(
+          Blockly.utils.math.toDegrees(5 * quarter), 360 + 90, '450');
     });
   });
 });

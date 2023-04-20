@@ -36,34 +36,58 @@ suite('Dropdown Fields', function() {
   const invalidValueCreationTestCases = [
     {title: 'Undefined', args: [undefined]},
     {title: 'Array Items not Arrays', args: [undefined]},
-    {title: 'Array Items with Invalid IDs',
-      args: [[['1', 1], ['2', 2], ['3', 3]]]},
-    {title: 'Array Items with Invalid Content',
-      args: [[[1, '1'], [2, '2'], [3, '3']]]},
+    {
+      title: 'Array Items with Invalid IDs',
+      args: [[['1', 1], ['2', 2], ['3', 3]]]
+    },
+    {
+      title: 'Array Items with Invalid Content',
+      args: [[[1, '1'], [2, '2'], [3, '3']]]
+    },
   ];
   /**
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
   const validValueCreationTestCases = [
-    {title: 'Text Dropdown', value: 'A', expectedValue: 'A', expectedText: 'a',
-      args: [[['a', 'A'], ['b', 'B'], ['c', 'C']]]},
-    {title: 'Image Dropdown', value: 'A', expectedValue: 'A', expectedText: 'a',
+    {
+      title: 'Text Dropdown',
+      value: 'A',
+      expectedValue: 'A',
+      expectedText: 'a',
+      args: [[['a', 'A'], ['b', 'B'], ['c', 'C']]]
+    },
+    {
+      title: 'Image Dropdown',
+      value: 'A',
+      expectedValue: 'A',
+      expectedText: 'a',
       args: [[
-        [{src: 'scrA', alt: 'a'}, 'A'],
-        [{src: 'scrB', alt: 'b'}, 'B'],
-        [{src: 'scrC', alt: 'c'}, 'C']]]},
-    {title: 'Dynamic Text Dropdown', value: 'A', expectedValue: 'A', expectedText: 'a',
+        [{src: 'scrA', alt: 'a'}, 'A'], [{src: 'scrB', alt: 'b'}, 'B'],
+        [{src: 'scrC', alt: 'c'}, 'C']
+      ]]
+    },
+    {
+      title: 'Dynamic Text Dropdown',
+      value: 'A',
+      expectedValue: 'A',
+      expectedText: 'a',
       args: [() => {
         return [['a', 'A'], ['b', 'B'], ['c', 'C']];
-      }]},
-    {title: 'Dynamic Image Dropdown', value: 'A', expectedValue: 'A', expectedText: 'a',
+      }]
+    },
+    {
+      title: 'Dynamic Image Dropdown',
+      value: 'A',
+      expectedValue: 'A',
+      expectedText: 'a',
       args: [() => {
         return [
-          [{src: 'scrA', alt: 'a'}, 'A'],
-          [{src: 'scrB', alt: 'b'}, 'B'],
-          [{src: 'scrC', alt: 'c'}, 'C']];
-      }]},
+          [{src: 'scrA', alt: 'a'}, 'A'], [{src: 'scrB', alt: 'b'}, 'B'],
+          [{src: 'scrC', alt: 'c'}, 'C']
+        ];
+      }]
+    },
   ];
   const addJson = function(testCase) {
     testCase.json = {'options': testCase.args[0]};
@@ -107,8 +131,8 @@ suite('Dropdown Fields', function() {
 
   suite('setValue', function() {
     setup(function() {
-      this.field = new Blockly.FieldDropdown(
-          [['a', 'A'], ['b', 'B'], ['c', 'C']]);
+      this.field =
+          new Blockly.FieldDropdown([['a', 'A'], ['b', 'B'], ['c', 'C']]);
     });
     runSetValueTests(
         validValueSetValueTestCases, invalidValueSetValueTestCases, 'A', 'a');
@@ -122,8 +146,9 @@ suite('Dropdown Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.dropdownField = new Blockly.FieldDropdown([
-        ["1a", "1A"], ["1b", "1B"], ["1c", "1C"],
-        ["2a", "2A"], ["2b", "2B"], ["2c", "2C"]]);
+        ["1a", "1A"], ["1b", "1B"], ["1c", "1C"], ["2a", "2A"], ["2b", "2B"],
+        ["2c", "2C"]
+      ]);
     });
     teardown(function() {
       this.dropdownField.setValidator(null);

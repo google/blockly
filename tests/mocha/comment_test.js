@@ -25,9 +25,9 @@ suite('Comments', function() {
       comments: true,
       scrollbars: true,
     });
-    this.block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
-        '<block type="empty_block"/>'
-    ), this.workspace);
+    this.block = Blockly.Xml.domToBlock(
+        Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
+        this.workspace);
     this.comment = new Blockly.Comment(this.block);
     this.comment.computeIconLocation();
   });
@@ -47,8 +47,8 @@ suite('Comments', function() {
     function assertNotEditable(comment) {
       chai.assert.isNotOk(comment.textarea_);
       chai.assert.isOk(comment.paragraphElement_);
-      chai.assert.equal(comment.paragraphElement_.firstChild.textContent,
-          'test text');
+      chai.assert.equal(
+          comment.paragraphElement_.firstChild.textContent, 'test text');
     }
     test('Editable', function() {
       this.comment.setVisible(true);
@@ -56,8 +56,8 @@ suite('Comments', function() {
       assertEditable(this.comment);
       assertEventFired(
           this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN}, this.workspace.id,
-          this.block.id);
+          {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
+          this.workspace.id, this.block.id);
     });
     test('Not Editable', function() {
       sinon.stub(this.block, 'isEditable').returns(false);

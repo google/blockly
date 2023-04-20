@@ -325,8 +325,10 @@ JavaScript['lists_getSublist'] = function(block) {
     const at2Param =
         (where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' : '';
     const functionName = JavaScript.provideFunction_(
-        'subsequence' + wherePascalCase[where1] + wherePascalCase[where2], `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param}) {
+        'subsequence' + wherePascalCase[where1] + wherePascalCase[where2],
+        `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${
+            at2Param}) {
   var start = ${getSubstringIndex('sequence', where1, 'at1')};
   var end = ${getSubstringIndex('sequence', where2, 'at2')} + 1;
   return sequence.slice(start, end);

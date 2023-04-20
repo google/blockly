@@ -176,8 +176,7 @@ suite('Workspace comment', function() {
     });
 
     test('After creation', function() {
-      chai.assert.equal(
-          this.comment.getContent(), 'comment text');
+      chai.assert.equal(this.comment.getContent(), 'comment text');
       chai.assert.equal(
           this.workspace.undoStack_.length, 1, 'Workspace undo stack');
     });

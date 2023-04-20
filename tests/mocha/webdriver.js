@@ -34,7 +34,10 @@ async function runMochaTestsInBrowser() {
   // Run in headless mode on Github Actions.
   if (process.env.CI) {
     options.capabilities['goog:chromeOptions'].args.push(
-        '--headless', '--no-sandbox', '--disable-dev-shm-usage',);
+        '--headless',
+        '--no-sandbox',
+        '--disable-dev-shm-usage',
+    );
   } else {
     // --disable-gpu is needed to prevent Chrome from hanging on Linux with
     // NVIDIA drivers older than v295.20. See
@@ -48,7 +51,7 @@ async function runMochaTestsInBrowser() {
   console.log('Loading URL: ' + url);
   await browser.url(url);
 
-  await browser.waitUntil(async() => {
+  await browser.waitUntil(async () => {
     const elem = await browser.$('#failureCount');
     const text = await elem.getAttribute('tests_failed');
     return text !== 'unset';
@@ -63,7 +66,8 @@ async function runMochaTestsInBrowser() {
     console.log('============Blockly Mocha Test Failures================');
     const failureMessagesEls = await browser.$$('#failureMessages p');
     if (!failureMessagesEls.length) {
-      console.log('There is at least one test failure, but no messages reported. Mocha may be failing because no tests are being run.');
+      console.log(
+          'There is at least one test failure, but no messages reported. Mocha may be failing because no tests are being run.');
     }
     for (const el of failureMessagesEls) {
       console.log(await el.getText());
@@ -81,18 +85,20 @@ async function runMochaTestsInBrowser() {
 }
 
 if (require.main === module) {
-  runMochaTestsInBrowser().catch((e) => {
-    console.error(e);
-    process.exit(1);
-  }).then(function(result) {
-    if (result) {
-      console.log('Mocha tests failed');
-      process.exit(1);
-    } else {
-      console.log('Mocha tests passed');
-      process.exit(0);
-    }
-  });
+  runMochaTestsInBrowser()
+      .catch((e) => {
+        console.error(e);
+        process.exit(1);
+      })
+      .then(function(result) {
+        if (result) {
+          console.log('Mocha tests failed');
+          process.exit(1);
+        } else {
+          console.log('Mocha tests passed');
+          process.exit(0);
+        }
+      });
 }
 
 module.exports = {runMochaTestsInBrowser};

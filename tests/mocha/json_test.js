@@ -46,14 +46,15 @@ suite('JSON Block Definitions', function() {
 
       assertWarnings(() => {
         Blockly.defineBlocksWithJsonArray([
-          {"type": BLOCK_TYPE1},
-          {"type": undefined},
-          {"type": null},
-          {"type": BLOCK_TYPE2}]);
+          {"type": BLOCK_TYPE1}, {"type": undefined}, {"type": null},
+          {"type": BLOCK_TYPE2}
+        ]);
       }, [/missing a type attribute/, /missing a type attribute/]);
-      chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE1],
+      chai.assert.isNotNull(
+          Blockly.Blocks[BLOCK_TYPE1],
           'Block before bad blocks should be defined.');
-      chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE2],
+      chai.assert.isNotNull(
+          Blockly.Blocks[BLOCK_TYPE2],
           'Block after bad blocks should be defined.');
       chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
     });
@@ -72,15 +73,17 @@ suite('JSON Block Definitions', function() {
             "type": BLOCK_TYPE1,
             "message0": 'before',
           },
-          null,
-          {
+          null, {
             "type": BLOCK_TYPE2,
             "message0": 'after',
-          }]);
+          }
+        ]);
       }, /is null/);
-      chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE1],
+      chai.assert.isNotNull(
+          Blockly.Blocks[BLOCK_TYPE1],
           'Block before null in array should be defined.');
-      chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE2],
+      chai.assert.isNotNull(
+          Blockly.Blocks[BLOCK_TYPE2],
           'Block after null in array should be defined.');
       chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
     });
@@ -98,15 +101,17 @@ suite('JSON Block Definitions', function() {
             "type": BLOCK_TYPE1,
             "message0": 'before',
           },
-          undefined,
-          {
+          undefined, {
             "type": BLOCK_TYPE2,
             "message0": 'after',
-          }]);
+          }
+        ]);
       }, /is undefined/);
-      chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE1],
+      chai.assert.isNotNull(
+          Blockly.Blocks[BLOCK_TYPE1],
           'Block before undefined in array should be defined.');
-      chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE2],
+      chai.assert.isNotNull(
+          Blockly.Blocks[BLOCK_TYPE2],
           'Block after undefined in array should be defined.');
       chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
     });

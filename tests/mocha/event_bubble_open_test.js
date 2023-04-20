@@ -26,9 +26,8 @@ suite('Bubble Open Event', function() {
   suite('Serialization', function() {
     test('events round-trip through JSON', function() {
       const block = this.workspace.newBlock('jso_block', 'block_id');
-      const origEvent =
-          new Blockly.Events.BubbleOpen(
-              block, true, Blockly.Events.BubbleType.MUTATOR);
+      const origEvent = new Blockly.Events.BubbleOpen(
+          block, true, Blockly.Events.BubbleType.MUTATOR);
 
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);

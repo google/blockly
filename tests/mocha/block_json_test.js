@@ -38,12 +38,14 @@ suite('Block JSON initialization', function() {
     });
 
     test('0 args, 1 token', function() {
-      this.assertError(['test', 1, 'test'], 0,
+      this.assertError(
+          ['test', 1, 'test'], 0,
           'Block "test": Message index %1 out of range.');
     });
 
     test('1 arg, 0 tokens', function() {
-      this.assertError(['test', 'test'], 1,
+      this.assertError(
+          ['test', 'test'], 1,
           'Block "test": Message does not reference all 1 arg(s).');
     });
 
@@ -52,17 +54,20 @@ suite('Block JSON initialization', function() {
     });
 
     test('1 arg, 2 tokens', function() {
-      this.assertError(['test', 1, 1, 'test'], 1,
+      this.assertError(
+          ['test', 1, 1, 'test'], 1,
           'Block "test": Message index %1 duplicated.');
     });
 
     test('Token out of lower bound', function() {
-      this.assertError(['test', 0, 'test'], 1,
+      this.assertError(
+          ['test', 0, 'test'], 1,
           'Block "test": Message index %0 out of range.');
     });
 
     test('Token out of upper bound', function() {
-      this.assertError(['test', 2, 'test'], 1,
+      this.assertError(
+          ['test', 2, 'test'], 1,
           'Block "test": Message index %2 out of range.');
     });
   });
@@ -77,17 +82,13 @@ suite('Block JSON initialization', function() {
           isInputKeyword_: Blockly.Block.prototype.isInputKeyword_,
         };
         chai.assert.deepEqual(
-            block.interpolateArguments_(tokens, args, lastAlign),
-            elements);
+            block.interpolateArguments_(tokens, args, lastAlign), elements);
       };
     });
 
     test('Strings to labels', function() {
       this.assertInterpolation(
-          ['test1', 'test2', 'test3', {'type': 'input_dummy'}],
-          [],
-          undefined,
-          [
+          ['test1', 'test2', 'test3', {'type': 'input_dummy'}], [], undefined, [
             {
               'type': 'field_label',
               'text': 'test1',
@@ -108,10 +109,7 @@ suite('Block JSON initialization', function() {
 
     test('Ignore empty strings', function() {
       this.assertInterpolation(
-          ['test1', '', '    ', {'type': 'input_dummy'}],
-          [],
-          undefined,
-          [
+          ['test1', '', '    ', {'type': 'input_dummy'}], [], undefined, [
             {
               'type': 'field_label',
               'text': 'test1',
@@ -139,8 +137,7 @@ suite('Block JSON initialization', function() {
               'name': 'test3',
             },
           ],
-          undefined,
-          [
+          undefined, [
             {
               'type': 'field_number',
               'name': 'test1',
@@ -161,10 +158,8 @@ suite('Block JSON initialization', function() {
 
     test('String args to labels', function() {
       this.assertInterpolation(
-          [1, 2, 3, {'type': 'input_dummy'}],
-          ['test1', 'test2', 'test3'],
-          undefined,
-          [
+          [1, 2, 3, {'type': 'input_dummy'}], ['test1', 'test2', 'test3'],
+          undefined, [
             {
               'type': 'field_label',
               'text': 'test1',
@@ -185,10 +180,8 @@ suite('Block JSON initialization', function() {
 
     test('Ignore empty string args', function() {
       this.assertInterpolation(
-          [1, 2, 3, {'type': 'input_dummy'}],
-          ['test1', '     ', '     '],
-          undefined,
-          [
+          [1, 2, 3, {'type': 'input_dummy'}], ['test1', '     ', '     '],
+          undefined, [
             {
               'type': 'field_label',
               'text': 'test1',
@@ -200,27 +193,23 @@ suite('Block JSON initialization', function() {
     });
 
     test('Add last dummy', function() {
-      this.assertInterpolation(
-          ['test1', 'test2', 'test3'],
-          [],
-          undefined,
-          [
-            {
-              'type': 'field_label',
-              'text': 'test1',
-            },
-            {
-              'type': 'field_label',
-              'text': 'test2',
-            },
-            {
-              'type': 'field_label',
-              'text': 'test3',
-            },
-            {
-              'type': 'input_dummy',
-            },
-          ]);
+      this.assertInterpolation(['test1', 'test2', 'test3'], [], undefined, [
+        {
+          'type': 'field_label',
+          'text': 'test1',
+        },
+        {
+          'type': 'field_label',
+          'text': 'test2',
+        },
+        {
+          'type': 'field_label',
+          'text': 'test3',
+        },
+        {
+          'type': 'input_dummy',
+        },
+      ]);
     });
 
     test('Add last dummy for no_field_prefix_field', function() {
@@ -230,9 +219,7 @@ suite('Block JSON initialization', function() {
               'type': 'no_field_prefix_field',
             },
           ],
-          [],
-          undefined,
-          [
+          [], undefined, [
             {
               'type': 'no_field_prefix_field',
             },
@@ -249,9 +236,7 @@ suite('Block JSON initialization', function() {
               'type': 'input_prefix_field',
             },
           ],
-          [],
-          undefined,
-          [
+          [], undefined, [
             {
               'type': 'input_prefix_field',
             },
@@ -262,48 +247,45 @@ suite('Block JSON initialization', function() {
     });
 
     test('Set last dummy alignment', function() {
-      this.assertInterpolation(
-          ['test1', 'test2', 'test3'],
-          [],
-          'CENTER',
-          [
-            {
-              'type': 'field_label',
-              'text': 'test1',
-            },
-            {
-              'type': 'field_label',
-              'text': 'test2',
-            },
-            {
-              'type': 'field_label',
-              'text': 'test3',
-            },
-            {
-              'type': 'input_dummy',
-              'align': 'CENTER',
-            },
-          ]);
+      this.assertInterpolation(['test1', 'test2', 'test3'], [], 'CENTER', [
+        {
+          'type': 'field_label',
+          'text': 'test1',
+        },
+        {
+          'type': 'field_label',
+          'text': 'test2',
+        },
+        {
+          'type': 'field_label',
+          'text': 'test3',
+        },
+        {
+          'type': 'input_dummy',
+          'align': 'CENTER',
+        },
+      ]);
     });
   });
 
   suite('fieldFromJson_', function() {
     setup(function() {
-      this.stub = sinon.stub(Blockly.fieldRegistry.TEST_ONLY, 'fromJsonInternal')
-          .callsFake(function(elem) {
-            switch (elem['type']) {
-              case 'field_label':
-                return 'field_label';
-              case 'field_number':
-                return 'field_number';
-              case 'no_field_prefix_field':
-                return 'no_field_prefix_field';
-              case 'input_prefix_field':
-                return 'input_prefix_field';
-              default:
-                return null;
-            }
-          });
+      this.stub =
+          sinon.stub(Blockly.fieldRegistry.TEST_ONLY, 'fromJsonInternal')
+              .callsFake(function(elem) {
+                switch (elem['type']) {
+                  case 'field_label':
+                    return 'field_label';
+                  case 'field_number':
+                    return 'field_number';
+                  case 'no_field_prefix_field':
+                    return 'no_field_prefix_field';
+                  case 'input_prefix_field':
+                    return 'input_prefix_field';
+                  default:
+                    return null;
+                }
+              });
 
       this.assertField = function(json, expectedType) {
         const block = {
@@ -320,115 +302,139 @@ suite('Block JSON initialization', function() {
     });
 
     test('Simple field', function() {
-      this.assertField({
-        'type': 'field_label',
-        'text': 'text',
-      }, 'field_label');
+      this.assertField(
+          {
+            'type': 'field_label',
+            'text': 'text',
+          },
+          'field_label');
     });
 
     test('Bad field', function() {
-      this.assertField({
-        'type': 'field_bad',
-      }, null);
+      this.assertField(
+          {
+            'type': 'field_bad',
+          },
+          null);
     });
 
     test('no_field_prefix_field', function() {
-      this.assertField({
-        'type': 'no_field_prefix_field',
-      }, 'no_field_prefix_field');
+      this.assertField(
+          {
+            'type': 'no_field_prefix_field',
+          },
+          'no_field_prefix_field');
     });
 
     test('input_prefix_field', function() {
-      this.assertField({
-        'type': 'input_prefix_field',
-      }, 'input_prefix_field');
+      this.assertField(
+          {
+            'type': 'input_prefix_field',
+          },
+          'input_prefix_field');
     });
 
     test('Alt string', function() {
-      this.assertField({
-        'type': 'field_undefined',
-        'alt': 'alt text',
-      }, 'field_label');
+      this.assertField(
+          {
+            'type': 'field_undefined',
+            'alt': 'alt text',
+          },
+          'field_label');
     });
 
     test('input_prefix_bad w/ alt string', function() {
-      this.assertField({
-        'type': 'input_prefix_bad',
-        'alt': 'alt string',
-      }, 'field_label');
+      this.assertField(
+          {
+            'type': 'input_prefix_bad',
+            'alt': 'alt string',
+          },
+          'field_label');
     });
 
     test('Alt other field', function() {
-      this.assertField({
-        'type': 'field_undefined',
-        'alt': {
-          'type': 'field_number',
-          'name': 'FIELDNAME',
-        },
-      }, 'field_number');
+      this.assertField(
+          {
+            'type': 'field_undefined',
+            'alt': {
+              'type': 'field_number',
+              'name': 'FIELDNAME',
+            },
+          },
+          'field_number');
     });
 
     test('Deep alt string', function() {
-      this.assertField({
-        'type': 'field_undefined1',
-        'alt': {
-          'type': 'field_undefined2',
-          'alt': {
-            'type': 'field_undefined3',
+      this.assertField(
+          {
+            'type': 'field_undefined1',
             'alt': {
-              'type': 'field_undefined4',
+              'type': 'field_undefined2',
               'alt': {
-                'type': 'field_undefined5',
-                'alt': 'text',
-              },
-            },
-          },
-        },
-      }, 'field_label');
-    });
-
-    test('Deep alt other field', function() {
-      this.assertField({
-        'type': 'field_undefined1',
-        'alt': {
-          'type': 'field_undefined2',
-          'alt': {
-            'type': 'field_undefined3',
-            'alt': {
-              'type': 'field_undefined4',
-              'alt': {
-                'type': 'field_undefined5',
+                'type': 'field_undefined3',
                 'alt': {
-                  'type': 'field_number',
-                  'name': 'FIELDNAME',
+                  'type': 'field_undefined4',
+                  'alt': {
+                    'type': 'field_undefined5',
+                    'alt': 'text',
+                  },
                 },
               },
             },
           },
-        },
-      }, 'field_number');
+          'field_label');
+    });
+
+    test('Deep alt other field', function() {
+      this.assertField(
+          {
+            'type': 'field_undefined1',
+            'alt': {
+              'type': 'field_undefined2',
+              'alt': {
+                'type': 'field_undefined3',
+                'alt': {
+                  'type': 'field_undefined4',
+                  'alt': {
+                    'type': 'field_undefined5',
+                    'alt': {
+                      'type': 'field_number',
+                      'name': 'FIELDNAME',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          'field_number');
     });
 
     test('No alt', function() {
-      this.assertField({
-        'type': 'field_undefined',
-      }, null);
+      this.assertField(
+          {
+            'type': 'field_undefined',
+          },
+          null);
     });
 
     test('Bad alt', function() {
-      this.assertField({
-        'type': 'field_undefined',
-        'alt': {
-          'type': 'field_undefined',
-        },
-      }, null);
+      this.assertField(
+          {
+            'type': 'field_undefined',
+            'alt': {
+              'type': 'field_undefined',
+            },
+          },
+          null);
     });
 
     test('Spaces string alt', function() {
-      this.assertField({
-        'type': 'field_undefined',
-        'alt': '        ',
-      }, null);
+      this.assertField(
+          {
+            'type': 'field_undefined',
+            'alt': '        ',
+          },
+          null);
     });
   });
 
@@ -452,40 +458,48 @@ suite('Block JSON initialization', function() {
         const input = block.inputFromJson_(json);
         switch (type) {
           case 'input_dummy':
-            chai.assert.isTrue(block.appendDummyInput.calledOnce,
+            chai.assert.isTrue(
+                block.appendDummyInput.calledOnce,
                 'Expected a dummy input to be created.');
             break;
           case 'input_value':
-            chai.assert.isTrue(block.appendValueInput.calledOnce,
+            chai.assert.isTrue(
+                block.appendValueInput.calledOnce,
                 'Expected a value input to be created.');
             break;
           case 'input_statement':
-            chai.assert.isTrue(block.appendStatementInput.calledOnce,
+            chai.assert.isTrue(
+                block.appendStatementInput.calledOnce,
                 'Expected a statement input to be created.');
             break;
           default:
             chai.assert.isNull(input, 'Expected input to be null');
-            chai.assert.isTrue(block.appendDummyInput.notCalled,
+            chai.assert.isTrue(
+                block.appendDummyInput.notCalled,
                 'Expected no input to be created');
-            chai.assert.isTrue(block.appendValueInput.notCalled,
+            chai.assert.isTrue(
+                block.appendValueInput.notCalled,
                 'Expected no input to be created');
-            chai.assert.isTrue(block.appendStatementInput.notCalled,
+            chai.assert.isTrue(
+                block.appendStatementInput.notCalled,
                 'Expected no input to be created');
             return;
         }
         if (check) {
-          chai.assert.isTrue(input.setCheck.calledWith(check),
+          chai.assert.isTrue(
+              input.setCheck.calledWith(check),
               'Expected setCheck to be called with', check);
         } else {
-          chai.assert.isTrue(input.setCheck.notCalled,
-              'Expected setCheck to not be called');
+          chai.assert.isTrue(
+              input.setCheck.notCalled, 'Expected setCheck to not be called');
         }
         if (align !== undefined) {
-          chai.assert.isTrue(input.setAlign.calledWith(align),
+          chai.assert.isTrue(
+              input.setAlign.calledWith(align),
               'Expected setAlign to be called with', align);
         } else {
-          chai.assert.isTrue(input.setAlign.notCalled,
-              'Expected setAlign to not be called');
+          chai.assert.isTrue(
+              input.setAlign.notCalled, 'Expected setAlign to not be called');
         }
       };
     });
@@ -528,8 +542,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'check': 'Integer',
           },
-          'input_dummy',
-          'Integer');
+          'input_dummy', 'Integer');
     });
 
     test('Array check', function() {
@@ -538,8 +551,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'check': ['Integer', 'Number'],
           },
-          'input_dummy',
-          ['Integer', 'Number']);
+          'input_dummy', ['Integer', 'Number']);
     });
 
     test('Empty check', function() {

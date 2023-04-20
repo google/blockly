@@ -137,8 +137,8 @@ Lua['math_number_property'] = function(block) {
   };
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
-  const numberToCheck = Lua.valueToCode(block, 'NUMBER_TO_CHECK',
-      inputOrder) || '0';
+  const numberToCheck =
+      Lua.valueToCode(block, 'NUMBER_TO_CHECK', inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
@@ -164,8 +164,8 @@ end
 `);
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = Lua.valueToCode(block, 'DIVISOR',
-        Lua.ORDER_MULTIPLICATIVE) || '0';
+    const divisor =
+        Lua.valueToCode(block, 'DIVISOR', Lua.ORDER_MULTIPLICATIVE) || '0';
     // If 'divisor' is some code that evals to 0, Lua will produce a nan.
     // Let's produce nil if we can determine this at compile-time.
     if (divisor === '0') {

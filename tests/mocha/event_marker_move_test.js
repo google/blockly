@@ -28,7 +28,8 @@ suite('Marker Move Event', function() {
       const block2 = this.workspace.newBlock('row_block', 'test_id2');
       const node1 = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, block1);
       const node2 = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, block2);
-      const origEvent = new Blockly.Events.MarkerMove(block2, false, node1, node2);
+      const origEvent =
+          new Blockly.Events.MarkerMove(block2, false, node1, node2);
 
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);

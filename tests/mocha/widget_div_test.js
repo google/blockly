@@ -102,8 +102,8 @@ suite('WidgetDiv', function() {
         // Anchor placed close to the right side.
         const anchorBBox =
             makeBBox(950, 500, this.anchorSize.width, this.anchorSize.height);
-        // The widget div should be placed as far right as possible--at the edge of
-        // the screen.
+        // The widget div should be placed as far right as possible--at the edge
+        // of the screen.
         const expectedX = this.viewportBBox.width - this.widgetSize.width;
         const expectedY = anchorBBox.top + this.anchorSize.height;
         this.testWidgetPosition(
@@ -148,8 +148,8 @@ suite('WidgetDiv', function() {
         // Anchor placed close to the left side.
         const anchorBBox =
             makeBBox(10, 500, this.anchorSize.width, this.anchorSize.height);
-        // The widget div should be placed as far left as possible--at the edge of
-        // the screen.
+        // The widget div should be placed as far left as possible--at the edge
+        // of the screen.
         const expectedX = 0;
         const expectedY = anchorBBox.top + this.anchorSize.height;
         this.testWidgetPosition(
@@ -160,8 +160,8 @@ suite('WidgetDiv', function() {
         // Anchor placed close to the right side.
         const anchorBBox =
             makeBBox(950, 500, this.anchorSize.width, this.anchorSize.height);
-        // The widget div should be placed as far right as possible--at the edge of
-        // the screen.
+        // The widget div should be placed as far right as possible--at the edge
+        // of the screen.
         const expectedX = this.viewportBBox.width - this.widgetSize.width;
         const expectedY = anchorBBox.top + this.anchorSize.height;
         this.testWidgetPosition(

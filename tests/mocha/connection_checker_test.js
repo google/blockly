@@ -30,32 +30,28 @@ suite('Connection checker', function() {
     test('Target Null', function() {
       const connection = new Blockly.Connection({}, ConnectionType.INPUT_VALUE);
       assertReasonHelper(
-          this.checker,
-          connection,
-          null,
+          this.checker, connection, null,
           Blockly.Connection.REASON_TARGET_NULL);
     });
     test('Target Self', function() {
       const block = {workspace: 1};
-      const connection1 = new Blockly.Connection(block, ConnectionType.INPUT_VALUE);
-      const connection2 = new Blockly.Connection(block, ConnectionType.OUTPUT_VALUE);
+      const connection1 =
+          new Blockly.Connection(block, ConnectionType.INPUT_VALUE);
+      const connection2 =
+          new Blockly.Connection(block, ConnectionType.OUTPUT_VALUE);
 
       assertReasonHelper(
-          this.checker,
-          connection1,
-          connection2,
+          this.checker, connection1, connection2,
           Blockly.Connection.REASON_SELF_CONNECTION);
     });
     test('Different Workspaces', function() {
-      const connection1 = new Blockly.Connection(
-          {workspace: 1}, ConnectionType.INPUT_VALUE);
-      const connection2 = new Blockly.Connection(
-          {workspace: 2}, ConnectionType.OUTPUT_VALUE);
+      const connection1 =
+          new Blockly.Connection({workspace: 1}, ConnectionType.INPUT_VALUE);
+      const connection2 =
+          new Blockly.Connection({workspace: 2}, ConnectionType.OUTPUT_VALUE);
 
       assertReasonHelper(
-          this.checker,
-          connection1,
-          connection2,
+          this.checker, connection1, connection2,
           Blockly.Connection.REASON_DIFFERENT_WORKSPACES);
     });
     suite('Types', function() {
@@ -68,170 +64,189 @@ suite('Connection checker', function() {
         const inBlock = {isShadow: function() {}};
         this.previous = new Blockly.Connection(
             prevBlock, ConnectionType.PREVIOUS_STATEMENT);
-        this.next = new Blockly.Connection(
-            nextBlock, ConnectionType.NEXT_STATEMENT);
-        this.output = new Blockly.Connection(
-            outBlock, ConnectionType.OUTPUT_VALUE);
-        this.input = new Blockly.Connection(
-            inBlock, ConnectionType.INPUT_VALUE);
+        this.next =
+            new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
+        this.output =
+            new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
+        this.input =
+            new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
       });
       test('Previous, Next', function() {
         assertReasonHelper(
-            this.checker,
-            this.previous,
-            this.next,
+            this.checker, this.previous, this.next,
             Blockly.Connection.CAN_CONNECT);
       });
       test('Previous, Output', function() {
         assertReasonHelper(
-            this.checker,
-            this.previous,
-            this.output,
+            this.checker, this.previous, this.output,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Previous, Input', function() {
         assertReasonHelper(
-            this.checker,
-            this.previous,
-            this.input,
+            this.checker, this.previous, this.input,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Next, Previous', function() {
         assertReasonHelper(
-            this.checker,
-            this.next,
-            this.previous,
+            this.checker, this.next, this.previous,
             Blockly.Connection.CAN_CONNECT);
       });
       test('Next, Output', function() {
         assertReasonHelper(
-            this.checker,
-            this.next,
-            this.output,
+            this.checker, this.next, this.output,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Next, Input', function() {
         assertReasonHelper(
-            this.checker,
-            this.next,
-            this.input,
+            this.checker, this.next, this.input,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Output, Previous', function() {
         assertReasonHelper(
-            this.checker,
-            this.previous,
-            this.output,
+            this.checker, this.previous, this.output,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Output, Next', function() {
         assertReasonHelper(
-            this.checker,
-            this.output,
-            this.next,
+            this.checker, this.output, this.next,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Output, Input', function() {
         assertReasonHelper(
-            this.checker,
-            this.output,
-            this.input,
+            this.checker, this.output, this.input,
             Blockly.Connection.CAN_CONNECT);
       });
       test('Input, Previous', function() {
         assertReasonHelper(
-            this.checker,
-            this.previous,
-            this.input,
+            this.checker, this.previous, this.input,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Input, Next', function() {
         assertReasonHelper(
-            this.checker,
-            this.input,
-            this.next,
+            this.checker, this.input, this.next,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Input, Output', function() {
         assertReasonHelper(
-            this.checker,
-            this.input,
-            this.output,
+            this.checker, this.input, this.output,
             Blockly.Connection.CAN_CONNECT);
       });
     });
     suite('Shadows', function() {
       test('Previous Shadow', function() {
-        const prevBlock = {isShadow: function() {return true;}};
-        const nextBlock = {isShadow: function() {return false;}};
-        const prev = new Blockly.Connection(prevBlock, ConnectionType.PREVIOUS_STATEMENT);
-        const next = new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
+        const prevBlock = {
+          isShadow: function() {
+            return true;
+          }
+        };
+        const nextBlock = {
+          isShadow: function() {
+            return false;
+          }
+        };
+        const prev = new Blockly.Connection(
+            prevBlock, ConnectionType.PREVIOUS_STATEMENT);
+        const next =
+            new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
 
         assertReasonHelper(
-            this.checker,
-            prev,
-            next,
-            Blockly.Connection.CAN_CONNECT);
+            this.checker, prev, next, Blockly.Connection.CAN_CONNECT);
       });
       test('Next Shadow', function() {
-        const prevBlock = {isShadow: function() {return false;}};
-        const nextBlock = {isShadow: function() {return true;}};
-        const prev = new Blockly.Connection(prevBlock, ConnectionType.PREVIOUS_STATEMENT);
-        const next = new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
+        const prevBlock = {
+          isShadow: function() {
+            return false;
+          }
+        };
+        const nextBlock = {
+          isShadow: function() {
+            return true;
+          }
+        };
+        const prev = new Blockly.Connection(
+            prevBlock, ConnectionType.PREVIOUS_STATEMENT);
+        const next =
+            new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
 
         assertReasonHelper(
-            this.checker,
-            prev,
-            next,
-            Blockly.Connection.REASON_SHADOW_PARENT);
+            this.checker, prev, next, Blockly.Connection.REASON_SHADOW_PARENT);
       });
       test('Prev and Next Shadow', function() {
-        const prevBlock = {isShadow: function() {return true;}};
-        const nextBlock = {isShadow: function() {return true;}};
-        const prev = new Blockly.Connection(prevBlock, ConnectionType.PREVIOUS_STATEMENT);
-        const next = new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
+        const prevBlock = {
+          isShadow: function() {
+            return true;
+          }
+        };
+        const nextBlock = {
+          isShadow: function() {
+            return true;
+          }
+        };
+        const prev = new Blockly.Connection(
+            prevBlock, ConnectionType.PREVIOUS_STATEMENT);
+        const next =
+            new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
 
         assertReasonHelper(
-            this.checker,
-            prev,
-            next,
-            Blockly.Connection.CAN_CONNECT);
+            this.checker, prev, next, Blockly.Connection.CAN_CONNECT);
       });
       test('Output Shadow', function() {
-        const outBlock = {isShadow: function() {return true;}};
-        const inBlock = {isShadow: function() {return false;}};
-        const outCon = new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
-        const inCon = new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
+        const outBlock = {
+          isShadow: function() {
+            return true;
+          }
+        };
+        const inBlock = {
+          isShadow: function() {
+            return false;
+          }
+        };
+        const outCon =
+            new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
+        const inCon =
+            new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
 
         assertReasonHelper(
-            this.checker,
-            outCon,
-            inCon,
-            Blockly.Connection.CAN_CONNECT);
+            this.checker, outCon, inCon, Blockly.Connection.CAN_CONNECT);
       });
       test('Input Shadow', function() {
-        const outBlock = {isShadow: function() {return false;}};
-        const inBlock = {isShadow: function() {return true;}};
-        const outCon = new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
-        const inCon = new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
+        const outBlock = {
+          isShadow: function() {
+            return false;
+          }
+        };
+        const inBlock = {
+          isShadow: function() {
+            return true;
+          }
+        };
+        const outCon =
+            new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
+        const inCon =
+            new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
 
         assertReasonHelper(
-            this.checker,
-            outCon,
-            inCon,
+            this.checker, outCon, inCon,
             Blockly.Connection.REASON_SHADOW_PARENT);
       });
       test('Output and Input Shadow', function() {
-        const outBlock = {isShadow: function() {return true;}};
-        const inBlock = {isShadow: function() {return true;}};
-        const outCon = new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
-        const inCon = new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
+        const outBlock = {
+          isShadow: function() {
+            return true;
+          }
+        };
+        const inBlock = {
+          isShadow: function() {
+            return true;
+          }
+        };
+        const outCon =
+            new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
+        const inCon =
+            new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
 
         assertReasonHelper(
-            this.checker,
-            outCon,
-            inCon,
-            Blockly.Connection.CAN_CONNECT);
+            this.checker, outCon, inCon, Blockly.Connection.CAN_CONNECT);
       });
     });
     suite('Output and Previous', function() {
@@ -249,56 +264,54 @@ suite('Connection checker', function() {
       };
       test('Output connected, adding previous', function() {
         const outBlock = {
-          isShadow: function() {
-          },
+          isShadow: function() {},
         };
         const inBlock = {
-          isShadow: function() {
-          },
+          isShadow: function() {},
         };
-        const outCon = new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
-        const inCon = new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
+        const outCon =
+            new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
+        const inCon =
+            new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
         outBlock.outputConnection = outCon;
         inBlock.inputConnection = inCon;
         connectReciprocally(inCon, outCon);
-        const prevCon = new Blockly.Connection(outBlock, ConnectionType.PREVIOUS_STATEMENT);
+        const prevCon =
+            new Blockly.Connection(outBlock, ConnectionType.PREVIOUS_STATEMENT);
         const nextBlock = {
-          isShadow: function() {
-          },
+          isShadow: function() {},
         };
-        const nextCon = new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
+        const nextCon =
+            new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
 
         assertReasonHelper(
-            this.checker,
-            prevCon,
-            nextCon,
+            this.checker, prevCon, nextCon,
             Blockly.Connection.REASON_PREVIOUS_AND_OUTPUT);
       });
       test('Previous connected, adding output', function() {
         const prevBlock = {
-          isShadow: function() {
-          },
+          isShadow: function() {},
         };
         const nextBlock = {
-          isShadow: function() {
-          },
+          isShadow: function() {},
         };
-        const prevCon = new Blockly.Connection(prevBlock, ConnectionType.PREVIOUS_STATEMENT);
-        const nextCon = new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
+        const prevCon = new Blockly.Connection(
+            prevBlock, ConnectionType.PREVIOUS_STATEMENT);
+        const nextCon =
+            new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
         prevBlock.previousConnection = prevCon;
         nextBlock.nextConnection = nextCon;
         connectReciprocally(prevCon, nextCon);
-        const outCon = new Blockly.Connection(prevBlock, ConnectionType.OUTPUT_VALUE);
+        const outCon =
+            new Blockly.Connection(prevBlock, ConnectionType.OUTPUT_VALUE);
         const inBlock = {
-          isShadow: function() {
-          },
+          isShadow: function() {},
         };
-        const inCon = new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
+        const inCon =
+            new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
 
         assertReasonHelper(
-            this.checker,
-            outCon,
-            inCon,
+            this.checker, outCon, inCon,
             Blockly.Connection.REASON_PREVIOUS_AND_OUTPUT);
       });
     });
@@ -345,8 +358,11 @@ suite('Connection checker', function() {
     suite('Stacks', function() {
       setup(function() {
         this.workspace = Blockly.inject('blocklyDiv');
-        // Load in three blocks: A and B are connected (next/prev); B is unmovable.
-        Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
+        // Load in three blocks: A and B are connected (next/prev); B is
+        // unmovable.
+        Blockly.Xml.domToWorkspace(
+            Blockly.utils.xml.textToDom(
+                `<xml xmlns="https://developers.google.com/blockly/xml">
         <block type="text_print" id="A" x="-76" y="-112">
           <next>
             <block type="text_print" id="B" movable="false">
@@ -354,17 +370,20 @@ suite('Connection checker', function() {
           </next>
         </block>
         <block type="text_print" id="C" x="47" y="-118"/>
-      </xml>`), this.workspace);
-      [this.blockA, this.blockB, this.blockC] = this.workspace.getAllBlocks(true);
-      this.checker = this.workspace.connectionChecker;
+      </xml>`),
+            this.workspace);
+        [this.blockA, this.blockB, this.blockC] =
+            this.workspace.getAllBlocks(true);
+        this.checker = this.workspace.connectionChecker;
       });
 
       test('Connect a stack', function() {
         // block C is not connected to block A; both are movable.
         chai.assert.isTrue(
-          this.checker.doDragChecks(
-            this.blockC.nextConnection, this.blockA.previousConnection, 9000),
-          'Should connect two compatible stack blocks');
+            this.checker.doDragChecks(
+                this.blockC.nextConnection, this.blockA.previousConnection,
+                9000),
+            'Should connect two compatible stack blocks');
       });
 
       test('Connect to unmovable shadow block', function() {
@@ -372,7 +391,9 @@ suite('Connection checker', function() {
         this.workspace.clear();
 
         // Add the same test blocks, but this time block B is a shadow block.
-        Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
+        Blockly.Xml.domToWorkspace(
+            Blockly.utils.xml.textToDom(
+                `<xml xmlns="https://developers.google.com/blockly/xml">
         <block type="text_print" id="A" x="-76" y="-112">
           <next>
             <shadow type="text_print" id="B" movable="false">
@@ -380,34 +401,40 @@ suite('Connection checker', function() {
           </next>
         </block>
         <block type="text_print" id="C" x="47" y="-118"/>
-      </xml>`), this.workspace);
-      [this.blockA, this.blockB, this.blockC] = this.workspace.getAllBlocks(true);
+      </xml>`),
+            this.workspace);
+        [this.blockA, this.blockB, this.blockC] =
+            this.workspace.getAllBlocks(true);
 
-      // Try to connect blockC into the input connection of blockA, replacing blockB.
-      // This is allowed because shadow blocks can always be replaced, even though
-      // they are unmovable.
-      chai.assert.isTrue(
-        this.checker.doDragChecks(
-          this.blockC.previousConnection, this.blockA.nextConnection, 9000),
-        'Should connect in place of a shadow block');
+        // Try to connect blockC into the input connection of blockA, replacing
+        // blockB. This is allowed because shadow blocks can always be replaced,
+        // even though they are unmovable.
+        chai.assert.isTrue(
+            this.checker.doDragChecks(
+                this.blockC.previousConnection, this.blockA.nextConnection,
+                9000),
+            'Should connect in place of a shadow block');
       });
 
       test('Do not splice into unmovable stack', function() {
-        // Try to connect blockC above blockB. It shouldn't work because B is not movable
-        // and is already connected to A's nextConnection.
+        // Try to connect blockC above blockB. It shouldn't work because B is
+        // not movable and is already connected to A's nextConnection.
         chai.assert.isFalse(
-          this.checker.doDragChecks(
-            this.blockC.previousConnection, this.blockA.nextConnection, 9000),
-          'Should not splice in a block above an unmovable block');
+            this.checker.doDragChecks(
+                this.blockC.previousConnection, this.blockA.nextConnection,
+                9000),
+            'Should not splice in a block above an unmovable block');
       });
 
       test('Connect to bottom of unmovable stack', function() {
         // Try to connect blockC below blockB.
-        // This is allowed even though B is not movable because it is on B's nextConnection.
+        // This is allowed even though B is not movable because it is on B's
+        // nextConnection.
         chai.assert.isTrue(
-          this.checker.doDragChecks(
-            this.blockC.previousConnection, this.blockB.nextConnection, 9000),
-          'Should connect below an unmovable stack block');
+            this.checker.doDragChecks(
+                this.blockC.previousConnection, this.blockB.nextConnection,
+                9000),
+            'Should connect below an unmovable stack block');
       });
 
       test('Connect to unconnected unmovable block', function() {
@@ -417,26 +444,30 @@ suite('Connection checker', function() {
         // Try to connect blockC above blockB.
         // This is allowed because we're not splicing into a stack.
         chai.assert.isTrue(
-          this.checker.doDragChecks(
-            this.blockC.nextConnection, this.blockB.previousConnection, 9000),
-          'Should connect above an unconnected unmovable block'
-        );
+            this.checker.doDragChecks(
+                this.blockC.nextConnection, this.blockB.previousConnection,
+                9000),
+            'Should connect above an unconnected unmovable block');
       });
     });
     suite('Rows', function() {
       setup(function() {
         this.workspace = Blockly.inject('blocklyDiv');
         // Load 3 blocks: A and B are connected (input/output); B is unmovable.
-        Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml">
+        Blockly.Xml.domToWorkspace(
+            Blockly.utils.xml.textToDom(
+                `<xml xmlns="https://developers.google.com/blockly/xml">
         <block type="test_basic_row" id="A" x="38" y="37">
           <value name="INPUT">
             <block type="test_basic_row" id="B" movable="false"></block>
           </value>
         </block>
         <block type="test_basic_row" id="C" x="38" y="87"></block>
-      </xml>`), this.workspace);
-      [this.blockA, this.blockB, this.blockC] = this.workspace.getAllBlocks(true);
-      this.checker = this.workspace.connectionChecker;
+      </xml>`),
+            this.workspace);
+        [this.blockA, this.blockB, this.blockC] =
+            this.workspace.getAllBlocks(true);
+        this.checker = this.workspace.connectionChecker;
       });
 
       test('Do not splice into unmovable block row', function() {
@@ -444,9 +475,9 @@ suite('Connection checker', function() {
         // A is already connected to B, which is unmovable.
         const inputConnection = this.blockA.inputList[0].connection;
         chai.assert.isFalse(
-          this.checker.doDragChecks(this.blockC.outputConnection, inputConnection, 9000),
-          'Should not splice in a block before an unmovable block'
-        );
+            this.checker.doDragChecks(
+                this.blockC.outputConnection, inputConnection, 9000),
+            'Should not splice in a block before an unmovable block');
       });
 
       test('Connect to end of unmovable block', function() {
@@ -455,21 +486,22 @@ suite('Connection checker', function() {
         // Try to connect A's output to C's input. This is allowed.
         const inputConnection = this.blockC.inputList[0].connection;
         chai.assert.isTrue(
-          this.checker.doDragChecks(this.blockA.outputConnection, inputConnection, 9000),
-          'Should connect to end of unmovable block'
-        );
+            this.checker.doDragChecks(
+                this.blockA.outputConnection, inputConnection, 9000),
+            'Should connect to end of unmovable block');
       });
 
       test('Connect to unconnected unmovable block', function() {
         this.blockB.outputConnection.disconnect();
         this.blockA.dispose();
 
-        // Try to connect C's input to B's output. Allowed because B is now unconnected.
+        // Try to connect C's input to B's output. Allowed because B is now
+        // unconnected.
         const inputConnection = this.blockC.inputList[0].connection;
         chai.assert.isTrue(
-          this.checker.doDragChecks(inputConnection, this.blockB.outputConnection, 9000),
-          'Should connect to unconnected unmovable block'
-        );
+            this.checker.doDragChecks(
+                inputConnection, this.blockB.outputConnection, 9000),
+            'Should connect to unconnected unmovable block');
       });
     });
   });

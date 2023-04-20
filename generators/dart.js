@@ -49,31 +49,30 @@ Dart.addReservedWords(
     'CyclicInitializationError,Error,Exception,FallThroughError,' +
     'FormatException,IntegerDivisionByZeroException,NoSuchMethodError,' +
     'NullThrownError,OutOfMemoryError,RangeError,StackOverflowError,' +
-    'StateError,TypeError,UnimplementedError,UnsupportedError'
-);
+    'StateError,TypeError,UnimplementedError,UnsupportedError');
 
 /**
  * Order of operation ENUMs.
  * https://dart.dev/guides/language/language-tour#operators
  */
-Dart.ORDER_ATOMIC = 0;         // 0 "" ...
-Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] . ?.
-Dart.ORDER_UNARY_PREFIX = 2;   // -expr !expr ~expr ++expr --expr
-Dart.ORDER_MULTIPLICATIVE = 3; // * / % ~/
-Dart.ORDER_ADDITIVE = 4;       // + -
-Dart.ORDER_SHIFT = 5;          // << >>
-Dart.ORDER_BITWISE_AND = 6;    // &
-Dart.ORDER_BITWISE_XOR = 7;    // ^
-Dart.ORDER_BITWISE_OR = 8;     // |
-Dart.ORDER_RELATIONAL = 9;     // >= > <= < as is is!
-Dart.ORDER_EQUALITY = 10;      // == !=
-Dart.ORDER_LOGICAL_AND = 11;   // &&
-Dart.ORDER_LOGICAL_OR = 12;    // ||
-Dart.ORDER_IF_NULL = 13;       // ??
-Dart.ORDER_CONDITIONAL = 14;   // expr ? expr : expr
-Dart.ORDER_CASCADE = 15;       // ..
-Dart.ORDER_ASSIGNMENT = 16;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
-Dart.ORDER_NONE = 99;          // (...)
+Dart.ORDER_ATOMIC = 0;          // 0 "" ...
+Dart.ORDER_UNARY_POSTFIX = 1;   // expr++ expr-- () [] . ?.
+Dart.ORDER_UNARY_PREFIX = 2;    // -expr !expr ~expr ++expr --expr
+Dart.ORDER_MULTIPLICATIVE = 3;  // * / % ~/
+Dart.ORDER_ADDITIVE = 4;        // + -
+Dart.ORDER_SHIFT = 5;           // << >>
+Dart.ORDER_BITWISE_AND = 6;     // &
+Dart.ORDER_BITWISE_XOR = 7;     // ^
+Dart.ORDER_BITWISE_OR = 8;      // |
+Dart.ORDER_RELATIONAL = 9;      // >= > <= < as is is!
+Dart.ORDER_EQUALITY = 10;       // == !=
+Dart.ORDER_LOGICAL_AND = 11;    // &&
+Dart.ORDER_LOGICAL_OR = 12;     // ||
+Dart.ORDER_IF_NULL = 13;        // ??
+Dart.ORDER_CONDITIONAL = 14;    // expr ? expr : expr
+Dart.ORDER_CASCADE = 15;        // ..
+Dart.ORDER_ASSIGNMENT = 16;     // = *= /= ~/= %= += -= <<= >>= &= ^= |=
+Dart.ORDER_NONE = 99;           // (...)
 
 /**
  * Whether the init method has been called.
@@ -103,21 +102,19 @@ Dart.init = function(workspace) {
   // Add developer variables (not created or named by the user).
   const devVarList = Variables.allDeveloperVariables(workspace);
   for (let i = 0; i < devVarList.length; i++) {
-    defvars.push(this.nameDB_.getName(devVarList[i],
-        NameType.DEVELOPER_VARIABLE));
+    defvars.push(
+        this.nameDB_.getName(devVarList[i], NameType.DEVELOPER_VARIABLE));
   }
 
   // Add user variables, but only ones that are being used.
   const variables = Variables.allUsedVarModels(workspace);
   for (let i = 0; i < variables.length; i++) {
-    defvars.push(this.nameDB_.getName(variables[i].getId(),
-        NameType.VARIABLE));
+    defvars.push(this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE));
   }
 
   // Declare all of the variables.
   if (defvars.length) {
-    this.definitions_['variables'] =
-        'var ' + defvars.join(', ') + ';';
+    this.definitions_['variables'] = 'var ' + defvars.join(', ') + ';';
   }
   this.isInitialized = true;
 };
@@ -173,9 +170,9 @@ Dart.scrubNakedValue = function(line) {
 Dart.quote_ = function(string) {
   // Can't use goog.string.quote since $ must also be escaped.
   string = string.replace(/\\/g, '\\\\')
-                 .replace(/\n/g, '\\\n')
-                 .replace(/\$/g, '\\$')
-                 .replace(/'/g, '\\\'');
+               .replace(/\n/g, '\\\n')
+               .replace(/\$/g, '\\$')
+               .replace(/'/g, '\\\'');
   return '\'' + string + '\'';
 };
 
@@ -186,7 +183,7 @@ Dart.quote_ = function(string) {
  * @return {string} Dart string.
  * @protected
  */
-Dart.multiline_quote_ = function (string) {
+Dart.multiline_quote_ = function(string) {
   const lines = string.split(/\n/g).map(this.quote_);
   // Join with the following, plus a newline:
   // + '\n' +
@@ -246,8 +243,7 @@ Dart.scrub_ = function(block, code, opt_thisOnly) {
  * @param {number=} opt_order The highest order acting on this value.
  * @return {string|number}
  */
-Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
-    opt_order) {
+Dart.getAdjusted = function(block, atId, opt_delta, opt_negate, opt_order) {
   let delta = opt_delta || 0;
   let order = opt_order || this.ORDER_NONE;
   if (block.workspace.options.oneBasedIndex) {

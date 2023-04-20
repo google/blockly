@@ -152,23 +152,22 @@ Python['math_constant'] = function(block) {
 };
 
 Python['math_number_property'] = function(block) {
-   // Check if a number is even, odd, prime, whole, positive, or negative
-   // or if it is divisible by certain number. Returns true or false.
+  // Check if a number is even, odd, prime, whole, positive, or negative
+  // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
     'EVEN': [' % 2 == 0', Python.ORDER_MULTIPLICATIVE, Python.ORDER_RELATIONAL],
     'ODD': [' % 2 == 1', Python.ORDER_MULTIPLICATIVE, Python.ORDER_RELATIONAL],
-    'WHOLE': [' % 1 == 0', Python.ORDER_MULTIPLICATIVE,
-        Python.ORDER_RELATIONAL],
+    'WHOLE':
+        [' % 1 == 0', Python.ORDER_MULTIPLICATIVE, Python.ORDER_RELATIONAL],
     'POSITIVE': [' > 0', Python.ORDER_RELATIONAL, Python.ORDER_RELATIONAL],
     'NEGATIVE': [' < 0', Python.ORDER_RELATIONAL, Python.ORDER_RELATIONAL],
-    'DIVISIBLE_BY': [null, Python.ORDER_MULTIPLICATIVE,
-        Python.ORDER_RELATIONAL],
+    'DIVISIBLE_BY':
+        [null, Python.ORDER_MULTIPLICATIVE, Python.ORDER_RELATIONAL],
     'PRIME': [null, Python.ORDER_NONE, Python.ORDER_FUNCTION_CALL],
-  }
-  const dropdownProperty = block.getFieldValue('PROPERTY');
+  } const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
-  const numberToCheck = Python.valueToCode(block, 'NUMBER_TO_CHECK',
-      inputOrder) || '0';
+  const numberToCheck =
+      Python.valueToCode(block, 'NUMBER_TO_CHECK', inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
@@ -195,10 +194,11 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(n):
       return False
   return True
 `);
-       code = functionName + '(' + numberToCheck + ')';
+    code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = Python.valueToCode(block, 'DIVISOR',
-        Python.ORDER_MULTIPLICATIVE) || '0';
+    const divisor =
+        Python.valueToCode(block, 'DIVISOR', Python.ORDER_MULTIPLICATIVE) ||
+        '0';
     // If 'divisor' is some code that evals to 0, Python will raise an error.
     if (divisor === '0') {
       return ['False', Python.ORDER_ATOMIC];
@@ -261,7 +261,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(myList):
           'from numbers import Number';
       // This operation excludes null values:
       // math_median([null, null, 1, 3]) -> 2.0
-      const functionName = Python.provideFunction_( 'math_median', `
+      const functionName = Python.provideFunction_('math_median', `
 def ${Python.FUNCTION_NAME_PLACEHOLDER_}(myList):
   localList = sorted([e for e in myList if isinstance(e, Number)])
   if not localList: return

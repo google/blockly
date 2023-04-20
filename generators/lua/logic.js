@@ -28,7 +28,8 @@ Lua['controls_if'] = function(block) {
     let branchCode = Lua.statementToCode(block, 'DO' + n);
     if (Lua.STATEMENT_SUFFIX) {
       branchCode = Lua.prefixLines(
-          Lua.injectId(Lua.STATEMENT_SUFFIX, block), Lua.INDENT) + branchCode;
+                       Lua.injectId(Lua.STATEMENT_SUFFIX, block), Lua.INDENT) +
+          branchCode;
     }
     code +=
         (n > 0 ? 'else' : '') + 'if ' + conditionCode + ' then\n' + branchCode;

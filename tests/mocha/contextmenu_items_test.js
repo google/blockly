@@ -38,7 +38,8 @@ suite('Context Menu Items', function() {
 
       test('Disabled when nothing to undo', function() {
         const precondition = this.undoOption.preconditionFn(this.scope);
-        chai.assert.equal(precondition, 'disabled',
+        chai.assert.equal(
+            precondition, 'disabled',
             'Should be disabled when there is nothing to undo');
       });
 
@@ -46,7 +47,8 @@ suite('Context Menu Items', function() {
         // Create a new block, which should be undoable.
         this.workspace.newBlock('text');
         const precondition = this.undoOption.preconditionFn(this.scope);
-        chai.assert.equal(precondition, 'enabled',
+        chai.assert.equal(
+            precondition, 'enabled',
             'Should be enabled when there are actions to undo');
       });
 
@@ -54,7 +56,8 @@ suite('Context Menu Items', function() {
         this.workspace.newBlock('text');
         chai.assert.equal(this.workspace.getTopBlocks(false).length, 1);
         this.undoOption.callback(this.scope);
-        chai.assert.equal(this.workspace.getTopBlocks(false).length, 0,
+        chai.assert.equal(
+            this.workspace.getTopBlocks(false).length, 0,
             'Should be no blocks after undo');
       });
 
@@ -72,16 +75,19 @@ suite('Context Menu Items', function() {
         // Create a new block. There should be something to undo, but not redo.
         this.workspace.newBlock('text');
         const precondition = this.redoOption.preconditionFn(this.scope);
-        chai.assert.equal(precondition, 'disabled',
+        chai.assert.equal(
+            precondition, 'disabled',
             'Should be disabled when there is nothing to redo');
       });
 
       test('Enabled when something to redo', function() {
-        // Create a new block, then undo it, which means there is something to redo.
+        // Create a new block, then undo it, which means there is something to
+        // redo.
         this.workspace.newBlock('text');
         this.workspace.undo(false);
         const precondition = this.redoOption.preconditionFn(this.scope);
-        chai.assert.equal(precondition, 'enabled',
+        chai.assert.equal(
+            precondition, 'enabled',
             'Should be enabled when there are actions to redo');
       });
 
@@ -91,7 +97,8 @@ suite('Context Menu Items', function() {
         this.workspace.undo(false);
         chai.assert.equal(this.workspace.getTopBlocks(false).length, 0);
         this.redoOption.callback(this.scope);
-        chai.assert.equal(this.workspace.getTopBlocks(false).length, 1,
+        chai.assert.equal(
+            this.workspace.getTopBlocks(false).length, 1,
             'Should be 1 block after redo');
       });
 
@@ -109,18 +116,21 @@ suite('Context Menu Items', function() {
       test('Enabled when multiple blocks', function() {
         this.workspace.newBlock('text');
         this.workspace.newBlock('text');
-        chai.assert.equal(this.cleanupOption.preconditionFn(this.scope), 'enabled',
+        chai.assert.equal(
+            this.cleanupOption.preconditionFn(this.scope), 'enabled',
             'Should be enabled if there are multiple blocks');
       });
 
       test('Disabled when no blocks', function() {
-        chai.assert.equal(this.cleanupOption.preconditionFn(this.scope), 'disabled',
+        chai.assert.equal(
+            this.cleanupOption.preconditionFn(this.scope), 'disabled',
             'Should be disabled if there are no blocks');
       });
 
       test('Hidden when not movable', function() {
         sinon.stub(this.workspace, 'isMovable').returns(false);
-        chai.assert.equal(this.cleanupOption.preconditionFn(this.scope), 'hidden',
+        chai.assert.equal(
+            this.cleanupOption.preconditionFn(this.scope), 'hidden',
             'Should be hidden if the workspace is not movable');
       });
 
@@ -143,22 +153,26 @@ suite('Context Menu Items', function() {
         this.workspace.newBlock('text');
         const block2 = this.workspace.newBlock('text');
         block2.setCollapsed(true);
-        chai.assert.equal(this.collapseOption.preconditionFn(this.scope), 'enabled',
+        chai.assert.equal(
+            this.collapseOption.preconditionFn(this.scope), 'enabled',
             'Should be enabled when any blocks are expanded');
       });
 
       test('Disabled when all blocks collapsed', function() {
         this.workspace.newBlock('text').setCollapsed(true);
-        chai.assert.equal(this.collapseOption.preconditionFn(this.scope), 'disabled',
+        chai.assert.equal(
+            this.collapseOption.preconditionFn(this.scope), 'disabled',
             'Should be disabled when no blocks are expanded');
       });
 
       test('Hidden when no collapse option', function() {
-        const workspaceWithOptions = new Blockly.Workspace(new Blockly.Options({collapse: false}));
+        const workspaceWithOptions =
+            new Blockly.Workspace(new Blockly.Options({collapse: false}));
         this.scope.workspace = workspaceWithOptions;
 
         try {
-          chai.assert.equal(this.collapseOption.preconditionFn(this.scope), 'hidden',
+          chai.assert.equal(
+              this.collapseOption.preconditionFn(this.scope), 'hidden',
               'Should be hidden if collapse is disabled in options');
         } finally {
           workspaceTeardown.call(this, workspaceWithOptions);
@@ -177,9 +191,11 @@ suite('Context Menu Items', function() {
         this.collapseOption.callback(this.scope);
         this.clock.runAll();
 
-        chai.assert.isTrue(block1.isCollapsed(),
+        chai.assert.isTrue(
+            block1.isCollapsed(),
             'Previously collapsed block should still be collapsed');
-        chai.assert.isTrue(block2.isCollapsed(),
+        chai.assert.isTrue(
+            block2.isCollapsed(),
             'Previously expanded block should now be collapsed');
       });
 
@@ -198,22 +214,26 @@ suite('Context Menu Items', function() {
         const block2 = this.workspace.newBlock('text');
         block2.setCollapsed(true);
 
-        chai.assert.equal(this.expandOption.preconditionFn(this.scope), 'enabled',
+        chai.assert.equal(
+            this.expandOption.preconditionFn(this.scope), 'enabled',
             'Should be enabled when any blocks are collapsed');
       });
 
       test('Disabled when no collapsed blocks', function() {
         this.workspace.newBlock('text');
-        chai.assert.equal(this.expandOption.preconditionFn(this.scope), 'disabled',
+        chai.assert.equal(
+            this.expandOption.preconditionFn(this.scope), 'disabled',
             'Should be disabled when no blocks are collapsed');
       });
 
       test('Hidden when no collapse option', function() {
-        const workspaceWithOptions = new Blockly.Workspace(new Blockly.Options({collapse: false}));
+        const workspaceWithOptions =
+            new Blockly.Workspace(new Blockly.Options({collapse: false}));
         this.scope.workspace = workspaceWithOptions;
 
         try {
-          chai.assert.equal(this.expandOption.preconditionFn(this.scope), 'hidden',
+          chai.assert.equal(
+              this.expandOption.preconditionFn(this.scope), 'hidden',
               'Should be hidden if collapse is disabled in options');
         } finally {
           workspaceTeardown.call(this, workspaceWithOptions);
@@ -232,9 +252,11 @@ suite('Context Menu Items', function() {
         this.expandOption.callback(this.scope);
         this.clock.runAll();
 
-        chai.assert.isFalse(block1.isCollapsed(),
+        chai.assert.isFalse(
+            block1.isCollapsed(),
             'Previously expanded block should still be expanded');
-        chai.assert.isFalse(block2.isCollapsed(),
+        chai.assert.isFalse(
+            block2.isCollapsed(),
             'Previously collapsed block should now be expanded');
       });
 
@@ -250,17 +272,21 @@ suite('Context Menu Items', function() {
 
       test('Enabled when blocks to delete', function() {
         this.workspace.newBlock('text');
-        chai.assert.equal(this.deleteOption.preconditionFn(this.scope), 'enabled');
+        chai.assert.equal(
+            this.deleteOption.preconditionFn(this.scope), 'enabled');
       });
 
       test('Disabled when no blocks to delete', function() {
-        chai.assert.equal(this.deleteOption.preconditionFn(this.scope), 'disabled');
+        chai.assert.equal(
+            this.deleteOption.preconditionFn(this.scope), 'disabled');
       });
 
       test('Deletes all blocks after confirming', function() {
-        // Mocks the confirmation dialog and calls the callback with 'true' simulating ok.
-        const confirmStub = sinon.stub(
-          Blockly.dialog.TEST_ONLY, 'confirmInternal').callsArgWith(1, true);
+        // Mocks the confirmation dialog and calls the callback with 'true'
+        // simulating ok.
+        const confirmStub =
+            sinon.stub(Blockly.dialog.TEST_ONLY, 'confirmInternal')
+                .callsArgWith(1, true);
 
         this.workspace.newBlock('text');
         this.workspace.newBlock('text');
@@ -271,9 +297,11 @@ suite('Context Menu Items', function() {
       });
 
       test('Does not delete blocks if not confirmed', function() {
-        // Mocks the confirmation dialog and calls the callback with 'false' simulating cancel.
-        const confirmStub = sinon.stub(
-          Blockly.dialog.TEST_ONLY, 'confirmInternal').callsArgWith(1, false);
+        // Mocks the confirmation dialog and calls the callback with 'false'
+        // simulating cancel.
+        const confirmStub =
+            sinon.stub(Blockly.dialog.TEST_ONLY, 'confirmInternal')
+                .callsArgWith(1, false);
 
         this.workspace.newBlock('text');
         this.workspace.newBlock('text');
@@ -284,7 +312,8 @@ suite('Context Menu Items', function() {
       });
 
       test('No dialog for single block', function() {
-        const confirmStub = sinon.stub(Blockly.dialog.TEST_ONLY, 'confirmInternal');
+        const confirmStub =
+            sinon.stub(Blockly.dialog.TEST_ONLY, 'confirmInternal');
         this.workspace.newBlock('text');
         this.deleteOption.callback(this.scope);
         this.clock.runAll();
@@ -297,12 +326,14 @@ suite('Context Menu Items', function() {
         this.workspace.newBlock('text');
         this.workspace.newBlock('text');
 
-        chai.assert.equal(this.deleteOption.displayText(this.scope), 'Delete 2 Blocks');
+        chai.assert.equal(
+            this.deleteOption.displayText(this.scope), 'Delete 2 Blocks');
       });
 
       test('Has correct label for single block', function() {
         this.workspace.newBlock('text');
-        chai.assert.equal(this.deleteOption.displayText(this.scope), 'Delete Block');
+        chai.assert.equal(
+            this.deleteOption.displayText(this.scope), 'Delete Block');
       });
     });
   });
@@ -320,17 +351,20 @@ suite('Context Menu Items', function() {
 
       test('Enabled when block is duplicatable', function() {
         // Block is duplicatable by default
-        chai.assert.equal(this.duplicateOption.preconditionFn(this.scope), 'enabled');
+        chai.assert.equal(
+            this.duplicateOption.preconditionFn(this.scope), 'enabled');
       });
 
       test('Disabled when block is not dupicatable', function() {
         sinon.stub(this.block, 'isDuplicatable').returns(false);
-        chai.assert.equal(this.duplicateOption.preconditionFn(this.scope), 'disabled');
+        chai.assert.equal(
+            this.duplicateOption.preconditionFn(this.scope), 'disabled');
       });
 
       test('Hidden when in flyout', function() {
         this.block.isInFlyout = true;
-        chai.assert.equal(this.duplicateOption.preconditionFn(this.scope), 'hidden');
+        chai.assert.equal(
+            this.duplicateOption.preconditionFn(this.scope), 'hidden');
       });
 
       test('Calls duplicate', function() {
@@ -353,7 +387,8 @@ suite('Context Menu Items', function() {
       });
 
       test('Enabled for normal block', function() {
-        chai.assert.equal(this.commentOption.preconditionFn(this.scope), 'enabled');
+        chai.assert.equal(
+            this.commentOption.preconditionFn(this.scope), 'enabled');
       });
 
       test('Hidden for collapsed block', function() {
@@ -362,30 +397,37 @@ suite('Context Menu Items', function() {
         this.block.render();
         this.block.setCollapsed(true);
 
-        chai.assert.equal(this.commentOption.preconditionFn(this.scope), 'hidden');
+        chai.assert.equal(
+            this.commentOption.preconditionFn(this.scope), 'hidden');
       });
 
       test('Creates comment if one did not exist', function() {
-        chai.assert.isNull(this.block.getCommentIcon(), 'New block should not have a comment');
+        chai.assert.isNull(
+            this.block.getCommentIcon(), 'New block should not have a comment');
         this.commentOption.callback(this.scope);
         chai.assert.exists(this.block.getCommentIcon());
-        chai.assert.isEmpty(this.block.getCommentText(), 'Block should have empty comment text');
+        chai.assert.isEmpty(
+            this.block.getCommentText(),
+            'Block should have empty comment text');
       });
 
       test('Removes comment if block had one', function() {
         this.block.setCommentText('Test comment');
         this.commentOption.callback(this.scope);
-        chai.assert.isNull(this.block.getCommentText(),
+        chai.assert.isNull(
+            this.block.getCommentText(),
             'Block should not have comment after removal');
       });
 
       test('Has correct label for add comment', function() {
-        chai.assert.equal(this.commentOption.displayText(this.scope), 'Add Comment');
+        chai.assert.equal(
+            this.commentOption.displayText(this.scope), 'Add Comment');
       });
 
       test('Has correct label for remove comment', function() {
         this.block.setCommentText('Test comment');
-        chai.assert.equal(this.commentOption.displayText(this.scope), 'Remove Comment');
+        chai.assert.equal(
+            this.commentOption.displayText(this.scope), 'Remove Comment');
       });
     });
 
@@ -397,7 +439,8 @@ suite('Context Menu Items', function() {
       test('Enabled when inputs to inline', function() {
         this.block.appendValueInput('test1');
         this.block.appendValueInput('test2');
-        chai.assert.equal(this.inlineOption.preconditionFn(this.scope), 'enabled');
+        chai.assert.equal(
+            this.inlineOption.preconditionFn(this.scope), 'enabled');
       });
     });
   });

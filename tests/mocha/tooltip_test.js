@@ -57,7 +57,8 @@ suite('Tooltip', function() {
       // Fire pointer events directly on the relevant SVG.
       this.block.pathObject.svgPath.dispatchEvent(
           new PointerEvent('pointerover'));
-      this.block.pathObject.svgPath.dispatchEvent(new PointerEvent('pointermove'));
+      this.block.pathObject.svgPath.dispatchEvent(
+          new PointerEvent('pointermove'));
       this.clock.runAll();
 
       chai.assert.isTrue(

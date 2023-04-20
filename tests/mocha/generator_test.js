@@ -39,42 +39,50 @@ suite('Generator', function() {
     });
 
     test('One line', function() {
-      chai.assert.equal(this.generator.prefixLines('Hello\n', '12'), '12Hello\n');
+      chai.assert.equal(
+          this.generator.prefixLines('Hello\n', '12'), '12Hello\n');
     });
 
     test('Two lines', function() {
-      chai.assert.equal(this.generator.prefixLines('Hello\nWorld\n', '***'), '***Hello\n***World\n');
+      chai.assert.equal(
+          this.generator.prefixLines('Hello\nWorld\n', '***'),
+          '***Hello\n***World\n');
     });
   });
 
   suite('blockToCode', function() {
     setup(function() {
-      Blockly.defineBlocksWithJsonArray([{
-        "type": "stack_block",
-        "message0": "",
-        "previousStatement": null,
-        "nextStatement": null,
-      },
-      {
-        "type": "row_block",
-        "message0": "%1",
-        "args0": [
-          {
-            "type": "input_value",
-            "name": "INPUT",
-          },
-        ],
-        "output": null,
-        "nextStatement": null,
-      }]);
+      Blockly.defineBlocksWithJsonArray([
+        {
+          "type": "stack_block",
+          "message0": "",
+          "previousStatement": null,
+          "nextStatement": null,
+        },
+        {
+          "type": "row_block",
+          "message0": "%1",
+          "args0": [
+            {
+              "type": "input_value",
+              "name": "INPUT",
+            },
+          ],
+          "output": null,
+          "nextStatement": null,
+        }
+      ]);
       const rowBlock = this.workspace.newBlock('row_block');
       const stackBlock = this.workspace.newBlock('stack_block');
 
       this.blockToCodeTest = function(
-          generator, blockDisabled, opt_thisOnly,
-          expectedCode, opt_message) {
-        generator.row_block = function(_) {return 'row_block';};
-        generator.stack_block = function(_) {return 'stack_block';};
+          generator, blockDisabled, opt_thisOnly, expectedCode, opt_message) {
+        generator.row_block = function(_) {
+          return 'row_block';
+        };
+        generator.stack_block = function(_) {
+          return 'stack_block';
+        };
         rowBlock.nextConnection.connect(stackBlock.previousConnection);
         rowBlock.disabled = blockDisabled;
 
@@ -84,11 +92,9 @@ suite('Generator', function() {
     });
 
     const testCase = [
-      [dartGenerator, 'Dart'],
-      [javascriptGenerator, 'JavaScript'],
-      [luaGenerator, 'Lua'],
-      [phpGenerator, 'PHP'],
-      [pythonGenerator, 'Python']];
+      [dartGenerator, 'Dart'], [javascriptGenerator, 'JavaScript'],
+      [luaGenerator, 'Lua'], [phpGenerator, 'PHP'], [pythonGenerator, 'Python']
+    ];
 
     suite('Trivial', function() {
       testCase.forEach(function(testCase) {
@@ -98,7 +104,8 @@ suite('Generator', function() {
           generator.init(this.workspace);
           this.blockToCodeTest(generator, false, true, 'row_block');
           this.blockToCodeTest(
-              generator, false, false, 'row_blockstack_block', 'thisOnly=false');
+              generator, false, false, 'row_blockstack_block',
+              'thisOnly=false');
         });
       });
     });
@@ -109,7 +116,8 @@ suite('Generator', function() {
         const name = testCase[1];
         test(name, function() {
           this.blockToCodeTest(generator, true, true, '');
-          this.blockToCodeTest(generator, true, false, 'stack_block', 'thisOnly=false');
+          this.blockToCodeTest(
+              generator, true, false, 'stack_block', 'thisOnly=false');
         });
       });
     });

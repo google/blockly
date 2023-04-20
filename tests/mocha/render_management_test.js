@@ -22,7 +22,9 @@ suite('Render Management', function() {
     function createMockBlock() {
       return {
         hasRendered: false,
-        renderEfficiently: function() {this.hasRendered = true;},
+        renderEfficiently: function() {
+          this.hasRendered = true;
+        },
 
         // All of the APIs the render management system needs.
         getParent: () => null,
@@ -36,14 +38,15 @@ suite('Render Management', function() {
       };
     }
 
-    test('the queueRender promise is properly resolved after rendering',
+    test(
+        'the queueRender promise is properly resolved after rendering',
         function() {
           const block = createMockBlock();
-          const promise = Blockly.renderManagement.queueRender(block)
-            .then(() => {
-              chai.assert.isTrue(
-                  block.hasRendered, 'Expected block to be rendered');
-             });
+          const promise =
+              Blockly.renderManagement.queueRender(block).then(() => {
+                chai.assert.isTrue(
+                    block.hasRendered, 'Expected block to be rendered');
+              });
           this.clock.runAll();
           return promise;
         });
@@ -54,9 +57,9 @@ suite('Render Management', function() {
           const block = createMockBlock();
           Blockly.renderManagement.queueRender(block);
           const promise = Blockly.renderManagement.finishQueuedRenders(() => {
-              chai.assert.isTrue(
-                  block.hasRendered, 'Expected block to be rendered');
-             });
+            chai.assert.isTrue(
+                block.hasRendered, 'Expected block to be rendered');
+          });
           this.clock.runAll();
           return promise;
         });

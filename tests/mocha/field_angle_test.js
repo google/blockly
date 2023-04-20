@@ -31,8 +31,11 @@ suite('Angle Fields', function() {
     {title: 'Infinity', value: Infinity, expectedValue: Infinity},
     {title: 'Negative Infinity', value: -Infinity, expectedValue: -Infinity},
     {title: 'Infinity String', value: 'Infinity', expectedValue: Infinity},
-    {title: 'Negative Infinity String', value: '-Infinity',
-      expectedValue: -Infinity},
+    {
+      title: 'Negative Infinity String',
+      value: '-Infinity',
+      expectedValue: -Infinity
+    },
   ];
   /**
    * Configuration for field tests with valid values.
@@ -121,20 +124,28 @@ suite('Angle Fields', function() {
       sinon.restore();
     });
     const testSuites = [
-      {title: 'Null Validator',
-        validator:
-            function() {
-              return null;
-            },
-        value: 2, expectedValue: '1'},
-      {title: 'Force Mult of 30 Validator',
-        validator:
-            function(newValue) {
-              return Math.round(newValue / 30) * 30;
-            },
-        value: 25, expectedValue: 30},
-      {title: 'Returns Undefined Validator', validator: function() {}, value: 2,
-        expectedValue: 2},
+      {
+        title: 'Null Validator',
+        validator: function() {
+          return null;
+        },
+        value: 2,
+        expectedValue: '1'
+      },
+      {
+        title: 'Force Mult of 30 Validator',
+        validator: function(newValue) {
+          return Math.round(newValue / 30) * 30;
+        },
+        value: 25,
+        expectedValue: 30
+      },
+      {
+        title: 'Returns Undefined Validator',
+        validator: function() {},
+        value: 2,
+        expectedValue: 2
+      },
     ];
     testSuites.forEach(function(suiteInfo) {
       suite(suiteInfo.title, function() {

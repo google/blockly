@@ -35,8 +35,10 @@ export function dispatchPointerEvent(target, type, properties) {
 
 /**
  * Creates a key down event used for testing.
- * @param {number} keyCode The keycode for the event. Use Blockly.utils.KeyCodes enum.
- * @param {!Array<number>=} modifiers A list of modifiers. Use Blockly.utils.KeyCodes enum.
+ * @param {number} keyCode The keycode for the event. Use Blockly.utils.KeyCodes
+ *     enum.
+ * @param {!Array<number>=} modifiers A list of modifiers. Use
+ *     Blockly.utils.KeyCodes enum.
  * @return {!KeyboardEvent} The mocked keydown event.
  */
 export function createKeyDownEvent(keyCode, modifiers) {

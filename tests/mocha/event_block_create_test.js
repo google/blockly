@@ -44,11 +44,9 @@ suite('Block Create Event', function() {
     Blockly.Events.enable();
     block.getInput('INPUT').connection.disconnect();
     assertEventFired(
-        this.eventsFireStub,
-        Blockly.Events.BlockCreate,
+        this.eventsFireStub, Blockly.Events.BlockCreate,
         {'recordUndo': false, 'type': eventUtils.BLOCK_CREATE},
-        this.workspace.id,
-        'shadowId');
+        this.workspace.id, 'shadowId');
     const calls = this.eventsFireStub.getCalls();
     const event = calls[calls.length - 1].args[0];
     chai.assert.equal(event.xml.tagName, 'shadow');
@@ -62,7 +60,7 @@ suite('Block Create Event', function() {
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);
       delete origEvent.xml;  // xml fails deep equals for some reason.
-      delete newEvent.xml;  // xml fails deep equals for some reason.
+      delete newEvent.xml;   // xml fails deep equals for some reason.
 
       chai.assert.deepEqual(newEvent, origEvent);
     });

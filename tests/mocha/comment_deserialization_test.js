@@ -46,9 +46,9 @@ suite('Comment Deserialization', function() {
       this.workspace.clear();
     });
     function createBlock(workspace) {
-      const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
-        '<block type="empty_block"/>'
-      ), workspace);
+      const block = Blockly.Xml.domToBlock(
+          Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
+          workspace);
       block.setCommentText('test text');
       return block;
     }
@@ -73,7 +73,8 @@ suite('Comment Deserialization', function() {
       // Open trashcan.
       simulateClick(this.workspace.trashcan.svgGroup);
       // Place from trashcan.
-      simulateClick(this.workspace.trashcan.flyout.svgGroup_.querySelector('.blocklyDraggable'));
+      simulateClick(this.workspace.trashcan.flyout.svgGroup_.querySelector(
+          '.blocklyDraggable'));
       chai.assert.equal(this.workspace.getAllBlocks().length, 1);
       // Check comment.
       assertComment(this.workspace, 'test text');
@@ -108,7 +109,8 @@ suite('Comment Deserialization', function() {
       // Place from toolbox.
       const toolbox = this.workspace.getToolbox();
       simulateClick(toolbox.HtmlDiv.querySelector('.blocklyTreeRow'));
-      simulateClick(toolbox.getFlyout().svgGroup_.querySelector('.blocklyDraggable'));
+      simulateClick(
+          toolbox.getFlyout().svgGroup_.querySelector('.blocklyDraggable'));
       chai.assert.equal(this.workspace.getAllBlocks().length, 1);
       // Check comment.
       assertComment(this.workspace, 'test toolbox text');

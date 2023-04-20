@@ -63,8 +63,8 @@ export const runSerializationTestSuite = (testCases) => {
         block = Blockly.serialization.blocks.append(
             testCase.json, this.workspace, {recordUndo: true});
       } else {
-        block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
-            testCase.xml), this.workspace);
+        block = Blockly.Xml.domToBlock(
+            Blockly.utils.xml.textToDom(testCase.xml), this.workspace);
       }
       this.clock.runAll();
       testCase.assertBlockStructure(block);
@@ -85,12 +85,11 @@ export const runSerializationTestSuite = (testCases) => {
         const expectedJson = testCase.expectedJson || testCase.json;
         chai.assert.deepEqual(generatedJson, expectedJson);
       } else {
-        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
-            testCase.xml), this.workspace);
+        const block = Blockly.Xml.domToBlock(
+            Blockly.utils.xml.textToDom(testCase.xml), this.workspace);
         this.clock.runAll();
         const generatedXml =
-            Blockly.Xml.domToPrettyText(
-                Blockly.Xml.blockToDom(block));
+            Blockly.Xml.domToPrettyText(Blockly.Xml.blockToDom(block));
         const expectedXml = testCase.expectedXml || testCase.xml;
         chai.assert.equal(generatedXml, expectedXml);
       }
@@ -113,8 +112,7 @@ export const runSerializationTestSuite = (testCases) => {
         //   .genUid is now a wrapper around .TEST_ONLY.genUid, which
         //   can be safely stubbed by sinon or other similar
         //   frameworks in a way that will continue to work.
-        if (Blockly.utils.idGenerator &&
-            Blockly.utils.idGenerator.TEST_ONLY) {
+        if (Blockly.utils.idGenerator && Blockly.utils.idGenerator.TEST_ONLY) {
           sinon.stub(Blockly.utils.idGenerator.TEST_ONLY, 'genUid')
               .returns('1');
         } else {

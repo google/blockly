@@ -59,7 +59,8 @@ suite('Variables', function() {
       createTestVarBlock(this.workspace, '3');
 
       const result = Blockly.Variables.allUsedVarModels(this.workspace);
-      chai.assert.equal(result.length, 3,
+      chai.assert.equal(
+          result.length, 3,
           'Expected three variables in the list of used variables');
     });
 
@@ -67,9 +68,11 @@ suite('Variables', function() {
       createTestVarBlock(this.workspace, '2');
 
       const result = Blockly.Variables.allUsedVarModels(this.workspace);
-      chai.assert.equal(result.length, 1,
+      chai.assert.equal(
+          result.length, 1,
           'Expected one variable in the list of used variables');
-      chai.assert.equal(result[0].getId(), '2',
+      chai.assert.equal(
+          result[0].getId(), '2',
           'Expected variable with ID 2 in the list of used variables');
     });
 
@@ -80,15 +83,18 @@ suite('Variables', function() {
       const result = Blockly.Variables.allUsedVarModels(this.workspace);
       // Using the same variable multiple times should not change the number of
       // elements in the list.
-      chai.assert.equal(result.length, 1,
+      chai.assert.equal(
+          result.length, 1,
           'Expected one variable in the list of used variables');
-      chai.assert.equal(result[0].getId(), '2',
+      chai.assert.equal(
+          result[0].getId(), '2',
           'Expected variable with ID 2 in the list of used variables');
     });
 
     test('All unused', function() {
       const result = Blockly.Variables.allUsedVarModels(this.workspace);
-      chai.assert.equal(result.length, 0,
+      chai.assert.equal(
+          result.length, 0,
           'Expected no variables in the list of used variables');
     });
   });
@@ -128,12 +134,12 @@ suite('Variables', function() {
       const var1 = this.workspace.createVariable('name1', 'type1', 'id1');
       const var2 = this.workspace.createVariable('name2', 'type1', 'id2');
       const var3 = this.workspace.createVariable('name3', 'type2', 'id3');
-      const result1 =
-          Blockly.Variables.getVariable(this.workspace, 'badId', 'name1', 'type1');
-      const result2 =
-          Blockly.Variables.getVariable(this.workspace, 'badId', 'name2', 'type1');
-      const result3 =
-          Blockly.Variables.getVariable(this.workspace, 'badId', 'name3', 'type2');
+      const result1 = Blockly.Variables.getVariable(
+          this.workspace, 'badId', 'name1', 'type1');
+      const result2 = Blockly.Variables.getVariable(
+          this.workspace, 'badId', 'name2', 'type1');
+      const result3 = Blockly.Variables.getVariable(
+          this.workspace, 'badId', 'name3', 'type2');
 
       // Searching by ID failed, but falling back onto name + type is correct.
       chai.assert.equal(var1, result1);
@@ -147,54 +153,58 @@ suite('Variables', function() {
       test(
           'conflicts within legacy procedure blocks return the procedure name',
           function() {
-            Blockly.serialization.blocks.append({
-              'type': 'procedures_defnoreturn',
-              'extraState': {
-                'params': [
-                  {
-                    'name': 'x',
-                    'id': '6l3P%Y!9EgA(Nh{E`Tl,',
+            Blockly.serialization.blocks.append(
+                {
+                  'type': 'procedures_defnoreturn',
+                  'extraState': {
+                    'params': [
+                      {
+                        'name': 'x',
+                        'id': '6l3P%Y!9EgA(Nh{E`Tl,',
+                      },
+                      {
+                        'name': 'y',
+                        'id': 'l1EtlJe%z_M[O-@uPAQ8',
+                      },
+                    ],
                   },
-                  {
-                    'name': 'y',
-                    'id': 'l1EtlJe%z_M[O-@uPAQ8',
+                  'fields': {
+                    'NAME': 'test name',
                   },
-                ],
-              },
-              'fields': {
-                'NAME': 'test name',
-              },
-            }, this.workspace);
+                },
+                this.workspace);
 
             chai.assert.equal(
                 'test name',
                 nameUsedWithConflictingParam('x', 'y', this.workspace),
                 'Expected the name of the procedure with the conflicting ' +
-                'param to be returned');
+                    'param to be returned');
           });
 
       test(
           'if no legacy block has the old var name, no procedure ' +
-          'name is returned',
+              'name is returned',
           function() {
-            Blockly.serialization.blocks.append({
-              'type': 'procedures_defnoreturn',
-              'extraState': {
-                'params': [
-                  {
-                    'name': 'definitely not x',
-                    'id': '6l3P%Y!9EgA(Nh{E`Tl,',
+            Blockly.serialization.blocks.append(
+                {
+                  'type': 'procedures_defnoreturn',
+                  'extraState': {
+                    'params': [
+                      {
+                        'name': 'definitely not x',
+                        'id': '6l3P%Y!9EgA(Nh{E`Tl,',
+                      },
+                      {
+                        'name': 'y',
+                        'id': 'l1EtlJe%z_M[O-@uPAQ8',
+                      },
+                    ],
                   },
-                  {
-                    'name': 'y',
-                    'id': 'l1EtlJe%z_M[O-@uPAQ8',
+                  'fields': {
+                    'NAME': 'test name',
                   },
-                ],
-              },
-              'fields': {
-                'NAME': 'test name',
-              },
-            }, this.workspace);
+                },
+                this.workspace);
 
             chai.assert.isNull(
                 nameUsedWithConflictingParam('x', 'y', this.workspace),
@@ -205,31 +215,31 @@ suite('Variables', function() {
           'conflicts within procedure models return the procedure name',
           function() {
             this.workspace.getProcedureMap().add(
-              new MockProcedureModel('test name')
-                .insertParameter(
-                    new MockParameterModelWithVar('x', this.workspace), 0)
-                .insertParameter(
-                    new MockParameterModelWithVar('y', this.workspace), 0));
+                new MockProcedureModel('test name')
+                    .insertParameter(
+                        new MockParameterModelWithVar('x', this.workspace), 0)
+                    .insertParameter(
+                        new MockParameterModelWithVar('y', this.workspace), 0));
 
             chai.assert.equal(
                 'test name',
                 nameUsedWithConflictingParam('x', 'y', this.workspace),
                 'Expected the name of the procedure with the conflicting ' +
-                'param to be returned');
+                    'param to be returned');
           });
 
       test(
           'if no procedure model has the old var, no procedure ' +
-          'name is returned',
+              'name is returned',
           function() {
             this.workspace.getProcedureMap().add(
-              new MockProcedureModel('test name')
-                .insertParameter(
-                    new MockParameterModelWithVar(
-                        'definitely not x', this.workspace),
-                    0)
-                .insertParameter(
-                    new MockParameterModelWithVar('y', this.workspace), 0));
+                new MockProcedureModel('test name')
+                    .insertParameter(
+                        new MockParameterModelWithVar(
+                            'definitely not x', this.workspace),
+                        0)
+                    .insertParameter(
+                        new MockParameterModelWithVar('y', this.workspace), 0));
 
             chai.assert.isNull(
                 nameUsedWithConflictingParam('x', 'y', this.workspace),

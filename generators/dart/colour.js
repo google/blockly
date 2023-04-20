@@ -40,12 +40,9 @@ String ${Dart.FUNCTION_NAME_PLACEHOLDER_}() {
 
 Dart['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
-  const red = Dart.valueToCode(block, 'RED',
-      Dart.ORDER_NONE) || 0;
-  const green = Dart.valueToCode(block, 'GREEN',
-      Dart.ORDER_NONE) || 0;
-  const blue = Dart.valueToCode(block, 'BLUE',
-      Dart.ORDER_NONE) || 0;
+  const red = Dart.valueToCode(block, 'RED', Dart.ORDER_NONE) || 0;
+  const green = Dart.valueToCode(block, 'GREEN', Dart.ORDER_NONE) || 0;
+  const blue = Dart.valueToCode(block, 'BLUE', Dart.ORDER_NONE) || 0;
 
   Dart.definitions_['import_dart_math'] = "import 'dart:math' as Math;";
   const functionName = Dart.provideFunction_('colour_rgb', `

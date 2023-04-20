@@ -115,20 +115,29 @@ suite('Text Input Fields', function() {
       sinon.restore();
     });
     const testSuites = [
-      {title: 'Null Validator',
-        validator:
-            function() {
-              return null;
-            },
-        value: 'newValue', expectedValue: 'value'},
-      {title: 'Remove \'a\' Validator',
-        validator:
-            function(newValue) {
-              return newValue.replace(/a/g, '');
-            },
-        value: 'bbbaaa', expectedValue: 'bbb'},
-      {title: 'Returns Undefined Validator', validator: function() {},
-        value: 'newValue', expectedValue: 'newValue', expectedText: 'newValue'},
+      {
+        title: 'Null Validator',
+        validator: function() {
+          return null;
+        },
+        value: 'newValue',
+        expectedValue: 'value'
+      },
+      {
+        title: 'Remove \'a\' Validator',
+        validator: function(newValue) {
+          return newValue.replace(/a/g, '');
+        },
+        value: 'bbbaaa',
+        expectedValue: 'bbb'
+      },
+      {
+        title: 'Returns Undefined Validator',
+        validator: function() {},
+        value: 'newValue',
+        expectedValue: 'newValue',
+        expectedText: 'newValue'
+      },
     ];
     testSuites.forEach(function(suiteInfo) {
       suite(suiteInfo.title, function() {
@@ -192,8 +201,8 @@ suite('Text Input Fields', function() {
         this.assertSpellcheck = function(field, value) {
           this.prepField(field);
           field.showEditor_();
-          chai.assert.equal(field.htmlInput_.getAttribute('spellcheck'),
-              value.toString());
+          chai.assert.equal(
+              field.htmlInput_.getAttribute('spellcheck'), value.toString());
         };
       });
       teardown(function() {

@@ -58,8 +58,8 @@ function assertXmlProperties_(obj, expectedXmlProperties) {
     const value = obj[key];
     const expectedValue = expectedXmlProperties[key];
     if (expectedValue === undefined) {
-      chai.assert.isUndefined(value,
-          'Expected ' + key + ' property to be undefined');
+      chai.assert.isUndefined(
+          value, 'Expected ' + key + ' property to be undefined');
       return;
     }
     chai.assert.exists(value, 'Expected ' + key + ' property to exist');
@@ -88,16 +88,16 @@ function isXmlProperty_(key) {
  * @param {boolean=} [isUiEvent=false] Whether the event is a UI event.
  * @param {string=} message Optional message to prepend assert messages.
  */
-export function assertEventEquals(event, expectedType,
-    expectedWorkspaceId, expectedBlockId, expectedProperties, isUiEvent = false, message) {
+export function assertEventEquals(
+    event, expectedType, expectedWorkspaceId, expectedBlockId,
+    expectedProperties, isUiEvent = false, message) {
   let prependMessage = message ? message + ' ' : '';
   prependMessage += 'Event fired ';
-  chai.assert.equal(event.type, expectedType,
-      prependMessage + 'type');
-  chai.assert.equal(event.workspaceId, expectedWorkspaceId,
-      prependMessage + 'workspace id');
-  chai.assert.equal(event.blockId, expectedBlockId,
-      prependMessage + 'block id');
+  chai.assert.equal(event.type, expectedType, prependMessage + 'type');
+  chai.assert.equal(
+      event.workspaceId, expectedWorkspaceId, prependMessage + 'workspace id');
+  chai.assert.equal(
+      event.blockId, expectedBlockId, prependMessage + 'block id');
   Object.keys(expectedProperties).map((key) => {
     const value = event[key];
     const expectedValue = expectedProperties[key];
@@ -107,11 +107,9 @@ export function assertEventEquals(event, expectedType,
     }
     chai.assert.exists(value, prependMessage + key);
     if (isXmlProperty_(key)) {
-      assertXmlPropertyEqual_(value, expectedValue,
-          prependMessage + key);
+      assertXmlPropertyEqual_(value, expectedValue, prependMessage + key);
     } else {
-      chai.assert.equal(value, expectedValue,
-          prependMessage + key);
+      chai.assert.equal(value, expectedValue, prependMessage + key);
     }
   });
   if (isUiEvent) {
@@ -131,12 +129,15 @@ export function assertEventEquals(event, expectedType,
  * @param {string} expectedWorkspaceId Expected workspace id of event fired.
  * @param {?string=} expectedBlockId Expected block id of event fired.
  */
-export function assertEventFired(spy, instanceType, expectedProperties,
-    expectedWorkspaceId, expectedBlockId) {
-  expectedProperties = Object.assign({
-    workspaceId: expectedWorkspaceId,
-    blockId: expectedBlockId,
-  }, expectedProperties);
+export function assertEventFired(
+    spy, instanceType, expectedProperties, expectedWorkspaceId,
+    expectedBlockId) {
+  expectedProperties = Object.assign(
+      {
+        workspaceId: expectedWorkspaceId,
+        blockId: expectedBlockId,
+      },
+      expectedProperties);
   const expectedEvent =
       sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
   sinon.assert.calledWith(spy, expectedEvent);
@@ -173,16 +174,15 @@ function shallowMatch(expected) {
  * @param {?string=} expectedBlockId Expected block id of event fired.
  */
 export function assertEventFiredShallow(
-    spy, instanceType, expectedProperties, expectedWorkspaceId, expectedBlockId) {
+    spy, instanceType, expectedProperties, expectedWorkspaceId,
+    expectedBlockId) {
   const properties = {
     ...expectedProperties,
     workspaceId: expectedWorkspaceId,
     blockId: expectedBlockId,
   };
   sinon.assert.calledWith(
-      spy,
-      sinon.match.instanceOf(instanceType)
-          .and(shallowMatch(properties)));
+      spy, sinon.match.instanceOf(instanceType).and(shallowMatch(properties)));
 }
 
 /**
@@ -195,8 +195,9 @@ export function assertEventFiredShallow(
  * @param {string=} expectedWorkspaceId Expected workspace id of event fired.
  * @param {?string=} expectedBlockId Expected block id of event fired.
  */
-export function assertEventNotFired(spy, instanceType, expectedProperties,
-    expectedWorkspaceId, expectedBlockId) {
+export function assertEventNotFired(
+    spy, instanceType, expectedProperties, expectedWorkspaceId,
+    expectedBlockId) {
   if (expectedWorkspaceId !== undefined) {
     expectedProperties.workspaceId = expectedWorkspaceId;
   }
@@ -241,14 +242,16 @@ function splitByXmlProperties_(properties) {
  * @param {string} expectedWorkspaceId Expected workspace id of event fired.
  * @param {?string=} expectedBlockId Expected block id of event fired.
  */
-export function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
-    expectedWorkspaceId, expectedBlockId) {
+export function assertNthCallEventArgEquals(
+    spy, n, instanceType, expectedProperties, expectedWorkspaceId,
+    expectedBlockId) {
   const nthCall = spy.getCall(n);
   const splitProperties = splitByXmlProperties_(expectedProperties);
   const nonXmlProperties = splitProperties[0];
   const xmlProperties = splitProperties[1];
 
-  assertEventFired(nthCall, instanceType, nonXmlProperties, expectedWorkspaceId,
+  assertEventFired(
+      nthCall, instanceType, nonXmlProperties, expectedWorkspaceId,
       expectedBlockId);
   const eventArg = nthCall.firstArg;
   assertXmlProperties_(eventArg, xmlProperties);

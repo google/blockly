@@ -13,34 +13,40 @@ goog.declareModuleId('Blockly.test.helpers.toolboxDefinitions');
  *    for a toolbox.
  */
 export function getCategoryJSON() {
-  return {"contents": [
-    {
-      "kind": "CATEGORY",
-      "cssconfig": {
-        "container": "something",
+  return {
+    "contents": [
+      {
+        "kind": "CATEGORY",
+        "cssconfig": {
+          "container": "something",
+        },
+        "contents": [
+          {
+            "kind": "BLOCK",
+            "blockxml":
+                '<block type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>',
+          },
+          {
+            "kind": "BLOCK",
+            "blockxml":
+                '<block type="basic_block"><field name="TEXT">FirstCategory-SecondBlock</field></block>',
+          },
+        ],
+        "name": "First",
       },
-      "contents": [
-        {
-          "kind": "BLOCK",
-          "blockxml": '<block type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>',
-        },
-        {
-          "kind": "BLOCK",
-          "blockxml": '<block type="basic_block"><field name="TEXT">FirstCategory-SecondBlock</field></block>',
-        },
-      ],
-      "name": "First",
-    },
-    {
-      "kind": "CATEGORY",
-      "contents": [
-        {
-          "kind": "BLOCK",
-          "blockxml": '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>',
-        },
-      ],
-      "name": "Second",
-    }]};
+      {
+        "kind": "CATEGORY",
+        "contents": [
+          {
+            "kind": "BLOCK",
+            "blockxml":
+                '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>',
+          },
+        ],
+        "name": "Second",
+      }
+    ]
+  };
 }
 
 /**
@@ -49,11 +55,11 @@ export function getCategoryJSON() {
  *    for a simple toolbox.
  */
 export function getSimpleJson() {
-  return {"contents": [
-    {
-      "kind": "BLOCK",
-      "blockxml":
-        `<block type="logic_compare">
+  return {
+    "contents": [
+      {
+        "kind": "BLOCK",
+        "blockxml": `<block type="logic_compare">
           <field name="OP">NEQ</field>
           <value name="A">
             <shadow type="math_number">
@@ -66,21 +72,22 @@ export function getSimpleJson() {
             </block>
           </value>
         </block>`,
-    },
-    {
-      "kind": "SEP",
-      "gap": "20",
-    },
-    {
-      "kind": "BUTTON",
-      "text": "insert",
-      "callbackkey": "insertConnectionRows",
-    },
-    {
-      "kind": "LABEL",
-      "text": "tooltips",
-    },
-  ]};
+      },
+      {
+        "kind": "SEP",
+        "gap": "20",
+      },
+      {
+        "kind": "BUTTON",
+        "text": "insert",
+        "callbackkey": "insertConnectionRows",
+      },
+      {
+        "kind": "LABEL",
+        "text": "tooltips",
+      },
+    ]
+  };
 }
 
 export function getProperSimpleJson() {
@@ -124,7 +131,8 @@ export function getProperSimpleJson() {
         "kind": "LABEL",
         "text": "tooltips",
       },
-    ]};
+    ]
+  };
 }
 
 /**
@@ -133,42 +141,48 @@ export function getProperSimpleJson() {
  *    for a toolbox.
  */
 export function getDeeplyNestedJSON() {
-  return {"contents": [
-    {
-      "kind": "CATEGORY",
-      "cssconfig": {
-        "container": "something",
-      },
-      "contents": [{
+  return {
+    "contents": [
+      {
         "kind": "CATEGORY",
+        "cssconfig": {
+          "container": "something",
+        },
         "contents": [{
           "kind": "CATEGORY",
-          "contents": [
-            {
-              "kind": "BLOCK",
-              "blockxml": '<block type="basic_block"><field name="TEXT">NestedCategory-FirstBlock</field></block>',
-            },
-            {
-              "kind": "BLOCK",
-              "blockxml": '<block type="basic_block"><field name="TEXT">NestedCategory-SecondBlock</field></block>',
-            },
-          ],
-          "name": "NestedCategoryInner",
+          "contents": [{
+            "kind": "CATEGORY",
+            "contents": [
+              {
+                "kind": "BLOCK",
+                "blockxml":
+                    '<block type="basic_block"><field name="TEXT">NestedCategory-FirstBlock</field></block>',
+              },
+              {
+                "kind": "BLOCK",
+                "blockxml":
+                    '<block type="basic_block"><field name="TEXT">NestedCategory-SecondBlock</field></block>',
+              },
+            ],
+            "name": "NestedCategoryInner",
+          }],
+          "name": "NestedCategoryMiddle",
         }],
-        "name": "NestedCategoryMiddle",
-      }],
-      "name": "NestedCategoryOuter",
-    },
-    {
-      "kind": "CATEGORY",
-      "contents": [
-        {
-          "kind": "BLOCK",
-          "blockxml": '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>',
-        },
-      ],
-      "name": "Second",
-    }]};
+        "name": "NestedCategoryOuter",
+      },
+      {
+        "kind": "CATEGORY",
+        "contents": [
+          {
+            "kind": "BLOCK",
+            "blockxml":
+                '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>',
+          },
+        ],
+        "name": "Second",
+      }
+    ]
+  };
 }
 
 /**
@@ -176,8 +190,7 @@ export function getDeeplyNestedJSON() {
  * @return {Array<Node>} Array holding xml elements for a toolbox.
  */
 export function getXmlArray() {
-  const block = Blockly.utils.xml.textToDom(
-      `<block type="logic_compare">
+  const block = Blockly.utils.xml.textToDom(`<block type="logic_compare">
         <field name="OP">NEQ</field>
         <value name="A">
           <shadow type="math_number">
@@ -191,7 +204,8 @@ export function getXmlArray() {
         </value>
       </block>`);
   const separator = Blockly.utils.xml.textToDom('<sep gap="20"></sep>');
-  const button = Blockly.utils.xml.textToDom('<button text="insert" callbackkey="insertConnectionRows"></button>');
+  const button = Blockly.utils.xml.textToDom(
+      '<button text="insert" callbackkey="insertConnectionRows"></button>');
   const label = Blockly.utils.xml.textToDom('<label text="tooltips"></label>');
   return [block, separator, button, label];
 }
@@ -210,10 +224,9 @@ export function getInjectedToolbox() {
    *   Category: NestedItemOne
    */
   const toolboxXml = document.getElementById('toolbox-test');
-  const workspace = Blockly.inject('blocklyDiv',
-      {
-        toolbox: toolboxXml,
-      });
+  const workspace = Blockly.inject('blocklyDiv', {
+    toolbox: toolboxXml,
+  });
   return workspace.getToolbox();
 }
 

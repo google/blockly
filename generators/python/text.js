@@ -111,8 +111,7 @@ Python['text_indexOf'] = function(block) {
   const operator = block.getFieldValue('END') === 'FIRST' ? 'find' : 'rfind';
   const substring =
       Python.valueToCode(block, 'FIND', Python.ORDER_NONE) || "''";
-  const text =
-      Python.valueToCode(block, 'VALUE', Python.ORDER_MEMBER) || "''";
+  const text = Python.valueToCode(block, 'VALUE', Python.ORDER_MEMBER) || "''";
   const code = text + '.' + operator + '(' + substring + ')';
   if (block.workspace.options.oneBasedIndex) {
     return [code + ' + 1', Python.ORDER_ADDITIVE];
@@ -164,8 +163,7 @@ Python['text_getSubstring'] = function(block) {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
-  const text =
-      Python.valueToCode(block, 'STRING', Python.ORDER_MEMBER) || "''";
+  const text = Python.valueToCode(block, 'STRING', Python.ORDER_MEMBER) || "''";
   let at1;
   switch (where1) {
     case 'FROM_START':

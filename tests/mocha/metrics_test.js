@@ -31,8 +31,12 @@ suite('Metrics', function() {
       scale: scale,
       scrollX: SCROLL_X,
       scrollY: SCROLL_Y,
-      isMovableHorizontally: function() {return true;},
-      isMovableVertically: function() {return true;},
+      isMovableHorizontally: function() {
+        return true;
+      },
+      isMovableVertically: function() {
+        return true;
+      },
     };
   }
 
@@ -344,8 +348,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       const mockContentMetrics = {top: 0, left: 0, width: 0, height: 0};
 
-      const contentMetrics =
-          metricsManager.getScrollMetrics(true, mockViewMetrics, mockContentMetrics);
+      const contentMetrics = metricsManager.getScrollMetrics(
+          true, mockViewMetrics, mockContentMetrics);
 
       // Should add half the view width to all sides.
       assertDimensionsMatch(contentMetrics, -200, -200, 400, 400);
@@ -358,8 +362,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       const mockContentMetrics = {top: 0, left: 0, width: 0, height: 0};
 
-      const contentMetrics =
-          metricsManager.getScrollMetrics(true, mockViewMetrics, mockContentMetrics);
+      const contentMetrics = metricsManager.getScrollMetrics(
+          true, mockViewMetrics, mockContentMetrics);
 
       // Should add half the view width to all sides.
       assertDimensionsMatch(contentMetrics, -100, -100, 200, 200);
@@ -372,8 +376,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       const mockContentMetrics = {top: 0, left: 0, width: 0, height: 0};
 
-      const contentMetrics =
-          metricsManager.getScrollMetrics(true, mockViewMetrics, mockContentMetrics);
+      const contentMetrics = metricsManager.getScrollMetrics(
+          true, mockViewMetrics, mockContentMetrics);
 
       // Should add half the view width to all sides.
       assertDimensionsMatch(contentMetrics, -400, -400, 800, 800);
@@ -386,8 +390,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       const mockContentMetrics = {top: 100, left: 100, width: 50, height: 50};
 
-      const contentMetrics =
-          metricsManager.getScrollMetrics(true, mockViewMetrics, mockContentMetrics);
+      const contentMetrics = metricsManager.getScrollMetrics(
+          true, mockViewMetrics, mockContentMetrics);
 
       // Should add half of the view width to all sides.
       assertDimensionsMatch(contentMetrics, -50, -50, 350, 350);
@@ -400,8 +404,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       const mockContentMetrics = {top: 100, left: 100, width: 50, height: 50};
 
-      const contentMetrics =
-          metricsManager.getScrollMetrics(true, mockViewMetrics, mockContentMetrics);
+      const contentMetrics = metricsManager.getScrollMetrics(
+          true, mockViewMetrics, mockContentMetrics);
 
       // Should add half of the view width to all sides.
       assertDimensionsMatch(contentMetrics, -25, -25, 175, 175);
@@ -414,8 +418,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       const mockContentMetrics = {top: 100, left: 100, width: 50, height: 50};
 
-      const contentMetrics =
-          metricsManager.getScrollMetrics(true, mockViewMetrics, mockContentMetrics);
+      const contentMetrics = metricsManager.getScrollMetrics(
+          true, mockViewMetrics, mockContentMetrics);
 
       // Should add half of the view width to all sides.
       assertDimensionsMatch(contentMetrics, -100, -100, 700, 700);
@@ -428,8 +432,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       const mockContentMetrics = {top: 0, left: 0, width: 0, height: 0};
 
-      const contentMetrics =
-          metricsManager.getScrollMetrics(false, mockViewMetrics, mockContentMetrics);
+      const contentMetrics = metricsManager.getScrollMetrics(
+          false, mockViewMetrics, mockContentMetrics);
 
       // Should add half the view width to all sides.
       assertDimensionsMatch(contentMetrics, -200, -200, 400, 400);
@@ -442,8 +446,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       const mockContentMetrics = {top: 0, left: 0, width: 0, height: 0};
 
-      const contentMetrics =
-          metricsManager.getScrollMetrics(false, mockViewMetrics, mockContentMetrics);
+      const contentMetrics = metricsManager.getScrollMetrics(
+          false, mockViewMetrics, mockContentMetrics);
 
       // Should add half the view width to all sides.
       assertDimensionsMatch(contentMetrics, -200, -200, 400, 400);
@@ -456,8 +460,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       const mockContentMetrics = {top: 0, left: 0, width: 0, height: 0};
 
-      const contentMetrics =
-          metricsManager.getScrollMetrics(false, mockViewMetrics, mockContentMetrics);
+      const contentMetrics = metricsManager.getScrollMetrics(
+          false, mockViewMetrics, mockContentMetrics);
 
       // Should add half the view width to all sides.
       assertDimensionsMatch(contentMetrics, -200, -200, 400, 400);
@@ -470,8 +474,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       const mockContentMetrics = {top: 100, left: 100, width: 50, height: 50};
 
-      const contentMetrics =
-          metricsManager.getScrollMetrics(false, mockViewMetrics, mockContentMetrics);
+      const contentMetrics = metricsManager.getScrollMetrics(
+          false, mockViewMetrics, mockContentMetrics);
 
       // Should add half of the view width to all sides.
       assertDimensionsMatch(contentMetrics, -50, -50, 350, 350);
@@ -484,8 +488,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       const mockContentMetrics = {top: 100, left: 100, width: 50, height: 50};
 
-      const contentMetrics =
-          metricsManager.getScrollMetrics(false, mockViewMetrics, mockContentMetrics);
+      const contentMetrics = metricsManager.getScrollMetrics(
+          false, mockViewMetrics, mockContentMetrics);
 
       // Should add half of the view width to all sides.
       assertDimensionsMatch(contentMetrics, -50, -50, 350, 350);
@@ -498,8 +502,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       const mockContentMetrics = {top: 100, left: 100, width: 50, height: 50};
 
-      const contentMetrics =
-          metricsManager.getScrollMetrics(false, mockViewMetrics, mockContentMetrics);
+      const contentMetrics = metricsManager.getScrollMetrics(
+          false, mockViewMetrics, mockContentMetrics);
 
       // Should add half of the view width to all sides.
       assertDimensionsMatch(contentMetrics, -50, -50, 350, 350);

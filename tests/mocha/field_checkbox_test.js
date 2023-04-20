@@ -38,14 +38,30 @@ suite('Checkbox Fields', function() {
    * @type {!Array<!FieldCreationTestCase>}
    */
   const validValueTestCases = [
-    {title: 'Boolean true', value: true, expectedValue: 'TRUE',
-      expectedText: 'true'},
-    {title: 'Boolean false', value: false, expectedValue: 'FALSE',
-      expectedText: 'false'},
-    {title: 'String TRUE', value: 'TRUE', expectedValue: 'TRUE',
-      expectedText: 'true'},
-    {title: 'String FALSE', value: 'FALSE', expectedValue: 'FALSE',
-      expectedText: 'false'},
+    {
+      title: 'Boolean true',
+      value: true,
+      expectedValue: 'TRUE',
+      expectedText: 'true'
+    },
+    {
+      title: 'Boolean false',
+      value: false,
+      expectedValue: 'FALSE',
+      expectedText: 'false'
+    },
+    {
+      title: 'String TRUE',
+      value: 'TRUE',
+      expectedValue: 'TRUE',
+      expectedText: 'true'
+    },
+    {
+      title: 'String FALSE',
+      value: 'FALSE',
+      expectedValue: 'FALSE',
+      expectedText: 'false'
+    },
   ];
   const addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
@@ -64,8 +80,7 @@ suite('Checkbox Fields', function() {
    * @param {!Blockly.FieldCheckbox} field The field to check.
    */
   const assertFieldDefault = function(field) {
-    assertFieldValue(
-        field, defaultFieldValue, defaultFieldValue.toLowerCase());
+    assertFieldValue(field, defaultFieldValue, defaultFieldValue.toLowerCase());
   };
   /**
    * Asserts that the field properties are correct based on the test case.
@@ -106,26 +121,36 @@ suite('Checkbox Fields', function() {
       this.field = new Blockly.FieldCheckbox(true);
     });
     const testSuites = [
-      {title: 'Null Validator',
-        validator:
-            function() {
-              return null;
-            },
-        value: 'FALSE', expectedValue: 'TRUE'},
-      {title: 'Always True Validator',
-        validator:
-            function() {
-              return 'TRUE';
-            },
-        value: 'FALSE', expectedValue: 'TRUE'},
-      {title: 'Always False Validator',
-        validator:
-            function() {
-              return 'TRUE';
-            },
-        value: 'FALSE', expectedValue: 'TRUE'},
-      {title: 'Returns Undefined Validator', validator: function() {},
-        value: 'FALSE', expectedValue: 'FALSE'},
+      {
+        title: 'Null Validator',
+        validator: function() {
+          return null;
+        },
+        value: 'FALSE',
+        expectedValue: 'TRUE'
+      },
+      {
+        title: 'Always True Validator',
+        validator: function() {
+          return 'TRUE';
+        },
+        value: 'FALSE',
+        expectedValue: 'TRUE'
+      },
+      {
+        title: 'Always False Validator',
+        validator: function() {
+          return 'TRUE';
+        },
+        value: 'FALSE',
+        expectedValue: 'TRUE'
+      },
+      {
+        title: 'Returns Undefined Validator',
+        validator: function() {},
+        value: 'FALSE',
+        expectedValue: 'FALSE'
+      },
     ];
     testSuites.forEach(function(suiteInfo) {
       suite(suiteInfo.title, function() {
@@ -144,15 +169,17 @@ suite('Checkbox Fields', function() {
   suite('Customizations', function() {
     suite('Check Character', function() {
       function assertCharacter(field, char) {
-        field.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-            Blockly.utils.Svg.G, {}, null);
+        field.fieldGroup_ =
+            Blockly.utils.dom.createSvgElement(Blockly.utils.Svg.G, {}, null);
         field.sourceBlock_ = {
           RTL: false,
           rendered: true,
           workspace: {
             keyboardAccessibilityMode: false,
           },
-          queueRender: function() {field.render_();},
+          queueRender: function() {
+            field.render_();
+          },
           bumpNeighbours: function() {},
         };
         field.constants_ = {
@@ -207,8 +234,8 @@ suite('Checkbox Fields', function() {
         });
         assertCharacter(field, '\u2661');
         field.setCheckCharacter(null);
-        chai.assert(field.textContent_.nodeValue,
-            Blockly.FieldCheckbox.CHECK_CHAR);
+        chai.assert(
+            field.textContent_.nodeValue, Blockly.FieldCheckbox.CHECK_CHAR);
       });
     });
   });

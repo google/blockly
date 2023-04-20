@@ -42,13 +42,20 @@ suite('Number Fields', function() {
     {title: 'Infinity', value: Infinity, expectedValue: Infinity},
     {title: 'Negative Infinity', value: -Infinity, expectedValue: -Infinity},
     {title: 'Infinity String', value: 'Infinity', expectedValue: Infinity},
-    {title: 'Negative Infinity String', value: '-Infinity',
-      expectedValue: -Infinity},
+    {
+      title: 'Negative Infinity String',
+      value: '-Infinity',
+      expectedValue: -Infinity
+    },
   ];
   const addArgsAndJson = function(testCase) {
     testCase.args = Array(4).fill(testCase.value);
-    testCase.json = {'value': testCase.value, 'min': testCase.value,
-      'max': testCase.value, 'precision': testCase.value};
+    testCase.json = {
+      'value': testCase.value,
+      'min': testCase.value,
+      'max': testCase.value,
+      'precision': testCase.value
+    };
   };
   invalidValueTestCases.forEach(addArgsAndJson);
   validValueTestCases.forEach(addArgsAndJson);
@@ -66,13 +73,12 @@ suite('Number Fields', function() {
    * @param {!number} expectedPrecision The expected precision.
    * @param {!number} expectedValue The expected value.
    */
-  function assertNumberField(field, expectedMin, expectedMax,
-      expectedPrecision, expectedValue) {
+  function assertNumberField(
+      field, expectedMin, expectedMax, expectedPrecision, expectedValue) {
     assertFieldValue(field, expectedValue);
     chai.assert.equal(field.getMin(), expectedMin, 'Min');
     chai.assert.equal(field.getMax(), expectedMax, 'Max');
-    chai.assert.equal(
-        field.getPrecision(), expectedPrecision, 'Precision');
+    chai.assert.equal(field.getPrecision(), expectedPrecision, 'Precision');
   }
   /**
    * Asserts that the field property values are set to default.
@@ -119,16 +125,31 @@ suite('Number Fields', function() {
     suite('Constraints', function() {
       const testCases = [
         {title: 'Float', json: {}, value: 123.456, expectedValue: 123.456},
-        {title: '0.01', json: {precision: .01}, value: 123.456,
-          expectedValue: 123.46},
-        {title: '1e-7', json: {precision: .0000001}, value: 123.00000456,
-          expectedValue: 123.0000046},
-        {title: '0.5', json: {precision: .5}, value: 123.456,
-          expectedValue: 123.5},
-        {title: '1', json: {precision: 1}, value: 123.456,
-          expectedValue: 123},
-        {title: '1.5', json: {precision: 1.5}, value: 123.456,
-          expectedValue: 123},
+        {
+          title: '0.01',
+          json: {precision: .01},
+          value: 123.456,
+          expectedValue: 123.46
+        },
+        {
+          title: '1e-7',
+          json: {precision: .0000001},
+          value: 123.00000456,
+          expectedValue: 123.0000046
+        },
+        {
+          title: '0.5',
+          json: {precision: .5},
+          value: 123.456,
+          expectedValue: 123.5
+        },
+        {title: '1', json: {precision: 1}, value: 123.456, expectedValue: 123},
+        {
+          title: '1.5',
+          json: {precision: 1.5},
+          value: 123.456,
+          expectedValue: 123
+        },
       ];
       suite('Precision', function() {
         runTestCases(testCases, function(testCase) {
@@ -148,19 +169,30 @@ suite('Number Fields', function() {
           const field = Blockly.FieldNumber.fromJson(testCase.json);
           testCase.values.forEach(function(value, i) {
             field.setValue(value);
-            assertFieldValue(
-                field, testCase.expectedValues[i]);
+            assertFieldValue(field, testCase.expectedValues[i]);
           });
         };
       };
       suite('Min', function() {
         const testCases = [
-          {title: '-10', json: {min: -10}, values: [-20, 0, 20],
-            expectedValues: [-10, 0, 20]},
-          {title: '0', json: {min: 0}, values: [-20, 0, 20],
-            expectedValues: [0, 0, 20]},
-          {title: '+10', json: {min: 10}, values: [-20, 0, 20],
-            expectedValues: [10, 10, 20]},
+          {
+            title: '-10',
+            json: {min: -10},
+            values: [-20, 0, 20],
+            expectedValues: [-10, 0, 20]
+          },
+          {
+            title: '0',
+            json: {min: 0},
+            values: [-20, 0, 20],
+            expectedValues: [0, 0, 20]
+          },
+          {
+            title: '+10',
+            json: {min: 10},
+            values: [-20, 0, 20],
+            expectedValues: [10, 10, 20]
+          },
         ];
         runTestCases(testCases, setValueBoundsTestFn);
         test('Null', function() {
@@ -170,12 +202,24 @@ suite('Number Fields', function() {
       });
       suite('Max', function() {
         const testCases = [
-          {title: '-10', json: {max: -10}, values: [-20, 0, 20],
-            expectedValues: [-20, -10, -10]},
-          {title: '0', json: {max: 0}, values: [-20, 0, 20],
-            expectedValues: [-20, 0, 0]},
-          {title: '+10', json: {max: 10}, values: [-20, 0, 20],
-            expectedValues: [-20, 0, 10]},
+          {
+            title: '-10',
+            json: {max: -10},
+            values: [-20, 0, 20],
+            expectedValues: [-20, -10, -10]
+          },
+          {
+            title: '0',
+            json: {max: 0},
+            values: [-20, 0, 20],
+            expectedValues: [-20, 0, 0]
+          },
+          {
+            title: '+10',
+            json: {max: 10},
+            values: [-20, 0, 20],
+            expectedValues: [-20, 0, 10]
+          },
         ];
         runTestCases(testCases, setValueBoundsTestFn);
         test('Null', function() {
@@ -197,20 +241,28 @@ suite('Number Fields', function() {
       sinon.restore();
     });
     const testSuites = [
-      {title: 'Null Validator',
-        validator:
-            function() {
-              return null;
-            },
-        value: 2, expectedValue: '1'},
-      {title: 'Force End with 6 Validator',
-        validator:
-            function(newValue) {
-              return +String(newValue).replace(/.$/, '6');
-            },
-        value: 25, expectedValue: 26},
-      {title: 'Returns Undefined Validator', validator: function() {}, value: 2,
-        expectedValue: 2},
+      {
+        title: 'Null Validator',
+        validator: function() {
+          return null;
+        },
+        value: 2,
+        expectedValue: '1'
+      },
+      {
+        title: 'Force End with 6 Validator',
+        validator: function(newValue) {
+          return +String(newValue).replace(/.$/, '6');
+        },
+        value: 25,
+        expectedValue: 26
+      },
+      {
+        title: 'Returns Undefined Validator',
+        validator: function() {},
+        value: 2,
+        expectedValue: 2
+      },
     ];
     testSuites.forEach(function(suiteInfo) {
       suite(suiteInfo.title, function() {

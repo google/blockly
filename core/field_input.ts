@@ -29,6 +29,7 @@ import {Coordinate} from './utils/coordinate.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import * as renderManagement from './render_management.js';
 
 /**
  * Supported types for FieldInput subclasses.
@@ -465,6 +466,11 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    */
   private onHtmlInputChange_(_e: Event) {
     this.setValue(this.getValueFromEditorText_(this.htmlInput_!.value));
+
+    // Resize the widget div after the block has finished rendering.
+    renderManagement.finishQueuedRenders().then(() => {
+      this.resizeEditor_();
+    });
   }
 
   /**

@@ -164,7 +164,8 @@ Python['math_number_property'] = function(block) {
     'DIVISIBLE_BY':
         [null, Python.ORDER_MULTIPLICATIVE, Python.ORDER_RELATIONAL],
     'PRIME': [null, Python.ORDER_NONE, Python.ORDER_FUNCTION_CALL],
-  } const dropdownProperty = block.getFieldValue('PROPERTY');
+  };
+  const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
   const numberToCheck =
       Python.valueToCode(block, 'NUMBER_TO_CHECK', inputOrder) || '0';

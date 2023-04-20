@@ -200,8 +200,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
 
   /**
    * Updates text field to match the colour/style of the block.
-   *
-   * @internal
    */
   override applyColour() {
     if (!this.sourceBlock_ || !this.getConstants()!.FULL_BLOCK_FIELDS) return;

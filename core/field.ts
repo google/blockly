@@ -683,13 +683,18 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
   }
 
   /**
-   * Updates the field to match the colour/style of the block. Should only be
-   * called by BlockSvg.applyColour().
+   * Updates the field to match the colour/style of the block.
    *
-   * @internal
+   * Non-abstract sub-classes may wish to implement this if the colour of the
+   * field depends on the colour of the block. It will automatically be called
+   * at relevant times, such as when the parent block or renderer changes.
+   *
+   * See {@link
+   * https://developers.google.com/blockly/guides/create-custom-blocks/fields/customizing-fields/creating#matching_block_colours
+   * | the field documentation} for more information, or FieldDropdown for an
+   * example.
    */
   applyColour() {}
-  // Non-abstract sub-classes may wish to implement this. See FieldDropdown.
 
   /**
    * Used by getSize() to move/resize any DOM elements, and get the new size.

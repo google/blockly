@@ -1121,7 +1121,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     const targetWorkspace = this.targetWorkspace;
     const svgRootOld = oldBlock.getSvgRoot();
     if (!svgRootOld) {
-      throw Error('oldBlock is not rendered.');
+      throw Error('oldBlock is not rendered');
     }
 
     // Clone the block.
@@ -1170,6 +1170,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     // The position of the old block in main workspace coordinates.
     finalOffset.scale(1 / targetWorkspace.scale);
 
+    // No 'reason' provided since events are disabled.
     block.moveTo(new Coordinate(finalOffset.x, finalOffset.y));
   }
 }

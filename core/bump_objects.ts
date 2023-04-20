@@ -71,7 +71,7 @@ function bumpObjectIntoBounds(
   const deltaX = newXPosition - objectMetrics.left;
 
   if (deltaX || deltaY) {
-    object.moveBy(deltaX, deltaY);
+    object.moveBy(deltaX, deltaY, 'inbounds');
     return true;
   }
   return false;

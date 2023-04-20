@@ -349,6 +349,7 @@ export class BlockDragger implements IBlockDragger {
     if (this.draggingBlock_.isDeadOrDying()) return;
     const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
                       this.draggingBlock_) as BlockMove;
+    event.setReason('drag');
     event.oldCoordinate = this.startXY_;
     event.recordNew();
     eventUtils.fire(event);

@@ -100,6 +100,7 @@ export class MarkerSvg extends BaseMarkerSvg {
   }
 
   override createDomInternal_() {
+    /* eslint-disable */
     /* clang-format off */
     /* This markup will be generated and added to the .svgGroup_:
         <g>
@@ -110,6 +111,7 @@ export class MarkerSvg extends BaseMarkerSvg {
         </g>
         */
     /* clang-format on */
+    /* eslint-enable */
     super.createDomInternal_();
 
     this.markerCircle = dom.createSvgElement(

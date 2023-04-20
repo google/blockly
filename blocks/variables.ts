@@ -12,27 +12,21 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.variables');
 
+import type {ContextMenuOption, LegacyContextMenuOption} from '../core/contextmenu_registry.js';
 import * as ContextMenu from '../core/contextmenu.js';
 import * as Extensions from '../core/extensions.js';
 import * as Variables from '../core/variables.js';
 import * as xmlUtils from '../core/utils/xml.js';
-/* eslint-disable-next-line no-unused-vars */
 import type {Block} from '../core/block.js';
-// import type {BlockDefinition} from '../core/blocks.js';
-// TODO (6248): Properly import the BlockDefinition type.
-/* eslint-disable-next-line no-unused-vars */
-const BlockDefinition = Object;
+import type {WorkspaceSvg} from '../core/workspace_svg.js';
 import {Msg} from '../core/msg.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
-/** @suppress {extraRequire} */
 import '../core/field_label.js';
-/** @suppress {extraRequire} */
-import '../core/field_variable.js';
+import {FieldVariable} from '../core/field_variable.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
- * @type {!Object<string, !BlockDefinition>}
  */
 export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for variable getter.
@@ -76,23 +70,25 @@ export const blocks = createBlockDefinitionsFromJsonArray([
   },
 ]);
 
+/** Type of a block that has CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN */
+type CustomContextMenuVariableBlock = Block&CustomContextMenuVariableMixin;
+interface CustomContextMenuVariableMixin extends
+    CustomContextMenuVariableMixinType {}
+type CustomContextMenuVariableMixinType =
+    typeof CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN;
 
 /**
  * Mixin to add context menu items to create getter/setter blocks for this
  * setter/getter.
  * Used by blocks 'variables_set' and 'variables_get'.
- * @mixin
- * @augments Block
- * @package
- * @readonly
  */
 const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
   /**
    * Add menu option to create getter/setter block for this setter/getter.
-   * @param {!Array} options List of menu options to add to.
-   * @this {Block}
    */
-  customContextMenu: function(options) {
+  customContextMenu: function(
+      this: CustomContextMenuVariableBlock,
+      options: Array<ContextMenuOption|LegacyContextMenuOption>) {
     if (!this.isInFlyout) {
       let oppositeType;
       let contextMenuMsg;
@@ -105,17 +101,20 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
         contextMenuMsg = Msg['VARIABLES_SET_CREATE_GET'];
       }
 
-      const option = {enabled: this.workspace.remainingCapacity() > 0};
-      const name = this.getField('VAR').getText();
-      option.text = contextMenuMsg.replace('%1', name);
+      const name = this.getField('VAR')!.getText();
+      const text = contextMenuMsg.replace('%1', name);
       const xmlField = xmlUtils.createElement('field');
       xmlField.setAttribute('name', 'VAR');
       xmlField.appendChild(xmlUtils.createTextNode(name));
       const xmlBlock = xmlUtils.createElement('block');
       xmlBlock.setAttribute('type', oppositeType);
       xmlBlock.appendChild(xmlField);
-      option.callback = ContextMenu.callbackFactory(this, xmlBlock);
-      options.push(option);
+
+      options.push({
+        enabled: this.workspace.remainingCapacity() > 0,
+        text: text,
+        callback: ContextMenu.callbackFactory(this, xmlBlock)
+      });
       // Getter blocks have the option to rename or delete that variable.
     } else {
       if (this.type === 'variables_get' ||
@@ -125,7 +124,7 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
           enabled: true,
           callback: renameOptionCallbackFactory(this),
         };
-        const name = this.getField('VAR').getText();
+        const name = this.getField('VAR')!.getText();
         const deleteOption = {
           text: Msg['DELETE_VARIABLE'].replace('%1', name),
           enabled: true,
@@ -141,13 +140,14 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
 /**
  * Factory for callbacks for rename variable dropdown menu option
  * associated with a variable getter block.
- * @param {!Block} block The block with the variable to rename.
- * @return {!function()} A function that renames the variable.
+ * @returns A function that renames the variable.
  */
-const renameOptionCallbackFactory = function(block) {
+const renameOptionCallbackFactory = function(
+    block: CustomContextMenuVariableBlock): () => void {
   return function() {
     const workspace = block.workspace;
-    const variable = block.getField('VAR').getVariable();
+    const variableField = block.getField('VAR') as FieldVariable;
+    const variable = variableField.getVariable()!;
     Variables.renameVariable(workspace, variable);
   };
 };
@@ -155,15 +155,16 @@ const renameOptionCallbackFactory = function(block) {
 /**
  * Factory for callbacks for delete variable dropdown menu option
  * associated with a variable getter block.
- * @param {!Block} block The block with the variable to delete.
- * @return {!function()} A function that deletes the variable.
+ * @returns A function that deletes the variable.
  */
-const deleteOptionCallbackFactory = function(block) {
+const deleteOptionCallbackFactory = function(
+    block: CustomContextMenuVariableBlock): () => void {
   return function() {
     const workspace = block.workspace;
-    const variable = block.getField('VAR').getVariable();
+    const variableField = block.getField('VAR') as FieldVariable;
+    const variable = variableField.getVariable()!;
     workspace.deleteVariableById(variable.getId());
-    workspace.refreshToolboxSelection();
+    (workspace as WorkspaceSvg).refreshToolboxSelection();
   };
 };
 

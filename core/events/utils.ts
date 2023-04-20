@@ -291,9 +291,9 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         lastEvent.newInputName = moveEvent.newInputName;
         lastEvent.newCoordinate = moveEvent.newCoordinate;
         if (moveEvent.reason) {
-          // Contatenate reasons into a comma separated string
-          // without duplicates.
           if (lastEvent.reason) {
+            // Contatenate reasons into a comma separated string
+            // without duplicates.
             const reasonSet = new Set(moveEvent.reason.split(',').concat(
                 lastEvent.reason.split(',')));
             lastEvent.reason = Array.from(reasonSet).join(',');

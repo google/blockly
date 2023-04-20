@@ -68,14 +68,14 @@ export class BlockMove extends BlockBase {
 
   /**
    * An explanation of what this move is for.  Known values include:
-   * 'drag' -- A drag operation completed.
-   * 'bump' -- Block got bumped away from an invalid connection.
-   * 'snap' -- Block got shifted to line up with the grid.
-   * 'inbounds' -- Block got pushed back into a non-scrolling workspace.
-   * 'connect' -- Block got connected to another block.
-   * 'disconnect' -- Block got disconnected from another block.
-   * 'create' -- Block created via XML.
-   * 'cleanup' -- Workspace aligned top-level blocks.
+   *  'drag' -- A drag operation completed.
+   *  'bump' -- Block got bumped away from an invalid connection.
+   *  'snap' -- Block got shifted to line up with the grid.
+   *  'inbounds' -- Block got pushed back into a non-scrolling workspace.
+   *  'connect' -- Block got connected to another block.
+   *  'disconnect' -- Block got disconnected from another block.
+   *  'create' -- Block created via XML.
+   *  'cleanup' -- Workspace aligned top-level blocks.
    * Reasons may become comma separated if move events merge ('drag,bump,snap').
    */
   reason?: string;

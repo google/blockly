@@ -398,7 +398,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.parentBlock_) {
       throw Error('Block has parent');
     }
-    reason || console.log('moveBy no reason');
     const eventsEnabled = eventUtils.isEnabled();
     let event: BlockMove|null = null;
     if (eventsEnabled) {
@@ -469,7 +468,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param reason Why is this move happening?  'drag', 'bump', 'snap', ...
    */
   moveTo(xy: Coordinate, reason?: string) {
-    reason || console.log('moveTo no reason');
     const curXY = this.getRelativeToSurfaceXY();
     this.moveBy(xy.x - curXY.x, xy.y - curXY.y, reason);
   }

@@ -433,8 +433,8 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
         const blockX = parseInt(xmlChildElement.getAttribute('x') ?? '10', 10);
         const blockY = parseInt(xmlChildElement.getAttribute('y') ?? '10', 10);
         if (!isNaN(blockX) && !isNaN(blockY)) {
-          block.moveBy(workspace.RTL ?
-              width - blockX : blockX, blockY, 'create');
+          block.moveBy(
+              workspace.RTL ? width - blockX : blockX, blockY, 'create');
         }
         variablesFirst = false;
       } else if (name === 'shadow') {

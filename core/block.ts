@@ -41,6 +41,7 @@ import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as parsing from './utils/parsing.js';
+import * as registry from './registry.js';
 import {Size} from './utils/size.js';
 import type {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
@@ -1482,7 +1483,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Shortcut for appending a value input row.
+   * Appends a value input row.
    *
    * @param name Language-neutral identifier which may used to find this input
    *     again.  Should be unique to this block.
@@ -1493,7 +1494,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Shortcut for appending a statement input row.
+   * Appends a statement input row.
    *
    * @param name Language-neutral identifier which may used to find this input
    *     again.  Should be unique to this block.
@@ -1504,7 +1505,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Shortcut for appending a dummy input row.
+   * Appends a dummy input row.
    *
    * @param opt_name Language-neutral identifier which may used to find this
    *     input again.  Should be unique to this block.
@@ -1512,6 +1513,33 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   appendDummyInput(opt_name?: string): Input {
     return this.appendInput_(inputTypes.DUMMY, opt_name || '');
+  }
+
+  /**
+   * Appends the given input row.
+   *
+   * Allows for custom inputs to be appended to the block.
+   */
+  appendInput(input: Input): Input {
+    this.inputList.push(input);
+    return input;
+  }
+
+  /**
+   * Appends an input with the given input type and name to the block after
+   * constructing it from the registry.
+   *
+   * @param type The name the input is registered under in the registry.
+   * @param name The name the input will have within the block.
+   * @returns The constucted input, or null if there was no constructor
+   *     associated with the type.
+   */
+  private appendInputFromRegistry(type: string, name: string): Input|null {
+    const inputConstructor =
+        registry.getClass(registry.Type.INPUT, type, false);
+    if (!inputConstructor) return null;
+    return this.appendInput(
+        new inputConstructor(inputTypes.CUSTOM, name, this, null));
   }
 
   /**
@@ -1850,6 +1878,10 @@ export class Block implements IASTNodeLocation, IDeletable {
       case 'input_dummy':
         input = this.appendDummyInput(element['name']);
         break;
+      default: {
+        input = this.appendInputFromRegistry(element['type'], element['name']);
+        break;
+      }
     }
     // Should never be hit because of interpolate_'s checks, but just in case.
     if (!input) {
@@ -1881,7 +1913,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   private isInputKeyword_(str: string): boolean {
     return str === 'input_value' || str === 'input_statement' ||
-        str === 'input_dummy';
+        str === 'input_dummy' || registry.hasItem(registry.Type.INPUT, str);
   }
 
   /**

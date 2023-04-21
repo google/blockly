@@ -80,6 +80,7 @@ jobs:
     - uses: DoozyX/clang-format-lint-action@v0.15
       with:
         source: 'core generators tests/mocha'
+        exclude: 'tests/mocha/.mocharc.js'
         extensions: 'js,ts'
         # This should be as close as possible to the version that the npm
         # package supports. This can be found by running:

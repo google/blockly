@@ -12,17 +12,17 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.variables');
 
-import type {ContextMenuOption, LegacyContextMenuOption} from '../core/contextmenu_registry.js';
 import * as ContextMenu from '../core/contextmenu.js';
 import * as Extensions from '../core/extensions.js';
 import * as Variables from '../core/variables.js';
 import * as xmlUtils from '../core/utils/xml.js';
 import type {Block} from '../core/block.js';
-import type {WorkspaceSvg} from '../core/workspace_svg.js';
+import type {ContextMenuOption, LegacyContextMenuOption} from '../core/contextmenu_registry.js';
+import {FieldVariable} from '../core/field_variable.js';
 import {Msg} from '../core/msg.js';
+import type {WorkspaceSvg} from '../core/workspace_svg.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 import '../core/field_label.js';
-import {FieldVariable} from '../core/field_variable.js';
 
 
 /**
@@ -71,10 +71,9 @@ export const blocks = createBlockDefinitionsFromJsonArray([
 ]);
 
 /** Type of a block that has CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN */
-type CustomContextMenuVariableBlock = Block&CustomContextMenuVariableMixin;
-interface CustomContextMenuVariableMixin extends
-    CustomContextMenuVariableMixinType {}
-type CustomContextMenuVariableMixinType =
+type VariableBlock = Block&VariableMixin;
+interface VariableMixin extends VariableMixinType {}
+type VariableMixinType =
     typeof CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN;
 
 /**
@@ -85,9 +84,11 @@ type CustomContextMenuVariableMixinType =
 const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
   /**
    * Add menu option to create getter/setter block for this setter/getter.
+   * 
+   * @param options List of menu options to add to.
    */
   customContextMenu: function(
-      this: CustomContextMenuVariableBlock,
+      this: VariableBlock,
       options: Array<ContextMenuOption|LegacyContextMenuOption>) {
     if (!this.isInFlyout) {
       let oppositeType;
@@ -102,7 +103,6 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
       }
 
       const name = this.getField('VAR')!.getText();
-      const text = contextMenuMsg.replace('%1', name);
       const xmlField = xmlUtils.createElement('field');
       xmlField.setAttribute('name', 'VAR');
       xmlField.appendChild(xmlUtils.createTextNode(name));
@@ -112,7 +112,7 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
 
       options.push({
         enabled: this.workspace.remainingCapacity() > 0,
-        text: text,
+        text: contextMenuMsg.replace('%1', name),
         callback: ContextMenu.callbackFactory(this, xmlBlock)
       });
       // Getter blocks have the option to rename or delete that variable.
@@ -140,10 +140,12 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
 /**
  * Factory for callbacks for rename variable dropdown menu option
  * associated with a variable getter block.
+ * 
+ * @param block The block with the variable to rename.
  * @returns A function that renames the variable.
  */
 const renameOptionCallbackFactory = function(
-    block: CustomContextMenuVariableBlock): () => void {
+    block: VariableBlock): () => void {
   return function() {
     const workspace = block.workspace;
     const variableField = block.getField('VAR') as FieldVariable;
@@ -155,10 +157,12 @@ const renameOptionCallbackFactory = function(
 /**
  * Factory for callbacks for delete variable dropdown menu option
  * associated with a variable getter block.
+ *
+ * @param block The block with the variable to delete.
  * @returns A function that deletes the variable.
  */
 const deleteOptionCallbackFactory = function(
-    block: CustomContextMenuVariableBlock): () => void {
+    block: VariableBlock): () => void {
   return function() {
     const workspace = block.workspace;
     const variableField = block.getField('VAR') as FieldVariable;

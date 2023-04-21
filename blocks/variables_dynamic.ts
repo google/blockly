@@ -83,12 +83,12 @@ type VariableMixinType =
 const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
   /**
    * Add menu option to create getter/setter block for this setter/getter.
-   * 
+   *
    * @param options List of menu options to add to.
    */
   customContextMenu: function(
-    this: VariableBlock,
-    options: Array<ContextMenuOption|LegacyContextMenuOption>) {
+      this: VariableBlock,
+      options: Array<ContextMenuOption|LegacyContextMenuOption>) {
     // Getter blocks have the option to create a setter block, and vice versa.
     if (!this.isInFlyout) {
       let oppositeType;
@@ -140,7 +140,7 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
   /**
    * Called whenever anything on the workspace changes.
    * Set the connection type for this block.
-   * 
+   *
    * @param _e Change event.
    */
   onchange: function(this: VariableBlock, _e: AbstractEvent) {
@@ -157,7 +157,7 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
 /**
  * Factory for callbacks for rename variable dropdown menu option
  * associated with a variable getter block.
- * 
+ *
  * @param block The block with the variable to rename.
  * @returns A function that renames the variable.
  */
@@ -173,7 +173,7 @@ const renameOptionCallbackFactory = function(block: VariableBlock) {
 /**
  * Factory for callbacks for delete variable dropdown menu option
  * associated with a variable getter block.
- * 
+ *
  * @param block The block with the variable to delete.
  * @returns A function that deletes the variable.
  */

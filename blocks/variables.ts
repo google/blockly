@@ -84,7 +84,7 @@ type VariableMixinType =
 const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
   /**
    * Add menu option to create getter/setter block for this setter/getter.
-   * 
+   *
    * @param options List of menu options to add to.
    */
   customContextMenu: function(
@@ -140,12 +140,11 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
 /**
  * Factory for callbacks for rename variable dropdown menu option
  * associated with a variable getter block.
- * 
+ *
  * @param block The block with the variable to rename.
  * @returns A function that renames the variable.
  */
-const renameOptionCallbackFactory = function(
-    block: VariableBlock): () => void {
+const renameOptionCallbackFactory = function(block: VariableBlock): () => void {
   return function() {
     const workspace = block.workspace;
     const variableField = block.getField('VAR') as FieldVariable;
@@ -161,8 +160,7 @@ const renameOptionCallbackFactory = function(
  * @param block The block with the variable to delete.
  * @returns A function that deletes the variable.
  */
-const deleteOptionCallbackFactory = function(
-    block: VariableBlock): () => void {
+const deleteOptionCallbackFactory = function(block: VariableBlock): () => void {
   return function() {
     const workspace = block.workspace;
     const variableField = block.getField('VAR') as FieldVariable;

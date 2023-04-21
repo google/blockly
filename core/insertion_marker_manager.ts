@@ -180,11 +180,11 @@ export class InsertionMarkerManager {
    */
   applyConnections() {
     if (!this.activeCandidate) return;
-    const {local, closest} = this.activeCandidate;
-    local.connect(closest);
     eventUtils.disable();
     this.hidePreview();
     eventUtils.enable();
+    const {local, closest} = this.activeCandidate;
+    local.connect(closest);
     if (this.topBlock.rendered) {
       const inferiorConnection = local.isSuperior() ? closest : local;
       const rootBlock = this.topBlock.getRootBlock();

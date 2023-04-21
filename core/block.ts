@@ -2100,7 +2100,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param dy Vertical offset, in workspace units.
    * @param reason Why is this move happening?  'drag', 'bump', 'snap', ...
    */
-  moveBy(dx: number, dy: number, reason?: string) {
+  moveBy(dx: number, dy: number, reason?: string[]) {
     if (this.parentBlock_) {
       throw Error('Block has parent');
     }

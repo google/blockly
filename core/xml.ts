@@ -434,7 +434,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
         const blockY = parseInt(xmlChildElement.getAttribute('y') ?? '10', 10);
         if (!isNaN(blockX) && !isNaN(blockY)) {
           block.moveBy(
-              workspace.RTL ? width - blockX : blockX, blockY, 'create');
+              workspace.RTL ? width - blockX : blockX, blockY, ['create']);
         }
         variablesFirst = false;
       } else if (name === 'shadow') {
@@ -517,7 +517,7 @@ export function appendDomToWorkspace(
     offsetX = workspace.RTL ? topX - newRightX : topX - newLeftX;
     for (let i = 0; i < newBlockIds.length; i++) {
       const block = workspace.getBlockById(newBlockIds[i]);
-      block!.moveBy(offsetX, offsetY, 'create');
+      block!.moveBy(offsetX, offsetY, ['create']);
     }
   }
   return newBlockIds;

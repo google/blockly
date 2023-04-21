@@ -394,7 +394,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param dy Vertical offset in workspace units.
    * @param reason Why is this move happening?  'drag', 'bump', 'snap', ...
    */
-  override moveBy(dx: number, dy: number, reason?: string) {
+  override moveBy(dx: number, dy: number, reason?: string[]) {
     if (this.parentBlock_) {
       throw Error('Block has parent');
     }
@@ -467,7 +467,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param xy The position to move to in workspace units.
    * @param reason Why is this move happening?  'drag', 'bump', 'snap', ...
    */
-  moveTo(xy: Coordinate, reason?: string) {
+  moveTo(xy: Coordinate, reason?: string[]) {
     const curXY = this.getRelativeToSurfaceXY();
     this.moveBy(xy.x - curXY.x, xy.y - curXY.y, reason);
   }
@@ -544,7 +544,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const dy =
         Math.round(Math.round((xy.y - half) / spacing) * spacing + half - xy.y);
     if (dx || dy) {
-      this.moveBy(dx, dy, 'snap');
+      this.moveBy(dx, dy, ['snap']);
     }
   }
 

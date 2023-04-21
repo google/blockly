@@ -27,5 +27,5 @@ export interface IBoundedElement {
    * @param dy Vertical offset in workspace units.
    * @param reason Why is this move happening?  'user', 'bump', 'snap'...
    */
-  moveBy(dx: number, dy: number, reason?: string): void;
+  moveBy(dx: number, dy: number, reason?: string[]): void;
 }

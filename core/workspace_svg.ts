@@ -1819,7 +1819,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         continue;
       }
       const xy = block.getRelativeToSurfaceXY();
-      block.moveBy(-xy.x, cursorY - xy.y, 'cleanup');
+      block.moveBy(-xy.x, cursorY - xy.y, ['cleanup']);
       block.snapToGrid();
       cursorY = block.getRelativeToSurfaceXY().y +
           block.getHeightWidth().height +

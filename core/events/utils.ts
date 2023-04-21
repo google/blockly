@@ -292,11 +292,10 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         lastEvent.newCoordinate = moveEvent.newCoordinate;
         if (moveEvent.reason) {
           if (lastEvent.reason) {
-            // Contatenate reasons into a comma separated string
-            // without duplicates.
-            const reasonSet = new Set(moveEvent.reason.split(',').concat(
-                lastEvent.reason.split(',')));
-            lastEvent.reason = Array.from(reasonSet).join(',');
+            // Concatenate reasons without duplicates.
+            const reasonSet =
+                new Set(moveEvent.reason.concat(lastEvent.reason));
+            lastEvent.reason = Array.from(reasonSet);
           } else {
             lastEvent.reason = moveEvent.reason;
           }

@@ -76,9 +76,9 @@ export class BlockMove extends BlockBase {
    *  'disconnect' -- Block got disconnected from another block.
    *  'create' -- Block created via XML.
    *  'cleanup' -- Workspace aligned top-level blocks.
-   * Reasons may become comma separated if move events merge ('drag,bump,snap').
+   * Event merging may create multiple reasons: ['drag', 'bump', 'snap'].
    */
-  reason?: string;
+  reason?: string[];
 
   /** @param opt_block The moved block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
@@ -204,7 +204,7 @@ export class BlockMove extends BlockBase {
    *
    * @param reason Why is this move happening?  'drag', 'bump', 'snap', ...
    */
-  setReason(reason: string) {
+  setReason(reason: string[]) {
     this.reason = reason;
   }
 
@@ -318,7 +318,7 @@ export interface BlockMoveJson extends BlockBaseJson {
   newParentId?: string;
   newInputName?: string;
   newCoordinate?: string;
-  reason?: string;
+  reason?: string[];
   recordUndo?: boolean;
 }
 

@@ -12,10 +12,10 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.logic');
 
-import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import * as Events from '../core/events/events.js';
 import * as Extensions from '../core/extensions.js';
 import * as xmlUtils from '../core/utils/xml.js';
+import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
 import type {BlockDefinition} from '../core/blocks.js';

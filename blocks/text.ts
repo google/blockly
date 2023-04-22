@@ -238,7 +238,7 @@ export const blocks = createBlockDefinitionsFromJsonArray([
   },
 ]);
 
-/** Type of a 'lists_create_with' block. */
+/** Type of a 'text_get_substring' block. */
 type GetSubstringBlock = Block&GetSubstringMixin;
 interface GetSubstringMixin extends GetSubstringType {
   WHERE_OPTIONS_1: Array<[string, string]>;

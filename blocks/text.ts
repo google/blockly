@@ -17,6 +17,7 @@ import * as xmlUtils from '../core/utils/xml.js';
 import {Align} from '../core/input.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
+import {Connection} from '../core/connection.js';
 import {ConnectionType} from '../core/connection_type.js';
 import {FieldImage} from '../core/field_image.js';
 import {FieldDropdown} from '../core/field_dropdown.js';
@@ -27,7 +28,6 @@ import type {Workspace} from '../core/workspace.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 import '../core/field_multilineinput.js';
 import '../core/field_variable.js';
-import { Connection } from '../core/connection.js';
 
 
 /**
@@ -337,14 +337,15 @@ const GET_SUBSTRING_BLOCK = {
     }
     const menu = fieldRegistry.fromJson({
       type: 'field_dropdown',
-      options: this[('WHERE_OPTIONS_' + n) as 'WHERE_OPTIONS_1'|'WHERE_OPTIONS_2'],
+      options:
+          this[('WHERE_OPTIONS_' + n) as 'WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2'],
     }) as FieldDropdown;
     menu.setValidator(
         /**
          * @param value The input value.
          * @return Null if the field has been replaced; otherwise undefined.
          */
-        function(this: FieldDropdown, value: any): null | undefined {
+        function(this: FieldDropdown, value: any): null|undefined {
           const newAt = (value === 'FROM_START') || (value === 'FROM_END');
           // The 'isAt' variable is available due to this function being a
           // closure.
@@ -440,7 +441,7 @@ blocks['text_print'] = {
 };
 
 type PromptCommonBlock = Block&PromptCommon;
-interface PromptCommon extends PromptCommonType {};
+interface PromptCommon extends PromptCommonType {}
 type PromptCommonType = typeof PROMPT_COMMON;
 
 /**
@@ -450,7 +451,7 @@ type PromptCommonType = typeof PROMPT_COMMON;
 const PROMPT_COMMON = {
   /**
    * Modify this block to have the correct output type.
-   * 
+   *
    * @param newOp The new output type. Should be either 'TEXT' or 'NUMBER'.
    */
   updateType_: function(this: PromptCommonBlock, newOp: string) {
@@ -460,7 +461,7 @@ const PROMPT_COMMON = {
   /**
    * Create XML to represent the output type.
    * Backwards compatible serialization implementation.
-   * 
+   *
    * @returns XML storage element.
    */
   mutationToDom: function(this: PromptCommonBlock): Element {
@@ -471,7 +472,7 @@ const PROMPT_COMMON = {
   /**
    * Parse XML to restore the output type.
    * Backwards compatible serialization implementation.
-   * 
+   *
    * @param xmlElement XML storage element.
    */
   domToMutation: function(this: PromptCommonBlock, xmlElement: Element) {
@@ -687,7 +688,7 @@ const QUOTE_IMAGE_MIXIN = {
 
   /**
    * Inserts appropriate quote images before and after the named field.
-   * 
+   *
    * @param fieldName The name of the field to wrap with quotes.
    */
   quoteField_: function(this: QuoteImageMixinBlock, fieldName: string) {
@@ -707,7 +708,7 @@ const QUOTE_IMAGE_MIXIN = {
   /**
    * A helper function that generates a FieldImage of an opening or
    * closing double quote. The selected quote will be adapted for RTL blocks.
-   * 
+   *
    * @param open If the image should be open quote (“ in LTR).
    *                       Otherwise, a closing quote is used (” in LTR).
    * @returns The new field.
@@ -736,13 +737,13 @@ const QUOTES_EXTENSION = function(this: QuoteImageMixinBlock) {
 
 /** Type of a block that has TEXT_JOIN_MUTATOR_MIXIN */
 type JoinMutatorBlock = Block&JoinMutatorMixin&QuoteImageMixin;
-interface JoinMutatorMixin extends JoinMutatorMixinType {};
+interface JoinMutatorMixin extends JoinMutatorMixinType {}
 type JoinMutatorMixinType = typeof JOIN_MUTATOR_MIXIN;
 
 /** Type of a item block in the text_join_mutator bubble. */
 type JoinMutatorItemBlock = BlockSvg&JoinMutatorItemMixin;
 interface JoinMutatorItemMixin {
-  valueConnection_: Connection | null
+  valueConnection_: Connection|null
 }
 
 /**
@@ -776,28 +777,29 @@ const JOIN_MUTATOR_MIXIN = {
    *
    * @returns The state of this block, ie the item count.
    */
-  saveExtraState: function(this: JoinMutatorBlock): { itemCount: number; } {
+  saveExtraState: function(this: JoinMutatorBlock): {itemCount: number;} {
     return {
       'itemCount': this.itemCount_,
     };
   },
   /**
    * Applies the given state to this block.
-   * 
+   *
    * @param state The state to apply to this block, ie the item count.
    */
-  loadExtraState: function(this: JoinMutatorBlock, state: { [x: string]: any; }) {
+  loadExtraState: function(this: JoinMutatorBlock, state: {[x: string]: any;}) {
     this.itemCount_ = state['itemCount'];
     this.updateShape_();
   },
   /**
    * Populate the mutator's dialog with this block's components.
-   * 
+   *
    * @param workspace Mutator's workspace.
    * @returns Root block in mutator.
    */
   decompose: function(this: JoinMutatorBlock, workspace: Workspace): Block {
-    const containerBlock = workspace.newBlock('text_create_join_container') as BlockSvg;
+    const containerBlock =
+        workspace.newBlock('text_create_join_container') as BlockSvg;
     containerBlock.initSvg();
     let connection = containerBlock.getInput('STACK')!.connection!;
     for (let i = 0; i < this.itemCount_; i++) {
@@ -810,7 +812,7 @@ const JOIN_MUTATOR_MIXIN = {
   },
   /**
    * Reconfigure this block based on the mutator dialog's components.
-   * 
+   *
    * @param containerBlock Root block in mutator.
    */
   compose: function(this: JoinMutatorBlock, containerBlock: Block) {
@@ -841,7 +843,7 @@ const JOIN_MUTATOR_MIXIN = {
   },
   /**
    * Store pointers to any connected child blocks.
-   * 
+   *
    * @param containerBlock Root block in mutator.
    */
   saveConnections: function(this: JoinMutatorBlock, containerBlock: Block) {
@@ -853,7 +855,8 @@ const JOIN_MUTATOR_MIXIN = {
         continue;
       }
       const input = this.getInput('ADD' + i);
-      (itemBlock as JoinMutatorItemBlock).valueConnection_ = input && input.connection!.targetConnection;
+      (itemBlock as JoinMutatorItemBlock).valueConnection_ =
+          input && input.connection!.targetConnection;
       itemBlock = itemBlock.getNextBlock();
       i++;
     }
@@ -918,7 +921,7 @@ const INDEXOF_TOOLTIP_EXTENSION = function(this: Block) {
 
 /** Type of a block that has TEXT_CHARAT_MUTATOR_MIXIN */
 type CharAtBlock = Block&CharAtMixin;
-interface CharAtMixin extends CharAtMixinType {};
+interface CharAtMixin extends CharAtMixinType {}
 type CharAtMixinType = typeof CHARAT_MUTATOR_MIXIN;
 
 /**
@@ -957,7 +960,7 @@ const CHARAT_MUTATOR_MIXIN = {
 
   /**
    * Create or delete an input for the numeric index.
-   * 
+   *
    * @param isAt True if the input should exist.
    */
   updateAt_: function(this: CharAtBlock, isAt: boolean) {
@@ -986,15 +989,14 @@ const CHARAT_MUTATOR_MIXIN = {
  */
 const CHARAT_EXTENSION = function(this: CharAtBlock) {
   const dropdown = this.getField('WHERE') as FieldDropdown;
-  dropdown.setValidator(
-      function(this: FieldDropdown, value: any) {
-        const newAt = (value === 'FROM_START') || (value === 'FROM_END');
-        const block = this.getSourceBlock() as CharAtBlock;
-        if (newAt !== block.isAt_) {
-          block.updateAt_(newAt);
-        }
-        return undefined;  // FieldValidators can't be void.  Use option as-is.
-      });
+  dropdown.setValidator(function(this: FieldDropdown, value: any) {
+    const newAt = (value === 'FROM_START') || (value === 'FROM_END');
+    const block = this.getSourceBlock() as CharAtBlock;
+    if (newAt !== block.isAt_) {
+      block.updateAt_(newAt);
+    }
+    return undefined;  // FieldValidators can't be void.  Use option as-is.
+  });
   this.updateAt_(true);
   // Assign 'this' to a variable for use in the tooltip closure below.
   const thisBlock = this;

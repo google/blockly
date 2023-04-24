@@ -138,6 +138,7 @@ function updateConnectionLocations(block: BlockSvg, blockOrigin: Coordinate) {
  * @param block The block to update the icon locations of.
  */
 function updateIconLocations(block: BlockSvg) {
+  if (!block.getIcons) return;
   for (const icon of block.getIcons()) {
     icon.computeIconLocation();
   }

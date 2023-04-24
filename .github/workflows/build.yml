@@ -77,7 +77,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: DoozyX/clang-format-lint-action@v0.15
+    - uses: DoozyX/clang-format-lint-action@v0.16
       with:
         source: 'core'
         extensions: 'js,ts'

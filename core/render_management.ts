@@ -86,6 +86,7 @@ function doRenders() {
 
     renderBlock(block);
     updateConnectionLocations(block, block.getRelativeToSurfaceXY());
+    updateIconLocations(block);
   }
   for (const workspace of workspaces) {
     workspace.resizeContents();
@@ -127,5 +128,21 @@ function updateConnectionLocations(block: BlockSvg, blockOrigin: Coordinate) {
       updateConnectionLocations(
           target, Coordinate.sum(blockOrigin, target.relativeCoords));
     }
+  }
+}
+
+/**
+ * Updates all icons that are children of the given block with their new
+ * locations.
+ *
+ * @param block The block to update the icon locations of.
+ */
+function updateIconLocations(block: BlockSvg) {
+  if (!block.getIcons) return;
+  for (const icon of block.getIcons()) {
+    icon.computeIconLocation();
+  }
+  for (const child of block.getChildren(false)) {
+    updateIconLocations(child);
   }
 }

@@ -177,8 +177,6 @@ export class FieldColour extends Field<string> {
 
   /**
    * Updates text field to match the colour/style of the block.
-   *
-   * @internal
    */
   override applyColour() {
     if (!this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) {

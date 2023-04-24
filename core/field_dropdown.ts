@@ -431,8 +431,6 @@ export class FieldDropdown extends Field<string> {
 
   /**
    * Updates the dropdown arrow to match the colour/style of the block.
-   *
-   * @internal
    */
   override applyColour() {
     const style = (this.sourceBlock_ as BlockSvg).style;

@@ -100,18 +100,17 @@ export class Drawer extends BaseDrawer {
       const precedesStatement = spacerRow.precedesStatement;
       const followsStatement = spacerRow.followsStatement;
       if (precedesStatement || followsStatement) {
-        const insideCornersObject =
-            this.constants_.INSIDE_CORNERS as InsideCorners;
-        const cornerHeight = insideCornersObject.rightHeight;
+        const insideCorners = this.constants_.INSIDE_CORNERS as InsideCorners;
+        const cornerHeight = insideCorners.rightHeight;
         const remainingHeight =
             spacerRow.height - (precedesStatement ? cornerHeight : 0);
         const bottomRightPath =
-            followsStatement ? insideCornersObject.pathBottomRight : '';
+            followsStatement ? insideCorners.pathBottomRight : '';
         const verticalPath = remainingHeight > 0 ?
             svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight) :
             '';
         const topRightPath =
-            precedesStatement ? insideCornersObject.pathTopRight : '';
+            precedesStatement ? insideCorners.pathTopRight : '';
         // Put all of the partial paths together.
         this.outlinePath_ += bottomRightPath + verticalPath + topRightPath;
         return;
@@ -196,17 +195,15 @@ export class Drawer extends BaseDrawer {
     // Where to start drawing the notch, which is on the right side in LTR.
     const x = input.xPos + input.notchOffset + (input.shape as BaseShape).width;
 
-    const insideCornersObject = this.constants_.INSIDE_CORNERS;
+    const insideCorners = this.constants_.INSIDE_CORNERS;
     const innerTopLeftCorner = (input.shape as Notch).pathRight +
-        svgPaths.lineOnAxis(
-            'h', -(input.notchOffset - insideCornersObject.width)) +
-        insideCornersObject.pathTop;
+        svgPaths.lineOnAxis('h', -(input.notchOffset - insideCorners.width)) +
+        insideCorners.pathTop;
 
-    const innerHeight = row.height - 2 * insideCornersObject.height;
+    const innerHeight = row.height - 2 * insideCorners.height;
 
-    const innerBottomLeftCorner = insideCornersObject.pathBottom +
-        svgPaths.lineOnAxis(
-            'h', input.notchOffset - insideCornersObject.width) +
+    const innerBottomLeftCorner = insideCorners.pathBottom +
+        svgPaths.lineOnAxis('h', input.notchOffset - insideCorners.width) +
         (input.connectedBottomNextConnection ? '' :
                                                (input.shape as Notch).pathLeft);
 

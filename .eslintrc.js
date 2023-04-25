@@ -1,19 +1,4 @@
 const rules = {
-  'curly': ['error'],
-  'eol-last': ['error'],
-  'keyword-spacing': ['error'],
-  'linebreak-style': ['error', 'unix'],
-  'max-len': [
-    'error',
-    {
-      'code': 100,
-      'tabWidth': 4,
-      'ignoreStrings': true,
-      'ignoreRegExpLiterals': true,
-      'ignoreUrls': true,
-    },
-  ],
-  'no-trailing-spaces': ['error', {'skipBlankLines': true}],
   'no-unused-vars': [
     'warn',
     {
@@ -29,20 +14,12 @@ const rules = {
   // Blockly uses single quotes except for JSON blobs, which must use double
   // quotes.
   'quotes': ['off'],
-  'semi': ['error', 'always'],
-  // Blockly doesn't have space before function paren when defining functions.
-  'space-before-function-paren': ['error', 'never'],
-  // Blockly doesn't have space before function paren when calling functions.
-  'func-call-spacing': ['error', 'never'],
-  'space-infix-ops': ['error'],
   // Blockly uses 'use strict' in files.
   'strict': ['off'],
   // Closure style allows redeclarations.
   'no-redeclare': ['off'],
   'valid-jsdoc': ['error'],
   'no-console': ['off'],
-  'no-multi-spaces': ['error', {'ignoreEOLComments': true}],
-  'operator-linebreak': ['error', 'after'],
   'spaced-comment': [
     'error',
     'always',
@@ -61,27 +38,13 @@ const rules = {
       'allow': ['^opt_', '^_opt_', '^testOnly_'],
     },
   ],
-  // Use clang-format for indentation by running `npm run format`.
-  'indent': ['off'],
   // Blockly uses capital letters for some non-constructor namespaces.
   // Keep them for legacy reasons.
   'new-cap': ['off'],
-  // Mostly use default rules for brace style, but allow single-line blocks.
-  'brace-style': ['error', '1tbs', {'allowSingleLine': true}],
   // Blockly uses objects as maps, but uses Object.create(null) to
   // instantiate them.
   'guard-for-in': ['off'],
   'prefer-spread': ['off'],
-  'comma-dangle': [
-    'error',
-    {
-      'arrays': 'always-multiline',
-      'objects': 'always-multiline',
-      'imports': 'always-multiline',
-      'exports': 'always-multiline',
-      'functions': 'ignore',
-    },
-  ],
 };
 
 /**
@@ -92,10 +55,7 @@ const rules = {
 function buildTSOverride({files, tsconfig}) {
   return {
     'files': files,
-    'plugins': [
-      '@typescript-eslint/eslint-plugin',
-      'jsdoc',
-    ],
+    'plugins': ['@typescript-eslint/eslint-plugin', 'jsdoc'],
     'settings': {
       'jsdoc': {
         'mode': 'typescript',
@@ -111,6 +71,7 @@ function buildTSOverride({files, tsconfig}) {
     'extends': [
       'plugin:@typescript-eslint/recommended',
       'plugin:jsdoc/recommended',
+      'prettier', // Extend again so that these rules are applied last
     ],
     'rules': {
       // TS rules
@@ -130,8 +91,6 @@ function buildTSOverride({files, tsconfig}) {
           'varsIgnorePattern': '^_',
         },
       ],
-      'func-call-spacing': ['off'],
-      '@typescript-eslint/func-call-spacing': ['warn'],
       // Temporarily disable. 23 problems.
       '@typescript-eslint/no-explicit-any': ['off'],
       // Temporarily disable. 128 problems.
@@ -195,10 +154,7 @@ const eslintJSON = {
     'goog': true,
     'exports': true,
   },
-  'extends': [
-    'eslint:recommended',
-    'google',
-  ],
+  'extends': ['eslint:recommended', 'google', 'prettier'],
   // TypeScript-specific config. Uses above rules plus these.
   'overrides': [
     buildTSOverride({
@@ -206,10 +162,7 @@ const eslintJSON = {
       tsconfig: './tsconfig.json',
     }),
     buildTSOverride({
-      files: [
-        './tests/typescript/**/*.ts',
-        './tests/typescript/**/*.tsx',
-      ],
+      files: ['./tests/typescript/**/*.ts', './tests/typescript/**/*.tsx'],
       tsconfig: './tests/typescript/tsconfig.json',
     }),
     {

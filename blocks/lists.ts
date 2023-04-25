@@ -18,7 +18,6 @@ import {Align} from '../core/inputs/input.js';
 import type {Block} from '../core/block.js';
 import type {Connection} from '../core/connection.js';
 import type {BlockSvg} from '../core/block_svg.js';
-import type {BlockDefinition} from '../core/blocks.js';
 import {ConnectionType} from '../core/connection_type.js';
 import type {FieldDropdown} from '../core/field_dropdown.js';
 import {Msg} from '../core/msg.js';
@@ -352,11 +351,11 @@ const LISTS_INDEXOF = {
     if (!operatorsDropdown) throw new Error('field_dropdown not found');
     this.appendValueInput('FIND').appendField(operatorsDropdown, 'END');
     this.setInputsInline(true);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    const thisBlock = this;
-    this.setTooltip(function() {
+    this.setTooltip(() => {
       return Msg['LISTS_INDEX_OF_TOOLTIP'].replace(
-          '%1', thisBlock.workspace.options.oneBasedIndex ? '0' : '-1');
+        '%1',
+        this.workspace.options.oneBasedIndex ? '0' : '-1'
+      );
     });
   },
 };
@@ -412,11 +411,9 @@ const LISTS_GETINDEX = {
     this.setInputsInline(true);
     this.setOutput(true);
     this.updateAt_(true);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    const thisBlock = this;
-    this.setTooltip(function() {
-      const mode = thisBlock.getFieldValue('MODE');
-      const where = thisBlock.getFieldValue('WHERE');
+    this.setTooltip(() => {
+      const mode = this.getFieldValue('MODE');
+      const where = this.getFieldValue('WHERE');
       let tooltip = '';
       switch (mode + ' ' + where) {
         case 'GET FROM_START':
@@ -460,12 +457,13 @@ const LISTS_GETINDEX = {
           break;
       }
       if (where === 'FROM_START' || where === 'FROM_END') {
-        const msg = (where === 'FROM_START') ?
-            Msg['LISTS_INDEX_FROM_START_TOOLTIP'] :
-            Msg['LISTS_INDEX_FROM_END_TOOLTIP'];
-        tooltip += '  ' +
-            msg.replace(
-                '%1', thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
+        const msg =
+          where === 'FROM_START'
+            ? Msg['LISTS_INDEX_FROM_START_TOOLTIP']
+            : Msg['LISTS_INDEX_FROM_END_TOOLTIP'];
+        tooltip +=
+          '  ' +
+          msg.replace('%1', this.workspace.options.oneBasedIndex ? '#1' : '#0');
       }
       return tooltip;
     });
@@ -642,11 +640,9 @@ const LISTS_SETINDEX = {
     this.setNextStatement(true);
     this.setTooltip(Msg['LISTS_SET_INDEX_TOOLTIP']);
     this.updateAt_(true);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    const thisBlock = this;
-    this.setTooltip(function() {
-      const mode = thisBlock.getFieldValue('MODE');
-      const where = thisBlock.getFieldValue('WHERE');
+    this.setTooltip(() => {
+      const mode = this.getFieldValue('MODE');
+      const where = this.getFieldValue('WHERE');
       let tooltip = '';
       switch (mode + ' ' + where) {
         case 'SET FROM_START':
@@ -677,9 +673,12 @@ const LISTS_SETINDEX = {
           break;
       }
       if (where === 'FROM_START' || where === 'FROM_END') {
-        tooltip += '  ' +
-            Msg['LISTS_INDEX_FROM_START_TOOLTIP'].replace(
-                '%1', thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
+        tooltip +=
+          '  ' +
+          Msg['LISTS_INDEX_FROM_START_TOOLTIP'].replace(
+            '%1',
+            this.workspace.options.oneBasedIndex ? '#1' : '#0'
+          );
       }
       return tooltip;
     });
@@ -966,9 +965,7 @@ blocks['lists_split'] = {
   /**
    * Block for splitting text into a list, or joining a list into text.
    */
-  init: function(this: SplitBlock) {
-    // Assign 'this' to a variable for use in the closures below.
-    const thisBlock = this;
+  init: function (this: SplitBlock) {
     const dropdown = fieldRegistry.fromJson({
       type: 'field_dropdown',
       options: [
@@ -977,8 +974,8 @@ blocks['lists_split'] = {
       ],
     });
     if (!dropdown) throw new Error('field_dropdown not found');
-    dropdown.setValidator(function(newMode) {
-      thisBlock.updateType_(newMode);
+    dropdown.setValidator((newMode) => {
+      this.updateType_(newMode);
     });
     this.setHelpUrl(Msg['LISTS_SPLIT_HELPURL']);
     this.setStyle('list_blocks');
@@ -988,8 +985,8 @@ blocks['lists_split'] = {
         Msg['LISTS_SPLIT_WITH_DELIMITER']);
     this.setInputsInline(true);
     this.setOutput(true, 'Array');
-    this.setTooltip(function() {
-      const mode = thisBlock.getFieldValue('MODE');
+    this.setTooltip(() => {
+      const mode = this.getFieldValue('MODE');
       if (mode === 'SPLIT') {
         return Msg['LISTS_SPLIT_TOOLTIP_SPLIT'];
       } else if (mode === 'JOIN') {

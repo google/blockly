@@ -12,12 +12,13 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.math');
 
 import * as Extensions from '../core/extensions.js';
-import type {Field} from '../core/field.js';
 import type {FieldDropdown} from '../core/field_dropdown.js';
 import * as xmlUtils from '../core/utils/xml.js';
 import type {Block} from '../core/block.js';
-import type {BlockDefinition} from '../core/blocks.js';
-import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
+import {
+  createBlockDefinitionsFromJsonArray,
+  defineBlocks,
+} from '../core/common.js';
 import '../core/field_dropdown.js';
 import '../core/field_label.js';
 import '../core/field_number.js';

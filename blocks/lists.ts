@@ -884,10 +884,8 @@ const LISTS_GETSUBLIST = {
     }
     const menu = fieldRegistry.fromJson({
       type: 'field_dropdown',
-      // TODO(#6920): Rewrite this so that clang-format doesn't make such an
-      // awful unreadable mess of it.
-      options: this
-          [('WHERE_OPTIONS_' + n) as ('WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2')],
+      options:
+        this[('WHERE_OPTIONS_' + n) as 'WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2'],
     }) as FieldDropdown;
     menu.setValidator(
         /**

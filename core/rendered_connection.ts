@@ -174,7 +174,7 @@ export class RenderedConnection extends Connection {
       dx = staticConnection.x - config.snapRadius -
           Math.floor(Math.random() * BUMP_RANDOMNESS) - this.x;
     }
-    rootBlock.moveBy(dx, dy);
+    rootBlock.moveBy(dx, dy, ['bump']);
     selected || rootBlock.removeSelect();
   }
 

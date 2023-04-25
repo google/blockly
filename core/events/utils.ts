@@ -290,6 +290,16 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         lastEvent.newParentId = moveEvent.newParentId;
         lastEvent.newInputName = moveEvent.newInputName;
         lastEvent.newCoordinate = moveEvent.newCoordinate;
+        if (moveEvent.reason) {
+          if (lastEvent.reason) {
+            // Concatenate reasons without duplicates.
+            const reasonSet =
+                new Set(moveEvent.reason.concat(lastEvent.reason));
+            lastEvent.reason = Array.from(reasonSet);
+          } else {
+            lastEvent.reason = moveEvent.reason;
+          }
+        }
         lastEntry.index = i;
       } else if (
           event.type === CHANGE &&

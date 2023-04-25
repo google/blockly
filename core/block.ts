@@ -2130,13 +2130,15 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @param dx Horizontal offset, in workspace units.
    * @param dy Vertical offset, in workspace units.
+   * @param reason Why is this move happening?  'drag', 'bump', 'snap', ...
    */
-  moveBy(dx: number, dy: number) {
+  moveBy(dx: number, dy: number, reason?: string[]) {
     if (this.parentBlock_) {
-      throw Error('Block has parent.');
+      throw Error('Block has parent');
     }
     const event =
         new (eventUtils.get(eventUtils.BLOCK_MOVE))(this) as BlockMove;
+    reason && event.setReason(reason);
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);

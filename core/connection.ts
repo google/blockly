@@ -115,6 +115,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     if (eventUtils.isEnabled()) {
       event =
           new (eventUtils.get(eventUtils.BLOCK_MOVE))(childBlock) as BlockMove;
+      event.setReason(['connect']);
     }
     connectReciprocally(this, childConnection);
     childBlock.setParent(parentBlock);
@@ -272,6 +273,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     if (eventUtils.isEnabled()) {
       event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
                   childConnection.getSourceBlock()) as BlockMove;
+      event.setReason(['disconnect']);
     }
     const otherConnection = this.targetConnection;
     if (otherConnection) {

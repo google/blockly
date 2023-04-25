@@ -158,7 +158,7 @@ const eslintJSON = {
   // TypeScript-specific config. Uses above rules plus these.
   'overrides': [
     buildTSOverride({
-      files: ['./core/**/*.ts', './core/**/*.tsx'],
+      files: ['./**/*.ts', './**/*.tsx'],
       tsconfig: './tsconfig.json',
     }),
     buildTSOverride({

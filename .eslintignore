@@ -17,6 +17,7 @@
 /tests/workspace_svg/*
 
 # Demos, scripts, misc
+/node_modules/*
 /generators/*
 /demos/*
 /appengine/*

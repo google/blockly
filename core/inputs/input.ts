@@ -21,6 +21,7 @@ import type {Connection} from '../connection.js';
 import type {Field} from '../field.js';
 import * as fieldRegistry from '../field_registry.js';
 import type {RenderedConnection} from '../rendered_connection.js';
+import {inputTypes} from './input_types.js';
 
 
 /**
@@ -35,8 +36,9 @@ export class Input {
   /** Is the input visible? */
   private visible = true;
 
+  public readonly type: number = inputTypes.CUSTOM;
+
   /**
-   * @param type The type of the input.
    * @param name Language-neutral identifier which may used to find this input
    *     again.
    * @param block The block containing this input.
@@ -45,8 +47,7 @@ export class Input {
    *     optionally construct a connection.
    */
   constructor(
-    public type: number, public name: string, block: Block,
-    public connection: Connection | null) {
+      public name: string, block: Block, public connection: Connection|null) {
     this.sourceBlock = block;
   }
 

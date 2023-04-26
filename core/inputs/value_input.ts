@@ -25,6 +25,6 @@ export class ValueInput extends Input {
       public name: string, block: Block, public connection: Connection|null) {
     if (!name) throw new Error('Value inputs must have a non-empty name');
     if (!connection) throw new Error('Value inputs must have a connection');
-    super(inputTypes.VALUE, name, block, connection);
+    super(name, block, connection);
   }
 }

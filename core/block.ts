@@ -32,7 +32,6 @@ import * as Extensions from './extensions.js';
 import type {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Align, Input} from './inputs/input.js';
-import {inputTypes} from './inputs/input_types.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IDeletable} from './interfaces/i_deletable.js';
 import type {Mutator} from './mutator.js';
@@ -45,6 +44,9 @@ import * as registry from './registry.js';
 import {Size} from './utils/size.js';
 import type {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
+import {DummyInput} from './inputs/dummy_input.js';
+import {ValueInput} from './inputs/value_input.js';
+import {StatementInput} from './inputs/statement_input.js';
 
 
 /**
@@ -1298,15 +1300,15 @@ export class Block implements IASTNodeLocation, IDeletable {
     }
     // Not defined explicitly.  Figure out what would look best.
     for (let i = 1; i < this.inputList.length; i++) {
-      if (this.inputList[i - 1].type === inputTypes.DUMMY &&
-          this.inputList[i].type === inputTypes.DUMMY) {
+      if (this.inputList[i - 1] instanceof DummyInput &&
+          this.inputList[i] instanceof DummyInput) {
         // Two dummy inputs in a row.  Don't inline them.
         return false;
       }
     }
     for (let i = 1; i < this.inputList.length; i++) {
-      if (this.inputList[i - 1].type === inputTypes.VALUE &&
-          this.inputList[i].type === inputTypes.DUMMY) {
+      if (this.inputList[i - 1] instanceof ValueInput &&
+          this.inputList[i] instanceof DummyInput) {
         // Dummy input after a value input.  Inline them.
         return true;
       }
@@ -1490,7 +1492,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The input object created.
    */
   appendValueInput(name: string): Input {
-    return this.appendInput_(inputTypes.VALUE, name);
+    return this.appendInput(new ValueInput(
+        name, this, this.makeConnection_(ConnectionType.INPUT_VALUE)));
   }
 
   /**
@@ -1501,7 +1504,9 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The input object created.
    */
   appendStatementInput(name: string): Input {
-    return this.appendInput_(inputTypes.STATEMENT, name);
+    this.statementInputCount++;
+    return this.appendInput(new StatementInput(
+        name, this, this.makeConnection_(ConnectionType.NEXT_STATEMENT)));
   }
 
   /**
@@ -1512,7 +1517,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The input object created.
    */
   appendDummyInput(opt_name?: string): Input {
-    return this.appendInput_(inputTypes.DUMMY, opt_name || '');
+    return this.appendInput(new DummyInput(opt_name ?? '', this));
   }
 
   /**
@@ -1538,8 +1543,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     const inputConstructor =
         registry.getClass(registry.Type.INPUT, type, false);
     if (!inputConstructor) return null;
-    return this.appendInput(
-        new inputConstructor(inputTypes.CUSTOM, name, this, null));
+    return this.appendInput(new inputConstructor(name, this, null));
   }
 
   /**
@@ -1935,28 +1939,6 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Add a value input, statement input or local variable to this block.
-   *
-   * @param type One of Blockly.inputTypes.
-   * @param name Language-neutral identifier which may used to find this input
-   *     again.  Should be unique to this block.
-   * @returns The input object created.
-   */
-  protected appendInput_(type: number, name: string): Input {
-    let connection = null;
-    if (type === inputTypes.VALUE || type === inputTypes.STATEMENT) {
-      connection = this.makeConnection_(type);
-    }
-    if (type === inputTypes.STATEMENT) {
-      this.statementInputCount++;
-    }
-    const input = new Input(type, name, this, connection);
-    // Append input to list.
-    this.inputList.push(input);
-    return input;
-  }
-
-  /**
    * Move a named input to a different location on this block.
    *
    * @param name The name of the input to move.
@@ -2031,9 +2013,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   removeInput(name: string, opt_quiet?: boolean): boolean {
     for (let i = 0, input; input = this.inputList[i]; i++) {
       if (input.name === name) {
-        if (input.type === inputTypes.STATEMENT) {
-          this.statementInputCount--;
-        }
+        if (input instanceof StatementInput) this.statementInputCount--;
         input.dispose();
         this.inputList.splice(i, 1);
         return true;

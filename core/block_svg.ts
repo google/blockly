@@ -1342,16 +1342,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
   }
 
-  /**
-   * Add a value input, statement input or local variable to this block.
-   *
-   * @param type One of Blockly.inputTypes.
-   * @param name Language-neutral identifier which may used to find this input
-   *     again.  Should be unique to this block.
-   * @returns The input object created.
-   */
-  protected override appendInput_(type: number, name: string): Input {
-    const input = super.appendInput_(type, name);
+  /** @override */
+  override appendInput(input: Input): Input {
+    super.appendInput(input);
 
     if (this.rendered) {
       this.queueRender();

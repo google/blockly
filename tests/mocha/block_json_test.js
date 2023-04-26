@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.blockJson');
 
-import {Align} from '../../build/src/core/input.js';
+import {Align} from '../../build/src/core/inputs/input.js';
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 suite('Block JSON initialization', function() {

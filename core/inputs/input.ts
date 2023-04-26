@@ -36,7 +36,7 @@ export class Input {
   /** Is the input visible? */
   private visible = true;
 
-  public readonly type: number = inputTypes.CUSTOM;
+  public readonly type: inputTypes = inputTypes.CUSTOM;
 
   /**
    * @param name Language-neutral identifier which may used to find this input

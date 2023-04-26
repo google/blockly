@@ -179,18 +179,18 @@ export class InsertionMarkerManager {
    */
   applyConnections() {
     if (!this.activeCandidate) return;
-    const {local, closest} = this.activeCandidate;
-    local.connect(closest);
     eventUtils.disable();
     this.hidePreview();
     eventUtils.enable();
+    const {local, closest} = this.activeCandidate;
+    local.connect(closest);
     if (this.topBlock.rendered) {
       const inferiorConnection = local.isSuperior() ? closest : local;
-      blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
       const rootBlock = this.topBlock.getRootBlock();
 
       // bringToFront is incredibly expensive. Delay by at least a frame.
       requestAnimationFrame(() => {
+        blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
         setTimeout(() => {
           rootBlock.bringToFront();
         }, 0);

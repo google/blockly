@@ -31,7 +31,7 @@ import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
 import type {Icon} from './icon.js';
-import type {Input} from './input.js';
+import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {CopyData, ICopyable} from './interfaces/i_copyable.js';

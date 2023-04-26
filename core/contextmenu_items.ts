@@ -13,7 +13,7 @@ import {ContextMenuRegistry, RegistryItem, Scope} from './contextmenu_registry.j
 import * as dialog from './dialog.js';
 import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
-import {inputTypes} from './input_types.js';
+import {inputTypes} from './inputs/input_types.js';
 import {Msg} from './msg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 

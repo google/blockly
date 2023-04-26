@@ -16,7 +16,7 @@ import type {Block} from './block.js';
 import {ConnectionType} from './connection_type.js';
 import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
-import type {Input} from './input.js';
+import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import * as blocks from './serialization/blocks.js';

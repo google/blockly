@@ -8,8 +8,8 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.RenderInfo');
 
 import type {BlockSvg} from '../../block_svg.js';
-import {Align, Input} from '../../input.js';
-import {inputTypes} from '../../input_types.js';
+import {Align, Input} from '../../inputs/input.js';
+import {inputTypes} from '../../inputs/input_types.js';
 import type {RenderedConnection} from '../../rendered_connection.js';
 import type {Measurable} from '../measurables/base.js';
 import {BottomRow} from '../measurables/bottom_row.js';

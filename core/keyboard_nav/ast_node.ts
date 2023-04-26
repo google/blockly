@@ -17,7 +17,7 @@ import type {Block} from '../block.js';
 import type {Connection} from '../connection.js';
 import {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
-import type {Input} from '../input.js';
+import type {Input} from '../inputs/input.js';
 import type {IASTNodeLocation} from '../interfaces/i_ast_node_location.js';
 import type {IASTNodeLocationWithBlock} from '../interfaces/i_ast_node_location_with_block.js';
 import {Coordinate} from '../utils/coordinate.js';

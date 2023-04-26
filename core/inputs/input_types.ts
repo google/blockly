@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.inputTypes');
 
-import {ConnectionType} from './connection_type.js';
+import {ConnectionType} from '../connection_type.js';
 
 
 /**

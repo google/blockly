@@ -11,7 +11,7 @@ import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import * as eventUtils from '../events/utils.js';
-import {inputTypes} from '../input_types.js';
+import {inputTypes} from '../inputs/input_types.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import {Size} from '../utils/size.js';
 import * as utilsXml from '../utils/xml.js';

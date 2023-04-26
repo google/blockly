@@ -13,7 +13,7 @@ import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
-import type {Input} from './input.js';
+import type {Input} from './inputs/input.js';
 import type {ISerializer} from './interfaces/i_serializer.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
 import type {Cursor} from './keyboard_nav/cursor.js';

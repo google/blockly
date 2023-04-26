@@ -9,19 +9,18 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Input');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './field_label.js';
+import '../field_label.js';
 
-import type {Block} from './block.js';
-import type {BlockSvg} from './block_svg.js';
-import type {Connection} from './connection.js';
-import type {Field} from './field.js';
-import * as fieldRegistry from './field_registry.js';
-import {inputTypes} from './input_types.js';
-import type {RenderedConnection} from './rendered_connection.js';
+import type {Block} from '../block.js';
+import type {BlockSvg} from '../block_svg.js';
+import type {Connection} from '../connection.js';
+import type {Field} from '../field.js';
+import * as fieldRegistry from '../field_registry.js';
+import type {RenderedConnection} from '../rendered_connection.js';
 
 
 /**
@@ -46,12 +45,8 @@ export class Input {
    *     optionally construct a connection.
    */
   constructor(
-      public type: number, public name: string, block: Block,
-      public connection: Connection|null) {
-    if ((type === inputTypes.VALUE || type === inputTypes.STATEMENT) && !name) {
-      throw Error(
-          'Value inputs and statement inputs must have non-empty name.');
-    }
+    public type: number, public name: string, block: Block,
+    public connection: Connection | null) {
     this.sourceBlock = block;
   }
 

@@ -8,8 +8,8 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.RenderInfo');
 
 import type {BlockSvg} from '../../block_svg.js';
-import type {Input} from '../../input.js';
-import {inputTypes} from '../../input_types.js';
+import type {Input} from '../../inputs/input.js';
+import {inputTypes} from '../../inputs/input_types.js';
 import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 import type {Measurable} from '../measurables/base.js';
 import type {BottomRow} from '../measurables/bottom_row.js';

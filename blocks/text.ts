@@ -440,8 +440,8 @@ blocks['text_print'] = {
   },
 };
 
-type PromptCommonBlock = Block&PromptCommon;
-interface PromptCommon extends PromptCommonType {}
+type PromptCommonBlock = Block&PromptCommonMixin;
+interface PromptCommonMixin extends PromptCommonType {}
 type PromptCommonType = typeof PROMPT_COMMON;
 
 /**
@@ -455,8 +455,7 @@ const PROMPT_COMMON = {
    * @param newOp The new output type. Should be either 'TEXT' or 'NUMBER'.
    */
   updateType_: function(this: PromptCommonBlock, newOp: string) {
-    if (!this.outputConnection) return;
-    this.outputConnection.setCheck(newOp === 'NUMBER' ? 'Number' : 'String');
+    this.outputConnection!.setCheck(newOp === 'NUMBER' ? 'Number' : 'String');
   },
   /**
    * Create XML to represent the output type.
@@ -476,9 +475,7 @@ const PROMPT_COMMON = {
    * @param xmlElement XML storage element.
    */
   domToMutation: function(this: PromptCommonBlock, xmlElement: Element) {
-    const type = xmlElement.getAttribute('type');
-    if (type === null) throw new TypeError('xmlElement had no type attribute');
-    this.updateType_(type);
+    this.updateType_(xmlElement.getAttribute('type')!);
   },
 };
 
@@ -519,7 +516,7 @@ blocks['text_prompt_ext'] = {
   // XML hooks are kept for backwards compatibility.
 };
 
-type PromptBlock = Block&PromptCommon&QuoteImageMixin;
+type PromptBlock = Block&PromptCommonMixin&QuoteImageMixin;
 
 const TEXT_PROMPT_BLOCK = {
   ...PROMPT_COMMON,
@@ -741,8 +738,8 @@ interface JoinMutatorMixin extends JoinMutatorMixinType {}
 type JoinMutatorMixinType = typeof JOIN_MUTATOR_MIXIN;
 
 /** Type of a item block in the text_join_mutator bubble. */
-type JoinMutatorItemBlock = BlockSvg&JoinMutatorItemMixin;
-interface JoinMutatorItemMixin {
+type JoinItemBlock = BlockSvg&JoinItemMixin;
+interface JoinItemMixin {
   valueConnection_: Connection|null
 }
 
@@ -803,7 +800,7 @@ const JOIN_MUTATOR_MIXIN = {
     containerBlock.initSvg();
     let connection = containerBlock.getInput('STACK')!.connection!;
     for (let i = 0; i < this.itemCount_; i++) {
-      const itemBlock = workspace.newBlock('text_create_join_item') as BlockSvg;
+      const itemBlock = workspace.newBlock('text_create_join_item') as JoinItemBlock;
       itemBlock.initSvg();
       connection.connect(itemBlock.previousConnection);
       connection = itemBlock.nextConnection;
@@ -824,7 +821,7 @@ const JOIN_MUTATOR_MIXIN = {
         itemBlock = itemBlock.getNextBlock()!;
         continue;
       }
-      connections.push((itemBlock as JoinMutatorItemBlock).valueConnection_);
+      connections.push((itemBlock as JoinItemBlock).valueConnection_);
       itemBlock = itemBlock.getNextBlock()!;
     }
     // Disconnect any children that don't belong.
@@ -855,7 +852,7 @@ const JOIN_MUTATOR_MIXIN = {
         continue;
       }
       const input = this.getInput('ADD' + i);
-      (itemBlock as JoinMutatorItemBlock).valueConnection_ =
+      (itemBlock as JoinItemBlock).valueConnection_ =
           input && input.connection!.targetConnection;
       itemBlock = itemBlock.getNextBlock();
       i++;
@@ -910,11 +907,9 @@ Extensions.register(
  * Update the tooltip of 'text_append' block to reference the variable.
  */
 const INDEXOF_TOOLTIP_EXTENSION = function(this: Block) {
-  // Assign 'this' to a variable for use in the tooltip closure below.
-  const thisBlock = this;
-  this.setTooltip(function() {
+  this.setTooltip(() => {
     return Msg['TEXT_INDEXOF_TOOLTIP'].replace(
-        '%1', thisBlock.workspace.options.oneBasedIndex ? '0' : '-1');
+        '%1', this.workspace.options.oneBasedIndex ? '0' : '-1');
   });
 };
 

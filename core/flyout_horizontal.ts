@@ -244,7 +244,6 @@ export class HorizontalFlyout extends Flyout {
           // a block.
           child.isInFlyout = true;
         }
-        block!.render();
         const root = block!.getSvgRoot();
         const blockHW = block!.getHeightWidth();
         // Figure out where to place the block.

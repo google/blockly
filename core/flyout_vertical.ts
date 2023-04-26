@@ -225,7 +225,6 @@ export class VerticalFlyout extends Flyout {
           // a block.
           child.isInFlyout = true;
         }
-        block!.render();
         const root = block!.getSvgRoot();
         const blockHW = block!.getHeightWidth();
         const moveX =

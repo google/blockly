@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {Block} from '../block.js';
-import {Connection} from '../connection.js';
-
+import type {Block} from '../block.js';
+import type {Connection} from '../connection.js';
 import {Input} from './input.js';
 import {inputTypes} from './input_types.js';
 

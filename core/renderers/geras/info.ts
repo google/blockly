@@ -9,21 +9,23 @@ goog.declareModuleId('Blockly.geras.RenderInfo');
 
 import type {BlockSvg} from '../../block_svg.js';
 import type {Input} from '../../inputs/input.js';
-import {inputTypes} from '../../inputs/input_types.js';
 import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 import type {Measurable} from '../measurables/base.js';
 import type {BottomRow} from '../measurables/bottom_row.js';
+import {DummyInput} from '../../inputs/dummy_input.js';
 import {ExternalValueInput} from '../measurables/external_value_input.js';
 import type {Field} from '../measurables/field.js';
 import {InRowSpacer} from '../measurables/in_row_spacer.js';
 import type {InputRow} from '../measurables/input_row.js';
 import type {Row} from '../measurables/row.js';
+import {StatementInput} from '../../inputs/statement_input.js';
 import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
+import {ValueInput} from '../../inputs/value_input.js';
 
 import type {ConstantProvider} from './constants.js';
 import {InlineInput} from './measurables/inline_input.js';
-import {StatementInput} from './measurables/statement_input.js';
+import {StatementInput as StatementInputMeasurable} from './measurables/statement_input.js';
 import type {Renderer} from './renderer.js';
 
 
@@ -63,8 +65,7 @@ export class RenderInfo extends BaseRenderInfo {
     super.populateBottomRow_();
 
     const followsStatement = this.block_.inputList.length &&
-        this.block_.inputList[this.block_.inputList.length - 1].type ===
-            inputTypes.STATEMENT;
+        this.block_.inputList[this.block_.inputList.length - 1] instanceof StatementInput;
     // The minimum height of the bottom row is smaller in Geras than in other
     // renderers, because the dark path adds a pixel.
     // If one of the row's elements has a greater height this will be
@@ -77,16 +78,16 @@ export class RenderInfo extends BaseRenderInfo {
 
   override addInput_(input: Input, activeRow: Row) {
     // Non-dummy inputs have visual representations onscreen.
-    if (this.isInline && input.type === inputTypes.VALUE) {
+    if (this.isInline && input instanceof ValueInput) {
       activeRow.elements.push(new InlineInput(this.constants_, input));
       activeRow.hasInlineInput = true;
-    } else if (input.type === inputTypes.STATEMENT) {
-      activeRow.elements.push(new StatementInput(this.constants_, input));
+    } else if (input instanceof StatementInput) {
+      activeRow.elements.push(new StatementInputMeasurable(this.constants_, input));
       activeRow.hasStatement = true;
-    } else if (input.type === inputTypes.VALUE) {
+    } else if (input instanceof ValueInput) {
       activeRow.elements.push(new ExternalValueInput(this.constants_, input));
       activeRow.hasExternalInput = true;
-    } else if (input.type === inputTypes.DUMMY) {
+    } else if (input instanceof DummyInput) {
       // Dummy inputs have no visual representation, but the information is
       // still important.
       activeRow.minHeight =

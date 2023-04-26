@@ -26,6 +26,7 @@ import {Mutator} from '../core/mutator.js';
 import type {Workspace} from '../core/workspace.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 import '../core/field_dropdown.js';
+import { ValueInput } from '../core/inputs/value_input.js';
 
 
 /**
@@ -478,7 +479,7 @@ const LISTS_GETINDEX = {
     const container = xmlUtils.createElement('mutation');
     const isStatement = !this.outputConnection;
     container.setAttribute('statement', String(isStatement));
-    const isAt = this.getInput('AT')!.type === ConnectionType.INPUT_VALUE;
+    const isAt = this.getInput('AT')! instanceof ValueInput;
     container.setAttribute('at', String(isAt));
     return container;
   },
@@ -689,7 +690,7 @@ const LISTS_SETINDEX = {
    */
   mutationToDom: function(this: SetIndexBlock): Element {
     const container = xmlUtils.createElement('mutation');
-    const isAt = this.getInput('AT')!.type === ConnectionType.INPUT_VALUE;
+    const isAt = this.getInput('AT')! instanceof ValueInput;
     container.setAttribute('at', String(isAt));
     return container;
   },
@@ -821,9 +822,9 @@ const LISTS_GETSUBLIST = {
    */
   mutationToDom: function(this: GetSublistBlock): Element {
     const container = xmlUtils.createElement('mutation');
-    const isAt1 = this.getInput('AT1')!.type === ConnectionType.INPUT_VALUE;
+    const isAt1 = this.getInput('AT1') instanceof ValueInput;
     container.setAttribute('at1', String(isAt1));
-    const isAt2 = this.getInput('AT2')!.type === ConnectionType.INPUT_VALUE;
+    const isAt2 = this.getInput('AT2') instanceof ValueInput;
     container.setAttribute('at2', String(isAt2));
     return container;
   },

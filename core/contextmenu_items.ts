@@ -13,8 +13,8 @@ import {ContextMenuRegistry, RegistryItem, Scope} from './contextmenu_registry.j
 import * as dialog from './dialog.js';
 import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
-import {inputTypes} from './inputs/input_types.js';
 import {Msg} from './msg.js';
+import {StatementInput} from './renderers/zelos/zelos.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 
@@ -386,8 +386,8 @@ export function registerInline() {
         for (let i = 1; i < block!.inputList.length; i++) {
           // Only display this option if there are two value or dummy inputs
           // next to each other.
-          if (block!.inputList[i - 1].type !== inputTypes.STATEMENT &&
-              block!.inputList[i].type !== inputTypes.STATEMENT) {
+          if (!(block!.inputList[i - 1] instanceof StatementInput) &&
+              !(block!.inputList[i] instanceof StatementInput)) {
             return 'enabled';
           }
         }

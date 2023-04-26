@@ -251,9 +251,7 @@ function saveInputBlocks(
   const inputs = Object.create(null);
   for (let i = 0; i < block.inputList.length; i++) {
     const input = block.inputList[i];
-    if (input.type === inputTypes.DUMMY) {
-      continue;
-    }
+    if (!input.connection) continue;
     const connectionState =
         saveConnection(input.connection as Connection, doFullSerialization);
     if (connectionState) {

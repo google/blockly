@@ -65,7 +65,8 @@ export class RenderInfo extends BaseRenderInfo {
     super.populateBottomRow_();
 
     const followsStatement = this.block_.inputList.length &&
-        this.block_.inputList[this.block_.inputList.length - 1] instanceof StatementInput;
+        this.block_.inputList[this.block_.inputList.length - 1] instanceof
+            StatementInput;
     // The minimum height of the bottom row is smaller in Geras than in other
     // renderers, because the dark path adds a pixel.
     // If one of the row's elements has a greater height this will be
@@ -82,7 +83,8 @@ export class RenderInfo extends BaseRenderInfo {
       activeRow.elements.push(new InlineInput(this.constants_, input));
       activeRow.hasInlineInput = true;
     } else if (input instanceof StatementInput) {
-      activeRow.elements.push(new StatementInputMeasurable(this.constants_, input));
+      activeRow.elements.push(
+          new StatementInputMeasurable(this.constants_, input));
       activeRow.hasStatement = true;
     } else if (input instanceof ValueInput) {
       activeRow.elements.push(new ExternalValueInput(this.constants_, input));

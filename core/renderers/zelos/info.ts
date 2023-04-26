@@ -251,7 +251,8 @@ export class RenderInfo extends BaseRenderInfo {
       this.rightAlignedDummyInputs.set(activeRow, input);
     } else if (input instanceof StatementInput) {
       // Handle statements without next connections correctly.
-      activeRow.elements.push(new StatementInputMeasurable(this.constants_, input));
+      activeRow.elements.push(
+          new StatementInputMeasurable(this.constants_, input));
       activeRow.hasStatement = true;
 
       if (activeRow.align === null) {

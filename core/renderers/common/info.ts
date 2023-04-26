@@ -266,7 +266,8 @@ export class RenderInfo {
     this.bottomRow.hasNextConnection = !!this.block_.nextConnection;
 
     const followsStatement = this.block_.inputList.length &&
-        this.block_.inputList[this.block_.inputList.length - 1] instanceof StatementInput;
+        this.block_.inputList[this.block_.inputList.length - 1] instanceof
+            StatementInput;
 
     // This is the minimum height for the row. If one of its elements has a
     // greater height it will be overwritten in the compute pass.
@@ -313,7 +314,8 @@ export class RenderInfo {
       activeRow.elements.push(new InlineInput(this.constants_, input));
       activeRow.hasInlineInput = true;
     } else if (input instanceof StatementInput) {
-      activeRow.elements.push(new StatementInputMeasurable(this.constants_, input));
+      activeRow.elements.push(
+          new StatementInputMeasurable(this.constants_, input));
       activeRow.hasStatement = true;
     } else if (input instanceof ValueInput) {
       activeRow.elements.push(new ExternalValueInput(this.constants_, input));

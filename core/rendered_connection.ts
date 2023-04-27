@@ -514,12 +514,7 @@ export class RenderedConnection extends Connection {
       return;
     }
     blockShadow.initSvg();
-    blockShadow.render(false);
-
-    const parentBlock = this.getSourceBlock();
-    if (parentBlock.rendered) {
-      parentBlock.queueRender();
-    }
+    blockShadow.queueRender();
   }
 
   /**

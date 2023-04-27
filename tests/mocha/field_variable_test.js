@@ -251,7 +251,7 @@ suite('Variable Fields', function() {
         const field = new Blockly.FieldVariable(
             'test', undefined, ['Type1'], 'Type1');
         chai.assert.deepEqual(field.variableTypes, ['Type1']);
-        chai.assert.equal(field.defaultType_, 'Type1');
+        chai.assert.equal(field.defaultType, 'Type1');
       });
       test('JSON Definition', function() {
         const field = Blockly.FieldVariable.fromJson({
@@ -260,7 +260,7 @@ suite('Variable Fields', function() {
           defaultType: 'Type1',
         });
         chai.assert.deepEqual(field.variableTypes, ['Type1']);
-        chai.assert.equal(field.defaultType_, 'Type1');
+        chai.assert.equal(field.defaultType, 'Type1');
       });
       test('JS Configuration - Simple', function() {
         const field = new Blockly.FieldVariable(
@@ -269,7 +269,7 @@ suite('Variable Fields', function() {
               defaultType: 'Type1',
             });
         chai.assert.deepEqual(field.variableTypes, ['Type1']);
-        chai.assert.equal(field.defaultType_, 'Type1');
+        chai.assert.equal(field.defaultType, 'Type1');
       });
       test('JS Configuration - Ignore', function() {
         const field = new Blockly.FieldVariable(
@@ -278,7 +278,7 @@ suite('Variable Fields', function() {
               defaultType: 'Type1',
             });
         chai.assert.deepEqual(field.variableTypes, ['Type1']);
-        chai.assert.equal(field.defaultType_, 'Type1');
+        chai.assert.equal(field.defaultType, 'Type1');
       });
     });
   });
@@ -291,7 +291,7 @@ suite('Variable Fields', function() {
       // Expect that since variableTypes is undefined, only type empty string
       // will be returned (regardless of what types are available on the workspace).
       const fieldVariable = new Blockly.FieldVariable('name1');
-      const resultTypes = fieldVariable.getVariableTypes_();
+      const resultTypes = fieldVariable.getVariableTypes();
       chai.assert.deepEqual(resultTypes, ['']);
     });
     test('variableTypes is explicit', function() {
@@ -299,9 +299,9 @@ suite('Variable Fields', function() {
       // value, regardless of what types are available on the workspace.
       const fieldVariable = new Blockly.FieldVariable(
           'name1', null, ['type1', 'type2'], 'type1');
-      const resultTypes = fieldVariable.getVariableTypes_();
+      const resultTypes = fieldVariable.getVariableTypes();
       chai.assert.deepEqual(resultTypes, ['type1', 'type2']);
-      chai.assert.equal(fieldVariable.defaultType_, 'type1',
+      chai.assert.equal(fieldVariable.defaultType, 'type1',
           'Default type was wrong');
     });
     test('variableTypes is null', function() {
@@ -314,7 +314,7 @@ suite('Variable Fields', function() {
       fieldVariable.setSourceBlock(mockBlock);
       fieldVariable.variableTypes = null;
 
-      const resultTypes = fieldVariable.getVariableTypes_();
+      const resultTypes = fieldVariable.getVariableTypes();
       // The empty string is always one of the options.
       chai.assert.deepEqual(resultTypes, ['type1', 'type2', '']);
     });
@@ -326,19 +326,19 @@ suite('Variable Fields', function() {
       fieldVariable.variableTypes = [];
 
       chai.assert.throws(function() {
-        fieldVariable.getVariableTypes_();
+        fieldVariable.getVariableTypes();
       });
     });
   });
   suite('Default types', function() {
     test('Default type exists', function() {
       const fieldVariable = new Blockly.FieldVariable(null, null, ['b'], 'b');
-      chai.assert.equal(fieldVariable.defaultType_, 'b',
+      chai.assert.equal(fieldVariable.defaultType, 'b',
           'The variable field\'s default type should be "b"');
     });
     test('No default type', function() {
       const fieldVariable = new Blockly.FieldVariable(null);
-      chai.assert.equal(fieldVariable.defaultType_, '', 'The variable field\'s default type should be the empty string');
+      chai.assert.equal(fieldVariable.defaultType, '', 'The variable field\'s default type should be the empty string');
       chai.assert.isNull(fieldVariable.variableTypes,
           'The variable field\'s allowed types should be null');
     });

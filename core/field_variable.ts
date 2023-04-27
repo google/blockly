@@ -385,7 +385,6 @@ export class FieldVariable extends FieldDropdown {
    * @throws {Error} if variableTypes is an empty array.
    */
   private getVariableTypes(): string[] {
-    // TODO (#1513): Try to avoid calling this every time the field is edited.
     let variableTypes = this.variableTypes;
     if (variableTypes === null) {
       // If variableTypes is null, return all variable types.

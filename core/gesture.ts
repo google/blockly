@@ -263,8 +263,7 @@ export class Gesture {
    * @returns True if a block is being dragged from the flyout.
    */
   private updateIsDraggingFromFlyout(): boolean {
-    if (!this.targetBlock ||
-        !this.flyout?.isBlockCreatable(this.targetBlock)) {
+    if (!this.targetBlock || !this.flyout?.isBlockCreatable(this.targetBlock)) {
       return false;
     }
     if (!this.flyout.targetWorkspace) {
@@ -538,8 +537,7 @@ export class Gesture {
       if (this.workspaceDragger) {
         this.workspaceDragger.drag(this.currentDragDeltaXY);
       } else if (this.blockDragger) {
-        this.blockDragger.drag(
-            this.mostRecentEvent, this.currentDragDeltaXY);
+        this.blockDragger.drag(this.mostRecentEvent, this.currentDragDeltaXY);
       } else if (this.bubbleDragger) {
         this.bubbleDragger.dragBubble(
             this.mostRecentEvent, this.currentDragDeltaXY);
@@ -738,8 +736,7 @@ export class Gesture {
       this.bubbleDragger.endBubbleDrag(
           this.mostRecentEvent, this.currentDragDeltaXY);
     } else if (this.blockDragger) {
-      this.blockDragger.endDrag(
-          this.mostRecentEvent, this.currentDragDeltaXY);
+      this.blockDragger.endDrag(this.mostRecentEvent, this.currentDragDeltaXY);
     } else if (this.workspaceDragger) {
       this.workspaceDragger.endDrag(this.currentDragDeltaXY);
     }
@@ -1057,8 +1054,7 @@ export class Gesture {
     // A block click starts on a block, never escapes the drag radius, and is
     // not a field click.
     const hasStartBlock = !!this.startBlock;
-    return hasStartBlock && !this.hasExceededDragRadius &&
-        !this.isFieldClick();
+    return hasStartBlock && !this.hasExceededDragRadius && !this.isFieldClick();
   }
 
   /**

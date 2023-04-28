@@ -6,40 +6,34 @@
 
 /**
  * @fileoverview Text blocks for Blockly.
- * @suppress {checkTypes}
  */
-'use strict';
 
-goog.module('Blockly.libraryBlocks.texts');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.libraryBlocks.texts');
 
-const Extensions = goog.require('Blockly.Extensions');
-const {Msg} = goog.require('Blockly.Msg');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-/* eslint-disable-next-line no-unused-vars */
-const xmlUtils = goog.require('Blockly.utils.xml');
-const {Align} = goog.require('Blockly.Input');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-// const {BlockDefinition} = goog.requireType('Blockly.blocks');
-// TODO (6248): Properly import the BlockDefinition type.
-/* eslint-disable-next-line no-unused-vars */
-const BlockDefinition = Object;
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {Mutator} = goog.require('Blockly.Mutator');
-/* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
-const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
-/** @suppress {extraRequire} */
-goog.require('Blockly.FieldMultilineInput');
-/** @suppress {extraRequire} */
-goog.require('Blockly.FieldVariable');
+import * as Extensions from '../core/extensions.js';
+import * as fieldRegistry from '../core/field_registry.js';
+import * as xmlUtils from '../core/utils/xml.js';
+import {Align} from '../core/input.js';
+import type {Block} from '../core/block.js';
+import type {BlockSvg} from '../core/block_svg.js';
+import {Connection} from '../core/connection.js';
+import {ConnectionType} from '../core/connection_type.js';
+import {FieldImage} from '../core/field_image.js';
+import {FieldDropdown} from '../core/field_dropdown.js';
+import {FieldTextInput} from '../core/field_textinput.js';
+import {Msg} from '../core/msg.js';
+import {Mutator} from '../core/mutator.js';
+import type {Workspace} from '../core/workspace.js';
+import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
+import '../core/field_multilineinput.js';
+import '../core/field_variable.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
- * @type {!Object<string, !BlockDefinition>}
  */
-const blocks = createBlockDefinitionsFromJsonArray([
+export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for text value
   {
     'type': 'text',
@@ -243,14 +237,20 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'mutator': 'text_charAt_mutator',
   },
 ]);
-exports.blocks = blocks;
 
-blocks['text_getSubstring'] = {
+/** Type of a 'text_get_substring' block. */
+type GetSubstringBlock = Block&GetSubstringMixin;
+interface GetSubstringMixin extends GetSubstringType {
+  WHERE_OPTIONS_1: Array<[string, string]>;
+  WHERE_OPTIONS_2: Array<[string, string]>;
+}
+type GetSubstringType = typeof GET_SUBSTRING_BLOCK;
+
+const GET_SUBSTRING_BLOCK = {
   /**
    * Block for getting substring.
-   * @this {Block}
    */
-  init: function() {
+  init: function(this: GetSubstringBlock) {
     this['WHERE_OPTIONS_1'] = [
       [Msg['TEXT_GET_SUBSTRING_START_FROM_START'], 'FROM_START'],
       [Msg['TEXT_GET_SUBSTRING_START_FROM_END'], 'FROM_END'],
@@ -279,24 +279,24 @@ blocks['text_getSubstring'] = {
   /**
    * Create XML to represent whether there are 'AT' inputs.
    * Backwards compatible serialization implementation.
-   * @return {!Element} XML storage element.
-   * @this {Block}
+   *
+   * @returns XML storage element.
    */
-  mutationToDom: function() {
+  mutationToDom: function(this: GetSubstringBlock): Element {
     const container = xmlUtils.createElement('mutation');
-    const isAt1 = this.getInput('AT1').type === ConnectionType.INPUT_VALUE;
-    container.setAttribute('at1', isAt1);
-    const isAt2 = this.getInput('AT2').type === ConnectionType.INPUT_VALUE;
-    container.setAttribute('at2', isAt2);
+    const isAt1 = this.getInput('AT1')!.type === ConnectionType.INPUT_VALUE;
+    container.setAttribute('at1', `${isAt1}`);
+    const isAt2 = this.getInput('AT2')!.type === ConnectionType.INPUT_VALUE;
+    container.setAttribute('at2', `${isAt2}`);
     return container;
   },
   /**
    * Parse XML to restore the 'AT' inputs.
    * Backwards compatible serialization implementation.
-   * @param {!Element} xmlElement XML storage element.
-   * @this {Block}
+   *
+   * @param xmlElement XML storage element.
    */
-  domToMutation: function(xmlElement) {
+  domToMutation: function(this: GetSubstringBlock, xmlElement: Element) {
     const isAt1 = (xmlElement.getAttribute('at1') === 'true');
     const isAt2 = (xmlElement.getAttribute('at2') === 'true');
     this.updateAt_(1, isAt1);
@@ -311,12 +311,11 @@ blocks['text_getSubstring'] = {
   /**
    * Create or delete an input for a numeric index.
    * This block has two such inputs, independent of each other.
-   * @param {number} n Specify first or second input (1 or 2).
-   * @param {boolean} isAt True if the input should exist.
-   * @private
-   * @this {Block}
+   *
+   * @param n Which input to modify (either 1 or 2).
+   * @param isAt True if the input includes a value connection, false otherwise.
    */
-  updateAt_: function(n, isAt) {
+  updateAt_: function(this: GetSubstringBlock, n: 1|2, isAt: boolean) {
     // Create or delete an input for the numeric index.
     // Destroy old 'AT' and 'ORDINAL' inputs.
     this.removeInput('AT' + n);
@@ -338,21 +337,20 @@ blocks['text_getSubstring'] = {
     }
     const menu = fieldRegistry.fromJson({
       type: 'field_dropdown',
-      options: this['WHERE_OPTIONS_' + n],
-    });
+      options:
+          this[('WHERE_OPTIONS_' + n) as 'WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2'],
+    }) as FieldDropdown;
     menu.setValidator(
         /**
-         * @param {*} value The input value.
-         * @this {FieldDropdown}
-         * @return {null|undefined} Null if the field has been replaced;
-         *     otherwise undefined.
+         * @param value The input value.
+         * @return Null if the field has been replaced; otherwise undefined.
          */
-        function(value) {
+        function(this: FieldDropdown, value: any): null|undefined {
           const newAt = (value === 'FROM_START') || (value === 'FROM_END');
           // The 'isAt' variable is available due to this function being a
           // closure.
           if (newAt !== isAt) {
-            const block = this.getSourceBlock();
+            const block = this.getSourceBlock() as GetSubstringBlock;
             block.updateAt_(n, newAt);
             // This menu has been destroyed and replaced.
             // Update the replacement.
@@ -362,7 +360,7 @@ blocks['text_getSubstring'] = {
           return undefined;
         });
 
-    this.getInput('AT' + n).appendField(menu, 'WHERE' + n);
+    this.getInput('AT' + n)!.appendField(menu, 'WHERE' + n);
     if (n === 1) {
       this.moveInputBefore('AT1', 'AT2');
       if (this.getInput('ORDINAL1')) {
@@ -372,12 +370,13 @@ blocks['text_getSubstring'] = {
   },
 };
 
+blocks['text_getSubstring'] = GET_SUBSTRING_BLOCK;
+
 blocks['text_changeCase'] = {
   /**
    * Block for changing capitalization.
-   * @this {Block}
    */
-  init: function() {
+  init: function(this: Block) {
     const OPERATORS = [
       [Msg['TEXT_CHANGECASE_OPERATOR_UPPERCASE'], 'UPPERCASE'],
       [Msg['TEXT_CHANGECASE_OPERATOR_LOWERCASE'], 'LOWERCASE'],
@@ -389,7 +388,7 @@ blocks['text_changeCase'] = {
         fieldRegistry.fromJson({
           type: 'field_dropdown',
           options: OPERATORS,
-        }),
+        }) as FieldDropdown,
         'CASE');
     this.setOutput(true, 'String');
     this.setTooltip(Msg['TEXT_CHANGECASE_TOOLTIP']);
@@ -399,9 +398,8 @@ blocks['text_changeCase'] = {
 blocks['text_trim'] = {
   /**
    * Block for trimming spaces.
-   * @this {Block}
    */
-  init: function() {
+  init: function(this: Block) {
     const OPERATORS = [
       [Msg['TEXT_TRIM_OPERATOR_BOTH'], 'BOTH'],
       [Msg['TEXT_TRIM_OPERATOR_LEFT'], 'LEFT'],
@@ -413,7 +411,7 @@ blocks['text_trim'] = {
         fieldRegistry.fromJson({
           type: 'field_dropdown',
           options: OPERATORS,
-        }),
+        }) as FieldDropdown,
         'MODE');
     this.setOutput(true, 'String');
     this.setTooltip(Msg['TEXT_TRIM_TOOLTIP']);
@@ -423,9 +421,8 @@ blocks['text_trim'] = {
 blocks['text_print'] = {
   /**
    * Block for print statement.
-   * @this {Block}
    */
-  init: function() {
+  init: function(this: Block) {
     this.jsonInit({
       'message0': Msg['TEXT_PRINT_TITLE'],
       'args0': [
@@ -443,28 +440,30 @@ blocks['text_print'] = {
   },
 };
 
+type PromptCommonBlock = Block&PromptCommonMixin;
+interface PromptCommonMixin extends PromptCommonType {}
+type PromptCommonType = typeof PROMPT_COMMON;
 
 /**
  * Common properties for the text_prompt_ext and text_prompt blocks
  * definitions.
  */
-const TEXT_PROMPT_COMMON = {
+const PROMPT_COMMON = {
   /**
    * Modify this block to have the correct output type.
-   * @param {string} newOp Either 'TEXT' or 'NUMBER'.
-   * @private
-   * @this {Block}
+   *
+   * @param newOp The new output type. Should be either 'TEXT' or 'NUMBER'.
    */
-  updateType_: function(newOp) {
-    this.outputConnection.setCheck(newOp === 'NUMBER' ? 'Number' : 'String');
+  updateType_: function(this: PromptCommonBlock, newOp: string) {
+    this.outputConnection!.setCheck(newOp === 'NUMBER' ? 'Number' : 'String');
   },
   /**
    * Create XML to represent the output type.
    * Backwards compatible serialization implementation.
-   * @return {!Element} XML storage element.
-   * @this {Block}
+   *
+   * @returns XML storage element.
    */
-  mutationToDom: function() {
+  mutationToDom: function(this: PromptCommonBlock): Element {
     const container = xmlUtils.createElement('mutation');
     container.setAttribute('type', this.getFieldValue('TYPE'));
     return container;
@@ -472,21 +471,20 @@ const TEXT_PROMPT_COMMON = {
   /**
    * Parse XML to restore the output type.
    * Backwards compatible serialization implementation.
-   * @param {!Element} xmlElement XML storage element.
-   * @this {Block}
+   *
+   * @param xmlElement XML storage element.
    */
-  domToMutation: function(xmlElement) {
-    this.updateType_(xmlElement.getAttribute('type'));
+  domToMutation: function(this: PromptCommonBlock, xmlElement: Element) {
+    this.updateType_(xmlElement.getAttribute('type')!);
   },
 };
 
 blocks['text_prompt_ext'] = {
-  ...TEXT_PROMPT_COMMON,
+  ...PROMPT_COMMON,
   /**
    * Block for prompt function (external message).
-   * @this {Block}
    */
-  init: function() {
+  init: function(this: PromptCommonBlock) {
     const TYPES = [
       [Msg['TEXT_PROMPT_TYPE_TEXT'], 'TEXT'],
       [Msg['TEXT_PROMPT_TYPE_NUMBER'], 'NUMBER'],
@@ -498,9 +496,10 @@ blocks['text_prompt_ext'] = {
     const dropdown = fieldRegistry.fromJson({
       type: 'field_dropdown',
       options: TYPES,
-    });
-    dropdown.setValidator(function(newOp) {
+    }) as FieldDropdown;
+    dropdown.setValidator(function(this: FieldDropdown, newOp: string) {
       thisBlock.updateType_(newOp);
+      return undefined;  // FieldValidators can't be void.  Use option as-is.
     });
     this.appendValueInput('TEXT').appendField(dropdown, 'TYPE');
     this.setOutput(true, 'String');
@@ -517,14 +516,15 @@ blocks['text_prompt_ext'] = {
   // XML hooks are kept for backwards compatibility.
 };
 
-blocks['text_prompt'] = {
-  ...TEXT_PROMPT_COMMON,
+type PromptBlock = Block&PromptCommonMixin&QuoteImageMixin;
+
+const TEXT_PROMPT_BLOCK = {
+  ...PROMPT_COMMON,
   /**
    * Block for prompt function (internal message).
    * The 'text_prompt_ext' block is preferred as it is more flexible.
-   * @this {Block}
    */
-  init: function() {
+  init: function(this: PromptBlock) {
     this.mixin(QUOTE_IMAGE_MIXIN);
     const TYPES = [
       [Msg['TEXT_PROMPT_TYPE_TEXT'], 'TEXT'],
@@ -538,9 +538,10 @@ blocks['text_prompt'] = {
     const dropdown = fieldRegistry.fromJson({
       type: 'field_dropdown',
       options: TYPES,
-    });
-    dropdown.setValidator(function(newOp) {
+    }) as FieldDropdown;
+    dropdown.setValidator(function(this: FieldDropdown, newOp: string) {
       thisBlock.updateType_(newOp);
+      return undefined;  // FieldValidators can't be void.  Use option as-is.
     });
     this.appendDummyInput()
         .appendField(dropdown, 'TYPE')
@@ -549,7 +550,7 @@ blocks['text_prompt'] = {
             fieldRegistry.fromJson({
               type: 'field_input',
               text: '',
-            }),
+            }) as FieldTextInput,
             'TEXT')
         .appendField(this.newQuote_(false));
     this.setOutput(true, 'String');
@@ -561,12 +562,13 @@ blocks['text_prompt'] = {
   },
 };
 
+blocks['text_prompt'] = TEXT_PROMPT_BLOCK;
+
 blocks['text_count'] = {
   /**
    * Block for counting how many times one string appears within another string.
-   * @this {Block}
    */
-  init: function() {
+  init: function(this: Block) {
     this.jsonInit({
       'message0': Msg['TEXT_COUNT_MESSAGE0'],
       'args0': [
@@ -593,9 +595,8 @@ blocks['text_count'] = {
 blocks['text_replace'] = {
   /**
    * Block for replacing one string with another in the text.
-   * @this {Block}
    */
-  init: function() {
+  init: function(this: Block) {
     this.jsonInit({
       'message0': Msg['TEXT_REPLACE_MESSAGE0'],
       'args0': [
@@ -627,9 +628,8 @@ blocks['text_replace'] = {
 blocks['text_reverse'] = {
   /**
    * Block for reversing a string.
-   * @this {Block}
    */
-  init: function() {
+  init: function(this: Block) {
     this.jsonInit({
       'message0': Msg['TEXT_REVERSE_MESSAGE0'],
       'args0': [
@@ -648,16 +648,15 @@ blocks['text_reverse'] = {
   },
 };
 
-/**
- * @mixin
- * @package
- * @readonly
- */
+/** Type of a block that has QUOTE_IMAGE_MIXIN */
+type QuoteImageBlock = Block&QuoteImageMixin;
+interface QuoteImageMixin extends QuoteImageMixinType {}
+type QuoteImageMixinType = typeof QUOTE_IMAGE_MIXIN;
+
 const QUOTE_IMAGE_MIXIN = {
   /**
    * Image data URI of an LTR opening double quote (same as RTL closing double
    * quote).
-   * @readonly
    */
   QUOTE_IMAGE_LEFT_DATAURI:
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAA' +
@@ -668,7 +667,6 @@ const QUOTE_IMAGE_MIXIN = {
   /**
    * Image data URI of an LTR closing double quote (same as RTL opening double
    * quote).
-   * @readonly
    */
   QUOTE_IMAGE_RIGHT_DATAURI:
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAA' +
@@ -678,21 +676,19 @@ const QUOTE_IMAGE_MIXIN = {
       'lLtGIHQMaCVnwDnADZIFIrXsoXrgAAAABJRU5ErkJggg==',
   /**
    * Pixel width of QUOTE_IMAGE_LEFT_DATAURI and QUOTE_IMAGE_RIGHT_DATAURI.
-   * @readonly
    */
   QUOTE_IMAGE_WIDTH: 12,
   /**
    * Pixel height of QUOTE_IMAGE_LEFT_DATAURI and QUOTE_IMAGE_RIGHT_DATAURI.
-   * @readonly
    */
   QUOTE_IMAGE_HEIGHT: 12,
 
   /**
    * Inserts appropriate quote images before and after the named field.
-   * @param {string} fieldName The name of the field to wrap with quotes.
-   * @this {Block}
+   *
+   * @param fieldName The name of the field to wrap with quotes.
    */
-  quoteField_: function(fieldName) {
+  quoteField_: function(this: QuoteImageBlock, fieldName: string) {
     for (let i = 0, input; (input = this.inputList[i]); i++) {
       for (let j = 0, field; (field = input.fieldRow[j]); j++) {
         if (fieldName === field.name) {
@@ -709,12 +705,12 @@ const QUOTE_IMAGE_MIXIN = {
   /**
    * A helper function that generates a FieldImage of an opening or
    * closing double quote. The selected quote will be adapted for RTL blocks.
-   * @param {boolean} open If the image should be open quote (“ in LTR).
+   *
+   * @param open If the image should be open quote (“ in LTR).
    *                       Otherwise, a closing quote is used (” in LTR).
-   * @return {!FieldImage} The new field.
-   * @this {Block}
+   * @returns The new field.
    */
-  newQuote_: function(open) {
+  newQuote_: function(this: QuoteImageBlock, open: boolean): FieldImage {
     const isLeft = this.RTL ? !open : open;
     const dataUri =
         isLeft ? this.QUOTE_IMAGE_LEFT_DATAURI : this.QUOTE_IMAGE_RIGHT_DATAURI;
@@ -724,76 +720,88 @@ const QUOTE_IMAGE_MIXIN = {
       width: this.QUOTE_IMAGE_WIDTH,
       height: this.QUOTE_IMAGE_HEIGHT,
       alt: isLeft ? '\u201C' : '\u201D',
-    });
+    }) as FieldImage;
   },
 };
 
 /**
  * Wraps TEXT field with images of double quote characters.
- * @this {Block}
  */
-const TEXT_QUOTES_EXTENSION = function() {
+const QUOTES_EXTENSION = function(this: QuoteImageBlock) {
   this.mixin(QUOTE_IMAGE_MIXIN);
   this.quoteField_('TEXT');
 };
 
+/** Type of a block that has TEXT_JOIN_MUTATOR_MIXIN */
+type JoinMutatorBlock = Block&JoinMutatorMixin&QuoteImageMixin;
+interface JoinMutatorMixin extends JoinMutatorMixinType {}
+type JoinMutatorMixinType = typeof JOIN_MUTATOR_MIXIN;
+
+/** Type of a item block in the text_join_mutator bubble. */
+type JoinItemBlock = BlockSvg&JoinItemMixin;
+interface JoinItemMixin {
+  valueConnection_: Connection|null
+}
+
 /**
  * Mixin for mutator functions in the 'text_join_mutator' extension.
- * @mixin
- * @augments Block
- * @package
  */
-const TEXT_JOIN_MUTATOR_MIXIN = {
+const JOIN_MUTATOR_MIXIN = {
+  itemCount_: 0,
   /**
    * Create XML to represent number of text inputs.
    * Backwards compatible serialization implementation.
-   * @return {!Element} XML storage element.
-   * @this {Block}
+   *
+   * @returns XML storage element.
    */
-  mutationToDom: function() {
+  mutationToDom: function(this: JoinMutatorBlock): Element {
     const container = xmlUtils.createElement('mutation');
-    container.setAttribute('items', this.itemCount_);
+    container.setAttribute('items', `${this.itemCount_}`);
     return container;
   },
   /**
    * Parse XML to restore the text inputs.
    * Backwards compatible serialization implementation.
-   * @param {!Element} xmlElement XML storage element.
-   * @this {Block}
+   *
+   * @param xmlElement XML storage element.
    */
-  domToMutation: function(xmlElement) {
-    this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+  domToMutation: function(this: JoinMutatorBlock, xmlElement: Element) {
+    this.itemCount_ = parseInt(xmlElement.getAttribute('items')!, 10);
     this.updateShape_();
   },
   /**
    * Returns the state of this block as a JSON serializable object.
-   * @return {{itemCount: number}} The state of this block, ie the item count.
+   *
+   * @returns The state of this block, ie the item count.
    */
-  saveExtraState: function() {
+  saveExtraState: function(this: JoinMutatorBlock): {itemCount: number;} {
     return {
       'itemCount': this.itemCount_,
     };
   },
   /**
    * Applies the given state to this block.
-   * @param {*} state The state to apply to this block, ie the item count.
+   *
+   * @param state The state to apply to this block, ie the item count.
    */
-  loadExtraState: function(state) {
+  loadExtraState: function(this: JoinMutatorBlock, state: {[x: string]: any;}) {
     this.itemCount_ = state['itemCount'];
     this.updateShape_();
   },
   /**
    * Populate the mutator's dialog with this block's components.
-   * @param {!Workspace} workspace Mutator's workspace.
-   * @return {!Block} Root block in mutator.
-   * @this {Block}
+   *
+   * @param workspace Mutator's workspace.
+   * @returns Root block in mutator.
    */
-  decompose: function(workspace) {
-    const containerBlock = workspace.newBlock('text_create_join_container');
+  decompose: function(this: JoinMutatorBlock, workspace: Workspace): Block {
+    const containerBlock =
+        workspace.newBlock('text_create_join_container') as BlockSvg;
     containerBlock.initSvg();
-    let connection = containerBlock.getInput('STACK').connection;
+    let connection = containerBlock.getInput('STACK')!.connection!;
     for (let i = 0; i < this.itemCount_; i++) {
-      const itemBlock = workspace.newBlock('text_create_join_item');
+      const itemBlock =
+          workspace.newBlock('text_create_join_item') as JoinItemBlock;
       itemBlock.initSvg();
       connection.connect(itemBlock.previousConnection);
       connection = itemBlock.nextConnection;
@@ -802,24 +810,25 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
   },
   /**
    * Reconfigure this block based on the mutator dialog's components.
-   * @param {!Block} containerBlock Root block in mutator.
-   * @this {Block}
+   *
+   * @param containerBlock Root block in mutator.
    */
-  compose: function(containerBlock) {
-    let itemBlock = containerBlock.getInputTargetBlock('STACK');
+  compose: function(this: JoinMutatorBlock, containerBlock: Block) {
+    let itemBlock =
+        containerBlock.getInputTargetBlock('STACK') as JoinItemBlock;
     // Count number of inputs.
     const connections = [];
     while (itemBlock) {
       if (itemBlock.isInsertionMarker()) {
-        itemBlock = itemBlock.getNextBlock();
+        itemBlock = itemBlock.getNextBlock() as JoinItemBlock;
         continue;
       }
       connections.push(itemBlock.valueConnection_);
-      itemBlock = itemBlock.getNextBlock();
+      itemBlock = itemBlock.getNextBlock() as JoinItemBlock;
     }
     // Disconnect any children that don't belong.
     for (let i = 0; i < this.itemCount_; i++) {
-      const connection = this.getInput('ADD' + i).connection.targetConnection;
+      const connection = this.getInput('ADD' + i)!.connection!.targetConnection;
       if (connection && connections.indexOf(connection) === -1) {
         connection.disconnect();
       }
@@ -828,15 +837,15 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (let i = 0; i < this.itemCount_; i++) {
-      Mutator.reconnect(connections[i], this, 'ADD' + i);
+      Mutator.reconnect(connections[i]!, this, 'ADD' + i);
     }
   },
   /**
    * Store pointers to any connected child blocks.
-   * @param {!Block} containerBlock Root block in mutator.
-   * @this {Block}
+   *
+   * @param containerBlock Root block in mutator.
    */
-  saveConnections: function(containerBlock) {
+  saveConnections: function(this: JoinMutatorBlock, containerBlock: Block) {
     let itemBlock = containerBlock.getInputTargetBlock('STACK');
     let i = 0;
     while (itemBlock) {
@@ -845,17 +854,16 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
         continue;
       }
       const input = this.getInput('ADD' + i);
-      itemBlock.valueConnection_ = input && input.connection.targetConnection;
+      (itemBlock as JoinItemBlock).valueConnection_ =
+          input && input.connection!.targetConnection;
       itemBlock = itemBlock.getNextBlock();
       i++;
     }
   },
   /**
    * Modify this block to have the correct number of inputs.
-   * @private
-   * @this {Block}
    */
-  updateShape_: function() {
+  updateShape_: function(this: JoinMutatorBlock) {
     if (this.itemCount_ && this.getInput('EMPTY')) {
       this.removeInput('EMPTY');
     } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
@@ -881,16 +889,15 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
 
 /**
  * Performs final setup of a text_join block.
- * @this {Block}
  */
-const TEXT_JOIN_EXTENSION = function() {
+const JOIN_EXTENSION = function(this: JoinMutatorBlock) {
   // Add the quote mixin for the itemCount_ = 0 case.
   this.mixin(QUOTE_IMAGE_MIXIN);
   // Initialize the mutator values.
   this.itemCount_ = 2;
   this.updateShape_();
   // Configure the mutator UI.
-  this.setMutator(new Mutator(['text_create_join_item'], this));
+  this.setMutator(new Mutator(['text_create_join_item']));
 };
 
 // Update the tooltip of 'text_append' block to reference the variable.
@@ -900,42 +907,43 @@ Extensions.register(
 
 /**
  * Update the tooltip of 'text_append' block to reference the variable.
- * @this {Block}
  */
-const TEXT_INDEXOF_TOOLTIP_EXTENSION = function() {
-  // Assign 'this' to a variable for use in the tooltip closure below.
-  const thisBlock = this;
-  this.setTooltip(function() {
+const INDEXOF_TOOLTIP_EXTENSION = function(this: Block) {
+  this.setTooltip(() => {
     return Msg['TEXT_INDEXOF_TOOLTIP'].replace(
-        '%1', thisBlock.workspace.options.oneBasedIndex ? '0' : '-1');
+        '%1', this.workspace.options.oneBasedIndex ? '0' : '-1');
   });
 };
 
+
+/** Type of a block that has TEXT_CHARAT_MUTATOR_MIXIN */
+type CharAtBlock = Block&CharAtMixin;
+interface CharAtMixin extends CharAtMixinType {}
+type CharAtMixinType = typeof CHARAT_MUTATOR_MIXIN;
+
 /**
  * Mixin for mutator functions in the 'text_charAt_mutator' extension.
- * @mixin
- * @augments Block
- * @package
  */
-const TEXT_CHARAT_MUTATOR_MIXIN = {
+const CHARAT_MUTATOR_MIXIN = {
+  isAt_: false,
   /**
    * Create XML to represent whether there is an 'AT' input.
    * Backwards compatible serialization implementation.
-   * @return {!Element} XML storage element.
-   * @this {Block}
+   *
+   * @returns XML storage element.
    */
-  mutationToDom: function() {
+  mutationToDom: function(this: CharAtBlock): Element {
     const container = xmlUtils.createElement('mutation');
-    container.setAttribute('at', !!this.isAt_);
+    container.setAttribute('at', `${this.isAt_}`);
     return container;
   },
   /**
    * Parse XML to restore the 'AT' input.
    * Backwards compatible serialization implementation.
-   * @param {!Element} xmlElement XML storage element.
-   * @this {Block}
+   *
+   * @param xmlElement XML storage element.
    */
-  domToMutation: function(xmlElement) {
+  domToMutation: function(this: CharAtBlock, xmlElement: Element) {
     // Note: Until January 2013 this block did not have mutations,
     // so 'at' defaults to true.
     const isAt = (xmlElement.getAttribute('at') !== 'false');
@@ -949,11 +957,10 @@ const TEXT_CHARAT_MUTATOR_MIXIN = {
 
   /**
    * Create or delete an input for the numeric index.
-   * @param {boolean} isAt True if the input should exist.
-   * @private
-   * @this {Block}
+   *
+   * @param isAt True if the input should exist.
    */
-  updateAt_: function(isAt) {
+  updateAt_: function(this: CharAtBlock, isAt: boolean) {
     // Destroy old 'AT' and 'ORDINAL' inputs.
     this.removeInput('AT', true);
     this.removeInput('ORDINAL', true);
@@ -976,22 +983,17 @@ const TEXT_CHARAT_MUTATOR_MIXIN = {
 
 /**
  * Does the initial mutator update of text_charAt and adds the tooltip
- * @this {Block}
  */
-const TEXT_CHARAT_EXTENSION = function() {
-  const dropdown = this.getField('WHERE');
-  dropdown.setValidator(
-      /**
-       * @param {*} value The input value.
-       * @this {FieldDropdown}
-       */
-      function(value) {
-        const newAt = (value === 'FROM_START') || (value === 'FROM_END');
-        if (newAt !== this.isAt_) {
-          const block = this.getSourceBlock();
-          block.updateAt_(newAt);
-        }
-      });
+const CHARAT_EXTENSION = function(this: CharAtBlock) {
+  const dropdown = this.getField('WHERE') as FieldDropdown;
+  dropdown.setValidator(function(this: FieldDropdown, value: any) {
+    const newAt = (value === 'FROM_START') || (value === 'FROM_END');
+    const block = this.getSourceBlock() as CharAtBlock;
+    if (newAt !== block.isAt_) {
+      block.updateAt_(newAt);
+    }
+    return undefined;  // FieldValidators can't be void.  Use option as-is.
+  });
   this.updateAt_(true);
   // Assign 'this' to a variable for use in the tooltip closure below.
   const thisBlock = this;
@@ -1012,15 +1014,15 @@ const TEXT_CHARAT_EXTENSION = function() {
   });
 };
 
-Extensions.register('text_indexOf_tooltip', TEXT_INDEXOF_TOOLTIP_EXTENSION);
+Extensions.register('text_indexOf_tooltip', INDEXOF_TOOLTIP_EXTENSION);
 
-Extensions.register('text_quotes', TEXT_QUOTES_EXTENSION);
-
-Extensions.registerMutator(
-    'text_join_mutator', TEXT_JOIN_MUTATOR_MIXIN, TEXT_JOIN_EXTENSION);
+Extensions.register('text_quotes', QUOTES_EXTENSION);
 
 Extensions.registerMutator(
-    'text_charAt_mutator', TEXT_CHARAT_MUTATOR_MIXIN, TEXT_CHARAT_EXTENSION);
+    'text_join_mutator', JOIN_MUTATOR_MIXIN, JOIN_EXTENSION);
+
+Extensions.registerMutator(
+    'text_charAt_mutator', CHARAT_MUTATOR_MIXIN, CHARAT_EXTENSION);
 
 // Register provided blocks.
 defineBlocks(blocks);

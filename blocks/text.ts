@@ -649,7 +649,7 @@ blocks['text_reverse'] = {
 };
 
 /** Type of a block that has QUOTE_IMAGE_MIXIN */
-type QuoteImageMixinBlock = Block&QuoteImageMixin;
+type QuoteImageBlock = Block&QuoteImageMixin;
 interface QuoteImageMixin extends QuoteImageMixinType {}
 type QuoteImageMixinType = typeof QUOTE_IMAGE_MIXIN;
 
@@ -688,7 +688,7 @@ const QUOTE_IMAGE_MIXIN = {
    *
    * @param fieldName The name of the field to wrap with quotes.
    */
-  quoteField_: function(this: QuoteImageMixinBlock, fieldName: string) {
+  quoteField_: function(this: QuoteImageBlock, fieldName: string) {
     for (let i = 0, input; (input = this.inputList[i]); i++) {
       for (let j = 0, field; (field = input.fieldRow[j]); j++) {
         if (fieldName === field.name) {
@@ -710,7 +710,7 @@ const QUOTE_IMAGE_MIXIN = {
    *                       Otherwise, a closing quote is used (” in LTR).
    * @returns The new field.
    */
-  newQuote_: function(this: QuoteImageMixinBlock, open: boolean): FieldImage {
+  newQuote_: function(this: QuoteImageBlock, open: boolean): FieldImage {
     const isLeft = this.RTL ? !open : open;
     const dataUri =
         isLeft ? this.QUOTE_IMAGE_LEFT_DATAURI : this.QUOTE_IMAGE_RIGHT_DATAURI;
@@ -727,7 +727,7 @@ const QUOTE_IMAGE_MIXIN = {
 /**
  * Wraps TEXT field with images of double quote characters.
  */
-const QUOTES_EXTENSION = function(this: QuoteImageMixinBlock) {
+const QUOTES_EXTENSION = function(this: QuoteImageBlock) {
   this.mixin(QUOTE_IMAGE_MIXIN);
   this.quoteField_('TEXT');
 };
@@ -800,7 +800,8 @@ const JOIN_MUTATOR_MIXIN = {
     containerBlock.initSvg();
     let connection = containerBlock.getInput('STACK')!.connection!;
     for (let i = 0; i < this.itemCount_; i++) {
-      const itemBlock = workspace.newBlock('text_create_join_item') as JoinItemBlock;
+      const itemBlock =
+          workspace.newBlock('text_create_join_item') as JoinItemBlock;
       itemBlock.initSvg();
       connection.connect(itemBlock.previousConnection);
       connection = itemBlock.nextConnection;
@@ -813,16 +814,17 @@ const JOIN_MUTATOR_MIXIN = {
    * @param containerBlock Root block in mutator.
    */
   compose: function(this: JoinMutatorBlock, containerBlock: Block) {
-    let itemBlock = containerBlock.getInputTargetBlock('STACK') as BlockSvg;
+    let itemBlock =
+        containerBlock.getInputTargetBlock('STACK') as JoinItemBlock;
     // Count number of inputs.
     const connections = [];
     while (itemBlock) {
       if (itemBlock.isInsertionMarker()) {
-        itemBlock = itemBlock.getNextBlock()!;
+        itemBlock = itemBlock.getNextBlock() as JoinItemBlock;
         continue;
       }
-      connections.push((itemBlock as JoinItemBlock).valueConnection_);
-      itemBlock = itemBlock.getNextBlock()!;
+      connections.push(itemBlock.valueConnection_);
+      itemBlock = itemBlock.getNextBlock() as JoinItemBlock;
     }
     // Disconnect any children that don't belong.
     for (let i = 0; i < this.itemCount_; i++) {

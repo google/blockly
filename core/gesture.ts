@@ -398,7 +398,6 @@ export class Gesture {
     this.blockDragger!.drag(this.mostRecentEvent, this.currentDragDeltaXY);
   }
 
-  // TODO (fenichel): Possibly combine this and startDraggingBlock_.
   /** Create a bubble dragger and start dragging the selected bubble. */
   private startDraggingBubble() {
     if (!this.startBubble) {

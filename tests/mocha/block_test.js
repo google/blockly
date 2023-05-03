@@ -53,6 +53,7 @@ suite('Blocks', function() {
         "nextStatement": null,
       }]);
   });
+
   teardown(function() {
     sharedTestTeardown.call(this);
   });
@@ -199,6 +200,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Disposal', function() {
     suite('calling destroy', function() {
       setup(function() {
@@ -396,6 +398,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Remove Input', function() {
     setup(function() {
       Blockly.defineBlocksWithJsonArray([
@@ -471,6 +474,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Connection Tracking', function() {
     setup(function() {
       this.workspace = Blockly.inject('blocklyDiv');
@@ -1155,6 +1159,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Comments', function() {
     suite('Set/Get Text', function() {
       function assertCommentEvent(eventSpy, oldValue, newValue) {
@@ -1275,6 +1280,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Getting/Setting Field (Values)', function() {
     setup(function() {
       this.workspace = Blockly.inject('blocklyDiv');
@@ -1335,12 +1341,14 @@ suite('Blocks', function() {
       }
     });
   });
+
   suite('Icon Management', function() {
     suite('Bubbles and Collapsing', function() {
       setup(function() {
         workspaceTeardown.call(this, this.workspace);
         this.workspace = Blockly.inject('blocklyDiv');
       });
+
       teardown(function() {
         workspaceTeardown.call(this, this.workspace);
       });
@@ -1355,6 +1363,7 @@ suite('Blocks', function() {
         block.setCollapsed(true);
         chai.assert.isFalse(block.comment.isVisible());
       });
+
       test('Child Has Icon', function() {
         const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="statement_block">' +
@@ -1370,6 +1379,7 @@ suite('Blocks', function() {
         block.setCollapsed(true);
         chai.assert.isFalse(childBlock.comment.isVisible());
       });
+
       test('Next Block Has Icon', function() {
         const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="statement_block">' +
@@ -1387,6 +1397,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Collapsing and Expanding', function() {
     function assertCollapsed(block, opt_string) {
       chai.assert.isTrue(block.isCollapsed());
@@ -1850,6 +1861,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Style', function() {
     suite('Headless', function() {
       setup(function() {
@@ -1913,6 +1925,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('toString', function() {
     const toStringTests = [
       {

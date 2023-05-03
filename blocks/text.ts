@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.libraryBlocks.texts');
 import * as Extensions from '../core/extensions.js';
 import * as fieldRegistry from '../core/field_registry.js';
 import * as xmlUtils from '../core/utils/xml.js';
-import {Align} from '../core/input.js';
+import {Align} from '../core/inputs/input.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
 import {Connection} from '../core/connection.js';
@@ -28,6 +28,7 @@ import type {Workspace} from '../core/workspace.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 import '../core/field_multilineinput.js';
 import '../core/field_variable.js';
+import { ValueInput } from '../core/inputs/value_input.js';
 
 
 /**
@@ -284,9 +285,9 @@ const GET_SUBSTRING_BLOCK = {
    */
   mutationToDom: function(this: GetSubstringBlock): Element {
     const container = xmlUtils.createElement('mutation');
-    const isAt1 = this.getInput('AT1')!.type === ConnectionType.INPUT_VALUE;
+    const isAt1 = this.getInput('AT1') instanceof ValueInput;
     container.setAttribute('at1', `${isAt1}`);
-    const isAt2 = this.getInput('AT2')!.type === ConnectionType.INPUT_VALUE;
+    const isAt2 = this.getInput('AT2') instanceof ValueInput;
     container.setAttribute('at2', `${isAt2}`);
     return container;
   },

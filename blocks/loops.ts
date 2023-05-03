@@ -324,16 +324,17 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
    *
    * @returns The nearest surrounding loop, or null if none.
    */
-  getSurroundLoop: function(this: ControlFlowInLoopBlock): Block | null {
-    let block: Block|null = this;
-    do {
-      if (loopTypes.has(block.type)) {
-        return block;
-      }
-      block = block.getSurroundParent();
-    } while (block);
-    return null;
-  },
+  getSurroundLoop: function(this: ControlFlowInLoopBlock): Block |
+      null {
+        let block: Block|null = this;
+        do {
+          if (loopTypes.has(block.type)) {
+            return block;
+          }
+          block = block.getSurroundParent();
+        } while (block);
+        return null;
+      },
 
   /**
    * Called whenever anything on the workspace changes.

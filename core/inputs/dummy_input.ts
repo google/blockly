@@ -11,7 +11,7 @@ import {inputTypes} from './input_types.js';
 
 /** Represents an input on a block with no connection. */
 export class DummyInput extends Input {
-  public readonly type = inputTypes.DUMMY;
+  readonly type = inputTypes.DUMMY;
 
   /**
    * @param name Language-neutral identifier which may used to find this input

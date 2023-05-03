@@ -28,7 +28,6 @@ import {inputTypes} from './input_types.js';
  * Class for an input with an optional field.
  */
 export class Input {
-  private sourceBlock: Block;
   fieldRow: Field[] = [];
   /** Alignment of input's fields (left, right or centre). */
   align = Align.LEFT;
@@ -47,9 +46,8 @@ export class Input {
    *     optionally construct a connection.
    */
   constructor(
-      public name: string, block: Block, public connection: Connection|null) {
-    this.sourceBlock = block;
-  }
+      public name: string, private sourceBlock: Block,
+      public connection: Connection|null) {}
 
   /**
    * Get the source block for this input.

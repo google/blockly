@@ -1512,12 +1512,12 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Appends a dummy input row.
    *
-   * @param opt_name Language-neutral identifier which may used to find this
-   *     input again.  Should be unique to this block.
+   * @param name Optional language-neutral identifier which may used to find
+   *     this input again.  Should be unique to this block.
    * @returns The input object created.
    */
-  appendDummyInput(opt_name?: string): Input {
-    return this.appendInput(new DummyInput(opt_name ?? '', this));
+  appendDummyInput(name = ''): Input {
+    return this.appendInput(new DummyInput(name, this));
   }
 
   /**

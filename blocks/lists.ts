@@ -26,7 +26,7 @@ import {Mutator} from '../core/mutator.js';
 import type {Workspace} from '../core/workspace.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 import '../core/field_dropdown.js';
-import { ValueInput } from '../core/inputs/value_input.js';
+import {ValueInput} from '../core/inputs/value_input.js';
 
 
 /**
@@ -186,23 +186,24 @@ const LISTS_CREATE_WITH = {
    * @param workspace Mutator's workspace.
    * @return Root block in mutator.
    */
-  decompose: function(this: CreateWithBlock, workspace: Workspace): ContainerBlock {
-    const containerBlock =
-        workspace.newBlock('lists_create_with_container') as ContainerBlock;
-    (containerBlock as BlockSvg).initSvg();
-    let connection = containerBlock.getInput('STACK')!.connection;
-    for (let i = 0; i < this.itemCount_; i++) {
-      const itemBlock =
-          workspace.newBlock('lists_create_with_item') as ItemBlock;
-      (itemBlock as BlockSvg).initSvg();
-      if (!itemBlock.previousConnection) {
-        throw new Error('itemBlock has no previousConnection');
-      }
-      connection!.connect(itemBlock.previousConnection);
-      connection = itemBlock.nextConnection;
-    }
-    return containerBlock;
-  },
+  decompose: function(this: CreateWithBlock, workspace: Workspace):
+      ContainerBlock {
+        const containerBlock =
+            workspace.newBlock('lists_create_with_container') as ContainerBlock;
+        (containerBlock as BlockSvg).initSvg();
+        let connection = containerBlock.getInput('STACK')!.connection;
+        for (let i = 0; i < this.itemCount_; i++) {
+          const itemBlock =
+              workspace.newBlock('lists_create_with_item') as ItemBlock;
+          (itemBlock as BlockSvg).initSvg();
+          if (!itemBlock.previousConnection) {
+            throw new Error('itemBlock has no previousConnection');
+          }
+          connection!.connect(itemBlock.previousConnection);
+          connection = itemBlock.nextConnection;
+        }
+        return containerBlock;
+      },
   /**
    * Reconfigure this block based on the mutator dialog's components.
    *
@@ -479,7 +480,7 @@ const LISTS_GETINDEX = {
     const container = xmlUtils.createElement('mutation');
     const isStatement = !this.outputConnection;
     container.setAttribute('statement', String(isStatement));
-    const isAt = this.getInput('AT')! instanceof ValueInput;
+    const isAt = this.getInput('AT') instanceof ValueInput;
     container.setAttribute('at', String(isAt));
     return container;
   },
@@ -690,7 +691,7 @@ const LISTS_SETINDEX = {
    */
   mutationToDom: function(this: SetIndexBlock): Element {
     const container = xmlUtils.createElement('mutation');
-    const isAt = this.getInput('AT')! instanceof ValueInput;
+    const isAt = this.getInput('AT') instanceof ValueInput;
     container.setAttribute('at', String(isAt));
     return container;
   },

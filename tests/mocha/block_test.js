@@ -1461,7 +1461,10 @@ suite('Blocks', function() {
 
       test('if there is no matching icon, getIcon returns null', function() {
         this.block.addIcon(new MockIconA());
-        chai.assert.isNull(this.block.getIcon('B'), 'Expected getIcon to return null if there is no icon with a missing type')
+        chai.assert.isNull(
+            this.block.getIcon('B'),
+            'Expected getIcon to return null if there is no ' +
+            'icon with a missing type');
       });
     });
 

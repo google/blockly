@@ -9,26 +9,25 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Input');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './field_label.js';
+import '../field_label.js';
 
-import type {Block} from './block.js';
-import type {BlockSvg} from './block_svg.js';
-import type {Connection} from './connection.js';
-import type {Field} from './field.js';
-import * as fieldRegistry from './field_registry.js';
+import type {Block} from '../block.js';
+import type {BlockSvg} from '../block_svg.js';
+import type {Connection} from '../connection.js';
+import type {Field} from '../field.js';
+import * as fieldRegistry from '../field_registry.js';
+import type {RenderedConnection} from '../rendered_connection.js';
 import {inputTypes} from './input_types.js';
-import type {RenderedConnection} from './rendered_connection.js';
 
 
 /**
  * Class for an input with an optional field.
  */
 export class Input {
-  private sourceBlock: Block;
   fieldRow: Field[] = [];
   /** Alignment of input's fields (left, right or centre). */
   align = Align.LEFT;
@@ -36,24 +35,19 @@ export class Input {
   /** Is the input visible? */
   private visible = true;
 
+  public readonly type: inputTypes = inputTypes.CUSTOM;
+
   /**
-   * @param type The type of the input.
    * @param name Language-neutral identifier which may used to find this input
    *     again.
-   * @param block The block containing this input.
+   * @param sourceBlock The block containing this input.
    * @param connection Optional connection for this input. If this is a custom
    *     input, `null` will always be passed, and then the subclass can
    *     optionally construct a connection.
    */
   constructor(
-      public type: number, public name: string, block: Block,
-      public connection: Connection|null) {
-    if ((type === inputTypes.VALUE || type === inputTypes.STATEMENT) && !name) {
-      throw Error(
-          'Value inputs and statement inputs must have non-empty name.');
-    }
-    this.sourceBlock = block;
-  }
+      public name: string, private sourceBlock: Block,
+      public connection: Connection|null) {}
 
   /**
    * Get the source block for this input.

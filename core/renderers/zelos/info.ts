@@ -8,23 +8,25 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.RenderInfo');
 
 import type {BlockSvg} from '../../block_svg.js';
+import {DummyInput} from '../../inputs/dummy_input.js';
 import {FieldImage} from '../../field_image.js';
 import {FieldLabel} from '../../field_label.js';
 import {FieldTextInput} from '../../field_textinput.js';
-import {Align, Input} from '../../input.js';
-import {inputTypes} from '../../input_types.js';
+import {Align, Input} from '../../inputs/input.js';
 import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 import type {Measurable} from '../measurables/base.js';
 import {Field} from '../measurables/field.js';
 import {InRowSpacer} from '../measurables/in_row_spacer.js';
 import {InputConnection} from '../measurables/input_connection.js';
+import {StatementInput} from '../../inputs/statement_input.js';
 import type {Row} from '../measurables/row.js';
 import type {SpacerRow} from '../measurables/spacer_row.js';
 import {Types} from '../measurables/types.js';
+import {ValueInput} from '../../inputs/value_input.js';
 
 import type {ConstantProvider, InsideCorners} from './constants.js';
 import {BottomRow} from './measurables/bottom_row.js';
-import {StatementInput} from './measurables/inputs.js';
+import {StatementInput as StatementInputMeasurable} from './measurables/inputs.js';
 import {RightConnectionShape} from './measurables/row_elements.js';
 import {TopRow} from './measurables/top_row.js';
 import type {PathObject} from './path_object.js';
@@ -123,12 +125,12 @@ export class RenderInfo extends BaseRenderInfo {
       return false;
     }
     // A statement input or an input following one always gets a new row.
-    if (input.type === inputTypes.STATEMENT ||
-        lastInput.type === inputTypes.STATEMENT) {
+    if (input instanceof StatementInput ||
+        lastInput instanceof StatementInput) {
       return true;
     }
     // Value and dummy inputs get new row if inputs are not inlined.
-    if (input.type === inputTypes.VALUE || input.type === inputTypes.DUMMY) {
+    if (input instanceof ValueInput || input instanceof DummyInput) {
       return !this.isInline || this.isMultiRow;
     }
     return false;
@@ -244,12 +246,13 @@ export class RenderInfo extends BaseRenderInfo {
     // If we have two dummy inputs on the same row, one aligned left and the
     // other right, keep track of the right aligned dummy input so we can add
     // padding later.
-    if (input.type === inputTypes.DUMMY && activeRow.hasDummyInput &&
+    if (input instanceof DummyInput && activeRow.hasDummyInput &&
         activeRow.align === Align.LEFT && input.align === Align.RIGHT) {
       this.rightAlignedDummyInputs.set(activeRow, input);
-    } else if (input.type === inputTypes.STATEMENT) {
+    } else if (input instanceof StatementInput) {
       // Handle statements without next connections correctly.
-      activeRow.elements.push(new StatementInput(this.constants_, input));
+      activeRow.elements.push(
+          new StatementInputMeasurable(this.constants_, input));
       activeRow.hasStatement = true;
 
       if (activeRow.align === null) {

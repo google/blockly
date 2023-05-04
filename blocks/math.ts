@@ -433,7 +433,8 @@ Extensions.register(
 
 /** Type of a block that has IS_DIVISBLEBY_MUTATOR_MIXIN */
 type DivisiblebyBlock = Block&DivisiblebyMixin;
-interface DivisiblebyMixin extends DivisiblebyMixinType {};
+interface DivisiblebyMixin extends DivisiblebyMixinType {}
+;
 type DivisiblebyMixinType = typeof IS_DIVISIBLEBY_MUTATOR_MIXIN;
 
 /**
@@ -517,7 +518,8 @@ Extensions.register(
 
 /** Type of a block that has LIST_MODES_MUTATOR_MIXIN */
 type ListModesBlock = Block&ListModesMixin;
-interface ListModesMixin extends ListModesMixinType {};
+interface ListModesMixin extends ListModesMixinType {}
+;
 type ListModesMixinType = typeof LIST_MODES_MUTATOR_MIXIN;
 
 /**
@@ -571,11 +573,11 @@ const LIST_MODES_MUTATOR_MIXIN = {
  * modes operation (outputs a list of numbers).
  */
 const LIST_MODES_MUTATOR_EXTENSION = function(this: ListModesBlock) {
-  this.getField('OP')!.setValidator(
-      function(this: ListModesBlock, newOp: string) {
-        this.updateType_(newOp);
-        return undefined;
-      }.bind(this));
+  this.getField(
+          'OP')!.setValidator(function(this: ListModesBlock, newOp: string) {
+    this.updateType_(newOp);
+    return undefined;
+  }.bind(this));
 };
 
 Extensions.registerMutator(

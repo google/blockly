@@ -31,7 +31,7 @@ import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
 import type {Icon} from './icon.js';
-import type {Input} from './input.js';
+import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
@@ -1342,16 +1342,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
   }
 
-  /**
-   * Add a value input, statement input or local variable to this block.
-   *
-   * @param type One of Blockly.inputTypes.
-   * @param name Language-neutral identifier which may used to find this input
-   *     again.  Should be unique to this block.
-   * @returns The input object created.
-   */
-  protected override appendInput_(type: number, name: string): Input {
-    const input = super.appendInput_(type, name);
+  /** @override */
+  override appendInput(input: Input): Input {
+    super.appendInput(input);
 
     if (this.rendered) {
       this.queueRender();

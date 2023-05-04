@@ -9,7 +9,7 @@ goog.declareModuleId('Blockly.blockRendering.Field');
 
 /* eslint-disable-next-line no-unused-vars */
 import type {Field as BlocklyField} from '../../field.js';
-import type {Input} from '../../input.js';
+import type {Input} from '../../inputs/input.js';
 import type {ConstantProvider} from '../common/constants.js';
 
 import {Measurable} from './base.js';

@@ -71,8 +71,11 @@ import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import {Icon} from './icon.js';
 import {inject} from './inject.js';
-import {Align, Input} from './input.js';
-import {inputTypes} from './input_types.js';
+import {Align, Input} from './inputs/input.js';
+import {inputTypes} from './inputs/input_types.js';
+import {DummyInput} from './inputs/dummy_input.js';
+import {StatementInput} from './inputs/statement_input.js';
+import {ValueInput} from './inputs/value_input.js';
 import {InsertionMarkerManager} from './insertion_marker_manager.js';
 import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
@@ -692,6 +695,13 @@ export {IKeyboardAccessible};
 export {IMetricsManager};
 export {IMovable};
 export {Input};
+export const inputs = {
+  Input,
+  inputTypes,
+  DummyInput,
+  StatementInput,
+  ValueInput,
+};
 export {InsertionMarkerManager};
 export {IObservable, isObservable};
 export {IPositionable};

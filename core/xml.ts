@@ -13,7 +13,7 @@ import type {Connection} from './connection.js';
 import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
-import {inputTypes} from './input_types.js';
+import {inputTypes} from './inputs/input_types.js';
 import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';
 import * as utilsXml from './utils/xml.js';

@@ -42,6 +42,7 @@ import * as userAgent from './utils/useragent.js';
 import * as utilsXml from './utils/xml.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import {ISerializable} from './interfaces/i_serializable.js';
 
 /**
  * A function that is called to validate changes to the field's value before
@@ -68,7 +69,7 @@ export type FieldValidator<T = any> = (newValue: T) => T|null|undefined;
 export abstract class Field<T = any> implements IASTNodeLocationSvg,
                                                 IASTNodeLocationWithBlock,
                                                 IKeyboardAccessible,
-                                                IRegistrable {
+                                                IRegistrable, ISerializable {
   /**
    * To overwrite the default value which is set in **Field**, directly update
    * the prototype.

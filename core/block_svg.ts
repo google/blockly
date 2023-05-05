@@ -34,12 +34,12 @@ import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
-import type {Icon} from './icon_old.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
+import type {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
 import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
@@ -303,25 +303,6 @@ export class BlockSvg
     eventUtils.fire(event);
     common.setSelected(null);
     this.removeSelect();
-  }
-
-  /**
-   * Returns a list of mutator, comment, and warning icons.
-   *
-   * @returns List of icons.
-   */
-  getIcons(): Icon[] {
-    const icons = [];
-    if (this.mutator) {
-      icons.push(this.mutator);
-    }
-    if (this.commentIcon_) {
-      icons.push(this.commentIcon_);
-    }
-    if (this.warning) {
-      icons.push(this.warning);
-    }
-    return icons;
   }
 
   /**
@@ -1143,6 +1124,36 @@ export class BlockSvg
       // Adding or removing a mutator icon will cause the block to change shape.
       this.bumpNeighbours();
     }
+  }
+
+  override addIcon<T extends IIcon>(icon: T): T {
+    super.addIcon(icon);
+    if (this.rendered) {
+      // TODO: Change this based on #7024.
+      this.render();
+      this.bumpNeighbours();
+    }
+    return icon;
+  }
+
+  override removeIcon(type: string): boolean {
+    const removed = super.removeIcon(type);
+    if (this.rendered) {
+      // TODO: Change this based on #7024.
+      this.render();
+      this.bumpNeighbours();
+    }
+    return removed;
+  }
+
+  // TODO: remove this implementation after #7038, #7039, and #7040 are
+  //   resolved.
+  override getIcons(): AnyDuringMigration[] {
+    const icons = [];
+    if (this.commentIcon_) icons.push(this.commentIcon_);
+    if (this.warning) icons.push(this.warning);
+    if (this.mutator) icons.push(this.mutator);
+    return icons;
   }
 
   /**

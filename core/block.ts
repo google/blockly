@@ -34,6 +34,7 @@ import * as fieldRegistry from './field_registry.js';
 import {Align, Input} from './inputs/input.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IDeletable} from './interfaces/i_deletable.js';
+import type {IIcon} from './interfaces/i_icon.js';
 import type {Mutator} from './mutator.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
@@ -156,6 +157,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   previousConnection: Connection | null = null;
   inputList: Input[] = [];
   inputsInline?: boolean;
+  icons: IIcon[] = [];
   private disabled = false;
   tooltip: Tooltip.TipInfo = '';
   contextMenu = true;
@@ -2217,16 +2219,65 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param _opt_id An optional ID for the warning text to be able to maintain
    *     multiple warnings.
    */
-  setWarningText(_text: string | null, _opt_id?: string) {}
-  // NOP.
+  setWarningText(_text: string | null, _opt_id?: string) {
+    // NOOP.
+  }
 
   /**
    * Give this block a mutator dialog.
    *
    * @param _mutator A mutator dialog instance or null to remove.
    */
-  setMutator(_mutator: Mutator) {}
-  // NOP.
+  setMutator(_mutator: Mutator) {
+    // NOOP.
+  }
+
+  /** Adds the given icon to the block. */
+  addIcon<T extends IIcon>(icon: T): T {
+    if (this.hasIcon(icon.getType())) {
+      throw new Error(
+        'Tried to append an icon when an icon of the same type already ' +
+          'exists on the block. Use getIcon to access the existing icon.'
+      );
+    }
+    this.icons.push(icon);
+    this.icons.sort((a, b) => a.getWeight() - b.getWeight());
+    return icon;
+  }
+
+  /**
+   * Removes the icon whose getType matches the given type iconType from the
+   * block.
+   *
+   * @param type The type of the icon to remove from the block.
+   * @return True if an icon with the given type was found, false otherwise.
+   */
+  removeIcon(type: string): boolean {
+    if (!this.hasIcon(type)) return false;
+    this.icons = this.icons.filter((icon) => icon.getType() !== type);
+    return true;
+  }
+
+  /**
+   * @return True if an icon with the given type exists on the block,
+   *     false otherwise.
+   */
+  hasIcon(type: string): boolean {
+    return this.icons.some((icon) => icon.getType() === type);
+  }
+
+  /**
+   * @return The icon with the given type if it exists on the block, undefined
+   *     otherwise.
+   */
+  getIcon(type: string): IIcon | undefined {
+    return this.icons.find((icon) => icon.getType() === type);
+  }
+
+  /** @return An array of the icons attached to this block. */
+  getIcons(): IIcon[] {
+    return [...this.icons];
+  }
 
   /**
    * Return the coordinates of the top-left corner of this block relative to the

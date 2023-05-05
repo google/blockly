@@ -12,8 +12,9 @@ import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../inputs/input_types.js';
-import {isSerializable} from '../interfaces/i_serializable.js';
+import {ISerializable, isSerializable} from '../interfaces/i_serializable.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
+import * as registry from '../registry.js';
 import {Size} from '../utils/size.js';
 import * as utilsXml from '../utils/xml.js';
 import type {Workspace} from '../workspace.js';
@@ -587,10 +588,20 @@ function tryToConnectParent(
  * @param state The state object to reference.
  */
 function loadIcons(block: Block, state: State) {
-  if (!state['icons']) {
-    return;
+  if (!state['icons']) return;
+
+  const iconTypes = Object.keys(state['icons']);
+  for (const iconType of iconTypes) {
+    // TODO(#7038): Remove this special casing of comment..
+    if (iconType === 'comment') continue;
+
+    const iconState = state['icons'][iconType];
+    const icon = new (registry.getClass(registry.Type.ICON, iconType, true)!)();
+    block.addIcon(icon);
+    if (isSerializable(icon)) icon.loadState(iconState);
   }
-  // TODO(#2105): Remove this logic and put it in the icon.
+
+  // TODO(#7038): Remove this logic and put it in the icon.
   const comment = state['icons']['comment'];
   if (comment) {
     block.setCommentText(comment['text']);

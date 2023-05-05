@@ -18,7 +18,7 @@ import './events/events_bubble_open.js';
 import type {BlockSvg} from './block_svg.js';
 import {Bubble} from './bubble.js';
 import * as eventUtils from './events/utils.js';
-import {Icon} from './icon.js';
+import {Icon} from './icon_old.js';
 import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';

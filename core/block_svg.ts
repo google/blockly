@@ -30,7 +30,7 @@ import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
-import type {Icon} from './icon.js';
+import type {Icon} from './icon_old.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';

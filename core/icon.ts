@@ -7,9 +7,9 @@
 import {Block} from './block.js';
 import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
+import {IIcon} from './interfaces/i_icon.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import {IIcon} from './interfaces/i_icon.js';
 import {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
 
@@ -26,7 +26,7 @@ export abstract class Icon implements IIcon {
   /** The root svg element visually representing this icon. */
   protected svgRoot: SVGGElement|null = null;
 
-  constructor(protected sourceBlock: Block) { }
+  constructor(protected sourceBlock: Block) {}
 
   getType(): string {
     return 'abstract type';
@@ -42,7 +42,7 @@ export abstract class Icon implements IIcon {
         this.svgRoot, 'pointerdown', this, pointerdownListener);
   }
 
-  dispose(): void { }
+  dispose(): void {}
 
   getWeight(): number {
     return -1;
@@ -52,9 +52,9 @@ export abstract class Icon implements IIcon {
     return new Size(0, 0);
   }
 
-  applyColour(): void { }
+  applyColour(): void {}
 
-  updateEditable(): void { }
+  updateEditable(): void {}
 
   updateCollapsed(): void {
     if (!this.svgRoot) {
@@ -81,5 +81,5 @@ export abstract class Icon implements IIcon {
     this.workspaceLocation = Coordinate.sum(blockOrigin, this.offsetInBlock);
   }
 
-  onClick(): void { }
+  onClick(): void {}
 }

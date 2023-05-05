@@ -12,6 +12,7 @@ import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../inputs/input_types.js';
+import {isSerializable} from '../interfaces/i_serializable.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import {Size} from '../utils/size.js';
 import * as utilsXml from '../utils/xml.js';
@@ -113,7 +114,7 @@ export function save(
   saveExtraState(block, state as AnyDuringMigration);
   // AnyDuringMigration because:  Argument of type '{ type: string; id: string;
   // }' is not assignable to parameter of type 'State'.
-  saveIcons(block, state as AnyDuringMigration);
+  saveIcons(block, state as AnyDuringMigration, doFullSerialization);
   // AnyDuringMigration because:  Argument of type '{ type: string; id: string;
   // }' is not assignable to parameter of type 'State'.
   saveFields(block, state as AnyDuringMigration, doFullSerialization);
@@ -208,18 +209,29 @@ function saveExtraState(block: Block, state: State) {
  *
  * @param block The block to serialize the icon state of.
  * @param state The state object to append to.
+ * @param doFullSerialization Whether or not to serialize the full state of the
+ *     icon (rather than possibly saving a reference to some state).
  */
-function saveIcons(block: Block, state: State) {
-  // TODO(#2105): Remove this logic and put it in the icon.
+function saveIcons(block: Block, state: State, doFullSerialization: boolean) {
+  const icons = Object.create(null);
+  for (const icon of block.getIcons()) {
+    if (isSerializable(icon)) {
+      icons[icon.getType()] = icon.saveState(doFullSerialization);
+    }
+  }
+
+  // TODO(#7038): Remove this logic and put it in the comment icon.
   if (block.getCommentText()) {
-    state['icons'] = {
-      'comment': {
-        'text': block.getCommentText(),
-        'pinned': block.commentModel.pinned,
-        'height': Math.round(block.commentModel.size.height),
-        'width': Math.round(block.commentModel.size.width),
-      },
+    icons['comment'] = {
+      'text': block.getCommentText(),
+      'pinned': block.commentModel.pinned,
+      'height': Math.round(block.commentModel.size.height),
+      'width': Math.round(block.commentModel.size.width),
     };
+  }
+
+  if (Object.keys(icons).length) {
+    state['icons'] = icons;
   }
 }
 

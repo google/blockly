@@ -23,6 +23,30 @@ import * as Xml from '../xml.js';
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
+/**
+ * A description of the action that caused the block change event to be
+ * broadcast. Many block change events don't have an origin corresponding to one
+ * of the types here, in which case none will be provided.
+ */
+export const enum BlockChangeEventOriginType {
+  /**
+   * Indicates that the change was caused by in-progress user input, and it is
+   * expected to be followed by another block change event in the near future.
+   * For example, this could indicate that the user is still typing in a text
+   * field or dragging a slider. Change handlers that perform expensive
+   * operations in the background, such as serializing the workspace, can
+   * probably ignore such events.
+   */
+  INCOMPLETE_USER_INPUT = 'incomplete_user_input',
+
+  /**
+   * Indicates that the change represents the completion of a sequence of user
+   * input events changing the value of the same block element. It may be
+   * impossible to know if the user is done until the user input widget loses
+   * focus, in which case the new value will be the same as the old value.
+   */
+  COMPLETE_USER_INPUT = 'complete_user_input',
+}
 
 /**
  * Notifies listeners when some element of a block has changed (e.g.
@@ -46,15 +70,26 @@ export class BlockChange extends BlockBase {
   newValue: unknown;
 
   /**
+   * A description of the immediate action that caused the block change event to
+   * be broadcast. Many block change events don't have an origin correponding to
+   * a defined type, in which case this property will be undefined. This
+   * property does not get serialized, and is not propagated when undoing or
+   * redoing events.
+   */
+  eventOriginType?: BlockChangeEventOriginType|undefined;
+
+  /**
    * @param opt_block The changed block.  Undefined for a blank event.
    * @param opt_element One of 'field', 'comment', 'disabled', etc.
    * @param opt_name Name of input or field affected, or null.
    * @param opt_oldValue Previous value of element.
    * @param opt_newValue New value of element.
+   * @param opt_eventOriginType The type of the origin of the event.
    */
   constructor(
       opt_block?: Block, opt_element?: string, opt_name?: string|null,
-      opt_oldValue?: unknown, opt_newValue?: unknown) {
+      opt_oldValue?: unknown, opt_newValue?: unknown,
+      opt_eventOriginType?: BlockChangeEventOriginType) {
     super(opt_block);
 
     if (!opt_block) {
@@ -64,6 +99,7 @@ export class BlockChange extends BlockBase {
     this.name = opt_name || undefined;
     this.oldValue = opt_oldValue;
     this.newValue = opt_newValue;
+    this.eventOriginType = opt_eventOriginType;
   }
 
   /**
@@ -99,6 +135,7 @@ export class BlockChange extends BlockBase {
     this.name = json['name'];
     this.oldValue = json['oldValue'];
     this.newValue = json['newValue'];
+    this.eventOriginType = undefined;
   }
 
   /**
@@ -119,6 +156,7 @@ export class BlockChange extends BlockBase {
     newEvent.name = json['name'];
     newEvent.oldValue = json['oldValue'];
     newEvent.newValue = json['newValue'];
+    newEvent.eventOriginType = undefined;
     return newEvent;
   }
 
@@ -128,6 +166,14 @@ export class BlockChange extends BlockBase {
    * @returns False if something changed.
    */
   override isNull(): boolean {
+    if (this.eventOriginType ===
+        BlockChangeEventOriginType.COMPLETE_USER_INPUT) {
+      // As a special case, events that represent the completion of a sequence
+      // of related changes should be reported to change listeners even if the
+      // value didn't change during the event, so that listeners that ignored
+      // the previous incomplete events can respond to the complete event.
+      return false;
+    }
     return this.oldValue === this.newValue;
   }
 

@@ -16,6 +16,7 @@ import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import {BlockChangeEventOriginType} from './events/events_block_change.js';
 import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {FieldInput, FieldInputConfig, FieldInputValidator} from './field_input.js';
@@ -326,7 +327,9 @@ export class FieldAngle extends FieldInput<number> {
     }
     angle = this.wrapValue(angle);
     if (angle !== this.value_) {
-      this.setEditorValue_(angle);
+      this.setEditorValue_(
+          angle, BlockChangeEventOriginType.INCOMPLETE_USER_INPUT);
+      this.valueChangedSinceLastCompleteEvent_ = true;
     }
   }
 

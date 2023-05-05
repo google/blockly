@@ -10,7 +10,7 @@ goog.declareModuleId('Blockly.Events');
 
 import {Abstract, AbstractEventJson} from './events_abstract.js';
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
-import {BlockChange, BlockChangeJson} from './events_block_change.js';
+import {BlockChange, BlockChangeEventOriginType, BlockChangeJson} from './events_block_change.js';
 import {BlockCreate, BlockCreateJson} from './events_block_create.js';
 import {BlockDelete, BlockDeleteJson} from './events_block_delete.js';
 import {BlockDrag, BlockDragJson} from './events_block_drag.js';
@@ -47,6 +47,7 @@ export {BubbleType};
 export {BlockBase};
 export {BlockBaseJson};
 export {BlockChange};
+export {BlockChangeEventOriginType};
 export {BlockChangeJson};
 export {BlockCreate};
 export {BlockCreateJson};

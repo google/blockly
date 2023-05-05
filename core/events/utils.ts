@@ -298,6 +298,12 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         const changeEvent = event as BlockChange;
         // Merge change events.
         lastEvent.newValue = changeEvent.newValue;
+
+        if (lastEvent.eventOriginType !== changeEvent.eventOriginType) {
+          // When merging events with different event origins, no origin value
+          // can consistently represent both, so leave it undefined.
+          lastEvent.eventOriginType = undefined;
+        }
       } else if (event.type === VIEWPORT_CHANGE) {
         const viewportEvent = event as ViewportChange;
         // Merge viewport change events.

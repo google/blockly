@@ -20,6 +20,7 @@ import * as browserEvents from './browser_events.js';
 import * as dialog from './dialog.js';
 import * as dom from './utils/dom.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import {BlockChangeEventOriginType} from './events/events_block_change.js';
 import * as eventUtils from './events/utils.js';
 import {Field, FieldConfig, FieldValidator, UnattachedFieldError} from './field.js';
 import {Msg} from './msg.js';
@@ -62,6 +63,12 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    * True if the value currently displayed in the field's editory UI is valid.
    */
   protected isTextValid_ = false;
+
+  /**
+   * True if the value has been edited by the user since the last time
+   * htmlInput_ has been disposed and a complete event has been broadcast.
+   */
+  protected valueChangedSinceLastCompleteEvent_ = false;
 
   /** Key down event data. */
   private onKeyDownWrapper_: browserEvents.Data|null = null;
@@ -383,6 +390,20 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
     // Make sure the field's node matches the field's internal value.
     this.forceRerender();
     this.onFinishEditing_(this.value_);
+
+    if (this.sourceBlock_ && eventUtils.isEnabled() &&
+        this.valueChangedSinceLastCompleteEvent_) {
+      this.valueChangedSinceLastCompleteEvent_ = false;
+      // When closing a field input widget, fire an event indicating that the
+      // user has completed a sequence of changes. The oldValue and the newValue
+      // will be the same since this is not actually a change to the value, but
+      // it is nevertheless an event related to changes that change handlers may
+      // need to know about.
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this.sourceBlock_, 'field', this.name || null, this.value_,
+          this.value_, BlockChangeEventOriginType.COMPLETE_USER_INPUT));
+    }
+
     eventUtils.setGroup(false);
 
     // Actual disposal.
@@ -463,7 +484,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    * @param _e Keyboard event.
    */
   private onHtmlInputChange_(_e: Event) {
-    this.setValue(this.getValueFromEditorText_(this.htmlInput_!.value));
+    this.setValue(
+        this.getValueFromEditorText_(this.htmlInput_!.value),
+        BlockChangeEventOriginType.INCOMPLETE_USER_INPUT);
+    this.valueChangedSinceLastCompleteEvent_ = true;
   }
 
   /**
@@ -472,8 +496,12 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    * value whilst editing.
    *
    * @param newValue New value.
+   * @param eventOriginType An optional description of the action that caused
+   *     the block change event to be broadcast.
    */
-  protected setEditorValue_(newValue: AnyDuringMigration) {
+  protected setEditorValue_(
+      newValue: AnyDuringMigration,
+      eventOriginType?: BlockChangeEventOriginType) {
     this.isDirty_ = true;
     if (this.isBeingEdited_) {
       // In the case this method is passed an invalid value, we still
@@ -482,7 +510,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
       // with what's shown to the user.
       this.htmlInput_!.value = this.getEditorText_(newValue);
     }
-    this.setValue(newValue);
+    this.setValue(newValue, eventOriginType);
   }
 
   /** Resize the editor to fit the text. */

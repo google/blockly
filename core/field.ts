@@ -14,9 +14,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Field');
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change.js';
-
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
@@ -42,6 +39,7 @@ import * as userAgent from './utils/useragent.js';
 import * as utilsXml from './utils/xml.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import {BlockChangeEventOriginType} from './events/events_block_change.js';
 
 /**
  * A function that is called to validate changes to the field's value before
@@ -964,9 +962,13 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    * than this method.
    *
    * @param newValue New value.
+   * @param eventOriginType An optional description of the action that caused
+   *     the block change event to be broadcast.
    * @sealed
    */
-  setValue(newValue: AnyDuringMigration) {
+  setValue(
+      newValue: AnyDuringMigration,
+      eventOriginType?: BlockChangeEventOriginType) {
     const doLogging = false;
     if (newValue === null) {
       doLogging && console.log('null, return');
@@ -1004,7 +1006,8 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
     this.doValueUpdate_(localValue);
     if (source && eventUtils.isEnabled()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          source, 'field', this.name || null, oldValue, localValue));
+          source, 'field', this.name || null, oldValue, localValue,
+          eventOriginType));
     }
     if (this.isDirty_) {
       this.forceRerender();

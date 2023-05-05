@@ -12,3 +12,9 @@ export interface IHasBubble {
   /** Sets whether the bubble is open or not. */
   setBubbleVisible(visible: boolean): void;
 }
+
+/** Type guard that checks whether the given object is a IHasBubble. */
+export function hasBubble(obj: any): obj is IHasBubble {
+  return obj.isBubbleVisible !== undefined &&
+      obj.setBubbleVisible !== undefined;
+}

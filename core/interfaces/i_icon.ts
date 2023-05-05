@@ -80,3 +80,14 @@ export interface IIcon {
    */
   onClick(): void;
 }
+
+/** Type guard that checks whether the given object is an IIcon. */
+export function isIcon(obj: any): obj is IIcon {
+  return obj.getType !== undefined && obj.initView !== undefined &&
+      obj.dispose !== undefined && obj.getWeight !== undefined &&
+      obj.getSize !== undefined && obj.applyColour !== undefined &&
+      obj.updateEditable !== undefined && obj.updateCollapsed !== undefined &&
+      obj.isShownWhenCollapsed !== undefined &&
+      obj.setOffsetInBlock !== undefined &&
+      obj.onLocationChange !== undefined && obj.onClick !== undefined;
+}

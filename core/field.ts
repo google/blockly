@@ -19,7 +19,7 @@ import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
-import type {Input} from './input.js';
+import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
@@ -681,13 +681,18 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
   }
 
   /**
-   * Updates the field to match the colour/style of the block. Should only be
-   * called by BlockSvg.applyColour().
+   * Updates the field to match the colour/style of the block.
    *
-   * @internal
+   * Non-abstract sub-classes may wish to implement this if the colour of the
+   * field depends on the colour of the block. It will automatically be called
+   * at relevant times, such as when the parent block or renderer changes.
+   *
+   * See {@link
+   * https://developers.google.com/blockly/guides/create-custom-blocks/fields/customizing-fields/creating#matching_block_colours
+   * | the field documentation} for more information, or FieldDropdown for an
+   * example.
    */
   applyColour() {}
-  // Non-abstract sub-classes may wish to implement this. See FieldDropdown.
 
   /**
    * Used by getSize() to move/resize any DOM elements, and get the new size.
@@ -726,6 +731,28 @@ export abstract class Field<T = any> implements IASTNodeLocationSvg,
    */
   protected showEditor_(_e?: Event): void {}
   // NOP
+
+  /**
+   * A developer hook to reposition the WidgetDiv during a window resize. You
+   * need to define this hook if your field has a WidgetDiv that needs to
+   * reposition itself when the window is resized. For example, text input
+   * fields define this hook so that the input WidgetDiv can reposition itself
+   * on a window resize event. This is especially important when modal inputs
+   * have been disabled, as Android devices will fire a window resize event when
+   * the soft keyboard opens.
+   *
+   * If you want the WidgetDiv to hide itself instead of repositioning, return
+   * false. This is the default behavior.
+   *
+   * DropdownDivs already handle their own positioning logic, so you do not need
+   * to override this function if your field only has a DropdownDiv.
+   *
+   * @returns True if the field should be repositioned,
+   *    false if the WidgetDiv should hide itself instead.
+   */
+  repositionForWindowResize(): boolean {
+    return false;
+  }
 
   /**
    * Updates the size of the field based on the text.

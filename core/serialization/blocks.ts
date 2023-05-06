@@ -11,7 +11,7 @@ import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import * as eventUtils from '../events/utils.js';
-import {inputTypes} from '../input_types.js';
+import {inputTypes} from '../inputs/input_types.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import {Size} from '../utils/size.js';
 import * as utilsXml from '../utils/xml.js';
@@ -251,9 +251,7 @@ function saveInputBlocks(
   const inputs = Object.create(null);
   for (let i = 0; i < block.inputList.length; i++) {
     const input = block.inputList[i];
-    if (input.type === inputTypes.DUMMY) {
-      continue;
-    }
+    if (!input.connection) continue;
     const connectionState =
         saveConnection(input.connection as Connection, doFullSerialization);
     if (connectionState) {

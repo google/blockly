@@ -44,7 +44,7 @@ export class FieldDropdown extends Field<string> {
   static ARROW_CHAR = '▾';
 
   /** A reference to the currently selected menu item. */
-  private selectedMenuItem_: MenuItem|null = null;
+  private selectedMenuItem: MenuItem|null = null;
 
   /** The dropdown menu. */
   protected menu_: Menu|null = null;
@@ -52,13 +52,13 @@ export class FieldDropdown extends Field<string> {
   /**
    * SVG image element if currently selected option is an image, or null.
    */
-  private imageElement_: SVGImageElement|null = null;
+  private imageElement: SVGImageElement|null = null;
 
   /** Tspan based arrow element. */
-  private arrow_: SVGTSpanElement|null = null;
+  private arrow: SVGTSpanElement|null = null;
 
   /** SVG based arrow element. */
-  private svgArrow_: SVGElement|null = null;
+  private svgArrow: SVGElement|null = null;
 
   /**
    * Serializable fields are saved by the serializer, non-serializable fields
@@ -72,7 +72,7 @@ export class FieldDropdown extends Field<string> {
   protected menuGenerator_?: MenuGenerator;
 
   /** A cache of the most recently generated options. */
-  private generatedOptions_: MenuOption[]|null = null;
+  private generatedOptions: MenuOption[]|null = null;
 
   /**
    * The prefix field label, of common words set after options are trimmed.
@@ -88,7 +88,7 @@ export class FieldDropdown extends Field<string> {
    */
   override suffixField: string|null = null;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  private selectedOption_!: MenuOption;
+  private selectedOption!: MenuOption;
   override clickTarget_: SVGElement|null = null;
 
   /**
@@ -137,12 +137,12 @@ export class FieldDropdown extends Field<string> {
      * The currently selected option. The field is initialized with the
      * first option selected.
      */
-    this.selectedOption_ = this.getOptions(false)[0];
+    this.selectedOption = this.getOptions(false)[0];
 
     if (config) {
       this.configure_(config);
     }
-    this.setValue(this.selectedOption_[1]);
+    this.setValue(this.selectedOption[1]);
     if (validator) {
       this.setValidator(validator);
     }
@@ -191,7 +191,7 @@ export class FieldDropdown extends Field<string> {
     }
     this.createTextElement_();
 
-    this.imageElement_ = dom.createSvgElement(Svg.IMAGE, {}, this.fieldGroup_);
+    this.imageElement = dom.createSvgElement(Svg.IMAGE, {}, this.fieldGroup_);
 
     if (this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW) {
       this.createSVGArrow_();
@@ -217,26 +217,26 @@ export class FieldDropdown extends Field<string> {
 
   /** Create a tspan based arrow. */
   protected createTextArrow_() {
-    this.arrow_ = dom.createSvgElement(Svg.TSPAN, {}, this.textElement_);
-    this.arrow_!.appendChild(document.createTextNode(
+    this.arrow = dom.createSvgElement(Svg.TSPAN, {}, this.textElement_);
+    this.arrow!.appendChild(document.createTextNode(
         this.getSourceBlock()?.RTL ? FieldDropdown.ARROW_CHAR + ' ' :
                                      ' ' + FieldDropdown.ARROW_CHAR));
     if (this.getSourceBlock()?.RTL) {
-      this.getTextElement().insertBefore(this.arrow_, this.textContent_);
+      this.getTextElement().insertBefore(this.arrow, this.textContent_);
     } else {
-      this.getTextElement().appendChild(this.arrow_);
+      this.getTextElement().appendChild(this.arrow);
     }
   }
 
   /** Create an SVG based arrow. */
   protected createSVGArrow_() {
-    this.svgArrow_ = dom.createSvgElement(
+    this.svgArrow = dom.createSvgElement(
         Svg.IMAGE, {
           'height': this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
           'width': this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
         },
         this.fieldGroup_);
-    this.svgArrow_!.setAttributeNS(
+    this.svgArrow!.setAttributeNS(
         dom.XLINK_NS, 'xlink:href',
         this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_DATAURI);
   }
@@ -252,7 +252,7 @@ export class FieldDropdown extends Field<string> {
     if (!block) {
       throw new UnattachedFieldError();
     }
-    this.dropdownCreate_();
+    this.dropdownCreate();
     if (e && typeof e.clientX === 'number') {
       this.menu_!.openingCoords = new Coordinate(e.clientX, e.clientY);
     } else {
@@ -281,10 +281,10 @@ export class FieldDropdown extends Field<string> {
     // view. See issue #1329.
     this.menu_!.focus();
 
-    if (this.selectedMenuItem_) {
-      this.menu_!.setHighlighted(this.selectedMenuItem_);
+    if (this.selectedMenuItem) {
+      this.menu_!.setHighlighted(this.selectedMenuItem);
       style.scrollIntoContainerView(
-          this.selectedMenuItem_.getElement()!, dropDownDiv.getContentDiv(),
+          this.selectedMenuItem.getElement()!, dropDownDiv.getContentDiv(),
           true);
     }
 
@@ -292,7 +292,7 @@ export class FieldDropdown extends Field<string> {
   }
 
   /** Create the dropdown editor. */
-  private dropdownCreate_() {
+  private dropdownCreate() {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -302,7 +302,7 @@ export class FieldDropdown extends Field<string> {
     this.menu_ = menu;
 
     const options = this.getOptions(false);
-    this.selectedMenuItem_ = null;
+    this.selectedMenuItem = null;
     for (let i = 0; i < options.length; i++) {
       const [label, value] = options[i];
       const content = (() => {
@@ -322,9 +322,9 @@ export class FieldDropdown extends Field<string> {
       menu.addChild(menuItem);
       menuItem.setChecked(value === this.value_);
       if (value === this.value_) {
-        this.selectedMenuItem_ = menuItem;
+        this.selectedMenuItem = menuItem;
       }
-      menuItem.onAction(this.handleMenuActionEvent_, this);
+      menuItem.onAction(this.handleMenuActionEvent, this);
     }
   }
 
@@ -336,7 +336,7 @@ export class FieldDropdown extends Field<string> {
       this.menu_.dispose();
     }
     this.menu_ = null;
-    this.selectedMenuItem_ = null;
+    this.selectedMenuItem = null;
     this.applyColour();
   }
 
@@ -345,7 +345,7 @@ export class FieldDropdown extends Field<string> {
    *
    * @param menuItem The MenuItem selected within menu.
    */
-  private handleMenuActionEvent_(menuItem: MenuItem) {
+  private handleMenuActionEvent(menuItem: MenuItem) {
     dropDownDiv.hideIfOwner(this, true);
     this.onItemSelected_(this.menu_ as Menu, menuItem);
   }
@@ -384,11 +384,11 @@ export class FieldDropdown extends Field<string> {
       throw TypeError('A menu generator was never defined.');
     }
     if (Array.isArray(this.menuGenerator_)) return this.menuGenerator_;
-    if (useCache && this.generatedOptions_) return this.generatedOptions_;
+    if (useCache && this.generatedOptions) return this.generatedOptions;
 
-    this.generatedOptions_ = this.menuGenerator_();
-    validateOptions(this.generatedOptions_);
-    return this.generatedOptions_;
+    this.generatedOptions = this.menuGenerator_();
+    validateOptions(this.generatedOptions);
+    return this.generatedOptions;
   }
 
   /**
@@ -424,15 +424,13 @@ export class FieldDropdown extends Field<string> {
     const options = this.getOptions(true);
     for (let i = 0, option; option = options[i]; i++) {
       if (option[1] === this.value_) {
-        this.selectedOption_ = option;
+        this.selectedOption = option;
       }
     }
   }
 
   /**
    * Updates the dropdown arrow to match the colour/style of the block.
-   *
-   * @internal
    */
   override applyColour() {
     const style = (this.sourceBlock_ as BlockSvg).style;
@@ -445,11 +443,11 @@ export class FieldDropdown extends Field<string> {
       }
     }
     // Update arrow's colour.
-    if (this.sourceBlock_ && this.arrow_) {
+    if (this.sourceBlock_ && this.arrow) {
       if (this.sourceBlock_.isShadow()) {
-        this.arrow_.style.fill = style.colourSecondary;
+        this.arrow.style.fill = style.colourSecondary;
       } else {
-        this.arrow_.style.fill = style.colourPrimary;
+        this.arrow.style.fill = style.colourPrimary;
       }
     }
   }
@@ -458,14 +456,14 @@ export class FieldDropdown extends Field<string> {
   protected override render_() {
     // Hide both elements.
     this.getTextContent().nodeValue = '';
-    this.imageElement_!.style.display = 'none';
+    this.imageElement!.style.display = 'none';
 
     // Show correct element.
-    const option = this.selectedOption_ && this.selectedOption_[0];
+    const option = this.selectedOption && this.selectedOption[0];
     if (option && typeof option === 'object') {
-      this.renderSelectedImage_(option);
+      this.renderSelectedImage(option);
     } else {
-      this.renderSelectedText_();
+      this.renderSelectedText();
     }
 
     this.positionBorderRect_();
@@ -476,16 +474,16 @@ export class FieldDropdown extends Field<string> {
    *
    * @param imageJson Selected option that must be an image.
    */
-  private renderSelectedImage_(imageJson: ImageProperties) {
+  private renderSelectedImage(imageJson: ImageProperties) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
     }
-    this.imageElement_!.style.display = '';
-    this.imageElement_!.setAttributeNS(
+    this.imageElement!.style.display = '';
+    this.imageElement!.setAttributeNS(
         dom.XLINK_NS, 'xlink:href', imageJson.src);
-    this.imageElement_!.setAttribute('height', String(imageJson.height));
-    this.imageElement_!.setAttribute('width', String(imageJson.width));
+    this.imageElement!.setAttribute('height', String(imageJson.height));
+    this.imageElement!.setAttribute('width', String(imageJson.width));
 
     const imageHeight = Number(imageJson.height);
     const imageWidth = Number(imageJson.width);
@@ -498,13 +496,13 @@ export class FieldDropdown extends Field<string> {
     const xPadding =
         hasBorder ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING : 0;
     let arrowWidth = 0;
-    if (this.svgArrow_) {
-      arrowWidth = this.positionSVGArrow_(
+    if (this.svgArrow) {
+      arrowWidth = this.positionSVGArrow(
           imageWidth + xPadding,
           height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
     } else {
       arrowWidth = dom.getFastTextWidth(
-          this.arrow_ as SVGTSpanElement,
+          this.arrow as SVGTSpanElement,
           this.getConstants()!.FIELD_TEXT_FONTSIZE,
           this.getConstants()!.FIELD_TEXT_FONTWEIGHT,
           this.getConstants()!.FIELD_TEXT_FONTFAMILY);
@@ -515,19 +513,19 @@ export class FieldDropdown extends Field<string> {
     let arrowX = 0;
     if (block.RTL) {
       const imageX = xPadding + arrowWidth;
-      this.imageElement_!.setAttribute('x', `${imageX}`);
+      this.imageElement!.setAttribute('x', `${imageX}`);
     } else {
       arrowX = imageWidth + arrowWidth;
       this.getTextElement().setAttribute('text-anchor', 'end');
-      this.imageElement_!.setAttribute('x', `${xPadding}`);
+      this.imageElement!.setAttribute('x', `${xPadding}`);
     }
-    this.imageElement_!.setAttribute('y', String(height / 2 - imageHeight / 2));
+    this.imageElement!.setAttribute('y', String(height / 2 - imageHeight / 2));
 
     this.positionTextElement_(arrowX + xPadding, imageWidth + arrowWidth);
   }
 
   /** Renders the selected option, which must be text. */
-  private renderSelectedText_() {
+  private renderSelectedText() {
     // Retrieves the selected option to display through getText_.
     this.getTextContent().nodeValue = this.getDisplayText_();
     const textElement = this.getTextElement();
@@ -546,8 +544,8 @@ export class FieldDropdown extends Field<string> {
     const xPadding =
         hasBorder ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING : 0;
     let arrowWidth = 0;
-    if (this.svgArrow_) {
-      arrowWidth = this.positionSVGArrow_(
+    if (this.svgArrow) {
+      arrowWidth = this.positionSVGArrow(
           textWidth + xPadding,
           height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
     }
@@ -564,8 +562,8 @@ export class FieldDropdown extends Field<string> {
    * @param y Y position the arrow is being rendered at, in px.
    * @returns Amount of space the arrow is taking up, in px.
    */
-  private positionSVGArrow_(x: number, y: number): number {
-    if (!this.svgArrow_) {
+  private positionSVGArrow(x: number, y: number): number {
+    if (!this.svgArrow) {
       return 0;
     }
     const block = this.getSourceBlock();
@@ -578,7 +576,7 @@ export class FieldDropdown extends Field<string> {
     const textPadding = this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_PADDING;
     const svgArrowSize = this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE;
     const arrowX = block.RTL ? xPadding : x + textPadding;
-    this.svgArrow_.setAttribute(
+    this.svgArrow.setAttribute(
         'transform', 'translate(' + arrowX + ',' + y + ')');
     return svgArrowSize + textPadding;
   }
@@ -591,10 +589,10 @@ export class FieldDropdown extends Field<string> {
    * @returns Selected option text.
    */
   protected override getText_(): string|null {
-    if (!this.selectedOption_) {
+    if (!this.selectedOption) {
       return null;
     }
-    const option = this.selectedOption_[0];
+    const option = this.selectedOption[0];
     if (typeof option === 'object') {
       return option['alt'];
     }

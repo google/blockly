@@ -7,6 +7,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.dom');
 
+import * as deprecation from './deprecation.js';
 import type {Svg} from './svg.js';
 
 
@@ -33,7 +34,6 @@ export enum NodeType {
   ELEMENT_NODE = 1,
   TEXT_NODE = 3,
   COMMENT_NODE = 8,
-  DOCUMENT_POSITION_CONTAINED_BY = 16
 }
 
 /** Temporary cache of text widths. */
@@ -160,11 +160,13 @@ export function insertAfter(newNode: Element, refNode: Element) {
  * @param parent The node that should contain the other node.
  * @param descendant The node to test presence of.
  * @returns Whether the parent node contains the descendant node.
+ * @deprecated Use native 'contains' DOM method.
  */
 export function containsNode(parent: Node, descendant: Node): boolean {
-  return !!(
-      parent.compareDocumentPosition(descendant) &
-      NodeType.DOCUMENT_POSITION_CONTAINED_BY);
+  deprecation.warn(
+      'Blockly.utils.dom.containsNode', 'version 10', 'version 11',
+      'Use native "contains" DOM method');
+  return parent.contains(descendant);
 }
 
 /**

@@ -181,7 +181,7 @@ export class ToolboxCategory extends ToolboxItem implements
     this.htmlDiv_ = this.createContainer_();
     aria.setRole(this.htmlDiv_, aria.Role.TREEITEM);
     aria.setState(this.htmlDiv_, aria.State.SELECTED, false);
-    aria.setState(this.htmlDiv_, aria.State.LEVEL, this.level_);
+    aria.setState(this.htmlDiv_, aria.State.LEVEL, this.level_ + 1);
 
     this.rowDiv_ = this.createRowContainer_();
     this.rowDiv_.style.pointerEvents = 'auto';

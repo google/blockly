@@ -176,7 +176,9 @@ function buildTSOverride({files, tsconfig}) {
       'jsdoc/check-param-names': ['off', {'checkDestructured': false}],
       // Allow any text in the license tag. Other checks are not relevant.
       'jsdoc/check-values': ['off'],
-      'jsdoc/newline-after-description': ['error'],
+      // Ensure there is a blank line between the body and any @tags,
+      // as required by the tsdoc spec (see #6353).
+      'jsdoc/tag-lines': ['error', 'any', {'startLines': 1}],
     },
   };
 }

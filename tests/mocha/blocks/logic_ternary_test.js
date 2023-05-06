@@ -34,8 +34,9 @@ suite('Logic ternary', function() {
     chai.assert.lengthOf(inputs, 3);
     const ifInput = block.getInput('IF');
     chai.assert.exists(ifInput, 'Has "IF" input');
-    chai.assert.equal(ifInput.connection.check_.length, 1);
-    chai.assert.equal(ifInput.connection.check_[0], 'Boolean');
+    const checkList = ifInput.connection.getCheck();
+    chai.assert.equal(checkList.length, 1);
+    chai.assert.equal(checkList[0], 'Boolean');
     chai.assert.exists(block.onchangeWrapper_, 'Has onchange handler');
     if (inputsInline) {
       chai.assert.isTrue(block.inputsInline);

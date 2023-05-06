@@ -61,10 +61,24 @@ export class BlockMove extends BlockBase {
   newInputName?: string;
 
   /**
-   * The new X and Y workspace coordinates of the block if it is a top level
+   * The new X and Y workspace coordinates of the block if it is a top-level
    * block. Undefined if it is not a top level block.
    */
   newCoordinate?: Coordinate;
+
+  /**
+   * An explanation of what this move is for.  Known values include:
+   *  'drag' -- A drag operation completed.
+   *  'bump' -- Block got bumped away from an invalid connection.
+   *  'snap' -- Block got shifted to line up with the grid.
+   *  'inbounds' -- Block got pushed back into a non-scrolling workspace.
+   *  'connect' -- Block got connected to another block.
+   *  'disconnect' -- Block got disconnected from another block.
+   *  'create' -- Block created via XML.
+   *  'cleanup' -- Workspace aligned top-level blocks.
+   * Event merging may create multiple reasons: ['drag', 'bump', 'snap'].
+   */
+  reason?: string[];
 
   /** @param opt_block The moved block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
@@ -104,6 +118,9 @@ export class BlockMove extends BlockBase {
       json['newCoordinate'] = `${Math.round(this.newCoordinate.x)}, ` +
           `${Math.round(this.newCoordinate.y)}`;
     }
+    if (this.reason) {
+      json['reason'] = this.reason;
+    }
     if (!this.recordUndo) {
       json['recordUndo'] = this.recordUndo;
     }
@@ -131,6 +148,9 @@ export class BlockMove extends BlockBase {
     if (json['newCoordinate']) {
       const xy = json['newCoordinate'].split(',');
       this.newCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
+    }
+    if (json['reason'] !== undefined) {
+      this.reason = json['reason'];
     }
     if (json['recordUndo'] !== undefined) {
       this.recordUndo = json['recordUndo'];
@@ -162,6 +182,9 @@ export class BlockMove extends BlockBase {
       const xy = json['newCoordinate'].split(',');
       newEvent.newCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
     }
+    if (json['reason'] !== undefined) {
+      newEvent.reason = json['reason'];
+    }
     if (json['recordUndo'] !== undefined) {
       newEvent.recordUndo = json['recordUndo'];
     }
@@ -174,6 +197,15 @@ export class BlockMove extends BlockBase {
     this.newParentId = location.parentId;
     this.newInputName = location.inputName;
     this.newCoordinate = location.coordinate;
+  }
+
+  /**
+   * Set the reason for a move event.
+   *
+   * @param reason Why is this move happening?  'drag', 'bump', 'snap', ...
+   */
+  setReason(reason: string[]) {
+    this.reason = reason;
   }
 
   /**
@@ -253,7 +285,7 @@ export class BlockMove extends BlockBase {
     }
     if (coordinate) {
       const xy = block.getRelativeToSurfaceXY();
-      block.moveBy(coordinate.x - xy.x, coordinate.y - xy.y);
+      block.moveBy(coordinate.x - xy.x, coordinate.y - xy.y, this.reason);
     } else {
       let blockConnection = block.outputConnection;
       if (!blockConnection ||
@@ -286,6 +318,7 @@ export interface BlockMoveJson extends BlockBaseJson {
   newParentId?: string;
   newInputName?: string;
   newCoordinate?: string;
+  reason?: string[];
   recordUndo?: boolean;
 }
 

@@ -477,19 +477,19 @@ suite('Blocks', function() {
 
       this.getInputs = function() {
         return this.workspace
-            .connectionDBList[ConnectionType.INPUT_VALUE].connections_;
+            .connectionDBList[ConnectionType.INPUT_VALUE].connections;
       };
       this.getOutputs = function() {
         return this.workspace
-            .connectionDBList[ConnectionType.OUTPUT_VALUE].connections_;
+            .connectionDBList[ConnectionType.OUTPUT_VALUE].connections;
       };
       this.getNext = function() {
         return this.workspace
-            .connectionDBList[ConnectionType.NEXT_STATEMENT].connections_;
+            .connectionDBList[ConnectionType.NEXT_STATEMENT].connections;
       };
       this.getPrevious = function() {
         return this.workspace
-            .connectionDBList[ConnectionType.PREVIOUS_STATEMENT].connections_;
+            .connectionDBList[ConnectionType.PREVIOUS_STATEMENT].connections;
       };
 
       this.assertConnectionsEmpty = function() {

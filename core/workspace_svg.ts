@@ -641,8 +641,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     let x = 0;
     let y = 0;
     let scale = 1;
-    if (dom.containsNode(this.getCanvas(), element) ||
-        dom.containsNode(this.getBubbleCanvas(), element)) {
+    if (this.getCanvas().contains(element) ||
+        this.getBubbleCanvas().contains(element)) {
       // Before the SVG canvas, scale the coordinates.
       scale = this.scale;
     }
@@ -1454,6 +1454,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
             blockY += config.snapRadius * 2;
           }
         } while (collide);
+        // No 'reason' provided since events are disabled.
         block!.moveTo(new Coordinate(blockX, blockY));
       }
     } finally {
@@ -1818,7 +1819,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         continue;
       }
       const xy = block.getRelativeToSurfaceXY();
-      block.moveBy(-xy.x, cursorY - xy.y);
+      block.moveBy(-xy.x, cursorY - xy.y, ['cleanup']);
       block.snapToGrid();
       cursorY = block.getRelativeToSurfaceXY().y +
           block.getHeightWidth().height +
@@ -2511,14 +2512,25 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Close tooltips, context menus, dropdown selections, etc.
    *
-   * @param opt_onlyClosePopups Whether only popups should be closed.
+   * @param onlyClosePopups Whether only popups should be closed. Defaults to
+   *     false.
    */
-  hideChaff(opt_onlyClosePopups?: boolean) {
+  hideChaff(onlyClosePopups = false) {
     Tooltip.hide();
     WidgetDiv.hide();
     dropDownDiv.hideWithoutAnimation();
 
-    const onlyClosePopups = !!opt_onlyClosePopups;
+    this.hideComponents(onlyClosePopups);
+  }
+
+  /**
+   * Hide any autohideable components (like flyout, trashcan, and any
+   * user-registered components).
+   *
+   * @param onlyClosePopups Whether only popups should be closed. Defaults to
+   *     false.
+   */
+  hideComponents(onlyClosePopups = false) {
     const autoHideables = this.getComponentManager().getComponents(
         ComponentManager.Capability.AUTOHIDEABLE, true);
     autoHideables.forEach(

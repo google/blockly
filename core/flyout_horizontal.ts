@@ -134,7 +134,7 @@ export class HorizontalFlyout extends Flyout {
 
     const edgeWidth = targetWorkspaceViewMetrics.width - 2 * this.CORNER_RADIUS;
     const edgeHeight = this.height_ - this.CORNER_RADIUS;
-    this.setBackgroundPath_(edgeWidth, edgeHeight);
+    this.setBackgroundPath(edgeWidth, edgeHeight);
 
     const x = this.getX();
     const y = this.getY();
@@ -148,7 +148,7 @@ export class HorizontalFlyout extends Flyout {
    * @param width The width of the flyout, not including the rounded corners.
    * @param height The height of the flyout, not including rounded corners.
    */
-  private setBackgroundPath_(width: number, height: number) {
+  private setBackgroundPath(width: number, height: number) {
     const atTop = this.toolboxPosition_ === toolbox.Position.TOP;
     // Start at top left.
     const path: (string|number)[] = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];

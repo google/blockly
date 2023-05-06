@@ -97,23 +97,22 @@ export class Drawer extends BaseDrawer {
     }
     if (Types.isSpacer(row)) {
       const spacerRow = row as SpacerRow;
-      if (spacerRow.precedesStatement || spacerRow.followsStatement) {
-        const cornerHeight =
-            (this.constants_.INSIDE_CORNERS as InsideCorners).rightHeight;
+      const precedesStatement = spacerRow.precedesStatement;
+      const followsStatement = spacerRow.followsStatement;
+      if (precedesStatement || followsStatement) {
+        const insideCorners = this.constants_.INSIDE_CORNERS as InsideCorners;
+        const cornerHeight = insideCorners.rightHeight;
         const remainingHeight =
-            spacerRow.height - (spacerRow.precedesStatement ? cornerHeight : 0);
-        this.outlinePath_ +=
-            (spacerRow.followsStatement ?
-                 (this.constants_.INSIDE_CORNERS as InsideCorners)
-                     .pathBottomRight :
-                 '') +
-            (remainingHeight > 0 ?
-                 svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight) :
-                 '') +
-            (spacerRow.precedesStatement ?
-                 (this.constants_.INSIDE_CORNERS as InsideCorners)
-                     .pathTopRight :
-                 '');
+            spacerRow.height - (precedesStatement ? cornerHeight : 0);
+        const bottomRightPath =
+            followsStatement ? insideCorners.pathBottomRight : '';
+        const verticalPath = remainingHeight > 0 ?
+            svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight) :
+            '';
+        const topRightPath =
+            precedesStatement ? insideCorners.pathTopRight : '';
+        // Put all of the partial paths together.
+        this.outlinePath_ += bottomRightPath + verticalPath + topRightPath;
         return;
       }
     }
@@ -156,7 +155,6 @@ export class Drawer extends BaseDrawer {
     this.positionPreviousConnection_();
 
     this.outlinePath_ += svgPaths.moveBy(topRow.xPos, this.info_.startY);
-
     this.outlinePath_ += svgPaths.lineOnAxis('h', topRow.width);
   }
 
@@ -166,7 +164,6 @@ export class Drawer extends BaseDrawer {
     this.positionNextConnection_();
 
     this.outlinePath_ += svgPaths.lineOnAxis('V', bottomRow.baseline);
-
     this.outlinePath_ += svgPaths.lineOnAxis('h', -bottomRow.width);
   }
 
@@ -198,16 +195,15 @@ export class Drawer extends BaseDrawer {
     // Where to start drawing the notch, which is on the right side in LTR.
     const x = input.xPos + input.notchOffset + (input.shape as BaseShape).width;
 
+    const insideCorners = this.constants_.INSIDE_CORNERS;
     const innerTopLeftCorner = (input.shape as Notch).pathRight +
-        svgPaths.lineOnAxis(
-            'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
-        this.constants_.INSIDE_CORNERS.pathTop;
+        svgPaths.lineOnAxis('h', -(input.notchOffset - insideCorners.width)) +
+        insideCorners.pathTop;
 
-    const innerHeight = row.height - 2 * this.constants_.INSIDE_CORNERS.height;
+    const innerHeight = row.height - 2 * insideCorners.height;
 
-    const innerBottomLeftCorner = this.constants_.INSIDE_CORNERS.pathBottom +
-        svgPaths.lineOnAxis(
-            'h', input.notchOffset - this.constants_.INSIDE_CORNERS.width) +
+    const innerBottomLeftCorner = insideCorners.pathBottom +
+        svgPaths.lineOnAxis('h', input.notchOffset - insideCorners.width) +
         (input.connectedBottomNextConnection ? '' :
                                                (input.shape as Notch).pathLeft);
 

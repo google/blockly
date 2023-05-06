@@ -220,7 +220,7 @@ export function dispose() {
  * @param xml XML representation of new block.
  * @returns Function that creates a block.
  */
-export function callbackFactory(block: Block, xml: Element): Function {
+export function callbackFactory(block: Block, xml: Element): () => void {
   return () => {
     eventUtils.disable();
     let newBlock;

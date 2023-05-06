@@ -15,7 +15,8 @@ goog.declareModuleId('Blockly.FieldInput');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
 
-import type {BlockSvg} from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
+import * as bumpObjects from './bump_objects.js';
 import * as browserEvents from './browser_events.js';
 import * as dialog from './dialog.js';
 import * as dom from './utils/dom.js';
@@ -29,6 +30,7 @@ import {Coordinate} from './utils/coordinate.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import * as renderManagement from './render_management.js';
 
 /**
  * Supported types for FieldInput subclasses.
@@ -206,8 +208,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
 
   /**
    * Updates text field to match the colour/style of the block.
-   *
-   * @internal
    */
   override applyColour() {
     if (!this.sourceBlock_ || !this.getConstants()!.FULL_BLOCK_FIELDS) return;
@@ -488,6 +488,11 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
         this.getValueFromEditorText_(this.htmlInput_!.value),
         BlockChangeEventOriginType.INCOMPLETE_USER_INPUT);
     this.valueChangedSinceLastCompleteEvent_ = true;
+
+    // Resize the widget div after the block has finished rendering.
+    renderManagement.finishQueuedRenders().then(() => {
+      this.resizeEditor_();
+    });
   }
 
   /**
@@ -531,6 +536,29 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
 
     div!.style.left = xy.x + 'px';
     div!.style.top = xy.y + 'px';
+  }
+
+  /**
+   * Handles repositioning the WidgetDiv used for input fields when the
+   * workspace is resized. Will bump the block into the viewport and update the
+   * position of the field if necessary.
+   *
+   * @returns True for rendered workspaces, as we never want to hide the widget
+   *     div.
+   */
+  override repositionForWindowResize(): boolean {
+    const block = this.getSourceBlock();
+    // This shouldn't be possible. We should never have a WidgetDiv if not using
+    // rendered blocks.
+    if (!(block instanceof BlockSvg)) return false;
+
+    bumpObjects.bumpIntoBounds(
+        this.workspace_!,
+        this.workspace_!.getMetricsManager().getViewMetrics(true), block);
+
+    this.resizeEditor_();
+
+    return true;
   }
 
   /**

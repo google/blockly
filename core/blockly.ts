@@ -71,8 +71,11 @@ import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import {Icon} from './icon.js';
 import {inject} from './inject.js';
-import {Align, Input} from './input.js';
-import {inputTypes} from './input_types.js';
+import {Align, Input} from './inputs/input.js';
+import {inputTypes} from './inputs/input_types.js';
+import {DummyInput} from './inputs/dummy_input.js';
+import {StatementInput} from './inputs/statement_input.js';
+import {ValueInput} from './inputs/value_input.js';
 import {InsertionMarkerManager} from './insertion_marker_manager.js';
 import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
@@ -121,6 +124,7 @@ import * as uiPosition from './positionable_helpers.js';
 import * as Procedures from './procedures.js';
 import * as registry from './registry.js';
 import {RenderedConnection} from './rendered_connection.js';
+import * as renderManagement from './render_management.js';
 import * as blockRendering from './renderers/common/block_rendering.js';
 import * as constants from './constants.js';
 import * as geras from './renderers/geras/geras.js';
@@ -542,7 +546,7 @@ Names.prototype.populateProcedures =
     function(this: Names, workspace: Workspace) {
       const procedures = Procedures.allProcedures(workspace);
       // Flatten the return vs no-return procedure lists.
-      const flattenedProcedures: AnyDuringMigration[][] =
+      const flattenedProcedures =
           procedures[0].concat(procedures[1]);
       for (let i = 0; i < flattenedProcedures.length; i++) {
         this.getName(flattenedProcedures[i][0], Names.NameType.PROCEDURE);
@@ -691,6 +695,13 @@ export {IKeyboardAccessible};
 export {IMetricsManager};
 export {IMovable};
 export {Input};
+export const inputs = {
+  Input,
+  inputTypes,
+  DummyInput,
+  StatementInput,
+  ValueInput,
+};
 export {InsertionMarkerManager};
 export {IObservable, isObservable};
 export {IPositionable};
@@ -711,6 +722,7 @@ export {Msg, setLocale};
 export {Names};
 export {Options};
 export {RenderedConnection};
+export {renderManagement};
 export {Scrollbar};
 export {ScrollbarPair};
 export {ShortcutRegistry};

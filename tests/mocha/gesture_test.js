@@ -28,7 +28,7 @@ suite('Gesture', function() {
     const gestureWorkspace = fieldWorkspace.targetWorkspace || fieldWorkspace;
     const gesture = gestureWorkspace.currentGesture_;
     chai.assert.exists(gesture, 'Gesture exists after pointerdown.');
-    const isFieldClickSpy = sinon.spy(gesture, 'isFieldClick_');
+    const isFieldClickSpy = sinon.spy(gesture, 'isFieldClick');
 
     dispatchPointerEvent(eventTarget, 'pointerup');
     dispatchPointerEvent(eventTarget, 'click');
@@ -60,7 +60,7 @@ suite('Gesture', function() {
   test('Constructor', function() {
     const e = {id: 'dummy_test_event'};
     const gesture = new Blockly.Gesture(e, this.workspace);
-    chai.assert.equal(gesture.mostRecentEvent_, e);
+    chai.assert.equal(gesture.mostRecentEvent, e);
     chai.assert.equal(gesture.creatorWorkspace, this.workspace);
   });
 

@@ -13,7 +13,7 @@ import type {Connection} from './connection.js';
 import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
-import {inputTypes} from './input_types.js';
+import {inputTypes} from './inputs/input_types.js';
 import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';
 import * as utilsXml from './utils/xml.js';
@@ -433,7 +433,8 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
         const blockX = parseInt(xmlChildElement.getAttribute('x') ?? '10', 10);
         const blockY = parseInt(xmlChildElement.getAttribute('y') ?? '10', 10);
         if (!isNaN(blockX) && !isNaN(blockY)) {
-          block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
+          block.moveBy(
+              workspace.RTL ? width - blockX : blockX, blockY, ['create']);
         }
         variablesFirst = false;
       } else if (name === 'shadow') {
@@ -516,7 +517,7 @@ export function appendDomToWorkspace(
     offsetX = workspace.RTL ? topX - newRightX : topX - newLeftX;
     for (let i = 0; i < newBlockIds.length; i++) {
       const block = workspace.getBlockById(newBlockIds[i]);
-      block!.moveBy(offsetX, offsetY);
+      block!.moveBy(offsetX, offsetY, ['create']);
     }
   }
   return newBlockIds;

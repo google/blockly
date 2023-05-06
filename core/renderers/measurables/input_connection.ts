@@ -8,7 +8,7 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.InputConnection');
 
 import type {BlockSvg} from '../../block_svg.js';
-import type {Input} from '../../input.js';
+import type {Input} from '../../inputs/input.js';
 import type {RenderedConnection} from '../../rendered_connection.js';
 import type {ConstantProvider} from '../common/constants.js';
 

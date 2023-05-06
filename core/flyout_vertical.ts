@@ -133,7 +133,7 @@ export class VerticalFlyout extends Flyout {
     const edgeWidth = this.width_ - this.CORNER_RADIUS;
     const edgeHeight =
         targetWorkspaceViewMetrics.height - 2 * this.CORNER_RADIUS;
-    this.setBackgroundPath_(edgeWidth, edgeHeight);
+    this.setBackgroundPath(edgeWidth, edgeHeight);
 
     const x = this.getX();
     const y = this.getY();
@@ -147,7 +147,7 @@ export class VerticalFlyout extends Flyout {
    * @param width The width of the flyout, not including the rounded corners.
    * @param height The height of the flyout, not including rounded corners.
    */
-  private setBackgroundPath_(width: number, height: number) {
+  private setBackgroundPath(width: number, height: number) {
     const atRight = this.toolboxPosition_ === toolbox.Position.RIGHT;
     const totalWidth = width + this.CORNER_RADIUS;
 

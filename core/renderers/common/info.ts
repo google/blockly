@@ -8,11 +8,11 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.RenderInfo');
 
 import type {BlockSvg} from '../../block_svg.js';
-import {Align, Input} from '../../input.js';
-import {inputTypes} from '../../input_types.js';
+import {Align, Input} from '../../inputs/input.js';
 import type {RenderedConnection} from '../../rendered_connection.js';
 import type {Measurable} from '../measurables/base.js';
 import {BottomRow} from '../measurables/bottom_row.js';
+import {DummyInput} from '../../inputs/dummy_input.js';
 import {ExternalValueInput} from '../measurables/external_value_input.js';
 import {Field} from '../measurables/field.js';
 import {Hat} from '../measurables/hat.js';
@@ -28,9 +28,11 @@ import {RoundCorner} from '../measurables/round_corner.js';
 import type {Row} from '../measurables/row.js';
 import {SpacerRow} from '../measurables/spacer_row.js';
 import {SquareCorner} from '../measurables/square_corner.js';
-import {StatementInput} from '../measurables/statement_input.js';
+import {StatementInput as StatementInputMeasurable} from '../measurables/statement_input.js';
+import {StatementInput} from '../../inputs/statement_input.js';
 import {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
+import {ValueInput} from '../../inputs/value_input.js';
 
 import type {ConstantProvider} from './constants.js';
 import type {Renderer} from './renderer.js';
@@ -241,7 +243,7 @@ export class RenderInfo {
     }
 
     const precedesStatement = this.block_.inputList.length &&
-        this.block_.inputList[0].type === inputTypes.STATEMENT;
+        this.block_.inputList[0] instanceof StatementInput;
 
     // This is the minimum height for the row. If one of its elements has a
     // greater height it will be overwritten in the compute pass.
@@ -264,8 +266,8 @@ export class RenderInfo {
     this.bottomRow.hasNextConnection = !!this.block_.nextConnection;
 
     const followsStatement = this.block_.inputList.length &&
-        this.block_.inputList[this.block_.inputList.length - 1].type ===
-            inputTypes.STATEMENT;
+        this.block_.inputList[this.block_.inputList.length - 1] instanceof
+            StatementInput;
 
     // This is the minimum height for the row. If one of its elements has a
     // greater height it will be overwritten in the compute pass.
@@ -308,16 +310,17 @@ export class RenderInfo {
    */
   protected addInput_(input: Input, activeRow: Row) {
     // Non-dummy inputs have visual representations onscreen.
-    if (this.isInline && input.type === inputTypes.VALUE) {
+    if (this.isInline && input instanceof ValueInput) {
       activeRow.elements.push(new InlineInput(this.constants_, input));
       activeRow.hasInlineInput = true;
-    } else if (input.type === inputTypes.STATEMENT) {
-      activeRow.elements.push(new StatementInput(this.constants_, input));
+    } else if (input instanceof StatementInput) {
+      activeRow.elements.push(
+          new StatementInputMeasurable(this.constants_, input));
       activeRow.hasStatement = true;
-    } else if (input.type === inputTypes.VALUE) {
+    } else if (input instanceof ValueInput) {
       activeRow.elements.push(new ExternalValueInput(this.constants_, input));
       activeRow.hasExternalInput = true;
-    } else if (input.type === inputTypes.DUMMY) {
+    } else if (input instanceof DummyInput) {
       // Dummy inputs have no visual representation, but the information is
       // still important.
       activeRow.minHeight = Math.max(
@@ -346,12 +349,12 @@ export class RenderInfo {
       return false;
     }
     // A statement input or an input following one always gets a new row.
-    if (input.type === inputTypes.STATEMENT ||
-        lastInput.type === inputTypes.STATEMENT) {
+    if (input instanceof StatementInput ||
+        lastInput instanceof StatementInput) {
       return true;
     }
     // Value and dummy inputs get new row if inputs are not inlined.
-    if (input.type === inputTypes.VALUE || input.type === inputTypes.DUMMY) {
+    if (input instanceof ValueInput || input instanceof DummyInput) {
       return !this.isInline;
     }
     return false;

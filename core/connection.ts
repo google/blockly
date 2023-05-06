@@ -16,7 +16,7 @@ import type {Block} from './block.js';
 import {ConnectionType} from './connection_type.js';
 import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
-import type {Input} from './input.js';
+import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import * as blocks from './serialization/blocks.js';
@@ -51,10 +51,10 @@ export class Connection implements IASTNodeLocationWithBlock {
   disposed = false;
 
   /** List of compatible value types.  Null if all types are compatible. */
-  private check_: string[]|null = null;
+  private check: string[]|null = null;
 
   /** DOM representation of a shadow block, or null if none. */
-  private shadowDom_: Element|null = null;
+  private shadowDom: Element|null = null;
 
   /**
    * Horizontal location of this connection.
@@ -70,7 +70,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    */
   y = 0;
 
-  private shadowState_: blocks.State|null = null;
+  private shadowState: blocks.State|null = null;
 
   /**
    * @param source The block establishing this connection.
@@ -99,7 +99,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     // Make sure the parentConnection is available.
     let orphan;
     if (this.isConnected()) {
-      const shadowState = this.stashShadowState_();
+      const shadowState = this.stashShadowState();
       const target = this.targetBlock();
       if (target!.isShadow()) {
         target!.dispose(false);
@@ -107,7 +107,7 @@ export class Connection implements IASTNodeLocationWithBlock {
         this.disconnectInternal();
         orphan = target;
       }
-      this.applyShadowState_(shadowState);
+      this.applyShadowState(shadowState);
     }
 
     // Connect the new connection to the parent.
@@ -115,6 +115,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     if (eventUtils.isEnabled()) {
       event =
           new (eventUtils.get(eventUtils.BLOCK_MOVE))(childBlock) as BlockMove;
+      event.setReason(['connect']);
     }
     connectReciprocally(this, childConnection);
     childBlock.setParent(parentBlock);
@@ -147,7 +148,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     // isConnected returns true for shadows and non-shadows.
     if (this.isConnected()) {
       // Destroy the attached shadow block & its children (if it exists).
-      this.setShadowStateInternal_();
+      this.setShadowStateInternal();
 
       const targetBlock = this.targetBlock();
       if (targetBlock && !targetBlock.isDeadOrDying()) {
@@ -272,6 +273,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     if (eventUtils.isEnabled()) {
       event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
                   childConnection.getSourceBlock()) as BlockMove;
+      event.setReason(['disconnect']);
     }
     const otherConnection = this.targetConnection;
     if (otherConnection) {
@@ -319,7 +321,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    */
   protected respawnShadow_() {
     // Have to keep respawnShadow_ for backwards compatibility.
-    this.createShadowBlock_(true);
+    this.createShadowBlock(true);
   }
 
   /**
@@ -360,10 +362,10 @@ export class Connection implements IASTNodeLocationWithBlock {
       if (!Array.isArray(check)) {
         check = [check];
       }
-      this.check_ = check;
+      this.check = check;
       this.onCheckChanged_();
     } else {
-      this.check_ = null;
+      this.check = null;
     }
     return this;
   }
@@ -375,7 +377,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    *     Null if all types are compatible.
    */
   getCheck(): string[]|null {
-    return this.check_;
+    return this.check;
   }
 
   /**
@@ -384,7 +386,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @param shadowDom DOM representation of a block or null.
    */
   setShadowDom(shadowDom: Element|null) {
-    this.setShadowStateInternal_({shadowDom});
+    this.setShadowStateInternal({shadowDom});
   }
 
   /**
@@ -399,7 +401,7 @@ export class Connection implements IASTNodeLocationWithBlock {
   getShadowDom(returnCurrent?: boolean): Element|null {
     return returnCurrent && this.targetBlock()!.isShadow() ?
         Xml.blockToDom((this.targetBlock() as Block)) as Element :
-        this.shadowDom_;
+        this.shadowDom;
   }
 
   /**
@@ -408,7 +410,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @param shadowState An state represetation of the block or null.
    */
   setShadowState(shadowState: blocks.State|null) {
-    this.setShadowStateInternal_({shadowState});
+    this.setShadowStateInternal({shadowState});
   }
 
   /**
@@ -425,7 +427,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     if (returnCurrent && this.targetBlock() && this.targetBlock()!.isShadow()) {
       return blocks.save(this.targetBlock() as Block);
     }
-    return this.shadowState_;
+    return this.shadowState;
   }
 
   /**
@@ -506,13 +508,13 @@ export class Connection implements IASTNodeLocationWithBlock {
    *
    * @returns The state of both the shadowDom_ and shadowState_ properties.
    */
-  private stashShadowState_():
+  private stashShadowState():
       {shadowDom: Element|null, shadowState: blocks.State|null} {
     const shadowDom = this.getShadowDom(true);
     const shadowState = this.getShadowState(true);
     // Set to null so it doesn't respawn.
-    this.shadowDom_ = null;
-    this.shadowState_ = null;
+    this.shadowDom = null;
+    this.shadowState = null;
     return {shadowDom, shadowState};
   }
 
@@ -522,12 +524,12 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @param param0 The state to reapply to the shadowDom_ and shadowState_
    *     properties.
    */
-  private applyShadowState_({shadowDom, shadowState}: {
+  private applyShadowState({shadowDom, shadowState}: {
     shadowDom: Element|null,
     shadowState: blocks.State|null
   }) {
-    this.shadowDom_ = shadowDom;
-    this.shadowState_ = shadowState;
+    this.shadowDom = shadowDom;
+    this.shadowState = shadowState;
   }
 
   /**
@@ -535,31 +537,31 @@ export class Connection implements IASTNodeLocationWithBlock {
    *
    * @param param0 The state to set the shadow of this connection to.
    */
-  private setShadowStateInternal_({shadowDom = null, shadowState = null}: {
+  private setShadowStateInternal({shadowDom = null, shadowState = null}: {
     shadowDom?: Element|null,
     shadowState?: blocks.State|null
   } = {}) {
     // One or both of these should always be null.
     // If neither is null, the shadowState will get priority.
-    this.shadowDom_ = shadowDom;
-    this.shadowState_ = shadowState;
+    this.shadowDom = shadowDom;
+    this.shadowState = shadowState;
 
     const target = this.targetBlock();
     if (!target) {
       this.respawnShadow_();
       if (this.targetBlock() && this.targetBlock()!.isShadow()) {
-        this.serializeShadow_(this.targetBlock());
+        this.serializeShadow(this.targetBlock());
       }
     } else if (target.isShadow()) {
       target.dispose(false);
       if (this.getSourceBlock().isDeadOrDying()) return;
       this.respawnShadow_();
       if (this.targetBlock() && this.targetBlock()!.isShadow()) {
-        this.serializeShadow_(this.targetBlock());
+        this.serializeShadow(this.targetBlock());
       }
     } else {
-      const shadow = this.createShadowBlock_(false);
-      this.serializeShadow_(shadow);
+      const shadow = this.createShadowBlock(false);
+      this.serializeShadow(shadow);
       if (shadow) {
         shadow.dispose(false);
       }
@@ -575,7 +577,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @returns The shadow block that was created, or null if both the
    *     shadowState_ and shadowDom_ are null.
    */
-  private createShadowBlock_(attemptToConnect: boolean): Block|null {
+  private createShadowBlock(attemptToConnect: boolean): Block|null {
     const parentBlock = this.getSourceBlock();
     const shadowState = this.getShadowState();
     const shadowDom = this.getShadowDom();
@@ -626,12 +628,12 @@ export class Connection implements IASTNodeLocationWithBlock {
    *
    * @param shadow The shadow to serialize, or null.
    */
-  private serializeShadow_(shadow: Block|null) {
+  private serializeShadow(shadow: Block|null) {
     if (!shadow) {
       return;
     }
-    this.shadowDom_ = Xml.blockToDom(shadow) as Element;
-    this.shadowState_ = blocks.save(shadow);
+    this.shadowDom = Xml.blockToDom(shadow) as Element;
+    this.shadowState = blocks.save(shadow);
   }
 
   /**

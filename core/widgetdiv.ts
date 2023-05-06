@@ -9,6 +9,7 @@ goog.declareModuleId('Blockly.WidgetDiv');
 
 import * as common from './common.js';
 import * as dom from './utils/dom.js';
+import type {Field} from './field.js';
 import type {Rect} from './utils/rect.js';
 import type {Size} from './utils/size.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
@@ -235,5 +236,27 @@ function calculateY(
   } else {
     // The top of the widget is at the bottom of the field.
     return anchorBBox.bottom;
+  }
+}
+
+/**
+ * Determine if the owner is a field for purposes of repositioning.
+ * We can't simply check `instanceof Field` as that would introduce a circular
+ * dependency.
+ */
+function isRepositionable(item: any): item is Field {
+  return !!item?.repositionForWindowResize;
+}
+
+/**
+ * Reposition the widget div if the owner of it says to.
+ * If the owner isn't a field, just give up and hide it.
+ */
+export function repositionForWindowResize(): void {
+  if (!isRepositionable(owner) || !owner.repositionForWindowResize()) {
+    // If the owner is not a Field, or if the owner returns false from the
+    // reposition method, we should hide the widget div. Otherwise, we'll assume
+    // the owner handled any needed resize.
+    hide();
   }
 }

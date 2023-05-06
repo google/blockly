@@ -31,7 +31,7 @@ import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
 import type {Icon} from './icon.js';
-import type {Input} from './input.js';
+import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
@@ -392,15 +392,17 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @param dx Horizontal offset in workspace units.
    * @param dy Vertical offset in workspace units.
+   * @param reason Why is this move happening?  'drag', 'bump', 'snap', ...
    */
-  override moveBy(dx: number, dy: number) {
+  override moveBy(dx: number, dy: number, reason?: string[]) {
     if (this.parentBlock_) {
-      throw Error('Block has parent.');
+      throw Error('Block has parent');
     }
     const eventsEnabled = eventUtils.isEnabled();
     let event: BlockMove|null = null;
     if (eventsEnabled) {
       event = new (eventUtils.get(eventUtils.BLOCK_MOVE))!(this) as BlockMove;
+      reason && event.setReason(reason);
     }
     const xy = this.getRelativeToSurfaceXY();
     this.translate(xy.x + dx, xy.y + dy);
@@ -463,10 +465,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Move a block to a position.
    *
    * @param xy The position to move to in workspace units.
+   * @param reason Why is this move happening?  'drag', 'bump', 'snap', ...
    */
-  moveTo(xy: Coordinate) {
+  moveTo(xy: Coordinate, reason?: string[]) {
     const curXY = this.getRelativeToSurfaceXY();
-    this.moveBy(xy.x - curXY.x, xy.y - curXY.y);
+    this.moveBy(xy.x - curXY.x, xy.y - curXY.y, reason);
   }
 
   /**
@@ -541,7 +544,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const dy =
         Math.round(Math.round((xy.y - half) / spacing) * spacing + half - xy.y);
     if (dx || dy) {
-      this.moveBy(dx, dy);
+      this.moveBy(dx, dy, ['snap']);
     }
   }
 
@@ -947,7 +950,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   updateDisabled() {
     const disabled = !this.isEnabled() || this.getInheritedDisabled();
-    if (this.visuallyDisabled === disabled) return;
+
+    if (this.visuallyDisabled === disabled) {
+      this.getNextBlock()?.updateDisabled();
+      return;
+    }
+
     this.applyColour();
     this.visuallyDisabled = disabled;
     for (const child of this.getChildren(false)) {
@@ -1334,16 +1342,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
   }
 
-  /**
-   * Add a value input, statement input or local variable to this block.
-   *
-   * @param type One of Blockly.inputTypes.
-   * @param name Language-neutral identifier which may used to find this input
-   *     again.  Should be unique to this block.
-   * @returns The input object created.
-   */
-  protected override appendInput_(type: number, name: string): Input {
-    const input = super.appendInput_(type, name);
+  /** @override */
+  override appendInput(input: Input): Input {
+    super.appendInput(input);
 
     if (this.rendered) {
       this.queueRender();
@@ -1611,10 +1612,13 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Triggers a rerender after a delay to allow for batching.
    *
+   * @returns A promise that resolves after the currently queued renders have
+   *     been completed. Used for triggering other behavior that relies on
+   *     updated size/position location for the block.
    * @internal
    */
-  queueRender() {
-    queueRender(this);
+  queueRender(): Promise<void> {
+    return queueRender(this);
   }
 
   /**

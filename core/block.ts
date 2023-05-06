@@ -31,8 +31,7 @@ import * as eventUtils from './events/utils.js';
 import * as Extensions from './extensions.js';
 import type {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {Align, Input} from './input.js';
-import {inputTypes} from './input_types.js';
+import {Align, Input} from './inputs/input.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IDeletable} from './interfaces/i_deletable.js';
 import type {Mutator} from './mutator.js';
@@ -41,9 +40,13 @@ import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as parsing from './utils/parsing.js';
+import * as registry from './registry.js';
 import {Size} from './utils/size.js';
 import type {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
+import {DummyInput} from './inputs/dummy_input.js';
+import {ValueInput} from './inputs/value_input.js';
+import {StatementInput} from './inputs/statement_input.js';
 
 
 /**
@@ -1297,15 +1300,15 @@ export class Block implements IASTNodeLocation, IDeletable {
     }
     // Not defined explicitly.  Figure out what would look best.
     for (let i = 1; i < this.inputList.length; i++) {
-      if (this.inputList[i - 1].type === inputTypes.DUMMY &&
-          this.inputList[i].type === inputTypes.DUMMY) {
+      if (this.inputList[i - 1] instanceof DummyInput &&
+          this.inputList[i] instanceof DummyInput) {
         // Two dummy inputs in a row.  Don't inline them.
         return false;
       }
     }
     for (let i = 1; i < this.inputList.length; i++) {
-      if (this.inputList[i - 1].type === inputTypes.VALUE &&
-          this.inputList[i].type === inputTypes.DUMMY) {
+      if (this.inputList[i - 1] instanceof ValueInput &&
+          this.inputList[i] instanceof DummyInput) {
         // Dummy input after a value input.  Inline them.
         return true;
       }
@@ -1482,36 +1485,65 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Shortcut for appending a value input row.
+   * Appends a value input row.
    *
    * @param name Language-neutral identifier which may used to find this input
    *     again.  Should be unique to this block.
    * @returns The input object created.
    */
   appendValueInput(name: string): Input {
-    return this.appendInput_(inputTypes.VALUE, name);
+    return this.appendInput(new ValueInput(
+        name, this, this.makeConnection_(ConnectionType.INPUT_VALUE)));
   }
 
   /**
-   * Shortcut for appending a statement input row.
+   * Appends a statement input row.
    *
    * @param name Language-neutral identifier which may used to find this input
    *     again.  Should be unique to this block.
    * @returns The input object created.
    */
   appendStatementInput(name: string): Input {
-    return this.appendInput_(inputTypes.STATEMENT, name);
+    this.statementInputCount++;
+    return this.appendInput(new StatementInput(
+        name, this, this.makeConnection_(ConnectionType.NEXT_STATEMENT)));
   }
 
   /**
-   * Shortcut for appending a dummy input row.
+   * Appends a dummy input row.
    *
-   * @param opt_name Language-neutral identifier which may used to find this
-   *     input again.  Should be unique to this block.
+   * @param name Optional language-neutral identifier which may used to find
+   *     this input again.  Should be unique to this block.
    * @returns The input object created.
    */
-  appendDummyInput(opt_name?: string): Input {
-    return this.appendInput_(inputTypes.DUMMY, opt_name || '');
+  appendDummyInput(name = ''): Input {
+    return this.appendInput(new DummyInput(name, this));
+  }
+
+  /**
+   * Appends the given input row.
+   *
+   * Allows for custom inputs to be appended to the block.
+   */
+  appendInput(input: Input): Input {
+    this.inputList.push(input);
+    return input;
+  }
+
+  /**
+   * Appends an input with the given input type and name to the block after
+   * constructing it from the registry.
+   *
+   * @param type The name the input is registered under in the registry.
+   * @param name The name the input will have within the block.
+   * @returns The constucted input, or null if there was no constructor
+   *     associated with the type.
+   */
+  private appendInputFromRegistry(type: string, name: string): Input|null {
+    const inputConstructor =
+        registry.getClass(registry.Type.INPUT, type, false);
+    if (!inputConstructor) return null;
+    return this.appendInput(new inputConstructor(name, this, null));
   }
 
   /**
@@ -1850,6 +1882,10 @@ export class Block implements IASTNodeLocation, IDeletable {
       case 'input_dummy':
         input = this.appendDummyInput(element['name']);
         break;
+      default: {
+        input = this.appendInputFromRegistry(element['type'], element['name']);
+        break;
+      }
     }
     // Should never be hit because of interpolate_'s checks, but just in case.
     if (!input) {
@@ -1881,7 +1917,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   private isInputKeyword_(str: string): boolean {
     return str === 'input_value' || str === 'input_statement' ||
-        str === 'input_dummy';
+        str === 'input_dummy' || registry.hasItem(registry.Type.INPUT, str);
   }
 
   /**
@@ -1900,28 +1936,6 @@ export class Block implements IASTNodeLocation, IDeletable {
       };
     }
     return null;
-  }
-
-  /**
-   * Add a value input, statement input or local variable to this block.
-   *
-   * @param type One of Blockly.inputTypes.
-   * @param name Language-neutral identifier which may used to find this input
-   *     again.  Should be unique to this block.
-   * @returns The input object created.
-   */
-  protected appendInput_(type: number, name: string): Input {
-    let connection = null;
-    if (type === inputTypes.VALUE || type === inputTypes.STATEMENT) {
-      connection = this.makeConnection_(type);
-    }
-    if (type === inputTypes.STATEMENT) {
-      this.statementInputCount++;
-    }
-    const input = new Input(type, name, this, connection);
-    // Append input to list.
-    this.inputList.push(input);
-    return input;
   }
 
   /**
@@ -1999,9 +2013,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   removeInput(name: string, opt_quiet?: boolean): boolean {
     for (let i = 0, input; input = this.inputList[i]; i++) {
       if (input.name === name) {
-        if (input.type === inputTypes.STATEMENT) {
-          this.statementInputCount--;
-        }
+        if (input instanceof StatementInput) this.statementInputCount--;
         input.dispose();
         this.inputList.splice(i, 1);
         return true;
@@ -2098,13 +2110,15 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @param dx Horizontal offset, in workspace units.
    * @param dy Vertical offset, in workspace units.
+   * @param reason Why is this move happening?  'drag', 'bump', 'snap', ...
    */
-  moveBy(dx: number, dy: number) {
+  moveBy(dx: number, dy: number, reason?: string[]) {
     if (this.parentBlock_) {
-      throw Error('Block has parent.');
+      throw Error('Block has parent');
     }
     const event =
         new (eventUtils.get(eventUtils.BLOCK_MOVE))(this) as BlockMove;
+    reason && event.setReason(reason);
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);

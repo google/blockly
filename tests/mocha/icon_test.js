@@ -19,7 +19,7 @@ suite.skip('Icon', function() {
     sharedTestTeardown.call(this);
   });
 
-  suite('hooks getting properly triggered by the block', function() {
+  suite('Hooks getting properly triggered by the block', function() {
     class MockIcon {
       initView() {}
 
@@ -51,7 +51,7 @@ suite.skip('Icon', function() {
       return block;
     }
 
-    suite('triggering view initialization', function() {
+    suite('Triggering view initialization', function() {
       test('initView is not called by headless blocks', function() {
         const workspace = createHeadlessWorkspace();
         const block = createUninitializedBlock(workspace);
@@ -95,7 +95,7 @@ suite.skip('Icon', function() {
           });
     });
 
-    suite('triggering applying colors', function() {
+    suite('Triggering applying colors', function() {
       test('applyColour is not called by headless blocks', function() {
         const workspace = createHeadlessWorkspace();
         const block = createUninitializedBlock(workspace);
@@ -190,7 +190,7 @@ suite.skip('Icon', function() {
       });
     });
 
-    suite('triggering updating editability', function() {
+    suite('Triggering updating editability', function() {
       test('updateEditable is not called by headless blocks', function() {
         const workspace = createHeadlessWorkspace();
         const block = createUninitializedBlock(workspace);
@@ -267,7 +267,7 @@ suite.skip('Icon', function() {
           });
     });
 
-    suite('triggering updating collapsed-ness', function() {
+    suite('Triggering updating collapsed-ness', function() {
       test('updateCollapsed is not called by headless blocks', function() {
         const workspace = createHeadlessWorkspace();
         const block = createUninitializedBlock(workspace);

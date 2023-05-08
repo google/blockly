@@ -1342,7 +1342,7 @@ suite('Blocks', function() {
     });
   });
 
-  suite('icon management', function() {
+  suite('Icon management', function() {
     class MockIconA {
       getType() {return 'A';}
     }
@@ -1351,10 +1351,12 @@ suite('Blocks', function() {
       getType() {return 'B';}
     }
     
-    suite.skip('adding icons', function() {
+    suite.skip('Adding icons', function() {
       setup(function() {
+        // Tear down the old headless workspace and create a new rendered one.
         workspaceTeardown.call(this, this.workspace);
         this.workspace = Blockly.inject('blocklyDiv');
+
         this.block = this.workspace.newBlock('stack_block');
         this.renderSpy = sinon.spy(this.block, 'queueRender');
       });
@@ -1386,10 +1388,12 @@ suite('Blocks', function() {
       });
     });
 
-    suite.skip('removing icons', function() {
+    suite.skip('Removing icons', function() {
       setup(function() {
+        // Tear down the old headless workspace and create a new rendered one.
         workspaceTeardown.call(this, this.workspace);
         this.workspace = Blockly.inject('blocklyDiv');
+
         this.block = this.workspace.newBlock('stack_block');
         this.renderSpy = sinon.spy(this.block, 'queueRender');
       });
@@ -1412,7 +1416,7 @@ suite('Blocks', function() {
       test('removing an icon that does not exist returns false', function() {
         chai.assert.isFalse(
             this.block.removeIcon('B'),
-            'Expected removeIcon to return true');
+            'Expected removeIcon to return false');
       });
 
       test('removing an icon triggers a render', function() {
@@ -1425,7 +1429,7 @@ suite('Blocks', function() {
       });
     });
 
-    suite.skip('getting icons', function() {
+    suite.skip('Getting icons', function() {
       setup(function() {
         this.block = this.workspace.newBlock('stack_block');
       });
@@ -1464,12 +1468,13 @@ suite('Blocks', function() {
         chai.assert.isNull(
             this.block.getIcon('B'),
             'Expected getIcon to return null if there is no ' +
-            'icon with a missing type');
+            'icon with a matching type');
       });
     });
 
-    suite('bubbles and collapsing', function() {
+    suite('Bubbles and collapsing', function() {
       setup(function() {
+        // Tear down the old headless workspace and create a new rendered one.
         workspaceTeardown.call(this, this.workspace);
         this.workspace = Blockly.inject('blocklyDiv');
       });

@@ -7,6 +7,15 @@
 goog.declareModuleId('Blockly.test.helpers.blockDefinitions');
 
 
+export function defineEmptyBlock(name = 'empty_block') {
+  Blockly.defineBlocksWithJsonArray([
+    {
+      "type": name,
+      "message0": "",
+    },
+  ]);
+}
+
 export function defineStackBlock(name = 'stack_block') {
   Blockly.defineBlocksWithJsonArray([{
     "type": name,

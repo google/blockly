@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {Coordinate} from '../utils/coordinate.js';
-import {Size} from '../utils/size.js';
+import type {Coordinate} from '../utils/coordinate.js';
+import type {Size} from '../utils/size.js';
 
 
 export interface IIcon {
@@ -19,9 +19,9 @@ export interface IIcon {
   /**
    * Creates the SVG elements for the icon that will live on the block.
    *
-   * @param pointerdownListener The listener to be attached to the root svg
-   *     element. This passes off the pointer down to Blockly's gesture system
-   *     so that clicks and drags can be properly handled.
+   * @param pointerdownListener An event listener that must be attached to the
+   *     root SVG element by the implementation of `initView`. Used by Blockly's
+   *     gesture system to properly handle clicks and drags.
    */
   initView(pointerdownListener: (e: PointerEvent) => void): void;
 
@@ -37,9 +37,8 @@ export interface IIcon {
 
   /**
    * @return the "weight" of the icon, which determines the static order which
-   *     icons should be rendered in.
-   *
-   *     More positive numbers are rendered farther toward the end of the block.
+   *     icons should be rendered in. More positive numbers are rendered farther
+   *     toward the end of the block.
    */
   getWeight(): number;
 

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {Block} from '../block.js';
-import {BlockSvg} from '../block_svg.js';
+import type {Block} from '../block.js';
+import type {BlockSvg} from '../block_svg.js';
 import * as browserEvents from '../browser_events.js';
-import {IIcon} from '../interfaces/i_icon.js';
+import type {IIcon} from '../interfaces/i_icon.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import {Size} from '../utils/size.js';

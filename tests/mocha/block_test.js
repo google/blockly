@@ -53,6 +53,7 @@ suite('Blocks', function() {
         "nextStatement": null,
       }]);
   });
+
   teardown(function() {
     sharedTestTeardown.call(this);
   });
@@ -199,6 +200,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Disposal', function() {
     suite('calling destroy', function() {
       setup(function() {
@@ -396,6 +398,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Remove Input', function() {
     setup(function() {
       Blockly.defineBlocksWithJsonArray([
@@ -471,6 +474,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Connection Tracking', function() {
     setup(function() {
       this.workspace = Blockly.inject('blocklyDiv');
@@ -1155,6 +1159,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Comments', function() {
     suite('Set/Get Text', function() {
       function assertCommentEvent(eventSpy, oldValue, newValue) {
@@ -1275,6 +1280,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Getting/Setting Field (Values)', function() {
     setup(function() {
       this.workspace = Blockly.inject('blocklyDiv');
@@ -1335,12 +1341,144 @@ suite('Blocks', function() {
       }
     });
   });
-  suite('Icon Management', function() {
-    suite('Bubbles and Collapsing', function() {
+
+  suite('Icon management', function() {
+    class MockIconA {
+      getType() {return 'A';}
+    }
+
+    class MockIconB {
+      getType() {return 'B';}
+    }
+    
+    suite.skip('Adding icons', function() {
       setup(function() {
+        // Tear down the old headless workspace and create a new rendered one.
+        workspaceTeardown.call(this, this.workspace);
+        this.workspace = Blockly.inject('blocklyDiv');
+
+        this.block = this.workspace.newBlock('stack_block');
+        this.renderSpy = sinon.spy(this.block, 'queueRender');
+      });
+
+      teardown(function() {
+        this.renderSpy.restore();
+        workspaceTeardown.call(this, this.workspace);
+      });
+
+      test('icons get added to the block', function() {
+        this.block.addIcon(new MockIconA());
+        chai.assert.isTrue(
+            this.block.hasIcon('A'), 'Expected the icon to be added');
+      });
+
+      test('adding two icons of the same type throws', function() {
+        this.block.addIcon(new MockIconA());
+        chai.assert.throws(
+            () => {this.block.addIcon(new MockIconA());},
+            'Expected adding an icon of the same type to throw');
+      });
+
+      test('adding an icon triggers a render', function() {
+        this.renderSpy.resetHistory();
+        this.block.addIcon(new MockIconA());
+        chai.assert.isTrue(
+            this.renderSpy.calledOnce,
+            'Expected adding an icon to trigger a render');
+      });
+    });
+
+    suite.skip('Removing icons', function() {
+      setup(function() {
+        // Tear down the old headless workspace and create a new rendered one.
+        workspaceTeardown.call(this, this.workspace);
+        this.workspace = Blockly.inject('blocklyDiv');
+
+        this.block = this.workspace.newBlock('stack_block');
+        this.renderSpy = sinon.spy(this.block, 'queueRender');
+      });
+
+      teardown(function() {
+        this.renderSpy.restore();
+        workspaceTeardown.call(this, this.workspace);
+      });
+
+      test('icons get removed from the block', function() {
+        this.block.addIcon(new MockIconA());
+        chai.assert.isTrue(
+            this.block.removeIcon('A'),
+            'Expected removeIcon to return true');
+        chai.assert.isFalse(
+            this.block.hasIcon('A'),
+            'Expected the icon to be removed');
+      });
+
+      test('removing an icon that does not exist returns false', function() {
+        chai.assert.isFalse(
+            this.block.removeIcon('B'),
+            'Expected removeIcon to return false');
+      });
+
+      test('removing an icon triggers a render', function() {
+        this.renderSpy.resetHistory();
+        this.block.addIcon(new MockIconA());
+        this.block.removeIcon('A');
+        chai.assert.isTrue(
+            this.renderSpy.calledOnce,
+            'Expected removing an icon to trigger a render');
+      });
+    });
+
+    suite.skip('Getting icons', function() {
+      setup(function() {
+        this.block = this.workspace.newBlock('stack_block');
+      });
+
+      test('all icons are returned from getIcons', function() {
+        const iconA = new MockIconA();
+        const iconB = new MockIconB();
+        this.block.addIcon(iconA);
+        this.block.addIcon(iconB);
+        chai.assert.sameMembers(
+            this.block.getIcons(),
+            [iconA, iconB],
+            'Expected getIcon to return both icons');
+      });
+
+      test('if there are no icons, getIcons returns an empty array', function() {
+        chai.assert.isEmpty(
+            this.block.getIcons(),
+            'Expected getIcons to return an empty array ' +
+            'for a block with no icons');
+      });
+
+      test('specific icons are returned from getIcon', function() {
+        const iconA = new MockIconA();
+        const iconB = new MockIconB();
+        this.block.addIcon(iconA);
+        this.block.addIcon(iconB);
+        chai.assert.equal(
+            this.block.getIcon('B'),
+            iconB,
+            'Expected getIcon to return the icon with the given type');
+      });
+
+      test('if there is no matching icon, getIcon returns null', function() {
+        this.block.addIcon(new MockIconA());
+        chai.assert.isNull(
+            this.block.getIcon('B'),
+            'Expected getIcon to return null if there is no ' +
+            'icon with a matching type');
+      });
+    });
+
+    suite('Bubbles and collapsing', function() {
+      setup(function() {
+        // Tear down the old headless workspace and create a new rendered one.
         workspaceTeardown.call(this, this.workspace);
         this.workspace = Blockly.inject('blocklyDiv');
       });
+
       teardown(function() {
         workspaceTeardown.call(this, this.workspace);
       });
@@ -1355,6 +1493,7 @@ suite('Blocks', function() {
         block.setCollapsed(true);
         chai.assert.isFalse(block.comment.isVisible());
       });
+
       test('Child Has Icon', function() {
         const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="statement_block">' +
@@ -1370,6 +1509,7 @@ suite('Blocks', function() {
         block.setCollapsed(true);
         chai.assert.isFalse(childBlock.comment.isVisible());
       });
+
       test('Next Block Has Icon', function() {
         const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
             '<block type="statement_block">' +
@@ -1387,6 +1527,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Collapsing and Expanding', function() {
     function assertCollapsed(block, opt_string) {
       chai.assert.isTrue(block.isCollapsed());
@@ -1850,6 +1991,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('Style', function() {
     suite('Headless', function() {
       setup(function() {
@@ -1913,6 +2055,7 @@ suite('Blocks', function() {
       });
     });
   });
+
   suite('toString', function() {
     const toStringTests = [
       {

@@ -123,7 +123,7 @@ import {VerticalFlyout} from './flyout_vertical.js';
 import {CodeGenerator} from './generator.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
-import {Icon} from './icon_old.js';
+import {Icon} from './icons/icon.js';
 import * as icons from './icons.js';
 import {inject} from './inject.js';
 import {Align, Input} from './inputs/input.js';

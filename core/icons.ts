@@ -5,5 +5,6 @@
  */
 
 import * as exceptions from './icons/exceptions.js';
+import * as registry from './icons/registry.js';
 
-export {exceptions};
+export {exceptions, registry};

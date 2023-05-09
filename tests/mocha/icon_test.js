@@ -12,7 +12,7 @@ import {
 } from './test_helpers/setup_teardown.js';
 import {defineEmptyBlock} from './test_helpers/block_definitions.js';
 
-suite.skip('Icon', function () {
+suite.only('Icon', function () {
   setup(function () {
     this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
     defineEmptyBlock();
@@ -22,7 +22,7 @@ suite.skip('Icon', function () {
     sharedTestTeardown.call(this);
   });
 
-  suite('Hooks getting properly triggered by the block', function () {
+  suite.skip('Hooks getting properly triggered by the block', function () {
     class MockIcon {
       initView() {}
 
@@ -346,6 +346,135 @@ suite.skip('Icon', function () {
           'Expected updateCollapsed to be called twice'
         );
       });
+    });
+  });
+
+  suite('Serialization', function () {
+    class MockSerializableIcon {
+      getType() {
+        return 'serializable icon';
+      }
+
+      getWeight() {
+        return 1;
+      }
+
+      saveState() {
+        return 'some state';
+      }
+
+      loadState() {}
+    }
+
+    class MockNonSerializableIcon {
+      getType() {
+        return 'non-serializable icon';
+      }
+
+      getWeight() {
+        return 1;
+      }
+    }
+
+    function createWorkspace() {
+      return new Blockly.Workspace(new Blockly.Options({}));
+    }
+
+    function createBlock(workspace) {
+      return workspace.newBlock('empty_block');
+    }
+
+    test('serializable icons are saved', function () {
+      const block = createBlock(createWorkspace());
+      block.addIcon(new MockSerializableIcon());
+      const json = Blockly.serialization.blocks.save(block);
+      chai.assert.deepNestedInclude(
+        json,
+        {'icons': {'serializable icon': 'some state'}},
+        'Expected the JSON to include the saved state of the ' +
+          'serializable icon.'
+      );
+    });
+
+    test('non-serializable icons are not saved', function () {
+      const block = createBlock(createWorkspace());
+      block.addIcon(new MockNonSerializableIcon());
+      const json = Blockly.serialization.blocks.save(block);
+      chai.assert.notProperty(
+        json,
+        'icons',
+        'Expected the JSON to not include any saved state for icons'
+      );
+    });
+  });
+
+  suite('Deserialization', function () {
+    class MockSerializableIcon {
+      constructor() {
+        this.state = '';
+      }
+
+      getType() {
+        return 'serializable icon';
+      }
+
+      getWeight() {
+        return 1;
+      }
+
+      saveState() {
+        return 'some state';
+      }
+
+      loadState(state) {
+        this.state = state;
+      }
+    }
+
+    function createWorkspace() {
+      return new Blockly.Workspace(new Blockly.Options({}));
+    }
+
+    test('registered icons are instantiated and added to the block', function () {
+      Blockly.icons.registry.register(
+        'serializable icon',
+        MockSerializableIcon
+      );
+
+      const workspace = createWorkspace();
+      const json = {
+        'type': 'empty_block',
+        'icons': {
+          'serializable icon': 'some state',
+        },
+      };
+      const block = Blockly.serialization.blocks.append(json, workspace);
+      chai.assert.equal(
+        block.getIcon('serializable icon').state,
+        'some state',
+        'Expected the icon to have been properly instantiated and ' +
+          'deserialized'
+      );
+
+      Blockly.icons.registry.unregister('serializable icon');
+    });
+
+    test('trying to deserialize an unregistered icon throws an error', function () {
+      const workspace = createWorkspace();
+      const json = {
+        'type': 'empty_block',
+        'icons': {
+          'serializable icon': 'some state',
+        },
+      };
+      chai.assert.throws(
+        () => {
+          Blockly.serialization.blocks.append(json, workspace);
+        },
+        Blockly.serialization.exceptions.UnregisteredIcon,
+        '',
+        'Expected deserializing an unregistered icon to throw'
+      );
     });
   });
 });

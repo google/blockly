@@ -335,7 +335,7 @@ export class Mutator extends Icon {
       this.rootBlock = block.decompose!(ws)!;
       const blocks = this.rootBlock.getDescendants(false);
       for (let i = 0, child; child = blocks[i]; i++) {
-        child.render();
+        child.queueRender();
       }
       // The root block should not be draggable or deletable.
       this.rootBlock.setMovable(false);

@@ -756,9 +756,6 @@ const PROCEDURE_CALL_COMMON = {
       this.quarkConnections_ = {};
       this.quarkIds_ = [];
     }
-    // Switch off rendering while the block is rebuilt.
-    const savedRendered = this.rendered;
-    this.rendered = false;
     // Update the quarkConnections_ with existing connections.
     for (let i = 0; i < this.arguments_.length; i++) {
       const input = this.getInput('ARG' + i);
@@ -797,11 +794,6 @@ const PROCEDURE_CALL_COMMON = {
           }
         }
       }
-    }
-    // Restore rendering and show the changes.
-    this.rendered = savedRendered;
-    if (this.rendered) {
-      this.render();
     }
   },
   /**

@@ -1301,7 +1301,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const blocks = this.getAllBlocks(false);
     // Render each block.
     for (let i = blocks.length - 1; i >= 0; i--) {
-      blocks[i].render(false);
+      blocks[i].queueRender();
     }
 
     if (this.currentGesture_) {

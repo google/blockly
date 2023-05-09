@@ -1422,22 +1422,30 @@ suite('Blocks', function () {
       getType() {
         return 'A';
       }
+
+      getWeight() {
+        return 1;
+      }
     }
 
     class MockIconB {
       getType() {
         return 'B';
       }
+
+      getWeight() {
+        return 2;
+      }
     }
 
-    suite.skip('Adding icons', function () {
+    suite('Adding icons', function () {
       setup(function () {
-        // Tear down the old headless workspace and create a new rendered one.
-        workspaceTeardown.call(this, this.workspace);
-        this.workspace = Blockly.inject('blocklyDiv');
+        this.workspace = Blockly.inject('blocklyDiv', {});
 
         this.block = this.workspace.newBlock('stack_block');
-        this.renderSpy = sinon.spy(this.block, 'queueRender');
+        this.block.initSvg();
+        this.block.render();
+        this.renderSpy = sinon.spy(this.block, 'render');
       });
 
       teardown(function () {
@@ -1455,9 +1463,13 @@ suite('Blocks', function () {
 
       test('adding two icons of the same type throws', function () {
         this.block.addIcon(new MockIconA());
-        chai.assert.throws(() => {
-          this.block.addIcon(new MockIconA());
-        }, 'Expected adding an icon of the same type to throw');
+        chai.assert.throws(
+          () => {
+            this.block.addIcon(new MockIconA());
+          },
+          '',
+          'Expected adding an icon of the same type to throw'
+        );
       });
 
       test('adding an icon triggers a render', function () {
@@ -1470,14 +1482,14 @@ suite('Blocks', function () {
       });
     });
 
-    suite.skip('Removing icons', function () {
+    suite('Removing icons', function () {
       setup(function () {
-        // Tear down the old headless workspace and create a new rendered one.
-        workspaceTeardown.call(this, this.workspace);
         this.workspace = Blockly.inject('blocklyDiv');
 
         this.block = this.workspace.newBlock('stack_block');
-        this.renderSpy = sinon.spy(this.block, 'queueRender');
+        this.block.initSvg();
+        this.block.render();
+        this.renderSpy = sinon.spy(this.block, 'render');
       });
 
       teardown(function () {
@@ -1505,8 +1517,8 @@ suite('Blocks', function () {
       });
 
       test('removing an icon triggers a render', function () {
-        this.renderSpy.resetHistory();
         this.block.addIcon(new MockIconA());
+        this.renderSpy.resetHistory();
         this.block.removeIcon('A');
         chai.assert.isTrue(
           this.renderSpy.calledOnce,
@@ -1515,17 +1527,17 @@ suite('Blocks', function () {
       });
     });
 
-    suite.skip('Getting icons', function () {
+    suite('Getting icons', function () {
       setup(function () {
         this.block = this.workspace.newBlock('stack_block');
       });
 
-      test('all icons are returned from getIcons', function () {
+      test('all icons are returned from getIcons, in order of weight', function () {
         const iconA = new MockIconA();
         const iconB = new MockIconB();
         this.block.addIcon(iconA);
         this.block.addIcon(iconB);
-        chai.assert.sameMembers(
+        chai.assert.sameOrderedMembers(
           this.block.getIcons(),
           [iconA, iconB],
           'Expected getIcon to return both icons'
@@ -1552,9 +1564,9 @@ suite('Blocks', function () {
         );
       });
 
-      test('if there is no matching icon, getIcon returns null', function () {
+      test('if there is no matching icon, getIcon returns undefined', function () {
         this.block.addIcon(new MockIconA());
-        chai.assert.isNull(
+        chai.assert.isUndefined(
           this.block.getIcon('B'),
           'Expected getIcon to return null if there is no ' +
             'icon with a matching type'
@@ -1564,8 +1576,6 @@ suite('Blocks', function () {
 
     suite('Bubbles and collapsing', function () {
       setup(function () {
-        // Tear down the old headless workspace and create a new rendered one.
-        workspaceTeardown.call(this, this.workspace);
         this.workspace = Blockly.inject('blocklyDiv');
       });
 

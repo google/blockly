@@ -25,7 +25,7 @@ import type {Connection} from './connection.js';
 import type {Abstract} from './events/events_abstract.js';
 import {BlockChange} from './events/events_block_change.js';
 import * as eventUtils from './events/utils.js';
-import {Icon} from './icon.js';
+import {Icon} from './icon_old.js';
 import {Options} from './options.js';
 import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';

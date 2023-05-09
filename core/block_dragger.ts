@@ -21,7 +21,7 @@ import * as bumpObjects from './bump_objects.js';
 import * as common from './common.js';
 import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
-import type {Icon} from './icon.js';
+import type {Icon} from './icon_old.js';
 import {InsertionMarkerManager} from './insertion_marker_manager.js';
 import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';

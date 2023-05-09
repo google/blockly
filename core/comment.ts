@@ -23,7 +23,7 @@ import * as browserEvents from './browser_events.js';
 import {Bubble} from './bubble.js';
 import * as Css from './css.js';
 import * as eventUtils from './events/utils.js';
-import {Icon} from './icon.js';
+import {Icon} from './icon_old.js';
 import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import type {Size} from './utils/size.js';

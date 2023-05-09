@@ -86,3 +86,20 @@ block. It is an invariant of Blockly that shadow blocks only have shadow
 children`);
   }
 }
+
+export class UnregisteredIcon extends DeserializationError {
+  /**
+   * @param iconType The type of the unregistered icon we are attempting to
+   *     deserialize.
+   * @param block The block we are attempting to add the unregistered icon to.
+   * @param state The state object representing the block.
+   */
+  constructor(iconType: string, public block: Block, public state: State) {
+    super(
+      `Cannot add an icon of type '${iconType}' to the block ` +
+        `${block.toDevString()}, because there is no icon registered with ` +
+        `type '${iconType}'. Make sure that all of your icons have been ` +
+        `registered.`
+    );
+  }
+}

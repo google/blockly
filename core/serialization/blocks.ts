@@ -12,7 +12,7 @@ import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../inputs/input_types.js';
-import {ISerializable, isSerializable} from '../interfaces/i_serializable.js';
+import {isSerializable} from '../interfaces/i_serializable.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import * as registry from '../registry.js';
 import {Size} from '../utils/size.js';
@@ -25,6 +25,7 @@ import {
   MissingBlockType,
   MissingConnection,
   RealChildOfShadow,
+  UnregisteredIcon,
 } from './exceptions.js';
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
@@ -596,7 +597,9 @@ function loadIcons(block: Block, state: State) {
     if (iconType === 'comment') continue;
 
     const iconState = state['icons'][iconType];
-    const icon = new (registry.getClass(registry.Type.ICON, iconType, true)!)();
+    const constructor = registry.getClass(registry.Type.ICON, iconType, false);
+    if (!constructor) throw new UnregisteredIcon(iconType, block, state);
+    const icon = new constructor();
     block.addIcon(icon);
     if (isSerializable(icon)) icon.loadState(iconState);
   }

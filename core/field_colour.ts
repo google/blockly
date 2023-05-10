@@ -36,6 +36,7 @@ export class FieldColour extends Field<string> {
    * Copied from goog.ui.ColorPicker.SIMPLE_GRID_COLORS
    * All colour pickers use this unless overridden with setColours.
    */
+  // prettier-ignore
   static COLOURS: string[] = [
     // grays
     '#ffffff', '#cccccc', '#c0c0c0', '#999999',

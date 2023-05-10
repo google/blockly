@@ -1046,9 +1046,8 @@ export class ConstantProvider {
    * @returns Array of CSS strings.
    */
   protected getCSS_(selector: string): string[] {
+    // prettier-ignore
     return [
-      /* eslint-disable indent */
-      /* clang-format off */
       // Text.
       `${selector} .blocklyText, `,
       `${selector} .blocklyFlyoutLabelText {`,
@@ -1118,10 +1117,6 @@ export class ConstantProvider {
         `fill-opacity: ${this.INSERTION_MARKER_OPACITY};`,
         `stroke: none;`,
       `}`,
-      /* clang-format on */
-      /* eslint-enable indent */
     ];
   }
 }
-/* clang-format on */
-/* eslint-enable indent */

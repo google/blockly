@@ -112,7 +112,7 @@ export class Bubble /* implements IBubble */ {
     // this.workspace.getGesture(e)?.handleBubbleStart(e, this);
   }
 
-  private positionByRect(rect: Rect) {
+  protected positionByRect(rect: Rect) {
     const viewMetrics = this.workspace.getMetricsManager().getViewMetrics(true);
 
     const optimalLeft = this.getOptimalRelativeLeft(viewMetrics);

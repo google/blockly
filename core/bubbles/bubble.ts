@@ -19,30 +19,70 @@ import * as userAgent from '../utils/useragent.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
 export class Bubble implements IBubble {
+  /** The width of the border around the bubble. */
   static BORDER_WIDTH = 6;
+
+  /** The minimum size the bubble can have. */
   static MIN_SIZE = this.BORDER_WIDTH * 2;
-  static TAIL_THICKNESS = 5;
+
+  /**
+   * The thickness of the base of the tail in relation to the size of the
+   * bubble. Higher numbers result in thinner tails.
+   */
+  static TAIL_THICKNESS = 1;
+
+  /** The number of degrees that the tail bends counter-clockwise. */
   static TAIL_ANGLE = 20;
+
+  /**
+   * The sharpness of the tail's bend. Higher numbers result in smoother
+   * tails.
+   */
   static TAIL_BEND = 4;
+
+  /** Distance between arrow point and anchor point. */
   static ANCHOR_RADIUS = 8;
 
+  /** The SVG group containing all parts of the bubble. */
   private svgRoot: SVGGElement;
+
+  /** The SVG path for the arrow from the anchor to the bubble. */
   private tail: SVGPathElement;
+
+  /** The SVG background rect for the main body of the bubble. */
   private background: SVGRectElement;
+
+  /** The SVG group containing the contents of the bubble. */
   protected contentContainer: SVGGElement;
 
+  /**
+   * The size of the bubble (including background and contents but not tail).
+   */
   private size = new Size(0, 0);
+
+  /** The colour of the background of the bubble. */
   private colour = '#ffffff';
-  private visible = false;
+
+  /** True if the bubble has been disposed, false otherwise. */
   public disposed = false;
 
+  /** The position of the top of the bubble relative to its anchor. */
   private relativeTop = 0;
+
+  /** The position of the left of the bubble realtive to its anchor. */
   private relativeLeft = 0;
 
+  /**
+   * @param workspace The workspace this bubble belongs to.
+   * @param anchor The anchor location of the thing this bubble is attached to.
+   *     The tail of the bubble will point to this location.
+   * @param ownerRect An optional rect we don't want the bubble to overlap with
+   *     when automatically positioning.
+   */
   constructor(
     private readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
-    protected ownerRect: Rect
+    protected ownerRect?: Rect
   ) {
     this.svgRoot = dom.createSvgElement(Svg.G, {}, workspace.getBubbleCanvas());
     const embossGroup = dom.createSvgElement(
@@ -72,31 +112,52 @@ export class Bubble implements IBubble {
     );
   }
 
+  /** Dispose of this bubble. */
   dispose() {
     dom.removeNode(this.svgRoot);
     this.disposed = true;
   }
 
-  setAnchorLocation(anchor: Coordinate, relayout: boolean) {
+  /**
+   * Set the location the tail of this bubble points to.
+   *
+   * @param anchor The location the tail of this bubble points to.
+   * @param relayout If true, reposition the bubble from scratch so that it is
+   *     optimally visible. If false, reposition it so it maintains the same
+   *     position relative to the anchor.
+   */
+  setAnchorLocation(anchor: Coordinate, relayout = false) {
     this.anchor = anchor;
     if (relayout) {
       this.positionByRect(this.ownerRect);
     } else {
       this.positionRelativeToAnchor();
     }
+    this.renderTail();
   }
 
-  public setPositionRelativeToAnchor(left: number, top: number) {
+  /** Sets the position of this bubble relative to its anchor. */
+  setPositionRelativeToAnchor(left: number, top: number) {
     this.relativeLeft = left;
     this.relativeTop = top;
     this.positionRelativeToAnchor();
+    this.renderTail();
   }
 
+  /** @return the size of this bubble. */
   protected getSize() {
     return this.size;
   }
 
-  protected setSize(size: Size, relayout: boolean) {
+  /**
+   * Sets the size of this bubble, including the border.
+   *
+   * @param size Sets the size of this bubble, including the border.
+   * @param relayout If true, reposition the bubble from scratch so that it is
+   *     optimally visible. If false, reposition it so it maintains the same
+   *     position relative to the anchor.
+   */
+  protected setSize(size: Size, relayout = false) {
     // TODO: set size.
     size.width = Math.max(size.width, Bubble.MIN_SIZE);
     size.height = Math.max(size.height, Bubble.MIN_SIZE);
@@ -113,16 +174,19 @@ export class Bubble implements IBubble {
     this.renderTail();
   }
 
+  /** Returns the colour of the background and tail of this bubble. */
   protected getColour(): string {
     return this.colour;
   }
 
+  /** Sets the colour of the background and tail of this bubble. */
   protected setColour(colour: string) {
     this.colour = colour;
     this.tail.setAttribute('fill', colour);
     this.background.setAttribute('fill', colour);
   }
 
+  /** Gets the emboss filter for this bubble. */
   private getFilter(): {filter?: string} {
     // TODO: Do we think this is actually still a problem??
     if (userAgent.JavaFx) return {};
@@ -133,10 +197,12 @@ export class Bubble implements IBubble {
     };
   }
 
+  /** Passes the pointer event off to the gesture system. */
   private onMouseDown(e: PointerEvent) {
     this.workspace.getGesture(e)?.handleBubbleStart(e, this);
   }
 
+  /** Positions the bubble relative to its anchor. Does not render its tail. */
   protected positionRelativeToAnchor() {
     let left = this.anchor.x;
     if (this.workspace.RTL) {
@@ -148,12 +214,20 @@ export class Bubble implements IBubble {
     this.moveTo(left, top);
   }
 
-  /** @internal */
+  /**
+   * Moves the bubble to the given coordinates.
+   *
+   * @internal
+   */
   moveTo(x: number, y: number) {
     this.svgRoot.setAttribute('transform', `translate(${x}, ${y})`);
   }
 
-  protected positionByRect(rect: Rect) {
+  /**
+   * Positions the bubble "optimally" so that the most of it is visible and
+   * it does not overlap the rect (if provided).
+   */
+  protected positionByRect(rect = new Rect(0, 0, 0, 0)) {
     const viewMetrics = this.workspace.getMetricsManager().getViewMetrics(true);
 
     const optimalLeft = this.getOptimalRelativeLeft(viewMetrics);
@@ -212,6 +286,16 @@ export class Bubble implements IBubble {
     this.positionRelativeToAnchor();
   }
 
+  /**
+   * Calculate the what percentage of the bubble overlaps with the visible
+   * workspace (what percentage of the bubble is visible).
+   *
+   * @param relativeMin The position of the top-left corner of the bubble
+   *     relative to the anchor point.
+   * @param viewMetrics The view metrics of the workspace the bubble will appear
+   *     in.
+   * @returns The percentage of the bubble that is visible.
+   */
   private getOverlap(
     relativeMin: {x: number; y: number},
     viewMetrics: ContainerRegion
@@ -257,6 +341,16 @@ export class Bubble implements IBubble {
     );
   }
 
+  /**
+   * Calculate what the optimal horizontal position of the top-left corner of
+   * the bubble is (relative to the anchor point) so that the most area of the
+   * bubble is shown.
+   *
+   * @param viewMetrics The view metrics of the workspace the bubble will appear
+   *     in.
+   * @returns The optimal horizontal position of the top-left corner of the
+   *     bubble.
+   */
   private getOptimalRelativeLeft(viewMetrics: ContainerRegion): number {
     // By default, show the bubble just a bit to the left of the anchor.
     let relativeLeft = -this.size.width / 4;
@@ -294,6 +388,16 @@ export class Bubble implements IBubble {
     return relativeLeft;
   }
 
+  /**
+   * Calculate what the optimal vertical position of the top-left corner of
+   * the bubble is (relative to the anchor point) so that the most area of the
+   * bubble is shown.
+   *
+   * @param viewMetrics The view metrics of the workspace the bubble will appear
+   *     in.
+   * @returns The optimal vertical position of the top-left corner of the
+   *     bubble.
+   */
   private getOptimalRelativeTop(viewMetrics: ContainerRegion): number {
     // By default, show the bubble just a bit higher than the anchor.
     let relativeTop = -this.size.height / 4;
@@ -316,7 +420,11 @@ export class Bubble implements IBubble {
     return relativeTop;
   }
 
-  private getWorkspaceViewRect(viewMetrics: ContainerRegion) {
+  /**
+   * @return a rect defining the bounds of the workspace's view in workspace
+   * coordinates.
+   */
+  private getWorkspaceViewRect(viewMetrics: ContainerRegion): Rect {
     const top = viewMetrics.top;
     let bottom = viewMetrics.top + viewMetrics.height;
     let left = viewMetrics.left;
@@ -332,10 +440,12 @@ export class Bubble implements IBubble {
     return new Rect(top, bottom, left, right);
   }
 
+  /** @return the scrollbar thickness in workspace units. */
   private getScrollbarThickness() {
     return Scrollbar.scrollbarThickness / this.workspace.scale;
   }
 
+  /** Draws the tail of the bubble. */
   private renderTail() {
     const steps = [];
     // Find the relative coordinates of the center of the bubble.

@@ -7,10 +7,11 @@
 import * as browserEvents from '../browser_events.js';
 import {IBubble} from '../interfaces/i_bubble.js';
 import {ContainerRegion} from '../metrics_manager.js';
+import {Scrollbar} from '../scrollbar.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
+import * as math from '../utils/math.js';
 import {Rect} from '../utils/rect.js';
-import {Scrollbar} from '../scrollbar.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import * as userAgent from '../utils/useragent.js';
@@ -18,6 +19,7 @@ import {WorkspaceSvg} from '../workspace_svg.js';
 
 export class Bubble /* implements IBubble */ {
   static BORDER_WIDTH = 6;
+  static MIN_SIZE = this.BORDER_WIDTH * 2;
   static TAIL_THICKNESS = 5;
   static TAIL_ANGLE = 20;
   static TAIL_BEND = 4;
@@ -38,7 +40,8 @@ export class Bubble /* implements IBubble */ {
 
   constructor(
     private readonly workspace: WorkspaceSvg,
-    protected anchor: Coordinate
+    protected anchor: Coordinate,
+    protected ownerRect: Rect
   ) {
     this.svgRoot = dom.createSvgElement(Svg.G, {}, workspace.getBubbleCanvas());
     const embossGroup = dom.createSvgElement(
@@ -73,19 +76,34 @@ export class Bubble /* implements IBubble */ {
     this.disposed = true;
   }
 
-  setAnchorLocation(anchor: Coordinate) {
+  setAnchorLocation(anchor: Coordinate, relayout: boolean) {
     this.anchor = anchor;
-    // TODO: Do we want to automatically position?
-    // this.positionRelativeToAnchor();
+    if (relayout) {
+      this.positionByRect(this.ownerRect);
+    } else {
+      this.positionRelativeToAnchor();
+    }
   }
 
   protected getSize() {
     return this.size;
   }
 
-  protected setSize(size: Size) {
+  protected setSize(size: Size, relayout: boolean) {
     // TODO: set size.
+    size.width = Math.max(size.width, Bubble.MIN_SIZE);
+    size.height = Math.max(size.height, Bubble.MIN_SIZE);
     this.size = size;
+
+    this.background.setAttribute('width', `${size.width}`);
+    this.background.setAttribute('height', `${size.height}`);
+
+    if (relayout) {
+      this.positionByRect(this.ownerRect);
+    } else {
+      this.positionRelativeToAnchor();
+    }
+    this.renderTail();
   }
 
   protected getColour(): string {
@@ -110,6 +128,21 @@ export class Bubble /* implements IBubble */ {
 
   private onMouseDown(e: PointerEvent) {
     // this.workspace.getGesture(e)?.handleBubbleStart(e, this);
+  }
+
+  protected positionRelativeToAnchor() {
+    let left = this.anchor.x;
+    if (this.workspace.RTL) {
+      left -= this.relativeLeft + this.size.width;
+    } else {
+      left += this.relativeLeft;
+    }
+    const top = this.relativeTop + this.anchor.y;
+    this.moveTo(left, top);
+  }
+
+  private moveTo(x: number, y: number) {
+    this.svgRoot.setAttribute('transform', `translate(${x}, ${y})`);
   }
 
   protected positionByRect(rect: Rect) {
@@ -168,6 +201,7 @@ export class Bubble /* implements IBubble */ {
     //  make it look simpler)
     this.relativeLeft = fartherPosition.x;
     this.relativeTop = fartherPosition.y;
+    this.positionRelativeToAnchor();
   }
 
   private getOverlap(
@@ -292,5 +326,98 @@ export class Bubble /* implements IBubble */ {
 
   private getScrollbarThickness() {
     return Scrollbar.scrollbarThickness / this.workspace.scale;
+  }
+
+  private renderTail() {
+    const steps = [];
+    // Find the relative coordinates of the center of the bubble.
+    const relBubbleX = this.size.width / 2;
+    const relBubbleY = this.size.height / 2;
+    // Find the relative coordinates of the center of the anchor.
+    let relAnchorX = -this.relativeLeft;
+    let relAnchorY = -this.relativeTop;
+    if (relBubbleX === relAnchorX && relBubbleY === relAnchorY) {
+      // Null case.  Bubble is directly on top of the anchor.
+      // Short circuit this rather than wade through divide by zeros.
+      steps.push('M ' + relBubbleX + ',' + relBubbleY);
+    } else {
+      // Compute the angle of the tail's line.
+      const rise = relAnchorY - relBubbleY;
+      let run = relAnchorX - relBubbleX;
+      if (this.workspace.RTL) {
+        run *= -1;
+      }
+      const hypotenuse = Math.sqrt(rise * rise + run * run);
+      let angle = Math.acos(run / hypotenuse);
+      if (rise < 0) {
+        angle = 2 * Math.PI - angle;
+      }
+      // Compute a line perpendicular to the tail.
+      let rightAngle = angle + Math.PI / 2;
+      if (rightAngle > Math.PI * 2) {
+        rightAngle -= Math.PI * 2;
+      }
+      const rightRise = Math.sin(rightAngle);
+      const rightRun = Math.cos(rightAngle);
+
+      // Calculate the thickness of the base of the tail.
+      let thickness =
+        (this.size.width + this.size.height) / Bubble.TAIL_THICKNESS;
+      thickness = Math.min(thickness, this.size.width, this.size.height) / 4;
+
+      // Back the tip of the tail off of the anchor.
+      const backoffRatio = 1 - Bubble.ANCHOR_RADIUS / hypotenuse;
+      relAnchorX = relBubbleX + backoffRatio * run;
+      relAnchorY = relBubbleY + backoffRatio * rise;
+
+      // Coordinates for the base of the tail.
+      const baseX1 = relBubbleX + thickness * rightRun;
+      const baseY1 = relBubbleY + thickness * rightRise;
+      const baseX2 = relBubbleX - thickness * rightRun;
+      const baseY2 = relBubbleY - thickness * rightRise;
+
+      // Distortion to curve the tail.
+      const radians = math.toRadians(
+        this.workspace.RTL ? -Bubble.TAIL_ANGLE : Bubble.TAIL_ANGLE
+      );
+      let swirlAngle = angle + radians;
+      if (swirlAngle > Math.PI * 2) {
+        swirlAngle -= Math.PI * 2;
+      }
+      const swirlRise = (Math.sin(swirlAngle) * hypotenuse) / Bubble.TAIL_BEND;
+      const swirlRun = (Math.cos(swirlAngle) * hypotenuse) / Bubble.TAIL_BEND;
+
+      steps.push('M' + baseX1 + ',' + baseY1);
+      steps.push(
+        'C' +
+          (baseX1 + swirlRun) +
+          ',' +
+          (baseY1 + swirlRise) +
+          ' ' +
+          relAnchorX +
+          ',' +
+          relAnchorY +
+          ' ' +
+          relAnchorX +
+          ',' +
+          relAnchorY
+      );
+      steps.push(
+        'C' +
+          relAnchorX +
+          ',' +
+          relAnchorY +
+          ' ' +
+          (baseX2 + swirlRun) +
+          ',' +
+          (baseY2 + swirlRise) +
+          ' ' +
+          baseX2 +
+          ',' +
+          baseY2
+      );
+    }
+    steps.push('z');
+    this.tail?.setAttribute('d', steps.join(' '));
   }
 }

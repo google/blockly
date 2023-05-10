@@ -16,8 +16,10 @@ import type {Block} from '../block.js';
 import * as deprecation from '../utils/deprecation.js';
 import type {Workspace} from '../workspace.js';
 
-import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
-
+import {
+  Abstract as AbstractEvent,
+  AbstractEventJson,
+} from './events_abstract.js';
 
 /**
  * Abstract class for any event related to blocks.
@@ -51,8 +53,9 @@ export class BlockBase extends AbstractEvent {
     const json = super.toJson() as BlockBaseJson;
     if (!this.blockId) {
       throw new Error(
-          'The block ID is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson');
+        'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson'
+      );
     }
     json['blockId'] = this.blockId;
     return json;
@@ -65,8 +68,11 @@ export class BlockBase extends AbstractEvent {
    */
   override fromJson(json: BlockBaseJson) {
     deprecation.warn(
-        'Blockly.Events.BlockBase.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
+      'Blockly.Events.BlockBase.prototype.fromJson',
+      'version 9',
+      'version 10',
+      'Blockly.Events.fromJson'
+    );
     super.fromJson(json);
     this.blockId = json['blockId'];
   }
@@ -80,10 +86,16 @@ export class BlockBase extends AbstractEvent {
    *     static methods in superclasses.
    * @internal
    */
-  static fromJson(json: BlockBaseJson, workspace: Workspace, event?: any):
-      BlockBase {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new BlockBase()) as BlockBase;
+  static fromJson(
+    json: BlockBaseJson,
+    workspace: Workspace,
+    event?: any
+  ): BlockBase {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new BlockBase()
+    ) as BlockBase;
     newEvent.blockId = json['blockId'];
     return newEvent;
   }

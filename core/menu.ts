@@ -20,7 +20,6 @@ import * as dom from './utils/dom.js';
 import type {Size} from './utils/size.js';
 import * as style from './utils/style.js';
 
-
 /**
  * A basic menu class.
  */
@@ -37,34 +36,34 @@ export class Menu {
    * prevent the consequent mouseup event due to a simple click from
    * activating a menu item immediately.
    */
-  openingCoords: Coordinate|null = null;
+  openingCoords: Coordinate | null = null;
 
   /**
    * This is the element that we will listen to the real focus events on.
    * A value of null means no menu item is highlighted.
    */
-  private highlightedItem: MenuItem|null = null;
+  private highlightedItem: MenuItem | null = null;
 
   /** Mouse over event data. */
-  private mouseOverHandler: browserEvents.Data|null = null;
+  private mouseOverHandler: browserEvents.Data | null = null;
 
   /** Click event data. */
-  private clickHandler: browserEvents.Data|null = null;
+  private clickHandler: browserEvents.Data | null = null;
 
   /** Mouse enter event data. */
-  private mouseEnterHandler: browserEvents.Data|null = null;
+  private mouseEnterHandler: browserEvents.Data | null = null;
 
   /** Mouse leave event data. */
-  private mouseLeaveHandler: browserEvents.Data|null = null;
+  private mouseLeaveHandler: browserEvents.Data | null = null;
 
   /** Key down event data. */
-  private onKeyDownHandler: browserEvents.Data|null = null;
+  private onKeyDownHandler: browserEvents.Data | null = null;
 
   /** The menu's root DOM element. */
-  private element: HTMLDivElement|null = null;
+  private element: HTMLDivElement | null = null;
 
   /** ARIA name for this menu. */
-  private roleName: aria.Role|null = null;
+  private roleName: aria.Role | null = null;
 
   /** Constructs a new Menu instance. */
   constructor() {}
@@ -86,7 +85,7 @@ export class Menu {
    * @returns The menu's root DOM element.
    */
   render(container: Element): HTMLDivElement {
-    const element = (document.createElement('div'));
+    const element = document.createElement('div');
     // goog-menu is deprecated, use blocklyMenu.  May 2020.
     element.className = 'blocklyMenu goog-menu blocklyNonSelectable';
     element.tabIndex = 0;
@@ -96,21 +95,45 @@ export class Menu {
     this.element = element;
 
     // Add menu items.
-    for (let i = 0, menuItem; menuItem = this.menuItems[i]; i++) {
+    for (let i = 0, menuItem; (menuItem = this.menuItems[i]); i++) {
       element.appendChild(menuItem.createDom());
     }
 
     // Add event handlers.
     this.mouseOverHandler = browserEvents.conditionalBind(
-        element, 'pointerover', this, this.handleMouseOver, true);
+      element,
+      'pointerover',
+      this,
+      this.handleMouseOver,
+      true
+    );
     this.clickHandler = browserEvents.conditionalBind(
-        element, 'pointerup', this, this.handleClick, true);
+      element,
+      'pointerup',
+      this,
+      this.handleClick,
+      true
+    );
     this.mouseEnterHandler = browserEvents.conditionalBind(
-        element, 'pointerenter', this, this.handleMouseEnter, true);
+      element,
+      'pointerenter',
+      this,
+      this.handleMouseEnter,
+      true
+    );
     this.mouseLeaveHandler = browserEvents.conditionalBind(
-        element, 'pointerleave', this, this.handleMouseLeave, true);
+      element,
+      'pointerleave',
+      this,
+      this.handleMouseLeave,
+      true
+    );
     this.onKeyDownHandler = browserEvents.conditionalBind(
-        element, 'keydown', this, this.handleKeyEvent);
+      element,
+      'keydown',
+      this,
+      this.handleKeyEvent
+    );
 
     container.appendChild(element);
     return element;
@@ -122,7 +145,7 @@ export class Menu {
    * @returns The DOM element.
    * @internal
    */
-  getElement(): HTMLDivElement|null {
+  getElement(): HTMLDivElement | null {
     return this.element;
   }
 
@@ -183,7 +206,7 @@ export class Menu {
     }
 
     // Remove menu items.
-    for (let i = 0, menuItem; menuItem = this.menuItems[i]; i++) {
+    for (let i = 0, menuItem; (menuItem = this.menuItems[i]); i++) {
       menuItem.dispose();
     }
     this.element = null;
@@ -198,17 +221,17 @@ export class Menu {
    * @param elem DOM element whose owner is to be returned.
    * @returns Menu item for which the DOM element belongs to.
    */
-  private getMenuItem(elem: Element): MenuItem|null {
+  private getMenuItem(elem: Element): MenuItem | null {
     const menuElem = this.getElement();
     // Node might be the menu border (resulting in no associated menu item), or
     // a menu item's div, or some element within the menu item.
     // Walk up parents until one meets either the menu's root element, or
     // a menu item's div.
-    let currentElement: Element|null = elem;
+    let currentElement: Element | null = elem;
     while (currentElement && currentElement !== menuElem) {
       if (currentElement.classList.contains('blocklyMenuItem')) {
         // Having found a menu item's div, locate that menu item in this menu.
-        for (let i = 0, menuItem; menuItem = this.menuItems[i]; i++) {
+        for (let i = 0, menuItem; (menuItem = this.menuItems[i]); i++) {
           if (menuItem.getElement() === currentElement) {
             return menuItem;
           }
@@ -227,7 +250,7 @@ export class Menu {
    * @param item Item to highlight, or null.
    * @internal
    */
-  setHighlighted(item: MenuItem|null) {
+  setHighlighted(item: MenuItem | null) {
     const currentHighlighted = this.highlightedItem;
     if (currentHighlighted) {
       currentHighlighted.setHighlighted(false);
@@ -252,9 +275,9 @@ export class Menu {
    * @internal
    */
   highlightNext() {
-    const index = this.highlightedItem ?
-        this.menuItems.indexOf(this.highlightedItem) :
-        -1;
+    const index = this.highlightedItem
+      ? this.menuItems.indexOf(this.highlightedItem)
+      : -1;
     this.highlightHelper(index, 1);
   }
 
@@ -265,9 +288,9 @@ export class Menu {
    * @internal
    */
   highlightPrevious() {
-    const index = this.highlightedItem ?
-        this.menuItems.indexOf(this.highlightedItem) :
-        -1;
+    const index = this.highlightedItem
+      ? this.menuItems.indexOf(this.highlightedItem)
+      : -1;
     this.highlightHelper(index < 0 ? this.menuItems.length : index, -1);
   }
 
@@ -291,7 +314,7 @@ export class Menu {
   private highlightHelper(startIndex: number, delta: number) {
     let index = startIndex + delta;
     let menuItem;
-    while (menuItem = this.menuItems[index]) {
+    while ((menuItem = this.menuItems[index])) {
       if (menuItem.isEnabled()) {
         this.setHighlighted(menuItem);
         break;
@@ -384,8 +407,12 @@ export class Menu {
       return;
     }
     const keyboardEvent = e as KeyboardEvent;
-    if (keyboardEvent.shiftKey || keyboardEvent.ctrlKey ||
-        keyboardEvent.metaKey || keyboardEvent.altKey) {
+    if (
+      keyboardEvent.shiftKey ||
+      keyboardEvent.ctrlKey ||
+      keyboardEvent.metaKey ||
+      keyboardEvent.altKey
+    ) {
       // Do not handle the key event if any modifier key is pressed.
       return;
     }

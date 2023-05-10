@@ -18,7 +18,6 @@ import * as registry from '../registry.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
-
 /**
  * Class for a UI event.
  *
@@ -39,8 +38,11 @@ export class Ui extends UiBase {
    * @param opt_newValue New value of element.
    */
   constructor(
-      opt_block?: Block|null, opt_element?: string,
-      opt_oldValue?: AnyDuringMigration, opt_newValue?: AnyDuringMigration) {
+    opt_block?: Block | null,
+    opt_element?: string,
+    opt_oldValue?: AnyDuringMigration,
+    opt_newValue?: AnyDuringMigration
+  ) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;
     super(workspaceId);
 

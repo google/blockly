@@ -11,7 +11,6 @@ goog.declareModuleId('Blockly.serialization.registry');
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import * as registry from '../registry.js';
 
-
 /**
  * Registers the given serializer so that it can be used for serialization and
  * deserialization.

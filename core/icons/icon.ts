@@ -24,7 +24,7 @@ export abstract class Icon implements IIcon {
   protected workspaceLocation: Coordinate = new Coordinate(0, 0);
 
   /** The root svg element visually representing this icon. */
-  protected svgRoot: SVGGElement|null = null;
+  protected svgRoot: SVGGElement | null = null;
 
   constructor(protected sourceBlock: Block) {}
 
@@ -33,13 +33,17 @@ export abstract class Icon implements IIcon {
   }
 
   initView(pointerdownListener: (e: PointerEvent) => void): void {
-    if (this.svgRoot) return;  // The icon has already been initialized.
+    if (this.svgRoot) return; // The icon has already been initialized.
 
     const svgBlock = this.sourceBlock as BlockSvg;
     this.svgRoot = dom.createSvgElement(Svg.G, {'class': 'blocklyIconGroup'});
     svgBlock.getSvgRoot().appendChild(this.svgRoot);
     browserEvents.conditionalBind(
-        this.svgRoot, 'pointerdown', this, pointerdownListener);
+      this.svgRoot,
+      'pointerdown',
+      this,
+      pointerdownListener
+    );
   }
 
   dispose(): void {}
@@ -59,8 +63,9 @@ export abstract class Icon implements IIcon {
   updateCollapsed(): void {
     if (!this.svgRoot) {
       throw new Error(
-          'Attempt to update the collapsed-ness of an icon before its ' +
-          'view has been initialized.');
+        'Attempt to update the collapsed-ness of an icon before its ' +
+          'view has been initialized.'
+      );
     }
     if (this.sourceBlock.isCollapsed()) {
       this.svgRoot.style.display = 'none';

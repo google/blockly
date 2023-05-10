@@ -12,7 +12,6 @@ import {Coordinate} from './coordinate.js';
 import {Rect} from './rect.js';
 import {Size} from './size.js';
 
-
 /**
  * Gets the height and width of an element.
  * Similar to Closure's goog.style.getSize
@@ -81,8 +80,10 @@ export function getComputedStyle(element: Element, property: string): string {
   const styles = window.getComputedStyle(element);
   // element.style[..] is undefined for browser specific styles
   // as 'filter'.
-  return (styles as AnyDuringMigration)[property] ||
-      styles.getPropertyValue(property);
+  return (
+    (styles as AnyDuringMigration)[property] ||
+    styles.getPropertyValue(property)
+  );
 }
 
 /**
@@ -98,13 +99,16 @@ export function getComputedStyle(element: Element, property: string): string {
  */
 export function getCascadedStyle(element: Element, style: string): string {
   deprecation.warn(
-      'Blockly.utils.style.getCascadedStyle', 'version 9', 'version 10');
+    'Blockly.utils.style.getCascadedStyle',
+    'version 9',
+    'version 10'
+  );
   // AnyDuringMigration because:  Property 'currentStyle' does not exist on type
   // 'Element'. AnyDuringMigration because:  Property 'currentStyle' does not
   // exist on type 'Element'.
-  return (element as AnyDuringMigration).currentStyle ?
-      (element as AnyDuringMigration).currentStyle[style] :
-      '' as string;
+  return (element as AnyDuringMigration).currentStyle
+    ? (element as AnyDuringMigration).currentStyle[style]
+    : ('' as string);
 }
 
 /**
@@ -122,8 +126,9 @@ export function getPageOffset(el: Element): Coordinate {
   // of element since getBoundingClientRect returns relative coordinates to
   // the viewport.
   const scrollCoord = new Coordinate(
-      window.pageXOffset || documentElement.scrollLeft,
-      window.pageYOffset || documentElement.scrollTop);
+    window.pageXOffset || documentElement.scrollLeft,
+    window.pageYOffset || documentElement.scrollTop
+  );
   pos.x = box.left + scrollCoord.x;
   pos.y = box.top + scrollCoord.y;
 
@@ -174,7 +179,10 @@ export function getBorderBox(element: Element): Rect {
  *     Defaults to false.
  */
 export function scrollIntoContainerView(
-    element: Element, container: Element, opt_center?: boolean) {
+  element: Element,
+  container: Element,
+  opt_center?: boolean
+) {
   const offset = getContainerOffsetToScrollInto(element, container, opt_center);
   container.scrollLeft = offset.x;
   container.scrollTop = offset.y;
@@ -195,7 +203,10 @@ export function scrollIntoContainerView(
  * @returns The new scroll position of the container.
  */
 export function getContainerOffsetToScrollInto(
-    element: Element, container: Element, opt_center?: boolean): Coordinate {
+  element: Element,
+  container: Element,
+  opt_center?: boolean
+): Coordinate {
   // Absolute position of the element's border's top left corner.
   const elementPos = getPageOffset(element);
   // Absolute position of the container's border's top left corner.

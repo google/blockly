@@ -35,7 +35,6 @@ import * as xml from './utils/xml.js';
 import * as deprecation from './utils/deprecation.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-
 /**
  * Class for a mutator dialog.
  */
@@ -47,7 +46,7 @@ export class Mutator extends Icon {
    * Due to legacy code in procedure block definitions, this name
    * cannot change.
    */
-  private workspace_: WorkspaceSvg|null = null;
+  private workspace_: WorkspaceSvg | null = null;
 
   /** Width of workspace. */
   private workspaceWidth = 0;
@@ -59,33 +58,35 @@ export class Mutator extends Icon {
    * The SVG element that is the parent of the mutator workspace, or null if
    * not created.
    */
-  private svgDialog: SVGSVGElement|null = null;
+  private svgDialog: SVGSVGElement | null = null;
 
   /**
    * The root block of the mutator workspace, created by decomposing the
    * source block.
    */
-  private rootBlock: BlockSvg|null = null;
+  private rootBlock: BlockSvg | null = null;
 
   /**
    * Function registered on the main workspace to update the mutator contents
    * when the main workspace changes.
    */
-  private sourceListener: Function|null = null;
+  private sourceListener: Function | null = null;
 
   /**
    * The PID associated with the updateWorkpace_ timeout, or null if no timeout
    * is currently running.
    */
-  private updateWorkspacePid: ReturnType<typeof setTimeout>|null = null;
+  private updateWorkspacePid: ReturnType<typeof setTimeout> | null = null;
 
   /** @param quarkNames List of names of sub-blocks for flyout. */
   constructor(quarkNames: string[], block?: BlockSvg) {
     if (!block) {
       deprecation.warn(
-          'Calling the Mutator constructor without passing the block it is attached to',
-          'version 9', 'version 10',
-          'the constructor by passing the list of subblocks and the block instance to attach the mutator to');
+        'Calling the Mutator constructor without passing the block it is attached to',
+        'version 9',
+        'version 10',
+        'the constructor by passing the list of subblocks and the block instance to attach the mutator to'
+      );
     }
     super(block ?? null);
     this.quarkNames = quarkNames;
@@ -108,7 +109,7 @@ export class Mutator extends Icon {
    *     mutator isn't open.
    * @internal
    */
-  getWorkspace(): WorkspaceSvg|null {
+  getWorkspace(): WorkspaceSvg | null {
     return this.workspace_;
   }
 
@@ -120,31 +121,38 @@ export class Mutator extends Icon {
   protected override drawIcon_(group: Element) {
     // Square with rounded corners.
     dom.createSvgElement(
-        Svg.RECT, {
-          'class': 'blocklyIconShape',
-          'rx': '4',
-          'ry': '4',
-          'height': '16',
-          'width': '16',
-        },
-        group);
+      Svg.RECT,
+      {
+        'class': 'blocklyIconShape',
+        'rx': '4',
+        'ry': '4',
+        'height': '16',
+        'width': '16',
+      },
+      group
+    );
     // Gear teeth.
     dom.createSvgElement(
-        Svg.PATH, {
-          'class': 'blocklyIconSymbol',
-          'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
-              '0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,' +
-              '-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,' +
-              '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
-              '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
-              '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
-              '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z',
-        },
-        group);
+      Svg.PATH,
+      {
+        'class': 'blocklyIconSymbol',
+        'd':
+          'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
+          '0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,' +
+          '-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,' +
+          '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
+          '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
+          '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
+          '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z',
+      },
+      group
+    );
     // Axle hole.
     dom.createSvgElement(
-        Svg.CIRCLE,
-        {'class': 'blocklyIconShape', 'r': '2.7', 'cx': '8', 'cy': '8'}, group);
+      Svg.CIRCLE,
+      {'class': 'blocklyIconShape', 'r': '2.7', 'cx': '8', 'cy': '8'},
+      group
+    );
   }
 
   /**
@@ -170,13 +178,15 @@ export class Mutator extends Icon {
           [Workspace]
         </svg>
         */
-    this.svgDialog = dom.createSvgElement(
-        Svg.SVG, {'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH});
+    this.svgDialog = dom.createSvgElement(Svg.SVG, {
+      'x': Bubble.BORDER_WIDTH,
+      'y': Bubble.BORDER_WIDTH,
+    });
     // Convert the list of names into a list of XML objects for the flyout.
     let quarkXml;
     if (this.quarkNames.length) {
       quarkXml = xml.createElement('xml');
-      for (let i = 0, quarkName; quarkName = this.quarkNames[i]; i++) {
+      for (let i = 0, quarkName; (quarkName = this.quarkNames[i]); i++) {
         const element = xml.createElement('block');
         element.setAttribute('type', quarkName);
         quarkXml.appendChild(element);
@@ -185,7 +195,7 @@ export class Mutator extends Icon {
       quarkXml = null;
     }
     const block = this.getBlock();
-    const workspaceOptions = new Options(({
+    const workspaceOptions = new Options({
       // If you want to enable disabling, also remove the
       // event filter from workspaceChanged_ .
       'disable': false,
@@ -195,9 +205,10 @@ export class Mutator extends Icon {
       'horizontalLayout': false,
       'renderer': block.workspace.options.renderer,
       'rendererOverrides': block.workspace.options.rendererOverrides,
-    } as BlocklyOptions));
-    workspaceOptions.toolboxPosition =
-        block.RTL ? toolbox.Position.RIGHT : toolbox.Position.LEFT;
+    } as BlocklyOptions);
+    workspaceOptions.toolboxPosition = block.RTL
+      ? toolbox.Position.RIGHT
+      : toolbox.Position.LEFT;
     const hasFlyout = !!quarkXml;
     if (hasFlyout) {
       workspaceOptions.languageTree = toolbox.convertToolboxDefToJson(quarkXml);
@@ -230,8 +241,9 @@ export class Mutator extends Icon {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   newWorkspaceSvg(options: Options): WorkspaceSvg {
     throw new Error(
-        'The implementation of newWorkspaceSvg should be ' +
-        'monkey-patched in by blockly.ts');
+      'The implementation of newWorkspaceSvg should be ' +
+        'monkey-patched in by blockly.ts'
+    );
   }
 
   /** Add or remove the UI indicating if this icon may be clicked or not. */
@@ -265,8 +277,10 @@ export class Mutator extends Icon {
     let height = workspaceSize.height + doubleBorderWidth * 3;
     const flyout = this.workspace_.getFlyout();
     if (flyout) {
-      const flyoutScrollMetrics =
-          flyout.getWorkspace().getMetricsManager().getScrollMetrics();
+      const flyoutScrollMetrics = flyout
+        .getWorkspace()
+        .getMetricsManager()
+        .getScrollMetrics();
       height = Math.max(height, flyoutScrollMetrics.height + 20);
       width += flyout.getWidth();
     }
@@ -277,14 +291,18 @@ export class Mutator extends Icon {
     width += doubleBorderWidth * 3;
     // Only resize if the size difference is significant.  Eliminates
     // shuddering.
-    if (Math.abs(this.workspaceWidth - width) > doubleBorderWidth ||
-        Math.abs(this.workspaceHeight - height) > doubleBorderWidth) {
+    if (
+      Math.abs(this.workspaceWidth - width) > doubleBorderWidth ||
+      Math.abs(this.workspaceHeight - height) > doubleBorderWidth
+    ) {
       // Record some layout information for workspace metrics.
       this.workspaceWidth = width;
       this.workspaceHeight = height;
       // Resize the bubble.
       this.bubble_!.setBubbleSize(
-          width + doubleBorderWidth, height + doubleBorderWidth);
+        width + doubleBorderWidth,
+        height + doubleBorderWidth
+      );
       this.svgDialog!.setAttribute('width', `${width}`);
       this.svgDialog!.setAttribute('height', `${height}`);
       this.workspace_.setCachedParentSvgSize(width, height);
@@ -318,8 +336,13 @@ export class Mutator extends Icon {
     if (visible) {
       // Create the bubble.
       this.bubble_ = new Bubble(
-          block.workspace, this.createEditor(), block.pathObject.svgPath,
-          (this.iconXY_ as Coordinate), null, null);
+        block.workspace,
+        this.createEditor(),
+        block.pathObject.svgPath,
+        this.iconXY_ as Coordinate,
+        null,
+        null
+      );
       // The workspace was created in createEditor.
       const ws = this.workspace_!;
       // Expose this mutator's block's ID on its top-level SVG group.
@@ -334,7 +357,7 @@ export class Mutator extends Icon {
 
       this.rootBlock = block.decompose!(ws)!;
       const blocks = this.rootBlock.getDescendants(false);
-      for (let i = 0, child; child = blocks[i]; i++) {
+      for (let i = 0, child; (child = blocks[i]); i++) {
         child.queueRender();
       }
       // The root block should not be draggable or deletable.
@@ -388,8 +411,9 @@ export class Mutator extends Icon {
         this.sourceListener = null;
       }
     }
-    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
-        block, visible, 'mutator'));
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(block, visible, 'mutator')
+    );
   }
 
   /**
@@ -414,9 +438,12 @@ export class Mutator extends Icon {
    * @returns Whether to ignore the event or not.
    */
   shouldIgnoreMutatorEvent_(e: Abstract) {
-    return e.isUiEvent || e.type === eventUtils.CREATE ||
-        e.type === eventUtils.CHANGE &&
-        (e as BlockChange).element === 'disabled';
+    return (
+      e.isUiEvent ||
+      e.type === eventUtils.CREATE ||
+      (e.type === eventUtils.CHANGE &&
+        (e as BlockChange).element === 'disabled')
+    );
   }
 
   /**
@@ -428,7 +455,7 @@ export class Mutator extends Icon {
       const blocks = this.workspace_!.getTopBlocks(false);
       const MARGIN = 20;
 
-      for (let b = 0, block; block = blocks[b]; b++) {
+      for (let b = 0, block; (block = blocks[b]); b++) {
         const blockXY = block.getRelativeToSurfaceXY();
 
         // Bump any block that's above the top back inside.
@@ -464,11 +491,18 @@ export class Mutator extends Icon {
 
       const newExtraState = BlockChange.getExtraBlockState_(block);
       if (oldExtraState !== newExtraState) {
-        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-            block, 'mutation', null, oldExtraState, newExtraState));
+        eventUtils.fire(
+          new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+            block,
+            'mutation',
+            null,
+            oldExtraState,
+            newExtraState
+          )
+        );
         // Ensure that any bump is part of this mutation's event group.
         const mutationGroup = eventUtils.getGroup();
-        setTimeout(function() {
+        setTimeout(function () {
           const oldGroup = eventUtils.getGroup();
           eventUtils.setGroup(mutationGroup);
           block.bumpNeighbours();
@@ -497,14 +531,14 @@ export class Mutator extends Icon {
 
     if (ws && ws.getAllBlocks(false)) {
       const workspaceBlocks = ws.getAllBlocks(false);
-      for (let i = 0, block; block = workspaceBlocks[i]; i++) {
+      for (let i = 0, block; (block = workspaceBlocks[i]); i++) {
         block.setStyle(block.getStyleName());
       }
 
       const flyout = ws.getFlyout();
       if (flyout) {
         const flyoutBlocks = flyout.getWorkspace().getAllBlocks(false);
-        for (let i = 0, block; block = flyoutBlocks[i]; i++) {
+        for (let i = 0, block; (block = flyoutBlocks[i]); i++) {
           block.setStyle(block.getStyleName());
         }
       }
@@ -520,14 +554,20 @@ export class Mutator extends Icon {
    * @returns True iff a reconnection was made, false otherwise.
    */
   static reconnect(
-      connectionChild: Connection, block: Block, inputName: string): boolean {
+    connectionChild: Connection,
+    block: Block,
+    inputName: string
+  ): boolean {
     if (!connectionChild || !connectionChild.getSourceBlock().workspace) {
-      return false;  // No connection or block has been deleted.
+      return false; // No connection or block has been deleted.
     }
     const connectionParent = block.getInput(inputName)!.connection;
     const currentParent = connectionChild.targetBlock();
-    if ((!currentParent || currentParent === block) && connectionParent &&
-        connectionParent.targetConnection !== connectionChild) {
+    if (
+      (!currentParent || currentParent === block) &&
+      connectionParent &&
+      connectionParent.targetConnection !== connectionChild
+    ) {
       if (connectionParent.isConnected()) {
         // There's already something connected here.  Get rid of it.
         connectionParent.disconnect();
@@ -545,7 +585,7 @@ export class Mutator extends Icon {
    * @param workspace The workspace that is inside a mutator.
    * @returns The mutator's parent workspace or null.
    */
-  static findParentWs(workspace: WorkspaceSvg): WorkspaceSvg|null {
+  static findParentWs(workspace: WorkspaceSvg): WorkspaceSvg | null {
     let outerWs = null;
     if (workspace && workspace.options) {
       const parent = workspace.options.parentWorkspace;

@@ -14,13 +14,19 @@ goog.declareModuleId('Blockly.libraryBlocks.loops');
 import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import type {Block} from '../core/block.js';
 import * as ContextMenu from '../core/contextmenu.js';
-import type {ContextMenuOption, LegacyContextMenuOption} from '../core/contextmenu_registry.js';
+import type {
+  ContextMenuOption,
+  LegacyContextMenuOption,
+} from '../core/contextmenu_registry.js';
 import * as Events from '../core/events/events.js';
 import * as Extensions from '../core/extensions.js';
 import * as Variables from '../core/variables.js';
 import * as xmlUtils from '../core/utils/xml.js';
 import {Msg} from '../core/msg.js';
-import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
+import {
+  createBlockDefinitionsFromJsonArray,
+  defineBlocks,
+} from '../core/common.js';
 import '../core/field_dropdown.js';
 import '../core/field_label.js';
 import '../core/field_number.js';
@@ -28,7 +34,6 @@ import '../core/field_variable.js';
 import '../core/warning.js';
 import {FieldVariable} from '../core/field_variable.js';
 import {WorkspaceSvg} from '../core/workspace_svg.js';
-
 
 /**
  * A dictionary of the block definitions provided by this module.
@@ -38,16 +43,20 @@ export const blocks = createBlockDefinitionsFromJsonArray([
   {
     'type': 'controls_repeat_ext',
     'message0': '%{BKY_CONTROLS_REPEAT_TITLE}',
-    'args0': [{
-      'type': 'input_value',
-      'name': 'TIMES',
-      'check': 'Number',
-    }],
+    'args0': [
+      {
+        'type': 'input_value',
+        'name': 'TIMES',
+        'check': 'Number',
+      },
+    ],
     'message1': '%{BKY_CONTROLS_REPEAT_INPUT_DO} %1',
-    'args1': [{
-      'type': 'input_statement',
-      'name': 'DO',
-    }],
+    'args1': [
+      {
+        'type': 'input_statement',
+        'name': 'DO',
+      },
+    ],
     'previousStatement': null,
     'nextStatement': null,
     'style': 'loop_blocks',
@@ -59,18 +68,22 @@ export const blocks = createBlockDefinitionsFromJsonArray([
   {
     'type': 'controls_repeat',
     'message0': '%{BKY_CONTROLS_REPEAT_TITLE}',
-    'args0': [{
-      'type': 'field_number',
-      'name': 'TIMES',
-      'value': 10,
-      'min': 0,
-      'precision': 1,
-    }],
+    'args0': [
+      {
+        'type': 'field_number',
+        'name': 'TIMES',
+        'value': 10,
+        'min': 0,
+        'precision': 1,
+      },
+    ],
     'message1': '%{BKY_CONTROLS_REPEAT_INPUT_DO} %1',
-    'args1': [{
-      'type': 'input_statement',
-      'name': 'DO',
-    }],
+    'args1': [
+      {
+        'type': 'input_statement',
+        'name': 'DO',
+      },
+    ],
     'previousStatement': null,
     'nextStatement': null,
     'style': 'loop_blocks',
@@ -97,10 +110,12 @@ export const blocks = createBlockDefinitionsFromJsonArray([
       },
     ],
     'message1': '%{BKY_CONTROLS_REPEAT_INPUT_DO} %1',
-    'args1': [{
-      'type': 'input_statement',
-      'name': 'DO',
-    }],
+    'args1': [
+      {
+        'type': 'input_statement',
+        'name': 'DO',
+      },
+    ],
     'previousStatement': null,
     'nextStatement': null,
     'style': 'loop_blocks',
@@ -137,19 +152,18 @@ export const blocks = createBlockDefinitionsFromJsonArray([
       },
     ],
     'message1': '%{BKY_CONTROLS_REPEAT_INPUT_DO} %1',
-    'args1': [{
-      'type': 'input_statement',
-      'name': 'DO',
-    }],
+    'args1': [
+      {
+        'type': 'input_statement',
+        'name': 'DO',
+      },
+    ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'loop_blocks',
     'helpUrl': '%{BKY_CONTROLS_FOR_HELPURL}',
-    'extensions': [
-      'contextMenu_newGetVariableBlock',
-      'controls_for_tooltip',
-    ],
+    'extensions': ['contextMenu_newGetVariableBlock', 'controls_for_tooltip'],
   },
   // Block for 'for each' loop.
   {
@@ -168,10 +182,12 @@ export const blocks = createBlockDefinitionsFromJsonArray([
       },
     ],
     'message1': '%{BKY_CONTROLS_REPEAT_INPUT_DO} %1',
-    'args1': [{
-      'type': 'input_statement',
-      'name': 'DO',
-    }],
+    'args1': [
+      {
+        'type': 'input_statement',
+        'name': 'DO',
+      },
+    ],
     'previousStatement': null,
     'nextStatement': null,
     'style': 'loop_blocks',
@@ -185,22 +201,21 @@ export const blocks = createBlockDefinitionsFromJsonArray([
   {
     'type': 'controls_flow_statements',
     'message0': '%1',
-    'args0': [{
-      'type': 'field_dropdown',
-      'name': 'FLOW',
-      'options': [
-        ['%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK}', 'BREAK'],
-        ['%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE}', 'CONTINUE'],
-      ],
-    }],
+    'args0': [
+      {
+        'type': 'field_dropdown',
+        'name': 'FLOW',
+        'options': [
+          ['%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK}', 'BREAK'],
+          ['%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE}', 'CONTINUE'],
+        ],
+      },
+    ],
     'previousStatement': null,
     'style': 'loop_blocks',
     'helpUrl': '%{BKY_CONTROLS_FLOW_STATEMENTS_HELPURL}',
     'suppressPrefixSuffix': true,
-    'extensions': [
-      'controls_flow_tooltip',
-      'controls_flow_in_loop_check',
-    ],
+    'extensions': ['controls_flow_tooltip', 'controls_flow_in_loop_check'],
   },
 ]);
 
@@ -215,8 +230,9 @@ const WHILE_UNTIL_TOOLTIPS = {
 };
 
 Extensions.register(
-    'controls_whileUntil_tooltip',
-    Extensions.buildTooltipForDropdown('MODE', WHILE_UNTIL_TOOLTIPS));
+  'controls_whileUntil_tooltip',
+  Extensions.buildTooltipForDropdown('MODE', WHILE_UNTIL_TOOLTIPS)
+);
 
 /**
  * Tooltips for the 'controls_flow_statements' block, keyed by FLOW value.
@@ -229,14 +245,15 @@ const BREAK_CONTINUE_TOOLTIPS = {
 };
 
 Extensions.register(
-    'controls_flow_tooltip',
-    Extensions.buildTooltipForDropdown('FLOW', BREAK_CONTINUE_TOOLTIPS));
+  'controls_flow_tooltip',
+  Extensions.buildTooltipForDropdown('FLOW', BREAK_CONTINUE_TOOLTIPS)
+);
 
 /** Type of a block that has CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN */
-type CustomContextMenuBlock = Block&CustomContextMenuMixin;
+type CustomContextMenuBlock = Block & CustomContextMenuMixin;
 interface CustomContextMenuMixin extends CustomContextMenuMixinType {}
 type CustomContextMenuMixinType =
-    typeof CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN;
+  typeof CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN;
 
 /**
  * Mixin to add a context menu item to create a 'variables_get' block.
@@ -249,9 +266,10 @@ const CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
    *
    * @param options List of menu options to add to.
    */
-  customContextMenu: function(
-      this: CustomContextMenuBlock,
-      options: Array<ContextMenuOption|LegacyContextMenuOption>) {
+  customContextMenu: function (
+    this: CustomContextMenuBlock,
+    options: Array<ContextMenuOption | LegacyContextMenuOption>
+  ) {
     if (this.isInFlyout) {
       return;
     }
@@ -267,24 +285,26 @@ const CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
       options.push({
         enabled: true,
         text: Msg['VARIABLES_SET_CREATE_GET'].replace('%1', varName),
-        callback: ContextMenu.callbackFactory(this, xmlBlock)
+        callback: ContextMenu.callbackFactory(this, xmlBlock),
       });
     }
   },
 };
 
 Extensions.registerMixin(
-    'contextMenu_newGetVariableBlock',
-    CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN);
+  'contextMenu_newGetVariableBlock',
+  CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN
+);
 
 Extensions.register(
-    'controls_for_tooltip',
-    Extensions.buildTooltipWithFieldText('%{BKY_CONTROLS_FOR_TOOLTIP}', 'VAR'));
+  'controls_for_tooltip',
+  Extensions.buildTooltipWithFieldText('%{BKY_CONTROLS_FOR_TOOLTIP}', 'VAR')
+);
 
 Extensions.register(
-    'controls_forEach_tooltip',
-    Extensions.buildTooltipWithFieldText(
-        '%{BKY_CONTROLS_FOREACH_TOOLTIP}', 'VAR'));
+  'controls_forEach_tooltip',
+  Extensions.buildTooltipWithFieldText('%{BKY_CONTROLS_FOREACH_TOOLTIP}', 'VAR')
+);
 
 /**
  * List of block types that are loops and thus do not need warnings.
@@ -310,7 +330,7 @@ export const loopTypes: Set<string> = new Set([
 ]);
 
 /** Type of a block that has CONTROL_FLOW_IN_LOOP_CHECK_MIXIN */
-type ControlFlowInLoopBlock = Block&ControlFlowInLoopMixin;
+type ControlFlowInLoopBlock = Block & ControlFlowInLoopMixin;
 interface ControlFlowInLoopMixin extends ControlFlowInLoopMixinType {}
 type ControlFlowInLoopMixinType = typeof CONTROL_FLOW_IN_LOOP_CHECK_MIXIN;
 
@@ -340,7 +360,7 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
    * Called whenever anything on the workspace changes.
    * Add warning if this flow block is not nested inside a loop.
    */
-  onchange: function(this: ControlFlowInLoopBlock, e: AbstractEvent) {
+  onchange: function (this: ControlFlowInLoopBlock, e: AbstractEvent) {
     const ws = this.workspace as WorkspaceSvg;
     // Don't change state if:
     //   * It's at the start of a drag.
@@ -350,7 +370,8 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     }
     const enabled = !!this.getSurroundLoop();
     this.setWarningText(
-        enabled ? null : Msg['CONTROLS_FLOW_STATEMENTS_WARNING']);
+      enabled ? null : Msg['CONTROLS_FLOW_STATEMENTS_WARNING']
+    );
     if (!this.isInFlyout) {
       const group = Events.getGroup();
       // Makes it so the move and the disable event get undone together.
@@ -362,7 +383,9 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
 };
 
 Extensions.registerMixin(
-    'controls_flow_in_loop_check', CONTROL_FLOW_IN_LOOP_CHECK_MIXIN);
+  'controls_flow_in_loop_check',
+  CONTROL_FLOW_IN_LOOP_CHECK_MIXIN
+);
 
 // Register provided blocks.
 defineBlocks(blocks);

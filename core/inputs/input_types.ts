@@ -9,7 +9,6 @@ goog.declareModuleId('Blockly.inputTypes');
 
 import {ConnectionType} from '../connection_type.js';
 
-
 /**
  * Enum for the type of a connection or input.
  */

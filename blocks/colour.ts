@@ -17,7 +17,6 @@ import {
 } from '../core/common.js';
 import '../core/field_colour.js';
 
-
 /**
  * A dictionary of the block definitions provided by this module.
  */
@@ -54,7 +53,7 @@ export const blocks = createBlockDefinitionsFromJsonArray([
   {
     'type': 'colour_rgb',
     'message0':
-        '%{BKY_COLOUR_RGB_TITLE} %{BKY_COLOUR_RGB_RED} %1 %{BKY_COLOUR_RGB_GREEN} %2 %{BKY_COLOUR_RGB_BLUE} %3',
+      '%{BKY_COLOUR_RGB_TITLE} %{BKY_COLOUR_RGB_RED} %1 %{BKY_COLOUR_RGB_GREEN} %2 %{BKY_COLOUR_RGB_BLUE} %3',
     'args0': [
       {
         'type': 'input_value',
@@ -84,8 +83,9 @@ export const blocks = createBlockDefinitionsFromJsonArray([
   // Block for blending two colours together.
   {
     'type': 'colour_blend',
-    'message0': '%{BKY_COLOUR_BLEND_TITLE} %{BKY_COLOUR_BLEND_COLOUR1} ' +
-        '%1 %{BKY_COLOUR_BLEND_COLOUR2} %2 %{BKY_COLOUR_BLEND_RATIO} %3',
+    'message0':
+      '%{BKY_COLOUR_BLEND_TITLE} %{BKY_COLOUR_BLEND_COLOUR1} ' +
+      '%1 %{BKY_COLOUR_BLEND_COLOUR2} %2 %{BKY_COLOUR_BLEND_RATIO} %3',
     'args0': [
       {
         'type': 'input_value',

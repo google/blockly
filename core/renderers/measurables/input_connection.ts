@@ -15,14 +15,13 @@ import type {ConstantProvider} from '../common/constants.js';
 import {Connection} from './connection.js';
 import {Types} from './types.js';
 
-
 /**
  * The base class to represent an input that takes up space on a block
  * during rendering.
  */
 export class InputConnection extends Connection {
   align: number;
-  connectedBlock: BlockSvg|null;
+  connectedBlock: BlockSvg | null;
   connectedBlockWidth: number;
   connectedBlockHeight: number;
   connectionOffsetX = 0;
@@ -40,9 +39,9 @@ export class InputConnection extends Connection {
     this.align = input.align;
 
     this.connectedBlock =
-        (input.connection && input.connection.targetBlock() ?
-             input.connection.targetBlock() as BlockSvg :
-             null);
+      input.connection && input.connection.targetBlock()
+        ? (input.connection.targetBlock() as BlockSvg)
+        : null;
 
     if (this.connectedBlock) {
       const bBox = this.connectedBlock.getHeightWidth();

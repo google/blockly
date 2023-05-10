@@ -7,7 +7,6 @@
 import {BlockSvg} from './block_svg.js';
 import {Coordinate} from './utils/coordinate.js';
 
-
 /** The set of all blocks in need of rendering which don't have parents. */
 const rootBlocks = new Set<BlockSvg>();
 
@@ -20,7 +19,7 @@ let dirtyBlocks = new WeakSet<BlockSvg>();
  *
  * Stored so that we can return it from afterQueuedRenders.
  */
-let afterRendersPromise: Promise<void>|null = null;
+let afterRendersPromise: Promise<void> | null = null;
 
 /**
  * Registers that the given block and all of its parents need to be rerendered,
@@ -126,7 +125,9 @@ function updateConnectionLocations(block: BlockSvg, blockOrigin: Coordinate) {
     if (!target) continue;
     if (moved || dirtyBlocks.has(target)) {
       updateConnectionLocations(
-          target, Coordinate.sum(blockOrigin, target.relativeCoords));
+        target,
+        Coordinate.sum(blockOrigin, target.relativeCoords)
+      );
     }
   }
 }

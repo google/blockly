@@ -7,20 +7,25 @@
 goog.declareModuleId('Blockly.test.fieldTest');
 
 import * as Blockly from '../../build/src/core/blockly.js';
-import {addBlockTypeToCleanup, addMessageToCleanup, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {
+  addBlockTypeToCleanup,
+  addMessageToCleanup,
+  sharedTestSetup,
+  sharedTestTeardown,
+  workspaceTeardown,
+} from './test_helpers/setup_teardown.js';
 import {createDeprecationWarningStub} from './test_helpers/warnings.js';
 
-
-suite('Abstract Fields', function() {
-  setup(function() {
+suite('Abstract Fields', function () {
+  setup(function () {
     sharedTestSetup.call(this);
   });
 
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
 
-  suite('Is Serializable', function() {
+  suite('Is Serializable', function () {
     // Both EDITABLE and SERIALIZABLE are default.
     class FieldDefault extends Blockly.Field {
       constructor() {
@@ -58,7 +63,7 @@ suite('Abstract Fields', function() {
     }
 
     /* Test Backwards Compatibility */
-    test('Editable Default(true), Serializable Default(false)', function() {
+    test('Editable Default(true), Serializable Default(false)', function () {
       // An old default field should be serialized.
       const field = new FieldDefault();
       const stub = sinon.stub(console, 'warn');
@@ -66,18 +71,18 @@ suite('Abstract Fields', function() {
       sinon.assert.calledOnce(stub);
       stub.restore();
     });
-    test('Editable False, Serializable Default(false)', function() {
+    test('Editable False, Serializable Default(false)', function () {
       // An old non-editable field should not be serialized.
       const field = new FieldFalseDefault();
       chai.assert.isFalse(field.isSerializable());
     });
     /* Test Other Cases */
-    test('Editable Default(true), Serializable True', function() {
+    test('Editable Default(true), Serializable True', function () {
       // A field that is both editable and serializable should be serialized.
       const field = new FieldDefaultTrue();
       chai.assert.isTrue(field.isSerializable());
     });
-    test('Editable False, Serializable True', function() {
+    test('Editable False, Serializable True', function () {
       // A field that is not editable, but overrides serializable to true
       // should be serialized (e.g. field_label_serializable)
       const field = new FieldFalseTrue();
@@ -85,7 +90,7 @@ suite('Abstract Fields', function() {
     });
   });
 
-  suite('Serialization', function() {
+  suite('Serialization', function () {
     class DefaultSerializationField extends Blockly.Field {
       constructor(value, validator = undefined, config = undefined) {
         super(value, validator, config);
@@ -185,169 +190,178 @@ suite('Abstract Fields', function() {
       }
     }
 
-    suite('Save', function() {
-      suite('JSO', function() {
-        test('No implementations', function() {
+    suite('Save', function () {
+      suite('JSO', function () {
+        test('No implementations', function () {
           const field = new DefaultSerializationField('test value');
           const value = field.saveState();
           chai.assert.equal(value, 'test value');
         });
 
-        test('Xml implementations', function() {
+        test('Xml implementations', function () {
           const field = new CustomXmlField('test value');
           const value = field.saveState();
           chai.assert.equal(value, '<field name="">custom value</field>');
         });
 
-        test('Xml super implementation', function() {
+        test('Xml super implementation', function () {
           const field = new CustomXmlCallSuperField('test value');
           const value = field.saveState();
           chai.assert.equal(
-              value,
-              '<field name="" attribute="custom value">test value</field>');
+            value,
+            '<field name="" attribute="custom value">test value</field>'
+          );
         });
 
-        test('JSO implementations', function() {
+        test('JSO implementations', function () {
           const field = new CustomJsoField('test value');
           const value = field.saveState();
           chai.assert.equal(value, 'custom value');
         });
 
-        test('JSO super implementations', function() {
+        test('JSO super implementations', function () {
           const field = new CustomJsoCallSuperField('test value');
           const value = field.saveState();
-          chai.assert.deepEqual(
-              value, {default: 'test value', val: 'custom value'});
+          chai.assert.deepEqual(value, {
+            default: 'test value',
+            val: 'custom value',
+          });
         });
 
-        test('Xml and JSO implementations', function() {
+        test('Xml and JSO implementations', function () {
           const field = new CustomXmlAndJsoField('test value');
           const value = field.saveState();
           chai.assert.equal(value, 'custom value');
         });
       });
 
-      suite('Xml', function() {
-        test('No implementations', function() {
+      suite('Xml', function () {
+        test('No implementations', function () {
           const field = new DefaultSerializationField('test value');
           const element = document.createElement('field');
           const value = Blockly.Xml.domToText(field.toXml(element));
           chai.assert.equal(
-              value,
-              '<field xmlns="http://www.w3.org/1999/xhtml">test value</field>');
+            value,
+            '<field xmlns="http://www.w3.org/1999/xhtml">test value</field>'
+          );
         });
 
-        test('Xml implementations', function() {
+        test('Xml implementations', function () {
           const field = new CustomXmlField('test value');
           const element = document.createElement('field');
           const value = Blockly.Xml.domToText(field.toXml(element));
           chai.assert.equal(
-              value,
-              '<field xmlns="http://www.w3.org/1999/xhtml">custom value</field>'
+            value,
+            '<field xmlns="http://www.w3.org/1999/xhtml">custom value</field>'
           );
         });
 
-        test('Xml super implementation', function() {
+        test('Xml super implementation', function () {
           const field = new CustomXmlCallSuperField('test value');
           const element = document.createElement('field');
           const value = Blockly.Xml.domToText(field.toXml(element));
           chai.assert.equal(
-              value,
-              '<field xmlns="http://www.w3.org/1999/xhtml" ' +
-              'attribute="custom value">test value</field>');
+            value,
+            '<field xmlns="http://www.w3.org/1999/xhtml" ' +
+              'attribute="custom value">test value</field>'
+          );
         });
 
-        test('Xml and JSO implementations', function() {
+        test('Xml and JSO implementations', function () {
           const field = new CustomXmlAndJsoField('test value');
           const element = document.createElement('field');
           const value = Blockly.Xml.domToText(field.toXml(element));
           chai.assert.equal(
-              value,
-              '<field xmlns="http://www.w3.org/1999/xhtml">custom value</field>'
+            value,
+            '<field xmlns="http://www.w3.org/1999/xhtml">custom value</field>'
           );
         });
       });
     });
 
-    suite('Load', function() {
-      suite('JSO', function() {
-        test('No implementations', function() {
+    suite('Load', function () {
+      suite('JSO', function () {
+        test('No implementations', function () {
           const field = new DefaultSerializationField('');
           field.loadState('test value');
           chai.assert.equal(field.getValue(), 'test value');
         });
 
-        test('Xml implementations', function() {
+        test('Xml implementations', function () {
           const field = new CustomXmlField('');
           field.loadState('<field name="">custom value</field>');
           chai.assert.equal(field.someProperty, 'custom value');
         });
 
-        test('Xml super implementation', function() {
+        test('Xml super implementation', function () {
           const field = new CustomXmlCallSuperField('');
           field.loadState(
-              '<field attribute="custom value" name="">test value</field>');
+            '<field attribute="custom value" name="">test value</field>'
+          );
           chai.assert.equal(field.getValue(), 'test value');
           chai.assert.equal(field.someProperty, 'custom value');
         });
 
-        test('JSO implementations', function() {
+        test('JSO implementations', function () {
           const field = new CustomJsoField('');
           field.loadState('custom value');
           chai.assert.equal(field.someProperty, 'custom value');
         });
 
-        test('JSO super implementations', function() {
+        test('JSO super implementations', function () {
           const field = new CustomJsoCallSuperField('');
           field.loadState({default: 'test value', val: 'custom value'});
           chai.assert.equal(field.getValue(), 'test value');
           chai.assert.equal(field.someProperty, 'custom value');
         });
 
-        test('Xml and JSO implementations', function() {
+        test('Xml and JSO implementations', function () {
           const field = new CustomXmlAndJsoField('');
           field.loadState('custom value');
           chai.assert.equal(field.someProperty, 'custom value');
         });
       });
 
-      suite('Xml', function() {
-        test('No implementations', function() {
+      suite('Xml', function () {
+        test('No implementations', function () {
           const field = new DefaultSerializationField('');
           field.fromXml(
-              Blockly.utils.xml.textToDom('<field name="">test value</field>'));
+            Blockly.utils.xml.textToDom('<field name="">test value</field>')
+          );
           chai.assert.equal(field.getValue(), 'test value');
         });
 
-        test('Xml implementations', function() {
+        test('Xml implementations', function () {
           const field = new CustomXmlField('');
           field.fromXml(
-              Blockly.utils.xml.textToDom('<field name="">custom value</field>'));
+            Blockly.utils.xml.textToDom('<field name="">custom value</field>')
+          );
           chai.assert.equal(field.someProperty, 'custom value');
         });
 
-        test('Xml super implementation', function() {
+        test('Xml super implementation', function () {
           const field = new CustomXmlCallSuperField('');
           field.fromXml(
-              Blockly.utils.xml.textToDom(
-                  '<field attribute="custom value" name="">test value</field>'
-              )
+            Blockly.utils.xml.textToDom(
+              '<field attribute="custom value" name="">test value</field>'
+            )
           );
           chai.assert.equal(field.getValue(), 'test value');
           chai.assert.equal(field.someProperty, 'custom value');
         });
 
-        test('XML andd JSO implementations', function() {
+        test('XML andd JSO implementations', function () {
           const field = new CustomXmlAndJsoField('');
           field.fromXml(
-              Blockly.utils.xml.textToDom('<field name="">custom value</field>'));
+            Blockly.utils.xml.textToDom('<field name="">custom value</field>')
+          );
           chai.assert.equal(field.someProperty, 'custom value');
         });
       });
     });
   });
 
-  suite('setValue', function() {
+  suite('setValue', function () {
     function addSpies(field, excludeSpies = []) {
       if (!excludeSpies.includes('doValueInvalid_')) {
         sinon.spy(field, 'doValueInvalid_');
@@ -360,23 +374,23 @@ suite('Abstract Fields', function() {
       }
     }
     function stubDoValueInvalid(field, isDirty) {
-      sinon.stub(field, 'doValueInvalid_').callsFake(function(newValue) {
+      sinon.stub(field, 'doValueInvalid_').callsFake(function (newValue) {
         this.isDirty_ = isDirty;
       });
     }
     function stubDoValueUpdate(field, isDirty) {
-      sinon.stub(field, 'doValueUpdate_').callsFake(function(newValue) {
+      sinon.stub(field, 'doValueUpdate_').callsFake(function (newValue) {
         this.isDirty_ = isDirty;
       });
     }
     function setLocalValidatorWithReturn(field, value) {
-      field.setValidator(function() {
+      field.setValidator(function () {
         return value;
       });
     }
     function setLocalValidator(field, isValid) {
       if (isValid) {
-        field.setValidator(function(newValue) {
+        field.setValidator(function (newValue) {
           return newValue;
         });
       } else {
@@ -388,32 +402,32 @@ suite('Abstract Fields', function() {
     }
     function stubClassValidator(field, isValid) {
       if (isValid) {
-        sinon.stub(field, 'doClassValidation_').callsFake(function(newValue) {
+        sinon.stub(field, 'doClassValidation_').callsFake(function (newValue) {
           return newValue;
         });
       } else {
         stubClassValidatorWithReturn(field, null);
       }
     }
-    setup(function() {
+    setup(function () {
       this.field = new Blockly.Field();
       this.field.isDirty_ = false;
     });
-    test('Null', function() {
+    test('Null', function () {
       addSpies(this.field);
       this.field.setValue(null);
       sinon.assert.notCalled(this.field.doValueInvalid_);
       sinon.assert.notCalled(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
-    test('No Validators, Dirty (Default)', function() {
+    test('No Validators, Dirty (Default)', function () {
       addSpies(this.field);
       this.field.setValue('value');
       sinon.assert.notCalled(this.field.doValueInvalid_);
       sinon.assert.calledOnce(this.field.doValueUpdate_);
       sinon.assert.calledOnce(this.field.forceRerender);
     });
-    test('No Validators, Not Dirty', function() {
+    test('No Validators, Not Dirty', function () {
       stubDoValueUpdate(this.field, false);
       addSpies(this.field, ['doValueUpdate_']);
       this.field.setValue('value');
@@ -421,7 +435,7 @@ suite('Abstract Fields', function() {
       sinon.assert.calledOnce(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
-    test('Class Validator Returns Invalid, Not Dirty (Default)', function() {
+    test('Class Validator Returns Invalid, Not Dirty (Default)', function () {
       stubClassValidator(this.field, false);
       addSpies(this.field);
       this.field.setValue('value');
@@ -429,7 +443,7 @@ suite('Abstract Fields', function() {
       sinon.assert.notCalled(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
-    test('Class Validator Returns Invalid, Dirty', function() {
+    test('Class Validator Returns Invalid, Dirty', function () {
       stubClassValidator(this.field, false);
       stubDoValueInvalid(this.field, true);
       addSpies(this.field, ['doValueInvalid_']);
@@ -438,7 +452,7 @@ suite('Abstract Fields', function() {
       sinon.assert.notCalled(this.field.doValueUpdate_);
       sinon.assert.calledOnce(this.field.forceRerender);
     });
-    test('Class Validator Returns Valid, Not Dirty', function() {
+    test('Class Validator Returns Valid, Not Dirty', function () {
       stubClassValidator(this.field, true);
       stubDoValueUpdate(this.field, false);
       addSpies(this.field, ['doValueUpdate_']);
@@ -447,7 +461,7 @@ suite('Abstract Fields', function() {
       sinon.assert.calledOnce(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
-    test('Class Validator Returns Valid, Dirty (Default)', function() {
+    test('Class Validator Returns Valid, Dirty (Default)', function () {
       stubClassValidator(this.field, true);
       addSpies(this.field);
       this.field.setValue('value');
@@ -455,7 +469,7 @@ suite('Abstract Fields', function() {
       sinon.assert.calledOnce(this.field.doValueUpdate_);
       sinon.assert.calledOnce(this.field.forceRerender);
     });
-    test('Local Validator Returns Invalid, Not Dirty (Default)', function() {
+    test('Local Validator Returns Invalid, Not Dirty (Default)', function () {
       setLocalValidator(this.field, false);
       addSpies(this.field);
       this.field.setValue('value');
@@ -463,7 +477,7 @@ suite('Abstract Fields', function() {
       sinon.assert.notCalled(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
-    test('Local Validator Returns Invalid, Dirty', function() {
+    test('Local Validator Returns Invalid, Dirty', function () {
       stubDoValueInvalid(this.field, true);
       setLocalValidator(this.field, false);
       addSpies(this.field, ['doValueInvalid_']);
@@ -472,7 +486,7 @@ suite('Abstract Fields', function() {
       sinon.assert.notCalled(this.field.doValueUpdate_);
       sinon.assert.calledOnce(this.field.forceRerender);
     });
-    test('Local Validator Returns Valid, Not Dirty', function() {
+    test('Local Validator Returns Valid, Not Dirty', function () {
       stubDoValueUpdate(this.field, false);
       setLocalValidator(this.field, true);
       addSpies(this.field, ['doValueUpdate_']);
@@ -481,7 +495,7 @@ suite('Abstract Fields', function() {
       sinon.assert.calledOnce(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
-    test('Local Validator Returns Valid, Dirty (Default)', function() {
+    test('Local Validator Returns Valid, Dirty (Default)', function () {
       setLocalValidator(this.field, true);
       addSpies(this.field);
       this.field.setValue('value');
@@ -489,7 +503,7 @@ suite('Abstract Fields', function() {
       sinon.assert.calledOnce(this.field.doValueUpdate_);
       sinon.assert.calledOnce(this.field.forceRerender);
     });
-    test('New Value Matches Old Value', function() {
+    test('New Value Matches Old Value', function () {
       this.field.setValue('value');
       addSpies(this.field);
       this.field.setValue('value');
@@ -497,7 +511,7 @@ suite('Abstract Fields', function() {
       sinon.assert.calledOnce(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
-    test('New Value (Class)Validates to Old Value', function() {
+    test('New Value (Class)Validates to Old Value', function () {
       this.field.setValue('value');
       stubClassValidatorWithReturn(this.field, 'value');
       addSpies(this.field);
@@ -506,7 +520,7 @@ suite('Abstract Fields', function() {
       sinon.assert.calledOnce(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
-    test('New Value (Local)Validates to Old Value', function() {
+    test('New Value (Local)Validates to Old Value', function () {
       this.field.setValue('value');
       setLocalValidatorWithReturn(this.field, 'value');
       addSpies(this.field);
@@ -515,7 +529,7 @@ suite('Abstract Fields', function() {
       sinon.assert.calledOnce(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
-    test('New Value (Class)Validates to not Old Value', function() {
+    test('New Value (Class)Validates to not Old Value', function () {
       this.field.setValue('value');
       stubClassValidatorWithReturn(this.field, 'notValue');
       addSpies(this.field);
@@ -523,7 +537,7 @@ suite('Abstract Fields', function() {
       sinon.assert.notCalled(this.field.doValueInvalid_);
       sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
-    test('New Value (Local)Validates to not Old Value', function() {
+    test('New Value (Local)Validates to not Old Value', function () {
       this.field.setValue('value');
       setLocalValidatorWithReturn(this.field, 'notValue');
       addSpies(this.field);
@@ -531,31 +545,32 @@ suite('Abstract Fields', function() {
       sinon.assert.notCalled(this.field.doValueInvalid_);
       sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
-    test('Class Validator Returns Null', function() {
+    test('Class Validator Returns Null', function () {
       stubClassValidatorWithReturn(this.field, null);
       addSpies(this.field);
       this.field.setValue('value');
       sinon.assert.calledOnce(this.field.doValueInvalid_);
       sinon.assert.notCalled(this.field.doValueUpdate_);
     });
-    test('Class Validator Returns Same', function() {
-      sinon.stub(this.field, 'doClassValidation_').callsFake(
-          function(newValue) {
-            return newValue;
-          });
+    test('Class Validator Returns Same', function () {
+      sinon
+        .stub(this.field, 'doClassValidation_')
+        .callsFake(function (newValue) {
+          return newValue;
+        });
       addSpies(this.field);
       this.field.setValue('value');
       sinon.assert.notCalled(this.field.doValueInvalid_);
       sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
-    test('Class Validator Returns Different', function() {
+    test('Class Validator Returns Different', function () {
       stubClassValidatorWithReturn(this.field, 'differentValue');
       addSpies(this.field);
       this.field.setValue('value');
       sinon.assert.notCalled(this.field.doValueInvalid_);
       sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
-    test('Class Validator Returns Undefined', function() {
+    test('Class Validator Returns Undefined', function () {
       stubClassValidatorWithReturn(this.field, undefined);
       addSpies(this.field);
       this.field.setValue('value');
@@ -563,15 +578,15 @@ suite('Abstract Fields', function() {
       sinon.assert.notCalled(this.field.doValueInvalid_);
       sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
-    test('Local Validator Returns Null', function() {
+    test('Local Validator Returns Null', function () {
       setLocalValidatorWithReturn(this.field, null);
       addSpies(this.field);
       this.field.setValue('value');
       sinon.assert.calledOnce(this.field.doValueInvalid_);
       sinon.assert.notCalled(this.field.doValueUpdate_);
     });
-    test('Local Validator Returns Same', function() {
-      this.field.setValidator(function(newValue) {
+    test('Local Validator Returns Same', function () {
+      this.field.setValidator(function (newValue) {
         return newValue;
       });
       addSpies(this.field);
@@ -579,14 +594,14 @@ suite('Abstract Fields', function() {
       sinon.assert.notCalled(this.field.doValueInvalid_);
       sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
-    test('Local Validator Returns Different', function() {
+    test('Local Validator Returns Different', function () {
       setLocalValidatorWithReturn(this.field, 'differentValue');
       addSpies(this.field);
       this.field.setValue('value');
       sinon.assert.notCalled(this.field.doValueInvalid_);
       sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
-    test('Local Validator Returns Undefined', function() {
+    test('Local Validator Returns Undefined', function () {
       setLocalValidatorWithReturn(this.field, undefined);
       addSpies(this.field);
       this.field.setValue('value');
@@ -596,7 +611,7 @@ suite('Abstract Fields', function() {
     });
   });
 
-  suite('Customization', function() {
+  suite('Customization', function () {
     // All this field does is wrap the abstract field.
     class CustomField extends Blockly.Field {
       constructor(opt_config) {
@@ -608,15 +623,15 @@ suite('Abstract Fields', function() {
       }
     }
 
-    suite('Tooltip', function() {
-      test('JS Constructor', function() {
+    suite('Tooltip', function () {
+      test('JS Constructor', function () {
         const field = new Blockly.Field('value', null, {
           tooltip: 'test tooltip',
         });
         chai.assert.equal(field.tooltip_, 'test tooltip');
       });
-      test('JS Constructor - Dynamic', function() {
-        const returnTooltip = function() {
+      test('JS Constructor - Dynamic', function () {
+        const returnTooltip = function () {
           return 'dynamic tooltip text';
         };
         const field = new Blockly.Field('value', null, {
@@ -624,167 +639,181 @@ suite('Abstract Fields', function() {
         });
         chai.assert.equal(field.tooltip_, returnTooltip);
       });
-      test('JSON Definition', function() {
+      test('JSON Definition', function () {
         const field = CustomField.fromJson({
-          tooltip: "test tooltip",
+          tooltip: 'test tooltip',
         });
         chai.assert.equal(field.tooltip_, 'test tooltip');
       });
-      suite('W/ Msg References', function() {
-        setup(function() {
+      suite('W/ Msg References', function () {
+        setup(function () {
           addMessageToCleanup(this.sharedCleanup, 'TOOLTIP');
           Blockly.Msg['TOOLTIP'] = 'test tooltip';
         });
-        test('JS Constructor', function() {
+        test('JS Constructor', function () {
           const field = new Blockly.Field('value', null, {
             tooltip: '%{BKY_TOOLTIP}',
           });
           chai.assert.equal(field.tooltip_, 'test tooltip');
         });
-        test('JSON Definition', function() {
+        test('JSON Definition', function () {
           const field = CustomField.fromJson({
-            tooltip: "%{BKY_TOOLTIP}",
+            tooltip: '%{BKY_TOOLTIP}',
           });
           chai.assert.equal(field.tooltip_, 'test tooltip');
         });
       });
-      suite('setTooltip', function() {
-        setup(function() {
+      suite('setTooltip', function () {
+        setup(function () {
           this.workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
           this.workspace.createDom();
         });
-        teardown(function() {
+        teardown(function () {
           workspaceTeardown.call(this, this.workspace);
         });
-        test('Before Append', function() {
+        test('Before Append', function () {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
-            init: function() {
+            init: function () {
               const field = new Blockly.FieldTextInput('default');
               field.setTooltip('tooltip');
-              this.appendDummyInput()
-                  .appendField(field, 'TOOLTIP');
+              this.appendDummyInput().appendField(field, 'TOOLTIP');
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
+          const block = Blockly.Xml.domToBlock(
+            Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
-              '  <block type="tooltip"></block>' +
-              '</xml>'
-          ).children[0], this.workspace);
+                '  <block type="tooltip"></block>' +
+                '</xml>'
+            ).children[0],
+            this.workspace
+          );
           const field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
         });
-        test('After Append', function() {
+        test('After Append', function () {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
-            init: function() {
+            init: function () {
               const field = new Blockly.FieldTextInput('default');
-              this.appendDummyInput()
-                  .appendField(field, 'TOOLTIP');
+              this.appendDummyInput().appendField(field, 'TOOLTIP');
               field.setTooltip('tooltip');
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
+          const block = Blockly.Xml.domToBlock(
+            Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
-              '  <block type="tooltip"></block>' +
-              '</xml>'
-          ).children[0], this.workspace);
+                '  <block type="tooltip"></block>' +
+                '</xml>'
+            ).children[0],
+            this.workspace
+          );
           const field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
         });
-        test('After Block Creation', function() {
+        test('After Block Creation', function () {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
-            init: function() {
+            init: function () {
               const field = new Blockly.FieldTextInput('default');
-              this.appendDummyInput()
-                  .appendField(field, 'TOOLTIP');
+              this.appendDummyInput().appendField(field, 'TOOLTIP');
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
+          const block = Blockly.Xml.domToBlock(
+            Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
-              '  <block type="tooltip"></block>' +
-              '</xml>'
-          ).children[0], this.workspace);
+                '  <block type="tooltip"></block>' +
+                '</xml>'
+            ).children[0],
+            this.workspace
+          );
           const field = block.getField('TOOLTIP');
           field.setTooltip('tooltip');
           chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
         });
-        test('Dynamic Function', function() {
+        test('Dynamic Function', function () {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
-            init: function() {
+            init: function () {
               const field = new Blockly.FieldTextInput('default');
               field.setTooltip(this.tooltipFunc);
-              this.appendDummyInput()
-                  .appendField(field, 'TOOLTIP');
+              this.appendDummyInput().appendField(field, 'TOOLTIP');
             },
 
-            tooltipFunc: function() {
+            tooltipFunc: function () {
               return this.getFieldValue('TOOLTIP');
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
+          const block = Blockly.Xml.domToBlock(
+            Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
-              '  <block type="tooltip"></block>' +
-              '</xml>'
-          ).children[0], this.workspace);
+                '  <block type="tooltip"></block>' +
+                '</xml>'
+            ).children[0],
+            this.workspace
+          );
           const field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block.tooltipFunc);
         });
-        test('Element', function() {
+        test('Element', function () {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
-            init: function() {
+            init: function () {
               const field = new Blockly.FieldTextInput('default');
               field.setTooltip(this.element);
-              this.appendDummyInput()
-                  .appendField(field, 'TOOLTIP');
+              this.appendDummyInput().appendField(field, 'TOOLTIP');
             },
             element: {
               tooltip: 'tooltip',
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
+          const block = Blockly.Xml.domToBlock(
+            Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
-              '  <block type="tooltip"></block>' +
-              '</xml>'
-          ).children[0], this.workspace);
+                '  <block type="tooltip"></block>' +
+                '</xml>'
+            ).children[0],
+            this.workspace
+          );
           const field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block.element);
         });
-        test('Null', function() {
+        test('Null', function () {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
-            init: function() {
+            init: function () {
               const field = new Blockly.FieldTextInput('default');
               field.setTooltip(null);
-              this.appendDummyInput()
-                  .appendField(field, 'TOOLTIP');
+              this.appendDummyInput().appendField(field, 'TOOLTIP');
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
+          const block = Blockly.Xml.domToBlock(
+            Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
-              '  <block type="tooltip"></block>' +
-              '</xml>'
-          ).children[0], this.workspace);
+                '  <block type="tooltip"></block>' +
+                '</xml>'
+            ).children[0],
+            this.workspace
+          );
           const field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block);
         });
-        test('Undefined', function() {
+        test('Undefined', function () {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
-            init: function() {
+            init: function () {
               const field = new Blockly.FieldTextInput('default');
-              this.appendDummyInput()
-                  .appendField(field, 'TOOLTIP');
+              this.appendDummyInput().appendField(field, 'TOOLTIP');
             },
           };
-          const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
+          const block = Blockly.Xml.domToBlock(
+            Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
-              '  <block type="tooltip"></block>' +
-              '</xml>'
-          ).children[0], this.workspace);
+                '  <block type="tooltip"></block>' +
+                '</xml>'
+            ).children[0],
+            this.workspace
+          );
           const field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block);
         });

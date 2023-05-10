@@ -14,7 +14,6 @@ import * as deprecation from './deprecation.js';
 import {Rect} from './rect.js';
 import * as style from './style.js';
 
-
 /**
  * Static regex to pull the x,y values out of an SVG translate() directive.
  * Note that Firefox and IE (9,10) return 'translate(12)' instead of
@@ -30,7 +29,7 @@ const XY_REGEX = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
  * Accounts for same exceptions as XY_REGEX.
  */
 const XY_STYLE_REGEX =
-    /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
+  /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
@@ -111,7 +110,10 @@ export function getInjectionDivXY(element: Element): Coordinate {
 export function is3dSupported(): boolean {
   // All browsers support translate3d in 2022.
   deprecation.warn(
-      'Blockly.utils.svgMath.is3dSupported', 'version 9', 'version 10');
+    'Blockly.utils.svgMath.is3dSupported',
+    'version 9',
+    'version 10'
+  );
   return true;
 }
 
@@ -127,8 +129,11 @@ export function getViewportBBox(): Rect {
   // Pixels, in window coordinates.
   const scrollOffset = style.getViewportPageOffset();
   return new Rect(
-      scrollOffset.y, document.documentElement.clientHeight + scrollOffset.y,
-      scrollOffset.x, document.documentElement.clientWidth + scrollOffset.x);
+    scrollOffset.y,
+    document.documentElement.clientHeight + scrollOffset.y,
+    scrollOffset.x,
+    document.documentElement.clientWidth + scrollOffset.x
+  );
 }
 
 /**
@@ -141,7 +146,9 @@ export function getDocumentScroll(): Coordinate {
   const el = document.documentElement;
   const win = window;
   return new Coordinate(
-      win.pageXOffset || el.scrollLeft, win.pageYOffset || el.scrollTop);
+    win.pageXOffset || el.scrollLeft,
+    win.pageYOffset || el.scrollTop
+  );
 }
 
 /**
@@ -153,7 +160,9 @@ export function getDocumentScroll(): Coordinate {
  * @returns The workspace coordinates.
  */
 export function screenToWsCoordinates(
-    ws: WorkspaceSvg, screenCoordinates: Coordinate): Coordinate {
+  ws: WorkspaceSvg,
+  screenCoordinates: Coordinate
+): Coordinate {
   const screenX = screenCoordinates.x;
   const screenY = screenCoordinates.y;
 
@@ -164,8 +173,10 @@ export function screenToWsCoordinates(
   const boundingRect = injectionDiv.getBoundingClientRect();
 
   // The client coordinates offset by the injection div's upper left corner.
-  const clientOffsetPixels =
-      new Coordinate(screenX - boundingRect.left, screenY - boundingRect.top);
+  const clientOffsetPixels = new Coordinate(
+    screenX - boundingRect.left,
+    screenY - boundingRect.top
+  );
 
   // The offset in pixels between the main workspace's origin and the upper
   // left corner of the injection div.
@@ -173,8 +184,10 @@ export function screenToWsCoordinates(
 
   // The position of the new comment in pixels relative to the origin of the
   // main workspace.
-  const finalOffsetPixels =
-      Coordinate.difference(clientOffsetPixels, mainOffsetPixels);
+  const finalOffsetPixels = Coordinate.difference(
+    clientOffsetPixels,
+    mainOffsetPixels
+  );
   // The position in main workspace coordinates.
   const finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
   return finalOffsetMainWs;

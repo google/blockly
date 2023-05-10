@@ -14,7 +14,11 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldLabelSerializable');
 
-import {FieldLabel, FieldLabelConfig, FieldLabelFromJsonConfig} from './field_label.js';
+import {
+  FieldLabel,
+  FieldLabelConfig,
+  FieldLabelFromJsonConfig,
+} from './field_label.js';
 import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
 
@@ -57,8 +61,9 @@ export class FieldLabelSerializable extends FieldLabel {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: FieldLabelFromJsonConfig):
-      FieldLabelSerializable {
+  static override fromJson(
+    options: FieldLabelFromJsonConfig
+  ): FieldLabelSerializable {
     const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldLabelSerializable if that class
     // doesn't override the static fromJson method.

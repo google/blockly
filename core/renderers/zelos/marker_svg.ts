@@ -19,7 +19,6 @@ import {MarkerSvg as BaseMarkerSvg} from '../common/marker_svg.js';
 
 import type {ConstantProvider as ZelosConstantProvider} from './constants.js';
 
-
 /**
  * Class to draw a marker.
  */
@@ -27,7 +26,7 @@ export class MarkerSvg extends BaseMarkerSvg {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   constants_!: ZelosConstantProvider;
 
-  private markerCircle: SVGCircleElement|null = null;
+  private markerCircle: SVGCircleElement | null = null;
 
   /**
    * @param workspace The workspace the marker belongs to.
@@ -35,8 +34,10 @@ export class MarkerSvg extends BaseMarkerSvg {
    * @param marker The marker to draw.
    */
   constructor(
-      workspace: WorkspaceSvg, constants: BaseConstantProvider,
-      marker: Marker) {
+    workspace: WorkspaceSvg,
+    constants: BaseConstantProvider,
+    marker: Marker
+  ) {
     super(workspace, constants, marker);
   }
 
@@ -113,12 +114,14 @@ export class MarkerSvg extends BaseMarkerSvg {
     super.createDomInternal_();
 
     this.markerCircle = dom.createSvgElement(
-        Svg.CIRCLE, {
-          'r': this.constants_.CURSOR_RADIUS,
-          'style': 'display: none',
-          'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
-        },
-        this.markerSvg_);
+      Svg.CIRCLE,
+      {
+        'r': this.constants_.CURSOR_RADIUS,
+        'style': 'display: none',
+        'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
+      },
+      this.markerSvg_
+    );
 
     // Markers and stack cursors don't blink.
     if (this.isCursor()) {

@@ -9,7 +9,6 @@ goog.declareModuleId('Blockly.utils.object');
 
 import * as deprecation from './deprecation.js';
 
-
 /**
  * Inherit the prototype methods from one constructor into another.
  *
@@ -47,7 +46,11 @@ export function inherits(childCtor: Function, parentCtor: Function) {
  */
 export function mixin(target: AnyDuringMigration, source: AnyDuringMigration) {
   deprecation.warn(
-      'Blockly.utils.object.mixin', 'May 2022', 'May 2023', 'Object.assign');
+    'Blockly.utils.object.mixin',
+    'May 2022',
+    'May 2023',
+    'Object.assign'
+  );
   for (const x in source) {
     target[x] = source[x];
   }
@@ -61,8 +64,9 @@ export function mixin(target: AnyDuringMigration, source: AnyDuringMigration) {
  * @returns The resulting object.
  */
 export function deepMerge(
-    target: AnyDuringMigration,
-    source: AnyDuringMigration): AnyDuringMigration {
+  target: AnyDuringMigration,
+  source: AnyDuringMigration
+): AnyDuringMigration {
   for (const x in source) {
     if (source[x] !== null && typeof source[x] === 'object') {
       target[x] = deepMerge(target[x] || Object.create(null), source[x]);
@@ -82,7 +86,10 @@ export function deepMerge(
  */
 export function values(obj: AnyDuringMigration): AnyDuringMigration[] {
   deprecation.warn(
-      'Blockly.utils.object.values', 'version 9', 'version 10',
-      'Object.values');
+    'Blockly.utils.object.values',
+    'version 9',
+    'version 10',
+    'Object.values'
+  );
   return Object.values(obj);
 }

@@ -9,7 +9,6 @@ goog.declareModuleId('Blockly.serialization.ISerializer');
 
 import type {Workspace} from '../workspace.js';
 
-
 /**
  * Serializes and deserializes a plugin or system.
  */
@@ -33,7 +32,7 @@ export interface ISerializer {
    * @returns A JS object containing the system's state, or null if there is no
    *     state to record.
    */
-  save(workspace: Workspace): Object|null;
+  save(workspace: Workspace): Object | null;
   /* eslint-enable valid-jsdoc */
 
   /**

@@ -20,7 +20,6 @@ import type * as toolbox from '../utils/toolbox.js';
 
 import {ToolboxItem} from './toolbox_item.js';
 
-
 /**
  * Class for a toolbox separator. This is the thin visual line that appears on
  * the toolbox. This item is not interactable.
@@ -32,7 +31,7 @@ export class ToolboxSeparator extends ToolboxItem {
   /** All the CSS class names that are used to create a separator. */
   protected cssConfig_: CssConfig = {'container': 'blocklyTreeSeparator'};
 
-  private htmlDiv_: HTMLDivElement|null = null;
+  private htmlDiv_: HTMLDivElement | null = null;
 
   /**
    * @param separatorDef The information needed to create a separator.
@@ -42,7 +41,7 @@ export class ToolboxSeparator extends ToolboxItem {
     super(separatorDef, toolbox);
 
     const cssConfig =
-        separatorDef['cssconfig'] || (separatorDef as any)['cssConfig'];
+      separatorDef['cssconfig'] || (separatorDef as any)['cssConfig'];
     Object.assign(this.cssConfig_, cssConfig);
   }
 
@@ -76,7 +75,7 @@ export class ToolboxSeparator extends ToolboxItem {
 
 export namespace ToolboxSeparator {
   export interface CssConfig {
-    container: string|undefined;
+    container: string | undefined;
   }
 }
 
@@ -101,5 +100,7 @@ Css.register(`
 `);
 
 registry.register(
-    registry.Type.TOOLBOX_ITEM, ToolboxSeparator.registrationName,
-    ToolboxSeparator);
+  registry.Type.TOOLBOX_ITEM,
+  ToolboxSeparator.registrationName,
+  ToolboxSeparator
+);

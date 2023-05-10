@@ -10,7 +10,6 @@ goog.declareModuleId('Blockly.Touch');
 import type {Gesture} from './gesture.js';
 import * as deprecation from './utils/deprecation.js';
 
-
 /**
  * A mock event, created from either a mouse or touch event,
  * with no more than one entry in the changedTouches array.
@@ -30,17 +29,22 @@ const LONGPRESS = 750;
  * Whether touch is enabled in the browser.
  * Copied from Closure's goog.events.BrowserFeature.TOUCH_ENABLED
  */
-export const TOUCH_ENABLED = 'ontouchstart' in globalThis ||
-    !!(globalThis['document'] && document.documentElement &&
-       'ontouchstart' in
-           document.documentElement) ||  // IE10 uses non-standard touch events,
-    // so it has a different check.
-    !!(globalThis['navigator'] &&
-       (globalThis['navigator']['maxTouchPoints'] ||
-        (globalThis['navigator'] as any)['msMaxTouchPoints']));
+export const TOUCH_ENABLED =
+  'ontouchstart' in globalThis ||
+  !!(
+    globalThis['document'] &&
+    document.documentElement &&
+    'ontouchstart' in document.documentElement
+  ) || // IE10 uses non-standard touch events,
+  // so it has a different check.
+  !!(
+    globalThis['navigator'] &&
+    (globalThis['navigator']['maxTouchPoints'] ||
+      (globalThis['navigator'] as any)['msMaxTouchPoints'])
+  );
 
 /** Which touch events are we currently paying attention to? */
-let touchIdentifier_: string|null = null;
+let touchIdentifier_: string | null = null;
 
 /**
  * The TOUCH_MAP lookup dictionary specifies additional touch events to fire,
@@ -74,7 +78,7 @@ let longPid_: AnyDuringMigration = 0;
  */
 export function longStart(e: PointerEvent, gesture: Gesture) {
   longStop();
-  longPid_ = setTimeout(function() {
+  longPid_ = setTimeout(function () {
     // Let the gesture route the right-click correctly.
     if (gesture) {
       gesture.handleRightClick(e);
@@ -118,8 +122,10 @@ export function shouldHandleEvent(e: Event): boolean {
   // `click` and `contextmenu` are PointerEvents in some browsers,
   // despite not starting with `pointer`, but we want to always handle them
   // without worrying about touch identifiers.
-  return !(e.type.startsWith('pointer')) ||
-      (e instanceof PointerEvent && checkTouchIdentifier(e));
+  return (
+    !e.type.startsWith('pointer') ||
+    (e instanceof PointerEvent && checkTouchIdentifier(e))
+  );
 }
 
 /**
@@ -168,7 +174,7 @@ export function checkTouchIdentifier(e: PointerEvent): boolean {
  *
  * @param e A touch event.
  */
-export function setClientFromTouch(e: Event|PseudoEvent) {
+export function setClientFromTouch(e: Event | PseudoEvent) {
   deprecation.warn('setClientFromTouch()', 'version 9', 'version 10');
   // AnyDuringMigration because:  Property 'changedTouches' does not exist on
   // type 'PseudoEvent | Event'.
@@ -192,10 +198,13 @@ export function setClientFromTouch(e: Event|PseudoEvent) {
  * @param e An event.
  * @returns True if it is a mouse, touch, or pointer event; false otherwise.
  */
-export function isMouseOrTouchEvent(e: Event|PseudoEvent): boolean {
+export function isMouseOrTouchEvent(e: Event | PseudoEvent): boolean {
   deprecation.warn('isMouseOrTouchEvent()', 'version 9', 'version 10');
-  return e.type.startsWith('touch') || e.type.startsWith('mouse') ||
-      e.type.startsWith('pointer');
+  return (
+    e.type.startsWith('touch') ||
+    e.type.startsWith('mouse') ||
+    e.type.startsWith('pointer')
+  );
 }
 
 /**
@@ -204,7 +213,7 @@ export function isMouseOrTouchEvent(e: Event|PseudoEvent): boolean {
  * @param e An event.
  * @returns True if it is a touch or pointer event; false otherwise.
  */
-export function isTouchEvent(e: Event|PseudoEvent): boolean {
+export function isTouchEvent(e: Event | PseudoEvent): boolean {
   deprecation.warn('isTouchEvent()', 'version 9', 'version 10');
   return e.type.startsWith('touch') || e.type.startsWith('pointer');
 }
@@ -218,7 +227,7 @@ export function isTouchEvent(e: Event|PseudoEvent): boolean {
  *     Each pseudo-touch event will have exactly one changed touch and there
  * will be no real touch events.
  */
-export function splitEventByTouches(e: Event): Array<Event|PseudoEvent> {
+export function splitEventByTouches(e: Event): Array<Event | PseudoEvent> {
   deprecation.warn('splitEventByTouches()', 'version 9', 'version 10');
   const events = [];
   // AnyDuringMigration because:  Property 'changedTouches' does not exist on

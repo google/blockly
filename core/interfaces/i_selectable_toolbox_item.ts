@@ -10,7 +10,6 @@ goog.declareModuleId('Blockly.ISelectableToolboxItem');
 
 import type {IToolboxItem} from './i_toolbox_item.js';
 
-
 /**
  * Interface for an item in the toolbox that can be selected.
  */
@@ -28,7 +27,7 @@ export interface ISelectableToolboxItem extends IToolboxItem {
    *
    * @returns The definition of items to be displayed in the flyout.
    */
-  getContents(): FlyoutItemInfoArray|string;
+  getContents(): FlyoutItemInfoArray | string;
 
   /**
    * Sets the current toolbox item as selected.
@@ -58,7 +57,8 @@ export interface ISelectableToolboxItem extends IToolboxItem {
 /**
  * Type guard that checks whether an IToolboxItem is an ISelectableToolboxItem.
  */
-export function isSelectableToolboxItem(toolboxItem: IToolboxItem):
-    toolboxItem is ISelectableToolboxItem {
+export function isSelectableToolboxItem(
+  toolboxItem: IToolboxItem
+): toolboxItem is ISelectableToolboxItem {
   return toolboxItem.isSelectable();
 }

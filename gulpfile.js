@@ -27,7 +27,7 @@ module.exports = {
   default: buildTasks.build,
 
   // Main sequence targets.  They already invoke prerequisites.
-  langfiles: buildTasks.langfiles,  // Build build/msg/*.js from msg/json/*.
+  langfiles: buildTasks.langfiles, // Build build/msg/*.js from msg/json/*.
   tsc: buildTasks.tsc,
   deps: buildTasks.deps,
   minify: buildTasks.minify,

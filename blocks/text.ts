@@ -31,7 +31,7 @@ import {
 } from '../core/common.js';
 import '../core/field_multilineinput.js';
 import '../core/field_variable.js';
-import { ValueInput } from '../core/inputs/value_input.js';
+import {ValueInput} from '../core/inputs/value_input.js';
 
 /**
  * A dictionary of the block definitions provided by this module.
@@ -1009,10 +1009,7 @@ const CHARAT_EXTENSION = function (this: CharAtBlock) {
       if (msg) {
         tooltip +=
           '  ' +
-          msg.replace(
-            '%1',
-            this.workspace.options.oneBasedIndex ? '#1' : '#0'
-          );
+          msg.replace('%1', this.workspace.options.oneBasedIndex ? '#1' : '#0');
       }
     }
     return tooltip;

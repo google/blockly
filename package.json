@@ -35,7 +35,6 @@
     "docs": "gulp docs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "format:sortrequires": "gulp sortRequires",
     "generate:langfiles": "exit 1 # Deprecated; use \"npm run messages\" instead.",
     "messages": "gulp messages",
     "license": "gulp checkLicenses",
@@ -108,7 +107,6 @@
     "readline-sync": "^1.4.10",
     "rimraf": "^5.0.0",
     "selenium-standalone": "^8.0.3",
-    "through2": "^4.0.2",
     "typescript": "^5.0.2",
     "webdriverio": "^8.0.5",
     "yargs": "^17.2.1"

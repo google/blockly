@@ -31,15 +31,6 @@ export interface IBubble extends IDraggable, IContextMenu {
   getSvgRoot(): SVGElement;
 
   /**
-   * Set whether auto-layout of this bubble is enabled.  The first time a bubble
-   * is shown it positions itself to not cover any blocks.  Once a user has
-   * dragged it to reposition, it renders where the user put it.
-   *
-   * @param enable True if auto-layout should be enabled, false otherwise.
-   */
-  setAutoLayout(enable: boolean): void;
-
-  /**
    * Sets whether or not this bubble is being dragged.
    *
    * @param adding True if dragging, false otherwise.

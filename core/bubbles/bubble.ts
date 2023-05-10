@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {BlockDragSurfaceSvg} from '../block_drag_surface.js';
 import * as browserEvents from '../browser_events.js';
 import {IBubble} from '../interfaces/i_bubble.js';
 import {ContainerRegion} from '../metrics_manager.js';
@@ -17,7 +18,7 @@ import {Svg} from '../utils/svg.js';
 import * as userAgent from '../utils/useragent.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
-export class Bubble /* implements IBubble */ {
+export class Bubble implements IBubble {
   static BORDER_WIDTH = 6;
   static MIN_SIZE = this.BORDER_WIDTH * 2;
   static TAIL_THICKNESS = 5;
@@ -85,6 +86,12 @@ export class Bubble /* implements IBubble */ {
     }
   }
 
+  public setPositionRelativeToAnchor(left: number, top: number) {
+    this.relativeLeft = left;
+    this.relativeTop = top;
+    this.positionRelativeToAnchor();
+  }
+
   protected getSize() {
     return this.size;
   }
@@ -127,7 +134,7 @@ export class Bubble /* implements IBubble */ {
   }
 
   private onMouseDown(e: PointerEvent) {
-    // this.workspace.getGesture(e)?.handleBubbleStart(e, this);
+    this.workspace.getGesture(e)?.handleBubbleStart(e, this);
   }
 
   protected positionRelativeToAnchor() {
@@ -141,7 +148,8 @@ export class Bubble /* implements IBubble */ {
     this.moveTo(left, top);
   }
 
-  private moveTo(x: number, y: number) {
+  /** @internal */
+  moveTo(x: number, y: number) {
     this.svgRoot.setAttribute('transform', `translate(${x}, ${y})`);
   }
 
@@ -419,5 +427,59 @@ export class Bubble /* implements IBubble */ {
     }
     steps.push('z');
     this.tail?.setAttribute('d', steps.join(' '));
+  }
+
+  /** @internal */
+  getRelativeToSurfaceXY(): Coordinate {
+    return new Coordinate(
+      this.workspace.RTL
+        ? -this.relativeLeft + this.anchor.x - this.size.width
+        : this.anchor.x + this.relativeLeft,
+      this.anchor.y + this.relativeTop
+    );
+  }
+
+  /** @internal */
+  getSvgRoot(): SVGElement {
+    return this.svgRoot;
+  }
+
+  /**
+   * Move this bubble during a drag, taking into account whether or not there is
+   * a drag surface.
+   *
+   * @param dragSurface The surface that carries rendered items during a drag,
+   *     or null if no drag surface is in use.
+   * @param newLoc The location to translate to, in workspace coordinates.
+   * @internal
+   */
+  moveDuringDrag(newLoc: Coordinate) {
+    this.moveTo(newLoc.x, newLoc.y);
+    if (this.workspace.RTL) {
+      this.relativeLeft = this.anchor.x - newLoc.x - this.size.width;
+    } else {
+      this.relativeLeft = newLoc.x - this.anchor.x;
+    }
+    this.relativeTop = newLoc.y - this.anchor.y;
+    this.renderTail();
+  }
+
+  setDragging(_start: boolean) {
+    // NOOP in base class.
+  }
+
+  /** @internal */
+  setDeleteStyle(_enable: boolean) {
+    // NOOP in base class.
+  }
+
+  /** @internal */
+  isDeletable(): boolean {
+    return false;
+  }
+
+  /** @internal */
+  showContextMenu(_e: Event) {
+    // NOOP in base class.
   }
 }

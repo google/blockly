@@ -58,7 +58,9 @@ export class BubbleDragger {
     }
 
     this.workspace.setResizesEnabled(false);
-    this.bubble.setAutoLayout(false);
+    if ((this.bubble as AnyDuringMigration).setAutoLayout) {
+      (this.bubble as AnyDuringMigration).setAutoLayout(false);
+    }
 
     this.bubble.setDragging && this.bubble.setDragging(true);
   }

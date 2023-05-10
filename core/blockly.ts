@@ -48,19 +48,75 @@ import {DragTarget} from './drag_target.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as Events from './events/events.js';
 import * as Extensions from './extensions.js';
-import {Field, FieldConfig, FieldValidator, UnattachedFieldError} from './field.js';
-import {FieldAngle, FieldAngleConfig, FieldAngleFromJsonConfig, FieldAngleValidator} from './field_angle.js';
-import {FieldCheckbox, FieldCheckboxConfig, FieldCheckboxFromJsonConfig, FieldCheckboxValidator} from './field_checkbox.js';
-import {FieldColour, FieldColourConfig, FieldColourFromJsonConfig, FieldColourValidator} from './field_colour.js';
-import {FieldDropdown, FieldDropdownConfig, FieldDropdownFromJsonConfig, FieldDropdownValidator, MenuGenerator, MenuGeneratorFunction, MenuOption} from './field_dropdown.js';
-import {FieldImage, FieldImageConfig, FieldImageFromJsonConfig} from './field_image.js';
-import {FieldLabel, FieldLabelConfig, FieldLabelFromJsonConfig} from './field_label.js';
+import {
+  Field,
+  FieldConfig,
+  FieldValidator,
+  UnattachedFieldError,
+} from './field.js';
+import {
+  FieldAngle,
+  FieldAngleConfig,
+  FieldAngleFromJsonConfig,
+  FieldAngleValidator,
+} from './field_angle.js';
+import {
+  FieldCheckbox,
+  FieldCheckboxConfig,
+  FieldCheckboxFromJsonConfig,
+  FieldCheckboxValidator,
+} from './field_checkbox.js';
+import {
+  FieldColour,
+  FieldColourConfig,
+  FieldColourFromJsonConfig,
+  FieldColourValidator,
+} from './field_colour.js';
+import {
+  FieldDropdown,
+  FieldDropdownConfig,
+  FieldDropdownFromJsonConfig,
+  FieldDropdownValidator,
+  MenuGenerator,
+  MenuGeneratorFunction,
+  MenuOption,
+} from './field_dropdown.js';
+import {
+  FieldImage,
+  FieldImageConfig,
+  FieldImageFromJsonConfig,
+} from './field_image.js';
+import {
+  FieldLabel,
+  FieldLabelConfig,
+  FieldLabelFromJsonConfig,
+} from './field_label.js';
 import {FieldLabelSerializable} from './field_label_serializable.js';
-import {FieldMultilineInput, FieldMultilineInputConfig, FieldMultilineInputFromJsonConfig, FieldMultilineInputValidator} from './field_multilineinput.js';
-import {FieldNumber, FieldNumberConfig, FieldNumberFromJsonConfig, FieldNumberValidator} from './field_number.js';
+import {
+  FieldMultilineInput,
+  FieldMultilineInputConfig,
+  FieldMultilineInputFromJsonConfig,
+  FieldMultilineInputValidator,
+} from './field_multilineinput.js';
+import {
+  FieldNumber,
+  FieldNumberConfig,
+  FieldNumberFromJsonConfig,
+  FieldNumberValidator,
+} from './field_number.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInput, FieldTextInputConfig, FieldTextInputFromJsonConfig, FieldTextInputValidator} from './field_textinput.js';
-import {FieldVariable, FieldVariableConfig, FieldVariableFromJsonConfig, FieldVariableValidator} from './field_variable.js';
+import {
+  FieldTextInput,
+  FieldTextInputConfig,
+  FieldTextInputFromJsonConfig,
+  FieldTextInputValidator,
+} from './field_textinput.js';
+import {
+  FieldVariable,
+  FieldVariableConfig,
+  FieldVariableFromJsonConfig,
+  FieldVariableValidator,
+} from './field_variable.js';
 import {Flyout} from './flyout_base.js';
 import {FlyoutButton} from './flyout_button.js';
 import {HorizontalFlyout} from './flyout_horizontal.js';
@@ -105,7 +161,10 @@ import {ISelectableToolboxItem} from './interfaces/i_selectable_toolbox_item.js'
 import {IStyleable} from './interfaces/i_styleable.js';
 import {IToolbox} from './interfaces/i_toolbox.js';
 import {IToolboxItem} from './interfaces/i_toolbox_item.js';
-import {IVariableBackedParameterModel, isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
+import {
+  IVariableBackedParameterModel,
+  isVariableBackedParameterModel,
+} from './interfaces/i_variable_backed_parameter_model.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
 import {BasicCursor} from './keyboard_nav/basic_cursor.js';
@@ -163,10 +222,12 @@ import {WorkspaceComment} from './workspace_comment.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
-import {resizeSvgContents as realResizeSvgContents, WorkspaceSvg} from './workspace_svg.js';
+import {
+  resizeSvgContents as realResizeSvgContents,
+  WorkspaceSvg,
+} from './workspace_svg.js';
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
-
 
 /**
  * Blockly core version.
@@ -327,8 +388,11 @@ export const setParentContainer = common.setParentContainer;
  */
 function resizeSvgContentsLocal(workspace: WorkspaceSvg) {
   deprecation.warn(
-      'Blockly.resizeSvgContents', 'December 2021', 'December 2022',
-      'Blockly.WorkspaceSvg.resizeSvgContents');
+    'Blockly.resizeSvgContents',
+    'December 2021',
+    'December 2022',
+    'Blockly.WorkspaceSvg.resizeSvgContents'
+  );
   realResizeSvgContents(workspace);
 }
 export const resizeSvgContents = resizeSvgContentsLocal;
@@ -342,8 +406,11 @@ export const resizeSvgContents = resizeSvgContentsLocal;
  */
 export function copy(toCopy: ICopyable) {
   deprecation.warn(
-      'Blockly.copy', 'December 2021', 'December 2022',
-      'Blockly.clipboard.copy');
+    'Blockly.copy',
+    'December 2021',
+    'December 2022',
+    'Blockly.clipboard.copy'
+  );
   clipboard.copy(toCopy);
 }
 
@@ -356,8 +423,11 @@ export function copy(toCopy: ICopyable) {
  */
 export function paste(): boolean {
   deprecation.warn(
-      'Blockly.paste', 'December 2021', 'December 2022',
-      'Blockly.clipboard.paste');
+    'Blockly.paste',
+    'December 2021',
+    'December 2022',
+    'Blockly.clipboard.paste'
+  );
   return !!clipboard.paste();
 }
 
@@ -370,8 +440,11 @@ export function paste(): boolean {
  */
 export function duplicate(toDuplicate: ICopyable) {
   deprecation.warn(
-      'Blockly.duplicate', 'December 2021', 'December 2022',
-      'Blockly.clipboard.duplicate');
+    'Blockly.duplicate',
+    'December 2021',
+    'December 2022',
+    'Blockly.clipboard.duplicate'
+  );
   clipboard.duplicate(toDuplicate);
 }
 
@@ -385,8 +458,11 @@ export function duplicate(toDuplicate: ICopyable) {
  */
 export function isNumber(str: string): boolean {
   deprecation.warn(
-      'Blockly.isNumber', 'December 2021', 'December 2022',
-      'Blockly.utils.string.isNumber');
+    'Blockly.isNumber',
+    'December 2021',
+    'December 2022',
+    'Blockly.utils.string.isNumber'
+  );
   return utils.string.isNumber(str);
 }
 
@@ -400,8 +476,11 @@ export function isNumber(str: string): boolean {
  */
 export function hueToHex(hue: number): string {
   deprecation.warn(
-      'Blockly.hueToHex', 'December 2021', 'December 2022',
-      'Blockly.utils.colour.hueToHex');
+    'Blockly.hueToHex',
+    'December 2021',
+    'December 2022',
+    'Blockly.utils.colour.hueToHex'
+  );
   return colour.hueToHex(hue);
 }
 
@@ -420,11 +499,17 @@ export function hueToHex(hue: number): string {
  * @see Blockly.browserEvents.bind
  */
 export function bindEvent_(
-    node: EventTarget, name: string, thisObject: Object|null,
-    func: Function): browserEvents.Data {
+  node: EventTarget,
+  name: string,
+  thisObject: Object | null,
+  func: Function
+): browserEvents.Data {
   deprecation.warn(
-      'Blockly.bindEvent_', 'December 2021', 'December 2022',
-      'Blockly.browserEvents.bind');
+    'Blockly.bindEvent_',
+    'December 2021',
+    'December 2022',
+    'Blockly.browserEvents.bind'
+  );
   return browserEvents.bind(node, name, thisObject, func);
 }
 
@@ -439,8 +524,11 @@ export function bindEvent_(
  */
 export function unbindEvent_(bindData: browserEvents.Data): Function {
   deprecation.warn(
-      'Blockly.unbindEvent_', 'December 2021', 'December 2022',
-      'Blockly.browserEvents.unbind');
+    'Blockly.unbindEvent_',
+    'December 2021',
+    'December 2022',
+    'Blockly.browserEvents.unbind'
+  );
   return browserEvents.unbind(bindData);
 }
 
@@ -463,14 +551,26 @@ export function unbindEvent_(bindData: browserEvents.Data): Function {
  * @see browserEvents.conditionalBind
  */
 export function bindEventWithChecks_(
-    node: EventTarget, name: string, thisObject: Object|null, func: Function,
-    opt_noCaptureIdentifier?: boolean,
-    _opt_noPreventDefault?: boolean): browserEvents.Data {
+  node: EventTarget,
+  name: string,
+  thisObject: Object | null,
+  func: Function,
+  opt_noCaptureIdentifier?: boolean,
+  _opt_noPreventDefault?: boolean
+): browserEvents.Data {
   deprecation.warn(
-      'Blockly.bindEventWithChecks_', 'December 2021', 'December 2022',
-      'Blockly.browserEvents.conditionalBind');
+    'Blockly.bindEventWithChecks_',
+    'December 2021',
+    'December 2022',
+    'Blockly.browserEvents.conditionalBind'
+  );
   return browserEvents.conditionalBind(
-      node, name, thisObject, func, opt_noCaptureIdentifier);
+    node,
+    name,
+    thisObject,
+    func,
+    opt_noCaptureIdentifier
+  );
 }
 
 // Aliases to allow external code to access these values for legacy reasons.
@@ -495,7 +595,7 @@ export const VARIABLE_CATEGORY_NAME: string = Variables.CATEGORY_NAME;
  * variable blocks.
  */
 export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
-    VariablesDynamic.CATEGORY_NAME;
+  VariablesDynamic.CATEGORY_NAME;
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
@@ -503,57 +603,61 @@ export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
  */
 export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
 
-
 // Context for why we need to monkey-patch in these functions (internal):
 //   https://docs.google.com/document/d/1MbO0LEA-pAyx1ErGLJnyUqTLrcYTo-5zga9qplnxeXo/edit?usp=sharing&resourcekey=0-5h_32-i-dHwHjf_9KYEVKg
 
 // clang-format off
-Workspace.prototype.newBlock =
-    function(prototypeName: string, opt_id?: string): Block {
-      return new Block(this, prototypeName, opt_id);
-    };
+Workspace.prototype.newBlock = function (
+  prototypeName: string,
+  opt_id?: string
+): Block {
+  return new Block(this, prototypeName, opt_id);
+};
 
-WorkspaceSvg.prototype.newBlock =
-    function(prototypeName: string, opt_id?: string): BlockSvg {
-      return new BlockSvg(this, prototypeName, opt_id);
-    };
+WorkspaceSvg.prototype.newBlock = function (
+  prototypeName: string,
+  opt_id?: string
+): BlockSvg {
+  return new BlockSvg(this, prototypeName, opt_id);
+};
 
-WorkspaceSvg.newTrashcan = function(workspace: WorkspaceSvg): Trashcan {
+WorkspaceSvg.newTrashcan = function (workspace: WorkspaceSvg): Trashcan {
   return new Trashcan(workspace);
 };
 
-WorkspaceCommentSvg.prototype.showContextMenu =
-    function(this: WorkspaceCommentSvg, e: Event) {
-      if (this.workspace.options.readOnly) {
-        return;
-      }
-      const menuOptions = [];
+WorkspaceCommentSvg.prototype.showContextMenu = function (
+  this: WorkspaceCommentSvg,
+  e: Event
+) {
+  if (this.workspace.options.readOnly) {
+    return;
+  }
+  const menuOptions = [];
 
-      if (this.isDeletable() && this.isMovable()) {
-        menuOptions.push(ContextMenu.commentDuplicateOption(this));
-        menuOptions.push(ContextMenu.commentDeleteOption(this));
-      }
+  if (this.isDeletable() && this.isMovable()) {
+    menuOptions.push(ContextMenu.commentDuplicateOption(this));
+    menuOptions.push(ContextMenu.commentDeleteOption(this));
+  }
 
-      ContextMenu.show(e, menuOptions, this.RTL);
-    };
+  ContextMenu.show(e, menuOptions, this.RTL);
+};
 
-Mutator.prototype.newWorkspaceSvg =
-    function(options: Options): WorkspaceSvg {
-      return new WorkspaceSvg(options);
-    };
+Mutator.prototype.newWorkspaceSvg = function (options: Options): WorkspaceSvg {
+  return new WorkspaceSvg(options);
+};
 
-Names.prototype.populateProcedures =
-    function(this: Names, workspace: Workspace) {
-      const procedures = Procedures.allProcedures(workspace);
-      // Flatten the return vs no-return procedure lists.
-      const flattenedProcedures =
-          procedures[0].concat(procedures[1]);
-      for (let i = 0; i < flattenedProcedures.length; i++) {
-        this.getName(flattenedProcedures[i][0], Names.NameType.PROCEDURE);
-      }
-    };
+Names.prototype.populateProcedures = function (
+  this: Names,
+  workspace: Workspace
+) {
+  const procedures = Procedures.allProcedures(workspace);
+  // Flatten the return vs no-return procedure lists.
+  const flattenedProcedures = procedures[0].concat(procedures[1]);
+  for (let i = 0; i < flattenedProcedures.length; i++) {
+    this.getName(flattenedProcedures[i][0], Names.NameType.PROCEDURE);
+  }
+};
 // clang-format on
-
 
 // Re-export submodules that no longer declareLegacyNamespace.
 export {browserEvents};
@@ -668,9 +772,9 @@ export {Flyout};
 export {FlyoutButton};
 export {FlyoutMetricsManager};
 export {CodeGenerator};
-export {CodeGenerator as Generator};  // Deprecated name, October 2022.
+export {CodeGenerator as Generator}; // Deprecated name, October 2022.
 export {Gesture};
-export {Gesture as TouchGesture};  // Remove in v10.
+export {Gesture as TouchGesture}; // Remove in v10.
 export {Grid};
 export {HorizontalFlyout};
 export {IASTNodeLocation};

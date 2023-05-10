@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 export interface IHasBubble {
   /** @return True if the bubble is currently open, false otherwise. */
   isBubbleVisible(): boolean;
@@ -15,6 +14,7 @@ export interface IHasBubble {
 
 /** Type guard that checks whether the given object is a IHasBubble. */
 export function hasBubble(obj: any): obj is IHasBubble {
-  return obj.isBubbleVisible !== undefined &&
-      obj.setBubbleVisible !== undefined;
+  return (
+    obj.isBubbleVisible !== undefined && obj.setBubbleVisible !== undefined
+  );
 }

@@ -7,7 +7,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.constants');
 
-
 /**
  * The language-neutral ID given to the collapsed input.
  */

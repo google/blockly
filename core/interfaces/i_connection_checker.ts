@@ -25,8 +25,11 @@ export interface IConnectionChecker {
    * @returns Whether the connection is legal.
    */
   canConnect(
-      a: Connection|null, b: Connection|null, isDragging: boolean,
-      opt_distance?: number): boolean;
+    a: Connection | null,
+    b: Connection | null,
+    isDragging: boolean,
+    opt_distance?: number
+  ): boolean;
 
   /**
    * Checks whether the current connection can connect with the target
@@ -41,8 +44,11 @@ export interface IConnectionChecker {
    *     otherwise.
    */
   canConnectWithReason(
-      a: Connection|null, b: Connection|null, isDragging: boolean,
-      opt_distance?: number): number;
+    a: Connection | null,
+    b: Connection | null,
+    isDragging: boolean,
+    opt_distance?: number
+  ): number;
 
   /**
    * Helper method that translates a connection error code into a string.
@@ -52,8 +58,11 @@ export interface IConnectionChecker {
    * @param b The second of the two connections being checked.
    * @returns A developer-readable error string.
    */
-  getErrorMessage(errorCode: number, a: Connection|null, b: Connection|null):
-      string;
+  getErrorMessage(
+    errorCode: number,
+    a: Connection | null,
+    b: Connection | null
+  ): string;
 
   /**
    * Check that connecting the given connections is safe, meaning that it would
@@ -63,7 +72,7 @@ export interface IConnectionChecker {
    * @param b The second of the connections to check.
    * @returns An enum with the reason this connection is safe or unsafe.
    */
-  doSafetyChecks(a: Connection|null, b: Connection|null): number;
+  doSafetyChecks(a: Connection | null, b: Connection | null): number;
 
   /**
    * Check whether this connection is compatible with another connection with
@@ -84,6 +93,9 @@ export interface IConnectionChecker {
    * @param distance The maximum allowable distance between connections.
    * @returns True if the connection is allowed during a drag.
    */
-  doDragChecks(a: RenderedConnection, b: RenderedConnection, distance: number):
-      boolean;
+  doDragChecks(
+    a: RenderedConnection,
+    b: RenderedConnection,
+    distance: number
+  ): boolean;
 }

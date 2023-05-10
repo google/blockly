@@ -20,7 +20,6 @@ import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 import {Workspace} from '../workspace.js';
 
-
 /**
  * Notifies listeners when a block is being manually dragged/dropped.
  */
@@ -66,13 +65,15 @@ export class BlockDrag extends UiBase {
     const json = super.toJson() as BlockDragJson;
     if (this.isStart === undefined) {
       throw new Error(
-          'Whether this event is the start of a drag is undefined. ' +
-          'Either pass the value to the constructor, or call fromJson');
+        'Whether this event is the start of a drag is undefined. ' +
+          'Either pass the value to the constructor, or call fromJson'
+      );
     }
     if (this.blockId === undefined) {
       throw new Error(
-          'The block ID is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson');
+        'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson'
+      );
     }
     json['isStart'] = this.isStart;
     json['blockId'] = this.blockId;
@@ -89,8 +90,11 @@ export class BlockDrag extends UiBase {
    */
   override fromJson(json: BlockDragJson) {
     deprecation.warn(
-        'Blockly.Events.BlockDrag.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
+      'Blockly.Events.BlockDrag.prototype.fromJson',
+      'version 9',
+      'version 10',
+      'Blockly.Events.fromJson'
+    );
     super.fromJson(json);
     this.isStart = json['isStart'];
     this.blockId = json['blockId'];
@@ -106,10 +110,16 @@ export class BlockDrag extends UiBase {
    *     static methods in superclasses..
    * @internal
    */
-  static fromJson(json: BlockDragJson, workspace: Workspace, event?: any):
-      BlockDrag {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new BlockDrag()) as BlockDrag;
+  static fromJson(
+    json: BlockDragJson,
+    workspace: Workspace,
+    event?: any
+  ): BlockDrag {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new BlockDrag()
+    ) as BlockDrag;
     newEvent.isStart = json['isStart'];
     newEvent.blockId = json['blockId'];
     newEvent.blocks = json['blocks'];

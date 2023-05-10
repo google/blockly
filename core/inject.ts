@@ -29,7 +29,6 @@ import * as WidgetDiv from './widgetdiv.js';
 import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 
-
 /**
  * Inject a Blockly editor into the specified container element (usually a div).
  *
@@ -38,11 +37,13 @@ import {WorkspaceSvg} from './workspace_svg.js';
  * @returns Newly created main workspace.
  */
 export function inject(
-    container: Element|string, opt_options?: BlocklyOptions): WorkspaceSvg {
-  let containerElement: Element|null = null;
+  container: Element | string,
+  opt_options?: BlocklyOptions
+): WorkspaceSvg {
+  let containerElement: Element | null = null;
   if (typeof container === 'string') {
     containerElement =
-        document.getElementById(container) || document.querySelector(container);
+      document.getElementById(container) || document.querySelector(container);
   } else {
     containerElement = container;
   }
@@ -50,8 +51,8 @@ export function inject(
   if (!document.contains(containerElement)) {
     throw Error('Error: container is not in current document');
   }
-  const options = new Options(opt_options || {} as BlocklyOptions);
-  const subContainer = (document.createElement('div'));
+  const options = new Options(opt_options || ({} as BlocklyOptions));
+  const subContainer = document.createElement('div');
   subContainer.className = 'injectionDiv';
   subContainer.tabIndex = 0;
   aria.setState(subContainer, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
@@ -65,8 +66,12 @@ export function inject(
 
   const workspaceDragSurface = new WorkspaceDragSurfaceSvg(subContainer);
 
-  const workspace =
-      createMainWorkspace(svg, options, blockDragSurface, workspaceDragSurface);
+  const workspace = createMainWorkspace(
+    svg,
+    options,
+    blockDragSurface,
+    workspaceDragSurface
+  );
 
   init(workspace);
 
@@ -76,7 +81,7 @@ export function inject(
 
   common.svgResize(workspace);
 
-  subContainer.addEventListener('focusin', function() {
+  subContainer.addEventListener('focusin', function () {
     common.setMainWorkspace(workspace);
   });
 
@@ -111,15 +116,17 @@ function createDom(container: Element, options: Options): SVGElement {
     </svg>
     */
   const svg = dom.createSvgElement(
-      Svg.SVG, {
-        'xmlns': dom.SVG_NS,
-        'xmlns:html': dom.HTML_NS,
-        'xmlns:xlink': dom.XLINK_NS,
-        'version': '1.1',
-        'class': 'blocklySvg',
-        'tabindex': '0',
-      },
-      container);
+    Svg.SVG,
+    {
+      'xmlns': dom.SVG_NS,
+      'xmlns:html': dom.HTML_NS,
+      'xmlns:xlink': dom.XLINK_NS,
+      'version': '1.1',
+      'class': 'blocklySvg',
+      'tabindex': '0',
+    },
+    container
+  );
   /*
     <defs>
       ... filters go here ...
@@ -145,11 +152,17 @@ function createDom(container: Element, options: Options): SVGElement {
  * @returns Newly created main workspace.
  */
 function createMainWorkspace(
-    svg: SVGElement, options: Options, blockDragSurface: BlockDragSurfaceSvg,
-    workspaceDragSurface: WorkspaceDragSurfaceSvg): WorkspaceSvg {
+  svg: SVGElement,
+  options: Options,
+  blockDragSurface: BlockDragSurfaceSvg,
+  workspaceDragSurface: WorkspaceDragSurfaceSvg
+): WorkspaceSvg {
   options.parentWorkspace = null;
-  const mainWorkspace =
-      new WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
+  const mainWorkspace = new WorkspaceSvg(
+    options,
+    blockDragSurface,
+    workspaceDragSurface
+  );
   const wsOptions = mainWorkspace.options;
   mainWorkspace.scale = wsOptions.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
@@ -177,14 +190,16 @@ function createMainWorkspace(
     mainWorkspace.addZoomControls();
   }
   // Register the workspace svg as a UI component.
-  mainWorkspace.getThemeManager().subscribe(
-      svg, 'workspaceBackgroundColour', 'background-color');
+  mainWorkspace
+    .getThemeManager()
+    .subscribe(svg, 'workspaceBackgroundColour', 'background-color');
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
 
   mainWorkspace.addChangeListener(
-      bumpObjects.bumpIntoBoundsHandler(mainWorkspace));
+    bumpObjects.bumpIntoBoundsHandler(mainWorkspace)
+  );
 
   // The SVG is now fully assembled.
   common.svgResize(mainWorkspace);
@@ -205,23 +220,31 @@ function init(mainWorkspace: WorkspaceSvg) {
 
   // Suppress the browser's context menu.
   browserEvents.conditionalBind(
-      svg.parentNode as Element, 'contextmenu', null, function(e: Event) {
-        if (!browserEvents.isTargetInput(e)) {
-          e.preventDefault();
-        }
-      });
+    svg.parentNode as Element,
+    'contextmenu',
+    null,
+    function (e: Event) {
+      if (!browserEvents.isTargetInput(e)) {
+        e.preventDefault();
+      }
+    }
+  );
 
-  const workspaceResizeHandler =
-      browserEvents.conditionalBind(window, 'resize', null, function() {
-        // Don't hide all the chaff. Leave the dropdown and widget divs open if
-        // possible.
-        Tooltip.hide();
-        mainWorkspace.hideComponents(true);
-        dropDownDiv.repositionForWindowResize();
-        WidgetDiv.repositionForWindowResize();
-        common.svgResize(mainWorkspace);
-        bumpObjects.bumpTopObjectsIntoBounds(mainWorkspace);
-      });
+  const workspaceResizeHandler = browserEvents.conditionalBind(
+    window,
+    'resize',
+    null,
+    function () {
+      // Don't hide all the chaff. Leave the dropdown and widget divs open if
+      // possible.
+      Tooltip.hide();
+      mainWorkspace.hideComponents(true);
+      dropDownDiv.repositionForWindowResize();
+      WidgetDiv.repositionForWindowResize();
+      common.svgResize(mainWorkspace);
+      bumpObjects.bumpTopObjectsIntoBounds(mainWorkspace);
+    }
+  );
   mainWorkspace.setResizeHandlerWrapper(workspaceResizeHandler);
 
   bindDocumentEvents();
@@ -249,13 +272,18 @@ function init(mainWorkspace: WorkspaceSvg) {
   }
 
   if (options.moveOptions && options.moveOptions.scrollbars) {
-    const horizontalScroll = options.moveOptions.scrollbars === true ||
-        !!options.moveOptions.scrollbars.horizontal;
-    const verticalScroll = options.moveOptions.scrollbars === true ||
-        !!options.moveOptions.scrollbars.vertical;
+    const horizontalScroll =
+      options.moveOptions.scrollbars === true ||
+      !!options.moveOptions.scrollbars.horizontal;
+    const verticalScroll =
+      options.moveOptions.scrollbars === true ||
+      !!options.moveOptions.scrollbars.vertical;
     mainWorkspace.scrollbar = new ScrollbarPair(
-        mainWorkspace, horizontalScroll, verticalScroll,
-        'blocklyMainWorkspaceScrollbar');
+      mainWorkspace,
+      horizontalScroll,
+      verticalScroll,
+      'blocklyMainWorkspaceScrollbar'
+    );
     mainWorkspace.scrollbar.resize();
   } else {
     mainWorkspace.setMetrics({x: 0.5, y: 0.5});
@@ -281,8 +309,10 @@ function onKeyDown(e: KeyboardEvent) {
     return;
   }
 
-  if (browserEvents.isTargetInput(e) ||
-      mainWorkspace.rendered && !mainWorkspace.isVisible()) {
+  if (
+    browserEvents.isTargetInput(e) ||
+    (mainWorkspace.rendered && !mainWorkspace.isVisible())
+  ) {
     // When focused on an HTML text input widget, don't trap any keys.
     // Ignore keypresses on rendered workspaces that have been explicitly
     // hidden.
@@ -309,9 +339,9 @@ let documentEventsBound = false;
  */
 function bindDocumentEvents() {
   if (!documentEventsBound) {
-    browserEvents.conditionalBind(document, 'scroll', null, function() {
+    browserEvents.conditionalBind(document, 'scroll', null, function () {
       const workspaces = common.getAllWorkspaces();
-      for (let i = 0, workspace; workspace = workspaces[i]; i++) {
+      for (let i = 0, workspace; (workspace = workspaces[i]); i++) {
         if (workspace instanceof WorkspaceSvg) {
           workspace.updateInverseScreenCTM();
         }
@@ -325,10 +355,14 @@ function bindDocumentEvents() {
     // Some iPad versions don't fire resize after portrait to landscape change.
     if (userAgent.IPAD) {
       browserEvents.conditionalBind(
-          window, 'orientationchange', document, function() {
-            // TODO (#397): Fix for multiple Blockly workspaces.
-            common.svgResize(common.getMainWorkspace() as WorkspaceSvg);
-          });
+        window,
+        'orientationchange',
+        document,
+        function () {
+          // TODO (#397): Fix for multiple Blockly workspaces.
+          common.svgResize(common.getMainWorkspace() as WorkspaceSvg);
+        }
+      );
     }
   }
   documentEventsBound = true;
@@ -343,26 +377,29 @@ function bindDocumentEvents() {
 function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
   const audioMgr = workspace.getAudioManager();
   audioMgr.load(
-      [
-        pathToMedia + 'click.mp3',
-        pathToMedia + 'click.wav',
-        pathToMedia + 'click.ogg',
-      ],
-      'click');
+    [
+      pathToMedia + 'click.mp3',
+      pathToMedia + 'click.wav',
+      pathToMedia + 'click.ogg',
+    ],
+    'click'
+  );
   audioMgr.load(
-      [
-        pathToMedia + 'disconnect.wav',
-        pathToMedia + 'disconnect.mp3',
-        pathToMedia + 'disconnect.ogg',
-      ],
-      'disconnect');
+    [
+      pathToMedia + 'disconnect.wav',
+      pathToMedia + 'disconnect.mp3',
+      pathToMedia + 'disconnect.ogg',
+    ],
+    'disconnect'
+  );
   audioMgr.load(
-      [
-        pathToMedia + 'delete.mp3',
-        pathToMedia + 'delete.ogg',
-        pathToMedia + 'delete.wav',
-      ],
-      'delete');
+    [
+      pathToMedia + 'delete.mp3',
+      pathToMedia + 'delete.ogg',
+      pathToMedia + 'delete.wav',
+    ],
+    'delete'
+  );
 
   // Bind temporary hooks that preload the sounds.
   const soundBinds: browserEvents.Data[] = [];
@@ -385,8 +422,22 @@ function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
   // happens on a click, not a drag, so that's not necessary.
 
   // Android ignores any sound not loaded as a result of a user action.
-  soundBinds.push(browserEvents.conditionalBind(
-      document, 'pointermove', null, unbindSounds, true));
-  soundBinds.push(browserEvents.conditionalBind(
-      document, 'touchstart', null, unbindSounds, true));
+  soundBinds.push(
+    browserEvents.conditionalBind(
+      document,
+      'pointermove',
+      null,
+      unbindSounds,
+      true
+    )
+  );
+  soundBinds.push(
+    browserEvents.conditionalBind(
+      document,
+      'touchstart',
+      null,
+      unbindSounds,
+      true
+    )
+  );
 }

@@ -19,7 +19,6 @@ const fs = require('fs');
 const path = require('path');
 const {posixPath} = require('../../scripts/helpers');
 
-
 /**
  * Renaming schema filename.
  * @type {string}
@@ -30,20 +29,25 @@ const SCHEMA_FILENAME = path.join(__dirname, 'renamings.schema.json');
  * Renamings filename.
  * @type {string}
  */
-const RENAMINGS_FILENAME =
-    path.resolve(__dirname, '../../scripts/migration/renamings.json5');
+const RENAMINGS_FILENAME = path.resolve(
+  __dirname,
+  '../../scripts/migration/renamings.json5'
+);
 
 // Can't use top-level await outside a module, and can't use require
 // in a module, so use an IIAFE.
-(async function() {
+(async function () {
   const schemaUrl = 'file://' + posixPath(path.resolve(SCHEMA_FILENAME));
   const schema = await JsonSchema.get(schemaUrl);
 
   const renamingsJson5 = fs.readFileSync(RENAMINGS_FILENAME);
   const renamings = JSON5.parse(renamingsJson5);
 
-  const output =
-      await JsonSchema.validate(schema, renamings, JsonSchema.DETAILED);
+  const output = await JsonSchema.validate(
+    schema,
+    renamings,
+    JsonSchema.DETAILED
+  );
 
   if (!output.valid) {
     console.log('Renamings file is invalid.');
@@ -59,8 +63,9 @@ const RENAMINGS_FILENAME =
     const seen = new Set();
     for (const {oldName} of modules) {
       if (seen.has(oldName)) {
-        console.log(`Duplicate entry for module ${oldName} ` +
-            `in version ${version}.`);
+        console.log(
+          `Duplicate entry for module ${oldName} ` + `in version ${version}.`
+        );
         ok = false;
       }
       seen.add(oldName);

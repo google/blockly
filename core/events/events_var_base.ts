@@ -15,9 +15,11 @@ goog.declareModuleId('Blockly.Events.VarBase');
 import * as deprecation from '../utils/deprecation.js';
 import type {VariableModel} from '../variable_model.js';
 
-import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
+import {
+  Abstract as AbstractEvent,
+  AbstractEventJson,
+} from './events_abstract.js';
 import type {Workspace} from '../workspace.js';
-
 
 /**
  * Abstract class for a variable event.
@@ -49,8 +51,9 @@ export class VarBase extends AbstractEvent {
     const json = super.toJson() as VarBaseJson;
     if (!this.varId) {
       throw new Error(
-          'The var ID is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson');
+        'The var ID is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson'
+      );
     }
     json['varId'] = this.varId;
     return json;
@@ -63,8 +66,11 @@ export class VarBase extends AbstractEvent {
    */
   override fromJson(json: VarBaseJson) {
     deprecation.warn(
-        'Blockly.Events.VarBase.prototype.fromJson', 'version 9', 'version 10',
-        'Blockly.Events.fromJson');
+      'Blockly.Events.VarBase.prototype.fromJson',
+      'version 9',
+      'version 10',
+      'Blockly.Events.fromJson'
+    );
     super.fromJson(json);
     this.varId = json['varId'];
   }
@@ -78,10 +84,16 @@ export class VarBase extends AbstractEvent {
    *     static methods in superclasses.
    * @internal
    */
-  static fromJson(json: VarBaseJson, workspace: Workspace, event?: any):
-      VarBase {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new VarBase()) as VarBase;
+  static fromJson(
+    json: VarBaseJson,
+    workspace: Workspace,
+    event?: any
+  ): VarBase {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new VarBase()
+    ) as VarBase;
     newEvent.varId = json['varId'];
     return newEvent;
   }

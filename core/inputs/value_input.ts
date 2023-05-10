@@ -9,7 +9,6 @@ import type {Connection} from '../connection.js';
 import {Input} from './input.js';
 import {inputTypes} from './input_types.js';
 
-
 /** Represents an input on a block with a value connection. */
 export class ValueInput extends Input {
   readonly type = inputTypes.VALUE;
@@ -21,7 +20,10 @@ export class ValueInput extends Input {
    * @param connection The value connection for this input.
    */
   constructor(
-      public name: string, block: Block, public connection: Connection) {
+    public name: string,
+    block: Block,
+    public connection: Connection
+  ) {
     // Errors are maintained for people not using typescript.
     if (!name) throw new Error('Value inputs must have a non-empty name');
     if (!connection) throw new Error('Value inputs must have a connection');

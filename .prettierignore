@@ -26,3 +26,6 @@
 /scripts/gulpfiles/*
 CHANGELOG.md
 PULL_REQUEST_TEMPLATE.md
+
+# Don't bother formatting js blocks since we're getting rid of them
+/blocks/*.js

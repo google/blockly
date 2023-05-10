@@ -7,7 +7,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events');
 
-
 import {Abstract, AbstractEventJson} from './events_abstract.js';
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import {BlockChange, BlockChangeJson} from './events_block_change.js';
@@ -25,7 +24,10 @@ import {CommentMove, CommentMoveJson} from './events_comment_move.js';
 import {MarkerMove, MarkerMoveJson} from './events_marker_move.js';
 import {Selected, SelectedJson} from './events_selected.js';
 import {ThemeChange, ThemeChangeJson} from './events_theme_change.js';
-import {ToolboxItemSelect, ToolboxItemSelectJson} from './events_toolbox_item_select.js';
+import {
+  ToolboxItemSelect,
+  ToolboxItemSelectJson,
+} from './events_toolbox_item_select.js';
 import {TrashcanOpen, TrashcanOpenJson} from './events_trashcan_open.js';
 import {Ui} from './events_ui.js';
 import {UiBase} from './events_ui_base.js';
@@ -36,7 +38,6 @@ import {VarRename, VarRenameJson} from './events_var_rename.js';
 import {ViewportChange, ViewportChangeJson} from './events_viewport.js';
 import * as eventUtils from './utils.js';
 import {FinishedLoading, FinishedLoadingJson} from './workspace_events.js';
-
 
 // Events.
 export {Abstract};

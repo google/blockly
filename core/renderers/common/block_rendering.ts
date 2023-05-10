@@ -72,9 +72,11 @@ export function unregister(name: string) {
  */
 export function stopDebugger() {
   deprecation.warn(
-      'Blockly.blockRendering.stopDebugger()', 'September 2021',
-      'September 2022',
-      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
+    'Blockly.blockRendering.stopDebugger()',
+    'September 2021',
+    'September 2022',
+    'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)'
+  );
   debug.stopDebugger();
 }
 
@@ -89,8 +91,10 @@ export function stopDebugger() {
  * @internal
  */
 export function init(
-    name: string, theme: Theme,
-    opt_rendererOverrides?: {[rendererConstant: string]: any}): Renderer {
+  name: string,
+  theme: Theme,
+  opt_rendererOverrides?: {[rendererConstant: string]: any}
+): Renderer {
   const rendererClass = registry.getClass(registry.Type.RENDERER, name);
   const renderer = new rendererClass!(name);
   renderer.init(theme, opt_rendererOverrides);

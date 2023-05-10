@@ -29,7 +29,6 @@ import * as dom from './utils/dom.js';
 import type {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
 
-
 /**
  * Class for a comment.
  */
@@ -40,7 +39,7 @@ export class Comment extends Icon {
    * The model's text value at the start of an edit.
    * Used to tell if an event should be fired at the end of an edit.
    */
-  private cachedText: string|null = '';
+  private cachedText: string | null = '';
 
   /**
    * Array holding info needed to unbind events.
@@ -52,13 +51,13 @@ export class Comment extends Icon {
   /**
    * The SVG element that contains the text edit area, or null if not created.
    */
-  private foreignObject: SVGForeignObjectElement|null = null;
+  private foreignObject: SVGForeignObjectElement | null = null;
 
   /** The editable text area, or null if not created. */
-  private textarea_: HTMLTextAreaElement|null = null;
+  private textarea_: HTMLTextAreaElement | null = null;
 
   /** The top-level node of the comment text, or null if not created. */
-  private paragraphElement_: SVGTextElement|null = null;
+  private paragraphElement_: SVGTextElement | null = null;
 
   /** @param block The block associated with this comment. */
   constructor(block: BlockSvg) {
@@ -81,28 +80,35 @@ export class Comment extends Icon {
   protected override drawIcon_(group: Element) {
     // Circle.
     dom.createSvgElement(
-        Svg.CIRCLE,
-        {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'}, group);
+      Svg.CIRCLE,
+      {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
+      group
+    );
     // Can't use a real '?' text character since different browsers and
     // operating systems render it differently. Body of question mark.
     dom.createSvgElement(
-        Svg.PATH, {
-          'class': 'blocklyIconSymbol',
-          'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
-              '0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25' +
-              '-1.201,0.998 -1.201,1.528 -1.204,2.19z',
-        },
-        group);
+      Svg.PATH,
+      {
+        'class': 'blocklyIconSymbol',
+        'd':
+          'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
+          '0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25' +
+          '-1.201,0.998 -1.201,1.528 -1.204,2.19z',
+      },
+      group
+    );
     // Dot of question mark.
     dom.createSvgElement(
-        Svg.RECT, {
-          'class': 'blocklyIconSymbol',
-          'x': '6.8',
-          'y': '10.78',
-          'height': '2',
-          'width': '2',
-        },
-        group);
+      Svg.RECT,
+      {
+        'class': 'blocklyIconSymbol',
+        'x': '6.8',
+        'y': '10.78',
+        'height': '2',
+        'width': '2',
+      },
+      group
+    );
   }
 
   /**
@@ -123,16 +129,19 @@ export class Comment extends Icon {
          * For non-editable mode see Warning.textToDom_.
          */
 
-    this.foreignObject = dom.createSvgElement(
-        Svg.FOREIGNOBJECT,
-        {'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH});
+    this.foreignObject = dom.createSvgElement(Svg.FOREIGNOBJECT, {
+      'x': Bubble.BORDER_WIDTH,
+      'y': Bubble.BORDER_WIDTH,
+    });
 
     const body = document.createElementNS(dom.HTML_NS, 'body');
     body.setAttribute('xmlns', dom.HTML_NS);
     body.className = 'blocklyMinimalBody';
 
-    this.textarea_ = document.createElementNS(dom.HTML_NS, 'textarea') as
-        HTMLTextAreaElement;
+    this.textarea_ = document.createElementNS(
+      dom.HTML_NS,
+      'textarea'
+    ) as HTMLTextAreaElement;
     const textarea = this.textarea_;
     textarea.className = 'blocklyCommentTextarea';
     textarea.setAttribute('dir', this.getBlock().RTL ? 'RTL' : 'LTR');
@@ -142,33 +151,62 @@ export class Comment extends Icon {
     body.appendChild(textarea);
     this.foreignObject!.appendChild(body);
 
-    this.boundEvents.push(browserEvents.conditionalBind(
-        textarea, 'focus', this, this.startEdit, true));
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        textarea,
+        'focus',
+        this,
+        this.startEdit,
+        true
+      )
+    );
     // Don't zoom with mousewheel.
-    this.boundEvents.push(browserEvents.conditionalBind(
-        textarea, 'wheel', this, function(e: Event) {
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        textarea,
+        'wheel',
+        this,
+        function (e: Event) {
           e.stopPropagation();
-        }));
-    this.boundEvents.push(browserEvents.conditionalBind(
-        textarea, 'change', this,
+        }
+      )
+    );
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        textarea,
+        'change',
+        this,
         /**
          * @param _e Unused event parameter.
          */
-        function(this: Comment, _e: Event) {
+        function (this: Comment, _e: Event) {
           if (this.cachedText !== this.model.text) {
-            eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-                this.getBlock(), 'comment', null, this.cachedText,
-                this.model.text));
+            eventUtils.fire(
+              new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+                this.getBlock(),
+                'comment',
+                null,
+                this.cachedText,
+                this.model.text
+              )
+            );
           }
-        }));
-    this.boundEvents.push(browserEvents.conditionalBind(
-        textarea, 'input', this,
+        }
+      )
+    );
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        textarea,
+        'input',
+        this,
         /**
          * @param _e Unused event parameter.
          */
-        function(this: Comment, _e: Event) {
+        function (this: Comment, _e: Event) {
           this.model.text = textarea.value;
-        }));
+        }
+      )
+    );
 
     setTimeout(textarea.focus.bind(textarea), 0);
 
@@ -225,8 +263,13 @@ export class Comment extends Icon {
     if (visible === this.isVisible()) {
       return;
     }
-    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
-        this.getBlock(), visible, 'comment'));
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+        this.getBlock(),
+        visible,
+        'comment'
+      )
+    );
     this.model.pinned = visible;
     if (visible) {
       this.createBubble();
@@ -248,9 +291,13 @@ export class Comment extends Icon {
   private createEditableBubble() {
     const block = this.getBlock();
     this.bubble_ = new Bubble(
-        block.workspace, this.createEditor(), block.pathObject.svgPath,
-        (this.iconXY_ as Coordinate), this.model.size.width,
-        this.model.size.height);
+      block.workspace,
+      this.createEditor(),
+      block.pathObject.svgPath,
+      this.iconXY_ as Coordinate,
+      this.model.size.width,
+      this.model.size.height
+    );
     // Expose this comment's block's ID on its top-level SVG group.
     this.bubble_.setSvgId(block.id);
     this.bubble_.registerResizeEvent(this.onBubbleResize.bind(this));
@@ -264,7 +311,10 @@ export class Comment extends Icon {
     // TODO (#2917): It would be great if the comment could support line breaks.
     this.paragraphElement_ = Bubble.textToDom(this.model.text ?? '');
     this.bubble_ = Bubble.createNonEditableBubble(
-        this.paragraphElement_, this.getBlock(), this.iconXY_ as Coordinate);
+      this.paragraphElement_,
+      this.getBlock(),
+      this.iconXY_ as Coordinate
+    );
     this.applyColour();
   }
 

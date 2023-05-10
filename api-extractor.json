@@ -109,7 +109,7 @@
     /**
      * (REQUIRED) Whether to generate an API report.
      */
-    "enabled": false,
+    "enabled": false
 
     /**
      * The filename for the API report files.  It will be combined with "reportFolder" or "reportTempFolder" to produce
@@ -195,7 +195,7 @@
      * SUPPORTED TOKENS: <projectFolder>, <packageName>, <unscopedPackageName>
      * DEFAULT VALUE: "<projectFolder>/dist/<unscopedPackageName>.d.ts"
      */
-    "untrimmedFilePath": "<projectFolder>/dist/<unscopedPackageName>_rollup.d.ts",
+    "untrimmedFilePath": "<projectFolder>/dist/<unscopedPackageName>_rollup.d.ts"
 
     /**
      * Specifies the output path for a .d.ts rollup file to be generated with trimming for an "alpha" release.

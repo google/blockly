@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 import {IParameterModel} from './i_parameter_model.js';
-
 
 /**
  * A data model for a procedure.
@@ -30,7 +28,7 @@ export interface IProcedureModel {
    *
    * Pass null to represent a procedure that does not return.
    */
-  setReturnTypes(types: string[]|null): this;
+  setReturnTypes(types: string[] | null): this;
 
   /**
    * Sets whether this procedure is enabled/disabled. If a procedure is disabled
@@ -55,7 +53,7 @@ export interface IProcedureModel {
    *
    * Null represents a procedure that does not return a value.
    */
-  getReturnTypes(): string[]|null;
+  getReturnTypes(): string[] | null;
 
   /**
    * Returns whether the procedure is enabled/disabled. If a procedure is

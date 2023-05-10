@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 export interface ISerializable {
   /**
    * @param doFullSerialization If true, this signals that any backing data

@@ -10,7 +10,6 @@ goog.declareModuleId('Blockly.ISelectable');
 import type {IDeletable} from './i_deletable.js';
 import type {IMovable} from './i_movable.js';
 
-
 /**
  * The interface for an object that is selectable.
  */

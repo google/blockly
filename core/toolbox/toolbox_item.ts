@@ -19,15 +19,14 @@ import * as idGenerator from '../utils/idgenerator.js';
 import type * as toolbox from '../utils/toolbox.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 
-
 /**
  * Class for an item in the toolbox.
  */
 export class ToolboxItem implements IToolboxItem {
   protected id_: string;
-  protected parent_: ICollapsibleToolboxItem|null;
+  protected parent_: ICollapsibleToolboxItem | null;
   protected level_: number;
-  protected toolboxItemDef_: toolbox.ToolboxItemInfo|null;
+  protected toolboxItemDef_: toolbox.ToolboxItemInfo | null;
   protected workspace_: WorkspaceSvg;
   /** The toolbox this category belongs to. */
   protected readonly parentToolbox_: IToolbox;
@@ -39,11 +38,14 @@ export class ToolboxItem implements IToolboxItem {
    *     have a parent.
    */
   constructor(
-      toolboxItemDef: toolbox.ToolboxItemInfo, parentToolbox: IToolbox,
-      opt_parent?: ICollapsibleToolboxItem) {
+    toolboxItemDef: toolbox.ToolboxItemInfo,
+    parentToolbox: IToolbox,
+    opt_parent?: ICollapsibleToolboxItem
+  ) {
     /** The ID for the category. */
-    this.id_ = (toolboxItemDef as AnyDuringMigration)['toolboxitemid'] ||
-        idGenerator.getNextUniqueId();
+    this.id_ =
+      (toolboxItemDef as AnyDuringMigration)['toolboxitemid'] ||
+      idGenerator.getNextUniqueId();
 
     /** The parent of the category. */
     this.parent_ = opt_parent || null;
@@ -73,7 +75,7 @@ export class ToolboxItem implements IToolboxItem {
    *
    * @returns The div for the toolbox item.
    */
-  getDiv(): Element|null {
+  getDiv(): Element | null {
     return null;
   }
 
@@ -86,7 +88,7 @@ export class ToolboxItem implements IToolboxItem {
    * @returns The HTML element that receives clicks, or null if this item should
    *     not receive clicks.
    */
-  getClickTarget(): Element|null {
+  getClickTarget(): Element | null {
     return null;
   }
 
@@ -105,7 +107,7 @@ export class ToolboxItem implements IToolboxItem {
    * @returns The parent toolbox item, or null if this toolbox item is not
    *     nested.
    */
-  getParent(): ICollapsibleToolboxItem|null {
+  getParent(): ICollapsibleToolboxItem | null {
     return null;
   }
 

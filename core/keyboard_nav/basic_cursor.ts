@@ -18,7 +18,6 @@ import * as registry from '../registry.js';
 import {ASTNode} from './ast_node.js';
 import {Cursor} from './cursor.js';
 
-
 /**
  * Class for a basic cursor.
  * This will allow the user to get to all nodes in the AST by hitting next or
@@ -38,7 +37,7 @@ export class BasicCursor extends Cursor {
    * @returns The next node, or null if the current node is not set or there is
    *     no next value.
    */
-  override next(): ASTNode|null {
+  override next(): ASTNode | null {
     const curNode = this.getCurNode();
     if (!curNode) {
       return null;
@@ -59,7 +58,7 @@ export class BasicCursor extends Cursor {
    * @returns The next node, or null if the current node is not set or there is
    *     no next value.
    */
-  override in(): ASTNode|null {
+  override in(): ASTNode | null {
     return this.next();
   }
 
@@ -69,7 +68,7 @@ export class BasicCursor extends Cursor {
    * @returns The previous node, or null if the current node is not set or there
    *     is no previous value.
    */
-  override prev(): ASTNode|null {
+  override prev(): ASTNode | null {
     const curNode = this.getCurNode();
     if (!curNode) {
       return null;
@@ -90,7 +89,7 @@ export class BasicCursor extends Cursor {
    * @returns The previous node, or null if the current node is not set or there
    *     is no previous value.
    */
-  override out(): ASTNode|null {
+  override out(): ASTNode | null {
     return this.prev();
   }
 
@@ -105,8 +104,9 @@ export class BasicCursor extends Cursor {
    * @returns The next node in the traversal.
    */
   protected getNextNode_(
-      node: ASTNode|null, isValid: (p1: ASTNode|null) => boolean): ASTNode
-      |null {
+    node: ASTNode | null,
+    isValid: (p1: ASTNode | null) => boolean
+  ): ASTNode | null {
     if (!node) {
       return null;
     }
@@ -137,12 +137,13 @@ export class BasicCursor extends Cursor {
    *     exists.
    */
   protected getPreviousNode_(
-      node: ASTNode|null, isValid: (p1: ASTNode|null) => boolean): ASTNode
-      |null {
+    node: ASTNode | null,
+    isValid: (p1: ASTNode | null) => boolean
+  ): ASTNode | null {
     if (!node) {
       return null;
     }
-    let newNode: ASTNode|null = node.prev();
+    let newNode: ASTNode | null = node.prev();
 
     if (newNode) {
       newNode = this.getRightMostChild(newNode);
@@ -164,12 +165,17 @@ export class BasicCursor extends Cursor {
    * @param node The AST node to check whether it is valid.
    * @returns True if the node should be visited, false otherwise.
    */
-  protected validNode_(node: ASTNode|null): boolean {
+  protected validNode_(node: ASTNode | null): boolean {
     let isValid = false;
     const type = node && node.getType();
-    if (type === ASTNode.types.OUTPUT || type === ASTNode.types.INPUT ||
-        type === ASTNode.types.FIELD || type === ASTNode.types.NEXT ||
-        type === ASTNode.types.PREVIOUS || type === ASTNode.types.WORKSPACE) {
+    if (
+      type === ASTNode.types.OUTPUT ||
+      type === ASTNode.types.INPUT ||
+      type === ASTNode.types.FIELD ||
+      type === ASTNode.types.NEXT ||
+      type === ASTNode.types.PREVIOUS ||
+      type === ASTNode.types.WORKSPACE
+    ) {
       isValid = true;
     }
     return isValid;
@@ -181,7 +187,7 @@ export class BasicCursor extends Cursor {
    * @param node The current position in the AST.
    * @returns The parent AST node or null if there are no valid parents.
    */
-  private findSiblingOrParent(node: ASTNode|null): ASTNode|null {
+  private findSiblingOrParent(node: ASTNode | null): ASTNode | null {
     if (!node) {
       return null;
     }
@@ -199,7 +205,7 @@ export class BasicCursor extends Cursor {
    * @returns The right most child of the given node, or the node if no child
    *     exists.
    */
-  private getRightMostChild(node: ASTNode|null): ASTNode|null {
+  private getRightMostChild(node: ASTNode | null): ASTNode | null {
     if (!node!.in()) {
       return node;
     }
@@ -212,4 +218,7 @@ export class BasicCursor extends Cursor {
 }
 
 registry.register(
-    registry.Type.CURSOR, BasicCursor.registrationName, BasicCursor);
+  registry.Type.CURSOR,
+  BasicCursor.registrationName,
+  BasicCursor
+);

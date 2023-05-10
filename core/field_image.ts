@@ -32,10 +32,10 @@ export class FieldImage extends Field<string> {
   private readonly imageHeight: number;
 
   /** The function to be called when this field is clicked. */
-  private clickHandler: ((p1: FieldImage) => void)|null = null;
+  private clickHandler: ((p1: FieldImage) => void) | null = null;
 
   /** The rendered field's image element. */
-  private imageElement: SVGImageElement|null = null;
+  private imageElement: SVGImageElement | null = null;
 
   /**
    * Editable fields usually show some sort of UI indicating they are
@@ -73,22 +73,27 @@ export class FieldImage extends Field<string> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      src: string|typeof Field.SKIP_SETUP, width: string|number,
-      height: string|number, alt?: string, onClick?: (p1: FieldImage) => void,
-      flipRtl?: boolean, config?: FieldImageConfig) {
+    src: string | typeof Field.SKIP_SETUP,
+    width: string | number,
+    height: string | number,
+    alt?: string,
+    onClick?: (p1: FieldImage) => void,
+    flipRtl?: boolean,
+    config?: FieldImageConfig
+  ) {
     super(Field.SKIP_SETUP);
 
     const imageHeight = Number(parsing.replaceMessageReferences(height));
     const imageWidth = Number(parsing.replaceMessageReferences(width));
     if (isNaN(imageHeight) || isNaN(imageWidth)) {
       throw Error(
-          'Height and width values of an image field must cast to' +
-          ' numbers.');
+        'Height and width values of an image field must cast to' + ' numbers.'
+      );
     }
     if (imageHeight <= 0 || imageWidth <= 0) {
       throw Error(
-          'Height and width values of an image field must be greater' +
-          ' than 0.');
+        'Height and width values of an image field must be greater' + ' than 0.'
+      );
     }
 
     /** The size of the area rendered by the field. */
@@ -134,14 +139,19 @@ export class FieldImage extends Field<string> {
    */
   override initView() {
     this.imageElement = dom.createSvgElement(
-        Svg.IMAGE, {
-          'height': this.imageHeight + 'px',
-          'width': this.size_.width + 'px',
-          'alt': this.altText,
-        },
-        this.fieldGroup_);
+      Svg.IMAGE,
+      {
+        'height': this.imageHeight + 'px',
+        'width': this.size_.width + 'px',
+        'alt': this.altText,
+      },
+      this.fieldGroup_
+    );
     this.imageElement.setAttributeNS(
-        dom.XLINK_NS, 'xlink:href', this.value_ as string);
+      dom.XLINK_NS,
+      'xlink:href',
+      this.value_ as string
+    );
 
     if (this.clickHandler) {
       this.imageElement.style.cursor = 'pointer';
@@ -157,7 +167,7 @@ export class FieldImage extends Field<string> {
    * @param newValue The input value.
    * @returns A string, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: any): string|null {
+  protected override doClassValidation_(newValue?: any): string | null {
     if (typeof newValue !== 'string') {
       return null;
     }
@@ -191,7 +201,7 @@ export class FieldImage extends Field<string> {
    *
    * @param alt New alt text.
    */
-  setAlt(alt: string|null) {
+  setAlt(alt: string | null) {
     if (alt === this.altText) {
       return;
     }
@@ -217,7 +227,7 @@ export class FieldImage extends Field<string> {
    * @param func The function that is called when the image is clicked, or null
    *     to remove.
    */
-  setOnClickHandler(func: ((p1: FieldImage) => void)|null) {
+  setOnClickHandler(func: ((p1: FieldImage) => void) | null) {
     this.clickHandler = func;
   }
 
@@ -228,7 +238,7 @@ export class FieldImage extends Field<string> {
    *
    * @returns The image alt text.
    */
-  protected override getText_(): string|null {
+  protected override getText_(): string | null {
     return this.altText;
   }
 
@@ -245,14 +255,21 @@ export class FieldImage extends Field<string> {
   static fromJson(options: FieldImageFromJsonConfig): FieldImage {
     if (!options.src || !options.width || !options.height) {
       throw new Error(
-          'src, width, and height values for an image field are' +
-          'required. The width and height must be non-zero.');
+        'src, width, and height values for an image field are' +
+          'required. The width and height must be non-zero.'
+      );
     }
     // `this` might be a subclass of FieldImage if that class doesn't override
     // the static fromJson method.
     return new this(
-        options.src, options.width, options.height, undefined, undefined,
-        undefined, options);
+      options.src,
+      options.width,
+      options.height,
+      undefined,
+      undefined,
+      undefined,
+      options
+    );
   }
 }
 

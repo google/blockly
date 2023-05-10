@@ -6,20 +6,23 @@
 
 goog.declareModuleId('Blockly.test.icon');
 
-import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 import {defineEmptyBlock} from './test_helpers/block_definitions.js';
 
-suite.skip('Icon', function() {
-  setup(function() {
+suite.skip('Icon', function () {
+  setup(function () {
     this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
     defineEmptyBlock();
   });
 
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
 
-  suite('Hooks getting properly triggered by the block', function() {
+  suite('Hooks getting properly triggered by the block', function () {
     class MockIcon {
       initView() {}
 
@@ -51,8 +54,8 @@ suite.skip('Icon', function() {
       return block;
     }
 
-    suite('Triggering view initialization', function() {
-      test('initView is not called by headless blocks', function() {
+    suite('Triggering view initialization', function () {
+      test('initView is not called by headless blocks', function () {
         const workspace = createHeadlessWorkspace();
         const block = createUninitializedBlock(workspace);
         const icon = new MockIcon();
@@ -61,10 +64,12 @@ suite.skip('Icon', function() {
         block.addIcon(icon);
 
         chai.assert.isFalse(
-            initViewSpy.called, 'Expected initView to not be called');
+          initViewSpy.called,
+          'Expected initView to not be called'
+        );
       });
 
-      test('initView is called by headful blocks during initSvg', function() {
+      test('initView is called by headful blocks during initSvg', function () {
         const workspace = createWorkspaceSvg();
         const block = createUninitializedBlock(workspace);
         const icon = new MockIcon();
@@ -72,31 +77,37 @@ suite.skip('Icon', function() {
 
         block.addIcon(icon);
         chai.assert.isFalse(
-            initViewSpy.called,
-            'Expected initView to not be called before initing svg');
+          initViewSpy.called,
+          'Expected initView to not be called before initing svg'
+        );
         block.initSvg();
         chai.assert.isTrue(
-            initViewSpy.calledOnce, 'Expected initView to be called');
+          initViewSpy.calledOnce,
+          'Expected initView to be called'
+        );
       });
 
       test(
-          'initView is called by headful blocks that are currently ' +
+        'initView is called by headful blocks that are currently ' +
           'rendered when the icon is added',
-          function() {
-            const workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
-            workspace.createDom();
-            const block = createInitializedBlock(workspace);
-            const icon = new MockIcon();
-            const initViewSpy = sinon.spy(icon, 'initView');
-    
-            block.addIcon(icon);
-            chai.assert.isTrue(
-                initViewSpy.calledOnce, 'Expected initView to be called');
-          });
+        function () {
+          const workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+          workspace.createDom();
+          const block = createInitializedBlock(workspace);
+          const icon = new MockIcon();
+          const initViewSpy = sinon.spy(icon, 'initView');
+
+          block.addIcon(icon);
+          chai.assert.isTrue(
+            initViewSpy.calledOnce,
+            'Expected initView to be called'
+          );
+        }
+      );
     });
 
-    suite('Triggering applying colors', function() {
-      test('applyColour is not called by headless blocks', function() {
+    suite('Triggering applying colors', function () {
+      test('applyColour is not called by headless blocks', function () {
         const workspace = createHeadlessWorkspace();
         const block = createUninitializedBlock(workspace);
         const icon = new MockIcon();
@@ -105,10 +116,12 @@ suite.skip('Icon', function() {
         block.addIcon(icon);
 
         chai.assert.isFalse(
-            applyColourSpy.called, 'Expected applyColour to not be called');
+          applyColourSpy.called,
+          'Expected applyColour to not be called'
+        );
       });
 
-      test('applyColour is called by headful blocks during initSvg', function() {
+      test('applyColour is called by headful blocks during initSvg', function () {
         const workspace = createWorkspaceSvg();
         const block = createUninitializedBlock(workspace);
         const icon = new MockIcon();
@@ -116,28 +129,34 @@ suite.skip('Icon', function() {
 
         block.addIcon(icon);
         chai.assert.isFalse(
-            applyColourSpy.called,
-            'Expected applyCOlour to not be called before initing svg');
+          applyColourSpy.called,
+          'Expected applyCOlour to not be called before initing svg'
+        );
         block.initSvg();
         chai.assert.isTrue(
-            applyColourSpy.calledOnce, 'Expected applyColour to be called');
+          applyColourSpy.calledOnce,
+          'Expected applyColour to be called'
+        );
       });
 
       test(
-          'applyColour is called by headful blocks that are currently ' +
+        'applyColour is called by headful blocks that are currently ' +
           'rendered when the icon is added',
-          function() {
-            const workspace = createWorkspaceSvg();
-            const block = createInitializedBlock(workspace);
-            const icon = new MockIcon();
-            const applyColourSpy = sinon.spy(icon, 'applyColour');
-    
-            block.addIcon(icon);
-            chai.assert.isTrue(
-                applyColourSpy.calledOnce, 'Expected applyColour to be called');
-          });
+        function () {
+          const workspace = createWorkspaceSvg();
+          const block = createInitializedBlock(workspace);
+          const icon = new MockIcon();
+          const applyColourSpy = sinon.spy(icon, 'applyColour');
 
-      test("applyColour is called when the block's color changes", function() {
+          block.addIcon(icon);
+          chai.assert.isTrue(
+            applyColourSpy.calledOnce,
+            'Expected applyColour to be called'
+          );
+        }
+      );
+
+      test("applyColour is called when the block's color changes", function () {
         const workspace = createWorkspaceSvg();
         const block = createInitializedBlock(workspace);
         const icon = new MockIcon();
@@ -147,10 +166,12 @@ suite.skip('Icon', function() {
         applyColourSpy.resetHistory();
         block.setColour('#cccccc');
         chai.assert.isTrue(
-            applyColourSpy.calledOnce, 'Expected applyColour to be called');
+          applyColourSpy.calledOnce,
+          'Expected applyColour to be called'
+        );
       });
 
-      test("applyColour is called when the block's style changes", function() {
+      test("applyColour is called when the block's style changes", function () {
         const workspace = createWorkspaceSvg();
         const block = createInitializedBlock(workspace);
         const icon = new MockIcon();
@@ -160,10 +181,12 @@ suite.skip('Icon', function() {
         applyColourSpy.resetHistory();
         block.setStyle('logic_block');
         chai.assert.isTrue(
-            applyColourSpy.calledOnce, 'Expected applyColour to be called');
+          applyColourSpy.calledOnce,
+          'Expected applyColour to be called'
+        );
       });
 
-      test('applyColour is called when the block is disabled', function() {
+      test('applyColour is called when the block is disabled', function () {
         const workspace = createWorkspaceSvg();
         const block = createInitializedBlock(workspace);
         const icon = new MockIcon();
@@ -173,10 +196,12 @@ suite.skip('Icon', function() {
         applyColourSpy.resetHistory();
         block.setDisabled(true);
         chai.assert.isTrue(
-            applyColourSpy.calledOnce, 'Expected applyColour to be called');
+          applyColourSpy.calledOnce,
+          'Expected applyColour to be called'
+        );
       });
 
-      test('applyColour is called when the block becomes a shadow', function() {
+      test('applyColour is called when the block becomes a shadow', function () {
         const workspace = createWorkspaceSvg();
         const block = createInitializedBlock(workspace);
         const icon = new MockIcon();
@@ -186,12 +211,14 @@ suite.skip('Icon', function() {
         applyColourSpy.resetHistory();
         block.setShadow(true);
         chai.assert.isTrue(
-            applyColourSpy.calledOnce, 'Expected applyColour to be called');
+          applyColourSpy.calledOnce,
+          'Expected applyColour to be called'
+        );
       });
     });
 
-    suite('Triggering updating editability', function() {
-      test('updateEditable is not called by headless blocks', function() {
+    suite('Triggering updating editability', function () {
+      test('updateEditable is not called by headless blocks', function () {
         const workspace = createHeadlessWorkspace();
         const block = createUninitializedBlock(workspace);
         const icon = new MockIcon();
@@ -200,75 +227,80 @@ suite.skip('Icon', function() {
         block.addIcon(icon);
 
         chai.assert.isFalse(
-            updateEditableSpy.called,
-            'Expected updateEditable to not be called');
+          updateEditableSpy.called,
+          'Expected updateEditable to not be called'
+        );
       });
 
-      test('updateEditable is called by headful blocks during initSvg',
-          function() {
-            const workspace = createWorkspaceSvg();
-            const block = createUninitializedBlock(workspace);
-            const icon = new MockIcon();
-            const updateEditableSpy = sinon.spy(icon, 'updateEditable');
-    
-            block.addIcon(icon);
-            chai.assert.isFalse(
-                updateEditableSpy.called,
-                'Expected updateEditable to not be called before initing svg');
-            block.initSvg();
-            chai.assert.isTrue(
-                updateEditableSpy.calledOnce, 'Expected updateEditable to be called');
-          });
+      test('updateEditable is called by headful blocks during initSvg', function () {
+        const workspace = createWorkspaceSvg();
+        const block = createUninitializedBlock(workspace);
+        const icon = new MockIcon();
+        const updateEditableSpy = sinon.spy(icon, 'updateEditable');
+
+        block.addIcon(icon);
+        chai.assert.isFalse(
+          updateEditableSpy.called,
+          'Expected updateEditable to not be called before initing svg'
+        );
+        block.initSvg();
+        chai.assert.isTrue(
+          updateEditableSpy.calledOnce,
+          'Expected updateEditable to be called'
+        );
+      });
 
       test(
-          'updateEditable is called by headful blocks that are currently ' +
+        'updateEditable is called by headful blocks that are currently ' +
           'rendered when the icon is added',
-          function() {
-            const workspace = createWorkspaceSvg();
-            const block = createInitializedBlock(workspace);
-            const icon = new MockIcon();
-            const updateEditableSpy = sinon.spy(icon, 'updateEditable');
-    
-            block.addIcon(icon);
-            chai.assert.isTrue(
-                updateEditableSpy.calledOnce,
-                'Expected updateEditable to be called');
-          });
+        function () {
+          const workspace = createWorkspaceSvg();
+          const block = createInitializedBlock(workspace);
+          const icon = new MockIcon();
+          const updateEditableSpy = sinon.spy(icon, 'updateEditable');
 
-      test(
-          'updateEditable is called when the block is made ineditable',
-          function() {
-            const workspace = createWorkspaceSvg();
-            const block = createInitializedBlock(workspace);
-            const icon = new MockIcon();
-            const updateEditableSpy = sinon.spy(icon, 'updateEditable');
-    
-            block.addIcon(icon);
-            updateEditableSpy.resetHistory();
-            block.setEditable(false);
-            chai.assert.isTrue(
-                updateEditableSpy.calledOnce, 'Expected updateEditable to be called');
-          });
+          block.addIcon(icon);
+          chai.assert.isTrue(
+            updateEditableSpy.calledOnce,
+            'Expected updateEditable to be called'
+          );
+        }
+      );
 
-      test(
-          'updateEditable is called when the block is made editable',
-          function() {
-            const workspace = createWorkspaceSvg();
-            const block = createInitializedBlock(workspace);
-            const icon = new MockIcon();
-            const updateEditableSpy = sinon.spy(icon, 'updateEditable');
-    
-            block.addIcon(icon);
-            block.setEditable(false);
-            updateEditableSpy.resetHistory();
-            block.setEditable(true);
-            chai.assert.isTrue(
-                updateEditableSpy.calledOnce, 'Expected updateEditable to be called');
-          });
+      test('updateEditable is called when the block is made ineditable', function () {
+        const workspace = createWorkspaceSvg();
+        const block = createInitializedBlock(workspace);
+        const icon = new MockIcon();
+        const updateEditableSpy = sinon.spy(icon, 'updateEditable');
+
+        block.addIcon(icon);
+        updateEditableSpy.resetHistory();
+        block.setEditable(false);
+        chai.assert.isTrue(
+          updateEditableSpy.calledOnce,
+          'Expected updateEditable to be called'
+        );
+      });
+
+      test('updateEditable is called when the block is made editable', function () {
+        const workspace = createWorkspaceSvg();
+        const block = createInitializedBlock(workspace);
+        const icon = new MockIcon();
+        const updateEditableSpy = sinon.spy(icon, 'updateEditable');
+
+        block.addIcon(icon);
+        block.setEditable(false);
+        updateEditableSpy.resetHistory();
+        block.setEditable(true);
+        chai.assert.isTrue(
+          updateEditableSpy.calledOnce,
+          'Expected updateEditable to be called'
+        );
+      });
     });
 
-    suite('Triggering updating collapsed-ness', function() {
-      test('updateCollapsed is not called by headless blocks', function() {
+    suite('Triggering updating collapsed-ness', function () {
+      test('updateCollapsed is not called by headless blocks', function () {
         const workspace = createHeadlessWorkspace();
         const block = createUninitializedBlock(workspace);
         const icon = new MockIcon();
@@ -279,11 +311,12 @@ suite.skip('Icon', function() {
         block.setCollapsed(false);
 
         chai.assert.isFalse(
-            updateCollapsedSpy.called,
-            'Expected updateCollapsed to not be called');
+          updateCollapsedSpy.called,
+          'Expected updateCollapsed to not be called'
+        );
       });
 
-      test('updateCollapsed is called when the block is collapsed', function() {
+      test('updateCollapsed is called when the block is collapsed', function () {
         const workspace = createWorkspaceSvg();
         const block = createInitializedBlock(workspace);
         const icon = new MockIcon();
@@ -293,11 +326,12 @@ suite.skip('Icon', function() {
         block.setCollapsed(true);
 
         chai.assert.isTrue(
-            updateCollapsedSpy.calledOnce,
-            'Expected updateCollapsed to be called');
+          updateCollapsedSpy.calledOnce,
+          'Expected updateCollapsed to be called'
+        );
       });
 
-      test('updateCollapsed is called when the block is expanded', function() {
+      test('updateCollapsed is called when the block is expanded', function () {
         const workspace = createWorkspaceSvg();
         const block = createInitializedBlock(workspace);
         const icon = new MockIcon();
@@ -308,8 +342,9 @@ suite.skip('Icon', function() {
         block.setCollapsed(false);
 
         chai.assert.isTrue(
-            updateCollapsedSpy.calledTwice,
-            'Expected updateCollapsed to be called twice');
+          updateCollapsedSpy.calledTwice,
+          'Expected updateCollapsed to be called twice'
+        );
       });
     });
   });

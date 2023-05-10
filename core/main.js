@@ -44,15 +44,22 @@ Object.defineProperties(Blockly, {
    * @suppress {checkTypes}
    */
   alert: {
-    set: function(newAlert) {
+    set: function (newAlert) {
       deprecation.warn(
-          'Blockly.alert', 'version 9', 'version 10',
-          'Blockly.dialog.setAlert');
+        'Blockly.alert',
+        'version 9',
+        'version 10',
+        'Blockly.dialog.setAlert'
+      );
       dialog.setAlert(newAlert);
     },
-    get: function() {
+    get: function () {
       deprecation.warn(
-          'Blockly.alert', 'version 9', 'version 10', 'Blockly.dialog.alert');
+        'Blockly.alert',
+        'version 9',
+        'version 10',
+        'Blockly.dialog.alert'
+      );
       return dialog.alert;
     },
   },
@@ -66,16 +73,22 @@ Object.defineProperties(Blockly, {
    * @suppress {checkTypes}
    */
   confirm: {
-    set: function(newConfirm) {
+    set: function (newConfirm) {
       deprecation.warn(
-          'Blockly.confirm', 'version 9', 'version 10',
-          'Blockly.dialog.setConfirm');
+        'Blockly.confirm',
+        'version 9',
+        'version 10',
+        'Blockly.dialog.setConfirm'
+      );
       dialog.setConfirm(newConfirm);
     },
-    get: function() {
+    get: function () {
       deprecation.warn(
-          'Blockly.confirm', 'version 9', 'version 10',
-          'Blockly.dialog.confirm');
+        'Blockly.confirm',
+        'version 9',
+        'version 10',
+        'Blockly.dialog.confirm'
+      );
       return dialog.confirm;
     },
   },
@@ -87,16 +100,22 @@ Object.defineProperties(Blockly, {
    * @suppress {checkTypes}
    */
   mainWorkspace: {
-    set: function(x) {
+    set: function (x) {
       deprecation.warn(
-          'Blockly.mainWorkspace', 'version 9', 'version 10',
-          'Blockly.getMainWorkspace');
+        'Blockly.mainWorkspace',
+        'version 9',
+        'version 10',
+        'Blockly.getMainWorkspace'
+      );
       common.setMainWorkspace(x);
     },
-    get: function() {
+    get: function () {
       deprecation.warn(
-          'Blockly.mainWorkspace', 'version 9', 'version 10',
-          'Blockly.getMainWorkspace');
+        'Blockly.mainWorkspace',
+        'version 9',
+        'version 10',
+        'Blockly.getMainWorkspace'
+      );
       return common.getMainWorkspace();
     },
   },
@@ -113,15 +132,22 @@ Object.defineProperties(Blockly, {
    * @suppress {checkTypes}
    */
   prompt: {
-    set: function(newPrompt) {
+    set: function (newPrompt) {
       deprecation.warn(
-          'Blockly.prompt', 'version 9', 'version 10',
-          'Blockly.dialog.setPrompt');
+        'Blockly.prompt',
+        'version 9',
+        'version 10',
+        'Blockly.dialog.setPrompt'
+      );
       dialog.setPrompt(newPrompt);
     },
-    get: function() {
+    get: function () {
       deprecation.warn(
-          'Blockly.prompt', 'version 9', 'version 10', 'Blockly.dialog.prompt');
+        'Blockly.prompt',
+        'version 9',
+        'version 10',
+        'Blockly.dialog.prompt'
+      );
       return dialog.prompt;
     },
   },
@@ -132,14 +158,22 @@ Object.defineProperties(Blockly, {
    * @suppress {checkTypes}
    */
   selected: {
-    get: function() {
+    get: function () {
       deprecation.warn(
-          'Blockly.selected', 'version 9', 'version 10', 'Blockly.getSelected');
+        'Blockly.selected',
+        'version 9',
+        'version 10',
+        'Blockly.getSelected'
+      );
       return common.getSelected();
     },
-    set: function(newSelection) {
+    set: function (newSelection) {
       deprecation.warn(
-          'Blockly.selected', 'version 9', 'version 10', 'Blockly.getSelected');
+        'Blockly.selected',
+        'version 9',
+        'version 10',
+        'Blockly.getSelected'
+      );
       common.setSelected(newSelection);
     },
   },
@@ -151,10 +185,10 @@ Object.defineProperties(Blockly, {
    * @suppress {checkTypes}
    */
   HSV_SATURATION: {
-    get: function() {
+    get: function () {
       return colour.getHsvSaturation();
     },
-    set: function(newValue) {
+    set: function (newValue) {
       colour.setHsvSaturation(newValue);
     },
   },
@@ -166,10 +200,10 @@ Object.defineProperties(Blockly, {
    * @suppress {checkTypes}
    */
   HSV_VALUE: {
-    get: function() {
+    get: function () {
       return colour.getHsvValue();
     },
-    set: function(newValue) {
+    set: function (newValue) {
       colour.setHsvValue(newValue);
     },
   },
@@ -187,16 +221,22 @@ Object.defineProperties(ContextMenu, {
    * @suppress {checkTypes}
    */
   currentBlock: {
-    get: function() {
+    get: function () {
       deprecation.warn(
-          'Blockly.ContextMenu.currentBlock', 'September 2021',
-          'September 2022', 'Blockly.Tooltip.getCurrentBlock()');
+        'Blockly.ContextMenu.currentBlock',
+        'September 2021',
+        'September 2022',
+        'Blockly.Tooltip.getCurrentBlock()'
+      );
       return ContextMenu.getCurrentBlock();
     },
-    set: function(block) {
+    set: function (block) {
       deprecation.warn(
-          'Blockly.ContextMenu.currentBlock', 'September 2021',
-          'September 2022', 'Blockly.Tooltip.setCurrentBlock(block)');
+        'Blockly.ContextMenu.currentBlock',
+        'September 2021',
+        'September 2022',
+        'Blockly.Tooltip.setCurrentBlock(block)'
+      );
       ContextMenu.setCurrentBlock(block);
     },
   },
@@ -214,21 +254,26 @@ Object.defineProperties(Events, {
    * @suppress {checkTypes}
    */
   recordUndo: {
-    get: function() {
+    get: function () {
       deprecation.warn(
-          'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
-          'Blockly.Events.getRecordUndo()');
+        'Blockly.Events.recordUndo',
+        'September 2021',
+        'September 2022',
+        'Blockly.Events.getRecordUndo()'
+      );
       return eventUtils.getRecordUndo();
     },
-    set: function(record) {
+    set: function (record) {
       deprecation.warn(
-          'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
-          'Blockly.Events.setRecordUndo()');
+        'Blockly.Events.recordUndo',
+        'September 2021',
+        'September 2022',
+        'Blockly.Events.setRecordUndo()'
+      );
       eventUtils.setRecordUndo(record);
     },
   },
 });
-
 
 // Add accessors for properties on Blockly.Tooltip that have now been
 // deprecated.
@@ -242,10 +287,13 @@ Object.defineProperties(Tooltip, {
    * @suppress {checkTypes}
    */
   visible: {
-    get: function() {
+    get: function () {
       deprecation.warn(
-          'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
-          'Blockly.Tooltip.isVisible()');
+        'Blockly.Tooltip.visible',
+        'September 2021',
+        'September 2022',
+        'Blockly.Tooltip.isVisible()'
+      );
       return Tooltip.isVisible();
     },
   },
@@ -258,10 +306,13 @@ Object.defineProperties(Tooltip, {
    * @suppress {checkTypes}
    */
   DIV: {
-    get: function() {
+    get: function () {
       deprecation.warn(
-          'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
-          'Blockly.Tooltip.getDiv()');
+        'Blockly.Tooltip.DIV',
+        'September 2021',
+        'September 2022',
+        'Blockly.Tooltip.getDiv()'
+      );
       return Tooltip.getDiv();
     },
   },
@@ -279,10 +330,13 @@ Object.defineProperties(WidgetDiv, {
    * @suppress {checkTypes}
    */
   DIV: {
-    get: function() {
+    get: function () {
       deprecation.warn(
-          'Blockly.WidgetDiv.DIV', 'September 2021', 'September 2022',
-          'Blockly.WidgetDiv.getDiv()');
+        'Blockly.WidgetDiv.DIV',
+        'September 2021',
+        'September 2022',
+        'Blockly.WidgetDiv.getDiv()'
+      );
       return WidgetDiv.getDiv();
     },
   },

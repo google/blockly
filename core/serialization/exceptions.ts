@@ -10,7 +10,6 @@ goog.declareModuleId('Blockly.serialization.exceptions');
 import type {Block} from '../block.js';
 import type {State} from './blocks.js';
 
-
 export class DeserializationError extends Error {}
 
 /**
@@ -60,8 +59,11 @@ export class BadConnectionCheck extends DeserializationError {
    * @internal
    */
   constructor(
-      reason: string, childConnection: string, public childBlock: Block,
-      public childState: State) {
+    reason: string,
+    childConnection: string,
+    public childBlock: Block,
+    public childState: State
+  ) {
     super(`The block ${childBlock.toDevString()} could not connect its
 ${childConnection} to its parent, because: ${reason}`);
   }

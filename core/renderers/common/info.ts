@@ -37,7 +37,6 @@ import {ValueInput} from '../../inputs/value_input.js';
 import type {ConstantProvider} from './constants.js';
 import type {Renderer} from './renderer.js';
 
-
 /**
  * An object containing all sizing information needed to draw this block.
  *
@@ -48,7 +47,7 @@ import type {Renderer} from './renderer.js';
 export class RenderInfo {
   block_: BlockSvg;
   protected constants_: ConstantProvider;
-  outputConnection: OutputConnection|null;
+  outputConnection: OutputConnection | null;
   isInline: boolean;
   isCollapsed: boolean;
   isInsertionMarker: boolean;
@@ -102,9 +101,9 @@ export class RenderInfo {
      * A measurable representing the output connection if the block has one.
      * Otherwise null.
      */
-    this.outputConnection = block.outputConnection ?
-        new OutputConnection(this.constants_, block.outputConnection) :
-        null;
+    this.outputConnection = block.outputConnection
+      ? new OutputConnection(this.constants_, block.outputConnection)
+      : null;
 
     /**
      * Whether the block should be rendered as a single line, either because
@@ -173,7 +172,7 @@ export class RenderInfo {
 
     // Icons always go on the first row, before anything else.
     const icons = this.block_.getIcons();
-    for (let i = 0, icon; icon = icons[i]; i++) {
+    for (let i = 0, icon; (icon = icons[i]); i++) {
       const iconInfo = new Icon(this.constants_, icon);
       if (this.isCollapsed && icon.collapseHidden) {
         this.hiddenIcons.push(iconInfo);
@@ -185,7 +184,7 @@ export class RenderInfo {
     let lastInput = undefined;
     // Loop across all of the inputs on the block, creating objects for anything
     // that needs to be rendered and breaking the block up into visual rows.
-    for (let i = 0, input; input = this.block_.inputList[i]; i++) {
+    for (let i = 0, input; (input = this.block_.inputList[i]); i++) {
       if (!input.isVisible()) {
         continue;
       }
@@ -197,7 +196,7 @@ export class RenderInfo {
       }
 
       // All of the fields in an input go on the same row.
-      for (let j = 0, field; field = input.fieldRow[j]; j++) {
+      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
         activeRow.elements.push(new Field(this.constants_, field, input));
       }
       this.addInput_(input, activeRow);
@@ -221,13 +220,16 @@ export class RenderInfo {
    */
   protected populateTopRow_() {
     const hasPrevious = !!this.block_.previousConnection;
-    const hasHat = (this.block_.hat ? this.block_.hat === 'cap' :
-                                      this.constants_.ADD_START_HATS) &&
-        !this.outputConnection && !hasPrevious;
+    const hasHat =
+      (this.block_.hat
+        ? this.block_.hat === 'cap'
+        : this.constants_.ADD_START_HATS) &&
+      !this.outputConnection &&
+      !hasPrevious;
 
-    let cornerClass = this.topRow.hasLeftSquareCorner(this.block_) ?
-        SquareCorner :
-        RoundCorner;
+    let cornerClass = this.topRow.hasLeftSquareCorner(this.block_)
+      ? SquareCorner
+      : RoundCorner;
     this.topRow.elements.push(new cornerClass(this.constants_));
 
     if (hasHat) {
@@ -237,25 +239,28 @@ export class RenderInfo {
     } else if (hasPrevious) {
       this.topRow.hasPreviousConnection = true;
       this.topRow.connection = new PreviousConnection(
-          this.constants_,
-          (this.block_.previousConnection as RenderedConnection));
+        this.constants_,
+        this.block_.previousConnection as RenderedConnection
+      );
       this.topRow.elements.push(this.topRow.connection);
     }
 
-    const precedesStatement = this.block_.inputList.length &&
-        this.block_.inputList[0] instanceof StatementInput;
+    const precedesStatement =
+      this.block_.inputList.length &&
+      this.block_.inputList[0] instanceof StatementInput;
 
     // This is the minimum height for the row. If one of its elements has a
     // greater height it will be overwritten in the compute pass.
     if (precedesStatement && !this.block_.isCollapsed()) {
       this.topRow.minHeight =
-          this.constants_.TOP_ROW_PRECEDES_STATEMENT_MIN_HEIGHT;
+        this.constants_.TOP_ROW_PRECEDES_STATEMENT_MIN_HEIGHT;
     } else {
       this.topRow.minHeight = this.constants_.TOP_ROW_MIN_HEIGHT;
     }
 
-    cornerClass = this.topRow.hasRightSquareCorner(this.block_) ? SquareCorner :
-                                                                  RoundCorner;
+    cornerClass = this.topRow.hasRightSquareCorner(this.block_)
+      ? SquareCorner
+      : RoundCorner;
     this.topRow.elements.push(new cornerClass(this.constants_, 'right'));
   }
 
@@ -265,15 +270,16 @@ export class RenderInfo {
   protected populateBottomRow_() {
     this.bottomRow.hasNextConnection = !!this.block_.nextConnection;
 
-    const followsStatement = this.block_.inputList.length &&
-        this.block_.inputList[this.block_.inputList.length - 1] instanceof
-            StatementInput;
+    const followsStatement =
+      this.block_.inputList.length &&
+      this.block_.inputList[this.block_.inputList.length - 1] instanceof
+        StatementInput;
 
     // This is the minimum height for the row. If one of its elements has a
     // greater height it will be overwritten in the compute pass.
     if (followsStatement) {
       this.bottomRow.minHeight =
-          this.constants_.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT;
+        this.constants_.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT;
     } else {
       this.bottomRow.minHeight = this.constants_.BOTTOM_ROW_MIN_HEIGHT;
     }
@@ -288,7 +294,9 @@ export class RenderInfo {
 
     if (this.bottomRow.hasNextConnection) {
       this.bottomRow.connection = new NextConnection(
-          this.constants_, (this.block_.nextConnection as RenderedConnection));
+        this.constants_,
+        this.block_.nextConnection as RenderedConnection
+      );
       this.bottomRow.elements.push(this.bottomRow.connection);
     }
 
@@ -315,7 +323,8 @@ export class RenderInfo {
       activeRow.hasInlineInput = true;
     } else if (input instanceof StatementInput) {
       activeRow.elements.push(
-          new StatementInputMeasurable(this.constants_, input));
+        new StatementInputMeasurable(this.constants_, input)
+      );
       activeRow.hasStatement = true;
     } else if (input instanceof ValueInput) {
       activeRow.elements.push(new ExternalValueInput(this.constants_, input));
@@ -324,10 +333,11 @@ export class RenderInfo {
       // Dummy inputs have no visual representation, but the information is
       // still important.
       activeRow.minHeight = Math.max(
-          activeRow.minHeight,
-          input.getSourceBlock() && input.getSourceBlock()!.isShadow() ?
-              this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT :
-              this.constants_.DUMMY_INPUT_MIN_HEIGHT);
+        activeRow.minHeight,
+        input.getSourceBlock() && input.getSourceBlock()!.isShadow()
+          ? this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT
+          : this.constants_.DUMMY_INPUT_MIN_HEIGHT
+      );
       activeRow.hasDummyInput = true;
     }
     if (activeRow.align === null) {
@@ -349,8 +359,10 @@ export class RenderInfo {
       return false;
     }
     // A statement input or an input following one always gets a new row.
-    if (input instanceof StatementInput ||
-        lastInput instanceof StatementInput) {
+    if (
+      input instanceof StatementInput ||
+      lastInput instanceof StatementInput
+    ) {
       return true;
     }
     // Value and dummy inputs get new row if inputs are not inlined.
@@ -362,14 +374,18 @@ export class RenderInfo {
 
   /** Add horizontal spacing between and around elements within each row. */
   protected addElemSpacing_() {
-    for (let i = 0, row; row = this.rows[i]; i++) {
+    for (let i = 0, row; (row = this.rows[i]); i++) {
       const oldElems = row.elements;
       row.elements = [];
       // No spacing needed before the corner on the top row or the bottom row.
       if (row.startsWithElemSpacer()) {
         // There's a spacer before the first element in the row.
-        row.elements.push(new InRowSpacer(
-            this.constants_, this.getInRowSpacing_(null, oldElems[0])));
+        row.elements.push(
+          new InRowSpacer(
+            this.constants_,
+            this.getInRowSpacing_(null, oldElems[0])
+          )
+        );
       }
       if (!oldElems.length) {
         continue;
@@ -382,9 +398,12 @@ export class RenderInfo {
       row.elements.push(oldElems[oldElems.length - 1]);
       if (row.endsWithElemSpacer()) {
         // There's a spacer after the last element in the row.
-        row.elements.push(new InRowSpacer(
+        row.elements.push(
+          new InRowSpacer(
             this.constants_,
-            this.getInRowSpacing_(oldElems[oldElems.length - 1], null)));
+            this.getInRowSpacing_(oldElems[oldElems.length - 1], null)
+          )
+        );
       }
     }
   }
@@ -398,8 +417,10 @@ export class RenderInfo {
    * @param next The element after the spacer.
    * @returns The size of the spacing between the two elements.
    */
-  protected getInRowSpacing_(prev: Measurable|null, next: Measurable|null):
-      number {
+  protected getInRowSpacing_(
+    prev: Measurable | null,
+    next: Measurable | null
+  ): number {
     if (!prev) {
       // Statement input padding.
       if (next && Types.isStatementInput(next)) {
@@ -442,23 +463,27 @@ export class RenderInfo {
     let widestStatementRowFields = 0;
     let blockWidth = 0;
     let widestRowWithConnectedBlocks = 0;
-    for (let i = 0, row; row = this.rows[i]; i++) {
+    for (let i = 0, row; (row = this.rows[i]); i++) {
       row.measure();
       blockWidth = Math.max(blockWidth, row.width);
       if (row.hasStatement) {
         const statementInput = row.getLastInput();
         const innerWidth = row.width - (statementInput?.width ?? 0);
-        widestStatementRowFields =
-            Math.max(widestStatementRowFields, innerWidth);
+        widestStatementRowFields = Math.max(
+          widestStatementRowFields,
+          innerWidth
+        );
       }
-      widestRowWithConnectedBlocks =
-          Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
+      widestRowWithConnectedBlocks = Math.max(
+        widestRowWithConnectedBlocks,
+        row.widthWithConnectedBlocks
+      );
     }
 
     this.statementEdge = widestStatementRowFields;
     this.width = blockWidth;
 
-    for (let i = 0, row; row = this.rows[i]; i++) {
+    for (let i = 0, row; (row = this.rows[i]); i++) {
       if (row.hasStatement) {
         row.statementEdge = this.statementEdge;
       }
@@ -479,7 +504,7 @@ export class RenderInfo {
    * the sizes of all rows.
    */
   protected alignRowElements_() {
-    for (let i = 0, row; row = this.rows[i]; i++) {
+    for (let i = 0, row; (row = this.rows[i]); i++) {
       if (row.hasStatement) {
         this.alignStatementRow_(row as InputRow);
       } else {
@@ -564,8 +589,10 @@ export class RenderInfo {
     statementInput.width += desiredWidth - currentWidth;
     statementInput.height = Math.max(statementInput.height, row.height);
     row.width += desiredWidth - currentWidth;
-    row.widthWithConnectedBlocks =
-        Math.max(row.width, this.statementEdge + row.connectedBlockWidths);
+    row.widthWithConnectedBlocks = Math.max(
+      row.width,
+      this.statementEdge + row.connectedBlockWidths
+    );
   }
 
   /** Add spacers between rows and set their sizes. */
@@ -641,7 +668,7 @@ export class RenderInfo {
     if (Types.isBottomRow(row)) {
       const bottomRow = row as BottomRow;
       const baseline =
-          bottomRow.yPos + bottomRow.height - bottomRow.descenderHeight;
+        bottomRow.yPos + bottomRow.height - bottomRow.descenderHeight;
       if (Types.isNextConnection(elem)) {
         return baseline + elem.height / 2;
       }
@@ -665,7 +692,7 @@ export class RenderInfo {
    */
   protected recordElemPositions_(row: Row) {
     let xCursor = row.xPos;
-    for (let j = 0, elem; elem = row.elements[j]; j++) {
+    for (let j = 0, elem; (elem = row.elements[j]); j++) {
       // Now that row heights are finalized, make spacers use the row height.
       if (Types.isSpacer(elem)) {
         elem.height = row.height;
@@ -686,13 +713,15 @@ export class RenderInfo {
     // accesses and sets properties that already exist on the objects.
     let widestRowWithConnectedBlocks = 0;
     let yCursor = 0;
-    for (let i = 0, row; row = this.rows[i]; i++) {
+    for (let i = 0, row; (row = this.rows[i]); i++) {
       row.yPos = yCursor;
       row.xPos = this.startX;
       yCursor += row.height;
 
-      widestRowWithConnectedBlocks =
-          Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
+      widestRowWithConnectedBlocks = Math.max(
+        widestRowWithConnectedBlocks,
+        row.widthWithConnectedBlocks
+      );
       this.recordElemPositions_(row);
     }
     if (this.outputConnection && this.block_.nextConnection) {
@@ -700,7 +729,9 @@ export class RenderInfo {
       if (target) {
         // Include width of connected block in value to stack width measurement.
         widestRowWithConnectedBlocks = Math.max(
-            widestRowWithConnectedBlocks, target.getHeightWidth().width);
+          widestRowWithConnectedBlocks,
+          target.getHeightWidth().width
+        );
       }
     }
 

@@ -23,65 +23,67 @@ jobs:
         # https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        persist-credentials: false
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
-    - name: Reconfigure git to use HTTP authentication
-      run: >
-        git config --global url."https://github.com/".insteadOf
-        ssh://git@github.com/
+      - name: Reconfigure git to use HTTP authentication
+        run: >
+          git config --global url."https://github.com/".insteadOf
+          ssh://git@github.com/
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Npm Install
-      run: npm install
+      - name: Npm Install
+        run: npm install
 
-    - name: Linux Test Setup
-      if: runner.os == 'Linux'
-      run: source ./tests/scripts/setup_linux_env.sh
+      - name: Linux Test Setup
+        if: runner.os == 'Linux'
+        run: source ./tests/scripts/setup_linux_env.sh
 
-    - name: MacOS Test Setup
-      if: runner.os == 'macOS'
-      run: source ./tests/scripts/setup_osx_env.sh
+      - name: MacOS Test Setup
+        if: runner.os == 'macOS'
+        run: source ./tests/scripts/setup_osx_env.sh
 
-    - name: Run
-      run: npm run test
+      - name: Run
+        run: npm run test
 
-      env:
-        CI: true
+        env:
+          CI: true
 
   lint:
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Use Node.js 20.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20.x
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
 
-    - name: Npm Install
-      run: npm install
+      - name: Npm Install
+        run: npm install
 
-    - name: Lint
-      run: npm run lint
+      - name: Lint
+        run: npm run lint
 
-  clang-formatter:
+  format:
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - uses: DoozyX/clang-format-lint-action@v0.16
-      with:
-        source: 'core'
-        extensions: 'js,ts'
-        # This should be as close as possible to the version that the npm
-        # package supports. This can be found by running:
-        # npx clang-format --version.
-        clangFormatVersion: 15
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: Npm Install
+        run: npm install
+
+      - name: Check Format
+        run: npm run format:check

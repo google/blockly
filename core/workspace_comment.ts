@@ -19,7 +19,6 @@ import * as idGenerator from './utils/idgenerator.js';
 import * as xml from './utils/xml.js';
 import type {Workspace} from './workspace.js';
 
-
 /**
  * Class for a workspace comment.
  */
@@ -51,11 +50,16 @@ export class WorkspaceComment {
    *     ID.
    */
   constructor(
-      public workspace: Workspace, content: string, height: number,
-      width: number, opt_id?: string) {
-    this.id = opt_id && !workspace.getCommentById(opt_id) ?
-        opt_id :
-        idGenerator.genUid();
+    public workspace: Workspace,
+    content: string,
+    height: number,
+    width: number,
+    opt_id?: string
+  ) {
+    this.id =
+      opt_id && !workspace.getCommentById(opt_id)
+        ? opt_id
+        : idGenerator.genUid();
 
     workspace.addTopComment(this);
 
@@ -164,8 +168,9 @@ export class WorkspaceComment {
    * @internal
    */
   moveBy(dx: number, dy: number) {
-    const event =
-        new (eventUtils.get(eventUtils.COMMENT_MOVE))(this) as CommentMove;
+    const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
+      this
+    ) as CommentMove;
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);
@@ -178,8 +183,9 @@ export class WorkspaceComment {
    * @internal
    */
   isDeletable(): boolean {
-    return this.deletable &&
-        !(this.workspace && this.workspace.options.readOnly);
+    return (
+      this.deletable && !(this.workspace && this.workspace.options.readOnly)
+    );
   }
 
   /**
@@ -218,8 +224,9 @@ export class WorkspaceComment {
    * @returns True if editable.
    */
   isEditable(): boolean {
-    return this.editable &&
-        !(this.workspace && this.workspace.options.readOnly);
+    return (
+      this.editable && !(this.workspace && this.workspace.options.readOnly)
+    );
   }
 
   /**
@@ -249,8 +256,13 @@ export class WorkspaceComment {
    */
   setContent(content: string) {
     if (this.content_ !== content) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CHANGE))(
-          this, this.content_, content));
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.COMMENT_CHANGE))(
+          this,
+          this.content_,
+          content
+        )
+      );
       this.content_ = content;
     }
   }
@@ -304,7 +316,8 @@ export class WorkspaceComment {
       }
       try {
         eventUtils.fire(
-            new (eventUtils.get(eventUtils.COMMENT_CREATE))(comment));
+          new (eventUtils.get(eventUtils.COMMENT_CREATE))(comment)
+        );
       } finally {
         eventUtils.setGroup(existingGroup);
       }
@@ -322,8 +335,13 @@ export class WorkspaceComment {
   static fromXml(xmlComment: Element, workspace: Workspace): WorkspaceComment {
     const info = WorkspaceComment.parseAttributes(xmlComment);
 
-    const comment =
-        new WorkspaceComment(workspace, info.content, info.h, info.w, info.id);
+    const comment = new WorkspaceComment(
+      workspace,
+      info.content,
+      info.h,
+      info.w,
+      info.id
+    );
 
     const xmlX = xmlComment.getAttribute('x');
     const xmlY = xmlComment.getAttribute('y');
@@ -345,12 +363,12 @@ export class WorkspaceComment {
    * @internal
    */
   static parseAttributes(xml: Element): {
-    id: string,
-    w: number,
-    h: number,
-    x: number,
-    y: number,
-    content: string
+    id: string;
+    w: number;
+    h: number;
+    x: number;
+    y: number;
+    content: string;
   } {
     const xmlH = xml.getAttribute('h');
     const xmlW = xml.getAttribute('w');

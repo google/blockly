@@ -22,7 +22,6 @@ import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
 
-
 /**
  * Notifies listeners that a workspace comment was created.
  */
@@ -30,7 +29,7 @@ export class CommentCreate extends CommentBase {
   override type = eventUtils.COMMENT_CREATE;
 
   /** The XML representation of the created workspace comment. */
-  xml?: Element|DocumentFragment;
+  xml?: Element | DocumentFragment;
 
   /**
    * @param opt_comment The created comment.
@@ -56,8 +55,9 @@ export class CommentCreate extends CommentBase {
     const json = super.toJson() as CommentCreateJson;
     if (!this.xml) {
       throw new Error(
-          'The comment XML is undefined. Either pass a comment to ' +
-          'the constructor, or call fromJson');
+        'The comment XML is undefined. Either pass a comment to ' +
+          'the constructor, or call fromJson'
+      );
     }
     json['xml'] = Xml.domToText(this.xml);
     return json;
@@ -70,8 +70,11 @@ export class CommentCreate extends CommentBase {
    */
   override fromJson(json: CommentCreateJson) {
     deprecation.warn(
-        'Blockly.Events.CommentCreate.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
+      'Blockly.Events.CommentCreate.prototype.fromJson',
+      'version 9',
+      'version 10',
+      'Blockly.Events.fromJson'
+    );
     super.fromJson(json);
     this.xml = utilsXml.textToDom(json['xml']);
   }
@@ -85,11 +88,16 @@ export class CommentCreate extends CommentBase {
    *     parameters to static methods in superclasses.
    * @internal
    */
-  static fromJson(json: CommentCreateJson, workspace: Workspace, event?: any):
-      CommentCreate {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new CommentCreate()) as
-        CommentCreate;
+  static fromJson(
+    json: CommentCreateJson,
+    workspace: Workspace,
+    event?: any
+  ): CommentCreate {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new CommentCreate()
+    ) as CommentCreate;
     newEvent.xml = utilsXml.textToDom(json['xml']);
     return newEvent;
   }
@@ -109,4 +117,7 @@ export interface CommentCreateJson extends CommentBaseJson {
 }
 
 registry.register(
-    registry.Type.EVENT, eventUtils.COMMENT_CREATE, CommentCreate);
+  registry.Type.EVENT,
+  eventUtils.COMMENT_CREATE,
+  CommentCreate
+);

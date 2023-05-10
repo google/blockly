@@ -20,7 +20,6 @@ import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
 
-
 /**
  * Notifies listeners when the trashcan is opening or closing.
  */
@@ -52,8 +51,9 @@ export class TrashcanOpen extends UiBase {
     const json = super.toJson() as TrashcanOpenJson;
     if (this.isOpen === undefined) {
       throw new Error(
-          'Whether this is already open or not is undefined. Either pass ' +
-          'a value to the constructor, or call fromJson');
+        'Whether this is already open or not is undefined. Either pass ' +
+          'a value to the constructor, or call fromJson'
+      );
     }
     json['isOpen'] = this.isOpen;
     return json;
@@ -66,8 +66,11 @@ export class TrashcanOpen extends UiBase {
    */
   override fromJson(json: TrashcanOpenJson) {
     deprecation.warn(
-        'Blockly.Events.TrashcanOpen.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
+      'Blockly.Events.TrashcanOpen.prototype.fromJson',
+      'version 9',
+      'version 10',
+      'Blockly.Events.fromJson'
+    );
     super.fromJson(json);
     this.isOpen = json['isOpen'];
   }
@@ -81,11 +84,16 @@ export class TrashcanOpen extends UiBase {
    *     parameters to static methods in superclasses.
    * @internal
    */
-  static fromJson(json: TrashcanOpenJson, workspace: Workspace, event?: any):
-      TrashcanOpen {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new TrashcanOpen()) as
-        TrashcanOpen;
+  static fromJson(
+    json: TrashcanOpenJson,
+    workspace: Workspace,
+    event?: any
+  ): TrashcanOpen {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new TrashcanOpen()
+    ) as TrashcanOpen;
     newEvent.isOpen = json['isOpen'];
     return newEvent;
   }

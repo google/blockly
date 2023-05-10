@@ -9,7 +9,6 @@ goog.declareModuleId('Blockly.geras.ConstantProvider');
 
 import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 
-
 /**
  * An object that provides constants for rendering blocks in Geras mode.
  */

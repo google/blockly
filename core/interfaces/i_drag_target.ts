@@ -13,7 +13,6 @@ goog.declareModuleId('Blockly.IDragTarget');
 
 import type {IComponent} from './i_component.js';
 
-
 /**
  * Interface for a component with custom behaviour when a block or bubble is
  * dragged over or dropped on top of it.
@@ -26,7 +25,7 @@ export interface IDragTarget extends IComponent {
    * @returns The component's bounding box. Null if drag target area should be
    *     ignored.
    */
-  getClientRect(): Rect|null;
+  getClientRect(): Rect | null;
 
   /**
    * Handles when a cursor with a block or bubble enters this drag target.

@@ -12,7 +12,6 @@ import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 
 import type {Renderer} from './renderer.js';
 
-
 /**
  * An object containing all sizing information needed to draw this block.
  *

@@ -30,7 +30,7 @@ body:
       value: |
         1. 
         2. 
-        3. 
+        3.
   - type: textarea
     id: stack-trace
     attributes:

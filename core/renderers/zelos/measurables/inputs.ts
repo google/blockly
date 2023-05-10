@@ -12,7 +12,6 @@ import type {Input} from '../../../inputs/input.js';
 import type {ConstantProvider} from '../../../renderers/common/constants.js';
 import {StatementInput as BaseStatementInput} from '../../../renderers/measurables/statement_input.js';
 
-
 /**
  * An object containing information about the space a statement input takes up
  * during rendering.
@@ -31,7 +30,7 @@ export class StatementInput extends BaseStatementInput {
       // Find the bottom-most connected block in the stack.
       let block = this.connectedBlock;
       let nextBlock;
-      while (nextBlock = block.getNextBlock()) {
+      while ((nextBlock = block.getNextBlock())) {
         block = nextBlock;
       }
       if (!block.nextConnection) {

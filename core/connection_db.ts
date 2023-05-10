@@ -19,7 +19,6 @@ import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import type {RenderedConnection} from './rendered_connection.js';
 import type {Coordinate} from './utils/coordinate.js';
 
-
 /**
  * Database of connections.
  * Connections are stored in order of their vertical component.  This way
@@ -58,8 +57,10 @@ export class ConnectionDB {
    * @returns The index of the connection, or -1 if the connection was not
    *     found.
    */
-  private findIndexOfConnection(conn: RenderedConnection, yPos: number):
-      number {
+  private findIndexOfConnection(
+    conn: RenderedConnection,
+    yPos: number
+  ): number {
     if (!this.connections.length) {
       return -1;
     }
@@ -81,8 +82,10 @@ export class ConnectionDB {
     }
 
     pointer = bestGuess;
-    while (pointer < this.connections.length &&
-           this.connections[pointer].y === yPos) {
+    while (
+      pointer < this.connections.length &&
+      this.connections[pointer].y === yPos
+    ) {
       if (this.connections[pointer] === conn) {
         return pointer;
       }
@@ -140,8 +143,10 @@ export class ConnectionDB {
    * @param maxRadius The maximum radius to another connection.
    * @returns List of connections.
    */
-  getNeighbours(connection: RenderedConnection, maxRadius: number):
-      RenderedConnection[] {
+  getNeighbours(
+    connection: RenderedConnection,
+    maxRadius: number
+  ): RenderedConnection[] {
     const db = this.connections;
     const currentX = connection.x;
     const currentY = connection.y;
@@ -218,8 +223,10 @@ export class ConnectionDB {
    *     connection or null, and 'radius' which is the distance.
    */
   searchForClosest(
-      conn: RenderedConnection, maxRadius: number,
-      dxy: Coordinate): {connection: RenderedConnection|null, radius: number} {
+    conn: RenderedConnection,
+    maxRadius: number,
+    dxy: Coordinate
+  ): {connection: RenderedConnection | null; radius: number} {
     if (!this.connections.length) {
       // Don't bother.
       return {connection: null, radius: maxRadius};
@@ -253,8 +260,10 @@ export class ConnectionDB {
     }
 
     let pointerMax = closestIndex;
-    while (pointerMax < this.connections.length &&
-           this.isInYRange(pointerMax, conn.y, maxRadius)) {
+    while (
+      pointerMax < this.connections.length &&
+      this.isInYRange(pointerMax, conn.y, maxRadius)
+    ) {
       temp = this.connections[pointerMax];
       if (this.connectionChecker.canConnect(conn, temp, true, bestRadius)) {
         bestConnection = temp;

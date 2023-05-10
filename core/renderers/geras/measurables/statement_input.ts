@@ -13,7 +13,6 @@ import type {ConstantProvider as BaseConstantProvider} from '../../../renderers/
 import {StatementInput as BaseStatementInput} from '../../../renderers/measurables/statement_input.js';
 import type {ConstantProvider as GerasConstantProvider} from '../constants.js';
 
-
 /**
  * An object containing information about the space a statement input takes up
  * during rendering.

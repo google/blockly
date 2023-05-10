@@ -8,9 +8,10 @@ import {IProcedureMap} from './interfaces/i_procedure_map.js';
 import type {IProcedureModel} from './interfaces/i_procedure_model.js';
 import {isObservable} from './interfaces/i_observable.js';
 
-
-export class ObservableProcedureMap extends
-    Map<string, IProcedureModel> implements IProcedureMap {
+export class ObservableProcedureMap
+  extends Map<string, IProcedureModel>
+  implements IProcedureMap
+{
   /** @internal */
   constructor() {
     super();

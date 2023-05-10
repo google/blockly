@@ -7,7 +7,6 @@
 import type {Coordinate} from '../utils/coordinate.js';
 import type {Size} from '../utils/size.js';
 
-
 export interface IIcon {
   /**
    * @return the string representing the type of the icon.
@@ -82,11 +81,18 @@ export interface IIcon {
 
 /** Type guard that checks whether the given object is an IIcon. */
 export function isIcon(obj: any): obj is IIcon {
-  return obj.getType !== undefined && obj.initView !== undefined &&
-      obj.dispose !== undefined && obj.getWeight !== undefined &&
-      obj.getSize !== undefined && obj.applyColour !== undefined &&
-      obj.updateEditable !== undefined && obj.updateCollapsed !== undefined &&
-      obj.isShownWhenCollapsed !== undefined &&
-      obj.setOffsetInBlock !== undefined &&
-      obj.onLocationChange !== undefined && obj.onClick !== undefined;
+  return (
+    obj.getType !== undefined &&
+    obj.initView !== undefined &&
+    obj.dispose !== undefined &&
+    obj.getWeight !== undefined &&
+    obj.getSize !== undefined &&
+    obj.applyColour !== undefined &&
+    obj.updateEditable !== undefined &&
+    obj.updateCollapsed !== undefined &&
+    obj.isShownWhenCollapsed !== undefined &&
+    obj.setOffsetInBlock !== undefined &&
+    obj.onLocationChange !== undefined &&
+    obj.onClick !== undefined
+  );
 }

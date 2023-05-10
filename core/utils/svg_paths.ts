@@ -7,7 +7,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.svgPaths');
 
-
 /**
  * Create a string representing the given x, y pair.  It does not matter whether
  * the coordinate is relative or absolute.  The result has leading
@@ -126,6 +125,10 @@ export function lineOnAxis(command: string, val: number): string {
  * @returns A string of the format 'command radius radius flags point'
  */
 export function arc(
-    command: string, flags: string, radius: number, point: string): string {
+  command: string,
+  flags: string,
+  radius: number,
+  point: string
+): string {
   return command + ' ' + radius + ' ' + radius + ' ' + flags + point;
 }

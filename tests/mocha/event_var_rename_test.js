@@ -6,23 +6,29 @@
 
 goog.declareModuleId('Blockly.test.eventVarRename');
 
-import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 
-
-suite('Var Rename Event', function() {
-  setup(function() {
+suite('Var Rename Event', function () {
+  setup(function () {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
   });
 
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
 
-  suite('Serialization', function() {
-    test('events round-trip through JSON', function() {
-      const varModel =
-          new Blockly.VariableModel(this.workspace, 'old name', 'type', 'id');
+  suite('Serialization', function () {
+    test('events round-trip through JSON', function () {
+      const varModel = new Blockly.VariableModel(
+        this.workspace,
+        'old name',
+        'type',
+        'id'
+      );
       const origEvent = new Blockly.Events.VarRename(varModel, 'new name');
 
       const json = origEvent.toJson();

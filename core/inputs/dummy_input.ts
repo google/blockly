@@ -8,7 +8,6 @@ import type {Block} from '../block.js';
 import {Input} from './input.js';
 import {inputTypes} from './input_types.js';
 
-
 /** Represents an input on a block with no connection. */
 export class DummyInput extends Input {
   readonly type = inputTypes.DUMMY;

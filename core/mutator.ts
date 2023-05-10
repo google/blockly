@@ -19,7 +19,7 @@ import './events/events_bubble_open.js';
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {BlocklyOptions} from './blockly_options.js';
-import {Bubble} from './bubble.js';
+import {Bubble} from './bubble_old.js';
 import {config} from './config.js';
 import type {Connection} from './connection.js';
 import type {Abstract} from './events/events_abstract.js';

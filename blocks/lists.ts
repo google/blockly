@@ -18,7 +18,6 @@ import {Align} from '../core/inputs/input.js';
 import type {Block} from '../core/block.js';
 import type {Connection} from '../core/connection.js';
 import type {BlockSvg} from '../core/block_svg.js';
-import {ConnectionType} from '../core/connection_type.js';
 import type {FieldDropdown} from '../core/field_dropdown.js';
 import {Msg} from '../core/msg.js';
 import {Mutator} from '../core/mutator.js';

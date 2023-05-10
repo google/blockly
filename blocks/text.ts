@@ -18,7 +18,6 @@ import {Align} from '../core/inputs/input.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
 import {Connection} from '../core/connection.js';
-import {ConnectionType} from '../core/connection_type.js';
 import {FieldImage} from '../core/field_image.js';
 import {FieldDropdown} from '../core/field_dropdown.js';
 import {FieldTextInput} from '../core/field_textinput.js';

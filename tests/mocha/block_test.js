@@ -1461,7 +1461,7 @@ suite('Blocks', function () {
         );
       });
 
-      test.only('adding two icons of the same type throws', function () {
+      test('adding two icons of the same type throws', function () {
         this.block.addIcon(new MockIconA());
         chai.assert.throws(
           () => {

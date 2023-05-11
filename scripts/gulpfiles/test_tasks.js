@@ -269,6 +269,7 @@ async function mocha() {
   });
 }
 
+
 /**
  * Helper method for comparison file.
  * @param {string} file1 First target file.

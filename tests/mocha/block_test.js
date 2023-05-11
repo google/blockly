@@ -1461,12 +1461,13 @@ suite('Blocks', function () {
         );
       });
 
-      test('adding two icons of the same type throws', function () {
+      test.only('adding two icons of the same type throws', function () {
         this.block.addIcon(new MockIconA());
         chai.assert.throws(
           () => {
             this.block.addIcon(new MockIconA());
           },
+          Blockly.icons.DuplicateIconType,
           '',
           'Expected adding an icon of the same type to throw'
         );

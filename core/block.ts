@@ -25,6 +25,7 @@ import * as common from './common.js';
 import {Connection} from './connection.js';
 import {ConnectionType} from './connection_type.js';
 import * as constants from './constants.js';
+import {DuplicateIconType} from './icons/exceptions.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
@@ -2234,12 +2235,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /** Adds the given icon to the block. */
   addIcon<T extends IIcon>(icon: T): T {
-    if (this.hasIcon(icon.getType())) {
-      throw new Error(
-        'Tried to append an icon when an icon of the same type already ' +
-          'exists on the block. Use getIcon to access the existing icon.'
-      );
-    }
+    if (this.hasIcon(icon.getType())) throw new DuplicateIconType(icon);
     this.icons.push(icon);
     this.icons.sort((a, b) => a.getWeight() - b.getWeight());
     return icon;

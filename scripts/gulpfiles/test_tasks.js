@@ -270,15 +270,6 @@ async function mocha() {
 }
 
 /**
- * Run Mocha tests inside a browser.
- * @return {Promise} result.
- */
-function mochaBrowser() {
-
-  return runTestCommand('mochaBrowser', 'mocha tests/browser/test --config tests/browser/test/.mocharc.js');
-}
-
-/**
  * Helper method for comparison file.
  * @param {string} file1 First target file.
  * @param {string} file2 Second target file.
@@ -396,7 +387,6 @@ const tasks = [
   build,
   renamings,
   metadata,
-  mochaBrowser,
   mocha,
   generators,
   node,

@@ -16,10 +16,8 @@ gulp.sourcemaps = require('gulp-sourcemaps');
 const path = require('path');
 const fs = require('fs');
 const {exec, execSync} = require('child_process');
-const through2 = require('through2');
 
 const closureCompiler = require('google-closure-compiler').gulp();
-const closureDeps = require('google-closure-deps');
 const argv = require('yargs').argv;
 const {rimraf} = require('rimraf');
 

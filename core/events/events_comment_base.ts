@@ -12,7 +12,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.CommentBase');
 
-import * as deprecation from '../utils/deprecation.js';
 import * as utilsXml from '../utils/xml.js';
 import type {WorkspaceComment} from '../workspace_comment.js';
 import * as Xml from '../xml.js';
@@ -67,22 +66,6 @@ export class CommentBase extends AbstractEvent {
     }
     json['commentId'] = this.commentId;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: CommentBaseJson) {
-    deprecation.warn(
-      'Blockly.Events.CommentBase.prototype.fromJson',
-      'version 9',
-      'version 10',
-      'Blockly.Events.fromJson'
-    );
-    super.fromJson(json);
-    this.commentId = json['commentId'];
   }
 
   /**

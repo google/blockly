@@ -14,7 +14,6 @@ goog.declareModuleId('Blockly.Events.BubbleOpen');
 
 import type {AbstractEventJson} from './events_abstract.js';
 import type {BlockSvg} from '../block_svg.js';
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
@@ -79,24 +78,6 @@ export class BubbleOpen extends UiBase {
     json['bubbleType'] = this.bubbleType;
     json['blockId'] = this.blockId || '';
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: BubbleOpenJson) {
-    deprecation.warn(
-      'Blockly.Events.BubbleOpen.prototype.fromJson',
-      'version 9',
-      'version 10',
-      'Blockly.Events.fromJson'
-    );
-    super.fromJson(json);
-    this.isOpen = json['isOpen'];
-    this.bubbleType = json['bubbleType'];
-    this.blockId = json['blockId'];
   }
 
   /**

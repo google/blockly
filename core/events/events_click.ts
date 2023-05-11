@@ -13,7 +13,6 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.Click');
 
 import type {Block} from '../block.js';
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 
@@ -75,23 +74,6 @@ export class Click extends UiBase {
     json['targetType'] = this.targetType;
     json['blockId'] = this.blockId;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: ClickJson) {
-    deprecation.warn(
-      'Blockly.Events.Click.prototype.fromJson',
-      'version 9',
-      'version 10',
-      'Blockly.Events.fromJson'
-    );
-    super.fromJson(json);
-    this.targetType = json['targetType'];
-    this.blockId = json['blockId'];
   }
 
   /**

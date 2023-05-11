@@ -140,14 +140,14 @@ phpGenerator['unittest_adjustindex'] = function(block) {
       phpGenerator.ORDER_ADDITION) || '0';
   // Adjust index if using one-based indexing.
   if (block.workspace.options.oneBasedIndex) {
-    if (Blockly.isNumber(index)) {
+    if (Blockly.utils.string.isNumber(index)) {
       // If the index is a naked number, adjust it right now.
       return [Number(index) + 1, phpGenerator.ORDER_ATOMIC];
     } else {
       // If the index is dynamic, adjust it in code.
       index = index + ' + 1';
     }
-  } else if (Blockly.isNumber(index)) {
+  } else if (Blockly.utils.string.isNumber(index)) {
     return [index, phpGenerator.ORDER_ATOMIC];
   }
   return [index, phpGenerator.ORDER_ADDITION];

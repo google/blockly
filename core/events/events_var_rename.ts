@@ -7,7 +7,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.VarRename');
 
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';
 
@@ -65,23 +64,6 @@ export class VarRename extends VarBase {
     json['oldName'] = this.oldName;
     json['newName'] = this.newName;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: VarRenameJson) {
-    deprecation.warn(
-      'Blockly.Events.VarRename.prototype.fromJson',
-      'version 9',
-      'version 10',
-      'Blockly.Events.fromJson'
-    );
-    super.fromJson(json);
-    this.oldName = json['oldName'];
-    this.newName = json['newName'];
   }
 
   /**

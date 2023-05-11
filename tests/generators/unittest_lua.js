@@ -156,7 +156,7 @@ luaGenerator['unittest_fail'] = function(block) {
 luaGenerator['unittest_adjustindex'] = function(block) {
   var index = luaGenerator.valueToCode(block, 'INDEX',
       luaGenerator.ORDER_ADDITIVE) || '0';
-  if (Blockly.isNumber(index)) {
+  if (Blockly.utils.string.isNumber(index)) {
     // If the index is a naked number, adjust it right now.
     return [Number(index) + 1, luaGenerator.ORDER_ATOMIC];
   }

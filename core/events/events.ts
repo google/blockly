@@ -29,7 +29,6 @@ import {
   ToolboxItemSelectJson,
 } from './events_toolbox_item_select.js';
 import {TrashcanOpen, TrashcanOpenJson} from './events_trashcan_open.js';
-import {Ui} from './events_ui.js';
 import {UiBase} from './events_ui_base.js';
 import {VarBase, VarBaseJson} from './events_var_base.js';
 import {VarCreate, VarCreateJson} from './events_var_create.js';
@@ -37,7 +36,7 @@ import {VarDelete, VarDeleteJson} from './events_var_delete.js';
 import {VarRename, VarRenameJson} from './events_var_rename.js';
 import {ViewportChange, ViewportChangeJson} from './events_viewport.js';
 import * as eventUtils from './utils.js';
-import {FinishedLoading, FinishedLoadingJson} from './workspace_events.js';
+import {FinishedLoading} from './workspace_events.js';
 
 // Events.
 export {Abstract};
@@ -70,7 +69,6 @@ export {CommentDelete};
 export {CommentMove};
 export {CommentMoveJson};
 export {FinishedLoading};
-export {FinishedLoadingJson};
 export {MarkerMove};
 export {MarkerMoveJson};
 export {Selected};
@@ -81,7 +79,6 @@ export {ToolboxItemSelect};
 export {ToolboxItemSelectJson};
 export {TrashcanOpen};
 export {TrashcanOpenJson};
-export {Ui};
 export {UiBase};
 export {VarBase};
 export {VarBaseJson};

@@ -8,8 +8,7 @@
  * @fileoverview Node.js script to run Automated tests in Chrome, via webdriver.
  */
 
-/* eslint-env node */
-/* eslint-env mocha */
+
 const webdriverio = require('webdriverio');
 const chai = require('chai');
 
@@ -52,16 +51,14 @@ suite("Testing Connecting Blocks", function(done) {
   test('Testing Block Drag', async function() {
     const startingBlock = await browser.$('#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)');
     const blocklyCanvas = await browser.$('#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas');
-    const firstPostion =  await blocklyCanvas.getAttribute('transform');
+    const firstPostion = await blocklyCanvas.getAttribute('transform');
     await startingBlock.dragAndDrop({x: 20, y: 20});
-    const secondPosition =  await blocklyCanvas.getAttribute('transform');
+    const secondPosition = await blocklyCanvas.getAttribute('transform');
     chai.assert.notEqual(firstPostion, secondPosition);
   });
-
-      // Teardown entire suite after test are done running
-      suiteTeardown(async function() {
-        await browser.deleteSession();
-      });
-
+  // Teardown entire suite after test are done running
+  suiteTeardown(async function() {
+    await browser.deleteSession();
+    });
 });
 

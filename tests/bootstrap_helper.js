@@ -14,7 +14,7 @@
  * undeclared dependencies on them.
  */
 
-(function() {
+(function () {
   const info = window.bootstrapInfo;
 
   if (!info.compressed) {
@@ -40,7 +40,7 @@
     }
   }
 
-  return;  // All done.  Only helper functions after this point.
+  return; // All done.  Only helper functions after this point.
 
   /**
    * Get the object referred to by a doted-itentifier path

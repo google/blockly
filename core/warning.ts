@@ -18,11 +18,10 @@ import './events/events_bubble_open.js';
 import type {BlockSvg} from './block_svg.js';
 import {Bubble} from './bubble.js';
 import * as eventUtils from './events/utils.js';
-import {Icon} from './icon.js';
+import {Icon} from './icon_old.js';
 import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
-
 
 /**
  * Class for a warning.
@@ -31,7 +30,7 @@ export class Warning extends Icon {
   private text: {[key: string]: string};
 
   /** The top-level node of the warning text, or null if not created. */
-  private paragraphElement: SVGTextElement|null = null;
+  private paragraphElement: SVGTextElement | null = null;
 
   /** Does this icon get hidden when the block is collapsed? */
   override collapseHidden = false;
@@ -52,29 +51,35 @@ export class Warning extends Icon {
   protected override drawIcon_(group: Element) {
     // Triangle with rounded corners.
     dom.createSvgElement(
-        Svg.PATH, {
-          'class': 'blocklyIconShape',
-          'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z',
-        },
-        group);
+      Svg.PATH,
+      {
+        'class': 'blocklyIconShape',
+        'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z',
+      },
+      group
+    );
     // Can't use a real '!' text character since different browsers and
     // operating systems render it differently. Body of exclamation point.
     dom.createSvgElement(
-        Svg.PATH, {
-          'class': 'blocklyIconSymbol',
-          'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z',
-        },
-        group);
+      Svg.PATH,
+      {
+        'class': 'blocklyIconSymbol',
+        'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z',
+      },
+      group
+    );
     // Dot of exclamation point.
     dom.createSvgElement(
-        Svg.RECT, {
-          'class': 'blocklyIconSymbol',
-          'x': '7',
-          'y': '11',
-          'height': '2',
-          'width': '2',
-        },
-        group);
+      Svg.RECT,
+      {
+        'class': 'blocklyIconSymbol',
+        'x': '7',
+        'y': '11',
+        'height': '2',
+        'width': '2',
+      },
+      group
+    );
   }
 
   /**
@@ -86,8 +91,13 @@ export class Warning extends Icon {
     if (visible === this.isVisible()) {
       return;
     }
-    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
-        this.getBlock(), visible, 'warning'));
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+        this.getBlock(),
+        visible,
+        'warning'
+      )
+    );
     if (visible) {
       this.createBubble();
     } else {
@@ -99,7 +109,10 @@ export class Warning extends Icon {
   private createBubble() {
     this.paragraphElement = Bubble.textToDom(this.getText());
     this.bubble_ = Bubble.createNonEditableBubble(
-        this.paragraphElement, this.getBlock(), this.iconXY_ as Coordinate);
+      this.paragraphElement,
+      this.getBlock(),
+      this.iconXY_ as Coordinate
+    );
     this.applyColour();
   }
 

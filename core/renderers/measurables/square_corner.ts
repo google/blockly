@@ -12,7 +12,6 @@ import type {ConstantProvider} from '../common/constants.js';
 import {Measurable} from './base.js';
 import {Types} from './types.js';
 
-
 /**
  * An object containing information about the space a square corner takes up
  * during rendering.
@@ -25,9 +24,9 @@ export class SquareCorner extends Measurable {
   constructor(constants: ConstantProvider, opt_position?: string) {
     super(constants);
     this.type =
-        (!opt_position || opt_position === 'left' ? Types.LEFT_SQUARE_CORNER :
-                                                    Types.RIGHT_SQUARE_CORNER) |
-        Types.CORNER;
+      (!opt_position || opt_position === 'left'
+        ? Types.LEFT_SQUARE_CORNER
+        : Types.RIGHT_SQUARE_CORNER) | Types.CORNER;
     this.height = this.constants_.NO_PADDING;
     this.width = this.constants_.NO_PADDING;
   }

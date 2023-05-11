@@ -27,7 +27,6 @@ import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 import * as svgPaths from './utils/svg_paths.js';
 
-
 /** A shape that has a pathDown property. */
 interface PathDownShape {
   pathDown: string;
@@ -47,14 +46,14 @@ const BUMP_RANDOMNESS = 10;
 export class RenderedConnection extends Connection {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   sourceBlock_!: BlockSvg;
-  private readonly db_: ConnectionDB;
-  private readonly dbOpposite_: ConnectionDB;
-  private readonly offsetInBlock_: Coordinate;
-  private trackedState_: TrackedState;
-  private highlightPath: SVGPathElement|null = null;
+  private readonly db: ConnectionDB;
+  private readonly dbOpposite: ConnectionDB;
+  private readonly offsetInBlock: Coordinate;
+  private trackedState: TrackedState;
+  private highlightPath: SVGPathElement | null = null;
 
   /** Connection this connection connects to.  Null if not connected. */
-  override targetConnection: RenderedConnection|null = null;
+  override targetConnection: RenderedConnection | null = null;
 
   /**
    * @param source The block establishing this connection.
@@ -67,21 +66,20 @@ export class RenderedConnection extends Connection {
      * Connection database for connections of this type on the current
      * workspace.
      */
-    this.db_ = source.workspace.connectionDBList[type];
+    this.db = source.workspace.connectionDBList[type];
 
     /**
      * Connection database for connections compatible with this type on the
      * current workspace.
      */
-    this.dbOpposite_ =
-        source.workspace
-            .connectionDBList[internalConstants.OPPOSITE_TYPE[type]];
+    this.dbOpposite =
+      source.workspace.connectionDBList[internalConstants.OPPOSITE_TYPE[type]];
 
     /** Workspace units, (0, 0) is top left of block. */
-    this.offsetInBlock_ = new Coordinate(0, 0);
+    this.offsetInBlock = new Coordinate(0, 0);
 
     /** Describes the state of this connection's tracked-ness. */
-    this.trackedState_ = RenderedConnection.TrackedState.WILL_TRACK;
+    this.trackedState = RenderedConnection.TrackedState.WILL_TRACK;
   }
 
   /**
@@ -92,8 +90,8 @@ export class RenderedConnection extends Connection {
    */
   override dispose() {
     super.dispose();
-    if (this.trackedState_ === RenderedConnection.TrackedState.TRACKED) {
-      this.db_.removeConnection(this, this.y);
+    if (this.trackedState === RenderedConnection.TrackedState.TRACKED) {
+      this.db.removeConnection(this, this.y);
     }
   }
 
@@ -111,7 +109,7 @@ export class RenderedConnection extends Connection {
    *
    * @returns The connected block or null if none is connected.
    */
-  override targetBlock(): BlockSvg|null {
+  override targetBlock(): BlockSvg | null {
     return super.targetBlock() as BlockSvg;
   }
 
@@ -162,19 +160,28 @@ export class RenderedConnection extends Connection {
     // Raise it to the top for extra visibility.
     const selected = common.getSelected() == rootBlock;
     selected || rootBlock.addSelect();
-    let dx = staticConnection.x + config.snapRadius +
-        Math.floor(Math.random() * BUMP_RANDOMNESS) - this.x;
-    let dy = staticConnection.y + config.snapRadius +
-        Math.floor(Math.random() * BUMP_RANDOMNESS) - this.y;
+    let dx =
+      staticConnection.x +
+      config.snapRadius +
+      Math.floor(Math.random() * BUMP_RANDOMNESS) -
+      this.x;
+    let dy =
+      staticConnection.y +
+      config.snapRadius +
+      Math.floor(Math.random() * BUMP_RANDOMNESS) -
+      this.y;
     if (reverse) {
       // When reversing a bump due to an uneditable block, bump up.
       dy = -dy;
     }
     if (rootBlock.RTL) {
-      dx = staticConnection.x - config.snapRadius -
-          Math.floor(Math.random() * BUMP_RANDOMNESS) - this.x;
+      dx =
+        staticConnection.x -
+        config.snapRadius -
+        Math.floor(Math.random() * BUMP_RANDOMNESS) -
+        this.x;
     }
-    rootBlock.moveBy(dx, dy);
+    rootBlock.moveBy(dx, dy, ['bump']);
     selected || rootBlock.removeSelect();
   }
 
@@ -192,15 +199,16 @@ export class RenderedConnection extends Connection {
     const moved = true;
     let updated = false;
 
-    if (this.trackedState_ === RenderedConnection.TrackedState.WILL_TRACK) {
-      this.db_.addConnection(this, y);
-      this.trackedState_ = RenderedConnection.TrackedState.TRACKED;
+    if (this.trackedState === RenderedConnection.TrackedState.WILL_TRACK) {
+      this.db.addConnection(this, y);
+      this.trackedState = RenderedConnection.TrackedState.TRACKED;
       updated = true;
     } else if (
-        this.trackedState_ === RenderedConnection.TrackedState.TRACKED &&
-        moved) {
-      this.db_.removeConnection(this, this.y);
-      this.db_.addConnection(this, y);
+      this.trackedState === RenderedConnection.TrackedState.TRACKED &&
+      moved
+    ) {
+      this.db.removeConnection(this, this.y);
+      this.db.addConnection(this, y);
       updated = true;
     }
 
@@ -233,7 +241,9 @@ export class RenderedConnection extends Connection {
    */
   moveToOffset(blockTL: Coordinate): boolean {
     return this.moveTo(
-        blockTL.x + this.offsetInBlock_.x, blockTL.y + this.offsetInBlock_.y);
+      blockTL.x + this.offsetInBlock.x,
+      blockTL.y + this.offsetInBlock.y
+    );
   }
 
   /**
@@ -243,8 +253,8 @@ export class RenderedConnection extends Connection {
    * @param y The new relative y, in workspace units.
    */
   setOffsetInBlock(x: number, y: number) {
-    this.offsetInBlock_.x = x;
-    this.offsetInBlock_.y = y;
+    this.offsetInBlock.x = x;
+    this.offsetInBlock.y = y;
   }
 
   /**
@@ -254,7 +264,7 @@ export class RenderedConnection extends Connection {
    * @internal
    */
   getOffsetInBlock(): Coordinate {
-    return this.offsetInBlock_;
+    return this.offsetInBlock;
   }
 
   /**
@@ -288,8 +298,10 @@ export class RenderedConnection extends Connection {
     const target = this.targetConnection;
     const block = this.targetBlock();
     if (!target || !block) return;
-    const offset =
-        Coordinate.difference(this.offsetInBlock_, target.offsetInBlock_);
+    const offset = Coordinate.difference(
+      this.offsetInBlock,
+      target.offsetInBlock
+    );
     block.translate(offset.x, offset.y);
   }
 
@@ -303,9 +315,11 @@ export class RenderedConnection extends Connection {
    * @returns Contains two properties: 'connection' which is either another
    *     connection or null, and 'radius' which is the distance.
    */
-  closest(maxLimit: number, dxy: Coordinate):
-      {connection: RenderedConnection|null, radius: number} {
-    return this.dbOpposite_.searchForClosest(this, maxLimit, dxy);
+  closest(
+    maxLimit: number,
+    dxy: Coordinate
+  ): {connection: RenderedConnection | null; radius: number} {
+    return this.dbOpposite.searchForClosest(this, maxLimit, dxy);
   }
 
   /** Add highlighting around this connection. */
@@ -315,34 +329,44 @@ export class RenderedConnection extends Connection {
       return;
     }
     let steps;
-    const sourceBlockSvg = (this.sourceBlock_);
-    const renderConstants =
-        sourceBlockSvg.workspace.getRenderer().getConstants();
+    const sourceBlockSvg = this.sourceBlock_;
+    const renderConstants = sourceBlockSvg.workspace
+      .getRenderer()
+      .getConstants();
     const shape = renderConstants.shapeFor(this);
-    if (this.type === ConnectionType.INPUT_VALUE ||
-        this.type === ConnectionType.OUTPUT_VALUE) {
+    if (
+      this.type === ConnectionType.INPUT_VALUE ||
+      this.type === ConnectionType.OUTPUT_VALUE
+    ) {
       // Vertical line, puzzle tab, vertical line.
       const yLen = renderConstants.TAB_OFFSET_FROM_TOP;
-      steps = svgPaths.moveBy(0, -yLen) + svgPaths.lineOnAxis('v', yLen) +
-          (shape as unknown as PathDownShape).pathDown +
-          svgPaths.lineOnAxis('v', yLen);
+      steps =
+        svgPaths.moveBy(0, -yLen) +
+        svgPaths.lineOnAxis('v', yLen) +
+        (shape as unknown as PathDownShape).pathDown +
+        svgPaths.lineOnAxis('v', yLen);
     } else {
       const xLen =
-          renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
+        renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
       // Horizontal line, notch, horizontal line.
-      steps = svgPaths.moveBy(-xLen, 0) + svgPaths.lineOnAxis('h', xLen) +
-          (shape as unknown as PathLeftShape).pathLeft +
-          svgPaths.lineOnAxis('h', xLen);
+      steps =
+        svgPaths.moveBy(-xLen, 0) +
+        svgPaths.lineOnAxis('h', xLen) +
+        (shape as unknown as PathLeftShape).pathLeft +
+        svgPaths.lineOnAxis('h', xLen);
     }
-    const offset = this.offsetInBlock_;
+    const offset = this.offsetInBlock;
     this.highlightPath = dom.createSvgElement(
-        Svg.PATH, {
-          'class': 'blocklyHighlightedConnectionPath',
-          'd': steps,
-          'transform': `translate(${offset.x}, ${offset.y})` +
-              (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
-        },
-        this.sourceBlock_.getSvgRoot());
+      Svg.PATH,
+      {
+        'class': 'blocklyHighlightedConnectionPath',
+        'd': steps,
+        'transform':
+          `translate(${offset.x}, ${offset.y})` +
+          (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
+      },
+      this.sourceBlock_.getSvgRoot()
+    );
   }
 
   /** Remove the highlighting around this connection. */
@@ -360,10 +384,12 @@ export class RenderedConnection extends Connection {
    * @internal
    */
   setTracking(doTracking: boolean) {
-    if (doTracking &&
-            this.trackedState_ === RenderedConnection.TrackedState.TRACKED ||
-        !doTracking &&
-            this.trackedState_ === RenderedConnection.TrackedState.UNTRACKED) {
+    if (
+      (doTracking &&
+        this.trackedState === RenderedConnection.TrackedState.TRACKED) ||
+      (!doTracking &&
+        this.trackedState === RenderedConnection.TrackedState.UNTRACKED)
+    ) {
       return;
     }
     if (this.sourceBlock_.isInFlyout) {
@@ -371,14 +397,14 @@ export class RenderedConnection extends Connection {
       return;
     }
     if (doTracking) {
-      this.db_.addConnection(this, this.y);
-      this.trackedState_ = RenderedConnection.TrackedState.TRACKED;
+      this.db.addConnection(this, this.y);
+      this.trackedState = RenderedConnection.TrackedState.TRACKED;
       return;
     }
-    if (this.trackedState_ === RenderedConnection.TrackedState.TRACKED) {
-      this.db_.removeConnection(this, this.y);
+    if (this.trackedState === RenderedConnection.TrackedState.TRACKED) {
+      this.db.removeConnection(this, this.y);
     }
-    this.trackedState_ = RenderedConnection.TrackedState.UNTRACKED;
+    this.trackedState = RenderedConnection.TrackedState.UNTRACKED;
   }
 
   /**
@@ -399,7 +425,7 @@ export class RenderedConnection extends Connection {
         // Stop tracking connections of all children.
         const connections = block.getConnections_(true);
         for (let j = 0; j < connections.length; j++) {
-          (connections[j]).setTracking(false);
+          connections[j].setTracking(false);
         }
         // Close all bubbles of all children.
         const icons = block.getIcons();
@@ -424,8 +450,10 @@ export class RenderedConnection extends Connection {
     // of lower blocks. Also, since rendering a block renders all its parents,
     // we only need to render the leaf nodes.
     let renderList: Block[] = [];
-    if (this.type !== ConnectionType.INPUT_VALUE &&
-        this.type !== ConnectionType.NEXT_STATEMENT) {
+    if (
+      this.type !== ConnectionType.INPUT_VALUE &&
+      this.type !== ConnectionType.NEXT_STATEMENT
+    ) {
       // Only spider down.
       return renderList;
     }
@@ -466,13 +494,16 @@ export class RenderedConnection extends Connection {
     const block = this.getSourceBlock();
     if (eventUtils.getRecordUndo()) {
       const group = eventUtils.getGroup();
-      setTimeout(function(this: RenderedConnection) {
-        if (!block.isDisposed() && !block.getParent()) {
-          eventUtils.setGroup(group);
-          this.bumpAwayFrom(otherConnection as RenderedConnection);
-          eventUtils.setGroup(false);
-        }
-      }.bind(this), config.bumpDelay);
+      setTimeout(
+        function (this: RenderedConnection) {
+          if (!block.isDisposed() && !block.getParent()) {
+            eventUtils.setGroup(group);
+            this.bumpAwayFrom(otherConnection as RenderedConnection);
+            eventUtils.setGroup(false);
+          }
+        }.bind(this),
+        config.bumpDelay
+      );
     }
   }
 
@@ -486,7 +517,7 @@ export class RenderedConnection extends Connection {
    */
   override disconnectInternal(setParent = true) {
     const {parentConnection, childConnection} =
-        this.getParentAndChildConnections();
+      this.getParentAndChildConnections();
     if (!parentConnection || !childConnection) return;
     const parent = parentConnection.getSourceBlock() as BlockSvg;
     const child = childConnection.getSourceBlock() as BlockSvg;
@@ -514,12 +545,7 @@ export class RenderedConnection extends Connection {
       return;
     }
     blockShadow.initSvg();
-    blockShadow.render(false);
-
-    const parentBlock = this.getSourceBlock();
-    if (parentBlock.rendered) {
-      parentBlock.queueRender();
-    }
+    blockShadow.queueRender();
   }
 
   /**
@@ -532,7 +558,7 @@ export class RenderedConnection extends Connection {
    * @internal
    */
   override neighbours(maxLimit: number): RenderedConnection[] {
-    return this.dbOpposite_.getNeighbours(this, maxLimit);
+    return this.dbOpposite.getNeighbours(this, maxLimit);
   }
 
   /**
@@ -558,8 +584,10 @@ export class RenderedConnection extends Connection {
       childBlock.updateDisabled();
     }
     if (parentRendered && childRendered) {
-      if (this.type === ConnectionType.NEXT_STATEMENT ||
-          this.type === ConnectionType.PREVIOUS_STATEMENT) {
+      if (
+        this.type === ConnectionType.NEXT_STATEMENT ||
+        this.type === ConnectionType.PREVIOUS_STATEMENT
+      ) {
         // Child block may need to square off its corners if it is in a stack.
         // Rendering a child will render its parent.
         childBlock.queueRender();
@@ -583,10 +611,15 @@ export class RenderedConnection extends Connection {
    */
   protected override onCheckChanged_() {
     // The new value type may not be compatible with the existing connection.
-    if (this.isConnected() &&
-        (!this.targetConnection ||
-         !this.getConnectionChecker().canConnect(
-             this, this.targetConnection, false))) {
+    if (
+      this.isConnected() &&
+      (!this.targetConnection ||
+        !this.getConnectionChecker().canConnect(
+          this,
+          this.targetConnection,
+          false
+        ))
+    ) {
       const child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
       child!.unplug();
       // Bump away.

@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.inputTypes');
 
-import {ConnectionType} from './connection_type.js';
-
+import {ConnectionType} from '../connection_type.js';
 
 /**
  * Enum for the type of a connection or input.
@@ -19,5 +18,7 @@ export enum inputTypes {
   // A down-facing block stack.  E.g. 'if-do' or 'else'.
   STATEMENT = ConnectionType.NEXT_STATEMENT,
   // A dummy input.  Used to add field(s) with no input.
-  DUMMY = 5
+  DUMMY = 5,
+  // An unknown type of input defined by an external developer.
+  CUSTOM = 6,
 }

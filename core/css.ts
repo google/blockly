@@ -7,7 +7,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Css');
 
-
 /** Has CSS already been injected? */
 let injected = false;
 

@@ -20,7 +20,6 @@ import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
 
-
 /**
  * Class for a selected event.
  * Notifies listeners that a new element has been selected.
@@ -46,8 +45,10 @@ export class Selected extends UiBase {
    *    Null if no element previously selected. Undefined for a blank event.
    */
   constructor(
-      opt_oldElementId?: string|null, opt_newElementId?: string|null,
-      opt_workspaceId?: string) {
+    opt_oldElementId?: string | null,
+    opt_newElementId?: string | null,
+    opt_workspaceId?: string
+  ) {
     super(opt_workspaceId);
 
     this.oldElementId = opt_oldElementId ?? undefined;
@@ -73,8 +74,11 @@ export class Selected extends UiBase {
    */
   override fromJson(json: SelectedJson) {
     deprecation.warn(
-        'Blockly.Events.Selected.prototype.fromJson', 'version 9', 'version 10',
-        'Blockly.Events.fromJson');
+      'Blockly.Events.Selected.prototype.fromJson',
+      'version 9',
+      'version 10',
+      'Blockly.Events.fromJson'
+    );
     super.fromJson(json);
     this.oldElementId = json['oldElementId'];
     this.newElementId = json['newElementId'];
@@ -89,10 +93,16 @@ export class Selected extends UiBase {
    *     static methods in superclasses.
    * @internal
    */
-  static fromJson(json: SelectedJson, workspace: Workspace, event?: any):
-      Selected {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new Selected()) as Selected;
+  static fromJson(
+    json: SelectedJson,
+    workspace: Workspace,
+    event?: any
+  ): Selected {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new Selected()
+    ) as Selected;
     newEvent.oldElementId = json['oldElementId'];
     newEvent.newElementId = json['newElementId'];
     return newEvent;

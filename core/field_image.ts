@@ -29,13 +29,13 @@ export class FieldImage extends Field<string> {
    */
   private static readonly Y_PADDING = 1;
   protected override size_: Size;
-  private readonly imageHeight_: number;
+  private readonly imageHeight: number;
 
   /** The function to be called when this field is clicked. */
-  private clickHandler_: ((p1: FieldImage) => void)|null = null;
+  private clickHandler: ((p1: FieldImage) => void) | null = null;
 
   /** The rendered field's image element. */
-  private imageElement_: SVGImageElement|null = null;
+  private imageElement: SVGImageElement | null = null;
 
   /**
    * Editable fields usually show some sort of UI indicating they are
@@ -51,10 +51,10 @@ export class FieldImage extends Field<string> {
   protected override isDirty_ = false;
 
   /** Whether to flip this image in RTL. */
-  private flipRtl_ = false;
+  private flipRtl = false;
 
   /** Alt text of this image. */
-  private altText_ = '';
+  private altText = '';
 
   /**
    * @param src The URL of the image.
@@ -73,22 +73,27 @@ export class FieldImage extends Field<string> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      src: string|typeof Field.SKIP_SETUP, width: string|number,
-      height: string|number, alt?: string, onClick?: (p1: FieldImage) => void,
-      flipRtl?: boolean, config?: FieldImageConfig) {
+    src: string | typeof Field.SKIP_SETUP,
+    width: string | number,
+    height: string | number,
+    alt?: string,
+    onClick?: (p1: FieldImage) => void,
+    flipRtl?: boolean,
+    config?: FieldImageConfig
+  ) {
     super(Field.SKIP_SETUP);
 
     const imageHeight = Number(parsing.replaceMessageReferences(height));
     const imageWidth = Number(parsing.replaceMessageReferences(width));
     if (isNaN(imageHeight) || isNaN(imageWidth)) {
       throw Error(
-          'Height and width values of an image field must cast to' +
-          ' numbers.');
+        'Height and width values of an image field must cast to' + ' numbers.'
+      );
     }
     if (imageHeight <= 0 || imageWidth <= 0) {
       throw Error(
-          'Height and width values of an image field must be greater' +
-          ' than 0.');
+        'Height and width values of an image field must be greater' + ' than 0.'
+      );
     }
 
     /** The size of the area rendered by the field. */
@@ -97,10 +102,10 @@ export class FieldImage extends Field<string> {
     /**
      * Store the image height, since it is different from the field height.
      */
-    this.imageHeight_ = imageHeight;
+    this.imageHeight = imageHeight;
 
     if (typeof onClick === 'function') {
-      this.clickHandler_ = onClick;
+      this.clickHandler = onClick;
     }
 
     if (src === Field.SKIP_SETUP) return;
@@ -108,8 +113,8 @@ export class FieldImage extends Field<string> {
     if (config) {
       this.configure_(config);
     } else {
-      this.flipRtl_ = !!flipRtl;
-      this.altText_ = parsing.replaceMessageReferences(alt) || '';
+      this.flipRtl = !!flipRtl;
+      this.altText = parsing.replaceMessageReferences(alt) || '';
     }
     this.setValue(parsing.replaceMessageReferences(src));
   }
@@ -121,9 +126,9 @@ export class FieldImage extends Field<string> {
    */
   protected override configure_(config: FieldImageConfig) {
     super.configure_(config);
-    if (config.flipRtl) this.flipRtl_ = config.flipRtl;
+    if (config.flipRtl) this.flipRtl = config.flipRtl;
     if (config.alt) {
-      this.altText_ = parsing.replaceMessageReferences(config.alt);
+      this.altText = parsing.replaceMessageReferences(config.alt);
     }
   }
 
@@ -133,18 +138,23 @@ export class FieldImage extends Field<string> {
    * @internal
    */
   override initView() {
-    this.imageElement_ = dom.createSvgElement(
-        Svg.IMAGE, {
-          'height': this.imageHeight_ + 'px',
-          'width': this.size_.width + 'px',
-          'alt': this.altText_,
-        },
-        this.fieldGroup_);
-    this.imageElement_.setAttributeNS(
-        dom.XLINK_NS, 'xlink:href', this.value_ as string);
+    this.imageElement = dom.createSvgElement(
+      Svg.IMAGE,
+      {
+        'height': this.imageHeight + 'px',
+        'width': this.size_.width + 'px',
+        'alt': this.altText,
+      },
+      this.fieldGroup_
+    );
+    this.imageElement.setAttributeNS(
+      dom.XLINK_NS,
+      'xlink:href',
+      this.value_ as string
+    );
 
-    if (this.clickHandler_) {
-      this.imageElement_.style.cursor = 'pointer';
+    if (this.clickHandler) {
+      this.imageElement.style.cursor = 'pointer';
     }
   }
 
@@ -157,7 +167,7 @@ export class FieldImage extends Field<string> {
    * @param newValue The input value.
    * @returns A string, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: any): string|null {
+  protected override doClassValidation_(newValue?: any): string | null {
     if (typeof newValue !== 'string') {
       return null;
     }
@@ -172,9 +182,8 @@ export class FieldImage extends Field<string> {
    */
   protected override doValueUpdate_(newValue: string) {
     this.value_ = newValue;
-    if (this.imageElement_) {
-      this.imageElement_.setAttributeNS(
-          dom.XLINK_NS, 'xlink:href', this.value_);
+    if (this.imageElement) {
+      this.imageElement.setAttributeNS(dom.XLINK_NS, 'xlink:href', this.value_);
     }
   }
 
@@ -184,7 +193,7 @@ export class FieldImage extends Field<string> {
    * @returns True if we should flip in RTL.
    */
   override getFlipRtl(): boolean {
-    return this.flipRtl_;
+    return this.flipRtl;
   }
 
   /**
@@ -192,13 +201,13 @@ export class FieldImage extends Field<string> {
    *
    * @param alt New alt text.
    */
-  setAlt(alt: string|null) {
-    if (alt === this.altText_) {
+  setAlt(alt: string | null) {
+    if (alt === this.altText) {
       return;
     }
-    this.altText_ = alt || '';
-    if (this.imageElement_) {
-      this.imageElement_.setAttribute('alt', this.altText_);
+    this.altText = alt || '';
+    if (this.imageElement) {
+      this.imageElement.setAttribute('alt', this.altText);
     }
   }
 
@@ -207,8 +216,8 @@ export class FieldImage extends Field<string> {
    * call the handler.
    */
   protected override showEditor_() {
-    if (this.clickHandler_) {
-      this.clickHandler_(this);
+    if (this.clickHandler) {
+      this.clickHandler(this);
     }
   }
 
@@ -218,8 +227,8 @@ export class FieldImage extends Field<string> {
    * @param func The function that is called when the image is clicked, or null
    *     to remove.
    */
-  setOnClickHandler(func: ((p1: FieldImage) => void)|null) {
-    this.clickHandler_ = func;
+  setOnClickHandler(func: ((p1: FieldImage) => void) | null) {
+    this.clickHandler = func;
   }
 
   /**
@@ -229,8 +238,8 @@ export class FieldImage extends Field<string> {
    *
    * @returns The image alt text.
    */
-  protected override getText_(): string|null {
-    return this.altText_;
+  protected override getText_(): string | null {
+    return this.altText;
   }
 
   /**
@@ -246,14 +255,21 @@ export class FieldImage extends Field<string> {
   static fromJson(options: FieldImageFromJsonConfig): FieldImage {
     if (!options.src || !options.width || !options.height) {
       throw new Error(
-          'src, width, and height values for an image field are' +
-          'required. The width and height must be non-zero.');
+        'src, width, and height values for an image field are' +
+          'required. The width and height must be non-zero.'
+      );
     }
     // `this` might be a subclass of FieldImage if that class doesn't override
     // the static fromJson method.
     return new this(
-        options.src, options.width, options.height, undefined, undefined,
-        undefined, options);
+      options.src,
+      options.width,
+      options.height,
+      undefined,
+      undefined,
+      undefined,
+      options
+    );
   }
 }
 

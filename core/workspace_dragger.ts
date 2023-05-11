@@ -16,7 +16,6 @@ import * as common from './common.js';
 import {Coordinate} from './utils/coordinate.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-
 /**
  * Class for a workspace dragger.  It moves the workspace around when it is
  * being dragged by a mouse or touch.

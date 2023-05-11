@@ -1,13 +1,11 @@
 {
-  "include": [
-    "src/**/*",
-  ],
+  "include": ["src/**/*"],
   "compilerOptions": {
     "allowJs": false,
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "blockly-test/*": ["../../dist/*"],
+      "blockly-test/*": ["../../dist/*"]
     },
 
     "declaration": false,
@@ -17,6 +15,6 @@
     "module": "ES2015",
     "moduleResolution": "node",
     "target": "ES2020",
-    "strict": true,
+    "strict": true
   }
 }

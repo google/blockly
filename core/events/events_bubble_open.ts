@@ -20,7 +20,6 @@ import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
 
-
 /**
  * Class for a bubble open event.
  */
@@ -44,7 +43,10 @@ export class BubbleOpen extends UiBase {
    *     'warning'. Undefined for a blank event.
    */
   constructor(
-      opt_block?: BlockSvg, opt_isOpen?: boolean, opt_bubbleType?: BubbleType) {
+    opt_block?: BlockSvg,
+    opt_isOpen?: boolean,
+    opt_bubbleType?: BubbleType
+  ) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;
     super(workspaceId);
     if (!opt_block) return;
@@ -63,13 +65,15 @@ export class BubbleOpen extends UiBase {
     const json = super.toJson() as BubbleOpenJson;
     if (this.isOpen === undefined) {
       throw new Error(
-          'Whether this event is for opening the bubble is undefined. ' +
-          'Either pass the value to the constructor, or call fromJson');
+        'Whether this event is for opening the bubble is undefined. ' +
+          'Either pass the value to the constructor, or call fromJson'
+      );
     }
     if (!this.bubbleType) {
       throw new Error(
-          'The type of bubble is undefined. Either pass the ' +
-          'value to the constructor, or call fromJson');
+        'The type of bubble is undefined. Either pass the ' +
+          'value to the constructor, or call fromJson'
+      );
     }
     json['isOpen'] = this.isOpen;
     json['bubbleType'] = this.bubbleType;
@@ -84,8 +88,11 @@ export class BubbleOpen extends UiBase {
    */
   override fromJson(json: BubbleOpenJson) {
     deprecation.warn(
-        'Blockly.Events.BubbleOpen.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
+      'Blockly.Events.BubbleOpen.prototype.fromJson',
+      'version 9',
+      'version 10',
+      'Blockly.Events.fromJson'
+    );
     super.fromJson(json);
     this.isOpen = json['isOpen'];
     this.bubbleType = json['bubbleType'];
@@ -101,11 +108,16 @@ export class BubbleOpen extends UiBase {
    *     parameters to static methods in superclasses.
    * @internal
    */
-  static fromJson(json: BubbleOpenJson, workspace: Workspace, event?: any):
-      BubbleOpen {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new BubbleOpen()) as
-        BubbleOpen;
+  static fromJson(
+    json: BubbleOpenJson,
+    workspace: Workspace,
+    event?: any
+  ): BubbleOpen {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new BubbleOpen()
+    ) as BubbleOpen;
     newEvent.isOpen = json['isOpen'];
     newEvent.bubbleType = json['bubbleType'];
     newEvent.blockId = json['blockId'];

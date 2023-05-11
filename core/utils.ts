@@ -35,7 +35,6 @@ import * as userAgent from './utils/useragent.js';
 import * as xml from './utils/xml.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-
 export {
   aria,
   arrayUtils as array,
@@ -73,8 +72,11 @@ export {
  */
 export function getRelativeXY(element: Element): Coordinate {
   deprecation.warn(
-      'Blockly.utils.getRelativeXY', 'December 2021', 'December 2022',
-      'Blockly.utils.svgMath.getRelativeXY');
+    'Blockly.utils.getRelativeXY',
+    'December 2021',
+    'December 2022',
+    'Blockly.utils.svgMath.getRelativeXY'
+  );
   return svgMath.getRelativeXY(element);
 }
 
@@ -89,8 +91,11 @@ export function getRelativeXY(element: Element): Coordinate {
  */
 function getInjectionDivXY(element: Element): Coordinate {
   deprecation.warn(
-      'Blockly.utils.getInjectionDivXY_', 'December 2021', 'December 2022',
-      'Blockly.utils.svgMath.getInjectionDivXY');
+    'Blockly.utils.getInjectionDivXY_',
+    'December 2021',
+    'December 2022',
+    'Blockly.utils.svgMath.getInjectionDivXY'
+  );
   return svgMath.getInjectionDivXY(element);
 }
 export const getInjectionDivXY_ = getInjectionDivXY;
@@ -107,10 +112,13 @@ export const getInjectionDivXY_ = getInjectionDivXY;
  * @returns Array of strings and numbers.
  * @deprecated Use **Blockly.utils.parsing.tokenizeInterpolation** instead.
  */
-export function tokenizeInterpolation(message: string): Array<string|number> {
+export function tokenizeInterpolation(message: string): Array<string | number> {
   deprecation.warn(
-      'Blockly.utils.tokenizeInterpolation', 'December 2021', 'December 2022',
-      'Blockly.utils.parsing.tokenizeInterpolation');
+    'Blockly.utils.tokenizeInterpolation',
+    'December 2021',
+    'December 2022',
+    'Blockly.utils.parsing.tokenizeInterpolation'
+  );
   return parsing.tokenizeInterpolation(message);
 }
 
@@ -124,10 +132,13 @@ export function tokenizeInterpolation(message: string): Array<string|number> {
  * @returns String with message references replaced.
  * @deprecated Use **Blockly.utils.parsing.replaceMessageReferences** instead.
  */
-export function replaceMessageReferences(message: string|any): string {
+export function replaceMessageReferences(message: string | any): string {
   deprecation.warn(
-      'Blockly.utils.replaceMessageReferences', 'December 2021',
-      'December 2022', 'Blockly.utils.parsing.replaceMessageReferences');
+    'Blockly.utils.replaceMessageReferences',
+    'December 2021',
+    'December 2022',
+    'Blockly.utils.parsing.replaceMessageReferences'
+  );
   return parsing.replaceMessageReferences(message);
 }
 
@@ -142,8 +153,11 @@ export function replaceMessageReferences(message: string|any): string {
  */
 export function checkMessageReferences(message: string): boolean {
   deprecation.warn(
-      'Blockly.utils.checkMessageReferences', 'December 2021', 'December 2022',
-      'Blockly.utils.parsing.checkMessageReferences');
+    'Blockly.utils.checkMessageReferences',
+    'December 2021',
+    'December 2022',
+    'Blockly.utils.parsing.checkMessageReferences'
+  );
   return parsing.checkMessageReferences(message);
 }
 
@@ -156,8 +170,11 @@ export function checkMessageReferences(message: string): boolean {
  */
 export function is3dSupported(): boolean {
   deprecation.warn(
-      'Blockly.utils.is3dSupported', 'December 2021', 'December 2022',
-      'Blockly.utils.svgMath.is3dSupported');
+    'Blockly.utils.is3dSupported',
+    'December 2021',
+    'December 2022',
+    'Blockly.utils.svgMath.is3dSupported'
+  );
   return svgMath.is3dSupported();
 }
 
@@ -172,8 +189,11 @@ export function is3dSupported(): boolean {
  */
 export function getViewportBBox(): Rect {
   deprecation.warn(
-      'Blockly.utils.getViewportBBox', 'December 2021', 'December 2022',
-      'Blockly.utils.svgMath.getViewportBBox');
+    'Blockly.utils.getViewportBBox',
+    'December 2021',
+    'December 2022',
+    'Blockly.utils.svgMath.getViewportBBox'
+  );
   return svgMath.getViewportBBox();
 }
 
@@ -188,8 +208,11 @@ export function getViewportBBox(): Rect {
  */
 export function arrayRemove<T>(arr: Array<T>, value: T): boolean {
   deprecation.warn(
-      'Blockly.utils.arrayRemove', 'December 2021', 'December 2022',
-      'Blockly.array.removeElem');
+    'Blockly.utils.arrayRemove',
+    'December 2021',
+    'December 2022',
+    'Blockly.array.removeElem'
+  );
   return arrayUtils.removeElem(arr, value);
 }
 
@@ -202,8 +225,11 @@ export function arrayRemove<T>(arr: Array<T>, value: T): boolean {
  */
 export function getDocumentScroll(): Coordinate {
   deprecation.warn(
-      'Blockly.utils.getDocumentScroll', 'December 2021', 'December 2022',
-      'Blockly.utils.svgMath.getDocumentScroll');
+    'Blockly.utils.getDocumentScroll',
+    'December 2021',
+    'December 2022',
+    'Blockly.utils.svgMath.getDocumentScroll'
+  );
   return svgMath.getDocumentScroll();
 }
 
@@ -218,10 +244,15 @@ export function getDocumentScroll(): Coordinate {
  * @deprecated Use **Blockly.common.getBlockTypeCounts** instead.
  */
 export function getBlockTypeCounts(
-    block: Block, opt_stripFollowing?: boolean): {[key: string]: number} {
+  block: Block,
+  opt_stripFollowing?: boolean
+): {[key: string]: number} {
   deprecation.warn(
-      'Blockly.utils.getBlockTypeCounts', 'December 2021', 'December 2022',
-      'Blockly.common.getBlockTypeCounts');
+    'Blockly.utils.getBlockTypeCounts',
+    'December 2021',
+    'December 2022',
+    'Blockly.common.getBlockTypeCounts'
+  );
   return common.getBlockTypeCounts(block, opt_stripFollowing);
 }
 
@@ -235,10 +266,15 @@ export function getBlockTypeCounts(
  * @returns The workspace coordinates.
  */
 export function screenToWsCoordinates(
-    ws: WorkspaceSvg, screenCoordinates: Coordinate): Coordinate {
+  ws: WorkspaceSvg,
+  screenCoordinates: Coordinate
+): Coordinate {
   deprecation.warn(
-      'Blockly.utils.screenToWsCoordinates', 'December 2021', 'December 2022',
-      'Blockly.utils.svgMath.screenToWsCoordinates');
+    'Blockly.utils.screenToWsCoordinates',
+    'December 2021',
+    'December 2022',
+    'Blockly.utils.svgMath.screenToWsCoordinates'
+  );
   return svgMath.screenToWsCoordinates(ws, screenCoordinates);
 }
 
@@ -253,11 +289,16 @@ export function screenToWsCoordinates(
  * @throws {Error} If the colour cannot be parsed.
  * @deprecated Use **Blockly.utils.parsing.parseBlockColour** instead.
  */
-export function parseBlockColour(colour: number|
-                                 string): {hue: number|null, hex: string} {
+export function parseBlockColour(colour: number | string): {
+  hue: number | null;
+  hex: string;
+} {
   deprecation.warn(
-      'Blockly.utils.parseBlockColour', 'December 2021', 'December 2022',
-      'Blockly.utils.parsing.parseBlockColour');
+    'Blockly.utils.parseBlockColour',
+    'December 2021',
+    'December 2022',
+    'Blockly.utils.parsing.parseBlockColour'
+  );
   return parsing.parseBlockColour(colour);
 }
 
@@ -270,6 +311,9 @@ export function parseBlockColour(colour: number|
  */
 export function runAfterPageLoad(fn: () => void) {
   deprecation.warn(
-      'Blockly.utils.runAfterPageLoad', 'December 2021', 'December 2022');
+    'Blockly.utils.runAfterPageLoad',
+    'December 2021',
+    'December 2022'
+  );
   extensions.runAfterPageLoad(fn);
 }

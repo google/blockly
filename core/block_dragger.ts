@@ -21,7 +21,7 @@ import * as bumpObjects from './bump_objects.js';
 import * as common from './common.js';
 import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
-import type {Icon} from './icon.js';
+import type {Icon} from './icon_old.js';
 import {InsertionMarkerManager} from './insertion_marker_manager.js';
 import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
@@ -29,7 +29,6 @@ import * as registry from './registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-
 
 /**
  * Class for a block dragger.  It moves blocks around the workspace when they
@@ -44,7 +43,7 @@ export class BlockDragger implements IBlockDragger {
   protected workspace_: WorkspaceSvg;
 
   /** Which drag area the mouse pointer is over, if any. */
-  private dragTarget_: IDragTarget|null = null;
+  private dragTarget_: IDragTarget | null = null;
 
   /** Whether the block would be deleted if dropped immediately. */
   protected wouldDeleteBlock_ = false;
@@ -59,8 +58,9 @@ export class BlockDragger implements IBlockDragger {
     this.draggingBlock_ = block;
 
     /** Object that keeps track of connections on dragged blocks. */
-    this.draggedConnectionManager_ =
-        new InsertionMarkerManager(this.draggingBlock_);
+    this.draggedConnectionManager_ = new InsertionMarkerManager(
+      this.draggingBlock_
+    );
 
     this.workspace_ = workspace;
 
@@ -136,9 +136,11 @@ export class BlockDragger implements IBlockDragger {
    */
   protected shouldDisconnect_(healStack: boolean): boolean {
     return !!(
-        this.draggingBlock_.getParent() ||
-        healStack && this.draggingBlock_.nextConnection &&
-            this.draggingBlock_.nextConnection.targetBlock());
+      this.draggingBlock_.getParent() ||
+      (healStack &&
+        this.draggingBlock_.nextConnection &&
+        this.draggingBlock_.nextConnection.targetBlock())
+    );
   }
 
   /**
@@ -149,7 +151,9 @@ export class BlockDragger implements IBlockDragger {
    *     at mouse down, in pixel units.
    */
   protected disconnectBlock_(
-      healStack: boolean, currentDragDeltaXY: Coordinate) {
+    healStack: boolean,
+    currentDragDeltaXY: Coordinate
+  ) {
     this.draggingBlock_.unplug(healStack);
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
     const newLoc = Coordinate.sum(this.startXY_, delta);
@@ -162,7 +166,10 @@ export class BlockDragger implements IBlockDragger {
   /** Fire a UI event at the start of a block drag. */
   protected fireDragStartEvent_() {
     const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
-        this.draggingBlock_, true, this.draggingBlock_.getDescendants(false));
+      this.draggingBlock_,
+      true,
+      this.draggingBlock_.getDescendants(false)
+    );
     eventUtils.fire(event);
   }
 
@@ -217,10 +224,11 @@ export class BlockDragger implements IBlockDragger {
 
     blockAnimation.disconnectUiStop();
 
-    const preventMove = !!this.dragTarget_ &&
-        this.dragTarget_.shouldPreventMove(this.draggingBlock_);
+    const preventMove =
+      !!this.dragTarget_ &&
+      this.dragTarget_.shouldPreventMove(this.draggingBlock_);
     let newLoc: Coordinate;
-    let delta: Coordinate|null = null;
+    let delta: Coordinate | null = null;
     if (preventMove) {
       newLoc = this.startXY_;
     } else {
@@ -238,15 +246,17 @@ export class BlockDragger implements IBlockDragger {
     if (!deleted) {
       // These are expensive and don't need to be done if we're deleting.
       this.draggingBlock_.setDragging(false);
-      if (delta) {  // !preventMove
+      if (delta) {
+        // !preventMove
         this.updateBlockAfterMove_();
       } else {
         // Blocks dragged directly from a flyout may need to be bumped into
         // bounds.
         bumpObjects.bumpIntoBounds(
-            this.draggingBlock_.workspace,
-            this.workspace_.getMetricsManager().getScrollMetrics(true),
-            this.draggingBlock_);
+          this.draggingBlock_.workspace,
+          this.workspace_.getMetricsManager().getScrollMetrics(true),
+          this.draggingBlock_
+        );
       }
     }
     this.workspace_.setResizesEnabled(true);
@@ -262,8 +272,10 @@ export class BlockDragger implements IBlockDragger {
    * @returns New location after drag. delta is in workspace units. newLocation
    *     is the new coordinate where the block should end up.
    */
-  protected getNewLocationAfterDrag_(currentDragDeltaXY: Coordinate):
-      {delta: Coordinate, newLocation: Coordinate} {
+  protected getNewLocationAfterDrag_(currentDragDeltaXY: Coordinate): {
+    delta: Coordinate;
+    newLocation: Coordinate;
+  } {
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
     const newLocation = Coordinate.sum(this.startXY_, delta);
     return {
@@ -307,7 +319,10 @@ export class BlockDragger implements IBlockDragger {
   /** Fire a UI event at the end of a block drag. */
   protected fireDragEndEvent_() {
     const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
-        this.draggingBlock_, false, this.draggingBlock_.getDescendants(false));
+      this.draggingBlock_,
+      false,
+      this.draggingBlock_.getDescendants(false)
+    );
     eventUtils.fire(event);
   }
 
@@ -322,21 +337,25 @@ export class BlockDragger implements IBlockDragger {
     const toolbox = this.workspace_.getToolbox();
 
     if (toolbox) {
-      const style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-                                                        'blocklyToolboxGrab';
+      const style = this.draggingBlock_.isDeletable()
+        ? 'blocklyToolboxDelete'
+        : 'blocklyToolboxGrab';
 
       // AnyDuringMigration because:  Property 'removeStyle' does not exist on
       // type 'IToolbox'.
-      if (isEnd &&
-          typeof (toolbox as AnyDuringMigration).removeStyle === 'function') {
+      if (
+        isEnd &&
+        typeof (toolbox as AnyDuringMigration).removeStyle === 'function'
+      ) {
         // AnyDuringMigration because:  Property 'removeStyle' does not exist on
         // type 'IToolbox'.
         (toolbox as AnyDuringMigration).removeStyle(style);
         // AnyDuringMigration because:  Property 'addStyle' does not exist on
         // type 'IToolbox'.
       } else if (
-          !isEnd &&
-          typeof (toolbox as AnyDuringMigration).addStyle === 'function') {
+        !isEnd &&
+        typeof (toolbox as AnyDuringMigration).addStyle === 'function'
+      ) {
         // AnyDuringMigration because:  Property 'addStyle' does not exist on
         // type 'IToolbox'.
         (toolbox as AnyDuringMigration).addStyle(style);
@@ -348,7 +367,9 @@ export class BlockDragger implements IBlockDragger {
   protected fireMoveEvent_() {
     if (this.draggingBlock_.isDeadOrDying()) return;
     const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
-                      this.draggingBlock_) as BlockMove;
+      this.draggingBlock_
+    ) as BlockMove;
+    event.setReason(['drag']);
     event.oldCoordinate = this.startXY_;
     event.recordNew();
     eventUtils.fire(event);
@@ -373,8 +394,9 @@ export class BlockDragger implements IBlockDragger {
    */
   protected pixelsToWorkspaceUnits_(pixelCoord: Coordinate): Coordinate {
     const result = new Coordinate(
-        pixelCoord.x / this.workspace_.scale,
-        pixelCoord.y / this.workspace_.scale);
+      pixelCoord.x / this.workspace_.scale,
+      pixelCoord.y / this.workspace_.scale
+    );
     if (this.workspace_.isMutator) {
       // If we're in a mutator, its scale is always 1, purely because of some
       // oddities in our rendering optimizations.  The actual scale is the same
@@ -407,8 +429,10 @@ export class BlockDragger implements IBlockDragger {
    */
   getInsertionMarkers(): BlockSvg[] {
     // No insertion markers with the old style of dragged connection managers.
-    if (this.draggedConnectionManager_ &&
-        this.draggedConnectionManager_.getInsertionMarkers) {
+    if (
+      this.draggedConnectionManager_ &&
+      this.draggedConnectionManager_.getInsertionMarkers
+    ) {
       return this.draggedConnectionManager_.getInsertionMarkers();
     }
     return [];
@@ -432,15 +456,15 @@ export interface IconPositionData {
 function initIconData(block: BlockSvg): IconPositionData[] {
   // Build a list of icons that need to be moved and where they started.
   const dragIconData = [];
-  const descendants = (block.getDescendants(false));
+  const descendants = block.getDescendants(false);
 
-  for (let i = 0, descendant; descendant = descendants[i]; i++) {
+  for (let i = 0, descendant; (descendant = descendants[i]); i++) {
     const icons = descendant.getIcons();
     for (let j = 0; j < icons.length; j++) {
       const data = {
         // Coordinate with x and y properties (workspace
         // coordinates).
-        location: icons[j].getIconLocation(),  // Blockly.Icon
+        location: icons[j].getIconLocation(), // Blockly.Icon
         icon: icons[j],
       };
       dragIconData.push(data);

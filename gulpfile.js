@@ -27,7 +27,7 @@ module.exports = {
   default: buildTasks.build,
 
   // Main sequence targets.  They already invoke prerequisites.
-  langfiles: buildTasks.langfiles,  // Build build/msg/*.js from msg/json/*.
+  langfiles: buildTasks.langfiles, // Build build/msg/*.js from msg/json/*.
   tsc: buildTasks.tsc,
   deps: buildTasks.deps,
   minify: buildTasks.minify,
@@ -41,8 +41,7 @@ module.exports = {
   gitUpdateGithubPages: gitTasks.updateGithubPages,
 
   // Manually-invokable targets, with prerequisites where required.
-  format: buildTasks.format,
-  messages: buildTasks.messages,  // Generate msg/json/en.json et al.
+  messages: buildTasks.messages, // Generate msg/json/en.json et al.
   sortRequires: cleanupTasks.sortRequires,
   checkLicenses: licenseTasks.checkLicenses,
   clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),

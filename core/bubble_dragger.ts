@@ -23,7 +23,6 @@ import {Coordinate} from './utils/coordinate.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-
 /**
  * Class for a bubble dragger.  It moves things on the bubble canvas around the
  * workspace when they are being dragged by a mouse or touch.  These can be
@@ -31,12 +30,12 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  */
 export class BubbleDragger {
   /** Which drag target the mouse pointer is over, if any. */
-  private dragTarget_: IDragTarget|null = null;
+  private dragTarget_: IDragTarget | null = null;
 
   /** Whether the bubble would be deleted if dropped immediately. */
   private wouldDeleteBubble_ = false;
   private readonly startXY_: Coordinate;
-  private dragSurface_: BlockDragSurfaceSvg|null;
+  private dragSurface_: BlockDragSurfaceSvg | null;
 
   /**
    * @param bubble The item on the bubble canvas to drag.
@@ -116,11 +115,13 @@ export class BubbleDragger {
    * @param dragTarget The drag target that the bubblee is currently over.
    * @returns Whether dropping the bubble immediately would delete the block.
    */
-  private shouldDelete_(dragTarget: IDragTarget|null): boolean {
+  private shouldDelete_(dragTarget: IDragTarget | null): boolean {
     if (dragTarget) {
       const componentManager = this.workspace.getComponentManager();
       const isDeleteArea = componentManager.hasCapability(
-          dragTarget.id, ComponentManager.Capability.DELETE_AREA);
+        dragTarget.id,
+        ComponentManager.Capability.DELETE_AREA
+      );
       if (isDeleteArea) {
         return (dragTarget as IDeleteArea).wouldDelete(this.bubble, false);
       }
@@ -149,7 +150,7 @@ export class BubbleDragger {
     this.dragBubble(e, currentDragDeltaXY);
 
     const preventMove =
-        this.dragTarget_ && this.dragTarget_.shouldPreventMove(this.bubble);
+      this.dragTarget_ && this.dragTarget_.shouldPreventMove(this.bubble);
     let newLoc;
     if (preventMove) {
       newLoc = this.startXY_;
@@ -187,7 +188,8 @@ export class BubbleDragger {
   private fireMoveEvent_() {
     if (this.bubble instanceof WorkspaceCommentSvg) {
       const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
-                        this.bubble) as CommentMove;
+        this.bubble
+      ) as CommentMove;
       event.setOldCoordinate(this.startXY_);
       event.recordNew();
       eventUtils.fire(event);
@@ -207,8 +209,9 @@ export class BubbleDragger {
    */
   private pixelsToWorkspaceUnits_(pixelCoord: Coordinate): Coordinate {
     const result = new Coordinate(
-        pixelCoord.x / this.workspace.scale,
-        pixelCoord.y / this.workspace.scale);
+      pixelCoord.x / this.workspace.scale,
+      pixelCoord.y / this.workspace.scale
+    );
     if (this.workspace.isMutator) {
       // If we're in a mutator, its scale is always 1, purely because of some
       // oddities in our rendering optimizations.  The actual scale is the same

@@ -11,7 +11,6 @@ import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import * as blocklyString from './utils/string.js';
 
-
 /**
  * A type which can define a tooltip.
  * Either a string, an object containing a tooltip property, or a function which
@@ -19,7 +18,9 @@ import * as blocklyString from './utils/string.js';
  * eventually unwinds to a string.
  */
 export type TipInfo =
-    string|{tooltip: AnyDuringMigration}|(() => TipInfo|string|Function);
+  | string
+  | {tooltip: AnyDuringMigration}
+  | (() => TipInfo | string | Function);
 
 /**
  * A function that renders custom tooltip UI.
@@ -34,7 +35,7 @@ export type CustomTooltip = (p1: Element, p2: Element) => AnyDuringMigration;
  * this is defined, the function will be called instead of rendering the default
  * tooltip UI.
  */
-let customTooltip: CustomTooltip|undefined = undefined;
+let customTooltip: CustomTooltip | undefined = undefined;
 
 /**
  * Sets a custom function that will be called if present instead of the default
@@ -51,7 +52,7 @@ export function setCustomTooltip(customFn: CustomTooltip) {
  *
  * @returns The custom tooltip function, if defined.
  */
-export function getCustomTooltip(): CustomTooltip|undefined {
+export function getCustomTooltip(): CustomTooltip | undefined {
   return customTooltip;
 }
 
@@ -126,14 +127,14 @@ export const HOVER_MS = 750;
 export const MARGINS = 5;
 
 /** The HTML container.  Set once by createDom. */
-let containerDiv: HTMLDivElement|null = null;
+let containerDiv: HTMLDivElement | null = null;
 
 /**
  * Returns the HTML tooltip container.
  *
  * @returns The HTML tooltip container.
  */
-export function getDiv(): HTMLDivElement|null {
+export function getDiv(): HTMLDivElement | null {
   return containerDiv;
 }
 
@@ -143,7 +144,7 @@ export function getDiv(): HTMLDivElement|null {
  * @param object The object to get the tooltip text of.
  * @returns The tooltip text of the element.
  */
-export function getTooltipOfObject(object: AnyDuringMigration|null): string {
+export function getTooltipOfObject(object: AnyDuringMigration | null): string {
   const obj = getTargetObject(object);
   if (obj) {
     let tooltip = obj.tooltip;
@@ -165,10 +166,14 @@ export function getTooltipOfObject(object: AnyDuringMigration|null): string {
  * @param obj The object are trying to find the target tooltip object of.
  * @returns The target tooltip object.
  */
-function getTargetObject(obj: object|null): {tooltip: AnyDuringMigration}|null {
+function getTargetObject(
+  obj: object | null
+): {tooltip: AnyDuringMigration} | null {
   while (obj && (obj as any).tooltip) {
-    if (typeof (obj as any).tooltip === 'string' ||
-        typeof (obj as any).tooltip === 'function') {
+    if (
+      typeof (obj as any).tooltip === 'string' ||
+      typeof (obj as any).tooltip === 'function'
+    ) {
       return obj as {tooltip: string | (() => string)};
     }
     obj = (obj as any).tooltip;
@@ -181,7 +186,7 @@ function getTargetObject(obj: object|null): {tooltip: AnyDuringMigration}|null {
  */
 export function createDom() {
   if (containerDiv) {
-    return;  // Already created.
+    return; // Already created.
   }
   // Create an HTML container for popup overlays (e.g. editor widgets).
   containerDiv = document.createElement('div');
@@ -197,10 +202,18 @@ export function createDom() {
  */
 export function bindMouseEvents(element: Element) {
   // TODO (#6097): Don't stash wrapper info on the DOM.
-  (element as AnyDuringMigration).mouseOverWrapper_ =
-      browserEvents.bind(element, 'pointerover', null, onMouseOver);
-  (element as AnyDuringMigration).mouseOutWrapper_ =
-      browserEvents.bind(element, 'pointerout', null, onMouseOut);
+  (element as AnyDuringMigration).mouseOverWrapper_ = browserEvents.bind(
+    element,
+    'pointerover',
+    null,
+    onMouseOver
+  );
+  (element as AnyDuringMigration).mouseOutWrapper_ = browserEvents.bind(
+    element,
+    'pointerout',
+    null,
+    onMouseOut
+  );
 
   // Don't use bindEvent_ for mousemove since that would create a
   // corresponding touch handler, even though this only makes sense in the
@@ -213,7 +226,7 @@ export function bindMouseEvents(element: Element) {
  *
  * @param element SVG element onto which tooltip is bound.
  */
-export function unbindMouseEvents(element: Element|null) {
+export function unbindMouseEvents(element: Element | null) {
   if (!element) {
     return;
   }
@@ -260,7 +273,7 @@ function onMouseOut(_e: PointerEvent) {
   // a mouseOut followed instantly by a mouseOver.  Fork off the mouseOut
   // event and kill it if a mouseOver is received immediately.
   // This way the task only fully executes if mousing into the void.
-  mouseOutPid = setTimeout(function() {
+  mouseOutPid = setTimeout(function () {
     element = null;
     poisonedElement = null;
     hide();
@@ -378,7 +391,7 @@ function renderDefaultContent() {
   // Create new text, line by line.
   const lines = tip.split('\n');
   for (let i = 0; i < lines.length; i++) {
-    const div = (document.createElement('div'));
+    const div = document.createElement('div');
     div.appendChild(document.createTextNode(lines[i]));
     containerDiv!.appendChild(div);
   }
@@ -391,7 +404,7 @@ function renderDefaultContent() {
  * @param rtl True if the tooltip should be in right-to-left layout.
  * @returns Coordinates at which the tooltip div should be placed.
  */
-function getPosition(rtl: boolean): {x: number, y: number} {
+function getPosition(rtl: boolean): {x: number; y: number} {
   // Position the tooltip just below the cursor.
   const windowWidth = document.documentElement.clientWidth;
   const windowHeight = document.documentElement.clientHeight;
@@ -413,8 +426,10 @@ function getPosition(rtl: boolean): {x: number, y: number} {
     // Prevent falling off left edge in RTL mode.
     anchorX = Math.max(MARGINS - window.scrollX, anchorX);
   } else {
-    if (anchorX + containerDiv!.offsetWidth >
-        windowWidth + window.scrollX - 2 * MARGINS) {
+    if (
+      anchorX + containerDiv!.offsetWidth >
+      windowWidth + window.scrollX - 2 * MARGINS
+    ) {
       // Falling off the right edge of the screen;
       // clamp the tooltip on the edge.
       anchorX = windowWidth - containerDiv!.offsetWidth - 2 * MARGINS;

@@ -19,7 +19,6 @@ import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
 
-
 /**
  * Notifies listeners that a toolbox item has been selected.
  */
@@ -41,8 +40,10 @@ export class ToolboxItemSelect extends UiBase {
    *    Undefined for a blank event.
    */
   constructor(
-      opt_oldItem?: string|null, opt_newItem?: string|null,
-      opt_workspaceId?: string) {
+    opt_oldItem?: string | null,
+    opt_newItem?: string | null,
+    opt_workspaceId?: string
+  ) {
     super(opt_workspaceId);
     this.oldItem = opt_oldItem ?? undefined;
     this.newItem = opt_newItem ?? undefined;
@@ -67,8 +68,11 @@ export class ToolboxItemSelect extends UiBase {
    */
   override fromJson(json: ToolboxItemSelectJson) {
     deprecation.warn(
-        'Blockly.Events.ToolboxItemSelect.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
+      'Blockly.Events.ToolboxItemSelect.prototype.fromJson',
+      'version 9',
+      'version 10',
+      'Blockly.Events.fromJson'
+    );
     super.fromJson(json);
     this.oldItem = json['oldItem'];
     this.newItem = json['newItem'];
@@ -84,11 +88,15 @@ export class ToolboxItemSelect extends UiBase {
    * @internal
    */
   static fromJson(
-      json: ToolboxItemSelectJson, workspace: Workspace,
-      event?: any): ToolboxItemSelect {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new ToolboxItemSelect()) as
-        ToolboxItemSelect;
+    json: ToolboxItemSelectJson,
+    workspace: Workspace,
+    event?: any
+  ): ToolboxItemSelect {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new ToolboxItemSelect()
+    ) as ToolboxItemSelect;
     newEvent.oldItem = json['oldItem'];
     newEvent.newItem = json['newItem'];
     return newEvent;
@@ -101,4 +109,7 @@ export interface ToolboxItemSelectJson extends AbstractEventJson {
 }
 
 registry.register(
-    registry.Type.EVENT, eventUtils.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);
+  registry.Type.EVENT,
+  eventUtils.TOOLBOX_ITEM_SELECT,
+  ToolboxItemSelect
+);

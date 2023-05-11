@@ -19,7 +19,6 @@ import type {Workspace} from '../workspace.js';
 
 import * as eventUtils from './utils.js';
 
-
 /**
  * Abstract class for an event.
  */
@@ -74,8 +73,11 @@ export abstract class Abstract {
    */
   fromJson(json: AbstractEventJson) {
     deprecation.warn(
-        'Blockly.Events.Abstract.prototype.fromJson', 'version 9', 'version 10',
-        'Blockly.Events.fromJson');
+      'Blockly.Events.Abstract.prototype.fromJson',
+      'version 9',
+      'version 10',
+      'Blockly.Events.fromJson'
+    );
     this.isBlank = false;
     this.group = json['group'] || '';
   }
@@ -89,8 +91,11 @@ export abstract class Abstract {
    *     supertypes of parameters to static methods in superclasses.
    * @internal
    */
-  static fromJson(json: AbstractEventJson, workspace: Workspace, event: any):
-      Abstract {
+  static fromJson(
+    json: AbstractEventJson,
+    workspace: Workspace,
+    event: any
+  ): Abstract {
     event.isBlank = false;
     event.group = json['group'] || '';
     event.workspaceId = workspace.id;
@@ -130,8 +135,9 @@ export abstract class Abstract {
     }
     if (!workspace) {
       throw Error(
-          'Workspace is null. Event must have been generated from real' +
-          ' Blockly events.');
+        'Workspace is null. Event must have been generated from real' +
+          ' Blockly events.'
+      );
     }
     return workspace;
   }

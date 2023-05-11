@@ -24,7 +24,6 @@ import type {RenderInfo as ZelosInfo} from '../zelos/info.js';
 import type {ConstantProvider} from './constants.js';
 import type {RenderInfo} from './info.js';
 
-
 /**
  * An object that renders rectangles and dots for debugging rendering code.
  */
@@ -51,7 +50,7 @@ export class Debug {
    * The SVG root of the block that is being rendered.  Debug elements will
    * be attached to this root.
    */
-  private svgRoot_: SVGElement|null = null;
+  private svgRoot_: SVGElement | null = null;
 
   private randomColour_ = '';
 
@@ -90,8 +89,10 @@ export class Debug {
       cursorY -= height;
     }
 
-    this.debugElements_.push(dom.createSvgElement(
-        Svg.RECT, {
+    this.debugElements_.push(
+      dom.createSvgElement(
+        Svg.RECT,
+        {
           'class': 'rowSpacerRect blockRenderDebug',
           'x': isRtl ? -(row.xPos + row.width) : row.xPos,
           'y': cursorY,
@@ -102,7 +103,9 @@ export class Debug {
           'fill-opacity': '0.5',
           'stroke-width': '1px',
         },
-        this.svgRoot_));
+        this.svgRoot_
+      )
+    );
   }
 
   /**
@@ -113,7 +116,10 @@ export class Debug {
    * @param isRtl Whether the block is rendered RTL.
    */
   protected drawSpacerElem(
-      elem: InRowSpacer, rowHeight: number, isRtl: boolean) {
+    elem: InRowSpacer,
+    rowHeight: number,
+    isRtl: boolean
+  ) {
     if (!Debug.config.elemSpacers) {
       return;
     }
@@ -125,8 +131,10 @@ export class Debug {
       xPos = -(xPos + width);
     }
     const yPos = elem.centerline - elem.height / 2;
-    this.debugElements_.push(dom.createSvgElement(
-        Svg.RECT, {
+    this.debugElements_.push(
+      dom.createSvgElement(
+        Svg.RECT,
+        {
           'class': 'elemSpacerRect blockRenderDebug',
           'x': xPos,
           'y': yPos,
@@ -137,7 +145,9 @@ export class Debug {
           'fill-opacity': '0.5',
           'stroke-width': '1px',
         },
-        this.svgRoot_));
+        this.svgRoot_
+      )
+    );
   }
 
   /**
@@ -153,8 +163,10 @@ export class Debug {
         xPos = -(xPos + elem.width);
       }
       const yPos = elem.centerline - elem.height / 2;
-      this.debugElements_.push(dom.createSvgElement(
-          Svg.RECT, {
+      this.debugElements_.push(
+        dom.createSvgElement(
+          Svg.RECT,
+          {
             'class': 'rowRenderingRect blockRenderDebug',
             'x': xPos,
             'y': yPos,
@@ -164,13 +176,20 @@ export class Debug {
             'fill': 'none',
             'stroke-width': '1px',
           },
-          this.svgRoot_));
+          this.svgRoot_
+        )
+      );
 
-      if (Types.isField(elem) && elem instanceof Field &&
-          elem.field instanceof FieldLabel) {
+      if (
+        Types.isField(elem) &&
+        elem instanceof Field &&
+        elem.field instanceof FieldLabel
+      ) {
         const baseline = this.constants.FIELD_TEXT_BASELINE;
-        this.debugElements_.push(dom.createSvgElement(
-            Svg.RECT, {
+        this.debugElements_.push(
+          dom.createSvgElement(
+            Svg.RECT,
+            {
               'class': 'rowRenderingRect blockRenderDebug',
               'x': xPos,
               'y': yPos + baseline,
@@ -180,12 +199,17 @@ export class Debug {
               'fill': 'none',
               'stroke-width': '0.5px',
             },
-            this.svgRoot_));
+            this.svgRoot_
+          )
+        );
       }
     }
 
-    if (Types.isInput(elem) && elem instanceof InputConnection &&
-        Debug.config.connections) {
+    if (
+      Types.isInput(elem) &&
+      elem instanceof InputConnection &&
+      Debug.config.connections
+    ) {
       this.drawConnection(elem.connectionModel);
     }
   }
@@ -224,8 +248,10 @@ export class Debug {
       colour = 'goldenrod';
       fill = colour;
     }
-    this.debugElements_.push(dom.createSvgElement(
-        Svg.CIRCLE, {
+    this.debugElements_.push(
+      dom.createSvgElement(
+        Svg.CIRCLE,
+        {
           'class': 'blockRenderDebug',
           'cx': conn.getOffsetInBlock().x,
           'cy': conn.getOffsetInBlock().y,
@@ -233,7 +259,9 @@ export class Debug {
           'fill': fill,
           'stroke': colour,
         },
-        this.svgRoot_));
+        this.svgRoot_
+      )
+    );
   }
 
   /**
@@ -247,8 +275,10 @@ export class Debug {
     if (!Debug.config.rows) {
       return;
     }
-    this.debugElements_.push(dom.createSvgElement(
-        Svg.RECT, {
+    this.debugElements_.push(
+      dom.createSvgElement(
+        Svg.RECT,
+        {
           'class': 'elemRenderingRect blockRenderDebug',
           'x': isRtl ? -(row.xPos + row.width) : row.xPos,
           'y': row.yPos,
@@ -258,15 +288,19 @@ export class Debug {
           'fill': 'none',
           'stroke-width': '1px',
         },
-        this.svgRoot_));
+        this.svgRoot_
+      )
+    );
 
     if (Types.isTopOrBottomRow(row)) {
       return;
     }
 
     if (Debug.config.connectedBlockBounds) {
-      this.debugElements_.push(dom.createSvgElement(
-          Svg.RECT, {
+      this.debugElements_.push(
+        dom.createSvgElement(
+          Svg.RECT,
+          {
             'class': 'connectedBlockWidth blockRenderDebug',
             'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
             'y': row.yPos,
@@ -277,7 +311,9 @@ export class Debug {
             'stroke-width': '1px',
             'stroke-dasharray': '3,3',
           },
-          this.svgRoot_));
+          this.svgRoot_
+        )
+      );
     }
   }
 
@@ -316,8 +352,10 @@ export class Debug {
     // Bounding box without children.
     let xPos = info.RTL ? -info.width : 0;
     const yPos = 0;
-    this.debugElements_.push(dom.createSvgElement(
-        Svg.RECT, {
+    this.debugElements_.push(
+      dom.createSvgElement(
+        Svg.RECT,
+        {
           'class': 'blockBoundingBox blockRenderDebug',
           'x': xPos,
           'y': yPos,
@@ -328,13 +366,17 @@ export class Debug {
           'stroke-width': '1px',
           'stroke-dasharray': '5,5',
         },
-        this.svgRoot_));
+        this.svgRoot_
+      )
+    );
 
     if (Debug.config.connectedBlockBounds) {
       // Bounding box with children.
       xPos = info.RTL ? -info.widthWithChildren : 0;
-      this.debugElements_.push(dom.createSvgElement(
-          Svg.RECT, {
+      this.debugElements_.push(
+        dom.createSvgElement(
+          Svg.RECT,
+          {
             'class': 'blockRenderDebug',
             'x': xPos,
             'y': yPos,
@@ -345,7 +387,9 @@ export class Debug {
             'stroke-width': '1px',
             'stroke-dasharray': '3,3',
           },
-          this.svgRoot_));
+          this.svgRoot_
+        )
+      );
     }
   }
 
@@ -360,7 +404,7 @@ export class Debug {
     this.svgRoot_ = block.getSvgRoot();
 
     this.randomColour_ =
-        '#' + Math.floor(Math.random() * 16777215).toString(16);
+      '#' + Math.floor(Math.random() * 16777215).toString(16);
 
     let cursorY = 0;
     for (let i = 0; i < info.rows.length; i++) {
@@ -406,8 +450,10 @@ export class Debug {
       return;
     }
     svgPath.setAttribute(
-        'filter', 'url(#' + this.constants.debugFilterId + ')');
-    setTimeout(function() {
+      'filter',
+      'url(#' + this.constants.debugFilterId + ')'
+    );
+    setTimeout(function () {
       svgPath.setAttribute('filter', '');
     }, 100);
   }

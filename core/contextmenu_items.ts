@@ -9,14 +9,17 @@ goog.declareModuleId('Blockly.ContextMenuItems');
 
 import type {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
-import {ContextMenuRegistry, RegistryItem, Scope} from './contextmenu_registry.js';
+import {
+  ContextMenuRegistry,
+  RegistryItem,
+  Scope,
+} from './contextmenu_registry.js';
 import * as dialog from './dialog.js';
 import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
-import {inputTypes} from './input_types.js';
 import {Msg} from './msg.js';
+import {StatementInput} from './renderers/zelos/zelos.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-
 
 /**
  * Option to undo previous action.
@@ -111,7 +114,7 @@ function toggleOption_(shouldCollapse: boolean, topBlocks: BlockSvg[]) {
   }
   Events.setGroup(true);
   for (let i = 0; i < topBlocks.length; i++) {
-    let block: BlockSvg|null = topBlocks[i];
+    let block: BlockSvg | null = topBlocks[i];
     while (block) {
       timeoutCounter++;
       setTimeout(timeoutFn.bind(null, block), ms);
@@ -133,7 +136,7 @@ export function registerCollapse() {
       if (scope.workspace!.options.collapse) {
         const topBlocks = scope.workspace!.getTopBlocks(false);
         for (let i = 0; i < topBlocks.length; i++) {
-          let block: BlockSvg|null = topBlocks[i];
+          let block: BlockSvg | null = topBlocks[i];
           while (block) {
             if (!block.isCollapsed()) {
               return 'enabled';
@@ -167,7 +170,7 @@ export function registerExpand() {
       if (scope.workspace!.options.collapse) {
         const topBlocks = scope.workspace!.getTopBlocks(false);
         for (let i = 0; i < topBlocks.length; i++) {
-          let block: BlockSvg|null = topBlocks[i];
+          let block: BlockSvg | null = topBlocks[i];
           while (block) {
             if (block.isCollapsed()) {
               return 'enabled';
@@ -280,13 +283,16 @@ export function registerDeleteAll() {
         deleteNext_(deletableBlocks);
       } else {
         dialog.confirm(
-            Msg['DELETE_ALL_BLOCKS'].replace(
-                '%1', String(deletableBlocks.length)),
-            function(ok) {
-              if (ok) {
-                deleteNext_(deletableBlocks);
-              }
-            });
+          Msg['DELETE_ALL_BLOCKS'].replace(
+            '%1',
+            String(deletableBlocks.length)
+          ),
+          function (ok) {
+            if (ok) {
+              deleteNext_(deletableBlocks);
+            }
+          }
+        );
       }
     },
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
@@ -350,8 +356,12 @@ export function registerComment() {
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
-      if (!block!.isInFlyout && block!.workspace.options.comments &&
-          !block!.isCollapsed() && block!.isEditable()) {
+      if (
+        !block!.isInFlyout &&
+        block!.workspace.options.comments &&
+        !block!.isCollapsed() &&
+        block!.isEditable()
+      ) {
         return 'enabled';
       }
       return 'hidden';
@@ -377,8 +387,9 @@ export function registerComment() {
 export function registerInline() {
   const inlineOption: RegistryItem = {
     displayText(scope: Scope) {
-      return scope.block!.getInputsInline() ? Msg['EXTERNAL_INPUTS'] :
-                                              Msg['INLINE_INPUTS'];
+      return scope.block!.getInputsInline()
+        ? Msg['EXTERNAL_INPUTS']
+        : Msg['INLINE_INPUTS'];
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
@@ -386,8 +397,10 @@ export function registerInline() {
         for (let i = 1; i < block!.inputList.length; i++) {
           // Only display this option if there are two value or dummy inputs
           // next to each other.
-          if (block!.inputList[i - 1].type !== inputTypes.STATEMENT &&
-              block!.inputList[i].type !== inputTypes.STATEMENT) {
+          if (
+            !(block!.inputList[i - 1] instanceof StatementInput) &&
+            !(block!.inputList[i] instanceof StatementInput)
+          ) {
             return 'enabled';
           }
         }
@@ -410,13 +423,17 @@ export function registerInline() {
 export function registerCollapseExpandBlock() {
   const collapseExpandOption: RegistryItem = {
     displayText(scope: Scope) {
-      return scope.block!.isCollapsed() ? Msg['EXPAND_BLOCK'] :
-                                          Msg['COLLAPSE_BLOCK'];
+      return scope.block!.isCollapsed()
+        ? Msg['EXPAND_BLOCK']
+        : Msg['COLLAPSE_BLOCK'];
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
-      if (!block!.isInFlyout && block!.isMovable() &&
-          block!.workspace.options.collapse) {
+      if (
+        !block!.isInFlyout &&
+        block!.isMovable() &&
+        block!.workspace.options.collapse
+      ) {
         return 'enabled';
       }
       return 'hidden';
@@ -437,13 +454,17 @@ export function registerCollapseExpandBlock() {
 export function registerDisable() {
   const disableOption: RegistryItem = {
     displayText(scope: Scope) {
-      return scope.block!.isEnabled() ? Msg['DISABLE_BLOCK'] :
-                                        Msg['ENABLE_BLOCK'];
+      return scope.block!.isEnabled()
+        ? Msg['DISABLE_BLOCK']
+        : Msg['ENABLE_BLOCK'];
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
-      if (!block!.isInFlyout && block!.workspace.options.disable &&
-          block!.isEditable()) {
+      if (
+        !block!.isInFlyout &&
+        block!.workspace.options.disable &&
+        block!.isEditable()
+      ) {
         if (block!.getInheritedDisabled()) {
           return 'disabled';
         }
@@ -481,9 +502,9 @@ export function registerDelete() {
         // Blocks in the current stack would survive this block's deletion.
         descendantCount -= nextBlock.getDescendants(false).length;
       }
-      return descendantCount === 1 ?
-          Msg['DELETE_BLOCK'] :
-          Msg['DELETE_X_BLOCKS'].replace('%1', `${descendantCount}`);
+      return descendantCount === 1
+        ? Msg['DELETE_BLOCK']
+        : Msg['DELETE_X_BLOCKS'].replace('%1', `${descendantCount}`);
     },
     preconditionFn(scope: Scope) {
       if (!scope.block!.isInFlyout && scope.block!.isDeletable()) {
@@ -513,8 +534,10 @@ export function registerHelp() {
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
-      const url = typeof block!.helpUrl === 'function' ? block!.helpUrl() :
-                                                         block!.helpUrl;
+      const url =
+        typeof block!.helpUrl === 'function'
+          ? block!.helpUrl()
+          : block!.helpUrl;
       if (url) {
         return 'enabled';
       }

@@ -18,8 +18,6 @@ const fs = require('fs');
 const {exec, execSync} = require('child_process');
 const through2 = require('through2');
 
-const clangFormat = require('clang-format');
-const clangFormatter = require('gulp-clang-format');
 const closureCompiler = require('google-closure-compiler').gulp();
 const closureDeps = require('google-closure-deps');
 const argv = require('yargs').argv;
@@ -717,19 +715,6 @@ function cleanBuildDir() {
   return rimraf(BUILD_DIR);
 }
 
-/**
- * Runs clang format on all files in the core directory.
- */
-function format() {
-  return gulp.src([
-    'core/**/*.js', 'core/**/*.ts',
-    'blocks/**/*.js', 'blocks/**/*.ts',
-    '.eslintrc.js'
-  ], {base: '.'})
-      .pipe(clangFormatter.format('file', clangFormat))
-      .pipe(gulp.dest('.'));
-}
-
 // Main sequence targets.  Each should invoke any immediate prerequisite(s).
 exports.cleanBuildDir = cleanBuildDir;
 exports.langfiles = buildLangfiles;  // Build build/msg/*.js from msg/json/*.
@@ -739,7 +724,6 @@ exports.minify = gulp.series(exports.deps, buildCompiled);
 exports.build = gulp.parallel(exports.minify, exports.langfiles);
 
 // Manually-invokable targets, with prerequisites where required.
-exports.format = format;
 exports.messages = generateMessages;  // Generate msg/json/en.json et al.
 exports.buildAdvancedCompilationTest =
     gulp.series(exports.deps, buildAdvancedCompilationTest);

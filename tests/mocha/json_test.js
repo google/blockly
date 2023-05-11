@@ -6,29 +6,34 @@
 
 goog.declareModuleId('Blockly.test.json');
 
-import {addMessageToCleanup, sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {
+  addMessageToCleanup,
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 import {assertNoWarnings, assertWarnings} from './test_helpers/warnings.js';
 
-
-suite('JSON Block Definitions', function() {
-  setup(function() {
+suite('JSON Block Definitions', function () {
+  setup(function () {
     sharedTestSetup.call(this);
     this.workspace_ = new Blockly.Workspace();
   });
 
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
 
-  suite('defineBlocksWithJsonArray', function() {
-    test('Basic block', function() {
+  suite('defineBlocksWithJsonArray', function () {
+    test('Basic block', function () {
       /**  Ensure a block can be instantiated from a JSON definition.  */
       const BLOCK_TYPE = 'test_json_minimal';
       let block;
       assertNoWarnings(() => {
-        Blockly.defineBlocksWithJsonArray([{
-          "type": BLOCK_TYPE,
-        }]);
+        Blockly.defineBlocksWithJsonArray([
+          {
+            'type': BLOCK_TYPE,
+          },
+        ]);
         block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       });
 
@@ -36,7 +41,7 @@ suite('JSON Block Definitions', function() {
       chai.assert.equal(BLOCK_TYPE, block.type);
     });
 
-    test('Null or undefined type id', function() {
+    test('Null or undefined type id', function () {
       const BLOCK_TYPE1 = 'test_json_before_bad_blocks';
       const BLOCK_TYPE2 = 'test_json_after_bad_blocks';
 
@@ -46,19 +51,24 @@ suite('JSON Block Definitions', function() {
 
       assertWarnings(() => {
         Blockly.defineBlocksWithJsonArray([
-          {"type": BLOCK_TYPE1},
-          {"type": undefined},
-          {"type": null},
-          {"type": BLOCK_TYPE2}]);
+          {'type': BLOCK_TYPE1},
+          {'type': undefined},
+          {'type': null},
+          {'type': BLOCK_TYPE2},
+        ]);
       }, [/missing a type attribute/, /missing a type attribute/]);
-      chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE1],
-          'Block before bad blocks should be defined.');
-      chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE2],
-          'Block after bad blocks should be defined.');
+      chai.assert.isNotNull(
+        Blockly.Blocks[BLOCK_TYPE1],
+        'Block before bad blocks should be defined.'
+      );
+      chai.assert.isNotNull(
+        Blockly.Blocks[BLOCK_TYPE2],
+        'Block after bad blocks should be defined.'
+      );
       chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
     });
 
-    test('Null item', function() {
+    test('Null item', function () {
       const BLOCK_TYPE1 = 'test_block_before_null';
       const BLOCK_TYPE2 = 'test_block_after_null';
 
@@ -69,23 +79,28 @@ suite('JSON Block Definitions', function() {
       assertWarnings(() => {
         Blockly.defineBlocksWithJsonArray([
           {
-            "type": BLOCK_TYPE1,
-            "message0": 'before',
+            'type': BLOCK_TYPE1,
+            'message0': 'before',
           },
           null,
           {
-            "type": BLOCK_TYPE2,
-            "message0": 'after',
-          }]);
+            'type': BLOCK_TYPE2,
+            'message0': 'after',
+          },
+        ]);
       }, /is null/);
-      chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE1],
-          'Block before null in array should be defined.');
-      chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE2],
-          'Block after null in array should be defined.');
+      chai.assert.isNotNull(
+        Blockly.Blocks[BLOCK_TYPE1],
+        'Block before null in array should be defined.'
+      );
+      chai.assert.isNotNull(
+        Blockly.Blocks[BLOCK_TYPE2],
+        'Block after null in array should be defined.'
+      );
       chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
     });
 
-    test('Undefined item', function() {
+    test('Undefined item', function () {
       const BLOCK_TYPE1 = 'test_block_before_undefined';
       const BLOCK_TYPE2 = 'test_block_after_undefined';
 
@@ -95,29 +110,36 @@ suite('JSON Block Definitions', function() {
       assertWarnings(() => {
         Blockly.defineBlocksWithJsonArray([
           {
-            "type": BLOCK_TYPE1,
-            "message0": 'before',
+            'type': BLOCK_TYPE1,
+            'message0': 'before',
           },
           undefined,
           {
-            "type": BLOCK_TYPE2,
-            "message0": 'after',
-          }]);
+            'type': BLOCK_TYPE2,
+            'message0': 'after',
+          },
+        ]);
       }, /is undefined/);
-      chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE1],
-          'Block before undefined in array should be defined.');
-      chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE2],
-          'Block after undefined in array should be defined.');
+      chai.assert.isNotNull(
+        Blockly.Blocks[BLOCK_TYPE1],
+        'Block before undefined in array should be defined.'
+      );
+      chai.assert.isNotNull(
+        Blockly.Blocks[BLOCK_TYPE2],
+        'Block after undefined in array should be defined.'
+      );
       chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
     });
 
-    test('message0 creates input', function() {
+    test('message0 creates input', function () {
       const BLOCK_TYPE = 'test_json_message0';
       const MESSAGE0 = 'message0';
-      Blockly.defineBlocksWithJsonArray([{
-        "type": BLOCK_TYPE,
-        "message0": MESSAGE0,
-      }]);
+      Blockly.defineBlocksWithJsonArray([
+        {
+          'type': BLOCK_TYPE,
+          'message0': MESSAGE0,
+        },
+      ]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       chai.assert.equal(block.inputList.length, 1);
@@ -127,16 +149,18 @@ suite('JSON Block Definitions', function() {
       chai.assert.equal(MESSAGE0, textField.getText());
     });
 
-    test('message1 and message0 creates two inputs', function() {
+    test('message1 and message0 creates two inputs', function () {
       /**  Ensure message1 creates a new input.  */
       const BLOCK_TYPE = 'test_json_message1';
       const MESSAGE0 = 'message0';
       const MESSAGE1 = 'message1';
-      Blockly.defineBlocksWithJsonArray([{
-        "type": BLOCK_TYPE,
-        "message0": MESSAGE0,
-        "message1": MESSAGE1,
-      }]);
+      Blockly.defineBlocksWithJsonArray([
+        {
+          'type': BLOCK_TYPE,
+          'message0': MESSAGE0,
+          'message1': MESSAGE1,
+        },
+      ]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       chai.assert.equal(block.inputList.length, 2);
@@ -152,17 +176,19 @@ suite('JSON Block Definitions', function() {
       chai.assert.equal(MESSAGE1, secondTextField.getText());
     });
 
-    test('Message string is dereferenced', function() {
+    test('Message string is dereferenced', function () {
       const BLOCK_TYPE = 'test_json_message0_i18n';
       const MESSAGE0 = '%{BKY_MESSAGE}';
       const MESSAGE = 'message';
 
       addMessageToCleanup(this.sharedCleanup, 'MESSAGE');
       Blockly.Msg['MESSAGE'] = MESSAGE;
-      Blockly.defineBlocksWithJsonArray([{
-        "type": BLOCK_TYPE,
-        "message0": MESSAGE0,
-      }]);
+      Blockly.defineBlocksWithJsonArray([
+        {
+          'type': BLOCK_TYPE,
+          'message0': MESSAGE0,
+        },
+      ]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       chai.assert.equal(block.inputList.length, 1);
@@ -172,27 +198,29 @@ suite('JSON Block Definitions', function() {
       chai.assert.equal(MESSAGE, textField.getText());
     });
 
-    test('Dropdown', function() {
+    test('Dropdown', function () {
       const BLOCK_TYPE = 'test_json_dropdown';
       const FIELD_NAME = 'FIELD_NAME';
       const LABEL0 = 'LABEL0';
       const VALUE0 = 'VALUE0';
       const LABEL1 = 'LABEL1';
       const VALUE1 = 'VALUE1';
-      Blockly.defineBlocksWithJsonArray([{
-        "type": BLOCK_TYPE,
-        "message0": "%1",
-        "args0": [
-          {
-            "type": "field_dropdown",
-            "name": FIELD_NAME,
-            "options": [
-              [LABEL0, VALUE0],
-              [LABEL1, VALUE1],
-            ],
-          },
-        ],
-      }]);
+      Blockly.defineBlocksWithJsonArray([
+        {
+          'type': BLOCK_TYPE,
+          'message0': '%1',
+          'args0': [
+            {
+              'type': 'field_dropdown',
+              'name': FIELD_NAME,
+              'options': [
+                [LABEL0, VALUE0],
+                [LABEL1, VALUE1],
+              ],
+            },
+          ],
+        },
+      ]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       chai.assert.equal(block.inputList.length, 1);
@@ -209,8 +237,7 @@ suite('JSON Block Definitions', function() {
       chai.assert.equal(VALUE1, options[1][1]);
     });
 
-
-    test('Dropdown with images', function() {
+    test('Dropdown with images', function () {
       const BLOCK_TYPE = 'test_json_dropdown';
       const FIELD_NAME = 'FIELD_NAME';
       const IMAGE1_ALT_TEXT = 'Localized message.';
@@ -237,21 +264,23 @@ suite('JSON Block Definitions', function() {
       };
       const VALUE2 = 'VALUE2';
 
-      Blockly.defineBlocksWithJsonArray([{
-        "type": BLOCK_TYPE,
-        "message0": "%1",
-        "args0": [
-          {
-            "type": "field_dropdown",
-            "name": FIELD_NAME,
-            "options": [
-              [IMAGE0, VALUE0],
-              [IMAGE1, VALUE1],
-              [IMAGE2, VALUE2],
-            ],
-          },
-        ],
-      }]);
+      Blockly.defineBlocksWithJsonArray([
+        {
+          'type': BLOCK_TYPE,
+          'message0': '%1',
+          'args0': [
+            {
+              'type': 'field_dropdown',
+              'name': FIELD_NAME,
+              'options': [
+                [IMAGE0, VALUE0],
+                [IMAGE1, VALUE1],
+                [IMAGE2, VALUE2],
+              ],
+            },
+          ],
+        },
+      ]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       chai.assert.equal(block.inputList.length, 1);
@@ -275,12 +304,12 @@ suite('JSON Block Definitions', function() {
 
       const image1 = options[1][0];
       assertImageEquals(IMAGE1, image1);
-      chai.assert.equal(image1.alt, IMAGE1_ALT_TEXT);  // Via Msg reference
+      chai.assert.equal(image1.alt, IMAGE1_ALT_TEXT); // Via Msg reference
       chai.assert.equal(VALUE1, options[1][1]);
 
       const image2 = options[2][0];
       assertImageEquals(IMAGE1, image1);
-      chai.assert.notExists(image2.alt);  // No alt specified.
+      chai.assert.notExists(image2.alt); // No alt specified.
       chai.assert.equal(VALUE2, options[2][1]);
     });
   });

@@ -7,7 +7,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.config');
 
-
 /**
  * All the values that we expect developers to be able to change
  * before injecting Blockly.

@@ -7,7 +7,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ConnectionType');
 
-
 /**
  * Enum for the type of a connection or input.
  */
@@ -19,5 +18,5 @@ export enum ConnectionType {
   // A down-facing block stack.  E.g. 'if-do' or 'else'.
   NEXT_STATEMENT,
   // An up-facing block stack.  E.g. 'break out of loop'.
-  PREVIOUS_STATEMENT
+  PREVIOUS_STATEMENT,
 }

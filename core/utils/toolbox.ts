@@ -12,17 +12,16 @@ import type {CssConfig as CategoryCssConfig} from '../toolbox/category.js';
 import type {CssConfig as SeparatorCssConfig} from '../toolbox/separator.js';
 import * as utilsXml from './xml.js';
 
-
 /**
  * The information needed to create a block in the toolbox.
  * Note that disabled has a different type for backwards compatibility.
  */
 export interface BlockInfo {
   kind: string;
-  blockxml?: string|Node;
+  blockxml?: string | Node;
   type?: string;
-  gap?: string|number;
-  disabled?: string|boolean;
+  gap?: string | number;
+  disabled?: string | boolean;
   enabled?: boolean;
   id?: string;
   x?: number;
@@ -42,9 +41,9 @@ export interface BlockInfo {
  */
 export interface SeparatorInfo {
   kind: string;
-  id: string|undefined;
-  gap: number|undefined;
-  cssconfig: SeparatorCssConfig|undefined;
+  id: string | undefined;
+  gap: number | undefined;
+  cssconfig: SeparatorCssConfig | undefined;
 }
 
 /**
@@ -62,13 +61,13 @@ export interface ButtonInfo {
 export interface LabelInfo {
   kind: string;
   text: string;
-  id: string|undefined;
+  id: string | undefined;
 }
 
 /**
  * The information needed to create either a button or a label in the flyout.
  */
-export type ButtonOrLabelInfo = ButtonInfo|LabelInfo;
+export type ButtonOrLabelInfo = ButtonInfo | LabelInfo;
 
 /**
  * The information needed to create a category in the toolbox.
@@ -77,12 +76,12 @@ export interface StaticCategoryInfo {
   kind: string;
   name: string;
   contents: ToolboxItemInfo[];
-  id: string|undefined;
-  categorystyle: string|undefined;
-  colour: string|undefined;
-  cssconfig: CategoryCssConfig|undefined;
-  hidden: string|undefined;
-  expanded?: string|boolean;
+  id: string | undefined;
+  categorystyle: string | undefined;
+  colour: string | undefined;
+  cssconfig: CategoryCssConfig | undefined;
+  hidden: string | undefined;
+  expanded?: string | boolean;
 }
 
 /**
@@ -91,29 +90,33 @@ export interface StaticCategoryInfo {
 export interface DynamicCategoryInfo {
   kind: string;
   custom: string;
-  id: string|undefined;
-  categorystyle: string|undefined;
-  colour: string|undefined;
-  cssconfig: CategoryCssConfig|undefined;
-  hidden: string|undefined;
-  expanded?: string|boolean;
+  id: string | undefined;
+  categorystyle: string | undefined;
+  colour: string | undefined;
+  cssconfig: CategoryCssConfig | undefined;
+  hidden: string | undefined;
+  expanded?: string | boolean;
 }
 
 /**
  * The information needed to create either a dynamic or static category.
  */
-export type CategoryInfo = StaticCategoryInfo|DynamicCategoryInfo;
+export type CategoryInfo = StaticCategoryInfo | DynamicCategoryInfo;
 
 /**
  * Any information that can be used to create an item in the toolbox.
  */
-export type ToolboxItemInfo = FlyoutItemInfo|StaticCategoryInfo;
+export type ToolboxItemInfo = FlyoutItemInfo | StaticCategoryInfo;
 
 /**
  * All the different types that can be displayed in a flyout.
  */
 export type FlyoutItemInfo =
-    BlockInfo|SeparatorInfo|ButtonInfo|LabelInfo|DynamicCategoryInfo;
+  | BlockInfo
+  | SeparatorInfo
+  | ButtonInfo
+  | LabelInfo
+  | DynamicCategoryInfo;
 
 /**
  * The JSON definition of a toolbox.
@@ -131,12 +134,16 @@ export type FlyoutItemInfoArray = FlyoutItemInfo[];
 /**
  * All of the different types that can create a toolbox.
  */
-export type ToolboxDefinition = Node|ToolboxInfo|string;
+export type ToolboxDefinition = Node | ToolboxInfo | string;
 
 /**
  * All of the different types that can be used to show items in a flyout.
  */
-export type FlyoutDefinition = FlyoutItemInfoArray|NodeList|ToolboxInfo|Node[];
+export type FlyoutDefinition =
+  | FlyoutItemInfoArray
+  | NodeList
+  | ToolboxInfo
+  | Node[];
 
 /**
  * The name used to identify a toolbox that has category like items.
@@ -159,7 +166,7 @@ export enum Position {
   TOP,
   BOTTOM,
   LEFT,
-  RIGHT
+  RIGHT,
 }
 
 /**
@@ -169,8 +176,9 @@ export enum Position {
  * @returns Object holding information for creating a toolbox.
  * @internal
  */
-export function convertToolboxDefToJson(toolboxDef: ToolboxDefinition|
-                                        null): ToolboxInfo|null {
+export function convertToolboxDefToJson(
+  toolboxDef: ToolboxDefinition | null
+): ToolboxInfo | null {
   if (!toolboxDef) {
     return null;
   }
@@ -198,12 +206,19 @@ function validateToolbox(toolboxJson: ToolboxInfo) {
   const toolboxContents = toolboxJson['contents'];
 
   if (toolboxKind) {
-    if (toolboxKind !== FLYOUT_TOOLBOX_KIND &&
-        toolboxKind !== CATEGORY_TOOLBOX_KIND) {
+    if (
+      toolboxKind !== FLYOUT_TOOLBOX_KIND &&
+      toolboxKind !== CATEGORY_TOOLBOX_KIND
+    ) {
       throw Error(
-          'Invalid toolbox kind ' + toolboxKind + '.' +
-          ' Please supply either ' + FLYOUT_TOOLBOX_KIND + ' or ' +
-          CATEGORY_TOOLBOX_KIND);
+        'Invalid toolbox kind ' +
+          toolboxKind +
+          '.' +
+          ' Please supply either ' +
+          FLYOUT_TOOLBOX_KIND +
+          ' or ' +
+          CATEGORY_TOOLBOX_KIND
+      );
     }
   }
   if (!toolboxContents) {
@@ -218,8 +233,9 @@ function validateToolbox(toolboxJson: ToolboxInfo) {
  * @returns A list of flyout items.
  * @internal
  */
-export function convertFlyoutDefToJsonArray(flyoutDef: FlyoutDefinition|
-                                            null): FlyoutItemInfoArray {
+export function convertFlyoutDefToJsonArray(
+  flyoutDef: FlyoutDefinition | null
+): FlyoutItemInfoArray {
   if (!flyoutDef) {
     return [];
   }
@@ -230,8 +246,11 @@ export function convertFlyoutDefToJsonArray(flyoutDef: FlyoutDefinition|
   // If it is already in the correct format return the flyoutDef.
   // AnyDuringMigration because:  Property 'nodeType' does not exist on type
   // 'Node | FlyoutItemInfo'.
-  if (Array.isArray(flyoutDef) && flyoutDef.length > 0 &&
-      !((flyoutDef[0]) as AnyDuringMigration).nodeType) {
+  if (
+    Array.isArray(flyoutDef) &&
+    flyoutDef.length > 0 &&
+    !(flyoutDef[0] as AnyDuringMigration).nodeType
+  ) {
     // AnyDuringMigration because:  Type 'FlyoutItemInfoArray | Node[]' is not
     // assignable to type 'FlyoutItemInfoArray'.
     return flyoutDef as AnyDuringMigration;
@@ -249,14 +268,14 @@ export function convertFlyoutDefToJsonArray(flyoutDef: FlyoutDefinition|
  * @returns True if the toolbox has categories.
  * @internal
  */
-export function hasCategories(toolboxJson: ToolboxInfo|null): boolean {
+export function hasCategories(toolboxJson: ToolboxInfo | null): boolean {
   return TEST_ONLY.hasCategoriesInternal(toolboxJson);
 }
 
 /**
  * Private version of hasCategories for stubbing in tests.
  */
-function hasCategoriesInternal(toolboxJson: ToolboxInfo|null): boolean {
+function hasCategoriesInternal(toolboxJson: ToolboxInfo | null): boolean {
   if (!toolboxJson) {
     return false;
   }
@@ -266,7 +285,7 @@ function hasCategoriesInternal(toolboxJson: ToolboxInfo|null): boolean {
     return toolboxKind === CATEGORY_TOOLBOX_KIND;
   }
 
-  const categories = toolboxJson['contents'].filter(function(item) {
+  const categories = toolboxJson['contents'].filter(function (item) {
     return item['kind'].toUpperCase() === 'CATEGORY';
   });
   return !!categories.length;
@@ -284,11 +303,11 @@ export function isCategoryCollapsible(categoryInfo: CategoryInfo): boolean {
     return false;
   }
 
-  const categories =
-      (categoryInfo as AnyDuringMigration)['contents'].filter(function(
-          item: AnyDuringMigration) {
-        return item['kind'].toUpperCase() === 'CATEGORY';
-      });
+  const categories = (categoryInfo as AnyDuringMigration)['contents'].filter(
+    function (item: AnyDuringMigration) {
+      return item['kind'].toUpperCase() === 'CATEGORY';
+    }
+  );
   return !!categories.length;
 }
 
@@ -313,8 +332,9 @@ function convertToToolboxJson(toolboxDef: Node): ToolboxInfo {
  * @param toolboxDef The definition of the toolbox in one of its many forms.
  * @returns A list of objects in the toolbox.
  */
-function xmlToJsonArray(toolboxDef: Node|Node[]|NodeList): FlyoutItemInfoArray|
-    ToolboxItemInfo[] {
+function xmlToJsonArray(
+  toolboxDef: Node | Node[] | NodeList
+): FlyoutItemInfoArray | ToolboxItemInfo[] {
   const arr = [];
   // If it is a node it will have children.
   // AnyDuringMigration because:  Property 'childNodes' does not exist on type
@@ -324,7 +344,7 @@ function xmlToJsonArray(toolboxDef: Node|Node[]|NodeList): FlyoutItemInfoArray|
     // Otherwise the toolboxDef is an array or collection.
     childNodes = toolboxDef;
   }
-  for (let i = 0, child; child = childNodes[i]; i++) {
+  for (let i = 0, child; (child = childNodes[i]); i++) {
     if (!child.tagName) {
       continue;
     }
@@ -377,9 +397,10 @@ function addAttributes(node: Node, obj: AnyDuringMigration) {
  * @param toolboxDef DOM tree of blocks, or text representation of same.
  * @returns DOM tree of blocks, or null.
  */
-export function parseToolboxTree(toolboxDef: Element|null|string): Element|
-    null {
-  let parsedToolboxDef: Element|null = null;
+export function parseToolboxTree(
+  toolboxDef: Element | null | string
+): Element | null {
+  let parsedToolboxDef: Element | null = null;
   if (toolboxDef) {
     if (typeof toolboxDef === 'string') {
       parsedToolboxDef = utilsXml.textToDom(toolboxDef);

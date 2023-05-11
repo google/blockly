@@ -21,7 +21,6 @@ import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 import {Workspace} from '../workspace.js';
 
-
 /**
  * Notifies listeners that ome blockly element was clicked.
  */
@@ -46,8 +45,10 @@ export class Click extends UiBase {
    *     Undefined for a blank event.
    */
   constructor(
-      opt_block?: Block|null, opt_workspaceId?: string|null,
-      opt_targetType?: ClickTarget) {
+    opt_block?: Block | null,
+    opt_workspaceId?: string | null,
+    opt_targetType?: ClickTarget
+  ) {
     let workspaceId = opt_block ? opt_block.workspace.id : opt_workspaceId;
     if (workspaceId === null) {
       workspaceId = undefined;
@@ -67,8 +68,9 @@ export class Click extends UiBase {
     const json = super.toJson() as ClickJson;
     if (!this.targetType) {
       throw new Error(
-          'The click target type is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson');
+        'The click target type is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson'
+      );
     }
     json['targetType'] = this.targetType;
     json['blockId'] = this.blockId;
@@ -82,8 +84,11 @@ export class Click extends UiBase {
    */
   override fromJson(json: ClickJson) {
     deprecation.warn(
-        'Blockly.Events.Click.prototype.fromJson', 'version 9', 'version 10',
-        'Blockly.Events.fromJson');
+      'Blockly.Events.Click.prototype.fromJson',
+      'version 9',
+      'version 10',
+      'Blockly.Events.fromJson'
+    );
     super.fromJson(json);
     this.targetType = json['targetType'];
     this.blockId = json['blockId'];
@@ -99,8 +104,11 @@ export class Click extends UiBase {
    * @internal
    */
   static fromJson(json: ClickJson, workspace: Workspace, event?: any): Click {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new Click()) as Click;
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new Click()
+    ) as Click;
     newEvent.targetType = json['targetType'];
     newEvent.blockId = json['blockId'];
     return newEvent;

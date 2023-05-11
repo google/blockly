@@ -13,7 +13,6 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockBase');
 
 import type {Block} from '../block.js';
-import * as deprecation from '../utils/deprecation.js';
 import type {Workspace} from '../workspace.js';
 
 import {
@@ -59,22 +58,6 @@ export class BlockBase extends AbstractEvent {
     }
     json['blockId'] = this.blockId;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: BlockBaseJson) {
-    deprecation.warn(
-      'Blockly.Events.BlockBase.prototype.fromJson',
-      'version 9',
-      'version 10',
-      'Blockly.Events.fromJson'
-    );
-    super.fromJson(json);
-    this.blockId = json['blockId'];
   }
 
   /**

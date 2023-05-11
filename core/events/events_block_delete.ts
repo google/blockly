@@ -13,7 +13,6 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockDelete');
 
 import type {Block} from '../block.js';
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
 import * as utilsXml from '../utils/xml.js';
@@ -105,29 +104,6 @@ export class BlockDelete extends BlockBase {
       json['recordUndo'] = this.recordUndo;
     }
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: BlockDeleteJson) {
-    deprecation.warn(
-      'Blockly.Events.BlockDelete.prototype.fromJson',
-      'version 9',
-      'version 10',
-      'Blockly.Events.fromJson'
-    );
-    super.fromJson(json);
-    this.oldXml = utilsXml.textToDom(json['oldXml']);
-    this.ids = json['ids'];
-    this.wasShadow =
-      json['wasShadow'] || this.oldXml.tagName.toLowerCase() === 'shadow';
-    this.oldJson = json['oldJson'];
-    if (json['recordUndo'] !== undefined) {
-      this.recordUndo = json['recordUndo'];
-    }
   }
 
   /**

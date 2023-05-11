@@ -33,7 +33,6 @@ import {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 
 import {ConstantProvider} from './constants.js';
-import {Debug} from './debugger.js';
 import {Drawer} from './drawer.js';
 import type {IPathObject} from './i_path_object.js';
 import {RenderInfo} from './info.js';
@@ -84,7 +83,6 @@ export function init(
 export {BottomRow};
 export {Connection};
 export {ConstantProvider};
-export {Debug};
 export {Drawer};
 export {ExternalValueInput};
 export {Field};

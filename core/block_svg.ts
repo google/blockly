@@ -47,7 +47,6 @@ import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
 import type {Mutator} from './mutator.js';
 import {RenderedConnection} from './rendered_connection.js';
-import type {Debug as BlockRenderingDebug} from './renderers/common/debugger.js';
 import type {IPathObject} from './renderers/common/i_path_object.js';
 import * as blocks from './serialization/blocks.js';
 import type {BlockStyle} from './theme.js';
@@ -88,13 +87,6 @@ export class BlockSvg
   customContextMenu?: (
     p1: Array<ContextMenuOption | LegacyContextMenuOption>
   ) => void;
-
-  /**
-   * An property used internally to reference the block's rendering debugger.
-   *
-   * @internal
-   */
-  renderingDebugger: BlockRenderingDebug | null = null;
 
   /**
    * Height of this block, not including any statement blocks above or below.

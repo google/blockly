@@ -1,7 +1,7 @@
 # This workflow will do a clean install, start the selenium server, and run
 # all of our browser based test
 
-name: Run browser test nightl
+name: Run browser test nightly
 
 on:
   # Trigger the workflow nightly

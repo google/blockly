@@ -1,22 +1,22 @@
 {
-    "env": {
-      "browser": true,
-      "mocha": true,
-      "node": true
-    },
-    "globals": {
-      "chai": false,
-      "sinon": false
-    },
-    "rules": {
-      "no-unused-vars": ["off"],
-      // Allow uncommented helper functions in tests.
-      "require-jsdoc": ["off"],
-      "prefer-rest-params": ["off"],
-      "no-invalid-this": ["off"]
-    },
-    "extends": "../../.eslintrc.js",
-    "parserOptions": {
-      "sourceType": "module"
-    }
+  "env": {
+    "browser": true,
+    "mocha": true,
+    "node": true
+  },
+  "globals": {
+    "chai": false,
+    "sinon": false
+  },
+  "rules": {
+    "no-unused-vars": ["off"],
+    // Allow uncommented helper functions in tests.
+    "require-jsdoc": ["off"],
+    "prefer-rest-params": ["off"],
+    "no-invalid-this": ["off"]
+  },
+  "extends": "../../.eslintrc.js",
+  "parserOptions": {
+    "sourceType": "module"
+  }
 }

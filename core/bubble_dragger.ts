@@ -12,7 +12,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.BubbleDragger');
 
-import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import {ComponentManager} from './component_manager.js';
 import type {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';
@@ -35,7 +34,6 @@ export class BubbleDragger {
   /** Whether the bubble would be deleted if dropped immediately. */
   private wouldDeleteBubble_ = false;
   private readonly startXY_: Coordinate;
-  private dragSurface_: BlockDragSurfaceSvg | null;
 
   /**
    * @param bubble The item on the bubble canvas to drag.
@@ -47,16 +45,10 @@ export class BubbleDragger {
      * beginning of the drag, in workspace coordinates.
      */
     this.startXY_ = this.bubble.getRelativeToSurfaceXY();
-
-    /**
-     * The drag surface to move bubbles to during a drag, or null if none should
-     * be used.  Block dragging and bubble dragging use the same surface.
-     */
-    this.dragSurface_ = workspace.getBlockDragSurface();
   }
 
   /**
-   * Start dragging a bubble.  This includes moving it to the drag surface.
+   * Start dragging a bubble.
    *
    * @internal
    */
@@ -67,12 +59,6 @@ export class BubbleDragger {
 
     this.workspace.setResizesEnabled(false);
     this.bubble.setAutoLayout(false);
-    if (this.dragSurface_) {
-      this.bubble.moveTo(0, 0);
-      this.dragSurface_.translateSurface(this.startXY_.x, this.startXY_.y);
-      // Execute the move on the top-level SVG component.
-      this.dragSurface_.setBlocksAndShow(this.bubble.getSvgRoot());
-    }
 
     this.bubble.setDragging && this.bubble.setDragging(true);
   }
@@ -89,7 +75,7 @@ export class BubbleDragger {
   dragBubble(e: PointerEvent, currentDragDeltaXY: Coordinate) {
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
     const newLoc = Coordinate.sum(this.startXY_, delta);
-    this.bubble.moveDuringDrag(this.dragSurface_, newLoc);
+    this.bubble.moveDuringDrag(newLoc);
 
     const oldDragTarget = this.dragTarget_;
     this.dragTarget_ = this.workspace.getDragTarget(e);
@@ -171,9 +157,6 @@ export class BubbleDragger {
       this.bubble.dispose();
     } else {
       // Put everything back onto the bubble canvas.
-      if (this.dragSurface_) {
-        this.dragSurface_.clearAndHide(this.workspace.getBubbleCanvas());
-      }
       if (this.bubble.setDragging) {
         this.bubble.setDragging(false);
       }

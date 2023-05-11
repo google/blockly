@@ -12,7 +12,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Bubble');
 
-import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import type {IBubble} from './interfaces/i_bubble.js';
@@ -863,20 +862,13 @@ export class Bubble implements IBubble {
   }
 
   /**
-   * Move this bubble during a drag, taking into account whether or not there is
-   * a drag surface.
+   * Move this bubble during a drag.
    *
-   * @param dragSurface The surface that carries rendered items during a drag,
-   *     or null if no drag surface is in use.
    * @param newLoc The location to translate to, in workspace coordinates.
    * @internal
    */
-  moveDuringDrag(dragSurface: BlockDragSurfaceSvg, newLoc: Coordinate) {
-    if (dragSurface) {
-      dragSurface.translateSurface(newLoc.x, newLoc.y);
-    } else {
-      this.moveTo(newLoc.x, newLoc.y);
-    }
+  moveDuringDrag(newLoc: Coordinate) {
+    this.moveTo(newLoc.x, newLoc.y);
     if (this.workspace_.RTL) {
       this.relativeLeft = this.anchorXY.x - newLoc.x - this.width;
     } else {

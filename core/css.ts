@@ -88,31 +88,6 @@ let content = `
   -webkit-user-select: none;
 }
 
-.blocklyWsDragSurface {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* Added as a separate rule with multiple classes to make it more specific
-   than a bootstrap rule that selects svg:root. See issue #1275 for context.
-*/
-.blocklyWsDragSurface.blocklyOverflowVisible {
-  overflow: visible;
-}
-
-.blocklyBlockDragSurface {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: visible !important;
-  z-index: 50;  /* Display below toolbox, but above everything else. */
-}
-
 .blocklyBlockCanvas.blocklyCanvasTransitioning,
 .blocklyBubbleCanvas.blocklyCanvasTransitioning {
   transition: transform .5s;
@@ -241,14 +216,6 @@ let content = `
   cursor: -webkit-grabbing;
 }
 
-/* Change the cursor on the whole drag surface in case the mouse gets
-   ahead of block during a drag. This way the cursor is still a closed hand.
-  */
-.blocklyBlockDragSurface .blocklyDraggable {
-  cursor: grabbing;
-  cursor: -webkit-grabbing;
-}
-
 .blocklyDragging.blocklyDraggingDelete {
   cursor: url("<<<PATH>>>/handdelete.cur"), auto;
 }
@@ -301,8 +268,7 @@ let content = `
   Don't allow users to select text.  It gets annoying when trying to
   drag a block and selected text moves instead.
 */
-.blocklySvg text,
-.blocklyBlockDragSurface text {
+.blocklySvg text {
   user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;

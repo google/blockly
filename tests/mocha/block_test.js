@@ -1535,12 +1535,20 @@ suite('Blocks', function () {
       test('all icons are returned from getIcons, in order of weight', function () {
         const iconA = new MockIconA();
         const iconB = new MockIconB();
-        this.block.addIcon(iconA);
         this.block.addIcon(iconB);
+        this.block.addIcon(iconA);
         chai.assert.sameOrderedMembers(
           this.block.getIcons(),
           [iconA, iconB],
-          'Expected getIcon to return both icons'
+          'Expected getIcon to return both icons in order of weight'
+        );
+      });
+
+      test('if there are no icons, getIcons returns an empty array', function () {
+        chai.assert.isEmpty(
+          this.block.getIcons(),
+          'Expected getIcons to return an empty array ' +
+            'for a block with no icons'
         );
       });
 

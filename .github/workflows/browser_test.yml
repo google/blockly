@@ -1,5 +1,5 @@
 # This workflow will do a clean install, start the selenium server, and run
-# all of our mocha based test
+# all of our browser based test
 
 name: Run browser test nightl
 

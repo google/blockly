@@ -251,6 +251,46 @@ function fireNow() {
       eventWorkspace.fireChangeListener(event);
     }
   }
+
+  // Post-filter the undo stack to squash and remove any events that result in
+  // a null event
+
+  // 1. Determine which workspaces will need to have their undo stacks validated
+  const workspaceIds = new Set(queue.map((e) => e.workspaceId));
+  for (const workspaceId of workspaceIds) {
+    // Only process valid workspaces
+    if (!workspaceId) {
+      continue;
+    }
+    const eventWorkspace = common.getWorkspaceById(workspaceId);
+    if (!eventWorkspace) {
+      continue;
+    }
+
+    // Find the last contiguous group of events on the stack
+    const undoStack = eventWorkspace.getUndoStack();
+    let i;
+    let group: string | undefined = undefined;
+    for (i = undoStack.length; i > 0; i--) {
+      const event = undoStack[i - 1];
+      if (event.group === '') {
+        break;
+      } else if (group === undefined) {
+        group = event.group;
+      } else if (event.group !== group) {
+        break;
+      }
+    }
+    if (!group || i == undoStack.length - 1) {
+      // Need a group of two or more events on the stack. Nothing to do here.
+      continue;
+    }
+
+    // Extract the event group, filter, and add back to the undo stack
+    let events = undoStack.splice(i, undoStack.length - i);
+    events = filter(events, true);
+    undoStack.push(...events);
+  }
 }
 
 /**

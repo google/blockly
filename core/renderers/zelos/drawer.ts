@@ -10,7 +10,6 @@ goog.declareModuleId('Blockly.zelos.Drawer');
 import type {BlockSvg} from '../../block_svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import type {BaseShape, DynamicShape, Notch} from '../common/constants.js';
-import * as debug from '../common/debug.js';
 import {Drawer as BaseDrawer} from '../common/drawer.js';
 import type {InlineInput} from '../measurables/inline_input.js';
 import type {Row} from '../measurables/row.js';
@@ -48,9 +47,6 @@ export class Drawer extends BaseDrawer {
     pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);
     if (this.info_.RTL) {
       pathObject.flipRTL();
-    }
-    if (debug.isDebuggerEnabled()) {
-      this.block_?.renderingDebugger?.drawDebug(this.block_, this.info_);
     }
     this.recordSizeOnBlock_();
     if (this.info_.outputConnection) {

@@ -316,7 +316,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * @param options Dictionary of options.
-   * @param opt_wsDragSurface Drag surface for the workspace.
    */
   constructor(options: Options) {
     super(options);

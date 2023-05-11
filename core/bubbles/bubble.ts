@@ -87,7 +87,11 @@ export class Bubble implements IBubble {
     this.svgRoot = dom.createSvgElement(Svg.G, {}, workspace.getBubbleCanvas());
     const embossGroup = dom.createSvgElement(
       Svg.G,
-      this.getFilter(),
+      {
+        'filter': `url(#${
+          this.workspace.getRenderer().getConstants().embossFilterId
+        })`,
+      },
       this.svgRoot
     );
     this.tail = dom.createSvgElement(Svg.PATH, {}, embossGroup);
@@ -158,7 +162,6 @@ export class Bubble implements IBubble {
    *     position relative to the anchor.
    */
   protected setSize(size: Size, relayout = false) {
-    // TODO: set size.
     size.width = Math.max(size.width, Bubble.MIN_SIZE);
     size.height = Math.max(size.height, Bubble.MIN_SIZE);
     this.size = size;
@@ -184,17 +187,6 @@ export class Bubble implements IBubble {
     this.colour = colour;
     this.tail.setAttribute('fill', colour);
     this.background.setAttribute('fill', colour);
-  }
-
-  /** Gets the emboss filter for this bubble. */
-  private getFilter(): {filter?: string} {
-    // TODO: Do we think this is actually still a problem??
-    if (userAgent.JavaFx) return {};
-    return {
-      'filter': `url(#${
-        this.workspace.getRenderer().getConstants().embossFilterId
-      })`,
-    };
   }
 
   /** Passes the pointer event off to the gesture system. */

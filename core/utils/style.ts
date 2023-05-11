@@ -7,7 +7,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.style');
 
-import * as deprecation from './deprecation.js';
 import {Coordinate} from './coordinate.js';
 import {Rect} from './rect.js';
 import {Size} from './size.js';
@@ -84,31 +83,6 @@ export function getComputedStyle(element: Element, property: string): string {
     (styles as AnyDuringMigration)[property] ||
     styles.getPropertyValue(property)
   );
-}
-
-/**
- * Gets the cascaded style value of a node, or null if the value cannot be
- * computed (only Internet Explorer can do this).
- *
- * Copied from Closure's goog.style.getCascadedStyle
- *
- * @param element Element to get style of.
- * @param style Property to get (camel-case).
- * @returns Style value.
- * @deprecated No longer provided by Blockly.
- */
-export function getCascadedStyle(element: Element, style: string): string {
-  deprecation.warn(
-    'Blockly.utils.style.getCascadedStyle',
-    'version 9',
-    'version 10'
-  );
-  // AnyDuringMigration because:  Property 'currentStyle' does not exist on type
-  // 'Element'. AnyDuringMigration because:  Property 'currentStyle' does not
-  // exist on type 'Element'.
-  return (element as AnyDuringMigration).currentStyle
-    ? (element as AnyDuringMigration).currentStyle[style]
-    : ('' as string);
 }
 
 /**

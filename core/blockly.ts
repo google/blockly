@@ -207,8 +207,6 @@ import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
 import {Trashcan} from './trashcan.js';
 import * as utils from './utils.js';
-import * as colour from './utils/colour.js';
-import * as deprecation from './utils/deprecation.js';
 import * as toolbox from './utils/toolbox.js';
 import {VariableMap} from './variable_map.js';
 import {VariableModel} from './variable_model.js';
@@ -222,10 +220,7 @@ import {WorkspaceComment} from './workspace_comment.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
-import {
-  resizeSvgContents as realResizeSvgContents,
-  WorkspaceSvg,
-} from './workspace_svg.js';
+import { WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
 
@@ -377,201 +372,6 @@ export const defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
  * @see Blockly.common.setParentContainer
  */
 export const setParentContainer = common.setParentContainer;
-
-/**
- * Size the workspace when the contents change.  This also updates
- * scrollbars accordingly.
- *
- * @param workspace The workspace to resize.
- * @deprecated Use **workspace.resizeContents** instead.
- * @see Blockly.WorkspaceSvg.resizeContents
- */
-function resizeSvgContentsLocal(workspace: WorkspaceSvg) {
-  deprecation.warn(
-    'Blockly.resizeSvgContents',
-    'December 2021',
-    'December 2022',
-    'Blockly.WorkspaceSvg.resizeSvgContents'
-  );
-  realResizeSvgContents(workspace);
-}
-export const resizeSvgContents = resizeSvgContentsLocal;
-
-/**
- * Copy a block or workspace comment onto the local clipboard.
- *
- * @param toCopy Block or Workspace Comment to be copied.
- * @deprecated Use **Blockly.clipboard.copy** instead.
- * @see Blockly.clipboard.copy
- */
-export function copy(toCopy: ICopyable) {
-  deprecation.warn(
-    'Blockly.copy',
-    'December 2021',
-    'December 2022',
-    'Blockly.clipboard.copy'
-  );
-  clipboard.copy(toCopy);
-}
-
-/**
- * Paste a block or workspace comment on to the main workspace.
- *
- * @returns True if the paste was successful, false otherwise.
- * @deprecated Use **Blockly.clipboard.paste** instead.
- * @see Blockly.clipboard.paste
- */
-export function paste(): boolean {
-  deprecation.warn(
-    'Blockly.paste',
-    'December 2021',
-    'December 2022',
-    'Blockly.clipboard.paste'
-  );
-  return !!clipboard.paste();
-}
-
-/**
- * Duplicate this block and its children, or a workspace comment.
- *
- * @param toDuplicate Block or Workspace Comment to be copied.
- * @deprecated Use **Blockly.clipboard.duplicate** instead.
- * @see Blockly.clipboard.duplicate
- */
-export function duplicate(toDuplicate: ICopyable) {
-  deprecation.warn(
-    'Blockly.duplicate',
-    'December 2021',
-    'December 2022',
-    'Blockly.clipboard.duplicate'
-  );
-  clipboard.duplicate(toDuplicate);
-}
-
-/**
- * Is the given string a number (includes negative and decimals).
- *
- * @param str Input string.
- * @returns True if number, false otherwise.
- * @deprecated Use **Blockly.utils.string.isNumber** instead.
- * @see Blockly.utils.string.isNumber
- */
-export function isNumber(str: string): boolean {
-  deprecation.warn(
-    'Blockly.isNumber',
-    'December 2021',
-    'December 2022',
-    'Blockly.utils.string.isNumber'
-  );
-  return utils.string.isNumber(str);
-}
-
-/**
- * Convert a hue (HSV model) into an RGB hex triplet.
- *
- * @param hue Hue on a colour wheel (0-360).
- * @returns RGB code, e.g. '#5ba65b'.
- * @deprecated Use **Blockly.utils.colour.hueToHex** instead.
- * @see Blockly.utils.colour.hueToHex
- */
-export function hueToHex(hue: number): string {
-  deprecation.warn(
-    'Blockly.hueToHex',
-    'December 2021',
-    'December 2022',
-    'Blockly.utils.colour.hueToHex'
-  );
-  return colour.hueToHex(hue);
-}
-
-/**
- * Bind an event handler that should be called regardless of whether it is part
- * of the active touch stream.
- * Use this for events that are not part of a multi-part gesture (e.g.
- * mouseover for tooltips).
- *
- * @param node Node upon which to listen.
- * @param name Event name to listen to (e.g. 'mousedown').
- * @param thisObject The value of 'this' in the function.
- * @param func Function to call when event is triggered.
- * @returns Opaque data that can be passed to unbindEvent_.
- * @deprecated Use **Blockly.browserEvents.bind** instead.
- * @see Blockly.browserEvents.bind
- */
-export function bindEvent_(
-  node: EventTarget,
-  name: string,
-  thisObject: Object | null,
-  func: Function
-): browserEvents.Data {
-  deprecation.warn(
-    'Blockly.bindEvent_',
-    'December 2021',
-    'December 2022',
-    'Blockly.browserEvents.bind'
-  );
-  return browserEvents.bind(node, name, thisObject, func);
-}
-
-/**
- * Unbind one or more events event from a function call.
- *
- * @param bindData Opaque data from bindEvent_.
- *     This list is emptied during the course of calling this function.
- * @returns The function call.
- * @deprecated Use **Blockly.browserEvents.unbind** instead.
- * @see browserEvents.unbind
- */
-export function unbindEvent_(bindData: browserEvents.Data): Function {
-  deprecation.warn(
-    'Blockly.unbindEvent_',
-    'December 2021',
-    'December 2022',
-    'Blockly.browserEvents.unbind'
-  );
-  return browserEvents.unbind(bindData);
-}
-
-/**
- * Bind an event handler that can be ignored if it is not part of the active
- * touch stream.
- * Use this for events that either start or continue a multi-part gesture (e.g.
- * mousedown or mousemove, which may be part of a drag or click).
- *
- * @param node Node upon which to listen.
- * @param name Event name to listen to (e.g. 'mousedown').
- * @param thisObject The value of 'this' in the function.
- * @param func Function to call when event is triggered.
- * @param opt_noCaptureIdentifier True if triggering on this event should not
- *     block execution of other event handlers on this touch or other
- *     simultaneous touches.  False by default.
- * @param _opt_noPreventDefault No-op, deprecated and will be removed in v10.
- * @returns Opaque data that can be passed to unbindEvent_.
- * @deprecated Use **Blockly.browserEvents.conditionalBind** instead.
- * @see browserEvents.conditionalBind
- */
-export function bindEventWithChecks_(
-  node: EventTarget,
-  name: string,
-  thisObject: Object | null,
-  func: Function,
-  opt_noCaptureIdentifier?: boolean,
-  _opt_noPreventDefault?: boolean
-): browserEvents.Data {
-  deprecation.warn(
-    'Blockly.bindEventWithChecks_',
-    'December 2021',
-    'December 2022',
-    'Blockly.browserEvents.conditionalBind'
-  );
-  return browserEvents.conditionalBind(
-    node,
-    name,
-    thisObject,
-    func,
-    opt_noCaptureIdentifier
-  );
-}
 
 // Aliases to allow external code to access these values for legacy reasons.
 export const COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
@@ -774,7 +574,6 @@ export {FlyoutMetricsManager};
 export {CodeGenerator};
 export {CodeGenerator as Generator}; // Deprecated name, October 2022.
 export {Gesture};
-export {Gesture as TouchGesture}; // Remove in v10.
 export {Grid};
 export {HorizontalFlyout};
 export {IASTNodeLocation};

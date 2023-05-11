@@ -8,7 +8,6 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.browserEvents');
 
 import * as Touch from './touch.js';
-import * as deprecation from './utils/deprecation.js';
 import * as userAgent from './utils/useragent.js';
 
 /**
@@ -44,7 +43,6 @@ const PAGE_MODE_MULTIPLIER = 125;
  * @param opt_noCaptureIdentifier True if triggering on this event should not
  *     block execution of other event handlers on this touch or other
  *     simultaneous touches.  False by default.
- * @param opt_noPreventDefault No-op, deprecated and will be removed in v10.
  * @returns Opaque data that can be passed to unbindEvent_.
  */
 export function conditionalBind(
@@ -52,16 +50,8 @@ export function conditionalBind(
   name: string,
   thisObject: Object | null,
   func: Function,
-  opt_noCaptureIdentifier?: boolean,
-  opt_noPreventDefault?: boolean
+  opt_noCaptureIdentifier?: boolean
 ): Data {
-  if (opt_noPreventDefault !== undefined) {
-    deprecation.warn(
-      'The opt_noPreventDefault argument of conditionalBind',
-      'version 9',
-      'version 10'
-    );
-  }
   /**
    *
    * @param e

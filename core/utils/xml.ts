@@ -7,8 +7,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.xml');
 
-import * as deprecation from './deprecation.js';
-
 let domParser: DOMParser = {
   parseFromString: function () {
     throw new Error(
@@ -83,28 +81,6 @@ export const NAME_SPACE = 'https://developers.google.com/blockly/xml';
 const INVALID_CONTROL_CHARS = /[\x00-\x09\x0B\x0C\x0E-\x1F]/g;
 
 /**
- * Get the document object to use for XML serialization.
- *
- * @returns The document object.
- * @deprecated No longer provided by Blockly.
- */
-export function getDocument(): Document {
-  deprecation.warn('Blockly.utils.xml.getDocument', 'version 9', 'version 10');
-  return document;
-}
-
-/**
- * Get the document object to use for XML serialization.
- *
- * @param xmlDocument The document object to use.
- * @deprecated No longer provided by Blockly.
- */
-export function setDocument(xmlDocument: Document) {
-  deprecation.warn('Blockly.utils.xml.setDocument', 'version 9', 'version 10');
-  document = xmlDocument;
-}
-
-/**
  * Create DOM element for XML.
  *
  * @param tagName Name of DOM element.
@@ -162,22 +138,6 @@ export function textToDom(text: string): Element {
   }
 
   throw new Error(`DOMParser was unable to parse: ${text}`);
-}
-
-/**
- * Converts an XML string into a DOM tree.
- *
- * @param text XML string.
- * @returns The DOM document.
- * @throws if XML doesn't parse.
- */
-export function textToDomDocument(text: string): Document {
-  deprecation.warn(
-    'Blockly.utils.xml.textToDomDocument',
-    'version 10',
-    'version 11'
-  );
-  return domParser.parseFromString(text, 'text/xml');
 }
 
 /**

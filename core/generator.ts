@@ -16,7 +16,6 @@ goog.declareModuleId('Blockly.CodeGenerator');
 import type {Block} from './block.js';
 import * as common from './common.js';
 import {Names, NameType} from './names.js';
-import * as deprecation from './utils/deprecation.js';
 import type {Workspace} from './workspace.js';
 
 /**
@@ -547,25 +546,3 @@ export class CodeGenerator {
     return line;
   }
 }
-
-Object.defineProperties(CodeGenerator.prototype, {
-  /**
-   * A database of variable names.
-   *
-   * @name Blockly.CodeGenerator.prototype.variableDB_
-   * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
-   * @suppress {checkTypes}
-   */
-  variableDB_: {
-    /** @returns Name database. */
-    get(this: CodeGenerator): Names | undefined {
-      deprecation.warn('variableDB_', 'version 9', 'version 10', 'nameDB_');
-      return this.nameDB_;
-    },
-    /** @param nameDb New name database. */
-    set(this: CodeGenerator, nameDb: Names | undefined) {
-      deprecation.warn('variableDB_', 'version 9', 'version 10', 'nameDB_');
-      this.nameDB_ = nameDb;
-    },
-  },
-});

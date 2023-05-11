@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2019 Google LLC
+ * Copyright 2023 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,8 +13,10 @@ const chai = require('chai');
 
 let browser;
 suite('Testing Connecting Blocks', function (done) {
+  // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
-  // Setup Selenium for each of the test
+
+  // Setup Selenium for all of the tests
   suiteSetup(async function () {
     const options = {
       capabilities: {
@@ -49,6 +51,7 @@ suite('Testing Connecting Blocks', function (done) {
     await browser.url(url);
     return browser;
   });
+
   test('Testing Block Drag', async function () {
     const startingBlock = await browser.$(
       '#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)'
@@ -61,6 +64,7 @@ suite('Testing Connecting Blocks', function (done) {
     const secondPosition = await blocklyCanvas.getAttribute('transform');
     chai.assert.notEqual(firstPostion, secondPosition);
   });
+
   // Teardown entire suite after test are done running
   suiteTeardown(async function () {
     await browser.deleteSession();

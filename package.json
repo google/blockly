@@ -53,10 +53,10 @@
     "start": "npm run build && concurrently -n tsc,server \"tsc --watch --preserveWatchOutput --outDir 'build/src' --declarationDir 'build/declarations'\" \"http-server ./ -s -o /tests/playground.html -c-1\"",
     "tsc": "gulp tsc",
     "test": "gulp test",
+    "test:browser": "npx mocha ./tests/browser/test --config ./tests/browser/test/.mocharc.js",
     "test:generators": "gulp testGenerators",
     "test:mocha:interactive": "http-server ./ -o /tests/mocha/index.html -c-1",
     "test:compile:advanced": "gulp buildAdvancedCompilationTest --debug",
-    "test:browser": "npx mocha ./tests/browser/test --config ./tests/browser/test/.mocharc.js",
     "updateGithubPages": "npm ci && gulp gitUpdateGithubPages"
   },
   "main": "./index.js",

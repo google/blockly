@@ -49,7 +49,7 @@ suite("Testing Connecting Blocks", function(done) {
     await browser.url(url);
     return browser;
   });
-  test('Testing Block Flyout', async function() {
+  test('Testing Block Drag', async function() {
     const startingBlock = await browser.$('#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)');
     const blocklyCanvas = await browser.$('#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas');
     const firstPostion =  await blocklyCanvas.getAttribute('transform');

@@ -18,7 +18,7 @@ import {Svg} from '../utils/svg.js';
 import * as userAgent from '../utils/useragent.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
-export class Bubble implements IBubble {
+export abstract class Bubble implements IBubble {
   /** The width of the border around the bubble. */
   static BORDER_WIDTH = 6;
 
@@ -80,7 +80,7 @@ export class Bubble implements IBubble {
    *     when automatically positioning.
    */
   constructor(
-    private readonly workspace: WorkspaceSvg,
+    protected readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect
   ) {
@@ -258,16 +258,19 @@ export class Bubble implements IBubble {
     if (topPositionOverlap === mostOverlap) {
       this.relativeLeft = topPosition.x;
       this.relativeTop = topPosition.y;
+      this.positionRelativeToAnchor();
       return;
     }
     if (startPositionOverlap === mostOverlap) {
       this.relativeLeft = startPosition.x;
       this.relativeTop = startPosition.y;
+      this.positionRelativeToAnchor();
       return;
     }
     if (closerPositionOverlap === mostOverlap) {
       this.relativeLeft = closerPosition.x;
       this.relativeTop = closerPosition.y;
+      this.positionRelativeToAnchor();
       return;
     }
     // TODO: I believe relativeLeft_ should actually be called relativeStart_

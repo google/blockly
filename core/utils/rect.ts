@@ -33,8 +33,8 @@ export class Rect {
     public left: number,
     public right: number
   ) {
-    this.height = top - bottom;
-    this.width = left - right;
+    this.height = bottom - top;
+    this.width = right - left;
   }
 
   /**

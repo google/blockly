@@ -12,8 +12,6 @@ import './events/events_block_create.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/workspace_events.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_ui.js';
-// Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_ui_base.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_var_create.js';
@@ -220,7 +218,7 @@ import {WorkspaceComment} from './workspace_comment.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
-import { WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
 

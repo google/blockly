@@ -15,6 +15,7 @@ goog.module('Blockly.main');
 
 /** @suppress {extraRequire} */
 goog.require('Blockly');
+const Msg = goog.require('Blockly.Msg');
 
 // If Blockly is compiled with ADVANCED_COMPILATION and/or loaded as a
 // CJS or ES module there will not be a Blockly global variable

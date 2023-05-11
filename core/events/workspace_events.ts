@@ -14,9 +14,7 @@ goog.declareModuleId('Blockly.Events.FinishedLoading');
 
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
-import {
-  Abstract as AbstractEvent,
-} from './events_abstract.js';
+import {Abstract as AbstractEvent} from './events_abstract.js';
 import * as eventUtils from './utils.js';
 
 /**

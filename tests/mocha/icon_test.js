@@ -12,7 +12,7 @@ import {
 } from './test_helpers/setup_teardown.js';
 import {defineEmptyBlock} from './test_helpers/block_definitions.js';
 
-suite.only('Icon', function () {
+suite('Icon', function () {
   setup(function () {
     this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
     defineEmptyBlock();

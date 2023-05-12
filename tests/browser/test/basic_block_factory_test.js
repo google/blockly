@@ -10,6 +10,8 @@
 
 const webdriverio = require('webdriverio');
 const chai = require('chai');
+const path = require('path');
+const {posixPath} = require('../../../scripts/helpers');
 
 let browser;
 suite('Testing Connecting Blocks', function (done) {
@@ -44,7 +46,12 @@ suite('Testing Connecting Blocks', function (done) {
     }
     // Use Selenium to bring up the page
     const url =
-      'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html';
+      'file://' +
+      posixPath(
+        path.join(__dirname, '..', '..', '..', 'demos', 'blockfactory')
+      ) +
+      '/index.html';
+    console.log(url);
     console.log('Starting webdriverio...');
     browser = await webdriverio.remote(options);
     console.log('Loading URL: ' + url);

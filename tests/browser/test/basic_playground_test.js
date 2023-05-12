@@ -10,6 +10,8 @@
 
 const webdriverio = require('webdriverio');
 const chai = require('chai');
+const path = require('path');
+const {posixPath} = require('../../../scripts/helpers');
 
 let browser;
 suite('Testing Connecting Blocks', function (done) {
@@ -43,7 +45,11 @@ suite('Testing Connecting Blocks', function (done) {
       options.capabilities['goog:chromeOptions'].args.push('--disable-gpu');
     }
     // Use Selenium to bring up the page
-    const url = 'https://blockly-demo.appspot.com/static/tests/playground.html';
+    const url =
+      'file://' +
+      posixPath(path.join(__dirname, '..', '..')) +
+      '/playground.html';
+    console.log(url);
     console.log('Starting webdriverio...');
     browser = await webdriverio.remote(options);
     console.log('Loading URL: ' + url);

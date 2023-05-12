@@ -51,7 +51,10 @@ jobs:
         if: runner.os == 'macOS'
         run: source ./tests/scripts/setup_osx_env.sh
 
-      - name: Run
+      - name: Run Build
+        run: npm run build
+
+      - name: Run Test
         run: npm run test:browser
 
         env:

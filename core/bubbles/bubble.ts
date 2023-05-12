@@ -15,7 +15,6 @@ import * as math from '../utils/math.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
-import * as userAgent from '../utils/useragent.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
 export abstract class Bubble implements IBubble {

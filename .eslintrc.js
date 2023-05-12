@@ -1,6 +1,6 @@
 const rules = {
   'no-unused-vars': [
-    'warn',
+    'error',
     {
       'args': 'after-used',
       // Ignore vars starting with an underscore.

@@ -186,7 +186,7 @@ export class TextInputBubble extends Bubble {
       resizeGroup,
       'pointerdown',
       this,
-      this.onResizeMouseDown
+      this.onResizePointerDown
     );
 
     return resizeGroup;
@@ -233,7 +233,7 @@ export class TextInputBubble extends Bubble {
   }
 
   /** Handles mouse down events on the resize target. */
-  private onResizeMouseDown(e: PointerEvent) {
+  private onResizePointerDown(e: PointerEvent) {
     this.bringToFront();
     if (browserEvents.isRightButton(e)) {
       e.stopPropagation();
@@ -252,21 +252,21 @@ export class TextInputBubble extends Bubble {
       document,
       'pointerup',
       this,
-      this.onResizeMouseUp
+      this.onResizePointerUp
     );
     this.resizePointerMoveListener = browserEvents.conditionalBind(
       document,
       'pointermove',
       this,
-      this.onResizeMouseMove
+      this.onResizePointerMove
     );
     this.workspace.hideChaff();
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
   }
 
-  /** Handles mouse up events on the resize target. */
-  private onResizeMouseUp(_e: PointerEvent) {
+  /** Handles pointer up events on the resize target. */
+  private onResizePointerUp(_e: PointerEvent) {
     touch.clearTouchIdentifier();
     if (this.resizePointerUpListener) {
       browserEvents.unbind(this.resizePointerUpListener);
@@ -278,8 +278,8 @@ export class TextInputBubble extends Bubble {
     }
   }
 
-  /** Handles mouse move events on the resize target. */
-  private onResizeMouseMove(e: PointerEvent) {
+  /** Handles pointer move events on the resize target. */
+  private onResizePointerMove(e: PointerEvent) {
     const delta = this.workspace.moveDrag(e);
     this.setSize(
       new Size(this.workspace.RTL ? -delta.x : delta.x, delta.y),

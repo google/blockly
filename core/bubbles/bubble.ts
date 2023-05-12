@@ -230,13 +230,13 @@ export abstract class Bubble implements IBubble {
         this.workspace.getRenderer().getConstants().MIN_BLOCK_HEIGHT) as number,
     };
     const startPosition = {x: -this.size.width - 30, y: optimalTop};
-    const endPosition = {x: rect.width, y: optimalTop};
-    const bottomPosition = {x: optimalLeft, y: rect.height};
+    const endPosition = {x: rect.getWidth(), y: optimalTop};
+    const bottomPosition = {x: optimalLeft, y: rect.getHeight()};
 
     const closerPosition =
-      rect.width < rect.height ? endPosition : bottomPosition;
+      rect.getWidth() < rect.getHeight() ? endPosition : bottomPosition;
     const fartherPosition =
-      rect.width < rect.height ? bottomPosition : endPosition;
+      rect.getWidth() < rect.getHeight() ? bottomPosition : endPosition;
 
     const topPositionOverlap = this.getOverlap(topPosition, viewMetrics);
     const startPositionOverlap = this.getOverlap(startPosition, viewMetrics);

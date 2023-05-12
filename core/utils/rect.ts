@@ -18,9 +18,6 @@ goog.declareModuleId('Blockly.utils.Rect');
  * Class for representing rectangular regions.
  */
 export class Rect {
-  public height;
-  public width;
-
   /**
    * @param top Top.
    * @param bottom Bottom.
@@ -32,9 +29,14 @@ export class Rect {
     public bottom: number,
     public left: number,
     public right: number
-  ) {
-    this.height = bottom - top;
-    this.width = right - left;
+  ) {}
+
+  getHeight(): number {
+    return this.bottom - this.top;
+  }
+
+  getWidth(): number {
+    return this.right - this.left;
   }
 
   /**

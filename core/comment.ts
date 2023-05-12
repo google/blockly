@@ -20,7 +20,7 @@ import './events/events_bubble_open.js';
 import type {CommentModel} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
-import {Bubble} from './bubble.js';
+import {Bubble} from './bubble_old.js';
 import * as Css from './css.js';
 import * as eventUtils from './events/utils.js';
 import {Icon} from './icon_old.js';

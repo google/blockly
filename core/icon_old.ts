@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Icon');
 
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
-import type {Bubble} from './bubble.js';
+import type {Bubble} from './bubble_old.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';

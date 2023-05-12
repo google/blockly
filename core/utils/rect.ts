@@ -31,6 +31,14 @@ export class Rect {
     public right: number
   ) {}
 
+  getHeight(): number {
+    return this.bottom - this.top;
+  }
+
+  getWidth(): number {
+    return this.right - this.left;
+  }
+
   /**
    * Tests whether this rectangle contains a x/y coordinate.
    *

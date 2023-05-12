@@ -16,7 +16,7 @@ goog.declareModuleId('Blockly.Warning');
 import './events/events_bubble_open.js';
 
 import type {BlockSvg} from './block_svg.js';
-import {Bubble} from './bubble.js';
+import {Bubble} from './bubble_old.js';
 import * as eventUtils from './events/utils.js';
 import {Icon} from './icon_old.js';
 import type {Coordinate} from './utils/coordinate.js';

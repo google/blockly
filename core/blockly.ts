@@ -23,7 +23,7 @@ import {BlockSvg} from './block_svg.js';
 import {BlocklyOptions} from './blockly_options.js';
 import {Blocks} from './blocks.js';
 import * as browserEvents from './browser_events.js';
-import {Bubble} from './bubble.js';
+import {Bubble} from './bubble_old.js';
 import {BubbleDragger} from './bubble_dragger.js';
 import * as bumpObjects from './bump_objects.js';
 import * as clipboard from './clipboard.js';

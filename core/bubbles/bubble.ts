@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {BlockDragSurfaceSvg} from '../block_drag_surface.js';
 import * as browserEvents from '../browser_events.js';
 import {IBubble} from '../interfaces/i_bubble.js';
 import {ContainerRegion} from '../metrics_manager.js';

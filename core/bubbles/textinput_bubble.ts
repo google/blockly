@@ -15,24 +15,52 @@ import {WorkspaceSvg} from '../workspace_svg.js';
 import {browserEvents} from '../utils.js';
 
 export class TextInputBubble extends Bubble {
+  /** The root of the elements specific to the text element. */
   private inputRoot: SVGForeignObjectElement;
+
+  /** The text input area element. */
   private textArea: HTMLTextAreaElement;
+
+  /** The group containing the lines indicating the bubble is resizable. */
   private resizeGroup: SVGGElement;
+
+  /**
+   * Event data associated with the listener for pointer up events on the
+   * resize group.
+   */
   private resizePointerUpListener: browserEvents.Data | null = null;
+
+  /**
+   * Event data associated with the listener for pointer move events on the
+   * resize group.
+   */
   private resizePointerMoveListener: browserEvents.Data | null = null;
+
+  /** Functions listening for changes to the text of this bubble. */
   private textChangeListeners: (() => void)[] = [];
+
+  /** The text of this bubble. */
   private text = '';
 
+  /** The default size of this bubble, including borders. */
   private readonly DEFAULT_SIZE = new Size(
     160 + Bubble.DOUBLE_BORDER,
     80 + Bubble.DOUBLE_BORDER
   );
 
+  /** The minimum size of this bubble, including borders. */
   private readonly MIN_SIZE = new Size(
     45 + Bubble.DOUBLE_BORDER,
     20 + Bubble.DOUBLE_BORDER
   );
 
+  /**
+   * @param workspace The workspace this bubble belongs to.
+   * @param anchor The anchor location of the thing this bubble is attached to.
+   *     The tail of the bubble will point to this location.
+   * @param ownerRect An optional rect we don't want the bubble to overlap with
+   *     when automatically positioning.
+   */
   constructor(
     protected readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
@@ -46,19 +74,24 @@ export class TextInputBubble extends Bubble {
     this.setSize(this.DEFAULT_SIZE, true);
   }
 
+  /** @return the text of this bubble. */
   getText(): string {
     return this.text;
   }
 
+  /** Sets the text of this bubble. Calls change listeners. */
   setText(text: string) {
     this.text = text;
     this.textArea.value = text;
+    this.onTextChange();
   }
 
+  /** Adds a change listener to be notified when this bubble's text changes. */
   addTextChangeListener(listener: () => void) {
     this.textChangeListeners.push(listener);
   }
 
+  /** Creates the editor UI for this bubble. */
   private createEditor(container: SVGGElement): {
     inputRoot: SVGForeignObjectElement;
     textArea: HTMLTextAreaElement;
@@ -94,6 +127,7 @@ export class TextInputBubble extends Bubble {
     return {inputRoot, textArea};
   }
 
+  /** Binds events to the text area element. */
   private bindTextAreaEvents(textArea: HTMLTextAreaElement) {
     // Don't zoom with mousewheel.
     browserEvents.conditionalBind(textArea, 'wheel', this, (e: Event) => {
@@ -110,6 +144,7 @@ export class TextInputBubble extends Bubble {
     browserEvents.conditionalBind(textArea, 'change', this, this.onTextChange);
   }
 
+  /** Creates the resize handler elements and binds events to them. */
   private createResizeHandle(container: SVGGElement): SVGGElement {
     const resizeGroup = dom.createSvgElement(
       Svg.G,
@@ -157,6 +192,14 @@ export class TextInputBubble extends Bubble {
     return resizeGroup;
   }
 
+  /**
+   * Sets the size of this bubble, including the border.
+   *
+   * @param size Sets the size of this bubble, including the border.
+   * @param relayout If true, reposition the bubble from scratch so that it is
+   *     optimally visible. If false, reposition it so it maintains the same
+   *     position relative to the anchor.
+   */
   setSize(size: Size, relayout = false) {
     size.width = Math.max(size.width, this.MIN_SIZE.width);
     size.height = Math.max(size.height, this.MIN_SIZE.height);
@@ -183,11 +226,13 @@ export class TextInputBubble extends Bubble {
     super.setSize(size, relayout);
   }
 
+  /** @return the size of this bubble. */
   getSize(): Size {
     // Overriden to be public.
     return super.getSize();
   }
 
+  /** Handles mouse down events on the resize target. */
   private onResizeMouseDown(e: PointerEvent) {
     this.bringToFront();
     if (browserEvents.isRightButton(e)) {
@@ -220,6 +265,7 @@ export class TextInputBubble extends Bubble {
     e.stopPropagation();
   }
 
+  /** Handles mouse up events on the resize target. */
   private onResizeMouseUp(_e: PointerEvent) {
     touch.clearTouchIdentifier();
     if (this.resizePointerUpListener) {
@@ -232,6 +278,7 @@ export class TextInputBubble extends Bubble {
     }
   }
 
+  /** Handles mouse move events on the resize target. */
   private onResizeMouseMove(e: PointerEvent) {
     const delta = this.workspace.moveDrag(e);
     this.setSize(
@@ -240,6 +287,9 @@ export class TextInputBubble extends Bubble {
     );
   }
 
+  /**
+   * Handles starting an edit of the text area. Brings the bubble to the front.
+   */
   private onStartEdit() {
     if (this.bringToFront()) {
       // Since the act of moving this node within the DOM causes a loss of
@@ -248,6 +298,7 @@ export class TextInputBubble extends Bubble {
     }
   }
 
+  /** Handles a text change event for the text area. Calls event listeners. */
   private onTextChange() {
     this.text = this.textArea.value;
     for (const listener of this.textChangeListeners) {

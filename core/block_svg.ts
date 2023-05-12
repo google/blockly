@@ -34,12 +34,12 @@ import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
-import type {Icon} from './icon_old.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
+import type {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
 import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
@@ -47,7 +47,6 @@ import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
 import type {Mutator} from './mutator.js';
 import {RenderedConnection} from './rendered_connection.js';
-import type {Debug as BlockRenderingDebug} from './renderers/common/debugger.js';
 import type {IPathObject} from './renderers/common/i_path_object.js';
 import * as blocks from './serialization/blocks.js';
 import type {BlockStyle} from './theme.js';
@@ -88,13 +87,6 @@ export class BlockSvg
   customContextMenu?: (
     p1: Array<ContextMenuOption | LegacyContextMenuOption>
   ) => void;
-
-  /**
-   * An property used internally to reference the block's rendering debugger.
-   *
-   * @internal
-   */
-  renderingDebugger: BlockRenderingDebug | null = null;
 
   /**
    * Height of this block, not including any statement blocks above or below.
@@ -146,7 +138,6 @@ export class BlockSvg
   override nextConnection!: RenderedConnection;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   override previousConnection!: RenderedConnection;
-  private readonly useDragSurface_: boolean;
 
   private translation = '';
 
@@ -184,12 +175,6 @@ export class BlockSvg
     this.pathObject = workspace
       .getRenderer()
       .makePathObject(this.svgGroup_, this.style);
-
-    /**
-     * Whether to move the block to the drag surface when it is dragged.
-     * True if it should move, false if it should be translated directly.
-     */
-    this.useDragSurface_ = !!workspace.getBlockDragSurface();
 
     const svgPath = this.pathObject.svgPath;
     (svgPath as any).tooltip = this;
@@ -306,25 +291,6 @@ export class BlockSvg
   }
 
   /**
-   * Returns a list of mutator, comment, and warning icons.
-   *
-   * @returns List of icons.
-   */
-  getIcons(): Icon[] {
-    const icons = [];
-    if (this.mutator) {
-      icons.push(this.mutator);
-    }
-    if (this.commentIcon_) {
-      icons.push(this.commentIcon_);
-    }
-    if (this.warning) {
-      icons.push(this.warning);
-    }
-    return icons;
-  }
-
-  /**
    * Sets the parent of this block to be a new block or null.
    *
    * @param newParent New parent block.
@@ -374,10 +340,6 @@ export class BlockSvg
     let x = 0;
     let y = 0;
 
-    const dragSurfaceGroup = this.useDragSurface_
-      ? this.workspace.getBlockDragSurface()!.getGroup()
-      : null;
-
     let element: SVGElement = this.getSvgRoot();
     if (element) {
       do {
@@ -385,24 +347,8 @@ export class BlockSvg
         const xy = svgMath.getRelativeXY(element);
         x += xy.x;
         y += xy.y;
-        // If this element is the current element on the drag surface, include
-        // the translation of the drag surface itself.
-        if (
-          this.useDragSurface_ &&
-          this.workspace.getBlockDragSurface()!.getCurrentBlock() === element
-        ) {
-          const surfaceTranslation = this.workspace
-            .getBlockDragSurface()!
-            .getSurfaceTranslation();
-          x += surfaceTranslation.x;
-          y += surfaceTranslation.y;
-        }
         element = element.parentNode as SVGElement;
-      } while (
-        element &&
-        element !== this.workspace.getCanvas() &&
-        element !== dragSurfaceGroup
-      );
+      } while (element && element !== this.workspace.getCanvas());
     }
     return new Coordinate(x, y);
   }
@@ -457,31 +403,6 @@ export class BlockSvg
   }
 
   /**
-   * Move this block to its workspace's drag surface, accounting for
-   * positioning. Generally should be called at the same time as
-   * setDragging_(true). Does nothing if useDragSurface_ is false.
-   *
-   * @internal
-   */
-  moveToDragSurface() {
-    if (!this.useDragSurface_) {
-      return;
-    }
-    // The translation for drag surface blocks,
-    // is equal to the current relative-to-surface position,
-    // to keep the position in sync as it move on/off the surface.
-    // This is in workspace coordinates.
-    const xy = this.getRelativeToSurfaceXY();
-    this.clearTransformAttributes_();
-    this.workspace.getBlockDragSurface()!.translateSurface(xy.x, xy.y);
-    // Execute the move on the top-level SVG component
-    const svg = this.getSvgRoot();
-    if (svg) {
-      this.workspace.getBlockDragSurface()!.setBlocksAndShow(svg);
-    }
-  }
-
-  /**
    * Move a block to a position.
    *
    * @param xy The position to move to in workspace units.
@@ -493,42 +414,15 @@ export class BlockSvg
   }
 
   /**
-   * Move this block back to the workspace block canvas.
-   * Generally should be called at the same time as setDragging_(false).
-   * Does nothing if useDragSurface_ is false.
-   *
-   * @param newXY The position the block should take on on the workspace canvas,
-   *     in workspace coordinates.
-   * @internal
-   */
-  moveOffDragSurface(newXY: Coordinate) {
-    if (!this.useDragSurface_) {
-      return;
-    }
-    // Translate to current position, turning off 3d.
-    this.translate(newXY.x, newXY.y);
-    this.workspace
-      .getBlockDragSurface()!
-      .clearAndHide(this.workspace.getCanvas());
-  }
-
-  /**
-   * Move this block during a drag, taking into account whether we are using a
-   * drag surface to translate blocks.
+   * Move this block during a drag.
    * This block must be a top-level block.
    *
    * @param newLoc The location to translate to, in workspace coordinates.
    * @internal
    */
   moveDuringDrag(newLoc: Coordinate) {
-    if (this.useDragSurface_) {
-      this.workspace
-        .getBlockDragSurface()!
-        .translateSurface(newLoc.x, newLoc.y);
-    } else {
-      this.translate(newLoc.x, newLoc.y);
-      this.getSvgRoot().setAttribute('transform', this.getTranslation());
-    }
+    this.translate(newLoc.x, newLoc.y);
+    this.getSvgRoot().setAttribute('transform', this.getTranslation());
   }
 
   /**
@@ -1143,6 +1037,36 @@ export class BlockSvg
       // Adding or removing a mutator icon will cause the block to change shape.
       this.bumpNeighbours();
     }
+  }
+
+  override addIcon<T extends IIcon>(icon: T): T {
+    super.addIcon(icon);
+    if (this.rendered) {
+      // TODO: Change this based on #7024.
+      this.render();
+      this.bumpNeighbours();
+    }
+    return icon;
+  }
+
+  override removeIcon(type: string): boolean {
+    const removed = super.removeIcon(type);
+    if (this.rendered) {
+      // TODO: Change this based on #7024.
+      this.render();
+      this.bumpNeighbours();
+    }
+    return removed;
+  }
+
+  // TODO: remove this implementation after #7038, #7039, and #7040 are
+  //   resolved.
+  override getIcons(): AnyDuringMigration[] {
+    const icons = [];
+    if (this.commentIcon_) icons.push(this.commentIcon_);
+    if (this.warning) icons.push(this.warning);
+    if (this.mutator) icons.push(this.mutator);
+    return icons;
   }
 
   /**

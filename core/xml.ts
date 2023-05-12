@@ -10,7 +10,6 @@ goog.declareModuleId('Blockly.Xml');
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {Connection} from './connection.js';
-import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {inputTypes} from './inputs/input_types.js';
@@ -372,25 +371,6 @@ export function domToPrettyText(dom: Node): string {
   text = text.replace(/(<(\w+)\b[^>]*>[^\n]*)\n *<\/\2>/g, '$1</$2>');
   // Trim leading blank line.
   return text.replace(/^\n/, '');
-}
-
-/**
- * Converts an XML string into a DOM structure.
- *
- * @param text An XML string.
- * @returns A DOM object representing the singular child of the document
- *     element.
- * @throws if the text doesn't parse.
- * @deprecated Moved to core/utils/xml.js.
- */
-export function textToDom(text: string): Element {
-  deprecation.warn(
-    'Blockly.Xml.textToDom',
-    'version 9',
-    'version 10',
-    'Use Blockly.utils.xml.textToDom instead'
-  );
-  return utilsXml.textToDom(text);
 }
 
 /**

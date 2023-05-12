@@ -10,8 +10,11 @@
 
 const webdriverio = require('webdriverio');
 const chai = require('chai');
+<<<<<<< HEAD
 const path = require('path');
 const {posixPath} = require('../../../scripts/helpers');
+=======
+>>>>>>> upstream/develop
 
 let browser;
 suite('Testing Connecting Blocks', function (done) {

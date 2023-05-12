@@ -14,7 +14,6 @@ goog.declareModuleId('Blockly.Events.BlockChange');
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import * as utilsXml from '../utils/xml.js';
 import {Workspace} from '../workspace.js';
@@ -87,25 +86,6 @@ export class BlockChange extends BlockBase {
     json['oldValue'] = this.oldValue;
     json['newValue'] = this.newValue;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: BlockChangeJson) {
-    deprecation.warn(
-      'Blockly.Events.BlockChange.prototype.fromJson',
-      'version 9',
-      'version 10',
-      'Blockly.Events.fromJson'
-    );
-    super.fromJson(json);
-    this.element = json['element'];
-    this.name = json['name'];
-    this.oldValue = json['oldValue'];
-    this.newValue = json['newValue'];
   }
 
   /**

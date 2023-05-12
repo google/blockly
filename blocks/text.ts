@@ -729,7 +729,7 @@ const QUOTES_EXTENSION = function (this: QuoteImageBlock) {
 };
 
 /** Type of a block that has TEXT_JOIN_MUTATOR_MIXIN */
-type JoinMutatorBlock = Block & JoinMutatorMixin & QuoteImageMixin;
+type JoinMutatorBlock = BlockSvg & JoinMutatorMixin & QuoteImageMixin;
 interface JoinMutatorMixin extends JoinMutatorMixinType {}
 type JoinMutatorMixinType = typeof JOIN_MUTATOR_MIXIN;
 
@@ -896,7 +896,7 @@ const JOIN_EXTENSION = function (this: JoinMutatorBlock) {
   this.itemCount_ = 2;
   this.updateShape_();
   // Configure the mutator UI.
-  this.setMutator(new Mutator(['text_create_join_item']));
+  this.setMutator(new Mutator(['text_create_join_item'], this));
 };
 
 // Update the tooltip of 'text_append' block to reference the variable.

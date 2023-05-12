@@ -21,7 +21,6 @@ import {Types} from '../measurables/types.js';
 
 import {isDynamicShape} from './constants.js';
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
-import * as debug from './debug.js';
 import type {RenderInfo} from './info.js';
 
 /**
@@ -66,9 +65,6 @@ export class Drawer {
     this.block_.pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);
     if (this.info_.RTL) {
       this.block_.pathObject.flipRTL();
-    }
-    if (debug.isDebuggerEnabled()) {
-      this.block_.renderingDebugger?.drawDebug(this.block_, this.info_);
     }
     this.recordSizeOnBlock_();
   }

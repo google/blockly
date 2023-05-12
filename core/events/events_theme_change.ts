@@ -12,7 +12,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.ThemeChange');
 
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
@@ -53,22 +52,6 @@ export class ThemeChange extends UiBase {
     }
     json['themeName'] = this.themeName;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: ThemeChangeJson) {
-    deprecation.warn(
-      'Blockly.Events.ThemeChange.prototype.fromJson',
-      'version 9',
-      'version 10',
-      'Blockly.Events.fromJson'
-    );
-    super.fromJson(json);
-    this.themeName = json['themeName'];
   }
 
   /**

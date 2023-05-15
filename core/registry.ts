@@ -13,6 +13,7 @@ import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
+import type {IIcon} from './interfaces/i_icon.js';
 import type {Input} from './inputs/input.js';
 import type {ISerializer} from './interfaces/i_serializer.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
@@ -92,6 +93,9 @@ export class Type<_T> {
 
   /** @internal */
   static SERIALIZER = new Type<ISerializer>('serializer');
+
+  /** @internal */
+  static ICON = new Type<IIcon>('icon');
 }
 
 /**

@@ -70,10 +70,15 @@ export class MiniWorkspaceBubble extends Bubble {
     return this.miniWorkspace;
   }
 
+  /** Adds a change listener to the mini workspace. */
   addWorkspaceChangeListener(listener: (e: AbstractEvent) => void) {
     this.miniWorkspace.addChangeListener(listener);
   }
 
+  /**
+   * Validates the workspace options to make sure folks aren't trying to
+   * enable things the miniworkspace doesn't support.
+   */
   private validateWorkspaceOptions(options: Options) {
     if (options.hasCategories) {
       throw new Error(
@@ -106,6 +111,10 @@ export class MiniWorkspaceBubble extends Bubble {
     }
   }
 
+  /**
+   * Updates the size of this bubble to account for the size of the
+   * mini workspace.
+   */
   private updateBubbleSize() {
     if (this.miniWorkspace.isDragging()) return;
 
@@ -137,6 +146,9 @@ export class MiniWorkspaceBubble extends Bubble {
     this.miniWorkspace.recordDragTargets();
   }
 
+  /**
+   * Calculates the size of the mini workspace for use in resizing the bubble.
+   */
   private calculateWorkspaceSize(): Size {
     const canvas = this.miniWorkspace.getCanvas();
     const bbox = canvas.getBBox();

@@ -56,7 +56,7 @@ suite('Testing Connecting Blocks', function (done) {
   });
 
   test('Testing Procedure', async function () {
-     // Drag out first function
+    // Drag out first function
     const functionButton = await browser.$('#blockly\\:9 > div.blocklyTreeRow');
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     functionButton.click();

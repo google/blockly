@@ -26,6 +26,8 @@ export class MiniWorkspaceBubble extends Bubble {
     protected ownerRect?: Rect
   ) {
     super(workspace, anchor, ownerRect);
+    const options = new Options(workspaceOptions);
+    this.validateWorkspaceOptions(options);
 
     this.svgDialog = dom.createSvgElement(
       Svg.SVG,
@@ -36,11 +38,25 @@ export class MiniWorkspaceBubble extends Bubble {
       this.contentContainer
     );
     this.miniWorkspace = this.newWorkspaceSvg(new Options(workspaceOptions));
-    this.svgDialog.appendChild(
-      this.miniWorkspace.createDom('blocklyMutatorBackground')
-    );
+    const background = this.miniWorkspace.createDom('blocklyMutatorBackground');
+    this.svgDialog.appendChild(background);
+    if (options.languageTree) {
+      background.insertBefore(
+        this.miniWorkspace.addFlyout(Svg.G),
+        this.miniWorkspace.getCanvas()
+      );
+      const flyout = this.miniWorkspace.getFlyout();
+      flyout?.init(this.miniWorkspace);
+      flyout?.show(options.languageTree);
+    }
+
     this.miniWorkspace.addChangeListener(this.updateBubbleSize.bind(this));
     this.updateBubbleSize();
+  }
+
+  dispose() {
+    this.miniWorkspace.dispose();
+    super.dispose();
   }
 
   /** @internal */
@@ -50,6 +66,26 @@ export class MiniWorkspaceBubble extends Bubble {
 
   addWorkspaceChangeListener(listener: (e: AbstractEvent) => void) {
     this.miniWorkspace.addChangeListener(listener);
+    this.miniWorkspace.getFlyout()?.getWorkspace().addChangeListener(listener);
+  }
+
+  private validateWorkspaceOptions(options: Options) {
+    if (options.hasCategories) {
+      throw new Error(
+        'The miniworkspace bubble does not support toolboxes with categories'
+      );
+    }
+    if (options.hasTrashcan) {
+      throw new Error('The miniworkspace bubble does not support trashcans');
+    }
+    if (options.zoomOptions.controls) {
+      throw new Error(
+        'The miniworkspace bubble does not support zoom controls'
+      );
+    }
+    if (options.moveOptions.scrollbars) {
+      throw new Error('The miniworkspace bubble does not support scrollbars');
+    }
   }
 
   private updateBubbleSize() {
@@ -57,7 +93,6 @@ export class MiniWorkspaceBubble extends Bubble {
 
     const currSize = this.getSize();
     const newSize = this.calculateWorkspaceSize();
-    console.log(currSize, newSize);
     if (
       Math.abs(currSize.width - newSize.width) < 10 &&
       Math.abs(currSize.height - newSize.height) < 10
@@ -67,6 +102,7 @@ export class MiniWorkspaceBubble extends Bubble {
     }
     this.svgDialog.setAttribute('width', `${newSize.width}px`);
     this.svgDialog.setAttribute('height', `${newSize.height}px`);
+    this.miniWorkspace.setCachedParentSvgSize(newSize.width, newSize.height);
     this.setSize(
       new Size(
         newSize.width + Bubble.DOUBLE_BORDER,
@@ -75,6 +111,7 @@ export class MiniWorkspaceBubble extends Bubble {
       true
     );
     this.miniWorkspace.resize();
+    this.miniWorkspace.recordDragTargets();
   }
 
   private calculateWorkspaceSize(): Size {

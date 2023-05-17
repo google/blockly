@@ -52,7 +52,11 @@ export class MiniWorkspaceBubble extends Bubble {
       flyout?.show(options.languageTree);
     }
 
-    this.addWorkspaceChangeListener(this.updateBubbleSize.bind(this));
+    this.miniWorkspace.addChangeListener(this.updateBubbleSize.bind(this));
+    this.miniWorkspace
+      .getFlyout()
+      ?.getWorkspace()
+      ?.addChangeListener(this.updateBubbleSize.bind(this));
     this.updateBubbleSize();
   }
 
@@ -68,7 +72,6 @@ export class MiniWorkspaceBubble extends Bubble {
 
   addWorkspaceChangeListener(listener: (e: AbstractEvent) => void) {
     this.miniWorkspace.addChangeListener(listener);
-    this.miniWorkspace.getFlyout()?.getWorkspace().addChangeListener(listener);
   }
 
   private validateWorkspaceOptions(options: Options) {

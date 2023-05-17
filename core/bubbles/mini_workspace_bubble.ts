@@ -18,6 +18,7 @@ import {WorkspaceSvg} from '../workspace_svg.js';
 export class MiniWorkspaceBubble extends Bubble {
   private svgDialog: SVGElement;
   private miniWorkspace: WorkspaceSvg;
+  private autoLayout = true;
 
   constructor(
     workspaceOptions: BlocklyOptions,
@@ -127,7 +128,7 @@ export class MiniWorkspaceBubble extends Bubble {
         newSize.width + Bubble.DOUBLE_BORDER,
         newSize.height + Bubble.DOUBLE_BORDER
       ),
-      true
+      this.autoLayout
     );
     this.miniWorkspace.resize();
     this.miniWorkspace.recordDragTargets();
@@ -153,6 +154,18 @@ export class MiniWorkspaceBubble extends Bubble {
     }
     width += Bubble.DOUBLE_BORDER * 3;
     return new Size(width, height);
+  }
+
+  /** @internal */
+  moveDuringDrag(newLoc: Coordinate): void {
+    super.moveDuringDrag(newLoc);
+    this.autoLayout = false;
+  }
+
+  /** @internal */
+  moveTo(x: number, y: number): void {
+    super.moveTo(x, y);
+    this.miniWorkspace.recordDragTargets();
   }
 
   /** @internal */

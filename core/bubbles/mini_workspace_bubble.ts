@@ -37,6 +37,7 @@ export class MiniWorkspaceBubble extends Bubble {
       },
       this.contentContainer
     );
+    workspaceOptions.parentWorkspace = this.workspace;
     this.miniWorkspace = this.newWorkspaceSvg(new Options(workspaceOptions));
     const background = this.miniWorkspace.createDom('blocklyMutatorBackground');
     this.svgDialog.appendChild(background);
@@ -50,7 +51,7 @@ export class MiniWorkspaceBubble extends Bubble {
       flyout?.show(options.languageTree);
     }
 
-    this.miniWorkspace.addChangeListener(this.updateBubbleSize.bind(this));
+    this.addWorkspaceChangeListener(this.updateBubbleSize.bind(this));
     this.updateBubbleSize();
   }
 
@@ -78,13 +79,26 @@ export class MiniWorkspaceBubble extends Bubble {
     if (options.hasTrashcan) {
       throw new Error('The miniworkspace bubble does not support trashcans');
     }
-    if (options.zoomOptions.controls) {
+    if (
+      options.zoomOptions.controls ||
+      options.zoomOptions.wheel ||
+      options.zoomOptions.pinch
+    ) {
+      throw new Error('The miniworkspace bubble does not support zooming');
+    }
+    if (
+      options.moveOptions.scrollbars ||
+      options.moveOptions.wheel ||
+      options.moveOptions.drag
+    ) {
       throw new Error(
-        'The miniworkspace bubble does not support zoom controls'
+        'The miniworkspace bubble does not scrolling/moving the workspace'
       );
     }
-    if (options.moveOptions.scrollbars) {
-      throw new Error('The miniworkspace bubble does not support scrollbars');
+    if (options.horizontalLayout) {
+      throw new Error(
+        'The miniworkspace bubble does not support horizontal layouts'
+      );
     }
   }
 
@@ -103,6 +117,11 @@ export class MiniWorkspaceBubble extends Bubble {
     this.svgDialog.setAttribute('width', `${newSize.width}px`);
     this.svgDialog.setAttribute('height', `${newSize.height}px`);
     this.miniWorkspace.setCachedParentSvgSize(newSize.width, newSize.height);
+    if (this.miniWorkspace.RTL) {
+      this.miniWorkspace
+        .getCanvas()
+        .setAttribute('transform', `translate(${newSize.width}, 0)`);
+    }
     this.setSize(
       new Size(
         newSize.width + Bubble.DOUBLE_BORDER,
@@ -116,9 +135,9 @@ export class MiniWorkspaceBubble extends Bubble {
 
   private calculateWorkspaceSize(): Size {
     const canvas = this.miniWorkspace.getCanvas();
-    const workspaceSize = canvas.getBBox();
-    let width = workspaceSize.width + workspaceSize.x;
-    let height = workspaceSize.height + Bubble.DOUBLE_BORDER * 3;
+    const bbox = canvas.getBBox();
+    let width = this.miniWorkspace.RTL ? -bbox.x : bbox.width;
+    let height = bbox.height + bbox.y + Bubble.DOUBLE_BORDER * 3;
     const flyout = this.miniWorkspace.getFlyout();
     if (flyout) {
       const flyoutScrollMetrics = flyout
@@ -126,11 +145,11 @@ export class MiniWorkspaceBubble extends Bubble {
         .getMetricsManager()
         .getScrollMetrics();
       height = Math.max(height, flyoutScrollMetrics.height + 20);
-      width += flyout.getWidth();
-    }
-    const isRtl = this.miniWorkspace.RTL;
-    if (isRtl) {
-      width = -workspaceSize.x;
+      if (this.miniWorkspace.RTL) {
+        width = Math.max(width, flyout.getWidth());
+      } else {
+        width += flyout.getWidth();
+      }
     }
     width += Bubble.DOUBLE_BORDER * 3;
     return new Size(width, height);

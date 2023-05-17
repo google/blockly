@@ -56,6 +56,7 @@ suite('Testing Connecting Blocks', function (done) {
   });
 
   test('Testing Procedure', async function () {
+     // Drag out first function
     const functionButton = await browser.$('#blockly\\:9 > div.blocklyTreeRow');
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     functionButton.click();
@@ -64,7 +65,7 @@ suite('Testing Connecting Blocks', function (done) {
     );
     await toReturnBlock.dragAndDrop({x: 50, y: 20});
 
-    //Drag out second
+    // Drag out second function
     functionButton.click();
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     toReturnBlock = await browser.$(
@@ -72,7 +73,7 @@ suite('Testing Connecting Blocks', function (done) {
     );
     await toReturnBlock.dragAndDrop({x: 300, y: 200});
 
-    //Drag out numeric
+    // Drag out numeric
     const mathButton = await browser.$('#blockly\\:3 > div.blocklyTreeRow');
     mathButton.click();
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
@@ -81,7 +82,7 @@ suite('Testing Connecting Blocks', function (done) {
     );
     await numericBlock.dragAndDrop({x: 50, y: 20});
 
-    //Connect numeric to first procedure
+    // Connect numeric to first procedure
     const numericWorkspace = await browser.$(
       '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable.blocklySelected'
     );
@@ -92,13 +93,13 @@ suite('Testing Connecting Blocks', function (done) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     await numericWorkspace.dragAndDrop({x: 90, y: 20});
 
-    //Drag out doSomething from flyout and connect it to doSomething2
+    // Drag out doSomething from flyout and connect it to doSomething2
     const doSomething2 = await browser.$(
       '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(1)'
     );
     functionButton.click();
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    doSomethingFlyout = await browser.$(
+    const doSomethingFlyout = await browser.$(
       '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(8)'
     );
     await doSomethingFlyout.dragAndDrop(doSomething2);
@@ -108,18 +109,18 @@ suite('Testing Connecting Blocks', function (done) {
     );
     await doSomethingFlyoutWorkspace.dragAndDrop({x: 130, y: 20});
 
-    //Drag out print from flyout and connect it with doSomething 2
+    // Drag out print from flyout and connect it with doSomething 2
     const textButton = await browser.$('#blockly\\:4 > div.blocklyTreeRow');
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     textButton.click();
-    let printFlyout = await browser.$(
+    const printFlyout = await browser.$(
       '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(22)'
     );
     await printFlyout.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     functionButton.click();
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    doSomething2Flyout = await browser.$(
+    const doSomething2Flyout = await browser.$(
       '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(10)'
     );
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
@@ -135,12 +136,12 @@ suite('Testing Connecting Blocks', function (done) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     await doSomething2FlyoutWorkspace.dragAndDrop({x: 65, y: 0});
 
-    //Click run button and verify the number is 123
+    // Click run button and verify the number is 123
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     const runButton = await browser.$('#runButton');
     runButton.click();
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    const alertText = await browser.getAlertText(); //get the alert text
+    const alertText = await browser.getAlertText(); // get the alert text
     chai.assert.equal(alertText, '123');
   });
 

@@ -20,8 +20,11 @@ export abstract class Bubble implements IBubble {
   /** The width of the border around the bubble. */
   static BORDER_WIDTH = 6;
 
+  /** Double the width of the border around the bubble. */
+  static DOUBLE_BORDER = this.BORDER_WIDTH * 2;
+
   /** The minimum size the bubble can have. */
-  static MIN_SIZE = this.BORDER_WIDTH * 2;
+  static MIN_SIZE = this.DOUBLE_BORDER;
 
   /**
    * The thickness of the base of the tail in relation to the size of the

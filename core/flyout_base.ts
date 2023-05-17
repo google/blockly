@@ -12,6 +12,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Flyout');
 
+import type {Abstract as AbstractEvent} from './events/events_abstract.js';
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
@@ -136,14 +137,14 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * Function that will be registered as a change listener on the workspace
    * to reflow when blocks in the flyout workspace change.
    */
-  private reflowWrapper: Function | null = null;
+  private reflowWrapper: ((e: AbstractEvent) => void) | null = null;
 
   /**
    * Function that disables blocks in the flyout based on max block counts
    * allowed in the target workspace. Registered as a change listener on the
    * target workspace.
    */
-  private filterWrapper: Function | null = null;
+  private filterWrapper: ((e: AbstractEvent) => void) | null = null;
 
   /**
    * List of background mats that lurk behind each block to catch clicks

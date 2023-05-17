@@ -69,7 +69,7 @@ export class Mutator extends Icon {
    * Function registered on the main workspace to update the mutator contents
    * when the main workspace changes.
    */
-  private sourceListener: Function | null = null;
+  private sourceListener: (() => void) | null = null;
 
   /**
    * The PID associated with the updateWorkpace_ timeout, or null if no timeout
@@ -265,7 +265,7 @@ export class Mutator extends Icon {
     const canvas = this.workspace_.getCanvas();
     const workspaceSize = canvas.getBBox();
     let width = workspaceSize.width + workspaceSize.x;
-    let height = workspaceSize.height + doubleBorderWidth * 3;
+    let height = workspaceSize.height + doubleBorderWidth * 2;
     const flyout = this.workspace_.getFlyout();
     if (flyout) {
       const flyoutScrollMetrics = flyout

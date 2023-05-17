@@ -174,6 +174,7 @@ import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
 import {MetricsManager} from './metrics_manager.js';
 import {Msg, setLocale} from './msg.js';
+import {MiniWorkspaceBubble} from './bubbles/mini_workspace_bubble.js';
 import {Mutator} from './mutator.js';
 import {Names} from './names.js';
 import {Options} from './options.js';
@@ -440,6 +441,12 @@ WorkspaceCommentSvg.prototype.showContextMenu = function (
 };
 
 Mutator.prototype.newWorkspaceSvg = function (options: Options): WorkspaceSvg {
+  return new WorkspaceSvg(options);
+};
+
+MiniWorkspaceBubble.prototype.newWorkspaceSvg = function (
+  options: Options
+): WorkspaceSvg {
   return new WorkspaceSvg(options);
 };
 

@@ -18,31 +18,31 @@ import {WorkspaceSvg} from '../workspace_svg.js';
 
 export abstract class Bubble implements IBubble {
   /** The width of the border around the bubble. */
-  static BORDER_WIDTH = 6;
+  static readonly BORDER_WIDTH = 6;
 
   /** Double the width of the border around the bubble. */
-  static DOUBLE_BORDER = this.BORDER_WIDTH * 2;
+  static readonly DOUBLE_BORDER = this.BORDER_WIDTH * 2;
 
   /** The minimum size the bubble can have. */
-  static MIN_SIZE = this.DOUBLE_BORDER;
+  static readonly MIN_SIZE = this.DOUBLE_BORDER;
 
   /**
    * The thickness of the base of the tail in relation to the size of the
    * bubble. Higher numbers result in thinner tails.
    */
-  static TAIL_THICKNESS = 1;
+  static readonly TAIL_THICKNESS = 1;
 
   /** The number of degrees that the tail bends counter-clockwise. */
-  static TAIL_ANGLE = 20;
+  static readonly TAIL_ANGLE = 20;
 
   /**
    * The sharpness of the tail's bend. Higher numbers result in smoother
    * tails.
    */
-  static TAIL_BEND = 4;
+  static readonly TAIL_BEND = 4;
 
   /** Distance between arrow point and anchor point. */
-  static ANCHOR_RADIUS = 8;
+  static readonly ANCHOR_RADIUS = 8;
 
   /** The SVG group containing all parts of the bubble. */
   private svgRoot: SVGGElement;

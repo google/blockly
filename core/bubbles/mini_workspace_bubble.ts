@@ -7,19 +7,34 @@
 import {Abstract as AbstractEvent} from '../events/events_abstract.js';
 import type {BlocklyOptions} from '../blockly_options.js';
 import {Bubble} from './bubble.js';
-import type {Coordinate} from '../utils/coordinate.js';
+import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import {Options} from '../options.js';
 import {Svg} from '../utils/svg.js';
 import type {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
-import {WorkspaceSvg} from '../workspace_svg.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
 
 export class MiniWorkspaceBubble extends Bubble {
+  /**
+   * The minimum amount of change to the mini workspace view to trigger
+   * resizing the bubble.
+   */
+  private static readonly MINIMUM_VIEW_CHANGE = 10;
+
+  /** The root svg element containing the workspace. */
   private svgDialog: SVGElement;
+
+  /** The workspace that gets shown within this bubble. */
   private miniWorkspace: WorkspaceSvg;
+
+  /**
+   * Should this bubble automatically reposition itself when it resizes?
+   * Becomes false after this bubble is first dragged.
+   */
   private autoLayout = true;
 
+  /** @internal */
   constructor(
     workspaceOptions: BlocklyOptions,
     protected readonly workspace: WorkspaceSvg,
@@ -121,8 +136,10 @@ export class MiniWorkspaceBubble extends Bubble {
     const currSize = this.getSize();
     const newSize = this.calculateWorkspaceSize();
     if (
-      Math.abs(currSize.width - newSize.width) < 10 &&
-      Math.abs(currSize.height - newSize.height) < 10
+      Math.abs(currSize.width - newSize.width) <
+        MiniWorkspaceBubble.MINIMUM_VIEW_CHANGE &&
+      Math.abs(currSize.height - newSize.height) <
+        MiniWorkspaceBubble.MINIMUM_VIEW_CHANGE
     ) {
       // Only resize if the size has noticeably changed.
       return;
@@ -131,6 +148,7 @@ export class MiniWorkspaceBubble extends Bubble {
     this.svgDialog.setAttribute('height', `${newSize.height}px`);
     this.miniWorkspace.setCachedParentSvgSize(newSize.width, newSize.height);
     if (this.miniWorkspace.RTL) {
+      // Scroll the workspace to always left-align.
       this.miniWorkspace
         .getCanvas()
         .setAttribute('transform', `translate(${newSize.width}, 0)`);
@@ -152,7 +170,7 @@ export class MiniWorkspaceBubble extends Bubble {
   private calculateWorkspaceSize(): Size {
     const canvas = this.miniWorkspace.getCanvas();
     const bbox = canvas.getBBox();
-    let width = this.miniWorkspace.RTL ? -bbox.x : bbox.width;
+    let width = bbox.width + Bubble.DOUBLE_BORDER * 3;
     let height = bbox.height + bbox.y + Bubble.DOUBLE_BORDER * 3;
     const flyout = this.miniWorkspace.getFlyout();
     if (flyout) {
@@ -161,13 +179,8 @@ export class MiniWorkspaceBubble extends Bubble {
         .getMetricsManager()
         .getScrollMetrics();
       height = Math.max(height, flyoutScrollMetrics.height + 20);
-      if (this.miniWorkspace.RTL) {
-        width = Math.max(width, flyout.getWidth());
-      } else {
-        width += flyout.getWidth();
-      }
+      width += flyout.getWidth();
     }
-    width += Bubble.DOUBLE_BORDER * 3;
     return new Size(width, height);
   }
 

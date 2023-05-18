@@ -265,7 +265,7 @@ export class Mutator extends Icon {
     const canvas = this.workspace_.getCanvas();
     const workspaceSize = canvas.getBBox();
     let width = workspaceSize.width + workspaceSize.x;
-    let height = workspaceSize.height + doubleBorderWidth * 2;
+    let height = workspaceSize.height + doubleBorderWidth * 3;
     const flyout = this.workspace_.getFlyout();
     if (flyout) {
       const flyoutScrollMetrics = flyout

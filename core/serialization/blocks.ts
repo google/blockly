@@ -37,8 +37,8 @@ import * as serializationRegistry from './registry.js';
  * Represents the state of a connection.
  */
 export interface ConnectionState {
-  shadow: State | undefined;
-  block: State | undefined;
+  shadow?: State;
+  block?: State;
 }
 
 /**

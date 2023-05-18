@@ -32,43 +32,39 @@ const SCHEMA_URL = new URL('renamings.schema.json', import.meta.url);
 const RENAMINGS_URL =
     new URL('../../scripts/migration/renamings.json5', import.meta.url);
 
-// Can't use top-level await outside a module, and can't use require
-// in a module, so use an IIAFE.
-(async function () {
-  const renamingsJson5 = fs.readFileSync(RENAMINGS_URL);
-  const renamings = JSON5.parse(renamingsJson5);
+const renamingsJson5 = fs.readFileSync(RENAMINGS_URL);
+const renamings = JSON5.parse(renamingsJson5);
 
-  const output = await validate(
+const output = await validate(
     SCHEMA_URL,
     renamings,
     DETAILED
-  );
+);
 
-  if (!output.valid) {
-    console.log('Renamings file is invalid.');
-    console.log('Maybe this validator output will help you find the problem:');
-    console.log(JSON5.stringify(output, undefined, '  '));
-    process.exit(1);
-  }
+if (!output.valid) {
+  console.log('Renamings file is invalid.');
+  console.log('Maybe this validator output will help you find the problem:');
+  console.log(JSON5.stringify(output, undefined, '  '));
+  process.exit(1);
+}
 
-  // File passed schema validation.  Do some additional checks.
-  let ok = true;
-  Object.entries(renamings).forEach(([version, modules]) => {
-    // Scan through modules and check for duplicates.
-    const seen = new Set();
-    for (const {oldName} of modules) {
-      if (seen.has(oldName)) {
-        console.log(
-          `Duplicate entry for module ${oldName} ` + `in version ${version}.`
-        );
-        ok = false;
-      }
-      seen.add(oldName);
+// File passed schema validation.  Do some additional checks.
+let ok = true;
+Object.entries(renamings).forEach(([version, modules]) => {
+  // Scan through modules and check for duplicates.
+  const seen = new Set();
+  for (const {oldName} of modules) {
+    if (seen.has(oldName)) {
+      console.log(
+        `Duplicate entry for module ${oldName} ` + `in version ${version}.`
+      );
+      ok = false;
     }
-  });
-  if (!ok) {
-    console.log('Renamings file is invalid.');
-    process.exit(1);
+    seen.add(oldName);
   }
-  // Default is a successful exit 0.
-})();
+});
+if (!ok) {
+  console.log('Renamings file is invalid.');
+  process.exit(1);
+}
+// Default is a successful exit 0.

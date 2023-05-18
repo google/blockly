@@ -11,42 +11,37 @@
  * (renamings-schema.json).
  */
 
-/* global require __dirname process */
+/* global process */
 
-const JsonSchema = require('@hyperjump/json-schema');
-const JSON5 = require('json5');
-const fs = require('fs');
-const path = require('path');
-const {posixPath} = require('../../scripts/helpers');
+import JSON5 from 'json5';
+import * as fs from 'fs';
+import {posixPath} from '../../scripts/helpers.js';
+import {validate} from '@hyperjump/json-schema/draft-2020-12';
+import {DETAILED} from '@hyperjump/json-schema/experimental';
 
 /**
  * Renaming schema filename.
- * @type {string}
+ * @type {URL}
  */
-const SCHEMA_FILENAME = path.join(__dirname, 'renamings.schema.json');
+const SCHEMA_URL = new URL('renamings.schema.json', import.meta.url);
 
 /**
  * Renamings filename.
- * @type {string}
+ * @type {URL}
  */
-const RENAMINGS_FILENAME = path.resolve(
-  __dirname,
-  '../../scripts/migration/renamings.json5'
-);
+const RENAMINGS_URL =
+    new URL('../../scripts/migration/renamings.json5', import.meta.url);
 
 // Can't use top-level await outside a module, and can't use require
 // in a module, so use an IIAFE.
 (async function () {
-  const schemaUrl = 'file://' + posixPath(path.resolve(SCHEMA_FILENAME));
-  const schema = await JsonSchema.get(schemaUrl);
-
-  const renamingsJson5 = fs.readFileSync(RENAMINGS_FILENAME);
+  const renamingsJson5 = fs.readFileSync(RENAMINGS_URL);
   const renamings = JSON5.parse(renamingsJson5);
 
-  const output = await JsonSchema.validate(
-    schema,
+  const output = await validate(
+    SCHEMA_URL,
     renamings,
-    JsonSchema.DETAILED
+    DETAILED
   );
 
   if (!output.valid) {

@@ -36,6 +36,7 @@ import {Coordinate} from './utils/coordinate.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import type {IIcon} from './interfaces/i_icon.js';
 
 /**
  * Note: In this file "start" refers to pointerdown
@@ -71,6 +72,12 @@ export class Gesture {
    * field.
    */
   private startField: Field | null = null;
+
+  /**
+   * The icon that the gesture started on, or null if it did not start on an
+   * icon.
+   */
+  private startIcon: IIcon | null = null;
 
   /**
    * The block that the gesture started on, or null if it did not start on a
@@ -614,9 +621,9 @@ export class Gesture {
       }
       this.isEnding_ = true;
       // The ordering of these checks is important: drags have higher priority
-      // than clicks.  Fields have higher priority than blocks; blocks have
-      // higher priority than workspaces. The ordering within drags does not
-      // matter, because the three types of dragging are exclusive.
+      // than clicks.  Fields and icons have higher priority than blocks; blocks
+      // have higher priority than workspaces. The ordering within drags does
+      // not matter, because the three types of dragging are exclusive.
       if (this.bubbleDragger) {
         this.bubbleDragger.endBubbleDrag(e, this.currentDragDeltaXY);
       } else if (this.blockDragger) {
@@ -628,6 +635,8 @@ export class Gesture {
         this.doBubbleClick();
       } else if (this.isFieldClick()) {
         this.doFieldClick();
+      } else if (this.isIconClick()) {
+        this.doIconClick();
       } else if (this.isBlockClick()) {
         this.doBlockClick();
       } else if (this.isWorkspaceClick()) {
@@ -917,7 +926,7 @@ export class Gesture {
   private doFieldClick() {
     if (!this.startField) {
       throw new Error(
-        'Cannot do a field click because the start field is ' + 'undefined'
+        'Cannot do a field click because the start field is undefined'
       );
     }
 
@@ -928,6 +937,17 @@ export class Gesture {
       this.startField.showEditor(this.mostRecentEvent);
     }
     this.bringBlockToFront();
+  }
+
+  /** Execute an icon click. */
+  private doIconClick() {
+    if (!this.startIcon) {
+      throw new Error(
+        'Cannot do a field click because the start field is undefined'
+      );
+    }
+
+    this.startIcon.onClick();
   }
 
   /** Execute a block click. */
@@ -1013,6 +1033,23 @@ export class Gesture {
     if (!this.startField) {
       this.startField = field as Field;
     }
+  }
+
+  /**
+   * Record the icon that a gesture started on.
+   *
+   * @param icon The icon the gesture started on.
+   * @internal
+   */
+  setStartIcon(icon: IIcon) {
+    if (this.gestureHasStarted) {
+      throw Error(
+        'Tried to call gesture.setStartIcon, ' +
+          'but the gesture had already been started.'
+      );
+    }
+
+    if (!this.startIcon) this.startIcon = icon;
   }
 
   /**
@@ -1112,7 +1149,12 @@ export class Gesture {
     // A block click starts on a block, never escapes the drag radius, and is
     // not a field click.
     const hasStartBlock = !!this.startBlock;
-    return hasStartBlock && !this.hasExceededDragRadius && !this.isFieldClick();
+    return (
+      hasStartBlock &&
+      !this.hasExceededDragRadius &&
+      !this.isFieldClick() &&
+      !this.isIconClick()
+    );
   }
 
   /**
@@ -1130,6 +1172,11 @@ export class Gesture {
       !this.hasExceededDragRadius &&
       (!this.flyout || !this.flyout.autoClose)
     );
+  }
+
+  /** @return Whether this gesture is a click on an icon. */
+  private isIconClick(): boolean {
+    return !!this.startIcon && !this.hasExceededDragRadius;
   }
 
   /**

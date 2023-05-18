@@ -124,7 +124,7 @@ suite('Icon', function () {
         );
       });
 
-      test.skip('initView is called by headful blocks during initSvg', function () {
+      test('initView is called by headful blocks during initSvg', function () {
         const workspace = createWorkspaceSvg();
         const block = createUninitializedBlock(workspace);
         const icon = new MockIcon();
@@ -142,7 +142,7 @@ suite('Icon', function () {
         );
       });
 
-      test.skip(
+      test(
         'initView is called by headful blocks that are currently ' +
           'rendered when the icon is added',
         function () {

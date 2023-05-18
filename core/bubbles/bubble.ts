@@ -551,11 +551,8 @@ export abstract class Bubble implements IBubble {
   }
 
   /**
-   * Move this bubble during a drag, taking into account whether or not there is
-   * a drag surface.
+   * Move this bubble during a drag.
    *
-   * @param dragSurface The surface that carries rendered items during a drag,
-   *     or null if no drag surface is in use.
    * @param newLoc The location to translate to, in workspace coordinates.
    * @internal
    */

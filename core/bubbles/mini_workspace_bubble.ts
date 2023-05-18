@@ -171,7 +171,12 @@ export class MiniWorkspaceBubble extends Bubble {
     return new Size(width, height);
   }
 
-  /** @internal */
+  /**
+   * Move this bubble during a drag.
+   *
+   * @param newLoc The location to translate to, in workspace coordinates.
+   * @internal
+   */
   moveDuringDrag(newLoc: Coordinate): void {
     super.moveDuringDrag(newLoc);
     this.autoLayout = false;

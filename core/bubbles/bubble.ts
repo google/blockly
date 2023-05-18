@@ -108,7 +108,7 @@ export abstract class Bubble implements IBubble {
 
     browserEvents.conditionalBind(
       this.background,
-      'pointerDown',
+      'pointerdown',
       this,
       this.onMouseDown
     );

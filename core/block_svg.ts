@@ -39,7 +39,7 @@ import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js'
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
-import type {IIcon} from './interfaces/i_icon.js';
+import {IIcon, isIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
 import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
@@ -197,9 +197,14 @@ export class BlockSvg
     for (let i = 0, input; (input = this.inputList[i]); i++) {
       input.init();
     }
-    const icons = this.getIcons();
-    for (let i = 0; i < icons.length; i++) {
-      icons[i].createIcon();
+    for (const icon of this.getIcons()) {
+      if (isIcon(icon)) {
+        // icon.initView();
+        icon.updateEditable();
+      } else {
+        // TODO (#7042): Remove old icon handling.
+        icon.createIcon();
+      }
     }
     this.applyColour();
     this.pathObject.updateMovable(this.isMovable());
@@ -527,15 +532,19 @@ export class BlockSvg
       }
     }
 
+    for (const icon of this.getIcons()) {
+      if (isIcon(icon)) {
+        icon.updateCollapsed();
+      } else if (collapsed) {
+        // TODO(#7042): Remove old icon handling code.
+        icon.setVisible(false);
+      }
+    }
+
     if (!collapsed) {
       this.updateDisabled();
       this.removeInput(collapsedInputName);
       return;
-    }
-
-    const icons = this.getIcons();
-    for (let i = 0, icon; (icon = icons[i]); i++) {
-      icon.setVisible(false);
     }
 
     const text = this.toString(internalConstants.COLLAPSE_CHARS);
@@ -1042,6 +1051,9 @@ export class BlockSvg
   override addIcon<T extends IIcon>(icon: T): T {
     super.addIcon(icon);
     if (this.rendered) {
+      // icon.initView();
+      icon.applyColour();
+      icon.updateEditable();
       // TODO: Change this based on #7024.
       this.render();
       this.bumpNeighbours();
@@ -1062,7 +1074,7 @@ export class BlockSvg
   // TODO: remove this implementation after #7038, #7039, and #7040 are
   //   resolved.
   override getIcons(): AnyDuringMigration[] {
-    const icons = [];
+    const icons: AnyDuringMigration = [...this.icons];
     if (this.commentIcon_) icons.push(this.commentIcon_);
     if (this.warning) icons.push(this.warning);
     if (this.mutator) icons.push(this.mutator);

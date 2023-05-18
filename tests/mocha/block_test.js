@@ -1158,7 +1158,7 @@ suite('Blocks', function () {
       });
     });
     suite('Add Connections Programmatically', function () {
-      test('Output', function () {
+      test('Output', async function () {
         const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.setOutput(true);
@@ -1418,7 +1418,39 @@ suite('Blocks', function () {
   });
 
   suite('Icon management', function () {
-    class MockIconA {
+    class MockIcon {
+      getType() {
+        return 'mock icon';
+      }
+
+      initView() {}
+
+      dispose() {}
+
+      getWeight() {}
+
+      getSize() {
+        return new Blockly.utils.Size(0, 0);
+      }
+
+      applyColour() {}
+
+      hideForInsertionMarker() {}
+
+      updateEditable() {}
+
+      updateCollapsed() {}
+
+      isShownWhenCollapsed() {}
+
+      setOffsetInBlock() {}
+
+      onLocationChange() {}
+
+      onClick() {}
+    }
+
+    class MockIconA extends MockIcon {
       getType() {
         return 'A';
       }
@@ -1428,7 +1460,7 @@ suite('Blocks', function () {
       }
     }
 
-    class MockIconB {
+    class MockIconB extends MockIcon {
       getType() {
         return 'B';
       }

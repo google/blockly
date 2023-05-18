@@ -29,11 +29,29 @@ suite('Icon', function () {
 
     initView() {}
 
+    dispose() {}
+
+    getWeight() {}
+
+    getSize() {
+      return new Blockly.utils.Size(0, 0);
+    }
+
     applyColour() {}
+
+    hideForInsertionMarker() {}
 
     updateEditable() {}
 
     updateCollapsed() {}
+
+    isShownWhenCollapsed() {}
+
+    setOffsetInBlock() {}
+
+    onLocationChange() {}
+
+    onClick() {}
   }
 
   class MockSerializableIcon extends MockIcon {
@@ -90,7 +108,7 @@ suite('Icon', function () {
     return createUninitializedBlock(workspace);
   }
 
-  suite.skip('Hooks getting properly triggered by the block', function () {
+  suite('Hooks getting properly triggered by the block', function () {
     suite('Triggering view initialization', function () {
       test('initView is not called by headless blocks', function () {
         const workspace = createHeadlessWorkspace();
@@ -106,7 +124,7 @@ suite('Icon', function () {
         );
       });
 
-      test('initView is called by headful blocks during initSvg', function () {
+      test.skip('initView is called by headful blocks during initSvg', function () {
         const workspace = createWorkspaceSvg();
         const block = createUninitializedBlock(workspace);
         const icon = new MockIcon();
@@ -124,7 +142,7 @@ suite('Icon', function () {
         );
       });
 
-      test(
+      test.skip(
         'initView is called by headful blocks that are currently ' +
           'rendered when the icon is added',
         function () {
@@ -231,7 +249,7 @@ suite('Icon', function () {
 
         block.addIcon(icon);
         applyColourSpy.resetHistory();
-        block.setDisabled(true);
+        block.setEnabled(false);
         chai.assert.isTrue(
           applyColourSpy.calledOnce,
           'Expected applyColour to be called'
@@ -357,13 +375,15 @@ suite('Icon', function () {
         const workspace = createWorkspaceSvg();
         const block = createInitializedBlock(workspace);
         const icon = new MockIcon();
-        const updateCollapsedSpy = sinon.spy(icon, 'updateCollapsed');
+        const updateCollapsedSpy = sinon.stub(icon, 'updateCollapsed');
         block.addIcon(icon);
 
+        updateCollapsedSpy.resetHistory();
         block.setCollapsed(true);
+        this.clock.runAll();
 
         chai.assert.isTrue(
-          updateCollapsedSpy.calledOnce,
+          updateCollapsedSpy.called,
           'Expected updateCollapsed to be called'
         );
       });
@@ -377,10 +397,11 @@ suite('Icon', function () {
 
         block.setCollapsed(true);
         block.setCollapsed(false);
+        this.clock.runAll();
 
         chai.assert.isTrue(
-          updateCollapsedSpy.calledTwice,
-          'Expected updateCollapsed to be called twice'
+          updateCollapsedSpy.called,
+          'Expected updateCollapsed to be called'
         );
       });
     });

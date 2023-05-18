@@ -11,35 +11,25 @@
  * (renamings-schema.json).
  */
 
-/* global process */
-
 import JSON5 from 'json5';
-import * as fs from 'fs';
+import {readFile} from 'fs/promises';
 import {posixPath} from '../../scripts/helpers.js';
 import {validate} from '@hyperjump/json-schema/draft-2020-12';
 import {DETAILED} from '@hyperjump/json-schema/experimental';
 
-/**
- * Renaming schema filename.
- * @type {URL}
- */
+/** @type {URL} Renaming schema filename. */
 const SCHEMA_URL = new URL('renamings.schema.json', import.meta.url);
 
-/**
- * Renamings filename.
- * @type {URL}
- */
-const RENAMINGS_URL =
-    new URL('../../scripts/migration/renamings.json5', import.meta.url);
+/** @type {URL} Renamings filename. */
+const RENAMINGS_URL = new URL(
+  '../../scripts/migration/renamings.json5',
+  import.meta.url
+);
 
-const renamingsJson5 = fs.readFileSync(RENAMINGS_URL);
+const renamingsJson5 = await readFile(RENAMINGS_URL);
 const renamings = JSON5.parse(renamingsJson5);
 
-const output = await validate(
-    SCHEMA_URL,
-    renamings,
-    DETAILED
-);
+const output = await validate(SCHEMA_URL, renamings, DETAILED);
 
 if (!output.valid) {
   console.log('Renamings file is invalid.');

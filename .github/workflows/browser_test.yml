@@ -43,10 +43,6 @@ jobs:
       - name: Npm Install
         run: npm install
 
-      - name: Linux Test Setup
-        if: runner.os == 'Linux'
-        run: source ./tests/scripts/setup_linux_env.sh
-
       - name: MacOS Test Setup
         if: runner.os == 'macOS'
         run: source ./tests/scripts/setup_osx_env.sh

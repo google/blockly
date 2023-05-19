@@ -44,13 +44,19 @@ export interface IIcon {
   /** @return The dimensions of the icon for use in rendering. */
   getSize(): Size;
 
-  /** Notifies the icon that the block's colour has changed. */
+  /** Updates the icon's color when the block's color changes.. */
   applyColour(): void;
 
-  /** Notifies the icon that the block's editability has changed. */
+  /** Hides the icon when it is part of an insertion marker. */
+  hideForInsertionMarker(): void;
+
+  /** Updates the icon's editability when the block's editability changes. */
   updateEditable(): void;
 
-  /** Notifies the icon that the block's collapsed-ness has changed. */
+  /**
+   * Updates the icon's collapsed-ness/view when the block's collapsed-ness
+   * changes.
+   */
   updateCollapsed(): void;
 
   /**
@@ -88,6 +94,7 @@ export function isIcon(obj: any): obj is IIcon {
     obj.getWeight !== undefined &&
     obj.getSize !== undefined &&
     obj.applyColour !== undefined &&
+    obj.hideForInsertionMarker !== undefined &&
     obj.updateEditable !== undefined &&
     obj.updateCollapsed !== undefined &&
     obj.isShownWhenCollapsed !== undefined &&

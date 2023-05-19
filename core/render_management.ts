@@ -5,6 +5,7 @@
  */
 
 import {BlockSvg} from './block_svg.js';
+import {isIcon} from './interfaces/i_icon.js';
 import {Coordinate} from './utils/coordinate.js';
 
 /** The set of all blocks in need of rendering which don't have parents. */
@@ -84,8 +85,9 @@ function doRenders() {
     if (block.getParent()) continue;
 
     renderBlock(block);
-    updateConnectionLocations(block, block.getRelativeToSurfaceXY());
-    updateIconLocations(block);
+    const blockOrigin = block.getRelativeToSurfaceXY();
+    updateConnectionLocations(block, blockOrigin);
+    updateIconLocations(block, blockOrigin);
   }
   for (const workspace of workspaces) {
     workspace.resizeContents();
@@ -138,12 +140,20 @@ function updateConnectionLocations(block: BlockSvg, blockOrigin: Coordinate) {
  *
  * @param block The block to update the icon locations of.
  */
-function updateIconLocations(block: BlockSvg) {
+function updateIconLocations(block: BlockSvg, blockOrigin: Coordinate) {
   if (!block.getIcons) return;
   for (const icon of block.getIcons()) {
-    icon.computeIconLocation();
+    if (isIcon(icon)) {
+      icon.onLocationChange(blockOrigin);
+    } else {
+      // TODO (#7042): Remove old icon handling code.
+      icon.computeIconLocation();
+    }
   }
   for (const child of block.getChildren(false)) {
-    updateIconLocations(child);
+    updateIconLocations(
+      child,
+      Coordinate.sum(blockOrigin, child.relativeCoords)
+    );
   }
 }

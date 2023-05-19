@@ -7,11 +7,11 @@
 /**
  * @fileoverview Generating Python for logic blocks.
  */
-'use strict';
 
-goog.module('Blockly.Python.logic');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Python.logic');
 
-const {pythonGenerator: Python} = goog.require('Blockly.Python');
+import {pythonGenerator as Python} from '../python.js';
 
 
 Python['controls_if'] = function(block) {

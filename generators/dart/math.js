@@ -7,12 +7,12 @@
 /**
  * @fileoverview Generating Dart for math blocks.
  */
-'use strict';
 
-goog.module('Blockly.Dart.math');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Dart.math');
 
-const {NameType} = goog.require('Blockly.Names');
-const {dartGenerator: Dart} = goog.require('Blockly.Dart');
+import {NameType} from '../../core/names.js';
+import {dartGenerator as Dart} from '../dart.js';
 
 
 Dart.addReservedWords('Math');

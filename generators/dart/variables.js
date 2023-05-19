@@ -7,12 +7,12 @@
 /**
  * @fileoverview Generating Dart for variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.Dart.variables');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Dart.variables');
 
-const {NameType} = goog.require('Blockly.Names');
-const {dartGenerator: Dart} = goog.require('Blockly.Dart');
+import {NameType} from '../../core/names.js';
+import {dartGenerator as Dart} from '../dart.js';
 
 
 Dart['variables_get'] = function(block) {

@@ -7,12 +7,12 @@
 /**
  * @fileoverview Generating Python for math blocks.
  */
-'use strict';
 
-goog.module('Blockly.Python.math');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Python.math');
 
-const {NameType} = goog.require('Blockly.Names');
-const {pythonGenerator: Python} = goog.require('Blockly.Python');
+import {NameType} from '../../core/names.js';
+import {pythonGenerator as Python} from '../python.js';
 
 
 // If any new block imports any library, add that library name here.

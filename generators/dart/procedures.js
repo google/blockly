@@ -7,12 +7,12 @@
 /**
  * @fileoverview Generating Dart for procedure blocks.
  */
-'use strict';
 
-goog.module('Blockly.Dart.procedures');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Dart.procedures');
 
-const {NameType} = goog.require('Blockly.Names');
-const {dartGenerator: Dart} = goog.require('Blockly.Dart');
+import {NameType} from '../../core/names.js';
+import {dartGenerator as Dart} from '../dart.js';
 
 
 Dart['procedures_defreturn'] = function(block) {

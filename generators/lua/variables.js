@@ -7,12 +7,12 @@
 /**
  * @fileoverview Generating Lua for variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.Lua.variables');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Lua.variables');
 
-const {NameType} = goog.require('Blockly.Names');
-const {luaGenerator: Lua} = goog.require('Blockly.Lua');
+import {NameType} from '../../core/names.js';
+import {luaGenerator as Lua} from '../lua.js';
 
 
 Lua['variables_get'] = function(block) {

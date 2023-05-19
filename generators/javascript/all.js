@@ -9,19 +9,18 @@
  *     blocks.  This is the entrypoint for javascript_compressed.js.
  * @suppress {extraRequire}
  */
-'use strict';
 
-goog.module('Blockly.JavaScript.all');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.JavaScript.all');
 
-const moduleExports = goog.require('Blockly.JavaScript');
-goog.require('Blockly.JavaScript.colour');
-goog.require('Blockly.JavaScript.lists');
-goog.require('Blockly.JavaScript.logic');
-goog.require('Blockly.JavaScript.loops');
-goog.require('Blockly.JavaScript.math');
-goog.require('Blockly.JavaScript.procedures');
-goog.require('Blockly.JavaScript.texts');
-goog.require('Blockly.JavaScript.variables');
-goog.require('Blockly.JavaScript.variablesDynamic');
+import './colour.js';
+import './lists.js';
+import './logic.js';
+import './loops.js';
+import './math.js';
+import './procedures.js';
+import './text.js';
+import './variables.js';
+import './variables_dynamic.js';
 
-exports = moduleExports;
+export * from '../javascript.js';

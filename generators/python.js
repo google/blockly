@@ -8,17 +8,17 @@
  * @fileoverview Helper functions for generating Python for blocks.
  * @suppress {checkTypes|globalThis}
  */
-'use strict';
 
-goog.module('Blockly.Python');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Python');
 
-const stringUtils = goog.require('Blockly.utils.string');
-const Variables = goog.require('Blockly.Variables');
-const {Block} = goog.requireType('Blockly.Block');
-const {CodeGenerator} = goog.require('Blockly.CodeGenerator');
-const {inputTypes} = goog.require('Blockly.inputTypes');
-const {Names, NameType} = goog.require('Blockly.Names');
-const {Workspace} = goog.requireType('Blockly.Workspace');
+import * as stringUtils from '../core/utils/string.js';
+import * as Variables from '../core/variables.js';
+// import type {Block} from '../core/block.js';
+import {CodeGenerator} from '../core/generator.js';
+import {inputTypes} from '../core/inputs/input_types.js';
+import {Names, NameType} from '../core/names.js';
+// import type {Workspace} from '../core/workspace.js';
 
 
 /**
@@ -329,5 +329,4 @@ Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
   }
   return at;
 };
-
-exports.pythonGenerator = Python;
+export {Python as pythonGenerator};

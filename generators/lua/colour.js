@@ -7,11 +7,11 @@
 /**
  * @fileoverview Generating Lua for colour blocks.
  */
-'use strict';
 
-goog.module('Blockly.Lua.colour');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Lua.colour');
 
-const {luaGenerator: Lua} = goog.require('Blockly.Lua');
+import {luaGenerator as Lua} from '../lua.js';
 
 
 Lua['colour_picker'] = function(block) {

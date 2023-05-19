@@ -668,7 +668,7 @@ export class Workspace implements IASTNodeLocation {
    * @param func Function to call.
    * @returns Obsolete return value, ignore.
    */
-  addChangeListener(func: Function): Function {
+  addChangeListener(func: (e: Abstract) => void): Function {
     this.listeners.push(func);
     return func;
   }

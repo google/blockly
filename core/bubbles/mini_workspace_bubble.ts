@@ -22,6 +22,12 @@ export class MiniWorkspaceBubble extends Bubble {
    */
   private static readonly MINIMUM_VIEW_CHANGE = 10;
 
+  /**
+   * An arbitrary margin of whitespace to put around the blocks in the
+   * workspace.
+   */
+  private static readonly MARGIN = Bubble.DOUBLE_BORDER * 3;
+
   /** The root svg element containing the workspace. */
   private svgDialog: SVGElement;
 
@@ -168,10 +174,12 @@ export class MiniWorkspaceBubble extends Bubble {
    * Calculates the size of the mini workspace for use in resizing the bubble.
    */
   private calculateWorkspaceSize(): Size {
+    // TODO (#7104): Clean this up to be more readable and unified for RTL
+    //     vs LTR.
     const canvas = this.miniWorkspace.getCanvas();
-    const bbox = canvas.getBBox();
-    let width = bbox.width + Bubble.DOUBLE_BORDER * 3;
-    let height = bbox.height + bbox.y + Bubble.DOUBLE_BORDER * 3;
+    const workspaceSize = canvas.getBBox();
+    let width = workspaceSize.width + workspaceSize.x;
+    let height = workspaceSize.height + MiniWorkspaceBubble.MARGIN;
     const flyout = this.miniWorkspace.getFlyout();
     if (flyout) {
       const flyoutScrollMetrics = flyout
@@ -181,6 +189,10 @@ export class MiniWorkspaceBubble extends Bubble {
       height = Math.max(height, flyoutScrollMetrics.height + 20);
       width += flyout.getWidth();
     }
+    if (this.miniWorkspace.RTL) {
+      width = -workspaceSize.x;
+    }
+    width += MiniWorkspaceBubble.MARGIN;
     return new Size(width, height);
   }
 

@@ -76,11 +76,7 @@ export abstract class Icon implements IIcon {
   }
 
   hideForInsertionMarker(): void {
-    if (!this.svgRoot) {
-      throw new Error(
-        'Attempt to the icon before its view has been initialized.'
-      );
-    }
+    if (!this.svgRoot) return;
     this.svgRoot.style.display = 'none';
   }
 

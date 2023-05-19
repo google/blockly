@@ -150,13 +150,9 @@ function updateIconLocations(block: BlockSvg, blockOrigin: Coordinate) {
       icon.computeIconLocation();
     }
   }
-  for (const conn of block.getConnections_(false)) {
-    if (!conn.isSuperior()) continue;
-    const target = conn.targetBlock();
-    if (!target) continue;
+  for (const child of block.getChildren(false)) {
     updateIconLocations(
-      target,
-      Coordinate.sum(blockOrigin, target.relativeCoords)
-    );
+      child,
+      Coordinate.sum(blockOrigin, child.relativeCoords));
   }
 }

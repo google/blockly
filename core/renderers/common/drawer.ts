@@ -328,6 +328,8 @@ export class Drawer {
     if (this.info_.isInsertionMarker) {
       // Fields and icons are invisible on insertion marker.  They still have to
       // be rendered so that the block can be sized correctly.
+      // TODO (#7042): Figure out a better way to handle the types here,
+      //     possibly by splitting this method into submethods.
       if (isIcon((fieldInfo as Icon).icon)) {
         (
           (fieldInfo as Icon).icon as AnyDuringMigration

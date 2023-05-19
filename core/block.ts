@@ -2231,6 +2231,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   removeIcon(type: string): boolean {
     if (!this.hasIcon(type)) return false;
+    this.getIcon(type)?.dispose();
     this.icons = this.icons.filter((icon) => icon.getType() !== type);
     return true;
   }

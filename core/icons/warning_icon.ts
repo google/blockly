@@ -25,6 +25,7 @@ export class WarningIcon extends Icon implements IHasBubble {
 
   private textBubble: TextBubble | null = null;
 
+
   constructor(protected readonly sourceBlock: BlockSvg) {
     super(sourceBlock);
   }
@@ -119,6 +120,10 @@ export class WarningIcon extends Icon implements IHasBubble {
     return [...this.textMap.values()].join('\n');
   }
 
+  onClick(): void {
+    this.setBubbleVisible(!this.bubbleIsVisible());
+  }
+
   bubbleIsVisible(): boolean {
     return !!this.textBubble;
   }
@@ -133,6 +138,7 @@ export class WarningIcon extends Icon implements IHasBubble {
         this.getAnchorLocation(),
         this.getBubbleOwnerRect()
       );
+      this.applyColour();
     } else {
       this.textBubble?.dispose();
       this.textBubble = null;

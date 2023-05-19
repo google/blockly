@@ -162,7 +162,6 @@ export class Warning extends Icon {
 
   /** Dispose of this warning. */
   override dispose() {
-    this.getBlock().warning = null;
     super.dispose();
   }
 }

@@ -7,12 +7,12 @@
 /**
  * @fileoverview Generating Lua for text blocks.
  */
-'use strict';
 
-goog.module('Blockly.Lua.texts');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Lua.texts');
 
-const {NameType} = goog.require('Blockly.Names');
-const {luaGenerator: Lua} = goog.require('Blockly.Lua');
+import {NameType} from '../../core/names.js';
+import {luaGenerator as Lua} from '../lua.js';
 
 
 Lua['text'] = function(block) {

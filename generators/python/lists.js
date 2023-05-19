@@ -7,13 +7,13 @@
 /**
  * @fileoverview Generating Python for list blocks.
  */
-'use strict';
 
-goog.module('Blockly.Python.lists');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Python.lists');
 
-const stringUtils = goog.require('Blockly.utils.string');
-const {NameType} = goog.require('Blockly.Names');
-const {pythonGenerator: Python} = goog.require('Blockly.Python');
+import * as stringUtils from '../../core/utils/string.js';
+import {NameType} from '../../core/names.js';
+import {pythonGenerator as Python} from '../python.js';
 
 
 Python['lists_create_empty'] = function(block) {

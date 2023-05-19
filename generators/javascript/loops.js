@@ -7,13 +7,13 @@
 /**
  * @fileoverview Generating JavaScript for loop blocks.
  */
-'use strict';
 
-goog.module('Blockly.JavaScript.loops');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.JavaScript.loops');
 
-const stringUtils = goog.require('Blockly.utils.string');
-const {NameType} = goog.require('Blockly.Names');
-const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
+import * as stringUtils from '../../core/utils/string.js';
+import {NameType} from '../../core/names.js';
+import {javascriptGenerator as JavaScript} from '../javascript.js';
 
 
 JavaScript['controls_repeat_ext'] = function(block) {

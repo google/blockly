@@ -7,13 +7,13 @@
 /**
  * @fileoverview Generating Python for procedure blocks.
  */
-'use strict';
 
-goog.module('Blockly.Python.procedures');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Python.procedures');
 
-const Variables = goog.require('Blockly.Variables');
-const {NameType} = goog.require('Blockly.Names');
-const {pythonGenerator: Python} = goog.require('Blockly.Python');
+import * as Variables from '../../core/variables.js';
+import {NameType} from '../../core/names.js';
+import {pythonGenerator as Python} from '../python.js';
 
 
 Python['procedures_defreturn'] = function(block) {

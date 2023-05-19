@@ -7,12 +7,12 @@
 /**
  * @fileoverview Generating PHP for math blocks.
  */
-'use strict';
 
-goog.module('Blockly.PHP.math');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.PHP.math');
 
-const {NameType} = goog.require('Blockly.Names');
-const {phpGenerator: PHP} = goog.require('Blockly.PHP');
+import {NameType} from '../../core/names.js';
+import {phpGenerator as PHP} from '../php.js';
 
 
 PHP['math_number'] = function(block) {

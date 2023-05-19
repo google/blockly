@@ -7,13 +7,13 @@
 /**
  * @fileoverview Generating PHP for loop blocks.
  */
-'use strict';
 
-goog.module('Blockly.PHP.loops');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.PHP.loops');
 
-const stringUtils = goog.require('Blockly.utils.string');
-const {NameType} = goog.require('Blockly.Names');
-const {phpGenerator: PHP} = goog.require('Blockly.PHP');
+import * as stringUtils from '../../core/utils/string.js';
+import {NameType} from '../../core/names.js';
+import {phpGenerator as PHP} from '../php.js';
 
 
 PHP['controls_repeat_ext'] = function(block) {

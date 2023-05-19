@@ -7,11 +7,11 @@
 /**
  * @fileoverview Generating JavaScript for colour blocks.
  */
-'use strict';
 
-goog.module('Blockly.JavaScript.colour');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.JavaScript.colour');
 
-const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
+import {javascriptGenerator as JavaScript} from '../javascript.js';
 
 
 JavaScript['colour_picker'] = function(block) {

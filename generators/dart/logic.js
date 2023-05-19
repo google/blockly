@@ -7,11 +7,11 @@
 /**
  * @fileoverview Generating Dart for logic blocks.
  */
-'use strict';
 
-goog.module('Blockly.Dart.logic');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Dart.logic');
 
-const {dartGenerator: Dart} = goog.require('Blockly.Dart');
+import {dartGenerator as Dart} from '../dart.js';
 
 
 Dart['controls_if'] = function(block) {

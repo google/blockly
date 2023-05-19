@@ -7,11 +7,11 @@
 /**
  * @fileoverview Generating JavaScript for logic blocks.
  */
-'use strict';
 
-goog.module('Blockly.JavaScript.logic');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.JavaScript.logic');
 
-const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
+import {javascriptGenerator as JavaScript} from '../javascript.js';
 
 
 JavaScript['controls_if'] = function(block) {

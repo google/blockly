@@ -7,13 +7,12 @@
 /**
  * @fileoverview Generating JavaScript for dynamic variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.JavaScript.variablesDynamic');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.JavaScript.variablesDynamic');
 
-const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
-/** @suppress {extraRequire} */
-goog.require('Blockly.JavaScript.variables');
+import {javascriptGenerator as JavaScript} from '../javascript.js';
+import './variables.js';
 
 
 // JavaScript is dynamically typed.

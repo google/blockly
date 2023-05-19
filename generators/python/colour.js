@@ -7,11 +7,11 @@
 /**
  * @fileoverview Generating Python for colour blocks.
  */
-'use strict';
 
-goog.module('Blockly.Python.colour');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Python.colour');
 
-const {pythonGenerator: Python} = goog.require('Blockly.Python');
+import {pythonGenerator as Python} from '../python.js';
 
 
 Python['colour_picker'] = function(block) {

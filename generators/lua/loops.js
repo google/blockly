@@ -7,13 +7,13 @@
 /**
  * @fileoverview Generating Lua for loop blocks.
  */
-'use strict';
 
-goog.module('Blockly.Lua.loops');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Lua.loops');
 
-const stringUtils = goog.require('Blockly.utils.string');
-const {NameType} = goog.require('Blockly.Names');
-const {luaGenerator: Lua} = goog.require('Blockly.Lua');
+import * as stringUtils from '../../core/utils/string.js';
+import {NameType} from '../../core/names.js';
+import {luaGenerator as Lua} from '../lua.js';
 
 
 /**

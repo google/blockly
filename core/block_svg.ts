@@ -671,8 +671,14 @@ export class BlockSvg
       myConnections[i].moveBy(dx, dy);
     }
     const icons = this.getIcons();
-    for (let i = 0; i < icons.length; i++) {
-      icons[i].computeIconLocation();
+    const pos = this.getRelativeToSurfaceXY();
+    for (const icon of icons) {
+      if (isIcon(icon)) {
+        icon.onLocationChange(pos);
+      } else {
+        // TODO (#7042): Remove old icon handling code.
+        icon.computeIconLocation();
+      }
     }
 
     // Recurse through all blocks attached under this one.

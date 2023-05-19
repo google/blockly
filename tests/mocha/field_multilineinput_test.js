@@ -23,11 +23,11 @@ import {
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
 import {runCodeGenerationTestSuites} from './test_helpers/code_generation.js';
-const {dartGenerator} = goog.require('Blockly.Dart.all');
-const {javascriptGenerator} = goog.require('Blockly.JavaScript.all');
-const {luaGenerator} = goog.require('Blockly.Lua.all');
-const {phpGenerator} = goog.require('Blockly.PHP.all');
-const {pythonGenerator} = goog.require('Blockly.Python.all');
+import {dartGenerator} from '../../generators/dart.js';
+import {javascriptGenerator} from '../../generators/javascript.js';
+import {luaGenerator} from '../../generators/lua.js';
+import {phpGenerator} from '../../generators/php.js';
+import {pythonGenerator} from '../../generators/python.js';
 
 suite('Multiline Input Fields', function () {
   setup(function () {

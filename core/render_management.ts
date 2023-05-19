@@ -153,6 +153,7 @@ function updateIconLocations(block: BlockSvg, blockOrigin: Coordinate) {
   for (const child of block.getChildren(false)) {
     updateIconLocations(
       child,
-      Coordinate.sum(blockOrigin, child.relativeCoords));
+      Coordinate.sum(blockOrigin, child.relativeCoords)
+    );
   }
 }

@@ -43,17 +43,12 @@ suite('Comments', function () {
     });
 
     function assertEditable(comment) {
-      chai.assert.isNotOk(comment.paragraphElement_);
-      chai.assert.isOk(comment.textarea_);
-      chai.assert.equal(comment.textarea_.value, 'test text');
+      chai.assert.isNotOk(comment.textBubble);
+      chai.assert.isOk(comment.textInputBubble);
     }
     function assertNotEditable(comment) {
-      chai.assert.isNotOk(comment.textarea_);
-      chai.assert.isOk(comment.paragraphElement_);
-      chai.assert.equal(
-        comment.paragraphElement_.firstChild.textContent,
-        'test text'
-      );
+      chai.assert.isNotOk(comment.textInputBubble);
+      chai.assert.isOk(comment.textBubble);
     }
     test('Editable', function () {
       this.comment.setVisible(true);

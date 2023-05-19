@@ -9,16 +9,16 @@
  * Based on Ellen Spertus's blocky-lua project.
  * @suppress {checkTypes|globalThis}
  */
-'use strict';
 
-goog.module('Blockly.Lua');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Lua');
 
-const stringUtils = goog.require('Blockly.utils.string');
-const {Block} = goog.requireType('Blockly.Block');
-const {CodeGenerator} = goog.require('Blockly.CodeGenerator');
-const {inputTypes} = goog.require('Blockly.inputTypes');
-const {Names} = goog.require('Blockly.Names');
-const {Workspace} = goog.requireType('Blockly.Workspace');
+import * as stringUtils from '../core/utils/string.js';
+// import type {Block} from '../core/block.js';
+import {CodeGenerator} from '../core/generator.js';
+import {inputTypes} from '../core/inputs/input_types.js';
+import {Names} from '../core/names.js';
+// import type {Workspace} from '../core/workspace.js';
 
 
 /**
@@ -201,5 +201,4 @@ Lua.scrub_ = function(block, code, opt_thisOnly) {
   const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
-
-exports.luaGenerator = Lua;
+export {Lua as luaGenerator};

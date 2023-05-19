@@ -8,17 +8,17 @@
  * @fileoverview Helper functions for generating JavaScript for blocks.
  * @suppress {checkTypes|globalThis}
  */
-'use strict';
 
-goog.module('Blockly.JavaScript');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.JavaScript');
 
-const Variables = goog.require('Blockly.Variables');
-const stringUtils = goog.require('Blockly.utils.string');
-const {Block} = goog.requireType('Blockly.Block');
-const {CodeGenerator} = goog.require('Blockly.CodeGenerator');
-const {inputTypes} = goog.require('Blockly.inputTypes');
-const {Names, NameType} = goog.require('Blockly.Names');
-const {Workspace} = goog.requireType('Blockly.Workspace');
+import * as Variables from '../core/variables.js';
+import * as stringUtils from '../core/utils/string.js';
+// import type {Block} from '../core/block.js';
+import {CodeGenerator} from '../core/generator.js';
+import {inputTypes} from '../core/inputs/input_types.js';
+import {Names, NameType} from '../core/names.js';
+// import type {Workspace} from '../core/workspace.js';
 
 
 /**
@@ -317,5 +317,4 @@ JavaScript.getAdjusted = function(
   }
   return at;
 };
-
-exports.javascriptGenerator = JavaScript;
+export {JavaScript as javascriptGenerator};

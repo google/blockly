@@ -72,6 +72,13 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   protected isTextValid_ = false;
 
+  /**
+   * The intial value of the field when the user opened an editor to change its
+   * value. When the editor is disposed, an event will be fired that uses this
+   * as the event's oldValue.
+   */
+  protected valueWhenEditorWasOpened_: string | T | null = null;
+
   /** Key down event data. */
   private onKeyDownWrapper_: browserEvents.Data | null = null;
 
@@ -328,6 +335,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     WidgetDiv.show(this, block.RTL, this.widgetDispose_.bind(this));
     this.htmlInput_ = this.widgetCreate_() as HTMLInputElement;
     this.isBeingEdited_ = true;
+    this.valueWhenEditorWasOpened_ = this.value_;
 
     if (!quietInput) {
       (this.htmlInput_ as HTMLElement).focus({
@@ -410,6 +418,20 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     // Make sure the field's node matches the field's internal value.
     this.forceRerender();
     this.onFinishEditing_(this.value_);
+
+    if (this.sourceBlock_ && eventUtils.isEnabled() &&
+        this.valueWhenEditorWasOpened_ !== null &&
+        this.valueWhenEditorWasOpened_ !== this.value_) {
+      // When closing a field input widget, fire an event indicating that the
+      // user has completed a sequence of changes. The value may have changed
+      // multiple times while the editor was open, but this will fire an event
+      // containing the value when the editor was opened as well as the new one.
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this.sourceBlock_, 'field', this.name || null, this.valueWhenEditorWasOpened_,
+          this.value_));
+      this.valueWhenEditorWasOpened_ = null;
+    }
+
     eventUtils.setGroup(false);
 
     // Actual disposal.
@@ -499,7 +521,20 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * @param _e Keyboard event.
    */
   private onHtmlInputChange_(_e: Event) {
+    // Intermediate value changes from user input are not confirmed until the
+    // user closes the editor, and may be numerous. Inhibit reporting these as
+    // normal block change events, and instead report them as special
+    // intermediate changes that do not get recorded in undo history.
+    const oldValue = this.value_;
+    eventUtils.disable();
     this.setValue(this.getValueFromEditorText_(this.htmlInput_!.value));
+    eventUtils.enable();
+    if (this.sourceBlock_ && eventUtils.isEnabled() &&
+        this.value_ !== oldValue) {
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE))(
+              this.sourceBlock_, this.name || null, oldValue, this.value_));
+    }
 
     // Resize the widget div after the block has finished rendering.
     renderManagement.finishQueuedRenders().then(() => {

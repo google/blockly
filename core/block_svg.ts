@@ -199,7 +199,7 @@ export class BlockSvg
     }
     for (const icon of this.getIcons()) {
       if (isIcon(icon)) {
-        // icon.initView();
+        icon.initView(this.createIconPointerDownListener(icon));
         icon.updateEditable();
       } else {
         // TODO (#7042): Remove old icon handling.
@@ -1051,7 +1051,7 @@ export class BlockSvg
   override addIcon<T extends IIcon>(icon: T): T {
     super.addIcon(icon);
     if (this.rendered) {
-      // icon.initView();
+      icon.initView(this.createIconPointerDownListener(icon));
       icon.applyColour();
       icon.updateEditable();
       // TODO: Change this based on #7024.
@@ -1059,6 +1059,20 @@ export class BlockSvg
       this.bumpNeighbours();
     }
     return icon;
+  }
+
+  /**
+   * Creates a pointer down event listener for the icon to append to its
+   * root svg.
+   */
+  private createIconPointerDownListener(icon: IIcon) {
+    return (e: PointerEvent) => {
+      if (this.isDeadOrDying()) return;
+      const gesture = this.workspace.getGesture(e);
+      if (gesture) {
+        gesture.setStartIcon(icon);
+      }
+    };
   }
 
   override removeIcon(type: string): boolean {

@@ -41,7 +41,7 @@ export class Icon extends Measurable {
     // TODO(#7042): Remove references to old icon API.
     this.isVisible =
       (icon.isVisible && icon.isVisible()) ||
-      (hasBubble(icon) && icon.isBubbleVisible());
+      (hasBubble(icon) && icon.bubbleIsVisible());
     this.type |= Types.ICON;
 
     const size =

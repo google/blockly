@@ -11,6 +11,7 @@ import {
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
 import {defineEmptyBlock} from './test_helpers/block_definitions.js';
+import {MockIcon, MockSerializableIcon} from './test_helpers/icon_mocks.js';
 
 suite('Icon', function () {
   setup(function () {
@@ -21,61 +22,6 @@ suite('Icon', function () {
   teardown(function () {
     sharedTestTeardown.call(this);
   });
-
-  class MockIcon {
-    getType() {
-      return 'mock icon';
-    }
-
-    initView() {}
-
-    dispose() {}
-
-    getWeight() {}
-
-    getSize() {
-      return new Blockly.utils.Size(0, 0);
-    }
-
-    applyColour() {}
-
-    hideForInsertionMarker() {}
-
-    updateEditable() {}
-
-    updateCollapsed() {}
-
-    isShownWhenCollapsed() {}
-
-    setOffsetInBlock() {}
-
-    onLocationChange() {}
-
-    onClick() {}
-  }
-
-  class MockSerializableIcon extends MockIcon {
-    constructor() {
-      super();
-      this.state = '';
-    }
-
-    getType() {
-      return 'serializable icon';
-    }
-
-    getWeight() {
-      return 1;
-    }
-
-    saveState() {
-      return 'some state';
-    }
-
-    loadState(state) {
-      this.state = state;
-    }
-  }
 
   class MockNonSerializableIcon extends MockIcon {
     getType() {

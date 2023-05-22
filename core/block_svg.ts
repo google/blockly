@@ -1655,7 +1655,7 @@ export class BlockSvg
         this.updateCollapsed_();
       }
       this.workspace.getRenderer().render(this);
-      this.updateConnectionLocations();
+      this.updateConnectionAndIconLocations();
 
       if (opt_bubble !== false) {
         const parentBlock = this.getParent();
@@ -1734,7 +1734,7 @@ export class BlockSvg
    *
    * @internal
    */
-  updateConnectionLocations() {
+  private updateConnectionAndIconLocations() {
     const blockTL = this.getRelativeToSurfaceXY();
     // Don't tighten previous or output connections because they are inferior
     // connections.
@@ -1760,6 +1760,15 @@ export class BlockSvg
       if (this.nextConnection.isConnected()) {
         this.nextConnection.tighten();
       }
+    }
+
+    for (const icon of this.getIcons()) {
+      if (isIcon(icon)) {
+        icon.onLocationChange(blockTL);
+      }
+      // TODO (#7042): Remove the below comment.
+      // Updating the positions of old style icons is handled directly in the
+      // drawer.
     }
   }
 

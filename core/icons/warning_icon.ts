@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Warning');
+
 import {BlockSvg} from '../block_svg.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';

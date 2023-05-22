@@ -1008,9 +1008,9 @@ export class BlockSvg
       }
 
       if (icon) {
-        (icon as WarningIcon).setText(text, id);
+        (icon as WarningIcon).addMessage(text, id);
       } else {
-        this.addIcon(new WarningIcon(this).setText(text, id));
+        this.addIcon(new WarningIcon(this).addMessage(text, id));
         changedState = true;
       }
     } else if (icon) {
@@ -1020,7 +1020,7 @@ export class BlockSvg
         changedState = true;
       } else {
         const oldText = icon.getText();
-        icon.setText('', id);
+        icon.addMessage('', id);
         const newText = icon.getText();
         if (!newText) this.removeIcon(WarningIcon.TYPE);
         changedState = oldText !== newText;

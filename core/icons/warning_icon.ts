@@ -15,17 +15,25 @@ import {Svg} from '../utils/svg.js';
 import {TextBubble} from '../bubbles/text_bubble.js';
 
 export class WarningIcon extends Icon implements IHasBubble {
+  /** The type string used to identify this icon. */
   static readonly TYPE = 'warning';
 
+  /**
+   * The weight this icon has relative to other icons. Icons with more positive
+   * weight values are rendered farther toward the end of the block.
+   */
   static readonly WEIGHT = 2;
 
+  /** The size of this icon in workspace-scale units. */
   static readonly SIZE = 17;
 
+  /** A map of warning IDs to warning text. */
   private textMap: Map<string, string> = new Map();
 
+  /** The bubble used to display the warnings to the user. */
   private textBubble: TextBubble | null = null;
 
-
+  /** @internal */
   constructor(protected readonly sourceBlock: BlockSvg) {
     super(sourceBlock);
   }
@@ -92,10 +100,12 @@ export class WarningIcon extends Icon implements IHasBubble {
     // behavior of hiding.
   }
 
+  /** Tells the blockly that this icon is shown when the block is collapsed. */
   isShownWhenCollapsed(): boolean {
     return true;
   }
 
+  /** Updates the location of the icon's bubble if it is open. */
   onLocationChange(blockOrigin: Coordinate): void {
     super.onLocationChange(blockOrigin);
     if (this.bubbleIsVisible()) {
@@ -103,7 +113,14 @@ export class WarningIcon extends Icon implements IHasBubble {
     }
   }
 
-  setText(text: string, id: string): this {
+  /**
+   * Adds a warning message to this warning icon.
+   *
+   * @param text The text of the message to add.
+   * @param id The id of the message to add.
+   * @internal
+   */
+  addMessage(text: string, id: string): this {
     if (this.textMap.get(id) === text) return this;
 
     if (text) {
@@ -116,10 +133,16 @@ export class WarningIcon extends Icon implements IHasBubble {
     return this;
   }
 
+  /**
+   * @return the display text for this icon. Includes all warning messages
+   *     concatenated together with newlines.
+   * @internal
+   */
   getText(): string {
     return [...this.textMap.values()].join('\n');
   }
 
+  /** Toggles the visibility of the bubble. */
   onClick(): void {
     this.setBubbleVisible(!this.bubbleIsVisible());
   }
@@ -145,6 +168,10 @@ export class WarningIcon extends Icon implements IHasBubble {
     }
   }
 
+  /**
+   * @return the location the bubble should be anchored to.
+   *     I.E. the middle of this icon.
+   */
   private getAnchorLocation(): Coordinate {
     const midIcon = WarningIcon.SIZE / 2;
     return Coordinate.sum(
@@ -153,6 +180,10 @@ export class WarningIcon extends Icon implements IHasBubble {
     );
   }
 
+  /**
+   * @return the rect the bubble should avoid overlapping.
+   *     I.E. the block that owns this icon.
+   */
   private getBubbleOwnerRect(): Rect {
     const bbox = this.sourceBlock.getSvgRoot().getBBox();
     return new Rect(bbox.y, bbox.y + bbox.height, bbox.x, bbox.x + bbox.width);

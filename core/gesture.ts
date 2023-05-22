@@ -943,7 +943,7 @@ export class Gesture {
   private doIconClick() {
     if (!this.startIcon) {
       throw new Error(
-        'Cannot do a field click because the start field is undefined'
+        'Cannot do an icon click because the start icon is undefined'
       );
     }
 

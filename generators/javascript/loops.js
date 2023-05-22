@@ -13,7 +13,7 @@ goog.declareModuleId('Blockly.JavaScript.loops');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {javascriptGenerator as JavaScript} from '../javascript.js';
+import {Order, javascriptGenerator as JavaScript} from '../javascript.js';
 
 
 JavaScript['controls_repeat_ext'] = function(block) {
@@ -25,7 +25,7 @@ JavaScript['controls_repeat_ext'] = function(block) {
   } else {
     // External number.
     repeats =
-        JavaScript.valueToCode(block, 'TIMES', JavaScript.ORDER_ASSIGNMENT) ||
+        JavaScript.valueToCode(block, 'TIMES', Order.ASSIGNMENT) ||
         '0';
   }
   let branch = JavaScript.statementToCode(block, 'DO');
@@ -52,7 +52,7 @@ JavaScript['controls_whileUntil'] = function(block) {
   let argument0 =
       JavaScript.valueToCode(
           block, 'BOOL',
-          until ? JavaScript.ORDER_LOGICAL_NOT : JavaScript.ORDER_NONE) ||
+          until ? Order.LOGICAL_NOT : Order.NONE) ||
       'false';
   let branch = JavaScript.statementToCode(block, 'DO');
   branch = JavaScript.addLoopTrap(branch, block);
@@ -67,11 +67,11 @@ JavaScript['controls_for'] = function(block) {
   const variable0 =
       JavaScript.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
   const argument0 =
-      JavaScript.valueToCode(block, 'FROM', JavaScript.ORDER_ASSIGNMENT) || '0';
+      JavaScript.valueToCode(block, 'FROM', Order.ASSIGNMENT) || '0';
   const argument1 =
-      JavaScript.valueToCode(block, 'TO', JavaScript.ORDER_ASSIGNMENT) || '0';
+      JavaScript.valueToCode(block, 'TO', Order.ASSIGNMENT) || '0';
   const increment =
-      JavaScript.valueToCode(block, 'BY', JavaScript.ORDER_ASSIGNMENT) || '1';
+      JavaScript.valueToCode(block, 'BY', Order.ASSIGNMENT) || '1';
   let branch = JavaScript.statementToCode(block, 'DO');
   branch = JavaScript.addLoopTrap(branch, block);
   let code;
@@ -129,7 +129,7 @@ JavaScript['controls_forEach'] = function(block) {
   const variable0 =
       JavaScript.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
   const argument0 =
-      JavaScript.valueToCode(block, 'LIST', JavaScript.ORDER_ASSIGNMENT) ||
+      JavaScript.valueToCode(block, 'LIST', Order.ASSIGNMENT) ||
       '[]';
   let branch = JavaScript.statementToCode(block, 'DO');
   branch = JavaScript.addLoopTrap(branch, block);

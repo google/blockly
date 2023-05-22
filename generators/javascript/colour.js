@@ -11,13 +11,13 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.colour');
 
-import {javascriptGenerator as JavaScript} from '../javascript.js';
+import {Order, javascriptGenerator as JavaScript} from '../javascript.js';
 
 
 JavaScript['colour_picker'] = function(block) {
   // Colour picker.
   const code = JavaScript.quote_(block.getFieldValue('COLOUR'));
-  return [code, JavaScript.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 JavaScript['colour_random'] = function(block) {
@@ -29,16 +29,16 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}() {
 }
 `);
   const code = functionName + '()';
-  return [code, JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 JavaScript['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
-  const red = JavaScript.valueToCode(block, 'RED', JavaScript.ORDER_NONE) || 0;
+  const red = JavaScript.valueToCode(block, 'RED', Order.NONE) || 0;
   const green =
-      JavaScript.valueToCode(block, 'GREEN', JavaScript.ORDER_NONE) || 0;
+      JavaScript.valueToCode(block, 'GREEN', Order.NONE) || 0;
   const blue =
-      JavaScript.valueToCode(block, 'BLUE', JavaScript.ORDER_NONE) || 0;
+      JavaScript.valueToCode(block, 'BLUE', Order.NONE) || 0;
   const functionName = JavaScript.provideFunction_('colourRgb', `
 function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(r, g, b) {
   r = Math.max(Math.min(Number(r), 100), 0) * 2.55;
@@ -51,17 +51,17 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(r, g, b) {
 }
 `);
   const code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
-  return [code, JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 JavaScript['colour_blend'] = function(block) {
   // Blend two colours together.
-  const c1 = JavaScript.valueToCode(block, 'COLOUR1', JavaScript.ORDER_NONE) ||
+  const c1 = JavaScript.valueToCode(block, 'COLOUR1', Order.NONE) ||
       "'#000000'";
-  const c2 = JavaScript.valueToCode(block, 'COLOUR2', JavaScript.ORDER_NONE) ||
+  const c2 = JavaScript.valueToCode(block, 'COLOUR2', Order.NONE) ||
       "'#000000'";
   const ratio =
-      JavaScript.valueToCode(block, 'RATIO', JavaScript.ORDER_NONE) || 0.5;
+      JavaScript.valueToCode(block, 'RATIO', Order.NONE) || 0.5;
   const functionName = JavaScript.provideFunction_('colourBlend', `
 function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(c1, c2, ratio) {
   ratio = Math.max(Math.min(Number(ratio), 1), 0);
@@ -81,5 +81,5 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(c1, c2, ratio) {
 }
 `);
   const code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
-  return [code, JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };

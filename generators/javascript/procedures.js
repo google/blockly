@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.procedures');
 
 import {NameType} from '../../core/names.js';
-import {javascriptGenerator as JavaScript} from '../javascript.js';
+import {Order, javascriptGenerator as JavaScript} from '../javascript.js';
 
 
 JavaScript['procedures_defreturn'] = function(block) {
@@ -37,7 +37,7 @@ JavaScript['procedures_defreturn'] = function(block) {
   }
   const branch = JavaScript.statementToCode(block, 'STACK');
   let returnValue =
-      JavaScript.valueToCode(block, 'RETURN', JavaScript.ORDER_NONE) || '';
+      JavaScript.valueToCode(block, 'RETURN', Order.NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
@@ -70,11 +70,11 @@ JavaScript['procedures_callreturn'] = function(block) {
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = JavaScript.valueToCode(block, 'ARG' + i, JavaScript.ORDER_NONE) ||
+    args[i] = JavaScript.valueToCode(block, 'ARG' + i, Order.NONE) ||
         'null';
   }
   const code = funcName + '(' + args.join(', ') + ')';
-  return [code, JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 JavaScript['procedures_callnoreturn'] = function(block) {
@@ -88,7 +88,7 @@ JavaScript['procedures_callnoreturn'] = function(block) {
 JavaScript['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   const condition =
-      JavaScript.valueToCode(block, 'CONDITION', JavaScript.ORDER_NONE) ||
+      JavaScript.valueToCode(block, 'CONDITION', Order.NONE) ||
       'false';
   let code = 'if (' + condition + ') {\n';
   if (JavaScript.STATEMENT_SUFFIX) {
@@ -100,7 +100,7 @@ JavaScript['procedures_ifreturn'] = function(block) {
   }
   if (block.hasReturnValue_) {
     const value =
-        JavaScript.valueToCode(block, 'VALUE', JavaScript.ORDER_NONE) || 'null';
+        JavaScript.valueToCode(block, 'VALUE', Order.NONE) || 'null';
     code += JavaScript.INDENT + 'return ' + value + ';\n';
   } else {
     code += JavaScript.INDENT + 'return;\n';

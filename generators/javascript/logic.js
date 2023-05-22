@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.logic');
 
-import {javascriptGenerator as JavaScript} from '../javascript.js';
+import {Order, javascriptGenerator as JavaScript} from '../javascript.js';
 
 
 JavaScript['controls_if'] = function(block) {
@@ -24,7 +24,7 @@ JavaScript['controls_if'] = function(block) {
   }
   do {
     const conditionCode =
-        JavaScript.valueToCode(block, 'IF' + n, JavaScript.ORDER_NONE) ||
+        JavaScript.valueToCode(block, 'IF' + n, Order.NONE) ||
         'false';
     let branchCode = JavaScript.statementToCode(block, 'DO' + n);
     if (JavaScript.STATEMENT_SUFFIX) {
@@ -59,8 +59,8 @@ JavaScript['logic_compare'] = function(block) {
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
   const order = (operator === '==' || operator === '!=') ?
-      JavaScript.ORDER_EQUALITY :
-      JavaScript.ORDER_RELATIONAL;
+      Order.EQUALITY :
+      Order.RELATIONAL;
   const argument0 = JavaScript.valueToCode(block, 'A', order) || '0';
   const argument1 = JavaScript.valueToCode(block, 'B', order) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
@@ -70,8 +70,8 @@ JavaScript['logic_compare'] = function(block) {
 JavaScript['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
-  const order = (operator === '&&') ? JavaScript.ORDER_LOGICAL_AND :
-                                      JavaScript.ORDER_LOGICAL_OR;
+  const order = (operator === '&&') ? Order.LOGICAL_AND :
+                                      Order.LOGICAL_OR;
   let argument0 = JavaScript.valueToCode(block, 'A', order);
   let argument1 = JavaScript.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
@@ -94,7 +94,7 @@ JavaScript['logic_operation'] = function(block) {
 
 JavaScript['logic_negate'] = function(block) {
   // Negation.
-  const order = JavaScript.ORDER_LOGICAL_NOT;
+  const order = Order.LOGICAL_NOT;
   const argument0 = JavaScript.valueToCode(block, 'BOOL', order) || 'true';
   const code = '!' + argument0;
   return [code, order];
@@ -103,25 +103,25 @@ JavaScript['logic_negate'] = function(block) {
 JavaScript['logic_boolean'] = function(block) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
-  return [code, JavaScript.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 JavaScript['logic_null'] = function(block) {
   // Null data type.
-  return ['null', JavaScript.ORDER_ATOMIC];
+  return ['null', Order.ATOMIC];
 };
 
 JavaScript['logic_ternary'] = function(block) {
   // Ternary operator.
   const value_if =
-      JavaScript.valueToCode(block, 'IF', JavaScript.ORDER_CONDITIONAL) ||
+      JavaScript.valueToCode(block, 'IF', Order.CONDITIONAL) ||
       'false';
   const value_then =
-      JavaScript.valueToCode(block, 'THEN', JavaScript.ORDER_CONDITIONAL) ||
+      JavaScript.valueToCode(block, 'THEN', Order.CONDITIONAL) ||
       'null';
   const value_else =
-      JavaScript.valueToCode(block, 'ELSE', JavaScript.ORDER_CONDITIONAL) ||
+      JavaScript.valueToCode(block, 'ELSE', Order.CONDITIONAL) ||
       'null';
   const code = value_if + ' ? ' + value_then + ' : ' + value_else;
-  return [code, JavaScript.ORDER_CONDITIONAL];
+  return [code, Order.CONDITIONAL];
 };

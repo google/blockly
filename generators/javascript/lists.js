@@ -16,12 +16,12 @@ import {NameType} from '../../core/names.js';
 import {javascriptGenerator as JavaScript} from '../javascript.js';
 
 
-JavaScript['lists_create_empty'] = function(block) {
+JavaScript.forBlock['lists_create_empty'] = function(block) {
   // Create an empty list.
   return ['[]', JavaScript.ORDER_ATOMIC];
 };
 
-JavaScript['lists_create_with'] = function(block) {
+JavaScript.forBlock['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
@@ -33,7 +33,7 @@ JavaScript['lists_create_with'] = function(block) {
   return [code, JavaScript.ORDER_ATOMIC];
 };
 
-JavaScript['lists_repeat'] = function(block) {
+JavaScript.forBlock['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
   const functionName = JavaScript.provideFunction_('listsRepeat', `
 function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(value, n) {
@@ -52,21 +52,21 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(value, n) {
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['lists_length'] = function(block) {
+JavaScript.forBlock['lists_length'] = function(block) {
   // String or array length.
   const list =
       JavaScript.valueToCode(block, 'VALUE', JavaScript.ORDER_MEMBER) || '[]';
   return [list + '.length', JavaScript.ORDER_MEMBER];
 };
 
-JavaScript['lists_isEmpty'] = function(block) {
+JavaScript.forBlock['lists_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const list =
       JavaScript.valueToCode(block, 'VALUE', JavaScript.ORDER_MEMBER) || '[]';
   return ['!' + list + '.length', JavaScript.ORDER_LOGICAL_NOT];
 };
 
-JavaScript['lists_indexOf'] = function(block) {
+JavaScript.forBlock['lists_indexOf'] = function(block) {
   // Find an item in the list.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'indexOf' : 'lastIndexOf';
@@ -81,7 +81,7 @@ JavaScript['lists_indexOf'] = function(block) {
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['lists_getIndex'] = function(block) {
+JavaScript.forBlock['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -162,7 +162,7 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(list, remove) {
   throw Error('Unhandled combination (lists_getIndex).');
 };
 
-JavaScript['lists_setIndex'] = function(block) {
+JavaScript.forBlock['lists_setIndex'] = function(block) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   let list =
@@ -262,7 +262,7 @@ const getSubstringIndex = function(listName, where, opt_at) {
   }
 };
 
-JavaScript['lists_getSublist'] = function(block) {
+JavaScript.forBlock['lists_getSublist'] = function(block) {
   // Get sublist.
   const list =
       JavaScript.valueToCode(block, 'LIST', JavaScript.ORDER_MEMBER) || '[]';
@@ -342,7 +342,7 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param}
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['lists_sort'] = function(block) {
+JavaScript.forBlock['lists_sort'] = function(block) {
   // Block for sorting a list.
   const list =
       JavaScript.valueToCode(block, 'LIST', JavaScript.ORDER_FUNCTION_CALL) ||
@@ -371,7 +371,7 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(type, direction) {
   ];
 };
 
-JavaScript['lists_split'] = function(block) {
+JavaScript.forBlock['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   let input = JavaScript.valueToCode(block, 'INPUT', JavaScript.ORDER_MEMBER);
   const delimiter =
@@ -395,7 +395,7 @@ JavaScript['lists_split'] = function(block) {
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['lists_reverse'] = function(block) {
+JavaScript.forBlock['lists_reverse'] = function(block) {
   // Block for reversing a list.
   const list =
       JavaScript.valueToCode(block, 'LIST', JavaScript.ORDER_FUNCTION_CALL) ||

@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Dart.logic');
 import {dartGenerator as Dart} from '../dart.js';
 
 
-Dart['controls_if'] = function(block) {
+Dart.forBlock['controls_if'] = function(block) {
   // If/elseif/else condition.
   let n = 0;
   let code = '', branchCode, conditionCode;
@@ -50,9 +50,9 @@ Dart['controls_if'] = function(block) {
   return code + '\n';
 };
 
-Dart['controls_ifelse'] = Dart['controls_if'];
+Dart.forBlock['controls_ifelse'] = Dart.forBlock['controls_if'];
 
-Dart['logic_compare'] = function(block) {
+Dart.forBlock['logic_compare'] = function(block) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
@@ -66,7 +66,7 @@ Dart['logic_compare'] = function(block) {
   return [code, order];
 };
 
-Dart['logic_operation'] = function(block) {
+Dart.forBlock['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
   const order =
@@ -91,7 +91,7 @@ Dart['logic_operation'] = function(block) {
   return [code, order];
 };
 
-Dart['logic_negate'] = function(block) {
+Dart.forBlock['logic_negate'] = function(block) {
   // Negation.
   const order = Dart.ORDER_UNARY_PREFIX;
   const argument0 = Dart.valueToCode(block, 'BOOL', order) || 'true';
@@ -99,18 +99,18 @@ Dart['logic_negate'] = function(block) {
   return [code, order];
 };
 
-Dart['logic_boolean'] = function(block) {
+Dart.forBlock['logic_boolean'] = function(block) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
   return [code, Dart.ORDER_ATOMIC];
 };
 
-Dart['logic_null'] = function(block) {
+Dart.forBlock['logic_null'] = function(block) {
   // Null data type.
   return ['null', Dart.ORDER_ATOMIC];
 };
 
-Dart['logic_ternary'] = function(block) {
+Dart.forBlock['logic_ternary'] = function(block) {
   // Ternary operator.
   const value_if =
       Dart.valueToCode(block, 'IF', Dart.ORDER_CONDITIONAL) || 'false';

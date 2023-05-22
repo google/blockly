@@ -26,12 +26,12 @@ import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
 import {phpGenerator as PHP} from '../php.js';
 
-PHP['lists_create_empty'] = function(block) {
+PHP.forBlock['lists_create_empty'] = function(block) {
   // Create an empty list.
   return ['array()', PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['lists_create_with'] = function(block) {
+PHP.forBlock['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
   let code = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
@@ -41,7 +41,7 @@ PHP['lists_create_with'] = function(block) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['lists_repeat'] = function(block) {
+PHP.forBlock['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
   const functionName = PHP.provideFunction_('lists_repeat', `
 function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($value, $count) {
@@ -58,7 +58,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($value, $count) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['lists_length'] = function(block) {
+PHP.forBlock['lists_length'] = function(block) {
   // String or array length.
   const functionName = PHP.provideFunction_('length', `
 function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($value) {
@@ -73,14 +73,14 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($value) {
   return [functionName + '(' + list + ')', PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['lists_isEmpty'] = function(block) {
+PHP.forBlock['lists_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const argument0 =
       PHP.valueToCode(block, 'VALUE', PHP.ORDER_FUNCTION_CALL) || 'array()';
   return ['empty(' + argument0 + ')', PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['lists_indexOf'] = function(block) {
+PHP.forBlock['lists_indexOf'] = function(block) {
   // Find an item in the list.
   const argument0 = PHP.valueToCode(block, 'FIND', PHP.ORDER_NONE) || "''";
   const argument1 = PHP.valueToCode(block, 'VALUE', PHP.ORDER_MEMBER) || '[]';
@@ -118,7 +118,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($haystack, $needle) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['lists_getIndex'] = function(block) {
+PHP.forBlock['lists_getIndex'] = function(block) {
   // Get element at index.
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
@@ -232,7 +232,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list) {
   throw Error('Unhandled combination (lists_getIndex).');
 };
 
-PHP['lists_setIndex'] = function(block) {
+PHP.forBlock['lists_setIndex'] = function(block) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -328,7 +328,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list, $at, $value) {
   throw Error('Unhandled combination (lists_setIndex).');
 };
 
-PHP['lists_getSublist'] = function(block) {
+PHP.forBlock['lists_getSublist'] = function(block) {
   // Get sublist.
   const list = PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || 'array()';
   const where1 = block.getFieldValue('WHERE1');
@@ -424,7 +424,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($list, $where1, $at1, $where2, $at2) 
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['lists_sort'] = function(block) {
+PHP.forBlock['lists_sort'] = function(block) {
   // Block for sorting a list.
   const listCode = PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || 'array()';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
@@ -450,7 +450,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($list, $type, $direction) {
   return [sortCode, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['lists_split'] = function(block) {
+PHP.forBlock['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   let value_input = PHP.valueToCode(block, 'INPUT', PHP.ORDER_NONE);
   const value_delim = PHP.valueToCode(block, 'DELIM', PHP.ORDER_NONE) || "''";
@@ -473,7 +473,7 @@ PHP['lists_split'] = function(block) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['lists_reverse'] = function(block) {
+PHP.forBlock['lists_reverse'] = function(block) {
   // Block for reversing a list.
   const list = PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || '[]';
   const code = 'array_reverse(' + list + ')';

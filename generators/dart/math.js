@@ -17,7 +17,7 @@ import {dartGenerator as Dart} from '../dart.js';
 
 Dart.addReservedWords('Math');
 
-Dart['math_number'] = function(block) {
+Dart.forBlock['math_number'] = function(block) {
   // Numeric value.
   let code = Number(block.getFieldValue('NUM'));
   let order;
@@ -35,7 +35,7 @@ Dart['math_number'] = function(block) {
   return [code, order];
 };
 
-Dart['math_arithmetic'] = function(block) {
+Dart.forBlock['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', Dart.ORDER_ADDITIVE],
@@ -60,7 +60,7 @@ Dart['math_arithmetic'] = function(block) {
   return [code, order];
 };
 
-Dart['math_single'] = function(block) {
+Dart.forBlock['math_single'] = function(block) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
@@ -144,7 +144,7 @@ Dart['math_single'] = function(block) {
   return [code, Dart.ORDER_MULTIPLICATIVE];
 };
 
-Dart['math_constant'] = function(block) {
+Dart.forBlock['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['Math.pi', Dart.ORDER_UNARY_POSTFIX],
@@ -161,7 +161,7 @@ Dart['math_constant'] = function(block) {
   return CONSTANTS[constant];
 };
 
-Dart['math_number_property'] = function(block) {
+Dart.forBlock['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -216,7 +216,7 @@ bool ${Dart.FUNCTION_NAME_PLACEHOLDER_}(n) {
   return [code, outputOrder];
 };
 
-Dart['math_change'] = function(block) {
+Dart.forBlock['math_change'] = function(block) {
   // Add to a variable in place.
   const argument0 =
       Dart.valueToCode(block, 'DELTA', Dart.ORDER_ADDITIVE) || '0';
@@ -227,11 +227,11 @@ Dart['math_change'] = function(block) {
 };
 
 // Rounding functions have a single operand.
-Dart['math_round'] = Dart['math_single'];
+Dart.forBlock['math_round'] = Dart.forBlock['math_single'];
 // Trigonometry functions have a single operand.
-Dart['math_trig'] = Dart['math_single'];
+Dart.forBlock['math_trig'] = Dart.forBlock['math_single'];
 
-Dart['math_on_list'] = function(block) {
+Dart.forBlock['math_on_list'] = function(block) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   const list = Dart.valueToCode(block, 'LIST', Dart.ORDER_NONE) || '[]';
@@ -386,7 +386,7 @@ dynamic ${Dart.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['math_modulo'] = function(block) {
+Dart.forBlock['math_modulo'] = function(block) {
   // Remainder computation.
   const argument0 =
       Dart.valueToCode(block, 'DIVIDEND', Dart.ORDER_MULTIPLICATIVE) || '0';
@@ -396,7 +396,7 @@ Dart['math_modulo'] = function(block) {
   return [code, Dart.ORDER_MULTIPLICATIVE];
 };
 
-Dart['math_constrain'] = function(block) {
+Dart.forBlock['math_constrain'] = function(block) {
   // Constrain a number between two limits.
   Dart.definitions_['import_dart_math'] = 'import \'dart:math\' as Math;';
   const argument0 = Dart.valueToCode(block, 'VALUE', Dart.ORDER_NONE) || '0';
@@ -408,7 +408,7 @@ Dart['math_constrain'] = function(block) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['math_random_int'] = function(block) {
+Dart.forBlock['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
   Dart.definitions_['import_dart_math'] = 'import \'dart:math\' as Math;';
   const argument0 = Dart.valueToCode(block, 'FROM', Dart.ORDER_NONE) || '0';
@@ -428,13 +428,13 @@ int ${Dart.FUNCTION_NAME_PLACEHOLDER_}(num a, num b) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['math_random_float'] = function(block) {
+Dart.forBlock['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   Dart.definitions_['import_dart_math'] = 'import \'dart:math\' as Math;';
   return ['new Math.Random().nextDouble()', Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['math_atan2'] = function(block) {
+Dart.forBlock['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   Dart.definitions_['import_dart_math'] = 'import \'dart:math\' as Math;';
   const argument0 = Dart.valueToCode(block, 'X', Dart.ORDER_NONE) || '0';

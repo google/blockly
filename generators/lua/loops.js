@@ -42,7 +42,7 @@ const addContinueLabel = function(branch) {
   }
 };
 
-Lua['controls_repeat_ext'] = function(block) {
+Lua.forBlock['controls_repeat_ext'] = function(block) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -66,9 +66,9 @@ Lua['controls_repeat_ext'] = function(block) {
   return code;
 };
 
-Lua['controls_repeat'] = Lua['controls_repeat_ext'];
+Lua.forBlock['controls_repeat'] = Lua.forBlock['controls_repeat_ext'];
 
-Lua['controls_whileUntil'] = function(block) {
+Lua.forBlock['controls_whileUntil'] = function(block) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
@@ -84,7 +84,7 @@ Lua['controls_whileUntil'] = function(block) {
   return 'while ' + argument0 + ' do\n' + branch + 'end\n';
 };
 
-Lua['controls_for'] = function(block) {
+Lua.forBlock['controls_for'] = function(block) {
   // For loop.
   const variable0 =
       Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
@@ -124,7 +124,7 @@ Lua['controls_for'] = function(block) {
   return code;
 };
 
-Lua['controls_forEach'] = function(block) {
+Lua.forBlock['controls_forEach'] = function(block) {
   // For each loop.
   const variable0 =
       Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
@@ -137,7 +137,7 @@ Lua['controls_forEach'] = function(block) {
   return code;
 };
 
-Lua['controls_flow_statements'] = function(block) {
+Lua.forBlock['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
   let xfix = '';
   if (Lua.STATEMENT_PREFIX) {

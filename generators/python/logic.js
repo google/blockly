@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Python.logic');
 import {pythonGenerator as Python} from '../python.js';
 
 
-Python['controls_if'] = function(block) {
+Python.forBlock['controls_if'] = function(block) {
   // If/elseif/else condition.
   let n = 0;
   let code = '', branchCode, conditionCode;
@@ -49,9 +49,9 @@ Python['controls_if'] = function(block) {
   return code;
 };
 
-Python['controls_ifelse'] = Python['controls_if'];
+Python.forBlock['controls_ifelse'] = Python.forBlock['controls_if'];
 
-Python['logic_compare'] = function(block) {
+Python.forBlock['logic_compare'] = function(block) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
@@ -63,7 +63,7 @@ Python['logic_compare'] = function(block) {
   return [code, order];
 };
 
-Python['logic_operation'] = function(block) {
+Python.forBlock['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
   const order =
@@ -88,7 +88,7 @@ Python['logic_operation'] = function(block) {
   return [code, order];
 };
 
-Python['logic_negate'] = function(block) {
+Python.forBlock['logic_negate'] = function(block) {
   // Negation.
   const argument0 =
       Python.valueToCode(block, 'BOOL', Python.ORDER_LOGICAL_NOT) || 'True';
@@ -96,18 +96,18 @@ Python['logic_negate'] = function(block) {
   return [code, Python.ORDER_LOGICAL_NOT];
 };
 
-Python['logic_boolean'] = function(block) {
+Python.forBlock['logic_boolean'] = function(block) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'True' : 'False';
   return [code, Python.ORDER_ATOMIC];
 };
 
-Python['logic_null'] = function(block) {
+Python.forBlock['logic_null'] = function(block) {
   // Null data type.
   return ['None', Python.ORDER_ATOMIC];
 };
 
-Python['logic_ternary'] = function(block) {
+Python.forBlock['logic_ternary'] = function(block) {
   // Ternary operator.
   const value_if =
       Python.valueToCode(block, 'IF', Python.ORDER_CONDITIONAL) || 'False';

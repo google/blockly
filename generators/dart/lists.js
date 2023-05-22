@@ -17,12 +17,12 @@ import {dartGenerator as Dart} from '../dart.js';
 
 Dart.addReservedWords('Math');
 
-Dart['lists_create_empty'] = function(block) {
+Dart.forBlock['lists_create_empty'] = function(block) {
   // Create an empty list.
   return ['[]', Dart.ORDER_ATOMIC];
 };
 
-Dart['lists_create_with'] = function(block) {
+Dart.forBlock['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
@@ -32,7 +32,7 @@ Dart['lists_create_with'] = function(block) {
   return [code, Dart.ORDER_ATOMIC];
 };
 
-Dart['lists_repeat'] = function(block) {
+Dart.forBlock['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
   const element = Dart.valueToCode(block, 'ITEM', Dart.ORDER_NONE) || 'null';
   const repeatCount = Dart.valueToCode(block, 'NUM', Dart.ORDER_NONE) || '0';
@@ -40,21 +40,21 @@ Dart['lists_repeat'] = function(block) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['lists_length'] = function(block) {
+Dart.forBlock['lists_length'] = function(block) {
   // String or array length.
   const list =
       Dart.valueToCode(block, 'VALUE', Dart.ORDER_UNARY_POSTFIX) || '[]';
   return [list + '.length', Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['lists_isEmpty'] = function(block) {
+Dart.forBlock['lists_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const list =
       Dart.valueToCode(block, 'VALUE', Dart.ORDER_UNARY_POSTFIX) || '[]';
   return [list + '.isEmpty', Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['lists_indexOf'] = function(block) {
+Dart.forBlock['lists_indexOf'] = function(block) {
   // Find an item in the list.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'indexOf' : 'lastIndexOf';
@@ -68,7 +68,7 @@ Dart['lists_indexOf'] = function(block) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['lists_getIndex'] = function(block) {
+Dart.forBlock['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -222,7 +222,7 @@ dynamic ${Dart.FUNCTION_NAME_PLACEHOLDER_}(List my_list) {
   throw Error('Unhandled combination (lists_getIndex).');
 };
 
-Dart['lists_setIndex'] = function(block) {
+Dart.forBlock['lists_setIndex'] = function(block) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -298,7 +298,7 @@ Dart['lists_setIndex'] = function(block) {
   throw Error('Unhandled combination (lists_setIndex).');
 };
 
-Dart['lists_getSublist'] = function(block) {
+Dart.forBlock['lists_getSublist'] = function(block) {
   // Get sublist.
   const list =
       Dart.valueToCode(block, 'LIST', Dart.ORDER_UNARY_POSTFIX) || '[]';
@@ -372,7 +372,7 @@ List ${Dart.FUNCTION_NAME_PLACEHOLDER_}(List list, String where1, num at1, Strin
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['lists_sort'] = function(block) {
+Dart.forBlock['lists_sort'] = function(block) {
   // Block for sorting a list.
   const list = Dart.valueToCode(block, 'LIST', Dart.ORDER_NONE) || '[]';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
@@ -399,7 +399,7 @@ List ${Dart.FUNCTION_NAME_PLACEHOLDER_}(List list, String type, int direction) {
   ];
 };
 
-Dart['lists_split'] = function(block) {
+Dart.forBlock['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   let input = Dart.valueToCode(block, 'INPUT', Dart.ORDER_UNARY_POSTFIX);
   const delimiter = Dart.valueToCode(block, 'DELIM', Dart.ORDER_NONE) || "''";
@@ -422,7 +422,7 @@ Dart['lists_split'] = function(block) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['lists_reverse'] = function(block) {
+Dart.forBlock['lists_reverse'] = function(block) {
   // Block for reversing a list.
   const list = Dart.valueToCode(block, 'LIST', Dart.ORDER_NONE) || '[]';
   // XXX What should the operator precedence be for a `new`?

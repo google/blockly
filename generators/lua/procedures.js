@@ -15,7 +15,7 @@ import {NameType} from '../../core/names.js';
 import {luaGenerator as Lua} from '../lua.js';
 
 
-Lua['procedures_defreturn'] = function(block) {
+Lua.forBlock['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   const funcName =
       Lua.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
@@ -61,9 +61,9 @@ Lua['procedures_defreturn'] = function(block) {
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-Lua['procedures_defnoreturn'] = Lua['procedures_defreturn'];
+Lua.forBlock['procedures_defnoreturn'] = Lua.forBlock['procedures_defreturn'];
 
-Lua['procedures_callreturn'] = function(block) {
+Lua.forBlock['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
   const funcName =
       Lua.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
@@ -76,15 +76,15 @@ Lua['procedures_callreturn'] = function(block) {
   return [code, Lua.ORDER_HIGH];
 };
 
-Lua['procedures_callnoreturn'] = function(block) {
+Lua.forBlock['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  const tuple = Lua['procedures_callreturn'](block);
+  const tuple = Lua.forBlock['procedures_callreturn'](block);
   return tuple[0] + '\n';
 };
 
-Lua['procedures_ifreturn'] = function(block) {
+Lua.forBlock['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   const condition =
       Lua.valueToCode(block, 'CONDITION', Lua.ORDER_NONE) || 'false';

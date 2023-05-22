@@ -17,13 +17,13 @@ import {dartGenerator as Dart} from '../dart.js';
 
 Dart.addReservedWords('Html,Math');
 
-Dart['text'] = function(block) {
+Dart.forBlock['text'] = function(block) {
   // Text value.
   const code = Dart.quote_(block.getFieldValue('TEXT'));
   return [code, Dart.ORDER_ATOMIC];
 };
 
-Dart['text_multiline'] = function(block) {
+Dart.forBlock['text_multiline'] = function(block) {
   // Text value.
   const code = Dart.multiline_quote_(block.getFieldValue('TEXT'));
   const order =
@@ -31,7 +31,7 @@ Dart['text_multiline'] = function(block) {
   return [code, order];
 };
 
-Dart['text_join'] = function(block) {
+Dart.forBlock['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   switch (block.itemCount_) {
     case 0:
@@ -54,7 +54,7 @@ Dart['text_join'] = function(block) {
   }
 };
 
-Dart['text_append'] = function(block) {
+Dart.forBlock['text_append'] = function(block) {
   // Append to a variable in place.
   const varName =
       Dart.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
@@ -62,21 +62,21 @@ Dart['text_append'] = function(block) {
   return varName + ' = [' + varName + ', ' + value + '].join();\n';
 };
 
-Dart['text_length'] = function(block) {
+Dart.forBlock['text_length'] = function(block) {
   // String or array length.
   const text =
       Dart.valueToCode(block, 'VALUE', Dart.ORDER_UNARY_POSTFIX) || "''";
   return [text + '.length', Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['text_isEmpty'] = function(block) {
+Dart.forBlock['text_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const text =
       Dart.valueToCode(block, 'VALUE', Dart.ORDER_UNARY_POSTFIX) || "''";
   return [text + '.isEmpty', Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['text_indexOf'] = function(block) {
+Dart.forBlock['text_indexOf'] = function(block) {
   // Search the text for a substring.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'indexOf' : 'lastIndexOf';
@@ -90,7 +90,7 @@ Dart['text_indexOf'] = function(block) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['text_charAt'] = function(block) {
+Dart.forBlock['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
@@ -137,7 +137,7 @@ String ${Dart.FUNCTION_NAME_PLACEHOLDER_}(String text) {
   throw Error('Unhandled option (text_charAt).');
 };
 
-Dart['text_getSubstring'] = function(block) {
+Dart.forBlock['text_getSubstring'] = function(block) {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
@@ -215,7 +215,7 @@ String ${Dart.FUNCTION_NAME_PLACEHOLDER_}(String text, String where1, num at1, S
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['text_changeCase'] = function(block) {
+Dart.forBlock['text_changeCase'] = function(block) {
   // Change capitalization.
   const OPERATORS = {
     'UPPERCASE': '.toUpperCase()',
@@ -252,7 +252,7 @@ String ${Dart.FUNCTION_NAME_PLACEHOLDER_}(String str) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['text_trim'] = function(block) {
+Dart.forBlock['text_trim'] = function(block) {
   // Trim spaces.
   const OPERATORS = {
     'LEFT': '.replaceFirst(new RegExp(r\'^\\s+\'), \'\')',
@@ -265,13 +265,13 @@ Dart['text_trim'] = function(block) {
   return [text + operator, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['text_print'] = function(block) {
+Dart.forBlock['text_print'] = function(block) {
   // Print statement.
   const msg = Dart.valueToCode(block, 'TEXT', Dart.ORDER_NONE) || "''";
   return 'print(' + msg + ');\n';
 };
 
-Dart['text_prompt_ext'] = function(block) {
+Dart.forBlock['text_prompt_ext'] = function(block) {
   // Prompt function.
   Dart.definitions_['import_dart_html'] = 'import \'dart:html\' as Html;';
   let msg;
@@ -291,9 +291,9 @@ Dart['text_prompt_ext'] = function(block) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['text_prompt'] = Dart['text_prompt_ext'];
+Dart.forBlock['text_prompt'] = Dart.forBlock['text_prompt_ext'];
 
-Dart['text_count'] = function(block) {
+Dart.forBlock['text_count'] = function(block) {
   const text = Dart.valueToCode(block, 'TEXT', Dart.ORDER_NONE) || "''";
   const sub = Dart.valueToCode(block, 'SUB', Dart.ORDER_NONE) || "''";
   // Substring count is not a native Dart function.  Define one.
@@ -318,7 +318,7 @@ int ${Dart.FUNCTION_NAME_PLACEHOLDER_}(String haystack, String needle) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['text_replace'] = function(block) {
+Dart.forBlock['text_replace'] = function(block) {
   const text =
       Dart.valueToCode(block, 'TEXT', Dart.ORDER_UNARY_POSTFIX) || "''";
   const from = Dart.valueToCode(block, 'FROM', Dart.ORDER_NONE) || "''";
@@ -327,7 +327,7 @@ Dart['text_replace'] = function(block) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['text_reverse'] = function(block) {
+Dart.forBlock['text_reverse'] = function(block) {
   // There isn't a sensible way to do this in Dart. See:
   // http://stackoverflow.com/a/21613700/3529104
   // Implementing something is possibly better than not implementing anything?

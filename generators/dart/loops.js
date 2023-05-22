@@ -16,7 +16,7 @@ import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
 
 
-Dart['controls_repeat_ext'] = function(block) {
+Dart.forBlock['controls_repeat_ext'] = function(block) {
   let repeats;
   // Repeat n times.
   if (block.getField('TIMES')) {
@@ -40,9 +40,9 @@ Dart['controls_repeat_ext'] = function(block) {
   return code;
 };
 
-Dart['controls_repeat'] = Dart['controls_repeat_ext'];
+Dart.forBlock['controls_repeat'] = Dart.forBlock['controls_repeat_ext'];
 
-Dart['controls_whileUntil'] = function(block) {
+Dart.forBlock['controls_whileUntil'] = function(block) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
@@ -57,7 +57,7 @@ Dart['controls_whileUntil'] = function(block) {
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
 };
 
-Dart['controls_for'] = function(block) {
+Dart.forBlock['controls_for'] = function(block) {
   // For loop.
   const variable0 =
       Dart.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
@@ -117,7 +117,7 @@ Dart['controls_for'] = function(block) {
   return code;
 };
 
-Dart['controls_forEach'] = function(block) {
+Dart.forBlock['controls_forEach'] = function(block) {
   // For each loop.
   const variable0 =
       Dart.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
@@ -130,7 +130,7 @@ Dart['controls_forEach'] = function(block) {
   return code;
 };
 
-Dart['controls_flow_statements'] = function(block) {
+Dart.forBlock['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
   let xfix = '';
   if (Dart.STATEMENT_PREFIX) {

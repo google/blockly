@@ -73,11 +73,11 @@ export class MiniWorkspaceBubble extends Bubble {
       flyout?.show(options.languageTree);
     }
 
-    this.miniWorkspace.addChangeListener(this.updateBubbleSize.bind(this));
+    this.miniWorkspace.addChangeListener(this.onWorkspaceChange.bind(this));
     this.miniWorkspace
       .getFlyout()
       ?.getWorkspace()
-      ?.addChangeListener(this.updateBubbleSize.bind(this));
+      ?.addChangeListener(this.onWorkspaceChange.bind(this));
     this.updateBubbleSize();
   }
 
@@ -129,6 +129,39 @@ export class MiniWorkspaceBubble extends Bubble {
       throw new Error(
         'The miniworkspace bubble does not support horizontal layouts'
       );
+    }
+  }
+
+  private onWorkspaceChange() {
+    this.bumpBlocksIntoBounds();
+    this.updateBubbleSize();
+  }
+
+  private bumpBlocksIntoBounds() {
+    if (this.miniWorkspace.isDragging()) return;
+
+    const MARGIN = 20;
+
+    for (const block of this.miniWorkspace.getTopBlocks(false)) {
+      const blockXY = block.getRelativeToSurfaceXY();
+
+      // Bump any block that's above the top back inside.
+      if (blockXY.y < MARGIN) {
+        block.moveBy(0, MARGIN - blockXY.y);
+      }
+      // Bump any block overlapping the flyout back inside.
+      if (block.RTL) {
+        let right = -MARGIN;
+        const flyout = this.miniWorkspace.getFlyout();
+        if (flyout) {
+          right -= flyout.getWidth();
+        }
+        if (blockXY.x > right) {
+          block.moveBy(right - blockXY.x, 0);
+        }
+      } else if (blockXY.x < MARGIN) {
+        block.moveBy(MARGIN - blockXY.x, 0);
+      }
     }
   }
 

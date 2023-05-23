@@ -4,16 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Mutator');
+
+import {Abstract} from '../events/events_abstract.js';
+import {BlockChange} from '../events/events_block_change.js';
+import {BlocklyOptions} from '../blockly_options.js';
 import {BlockSvg} from '../block_svg.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
+import * as eventUtils from '../events/utils.js';
 import {IHasBubble} from '../interfaces/i_has_bubble.js';
 import {Icon} from './icon.js';
 import {MiniWorkspaceBubble} from '../bubbles/mini_workspace_bubble.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
-
 
 export class MutatorIcon extends Icon implements IHasBubble {
   static readonly TYPE = 'mutator';
@@ -22,9 +28,18 @@ export class MutatorIcon extends Icon implements IHasBubble {
 
   static readonly SIZE = 17;
 
+  private readonly MARGIN = 16;
+
   private miniWorkspaceBubble: MiniWorkspaceBubble | null = null;
 
-  constructor(quarks: AnyDuringMigration, protected readonly sourceBlock: BlockSvg) {
+  private rootBlock: BlockSvg | null = null;
+
+  private updateWorkspacePid: ReturnType<typeof setTimeout> | null = null;
+
+  constructor(
+    private readonly flyoutBlockTypes: string[],
+    protected readonly sourceBlock: BlockSvg
+  ) {
     super(sourceBlock);
   }
 
@@ -78,7 +93,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
   }
 
   getWeight(): number {
-      return MutatorIcon.WEIGHT;
+    return MutatorIcon.WEIGHT;
   }
 
   getSize(): Size {
@@ -119,23 +134,49 @@ export class MutatorIcon extends Icon implements IHasBubble {
         this.getMiniWorkspaceConfig(),
         this.sourceBlock.workspace,
         this.getAnchorLocation(),
-        this.getBubbleOwnerRect(),
+        this.getBubbleOwnerRect()
       );
       this.applyColour();
+      this.createRootBlock();
+      this.addSaveConnectionsListener();
+      this.miniWorkspaceBubble?.addWorkspaceChangeListener(
+        this.createMiniWorkspaceChangeListener()
+      );
     } else {
       this.miniWorkspaceBubble?.dispose();
       this.miniWorkspaceBubble = null;
     }
+
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+        this.sourceBlock,
+        visible,
+        'mutator'
+      )
+    );
   }
 
   private getMiniWorkspaceConfig() {
-    return {
+    const options: BlocklyOptions = {
       'disable': false,
       'media': this.sourceBlock.workspace.options.pathToMedia,
       'rtl': this.sourceBlock.RTL,
       'renderer': this.sourceBlock.workspace.options.renderer,
-      'rendererOverrides': this.sourceBlock.workspace.options.rendererOverrides ?? undefined,
+      'rendererOverrides':
+        this.sourceBlock.workspace.options.rendererOverrides ?? undefined,
+    };
+
+    if (this.flyoutBlockTypes.length) {
+      options.toolbox = {
+        'kind': 'flyoutToolbox',
+        'contents': this.flyoutBlockTypes.map((type) => ({
+          'kind': 'block',
+          'type': type,
+        })),
+      };
     }
+
+    return options;
   }
 
   private getAnchorLocation(): Coordinate {
@@ -149,5 +190,80 @@ export class MutatorIcon extends Icon implements IHasBubble {
   private getBubbleOwnerRect(): Rect {
     const bbox = this.sourceBlock.getSvgRoot().getBBox();
     return new Rect(bbox.y, bbox.y + bbox.height, bbox.x, bbox.x + bbox.width);
+  }
+
+  private createRootBlock() {
+    this.rootBlock = this.sourceBlock.decompose!(
+      this.miniWorkspaceBubble!.getWorkspace()
+    )!;
+
+    for (const child of this.rootBlock.getDescendants(false)) {
+      child.queueRender();
+    }
+
+    this.rootBlock.setMovable(false);
+    this.rootBlock.setDeletable(false);
+
+    const flyoutWidth =
+      this.miniWorkspaceBubble?.getWorkspace()?.getFlyout()?.getWidth() ?? 0;
+    this.rootBlock.moveBy(
+      this.rootBlock.RTL ? -(flyoutWidth + this.MARGIN) : this.MARGIN,
+      this.MARGIN
+    );
+  }
+
+  private addSaveConnectionsListener() {
+    if (!this.sourceBlock.saveConnections || !this.rootBlock) return;
+    const saveConnectionsListener = () => {
+      if (!this.sourceBlock.saveConnections || !this.rootBlock) return;
+      this.sourceBlock.saveConnections(this.rootBlock);
+    };
+    saveConnectionsListener();
+    this.sourceBlock.workspace.addChangeListener(saveConnectionsListener);
+  }
+
+  private createMiniWorkspaceChangeListener() {
+    return (e: Abstract) => {
+      if (!this.shouldIgnoreMutatorEvent(e) && !this.updateWorkspacePid) {
+        this.updateWorkspacePid = setTimeout(() => {
+          this.updateWorkspacePid = null;
+          this.recomposeSourceBlock();
+        }, 0);
+      }
+    };
+  }
+
+  private shouldIgnoreMutatorEvent(e: Abstract) {
+    return (
+      e.isUiEvent ||
+      e.type === eventUtils.CREATE ||
+      (e.type === eventUtils.CHANGE &&
+        (e as BlockChange).element === 'disabled')
+    );
+  }
+
+  private recomposeSourceBlock() {
+    if (!this.rootBlock) return;
+
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) eventUtils.setGroup(true);
+
+    const oldExtraState = BlockChange.getExtraBlockState_(this.sourceBlock);
+    this.sourceBlock.compose!(this.rootBlock);
+    const newExtraState = BlockChange.getExtraBlockState_(this.sourceBlock);
+
+    if (oldExtraState !== newExtraState) {
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this.sourceBlock,
+          'mutation',
+          null,
+          oldExtraState,
+          newExtraState
+        )
+      );
+    }
+
+    eventUtils.setGroup(existingGroup);
   }
 }

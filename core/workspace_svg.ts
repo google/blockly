@@ -570,9 +570,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       if (blockStyleName) {
         const blockSvg = block as BlockSvg;
         blockSvg.setStyle(blockStyleName);
-        if (blockSvg.mutator) {
-          blockSvg.mutator.updateBlockStyle();
-        }
       }
     }
   }

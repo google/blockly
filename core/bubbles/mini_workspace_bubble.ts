@@ -229,6 +229,19 @@ export class MiniWorkspaceBubble extends Bubble {
     return new Size(width, height);
   }
 
+  updateBlockStyles() {
+    for (const block of this.miniWorkspace.getAllBlocks(false)) {
+      block.setStyle(block.getStyleName());
+    }
+
+    const flyoutWs = this.miniWorkspace.getFlyout()?.getWorkspace();
+    if (flyoutWs) {
+      for (const block of flyoutWs.getAllBlocks(false)) {
+        block.setStyle(block.getStyleName());
+      }
+    }
+  }
+
   /**
    * Move this bubble during a drag.
    *

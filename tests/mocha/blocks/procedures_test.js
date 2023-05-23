@@ -90,8 +90,9 @@ suite('Procedures', function () {
   suite('adding procedure parameters', function () {
     test('the mutator flyout updates to avoid parameter name conflicts', function () {
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const origFlyoutParamName = mutatorWorkspace
         .getFlyout()
         .getWorkspace()
@@ -123,8 +124,9 @@ suite('Procedures', function () {
     test('adding a parameter to the procedure updates procedure defs', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -147,8 +149,9 @@ suite('Procedures', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
       const callBlock = createProcCallBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -171,8 +174,9 @@ suite('Procedures', function () {
     test('undoing adding a procedure parameter removes it', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -195,8 +199,9 @@ suite('Procedures', function () {
       function () {
         // Create a stack of container, parameter.
         const defBlock = createProcDefBlock(this.workspace);
-        defBlock.mutator.setVisible(true);
-        const mutatorWorkspace = defBlock.mutator.getWorkspace();
+        const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+        mutatorIcon.setBubbleVisible(true);
+        const mutatorWorkspace = mutatorIcon.getWorkspace();
         const containerBlock = mutatorWorkspace.getTopBlocks()[0];
         const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
         paramBlock.setFieldValue('param1', 'NAME');
@@ -224,8 +229,9 @@ suite('Procedures', function () {
     test('deleting a parameter from the procedure updates procedure defs', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -247,8 +253,9 @@ suite('Procedures', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
       const callBlock = createProcCallBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -269,8 +276,9 @@ suite('Procedures', function () {
     test('undoing deleting a procedure parameter adds it', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -295,8 +303,9 @@ suite('Procedures', function () {
       function () {
         // Create a stack of container, parameter.
         const defBlock = createProcDefBlock(this.workspace);
-        defBlock.mutator.setVisible(true);
-        const mutatorWorkspace = defBlock.mutator.getWorkspace();
+        const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+        mutatorIcon.setBubbleVisible(true);
+        const mutatorWorkspace = mutatorIcon.getWorkspace();
         const containerBlock = mutatorWorkspace.getTopBlocks()[0];
         const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
         paramBlock.setFieldValue('param1', 'NAME');
@@ -322,8 +331,9 @@ suite('Procedures', function () {
     test('defs are updated for parameter renames', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -348,8 +358,9 @@ suite('Procedures', function () {
     test('defs are updated for parameter renames when two params exist', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock1 = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock1.setFieldValue('param1', 'NAME');
@@ -378,8 +389,9 @@ suite('Procedures', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
       const callBlock = createProcCallBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -406,8 +418,9 @@ suite('Procedures', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
       const callBlock = createProcCallBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -428,8 +441,9 @@ suite('Procedures', function () {
     test('renaming a variable associated with a parameter updates procedure defs', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -437,7 +451,7 @@ suite('Procedures', function () {
         .getInput('STACK')
         .connection.connect(paramBlock.previousConnection);
       this.clock.runAll();
-      defBlock.mutator.setVisible(false);
+      mutatorIcon.setBubbleVisible(false);
 
       const variable = this.workspace.getVariable('param1', '');
       this.workspace.renameVariableById(variable.getId(), 'new name');
@@ -455,8 +469,9 @@ suite('Procedures', function () {
     test('renaming a variable associated with a parameter updates mutator parameters', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -479,8 +494,9 @@ suite('Procedures', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
       const callBlock = createProcCallBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -488,7 +504,7 @@ suite('Procedures', function () {
         .getInput('STACK')
         .connection.connect(paramBlock.previousConnection);
       this.clock.runAll();
-      defBlock.mutator.setVisible(false);
+      mutatorIcon.setBubbleVisible(false);
 
       const variable = this.workspace.getVariable('param1', '');
       this.workspace.renameVariableById(variable.getId(), 'new name');
@@ -507,8 +523,9 @@ suite('Procedures', function () {
     test('coalescing a variable associated with a parameter updates procedure defs', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -516,7 +533,7 @@ suite('Procedures', function () {
         .getInput('STACK')
         .connection.connect(paramBlock.previousConnection);
       this.clock.runAll();
-      defBlock.mutator.setVisible(false);
+      mutatorIcon.setBubbleVisible(false);
 
       const variable = this.workspace.getVariable('param1', '');
       this.workspace.renameVariableById(variable.getId(), 'preCreatedVar');
@@ -534,8 +551,9 @@ suite('Procedures', function () {
     test('coalescing a variable associated with a parameter updates mutator parameters', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -558,8 +576,9 @@ suite('Procedures', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
       const callBlock = createProcCallBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -567,7 +586,7 @@ suite('Procedures', function () {
         .getInput('STACK')
         .connection.connect(paramBlock.previousConnection);
       this.clock.runAll();
-      defBlock.mutator.setVisible(false);
+      mutatorIcon.setBubbleVisible(false);
 
       const variable = this.workspace.getVariable('param1', '');
       this.workspace.renameVariableById(variable.getId(), 'preCreatedVar');
@@ -592,8 +611,9 @@ suite('Procedures', function () {
     test('undoing renaming a procedure parameter reverts the change', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -622,8 +642,9 @@ suite('Procedures', function () {
     test('undoing and redoing renaming a procedure maintains the same state', function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock.setFieldValue('param1', 'NAME');
@@ -654,8 +675,9 @@ suite('Procedures', function () {
     test('reordering procedure parameters updates procedure blocks', function () {
       // Create a stack of container, parameter, parameter.
       const defBlock = createProcDefBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock1 = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock1.setFieldValue('param1', 'NAME');
@@ -690,8 +712,9 @@ suite('Procedures', function () {
       // Create a stack of container, parameter, parameter.
       const defBlock = createProcDefBlock(this.workspace);
       const callBlock = createProcCallBlock(this.workspace);
-      defBlock.mutator.setVisible(true);
-      const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
       const containerBlock = mutatorWorkspace.getTopBlocks()[0];
       const paramBlock1 = mutatorWorkspace.newBlock('procedures_mutatorarg');
       paramBlock1.setFieldValue('param1', 'NAME');
@@ -739,8 +762,9 @@ suite('Procedures', function () {
         // Create a stack of container, parameter, parameter.
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
-        defBlock.mutator.setVisible(true);
-        const mutatorWorkspace = defBlock.mutator.getWorkspace();
+      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
         const containerBlock = mutatorWorkspace.getTopBlocks()[0];
         const paramBlock1 = mutatorWorkspace.newBlock('procedures_mutatorarg');
         paramBlock1.setFieldValue('param1', 'NAME');
@@ -1888,8 +1912,9 @@ suite('Procedures', function () {
           });
           suite('Untyped Arguments', function () {
             function createMutator(argArray) {
-              this.defBlock.mutator.setVisible(true);
-              this.mutatorWorkspace = this.defBlock.mutator.getWorkspace();
+              const mutatorIcon = this.defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+              mutatorIcon.setBubbleVisible(true);
+              this.mutatorWorkspace = mutatorIcon.getWorkspace();
               this.containerBlock = this.mutatorWorkspace.getTopBlocks()[0];
               this.connection =
                 this.containerBlock.getInput('STACK').connection;

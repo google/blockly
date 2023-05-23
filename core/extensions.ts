@@ -10,7 +10,7 @@ goog.declareModuleId('Blockly.Extensions');
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import {FieldDropdown} from './field_dropdown.js';
-import {Mutator} from './mutator.js';
+import {MutatorIcon} from './icons/mutator_icon.js';
 import * as parsing from './utils/parsing.js';
 
 /** The set of all registered extensions, keyed by extension name/id. */
@@ -89,7 +89,7 @@ export function registerMutator(
   // Sanity checks passed.
   register(name, function (this: Block) {
     if (hasMutatorDialog) {
-      this.setMutator(new Mutator(opt_blockList || [], this as BlockSvg));
+      this.setMutator(new MutatorIcon(opt_blockList || [], this as BlockSvg));
     }
     // Mixin the object.
     this.mixin(mixinObj);

@@ -15,7 +15,7 @@ import type {Connection} from '../core/connection.js';
 import type {BlockSvg} from '../core/block_svg.js';
 import type {FieldDropdown} from '../core/field_dropdown.js';
 import {Msg} from '../core/msg.js';
-import {Mutator} from '../core/mutator.js';
+import {MutatorIcon} from '../core/icons/mutator_icon.js';
 import type {Workspace} from '../core/workspace.js';
 import {
   createBlockDefinitionsFromJsonArray,
@@ -130,7 +130,7 @@ const LISTS_CREATE_WITH = {
     this.updateShape_();
     this.setOutput(true, 'Array');
     this.setMutator(
-      new Mutator(['lists_create_with_item'], this as unknown as BlockSvg)
+      new MutatorIcon(['lists_create_with_item'], this as unknown as BlockSvg)
     ); // BUG(#6905)
     this.setTooltip(Msg['LISTS_CREATE_WITH_TOOLTIP']);
   },
@@ -232,7 +232,7 @@ const LISTS_CREATE_WITH = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (let i = 0; i < this.itemCount_; i++) {
-      Mutator.reconnect(connections[i], this, 'ADD' + i);
+      MutatorIcon.reconnect(connections[i], this, 'ADD' + i);
     }
   },
   /**

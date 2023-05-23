@@ -30,7 +30,7 @@ const {Block} = goog.requireType('Blockly.Block');
 const BlockDefinition = Object;
 const {config} = goog.require('Blockly.config');
 const {Msg} = goog.require('Blockly.Msg');
-const {Mutator} = goog.require('Blockly.Mutator');
+const {MutatorIcon} = goog.require('Blockly.Mutator');
 const {Names} = goog.require('Blockly.Names');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
@@ -290,7 +290,7 @@ const PROCEDURE_DEF_COMMON = {
         if (hasStatements) {
           this.setStatements_(true);
           // Restore the stack, if one was saved.
-          Mutator.reconnect(this.statementConnection_, this, 'STACK');
+          MutatorIcon.reconnect(this.statementConnection_, this, 'STACK');
           this.statementConnection_ = null;
         } else {
           // Save the stack, then disconnect it.
@@ -388,8 +388,9 @@ const PROCEDURE_DEF_COMMON = {
   displayRenamedVar_: function(oldName, newName) {
     this.updateParams_();
     // Update the mutator's variables if the mutator is open.
-    if (this.mutator && this.mutator.isVisible()) {
-      const blocks = this.mutator.workspace_.getAllBlocks(false);
+    const mutator = this.getIcon(MutatorIcon.TYPE);
+    if (mutator && mutator.bubbleIsVisible()) {
+      const blocks = mutator.getWorkspace().getAllBlocks(false);
       for (let i = 0, block; (block = blocks[i]); i++) {
         if (block.type === 'procedures_mutatorarg' &&
             Names.equals(oldName, block.getFieldValue('NAME'))) {
@@ -461,7 +462,7 @@ blocks['procedures_defnoreturn'] = {
         .appendField(Msg['PROCEDURES_DEFNORETURN_TITLE'])
         .appendField(nameField, 'NAME')
         .appendField('', 'PARAMS');
-    this.setMutator(new Mutator(['procedures_mutatorarg'], this));
+    this.setMutator(new MutatorIcon(['procedures_mutatorarg'], this));
     if ((this.workspace.options.comments ||
          (this.workspace.options.parentWorkspace &&
           this.workspace.options.parentWorkspace.options.comments)) &&
@@ -511,7 +512,7 @@ blocks['procedures_defreturn'] = {
     this.appendValueInput('RETURN')
         .setAlign(Align.RIGHT)
         .appendField(Msg['PROCEDURES_DEFRETURN_RETURN']);
-    this.setMutator(new Mutator(['procedures_mutatorarg'], this));
+    this.setMutator(new MutatorIcon(['procedures_mutatorarg'], this));
     if ((this.workspace.options.comments ||
          (this.workspace.options.parentWorkspace &&
           this.workspace.options.parentWorkspace.options.comments)) &&
@@ -616,7 +617,7 @@ blocks['procedures_mutatorarg'] = {
    */
   validator_: function(varName) {
     const sourceBlock = this.getSourceBlock();
-    const outerWs = Mutator.findParentWs(sourceBlock.workspace);
+    const outerWs = MutatorIcon.findParentWs(sourceBlock.workspace);
     varName = varName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
     if (!varName) {
       return null;
@@ -667,7 +668,7 @@ blocks['procedures_mutatorarg'] = {
    * @this {FieldTextInput}
    */
   deleteIntermediateVars_: function(newText) {
-    const outerWs = Mutator.findParentWs(this.getSourceBlock().workspace);
+    const outerWs = MutatorIcon.findParentWs(this.getSourceBlock().workspace);
     if (!outerWs) {
       return;
     }
@@ -731,8 +732,9 @@ const PROCEDURE_CALL_COMMON = {
     // which might reappear if a param is reattached in the mutator.
     const defBlock =
         Procedures.getDefinition(this.getProcedureCall(), this.workspace);
+    const mutatorIcon = defBlock && defBlock.getIcon(MutatorIcon.TYPE);
     const mutatorOpen =
-        defBlock && defBlock.mutator && defBlock.mutator.isVisible();
+        mutatorIcon && mutatorIcon.bubbleIsVisible();
     if (!mutatorOpen) {
       this.quarkConnections_ = {};
       this.quarkIds_ = null;
@@ -788,7 +790,7 @@ const PROCEDURE_CALL_COMMON = {
         const quarkId = this.quarkIds_[i];
         if (quarkId in this.quarkConnections_) {
           const connection = this.quarkConnections_[quarkId];
-          if (!Mutator.reconnect(connection, this, 'ARG' + i)) {
+          if (!MutatorIcon.reconnect(connection, this, 'ARG' + i)) {
             // Block no longer exists or has been attached elsewhere.
             delete this.quarkConnections_[quarkId];
           }

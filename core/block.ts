@@ -35,8 +35,8 @@ import {Align, Input} from './inputs/input.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IDeletable} from './interfaces/i_deletable.js';
 import type {IIcon} from './interfaces/i_icon.js';
-import type {Mutator} from './mutator.js';
 import {CommentIcon} from './icons/comment_icon.js';
+import type {MutatorIcon} from './icons/mutator_icon.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -2208,7 +2208,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @param _mutator A mutator dialog instance or null to remove.
    */
-  setMutator(_mutator: Mutator) {
+  setMutator(_mutator: MutatorIcon) {
     // NOOP.
   }
 

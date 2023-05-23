@@ -19,13 +19,14 @@ import * as eventUtils from '../events/utils.js';
 import {IHasBubble} from '../interfaces/i_has_bubble.js';
 import {Icon} from './icon.js';
 import {MiniWorkspaceBubble} from '../bubbles/mini_workspace_bubble.js';
+import {MUTATOR_TYPE} from './icon_types.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 
 export class MutatorIcon extends Icon implements IHasBubble {
-  static readonly TYPE = 'mutator';
+  static readonly TYPE = MUTATOR_TYPE;
 
   static readonly WEIGHT = 1;
 
@@ -269,6 +270,11 @@ export class MutatorIcon extends Icon implements IHasBubble {
     }
 
     eventUtils.setGroup(existingGroup);
+  }
+
+  /** @internal */
+  getWorkspace(): WorkspaceSvg | undefined {
+    return this.miniWorkspaceBubble?.getWorkspace();
   }
 
   static reconnect(

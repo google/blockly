@@ -14,6 +14,8 @@ goog.declareModuleId('Blockly.Events.BlockChange');
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
+import {MUTATOR_TYPE} from '../icons/icon_types.js';
+import { hasBubble } from '../interfaces/i_has_bubble.js';
 import * as registry from '../registry.js';
 import * as utilsXml from '../utils/xml.js';
 import {Workspace} from '../workspace.js';
@@ -144,10 +146,10 @@ export class BlockChange extends BlockBase {
       );
     }
     // Assume the block is rendered so that then we can check.
-    const blockSvg = block as BlockSvg;
-    if (blockSvg.mutator) {
-      // Close the mutator (if open) since we don't want to update it.
-      blockSvg.mutator.setVisible(false);
+    // const blockSvg = block as BlockSvg;
+    const icon = block.getIcon(MUTATOR_TYPE);
+    if (icon && hasBubble(icon) && icon.bubbleIsVisible()) {
+      icon.setBubbleVisible(false);
     }
     const value = forward ? this.newValue : this.oldValue;
     switch (this.element) {

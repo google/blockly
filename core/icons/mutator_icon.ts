@@ -8,9 +8,11 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Mutator');
 
 import {Abstract} from '../events/events_abstract.js';
+import type {Block} from '../block.js';
 import {BlockChange} from '../events/events_block_change.js';
 import {BlocklyOptions} from '../blockly_options.js';
 import {BlockSvg} from '../block_svg.js';
+import type {Connection} from '../connection.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import * as eventUtils from '../events/utils.js';
@@ -20,6 +22,7 @@ import {MiniWorkspaceBubble} from '../bubbles/mini_workspace_bubble.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
 
 export class MutatorIcon extends Icon implements IHasBubble {
   static readonly TYPE = 'mutator';
@@ -266,5 +269,47 @@ export class MutatorIcon extends Icon implements IHasBubble {
     }
 
     eventUtils.setGroup(existingGroup);
+  }
+
+  static reconnect(
+    connectionChild: Connection,
+    block: Block,
+    inputName: string
+  ): boolean {
+    if (!connectionChild || !connectionChild.getSourceBlock().workspace) {
+      return false; // No connection or block has been deleted.
+    }
+    const connectionParent = block.getInput(inputName)!.connection;
+    const currentParent = connectionChild.targetBlock();
+    if (
+      (!currentParent || currentParent === block) &&
+      connectionParent &&
+      connectionParent.targetConnection !== connectionChild
+    ) {
+      if (connectionParent.isConnected()) {
+        // There's already something connected here.  Get rid of it.
+        connectionParent.disconnect();
+      }
+      connectionParent.connect(connectionChild);
+      return true;
+    }
+    return false;
+  }
+
+  static findParentWs(workspace: WorkspaceSvg): WorkspaceSvg | null {
+    let outerWs = null;
+    if (workspace && workspace.options) {
+      const parent = workspace.options.parentWorkspace;
+      // If we were in a flyout in a mutator, need to go up two levels to find
+      // the actual parent.
+      if (workspace.isFlyout) {
+        if (parent && parent.options) {
+          outerWs = parent.options.parentWorkspace;
+        }
+      } else if (parent) {
+        outerWs = parent;
+      }
+    }
+    return outerWs;
   }
 }

@@ -38,7 +38,7 @@ import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import { MutatorIcon } from './icons.js';
+import {MutatorIcon} from './icons.js';
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -373,7 +373,9 @@ export function mutatorOpenListener(e: Abstract) {
   if (type !== 'procedures_defnoreturn' && type !== 'procedures_defreturn') {
     return;
   }
-  const workspace = (block.getIcon(MutatorIcon.TYPE) as MutatorIcon).getWorkspace()!;
+  const workspace = (
+    block.getIcon(MutatorIcon.TYPE) as MutatorIcon
+  ).getWorkspace()!;
   updateMutatorFlyout(workspace);
   workspace.addChangeListener(mutatorChangeListener);
 }

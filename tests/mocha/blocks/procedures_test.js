@@ -762,9 +762,9 @@ suite('Procedures', function () {
         // Create a stack of container, parameter, parameter.
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
-      const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
-      mutatorIcon.setBubbleVisible(true);
-      const mutatorWorkspace = mutatorIcon.getWorkspace();
+        const mutatorIcon = defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+        mutatorIcon.setBubbleVisible(true);
+        const mutatorWorkspace = mutatorIcon.getWorkspace();
         const containerBlock = mutatorWorkspace.getTopBlocks()[0];
         const paramBlock1 = mutatorWorkspace.newBlock('procedures_mutatorarg');
         paramBlock1.setFieldValue('param1', 'NAME');
@@ -1912,7 +1912,9 @@ suite('Procedures', function () {
           });
           suite('Untyped Arguments', function () {
             function createMutator(argArray) {
-              const mutatorIcon = this.defBlock.getIcon(Blockly.icons.MutatorIcon.TYPE);
+              const mutatorIcon = this.defBlock.getIcon(
+                Blockly.icons.MutatorIcon.TYPE
+              );
               mutatorIcon.setBubbleVisible(true);
               this.mutatorWorkspace = mutatorIcon.getWorkspace();
               this.containerBlock = this.mutatorWorkspace.getTopBlocks()[0];

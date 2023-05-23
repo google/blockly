@@ -26,18 +26,28 @@ import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 
 export class MutatorIcon extends Icon implements IHasBubble {
+  /** The type string used to identify this icon. */
   static readonly TYPE = MUTATOR_TYPE;
 
+  /**
+   * The weight this icon has relative to other icons. Icons with more positive
+   * weight values are rendered farther toward the end of the block.
+   */
   static readonly WEIGHT = 1;
 
+  /** The size of this icon in workspace-scale units. */
   static readonly SIZE = 17;
 
+  /** The distance between the root block and the workspace edges. */
   private readonly MARGIN = 16;
 
+  /** The bubble used to show the mini workspace to the user. */
   private miniWorkspaceBubble: MiniWorkspaceBubble | null = null;
 
+  /** The root block in the mini workspace. */
   private rootBlock: BlockSvg | null = null;
 
+  /** The PID tracking updating the workkspace in response to user events. */
   private updateWorkspacePid: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
@@ -161,6 +171,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
     );
   }
 
+  /** @return the configuration the mini workspace should have. */
   private getMiniWorkspaceConfig() {
     const options: BlocklyOptions = {
       'disable': false,
@@ -184,6 +195,10 @@ export class MutatorIcon extends Icon implements IHasBubble {
     return options;
   }
 
+  /**
+   * @return the location the bubble should be anchored to.
+   *     I.E. the middle of this icon.
+   */
   private getAnchorLocation(): Coordinate {
     const midIcon = MutatorIcon.SIZE / 2;
     return Coordinate.sum(
@@ -192,11 +207,16 @@ export class MutatorIcon extends Icon implements IHasBubble {
     );
   }
 
+  /**
+   * @return the rect the bubble should avoid overlapping.
+   *     I.E. the block that owns this icon.
+   */
   private getBubbleOwnerRect(): Rect {
     const bbox = this.sourceBlock.getSvgRoot().getBBox();
     return new Rect(bbox.y, bbox.y + bbox.height, bbox.x, bbox.x + bbox.width);
   }
 
+  /** Decomposes the source block to create blocks in the mini workspace. */
   private createRootBlock() {
     this.rootBlock = this.sourceBlock.decompose!(
       this.miniWorkspaceBubble!.getWorkspace()
@@ -217,6 +237,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
     );
   }
 
+  /** Adds a listen to the source block that triggers saving connections. */
   private addSaveConnectionsListener() {
     if (!this.sourceBlock.saveConnections || !this.rootBlock) return;
     const saveConnectionsListener = () => {
@@ -227,6 +248,10 @@ export class MutatorIcon extends Icon implements IHasBubble {
     this.sourceBlock.workspace.addChangeListener(saveConnectionsListener);
   }
 
+  /**
+   * Creates a change listener to add to the mini workspace which recomposes
+   * the block.
+   */
   private createMiniWorkspaceChangeListener() {
     return (e: Abstract) => {
       if (!this.shouldIgnoreMutatorEvent(e) && !this.updateWorkspacePid) {
@@ -238,6 +263,10 @@ export class MutatorIcon extends Icon implements IHasBubble {
     };
   }
 
+  /**
+   * Returns true if the given event is not one the mutator needs to
+   * care about.
+   */
   private shouldIgnoreMutatorEvent(e: Abstract) {
     return (
       e.isUiEvent ||
@@ -247,6 +276,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
     );
   }
 
+  /** Recomposes the source block based on changes to the mini workspace. */
   private recomposeSourceBlock() {
     if (!this.rootBlock) return;
 
@@ -277,6 +307,9 @@ export class MutatorIcon extends Icon implements IHasBubble {
     return this.miniWorkspaceBubble?.getWorkspace();
   }
 
+  /**
+   * Reconnects the given connection to the mutated input on the given block.
+   */
   static reconnect(
     connectionChild: Connection,
     block: Block,
@@ -302,6 +335,10 @@ export class MutatorIcon extends Icon implements IHasBubble {
     return false;
   }
 
+  /**
+   * Returns the parent workspace of a workspace that is inside a mutator,
+   * taking into account wither it is a flyout.
+   */
   static findParentWs(workspace: WorkspaceSvg): WorkspaceSvg | null {
     let outerWs = null;
     if (workspace && workspace.options) {

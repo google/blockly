@@ -310,7 +310,6 @@ export function commentDuplicateOption(
  *     originated.
  * @param e The right-click mouse event.
  * @returns A menu option, containing text, enabled, and a callback.
- * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
  *     comments are not bundled in.
  * @internal
  */

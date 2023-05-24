@@ -287,8 +287,6 @@ export class Input {
 
   /**
    * Sever all links to this input.
-   *
-   * @suppress {checkTypes}
    */
   dispose() {
     for (let i = 0, field; (field = this.fieldRow[i]); i++) {

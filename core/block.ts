@@ -312,7 +312,6 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param healStack If true, then try to heal any gap by connecting the next
    *     statement with the previous statement.  Otherwise, dispose of all
    *     children of this block.
-   * @suppress {checkTypes}
    */
   dispose(healStack: boolean) {
     if (this.isDeadOrDying()) return;

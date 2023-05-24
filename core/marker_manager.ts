@@ -174,7 +174,6 @@ export class MarkerManager {
    * Dispose of the marker manager.
    * Go through and delete all markers associated with this marker manager.
    *
-   * @suppress {checkTypes}
    * @internal
    */
   dispose() {

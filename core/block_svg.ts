@@ -773,7 +773,6 @@ export class BlockSvg
    *     statement with the previous statement.  Otherwise, dispose of all
    *     children of this block.
    * @param animate If true, show a disposal animation and sound.
-   * @suppress {checkTypes}
    */
   override dispose(healStack?: boolean, animate?: boolean) {
     if (this.isDeadOrDying()) return;

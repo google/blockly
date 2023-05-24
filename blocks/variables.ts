@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Variable blocks for Blockly.
- * @suppress {checkTypes}
  */
 
 import * as goog from '../closure/goog/goog.js';

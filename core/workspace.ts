@@ -151,8 +151,6 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Dispose of this workspace.
    * Unlink from all DOM elements to prevent memory leaks.
-   *
-   * @suppress {checkTypes}
    */
   dispose() {
     this.listeners.length = 0;

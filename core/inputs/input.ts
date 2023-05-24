@@ -18,6 +18,7 @@ import '../field_label.js';
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
+import type {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
 import * as fieldRegistry from '../field_registry.js';
 import type {RenderedConnection} from '../rendered_connection.js';
@@ -294,7 +295,15 @@ export class Input {
     }
   }
 
-  protected makeConnection(type: number): Connection {
+  /**
+   * Constructs a connection based on the type of this input's source block.
+   * Properly handles constructing headless connections for headless blocks
+   * and rendered connections for rendered blocks.
+   *
+   * @returns a connection of the given type, which is either a headless
+   *     or rendered connection, based on the type of this input's source block.
+   */
+  protected makeConnection(type: ConnectionType): Connection {
     return this.sourceBlock.makeConnection_(type);
   }
 }

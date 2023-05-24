@@ -2300,7 +2300,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns A new connection of the specified type.
    * @internal
    */
-  public makeConnection_(type: number): Connection {
+  makeConnection_(type: ConnectionType): Connection {
     return new Connection(this, type);
   }
 

@@ -1471,7 +1471,7 @@ export class BlockSvg
    * @returns A new connection of the specified type.
    * @internal
    */
-  public override makeConnection_(type: number): RenderedConnection {
+  override makeConnection_(type: ConnectionType): RenderedConnection {
     return new RenderedConnection(this, type);
   }
 

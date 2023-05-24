@@ -1568,13 +1568,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The input object created.
    */
   appendValueInput(name: string): Input {
-    return this.appendInput(
-      new ValueInput(
-        name,
-        this,
-        this.makeConnection_(ConnectionType.INPUT_VALUE)
-      )
-    );
+    return this.appendInput(new ValueInput(name, this));
   }
 
   /**
@@ -1586,13 +1580,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   appendStatementInput(name: string): Input {
     this.statementInputCount++;
-    return this.appendInput(
-      new StatementInput(
-        name,
-        this,
-        this.makeConnection_(ConnectionType.NEXT_STATEMENT)
-      )
-    );
+    return this.appendInput(new StatementInput(name, this));
   }
 
   /**
@@ -1632,7 +1620,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       false
     );
     if (!inputConstructor) return null;
-    return this.appendInput(new inputConstructor(name, this, null));
+    return this.appendInput(new inputConstructor(name, this));
   }
 
   /**
@@ -2309,8 +2297,9 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @param type The type of the connection to create.
    * @returns A new connection of the specified type.
+   * @internal
    */
-  protected makeConnection_(type: number): Connection {
+  makeConnection_(type: ConnectionType): Connection {
     return new Connection(this, type);
   }
 

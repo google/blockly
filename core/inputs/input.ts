@@ -18,6 +18,7 @@ import '../field_label.js';
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
+import type {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
 import * as fieldRegistry from '../field_registry.js';
 import type {RenderedConnection} from '../rendered_connection.js';
@@ -36,19 +37,14 @@ export class Input {
 
   public readonly type: inputTypes = inputTypes.CUSTOM;
 
+  public connection: Connection | null = null;
+
   /**
    * @param name Language-neutral identifier which may used to find this input
    *     again.
    * @param sourceBlock The block containing this input.
-   * @param connection Optional connection for this input. If this is a custom
-   *     input, `null` will always be passed, and then the subclass can
-   *     optionally construct a connection.
    */
-  constructor(
-    public name: string,
-    private sourceBlock: Block,
-    public connection: Connection | null
-  ) {}
+  constructor(public name: string, private sourceBlock: Block) {}
 
   /**
    * Get the source block for this input.
@@ -295,6 +291,18 @@ export class Input {
     if (this.connection) {
       this.connection.dispose();
     }
+  }
+
+  /**
+   * Constructs a connection based on the type of this input's source block.
+   * Properly handles constructing headless connections for headless blocks
+   * and rendered connections for rendered blocks.
+   *
+   * @returns a connection of the given type, which is either a headless
+   *     or rendered connection, based on the type of this input's source block.
+   */
+  protected makeConnection(type: ConnectionType): Connection {
+    return this.sourceBlock.makeConnection_(type);
   }
 }
 

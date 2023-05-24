@@ -45,7 +45,7 @@ export abstract class Bubble implements IBubble {
   static readonly ANCHOR_RADIUS = 8;
 
   /** The SVG group containing all parts of the bubble. */
-  private svgRoot: SVGGElement;
+  protected svgRoot: SVGGElement;
 
   /** The SVG path for the arrow from the anchor to the bubble. */
   private tail: SVGPathElement;
@@ -533,6 +533,20 @@ export abstract class Bubble implements IBubble {
     }
     steps.push('z');
     this.tail?.setAttribute('d', steps.join(' '));
+  }
+  /**
+   * Move this bubble to the front of the visible workspace.
+   *
+   * @returns Whether or not the bubble has been moved.
+   * @internal
+   */
+  bringToFront(): boolean {
+    const svgGroup = this.svgRoot?.parentNode;
+    if (this.svgRoot && svgGroup?.lastChild !== this.svgRoot) {
+      svgGroup?.appendChild(this.svgRoot);
+      return true;
+    }
+    return false;
   }
 
   /** @internal */

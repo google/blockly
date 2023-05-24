@@ -18,14 +18,6 @@
     {
       "tagName": "@nocollapse",
       "syntaxKind": "modifier"
-    },
-    {
-      "tagName": "@suppress",
-      "syntaxKind": "block"
-    },
-    {
-      "tagName": "@unrestricted",
-      "syntaxKind": "modifier"
     }
   ],
 

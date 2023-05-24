@@ -74,7 +74,7 @@ export class TextInputBubble extends Bubble {
     this.setSize(this.DEFAULT_SIZE, true);
   }
 
-  /** @return the text of this bubble. */
+  /** @returns the text of this bubble. */
   getText(): string {
     return this.text;
   }
@@ -226,7 +226,7 @@ export class TextInputBubble extends Bubble {
     super.setSize(size, relayout);
   }
 
-  /** @return the size of this bubble. */
+  /** @returns the size of this bubble. */
   getSize(): Size {
     // Overriden to be public.
     return super.getSize();

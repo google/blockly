@@ -542,7 +542,7 @@ export abstract class Bubble implements IBubble {
    */
   bringToFront(): boolean {
     const svgGroup = this.svgRoot?.parentNode;
-    if (svgGroup?.lastChild !== this.svgRoot && this.svgRoot) {
+    if (this.svgRoot && svgGroup?.lastChild !== this.svgRoot) {
       svgGroup?.appendChild(this.svgRoot);
       return true;
     }

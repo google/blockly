@@ -671,8 +671,14 @@ export class BlockSvg
       myConnections[i].moveBy(dx, dy);
     }
     const icons = this.getIcons();
-    for (let i = 0; i < icons.length; i++) {
-      icons[i].computeIconLocation();
+    const pos = this.getRelativeToSurfaceXY();
+    for (const icon of icons) {
+      if (isIcon(icon)) {
+        icon.onLocationChange(pos);
+      } else {
+        // TODO (#7042): Remove old icon handling code.
+        icon.computeIconLocation();
+      }
     }
 
     // Recurse through all blocks attached under this one.
@@ -1649,7 +1655,7 @@ export class BlockSvg
         this.updateCollapsed_();
       }
       this.workspace.getRenderer().render(this);
-      this.updateConnectionLocations();
+      this.updateConnectionAndIconLocations();
 
       if (opt_bubble !== false) {
         const parentBlock = this.getParent();
@@ -1728,7 +1734,7 @@ export class BlockSvg
    *
    * @internal
    */
-  updateConnectionLocations() {
+  private updateConnectionAndIconLocations() {
     const blockTL = this.getRelativeToSurfaceXY();
     // Don't tighten previous or output connections because they are inferior
     // connections.
@@ -1754,6 +1760,15 @@ export class BlockSvg
       if (this.nextConnection.isConnected()) {
         this.nextConnection.tighten();
       }
+    }
+
+    for (const icon of this.getIcons()) {
+      if (isIcon(icon)) {
+        icon.onLocationChange(blockTL);
+      }
+      // TODO (#7042): Remove the below comment.
+      // Updating the positions of old style icons is handled directly in the
+      // drawer.
     }
   }
 

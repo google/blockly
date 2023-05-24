@@ -330,7 +330,7 @@ export class Drawer {
       // be rendered so that the block can be sized correctly.
       // TODO (#7042): Figure out a better way to handle the types here,
       //     possibly by splitting this method into submethods.
-      if (isIcon((fieldInfo as Icon).icon)) {
+      if (Types.isIcon(fieldInfo) && isIcon((fieldInfo as Icon).icon)) {
         (
           (fieldInfo as Icon).icon as AnyDuringMigration
         ).hideForInsertionMarker();

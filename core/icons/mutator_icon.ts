@@ -36,7 +36,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
   static readonly WEIGHT = 1;
 
   /** The size of this icon in workspace-scale units. */
-  static readonly SIZE = 17;
+  private readonly SIZE = 17;
 
   /** The distance between the root block and the workspace edges. */
   private readonly MARGIN = 16;
@@ -111,7 +111,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
   }
 
   getSize(): Size {
-    return new Size(MutatorIcon.SIZE, MutatorIcon.SIZE);
+    return new Size(this.SIZE, this.SIZE);
   }
 
   applyColour(): void {
@@ -171,7 +171,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
     );
   }
 
-  /** @return the configuration the mini workspace should have. */
+  /** @returns the configuration the mini workspace should have. */
   private getMiniWorkspaceConfig() {
     const options: BlocklyOptions = {
       'disable': false,
@@ -196,11 +196,11 @@ export class MutatorIcon extends Icon implements IHasBubble {
   }
 
   /**
-   * @return the location the bubble should be anchored to.
+   * @returns the location the bubble should be anchored to.
    *     I.E. the middle of this icon.
    */
   private getAnchorLocation(): Coordinate {
-    const midIcon = MutatorIcon.SIZE / 2;
+    const midIcon = this.SIZE / 2;
     return Coordinate.sum(
       this.workspaceLocation,
       new Coordinate(midIcon, midIcon)
@@ -208,7 +208,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
   }
 
   /**
-   * @return the rect the bubble should avoid overlapping.
+   * @returns the rect the bubble should avoid overlapping.
    *     I.E. the block that owns this icon.
    */
   private getBubbleOwnerRect(): Rect {

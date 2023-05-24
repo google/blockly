@@ -329,7 +329,7 @@ const GET_SUBSTRING_BLOCK = {
     menu.setValidator(
       /**
        * @param value The input value.
-       * @return Null if the field has been replaced; otherwise undefined.
+       * @returns Null if the field has been replaced; otherwise undefined.
        */
       function (this: FieldDropdown, value: any): null | undefined {
         const newAt = value === 'FROM_START' || value === 'FROM_END';

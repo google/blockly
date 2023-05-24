@@ -1174,7 +1174,7 @@ export class Gesture {
     );
   }
 
-  /** @return Whether this gesture is a click on an icon. */
+  /** @returns Whether this gesture is a click on an icon. */
   private isIconClick(): boolean {
     return !!this.startIcon && !this.hasExceededDragRadius;
   }

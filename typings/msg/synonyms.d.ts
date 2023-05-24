@@ -5,12 +5,10 @@
  */
 
 /**
- * @fileoverview Type definitions for the Blockly synonyms locale.
- * @author samelh@google.com (Sam El-Husseini)
+ *  Type definitions for the Blockly synonyms locale.
  */
 
 /// <reference path="msg.d.ts" />
 
 import BlocklyMsg = Blockly.Msg;
 export = BlocklyMsg;
-

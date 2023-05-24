@@ -5,7 +5,7 @@
  */
 
 export interface IHasBubble {
-  /** @return True if the bubble is currently open, false otherwise. */
+  /** @returns True if the bubble is currently open, false otherwise. */
   bubbleIsVisible(): boolean;
 
   /** Sets whether the bubble is open or not. */

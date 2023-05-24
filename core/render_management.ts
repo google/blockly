@@ -27,7 +27,7 @@ let afterRendersPromise: Promise<void> | null = null;
  * and registers a callback to do so after a delay, to allowf or batching.
  *
  * @param block The block to rerender.
- * @return A promise that resolves after the currently queued renders have been
+ * @returns A promise that resolves after the currently queued renders have been
  *     completed. Used for triggering other behavior that relies on updated
  *     size/position location for the block.
  * @internal

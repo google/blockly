@@ -44,7 +44,6 @@ export class WorkspaceDragger {
   /**
    * Sever all links from this object.
    *
-   * @suppress {checkTypes}
    * @internal
    */
   dispose() {

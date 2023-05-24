@@ -81,8 +81,6 @@ export class ScrollbarPair {
   /**
    * Dispose of this pair of scrollbars.
    * Unlink from all DOM elements to prevent memory leaks.
-   *
-   * @suppress {checkTypes}
    */
   dispose() {
     dom.removeNode(this.corner_);

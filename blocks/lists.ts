@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview List blocks for Blockly.
- * @suppress {checkTypes}
- */
-
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.lists');
 
@@ -163,7 +158,7 @@ const LISTS_CREATE_WITH = {
   /**
    * Returns the state of this block as a JSON serializable object.
    *
-   * @return The state of this block, ie the item count.
+   * @returns The state of this block, ie the item count.
    */
   saveExtraState: function (this: CreateWithBlock): {itemCount: number} {
     return {
@@ -183,7 +178,7 @@ const LISTS_CREATE_WITH = {
    * Populate the mutator's dialog with this block's components.
    *
    * @param workspace Mutator's workspace.
-   * @return Root block in mutator.
+   * @returns Root block in mutator.
    */
   decompose: function (
     this: CreateWithBlock,
@@ -482,7 +477,7 @@ const LISTS_GETINDEX = {
    * Create XML to represent whether the block is a statement or a value.
    * Also represent whether there is an 'AT' input.
    *
-   * @return XML storage element.
+   * @returns XML storage element.
    */
   mutationToDom: function (this: GetIndexBlock): Element {
     const container = xmlUtils.createElement('mutation');
@@ -509,7 +504,7 @@ const LISTS_GETINDEX = {
    * Returns the state of this block as a JSON serializable object.
    * Returns null for efficiency if no state is needed (not a statement)
    *
-   * @return The state of this block, ie whether it's a statement.
+   * @returns The state of this block, ie whether it's a statement.
    */
   saveExtraState: function (this: GetIndexBlock): {
     isStatement: boolean;
@@ -586,7 +581,7 @@ const LISTS_GETINDEX = {
     menu.setValidator(
       /**
        * @param value The input value.
-       * @return Null if the field has been replaced; otherwise undefined.
+       * @returns Null if the field has been replaced; otherwise undefined.
        */
       function (this: FieldDropdown, value: string) {
         const newAt = value === 'FROM_START' || value === 'FROM_END';
@@ -699,7 +694,7 @@ const LISTS_SETINDEX = {
   /**
    * Create XML to represent whether there is an 'AT' input.
    *
-   * @return XML storage element.
+   * @returns XML storage element.
    */
   mutationToDom: function (this: SetIndexBlock): Element {
     const container = xmlUtils.createElement('mutation');
@@ -725,7 +720,7 @@ const LISTS_SETINDEX = {
    * encoded in the dropdown values, but must have an implementation to avoid
    * the backward compatible XML mutations being serialized.
    *
-   * @return The state of this block.
+   * @returns The state of this block.
    */
   saveExtraState: function (this: SetIndexBlock): null {
     return null;
@@ -765,7 +760,7 @@ const LISTS_SETINDEX = {
     menu.setValidator(
       /**
        * @param value The input value.
-       * @return Null if the field has been replaced; otherwise undefined.
+       * @returns Null if the field has been replaced; otherwise undefined.
        */
       function (this: FieldDropdown, value: string) {
         const newAt = value === 'FROM_START' || value === 'FROM_END';
@@ -834,7 +829,7 @@ const LISTS_GETSUBLIST = {
   /**
    * Create XML to represent whether there are 'AT' inputs.
    *
-   * @return XML storage element.
+   * @returns XML storage element.
    */
   mutationToDom: function (this: GetSublistBlock): Element {
     const container = xmlUtils.createElement('mutation');
@@ -862,7 +857,7 @@ const LISTS_GETSUBLIST = {
    * encoded in the dropdown values, but must have an implementation to avoid
    * the backward compatible XML mutations being serialized.
    *
-   * @return The state of this block.
+   * @returns The state of this block.
    */
   saveExtraState: function (this: GetSublistBlock): null {
     return null;
@@ -906,7 +901,7 @@ const LISTS_GETSUBLIST = {
     menu.setValidator(
       /**
        * @param value The input value.
-       * @return Null if the field has been replaced; otherwise undefined.
+       * @returns Null if the field has been replaced; otherwise undefined.
        */
       function (this: FieldDropdown, value: string) {
         const newAt = value === 'FROM_START' || value === 'FROM_END';
@@ -1047,7 +1042,7 @@ blocks['lists_split'] = {
   /**
    * Create XML to represent the input and output types.
    *
-   * @return XML storage element.
+   * @returns XML storage element.
    */
   mutationToDom: function (this: SplitBlock): Element {
     const container = xmlUtils.createElement('mutation');
@@ -1069,7 +1064,7 @@ blocks['lists_split'] = {
    * encoded in the dropdown values, but must have an implementation to avoid
    * the backward compatible XML mutations being serialized.
    *
-   * @return The state of this block.
+   * @returns The state of this block.
    */
   saveExtraState: function (this: SplitBlock): null {
     return null;

@@ -423,8 +423,6 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Dispose of this flyout.
    * Unlink from all DOM elements to prevent memory leaks.
-   *
-   * @suppress {checkTypes}
    */
   dispose() {
     this.hide();

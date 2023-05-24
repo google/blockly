@@ -312,7 +312,6 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param healStack If true, then try to heal any gap by connecting the next
    *     statement with the previous statement.  Otherwise, dispose of all
    *     children of this block.
-   * @suppress {checkTypes}
    */
   dispose(healStack: boolean) {
     if (this.isDeadOrDying()) return;
@@ -2246,7 +2245,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * block.
    *
    * @param type The type of the icon to remove from the block.
-   * @return True if an icon with the given type was found, false otherwise.
+   * @returns True if an icon with the given type was found, false otherwise.
    */
   removeIcon(type: string): boolean {
     if (!this.hasIcon(type)) return false;
@@ -2255,7 +2254,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * @return True if an icon with the given type exists on the block,
+   * @returns True if an icon with the given type exists on the block,
    *     false otherwise.
    */
   hasIcon(type: string): boolean {
@@ -2263,14 +2262,14 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * @return The icon with the given type if it exists on the block, undefined
+   * @returns The icon with the given type if it exists on the block, undefined
    *     otherwise.
    */
   getIcon(type: string): IIcon | undefined {
     return this.icons.find((icon) => icon.getType() === type);
   }
 
-  /** @return An array of the icons attached to this block. */
+  /** @returns An array of the icons attached to this block. */
   getIcons(): IIcon[] {
     return [...this.icons];
   }

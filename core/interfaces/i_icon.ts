@@ -9,7 +9,7 @@ import type {Size} from '../utils/size.js';
 
 export interface IIcon {
   /**
-   * @return the string representing the type of the icon.
+   * @returns the string representing the type of the icon.
    * E.g. 'comment', 'warning', etc. This string should also be used when
    * registering the icon class.
    */
@@ -35,13 +35,13 @@ export interface IIcon {
   dispose(): void;
 
   /**
-   * @return the "weight" of the icon, which determines the static order which
+   * @returns the "weight" of the icon, which determines the static order which
    *     icons should be rendered in. More positive numbers are rendered farther
    *     toward the end of the block.
    */
   getWeight(): number;
 
-  /** @return The dimensions of the icon for use in rendering. */
+  /** @returns The dimensions of the icon for use in rendering. */
   getSize(): Size;
 
   /** Updates the icon's color when the block's color changes.. */
@@ -60,7 +60,7 @@ export interface IIcon {
   updateCollapsed(): void;
 
   /**
-   * @return Whether this icon is shown when the block is collapsed. Used
+   * @returns Whether this icon is shown when the block is collapsed. Used
    *     to allow renderers to account for padding.
    */
   isShownWhenCollapsed(): boolean;

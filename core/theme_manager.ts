@@ -171,7 +171,6 @@ export class ThemeManager {
   /**
    * Dispose of this theme manager.
    *
-   * @suppress {checkTypes}
    * @internal
    */
   dispose() {

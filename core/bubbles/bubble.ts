@@ -149,7 +149,7 @@ export abstract class Bubble implements IBubble {
     this.renderTail();
   }
 
-  /** @return the size of this bubble. */
+  /** @returns the size of this bubble. */
   protected getSize() {
     return this.size;
   }
@@ -417,7 +417,7 @@ export abstract class Bubble implements IBubble {
   }
 
   /**
-   * @return a rect defining the bounds of the workspace's view in workspace
+   * @returns a rect defining the bounds of the workspace's view in workspace
    * coordinates.
    */
   private getWorkspaceViewRect(viewMetrics: ContainerRegion): Rect {
@@ -436,7 +436,7 @@ export abstract class Bubble implements IBubble {
     return new Rect(top, bottom, left, right);
   }
 
-  /** @return the scrollbar thickness in workspace units. */
+  /** @returns the scrollbar thickness in workspace units. */
   private getScrollbarThickness() {
     return Scrollbar.scrollbarThickness / this.workspace.scale;
   }

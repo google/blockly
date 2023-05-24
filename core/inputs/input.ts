@@ -36,6 +36,8 @@ export class Input {
 
   public readonly type: inputTypes = inputTypes.CUSTOM;
 
+  public connection: Connection | null = null;
+
   /**
    * @param name Language-neutral identifier which may used to find this input
    *     again.
@@ -44,11 +46,7 @@ export class Input {
    *     input, `null` will always be passed, and then the subclass can
    *     optionally construct a connection.
    */
-  constructor(
-    public name: string,
-    private sourceBlock: Block,
-    public connection: Connection | null
-  ) {}
+  constructor(public name: string, private sourceBlock: Block) {}
 
   /**
    * Get the source block for this input.
@@ -297,6 +295,10 @@ export class Input {
     if (this.connection) {
       this.connection.dispose();
     }
+  }
+
+  protected makeConnection(type: number): Connection {
+    return this.sourceBlock.makeConnection_(type);
   }
 }
 

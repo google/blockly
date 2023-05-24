@@ -47,7 +47,9 @@ export abstract class Icon implements IIcon {
     );
   }
 
-  dispose(): void {}
+  dispose(): void {
+    dom.removeNode(this.svgRoot);
+  }
 
   getWeight(): number {
     return -1;

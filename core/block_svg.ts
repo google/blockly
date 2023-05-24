@@ -989,7 +989,6 @@ export class BlockSvg
 
     // TODO: Make getIcon take in a type parameter?
     const icon = this.getIcon(WarningIcon.TYPE) as WarningIcon | undefined;
-    let changedState = false;
     if (typeof text === 'string') {
       // Bubble up to add a warning on top-most collapsed block.
       let parent = this.getSurroundParent();
@@ -1011,27 +1010,14 @@ export class BlockSvg
         (icon as WarningIcon).addMessage(text, id);
       } else {
         this.addIcon(new WarningIcon(this).addMessage(text, id));
-        changedState = true;
       }
     } else if (icon) {
       // Dispose all warnings if no ID is given.
       if (!id) {
         this.removeIcon(WarningIcon.TYPE);
-        changedState = true;
       } else {
-        const oldText = icon.getText();
-        icon.addMessage('', id);
-        const newText = icon.getText();
-        if (!newText) this.removeIcon(WarningIcon.TYPE);
-        changedState = oldText !== newText;
+        if (!icon.getText()) this.removeIcon(WarningIcon.TYPE);
       }
-    }
-    if (changedState && this.rendered) {
-      // Icons must force an immediate render so that bubbles can be opened
-      // immedately at the correct position.
-      this.render();
-      // Adding or removing a warning icon will cause the block to change shape.
-      this.bumpNeighbours();
     }
   }
 

@@ -10,6 +10,7 @@ goog.declareModuleId('Blockly.Warning');
 import {BlockSvg} from '../block_svg.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
+import * as eventUtils from '../events/utils.js';
 import {Icon} from './icon.js';
 import {IHasBubble} from '../interfaces/i_has_bubble.js';
 import {Rect} from '../utils/rect.js';
@@ -28,7 +29,7 @@ export class WarningIcon extends Icon implements IHasBubble {
   static readonly WEIGHT = 2;
 
   /** The size of this icon in workspace-scale units. */
-  static readonly SIZE = 17;
+  private readonly SIZE = 17;
 
   /** A map of warning IDs to warning text. */
   private textMap: Map<string, string> = new Map();
@@ -83,6 +84,7 @@ export class WarningIcon extends Icon implements IHasBubble {
   }
 
   dispose() {
+    super.dispose();
     if (this.textBubble) this.textBubble.dispose();
   }
 
@@ -91,7 +93,7 @@ export class WarningIcon extends Icon implements IHasBubble {
   }
 
   getSize(): Size {
-    return new Size(17, 17);
+    return new Size(this.SIZE, this.SIZE);
   }
 
   applyColour(): void {
@@ -137,7 +139,7 @@ export class WarningIcon extends Icon implements IHasBubble {
   }
 
   /**
-   * @return the display text for this icon. Includes all warning messages
+   * @returns the display text for this icon. Includes all warning messages
    *     concatenated together with newlines.
    * @internal
    */
@@ -169,14 +171,22 @@ export class WarningIcon extends Icon implements IHasBubble {
       this.textBubble?.dispose();
       this.textBubble = null;
     }
+
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+        this.sourceBlock,
+        visible,
+        'warning'
+      )
+    );
   }
 
   /**
-   * @return the location the bubble should be anchored to.
+   * @returns the location the bubble should be anchored to.
    *     I.E. the middle of this icon.
    */
   private getAnchorLocation(): Coordinate {
-    const midIcon = WarningIcon.SIZE / 2;
+    const midIcon = this.SIZE / 2;
     return Coordinate.sum(
       this.workspaceLocation,
       new Coordinate(midIcon, midIcon)
@@ -184,7 +194,7 @@ export class WarningIcon extends Icon implements IHasBubble {
   }
 
   /**
-   * @return the rect the bubble should avoid overlapping.
+   * @returns the rect the bubble should avoid overlapping.
    *     I.E. the block that owns this icon.
    */
   private getBubbleOwnerRect(): Rect {

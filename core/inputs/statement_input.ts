@@ -20,7 +20,6 @@ export class StatementInput extends Input {
    * @param name Language-neutral identifier which may used to find this input
    *     again.
    * @param block The block containing this input.
-   * @param connection The statement connection for this input.
    */
   constructor(public name: string, block: Block) {
     // Errors are maintained for people not using typescript.

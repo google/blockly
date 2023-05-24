@@ -219,7 +219,8 @@ function saveIcons(block: Block, state: State, doFullSerialization: boolean) {
   const icons = Object.create(null);
   for (const icon of block.getIcons()) {
     if (isSerializable(icon)) {
-      icons[icon.getType()] = icon.saveState(doFullSerialization);
+      const state = icon.saveState(doFullSerialization);
+      if (state) icons[icon.getType()] = state;
     }
   }
 
@@ -584,9 +585,6 @@ function loadIcons(block: Block, state: State) {
 
   const iconTypes = Object.keys(state['icons']);
   for (const iconType of iconTypes) {
-    // TODO(#7038): Remove this special casing of comment..
-    if (iconType === 'comment') continue;
-
     const iconState = state['icons'][iconType];
     let icon = block.getIcon(iconType);
     if (!icon) {

@@ -18,7 +18,7 @@ import './events/events_selected.js';
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
 import * as browserEvents from './browser_events.js';
-import {Comment} from './comment.js';
+import {CommentIcon} from './icons/comment_icon.js';
 import * as common from './common.js';
 import {config} from './config.js';
 import type {Connection} from './connection.js';
@@ -110,7 +110,7 @@ export class BlockSvg
   mutator: Mutator | null = null;
 
   /** Block's comment icon (if any). */
-  private commentIcon_: Comment | null = null;
+  private commentIcon_: CommentIcon | null = null;
 
   /**
    * Block's warning icon (if any).
@@ -910,43 +910,8 @@ export class BlockSvg
    *
    * @returns The comment icon attached to this block, or null.
    */
-  getCommentIcon(): Comment | null {
+  getCommentIcon(): CommentIcon | null {
     return this.commentIcon_;
-  }
-
-  /**
-   * Set this block's comment text.
-   *
-   * @param text The text, or null to delete.
-   */
-  override setCommentText(text: string | null) {
-    if (this.commentModel.text === text) {
-      return;
-    }
-    super.setCommentText(text);
-
-    const shouldHaveComment = text !== null;
-    if (!!this.commentIcon_ === shouldHaveComment) {
-      // If the comment's state of existence is correct, but the text is new
-      // that means we're just updating a comment.
-      this.commentIcon_!.updateText();
-      return;
-    }
-    if (shouldHaveComment) {
-      this.commentIcon_ = new Comment(this);
-      this.comment = this.commentIcon_; // For backwards compatibility.
-    } else {
-      this.commentIcon_!.dispose();
-      this.commentIcon_ = null;
-      this.comment = null; // For backwards compatibility.
-    }
-    if (this.rendered) {
-      // Icons must force an immediate render so that bubbles can be opened
-      // immedately at the correct position.
-      this.render();
-      // Adding or removing a comment icon will cause the block to change shape.
-      this.bumpNeighbours();
-    }
   }
 
   /**
@@ -1048,6 +1013,10 @@ export class BlockSvg
     super.addIcon(icon);
 
     if (icon instanceof WarningIcon) this.warning = icon;
+    if (icon instanceof CommentIcon) {
+      this.commentIcon_ = icon;
+      this.comment = icon;
+    }
 
     if (this.rendered) {
       icon.initView(this.createIconPointerDownListener(icon));
@@ -1079,6 +1048,10 @@ export class BlockSvg
     const removed = super.removeIcon(type);
 
     if (type === WarningIcon.TYPE) this.warning = null;
+    if (type === CommentIcon.TYPE) {
+      this.commentIcon_ = null;
+      this.comment = null;
+    }
 
     if (this.rendered) {
       // TODO: Change this based on #7068.
@@ -1092,7 +1065,6 @@ export class BlockSvg
   //   resolved.
   override getIcons(): AnyDuringMigration[] {
     const icons: AnyDuringMigration = [...this.icons];
-    if (this.commentIcon_) icons.push(this.commentIcon_);
     if (this.mutator) icons.push(this.mutator);
     return icons;
   }

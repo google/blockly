@@ -343,23 +343,17 @@ export class Block implements IASTNodeLocation, IDeletable {
       this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
 
-    eventUtils.disable();
-    try {
-      this.workspace.removeTypedBlock(this);
-      this.workspace.removeBlockById(this.id);
-      this.disposing = true;
+    this.workspace.removeTypedBlock(this);
+    this.workspace.removeBlockById(this.id);
+    this.disposing = true;
 
-      this.childBlocks_.forEach((c) => c.disposeInternal());
-      this.inputList.forEach((i) => i.dispose());
-      this.inputList.length = 0;
-      this.getConnections_(true).forEach((c) => c.dispose());
-    } finally {
-      eventUtils.enable();
-      if (typeof this.destroy === 'function') {
-        this.destroy();
-      }
-      this.disposed = true;
-    }
+    if (typeof this.destroy === 'function') this.destroy();
+
+    this.childBlocks_.forEach((c) => c.disposeInternal());
+    this.inputList.forEach((i) => i.dispose());
+    this.inputList.length = 0;
+    this.getConnections_(true).forEach((c) => c.dispose());
+    this.disposed = true;
   }
 
   /**

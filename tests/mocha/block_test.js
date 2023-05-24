@@ -213,7 +213,11 @@ suite('Blocks', function () {
     suite('calling destroy', function () {
       setup(function () {
         Blockly.Blocks['destroyable_block'] = {
-          init: function () {},
+          init: function () {
+            this.appendStatementInput('STATEMENT');
+            this.setPreviousStatement(true);
+            this.setNextStatement(true);
+          },
           destroy: function () {},
         };
         this.block = this.workspace.newBlock('destroyable_block');
@@ -262,6 +266,26 @@ suite('Blocks', function () {
       test('events can be fired from destroy', function () {
         const mockEvent = createMockEvent(this.workspace);
         this.block.destroy = function () {
+          Blockly.Events.fire(mockEvent);
+        };
+        const spy = createChangeListenerSpy(this.workspace);
+
+        this.block.dispose();
+        this.clock.runAll();
+
+        chai.assert.isTrue(
+          spy.calledWith(mockEvent),
+          'Expected to be able to fire events from destroy'
+        );
+      });
+
+      test('child blocks can fire events from destroy', function () {
+        const mockEvent = createMockEvent(this.workspace);
+        const childBlock = this.workspace.newBlock('destroyable_block');
+        this.block
+          .getInput('STATEMENT')
+          .connection.connect(childBlock.previousConnection);
+        childBlock.destroy = function () {
           Blockly.Events.fire(mockEvent);
         };
         const spy = createChangeListenerSpy(this.workspace);

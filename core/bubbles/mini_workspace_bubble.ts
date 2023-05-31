@@ -140,7 +140,7 @@ export class MiniWorkspaceBubble extends Bubble {
   /**
    * Bumps blocks that are above the top or outside the start-side of the
    * workspace back within the workspace.
-   * 
+   *
    * Blocks that are below the bottom or outside the end-side of the workspace
    * are dealt with by resizing the workspace to show them.
    */

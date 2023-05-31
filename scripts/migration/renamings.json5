@@ -1470,6 +1470,6 @@
     {
       oldName: 'Blockly.Mutator',
       newName: 'Blockly.icons.MutatorIcon',
-    }
+    },
   ],
 }

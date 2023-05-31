@@ -233,7 +233,9 @@ export class MutatorIcon extends Icon implements IHasBubble {
     const flyoutWidth =
       this.miniWorkspaceBubble?.getWorkspace()?.getFlyout()?.getWidth() ?? 0;
     this.rootBlock.moveBy(
-      this.rootBlock.RTL ? -(flyoutWidth + this.WORKSPACE_MARGIN) : this.WORKSPACE_MARGIN,
+      this.rootBlock.RTL
+        ? -(flyoutWidth + this.WORKSPACE_MARGIN)
+        : this.WORKSPACE_MARGIN,
       this.WORKSPACE_MARGIN
     );
   }

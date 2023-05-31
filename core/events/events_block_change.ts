@@ -146,9 +146,9 @@ export class BlockChange extends BlockBase {
       );
     }
     // Assume the block is rendered so that then we can check.
-    // const blockSvg = block as BlockSvg;
     const icon = block.getIcon(MUTATOR_TYPE);
     if (icon && hasBubble(icon) && icon.bubbleIsVisible()) {
+      // Close the mutator (if open) since we don't want to update it.
       icon.setBubbleVisible(false);
     }
     const value = forward ? this.newValue : this.oldValue;

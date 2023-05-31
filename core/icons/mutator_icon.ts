@@ -38,8 +38,11 @@ export class MutatorIcon extends Icon implements IHasBubble {
   /** The size of this icon in workspace-scale units. */
   private readonly SIZE = 17;
 
-  /** The distance between the root block and the workspace edges. */
-  private readonly MARGIN = 16;
+  /**
+   * The distance between the root block in the mini workspace and that
+   * workspace's edges.
+   */
+  private readonly WORKSPACE_MARGIN = 16;
 
   /** The bubble used to show the mini workspace to the user. */
   private miniWorkspaceBubble: MiniWorkspaceBubble | null = null;
@@ -103,7 +106,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
   }
 
   dispose(): void {
-    if (this.miniWorkspaceBubble) this.miniWorkspaceBubble.dispose();
+    this.miniWorkspaceBubble?.dispose();
   }
 
   getWeight(): number {
@@ -121,9 +124,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
 
   updateCollapsed(): void {
     super.updateCollapsed();
-    if (this.bubbleIsVisible() && this.sourceBlock.isCollapsed()) {
-      this.setBubbleVisible(false);
-    }
+    if (this.sourceBlock.isCollapsed()) this.setBubbleVisible(false);
   }
 
   onLocationChange(blockOrigin: Coordinate): void {
@@ -232,8 +233,8 @@ export class MutatorIcon extends Icon implements IHasBubble {
     const flyoutWidth =
       this.miniWorkspaceBubble?.getWorkspace()?.getFlyout()?.getWidth() ?? 0;
     this.rootBlock.moveBy(
-      this.rootBlock.RTL ? -(flyoutWidth + this.MARGIN) : this.MARGIN,
-      this.MARGIN
+      this.rootBlock.RTL ? -(flyoutWidth + this.WORKSPACE_MARGIN) : this.WORKSPACE_MARGIN,
+      this.WORKSPACE_MARGIN
     );
   }
 
@@ -254,7 +255,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
    */
   private createMiniWorkspaceChangeListener() {
     return (e: Abstract) => {
-      if (!this.shouldIgnoreMutatorEvent(e) && !this.updateWorkspacePid) {
+      if (!MutatorIcon.isIgnorableMutatorEvent(e) && !this.updateWorkspacePid) {
         this.updateWorkspacePid = setTimeout(() => {
           this.updateWorkspacePid = null;
           this.recomposeSourceBlock();
@@ -266,8 +267,10 @@ export class MutatorIcon extends Icon implements IHasBubble {
   /**
    * Returns true if the given event is not one the mutator needs to
    * care about.
+   *
+   * @internal
    */
-  private shouldIgnoreMutatorEvent(e: Abstract) {
+  static isIgnorableMutatorEvent(e: Abstract) {
     return (
       e.isUiEvent ||
       e.type === eventUtils.CREATE ||
@@ -336,8 +339,8 @@ export class MutatorIcon extends Icon implements IHasBubble {
   }
 
   /**
-   * Returns the parent workspace of a workspace that is inside a mutator,
-   * taking into account wither it is a flyout.
+   * Returns the parent workspace of a workspace that is inside a mini workspace
+   * bubble, taking into account whether the workspace is a flyout.
    */
   static findParentWs(workspace: WorkspaceSvg): WorkspaceSvg | null {
     let outerWs = null;

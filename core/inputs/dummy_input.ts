@@ -18,6 +18,6 @@ export class DummyInput extends Input {
    * @param block The block containing this input.
    */
   constructor(public name: string, block: Block) {
-    super(name, block, null);
+    super(name, block);
   }
 }

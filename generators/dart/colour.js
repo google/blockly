@@ -7,11 +7,11 @@
 /**
  * @fileoverview Generating Dart for colour blocks.
  */
-'use strict';
 
-goog.module('Blockly.Dart.colour');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Dart.colour');
 
-const {dartGenerator: Dart} = goog.require('Blockly.Dart');
+import {dartGenerator as Dart} from '../dart.js';
 
 
 Dart.addReservedWords('Math');

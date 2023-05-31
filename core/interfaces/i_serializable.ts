@@ -9,7 +9,7 @@ export interface ISerializable {
    * @param doFullSerialization If true, this signals that any backing data
    *     structures used by this ISerializable should also be serialized. This
    *     is used for copy-paste.
-   * @return a JSON serializable value that records the icon's state.
+   * @returns a JSON serializable value that records the icon's state.
    */
   saveState(doFullSerialization: boolean): any;
 

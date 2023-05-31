@@ -69,7 +69,7 @@ export class Mutator extends Icon {
    * Function registered on the main workspace to update the mutator contents
    * when the main workspace changes.
    */
-  private sourceListener: Function | null = null;
+  private sourceListener: (() => void) | null = null;
 
   /**
    * The PID associated with the updateWorkpace_ timeout, or null if no timeout

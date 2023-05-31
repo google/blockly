@@ -18,31 +18,34 @@ import {WorkspaceSvg} from '../workspace_svg.js';
 
 export abstract class Bubble implements IBubble {
   /** The width of the border around the bubble. */
-  static BORDER_WIDTH = 6;
+  static readonly BORDER_WIDTH = 6;
+
+  /** Double the width of the border around the bubble. */
+  static readonly DOUBLE_BORDER = this.BORDER_WIDTH * 2;
 
   /** The minimum size the bubble can have. */
-  static MIN_SIZE = this.BORDER_WIDTH * 2;
+  static readonly MIN_SIZE = this.DOUBLE_BORDER;
 
   /**
    * The thickness of the base of the tail in relation to the size of the
    * bubble. Higher numbers result in thinner tails.
    */
-  static TAIL_THICKNESS = 1;
+  static readonly TAIL_THICKNESS = 1;
 
   /** The number of degrees that the tail bends counter-clockwise. */
-  static TAIL_ANGLE = 20;
+  static readonly TAIL_ANGLE = 20;
 
   /**
    * The sharpness of the tail's bend. Higher numbers result in smoother
    * tails.
    */
-  static TAIL_BEND = 4;
+  static readonly TAIL_BEND = 4;
 
   /** Distance between arrow point and anchor point. */
-  static ANCHOR_RADIUS = 8;
+  static readonly ANCHOR_RADIUS = 8;
 
   /** The SVG group containing all parts of the bubble. */
-  private svgRoot: SVGGElement;
+  protected svgRoot: SVGGElement;
 
   /** The SVG path for the arrow from the anchor to the bubble. */
   private tail: SVGPathElement;
@@ -146,7 +149,7 @@ export abstract class Bubble implements IBubble {
     this.renderTail();
   }
 
-  /** @return the size of this bubble. */
+  /** @returns the size of this bubble. */
   protected getSize() {
     return this.size;
   }
@@ -414,7 +417,7 @@ export abstract class Bubble implements IBubble {
   }
 
   /**
-   * @return a rect defining the bounds of the workspace's view in workspace
+   * @returns a rect defining the bounds of the workspace's view in workspace
    * coordinates.
    */
   private getWorkspaceViewRect(viewMetrics: ContainerRegion): Rect {
@@ -433,7 +436,7 @@ export abstract class Bubble implements IBubble {
     return new Rect(top, bottom, left, right);
   }
 
-  /** @return the scrollbar thickness in workspace units. */
+  /** @returns the scrollbar thickness in workspace units. */
   private getScrollbarThickness() {
     return Scrollbar.scrollbarThickness / this.workspace.scale;
   }
@@ -531,6 +534,20 @@ export abstract class Bubble implements IBubble {
     steps.push('z');
     this.tail?.setAttribute('d', steps.join(' '));
   }
+  /**
+   * Move this bubble to the front of the visible workspace.
+   *
+   * @returns Whether or not the bubble has been moved.
+   * @internal
+   */
+  bringToFront(): boolean {
+    const svgGroup = this.svgRoot?.parentNode;
+    if (this.svgRoot && svgGroup?.lastChild !== this.svgRoot) {
+      svgGroup?.appendChild(this.svgRoot);
+      return true;
+    }
+    return false;
+  }
 
   /** @internal */
   getRelativeToSurfaceXY(): Coordinate {
@@ -548,11 +565,8 @@ export abstract class Bubble implements IBubble {
   }
 
   /**
-   * Move this bubble during a drag, taking into account whether or not there is
-   * a drag surface.
+   * Move this bubble during a drag.
    *
-   * @param dragSurface The surface that carries rendered items during a drag,
-   *     or null if no drag surface is in use.
    * @param newLoc The location to translate to, in workspace coordinates.
    * @internal
    */

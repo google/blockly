@@ -7,13 +7,13 @@
 /**
  * @fileoverview Generating PHP for procedure blocks.
  */
-'use strict';
 
-goog.module('Blockly.PHP.procedures');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.PHP.procedures');
 
-const Variables = goog.require('Blockly.Variables');
-const {NameType} = goog.require('Blockly.Names');
-const {phpGenerator: PHP} = goog.require('Blockly.PHP');
+import * as Variables from '../../core/variables.js';
+import {NameType} from '../../core/names.js';
+import {phpGenerator as PHP} from '../php.js';
 
 
 PHP['procedures_defreturn'] = function(block) {

@@ -121,9 +121,18 @@ function buildTSOverride({files, tsconfig}) {
           'publicOnly': true,
         },
       ],
-      // Disable because of false alarms with Closure-supported tags.
-      // Re-enable after Closure is removed.
-      'jsdoc/check-tag-names': ['off'],
+      'jsdoc/check-tag-names': [
+        'error',
+        {
+          'definedTags': [
+            'sealed',
+            'typeParam',
+            'remarks',
+            'define',
+            'nocollapse',
+          ],
+        },
+      ],
       // Re-enable after Closure is removed. There shouldn't even be
       // types in the TsDoc.
       // These are "types" because of Closure's @suppress {warningName}

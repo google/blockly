@@ -22,6 +22,7 @@ import * as common from './common.js';
 import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
 import type {Icon} from './icon_old.js';
+import {isIcon} from './interfaces/i_icon.js';
 import {InsertionMarkerManager} from './insertion_marker_manager.js';
 import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
@@ -29,6 +30,7 @@ import * as registry from './registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import {hasBubble} from './interfaces/i_has_bubble.js';
 
 /**
  * Class for a block dragger.  It moves blocks around the workspace when they
@@ -75,7 +77,7 @@ export class BlockDragger implements IBlockDragger {
      * on this block and its descendants.  Moving an icon moves the bubble that
      * extends from it if that bubble is open.
      */
-    this.dragIconData_ = initIconData(block);
+    this.dragIconData_ = initIconData(block, this.startXY_);
   }
 
   /**
@@ -406,9 +408,13 @@ export class BlockDragger implements IBlockDragger {
    */
   protected dragIcons_(dxy: Coordinate) {
     // Moving icons moves their associated bubbles.
-    for (let i = 0; i < this.dragIconData_.length; i++) {
-      const data = this.dragIconData_[i];
-      data.icon.setIconLocation(Coordinate.sum(data.location, dxy));
+    for (const data of this.dragIconData_) {
+      if (isIcon(data.icon)) {
+        data.icon.onLocationChange(Coordinate.sum(data.location, dxy));
+      } else {
+        // TODO: Remove old icon handling logic.
+        data.icon.setIconLocation(Coordinate.sum(data.location, dxy));
+      }
     }
   }
 
@@ -442,26 +448,40 @@ export interface IconPositionData {
  * extends from it if that bubble is open.
  *
  * @param block The root block that is being dragged.
+ * @param blockOrigin The top left of the given block in workspace coordinates.
  * @returns The list of all icons and their locations.
  */
-function initIconData(block: BlockSvg): IconPositionData[] {
+function initIconData(
+  block: BlockSvg,
+  blockOrigin: Coordinate
+): IconPositionData[] {
   // Build a list of icons that need to be moved and where they started.
   const dragIconData = [];
-  const descendants = block.getDescendants(false);
 
-  for (let i = 0, descendant; (descendant = descendants[i]); i++) {
-    const icons = descendant.getIcons();
-    for (let j = 0; j < icons.length; j++) {
-      // Only bother to track icons whose bubble is visible.
-      if (!icons[j].isVisible()) continue;
-      const data = {
+  for (const icon of block.getIcons()) {
+    // Only bother to track icons whose bubble is visible.
+    if (hasBubble(icon) && !icon.bubbleIsVisible()) continue;
+    // TODO (#7042): Remove old icon handling code.
+    if (icon.isVisible && !icon.isVisible()) continue;
+
+    if (isIcon(icon)) {
+      dragIconData.push({location: blockOrigin, icon: icon});
+      icon.onLocationChange(blockOrigin);
+    } else {
+      // TODO (#7042): Remove old icon handling code.
+      dragIconData.push({
         // Coordinate with x and y properties (workspace
         // coordinates).
-        location: icons[j].getIconLocation(), // Blockly.Icon
-        icon: icons[j],
-      };
-      dragIconData.push(data);
+        location: icon.getIconLocation(), // Blockly.Icon
+        icon: icon,
+      });
     }
+  }
+
+  for (const child of block.getChildren(false)) {
+    dragIconData.push(
+      ...initIconData(child, Coordinate.sum(blockOrigin, child.relativeCoords))
+    );
   }
   // AnyDuringMigration because:  Type '{ location: Coordinate | null; icon:
   // Icon; }[]' is not assignable to type 'IconPositionData[]'.

@@ -7,12 +7,12 @@
 /**
  * @fileoverview Generating PHP for text blocks.
  */
-'use strict';
 
-goog.module('Blockly.PHP.texts');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.PHP.texts');
 
-const {NameType} = goog.require('Blockly.Names');
-const {phpGenerator: PHP} = goog.require('Blockly.PHP');
+import {NameType} from '../../core/names.js';
+import {phpGenerator as PHP} from '../php.js';
 
 
 PHP['text'] = function(block) {

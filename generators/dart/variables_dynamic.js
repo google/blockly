@@ -7,13 +7,12 @@
 /**
  * @fileoverview Generating Dart for dynamic variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.Dart.variablesDynamic');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Dart.variablesDynamic');
 
-const {dartGenerator: Dart} = goog.require('Blockly.Dart');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Dart.variables');
+import {dartGenerator as Dart} from '../dart.js';
+import './variables.js';
 
 
 // Dart is dynamically typed.

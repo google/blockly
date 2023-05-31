@@ -18,13 +18,13 @@
  * PHP (because only variables can be passed by reference).
  * ex:  end(true ? list1 : list2)
  */
-'use strict';
 
-goog.module('Blockly.PHP.lists');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.PHP.lists');
 
-const stringUtils = goog.require('Blockly.utils.string');
-const {NameType} = goog.require('Blockly.Names');
-const {phpGenerator: PHP} = goog.require('Blockly.PHP');
+import * as stringUtils from '../../core/utils/string.js';
+import {NameType} from '../../core/names.js';
+import {phpGenerator as PHP} from '../php.js';
 
 PHP['lists_create_empty'] = function(block) {
   // Create an empty list.

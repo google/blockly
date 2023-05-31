@@ -7,12 +7,12 @@
 /**
  * @fileoverview Generating Python for variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.Python.variables');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Python.variables');
 
-const {NameType} = goog.require('Blockly.Names');
-const {pythonGenerator: Python} = goog.require('Blockly.Python');
+import {NameType} from '../../core/names.js';
+import {pythonGenerator as Python} from '../python.js';
 
 
 Python['variables_get'] = function(block) {

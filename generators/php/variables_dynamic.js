@@ -7,13 +7,12 @@
 /**
  * @fileoverview Generating PHP for dynamic variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.PHP.variablesDynamic');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.PHP.variablesDynamic');
 
-const {phpGenerator: PHP} = goog.require('Blockly.PHP');
-/** @suppress {extraRequire} */
-goog.require('Blockly.PHP.variables');
+import {phpGenerator as PHP} from '../php.js';
+import './variables.js';
 
 
 // PHP is dynamically typed.

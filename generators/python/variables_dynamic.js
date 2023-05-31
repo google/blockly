@@ -7,13 +7,12 @@
 /**
  * @fileoverview Generating Python for dynamic variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.Python.variablesDynamic');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Python.variablesDynamic');
 
-const {pythonGenerator: Python} = goog.require('Blockly.Python');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Python.variables');
+import {pythonGenerator as Python} from '../python.js';
+import './variables.js';
 
 
 // Python is dynamically typed.

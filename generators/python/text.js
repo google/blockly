@@ -7,13 +7,13 @@
 /**
  * @fileoverview Generating Python for text blocks.
  */
-'use strict';
 
-goog.module('Blockly.Python.texts');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Python.texts');
 
-const stringUtils = goog.require('Blockly.utils.string');
-const {NameType} = goog.require('Blockly.Names');
-const {pythonGenerator: Python} = goog.require('Blockly.Python');
+import * as stringUtils from '../../core/utils/string.js';
+import {NameType} from '../../core/names.js';
+import {pythonGenerator as Python} from '../python.js';
 
 
 Python['text'] = function(block) {

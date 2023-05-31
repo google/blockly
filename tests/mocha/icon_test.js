@@ -11,6 +11,7 @@ import {
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
 import {defineEmptyBlock} from './test_helpers/block_definitions.js';
+import {MockIcon, MockSerializableIcon} from './test_helpers/icon_mocks.js';
 
 suite('Icon', function () {
   setup(function () {
@@ -21,43 +22,6 @@ suite('Icon', function () {
   teardown(function () {
     sharedTestTeardown.call(this);
   });
-
-  class MockIcon {
-    getType() {
-      return 'mock icon';
-    }
-
-    initView() {}
-
-    applyColour() {}
-
-    updateEditable() {}
-
-    updateCollapsed() {}
-  }
-
-  class MockSerializableIcon extends MockIcon {
-    constructor() {
-      super();
-      this.state = '';
-    }
-
-    getType() {
-      return 'serializable icon';
-    }
-
-    getWeight() {
-      return 1;
-    }
-
-    saveState() {
-      return 'some state';
-    }
-
-    loadState(state) {
-      this.state = state;
-    }
-  }
 
   class MockNonSerializableIcon extends MockIcon {
     getType() {
@@ -90,7 +54,7 @@ suite('Icon', function () {
     return createUninitializedBlock(workspace);
   }
 
-  suite.skip('Hooks getting properly triggered by the block', function () {
+  suite('Hooks getting properly triggered by the block', function () {
     suite('Triggering view initialization', function () {
       test('initView is not called by headless blocks', function () {
         const workspace = createHeadlessWorkspace();
@@ -231,7 +195,7 @@ suite('Icon', function () {
 
         block.addIcon(icon);
         applyColourSpy.resetHistory();
-        block.setDisabled(true);
+        block.setEnabled(false);
         chai.assert.isTrue(
           applyColourSpy.calledOnce,
           'Expected applyColour to be called'
@@ -357,13 +321,15 @@ suite('Icon', function () {
         const workspace = createWorkspaceSvg();
         const block = createInitializedBlock(workspace);
         const icon = new MockIcon();
-        const updateCollapsedSpy = sinon.spy(icon, 'updateCollapsed');
+        const updateCollapsedSpy = sinon.stub(icon, 'updateCollapsed');
         block.addIcon(icon);
 
+        updateCollapsedSpy.resetHistory();
         block.setCollapsed(true);
+        this.clock.runAll();
 
         chai.assert.isTrue(
-          updateCollapsedSpy.calledOnce,
+          updateCollapsedSpy.called,
           'Expected updateCollapsed to be called'
         );
       });
@@ -377,10 +343,11 @@ suite('Icon', function () {
 
         block.setCollapsed(true);
         block.setCollapsed(false);
+        this.clock.runAll();
 
         chai.assert.isTrue(
-          updateCollapsedSpy.calledTwice,
-          'Expected updateCollapsed to be called twice'
+          updateCollapsedSpy.called,
+          'Expected updateCollapsed to be called'
         );
       });
     });

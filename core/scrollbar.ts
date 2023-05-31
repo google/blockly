@@ -255,8 +255,6 @@ export class Scrollbar {
   /**
    * Dispose of this scrollbar. Remove DOM elements, event listeners,
    * and theme subscriptions.
-   *
-   * @suppress {checkTypes}
    */
   dispose() {
     this.cleanUp();

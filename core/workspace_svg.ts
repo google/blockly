@@ -812,8 +812,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Dispose of this workspace.
    * Unlink from all DOM elements to prevent memory leaks.
-   *
-   * @suppress {checkTypes}
    */
   override dispose() {
     // Stop rerendering.
@@ -1428,8 +1426,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param xmlComment XML workspace comment element.
    * @returns The pasted workspace comment.
-   * @suppress {checkTypes} Suppress checks while workspace comments are not
-   * bundled in.
    */
   private pasteWorkspaceComment_(xmlComment: Element): WorkspaceCommentSvg {
     eventUtils.disable();

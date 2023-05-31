@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Variable blocks for Blockly.
- * @suppress {checkTypes}
- */
-
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.variables');
 

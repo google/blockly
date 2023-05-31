@@ -38,6 +38,7 @@ export abstract class Icon implements IIcon {
     const svgBlock = this.sourceBlock as BlockSvg;
     this.svgRoot = dom.createSvgElement(Svg.G, {'class': 'blocklyIconGroup'});
     svgBlock.getSvgRoot().appendChild(this.svgRoot);
+    this.updateSvgRootOffset();
     browserEvents.conditionalBind(
       this.svgRoot,
       'pointerdown',
@@ -74,12 +75,25 @@ export abstract class Icon implements IIcon {
     }
   }
 
+  hideForInsertionMarker(): void {
+    if (!this.svgRoot) return;
+    this.svgRoot.style.display = 'none';
+  }
+
   isShownWhenCollapsed(): boolean {
     return false;
   }
 
   setOffsetInBlock(offset: Coordinate): void {
     this.offsetInBlock = offset;
+    this.updateSvgRootOffset();
+  }
+
+  private updateSvgRootOffset(): void {
+    this.svgRoot?.setAttribute(
+      'transform',
+      `translate(${this.offsetInBlock.x}, ${this.offsetInBlock.y})`
+    );
   }
 
   onLocationChange(blockOrigin: Coordinate): void {

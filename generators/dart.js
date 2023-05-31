@@ -8,17 +8,17 @@
  * @fileoverview Helper functions for generating Dart for blocks.
  * @suppress {checkTypes|globalThis}
  */
-'use strict';
 
-goog.module('Blockly.Dart');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Dart');
 
-const Variables = goog.require('Blockly.Variables');
-const stringUtils = goog.require('Blockly.utils.string');
-const {Block} = goog.requireType('Blockly.Block');
-const {CodeGenerator} = goog.require('Blockly.CodeGenerator');
-const {Names, NameType} = goog.require('Blockly.Names');
-const {Workspace} = goog.requireType('Blockly.Workspace');
-const {inputTypes} = goog.require('Blockly.inputTypes');
+import * as Variables from '../core/variables.js';
+import * as stringUtils from '../core/utils/string.js';
+// import type {Block} from '../core/block.js';
+import {CodeGenerator} from '../core/generator.js';
+import {Names, NameType} from '../core/names.js';
+// import type {Workspace} from '../core/workspace.js';
+import {inputTypes} from '../core/inputs/input_types.js';
 
 
 /**
@@ -299,5 +299,4 @@ Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
   }
   return at;
 };
-
-exports.dartGenerator = Dart;
+export {Dart as dartGenerator};

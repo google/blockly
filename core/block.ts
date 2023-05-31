@@ -2242,6 +2242,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     return this.icons.some((icon) => icon.getType() === type);
   }
 
+  // TODO (#7126): Make this take in a generic type.
   /**
    * @returns The icon with the given type if it exists on the block, undefined
    *     otherwise.

@@ -30,7 +30,7 @@ const {Block} = goog.requireType('Blockly.Block');
 const BlockDefinition = Object;
 const {config} = goog.require('Blockly.config');
 const {Msg} = goog.require('Blockly.Msg');
-const {MutatorIcon} = goog.require('Blockly.Mutator');
+const {MutatorIcon} = goog.require('Blockly.icons.MutatorIcon');
 const {Names} = goog.require('Blockly.Names');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');

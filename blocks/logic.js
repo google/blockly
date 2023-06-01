@@ -24,7 +24,7 @@ const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
 const {Msg} = goog.require('Blockly.Msg');
-const {MutatorIcon} = goog.require('Blockly.Mutator');
+const {MutatorIcon} = goog.require('Blockly.icons.MutatorIcon');
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */

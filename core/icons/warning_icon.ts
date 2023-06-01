@@ -18,6 +18,9 @@ import {Size} from '../utils.js';
 import {Svg} from '../utils/svg.js';
 import {TextBubble} from '../bubbles/text_bubble.js';
 
+/** The size of the warning icon in workspace-scale units. */
+const SIZE = 17;
+
 export class WarningIcon extends Icon implements IHasBubble {
   /** The type string used to identify this icon. */
   static readonly TYPE = 'warning';
@@ -27,9 +30,6 @@ export class WarningIcon extends Icon implements IHasBubble {
    * weight values are rendered farther toward the end of the block.
    */
   static readonly WEIGHT = 2;
-
-  /** The size of this icon in workspace-scale units. */
-  private readonly SIZE = 17;
 
   /** A map of warning IDs to warning text. */
   private textMap: Map<string, string> = new Map();
@@ -93,7 +93,7 @@ export class WarningIcon extends Icon implements IHasBubble {
   }
 
   getSize(): Size {
-    return new Size(this.SIZE, this.SIZE);
+    return new Size(SIZE, SIZE);
   }
 
   applyColour(): void {
@@ -186,7 +186,7 @@ export class WarningIcon extends Icon implements IHasBubble {
    *     I.E. the middle of this icon.
    */
   private getAnchorLocation(): Coordinate {
-    const midIcon = this.SIZE / 2;
+    const midIcon = SIZE / 2;
     return Coordinate.sum(
       this.workspaceLocation,
       new Coordinate(midIcon, midIcon)

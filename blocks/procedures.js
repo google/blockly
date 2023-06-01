@@ -617,7 +617,7 @@ blocks['procedures_mutatorarg'] = {
    */
   validator_: function(varName) {
     const sourceBlock = this.getSourceBlock();
-    const outerWs = MutatorIcon.findParentWs(sourceBlock.workspace);
+    const outerWs = sourceBlock.workspace.getRootWorkspace();
     varName = varName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
     if (!varName) {
       return null;
@@ -668,7 +668,7 @@ blocks['procedures_mutatorarg'] = {
    * @this {FieldTextInput}
    */
   deleteIntermediateVars_: function(newText) {
-    const outerWs = MutatorIcon.findParentWs(this.getSourceBlock().workspace);
+    const outerWs = this.getSourceBlock().workspace.getRootWorkspace();
     if (!outerWs) {
       return;
     }

@@ -334,21 +334,16 @@ export class MutatorIcon extends Icon implements IHasBubble {
   /**
    * Returns the parent workspace of a workspace that is inside a mini workspace
    * bubble, taking into account whether the workspace is a flyout.
+   *
+   * @deprecated Use workspace.getRootWorkspace. To be removed in v11.
    */
   static findParentWs(workspace: WorkspaceSvg): WorkspaceSvg | null {
-    let outerWs = null;
-    if (workspace && workspace.options) {
-      const parent = workspace.options.parentWorkspace;
-      // If we were in a flyout in a mutator, need to go up two levels to find
-      // the actual parent.
-      if (workspace.isFlyout) {
-        if (parent && parent.options) {
-          outerWs = parent.options.parentWorkspace;
-        }
-      } else if (parent) {
-        outerWs = parent;
-      }
-    }
-    return outerWs;
+    deprecation.warn(
+      'MutatorIcon.findParentWs',
+      'v10',
+      'v11',
+      'workspace.getRootWorkspace'
+    );
+    return workspace.getRootWorkspace();
   }
 }

@@ -2292,6 +2292,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     super.removeTopComment(comment);
   }
 
+  override getRootWorkspace(): WorkspaceSvg | null {
+    return super.getRootWorkspace() as WorkspaceSvg | null;
+  }
+
   /**
    * Adds a bounded element to the list of top bounded elements.
    *

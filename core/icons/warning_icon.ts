@@ -107,7 +107,7 @@ export class WarningIcon extends Icon implements IHasBubble {
     // behavior of hiding.
   }
 
-  /** Tells the blockly that this icon is shown when the block is collapsed. */
+  /** Tells blockly that this icon is shown when the block is collapsed. */
   override isShownWhenCollapsed(): boolean {
     return true;
   }

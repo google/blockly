@@ -25,6 +25,15 @@ import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 
+/** The size of the mutator icon in workspace-scale units. */
+const SIZE = 17;
+
+/**
+ * The distance between the root block in the mini workspace and that
+ * workspace's edges.
+ */
+const WORKSPACE_MARGIN = 16;
+
 export class MutatorIcon extends Icon implements IHasBubble {
   /** The type string used to identify this icon. */
   static readonly TYPE = MUTATOR_TYPE;
@@ -34,15 +43,6 @@ export class MutatorIcon extends Icon implements IHasBubble {
    * weight values are rendered farther toward the end of the block.
    */
   static readonly WEIGHT = 1;
-
-  /** The size of this icon in workspace-scale units. */
-  private readonly SIZE = 17;
-
-  /**
-   * The distance between the root block in the mini workspace and that
-   * workspace's edges.
-   */
-  private readonly WORKSPACE_MARGIN = 16;
 
   /** The bubble used to show the mini workspace to the user. */
   private miniWorkspaceBubble: MiniWorkspaceBubble | null = null;
@@ -114,7 +114,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
   }
 
   getSize(): Size {
-    return new Size(this.SIZE, this.SIZE);
+    return new Size(SIZE, SIZE);
   }
 
   applyColour(): void {
@@ -201,7 +201,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
    *     I.E. the middle of this icon.
    */
   private getAnchorLocation(): Coordinate {
-    const midIcon = this.SIZE / 2;
+    const midIcon = SIZE / 2;
     return Coordinate.sum(
       this.workspaceLocation,
       new Coordinate(midIcon, midIcon)
@@ -233,10 +233,8 @@ export class MutatorIcon extends Icon implements IHasBubble {
     const flyoutWidth =
       this.miniWorkspaceBubble?.getWorkspace()?.getFlyout()?.getWidth() ?? 0;
     this.rootBlock.moveBy(
-      this.rootBlock.RTL
-        ? -(flyoutWidth + this.WORKSPACE_MARGIN)
-        : this.WORKSPACE_MARGIN,
-      this.WORKSPACE_MARGIN
+      this.rootBlock.RTL ? -(flyoutWidth + WORKSPACE_MARGIN) : WORKSPACE_MARGIN,
+      WORKSPACE_MARGIN
     );
   }
 

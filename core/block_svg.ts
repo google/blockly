@@ -60,6 +60,7 @@ import {WarningIcon} from './icons/warning_icon.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {queueRender} from './render_management.js';
+import * as deprecation from './utils/deprecation.js';
 
 /**
  * Class for a block's SVG representation.
@@ -907,8 +908,10 @@ export class BlockSvg
    * comment.
    *
    * @returns The comment icon attached to this block, or null.
+   * @deprecated Use getIcon. To be remove in v11.
    */
   getCommentIcon(): CommentIcon | null {
+    deprecation.warn('getCommentIcon', 'v10', 'v11', 'getIcon');
     return (this.getIcon(CommentIcon.TYPE) ?? null) as CommentIcon | null;
   }
 

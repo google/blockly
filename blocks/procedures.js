@@ -38,7 +38,7 @@ const {VariableModel} = goog.requireType('Blockly.VariableModel');
 const {Workspace} = goog.requireType('Blockly.Workspace');
 const {defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Comment');
+goog.require('Blockly.icons.CommentIcon');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Warning');
 

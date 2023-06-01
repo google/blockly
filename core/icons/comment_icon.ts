@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.icons.CommentIcon');
+
 import {Block} from '../block.js';
 import {BlockSvg} from '../block_svg.js';
 import {COMMENT_TYPE} from './icon_types.js';

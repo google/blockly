@@ -61,11 +61,11 @@ export class MutatorIcon extends Icon implements IHasBubble {
     super(sourceBlock);
   }
 
-  getType() {
+  override getType() {
     return MutatorIcon.TYPE;
   }
 
-  initView(pointerdownListener: (e: PointerEvent) => void): void {
+  override initView(pointerdownListener: (e: PointerEvent) => void): void {
     if (this.svgRoot) return; // Already initialized.
 
     super.initView(pointerdownListener);
@@ -106,36 +106,39 @@ export class MutatorIcon extends Icon implements IHasBubble {
     );
   }
 
-  dispose(): void {
+  override dispose(): void {
+    super.dispose();
     this.miniWorkspaceBubble?.dispose();
   }
 
-  getWeight(): number {
+  override getWeight(): number {
     return MutatorIcon.WEIGHT;
   }
 
-  getSize(): Size {
+  override getSize(): Size {
     return new Size(SIZE, SIZE);
   }
 
-  applyColour(): void {
+  override applyColour(): void {
+    super.applyColour();
     this.miniWorkspaceBubble?.setColour(this.sourceBlock.style.colourPrimary);
     this.miniWorkspaceBubble?.updateBlockStyles();
   }
 
-  updateCollapsed(): void {
+  override updateCollapsed(): void {
     super.updateCollapsed();
     if (this.sourceBlock.isCollapsed()) this.setBubbleVisible(false);
   }
 
-  onLocationChange(blockOrigin: Coordinate): void {
+  override onLocationChange(blockOrigin: Coordinate): void {
     super.onLocationChange(blockOrigin);
     if (this.bubbleIsVisible()) {
       this.miniWorkspaceBubble?.setAnchorLocation(this.getAnchorLocation());
     }
   }
 
-  onClick(): void {
+  override onClick(): void {
+    super.onClick();
     this.setBubbleVisible(!this.bubbleIsVisible());
   }
 

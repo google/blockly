@@ -40,7 +40,7 @@ const {defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Comment');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Warning');
+goog.require('Blockly.icons.WarningIcon');
 
 
 /**

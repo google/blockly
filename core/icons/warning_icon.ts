@@ -5,7 +5,7 @@
  */
 
 import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Warning');
+goog.declareModuleId('Blockly.icons.WarningIcon');
 
 import {BlockSvg} from '../block_svg.js';
 import {Coordinate} from '../utils/coordinate.js';

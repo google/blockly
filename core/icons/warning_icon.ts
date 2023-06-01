@@ -86,7 +86,7 @@ export class WarningIcon extends Icon implements IHasBubble {
 
   override dispose() {
     super.dispose();
-    if (this.textBubble) this.textBubble.dispose();
+    this.textBubble?.dispose();
   }
 
   override getWeight(): number {
@@ -115,9 +115,7 @@ export class WarningIcon extends Icon implements IHasBubble {
   /** Updates the location of the icon's bubble if it is open. */
   override onLocationChange(blockOrigin: Coordinate): void {
     super.onLocationChange(blockOrigin);
-    if (this.bubbleIsVisible()) {
-      this.textBubble?.setAnchorLocation(this.getAnchorLocation());
-    }
+    this.textBubble?.setAnchorLocation(this.getAnchorLocation());
   }
 
   /**
@@ -136,7 +134,7 @@ export class WarningIcon extends Icon implements IHasBubble {
       this.textMap.delete(id);
     }
 
-    if (this.bubbleIsVisible()) this.textBubble?.setText(this.getText());
+    this.textBubble?.setText(this.getText());
     return this;
   }
 

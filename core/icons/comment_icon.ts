@@ -68,14 +68,15 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     super(sourceBlock);
   }
 
-  getType(): string {
+  override getType(): string {
     return CommentIcon.TYPE;
   }
 
-  initView(pointerdownListener: (e: PointerEvent) => void): void {
+  override initView(pointerdownListener: (e: PointerEvent) => void): void {
     if (this.svgRoot) return; // Already initialized.
 
     super.initView(pointerdownListener);
+
     // Circle.
     dom.createSvgElement(
       Svg.CIRCLE,
@@ -109,21 +110,21 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     );
   }
 
-  dispose() {
+  override dispose() {
     super.dispose();
     this.textInputBubble?.dispose();
     this.textBubble?.dispose();
   }
 
-  getWeight(): number {
+  override getWeight(): number {
     return CommentIcon.WEIGHT;
   }
 
-  getSize(): Size {
+  override getSize(): Size {
     return new Size(SIZE, SIZE);
   }
 
-  applyColour(): void {
+  override applyColour(): void {
     super.applyColour();
     const colour = (this.sourceBlock as BlockSvg).style.colourPrimary;
     this.textInputBubble?.setColour(colour);
@@ -134,7 +135,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
    * Updates the state of the bubble (editable / noneditable) to reflect the
    * state of the bubble if the bubble is currently shown.
    */
-  updateEditable(): void {
+  override updateEditable(): void {
     super.updateEditable();
     if (this.bubbleIsVisible()) {
       // Close and reopen the bubble to display the correct UI.
@@ -143,7 +144,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     }
   }
 
-  onLocationChange(blockOrigin: Coordinate): void {
+  override onLocationChange(blockOrigin: Coordinate): void {
     super.onLocationChange(blockOrigin);
     const anchorLocation = this.getAnchorLocation();
     this.textInputBubble?.setAnchorLocation(anchorLocation);
@@ -204,7 +205,8 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     setTimeout(() => this.setBubbleVisible(this.bubbleVisiblity), 1);
   }
 
-  onClick(): void {
+  override onClick(): void {
+    super.onClick();
     this.setBubbleVisible(!this.bubbleIsVisible());
   }
 

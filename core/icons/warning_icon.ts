@@ -42,14 +42,15 @@ export class WarningIcon extends Icon implements IHasBubble {
     super(sourceBlock);
   }
 
-  getType(): string {
+  override getType(): string {
     return WarningIcon.TYPE;
   }
 
-  initView(pointerdownListener: (e: PointerEvent) => void): void {
+  override initView(pointerdownListener: (e: PointerEvent) => void): void {
     if (this.svgRoot) return; // Already initialized.
 
     super.initView(pointerdownListener);
+
     // Triangle with rounded corners.
     dom.createSvgElement(
       Svg.PATH,
@@ -83,35 +84,36 @@ export class WarningIcon extends Icon implements IHasBubble {
     );
   }
 
-  dispose() {
+  override dispose() {
     super.dispose();
     if (this.textBubble) this.textBubble.dispose();
   }
 
-  getWeight(): number {
+  override getWeight(): number {
     return WarningIcon.WEIGHT;
   }
 
-  getSize(): Size {
+  override getSize(): Size {
     return new Size(SIZE, SIZE);
   }
 
-  applyColour(): void {
+  override applyColour(): void {
+    super.applyColour();
     this.textBubble?.setColour(this.sourceBlock.style.colourPrimary);
   }
 
-  updateCollapsed(): void {
+  override updateCollapsed(): void {
     // We are shown when collapsed, so do nothing! I.e. skip the default
     // behavior of hiding.
   }
 
   /** Tells the blockly that this icon is shown when the block is collapsed. */
-  isShownWhenCollapsed(): boolean {
+  override isShownWhenCollapsed(): boolean {
     return true;
   }
 
   /** Updates the location of the icon's bubble if it is open. */
-  onLocationChange(blockOrigin: Coordinate): void {
+  override onLocationChange(blockOrigin: Coordinate): void {
     super.onLocationChange(blockOrigin);
     if (this.bubbleIsVisible()) {
       this.textBubble?.setAnchorLocation(this.getAnchorLocation());
@@ -148,7 +150,8 @@ export class WarningIcon extends Icon implements IHasBubble {
   }
 
   /** Toggles the visibility of the bubble. */
-  onClick(): void {
+  override onClick(): void {
+    super.onClick();
     this.setBubbleVisible(!this.bubbleIsVisible());
   }
 

@@ -24,6 +24,15 @@ import {TextBubble} from '../bubbles/text_bubble.js';
 import {TextInputBubble} from '../bubbles/textinput_bubble.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
+/** The size of the comment icon in workspace-scale units. */
+const SIZE = 17;
+
+/** The default width in workspace-scale units of the text input bubble. */
+const DEFAULT_BUBBLE_WIDTH = 160;
+
+/** The default height in workspace-scale units of the text input bubble. */
+const DEFAULT_BUBBLE_HEIGHT = 80;
+
 export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   /** The type string used to identify this icon. */
   static readonly TYPE = COMMENT_TYPE;
@@ -33,15 +42,6 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
    * weight values are rendered farther toward the end of the block.
    */
   static readonly WEIGHT = 3;
-
-  /** The size of this icon in workspace-scale units. */
-  private readonly SIZE = 17;
-
-  /** The default width in workspace-scale units of the text input bubble. */
-  private readonly DEFAULT_BUBBLE_WIDTH = 160;
-
-  /** The default height in workspace-scale units of the text input bubble. */
-  private readonly DEFAULT_BUBBLE_HEIGHT = 80;
 
   /** The bubble used to show editable text to the user. */
   private textInputBubble: TextInputBubble | null = null;
@@ -53,14 +53,11 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   private text = '';
 
   /** The size of this comment (which is applied to the editable bubble). */
-  private bubbleSize = new Size(
-    this.DEFAULT_BUBBLE_WIDTH,
-    this.DEFAULT_BUBBLE_HEIGHT
-  );
+  private bubbleSize = new Size(DEFAULT_BUBBLE_WIDTH, DEFAULT_BUBBLE_HEIGHT);
 
   /**
    * The visibility of the bubble for this comment.
-   * 
+   *
    * This is used to track what the visibile state /should/ be, not necessarily
    * what it currently /is/. E.g. sometimes this will be true, but the block
    * hasn't been rendered yet, so the bubble will not currently be visible.
@@ -123,7 +120,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   }
 
   getSize(): Size {
-    return new Size(this.SIZE, this.SIZE);
+    return new Size(SIZE, SIZE);
   }
 
   applyColour(): void {
@@ -199,8 +196,8 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   loadState(state: CommentState) {
     this.text = state['text'] ?? '';
     this.bubbleSize = new Size(
-      state['width'] ?? this.DEFAULT_BUBBLE_WIDTH,
-      state['height'] ?? this.DEFAULT_BUBBLE_HEIGHT
+      state['width'] ?? DEFAULT_BUBBLE_WIDTH,
+      state['height'] ?? DEFAULT_BUBBLE_HEIGHT
     );
     this.bubbleVisiblity = state['pinned'] ?? false;
     // Give the block a chance to be positioned and rendered before showing.
@@ -302,7 +299,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
    *     I.E. the middle of this icon.
    */
   private getAnchorLocation(): Coordinate {
-    const midIcon = this.SIZE / 2;
+    const midIcon = SIZE / 2;
     return Coordinate.sum(
       this.workspaceLocation,
       new Coordinate(midIcon, midIcon)

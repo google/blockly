@@ -183,12 +183,6 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   private disposing = false;
 
-  /**
-   * A string representing the comment attached to this block.
-   *
-   * @deprecated August 2019. Use getCommentText instead.
-   */
-  comment: string | CommentIcon | null = null;
   private readonly xy_: Coordinate;
   isInFlyout: boolean;
   isInMutator: boolean;
@@ -2197,8 +2191,6 @@ export class Block implements IASTNodeLocation, IDeletable {
     } else {
       this.removeIcon(CommentIcon.TYPE);
     }
-
-    this.comment = text; // For backwards compatibility.
   }
 
   /**

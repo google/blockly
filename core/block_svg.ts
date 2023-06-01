@@ -109,8 +109,6 @@ export class BlockSvg
   /** Block's mutator icon (if any). */
   mutator: Mutator | null = null;
 
-  /** Block's comment icon (if any). */
-  private commentIcon_: CommentIcon | null = null;
 
   /**
    * Block's warning icon (if any).
@@ -911,7 +909,7 @@ export class BlockSvg
    * @returns The comment icon attached to this block, or null.
    */
   getCommentIcon(): CommentIcon | null {
-    return this.commentIcon_;
+    return (this.getIcon(CommentIcon.TYPE) ?? null) as CommentIcon | null;
   }
 
   /**
@@ -1013,10 +1011,6 @@ export class BlockSvg
     super.addIcon(icon);
 
     if (icon instanceof WarningIcon) this.warning = icon;
-    if (icon instanceof CommentIcon) {
-      this.commentIcon_ = icon;
-      this.comment = icon;
-    }
 
     if (this.rendered) {
       icon.initView(this.createIconPointerDownListener(icon));
@@ -1048,10 +1042,6 @@ export class BlockSvg
     const removed = super.removeIcon(type);
 
     if (type === WarningIcon.TYPE) this.warning = null;
-    if (type === CommentIcon.TYPE) {
-      this.commentIcon_ = null;
-      this.comment = null;
-    }
 
     if (this.rendered) {
       // TODO: Change this based on #7068.

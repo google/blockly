@@ -290,7 +290,7 @@ const PROCEDURE_DEF_COMMON = {
         if (hasStatements) {
           this.setStatements_(true);
           // Restore the stack, if one was saved.
-          MutatorIcon.reconnect(this.statementConnection_, this, 'STACK');
+          this.statementConnection_?.reconnect(this, 'STACK');
           this.statementConnection_ = null;
         } else {
           // Save the stack, then disconnect it.
@@ -790,7 +790,7 @@ const PROCEDURE_CALL_COMMON = {
         const quarkId = this.quarkIds_[i];
         if (quarkId in this.quarkConnections_) {
           const connection = this.quarkConnections_[quarkId];
-          if (!MutatorIcon.reconnect(connection, this, 'ARG' + i)) {
+          if (!connection?.reconnect(this, 'ARG' + i)) {
             // Block no longer exists or has been attached elsewhere.
             delete this.quarkConnections_[quarkId];
           }

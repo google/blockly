@@ -24,6 +24,7 @@ import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
+import * as deprecation from '../utils/deprecation.js';
 
 /** The size of the mutator icon in workspace-scale units. */
 const SIZE = 17;
@@ -312,30 +313,22 @@ export class MutatorIcon extends Icon implements IHasBubble {
 
   /**
    * Reconnects the given connection to the mutated input on the given block.
+   *
+   * @deprecated Use connection.reconnect instead. To be removed in v11.
    */
   static reconnect(
-    connectionChild: Connection,
+    connectionChild: Connection | null,
     block: Block,
     inputName: string
   ): boolean {
-    if (!connectionChild || !connectionChild.getSourceBlock().workspace) {
-      return false; // No connection or block has been deleted.
-    }
-    const connectionParent = block.getInput(inputName)!.connection;
-    const currentParent = connectionChild.targetBlock();
-    if (
-      (!currentParent || currentParent === block) &&
-      connectionParent &&
-      connectionParent.targetConnection !== connectionChild
-    ) {
-      if (connectionParent.isConnected()) {
-        // There's already something connected here.  Get rid of it.
-        connectionParent.disconnect();
-      }
-      connectionParent.connect(connectionChild);
-      return true;
-    }
-    return false;
+    deprecation.warn(
+      'MutatorIcon.reconnect',
+      'v10',
+      'v11',
+      'connection.reconnect'
+    );
+    if (!connectionChild) return false;
+    return connectionChild.reconnect(block, inputName);
   }
 
   /**

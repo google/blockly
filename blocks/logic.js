@@ -24,12 +24,14 @@ const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
 const {Msg} = goog.require('Blockly.Msg');
-const {MutatorIcon} = goog.require('Blockly.icons.MutatorIcon');
+goog.require('Blockly.icons.MutatorIcon');
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
+/** @suppress {extraRequire} */
+goog.require('Blockly.icons.MutatorIcon');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldDropdown');
 /** @suppress {extraRequire} */
@@ -519,10 +521,10 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
   reconnectChildBlocks_: function(
       valueConnections, statementConnections, elseStatementConnection) {
     for (let i = 1; i <= this.elseifCount_; i++) {
-      MutatorIcon.reconnect(valueConnections[i], this, 'IF' + i);
-      MutatorIcon.reconnect(statementConnections[i], this, 'DO' + i);
+      valueConnections[i]?.reconnect(this, 'IF' + i);
+      statementConnections[i]?.reconnect(this, 'DO' + i);
     }
-    MutatorIcon.reconnect(elseStatementConnection, this, 'ELSE');
+    elseStatementConnection?.reconnect(this, 'ELSE');
   },
 };
 

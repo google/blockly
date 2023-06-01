@@ -568,7 +568,7 @@ Blockly.Blocks['type_group'] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 0; i < this.typeCount_; i++) {
-      Blockly.icons.MutatorIcon.reconnect(connections[i], this, 'TYPE' + i);
+      connections[i]?.reconnect(this, 'TYPE' + i);
     }
   },
   saveConnections: function(containerBlock) {

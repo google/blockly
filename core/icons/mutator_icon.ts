@@ -132,9 +132,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
 
   override onLocationChange(blockOrigin: Coordinate): void {
     super.onLocationChange(blockOrigin);
-    if (this.bubbleIsVisible()) {
-      this.miniWorkspaceBubble?.setAnchorLocation(this.getAnchorLocation());
-    }
+    this.miniWorkspaceBubble?.setAnchorLocation(this.getAnchorLocation());
   }
 
   override onClick(): void {

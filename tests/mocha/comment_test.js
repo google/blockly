@@ -32,7 +32,6 @@ suite('Comments', function () {
       this.workspace
     );
     this.comment = new Blockly.icons.CommentIcon(this.block);
-    // this.comment.computeIconLocation();
   });
   teardown(function () {
     sharedTestTeardown.call(this);

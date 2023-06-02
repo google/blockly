@@ -334,6 +334,36 @@ export class Connection implements IASTNodeLocationWithBlock {
   }
 
   /**
+   * Reconnects this connection to the input with the given name on the given
+   * block. If there is already a connection connected to that input, that
+   * connection is disconnected.
+   *
+   * @param block The block to connect this connection to.
+   * @param inputName The name of the input to connect this connection to.
+   * @returns True if this connection was able to connect, false otherwise.
+   */
+  reconnect(block: Block, inputName: string): boolean {
+    // No need to reconnect if this connection's block is deleted.
+    if (this.getSourceBlock().isDeadOrDying()) return false;
+
+    const connectionParent = block.getInput(inputName)?.connection;
+    const currentParent = this.targetBlock();
+    if (
+      (!currentParent || currentParent === block) &&
+      connectionParent &&
+      connectionParent.targetConnection !== this
+    ) {
+      if (connectionParent.isConnected()) {
+        // There's already something connected here.  Get rid of it.
+        connectionParent.disconnect();
+      }
+      connectionParent.connect(this);
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Returns the block that this connection connects to.
    *
    * @returns The connected block or null if none is connected.

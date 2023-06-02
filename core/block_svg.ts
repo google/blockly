@@ -45,7 +45,7 @@ import {ASTNode} from './keyboard_nav/ast_node.js';
 import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
 import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
-import type {Mutator} from './mutator.js';
+import {MutatorIcon} from './icons/mutator_icon.js';
 import {RenderedConnection} from './rendered_connection.js';
 import type {IPathObject} from './renderers/common/i_path_object.js';
 import * as blocks from './serialization/blocks.js';
@@ -108,7 +108,7 @@ export class BlockSvg
   private warningTextDb = new Map<string, ReturnType<typeof setTimeout>>();
 
   /** Block's mutator icon (if any). */
-  mutator: Mutator | null = null;
+  mutator: MutatorIcon | null = null;
 
   /**
    * Block's warning icon (if any).
@@ -991,28 +991,16 @@ export class BlockSvg
    *
    * @param mutator A mutator dialog instance or null to remove.
    */
-  override setMutator(mutator: Mutator | null) {
-    if (this.mutator && this.mutator !== mutator) {
-      this.mutator.dispose();
-    }
-    if (mutator) {
-      mutator.setBlock(this);
-      this.mutator = mutator;
-      mutator.createIcon();
-    }
-    if (this.rendered) {
-      // Icons must force an immediate render so that bubbles can be opened
-      // immedately at the correct position.
-      this.render();
-      // Adding or removing a mutator icon will cause the block to change shape.
-      this.bumpNeighbours();
-    }
+  override setMutator(mutator: MutatorIcon | null) {
+    this.removeIcon(MutatorIcon.TYPE);
+    if (mutator) this.addIcon(mutator);
   }
 
   override addIcon<T extends IIcon>(icon: T): T {
     super.addIcon(icon);
 
     if (icon instanceof WarningIcon) this.warning = icon;
+    if (icon instanceof MutatorIcon) this.mutator = icon;
 
     if (this.rendered) {
       icon.initView(this.createIconPointerDownListener(icon));
@@ -1044,6 +1032,7 @@ export class BlockSvg
     const removed = super.removeIcon(type);
 
     if (type === WarningIcon.TYPE) this.warning = null;
+    if (type === MutatorIcon.TYPE) this.mutator = null;
 
     if (this.rendered) {
       // TODO: Change this based on #7068.
@@ -1056,9 +1045,7 @@ export class BlockSvg
   // TODO: remove this implementation after #7038, #7039, and #7040 are
   //   resolved.
   override getIcons(): AnyDuringMigration[] {
-    const icons: AnyDuringMigration = [...this.icons];
-    if (this.mutator) icons.push(this.mutator);
-    return icons;
+    return [...this.icons];
   }
 
   /**

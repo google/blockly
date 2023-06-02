@@ -805,6 +805,28 @@ export class Workspace implements IASTNodeLocation {
   }
 
   /**
+   * Returns the root workspace of this workspace if the workspace has
+   * parent(s).
+   *
+   * E.g. workspaces in flyouts and mini workspace bubbles have parent
+   * workspaces.
+   */
+  getRootWorkspace(): Workspace | null {
+    let outerWs = null;
+    const parent = this.options.parentWorkspace;
+    // If we were in a flyout in a mutator, need to go up two levels to find
+    // the actual parent.
+    if (this.isFlyout) {
+      if (parent && parent.options) {
+        outerWs = parent.options.parentWorkspace;
+      }
+    } else if (parent) {
+      outerWs = parent;
+    }
+    return outerWs;
+  }
+
+  /**
    * Find the workspace with the specified ID.
    *
    * @param id ID of workspace to find.

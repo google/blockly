@@ -570,9 +570,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       if (blockStyleName) {
         const blockSvg = block as BlockSvg;
         blockSvg.setStyle(blockStyleName);
-        if (blockSvg.mutator) {
-          blockSvg.mutator.updateBlockStyle();
-        }
       }
     }
   }
@@ -2293,6 +2290,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   override removeTopComment(comment: WorkspaceComment) {
     this.removeTopBoundedElement(comment as WorkspaceCommentSvg);
     super.removeTopComment(comment);
+  }
+
+  override getRootWorkspace(): WorkspaceSvg | null {
+    return super.getRootWorkspace() as WorkspaceSvg | null;
   }
 
   /**

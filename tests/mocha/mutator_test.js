@@ -35,8 +35,9 @@ suite('Mutator', function () {
 
     test('No change', function () {
       const block = createRenderedBlock(this.workspace, 'xml_block');
-      block.mutator.setVisible(true);
-      const mutatorWorkspace = block.mutator.getWorkspace();
+      const icon = block.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      icon.setBubbleVisible(true);
+      const mutatorWorkspace = icon.getWorkspace();
       // Trigger mutator change listener.
       createRenderedBlock(mutatorWorkspace, 'checkbox_block');
       assertEventNotFired(this.eventsFireStub, Blockly.Events.BlockChange, {
@@ -46,8 +47,9 @@ suite('Mutator', function () {
 
     test('XML', function () {
       const block = createRenderedBlock(this.workspace, 'xml_block');
-      block.mutator.setVisible(true);
-      const mutatorWorkspace = block.mutator.getWorkspace();
+      const icon = block.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      icon.setBubbleVisible(true);
+      const mutatorWorkspace = icon.getWorkspace();
       mutatorWorkspace
         .getBlockById('check_block')
         .setFieldValue('TRUE', 'CHECK');
@@ -65,8 +67,9 @@ suite('Mutator', function () {
 
     test('JSO', function () {
       const block = createRenderedBlock(this.workspace, 'jso_block');
-      block.mutator.setVisible(true);
-      const mutatorWorkspace = block.mutator.getWorkspace();
+      const icon = block.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      icon.setBubbleVisible(true);
+      const mutatorWorkspace = icon.getWorkspace();
       mutatorWorkspace
         .getBlockById('check_block')
         .setFieldValue('TRUE', 'CHECK');

@@ -1467,5 +1467,16 @@
         },
       },
     },
+    {
+      oldName: 'Blockly.Mutator',
+      newName: 'Blockly.icons.MutatorIcon',
+      exports: {
+        Mutator: {
+          newExport: 'MutatorIcon',
+          oldPath: 'Blockly.Mutator',
+          newPath: 'Blocky.icons.MutatorIcon',
+        },
+      },
+    },
   ],
 }

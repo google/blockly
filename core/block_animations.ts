@@ -11,7 +11,6 @@ import type {BlockSvg} from './block_svg.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 
-
 /** A bounding box for a cloned block. */
 interface CloneRect {
   x: number;
@@ -21,11 +20,10 @@ interface CloneRect {
 }
 
 /** PID of disconnect UI animation.  There can only be one at a time. */
-let disconnectPid: ReturnType<typeof setTimeout>|null = null;
+let disconnectPid: ReturnType<typeof setTimeout> | null = null;
 
 /** The wobbling block.  There can only be one at a time. */
-let wobblingBlock: BlockSvg|null = null;
-
+let wobblingBlock: BlockSvg | null = null;
 
 /**
  * Play some UI effects (sound, animation) when disposing of a block.
@@ -46,8 +44,12 @@ export function disposeUiEffect(block: BlockSvg) {
   const clone: SVGGElement = svgGroup.cloneNode(true) as SVGGElement;
   clone.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   workspace.getParentSvg().appendChild(clone);
-  const cloneRect =
-      {'x': xy.x, 'y': xy.y, 'width': block.width, 'height': block.height};
+  const cloneRect = {
+    'x': xy.x,
+    'y': xy.y,
+    'width': block.width,
+    'height': block.height,
+  };
   disposeUiStep(clone, cloneRect, workspace.RTL, new Date(), workspace.scale);
 }
 /**
@@ -62,21 +64,25 @@ export function disposeUiEffect(block: BlockSvg) {
  * @param workspaceScale Scale of workspace.
  */
 function disposeUiStep(
-    clone: Element, rect: CloneRect, rtl: boolean, start: Date,
-    workspaceScale: number) {
+  clone: Element,
+  rect: CloneRect,
+  rtl: boolean,
+  start: Date,
+  workspaceScale: number
+) {
   const ms = new Date().getTime() - start.getTime();
   const percent = ms / 150;
   if (percent > 1) {
     dom.removeNode(clone);
   } else {
     const x =
-        rect.x + (rtl ? -1 : 1) * rect.width * workspaceScale / 2 * percent;
+      rect.x + (((rtl ? -1 : 1) * rect.width * workspaceScale) / 2) * percent;
     const y = rect.y + rect.height * workspaceScale * percent;
     const scale = (1 - percent) * workspaceScale;
     clone.setAttribute(
-        'transform',
-        'translate(' + x + ',' + y + ')' +
-            ' scale(' + scale + ')');
+      'transform',
+      'translate(' + x + ',' + y + ')' + ' scale(' + scale + ')'
+    );
     setTimeout(disposeUiStep, 10, clone, rect, rtl, start, workspaceScale);
   }
 }
@@ -92,7 +98,7 @@ export function connectionUiEffect(block: BlockSvg) {
   const scale = workspace.scale;
   workspace.getAudioManager().play('click');
   if (scale < 1) {
-    return;  // Too small to care about visual effects.
+    return; // Too small to care about visual effects.
   }
   // Determine the absolute coordinates of the inferior block.
   const xy = workspace.getSvgXY(block.getSvgRoot());
@@ -105,15 +111,17 @@ export function connectionUiEffect(block: BlockSvg) {
     xy.y += 3 * scale;
   }
   const ripple = dom.createSvgElement(
-      Svg.CIRCLE, {
-        'cx': xy.x,
-        'cy': xy.y,
-        'r': 0,
-        'fill': 'none',
-        'stroke': '#888',
-        'stroke-width': 10,
-      },
-      workspace.getParentSvg());
+    Svg.CIRCLE,
+    {
+      'cx': xy.x,
+      'cy': xy.y,
+      'r': 0,
+      'fill': 'none',
+      'stroke': '#888',
+      'stroke-width': 10,
+    },
+    workspace.getParentSvg()
+  );
   // Start the animation.
   connectionUiStep(ripple, new Date(), scale);
 }
@@ -147,13 +155,13 @@ export function disconnectUiEffect(block: BlockSvg) {
   disconnectUiStop();
   block.workspace.getAudioManager().play('disconnect');
   if (block.workspace.scale < 1) {
-    return;  // Too small to care about visual effects.
+    return; // Too small to care about visual effects.
   }
   // Horizontal distance for bottom of block to wiggle.
   const DISPLACEMENT = 10;
   // Scale magnitude of skew to height of block.
   const height = block.getHeightWidth().height;
-  let magnitude = Math.atan(DISPLACEMENT / height) / Math.PI * 180;
+  let magnitude = (Math.atan(DISPLACEMENT / height) / Math.PI) * 180;
   if (!block.RTL) {
     magnitude *= -1;
   }
@@ -170,8 +178,8 @@ export function disconnectUiEffect(block: BlockSvg) {
  * @param start Date of animation's start.
  */
 function disconnectUiStep(block: BlockSvg, magnitude: number, start: Date) {
-  const DURATION = 200;  // Milliseconds.
-  const WIGGLES = 3;     // Half oscillations.
+  const DURATION = 200; // Milliseconds.
+  const WIGGLES = 3; // Half oscillations.
 
   const ms = new Date().getTime() - start.getTime();
   const percent = ms / DURATION;
@@ -179,13 +187,15 @@ function disconnectUiStep(block: BlockSvg, magnitude: number, start: Date) {
   let skew = '';
   if (percent <= 1) {
     const val = Math.round(
-        Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
+      Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude
+    );
     skew = `skewX(${val})`;
     disconnectPid = setTimeout(disconnectUiStep, 10, block, magnitude, start);
   }
 
-  block.getSvgRoot().setAttribute(
-      'transform', `${block.getTranslation()} ${skew}`);
+  block
+    .getSvgRoot()
+    .setAttribute('transform', `${block.getTranslation()} ${skew}`);
 }
 
 /**
@@ -199,7 +209,8 @@ export function disconnectUiStop() {
     clearTimeout(disconnectPid);
     disconnectPid = null;
   }
-  wobblingBlock.getSvgRoot().setAttribute(
-      'transform', wobblingBlock.getTranslation());
+  wobblingBlock
+    .getSvgRoot()
+    .setAttribute('transform', wobblingBlock.getTranslation());
   wobblingBlock = null;
 }

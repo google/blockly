@@ -33,7 +33,7 @@
  */
 'use strict';
 
-(function() {
+(function () {
   // Values used to compute default bootstrap options.
   const localhosts = ['localhost', '127.0.0.1', '[::1]'];
   const isLocalhost = localhosts.includes(location.hostname);
@@ -59,9 +59,7 @@
     root: window.location.href.replace(/\/tests\/.*$/, '/'),
 
     // List of deps files to load.  Paths relative to root.
-    depsFiles: [
-      'build/deps.js',
-    ],
+    depsFiles: ['build/deps.js'],
 
     // List of goog.modules to goog.require.
     requires: [
@@ -117,9 +115,7 @@
     // Additional scripts to be loaded after Blockly is loaded,
     // whether Blockly is loaded from compressed or uncompressed.
     // Paths relative to root.
-    additionalScripts: [
-      'build/msg/en.js',
-    ],
+    additionalScripts: ['build/msg/en.js'],
   };
   if (typeof window.BLOCKLY_BOOTSTRAP_OPTIONS === 'object') {
     Object.assign(options, window.BLOCKLY_BOOTSTRAP_OPTIONS);
@@ -153,8 +149,8 @@
     // library we use, mainly for goog.require / goog.provide /
     // goog.module).
     document.write(
-        `<script src="${options.root}build/src/closure/goog/base.js"></script>`
-        );
+      `<script src="${options.root}build/src/closure/goog/base.js"></script>`
+    );
 
     // Prevent spurious transpilation warnings.
     document.write('<script>goog.TRANSPILE = "never";</script>');
@@ -186,15 +182,15 @@
     // goog.addDependency for each one making it dependent on the
     // previous one.
     let requires = options.requires.slice();
-    const scripts =
-        ['tests/bootstrap_helper.js', ...options.additionalScripts];
+    const scripts = ['tests/bootstrap_helper.js', ...options.additionalScripts];
     const scriptDeps = [];
     for (const script of scripts) {
       const fakeModuleName = `script.${script.replace(/[./]/g, '-')}`;
       scriptDeps.push(
-          `goog.addDependency(${quote('../../../../' + script)}, ` +
+        `goog.addDependency(${quote('../../../../' + script)}, ` +
           `[${quote(fakeModuleName)}], [${requires.map(quote).join()}], ` +
-          `{'lang': 'es6'});`);
+          `{'lang': 'es6'});`
+      );
       requires = [fakeModuleName];
     }
 
@@ -222,7 +218,7 @@
     }
   }
 
-  return;  // All done.  Only helper functions after this point.
+  return; // All done.  Only helper functions after this point.
 
   /**
    * Convert a string into a string literal.  Strictly speaking we
@@ -242,12 +238,27 @@
 
     /** Map of control character replacements. */
     const replacements = {
-      '\x00': '\\0',   '\x01': '\\x01', '\x02': '\\x02', '\x03': '\\x03',
-      '\x04': '\\x04', '\x05': '\\x05', '\x06': '\\x06', '\x07': '\\x07',
-      '\x08': '\\b',   '\x09': '\\t',   '\x0a': '\\n',   '\x0b': '\\v',
-      '\x0c': '\\f',   '\x0d': '\\r',   '\x0e': '\\x0e', '\x0f': '\\x0f',
-      '"': '\\"', "'": "\\'", '\\': '\\\\',
-      '\u2028': '\\u2028', '\u2029': '\\u2029',
+      '\x00': '\\0',
+      '\x01': '\\x01',
+      '\x02': '\\x02',
+      '\x03': '\\x03',
+      '\x04': '\\x04',
+      '\x05': '\\x05',
+      '\x06': '\\x06',
+      '\x07': '\\x07',
+      '\x08': '\\b',
+      '\x09': '\\t',
+      '\x0a': '\\n',
+      '\x0b': '\\v',
+      '\x0c': '\\f',
+      '\x0d': '\\r',
+      '\x0e': '\\x0e',
+      '\x0f': '\\x0f',
+      '"': '\\"',
+      "'": "\\'",
+      '\\': '\\\\',
+      '\u2028': '\\u2028',
+      '\u2029': '\\u2029',
     };
     /* eslint-enable no-control-regex, no-multi-spaces */
 

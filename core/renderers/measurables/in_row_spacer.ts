@@ -12,7 +12,6 @@ import type {ConstantProvider} from '../common/constants.js';
 import {Measurable} from './base.js';
 import {Types} from './types.js';
 
-
 /**
  * An object containing information about a spacer between two elements on a
  * row.

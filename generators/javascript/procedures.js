@@ -7,12 +7,12 @@
 /**
  * @fileoverview Generating JavaScript for procedure blocks.
  */
-'use strict';
 
-goog.module('Blockly.JavaScript.procedures');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.JavaScript.procedures');
 
-const {NameType} = goog.require('Blockly.Names');
-const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
+import {NameType} from '../../core/names.js';
+import {javascriptGenerator as JavaScript} from '../javascript.js';
 
 
 JavaScript['procedures_defreturn'] = function(block) {

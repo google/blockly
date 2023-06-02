@@ -7,13 +7,13 @@
 /**
  * @fileoverview Generating Dart for loop blocks.
  */
-'use strict';
 
-goog.module('Blockly.Dart.loops');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Dart.loops');
 
-const {dartGenerator: Dart} = goog.require('Blockly.Dart');
-const stringUtils = goog.require('Blockly.utils.string');
-const {NameType} = goog.require('Blockly.Names');
+import {dartGenerator as Dart} from '../dart.js';
+import * as stringUtils from '../../core/utils/string.js';
+import {NameType} from '../../core/names.js';
 
 
 Dart['controls_repeat_ext'] = function(block) {

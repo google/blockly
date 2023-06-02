@@ -23,7 +23,12 @@ import * as dom from './utils/dom.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {BlockChangeEventOriginType} from './events/events_block_change.js';
 import * as eventUtils from './events/utils.js';
-import {Field, FieldConfig, FieldValidator, UnattachedFieldError} from './field.js';
+import {
+  Field,
+  FieldConfig,
+  FieldValidator,
+  UnattachedFieldError,
+} from './field.js';
 import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -37,7 +42,7 @@ import * as renderManagement from './render_management.js';
  *
  * @internal
  */
-type InputTypes = string|number;
+type InputTypes = string | number;
 
 /**
  * Abstract class for an editable input field.
@@ -45,7 +50,9 @@ type InputTypes = string|number;
  * @typeParam T - The value stored on the field.
  * @internal
  */
-export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
+export abstract class FieldInput<T extends InputTypes> extends Field<
+  string | T
+> {
   /**
    * Pixel size of input border radius.
    * Should match blocklyText's border-radius in CSS.
@@ -56,7 +63,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
   protected spellcheck_ = true;
 
   /** The HTML input element. */
-  protected htmlInput_: HTMLInputElement|null = null;
+  protected htmlInput_: HTMLInputElement | null = null;
 
   /** True if the field's value is currently being edited via the UI. */
   protected isBeingEdited_ = false;
@@ -73,19 +80,19 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
   protected valueChangedSinceLastCompleteEvent_ = false;
 
   /** Key down event data. */
-  private onKeyDownWrapper_: browserEvents.Data|null = null;
+  private onKeyDownWrapper_: browserEvents.Data | null = null;
 
   /** Key input event data. */
-  private onKeyInputWrapper_: browserEvents.Data|null = null;
+  private onKeyInputWrapper_: browserEvents.Data | null = null;
 
   /**
    * Whether the field should consider the whole parent block to be its click
    * target.
    */
-  fullBlockClickTarget_: boolean|null = false;
+  fullBlockClickTarget_: boolean | null = false;
 
   /** The workspace that this field belongs to. */
-  protected workspace_: WorkspaceSvg|null = null;
+  protected workspace_: WorkspaceSvg | null = null;
 
   /**
    * Serializable fields are saved by the serializer, non-serializable fields
@@ -111,8 +118,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|typeof Field.SKIP_SETUP,
-      validator?: FieldInputValidator<T>|null, config?: FieldInputConfig) {
+    value?: string | typeof Field.SKIP_SETUP,
+    validator?: FieldInputValidator<T> | null,
+    config?: FieldInputConfig
+  ) {
     super(Field.SKIP_SETUP);
 
     if (value === Field.SKIP_SETUP) return;
@@ -144,7 +153,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
       let nFields = 0;
       let nConnections = 0;
       // Count the number of fields, excluding text fields
-      for (let i = 0, input; input = block.inputList[i]; i++) {
+      for (let i = 0, input; (input = block.inputList[i]); i++) {
         for (let j = 0; input.fieldRow[j]; j++) {
           nFields++;
         }
@@ -155,7 +164,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
       // The special case is when this is the only non-label field on the block
       // and it has an output but no inputs.
       this.fullBlockClickTarget_ =
-          nFields <= 1 && block.outputConnection && !nConnections;
+        nFields <= 1 && block.outputConnection && !nConnections;
     } else {
       this.fullBlockClickTarget_ = false;
     }
@@ -185,9 +194,15 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
       // Revert value when the text becomes invalid.
       this.value_ = this.htmlInput_!.getAttribute('data-untyped-default-value');
       if (this.sourceBlock_ && eventUtils.isEnabled()) {
-        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-            this.sourceBlock_, 'field', this.name || null, oldValue,
-            this.value_));
+        eventUtils.fire(
+          new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+            this.sourceBlock_,
+            'field',
+            this.name || null,
+            oldValue,
+            this.value_
+          )
+        );
       }
     }
   }
@@ -200,7 +215,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
-  protected override doValueUpdate_(newValue: string|T) {
+  protected override doValueUpdate_(newValue: string | T) {
     this.isDirty_ = true;
     this.isTextValid_ = true;
     this.value_ = newValue;
@@ -218,7 +233,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
       this.borderRect_.setAttribute('stroke', source.style.colourTertiary);
     } else {
       source.pathObject.svgPath.setAttribute(
-          'fill', this.getConstants()!.FIELD_BORDER_RECT_COLOUR);
+        'fill',
+        this.getConstants()!.FIELD_BORDER_RECT_COLOUR
+      );
     }
   }
 
@@ -257,7 +274,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
       // AnyDuringMigration because:  Argument of type 'boolean' is not
       // assignable to parameter of type 'string'.
       this.htmlInput_.setAttribute(
-          'spellcheck', this.spellcheck_ as AnyDuringMigration);
+        'spellcheck',
+        this.spellcheck_ as AnyDuringMigration
+      );
     }
   }
 
@@ -274,8 +293,11 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    */
   protected override showEditor_(_e?: Event, quietInput = false) {
     this.workspace_ = (this.sourceBlock_ as BlockSvg).workspace;
-    if (!quietInput && this.workspace_.options.modalInputs &&
-        (userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD)) {
+    if (
+      !quietInput &&
+      this.workspace_.options.modalInputs &&
+      (userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD)
+    ) {
       this.showPromptEditor_();
     } else {
       this.showInlineEditor_(quietInput);
@@ -289,12 +311,15 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    */
   private showPromptEditor_() {
     dialog.prompt(
-        Msg['CHANGE_VALUE_TITLE'], this.getText(), (text: string|null) => {
-          // Text is null if user pressed cancel button.
-          if (text !== null) {
-            this.setValue(this.getValueFromEditorText_(text));
-          }
-        });
+      Msg['CHANGE_VALUE_TITLE'],
+      this.getText(),
+      (text: string | null) => {
+        // Text is null if user pressed cancel button.
+        if (text !== null) {
+          this.setValue(this.getValueFromEditorText_(text));
+        }
+      }
+    );
   }
 
   /**
@@ -336,12 +361,14 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
     if (!clickTarget) throw new Error('A click target has not been set.');
     dom.addClass(clickTarget, 'editing');
 
-    const htmlInput = (document.createElement('input'));
+    const htmlInput = document.createElement('input');
     htmlInput.className = 'blocklyHtmlInput';
     // AnyDuringMigration because:  Argument of type 'boolean' is not assignable
     // to parameter of type 'string'.
     htmlInput.setAttribute(
-        'spellcheck', this.spellcheck_ as AnyDuringMigration);
+      'spellcheck',
+      this.spellcheck_ as AnyDuringMigration
+    );
     const scale = this.workspace_!.getScale();
     const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE * scale + 'pt';
     div!.style.fontSize = fontSize;
@@ -354,15 +381,15 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
       // Override border radius.
       borderRadius = (bBox.bottom - bBox.top) / 2 + 'px';
       // Pull stroke colour from the existing shadow block
-      const strokeColour = block.getParent() ?
-          (block.getParent() as BlockSvg).style.colourTertiary :
-          (this.sourceBlock_ as BlockSvg).style.colourTertiary;
+      const strokeColour = block.getParent()
+        ? (block.getParent() as BlockSvg).style.colourTertiary
+        : (this.sourceBlock_ as BlockSvg).style.colourTertiary;
       htmlInput.style.border = 1 * scale + 'px solid ' + strokeColour;
       div!.style.borderRadius = borderRadius;
       div!.style.transition = 'box-shadow 0.25s ease 0s';
       if (this.getConstants()!.FIELD_TEXTINPUT_BOX_SHADOW) {
         div!.style.boxShadow =
-            'rgba(255, 255, 255, 0.3) 0 0 0 ' + (4 * scale) + 'px';
+          'rgba(255, 255, 255, 0.3) 0 0 0 ' + 4 * scale + 'px';
       }
     }
     htmlInput.style.borderRadius = borderRadius;
@@ -438,10 +465,18 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
   protected bindInputEvents_(htmlInput: HTMLElement) {
     // Trap Enter without IME and Esc to hide.
     this.onKeyDownWrapper_ = browserEvents.conditionalBind(
-        htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
+      htmlInput,
+      'keydown',
+      this,
+      this.onHtmlInputKeyDown_
+    );
     // Resize after every input change.
     this.onKeyInputWrapper_ = browserEvents.conditionalBind(
-        htmlInput, 'input', this, this.onHtmlInputChange_);
+      htmlInput,
+      'input',
+      this,
+      this.onHtmlInputChange_
+    );
   }
 
   /** Unbind handlers for user input and workspace size changes. */
@@ -467,7 +502,8 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
       dropDownDiv.hideWithoutAnimation();
     } else if (e.key === 'Escape') {
       this.setValue(
-          this.htmlInput_!.getAttribute('data-untyped-default-value'));
+        this.htmlInput_!.getAttribute('data-untyped-default-value')
+      );
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
     } else if (e.key === 'Tab') {
@@ -553,8 +589,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
     if (!(block instanceof BlockSvg)) return false;
 
     bumpObjects.bumpIntoBounds(
-        this.workspace_!,
-        this.workspace_!.getMetricsManager().getViewMetrics(true), block);
+      this.workspace_!,
+      this.workspace_!.getMetricsManager().getViewMetrics(true),
+      block
+    );
 
     this.resizeEditor_();
 
@@ -578,7 +616,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<string|T> {
    *
    * @returns The HTML value if we're editing, otherwise null.
    */
-  protected override getText_(): string|null {
+  protected override getText_(): string | null {
     if (this.isBeingEdited_ && this.htmlInput_) {
       // We are currently editing, return the HTML input value instead.
       return this.htmlInput_.value;
@@ -639,5 +677,6 @@ export interface FieldInputConfig extends FieldConfig {
  * - `undefined` to set `newValue` as is.
  * @internal
  */
-export type FieldInputValidator<T extends InputTypes> =
-    FieldValidator<string|T>;
+export type FieldInputValidator<T extends InputTypes> = FieldValidator<
+  string | T
+>;

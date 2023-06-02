@@ -12,13 +12,11 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.ThemeChange');
 
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
-
 
 /**
  * Notifies listeners that the workspace theme has changed.
@@ -48,24 +46,12 @@ export class ThemeChange extends UiBase {
     const json = super.toJson() as ThemeChangeJson;
     if (!this.themeName) {
       throw new Error(
-          'The theme name is undefined. Either pass a theme name to ' +
-          'the constructor, or call fromJson');
+        'The theme name is undefined. Either pass a theme name to ' +
+          'the constructor, or call fromJson'
+      );
     }
     json['themeName'] = this.themeName;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: ThemeChangeJson) {
-    deprecation.warn(
-        'Blockly.Events.ThemeChange.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
-    super.fromJson(json);
-    this.themeName = json['themeName'];
   }
 
   /**
@@ -77,11 +63,16 @@ export class ThemeChange extends UiBase {
    *     parameters to static methods in superclasses.
    * @internal
    */
-  static fromJson(json: ThemeChangeJson, workspace: Workspace, event?: any):
-      ThemeChange {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new ThemeChange()) as
-        ThemeChange;
+  static fromJson(
+    json: ThemeChangeJson,
+    workspace: Workspace,
+    event?: any
+  ): ThemeChange {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new ThemeChange()
+    ) as ThemeChange;
     newEvent.themeName = json['themeName'];
     return newEvent;
   }

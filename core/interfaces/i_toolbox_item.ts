@@ -7,7 +7,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IToolboxItem');
 
-
 /**
  * Interface for an item in the toolbox.
  */
@@ -24,7 +23,7 @@ export interface IToolboxItem {
    *
    * @returns The div for the toolbox item.
    */
-  getDiv(): Element|null;
+  getDiv(): Element | null;
 
   /**
    * Gets a unique identifier for this toolbox item.
@@ -39,7 +38,7 @@ export interface IToolboxItem {
    * @returns The parent toolbox item, or null if this toolbox item is not
    *     nested.
    */
-  getParent(): IToolboxItem|null;
+  getParent(): IToolboxItem | null;
 
   /**
    * Gets the nested level of the category.
@@ -71,7 +70,7 @@ export interface IToolboxItem {
    *
    * @returns The HTML element that receives clicks.
    */
-  getClickTarget(): Element|null;
+  getClickTarget(): Element | null;
 
   /**
    * Sets whether the category is visible or not.

@@ -25,6 +25,7 @@ import * as common from './common.js';
 import {Connection} from './connection.js';
 import {ConnectionType} from './connection_type.js';
 import * as constants from './constants.js';
+import {DuplicateIconType} from './icons/exceptions.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
@@ -34,6 +35,7 @@ import * as fieldRegistry from './field_registry.js';
 import {Align, Input} from './inputs/input.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IDeletable} from './interfaces/i_deletable.js';
+import type {IIcon} from './interfaces/i_icon.js';
 import type {Mutator} from './mutator.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
@@ -48,7 +50,6 @@ import {DummyInput} from './inputs/dummy_input.js';
 import {ValueInput} from './inputs/value_input.js';
 import {StatementInput} from './inputs/statement_input.js';
 
-
 /**
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
@@ -59,7 +60,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * changes. This is usually only called from the constructor, the block type
    * initializer function, or an extension initializer function.
    */
-  onchange?: ((p1: Abstract) => void)|null;
+  onchange?: ((p1: Abstract) => void) | null;
 
   /** The language-neutral ID given to the collapsed input. */
   static readonly COLLAPSED_INPUT_NAME: string = constants.COLLAPSED_INPUT_NAME;
@@ -71,7 +72,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Optional text data that round-trips between blocks and XML.
    * Has no effect. May be used by 3rd parties for meta information.
    */
-  data: string|null = null;
+  data: string | null = null;
 
   /**
    * Has this block been disposed of?
@@ -84,7 +85,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Colour of the block as HSV hue value (0-360)
    * This may be null if the block colour was not set via a hue number.
    */
-  private hue_: number|null = null;
+  private hue_: number | null = null;
 
   /** Colour of the block in '#RRGGBB' format. */
   protected colour_ = '#000000';
@@ -93,10 +94,10 @@ export class Block implements IASTNodeLocation, IDeletable {
   protected styleName_ = '';
 
   /** An optional method called during initialization. */
-  init?: (() => void);
+  init?: () => void;
 
   /** An optional method called during disposal. */
-  destroy?: (() => void);
+  destroy?: () => void;
 
   /**
    * An optional serialization method for defining how to serialize the
@@ -130,7 +131,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * An optional property for suppressing adding STATEMENT_PREFIX and
    * STATEMENT_SUFFIX to generated code.
    */
-  suppressPrefixSuffix: boolean|null = false;
+  suppressPrefixSuffix: boolean | null = false;
 
   /**
    * An optional property for declaring developer variables.  Return a list of
@@ -152,16 +153,17 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   decompose?: (p1: Workspace) => Block;
   id: string;
-  outputConnection: Connection|null = null;
-  nextConnection: Connection|null = null;
-  previousConnection: Connection|null = null;
+  outputConnection: Connection | null = null;
+  nextConnection: Connection | null = null;
+  previousConnection: Connection | null = null;
   inputList: Input[] = [];
   inputsInline?: boolean;
+  icons: IIcon[] = [];
   private disabled = false;
   tooltip: Tooltip.TipInfo = '';
   contextMenu = true;
 
-  protected parentBlock_: this|null = null;
+  protected parentBlock_: this | null = null;
 
   protected childBlocks_: this[] = [];
 
@@ -174,7 +176,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   private isShadow_ = false;
 
   protected collapsed_ = false;
-  protected outputShape_: number|null = null;
+  protected outputShape_: number | null = null;
 
   /**
    * Is the current block currently in the process of being disposed?
@@ -186,7 +188,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @deprecated August 2019. Use getCommentText instead.
    */
-  comment: string|Comment|null = null;
+  comment: string | Comment | null = null;
   /** @internal */
   commentModel: CommentModel;
   private readonly xy_: Coordinate;
@@ -200,15 +202,15 @@ export class Block implements IASTNodeLocation, IDeletable {
   /** Name of the type of hat. */
   hat?: string;
 
-  rendered: boolean|null = null;
+  rendered: boolean | null = null;
 
   /**
    * String for block help, or function that returns a URL. Null for no help.
    */
-  helpUrl: string|Function|null = null;
+  helpUrl: string | Function | null = null;
 
   /** A bound callback function to use when the parent workspace changes. */
-  private onchangeWrapper_: ((p1: Abstract) => void)|null = null;
+  private onchangeWrapper_: ((p1: Abstract) => void) | null = null;
 
   /**
    * A count of statement inputs on the block.
@@ -233,8 +235,8 @@ export class Block implements IASTNodeLocation, IDeletable {
   constructor(workspace: Workspace, prototypeName: string, opt_id?: string) {
     this.workspace = workspace;
 
-    this.id = opt_id && !workspace.getBlockById(opt_id) ? opt_id :
-                                                          idGenerator.genUid();
+    this.id =
+      opt_id && !workspace.getBlockById(opt_id) ? opt_id : idGenerator.genUid();
     workspace.setBlockById(this.id, this);
 
     /** A model of the comment attached to this block. */
@@ -310,7 +312,6 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param healStack If true, then try to heal any gap by connecting the next
    *     statement with the previous statement.  Otherwise, dispose of all
    *     children of this block.
-   * @suppress {checkTypes}
    */
   dispose(healStack: boolean) {
     if (this.isDeadOrDying()) return;
@@ -342,23 +343,17 @@ export class Block implements IASTNodeLocation, IDeletable {
       this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
 
-    eventUtils.disable();
-    try {
-      this.workspace.removeTypedBlock(this);
-      this.workspace.removeBlockById(this.id);
-      this.disposing = true;
+    this.workspace.removeTypedBlock(this);
+    this.workspace.removeBlockById(this.id);
+    this.disposing = true;
 
-      this.childBlocks_.forEach((c) => c.disposeInternal());
-      this.inputList.forEach((i) => i.dispose());
-      this.inputList.length = 0;
-      this.getConnections_(true).forEach((c) => c.dispose());
-    } finally {
-      eventUtils.enable();
-      if (typeof this.destroy === 'function') {
-        this.destroy();
-      }
-      this.disposed = true;
-    }
+    if (typeof this.destroy === 'function') this.destroy();
+
+    this.childBlocks_.forEach((c) => c.disposeInternal());
+    this.inputList.forEach((i) => i.dispose());
+    this.inputList.length = 0;
+    this.getConnections_(true).forEach((c) => c.dispose());
+    this.disposed = true;
   }
 
   /**
@@ -380,8 +375,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * change).
    */
   initModel() {
-    for (let i = 0, input; input = this.inputList[i]; i++) {
-      for (let j = 0, field; field = input.fieldRow[j]; j++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
+      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
         if (field.initModel) {
           field.initModel();
         }
@@ -426,8 +421,11 @@ export class Block implements IASTNodeLocation, IDeletable {
     }
 
     const thisConnection = this.getOnlyValueConnection_();
-    if (!thisConnection || !thisConnection.isConnected() ||
-        thisConnection.targetBlock()!.isShadow()) {
+    if (
+      !thisConnection ||
+      !thisConnection.isConnected() ||
+      thisConnection.targetBlock()!.isShadow()
+    ) {
       // Too many or too few possible connections on this block, or there's
       // nothing on the other side of this connection.
       return;
@@ -437,8 +435,13 @@ export class Block implements IASTNodeLocation, IDeletable {
     // Disconnect the child block.
     childConnection?.disconnect();
     // Connect child to the parent if possible, otherwise bump away.
-    if (this.workspace.connectionChecker.canConnect(
-            childConnection, parentConnection, false)) {
+    if (
+      this.workspace.connectionChecker.canConnect(
+        childConnection,
+        parentConnection,
+        false
+      )
+    ) {
       parentConnection.connect(childConnection!);
     } else {
       childConnection?.onFailedConnect(parentConnection);
@@ -454,15 +457,17 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @returns The connection on the value input, or null.
    */
-  private getOnlyValueConnection_(): Connection|null {
+  private getOnlyValueConnection_(): Connection | null {
     let connection = null;
     for (let i = 0; i < this.inputList.length; i++) {
       const thisConnection = this.inputList[i].connection;
-      if (thisConnection &&
-          thisConnection.type === ConnectionType.INPUT_VALUE &&
-          thisConnection.targetConnection) {
+      if (
+        thisConnection &&
+        thisConnection.type === ConnectionType.INPUT_VALUE &&
+        thisConnection.targetConnection
+      ) {
         if (connection) {
-          return null;  // More than one value input found.
+          return null; // More than one value input found.
         }
         connection = thisConnection;
       }
@@ -490,9 +495,14 @@ export class Block implements IASTNodeLocation, IDeletable {
       // Disconnect the next statement.
       const nextTarget = this.nextConnection?.targetConnection ?? null;
       nextTarget?.disconnect();
-      if (previousTarget &&
-          this.workspace.connectionChecker.canConnect(
-              previousTarget, nextTarget, false)) {
+      if (
+        previousTarget &&
+        this.workspace.connectionChecker.canConnect(
+          previousTarget,
+          nextTarget,
+          false
+        )
+      ) {
         // Attach the next statement to the previous statement.
         previousTarget.connect(nextTarget!);
       }
@@ -517,7 +527,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (this.nextConnection) {
       myConnections.push(this.nextConnection);
     }
-    for (let i = 0, input; input = this.inputList[i]; i++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
       if (input.connection) {
         myConnections.push(input.connection);
       }
@@ -535,11 +545,11 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The last next connection on the stack, or null.
    * @internal
    */
-  lastConnectionInStack(ignoreShadows: boolean): Connection|null {
+  lastConnectionInStack(ignoreShadows: boolean): Connection | null {
     let nextConnection = this.nextConnection;
     while (nextConnection) {
       const nextBlock = nextConnection.targetBlock();
-      if (!nextBlock || ignoreShadows && nextBlock.isShadow()) {
+      if (!nextBlock || (ignoreShadows && nextBlock.isShadow())) {
         return nextConnection;
       }
       nextConnection = nextBlock.nextConnection;
@@ -562,7 +572,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @returns The block (if any) that holds the current block.
    */
-  getParent(): this|null {
+  getParent(): this | null {
     return this.parentBlock_;
   }
 
@@ -572,8 +582,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param block A block connected to an input on this block.
    * @returns The input (if any) that connects to the specified block.
    */
-  getInputWithBlock(block: Block): Input|null {
-    for (let i = 0, input; input = this.inputList[i]; i++) {
+  getInputWithBlock(block: Block): Input | null {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
       if (input.connection && input.connection.targetBlock() === block) {
         return input;
       }
@@ -589,9 +599,9 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @returns The block (if any) that surrounds the current block.
    */
-  getSurroundParent(): this|null {
+  getSurroundParent(): this | null {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
-    let block: this|null = this;
+    let block: this | null = this;
     let prevBlock;
     do {
       prevBlock = block;
@@ -610,7 +620,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @returns The next statement block or null.
    */
-  getNextBlock(): Block|null {
+  getNextBlock(): Block | null {
     return this.nextConnection && this.nextConnection.targetBlock();
   }
 
@@ -619,7 +629,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @returns The previous statement block or null.
    */
-  getPreviousBlock(): Block|null {
+  getPreviousBlock(): Block | null {
     return this.previousConnection && this.previousConnection.targetBlock();
   }
 
@@ -630,10 +640,12 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The first statement connection or null.
    * @internal
    */
-  getFirstStatementConnection(): Connection|null {
-    for (let i = 0, input; input = this.inputList[i]; i++) {
-      if (input.connection &&
-          input.connection.type === ConnectionType.NEXT_STATEMENT) {
+  getFirstStatementConnection(): Connection | null {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
+      if (
+        input.connection &&
+        input.connection.type === ConnectionType.NEXT_STATEMENT
+      ) {
         return input.connection;
       }
     }
@@ -649,7 +661,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   getRootBlock(): this {
     let rootBlock: this;
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
-    let block: this|null = this;
+    let block: this | null = this;
     do {
       rootBlock = block;
       block = rootBlock.parentBlock_;
@@ -673,8 +685,11 @@ export class Block implements IASTNodeLocation, IDeletable {
       previous = block.getPreviousBlock();
       // AnyDuringMigration because:  Type 'Block' is not assignable to type
       // 'this'.
-    } while (previous && previous.getNextBlock() === block &&
-             (block = previous as AnyDuringMigration));
+    } while (
+      previous &&
+      previous.getNextBlock() === block &&
+      (block = previous as AnyDuringMigration)
+    );
     return block;
   }
 
@@ -692,7 +707,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       return this.childBlocks_;
     }
     const blocks = [];
-    for (let i = 0, input; input = this.inputList[i]; i++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
       if (input.connection) {
         const child = input.connection.targetBlock();
         if (child) {
@@ -713,7 +728,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param newParent New parent block.
    * @internal
    */
-  setParent(newParent: this|null) {
+  setParent(newParent: this | null) {
     if (newParent === this.parentBlock_) {
       return;
     }
@@ -721,8 +736,8 @@ export class Block implements IASTNodeLocation, IDeletable {
     // Check that block is connected to new parent if new parent is not null and
     //    that block is not connected to superior one if new parent is null.
     const targetBlock =
-        this.previousConnection && this.previousConnection.targetBlock() ||
-        this.outputConnection && this.outputConnection.targetBlock();
+      (this.previousConnection && this.previousConnection.targetBlock()) ||
+      (this.outputConnection && this.outputConnection.targetBlock());
     const isConnected = !!targetBlock;
 
     if (isConnected && newParent && targetBlock !== newParent) {
@@ -731,8 +746,9 @@ export class Block implements IASTNodeLocation, IDeletable {
       throw Error('Block not connected to new parent.');
     } else if (isConnected && !newParent) {
       throw Error(
-          'Cannot set parent to null while block is still connected to' +
-          ' superior block.');
+        'Cannot set parent to null while block is still connected to' +
+          ' superior block.'
+      );
     }
 
     // This block hasn't actually moved on-screen, so there's no need to
@@ -769,10 +785,10 @@ export class Block implements IASTNodeLocation, IDeletable {
   getDescendants(ordered: boolean): this[] {
     const blocks = [this];
     const childBlocks = this.getChildren(ordered);
-    for (let child, i = 0; child = childBlocks[i]; i++) {
+    for (let child, i = 0; (child = childBlocks[i]); i++) {
       // AnyDuringMigration because:  Argument of type 'Block[]' is not
       // assignable to parameter of type 'this[]'.
-      blocks.push(...child.getDescendants(ordered) as AnyDuringMigration);
+      blocks.push(...(child.getDescendants(ordered) as AnyDuringMigration));
     }
     return blocks;
   }
@@ -783,8 +799,12 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns True if deletable.
    */
   isDeletable(): boolean {
-    return this.deletable_ && !this.isShadow_ && !this.isDeadOrDying() &&
-        !this.workspace.options.readOnly;
+    return (
+      this.deletable_ &&
+      !this.isShadow_ &&
+      !this.isDeadOrDying() &&
+      !this.workspace.options.readOnly
+    );
   }
 
   /**
@@ -812,8 +832,12 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @internal
    */
   isMovable(): boolean {
-    return this.movable_ && !this.isShadow_ && !this.isDeadOrDying() &&
-        !this.workspace.options.readOnly;
+    return (
+      this.movable_ &&
+      !this.isShadow_ &&
+      !this.isDeadOrDying() &&
+      !this.workspace.options.readOnly
+    );
   }
 
   /**
@@ -848,7 +872,8 @@ export class Block implements IASTNodeLocation, IDeletable {
       return true;
     }
     return this.workspace.isCapacityAvailable(
-        common.getBlockTypeCounts(this, true));
+      common.getBlockTypeCounts(this, true)
+    );
   }
 
   /**
@@ -897,8 +922,11 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @internal
    */
   isEditable(): boolean {
-    return this.editable_ && !this.isDeadOrDying() &&
-        !this.workspace.options.readOnly;
+    return (
+      this.editable_ &&
+      !this.isDeadOrDying() &&
+      !this.workspace.options.readOnly
+    );
   }
 
   /**
@@ -917,8 +945,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   setEditable(editable: boolean) {
     this.editable_ = editable;
-    for (let i = 0, input; input = this.inputList[i]; i++) {
-      for (let j = 0, field; field = input.fieldRow[j]; j++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
+      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
         field.updateEditable();
       }
     }
@@ -943,7 +971,10 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The matching connection on this block, or null.
    * @internal
    */
-  getMatchingConnection(otherBlock: Block, conn: Connection): Connection|null {
+  getMatchingConnection(
+    otherBlock: Block,
+    conn: Connection
+  ): Connection | null {
     const connections = this.getConnections_(true);
     const otherConnections = otherBlock.getConnections_(true);
     if (connections.length !== otherConnections.length) {
@@ -963,7 +994,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param url URL string for block help, or function that returns a URL.  Null
    *     for no help.
    */
-  setHelpUrl(url: string|Function) {
+  setHelpUrl(url: string | Function) {
     this.helpUrl = url;
   }
 
@@ -1010,7 +1041,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @returns Hue value (0-360).
    */
-  getHue(): number|null {
+  getHue(): number | null {
     return this.hue_;
   }
 
@@ -1020,7 +1051,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param colour HSV hue value (0 to 360), #RRGGBB string, or a message
    *     reference string pointing to one of those two values.
    */
-  setColour(colour: number|string) {
+  setColour(colour: number | string) {
     const parsed = parsing.parseBlockColour(colour);
     this.hue_ = parsed.hue;
     this.colour_ = parsed.hex;
@@ -1062,16 +1093,17 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param name The name of the field.
    * @returns Named field, or null if field does not exist.
    */
-  getField(name: string): Field|null {
+  getField(name: string): Field | null {
     if (typeof name !== 'string') {
       throw TypeError(
-          'Block.prototype.getField expects a string ' +
+        'Block.prototype.getField expects a string ' +
           'with the field name but received ' +
           (name === undefined ? 'nothing' : name + ' of type ' + typeof name) +
-          ' instead');
+          ' instead'
+      );
     }
-    for (let i = 0, input; input = this.inputList[i]; i++) {
-      for (let j = 0, field; field = input.fieldRow[j]; j++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
+      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
         if (field.name === name) {
           return field;
         }
@@ -1087,8 +1119,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   getVars(): string[] {
     const vars: string[] = [];
-    for (let i = 0, input; input = this.inputList[i]; i++) {
-      for (let j = 0, field; field = input.fieldRow[j]; j++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
+      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
         if (field.referencesVariables()) {
           // NOTE: This only applies to `FieldVariable`, a `Field<string>`
           vars.push(field.getValue() as string);
@@ -1106,11 +1138,12 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   getVarModels(): VariableModel[] {
     const vars = [];
-    for (let i = 0, input; input = this.inputList[i]; i++) {
-      for (let j = 0, field; field = input.fieldRow[j]; j++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
+      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
         if (field.referencesVariables()) {
-          const model =
-              this.workspace.getVariableById(field.getValue() as string);
+          const model = this.workspace.getVariableById(
+            field.getValue() as string
+          );
           // Check if the variable actually exists (and isn't just a potential
           // variable).
           if (model) {
@@ -1130,10 +1163,12 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @internal
    */
   updateVarName(variable: VariableModel) {
-    for (let i = 0, input; input = this.inputList[i]; i++) {
-      for (let j = 0, field; field = input.fieldRow[j]; j++) {
-        if (field.referencesVariables() &&
-            variable.getId() === field.getValue()) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
+      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
+        if (
+          field.referencesVariables() &&
+          variable.getId() === field.getValue()
+        ) {
           field.refreshVariableName();
         }
       }
@@ -1149,8 +1184,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    *     updated name.
    */
   renameVarById(oldId: string, newId: string) {
-    for (let i = 0, input; input = this.inputList[i]; i++) {
-      for (let j = 0, field; field = input.fieldRow[j]; j++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
+      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
         if (field.referencesVariables() && oldId === field.getValue()) {
           field.setValue(newId);
         }
@@ -1193,22 +1228,27 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param opt_check Statement type or list of statement types.  Null/undefined
    *     if any type could be connected.
    */
-  setPreviousStatement(newBoolean: boolean, opt_check?: string|string[]|null) {
+  setPreviousStatement(
+    newBoolean: boolean,
+    opt_check?: string | string[] | null
+  ) {
     if (newBoolean) {
       if (opt_check === undefined) {
         opt_check = null;
       }
       if (!this.previousConnection) {
-        this.previousConnection =
-            this.makeConnection_(ConnectionType.PREVIOUS_STATEMENT);
+        this.previousConnection = this.makeConnection_(
+          ConnectionType.PREVIOUS_STATEMENT
+        );
       }
       this.previousConnection.setCheck(opt_check);
     } else {
       if (this.previousConnection) {
         if (this.previousConnection.isConnected()) {
           throw Error(
-              'Must disconnect previous statement before removing ' +
-              'connection.');
+            'Must disconnect previous statement before removing ' +
+              'connection.'
+          );
         }
         this.previousConnection.dispose();
         this.previousConnection = null;
@@ -1223,22 +1263,23 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param opt_check Statement type or list of statement types.  Null/undefined
    *     if any type could be connected.
    */
-  setNextStatement(newBoolean: boolean, opt_check?: string|string[]|null) {
+  setNextStatement(newBoolean: boolean, opt_check?: string | string[] | null) {
     if (newBoolean) {
       if (opt_check === undefined) {
         opt_check = null;
       }
       if (!this.nextConnection) {
-        this.nextConnection =
-            this.makeConnection_(ConnectionType.NEXT_STATEMENT);
+        this.nextConnection = this.makeConnection_(
+          ConnectionType.NEXT_STATEMENT
+        );
       }
       this.nextConnection.setCheck(opt_check);
     } else {
       if (this.nextConnection) {
         if (this.nextConnection.isConnected()) {
           throw Error(
-              'Must disconnect next statement before removing ' +
-              'connection.');
+            'Must disconnect next statement before removing ' + 'connection.'
+          );
         }
         this.nextConnection.dispose();
         this.nextConnection = null;
@@ -1253,21 +1294,23 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param opt_check Returned type or list of returned types.  Null or
    *     undefined if any type could be returned (e.g. variable get).
    */
-  setOutput(newBoolean: boolean, opt_check?: string|string[]|null) {
+  setOutput(newBoolean: boolean, opt_check?: string | string[] | null) {
     if (newBoolean) {
       if (opt_check === undefined) {
         opt_check = null;
       }
       if (!this.outputConnection) {
-        this.outputConnection =
-            this.makeConnection_(ConnectionType.OUTPUT_VALUE);
+        this.outputConnection = this.makeConnection_(
+          ConnectionType.OUTPUT_VALUE
+        );
       }
       this.outputConnection.setCheck(opt_check);
     } else {
       if (this.outputConnection) {
         if (this.outputConnection.isConnected()) {
           throw Error(
-              'Must disconnect output value before removing connection.');
+            'Must disconnect output value before removing connection.'
+          );
         }
         this.outputConnection.dispose();
         this.outputConnection = null;
@@ -1282,8 +1325,15 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   setInputsInline(newBoolean: boolean) {
     if (this.inputsInline !== newBoolean) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          this, 'inline', null, this.inputsInline, newBoolean));
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this,
+          'inline',
+          null,
+          this.inputsInline,
+          newBoolean
+        )
+      );
       this.inputsInline = newBoolean;
     }
   }
@@ -1300,15 +1350,19 @@ export class Block implements IASTNodeLocation, IDeletable {
     }
     // Not defined explicitly.  Figure out what would look best.
     for (let i = 1; i < this.inputList.length; i++) {
-      if (this.inputList[i - 1] instanceof DummyInput &&
-          this.inputList[i] instanceof DummyInput) {
+      if (
+        this.inputList[i - 1] instanceof DummyInput &&
+        this.inputList[i] instanceof DummyInput
+      ) {
         // Two dummy inputs in a row.  Don't inline them.
         return false;
       }
     }
     for (let i = 1; i < this.inputList.length; i++) {
-      if (this.inputList[i - 1] instanceof ValueInput &&
-          this.inputList[i] instanceof DummyInput) {
+      if (
+        this.inputList[i - 1] instanceof ValueInput &&
+        this.inputList[i] instanceof DummyInput
+      ) {
         // Dummy input after a value input.  Inline them.
         return true;
       }
@@ -1321,7 +1375,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @param outputShape Value representing an output shape.
    */
-  setOutputShape(outputShape: number|null) {
+  setOutputShape(outputShape: number | null) {
     this.outputShape_ = outputShape;
   }
 
@@ -1330,7 +1384,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @returns Value representing output shape if one exists.
    */
-  getOutputShape(): number|null {
+  getOutputShape(): number | null {
     return this.outputShape_;
   }
 
@@ -1352,8 +1406,15 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (this.isEnabled() !== enabled) {
       const oldValue = this.disabled;
       this.disabled = !enabled;
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          this, 'disabled', null, oldValue, !enabled));
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this,
+          'disabled',
+          null,
+          oldValue,
+          !enabled
+        )
+      );
     }
   }
 
@@ -1391,8 +1452,15 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   setCollapsed(collapsed: boolean) {
     if (this.collapsed_ !== collapsed) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          this, 'collapsed', null, this.collapsed_, collapsed));
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this,
+          'collapsed',
+          null,
+          this.collapsed_,
+          collapsed
+        )
+      );
       this.collapsed_ = collapsed;
     }
   }
@@ -1421,7 +1489,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     // Join the text array, removing the spaces around added parentheses.
     let prev = '';
     let text: string = tokens.reduce((acc, curr) => {
-      const val = acc + ((prev === '(' || curr === ')') ? '' : ' ') + curr;
+      const val = acc + (prev === '(' || curr === ')' ? '' : ' ') + curr;
       prev = curr[curr.length - 1];
       return val;
     }, '');
@@ -1458,8 +1526,10 @@ export class Block implements IASTNodeLocation, IDeletable {
       if (!checks && connection.targetConnection) {
         checks = connection.targetConnection.getCheck();
       }
-      return !!checks &&
-          (checks.indexOf('Boolean') !== -1 || checks.indexOf('Number') !== -1);
+      return (
+        !!checks &&
+        (checks.indexOf('Boolean') !== -1 || checks.indexOf('Number') !== -1)
+      );
     }
 
     for (const input of this.inputList) {
@@ -1492,8 +1562,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The input object created.
    */
   appendValueInput(name: string): Input {
-    return this.appendInput(new ValueInput(
-        name, this, this.makeConnection_(ConnectionType.INPUT_VALUE)));
+    return this.appendInput(new ValueInput(name, this));
   }
 
   /**
@@ -1505,8 +1574,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   appendStatementInput(name: string): Input {
     this.statementInputCount++;
-    return this.appendInput(new StatementInput(
-        name, this, this.makeConnection_(ConnectionType.NEXT_STATEMENT)));
+    return this.appendInput(new StatementInput(name, this));
   }
 
   /**
@@ -1539,11 +1607,14 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The constucted input, or null if there was no constructor
    *     associated with the type.
    */
-  private appendInputFromRegistry(type: string, name: string): Input|null {
-    const inputConstructor =
-        registry.getClass(registry.Type.INPUT, type, false);
+  private appendInputFromRegistry(type: string, name: string): Input | null {
+    const inputConstructor = registry.getClass(
+      registry.Type.INPUT,
+      type,
+      false
+    );
     if (!inputConstructor) return null;
-    return this.appendInput(new inputConstructor(name, this, null));
+    return this.appendInput(new inputConstructor(name, this));
   }
 
   /**
@@ -1558,8 +1629,8 @@ export class Block implements IASTNodeLocation, IDeletable {
     // Validate inputs.
     if (json['output'] && json['previousStatement']) {
       throw Error(
-          warningPrefix +
-          'Must not have both an output and a previousStatement.');
+        warningPrefix + 'Must not have both an output and a previousStatement.'
+      );
     }
 
     // Set basic properties of block.
@@ -1583,8 +1654,11 @@ export class Block implements IASTNodeLocation, IDeletable {
     let i = 0;
     while (json['message' + i] !== undefined) {
       this.interpolate_(
-          json['message' + i], json['args' + i] || [],
-          json['lastDummyAlign' + i], warningPrefix);
+        json['message' + i],
+        json['args' + i] || [],
+        json['lastDummyAlign' + i],
+        warningPrefix
+      );
       i++;
     }
 
@@ -1622,11 +1696,13 @@ export class Block implements IASTNodeLocation, IDeletable {
     }
     if (typeof json['extensions'] === 'string') {
       console.warn(
-          warningPrefix +
-          'JSON attribute \'extensions\' should be an array of' +
-          ' strings. Found raw string in JSON for \'' + json['type'] +
-          '\' block.');
-      json['extensions'] = [json['extensions']];  // Correct and continue.
+        warningPrefix +
+          "JSON attribute 'extensions' should be an array of" +
+          " strings. Found raw string in JSON for '" +
+          json['type'] +
+          "' block."
+      );
+      json['extensions'] = [json['extensions']]; // Correct and continue.
     }
 
     // Add the mutator to the block.
@@ -1689,8 +1765,10 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param opt_disableCheck Option flag to disable overwrite checks.
    */
   mixin(mixinObj: AnyDuringMigration, opt_disableCheck?: boolean) {
-    if (opt_disableCheck !== undefined &&
-        typeof opt_disableCheck !== 'boolean') {
+    if (
+      opt_disableCheck !== undefined &&
+      typeof opt_disableCheck !== 'boolean'
+    ) {
       throw Error('opt_disableCheck must be a boolean if provided');
     }
     if (!opt_disableCheck) {
@@ -1702,8 +1780,8 @@ export class Block implements IASTNodeLocation, IDeletable {
       }
       if (overwrites.length) {
         throw Error(
-            'Mixin will overwrite block members: ' +
-            JSON.stringify(overwrites));
+          'Mixin will overwrite block members: ' + JSON.stringify(overwrites)
+        );
       }
     }
     Object.assign(this, mixinObj);
@@ -1720,20 +1798,23 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param warningPrefix Warning prefix string identifying block.
    */
   private interpolate_(
-      message: string, args: AnyDuringMigration[],
-      lastDummyAlign: string|undefined, warningPrefix: string) {
+    message: string,
+    args: AnyDuringMigration[],
+    lastDummyAlign: string | undefined,
+    warningPrefix: string
+  ) {
     const tokens = parsing.tokenizeInterpolation(message);
     this.validateTokens_(tokens, args.length);
     const elements = this.interpolateArguments_(tokens, args, lastDummyAlign);
 
     // An array of [field, fieldName] tuples.
     const fieldStack = [];
-    for (let i = 0, element; element = elements[i]; i++) {
+    for (let i = 0, element; (element = elements[i]); i++) {
       if (this.isInputKeyword_(element['type'])) {
         const input = this.inputFromJson_(element, warningPrefix);
         // Should never be null, but just in case.
         if (input) {
-          for (let j = 0, tuple; tuple = fieldStack[j]; j++) {
+          for (let j = 0, tuple; (tuple = fieldStack[j]); j++) {
             input.appendField(tuple[0], tuple[1]);
           }
           fieldStack.length = 0;
@@ -1757,7 +1838,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param tokens An array of tokens to validate
    * @param argsCount The number of args that need to be referred to.
    */
-  private validateTokens_(tokens: Array<string|number>, argsCount: number) {
+  private validateTokens_(tokens: Array<string | number>, argsCount: number) {
     const visitedArgsHash = [];
     let visitedArgsCount = 0;
     for (let i = 0; i < tokens.length; i++) {
@@ -1767,21 +1848,36 @@ export class Block implements IASTNodeLocation, IDeletable {
       }
       if (token < 1 || token > argsCount) {
         throw Error(
-            'Block "' + this.type + '": ' +
-            'Message index %' + token + ' out of range.');
+          'Block "' +
+            this.type +
+            '": ' +
+            'Message index %' +
+            token +
+            ' out of range.'
+        );
       }
       if (visitedArgsHash[token]) {
         throw Error(
-            'Block "' + this.type + '": ' +
-            'Message index %' + token + ' duplicated.');
+          'Block "' +
+            this.type +
+            '": ' +
+            'Message index %' +
+            token +
+            ' duplicated.'
+        );
       }
       visitedArgsHash[token] = true;
       visitedArgsCount++;
     }
     if (visitedArgsCount !== argsCount) {
       throw Error(
-          'Block "' + this.type + '": ' +
-          'Message does not reference all ' + argsCount + ' arg(s).');
+        'Block "' +
+          this.type +
+          '": ' +
+          'Message does not reference all ' +
+          argsCount +
+          ' arg(s).'
+      );
     }
   }
 
@@ -1797,8 +1893,10 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The JSON definitions of field and inputs to add to the block.
    */
   private interpolateArguments_(
-      tokens: Array<string|number>, args: Array<AnyDuringMigration|string>,
-      lastDummyAlign: string|undefined): AnyDuringMigration[] {
+    tokens: Array<string | number>,
+    args: Array<AnyDuringMigration | string>,
+    lastDummyAlign: string | undefined
+  ): AnyDuringMigration[] {
     const elements = [];
     for (let i = 0; i < tokens.length; i++) {
       let element = tokens[i];
@@ -1818,9 +1916,12 @@ export class Block implements IASTNodeLocation, IDeletable {
     }
 
     const length = elements.length;
-    if (length &&
-        !this.isInputKeyword_(
-            (elements as AnyDuringMigration)[length - 1]['type'])) {
+    if (
+      length &&
+      !this.isInputKeyword_(
+        (elements as AnyDuringMigration)[length - 1]['type']
+      )
+    ) {
       const dummyInput = {'type': 'input_dummy'};
       if (lastDummyAlign) {
         (dummyInput as AnyDuringMigration)['align'] = lastDummyAlign;
@@ -1839,8 +1940,11 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param element The element to try to turn into a field.
    * @returns The field defined by the JSON, or null if one couldn't be created.
    */
-  private fieldFromJson_(element: {alt?: string, type: string, text?: string}):
-      Field|null {
+  private fieldFromJson_(element: {
+    alt?: string;
+    type: string;
+    text?: string;
+  }): Field | null {
     const field = fieldRegistry.fromJson(element);
     if (!field && element['alt']) {
       if (typeof element['alt'] === 'string') {
@@ -1862,8 +1966,10 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The input that has been created, or null if one could not be
    *     created for some reason (should never happen).
    */
-  private inputFromJson_(element: AnyDuringMigration, warningPrefix: string):
-      Input|null {
+  private inputFromJson_(
+    element: AnyDuringMigration,
+    warningPrefix: string
+  ): Input | null {
     const alignmentLookup = {
       'LEFT': Align.LEFT,
       'RIGHT': Align.RIGHT,
@@ -1896,9 +2002,9 @@ export class Block implements IASTNodeLocation, IDeletable {
       input.setCheck(element['check']);
     }
     if (element['align']) {
-      const alignment =
-          (alignmentLookup as
-           AnyDuringMigration)[element['align'].toUpperCase()];
+      const alignment = (alignmentLookup as AnyDuringMigration)[
+        element['align'].toUpperCase()
+      ];
       if (alignment === undefined) {
         console.warn(warningPrefix + 'Illegal align value: ', element['align']);
       } else {
@@ -1916,8 +2022,12 @@ export class Block implements IASTNodeLocation, IDeletable {
    *     otherwise.
    */
   private isInputKeyword_(str: string): boolean {
-    return str === 'input_value' || str === 'input_statement' ||
-        str === 'input_dummy' || registry.hasItem(registry.Type.INPUT, str);
+    return (
+      str === 'input_value' ||
+      str === 'input_statement' ||
+      str === 'input_dummy' ||
+      registry.hasItem(registry.Type.INPUT, str)
+    );
   }
 
   /**
@@ -1927,7 +2037,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param str String to turn into the JSON definition of a label field.
    * @returns The JSON definition or null.
    */
-  private stringToFieldJson_(str: string): {text: string, type: string}|null {
+  private stringToFieldJson_(str: string): {text: string; type: string} | null {
     str = str.trim();
     if (str) {
       return {
@@ -1945,14 +2055,14 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param refName Name of input that should be after the moved input, or null
    *     to be the input at the end.
    */
-  moveInputBefore(name: string, refName: string|null) {
+  moveInputBefore(name: string, refName: string | null) {
     if (name === refName) {
       return;
     }
     // Find both inputs.
     let inputIndex = -1;
     let refIndex = refName ? -1 : this.inputList.length;
-    for (let i = 0, input; input = this.inputList[i]; i++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
       if (input.name === name) {
         inputIndex = i;
         if (refIndex !== -1) {
@@ -1983,7 +2093,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   moveNumberedInputBefore(inputIndex: number, refIndex: number) {
     // Validate arguments.
     if (inputIndex === refIndex) {
-      throw Error('Can\'t move input to itself.');
+      throw Error("Can't move input to itself.");
     }
     if (inputIndex >= this.inputList.length) {
       throw RangeError('Input index ' + inputIndex + ' out of bounds.');
@@ -2011,7 +2121,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @throws {Error} if the input is not present and opt_quiet is not true.
    */
   removeInput(name: string, opt_quiet?: boolean): boolean {
-    for (let i = 0, input; input = this.inputList[i]; i++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
       if (input.name === name) {
         if (input instanceof StatementInput) this.statementInputCount--;
         input.dispose();
@@ -2031,8 +2141,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param name The name of the input.
    * @returns The input object, or null if input does not exist.
    */
-  getInput(name: string): Input|null {
-    for (let i = 0, input; input = this.inputList[i]; i++) {
+  getInput(name: string): Input | null {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
       if (input.name === name) {
         return input;
       }
@@ -2048,7 +2158,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The attached value block, or null if the input is either
    *     disconnected or if the input does not exist.
    */
-  getInputTargetBlock(name: string): Block|null {
+  getInputTargetBlock(name: string): Block | null {
     const input = this.getInput(name);
     return input && input.connection && input.connection.targetBlock();
   }
@@ -2058,7 +2168,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @returns Block's comment.
    */
-  getCommentText(): string|null {
+  getCommentText(): string | null {
     return this.commentModel.text;
   }
 
@@ -2067,14 +2177,21 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @param text The text, or null to delete.
    */
-  setCommentText(text: string|null) {
+  setCommentText(text: string | null) {
     if (this.commentModel.text === text) {
       return;
     }
-    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-        this, 'comment', null, this.commentModel.text, text));
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        this,
+        'comment',
+        null,
+        this.commentModel.text,
+        text
+      )
+    );
     this.commentModel.text = text;
-    this.comment = text;  // For backwards compatibility.
+    this.comment = text; // For backwards compatibility.
   }
 
   /**
@@ -2084,16 +2201,60 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param _opt_id An optional ID for the warning text to be able to maintain
    *     multiple warnings.
    */
-  setWarningText(_text: string|null, _opt_id?: string) {}
-  // NOP.
+  setWarningText(_text: string | null, _opt_id?: string) {
+    // NOOP.
+  }
 
   /**
    * Give this block a mutator dialog.
    *
    * @param _mutator A mutator dialog instance or null to remove.
    */
-  setMutator(_mutator: Mutator) {}
-  // NOP.
+  setMutator(_mutator: Mutator) {
+    // NOOP.
+  }
+
+  /** Adds the given icon to the block. */
+  addIcon<T extends IIcon>(icon: T): T {
+    if (this.hasIcon(icon.getType())) throw new DuplicateIconType(icon);
+    this.icons.push(icon);
+    this.icons.sort((a, b) => a.getWeight() - b.getWeight());
+    return icon;
+  }
+
+  /**
+   * Removes the icon whose getType matches the given type iconType from the
+   * block.
+   *
+   * @param type The type of the icon to remove from the block.
+   * @returns True if an icon with the given type was found, false otherwise.
+   */
+  removeIcon(type: string): boolean {
+    if (!this.hasIcon(type)) return false;
+    this.icons = this.icons.filter((icon) => icon.getType() !== type);
+    return true;
+  }
+
+  /**
+   * @returns True if an icon with the given type exists on the block,
+   *     false otherwise.
+   */
+  hasIcon(type: string): boolean {
+    return this.icons.some((icon) => icon.getType() === type);
+  }
+
+  /**
+   * @returns The icon with the given type if it exists on the block, undefined
+   *     otherwise.
+   */
+  getIcon(type: string): IIcon | undefined {
+    return this.icons.find((icon) => icon.getType() === type);
+  }
+
+  /** @returns An array of the icons attached to this block. */
+  getIcons(): IIcon[] {
+    return [...this.icons];
+  }
 
   /**
    * Return the coordinates of the top-left corner of this block relative to the
@@ -2116,8 +2277,9 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (this.parentBlock_) {
       throw Error('Block has parent');
     }
-    const event =
-        new (eventUtils.get(eventUtils.BLOCK_MOVE))(this) as BlockMove;
+    const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
+      this
+    ) as BlockMove;
     reason && event.setReason(reason);
     this.xy_.translate(dx, dy);
     event.recordNew();
@@ -2129,8 +2291,9 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @param type The type of the connection to create.
    * @returns A new connection of the specified type.
+   * @internal
    */
-  protected makeConnection_(type: number): Connection {
+  makeConnection_(type: ConnectionType): Connection {
     return new Connection(this, type);
   }
 
@@ -2152,7 +2315,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     }
 
     // Recursively check each input block of the current block.
-    for (let i = 0, input; input = this.inputList[i]; i++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
       if (!input.connection) {
         continue;
       }
@@ -2192,7 +2355,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
 export namespace Block {
   export interface CommentModel {
-    text: string|null;
+    text: string | null;
     pinned: boolean;
     size: Size;
   }

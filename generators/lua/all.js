@@ -9,19 +9,18 @@
  *     blocks.  This is the entrypoint for lua_compressed.js.
  * @suppress {extraRequire}
  */
-'use strict';
 
-goog.module('Blockly.Lua.all');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Lua.all');
 
-const moduleExports = goog.require('Blockly.Lua');
-goog.require('Blockly.Lua.colour');
-goog.require('Blockly.Lua.lists');
-goog.require('Blockly.Lua.logic');
-goog.require('Blockly.Lua.loops');
-goog.require('Blockly.Lua.math');
-goog.require('Blockly.Lua.procedures');
-goog.require('Blockly.Lua.texts');
-goog.require('Blockly.Lua.variables');
-goog.require('Blockly.Lua.variablesDynamic');
+import './colour.js';
+import './lists.js';
+import './logic.js';
+import './loops.js';
+import './math.js';
+import './procedures.js';
+import './text.js';
+import './variables.js';
+import './variables_dynamic.js';
 
-exports = moduleExports;
+export * from '../lua.js';

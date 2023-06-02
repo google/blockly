@@ -57,14 +57,19 @@ export const runSerializationTestSuite = (testCases) => {
    * @return {!Function} The test callback.
    */
   const createSerializedDataToBlockTestCallback = (testCase) => {
-    return function() {
+    return function () {
       let block;
       if (testCase.json) {
         block = Blockly.serialization.blocks.append(
-            testCase.json, this.workspace, {recordUndo: true});
+          testCase.json,
+          this.workspace,
+          {recordUndo: true}
+        );
       } else {
-        block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
-            testCase.xml), this.workspace);
+        block = Blockly.Xml.domToBlock(
+          Blockly.utils.xml.textToDom(testCase.xml),
+          this.workspace
+        );
       }
       this.clock.runAll();
       testCase.assertBlockStructure(block);
@@ -76,32 +81,37 @@ export const runSerializationTestSuite = (testCases) => {
    * @return {!Function} The test callback.
    */
   const createRoundTripTestCallback = (testCase) => {
-    return function() {
+    return function () {
       if (testCase.json) {
         const block = Blockly.serialization.blocks.append(
-            testCase.json, this.workspace, {recordUndo: true});
+          testCase.json,
+          this.workspace,
+          {recordUndo: true}
+        );
         this.clock.runAll();
         const generatedJson = Blockly.serialization.blocks.save(block);
         const expectedJson = testCase.expectedJson || testCase.json;
         chai.assert.deepEqual(generatedJson, expectedJson);
       } else {
-        const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
-            testCase.xml), this.workspace);
+        const block = Blockly.Xml.domToBlock(
+          Blockly.utils.xml.textToDom(testCase.xml),
+          this.workspace
+        );
         this.clock.runAll();
-        const generatedXml =
-            Blockly.Xml.domToPrettyText(
-                Blockly.Xml.blockToDom(block));
+        const generatedXml = Blockly.Xml.domToPrettyText(
+          Blockly.Xml.blockToDom(block)
+        );
         const expectedXml = testCase.expectedXml || testCase.xml;
         chai.assert.equal(generatedXml, expectedXml);
       }
     };
   };
-  suite('Serialization', function() {
-    suite('xmlToBlock', function() {
+  suite('Serialization', function () {
+    suite('xmlToBlock', function () {
       runTestCases(testCases, createSerializedDataToBlockTestCallback);
     });
-    suite('xml round-trip', function() {
-      setup(function() {
+    suite('xml round-trip', function () {
+      setup(function () {
         // The genUid is undergoing change as part of the 2021Q3
         // goog.module migration:
         //
@@ -113,17 +123,17 @@ export const runSerializationTestSuite = (testCases) => {
         //   .genUid is now a wrapper around .TEST_ONLY.genUid, which
         //   can be safely stubbed by sinon or other similar
         //   frameworks in a way that will continue to work.
-        if (Blockly.utils.idGenerator &&
-            Blockly.utils.idGenerator.TEST_ONLY) {
-          sinon.stub(Blockly.utils.idGenerator.TEST_ONLY, 'genUid')
-              .returns('1');
+        if (Blockly.utils.idGenerator && Blockly.utils.idGenerator.TEST_ONLY) {
+          sinon
+            .stub(Blockly.utils.idGenerator.TEST_ONLY, 'genUid')
+            .returns('1');
         } else {
           // Fall back to stubbing original version on Blockly.utils.
           sinon.stub(Blockly.utils, 'genUid').returns('1');
         }
       });
 
-      teardown(function() {
+      teardown(function () {
         sinon.restore();
       });
 

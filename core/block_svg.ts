@@ -25,17 +25,21 @@ import type {Connection} from './connection.js';
 import {ConnectionType} from './connection_type.js';
 import * as constants from './constants.js';
 import * as ContextMenu from './contextmenu.js';
-import {ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption} from './contextmenu_registry.js';
+import {
+  ContextMenuOption,
+  ContextMenuRegistry,
+  LegacyContextMenuOption,
+} from './contextmenu_registry.js';
 import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
-import type {Icon} from './icon.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
+import {IIcon, isIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
 import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
@@ -43,7 +47,6 @@ import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
 import type {Mutator} from './mutator.js';
 import {RenderedConnection} from './rendered_connection.js';
-import type {Debug as BlockRenderingDebug} from './renderers/common/debugger.js';
 import type {IPathObject} from './renderers/common/i_path_object.js';
 import * as blocks from './serialization/blocks.js';
 import type {BlockStyle} from './theme.js';
@@ -58,14 +61,14 @@ import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {queueRender} from './render_management.js';
 
-
 /**
  * Class for a block's SVG representation.
  * Not normally called directly, workspace.newBlock() is preferred.
  */
-export class BlockSvg extends Block implements IASTNodeLocationSvg,
-                                               IBoundedElement, ICopyable,
-                                               IDraggable {
+export class BlockSvg
+  extends Block
+  implements IASTNodeLocationSvg, IBoundedElement, ICopyable, IDraggable
+{
   /**
    * Constant for identifying rows that are to be rendered inline.
    * Don't collide with Blockly.inputTypes.
@@ -81,15 +84,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   override decompose?: (p1: Workspace) => BlockSvg;
   // override compose?: ((p1: BlockSvg) => void)|null;
   saveConnections?: (p1: BlockSvg) => void;
-  customContextMenu?:
-      (p1: Array<ContextMenuOption|LegacyContextMenuOption>) => void;
-
-  /**
-   * An property used internally to reference the block's rendering debugger.
-   *
-   * @internal
-   */
-  renderingDebugger: BlockRenderingDebug|null = null;
+  customContextMenu?: (
+    p1: Array<ContextMenuOption | LegacyContextMenuOption>
+  ) => void;
 
   /**
    * Height of this block, not including any statement blocks above or below.
@@ -110,13 +107,13 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   private warningTextDb = new Map<string, ReturnType<typeof setTimeout>>();
 
   /** Block's mutator icon (if any). */
-  mutator: Mutator|null = null;
+  mutator: Mutator | null = null;
 
   /** Block's comment icon (if any). */
-  private commentIcon_: Comment|null = null;
+  private commentIcon_: Comment | null = null;
 
   /** Block's warning icon (if any). */
-  warning: Warning|null = null;
+  warning: Warning | null = null;
 
   private svgGroup_: SVGGElement;
   style: BlockStyle;
@@ -141,7 +138,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   override nextConnection!: RenderedConnection;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   override previousConnection!: RenderedConnection;
-  private readonly useDragSurface_: boolean;
 
   private translation = '';
 
@@ -160,7 +156,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   relativeCoords = new Coordinate(0, 0);
 
-
   /**
    * @param workspace The block's workspace.
    * @param prototypeName Name of the language object containing type-specific
@@ -177,14 +172,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     this.style = workspace.getRenderer().getConstants().getBlockStyle(null);
 
     /** The renderer's path object. */
-    this.pathObject =
-        workspace.getRenderer().makePathObject(this.svgGroup_, this.style);
-
-    /**
-     * Whether to move the block to the drag surface when it is dragged.
-     * True if it should move, false if it should be translated directly.
-     */
-    this.useDragSurface_ = !!workspace.getBlockDragSurface();
+    this.pathObject = workspace
+      .getRenderer()
+      .makePathObject(this.svgGroup_, this.style);
 
     const svgPath = this.pathObject.svgPath;
     (svgPath as any).tooltip = this;
@@ -204,19 +194,28 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (!this.workspace.rendered) {
       throw TypeError('Workspace is headless.');
     }
-    for (let i = 0, input; input = this.inputList[i]; i++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
       input.init();
     }
-    const icons = this.getIcons();
-    for (let i = 0; i < icons.length; i++) {
-      icons[i].createIcon();
+    for (const icon of this.getIcons()) {
+      if (isIcon(icon)) {
+        icon.initView(this.createIconPointerDownListener(icon));
+        icon.updateEditable();
+      } else {
+        // TODO (#7042): Remove old icon handling.
+        icon.createIcon();
+      }
     }
     this.applyColour();
     this.pathObject.updateMovable(this.isMovable());
     const svg = this.getSvgRoot();
     if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
       browserEvents.conditionalBind(
-          svg, 'pointerdown', this, this.onMouseDown_);
+        svg,
+        'pointerdown',
+        this,
+        this.onMouseDown_
+      );
     }
     this.eventsInit_ = true;
 
@@ -230,7 +229,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @returns #RRGGBB string.
    */
-  getColourSecondary(): string|undefined {
+  getColourSecondary(): string | undefined {
     return this.style.colourSecondary;
   }
 
@@ -239,7 +238,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @returns #RRGGBB string.
    */
-  getColourTertiary(): string|undefined {
+  getColourTertiary(): string | undefined {
     return this.style.colourTertiary;
   }
 
@@ -268,7 +267,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       }
     }
     const event = new (eventUtils.get(eventUtils.SELECTED))(
-        oldId, this.id, this.workspace.id);
+      oldId,
+      this.id,
+      this.workspace.id
+    );
     eventUtils.fire(event);
     common.setSelected(this);
     this.addSelect();
@@ -283,30 +285,14 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       return;
     }
     const event = new (eventUtils.get(eventUtils.SELECTED))(
-        this.id, null, this.workspace.id);
+      this.id,
+      null,
+      this.workspace.id
+    );
     event.workspaceId = this.workspace.id;
     eventUtils.fire(event);
     common.setSelected(null);
     this.removeSelect();
-  }
-
-  /**
-   * Returns a list of mutator, comment, and warning icons.
-   *
-   * @returns List of icons.
-   */
-  getIcons(): Icon[] {
-    const icons = [];
-    if (this.mutator) {
-      icons.push(this.mutator);
-    }
-    if (this.commentIcon_) {
-      icons.push(this.commentIcon_);
-    }
-    if (this.warning) {
-      icons.push(this.warning);
-    }
-    return icons;
   }
 
   /**
@@ -315,7 +301,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param newParent New parent block.
    * @internal
    */
-  override setParent(newParent: this|null) {
+  override setParent(newParent: this | null) {
     const oldParent = this.parentBlock_;
     if (newParent === oldParent) {
       return;
@@ -359,10 +345,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     let x = 0;
     let y = 0;
 
-    const dragSurfaceGroup = this.useDragSurface_ ?
-        this.workspace.getBlockDragSurface()!.getGroup() :
-        null;
-
     let element: SVGElement = this.getSvgRoot();
     if (element) {
       do {
@@ -370,19 +352,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
         const xy = svgMath.getRelativeXY(element);
         x += xy.x;
         y += xy.y;
-        // If this element is the current element on the drag surface, include
-        // the translation of the drag surface itself.
-        if (this.useDragSurface_ &&
-            this.workspace.getBlockDragSurface()!.getCurrentBlock() ===
-                element) {
-          const surfaceTranslation =
-              this.workspace.getBlockDragSurface()!.getSurfaceTranslation();
-          x += surfaceTranslation.x;
-          y += surfaceTranslation.y;
-        }
         element = element.parentNode as SVGElement;
-      } while (element && element !== this.workspace.getCanvas() &&
-               element !== dragSurfaceGroup);
+      } while (element && element !== this.workspace.getCanvas());
     }
     return new Coordinate(x, y);
   }
@@ -399,9 +370,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       throw Error('Block has parent');
     }
     const eventsEnabled = eventUtils.isEnabled();
-    let event: BlockMove|null = null;
+    let event: BlockMove | null = null;
     if (eventsEnabled) {
-      event = new (eventUtils.get(eventUtils.BLOCK_MOVE))!(this) as BlockMove;
+      event = new (eventUtils.get(eventUtils.BLOCK_MOVE)!)(this) as BlockMove;
       reason && event.setReason(reason);
     }
     const xy = this.getRelativeToSurfaceXY();
@@ -437,31 +408,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
-   * Move this block to its workspace's drag surface, accounting for
-   * positioning. Generally should be called at the same time as
-   * setDragging_(true). Does nothing if useDragSurface_ is false.
-   *
-   * @internal
-   */
-  moveToDragSurface() {
-    if (!this.useDragSurface_) {
-      return;
-    }
-    // The translation for drag surface blocks,
-    // is equal to the current relative-to-surface position,
-    // to keep the position in sync as it move on/off the surface.
-    // This is in workspace coordinates.
-    const xy = this.getRelativeToSurfaceXY();
-    this.clearTransformAttributes_();
-    this.workspace.getBlockDragSurface()!.translateSurface(xy.x, xy.y);
-    // Execute the move on the top-level SVG component
-    const svg = this.getSvgRoot();
-    if (svg) {
-      this.workspace.getBlockDragSurface()!.setBlocksAndShow(svg);
-    }
-  }
-
-  /**
    * Move a block to a position.
    *
    * @param xy The position to move to in workspace units.
@@ -473,40 +419,15 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
-   * Move this block back to the workspace block canvas.
-   * Generally should be called at the same time as setDragging_(false).
-   * Does nothing if useDragSurface_ is false.
-   *
-   * @param newXY The position the block should take on on the workspace canvas,
-   *     in workspace coordinates.
-   * @internal
-   */
-  moveOffDragSurface(newXY: Coordinate) {
-    if (!this.useDragSurface_) {
-      return;
-    }
-    // Translate to current position, turning off 3d.
-    this.translate(newXY.x, newXY.y);
-    this.workspace.getBlockDragSurface()!.clearAndHide(
-        this.workspace.getCanvas());
-  }
-
-  /**
-   * Move this block during a drag, taking into account whether we are using a
-   * drag surface to translate blocks.
+   * Move this block during a drag.
    * This block must be a top-level block.
    *
    * @param newLoc The location to translate to, in workspace coordinates.
    * @internal
    */
   moveDuringDrag(newLoc: Coordinate) {
-    if (this.useDragSurface_) {
-      this.workspace.getBlockDragSurface()!.translateSurface(
-          newLoc.x, newLoc.y);
-    } else {
-      this.translate(newLoc.x, newLoc.y);
-      this.getSvgRoot().setAttribute('transform', this.getTranslation());
-    }
+    this.translate(newLoc.x, newLoc.y);
+    this.getSvgRoot().setAttribute('transform', this.getTranslation());
   }
 
   /**
@@ -520,29 +441,31 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /** Snap this block to the nearest grid point. */
   snapToGrid() {
     if (this.isDeadOrDying()) {
-      return;  // Deleted block.
+      return; // Deleted block.
     }
     if (this.workspace.isDragging()) {
-      return;  // Don't bump blocks during a drag.;
+      return; // Don't bump blocks during a drag.;
     }
 
     if (this.getParent()) {
-      return;  // Only snap top-level blocks.
+      return; // Only snap top-level blocks.
     }
     if (this.isInFlyout) {
-      return;  // Don't move blocks around in a flyout.
+      return; // Don't move blocks around in a flyout.
     }
     const grid = this.workspace.getGrid();
     if (!grid || !grid.shouldSnap()) {
-      return;  // Config says no snapping.
+      return; // Config says no snapping.
     }
     const spacing = grid.getSpacing();
     const half = spacing / 2;
     const xy = this.getRelativeToSurfaceXY();
-    const dx =
-        Math.round(Math.round((xy.x - half) / spacing) * spacing + half - xy.x);
-    const dy =
-        Math.round(Math.round((xy.y - half) / spacing) * spacing + half - xy.y);
+    const dx = Math.round(
+      Math.round((xy.x - half) / spacing) * spacing + half - xy.x
+    );
+    const dy = Math.round(
+      Math.round((xy.y - half) / spacing) * spacing + half - xy.y
+    );
     if (dx || dy) {
       this.moveBy(dx, dy, ['snap']);
     }
@@ -576,7 +499,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   markDirty() {
     this.pathObject.constants = this.workspace.getRenderer().getConstants();
-    for (let i = 0, input; input = this.inputList[i]; i++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
       input.markDirty();
     }
   }
@@ -603,9 +526,18 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     const collapsedInputName = constants.COLLAPSED_INPUT_NAME;
     const collapsedFieldName = constants.COLLAPSED_FIELD_NAME;
 
-    for (let i = 0, input; input = this.inputList[i]; i++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
       if (input.name !== collapsedInputName) {
         input.setVisible(!collapsed);
+      }
+    }
+
+    for (const icon of this.getIcons()) {
+      if (isIcon(icon)) {
+        icon.updateCollapsed();
+      } else if (collapsed) {
+        // TODO(#7042): Remove old icon handling code.
+        icon.setVisible(false);
       }
     }
 
@@ -615,19 +547,15 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       return;
     }
 
-    const icons = this.getIcons();
-    for (let i = 0, icon; icon = icons[i]; i++) {
-      icon.setVisible(false);
-    }
-
     const text = this.toString(internalConstants.COLLAPSE_CHARS);
     const field = this.getField(collapsedFieldName);
     if (field) {
       field.setValue(text);
       return;
     }
-    const input = this.getInput(collapsedInputName) ||
-        this.appendDummyInput(collapsedInputName);
+    const input =
+      this.getInput(collapsedInputName) ||
+      this.appendDummyInput(collapsedInputName);
     input.appendField(new FieldLabel(text), collapsedFieldName);
   }
 
@@ -679,7 +607,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   showHelp() {
     const url =
-        typeof this.helpUrl === 'function' ? this.helpUrl() : this.helpUrl;
+      typeof this.helpUrl === 'function' ? this.helpUrl() : this.helpUrl;
     if (url) {
       window.open(url);
     }
@@ -690,13 +618,16 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @returns Context menu options or null if no menu.
    */
-  protected generateContextMenu():
-      Array<ContextMenuOption|LegacyContextMenuOption>|null {
+  protected generateContextMenu(): Array<
+    ContextMenuOption | LegacyContextMenuOption
+  > | null {
     if (this.workspace.options.readOnly || !this.contextMenu) {
       return null;
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-        ContextMenuRegistry.ScopeType.BLOCK, {block: this});
+      ContextMenuRegistry.ScopeType.BLOCK,
+      {block: this}
+    );
 
     // Allow the block to add or modify menuOptions.
     if (this.customContextMenu) {
@@ -740,8 +671,14 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       myConnections[i].moveBy(dx, dy);
     }
     const icons = this.getIcons();
-    for (let i = 0; i < icons.length; i++) {
-      icons[i].computeIconLocation();
+    const pos = this.getRelativeToSurfaceXY();
+    for (const icon of icons) {
+      if (isIcon(icon)) {
+        icon.onLocationChange(pos);
+      } else {
+        // TODO (#7042): Remove old icon handling code.
+        icon.computeIconLocation();
+      }
     }
 
     // Recurse through all blocks attached under this one.
@@ -815,12 +752,13 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   override setInsertionMarker(insertionMarker: boolean) {
     if (this.isInsertionMarker_ === insertionMarker) {
-      return;  // No change.
+      return; // No change.
     }
     this.isInsertionMarker_ = insertionMarker;
     if (this.isInsertionMarker_) {
       this.setColour(
-          this.workspace.getRenderer().getConstants().INSERTION_MARKER_COLOUR);
+        this.workspace.getRenderer().getConstants().INSERTION_MARKER_COLOUR
+      );
       this.pathObject.updateInsertionMarker(true);
     }
   }
@@ -841,7 +779,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *     statement with the previous statement.  Otherwise, dispose of all
    *     children of this block.
    * @param animate If true, show a disposal animation and sound.
-   * @suppress {checkTypes}
    */
   override dispose(healStack?: boolean, animate?: boolean) {
     if (this.isDeadOrDying()) return;
@@ -897,8 +834,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       // (https://github.com/google/blockly/issues/4832)
       this.dispose(false, true);
     } else {
-      this.dispose(/* heal */
-                   true, true);
+      this.dispose(/* heal */ true, true);
     }
     eventUtils.setGroup(false);
   }
@@ -909,14 +845,15 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @returns Copy metadata, or null if the block is an insertion marker.
    * @internal
    */
-  toCopyData(): CopyData|null {
+  toCopyData(): CopyData | null {
     if (this.isInsertionMarker_) {
       return null;
     }
     return {
-      saveInfo:
-          blocks.save(this, {addCoordinates: true, addNextBlocks: false}) as
-          blocks.State,
+      saveInfo: blocks.save(this, {
+        addCoordinates: true,
+        addNextBlocks: false,
+      }) as blocks.State,
       source: this.workspace,
       typeCounts: common.getBlockTypeCounts(this, true),
     };
@@ -935,8 +872,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       icons[i].applyColour();
     }
 
-    for (let x = 0, input; input = this.inputList[x]; x++) {
-      for (let y = 0, field; field = input.fieldRow[y]; y++) {
+    for (let x = 0, input; (input = this.inputList[x]); x++) {
+      for (let y = 0, field; (field = input.fieldRow[y]); y++) {
         field.applyColour();
       }
     }
@@ -969,7 +906,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @returns The comment icon attached to this block, or null.
    */
-  getCommentIcon(): Comment|null {
+  getCommentIcon(): Comment | null {
     return this.commentIcon_;
   }
 
@@ -978,7 +915,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @param text The text, or null to delete.
    */
-  override setCommentText(text: string|null) {
+  override setCommentText(text: string | null) {
     if (this.commentModel.text === text) {
       return;
     }
@@ -993,13 +930,15 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
     if (shouldHaveComment) {
       this.commentIcon_ = new Comment(this);
-      this.comment = this.commentIcon_;  // For backwards compatibility.
+      this.comment = this.commentIcon_; // For backwards compatibility.
     } else {
       this.commentIcon_!.dispose();
       this.commentIcon_ = null;
-      this.comment = null;  // For backwards compatibility.
+      this.comment = null; // For backwards compatibility.
     }
     if (this.rendered) {
+      // Icons must force an immediate render so that bubbles can be opened
+      // immedately at the correct position.
       this.render();
       // Adding or removing a comment icon will cause the block to change shape.
       this.bumpNeighbours();
@@ -1013,7 +952,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param opt_id An optional ID for the warning text to be able to maintain
    *     multiple warnings.
    */
-  override setWarningText(text: string|null, opt_id?: string) {
+  override setWarningText(text: string | null, opt_id?: string) {
     const id = opt_id || '';
     if (!id) {
       // Kill all previous pending processes, this edit supersedes them all.
@@ -1029,12 +968,15 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.workspace.isDragging()) {
       // Don't change the warning text during a drag.
       // Wait until the drag finishes.
-      this.warningTextDb.set(id, setTimeout(() => {
-                               if (!this.isDeadOrDying()) {
-                                 this.warningTextDb.delete(id);
-                                 this.setWarningText(text, id);
-                               }
-                             }, 100));
+      this.warningTextDb.set(
+        id,
+        setTimeout(() => {
+          if (!this.isDeadOrDying()) {
+            this.warningTextDb.delete(id);
+            this.setWarningText(text, id);
+          }
+        }, 100)
+      );
       return;
     }
     if (this.isInFlyout) {
@@ -1054,14 +996,16 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       }
       if (collapsedParent) {
         collapsedParent.setWarningText(
-            Msg['COLLAPSED_WARNINGS_WARNING'], BlockSvg.COLLAPSED_WARNING_ID);
+          Msg['COLLAPSED_WARNINGS_WARNING'],
+          BlockSvg.COLLAPSED_WARNING_ID
+        );
       }
 
       if (!this.warning) {
         this.warning = new Warning(this);
         changedState = true;
       }
-      this.warning!.setText((text), id);
+      this.warning!.setText(text, id);
     } else {
       // Dispose all warnings if no ID is given.
       if (this.warning && !id) {
@@ -1078,6 +1022,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       }
     }
     if (changedState && this.rendered) {
+      // Icons must force an immediate render so that bubbles can be opened
+      // immedately at the correct position.
       this.render();
       // Adding or removing a warning icon will cause the block to change shape.
       this.bumpNeighbours();
@@ -1089,7 +1035,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @param mutator A mutator dialog instance or null to remove.
    */
-  override setMutator(mutator: Mutator|null) {
+  override setMutator(mutator: Mutator | null) {
     if (this.mutator && this.mutator !== mutator) {
       this.mutator.dispose();
     }
@@ -1099,10 +1045,59 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       mutator.createIcon();
     }
     if (this.rendered) {
+      // Icons must force an immediate render so that bubbles can be opened
+      // immedately at the correct position.
       this.render();
       // Adding or removing a mutator icon will cause the block to change shape.
       this.bumpNeighbours();
     }
+  }
+
+  override addIcon<T extends IIcon>(icon: T): T {
+    super.addIcon(icon);
+    if (this.rendered) {
+      icon.initView(this.createIconPointerDownListener(icon));
+      icon.applyColour();
+      icon.updateEditable();
+      // TODO: Change this based on #7024.
+      this.render();
+      this.bumpNeighbours();
+    }
+    return icon;
+  }
+
+  /**
+   * Creates a pointer down event listener for the icon to append to its
+   * root svg.
+   */
+  private createIconPointerDownListener(icon: IIcon) {
+    return (e: PointerEvent) => {
+      if (this.isDeadOrDying()) return;
+      const gesture = this.workspace.getGesture(e);
+      if (gesture) {
+        gesture.setStartIcon(icon);
+      }
+    };
+  }
+
+  override removeIcon(type: string): boolean {
+    const removed = super.removeIcon(type);
+    if (this.rendered) {
+      // TODO: Change this based on #7024.
+      this.render();
+      this.bumpNeighbours();
+    }
+    return removed;
+  }
+
+  // TODO: remove this implementation after #7038, #7039, and #7040 are
+  //   resolved.
+  override getIcons(): AnyDuringMigration[] {
+    const icons: AnyDuringMigration = [...this.icons];
+    if (this.commentIcon_) icons.push(this.commentIcon_);
+    if (this.warning) icons.push(this.warning);
+    if (this.mutator) icons.push(this.mutator);
+    return icons;
   }
 
   /**
@@ -1180,11 +1175,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @param colour HSV hue value, or #RRGGBB string.
    */
-  override setColour(colour: number|string) {
+  override setColour(colour: number | string) {
     super.setColour(colour);
-    const styleObj =
-        this.workspace.getRenderer().getConstants().getBlockStyleForColour(
-            this.colour_);
+    const styleObj = this.workspace
+      .getRenderer()
+      .getConstants()
+      .getBlockStyleForColour(this.colour_);
 
     this.pathObject.setStyle(styleObj.style);
     this.style = styleObj.style;
@@ -1200,9 +1196,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @throws {Error} if the block style does not exist.
    */
   override setStyle(blockStyleName: string) {
-    const blockStyle =
-        this.workspace.getRenderer().getConstants().getBlockStyle(
-            blockStyleName);
+    const blockStyle = this.workspace
+      .getRenderer()
+      .getConstants()
+      .getBlockStyle(blockStyleName);
     this.styleName_ = blockStyleName;
 
     if (blockStyle) {
@@ -1228,7 +1225,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   bringToFront() {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
-    let block: this|null = this;
+    let block: this | null = this;
     do {
       const root = block.getSvgRoot();
       const parent = root.parentNode;
@@ -1249,7 +1246,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *     if any type could be connected.
    */
   override setPreviousStatement(
-      newBoolean: boolean, opt_check?: string|string[]|null) {
+    newBoolean: boolean,
+    opt_check?: string | string[] | null
+  ) {
     super.setPreviousStatement(newBoolean, opt_check);
 
     if (this.rendered) {
@@ -1266,7 +1265,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *     if any type could be connected.
    */
   override setNextStatement(
-      newBoolean: boolean, opt_check?: string|string[]|null) {
+    newBoolean: boolean,
+    opt_check?: string | string[] | null
+  ) {
     super.setNextStatement(newBoolean, opt_check);
 
     if (this.rendered) {
@@ -1282,7 +1283,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param opt_check Returned type or list of returned types.  Null or
    *     undefined if any type could be returned (e.g. variable get).
    */
-  override setOutput(newBoolean: boolean, opt_check?: string|string[]|null) {
+  override setOutput(
+    newBoolean: boolean,
+    opt_check?: string | string[] | null
+  ) {
     super.setOutput(newBoolean, opt_check);
 
     if (this.rendered) {
@@ -1366,14 +1370,14 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   setConnectionTracking(track: boolean) {
     if (this.previousConnection) {
-      (this.previousConnection).setTracking(track);
+      this.previousConnection.setTracking(track);
     }
     if (this.outputConnection) {
-      (this.outputConnection).setTracking(track);
+      this.outputConnection.setTracking(track);
     }
     if (this.nextConnection) {
-      (this.nextConnection).setTracking(track);
-      const child = (this.nextConnection).targetBlock();
+      this.nextConnection.setTracking(track);
+      const child = this.nextConnection.targetBlock();
       if (child) {
         child.setConnectionTracking(track);
       }
@@ -1422,7 +1426,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
         myConnections.push(this.nextConnection);
       }
       if (all || !this.collapsed_) {
-        for (let i = 0, input; input = this.inputList[i]; i++) {
+        for (let i = 0, input; (input = this.inputList[i]); i++) {
           if (input.connection) {
             myConnections.push(input.connection as RenderedConnection);
           }
@@ -1442,8 +1446,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @returns The last next connection on the stack, or null.
    * @internal
    */
-  override lastConnectionInStack(ignoreShadows: boolean): RenderedConnection
-      |null {
+  override lastConnectionInStack(
+    ignoreShadows: boolean
+  ): RenderedConnection | null {
     return super.lastConnectionInStack(ignoreShadows) as RenderedConnection;
   }
 
@@ -1457,8 +1462,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @returns The matching connection on this block, or null.
    * @internal
    */
-  override getMatchingConnection(otherBlock: Block, conn: Connection):
-      RenderedConnection|null {
+  override getMatchingConnection(
+    otherBlock: Block,
+    conn: Connection
+  ): RenderedConnection | null {
     return super.getMatchingConnection(otherBlock, conn) as RenderedConnection;
   }
 
@@ -1467,8 +1474,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @param type The type of the connection to create.
    * @returns A new connection of the specified type.
+   * @internal
    */
-  protected override makeConnection_(type: number): RenderedConnection {
+  override makeConnection_(type: ConnectionType): RenderedConnection {
     return new RenderedConnection(this, type);
   }
 
@@ -1477,7 +1485,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @returns The next statement block or null.
    */
-  override getNextBlock(): BlockSvg|null {
+  override getNextBlock(): BlockSvg | null {
     return super.getNextBlock() as BlockSvg;
   }
 
@@ -1486,7 +1494,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @returns The previous statement block or null.
    */
-  override getPreviousBlock(): BlockSvg|null {
+  override getPreviousBlock(): BlockSvg | null {
     return super.getPreviousBlock() as BlockSvg;
   }
 
@@ -1514,8 +1522,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   private bumpNeighboursInternal() {
     const root = this.getRootBlock();
-    if (this.isDeadOrDying() || this.workspace.isDragging() ||
-        root.isInFlyout) {
+    if (
+      this.isDeadOrDying() ||
+      this.workspace.isDragging() ||
+      root.isInFlyout
+    ) {
       return;
     }
 
@@ -1575,12 +1586,15 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @internal
    */
   positionNearConnection(
-      sourceConnection: RenderedConnection,
-      targetConnection: RenderedConnection) {
+    sourceConnection: RenderedConnection,
+    targetConnection: RenderedConnection
+  ) {
     // We only need to position the new block if it's before the existing one,
     // otherwise its position is set by the previous block.
-    if (sourceConnection.type === ConnectionType.NEXT_STATEMENT ||
-        sourceConnection.type === ConnectionType.INPUT_VALUE) {
+    if (
+      sourceConnection.type === ConnectionType.NEXT_STATEMENT ||
+      sourceConnection.type === ConnectionType.INPUT_VALUE
+    ) {
       const dx = targetConnection.x - sourceConnection.x;
       const dy = targetConnection.y - sourceConnection.y;
 
@@ -1592,7 +1606,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @returns The first statement connection or null.
    * @internal
    */
-  override getFirstStatementConnection(): RenderedConnection|null {
+  override getFirstStatementConnection(): RenderedConnection | null {
     return super.getFirstStatementConnection() as RenderedConnection | null;
   }
 
@@ -1630,7 +1644,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   render(opt_bubble?: boolean) {
     if (this.renderIsInProgress_) {
-      return;  // Don't allow recursive renders.
+      return; // Don't allow recursive renders.
     }
     this.renderIsInProgress_ = true;
     try {
@@ -1641,7 +1655,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
         this.updateCollapsed_();
       }
       this.workspace.getRenderer().render(this);
-      this.updateConnectionLocations();
+      this.updateConnectionAndIconLocations();
 
       if (opt_bubble !== false) {
         const parentBlock = this.getParent();
@@ -1720,7 +1734,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @internal
    */
-  updateConnectionLocations() {
+  private updateConnectionAndIconLocations() {
     const blockTL = this.getRelativeToSurfaceXY();
     // Don't tighten previous or output connections because they are inferior
     // connections.
@@ -1746,6 +1760,15 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       if (this.nextConnection.isConnected()) {
         this.nextConnection.tighten();
       }
+    }
+
+    for (const icon of this.getIcons()) {
+      if (isIcon(icon)) {
+        icon.onLocationChange(blockTL);
+      }
+      // TODO (#7042): Remove the below comment.
+      // Updating the positions of old style icons is handled directly in the
+      // drawer.
     }
   }
 
@@ -1778,15 +1801,16 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @returns Object with height and width properties in workspace units.
    * @internal
    */
-  getHeightWidth(): {height: number, width: number} {
+  getHeightWidth(): {height: number; width: number} {
     let height = this.height;
     let width = this.width;
     // Recursively add size of subsequent blocks.
     const nextBlock = this.getNextBlock();
     if (nextBlock) {
       const nextHeightWidth = nextBlock.getHeightWidth();
-      const tabHeight =
-          this.workspace.getRenderer().getConstants().NOTCH_HEIGHT;
+      const tabHeight = this.workspace
+        .getRenderer()
+        .getConstants().NOTCH_HEIGHT;
       height += nextHeightWidth.height - tabHeight;
       width = Math.max(width, nextHeightWidth.width);
     }

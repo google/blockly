@@ -14,14 +14,12 @@ goog.declareModuleId('Blockly.Events.BlockMove');
 
 import type {Block} from '../block.js';
 import {ConnectionType} from '../connection_type.js';
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
-
 
 interface BlockLocation {
   parentId?: string;
@@ -109,14 +107,16 @@ export class BlockMove extends BlockBase {
     json['oldParentId'] = this.oldParentId;
     json['oldInputName'] = this.oldInputName;
     if (this.oldCoordinate) {
-      json['oldCoordinate'] = `${Math.round(this.oldCoordinate.x)}, ` +
-          `${Math.round(this.oldCoordinate.y)}`;
+      json['oldCoordinate'] =
+        `${Math.round(this.oldCoordinate.x)}, ` +
+        `${Math.round(this.oldCoordinate.y)}`;
     }
     json['newParentId'] = this.newParentId;
     json['newInputName'] = this.newInputName;
     if (this.newCoordinate) {
-      json['newCoordinate'] = `${Math.round(this.newCoordinate.x)}, ` +
-          `${Math.round(this.newCoordinate.y)}`;
+      json['newCoordinate'] =
+        `${Math.round(this.newCoordinate.x)}, ` +
+        `${Math.round(this.newCoordinate.y)}`;
     }
     if (this.reason) {
       json['reason'] = this.reason;
@@ -128,36 +128,6 @@ export class BlockMove extends BlockBase {
   }
 
   /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: BlockMoveJson) {
-    deprecation.warn(
-        'Blockly.Events.BlockMove.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
-    super.fromJson(json);
-    this.oldParentId = json['oldParentId'];
-    this.oldInputName = json['oldInputName'];
-    if (json['oldCoordinate']) {
-      const xy = json['oldCoordinate'].split(',');
-      this.oldCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
-    }
-    this.newParentId = json['newParentId'];
-    this.newInputName = json['newInputName'];
-    if (json['newCoordinate']) {
-      const xy = json['newCoordinate'].split(',');
-      this.newCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
-    }
-    if (json['reason'] !== undefined) {
-      this.reason = json['reason'];
-    }
-    if (json['recordUndo'] !== undefined) {
-      this.recordUndo = json['recordUndo'];
-    }
-  }
-
-  /**
    * Deserializes the JSON event.
    *
    * @param event The event to append new properties to. Should be a subclass
@@ -166,10 +136,16 @@ export class BlockMove extends BlockBase {
    *     static methods in superclasses.
    * @internal
    */
-  static fromJson(json: BlockMoveJson, workspace: Workspace, event?: any):
-      BlockMove {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new BlockMove()) as BlockMove;
+  static fromJson(
+    json: BlockMoveJson,
+    workspace: Workspace,
+    event?: any
+  ): BlockMove {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new BlockMove()
+    ) as BlockMove;
     newEvent.oldParentId = json['oldParentId'];
     newEvent.oldInputName = json['oldInputName'];
     if (json['oldCoordinate']) {
@@ -218,14 +194,15 @@ export class BlockMove extends BlockBase {
     const workspace = this.getEventWorkspace_();
     if (!this.blockId) {
       throw new Error(
-          'The block ID is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson');
+        'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson'
+      );
     }
     const block = workspace.getBlockById(this.blockId);
     if (!block) {
       throw new Error(
-          'The block associated with the block move event ' +
-          'could not be found');
+        'The block associated with the block move event ' + 'could not be found'
+      );
     }
     const location = {} as BlockLocation;
     const parent = block.getParent();
@@ -247,9 +224,11 @@ export class BlockMove extends BlockBase {
    * @returns False if something changed.
    */
   override isNull(): boolean {
-    return this.oldParentId === this.newParentId &&
-        this.oldInputName === this.newInputName &&
-        Coordinate.equals(this.oldCoordinate, this.newCoordinate);
+    return (
+      this.oldParentId === this.newParentId &&
+      this.oldInputName === this.newInputName &&
+      Coordinate.equals(this.oldCoordinate, this.newCoordinate)
+    );
   }
 
   /**
@@ -261,22 +240,23 @@ export class BlockMove extends BlockBase {
     const workspace = this.getEventWorkspace_();
     if (!this.blockId) {
       throw new Error(
-          'The block ID is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson');
+        'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson'
+      );
     }
     const block = workspace.getBlockById(this.blockId);
     if (!block) {
-      console.warn('Can\'t move non-existent block: ' + this.blockId);
+      console.warn("Can't move non-existent block: " + this.blockId);
       return;
     }
     const parentId = forward ? this.newParentId : this.oldParentId;
     const inputName = forward ? this.newInputName : this.oldInputName;
     const coordinate = forward ? this.newCoordinate : this.oldCoordinate;
-    let parentBlock: Block|null;
+    let parentBlock: Block | null;
     if (parentId) {
       parentBlock = workspace.getBlockById(parentId);
       if (!parentBlock) {
-        console.warn('Can\'t connect to non-existent block: ' + parentId);
+        console.warn("Can't connect to non-existent block: " + parentId);
         return;
       }
     }
@@ -288,8 +268,10 @@ export class BlockMove extends BlockBase {
       block.moveBy(coordinate.x - xy.x, coordinate.y - xy.y, this.reason);
     } else {
       let blockConnection = block.outputConnection;
-      if (!blockConnection ||
-          block.previousConnection && block.previousConnection.isConnected()) {
+      if (
+        !blockConnection ||
+        (block.previousConnection && block.previousConnection.isConnected())
+      ) {
         blockConnection = block.previousConnection;
       }
       let parentConnection;
@@ -305,7 +287,7 @@ export class BlockMove extends BlockBase {
       if (parentConnection && blockConnection) {
         blockConnection.connect(parentConnection);
       } else {
-        console.warn('Can\'t connect to non-existent input: ' + inputName);
+        console.warn("Can't connect to non-existent input: " + inputName);
       }
     }
   }

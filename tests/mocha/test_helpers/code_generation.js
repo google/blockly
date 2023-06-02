@@ -9,7 +9,6 @@ goog.declareModuleId('Blockly.test.helpers.codeGeneration');
 
 import {runTestSuites} from './common.js';
 
-
 /**
  * Code generation test case configuration.
  * @implements {TestCase}
@@ -71,7 +70,7 @@ export class CodeGenerationTestSuite {
  */
 const createCodeGenerationTestFn_ = (generator) => {
   return (testCase) => {
-    return function() {
+    return function () {
       const block = testCase.createBlock(this.workspace);
       let code;
       let innerOrder;
@@ -85,11 +84,15 @@ const createCodeGenerationTestFn_ = (generator) => {
           code = code[0];
         }
       }
-      const assertFunc = (typeof testCase.expectedCode === 'string') ?
-          chai.assert.equal : chai.assert.match;
+      const assertFunc =
+        typeof testCase.expectedCode === 'string'
+          ? chai.assert.equal
+          : chai.assert.match;
       assertFunc(code, testCase.expectedCode);
-      if (!testCase.useWorkspaceToCode &&
-          testCase.expectedInnerOrder !== undefined) {
+      if (
+        !testCase.useWorkspaceToCode &&
+        testCase.expectedInnerOrder !== undefined
+      ) {
         chai.assert.equal(innerOrder, testCase.expectedInnerOrder);
       }
     };

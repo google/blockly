@@ -12,5 +12,4 @@ goog.declareModuleId('Blockly.thrasos');
 import {RenderInfo} from './info.js';
 import {Renderer} from './renderer.js';
 
-
 export {Renderer, RenderInfo};

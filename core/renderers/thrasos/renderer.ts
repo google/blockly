@@ -13,7 +13,6 @@ import {Renderer as BaseRenderer} from '../common/renderer.js';
 
 import {RenderInfo} from './info.js';
 
-
 /**
  * The thrasos renderer. This is a more modern take on the legacy geras
  * renderer.

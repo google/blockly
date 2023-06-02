@@ -7,11 +7,11 @@
 /**
  * @fileoverview Generating PHP for logic blocks.
  */
-'use strict';
 
-goog.module('Blockly.PHP.logic');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.PHP.logic');
 
-const {phpGenerator: PHP} = goog.require('Blockly.PHP');
+import {phpGenerator as PHP} from '../php.js';
 
 
 PHP['controls_if'] = function(block) {

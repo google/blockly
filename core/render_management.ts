@@ -5,8 +5,8 @@
  */
 
 import {BlockSvg} from './block_svg.js';
+import {isIcon} from './interfaces/i_icon.js';
 import {Coordinate} from './utils/coordinate.js';
-
 
 /** The set of all blocks in need of rendering which don't have parents. */
 const rootBlocks = new Set<BlockSvg>();
@@ -20,14 +20,14 @@ let dirtyBlocks = new WeakSet<BlockSvg>();
  *
  * Stored so that we can return it from afterQueuedRenders.
  */
-let afterRendersPromise: Promise<void>|null = null;
+let afterRendersPromise: Promise<void> | null = null;
 
 /**
  * Registers that the given block and all of its parents need to be rerendered,
  * and registers a callback to do so after a delay, to allowf or batching.
  *
  * @param block The block to rerender.
- * @return A promise that resolves after the currently queued renders have been
+ * @returns A promise that resolves after the currently queued renders have been
  *     completed. Used for triggering other behavior that relies on updated
  *     size/position location for the block.
  * @internal
@@ -85,8 +85,9 @@ function doRenders() {
     if (block.getParent()) continue;
 
     renderBlock(block);
-    updateConnectionLocations(block, block.getRelativeToSurfaceXY());
-    updateIconLocations(block);
+    const blockOrigin = block.getRelativeToSurfaceXY();
+    updateConnectionLocations(block, blockOrigin);
+    updateIconLocations(block, blockOrigin);
   }
   for (const workspace of workspaces) {
     workspace.resizeContents();
@@ -126,7 +127,9 @@ function updateConnectionLocations(block: BlockSvg, blockOrigin: Coordinate) {
     if (!target) continue;
     if (moved || dirtyBlocks.has(target)) {
       updateConnectionLocations(
-          target, Coordinate.sum(blockOrigin, target.relativeCoords));
+        target,
+        Coordinate.sum(blockOrigin, target.relativeCoords)
+      );
     }
   }
 }
@@ -137,12 +140,20 @@ function updateConnectionLocations(block: BlockSvg, blockOrigin: Coordinate) {
  *
  * @param block The block to update the icon locations of.
  */
-function updateIconLocations(block: BlockSvg) {
+function updateIconLocations(block: BlockSvg, blockOrigin: Coordinate) {
   if (!block.getIcons) return;
   for (const icon of block.getIcons()) {
-    icon.computeIconLocation();
+    if (isIcon(icon)) {
+      icon.onLocationChange(blockOrigin);
+    } else {
+      // TODO (#7042): Remove old icon handling code.
+      icon.computeIconLocation();
+    }
   }
   for (const child of block.getChildren(false)) {
-    updateIconLocations(child);
+    updateIconLocations(
+      child,
+      Coordinate.sum(blockOrigin, child.relativeCoords)
+    );
   }
 }

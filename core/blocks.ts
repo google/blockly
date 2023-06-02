@@ -7,7 +7,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blocks');
 
-
 /**
  * A block definition.  For now this very loose, but it can potentially
  * be refined e.g. by replacing this typedef with a class definition.

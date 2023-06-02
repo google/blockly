@@ -4,7 +4,7 @@ changelog:
   exclude:
     labels:
       - ignore-for-release
-      - "PR: chore"
+      - 'PR: chore'
     authors:
       - dependabot
   categories:
@@ -16,17 +16,17 @@ changelog:
         - deprecation
     - title: New features ✨
       labels:
-        - "PR: feature"
+        - 'PR: feature'
     - title: Bug fixes 🐛
       labels:
-        - "PR: fix"
+        - 'PR: fix'
     - title: Cleanup ♻️
       labels:
-        - "PR: docs"
-        - "PR: refactor"
+        - 'PR: docs'
+        - 'PR: refactor'
     - title: Reverted changes ⎌
       labels:
-        - "PR: revert"
+        - 'PR: revert'
     - title: Other changes
       labels:
-        - "*"
+        - '*'

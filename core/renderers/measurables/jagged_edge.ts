@@ -12,7 +12,6 @@ import type {ConstantProvider} from '../common/constants.js';
 import {Measurable} from './base.js';
 import {Types} from './types.js';
 
-
 /**
  * An object containing information about the space the jagged edge of a
  * collapsed block takes up during rendering.

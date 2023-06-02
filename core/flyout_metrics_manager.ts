@@ -16,7 +16,6 @@ import type {IFlyout} from './interfaces/i_flyout.js';
 import {ContainerRegion, MetricsManager} from './metrics_manager.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-
 /**
  * Calculates metrics for a flyout's workspace.
  * The metrics are mainly used to size scrollbars for the flyout.
@@ -40,8 +39,9 @@ export class FlyoutMetricsManager extends MetricsManager {
    *
    * @returns The bounding box of the blocks on the workspace.
    */
-  private getBoundingBox_(): SVGRect|
-      {height: number, y: number, width: number, x: number} {
+  private getBoundingBox_():
+    | SVGRect
+    | {height: number; y: number; width: number; x: number} {
     let blockBoundingBox;
     try {
       blockBoundingBox = this.workspace_.getCanvas().getBBox();
@@ -68,8 +68,10 @@ export class FlyoutMetricsManager extends MetricsManager {
   }
 
   override getScrollMetrics(
-      opt_getWorkspaceCoordinates?: boolean, opt_viewMetrics?: ContainerRegion,
-      opt_contentMetrics?: ContainerRegion) {
+    opt_getWorkspaceCoordinates?: boolean,
+    opt_viewMetrics?: ContainerRegion,
+    opt_contentMetrics?: ContainerRegion
+  ) {
     const contentMetrics = opt_contentMetrics || this.getContentMetrics();
     const margin = this.flyout_.MARGIN * this.workspace_.scale;
     const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;

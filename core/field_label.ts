@@ -23,7 +23,7 @@ import * as parsing from './utils/parsing.js';
  */
 export class FieldLabel extends Field<string> {
   /** The HTML class name to use for this field. */
-  private class: string|null = null;
+  private class: string | null = null;
 
   /**
    * Editable fields usually show some sort of UI indicating they are
@@ -47,8 +47,10 @@ export class FieldLabel extends Field<string> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|typeof Field.SKIP_SETUP, textClass?: string,
-      config?: FieldLabelConfig) {
+    value?: string | typeof Field.SKIP_SETUP,
+    textClass?: string,
+    config?: FieldLabelConfig
+  ) {
     super(Field.SKIP_SETUP);
 
     if (value === Field.SKIP_SETUP) return;
@@ -83,8 +85,9 @@ export class FieldLabel extends Field<string> {
    * @param newValue The input value.
    * @returns A valid string, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: AnyDuringMigration): string
-      |null {
+  protected override doClassValidation_(
+    newValue?: AnyDuringMigration
+  ): string | null {
     if (newValue === null || newValue === undefined) {
       return null;
     }
@@ -96,7 +99,7 @@ export class FieldLabel extends Field<string> {
    *
    * @param cssClass The new CSS class name, or null to remove.
    */
-  setClass(cssClass: string|null) {
+  setClass(cssClass: string | null) {
     if (this.textElement_) {
       if (this.class) {
         dom.removeClass(this.textElement_, this.class);
@@ -138,7 +141,6 @@ export interface FieldLabelConfig extends FieldConfig {
   class?: string;
 }
 // clang-format on
-
 
 /**
  * fromJson config options for the label field.

@@ -6,6 +6,7 @@
 
 import {Bubble} from './bubble.js';
 import {Coordinate} from '../utils/coordinate.js';
+import * as Css from '../css.js';
 import * as dom from '../utils/dom.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
@@ -38,6 +39,9 @@ export class TextInputBubble extends Bubble {
 
   /** Functions listening for changes to the text of this bubble. */
   private textChangeListeners: (() => void)[] = [];
+
+  /** Functions listening for changes to the size of this bubble. */
+  private sizeChangeListeners: (() => void)[] = [];
 
   /** The text of this bubble. */
   private text = '';
@@ -89,6 +93,11 @@ export class TextInputBubble extends Bubble {
   /** Adds a change listener to be notified when this bubble's text changes. */
   addTextChangeListener(listener: () => void) {
     this.textChangeListeners.push(listener);
+  }
+
+  /** Adds a change listener to be notified when this bubble's size changes. */
+  addSizeChangeListener(listener: () => void) {
+    this.sizeChangeListeners.push(listener);
   }
 
   /** Creates the editor UI for this bubble. */
@@ -224,6 +233,7 @@ export class TextInputBubble extends Bubble {
     }
 
     super.setSize(size, relayout);
+    this.onSizeChange();
   }
 
   /** @returns the size of this bubble. */
@@ -285,6 +295,7 @@ export class TextInputBubble extends Bubble {
       new Size(this.workspace.RTL ? -delta.x : delta.x, delta.y),
       false
     );
+    this.onSizeChange();
   }
 
   /**
@@ -305,4 +316,24 @@ export class TextInputBubble extends Bubble {
       listener();
     }
   }
+
+  /** Handles a size change event for the text area. Calls event listeners. */
+  private onSizeChange() {
+    for (const listener of this.sizeChangeListeners) {
+      listener();
+    }
+  }
 }
+
+Css.register(`
+.blocklyCommentTextarea {
+  background-color: #fef49c;
+  border: 0;
+  display: block;
+  margin: 0;
+  outline: 0;
+  padding: 3px;
+  resize: none;
+  text-overflow: hidden;
+}
+`);

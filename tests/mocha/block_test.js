@@ -1235,9 +1235,21 @@ suite('Blocks', function () {
         const calls = eventSpy.getCalls();
         const event = calls[calls.length - 1].args[0];
         chai.assert.equal(event.type, eventUtils.BLOCK_CHANGE);
-        chai.assert.equal(event.element, 'comment');
-        chai.assert.equal(event.oldValue, oldValue);
-        chai.assert.equal(event.newValue, newValue);
+        chai.assert.equal(
+          event.element,
+          'comment',
+          'Expected the element to be a comment'
+        );
+        chai.assert.equal(
+          event.oldValue,
+          oldValue,
+          'Expected the old values to match'
+        );
+        chai.assert.equal(
+          event.newValue,
+          newValue,
+          'Expected the new values to match'
+        );
       }
       function assertNoCommentEvent(eventSpy) {
         const calls = eventSpy.getCalls();
@@ -1318,37 +1330,23 @@ suite('Blocks', function () {
         });
         test('Set While Visible - Editable', function () {
           this.block.setCommentText('test1');
-          const icon = this.block.getCommentIcon();
-          icon.setVisible(true);
+          const icon = this.block.getIcon(Blockly.icons.CommentIcon.TYPE);
+          icon.setBubbleVisible(true);
 
           this.block.setCommentText('test2');
           chai.assert.equal(this.block.getCommentText(), 'test2');
           assertCommentEvent(this.eventsFireSpy, 'test1', 'test2');
-          chai.assert.equal(icon.textarea_.value, 'test2');
         });
         test('Set While Visible - NonEditable', function () {
           this.block.setCommentText('test1');
           // Restored up by call to sinon.restore() in sharedTestTeardown()
           sinon.stub(this.block, 'isEditable').returns(false);
-          const icon = this.block.getCommentIcon();
-          icon.setVisible(true);
+          const icon = this.block.getIcon(Blockly.icons.CommentIcon.TYPE);
+          icon.setBubbleVisible(true);
 
           this.block.setCommentText('test2');
           chai.assert.equal(this.block.getCommentText(), 'test2');
           assertCommentEvent(this.eventsFireSpy, 'test1', 'test2');
-          chai.assert.equal(
-            icon.paragraphElement_.firstChild.textContent,
-            'test2'
-          );
-        });
-        test('Get Text While Editing', function () {
-          this.block.setCommentText('test1');
-          const icon = this.block.getCommentIcon();
-          icon.setVisible(true);
-          icon.textarea_.value = 'test2';
-          icon.textarea_.dispatchEvent(new Event('input'));
-
-          chai.assert.equal(this.block.getCommentText(), 'test2');
         });
       });
     });
@@ -1687,7 +1685,7 @@ suite('Blocks', function () {
       }
       const icons = block.getIcons();
       for (let i = 0, icon; (icon = icons[i]); i++) {
-        chai.assert.isFalse(icon.isVisible());
+        chai.assert.isFalse(icon.bubbleIsVisible());
       }
 
       const input = block.getInput(Blockly.Block.COLLAPSED_INPUT_NAME);

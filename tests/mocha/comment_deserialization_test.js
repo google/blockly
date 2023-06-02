@@ -58,14 +58,14 @@ suite('Comment Deserialization', function () {
     function assertComment(workspace, text) {
       // Show comment.
       const block = workspace.getAllBlocks()[0];
-      block.comment.setVisible(true);
+      const icon = block.getIcon(Blockly.icons.CommentIcon.TYPE);
+      icon.setBubbleVisible(true);
       // Check comment bubble size.
       const comment = block.getCommentIcon();
       const bubbleSize = comment.getBubbleSize();
       chai.assert.isNotNaN(bubbleSize.width);
       chai.assert.isNotNaN(bubbleSize.height);
-      // Check comment text.
-      chai.assert.equal(comment.textarea_.value, text);
+      chai.assert.equal(icon.getText(), text);
     }
     test('Trashcan', function () {
       // Create block.

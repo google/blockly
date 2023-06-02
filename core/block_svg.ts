@@ -18,7 +18,7 @@ import './events/events_selected.js';
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
 import * as browserEvents from './browser_events.js';
-import {Comment} from './comment.js';
+import {CommentIcon} from './icons/comment_icon.js';
 import * as common from './common.js';
 import {config} from './config.js';
 import type {Connection} from './connection.js';
@@ -60,6 +60,7 @@ import {WarningIcon} from './icons/warning_icon.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {queueRender} from './render_management.js';
+import * as deprecation from './utils/deprecation.js';
 
 /**
  * Class for a block's SVG representation.
@@ -108,9 +109,6 @@ export class BlockSvg
 
   /** Block's mutator icon (if any). */
   mutator: Mutator | null = null;
-
-  /** Block's comment icon (if any). */
-  private commentIcon_: Comment | null = null;
 
   /**
    * Block's warning icon (if any).
@@ -909,44 +907,11 @@ export class BlockSvg
    * comment.
    *
    * @returns The comment icon attached to this block, or null.
+   * @deprecated Use getIcon. To be remove in v11.
    */
-  getCommentIcon(): Comment | null {
-    return this.commentIcon_;
-  }
-
-  /**
-   * Set this block's comment text.
-   *
-   * @param text The text, or null to delete.
-   */
-  override setCommentText(text: string | null) {
-    if (this.commentModel.text === text) {
-      return;
-    }
-    super.setCommentText(text);
-
-    const shouldHaveComment = text !== null;
-    if (!!this.commentIcon_ === shouldHaveComment) {
-      // If the comment's state of existence is correct, but the text is new
-      // that means we're just updating a comment.
-      this.commentIcon_!.updateText();
-      return;
-    }
-    if (shouldHaveComment) {
-      this.commentIcon_ = new Comment(this);
-      this.comment = this.commentIcon_; // For backwards compatibility.
-    } else {
-      this.commentIcon_!.dispose();
-      this.commentIcon_ = null;
-      this.comment = null; // For backwards compatibility.
-    }
-    if (this.rendered) {
-      // Icons must force an immediate render so that bubbles can be opened
-      // immedately at the correct position.
-      this.render();
-      // Adding or removing a comment icon will cause the block to change shape.
-      this.bumpNeighbours();
-    }
+  getCommentIcon(): CommentIcon | null {
+    deprecation.warn('getCommentIcon', 'v10', 'v11', 'getIcon');
+    return (this.getIcon(CommentIcon.TYPE) ?? null) as CommentIcon | null;
   }
 
   /**
@@ -1092,7 +1057,6 @@ export class BlockSvg
   //   resolved.
   override getIcons(): AnyDuringMigration[] {
     const icons: AnyDuringMigration = [...this.icons];
-    if (this.commentIcon_) icons.push(this.commentIcon_);
     if (this.mutator) icons.push(this.mutator);
     return icons;
   }

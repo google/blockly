@@ -20,7 +20,6 @@ import './events/events_block_create.js';
 import './events/events_block_delete.js';
 
 import {Blocks} from './blocks.js';
-import type {Comment} from './comment.js';
 import * as common from './common.js';
 import {Connection} from './connection.js';
 import {ConnectionType} from './connection_type.js';
@@ -37,6 +36,7 @@ import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IDeletable} from './interfaces/i_deletable.js';
 import type {IIcon} from './interfaces/i_icon.js';
 import type {Mutator} from './mutator.js';
+import {CommentIcon} from './icons/comment_icon.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -183,14 +183,6 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   private disposing = false;
 
-  /**
-   * A string representing the comment attached to this block.
-   *
-   * @deprecated August 2019. Use getCommentText instead.
-   */
-  comment: string | Comment | null = null;
-  /** @internal */
-  commentModel: CommentModel;
   private readonly xy_: Coordinate;
   isInFlyout: boolean;
   isInMutator: boolean;
@@ -238,9 +230,6 @@ export class Block implements IASTNodeLocation, IDeletable {
     this.id =
       opt_id && !workspace.getBlockById(opt_id) ? opt_id : idGenerator.genUid();
     workspace.setBlockById(this.id, this);
-
-    /** A model of the comment attached to this block. */
-    this.commentModel = {text: null, pinned: false, size: new Size(160, 80)};
 
     /**
      * The block's position in workspace units.  (0, 0) is at the workspace's
@@ -2169,7 +2158,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns Block's comment.
    */
   getCommentText(): string | null {
-    return this.commentModel.text;
+    const comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | null;
+    return comment?.getText() ?? null;
   }
 
   /**
@@ -2178,20 +2168,28 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param text The text, or null to delete.
    */
   setCommentText(text: string | null) {
-    if (this.commentModel.text === text) {
-      return;
-    }
+    const comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | null;
+    const oldText = comment?.getText() ?? null;
+    if (oldText === text) return;
     eventUtils.fire(
       new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this,
         'comment',
         null,
-        this.commentModel.text,
+        oldText,
         text
       )
     );
-    this.commentModel.text = text;
-    this.comment = text; // For backwards compatibility.
+
+    if (text !== null) {
+      let comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | undefined;
+      if (!comment) {
+        comment = this.addIcon(new CommentIcon(this));
+      }
+      comment.setText(text);
+    } else {
+      this.removeIcon(CommentIcon.TYPE);
+    }
   }
 
   /**

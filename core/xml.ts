@@ -12,7 +12,7 @@ import type {BlockSvg} from './block_svg.js';
 import type {Connection} from './connection.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
-import {CommentIcon} from './icons/comment_icon.js';
+import type {CommentIcon} from './icons/comment_icon.js';
 import {COMMENT_TYPE} from './icons/icon_types.js';
 import {inputTypes} from './inputs/input_types.js';
 import * as dom from './utils/dom.js';

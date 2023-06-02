@@ -75,7 +75,7 @@ export class BlockChange extends BlockBase {
    * property does not get serialized, and is not propagated when undoing or
    * redoing events.
    */
-  eventOriginType?: BlockChangeEventOriginType|undefined;
+  eventOriginType?: BlockChangeEventOriginType | undefined;
 
   /**
    * @param opt_block The changed block.  Undefined for a blank event.
@@ -88,7 +88,7 @@ export class BlockChange extends BlockBase {
   constructor(
     opt_block?: Block,
     opt_element?: string,
-    opt_name?: string|null,
+    opt_name?: string | null,
     opt_oldValue?: unknown,
     opt_newValue?: unknown,
     opt_eventOriginType?: BlockChangeEventOriginType
@@ -158,8 +158,9 @@ export class BlockChange extends BlockBase {
    * @returns False if something changed.
    */
   override isNull(): boolean {
-    if (this.eventOriginType ===
-        BlockChangeEventOriginType.COMPLETE_USER_INPUT) {
+    if (
+      this.eventOriginType === BlockChangeEventOriginType.COMPLETE_USER_INPUT
+    ) {
       // As a special case, events that represent the completion of a sequence
       // of related changes should be reported to change listeners even if the
       // value didn't change during the event, so that listeners that ignored

@@ -365,7 +365,9 @@ export class FieldAngle extends FieldInput<number> {
     angle = this.wrapValue(angle);
     if (angle !== this.value_) {
       this.setEditorValue_(
-          angle, BlockChangeEventOriginType.INCOMPLETE_USER_INPUT);
+        angle,
+        BlockChangeEventOriginType.INCOMPLETE_USER_INPUT
+      );
       this.valueChangedSinceLastCompleteEvent_ = true;
     }
   }

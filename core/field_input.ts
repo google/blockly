@@ -418,17 +418,27 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     this.forceRerender();
     this.onFinishEditing_(this.value_);
 
-    if (this.sourceBlock_ && eventUtils.isEnabled() &&
-        this.valueChangedSinceLastCompleteEvent_) {
+    if (
+      this.sourceBlock_ &&
+      eventUtils.isEnabled() &&
+      this.valueChangedSinceLastCompleteEvent_
+    ) {
       this.valueChangedSinceLastCompleteEvent_ = false;
       // When closing a field input widget, fire an event indicating that the
       // user has completed a sequence of changes. The oldValue and the newValue
       // will be the same since this is not actually a change to the value, but
       // it is nevertheless an event related to changes that change handlers may
       // need to know about.
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          this.sourceBlock_, 'field', this.name || null, this.value_,
-          this.value_, BlockChangeEventOriginType.COMPLETE_USER_INPUT));
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this.sourceBlock_,
+          'field',
+          this.name || null,
+          this.value_,
+          this.value_,
+          BlockChangeEventOriginType.COMPLETE_USER_INPUT
+        )
+      );
     }
 
     eventUtils.setGroup(false);
@@ -521,8 +531,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   private onHtmlInputChange_(_e: Event) {
     this.setValue(
-        this.getValueFromEditorText_(this.htmlInput_!.value),
-        BlockChangeEventOriginType.INCOMPLETE_USER_INPUT);
+      this.getValueFromEditorText_(this.htmlInput_!.value),
+      BlockChangeEventOriginType.INCOMPLETE_USER_INPUT
+    );
     this.valueChangedSinceLastCompleteEvent_ = true;
 
     // Resize the widget div after the block has finished rendering.
@@ -541,8 +552,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *     the block change event to be broadcast.
    */
   protected setEditorValue_(
-      newValue: AnyDuringMigration,
-      eventOriginType?: BlockChangeEventOriginType) {
+    newValue: AnyDuringMigration,
+    eventOriginType?: BlockChangeEventOriginType
+  ) {
     this.isDirty_ = true;
     if (this.isBeingEdited_) {
       // In the case this method is passed an invalid value, we still

@@ -1271,40 +1271,81 @@ suite('Events', function () {
       this.changeListenerSpy = createChangeListenerSpy(this.workspace);
     });
 
-    teardown(function() {
+    teardown(function () {
       this.workspace.removeChangeListener(this.changeListenerSpy);
     });
 
     test('No-op complete block change events are preserved', function () {
       const block1 = this.workspace.newBlock('field_variable_test_block', '1');
       const events = [
-        new Blockly.Events.BlockChange(block1, 'field', 'VAR', 'item', 'item', 'complete_user_input'),
+        new Blockly.Events.BlockChange(
+          block1,
+          'field',
+          'VAR',
+          'item',
+          'item',
+          'complete_user_input'
+        ),
       ];
       const filteredEvents = eventUtils.filter(events, true);
       chai.assert.equal(filteredEvents.length, 1);
       chai.assert.equal(filteredEvents[0].oldValue, 'item');
       chai.assert.equal(filteredEvents[0].newValue, 'item');
-      chai.assert.equal(filteredEvents[0].eventOriginType, 'complete_user_input');
+      chai.assert.equal(
+        filteredEvents[0].eventOriginType,
+        'complete_user_input'
+      );
     });
 
     test('Incomplete block change events keep event origin', function () {
       const block1 = this.workspace.newBlock('field_variable_test_block', '1');
       const events = [
-        new Blockly.Events.BlockChange(block1, 'field', 'VAR', 'item', 'item1', 'incomplete_user_input'),
-        new Blockly.Events.BlockChange(block1, 'field', 'VAR', 'item1', 'item2', 'incomplete_user_input'),
+        new Blockly.Events.BlockChange(
+          block1,
+          'field',
+          'VAR',
+          'item',
+          'item1',
+          'incomplete_user_input'
+        ),
+        new Blockly.Events.BlockChange(
+          block1,
+          'field',
+          'VAR',
+          'item1',
+          'item2',
+          'incomplete_user_input'
+        ),
       ];
       const filteredEvents = eventUtils.filter(events, true);
       chai.assert.equal(filteredEvents.length, 1);
       chai.assert.equal(filteredEvents[0].oldValue, 'item');
       chai.assert.equal(filteredEvents[0].newValue, 'item2');
-      chai.assert.equal(filteredEvents[0].eventOriginType, 'incomplete_user_input');
+      chai.assert.equal(
+        filteredEvents[0].eventOriginType,
+        'incomplete_user_input'
+      );
     });
 
     test('Merging mixed block change events omits origin type', function () {
       const block1 = this.workspace.newBlock('field_variable_test_block', '1');
       const events = [
-        new Blockly.Events.BlockChange(block1, 'field', 'VAR', 'item', 'item1', 'incomplete_user_input'),
-        new Blockly.Events.BlockChange(block1, 'field', 'VAR', 'item1', 'item1', 'complete_user_input'),
+        new Blockly.Events.BlockChange(
+          block1,
+          'field',
+          'VAR',
+          'item',
+          'item1',
+          'incomplete_user_input'
+        ),
+        new Blockly.Events.BlockChange(
+          block1,
+          'field',
+          'VAR',
+          'item1',
+          'item1',
+          'complete_user_input'
+        ),
       ];
       const filteredEvents = eventUtils.filter(events, true);
       chai.assert.equal(filteredEvents.length, 1);
@@ -1317,8 +1358,22 @@ suite('Events', function () {
       const block1 = this.workspace.newBlock('field_variable_test_block', '1');
       const events = [
         new Blockly.Events.BlockChange(block1, 'field', 'VAR', 'item', 'item1'),
-        new Blockly.Events.BlockChange(block1, 'field', 'VAR', 'item1', 'item2', 'incomplete_user_input'),
-        new Blockly.Events.BlockChange(block1, 'field', 'VAR', 'item2', 'item2', 'complete_user_input'),
+        new Blockly.Events.BlockChange(
+          block1,
+          'field',
+          'VAR',
+          'item1',
+          'item2',
+          'incomplete_user_input'
+        ),
+        new Blockly.Events.BlockChange(
+          block1,
+          'field',
+          'VAR',
+          'item2',
+          'item2',
+          'complete_user_input'
+        ),
       ];
       const filteredEvents = eventUtils.filter(events, true);
       chai.assert.equal(filteredEvents.length, 1);
@@ -1332,11 +1387,17 @@ suite('Events', function () {
       this.clock.runAll();
       this.changeListenerSpy.resetHistory();
       const event = new Blockly.Events.BlockChange(
-          block1, 'field', 'VAR', 'item1', 'item2', 'incomplete_user_input');
+        block1,
+        'field',
+        'VAR',
+        'item1',
+        'item2',
+        'incomplete_user_input'
+      );
       eventUtils.fire(event);
       this.clock.runAll();
       sinon.assert.calledOnce(this.changeListenerSpy);
-      const receivedEvent = this.changeListenerSpy . getCall(0).firstArg();
+      const receivedEvent = this.changeListenerSpy.getCall(0).firstArg();
       chai.assert.equal(receivedEvent.oldValue, 'item1');
       chai.assert.equal(receivedEvent.newValue, 'item2');
       chai.assert.equal(receivedEvent.eventOriginType, 'incomplete_user_input');
@@ -1347,7 +1408,13 @@ suite('Events', function () {
       this.clock.runAll();
       this.changeListenerSpy.resetHistory();
       const event = new Blockly.Events.BlockChange(
-          block1, 'field', 'VAR', 'item1', 'item2', 'incomplete_user_input');
+        block1,
+        'field',
+        'VAR',
+        'item1',
+        'item2',
+        'incomplete_user_input'
+      );
       eventUtils.fire(event);
       this.clock.runAll();
       sinon.assert.calledOnce(this.changeListenerSpy);

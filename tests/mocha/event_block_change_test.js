@@ -12,7 +12,7 @@ import {
 } from './test_helpers/setup_teardown.js';
 import {
   defineBasicBlockWithField,
-  defineMutatorBlocks
+  defineMutatorBlocks,
 } from './test_helpers/block_definitions.js';
 
 suite('Block Change Event', function () {
@@ -103,29 +103,40 @@ suite('Block Change Event', function () {
       defineBasicBlockWithField();
     });
 
-    test('isNull is false when values are different', function() {
+    test('isNull is false when values are different', function () {
       const block = this.workspace.newBlock('test_field_block', 'block_id');
       const blockChange = new Blockly.Events.BlockChange(
-          block, 'field', 'NAME', 'old value', 'new value');
+        block,
+        'field',
+        'NAME',
+        'old value',
+        'new value'
+      );
       chai.assert.isFalse(blockChange.isNull());
     });
 
-    test('isNull is true when values are the same', function() {
+    test('isNull is true when values are the same', function () {
       const block = this.workspace.newBlock('test_field_block', 'block_id');
       const blockChange = new Blockly.Events.BlockChange(
-          block, 'field', 'NAME', 'same value', 'same value');
+        block,
+        'field',
+        'NAME',
+        'same value',
+        'same value'
+      );
       chai.assert.isTrue(blockChange.isNull());
     });
 
-    test('isNull is false for complete input regardless of values', function() {
+    test('isNull is false for complete input regardless of values', function () {
       const block = this.workspace.newBlock('test_field_block', 'block_id');
       const blockChange = new Blockly.Events.BlockChange(
-          block,
-          'field',
-          'NAME',
-          'same value',
-          'same value',
-          'complete_user_input');
+        block,
+        'field',
+        'NAME',
+        'same value',
+        'same value',
+        'complete_user_input'
+      );
       chai.assert.isFalse(blockChange.isNull());
     });
   });

@@ -1045,8 +1045,9 @@ export abstract class Field<T = any>
    * @sealed
    */
   setValue(
-      newValue: AnyDuringMigration,
-      eventOriginType?: BlockChangeEventOriginType) {
+    newValue: AnyDuringMigration,
+    eventOriginType?: BlockChangeEventOriginType
+  ) {
     const doLogging = false;
     if (newValue === null) {
       doLogging && console.log('null, return');

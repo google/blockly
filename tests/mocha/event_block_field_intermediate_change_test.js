@@ -25,8 +25,12 @@ suite('Field Intermediate Change Event', function () {
     test('events round-trip through JSON', function () {
       const block = this.workspace.newBlock('text', 'block_id');
       const origEvent = new Blockly.Events.BlockFieldIntermediateChange(
-        block, 'TEXT', 'old value', 'new value');
-  
+        block,
+        'TEXT',
+        'old value',
+        'new value'
+      );
+
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);
 

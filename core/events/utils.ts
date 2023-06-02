@@ -84,7 +84,7 @@ export const BLOCK_CHANGE = CHANGE;
  * is expected to be followed by a block change event.
  */
 export const BLOCK_FIELD_INTERMEDIATE_CHANGE =
-    'block_field_intermediate_change';
+  'block_field_intermediate_change';
 
 /**
  * Name of event that moves a block. Will be deprecated for BLOCK_MOVE.

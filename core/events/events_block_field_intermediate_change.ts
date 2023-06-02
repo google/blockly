@@ -58,7 +58,7 @@ export class BlockFieldIntermediateChange extends UiBase {
     if (!opt_block) {
       return; // Blank event to be populated by fromJson.
     }
-    
+
     this.blockId = opt_block.id;
     this.name = opt_name;
     this.oldValue = opt_oldValue;
@@ -135,6 +135,7 @@ export interface BlockFieldIntermediateChangeJson extends AbstractEventJson {
 }
 
 registry.register(
-    registry.Type.EVENT,
-    eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE,
-    BlockFieldIntermediateChange);
+  registry.Type.EVENT,
+  eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE,
+  BlockFieldIntermediateChange
+);

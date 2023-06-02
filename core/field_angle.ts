@@ -372,11 +372,19 @@ export class FieldAngle extends FieldInput<number> {
       eventUtils.disable();
       this.setEditorValue_(angle);
       eventUtils.enable();
-      if (this.sourceBlock_ && eventUtils.isEnabled() &&
-          this.value_ !== oldValue) {
+      if (
+        this.sourceBlock_ &&
+        eventUtils.isEnabled() &&
+        this.value_ !== oldValue
+      ) {
         eventUtils.fire(
-            new (eventUtils.get(eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE))(
-                this.sourceBlock_, this.name || null, oldValue, this.value_));
+          new (eventUtils.get(eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE))(
+            this.sourceBlock_,
+            this.name || null,
+            oldValue,
+            this.value_
+          )
+        );
       }
     }
   }

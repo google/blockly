@@ -419,16 +419,25 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     this.forceRerender();
     this.onFinishEditing_(this.value_);
 
-    if (this.sourceBlock_ && eventUtils.isEnabled() &&
-        this.valueWhenEditorWasOpened_ !== null &&
-        this.valueWhenEditorWasOpened_ !== this.value_) {
+    if (
+      this.sourceBlock_ &&
+      eventUtils.isEnabled() &&
+      this.valueWhenEditorWasOpened_ !== null &&
+      this.valueWhenEditorWasOpened_ !== this.value_
+    ) {
       // When closing a field input widget, fire an event indicating that the
       // user has completed a sequence of changes. The value may have changed
       // multiple times while the editor was open, but this will fire an event
       // containing the value when the editor was opened as well as the new one.
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          this.sourceBlock_, 'field', this.name || null, this.valueWhenEditorWasOpened_,
-          this.value_));
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this.sourceBlock_,
+          'field',
+          this.name || null,
+          this.valueWhenEditorWasOpened_,
+          this.value_
+        )
+      );
       this.valueWhenEditorWasOpened_ = null;
     }
 
@@ -528,13 +537,21 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     const oldValue = this.value_;
     // Change the field's value without firing the normal change event.
     this.setValue(this.getValueFromEditorText_(this.htmlInput_!.value), false);
-    if (this.sourceBlock_ && eventUtils.isEnabled() &&
-        this.value_ !== oldValue) {
+    if (
+      this.sourceBlock_ &&
+      eventUtils.isEnabled() &&
+      this.value_ !== oldValue
+    ) {
       // Fire a special event indicating that the value changed but the change
       // isn't complete yet and normal field change listeners can wait.
       eventUtils.fire(
-          new (eventUtils.get(eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE))(
-              this.sourceBlock_, this.name || null, oldValue, this.value_));
+        new (eventUtils.get(eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE))(
+          this.sourceBlock_,
+          this.name || null,
+          oldValue,
+          this.value_
+        )
+      );
     }
 
     // Resize the widget div after the block has finished rendering.

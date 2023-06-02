@@ -7,12 +7,12 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.icons.WarningIcon');
 
-import {BlockSvg} from '../block_svg.js';
+import type {BlockSvg} from '../block_svg.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import * as eventUtils from '../events/utils.js';
 import {Icon} from './icon.js';
-import {IHasBubble} from '../interfaces/i_has_bubble.js';
+import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils.js';
 import {Svg} from '../utils/svg.js';

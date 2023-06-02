@@ -908,8 +908,6 @@ export class ConstantProvider {
    * @param svg The root of the workspace's SVG.
    * @param tagName The name to use for the CSS style tag.
    * @param selector The CSS selector to use.
-   * @suppress {strictModuleDepCheck} Debug renderer only included in
-   * playground.
    */
   createDom(svg: SVGElement, tagName: string, selector: string) {
     this.injectCSS_(tagName, selector);

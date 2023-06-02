@@ -22,6 +22,7 @@ import {Types} from '../measurables/types.js';
 import {isDynamicShape} from './constants.js';
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
 import type {RenderInfo} from './info.js';
+import {isIcon} from '../../interfaces/i_icon.js';
 
 /**
  * An object that draws a block based on the given rendering information.
@@ -305,12 +306,18 @@ export class Drawer {
       }
     }
     if (Types.isIcon(fieldInfo)) {
-      svgGroup.setAttribute('display', 'block');
-      svgGroup.setAttribute(
-        'transform',
-        'translate(' + xPos + ',' + yPos + ')'
-      );
-      (fieldInfo as Icon).icon.computeIconLocation();
+      const icon = (fieldInfo as Icon).icon;
+      if (isIcon(icon)) {
+        icon.setOffsetInBlock(new Coordinate(xPos, yPos));
+      } else {
+        // TODO (#7042): Remove old icon handling code.
+        svgGroup.setAttribute('display', 'block');
+        svgGroup.setAttribute(
+          'transform',
+          'translate(' + xPos + ',' + yPos + ')'
+        );
+        (fieldInfo as Icon).icon.computeIconLocation();
+      }
     } else {
       svgGroup.setAttribute(
         'transform',
@@ -321,7 +328,15 @@ export class Drawer {
     if (this.info_.isInsertionMarker) {
       // Fields and icons are invisible on insertion marker.  They still have to
       // be rendered so that the block can be sized correctly.
-      svgGroup.setAttribute('display', 'none');
+      // TODO (#7042): Figure out a better way to handle the types here,
+      //     possibly by splitting this method into submethods.
+      if (Types.isIcon(fieldInfo) && isIcon((fieldInfo as Icon).icon)) {
+        (
+          (fieldInfo as Icon).icon as AnyDuringMigration
+        ).hideForInsertionMarker();
+      } else {
+        svgGroup.setAttribute('display', 'none');
+      }
     }
   }
 

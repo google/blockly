@@ -7,11 +7,11 @@
 /**
  * @fileoverview Generating PHP for colour blocks.
  */
-'use strict';
 
-goog.module('Blockly.PHP.colour');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.PHP.colour');
 
-const {phpGenerator: PHP} = goog.require('Blockly.PHP');
+import {phpGenerator as PHP} from '../php.js';
 
 
 PHP['colour_picker'] = function(block) {

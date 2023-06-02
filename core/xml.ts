@@ -398,8 +398,6 @@ export function clearWorkspaceAndLoadFromXml(
  * @param xml XML DOM.
  * @param workspace The workspace.
  * @returns An array containing new block IDs.
- * @suppress {strictModuleDepCheck} Suppress module check while workspace
- * comments are not bundled in.
  */
 export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
   let width = 0; // Not used in LTR.

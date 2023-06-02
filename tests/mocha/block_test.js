@@ -19,6 +19,7 @@ import {
   createChangeListenerSpy,
   createMockEvent,
 } from './test_helpers/events.js';
+import {MockIcon, MockBubbleIcon} from './test_helpers/icon_mocks.js';
 
 suite('Blocks', function () {
   setup(function () {
@@ -212,7 +213,11 @@ suite('Blocks', function () {
     suite('calling destroy', function () {
       setup(function () {
         Blockly.Blocks['destroyable_block'] = {
-          init: function () {},
+          init: function () {
+            this.appendStatementInput('STATEMENT');
+            this.setPreviousStatement(true);
+            this.setNextStatement(true);
+          },
           destroy: function () {},
         };
         this.block = this.workspace.newBlock('destroyable_block');
@@ -261,6 +266,26 @@ suite('Blocks', function () {
       test('events can be fired from destroy', function () {
         const mockEvent = createMockEvent(this.workspace);
         this.block.destroy = function () {
+          Blockly.Events.fire(mockEvent);
+        };
+        const spy = createChangeListenerSpy(this.workspace);
+
+        this.block.dispose();
+        this.clock.runAll();
+
+        chai.assert.isTrue(
+          spy.calledWith(mockEvent),
+          'Expected to be able to fire events from destroy'
+        );
+      });
+
+      test('child blocks can fire events from destroy', function () {
+        const mockEvent = createMockEvent(this.workspace);
+        const childBlock = this.workspace.newBlock('destroyable_block');
+        this.block
+          .getInput('STATEMENT')
+          .connection.connect(childBlock.previousConnection);
+        childBlock.destroy = function () {
           Blockly.Events.fire(mockEvent);
         };
         const spy = createChangeListenerSpy(this.workspace);
@@ -1158,7 +1183,7 @@ suite('Blocks', function () {
       });
     });
     suite('Add Connections Programmatically', function () {
-      test('Output', function () {
+      test('Output', async function () {
         const block = createRenderedBlock(this.workspace, 'empty_block');
 
         block.setOutput(true);
@@ -1418,7 +1443,7 @@ suite('Blocks', function () {
   });
 
   suite('Icon management', function () {
-    class MockIconA {
+    class MockIconA extends MockIcon {
       getType() {
         return 'A';
       }
@@ -1428,7 +1453,7 @@ suite('Blocks', function () {
       }
     }
 
-    class MockIconB {
+    class MockIconB extends MockIcon {
       getType() {
         return 'B';
       }
@@ -1592,54 +1617,58 @@ suite('Blocks', function () {
         workspaceTeardown.call(this, this.workspace);
       });
 
-      test('Has Icon', function () {
-        const block = Blockly.Xml.domToBlock(
-          Blockly.utils.xml.textToDom('<block type="statement_block"/>'),
+      test("Collapsing the block closes its contained children's bubbles", function () {
+        const parentBlock = Blockly.serialization.blocks.append(
+          {
+            'type': 'statement_block',
+            'inputs': {
+              'STATEMENT': {
+                'block': {
+                  'type': 'statement_block',
+                },
+              },
+            },
+          },
           this.workspace
         );
-        block.setCommentText('test text');
-        block.comment.setVisible(true);
-        chai.assert.isTrue(block.comment.isVisible());
-        block.setCollapsed(true);
-        chai.assert.isFalse(block.comment.isVisible());
+        const childBlock = parentBlock.getInputTargetBlock('STATEMENT');
+        const icon = new MockBubbleIcon();
+        childBlock.addIcon(icon);
+        icon.setBubbleVisible(true);
+
+        parentBlock.setCollapsed(true);
+
+        chai.assert.isFalse(
+          icon.bubbleIsVisible(),
+          "Expected collapsing the parent block to hide the child block's " +
+            "icon's bubble"
+        );
       });
 
-      test('Child Has Icon', function () {
-        const block = Blockly.Xml.domToBlock(
-          Blockly.utils.xml.textToDom(
-            '<block type="statement_block">' +
-              '  <statement name="STATEMENT">' +
-              '    <block type="statement_block"/>' +
-              '  </statement>' +
-              '</block>'
-          ),
+      test("Collapsing a block does not close its following childrens' bubbles", function () {
+        const parentBlock = Blockly.serialization.blocks.append(
+          {
+            'type': 'statement_block',
+            'next': {
+              'block': {
+                'type': 'statement_block',
+              },
+            },
+          },
           this.workspace
         );
-        const childBlock = block.getInputTargetBlock('STATEMENT');
-        childBlock.setCommentText('test text');
-        childBlock.comment.setVisible(true);
-        chai.assert.isTrue(childBlock.comment.isVisible());
-        block.setCollapsed(true);
-        chai.assert.isFalse(childBlock.comment.isVisible());
-      });
+        const nextBlock = parentBlock.getNextBlock();
+        const icon = new MockBubbleIcon();
+        nextBlock.addIcon(icon);
+        icon.setBubbleVisible(true);
 
-      test('Next Block Has Icon', function () {
-        const block = Blockly.Xml.domToBlock(
-          Blockly.utils.xml.textToDom(
-            '<block type="statement_block">' +
-              '  <next>' +
-              '    <block type="statement_block"/>' +
-              '  </next>' +
-              '</block>'
-          ),
-          this.workspace
+        parentBlock.setCollapsed(true);
+
+        chai.assert.isTrue(
+          icon.bubbleIsVisible(),
+          'Expected collapsing the parent block to not hide the next ' +
+            "block's bubble"
         );
-        const nextBlock = block.getNextBlock();
-        nextBlock.setCommentText('test text');
-        nextBlock.comment.setVisible(true);
-        chai.assert.isTrue(nextBlock.comment.isVisible());
-        block.setCollapsed(true);
-        chai.assert.isTrue(nextBlock.comment.isVisible());
       });
     });
   });

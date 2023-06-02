@@ -20,6 +20,7 @@ import {Connection} from './connection.js';
 import type {ConnectionDB} from './connection_db.js';
 import {ConnectionType} from './connection_type.js';
 import * as eventUtils from './events/utils.js';
+import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
@@ -190,7 +191,7 @@ export class RenderedConnection extends Connection {
    *
    * @param x New absolute x coordinate, in workspace coordinates.
    * @param y New absolute y coordinate, in workspace coordinates.
-   * @return True if the position of the connection in the connection db
+   * @returns True if the position of the connection in the connection db
    *     was updated.
    */
   moveTo(x: number, y: number): boolean {
@@ -223,7 +224,7 @@ export class RenderedConnection extends Connection {
    *
    * @param dx Change to x coordinate, in workspace units.
    * @param dy Change to y coordinate, in workspace units.
-   * @return True if the position of the connection in the connection db
+   * @returns True if the position of the connection in the connection db
    *     was updated.
    */
   moveBy(dx: number, dy: number): boolean {
@@ -236,7 +237,7 @@ export class RenderedConnection extends Connection {
    *
    * @param blockTL The location of the top left corner of the block, in
    *     workspace coordinates.
-   * @return True if the position of the connection in the connection db
+   * @returns True if the position of the connection in the connection db
    *     was updated.
    */
   moveToOffset(blockTL: Coordinate): boolean {
@@ -428,9 +429,13 @@ export class RenderedConnection extends Connection {
           connections[j].setTracking(false);
         }
         // Close all bubbles of all children.
-        const icons = block.getIcons();
-        for (let j = 0; j < icons.length; j++) {
-          icons[j].setVisible(false);
+        for (const icon of block.getIcons()) {
+          if (hasBubble(icon)) {
+            icon.setBubbleVisible(false);
+          } else if (icon.setVisible) {
+            // TODO (#7042): Remove old icon handling code.
+            icon.setVisible(false);
+          }
         }
       }
     }

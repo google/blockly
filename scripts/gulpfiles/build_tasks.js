@@ -108,35 +108,35 @@ const chunks = [
   {
     name: 'javascript',
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'javascript', 'all.js'),
-    exports: 'module$exports$Blockly$JavaScript',
+    exports: 'module$build$src$generators$javascript$all',
     reexport: 'Blockly.JavaScript',
     reexportOnly: 'javascriptGenerator',
   },
   {
     name: 'python',
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'python', 'all.js'),
-    exports: 'module$exports$Blockly$Python',
+    exports: 'module$build$src$generators$python$all',
     reexport: 'Blockly.Python',
     reexportOnly: 'pythonGenerator',
   },
   {
     name: 'php',
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'php', 'all.js'),
-    exports: 'module$exports$Blockly$PHP',
+    exports: 'module$build$src$generators$php$all',
     reexport: 'Blockly.PHP',
     reexportOnly: 'phpGenerator',
   },
   {
     name: 'lua',
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'lua', 'all.js'),
-    exports: 'module$exports$Blockly$Lua',
+    exports: 'module$build$src$generators$lua$all',
     reexport: 'Blockly.Lua',
     reexportOnly: 'luaGenerator',
   },
   {
     name: 'dart',
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'dart', 'all.js'),
-    exports: 'module$exports$Blockly$Dart',
+    exports: 'module$build$src$generators$dart$all',
     reexport: 'Blockly.Dart',
     reexportOnly: 'dartGenerator',
   }
@@ -560,7 +560,7 @@ function getChunkOptions() {
     // Figure out which chunk this is by looking for one of the
     // known chunk entrypoints in chunkFiles.  N.B.: O(n*m).  :-(
     const chunk = chunks.find(
-        chunk => chunkFiles.find(f => f.endsWith('/' + chunk.entry)));
+        chunk => chunkFiles.find(f => f.endsWith(path.sep + chunk.entry)));
     if (!chunk) throw new Error('Unable to identify chunk');
 
     // Replace nicknames with the names we chose.

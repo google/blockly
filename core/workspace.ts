@@ -151,8 +151,6 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Dispose of this workspace.
    * Unlink from all DOM elements to prevent memory leaks.
-   *
-   * @suppress {checkTypes}
    */
   dispose() {
     this.listeners.length = 0;
@@ -668,7 +666,7 @@ export class Workspace implements IASTNodeLocation {
    * @param func Function to call.
    * @returns Obsolete return value, ignore.
    */
-  addChangeListener(func: Function): Function {
+  addChangeListener(func: (e: Abstract) => void): Function {
     this.listeners.push(func);
     return func;
   }

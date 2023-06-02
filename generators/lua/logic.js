@@ -7,11 +7,11 @@
 /**
  * @fileoverview Generating Lua for logic blocks.
  */
-'use strict';
 
-goog.module('Blockly.Lua.logic');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Lua.logic');
 
-const {luaGenerator: Lua} = goog.require('Blockly.Lua');
+import {luaGenerator as Lua} from '../lua.js';
 
 
 Lua['controls_if'] = function(block) {

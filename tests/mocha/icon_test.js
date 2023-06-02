@@ -11,8 +11,9 @@ import {
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
 import {defineEmptyBlock} from './test_helpers/block_definitions.js';
+import {MockIcon, MockSerializableIcon} from './test_helpers/icon_mocks.js';
 
-suite.skip('Icon', function () {
+suite('Icon', function () {
   setup(function () {
     this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
     defineEmptyBlock();
@@ -22,38 +23,38 @@ suite.skip('Icon', function () {
     sharedTestTeardown.call(this);
   });
 
+  class MockNonSerializableIcon extends MockIcon {
+    getType() {
+      return 'non-serializable icon';
+    }
+  }
+
+  function createHeadlessWorkspace() {
+    return new Blockly.Workspace();
+  }
+
+  function createWorkspaceSvg() {
+    const workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+    workspace.createDom();
+    return workspace;
+  }
+
+  function createUninitializedBlock(workspace) {
+    return workspace.newBlock('empty_block');
+  }
+
+  function createInitializedBlock(workspace) {
+    const block = workspace.newBlock('empty_block');
+    block.initSvg();
+    block.render();
+    return block;
+  }
+
+  function createHeadlessBlock(workspace) {
+    return createUninitializedBlock(workspace);
+  }
+
   suite('Hooks getting properly triggered by the block', function () {
-    class MockIcon {
-      initView() {}
-
-      applyColour() {}
-
-      updateEditable() {}
-
-      updateCollapsed() {}
-    }
-
-    function createHeadlessWorkspace() {
-      return new Blockly.Workspace();
-    }
-
-    function createWorkspaceSvg() {
-      const workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
-      workspace.createDom();
-      return workspace;
-    }
-
-    function createUninitializedBlock(workspace) {
-      return workspace.newBlock('empty_block');
-    }
-
-    function createInitializedBlock(workspace) {
-      const block = workspace.newBlock('empty_block');
-      block.initSvg();
-      block.render();
-      return block;
-    }
-
     suite('Triggering view initialization', function () {
       test('initView is not called by headless blocks', function () {
         const workspace = createHeadlessWorkspace();
@@ -194,7 +195,7 @@ suite.skip('Icon', function () {
 
         block.addIcon(icon);
         applyColourSpy.resetHistory();
-        block.setDisabled(true);
+        block.setEnabled(false);
         chai.assert.isTrue(
           applyColourSpy.calledOnce,
           'Expected applyColour to be called'
@@ -320,13 +321,15 @@ suite.skip('Icon', function () {
         const workspace = createWorkspaceSvg();
         const block = createInitializedBlock(workspace);
         const icon = new MockIcon();
-        const updateCollapsedSpy = sinon.spy(icon, 'updateCollapsed');
+        const updateCollapsedSpy = sinon.stub(icon, 'updateCollapsed');
         block.addIcon(icon);
 
+        updateCollapsedSpy.resetHistory();
         block.setCollapsed(true);
+        this.clock.runAll();
 
         chai.assert.isTrue(
-          updateCollapsedSpy.calledOnce,
+          updateCollapsedSpy.called,
           'Expected updateCollapsed to be called'
         );
       });
@@ -340,12 +343,82 @@ suite.skip('Icon', function () {
 
         block.setCollapsed(true);
         block.setCollapsed(false);
+        this.clock.runAll();
 
         chai.assert.isTrue(
-          updateCollapsedSpy.calledTwice,
-          'Expected updateCollapsed to be called twice'
+          updateCollapsedSpy.called,
+          'Expected updateCollapsed to be called'
         );
       });
+    });
+  });
+
+  suite('Serialization', function () {
+    test('serializable icons are saved', function () {
+      const block = createHeadlessBlock(createHeadlessWorkspace());
+      block.addIcon(new MockSerializableIcon());
+      const json = Blockly.serialization.blocks.save(block);
+      chai.assert.deepNestedInclude(
+        json,
+        {'icons': {'serializable icon': 'some state'}},
+        'Expected the JSON to include the saved state of the ' +
+          'serializable icon.'
+      );
+    });
+
+    test('non-serializable icons are not saved', function () {
+      const block = createHeadlessBlock(createHeadlessWorkspace());
+      block.addIcon(new MockNonSerializableIcon());
+      const json = Blockly.serialization.blocks.save(block);
+      chai.assert.notProperty(
+        json,
+        'icons',
+        'Expected the JSON to not include any saved state for icons'
+      );
+    });
+  });
+
+  suite('Deserialization', function () {
+    test('registered icons are instantiated and added to the block', function () {
+      Blockly.icons.registry.register(
+        'serializable icon',
+        MockSerializableIcon
+      );
+
+      const workspace = createHeadlessWorkspace();
+      const json = {
+        'type': 'empty_block',
+        'icons': {
+          'serializable icon': 'some state',
+        },
+      };
+      const block = Blockly.serialization.blocks.append(json, workspace);
+      chai.assert.equal(
+        block.getIcon('serializable icon').state,
+        'some state',
+        'Expected the icon to have been properly instantiated and ' +
+          'deserialized'
+      );
+
+      Blockly.icons.registry.unregister('serializable icon');
+    });
+
+    test('trying to deserialize an unregistered icon throws an error', function () {
+      const workspace = createHeadlessWorkspace();
+      const json = {
+        'type': 'empty_block',
+        'icons': {
+          'serializable icon': 'some state',
+        },
+      };
+      chai.assert.throws(
+        () => {
+          Blockly.serialization.blocks.append(json, workspace);
+        },
+        Blockly.serialization.exceptions.UnregisteredIcon,
+        '',
+        'Expected deserializing an unregistered icon to throw'
+      );
     });
   });
 });

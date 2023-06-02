@@ -312,7 +312,6 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param healStack If true, then try to heal any gap by connecting the next
    *     statement with the previous statement.  Otherwise, dispose of all
    *     children of this block.
-   * @suppress {checkTypes}
    */
   dispose(healStack: boolean) {
     if (this.isDeadOrDying()) return;
@@ -344,23 +343,17 @@ export class Block implements IASTNodeLocation, IDeletable {
       this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
 
-    eventUtils.disable();
-    try {
-      this.workspace.removeTypedBlock(this);
-      this.workspace.removeBlockById(this.id);
-      this.disposing = true;
+    this.workspace.removeTypedBlock(this);
+    this.workspace.removeBlockById(this.id);
+    this.disposing = true;
 
-      this.childBlocks_.forEach((c) => c.disposeInternal());
-      this.inputList.forEach((i) => i.dispose());
-      this.inputList.length = 0;
-      this.getConnections_(true).forEach((c) => c.dispose());
-    } finally {
-      eventUtils.enable();
-      if (typeof this.destroy === 'function') {
-        this.destroy();
-      }
-      this.disposed = true;
-    }
+    if (typeof this.destroy === 'function') this.destroy();
+
+    this.childBlocks_.forEach((c) => c.disposeInternal());
+    this.inputList.forEach((i) => i.dispose());
+    this.inputList.length = 0;
+    this.getConnections_(true).forEach((c) => c.dispose());
+    this.disposed = true;
   }
 
   /**
@@ -1569,13 +1562,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns The input object created.
    */
   appendValueInput(name: string): Input {
-    return this.appendInput(
-      new ValueInput(
-        name,
-        this,
-        this.makeConnection_(ConnectionType.INPUT_VALUE)
-      )
-    );
+    return this.appendInput(new ValueInput(name, this));
   }
 
   /**
@@ -1587,13 +1574,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   appendStatementInput(name: string): Input {
     this.statementInputCount++;
-    return this.appendInput(
-      new StatementInput(
-        name,
-        this,
-        this.makeConnection_(ConnectionType.NEXT_STATEMENT)
-      )
-    );
+    return this.appendInput(new StatementInput(name, this));
   }
 
   /**
@@ -1633,7 +1614,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       false
     );
     if (!inputConstructor) return null;
-    return this.appendInput(new inputConstructor(name, this, null));
+    return this.appendInput(new inputConstructor(name, this));
   }
 
   /**
@@ -2246,7 +2227,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * block.
    *
    * @param type The type of the icon to remove from the block.
-   * @return True if an icon with the given type was found, false otherwise.
+   * @returns True if an icon with the given type was found, false otherwise.
    */
   removeIcon(type: string): boolean {
     if (!this.hasIcon(type)) return false;
@@ -2255,7 +2236,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * @return True if an icon with the given type exists on the block,
+   * @returns True if an icon with the given type exists on the block,
    *     false otherwise.
    */
   hasIcon(type: string): boolean {
@@ -2263,14 +2244,14 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * @return The icon with the given type if it exists on the block, undefined
+   * @returns The icon with the given type if it exists on the block, undefined
    *     otherwise.
    */
   getIcon(type: string): IIcon | undefined {
     return this.icons.find((icon) => icon.getType() === type);
   }
 
-  /** @return An array of the icons attached to this block. */
+  /** @returns An array of the icons attached to this block. */
   getIcons(): IIcon[] {
     return [...this.icons];
   }
@@ -2310,8 +2291,9 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @param type The type of the connection to create.
    * @returns A new connection of the specified type.
+   * @internal
    */
-  protected makeConnection_(type: number): Connection {
+  makeConnection_(type: ConnectionType): Connection {
     return new Connection(this, type);
   }
 

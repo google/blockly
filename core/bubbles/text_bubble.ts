@@ -26,7 +26,7 @@ export class TextBubble extends Bubble {
     this.updateBubbleSize();
   }
 
-  /** @return the current text of this text bubble. */
+  /** @returns the current text of this text bubble. */
   getText(): string {
     return this.text;
   }

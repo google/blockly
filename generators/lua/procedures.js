@@ -7,12 +7,12 @@
 /**
  * @fileoverview Generating Lua for procedure blocks.
  */
-'use strict';
 
-goog.module('Blockly.Lua.procedures');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Lua.procedures');
 
-const {NameType} = goog.require('Blockly.Names');
-const {luaGenerator: Lua} = goog.require('Blockly.Lua');
+import {NameType} from '../../core/names.js';
+import {luaGenerator as Lua} from '../lua.js';
 
 
 Lua['procedures_defreturn'] = function(block) {

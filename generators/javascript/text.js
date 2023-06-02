@@ -7,12 +7,12 @@
 /**
  * @fileoverview Generating JavaScript for text blocks.
  */
-'use strict';
 
-goog.module('Blockly.JavaScript.texts');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.JavaScript.texts');
 
-const {NameType} = goog.require('Blockly.Names');
-const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
+import {NameType} from '../../core/names.js';
+import {javascriptGenerator as JavaScript} from '../javascript.js';
 
 
 /**

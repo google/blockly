@@ -12,7 +12,10 @@ import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../inputs/input_types.js';
+import {isIcon} from '../interfaces/i_icon.js';
+import {isSerializable} from '../interfaces/i_serializable.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
+import * as registry from '../registry.js';
 import {Size} from '../utils/size.js';
 import * as utilsXml from '../utils/xml.js';
 import type {Workspace} from '../workspace.js';
@@ -23,6 +26,7 @@ import {
   MissingBlockType,
   MissingConnection,
   RealChildOfShadow,
+  UnregisteredIcon,
 } from './exceptions.js';
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
@@ -34,8 +38,8 @@ import * as serializationRegistry from './registry.js';
  * Represents the state of a connection.
  */
 export interface ConnectionState {
-  shadow: State | undefined;
-  block: State | undefined;
+  shadow?: State;
+  block?: State;
 }
 
 /**
@@ -113,7 +117,7 @@ export function save(
   saveExtraState(block, state as AnyDuringMigration);
   // AnyDuringMigration because:  Argument of type '{ type: string; id: string;
   // }' is not assignable to parameter of type 'State'.
-  saveIcons(block, state as AnyDuringMigration);
+  saveIcons(block, state as AnyDuringMigration, doFullSerialization);
   // AnyDuringMigration because:  Argument of type '{ type: string; id: string;
   // }' is not assignable to parameter of type 'State'.
   saveFields(block, state as AnyDuringMigration, doFullSerialization);
@@ -208,18 +212,29 @@ function saveExtraState(block: Block, state: State) {
  *
  * @param block The block to serialize the icon state of.
  * @param state The state object to append to.
+ * @param doFullSerialization Whether or not to serialize the full state of the
+ *     icon (rather than possibly saving a reference to some state).
  */
-function saveIcons(block: Block, state: State) {
-  // TODO(#2105): Remove this logic and put it in the icon.
+function saveIcons(block: Block, state: State, doFullSerialization: boolean) {
+  const icons = Object.create(null);
+  for (const icon of block.getIcons()) {
+    if (isSerializable(icon)) {
+      icons[icon.getType()] = icon.saveState(doFullSerialization);
+    }
+  }
+
+  // TODO(#7038): Remove this logic and put it in the comment icon.
   if (block.getCommentText()) {
-    state['icons'] = {
-      'comment': {
-        'text': block.getCommentText(),
-        'pinned': block.commentModel.pinned,
-        'height': Math.round(block.commentModel.size.height),
-        'width': Math.round(block.commentModel.size.width),
-      },
+    icons['comment'] = {
+      'text': block.getCommentText(),
+      'pinned': block.commentModel.pinned,
+      'height': Math.round(block.commentModel.size.height),
+      'width': Math.round(block.commentModel.size.width),
     };
+  }
+
+  if (Object.keys(icons).length) {
+    state['icons'] = icons;
   }
 }
 
@@ -575,10 +590,22 @@ function tryToConnectParent(
  * @param state The state object to reference.
  */
 function loadIcons(block: Block, state: State) {
-  if (!state['icons']) {
-    return;
+  if (!state['icons']) return;
+
+  const iconTypes = Object.keys(state['icons']);
+  for (const iconType of iconTypes) {
+    // TODO(#7038): Remove this special casing of comment..
+    if (iconType === 'comment') continue;
+
+    const iconState = state['icons'][iconType];
+    const constructor = registry.getClass(registry.Type.ICON, iconType, false);
+    if (!constructor) throw new UnregisteredIcon(iconType, block, state);
+    const icon = new constructor();
+    block.addIcon(icon);
+    if (isSerializable(icon)) icon.loadState(iconState);
   }
-  // TODO(#2105): Remove this logic and put it in the icon.
+
+  // TODO(#7038): Remove this logic and put it in the icon.
   const comment = state['icons']['comment'];
   if (comment) {
     block.setCommentText(comment['text']);
@@ -702,9 +729,12 @@ function initBlock(block: Block, rendered: boolean) {
     blockSvg.render(false);
     // fixes #6076 JSO deserialization doesn't
     // set .iconXY_ property so here it will be set
-    const icons = blockSvg.getIcons();
-    for (let i = 0; i < icons.length; i++) {
-      icons[i].computeIconLocation();
+    for (const icon of blockSvg.getIcons()) {
+      if (isIcon(icon)) {
+        icon.onLocationChange(blockSvg.getRelativeToSurfaceXY());
+      } else {
+        icon.computeIconLocation();
+      }
     }
   } else {
     block.initModel();

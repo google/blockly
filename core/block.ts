@@ -2182,12 +2182,11 @@ export class Block implements IASTNodeLocation, IDeletable {
     );
 
     if (text !== null) {
-      if (!this.hasIcon(CommentIcon.TYPE)) {
-        this.addIcon(new CommentIcon(this));
+      let comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | undefined;
+      if (!comment) {
+        comment = this.addIcon(new CommentIcon(this));
       }
-      (this.getIcon(CommentIcon.TYPE) as CommentIcon | undefined)?.setText(
-        text
-      );
+      comment.setText(text);
     } else {
       this.removeIcon(CommentIcon.TYPE);
     }

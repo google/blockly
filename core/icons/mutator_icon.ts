@@ -7,16 +7,16 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.icons.MutatorIcon');
 
-import {Abstract} from '../events/events_abstract.js';
+import type {Abstract} from '../events/events_abstract.js';
 import type {Block} from '../block.js';
 import {BlockChange} from '../events/events_block_change.js';
-import {BlocklyOptions} from '../blockly_options.js';
-import {BlockSvg} from '../block_svg.js';
+import type {BlocklyOptions} from '../blockly_options.js';
+import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import * as eventUtils from '../events/utils.js';
-import {IHasBubble} from '../interfaces/i_has_bubble.js';
+import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import {Icon} from './icon.js';
 import {MiniWorkspaceBubble} from '../bubbles/mini_workspace_bubble.js';
 import {MUTATOR_TYPE} from './icon_types.js';

@@ -110,7 +110,6 @@ export class BlockSvg
   /** Block's mutator icon (if any). */
   mutator: Mutator | null = null;
 
-
   /**
    * Block's warning icon (if any).
    *

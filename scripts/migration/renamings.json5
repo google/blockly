@@ -1454,8 +1454,8 @@
           newExport: 'WarningIcon',
           oldPath: 'Blockly.Warning',
           newPath: 'Blocky.icons.WarningIcon',
-        }
-      }
+        },
+      },
     },
     {
       oldName: 'Blockly.Comment',

@@ -14,11 +14,8 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockFieldIntermediateChange');
 
 import type {Block} from '../block.js';
-import type {BlockSvg} from '../block_svg.js';
 import * as registry from '../registry.js';
-import * as utilsXml from '../utils/xml.js';
 import {Workspace} from '../workspace.js';
-import * as Xml from '../xml.js';
 
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';

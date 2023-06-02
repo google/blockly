@@ -526,11 +526,12 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     // normal block change events, and instead report them as special
     // intermediate changes that do not get recorded in undo history.
     const oldValue = this.value_;
-    eventUtils.disable();
-    this.setValue(this.getValueFromEditorText_(this.htmlInput_!.value));
-    eventUtils.enable();
+    // Change the field's value without firing the normal change event.
+    this.setValue(this.getValueFromEditorText_(this.htmlInput_!.value), false);
     if (this.sourceBlock_ && eventUtils.isEnabled() &&
         this.value_ !== oldValue) {
+      // Fire a special event indicating that the value changed but the change
+      // isn't complete yet and normal field change listeners can wait.
       eventUtils.fire(
           new (eventUtils.get(eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE))(
               this.sourceBlock_, this.name || null, oldValue, this.value_));

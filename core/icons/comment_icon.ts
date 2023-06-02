@@ -5,7 +5,7 @@
  */
 
 import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.icons.CommentIcon');
+goog.declareModuleId('Blockly.Comment');
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';

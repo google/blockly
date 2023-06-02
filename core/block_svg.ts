@@ -56,7 +56,7 @@ import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
-import {Warning} from './warning.js';
+import {WarningIcon} from './icons/warning_icon.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {queueRender} from './render_management.js';
@@ -112,8 +112,12 @@ export class BlockSvg
   /** Block's comment icon (if any). */
   private commentIcon_: Comment | null = null;
 
-  /** Block's warning icon (if any). */
-  warning: Warning | null = null;
+  /**
+   * Block's warning icon (if any).
+   *
+   * @deprecated Use `setWarningText` to modify warnings on this block.
+   */
+  warning: WarningIcon | null = null;
 
   private svgGroup_: SVGGElement;
   style: BlockStyle;
@@ -983,7 +987,8 @@ export class BlockSvg
       text = null;
     }
 
-    let changedState = false;
+    // TODO: Make getIcon take in a type parameter?
+    const icon = this.getIcon(WarningIcon.TYPE) as WarningIcon | undefined;
     if (typeof text === 'string') {
       // Bubble up to add a warning on top-most collapsed block.
       let parent = this.getSurroundParent();
@@ -1001,32 +1006,18 @@ export class BlockSvg
         );
       }
 
-      if (!this.warning) {
-        this.warning = new Warning(this);
-        changedState = true;
+      if (icon) {
+        (icon as WarningIcon).addMessage(text, id);
+      } else {
+        this.addIcon(new WarningIcon(this).addMessage(text, id));
       }
-      this.warning!.setText(text, id);
-    } else {
+    } else if (icon) {
       // Dispose all warnings if no ID is given.
-      if (this.warning && !id) {
-        this.warning.dispose();
-        changedState = true;
-      } else if (this.warning) {
-        const oldText = this.warning.getText();
-        this.warning.setText('', id);
-        const newText = this.warning.getText();
-        if (!newText) {
-          this.warning.dispose();
-        }
-        changedState = oldText !== newText;
+      if (!id) {
+        this.removeIcon(WarningIcon.TYPE);
+      } else {
+        if (!icon.getText()) this.removeIcon(WarningIcon.TYPE);
       }
-    }
-    if (changedState && this.rendered) {
-      // Icons must force an immediate render so that bubbles can be opened
-      // immedately at the correct position.
-      this.render();
-      // Adding or removing a warning icon will cause the block to change shape.
-      this.bumpNeighbours();
     }
   }
 
@@ -1055,14 +1046,18 @@ export class BlockSvg
 
   override addIcon<T extends IIcon>(icon: T): T {
     super.addIcon(icon);
+
+    if (icon instanceof WarningIcon) this.warning = icon;
+
     if (this.rendered) {
       icon.initView(this.createIconPointerDownListener(icon));
       icon.applyColour();
       icon.updateEditable();
-      // TODO: Change this based on #7024.
+      // TODO: Change this based on #7068.
       this.render();
       this.bumpNeighbours();
     }
+
     return icon;
   }
 
@@ -1082,8 +1077,11 @@ export class BlockSvg
 
   override removeIcon(type: string): boolean {
     const removed = super.removeIcon(type);
+
+    if (type === WarningIcon.TYPE) this.warning = null;
+
     if (this.rendered) {
-      // TODO: Change this based on #7024.
+      // TODO: Change this based on #7068.
       this.render();
       this.bumpNeighbours();
     }
@@ -1095,7 +1093,6 @@ export class BlockSvg
   override getIcons(): AnyDuringMigration[] {
     const icons: AnyDuringMigration = [...this.icons];
     if (this.commentIcon_) icons.push(this.commentIcon_);
-    if (this.warning) icons.push(this.warning);
     if (this.mutator) icons.push(this.mutator);
     return icons;
   }

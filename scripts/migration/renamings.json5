@@ -1447,5 +1447,15 @@
 
   'develop': [
     // New renamings go here!
+    {
+      oldName: 'Blockly.Warning',
+      exports: {
+        Warning: {
+          newExport: 'WarningIcon',
+          oldPath: 'Blockly.Warning',
+          newPath: 'Blocky.icons.WarningIcon',
+        },
+      },
+    },
   ],
 }

@@ -346,7 +346,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     // No need to reconnect if this connection's block is deleted.
     if (this.getSourceBlock().isDeadOrDying()) return false;
 
-    const connectionParent = block.getInput(inputName)!.connection;
+    const connectionParent = block.getInput(inputName)?.connection;
     const currentParent = this.targetBlock();
     if (
       (!currentParent || currentParent === block) &&

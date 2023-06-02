@@ -5,7 +5,7 @@
  */
 
 import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.icons.MutatorIcon');
+goog.declareModuleId('Blockly.Mutator');
 
 import type {Abstract} from '../events/events_abstract.js';
 import type {Block} from '../block.js';

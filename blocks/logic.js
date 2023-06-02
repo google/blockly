@@ -30,7 +30,7 @@ const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 const {Workspace} = goog.requireType('Blockly.Workspace');
 const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
-goog.require('Blockly.icons.MutatorIcon');
+goog.require('Blockly.Mutator');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldDropdown');
 /** @suppress {extraRequire} */

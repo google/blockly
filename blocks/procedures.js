@@ -30,7 +30,7 @@ const {Block} = goog.requireType('Blockly.Block');
 const BlockDefinition = Object;
 const {config} = goog.require('Blockly.config');
 const {Msg} = goog.require('Blockly.Msg');
-const {MutatorIcon} = goog.require('Blockly.icons.MutatorIcon');
+const {MutatorIcon: Mutator} = goog.require('Blockly.Mutator');
 const {Names} = goog.require('Blockly.Names');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
@@ -388,7 +388,7 @@ const PROCEDURE_DEF_COMMON = {
   displayRenamedVar_: function(oldName, newName) {
     this.updateParams_();
     // Update the mutator's variables if the mutator is open.
-    const mutator = this.getIcon(MutatorIcon.TYPE);
+    const mutator = this.getIcon(Mutator.TYPE);
     if (mutator && mutator.bubbleIsVisible()) {
       const blocks = mutator.getWorkspace().getAllBlocks(false);
       for (let i = 0, block; (block = blocks[i]); i++) {
@@ -462,7 +462,7 @@ blocks['procedures_defnoreturn'] = {
         .appendField(Msg['PROCEDURES_DEFNORETURN_TITLE'])
         .appendField(nameField, 'NAME')
         .appendField('', 'PARAMS');
-    this.setMutator(new MutatorIcon(['procedures_mutatorarg'], this));
+    this.setMutator(new Mutator(['procedures_mutatorarg'], this));
     if ((this.workspace.options.comments ||
          (this.workspace.options.parentWorkspace &&
           this.workspace.options.parentWorkspace.options.comments)) &&
@@ -512,7 +512,7 @@ blocks['procedures_defreturn'] = {
     this.appendValueInput('RETURN')
         .setAlign(Align.RIGHT)
         .appendField(Msg['PROCEDURES_DEFRETURN_RETURN']);
-    this.setMutator(new MutatorIcon(['procedures_mutatorarg'], this));
+    this.setMutator(new Mutator(['procedures_mutatorarg'], this));
     if ((this.workspace.options.comments ||
          (this.workspace.options.parentWorkspace &&
           this.workspace.options.parentWorkspace.options.comments)) &&
@@ -732,7 +732,7 @@ const PROCEDURE_CALL_COMMON = {
     // which might reappear if a param is reattached in the mutator.
     const defBlock =
         Procedures.getDefinition(this.getProcedureCall(), this.workspace);
-    const mutatorIcon = defBlock && defBlock.getIcon(MutatorIcon.TYPE);
+    const mutatorIcon = defBlock && defBlock.getIcon(Mutator.TYPE);
     const mutatorOpen =
         mutatorIcon && mutatorIcon.bubbleIsVisible();
     if (!mutatorOpen) {

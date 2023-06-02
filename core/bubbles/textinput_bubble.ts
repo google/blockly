@@ -6,6 +6,7 @@
 
 import {Bubble} from './bubble.js';
 import {Coordinate} from '../utils/coordinate.js';
+import * as Css from '../css.js';
 import * as dom from '../utils/dom.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
@@ -323,3 +324,16 @@ export class TextInputBubble extends Bubble {
     }
   }
 }
+
+Css.register(`
+.blocklyCommentTextarea {
+  background-color: #fef49c;
+  border: 0;
+  display: block;
+  margin: 0;
+  outline: 0;
+  padding: 3px;
+  resize: none;
+  text-overflow: hidden;
+}
+`);

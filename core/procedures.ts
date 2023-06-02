@@ -386,7 +386,8 @@ function mutatorChangeListener(e: Abstract) {
   if (
     e.type !== eventUtils.BLOCK_CREATE &&
     e.type !== eventUtils.BLOCK_DELETE &&
-    e.type !== eventUtils.BLOCK_CHANGE
+    e.type !== eventUtils.BLOCK_CHANGE &&
+    e.type !== eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE
   ) {
     return;
   }

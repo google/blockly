@@ -7,6 +7,7 @@
 import type {Block} from '../block.js';
 import type {IIcon} from '../interfaces/i_icon.js';
 import * as registry from '../registry.js';
+import {IconType} from './icon_types.js';
 
 /**
  * Registers the given icon so that it can be deserialized.
@@ -16,10 +17,10 @@ import * as registry from '../registry.js';
  * @param iconConstructor The icon class/constructor to register.
  */
 export function register(
-  type: string,
+  type: IconType<any>,
   iconConstructor: new (block: Block) => IIcon
 ) {
-  registry.register(registry.Type.ICON, type, iconConstructor);
+  registry.register(registry.Type.ICON, type.toString(), iconConstructor);
 }
 
 /**

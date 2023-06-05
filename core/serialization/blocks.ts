@@ -219,7 +219,7 @@ function saveIcons(block: Block, state: State, doFullSerialization: boolean) {
   for (const icon of block.getIcons()) {
     if (isSerializable(icon)) {
       const state = icon.saveState(doFullSerialization);
-      if (state) icons[icon.getType()] = state;
+      if (state) icons[icon.getType().toString()] = state;
     }
   }
 
@@ -709,7 +709,7 @@ function initBlock(block: Block, rendered: boolean) {
       if (isIcon(icon)) {
         icon.onLocationChange(blockSvg.getRelativeToSurfaceXY());
       } else {
-        icon.computeIconLocation();
+        // icon.computeIconLocation();
       }
     }
   } else {

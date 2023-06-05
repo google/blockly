@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type {IconType} from '../icons/icon_types.js';
 import type {Coordinate} from '../utils/coordinate.js';
 import type {Size} from '../utils/size.js';
 
@@ -13,7 +14,7 @@ export interface IIcon {
    * E.g. 'comment', 'warning', etc. This string should also be used when
    * registering the icon class.
    */
-  getType(): string;
+  getType(): IconType<any>;
 
   /**
    * Creates the SVG elements for the icon that will live on the block.

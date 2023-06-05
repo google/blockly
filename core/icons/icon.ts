@@ -12,6 +12,7 @@ import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
+import type {IconType} from './icon_types.js';
 
 export abstract class Icon implements IIcon {
   /**
@@ -28,7 +29,7 @@ export abstract class Icon implements IIcon {
 
   constructor(protected sourceBlock: Block) {}
 
-  getType(): string {
+  getType(): IconType<any> {
     throw new Error('Icons must implement getType');
   }
 

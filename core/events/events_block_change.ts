@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Events.BlockChange');
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
-import {MUTATOR_TYPE} from '../icons/icon_types.js';
+import {IconType} from '../icons/icon_types.js';
 import {hasBubble} from '../interfaces/i_has_bubble.js';
 import * as registry from '../registry.js';
 import * as utilsXml from '../utils/xml.js';
@@ -146,7 +146,7 @@ export class BlockChange extends BlockBase {
       );
     }
     // Assume the block is rendered so that then we can check.
-    const icon = block.getIcon(MUTATOR_TYPE);
+    const icon = block.getIcon(IconType.MUTATOR);
     if (icon && hasBubble(icon) && icon.bubbleIsVisible()) {
       // Close the mutator (if open) since we don't want to update it.
       icon.setBubbleVisible(false);

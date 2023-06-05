@@ -6,7 +6,7 @@
 
 export class MockIcon {
   getType() {
-    return 'mock icon';
+    return new Blockly.icons.IconType('mock icon');
   }
 
   initView() {}
@@ -43,7 +43,7 @@ export class MockSerializableIcon extends MockIcon {
   }
 
   getType() {
-    return 'serializable icon';
+    return new Blockly.icons.IconType('serializable icon');
   }
 
   getWeight() {
@@ -66,7 +66,7 @@ export class MockBubbleIcon extends MockIcon {
   }
 
   getType() {
-    return 'bubble icon';
+    return new Blockly.icons.IconType('bubble icon');
   }
 
   updateCollapsed() {}

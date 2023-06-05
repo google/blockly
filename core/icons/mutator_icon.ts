@@ -19,12 +19,12 @@ import * as eventUtils from '../events/utils.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import {Icon} from './icon.js';
 import {MiniWorkspaceBubble} from '../bubbles/mini_workspace_bubble.js';
-import {MUTATOR_TYPE} from './icon_types.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import * as deprecation from '../utils/deprecation.js';
+import {IconType} from './icon_types.js';
 
 /** The size of the mutator icon in workspace-scale units. */
 const SIZE = 17;
@@ -37,7 +37,7 @@ const WORKSPACE_MARGIN = 16;
 
 export class MutatorIcon extends Icon implements IHasBubble {
   /** The type string used to identify this icon. */
-  static readonly TYPE = MUTATOR_TYPE;
+  static readonly TYPE = IconType.MUTATOR;
 
   /**
    * The weight this icon has relative to other icons. Icons with more positive
@@ -61,7 +61,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
     super(sourceBlock);
   }
 
-  override getType() {
+  override getType(): IconType<MutatorIcon> {
     return MutatorIcon.TYPE;
   }
 

@@ -691,8 +691,6 @@ export class Gesture {
 
     if (this.isPinchZoomEnabled && this.cachedPoints.size === 2) {
       this.handlePinch(e);
-    } else {
-      this.handleMove(e);
     }
   }
 

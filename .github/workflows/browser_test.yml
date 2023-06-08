@@ -1,12 +1,10 @@
 # This workflow will do a clean install, start the selenium server, and run
 # all of our browser based tests
 
-name: Run browser test nightly
+name: Run browser manually
 
 on:
-  # Trigger the workflow nightly
-  schedule:
-    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: read

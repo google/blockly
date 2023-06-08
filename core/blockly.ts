@@ -27,7 +27,6 @@ import {Bubble} from './bubble_old.js';
 import {BubbleDragger} from './bubble_dragger.js';
 import * as bumpObjects from './bump_objects.js';
 import * as clipboard from './clipboard.js';
-import {Comment} from './comment.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
 import {config} from './config.js';
@@ -175,7 +174,6 @@ import {MenuItem} from './menuitem.js';
 import {MetricsManager} from './metrics_manager.js';
 import {Msg, setLocale} from './msg.js';
 import {MiniWorkspaceBubble} from './bubbles/mini_workspace_bubble.js';
-import {Mutator} from './mutator.js';
 import {Names} from './names.js';
 import {Options} from './options.js';
 import * as uiPosition from './positionable_helpers.js';
@@ -211,7 +209,6 @@ import {VariableMap} from './variable_map.js';
 import {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
 import * as VariablesDynamic from './variables_dynamic.js';
-import {Warning} from './warning.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
@@ -440,10 +437,6 @@ WorkspaceCommentSvg.prototype.showContextMenu = function (
   ContextMenu.show(e, menuOptions, this.RTL);
 };
 
-Mutator.prototype.newWorkspaceSvg = function (options: Options): WorkspaceSvg {
-  return new WorkspaceSvg(options);
-};
-
 MiniWorkspaceBubble.prototype.newWorkspaceSvg = function (
   options: Options
 ): WorkspaceSvg {
@@ -505,7 +498,6 @@ export {Blocks};
 export {Bubble};
 export {BubbleDragger};
 export {CollapsibleToolboxCategory};
-export {Comment};
 export {ComponentManager};
 export {Connection};
 export {ConnectionType};
@@ -624,7 +616,6 @@ export {MarkerManager};
 export {Menu};
 export {MenuItem};
 export {MetricsManager};
-export {Mutator};
 export {Msg, setLocale};
 export {Names};
 export {Options};
@@ -644,7 +635,6 @@ export {Trashcan};
 export {VariableMap};
 export {VariableModel};
 export {VerticalFlyout};
-export {Warning};
 export {Workspace};
 export {WorkspaceAudio};
 export {WorkspaceComment};

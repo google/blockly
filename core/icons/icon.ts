@@ -29,7 +29,7 @@ export abstract class Icon implements IIcon {
   constructor(protected sourceBlock: Block) {}
 
   getType(): string {
-    return 'abstract type';
+    throw new Error('Icons must implement getType');
   }
 
   initView(pointerdownListener: (e: PointerEvent) => void): void {
@@ -47,7 +47,9 @@ export abstract class Icon implements IIcon {
     );
   }
 
-  dispose(): void {}
+  dispose(): void {
+    dom.removeNode(this.svgRoot);
+  }
 
   getWeight(): number {
     return -1;

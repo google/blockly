@@ -184,7 +184,7 @@ export abstract class Bubble implements IBubble {
   }
 
   /** Sets the colour of the background and tail of this bubble. */
-  protected setColour(colour: string) {
+  public setColour(colour: string) {
     this.colour = colour;
     this.tail.setAttribute('fill', colour);
     this.background.setAttribute('fill', colour);

@@ -12,6 +12,8 @@ import type {BlockSvg} from './block_svg.js';
 import type {Connection} from './connection.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
+import type {CommentIcon} from './icons/comment_icon.js';
+import {COMMENT_TYPE} from './icons/icon_types.js';
 import {inputTypes} from './inputs/input_types.js';
 import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';
@@ -188,8 +190,9 @@ export function blockToDom(
 
   const commentText = block.getCommentText();
   if (commentText) {
-    const size = block.commentModel.size;
-    const pinned = block.commentModel.pinned;
+    const comment = block.getIcon(COMMENT_TYPE) as CommentIcon;
+    const size = comment.getBubbleSize();
+    const pinned = comment.bubbleIsVisible();
 
     const commentElement = utilsXml.createElement('comment');
     commentElement.appendChild(utilsXml.createTextNode(commentText));
@@ -720,17 +723,14 @@ function applyCommentTagNodes(xmlChildren: Element[], block: Block) {
     const height = parseInt(xmlChild.getAttribute('h') ?? '50', 10);
 
     block.setCommentText(text);
-    block.commentModel.pinned = pinned;
+    const comment = block.getIcon(COMMENT_TYPE) as CommentIcon;
     if (!isNaN(width) && !isNaN(height)) {
-      block.commentModel.size = new Size(width, height);
+      comment.setBubbleSize(new Size(width, height));
     }
-
-    if (pinned && (block as BlockSvg).getCommentIcon && !block.isInFlyout) {
-      const blockSvg = block as BlockSvg;
-      setTimeout(function () {
-        blockSvg.getCommentIcon()!.setVisible(true);
-      }, 1);
-    }
+    // Set the pinned state of the bubble.
+    comment.setBubbleVisible(pinned);
+    // Actually show the bubble after the block has been rendered.
+    setTimeout(() => comment.setBubbleVisible(pinned), 1);
   }
 }
 

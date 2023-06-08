@@ -260,7 +260,7 @@ suite('JSO Serialization', function () {
         test('Pinned', function () {
           const block = this.workspace.newBlock('row_block');
           block.setCommentText('test');
-          block.commentModel.pinned = true;
+          block.getIcon(Blockly.icons.CommentIcon.TYPE).setBubbleVisible(true);
           const jso = Blockly.serialization.blocks.save(block);
           assertProperty(jso, 'icons', {
             'comment': {
@@ -275,8 +275,9 @@ suite('JSO Serialization', function () {
         test('Size', function () {
           const block = this.workspace.newBlock('row_block');
           block.setCommentText('test');
-          block.commentModel.size.height = 40;
-          block.commentModel.size.width = 320;
+          block
+            .getIcon(Blockly.icons.CommentIcon.TYPE)
+            .setBubbleSize(new Blockly.utils.Size(320, 40));
           const jso = Blockly.serialization.blocks.save(block);
           assertProperty(jso, 'icons', {
             'comment': {

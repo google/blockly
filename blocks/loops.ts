@@ -27,7 +27,7 @@ import '../core/field_dropdown.js';
 import '../core/field_label.js';
 import '../core/field_number.js';
 import '../core/field_variable.js';
-import '../core/warning.js';
+import '../core/icons/warning_icon.js';
 import {FieldVariable} from '../core/field_variable.js';
 import {WorkspaceSvg} from '../core/workspace_svg.js';
 

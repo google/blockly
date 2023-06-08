@@ -16,7 +16,6 @@ import {isIcon} from '../interfaces/i_icon.js';
 import {isSerializable} from '../interfaces/i_serializable.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import * as registry from '../registry.js';
-import {Size} from '../utils/size.js';
 import * as utilsXml from '../utils/xml.js';
 import type {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
@@ -219,18 +218,9 @@ function saveIcons(block: Block, state: State, doFullSerialization: boolean) {
   const icons = Object.create(null);
   for (const icon of block.getIcons()) {
     if (isSerializable(icon)) {
-      icons[icon.getType()] = icon.saveState(doFullSerialization);
+      const state = icon.saveState(doFullSerialization);
+      if (state) icons[icon.getType()] = state;
     }
-  }
-
-  // TODO(#7038): Remove this logic and put it in the comment icon.
-  if (block.getCommentText()) {
-    icons['comment'] = {
-      'text': block.getCommentText(),
-      'pinned': block.commentModel.pinned,
-      'height': Math.round(block.commentModel.size.height),
-      'width': Math.round(block.commentModel.size.width),
-    };
   }
 
   if (Object.keys(icons).length) {
@@ -594,33 +584,19 @@ function loadIcons(block: Block, state: State) {
 
   const iconTypes = Object.keys(state['icons']);
   for (const iconType of iconTypes) {
-    // TODO(#7038): Remove this special casing of comment..
-    if (iconType === 'comment') continue;
-
     const iconState = state['icons'][iconType];
-    const constructor = registry.getClass(registry.Type.ICON, iconType, false);
-    if (!constructor) throw new UnregisteredIcon(iconType, block, state);
-    const icon = new constructor();
-    block.addIcon(icon);
+    let icon = block.getIcon(iconType);
+    if (!icon) {
+      const constructor = registry.getClass(
+        registry.Type.ICON,
+        iconType,
+        false
+      );
+      if (!constructor) throw new UnregisteredIcon(iconType, block, state);
+      icon = new constructor(block);
+      block.addIcon(icon);
+    }
     if (isSerializable(icon)) icon.loadState(iconState);
-  }
-
-  // TODO(#7038): Remove this logic and put it in the icon.
-  const comment = state['icons']['comment'];
-  if (comment) {
-    block.setCommentText(comment['text']);
-    // Load if saved. (Cleaned unnecessary attributes when in the trashcan.)
-    if ('pinned' in comment) {
-      block.commentModel.pinned = comment['pinned'];
-    }
-    if ('width' in comment && 'height' in comment) {
-      block.commentModel.size = new Size(comment['width'], comment['height']);
-    }
-    if (comment['pinned'] && block.rendered && !block.isInFlyout) {
-      // Give the block a chance to be positioned and rendered before showing.
-      const blockSvg = block as BlockSvg;
-      setTimeout(() => blockSvg.getCommentIcon()!.setVisible(true), 1);
-    }
   }
 }
 

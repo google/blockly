@@ -18,7 +18,7 @@ import './events/events_selected.js';
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
 import * as browserEvents from './browser_events.js';
-import {Comment} from './comment.js';
+import {CommentIcon} from './icons/comment_icon.js';
 import * as common from './common.js';
 import {config} from './config.js';
 import type {Connection} from './connection.js';
@@ -45,7 +45,7 @@ import {ASTNode} from './keyboard_nav/ast_node.js';
 import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
 import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
-import type {Mutator} from './mutator.js';
+import {MutatorIcon} from './icons/mutator_icon.js';
 import {RenderedConnection} from './rendered_connection.js';
 import type {IPathObject} from './renderers/common/i_path_object.js';
 import * as blocks from './serialization/blocks.js';
@@ -56,10 +56,11 @@ import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
-import {Warning} from './warning.js';
+import {WarningIcon} from './icons/warning_icon.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {queueRender} from './render_management.js';
+import * as deprecation from './utils/deprecation.js';
 
 /**
  * Class for a block's SVG representation.
@@ -107,13 +108,14 @@ export class BlockSvg
   private warningTextDb = new Map<string, ReturnType<typeof setTimeout>>();
 
   /** Block's mutator icon (if any). */
-  mutator: Mutator | null = null;
+  mutator: MutatorIcon | null = null;
 
-  /** Block's comment icon (if any). */
-  private commentIcon_: Comment | null = null;
-
-  /** Block's warning icon (if any). */
-  warning: Warning | null = null;
+  /**
+   * Block's warning icon (if any).
+   *
+   * @deprecated Use `setWarningText` to modify warnings on this block.
+   */
+  warning: WarningIcon | null = null;
 
   private svgGroup_: SVGGElement;
   style: BlockStyle;
@@ -905,44 +907,11 @@ export class BlockSvg
    * comment.
    *
    * @returns The comment icon attached to this block, or null.
+   * @deprecated Use getIcon. To be remove in v11.
    */
-  getCommentIcon(): Comment | null {
-    return this.commentIcon_;
-  }
-
-  /**
-   * Set this block's comment text.
-   *
-   * @param text The text, or null to delete.
-   */
-  override setCommentText(text: string | null) {
-    if (this.commentModel.text === text) {
-      return;
-    }
-    super.setCommentText(text);
-
-    const shouldHaveComment = text !== null;
-    if (!!this.commentIcon_ === shouldHaveComment) {
-      // If the comment's state of existence is correct, but the text is new
-      // that means we're just updating a comment.
-      this.commentIcon_!.updateText();
-      return;
-    }
-    if (shouldHaveComment) {
-      this.commentIcon_ = new Comment(this);
-      this.comment = this.commentIcon_; // For backwards compatibility.
-    } else {
-      this.commentIcon_!.dispose();
-      this.commentIcon_ = null;
-      this.comment = null; // For backwards compatibility.
-    }
-    if (this.rendered) {
-      // Icons must force an immediate render so that bubbles can be opened
-      // immedately at the correct position.
-      this.render();
-      // Adding or removing a comment icon will cause the block to change shape.
-      this.bumpNeighbours();
-    }
+  getCommentIcon(): CommentIcon | null {
+    deprecation.warn('getCommentIcon', 'v10', 'v11', 'getIcon');
+    return (this.getIcon(CommentIcon.TYPE) ?? null) as CommentIcon | null;
   }
 
   /**
@@ -983,7 +952,8 @@ export class BlockSvg
       text = null;
     }
 
-    let changedState = false;
+    // TODO: Make getIcon take in a type parameter?
+    const icon = this.getIcon(WarningIcon.TYPE) as WarningIcon | undefined;
     if (typeof text === 'string') {
       // Bubble up to add a warning on top-most collapsed block.
       let parent = this.getSurroundParent();
@@ -1001,32 +971,18 @@ export class BlockSvg
         );
       }
 
-      if (!this.warning) {
-        this.warning = new Warning(this);
-        changedState = true;
+      if (icon) {
+        (icon as WarningIcon).addMessage(text, id);
+      } else {
+        this.addIcon(new WarningIcon(this).addMessage(text, id));
       }
-      this.warning!.setText(text, id);
-    } else {
+    } else if (icon) {
       // Dispose all warnings if no ID is given.
-      if (this.warning && !id) {
-        this.warning.dispose();
-        changedState = true;
-      } else if (this.warning) {
-        const oldText = this.warning.getText();
-        this.warning.setText('', id);
-        const newText = this.warning.getText();
-        if (!newText) {
-          this.warning.dispose();
-        }
-        changedState = oldText !== newText;
+      if (!id) {
+        this.removeIcon(WarningIcon.TYPE);
+      } else {
+        if (!icon.getText()) this.removeIcon(WarningIcon.TYPE);
       }
-    }
-    if (changedState && this.rendered) {
-      // Icons must force an immediate render so that bubbles can be opened
-      // immedately at the correct position.
-      this.render();
-      // Adding or removing a warning icon will cause the block to change shape.
-      this.bumpNeighbours();
     }
   }
 
@@ -1035,34 +991,26 @@ export class BlockSvg
    *
    * @param mutator A mutator dialog instance or null to remove.
    */
-  override setMutator(mutator: Mutator | null) {
-    if (this.mutator && this.mutator !== mutator) {
-      this.mutator.dispose();
-    }
-    if (mutator) {
-      mutator.setBlock(this);
-      this.mutator = mutator;
-      mutator.createIcon();
-    }
-    if (this.rendered) {
-      // Icons must force an immediate render so that bubbles can be opened
-      // immedately at the correct position.
-      this.render();
-      // Adding or removing a mutator icon will cause the block to change shape.
-      this.bumpNeighbours();
-    }
+  override setMutator(mutator: MutatorIcon | null) {
+    this.removeIcon(MutatorIcon.TYPE);
+    if (mutator) this.addIcon(mutator);
   }
 
   override addIcon<T extends IIcon>(icon: T): T {
     super.addIcon(icon);
+
+    if (icon instanceof WarningIcon) this.warning = icon;
+    if (icon instanceof MutatorIcon) this.mutator = icon;
+
     if (this.rendered) {
       icon.initView(this.createIconPointerDownListener(icon));
       icon.applyColour();
       icon.updateEditable();
-      // TODO: Change this based on #7024.
+      // TODO: Change this based on #7068.
       this.render();
       this.bumpNeighbours();
     }
+
     return icon;
   }
 
@@ -1082,8 +1030,12 @@ export class BlockSvg
 
   override removeIcon(type: string): boolean {
     const removed = super.removeIcon(type);
+
+    if (type === WarningIcon.TYPE) this.warning = null;
+    if (type === MutatorIcon.TYPE) this.mutator = null;
+
     if (this.rendered) {
-      // TODO: Change this based on #7024.
+      // TODO: Change this based on #7068.
       this.render();
       this.bumpNeighbours();
     }
@@ -1093,11 +1045,7 @@ export class BlockSvg
   // TODO: remove this implementation after #7038, #7039, and #7040 are
   //   resolved.
   override getIcons(): AnyDuringMigration[] {
-    const icons: AnyDuringMigration = [...this.icons];
-    if (this.commentIcon_) icons.push(this.commentIcon_);
-    if (this.warning) icons.push(this.warning);
-    if (this.mutator) icons.push(this.mutator);
-    return icons;
+    return [...this.icons];
   }
 
   /**

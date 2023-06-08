@@ -441,7 +441,9 @@ suite('XML', function () {
         });
         test('Size', function () {
           this.block.setCommentText('test text');
-          this.block.getCommentIcon().setBubbleSize(100, 200);
+          this.block
+            .getCommentIcon()
+            .setBubbleSize(new Blockly.utils.Size(100, 200));
           const xml = Blockly.Xml.blockToDom(this.block);
           const commentXml = xml.firstChild;
           chai.assert.equal(commentXml.tagName, 'comment');
@@ -450,7 +452,7 @@ suite('XML', function () {
         });
         test('Pinned True', function () {
           this.block.setCommentText('test text');
-          this.block.getCommentIcon().setVisible(true);
+          this.block.getCommentIcon().setBubbleVisible(true);
           const xml = Blockly.Xml.blockToDom(this.block);
           const commentXml = xml.firstChild;
           chai.assert.equal(commentXml.tagName, 'comment');
@@ -629,10 +631,13 @@ suite('XML', function () {
             ),
             this.workspace
           );
-          chai.assert.deepEqual(block.commentModel.size, {
-            width: 100,
-            height: 200,
-          });
+          chai.assert.deepEqual(
+            block.getIcon(Blockly.icons.CommentIcon.TYPE).getBubbleSize(),
+            {
+              width: 100,
+              height: 200,
+            }
+          );
         });
         test('Pinned True', function () {
           const block = Blockly.Xml.domToBlock(
@@ -643,7 +648,9 @@ suite('XML', function () {
             ),
             this.workspace
           );
-          chai.assert.isTrue(block.commentModel.pinned);
+          chai.assert.isTrue(
+            block.getIcon(Blockly.icons.CommentIcon.TYPE).bubbleIsVisible()
+          );
         });
         test('Pinned False', function () {
           const block = Blockly.Xml.domToBlock(
@@ -654,7 +661,9 @@ suite('XML', function () {
             ),
             this.workspace
           );
-          chai.assert.isFalse(block.commentModel.pinned);
+          chai.assert.isFalse(
+            block.getIcon(Blockly.icons.CommentIcon.TYPE).bubbleIsVisible()
+          );
         });
         test('Pinned Undefined', function () {
           const block = Blockly.Xml.domToBlock(
@@ -665,7 +674,9 @@ suite('XML', function () {
             ),
             this.workspace
           );
-          chai.assert.isFalse(block.commentModel.pinned);
+          chai.assert.isFalse(
+            block.getIcon(Blockly.icons.CommentIcon.TYPE).bubbleIsVisible()
+          );
         });
       });
       suite('Rendered', function () {
@@ -686,7 +697,7 @@ suite('XML', function () {
             this.workspace
           );
           chai.assert.equal(block.getCommentText(), 'test text');
-          chai.assert.isNotNull(block.getCommentIcon());
+          chai.assert.isOk(block.getCommentIcon());
         });
         test('No Text', function () {
           const block = Blockly.Xml.domToBlock(
@@ -698,7 +709,7 @@ suite('XML', function () {
             this.workspace
           );
           chai.assert.equal(block.getCommentText(), '');
-          chai.assert.isNotNull(block.getCommentIcon());
+          chai.assert.isOk(block.getIcon(Blockly.icons.CommentIcon.TYPE));
         });
         test('Size', function () {
           const block = Blockly.Xml.domToBlock(
@@ -709,11 +720,7 @@ suite('XML', function () {
             ),
             this.workspace
           );
-          chai.assert.deepEqual(block.commentModel.size, {
-            width: 100,
-            height: 200,
-          });
-          chai.assert.isNotNull(block.getCommentIcon());
+          chai.assert.isOk(block.getIcon(Blockly.icons.CommentIcon.TYPE));
           chai.assert.deepEqual(block.getCommentIcon().getBubbleSize(), {
             width: 100,
             height: 200,
@@ -730,9 +737,9 @@ suite('XML', function () {
               this.workspace
             );
             this.clock.runAll();
-            chai.assert.isTrue(block.commentModel.pinned);
-            chai.assert.isNotNull(block.getCommentIcon());
-            chai.assert.isTrue(block.getCommentIcon().isVisible());
+            const icon = block.getIcon(Blockly.icons.CommentIcon.TYPE);
+            chai.assert.isOk(icon);
+            chai.assert.isTrue(icon.bubbleIsVisible());
           });
           test('Pinned False', function () {
             const block = Blockly.Xml.domToBlock(
@@ -744,9 +751,9 @@ suite('XML', function () {
               this.workspace
             );
             this.clock.runAll();
-            chai.assert.isFalse(block.commentModel.pinned);
-            chai.assert.isNotNull(block.getCommentIcon());
-            chai.assert.isFalse(block.getCommentIcon().isVisible());
+            const icon = block.getIcon(Blockly.icons.CommentIcon.TYPE);
+            chai.assert.isOk(icon);
+            chai.assert.isFalse(icon.bubbleIsVisible());
           });
           test('Pinned Undefined', function () {
             const block = Blockly.Xml.domToBlock(
@@ -758,9 +765,9 @@ suite('XML', function () {
               this.workspace
             );
             this.clock.runAll();
-            chai.assert.isFalse(block.commentModel.pinned);
-            chai.assert.isNotNull(block.getCommentIcon());
-            chai.assert.isFalse(block.getCommentIcon().isVisible());
+            const icon = block.getIcon(Blockly.icons.CommentIcon.TYPE);
+            chai.assert.isOk(icon);
+            chai.assert.isFalse(icon.bubbleIsVisible());
           });
         });
       });
@@ -938,8 +945,9 @@ suite('XML', function () {
           this.renderedWorkspace
         );
         block.setCommentText('test text');
-        block.getCommentIcon().setBubbleSize(100, 100);
-        block.getCommentIcon().setVisible(true);
+        const icon = block.getIcon(Blockly.icons.CommentIcon.TYPE);
+        icon.setBubbleSize(new Blockly.utils.Size(100, 100));
+        icon.setBubbleVisible(true);
         assertRoundTrip(this.renderedWorkspace, this.headlessWorkspace);
       });
     });
@@ -950,8 +958,9 @@ suite('XML', function () {
           this.headlessWorkspace
         );
         block.setCommentText('test text');
-        block.commentModel.size = new Blockly.utils.Size(100, 100);
-        block.commentModel.pinned = true;
+        const icon = block.getIcon(Blockly.icons.CommentIcon.TYPE);
+        icon.setBubbleSize(new Blockly.utils.Size(100, 100));
+        icon.setBubbleVisible(true);
 
         this.clock.runAll();
 

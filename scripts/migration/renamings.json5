@@ -1447,5 +1447,36 @@
 
   'develop': [
     // New renamings go here!
+    {
+      oldName: 'Blockly.Warning',
+      exports: {
+        Warning: {
+          newExport: 'WarningIcon',
+          oldPath: 'Blockly.Warning',
+          newPath: 'Blocky.icons.WarningIcon',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Comment',
+      exports: {
+        Comment: {
+          newExport: 'CommentIcon',
+          oldPath: 'Blockly.Comment',
+          newPath: 'Blocky.icons.CommentIcon',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Mutator',
+      newName: 'Blockly.icons.MutatorIcon',
+      exports: {
+        Mutator: {
+          newExport: 'MutatorIcon',
+          oldPath: 'Blockly.Mutator',
+          newPath: 'Blocky.icons.MutatorIcon',
+        },
+      },
+    },
   ],
 }

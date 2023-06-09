@@ -75,8 +75,6 @@ export class RenderInfo {
   /** An array of input rows on the block. */
   inputRows: InputRow[] = [];
 
-  /** An array of measurable objects containing hidden icons. */
-  hiddenIcons: Icon[] = [];
   topRow: TopRow;
   bottomRow: BottomRow;
 
@@ -174,9 +172,7 @@ export class RenderInfo {
     const icons = this.block_.getIcons();
     for (let i = 0, icon; (icon = icons[i]); i++) {
       const iconInfo = new Icon(this.constants_, icon);
-      if (this.isCollapsed && icon.collapseHidden) {
-        this.hiddenIcons.push(iconInfo);
-      } else {
+      if (!this.isCollapsed || icon.isShownWhenCollapsed()) {
         activeRow.elements.push(iconInfo);
       }
     }

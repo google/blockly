@@ -12,7 +12,6 @@ import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../inputs/input_types.js';
-import {isIcon} from '../interfaces/i_icon.js';
 import {isSerializable} from '../interfaces/i_serializable.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import * as registry from '../registry.js';
@@ -706,11 +705,7 @@ function initBlock(block: Block, rendered: boolean) {
     // fixes #6076 JSO deserialization doesn't
     // set .iconXY_ property so here it will be set
     for (const icon of blockSvg.getIcons()) {
-      if (isIcon(icon)) {
-        icon.onLocationChange(blockSvg.getRelativeToSurfaceXY());
-      } else {
-        icon.computeIconLocation();
-      }
+      icon.onLocationChange(blockSvg.getRelativeToSurfaceXY());
     }
   } else {
     block.initModel();

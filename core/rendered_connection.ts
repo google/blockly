@@ -430,12 +430,7 @@ export class RenderedConnection extends Connection {
         }
         // Close all bubbles of all children.
         for (const icon of block.getIcons()) {
-          if (hasBubble(icon)) {
-            icon.setBubbleVisible(false);
-          } else if (icon.setVisible) {
-            // TODO (#7042): Remove old icon handling code.
-            icon.setVisible(false);
-          }
+          if (hasBubble(icon)) icon.setBubbleVisible(false);
         }
       }
     }

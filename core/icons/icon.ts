@@ -66,12 +66,7 @@ export abstract class Icon implements IIcon {
   updateEditable(): void {}
 
   updateCollapsed(): void {
-    if (!this.svgRoot) {
-      throw new Error(
-        'Attempt to update the collapsed-ness of an icon before its ' +
-          'view has been initialized.'
-      );
-    }
+    if (!this.svgRoot) return;
     if (this.sourceBlock.isCollapsed()) {
       this.svgRoot.style.display = 'none';
     } else {

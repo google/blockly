@@ -40,7 +40,6 @@ export class Drawer extends BaseDrawer {
   override draw() {
     const pathObject = this.block_.pathObject as PathObject;
     pathObject.beginDrawing();
-    this.hideHiddenIcons_();
     this.drawOutline_();
     this.drawInternals_();
 

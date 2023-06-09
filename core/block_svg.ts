@@ -39,7 +39,7 @@ import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js'
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
-import {IIcon, isIcon} from './interfaces/i_icon.js';
+import {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
 import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
@@ -201,13 +201,8 @@ export class BlockSvg
       input.init();
     }
     for (const icon of this.getIcons()) {
-      if (isIcon(icon)) {
-        icon.initView(this.createIconPointerDownListener(icon));
-        icon.updateEditable();
-      } else {
-        // TODO (#7042): Remove old icon handling.
-        icon.createIcon();
-      }
+      icon.initView(this.createIconPointerDownListener(icon));
+      icon.updateEditable();
     }
     this.applyColour();
     this.pathObject.updateMovable(this.isMovable());
@@ -536,12 +531,7 @@ export class BlockSvg
     }
 
     for (const icon of this.getIcons()) {
-      if (isIcon(icon)) {
-        icon.updateCollapsed();
-      } else if (collapsed) {
-        // TODO(#7042): Remove old icon handling code.
-        icon.setVisible(false);
-      }
+      icon.updateCollapsed();
     }
 
     if (!collapsed) {
@@ -676,12 +666,7 @@ export class BlockSvg
     const icons = this.getIcons();
     const pos = this.getRelativeToSurfaceXY();
     for (const icon of icons) {
-      if (isIcon(icon)) {
-        icon.onLocationChange(pos);
-      } else {
-        // TODO (#7042): Remove old icon handling code.
-        icon.computeIconLocation();
-      }
+      icon.onLocationChange(pos);
     }
 
     // Recurse through all blocks attached under this one.
@@ -1040,12 +1025,6 @@ export class BlockSvg
       this.bumpNeighbours();
     }
     return removed;
-  }
-
-  // TODO: remove this implementation after #7038, #7039, and #7040 are
-  //   resolved.
-  override getIcons(): AnyDuringMigration[] {
-    return [...this.icons];
   }
 
   /**
@@ -1711,12 +1690,7 @@ export class BlockSvg
     }
 
     for (const icon of this.getIcons()) {
-      if (isIcon(icon)) {
-        icon.onLocationChange(blockTL);
-      }
-      // TODO (#7042): Remove the below comment.
-      // Updating the positions of old style icons is handled directly in the
-      // drawer.
+      icon.onLocationChange(blockTL);
     }
   }
 

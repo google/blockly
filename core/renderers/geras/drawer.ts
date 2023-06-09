@@ -39,7 +39,6 @@ export class Drawer extends BaseDrawer {
   }
 
   override draw() {
-    this.hideHiddenIcons_();
     this.drawOutline_();
     this.drawInternals_();
 

@@ -5,7 +5,6 @@
  */
 
 import {BlockSvg} from './block_svg.js';
-import {isIcon} from './interfaces/i_icon.js';
 import {Coordinate} from './utils/coordinate.js';
 
 /** The set of all blocks in need of rendering which don't have parents. */
@@ -143,12 +142,7 @@ function updateConnectionLocations(block: BlockSvg, blockOrigin: Coordinate) {
 function updateIconLocations(block: BlockSvg, blockOrigin: Coordinate) {
   if (!block.getIcons) return;
   for (const icon of block.getIcons()) {
-    if (isIcon(icon)) {
-      icon.onLocationChange(blockOrigin);
-    } else {
-      // TODO (#7042): Remove old icon handling code.
-      icon.computeIconLocation();
-    }
+    icon.onLocationChange(blockOrigin);
   }
   for (const child of block.getChildren(false)) {
     updateIconLocations(

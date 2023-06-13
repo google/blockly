@@ -16,13 +16,13 @@ import {dartGenerator as Dart} from '../dart.js';
 
 Dart.addReservedWords('Math');
 
-Dart['colour_picker'] = function(block) {
+Dart.forBlock['colour_picker'] = function(block) {
   // Colour picker.
   const code = Dart.quote_(block.getFieldValue('COLOUR'));
   return [code, Dart.ORDER_ATOMIC];
 };
 
-Dart['colour_random'] = function(block) {
+Dart.forBlock['colour_random'] = function(block) {
   // Generate a random colour.
   Dart.definitions_['import_dart_math'] = "import 'dart:math' as Math;";
   const functionName = Dart.provideFunction_('colour_random', `
@@ -38,7 +38,7 @@ String ${Dart.FUNCTION_NAME_PLACEHOLDER_}() {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['colour_rgb'] = function(block) {
+Dart.forBlock['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
   const red = Dart.valueToCode(block, 'RED',
       Dart.ORDER_NONE) || 0;
@@ -69,7 +69,7 @@ String ${Dart.FUNCTION_NAME_PLACEHOLDER_}(num r, num g, num b) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['colour_blend'] = function(block) {
+Dart.forBlock['colour_blend'] = function(block) {
   // Blend two colours together.
   const c1 = Dart.valueToCode(block, 'COLOUR1', Dart.ORDER_NONE) || "'#000000'";
   const c2 = Dart.valueToCode(block, 'COLOUR2', Dart.ORDER_NONE) || "'#000000'";

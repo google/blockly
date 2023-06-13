@@ -16,7 +16,7 @@ import {NameType} from '../../core/names.js';
 import {Order, javascriptGenerator} from '../javascript.js';
 
 
-javascriptGenerator['controls_repeat_ext'] = function(block) {
+javascriptGenerator.forBlock['controls_repeat_ext'] = function(block) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -45,10 +45,10 @@ javascriptGenerator['controls_repeat_ext'] = function(block) {
   return code;
 };
 
-javascriptGenerator['controls_repeat'] =
-    javascriptGenerator['controls_repeat_ext'];
+javascriptGenerator.forBlock['controls_repeat'] =
+    javascriptGenerator.forBlock['controls_repeat_ext'];
 
-javascriptGenerator['controls_whileUntil'] = function(block) {
+javascriptGenerator.forBlock['controls_whileUntil'] = function(block) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
@@ -64,7 +64,7 @@ javascriptGenerator['controls_whileUntil'] = function(block) {
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
 };
 
-javascriptGenerator['controls_for'] = function(block) {
+javascriptGenerator.forBlock['controls_for'] = function(block) {
   // For loop.
   const variable0 =
       javascriptGenerator.nameDB_.getName(
@@ -127,7 +127,7 @@ javascriptGenerator['controls_for'] = function(block) {
   return code;
 };
 
-javascriptGenerator['controls_forEach'] = function(block) {
+javascriptGenerator.forBlock['controls_forEach'] = function(block) {
   // For each loop.
   const variable0 =
       javascriptGenerator.nameDB_.getName(
@@ -153,7 +153,7 @@ javascriptGenerator['controls_forEach'] = function(block) {
   return code;
 };
 
-javascriptGenerator['controls_flow_statements'] = function(block) {
+javascriptGenerator.forBlock['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
   let xfix = '';
   if (javascriptGenerator.STATEMENT_PREFIX) {

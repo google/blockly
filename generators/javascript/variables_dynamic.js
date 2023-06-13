@@ -15,7 +15,7 @@ import {javascriptGenerator} from '../javascript.js';
 import './variables.js';
 
 // JavaScript is dynamically typed.
-javascriptGenerator['variables_get_dynamic'] =
-    javascriptGenerator['variables_get'];
-javascriptGenerator['variables_set_dynamic'] =
-    javascriptGenerator['variables_set'];
+javascriptGenerator.forBlock['variables_get_dynamic'] =
+    javascriptGenerator.forBlock['variables_get'];
+javascriptGenerator.forBlock['variables_set_dynamic'] =
+    javascriptGenerator.forBlock['variables_set'];

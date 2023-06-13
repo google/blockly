@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.PHP.logic');
 import {phpGenerator as PHP} from '../php.js';
 
 
-PHP['controls_if'] = function(block) {
+PHP.forBlock['controls_if'] = function(block) {
   // If/elseif/else condition.
   let n = 0;
   let code = '', branchCode, conditionCode;
@@ -47,9 +47,9 @@ PHP['controls_if'] = function(block) {
   return code + '\n';
 };
 
-PHP['controls_ifelse'] = PHP['controls_if'];
+PHP.forBlock['controls_ifelse'] = PHP.forBlock['controls_if'];
 
-PHP['logic_compare'] = function(block) {
+PHP.forBlock['logic_compare'] = function(block) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
@@ -62,7 +62,7 @@ PHP['logic_compare'] = function(block) {
   return [code, order];
 };
 
-PHP['logic_operation'] = function(block) {
+PHP.forBlock['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
   const order =
@@ -87,7 +87,7 @@ PHP['logic_operation'] = function(block) {
   return [code, order];
 };
 
-PHP['logic_negate'] = function(block) {
+PHP.forBlock['logic_negate'] = function(block) {
   // Negation.
   const order = PHP.ORDER_LOGICAL_NOT;
   const argument0 = PHP.valueToCode(block, 'BOOL', order) || 'true';
@@ -95,18 +95,18 @@ PHP['logic_negate'] = function(block) {
   return [code, order];
 };
 
-PHP['logic_boolean'] = function(block) {
+PHP.forBlock['logic_boolean'] = function(block) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
   return [code, PHP.ORDER_ATOMIC];
 };
 
-PHP['logic_null'] = function(block) {
+PHP.forBlock['logic_null'] = function(block) {
   // Null data type.
   return ['null', PHP.ORDER_ATOMIC];
 };
 
-PHP['logic_ternary'] = function(block) {
+PHP.forBlock['logic_ternary'] = function(block) {
   // Ternary operator.
   const value_if =
       PHP.valueToCode(block, 'IF', PHP.ORDER_CONDITIONAL) || 'false';

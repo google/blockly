@@ -14,13 +14,13 @@ goog.declareModuleId('Blockly.JavaScript.colour');
 import {Order, javascriptGenerator} from '../javascript.js';
 
 
-javascriptGenerator['colour_picker'] = function(block) {
+javascriptGenerator.forBlock['colour_picker'] = function(block) {
   // Colour picker.
   const code = javascriptGenerator.quote_(block.getFieldValue('COLOUR'));
   return [code, Order.ATOMIC];
 };
 
-javascriptGenerator['colour_random'] = function(block) {
+javascriptGenerator.forBlock['colour_random'] = function(block) {
   // Generate a random colour.
   const functionName = javascriptGenerator.provideFunction_('colourRandom', `
 function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}() {
@@ -32,7 +32,7 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}() {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator['colour_rgb'] = function(block) {
+javascriptGenerator.forBlock['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
   const red = javascriptGenerator.valueToCode(block, 'RED', Order.NONE) || 0;
   const green =
@@ -54,7 +54,7 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(r, g, b) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator['colour_blend'] = function(block) {
+javascriptGenerator.forBlock['colour_blend'] = function(block) {
   // Blend two colours together.
   const c1 = javascriptGenerator.valueToCode(block, 'COLOUR1', Order.NONE) ||
       "'#000000'";

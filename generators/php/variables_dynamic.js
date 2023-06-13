@@ -16,5 +16,5 @@ import './variables.js';
 
 
 // PHP is dynamically typed.
-PHP['variables_get_dynamic'] = PHP['variables_get'];
-PHP['variables_set_dynamic'] = PHP['variables_set'];
+PHP.forBlock['variables_get_dynamic'] = PHP.forBlock['variables_get'];
+PHP.forBlock['variables_set_dynamic'] = PHP.forBlock['variables_set'];

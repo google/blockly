@@ -53,13 +53,13 @@ const getSubstringIndex = function(stringName, where, opt_at) {
   }
 };
 
-javascriptGenerator['text'] = function(block) {
+javascriptGenerator.forBlock['text'] = function(block) {
   // Text value.
   const code = javascriptGenerator.quote_(block.getFieldValue('TEXT'));
   return [code, Order.ATOMIC];
 };
 
-javascriptGenerator['text_multiline'] = function(block) {
+javascriptGenerator.forBlock['text_multiline'] = function(block) {
   // Text value.
   const code =
       javascriptGenerator.multiline_quote_(block.getFieldValue('TEXT'));
@@ -68,7 +68,7 @@ javascriptGenerator['text_multiline'] = function(block) {
   return [code, order];
 };
 
-javascriptGenerator['text_join'] = function(block) {
+javascriptGenerator.forBlock['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   switch (block.itemCount_) {
     case 0:
@@ -100,7 +100,7 @@ javascriptGenerator['text_join'] = function(block) {
   }
 };
 
-javascriptGenerator['text_append'] = function(block) {
+javascriptGenerator.forBlock['text_append'] = function(block) {
   // Append to a variable in place.
   const varName = javascriptGenerator.nameDB_.getName(
       block.getFieldValue('VAR'), NameType.VARIABLE);
@@ -111,21 +111,21 @@ javascriptGenerator['text_append'] = function(block) {
   return code;
 };
 
-javascriptGenerator['text_length'] = function(block) {
+javascriptGenerator.forBlock['text_length'] = function(block) {
   // String or array length.
   const text = javascriptGenerator.valueToCode(block, 'VALUE',
       Order.MEMBER) || "''";
   return [text + '.length', Order.MEMBER];
 };
 
-javascriptGenerator['text_isEmpty'] = function(block) {
+javascriptGenerator.forBlock['text_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const text = javascriptGenerator.valueToCode(block, 'VALUE',
       Order.MEMBER) || "''";
   return ['!' + text + '.length', Order.LOGICAL_NOT];
 };
 
-javascriptGenerator['text_indexOf'] = function(block) {
+javascriptGenerator.forBlock['text_indexOf'] = function(block) {
   // Search the text for a substring.
   const operator = block.getFieldValue('END') === 'FIRST' ?
       'indexOf' : 'lastIndexOf';
@@ -141,7 +141,7 @@ javascriptGenerator['text_indexOf'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator['text_charAt'] = function(block) {
+javascriptGenerator.forBlock['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
@@ -184,7 +184,7 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(text) {
   throw Error('Unhandled option (text_charAt).');
 };
 
-javascriptGenerator['text_getSubstring'] = function(block) {
+javascriptGenerator.forBlock['text_getSubstring'] = function(block) {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
@@ -263,7 +263,7 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator['text_changeCase'] = function(block) {
+javascriptGenerator.forBlock['text_changeCase'] = function(block) {
   // Change capitalization.
   const OPERATORS = {
     'UPPERCASE': '.toUpperCase()',
@@ -292,7 +292,7 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(str) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator['text_trim'] = function(block) {
+javascriptGenerator.forBlock['text_trim'] = function(block) {
   // Trim spaces.
   const OPERATORS = {
     'LEFT': ".replace(/^[\\s\\xa0]+/, '')",
@@ -305,14 +305,14 @@ javascriptGenerator['text_trim'] = function(block) {
   return [text + operator, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator['text_print'] = function(block) {
+javascriptGenerator.forBlock['text_print'] = function(block) {
   // Print statement.
   const msg = javascriptGenerator.valueToCode(block, 'TEXT',
       Order.NONE) || "''";
   return 'window.alert(' + msg + ');\n';
 };
 
-javascriptGenerator['text_prompt_ext'] = function(block) {
+javascriptGenerator.forBlock['text_prompt_ext'] = function(block) {
   // Prompt function.
   let msg;
   if (block.getField('TEXT')) {
@@ -330,9 +330,10 @@ javascriptGenerator['text_prompt_ext'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator['text_prompt'] = javascriptGenerator['text_prompt_ext'];
+javascriptGenerator.forBlock['text_prompt'] =
+    javascriptGenerator.forBlock['text_prompt_ext'];
 
-javascriptGenerator['text_count'] = function(block) {
+javascriptGenerator.forBlock['text_count'] = function(block) {
   const text = javascriptGenerator.valueToCode(block, 'TEXT',
       Order.NONE) || "''";
   const sub = javascriptGenerator.valueToCode(block, 'SUB',
@@ -350,7 +351,7 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator['text_replace'] = function(block) {
+javascriptGenerator.forBlock['text_replace'] = function(block) {
   const text = javascriptGenerator.valueToCode(block, 'TEXT',
       Order.NONE) || "''";
   const from = javascriptGenerator.valueToCode(block, 'FROM',
@@ -369,7 +370,7 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle, rep
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator['text_reverse'] = function(block) {
+javascriptGenerator.forBlock['text_reverse'] = function(block) {
   const text = javascriptGenerator.valueToCode(block, 'TEXT',
       Order.MEMBER) || "''";
   const code = text + ".split('').reverse().join('')";

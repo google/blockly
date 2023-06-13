@@ -16,5 +16,5 @@ import './variables.js';
 
 
 // Lua is dynamically typed.
-Lua['variables_get_dynamic'] = Lua['variables_get'];
-Lua['variables_set_dynamic'] = Lua['variables_set'];
+Lua.forBlock['variables_get_dynamic'] = Lua.forBlock['variables_get'];
+Lua.forBlock['variables_set_dynamic'] = Lua.forBlock['variables_set'];

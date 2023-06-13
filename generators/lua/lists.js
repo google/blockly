@@ -15,12 +15,12 @@ import {NameType} from '../../core/names.js';
 import {luaGenerator as Lua} from '../lua.js';
 
 
-Lua['lists_create_empty'] = function(block) {
+Lua.forBlock['lists_create_empty'] = function(block) {
   // Create an empty list.
   return ['{}', Lua.ORDER_HIGH];
 };
 
-Lua['lists_create_with'] = function(block) {
+Lua.forBlock['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
@@ -30,7 +30,7 @@ Lua['lists_create_with'] = function(block) {
   return [code, Lua.ORDER_HIGH];
 };
 
-Lua['lists_repeat'] = function(block) {
+Lua.forBlock['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
   const functionName = Lua.provideFunction_('create_list_repeated', `
 function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(item, count)
@@ -47,20 +47,20 @@ end
   return [code, Lua.ORDER_HIGH];
 };
 
-Lua['lists_length'] = function(block) {
+Lua.forBlock['lists_length'] = function(block) {
   // String or array length.
   const list = Lua.valueToCode(block, 'VALUE', Lua.ORDER_UNARY) || '{}';
   return ['#' + list, Lua.ORDER_UNARY];
 };
 
-Lua['lists_isEmpty'] = function(block) {
+Lua.forBlock['lists_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const list = Lua.valueToCode(block, 'VALUE', Lua.ORDER_UNARY) || '{}';
   const code = '#' + list + ' == 0';
   return [code, Lua.ORDER_RELATIONAL];
 };
 
-Lua['lists_indexOf'] = function(block) {
+Lua.forBlock['lists_indexOf'] = function(block) {
   // Find an item in the list.
   const item = Lua.valueToCode(block, 'FIND', Lua.ORDER_NONE) || "''";
   const list = Lua.valueToCode(block, 'VALUE', Lua.ORDER_NONE) || '{}';
@@ -113,7 +113,7 @@ const getListIndex = function(listName, where, opt_at) {
   }
 };
 
-Lua['lists_getIndex'] = function(block) {
+Lua.forBlock['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -191,7 +191,7 @@ Lua['lists_getIndex'] = function(block) {
   }
 };
 
-Lua['lists_setIndex'] = function(block) {
+Lua.forBlock['lists_setIndex'] = function(block) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   let list = Lua.valueToCode(block, 'LIST', Lua.ORDER_HIGH) || '{}';
@@ -223,7 +223,7 @@ Lua['lists_setIndex'] = function(block) {
   return code + '\n';
 };
 
-Lua['lists_getSublist'] = function(block) {
+Lua.forBlock['lists_getSublist'] = function(block) {
   // Get sublist.
   const list = Lua.valueToCode(block, 'LIST', Lua.ORDER_NONE) || '{}';
   const where1 = block.getFieldValue('WHERE1');
@@ -258,7 +258,7 @@ end
   return [code, Lua.ORDER_HIGH];
 };
 
-Lua['lists_sort'] = function(block) {
+Lua.forBlock['lists_sort'] = function(block) {
   // Block for sorting a list.
   const list = Lua.valueToCode(block, 'LIST', Lua.ORDER_NONE) || '{}';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
@@ -292,7 +292,7 @@ end
   return [code, Lua.ORDER_HIGH];
 };
 
-Lua['lists_split'] = function(block) {
+Lua.forBlock['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   let input = Lua.valueToCode(block, 'INPUT', Lua.ORDER_NONE);
   const delimiter = Lua.valueToCode(block, 'DELIM', Lua.ORDER_NONE) || "''";
@@ -331,7 +331,7 @@ end
   return [code, Lua.ORDER_HIGH];
 };
 
-Lua['lists_reverse'] = function(block) {
+Lua.forBlock['lists_reverse'] = function(block) {
   // Block for reversing a list.
   const list = Lua.valueToCode(block, 'LIST', Lua.ORDER_NONE) || '{}';
   const functionName = Lua.provideFunction_('list_reverse', `

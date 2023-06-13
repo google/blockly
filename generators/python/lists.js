@@ -16,12 +16,12 @@ import {NameType} from '../../core/names.js';
 import {pythonGenerator as Python} from '../python.js';
 
 
-Python['lists_create_empty'] = function(block) {
+Python.forBlock['lists_create_empty'] = function(block) {
   // Create an empty list.
   return ['[]', Python.ORDER_ATOMIC];
 };
 
-Python['lists_create_with'] = function(block) {
+Python.forBlock['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
@@ -32,7 +32,7 @@ Python['lists_create_with'] = function(block) {
   return [code, Python.ORDER_ATOMIC];
 };
 
-Python['lists_repeat'] = function(block) {
+Python.forBlock['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
   const item = Python.valueToCode(block, 'ITEM', Python.ORDER_NONE) || 'None';
   const times =
@@ -41,20 +41,20 @@ Python['lists_repeat'] = function(block) {
   return [code, Python.ORDER_MULTIPLICATIVE];
 };
 
-Python['lists_length'] = function(block) {
+Python.forBlock['lists_length'] = function(block) {
   // String or array length.
   const list = Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || '[]';
   return ['len(' + list + ')', Python.ORDER_FUNCTION_CALL];
 };
 
-Python['lists_isEmpty'] = function(block) {
+Python.forBlock['lists_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const list = Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || '[]';
   const code = 'not len(' + list + ')';
   return [code, Python.ORDER_LOGICAL_NOT];
 };
 
-Python['lists_indexOf'] = function(block) {
+Python.forBlock['lists_indexOf'] = function(block) {
   // Find an item in the list.
   const item = Python.valueToCode(block, 'FIND', Python.ORDER_NONE) || '[]';
   const list = Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || "''";
@@ -88,7 +88,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(my_list, elem):
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['lists_getIndex'] = function(block) {
+Python.forBlock['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -170,7 +170,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(myList):
   throw Error('Unhandled combination (lists_getIndex).');
 };
 
-Python['lists_setIndex'] = function(block) {
+Python.forBlock['lists_setIndex'] = function(block) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   let list = Python.valueToCode(block, 'LIST', Python.ORDER_MEMBER) || '[]';
@@ -241,7 +241,7 @@ Python['lists_setIndex'] = function(block) {
   throw Error('Unhandled combination (lists_setIndex).');
 };
 
-Python['lists_getSublist'] = function(block) {
+Python.forBlock['lists_getSublist'] = function(block) {
   // Get sublist.
   const list = Python.valueToCode(block, 'LIST', Python.ORDER_MEMBER) || '[]';
   const where1 = block.getFieldValue('WHERE1');
@@ -290,7 +290,7 @@ Python['lists_getSublist'] = function(block) {
   return [code, Python.ORDER_MEMBER];
 };
 
-Python['lists_sort'] = function(block) {
+Python.forBlock['lists_sort'] = function(block) {
   // Block for sorting a list.
   const list = (Python.valueToCode(block, 'LIST', Python.ORDER_NONE) || '[]');
   const type = block.getFieldValue('TYPE');
@@ -317,7 +317,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(my_list, type, reverse):
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['lists_split'] = function(block) {
+Python.forBlock['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   const mode = block.getFieldValue('MODE');
   let code;
@@ -338,7 +338,7 @@ Python['lists_split'] = function(block) {
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['lists_reverse'] = function(block) {
+Python.forBlock['lists_reverse'] = function(block) {
   // Block for reversing a list.
   const list = Python.valueToCode(block, 'LIST', Python.ORDER_NONE) || '[]';
   const code = 'list(reversed(' + list + '))';

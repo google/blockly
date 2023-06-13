@@ -16,7 +16,7 @@ import {NameType} from '../../core/names.js';
 import {pythonGenerator as Python} from '../python.js';
 
 
-Python['procedures_defreturn'] = function(block) {
+Python.forBlock['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   // First, add a 'global' statement for every variable that is not shadowed by
   // a local parameter.
@@ -84,9 +84,9 @@ Python['procedures_defreturn'] = function(block) {
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-Python['procedures_defnoreturn'] = Python['procedures_defreturn'];
+Python.forBlock['procedures_defnoreturn'] = Python.forBlock['procedures_defreturn'];
 
-Python['procedures_callreturn'] = function(block) {
+Python.forBlock['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
   const funcName =
       Python.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
@@ -99,15 +99,15 @@ Python['procedures_callreturn'] = function(block) {
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['procedures_callnoreturn'] = function(block) {
+Python.forBlock['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  const tuple = Python['procedures_callreturn'](block);
+  const tuple = Python.forBlock['procedures_callreturn'](block);
   return tuple[0] + '\n';
 };
 
-Python['procedures_ifreturn'] = function(block) {
+Python.forBlock['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   const condition =
       Python.valueToCode(block, 'CONDITION', Python.ORDER_NONE) || 'False';

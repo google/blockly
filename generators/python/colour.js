@@ -14,20 +14,20 @@ goog.declareModuleId('Blockly.Python.colour');
 import {pythonGenerator as Python} from '../python.js';
 
 
-Python['colour_picker'] = function(block) {
+Python.forBlock['colour_picker'] = function(block) {
   // Colour picker.
   const code = Python.quote_(block.getFieldValue('COLOUR'));
   return [code, Python.ORDER_ATOMIC];
 };
 
-Python['colour_random'] = function(block) {
+Python.forBlock['colour_random'] = function(block) {
   // Generate a random colour.
   Python.definitions_['import_random'] = 'import random';
   const code = '\'#%06x\' % random.randint(0, 2**24 - 1)';
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['colour_rgb'] = function(block) {
+Python.forBlock['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
   const functionName = Python.provideFunction_('colour_rgb', `
 def ${Python.FUNCTION_NAME_PLACEHOLDER_}(r, g, b):
@@ -43,7 +43,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(r, g, b):
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['colour_blend'] = function(block) {
+Python.forBlock['colour_blend'] = function(block) {
   // Blend two colours together.
   const functionName = Python.provideFunction_('colour_blend', `
 def ${Python.FUNCTION_NAME_PLACEHOLDER_}(colour1, colour2, ratio):

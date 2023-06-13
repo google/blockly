@@ -15,7 +15,7 @@ import {NameType} from '../../core/names.js';
 import {dartGenerator as Dart} from '../dart.js';
 
 
-Dart['procedures_defreturn'] = function(block) {
+Dart.forBlock['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   const funcName =
       Dart.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
@@ -60,9 +60,9 @@ Dart['procedures_defreturn'] = function(block) {
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-Dart['procedures_defnoreturn'] = Dart['procedures_defreturn'];
+Dart.forBlock['procedures_defnoreturn'] = Dart.forBlock['procedures_defreturn'];
 
-Dart['procedures_callreturn'] = function(block) {
+Dart.forBlock['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
   const funcName =
       Dart.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
@@ -75,15 +75,15 @@ Dart['procedures_callreturn'] = function(block) {
   return [code, Dart.ORDER_UNARY_POSTFIX];
 };
 
-Dart['procedures_callnoreturn'] = function(block) {
+Dart.forBlock['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  const tuple = Dart['procedures_callreturn'](block);
+  const tuple = Dart.forBlock['procedures_callreturn'](block);
   return tuple[0] + ';\n';
 };
 
-Dart['procedures_ifreturn'] = function(block) {
+Dart.forBlock['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   const condition =
       Dart.valueToCode(block, 'CONDITION', Dart.ORDER_NONE) || 'false';

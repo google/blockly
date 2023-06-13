@@ -15,13 +15,13 @@ import {NameType} from '../../core/names.js';
 import {phpGenerator as PHP} from '../php.js';
 
 
-PHP['text'] = function(block) {
+PHP.forBlock['text'] = function(block) {
   // Text value.
   const code = PHP.quote_(block.getFieldValue('TEXT'));
   return [code, PHP.ORDER_ATOMIC];
 };
 
-PHP['text_multiline'] = function(block) {
+PHP.forBlock['text_multiline'] = function(block) {
   // Text value.
   const code = PHP.multiline_quote_(block.getFieldValue('TEXT'));
   const order =
@@ -29,7 +29,7 @@ PHP['text_multiline'] = function(block) {
   return [code, order];
 };
 
-PHP['text_join'] = function(block) {
+PHP.forBlock['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   if (block.itemCount_ === 0) {
     return ["''", PHP.ORDER_ATOMIC];
@@ -54,7 +54,7 @@ PHP['text_join'] = function(block) {
   }
 };
 
-PHP['text_append'] = function(block) {
+PHP.forBlock['text_append'] = function(block) {
   // Append to a variable in place.
   const varName =
       PHP.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
@@ -62,7 +62,7 @@ PHP['text_append'] = function(block) {
   return varName + ' .= ' + value + ';\n';
 };
 
-PHP['text_length'] = function(block) {
+PHP.forBlock['text_length'] = function(block) {
   // String or array length.
   const functionName = PHP.provideFunction_('length', `
 function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($value) {
@@ -76,13 +76,13 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($value) {
   return [functionName + '(' + text + ')', PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['text_isEmpty'] = function(block) {
+PHP.forBlock['text_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const text = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || "''";
   return ['empty(' + text + ')', PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['text_indexOf'] = function(block) {
+PHP.forBlock['text_indexOf'] = function(block) {
   // Search the text for a substring.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'strpos' : 'strrpos';
@@ -107,7 +107,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($text, $search) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['text_charAt'] = function(block) {
+PHP.forBlock['text_charAt'] = function(block) {
   // Get letter at index.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const textOrder = (where === 'RANDOM') ? PHP.ORDER_NONE : PHP.ORDER_NONE;
@@ -144,7 +144,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($text) {
   throw Error('Unhandled option (text_charAt).');
 };
 
-PHP['text_getSubstring'] = function(block) {
+PHP.forBlock['text_getSubstring'] = function(block) {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
@@ -183,7 +183,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($text, $where1, $at1, $where2, $at2) 
   }
 };
 
-PHP['text_changeCase'] = function(block) {
+PHP.forBlock['text_changeCase'] = function(block) {
   // Change capitalization.
   const text = PHP.valueToCode(block, 'TEXT', PHP.ORDER_NONE) || "''";
   let code;
@@ -197,7 +197,7 @@ PHP['text_changeCase'] = function(block) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['text_trim'] = function(block) {
+PHP.forBlock['text_trim'] = function(block) {
   // Trim spaces.
   const OPERATORS = {'LEFT': 'ltrim', 'RIGHT': 'rtrim', 'BOTH': 'trim'};
   const operator = OPERATORS[block.getFieldValue('MODE')];
@@ -205,13 +205,13 @@ PHP['text_trim'] = function(block) {
   return [operator + '(' + text + ')', PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['text_print'] = function(block) {
+PHP.forBlock['text_print'] = function(block) {
   // Print statement.
   const msg = PHP.valueToCode(block, 'TEXT', PHP.ORDER_NONE) || "''";
   return 'print(' + msg + ');\n';
 };
 
-PHP['text_prompt_ext'] = function(block) {
+PHP.forBlock['text_prompt_ext'] = function(block) {
   // Prompt function.
   let msg;
   if (block.getField('TEXT')) {
@@ -229,9 +229,9 @@ PHP['text_prompt_ext'] = function(block) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['text_prompt'] = PHP['text_prompt_ext'];
+PHP.forBlock['text_prompt'] = PHP.forBlock['text_prompt_ext'];
 
-PHP['text_count'] = function(block) {
+PHP.forBlock['text_count'] = function(block) {
   const text = PHP.valueToCode(block, 'TEXT', PHP.ORDER_NONE) || "''";
   const sub = PHP.valueToCode(block, 'SUB', PHP.ORDER_NONE) || "''";
   const code = 'strlen(' + sub + ') === 0' +
@@ -240,7 +240,7 @@ PHP['text_count'] = function(block) {
   return [code, PHP.ORDER_CONDITIONAL];
 };
 
-PHP['text_replace'] = function(block) {
+PHP.forBlock['text_replace'] = function(block) {
   const text = PHP.valueToCode(block, 'TEXT', PHP.ORDER_NONE) || "''";
   const from = PHP.valueToCode(block, 'FROM', PHP.ORDER_NONE) || "''";
   const to = PHP.valueToCode(block, 'TO', PHP.ORDER_NONE) || "''";
@@ -248,7 +248,7 @@ PHP['text_replace'] = function(block) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['text_reverse'] = function(block) {
+PHP.forBlock['text_reverse'] = function(block) {
   const text = PHP.valueToCode(block, 'TEXT', PHP.ORDER_NONE) || "''";
   const code = 'strrev(' + text + ')';
   return [code, PHP.ORDER_FUNCTION_CALL];

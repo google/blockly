@@ -52,10 +52,10 @@ suite('InsertionMarkers', function () {
   });
   suite('Code Generation', function () {
     setup(function () {
-      javascriptGenerator['stack_block'] = function (block) {
+      javascriptGenerator.forBlock['stack_block'] = function (block) {
         return 'stack[' + block.id + '];\n';
       };
-      javascriptGenerator['row_block'] = function (block) {
+      javascriptGenerator.forBlock['row_block'] = function (block) {
         const value = javascriptGenerator.valueToCode(
           block,
           'INPUT',
@@ -64,7 +64,7 @@ suite('InsertionMarkers', function () {
         const code = 'row[' + block.id + '](' + value + ')';
         return [code, javascriptGenerator.ORDER_NONE];
       };
-      javascriptGenerator['statement_block'] = function (block) {
+      javascriptGenerator.forBlock['statement_block'] = function (block) {
         return (
           'statement[' +
           block.id +
@@ -83,9 +83,9 @@ suite('InsertionMarkers', function () {
       };
     });
     teardown(function () {
-      delete javascriptGenerator['stack_block'];
-      delete javascriptGenerator['row_block'];
-      delete javascriptGenerator['statement_block'];
+      delete javascriptGenerator.forBlock['stack_block'];
+      delete javascriptGenerator.forBlock['row_block'];
+      delete javascriptGenerator.forBlock['statement_block'];
     });
     test('Marker Surrounds', function () {
       const xml = Blockly.utils.xml.textToDom(

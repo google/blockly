@@ -15,7 +15,7 @@ import {NameType} from '../../core/names.js';
 import {Order, javascriptGenerator} from '../javascript.js';
 
 
-javascriptGenerator['procedures_defreturn'] = function(block) {
+javascriptGenerator.forBlock['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   const funcName = javascriptGenerator.nameDB_.getName(
       block.getFieldValue('NAME'), NameType.PROCEDURE);
@@ -65,10 +65,10 @@ javascriptGenerator['procedures_defreturn'] = function(block) {
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-javascriptGenerator['procedures_defnoreturn'] =
-    javascriptGenerator['procedures_defreturn'];
+javascriptGenerator.forBlock['procedures_defnoreturn'] =
+    javascriptGenerator.forBlock['procedures_defreturn'];
 
-javascriptGenerator['procedures_callreturn'] = function(block) {
+javascriptGenerator.forBlock['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
   const funcName = javascriptGenerator.nameDB_.getName(
       block.getFieldValue('NAME'), NameType.PROCEDURE);
@@ -82,15 +82,23 @@ javascriptGenerator['procedures_callreturn'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator['procedures_callnoreturn'] = function(block) {
+javascriptGenerator.forBlock['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  const tuple = javascriptGenerator['procedures_callreturn'](block);
+  const tuple = javascriptGenerator.forBlock['procedures_callreturn'](block);
   return tuple[0] + ';\n';
 };
 
-javascriptGenerator['procedures_ifreturn'] = function(block) {
+javascriptGenerator.forBlock['procedures_callnoreturn'] = function(block) {
+  // Call a procedure with no return value.
+  // Generated code is for a function call as a statement is the same as a
+  // function call as a value, with the addition of line ending.
+  const tuple = javascriptGenerator.forBlock['procedures_callreturn'](block);
+  return tuple[0] + ';\n';
+};
+
+javascriptGenerator.forBlock['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   const condition =
       javascriptGenerator.valueToCode(block, 'CONDITION', Order.NONE) ||

@@ -16,5 +16,5 @@ import './variables.js';
 
 
 // Dart is dynamically typed.
-Dart['variables_get_dynamic'] = Dart['variables_get'];
-Dart['variables_set_dynamic'] = Dart['variables_set'];
+Dart.forBlock['variables_get_dynamic'] = Dart.forBlock['variables_get'];
+Dart.forBlock['variables_set_dynamic'] = Dart.forBlock['variables_set'];

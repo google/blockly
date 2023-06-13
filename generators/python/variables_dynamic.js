@@ -16,5 +16,5 @@ import './variables.js';
 
 
 // Python is dynamically typed.
-Python['variables_get_dynamic'] = Python['variables_get'];
-Python['variables_set_dynamic'] = Python['variables_set'];
+Python.forBlock['variables_get_dynamic'] = Python.forBlock['variables_get'];
+Python.forBlock['variables_set_dynamic'] = Python.forBlock['variables_set'];

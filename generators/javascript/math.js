@@ -13,63 +13,63 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.math');
 
 import {NameType} from '../../core/names.js';
-import {javascriptGenerator as JavaScript} from '../javascript.js';
+import {Order, javascriptGenerator} from '../javascript.js';
 
 
-JavaScript.forBlock['math_number'] = function(block) {
+javascriptGenerator.forBlock['math_number'] = function(block) {
   // Numeric value.
   const code = Number(block.getFieldValue('NUM'));
-  const order = code >= 0 ? JavaScript.ORDER_ATOMIC :
-              JavaScript.ORDER_UNARY_NEGATION;
+  const order = code >= 0 ? Order.ATOMIC :
+              Order.UNARY_NEGATION;
   return [code, order];
 };
 
-JavaScript.forBlock['math_arithmetic'] = function(block) {
+javascriptGenerator.forBlock['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
-    'ADD': [' + ', JavaScript.ORDER_ADDITION],
-    'MINUS': [' - ', JavaScript.ORDER_SUBTRACTION],
-    'MULTIPLY': [' * ', JavaScript.ORDER_MULTIPLICATION],
-    'DIVIDE': [' / ', JavaScript.ORDER_DIVISION],
-    'POWER': [null, JavaScript.ORDER_NONE],  // Handle power separately.
+    'ADD': [' + ', Order.ADDITION],
+    'MINUS': [' - ', Order.SUBTRACTION],
+    'MULTIPLY': [' * ', Order.MULTIPLICATION],
+    'DIVIDE': [' / ', Order.DIVISION],
+    'POWER': [null, Order.NONE],  // Handle power separately.
   };
   const tuple = OPERATORS[block.getFieldValue('OP')];
   const operator = tuple[0];
   const order = tuple[1];
-  const argument0 = JavaScript.valueToCode(block, 'A', order) || '0';
-  const argument1 = JavaScript.valueToCode(block, 'B', order) || '0';
+  const argument0 = javascriptGenerator.valueToCode(block, 'A', order) || '0';
+  const argument1 = javascriptGenerator.valueToCode(block, 'B', order) || '0';
   let code;
   // Power in JavaScript requires a special case since it has no operator.
   if (!operator) {
     code = 'Math.pow(' + argument0 + ', ' + argument1 + ')';
-    return [code, JavaScript.ORDER_FUNCTION_CALL];
+    return [code, Order.FUNCTION_CALL];
   }
   code = argument0 + operator + argument1;
   return [code, order];
 };
 
-JavaScript.forBlock['math_single'] = function(block) {
+javascriptGenerator.forBlock['math_single'] = function(block) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
   let arg;
   if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
-    arg = JavaScript.valueToCode(block, 'NUM',
-        JavaScript.ORDER_UNARY_NEGATION) || '0';
+    arg = javascriptGenerator.valueToCode(block, 'NUM',
+        Order.UNARY_NEGATION) || '0';
     if (arg[0] === '-') {
       // --3 is not legal in JS.
       arg = ' ' + arg;
     }
     code = '-' + arg;
-    return [code, JavaScript.ORDER_UNARY_NEGATION];
+    return [code, Order.UNARY_NEGATION];
   }
   if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
-    arg = JavaScript.valueToCode(block, 'NUM',
-        JavaScript.ORDER_DIVISION) || '0';
+    arg = javascriptGenerator.valueToCode(block, 'NUM',
+        Order.DIVISION) || '0';
   } else {
-    arg = JavaScript.valueToCode(block, 'NUM',
-        JavaScript.ORDER_NONE) || '0';
+    arg = javascriptGenerator.valueToCode(block, 'NUM',
+        Order.NONE) || '0';
   }
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
@@ -109,7 +109,7 @@ JavaScript.forBlock['math_single'] = function(block) {
       break;
   }
   if (code) {
-    return [code, JavaScript.ORDER_FUNCTION_CALL];
+    return [code, Order.FUNCTION_CALL];
   }
   // Second, handle cases which generate values that may need parentheses
   // wrapping the code.
@@ -129,46 +129,47 @@ JavaScript.forBlock['math_single'] = function(block) {
     default:
       throw Error('Unknown math operator: ' + operator);
   }
-  return [code, JavaScript.ORDER_DIVISION];
+  return [code, Order.DIVISION];
 };
 
-JavaScript.forBlock['math_constant'] = function(block) {
+javascriptGenerator.forBlock['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
-    'PI': ['Math.PI', JavaScript.ORDER_MEMBER],
-    'E': ['Math.E', JavaScript.ORDER_MEMBER],
-    'GOLDEN_RATIO': ['(1 + Math.sqrt(5)) / 2', JavaScript.ORDER_DIVISION],
-    'SQRT2': ['Math.SQRT2', JavaScript.ORDER_MEMBER],
-    'SQRT1_2': ['Math.SQRT1_2', JavaScript.ORDER_MEMBER],
-    'INFINITY': ['Infinity', JavaScript.ORDER_ATOMIC],
+    'PI': ['Math.PI', Order.MEMBER],
+    'E': ['Math.E', Order.MEMBER],
+    'GOLDEN_RATIO': ['(1 + Math.sqrt(5)) / 2', Order.DIVISION],
+    'SQRT2': ['Math.SQRT2', Order.MEMBER],
+    'SQRT1_2': ['Math.SQRT1_2', Order.MEMBER],
+    'INFINITY': ['Infinity', Order.ATOMIC],
   };
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
 
-JavaScript.forBlock['math_number_property'] = function(block) {
+javascriptGenerator.forBlock['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-    'EVEN': [' % 2 === 0', JavaScript.ORDER_MODULUS, JavaScript.ORDER_EQUALITY],
-    'ODD': [' % 2 === 1', JavaScript.ORDER_MODULUS, JavaScript.ORDER_EQUALITY],
-    'WHOLE': [' % 1 === 0', JavaScript.ORDER_MODULUS,
-        JavaScript.ORDER_EQUALITY],
-    'POSITIVE': [' > 0', JavaScript.ORDER_RELATIONAL,
-        JavaScript.ORDER_RELATIONAL],
-    'NEGATIVE': [' < 0', JavaScript.ORDER_RELATIONAL,
-        JavaScript.ORDER_RELATIONAL],
-    'DIVISIBLE_BY': [null, JavaScript.ORDER_MODULUS, JavaScript.ORDER_EQUALITY],
-    'PRIME': [null, JavaScript.ORDER_NONE, JavaScript.ORDER_FUNCTION_CALL],
+    'EVEN': [' % 2 === 0', Order.MODULUS, Order.EQUALITY],
+    'ODD': [' % 2 === 1', Order.MODULUS, Order.EQUALITY],
+    'WHOLE': [' % 1 === 0', Order.MODULUS,
+        Order.EQUALITY],
+    'POSITIVE': [' > 0', Order.RELATIONAL,
+        Order.RELATIONAL],
+    'NEGATIVE': [' < 0', Order.RELATIONAL,
+        Order.RELATIONAL],
+    'DIVISIBLE_BY': [null, Order.MODULUS, Order.EQUALITY],
+    'PRIME': [null, Order.NONE, Order.FUNCTION_CALL],
   };
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
-  const numberToCheck = JavaScript.valueToCode(block, 'NUMBER_TO_CHECK',
-      inputOrder) || '0';
+  const numberToCheck =
+      javascriptGenerator.valueToCode(block, 'NUMBER_TO_CHECK', inputOrder) ||
+      '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    const functionName = JavaScript.provideFunction_('mathIsPrime', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(n) {
+    const functionName = javascriptGenerator.provideFunction_('mathIsPrime', `
+function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(n) {
   // https://en.wikipedia.org/wiki/Primality_test#Naive_methods
   if (n == 2 || n == 3) {
     return true;
@@ -189,8 +190,8 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(n) {
 `);
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = JavaScript.valueToCode(block, 'DIVISOR',
-        JavaScript.ORDER_MODULUS) || '0';
+    const divisor = javascriptGenerator.valueToCode(block, 'DIVISOR',
+        Order.MODULUS) || '0';
     code = numberToCheck + ' % ' + divisor + ' === 0';
   } else {
     code = numberToCheck + suffix;
@@ -198,58 +199,60 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(n) {
   return [code, outputOrder];
 };
 
-JavaScript.forBlock['math_change'] = function(block) {
+javascriptGenerator.forBlock['math_change'] = function(block) {
   // Add to a variable in place.
-  const argument0 = JavaScript.valueToCode(block, 'DELTA',
-      JavaScript.ORDER_ADDITION) || '0';
-  const varName = JavaScript.nameDB_.getName(
+  const argument0 = javascriptGenerator.valueToCode(block, 'DELTA',
+      Order.ADDITION) || '0';
+  const varName = javascriptGenerator.nameDB_.getName(
       block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = (typeof ' + varName + ' === \'number\' ? ' + varName +
       ' : 0) + ' + argument0 + ';\n';
 };
 
 // Rounding functions have a single operand.
-JavaScript.forBlock['math_round'] = JavaScript.forBlock['math_single'];
+javascriptGenerator.forBlock['math_round'] =
+    javascriptGenerator.forBlock['math_single'];
 // Trigonometry functions have a single operand.
-JavaScript.forBlock['math_trig'] = JavaScript.forBlock['math_single'];
+javascriptGenerator.forBlock['math_trig'] =
+    javascriptGenerator.forBlock['math_single'];
 
-JavaScript.forBlock['math_on_list'] = function(block) {
+javascriptGenerator.forBlock['math_on_list'] = function(block) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   let list;
   let code;
   switch (func) {
     case 'SUM':
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_MEMBER) || '[]';
+      list = javascriptGenerator.valueToCode(block, 'LIST',
+          Order.MEMBER) || '[]';
       code = list + '.reduce(function(x, y) {return x + y;}, 0)';
       break;
     case 'MIN':
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list = javascriptGenerator.valueToCode(block, 'LIST',
+          Order.NONE) || '[]';
       code = 'Math.min.apply(null, ' + list + ')';
       break;
     case 'MAX':
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list = javascriptGenerator.valueToCode(block, 'LIST',
+          Order.NONE) || '[]';
       code = 'Math.max.apply(null, ' + list + ')';
       break;
     case 'AVERAGE': {
       // mathMean([null,null,1,3]) === 2.0.
-      const functionName = JavaScript.provideFunction_('mathMean', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
+      const functionName = javascriptGenerator.provideFunction_('mathMean', `
+function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(myList) {
   return myList.reduce(function(x, y) {return x + y;}, 0) / myList.length;
 }
 `);
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list = javascriptGenerator.valueToCode(block, 'LIST',
+          Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'MEDIAN': {
       // mathMedian([null,null,1,3]) === 2.0.
-      const functionName = JavaScript.provideFunction_('mathMedian', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
+      const functionName = javascriptGenerator.provideFunction_('mathMedian', `
+function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(myList) {
   var localList = myList.filter(function (x) {return typeof x === 'number';});
   if (!localList.length) return null;
   localList.sort(function(a, b) {return b - a;});
@@ -260,8 +263,8 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
   }
 }
 `);
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list = javascriptGenerator.valueToCode(block, 'LIST',
+          Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
@@ -269,8 +272,8 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
-      const functionName = JavaScript.provideFunction_('mathModes', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(values) {
+      const functionName = javascriptGenerator.provideFunction_('mathModes', `
+function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(values) {
   var modes = [];
   var counts = [];
   var maxCount = 0;
@@ -299,14 +302,15 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(values) {
   return modes;
 }
 `);
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list = javascriptGenerator.valueToCode(block, 'LIST',
+          Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'STD_DEV': {
-      const functionName = JavaScript.provideFunction_('mathStandardDeviation', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(numbers) {
+      const functionName =
+          javascriptGenerator.provideFunction_('mathStandardDeviation', `
+function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(numbers) {
   var n = numbers.length;
   if (!n) return null;
   var mean = numbers.reduce(function(x, y) {return x + y;}) / n;
@@ -318,60 +322,61 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(numbers) {
   return Math.sqrt(variance);
 }
 `);
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list = javascriptGenerator.valueToCode(block, 'LIST',
+          Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'RANDOM': {
-      const functionName = JavaScript.provideFunction_('mathRandomList', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(list) {
+      const functionName =
+          javascriptGenerator.provideFunction_('mathRandomList', `
+function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(list) {
   var x = Math.floor(Math.random() * list.length);
   return list[x];
 }
 `);
-      list = JavaScript.valueToCode(block, 'LIST',
-          JavaScript.ORDER_NONE) || '[]';
+      list = javascriptGenerator.valueToCode(block, 'LIST',
+          Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     default:
       throw Error('Unknown operator: ' + func);
   }
-  return [code, JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
-JavaScript.forBlock['math_modulo'] = function(block) {
+javascriptGenerator.forBlock['math_modulo'] = function(block) {
   // Remainder computation.
-  const argument0 = JavaScript.valueToCode(block, 'DIVIDEND',
-      JavaScript.ORDER_MODULUS) || '0';
-  const argument1 = JavaScript.valueToCode(block, 'DIVISOR',
-      JavaScript.ORDER_MODULUS) || '0';
+  const argument0 = javascriptGenerator.valueToCode(block, 'DIVIDEND',
+      Order.MODULUS) || '0';
+  const argument1 = javascriptGenerator.valueToCode(block, 'DIVISOR',
+      Order.MODULUS) || '0';
   const code = argument0 + ' % ' + argument1;
-  return [code, JavaScript.ORDER_MODULUS];
+  return [code, Order.MODULUS];
 };
 
-JavaScript.forBlock['math_constrain'] = function(block) {
+javascriptGenerator.forBlock['math_constrain'] = function(block) {
   // Constrain a number between two limits.
-  const argument0 = JavaScript.valueToCode(block, 'VALUE',
-      JavaScript.ORDER_NONE) || '0';
-  const argument1 = JavaScript.valueToCode(block, 'LOW',
-      JavaScript.ORDER_NONE) || '0';
-  const argument2 = JavaScript.valueToCode(block, 'HIGH',
-      JavaScript.ORDER_NONE) || 'Infinity';
+  const argument0 = javascriptGenerator.valueToCode(block, 'VALUE',
+      Order.NONE) || '0';
+  const argument1 = javascriptGenerator.valueToCode(block, 'LOW',
+      Order.NONE) || '0';
+  const argument2 = javascriptGenerator.valueToCode(block, 'HIGH',
+      Order.NONE) || 'Infinity';
   const code = 'Math.min(Math.max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
-  return [code, JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
-JavaScript.forBlock['math_random_int'] = function(block) {
+javascriptGenerator.forBlock['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
-  const argument0 = JavaScript.valueToCode(block, 'FROM',
-      JavaScript.ORDER_NONE) || '0';
-  const argument1 = JavaScript.valueToCode(block, 'TO',
-      JavaScript.ORDER_NONE) || '0';
-  const functionName = JavaScript.provideFunction_('mathRandomInt', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(a, b) {
+  const argument0 = javascriptGenerator.valueToCode(block, 'FROM',
+      Order.NONE) || '0';
+  const argument1 = javascriptGenerator.valueToCode(block, 'TO',
+      Order.NONE) || '0';
+  const functionName = javascriptGenerator.provideFunction_('mathRandomInt', `
+function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(a, b) {
   if (a > b) {
     // Swap a and b to ensure a is smaller.
     var c = a;
@@ -382,20 +387,20 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(a, b) {
 }
 `);
   const code = functionName + '(' + argument0 + ', ' + argument1 + ')';
-  return [code, JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
-JavaScript.forBlock['math_random_float'] = function(block) {
+javascriptGenerator.forBlock['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
-  return ['Math.random()', JavaScript.ORDER_FUNCTION_CALL];
+  return ['Math.random()', Order.FUNCTION_CALL];
 };
 
-JavaScript.forBlock['math_atan2'] = function(block) {
+javascriptGenerator.forBlock['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  const argument0 = JavaScript.valueToCode(block, 'X',
-      JavaScript.ORDER_NONE) || '0';
-  const argument1 = JavaScript.valueToCode(block, 'Y',
-      JavaScript.ORDER_NONE) || '0';
+  const argument0 = javascriptGenerator.valueToCode(block, 'X',
+      Order.NONE) || '0';
+  const argument1 = javascriptGenerator.valueToCode(block, 'Y',
+      Order.NONE) || '0';
   return ['Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.PI * 180',
-      JavaScript.ORDER_DIVISION];
+      Order.DIVISION];
 };

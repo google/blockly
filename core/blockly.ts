@@ -51,6 +51,12 @@ import {
   UnattachedFieldError,
 } from './field.js';
 import {
+  FieldAngle,
+  FieldAngleConfig,
+  FieldAngleFromJsonConfig,
+  FieldAngleValidator,
+} from './field_angle.js';
+import {
   FieldCheckbox,
   FieldCheckboxConfig,
   FieldCheckboxFromJsonConfig,
@@ -503,6 +509,12 @@ export {DeleteArea};
 export {DragTarget};
 export const DropDownDiv = dropDownDiv;
 export {Field, FieldConfig, FieldValidator, UnattachedFieldError};
+export {
+  FieldAngle,
+  FieldAngleConfig,
+  FieldAngleFromJsonConfig,
+  FieldAngleValidator,
+};
 export {
   FieldCheckbox,
   FieldCheckboxConfig,

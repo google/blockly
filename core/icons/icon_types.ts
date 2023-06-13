@@ -19,7 +19,7 @@ export class IconType<_T extends IIcon> {
   }
 
   /** @returns true if this icon type is equivalent to the given icon type. */
-  equals(type: IconType<any>): boolean {
+  equals(type: IconType<IIcon>): boolean {
     return this.name === type.toString();
   }
 

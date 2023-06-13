@@ -2228,7 +2228,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param type The type of the icon to remove from the block.
    * @returns True if an icon with the given type was found, false otherwise.
    */
-  removeIcon(type: IconType<any>): boolean {
+  removeIcon(type: IconType<IIcon>): boolean {
     if (!this.hasIcon(type)) return false;
     this.getIcon(type)?.dispose();
     this.icons = this.icons.filter((icon) => !icon.getType().equals(type));
@@ -2239,7 +2239,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns True if an icon with the given type exists on the block,
    *     false otherwise.
    */
-  hasIcon(type: IconType<any>): boolean {
+  hasIcon(type: IconType<IIcon>): boolean {
     return this.icons.some((icon) => icon.getType().equals(type));
   }
 

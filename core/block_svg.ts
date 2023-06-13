@@ -1028,7 +1028,7 @@ export class BlockSvg
     };
   }
 
-  override removeIcon(type: IconType<any>): boolean {
+  override removeIcon(type: IconType<IIcon>): boolean {
     const removed = super.removeIcon(type);
 
     if (type.equals(WarningIcon.TYPE)) this.warning = null;

@@ -709,7 +709,7 @@ function initBlock(block: Block, rendered: boolean) {
       if (isIcon(icon)) {
         icon.onLocationChange(blockSvg.getRelativeToSurfaceXY());
       } else {
-        // icon.computeIconLocation();
+        icon.computeIconLocation();
       }
     }
   } else {

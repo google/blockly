@@ -29,7 +29,7 @@ export abstract class Icon implements IIcon {
 
   constructor(protected sourceBlock: Block) {}
 
-  getType(): IconType<any> {
+  getType(): IconType<IIcon> {
     throw new Error('Icons must implement getType');
   }
 

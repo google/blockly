@@ -12,7 +12,6 @@ import type {BlockSvg} from './block_svg.js';
 import type {Connection} from './connection.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
-import type {CommentIcon} from './icons/comment_icon.js';
 import {IconType} from './icons/icon_types.js';
 import {inputTypes} from './inputs/input_types.js';
 import * as dom from './utils/dom.js';
@@ -190,7 +189,7 @@ export function blockToDom(
 
   const commentText = block.getCommentText();
   if (commentText) {
-    const comment = block.getIcon(IconType.COMMENT) as CommentIcon;
+    const comment = block.getIcon(IconType.COMMENT)!;
     const size = comment.getBubbleSize();
     const pinned = comment.bubbleIsVisible();
 
@@ -723,7 +722,7 @@ function applyCommentTagNodes(xmlChildren: Element[], block: Block) {
     const height = parseInt(xmlChild.getAttribute('h') ?? '50', 10);
 
     block.setCommentText(text);
-    const comment = block.getIcon(IconType.COMMENT) as CommentIcon;
+    const comment = block.getIcon(IconType.COMMENT)!;
     if (!isNaN(width) && !isNaN(height)) {
       comment.setBubbleSize(new Size(width, height));
     }

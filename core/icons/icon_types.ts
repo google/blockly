@@ -4,23 +4,26 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The type for a mutator icon. Used for registration and access.
- *
- * @internal
- */
-export const MUTATOR_TYPE = 'mutator';
+import {IIcon} from '../interfaces/i_icon.js';
+import {CommentIcon} from './comment_icon.js';
+import {MutatorIcon} from './mutator_icon.js';
+import {WarningIcon} from './warning_icon.js';
 
-/**
- * The type for a warning icon. Used for registration and access.
- *
- * @internal
- */
-export const WARNING_TYPE = 'warning';
+export class IconType<_T extends IIcon> {
+  /** @param name The name of the registry type. */
+  constructor(private readonly name: string) {}
 
-/**
- * The type for a comment icon. Used for registration and access.
- *
- * @internal
- */
-export const COMMENT_TYPE = 'comment';
+  /** @returns the name of the type. */
+  toString(): string {
+    return this.name;
+  }
+
+  /** @returns true if this icon type is equivalent to the given icon type. */
+  equals(type: IconType<IIcon>): boolean {
+    return this.name === type.toString();
+  }
+
+  static MUTATOR = new IconType<MutatorIcon>('mutator');
+  static WARNING = new IconType<WarningIcon>('warning');
+  static COMMENT = new IconType<CommentIcon>('comment');
+}

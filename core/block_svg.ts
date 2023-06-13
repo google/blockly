@@ -61,6 +61,7 @@ import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {queueRender} from './render_management.js';
 import * as deprecation from './utils/deprecation.js';
+import {IconType} from './icons/icon_types.js';
 
 /**
  * Class for a block's SVG representation.
@@ -952,7 +953,6 @@ export class BlockSvg
       text = null;
     }
 
-    // TODO: Make getIcon take in a type parameter?
     const icon = this.getIcon(WarningIcon.TYPE) as WarningIcon | undefined;
     if (typeof text === 'string') {
       // Bubble up to add a warning on top-most collapsed block.
@@ -1028,11 +1028,11 @@ export class BlockSvg
     };
   }
 
-  override removeIcon(type: string): boolean {
+  override removeIcon(type: IconType<IIcon>): boolean {
     const removed = super.removeIcon(type);
 
-    if (type === WarningIcon.TYPE) this.warning = null;
-    if (type === MutatorIcon.TYPE) this.mutator = null;
+    if (type.equals(WarningIcon.TYPE)) this.warning = null;
+    if (type.equals(MutatorIcon.TYPE)) this.mutator = null;
 
     if (this.rendered) {
       // TODO: Change this based on #7068.

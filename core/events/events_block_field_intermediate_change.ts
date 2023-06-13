@@ -17,8 +17,7 @@ import type {Block} from '../block.js';
 import * as registry from '../registry.js';
 import {Workspace} from '../workspace.js';
 
-import {AbstractEventJson} from './events_abstract.js';
-import {UiBase} from './events_ui_base.js';
+import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
 /**
@@ -26,11 +25,11 @@ import * as eventUtils from './utils.js';
  * change is not yet complete, and is expected to be followed by a block change
  * event.
  */
-export class BlockFieldIntermediateChange extends UiBase {
+export class BlockFieldIntermediateChange extends BlockBase {
   override type = eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE;
 
-  /** The ID of the block associated with this event. */
-  blockId?: string;
+  // Intermediate events do not undo or redo.
+  override recordUndo = false;
 
   /** The name of the field that changed. */
   name?: string;
@@ -53,13 +52,11 @@ export class BlockFieldIntermediateChange extends UiBase {
     opt_oldValue?: unknown,
     opt_newValue?: unknown
   ) {
-    const workspaceId = opt_block ? opt_block.workspace.id : undefined;
-    super(workspaceId);
+    super(opt_block);
     if (!opt_block) {
       return; // Blank event to be populated by fromJson.
     }
 
-    this.blockId = opt_block.id;
     this.name = opt_name;
     this.oldValue = opt_oldValue;
     this.newValue = opt_newValue;
@@ -72,19 +69,12 @@ export class BlockFieldIntermediateChange extends UiBase {
    */
   override toJson(): BlockFieldIntermediateChangeJson {
     const json = super.toJson() as BlockFieldIntermediateChangeJson;
-    if (!this.blockId) {
-      throw new Error(
-        'The block ID is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson.'
-      );
-    }
     if (!this.name) {
       throw new Error(
         'The changed field name is undefined. Either pass a ' +
           'name to the constructor, or call fromJson.'
       );
     }
-    json['blockId'] = this.blockId;
     json['name'] = this.name;
     json['oldValue'] = this.oldValue;
     json['newValue'] = this.newValue;
@@ -110,7 +100,6 @@ export class BlockFieldIntermediateChange extends UiBase {
       workspace,
       event ?? new BlockFieldIntermediateChange()
     ) as BlockFieldIntermediateChange;
-    newEvent.blockId = json['blockId'];
     newEvent.name = json['name'];
     newEvent.oldValue = json['oldValue'];
     newEvent.newValue = json['newValue'];
@@ -127,8 +116,7 @@ export class BlockFieldIntermediateChange extends UiBase {
   }
 }
 
-export interface BlockFieldIntermediateChangeJson extends AbstractEventJson {
-  blockId: string;
+export interface BlockFieldIntermediateChangeJson extends BlockBaseJson {
   name: string;
   newValue: unknown;
   oldValue: unknown;

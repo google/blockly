@@ -1478,5 +1478,9 @@
         },
       },
     },
+    {
+      oldName: 'Blockly.Icon',
+      newName: 'Blockly.icons.Icon',
+    },
   ],
 }

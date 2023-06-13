@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.logic');
 
-import {dartGenerator as Dart} from '../dart.js';
+import {dartGenerator as Dart, Order} from '../dart.js';
 
 
 Dart.forBlock['controls_if'] = function(block) {
@@ -24,7 +24,7 @@ Dart.forBlock['controls_if'] = function(block) {
   }
   do {
     conditionCode =
-        Dart.valueToCode(block, 'IF' + n, Dart.ORDER_NONE) || 'false';
+        Dart.valueToCode(block, 'IF' + n, Order.NONE) || 'false';
     branchCode = Dart.statementToCode(block, 'DO' + n);
     if (Dart.STATEMENT_SUFFIX) {
       branchCode =
@@ -58,8 +58,8 @@ Dart.forBlock['logic_compare'] = function(block) {
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
   const order = (operator === '==' || operator === '!=') ?
-      Dart.ORDER_EQUALITY :
-      Dart.ORDER_RELATIONAL;
+      Order.EQUALITY :
+      Order.RELATIONAL;
   const argument0 = Dart.valueToCode(block, 'A', order) || '0';
   const argument1 = Dart.valueToCode(block, 'B', order) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
@@ -70,7 +70,7 @@ Dart.forBlock['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
   const order =
-      (operator === '&&') ? Dart.ORDER_LOGICAL_AND : Dart.ORDER_LOGICAL_OR;
+      (operator === '&&') ? Order.LOGICAL_AND : Order.LOGICAL_OR;
   let argument0 = Dart.valueToCode(block, 'A', order);
   let argument1 = Dart.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
@@ -93,7 +93,7 @@ Dart.forBlock['logic_operation'] = function(block) {
 
 Dart.forBlock['logic_negate'] = function(block) {
   // Negation.
-  const order = Dart.ORDER_UNARY_PREFIX;
+  const order = Order.UNARY_PREFIX;
   const argument0 = Dart.valueToCode(block, 'BOOL', order) || 'true';
   const code = '!' + argument0;
   return [code, order];
@@ -102,22 +102,22 @@ Dart.forBlock['logic_negate'] = function(block) {
 Dart.forBlock['logic_boolean'] = function(block) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
-  return [code, Dart.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 Dart.forBlock['logic_null'] = function(block) {
   // Null data type.
-  return ['null', Dart.ORDER_ATOMIC];
+  return ['null', Order.ATOMIC];
 };
 
 Dart.forBlock['logic_ternary'] = function(block) {
   // Ternary operator.
   const value_if =
-      Dart.valueToCode(block, 'IF', Dart.ORDER_CONDITIONAL) || 'false';
+      Dart.valueToCode(block, 'IF', Order.CONDITIONAL) || 'false';
   const value_then =
-      Dart.valueToCode(block, 'THEN', Dart.ORDER_CONDITIONAL) || 'null';
+      Dart.valueToCode(block, 'THEN', Order.CONDITIONAL) || 'null';
   const value_else =
-      Dart.valueToCode(block, 'ELSE', Dart.ORDER_CONDITIONAL) || 'null';
+      Dart.valueToCode(block, 'ELSE', Order.CONDITIONAL) || 'null';
   const code = value_if + ' ? ' + value_then + ' : ' + value_else;
-  return [code, Dart.ORDER_CONDITIONAL];
+  return [code, Order.CONDITIONAL];
 };

@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.procedures');
 
 import {NameType} from '../../core/names.js';
-import {dartGenerator as Dart} from '../dart.js';
+import {dartGenerator as Dart, Order} from '../dart.js';
 
 
 Dart.forBlock['procedures_defreturn'] = function(block) {
@@ -35,7 +35,7 @@ Dart.forBlock['procedures_defreturn'] = function(block) {
         Dart.injectId(Dart.INFINITE_LOOP_TRAP, block), Dart.INDENT);
   }
   const branch = Dart.statementToCode(block, 'STACK');
-  let returnValue = Dart.valueToCode(block, 'RETURN', Dart.ORDER_NONE) || '';
+  let returnValue = Dart.valueToCode(block, 'RETURN', Order.NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
@@ -69,10 +69,10 @@ Dart.forBlock['procedures_callreturn'] = function(block) {
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Dart.valueToCode(block, 'ARG' + i, Dart.ORDER_NONE) || 'null';
+    args[i] = Dart.valueToCode(block, 'ARG' + i, Order.NONE) || 'null';
   }
   let code = funcName + '(' + args.join(', ') + ')';
-  return [code, Dart.ORDER_UNARY_POSTFIX];
+  return [code, Order.UNARY_POSTFIX];
 };
 
 Dart.forBlock['procedures_callnoreturn'] = function(block) {
@@ -86,7 +86,7 @@ Dart.forBlock['procedures_callnoreturn'] = function(block) {
 Dart.forBlock['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   const condition =
-      Dart.valueToCode(block, 'CONDITION', Dart.ORDER_NONE) || 'false';
+      Dart.valueToCode(block, 'CONDITION', Order.NONE) || 'false';
   let code = 'if (' + condition + ') {\n';
   if (Dart.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
@@ -95,7 +95,7 @@ Dart.forBlock['procedures_ifreturn'] = function(block) {
         Dart.injectId(Dart.STATEMENT_SUFFIX, block), Dart.INDENT);
   }
   if (block.hasReturnValue_) {
-    const value = Dart.valueToCode(block, 'VALUE', Dart.ORDER_NONE) || 'null';
+    const value = Dart.valueToCode(block, 'VALUE', Order.NONE) || 'null';
     code += Dart.INDENT + 'return ' + value + ';\n';
   } else {
     code += Dart.INDENT + 'return;\n';

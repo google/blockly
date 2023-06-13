@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.math');
 
 import {NameType} from '../../core/names.js';
-import {dartGenerator as Dart} from '../dart.js';
+import {dartGenerator as Dart, Order} from '../dart.js';
 
 
 Dart.addReservedWords('Math');
@@ -23,14 +23,14 @@ Dart.forBlock['math_number'] = function(block) {
   let order;
   if (code === Infinity) {
     code = 'double.infinity';
-    order = Dart.ORDER_UNARY_POSTFIX;
+    order = Order.UNARY_POSTFIX;
   } else if (code === -Infinity) {
     code = '-double.infinity';
-    order = Dart.ORDER_UNARY_PREFIX;
+    order = Order.UNARY_PREFIX;
   } else {
     // -4.abs() returns -4 in Dart due to strange order of operation choices.
     // -4 is actually an operator and a number.  Reflect this in the order.
-    order = code < 0 ? Dart.ORDER_UNARY_PREFIX : Dart.ORDER_ATOMIC;
+    order = code < 0 ? Order.UNARY_PREFIX : Order.ATOMIC;
   }
   return [code, order];
 };
@@ -38,11 +38,11 @@ Dart.forBlock['math_number'] = function(block) {
 Dart.forBlock['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
-    'ADD': [' + ', Dart.ORDER_ADDITIVE],
-    'MINUS': [' - ', Dart.ORDER_ADDITIVE],
-    'MULTIPLY': [' * ', Dart.ORDER_MULTIPLICATIVE],
-    'DIVIDE': [' / ', Dart.ORDER_MULTIPLICATIVE],
-    'POWER': [null, Dart.ORDER_NONE],  // Handle power separately.
+    'ADD': [' + ', Order.ADDITIVE],
+    'MINUS': [' - ', Order.ADDITIVE],
+    'MULTIPLY': [' * ', Order.MULTIPLICATIVE],
+    'DIVIDE': [' / ', Order.MULTIPLICATIVE],
+    'POWER': [null, Order.NONE],  // Handle power separately.
   };
   const tuple = OPERATORS[block.getFieldValue('OP')];
   const operator = tuple[0];
@@ -54,7 +54,7 @@ Dart.forBlock['math_arithmetic'] = function(block) {
   if (!operator) {
     Dart.definitions_['import_dart_math'] = 'import \'dart:math\' as Math;';
     code = 'Math.pow(' + argument0 + ', ' + argument1 + ')';
-    return [code, Dart.ORDER_UNARY_POSTFIX];
+    return [code, Order.UNARY_POSTFIX];
   }
   code = argument0 + operator + argument1;
   return [code, order];
@@ -67,21 +67,21 @@ Dart.forBlock['math_single'] = function(block) {
   let arg;
   if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
-    arg = Dart.valueToCode(block, 'NUM', Dart.ORDER_UNARY_PREFIX) || '0';
+    arg = Dart.valueToCode(block, 'NUM', Order.UNARY_PREFIX) || '0';
     if (arg[0] === '-') {
       // --3 is not legal in Dart.
       arg = ' ' + arg;
     }
     code = '-' + arg;
-    return [code, Dart.ORDER_UNARY_PREFIX];
+    return [code, Order.UNARY_PREFIX];
   }
   Dart.definitions_['import_dart_math'] = 'import \'dart:math\' as Math;';
   if (operator === 'ABS' || operator.substring(0, 5) === 'ROUND') {
-    arg = Dart.valueToCode(block, 'NUM', Dart.ORDER_UNARY_POSTFIX) || '0';
+    arg = Dart.valueToCode(block, 'NUM', Order.UNARY_POSTFIX) || '0';
   } else if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
-    arg = Dart.valueToCode(block, 'NUM', Dart.ORDER_MULTIPLICATIVE) || '0';
+    arg = Dart.valueToCode(block, 'NUM', Order.MULTIPLICATIVE) || '0';
   } else {
-    arg = Dart.valueToCode(block, 'NUM', Dart.ORDER_NONE) || '0';
+    arg = Dart.valueToCode(block, 'NUM', Order.NONE) || '0';
   }
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
@@ -121,7 +121,7 @@ Dart.forBlock['math_single'] = function(block) {
       break;
   }
   if (code) {
-    return [code, Dart.ORDER_UNARY_POSTFIX];
+    return [code, Order.UNARY_POSTFIX];
   }
   // Second, handle cases which generate values that may need parentheses
   // wrapping the code.
@@ -141,18 +141,18 @@ Dart.forBlock['math_single'] = function(block) {
     default:
       throw Error('Unknown math operator: ' + operator);
   }
-  return [code, Dart.ORDER_MULTIPLICATIVE];
+  return [code, Order.MULTIPLICATIVE];
 };
 
 Dart.forBlock['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
-    'PI': ['Math.pi', Dart.ORDER_UNARY_POSTFIX],
-    'E': ['Math.e', Dart.ORDER_UNARY_POSTFIX],
-    'GOLDEN_RATIO': ['(1 + Math.sqrt(5)) / 2', Dart.ORDER_MULTIPLICATIVE],
-    'SQRT2': ['Math.sqrt2', Dart.ORDER_UNARY_POSTFIX],
-    'SQRT1_2': ['Math.sqrt1_2', Dart.ORDER_UNARY_POSTFIX],
-    'INFINITY': ['double.infinity', Dart.ORDER_ATOMIC],
+    'PI': ['Math.pi', Order.UNARY_POSTFIX],
+    'E': ['Math.e', Order.UNARY_POSTFIX],
+    'GOLDEN_RATIO': ['(1 + Math.sqrt(5)) / 2', Order.MULTIPLICATIVE],
+    'SQRT2': ['Math.sqrt2', Order.UNARY_POSTFIX],
+    'SQRT1_2': ['Math.sqrt1_2', Order.UNARY_POSTFIX],
+    'INFINITY': ['double.infinity', Order.ATOMIC],
   };
   const constant = block.getFieldValue('CONSTANT');
   if (constant !== 'INFINITY') {
@@ -165,13 +165,13 @@ Dart.forBlock['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-    'EVEN': [' % 2 == 0', Dart.ORDER_MULTIPLICATIVE, Dart.ORDER_EQUALITY],
-    'ODD': [' % 2 == 1', Dart.ORDER_MULTIPLICATIVE, Dart.ORDER_EQUALITY],
-    'WHOLE': [' % 1 == 0', Dart.ORDER_MULTIPLICATIVE, Dart.ORDER_EQUALITY],
-    'POSITIVE': [' > 0', Dart.ORDER_RELATIONAL, Dart.ORDER_RELATIONAL],
-    'NEGATIVE': [' < 0', Dart.ORDER_RELATIONAL, Dart.ORDER_RELATIONAL],
-    'DIVISIBLE_BY': [null, Dart.ORDER_MULTIPLICATIVE, Dart.ORDER_EQUALITY],
-    'PRIME': [null, Dart.ORDER_NONE, Dart.ORDER_UNARY_POSTFIX],
+    'EVEN': [' % 2 == 0', Order.MULTIPLICATIVE, Order.EQUALITY],
+    'ODD': [' % 2 == 1', Order.MULTIPLICATIVE, Order.EQUALITY],
+    'WHOLE': [' % 1 == 0', Order.MULTIPLICATIVE, Order.EQUALITY],
+    'POSITIVE': [' > 0', Order.RELATIONAL, Order.RELATIONAL],
+    'NEGATIVE': [' < 0', Order.RELATIONAL, Order.RELATIONAL],
+    'DIVISIBLE_BY': [null, Order.MULTIPLICATIVE, Order.EQUALITY],
+    'PRIME': [null, Order.NONE, Order.UNARY_POSTFIX],
   };
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
@@ -205,9 +205,9 @@ bool ${Dart.FUNCTION_NAME_PLACEHOLDER_}(n) {
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
     const divisor = Dart.valueToCode(block, 'DIVISOR',
-        Dart.ORDER_MULTIPLICATIVE) || '0';
+        Order.MULTIPLICATIVE) || '0';
     if (divisor === '0') {
-      return ['false', Dart.ORDER_ATOMIC];
+      return ['false', Order.ATOMIC];
     }
     code = numberToCheck + ' % ' + divisor + ' == 0';
   } else {
@@ -219,7 +219,7 @@ bool ${Dart.FUNCTION_NAME_PLACEHOLDER_}(n) {
 Dart.forBlock['math_change'] = function(block) {
   // Add to a variable in place.
   const argument0 =
-      Dart.valueToCode(block, 'DELTA', Dart.ORDER_ADDITIVE) || '0';
+      Dart.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
   const varName =
       Dart.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = (' + varName + ' is num ? ' + varName + ' : 0) + ' +
@@ -234,7 +234,7 @@ Dart.forBlock['math_trig'] = Dart.forBlock['math_single'];
 Dart.forBlock['math_on_list'] = function(block) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
-  const list = Dart.valueToCode(block, 'LIST', Dart.ORDER_NONE) || '[]';
+  const list = Dart.valueToCode(block, 'LIST', Order.NONE) || '[]';
   let code;
   switch (func) {
     case 'SUM': {
@@ -383,36 +383,36 @@ dynamic ${Dart.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
     default:
       throw Error('Unknown operator: ' + func);
   }
-  return [code, Dart.ORDER_UNARY_POSTFIX];
+  return [code, Order.UNARY_POSTFIX];
 };
 
 Dart.forBlock['math_modulo'] = function(block) {
   // Remainder computation.
   const argument0 =
-      Dart.valueToCode(block, 'DIVIDEND', Dart.ORDER_MULTIPLICATIVE) || '0';
+      Dart.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) || '0';
   const argument1 =
-      Dart.valueToCode(block, 'DIVISOR', Dart.ORDER_MULTIPLICATIVE) || '0';
+      Dart.valueToCode(block, 'DIVISOR', Order.MULTIPLICATIVE) || '0';
   const code = argument0 + ' % ' + argument1;
-  return [code, Dart.ORDER_MULTIPLICATIVE];
+  return [code, Order.MULTIPLICATIVE];
 };
 
 Dart.forBlock['math_constrain'] = function(block) {
   // Constrain a number between two limits.
   Dart.definitions_['import_dart_math'] = 'import \'dart:math\' as Math;';
-  const argument0 = Dart.valueToCode(block, 'VALUE', Dart.ORDER_NONE) || '0';
-  const argument1 = Dart.valueToCode(block, 'LOW', Dart.ORDER_NONE) || '0';
+  const argument0 = Dart.valueToCode(block, 'VALUE', Order.NONE) || '0';
+  const argument1 = Dart.valueToCode(block, 'LOW', Order.NONE) || '0';
   const argument2 =
-      Dart.valueToCode(block, 'HIGH', Dart.ORDER_NONE) || 'double.infinity';
+      Dart.valueToCode(block, 'HIGH', Order.NONE) || 'double.infinity';
   const code = 'Math.min(Math.max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
-  return [code, Dart.ORDER_UNARY_POSTFIX];
+  return [code, Order.UNARY_POSTFIX];
 };
 
 Dart.forBlock['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
   Dart.definitions_['import_dart_math'] = 'import \'dart:math\' as Math;';
-  const argument0 = Dart.valueToCode(block, 'FROM', Dart.ORDER_NONE) || '0';
-  const argument1 = Dart.valueToCode(block, 'TO', Dart.ORDER_NONE) || '0';
+  const argument0 = Dart.valueToCode(block, 'FROM', Order.NONE) || '0';
+  const argument1 = Dart.valueToCode(block, 'TO', Order.NONE) || '0';
   const functionName = Dart.provideFunction_('math_random_int', `
 int ${Dart.FUNCTION_NAME_PLACEHOLDER_}(num a, num b) {
   if (a > b) {
@@ -425,22 +425,22 @@ int ${Dart.FUNCTION_NAME_PLACEHOLDER_}(num a, num b) {
 }
 `);
   const code = functionName + '(' + argument0 + ', ' + argument1 + ')';
-  return [code, Dart.ORDER_UNARY_POSTFIX];
+  return [code, Order.UNARY_POSTFIX];
 };
 
 Dart.forBlock['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   Dart.definitions_['import_dart_math'] = 'import \'dart:math\' as Math;';
-  return ['new Math.Random().nextDouble()', Dart.ORDER_UNARY_POSTFIX];
+  return ['new Math.Random().nextDouble()', Order.UNARY_POSTFIX];
 };
 
 Dart.forBlock['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   Dart.definitions_['import_dart_math'] = 'import \'dart:math\' as Math;';
-  const argument0 = Dart.valueToCode(block, 'X', Dart.ORDER_NONE) || '0';
-  const argument1 = Dart.valueToCode(block, 'Y', Dart.ORDER_NONE) || '0';
+  const argument0 = Dart.valueToCode(block, 'X', Order.NONE) || '0';
+  const argument1 = Dart.valueToCode(block, 'Y', Order.NONE) || '0';
   return [
     'Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.pi * 180',
-    Dart.ORDER_MULTIPLICATIVE
+    Order.MULTIPLICATIVE
   ];
 };

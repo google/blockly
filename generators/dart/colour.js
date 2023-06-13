@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.colour');
 
-import {dartGenerator as Dart} from '../dart.js';
+import {dartGenerator as Dart, Order} from '../dart.js';
 
 
 Dart.addReservedWords('Math');
@@ -19,7 +19,7 @@ Dart.addReservedWords('Math');
 Dart.forBlock['colour_picker'] = function(block) {
   // Colour picker.
   const code = Dart.quote_(block.getFieldValue('COLOUR'));
-  return [code, Dart.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 Dart.forBlock['colour_random'] = function(block) {
@@ -35,17 +35,14 @@ String ${Dart.FUNCTION_NAME_PLACEHOLDER_}() {
 }
 `);
   const code = functionName + '()';
-  return [code, Dart.ORDER_UNARY_POSTFIX];
+  return [code, Order.UNARY_POSTFIX];
 };
 
 Dart.forBlock['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
-  const red = Dart.valueToCode(block, 'RED',
-      Dart.ORDER_NONE) || 0;
-  const green = Dart.valueToCode(block, 'GREEN',
-      Dart.ORDER_NONE) || 0;
-  const blue = Dart.valueToCode(block, 'BLUE',
-      Dart.ORDER_NONE) || 0;
+  const red = Dart.valueToCode(block, 'RED', Order.NONE) || 0;
+  const green = Dart.valueToCode(block, 'GREEN', Order.NONE) || 0;
+  const blue = Dart.valueToCode(block, 'BLUE', Order.NONE) || 0;
 
   Dart.definitions_['import_dart_math'] = "import 'dart:math' as Math;";
   const functionName = Dart.provideFunction_('colour_rgb', `
@@ -66,14 +63,14 @@ String ${Dart.FUNCTION_NAME_PLACEHOLDER_}(num r, num g, num b) {
 }
 `);
   const code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
-  return [code, Dart.ORDER_UNARY_POSTFIX];
+  return [code, Order.UNARY_POSTFIX];
 };
 
 Dart.forBlock['colour_blend'] = function(block) {
   // Blend two colours together.
-  const c1 = Dart.valueToCode(block, 'COLOUR1', Dart.ORDER_NONE) || "'#000000'";
-  const c2 = Dart.valueToCode(block, 'COLOUR2', Dart.ORDER_NONE) || "'#000000'";
-  const ratio = Dart.valueToCode(block, 'RATIO', Dart.ORDER_NONE) || 0.5;
+  const c1 = Dart.valueToCode(block, 'COLOUR1', Order.NONE) || "'#000000'";
+  const c2 = Dart.valueToCode(block, 'COLOUR2', Order.NONE) || "'#000000'";
+  const ratio = Dart.valueToCode(block, 'RATIO', Order.NONE) || 0.5;
 
   Dart.definitions_['import_dart_math'] = "import 'dart:math' as Math;";
   const functionName = Dart.provideFunction_('colour_blend', `
@@ -101,5 +98,5 @@ String ${Dart.FUNCTION_NAME_PLACEHOLDER_}(String c1, String c2, num ratio) {
 }
 `);
   const code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
-  return [code, Dart.ORDER_UNARY_POSTFIX];
+  return [code, Order.UNARY_POSTFIX];
 };

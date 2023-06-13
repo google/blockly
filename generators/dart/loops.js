@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.loops');
 
-import {dartGenerator as Dart} from '../dart.js';
+import {dartGenerator as Dart, Order} from '../dart.js';
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
 
@@ -24,7 +24,7 @@ Dart.forBlock['controls_repeat_ext'] = function(block) {
     repeats = String(Number(block.getFieldValue('TIMES')));
   } else {
     // External number.
-    repeats = Dart.valueToCode(block, 'TIMES', Dart.ORDER_ASSIGNMENT) || '0';
+    repeats = Dart.valueToCode(block, 'TIMES', Order.ASSIGNMENT) || '0';
   }
   let branch = Dart.statementToCode(block, 'DO');
   branch = Dart.addLoopTrap(branch, block);
@@ -47,7 +47,7 @@ Dart.forBlock['controls_whileUntil'] = function(block) {
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
       Dart.valueToCode(
-          block, 'BOOL', until ? Dart.ORDER_UNARY_PREFIX : Dart.ORDER_NONE) ||
+          block, 'BOOL', until ? Order.UNARY_PREFIX : Order.NONE) ||
       'false';
   let branch = Dart.statementToCode(block, 'DO');
   branch = Dart.addLoopTrap(branch, block);
@@ -62,9 +62,9 @@ Dart.forBlock['controls_for'] = function(block) {
   const variable0 =
       Dart.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
   const argument0 =
-      Dart.valueToCode(block, 'FROM', Dart.ORDER_ASSIGNMENT) || '0';
-  const argument1 = Dart.valueToCode(block, 'TO', Dart.ORDER_ASSIGNMENT) || '0';
-  const increment = Dart.valueToCode(block, 'BY', Dart.ORDER_ASSIGNMENT) || '1';
+      Dart.valueToCode(block, 'FROM', Order.ASSIGNMENT) || '0';
+  const argument1 = Dart.valueToCode(block, 'TO', Order.ASSIGNMENT) || '0';
+  const increment = Dart.valueToCode(block, 'BY', Order.ASSIGNMENT) || '1';
   let branch = Dart.statementToCode(block, 'DO');
   branch = Dart.addLoopTrap(branch, block);
   let code;
@@ -122,7 +122,7 @@ Dart.forBlock['controls_forEach'] = function(block) {
   const variable0 =
       Dart.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
   const argument0 =
-      Dart.valueToCode(block, 'LIST', Dart.ORDER_ASSIGNMENT) || '[]';
+      Dart.valueToCode(block, 'LIST', Order.ASSIGNMENT) || '[]';
   let branch = Dart.statementToCode(block, 'DO');
   branch = Dart.addLoopTrap(branch, block);
   const code =

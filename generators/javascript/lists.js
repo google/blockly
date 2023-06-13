@@ -13,30 +13,30 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.lists');
 
 import {NameType} from '../../core/names.js';
-import {Order, javascriptGenerator as JavaScript} from '../javascript.js';
+import {Order, javascriptGenerator} from '../javascript.js';
 
 
-JavaScript['lists_create_empty'] = function(block) {
+javascriptGenerator['lists_create_empty'] = function(block) {
   // Create an empty list.
   return ['[]', Order.ATOMIC];
 };
 
-JavaScript['lists_create_with'] = function(block) {
+javascriptGenerator['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
     elements[i] =
-        JavaScript.valueToCode(block, 'ADD' + i, Order.NONE) ||
+        javascriptGenerator.valueToCode(block, 'ADD' + i, Order.NONE) ||
         'null';
   }
   const code = '[' + elements.join(', ') + ']';
   return [code, Order.ATOMIC];
 };
 
-JavaScript['lists_repeat'] = function(block) {
+javascriptGenerator['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
-  const functionName = JavaScript.provideFunction_('listsRepeat', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(value, n) {
+  const functionName = javascriptGenerator.provideFunction_('listsRepeat', `
+function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(value, n) {
   var array = [];
   for (var i = 0; i < n; i++) {
     array[i] = value;
@@ -45,35 +45,35 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(value, n) {
 }
 `);
   const element =
-      JavaScript.valueToCode(block, 'ITEM', Order.NONE) || 'null';
+      javascriptGenerator.valueToCode(block, 'ITEM', Order.NONE) || 'null';
   const repeatCount =
-      JavaScript.valueToCode(block, 'NUM', Order.NONE) || '0';
+      javascriptGenerator.valueToCode(block, 'NUM', Order.NONE) || '0';
   const code = functionName + '(' + element + ', ' + repeatCount + ')';
   return [code, Order.FUNCTION_CALL];
 };
 
-JavaScript['lists_length'] = function(block) {
+javascriptGenerator['lists_length'] = function(block) {
   // String or array length.
   const list =
-      JavaScript.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
+      javascriptGenerator.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
   return [list + '.length', Order.MEMBER];
 };
 
-JavaScript['lists_isEmpty'] = function(block) {
+javascriptGenerator['lists_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const list =
-      JavaScript.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
+      javascriptGenerator.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
   return ['!' + list + '.length', Order.LOGICAL_NOT];
 };
 
-JavaScript['lists_indexOf'] = function(block) {
+javascriptGenerator['lists_indexOf'] = function(block) {
   // Find an item in the list.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'indexOf' : 'lastIndexOf';
   const item =
-      JavaScript.valueToCode(block, 'FIND', Order.NONE) || "''";
+      javascriptGenerator.valueToCode(block, 'FIND', Order.NONE) || "''";
   const list =
-      JavaScript.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
+      javascriptGenerator.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
   const code = list + '.' + operator + '(' + item + ')';
   if (block.workspace.options.oneBasedIndex) {
     return [code + ' + 1', Order.ADDITION];
@@ -81,14 +81,15 @@ JavaScript['lists_indexOf'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-JavaScript['lists_getIndex'] = function(block) {
+javascriptGenerator['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const listOrder =
       (where === 'RANDOM') ? Order.NONE : Order.MEMBER;
-  const list = JavaScript.valueToCode(block, 'VALUE', listOrder) || '[]';
+  const list =
+      javascriptGenerator.valueToCode(block, 'VALUE', listOrder) || '[]';
 
   switch (where) {
     case ('FIRST'):
@@ -114,7 +115,7 @@ JavaScript['lists_getIndex'] = function(block) {
       }
       break;
     case ('FROM_START'): {
-      const at = JavaScript.getAdjusted(block, 'AT');
+      const at = javascriptGenerator.getAdjusted(block, 'AT');
       if (mode === 'GET') {
         const code = list + '[' + at + ']';
         return [code, Order.MEMBER];
@@ -127,7 +128,7 @@ JavaScript['lists_getIndex'] = function(block) {
       break;
     }
     case ('FROM_END'): {
-      const at = JavaScript.getAdjusted(block, 'AT', 1, true);
+      const at = javascriptGenerator.getAdjusted(block, 'AT', 1, true);
       if (mode === 'GET') {
         const code = list + '.slice(' + at + ')[0]';
         return [code, Order.FUNCTION_CALL];
@@ -140,8 +141,9 @@ JavaScript['lists_getIndex'] = function(block) {
       break;
     }
     case ('RANDOM'): {
-      const functionName = JavaScript.provideFunction_('listsGetRandomItem', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(list, remove) {
+      const functionName =
+          javascriptGenerator.provideFunction_('listsGetRandomItem', `
+function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(list, remove) {
   var x = Math.floor(Math.random() * list.length);
   if (remove) {
     return list.splice(x, 1)[0];
@@ -162,15 +164,15 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(list, remove) {
   throw Error('Unhandled combination (lists_getIndex).');
 };
 
-JavaScript['lists_setIndex'] = function(block) {
+javascriptGenerator['lists_setIndex'] = function(block) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   let list =
-      JavaScript.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
+      javascriptGenerator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const value =
-      JavaScript.valueToCode(block, 'TO', Order.ASSIGNMENT) ||
+      javascriptGenerator.valueToCode(block, 'TO', Order.ASSIGNMENT) ||
       'null';
   // Cache non-trivial values to variables to prevent repeated look-ups.
   // Closure, which accesses and modifies 'list'.
@@ -179,7 +181,8 @@ JavaScript['lists_setIndex'] = function(block) {
       return '';
     }
     const listVar =
-        JavaScript.nameDB_.getDistinctName('tmpList', NameType.VARIABLE);
+        javascriptGenerator.nameDB_.getDistinctName(
+          'tmpList', NameType.VARIABLE);
     const code = 'var ' + listVar + ' = ' + list + ';\n';
     list = listVar;
     return code;
@@ -202,7 +205,7 @@ JavaScript['lists_setIndex'] = function(block) {
       }
       break;
     case ('FROM_START'): {
-      const at = JavaScript.getAdjusted(block, 'AT');
+      const at = javascriptGenerator.getAdjusted(block, 'AT');
       if (mode === 'SET') {
         return list + '[' + at + '] = ' + value + ';\n';
       } else if (mode === 'INSERT') {
@@ -211,7 +214,7 @@ JavaScript['lists_setIndex'] = function(block) {
       break;
     }
     case ('FROM_END'): {
-      const at = JavaScript.getAdjusted(
+      const at = javascriptGenerator.getAdjusted(
           block, 'AT', 1, false, Order.SUBTRACTION);
       let code = cacheList();
       if (mode === 'SET') {
@@ -227,7 +230,8 @@ JavaScript['lists_setIndex'] = function(block) {
     case ('RANDOM'): {
       let code = cacheList();
       const xVar =
-          JavaScript.nameDB_.getDistinctName('tmpX', NameType.VARIABLE);
+          javascriptGenerator.nameDB_.getDistinctName(
+            'tmpX', NameType.VARIABLE);
       code += 'var ' + xVar + ' = Math.floor(Math.random() * ' + list +
           '.length);\n';
       if (mode === 'SET') {
@@ -262,10 +266,10 @@ const getSubstringIndex = function(listName, where, opt_at) {
   }
 };
 
-JavaScript['lists_getSublist'] = function(block) {
+javascriptGenerator['lists_getSublist'] = function(block) {
   // Get sublist.
   const list =
-      JavaScript.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
+      javascriptGenerator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
   let code;
@@ -279,10 +283,10 @@ JavaScript['lists_getSublist'] = function(block) {
     let at1;
     switch (where1) {
       case 'FROM_START':
-        at1 = JavaScript.getAdjusted(block, 'AT1');
+        at1 = javascriptGenerator.getAdjusted(block, 'AT1');
         break;
       case 'FROM_END':
-        at1 = JavaScript.getAdjusted(
+        at1 = javascriptGenerator.getAdjusted(
             block, 'AT1', 1, false, Order.SUBTRACTION);
         at1 = list + '.length - ' + at1;
         break;
@@ -295,10 +299,10 @@ JavaScript['lists_getSublist'] = function(block) {
     let at2;
     switch (where2) {
       case 'FROM_START':
-        at2 = JavaScript.getAdjusted(block, 'AT2', 1);
+        at2 = javascriptGenerator.getAdjusted(block, 'AT2', 1);
         break;
       case 'FROM_END':
-        at2 = JavaScript.getAdjusted(
+        at2 = javascriptGenerator.getAdjusted(
             block, 'AT2', 0, false, Order.SUBTRACTION);
         at2 = list + '.length - ' + at2;
         break;
@@ -310,8 +314,8 @@ JavaScript['lists_getSublist'] = function(block) {
     }
     code = list + '.slice(' + at1 + ', ' + at2 + ')';
   } else {
-    const at1 = JavaScript.getAdjusted(block, 'AT1');
-    const at2 = JavaScript.getAdjusted(block, 'AT2');
+    const at1 = javascriptGenerator.getAdjusted(block, 'AT1');
+    const at2 = javascriptGenerator.getAdjusted(block, 'AT2');
     const wherePascalCase = {
       'FIRST': 'First',
       'LAST': 'Last',
@@ -324,9 +328,9 @@ JavaScript['lists_getSublist'] = function(block) {
         (where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' : '';
     const at2Param =
         (where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' : '';
-    const functionName = JavaScript.provideFunction_(
+    const functionName = javascriptGenerator.provideFunction_(
         'subsequence' + wherePascalCase[where1] + wherePascalCase[where2], `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param}) {
+function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param}) {
   var start = ${getSubstringIndex('sequence', where1, 'at1')};
   var end = ${getSubstringIndex('sequence', where2, 'at2')} + 1;
   return sequence.slice(start, end);
@@ -342,16 +346,16 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param}
   return [code, Order.FUNCTION_CALL];
 };
 
-JavaScript['lists_sort'] = function(block) {
+javascriptGenerator['lists_sort'] = function(block) {
   // Block for sorting a list.
   const list =
-      JavaScript.valueToCode(block, 'LIST', Order.FUNCTION_CALL) ||
+      javascriptGenerator.valueToCode(block, 'LIST', Order.FUNCTION_CALL) ||
       '[]';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   const type = block.getFieldValue('TYPE');
   const getCompareFunctionName =
-      JavaScript.provideFunction_('listsGetSortCompare', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(type, direction) {
+      javascriptGenerator.provideFunction_('listsGetSortCompare', `
+function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(type, direction) {
   var compareFuncs = {
     'NUMERIC': function(a, b) {
         return Number(a) - Number(b); },
@@ -371,11 +375,11 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(type, direction) {
   ];
 };
 
-JavaScript['lists_split'] = function(block) {
+javascriptGenerator['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
-  let input = JavaScript.valueToCode(block, 'INPUT', Order.MEMBER);
+  let input = javascriptGenerator.valueToCode(block, 'INPUT', Order.MEMBER);
   const delimiter =
-      JavaScript.valueToCode(block, 'DELIM', Order.NONE) || "''";
+      javascriptGenerator.valueToCode(block, 'DELIM', Order.NONE) || "''";
   const mode = block.getFieldValue('MODE');
   let functionName;
   if (mode === 'SPLIT') {
@@ -395,10 +399,10 @@ JavaScript['lists_split'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-JavaScript['lists_reverse'] = function(block) {
+javascriptGenerator['lists_reverse'] = function(block) {
   // Block for reversing a list.
   const list =
-      JavaScript.valueToCode(block, 'LIST', Order.FUNCTION_CALL) ||
+      javascriptGenerator.valueToCode(block, 'LIST', Order.FUNCTION_CALL) ||
       '[]';
   const code = list + '.slice().reverse()';
   return [code, Order.FUNCTION_CALL];

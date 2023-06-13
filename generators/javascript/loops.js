@@ -13,10 +13,10 @@ goog.declareModuleId('Blockly.JavaScript.loops');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {Order, javascriptGenerator as JavaScript} from '../javascript.js';
+import {Order, javascriptGenerator} from '../javascript.js';
 
 
-JavaScript['controls_repeat_ext'] = function(block) {
+javascriptGenerator['controls_repeat_ext'] = function(block) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -25,18 +25,19 @@ JavaScript['controls_repeat_ext'] = function(block) {
   } else {
     // External number.
     repeats =
-        JavaScript.valueToCode(block, 'TIMES', Order.ASSIGNMENT) ||
+        javascriptGenerator.valueToCode(block, 'TIMES', Order.ASSIGNMENT) ||
         '0';
   }
-  let branch = JavaScript.statementToCode(block, 'DO');
-  branch = JavaScript.addLoopTrap(branch, block);
+  let branch = javascriptGenerator.statementToCode(block, 'DO');
+  branch = javascriptGenerator.addLoopTrap(branch, block);
   let code = '';
   const loopVar =
-      JavaScript.nameDB_.getDistinctName('count', NameType.VARIABLE);
+      javascriptGenerator.nameDB_.getDistinctName('count', NameType.VARIABLE);
   let endVar = repeats;
   if (!repeats.match(/^\w+$/) && !stringUtils.isNumber(repeats)) {
     endVar =
-        JavaScript.nameDB_.getDistinctName('repeat_end', NameType.VARIABLE);
+        javascriptGenerator.nameDB_.getDistinctName(
+          'repeat_end', NameType.VARIABLE);
     code += 'var ' + endVar + ' = ' + repeats + ';\n';
   }
   code += 'for (var ' + loopVar + ' = 0; ' + loopVar + ' < ' + endVar + '; ' +
@@ -44,36 +45,38 @@ JavaScript['controls_repeat_ext'] = function(block) {
   return code;
 };
 
-JavaScript['controls_repeat'] = JavaScript['controls_repeat_ext'];
+javascriptGenerator['controls_repeat'] =
+    javascriptGenerator['controls_repeat_ext'];
 
-JavaScript['controls_whileUntil'] = function(block) {
+javascriptGenerator['controls_whileUntil'] = function(block) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
-      JavaScript.valueToCode(
+      javascriptGenerator.valueToCode(
           block, 'BOOL',
           until ? Order.LOGICAL_NOT : Order.NONE) ||
       'false';
-  let branch = JavaScript.statementToCode(block, 'DO');
-  branch = JavaScript.addLoopTrap(branch, block);
+  let branch = javascriptGenerator.statementToCode(block, 'DO');
+  branch = javascriptGenerator.addLoopTrap(branch, block);
   if (until) {
     argument0 = '!' + argument0;
   }
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
 };
 
-JavaScript['controls_for'] = function(block) {
+javascriptGenerator['controls_for'] = function(block) {
   // For loop.
   const variable0 =
-      JavaScript.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+      javascriptGenerator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
   const argument0 =
-      JavaScript.valueToCode(block, 'FROM', Order.ASSIGNMENT) || '0';
+      javascriptGenerator.valueToCode(block, 'FROM', Order.ASSIGNMENT) || '0';
   const argument1 =
-      JavaScript.valueToCode(block, 'TO', Order.ASSIGNMENT) || '0';
+      javascriptGenerator.valueToCode(block, 'TO', Order.ASSIGNMENT) || '0';
   const increment =
-      JavaScript.valueToCode(block, 'BY', Order.ASSIGNMENT) || '1';
-  let branch = JavaScript.statementToCode(block, 'DO');
-  branch = JavaScript.addLoopTrap(branch, block);
+      javascriptGenerator.valueToCode(block, 'BY', Order.ASSIGNMENT) || '1';
+  let branch = javascriptGenerator.statementToCode(block, 'DO');
+  branch = javascriptGenerator.addLoopTrap(branch, block);
   let code;
   if (stringUtils.isNumber(argument0) && stringUtils.isNumber(argument1) &&
       stringUtils.isNumber(increment)) {
@@ -93,19 +96,19 @@ JavaScript['controls_for'] = function(block) {
     // Cache non-trivial values to variables to prevent repeated look-ups.
     let startVar = argument0;
     if (!argument0.match(/^\w+$/) && !stringUtils.isNumber(argument0)) {
-      startVar = JavaScript.nameDB_.getDistinctName(
+      startVar = javascriptGenerator.nameDB_.getDistinctName(
           variable0 + '_start', NameType.VARIABLE);
       code += 'var ' + startVar + ' = ' + argument0 + ';\n';
     }
     let endVar = argument1;
     if (!argument1.match(/^\w+$/) && !stringUtils.isNumber(argument1)) {
-      endVar = JavaScript.nameDB_.getDistinctName(
+      endVar = javascriptGenerator.nameDB_.getDistinctName(
           variable0 + '_end', NameType.VARIABLE);
       code += 'var ' + endVar + ' = ' + argument1 + ';\n';
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    const incVar = JavaScript.nameDB_.getDistinctName(
+    const incVar = javascriptGenerator.nameDB_.getDistinctName(
         variable0 + '_inc', NameType.VARIABLE);
     code += 'var ' + incVar + ' = ';
     if (stringUtils.isNumber(increment)) {
@@ -114,7 +117,7 @@ JavaScript['controls_for'] = function(block) {
       code += 'Math.abs(' + increment + ');\n';
     }
     code += 'if (' + startVar + ' > ' + endVar + ') {\n';
-    code += JavaScript.INDENT + incVar + ' = -' + incVar + ';\n';
+    code += javascriptGenerator.INDENT + incVar + ' = -' + incVar + ';\n';
     code += '}\n';
     code += 'for (' + variable0 + ' = ' + startVar + '; ' + incVar +
         ' >= 0 ? ' + variable0 + ' <= ' + endVar + ' : ' + variable0 +
@@ -124,50 +127,54 @@ JavaScript['controls_for'] = function(block) {
   return code;
 };
 
-JavaScript['controls_forEach'] = function(block) {
+javascriptGenerator['controls_forEach'] = function(block) {
   // For each loop.
   const variable0 =
-      JavaScript.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+      javascriptGenerator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
   const argument0 =
-      JavaScript.valueToCode(block, 'LIST', Order.ASSIGNMENT) ||
+      javascriptGenerator.valueToCode(block, 'LIST', Order.ASSIGNMENT) ||
       '[]';
-  let branch = JavaScript.statementToCode(block, 'DO');
-  branch = JavaScript.addLoopTrap(branch, block);
+  let branch = javascriptGenerator.statementToCode(block, 'DO');
+  branch = javascriptGenerator.addLoopTrap(branch, block);
   let code = '';
   // Cache non-trivial values to variables to prevent repeated look-ups.
   let listVar = argument0;
   if (!argument0.match(/^\w+$/)) {
-    listVar = JavaScript.nameDB_.getDistinctName(
+    listVar = javascriptGenerator.nameDB_.getDistinctName(
         variable0 + '_list', NameType.VARIABLE);
     code += 'var ' + listVar + ' = ' + argument0 + ';\n';
   }
-  const indexVar = JavaScript.nameDB_.getDistinctName(
+  const indexVar = javascriptGenerator.nameDB_.getDistinctName(
       variable0 + '_index', NameType.VARIABLE);
-  branch = JavaScript.INDENT + variable0 + ' = ' + listVar + '[' + indexVar +
-      '];\n' + branch;
+  branch = javascriptGenerator.INDENT + variable0 + ' = ' + listVar +
+      '[' + indexVar + '];\n' + branch;
   code += 'for (var ' + indexVar + ' in ' + listVar + ') {\n' + branch + '}\n';
   return code;
 };
 
-JavaScript['controls_flow_statements'] = function(block) {
+javascriptGenerator['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
   let xfix = '';
-  if (JavaScript.STATEMENT_PREFIX) {
+  if (javascriptGenerator.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
-    xfix += JavaScript.injectId(JavaScript.STATEMENT_PREFIX, block);
+    xfix += javascriptGenerator.injectId(
+        javascriptGenerator.STATEMENT_PREFIX, block);
   }
-  if (JavaScript.STATEMENT_SUFFIX) {
+  if (javascriptGenerator.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the break/continue is triggered.
-    xfix += JavaScript.injectId(JavaScript.STATEMENT_SUFFIX, block);
+    xfix += javascriptGenerator.injectId(
+        javascriptGenerator.STATEMENT_SUFFIX, block);
   }
-  if (JavaScript.STATEMENT_PREFIX) {
+  if (javascriptGenerator.STATEMENT_PREFIX) {
     const loop = block.getSurroundLoop();
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end
       // of the loop will not get executed if 'continue' is triggered.
       // In the case of 'break', a prefix is needed due to the loop's suffix.
-      xfix += JavaScript.injectId(JavaScript.STATEMENT_PREFIX, loop);
+      xfix += javascriptGenerator.injectId(
+          javascriptGenerator.STATEMENT_PREFIX, loop);
     }
   }
   switch (block.getFieldValue('FLOW')) {

@@ -8,13 +8,12 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Icon');
 
 /* eslint-disable-next-line no-unused-vars */
-import type {Icon as BlocklyIcon} from '../../icon_old.js';
+import type {IIcon as BlocklyIcon} from '../../interfaces/i_icon.js';
 import type {ConstantProvider} from '../common/constants.js';
 
 import {Measurable} from './base.js';
 import {Types} from './types.js';
 import {hasBubble} from '../../interfaces/i_has_bubble.js';
-import {isIcon} from '../../interfaces/i_icon.js';
 
 /**
  * An object containing information about the space an icon takes up during
@@ -38,15 +37,10 @@ export class Icon extends Measurable {
   constructor(constants: ConstantProvider, public icon: BlocklyIcon) {
     super(constants);
 
-    // TODO(#7042): Remove references to old icon API.
-    this.isVisible =
-      (icon.isVisible && icon.isVisible()) ||
-      (hasBubble(icon) && icon.bubbleIsVisible());
+    this.isVisible = hasBubble(icon) && icon.bubbleIsVisible();
     this.type |= Types.ICON;
 
-    const size =
-      (icon.getCorrectedSize && icon.getCorrectedSize()) ||
-      (isIcon(icon) && icon.getSize());
+    const size = icon.getSize();
     this.height = size.height;
     this.width = size.width;
   }

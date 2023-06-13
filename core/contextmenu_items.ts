@@ -17,6 +17,7 @@ import {
 import * as dialog from './dialog.js';
 import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
+import {CommentIcon} from './icons/comment_icon.js';
 import {Msg} from './msg.js';
 import {StatementInput} from './renderers/zelos/zelos.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
@@ -347,7 +348,7 @@ export function registerDuplicate() {
 export function registerComment() {
   const commentOption: RegistryItem = {
     displayText(scope: Scope) {
-      if (scope.block!.getCommentIcon()) {
+      if (scope.block!.hasIcon(CommentIcon.TYPE)) {
         // If there's already a comment,  option is to remove.
         return Msg['REMOVE_COMMENT'];
       }
@@ -368,7 +369,7 @@ export function registerComment() {
     },
     callback(scope: Scope) {
       const block = scope.block;
-      if (block!.getCommentIcon()) {
+      if (block!.hasIcon(CommentIcon.TYPE)) {
         block!.setCommentText(null);
       } else {
         block!.setCommentText('');

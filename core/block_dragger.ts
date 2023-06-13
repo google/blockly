@@ -21,8 +21,7 @@ import * as bumpObjects from './bump_objects.js';
 import * as common from './common.js';
 import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
-import type {Icon} from './icon_old.js';
-import {isIcon} from './interfaces/i_icon.js';
+import type {Icon} from './icons/icon.js';
 import {InsertionMarkerManager} from './insertion_marker_manager.js';
 import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
@@ -409,12 +408,7 @@ export class BlockDragger implements IBlockDragger {
   protected dragIcons_(dxy: Coordinate) {
     // Moving icons moves their associated bubbles.
     for (const data of this.dragIconData_) {
-      if (isIcon(data.icon)) {
-        data.icon.onLocationChange(Coordinate.sum(data.location, dxy));
-      } else {
-        // TODO: Remove old icon handling logic.
-        data.icon.setIconLocation(Coordinate.sum(data.location, dxy));
-      }
+      data.icon.onLocationChange(Coordinate.sum(data.location, dxy));
     }
   }
 
@@ -461,21 +455,9 @@ function initIconData(
   for (const icon of block.getIcons()) {
     // Only bother to track icons whose bubble is visible.
     if (hasBubble(icon) && !icon.bubbleIsVisible()) continue;
-    // TODO (#7042): Remove old icon handling code.
-    if (icon.isVisible && !icon.isVisible()) continue;
 
-    if (isIcon(icon)) {
-      dragIconData.push({location: blockOrigin, icon: icon});
-      icon.onLocationChange(blockOrigin);
-    } else {
-      // TODO (#7042): Remove old icon handling code.
-      dragIconData.push({
-        // Coordinate with x and y properties (workspace
-        // coordinates).
-        location: icon.getIconLocation(), // Blockly.Icon
-        icon: icon,
-      });
-    }
+    dragIconData.push({location: blockOrigin, icon: icon});
+    icon.onLocationChange(blockOrigin);
   }
 
   for (const child of block.getChildren(false)) {

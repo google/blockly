@@ -14,13 +14,13 @@ goog.declareModuleId('Blockly.PHP.colour');
 import {phpGenerator as PHP} from '../php.js';
 
 
-PHP['colour_picker'] = function(block) {
+PHP.forBlock['colour_picker'] = function(block) {
   // Colour picker.
   const code = PHP.quote_(block.getFieldValue('COLOUR'));
   return [code, PHP.ORDER_ATOMIC];
 };
 
-PHP['colour_random'] = function(block) {
+PHP.forBlock['colour_random'] = function(block) {
   // Generate a random colour.
   const functionName = PHP.provideFunction_('colour_random', `
 function ${PHP.FUNCTION_NAME_PLACEHOLDER_}() {
@@ -31,7 +31,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}() {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['colour_rgb'] = function(block) {
+PHP.forBlock['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
   const red = PHP.valueToCode(block, 'RED', PHP.ORDER_NONE) || 0;
   const green = PHP.valueToCode(block, 'GREEN', PHP.ORDER_NONE) || 0;
@@ -52,7 +52,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($r, $g, $b) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['colour_blend'] = function(block) {
+PHP.forBlock['colour_blend'] = function(block) {
   // Blend two colours together.
   const c1 = PHP.valueToCode(block, 'COLOUR1', PHP.ORDER_NONE) || "'#000000'";
   const c2 = PHP.valueToCode(block, 'COLOUR2', PHP.ORDER_NONE) || "'#000000'";

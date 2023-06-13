@@ -16,13 +16,13 @@ import {NameType} from '../../core/names.js';
 import {pythonGenerator as Python} from '../python.js';
 
 
-Python['text'] = function(block) {
+Python.forBlock['text'] = function(block) {
   // Text value.
   const code = Python.quote_(block.getFieldValue('TEXT'));
   return [code, Python.ORDER_ATOMIC];
 };
 
-Python['text_multiline'] = function(block) {
+Python.forBlock['text_multiline'] = function(block) {
   // Text value.
   const code = Python.multiline_quote_(block.getFieldValue('TEXT'));
   const order =
@@ -50,7 +50,7 @@ const forceString = function(value) {
   return ['str(' + value + ')', Python.ORDER_FUNCTION_CALL];
 };
 
-Python['text_join'] = function(block) {
+Python.forBlock['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   // Should we allow joining by '-' or ',' or any other characters?
   switch (block.itemCount_) {
@@ -84,7 +84,7 @@ Python['text_join'] = function(block) {
   }
 };
 
-Python['text_append'] = function(block) {
+Python.forBlock['text_append'] = function(block) {
   // Append to a variable in place.
   const varName =
       Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
@@ -92,20 +92,20 @@ Python['text_append'] = function(block) {
   return varName + ' = str(' + varName + ') + ' + forceString(value)[0] + '\n';
 };
 
-Python['text_length'] = function(block) {
+Python.forBlock['text_length'] = function(block) {
   // Is the string null or array empty?
   const text = Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || "''";
   return ['len(' + text + ')', Python.ORDER_FUNCTION_CALL];
 };
 
-Python['text_isEmpty'] = function(block) {
+Python.forBlock['text_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const text = Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || "''";
   const code = 'not len(' + text + ')';
   return [code, Python.ORDER_LOGICAL_NOT];
 };
 
-Python['text_indexOf'] = function(block) {
+Python.forBlock['text_indexOf'] = function(block) {
   // Search the text for a substring.
   // Should we allow for non-case sensitive???
   const operator = block.getFieldValue('END') === 'FIRST' ? 'find' : 'rfind';
@@ -120,7 +120,7 @@ Python['text_indexOf'] = function(block) {
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['text_charAt'] = function(block) {
+Python.forBlock['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
@@ -160,7 +160,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(text):
   throw Error('Unhandled option (text_charAt).');
 };
 
-Python['text_getSubstring'] = function(block) {
+Python.forBlock['text_getSubstring'] = function(block) {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
@@ -210,7 +210,7 @@ Python['text_getSubstring'] = function(block) {
   return [code, Python.ORDER_MEMBER];
 };
 
-Python['text_changeCase'] = function(block) {
+Python.forBlock['text_changeCase'] = function(block) {
   // Change capitalization.
   const OPERATORS = {
     'UPPERCASE': '.upper()',
@@ -223,7 +223,7 @@ Python['text_changeCase'] = function(block) {
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['text_trim'] = function(block) {
+Python.forBlock['text_trim'] = function(block) {
   // Trim spaces.
   const OPERATORS = {
     'LEFT': '.lstrip()',
@@ -236,13 +236,13 @@ Python['text_trim'] = function(block) {
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['text_print'] = function(block) {
+Python.forBlock['text_print'] = function(block) {
   // Print statement.
   const msg = Python.valueToCode(block, 'TEXT', Python.ORDER_NONE) || "''";
   return 'print(' + msg + ')\n';
 };
 
-Python['text_prompt_ext'] = function(block) {
+Python.forBlock['text_prompt_ext'] = function(block) {
   // Prompt function.
   const functionName = Python.provideFunction_('text_prompt', `
 def ${Python.FUNCTION_NAME_PLACEHOLDER_}(msg):
@@ -267,16 +267,16 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(msg):
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['text_prompt'] = Python['text_prompt_ext'];
+Python.forBlock['text_prompt'] = Python.forBlock['text_prompt_ext'];
 
-Python['text_count'] = function(block) {
+Python.forBlock['text_count'] = function(block) {
   const text = Python.valueToCode(block, 'TEXT', Python.ORDER_MEMBER) || "''";
   const sub = Python.valueToCode(block, 'SUB', Python.ORDER_NONE) || "''";
   const code = text + '.count(' + sub + ')';
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['text_replace'] = function(block) {
+Python.forBlock['text_replace'] = function(block) {
   const text = Python.valueToCode(block, 'TEXT', Python.ORDER_MEMBER) || "''";
   const from = Python.valueToCode(block, 'FROM', Python.ORDER_NONE) || "''";
   const to = Python.valueToCode(block, 'TO', Python.ORDER_NONE) || "''";
@@ -284,7 +284,7 @@ Python['text_replace'] = function(block) {
   return [code, Python.ORDER_MEMBER];
 };
 
-Python['text_reverse'] = function(block) {
+Python.forBlock['text_reverse'] = function(block) {
   const text = Python.valueToCode(block, 'TEXT', Python.ORDER_MEMBER) || "''";
   const code = text + '[::-1]';
   return [code, Python.ORDER_MEMBER];

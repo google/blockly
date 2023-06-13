@@ -15,14 +15,14 @@ import {NameType} from '../../core/names.js';
 import {luaGenerator as Lua} from '../lua.js';
 
 
-Lua['math_number'] = function(block) {
+Lua.forBlock['math_number'] = function(block) {
   // Numeric value.
   const code = Number(block.getFieldValue('NUM'));
   const order = code < 0 ? Lua.ORDER_UNARY : Lua.ORDER_ATOMIC;
   return [code, order];
 };
 
-Lua['math_arithmetic'] = function(block) {
+Lua.forBlock['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', Lua.ORDER_ADDITIVE],
@@ -40,7 +40,7 @@ Lua['math_arithmetic'] = function(block) {
   return [code, order];
 };
 
-Lua['math_single'] = function(block) {
+Lua.forBlock['math_single'] = function(block) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let arg;
@@ -110,7 +110,7 @@ Lua['math_single'] = function(block) {
   return [code, Lua.ORDER_HIGH];
 };
 
-Lua['math_constant'] = function(block) {
+Lua.forBlock['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['math.pi', Lua.ORDER_HIGH],
@@ -123,7 +123,7 @@ Lua['math_constant'] = function(block) {
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
 
-Lua['math_number_property'] = function(block) {
+Lua.forBlock['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -181,7 +181,7 @@ end
   return [code, outputOrder];
 };
 
-Lua['math_change'] = function(block) {
+Lua.forBlock['math_change'] = function(block) {
   // Add to a variable in place.
   const argument0 = Lua.valueToCode(block, 'DELTA', Lua.ORDER_ADDITIVE) || '0';
   const varName =
@@ -190,11 +190,11 @@ Lua['math_change'] = function(block) {
 };
 
 // Rounding functions have a single operand.
-Lua['math_round'] = Lua['math_single'];
+Lua.forBlock['math_round'] = Lua.forBlock['math_single'];
 // Trigonometry functions have a single operand.
-Lua['math_trig'] = Lua['math_single'];
+Lua.forBlock['math_trig'] = Lua.forBlock['math_single'];
 
-Lua['math_on_list'] = function(block) {
+Lua.forBlock['math_on_list'] = function(block) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   const list = Lua.valueToCode(block, 'LIST', Lua.ORDER_NONE) || '{}';
@@ -361,7 +361,7 @@ end
   return [functionName + '(' + list + ')', Lua.ORDER_HIGH];
 };
 
-Lua['math_modulo'] = function(block) {
+Lua.forBlock['math_modulo'] = function(block) {
   // Remainder computation.
   const argument0 =
       Lua.valueToCode(block, 'DIVIDEND', Lua.ORDER_MULTIPLICATIVE) || '0';
@@ -371,7 +371,7 @@ Lua['math_modulo'] = function(block) {
   return [code, Lua.ORDER_MULTIPLICATIVE];
 };
 
-Lua['math_constrain'] = function(block) {
+Lua.forBlock['math_constrain'] = function(block) {
   // Constrain a number between two limits.
   const argument0 = Lua.valueToCode(block, 'VALUE', Lua.ORDER_NONE) || '0';
   const argument1 =
@@ -383,7 +383,7 @@ Lua['math_constrain'] = function(block) {
   return [code, Lua.ORDER_HIGH];
 };
 
-Lua['math_random_int'] = function(block) {
+Lua.forBlock['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
   const argument0 = Lua.valueToCode(block, 'FROM', Lua.ORDER_NONE) || '0';
   const argument1 = Lua.valueToCode(block, 'TO', Lua.ORDER_NONE) || '0';
@@ -391,12 +391,12 @@ Lua['math_random_int'] = function(block) {
   return [code, Lua.ORDER_HIGH];
 };
 
-Lua['math_random_float'] = function(block) {
+Lua.forBlock['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   return ['math.random()', Lua.ORDER_HIGH];
 };
 
-Lua['math_atan2'] = function(block) {
+Lua.forBlock['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   const argument0 = Lua.valueToCode(block, 'X', Lua.ORDER_NONE) || '0';
   const argument1 = Lua.valueToCode(block, 'Y', Lua.ORDER_NONE) || '0';

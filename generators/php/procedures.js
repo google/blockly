@@ -16,7 +16,7 @@ import {NameType} from '../../core/names.js';
 import {phpGenerator as PHP} from '../php.js';
 
 
-PHP['procedures_defreturn'] = function(block) {
+PHP.forBlock['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   // First, add a 'global' statement for every variable that is not shadowed by
   // a local parameter.
@@ -80,9 +80,9 @@ PHP['procedures_defreturn'] = function(block) {
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-PHP['procedures_defnoreturn'] = PHP['procedures_defreturn'];
+PHP.forBlock['procedures_defnoreturn'] = PHP.forBlock['procedures_defreturn'];
 
-PHP['procedures_callreturn'] = function(block) {
+PHP.forBlock['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
   const funcName =
       PHP.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
@@ -95,15 +95,15 @@ PHP['procedures_callreturn'] = function(block) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['procedures_callnoreturn'] = function(block) {
+PHP.forBlock['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  const tuple = PHP['procedures_callreturn'](block);
+  const tuple = PHP.forBlock['procedures_callreturn'](block);
   return tuple[0] + ';\n';
 };
 
-PHP['procedures_ifreturn'] = function(block) {
+PHP.forBlock['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   const condition =
       PHP.valueToCode(block, 'CONDITION', PHP.ORDER_NONE) || 'false';

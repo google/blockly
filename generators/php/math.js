@@ -15,7 +15,7 @@ import {NameType} from '../../core/names.js';
 import {phpGenerator as PHP} from '../php.js';
 
 
-PHP['math_number'] = function(block) {
+PHP.forBlock['math_number'] = function(block) {
   // Numeric value.
   let code = Number(block.getFieldValue('NUM'));
   const order = code >= 0 ? PHP.ORDER_ATOMIC : PHP.ORDER_UNARY_NEGATION;
@@ -27,7 +27,7 @@ PHP['math_number'] = function(block) {
   return [code, order];
 };
 
-PHP['math_arithmetic'] = function(block) {
+PHP.forBlock['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', PHP.ORDER_ADDITION],
@@ -45,7 +45,7 @@ PHP['math_arithmetic'] = function(block) {
   return [code, order];
 };
 
-PHP['math_single'] = function(block) {
+PHP.forBlock['math_single'] = function(block) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
@@ -126,7 +126,7 @@ PHP['math_single'] = function(block) {
   return [code, PHP.ORDER_DIVISION];
 };
 
-PHP['math_constant'] = function(block) {
+PHP.forBlock['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['M_PI', PHP.ORDER_ATOMIC],
@@ -139,7 +139,7 @@ PHP['math_constant'] = function(block) {
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
 
-PHP['math_number_property'] = function(block) {
+PHP.forBlock['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -193,7 +193,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($n) {
   return [code, outputOrder];
 };
 
-PHP['math_change'] = function(block) {
+PHP.forBlock['math_change'] = function(block) {
   // Add to a variable in place.
   const argument0 = PHP.valueToCode(block, 'DELTA', PHP.ORDER_ADDITION) || '0';
   const varName =
@@ -202,11 +202,11 @@ PHP['math_change'] = function(block) {
 };
 
 // Rounding functions have a single operand.
-PHP['math_round'] = PHP['math_single'];
+PHP.forBlock['math_round'] = PHP.forBlock['math_single'];
 // Trigonometry functions have a single operand.
-PHP['math_trig'] = PHP['math_single'];
+PHP.forBlock['math_trig'] = PHP.forBlock['math_single'];
 
-PHP['math_on_list'] = function(block) {
+PHP.forBlock['math_on_list'] = function(block) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   let list;
@@ -297,7 +297,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($list) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['math_modulo'] = function(block) {
+PHP.forBlock['math_modulo'] = function(block) {
   // Remainder computation.
   const argument0 =
       PHP.valueToCode(block, 'DIVIDEND', PHP.ORDER_MODULUS) || '0';
@@ -306,7 +306,7 @@ PHP['math_modulo'] = function(block) {
   return [code, PHP.ORDER_MODULUS];
 };
 
-PHP['math_constrain'] = function(block) {
+PHP.forBlock['math_constrain'] = function(block) {
   // Constrain a number between two limits.
   const argument0 = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || '0';
   const argument1 = PHP.valueToCode(block, 'LOW', PHP.ORDER_NONE) || '0';
@@ -317,7 +317,7 @@ PHP['math_constrain'] = function(block) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['math_random_int'] = function(block) {
+PHP.forBlock['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
   const argument0 = PHP.valueToCode(block, 'FROM', PHP.ORDER_NONE) || '0';
   const argument1 = PHP.valueToCode(block, 'TO', PHP.ORDER_NONE) || '0';
@@ -333,12 +333,12 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($a, $b) {
   return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['math_random_float'] = function(block) {
+PHP.forBlock['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   return ['(float)rand()/(float)getrandmax()', PHP.ORDER_FUNCTION_CALL];
 };
 
-PHP['math_atan2'] = function(block) {
+PHP.forBlock['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   const argument0 = PHP.valueToCode(block, 'X', PHP.ORDER_NONE) || '0';
   const argument1 = PHP.valueToCode(block, 'Y', PHP.ORDER_NONE) || '0';

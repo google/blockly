@@ -53,13 +53,13 @@ const getSubstringIndex = function(stringName, where, opt_at) {
   }
 };
 
-JavaScript['text'] = function(block) {
+JavaScript.forBlock['text'] = function(block) {
   // Text value.
   const code = JavaScript.quote_(block.getFieldValue('TEXT'));
   return [code, JavaScript.ORDER_ATOMIC];
 };
 
-JavaScript['text_multiline'] = function(block) {
+JavaScript.forBlock['text_multiline'] = function(block) {
   // Text value.
   const code = JavaScript.multiline_quote_(block.getFieldValue('TEXT'));
   const order = code.indexOf('+') !== -1 ? JavaScript.ORDER_ADDITION :
@@ -67,7 +67,7 @@ JavaScript['text_multiline'] = function(block) {
   return [code, order];
 };
 
-JavaScript['text_join'] = function(block) {
+JavaScript.forBlock['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   switch (block.itemCount_) {
     case 0:
@@ -99,7 +99,7 @@ JavaScript['text_join'] = function(block) {
   }
 };
 
-JavaScript['text_append'] = function(block) {
+JavaScript.forBlock['text_append'] = function(block) {
   // Append to a variable in place.
   const varName = JavaScript.nameDB_.getName(
       block.getFieldValue('VAR'), NameType.VARIABLE);
@@ -110,21 +110,21 @@ JavaScript['text_append'] = function(block) {
   return code;
 };
 
-JavaScript['text_length'] = function(block) {
+JavaScript.forBlock['text_length'] = function(block) {
   // String or array length.
   const text = JavaScript.valueToCode(block, 'VALUE',
       JavaScript.ORDER_MEMBER) || "''";
   return [text + '.length', JavaScript.ORDER_MEMBER];
 };
 
-JavaScript['text_isEmpty'] = function(block) {
+JavaScript.forBlock['text_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const text = JavaScript.valueToCode(block, 'VALUE',
       JavaScript.ORDER_MEMBER) || "''";
   return ['!' + text + '.length', JavaScript.ORDER_LOGICAL_NOT];
 };
 
-JavaScript['text_indexOf'] = function(block) {
+JavaScript.forBlock['text_indexOf'] = function(block) {
   // Search the text for a substring.
   const operator = block.getFieldValue('END') === 'FIRST' ?
       'indexOf' : 'lastIndexOf';
@@ -140,7 +140,7 @@ JavaScript['text_indexOf'] = function(block) {
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['text_charAt'] = function(block) {
+JavaScript.forBlock['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
@@ -181,7 +181,7 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(text) {
   throw Error('Unhandled option (text_charAt).');
 };
 
-JavaScript['text_getSubstring'] = function(block) {
+JavaScript.forBlock['text_getSubstring'] = function(block) {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
@@ -259,7 +259,7 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param}
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['text_changeCase'] = function(block) {
+JavaScript.forBlock['text_changeCase'] = function(block) {
   // Change capitalization.
   const OPERATORS = {
     'UPPERCASE': '.toUpperCase()',
@@ -286,7 +286,7 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(str) {
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['text_trim'] = function(block) {
+JavaScript.forBlock['text_trim'] = function(block) {
   // Trim spaces.
   const OPERATORS = {
     'LEFT': ".replace(/^[\\s\\xa0]+/, '')",
@@ -299,14 +299,14 @@ JavaScript['text_trim'] = function(block) {
   return [text + operator, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['text_print'] = function(block) {
+JavaScript.forBlock['text_print'] = function(block) {
   // Print statement.
   const msg = JavaScript.valueToCode(block, 'TEXT',
       JavaScript.ORDER_NONE) || "''";
   return 'window.alert(' + msg + ');\n';
 };
 
-JavaScript['text_prompt_ext'] = function(block) {
+JavaScript.forBlock['text_prompt_ext'] = function(block) {
   // Prompt function.
   let msg;
   if (block.getField('TEXT')) {
@@ -324,9 +324,9 @@ JavaScript['text_prompt_ext'] = function(block) {
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['text_prompt'] = JavaScript['text_prompt_ext'];
+JavaScript.forBlock['text_prompt'] = JavaScript.forBlock['text_prompt_ext'];
 
-JavaScript['text_count'] = function(block) {
+JavaScript.forBlock['text_count'] = function(block) {
   const text = JavaScript.valueToCode(block, 'TEXT',
       JavaScript.ORDER_NONE) || "''";
   const sub = JavaScript.valueToCode(block, 'SUB',
@@ -344,7 +344,7 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle) {
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['text_replace'] = function(block) {
+JavaScript.forBlock['text_replace'] = function(block) {
   const text = JavaScript.valueToCode(block, 'TEXT',
       JavaScript.ORDER_NONE) || "''";
   const from = JavaScript.valueToCode(block, 'FROM',
@@ -363,7 +363,7 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle, replacement)
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['text_reverse'] = function(block) {
+JavaScript.forBlock['text_reverse'] = function(block) {
   const text = JavaScript.valueToCode(block, 'TEXT',
       JavaScript.ORDER_MEMBER) || "''";
   const code = text + ".split('').reverse().join('')";

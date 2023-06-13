@@ -16,5 +16,5 @@ import './variables.js';
 
 
 // JavaScript is dynamically typed.
-JavaScript['variables_get_dynamic'] = JavaScript['variables_get'];
-JavaScript['variables_set_dynamic'] = JavaScript['variables_set'];
+JavaScript.forBlock['variables_get_dynamic'] = JavaScript.forBlock['variables_get'];
+JavaScript.forBlock['variables_set_dynamic'] = JavaScript.forBlock['variables_set'];

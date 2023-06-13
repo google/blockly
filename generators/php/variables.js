@@ -15,14 +15,14 @@ import {NameType} from '../../core/names.js';
 import {phpGenerator as PHP} from '../php.js';
 
 
-PHP['variables_get'] = function(block) {
+PHP.forBlock['variables_get'] = function(block) {
   // Variable getter.
   const code =
       PHP.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
   return [code, PHP.ORDER_ATOMIC];
 };
 
-PHP['variables_set'] = function(block) {
+PHP.forBlock['variables_set'] = function(block) {
   // Variable setter.
   const argument0 =
       PHP.valueToCode(block, 'VALUE', PHP.ORDER_ASSIGNMENT) || '0';

@@ -16,7 +16,7 @@ import {NameType} from '../../core/names.js';
 import {javascriptGenerator as JavaScript} from '../javascript.js';
 
 
-JavaScript['math_number'] = function(block) {
+JavaScript.forBlock['math_number'] = function(block) {
   // Numeric value.
   const code = Number(block.getFieldValue('NUM'));
   const order = code >= 0 ? JavaScript.ORDER_ATOMIC :
@@ -24,7 +24,7 @@ JavaScript['math_number'] = function(block) {
   return [code, order];
 };
 
-JavaScript['math_arithmetic'] = function(block) {
+JavaScript.forBlock['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', JavaScript.ORDER_ADDITION],
@@ -48,7 +48,7 @@ JavaScript['math_arithmetic'] = function(block) {
   return [code, order];
 };
 
-JavaScript['math_single'] = function(block) {
+JavaScript.forBlock['math_single'] = function(block) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
@@ -132,7 +132,7 @@ JavaScript['math_single'] = function(block) {
   return [code, JavaScript.ORDER_DIVISION];
 };
 
-JavaScript['math_constant'] = function(block) {
+JavaScript.forBlock['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['Math.PI', JavaScript.ORDER_MEMBER],
@@ -145,7 +145,7 @@ JavaScript['math_constant'] = function(block) {
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
 
-JavaScript['math_number_property'] = function(block) {
+JavaScript.forBlock['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -198,7 +198,7 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(n) {
   return [code, outputOrder];
 };
 
-JavaScript['math_change'] = function(block) {
+JavaScript.forBlock['math_change'] = function(block) {
   // Add to a variable in place.
   const argument0 = JavaScript.valueToCode(block, 'DELTA',
       JavaScript.ORDER_ADDITION) || '0';
@@ -209,11 +209,11 @@ JavaScript['math_change'] = function(block) {
 };
 
 // Rounding functions have a single operand.
-JavaScript['math_round'] = JavaScript['math_single'];
+JavaScript.forBlock['math_round'] = JavaScript.forBlock['math_single'];
 // Trigonometry functions have a single operand.
-JavaScript['math_trig'] = JavaScript['math_single'];
+JavaScript.forBlock['math_trig'] = JavaScript.forBlock['math_single'];
 
-JavaScript['math_on_list'] = function(block) {
+JavaScript.forBlock['math_on_list'] = function(block) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   let list;
@@ -341,7 +341,7 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(list) {
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['math_modulo'] = function(block) {
+JavaScript.forBlock['math_modulo'] = function(block) {
   // Remainder computation.
   const argument0 = JavaScript.valueToCode(block, 'DIVIDEND',
       JavaScript.ORDER_MODULUS) || '0';
@@ -351,7 +351,7 @@ JavaScript['math_modulo'] = function(block) {
   return [code, JavaScript.ORDER_MODULUS];
 };
 
-JavaScript['math_constrain'] = function(block) {
+JavaScript.forBlock['math_constrain'] = function(block) {
   // Constrain a number between two limits.
   const argument0 = JavaScript.valueToCode(block, 'VALUE',
       JavaScript.ORDER_NONE) || '0';
@@ -364,7 +364,7 @@ JavaScript['math_constrain'] = function(block) {
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['math_random_int'] = function(block) {
+JavaScript.forBlock['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
   const argument0 = JavaScript.valueToCode(block, 'FROM',
       JavaScript.ORDER_NONE) || '0';
@@ -385,12 +385,12 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(a, b) {
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['math_random_float'] = function(block) {
+JavaScript.forBlock['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   return ['Math.random()', JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['math_atan2'] = function(block) {
+JavaScript.forBlock['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   const argument0 = JavaScript.valueToCode(block, 'X',
       JavaScript.ORDER_NONE) || '0';

@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Lua.logic');
 import {luaGenerator as Lua} from '../lua.js';
 
 
-Lua['controls_if'] = function(block) {
+Lua.forBlock['controls_if'] = function(block) {
   // If/elseif/else condition.
   let n = 0;
   let code = '';
@@ -47,9 +47,9 @@ Lua['controls_if'] = function(block) {
   return code + 'end\n';
 };
 
-Lua['controls_ifelse'] = Lua['controls_if'];
+Lua.forBlock['controls_ifelse'] = Lua.forBlock['controls_if'];
 
-Lua['logic_compare'] = function(block) {
+Lua.forBlock['logic_compare'] = function(block) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '~=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
@@ -60,7 +60,7 @@ Lua['logic_compare'] = function(block) {
   return [code, Lua.ORDER_RELATIONAL];
 };
 
-Lua['logic_operation'] = function(block) {
+Lua.forBlock['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
   const order = (operator === 'and') ? Lua.ORDER_AND : Lua.ORDER_OR;
@@ -84,25 +84,25 @@ Lua['logic_operation'] = function(block) {
   return [code, order];
 };
 
-Lua['logic_negate'] = function(block) {
+Lua.forBlock['logic_negate'] = function(block) {
   // Negation.
   const argument0 = Lua.valueToCode(block, 'BOOL', Lua.ORDER_UNARY) || 'true';
   const code = 'not ' + argument0;
   return [code, Lua.ORDER_UNARY];
 };
 
-Lua['logic_boolean'] = function(block) {
+Lua.forBlock['logic_boolean'] = function(block) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
   return [code, Lua.ORDER_ATOMIC];
 };
 
-Lua['logic_null'] = function(block) {
+Lua.forBlock['logic_null'] = function(block) {
   // Null data type.
   return ['nil', Lua.ORDER_ATOMIC];
 };
 
-Lua['logic_ternary'] = function(block) {
+Lua.forBlock['logic_ternary'] = function(block) {
   // Ternary operator.
   const value_if = Lua.valueToCode(block, 'IF', Lua.ORDER_AND) || 'false';
   const value_then = Lua.valueToCode(block, 'THEN', Lua.ORDER_AND) || 'nil';

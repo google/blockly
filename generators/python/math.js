@@ -18,7 +18,7 @@ import {pythonGenerator as Python} from '../python.js';
 // If any new block imports any library, add that library name here.
 Python.addReservedWords('math,random,Number');
 
-Python['math_number'] = function(block) {
+Python.forBlock['math_number'] = function(block) {
   // Numeric value.
   let code = Number(block.getFieldValue('NUM'));
   let order;
@@ -34,7 +34,7 @@ Python['math_number'] = function(block) {
   return [code, order];
 };
 
-Python['math_arithmetic'] = function(block) {
+Python.forBlock['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', Python.ORDER_ADDITIVE],
@@ -57,7 +57,7 @@ Python['math_arithmetic'] = function(block) {
   // legibility of the generated code.
 };
 
-Python['math_single'] = function(block) {
+Python.forBlock['math_single'] = function(block) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
@@ -134,7 +134,7 @@ Python['math_single'] = function(block) {
   return [code, Python.ORDER_MULTIPLICATIVE];
 };
 
-Python['math_constant'] = function(block) {
+Python.forBlock['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['math.pi', Python.ORDER_MEMBER],
@@ -151,7 +151,7 @@ Python['math_constant'] = function(block) {
   return CONSTANTS[constant];
 };
 
-Python['math_number_property'] = function(block) {
+Python.forBlock['math_number_property'] = function(block) {
    // Check if a number is even, odd, prime, whole, positive, or negative
    // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -210,7 +210,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(n):
   return [code, outputOrder];
 };
 
-Python['math_change'] = function(block) {
+Python.forBlock['math_change'] = function(block) {
   // Add to a variable in place.
   Python.definitions_['from_numbers_import_Number'] =
       'from numbers import Number';
@@ -223,11 +223,11 @@ Python['math_change'] = function(block) {
 };
 
 // Rounding functions have a single operand.
-Python['math_round'] = Python['math_single'];
+Python.forBlock['math_round'] = Python.forBlock['math_single'];
 // Trigonometry functions have a single operand.
-Python['math_trig'] = Python['math_single'];
+Python.forBlock['math_trig'] = Python.forBlock['math_single'];
 
-Python['math_on_list'] = function(block) {
+Python.forBlock['math_on_list'] = function(block) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   const list = Python.valueToCode(block, 'LIST', Python.ORDER_NONE) || '[]';
@@ -324,7 +324,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(numbers):
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['math_modulo'] = function(block) {
+Python.forBlock['math_modulo'] = function(block) {
   // Remainder computation.
   const argument0 =
       Python.valueToCode(block, 'DIVIDEND', Python.ORDER_MULTIPLICATIVE) || '0';
@@ -334,7 +334,7 @@ Python['math_modulo'] = function(block) {
   return [code, Python.ORDER_MULTIPLICATIVE];
 };
 
-Python['math_constrain'] = function(block) {
+Python.forBlock['math_constrain'] = function(block) {
   // Constrain a number between two limits.
   const argument0 =
       Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || '0';
@@ -346,7 +346,7 @@ Python['math_constrain'] = function(block) {
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['math_random_int'] = function(block) {
+Python.forBlock['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
   Python.definitions_['import_random'] = 'import random';
   const argument0 = Python.valueToCode(block, 'FROM', Python.ORDER_NONE) || '0';
@@ -355,13 +355,13 @@ Python['math_random_int'] = function(block) {
   return [code, Python.ORDER_FUNCTION_CALL];
 };
 
-Python['math_random_float'] = function(block) {
+Python.forBlock['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   Python.definitions_['import_random'] = 'import random';
   return ['random.random()', Python.ORDER_FUNCTION_CALL];
 };
 
-Python['math_atan2'] = function(block) {
+Python.forBlock['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   Python.definitions_['import_math'] = 'import math';
   const argument0 = Python.valueToCode(block, 'X', Python.ORDER_NONE) || '0';

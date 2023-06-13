@@ -15,7 +15,7 @@ import {NameType} from '../../core/names.js';
 import {javascriptGenerator as JavaScript} from '../javascript.js';
 
 
-JavaScript['procedures_defreturn'] = function(block) {
+JavaScript.forBlock['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   const funcName = JavaScript.nameDB_.getName(
       block.getFieldValue('NAME'), NameType.PROCEDURE);
@@ -61,9 +61,9 @@ JavaScript['procedures_defreturn'] = function(block) {
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-JavaScript['procedures_defnoreturn'] = JavaScript['procedures_defreturn'];
+JavaScript.forBlock['procedures_defnoreturn'] = JavaScript.forBlock['procedures_defreturn'];
 
-JavaScript['procedures_callreturn'] = function(block) {
+JavaScript.forBlock['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
   const funcName = JavaScript.nameDB_.getName(
       block.getFieldValue('NAME'), NameType.PROCEDURE);
@@ -77,15 +77,15 @@ JavaScript['procedures_callreturn'] = function(block) {
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-JavaScript['procedures_callnoreturn'] = function(block) {
+JavaScript.forBlock['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  const tuple = JavaScript['procedures_callreturn'](block);
+  const tuple = JavaScript.forBlock['procedures_callreturn'](block);
   return tuple[0] + ';\n';
 };
 
-JavaScript['procedures_ifreturn'] = function(block) {
+JavaScript.forBlock['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   const condition =
       JavaScript.valueToCode(block, 'CONDITION', JavaScript.ORDER_NONE) ||

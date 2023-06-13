@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.JavaScript.logic');
 import {javascriptGenerator as JavaScript} from '../javascript.js';
 
 
-JavaScript['controls_if'] = function(block) {
+JavaScript.forBlock['controls_if'] = function(block) {
   // If/elseif/else condition.
   let n = 0;
   let code = '';
@@ -51,9 +51,9 @@ JavaScript['controls_if'] = function(block) {
   return code + '\n';
 };
 
-JavaScript['controls_ifelse'] = JavaScript['controls_if'];
+JavaScript.forBlock['controls_ifelse'] = JavaScript.forBlock['controls_if'];
 
-JavaScript['logic_compare'] = function(block) {
+JavaScript.forBlock['logic_compare'] = function(block) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
@@ -67,7 +67,7 @@ JavaScript['logic_compare'] = function(block) {
   return [code, order];
 };
 
-JavaScript['logic_operation'] = function(block) {
+JavaScript.forBlock['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
   const order = (operator === '&&') ? JavaScript.ORDER_LOGICAL_AND :
@@ -92,7 +92,7 @@ JavaScript['logic_operation'] = function(block) {
   return [code, order];
 };
 
-JavaScript['logic_negate'] = function(block) {
+JavaScript.forBlock['logic_negate'] = function(block) {
   // Negation.
   const order = JavaScript.ORDER_LOGICAL_NOT;
   const argument0 = JavaScript.valueToCode(block, 'BOOL', order) || 'true';
@@ -100,18 +100,18 @@ JavaScript['logic_negate'] = function(block) {
   return [code, order];
 };
 
-JavaScript['logic_boolean'] = function(block) {
+JavaScript.forBlock['logic_boolean'] = function(block) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
   return [code, JavaScript.ORDER_ATOMIC];
 };
 
-JavaScript['logic_null'] = function(block) {
+JavaScript.forBlock['logic_null'] = function(block) {
   // Null data type.
   return ['null', JavaScript.ORDER_ATOMIC];
 };
 
-JavaScript['logic_ternary'] = function(block) {
+JavaScript.forBlock['logic_ternary'] = function(block) {
   // Ternary operator.
   const value_if =
       JavaScript.valueToCode(block, 'IF', JavaScript.ORDER_CONDITIONAL) ||

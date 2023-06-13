@@ -87,16 +87,18 @@ suite('Generator', function () {
         expectedCode,
         opt_message
       ) {
-        generator.row_block = function (_) {
+        generator.forBlock['row_block'] = function (_) {
           return 'row_block';
         };
-        generator.stack_block = function (_) {
+        generator.forBlock['stack_block'] = function (_) {
           return 'stack_block';
         };
         rowBlock.nextConnection.connect(stackBlock.previousConnection);
         rowBlock.disabled = blockDisabled;
 
         const code = generator.blockToCode(rowBlock, opt_thisOnly);
+        delete generator.forBlock['stack_block'];
+        delete generator.forBlock['row_block'];
         chai.assert.equal(code, expectedCode, opt_message);
       };
     });
@@ -170,7 +172,7 @@ suite('Generator', function () {
           expectedCode,
           opt_message
         ) {
-          generator.test_loop_block = function (block) {
+          generator.forBlock['test_loop_block'] = function (block) {
             return '{' + generator.statementToCode(block, 'DO') + '}';
           };
           blockA.getInput('DO').connection.connect(blockB.previousConnection);

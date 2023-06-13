@@ -97,6 +97,8 @@ suite('Generator', function () {
         rowBlock.disabled = blockDisabled;
 
         const code = generator.blockToCode(rowBlock, opt_thisOnly);
+        delete generator.forBlock['stack_block'];
+        delete generator.forBlock['row_block'];
         chai.assert.equal(code, expectedCode, opt_message);
       };
     });

@@ -46,7 +46,10 @@ export function inject(
     containerElement = container;
   }
   // Verify that the container is in document.
-  if (!document.contains(containerElement)) {
+  if (
+    !document.contains(containerElement) &&
+    document !== containerElement?.ownerDocument
+  ) {
     throw Error('Error: container is not in current document');
   }
   const options = new Options(opt_options || ({} as BlocklyOptions));

@@ -104,8 +104,12 @@ export class JavascriptGenerator extends CodeGenerator {
     this.isInitialized = false;
 
     // Copy Order values onto instance for backwards compatibility
-    // while ensuring they are not part of the publically- -advertised
+    // while ensuring they are not part of the publically-advertised
     // API.
+    //
+    // TODO(#7085): deprecate these in due course.  (Could initially
+    // replace data properties with get accessors that call
+    // deprecate.warn().)
     for (const key in Order) {
       this['ORDER_' + key] = Order[key];
     }

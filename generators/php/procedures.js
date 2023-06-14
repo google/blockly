@@ -105,7 +105,7 @@ phpGenerator.forBlock['procedures_callnoreturn'] = function(block, generator) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  const tuple = phpGenerator.forBlock['procedures_callreturn'](block, generator);
+  const tuple = generator.forBlock['procedures_callreturn'](block, generator);
   return tuple[0] + ';\n';
 };
 

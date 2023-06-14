@@ -31,12 +31,13 @@ const CONTINUE_STATEMENT = 'goto continue\n';
  * blockToCode.
  *
  * @param {string} branch Generated code of the loop body
+ * @param {string} indent Whitespace by which to indent a continue statement.
  * @return {string} Generated label or '' if unnecessary
  */
-const addContinueLabel = function(branch) {
+function addContinueLabel(branch, indent) {
   if (branch.indexOf(CONTINUE_STATEMENT) !== -1) {
     // False positives are possible (e.g. a string literal), but are harmless.
-    return branch + luaGenerator.INDENT + '::continue::\n';
+    return branch + indent + '::continue::\n';
   } else {
     return branch;
   }
@@ -59,7 +60,7 @@ luaGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {
   }
   let branch = generator.statementToCode(block, 'DO');
   branch = generator.addLoopTrap(branch, block);
-  branch = addContinueLabel(branch);
+  branch = addContinueLabel(branch, generator.INDENT);
   const loopVar = generator.nameDB_.getDistinctName('count', NameType.VARIABLE);
   const code =
       'for ' + loopVar + ' = 1, ' + repeats + ' do\n' + branch + 'end\n';
@@ -78,7 +79,7 @@ luaGenerator.forBlock['controls_whileUntil'] = function(block, generator) {
       'false';
   let branch = generator.statementToCode(block, 'DO');
   branch = generator.addLoopTrap(branch, block);
-  branch = addContinueLabel(branch);
+  branch = addContinueLabel(branch, generator.INDENT);
   if (until) {
     argument0 = 'not ' + argument0;
   }
@@ -95,7 +96,7 @@ luaGenerator.forBlock['controls_for'] = function(block, generator) {
   const increment = generator.valueToCode(block, 'BY', Order.NONE) || '1';
   let branch = generator.statementToCode(block, 'DO');
   branch = generator.addLoopTrap(branch, block);
-  branch = addContinueLabel(branch);
+  branch = addContinueLabel(branch, generator.INDENT);
   let code = '';
   let incValue;
   if (stringUtils.isNumber(startVar) && stringUtils.isNumber(endVar) &&
@@ -135,7 +136,7 @@ luaGenerator.forBlock['controls_forEach'] = function(block, generator) {
   const argument0 = generator.valueToCode(block, 'LIST', Order.NONE) || '{}';
   let branch = generator.statementToCode(block, 'DO');
   branch = generator.addLoopTrap(branch, block);
-  branch = addContinueLabel(branch);
+  branch = addContinueLabel(branch, generator.INDENT);
   const code = 'for _, ' + variable0 + ' in ipairs(' + argument0 + ') do \n' +
       branch + 'end\n';
   return code;

@@ -13,12 +13,12 @@ goog.declareModuleId('Blockly.Python.lists');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {pythonGenerator as Python} from '../python.js';
+import {pythonGenerator as Python, Order} from '../python.js';
 
 
 Python.forBlock['lists_create_empty'] = function(block) {
   // Create an empty list.
-  return ['[]', Python.ORDER_ATOMIC];
+  return ['[]', Order.ATOMIC];
 };
 
 Python.forBlock['lists_create_with'] = function(block) {
@@ -26,38 +26,38 @@ Python.forBlock['lists_create_with'] = function(block) {
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
     elements[i] =
-        Python.valueToCode(block, 'ADD' + i, Python.ORDER_NONE) || 'None';
+        Python.valueToCode(block, 'ADD' + i, Order.NONE) || 'None';
   }
   const code = '[' + elements.join(', ') + ']';
-  return [code, Python.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 Python.forBlock['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
-  const item = Python.valueToCode(block, 'ITEM', Python.ORDER_NONE) || 'None';
+  const item = Python.valueToCode(block, 'ITEM', Order.NONE) || 'None';
   const times =
-      Python.valueToCode(block, 'NUM', Python.ORDER_MULTIPLICATIVE) || '0';
+      Python.valueToCode(block, 'NUM', Order.MULTIPLICATIVE) || '0';
   const code = '[' + item + '] * ' + times;
-  return [code, Python.ORDER_MULTIPLICATIVE];
+  return [code, Order.MULTIPLICATIVE];
 };
 
 Python.forBlock['lists_length'] = function(block) {
   // String or array length.
-  const list = Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || '[]';
-  return ['len(' + list + ')', Python.ORDER_FUNCTION_CALL];
+  const list = Python.valueToCode(block, 'VALUE', Order.NONE) || '[]';
+  return ['len(' + list + ')', Order.FUNCTION_CALL];
 };
 
 Python.forBlock['lists_isEmpty'] = function(block) {
   // Is the string null or array empty?
-  const list = Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || '[]';
+  const list = Python.valueToCode(block, 'VALUE', Order.NONE) || '[]';
   const code = 'not len(' + list + ')';
-  return [code, Python.ORDER_LOGICAL_NOT];
+  return [code, Order.LOGICAL_NOT];
 };
 
 Python.forBlock['lists_indexOf'] = function(block) {
   // Find an item in the list.
-  const item = Python.valueToCode(block, 'FIND', Python.ORDER_NONE) || '[]';
-  const list = Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || "''";
+  const item = Python.valueToCode(block, 'FIND', Order.NONE) || '[]';
+  const list = Python.valueToCode(block, 'VALUE', Order.NONE) || "''";
   let errorIndex = ' -1';
   let firstIndexAdjustment = '';
   let lastIndexAdjustment = ' - 1';
@@ -85,7 +85,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(my_list, elem):
 `);
   }
   const code = functionName + '(' + list + ', ' + item + ')';
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['lists_getIndex'] = function(block) {
@@ -94,17 +94,17 @@ Python.forBlock['lists_getIndex'] = function(block) {
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const listOrder =
-      (where === 'RANDOM') ? Python.ORDER_NONE : Python.ORDER_MEMBER;
+      (where === 'RANDOM') ? Order.NONE : Order.MEMBER;
   const list = Python.valueToCode(block, 'VALUE', listOrder) || '[]';
 
   switch (where) {
     case 'FIRST':
       if (mode === 'GET') {
         const code = list + '[0]';
-        return [code, Python.ORDER_MEMBER];
+        return [code, Order.MEMBER];
       } else if (mode === 'GET_REMOVE') {
         const code = list + '.pop(0)';
-        return [code, Python.ORDER_FUNCTION_CALL];
+        return [code, Order.FUNCTION_CALL];
       } else if (mode === 'REMOVE') {
         return list + '.pop(0)\n';
       }
@@ -112,10 +112,10 @@ Python.forBlock['lists_getIndex'] = function(block) {
     case 'LAST':
       if (mode === 'GET') {
         const code = list + '[-1]';
-        return [code, Python.ORDER_MEMBER];
+        return [code, Order.MEMBER];
       } else if (mode === 'GET_REMOVE') {
         const code = list + '.pop()';
-        return [code, Python.ORDER_FUNCTION_CALL];
+        return [code, Order.FUNCTION_CALL];
       } else if (mode === 'REMOVE') {
         return list + '.pop()\n';
       }
@@ -124,10 +124,10 @@ Python.forBlock['lists_getIndex'] = function(block) {
       const at = Python.getAdjustedInt(block, 'AT');
       if (mode === 'GET') {
         const code = list + '[' + at + ']';
-        return [code, Python.ORDER_MEMBER];
+        return [code, Order.MEMBER];
       } else if (mode === 'GET_REMOVE') {
         const code = list + '.pop(' + at + ')';
-        return [code, Python.ORDER_FUNCTION_CALL];
+        return [code, Order.FUNCTION_CALL];
       } else if (mode === 'REMOVE') {
         return list + '.pop(' + at + ')\n';
       }
@@ -137,10 +137,10 @@ Python.forBlock['lists_getIndex'] = function(block) {
       const at = Python.getAdjustedInt(block, 'AT', 1, true);
       if (mode === 'GET') {
         const code = list + '[' + at + ']';
-        return [code, Python.ORDER_MEMBER];
+        return [code, Order.MEMBER];
       } else if (mode === 'GET_REMOVE') {
         const code = list + '.pop(' + at + ')';
-        return [code, Python.ORDER_FUNCTION_CALL];
+        return [code, Order.FUNCTION_CALL];
       } else if (mode === 'REMOVE') {
         return list + '.pop(' + at + ')\n';
       }
@@ -150,7 +150,7 @@ Python.forBlock['lists_getIndex'] = function(block) {
       Python.definitions_['import_random'] = 'import random';
       if (mode === 'GET') {
         const code = 'random.choice(' + list + ')';
-        return [code, Python.ORDER_FUNCTION_CALL];
+        return [code, Order.FUNCTION_CALL];
       } else {
         const functionName =
             Python.provideFunction_('lists_remove_random_item', `
@@ -160,7 +160,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(myList):
 `);
         const code = functionName + '(' + list + ')';
         if (mode === 'GET_REMOVE') {
-          return [code, Python.ORDER_FUNCTION_CALL];
+          return [code, Order.FUNCTION_CALL];
         } else if (mode === 'REMOVE') {
           return code + '\n';
         }
@@ -173,10 +173,10 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(myList):
 Python.forBlock['lists_setIndex'] = function(block) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
-  let list = Python.valueToCode(block, 'LIST', Python.ORDER_MEMBER) || '[]';
+  let list = Python.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
-  const value = Python.valueToCode(block, 'TO', Python.ORDER_NONE) || 'None';
+  const value = Python.valueToCode(block, 'TO', Order.NONE) || 'None';
   // Cache non-trivial values to variables to prevent repeated look-ups.
   // Closure, which accesses and modifies 'list'.
   function cacheList() {
@@ -243,7 +243,7 @@ Python.forBlock['lists_setIndex'] = function(block) {
 
 Python.forBlock['lists_getSublist'] = function(block) {
   // Get sublist.
-  const list = Python.valueToCode(block, 'LIST', Python.ORDER_MEMBER) || '[]';
+  const list = Python.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
   let at1;
@@ -287,12 +287,12 @@ Python.forBlock['lists_getSublist'] = function(block) {
       throw Error('Unhandled option (lists_getSublist)');
   }
   const code = list + '[' + at1 + ' : ' + at2 + ']';
-  return [code, Python.ORDER_MEMBER];
+  return [code, Order.MEMBER];
 };
 
 Python.forBlock['lists_sort'] = function(block) {
   // Block for sorting a list.
-  const list = (Python.valueToCode(block, 'LIST', Python.ORDER_NONE) || '[]');
+  const list = (Python.valueToCode(block, 'LIST', Order.NONE) || '[]');
   const type = block.getFieldValue('TYPE');
   const reverse = block.getFieldValue('DIRECTION') === '1' ? 'False' : 'True';
   const sortFunctionName = Python.provideFunction_('lists_sort', `
@@ -314,7 +314,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(my_list, type, reverse):
 
   const code =
       sortFunctionName + '(' + list + ', "' + type + '", ' + reverse + ')';
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['lists_split'] = function(block) {
@@ -323,24 +323,24 @@ Python.forBlock['lists_split'] = function(block) {
   let code;
   if (mode === 'SPLIT') {
     const value_input =
-        Python.valueToCode(block, 'INPUT', Python.ORDER_MEMBER) || "''";
-    const value_delim = Python.valueToCode(block, 'DELIM', Python.ORDER_NONE);
+        Python.valueToCode(block, 'INPUT', Order.MEMBER) || "''";
+    const value_delim = Python.valueToCode(block, 'DELIM', Order.NONE);
     code = value_input + '.split(' + value_delim + ')';
   } else if (mode === 'JOIN') {
     const value_input =
-        Python.valueToCode(block, 'INPUT', Python.ORDER_NONE) || '[]';
+        Python.valueToCode(block, 'INPUT', Order.NONE) || '[]';
     const value_delim =
-        Python.valueToCode(block, 'DELIM', Python.ORDER_MEMBER) || "''";
+        Python.valueToCode(block, 'DELIM', Order.MEMBER) || "''";
     code = value_delim + '.join(' + value_input + ')';
   } else {
     throw Error('Unknown mode: ' + mode);
   }
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['lists_reverse'] = function(block) {
   // Block for reversing a list.
-  const list = Python.valueToCode(block, 'LIST', Python.ORDER_NONE) || '[]';
+  const list = Python.valueToCode(block, 'LIST', Order.NONE) || '[]';
   const code = 'list(reversed(' + list + '))';
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };

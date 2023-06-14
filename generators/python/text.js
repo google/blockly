@@ -13,20 +13,20 @@ goog.declareModuleId('Blockly.Python.texts');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {pythonGenerator as Python} from '../python.js';
+import {pythonGenerator as Python, Order} from '../python.js';
 
 
 Python.forBlock['text'] = function(block) {
   // Text value.
   const code = Python.quote_(block.getFieldValue('TEXT'));
-  return [code, Python.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 Python.forBlock['text_multiline'] = function(block) {
   // Text value.
   const code = Python.multiline_quote_(block.getFieldValue('TEXT'));
   const order =
-      code.indexOf('+') !== -1 ? Python.ORDER_ADDITIVE : Python.ORDER_ATOMIC;
+      code.indexOf('+') !== -1 ? Order.ADDITIVE : Order.ATOMIC;
   return [code, order];
 };
 
@@ -45,9 +45,9 @@ const strRegExp = /^\s*'([^']|\\')*'\s*$/;
  */
 const forceString = function(value) {
   if (strRegExp.test(value)) {
-    return [value, Python.ORDER_ATOMIC];
+    return [value, Order.ATOMIC];
   }
-  return ['str(' + value + ')', Python.ORDER_FUNCTION_CALL];
+  return ['str(' + value + ')', Order.FUNCTION_CALL];
 };
 
 Python.forBlock['text_join'] = function(block) {
@@ -55,31 +55,31 @@ Python.forBlock['text_join'] = function(block) {
   // Should we allow joining by '-' or ',' or any other characters?
   switch (block.itemCount_) {
     case 0:
-      return ["''", Python.ORDER_ATOMIC];
+      return ["''", Order.ATOMIC];
     case 1: {
       const element =
-          Python.valueToCode(block, 'ADD0', Python.ORDER_NONE) || "''";
+          Python.valueToCode(block, 'ADD0', Order.NONE) || "''";
       const codeAndOrder = forceString(element);
       return codeAndOrder;
     }
     case 2: {
       const element0 =
-          Python.valueToCode(block, 'ADD0', Python.ORDER_NONE) || "''";
+          Python.valueToCode(block, 'ADD0', Order.NONE) || "''";
       const element1 =
-          Python.valueToCode(block, 'ADD1', Python.ORDER_NONE) || "''";
+          Python.valueToCode(block, 'ADD1', Order.NONE) || "''";
       const code = forceString(element0)[0] + ' + ' + forceString(element1)[0];
-      return [code, Python.ORDER_ADDITIVE];
+      return [code, Order.ADDITIVE];
     }
     default: {
       const elements = [];
       for (let i = 0; i < block.itemCount_; i++) {
         elements[i] =
-            Python.valueToCode(block, 'ADD' + i, Python.ORDER_NONE) || "''";
+            Python.valueToCode(block, 'ADD' + i, Order.NONE) || "''";
       }
       const tempVar = Python.nameDB_.getDistinctName('x', NameType.VARIABLE);
       const code = '\'\'.join([str(' + tempVar + ') for ' + tempVar + ' in [' +
           elements.join(', ') + ']])';
-      return [code, Python.ORDER_FUNCTION_CALL];
+      return [code, Order.FUNCTION_CALL];
     }
   }
 };
@@ -88,21 +88,21 @@ Python.forBlock['text_append'] = function(block) {
   // Append to a variable in place.
   const varName =
       Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-  const value = Python.valueToCode(block, 'TEXT', Python.ORDER_NONE) || "''";
+  const value = Python.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return varName + ' = str(' + varName + ') + ' + forceString(value)[0] + '\n';
 };
 
 Python.forBlock['text_length'] = function(block) {
   // Is the string null or array empty?
-  const text = Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || "''";
-  return ['len(' + text + ')', Python.ORDER_FUNCTION_CALL];
+  const text = Python.valueToCode(block, 'VALUE', Order.NONE) || "''";
+  return ['len(' + text + ')', Order.FUNCTION_CALL];
 };
 
 Python.forBlock['text_isEmpty'] = function(block) {
   // Is the string null or array empty?
-  const text = Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || "''";
+  const text = Python.valueToCode(block, 'VALUE', Order.NONE) || "''";
   const code = 'not len(' + text + ')';
-  return [code, Python.ORDER_LOGICAL_NOT];
+  return [code, Order.LOGICAL_NOT];
 };
 
 Python.forBlock['text_indexOf'] = function(block) {
@@ -110,14 +110,14 @@ Python.forBlock['text_indexOf'] = function(block) {
   // Should we allow for non-case sensitive???
   const operator = block.getFieldValue('END') === 'FIRST' ? 'find' : 'rfind';
   const substring =
-      Python.valueToCode(block, 'FIND', Python.ORDER_NONE) || "''";
+      Python.valueToCode(block, 'FIND', Order.NONE) || "''";
   const text =
-      Python.valueToCode(block, 'VALUE', Python.ORDER_MEMBER) || "''";
+      Python.valueToCode(block, 'VALUE', Order.MEMBER) || "''";
   const code = text + '.' + operator + '(' + substring + ')';
   if (block.workspace.options.oneBasedIndex) {
-    return [code + ' + 1', Python.ORDER_ADDITIVE];
+    return [code + ' + 1', Order.ADDITIVE];
   }
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['text_charAt'] = function(block) {
@@ -125,26 +125,26 @@ Python.forBlock['text_charAt'] = function(block) {
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const textOrder =
-      (where === 'RANDOM') ? Python.ORDER_NONE : Python.ORDER_MEMBER;
+      (where === 'RANDOM') ? Order.NONE : Order.MEMBER;
   const text = Python.valueToCode(block, 'VALUE', textOrder) || "''";
   switch (where) {
     case 'FIRST': {
       const code = text + '[0]';
-      return [code, Python.ORDER_MEMBER];
+      return [code, Order.MEMBER];
     }
     case 'LAST': {
       const code = text + '[-1]';
-      return [code, Python.ORDER_MEMBER];
+      return [code, Order.MEMBER];
     }
     case 'FROM_START': {
       const at = Python.getAdjustedInt(block, 'AT');
       const code = text + '[' + at + ']';
-      return [code, Python.ORDER_MEMBER];
+      return [code, Order.MEMBER];
     }
     case 'FROM_END': {
       const at = Python.getAdjustedInt(block, 'AT', 1, true);
       const code = text + '[' + at + ']';
-      return [code, Python.ORDER_MEMBER];
+      return [code, Order.MEMBER];
     }
     case 'RANDOM': {
       Python.definitions_['import_random'] = 'import random';
@@ -154,7 +154,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(text):
   return text[x]
 `);
       const code = functionName + '(' + text + ')';
-      return [code, Python.ORDER_FUNCTION_CALL];
+      return [code, Order.FUNCTION_CALL];
     }
   }
   throw Error('Unhandled option (text_charAt).');
@@ -165,7 +165,7 @@ Python.forBlock['text_getSubstring'] = function(block) {
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
   const text =
-      Python.valueToCode(block, 'STRING', Python.ORDER_MEMBER) || "''";
+      Python.valueToCode(block, 'STRING', Order.MEMBER) || "''";
   let at1;
   switch (where1) {
     case 'FROM_START':
@@ -207,7 +207,7 @@ Python.forBlock['text_getSubstring'] = function(block) {
       throw Error('Unhandled option (text_getSubstring)');
   }
   const code = text + '[' + at1 + ' : ' + at2 + ']';
-  return [code, Python.ORDER_MEMBER];
+  return [code, Order.MEMBER];
 };
 
 Python.forBlock['text_changeCase'] = function(block) {
@@ -218,9 +218,9 @@ Python.forBlock['text_changeCase'] = function(block) {
     'TITLECASE': '.title()'
   };
   const operator = OPERATORS[block.getFieldValue('CASE')];
-  const text = Python.valueToCode(block, 'TEXT', Python.ORDER_MEMBER) || "''";
+  const text = Python.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
   const code = text + operator;
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['text_trim'] = function(block) {
@@ -231,14 +231,14 @@ Python.forBlock['text_trim'] = function(block) {
     'BOTH': '.strip()'
   };
   const operator = OPERATORS[block.getFieldValue('MODE')];
-  const text = Python.valueToCode(block, 'TEXT', Python.ORDER_MEMBER) || "''";
+  const text = Python.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
   const code = text + operator;
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['text_print'] = function(block) {
   // Print statement.
-  const msg = Python.valueToCode(block, 'TEXT', Python.ORDER_NONE) || "''";
+  const msg = Python.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return 'print(' + msg + ')\n';
 };
 
@@ -257,35 +257,35 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(msg):
     msg = Python.quote_(block.getFieldValue('TEXT'));
   } else {
     // External message.
-    msg = Python.valueToCode(block, 'TEXT', Python.ORDER_NONE) || "''";
+    msg = Python.valueToCode(block, 'TEXT', Order.NONE) || "''";
   }
   let code = functionName + '(' + msg + ')';
   const toNumber = block.getFieldValue('TYPE') === 'NUMBER';
   if (toNumber) {
     code = 'float(' + code + ')';
   }
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['text_prompt'] = Python.forBlock['text_prompt_ext'];
 
 Python.forBlock['text_count'] = function(block) {
-  const text = Python.valueToCode(block, 'TEXT', Python.ORDER_MEMBER) || "''";
-  const sub = Python.valueToCode(block, 'SUB', Python.ORDER_NONE) || "''";
+  const text = Python.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
+  const sub = Python.valueToCode(block, 'SUB', Order.NONE) || "''";
   const code = text + '.count(' + sub + ')';
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['text_replace'] = function(block) {
-  const text = Python.valueToCode(block, 'TEXT', Python.ORDER_MEMBER) || "''";
-  const from = Python.valueToCode(block, 'FROM', Python.ORDER_NONE) || "''";
-  const to = Python.valueToCode(block, 'TO', Python.ORDER_NONE) || "''";
+  const text = Python.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
+  const from = Python.valueToCode(block, 'FROM', Order.NONE) || "''";
+  const to = Python.valueToCode(block, 'TO', Order.NONE) || "''";
   const code = text + '.replace(' + from + ', ' + to + ')';
-  return [code, Python.ORDER_MEMBER];
+  return [code, Order.MEMBER];
 };
 
 Python.forBlock['text_reverse'] = function(block) {
-  const text = Python.valueToCode(block, 'TEXT', Python.ORDER_MEMBER) || "''";
+  const text = Python.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
   const code = text + '[::-1]';
-  return [code, Python.ORDER_MEMBER];
+  return [code, Order.MEMBER];
 };

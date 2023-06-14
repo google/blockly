@@ -13,7 +13,7 @@ goog.declareModuleId('Blockly.Python.loops');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {pythonGenerator as Python} from '../python.js';
+import {pythonGenerator as Python, Order} from '../python.js';
 
 
 Python.forBlock['controls_repeat_ext'] = function(block) {
@@ -24,7 +24,7 @@ Python.forBlock['controls_repeat_ext'] = function(block) {
     repeats = String(parseInt(block.getFieldValue('TIMES'), 10));
   } else {
     // External number.
-    repeats = Python.valueToCode(block, 'TIMES', Python.ORDER_NONE) || '0';
+    repeats = Python.valueToCode(block, 'TIMES', Order.NONE) || '0';
   }
   if (stringUtils.isNumber(repeats)) {
     repeats = parseInt(repeats, 10);
@@ -45,7 +45,7 @@ Python.forBlock['controls_whileUntil'] = function(block) {
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 = Python.valueToCode(
                       block, 'BOOL',
-                      until ? Python.ORDER_LOGICAL_NOT : Python.ORDER_NONE) ||
+                      until ? Order.LOGICAL_NOT : Order.NONE) ||
       'False';
   let branch = Python.statementToCode(block, 'DO');
   branch = Python.addLoopTrap(branch, block) || Python.PASS;
@@ -59,9 +59,9 @@ Python.forBlock['controls_for'] = function(block) {
   // For loop.
   const variable0 =
       Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-  let argument0 = Python.valueToCode(block, 'FROM', Python.ORDER_NONE) || '0';
-  let argument1 = Python.valueToCode(block, 'TO', Python.ORDER_NONE) || '0';
-  let increment = Python.valueToCode(block, 'BY', Python.ORDER_NONE) || '1';
+  let argument0 = Python.valueToCode(block, 'FROM', Order.NONE) || '0';
+  let argument1 = Python.valueToCode(block, 'TO', Order.NONE) || '0';
+  let increment = Python.valueToCode(block, 'BY', Order.NONE) || '1';
   let branch = Python.statementToCode(block, 'DO');
   branch = Python.addLoopTrap(branch, block) || Python.PASS;
 
@@ -168,7 +168,7 @@ Python.forBlock['controls_forEach'] = function(block) {
   const variable0 =
       Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
   const argument0 =
-      Python.valueToCode(block, 'LIST', Python.ORDER_RELATIONAL) || '[]';
+      Python.valueToCode(block, 'LIST', Order.RELATIONAL) || '[]';
   let branch = Python.statementToCode(block, 'DO');
   branch = Python.addLoopTrap(branch, block) || Python.PASS;
   const code = 'for ' + variable0 + ' in ' + argument0 + ':\n' + branch;

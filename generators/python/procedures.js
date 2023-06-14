@@ -13,7 +13,7 @@ goog.declareModuleId('Blockly.Python.procedures');
 
 import * as Variables from '../../core/variables.js';
 import {NameType} from '../../core/names.js';
-import {pythonGenerator as Python} from '../python.js';
+import {pythonGenerator as Python, Order} from '../python.js';
 
 
 Python.forBlock['procedures_defreturn'] = function(block) {
@@ -58,7 +58,7 @@ Python.forBlock['procedures_defreturn'] = function(block) {
   }
   let branch = Python.statementToCode(block, 'STACK');
   let returnValue =
-      Python.valueToCode(block, 'RETURN', Python.ORDER_NONE) || '';
+      Python.valueToCode(block, 'RETURN', Order.NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
@@ -93,10 +93,10 @@ Python.forBlock['procedures_callreturn'] = function(block) {
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Python.valueToCode(block, 'ARG' + i, Python.ORDER_NONE) || 'None';
+    args[i] = Python.valueToCode(block, 'ARG' + i, Order.NONE) || 'None';
   }
   const code = funcName + '(' + args.join(', ') + ')';
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['procedures_callnoreturn'] = function(block) {
@@ -110,7 +110,7 @@ Python.forBlock['procedures_callnoreturn'] = function(block) {
 Python.forBlock['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   const condition =
-      Python.valueToCode(block, 'CONDITION', Python.ORDER_NONE) || 'False';
+      Python.valueToCode(block, 'CONDITION', Order.NONE) || 'False';
   let code = 'if ' + condition + ':\n';
   if (Python.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
@@ -120,7 +120,7 @@ Python.forBlock['procedures_ifreturn'] = function(block) {
   }
   if (block.hasReturnValue_) {
     const value =
-        Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || 'None';
+        Python.valueToCode(block, 'VALUE', Order.NONE) || 'None';
     code += Python.INDENT + 'return ' + value + '\n';
   } else {
     code += Python.INDENT + 'return\n';

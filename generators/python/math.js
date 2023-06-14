@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.math');
 
 import {NameType} from '../../core/names.js';
-import {pythonGenerator as Python} from '../python.js';
+import {pythonGenerator as Python, Order} from '../python.js';
 
 
 // If any new block imports any library, add that library name here.
@@ -24,12 +24,12 @@ Python.forBlock['math_number'] = function(block) {
   let order;
   if (code === Infinity) {
     code = 'float("inf")';
-    order = Python.ORDER_FUNCTION_CALL;
+    order = Order.FUNCTION_CALL;
   } else if (code === -Infinity) {
     code = '-float("inf")';
-    order = Python.ORDER_UNARY_SIGN;
+    order = Order.UNARY_SIGN;
   } else {
-    order = code < 0 ? Python.ORDER_UNARY_SIGN : Python.ORDER_ATOMIC;
+    order = code < 0 ? Order.UNARY_SIGN : Order.ATOMIC;
   }
   return [code, order];
 };
@@ -37,11 +37,11 @@ Python.forBlock['math_number'] = function(block) {
 Python.forBlock['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
-    'ADD': [' + ', Python.ORDER_ADDITIVE],
-    'MINUS': [' - ', Python.ORDER_ADDITIVE],
-    'MULTIPLY': [' * ', Python.ORDER_MULTIPLICATIVE],
-    'DIVIDE': [' / ', Python.ORDER_MULTIPLICATIVE],
-    'POWER': [' ** ', Python.ORDER_EXPONENTIATION],
+    'ADD': [' + ', Order.ADDITIVE],
+    'MINUS': [' - ', Order.ADDITIVE],
+    'MULTIPLY': [' * ', Order.MULTIPLICATIVE],
+    'DIVIDE': [' / ', Order.MULTIPLICATIVE],
+    'POWER': [' ** ', Order.EXPONENTIATION],
   };
   const tuple = OPERATORS[block.getFieldValue('OP')];
   const operator = tuple[0];
@@ -64,14 +64,14 @@ Python.forBlock['math_single'] = function(block) {
   let arg;
   if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
-    code = Python.valueToCode(block, 'NUM', Python.ORDER_UNARY_SIGN) || '0';
-    return ['-' + code, Python.ORDER_UNARY_SIGN];
+    code = Python.valueToCode(block, 'NUM', Order.UNARY_SIGN) || '0';
+    return ['-' + code, Order.UNARY_SIGN];
   }
   Python.definitions_['import_math'] = 'import math';
   if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
-    arg = Python.valueToCode(block, 'NUM', Python.ORDER_MULTIPLICATIVE) || '0';
+    arg = Python.valueToCode(block, 'NUM', Order.MULTIPLICATIVE) || '0';
   } else {
-    arg = Python.valueToCode(block, 'NUM', Python.ORDER_NONE) || '0';
+    arg = Python.valueToCode(block, 'NUM', Order.NONE) || '0';
   }
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
@@ -114,7 +114,7 @@ Python.forBlock['math_single'] = function(block) {
       break;
   }
   if (code) {
-    return [code, Python.ORDER_FUNCTION_CALL];
+    return [code, Order.FUNCTION_CALL];
   }
   // Second, handle cases which generate values that may need parentheses
   // wrapping the code.
@@ -131,18 +131,18 @@ Python.forBlock['math_single'] = function(block) {
     default:
       throw Error('Unknown math operator: ' + operator);
   }
-  return [code, Python.ORDER_MULTIPLICATIVE];
+  return [code, Order.MULTIPLICATIVE];
 };
 
 Python.forBlock['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
-    'PI': ['math.pi', Python.ORDER_MEMBER],
-    'E': ['math.e', Python.ORDER_MEMBER],
-    'GOLDEN_RATIO': ['(1 + math.sqrt(5)) / 2', Python.ORDER_MULTIPLICATIVE],
-    'SQRT2': ['math.sqrt(2)', Python.ORDER_MEMBER],
-    'SQRT1_2': ['math.sqrt(1.0 / 2)', Python.ORDER_MEMBER],
-    'INFINITY': ['float(\'inf\')', Python.ORDER_ATOMIC],
+    'PI': ['math.pi', Order.MEMBER],
+    'E': ['math.e', Order.MEMBER],
+    'GOLDEN_RATIO': ['(1 + math.sqrt(5)) / 2', Order.MULTIPLICATIVE],
+    'SQRT2': ['math.sqrt(2)', Order.MEMBER],
+    'SQRT1_2': ['math.sqrt(1.0 / 2)', Order.MEMBER],
+    'INFINITY': ['float(\'inf\')', Order.ATOMIC],
   };
   const constant = block.getFieldValue('CONSTANT');
   if (constant !== 'INFINITY') {
@@ -155,15 +155,15 @@ Python.forBlock['math_number_property'] = function(block) {
    // Check if a number is even, odd, prime, whole, positive, or negative
    // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-    'EVEN': [' % 2 == 0', Python.ORDER_MULTIPLICATIVE, Python.ORDER_RELATIONAL],
-    'ODD': [' % 2 == 1', Python.ORDER_MULTIPLICATIVE, Python.ORDER_RELATIONAL],
-    'WHOLE': [' % 1 == 0', Python.ORDER_MULTIPLICATIVE,
-        Python.ORDER_RELATIONAL],
-    'POSITIVE': [' > 0', Python.ORDER_RELATIONAL, Python.ORDER_RELATIONAL],
-    'NEGATIVE': [' < 0', Python.ORDER_RELATIONAL, Python.ORDER_RELATIONAL],
-    'DIVISIBLE_BY': [null, Python.ORDER_MULTIPLICATIVE,
-        Python.ORDER_RELATIONAL],
-    'PRIME': [null, Python.ORDER_NONE, Python.ORDER_FUNCTION_CALL],
+    'EVEN': [' % 2 == 0', Order.MULTIPLICATIVE, Order.RELATIONAL],
+    'ODD': [' % 2 == 1', Order.MULTIPLICATIVE, Order.RELATIONAL],
+    'WHOLE': [' % 1 == 0', Order.MULTIPLICATIVE,
+        Order.RELATIONAL],
+    'POSITIVE': [' > 0', Order.RELATIONAL, Order.RELATIONAL],
+    'NEGATIVE': [' < 0', Order.RELATIONAL, Order.RELATIONAL],
+    'DIVISIBLE_BY': [null, Order.MULTIPLICATIVE,
+        Order.RELATIONAL],
+    'PRIME': [null, Order.NONE, Order.FUNCTION_CALL],
   }
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
@@ -198,10 +198,10 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(n):
        code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
     const divisor = Python.valueToCode(block, 'DIVISOR',
-        Python.ORDER_MULTIPLICATIVE) || '0';
+        Order.MULTIPLICATIVE) || '0';
     // If 'divisor' is some code that evals to 0, Python will raise an error.
     if (divisor === '0') {
-      return ['False', Python.ORDER_ATOMIC];
+      return ['False', Order.ATOMIC];
     }
     code = numberToCheck + ' % ' + divisor + ' == 0';
   } else {
@@ -215,7 +215,7 @@ Python.forBlock['math_change'] = function(block) {
   Python.definitions_['from_numbers_import_Number'] =
       'from numbers import Number';
   const argument0 =
-      Python.valueToCode(block, 'DELTA', Python.ORDER_ADDITIVE) || '0';
+      Python.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
   const varName =
       Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = (' + varName + ' if isinstance(' + varName +
@@ -230,7 +230,7 @@ Python.forBlock['math_trig'] = Python.forBlock['math_single'];
 Python.forBlock['math_on_list'] = function(block) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
-  const list = Python.valueToCode(block, 'LIST', Python.ORDER_NONE) || '[]';
+  const list = Python.valueToCode(block, 'LIST', Order.NONE) || '[]';
   let code;
   switch (func) {
     case 'SUM':
@@ -321,53 +321,53 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(numbers):
     default:
       throw Error('Unknown operator: ' + func);
   }
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['math_modulo'] = function(block) {
   // Remainder computation.
   const argument0 =
-      Python.valueToCode(block, 'DIVIDEND', Python.ORDER_MULTIPLICATIVE) || '0';
+      Python.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) || '0';
   const argument1 =
-      Python.valueToCode(block, 'DIVISOR', Python.ORDER_MULTIPLICATIVE) || '0';
+      Python.valueToCode(block, 'DIVISOR', Order.MULTIPLICATIVE) || '0';
   const code = argument0 + ' % ' + argument1;
-  return [code, Python.ORDER_MULTIPLICATIVE];
+  return [code, Order.MULTIPLICATIVE];
 };
 
 Python.forBlock['math_constrain'] = function(block) {
   // Constrain a number between two limits.
   const argument0 =
-      Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || '0';
-  const argument1 = Python.valueToCode(block, 'LOW', Python.ORDER_NONE) || '0';
+      Python.valueToCode(block, 'VALUE', Order.NONE) || '0';
+  const argument1 = Python.valueToCode(block, 'LOW', Order.NONE) || '0';
   const argument2 =
-      Python.valueToCode(block, 'HIGH', Python.ORDER_NONE) || 'float(\'inf\')';
+      Python.valueToCode(block, 'HIGH', Order.NONE) || 'float(\'inf\')';
   const code =
       'min(max(' + argument0 + ', ' + argument1 + '), ' + argument2 + ')';
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
   Python.definitions_['import_random'] = 'import random';
-  const argument0 = Python.valueToCode(block, 'FROM', Python.ORDER_NONE) || '0';
-  const argument1 = Python.valueToCode(block, 'TO', Python.ORDER_NONE) || '0';
+  const argument0 = Python.valueToCode(block, 'FROM', Order.NONE) || '0';
+  const argument1 = Python.valueToCode(block, 'TO', Order.NONE) || '0';
   const code = 'random.randint(' + argument0 + ', ' + argument1 + ')';
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   Python.definitions_['import_random'] = 'import random';
-  return ['random.random()', Python.ORDER_FUNCTION_CALL];
+  return ['random.random()', Order.FUNCTION_CALL];
 };
 
 Python.forBlock['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   Python.definitions_['import_math'] = 'import math';
-  const argument0 = Python.valueToCode(block, 'X', Python.ORDER_NONE) || '0';
-  const argument1 = Python.valueToCode(block, 'Y', Python.ORDER_NONE) || '0';
+  const argument0 = Python.valueToCode(block, 'X', Order.NONE) || '0';
+  const argument1 = Python.valueToCode(block, 'Y', Order.NONE) || '0';
   return [
     'math.atan2(' + argument1 + ', ' + argument0 + ') / math.pi * 180',
-    Python.ORDER_MULTIPLICATIVE
+    Order.MULTIPLICATIVE
   ];
 };

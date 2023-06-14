@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.logic');
 
-import {pythonGenerator as Python} from '../python.js';
+import {pythonGenerator as Python, Order} from '../python.js';
 
 
 Python.forBlock['controls_if'] = function(block) {
@@ -24,7 +24,7 @@ Python.forBlock['controls_if'] = function(block) {
   }
   do {
     conditionCode =
-        Python.valueToCode(block, 'IF' + n, Python.ORDER_NONE) || 'False';
+        Python.valueToCode(block, 'IF' + n, Order.NONE) || 'False';
     branchCode = Python.statementToCode(block, 'DO' + n) || Python.PASS;
     if (Python.STATEMENT_SUFFIX) {
       branchCode =
@@ -56,7 +56,7 @@ Python.forBlock['logic_compare'] = function(block) {
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
-  const order = Python.ORDER_RELATIONAL;
+  const order = Order.RELATIONAL;
   const argument0 = Python.valueToCode(block, 'A', order) || '0';
   const argument1 = Python.valueToCode(block, 'B', order) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
@@ -67,7 +67,7 @@ Python.forBlock['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
   const order =
-      (operator === 'and') ? Python.ORDER_LOGICAL_AND : Python.ORDER_LOGICAL_OR;
+      (operator === 'and') ? Order.LOGICAL_AND : Order.LOGICAL_OR;
   let argument0 = Python.valueToCode(block, 'A', order);
   let argument1 = Python.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
@@ -91,30 +91,30 @@ Python.forBlock['logic_operation'] = function(block) {
 Python.forBlock['logic_negate'] = function(block) {
   // Negation.
   const argument0 =
-      Python.valueToCode(block, 'BOOL', Python.ORDER_LOGICAL_NOT) || 'True';
+      Python.valueToCode(block, 'BOOL', Order.LOGICAL_NOT) || 'True';
   const code = 'not ' + argument0;
-  return [code, Python.ORDER_LOGICAL_NOT];
+  return [code, Order.LOGICAL_NOT];
 };
 
 Python.forBlock['logic_boolean'] = function(block) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'True' : 'False';
-  return [code, Python.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 Python.forBlock['logic_null'] = function(block) {
   // Null data type.
-  return ['None', Python.ORDER_ATOMIC];
+  return ['None', Order.ATOMIC];
 };
 
 Python.forBlock['logic_ternary'] = function(block) {
   // Ternary operator.
   const value_if =
-      Python.valueToCode(block, 'IF', Python.ORDER_CONDITIONAL) || 'False';
+      Python.valueToCode(block, 'IF', Order.CONDITIONAL) || 'False';
   const value_then =
-      Python.valueToCode(block, 'THEN', Python.ORDER_CONDITIONAL) || 'None';
+      Python.valueToCode(block, 'THEN', Order.CONDITIONAL) || 'None';
   const value_else =
-      Python.valueToCode(block, 'ELSE', Python.ORDER_CONDITIONAL) || 'None';
+      Python.valueToCode(block, 'ELSE', Order.CONDITIONAL) || 'None';
   const code = value_then + ' if ' + value_if + ' else ' + value_else;
-  return [code, Python.ORDER_CONDITIONAL];
+  return [code, Order.CONDITIONAL];
 };

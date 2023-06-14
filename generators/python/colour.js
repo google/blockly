@@ -11,20 +11,20 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.colour');
 
-import {pythonGenerator as Python} from '../python.js';
+import {pythonGenerator as Python, Order} from '../python.js';
 
 
 Python.forBlock['colour_picker'] = function(block) {
   // Colour picker.
   const code = Python.quote_(block.getFieldValue('COLOUR'));
-  return [code, Python.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 Python.forBlock['colour_random'] = function(block) {
   // Generate a random colour.
   Python.definitions_['import_random'] = 'import random';
   const code = '\'#%06x\' % random.randint(0, 2**24 - 1)';
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['colour_rgb'] = function(block) {
@@ -36,11 +36,11 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(r, g, b):
   b = round(min(100, max(0, b)) * 2.55)
   return '#%02x%02x%02x' % (r, g, b)
 `);
-  const r = Python.valueToCode(block, 'RED', Python.ORDER_NONE) || 0;
-  const g = Python.valueToCode(block, 'GREEN', Python.ORDER_NONE) || 0;
-  const b = Python.valueToCode(block, 'BLUE', Python.ORDER_NONE) || 0;
+  const r = Python.valueToCode(block, 'RED', Order.NONE) || 0;
+  const g = Python.valueToCode(block, 'GREEN', Order.NONE) || 0;
+  const b = Python.valueToCode(block, 'BLUE', Order.NONE) || 0;
   const code = functionName + '(' + r + ', ' + g + ', ' + b + ')';
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 Python.forBlock['colour_blend'] = function(block) {
@@ -57,11 +57,11 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(colour1, colour2, ratio):
   return '#%02x%02x%02x' % (r, g, b)
 `);
   const colour1 =
-      Python.valueToCode(block, 'COLOUR1', Python.ORDER_NONE) || '\'#000000\'';
+      Python.valueToCode(block, 'COLOUR1', Order.NONE) || '\'#000000\'';
   const colour2 =
-      Python.valueToCode(block, 'COLOUR2', Python.ORDER_NONE) || '\'#000000\'';
-  const ratio = Python.valueToCode(block, 'RATIO', Python.ORDER_NONE) || 0;
+      Python.valueToCode(block, 'COLOUR2', Order.NONE) || '\'#000000\'';
+  const ratio = Python.valueToCode(block, 'RATIO', Order.NONE) || 0;
   const code =
       functionName + '(' + colour1 + ', ' + colour2 + ', ' + ratio + ')';
-  return [code, Python.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };

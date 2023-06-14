@@ -9,7 +9,6 @@ goog.declareModuleId('Blockly.Themes.Zelos');
 
 import {Theme} from '../theme.js';
 
-
 const defaultBlockStyles = {
   'colour_blocks': {
     'colourPrimary': '#CF63CF',

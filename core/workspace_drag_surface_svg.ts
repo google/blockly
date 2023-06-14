@@ -20,7 +20,6 @@ import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 
-
 /**
  * Blocks are moved into this SVG during a drag, improving performance.
  * The entire SVG is translated using CSS transforms instead of SVG so the
@@ -38,7 +37,7 @@ export class WorkspaceDragSurfaceSvg {
    * The element to insert the block canvas and bubble canvas after when it
    * goes back in the DOM at the end of a drag.
    */
-  private previousSibling: Element|null = null;
+  private previousSibling: Element | null = null;
 
   /** @param container Containing element. */
   constructor(private readonly container: Element) {
@@ -48,7 +47,7 @@ export class WorkspaceDragSurfaceSvg {
   /** Create the drag surface and inject it into the container. */
   createDom() {
     if (this.SVG) {
-      return;  // Already created.
+      return; // Already created.
     }
     /**
      * Dom structure when the workspace is being dragged. If there is no drag in
@@ -85,7 +84,9 @@ export class WorkspaceDragSurfaceSvg {
 
     this.SVG.style.display = 'block';
     dom.setCssTransform(
-        this.SVG, 'translate3d(' + fixedX + 'px, ' + fixedY + 'px, 0)');
+      this.SVG,
+      'translate3d(' + fixedX + 'px, ' + fixedY + 'px, 0)'
+    );
   }
 
   /**
@@ -96,7 +97,7 @@ export class WorkspaceDragSurfaceSvg {
    * @internal
    */
   getSurfaceTranslation(): Coordinate {
-    return svgMath.getRelativeXY((this.SVG));
+    return svgMath.getRelativeXY(this.SVG);
   }
 
   /**
@@ -109,15 +110,22 @@ export class WorkspaceDragSurfaceSvg {
   clearAndHide(newSurface: SVGElement) {
     if (!newSurface) {
       throw Error(
-          'Couldn\'t clear and hide the drag surface: missing new surface.');
+        "Couldn't clear and hide the drag surface: missing new surface."
+      );
     }
     const blockCanvas = this.SVG.childNodes[0] as Element;
     const bubbleCanvas = this.SVG.childNodes[1] as Element;
-    if (!blockCanvas || !bubbleCanvas ||
-        !(blockCanvas.classList.contains('blocklyBlockCanvas') ||
-          !bubbleCanvas.classList.contains('blocklyBubbleCanvas'))) {
+    if (
+      !blockCanvas ||
+      !bubbleCanvas ||
+      !(
+        blockCanvas.classList.contains('blocklyBlockCanvas') ||
+        !bubbleCanvas.classList.contains('blocklyBubbleCanvas')
+      )
+    ) {
       throw Error(
-          'Couldn\'t clear and hide the drag surface. A node was missing.');
+        "Couldn't clear and hide the drag surface. A node was missing."
+      );
     }
 
     // If there is a previous sibling, put the blockCanvas back right
@@ -156,17 +164,26 @@ export class WorkspaceDragSurfaceSvg {
    * @internal
    */
   setContentsAndShow(
-      blockCanvas: SVGElement, bubbleCanvas: SVGElement,
-      previousSibling: Element, width: number, height: number, scale: number) {
+    blockCanvas: SVGElement,
+    bubbleCanvas: SVGElement,
+    previousSibling: Element,
+    width: number,
+    height: number,
+    scale: number
+  ) {
     if (this.SVG.childNodes.length) {
       throw Error('Already dragging a block.');
     }
     this.previousSibling = previousSibling;
     // Make sure the blocks and bubble canvas are scaled appropriately.
     blockCanvas.setAttribute(
-        'transform', 'translate(0, 0) scale(' + scale + ')');
+      'transform',
+      'translate(0, 0) scale(' + scale + ')'
+    );
     bubbleCanvas.setAttribute(
-        'transform', 'translate(0, 0) scale(' + scale + ')');
+      'transform',
+      'translate(0, 0) scale(' + scale + ')'
+    );
     this.SVG.setAttribute('width', String(width));
     this.SVG.setAttribute('height', String(height));
     this.SVG.appendChild(blockCanvas);

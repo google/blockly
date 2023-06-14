@@ -12,25 +12,26 @@ const assert = require('chai').assert;
 const Blockly = require('../../dist/');
 const {javascriptGenerator} = require('../../dist/javascript');
 
-const xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">\n' +
-'  <block type="text_print" x="37" y="63">\n' +
-'    <value name="TEXT">\n' +
-'      <shadow type="text">\n' +
-'        <field name="TEXT">Hello from Blockly!</field>\n' +
-'      </shadow>\n' +
-'    </value>\n' +
-'  </block>\n' +
-'</xml>';
+const xmlText =
+  '<xml xmlns="https://developers.google.com/blockly/xml">\n' +
+  '  <block type="text_print" x="37" y="63">\n' +
+  '    <value name="TEXT">\n' +
+  '      <shadow type="text">\n' +
+  '        <field name="TEXT">Hello from Blockly!</field>\n' +
+  '      </shadow>\n' +
+  '    </value>\n' +
+  '  </block>\n' +
+  '</xml>';
 
-suite('Test Node.js', function() {
-  test('Import XML', function() {
+suite('Test Node.js', function () {
+  test('Import XML', function () {
     const xml = Blockly.utils.xml.textToDom(xmlText);
 
     // Create workspace and import the XML
     const workspace = new Blockly.Workspace();
     Blockly.Xml.domToWorkspace(xml, workspace);
   });
-  test('Roundtrip XML', function() {
+  test('Roundtrip XML', function () {
     const xml = Blockly.utils.xml.textToDom(xmlText);
 
     const workspace = new Blockly.Workspace();
@@ -41,7 +42,7 @@ suite('Test Node.js', function() {
 
     assert.equal(headlessText, xmlText, 'equal');
   });
-  test('Generate Code', function() {
+  test('Generate Code', function () {
     const xml = Blockly.utils.xml.textToDom(xmlText);
 
     // Create workspace and import the XML
@@ -52,7 +53,6 @@ suite('Test Node.js', function() {
     const code = javascriptGenerator.workspaceToCode(workspace);
 
     // Check output
-    assert.equal('window.alert(\'Hello from Blockly!\');', code.trim(), 'equal');
+    assert.equal("window.alert('Hello from Blockly!');", code.trim(), 'equal');
   });
 });
-

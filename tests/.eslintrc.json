@@ -1,10 +1,10 @@
 {
-    "globals": {
-        "Blockly": true,
-        "dartGenerator": true,
-        "javascriptGenerator": true,
-        "luaGenerator": true,
-        "phpGenerator": true,
-        "pythonGenerator": true
-    }
+  "globals": {
+    "Blockly": true,
+    "dartGenerator": true,
+    "javascriptGenerator": true,
+    "luaGenerator": true,
+    "phpGenerator": true,
+    "pythonGenerator": true
+  }
 }

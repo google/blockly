@@ -36,6 +36,7 @@ export class FieldColour extends Field<string> {
    * Copied from goog.ui.ColorPicker.SIMPLE_GRID_COLORS
    * All colour pickers use this unless overridden with setColours.
    */
+  // prettier-ignore
   static COLOURS: string[] = [
     // grays
     '#ffffff', '#cccccc', '#c0c0c0', '#999999',
@@ -74,10 +75,10 @@ export class FieldColour extends Field<string> {
   static COLUMNS = 7;
 
   /** The field's colour picker element. */
-  private picker: HTMLElement|null = null;
+  private picker: HTMLElement | null = null;
 
   /** Index of the currently highlighted element. */
-  private highlightedIndex: number|null = null;
+  private highlightedIndex: number | null = null;
 
   /**
    * Array holding info needed to unbind events.
@@ -103,13 +104,13 @@ export class FieldColour extends Field<string> {
   protected override isDirty_ = false;
 
   /** Array of colours used by this field.  If null, use the global list. */
-  private colours: string[]|null = null;
+  private colours: string[] | null = null;
 
   /**
    * Array of colour tooltips used by this field.  If null, use the global
    * list.
    */
-  private titles: string[]|null = null;
+  private titles: string[] | null = null;
 
   /**
    * Number of colour columns used by this field.  If 0, use the global
@@ -132,8 +133,10 @@ export class FieldColour extends Field<string> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|typeof Field.SKIP_SETUP, validator?: FieldColourValidator,
-      config?: FieldColourConfig) {
+    value?: string | typeof Field.SKIP_SETUP,
+    validator?: FieldColourValidator,
+    config?: FieldColourConfig
+  ) {
     super(Field.SKIP_SETUP);
 
     if (value === Field.SKIP_SETUP) return;
@@ -165,8 +168,9 @@ export class FieldColour extends Field<string> {
    */
   override initView() {
     this.size_ = new Size(
-        this.getConstants()!.FIELD_COLOUR_DEFAULT_WIDTH,
-        this.getConstants()!.FIELD_COLOUR_DEFAULT_HEIGHT);
+      this.getConstants()!.FIELD_COLOUR_DEFAULT_WIDTH,
+      this.getConstants()!.FIELD_COLOUR_DEFAULT_HEIGHT
+    );
     if (!this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) {
       this.createBorderRect_();
       this.getBorderRect().style['fillOpacity'] = '1';
@@ -185,7 +189,9 @@ export class FieldColour extends Field<string> {
       }
     } else if (this.sourceBlock_ instanceof BlockSvg) {
       this.sourceBlock_.pathObject.svgPath.setAttribute(
-          'fill', this.getValue() as string);
+        'fill',
+        this.getValue() as string
+      );
       this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }
@@ -196,7 +202,7 @@ export class FieldColour extends Field<string> {
    * @param newValue The input value.
    * @returns A valid colour, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: any): string|null {
+  protected override doClassValidation_(newValue?: any): string | null {
     if (typeof newValue !== 'string') {
       return null;
     }
@@ -214,8 +220,10 @@ export class FieldColour extends Field<string> {
     if (this.borderRect_) {
       this.borderRect_.style.fill = newValue;
     } else if (
-        this.sourceBlock_ && this.sourceBlock_.rendered &&
-        this.sourceBlock_ instanceof BlockSvg) {
+      this.sourceBlock_ &&
+      this.sourceBlock_.rendered &&
+      this.sourceBlock_ instanceof BlockSvg
+    ) {
       this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
       this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
@@ -297,7 +305,7 @@ export class FieldColour extends Field<string> {
    */
   private onKeyDown(e: KeyboardEvent) {
     let handled = true;
-    let highlighted: HTMLElement|null;
+    let highlighted: HTMLElement | null;
     switch (e.key) {
       case 'ArrowUp':
         this.moveHighlightBy(0, -1);
@@ -423,7 +431,7 @@ export class FieldColour extends Field<string> {
    *
    * @returns Highlighted item (null if none).
    */
-  private getHighlighted(): HTMLElement|null {
+  private getHighlighted(): HTMLElement | null {
     if (!this.highlightedIndex) {
       return null;
     }
@@ -476,7 +484,10 @@ export class FieldColour extends Field<string> {
     aria.setRole(table, aria.Role.GRID);
     aria.setState(table, aria.State.EXPANDED, true);
     aria.setState(
-        table, aria.State.ROWCOUNT, Math.floor(colours.length / columns));
+      table,
+      aria.State.ROWCOUNT,
+      Math.floor(colours.length / columns)
+    );
     aria.setState(table, aria.State.COLCOUNT, columns);
     let row: Element;
     for (let i = 0; i < colours.length; i++) {
@@ -485,7 +496,7 @@ export class FieldColour extends Field<string> {
         aria.setRole(row, aria.Role.ROW);
         table.appendChild(row);
       }
-      const cell = (document.createElement('td'));
+      const cell = document.createElement('td');
       row!.appendChild(cell);
       // This becomes the value, if clicked.
       cell.setAttribute('data-colour', colours[i]);
@@ -503,16 +514,51 @@ export class FieldColour extends Field<string> {
     }
 
     // Configure event handler on the table to listen for any event in a cell.
-    this.boundEvents.push(browserEvents.conditionalBind(
-        table, 'pointerdown', this, this.onClick, true));
-    this.boundEvents.push(browserEvents.conditionalBind(
-        table, 'pointermove', this, this.onMouseMove, true));
-    this.boundEvents.push(browserEvents.conditionalBind(
-        table, 'pointerenter', this, this.onMouseEnter, true));
-    this.boundEvents.push(browserEvents.conditionalBind(
-        table, 'pointerleave', this, this.onMouseLeave, true));
-    this.boundEvents.push(browserEvents.conditionalBind(
-        table, 'keydown', this, this.onKeyDown, false));
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        table,
+        'pointerdown',
+        this,
+        this.onClick,
+        true
+      )
+    );
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        table,
+        'pointermove',
+        this,
+        this.onMouseMove,
+        true
+      )
+    );
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        table,
+        'pointerenter',
+        this,
+        this.onMouseEnter,
+        true
+      )
+    );
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        table,
+        'pointerleave',
+        this,
+        this.onMouseLeave,
+        true
+      )
+    );
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        table,
+        'keydown',
+        this,
+        this.onKeyDown,
+        false
+      )
+    );
 
     this.picker = table;
   }
@@ -546,7 +592,6 @@ export class FieldColour extends Field<string> {
 FieldColour.prototype.DEFAULT_VALUE = FieldColour.COLOURS[0];
 
 fieldRegistry.register('field_colour', FieldColour);
-
 
 /**
  * CSS for colour picker.

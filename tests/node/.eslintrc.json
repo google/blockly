@@ -1,12 +1,12 @@
 {
-    "env": {
-        "node": true,
-        "browser": false,
-        "mocha": true
-    },
-    "globals": {
-        "console": true,
-        "require": true
-    },
-    "extends": "../../.eslintrc.js"
+  "env": {
+    "node": true,
+    "browser": false,
+    "mocha": true
+  },
+  "globals": {
+    "console": true,
+    "require": true
+  },
+  "extends": "../../.eslintrc.js"
 }

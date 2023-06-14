@@ -9,19 +9,18 @@
  *     blocks.  This is the entrypoint for dart_compressed.js.
  * @suppress {extraRequire}
  */
-'use strict';
 
-goog.module('Blockly.Dart.all');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Dart.all');
 
-const moduleExports = goog.require('Blockly.Dart');
-goog.require('Blockly.Dart.colour');
-goog.require('Blockly.Dart.lists');
-goog.require('Blockly.Dart.logic');
-goog.require('Blockly.Dart.loops');
-goog.require('Blockly.Dart.math');
-goog.require('Blockly.Dart.procedures');
-goog.require('Blockly.Dart.texts');
-goog.require('Blockly.Dart.variables');
-goog.require('Blockly.Dart.variablesDynamic');
+import './colour.js';
+import './lists.js';
+import './logic.js';
+import './loops.js';
+import './math.js';
+import './procedures.js';
+import './text.js';
+import './variables.js';
+import './variables_dynamic.js';
 
-exports = moduleExports;
+export * from '../dart.js';

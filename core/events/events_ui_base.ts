@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.Events.UiBase');
 
 import {Abstract as AbstractEvent} from './events_abstract.js';
 
-
 /**
  * Base class for a UI event.
  * UI events are events that don't need to be sent over the wire for multi-user

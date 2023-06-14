@@ -7,26 +7,28 @@
 /**
  * @fileoverview Generating Dart for variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.Dart.variables');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Dart.variables');
 
-const {NameType} = goog.require('Blockly.Names');
-const {dartGenerator: Dart} = goog.require('Blockly.Dart');
+import {NameType} from '../../core/names.js';
+import {dartGenerator, Order} from '../dart.js';
 
 
-Dart['variables_get'] = function(block) {
+dartGenerator.forBlock['variables_get'] = function(block) {
   // Variable getter.
   const code =
-      Dart.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-  return [code, Dart.ORDER_ATOMIC];
+      dartGenerator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
+  return [code, Order.ATOMIC];
 };
 
-Dart['variables_set'] = function(block) {
+dartGenerator.forBlock['variables_set'] = function(block) {
   // Variable setter.
   const argument0 =
-      Dart.valueToCode(block, 'VALUE', Dart.ORDER_ASSIGNMENT) || '0';
+      dartGenerator.valueToCode(block, 'VALUE', Order.ASSIGNMENT) || '0';
   const varName =
-      Dart.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+      dartGenerator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = ' + argument0 + ';\n';
 };

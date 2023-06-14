@@ -4,25 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Math blocks for Blockly.
- */
-
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.math');
 
 import * as Extensions from '../core/extensions.js';
-import type {Field} from '../core/field.js';
 import type {FieldDropdown} from '../core/field_dropdown.js';
 import * as xmlUtils from '../core/utils/xml.js';
 import type {Block} from '../core/block.js';
-import type {BlockDefinition} from '../core/blocks.js';
-import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
+import {
+  createBlockDefinitionsFromJsonArray,
+  defineBlocks,
+} from '../core/common.js';
 import '../core/field_dropdown.js';
 import '../core/field_label.js';
 import '../core/field_number.js';
 import '../core/field_variable.js';
-
 
 /**
  * A dictionary of the block definitions provided by this module.
@@ -32,11 +28,13 @@ export const blocks = createBlockDefinitionsFromJsonArray([
   {
     'type': 'math_number',
     'message0': '%1',
-    'args0': [{
-      'type': 'field_number',
-      'name': 'NUM',
-      'value': 0,
-    }],
+    'args0': [
+      {
+        'type': 'field_number',
+        'name': 'NUM',
+        'value': 0,
+      },
+    ],
     'output': 'Number',
     'helpUrl': '%{BKY_MATH_NUMBER_HELPURL}',
     'style': 'math_blocks',
@@ -428,12 +426,13 @@ const TOOLTIPS_BY_OP = {
 };
 
 Extensions.register(
-    'math_op_tooltip',
-    Extensions.buildTooltipForDropdown('OP', TOOLTIPS_BY_OP));
+  'math_op_tooltip',
+  Extensions.buildTooltipForDropdown('OP', TOOLTIPS_BY_OP)
+);
 
 /** Type of a block that has IS_DIVISBLEBY_MUTATOR_MIXIN */
-type DivisiblebyBlock = Block&DivisiblebyMixin;
-interface DivisiblebyMixin extends DivisiblebyMixinType {};
+type DivisiblebyBlock = Block & DivisiblebyMixin;
+interface DivisiblebyMixin extends DivisiblebyMixinType {}
 type DivisiblebyMixinType = typeof IS_DIVISIBLEBY_MUTATOR_MIXIN;
 
 /**
@@ -451,9 +450,9 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    *
    * @returns XML storage element.
    */
-  mutationToDom: function(this: DivisiblebyBlock): Element {
+  mutationToDom: function (this: DivisiblebyBlock): Element {
     const container = xmlUtils.createElement('mutation');
-    const divisorInput = (this.getFieldValue('PROPERTY') === 'DIVISIBLE_BY');
+    const divisorInput = this.getFieldValue('PROPERTY') === 'DIVISIBLE_BY';
     container.setAttribute('divisor_input', String(divisorInput));
     return container;
   },
@@ -463,8 +462,8 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    *
    * @param xmlElement XML storage element.
    */
-  domToMutation: function(this: DivisiblebyBlock, xmlElement: Element) {
-    const divisorInput = (xmlElement.getAttribute('divisor_input') === 'true');
+  domToMutation: function (this: DivisiblebyBlock, xmlElement: Element) {
+    const divisorInput = xmlElement.getAttribute('divisor_input') === 'true';
     this.updateShape_(divisorInput);
   },
 
@@ -478,7 +477,7 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    *
    * @param divisorInput True if this block has a divisor input.
    */
-  updateShape_: function(this: DivisiblebyBlock, divisorInput: boolean) {
+  updateShape_: function (this: DivisiblebyBlock, divisorInput: boolean) {
     // Add or remove a Value Input.
     const inputExists = this.getInput('DIVISOR');
     if (divisorInput) {
@@ -496,28 +495,32 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
  * can update the block shape (add/remove divisor input) based on whether
  * property is "divisible by".
  */
-const IS_DIVISIBLE_MUTATOR_EXTENSION = function(this: DivisiblebyBlock) {
+const IS_DIVISIBLE_MUTATOR_EXTENSION = function (this: DivisiblebyBlock) {
   this.getField('PROPERTY')!.setValidator(
-      /** @param option The selected dropdown option. */
-      function(this: FieldDropdown, option: string) {
-        const divisorInput = (option === 'DIVISIBLE_BY');
-        (this.getSourceBlock() as DivisiblebyBlock).updateShape_(divisorInput);
-        return undefined;  // FieldValidators can't be void.  Use option as-is.
-      });
+    /** @param option The selected dropdown option. */
+    function (this: FieldDropdown, option: string) {
+      const divisorInput = option === 'DIVISIBLE_BY';
+      (this.getSourceBlock() as DivisiblebyBlock).updateShape_(divisorInput);
+      return undefined; // FieldValidators can't be void.  Use option as-is.
+    }
+  );
 };
 
 Extensions.registerMutator(
-    'math_is_divisibleby_mutator', IS_DIVISIBLEBY_MUTATOR_MIXIN,
-    IS_DIVISIBLE_MUTATOR_EXTENSION);
+  'math_is_divisibleby_mutator',
+  IS_DIVISIBLEBY_MUTATOR_MIXIN,
+  IS_DIVISIBLE_MUTATOR_EXTENSION
+);
 
 // Update the tooltip of 'math_change' block to reference the variable.
 Extensions.register(
-    'math_change_tooltip',
-    Extensions.buildTooltipWithFieldText('%{BKY_MATH_CHANGE_TOOLTIP}', 'VAR'));
+  'math_change_tooltip',
+  Extensions.buildTooltipWithFieldText('%{BKY_MATH_CHANGE_TOOLTIP}', 'VAR')
+);
 
 /** Type of a block that has LIST_MODES_MUTATOR_MIXIN */
-type ListModesBlock = Block&ListModesMixin;
-interface ListModesMixin extends ListModesMixinType {};
+type ListModesBlock = Block & ListModesMixin;
+interface ListModesMixin extends ListModesMixinType {}
 type ListModesMixinType = typeof LIST_MODES_MUTATOR_MIXIN;
 
 /**
@@ -530,7 +533,7 @@ const LIST_MODES_MUTATOR_MIXIN = {
    *
    * @param newOp Either 'MODE' or some op than returns a number.
    */
-  updateType_: function(this: ListModesBlock, newOp: string) {
+  updateType_: function (this: ListModesBlock, newOp: string) {
     if (newOp === 'MODE') {
       this.outputConnection!.setCheck('Array');
     } else {
@@ -543,7 +546,7 @@ const LIST_MODES_MUTATOR_MIXIN = {
    *
    * @returns XML storage element.
    */
-  mutationToDom: function(this: ListModesBlock): Element {
+  mutationToDom: function (this: ListModesBlock): Element {
     const container = xmlUtils.createElement('mutation');
     container.setAttribute('op', this.getFieldValue('OP'));
     return container;
@@ -554,7 +557,7 @@ const LIST_MODES_MUTATOR_MIXIN = {
    *
    * @param xmlElement XML storage element.
    */
-  domToMutation: function(this: ListModesBlock, xmlElement: Element) {
+  domToMutation: function (this: ListModesBlock, xmlElement: Element) {
     const op = xmlElement.getAttribute('op');
     if (op === null) throw new TypeError('xmlElement had no op attribute');
     this.updateType_(op);
@@ -570,17 +573,20 @@ const LIST_MODES_MUTATOR_MIXIN = {
  * Extension to 'math_on_list' blocks that allows support of
  * modes operation (outputs a list of numbers).
  */
-const LIST_MODES_MUTATOR_EXTENSION = function(this: ListModesBlock) {
+const LIST_MODES_MUTATOR_EXTENSION = function (this: ListModesBlock) {
   this.getField('OP')!.setValidator(
-      function(this: ListModesBlock, newOp: string) {
-        this.updateType_(newOp);
-        return undefined;
-      }.bind(this));
+    function (this: ListModesBlock, newOp: string) {
+      this.updateType_(newOp);
+      return undefined;
+    }.bind(this)
+  );
 };
 
 Extensions.registerMutator(
-    'math_modes_of_list_mutator', LIST_MODES_MUTATOR_MIXIN,
-    LIST_MODES_MUTATOR_EXTENSION);
+  'math_modes_of_list_mutator',
+  LIST_MODES_MUTATOR_MIXIN,
+  LIST_MODES_MUTATOR_EXTENSION
+);
 
 // Register provided blocks.
 defineBlocks(blocks);

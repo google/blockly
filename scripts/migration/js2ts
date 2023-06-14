@@ -64,6 +64,9 @@ require(path.resolve(__dirname, '../../build/deps.mocha.js'));
 const requireRE =
     /(?:const\s+(?:([$\w]+)|(\{[^}]*\}))\s+=\s+)?goog.require(Type)?\('([^']+)'\);/mg;
 
+/** RegExp matching key: value pairs in destructuring assignments. */
+const keyValueRE = /([$\w]+)\s*:\s*([$\w]+)\s*(?=,|})/g;
+
 for (const filename of filenames) {
   let contents = null;
   try {
@@ -102,11 +105,13 @@ for (const filename of filenames) {
               moduleId}') as no ES module path known.`);
           return orig;
         }
-        const relativePath =
+        let relativePath =
             path.relative(path.dirname(path.resolve(filename)), importPath);
+        if (relativePath[0] !== '.') relativePath = './' + relativePath;
         if (name) {
           return `import${type} * as ${name} from '${relativePath}';`;
         } else if (names) {
+          names = names.replace(keyValueRE, '$1 as $2');
           return `import${type} ${names} from '${relativePath}';`;
         } else {  // Side-effect only require.
           return `import${type} '${relativePath}';`;

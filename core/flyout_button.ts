@@ -22,7 +22,6 @@ import {Svg} from './utils/svg.js';
 import type * as toolbox from './utils/toolbox.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-
 /**
  * Class for a button or label in the flyout.
  */
@@ -39,10 +38,10 @@ export class FlyoutButton {
   private readonly text: string;
   private readonly position: Coordinate;
   private readonly callbackKey: string;
-  private readonly cssClass: string|null;
+  private readonly cssClass: string | null;
 
   /** Mouse up event data. */
-  private onMouseUpWrapper: browserEvents.Data|null = null;
+  private onMouseUpWrapper: browserEvents.Data | null = null;
   info: toolbox.ButtonOrLabelInfo;
 
   /** The width of the button's rect. */
@@ -52,10 +51,10 @@ export class FlyoutButton {
   height = 0;
 
   /** The root SVG group for the button or label. */
-  private svgGroup: SVGGElement|null = null;
+  private svgGroup: SVGGElement | null = null;
 
   /** The SVG element with the text of the label or button. */
-  private svgText: SVGTextElement|null = null;
+  private svgText: SVGTextElement | null = null;
 
   /**
    * @param workspace The workspace in which to place this button.
@@ -65,19 +64,22 @@ export class FlyoutButton {
    * @internal
    */
   constructor(
-      private readonly workspace: WorkspaceSvg,
-      private readonly targetWorkspace: WorkspaceSvg,
-      json: toolbox.ButtonOrLabelInfo, private readonly isLabel_: boolean) {
+    private readonly workspace: WorkspaceSvg,
+    private readonly targetWorkspace: WorkspaceSvg,
+    json: toolbox.ButtonOrLabelInfo,
+    private readonly isLabel_: boolean
+  ) {
     this.text = json['text'];
 
     this.position = new Coordinate(0, 0);
 
     /** The key to the function called when this button is clicked. */
     this.callbackKey =
-        (json as
-         AnyDuringMigration)['callbackKey'] || /* Check the lower case version
-                                                   too to satisfy IE */
-        (json as AnyDuringMigration)['callbackkey'];
+      (json as AnyDuringMigration)[
+        'callbackKey'
+      ] /* Check the lower case version
+                                                   too to satisfy IE */ ||
+      (json as AnyDuringMigration)['callbackkey'];
 
     /** If specified, a CSS class to add to this button. */
     this.cssClass = (json as AnyDuringMigration)['web-class'] || null;
@@ -98,39 +100,49 @@ export class FlyoutButton {
     }
 
     this.svgGroup = dom.createSvgElement(
-        Svg.G, {'class': cssClass}, this.workspace.getCanvas());
+      Svg.G,
+      {'class': cssClass},
+      this.workspace.getCanvas()
+    );
 
     let shadow;
     if (!this.isLabel_) {
       // Shadow rectangle (light source does not mirror in RTL).
       shadow = dom.createSvgElement(
-          Svg.RECT, {
-            'class': 'blocklyFlyoutButtonShadow',
-            'rx': FlyoutButton.BORDER_RADIUS,
-            'ry': FlyoutButton.BORDER_RADIUS,
-            'x': 1,
-            'y': 1,
-          },
-          this.svgGroup!);
+        Svg.RECT,
+        {
+          'class': 'blocklyFlyoutButtonShadow',
+          'rx': FlyoutButton.BORDER_RADIUS,
+          'ry': FlyoutButton.BORDER_RADIUS,
+          'x': 1,
+          'y': 1,
+        },
+        this.svgGroup!
+      );
     }
     // Background rectangle.
     const rect = dom.createSvgElement(
-        Svg.RECT, {
-          'class': this.isLabel_ ? 'blocklyFlyoutLabelBackground' :
-                                   'blocklyFlyoutButtonBackground',
-          'rx': FlyoutButton.BORDER_RADIUS,
-          'ry': FlyoutButton.BORDER_RADIUS,
-        },
-        this.svgGroup!);
+      Svg.RECT,
+      {
+        'class': this.isLabel_
+          ? 'blocklyFlyoutLabelBackground'
+          : 'blocklyFlyoutButtonBackground',
+        'rx': FlyoutButton.BORDER_RADIUS,
+        'ry': FlyoutButton.BORDER_RADIUS,
+      },
+      this.svgGroup!
+    );
 
     const svgText = dom.createSvgElement(
-        Svg.TEXT, {
-          'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
-          'x': 0,
-          'y': 0,
-          'text-anchor': 'middle',
-        },
-        this.svgGroup!);
+      Svg.TEXT,
+      {
+        'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
+        'x': 0,
+        'y': 0,
+        'text-anchor': 'middle',
+      },
+      this.svgGroup!
+    );
     let text = parsing.replaceMessageReferences(this.text);
     if (this.workspace.RTL) {
       // Force text to be RTL by adding an RLM.
@@ -139,17 +151,26 @@ export class FlyoutButton {
     svgText.textContent = text;
     if (this.isLabel_) {
       this.svgText = svgText;
-      this.workspace.getThemeManager().subscribe(
-          this.svgText, 'flyoutForegroundColour', 'fill');
+      this.workspace
+        .getThemeManager()
+        .subscribe(this.svgText, 'flyoutForegroundColour', 'fill');
     }
 
     const fontSize = style.getComputedStyle(svgText, 'fontSize');
     const fontWeight = style.getComputedStyle(svgText, 'fontWeight');
     const fontFamily = style.getComputedStyle(svgText, 'fontFamily');
     this.width = dom.getFastTextWidthWithSizeString(
-        svgText, fontSize, fontWeight, fontFamily);
-    const fontMetrics =
-        dom.measureFontMetrics(text, fontSize, fontWeight, fontFamily);
+      svgText,
+      fontSize,
+      fontWeight,
+      fontFamily
+    );
+    const fontMetrics = dom.measureFontMetrics(
+      text,
+      fontSize,
+      fontWeight,
+      fontFamily
+    );
     this.height = fontMetrics.height;
 
     if (!this.isLabel_) {
@@ -163,16 +184,20 @@ export class FlyoutButton {
 
     svgText.setAttribute('x', String(this.width / 2));
     svgText.setAttribute(
-        'y',
-        String(
-            this.height / 2 - fontMetrics.height / 2 + fontMetrics.baseline));
+      'y',
+      String(this.height / 2 - fontMetrics.height / 2 + fontMetrics.baseline)
+    );
 
     this.updateTransform();
 
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'EventTarget'.
     this.onMouseUpWrapper = browserEvents.conditionalBind(
-        this.svgGroup as AnyDuringMigration, 'pointerup', this, this.onMouseUp);
+      this.svgGroup as AnyDuringMigration,
+      'pointerup',
+      this,
+      this.onMouseUp
+    );
     return this.svgGroup!;
   }
 
@@ -185,8 +210,9 @@ export class FlyoutButton {
   /** Update SVG attributes to match internal state. */
   private updateTransform() {
     this.svgGroup!.setAttribute(
-        'transform',
-        'translate(' + this.position.x + ',' + this.position.y + ')');
+      'transform',
+      'translate(' + this.position.x + ',' + this.position.y + ')'
+    );
   }
 
   /**
@@ -256,11 +282,15 @@ export class FlyoutButton {
 
     if (this.isLabel_ && this.callbackKey) {
       console.warn(
-          'Labels should not have callbacks. Label text: ' + this.text);
+        'Labels should not have callbacks. Label text: ' + this.text
+      );
     } else if (
-        !this.isLabel_ &&
-        !(this.callbackKey &&
-          this.targetWorkspace.getButtonCallback(this.callbackKey))) {
+      !this.isLabel_ &&
+      !(
+        this.callbackKey &&
+        this.targetWorkspace.getButtonCallback(this.callbackKey)
+      )
+    ) {
       console.warn('Buttons should have callbacks. Button text: ' + this.text);
     } else if (!this.isLabel_) {
       const callback = this.targetWorkspace.getButtonCallback(this.callbackKey);

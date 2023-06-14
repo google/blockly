@@ -7,26 +7,28 @@
 /**
  * @fileoverview Generating PHP for variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.PHP.variables');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.PHP.variables');
 
-const {NameType} = goog.require('Blockly.Names');
-const {phpGenerator: PHP} = goog.require('Blockly.PHP');
+import {NameType} from '../../core/names.js';
+import {phpGenerator, Order} from '../php.js';
 
 
-PHP['variables_get'] = function(block) {
+phpGenerator.forBlock['variables_get'] = function(block) {
   // Variable getter.
   const code =
-      PHP.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-  return [code, PHP.ORDER_ATOMIC];
+      phpGenerator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
+  return [code, Order.ATOMIC];
 };
 
-PHP['variables_set'] = function(block) {
+phpGenerator.forBlock['variables_set'] = function(block) {
   // Variable setter.
   const argument0 =
-      PHP.valueToCode(block, 'VALUE', PHP.ORDER_ASSIGNMENT) || '0';
+      phpGenerator.valueToCode(block, 'VALUE', Order.ASSIGNMENT) || '0';
   const varName =
-      PHP.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+      phpGenerator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = ' + argument0 + ';\n';
 };

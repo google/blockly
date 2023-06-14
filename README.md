@@ -1,6 +1,6 @@
 # Blockly
 
-Google's Blockly is a library that adds a visual code editor to web and mobile apps. The Blockly editor uses interlocking, graphical blocks to represent code concepts like variables, logical expressions, loops, and more. It allows users to apply programming principles without having to worry about syntax or the intimidation of a blinking cursor on the command line.  All code is free and open source.
+Google's Blockly is a library that adds a visual code editor to web and mobile apps. The Blockly editor uses interlocking, graphical blocks to represent code concepts like variables, logical expressions, loops, and more. It allows users to apply programming principles without having to worry about syntax or the intimidation of a blinking cursor on the command line. All code is free and open source.
 
 ![](https://developers.google.com/blockly/images/sample.png)
 
@@ -8,13 +8,13 @@ Google's Blockly is a library that adds a visual code editor to web and mobile a
 
 Blockly has many resources for learning how to use the library. Start at our [Google Developers Site](https://developers.google.com/blockly) to read the documentation on how to get started, configure Blockly, and integrate it into your application. The developers site also contains links to:
 
-* [Getting Started article](https://developers.google.com/blockly/guides/get-started/web)
-* [Getting Started codelab](https://blocklycodelabs.dev/codelabs/getting-started/index.html#0)
-* [More codelabs](https://blocklycodelabs.dev/)
-* [Demos and plugins](https://google.github.io/blockly-samples/)
+- [Getting Started article](https://developers.google.com/blockly/guides/get-started/web)
+- [Getting Started codelab](https://blocklycodelabs.dev/codelabs/getting-started/index.html#0)
+- [More codelabs](https://blocklycodelabs.dev/)
+- [Demos and plugins](https://google.github.io/blockly-samples/)
 
 Help us focus our development efforts by telling us [what you are doing with
-Blockly](https://developers.google.com/blockly/registration).  The questionnaire only takes
+Blockly](https://developers.google.com/blockly/registration). The questionnaire only takes
 a few minutes and will help us better support the Blockly community.
 
 ### Installing Blockly
@@ -28,8 +28,9 @@ npm install blockly
 For more information on installing and using Blockly, see the [Getting Started article](https://developers.google.com/blockly/guides/get-started/web).
 
 ### Getting Help
-* [Report a bug](https://developers.google.com/blockly/guides/modify/contribute/write_a_good_issue) or file a feature request on GitHub
-* Ask a question, or search others' questions, on our [developer forum](https://groups.google.com/forum/#!forum/blockly). You can also drop by to say hello and show us your prototypes; collectively we have a lot of experience and can offer hints which will save you time. We actively monitor the forums and typically respond to questions within 2 working days.
+
+- [Report a bug](https://developers.google.com/blockly/guides/modify/contribute/write_a_good_issue) or file a feature request on GitHub
+- Ask a question, or search others' questions, on our [developer forum](https://groups.google.com/forum/#!forum/blockly). You can also drop by to say hello and show us your prototypes; collectively we have a lot of experience and can offer hints which will save you time. We actively monitor the forums and typically respond to questions within 2 working days.
 
 ### blockly-samples
 
@@ -50,6 +51,7 @@ We now have a [beta release on npm](https://www.npmjs.com/package/blockly?active
 ```bash
 npm install blockly@beta
 ```
+
 As it is a beta channel, it may be less stable, and the APIs there are subject to change.
 
 ### Branches
@@ -82,5 +84,5 @@ We typically triage all bugs within 2 working days, which includes adding any ap
 
 ## Good to Know
 
-* Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com)
-* We test browsers using [BrowserStack](https://browserstack.com)
+- Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com)
+- We test browsers using [BrowserStack](https://browserstack.com)

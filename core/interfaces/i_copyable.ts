@@ -10,7 +10,6 @@ goog.declareModuleId('Blockly.ICopyable');
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import type {ISelectable} from './i_selectable.js';
 
-
 export interface ICopyable extends ISelectable {
   /**
    * Encode for copying.
@@ -18,14 +17,14 @@ export interface ICopyable extends ISelectable {
    * @returns Copy metadata.
    * @internal
    */
-  toCopyData(): CopyData|null;
+  toCopyData(): CopyData | null;
 }
 
 export namespace ICopyable {
   export interface CopyData {
-    saveInfo: Object|Element;
+    saveInfo: Object | Element;
     source: WorkspaceSvg;
-    typeCounts: {[key: string]: number}|null;
+    typeCounts: {[key: string]: number} | null;
   }
 }
 

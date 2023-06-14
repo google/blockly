@@ -16,12 +16,8 @@ gulp.sourcemaps = require('gulp-sourcemaps');
 const path = require('path');
 const fs = require('fs');
 const {exec, execSync} = require('child_process');
-const through2 = require('through2');
 
-const clangFormat = require('clang-format');
-const clangFormatter = require('gulp-clang-format');
 const closureCompiler = require('google-closure-compiler').gulp();
-const closureDeps = require('google-closure-deps');
 const argv = require('yargs').argv;
 const {rimraf} = require('rimraf');
 
@@ -112,35 +108,35 @@ const chunks = [
   {
     name: 'javascript',
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'javascript', 'all.js'),
-    exports: 'module$exports$Blockly$JavaScript',
+    exports: 'module$build$src$generators$javascript$all',
     reexport: 'Blockly.JavaScript',
     reexportOnly: 'javascriptGenerator',
   },
   {
     name: 'python',
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'python', 'all.js'),
-    exports: 'module$exports$Blockly$Python',
+    exports: 'module$build$src$generators$python$all',
     reexport: 'Blockly.Python',
     reexportOnly: 'pythonGenerator',
   },
   {
     name: 'php',
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'php', 'all.js'),
-    exports: 'module$exports$Blockly$PHP',
+    exports: 'module$build$src$generators$php$all',
     reexport: 'Blockly.PHP',
     reexportOnly: 'phpGenerator',
   },
   {
     name: 'lua',
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'lua', 'all.js'),
-    exports: 'module$exports$Blockly$Lua',
+    exports: 'module$build$src$generators$lua$all',
     reexport: 'Blockly.Lua',
     reexportOnly: 'luaGenerator',
   },
   {
     name: 'dart',
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'dart', 'all.js'),
-    exports: 'module$exports$Blockly$Dart',
+    exports: 'module$build$src$generators$dart$all',
     reexport: 'Blockly.Dart',
     reexportOnly: 'dartGenerator',
   }
@@ -564,7 +560,7 @@ function getChunkOptions() {
     // Figure out which chunk this is by looking for one of the
     // known chunk entrypoints in chunkFiles.  N.B.: O(n*m).  :-(
     const chunk = chunks.find(
-        chunk => chunkFiles.find(f => f.endsWith('/' + chunk.entry)));
+        chunk => chunkFiles.find(f => f.endsWith(path.sep + chunk.entry)));
     if (!chunk) throw new Error('Unable to identify chunk');
 
     // Replace nicknames with the names we chose.
@@ -717,19 +713,6 @@ function cleanBuildDir() {
   return rimraf(BUILD_DIR);
 }
 
-/**
- * Runs clang format on all files in the core directory.
- */
-function format() {
-  return gulp.src([
-    'core/**/*.js', 'core/**/*.ts',
-    'blocks/**/*.js', 'blocks/**/*.ts',
-    '.eslintrc.js'
-  ], {base: '.'})
-      .pipe(clangFormatter.format('file', clangFormat))
-      .pipe(gulp.dest('.'));
-}
-
 // Main sequence targets.  Each should invoke any immediate prerequisite(s).
 exports.cleanBuildDir = cleanBuildDir;
 exports.langfiles = buildLangfiles;  // Build build/msg/*.js from msg/json/*.
@@ -739,7 +722,6 @@ exports.minify = gulp.series(exports.deps, buildCompiled);
 exports.build = gulp.parallel(exports.minify, exports.langfiles);
 
 // Manually-invokable targets, with prerequisites where required.
-exports.format = format;
 exports.messages = generateMessages;  // Generate msg/json/en.json et al.
 exports.buildAdvancedCompilationTest =
     gulp.series(exports.deps, buildAdvancedCompilationTest);

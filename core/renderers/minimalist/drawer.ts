@@ -12,7 +12,6 @@ import {Drawer as BaseDrawer} from '../common/drawer.js';
 
 import type {RenderInfo} from './info.js';
 
-
 /**
  * An object that draws a block based on the given rendering information.
  */

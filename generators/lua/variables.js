@@ -7,25 +7,27 @@
 /**
  * @fileoverview Generating Lua for variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.Lua.variables');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Lua.variables');
 
-const {NameType} = goog.require('Blockly.Names');
-const {luaGenerator: Lua} = goog.require('Blockly.Lua');
+import {NameType} from '../../core/names.js';
+import {luaGenerator, Order} from '../lua.js';
 
 
-Lua['variables_get'] = function(block) {
+luaGenerator.forBlock['variables_get'] = function(block) {
   // Variable getter.
   const code =
-      Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-  return [code, Lua.ORDER_ATOMIC];
+      luaGenerator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
+  return [code, Order.ATOMIC];
 };
 
-Lua['variables_set'] = function(block) {
+luaGenerator.forBlock['variables_set'] = function(block) {
   // Variable setter.
-  const argument0 = Lua.valueToCode(block, 'VALUE', Lua.ORDER_NONE) || '0';
+  const argument0 = luaGenerator.valueToCode(block, 'VALUE', Order.NONE) || '0';
   const varName =
-      Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+      luaGenerator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = ' + argument0 + '\n';
 };

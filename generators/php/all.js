@@ -9,19 +9,18 @@
  *     blocks.  This is the entrypoint for php_compressed.js.
  * @suppress {extraRequire}
  */
-'use strict';
 
-goog.module('Blockly.PHP.all');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.PHP.all');
 
-const moduleExports = goog.require('Blockly.PHP');
-goog.require('Blockly.PHP.colour');
-goog.require('Blockly.PHP.lists');
-goog.require('Blockly.PHP.logic');
-goog.require('Blockly.PHP.loops');
-goog.require('Blockly.PHP.math');
-goog.require('Blockly.PHP.procedures');
-goog.require('Blockly.PHP.texts');
-goog.require('Blockly.PHP.variables');
-goog.require('Blockly.PHP.variablesDynamic');
+import './colour.js';
+import './lists.js';
+import './logic.js';
+import './loops.js';
+import './math.js';
+import './procedures.js';
+import './text.js';
+import './variables.js';
+import './variables_dynamic.js';
 
-exports = moduleExports;
+export * from '../php.js';

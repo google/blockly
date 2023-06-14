@@ -7,30 +7,32 @@
 /**
  * @fileoverview Generating JavaScript for logic blocks.
  */
-'use strict';
 
-goog.module('Blockly.JavaScript.logic');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.JavaScript.logic');
 
-const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
+import {Order, javascriptGenerator} from '../javascript.js';
 
 
-JavaScript['controls_if'] = function(block) {
+javascriptGenerator.forBlock['controls_if'] = function(block) {
   // If/elseif/else condition.
   let n = 0;
   let code = '';
-  if (JavaScript.STATEMENT_PREFIX) {
+  if (javascriptGenerator.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
-    code += JavaScript.injectId(JavaScript.STATEMENT_PREFIX, block);
+    code += javascriptGenerator.injectId(
+        javascriptGenerator.STATEMENT_PREFIX, block);
   }
   do {
     const conditionCode =
-        JavaScript.valueToCode(block, 'IF' + n, JavaScript.ORDER_NONE) ||
+        javascriptGenerator.valueToCode(block, 'IF' + n, Order.NONE) ||
         'false';
-    let branchCode = JavaScript.statementToCode(block, 'DO' + n);
-    if (JavaScript.STATEMENT_SUFFIX) {
-      branchCode = JavaScript.prefixLines(
-                       JavaScript.injectId(JavaScript.STATEMENT_SUFFIX, block),
-                       JavaScript.INDENT) +
+    let branchCode = javascriptGenerator.statementToCode(block, 'DO' + n);
+    if (javascriptGenerator.STATEMENT_SUFFIX) {
+      branchCode = javascriptGenerator.prefixLines(
+          javascriptGenerator.injectId(
+            javascriptGenerator.STATEMENT_SUFFIX, block),
+          javascriptGenerator.INDENT) +
           branchCode;
     }
     code += (n > 0 ? ' else ' : '') + 'if (' + conditionCode + ') {\n' +
@@ -38,12 +40,13 @@ JavaScript['controls_if'] = function(block) {
     n++;
   } while (block.getInput('IF' + n));
 
-  if (block.getInput('ELSE') || JavaScript.STATEMENT_SUFFIX) {
-    let branchCode = JavaScript.statementToCode(block, 'ELSE');
-    if (JavaScript.STATEMENT_SUFFIX) {
-      branchCode = JavaScript.prefixLines(
-                       JavaScript.injectId(JavaScript.STATEMENT_SUFFIX, block),
-                       JavaScript.INDENT) +
+  if (block.getInput('ELSE') || javascriptGenerator.STATEMENT_SUFFIX) {
+    let branchCode = javascriptGenerator.statementToCode(block, 'ELSE');
+    if (javascriptGenerator.STATEMENT_SUFFIX) {
+      branchCode = javascriptGenerator.prefixLines(
+          javascriptGenerator.injectId(
+            javascriptGenerator.STATEMENT_SUFFIX, block),
+          javascriptGenerator.INDENT) +
           branchCode;
     }
     code += ' else {\n' + branchCode + '}';
@@ -51,29 +54,30 @@ JavaScript['controls_if'] = function(block) {
   return code + '\n';
 };
 
-JavaScript['controls_ifelse'] = JavaScript['controls_if'];
+javascriptGenerator.forBlock['controls_ifelse'] =
+    javascriptGenerator.forBlock['controls_if'];
 
-JavaScript['logic_compare'] = function(block) {
+javascriptGenerator.forBlock['logic_compare'] = function(block) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
   const order = (operator === '==' || operator === '!=') ?
-      JavaScript.ORDER_EQUALITY :
-      JavaScript.ORDER_RELATIONAL;
-  const argument0 = JavaScript.valueToCode(block, 'A', order) || '0';
-  const argument1 = JavaScript.valueToCode(block, 'B', order) || '0';
+      Order.EQUALITY :
+      Order.RELATIONAL;
+  const argument0 = javascriptGenerator.valueToCode(block, 'A', order) || '0';
+  const argument1 = javascriptGenerator.valueToCode(block, 'B', order) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };
 
-JavaScript['logic_operation'] = function(block) {
+javascriptGenerator.forBlock['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
-  const order = (operator === '&&') ? JavaScript.ORDER_LOGICAL_AND :
-                                      JavaScript.ORDER_LOGICAL_OR;
-  let argument0 = JavaScript.valueToCode(block, 'A', order);
-  let argument1 = JavaScript.valueToCode(block, 'B', order);
+  const order = (operator === '&&') ? Order.LOGICAL_AND :
+                                      Order.LOGICAL_OR;
+  let argument0 = javascriptGenerator.valueToCode(block, 'A', order);
+  let argument1 = javascriptGenerator.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
     // If there are no arguments, then the return value is false.
     argument0 = 'false';
@@ -92,36 +96,37 @@ JavaScript['logic_operation'] = function(block) {
   return [code, order];
 };
 
-JavaScript['logic_negate'] = function(block) {
+javascriptGenerator.forBlock['logic_negate'] = function(block) {
   // Negation.
-  const order = JavaScript.ORDER_LOGICAL_NOT;
-  const argument0 = JavaScript.valueToCode(block, 'BOOL', order) || 'true';
+  const order = Order.LOGICAL_NOT;
+  const argument0 =
+      javascriptGenerator.valueToCode(block, 'BOOL', order) || 'true';
   const code = '!' + argument0;
   return [code, order];
 };
 
-JavaScript['logic_boolean'] = function(block) {
+javascriptGenerator.forBlock['logic_boolean'] = function(block) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
-  return [code, JavaScript.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
-JavaScript['logic_null'] = function(block) {
+javascriptGenerator.forBlock['logic_null'] = function(block) {
   // Null data type.
-  return ['null', JavaScript.ORDER_ATOMIC];
+  return ['null', Order.ATOMIC];
 };
 
-JavaScript['logic_ternary'] = function(block) {
+javascriptGenerator.forBlock['logic_ternary'] = function(block) {
   // Ternary operator.
   const value_if =
-      JavaScript.valueToCode(block, 'IF', JavaScript.ORDER_CONDITIONAL) ||
+      javascriptGenerator.valueToCode(block, 'IF', Order.CONDITIONAL) ||
       'false';
   const value_then =
-      JavaScript.valueToCode(block, 'THEN', JavaScript.ORDER_CONDITIONAL) ||
+      javascriptGenerator.valueToCode(block, 'THEN', Order.CONDITIONAL) ||
       'null';
   const value_else =
-      JavaScript.valueToCode(block, 'ELSE', JavaScript.ORDER_CONDITIONAL) ||
+      javascriptGenerator.valueToCode(block, 'ELSE', Order.CONDITIONAL) ||
       'null';
   const code = value_if + ' ? ' + value_then + ' : ' + value_else;
-  return [code, JavaScript.ORDER_CONDITIONAL];
+  return [code, Order.CONDITIONAL];
 };

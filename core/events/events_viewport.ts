@@ -12,13 +12,11 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.ViewportChange');
 
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
-
 
 /**
  * Notifies listeners that the workspace surface's position or scale has
@@ -59,8 +57,12 @@ export class ViewportChange extends UiBase {
    *     event.
    */
   constructor(
-      opt_top?: number, opt_left?: number, opt_scale?: number,
-      opt_workspaceId?: string, opt_oldScale?: number) {
+    opt_top?: number,
+    opt_left?: number,
+    opt_scale?: number,
+    opt_workspaceId?: string,
+    opt_oldScale?: number
+  ) {
     super(opt_workspaceId);
 
     this.viewTop = opt_top;
@@ -78,45 +80,33 @@ export class ViewportChange extends UiBase {
     const json = super.toJson() as ViewportChangeJson;
     if (this.viewTop === undefined) {
       throw new Error(
-          'The view top is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson');
+        'The view top is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson'
+      );
     }
     if (this.viewLeft === undefined) {
       throw new Error(
-          'The view left is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson');
+        'The view left is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson'
+      );
     }
     if (this.scale === undefined) {
       throw new Error(
-          'The scale is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson');
+        'The scale is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson'
+      );
     }
     if (this.oldScale === undefined) {
       throw new Error(
-          'The old scale is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson');
+        'The old scale is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson'
+      );
     }
     json['viewTop'] = this.viewTop;
     json['viewLeft'] = this.viewLeft;
     json['scale'] = this.scale;
     json['oldScale'] = this.oldScale;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: ViewportChangeJson) {
-    deprecation.warn(
-        'Blockly.Events.Viewport.prototype.fromJson', 'version 9', 'version 10',
-        'Blockly.Events.fromJson');
-    super.fromJson(json);
-    this.viewTop = json['viewTop'];
-    this.viewLeft = json['viewLeft'];
-    this.scale = json['scale'];
-    this.oldScale = json['oldScale'];
   }
 
   /**
@@ -128,11 +118,16 @@ export class ViewportChange extends UiBase {
    *     static methods in superclasses.
    * @internal
    */
-  static fromJson(json: ViewportChangeJson, workspace: Workspace, event?: any):
-      ViewportChange {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new ViewportChange()) as
-        ViewportChange;
+  static fromJson(
+    json: ViewportChangeJson,
+    workspace: Workspace,
+    event?: any
+  ): ViewportChange {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new ViewportChange()
+    ) as ViewportChange;
     newEvent.viewTop = json['viewTop'];
     newEvent.viewLeft = json['viewLeft'];
     newEvent.scale = json['scale'];
@@ -149,4 +144,7 @@ export interface ViewportChangeJson extends AbstractEventJson {
 }
 
 registry.register(
-    registry.Type.EVENT, eventUtils.VIEWPORT_CHANGE, ViewportChange);
+  registry.Type.EVENT,
+  eventUtils.VIEWPORT_CHANGE,
+  ViewportChange
+);

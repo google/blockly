@@ -11,7 +11,6 @@ import type {BlockSvg} from '../../../block_svg.js';
 import type {ConstantProvider} from '../../../renderers/common/constants.js';
 import {BottomRow as BaseBottomRow} from '../../../renderers/measurables/bottom_row.js';
 
-
 /**
  * An object containing information about what elements are in the bottom row of
  * a block as well as spacing information for the top row.
@@ -37,7 +36,10 @@ export class BottomRow extends BaseBottomRow {
 
   /** Render a round corner unless the block has an output connection. */
   override hasRightSquareCorner(block: BlockSvg) {
-    return !!block.outputConnection && !block.statementInputCount &&
-        !block.nextConnection;
+    return (
+      !!block.outputConnection &&
+      !block.statementInputCount &&
+      !block.nextConnection
+    );
   }
 }

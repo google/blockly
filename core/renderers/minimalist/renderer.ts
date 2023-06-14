@@ -16,7 +16,6 @@ import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';
 import {RenderInfo} from './info.js';
 
-
 /**
  * The minimalist renderer.
  */
@@ -55,9 +54,11 @@ export class Renderer extends BaseRenderer {
    *     block.
    * @returns The drawer.
    */
-  protected override makeDrawer_(block: BlockSvg, info: BaseRenderInfo):
-      Drawer {
-    return new Drawer(block, (info as RenderInfo));
+  protected override makeDrawer_(
+    block: BlockSvg,
+    info: BaseRenderInfo
+  ): Drawer {
+    return new Drawer(block, info as RenderInfo);
   }
 }
 

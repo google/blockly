@@ -7,82 +7,84 @@
 /**
  * @fileoverview Generating Lua for text blocks.
  */
-'use strict';
 
-goog.module('Blockly.Lua.texts');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Lua.texts');
 
-const {NameType} = goog.require('Blockly.Names');
-const {luaGenerator: Lua} = goog.require('Blockly.Lua');
+import {NameType} from '../../core/names.js';
+import {luaGenerator, Order} from '../lua.js';
 
 
-Lua['text'] = function(block) {
+luaGenerator.forBlock['text'] = function(block) {
   // Text value.
-  const code = Lua.quote_(block.getFieldValue('TEXT'));
-  return [code, Lua.ORDER_ATOMIC];
+  const code = luaGenerator.quote_(block.getFieldValue('TEXT'));
+  return [code, Order.ATOMIC];
 };
 
-Lua['text_multiline'] = function(block) {
+luaGenerator.forBlock['text_multiline'] = function(block) {
   // Text value.
-  const code = Lua.multiline_quote_(block.getFieldValue('TEXT'));
+  const code = luaGenerator.multiline_quote_(block.getFieldValue('TEXT'));
   const order =
-      code.indexOf('..') !== -1 ? Lua.ORDER_CONCATENATION : Lua.ORDER_ATOMIC;
+      code.indexOf('..') !== -1 ? Order.CONCATENATION : Order.ATOMIC;
   return [code, order];
 };
 
-Lua['text_join'] = function(block) {
+luaGenerator.forBlock['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   if (block.itemCount_ === 0) {
-    return ["''", Lua.ORDER_ATOMIC];
+    return ["''", Order.ATOMIC];
   } else if (block.itemCount_ === 1) {
-    const element = Lua.valueToCode(block, 'ADD0', Lua.ORDER_NONE) || "''";
+    const element = luaGenerator.valueToCode(block, 'ADD0', Order.NONE) || "''";
     const code = 'tostring(' + element + ')';
-    return [code, Lua.ORDER_HIGH];
+    return [code, Order.HIGH];
   } else if (block.itemCount_ === 2) {
     const element0 =
-        Lua.valueToCode(block, 'ADD0', Lua.ORDER_CONCATENATION) || "''";
+        luaGenerator.valueToCode(block, 'ADD0', Order.CONCATENATION) || "''";
     const element1 =
-        Lua.valueToCode(block, 'ADD1', Lua.ORDER_CONCATENATION) || "''";
+        luaGenerator.valueToCode(block, 'ADD1', Order.CONCATENATION) || "''";
     const code = element0 + ' .. ' + element1;
-    return [code, Lua.ORDER_CONCATENATION];
+    return [code, Order.CONCATENATION];
   } else {
     const elements = [];
     for (let i = 0; i < block.itemCount_; i++) {
-      elements[i] = Lua.valueToCode(block, 'ADD' + i, Lua.ORDER_NONE) || "''";
+      elements[i] =
+          luaGenerator.valueToCode(block, 'ADD' + i, Order.NONE) || "''";
     }
     const code = 'table.concat({' + elements.join(', ') + '})';
-    return [code, Lua.ORDER_HIGH];
+    return [code, Order.HIGH];
   }
 };
 
-Lua['text_append'] = function(block) {
+luaGenerator.forBlock['text_append'] = function(block) {
   // Append to a variable in place.
   const varName =
-      Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+      luaGenerator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
   const value =
-      Lua.valueToCode(block, 'TEXT', Lua.ORDER_CONCATENATION) || "''";
+      luaGenerator.valueToCode(block, 'TEXT', Order.CONCATENATION) || "''";
   return varName + ' = ' + varName + ' .. ' + value + '\n';
 };
 
-Lua['text_length'] = function(block) {
+luaGenerator.forBlock['text_length'] = function(block) {
   // String or array length.
-  const text = Lua.valueToCode(block, 'VALUE', Lua.ORDER_UNARY) || "''";
-  return ['#' + text, Lua.ORDER_UNARY];
+  const text = luaGenerator.valueToCode(block, 'VALUE', Order.UNARY) || "''";
+  return ['#' + text, Order.UNARY];
 };
 
-Lua['text_isEmpty'] = function(block) {
+luaGenerator.forBlock['text_isEmpty'] = function(block) {
   // Is the string null or array empty?
-  const text = Lua.valueToCode(block, 'VALUE', Lua.ORDER_UNARY) || "''";
-  return ['#' + text + ' == 0', Lua.ORDER_RELATIONAL];
+  const text = luaGenerator.valueToCode(block, 'VALUE', Order.UNARY) || "''";
+  return ['#' + text + ' == 0', Order.RELATIONAL];
 };
 
-Lua['text_indexOf'] = function(block) {
+luaGenerator.forBlock['text_indexOf'] = function(block) {
   // Search the text for a substring.
-  const substring = Lua.valueToCode(block, 'FIND', Lua.ORDER_NONE) || "''";
-  const text = Lua.valueToCode(block, 'VALUE', Lua.ORDER_NONE) || "''";
+  const substring = luaGenerator.valueToCode(block, 'FIND', Order.NONE) || "''";
+  const text = luaGenerator.valueToCode(block, 'VALUE', Order.NONE) || "''";
   let functionName;
   if (block.getFieldValue('END') === 'FIRST') {
-    functionName = Lua.provideFunction_('firstIndexOf', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(str, substr)
+    functionName = luaGenerator.provideFunction_('firstIndexOf', `
+function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(str, substr)
   local i = string.find(str, substr, 1, true)
   if i == nil then
     return 0
@@ -91,8 +93,8 @@ function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(str, substr)
 end
 `);
   } else {
-    functionName = Lua.provideFunction_('lastIndexOf', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(str, substr)
+    functionName = luaGenerator.provideFunction_('lastIndexOf', `
+function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(str, substr)
   local i = string.find(string.reverse(str), string.reverse(substr), 1, true)
   if i then
     return #str + 2 - i - #substr
@@ -102,20 +104,20 @@ end
 `);
   }
   const code = functionName + '(' + text + ', ' + substring + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['text_charAt'] = function(block) {
+luaGenerator.forBlock['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
-  const atOrder = (where === 'FROM_END') ? Lua.ORDER_UNARY : Lua.ORDER_NONE;
-  const at = Lua.valueToCode(block, 'AT', atOrder) || '1';
-  const text = Lua.valueToCode(block, 'VALUE', Lua.ORDER_NONE) || "''";
+  const atOrder = (where === 'FROM_END') ? Order.UNARY : Order.NONE;
+  const at = luaGenerator.valueToCode(block, 'AT', atOrder) || '1';
+  const text = luaGenerator.valueToCode(block, 'VALUE', Order.NONE) || "''";
   let code;
   if (where === 'RANDOM') {
-    const functionName = Lua.provideFunction_('text_random_letter', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(str)
+    const functionName = luaGenerator.provideFunction_('text_random_letter', `
+function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(str)
   local index = math.random(string.len(str))
   return string.sub(str, index, index)
 end
@@ -140,25 +142,25 @@ end
       code = 'string.sub(' + text + ', ' + start + ', ' + start + ')';
     } else {
       // use function to avoid reevaluation
-      const functionName = Lua.provideFunction_('text_char_at', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(str, index)
+      const functionName = luaGenerator.provideFunction_('text_char_at', `
+function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(str, index)
   return string.sub(str, index, index)
 end
 `);
       code = functionName + '(' + text + ', ' + start + ')';
     }
   }
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['text_getSubstring'] = function(block) {
+luaGenerator.forBlock['text_getSubstring'] = function(block) {
   // Get substring.
-  const text = Lua.valueToCode(block, 'STRING', Lua.ORDER_NONE) || "''";
+  const text = luaGenerator.valueToCode(block, 'STRING', Order.NONE) || "''";
 
   // Get start index.
   const where1 = block.getFieldValue('WHERE1');
-  const at1Order = (where1 === 'FROM_END') ? Lua.ORDER_UNARY : Lua.ORDER_NONE;
-  const at1 = Lua.valueToCode(block, 'AT1', at1Order) || '1';
+  const at1Order = (where1 === 'FROM_END') ? Order.UNARY : Order.NONE;
+  const at1 = luaGenerator.valueToCode(block, 'AT1', at1Order) || '1';
   let start;
   if (where1 === 'FIRST') {
     start = 1;
@@ -172,8 +174,8 @@ Lua['text_getSubstring'] = function(block) {
 
   // Get end index.
   const where2 = block.getFieldValue('WHERE2');
-  const at2Order = (where2 === 'FROM_END') ? Lua.ORDER_UNARY : Lua.ORDER_NONE;
-  const at2 = Lua.valueToCode(block, 'AT2', at2Order) || '1';
+  const at2Order = (where2 === 'FROM_END') ? Order.UNARY : Order.NONE;
+  const at2 = luaGenerator.valueToCode(block, 'AT2', at2Order) || '1';
   let end;
   if (where2 === 'LAST') {
     end = -1;
@@ -185,13 +187,13 @@ Lua['text_getSubstring'] = function(block) {
     throw Error('Unhandled option (text_getSubstring)');
   }
   const code = 'string.sub(' + text + ', ' + start + ', ' + end + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['text_changeCase'] = function(block) {
+luaGenerator.forBlock['text_changeCase'] = function(block) {
   // Change capitalization.
   const operator = block.getFieldValue('CASE');
-  const text = Lua.valueToCode(block, 'TEXT', Lua.ORDER_NONE) || "''";
+  const text = luaGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   let functionName;
   if (operator === 'UPPERCASE') {
     functionName = 'string.upper';
@@ -201,8 +203,8 @@ Lua['text_changeCase'] = function(block) {
     // There are shorter versions at
     // http://lua-users.org/wiki/SciteTitleCase
     // that do not preserve whitespace.
-    functionName = Lua.provideFunction_('text_titlecase', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(str)
+    functionName = luaGenerator.provideFunction_('text_titlecase', `
+function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(str)
   local buf = {}
   local inWord = false
   for i = 1, #str do
@@ -222,37 +224,37 @@ end
 `);
   }
   const code = functionName + '(' + text + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['text_trim'] = function(block) {
+luaGenerator.forBlock['text_trim'] = function(block) {
   // Trim spaces.
   const OPERATORS = {LEFT: '^%s*(,-)', RIGHT: '(.-)%s*$', BOTH: '^%s*(.-)%s*$'};
   const operator = OPERATORS[block.getFieldValue('MODE')];
-  const text = Lua.valueToCode(block, 'TEXT', Lua.ORDER_NONE) || "''";
+  const text = luaGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   const code = 'string.gsub(' + text + ', "' + operator + '", "%1")';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['text_print'] = function(block) {
+luaGenerator.forBlock['text_print'] = function(block) {
   // Print statement.
-  const msg = Lua.valueToCode(block, 'TEXT', Lua.ORDER_NONE) || "''";
+  const msg = luaGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return 'print(' + msg + ')\n';
 };
 
-Lua['text_prompt_ext'] = function(block) {
+luaGenerator.forBlock['text_prompt_ext'] = function(block) {
   // Prompt function.
   let msg;
   if (block.getField('TEXT')) {
     // Internal message.
-    msg = Lua.quote_(block.getFieldValue('TEXT'));
+    msg = luaGenerator.quote_(block.getFieldValue('TEXT'));
   } else {
     // External message.
-    msg = Lua.valueToCode(block, 'TEXT', Lua.ORDER_NONE) || "''";
+    msg = luaGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   }
 
-  const functionName = Lua.provideFunction_('text_prompt', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(msg)
+  const functionName = luaGenerator.provideFunction_('text_prompt', `
+function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(msg)
   io.write(msg)
   io.flush()
   return io.read()
@@ -264,16 +266,16 @@ end
   if (toNumber) {
     code = 'tonumber(' + code + ', 10)';
   }
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['text_prompt'] = Lua['text_prompt_ext'];
+luaGenerator.forBlock['text_prompt'] = luaGenerator.forBlock['text_prompt_ext'];
 
-Lua['text_count'] = function(block) {
-  const text = Lua.valueToCode(block, 'TEXT', Lua.ORDER_NONE) || "''";
-  const sub = Lua.valueToCode(block, 'SUB', Lua.ORDER_NONE) || "''";
-  const functionName = Lua.provideFunction_('text_count', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle)
+luaGenerator.forBlock['text_count'] = function(block) {
+  const text = luaGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
+  const sub = luaGenerator.valueToCode(block, 'SUB', Order.NONE) || "''";
+  const functionName = luaGenerator.provideFunction_('text_count', `
+function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle)
   if #needle == 0 then
     return #haystack + 1
   end
@@ -291,15 +293,15 @@ function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle)
 end
 `);
   const code = functionName + '(' + text + ', ' + sub + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['text_replace'] = function(block) {
-  const text = Lua.valueToCode(block, 'TEXT', Lua.ORDER_NONE) || "''";
-  const from = Lua.valueToCode(block, 'FROM', Lua.ORDER_NONE) || "''";
-  const to = Lua.valueToCode(block, 'TO', Lua.ORDER_NONE) || "''";
-  const functionName = Lua.provideFunction_('text_replace', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle, replacement)
+luaGenerator.forBlock['text_replace'] = function(block) {
+  const text = luaGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
+  const from = luaGenerator.valueToCode(block, 'FROM', Order.NONE) || "''";
+  const to = luaGenerator.valueToCode(block, 'TO', Order.NONE) || "''";
+  const functionName = luaGenerator.provideFunction_('text_replace', `
+function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle, replacement)
   local buf = {}
   local i = 1
   while i <= #haystack do
@@ -317,11 +319,11 @@ function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle, replacement)
 end
 `);
   const code = functionName + '(' + text + ', ' + from + ', ' + to + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['text_reverse'] = function(block) {
-  const text = Lua.valueToCode(block, 'TEXT', Lua.ORDER_NONE) || "''";
+luaGenerator.forBlock['text_reverse'] = function(block) {
+  const text = luaGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   const code = 'string.reverse(' + text + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };

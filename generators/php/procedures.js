@@ -13,7 +13,7 @@ goog.declareModuleId('Blockly.PHP.procedures');
 
 import * as Variables from '../../core/variables.js';
 import {NameType} from '../../core/names.js';
-import {phpGenerator as PHP} from '../php.js';
+import {phpGenerator as PHP, Order} from '../php.js';
 
 
 PHP.forBlock['procedures_defreturn'] = function(block) {
@@ -56,7 +56,7 @@ PHP.forBlock['procedures_defreturn'] = function(block) {
         PHP.injectId(PHP.INFINITE_LOOP_TRAP, block), PHP.INDENT);
   }
   const branch = PHP.statementToCode(block, 'STACK');
-  let returnValue = PHP.valueToCode(block, 'RETURN', PHP.ORDER_NONE) || '';
+  let returnValue = PHP.valueToCode(block, 'RETURN', Order.NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
@@ -89,10 +89,10 @@ PHP.forBlock['procedures_callreturn'] = function(block) {
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = PHP.valueToCode(block, 'ARG' + i, PHP.ORDER_NONE) || 'null';
+    args[i] = PHP.valueToCode(block, 'ARG' + i, Order.NONE) || 'null';
   }
   const code = funcName + '(' + args.join(', ') + ')';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['procedures_callnoreturn'] = function(block) {
@@ -106,7 +106,7 @@ PHP.forBlock['procedures_callnoreturn'] = function(block) {
 PHP.forBlock['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   const condition =
-      PHP.valueToCode(block, 'CONDITION', PHP.ORDER_NONE) || 'false';
+      PHP.valueToCode(block, 'CONDITION', Order.NONE) || 'false';
   let code = 'if (' + condition + ') {\n';
   if (PHP.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
@@ -115,7 +115,7 @@ PHP.forBlock['procedures_ifreturn'] = function(block) {
         PHP.prefixLines(PHP.injectId(PHP.STATEMENT_SUFFIX, block), PHP.INDENT);
   }
   if (block.hasReturnValue_) {
-    const value = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'null';
+    const value = PHP.valueToCode(block, 'VALUE', Order.NONE) || 'null';
     code += PHP.INDENT + 'return ' + value + ';\n';
   } else {
     code += PHP.INDENT + 'return;\n';

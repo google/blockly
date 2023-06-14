@@ -11,13 +11,13 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.PHP.colour');
 
-import {phpGenerator as PHP} from '../php.js';
+import {phpGenerator as PHP, Order} from '../php.js';
 
 
 PHP.forBlock['colour_picker'] = function(block) {
   // Colour picker.
   const code = PHP.quote_(block.getFieldValue('COLOUR'));
-  return [code, PHP.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 PHP.forBlock['colour_random'] = function(block) {
@@ -28,14 +28,14 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}() {
 }
 `);
   const code = functionName + '()';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
-  const red = PHP.valueToCode(block, 'RED', PHP.ORDER_NONE) || 0;
-  const green = PHP.valueToCode(block, 'GREEN', PHP.ORDER_NONE) || 0;
-  const blue = PHP.valueToCode(block, 'BLUE', PHP.ORDER_NONE) || 0;
+  const red = PHP.valueToCode(block, 'RED', Order.NONE) || 0;
+  const green = PHP.valueToCode(block, 'GREEN', Order.NONE) || 0;
+  const blue = PHP.valueToCode(block, 'BLUE', Order.NONE) || 0;
   const functionName = PHP.provideFunction_('colour_rgb', `
 function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($r, $g, $b) {
   $r = round(max(min($r, 100), 0) * 2.55);
@@ -49,14 +49,14 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($r, $g, $b) {
 }
 `);
   const code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['colour_blend'] = function(block) {
   // Blend two colours together.
-  const c1 = PHP.valueToCode(block, 'COLOUR1', PHP.ORDER_NONE) || "'#000000'";
-  const c2 = PHP.valueToCode(block, 'COLOUR2', PHP.ORDER_NONE) || "'#000000'";
-  const ratio = PHP.valueToCode(block, 'RATIO', PHP.ORDER_NONE) || 0.5;
+  const c1 = PHP.valueToCode(block, 'COLOUR1', Order.NONE) || "'#000000'";
+  const c2 = PHP.valueToCode(block, 'COLOUR2', Order.NONE) || "'#000000'";
+  const ratio = PHP.valueToCode(block, 'RATIO', Order.NONE) || 0.5;
   const functionName = PHP.provideFunction_('colour_blend', `
 function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($c1, $c2, $ratio) {
   $ratio = max(min($ratio, 1), 0);
@@ -77,5 +77,5 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($c1, $c2, $ratio) {
 }
 `);
   const code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };

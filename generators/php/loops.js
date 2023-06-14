@@ -13,7 +13,7 @@ goog.declareModuleId('Blockly.PHP.loops');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {phpGenerator as PHP} from '../php.js';
+import {phpGenerator as PHP, Order} from '../php.js';
 
 
 PHP.forBlock['controls_repeat_ext'] = function(block) {
@@ -24,7 +24,7 @@ PHP.forBlock['controls_repeat_ext'] = function(block) {
     repeats = String(Number(block.getFieldValue('TIMES')));
   } else {
     // External number.
-    repeats = PHP.valueToCode(block, 'TIMES', PHP.ORDER_ASSIGNMENT) || '0';
+    repeats = PHP.valueToCode(block, 'TIMES', Order.ASSIGNMENT) || '0';
   }
   let branch = PHP.statementToCode(block, 'DO');
   branch = PHP.addLoopTrap(branch, block);
@@ -47,7 +47,7 @@ PHP.forBlock['controls_whileUntil'] = function(block) {
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
       PHP.valueToCode(
-          block, 'BOOL', until ? PHP.ORDER_LOGICAL_NOT : PHP.ORDER_NONE) ||
+          block, 'BOOL', until ? Order.LOGICAL_NOT : Order.NONE) ||
       'false';
   let branch = PHP.statementToCode(block, 'DO');
   branch = PHP.addLoopTrap(branch, block);
@@ -61,9 +61,9 @@ PHP.forBlock['controls_for'] = function(block) {
   // For loop.
   const variable0 =
       PHP.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-  const argument0 = PHP.valueToCode(block, 'FROM', PHP.ORDER_ASSIGNMENT) || '0';
-  const argument1 = PHP.valueToCode(block, 'TO', PHP.ORDER_ASSIGNMENT) || '0';
-  const increment = PHP.valueToCode(block, 'BY', PHP.ORDER_ASSIGNMENT) || '1';
+  const argument0 = PHP.valueToCode(block, 'FROM', Order.ASSIGNMENT) || '0';
+  const argument1 = PHP.valueToCode(block, 'TO', Order.ASSIGNMENT) || '0';
+  const increment = PHP.valueToCode(block, 'BY', Order.ASSIGNMENT) || '1';
   let branch = PHP.statementToCode(block, 'DO');
   branch = PHP.addLoopTrap(branch, block);
   let code;
@@ -121,7 +121,7 @@ PHP.forBlock['controls_forEach'] = function(block) {
   const variable0 =
       PHP.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
   const argument0 =
-      PHP.valueToCode(block, 'LIST', PHP.ORDER_ASSIGNMENT) || '[]';
+      PHP.valueToCode(block, 'LIST', Order.ASSIGNMENT) || '[]';
   let branch = PHP.statementToCode(block, 'DO');
   branch = PHP.addLoopTrap(branch, block);
   let code = '';

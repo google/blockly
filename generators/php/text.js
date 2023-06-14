@@ -12,45 +12,45 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.PHP.texts');
 
 import {NameType} from '../../core/names.js';
-import {phpGenerator as PHP} from '../php.js';
+import {phpGenerator as PHP, Order} from '../php.js';
 
 
 PHP.forBlock['text'] = function(block) {
   // Text value.
   const code = PHP.quote_(block.getFieldValue('TEXT'));
-  return [code, PHP.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 PHP.forBlock['text_multiline'] = function(block) {
   // Text value.
   const code = PHP.multiline_quote_(block.getFieldValue('TEXT'));
   const order =
-      code.indexOf('.') !== -1 ? PHP.ORDER_STRING_CONCAT : PHP.ORDER_ATOMIC;
+      code.indexOf('.') !== -1 ? Order.STRING_CONCAT : Order.ATOMIC;
   return [code, order];
 };
 
 PHP.forBlock['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   if (block.itemCount_ === 0) {
-    return ["''", PHP.ORDER_ATOMIC];
+    return ["''", Order.ATOMIC];
   } else if (block.itemCount_ === 1) {
-    const element = PHP.valueToCode(block, 'ADD0', PHP.ORDER_NONE) || "''";
+    const element = PHP.valueToCode(block, 'ADD0', Order.NONE) || "''";
     const code = element;
-    return [code, PHP.ORDER_NONE];
+    return [code, Order.NONE];
   } else if (block.itemCount_ === 2) {
     const element0 =
-        PHP.valueToCode(block, 'ADD0', PHP.ORDER_STRING_CONCAT) || "''";
+        PHP.valueToCode(block, 'ADD0', Order.STRING_CONCAT) || "''";
     const element1 =
-        PHP.valueToCode(block, 'ADD1', PHP.ORDER_STRING_CONCAT) || "''";
+        PHP.valueToCode(block, 'ADD1', Order.STRING_CONCAT) || "''";
     const code = element0 + ' . ' + element1;
-    return [code, PHP.ORDER_STRING_CONCAT];
+    return [code, Order.STRING_CONCAT];
   } else {
     const elements = new Array(block.itemCount_);
     for (let i = 0; i < block.itemCount_; i++) {
-      elements[i] = PHP.valueToCode(block, 'ADD' + i, PHP.ORDER_NONE) || "''";
+      elements[i] = PHP.valueToCode(block, 'ADD' + i, Order.NONE) || "''";
     }
     const code = 'implode(\'\', array(' + elements.join(',') + '))';
-    return [code, PHP.ORDER_FUNCTION_CALL];
+    return [code, Order.FUNCTION_CALL];
   }
 };
 
@@ -58,7 +58,7 @@ PHP.forBlock['text_append'] = function(block) {
   // Append to a variable in place.
   const varName =
       PHP.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-  const value = PHP.valueToCode(block, 'TEXT', PHP.ORDER_ASSIGNMENT) || "''";
+  const value = PHP.valueToCode(block, 'TEXT', Order.ASSIGNMENT) || "''";
   return varName + ' .= ' + value + ';\n';
 };
 
@@ -72,22 +72,22 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($value) {
   return count($value);
 }
 `);
-  const text = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || "''";
-  return [functionName + '(' + text + ')', PHP.ORDER_FUNCTION_CALL];
+  const text = PHP.valueToCode(block, 'VALUE', Order.NONE) || "''";
+  return [functionName + '(' + text + ')', Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['text_isEmpty'] = function(block) {
   // Is the string null or array empty?
-  const text = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || "''";
-  return ['empty(' + text + ')', PHP.ORDER_FUNCTION_CALL];
+  const text = PHP.valueToCode(block, 'VALUE', Order.NONE) || "''";
+  return ['empty(' + text + ')', Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['text_indexOf'] = function(block) {
   // Search the text for a substring.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'strpos' : 'strrpos';
-  const substring = PHP.valueToCode(block, 'FIND', PHP.ORDER_NONE) || "''";
-  const text = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || "''";
+  const substring = PHP.valueToCode(block, 'FIND', Order.NONE) || "''";
+  const text = PHP.valueToCode(block, 'VALUE', Order.NONE) || "''";
   let errorIndex = ' -1';
   let indexAdjustment = '';
   if (block.workspace.options.oneBasedIndex) {
@@ -104,32 +104,32 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($text, $search) {
 }
 `);
   const code = functionName + '(' + text + ', ' + substring + ')';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['text_charAt'] = function(block) {
   // Get letter at index.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
-  const textOrder = (where === 'RANDOM') ? PHP.ORDER_NONE : PHP.ORDER_NONE;
+  const textOrder = (where === 'RANDOM') ? Order.NONE : Order.NONE;
   const text = PHP.valueToCode(block, 'VALUE', textOrder) || "''";
   switch (where) {
     case 'FIRST': {
       const code = 'substr(' + text + ', 0, 1)';
-      return [code, PHP.ORDER_FUNCTION_CALL];
+      return [code, Order.FUNCTION_CALL];
     }
     case 'LAST': {
       const code = 'substr(' + text + ', -1)';
-      return [code, PHP.ORDER_FUNCTION_CALL];
+      return [code, Order.FUNCTION_CALL];
     }
     case 'FROM_START': {
       const at = PHP.getAdjusted(block, 'AT');
       const code = 'substr(' + text + ', ' + at + ', 1)';
-      return [code, PHP.ORDER_FUNCTION_CALL];
+      return [code, Order.FUNCTION_CALL];
     }
     case 'FROM_END': {
       const at = PHP.getAdjusted(block, 'AT', 1, true);
       const code = 'substr(' + text + ', ' + at + ', 1)';
-      return [code, PHP.ORDER_FUNCTION_CALL];
+      return [code, Order.FUNCTION_CALL];
     }
     case 'RANDOM': {
       const functionName = PHP.provideFunction_('text_random_letter', `
@@ -138,7 +138,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($text) {
 }
 `);
       const code = functionName + '(' + text + ')';
-      return [code, PHP.ORDER_FUNCTION_CALL];
+      return [code, Order.FUNCTION_CALL];
     }
   }
   throw Error('Unhandled option (text_charAt).');
@@ -148,10 +148,10 @@ PHP.forBlock['text_getSubstring'] = function(block) {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
-  const text = PHP.valueToCode(block, 'STRING', PHP.ORDER_NONE) || "''";
+  const text = PHP.valueToCode(block, 'STRING', Order.NONE) || "''";
   if (where1 === 'FIRST' && where2 === 'LAST') {
     const code = text;
-    return [code, PHP.ORDER_NONE];
+    return [code, Order.NONE];
   } else {
     const at1 = PHP.getAdjusted(block, 'AT1');
     const at2 = PHP.getAdjusted(block, 'AT2');
@@ -179,13 +179,13 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($text, $where1, $at1, $where2, $at2) 
 `);
     const code = functionName + '(' + text + ', \'' + where1 + '\', ' + at1 +
         ', \'' + where2 + '\', ' + at2 + ')';
-    return [code, PHP.ORDER_FUNCTION_CALL];
+    return [code, Order.FUNCTION_CALL];
   }
 };
 
 PHP.forBlock['text_changeCase'] = function(block) {
   // Change capitalization.
-  const text = PHP.valueToCode(block, 'TEXT', PHP.ORDER_NONE) || "''";
+  const text = PHP.valueToCode(block, 'TEXT', Order.NONE) || "''";
   let code;
   if (block.getFieldValue('CASE') === 'UPPERCASE') {
     code = 'strtoupper(' + text + ')';
@@ -194,20 +194,20 @@ PHP.forBlock['text_changeCase'] = function(block) {
   } else if (block.getFieldValue('CASE') === 'TITLECASE') {
     code = 'ucwords(strtolower(' + text + '))';
   }
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['text_trim'] = function(block) {
   // Trim spaces.
   const OPERATORS = {'LEFT': 'ltrim', 'RIGHT': 'rtrim', 'BOTH': 'trim'};
   const operator = OPERATORS[block.getFieldValue('MODE')];
-  const text = PHP.valueToCode(block, 'TEXT', PHP.ORDER_NONE) || "''";
-  return [operator + '(' + text + ')', PHP.ORDER_FUNCTION_CALL];
+  const text = PHP.valueToCode(block, 'TEXT', Order.NONE) || "''";
+  return [operator + '(' + text + ')', Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['text_print'] = function(block) {
   // Print statement.
-  const msg = PHP.valueToCode(block, 'TEXT', PHP.ORDER_NONE) || "''";
+  const msg = PHP.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return 'print(' + msg + ');\n';
 };
 
@@ -219,37 +219,37 @@ PHP.forBlock['text_prompt_ext'] = function(block) {
     msg = PHP.quote_(block.getFieldValue('TEXT'));
   } else {
     // External message.
-    msg = PHP.valueToCode(block, 'TEXT', PHP.ORDER_NONE) || "''";
+    msg = PHP.valueToCode(block, 'TEXT', Order.NONE) || "''";
   }
   let code = 'readline(' + msg + ')';
   const toNumber = block.getFieldValue('TYPE') === 'NUMBER';
   if (toNumber) {
     code = 'floatval(' + code + ')';
   }
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['text_prompt'] = PHP.forBlock['text_prompt_ext'];
 
 PHP.forBlock['text_count'] = function(block) {
-  const text = PHP.valueToCode(block, 'TEXT', PHP.ORDER_NONE) || "''";
-  const sub = PHP.valueToCode(block, 'SUB', PHP.ORDER_NONE) || "''";
+  const text = PHP.valueToCode(block, 'TEXT', Order.NONE) || "''";
+  const sub = PHP.valueToCode(block, 'SUB', Order.NONE) || "''";
   const code = 'strlen(' + sub + ') === 0' +
       ' ? strlen(' + text + ') + 1' +
       ' : substr_count(' + text + ', ' + sub + ')';
-  return [code, PHP.ORDER_CONDITIONAL];
+  return [code, Order.CONDITIONAL];
 };
 
 PHP.forBlock['text_replace'] = function(block) {
-  const text = PHP.valueToCode(block, 'TEXT', PHP.ORDER_NONE) || "''";
-  const from = PHP.valueToCode(block, 'FROM', PHP.ORDER_NONE) || "''";
-  const to = PHP.valueToCode(block, 'TO', PHP.ORDER_NONE) || "''";
+  const text = PHP.valueToCode(block, 'TEXT', Order.NONE) || "''";
+  const from = PHP.valueToCode(block, 'FROM', Order.NONE) || "''";
+  const to = PHP.valueToCode(block, 'TO', Order.NONE) || "''";
   const code = 'str_replace(' + from + ', ' + to + ', ' + text + ')';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['text_reverse'] = function(block) {
-  const text = PHP.valueToCode(block, 'TEXT', PHP.ORDER_NONE) || "''";
+  const text = PHP.valueToCode(block, 'TEXT', Order.NONE) || "''";
   const code = 'strrev(' + text + ')';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };

@@ -24,21 +24,21 @@ goog.declareModuleId('Blockly.PHP.lists');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {phpGenerator as PHP} from '../php.js';
+import {phpGenerator as PHP, Order} from '../php.js';
 
 PHP.forBlock['lists_create_empty'] = function(block) {
   // Create an empty list.
-  return ['array()', PHP.ORDER_FUNCTION_CALL];
+  return ['array()', Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
   let code = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
-    code[i] = PHP.valueToCode(block, 'ADD' + i, PHP.ORDER_NONE) || 'null';
+    code[i] = PHP.valueToCode(block, 'ADD' + i, Order.NONE) || 'null';
   }
   code = 'array(' + code.join(', ') + ')';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['lists_repeat'] = function(block) {
@@ -52,10 +52,10 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($value, $count) {
   return $array;
 }
 `);
-  const element = PHP.valueToCode(block, 'ITEM', PHP.ORDER_NONE) || 'null';
-  const repeatCount = PHP.valueToCode(block, 'NUM', PHP.ORDER_NONE) || '0';
+  const element = PHP.valueToCode(block, 'ITEM', Order.NONE) || 'null';
+  const repeatCount = PHP.valueToCode(block, 'NUM', Order.NONE) || '0';
   const code = functionName + '(' + element + ', ' + repeatCount + ')';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['lists_length'] = function(block) {
@@ -69,21 +69,21 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($value) {
   }
 }
 `);
-  const list = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || "''";
-  return [functionName + '(' + list + ')', PHP.ORDER_FUNCTION_CALL];
+  const list = PHP.valueToCode(block, 'VALUE', Order.NONE) || "''";
+  return [functionName + '(' + list + ')', Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['lists_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const argument0 =
-      PHP.valueToCode(block, 'VALUE', PHP.ORDER_FUNCTION_CALL) || 'array()';
-  return ['empty(' + argument0 + ')', PHP.ORDER_FUNCTION_CALL];
+      PHP.valueToCode(block, 'VALUE', Order.FUNCTION_CALL) || 'array()';
+  return ['empty(' + argument0 + ')', Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['lists_indexOf'] = function(block) {
   // Find an item in the list.
-  const argument0 = PHP.valueToCode(block, 'FIND', PHP.ORDER_NONE) || "''";
-  const argument1 = PHP.valueToCode(block, 'VALUE', PHP.ORDER_MEMBER) || '[]';
+  const argument0 = PHP.valueToCode(block, 'FIND', Order.NONE) || "''";
+  const argument1 = PHP.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
   let errorIndex = ' -1';
   let indexAdjustment = '';
   if (block.workspace.options.oneBasedIndex) {
@@ -115,7 +115,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($haystack, $needle) {
   }
 
   const code = functionName + '(' + argument1 + ', ' + argument0 + ')';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['lists_getIndex'] = function(block) {
@@ -126,34 +126,34 @@ PHP.forBlock['lists_getIndex'] = function(block) {
     case 'FIRST':
       if (mode === 'GET') {
         const list =
-            PHP.valueToCode(block, 'VALUE', PHP.ORDER_MEMBER) || 'array()';
+            PHP.valueToCode(block, 'VALUE', Order.MEMBER) || 'array()';
         const code = list + '[0]';
-        return [code, PHP.ORDER_MEMBER];
+        return [code, Order.MEMBER];
       } else if (mode === 'GET_REMOVE') {
         const list =
-            PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'array()';
+            PHP.valueToCode(block, 'VALUE', Order.NONE) || 'array()';
         const code = 'array_shift(' + list + ')';
-        return [code, PHP.ORDER_FUNCTION_CALL];
+        return [code, Order.FUNCTION_CALL];
       } else if (mode === 'REMOVE') {
         const list =
-            PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'array()';
+            PHP.valueToCode(block, 'VALUE', Order.NONE) || 'array()';
         return 'array_shift(' + list + ');\n';
       }
       break;
     case 'LAST':
       if (mode === 'GET') {
         const list =
-            PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'array()';
+            PHP.valueToCode(block, 'VALUE', Order.NONE) || 'array()';
         const code = 'end(' + list + ')';
-        return [code, PHP.ORDER_FUNCTION_CALL];
+        return [code, Order.FUNCTION_CALL];
       } else if (mode === 'GET_REMOVE') {
         const list =
-            PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'array()';
+            PHP.valueToCode(block, 'VALUE', Order.NONE) || 'array()';
         const code = 'array_pop(' + list + ')';
-        return [code, PHP.ORDER_FUNCTION_CALL];
+        return [code, Order.FUNCTION_CALL];
       } else if (mode === 'REMOVE') {
         const list =
-            PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'array()';
+            PHP.valueToCode(block, 'VALUE', Order.NONE) || 'array()';
         return 'array_pop(' + list + ');\n';
       }
       break;
@@ -161,17 +161,17 @@ PHP.forBlock['lists_getIndex'] = function(block) {
       const at = PHP.getAdjusted(block, 'AT');
       if (mode === 'GET') {
         const list =
-            PHP.valueToCode(block, 'VALUE', PHP.ORDER_MEMBER) || 'array()';
+            PHP.valueToCode(block, 'VALUE', Order.MEMBER) || 'array()';
         const code = list + '[' + at + ']';
-        return [code, PHP.ORDER_MEMBER];
+        return [code, Order.MEMBER];
       } else if (mode === 'GET_REMOVE') {
         const list =
-            PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'array()';
+            PHP.valueToCode(block, 'VALUE', Order.NONE) || 'array()';
         const code = 'array_splice(' + list + ', ' + at + ', 1)[0]';
-        return [code, PHP.ORDER_FUNCTION_CALL];
+        return [code, Order.FUNCTION_CALL];
       } else if (mode === 'REMOVE') {
         const list =
-            PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'array()';
+            PHP.valueToCode(block, 'VALUE', Order.NONE) || 'array()';
         return 'array_splice(' + list + ', ' + at + ', 1);\n';
       }
       break;
@@ -179,26 +179,26 @@ PHP.forBlock['lists_getIndex'] = function(block) {
     case 'FROM_END':
       if (mode === 'GET') {
         const list =
-            PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'array()';
+            PHP.valueToCode(block, 'VALUE', Order.NONE) || 'array()';
         const at = PHP.getAdjusted(block, 'AT', 1, true);
         const code = 'array_slice(' + list + ', ' + at + ', 1)[0]';
-        return [code, PHP.ORDER_FUNCTION_CALL];
+        return [code, Order.FUNCTION_CALL];
       } else if (mode === 'GET_REMOVE' || mode === 'REMOVE') {
         const list =
-            PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'array()';
+            PHP.valueToCode(block, 'VALUE', Order.NONE) || 'array()';
         const at =
-            PHP.getAdjusted(block, 'AT', 1, false, PHP.ORDER_SUBTRACTION);
+            PHP.getAdjusted(block, 'AT', 1, false, Order.SUBTRACTION);
         const code = 'array_splice(' + list + ', count(' + list + ') - ' + at +
             ', 1)[0]';
         if (mode === 'GET_REMOVE') {
-          return [code, PHP.ORDER_FUNCTION_CALL];
+          return [code, Order.FUNCTION_CALL];
         } else if (mode === 'REMOVE') {
           return code + ';\n';
         }
       }
       break;
     case 'RANDOM': {
-      const list = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'array()';
+      const list = PHP.valueToCode(block, 'VALUE', Order.NONE) || 'array()';
       if (mode === 'GET') {
         const functionName = PHP.provideFunction_('lists_get_random_item', `
 function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($list) {
@@ -206,7 +206,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($list) {
 }
 `);
         const code = functionName + '(' + list + ')';
-        return [code, PHP.ORDER_FUNCTION_CALL];
+        return [code, Order.FUNCTION_CALL];
       } else if (mode === 'GET_REMOVE') {
         const functionName =
             PHP.provideFunction_('lists_get_remove_random_item', `
@@ -217,7 +217,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list) {
 }
 `);
         const code = functionName + '(' + list + ')';
-        return [code, PHP.ORDER_FUNCTION_CALL];
+        return [code, Order.FUNCTION_CALL];
       } else if (mode === 'REMOVE') {
         const functionName = PHP.provideFunction_('lists_remove_random_item', `
 function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list) {
@@ -237,7 +237,7 @@ PHP.forBlock['lists_setIndex'] = function(block) {
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
-  const value = PHP.valueToCode(block, 'TO', PHP.ORDER_ASSIGNMENT) || 'null';
+  const value = PHP.valueToCode(block, 'TO', Order.ASSIGNMENT) || 'null';
   // Cache non-trivial values to variables to prevent repeated look-ups.
   // Closure, which accesses and modifies 'list'.
   let cachedList;
@@ -254,16 +254,16 @@ PHP.forBlock['lists_setIndex'] = function(block) {
     case 'FIRST':
       if (mode === 'SET') {
         const list =
-            PHP.valueToCode(block, 'LIST', PHP.ORDER_MEMBER) || 'array()';
+            PHP.valueToCode(block, 'LIST', Order.MEMBER) || 'array()';
         return list + '[0] = ' + value + ';\n';
       } else if (mode === 'INSERT') {
         const list =
-            PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || 'array()';
+            PHP.valueToCode(block, 'LIST', Order.NONE) || 'array()';
         return 'array_unshift(' + list + ', ' + value + ');\n';
       }
       break;
     case 'LAST': {
-      const list = PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || 'array()';
+      const list = PHP.valueToCode(block, 'LIST', Order.NONE) || 'array()';
       if (mode === 'SET') {
         const functionName = PHP.provideFunction_('lists_set_last_item', `
 function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list, $value) {
@@ -280,17 +280,17 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list, $value) {
       const at = PHP.getAdjusted(block, 'AT');
       if (mode === 'SET') {
         const list =
-            PHP.valueToCode(block, 'LIST', PHP.ORDER_MEMBER) || 'array()';
+            PHP.valueToCode(block, 'LIST', Order.MEMBER) || 'array()';
         return list + '[' + at + '] = ' + value + ';\n';
       } else if (mode === 'INSERT') {
         const list =
-            PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || 'array()';
+            PHP.valueToCode(block, 'LIST', Order.NONE) || 'array()';
         return 'array_splice(' + list + ', ' + at + ', 0, ' + value + ');\n';
       }
       break;
     }
     case 'FROM_END': {
-      const list = PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || 'array()';
+      const list = PHP.valueToCode(block, 'LIST', Order.NONE) || 'array()';
       const at = PHP.getAdjusted(block, 'AT', 1);
       if (mode === 'SET') {
         const functionName = PHP.provideFunction_('lists_set_from_end', `
@@ -311,7 +311,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list, $at, $value) {
     }
     case 'RANDOM':
       cachedList =
-          PHP.valueToCode(block, 'LIST', PHP.ORDER_REFERENCE) || 'array()';
+          PHP.valueToCode(block, 'LIST', Order.REFERENCE) || 'array()';
       let code = cacheList();
       const list = cachedList;
       const xVar = PHP.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
@@ -330,7 +330,7 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list, $at, $value) {
 
 PHP.forBlock['lists_getSublist'] = function(block) {
   // Get sublist.
-  const list = PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || 'array()';
+  const list = PHP.valueToCode(block, 'LIST', Order.NONE) || 'array()';
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
   let code;
@@ -347,7 +347,7 @@ PHP.forBlock['lists_getSublist'] = function(block) {
         at1 = PHP.getAdjusted(block, 'AT1');
         break;
       case 'FROM_END':
-        at1 = PHP.getAdjusted(block, 'AT1', 1, false, PHP.ORDER_SUBTRACTION);
+        at1 = PHP.getAdjusted(block, 'AT1', 1, false, Order.SUBTRACTION);
         at1 = 'count(' + list + ') - ' + at1;
         break;
       case 'FIRST':
@@ -360,7 +360,7 @@ PHP.forBlock['lists_getSublist'] = function(block) {
     let length;
     switch (where2) {
       case 'FROM_START':
-        at2 = PHP.getAdjusted(block, 'AT2', 0, false, PHP.ORDER_SUBTRACTION);
+        at2 = PHP.getAdjusted(block, 'AT2', 0, false, Order.SUBTRACTION);
         length = at2 + ' - ';
         if (stringUtils.isNumber(String(at1)) ||
             String(at1).match(/^\(.+\)$/)) {
@@ -371,7 +371,7 @@ PHP.forBlock['lists_getSublist'] = function(block) {
         length += ' + 1';
         break;
       case 'FROM_END':
-        at2 = PHP.getAdjusted(block, 'AT2', 0, false, PHP.ORDER_SUBTRACTION);
+        at2 = PHP.getAdjusted(block, 'AT2', 0, false, Order.SUBTRACTION);
         length = 'count(' + list + ') - ' + at2 + ' - ';
         if (stringUtils.isNumber(String(at1)) ||
             String(at1).match(/^\(.+\)$/)) {
@@ -421,12 +421,12 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($list, $where1, $at1, $where2, $at2) 
     code = functionName + '(' + list + ', \'' + where1 + '\', ' + at1 + ', \'' +
         where2 + '\', ' + at2 + ')';
   }
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['lists_sort'] = function(block) {
   // Block for sorting a list.
-  const listCode = PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || 'array()';
+  const listCode = PHP.valueToCode(block, 'LIST', Order.NONE) || 'array()';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   const type = block.getFieldValue('TYPE');
   const functionName = PHP.provideFunction_('lists_sort', `
@@ -447,13 +447,13 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($list, $type, $direction) {
 `);
   const sortCode =
       functionName + '(' + listCode + ', "' + type + '", ' + direction + ')';
-  return [sortCode, PHP.ORDER_FUNCTION_CALL];
+  return [sortCode, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
-  let value_input = PHP.valueToCode(block, 'INPUT', PHP.ORDER_NONE);
-  const value_delim = PHP.valueToCode(block, 'DELIM', PHP.ORDER_NONE) || "''";
+  let value_input = PHP.valueToCode(block, 'INPUT', Order.NONE);
+  const value_delim = PHP.valueToCode(block, 'DELIM', Order.NONE) || "''";
   const mode = block.getFieldValue('MODE');
   let functionName;
   if (mode === 'SPLIT') {
@@ -470,12 +470,12 @@ PHP.forBlock['lists_split'] = function(block) {
     throw Error('Unknown mode: ' + mode);
   }
   const code = functionName + '(' + value_delim + ', ' + value_input + ')';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
 PHP.forBlock['lists_reverse'] = function(block) {
   // Block for reversing a list.
-  const list = PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || '[]';
+  const list = PHP.valueToCode(block, 'LIST', Order.NONE) || '[]';
   const code = 'array_reverse(' + list + ')';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };

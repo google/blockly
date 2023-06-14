@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.PHP.logic');
 
-import {phpGenerator as PHP} from '../php.js';
+import {phpGenerator as PHP, Order} from '../php.js';
 
 
 PHP.forBlock['controls_if'] = function(block) {
@@ -23,7 +23,7 @@ PHP.forBlock['controls_if'] = function(block) {
     code += PHP.injectId(PHP.STATEMENT_PREFIX, block);
   }
   do {
-    conditionCode = PHP.valueToCode(block, 'IF' + n, PHP.ORDER_NONE) || 'false';
+    conditionCode = PHP.valueToCode(block, 'IF' + n, Order.NONE) || 'false';
     branchCode = PHP.statementToCode(block, 'DO' + n);
     if (PHP.STATEMENT_SUFFIX) {
       branchCode = PHP.prefixLines(
@@ -54,8 +54,8 @@ PHP.forBlock['logic_compare'] = function(block) {
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
-  const order = (operator === '==' || operator === '!=') ? PHP.ORDER_EQUALITY :
-                                                           PHP.ORDER_RELATIONAL;
+  const order = (operator === '==' || operator === '!=') ? Order.EQUALITY :
+                                                           Order.RELATIONAL;
   const argument0 = PHP.valueToCode(block, 'A', order) || '0';
   const argument1 = PHP.valueToCode(block, 'B', order) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
@@ -66,7 +66,7 @@ PHP.forBlock['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
   const order =
-      (operator === '&&') ? PHP.ORDER_LOGICAL_AND : PHP.ORDER_LOGICAL_OR;
+      (operator === '&&') ? Order.LOGICAL_AND : Order.LOGICAL_OR;
   let argument0 = PHP.valueToCode(block, 'A', order);
   let argument1 = PHP.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
@@ -89,7 +89,7 @@ PHP.forBlock['logic_operation'] = function(block) {
 
 PHP.forBlock['logic_negate'] = function(block) {
   // Negation.
-  const order = PHP.ORDER_LOGICAL_NOT;
+  const order = Order.LOGICAL_NOT;
   const argument0 = PHP.valueToCode(block, 'BOOL', order) || 'true';
   const code = '!' + argument0;
   return [code, order];
@@ -98,22 +98,22 @@ PHP.forBlock['logic_negate'] = function(block) {
 PHP.forBlock['logic_boolean'] = function(block) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
-  return [code, PHP.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 PHP.forBlock['logic_null'] = function(block) {
   // Null data type.
-  return ['null', PHP.ORDER_ATOMIC];
+  return ['null', Order.ATOMIC];
 };
 
 PHP.forBlock['logic_ternary'] = function(block) {
   // Ternary operator.
   const value_if =
-      PHP.valueToCode(block, 'IF', PHP.ORDER_CONDITIONAL) || 'false';
+      PHP.valueToCode(block, 'IF', Order.CONDITIONAL) || 'false';
   const value_then =
-      PHP.valueToCode(block, 'THEN', PHP.ORDER_CONDITIONAL) || 'null';
+      PHP.valueToCode(block, 'THEN', Order.CONDITIONAL) || 'null';
   const value_else =
-      PHP.valueToCode(block, 'ELSE', PHP.ORDER_CONDITIONAL) || 'null';
+      PHP.valueToCode(block, 'ELSE', Order.CONDITIONAL) || 'null';
   const code = value_if + ' ? ' + value_then + ' : ' + value_else;
-  return [code, PHP.ORDER_CONDITIONAL];
+  return [code, Order.CONDITIONAL];
 };

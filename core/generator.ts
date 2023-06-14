@@ -19,6 +19,15 @@ import {Names, NameType} from './names.js';
 import type {Workspace} from './workspace.js';
 import {warn} from './utils/deprecation.js';
 
+/**
+ * Type declaration for per-block-type generator functions.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/generating-code}
+ * @param block The Block instance to generate code for.
+ * @returns A string containing the generated code (for statement blocks),
+ *     or a [code, precedence] tuple (for value/expression blocks), or
+ *     null if no code should be emitted for block.
+ */
 export type BlockGenerator = (block: Block) => [string, number] | string | null;
 
 /**

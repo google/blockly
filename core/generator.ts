@@ -29,7 +29,10 @@ import {warn} from './utils/deprecation.js';
  *     or a [code, precedence] tuple (for value/expression blocks), or
  *     null if no code should be emitted for block.
  */
-export type BlockGenerator = (block: Block, generator: CodeGenerator) => [string, number] | string | null;
+export type BlockGenerator = (
+  block: Block,
+  generator: CodeGenerator
+) => [string, number] | string | null;
 
 /**
  * Class for a code generator that translates the blocks into a language.

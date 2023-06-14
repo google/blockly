@@ -11,19 +11,19 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.PHP.colour');
 
-import {phpGenerator as PHP, Order} from '../php.js';
+import {phpGenerator, Order} from '../php.js';
 
 
-PHP.forBlock['colour_picker'] = function(block) {
+phpGenerator.forBlock['colour_picker'] = function(block) {
   // Colour picker.
-  const code = PHP.quote_(block.getFieldValue('COLOUR'));
+  const code = phpGenerator.quote_(block.getFieldValue('COLOUR'));
   return [code, Order.ATOMIC];
 };
 
-PHP.forBlock['colour_random'] = function(block) {
+phpGenerator.forBlock['colour_random'] = function(block) {
   // Generate a random colour.
-  const functionName = PHP.provideFunction_('colour_random', `
-function ${PHP.FUNCTION_NAME_PLACEHOLDER_}() {
+  const functionName = phpGenerator.provideFunction_('colour_random', `
+function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}() {
   return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
 }
 `);
@@ -31,13 +31,13 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}() {
   return [code, Order.FUNCTION_CALL];
 };
 
-PHP.forBlock['colour_rgb'] = function(block) {
+phpGenerator.forBlock['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
-  const red = PHP.valueToCode(block, 'RED', Order.NONE) || 0;
-  const green = PHP.valueToCode(block, 'GREEN', Order.NONE) || 0;
-  const blue = PHP.valueToCode(block, 'BLUE', Order.NONE) || 0;
-  const functionName = PHP.provideFunction_('colour_rgb', `
-function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($r, $g, $b) {
+  const red = phpGenerator.valueToCode(block, 'RED', Order.NONE) || 0;
+  const green = phpGenerator.valueToCode(block, 'GREEN', Order.NONE) || 0;
+  const blue = phpGenerator.valueToCode(block, 'BLUE', Order.NONE) || 0;
+  const functionName = phpGenerator.provideFunction_('colour_rgb', `
+function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($r, $g, $b) {
   $r = round(max(min($r, 100), 0) * 2.55);
   $g = round(max(min($g, 100), 0) * 2.55);
   $b = round(max(min($b, 100), 0) * 2.55);
@@ -52,13 +52,15 @@ function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($r, $g, $b) {
   return [code, Order.FUNCTION_CALL];
 };
 
-PHP.forBlock['colour_blend'] = function(block) {
+phpGenerator.forBlock['colour_blend'] = function(block) {
   // Blend two colours together.
-  const c1 = PHP.valueToCode(block, 'COLOUR1', Order.NONE) || "'#000000'";
-  const c2 = PHP.valueToCode(block, 'COLOUR2', Order.NONE) || "'#000000'";
-  const ratio = PHP.valueToCode(block, 'RATIO', Order.NONE) || 0.5;
-  const functionName = PHP.provideFunction_('colour_blend', `
-function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($c1, $c2, $ratio) {
+  const c1 =
+      phpGenerator.valueToCode(block, 'COLOUR1', Order.NONE) || "'#000000'";
+  const c2 =
+      phpGenerator.valueToCode(block, 'COLOUR2', Order.NONE) || "'#000000'";
+  const ratio = phpGenerator.valueToCode(block, 'RATIO', Order.NONE) || 0.5;
+  const functionName = phpGenerator.provideFunction_('colour_blend', `
+function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($c1, $c2, $ratio) {
   $ratio = max(min($ratio, 1), 0);
   $r1 = hexdec(substr($c1, 1, 2));
   $g1 = hexdec(substr($c1, 3, 2));

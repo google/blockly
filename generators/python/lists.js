@@ -16,48 +16,48 @@ import {NameType} from '../../core/names.js';
 import {pythonGenerator, Order} from '../python.js';
 
 
-pythonGenerator.forBlock['lists_create_empty'] = function(block) {
+pythonGenerator.forBlock['lists_create_empty'] = function(block, generator) {
   // Create an empty list.
   return ['[]', Order.ATOMIC];
 };
 
-pythonGenerator.forBlock['lists_create_with'] = function(block) {
+pythonGenerator.forBlock['lists_create_with'] = function(block, generator) {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
     elements[i] =
-        pythonGenerator.valueToCode(block, 'ADD' + i, Order.NONE) || 'None';
+        generator.valueToCode(block, 'ADD' + i, Order.NONE) || 'None';
   }
   const code = '[' + elements.join(', ') + ']';
   return [code, Order.ATOMIC];
 };
 
-pythonGenerator.forBlock['lists_repeat'] = function(block) {
+pythonGenerator.forBlock['lists_repeat'] = function(block, generator) {
   // Create a list with one element repeated.
-  const item = pythonGenerator.valueToCode(block, 'ITEM', Order.NONE) || 'None';
+  const item = generator.valueToCode(block, 'ITEM', Order.NONE) || 'None';
   const times =
-      pythonGenerator.valueToCode(block, 'NUM', Order.MULTIPLICATIVE) || '0';
+      generator.valueToCode(block, 'NUM', Order.MULTIPLICATIVE) || '0';
   const code = '[' + item + '] * ' + times;
   return [code, Order.MULTIPLICATIVE];
 };
 
-pythonGenerator.forBlock['lists_length'] = function(block) {
+pythonGenerator.forBlock['lists_length'] = function(block, generator) {
   // String or array length.
-  const list = pythonGenerator.valueToCode(block, 'VALUE', Order.NONE) || '[]';
+  const list = generator.valueToCode(block, 'VALUE', Order.NONE) || '[]';
   return ['len(' + list + ')', Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['lists_isEmpty'] = function(block) {
+pythonGenerator.forBlock['lists_isEmpty'] = function(block, generator) {
   // Is the string null or array empty?
-  const list = pythonGenerator.valueToCode(block, 'VALUE', Order.NONE) || '[]';
+  const list = generator.valueToCode(block, 'VALUE', Order.NONE) || '[]';
   const code = 'not len(' + list + ')';
   return [code, Order.LOGICAL_NOT];
 };
 
-pythonGenerator.forBlock['lists_indexOf'] = function(block) {
+pythonGenerator.forBlock['lists_indexOf'] = function(block, generator) {
   // Find an item in the list.
-  const item = pythonGenerator.valueToCode(block, 'FIND', Order.NONE) || '[]';
-  const list = pythonGenerator.valueToCode(block, 'VALUE', Order.NONE) || "''";
+  const item = generator.valueToCode(block, 'FIND', Order.NONE) || '[]';
+  const list = generator.valueToCode(block, 'VALUE', Order.NONE) || "''";
   let errorIndex = ' -1';
   let firstIndexAdjustment = '';
   let lastIndexAdjustment = ' - 1';
@@ -70,15 +70,15 @@ pythonGenerator.forBlock['lists_indexOf'] = function(block) {
 
   let functionName;
   if (block.getFieldValue('END') === 'FIRST') {
-    functionName = pythonGenerator.provideFunction_('first_index', `
-def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(my_list, elem):
+    functionName = generator.provideFunction_('first_index', `
+def ${generator.FUNCTION_NAME_PLACEHOLDER_}(my_list, elem):
   try: index = my_list.index(elem)${firstIndexAdjustment}
   except: index =${errorIndex}
   return index
 `);
   } else {
-    functionName = pythonGenerator.provideFunction_('last_index', `
-def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(my_list, elem):
+    functionName = generator.provideFunction_('last_index', `
+def ${generator.FUNCTION_NAME_PLACEHOLDER_}(my_list, elem):
   try: index = len(my_list) - my_list[::-1].index(elem)${lastIndexAdjustment}
   except: index =${errorIndex}
   return index
@@ -88,14 +88,14 @@ def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(my_list, elem):
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['lists_getIndex'] = function(block) {
+pythonGenerator.forBlock['lists_getIndex'] = function(block, generator) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const listOrder =
       (where === 'RANDOM') ? Order.NONE : Order.MEMBER;
-  const list = pythonGenerator.valueToCode(block, 'VALUE', listOrder) || '[]';
+  const list = generator.valueToCode(block, 'VALUE', listOrder) || '[]';
 
   switch (where) {
     case 'FIRST':
@@ -121,7 +121,7 @@ pythonGenerator.forBlock['lists_getIndex'] = function(block) {
       }
       break;
     case 'FROM_START': {
-      const at = pythonGenerator.getAdjustedInt(block, 'AT');
+      const at = generator.getAdjustedInt(block, 'AT');
       if (mode === 'GET') {
         const code = list + '[' + at + ']';
         return [code, Order.MEMBER];
@@ -134,7 +134,7 @@ pythonGenerator.forBlock['lists_getIndex'] = function(block) {
       break;
     }
     case 'FROM_END': {
-      const at = pythonGenerator.getAdjustedInt(block, 'AT', 1, true);
+      const at = generator.getAdjustedInt(block, 'AT', 1, true);
       if (mode === 'GET') {
         const code = list + '[' + at + ']';
         return [code, Order.MEMBER];
@@ -147,14 +147,14 @@ pythonGenerator.forBlock['lists_getIndex'] = function(block) {
       break;
     }
     case 'RANDOM':
-      pythonGenerator.definitions_['import_random'] = 'import random';
+      generator.definitions_['import_random'] = 'import random';
       if (mode === 'GET') {
         const code = 'random.choice(' + list + ')';
         return [code, Order.FUNCTION_CALL];
       } else {
         const functionName =
-            pythonGenerator.provideFunction_('lists_remove_random_item', `
-def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(myList):
+            generator.provideFunction_('lists_remove_random_item', `
+def ${generator.FUNCTION_NAME_PLACEHOLDER_}(myList):
   x = int(random.random() * len(myList))
   return myList.pop(x)
 `);
@@ -170,13 +170,13 @@ def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(myList):
   throw Error('Unhandled combination (lists_getIndex).');
 };
 
-pythonGenerator.forBlock['lists_setIndex'] = function(block) {
+pythonGenerator.forBlock['lists_setIndex'] = function(block, generator) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
-  let list = pythonGenerator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
+  let list = generator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
-  const value = pythonGenerator.valueToCode(block, 'TO', Order.NONE) || 'None';
+  const value = generator.valueToCode(block, 'TO', Order.NONE) || 'None';
   // Cache non-trivial values to variables to prevent repeated look-ups.
   // Closure, which accesses and modifies 'list'.
   function cacheList() {
@@ -184,7 +184,7 @@ pythonGenerator.forBlock['lists_setIndex'] = function(block) {
       return '';
     }
     const listVar =
-        pythonGenerator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
+        generator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
     const code = listVar + ' = ' + list + '\n';
     list = listVar;
     return code;
@@ -206,7 +206,7 @@ pythonGenerator.forBlock['lists_setIndex'] = function(block) {
       }
       break;
     case 'FROM_START': {
-      const at = pythonGenerator.getAdjustedInt(block, 'AT');
+      const at = generator.getAdjustedInt(block, 'AT');
       if (mode === 'SET') {
         return list + '[' + at + '] = ' + value + '\n';
       } else if (mode === 'INSERT') {
@@ -215,7 +215,7 @@ pythonGenerator.forBlock['lists_setIndex'] = function(block) {
       break;
     }
     case 'FROM_END': {
-      const at = pythonGenerator.getAdjustedInt(block, 'AT', 1, true);
+      const at = generator.getAdjustedInt(block, 'AT', 1, true);
       if (mode === 'SET') {
         return list + '[' + at + '] = ' + value + '\n';
       } else if (mode === 'INSERT') {
@@ -224,10 +224,10 @@ pythonGenerator.forBlock['lists_setIndex'] = function(block) {
       break;
     }
     case 'RANDOM': {
-      pythonGenerator.definitions_['import_random'] = 'import random';
+      generator.definitions_['import_random'] = 'import random';
       let code = cacheList();
       const xVar =
-          pythonGenerator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
+          generator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
       code += xVar + ' = int(random.random() * len(' + list + '))\n';
       if (mode === 'SET') {
         code += list + '[' + xVar + '] = ' + value + '\n';
@@ -242,21 +242,21 @@ pythonGenerator.forBlock['lists_setIndex'] = function(block) {
   throw Error('Unhandled combination (lists_setIndex).');
 };
 
-pythonGenerator.forBlock['lists_getSublist'] = function(block) {
+pythonGenerator.forBlock['lists_getSublist'] = function(block, generator) {
   // Get sublist.
-  const list = pythonGenerator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
+  const list = generator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
   let at1;
   switch (where1) {
     case 'FROM_START':
-      at1 = pythonGenerator.getAdjustedInt(block, 'AT1');
+      at1 = generator.getAdjustedInt(block, 'AT1');
       if (at1 === 0) {
         at1 = '';
       }
       break;
     case 'FROM_END':
-      at1 = pythonGenerator.getAdjustedInt(block, 'AT1', 1, true);
+      at1 = generator.getAdjustedInt(block, 'AT1', 1, true);
       break;
     case 'FIRST':
       at1 = '';
@@ -268,14 +268,14 @@ pythonGenerator.forBlock['lists_getSublist'] = function(block) {
   let at2;
   switch (where2) {
     case 'FROM_START':
-      at2 = pythonGenerator.getAdjustedInt(block, 'AT2', 1);
+      at2 = generator.getAdjustedInt(block, 'AT2', 1);
       break;
     case 'FROM_END':
-      at2 = pythonGenerator.getAdjustedInt(block, 'AT2', 0, true);
+      at2 = generator.getAdjustedInt(block, 'AT2', 0, true);
       // Ensure that if the result calculated is 0 that sub-sequence will
       // include all elements as expected.
       if (!stringUtils.isNumber(String(at2))) {
-        pythonGenerator.definitions_['import_sys'] = 'import sys';
+        generator.definitions_['import_sys'] = 'import sys';
         at2 += ' or sys.maxsize';
       } else if (at2 === 0) {
         at2 = '';
@@ -291,13 +291,13 @@ pythonGenerator.forBlock['lists_getSublist'] = function(block) {
   return [code, Order.MEMBER];
 };
 
-pythonGenerator.forBlock['lists_sort'] = function(block) {
+pythonGenerator.forBlock['lists_sort'] = function(block, generator) {
   // Block for sorting a list.
-  const list = (pythonGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]');
+  const list = (generator.valueToCode(block, 'LIST', Order.NONE) || '[]');
   const type = block.getFieldValue('TYPE');
   const reverse = block.getFieldValue('DIRECTION') === '1' ? 'False' : 'True';
-  const sortFunctionName = pythonGenerator.provideFunction_('lists_sort', `
-def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(my_list, type, reverse):
+  const sortFunctionName = generator.provideFunction_('lists_sort', `
+def ${generator.FUNCTION_NAME_PLACEHOLDER_}(my_list, type, reverse):
   def try_float(s):
     try:
       return float(s)
@@ -318,20 +318,20 @@ def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(my_list, type, reverse):
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['lists_split'] = function(block) {
+pythonGenerator.forBlock['lists_split'] = function(block, generator) {
   // Block for splitting text into a list, or joining a list into text.
   const mode = block.getFieldValue('MODE');
   let code;
   if (mode === 'SPLIT') {
     const value_input =
-        pythonGenerator.valueToCode(block, 'INPUT', Order.MEMBER) || "''";
-    const value_delim = pythonGenerator.valueToCode(block, 'DELIM', Order.NONE);
+        generator.valueToCode(block, 'INPUT', Order.MEMBER) || "''";
+    const value_delim = generator.valueToCode(block, 'DELIM', Order.NONE);
     code = value_input + '.split(' + value_delim + ')';
   } else if (mode === 'JOIN') {
     const value_input =
-        pythonGenerator.valueToCode(block, 'INPUT', Order.NONE) || '[]';
+        generator.valueToCode(block, 'INPUT', Order.NONE) || '[]';
     const value_delim =
-        pythonGenerator.valueToCode(block, 'DELIM', Order.MEMBER) || "''";
+        generator.valueToCode(block, 'DELIM', Order.MEMBER) || "''";
     code = value_delim + '.join(' + value_input + ')';
   } else {
     throw Error('Unknown mode: ' + mode);
@@ -339,9 +339,9 @@ pythonGenerator.forBlock['lists_split'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['lists_reverse'] = function(block) {
+pythonGenerator.forBlock['lists_reverse'] = function(block, generator) {
   // Block for reversing a list.
-  const list = pythonGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]';
+  const list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
   const code = 'list(reversed(' + list + '))';
   return [code, Order.FUNCTION_CALL];
 };

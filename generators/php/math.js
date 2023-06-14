@@ -15,7 +15,7 @@ import {NameType} from '../../core/names.js';
 import {phpGenerator, Order} from '../php.js';
 
 
-phpGenerator.forBlock['math_number'] = function(block) {
+phpGenerator.forBlock['math_number'] = function(block, generator) {
   // Numeric value.
   let code = Number(block.getFieldValue('NUM'));
   const order = code >= 0 ? Order.ATOMIC : Order.UNARY_NEGATION;
@@ -27,7 +27,7 @@ phpGenerator.forBlock['math_number'] = function(block) {
   return [code, order];
 };
 
-phpGenerator.forBlock['math_arithmetic'] = function(block) {
+phpGenerator.forBlock['math_arithmetic'] = function(block, generator) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', Order.ADDITION],
@@ -39,20 +39,20 @@ phpGenerator.forBlock['math_arithmetic'] = function(block) {
   const tuple = OPERATORS[block.getFieldValue('OP')];
   const operator = tuple[0];
   const order = tuple[1];
-  const argument0 = phpGenerator.valueToCode(block, 'A', order) || '0';
-  const argument1 = phpGenerator.valueToCode(block, 'B', order) || '0';
+  const argument0 = generator.valueToCode(block, 'A', order) || '0';
+  const argument1 = generator.valueToCode(block, 'B', order) || '0';
   const code = argument0 + operator + argument1;
   return [code, order];
 };
 
-phpGenerator.forBlock['math_single'] = function(block) {
+phpGenerator.forBlock['math_single'] = function(block, generator) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
   let arg;
   if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
-    arg = phpGenerator.valueToCode(block, 'NUM', Order.UNARY_NEGATION) || '0';
+    arg = generator.valueToCode(block, 'NUM', Order.UNARY_NEGATION) || '0';
     if (arg[0] === '-') {
       // --3 is not legal in JS.
       arg = ' ' + arg;
@@ -61,9 +61,9 @@ phpGenerator.forBlock['math_single'] = function(block) {
     return [code, Order.UNARY_NEGATION];
   }
   if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
-    arg = phpGenerator.valueToCode(block, 'NUM', Order.DIVISION) || '0';
+    arg = generator.valueToCode(block, 'NUM', Order.DIVISION) || '0';
   } else {
-    arg = phpGenerator.valueToCode(block, 'NUM', Order.NONE) || '0';
+    arg = generator.valueToCode(block, 'NUM', Order.NONE) || '0';
   }
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
@@ -126,7 +126,7 @@ phpGenerator.forBlock['math_single'] = function(block) {
   return [code, Order.DIVISION];
 };
 
-phpGenerator.forBlock['math_constant'] = function(block) {
+phpGenerator.forBlock['math_constant'] = function(block, generator) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['M_PI', Order.ATOMIC],
@@ -139,7 +139,7 @@ phpGenerator.forBlock['math_constant'] = function(block) {
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
 
-phpGenerator.forBlock['math_number_property'] = function(block) {
+phpGenerator.forBlock['math_number_property'] = function(block, generator) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -154,13 +154,13 @@ phpGenerator.forBlock['math_number_property'] = function(block) {
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [prefix, suffix, inputOrder, outputOrder] =
       PROPERTIES[dropdownProperty];
-  const numberToCheck = phpGenerator.valueToCode(block, 'NUMBER_TO_CHECK',
+  const numberToCheck = generator.valueToCode(block, 'NUMBER_TO_CHECK',
       inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    const functionName = phpGenerator.provideFunction_('math_isPrime', `
-function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($n) {
+    const functionName = generator.provideFunction_('math_isPrime', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}($n) {
   // https://en.wikipedia.org/wiki/Primality_test#Naive_methods
   if ($n == 2 || $n == 3) {
     return true;
@@ -181,7 +181,7 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($n) {
 `);
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = phpGenerator.valueToCode(block, 'DIVISOR',
+    const divisor = generator.valueToCode(block, 'DIVISOR',
         Order.MODULUS) || '0';
     if (divisor === '0') {
       return ['false', Order.ATOMIC];
@@ -194,12 +194,12 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($n) {
   return [code, outputOrder];
 };
 
-phpGenerator.forBlock['math_change'] = function(block) {
+phpGenerator.forBlock['math_change'] = function(block, generator) {
   // Add to a variable in place.
   const argument0 =
-      phpGenerator.valueToCode(block, 'DELTA', Order.ADDITION) || '0';
+      generator.valueToCode(block, 'DELTA', Order.ADDITION) || '0';
   const varName =
-      phpGenerator.nameDB_.getName(
+      generator.nameDB_.getName(
         block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' += ' + argument0 + ';\n';
 };
@@ -209,7 +209,7 @@ phpGenerator.forBlock['math_round'] = phpGenerator.forBlock['math_single'];
 // Trigonometry functions have a single operand.
 phpGenerator.forBlock['math_trig'] = phpGenerator.forBlock['math_single'];
 
-phpGenerator.forBlock['math_on_list'] = function(block) {
+phpGenerator.forBlock['math_on_list'] = function(block, generator) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   let list;
@@ -217,41 +217,41 @@ phpGenerator.forBlock['math_on_list'] = function(block) {
   switch (func) {
     case 'SUM':
       list =
-          phpGenerator.valueToCode(block, 'LIST', Order.FUNCTION_CALL)
+          generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL)
           || 'array()';
       code = 'array_sum(' + list + ')';
       break;
     case 'MIN':
       list =
-          phpGenerator.valueToCode(block, 'LIST', Order.FUNCTION_CALL)
+          generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL)
           || 'array()';
       code = 'min(' + list + ')';
       break;
     case 'MAX':
       list =
-          phpGenerator.valueToCode(block, 'LIST', Order.FUNCTION_CALL)
+          generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL)
           || 'array()';
       code = 'max(' + list + ')';
       break;
     case 'AVERAGE': {
-      const functionName = phpGenerator.provideFunction_('math_mean', `
-function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($myList) {
+      const functionName = generator.provideFunction_('math_mean', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}($myList) {
   return array_sum($myList) / count($myList);
 }
 `);
-      list = phpGenerator.valueToCode(block, 'LIST', Order.NONE) || 'array()';
+      list = generator.valueToCode(block, 'LIST', Order.NONE) || 'array()';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'MEDIAN': {
-      const functionName = phpGenerator.provideFunction_('math_median', `
-function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($arr) {
+      const functionName = generator.provideFunction_('math_median', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}($arr) {
   sort($arr,SORT_NUMERIC);
   return (count($arr) % 2) ? $arr[floor(count($arr) / 2)] :
       ($arr[floor(count($arr) / 2)] + $arr[floor(count($arr) / 2) - 1]) / 2;
 }
 `);
-      list = phpGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]';
+      list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
@@ -259,8 +259,8 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($arr) {
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
-      const functionName = phpGenerator.provideFunction_('math_modes', `
-function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($values) {
+      const functionName = generator.provideFunction_('math_modes', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}($values) {
   if (empty($values)) return array();
   $counts = array_count_values($values);
   arsort($counts); // Sort counts in descending order
@@ -268,14 +268,14 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($values) {
   return $modes;
 }
 `);
-      list = phpGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]';
+      list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'STD_DEV': {
       const functionName =
-          phpGenerator.provideFunction_('math_standard_deviation', `
-function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($numbers) {
+          generator.provideFunction_('math_standard_deviation', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}($numbers) {
   $n = count($numbers);
   if (!$n) return null;
   $mean = array_sum($numbers) / count($numbers);
@@ -283,18 +283,18 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($numbers) {
   return sqrt(array_sum($devs) / (count($devs) - 1));
 }
 `);
-      list = phpGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]';
+      list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'RANDOM': {
-      const functionName = phpGenerator.provideFunction_('math_random_list', `
-function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($list) {
+      const functionName = generator.provideFunction_('math_random_list', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}($list) {
   $x = rand(0, count($list)-1);
   return $list[$x];
 }
 `);
-      list = phpGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]';
+      list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
@@ -304,33 +304,33 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($list) {
   return [code, Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['math_modulo'] = function(block) {
+phpGenerator.forBlock['math_modulo'] = function(block, generator) {
   // Remainder computation.
   const argument0 =
-      phpGenerator.valueToCode(block, 'DIVIDEND', Order.MODULUS) || '0';
+      generator.valueToCode(block, 'DIVIDEND', Order.MODULUS) || '0';
   const argument1 =
-      phpGenerator.valueToCode(block, 'DIVISOR', Order.MODULUS) || '0';
+      generator.valueToCode(block, 'DIVISOR', Order.MODULUS) || '0';
   const code = argument0 + ' % ' + argument1;
   return [code, Order.MODULUS];
 };
 
-phpGenerator.forBlock['math_constrain'] = function(block) {
+phpGenerator.forBlock['math_constrain'] = function(block, generator) {
   // Constrain a number between two limits.
-  const argument0 = phpGenerator.valueToCode(block, 'VALUE', Order.NONE) || '0';
-  const argument1 = phpGenerator.valueToCode(block, 'LOW', Order.NONE) || '0';
+  const argument0 = generator.valueToCode(block, 'VALUE', Order.NONE) || '0';
+  const argument1 = generator.valueToCode(block, 'LOW', Order.NONE) || '0';
   const argument2 =
-      phpGenerator.valueToCode(block, 'HIGH', Order.NONE) || 'Infinity';
+      generator.valueToCode(block, 'HIGH', Order.NONE) || 'Infinity';
   const code =
       'min(max(' + argument0 + ', ' + argument1 + '), ' + argument2 + ')';
   return [code, Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['math_random_int'] = function(block) {
+phpGenerator.forBlock['math_random_int'] = function(block, generator) {
   // Random integer between [X] and [Y].
-  const argument0 = phpGenerator.valueToCode(block, 'FROM', Order.NONE) || '0';
-  const argument1 = phpGenerator.valueToCode(block, 'TO', Order.NONE) || '0';
-  const functionName = phpGenerator.provideFunction_('math_random_int', `
-function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($a, $b) {
+  const argument0 = generator.valueToCode(block, 'FROM', Order.NONE) || '0';
+  const argument1 = generator.valueToCode(block, 'TO', Order.NONE) || '0';
+  const functionName = generator.provideFunction_('math_random_int', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}($a, $b) {
   if ($a > $b) {
     return rand($b, $a);
   }
@@ -341,15 +341,15 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($a, $b) {
   return [code, Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['math_random_float'] = function(block) {
+phpGenerator.forBlock['math_random_float'] = function(block, generator) {
   // Random fraction between 0 and 1.
   return ['(float)rand()/(float)getrandmax()', Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['math_atan2'] = function(block) {
+phpGenerator.forBlock['math_atan2'] = function(block, generator) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  const argument0 = phpGenerator.valueToCode(block, 'X', Order.NONE) || '0';
-  const argument1 = phpGenerator.valueToCode(block, 'Y', Order.NONE) || '0';
+  const argument0 = generator.valueToCode(block, 'X', Order.NONE) || '0';
+  const argument1 = generator.valueToCode(block, 'Y', Order.NONE) || '0';
   return [
     'atan2(' + argument1 + ', ' + argument0 + ') / pi() * 180',
     Order.DIVISION

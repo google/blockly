@@ -15,20 +15,20 @@ import {NameType} from '../../core/names.js';
 import {phpGenerator, Order} from '../php.js';
 
 
-phpGenerator.forBlock['variables_get'] = function(block) {
+phpGenerator.forBlock['variables_get'] = function(block, generator) {
   // Variable getter.
   const code =
-      phpGenerator.nameDB_.getName(
+      generator.nameDB_.getName(
         block.getFieldValue('VAR'), NameType.VARIABLE);
   return [code, Order.ATOMIC];
 };
 
-phpGenerator.forBlock['variables_set'] = function(block) {
+phpGenerator.forBlock['variables_set'] = function(block, generator) {
   // Variable setter.
   const argument0 =
-      phpGenerator.valueToCode(block, 'VALUE', Order.ASSIGNMENT) || '0';
+      generator.valueToCode(block, 'VALUE', Order.ASSIGNMENT) || '0';
   const varName =
-      phpGenerator.nameDB_.getName(
+      generator.nameDB_.getName(
         block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = ' + argument0 + ';\n';
 };

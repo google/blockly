@@ -17,7 +17,7 @@ import {dartGenerator, Order} from '../dart.js';
 
 dartGenerator.addReservedWords('Math');
 
-dartGenerator.forBlock['math_number'] = function(block) {
+dartGenerator.forBlock['math_number'] = function(block, generator) {
   // Numeric value.
   let code = Number(block.getFieldValue('NUM'));
   let order;
@@ -28,14 +28,14 @@ dartGenerator.forBlock['math_number'] = function(block) {
     code = '-double.infinity';
     order = Order.UNARY_PREFIX;
   } else {
-    // -4.abs() returns -4 in dartGenerator due to strange order of operation choices.
+    // -4.abs() returns -4 in generator due to strange order of operation choices.
     // -4 is actually an operator and a number.  Reflect this in the order.
     order = code < 0 ? Order.UNARY_PREFIX : Order.ATOMIC;
   }
   return [code, order];
 };
 
-dartGenerator.forBlock['math_arithmetic'] = function(block) {
+dartGenerator.forBlock['math_arithmetic'] = function(block, generator) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', Order.ADDITIVE],
@@ -47,12 +47,12 @@ dartGenerator.forBlock['math_arithmetic'] = function(block) {
   const tuple = OPERATORS[block.getFieldValue('OP')];
   const operator = tuple[0];
   const order = tuple[1];
-  const argument0 = dartGenerator.valueToCode(block, 'A', order) || '0';
-  const argument1 = dartGenerator.valueToCode(block, 'B', order) || '0';
+  const argument0 = generator.valueToCode(block, 'A', order) || '0';
+  const argument1 = generator.valueToCode(block, 'B', order) || '0';
   let code;
-  // Power in dartGenerator requires a special case since it has no operator.
+  // Power in generator requires a special case since it has no operator.
   if (!operator) {
-    dartGenerator.definitions_['import_dart_math'] =
+    generator.definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
     code = 'Math.pow(' + argument0 + ', ' + argument1 + ')';
     return [code, Order.UNARY_POSTFIX];
@@ -61,29 +61,29 @@ dartGenerator.forBlock['math_arithmetic'] = function(block) {
   return [code, order];
 };
 
-dartGenerator.forBlock['math_single'] = function(block) {
+dartGenerator.forBlock['math_single'] = function(block, generator) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
   let arg;
   if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
-    arg = dartGenerator.valueToCode(block, 'NUM', Order.UNARY_PREFIX) || '0';
+    arg = generator.valueToCode(block, 'NUM', Order.UNARY_PREFIX) || '0';
     if (arg[0] === '-') {
-      // --3 is not legal in dartGenerator.
+      // --3 is not legal in generator.
       arg = ' ' + arg;
     }
     code = '-' + arg;
     return [code, Order.UNARY_PREFIX];
   }
-  dartGenerator.definitions_['import_dart_math'] =
+  generator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
   if (operator === 'ABS' || operator.substring(0, 5) === 'ROUND') {
-    arg = dartGenerator.valueToCode(block, 'NUM', Order.UNARY_POSTFIX) || '0';
+    arg = generator.valueToCode(block, 'NUM', Order.UNARY_POSTFIX) || '0';
   } else if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
-    arg = dartGenerator.valueToCode(block, 'NUM', Order.MULTIPLICATIVE) || '0';
+    arg = generator.valueToCode(block, 'NUM', Order.MULTIPLICATIVE) || '0';
   } else {
-    arg = dartGenerator.valueToCode(block, 'NUM', Order.NONE) || '0';
+    arg = generator.valueToCode(block, 'NUM', Order.NONE) || '0';
   }
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
@@ -146,7 +146,7 @@ dartGenerator.forBlock['math_single'] = function(block) {
   return [code, Order.MULTIPLICATIVE];
 };
 
-dartGenerator.forBlock['math_constant'] = function(block) {
+dartGenerator.forBlock['math_constant'] = function(block, generator) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['Math.pi', Order.UNARY_POSTFIX],
@@ -158,13 +158,13 @@ dartGenerator.forBlock['math_constant'] = function(block) {
   };
   const constant = block.getFieldValue('CONSTANT');
   if (constant !== 'INFINITY') {
-    dartGenerator.definitions_['import_dart_math'] =
+    generator.definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
   }
   return CONSTANTS[constant];
 };
 
-dartGenerator.forBlock['math_number_property'] = function(block) {
+dartGenerator.forBlock['math_number_property'] = function(block, generator) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -178,15 +178,15 @@ dartGenerator.forBlock['math_number_property'] = function(block) {
   };
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
-  const numberToCheck = dartGenerator.valueToCode(block, 'NUMBER_TO_CHECK',
+  const numberToCheck = generator.valueToCode(block, 'NUMBER_TO_CHECK',
       inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    dartGenerator.definitions_['import_dart_math'] =
+    generator.definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
-    const functionName = dartGenerator.provideFunction_('math_isPrime', `
-bool ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(n) {
+    const functionName = generator.provideFunction_('math_isPrime', `
+bool ${generator.FUNCTION_NAME_PLACEHOLDER_}(n) {
   // https://en.wikipedia.org/wiki/Primality_test#Naive_methods
   if (n == 2 || n == 3) {
     return true;
@@ -207,7 +207,7 @@ bool ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(n) {
 `);
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = dartGenerator.valueToCode(block, 'DIVISOR',
+    const divisor = generator.valueToCode(block, 'DIVISOR',
         Order.MULTIPLICATIVE) || '0';
     if (divisor === '0') {
       return ['false', Order.ATOMIC];
@@ -219,12 +219,12 @@ bool ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(n) {
   return [code, outputOrder];
 };
 
-dartGenerator.forBlock['math_change'] = function(block) {
+dartGenerator.forBlock['math_change'] = function(block, generator) {
   // Add to a variable in place.
   const argument0 =
-      dartGenerator.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
+      generator.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
   const varName =
-      dartGenerator.nameDB_.getName(
+      generator.nameDB_.getName(
         block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = (' + varName + ' is num ? ' + varName + ' : 0) + ' +
       argument0 + ';\n';
@@ -235,15 +235,15 @@ dartGenerator.forBlock['math_round'] = dartGenerator.forBlock['math_single'];
 // Trigonometry functions have a single operand.
 dartGenerator.forBlock['math_trig'] = dartGenerator.forBlock['math_single'];
 
-dartGenerator.forBlock['math_on_list'] = function(block) {
+dartGenerator.forBlock['math_on_list'] = function(block, generator) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
-  const list = dartGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]';
+  const list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
   let code;
   switch (func) {
     case 'SUM': {
-      const functionName = dartGenerator.provideFunction_('math_sum', `
-num ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
+      const functionName = generator.provideFunction_('math_sum', `
+num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
   num sumVal = 0;
   myList.forEach((num entry) {sumVal += entry;});
   return sumVal;
@@ -253,10 +253,10 @@ num ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
       break;
     }
     case 'MIN': {
-      dartGenerator.definitions_['import_dart_math'] =
+      generator.definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
-      const functionName = dartGenerator.provideFunction_('math_min', `
-num ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
+      const functionName = generator.provideFunction_('math_min', `
+num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
   if (myList.isEmpty) return null;
   num minVal = myList[0];
   myList.forEach((num entry) {minVal = Math.min(minVal, entry);});
@@ -267,10 +267,10 @@ num ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
       break;
     }
     case 'MAX': {
-      dartGenerator.definitions_['import_dart_math'] =
+      generator.definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
-      const functionName = dartGenerator.provideFunction_('math_max', `
-num ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
+      const functionName = generator.provideFunction_('math_max', `
+num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
   if (myList.isEmpty) return null;
   num maxVal = myList[0];
   myList.forEach((num entry) {maxVal = Math.max(maxVal, entry);});
@@ -283,8 +283,8 @@ num ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
     case 'AVERAGE': {
       // This operation exclude null and values that are not int or float:
       //   math_mean([null,null,"aString",1,9]) -> 5.0
-      const functionName = dartGenerator.provideFunction_('math_mean', `
-num ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
+      const functionName = generator.provideFunction_('math_mean', `
+num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   // First filter list for numbers only.
   List localList = new List.from(myList);
   localList.removeWhere((a) => a is! num);
@@ -298,8 +298,8 @@ num ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
       break;
     }
     case 'MEDIAN': {
-      const functionName = dartGenerator.provideFunction_('math_median', `
-num ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
+      const functionName = generator.provideFunction_('math_median', `
+num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   // First filter list for numbers only, then sort, then return middle value
   // or the average of two middle values if list has an even number of elements.
   List localList = new List.from(myList);
@@ -318,13 +318,13 @@ num ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
       break;
     }
     case 'MODE': {
-      dartGenerator.definitions_['import_dart_math'] =
+      generator.definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1]
-      const functionName = dartGenerator.provideFunction_('math_modes', `
-List ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List values) {
+      const functionName = generator.provideFunction_('math_modes', `
+List ${generator.FUNCTION_NAME_PLACEHOLDER_}(List values) {
   List modes = [];
   List counts = [];
   int maxCount = 0;
@@ -357,11 +357,11 @@ List ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List values) {
       break;
     }
     case 'STD_DEV': {
-      dartGenerator.definitions_['import_dart_math'] =
+      generator.definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       const functionName =
-          dartGenerator.provideFunction_('math_standard_deviation', `
-num ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
+          generator.provideFunction_('math_standard_deviation', `
+num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   // First filter list for numbers only.
   List numbers = new List.from(myList);
   numbers.removeWhere((a) => a is! num);
@@ -379,10 +379,10 @@ num ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
       break;
     }
     case 'RANDOM': {
-      dartGenerator.definitions_['import_dart_math'] =
+      generator.definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
-      const functionName = dartGenerator.provideFunction_('math_random_item', `
-dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
+      const functionName = generator.provideFunction_('math_random_item', `
+dynamic ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   int x = new Math.Random().nextInt(myList.length);
   return myList[x];
 }
@@ -396,38 +396,38 @@ dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['math_modulo'] = function(block) {
+dartGenerator.forBlock['math_modulo'] = function(block, generator) {
   // Remainder computation.
   const argument0 =
-      dartGenerator.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) || '0';
+      generator.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) || '0';
   const argument1 =
-      dartGenerator.valueToCode(block, 'DIVISOR', Order.MULTIPLICATIVE) || '0';
+      generator.valueToCode(block, 'DIVISOR', Order.MULTIPLICATIVE) || '0';
   const code = argument0 + ' % ' + argument1;
   return [code, Order.MULTIPLICATIVE];
 };
 
-dartGenerator.forBlock['math_constrain'] = function(block) {
+dartGenerator.forBlock['math_constrain'] = function(block, generator) {
   // Constrain a number between two limits.
-  dartGenerator.definitions_['import_dart_math'] =
+  generator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
   const argument0 =
-      dartGenerator.valueToCode(block, 'VALUE', Order.NONE) || '0';
-  const argument1 = dartGenerator.valueToCode(block, 'LOW', Order.NONE) || '0';
+      generator.valueToCode(block, 'VALUE', Order.NONE) || '0';
+  const argument1 = generator.valueToCode(block, 'LOW', Order.NONE) || '0';
   const argument2 =
-      dartGenerator.valueToCode(block, 'HIGH', Order.NONE) || 'double.infinity';
+      generator.valueToCode(block, 'HIGH', Order.NONE) || 'double.infinity';
   const code = 'Math.min(Math.max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['math_random_int'] = function(block) {
+dartGenerator.forBlock['math_random_int'] = function(block, generator) {
   // Random integer between [X] and [Y].
-  dartGenerator.definitions_['import_dart_math'] =
+  generator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
-  const argument0 = dartGenerator.valueToCode(block, 'FROM', Order.NONE) || '0';
-  const argument1 = dartGenerator.valueToCode(block, 'TO', Order.NONE) || '0';
-  const functionName = dartGenerator.provideFunction_('math_random_int', `
-int ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(num a, num b) {
+  const argument0 = generator.valueToCode(block, 'FROM', Order.NONE) || '0';
+  const argument1 = generator.valueToCode(block, 'TO', Order.NONE) || '0';
+  const functionName = generator.provideFunction_('math_random_int', `
+int ${generator.FUNCTION_NAME_PLACEHOLDER_}(num a, num b) {
   if (a > b) {
     // Swap a and b to ensure a is smaller.
     num c = a;
@@ -441,19 +441,19 @@ int ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(num a, num b) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['math_random_float'] = function(block) {
+dartGenerator.forBlock['math_random_float'] = function(block, generator) {
   // Random fraction between 0 and 1.
-  dartGenerator.definitions_['import_dart_math'] =
+  generator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
   return ['new Math.Random().nextDouble()', Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['math_atan2'] = function(block) {
+dartGenerator.forBlock['math_atan2'] = function(block, generator) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  dartGenerator.definitions_['import_dart_math'] =
+  generator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
-  const argument0 = dartGenerator.valueToCode(block, 'X', Order.NONE) || '0';
-  const argument1 = dartGenerator.valueToCode(block, 'Y', Order.NONE) || '0';
+  const argument0 = generator.valueToCode(block, 'X', Order.NONE) || '0';
+  const argument1 = generator.valueToCode(block, 'Y', Order.NONE) || '0';
   return [
     'Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.pi * 180',
     Order.MULTIPLICATIVE

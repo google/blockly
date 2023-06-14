@@ -15,26 +15,26 @@ import {NameType} from '../../core/names.js';
 import {luaGenerator, Order} from '../lua.js';
 
 
-luaGenerator.forBlock['lists_create_empty'] = function(block) {
+luaGenerator.forBlock['lists_create_empty'] = function(block, generator) {
   // Create an empty list.
   return ['{}', Order.HIGH];
 };
 
-luaGenerator.forBlock['lists_create_with'] = function(block) {
+luaGenerator.forBlock['lists_create_with'] = function(block, generator) {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
     elements[i] =
-        luaGenerator.valueToCode(block, 'ADD' + i, Order.NONE) || 'None';
+        generator.valueToCode(block, 'ADD' + i, Order.NONE) || 'None';
   }
   const code = '{' + elements.join(', ') + '}';
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['lists_repeat'] = function(block) {
+luaGenerator.forBlock['lists_repeat'] = function(block, generator) {
   // Create a list with one element repeated.
-  const functionName = luaGenerator.provideFunction_('create_list_repeated', `
-function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(item, count)
+  const functionName = generator.provideFunction_('create_list_repeated', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(item, count)
   local t = {}
   for i = 1, count do
     table.insert(t, item)
@@ -42,33 +42,33 @@ function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(item, count)
   return t
 end
   `);
-  const element = luaGenerator.valueToCode(block, 'ITEM', Order.NONE) || 'None';
-  const repeatCount = luaGenerator.valueToCode(block, 'NUM', Order.NONE) || '0';
+  const element = generator.valueToCode(block, 'ITEM', Order.NONE) || 'None';
+  const repeatCount = generator.valueToCode(block, 'NUM', Order.NONE) || '0';
   const code = functionName + '(' + element + ', ' + repeatCount + ')';
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['lists_length'] = function(block) {
+luaGenerator.forBlock['lists_length'] = function(block, generator) {
   // String or array length.
-  const list = luaGenerator.valueToCode(block, 'VALUE', Order.UNARY) || '{}';
+  const list = generator.valueToCode(block, 'VALUE', Order.UNARY) || '{}';
   return ['#' + list, Order.UNARY];
 };
 
-luaGenerator.forBlock['lists_isEmpty'] = function(block) {
+luaGenerator.forBlock['lists_isEmpty'] = function(block, generator) {
   // Is the string null or array empty?
-  const list = luaGenerator.valueToCode(block, 'VALUE', Order.UNARY) || '{}';
+  const list = generator.valueToCode(block, 'VALUE', Order.UNARY) || '{}';
   const code = '#' + list + ' == 0';
   return [code, Order.RELATIONAL];
 };
 
-luaGenerator.forBlock['lists_indexOf'] = function(block) {
+luaGenerator.forBlock['lists_indexOf'] = function(block, generator) {
   // Find an item in the list.
-  const item = luaGenerator.valueToCode(block, 'FIND', Order.NONE) || "''";
-  const list = luaGenerator.valueToCode(block, 'VALUE', Order.NONE) || '{}';
+  const item = generator.valueToCode(block, 'FIND', Order.NONE) || "''";
+  const list = generator.valueToCode(block, 'VALUE', Order.NONE) || '{}';
   let functionName;
   if (block.getFieldValue('END') === 'FIRST') {
-    functionName = luaGenerator.provideFunction_('first_index', `
-function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(t, elem)
+    functionName = generator.provideFunction_('first_index', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(t, elem)
   for k, v in ipairs(t) do
     if v == elem then
       return k
@@ -78,8 +78,8 @@ function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(t, elem)
 end
 `);
   } else {
-    functionName = luaGenerator.provideFunction_('last_index', `
-function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(t, elem)
+    functionName = generator.provideFunction_('last_index', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(t, elem)
   for i = #t, 1, -1 do
     if t[i] == elem then
       return i
@@ -114,12 +114,12 @@ const getListIndex = function(listName, where, opt_at) {
   }
 };
 
-luaGenerator.forBlock['lists_getIndex'] = function(block) {
+luaGenerator.forBlock['lists_getIndex'] = function(block, generator) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
-  const list = luaGenerator.valueToCode(block, 'VALUE', Order.HIGH) || '({})';
+  const list = generator.valueToCode(block, 'VALUE', Order.HIGH) || '({})';
 
   // If `list` would be evaluated more than once (which is the case for LAST,
   // FROM_END, and RANDOM) and is non-trivial, make sure to access it only once.
@@ -130,21 +130,21 @@ luaGenerator.forBlock['lists_getIndex'] = function(block) {
       // We can use multiple statements.
       const atOrder =
           (where === 'FROM_END') ? Order.ADDITIVE : Order.NONE;
-      let at = luaGenerator.valueToCode(block, 'AT', atOrder) || '1';
+      let at = generator.valueToCode(block, 'AT', atOrder) || '1';
       const listVar =
-          luaGenerator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
+          generator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
       at = getListIndex(listVar, where, at);
       const code = listVar + ' = ' + list + '\n' +
           'table.remove(' + listVar + ', ' + at + ')\n';
       return code;
     } else {
       // We need to create a procedure to avoid reevaluating values.
-      const at = luaGenerator.valueToCode(block, 'AT', Order.NONE) || '1';
+      const at = generator.valueToCode(block, 'AT', Order.NONE) || '1';
       let functionName;
       if (mode === 'GET') {
-        functionName = luaGenerator.provideFunction_(
+        functionName = generator.provideFunction_(
           'list_get_' + where.toLowerCase(), [
-          'function ' + luaGenerator.FUNCTION_NAME_PLACEHOLDER_ + '(t' +
+          'function ' + generator.FUNCTION_NAME_PLACEHOLDER_ + '(t' +
               // The value for 'FROM_END' and'FROM_START' depends on `at` so
               // we add it as a parameter.
               ((where === 'FROM_END' || where === 'FROM_START') ? ', at)' :
@@ -153,9 +153,9 @@ luaGenerator.forBlock['lists_getIndex'] = function(block) {
         ]);
       } else {  // `mode` === 'GET_REMOVE'
         functionName =
-            luaGenerator.provideFunction_(
+            generator.provideFunction_(
               'list_remove_' + where.toLowerCase(), [
-              'function ' + luaGenerator.FUNCTION_NAME_PLACEHOLDER_ + '(t' +
+              'function ' + generator.FUNCTION_NAME_PLACEHOLDER_ + '(t' +
                   // The value for 'FROM_END' and'FROM_START' depends on `at` so
                   // we add it as a parameter.
                   ((where === 'FROM_END' || where === 'FROM_START') ? ', at)' :
@@ -178,7 +178,7 @@ luaGenerator.forBlock['lists_getIndex'] = function(block) {
     const atOrder = (mode === 'GET' && where === 'FROM_END') ?
         Order.ADDITIVE :
         Order.NONE;
-    let at = luaGenerator.valueToCode(block, 'AT', atOrder) || '1';
+    let at = generator.valueToCode(block, 'AT', atOrder) || '1';
     at = getListIndex(list, where, at);
     if (mode === 'GET') {
       const code = list + '[' + at + ']';
@@ -194,14 +194,14 @@ luaGenerator.forBlock['lists_getIndex'] = function(block) {
   }
 };
 
-luaGenerator.forBlock['lists_setIndex'] = function(block) {
+luaGenerator.forBlock['lists_setIndex'] = function(block, generator) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
-  let list = luaGenerator.valueToCode(block, 'LIST', Order.HIGH) || '{}';
+  let list = generator.valueToCode(block, 'LIST', Order.HIGH) || '{}';
   const mode = block.getFieldValue('MODE') || 'SET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
-  const at = luaGenerator.valueToCode(block, 'AT', Order.ADDITIVE) || '1';
-  const value = luaGenerator.valueToCode(block, 'TO', Order.NONE) || 'None';
+  const at = generator.valueToCode(block, 'AT', Order.ADDITIVE) || '1';
+  const value = generator.valueToCode(block, 'TO', Order.NONE) || 'None';
 
   let code = '';
   // If `list` would be evaluated more than once (which is the case for LAST,
@@ -211,7 +211,7 @@ luaGenerator.forBlock['lists_setIndex'] = function(block) {
     // `list` is an expression, so we may not evaluate it more than once.
     // We can use multiple statements.
     const listVar =
-        luaGenerator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
+        generator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
     code = listVar + ' = ' + list + '\n';
     list = listVar;
   }
@@ -227,13 +227,13 @@ luaGenerator.forBlock['lists_setIndex'] = function(block) {
   return code + '\n';
 };
 
-luaGenerator.forBlock['lists_getSublist'] = function(block) {
+luaGenerator.forBlock['lists_getSublist'] = function(block, generator) {
   // Get sublist.
-  const list = luaGenerator.valueToCode(block, 'LIST', Order.NONE) || '{}';
+  const list = generator.valueToCode(block, 'LIST', Order.NONE) || '{}';
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
-  const at1 = luaGenerator.valueToCode(block, 'AT1', Order.NONE) || '1';
-  const at2 = luaGenerator.valueToCode(block, 'AT2', Order.NONE) || '1';
+  const at1 = generator.valueToCode(block, 'AT1', Order.NONE) || '1';
+  const at2 = generator.valueToCode(block, 'AT2', Order.NONE) || '1';
 
   // The value for 'FROM_END' and'FROM_START' depends on `at` so
   // we add it as a parameter.
@@ -241,9 +241,9 @@ luaGenerator.forBlock['lists_getSublist'] = function(block) {
       (where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' : '';
   const at2Param =
       (where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' : '';
-  const functionName = luaGenerator.provideFunction_(
+  const functionName = generator.provideFunction_(
       'list_sublist_' + where1.toLowerCase() + '_' + where2.toLowerCase(), `
-function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(source${at1Param}${at2Param})
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(source${at1Param}${at2Param})
   local t = {}
   local start = ${getListIndex('source', where1, 'at1')}
   local finish = ${getListIndex('source', where2, 'at2')}
@@ -262,14 +262,14 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['lists_sort'] = function(block) {
+luaGenerator.forBlock['lists_sort'] = function(block, generator) {
   // Block for sorting a list.
-  const list = luaGenerator.valueToCode(block, 'LIST', Order.NONE) || '{}';
+  const list = generator.valueToCode(block, 'LIST', Order.NONE) || '{}';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   const type = block.getFieldValue('TYPE');
 
-  const functionName = luaGenerator.provideFunction_('list_sort', `
-function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(list, typev, direction)
+  const functionName = generator.provideFunction_('list_sort', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(list, typev, direction)
   local t = {}
   for n,v in pairs(list) do table.insert(t, v) end
   local compareFuncs = {
@@ -296,19 +296,19 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['lists_split'] = function(block) {
+luaGenerator.forBlock['lists_split'] = function(block, generator) {
   // Block for splitting text into a list, or joining a list into text.
-  let input = luaGenerator.valueToCode(block, 'INPUT', Order.NONE);
+  let input = generator.valueToCode(block, 'INPUT', Order.NONE);
   const delimiter =
-      luaGenerator.valueToCode(block, 'DELIM', Order.NONE) || "''";
+      generator.valueToCode(block, 'DELIM', Order.NONE) || "''";
   const mode = block.getFieldValue('MODE');
   let functionName;
   if (mode === 'SPLIT') {
     if (!input) {
       input = "''";
     }
-    functionName = luaGenerator.provideFunction_('list_string_split', `
-function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(input, delim)
+    functionName = generator.provideFunction_('list_string_split', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(input, delim)
   local t = {}
   local pos = 1
   while true do
@@ -336,11 +336,11 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['lists_reverse'] = function(block) {
+luaGenerator.forBlock['lists_reverse'] = function(block, generator) {
   // Block for reversing a list.
-  const list = luaGenerator.valueToCode(block, 'LIST', Order.NONE) || '{}';
-  const functionName = luaGenerator.provideFunction_('list_reverse', `
-function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(input)
+  const list = generator.valueToCode(block, 'LIST', Order.NONE) || '{}';
+  const functionName = generator.provideFunction_('list_reverse', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(input)
   local reversed = {}
   for i = #input, 1, -1 do
     table.insert(reversed, input[i])

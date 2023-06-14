@@ -15,51 +15,51 @@ import {NameType} from '../../core/names.js';
 import {Order, javascriptGenerator} from '../javascript.js';
 
 
-javascriptGenerator.forBlock['procedures_defreturn'] = function(block) {
+javascriptGenerator.forBlock['procedures_defreturn'] = function(block, generator) {
   // Define a procedure with a return value.
-  const funcName = javascriptGenerator.nameDB_.getName(
+  const funcName = generator.nameDB_.getName(
       block.getFieldValue('NAME'), NameType.PROCEDURE);
   let xfix1 = '';
-  if (javascriptGenerator.STATEMENT_PREFIX) {
-    xfix1 += javascriptGenerator.injectId(
-        javascriptGenerator.STATEMENT_PREFIX, block);
+  if (generator.STATEMENT_PREFIX) {
+    xfix1 += generator.injectId(
+        generator.STATEMENT_PREFIX, block);
   }
-  if (javascriptGenerator.STATEMENT_SUFFIX) {
-    xfix1 += javascriptGenerator.injectId(
-        javascriptGenerator.STATEMENT_SUFFIX, block);
+  if (generator.STATEMENT_SUFFIX) {
+    xfix1 += generator.injectId(
+        generator.STATEMENT_SUFFIX, block);
   }
   if (xfix1) {
-    xfix1 = javascriptGenerator.prefixLines(xfix1, javascriptGenerator.INDENT);
+    xfix1 = generator.prefixLines(xfix1, generator.INDENT);
   }
   let loopTrap = '';
-  if (javascriptGenerator.INFINITE_LOOP_TRAP) {
-    loopTrap = javascriptGenerator.prefixLines(
-        javascriptGenerator.injectId(
-          javascriptGenerator.INFINITE_LOOP_TRAP, block),
-        javascriptGenerator.INDENT);
+  if (generator.INFINITE_LOOP_TRAP) {
+    loopTrap = generator.prefixLines(
+        generator.injectId(
+          generator.INFINITE_LOOP_TRAP, block),
+        generator.INDENT);
   }
-  const branch = javascriptGenerator.statementToCode(block, 'STACK');
+  const branch = generator.statementToCode(block, 'STACK');
   let returnValue =
-      javascriptGenerator.valueToCode(block, 'RETURN', Order.NONE) || '';
+      generator.valueToCode(block, 'RETURN', Order.NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
     xfix2 = xfix1;
   }
   if (returnValue) {
-    returnValue = javascriptGenerator.INDENT + 'return ' + returnValue + ';\n';
+    returnValue = generator.INDENT + 'return ' + returnValue + ';\n';
   }
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
     args[i] =
-        javascriptGenerator.nameDB_.getName(variables[i], NameType.VARIABLE);
+        generator.nameDB_.getName(variables[i], NameType.VARIABLE);
   }
   let code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' + xfix1 +
       loopTrap + branch + xfix2 + returnValue + '}';
-  code = javascriptGenerator.scrub_(block, code);
+  code = generator.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
-  javascriptGenerator.definitions_['%' + funcName] = code;
+  generator.definitions_['%' + funcName] = code;
   return null;
 };
 
@@ -68,56 +68,48 @@ javascriptGenerator.forBlock['procedures_defreturn'] = function(block) {
 javascriptGenerator.forBlock['procedures_defnoreturn'] =
     javascriptGenerator.forBlock['procedures_defreturn'];
 
-javascriptGenerator.forBlock['procedures_callreturn'] = function(block) {
+javascriptGenerator.forBlock['procedures_callreturn'] = function(block, generator) {
   // Call a procedure with a return value.
-  const funcName = javascriptGenerator.nameDB_.getName(
+  const funcName = generator.nameDB_.getName(
       block.getFieldValue('NAME'), NameType.PROCEDURE);
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = javascriptGenerator.valueToCode(block, 'ARG' + i, Order.NONE) ||
+    args[i] = generator.valueToCode(block, 'ARG' + i, Order.NONE) ||
         'null';
   }
   const code = funcName + '(' + args.join(', ') + ')';
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['procedures_callnoreturn'] = function(block) {
+javascriptGenerator.forBlock['procedures_callnoreturn'] = function(block, generator) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  const tuple = javascriptGenerator.forBlock['procedures_callreturn'](block);
+  const tuple = generator.forBlock['procedures_callreturn'](block, generator);
   return tuple[0] + ';\n';
 };
 
-javascriptGenerator.forBlock['procedures_callnoreturn'] = function(block) {
-  // Call a procedure with no return value.
-  // Generated code is for a function call as a statement is the same as a
-  // function call as a value, with the addition of line ending.
-  const tuple = javascriptGenerator.forBlock['procedures_callreturn'](block);
-  return tuple[0] + ';\n';
-};
-
-javascriptGenerator.forBlock['procedures_ifreturn'] = function(block) {
+javascriptGenerator.forBlock['procedures_ifreturn'] = function(block, generator) {
   // Conditionally return value from a procedure.
   const condition =
-      javascriptGenerator.valueToCode(block, 'CONDITION', Order.NONE) ||
+      generator.valueToCode(block, 'CONDITION', Order.NONE) ||
       'false';
   let code = 'if (' + condition + ') {\n';
-  if (javascriptGenerator.STATEMENT_SUFFIX) {
+  if (generator.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the return is triggered.
-    code += javascriptGenerator.prefixLines(
-        javascriptGenerator.injectId(
-          javascriptGenerator.STATEMENT_SUFFIX, block),
-        javascriptGenerator.INDENT);
+    code += generator.prefixLines(
+        generator.injectId(
+          generator.STATEMENT_SUFFIX, block),
+        generator.INDENT);
   }
   if (block.hasReturnValue_) {
     const value =
-        javascriptGenerator.valueToCode(block, 'VALUE', Order.NONE) || 'null';
-    code += javascriptGenerator.INDENT + 'return ' + value + ';\n';
+        generator.valueToCode(block, 'VALUE', Order.NONE) || 'null';
+    code += generator.INDENT + 'return ' + value + ';\n';
   } else {
-    code += javascriptGenerator.INDENT + 'return;\n';
+    code += generator.INDENT + 'return;\n';
   }
   code += '}\n';
   return code;

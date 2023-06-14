@@ -17,53 +17,53 @@ import {dartGenerator, Order} from '../dart.js';
 
 dartGenerator.addReservedWords('Math');
 
-dartGenerator.forBlock['lists_create_empty'] = function(block) {
+dartGenerator.forBlock['lists_create_empty'] = function(block, generator) {
   // Create an empty list.
   return ['[]', Order.ATOMIC];
 };
 
-dartGenerator.forBlock['lists_create_with'] = function(block) {
+dartGenerator.forBlock['lists_create_with'] = function(block, generator) {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
     elements[i] =
-        dartGenerator.valueToCode(block, 'ADD' + i, Order.NONE) || 'null';
+        generator.valueToCode(block, 'ADD' + i, Order.NONE) || 'null';
   }
   const code = '[' + elements.join(', ') + ']';
   return [code, Order.ATOMIC];
 };
 
-dartGenerator.forBlock['lists_repeat'] = function(block) {
+dartGenerator.forBlock['lists_repeat'] = function(block, generator) {
   // Create a list with one element repeated.
   const element =
-      dartGenerator.valueToCode(block, 'ITEM', Order.NONE) || 'null';
+      generator.valueToCode(block, 'ITEM', Order.NONE) || 'null';
   const repeatCount =
-      dartGenerator.valueToCode(block, 'NUM', Order.NONE) || '0';
+      generator.valueToCode(block, 'NUM', Order.NONE) || '0';
   const code = 'new List.filled(' + repeatCount + ', ' + element + ')';
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['lists_length'] = function(block) {
+dartGenerator.forBlock['lists_length'] = function(block, generator) {
   // String or array length.
   const list =
-      dartGenerator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || '[]';
+      generator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || '[]';
   return [list + '.length', Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['lists_isEmpty'] = function(block) {
+dartGenerator.forBlock['lists_isEmpty'] = function(block, generator) {
   // Is the string null or array empty?
   const list =
-      dartGenerator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || '[]';
+      generator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || '[]';
   return [list + '.isEmpty', Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['lists_indexOf'] = function(block) {
+dartGenerator.forBlock['lists_indexOf'] = function(block, generator) {
   // Find an item in the list.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'indexOf' : 'lastIndexOf';
-  const item = dartGenerator.valueToCode(block, 'FIND', Order.NONE) || "''";
+  const item = generator.valueToCode(block, 'FIND', Order.NONE) || "''";
   const list =
-      dartGenerator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || '[]';
+      generator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || '[]';
   const code = list + '.' + operator + '(' + item + ')';
   if (block.workspace.options.oneBasedIndex) {
     return [code + ' + 1', Order.ADDITIVE];
@@ -71,7 +71,7 @@ dartGenerator.forBlock['lists_indexOf'] = function(block) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['lists_getIndex'] = function(block) {
+dartGenerator.forBlock['lists_getIndex'] = function(block, generator) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -79,12 +79,12 @@ dartGenerator.forBlock['lists_getIndex'] = function(block) {
   const listOrder = (where === 'RANDOM' || where === 'FROM_END') ?
       Order.NONE :
       Order.UNARY_POSTFIX;
-  let list = dartGenerator.valueToCode(block, 'VALUE', listOrder) || '[]';
+  let list = generator.valueToCode(block, 'VALUE', listOrder) || '[]';
   // Cache non-trivial values to variables to prevent repeated look-ups.
   // Closure, which accesses and modifies 'list'.
   function cacheList() {
     const listVar =
-        dartGenerator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
+        generator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
     const code = 'List ' + listVar + ' = ' + list + ';\n';
     list = listVar;
     return code;
@@ -96,12 +96,12 @@ dartGenerator.forBlock['lists_getIndex'] = function(block) {
       !list.match(/^\w+$/)) {
     // `list` is an expression, so we may not evaluate it more than once.
     if (where === 'RANDOM') {
-      dartGenerator.definitions_['import_dart_math'] =
+      generator.definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       // We can use multiple statements.
       let code = cacheList();
       const xVar =
-          dartGenerator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
+          generator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
       code += 'int ' + xVar + ' = new Math.Random().nextInt(' + list +
           '.length);\n';
       code += list + '.removeAt(' + xVar + ');\n';
@@ -110,17 +110,17 @@ dartGenerator.forBlock['lists_getIndex'] = function(block) {
       if (mode === 'REMOVE') {
         // We can use multiple statements.
         const at =
-            dartGenerator.getAdjusted(block, 'AT', 1, false, Order.ADDITIVE);
+            generator.getAdjusted(block, 'AT', 1, false, Order.ADDITIVE);
         let code = cacheList();
         code += list + '.removeAt(' + list + '.length' +
             ' - ' + at + ');\n';
         return code;
 
       } else if (mode === 'GET') {
-        const at = dartGenerator.getAdjusted(block, 'AT', 1);
+        const at = generator.getAdjusted(block, 'AT', 1);
         // We need to create a procedure to avoid reevaluating values.
-        const functionName = dartGenerator.provideFunction_('lists_get_from_end', `
-dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List my_list, num x) {
+        const functionName = generator.provideFunction_('lists_get_from_end', `
+dynamic ${generator.FUNCTION_NAME_PLACEHOLDER_}(List my_list, num x) {
   x = my_list.length - x;
   return my_list[x];
 }
@@ -128,11 +128,11 @@ dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List my_list, num x) {
         const code = functionName + '(' + list + ', ' + at + ')';
         return [code, Order.UNARY_POSTFIX];
       } else if (mode === 'GET_REMOVE') {
-        const at = dartGenerator.getAdjusted(block, 'AT', 1);
+        const at = generator.getAdjusted(block, 'AT', 1);
         // We need to create a procedure to avoid reevaluating values.
         const functionName =
-            dartGenerator.provideFunction_('lists_remove_from_end', `
-dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List my_list, num x) {
+            generator.provideFunction_('lists_remove_from_end', `
+dynamic ${generator.FUNCTION_NAME_PLACEHOLDER_}(List my_list, num x) {
   x = my_list.length - x;
   return my_list.removeAt(x);
 }
@@ -168,7 +168,7 @@ dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List my_list, num x) {
         }
         break;
       case 'FROM_START': {
-        const at = dartGenerator.getAdjusted(block, 'AT');
+        const at = generator.getAdjusted(block, 'AT');
         if (mode === 'GET') {
           const code = list + '[' + at + ']';
           return [code, Order.UNARY_POSTFIX];
@@ -182,7 +182,7 @@ dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List my_list, num x) {
       }
       case 'FROM_END': {
         const at =
-            dartGenerator.getAdjusted(block, 'AT', 1, false, Order.ADDITIVE);
+            generator.getAdjusted(block, 'AT', 1, false, Order.ADDITIVE);
         if (mode === 'GET') {
           const code = list + '[' + list + '.length - ' + at + ']';
           return [code, Order.UNARY_POSTFIX];
@@ -197,20 +197,20 @@ dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List my_list, num x) {
         break;
       }
       case 'RANDOM':
-        dartGenerator.definitions_['import_dart_math'] =
+        generator.definitions_['import_dart_math'] =
             'import \'dart:math\' as Math;';
         if (mode === 'REMOVE') {
           // We can use multiple statements.
           const xVar =
-              dartGenerator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
+              generator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
           let code = 'int ' + xVar + ' = new Math.Random().nextInt(' + list +
               '.length);\n';
           code += list + '.removeAt(' + xVar + ');\n';
           return code;
         } else if (mode === 'GET') {
           const functionName =
-              dartGenerator.provideFunction_('lists_get_random_item', `
-dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List my_list) {
+              generator.provideFunction_('lists_get_random_item', `
+dynamic ${generator.FUNCTION_NAME_PLACEHOLDER_}(List my_list) {
   int x = new Math.Random().nextInt(my_list.length);
   return my_list[x];
 }
@@ -219,8 +219,8 @@ dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List my_list) {
           return [code, Order.UNARY_POSTFIX];
         } else if (mode === 'GET_REMOVE') {
           const functionName =
-              dartGenerator.provideFunction_('lists_remove_random_item', `
-dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List my_list) {
+              generator.provideFunction_('lists_remove_random_item', `
+dynamic ${generator.FUNCTION_NAME_PLACEHOLDER_}(List my_list) {
   int x = new Math.Random().nextInt(my_list.length);
   return my_list.removeAt(x);
 }
@@ -234,15 +234,15 @@ dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List my_list) {
   throw Error('Unhandled combination (lists_getIndex).');
 };
 
-dartGenerator.forBlock['lists_setIndex'] = function(block) {
+dartGenerator.forBlock['lists_setIndex'] = function(block, generator) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   let list =
-      dartGenerator.valueToCode(block, 'LIST', Order.UNARY_POSTFIX) || '[]';
+      generator.valueToCode(block, 'LIST', Order.UNARY_POSTFIX) || '[]';
   const value =
-      dartGenerator.valueToCode(block, 'TO', Order.ASSIGNMENT) || 'null';
+      generator.valueToCode(block, 'TO', Order.ASSIGNMENT) || 'null';
   // Cache non-trivial values to variables to prevent repeated look-ups.
   // Closure, which accesses and modifies 'list'.
   function cacheList() {
@@ -250,7 +250,7 @@ dartGenerator.forBlock['lists_setIndex'] = function(block) {
       return '';
     }
     const listVar =
-        dartGenerator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
+        generator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
     const code = 'List ' + listVar + ' = ' + list + ';\n';
     list = listVar;
     return code;
@@ -273,7 +273,7 @@ dartGenerator.forBlock['lists_setIndex'] = function(block) {
       }
       break;
     case 'FROM_START': {
-      const at = dartGenerator.getAdjusted(block, 'AT');
+      const at = generator.getAdjusted(block, 'AT');
       if (mode === 'SET') {
         return list + '[' + at + '] = ' + value + ';\n';
       } else if (mode === 'INSERT') {
@@ -283,7 +283,7 @@ dartGenerator.forBlock['lists_setIndex'] = function(block) {
     }
     case 'FROM_END': {
       const at =
-          dartGenerator.getAdjusted(block, 'AT', 1, false, Order.ADDITIVE);
+          generator.getAdjusted(block, 'AT', 1, false, Order.ADDITIVE);
       let code = cacheList();
       if (mode === 'SET') {
         code += list + '[' + list + '.length - ' + at + '] = ' + value + ';\n';
@@ -296,11 +296,11 @@ dartGenerator.forBlock['lists_setIndex'] = function(block) {
       break;
     }
     case 'RANDOM': {
-      dartGenerator.definitions_['import_dart_math'] =
+      generator.definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       let code = cacheList();
       const xVar =
-          dartGenerator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
+          generator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
       code += 'int ' + xVar + ' = new Math.Random().nextInt(' + list +
           '.length);\n';
       if (mode === 'SET') {
@@ -316,10 +316,10 @@ dartGenerator.forBlock['lists_setIndex'] = function(block) {
   throw Error('Unhandled combination (lists_setIndex).');
 };
 
-dartGenerator.forBlock['lists_getSublist'] = function(block) {
+dartGenerator.forBlock['lists_getSublist'] = function(block, generator) {
   // Get sublist.
   const list =
-      dartGenerator.valueToCode(block, 'LIST', Order.UNARY_POSTFIX) || '[]';
+      generator.valueToCode(block, 'LIST', Order.UNARY_POSTFIX) || '[]';
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
   let code;
@@ -330,10 +330,10 @@ dartGenerator.forBlock['lists_getSublist'] = function(block) {
     let at1;
     switch (where1) {
       case 'FROM_START':
-        at1 = dartGenerator.getAdjusted(block, 'AT1');
+        at1 = generator.getAdjusted(block, 'AT1');
         break;
       case 'FROM_END':
-        at1 = dartGenerator.getAdjusted(block, 'AT1', 1, false, Order.ADDITIVE);
+        at1 = generator.getAdjusted(block, 'AT1', 1, false, Order.ADDITIVE);
         at1 = list + '.length - ' + at1;
         break;
       case 'FIRST':
@@ -345,10 +345,10 @@ dartGenerator.forBlock['lists_getSublist'] = function(block) {
     let at2;
     switch (where2) {
       case 'FROM_START':
-        at2 = dartGenerator.getAdjusted(block, 'AT2', 1);
+        at2 = generator.getAdjusted(block, 'AT2', 1);
         break;
       case 'FROM_END':
-        at2 = dartGenerator.getAdjusted(block, 'AT2', 0, false, Order.ADDITIVE);
+        at2 = generator.getAdjusted(block, 'AT2', 0, false, Order.ADDITIVE);
         at2 = list + '.length - ' + at2;
         break;
       case 'LAST':
@@ -363,10 +363,10 @@ dartGenerator.forBlock['lists_getSublist'] = function(block) {
       code = list + '.sublist(' + at1 + ', ' + at2 + ')';
     }
   } else {
-    const at1 = dartGenerator.getAdjusted(block, 'AT1');
-    const at2 = dartGenerator.getAdjusted(block, 'AT2');
-    const functionName = dartGenerator.provideFunction_('lists_get_sublist', `
-List ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List list, String where1, num at1, String where2, num at2) {
+    const at1 = generator.getAdjusted(block, 'AT1');
+    const at2 = generator.getAdjusted(block, 'AT2');
+    const functionName = generator.provideFunction_('lists_get_sublist', `
+List ${generator.FUNCTION_NAME_PLACEHOLDER_}(List list, String where1, num at1, String where2, num at2) {
   int getAt(String where, num at) {
     if (where == 'FROM_END') {
       at = list.length - 1 - at;
@@ -390,13 +390,13 @@ List ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List list, String where1, num a
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['lists_sort'] = function(block) {
+dartGenerator.forBlock['lists_sort'] = function(block, generator) {
   // Block for sorting a list.
-  const list = dartGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]';
+  const list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   const type = block.getFieldValue('TYPE');
-  const sortFunctionName = dartGenerator.provideFunction_('lists_sort', `
-List ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List list, String type, int direction) {
+  const sortFunctionName = generator.provideFunction_('lists_sort', `
+List ${generator.FUNCTION_NAME_PLACEHOLDER_}(List list, String type, int direction) {
   var compareFuncs = {
     'NUMERIC': (a, b) => (direction * a.compareTo(b)).toInt(),
     'TEXT': (a, b) => direction * a.toString().compareTo(b.toString()),
@@ -417,11 +417,11 @@ List ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List list, String type, int dir
   ];
 };
 
-dartGenerator.forBlock['lists_split'] = function(block) {
+dartGenerator.forBlock['lists_split'] = function(block, generator) {
   // Block for splitting text into a list, or joining a list into text.
-  let input = dartGenerator.valueToCode(block, 'INPUT', Order.UNARY_POSTFIX);
+  let input = generator.valueToCode(block, 'INPUT', Order.UNARY_POSTFIX);
   const delimiter =
-      dartGenerator.valueToCode(block, 'DELIM', Order.NONE) || "''";
+      generator.valueToCode(block, 'DELIM', Order.NONE) || "''";
   const mode = block.getFieldValue('MODE');
   let functionName;
   if (mode === 'SPLIT') {
@@ -441,9 +441,9 @@ dartGenerator.forBlock['lists_split'] = function(block) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['lists_reverse'] = function(block) {
+dartGenerator.forBlock['lists_reverse'] = function(block, generator) {
   // Block for reversing a list.
-  const list = dartGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]';
+  const list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
   // XXX What should the operator precedence be for a `new`?
   const code = 'new List.from(' + list + '.reversed)';
   return [code, Order.UNARY_POSTFIX];

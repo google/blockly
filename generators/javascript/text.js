@@ -53,36 +53,36 @@ const getSubstringIndex = function(stringName, where, opt_at) {
   }
 };
 
-javascriptGenerator.forBlock['text'] = function(block) {
+javascriptGenerator.forBlock['text'] = function(block, generator) {
   // Text value.
-  const code = javascriptGenerator.quote_(block.getFieldValue('TEXT'));
+  const code = generator.quote_(block.getFieldValue('TEXT'));
   return [code, Order.ATOMIC];
 };
 
-javascriptGenerator.forBlock['text_multiline'] = function(block) {
+javascriptGenerator.forBlock['text_multiline'] = function(block, generator) {
   // Text value.
   const code =
-      javascriptGenerator.multiline_quote_(block.getFieldValue('TEXT'));
+      generator.multiline_quote_(block.getFieldValue('TEXT'));
   const order = code.indexOf('+') !== -1 ? Order.ADDITION :
       Order.ATOMIC;
   return [code, order];
 };
 
-javascriptGenerator.forBlock['text_join'] = function(block) {
+javascriptGenerator.forBlock['text_join'] = function(block, generator) {
   // Create a string made up of any number of elements of any type.
   switch (block.itemCount_) {
     case 0:
       return ["''", Order.ATOMIC];
     case 1: {
-      const element = javascriptGenerator.valueToCode(block, 'ADD0',
+      const element = generator.valueToCode(block, 'ADD0',
           Order.NONE) || "''";
       const codeAndOrder = forceString(element);
       return codeAndOrder;
     }
     case 2: {
-      const element0 = javascriptGenerator.valueToCode(block, 'ADD0',
+      const element0 = generator.valueToCode(block, 'ADD0',
           Order.NONE) || "''";
-      const element1 = javascriptGenerator.valueToCode(block, 'ADD1',
+      const element1 = generator.valueToCode(block, 'ADD1',
           Order.NONE) || "''";
       const code = forceString(element0)[0] +
           ' + ' + forceString(element1)[0];
@@ -91,7 +91,7 @@ javascriptGenerator.forBlock['text_join'] = function(block) {
     default: {
       const elements = new Array(block.itemCount_);
       for (let i = 0; i < block.itemCount_; i++) {
-        elements[i] = javascriptGenerator.valueToCode(block, 'ADD' + i,
+        elements[i] = generator.valueToCode(block, 'ADD' + i,
             Order.NONE) || "''";
       }
       const code = '[' + elements.join(',') + '].join(\'\')';
@@ -100,38 +100,38 @@ javascriptGenerator.forBlock['text_join'] = function(block) {
   }
 };
 
-javascriptGenerator.forBlock['text_append'] = function(block) {
+javascriptGenerator.forBlock['text_append'] = function(block, generator) {
   // Append to a variable in place.
-  const varName = javascriptGenerator.nameDB_.getName(
+  const varName = generator.nameDB_.getName(
       block.getFieldValue('VAR'), NameType.VARIABLE);
-  const value = javascriptGenerator.valueToCode(block, 'TEXT',
+  const value = generator.valueToCode(block, 'TEXT',
       Order.NONE) || "''";
   const code = varName + ' += ' +
       forceString(value)[0] + ';\n';
   return code;
 };
 
-javascriptGenerator.forBlock['text_length'] = function(block) {
+javascriptGenerator.forBlock['text_length'] = function(block, generator) {
   // String or array length.
-  const text = javascriptGenerator.valueToCode(block, 'VALUE',
+  const text = generator.valueToCode(block, 'VALUE',
       Order.MEMBER) || "''";
   return [text + '.length', Order.MEMBER];
 };
 
-javascriptGenerator.forBlock['text_isEmpty'] = function(block) {
+javascriptGenerator.forBlock['text_isEmpty'] = function(block, generator) {
   // Is the string null or array empty?
-  const text = javascriptGenerator.valueToCode(block, 'VALUE',
+  const text = generator.valueToCode(block, 'VALUE',
       Order.MEMBER) || "''";
   return ['!' + text + '.length', Order.LOGICAL_NOT];
 };
 
-javascriptGenerator.forBlock['text_indexOf'] = function(block) {
+javascriptGenerator.forBlock['text_indexOf'] = function(block, generator) {
   // Search the text for a substring.
   const operator = block.getFieldValue('END') === 'FIRST' ?
       'indexOf' : 'lastIndexOf';
-  const substring = javascriptGenerator.valueToCode(block, 'FIND',
+  const substring = generator.valueToCode(block, 'FIND',
       Order.NONE) || "''";
-  const text = javascriptGenerator.valueToCode(block, 'VALUE',
+  const text = generator.valueToCode(block, 'VALUE',
       Order.MEMBER) || "''";
   const code = text + '.' + operator + '(' + substring + ')';
   // Adjust index if using one-based indices.
@@ -141,14 +141,14 @@ javascriptGenerator.forBlock['text_indexOf'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_charAt'] = function(block) {
+javascriptGenerator.forBlock['text_charAt'] = function(block, generator) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const textOrder = (where === 'RANDOM') ? Order.NONE :
       Order.MEMBER;
   const text =
-      javascriptGenerator.valueToCode(block, 'VALUE', textOrder) || "''";
+      generator.valueToCode(block, 'VALUE', textOrder) || "''";
   switch (where) {
     case 'FIRST': {
       const code = text + '.charAt(0)';
@@ -159,20 +159,20 @@ javascriptGenerator.forBlock['text_charAt'] = function(block) {
       return [code, Order.FUNCTION_CALL];
     }
     case 'FROM_START': {
-      const at = javascriptGenerator.getAdjusted(block, 'AT');
+      const at = generator.getAdjusted(block, 'AT');
       // Adjust index if using one-based indices.
       const code = text + '.charAt(' + at + ')';
       return [code, Order.FUNCTION_CALL];
     }
     case 'FROM_END': {
-      const at = javascriptGenerator.getAdjusted(block, 'AT', 1, true);
+      const at = generator.getAdjusted(block, 'AT', 1, true);
       const code = text + '.slice(' + at + ').charAt(0)';
       return [code, Order.FUNCTION_CALL];
     }
     case 'RANDOM': {
       const functionName =
-          javascriptGenerator.provideFunction_('textRandomLetter', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(text) {
+          generator.provideFunction_('textRandomLetter', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(text) {
   var x = Math.floor(Math.random() * text.length);
   return text[x];
 }
@@ -184,7 +184,7 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(text) {
   throw Error('Unhandled option (text_charAt).');
 };
 
-javascriptGenerator.forBlock['text_getSubstring'] = function(block) {
+javascriptGenerator.forBlock['text_getSubstring'] = function(block, generator) {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
@@ -193,7 +193,7 @@ javascriptGenerator.forBlock['text_getSubstring'] = function(block) {
   const textOrder = requiresLengthCall ? Order.MEMBER :
       Order.NONE;
   const text =
-      javascriptGenerator.valueToCode(block, 'STRING', textOrder) || "''";
+      generator.valueToCode(block, 'STRING', textOrder) || "''";
   let code;
   if (where1 === 'FIRST' && where2 === 'LAST') {
     code = text;
@@ -204,10 +204,10 @@ javascriptGenerator.forBlock['text_getSubstring'] = function(block) {
     let at1;
     switch (where1) {
       case 'FROM_START':
-        at1 = javascriptGenerator.getAdjusted(block, 'AT1');
+        at1 = generator.getAdjusted(block, 'AT1');
         break;
       case 'FROM_END':
-        at1 = javascriptGenerator.getAdjusted(block, 'AT1', 1, false,
+        at1 = generator.getAdjusted(block, 'AT1', 1, false,
             Order.SUBTRACTION);
         at1 = text + '.length - ' + at1;
         break;
@@ -220,10 +220,10 @@ javascriptGenerator.forBlock['text_getSubstring'] = function(block) {
     let at2;
     switch (where2) {
       case 'FROM_START':
-        at2 = javascriptGenerator.getAdjusted(block, 'AT2', 1);
+        at2 = generator.getAdjusted(block, 'AT2', 1);
         break;
       case 'FROM_END':
-        at2 = javascriptGenerator.getAdjusted(block, 'AT2', 0, false,
+        at2 = generator.getAdjusted(block, 'AT2', 0, false,
             Order.SUBTRACTION);
         at2 = text + '.length - ' + at2;
         break;
@@ -235,8 +235,8 @@ javascriptGenerator.forBlock['text_getSubstring'] = function(block) {
     }
     code = text + '.slice(' + at1 + ', ' + at2 + ')';
   } else {
-    const at1 = javascriptGenerator.getAdjusted(block, 'AT1');
-    const at2 = javascriptGenerator.getAdjusted(block, 'AT2');
+    const at1 = generator.getAdjusted(block, 'AT1');
+    const at2 = generator.getAdjusted(block, 'AT2');
     const wherePascalCase = {'FIRST': 'First', 'LAST': 'Last',
       'FROM_START': 'FromStart', 'FROM_END': 'FromEnd'};
     // The value for 'FROM_END' and'FROM_START' depends on `at` so
@@ -245,9 +245,9 @@ javascriptGenerator.forBlock['text_getSubstring'] = function(block) {
         (where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' : '';
     const at2Param =
         (where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' : '';
-    const functionName = javascriptGenerator.provideFunction_(
+    const functionName = generator.provideFunction_(
         'subsequence' + wherePascalCase[where1] + wherePascalCase[where2], `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param}) {
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param}) {
   var start = ${getSubstringIndex('sequence', where1, 'at1')};
   var end = ${getSubstringIndex('sequence', where2, 'at2')} + 1;
   return sequence.slice(start, end);
@@ -263,7 +263,7 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_changeCase'] = function(block) {
+javascriptGenerator.forBlock['text_changeCase'] = function(block, generator) {
   // Change capitalization.
   const OPERATORS = {
     'UPPERCASE': '.toUpperCase()',
@@ -273,16 +273,16 @@ javascriptGenerator.forBlock['text_changeCase'] = function(block) {
   const operator = OPERATORS[block.getFieldValue('CASE')];
   const textOrder = operator ? Order.MEMBER : Order.NONE;
   const text =
-      javascriptGenerator.valueToCode(block, 'TEXT', textOrder) || "''";
+      generator.valueToCode(block, 'TEXT', textOrder) || "''";
   let code;
   if (operator) {
-    // Upper and lower case are functions built into javascriptGenerator.
+    // Upper and lower case are functions built into generator.
     code = text + operator;
   } else {
     // Title case is not a native JavaScript function.  Define one.
     const functionName =
-        javascriptGenerator.provideFunction_('textToTitleCase', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(str) {
+        generator.provideFunction_('textToTitleCase', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(str) {
   return str.replace(/\\S+/g,
       function(txt) {return txt[0].toUpperCase() + txt.substring(1).toLowerCase();});
 }
@@ -292,7 +292,7 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(str) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_trim'] = function(block) {
+javascriptGenerator.forBlock['text_trim'] = function(block, generator) {
   // Trim spaces.
   const OPERATORS = {
     'LEFT': ".replace(/^[\\s\\xa0]+/, '')",
@@ -300,27 +300,27 @@ javascriptGenerator.forBlock['text_trim'] = function(block) {
     'BOTH': '.trim()',
   };
   const operator = OPERATORS[block.getFieldValue('MODE')];
-  const text = javascriptGenerator.valueToCode(block, 'TEXT',
+  const text = generator.valueToCode(block, 'TEXT',
       Order.MEMBER) || "''";
   return [text + operator, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_print'] = function(block) {
+javascriptGenerator.forBlock['text_print'] = function(block, generator) {
   // Print statement.
-  const msg = javascriptGenerator.valueToCode(block, 'TEXT',
+  const msg = generator.valueToCode(block, 'TEXT',
       Order.NONE) || "''";
   return 'window.alert(' + msg + ');\n';
 };
 
-javascriptGenerator.forBlock['text_prompt_ext'] = function(block) {
+javascriptGenerator.forBlock['text_prompt_ext'] = function(block, generator) {
   // Prompt function.
   let msg;
   if (block.getField('TEXT')) {
     // Internal message.
-    msg = javascriptGenerator.quote_(block.getFieldValue('TEXT'));
+    msg = generator.quote_(block.getFieldValue('TEXT'));
   } else {
     // External message.
-    msg = javascriptGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
+    msg = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   }
   let code = 'window.prompt(' + msg + ')';
   const toNumber = block.getFieldValue('TYPE') === 'NUMBER';
@@ -333,13 +333,13 @@ javascriptGenerator.forBlock['text_prompt_ext'] = function(block) {
 javascriptGenerator.forBlock['text_prompt'] =
     javascriptGenerator.forBlock['text_prompt_ext'];
 
-javascriptGenerator.forBlock['text_count'] = function(block) {
-  const text = javascriptGenerator.valueToCode(block, 'TEXT',
+javascriptGenerator.forBlock['text_count'] = function(block, generator) {
+  const text = generator.valueToCode(block, 'TEXT',
       Order.NONE) || "''";
-  const sub = javascriptGenerator.valueToCode(block, 'SUB',
+  const sub = generator.valueToCode(block, 'SUB',
       Order.NONE) || "''";
-  const functionName = javascriptGenerator.provideFunction_('textCount', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle) {
+  const functionName = generator.provideFunction_('textCount', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle) {
   if (needle.length === 0) {
     return haystack.length + 1;
   } else {
@@ -351,16 +351,16 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_replace'] = function(block) {
-  const text = javascriptGenerator.valueToCode(block, 'TEXT',
+javascriptGenerator.forBlock['text_replace'] = function(block, generator) {
+  const text = generator.valueToCode(block, 'TEXT',
       Order.NONE) || "''";
-  const from = javascriptGenerator.valueToCode(block, 'FROM',
+  const from = generator.valueToCode(block, 'FROM',
       Order.NONE) || "''";
-  const to = javascriptGenerator.valueToCode(block, 'TO', Order.NONE) || "''";
+  const to = generator.valueToCode(block, 'TO', Order.NONE) || "''";
   // The regex escaping code below is taken from the implementation of
   // goog.string.regExpEscape.
-  const functionName = javascriptGenerator.provideFunction_('textReplace', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle, replacement) {
+  const functionName = generator.provideFunction_('textReplace', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle, replacement) {
   needle = needle.replace(/([-()\\[\\]{}+?*.$\\^|,:#<!\\\\])/g, '\\\\$1')
                  .replace(/\\x08/g, '\\\\x08');
   return haystack.replace(new RegExp(needle, 'g'), replacement);
@@ -370,8 +370,8 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle, rep
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_reverse'] = function(block) {
-  const text = javascriptGenerator.valueToCode(block, 'TEXT',
+javascriptGenerator.forBlock['text_reverse'] = function(block, generator) {
+  const text = generator.valueToCode(block, 'TEXT',
       Order.MEMBER) || "''";
   const code = text + ".split('').reverse().join('')";
   return [code, Order.FUNCTION_CALL];

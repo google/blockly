@@ -15,6 +15,6 @@ import {pythonGenerator} from '../python.js';
 import './variables.js';
 
 
-// pythonGenerator is dynamically typed.
+// generator is dynamically typed.
 pythonGenerator.forBlock['variables_get_dynamic'] = pythonGenerator.forBlock['variables_get'];
 pythonGenerator.forBlock['variables_set_dynamic'] = pythonGenerator.forBlock['variables_set'];

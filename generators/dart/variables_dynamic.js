@@ -15,7 +15,7 @@ import {dartGenerator} from '../dart.js';
 import './variables.js';
 
 
-// dartGenerator is dynamically typed.
+// generator is dynamically typed.
 dartGenerator.forBlock['variables_get_dynamic'] =
     dartGenerator.forBlock['variables_get'];
 dartGenerator.forBlock['variables_set_dynamic'] =

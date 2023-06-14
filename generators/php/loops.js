@@ -16,7 +16,7 @@ import {NameType} from '../../core/names.js';
 import {phpGenerator, Order} from '../php.js';
 
 
-phpGenerator.forBlock['controls_repeat_ext'] = function(block) {
+phpGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -24,17 +24,17 @@ phpGenerator.forBlock['controls_repeat_ext'] = function(block) {
     repeats = String(Number(block.getFieldValue('TIMES')));
   } else {
     // External number.
-    repeats = phpGenerator.valueToCode(block, 'TIMES', Order.ASSIGNMENT) || '0';
+    repeats = generator.valueToCode(block, 'TIMES', Order.ASSIGNMENT) || '0';
   }
-  let branch = phpGenerator.statementToCode(block, 'DO');
-  branch = phpGenerator.addLoopTrap(branch, block);
+  let branch = generator.statementToCode(block, 'DO');
+  branch = generator.addLoopTrap(branch, block);
   let code = '';
   const loopVar =
-        phpGenerator.nameDB_.getDistinctName('count', NameType.VARIABLE);
+        generator.nameDB_.getDistinctName('count', NameType.VARIABLE);
   let endVar = repeats;
   if (!repeats.match(/^\w+$/) && !stringUtils.isNumber(repeats)) {
     endVar =
-        phpGenerator.nameDB_.getDistinctName('repeat_end', NameType.VARIABLE);
+        generator.nameDB_.getDistinctName('repeat_end', NameType.VARIABLE);
     code += endVar + ' = ' + repeats + ';\n';
   }
   code += 'for (' + loopVar + ' = 0; ' + loopVar + ' < ' + endVar + '; ' +
@@ -45,33 +45,33 @@ phpGenerator.forBlock['controls_repeat_ext'] = function(block) {
 phpGenerator.forBlock['controls_repeat'] =
     phpGenerator.forBlock['controls_repeat_ext'];
 
-phpGenerator.forBlock['controls_whileUntil'] = function(block) {
+phpGenerator.forBlock['controls_whileUntil'] = function(block, generator) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
-      phpGenerator.valueToCode(
+      generator.valueToCode(
           block, 'BOOL', until ? Order.LOGICAL_NOT : Order.NONE) ||
       'false';
-  let branch = phpGenerator.statementToCode(block, 'DO');
-  branch = phpGenerator.addLoopTrap(branch, block);
+  let branch = generator.statementToCode(block, 'DO');
+  branch = generator.addLoopTrap(branch, block);
   if (until) {
     argument0 = '!' + argument0;
   }
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
 };
 
-phpGenerator.forBlock['controls_for'] = function(block) {
+phpGenerator.forBlock['controls_for'] = function(block, generator) {
   // For loop.
   const variable0 =
-      phpGenerator.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+      generator.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
   const argument0 =
-        phpGenerator.valueToCode(block, 'FROM', Order.ASSIGNMENT) || '0';
+        generator.valueToCode(block, 'FROM', Order.ASSIGNMENT) || '0';
   const argument1 =
-        phpGenerator.valueToCode(block, 'TO', Order.ASSIGNMENT) || '0';
+        generator.valueToCode(block, 'TO', Order.ASSIGNMENT) || '0';
   const increment =
-        phpGenerator.valueToCode(block, 'BY', Order.ASSIGNMENT) || '1';
-  let branch = phpGenerator.statementToCode(block, 'DO');
-  branch = phpGenerator.addLoopTrap(branch, block);
+        generator.valueToCode(block, 'BY', Order.ASSIGNMENT) || '1';
+  let branch = generator.statementToCode(block, 'DO');
+  branch = generator.addLoopTrap(branch, block);
   let code;
   if (stringUtils.isNumber(argument0) && stringUtils.isNumber(argument1) &&
       stringUtils.isNumber(increment)) {
@@ -92,21 +92,21 @@ phpGenerator.forBlock['controls_for'] = function(block) {
     let startVar = argument0;
     if (!argument0.match(/^\w+$/) && !stringUtils.isNumber(argument0)) {
       startVar =
-          phpGenerator.nameDB_.getDistinctName(
+          generator.nameDB_.getDistinctName(
             variable0 + '_start', NameType.VARIABLE);
       code += startVar + ' = ' + argument0 + ';\n';
     }
     let endVar = argument1;
     if (!argument1.match(/^\w+$/) && !stringUtils.isNumber(argument1)) {
       endVar =
-          phpGenerator.nameDB_.getDistinctName(
+          generator.nameDB_.getDistinctName(
             variable0 + '_end', NameType.VARIABLE);
       code += endVar + ' = ' + argument1 + ';\n';
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
     const incVar =
-        phpGenerator.nameDB_.getDistinctName(
+        generator.nameDB_.getDistinctName(
           variable0 + '_inc', NameType.VARIABLE);
     code += incVar + ' = ';
     if (stringUtils.isNumber(increment)) {
@@ -115,7 +115,7 @@ phpGenerator.forBlock['controls_for'] = function(block) {
       code += 'abs(' + increment + ');\n';
     }
     code += 'if (' + startVar + ' > ' + endVar + ') {\n';
-    code += phpGenerator.INDENT + incVar + ' = -' + incVar + ';\n';
+    code += generator.INDENT + incVar + ' = -' + incVar + ';\n';
     code += '}\n';
     code += 'for (' + variable0 + ' = ' + startVar + '; ' + incVar +
         ' >= 0 ? ' + variable0 + ' <= ' + endVar + ' : ' + variable0 +
@@ -125,40 +125,40 @@ phpGenerator.forBlock['controls_for'] = function(block) {
   return code;
 };
 
-phpGenerator.forBlock['controls_forEach'] = function(block) {
+phpGenerator.forBlock['controls_forEach'] = function(block, generator) {
   // For each loop.
   const variable0 =
-      phpGenerator.nameDB_.getName(
+      generator.nameDB_.getName(
         block.getFieldValue('VAR'), NameType.VARIABLE);
   const argument0 =
-      phpGenerator.valueToCode(block, 'LIST', Order.ASSIGNMENT) || '[]';
-  let branch = phpGenerator.statementToCode(block, 'DO');
-  branch = phpGenerator.addLoopTrap(branch, block);
+      generator.valueToCode(block, 'LIST', Order.ASSIGNMENT) || '[]';
+  let branch = generator.statementToCode(block, 'DO');
+  branch = generator.addLoopTrap(branch, block);
   let code = '';
   code +=
       'foreach (' + argument0 + ' as ' + variable0 + ') {\n' + branch + '}\n';
   return code;
 };
 
-phpGenerator.forBlock['controls_flow_statements'] = function(block) {
+phpGenerator.forBlock['controls_flow_statements'] = function(block, generator) {
   // Flow statements: continue, break.
   let xfix = '';
-  if (phpGenerator.STATEMENT_PREFIX) {
+  if (generator.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
-    xfix += phpGenerator.injectId(phpGenerator.STATEMENT_PREFIX, block);
+    xfix += generator.injectId(generator.STATEMENT_PREFIX, block);
   }
-  if (phpGenerator.STATEMENT_SUFFIX) {
+  if (generator.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the break/continue is triggered.
-    xfix += phpGenerator.injectId(phpGenerator.STATEMENT_SUFFIX, block);
+    xfix += generator.injectId(generator.STATEMENT_SUFFIX, block);
   }
-  if (phpGenerator.STATEMENT_PREFIX) {
+  if (generator.STATEMENT_PREFIX) {
     const loop = block.getSurroundLoop();
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end
       // of the loop will not get executed if 'continue' is triggered.
       // In the case of 'break', a prefix is needed due to the loop's suffix.
-      xfix += phpGenerator.injectId(phpGenerator.STATEMENT_PREFIX, loop);
+      xfix += generator.injectId(generator.STATEMENT_PREFIX, loop);
     }
   }
   switch (block.getFieldValue('FLOW')) {

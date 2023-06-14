@@ -17,28 +17,28 @@ import {dartGenerator, Order} from '../dart.js';
 
 dartGenerator.addReservedWords('Html,Math');
 
-dartGenerator.forBlock['text'] = function(block) {
+dartGenerator.forBlock['text'] = function(block, generator) {
   // Text value.
-  const code = dartGenerator.quote_(block.getFieldValue('TEXT'));
+  const code = generator.quote_(block.getFieldValue('TEXT'));
   return [code, Order.ATOMIC];
 };
 
-dartGenerator.forBlock['text_multiline'] = function(block) {
+dartGenerator.forBlock['text_multiline'] = function(block, generator) {
   // Text value.
-  const code = dartGenerator.multiline_quote_(block.getFieldValue('TEXT'));
+  const code = generator.multiline_quote_(block.getFieldValue('TEXT'));
   const order =
       code.indexOf('+') !== -1 ? Order.ADDITIVE : Order.ATOMIC;
   return [code, order];
 };
 
-dartGenerator.forBlock['text_join'] = function(block) {
+dartGenerator.forBlock['text_join'] = function(block, generator) {
   // Create a string made up of any number of elements of any type.
   switch (block.itemCount_) {
     case 0:
       return ["''", Order.ATOMIC];
     case 1: {
       const element =
-          dartGenerator.valueToCode(block, 'ADD0', Order.UNARY_POSTFIX) || "''";
+          generator.valueToCode(block, 'ADD0', Order.UNARY_POSTFIX) || "''";
       const code = element + '.toString()';
       return [code, Order.UNARY_POSTFIX];
     }
@@ -46,7 +46,7 @@ dartGenerator.forBlock['text_join'] = function(block) {
       const elements = new Array(block.itemCount_);
       for (let i = 0; i < block.itemCount_; i++) {
         elements[i] =
-            dartGenerator.valueToCode(block, 'ADD' + i, Order.NONE) || "''";
+            generator.valueToCode(block, 'ADD' + i, Order.NONE) || "''";
       }
       const code = '[' + elements.join(',') + '].join()';
       return [code, Order.UNARY_POSTFIX];
@@ -54,37 +54,37 @@ dartGenerator.forBlock['text_join'] = function(block) {
   }
 };
 
-dartGenerator.forBlock['text_append'] = function(block) {
+dartGenerator.forBlock['text_append'] = function(block, generator) {
   // Append to a variable in place.
   const varName =
-      dartGenerator.nameDB_.getName(
+      generator.nameDB_.getName(
         block.getFieldValue('VAR'), NameType.VARIABLE);
-  const value = dartGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
+  const value = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return varName + ' = [' + varName + ', ' + value + '].join();\n';
 };
 
-dartGenerator.forBlock['text_length'] = function(block) {
+dartGenerator.forBlock['text_length'] = function(block, generator) {
   // String or array length.
   const text =
-      dartGenerator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || "''";
+      generator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || "''";
   return [text + '.length', Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['text_isEmpty'] = function(block) {
+dartGenerator.forBlock['text_isEmpty'] = function(block, generator) {
   // Is the string null or array empty?
   const text =
-      dartGenerator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || "''";
+      generator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || "''";
   return [text + '.isEmpty', Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['text_indexOf'] = function(block) {
+dartGenerator.forBlock['text_indexOf'] = function(block, generator) {
   // Search the text for a substring.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'indexOf' : 'lastIndexOf';
   const substring =
-      dartGenerator.valueToCode(block, 'FIND', Order.NONE) || "''";
+      generator.valueToCode(block, 'FIND', Order.NONE) || "''";
   const text =
-      dartGenerator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || "''";
+      generator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || "''";
   const code = text + '.' + operator + '(' + substring + ')';
   if (block.workspace.options.oneBasedIndex) {
     return [code + ' + 1', Order.ADDITIVE];
@@ -92,14 +92,14 @@ dartGenerator.forBlock['text_indexOf'] = function(block) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['text_charAt'] = function(block) {
+dartGenerator.forBlock['text_charAt'] = function(block, generator) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const textOrder = (where === 'FIRST' || where === 'FROM_START') ?
       Order.UNARY_POSTFIX :
       Order.NONE;
-  const text = dartGenerator.valueToCode(block, 'VALUE', textOrder) || "''";
+  const text = generator.valueToCode(block, 'VALUE', textOrder) || "''";
   let at;
   switch (where) {
     case 'FIRST': {
@@ -107,7 +107,7 @@ dartGenerator.forBlock['text_charAt'] = function(block) {
       return [code, Order.UNARY_POSTFIX];
     }
     case 'FROM_START': {
-      at = dartGenerator.getAdjusted(block, 'AT');
+      at = generator.getAdjusted(block, 'AT');
       const code = text + '[' + at + ']';
       return [code, Order.UNARY_POSTFIX];
     }
@@ -115,9 +115,9 @@ dartGenerator.forBlock['text_charAt'] = function(block) {
       at = 1;
       // Fall through.
     case 'FROM_END': {
-      at = dartGenerator.getAdjusted(block, 'AT', 1);
-      const functionName = dartGenerator.provideFunction_('text_get_from_end', `
-String ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(String text, num x) {
+      at = generator.getAdjusted(block, 'AT', 1);
+      const functionName = generator.provideFunction_('text_get_from_end', `
+String ${generator.FUNCTION_NAME_PLACEHOLDER_}(String text, num x) {
   return text[text.length - x];
 }
 `);
@@ -125,11 +125,11 @@ String ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(String text, num x) {
       return [code, Order.UNARY_POSTFIX];
     }
     case 'RANDOM': {
-      dartGenerator.definitions_['import_dart_math'] =
+      generator.definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       const functionName =
-          dartGenerator.provideFunction_('text_random_letter', `
-String ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(String text) {
+          generator.provideFunction_('text_random_letter', `
+String ${generator.FUNCTION_NAME_PLACEHOLDER_}(String text) {
   int x = new Math.Random().nextInt(text.length);
   return text[x];
 }
@@ -141,14 +141,14 @@ String ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(String text) {
   throw Error('Unhandled option (text_charAt).');
 };
 
-dartGenerator.forBlock['text_getSubstring'] = function(block) {
+dartGenerator.forBlock['text_getSubstring'] = function(block, generator) {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
   const requiresLengthCall = (where1 !== 'FROM_END' && where2 === 'FROM_START');
   const textOrder =
       requiresLengthCall ? Order.UNARY_POSTFIX : Order.NONE;
-  const text = dartGenerator.valueToCode(block, 'STRING', textOrder) || "''";
+  const text = generator.valueToCode(block, 'STRING', textOrder) || "''";
   let code;
   if (where1 === 'FIRST' && where2 === 'LAST') {
     code = text;
@@ -159,10 +159,10 @@ dartGenerator.forBlock['text_getSubstring'] = function(block) {
     let at1;
     switch (where1) {
       case 'FROM_START':
-        at1 = dartGenerator.getAdjusted(block, 'AT1');
+        at1 = generator.getAdjusted(block, 'AT1');
         break;
       case 'FROM_END':
-        at1 = dartGenerator.getAdjusted(block, 'AT1', 1, false, Order.ADDITIVE);
+        at1 = generator.getAdjusted(block, 'AT1', 1, false, Order.ADDITIVE);
         at1 = text + '.length - ' + at1;
         break;
       case 'FIRST':
@@ -174,10 +174,10 @@ dartGenerator.forBlock['text_getSubstring'] = function(block) {
     let at2;
     switch (where2) {
       case 'FROM_START':
-        at2 = dartGenerator.getAdjusted(block, 'AT2', 1);
+        at2 = generator.getAdjusted(block, 'AT2', 1);
         break;
       case 'FROM_END':
-        at2 = dartGenerator.getAdjusted(block, 'AT2', 0, false, Order.ADDITIVE);
+        at2 = generator.getAdjusted(block, 'AT2', 0, false, Order.ADDITIVE);
         at2 = text + '.length - ' + at2;
         break;
       case 'LAST':
@@ -192,11 +192,11 @@ dartGenerator.forBlock['text_getSubstring'] = function(block) {
       code = text + '.substring(' + at1 + ', ' + at2 + ')';
     }
   } else {
-    const at1 = dartGenerator.getAdjusted(block, 'AT1');
-    const at2 = dartGenerator.getAdjusted(block, 'AT2');
+    const at1 = generator.getAdjusted(block, 'AT1');
+    const at2 = generator.getAdjusted(block, 'AT2');
     const functionName =
-        dartGenerator.provideFunction_('text_get_substring', `
-String ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(String text, String where1, num at1, String where2, num at2) {
+        generator.provideFunction_('text_get_substring', `
+String ${generator.FUNCTION_NAME_PLACEHOLDER_}(String text, String where1, num at1, String where2, num at2) {
   int getAt(String where, num at) {
     if (where == 'FROM_END') {
       at = text.length - 1 - at;
@@ -220,7 +220,7 @@ String ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(String text, String where1, n
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['text_changeCase'] = function(block) {
+dartGenerator.forBlock['text_changeCase'] = function(block, generator) {
   // Change capitalization.
   const OPERATORS = {
     'UPPERCASE': '.toUpperCase()',
@@ -229,15 +229,15 @@ dartGenerator.forBlock['text_changeCase'] = function(block) {
   };
   const operator = OPERATORS[block.getFieldValue('CASE')];
   const textOrder = operator ? Order.UNARY_POSTFIX : Order.NONE;
-  const text = dartGenerator.valueToCode(block, 'TEXT', textOrder) || "''";
+  const text = generator.valueToCode(block, 'TEXT', textOrder) || "''";
   let code;
   if (operator) {
-    // Upper and lower case are functions built into dartGenerator.
+    // Upper and lower case are functions built into generator.
     code = text + operator;
   } else {
-    // Title case is not a native dartGenerator function.  Define one.
-    const functionName = dartGenerator.provideFunction_('text_toTitleCase', `
-String ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(String str) {
+    // Title case is not a native generator function.  Define one.
+    const functionName = generator.provideFunction_('text_toTitleCase', `
+String ${generator.FUNCTION_NAME_PLACEHOLDER_}(String str) {
   RegExp exp = new RegExp(r'\\b');
   List<String> list = str.split(exp);
   final title = new StringBuffer();
@@ -257,7 +257,7 @@ String ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(String str) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['text_trim'] = function(block) {
+dartGenerator.forBlock['text_trim'] = function(block, generator) {
   // Trim spaces.
   const OPERATORS = {
     'LEFT': '.replaceFirst(new RegExp(r\'^\\s+\'), \'\')',
@@ -266,32 +266,32 @@ dartGenerator.forBlock['text_trim'] = function(block) {
   };
   const operator = OPERATORS[block.getFieldValue('MODE')];
   const text =
-      dartGenerator.valueToCode(block, 'TEXT', Order.UNARY_POSTFIX) || "''";
+      generator.valueToCode(block, 'TEXT', Order.UNARY_POSTFIX) || "''";
   return [text + operator, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['text_print'] = function(block) {
+dartGenerator.forBlock['text_print'] = function(block, generator) {
   // Print statement.
-  const msg = dartGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
+  const msg = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return 'print(' + msg + ');\n';
 };
 
-dartGenerator.forBlock['text_prompt_ext'] = function(block) {
+dartGenerator.forBlock['text_prompt_ext'] = function(block, generator) {
   // Prompt function.
-  dartGenerator.definitions_['import_dart_html'] =
+  generator.definitions_['import_dart_html'] =
       'import \'dart:html\' as Html;';
   let msg;
   if (block.getField('TEXT')) {
     // Internal message.
-    msg = dartGenerator.quote_(block.getFieldValue('TEXT'));
+    msg = generator.quote_(block.getFieldValue('TEXT'));
   } else {
     // External message.
-    msg = dartGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
+    msg = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   }
   let code = 'Html.window.prompt(' + msg + ', \'\')';
   const toNumber = block.getFieldValue('TYPE') === 'NUMBER';
   if (toNumber) {
-    dartGenerator.definitions_['import_dart_math'] =
+    generator.definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
     code = 'Math.parseDouble(' + code + ')';
   }
@@ -301,12 +301,12 @@ dartGenerator.forBlock['text_prompt_ext'] = function(block) {
 dartGenerator.forBlock['text_prompt'] =
     dartGenerator.forBlock['text_prompt_ext'];
 
-dartGenerator.forBlock['text_count'] = function(block) {
-  const text = dartGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
-  const sub = dartGenerator.valueToCode(block, 'SUB', Order.NONE) || "''";
-  // Substring count is not a native dartGenerator function.  Define one.
-  const functionName = dartGenerator.provideFunction_('text_count', `
-int ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(String haystack, String needle) {
+dartGenerator.forBlock['text_count'] = function(block, generator) {
+  const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
+  const sub = generator.valueToCode(block, 'SUB', Order.NONE) || "''";
+  // Substring count is not a native generator function.  Define one.
+  const functionName = generator.provideFunction_('text_count', `
+int ${generator.FUNCTION_NAME_PLACEHOLDER_}(String haystack, String needle) {
   if (needle.length == 0) {
     return haystack.length + 1;
   }
@@ -326,21 +326,21 @@ int ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(String haystack, String needle) 
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['text_replace'] = function(block) {
+dartGenerator.forBlock['text_replace'] = function(block, generator) {
   const text =
-      dartGenerator.valueToCode(block, 'TEXT', Order.UNARY_POSTFIX) || "''";
-  const from = dartGenerator.valueToCode(block, 'FROM', Order.NONE) || "''";
-  const to = dartGenerator.valueToCode(block, 'TO', Order.NONE) || "''";
+      generator.valueToCode(block, 'TEXT', Order.UNARY_POSTFIX) || "''";
+  const from = generator.valueToCode(block, 'FROM', Order.NONE) || "''";
+  const to = generator.valueToCode(block, 'TO', Order.NONE) || "''";
   const code = text + '.replaceAll(' + from + ', ' + to + ')';
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['text_reverse'] = function(block) {
-  // There isn't a sensible way to do this in dartGenerator. See:
+dartGenerator.forBlock['text_reverse'] = function(block, generator) {
+  // There isn't a sensible way to do this in generator. See:
   // http://stackoverflow.com/a/21613700/3529104
   // Implementing something is possibly better than not implementing anything?
   const text =
-      dartGenerator.valueToCode(block, 'TEXT', Order.UNARY_POSTFIX) || "''";
+      generator.valueToCode(block, 'TEXT', Order.UNARY_POSTFIX) || "''";
   const code = 'new String.fromCharCodes(' + text + '.runes.toList().reversed)';
   return [code, Order.UNARY_PREFIX];
 };

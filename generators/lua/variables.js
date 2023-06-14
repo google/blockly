@@ -15,19 +15,19 @@ import {NameType} from '../../core/names.js';
 import {luaGenerator, Order} from '../lua.js';
 
 
-luaGenerator.forBlock['variables_get'] = function(block) {
+luaGenerator.forBlock['variables_get'] = function(block, generator) {
   // Variable getter.
   const code =
-      luaGenerator.nameDB_.getName(
+      generator.nameDB_.getName(
         block.getFieldValue('VAR'), NameType.VARIABLE);
   return [code, Order.ATOMIC];
 };
 
-luaGenerator.forBlock['variables_set'] = function(block) {
+luaGenerator.forBlock['variables_set'] = function(block, generator) {
   // Variable setter.
-  const argument0 = luaGenerator.valueToCode(block, 'VALUE', Order.NONE) || '0';
+  const argument0 = generator.valueToCode(block, 'VALUE', Order.NONE) || '0';
   const varName =
-      luaGenerator.nameDB_.getName(
+      generator.nameDB_.getName(
         block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = ' + argument0 + '\n';
 };

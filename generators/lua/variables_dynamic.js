@@ -11,10 +11,12 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.variablesDynamic');
 
-import {luaGenerator as Lua} from '../lua.js';
+import {luaGenerator} from '../lua.js';
 import './variables.js';
 
 
 // Lua is dynamically typed.
-Lua.forBlock['variables_get_dynamic'] = Lua.forBlock['variables_get'];
-Lua.forBlock['variables_set_dynamic'] = Lua.forBlock['variables_set'];
+luaGenerator.forBlock['variables_get_dynamic'] =
+    luaGenerator.forBlock['variables_get'];
+luaGenerator.forBlock['variables_set_dynamic'] =
+    luaGenerator.forBlock['variables_set'];

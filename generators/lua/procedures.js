@@ -12,94 +12,100 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.procedures');
 
 import {NameType} from '../../core/names.js';
-import {luaGenerator as Lua, Order} from '../lua.js';
+import {luaGenerator, Order} from '../lua.js';
 
 
-Lua.forBlock['procedures_defreturn'] = function(block) {
+luaGenerator.forBlock['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   const funcName =
-      Lua.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
+      luaGenerator.nameDB_.getName(
+        block.getFieldValue('NAME'), NameType.PROCEDURE);
   let xfix1 = '';
-  if (Lua.STATEMENT_PREFIX) {
-    xfix1 += Lua.injectId(Lua.STATEMENT_PREFIX, block);
+  if (luaGenerator.STATEMENT_PREFIX) {
+    xfix1 += luaGenerator.injectId(luaGenerator.STATEMENT_PREFIX, block);
   }
-  if (Lua.STATEMENT_SUFFIX) {
-    xfix1 += Lua.injectId(Lua.STATEMENT_SUFFIX, block);
+  if (luaGenerator.STATEMENT_SUFFIX) {
+    xfix1 += luaGenerator.injectId(luaGenerator.STATEMENT_SUFFIX, block);
   }
   if (xfix1) {
-    xfix1 = Lua.prefixLines(xfix1, Lua.INDENT);
+    xfix1 = luaGenerator.prefixLines(xfix1, luaGenerator.INDENT);
   }
   let loopTrap = '';
-  if (Lua.INFINITE_LOOP_TRAP) {
-    loopTrap = Lua.prefixLines(
-        Lua.injectId(Lua.INFINITE_LOOP_TRAP, block), Lua.INDENT);
+  if (luaGenerator.INFINITE_LOOP_TRAP) {
+    loopTrap = luaGenerator.prefixLines(
+        luaGenerator.injectId(
+          luaGenerator.INFINITE_LOOP_TRAP, block), luaGenerator.INDENT);
   }
-  let branch = Lua.statementToCode(block, 'STACK');
-  let returnValue = Lua.valueToCode(block, 'RETURN', Order.NONE) || '';
+  let branch = luaGenerator.statementToCode(block, 'STACK');
+  let returnValue = luaGenerator.valueToCode(block, 'RETURN', Order.NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
     xfix2 = xfix1;
   }
   if (returnValue) {
-    returnValue = Lua.INDENT + 'return ' + returnValue + '\n';
+    returnValue = luaGenerator.INDENT + 'return ' + returnValue + '\n';
   } else if (!branch) {
     branch = '';
   }
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Lua.nameDB_.getName(variables[i], NameType.VARIABLE);
+    args[i] = luaGenerator.nameDB_.getName(variables[i], NameType.VARIABLE);
   }
   let code = 'function ' + funcName + '(' + args.join(', ') + ')\n' + xfix1 +
       loopTrap + branch + xfix2 + returnValue + 'end\n';
-  code = Lua.scrub_(block, code);
+  code = luaGenerator.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
-  Lua.definitions_['%' + funcName] = code;
+  luaGenerator.definitions_['%' + funcName] = code;
   return null;
 };
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-Lua.forBlock['procedures_defnoreturn'] = Lua.forBlock['procedures_defreturn'];
+luaGenerator.forBlock['procedures_defnoreturn'] =
+    luaGenerator.forBlock['procedures_defreturn'];
 
-Lua.forBlock['procedures_callreturn'] = function(block) {
+luaGenerator.forBlock['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
   const funcName =
-      Lua.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
+      luaGenerator.nameDB_.getName(
+        block.getFieldValue('NAME'), NameType.PROCEDURE);
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Lua.valueToCode(block, 'ARG' + i, Order.NONE) || 'nil';
+    args[i] = luaGenerator.valueToCode(block, 'ARG' + i, Order.NONE) || 'nil';
   }
   const code = funcName + '(' + args.join(', ') + ')';
   return [code, Order.HIGH];
 };
 
-Lua.forBlock['procedures_callnoreturn'] = function(block) {
+luaGenerator.forBlock['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  const tuple = Lua.forBlock['procedures_callreturn'](block);
+  const tuple = luaGenerator.forBlock['procedures_callreturn'](block);
   return tuple[0] + '\n';
 };
 
-Lua.forBlock['procedures_ifreturn'] = function(block) {
+luaGenerator.forBlock['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   const condition =
-      Lua.valueToCode(block, 'CONDITION', Order.NONE) || 'false';
+      luaGenerator.valueToCode(block, 'CONDITION', Order.NONE) || 'false';
   let code = 'if ' + condition + ' then\n';
-  if (Lua.STATEMENT_SUFFIX) {
+  if (luaGenerator.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the return is triggered.
     code +=
-        Lua.prefixLines(Lua.injectId(Lua.STATEMENT_SUFFIX, block), Lua.INDENT);
+        luaGenerator.prefixLines(
+          luaGenerator.injectId(luaGenerator.STATEMENT_SUFFIX, block),
+          luaGenerator.INDENT);
   }
   if (block.hasReturnValue_) {
-    const value = Lua.valueToCode(block, 'VALUE', Order.NONE) || 'nil';
-    code += Lua.INDENT + 'return ' + value + '\n';
+    const value = luaGenerator.valueToCode(block, 'VALUE', Order.NONE) || 'nil';
+    code += luaGenerator.INDENT + 'return ' + value + '\n';
   } else {
-    code += Lua.INDENT + 'return\n';
+    code += luaGenerator.INDENT + 'return\n';
   }
   code += 'end\n';
   return code;

@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.logic');
 
-import {luaGenerator as Lua} from '../lua.js';
+import {luaGenerator as Lua, Order} from '../lua.js';
 
 
 Lua.forBlock['controls_if'] = function(block) {
@@ -24,7 +24,7 @@ Lua.forBlock['controls_if'] = function(block) {
   }
   do {
     const conditionCode =
-        Lua.valueToCode(block, 'IF' + n, Lua.ORDER_NONE) || 'false';
+        Lua.valueToCode(block, 'IF' + n, Order.NONE) || 'false';
     let branchCode = Lua.statementToCode(block, 'DO' + n);
     if (Lua.STATEMENT_SUFFIX) {
       branchCode = Lua.prefixLines(
@@ -54,16 +54,16 @@ Lua.forBlock['logic_compare'] = function(block) {
   const OPERATORS =
       {'EQ': '==', 'NEQ': '~=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
-  const argument0 = Lua.valueToCode(block, 'A', Lua.ORDER_RELATIONAL) || '0';
-  const argument1 = Lua.valueToCode(block, 'B', Lua.ORDER_RELATIONAL) || '0';
+  const argument0 = Lua.valueToCode(block, 'A', Order.RELATIONAL) || '0';
+  const argument1 = Lua.valueToCode(block, 'B', Order.RELATIONAL) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
-  return [code, Lua.ORDER_RELATIONAL];
+  return [code, Order.RELATIONAL];
 };
 
 Lua.forBlock['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
-  const order = (operator === 'and') ? Lua.ORDER_AND : Lua.ORDER_OR;
+  const order = (operator === 'and') ? Order.AND : Order.OR;
   let argument0 = Lua.valueToCode(block, 'A', order);
   let argument1 = Lua.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
@@ -86,27 +86,27 @@ Lua.forBlock['logic_operation'] = function(block) {
 
 Lua.forBlock['logic_negate'] = function(block) {
   // Negation.
-  const argument0 = Lua.valueToCode(block, 'BOOL', Lua.ORDER_UNARY) || 'true';
+  const argument0 = Lua.valueToCode(block, 'BOOL', Order.UNARY) || 'true';
   const code = 'not ' + argument0;
-  return [code, Lua.ORDER_UNARY];
+  return [code, Order.UNARY];
 };
 
 Lua.forBlock['logic_boolean'] = function(block) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
-  return [code, Lua.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 Lua.forBlock['logic_null'] = function(block) {
   // Null data type.
-  return ['nil', Lua.ORDER_ATOMIC];
+  return ['nil', Order.ATOMIC];
 };
 
 Lua.forBlock['logic_ternary'] = function(block) {
   // Ternary operator.
-  const value_if = Lua.valueToCode(block, 'IF', Lua.ORDER_AND) || 'false';
-  const value_then = Lua.valueToCode(block, 'THEN', Lua.ORDER_AND) || 'nil';
-  const value_else = Lua.valueToCode(block, 'ELSE', Lua.ORDER_OR) || 'nil';
+  const value_if = Lua.valueToCode(block, 'IF', Order.AND) || 'false';
+  const value_then = Lua.valueToCode(block, 'THEN', Order.AND) || 'nil';
+  const value_else = Lua.valueToCode(block, 'ELSE', Order.OR) || 'nil';
   const code = value_if + ' and ' + value_then + ' or ' + value_else;
-  return [code, Lua.ORDER_OR];
+  return [code, Order.OR];
 };

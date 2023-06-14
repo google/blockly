@@ -11,19 +11,19 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.colour');
 
-import {luaGenerator as Lua} from '../lua.js';
+import {luaGenerator as Lua, Order} from '../lua.js';
 
 
 Lua.forBlock['colour_picker'] = function(block) {
   // Colour picker.
   const code = Lua.quote_(block.getFieldValue('COLOUR'));
-  return [code, Lua.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
 Lua.forBlock['colour_random'] = function(block) {
   // Generate a random colour.
   const code = 'string.format("#%06x", math.random(0, 2^24 - 1))';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
 Lua.forBlock['colour_rgb'] = function(block) {
@@ -36,11 +36,11 @@ function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(r, g, b)
   return string.format("#%02x%02x%02x", r, g, b)
 end
 `);
-  const r = Lua.valueToCode(block, 'RED', Lua.ORDER_NONE) || 0;
-  const g = Lua.valueToCode(block, 'GREEN', Lua.ORDER_NONE) || 0;
-  const b = Lua.valueToCode(block, 'BLUE', Lua.ORDER_NONE) || 0;
+  const r = Lua.valueToCode(block, 'RED', Order.NONE) || 0;
+  const g = Lua.valueToCode(block, 'GREEN', Order.NONE) || 0;
+  const b = Lua.valueToCode(block, 'BLUE', Order.NONE) || 0;
   const code = functionName + '(' + r + ', ' + g + ', ' + b + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
 Lua.forBlock['colour_blend'] = function(block) {
@@ -61,11 +61,11 @@ function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(colour1, colour2, ratio)
 end
 `);
   const colour1 =
-      Lua.valueToCode(block, 'COLOUR1', Lua.ORDER_NONE) || "'#000000'";
+      Lua.valueToCode(block, 'COLOUR1', Order.NONE) || "'#000000'";
   const colour2 =
-      Lua.valueToCode(block, 'COLOUR2', Lua.ORDER_NONE) || "'#000000'";
-  const ratio = Lua.valueToCode(block, 'RATIO', Lua.ORDER_NONE) || 0;
+      Lua.valueToCode(block, 'COLOUR2', Order.NONE) || "'#000000'";
+  const ratio = Lua.valueToCode(block, 'RATIO', Order.NONE) || 0;
   const code =
       functionName + '(' + colour1 + ', ' + colour2 + ', ' + ratio + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };

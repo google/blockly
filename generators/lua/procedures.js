@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.procedures');
 
 import {NameType} from '../../core/names.js';
-import {luaGenerator as Lua} from '../lua.js';
+import {luaGenerator as Lua, Order} from '../lua.js';
 
 
 Lua.forBlock['procedures_defreturn'] = function(block) {
@@ -35,7 +35,7 @@ Lua.forBlock['procedures_defreturn'] = function(block) {
         Lua.injectId(Lua.INFINITE_LOOP_TRAP, block), Lua.INDENT);
   }
   let branch = Lua.statementToCode(block, 'STACK');
-  let returnValue = Lua.valueToCode(block, 'RETURN', Lua.ORDER_NONE) || '';
+  let returnValue = Lua.valueToCode(block, 'RETURN', Order.NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
@@ -70,10 +70,10 @@ Lua.forBlock['procedures_callreturn'] = function(block) {
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Lua.valueToCode(block, 'ARG' + i, Lua.ORDER_NONE) || 'nil';
+    args[i] = Lua.valueToCode(block, 'ARG' + i, Order.NONE) || 'nil';
   }
   const code = funcName + '(' + args.join(', ') + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
 Lua.forBlock['procedures_callnoreturn'] = function(block) {
@@ -87,7 +87,7 @@ Lua.forBlock['procedures_callnoreturn'] = function(block) {
 Lua.forBlock['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   const condition =
-      Lua.valueToCode(block, 'CONDITION', Lua.ORDER_NONE) || 'false';
+      Lua.valueToCode(block, 'CONDITION', Order.NONE) || 'false';
   let code = 'if ' + condition + ' then\n';
   if (Lua.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
@@ -96,7 +96,7 @@ Lua.forBlock['procedures_ifreturn'] = function(block) {
         Lua.prefixLines(Lua.injectId(Lua.STATEMENT_SUFFIX, block), Lua.INDENT);
   }
   if (block.hasReturnValue_) {
-    const value = Lua.valueToCode(block, 'VALUE', Lua.ORDER_NONE) || 'nil';
+    const value = Lua.valueToCode(block, 'VALUE', Order.NONE) || 'nil';
     code += Lua.INDENT + 'return ' + value + '\n';
   } else {
     code += Lua.INDENT + 'return\n';

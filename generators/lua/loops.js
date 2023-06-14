@@ -13,7 +13,7 @@ goog.declareModuleId('Blockly.Lua.loops');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {luaGenerator as Lua} from '../lua.js';
+import {luaGenerator as Lua, Order} from '../lua.js';
 
 
 /**
@@ -50,7 +50,7 @@ Lua.forBlock['controls_repeat_ext'] = function(block) {
     repeats = String(Number(block.getFieldValue('TIMES')));
   } else {
     // External number.
-    repeats = Lua.valueToCode(block, 'TIMES', Lua.ORDER_NONE) || '0';
+    repeats = Lua.valueToCode(block, 'TIMES', Order.NONE) || '0';
   }
   if (stringUtils.isNumber(repeats)) {
     repeats = parseInt(repeats, 10);
@@ -73,7 +73,7 @@ Lua.forBlock['controls_whileUntil'] = function(block) {
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
       Lua.valueToCode(
-          block, 'BOOL', until ? Lua.ORDER_UNARY : Lua.ORDER_NONE) ||
+          block, 'BOOL', until ? Order.UNARY : Order.NONE) ||
       'false';
   let branch = Lua.statementToCode(block, 'DO');
   branch = Lua.addLoopTrap(branch, block);
@@ -88,9 +88,9 @@ Lua.forBlock['controls_for'] = function(block) {
   // For loop.
   const variable0 =
       Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-  const startVar = Lua.valueToCode(block, 'FROM', Lua.ORDER_NONE) || '0';
-  const endVar = Lua.valueToCode(block, 'TO', Lua.ORDER_NONE) || '0';
-  const increment = Lua.valueToCode(block, 'BY', Lua.ORDER_NONE) || '1';
+  const startVar = Lua.valueToCode(block, 'FROM', Order.NONE) || '0';
+  const endVar = Lua.valueToCode(block, 'TO', Order.NONE) || '0';
+  const increment = Lua.valueToCode(block, 'BY', Order.NONE) || '1';
   let branch = Lua.statementToCode(block, 'DO');
   branch = Lua.addLoopTrap(branch, block);
   branch = addContinueLabel(branch);
@@ -128,7 +128,7 @@ Lua.forBlock['controls_forEach'] = function(block) {
   // For each loop.
   const variable0 =
       Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-  const argument0 = Lua.valueToCode(block, 'LIST', Lua.ORDER_NONE) || '{}';
+  const argument0 = Lua.valueToCode(block, 'LIST', Order.NONE) || '{}';
   let branch = Lua.statementToCode(block, 'DO');
   branch = Lua.addLoopTrap(branch, block);
   branch = addContinueLabel(branch);

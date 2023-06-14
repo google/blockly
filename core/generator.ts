@@ -24,11 +24,12 @@ import {warn} from './utils/deprecation.js';
  *
  * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/generating-code}
  * @param block The Block instance to generate code for.
+ * @param genearator The CodeGenerator calling the function.
  * @returns A string containing the generated code (for statement blocks),
  *     or a [code, precedence] tuple (for value/expression blocks), or
  *     null if no code should be emitted for block.
  */
-export type BlockGenerator = (block: Block) => [string, number] | string | null;
+export type BlockGenerator = (block: Block, generator: CodeGenerator) => [string, number] | string | null;
 
 /**
  * Class for a code generator that translates the blocks into a language.
@@ -258,7 +259,7 @@ export class CodeGenerator {
     // The current preferred method of accessing the block is through the second
     // argument to func.call, which becomes the first parameter to the
     // generator.
-    let code = func.call(block, block);
+    let code = func.call(block, block, this);
     if (Array.isArray(code)) {
       // Value blocks return tuples of code and operator order.
       if (!block.outputConnection) {

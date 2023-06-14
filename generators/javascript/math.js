@@ -36,8 +36,8 @@ javascriptGenerator.forBlock['math_arithmetic'] = function(block, generator) {
   const tuple = OPERATORS[block.getFieldValue('OP')];
   const operator = tuple[0];
   const order = tuple[1];
-  const argument0 = javascriptGenerator.valueToCode(block, 'A', order) || '0';
-  const argument1 = javascriptGenerator.valueToCode(block, 'B', order) || '0';
+  const argument0 = generator.valueToCode(block, 'A', order) || '0';
+  const argument1 = generator.valueToCode(block, 'B', order) || '0';
   let code;
   // Power in JavaScript requires a special case since it has no operator.
   if (!operator) {
@@ -55,7 +55,7 @@ javascriptGenerator.forBlock['math_single'] = function(block, generator) {
   let arg;
   if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
-    arg = javascriptGenerator.valueToCode(block, 'NUM',
+    arg = generator.valueToCode(block, 'NUM',
         Order.UNARY_NEGATION) || '0';
     if (arg[0] === '-') {
       // --3 is not legal in JS.
@@ -65,10 +65,10 @@ javascriptGenerator.forBlock['math_single'] = function(block, generator) {
     return [code, Order.UNARY_NEGATION];
   }
   if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
-    arg = javascriptGenerator.valueToCode(block, 'NUM',
+    arg = generator.valueToCode(block, 'NUM',
         Order.DIVISION) || '0';
   } else {
-    arg = javascriptGenerator.valueToCode(block, 'NUM',
+    arg = generator.valueToCode(block, 'NUM',
         Order.NONE) || '0';
   }
   // First, handle cases which generate values that don't need parentheses
@@ -163,13 +163,13 @@ javascriptGenerator.forBlock['math_number_property'] = function(block, generator
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
   const numberToCheck =
-      javascriptGenerator.valueToCode(block, 'NUMBER_TO_CHECK', inputOrder) ||
+      generator.valueToCode(block, 'NUMBER_TO_CHECK', inputOrder) ||
       '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    const functionName = javascriptGenerator.provideFunction_('mathIsPrime', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(n) {
+    const functionName = generator.provideFunction_('mathIsPrime', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(n) {
   // https://en.wikipedia.org/wiki/Primality_test#Naive_methods
   if (n == 2 || n == 3) {
     return true;
@@ -190,7 +190,7 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(n) {
 `);
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = javascriptGenerator.valueToCode(block, 'DIVISOR',
+    const divisor = generator.valueToCode(block, 'DIVISOR',
         Order.MODULUS) || '0';
     code = numberToCheck + ' % ' + divisor + ' === 0';
   } else {
@@ -201,9 +201,9 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(n) {
 
 javascriptGenerator.forBlock['math_change'] = function(block, generator) {
   // Add to a variable in place.
-  const argument0 = javascriptGenerator.valueToCode(block, 'DELTA',
+  const argument0 = generator.valueToCode(block, 'DELTA',
       Order.ADDITION) || '0';
-  const varName = javascriptGenerator.nameDB_.getName(
+  const varName = generator.nameDB_.getName(
       block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = (typeof ' + varName + ' === \'number\' ? ' + varName +
       ' : 0) + ' + argument0 + ';\n';
@@ -223,36 +223,36 @@ javascriptGenerator.forBlock['math_on_list'] = function(block, generator) {
   let code;
   switch (func) {
     case 'SUM':
-      list = javascriptGenerator.valueToCode(block, 'LIST',
+      list = generator.valueToCode(block, 'LIST',
           Order.MEMBER) || '[]';
       code = list + '.reduce(function(x, y) {return x + y;}, 0)';
       break;
     case 'MIN':
-      list = javascriptGenerator.valueToCode(block, 'LIST',
+      list = generator.valueToCode(block, 'LIST',
           Order.NONE) || '[]';
       code = 'Math.min.apply(null, ' + list + ')';
       break;
     case 'MAX':
-      list = javascriptGenerator.valueToCode(block, 'LIST',
+      list = generator.valueToCode(block, 'LIST',
           Order.NONE) || '[]';
       code = 'Math.max.apply(null, ' + list + ')';
       break;
     case 'AVERAGE': {
       // mathMean([null,null,1,3]) === 2.0.
-      const functionName = javascriptGenerator.provideFunction_('mathMean', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(myList) {
+      const functionName = generator.provideFunction_('mathMean', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(myList) {
   return myList.reduce(function(x, y) {return x + y;}, 0) / myList.length;
 }
 `);
-      list = javascriptGenerator.valueToCode(block, 'LIST',
+      list = generator.valueToCode(block, 'LIST',
           Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'MEDIAN': {
       // mathMedian([null,null,1,3]) === 2.0.
-      const functionName = javascriptGenerator.provideFunction_('mathMedian', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(myList) {
+      const functionName = generator.provideFunction_('mathMedian', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(myList) {
   var localList = myList.filter(function (x) {return typeof x === 'number';});
   if (!localList.length) return null;
   localList.sort(function(a, b) {return b - a;});
@@ -263,7 +263,7 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(myList) {
   }
 }
 `);
-      list = javascriptGenerator.valueToCode(block, 'LIST',
+      list = generator.valueToCode(block, 'LIST',
           Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
@@ -272,8 +272,8 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(myList) {
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
-      const functionName = javascriptGenerator.provideFunction_('mathModes', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(values) {
+      const functionName = generator.provideFunction_('mathModes', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(values) {
   var modes = [];
   var counts = [];
   var maxCount = 0;
@@ -302,15 +302,15 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(values) {
   return modes;
 }
 `);
-      list = javascriptGenerator.valueToCode(block, 'LIST',
+      list = generator.valueToCode(block, 'LIST',
           Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'STD_DEV': {
       const functionName =
-          javascriptGenerator.provideFunction_('mathStandardDeviation', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(numbers) {
+          generator.provideFunction_('mathStandardDeviation', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(numbers) {
   var n = numbers.length;
   if (!n) return null;
   var mean = numbers.reduce(function(x, y) {return x + y;}) / n;
@@ -322,20 +322,20 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(numbers) {
   return Math.sqrt(variance);
 }
 `);
-      list = javascriptGenerator.valueToCode(block, 'LIST',
+      list = generator.valueToCode(block, 'LIST',
           Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'RANDOM': {
       const functionName =
-          javascriptGenerator.provideFunction_('mathRandomList', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(list) {
+          generator.provideFunction_('mathRandomList', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(list) {
   var x = Math.floor(Math.random() * list.length);
   return list[x];
 }
 `);
-      list = javascriptGenerator.valueToCode(block, 'LIST',
+      list = generator.valueToCode(block, 'LIST',
           Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
@@ -348,9 +348,9 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(list) {
 
 javascriptGenerator.forBlock['math_modulo'] = function(block, generator) {
   // Remainder computation.
-  const argument0 = javascriptGenerator.valueToCode(block, 'DIVIDEND',
+  const argument0 = generator.valueToCode(block, 'DIVIDEND',
       Order.MODULUS) || '0';
-  const argument1 = javascriptGenerator.valueToCode(block, 'DIVISOR',
+  const argument1 = generator.valueToCode(block, 'DIVISOR',
       Order.MODULUS) || '0';
   const code = argument0 + ' % ' + argument1;
   return [code, Order.MODULUS];
@@ -358,11 +358,11 @@ javascriptGenerator.forBlock['math_modulo'] = function(block, generator) {
 
 javascriptGenerator.forBlock['math_constrain'] = function(block, generator) {
   // Constrain a number between two limits.
-  const argument0 = javascriptGenerator.valueToCode(block, 'VALUE',
+  const argument0 = generator.valueToCode(block, 'VALUE',
       Order.NONE) || '0';
-  const argument1 = javascriptGenerator.valueToCode(block, 'LOW',
+  const argument1 = generator.valueToCode(block, 'LOW',
       Order.NONE) || '0';
-  const argument2 = javascriptGenerator.valueToCode(block, 'HIGH',
+  const argument2 = generator.valueToCode(block, 'HIGH',
       Order.NONE) || 'Infinity';
   const code = 'Math.min(Math.max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
@@ -371,12 +371,12 @@ javascriptGenerator.forBlock['math_constrain'] = function(block, generator) {
 
 javascriptGenerator.forBlock['math_random_int'] = function(block, generator) {
   // Random integer between [X] and [Y].
-  const argument0 = javascriptGenerator.valueToCode(block, 'FROM',
+  const argument0 = generator.valueToCode(block, 'FROM',
       Order.NONE) || '0';
-  const argument1 = javascriptGenerator.valueToCode(block, 'TO',
+  const argument1 = generator.valueToCode(block, 'TO',
       Order.NONE) || '0';
-  const functionName = javascriptGenerator.provideFunction_('mathRandomInt', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(a, b) {
+  const functionName = generator.provideFunction_('mathRandomInt', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(a, b) {
   if (a > b) {
     // Swap a and b to ensure a is smaller.
     var c = a;
@@ -397,9 +397,9 @@ javascriptGenerator.forBlock['math_random_float'] = function(block, generator) {
 
 javascriptGenerator.forBlock['math_atan2'] = function(block, generator) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  const argument0 = javascriptGenerator.valueToCode(block, 'X',
+  const argument0 = generator.valueToCode(block, 'X',
       Order.NONE) || '0';
-  const argument1 = javascriptGenerator.valueToCode(block, 'Y',
+  const argument1 = generator.valueToCode(block, 'Y',
       Order.NONE) || '0';
   return ['Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.PI * 180',
       Order.DIVISION];

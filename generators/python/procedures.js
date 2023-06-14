@@ -26,62 +26,62 @@ pythonGenerator.forBlock['procedures_defreturn'] = function(block, generator) {
   for (let i = 0, variable; (variable = usedVariables[i]); i++) {
     const varName = variable.name;
     if (block.getVars().indexOf(varName) === -1) {
-      globals.push(pythonGenerator.nameDB_.getName(varName, NameType.VARIABLE));
+      globals.push(generator.nameDB_.getName(varName, NameType.VARIABLE));
     }
   }
   // Add developer variables.
   const devVarList = Variables.allDeveloperVariables(workspace);
   for (let i = 0; i < devVarList.length; i++) {
     globals.push(
-        pythonGenerator.nameDB_.getName(
+        generator.nameDB_.getName(
           devVarList[i], NameType.DEVELOPER_VARIABLE));
   }
 
   const globalString = globals.length ?
-      pythonGenerator.INDENT + 'global ' + globals.join(', ') + '\n' :
+      generator.INDENT + 'global ' + globals.join(', ') + '\n' :
       '';
   const funcName =
-      pythonGenerator.nameDB_.getName(
+      generator.nameDB_.getName(
         block.getFieldValue('NAME'), NameType.PROCEDURE);
   let xfix1 = '';
-  if (pythonGenerator.STATEMENT_PREFIX) {
-    xfix1 += pythonGenerator.injectId(pythonGenerator.STATEMENT_PREFIX, block);
+  if (generator.STATEMENT_PREFIX) {
+    xfix1 += generator.injectId(generator.STATEMENT_PREFIX, block);
   }
-  if (pythonGenerator.STATEMENT_SUFFIX) {
-    xfix1 += pythonGenerator.injectId(pythonGenerator.STATEMENT_SUFFIX, block);
+  if (generator.STATEMENT_SUFFIX) {
+    xfix1 += generator.injectId(generator.STATEMENT_SUFFIX, block);
   }
   if (xfix1) {
-    xfix1 = pythonGenerator.prefixLines(xfix1, pythonGenerator.INDENT);
+    xfix1 = generator.prefixLines(xfix1, generator.INDENT);
   }
   let loopTrap = '';
-  if (pythonGenerator.INFINITE_LOOP_TRAP) {
-    loopTrap = pythonGenerator.prefixLines(
-        pythonGenerator.injectId(pythonGenerator.INFINITE_LOOP_TRAP, block),
-        pythonGenerator.INDENT);
+  if (generator.INFINITE_LOOP_TRAP) {
+    loopTrap = generator.prefixLines(
+        generator.injectId(generator.INFINITE_LOOP_TRAP, block),
+        generator.INDENT);
   }
-  let branch = pythonGenerator.statementToCode(block, 'STACK');
+  let branch = generator.statementToCode(block, 'STACK');
   let returnValue =
-      pythonGenerator.valueToCode(block, 'RETURN', Order.NONE) || '';
+      generator.valueToCode(block, 'RETURN', Order.NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
     xfix2 = xfix1;
   }
   if (returnValue) {
-    returnValue = pythonGenerator.INDENT + 'return ' + returnValue + '\n';
+    returnValue = generator.INDENT + 'return ' + returnValue + '\n';
   } else if (!branch) {
-    branch = pythonGenerator.PASS;
+    branch = generator.PASS;
   }
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = pythonGenerator.nameDB_.getName(variables[i], NameType.VARIABLE);
+    args[i] = generator.nameDB_.getName(variables[i], NameType.VARIABLE);
   }
   let code = 'def ' + funcName + '(' + args.join(', ') + '):\n' + globalString +
       xfix1 + loopTrap + branch + xfix2 + returnValue;
-  code = pythonGenerator.scrub_(block, code);
+  code = generator.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
-  pythonGenerator.definitions_['%' + funcName] = code;
+  generator.definitions_['%' + funcName] = code;
   return null;
 };
 
@@ -93,13 +93,13 @@ pythonGenerator.forBlock['procedures_defnoreturn'] =
 pythonGenerator.forBlock['procedures_callreturn'] = function(block, generator) {
   // Call a procedure with a return value.
   const funcName =
-      pythonGenerator.nameDB_.getName(
+      generator.nameDB_.getName(
         block.getFieldValue('NAME'), NameType.PROCEDURE);
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
     args[i] =
-        pythonGenerator.valueToCode(block, 'ARG' + i, Order.NONE) || 'None';
+        generator.valueToCode(block, 'ARG' + i, Order.NONE) || 'None';
   }
   const code = funcName + '(' + args.join(', ') + ')';
   return [code, Order.FUNCTION_CALL];
@@ -116,21 +116,21 @@ pythonGenerator.forBlock['procedures_callnoreturn'] = function(block, generator)
 pythonGenerator.forBlock['procedures_ifreturn'] = function(block, generator) {
   // Conditionally return value from a procedure.
   const condition =
-      pythonGenerator.valueToCode(block, 'CONDITION', Order.NONE) || 'False';
+      generator.valueToCode(block, 'CONDITION', Order.NONE) || 'False';
   let code = 'if ' + condition + ':\n';
-  if (pythonGenerator.STATEMENT_SUFFIX) {
+  if (generator.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the return is triggered.
-    code += pythonGenerator.prefixLines(
-        pythonGenerator.injectId(
-          pythonGenerator.STATEMENT_SUFFIX, block), pythonGenerator.INDENT);
+    code += generator.prefixLines(
+        generator.injectId(
+          generator.STATEMENT_SUFFIX, block), generator.INDENT);
   }
   if (block.hasReturnValue_) {
     const value =
-        pythonGenerator.valueToCode(block, 'VALUE', Order.NONE) || 'None';
-    code += pythonGenerator.INDENT + 'return ' + value + '\n';
+        generator.valueToCode(block, 'VALUE', Order.NONE) || 'None';
+    code += generator.INDENT + 'return ' + value + '\n';
   } else {
-    code += pythonGenerator.INDENT + 'return\n';
+    code += generator.INDENT + 'return\n';
   }
   return code;
 };

@@ -15,7 +15,7 @@ import {phpGenerator} from '../php.js';
 import './variables.js';
 
 
-// phpGenerator is dynamically typed.
+// generator is dynamically typed.
 phpGenerator.forBlock['variables_get_dynamic'] =
     phpGenerator.forBlock['variables_get'];
 phpGenerator.forBlock['variables_set_dynamic'] =

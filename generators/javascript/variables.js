@@ -17,16 +17,16 @@ import {Order, javascriptGenerator} from '../javascript.js';
 
 javascriptGenerator.forBlock['variables_get'] = function(block, generator) {
   // Variable getter.
-  const code = javascriptGenerator.nameDB_.getName(block.getFieldValue('VAR'),
+  const code = generator.nameDB_.getName(block.getFieldValue('VAR'),
       NameType.VARIABLE);
   return [code, Order.ATOMIC];
 };
 
 javascriptGenerator.forBlock['variables_set'] = function(block, generator) {
   // Variable setter.
-  const argument0 = javascriptGenerator.valueToCode(
+  const argument0 = generator.valueToCode(
                         block, 'VALUE', Order.ASSIGNMENT) || '0';
-  const varName = javascriptGenerator.nameDB_.getName(
+  const varName = generator.nameDB_.getName(
       block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = ' + argument0 + ';\n';
 };

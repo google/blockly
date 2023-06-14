@@ -26,7 +26,7 @@ javascriptGenerator.forBlock['lists_create_with'] = function(block, generator) {
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
     elements[i] =
-        javascriptGenerator.valueToCode(block, 'ADD' + i, Order.NONE) ||
+        generator.valueToCode(block, 'ADD' + i, Order.NONE) ||
         'null';
   }
   const code = '[' + elements.join(', ') + ']';
@@ -35,8 +35,8 @@ javascriptGenerator.forBlock['lists_create_with'] = function(block, generator) {
 
 javascriptGenerator.forBlock['lists_repeat'] = function(block, generator) {
   // Create a list with one element repeated.
-  const functionName = javascriptGenerator.provideFunction_('listsRepeat', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(value, n) {
+  const functionName = generator.provideFunction_('listsRepeat', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(value, n) {
   var array = [];
   for (var i = 0; i < n; i++) {
     array[i] = value;
@@ -45,9 +45,9 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(value, n) {
 }
 `);
   const element =
-      javascriptGenerator.valueToCode(block, 'ITEM', Order.NONE) || 'null';
+      generator.valueToCode(block, 'ITEM', Order.NONE) || 'null';
   const repeatCount =
-      javascriptGenerator.valueToCode(block, 'NUM', Order.NONE) || '0';
+      generator.valueToCode(block, 'NUM', Order.NONE) || '0';
   const code = functionName + '(' + element + ', ' + repeatCount + ')';
   return [code, Order.FUNCTION_CALL];
 };
@@ -55,14 +55,14 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(value, n) {
 javascriptGenerator.forBlock['lists_length'] = function(block, generator) {
   // String or array length.
   const list =
-      javascriptGenerator.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
+      generator.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
   return [list + '.length', Order.MEMBER];
 };
 
 javascriptGenerator.forBlock['lists_isEmpty'] = function(block, generator) {
   // Is the string null or array empty?
   const list =
-      javascriptGenerator.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
+      generator.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
   return ['!' + list + '.length', Order.LOGICAL_NOT];
 };
 
@@ -71,9 +71,9 @@ javascriptGenerator.forBlock['lists_indexOf'] = function(block, generator) {
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'indexOf' : 'lastIndexOf';
   const item =
-      javascriptGenerator.valueToCode(block, 'FIND', Order.NONE) || "''";
+      generator.valueToCode(block, 'FIND', Order.NONE) || "''";
   const list =
-      javascriptGenerator.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
+      generator.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
   const code = list + '.' + operator + '(' + item + ')';
   if (block.workspace.options.oneBasedIndex) {
     return [code + ' + 1', Order.ADDITION];
@@ -89,7 +89,7 @@ javascriptGenerator.forBlock['lists_getIndex'] = function(block, generator) {
   const listOrder =
       (where === 'RANDOM') ? Order.NONE : Order.MEMBER;
   const list =
-      javascriptGenerator.valueToCode(block, 'VALUE', listOrder) || '[]';
+      generator.valueToCode(block, 'VALUE', listOrder) || '[]';
 
   switch (where) {
     case ('FIRST'):
@@ -115,7 +115,7 @@ javascriptGenerator.forBlock['lists_getIndex'] = function(block, generator) {
       }
       break;
     case ('FROM_START'): {
-      const at = javascriptGenerator.getAdjusted(block, 'AT');
+      const at = generator.getAdjusted(block, 'AT');
       if (mode === 'GET') {
         const code = list + '[' + at + ']';
         return [code, Order.MEMBER];
@@ -128,7 +128,7 @@ javascriptGenerator.forBlock['lists_getIndex'] = function(block, generator) {
       break;
     }
     case ('FROM_END'): {
-      const at = javascriptGenerator.getAdjusted(block, 'AT', 1, true);
+      const at = generator.getAdjusted(block, 'AT', 1, true);
       if (mode === 'GET') {
         const code = list + '.slice(' + at + ')[0]';
         return [code, Order.FUNCTION_CALL];
@@ -142,8 +142,8 @@ javascriptGenerator.forBlock['lists_getIndex'] = function(block, generator) {
     }
     case ('RANDOM'): {
       const functionName =
-          javascriptGenerator.provideFunction_('listsGetRandomItem', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(list, remove) {
+          generator.provideFunction_('listsGetRandomItem', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(list, remove) {
   var x = Math.floor(Math.random() * list.length);
   if (remove) {
     return list.splice(x, 1)[0];
@@ -168,11 +168,11 @@ javascriptGenerator.forBlock['lists_setIndex'] = function(block, generator) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   let list =
-      javascriptGenerator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
+      generator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const value =
-      javascriptGenerator.valueToCode(block, 'TO', Order.ASSIGNMENT) ||
+      generator.valueToCode(block, 'TO', Order.ASSIGNMENT) ||
       'null';
   // Cache non-trivial values to variables to prevent repeated look-ups.
   // Closure, which accesses and modifies 'list'.
@@ -181,7 +181,7 @@ javascriptGenerator.forBlock['lists_setIndex'] = function(block, generator) {
       return '';
     }
     const listVar =
-        javascriptGenerator.nameDB_.getDistinctName(
+        generator.nameDB_.getDistinctName(
           'tmpList', NameType.VARIABLE);
     const code = 'var ' + listVar + ' = ' + list + ';\n';
     list = listVar;
@@ -205,7 +205,7 @@ javascriptGenerator.forBlock['lists_setIndex'] = function(block, generator) {
       }
       break;
     case ('FROM_START'): {
-      const at = javascriptGenerator.getAdjusted(block, 'AT');
+      const at = generator.getAdjusted(block, 'AT');
       if (mode === 'SET') {
         return list + '[' + at + '] = ' + value + ';\n';
       } else if (mode === 'INSERT') {
@@ -214,7 +214,7 @@ javascriptGenerator.forBlock['lists_setIndex'] = function(block, generator) {
       break;
     }
     case ('FROM_END'): {
-      const at = javascriptGenerator.getAdjusted(
+      const at = generator.getAdjusted(
           block, 'AT', 1, false, Order.SUBTRACTION);
       let code = cacheList();
       if (mode === 'SET') {
@@ -230,7 +230,7 @@ javascriptGenerator.forBlock['lists_setIndex'] = function(block, generator) {
     case ('RANDOM'): {
       let code = cacheList();
       const xVar =
-          javascriptGenerator.nameDB_.getDistinctName(
+          generator.nameDB_.getDistinctName(
             'tmpX', NameType.VARIABLE);
       code += 'var ' + xVar + ' = Math.floor(Math.random() * ' + list +
           '.length);\n';
@@ -269,7 +269,7 @@ const getSubstringIndex = function(listName, where, opt_at) {
 javascriptGenerator.forBlock['lists_getSublist'] = function(block, generator) {
   // Get sublist.
   const list =
-      javascriptGenerator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
+      generator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
   let code;
@@ -283,10 +283,10 @@ javascriptGenerator.forBlock['lists_getSublist'] = function(block, generator) {
     let at1;
     switch (where1) {
       case 'FROM_START':
-        at1 = javascriptGenerator.getAdjusted(block, 'AT1');
+        at1 = generator.getAdjusted(block, 'AT1');
         break;
       case 'FROM_END':
-        at1 = javascriptGenerator.getAdjusted(
+        at1 = generator.getAdjusted(
             block, 'AT1', 1, false, Order.SUBTRACTION);
         at1 = list + '.length - ' + at1;
         break;
@@ -299,10 +299,10 @@ javascriptGenerator.forBlock['lists_getSublist'] = function(block, generator) {
     let at2;
     switch (where2) {
       case 'FROM_START':
-        at2 = javascriptGenerator.getAdjusted(block, 'AT2', 1);
+        at2 = generator.getAdjusted(block, 'AT2', 1);
         break;
       case 'FROM_END':
-        at2 = javascriptGenerator.getAdjusted(
+        at2 = generator.getAdjusted(
             block, 'AT2', 0, false, Order.SUBTRACTION);
         at2 = list + '.length - ' + at2;
         break;
@@ -314,8 +314,8 @@ javascriptGenerator.forBlock['lists_getSublist'] = function(block, generator) {
     }
     code = list + '.slice(' + at1 + ', ' + at2 + ')';
   } else {
-    const at1 = javascriptGenerator.getAdjusted(block, 'AT1');
-    const at2 = javascriptGenerator.getAdjusted(block, 'AT2');
+    const at1 = generator.getAdjusted(block, 'AT1');
+    const at2 = generator.getAdjusted(block, 'AT2');
     const wherePascalCase = {
       'FIRST': 'First',
       'LAST': 'Last',
@@ -328,9 +328,9 @@ javascriptGenerator.forBlock['lists_getSublist'] = function(block, generator) {
         (where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' : '';
     const at2Param =
         (where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' : '';
-    const functionName = javascriptGenerator.provideFunction_(
+    const functionName = generator.provideFunction_(
         'subsequence' + wherePascalCase[where1] + wherePascalCase[where2], `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param}) {
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param}) {
   var start = ${getSubstringIndex('sequence', where1, 'at1')};
   var end = ${getSubstringIndex('sequence', where2, 'at2')} + 1;
   return sequence.slice(start, end);
@@ -349,13 +349,13 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${
 javascriptGenerator.forBlock['lists_sort'] = function(block, generator) {
   // Block for sorting a list.
   const list =
-      javascriptGenerator.valueToCode(block, 'LIST', Order.FUNCTION_CALL) ||
+      generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL) ||
       '[]';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   const type = block.getFieldValue('TYPE');
   const getCompareFunctionName =
-      javascriptGenerator.provideFunction_('listsGetSortCompare', `
-function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(type, direction) {
+      generator.provideFunction_('listsGetSortCompare', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(type, direction) {
   var compareFuncs = {
     'NUMERIC': function(a, b) {
         return Number(a) - Number(b); },
@@ -377,9 +377,9 @@ function ${javascriptGenerator.FUNCTION_NAME_PLACEHOLDER_}(type, direction) {
 
 javascriptGenerator.forBlock['lists_split'] = function(block, generator) {
   // Block for splitting text into a list, or joining a list into text.
-  let input = javascriptGenerator.valueToCode(block, 'INPUT', Order.MEMBER);
+  let input = generator.valueToCode(block, 'INPUT', Order.MEMBER);
   const delimiter =
-      javascriptGenerator.valueToCode(block, 'DELIM', Order.NONE) || "''";
+      generator.valueToCode(block, 'DELIM', Order.NONE) || "''";
   const mode = block.getFieldValue('MODE');
   let functionName;
   if (mode === 'SPLIT') {
@@ -402,7 +402,7 @@ javascriptGenerator.forBlock['lists_split'] = function(block, generator) {
 javascriptGenerator.forBlock['lists_reverse'] = function(block, generator) {
   // Block for reversing a list.
   const list =
-      javascriptGenerator.valueToCode(block, 'LIST', Order.FUNCTION_CALL) ||
+      generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL) ||
       '[]';
   const code = list + '.slice().reverse()';
   return [code, Order.FUNCTION_CALL];

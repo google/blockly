@@ -18,36 +18,36 @@ pythonGenerator.forBlock['controls_if'] = function(block, generator) {
   // If/elseif/else condition.
   let n = 0;
   let code = '', branchCode, conditionCode;
-  if (pythonGenerator.STATEMENT_PREFIX) {
+  if (generator.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
-    code += pythonGenerator.injectId(pythonGenerator.STATEMENT_PREFIX, block);
+    code += generator.injectId(generator.STATEMENT_PREFIX, block);
   }
   do {
     conditionCode =
-        pythonGenerator.valueToCode(block, 'IF' + n, Order.NONE) || 'False';
+        generator.valueToCode(block, 'IF' + n, Order.NONE) || 'False';
     branchCode =
-        pythonGenerator.statementToCode(block, 'DO' + n) ||
-        pythonGenerator.PASS;
-    if (pythonGenerator.STATEMENT_SUFFIX) {
+        generator.statementToCode(block, 'DO' + n) ||
+        generator.PASS;
+    if (generator.STATEMENT_SUFFIX) {
       branchCode =
-          pythonGenerator.prefixLines(
-            pythonGenerator.injectId(pythonGenerator.STATEMENT_SUFFIX, block),
-            pythonGenerator.INDENT) +
+          generator.prefixLines(
+            generator.injectId(generator.STATEMENT_SUFFIX, block),
+            generator.INDENT) +
           branchCode;
     }
     code += (n === 0 ? 'if ' : 'elif ') + conditionCode + ':\n' + branchCode;
     n++;
   } while (block.getInput('IF' + n));
 
-  if (block.getInput('ELSE') || pythonGenerator.STATEMENT_SUFFIX) {
+  if (block.getInput('ELSE') || generator.STATEMENT_SUFFIX) {
     branchCode =
-        pythonGenerator.statementToCode(block, 'ELSE') || pythonGenerator.PASS;
-    if (pythonGenerator.STATEMENT_SUFFIX) {
+        generator.statementToCode(block, 'ELSE') || generator.PASS;
+    if (generator.STATEMENT_SUFFIX) {
       branchCode =
-          pythonGenerator.prefixLines(
-            pythonGenerator.injectId(
-              pythonGenerator.STATEMENT_SUFFIX, block),
-            pythonGenerator.INDENT) +
+          generator.prefixLines(
+            generator.injectId(
+              generator.STATEMENT_SUFFIX, block),
+            generator.INDENT) +
           branchCode;
     }
     code += 'else:\n' + branchCode;
@@ -64,8 +64,8 @@ pythonGenerator.forBlock['logic_compare'] = function(block, generator) {
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
   const order = Order.RELATIONAL;
-  const argument0 = pythonGenerator.valueToCode(block, 'A', order) || '0';
-  const argument1 = pythonGenerator.valueToCode(block, 'B', order) || '0';
+  const argument0 = generator.valueToCode(block, 'A', order) || '0';
+  const argument1 = generator.valueToCode(block, 'B', order) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };
@@ -75,8 +75,8 @@ pythonGenerator.forBlock['logic_operation'] = function(block, generator) {
   const operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
   const order =
       (operator === 'and') ? Order.LOGICAL_AND : Order.LOGICAL_OR;
-  let argument0 = pythonGenerator.valueToCode(block, 'A', order);
-  let argument1 = pythonGenerator.valueToCode(block, 'B', order);
+  let argument0 = generator.valueToCode(block, 'A', order);
+  let argument1 = generator.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
     // If there are no arguments, then the return value is false.
     argument0 = 'False';
@@ -98,7 +98,7 @@ pythonGenerator.forBlock['logic_operation'] = function(block, generator) {
 pythonGenerator.forBlock['logic_negate'] = function(block, generator) {
   // Negation.
   const argument0 =
-      pythonGenerator.valueToCode(block, 'BOOL', Order.LOGICAL_NOT) || 'True';
+      generator.valueToCode(block, 'BOOL', Order.LOGICAL_NOT) || 'True';
   const code = 'not ' + argument0;
   return [code, Order.LOGICAL_NOT];
 };
@@ -117,11 +117,11 @@ pythonGenerator.forBlock['logic_null'] = function(block, generator) {
 pythonGenerator.forBlock['logic_ternary'] = function(block, generator) {
   // Ternary operator.
   const value_if =
-      pythonGenerator.valueToCode(block, 'IF', Order.CONDITIONAL) || 'False';
+      generator.valueToCode(block, 'IF', Order.CONDITIONAL) || 'False';
   const value_then =
-      pythonGenerator.valueToCode(block, 'THEN', Order.CONDITIONAL) || 'None';
+      generator.valueToCode(block, 'THEN', Order.CONDITIONAL) || 'None';
   const value_else =
-      pythonGenerator.valueToCode(block, 'ELSE', Order.CONDITIONAL) || 'None';
+      generator.valueToCode(block, 'ELSE', Order.CONDITIONAL) || 'None';
   const code = value_then + ' if ' + value_if + ' else ' + value_else;
   return [code, Order.CONDITIONAL];
 };

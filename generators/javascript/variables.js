@@ -15,14 +15,14 @@ import {NameType} from '../../core/names.js';
 import {Order, javascriptGenerator} from '../javascript.js';
 
 
-javascriptGenerator.forBlock['variables_get'] = function(block) {
+javascriptGenerator.forBlock['variables_get'] = function(block, generator) {
   // Variable getter.
   const code = javascriptGenerator.nameDB_.getName(block.getFieldValue('VAR'),
       NameType.VARIABLE);
   return [code, Order.ATOMIC];
 };
 
-javascriptGenerator.forBlock['variables_set'] = function(block) {
+javascriptGenerator.forBlock['variables_set'] = function(block, generator) {
   // Variable setter.
   const argument0 = javascriptGenerator.valueToCode(
                         block, 'VALUE', Order.ASSIGNMENT) || '0';

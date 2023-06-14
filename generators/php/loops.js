@@ -16,7 +16,7 @@ import {NameType} from '../../core/names.js';
 import {phpGenerator, Order} from '../php.js';
 
 
-phpGenerator.forBlock['controls_repeat_ext'] = function(block) {
+phpGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -45,7 +45,7 @@ phpGenerator.forBlock['controls_repeat_ext'] = function(block) {
 phpGenerator.forBlock['controls_repeat'] =
     phpGenerator.forBlock['controls_repeat_ext'];
 
-phpGenerator.forBlock['controls_whileUntil'] = function(block) {
+phpGenerator.forBlock['controls_whileUntil'] = function(block, generator) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
@@ -60,7 +60,7 @@ phpGenerator.forBlock['controls_whileUntil'] = function(block) {
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
 };
 
-phpGenerator.forBlock['controls_for'] = function(block) {
+phpGenerator.forBlock['controls_for'] = function(block, generator) {
   // For loop.
   const variable0 =
       phpGenerator.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
@@ -125,7 +125,7 @@ phpGenerator.forBlock['controls_for'] = function(block) {
   return code;
 };
 
-phpGenerator.forBlock['controls_forEach'] = function(block) {
+phpGenerator.forBlock['controls_forEach'] = function(block, generator) {
   // For each loop.
   const variable0 =
       phpGenerator.nameDB_.getName(
@@ -140,7 +140,7 @@ phpGenerator.forBlock['controls_forEach'] = function(block) {
   return code;
 };
 
-phpGenerator.forBlock['controls_flow_statements'] = function(block) {
+phpGenerator.forBlock['controls_flow_statements'] = function(block, generator) {
   // Flow statements: continue, break.
   let xfix = '';
   if (phpGenerator.STATEMENT_PREFIX) {

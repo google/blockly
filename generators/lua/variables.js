@@ -15,7 +15,7 @@ import {NameType} from '../../core/names.js';
 import {luaGenerator, Order} from '../lua.js';
 
 
-luaGenerator.forBlock['variables_get'] = function(block) {
+luaGenerator.forBlock['variables_get'] = function(block, generator) {
   // Variable getter.
   const code =
       luaGenerator.nameDB_.getName(
@@ -23,7 +23,7 @@ luaGenerator.forBlock['variables_get'] = function(block) {
   return [code, Order.ATOMIC];
 };
 
-luaGenerator.forBlock['variables_set'] = function(block) {
+luaGenerator.forBlock['variables_set'] = function(block, generator) {
   // Variable setter.
   const argument0 = luaGenerator.valueToCode(block, 'VALUE', Order.NONE) || '0';
   const varName =

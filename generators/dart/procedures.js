@@ -15,7 +15,7 @@ import {NameType} from '../../core/names.js';
 import {dartGenerator, Order} from '../dart.js';
 
 
-dartGenerator.forBlock['procedures_defreturn'] = function(block) {
+dartGenerator.forBlock['procedures_defreturn'] = function(block, generator) {
   // Define a procedure with a return value.
   const funcName =
       dartGenerator.nameDB_.getName(
@@ -65,7 +65,7 @@ dartGenerator.forBlock['procedures_defreturn'] = function(block) {
 // a procedure with a return value.
 dartGenerator.forBlock['procedures_defnoreturn'] = dartGenerator.forBlock['procedures_defreturn'];
 
-dartGenerator.forBlock['procedures_callreturn'] = function(block) {
+dartGenerator.forBlock['procedures_callreturn'] = function(block, generator) {
   // Call a procedure with a return value.
   const funcName =
       dartGenerator.nameDB_.getName(
@@ -79,7 +79,7 @@ dartGenerator.forBlock['procedures_callreturn'] = function(block) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['procedures_callnoreturn'] = function(block) {
+dartGenerator.forBlock['procedures_callnoreturn'] = function(block, generator) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
@@ -87,7 +87,7 @@ dartGenerator.forBlock['procedures_callnoreturn'] = function(block) {
   return tuple[0] + ';\n';
 };
 
-dartGenerator.forBlock['procedures_ifreturn'] = function(block) {
+dartGenerator.forBlock['procedures_ifreturn'] = function(block, generator) {
   // Conditionally return value from a procedure.
   const condition =
       dartGenerator.valueToCode(block, 'CONDITION', Order.NONE) || 'false';

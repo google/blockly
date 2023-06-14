@@ -18,7 +18,7 @@ import {pythonGenerator, Order} from '../python.js';
 // If any new block imports any library, add that library name here.
 pythonGenerator.addReservedWords('math,random,Number');
 
-pythonGenerator.forBlock['math_number'] = function(block) {
+pythonGenerator.forBlock['math_number'] = function(block, generator) {
   // Numeric value.
   let code = Number(block.getFieldValue('NUM'));
   let order;
@@ -34,7 +34,7 @@ pythonGenerator.forBlock['math_number'] = function(block) {
   return [code, order];
 };
 
-pythonGenerator.forBlock['math_arithmetic'] = function(block) {
+pythonGenerator.forBlock['math_arithmetic'] = function(block, generator) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', Order.ADDITIVE],
@@ -57,7 +57,7 @@ pythonGenerator.forBlock['math_arithmetic'] = function(block) {
   // legibility of the generated code.
 };
 
-pythonGenerator.forBlock['math_single'] = function(block) {
+pythonGenerator.forBlock['math_single'] = function(block, generator) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
@@ -135,7 +135,7 @@ pythonGenerator.forBlock['math_single'] = function(block) {
   return [code, Order.MULTIPLICATIVE];
 };
 
-pythonGenerator.forBlock['math_constant'] = function(block) {
+pythonGenerator.forBlock['math_constant'] = function(block, generator) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['math.pi', Order.MEMBER],
@@ -152,7 +152,7 @@ pythonGenerator.forBlock['math_constant'] = function(block) {
   return CONSTANTS[constant];
 };
 
-pythonGenerator.forBlock['math_number_property'] = function(block) {
+pythonGenerator.forBlock['math_number_property'] = function(block, generator) {
    // Check if a number is even, odd, prime, whole, positive, or negative
    // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -211,7 +211,7 @@ def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(n):
   return [code, outputOrder];
 };
 
-pythonGenerator.forBlock['math_change'] = function(block) {
+pythonGenerator.forBlock['math_change'] = function(block, generator) {
   // Add to a variable in place.
   pythonGenerator.definitions_['from_numbers_import_Number'] =
       'from numbers import Number';
@@ -231,7 +231,7 @@ pythonGenerator.forBlock['math_round'] =
 pythonGenerator.forBlock['math_trig'] =
     pythonGenerator.forBlock['math_single'];
 
-pythonGenerator.forBlock['math_on_list'] = function(block) {
+pythonGenerator.forBlock['math_on_list'] = function(block, generator) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   const list = pythonGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]';
@@ -329,7 +329,7 @@ def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(numbers):
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['math_modulo'] = function(block) {
+pythonGenerator.forBlock['math_modulo'] = function(block, generator) {
   // Remainder computation.
   const argument0 =
       pythonGenerator.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) ||
@@ -341,7 +341,7 @@ pythonGenerator.forBlock['math_modulo'] = function(block) {
   return [code, Order.MULTIPLICATIVE];
 };
 
-pythonGenerator.forBlock['math_constrain'] = function(block) {
+pythonGenerator.forBlock['math_constrain'] = function(block, generator) {
   // Constrain a number between two limits.
   const argument0 =
       pythonGenerator.valueToCode(block, 'VALUE', Order.NONE) || '0';
@@ -355,7 +355,7 @@ pythonGenerator.forBlock['math_constrain'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['math_random_int'] = function(block) {
+pythonGenerator.forBlock['math_random_int'] = function(block, generator) {
   // Random integer between [X] and [Y].
   pythonGenerator.definitions_['import_random'] = 'import random';
   const argument0 =
@@ -366,13 +366,13 @@ pythonGenerator.forBlock['math_random_int'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['math_random_float'] = function(block) {
+pythonGenerator.forBlock['math_random_float'] = function(block, generator) {
   // Random fraction between 0 and 1.
   pythonGenerator.definitions_['import_random'] = 'import random';
   return ['random.random()', Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['math_atan2'] = function(block) {
+pythonGenerator.forBlock['math_atan2'] = function(block, generator) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   pythonGenerator.definitions_['import_math'] = 'import math';
   const argument0 = pythonGenerator.valueToCode(block, 'X', Order.NONE) || '0';

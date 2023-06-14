@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Lua.logic');
 import {luaGenerator, Order} from '../lua.js';
 
 
-luaGenerator.forBlock['controls_if'] = function(block) {
+luaGenerator.forBlock['controls_if'] = function(block, generator) {
   // If/elseif/else condition.
   let n = 0;
   let code = '';
@@ -53,7 +53,7 @@ luaGenerator.forBlock['controls_if'] = function(block) {
 
 luaGenerator.forBlock['controls_ifelse'] = luaGenerator.forBlock['controls_if'];
 
-luaGenerator.forBlock['logic_compare'] = function(block) {
+luaGenerator.forBlock['logic_compare'] = function(block, generator) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '~=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
@@ -66,7 +66,7 @@ luaGenerator.forBlock['logic_compare'] = function(block) {
   return [code, Order.RELATIONAL];
 };
 
-luaGenerator.forBlock['logic_operation'] = function(block) {
+luaGenerator.forBlock['logic_operation'] = function(block, generator) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
   const order = (operator === 'and') ? Order.AND : Order.OR;
@@ -90,7 +90,7 @@ luaGenerator.forBlock['logic_operation'] = function(block) {
   return [code, order];
 };
 
-luaGenerator.forBlock['logic_negate'] = function(block) {
+luaGenerator.forBlock['logic_negate'] = function(block, generator) {
   // Negation.
   const argument0 =
         luaGenerator.valueToCode(block, 'BOOL', Order.UNARY) || 'true';
@@ -98,18 +98,18 @@ luaGenerator.forBlock['logic_negate'] = function(block) {
   return [code, Order.UNARY];
 };
 
-luaGenerator.forBlock['logic_boolean'] = function(block) {
+luaGenerator.forBlock['logic_boolean'] = function(block, generator) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
   return [code, Order.ATOMIC];
 };
 
-luaGenerator.forBlock['logic_null'] = function(block) {
+luaGenerator.forBlock['logic_null'] = function(block, generator) {
   // Null data type.
   return ['nil', Order.ATOMIC];
 };
 
-luaGenerator.forBlock['logic_ternary'] = function(block) {
+luaGenerator.forBlock['logic_ternary'] = function(block, generator) {
   // Ternary operator.
   const value_if = luaGenerator.valueToCode(block, 'IF', Order.AND) || 'false';
   const value_then =

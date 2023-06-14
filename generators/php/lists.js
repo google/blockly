@@ -26,12 +26,12 @@ import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
 import {phpGenerator, Order} from '../php.js';
 
-phpGenerator.forBlock['lists_create_empty'] = function(block) {
+phpGenerator.forBlock['lists_create_empty'] = function(block, generator) {
   // Create an empty list.
   return ['array()', Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['lists_create_with'] = function(block) {
+phpGenerator.forBlock['lists_create_with'] = function(block, generator) {
   // Create a list with any number of elements of any type.
   let code = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
@@ -41,7 +41,7 @@ phpGenerator.forBlock['lists_create_with'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['lists_repeat'] = function(block) {
+phpGenerator.forBlock['lists_repeat'] = function(block, generator) {
   // Create a list with one element repeated.
   const functionName = phpGenerator.provideFunction_('lists_repeat', `
 function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($value, $count) {
@@ -58,7 +58,7 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($value, $count) {
   return [code, Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['lists_length'] = function(block) {
+phpGenerator.forBlock['lists_length'] = function(block, generator) {
   // String or array length.
   const functionName = phpGenerator.provideFunction_('length', `
 function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($value) {
@@ -73,7 +73,7 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($value) {
   return [functionName + '(' + list + ')', Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['lists_isEmpty'] = function(block) {
+phpGenerator.forBlock['lists_isEmpty'] = function(block, generator) {
   // Is the string null or array empty?
   const argument0 =
       phpGenerator.valueToCode(block, 'VALUE', Order.FUNCTION_CALL)
@@ -81,7 +81,7 @@ phpGenerator.forBlock['lists_isEmpty'] = function(block) {
   return ['empty(' + argument0 + ')', Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['lists_indexOf'] = function(block) {
+phpGenerator.forBlock['lists_indexOf'] = function(block, generator) {
   // Find an item in the list.
   const argument0 = phpGenerator.valueToCode(block, 'FIND', Order.NONE) || "''";
   const argument1 =
@@ -120,7 +120,7 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($haystack, $needle) {
   return [code, Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['lists_getIndex'] = function(block) {
+phpGenerator.forBlock['lists_getIndex'] = function(block, generator) {
   // Get element at index.
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
@@ -237,7 +237,7 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}(&$list) {
   throw Error('Unhandled combination (lists_getIndex).');
 };
 
-phpGenerator.forBlock['lists_setIndex'] = function(block) {
+phpGenerator.forBlock['lists_setIndex'] = function(block, generator) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -341,7 +341,7 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}(&$list, $at, $value) {
   throw Error('Unhandled combination (lists_setIndex).');
 };
 
-phpGenerator.forBlock['lists_getSublist'] = function(block) {
+phpGenerator.forBlock['lists_getSublist'] = function(block, generator) {
   // Get sublist.
   const list = phpGenerator.valueToCode(block, 'LIST', Order.NONE) || 'array()';
   const where1 = block.getFieldValue('WHERE1');
@@ -441,7 +441,7 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($list, $where1, $at1, $where
   return [code, Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['lists_sort'] = function(block) {
+phpGenerator.forBlock['lists_sort'] = function(block, generator) {
   // Block for sorting a list.
   const listCode =
       phpGenerator.valueToCode(block, 'LIST', Order.NONE) || 'array()';
@@ -468,7 +468,7 @@ function ${phpGenerator.FUNCTION_NAME_PLACEHOLDER_}($list, $type, $direction) {
   return [sortCode, Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['lists_split'] = function(block) {
+phpGenerator.forBlock['lists_split'] = function(block, generator) {
   // Block for splitting text into a list, or joining a list into text.
   let value_input = phpGenerator.valueToCode(block, 'INPUT', Order.NONE);
   const value_delim =
@@ -492,7 +492,7 @@ phpGenerator.forBlock['lists_split'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-phpGenerator.forBlock['lists_reverse'] = function(block) {
+phpGenerator.forBlock['lists_reverse'] = function(block, generator) {
   // Block for reversing a list.
   const list = phpGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]';
   const code = 'array_reverse(' + list + ')';

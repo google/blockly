@@ -17,7 +17,7 @@ import {dartGenerator, Order} from '../dart.js';
 
 dartGenerator.addReservedWords('Math');
 
-dartGenerator.forBlock['math_number'] = function(block) {
+dartGenerator.forBlock['math_number'] = function(block, generator) {
   // Numeric value.
   let code = Number(block.getFieldValue('NUM'));
   let order;
@@ -35,7 +35,7 @@ dartGenerator.forBlock['math_number'] = function(block) {
   return [code, order];
 };
 
-dartGenerator.forBlock['math_arithmetic'] = function(block) {
+dartGenerator.forBlock['math_arithmetic'] = function(block, generator) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', Order.ADDITIVE],
@@ -61,7 +61,7 @@ dartGenerator.forBlock['math_arithmetic'] = function(block) {
   return [code, order];
 };
 
-dartGenerator.forBlock['math_single'] = function(block) {
+dartGenerator.forBlock['math_single'] = function(block, generator) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
@@ -146,7 +146,7 @@ dartGenerator.forBlock['math_single'] = function(block) {
   return [code, Order.MULTIPLICATIVE];
 };
 
-dartGenerator.forBlock['math_constant'] = function(block) {
+dartGenerator.forBlock['math_constant'] = function(block, generator) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['Math.pi', Order.UNARY_POSTFIX],
@@ -164,7 +164,7 @@ dartGenerator.forBlock['math_constant'] = function(block) {
   return CONSTANTS[constant];
 };
 
-dartGenerator.forBlock['math_number_property'] = function(block) {
+dartGenerator.forBlock['math_number_property'] = function(block, generator) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -219,7 +219,7 @@ bool ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(n) {
   return [code, outputOrder];
 };
 
-dartGenerator.forBlock['math_change'] = function(block) {
+dartGenerator.forBlock['math_change'] = function(block, generator) {
   // Add to a variable in place.
   const argument0 =
       dartGenerator.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
@@ -235,7 +235,7 @@ dartGenerator.forBlock['math_round'] = dartGenerator.forBlock['math_single'];
 // Trigonometry functions have a single operand.
 dartGenerator.forBlock['math_trig'] = dartGenerator.forBlock['math_single'];
 
-dartGenerator.forBlock['math_on_list'] = function(block) {
+dartGenerator.forBlock['math_on_list'] = function(block, generator) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   const list = dartGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]';
@@ -396,7 +396,7 @@ dynamic ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['math_modulo'] = function(block) {
+dartGenerator.forBlock['math_modulo'] = function(block, generator) {
   // Remainder computation.
   const argument0 =
       dartGenerator.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) || '0';
@@ -406,7 +406,7 @@ dartGenerator.forBlock['math_modulo'] = function(block) {
   return [code, Order.MULTIPLICATIVE];
 };
 
-dartGenerator.forBlock['math_constrain'] = function(block) {
+dartGenerator.forBlock['math_constrain'] = function(block, generator) {
   // Constrain a number between two limits.
   dartGenerator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
@@ -420,7 +420,7 @@ dartGenerator.forBlock['math_constrain'] = function(block) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['math_random_int'] = function(block) {
+dartGenerator.forBlock['math_random_int'] = function(block, generator) {
   // Random integer between [X] and [Y].
   dartGenerator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
@@ -441,14 +441,14 @@ int ${dartGenerator.FUNCTION_NAME_PLACEHOLDER_}(num a, num b) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['math_random_float'] = function(block) {
+dartGenerator.forBlock['math_random_float'] = function(block, generator) {
   // Random fraction between 0 and 1.
   dartGenerator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
   return ['new Math.Random().nextDouble()', Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['math_atan2'] = function(block) {
+dartGenerator.forBlock['math_atan2'] = function(block, generator) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   dartGenerator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';

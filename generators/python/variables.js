@@ -15,7 +15,7 @@ import {NameType} from '../../core/names.js';
 import {pythonGenerator, Order} from '../python.js';
 
 
-pythonGenerator.forBlock['variables_get'] = function(block) {
+pythonGenerator.forBlock['variables_get'] = function(block, generator) {
   // Variable getter.
   const code =
       pythonGenerator.nameDB_.getName(
@@ -23,7 +23,7 @@ pythonGenerator.forBlock['variables_get'] = function(block) {
   return [code, Order.ATOMIC];
 };
 
-pythonGenerator.forBlock['variables_set'] = function(block) {
+pythonGenerator.forBlock['variables_set'] = function(block, generator) {
   // Variable setter.
   const argument0 =
       pythonGenerator.valueToCode(block, 'VALUE', Order.NONE) || '0';

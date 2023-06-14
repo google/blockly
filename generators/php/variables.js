@@ -15,7 +15,7 @@ import {NameType} from '../../core/names.js';
 import {phpGenerator, Order} from '../php.js';
 
 
-phpGenerator.forBlock['variables_get'] = function(block) {
+phpGenerator.forBlock['variables_get'] = function(block, generator) {
   // Variable getter.
   const code =
       phpGenerator.nameDB_.getName(
@@ -23,7 +23,7 @@ phpGenerator.forBlock['variables_get'] = function(block) {
   return [code, Order.ATOMIC];
 };
 
-phpGenerator.forBlock['variables_set'] = function(block) {
+phpGenerator.forBlock['variables_set'] = function(block, generator) {
   // Variable setter.
   const argument0 =
       phpGenerator.valueToCode(block, 'VALUE', Order.ASSIGNMENT) || '0';

@@ -16,13 +16,13 @@ import {NameType} from '../../core/names.js';
 import {pythonGenerator, Order} from '../python.js';
 
 
-pythonGenerator.forBlock['text'] = function(block) {
+pythonGenerator.forBlock['text'] = function(block, generator) {
   // Text value.
   const code = pythonGenerator.quote_(block.getFieldValue('TEXT'));
   return [code, Order.ATOMIC];
 };
 
-pythonGenerator.forBlock['text_multiline'] = function(block) {
+pythonGenerator.forBlock['text_multiline'] = function(block, generator) {
   // Text value.
   const code = pythonGenerator.multiline_quote_(block.getFieldValue('TEXT'));
   const order =
@@ -50,7 +50,7 @@ const forceString = function(value) {
   return ['str(' + value + ')', Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['text_join'] = function(block) {
+pythonGenerator.forBlock['text_join'] = function(block, generator) {
   // Create a string made up of any number of elements of any type.
   // Should we allow joining by '-' or ',' or any other characters?
   switch (block.itemCount_) {
@@ -85,7 +85,7 @@ pythonGenerator.forBlock['text_join'] = function(block) {
   }
 };
 
-pythonGenerator.forBlock['text_append'] = function(block) {
+pythonGenerator.forBlock['text_append'] = function(block, generator) {
   // Append to a variable in place.
   const varName =
       pythonGenerator.nameDB_.getName(
@@ -94,20 +94,20 @@ pythonGenerator.forBlock['text_append'] = function(block) {
   return varName + ' = str(' + varName + ') + ' + forceString(value)[0] + '\n';
 };
 
-pythonGenerator.forBlock['text_length'] = function(block) {
+pythonGenerator.forBlock['text_length'] = function(block, generator) {
   // Is the string null or array empty?
   const text = pythonGenerator.valueToCode(block, 'VALUE', Order.NONE) || "''";
   return ['len(' + text + ')', Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['text_isEmpty'] = function(block) {
+pythonGenerator.forBlock['text_isEmpty'] = function(block, generator) {
   // Is the string null or array empty?
   const text = pythonGenerator.valueToCode(block, 'VALUE', Order.NONE) || "''";
   const code = 'not len(' + text + ')';
   return [code, Order.LOGICAL_NOT];
 };
 
-pythonGenerator.forBlock['text_indexOf'] = function(block) {
+pythonGenerator.forBlock['text_indexOf'] = function(block, generator) {
   // Search the text for a substring.
   // Should we allow for non-case sensitive???
   const operator = block.getFieldValue('END') === 'FIRST' ? 'find' : 'rfind';
@@ -122,7 +122,7 @@ pythonGenerator.forBlock['text_indexOf'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['text_charAt'] = function(block) {
+pythonGenerator.forBlock['text_charAt'] = function(block, generator) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
@@ -163,7 +163,7 @@ def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(text):
   throw Error('Unhandled option (text_charAt).');
 };
 
-pythonGenerator.forBlock['text_getSubstring'] = function(block) {
+pythonGenerator.forBlock['text_getSubstring'] = function(block, generator) {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
@@ -213,7 +213,7 @@ pythonGenerator.forBlock['text_getSubstring'] = function(block) {
   return [code, Order.MEMBER];
 };
 
-pythonGenerator.forBlock['text_changeCase'] = function(block) {
+pythonGenerator.forBlock['text_changeCase'] = function(block, generator) {
   // Change capitalization.
   const OPERATORS = {
     'UPPERCASE': '.upper()',
@@ -226,7 +226,7 @@ pythonGenerator.forBlock['text_changeCase'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['text_trim'] = function(block) {
+pythonGenerator.forBlock['text_trim'] = function(block, generator) {
   // Trim spaces.
   const OPERATORS = {
     'LEFT': '.lstrip()',
@@ -239,13 +239,13 @@ pythonGenerator.forBlock['text_trim'] = function(block) {
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['text_print'] = function(block) {
+pythonGenerator.forBlock['text_print'] = function(block, generator) {
   // Print statement.
   const msg = pythonGenerator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return 'print(' + msg + ')\n';
 };
 
-pythonGenerator.forBlock['text_prompt_ext'] = function(block) {
+pythonGenerator.forBlock['text_prompt_ext'] = function(block, generator) {
   // Prompt function.
   const functionName = pythonGenerator.provideFunction_('text_prompt', `
 def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(msg):
@@ -273,14 +273,14 @@ def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(msg):
 pythonGenerator.forBlock['text_prompt'] =
     pythonGenerator.forBlock['text_prompt_ext'];
 
-pythonGenerator.forBlock['text_count'] = function(block) {
+pythonGenerator.forBlock['text_count'] = function(block, generator) {
   const text = pythonGenerator.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
   const sub = pythonGenerator.valueToCode(block, 'SUB', Order.NONE) || "''";
   const code = text + '.count(' + sub + ')';
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['text_replace'] = function(block) {
+pythonGenerator.forBlock['text_replace'] = function(block, generator) {
   const text = pythonGenerator.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
   const from = pythonGenerator.valueToCode(block, 'FROM', Order.NONE) || "''";
   const to = pythonGenerator.valueToCode(block, 'TO', Order.NONE) || "''";
@@ -288,7 +288,7 @@ pythonGenerator.forBlock['text_replace'] = function(block) {
   return [code, Order.MEMBER];
 };
 
-pythonGenerator.forBlock['text_reverse'] = function(block) {
+pythonGenerator.forBlock['text_reverse'] = function(block, generator) {
   const text = pythonGenerator.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
   const code = text + '[::-1]';
   return [code, Order.MEMBER];

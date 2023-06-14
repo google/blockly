@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.PHP.logic');
 import {phpGenerator, Order} from '../php.js';
 
 
-phpGenerator.forBlock['controls_if'] = function(block) {
+phpGenerator.forBlock['controls_if'] = function(block, generator) {
   // If/elseif/else condition.
   let n = 0;
   let code = '', branchCode, conditionCode;
@@ -54,7 +54,7 @@ phpGenerator.forBlock['controls_if'] = function(block) {
 
 phpGenerator.forBlock['controls_ifelse'] = phpGenerator.forBlock['controls_if'];
 
-phpGenerator.forBlock['logic_compare'] = function(block) {
+phpGenerator.forBlock['logic_compare'] = function(block, generator) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
@@ -67,7 +67,7 @@ phpGenerator.forBlock['logic_compare'] = function(block) {
   return [code, order];
 };
 
-phpGenerator.forBlock['logic_operation'] = function(block) {
+phpGenerator.forBlock['logic_operation'] = function(block, generator) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
   const order =
@@ -92,7 +92,7 @@ phpGenerator.forBlock['logic_operation'] = function(block) {
   return [code, order];
 };
 
-phpGenerator.forBlock['logic_negate'] = function(block) {
+phpGenerator.forBlock['logic_negate'] = function(block, generator) {
   // Negation.
   const order = Order.LOGICAL_NOT;
   const argument0 = phpGenerator.valueToCode(block, 'BOOL', order) || 'true';
@@ -100,18 +100,18 @@ phpGenerator.forBlock['logic_negate'] = function(block) {
   return [code, order];
 };
 
-phpGenerator.forBlock['logic_boolean'] = function(block) {
+phpGenerator.forBlock['logic_boolean'] = function(block, generator) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
   return [code, Order.ATOMIC];
 };
 
-phpGenerator.forBlock['logic_null'] = function(block) {
+phpGenerator.forBlock['logic_null'] = function(block, generator) {
   // Null data type.
   return ['null', Order.ATOMIC];
 };
 
-phpGenerator.forBlock['logic_ternary'] = function(block) {
+phpGenerator.forBlock['logic_ternary'] = function(block, generator) {
   // Ternary operator.
   const value_if =
       phpGenerator.valueToCode(block, 'IF', Order.CONDITIONAL) || 'false';

@@ -16,7 +16,7 @@ import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
 
 
-dartGenerator.forBlock['controls_repeat_ext'] = function(block) {
+dartGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {
   let repeats;
   // Repeat n times.
   if (block.getField('TIMES')) {
@@ -46,7 +46,7 @@ dartGenerator.forBlock['controls_repeat_ext'] = function(block) {
 dartGenerator.forBlock['controls_repeat'] =
     dartGenerator.forBlock['controls_repeat_ext'];
 
-dartGenerator.forBlock['controls_whileUntil'] = function(block) {
+dartGenerator.forBlock['controls_whileUntil'] = function(block, generator) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
@@ -61,7 +61,7 @@ dartGenerator.forBlock['controls_whileUntil'] = function(block) {
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
 };
 
-dartGenerator.forBlock['controls_for'] = function(block) {
+dartGenerator.forBlock['controls_for'] = function(block, generator) {
   // For loop.
   const variable0 =
         dartGenerator.nameDB_.getName(
@@ -127,7 +127,7 @@ dartGenerator.forBlock['controls_for'] = function(block) {
   return code;
 };
 
-dartGenerator.forBlock['controls_forEach'] = function(block) {
+dartGenerator.forBlock['controls_forEach'] = function(block, generator) {
   // For each loop.
   const variable0 =
       dartGenerator.nameDB_.getName(
@@ -141,7 +141,7 @@ dartGenerator.forBlock['controls_forEach'] = function(block) {
   return code;
 };
 
-dartGenerator.forBlock['controls_flow_statements'] = function(block) {
+dartGenerator.forBlock['controls_flow_statements'] = function(block, generator) {
   // Flow statements: continue, break.
   let xfix = '';
   if (dartGenerator.STATEMENT_PREFIX) {

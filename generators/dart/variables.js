@@ -15,7 +15,7 @@ import {NameType} from '../../core/names.js';
 import {dartGenerator, Order} from '../dart.js';
 
 
-dartGenerator.forBlock['variables_get'] = function(block) {
+dartGenerator.forBlock['variables_get'] = function(block, generator) {
   // Variable getter.
   const code =
       dartGenerator.nameDB_.getName(
@@ -23,7 +23,7 @@ dartGenerator.forBlock['variables_get'] = function(block) {
   return [code, Order.ATOMIC];
 };
 
-dartGenerator.forBlock['variables_set'] = function(block) {
+dartGenerator.forBlock['variables_set'] = function(block, generator) {
   // Variable setter.
   const argument0 =
       dartGenerator.valueToCode(block, 'VALUE', Order.ASSIGNMENT) || '0';

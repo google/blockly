@@ -16,7 +16,7 @@ import {NameType} from '../../core/names.js';
 import {pythonGenerator, Order} from '../python.js';
 
 
-pythonGenerator.forBlock['controls_repeat_ext'] = function(block) {
+pythonGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -42,7 +42,7 @@ pythonGenerator.forBlock['controls_repeat_ext'] = function(block) {
 pythonGenerator.forBlock['controls_repeat'] =
     pythonGenerator.forBlock['controls_repeat_ext'];
 
-pythonGenerator.forBlock['controls_whileUntil'] = function(block) {
+pythonGenerator.forBlock['controls_whileUntil'] = function(block, generator) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 = pythonGenerator.valueToCode(
@@ -57,7 +57,7 @@ pythonGenerator.forBlock['controls_whileUntil'] = function(block) {
   return 'while ' + argument0 + ':\n' + branch;
 };
 
-pythonGenerator.forBlock['controls_for'] = function(block) {
+pythonGenerator.forBlock['controls_for'] = function(block, generator) {
   // For loop.
   const variable0 =
       pythonGenerator.nameDB_.getName(
@@ -166,7 +166,7 @@ def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(start, stop, step):
   return code;
 };
 
-pythonGenerator.forBlock['controls_forEach'] = function(block) {
+pythonGenerator.forBlock['controls_forEach'] = function(block, generator) {
   // For each loop.
   const variable0 =
       pythonGenerator.nameDB_.getName(
@@ -179,7 +179,7 @@ pythonGenerator.forBlock['controls_forEach'] = function(block) {
   return code;
 };
 
-pythonGenerator.forBlock['controls_flow_statements'] = function(block) {
+pythonGenerator.forBlock['controls_flow_statements'] = function(block, generator) {
   // Flow statements: continue, break.
   let xfix = '';
   if (pythonGenerator.STATEMENT_PREFIX) {

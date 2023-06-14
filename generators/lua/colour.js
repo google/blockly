@@ -14,19 +14,19 @@ goog.declareModuleId('Blockly.Lua.colour');
 import {luaGenerator, Order} from '../lua.js';
 
 
-luaGenerator.forBlock['colour_picker'] = function(block) {
+luaGenerator.forBlock['colour_picker'] = function(block, generator) {
   // Colour picker.
   const code = luaGenerator.quote_(block.getFieldValue('COLOUR'));
   return [code, Order.ATOMIC];
 };
 
-luaGenerator.forBlock['colour_random'] = function(block) {
+luaGenerator.forBlock['colour_random'] = function(block, generator) {
   // Generate a random colour.
   const code = 'string.format("#%06x", math.random(0, 2^24 - 1))';
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['colour_rgb'] = function(block) {
+luaGenerator.forBlock['colour_rgb'] = function(block, generator) {
   // Compose a colour from RGB components expressed as percentages.
   const functionName = luaGenerator.provideFunction_('colour_rgb', `
 function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(r, g, b)
@@ -43,7 +43,7 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['colour_blend'] = function(block) {
+luaGenerator.forBlock['colour_blend'] = function(block, generator) {
   // Blend two colours together.
   const functionName = luaGenerator.provideFunction_('colour_blend', `
 function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(colour1, colour2, ratio)

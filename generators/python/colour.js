@@ -14,20 +14,20 @@ goog.declareModuleId('Blockly.Python.colour');
 import {pythonGenerator, Order} from '../python.js';
 
 
-pythonGenerator.forBlock['colour_picker'] = function(block) {
+pythonGenerator.forBlock['colour_picker'] = function(block, generator) {
   // Colour picker.
   const code = pythonGenerator.quote_(block.getFieldValue('COLOUR'));
   return [code, Order.ATOMIC];
 };
 
-pythonGenerator.forBlock['colour_random'] = function(block) {
+pythonGenerator.forBlock['colour_random'] = function(block, generator) {
   // Generate a random colour.
   pythonGenerator.definitions_['import_random'] = 'import random';
   const code = '\'#%06x\' % random.randint(0, 2**24 - 1)';
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['colour_rgb'] = function(block) {
+pythonGenerator.forBlock['colour_rgb'] = function(block, generator) {
   // Compose a colour from RGB components expressed as percentages.
   const functionName = pythonGenerator.provideFunction_('colour_rgb', `
 def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(r, g, b):
@@ -43,7 +43,7 @@ def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(r, g, b):
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['colour_blend'] = function(block) {
+pythonGenerator.forBlock['colour_blend'] = function(block, generator) {
   // Blend two colours together.
   const functionName = pythonGenerator.provideFunction_('colour_blend', `
 def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(colour1, colour2, ratio):

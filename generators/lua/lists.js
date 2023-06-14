@@ -15,12 +15,12 @@ import {NameType} from '../../core/names.js';
 import {luaGenerator, Order} from '../lua.js';
 
 
-luaGenerator.forBlock['lists_create_empty'] = function(block) {
+luaGenerator.forBlock['lists_create_empty'] = function(block, generator) {
   // Create an empty list.
   return ['{}', Order.HIGH];
 };
 
-luaGenerator.forBlock['lists_create_with'] = function(block) {
+luaGenerator.forBlock['lists_create_with'] = function(block, generator) {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
@@ -31,7 +31,7 @@ luaGenerator.forBlock['lists_create_with'] = function(block) {
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['lists_repeat'] = function(block) {
+luaGenerator.forBlock['lists_repeat'] = function(block, generator) {
   // Create a list with one element repeated.
   const functionName = luaGenerator.provideFunction_('create_list_repeated', `
 function ${luaGenerator.FUNCTION_NAME_PLACEHOLDER_}(item, count)
@@ -48,20 +48,20 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['lists_length'] = function(block) {
+luaGenerator.forBlock['lists_length'] = function(block, generator) {
   // String or array length.
   const list = luaGenerator.valueToCode(block, 'VALUE', Order.UNARY) || '{}';
   return ['#' + list, Order.UNARY];
 };
 
-luaGenerator.forBlock['lists_isEmpty'] = function(block) {
+luaGenerator.forBlock['lists_isEmpty'] = function(block, generator) {
   // Is the string null or array empty?
   const list = luaGenerator.valueToCode(block, 'VALUE', Order.UNARY) || '{}';
   const code = '#' + list + ' == 0';
   return [code, Order.RELATIONAL];
 };
 
-luaGenerator.forBlock['lists_indexOf'] = function(block) {
+luaGenerator.forBlock['lists_indexOf'] = function(block, generator) {
   // Find an item in the list.
   const item = luaGenerator.valueToCode(block, 'FIND', Order.NONE) || "''";
   const list = luaGenerator.valueToCode(block, 'VALUE', Order.NONE) || '{}';
@@ -114,7 +114,7 @@ const getListIndex = function(listName, where, opt_at) {
   }
 };
 
-luaGenerator.forBlock['lists_getIndex'] = function(block) {
+luaGenerator.forBlock['lists_getIndex'] = function(block, generator) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -194,7 +194,7 @@ luaGenerator.forBlock['lists_getIndex'] = function(block) {
   }
 };
 
-luaGenerator.forBlock['lists_setIndex'] = function(block) {
+luaGenerator.forBlock['lists_setIndex'] = function(block, generator) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   let list = luaGenerator.valueToCode(block, 'LIST', Order.HIGH) || '{}';
@@ -227,7 +227,7 @@ luaGenerator.forBlock['lists_setIndex'] = function(block) {
   return code + '\n';
 };
 
-luaGenerator.forBlock['lists_getSublist'] = function(block) {
+luaGenerator.forBlock['lists_getSublist'] = function(block, generator) {
   // Get sublist.
   const list = luaGenerator.valueToCode(block, 'LIST', Order.NONE) || '{}';
   const where1 = block.getFieldValue('WHERE1');
@@ -262,7 +262,7 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['lists_sort'] = function(block) {
+luaGenerator.forBlock['lists_sort'] = function(block, generator) {
   // Block for sorting a list.
   const list = luaGenerator.valueToCode(block, 'LIST', Order.NONE) || '{}';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
@@ -296,7 +296,7 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['lists_split'] = function(block) {
+luaGenerator.forBlock['lists_split'] = function(block, generator) {
   // Block for splitting text into a list, or joining a list into text.
   let input = luaGenerator.valueToCode(block, 'INPUT', Order.NONE);
   const delimiter =
@@ -336,7 +336,7 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['lists_reverse'] = function(block) {
+luaGenerator.forBlock['lists_reverse'] = function(block, generator) {
   // Block for reversing a list.
   const list = luaGenerator.valueToCode(block, 'LIST', Order.NONE) || '{}';
   const functionName = luaGenerator.provideFunction_('list_reverse', `

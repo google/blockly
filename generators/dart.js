@@ -24,6 +24,7 @@ import {inputTypes} from '../core/inputs/input_types.js';
 /**
  * Order of operation ENUMs.
  * https://dart.dev/guides/language/language-tour#operators
+ * @enum {number}
  */
 export const Order = {
   ATOMIC: 0,         // 0 "" ...

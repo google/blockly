@@ -164,7 +164,8 @@ export class JavascriptGenerator extends CodeGenerator {
     // Add user variables, but only ones that are being used.
     const variables = Variables.allUsedVarModels(workspace);
     for (let i = 0; i < variables.length; i++) {
-      defvars.push(this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE));
+      defvars.push(
+        this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE));
     }
 
     // Declare all of the variables.
@@ -236,7 +237,8 @@ export class JavascriptGenerator extends CodeGenerator {
    * Calls any statements following this block.
    * @param {!Block} block The current block.
    * @param {string} code The JavaScript code created for this block.
-   * @param {boolean=} opt_thisOnly True to generate code for only this statement.
+   * @param {boolean=} opt_thisOnly True to generate code for only this
+   *     statement.
    * @return {string} JavaScript code with comments and subsequent blocks added.
    * @protected
    */
@@ -264,7 +266,8 @@ export class JavascriptGenerator extends CodeGenerator {
         }
       }
     }
-    const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+    const nextBlock =
+        block.nextConnection && block.nextConnection.targetBlock();
     const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
     return commentCode + code + nextCode;
   }

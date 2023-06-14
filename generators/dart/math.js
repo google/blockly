@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.math');
 
 import {NameType} from '../../core/names.js';
-import {dartGenerator, Order} from '../dart.js';
+import {dartGenerator, Order} from './dart_generator.js';
 
 
 dartGenerator.addReservedWords('Math');

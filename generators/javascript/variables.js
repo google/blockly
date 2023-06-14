@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.variables');
 
 import {NameType} from '../../core/names.js';
-import {Order, javascriptGenerator} from '../javascript.js';
+import {Order, javascriptGenerator} from './javascript_generator.js';
 
 
 javascriptGenerator.forBlock['variables_get'] = function(block, generator) {

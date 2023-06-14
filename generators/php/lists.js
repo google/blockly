@@ -24,7 +24,7 @@ goog.declareModuleId('Blockly.generator.lists');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {phpGenerator, Order} from '../php.js';
+import {phpGenerator, Order} from './php_generator.js';
 
 phpGenerator.forBlock['lists_create_empty'] = function(block, generator) {
   // Create an empty list.

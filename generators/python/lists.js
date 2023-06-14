@@ -13,7 +13,7 @@ goog.declareModuleId('Blockly.Python.lists');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {pythonGenerator, Order} from '../python.js';
+import {pythonGenerator, Order} from './python_generator.js';
 
 
 pythonGenerator.forBlock['lists_create_empty'] = function(block, generator) {

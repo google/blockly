@@ -1,106 +1,58 @@
 /**
  * @license
- * Copyright 2012 Google LLC
+ * Copyright 2014 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * @fileoverview Helper functions for generating JavaScript for blocks.
+ * @fileoverview Helper functions for generating Dart for blocks.
  * @suppress {checkTypes|globalThis}
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Dart');
 
-import * as Variables from '../core/variables.js';
-import * as stringUtils from '../core/utils/string.js';
-// import type {Block} from '../core/block.js';
-import {CodeGenerator} from '../core/generator.js';
-import {Names, NameType} from '../core/names.js';
-// import type {Workspace} from '../core/workspace.js';
-import {inputTypes} from '../core/inputs/input_types.js';
+import * as Variables from '../../core/variables.js';
+import * as stringUtils from '../../core/utils/string.js';
+// import type {Block} from '../../core/block.js';
+import {CodeGenerator} from '../../core/generator.js';
+import {Names, NameType} from '../../core/names.js';
+// import type {Workspace} from '../../core/workspace.js';
+import {inputTypes} from '../../core/inputs/input_types.js';
 
 
 /**
  * Order of operation ENUMs.
- * https://developer.mozilla.org/en/JavaScript/Reference/Operators/Operator_Precedence
+ * https://dart.dev/guides/language/language-tour#operators
  * @enum {number}
  */
 export const Order = {
-  ATOMIC: 0,            // 0 "" ...
-  NEW: 1.1,             // new
-  MEMBER: 1.2,          // . []
-  FUNCTION_CALL: 2,     // ()
-  INCREMENT: 3,         // ++
-  DECREMENT: 3,         // --
-  BITWISE_NOT: 4.1,     // ~
-  UNARY_PLUS: 4.2,      // +
-  UNARY_NEGATION: 4.3,  // -
-  LOGICAL_NOT: 4.4,     // !
-  TYPEOF: 4.5,          // typeof
-  VOID: 4.6,            // void
-  DELETE: 4.7,          // delete
-  AWAIT: 4.8,           // await
-  EXPONENTIATION: 5.0,  // **
-  MULTIPLICATION: 5.1,  // *
-  DIVISION: 5.2,        // /
-  MODULUS: 5.3,         // %
-  SUBTRACTION: 6.1,     // -
-  ADDITION: 6.2,        // +
-  BITWISE_SHIFT: 7,     // << >> >>>
-  RELATIONAL: 8,        // < <= > >=
-  IN: 8,                // in
-  INSTANCEOF: 8,        // instanceof
-  EQUALITY: 9,          // == != === !==
-  BITWISE_AND: 10,      // &
-  BITWISE_XOR: 11,      // ^
-  BITWISE_OR: 12,       // |
-  LOGICAL_AND: 13,      // &&
-  LOGICAL_OR: 14,       // ||
-  CONDITIONAL: 15,      // ?:
-  ASSIGNMENT: 16,       //: += -= **= *= /= %= <<= >>= ...
-  YIELD: 17,            // yield
-  COMMA: 18,            // ,
-  NONE: 99,             // (...)
+  ATOMIC: 0,         // 0 "" ...
+  UNARY_POSTFIX: 1,  // expr++ expr-- () [] . ?.
+  UNARY_PREFIX: 2,   // -expr !expr ~expr ++expr --expr
+  MULTIPLICATIVE: 3, // * / % ~/
+  ADDITIVE: 4,       // + -
+  SHIFT: 5,          // << >>
+  BITWISE_AND: 6,    // &
+  BITWISE_XOR: 7,    // ^
+  BITWISE_OR: 8,     // |
+  RELATIONAL: 9,     // >= > <= < as is is!
+  EQUALITY: 10,      // == !=
+  LOGICAL_AND: 11,   // &&
+  LOGICAL_OR: 12,    // ||
+  IF_NULL: 13,       // ??
+  CONDITIONAL: 14,   // expr ? expr : expr
+  CASCADE: 15,       // ..
+  ASSIGNMENT: 16,    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
+  NONE: 99,          // (...)
 };
 
 /**
- * JavaScript code generator class.
+ * Dart code generator class.
  */
-export class JavascriptGenerator extends CodeGenerator {
-  /**
-   * List of outer-inner pairings that do NOT require parentheses.
-   * @type {!Array<!Array<number>>}
-   */
-  ORDER_OVERRIDES = [
-    // (foo()).bar -> foo().bar
-    // (foo())[0] -> foo()[0]
-    [Order.FUNCTION_CALL, Order.MEMBER],
-    // (foo())() -> foo()()
-    [Order.FUNCTION_CALL, Order.FUNCTION_CALL],
-    // (foo.bar).baz -> foo.bar.baz
-    // (foo.bar)[0] -> foo.bar[0]
-    // (foo[0]).bar -> foo[0].bar
-    // (foo[0])[1] -> foo[0][1]
-    [Order.MEMBER, Order.MEMBER],
-    // (foo.bar)() -> foo.bar()
-    // (foo[0])() -> foo[0]()
-    [Order.MEMBER, Order.FUNCTION_CALL],
-
-    // !(!foo) -> !!foo
-    [Order.LOGICAL_NOT, Order.LOGICAL_NOT],
-    // a * (b * c) -> a * b * c
-    [Order.MULTIPLICATION, Order.MULTIPLICATION],
-    // a + (b + c) -> a + b + c
-    [Order.ADDITION, Order.ADDITION],
-    // a && (b && c) -> a && b && c
-    [Order.LOGICAL_AND, Order.LOGICAL_AND],
-    // a || (b || c) -> a || b || c
-    [Order.LOGICAL_OR, Order.LOGICAL_OR]
-  ];
-
+export class DartGenerator extends CodeGenerator {
   constructor(name) {
-    super(name ?? 'JavaScript');
+    super(name ?? 'Dart');
     this.isInitialized = false;
 
     // Copy Order values onto instance for backwards compatibility
@@ -119,20 +71,22 @@ export class JavascriptGenerator extends CodeGenerator {
     // this list is trivial.  This is intended to prevent users from
     // accidentally clobbering a built-in object or function.
     this.addReservedWords(
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords
-        'break,case,catch,class,const,continue,debugger,default,delete,do,' +
-        'else,export,extends,finally,for,function,if,import,in,instanceof,' +
-        'new,return,super,switch,this,throw,try,typeof,var,void,' +
-        'while,with,yield,' +
-        'enum,' +
-        'implements,interface,let,package,private,protected,public,static,' +
-        'await,' +
-        'null,true,false,' +
-        // Magic variable.
-        'arguments,' +
-        // Everything in the current environment (835 items in Chrome,
-        // 104 in Node).
-        Object.getOwnPropertyNames(globalThis).join(',')
+      // https://www.dartlang.org/docs/spec/latest/dart-language-specification.pdf
+      // Section 16.1.1
+      'assert,break,case,catch,class,const,continue,default,do,else,enum,' +
+      'extends,false,final,finally,for,if,in,is,new,null,rethrow,return,' +
+      'super,switch,this,throw,true,try,var,void,while,with,' +
+      // https://api.dartlang.org/dart_core.html
+      'print,identityHashCode,identical,BidirectionalIterator,Comparable,' +
+      'double,Function,int,Invocation,Iterable,Iterator,List,Map,Match,num,' +
+      'Pattern,RegExp,Set,StackTrace,String,StringSink,Type,bool,DateTime,' +
+      'Deprecated,Duration,Expando,Null,Object,RuneIterator,Runes,Stopwatch,' +
+      'StringBuffer,Symbol,Uri,Comparator,AbstractClassInstantiationError,' +
+      'ArgumentError,AssertionError,CastError,ConcurrentModificationError,' +
+      'CyclicInitializationError,Error,Exception,FallThroughError,' +
+      'FormatException,IntegerDivisionByZeroException,NoSuchMethodError,' +
+      'NullThrownError,OutOfMemoryError,RangeError,StackOverflowError,' +
+      'StateError,TypeError,UnimplementedError,UnsupportedError'
     );
   }
 
@@ -141,7 +95,7 @@ export class JavascriptGenerator extends CodeGenerator {
    * @param {!Workspace} workspace Workspace to generate code from.
    */
   init(workspace) {
-    super.init(workspace);
+    super.init();
 
     if (!this.nameDB_) {
       this.nameDB_ = new Names(this.RESERVED_WORDS_);
@@ -157,38 +111,55 @@ export class JavascriptGenerator extends CodeGenerator {
     // Add developer variables (not created or named by the user).
     const devVarList = Variables.allDeveloperVariables(workspace);
     for (let i = 0; i < devVarList.length; i++) {
-      defvars.push(
-          this.nameDB_.getName(devVarList[i], NameType.DEVELOPER_VARIABLE));
+      defvars.push(this.nameDB_.getName(devVarList[i],
+                                        NameType.DEVELOPER_VARIABLE));
     }
 
     // Add user variables, but only ones that are being used.
     const variables = Variables.allUsedVarModels(workspace);
     for (let i = 0; i < variables.length; i++) {
-      defvars.push(
-        this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE));
+      defvars.push(this.nameDB_.getName(variables[i].getId(),
+                                        NameType.VARIABLE));
     }
 
     // Declare all of the variables.
     if (defvars.length) {
-      this.definitions_['variables'] = 'var ' + defvars.join(', ') + ';';
+      this.definitions_['variables'] =
+          'var ' + defvars.join(', ') + ';';
     }
     this.isInitialized = true;
   }
 
   /**
-   * Prepend the generated code with the variable definitions.
+   * Prepend the generated code with import statements and variable definitions.
    * @param {string} code Generated code.
    * @return {string} Completed code.
    */
   finish(code) {
+    // Indent every line.
+    if (code) {
+      code = this.prefixLines(code, this.INDENT);
+    }
+    code = 'main() {\n' + code + '}';
+
     // Convert the definitions dictionary into a list.
-    const definitions = Object.values(this.definitions_);
+    const imports = [];
+    const definitions = [];
+    for (let name in this.definitions_) {
+      const def = this.definitions_[name];
+      if (def.match(/^import\s/)) {
+        imports.push(def);
+      } else {
+        definitions.push(def);
+      }
+    }
     // Call Blockly.CodeGenerator's finish.
-    super.finish(code);
+    code = super.finish(code);
     this.isInitialized = false;
 
     this.nameDB_.reset();
-    return definitions.join('\n\n') + '\n\n\n' + code;
+    const allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
+    return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
   }
 
   /**
@@ -202,44 +173,43 @@ export class JavascriptGenerator extends CodeGenerator {
   }
 
   /**
-   * Encode a string as a properly escaped JavaScript string, complete with
-   * quotes.
+   * Encode a string as a properly escaped Dart string, complete with quotes.
    * @param {string} string Text to encode.
-   * @return {string} JavaScript string.
+   * @return {string} Dart string.
    * @protected
    */
   quote_(string) {
-    // Can't use goog.string.quote since Google's style guide recommends
-    // JS string literals use single quotes.
+    // Can't use goog.string.quote since $ must also be escaped.
     string = string.replace(/\\/g, '\\\\')
         .replace(/\n/g, '\\\n')
+        .replace(/\$/g, '\\$')
         .replace(/'/g, '\\\'');
     return '\'' + string + '\'';
   }
 
   /**
-   * Encode a string as a properly escaped multiline JavaScript string, complete
-   * with quotes.
+   * Encode a string as a properly escaped multiline Dart string, complete with
+   * quotes.
    * @param {string} string Text to encode.
-   * @return {string} JavaScript string.
+   * @return {string} Dart string.
    * @protected
    */
   multiline_quote_(string) {
-    // Can't use goog.string.quote since Google's style guide recommends
-    // JS string literals use single quotes.
     const lines = string.split(/\n/g).map(this.quote_);
-    return lines.join(' + \'\\n\' +\n');
+    // Join with the following, plus a newline:
+    // + '\n' +
+    return lines.join(' + \'\\n\' + \n');
   }
 
   /**
-   * Common tasks for generating JavaScript from blocks.
+   * Common tasks for generating Dart from blocks.
    * Handles comments for the specified block and any connected value blocks.
    * Calls any statements following this block.
    * @param {!Block} block The current block.
-   * @param {string} code The JavaScript code created for this block.
+   * @param {string} code The Dart code created for this block.
    * @param {boolean=} opt_thisOnly True to generate code for only this
    *     statement.
-   * @return {string} JavaScript code with comments and subsequent blocks added.
+   * @return {string} Dart code with comments and subsequent blocks added.
    * @protected
    */
   scrub_(block, code, opt_thisOnly) {
@@ -250,7 +220,12 @@ export class JavascriptGenerator extends CodeGenerator {
       let comment = block.getCommentText();
       if (comment) {
         comment = stringUtils.wrap(comment, this.COMMENT_WRAP - 3);
-        commentCode += this.prefixLines(comment + '\n', '// ');
+        if (block.getProcedureDef) {
+          // Use documentation comment for function comments.
+          commentCode += this.prefixLines(comment + '\n', '/// ');
+        } else {
+          commentCode += this.prefixLines(comment + '\n', '// ');
+        }
       }
       // Collect comments for all value arguments.
       // Don't collect comments for nested statements.
@@ -289,24 +264,25 @@ export class JavascriptGenerator extends CodeGenerator {
     }
     const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
 
+    /** @type {number} */
+    let outerOrder;
     let innerOrder;
-    let outerOrder = order;
-    if (delta > 0) {
-      outerOrder = this.ORDER_ADDITION;
-      innerOrder = this.ORDER_ADDITION;
-    } else if (delta < 0) {
-      outerOrder = this.ORDER_SUBTRACTION;
-      innerOrder = this.ORDER_SUBTRACTION;
+    if (delta) {
+      outerOrder = this.ORDER_ADDITIVE;
+      innerOrder = this.ORDER_ADDITIVE;
     } else if (opt_negate) {
-      outerOrder = this.ORDER_UNARY_NEGATION;
-      innerOrder = this.ORDER_UNARY_NEGATION;
+      outerOrder = this.ORDER_UNARY_PREFIX;
+      innerOrder = this.ORDER_UNARY_PREFIX;
+    } else {
+      outerOrder = order;
     }
 
+    /** @type {string|number} */
     let at = this.valueToCode(block, atId, outerOrder) || defaultAtIndex;
 
     if (stringUtils.isNumber(at)) {
       // If the index is a naked number, adjust it right now.
-      at = Number(at) + delta;
+      at = parseInt(at, 10) + delta;
       if (opt_negate) {
         at = -at;
       }
@@ -335,7 +311,7 @@ export class JavascriptGenerator extends CodeGenerator {
 }
 
 /**
- * JavaScript code generator instance.
- * @type {!JavascriptGenerator}
+ * Dart code generator.
+ * @type {!DartGenerator}
  */
-export const javascriptGenerator = new JavascriptGenerator();
+export const dartGenerator = new DartGenerator();

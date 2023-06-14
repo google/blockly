@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.PHP.variables');
 
 import {NameType} from '../../core/names.js';
-import {phpGenerator, Order} from '../php.js';
+import {phpGenerator, Order} from './php_generator.js';
 
 
 phpGenerator.forBlock['variables_get'] = function(block, generator) {

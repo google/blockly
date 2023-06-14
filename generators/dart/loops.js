@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.loops');
 
-import {dartGenerator, Order} from '../dart.js';
+import {dartGenerator, Order} from './dart_generator.js';
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
 

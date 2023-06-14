@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.PHP.logic');
 
-import {phpGenerator, Order} from '../php.js';
+import {phpGenerator, Order} from './php_generator.js';
 
 
 phpGenerator.forBlock['controls_if'] = function(block, generator) {

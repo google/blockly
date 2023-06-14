@@ -13,7 +13,7 @@ goog.declareModuleId('Blockly.Lua.loops');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {luaGenerator, Order} from '../lua.js';
+import {luaGenerator, Order} from './lua_generator.js';
 
 
 /**

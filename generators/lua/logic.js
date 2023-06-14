@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.logic');
 
-import {luaGenerator, Order} from '../lua.js';
+import {luaGenerator, Order} from './lua_generator.js';
 
 
 luaGenerator.forBlock['controls_if'] = function(block, generator) {

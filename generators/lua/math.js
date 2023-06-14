@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.math');
 
 import {NameType} from '../../core/names.js';
-import {luaGenerator, Order} from '../lua.js';
+import {luaGenerator, Order} from './lua_generator.js';
 
 
 luaGenerator.forBlock['math_number'] = function(block, generator) {

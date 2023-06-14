@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.logic');
 
-import {pythonGenerator, Order} from '../python.js';
+import {pythonGenerator, Order} from './python_generator.js';
 
 
 pythonGenerator.forBlock['controls_if'] = function(block, generator) {

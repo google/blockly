@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.texts');
 
 import {NameType} from '../../core/names.js';
-import {Order, javascriptGenerator} from '../javascript.js';
+import {Order, javascriptGenerator} from './javascript_generator.js';
 
 
 /**

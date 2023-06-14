@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.procedures');
 
 import {NameType} from '../../core/names.js';
-import {dartGenerator, Order} from '../dart.js';
+import {dartGenerator, Order} from './dart_generator.js';
 
 
 dartGenerator.forBlock['procedures_defreturn'] = function(block, generator) {

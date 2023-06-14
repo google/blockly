@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.variablesDynamic');
 
-import {luaGenerator} from '../lua.js';
+import {luaGenerator} from './lua_generator.js';
 import './variables.js';
 
 

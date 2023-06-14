@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.variablesDynamic');
 
-import {pythonGenerator} from '../python.js';
+import {pythonGenerator} from './python_generator.js';
 import './variables.js';
 
 

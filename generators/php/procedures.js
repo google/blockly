@@ -13,7 +13,7 @@ goog.declareModuleId('Blockly.PHP.procedures');
 
 import * as Variables from '../../core/variables.js';
 import {NameType} from '../../core/names.js';
-import {phpGenerator, Order} from '../php.js';
+import {phpGenerator, Order} from './php_generator.js';
 
 
 phpGenerator.forBlock['procedures_defreturn'] = function(block, generator) {

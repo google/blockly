@@ -23,4 +23,4 @@ import './text.js';
 import './variables.js';
 import './variables_dynamic.js';
 
-export * from '../php.js';
+export * from './php_generator.js';

@@ -23,4 +23,4 @@ import './text.js';
 import './variables.js';
 import './variables_dynamic.js';
 
-export * from '../dart.js';
+export * from './dart_generator.js';

@@ -13,7 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.lists');
 
 import {NameType} from '../../core/names.js';
-import {Order, javascriptGenerator} from '../javascript.js';
+import {Order, javascriptGenerator} from './javascript_generator.js';
 
 
 javascriptGenerator.forBlock['lists_create_empty'] = function(block, generator) {

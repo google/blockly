@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.colour');
 
-import {dartGenerator, Order} from '../dart.js';
+import {dartGenerator, Order} from './dart_generator.js';
 
 
 dartGenerator.addReservedWords('Math');

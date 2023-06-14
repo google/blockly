@@ -13,7 +13,7 @@ goog.declareModuleId('Blockly.PHP.loops');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {phpGenerator, Order} from '../php.js';
+import {phpGenerator, Order} from './php_generator.js';
 
 
 phpGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {

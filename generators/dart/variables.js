@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.variables');
 
 import {NameType} from '../../core/names.js';
-import {dartGenerator, Order} from '../dart.js';
+import {dartGenerator, Order} from './dart_generator.js';
 
 
 dartGenerator.forBlock['variables_get'] = function(block, generator) {

@@ -23,4 +23,4 @@ import './text.js';
 import './variables.js';
 import './variables_dynamic.js';
 
-export * from '../python.js';
+export * from './python_generator.js';

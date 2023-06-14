@@ -11,7 +11,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.variablesDynamic');
 
-import {dartGenerator} from '../dart.js';
+import {dartGenerator} from './dart_generator.js';
 import './variables.js';
 
 

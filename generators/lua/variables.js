@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.variables');
 
 import {NameType} from '../../core/names.js';
-import {luaGenerator, Order} from '../lua.js';
+import {luaGenerator, Order} from './lua_generator.js';
 
 
 luaGenerator.forBlock['variables_get'] = function(block, generator) {

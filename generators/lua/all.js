@@ -23,4 +23,4 @@ import './text.js';
 import './variables.js';
 import './variables_dynamic.js';
 
-export * from '../lua.js';
+export * from './lua_generator.js';

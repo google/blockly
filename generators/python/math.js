@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.math');
 
 import {NameType} from '../../core/names.js';
-import {pythonGenerator, Order} from '../python.js';
+import {pythonGenerator, Order} from './python_generator.js';
 
 
 // If any new block imports any library, add that library name here.

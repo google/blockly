@@ -13,7 +13,7 @@ goog.declareModuleId('Blockly.Python.loops');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {pythonGenerator, Order} from '../python.js';
+import {pythonGenerator, Order} from './python_generator.js';
 
 
 pythonGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {

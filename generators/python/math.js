@@ -12,13 +12,13 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.math');
 
 import {NameType} from '../../core/names.js';
-import {pythonGenerator as Python, Order} from '../python.js';
+import {pythonGenerator, Order} from '../python.js';
 
 
 // If any new block imports any library, add that library name here.
-Python.addReservedWords('math,random,Number');
+pythonGenerator.addReservedWords('math,random,Number');
 
-Python.forBlock['math_number'] = function(block) {
+pythonGenerator.forBlock['math_number'] = function(block) {
   // Numeric value.
   let code = Number(block.getFieldValue('NUM'));
   let order;
@@ -34,7 +34,7 @@ Python.forBlock['math_number'] = function(block) {
   return [code, order];
 };
 
-Python.forBlock['math_arithmetic'] = function(block) {
+pythonGenerator.forBlock['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', Order.ADDITIVE],
@@ -46,32 +46,33 @@ Python.forBlock['math_arithmetic'] = function(block) {
   const tuple = OPERATORS[block.getFieldValue('OP')];
   const operator = tuple[0];
   const order = tuple[1];
-  const argument0 = Python.valueToCode(block, 'A', order) || '0';
-  const argument1 = Python.valueToCode(block, 'B', order) || '0';
+  const argument0 = pythonGenerator.valueToCode(block, 'A', order) || '0';
+  const argument1 = pythonGenerator.valueToCode(block, 'B', order) || '0';
   const code = argument0 + operator + argument1;
   return [code, order];
   // In case of 'DIVIDE', division between integers returns different results
-  // in Python 2 and 3. However, is not an issue since Blockly does not
+  // in pythonGenerator 2 and 3. However, is not an issue since Blockly does not
   // guarantee identical results in all languages.  To do otherwise would
   // require every operator to be wrapped in a function call.  This would kill
   // legibility of the generated code.
 };
 
-Python.forBlock['math_single'] = function(block) {
+pythonGenerator.forBlock['math_single'] = function(block) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
   let arg;
   if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
-    code = Python.valueToCode(block, 'NUM', Order.UNARY_SIGN) || '0';
+    code = pythonGenerator.valueToCode(block, 'NUM', Order.UNARY_SIGN) || '0';
     return ['-' + code, Order.UNARY_SIGN];
   }
-  Python.definitions_['import_math'] = 'import math';
+  pythonGenerator.definitions_['import_math'] = 'import math';
   if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
-    arg = Python.valueToCode(block, 'NUM', Order.MULTIPLICATIVE) || '0';
+    arg =
+        pythonGenerator.valueToCode(block, 'NUM', Order.MULTIPLICATIVE) || '0';
   } else {
-    arg = Python.valueToCode(block, 'NUM', Order.NONE) || '0';
+    arg = pythonGenerator.valueToCode(block, 'NUM', Order.NONE) || '0';
   }
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
@@ -134,7 +135,7 @@ Python.forBlock['math_single'] = function(block) {
   return [code, Order.MULTIPLICATIVE];
 };
 
-Python.forBlock['math_constant'] = function(block) {
+pythonGenerator.forBlock['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['math.pi', Order.MEMBER],
@@ -146,12 +147,12 @@ Python.forBlock['math_constant'] = function(block) {
   };
   const constant = block.getFieldValue('CONSTANT');
   if (constant !== 'INFINITY') {
-    Python.definitions_['import_math'] = 'import math';
+    pythonGenerator.definitions_['import_math'] = 'import math';
   }
   return CONSTANTS[constant];
 };
 
-Python.forBlock['math_number_property'] = function(block) {
+pythonGenerator.forBlock['math_number_property'] = function(block) {
    // Check if a number is even, odd, prime, whole, positive, or negative
    // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -167,16 +168,16 @@ Python.forBlock['math_number_property'] = function(block) {
   }
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
-  const numberToCheck = Python.valueToCode(block, 'NUMBER_TO_CHECK',
+  const numberToCheck = pythonGenerator.valueToCode(block, 'NUMBER_TO_CHECK',
       inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    Python.definitions_['import_math'] = 'import math';
-    Python.definitions_['from_numbers_import_Number'] =
+    pythonGenerator.definitions_['import_math'] = 'import math';
+    pythonGenerator.definitions_['from_numbers_import_Number'] =
         'from numbers import Number';
-    const functionName = Python.provideFunction_('math_isPrime', `
-def ${Python.FUNCTION_NAME_PLACEHOLDER_}(n):
+    const functionName = pythonGenerator.provideFunction_('math_isPrime', `
+def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(n):
   # https://en.wikipedia.org/wiki/Primality_test#Naive_methods
   # If n is not a number but a string, try parsing it.
   if not isinstance(n, Number):
@@ -197,9 +198,9 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(n):
 `);
        code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = Python.valueToCode(block, 'DIVISOR',
+    const divisor = pythonGenerator.valueToCode(block, 'DIVISOR',
         Order.MULTIPLICATIVE) || '0';
-    // If 'divisor' is some code that evals to 0, Python will raise an error.
+    // If 'divisor' is some code that evals to 0, pythonGenerator will raise an error.
     if (divisor === '0') {
       return ['False', Order.ATOMIC];
     }
@@ -210,27 +211,30 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(n):
   return [code, outputOrder];
 };
 
-Python.forBlock['math_change'] = function(block) {
+pythonGenerator.forBlock['math_change'] = function(block) {
   // Add to a variable in place.
-  Python.definitions_['from_numbers_import_Number'] =
+  pythonGenerator.definitions_['from_numbers_import_Number'] =
       'from numbers import Number';
   const argument0 =
-      Python.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
+      pythonGenerator.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
   const varName =
-      Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+      pythonGenerator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = (' + varName + ' if isinstance(' + varName +
       ', Number) else 0) + ' + argument0 + '\n';
 };
 
 // Rounding functions have a single operand.
-Python.forBlock['math_round'] = Python.forBlock['math_single'];
+pythonGenerator.forBlock['math_round'] =
+    pythonGenerator.forBlock['math_single'];
 // Trigonometry functions have a single operand.
-Python.forBlock['math_trig'] = Python.forBlock['math_single'];
+pythonGenerator.forBlock['math_trig'] =
+    pythonGenerator.forBlock['math_single'];
 
-Python.forBlock['math_on_list'] = function(block) {
+pythonGenerator.forBlock['math_on_list'] = function(block) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
-  const list = Python.valueToCode(block, 'LIST', Order.NONE) || '[]';
+  const list = pythonGenerator.valueToCode(block, 'LIST', Order.NONE) || '[]';
   let code;
   switch (func) {
     case 'SUM':
@@ -243,12 +247,12 @@ Python.forBlock['math_on_list'] = function(block) {
       code = 'max(' + list + ')';
       break;
     case 'AVERAGE': {
-      Python.definitions_['from_numbers_import_Number'] =
+      pythonGenerator.definitions_['from_numbers_import_Number'] =
           'from numbers import Number';
       // This operation excludes null and values that aren't int or float:
       // math_mean([null, null, "aString", 1, 9]) -> 5.0
-      const functionName = Python.provideFunction_('math_mean', `
-def ${Python.FUNCTION_NAME_PLACEHOLDER_}(myList):
+      const functionName = pythonGenerator.provideFunction_('math_mean', `
+def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(myList):
   localList = [e for e in myList if isinstance(e, Number)]
   if not localList: return
   return float(sum(localList)) / len(localList)
@@ -257,12 +261,12 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(myList):
       break;
     }
     case 'MEDIAN': {
-      Python.definitions_['from_numbers_import_Number'] =
+      pythonGenerator.definitions_['from_numbers_import_Number'] =
           'from numbers import Number';
       // This operation excludes null values:
       // math_median([null, null, 1, 3]) -> 2.0
-      const functionName = Python.provideFunction_( 'math_median', `
-def ${Python.FUNCTION_NAME_PLACEHOLDER_}(myList):
+      const functionName = pythonGenerator.provideFunction_( 'math_median', `
+def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(myList):
   localList = sorted([e for e in myList if isinstance(e, Number)])
   if not localList: return
   if len(localList) % 2 == 0:
@@ -277,8 +281,8 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(myList):
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1]
-      const functionName = Python.provideFunction_('math_modes', `
-def ${Python.FUNCTION_NAME_PLACEHOLDER_}(some_list):
+      const functionName = pythonGenerator.provideFunction_('math_modes', `
+def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(some_list):
   modes = []
   # Using a lists of [item, count] to keep count rather than dict
   # to avoid "unhashable" errors when the counted item is itself a list or dict.
@@ -302,9 +306,10 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(some_list):
       break;
     }
     case 'STD_DEV': {
-      Python.definitions_['import_math'] = 'import math';
-      const functionName = Python.provideFunction_('math_standard_deviation', `
-def ${Python.FUNCTION_NAME_PLACEHOLDER_}(numbers):
+      pythonGenerator.definitions_['import_math'] = 'import math';
+      const functionName =
+          pythonGenerator.provideFunction_('math_standard_deviation', `
+def ${pythonGenerator.FUNCTION_NAME_PLACEHOLDER_}(numbers):
   n = len(numbers)
   if n == 0: return
   mean = float(sum(numbers)) / n
@@ -315,7 +320,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(numbers):
       break;
     }
     case 'RANDOM':
-      Python.definitions_['import_random'] = 'import random';
+      pythonGenerator.definitions_['import_random'] = 'import random';
       code = 'random.choice(' + list + ')';
       break;
     default:
@@ -324,48 +329,54 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(numbers):
   return [code, Order.FUNCTION_CALL];
 };
 
-Python.forBlock['math_modulo'] = function(block) {
+pythonGenerator.forBlock['math_modulo'] = function(block) {
   // Remainder computation.
   const argument0 =
-      Python.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) || '0';
+      pythonGenerator.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) ||
+      '0';
   const argument1 =
-      Python.valueToCode(block, 'DIVISOR', Order.MULTIPLICATIVE) || '0';
+      pythonGenerator.valueToCode(block, 'DIVISOR', Order.MULTIPLICATIVE) ||
+      '0';
   const code = argument0 + ' % ' + argument1;
   return [code, Order.MULTIPLICATIVE];
 };
 
-Python.forBlock['math_constrain'] = function(block) {
+pythonGenerator.forBlock['math_constrain'] = function(block) {
   // Constrain a number between two limits.
   const argument0 =
-      Python.valueToCode(block, 'VALUE', Order.NONE) || '0';
-  const argument1 = Python.valueToCode(block, 'LOW', Order.NONE) || '0';
+      pythonGenerator.valueToCode(block, 'VALUE', Order.NONE) || '0';
+  const argument1 =
+      pythonGenerator.valueToCode(block, 'LOW', Order.NONE) || '0';
   const argument2 =
-      Python.valueToCode(block, 'HIGH', Order.NONE) || 'float(\'inf\')';
+      pythonGenerator.valueToCode(block, 'HIGH', Order.NONE) ||
+      'float(\'inf\')';
   const code =
       'min(max(' + argument0 + ', ' + argument1 + '), ' + argument2 + ')';
   return [code, Order.FUNCTION_CALL];
 };
 
-Python.forBlock['math_random_int'] = function(block) {
+pythonGenerator.forBlock['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
-  Python.definitions_['import_random'] = 'import random';
-  const argument0 = Python.valueToCode(block, 'FROM', Order.NONE) || '0';
-  const argument1 = Python.valueToCode(block, 'TO', Order.NONE) || '0';
+  pythonGenerator.definitions_['import_random'] = 'import random';
+  const argument0 =
+      pythonGenerator.valueToCode(block, 'FROM', Order.NONE) || '0';
+  const argument1 =
+      pythonGenerator.valueToCode(block, 'TO', Order.NONE) || '0';
   const code = 'random.randint(' + argument0 + ', ' + argument1 + ')';
   return [code, Order.FUNCTION_CALL];
 };
 
-Python.forBlock['math_random_float'] = function(block) {
+pythonGenerator.forBlock['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
-  Python.definitions_['import_random'] = 'import random';
+  pythonGenerator.definitions_['import_random'] = 'import random';
   return ['random.random()', Order.FUNCTION_CALL];
 };
 
-Python.forBlock['math_atan2'] = function(block) {
+pythonGenerator.forBlock['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  Python.definitions_['import_math'] = 'import math';
-  const argument0 = Python.valueToCode(block, 'X', Order.NONE) || '0';
-  const argument1 = Python.valueToCode(block, 'Y', Order.NONE) || '0';
+  pythonGenerator.definitions_['import_math'] = 'import math';
+  const argument0 = pythonGenerator.valueToCode(block, 'X', Order.NONE) || '0';
+  const argument1 = pythonGenerator.valueToCode(block, 'Y', Order.NONE) || '0';
   return [
     'math.atan2(' + argument1 + ', ' + argument0 + ') / math.pi * 180',
     Order.MULTIPLICATIVE

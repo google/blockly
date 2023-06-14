@@ -11,10 +11,10 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.variablesDynamic');
 
-import {pythonGenerator as Python} from '../python.js';
+import {pythonGenerator} from '../python.js';
 import './variables.js';
 
 
-// Python is dynamically typed.
-Python.forBlock['variables_get_dynamic'] = Python.forBlock['variables_get'];
-Python.forBlock['variables_set_dynamic'] = Python.forBlock['variables_set'];
+// pythonGenerator is dynamically typed.
+pythonGenerator.forBlock['variables_get_dynamic'] = pythonGenerator.forBlock['variables_get'];
+pythonGenerator.forBlock['variables_set_dynamic'] = pythonGenerator.forBlock['variables_set'];

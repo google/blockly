@@ -319,5 +319,7 @@ export namespace Input {
   }
 }
 
+/** @suppress {deprecated} */
 export type Align = Input.Align;
+/** @suppress {deprecated} */
 export const Align = Input.Align;

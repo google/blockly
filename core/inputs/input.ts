@@ -311,6 +311,7 @@ export namespace Input {
    * Enum for alignment of inputs.
    *
    * @deprecated Use Blockly.inputs.Align. To be removed in v11.
+   * @suppress {deprecated}
    */
   export enum Align {
     LEFT = -1,

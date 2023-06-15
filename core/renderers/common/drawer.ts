@@ -22,7 +22,7 @@ import {Types} from '../measurables/types.js';
 import {isDynamicShape} from './constants.js';
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
 import type {RenderInfo} from './info.js';
-import {isIcon} from '../../interfaces/i_icon.js';
+import * as deprecation from '../../utils/deprecation.js';
 
 /**
  * An object that draws a block based on the given rendering information.
@@ -59,7 +59,6 @@ export class Drawer {
    * required.
    */
   draw() {
-    this.hideHiddenIcons_();
     this.drawOutline_();
     this.drawInternals_();
 
@@ -68,6 +67,16 @@ export class Drawer {
       this.block_.pathObject.flipRTL();
     }
     this.recordSizeOnBlock_();
+  }
+
+  /**
+   * Hide icons that were marked as hidden.
+   *
+   * @deprecated Manually hiding icons is no longer necessary. To be removed
+   *     in v11.
+   */
+  protected hideHiddenIcons_() {
+    deprecation.warn('hideHiddenIcons_', 'v10', 'v11');
   }
 
   /**
@@ -81,13 +90,6 @@ export class Drawer {
     // The dark path adds to the size of the block in both X and Y.
     this.block_.height = this.info_.height;
     this.block_.width = this.info_.widthWithChildren;
-  }
-
-  /** Hide icons that were marked as hidden. */
-  protected hideHiddenIcons_() {
-    for (let i = 0, iconInfo; (iconInfo = this.info_.hiddenIcons[i]); i++) {
-      iconInfo.icon.iconGroup_?.setAttribute('display', 'none');
-    }
   }
 
   /** Create the outline of the block.  This is a single continuous path. */
@@ -291,10 +293,6 @@ export class Drawer {
    * @param fieldInfo The rendering information for the field or icon.
    */
   protected layoutField_(fieldInfo: Icon | Field) {
-    const svgGroup = Types.isField(fieldInfo)
-      ? (fieldInfo as Field).field.getSvgRoot()!
-      : (fieldInfo as Icon).icon.iconGroup_!; // Never null in rendered case.
-
     const yPos = fieldInfo.centerline - fieldInfo.height / 2;
     let xPos = fieldInfo.xPos;
     let scale = '';
@@ -305,36 +303,20 @@ export class Drawer {
         scale = 'scale(-1 1)';
       }
     }
+
     if (Types.isIcon(fieldInfo)) {
       const icon = (fieldInfo as Icon).icon;
-      if (isIcon(icon)) {
-        icon.setOffsetInBlock(new Coordinate(xPos, yPos));
-      } else {
-        // TODO (#7042): Remove old icon handling code.
-        svgGroup.setAttribute('display', 'block');
-        svgGroup.setAttribute(
-          'transform',
-          'translate(' + xPos + ',' + yPos + ')'
-        );
-        (fieldInfo as Icon).icon.computeIconLocation();
+      icon.setOffsetInBlock(new Coordinate(xPos, yPos));
+      if (this.info_.isInsertionMarker) {
+        icon.hideForInsertionMarker();
       }
     } else {
+      const svgGroup = (fieldInfo as Field).field.getSvgRoot()!;
       svgGroup.setAttribute(
         'transform',
         'translate(' + xPos + ',' + yPos + ')' + scale
       );
-    }
-
-    if (this.info_.isInsertionMarker) {
-      // Fields and icons are invisible on insertion marker.  They still have to
-      // be rendered so that the block can be sized correctly.
-      // TODO (#7042): Figure out a better way to handle the types here,
-      //     possibly by splitting this method into submethods.
-      if (Types.isIcon(fieldInfo) && isIcon((fieldInfo as Icon).icon)) {
-        (
-          (fieldInfo as Icon).icon as AnyDuringMigration
-        ).hideForInsertionMarker();
-      } else {
+      if (this.info_.isInsertionMarker) {
         svgGroup.setAttribute('display', 'none');
       }
     }

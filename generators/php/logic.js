@@ -11,23 +11,26 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.PHP.logic');
 
-import {phpGenerator as PHP} from '../php.js';
+import {phpGenerator, Order} from '../php.js';
 
 
-PHP['controls_if'] = function(block) {
+phpGenerator.forBlock['controls_if'] = function(block, generator) {
   // If/elseif/else condition.
   let n = 0;
   let code = '', branchCode, conditionCode;
-  if (PHP.STATEMENT_PREFIX) {
+  if (generator.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
-    code += PHP.injectId(PHP.STATEMENT_PREFIX, block);
+    code += generator.injectId(generator.STATEMENT_PREFIX, block);
   }
   do {
-    conditionCode = PHP.valueToCode(block, 'IF' + n, PHP.ORDER_NONE) || 'false';
-    branchCode = PHP.statementToCode(block, 'DO' + n);
-    if (PHP.STATEMENT_SUFFIX) {
-      branchCode = PHP.prefixLines(
-                       PHP.injectId(PHP.STATEMENT_SUFFIX, block), PHP.INDENT) +
+    conditionCode =
+        generator.valueToCode(block, 'IF' + n, Order.NONE) || 'false';
+    branchCode = generator.statementToCode(block, 'DO' + n);
+    if (generator.STATEMENT_SUFFIX) {
+      branchCode =
+          generator.prefixLines(
+            generator.injectId(generator.STATEMENT_SUFFIX, block),
+            generator.INDENT) +
           branchCode;
     }
     code += (n > 0 ? ' else ' : '') + 'if (' + conditionCode + ') {\n' +
@@ -35,11 +38,13 @@ PHP['controls_if'] = function(block) {
     n++;
   } while (block.getInput('IF' + n));
 
-  if (block.getInput('ELSE') || PHP.STATEMENT_SUFFIX) {
-    branchCode = PHP.statementToCode(block, 'ELSE');
-    if (PHP.STATEMENT_SUFFIX) {
-      branchCode = PHP.prefixLines(
-                       PHP.injectId(PHP.STATEMENT_SUFFIX, block), PHP.INDENT) +
+  if (block.getInput('ELSE') || generator.STATEMENT_SUFFIX) {
+    branchCode = generator.statementToCode(block, 'ELSE');
+    if (generator.STATEMENT_SUFFIX) {
+      branchCode =
+          generator.prefixLines(
+            generator.injectId(generator.STATEMENT_SUFFIX, block),
+            generator.INDENT) +
           branchCode;
     }
     code += ' else {\n' + branchCode + '}';
@@ -47,28 +52,28 @@ PHP['controls_if'] = function(block) {
   return code + '\n';
 };
 
-PHP['controls_ifelse'] = PHP['controls_if'];
+phpGenerator.forBlock['controls_ifelse'] = phpGenerator.forBlock['controls_if'];
 
-PHP['logic_compare'] = function(block) {
+phpGenerator.forBlock['logic_compare'] = function(block, generator) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
-  const order = (operator === '==' || operator === '!=') ? PHP.ORDER_EQUALITY :
-                                                           PHP.ORDER_RELATIONAL;
-  const argument0 = PHP.valueToCode(block, 'A', order) || '0';
-  const argument1 = PHP.valueToCode(block, 'B', order) || '0';
+  const order = (operator === '==' || operator === '!=') ? Order.EQUALITY :
+                                                           Order.RELATIONAL;
+  const argument0 = generator.valueToCode(block, 'A', order) || '0';
+  const argument1 = generator.valueToCode(block, 'B', order) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };
 
-PHP['logic_operation'] = function(block) {
+phpGenerator.forBlock['logic_operation'] = function(block, generator) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
   const order =
-      (operator === '&&') ? PHP.ORDER_LOGICAL_AND : PHP.ORDER_LOGICAL_OR;
-  let argument0 = PHP.valueToCode(block, 'A', order);
-  let argument1 = PHP.valueToCode(block, 'B', order);
+      (operator === '&&') ? Order.LOGICAL_AND : Order.LOGICAL_OR;
+  let argument0 = generator.valueToCode(block, 'A', order);
+  let argument1 = generator.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
     // If there are no arguments, then the return value is false.
     argument0 = 'false';
@@ -87,33 +92,33 @@ PHP['logic_operation'] = function(block) {
   return [code, order];
 };
 
-PHP['logic_negate'] = function(block) {
+phpGenerator.forBlock['logic_negate'] = function(block, generator) {
   // Negation.
-  const order = PHP.ORDER_LOGICAL_NOT;
-  const argument0 = PHP.valueToCode(block, 'BOOL', order) || 'true';
+  const order = Order.LOGICAL_NOT;
+  const argument0 = generator.valueToCode(block, 'BOOL', order) || 'true';
   const code = '!' + argument0;
   return [code, order];
 };
 
-PHP['logic_boolean'] = function(block) {
+phpGenerator.forBlock['logic_boolean'] = function(block, generator) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
-  return [code, PHP.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
-PHP['logic_null'] = function(block) {
+phpGenerator.forBlock['logic_null'] = function(block, generator) {
   // Null data type.
-  return ['null', PHP.ORDER_ATOMIC];
+  return ['null', Order.ATOMIC];
 };
 
-PHP['logic_ternary'] = function(block) {
+phpGenerator.forBlock['logic_ternary'] = function(block, generator) {
   // Ternary operator.
   const value_if =
-      PHP.valueToCode(block, 'IF', PHP.ORDER_CONDITIONAL) || 'false';
+      generator.valueToCode(block, 'IF', Order.CONDITIONAL) || 'false';
   const value_then =
-      PHP.valueToCode(block, 'THEN', PHP.ORDER_CONDITIONAL) || 'null';
+      generator.valueToCode(block, 'THEN', Order.CONDITIONAL) || 'null';
   const value_else =
-      PHP.valueToCode(block, 'ELSE', PHP.ORDER_CONDITIONAL) || 'null';
+      generator.valueToCode(block, 'ELSE', Order.CONDITIONAL) || 'null';
   const code = value_if + ' ? ' + value_then + ' : ' + value_else;
-  return [code, PHP.ORDER_CONDITIONAL];
+  return [code, Order.CONDITIONAL];
 };

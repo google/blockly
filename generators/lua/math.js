@@ -12,51 +12,51 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.math');
 
 import {NameType} from '../../core/names.js';
-import {luaGenerator as Lua} from '../lua.js';
+import {luaGenerator, Order} from '../lua.js';
 
 
-Lua['math_number'] = function(block) {
+luaGenerator.forBlock['math_number'] = function(block, generator) {
   // Numeric value.
   const code = Number(block.getFieldValue('NUM'));
-  const order = code < 0 ? Lua.ORDER_UNARY : Lua.ORDER_ATOMIC;
+  const order = code < 0 ? Order.UNARY : Order.ATOMIC;
   return [code, order];
 };
 
-Lua['math_arithmetic'] = function(block) {
+luaGenerator.forBlock['math_arithmetic'] = function(block, generator) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
-    'ADD': [' + ', Lua.ORDER_ADDITIVE],
-    'MINUS': [' - ', Lua.ORDER_ADDITIVE],
-    'MULTIPLY': [' * ', Lua.ORDER_MULTIPLICATIVE],
-    'DIVIDE': [' / ', Lua.ORDER_MULTIPLICATIVE],
-    'POWER': [' ^ ', Lua.ORDER_EXPONENTIATION],
+    'ADD': [' + ', Order.ADDITIVE],
+    'MINUS': [' - ', Order.ADDITIVE],
+    'MULTIPLY': [' * ', Order.MULTIPLICATIVE],
+    'DIVIDE': [' / ', Order.MULTIPLICATIVE],
+    'POWER': [' ^ ', Order.EXPONENTIATION],
   };
   const tuple = OPERATORS[block.getFieldValue('OP')];
   const operator = tuple[0];
   const order = tuple[1];
-  const argument0 = Lua.valueToCode(block, 'A', order) || '0';
-  const argument1 = Lua.valueToCode(block, 'B', order) || '0';
+  const argument0 = generator.valueToCode(block, 'A', order) || '0';
+  const argument1 = generator.valueToCode(block, 'B', order) || '0';
   const code = argument0 + operator + argument1;
   return [code, order];
 };
 
-Lua['math_single'] = function(block) {
+luaGenerator.forBlock['math_single'] = function(block, generator) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let arg;
   if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
-    arg = Lua.valueToCode(block, 'NUM', Lua.ORDER_UNARY) || '0';
-    return ['-' + arg, Lua.ORDER_UNARY];
+    arg = generator.valueToCode(block, 'NUM', Order.UNARY) || '0';
+    return ['-' + arg, Order.UNARY];
   }
   if (operator === 'POW10') {
-    arg = Lua.valueToCode(block, 'NUM', Lua.ORDER_EXPONENTIATION) || '0';
-    return ['10 ^ ' + arg, Lua.ORDER_EXPONENTIATION];
+    arg = generator.valueToCode(block, 'NUM', Order.EXPONENTIATION) || '0';
+    return ['10 ^ ' + arg, Order.EXPONENTIATION];
   }
   if (operator === 'ROUND') {
-    arg = Lua.valueToCode(block, 'NUM', Lua.ORDER_ADDITIVE) || '0';
+    arg = generator.valueToCode(block, 'NUM', Order.ADDITIVE) || '0';
   } else {
-    arg = Lua.valueToCode(block, 'NUM', Lua.ORDER_NONE) || '0';
+    arg = generator.valueToCode(block, 'NUM', Order.NONE) || '0';
   }
 
   let code;
@@ -107,43 +107,43 @@ Lua['math_single'] = function(block) {
     default:
       throw Error('Unknown math operator: ' + operator);
   }
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['math_constant'] = function(block) {
+luaGenerator.forBlock['math_constant'] = function(block, generator) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
-    'PI': ['math.pi', Lua.ORDER_HIGH],
-    'E': ['math.exp(1)', Lua.ORDER_HIGH],
-    'GOLDEN_RATIO': ['(1 + math.sqrt(5)) / 2', Lua.ORDER_MULTIPLICATIVE],
-    'SQRT2': ['math.sqrt(2)', Lua.ORDER_HIGH],
-    'SQRT1_2': ['math.sqrt(1 / 2)', Lua.ORDER_HIGH],
-    'INFINITY': ['math.huge', Lua.ORDER_HIGH],
+    'PI': ['math.pi', Order.HIGH],
+    'E': ['math.exp(1)', Order.HIGH],
+    'GOLDEN_RATIO': ['(1 + math.sqrt(5)) / 2', Order.MULTIPLICATIVE],
+    'SQRT2': ['math.sqrt(2)', Order.HIGH],
+    'SQRT1_2': ['math.sqrt(1 / 2)', Order.HIGH],
+    'INFINITY': ['math.huge', Order.HIGH],
   };
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
 
-Lua['math_number_property'] = function(block) {
+luaGenerator.forBlock['math_number_property'] = function(block, generator) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-    'EVEN': [' % 2 == 0', Lua.ORDER_MULTIPLICATIVE, Lua.ORDER_RELATIONAL],
-    'ODD': [' % 2 == 1', Lua.ORDER_MULTIPLICATIVE, Lua.ORDER_RELATIONAL],
-    'WHOLE': [' % 1 == 0', Lua.ORDER_MULTIPLICATIVE, Lua.ORDER_RELATIONAL],
-    'POSITIVE': [' > 0', Lua.ORDER_RELATIONAL, Lua.ORDER_RELATIONAL],
-    'NEGATIVE': [' < 0', Lua.ORDER_RELATIONAL, Lua.ORDER_RELATIONAL],
-    'DIVISIBLE_BY': [null, Lua.ORDER_MULTIPLICATIVE, Lua.ORDER_RELATIONAL],
-    'PRIME': [null, Lua.ORDER_NONE, Lua.ORDER_HIGH],
+    'EVEN': [' % 2 == 0', Order.MULTIPLICATIVE, Order.RELATIONAL],
+    'ODD': [' % 2 == 1', Order.MULTIPLICATIVE, Order.RELATIONAL],
+    'WHOLE': [' % 1 == 0', Order.MULTIPLICATIVE, Order.RELATIONAL],
+    'POSITIVE': [' > 0', Order.RELATIONAL, Order.RELATIONAL],
+    'NEGATIVE': [' < 0', Order.RELATIONAL, Order.RELATIONAL],
+    'DIVISIBLE_BY': [null, Order.MULTIPLICATIVE, Order.RELATIONAL],
+    'PRIME': [null, Order.NONE, Order.HIGH],
   };
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
-  const numberToCheck = Lua.valueToCode(block, 'NUMBER_TO_CHECK',
+  const numberToCheck = generator.valueToCode(block, 'NUMBER_TO_CHECK',
       inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    const functionName = Lua.provideFunction_('math_isPrime', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(n)
+    const functionName = generator.provideFunction_('math_isPrime', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(n)
   -- https://en.wikipedia.org/wiki/Primality_test#Naive_methods
   if n == 2 or n == 3 then
     return true
@@ -164,12 +164,12 @@ end
 `);
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = Lua.valueToCode(block, 'DIVISOR',
-        Lua.ORDER_MULTIPLICATIVE) || '0';
-    // If 'divisor' is some code that evals to 0, Lua will produce a nan.
+    const divisor = generator.valueToCode(block, 'DIVISOR',
+        Order.MULTIPLICATIVE) || '0';
+    // If 'divisor' is some code that evals to 0, generator will produce a nan.
     // Let's produce nil if we can determine this at compile-time.
     if (divisor === '0') {
-      return ['nil', Lua.ORDER_ATOMIC];
+      return ['nil', Order.ATOMIC];
     }
     // The normal trick to implement ?: with and/or doesn't work here:
     //   divisor == 0 and nil or number_to_check % divisor == 0
@@ -181,29 +181,31 @@ end
   return [code, outputOrder];
 };
 
-Lua['math_change'] = function(block) {
+luaGenerator.forBlock['math_change'] = function(block, generator) {
   // Add to a variable in place.
-  const argument0 = Lua.valueToCode(block, 'DELTA', Lua.ORDER_ADDITIVE) || '0';
+  const argument0 =
+      generator.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
   const varName =
-      Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+      generator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = ' + varName + ' + ' + argument0 + '\n';
 };
 
 // Rounding functions have a single operand.
-Lua['math_round'] = Lua['math_single'];
+luaGenerator.forBlock['math_round'] = luaGenerator.forBlock['math_single'];
 // Trigonometry functions have a single operand.
-Lua['math_trig'] = Lua['math_single'];
+luaGenerator.forBlock['math_trig'] = luaGenerator.forBlock['math_single'];
 
-Lua['math_on_list'] = function(block) {
+luaGenerator.forBlock['math_on_list'] = function(block, generator) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
-  const list = Lua.valueToCode(block, 'LIST', Lua.ORDER_NONE) || '{}';
+  const list = generator.valueToCode(block, 'LIST', Order.NONE) || '{}';
   let functionName;
 
   // Functions needed in more than one case.
   function provideSum() {
-    return Lua.provideFunction_('math_sum', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+    return generator.provideFunction_('math_sum', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(t)
   local result = 0
   for _, v in ipairs(t) do
     result = result + v
@@ -220,8 +222,8 @@ end
 
     case 'MIN':
       // Returns 0 for the empty list.
-      functionName = Lua.provideFunction_('math_min', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+      functionName = generator.provideFunction_('math_min', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(t)
   if #t == 0 then
     return 0
   end
@@ -238,8 +240,8 @@ end
 
     case 'AVERAGE':
       // Returns 0 for the empty list.
-      functionName = Lua.provideFunction_('math_average', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+      functionName = generator.provideFunction_('math_average', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(t)
   if #t == 0 then
     return 0
   end
@@ -250,8 +252,8 @@ end
 
     case 'MAX':
       // Returns 0 for the empty list.
-      functionName = Lua.provideFunction_('math_max', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+      functionName = generator.provideFunction_('math_max', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(t)
   if #t == 0 then
     return 0
   end
@@ -268,8 +270,8 @@ end
 
     case 'MEDIAN':
       // This operation excludes non-numbers.
-      functionName = Lua.provideFunction_('math_median', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+      functionName = generator.provideFunction_('math_median', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(t)
   -- Source: http://lua-users.org/wiki/SimpleStats
   if #t == 0 then
     return 0
@@ -293,9 +295,9 @@ end
     case 'MODE':
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
-      // The Lua version includes non-numbers.
-      functionName = Lua.provideFunction_('math_modes', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+      // The generator version includes non-numbers.
+      functionName = generator.provideFunction_('math_modes', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(t)
   -- Source: http://lua-users.org/wiki/SimpleStats
   local counts = {}
   for _, v in ipairs(t) do
@@ -323,8 +325,8 @@ end
       break;
 
     case 'STD_DEV':
-      functionName = Lua.provideFunction_('math_standard_deviation', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+      functionName = generator.provideFunction_('math_standard_deviation', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(t)
   local m
   local vm
   local total = 0
@@ -345,8 +347,8 @@ end
       break;
 
     case 'RANDOM':
-      functionName = Lua.provideFunction_('math_random_list', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+      functionName = generator.provideFunction_('math_random_list', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(t)
   if #t == 0 then
     return nil
   end
@@ -358,49 +360,49 @@ end
     default:
       throw Error('Unknown operator: ' + func);
   }
-  return [functionName + '(' + list + ')', Lua.ORDER_HIGH];
+  return [functionName + '(' + list + ')', Order.HIGH];
 };
 
-Lua['math_modulo'] = function(block) {
+luaGenerator.forBlock['math_modulo'] = function(block, generator) {
   // Remainder computation.
   const argument0 =
-      Lua.valueToCode(block, 'DIVIDEND', Lua.ORDER_MULTIPLICATIVE) || '0';
+      generator.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) || '0';
   const argument1 =
-      Lua.valueToCode(block, 'DIVISOR', Lua.ORDER_MULTIPLICATIVE) || '0';
+      generator.valueToCode(block, 'DIVISOR', Order.MULTIPLICATIVE) || '0';
   const code = argument0 + ' % ' + argument1;
-  return [code, Lua.ORDER_MULTIPLICATIVE];
+  return [code, Order.MULTIPLICATIVE];
 };
 
-Lua['math_constrain'] = function(block) {
+luaGenerator.forBlock['math_constrain'] = function(block, generator) {
   // Constrain a number between two limits.
-  const argument0 = Lua.valueToCode(block, 'VALUE', Lua.ORDER_NONE) || '0';
+  const argument0 = generator.valueToCode(block, 'VALUE', Order.NONE) || '0';
   const argument1 =
-      Lua.valueToCode(block, 'LOW', Lua.ORDER_NONE) || '-math.huge';
+      generator.valueToCode(block, 'LOW', Order.NONE) || '-math.huge';
   const argument2 =
-      Lua.valueToCode(block, 'HIGH', Lua.ORDER_NONE) || 'math.huge';
+      generator.valueToCode(block, 'HIGH', Order.NONE) || 'math.huge';
   const code = 'math.min(math.max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['math_random_int'] = function(block) {
+luaGenerator.forBlock['math_random_int'] = function(block, generator) {
   // Random integer between [X] and [Y].
-  const argument0 = Lua.valueToCode(block, 'FROM', Lua.ORDER_NONE) || '0';
-  const argument1 = Lua.valueToCode(block, 'TO', Lua.ORDER_NONE) || '0';
+  const argument0 = generator.valueToCode(block, 'FROM', Order.NONE) || '0';
+  const argument1 = generator.valueToCode(block, 'TO', Order.NONE) || '0';
   const code = 'math.random(' + argument0 + ', ' + argument1 + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['math_random_float'] = function(block) {
+luaGenerator.forBlock['math_random_float'] = function(block, generator) {
   // Random fraction between 0 and 1.
-  return ['math.random()', Lua.ORDER_HIGH];
+  return ['math.random()', Order.HIGH];
 };
 
-Lua['math_atan2'] = function(block) {
+luaGenerator.forBlock['math_atan2'] = function(block, generator) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  const argument0 = Lua.valueToCode(block, 'X', Lua.ORDER_NONE) || '0';
-  const argument1 = Lua.valueToCode(block, 'Y', Lua.ORDER_NONE) || '0';
+  const argument0 = generator.valueToCode(block, 'X', Order.NONE) || '0';
+  const argument1 = generator.valueToCode(block, 'Y', Order.NONE) || '0';
   return [
-    'math.deg(math.atan2(' + argument1 + ', ' + argument0 + '))', Lua.ORDER_HIGH
+    'math.deg(math.atan2(' + argument1 + ', ' + argument0 + '))', Order.HIGH
   ];
 };

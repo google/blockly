@@ -49,6 +49,7 @@ import type {Workspace} from './workspace.js';
 import {DummyInput} from './inputs/dummy_input.js';
 import {ValueInput} from './inputs/value_input.js';
 import {StatementInput} from './inputs/statement_input.js';
+import {IconType} from './icons/icon_types.js';
 
 /**
  * Class for one block.
@@ -2227,10 +2228,10 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param type The type of the icon to remove from the block.
    * @returns True if an icon with the given type was found, false otherwise.
    */
-  removeIcon(type: string): boolean {
+  removeIcon(type: IconType<IIcon>): boolean {
     if (!this.hasIcon(type)) return false;
     this.getIcon(type)?.dispose();
-    this.icons = this.icons.filter((icon) => icon.getType() !== type);
+    this.icons = this.icons.filter((icon) => !icon.getType().equals(type));
     return true;
   }
 
@@ -2238,17 +2239,22 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns True if an icon with the given type exists on the block,
    *     false otherwise.
    */
-  hasIcon(type: string): boolean {
-    return this.icons.some((icon) => icon.getType() === type);
+  hasIcon(type: IconType<IIcon>): boolean {
+    return this.icons.some((icon) => icon.getType().equals(type));
   }
 
-  // TODO (#7126): Make this take in a generic type.
   /**
+   * @param type The type of the icon to retrieve. Prefer passing an `IconType`
+   *     for proper type checking when using typescript.
    * @returns The icon with the given type if it exists on the block, undefined
    *     otherwise.
    */
-  getIcon(type: string): IIcon | undefined {
-    return this.icons.find((icon) => icon.getType() === type);
+  getIcon<T extends IIcon>(type: IconType<T> | string): T | undefined {
+    if (type instanceof IconType) {
+      return this.icons.find((icon) => icon.getType().equals(type)) as T;
+    } else {
+      return this.icons.find((icon) => icon.getType().toString() === type) as T;
+    }
   }
 
   /** @returns An array of the icons attached to this block. */

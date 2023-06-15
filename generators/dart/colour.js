@@ -11,22 +11,23 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.colour');
 
-import {dartGenerator as Dart} from '../dart.js';
+import {dartGenerator, Order} from '../dart.js';
 
 
-Dart.addReservedWords('Math');
+dartGenerator.addReservedWords('Math');
 
-Dart['colour_picker'] = function(block) {
+dartGenerator.forBlock['colour_picker'] = function(block, generator) {
   // Colour picker.
-  const code = Dart.quote_(block.getFieldValue('COLOUR'));
-  return [code, Dart.ORDER_ATOMIC];
+  const code = generator.quote_(block.getFieldValue('COLOUR'));
+  return [code, Order.ATOMIC];
 };
 
-Dart['colour_random'] = function(block) {
+dartGenerator.forBlock['colour_random'] = function(block, generator) {
   // Generate a random colour.
-  Dart.definitions_['import_dart_math'] = "import 'dart:math' as Math;";
-  const functionName = Dart.provideFunction_('colour_random', `
-String ${Dart.FUNCTION_NAME_PLACEHOLDER_}() {
+  generator.definitions_['import_dart_math'] =
+      "import 'dart:math' as Math;";
+  const functionName = generator.provideFunction_('colour_random', `
+String ${generator.FUNCTION_NAME_PLACEHOLDER_}() {
   String hex = '0123456789abcdef';
   var rnd = new Math.Random();
   return '#\${hex[rnd.nextInt(16)]}\${hex[rnd.nextInt(16)]}'
@@ -35,21 +36,19 @@ String ${Dart.FUNCTION_NAME_PLACEHOLDER_}() {
 }
 `);
   const code = functionName + '()';
-  return [code, Dart.ORDER_UNARY_POSTFIX];
+  return [code, Order.UNARY_POSTFIX];
 };
 
-Dart['colour_rgb'] = function(block) {
+dartGenerator.forBlock['colour_rgb'] = function(block, generator) {
   // Compose a colour from RGB components expressed as percentages.
-  const red = Dart.valueToCode(block, 'RED',
-      Dart.ORDER_NONE) || 0;
-  const green = Dart.valueToCode(block, 'GREEN',
-      Dart.ORDER_NONE) || 0;
-  const blue = Dart.valueToCode(block, 'BLUE',
-      Dart.ORDER_NONE) || 0;
+  const red = generator.valueToCode(block, 'RED', Order.NONE) || 0;
+  const green = generator.valueToCode(block, 'GREEN', Order.NONE) || 0;
+  const blue = generator.valueToCode(block, 'BLUE', Order.NONE) || 0;
 
-  Dart.definitions_['import_dart_math'] = "import 'dart:math' as Math;";
-  const functionName = Dart.provideFunction_('colour_rgb', `
-String ${Dart.FUNCTION_NAME_PLACEHOLDER_}(num r, num g, num b) {
+  generator.definitions_['import_dart_math'] =
+      "import 'dart:math' as Math;";
+  const functionName = generator.provideFunction_('colour_rgb', `
+String ${generator.FUNCTION_NAME_PLACEHOLDER_}(num r, num g, num b) {
   num rn = (Math.max(Math.min(r, 100), 0) * 2.55).round();
   String rs = rn.toInt().toRadixString(16);
   rs = '0$rs';
@@ -66,18 +65,22 @@ String ${Dart.FUNCTION_NAME_PLACEHOLDER_}(num r, num g, num b) {
 }
 `);
   const code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
-  return [code, Dart.ORDER_UNARY_POSTFIX];
+  return [code, Order.UNARY_POSTFIX];
 };
 
-Dart['colour_blend'] = function(block) {
+dartGenerator.forBlock['colour_blend'] = function(block, generator) {
   // Blend two colours together.
-  const c1 = Dart.valueToCode(block, 'COLOUR1', Dart.ORDER_NONE) || "'#000000'";
-  const c2 = Dart.valueToCode(block, 'COLOUR2', Dart.ORDER_NONE) || "'#000000'";
-  const ratio = Dart.valueToCode(block, 'RATIO', Dart.ORDER_NONE) || 0.5;
+  const c1 =
+      generator.valueToCode(block, 'COLOUR1', Order.NONE) || "'#000000'";
+  const c2 =
+      generator.valueToCode(block, 'COLOUR2', Order.NONE) || "'#000000'";
+  const ratio =
+      generator.valueToCode(block, 'RATIO', Order.NONE) || 0.5;
 
-  Dart.definitions_['import_dart_math'] = "import 'dart:math' as Math;";
-  const functionName = Dart.provideFunction_('colour_blend', `
-String ${Dart.FUNCTION_NAME_PLACEHOLDER_}(String c1, String c2, num ratio) {
+  generator.definitions_['import_dart_math'] =
+      "import 'dart:math' as Math;";
+  const functionName = generator.provideFunction_('colour_blend', `
+String ${generator.FUNCTION_NAME_PLACEHOLDER_}(String c1, String c2, num ratio) {
   ratio = Math.max(Math.min(ratio, 1), 0);
   int r1 = int.parse('0x\${c1.substring(1, 3)}');
   int g1 = int.parse('0x\${c1.substring(3, 5)}');
@@ -101,5 +104,5 @@ String ${Dart.FUNCTION_NAME_PLACEHOLDER_}(String c1, String c2, num ratio) {
 }
 `);
   const code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
-  return [code, Dart.ORDER_UNARY_POSTFIX];
+  return [code, Order.UNARY_POSTFIX];
 };

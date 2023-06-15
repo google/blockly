@@ -295,7 +295,6 @@ export class FieldNumber extends FieldInput<number> {
    */
   protected override widgetCreate_(): HTMLInputElement {
     const htmlInput = super.widgetCreate_() as HTMLInputElement;
-    htmlInput.type = 'number';
 
     // Set the accessibility state
     if (this.min_ > -Infinity) {

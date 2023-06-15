@@ -293,8 +293,8 @@ function buildJavaScript(done) {
 }
 
 /**
- * This task updates DEPS_FILE (deps.js), used by
- * bootstrap.js when loading Blockly in uncompiled mode.
+ * This task updates DEPS_FILE (deps.js), used by the debug module
+ * loader (via bootstrap.js) when loading Blockly in uncompiled mode.
  *
  * Also updates TEST_DEPS_FILE (deps.mocha.js), used by the mocha test
  * suite.

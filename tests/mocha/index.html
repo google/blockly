@@ -34,20 +34,6 @@
         loadCompressed: false,
         depsFiles: ['build/deps.js', 'build/deps.mocha.js'],
         requires: [
-          // Blockly modules needed by tests.
-          'Blockly',
-          'Blockly.libraryBlocks',
-          'Blockly.Dart',
-          'Blockly.Dart.texts',
-          'Blockly.JavaScript',
-          'Blockly.JavaScript.texts',
-          'Blockly.Lua',
-          'Blockly.Lua.texts',
-          'Blockly.PHP',
-          'Blockly.PHP.texts',
-          'Blockly.Python',
-          'Blockly.Python.texts',
-
           // Test modules.
           'Blockly.test.astNode',
           'Blockly.test.blockJson',
@@ -133,7 +119,7 @@
           'Blockly.test.xml',
           'Blockly.test.zoomControls',
         ],
-        additionalScripts: [
+        scripts: [
           'build/msg/en.js',
           'tests/playgrounds/screenshot.js',
           'node_modules/@blockly/dev-tools/dist/index.js',

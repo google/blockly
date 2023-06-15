@@ -13,14 +13,28 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.PHP.all');
 
-import './php/colour.js';
-import './php/lists.js';
-import './php/logic.js';
-import './php/loops.js';
-import './php/math.js';
-import './php/procedures.js';
-import './php/text.js';
-import './php/variables.js';
-import './php/variables_dynamic.js';
+import {PhpGenerator} from './php/php_generator.js';
+import * as colour from './php/colour.js';
+import * as lists from './php/lists.js';
+import * as logic from './php/logic.js';
+import * as loops from './php/loops.js';
+import * as math from './php/math.js';
+import * as procedures from './php/procedures.js';
+import * as text from './php/text.js';
+import * as variables from './php/variables.js';
+import * as variablesDynamic from './php/variables_dynamic.js';
 
 export * from './php/php_generator.js';
+
+/**
+ * Php code generator instance.
+ * @type {!PhpGenerator}
+ */
+export const phpGenerator = new PhpGenerator();
+
+// Install per-block-type generator functions:
+Object.assign(
+  phpGenerator.forBlock,
+  colour, lists, logic, loops, math, procedures,
+  text, variables, variablesDynamic
+);

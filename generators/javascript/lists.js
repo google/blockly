@@ -13,15 +13,15 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.lists');
 
 import {NameType} from '../../core/names.js';
-import {Order, javascriptGenerator} from './javascript_generator.js';
+import {Order} from './javascript_generator.js';
 
 
-javascriptGenerator.forBlock['lists_create_empty'] = function(block, generator) {
+export function lists_create_empty(block, generator) {
   // Create an empty list.
   return ['[]', Order.ATOMIC];
 };
 
-javascriptGenerator.forBlock['lists_create_with'] = function(block, generator) {
+export function lists_create_with(block, generator) {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
@@ -33,7 +33,7 @@ javascriptGenerator.forBlock['lists_create_with'] = function(block, generator) {
   return [code, Order.ATOMIC];
 };
 
-javascriptGenerator.forBlock['lists_repeat'] = function(block, generator) {
+export function lists_repeat(block, generator) {
   // Create a list with one element repeated.
   const functionName = generator.provideFunction_('listsRepeat', `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}(value, n) {
@@ -52,21 +52,21 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(value, n) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['lists_length'] = function(block, generator) {
+export function lists_length(block, generator) {
   // String or array length.
   const list =
       generator.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
   return [list + '.length', Order.MEMBER];
 };
 
-javascriptGenerator.forBlock['lists_isEmpty'] = function(block, generator) {
+export function lists_isEmpty(block, generator) {
   // Is the string null or array empty?
   const list =
       generator.valueToCode(block, 'VALUE', Order.MEMBER) || '[]';
   return ['!' + list + '.length', Order.LOGICAL_NOT];
 };
 
-javascriptGenerator.forBlock['lists_indexOf'] = function(block, generator) {
+export function lists_indexOf(block, generator) {
   // Find an item in the list.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'indexOf' : 'lastIndexOf';
@@ -81,7 +81,7 @@ javascriptGenerator.forBlock['lists_indexOf'] = function(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['lists_getIndex'] = function(block, generator) {
+export function lists_getIndex(block, generator) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -164,7 +164,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(list, remove) {
   throw Error('Unhandled combination (lists_getIndex).');
 };
 
-javascriptGenerator.forBlock['lists_setIndex'] = function(block, generator) {
+export function lists_setIndex(block, generator) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   let list =
@@ -266,7 +266,7 @@ const getSubstringIndex = function(listName, where, opt_at) {
   }
 };
 
-javascriptGenerator.forBlock['lists_getSublist'] = function(block, generator) {
+export function lists_getSublist(block, generator) {
   // Get sublist.
   const list =
       generator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
@@ -346,7 +346,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param})
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['lists_sort'] = function(block, generator) {
+export function lists_sort(block, generator) {
   // Block for sorting a list.
   const list =
       generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL) ||
@@ -375,7 +375,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(type, direction) {
   ];
 };
 
-javascriptGenerator.forBlock['lists_split'] = function(block, generator) {
+export function lists_split(block, generator) {
   // Block for splitting text into a list, or joining a list into text.
   let input = generator.valueToCode(block, 'INPUT', Order.MEMBER);
   const delimiter =
@@ -399,7 +399,7 @@ javascriptGenerator.forBlock['lists_split'] = function(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['lists_reverse'] = function(block, generator) {
+export function lists_reverse(block, generator) {
   // Block for reversing a list.
   const list =
       generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL) ||

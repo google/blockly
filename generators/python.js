@@ -13,14 +13,32 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.all');
 
-import './python/colour.js';
-import './python/lists.js';
-import './python/logic.js';
-import './python/loops.js';
-import './python/math.js';
-import './python/procedures.js';
-import './python/text.js';
-import './python/variables.js';
-import './python/variables_dynamic.js';
+import {PythonGenerator} from './python/python_generator.js';
+import * as colour from './python/colour.js';
+import * as lists from './python/lists.js';
+import * as logic from './python/logic.js';
+import * as loops from './python/loops.js';
+import * as math from './python/math.js';
+import * as procedures from './python/procedures.js';
+import * as text from './python/text.js';
+import * as variables from './python/variables.js';
+import * as variablesDynamic from './python/variables_dynamic.js';
 
 export * from './python/python_generator.js';
+
+/**
+ * Python code generator instance.
+ * @type {!PythonGenerator}
+ */
+export const pythonGenerator = new PythonGenerator();
+
+// Add reserved words.  This list should include all words mentioned
+// in RESERVED WORDS: comments in the imports above.
+pythonGenerator.addReservedWords('math,random,Number');
+
+// Install per-block-type generator functions:
+Object.assign(
+  pythonGenerator.forBlock,
+  colour, lists, logic, loops, math, procedures,
+  text, variables, variablesDynamic
+);

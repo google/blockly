@@ -11,10 +11,10 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.logic');
 
-import {dartGenerator, Order} from './dart_generator.js';
+import {Order} from './dart_generator.js';
 
 
-dartGenerator.forBlock['controls_if'] = function(block, generator) {
+export function controls_if(block, generator) {
   // If/elseif/else condition.
   let n = 0;
   let code = '', branchCode, conditionCode;
@@ -52,10 +52,9 @@ dartGenerator.forBlock['controls_if'] = function(block, generator) {
   return code + '\n';
 };
 
-dartGenerator.forBlock['controls_ifelse'] =
-    dartGenerator.forBlock['controls_if'];
+export const controls_ifelse = controls_if;
 
-dartGenerator.forBlock['logic_compare'] = function(block, generator) {
+export function logic_compare(block, generator) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
@@ -69,7 +68,7 @@ dartGenerator.forBlock['logic_compare'] = function(block, generator) {
   return [code, order];
 };
 
-dartGenerator.forBlock['logic_operation'] = function(block, generator) {
+export function logic_operation(block, generator) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
   const order =
@@ -94,7 +93,7 @@ dartGenerator.forBlock['logic_operation'] = function(block, generator) {
   return [code, order];
 };
 
-dartGenerator.forBlock['logic_negate'] = function(block, generator) {
+export function logic_negate(block, generator) {
   // Negation.
   const order = Order.UNARY_PREFIX;
   const argument0 = generator.valueToCode(block, 'BOOL', order) || 'true';
@@ -102,18 +101,18 @@ dartGenerator.forBlock['logic_negate'] = function(block, generator) {
   return [code, order];
 };
 
-dartGenerator.forBlock['logic_boolean'] = function(block, generator) {
+export function logic_boolean(block, generator) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
   return [code, Order.ATOMIC];
 };
 
-dartGenerator.forBlock['logic_null'] = function(block, generator) {
+export function logic_null(block, generator) {
   // Null data type.
   return ['null', Order.ATOMIC];
 };
 
-dartGenerator.forBlock['logic_ternary'] = function(block, generator) {
+export function logic_ternary(block, generator) {
   // Ternary operator.
   const value_if =
       generator.valueToCode(block, 'IF', Order.CONDITIONAL) || 'false';

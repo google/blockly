@@ -333,9 +333,3 @@ export class JavascriptGenerator extends CodeGenerator {
     return at;
   }
 }
-
-/**
- * JavaScript code generator instance.
- * @type {!JavascriptGenerator}
- */
-export const javascriptGenerator = new JavascriptGenerator();

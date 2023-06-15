@@ -11,22 +11,22 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.colour');
 
-import {luaGenerator, Order} from './lua_generator.js';
+import {Order} from './lua_generator.js';
 
 
-luaGenerator.forBlock['colour_picker'] = function(block, generator) {
+export function colour_picker(block, generator) {
   // Colour picker.
   const code = generator.quote_(block.getFieldValue('COLOUR'));
   return [code, Order.ATOMIC];
 };
 
-luaGenerator.forBlock['colour_random'] = function(block, generator) {
+export function colour_random(block, generator) {
   // Generate a random colour.
   const code = 'string.format("#%06x", math.random(0, 2^24 - 1))';
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['colour_rgb'] = function(block, generator) {
+export function colour_rgb(block, generator) {
   // Compose a colour from RGB components expressed as percentages.
   const functionName = generator.provideFunction_('colour_rgb', `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}(r, g, b)
@@ -43,7 +43,7 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['colour_blend'] = function(block, generator) {
+export function colour_blend(block, generator) {
   // Blend two colours together.
   const functionName = generator.provideFunction_('colour_blend', `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}(colour1, colour2, ratio)

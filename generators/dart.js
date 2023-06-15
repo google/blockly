@@ -13,14 +13,32 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.all');
 
-import './dart/colour.js';
-import './dart/lists.js';
-import './dart/logic.js';
-import './dart/loops.js';
-import './dart/math.js';
-import './dart/procedures.js';
-import './dart/text.js';
-import './dart/variables.js';
-import './dart/variables_dynamic.js';
+import {DartGenerator} from './dart/dart_generator.js';
+import * as colour from './dart/colour.js';
+import * as lists from './dart/lists.js';
+import * as logic from './dart/logic.js';
+import * as loops from './dart/loops.js';
+import * as math from './dart/math.js';
+import * as procedures from './dart/procedures.js';
+import * as text from './dart/text.js';
+import * as variables from './dart/variables.js';
+import * as variablesDynamic from './dart/variables_dynamic.js';
 
 export * from './dart/dart_generator.js';
+
+/**
+ * Dart code generator instance.
+ * @type {!DartGenerator}
+ */
+export const dartGenerator = new DartGenerator();
+
+// Add reserved words.  This list should include all words mentioned
+// in RESERVED WORDS: comments in the imports above.
+dartGenerator.addReservedWords('Html,Math');
+
+// Install per-block-type generator functions:
+Object.assign(
+  dartGenerator.forBlock,
+  colour, lists, logic, loops, math, procedures,
+  text, variables, variablesDynamic
+);

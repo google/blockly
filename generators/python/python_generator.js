@@ -338,10 +338,3 @@ export class PythonGenerator extends CodeGenerator {
     return at;
   }
 }
-
-/**
- * Python code generator.
- * @type {!PythonGenerator}
- */
-export const pythonGenerator = new PythonGenerator();
-  

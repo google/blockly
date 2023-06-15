@@ -308,9 +308,3 @@ export class PhpGenerator extends CodeGenerator {
     return at;
   };
 }
-
-/**
- * PHP code generator.
- * @type {!PhpGenerator}
- */
-export const phpGenerator = new PhpGenerator();

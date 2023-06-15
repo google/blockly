@@ -13,14 +13,28 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.all');
 
-import './lua/colour.js';
-import './lua/lists.js';
-import './lua/logic.js';
-import './lua/loops.js';
-import './lua/math.js';
-import './lua/procedures.js';
-import './lua/text.js';
-import './lua/variables.js';
-import './lua/variables_dynamic.js';
+import {LuaGenerator} from './lua/lua_generator.js';
+import * as colour from './lua/colour.js';
+import * as lists from './lua/lists.js';
+import * as logic from './lua/logic.js';
+import * as loops from './lua/loops.js';
+import * as math from './lua/math.js';
+import * as procedures from './lua/procedures.js';
+import * as text from './lua/text.js';
+import * as variables from './lua/variables.js';
+import * as variablesDynamic from './lua/variables_dynamic.js';
 
 export * from './lua/lua_generator.js';
+
+/**
+ * Lua code generator instance.
+ * @type {!LuaGenerator}
+ */
+export const luaGenerator = new LuaGenerator();
+
+// Install per-block-type generator functions:
+Object.assign(
+  luaGenerator.forBlock,
+  colour, lists, logic, loops, math, procedures,
+  text, variables, variablesDynamic
+);

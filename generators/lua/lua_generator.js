@@ -211,9 +211,3 @@ export class LuaGenerator extends CodeGenerator {
     return commentCode + code + nextCode;
   };
 }
-
-/**
- * Lua code generator.
- * @type {!LuaGenerator}
- */
-export const luaGenerator = new LuaGenerator('Lua');

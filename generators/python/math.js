@@ -12,13 +12,13 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.math');
 
 import {NameType} from '../../core/names.js';
-import {pythonGenerator, Order} from './python_generator.js';
+import {Order} from './python_generator.js';
 
 
 // If any new block imports any library, add that library name here.
-pythonGenerator.addReservedWords('math,random,Number');
+// RESERVED WORDS: 'math,random,Number'
 
-pythonGenerator.forBlock['math_number'] = function(block, generator) {
+export function math_number(block, generator) {
   // Numeric value.
   let code = Number(block.getFieldValue('NUM'));
   let order;
@@ -34,7 +34,7 @@ pythonGenerator.forBlock['math_number'] = function(block, generator) {
   return [code, order];
 };
 
-pythonGenerator.forBlock['math_arithmetic'] = function(block, generator) {
+export function math_arithmetic(block, generator) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', Order.ADDITIVE],
@@ -57,7 +57,7 @@ pythonGenerator.forBlock['math_arithmetic'] = function(block, generator) {
   // legibility of the generated code.
 };
 
-pythonGenerator.forBlock['math_single'] = function(block, generator) {
+export function math_single(block, generator) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
@@ -135,7 +135,7 @@ pythonGenerator.forBlock['math_single'] = function(block, generator) {
   return [code, Order.MULTIPLICATIVE];
 };
 
-pythonGenerator.forBlock['math_constant'] = function(block, generator) {
+export function math_constant(block, generator) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['math.pi', Order.MEMBER],
@@ -152,7 +152,7 @@ pythonGenerator.forBlock['math_constant'] = function(block, generator) {
   return CONSTANTS[constant];
 };
 
-pythonGenerator.forBlock['math_number_property'] = function(block, generator) {
+export function math_number_property(block, generator) {
    // Check if a number is even, odd, prime, whole, positive, or negative
    // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -211,7 +211,7 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(n):
   return [code, outputOrder];
 };
 
-pythonGenerator.forBlock['math_change'] = function(block, generator) {
+export function math_change(block, generator) {
   // Add to a variable in place.
   generator.definitions_['from_numbers_import_Number'] =
       'from numbers import Number';
@@ -225,13 +225,11 @@ pythonGenerator.forBlock['math_change'] = function(block, generator) {
 };
 
 // Rounding functions have a single operand.
-pythonGenerator.forBlock['math_round'] =
-    pythonGenerator.forBlock['math_single'];
+export const math_round = math_single;
 // Trigonometry functions have a single operand.
-pythonGenerator.forBlock['math_trig'] =
-    pythonGenerator.forBlock['math_single'];
+export const math_trig = math_single;
 
-pythonGenerator.forBlock['math_on_list'] = function(block, generator) {
+export function math_on_list(block, generator) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   const list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
@@ -329,7 +327,7 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(numbers):
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['math_modulo'] = function(block, generator) {
+export function math_modulo(block, generator) {
   // Remainder computation.
   const argument0 =
       generator.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) ||
@@ -341,7 +339,7 @@ pythonGenerator.forBlock['math_modulo'] = function(block, generator) {
   return [code, Order.MULTIPLICATIVE];
 };
 
-pythonGenerator.forBlock['math_constrain'] = function(block, generator) {
+export function math_constrain(block, generator) {
   // Constrain a number between two limits.
   const argument0 =
       generator.valueToCode(block, 'VALUE', Order.NONE) || '0';
@@ -355,7 +353,7 @@ pythonGenerator.forBlock['math_constrain'] = function(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['math_random_int'] = function(block, generator) {
+export function math_random_int(block, generator) {
   // Random integer between [X] and [Y].
   generator.definitions_['import_random'] = 'import random';
   const argument0 =
@@ -366,13 +364,13 @@ pythonGenerator.forBlock['math_random_int'] = function(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['math_random_float'] = function(block, generator) {
+export function math_random_float(block, generator) {
   // Random fraction between 0 and 1.
   generator.definitions_['import_random'] = 'import random';
   return ['random.random()', Order.FUNCTION_CALL];
 };
 
-pythonGenerator.forBlock['math_atan2'] = function(block, generator) {
+export function math_atan2(block, generator) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   generator.definitions_['import_math'] = 'import math';
   const argument0 = generator.valueToCode(block, 'X', Order.NONE) || '0';

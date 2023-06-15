@@ -12,10 +12,10 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.variables');
 
 import {NameType} from '../../core/names.js';
-import {luaGenerator, Order} from './lua_generator.js';
+import {Order} from './lua_generator.js';
 
 
-luaGenerator.forBlock['variables_get'] = function(block, generator) {
+export function variables_get(block, generator) {
   // Variable getter.
   const code =
       generator.nameDB_.getName(
@@ -23,7 +23,7 @@ luaGenerator.forBlock['variables_get'] = function(block, generator) {
   return [code, Order.ATOMIC];
 };
 
-luaGenerator.forBlock['variables_set'] = function(block, generator) {
+export function variables_set(block, generator) {
   // Variable setter.
   const argument0 = generator.valueToCode(block, 'VALUE', Order.NONE) || '0';
   const varName =

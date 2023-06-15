@@ -12,7 +12,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.texts');
 
 import {NameType} from '../../core/names.js';
-import {Order, javascriptGenerator} from './javascript_generator.js';
+import {Order} from './javascript_generator.js';
 
 
 /**
@@ -53,13 +53,13 @@ const getSubstringIndex = function(stringName, where, opt_at) {
   }
 };
 
-javascriptGenerator.forBlock['text'] = function(block, generator) {
+export function text(block, generator) {
   // Text value.
   const code = generator.quote_(block.getFieldValue('TEXT'));
   return [code, Order.ATOMIC];
 };
 
-javascriptGenerator.forBlock['text_multiline'] = function(block, generator) {
+export function text_multiline(block, generator) {
   // Text value.
   const code =
       generator.multiline_quote_(block.getFieldValue('TEXT'));
@@ -68,7 +68,7 @@ javascriptGenerator.forBlock['text_multiline'] = function(block, generator) {
   return [code, order];
 };
 
-javascriptGenerator.forBlock['text_join'] = function(block, generator) {
+export function text_join(block, generator) {
   // Create a string made up of any number of elements of any type.
   switch (block.itemCount_) {
     case 0:
@@ -100,7 +100,7 @@ javascriptGenerator.forBlock['text_join'] = function(block, generator) {
   }
 };
 
-javascriptGenerator.forBlock['text_append'] = function(block, generator) {
+export function text_append(block, generator) {
   // Append to a variable in place.
   const varName = generator.nameDB_.getName(
       block.getFieldValue('VAR'), NameType.VARIABLE);
@@ -111,21 +111,21 @@ javascriptGenerator.forBlock['text_append'] = function(block, generator) {
   return code;
 };
 
-javascriptGenerator.forBlock['text_length'] = function(block, generator) {
+export function text_length(block, generator) {
   // String or array length.
   const text = generator.valueToCode(block, 'VALUE',
       Order.MEMBER) || "''";
   return [text + '.length', Order.MEMBER];
 };
 
-javascriptGenerator.forBlock['text_isEmpty'] = function(block, generator) {
+export function text_isEmpty(block, generator) {
   // Is the string null or array empty?
   const text = generator.valueToCode(block, 'VALUE',
       Order.MEMBER) || "''";
   return ['!' + text + '.length', Order.LOGICAL_NOT];
 };
 
-javascriptGenerator.forBlock['text_indexOf'] = function(block, generator) {
+export function text_indexOf(block, generator) {
   // Search the text for a substring.
   const operator = block.getFieldValue('END') === 'FIRST' ?
       'indexOf' : 'lastIndexOf';
@@ -141,7 +141,7 @@ javascriptGenerator.forBlock['text_indexOf'] = function(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_charAt'] = function(block, generator) {
+export function text_charAt(block, generator) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
@@ -184,7 +184,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(text) {
   throw Error('Unhandled option (text_charAt).');
 };
 
-javascriptGenerator.forBlock['text_getSubstring'] = function(block, generator) {
+export function text_getSubstring(block, generator) {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
@@ -263,7 +263,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param})
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_changeCase'] = function(block, generator) {
+export function text_changeCase(block, generator) {
   // Change capitalization.
   const OPERATORS = {
     'UPPERCASE': '.toUpperCase()',
@@ -292,7 +292,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(str) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_trim'] = function(block, generator) {
+export function text_trim(block, generator) {
   // Trim spaces.
   const OPERATORS = {
     'LEFT': ".replace(/^[\\s\\xa0]+/, '')",
@@ -305,14 +305,14 @@ javascriptGenerator.forBlock['text_trim'] = function(block, generator) {
   return [text + operator, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_print'] = function(block, generator) {
+export function text_print(block, generator) {
   // Print statement.
   const msg = generator.valueToCode(block, 'TEXT',
       Order.NONE) || "''";
   return 'window.alert(' + msg + ');\n';
 };
 
-javascriptGenerator.forBlock['text_prompt_ext'] = function(block, generator) {
+export function text_prompt_ext(block, generator) {
   // Prompt function.
   let msg;
   if (block.getField('TEXT')) {
@@ -330,10 +330,9 @@ javascriptGenerator.forBlock['text_prompt_ext'] = function(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_prompt'] =
-    javascriptGenerator.forBlock['text_prompt_ext'];
+export const text_prompt = text_prompt_ext;
 
-javascriptGenerator.forBlock['text_count'] = function(block, generator) {
+export function text_count(block, generator) {
   const text = generator.valueToCode(block, 'TEXT',
       Order.NONE) || "''";
   const sub = generator.valueToCode(block, 'SUB',
@@ -351,7 +350,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle) {
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_replace'] = function(block, generator) {
+export function text_replace(block, generator) {
   const text = generator.valueToCode(block, 'TEXT',
       Order.NONE) || "''";
   const from = generator.valueToCode(block, 'FROM',
@@ -370,7 +369,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle, replacement) 
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['text_reverse'] = function(block, generator) {
+export function text_reverse(block, generator) {
   const text = generator.valueToCode(block, 'TEXT',
       Order.MEMBER) || "''";
   const code = text + ".split('').reverse().join('')";

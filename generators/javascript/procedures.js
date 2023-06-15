@@ -12,10 +12,10 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.procedures');
 
 import {NameType} from '../../core/names.js';
-import {Order, javascriptGenerator} from './javascript_generator.js';
+import {Order} from './javascript_generator.js';
 
 
-javascriptGenerator.forBlock['procedures_defreturn'] = function(block, generator) {
+export function procedures_defreturn(block, generator) {
   // Define a procedure with a return value.
   const funcName = generator.nameDB_.getName(
       block.getFieldValue('NAME'), NameType.PROCEDURE);
@@ -65,10 +65,9 @@ javascriptGenerator.forBlock['procedures_defreturn'] = function(block, generator
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-javascriptGenerator.forBlock['procedures_defnoreturn'] =
-    javascriptGenerator.forBlock['procedures_defreturn'];
+export const procedures_defnoreturn = procedures_defreturn;
 
-javascriptGenerator.forBlock['procedures_callreturn'] = function(block, generator) {
+export function procedures_callreturn(block, generator) {
   // Call a procedure with a return value.
   const funcName = generator.nameDB_.getName(
       block.getFieldValue('NAME'), NameType.PROCEDURE);
@@ -82,7 +81,7 @@ javascriptGenerator.forBlock['procedures_callreturn'] = function(block, generato
   return [code, Order.FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['procedures_callnoreturn'] = function(block, generator) {
+export function procedures_callnoreturn(block, generator) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
@@ -90,7 +89,7 @@ javascriptGenerator.forBlock['procedures_callnoreturn'] = function(block, genera
   return tuple[0] + ';\n';
 };
 
-javascriptGenerator.forBlock['procedures_ifreturn'] = function(block, generator) {
+export function procedures_ifreturn(block, generator) {
   // Conditionally return value from a procedure.
   const condition =
       generator.valueToCode(block, 'CONDITION', Order.NONE) ||

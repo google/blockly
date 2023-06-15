@@ -309,9 +309,3 @@ export class DartGenerator extends CodeGenerator {
     return at;
   }
 }
-
-/**
- * Dart code generator.
- * @type {!DartGenerator}
- */
-export const dartGenerator = new DartGenerator();

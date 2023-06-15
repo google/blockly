@@ -13,10 +13,10 @@ goog.declareModuleId('Blockly.PHP.loops');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {phpGenerator, Order} from './php_generator.js';
+import {Order} from './php_generator.js';
 
 
-phpGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {
+export function controls_repeat_ext(block, generator) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -42,10 +42,9 @@ phpGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {
   return code;
 };
 
-phpGenerator.forBlock['controls_repeat'] =
-    phpGenerator.forBlock['controls_repeat_ext'];
+export const controls_repeat = controls_repeat_ext;
 
-phpGenerator.forBlock['controls_whileUntil'] = function(block, generator) {
+export function controls_whileUntil(block, generator) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
@@ -60,7 +59,7 @@ phpGenerator.forBlock['controls_whileUntil'] = function(block, generator) {
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
 };
 
-phpGenerator.forBlock['controls_for'] = function(block, generator) {
+export function controls_for(block, generator) {
   // For loop.
   const variable0 =
       generator.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
@@ -125,7 +124,7 @@ phpGenerator.forBlock['controls_for'] = function(block, generator) {
   return code;
 };
 
-phpGenerator.forBlock['controls_forEach'] = function(block, generator) {
+export function controls_forEach(block, generator) {
   // For each loop.
   const variable0 =
       generator.nameDB_.getName(
@@ -140,7 +139,7 @@ phpGenerator.forBlock['controls_forEach'] = function(block, generator) {
   return code;
 };
 
-phpGenerator.forBlock['controls_flow_statements'] = function(block, generator) {
+export function controls_flow_statements(block, generator) {
   // Flow statements: continue, break.
   let xfix = '';
   if (generator.STATEMENT_PREFIX) {

@@ -11,12 +11,12 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.loops');
 
-import {dartGenerator, Order} from './dart_generator.js';
+import {Order} from './dart_generator.js';
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
 
 
-dartGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {
+export function controls_repeat_ext(block, generator) {
   let repeats;
   // Repeat n times.
   if (block.getField('TIMES')) {
@@ -43,10 +43,9 @@ dartGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {
   return code;
 };
 
-dartGenerator.forBlock['controls_repeat'] =
-    dartGenerator.forBlock['controls_repeat_ext'];
+export const controls_repeat = controls_repeat_ext;
 
-dartGenerator.forBlock['controls_whileUntil'] = function(block, generator) {
+export function controls_whileUntil(block, generator) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
@@ -61,7 +60,7 @@ dartGenerator.forBlock['controls_whileUntil'] = function(block, generator) {
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
 };
 
-dartGenerator.forBlock['controls_for'] = function(block, generator) {
+export function controls_for(block, generator) {
   // For loop.
   const variable0 =
         generator.nameDB_.getName(
@@ -127,7 +126,7 @@ dartGenerator.forBlock['controls_for'] = function(block, generator) {
   return code;
 };
 
-dartGenerator.forBlock['controls_forEach'] = function(block, generator) {
+export function controls_forEach(block, generator) {
   // For each loop.
   const variable0 =
       generator.nameDB_.getName(
@@ -141,7 +140,7 @@ dartGenerator.forBlock['controls_forEach'] = function(block, generator) {
   return code;
 };
 
-dartGenerator.forBlock['controls_flow_statements'] = function(block, generator) {
+export function controls_flow_statements(block, generator) {
   // Flow statements: continue, break.
   let xfix = '';
   if (generator.STATEMENT_PREFIX) {

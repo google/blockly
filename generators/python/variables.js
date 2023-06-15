@@ -12,10 +12,10 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.variables');
 
 import {NameType} from '../../core/names.js';
-import {pythonGenerator, Order} from './python_generator.js';
+import {Order} from './python_generator.js';
 
 
-pythonGenerator.forBlock['variables_get'] = function(block, generator) {
+export function variables_get(block, generator) {
   // Variable getter.
   const code =
       generator.nameDB_.getName(
@@ -23,7 +23,7 @@ pythonGenerator.forBlock['variables_get'] = function(block, generator) {
   return [code, Order.ATOMIC];
 };
 
-pythonGenerator.forBlock['variables_set'] = function(block, generator) {
+export function variables_set(block, generator) {
   // Variable setter.
   const argument0 =
       generator.valueToCode(block, 'VALUE', Order.NONE) || '0';

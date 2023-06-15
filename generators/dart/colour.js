@@ -11,18 +11,18 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.colour');
 
-import {dartGenerator, Order} from './dart_generator.js';
+import {Order} from './dart_generator.js';
 
 
-dartGenerator.addReservedWords('Math');
+// RESERVED WORDS: 'Math'
 
-dartGenerator.forBlock['colour_picker'] = function(block, generator) {
+export function colour_picker(block, generator) {
   // Colour picker.
   const code = generator.quote_(block.getFieldValue('COLOUR'));
   return [code, Order.ATOMIC];
 };
 
-dartGenerator.forBlock['colour_random'] = function(block, generator) {
+export function colour_random(block, generator) {
   // Generate a random colour.
   generator.definitions_['import_dart_math'] =
       "import 'dart:math' as Math;";
@@ -39,7 +39,7 @@ String ${generator.FUNCTION_NAME_PLACEHOLDER_}() {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['colour_rgb'] = function(block, generator) {
+export function colour_rgb(block, generator) {
   // Compose a colour from RGB components expressed as percentages.
   const red = generator.valueToCode(block, 'RED', Order.NONE) || 0;
   const green = generator.valueToCode(block, 'GREEN', Order.NONE) || 0;
@@ -68,7 +68,7 @@ String ${generator.FUNCTION_NAME_PLACEHOLDER_}(num r, num g, num b) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['colour_blend'] = function(block, generator) {
+export function colour_blend(block, generator) {
   // Blend two colours together.
   const c1 =
       generator.valueToCode(block, 'COLOUR1', Order.NONE) || "'#000000'";

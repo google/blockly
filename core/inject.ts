@@ -365,8 +365,8 @@ function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
   );
   audioMgr.load(
     [
-      pathToMedia + 'disconnect.wav',
       pathToMedia + 'disconnect.mp3',
+      pathToMedia + 'disconnect.wav',
       pathToMedia + 'disconnect.ogg',
     ],
     'disconnect'

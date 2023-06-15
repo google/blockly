@@ -48,7 +48,7 @@ export const Order = {
  * one-indexed, so the generator does not repoct the oneBasedIndex configuration
  * option used for lists and text.
  */
-class LuaGenerator extends CodeGenerator {
+export class LuaGenerator extends CodeGenerator {
   constructor(name) {
     super(name ?? 'Lua');
     this.isInitialized = false;

@@ -65,7 +65,7 @@ export const Order = {
   NONE: 99,              // (...)
 };
 
-class PhpGenerator extends CodeGenerator {
+export class PhpGenerator extends CodeGenerator {
   /**
    * List of outer-inner pairings that do NOT require parentheses.
    * @type {!Array<!Array<number>>}

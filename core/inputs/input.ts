@@ -311,7 +311,7 @@ export namespace Input {
   //     of deprecated things (in build_tasks.js).
   /**
    * Enum for alignment of inputs.
-   * 
+   *
    * @deprecated Use Blockly.inputs.Align. To be removed in v11.
    */
   export enum Align {

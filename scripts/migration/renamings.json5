@@ -1484,21 +1484,18 @@
     },
     {
       oldName: 'Blockly.Input',
-      newName: 'Blockly.inputs.Input',
       exports: {
         'Align': {
-          oldPath: 'Blockly.Input.Align',
           newPath: 'Blockly.inputs.Align',
         },
       },
     },
     {
-      oldName: 'Blockly.Align',
-      newName: 'Blockly.inputs.Align',
-    },
-    {
       oldName: 'Blockly',
       exports: {
+        'Align': {
+          newPath: 'Blockly.inputs.Align',
+        },
         'ALIGN_LEFT': {
           newPath: 'Blockly.inputs.Align.LEFT',
         },

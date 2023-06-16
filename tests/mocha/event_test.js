@@ -489,6 +489,19 @@ suite('Events', function () {
         }),
       },
       {
+        title: 'Field Edit Intermediate Change',
+        class: Blockly.Events.BlockFieldIntermediateChange,
+        getArgs: (thisObj) => [thisObj.block, 'test', 'old value', 'new value'],
+        getExpectedJson: (thisObj) => ({
+          type: 'block_field_intermediate_change',
+          group: '',
+          blockId: thisObj.block.id,
+          name: 'test',
+          oldValue: 'old value',
+          newValue: 'new value',
+        }),
+      },
+      {
         title: 'null to Block Marker move',
         class: Blockly.Events.MarkerMove,
         getArgs: (thisObj) => [

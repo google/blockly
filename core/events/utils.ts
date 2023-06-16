@@ -80,6 +80,13 @@ export const CHANGE = 'change';
 export const BLOCK_CHANGE = CHANGE;
 
 /**
+ * Name of event representing an in-progress change to a field of a block, which
+ * is expected to be followed by a block change event.
+ */
+export const BLOCK_FIELD_INTERMEDIATE_CHANGE =
+  'block_field_intermediate_change';
+
+/**
  * Name of event that moves a block. Will be deprecated for BLOCK_MOVE.
  */
 export const MOVE = 'move';

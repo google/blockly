@@ -8,47 +8,46 @@
  * @fileoverview Procedure blocks for Blockly.
  * @suppress {checkTypes|visibility}
  */
-'use strict';
 
-goog.module('Blockly.libraryBlocks.procedures');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.libraryBlocks.procedures');
 
 /* eslint-disable-next-line no-unused-vars */
-const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
-const ContextMenu = goog.require('Blockly.ContextMenu');
-const Events = goog.require('Blockly.Events');
-const Procedures = goog.require('Blockly.Procedures');
-const Variables = goog.require('Blockly.Variables');
-const Xml = goog.require('Blockly.Xml');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const xmlUtils = goog.require('Blockly.utils.xml');
-const {Align} = goog.require('Blockly.Input');
+import type * as AbstractEvent from '../core/events/events_abstract.js';
+import * as ContextMenu from '../core/contextmenu.js';
+import * as Events from '../core/events/events.js';
+import * as Procedures from '../core/procedures.js';
+import * as Variables from '../core/variables.js';
+import * as Xml from '../core/xml.js';
+import * as fieldRegistry from '../core/field_registry.js';
+import * as xmlUtils from '../core/utils/xml.js';
+import {Align} from '../core/inputs/input.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+import type {Block} from '../core/block.js';
+// import type {BlockDefinition} from '../core/blocks.js';
 // TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
 const BlockDefinition = Object;
-const {config} = goog.require('Blockly.config');
-const {Msg} = goog.require('Blockly.Msg');
-const {MutatorIcon: Mutator} = goog.require('Blockly.Mutator');
-const {Names} = goog.require('Blockly.Names');
+import {config} from '../core/config.js';
+import {Msg} from '../core/msg.js';
+import {MutatorIcon as Mutator} from '../core/icons/mutator_icon.js';
+import {Names} from '../core/names.js';
 /* eslint-disable-next-line no-unused-vars */
-const {VariableModel} = goog.requireType('Blockly.VariableModel');
+import type {VariableModel} from '../core/variable_model.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
-const {defineBlocks} = goog.require('Blockly.common');
+import type {Workspace} from '../core/workspace.js';
+import {defineBlocks} from '../core/common.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Comment');
+import '../core/icons/comment_icon.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Warning');
+import '../core/icons/warning_icon.js';
 
 
 /**
  * A dictionary of the block definitions provided by this module.
  * @type {!Object<string, !BlockDefinition>}
  */
-const blocks = {};
-exports.blocks = blocks;
+export const blocks = {};
 
 /**
  * Common properties for the procedure_defnoreturn and
@@ -390,7 +389,7 @@ const PROCEDURE_DEF_COMMON = {
     // Update the mutator's variables if the mutator is open.
     const mutator = this.getIcon(Mutator.TYPE);
     if (mutator && mutator.bubbleIsVisible()) {
-      const blocks = mutator.getWorkspace().getAllBlocks(false);
+      export const blocks = mutator.getWorkspace().getAllBlocks(false);
       for (let i = 0, block; (block = blocks[i]); i++) {
         if (block.type === 'procedures_mutatorarg' &&
             Names.equals(oldName, block.getFieldValue('NAME'))) {
@@ -626,7 +625,7 @@ blocks['procedures_mutatorarg'] = {
     // Prevents duplicate parameter names in functions
     const workspace =
         sourceBlock.workspace.targetWorkspace || sourceBlock.workspace;
-    const blocks = workspace.getAllBlocks(false);
+    export const blocks = workspace.getAllBlocks(false);
     const caselessName = varName.toLowerCase();
     for (let i = 0; i < blocks.length; i++) {
       if (blocks[i].id === this.getSourceBlock().id) {

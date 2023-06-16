@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.ContextMenuRegistry');
 import type {BlockSvg} from './block_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-
 /**
  * Class for the registry of context menu items. This is intended to be a
  * singleton. You should not create a new instance, and only access this class
@@ -66,7 +65,7 @@ export class ContextMenuRegistry {
    * @param id The ID of the RegistryItem to get.
    * @returns RegistryItem or null if not found
    */
-  getItem(id: string): RegistryItem|null {
+  getItem(id: string): RegistryItem | null {
     return this.registry_.get(id) ?? null;
   }
 
@@ -81,16 +80,19 @@ export class ContextMenuRegistry {
    *     block being clicked on)
    * @returns the list of ContextMenuOptions
    */
-  getContextMenuOptions(scopeType: ScopeType, scope: Scope):
-      ContextMenuOption[] {
+  getContextMenuOptions(
+    scopeType: ScopeType,
+    scope: Scope
+  ): ContextMenuOption[] {
     const menuOptions: ContextMenuOption[] = [];
     for (const item of this.registry_.values()) {
       if (scopeType === item.scopeType) {
         const precondition = item.preconditionFn(scope);
         if (precondition !== 'hidden') {
-          const displayText = typeof item.displayText === 'function' ?
-              item.displayText(scope) :
-              item.displayText;
+          const displayText =
+            typeof item.displayText === 'function'
+              ? item.displayText(scope)
+              : item.displayText;
           const menuOption: ContextMenuOption = {
             text: displayText,
             enabled: precondition === 'enabled',
@@ -102,7 +104,7 @@ export class ContextMenuRegistry {
         }
       }
     }
-    menuOptions.sort(function(a, b) {
+    menuOptions.sort(function (a, b) {
       return a.weight - b.weight;
     });
     return menuOptions;
@@ -135,7 +137,7 @@ export namespace ContextMenuRegistry {
   export interface RegistryItem {
     callback: (p1: Scope) => void;
     scopeType: ScopeType;
-    displayText: ((p1: Scope) => string)|string;
+    displayText: ((p1: Scope) => string) | string;
     preconditionFn: (p1: Scope) => string;
     weight: number;
     id: string;
@@ -175,4 +177,4 @@ export type Scope = ContextMenuRegistry.Scope;
 export type RegistryItem = ContextMenuRegistry.RegistryItem;
 export type ContextMenuOption = ContextMenuRegistry.ContextMenuOption;
 export type LegacyContextMenuOption =
-    ContextMenuRegistry.LegacyContextMenuOption;
+  ContextMenuRegistry.LegacyContextMenuOption;

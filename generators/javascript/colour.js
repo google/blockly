@@ -7,40 +7,40 @@
 /**
  * @fileoverview Generating JavaScript for colour blocks.
  */
-'use strict';
 
-goog.module('Blockly.JavaScript.colour');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.JavaScript.colour');
 
-const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
+import {Order, javascriptGenerator} from '../javascript.js';
 
 
-JavaScript['colour_picker'] = function(block) {
+javascriptGenerator.forBlock['colour_picker'] = function(block, generator) {
   // Colour picker.
-  const code = JavaScript.quote_(block.getFieldValue('COLOUR'));
-  return [code, JavaScript.ORDER_ATOMIC];
+  const code = generator.quote_(block.getFieldValue('COLOUR'));
+  return [code, Order.ATOMIC];
 };
 
-JavaScript['colour_random'] = function(block) {
+javascriptGenerator.forBlock['colour_random'] = function(block, generator) {
   // Generate a random colour.
-  const functionName = JavaScript.provideFunction_('colourRandom', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}() {
+  const functionName = generator.provideFunction_('colourRandom', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}() {
   var num = Math.floor(Math.random() * Math.pow(2, 24));
   return '#' + ('00000' + num.toString(16)).substr(-6);
 }
 `);
   const code = functionName + '()';
-  return [code, JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
-JavaScript['colour_rgb'] = function(block) {
+javascriptGenerator.forBlock['colour_rgb'] = function(block, generator) {
   // Compose a colour from RGB components expressed as percentages.
-  const red = JavaScript.valueToCode(block, 'RED', JavaScript.ORDER_NONE) || 0;
+  const red = generator.valueToCode(block, 'RED', Order.NONE) || 0;
   const green =
-      JavaScript.valueToCode(block, 'GREEN', JavaScript.ORDER_NONE) || 0;
+      generator.valueToCode(block, 'GREEN', Order.NONE) || 0;
   const blue =
-      JavaScript.valueToCode(block, 'BLUE', JavaScript.ORDER_NONE) || 0;
-  const functionName = JavaScript.provideFunction_('colourRgb', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(r, g, b) {
+      generator.valueToCode(block, 'BLUE', Order.NONE) || 0;
+  const functionName = generator.provideFunction_('colourRgb', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(r, g, b) {
   r = Math.max(Math.min(Number(r), 100), 0) * 2.55;
   g = Math.max(Math.min(Number(g), 100), 0) * 2.55;
   b = Math.max(Math.min(Number(b), 100), 0) * 2.55;
@@ -51,19 +51,19 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(r, g, b) {
 }
 `);
   const code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
-  return [code, JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
-JavaScript['colour_blend'] = function(block) {
+javascriptGenerator.forBlock['colour_blend'] = function(block, generator) {
   // Blend two colours together.
-  const c1 = JavaScript.valueToCode(block, 'COLOUR1', JavaScript.ORDER_NONE) ||
+  const c1 = generator.valueToCode(block, 'COLOUR1', Order.NONE) ||
       "'#000000'";
-  const c2 = JavaScript.valueToCode(block, 'COLOUR2', JavaScript.ORDER_NONE) ||
+  const c2 = generator.valueToCode(block, 'COLOUR2', Order.NONE) ||
       "'#000000'";
   const ratio =
-      JavaScript.valueToCode(block, 'RATIO', JavaScript.ORDER_NONE) || 0.5;
-  const functionName = JavaScript.provideFunction_('colourBlend', `
-function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(c1, c2, ratio) {
+      generator.valueToCode(block, 'RATIO', Order.NONE) || 0.5;
+  const functionName = generator.provideFunction_('colourBlend', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(c1, c2, ratio) {
   ratio = Math.max(Math.min(Number(ratio), 1), 0);
   var r1 = parseInt(c1.substring(1, 3), 16);
   var g1 = parseInt(c1.substring(3, 5), 16);
@@ -81,5 +81,5 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(c1, c2, ratio) {
 }
 `);
   const code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
-  return [code, JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };

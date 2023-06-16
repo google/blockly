@@ -7,17 +7,20 @@
 goog.declareModuleId('Blockly.test.workspace');
 
 import {assertVariableValues} from './test_helpers/variables.js';
-import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+  workspaceTeardown,
+} from './test_helpers/setup_teardown.js';
 import {testAWorkspace} from './test_helpers/workspace.js';
 
-
-suite('Workspace', function() {
-  setup(function() {
+suite('Workspace', function () {
+  setup(function () {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
   });
 
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
 

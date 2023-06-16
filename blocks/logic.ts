@@ -21,12 +21,12 @@ import type {BlockSvg} from '../core/block_svg.js';
 import type {BlockDefinition} from '../core/blocks.js';
 import type {Connection} from '../core/connection.js';
 import {Msg} from '../core/msg.js';
-import {Mutator} from '../core/mutator.js';
 import type {RenderedConnection} from '../core/rendered_connection.js';
 import type {Workspace} from '../core/workspace.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 import '../core/field_dropdown.js';
 import '../core/field_label.js';
+import '../core/icons/mutator_icon.js';
 
 
 /**
@@ -378,7 +378,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
   /**
    * Populate the mutator's dialog with this block's components.
    *
-   * @param workspace Mutator's workspace.
+   * @param workspace MutatorIcon's workspace.
    * @return Root block in mutator.
    */
   decompose: function(this: IfBlock, workspace: Workspace): Block {
@@ -533,10 +533,10 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
       statementConnections: Array<Connection|null>,
       elseStatementConnection: Connection|null) {
     for (let i = 1; i <= this.elseifCount_; i++) {
-      Mutator.reconnect(valueConnections[i], this, 'IF' + i);
-      Mutator.reconnect(statementConnections[i], this, 'DO' + i);
+      valueConnections[i]?.reconnect(this, 'IF' + i);
+      statementConnections[i]?.reconnect(this, 'DO' + i);
     }
-    Mutator.reconnect(elseStatementConnection, this, 'ELSE');
+    elseStatementConnection?.reconnect(this, 'ELSE');
   },
 };
 

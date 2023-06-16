@@ -18,7 +18,6 @@ import type {VariableMap} from './variable_map.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 
-
 /**
  * Class for a database of entity names (variables, procedures, etc).
  */
@@ -41,7 +40,7 @@ export class Names {
   /**
    * The variable map from the workspace, containing Blockly variable models.
    */
-  private variableMap: VariableMap|null = null;
+  private variableMap: VariableMap | null = null;
 
   /**
    * @param reservedWordsList A comma-separated string of words that are illegal
@@ -53,8 +52,9 @@ export class Names {
     /** The prefix to attach to variable names in generated code. */
     this.variablePrefix = opt_variablePrefix || '';
 
-    this.reservedWords =
-        new Set<string>(reservedWordsList ? reservedWordsList.split(',') : []);
+    this.reservedWords = new Set<string>(
+      reservedWordsList ? reservedWordsList.split(',') : []
+    );
   }
 
   /**
@@ -83,14 +83,15 @@ export class Names {
    * @returns The name of the referenced variable, or null if there was no
    *     variable map or the variable was not found in the map.
    */
-  private getNameForUserVariable(id: string): string|null {
+  private getNameForUserVariable(id: string): string | null {
     if (!this.variableMap) {
       console.warn(
-          'Deprecated call to Names.prototype.getName without ' +
+        'Deprecated call to Names.prototype.getName without ' +
           'defining a variable map. To fix, add the following code in your ' +
-          'generator\'s init() function:\n' +
+          "generator's init() function:\n" +
           'Blockly.YourGeneratorName.nameDB_.setVariableMap(' +
-          'workspace.getVariableMap());');
+          'workspace.getVariableMap());'
+      );
       return null;
     }
     const variable = this.variableMap.getVariableById(id);
@@ -120,8 +121,9 @@ export class Names {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   populateProcedures(workspace: Workspace) {
     throw new Error(
-        'The implementation of populateProcedures should be ' +
-        'monkey-patched in by blockly.ts');
+      'The implementation of populateProcedures should be ' +
+        'monkey-patched in by blockly.ts'
+    );
   }
 
   /**
@@ -132,7 +134,7 @@ export class Names {
    *     'DEVELOPER_VARIABLE', etc...).
    * @returns An entity name that is legal in the exported language.
    */
-  getName(nameOrId: string, type: NameType|string): string {
+  getName(nameOrId: string, type: NameType | string): string {
     let name = nameOrId;
     if (type === NameType.VARIABLE) {
       const varName = this.getNameForUserVariable(nameOrId);
@@ -144,7 +146,7 @@ export class Names {
     const normalizedName = name.toLowerCase();
 
     const isVar =
-        type === NameType.VARIABLE || type === NameType.DEVELOPER_VARIABLE;
+      type === NameType.VARIABLE || type === NameType.DEVELOPER_VARIABLE;
 
     const prefix = isVar ? this.variablePrefix : '';
     if (!this.db.has(type)) {
@@ -166,7 +168,7 @@ export class Names {
    *     'DEVELOPER_VARIABLE', etc...).
    * @returns A list of Blockly entity names (no constraints).
    */
-  getUserNames(type: NameType|string): string[] {
+  getUserNames(type: NameType | string): string[] {
     const userNames = this.db.get(type)?.keys();
     return userNames ? Array.from(userNames) : [];
   }
@@ -182,18 +184,20 @@ export class Names {
    *     'DEVELOPER_VARIABLE', etc...).
    * @returns An entity name that is legal in the exported language.
    */
-  getDistinctName(name: string, type: NameType|string): string {
+  getDistinctName(name: string, type: NameType | string): string {
     let safeName = this.safeName(name);
-    let i: number|null = null;
-    while (this.dbReverse.has(safeName + (i ?? '')) ||
-           this.reservedWords.has(safeName + (i ?? ''))) {
+    let i: number | null = null;
+    while (
+      this.dbReverse.has(safeName + (i ?? '')) ||
+      this.reservedWords.has(safeName + (i ?? ''))
+    ) {
       // Collision with existing name.  Create a unique name.
       i = i ? i + 1 : 2;
     }
-    safeName += (i ?? '');
+    safeName += i ?? '';
     this.dbReverse.add(safeName);
     const isVar =
-        type === NameType.VARIABLE || type === NameType.DEVELOPER_VARIABLE;
+      type === NameType.VARIABLE || type === NameType.DEVELOPER_VARIABLE;
     const prefix = isVar ? this.variablePrefix : '';
     return prefix + safeName;
   }

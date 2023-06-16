@@ -7,16 +7,16 @@
 /**
  * @fileoverview Generating PHP for procedure blocks.
  */
-'use strict';
 
-goog.module('Blockly.PHP.procedures');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.PHP.procedures');
 
-const Variables = goog.require('Blockly.Variables');
-const {NameType} = goog.require('Blockly.Names');
-const {phpGenerator: PHP} = goog.require('Blockly.PHP');
+import * as Variables from '../../core/variables.js';
+import {NameType} from '../../core/names.js';
+import {phpGenerator, Order} from '../php.js';
 
 
-PHP['procedures_defreturn'] = function(block) {
+phpGenerator.forBlock['procedures_defreturn'] = function(block, generator) {
   // Define a procedure with a return value.
   // First, add a 'global' statement for every variable that is not shadowed by
   // a local parameter.
@@ -26,99 +26,107 @@ PHP['procedures_defreturn'] = function(block) {
   for (let i = 0, variable; variable = usedVariables[i]; i++) {
     const varName = variable.name;
     if (block.getVars().indexOf(varName) === -1) {
-      globals.push(PHP.nameDB_.getName(varName, NameType.VARIABLE));
+      globals.push(generator.nameDB_.getName(varName, NameType.VARIABLE));
     }
   }
   // Add developer variables.
   const devVarList = Variables.allDeveloperVariables(workspace);
   for (let i = 0; i < devVarList.length; i++) {
     globals.push(
-        PHP.nameDB_.getName(devVarList[i], NameType.DEVELOPER_VARIABLE));
+        generator.nameDB_.getName(
+          devVarList[i], NameType.DEVELOPER_VARIABLE));
   }
   const globalStr =
-      globals.length ? PHP.INDENT + 'global ' + globals.join(', ') + ';\n' : '';
+      globals.length ?
+      generator.INDENT + 'global ' + globals.join(', ') + ';\n' : '';
 
   const funcName =
-      PHP.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
+      generator.nameDB_.getName(
+        block.getFieldValue('NAME'), NameType.PROCEDURE);
   let xfix1 = '';
-  if (PHP.STATEMENT_PREFIX) {
-    xfix1 += PHP.injectId(PHP.STATEMENT_PREFIX, block);
+  if (generator.STATEMENT_PREFIX) {
+    xfix1 += generator.injectId(generator.STATEMENT_PREFIX, block);
   }
-  if (PHP.STATEMENT_SUFFIX) {
-    xfix1 += PHP.injectId(PHP.STATEMENT_SUFFIX, block);
+  if (generator.STATEMENT_SUFFIX) {
+    xfix1 += generator.injectId(generator.STATEMENT_SUFFIX, block);
   }
   if (xfix1) {
-    xfix1 = PHP.prefixLines(xfix1, PHP.INDENT);
+    xfix1 = generator.prefixLines(xfix1, generator.INDENT);
   }
   let loopTrap = '';
-  if (PHP.INFINITE_LOOP_TRAP) {
-    loopTrap = PHP.prefixLines(
-        PHP.injectId(PHP.INFINITE_LOOP_TRAP, block), PHP.INDENT);
+  if (generator.INFINITE_LOOP_TRAP) {
+    loopTrap = generator.prefixLines(
+        generator.injectId(generator.INFINITE_LOOP_TRAP, block),
+        generator.INDENT);
   }
-  const branch = PHP.statementToCode(block, 'STACK');
-  let returnValue = PHP.valueToCode(block, 'RETURN', PHP.ORDER_NONE) || '';
+  const branch = generator.statementToCode(block, 'STACK');
+  let returnValue = generator.valueToCode(block, 'RETURN', Order.NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
     xfix2 = xfix1;
   }
   if (returnValue) {
-    returnValue = PHP.INDENT + 'return ' + returnValue + ';\n';
+    returnValue = generator.INDENT + 'return ' + returnValue + ';\n';
   }
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = PHP.nameDB_.getName(variables[i], NameType.VARIABLE);
+    args[i] = generator.nameDB_.getName(variables[i], NameType.VARIABLE);
   }
   let code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
       globalStr + xfix1 + loopTrap + branch + xfix2 + returnValue + '}';
-  code = PHP.scrub_(block, code);
+  code = generator.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
-  PHP.definitions_['%' + funcName] = code;
+  generator.definitions_['%' + funcName] = code;
   return null;
 };
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-PHP['procedures_defnoreturn'] = PHP['procedures_defreturn'];
+phpGenerator.forBlock['procedures_defnoreturn'] =
+    phpGenerator.forBlock['procedures_defreturn'];
 
-PHP['procedures_callreturn'] = function(block) {
+phpGenerator.forBlock['procedures_callreturn'] = function(block, generator) {
   // Call a procedure with a return value.
   const funcName =
-      PHP.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
+      generator.nameDB_.getName(
+        block.getFieldValue('NAME'), NameType.PROCEDURE);
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = PHP.valueToCode(block, 'ARG' + i, PHP.ORDER_NONE) || 'null';
+    args[i] = generator.valueToCode(block, 'ARG' + i, Order.NONE) || 'null';
   }
   const code = funcName + '(' + args.join(', ') + ')';
-  return [code, PHP.ORDER_FUNCTION_CALL];
+  return [code, Order.FUNCTION_CALL];
 };
 
-PHP['procedures_callnoreturn'] = function(block) {
+phpGenerator.forBlock['procedures_callnoreturn'] = function(block, generator) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  const tuple = PHP['procedures_callreturn'](block);
+  const tuple = generator.forBlock['procedures_callreturn'](block, generator);
   return tuple[0] + ';\n';
 };
 
-PHP['procedures_ifreturn'] = function(block) {
+phpGenerator.forBlock['procedures_ifreturn'] = function(block, generator) {
   // Conditionally return value from a procedure.
   const condition =
-      PHP.valueToCode(block, 'CONDITION', PHP.ORDER_NONE) || 'false';
+      generator.valueToCode(block, 'CONDITION', Order.NONE) || 'false';
   let code = 'if (' + condition + ') {\n';
-  if (PHP.STATEMENT_SUFFIX) {
+  if (generator.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the return is triggered.
     code +=
-        PHP.prefixLines(PHP.injectId(PHP.STATEMENT_SUFFIX, block), PHP.INDENT);
+        generator.prefixLines(
+          generator.injectId(generator.STATEMENT_SUFFIX, block),
+          generator.INDENT);
   }
   if (block.hasReturnValue_) {
-    const value = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'null';
-    code += PHP.INDENT + 'return ' + value + ';\n';
+    const value = generator.valueToCode(block, 'VALUE', Order.NONE) || 'null';
+    code += generator.INDENT + 'return ' + value + ';\n';
   } else {
-    code += PHP.INDENT + 'return;\n';
+    code += generator.INDENT + 'return;\n';
   }
   code += '}\n';
   return code;

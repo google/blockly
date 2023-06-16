@@ -17,7 +17,6 @@ import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
 import type {Rect} from './utils/rect.js';
 
-
 /**
  * Abstract class for a component with custom behaviour when a block or bubble
  * is dragged over or dropped on top of it.
@@ -76,7 +75,7 @@ export class DragTarget implements IDragTarget {
    * @returns The component's bounding box. Null if drag target area should be
    *     ignored.
    */
-  getClientRect(): Rect|null {
+  getClientRect(): Rect | null {
     return null;
   }
 

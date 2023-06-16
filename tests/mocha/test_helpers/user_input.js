@@ -8,7 +8,6 @@ goog.declareModuleId('Blockly.test.helpers.userInput');
 
 import {KeyCodes} from '../../../build/src/core/utils/keycodes.js';
 
-
 /**
  * Triggers pointer event on target.
  * @param {!EventTarget} target The object receiving the event.

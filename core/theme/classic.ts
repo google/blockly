@@ -9,7 +9,6 @@ goog.declareModuleId('Blockly.Themes.Classic');
 
 import {Theme} from '../theme.js';
 
-
 const defaultBlockStyles = {
   'colour_blocks': {'colourPrimary': '20'},
   'list_blocks': {'colourPrimary': '260'},

@@ -7,46 +7,46 @@
 /**
  * @fileoverview Generating Lua for colour blocks.
  */
-'use strict';
 
-goog.module('Blockly.Lua.colour');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Lua.colour');
 
-const {luaGenerator: Lua} = goog.require('Blockly.Lua');
+import {luaGenerator, Order} from '../lua.js';
 
 
-Lua['colour_picker'] = function(block) {
+luaGenerator.forBlock['colour_picker'] = function(block, generator) {
   // Colour picker.
-  const code = Lua.quote_(block.getFieldValue('COLOUR'));
-  return [code, Lua.ORDER_ATOMIC];
+  const code = generator.quote_(block.getFieldValue('COLOUR'));
+  return [code, Order.ATOMIC];
 };
 
-Lua['colour_random'] = function(block) {
+luaGenerator.forBlock['colour_random'] = function(block, generator) {
   // Generate a random colour.
   const code = 'string.format("#%06x", math.random(0, 2^24 - 1))';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['colour_rgb'] = function(block) {
+luaGenerator.forBlock['colour_rgb'] = function(block, generator) {
   // Compose a colour from RGB components expressed as percentages.
-  const functionName = Lua.provideFunction_('colour_rgb', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(r, g, b)
+  const functionName = generator.provideFunction_('colour_rgb', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(r, g, b)
   r = math.floor(math.min(100, math.max(0, r)) * 2.55 + .5)
   g = math.floor(math.min(100, math.max(0, g)) * 2.55 + .5)
   b = math.floor(math.min(100, math.max(0, b)) * 2.55 + .5)
   return string.format("#%02x%02x%02x", r, g, b)
 end
 `);
-  const r = Lua.valueToCode(block, 'RED', Lua.ORDER_NONE) || 0;
-  const g = Lua.valueToCode(block, 'GREEN', Lua.ORDER_NONE) || 0;
-  const b = Lua.valueToCode(block, 'BLUE', Lua.ORDER_NONE) || 0;
+  const r = generator.valueToCode(block, 'RED', Order.NONE) || 0;
+  const g = generator.valueToCode(block, 'GREEN', Order.NONE) || 0;
+  const b = generator.valueToCode(block, 'BLUE', Order.NONE) || 0;
   const code = functionName + '(' + r + ', ' + g + ', ' + b + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };
 
-Lua['colour_blend'] = function(block) {
+luaGenerator.forBlock['colour_blend'] = function(block, generator) {
   // Blend two colours together.
-  const functionName = Lua.provideFunction_('colour_blend', `
-function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(colour1, colour2, ratio)
+  const functionName = generator.provideFunction_('colour_blend', `
+function ${generator.FUNCTION_NAME_PLACEHOLDER_}(colour1, colour2, ratio)
   local r1 = tonumber(string.sub(colour1, 2, 3), 16)
   local r2 = tonumber(string.sub(colour2, 2, 3), 16)
   local g1 = tonumber(string.sub(colour1, 4, 5), 16)
@@ -61,11 +61,11 @@ function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(colour1, colour2, ratio)
 end
 `);
   const colour1 =
-      Lua.valueToCode(block, 'COLOUR1', Lua.ORDER_NONE) || "'#000000'";
+      generator.valueToCode(block, 'COLOUR1', Order.NONE) || "'#000000'";
   const colour2 =
-      Lua.valueToCode(block, 'COLOUR2', Lua.ORDER_NONE) || "'#000000'";
-  const ratio = Lua.valueToCode(block, 'RATIO', Lua.ORDER_NONE) || 0;
+      generator.valueToCode(block, 'COLOUR2', Order.NONE) || "'#000000'";
+  const ratio = generator.valueToCode(block, 'RATIO', Order.NONE) || 0;
   const code =
       functionName + '(' + colour1 + ', ' + colour2 + ', ' + ratio + ')';
-  return [code, Lua.ORDER_HIGH];
+  return [code, Order.HIGH];
 };

@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 /**
  * An object that fires events optionally.
  *

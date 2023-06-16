@@ -7,7 +7,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.Metrics');
 
-
 export interface Metrics {
   /** Height of the visible portion of the workspace. */
   viewHeight: number;

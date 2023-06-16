@@ -21,8 +21,10 @@
  *     See tests/playground.html for example usage.
  */
 if (!window.bootstrapInfo) {
-  throw new Error('window.bootstrapInfo not found.  ' +
-      'Make sure to load bootstrap.js before importing bootstrap_done.mjs.');
+  throw new Error(
+    'window.bootstrapInfo not found.  ' +
+      'Make sure to load bootstrap.js before importing bootstrap_done.mjs.'
+  );
 }
 
 if (window.bootstrapInfo.compressed) {

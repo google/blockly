@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Mocha Tests for Blockly</title>
 
     <link href="../../node_modules/mocha/mocha.css" rel="stylesheet" />
@@ -16,8 +16,8 @@
   </style>
   <body>
     <div id="mocha"></div>
-    <div id="failureCount" style="display:none" tests_failed="unset"></div>
-    <div id="failureMessages" style="display:none"></div>
+    <div id="failureCount" style="display: none" tests_failed="unset"></div>
+    <div id="failureMessages" style="display: none"></div>
     <!-- Load mocha et al. before bootstrapping so that we can safely
          goog.require() the test modules that make calls to (e.g.)
          suite() at the top level. -->
@@ -34,20 +34,6 @@
         loadCompressed: false,
         depsFiles: ['build/deps.js', 'build/deps.mocha.js'],
         requires: [
-          // Blockly modules needed by tests.
-          'Blockly',
-          'Blockly.libraryBlocks',
-          'Blockly.Dart',
-          'Blockly.Dart.texts',
-          'Blockly.JavaScript',
-          'Blockly.JavaScript.texts',
-          'Blockly.Lua',
-          'Blockly.Lua.texts',
-          'Blockly.PHP',
-          'Blockly.PHP.texts',
-          'Blockly.Python',
-          'Blockly.Python.texts',
-
           // Test modules.
           'Blockly.test.astNode',
           'Blockly.test.blockJson',
@@ -98,6 +84,7 @@
           'Blockly.test.flyout',
           'Blockly.test.generator',
           'Blockly.test.gesture',
+          'Blockly.test.icon',
           'Blockly.test.input',
           'Blockly.test.insertionMarker',
           'Blockly.test.insertionMarkerManager',
@@ -132,18 +119,21 @@
           'Blockly.test.xml',
           'Blockly.test.zoomControls',
         ],
-        additionalScripts: [
+        scripts: [
           'build/msg/en.js',
           'tests/playgrounds/screenshot.js',
           'node_modules/@blockly/dev-tools/dist/index.js',
         ],
-      }
+      };
     </script>
     <script src="../bootstrap.js"></script>
 
     <div id="blocklyDiv"></div>
 
-    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
+    <xml
+      xmlns="https://developers.google.com/blockly/xml"
+      id="toolbox-simple"
+      style="display: none">
       <block type="logic_compare">
         <field name="OP">NEQ</field>
         <value name="A">
@@ -162,7 +152,10 @@
       <label text="tooltips"></label>
     </xml>
 
-    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
+    <xml
+      xmlns="https://developers.google.com/blockly/xml"
+      id="toolbox-categories"
+      style="display: none">
       <category name="First" css-container="something">
         <block type="basic_block">
           <field name="TEXT">FirstCategory-FirstBlock</field>
@@ -178,7 +171,10 @@
       </category>
     </xml>
 
-    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-test" style="display: none">
+    <xml
+      xmlns="https://developers.google.com/blockly/xml"
+      id="toolbox-test"
+      style="display: none">
       <category name="First" expanded="true" categorystyle="logic_category">
         <sep gap="-1"></sep>
         <button text="insert" callbackkey="insertConnectionRows"></button>
@@ -190,25 +186,30 @@
       </category>
       <sep toolboxitemid="separator" gap="-1"></sep>
       <category name="Variables" custom="VARIABLE"></category>
-      <category name="NestedCategory" >
-        <category toolboxitemid="nestedCategory" name="NestedItemOne"></category>
+      <category name="NestedCategory">
+        <category
+          toolboxitemid="nestedCategory"
+          name="NestedItemOne"></category>
       </category>
       <category name="lastItem"></category>
     </xml>
 
-    <xml xmlns="https://developers.google.com/blockly/xml" id="gesture-test-toolbox" style="display: none">
+    <xml
+      xmlns="https://developers.google.com/blockly/xml"
+      id="gesture-test-toolbox"
+      style="display: none">
       <block type="test_field_block"></block>
     </xml>
 
-    <script type=module>
+    <script type="module">
       // Wait for Blockly to finish loading before running tests.
       import '../bootstrap_done.mjs';
 
-      let runner = mocha.run(function(failures) {
+      let runner = mocha.run(function (failures) {
         var failureDiv = document.getElementById('failureCount');
         failureDiv.setAttribute('tests_failed', failures);
       });
-      runner.on('fail', function(test, err) {
+      runner.on('fail', function (test, err) {
         const msg = document.createElement('p');
         msg.textContent = `"${test.fullTitle()}" failed: ${err.message}`;
         const div = document.getElementById('failureMessages');

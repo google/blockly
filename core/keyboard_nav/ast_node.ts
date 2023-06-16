@@ -17,12 +17,11 @@ import type {Block} from '../block.js';
 import type {Connection} from '../connection.js';
 import {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
-import type {Input} from '../input.js';
+import type {Input} from '../inputs/input.js';
 import type {IASTNodeLocation} from '../interfaces/i_ast_node_location.js';
 import type {IASTNodeLocationWithBlock} from '../interfaces/i_ast_node_location_with_block.js';
 import {Coordinate} from '../utils/coordinate.js';
 import type {Workspace} from '../workspace.js';
-
 
 /**
  * Class for an AST node.
@@ -80,7 +79,7 @@ export class ASTNode {
    *
    * @param params The user specified parameters.
    */
-  private processParams(params: Params|null) {
+  private processParams(params: Params | null) {
     if (!params) {
       return;
     }
@@ -139,7 +138,7 @@ export class ASTNode {
    * @returns The AST node holding the next field or connection or null if there
    *     is no editable field or input connection after the given input.
    */
-  private findNextForInput(): ASTNode|null {
+  private findNextForInput(): ASTNode | null {
     const location = this.location as Connection;
     const parentInput = location.getParentInput();
     const block = parentInput!.getSourceBlock();
@@ -169,13 +168,14 @@ export class ASTNode {
    * @returns The AST node pointing to the next field or connection or null if
    *     there is no editable field or input connection after the given input.
    */
-  private findNextForField(): ASTNode|null {
+  private findNextForField(): ASTNode | null {
     const location = this.location as Field;
     const input = location.getParentInput();
     const block = location.getSourceBlock();
     if (!block) {
       throw new Error(
-          'The current AST location is not associated with a block');
+        'The current AST location is not associated with a block'
+      );
     }
     const curIdx = block.inputList.indexOf(input);
     let fieldIdx = input.fieldRow.indexOf(location) + 1;
@@ -203,7 +203,7 @@ export class ASTNode {
    *
    * @returns The AST node holding the previous field or connection.
    */
-  private findPrevForInput(): ASTNode|null {
+  private findPrevForInput(): ASTNode | null {
     const location = this.location as Connection;
     const parentInput = location.getParentInput();
     const block = parentInput!.getSourceBlock();
@@ -232,13 +232,14 @@ export class ASTNode {
    *
    * @returns The AST node holding the previous input or field.
    */
-  private findPrevForField(): ASTNode|null {
+  private findPrevForField(): ASTNode | null {
     const location = this.location as Field;
     const parentInput = location.getParentInput();
     const block = location.getSourceBlock();
     if (!block) {
       throw new Error(
-          'The current AST location is not associated with a block');
+        'The current AST location is not associated with a block'
+      );
     }
     const curIdx = block.inputList.indexOf(parentInput);
     let fieldIdx = parentInput.fieldRow.indexOf(location) - 1;
@@ -270,7 +271,7 @@ export class ASTNode {
    * @returns The first block of the next stack or null if there are no blocks
    *     on the workspace.
    */
-  private navigateBetweenStacks(forward: boolean): ASTNode|null {
+  private navigateBetweenStacks(forward: boolean): ASTNode | null {
     let curLocation = this.getLocation();
     // TODO(#6097): Use instanceof checks to exit early for values of
     // curLocation that don't make sense.
@@ -300,7 +301,8 @@ export class ASTNode {
       }
     }
     throw Error(
-        'Couldn\'t find ' + (forward ? 'next' : 'previous') + ' stack?!');
+      "Couldn't find " + (forward ? 'next' : 'previous') + ' stack?!'
+    );
   }
 
   /**
@@ -311,7 +313,7 @@ export class ASTNode {
    * @param block The block that we want to find the top connection on.
    * @returns The AST node containing the top connection.
    */
-  private findTopASTNodeForBlock(block: Block): ASTNode|null {
+  private findTopASTNodeForBlock(block: Block): ASTNode | null {
     const topConnection = getParentConnection(block);
     if (topConnection) {
       return ASTNode.createConnectionNode(topConnection);
@@ -328,7 +330,7 @@ export class ASTNode {
    * @returns The AST node pointing to the input connection or the top block of
    *     the stack this block is in.
    */
-  private getOutAstNodeForBlock(block: Block): ASTNode|null {
+  private getOutAstNodeForBlock(block: Block): ASTNode | null {
     if (!block) {
       return null;
     }
@@ -338,13 +340,16 @@ export class ASTNode {
     const topConnection = getParentConnection(topBlock);
     // If the top connection has a parentInput, create an AST node pointing to
     // that input.
-    if (topConnection && topConnection.targetConnection &&
-        topConnection.targetConnection.getParentInput()) {
+    if (
+      topConnection &&
+      topConnection.targetConnection &&
+      topConnection.targetConnection.getParentInput()
+    ) {
       // AnyDuringMigration because:  Argument of type 'Input | null' is not
       // assignable to parameter of type 'Input'.
       return ASTNode.createInputNode(
-          topConnection.targetConnection.getParentInput() as
-          AnyDuringMigration);
+        topConnection.targetConnection.getParentInput() as AnyDuringMigration
+      );
     } else {
       // Go to stack level if you are not underneath an input.
       return ASTNode.createStackNode(topBlock);
@@ -359,7 +364,7 @@ export class ASTNode {
    * Null if there are no editable fields or inputs with connections on the
    * block.
    */
-  private findFirstFieldOrInput(block: Block): ASTNode|null {
+  private findFirstFieldOrInput(block: Block): ASTNode | null {
     const inputs = block.inputList;
     for (let i = 0; i < inputs.length; i++) {
       const input = inputs[i];
@@ -383,7 +388,7 @@ export class ASTNode {
    * @returns The source block of the location, or null if the node is of type
    *     workspace.
    */
-  getSourceBlock(): Block|null {
+  getSourceBlock(): Block | null {
     if (this.getType() === ASTNode.types.BLOCK) {
       return this.getLocation() as Block;
     } else if (this.getType() === ASTNode.types.STACK) {
@@ -401,7 +406,7 @@ export class ASTNode {
    * @returns An AST node that wraps the next field, connection, block, or
    *     workspace. Or null if there is no node to the right.
    */
-  next(): ASTNode|null {
+  next(): ASTNode | null {
     switch (this.type) {
       case ASTNode.types.STACK:
         return this.navigateBetweenStacks(true);
@@ -443,7 +448,7 @@ export class ASTNode {
    * @returns An AST node that wraps the next field, connection, workspace, or
    *     block. Or null if there is nothing below this node.
    */
-  in(): ASTNode|null {
+  in(): ASTNode | null {
     switch (this.type) {
       case ASTNode.types.WORKSPACE: {
         const workspace = this.location as Workspace;
@@ -477,7 +482,7 @@ export class ASTNode {
    * @returns An AST node that wraps the previous field, connection, workspace
    *     or block. Or null if no node exists to the left. null.
    */
-  prev(): ASTNode|null {
+  prev(): ASTNode | null {
     switch (this.type) {
       case ASTNode.types.STACK:
         return this.navigateBetweenStacks(false);
@@ -521,14 +526,16 @@ export class ASTNode {
    * @returns An AST node that wraps the next field, connection, workspace or
    *     block. Or null if we are at the workspace level.
    */
-  out(): ASTNode|null {
+  out(): ASTNode | null {
     switch (this.type) {
       case ASTNode.types.STACK: {
         const block = this.location as Block;
         const blockPos = block.getRelativeToSurfaceXY();
         // TODO: Make sure this is in the bounds of the workspace.
-        const wsCoordinate =
-            new Coordinate(blockPos.x, blockPos.y + ASTNode.DEFAULT_OFFSET_Y);
+        const wsCoordinate = new Coordinate(
+          blockPos.x,
+          blockPos.y + ASTNode.DEFAULT_OFFSET_Y
+        );
         return ASTNode.createWorkspaceNode(block.workspace, wsCoordinate);
       }
       case ASTNode.types.OUTPUT: {
@@ -544,7 +551,8 @@ export class ASTNode {
         const block = field.getSourceBlock();
         if (!block) {
           throw new Error(
-              'The current AST location is not associated with a block');
+            'The current AST location is not associated with a block'
+          );
         }
         return ASTNode.createBlockNode(block);
       }
@@ -592,7 +600,7 @@ export class ASTNode {
    * @param field The location of the AST node.
    * @returns An AST node pointing to a field.
    */
-  static createFieldNode(field: Field): ASTNode|null {
+  static createFieldNode(field: Field): ASTNode | null {
     if (!field) {
       return null;
     }
@@ -607,7 +615,7 @@ export class ASTNode {
    * @param connection This is the connection the node will point to.
    * @returns An AST node pointing to a connection.
    */
-  static createConnectionNode(connection: Connection): ASTNode|null {
+  static createConnectionNode(connection: Connection): ASTNode | null {
     if (!connection) {
       return null;
     }
@@ -616,13 +624,17 @@ export class ASTNode {
       // AnyDuringMigration because:  Argument of type 'Input | null' is not
       // assignable to parameter of type 'Input'.
       return ASTNode.createInputNode(
-          connection.getParentInput() as AnyDuringMigration);
+        connection.getParentInput() as AnyDuringMigration
+      );
     } else if (
-        type === ConnectionType.NEXT_STATEMENT && connection.getParentInput()) {
+      type === ConnectionType.NEXT_STATEMENT &&
+      connection.getParentInput()
+    ) {
       // AnyDuringMigration because:  Argument of type 'Input | null' is not
       // assignable to parameter of type 'Input'.
       return ASTNode.createInputNode(
-          connection.getParentInput() as AnyDuringMigration);
+        connection.getParentInput() as AnyDuringMigration
+      );
     } else if (type === ConnectionType.NEXT_STATEMENT) {
       return new ASTNode(ASTNode.types.NEXT, connection);
     } else if (type === ConnectionType.OUTPUT_VALUE) {
@@ -640,7 +652,7 @@ export class ASTNode {
    * @param input The input used to create an AST node.
    * @returns An AST node pointing to a input.
    */
-  static createInputNode(input: Input): ASTNode|null {
+  static createInputNode(input: Input): ASTNode | null {
     if (!input || !input.connection) {
       return null;
     }
@@ -653,7 +665,7 @@ export class ASTNode {
    * @param block The block used to create an AST node.
    * @returns An AST node pointing to a block.
    */
-  static createBlockNode(block: Block): ASTNode|null {
+  static createBlockNode(block: Block): ASTNode | null {
     if (!block) {
       return null;
     }
@@ -670,7 +682,7 @@ export class ASTNode {
    * @returns An AST node of type stack that points to the top block on the
    *     stack.
    */
-  static createStackNode(topBlock: Block): ASTNode|null {
+  static createStackNode(topBlock: Block): ASTNode | null {
     if (!topBlock) {
       return null;
     }
@@ -686,7 +698,9 @@ export class ASTNode {
    *     workspace.
    */
   static createWorkspaceNode(
-      workspace: Workspace|null, wsCoordinate: Coordinate|null): ASTNode|null {
+    workspace: Workspace | null,
+    wsCoordinate: Coordinate | null
+  ): ASTNode | null {
     if (!wsCoordinate || !workspace) {
       return null;
     }
@@ -701,7 +715,7 @@ export class ASTNode {
    * @param block The block to find the top most AST node on.
    * @returns The AST node holding the top most position on the block.
    */
-  static createTopNode(block: Block): ASTNode|null {
+  static createTopNode(block: Block): ASTNode | null {
     let astNode;
     const topConnection = getParentConnection(block);
     if (topConnection) {
@@ -735,7 +749,6 @@ export type Params = ASTNode.Params;
 // wasn't automatically converted by the automatic migration script, (2) the
 // name doesn't follow the styleguide.
 
-
 /**
  * Gets the parent connection on a block.
  * This is either an output connection, previous connection or undefined.
@@ -745,10 +758,12 @@ export type Params = ASTNode.Params;
  * @param block The block to find the parent connection on.
  * @returns The connection connecting to the parent of the block.
  */
-function getParentConnection(block: Block): Connection|null {
+function getParentConnection(block: Block): Connection | null {
   let topConnection = block.outputConnection;
-  if (!topConnection ||
-      block.previousConnection && block.previousConnection.isConnected()) {
+  if (
+    !topConnection ||
+    (block.previousConnection && block.previousConnection.isConnected())
+  ) {
     topConnection = block.previousConnection;
   }
   return topConnection;

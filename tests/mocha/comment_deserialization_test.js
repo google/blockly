@@ -6,18 +6,20 @@
 
 goog.declareModuleId('Blockly.test.commentDeserialization');
 
-import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 import {simulateClick} from './test_helpers/user_input.js';
 
-
-suite('Comment Deserialization', function() {
-  setup(function() {
+suite('Comment Deserialization', function () {
+  setup(function () {
     sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([
       {
-        "type": "empty_block",
-        "message0": "",
-        "args0": [],
+        'type': 'empty_block',
+        'message0': '',
+        'args0': [],
       },
     ]);
     const toolboxXml = `
@@ -37,34 +39,35 @@ suite('Comment Deserialization', function() {
       toolbox: Blockly.utils.xml.textToDom(toolboxXml),
     });
   });
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
-  suite('Pattern', function() {
-    teardown(function() {
+  suite('Pattern', function () {
+    teardown(function () {
       // Delete all blocks.
       this.workspace.clear();
     });
     function createBlock(workspace) {
-      const block = Blockly.Xml.domToBlock(Blockly.utils.xml.textToDom(
-        '<block type="empty_block"/>'
-      ), workspace);
+      const block = Blockly.Xml.domToBlock(
+        Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
+        workspace
+      );
       block.setCommentText('test text');
       return block;
     }
     function assertComment(workspace, text) {
       // Show comment.
       const block = workspace.getAllBlocks()[0];
-      block.comment.setVisible(true);
+      const icon = block.getIcon(Blockly.icons.CommentIcon.TYPE);
+      icon.setBubbleVisible(true);
       // Check comment bubble size.
       const comment = block.getCommentIcon();
       const bubbleSize = comment.getBubbleSize();
       chai.assert.isNotNaN(bubbleSize.width);
       chai.assert.isNotNaN(bubbleSize.height);
-      // Check comment text.
-      chai.assert.equal(comment.textarea_.value, text);
+      chai.assert.equal(icon.getText(), text);
     }
-    test('Trashcan', function() {
+    test('Trashcan', function () {
       // Create block.
       this.block = createBlock(this.workspace);
       // Delete block.
@@ -73,12 +76,16 @@ suite('Comment Deserialization', function() {
       // Open trashcan.
       simulateClick(this.workspace.trashcan.svgGroup);
       // Place from trashcan.
-      simulateClick(this.workspace.trashcan.flyout.svgGroup_.querySelector('.blocklyDraggable'));
+      simulateClick(
+        this.workspace.trashcan.flyout.svgGroup_.querySelector(
+          '.blocklyDraggable'
+        )
+      );
       chai.assert.equal(this.workspace.getAllBlocks().length, 1);
       // Check comment.
       assertComment(this.workspace, 'test text');
     });
-    test('Undo', function() {
+    test('Undo', function () {
       // Create block.
       this.block = createBlock(this.workspace);
       // Delete block.
@@ -90,7 +97,7 @@ suite('Comment Deserialization', function() {
       // Check comment.
       assertComment(this.workspace, 'test text');
     });
-    test('Redo', function() {
+    test('Redo', function () {
       // Create block.
       this.block = createBlock(this.workspace);
       // Undo & undo.
@@ -104,11 +111,13 @@ suite('Comment Deserialization', function() {
       // Check comment.
       assertComment(this.workspace, 'test text');
     });
-    test('Toolbox', function() {
+    test('Toolbox', function () {
       // Place from toolbox.
       const toolbox = this.workspace.getToolbox();
       simulateClick(toolbox.HtmlDiv.querySelector('.blocklyTreeRow'));
-      simulateClick(toolbox.getFlyout().svgGroup_.querySelector('.blocklyDraggable'));
+      simulateClick(
+        toolbox.getFlyout().svgGroup_.querySelector('.blocklyDraggable')
+      );
       chai.assert.equal(this.workspace.getAllBlocks().length, 1);
       // Check comment.
       assertComment(this.workspace, 'test toolbox text');

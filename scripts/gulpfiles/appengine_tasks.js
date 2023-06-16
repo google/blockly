@@ -11,11 +11,11 @@
 const gulp = require('gulp');
 
 const fs = require('fs');
-const rimraf = require('rimraf');
 const path = require('path');
 const execSync = require('child_process').execSync;
 const buildTasks = require('./build_tasks.js');
 const packageTasks = require('./package_tasks.js');
+const {rimraf} = require('rimraf');
 
 const packageJson = require('../../package.json');
 const demoTmpDir = '../_deploy';

@@ -15,15 +15,15 @@ import * as dom from '../utils/dom.js';
 import type {Workspace} from '../workspace.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
-
 /**
  * Returns the state of the workspace as a plain JavaScript object.
  *
  * @param workspace The workspace to serialize.
  * @returns The serialized state of the workspace.
  */
-export function save(workspace: Workspace):
-    {[key: string]: AnyDuringMigration} {
+export function save(workspace: Workspace): {
+  [key: string]: AnyDuringMigration;
+} {
   const state = Object.create(null);
   const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
   for (const key in serializerMap) {
@@ -44,17 +44,18 @@ export function save(workspace: Workspace):
  *     undo-able by the user. False by default.
  */
 export function load(
-    state: {[key: string]: AnyDuringMigration}, workspace: Workspace,
-    {recordUndo = false}: {recordUndo?: boolean} = {}) {
+  state: {[key: string]: AnyDuringMigration},
+  workspace: Workspace,
+  {recordUndo = false}: {recordUndo?: boolean} = {}
+) {
   const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
   if (!serializerMap) {
     return;
   }
 
-  const deserializers = Object.entries(serializerMap)
-                            .sort(
-                                (a, b) => (b[1] as ISerializer)!.priority -
-                                    (a[1] as ISerializer)!.priority);
+  const deserializers = Object.entries(serializerMap).sort(
+    (a, b) => (b[1] as ISerializer)!.priority - (a[1] as ISerializer)!.priority
+  );
 
   const prevRecordUndo = eventUtils.getRecordUndo();
   eventUtils.setRecordUndo(recordUndo);

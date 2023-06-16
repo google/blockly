@@ -1,9 +1,9 @@
 {
   "include": [
-    "core/**/*",  // N.B.: also pulls in closure/goog/goog.js if needed.
-    "closure/goog/*",  // For base.js and base_minimal.js.
+    "core/**/*", // N.B.: also pulls in closure/goog/goog.js if needed.
+    "closure/goog/*", // For base.js and base_minimal.js.
     "blocks/**/*",
-    "generators/**/*",
+    "generators/**/*"
   ],
   "compilerOptions": {
     // Tells TypeScript to read JS files, as
@@ -37,6 +37,6 @@
     // which turns out to have syntax errors (see e.g. discussion on
     // PR #6564: https://github.com/google/blockly/pull/6564), so
     // disable it except for the explicitly-specified types.
-    "types": [],
-  },
+    "types": []
+  }
 }

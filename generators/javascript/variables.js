@@ -7,26 +7,26 @@
 /**
  * @fileoverview Generating JavaScript for variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.JavaScript.variables');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.JavaScript.variables');
 
-const {NameType} = goog.require('Blockly.Names');
-const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
+import {NameType} from '../../core/names.js';
+import {Order, javascriptGenerator} from '../javascript.js';
 
 
-JavaScript['variables_get'] = function(block) {
+javascriptGenerator.forBlock['variables_get'] = function(block, generator) {
   // Variable getter.
-  const code = JavaScript.nameDB_.getName(block.getFieldValue('VAR'),
+  const code = generator.nameDB_.getName(block.getFieldValue('VAR'),
       NameType.VARIABLE);
-  return [code, JavaScript.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
-JavaScript['variables_set'] = function(block) {
+javascriptGenerator.forBlock['variables_set'] = function(block, generator) {
   // Variable setter.
-  const argument0 = JavaScript.valueToCode(
-                        block, 'VALUE', JavaScript.ORDER_ASSIGNMENT) || '0';
-  const varName = JavaScript.nameDB_.getName(
+  const argument0 = generator.valueToCode(
+                        block, 'VALUE', Order.ASSIGNMENT) || '0';
+  const varName = generator.nameDB_.getName(
       block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = ' + argument0 + ';\n';
 };

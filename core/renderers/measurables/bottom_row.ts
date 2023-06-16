@@ -14,7 +14,6 @@ import type {NextConnection} from './next_connection.js';
 import {Row} from './row.js';
 import {Types} from './types.js';
 
-
 /**
  * An object containing information about what elements are in the bottom row of
  * a block as well as spacing information for the bottom row.
@@ -30,7 +29,7 @@ export class BottomRow extends Row {
   /**
    * The next connection on the row, if any.
    */
-  connection: NextConnection|null = null;
+  connection: NextConnection | null = null;
 
   /**
    * The amount that the bottom of the block extends below the horizontal

@@ -12,7 +12,6 @@
 /* eslint-disable */
 'use strict';
 
-
 // Override textToDomDocument and provide Node.js alternatives to DOMParser and
 // XMLSerializer.
 if (typeof globalThis.document !== 'object') {

@@ -40,12 +40,13 @@ import {BlockInfo} from './utils/toolbox.js';
 import * as toolbox from './utils/toolbox.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-
 /**
  * Class for a trash can.
  */
-export class Trashcan extends DeleteArea implements IAutoHideable,
-                                                    IPositionable {
+export class Trashcan
+  extends DeleteArea
+  implements IAutoHideable, IPositionable
+{
   /**
    * The unique id for this component that is used to register with the
    * ComponentManager.
@@ -62,7 +63,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    *
    * @internal
    */
-  flyout: IFlyout|null = null;
+  flyout: IFlyout | null = null;
 
   /** Current open/close state of the lid. */
   isLidOpen = false;
@@ -74,13 +75,13 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   private minOpenness = 0;
 
   /** The SVG group containing the trash can. */
-  private svgGroup: SVGElement|null = null;
+  private svgGroup: SVGElement | null = null;
 
   /** The SVG image element of the trash can lid. */
-  private svgLid: SVGElement|null = null;
+  private svgLid: SVGElement | null = null;
 
   /** Task ID of opening/closing animation. */
-  private lidTask: ReturnType<typeof setTimeout>|null = null;
+  private lidTask: ReturnType<typeof setTimeout> | null = null;
 
   /** Current state of lid opening (0.0 = closed, 1.0 = open). */
   private lidOpen = 0;
@@ -103,7 +104,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     }
 
     // Create flyout options.
-    const flyoutWorkspaceOptions = new Options(({
+    const flyoutWorkspaceOptions = new Options({
       'scrollbars': true,
       'parentWorkspace': this.workspace,
       'rtl': this.workspace.RTL,
@@ -113,24 +114,29 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
       'move': {
         'scrollbars': true,
       },
-    } as BlocklyOptions));
+    } as BlocklyOptions);
     // Create vertical or horizontal flyout.
     if (this.workspace.horizontalLayout) {
       flyoutWorkspaceOptions.toolboxPosition =
-          this.workspace.toolboxPosition === toolbox.Position.TOP ?
-          toolbox.Position.BOTTOM :
-          toolbox.Position.TOP;
+        this.workspace.toolboxPosition === toolbox.Position.TOP
+          ? toolbox.Position.BOTTOM
+          : toolbox.Position.TOP;
       const HorizontalFlyout = registry.getClassFromOptions(
-          registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, this.workspace.options,
-          true);
+        registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
+        this.workspace.options,
+        true
+      );
       this.flyout = new HorizontalFlyout!(flyoutWorkspaceOptions);
     } else {
       flyoutWorkspaceOptions.toolboxPosition =
-          this.workspace.toolboxPosition === toolbox.Position.RIGHT ?
-          toolbox.Position.LEFT :
-          toolbox.Position.RIGHT;
+        this.workspace.toolboxPosition === toolbox.Position.RIGHT
+          ? toolbox.Position.LEFT
+          : toolbox.Position.RIGHT;
       const VerticalFlyout = registry.getClassFromOptions(
-          registry.Type.FLYOUTS_VERTICAL_TOOLBOX, this.workspace.options, true);
+        registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
+        this.workspace.options,
+        true
+      );
       this.flyout = new VerticalFlyout!(flyoutWorkspaceOptions);
     }
     this.workspace.addChangeListener(this.onDelete.bind(this));
@@ -160,46 +166,69 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     let clip;
     const rnd = String(Math.random()).substring(2);
     clip = dom.createSvgElement(
-        Svg.CLIPPATH, {'id': 'blocklyTrashBodyClipPath' + rnd}, this.svgGroup);
+      Svg.CLIPPATH,
+      {'id': 'blocklyTrashBodyClipPath' + rnd},
+      this.svgGroup
+    );
     dom.createSvgElement(
-        Svg.RECT, {'width': WIDTH, 'height': BODY_HEIGHT, 'y': LID_HEIGHT},
-        clip);
+      Svg.RECT,
+      {'width': WIDTH, 'height': BODY_HEIGHT, 'y': LID_HEIGHT},
+      clip
+    );
     const body = dom.createSvgElement(
-        Svg.IMAGE, {
-          'width': SPRITE.width,
-          'x': -SPRITE_LEFT,
-          'height': SPRITE.height,
-          'y': -SPRITE_TOP,
-          'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')',
-        },
-        this.svgGroup);
+      Svg.IMAGE,
+      {
+        'width': SPRITE.width,
+        'x': -SPRITE_LEFT,
+        'height': SPRITE.height,
+        'y': -SPRITE_TOP,
+        'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')',
+      },
+      this.svgGroup
+    );
     body.setAttributeNS(
-        dom.XLINK_NS, 'xlink:href',
-        this.workspace.options.pathToMedia + SPRITE.url);
+      dom.XLINK_NS,
+      'xlink:href',
+      this.workspace.options.pathToMedia + SPRITE.url
+    );
 
     clip = dom.createSvgElement(
-        Svg.CLIPPATH, {'id': 'blocklyTrashLidClipPath' + rnd}, this.svgGroup);
+      Svg.CLIPPATH,
+      {'id': 'blocklyTrashLidClipPath' + rnd},
+      this.svgGroup
+    );
     dom.createSvgElement(
-        Svg.RECT, {'width': WIDTH, 'height': LID_HEIGHT}, clip);
+      Svg.RECT,
+      {'width': WIDTH, 'height': LID_HEIGHT},
+      clip
+    );
     this.svgLid = dom.createSvgElement(
-        Svg.IMAGE, {
-          'width': SPRITE.width,
-          'x': -SPRITE_LEFT,
-          'height': SPRITE.height,
-          'y': -SPRITE_TOP,
-          'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')',
-        },
-        this.svgGroup);
+      Svg.IMAGE,
+      {
+        'width': SPRITE.width,
+        'x': -SPRITE_LEFT,
+        'height': SPRITE.height,
+        'y': -SPRITE_TOP,
+        'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')',
+      },
+      this.svgGroup
+    );
     this.svgLid.setAttributeNS(
-        dom.XLINK_NS, 'xlink:href',
-        this.workspace.options.pathToMedia + SPRITE.url);
+      dom.XLINK_NS,
+      'xlink:href',
+      this.workspace.options.pathToMedia + SPRITE.url
+    );
 
     // bindEventWithChecks_ quashes events too aggressively. See:
     // https://groups.google.com/forum/#!topic/blockly/QF4yB9Wx00s
     // Using bindEventWithChecks_ for blocking mousedown causes issue in mobile.
     // See #4303
     browserEvents.bind(
-        this.svgGroup, 'pointerdown', this, this.blockMouseDownWhenOpenable);
+      this.svgGroup,
+      'pointerdown',
+      this,
+      this.blockMouseDownWhenOpenable
+    );
     browserEvents.bind(this.svgGroup, 'pointerup', this, this.click);
     // Bind to body instead of this.svgGroup so that we don't get lid jitters
     browserEvents.bind(body, 'pointerover', this, this.mouseOver);
@@ -212,7 +241,9 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   init() {
     if (this.workspace.options.maxTrashcanContents > 0) {
       dom.insertAfter(
-          this.flyout!.createDom(Svg.SVG)!, this.workspace.getParentSvg());
+        this.flyout!.createDom(Svg.SVG)!,
+        this.workspace.getParentSvg()
+      );
       this.flyout!.init(this.workspace);
     }
     this.workspace.getComponentManager().addComponent({
@@ -266,7 +297,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     if (this.contentsIsOpen()) {
       return;
     }
-    const contents = this.contents.map(function(string) {
+    const contents = this.contents.map(function (string) {
       return JSON.parse(string);
     });
     // Trashcans with lots of blocks can take a second to render.
@@ -330,25 +361,39 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
       return;
     }
 
-    const cornerPosition =
-        uiPosition.getCornerOppositeToolbox(this.workspace, metrics);
+    const cornerPosition = uiPosition.getCornerOppositeToolbox(
+      this.workspace,
+      metrics
+    );
 
     const height = BODY_HEIGHT + LID_HEIGHT;
     const startRect = uiPosition.getStartPositionRect(
-        cornerPosition, new Size(WIDTH, height), MARGIN_HORIZONTAL,
-        MARGIN_VERTICAL, metrics, this.workspace);
+      cornerPosition,
+      new Size(WIDTH, height),
+      MARGIN_HORIZONTAL,
+      MARGIN_VERTICAL,
+      metrics,
+      this.workspace
+    );
 
     const verticalPosition = cornerPosition.vertical;
-    const bumpDirection = verticalPosition === uiPosition.verticalPosition.TOP ?
-        uiPosition.bumpDirection.DOWN :
-        uiPosition.bumpDirection.UP;
+    const bumpDirection =
+      verticalPosition === uiPosition.verticalPosition.TOP
+        ? uiPosition.bumpDirection.DOWN
+        : uiPosition.bumpDirection.UP;
     const positionRect = uiPosition.bumpPositionRect(
-        startRect, MARGIN_VERTICAL, bumpDirection, savedPositions);
+      startRect,
+      MARGIN_VERTICAL,
+      bumpDirection,
+      savedPositions
+    );
 
     this.top = positionRect.top;
     this.left = positionRect.left;
     this.svgGroup?.setAttribute(
-        'transform', 'translate(' + this.left + ',' + this.top + ')');
+      'transform',
+      'translate(' + this.left + ',' + this.top + ')'
+    );
   }
 
   /**
@@ -358,7 +403,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    * @returns The UI elements's bounding box. Null if bounding box should be
    *     ignored by other UI elements.
    */
-  getBoundingRectangle(): Rect|null {
+  getBoundingRectangle(): Rect | null {
     const bottom = this.top + BODY_HEIGHT + LID_HEIGHT;
     const right = this.left + WIDTH;
     return new Rect(this.top, bottom, this.left, right);
@@ -371,7 +416,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    * @returns The component's bounding box. Null if drag target area should be
    *     ignored.
    */
-  override getClientRect(): Rect|null {
+  override getClientRect(): Rect | null {
     if (!this.svgGroup) {
       return null;
     }
@@ -447,8 +492,10 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     }
 
     if (this.lidOpen > this.minOpenness && this.lidOpen < 1) {
-      this.lidTask =
-          setTimeout(this.animateLid.bind(this), ANIMATION_LENGTH / frames);
+      this.lidTask = setTimeout(
+        this.animateLid.bind(this),
+        ANIMATION_LENGTH / frames
+      );
     }
   }
 
@@ -459,12 +506,18 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    */
   private setLidAngle(lidAngle: number) {
     const openAtRight =
-        this.workspace.toolboxPosition === toolbox.Position.RIGHT ||
-        this.workspace.horizontalLayout && this.workspace.RTL;
+      this.workspace.toolboxPosition === toolbox.Position.RIGHT ||
+      (this.workspace.horizontalLayout && this.workspace.RTL);
     this.svgLid?.setAttribute(
-        'transform',
-        'rotate(' + (openAtRight ? -lidAngle : lidAngle) + ',' +
-            (openAtRight ? 4 : WIDTH - 4) + ',' + (LID_HEIGHT - 2) + ')');
+      'transform',
+      'rotate(' +
+        (openAtRight ? -lidAngle : lidAngle) +
+        ',' +
+        (openAtRight ? 4 : WIDTH - 4) +
+        ',' +
+        (LID_HEIGHT - 2) +
+        ')'
+    );
   }
 
   /**
@@ -504,7 +557,9 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    */
   private fireUiEvent(trashcanOpen: boolean) {
     const uiEvent = new (eventUtils.get(eventUtils.TRASHCAN_OPEN))(
-        trashcanOpen, this.workspace.id);
+      trashcanOpen,
+      this.workspace.id
+    );
     eventUtils.fire(uiEvent);
   }
 
@@ -546,8 +601,10 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    * @param event Workspace event.
    */
   private onDelete(event: Abstract) {
-    if (this.workspace.options.maxTrashcanContents <= 0 ||
-        event.type !== eventUtils.BLOCK_DELETE) {
+    if (
+      this.workspace.options.maxTrashcanContents <= 0 ||
+      event.type !== eventUtils.BLOCK_DELETE
+    ) {
       return;
     }
     const deleteEvent = event as BlockDelete;
@@ -555,14 +612,16 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
       if (!deleteEvent.oldJson) {
         throw new Error('Encountered a delete event without proper oldJson');
       }
-      const cleanedJson =
-          JSON.stringify(this.cleanBlockJson(deleteEvent.oldJson));
+      const cleanedJson = JSON.stringify(
+        this.cleanBlockJson(deleteEvent.oldJson)
+      );
       if (this.contents.indexOf(cleanedJson) !== -1) {
         return;
       }
       this.contents.unshift(cleanedJson);
-      while (this.contents.length >
-             this.workspace.options.maxTrashcanContents) {
+      while (
+        this.contents.length > this.workspace.options.maxTrashcanContents
+      ) {
         this.contents.pop();
       }
 
@@ -638,7 +697,6 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     return blockInfo;
   }
 }
-
 
 /** Width of both the trash can and lid images. */
 const WIDTH = 47;

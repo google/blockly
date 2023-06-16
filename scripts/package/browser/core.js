@@ -11,4 +11,3 @@
 
 /* eslint-disable */
 'use strict';
-

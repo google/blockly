@@ -18,6 +18,10 @@
     {
       "tagName": "@nocollapse",
       "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@suppress",
+      "syntaxKind": "modifier"
     }
   ],
 
@@ -26,7 +30,6 @@
     "@define": true,
     "@license": true,
     "@nocollapse": true,
-    "@suppress": true,
-    "@unrestricted": true
+    "@suppress": true
   }
 }

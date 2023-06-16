@@ -1482,5 +1482,33 @@
       oldName: 'Blockly.Icon',
       newName: 'Blockly.icons.Icon',
     },
+    {
+      oldName: 'Blockly.Input',
+      exports: {
+        'Align': {
+          newPath: 'Blockly.inputs.Align',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly',
+      exports: {
+        'Align': {
+          newPath: 'Blockly.inputs.Align',
+        },
+        'ALIGN_LEFT': {
+          newPath: 'Blockly.inputs.Align.LEFT',
+        },
+        'ALIGN_CENTER': {
+          newPath: 'Blockly.inputs.Align.CENTER',
+        },
+        'ALIGN_RIGHT': {
+          newPath: 'Blockly.inputs.Align.RIGHT',
+        },
+        'inputTypes': {
+          newModule: 'Blockly.inputs',
+        },
+      },
+    },
   ],
 }

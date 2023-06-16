@@ -571,7 +571,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *     way, e.g. an intermediate field change event.
    */
   protected setEditorValue_(
-      newValue: AnyDuringMigration, fireChangeEvent = true) {
+    newValue: AnyDuringMigration,
+    fireChangeEvent = true
+  ) {
     this.isDirty_ = true;
     if (this.isBeingEdited_) {
       // In the case this method is passed an invalid value, we still

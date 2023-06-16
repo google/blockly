@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Logic blocks for Blockly.
- * @suppress {checkTypes}
- */
-
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.logic');
 
@@ -18,10 +13,8 @@ import * as xmlUtils from '../core/utils/xml.js';
 import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
-import type {BlockDefinition} from '../core/blocks.js';
 import type {Connection} from '../core/connection.js';
 import {Msg} from '../core/msg.js';
-import type {RenderedConnection} from '../core/rendered_connection.js';
 import type {Workspace} from '../core/workspace.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 import '../core/field_dropdown.js';
@@ -315,7 +308,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
    * Create XML to represent the number of else-if and else inputs.
    * Backwards compatible serialization implementation.
    *
-   * @return XML storage element.
+   * @returns XML storage element.
    */
   mutationToDom: function(this: IfBlock): Element|null {
     if (!this.elseifCount_ && !this.elseCount_) {
@@ -343,7 +336,8 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Returns the state of this block as a JSON serializable object.
-   * @return The state of this block, ie the else if count and else state.
+   *
+   * @returns The state of this block, ie the else if count and else state.
    */
   saveExtraState: function(this: IfBlock): IfExtraState | null {
     if (!this.elseifCount_ && !this.elseCount_) {
@@ -374,7 +368,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
    * Populate the mutator's dialog with this block's components.
    *
    * @param workspace MutatorIcon's workspace.
-   * @return Root block in mutator.
+   * @returns Root block in mutator.
    */
   decompose: function(this: IfBlock, workspace: Workspace): ContainerBlock {
     const containerBlock = workspace.newBlock('controls_if_if');

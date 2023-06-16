@@ -294,8 +294,8 @@ interface ContainerBlock extends Block {}
 
 /** Type of a controls_if_elseif or controls_if_else block. */
 interface ClauseBlock extends Block {
-  valueConnection_: Connection|null;
-  statementConnection_: Connection|null;
+  valueConnection_?: Connection|null;
+  statementConnection_?: Connection|null;
 }
 
 /** Extra state for serialising controls_if blocks. */
@@ -337,11 +337,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
    * @param xmlElement XML storage element.
    */
   domToMutation: function(this: IfBlock, xmlElement: Element) {
-    const elseifAttribute = xmlElement.getAttribute('elseif');
-    if (elseifAttribute === null) {
-      throw new TypeError('xmlElement did not elseif attribute');
-    }
-    this.elseifCount_ = parseInt(elseifAttribute, 10) || 0;
+    this.elseifCount_ = parseInt(xmlElement.getAttribute('elseif')!, 10) || 0;
     this.elseCount_ = parseInt(xmlElement.getAttribute('else')!, 10) || 0;
     this.rebuildShape_();
   },
@@ -349,20 +345,19 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
    * Returns the state of this block as a JSON serializable object.
    * @return The state of this block, ie the else if count and else state.
    */
-  saveExtraState: function(this: IfBlock): IfExtraState |
-      null {
-        if (!this.elseifCount_ && !this.elseCount_) {
-          return null;
-        }
-        const state = Object.create(null);
-        if (this.elseifCount_) {
-          state['elseIfCount'] = this.elseifCount_;
-        }
-        if (this.elseCount_) {
-          state['hasElse'] = true;
-        }
-        return state;
-      },
+  saveExtraState: function(this: IfBlock): IfExtraState | null {
+    if (!this.elseifCount_ && !this.elseCount_) {
+      return null;
+    }
+    const state = Object.create(null);
+    if (this.elseifCount_) {
+      state['elseIfCount'] = this.elseifCount_;
+    }
+    if (this.elseCount_) {
+      state['hasElse'] = true;
+    }
+    return state;
+  },
   /**
    * Applies the given state to this block.
    *
@@ -381,7 +376,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
    * @param workspace MutatorIcon's workspace.
    * @return Root block in mutator.
    */
-  decompose: function(this: IfBlock, workspace: Workspace): Block {
+  decompose: function(this: IfBlock, workspace: Workspace): ContainerBlock {
     const containerBlock = workspace.newBlock('controls_if_if');
     (containerBlock as BlockSvg).initSvg();
     let connection = containerBlock.nextConnection!;
@@ -409,6 +404,9 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
     // Count number of inputs.
     this.elseifCount_ = 0;
     this.elseCount_ = 0;
+    // Connections arrays are passed to .reconnectChildBlocks_() which
+    // takes 1-based arrays, so are initialised with a dummy value at
+    // index 0 for convenience.
     const valueConnections: Array<Connection|null> = [null];
     const statementConnections: Array<Connection|null> = [null];
     let elseStatementConnection: Connection|null = null;
@@ -420,12 +418,16 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
       switch (clauseBlock.type) {
         case 'controls_if_elseif':
           this.elseifCount_++;
-          valueConnections.push(clauseBlock.valueConnection_);
-          statementConnections.push(clauseBlock.statementConnection_);
+          // TODO(#6920): null valid, undefined not.
+          valueConnections.push(
+              (clauseBlock.valueConnection_ as Connection | null));
+          statementConnections.push(
+              (clauseBlock.statementConnection_ as Connection | null));
           break;
         case 'controls_if_else':
           this.elseCount_++;
-          elseStatementConnection = clauseBlock.statementConnection_;
+          elseStatementConnection =
+              (clauseBlock.statementConnection_ as Connection | null);
           break;
         default:
           throw TypeError('Unknown block type: ' + clauseBlock.type);
@@ -523,9 +525,10 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
   /**
    * Reconnects child blocks.
    *
-   * @param valueConnections List of value connections for 'if' input.
-   * @param statementConnections List of statement connections for 'do'
-   input.
+   * @param valueConnections 1-based array of value connections for
+   *     'if' input.  Value at index [0] ignored.
+   * @param statementConnections 1-based array of statement
+   *     connections for 'do' input.  Value at index [0] ignored.
    * @param elseStatementConnection Statement connection for else input.
    */
   reconnectChildBlocks_: function(
@@ -542,7 +545,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
 
 Extensions.registerMutator(
     'controls_if_mutator', CONTROLS_IF_MUTATOR_MIXIN,
-    null as unknown as undefined,  // BUG(#6920)
+    null as unknown as undefined,  // TODO(#6920)
     ['controls_if_elseif', 'controls_if_else']);
 
 /**
@@ -569,7 +572,7 @@ Extensions.register('controls_if_tooltip', CONTROLS_IF_TOOLTIP_EXTENSION);
 /** Type of a block that has LOGIC_COMPARE_ONCHANGE_MIXIN */
 type CompareBlock = Block&CompareMixin;
 interface CompareMixin extends CompareMixinType {
-  prevBlocks_: Array<Block|null>;
+  prevBlocks_?: Array<Block|null>;
 }
 type CompareMixinType = typeof LOGIC_COMPARE_ONCHANGE_MIXIN;
 

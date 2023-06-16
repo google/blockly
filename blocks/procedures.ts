@@ -389,7 +389,7 @@ const PROCEDURE_DEF_COMMON = {
     // Update the mutator's variables if the mutator is open.
     const mutator = this.getIcon(Mutator.TYPE);
     if (mutator && mutator.bubbleIsVisible()) {
-      export const blocks = mutator.getWorkspace().getAllBlocks(false);
+      const blocks = mutator.getWorkspace().getAllBlocks(false);
       for (let i = 0, block; (block = blocks[i]); i++) {
         if (block.type === 'procedures_mutatorarg' &&
             Names.equals(oldName, block.getFieldValue('NAME'))) {
@@ -625,7 +625,7 @@ blocks['procedures_mutatorarg'] = {
     // Prevents duplicate parameter names in functions
     const workspace =
         sourceBlock.workspace.targetWorkspace || sourceBlock.workspace;
-    export const blocks = workspace.getAllBlocks(false);
+    const blocks = workspace.getAllBlocks(false);
     const caselessName = varName.toLowerCase();
     for (let i = 0; i < blocks.length; i++) {
       if (blocks[i].id === this.getSourceBlock().id) {

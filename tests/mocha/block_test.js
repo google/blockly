@@ -2144,6 +2144,22 @@ suite('Blocks', function () {
         // Child blocks should stay disabled if they have been set.
         chai.assert.isTrue(blockB.disabled);
       });
+      test('Disabled blocks from JSON should have proper disabled status', function () {
+        const blockJson = {
+          'type': 'controls_if',
+          'enabled': false,
+        };
+        Blockly.serialization.blocks.append(blockJson, this.workspace);
+        const block = this.workspace.getTopBlocks(false)[0];
+        chai.assert.isTrue(
+          block.visuallyDisabled,
+          'block should have visuallyDisabled set because it is disabled'
+        );
+        chai.assert.isFalse(
+          block.isEnabled(),
+          'block should be marked disabled because enabled json property was set to false'
+        );
+      });
     });
   });
 

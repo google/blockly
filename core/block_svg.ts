@@ -1578,6 +1578,11 @@ export class BlockSvg
       this.rendered = true;
       dom.startTextWidthCache();
 
+      if (!this.isEnabled()) {
+        // Apply disabled styles if needed.
+        this.updateDisabled();
+      }
+
       if (this.isCollapsed()) {
         this.updateCollapsed_();
       }

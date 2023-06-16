@@ -10,7 +10,7 @@ goog.declareModuleId('Blockly.libraryBlocks.texts');
 import * as Extensions from '../core/extensions.js';
 import * as fieldRegistry from '../core/field_registry.js';
 import * as xmlUtils from '../core/utils/xml.js';
-import {Align} from '../core/inputs/input.js';
+import {Align} from '../core/inputs/align.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
 import {Connection} from '../core/connection.js';

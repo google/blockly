@@ -121,14 +121,12 @@ import {VerticalFlyout} from './flyout_vertical.js';
 import {CodeGenerator} from './generator.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
-import {Icon} from './icons/icon.js';
 import * as icons from './icons.js';
 import {inject} from './inject.js';
-import {Align, Input} from './inputs/input.js';
+import {Align} from './inputs/align.js';
+import {Input} from './inputs/input.js';
 import {inputTypes} from './inputs/input_types.js';
-import {DummyInput} from './inputs/dummy_input.js';
-import {StatementInput} from './inputs/statement_input.js';
-import {ValueInput} from './inputs/value_input.js';
+import * as inputs from './inputs.js';
 import {InsertionMarkerManager} from './insertion_marker_manager.js';
 import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
@@ -245,16 +243,19 @@ export const VERSION = 'uncompiled';
 
 /**
  * @see Blockly.Input.Align.LEFT
+ * @deprecated Use `Blockly.inputs.Align.LEFT`. To be removed in v11.
  */
 export const ALIGN_LEFT = Align.LEFT;
 
 /**
  * @see Blockly.Input.Align.CENTRE
+ * @deprecated Use `Blockly.inputs.Align.CENTER`. To be removed in v11.
  */
 export const ALIGN_CENTRE = Align.CENTRE;
 
 /**
  * @see Blockly.Input.Align.RIGHT
+ * @deprecated Use `Blockly.inputs.Align.RIGHT`. To be removed in v11.
  */
 export const ALIGN_RIGHT = Align.RIGHT;
 /*
@@ -283,6 +284,7 @@ export const PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
 
 /**
  * @see inputTypes.DUMMY_INPUT
+ * @deprecated Use `Blockly.inputs.inputTypes.DUMMY`. To be removed in v11.
  */
 export const DUMMY_INPUT = inputTypes.DUMMY;
 
@@ -582,7 +584,6 @@ export {ICollapsibleToolboxItem};
 export {IComponent};
 export {IConnectionChecker};
 export {IContextMenu};
-export {Icon};
 export {icons};
 export {ICopyable};
 export {IDeletable};
@@ -594,13 +595,7 @@ export {IKeyboardAccessible};
 export {IMetricsManager};
 export {IMovable};
 export {Input};
-export const inputs = {
-  Input,
-  inputTypes,
-  DummyInput,
-  StatementInput,
-  ValueInput,
-};
+export {inputs};
 export {InsertionMarkerManager};
 export {IObservable, isObservable};
 export {IPositionable};
@@ -646,5 +641,6 @@ export {config};
 /** @deprecated Use Blockly.ConnectionType instead. */
 export const connectionTypes = ConnectionType;
 export {inject};
+/** @deprecated Use Blockly.inputs.inputTypes instead. To be removed in v11. */
 export {inputTypes};
 export {serialization};

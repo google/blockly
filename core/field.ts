@@ -1042,9 +1042,12 @@ export abstract class Field<T = any>
    * than this method.
    *
    * @param newValue New value.
+   * @param fireChangeEvent Whether to fire a change event. Defaults to true.
+   *     Should usually be true unless the change will be reported some other
+   *     way, e.g. an intermediate field change event.
    * @sealed
    */
-  setValue(newValue: AnyDuringMigration) {
+  setValue(newValue: AnyDuringMigration, fireChangeEvent = true) {
     const doLogging = false;
     if (newValue === null) {
       doLogging && console.log('null, return');
@@ -1080,7 +1083,7 @@ export abstract class Field<T = any>
     }
 
     this.doValueUpdate_(localValue);
-    if (source && eventUtils.isEnabled()) {
+    if (fireChangeEvent && source && eventUtils.isEnabled()) {
       eventUtils.fire(
         new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
           source,

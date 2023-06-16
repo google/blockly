@@ -1044,7 +1044,7 @@ export abstract class Field<T = any>
    * @param newValue New value.
    * @param fireChangeEvent Whether to fire a change event. Defaults to true.
    *     Should usually be true unless the change will be reported some other
-   *     way.
+   *     way, e.g. an intermediate field change event.
    * @sealed
    */
   setValue(newValue: AnyDuringMigration, fireChangeEvent = true) {

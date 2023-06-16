@@ -28,7 +28,16 @@ import * as eventUtils from './utils.js';
 export class BlockFieldIntermediateChange extends BlockBase {
   override type = eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE;
 
-  // Intermediate events do not undo or redo.
+  // Intermediate events do not undo or redo. They may be fired frequently while
+  // the field editor widget is open. A separate BLOCK_CHANGE event is fired
+  // when the editor is closed, which combines all of the field value changes
+  // into a single change that is recorded in the undo history instead. The
+  // intermediate changes are important for reacting to immediate changes, but
+  // some event handlers would prefer to handle the less frequent final events,
+  // like when triggering workspace serialization. Technically, this method of
+  // grouping changes can result in undo perfoming actions out of order if some
+  // other event occurs between opening and closing the field editor, but such
+  // events are unlikely to cause a broken state.
   override recordUndo = false;
 
   /** The name of the field that changed. */

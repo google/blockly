@@ -566,8 +566,12 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * value whilst editing.
    *
    * @param newValue New value.
+   * @param fireChangeEvent Whether to fire a change event. Defaults to true.
+   *     Should usually be true unless the change will be reported some other
+   *     way, e.g. an intermediate field change event.
    */
-  protected setEditorValue_(newValue: AnyDuringMigration) {
+  protected setEditorValue_(
+      newValue: AnyDuringMigration, fireChangeEvent = true) {
     this.isDirty_ = true;
     if (this.isBeingEdited_) {
       // In the case this method is passed an invalid value, we still
@@ -576,7 +580,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       // with what's shown to the user.
       this.htmlInput_!.value = this.getEditorText_(newValue);
     }
-    this.setValue(newValue);
+    this.setValue(newValue, fireChangeEvent);
   }
 
   /** Resize the editor to fit the text. */

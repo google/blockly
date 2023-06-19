@@ -27,6 +27,24 @@ const EXTRAS = [
   'node_modules/@blockly',
 ];
 
+let upstream = null;
+
+/**
+ * Get name of git remote for upstream (typically 'upstream', but this
+ * is just convention and can be changed.)
+ */
+function getUpstream() {
+  if (upstream) return upstream;
+  for (const line of String(execSync('git remote -v')).split('\n')) {
+    const [remote, url] = line.split('\t');
+    if (url.includes('github.com/google/blockly')) {
+      upstream = remote;
+      return upstream;
+    }
+  }
+  throw new Error('Unable to determine upstream URL');
+}
+
 /**
  * Stash current state, check out the named branch, and sync with
  * google/blockly.
@@ -131,8 +149,8 @@ const updateGithubPages = gulp.series(
   function(done) {
     execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
     execSync('git switch -C gh-pages', { stdio: 'inherit' });
-    execSync(`git fetch ${UPSTREAM_URL}`, { stdio: 'inherit' });
-    execSync('git reset --hard upstream/develop', { stdio: 'inherit' });
+    execSync(`git fetch ${getUpstream()}`, { stdio: 'inherit' });
+    execSync(`git reset --hard ${getUpstream()}/develop`, { stdio: 'inherit' });
     done();
   },
   buildTasks.cleanBuildDir,

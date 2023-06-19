@@ -16,6 +16,17 @@ const packageTasks = require('./package_tasks');
 
 const upstream_url = "https://github.com/google/blockly.git";
 
+/**
+ * Extra paths to include in the gh_pages branch (beyond the normal
+ * contents of master / develop).  Passed to shell unquoted, so can
+ * include globs.
+ */
+const EXTRAS = [
+  'build/msg',
+  'dist/*_compressed.js*',
+  'node_modules/@blockly',
+];
+
 // Stash current state, check out the named branch, and sync with
 // google/blockly.
 function syncBranch(branchName) {
@@ -112,8 +123,9 @@ const updateGithubPages = gulp.series(
   packageTasks.cleanReleaseDir,
   buildTasks.build,
   function(done) {
-    // The build and dist directories are normally gitignored, so we have to force add.
-    execSync('git add -f build/msg/* dist/*_compressed.js*', {stdio: 'inherit'});
+    // Extra paths (e.g. build/, dist/ etc.) are normally gitignored,
+    // so we have to force add.
+    execSync(`git add -f ${EXTRAS.join(' ')}`, {stdio: 'inherit'});
     execSync('git commit -am "Rebuild"', {stdio: 'inherit'});
     execSync('git push ' + upstream_url + ' gh-pages --force',
         {stdio: 'inherit'});

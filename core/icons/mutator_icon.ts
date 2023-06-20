@@ -35,6 +35,12 @@ const SIZE = 17;
  */
 const WORKSPACE_MARGIN = 16;
 
+/**
+ * An icon that allows the user to change the shape of the block.
+ *
+ * For example, it could be used to add additional fields or inputs to
+ * the block.
+ */
 export class MutatorIcon extends Icon implements IHasBubble {
   /** The type string used to identify this icon. */
   static readonly TYPE = IconType.MUTATOR;

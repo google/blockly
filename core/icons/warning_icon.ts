@@ -22,6 +22,12 @@ import {IconType} from './icon_types.js';
 /** The size of the warning icon in workspace-scale units. */
 const SIZE = 17;
 
+/**
+ * An icon that warns the user that something is wrong with their block.
+ *
+ * For example, this could be used to warn them about incorrect field values,
+ * or incorrect placement of the block (putting it somewhere it doesn't belong).
+ */
 export class WarningIcon extends Icon implements IHasBubble {
   /** The type string used to identify this icon. */
   static readonly TYPE = IconType.WARNING;

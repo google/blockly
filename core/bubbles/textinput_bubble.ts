@@ -15,6 +15,9 @@ import * as touch from '../touch.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {browserEvents} from '../utils.js';
 
+/**
+ * A bubble that displays editable text. It can also be resized by the user.
+ */
 export class TextInputBubble extends Bubble {
   /** The root of the elements specific to the text element. */
   private inputRoot: SVGForeignObjectElement;

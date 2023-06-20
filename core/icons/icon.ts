@@ -15,6 +15,12 @@ import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import type {IconType} from './icon_types.js';
 
+/**
+ * The abstract icon class. Icons are visual elements that live in the top-start
+ * corner of the block. Usually they provide more "meta" information about a
+ * block (such as warnings or comments) as opposed to fields, which provide
+ * "actual" information, related to how a block functions.
+ */
 export abstract class Icon implements IIcon {
   /**
    * The position of this icon relative to its blocks top-start,

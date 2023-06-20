@@ -16,6 +16,11 @@ import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
+/**
+ * The abstract pop-up bubble class. This creates a UI that looks like a speech
+ * bubble, where it has a "tail" that points to the block, and a "head" that
+ * displays arbitrary svg elements.
+ */
 export abstract class Bubble implements IBubble {
   /** The width of the border around the bubble. */
   static readonly BORDER_WIDTH = 6;

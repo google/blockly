@@ -25,7 +25,7 @@ import type {RenderedConnection} from '../rendered_connection.js';
 import {inputTypes} from './input_types.js';
 
 /**
- * Class for an input with an optional field.
+ * Class for an input with optional fields.
  */
 export class Input {
   fieldRow: Field[] = [];

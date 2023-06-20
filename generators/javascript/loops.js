@@ -13,10 +13,10 @@ goog.declareModuleId('Blockly.JavaScript.loops');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {Order, javascriptGenerator} from '../javascript.js';
+import {Order} from './javascript_generator.js';
 
 
-javascriptGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {
+export function controls_repeat_ext(block, generator) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -45,10 +45,9 @@ javascriptGenerator.forBlock['controls_repeat_ext'] = function(block, generator)
   return code;
 };
 
-javascriptGenerator.forBlock['controls_repeat'] =
-    javascriptGenerator.forBlock['controls_repeat_ext'];
+export const controls_repeat = controls_repeat_ext;
 
-javascriptGenerator.forBlock['controls_whileUntil'] = function(block, generator) {
+export function controls_whileUntil(block, generator) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
@@ -64,7 +63,7 @@ javascriptGenerator.forBlock['controls_whileUntil'] = function(block, generator)
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
 };
 
-javascriptGenerator.forBlock['controls_for'] = function(block, generator) {
+export function controls_for(block, generator) {
   // For loop.
   const variable0 =
       generator.nameDB_.getName(
@@ -127,7 +126,7 @@ javascriptGenerator.forBlock['controls_for'] = function(block, generator) {
   return code;
 };
 
-javascriptGenerator.forBlock['controls_forEach'] = function(block, generator) {
+export function controls_forEach(block, generator) {
   // For each loop.
   const variable0 =
       generator.nameDB_.getName(
@@ -153,7 +152,7 @@ javascriptGenerator.forBlock['controls_forEach'] = function(block, generator) {
   return code;
 };
 
-javascriptGenerator.forBlock['controls_flow_statements'] = function(block, generator) {
+export function controls_flow_statements(block, generator) {
   // Flow statements: continue, break.
   let xfix = '';
   if (generator.STATEMENT_PREFIX) {

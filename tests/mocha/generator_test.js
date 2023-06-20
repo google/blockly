@@ -7,11 +7,11 @@
 goog.declareModuleId('Blockly.test.generator');
 
 import * as Blockly from '../../build/src/core/blockly.js';
-const {dartGenerator} = goog.require('Blockly.Dart');
-const {javascriptGenerator} = goog.require('Blockly.JavaScript');
-const {luaGenerator} = goog.require('Blockly.Lua');
-const {phpGenerator} = goog.require('Blockly.PHP');
-const {pythonGenerator} = goog.require('Blockly.Python');
+const {DartGenerator} = goog.require('Blockly.Dart');
+const {JavascriptGenerator} = goog.require('Blockly.JavaScript');
+const {LuaGenerator} = goog.require('Blockly.Lua');
+const {PhpGenerator} = goog.require('Blockly.PHP');
+const {PythonGenerator} = goog.require('Blockly.Python');
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -104,11 +104,11 @@ suite('Generator', function () {
     });
 
     const testCase = [
-      [dartGenerator, 'Dart'],
-      [javascriptGenerator, 'JavaScript'],
-      [luaGenerator, 'Lua'],
-      [phpGenerator, 'PHP'],
-      [pythonGenerator, 'Python'],
+      [new DartGenerator(), 'Dart'],
+      [new JavascriptGenerator(), 'JavaScript'],
+      [new LuaGenerator(), 'Lua'],
+      [new PhpGenerator(), 'PHP'],
+      [new PythonGenerator(), 'Python'],
     ];
 
     suite('Trivial', function () {

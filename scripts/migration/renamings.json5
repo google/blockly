@@ -1376,6 +1376,8 @@
       oldName: 'Blockly.Python',
       newExport: 'pythonGenerator',
       newPath: 'Blockly.Python',
+    },
+    {
       oldName: 'Blockly.ContextMenuRegistry',
       exports: {
         'ContextMenuRegistry.ScopeType': {
@@ -1507,6 +1509,62 @@
         },
         'inputTypes': {
           newModule: 'Blockly.inputs',
+        },
+      },
+    },
+    // The following renamings serve two purposes:
+    // - Record that the langGenerator instances have moved to a
+    //   different module (though this is not actually actioned by the
+    //   renaming script).
+    // - Record a change of path, applicable only to code that imports
+    //   generators via <script> tags.
+    {
+      oldName: 'Blockly.Dart',
+      exports: {
+        dartGenerator: {
+          newModule: 'Blockly.Dart.all',
+          oldPath: 'Blockly.Dart',
+          newPath: 'dart.dartGenerator',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.JavaScript',
+      exports: {
+        javascriptGenerator: {
+          newModule: 'Blockly.Javascript.all',
+          oldPath: 'Blockly.JavaScript',
+          newPath: 'javascript.javascriptGenerator',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Lua',
+      exports: {
+        luaGenerator: {
+          newModule: 'Blockly.Lua.all',
+          oldPath: 'Blockly.Lua',
+          newPath: 'lua.luaGenerator',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Php',
+      exports: {
+        phpGenerator: {
+          newModule: 'Blockly.PHP.all',
+          oldPath: 'Blockly.PHP',
+          newPath: 'php.phpGenerator',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Python',
+      exports: {
+        pythonGenerator: {
+          newModule: 'Blockly.Python.all',
+          oldPath: 'Blockly.Python',
+          newPath: 'python.pythonGenerator',
         },
       },
     },

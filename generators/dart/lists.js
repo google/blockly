@@ -12,17 +12,17 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Dart.lists');
 
 import {NameType} from '../../core/names.js';
-import {dartGenerator, Order} from '../dart.js';
+import {Order} from './dart_generator.js';
 
 
-dartGenerator.addReservedWords('Math');
+// RESERVED WORDS: 'Math'
 
-dartGenerator.forBlock['lists_create_empty'] = function(block, generator) {
+export function lists_create_empty(block, generator) {
   // Create an empty list.
   return ['[]', Order.ATOMIC];
 };
 
-dartGenerator.forBlock['lists_create_with'] = function(block, generator) {
+export function lists_create_with(block, generator) {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
@@ -33,7 +33,7 @@ dartGenerator.forBlock['lists_create_with'] = function(block, generator) {
   return [code, Order.ATOMIC];
 };
 
-dartGenerator.forBlock['lists_repeat'] = function(block, generator) {
+export function lists_repeat(block, generator) {
   // Create a list with one element repeated.
   const element =
       generator.valueToCode(block, 'ITEM', Order.NONE) || 'null';
@@ -43,21 +43,21 @@ dartGenerator.forBlock['lists_repeat'] = function(block, generator) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['lists_length'] = function(block, generator) {
+export function lists_length(block, generator) {
   // String or array length.
   const list =
       generator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || '[]';
   return [list + '.length', Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['lists_isEmpty'] = function(block, generator) {
+export function lists_isEmpty(block, generator) {
   // Is the string null or array empty?
   const list =
       generator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || '[]';
   return [list + '.isEmpty', Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['lists_indexOf'] = function(block, generator) {
+export function lists_indexOf(block, generator) {
   // Find an item in the list.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'indexOf' : 'lastIndexOf';
@@ -71,7 +71,7 @@ dartGenerator.forBlock['lists_indexOf'] = function(block, generator) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['lists_getIndex'] = function(block, generator) {
+export function lists_getIndex(block, generator) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -234,7 +234,7 @@ dynamic ${generator.FUNCTION_NAME_PLACEHOLDER_}(List my_list) {
   throw Error('Unhandled combination (lists_getIndex).');
 };
 
-dartGenerator.forBlock['lists_setIndex'] = function(block, generator) {
+export function lists_setIndex(block, generator) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -316,7 +316,7 @@ dartGenerator.forBlock['lists_setIndex'] = function(block, generator) {
   throw Error('Unhandled combination (lists_setIndex).');
 };
 
-dartGenerator.forBlock['lists_getSublist'] = function(block, generator) {
+export function lists_getSublist(block, generator) {
   // Get sublist.
   const list =
       generator.valueToCode(block, 'LIST', Order.UNARY_POSTFIX) || '[]';
@@ -390,7 +390,7 @@ List ${generator.FUNCTION_NAME_PLACEHOLDER_}(List list, String where1, num at1, 
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['lists_sort'] = function(block, generator) {
+export function lists_sort(block, generator) {
   // Block for sorting a list.
   const list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
@@ -417,7 +417,7 @@ List ${generator.FUNCTION_NAME_PLACEHOLDER_}(List list, String type, int directi
   ];
 };
 
-dartGenerator.forBlock['lists_split'] = function(block, generator) {
+export function lists_split(block, generator) {
   // Block for splitting text into a list, or joining a list into text.
   let input = generator.valueToCode(block, 'INPUT', Order.UNARY_POSTFIX);
   const delimiter =
@@ -441,7 +441,7 @@ dartGenerator.forBlock['lists_split'] = function(block, generator) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-dartGenerator.forBlock['lists_reverse'] = function(block, generator) {
+export function lists_reverse(block, generator) {
   // Block for reversing a list.
   const list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
   // XXX What should the operator precedence be for a `new`?

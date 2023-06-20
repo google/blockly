@@ -11,10 +11,10 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.logic');
 
-import {pythonGenerator, Order} from '../python.js';
+import {Order} from './python_generator.js';
 
 
-pythonGenerator.forBlock['controls_if'] = function(block, generator) {
+export function controls_if(block, generator) {
   // If/elseif/else condition.
   let n = 0;
   let code = '', branchCode, conditionCode;
@@ -55,10 +55,9 @@ pythonGenerator.forBlock['controls_if'] = function(block, generator) {
   return code;
 };
 
-pythonGenerator.forBlock['controls_ifelse'] =
-    pythonGenerator.forBlock['controls_if'];
+export const controls_ifelse = controls_if;
 
-pythonGenerator.forBlock['logic_compare'] = function(block, generator) {
+export function logic_compare(block, generator) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
@@ -70,7 +69,7 @@ pythonGenerator.forBlock['logic_compare'] = function(block, generator) {
   return [code, order];
 };
 
-pythonGenerator.forBlock['logic_operation'] = function(block, generator) {
+export function logic_operation(block, generator) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
   const order =
@@ -95,7 +94,7 @@ pythonGenerator.forBlock['logic_operation'] = function(block, generator) {
   return [code, order];
 };
 
-pythonGenerator.forBlock['logic_negate'] = function(block, generator) {
+export function logic_negate(block, generator) {
   // Negation.
   const argument0 =
       generator.valueToCode(block, 'BOOL', Order.LOGICAL_NOT) || 'True';
@@ -103,18 +102,18 @@ pythonGenerator.forBlock['logic_negate'] = function(block, generator) {
   return [code, Order.LOGICAL_NOT];
 };
 
-pythonGenerator.forBlock['logic_boolean'] = function(block, generator) {
+export function logic_boolean(block, generator) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'True' : 'False';
   return [code, Order.ATOMIC];
 };
 
-pythonGenerator.forBlock['logic_null'] = function(block, generator) {
+export function logic_null(block, generator) {
   // Null data type.
   return ['None', Order.ATOMIC];
 };
 
-pythonGenerator.forBlock['logic_ternary'] = function(block, generator) {
+export function logic_ternary(block, generator) {
   // Ternary operator.
   const value_if =
       generator.valueToCode(block, 'IF', Order.CONDITIONAL) || 'False';

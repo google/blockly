@@ -12,16 +12,16 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.texts');
 
 import {NameType} from '../../core/names.js';
-import {luaGenerator, Order} from '../lua.js';
+import {Order} from './lua_generator.js';
 
 
-luaGenerator.forBlock['text'] = function(block, generator) {
+export function text(block, generator) {
   // Text value.
   const code = generator.quote_(block.getFieldValue('TEXT'));
   return [code, Order.ATOMIC];
 };
 
-luaGenerator.forBlock['text_multiline'] = function(block, generator) {
+export function text_multiline(block, generator) {
   // Text value.
   const code = generator.multiline_quote_(block.getFieldValue('TEXT'));
   const order =
@@ -29,7 +29,7 @@ luaGenerator.forBlock['text_multiline'] = function(block, generator) {
   return [code, order];
 };
 
-luaGenerator.forBlock['text_join'] = function(block, generator) {
+export function text_join(block, generator) {
   // Create a string made up of any number of elements of any type.
   if (block.itemCount_ === 0) {
     return ["''", Order.ATOMIC];
@@ -55,7 +55,7 @@ luaGenerator.forBlock['text_join'] = function(block, generator) {
   }
 };
 
-luaGenerator.forBlock['text_append'] = function(block, generator) {
+export function text_append(block, generator) {
   // Append to a variable in place.
   const varName =
       generator.nameDB_.getName(
@@ -65,19 +65,19 @@ luaGenerator.forBlock['text_append'] = function(block, generator) {
   return varName + ' = ' + varName + ' .. ' + value + '\n';
 };
 
-luaGenerator.forBlock['text_length'] = function(block, generator) {
+export function text_length(block, generator) {
   // String or array length.
   const text = generator.valueToCode(block, 'VALUE', Order.UNARY) || "''";
   return ['#' + text, Order.UNARY];
 };
 
-luaGenerator.forBlock['text_isEmpty'] = function(block, generator) {
+export function text_isEmpty(block, generator) {
   // Is the string null or array empty?
   const text = generator.valueToCode(block, 'VALUE', Order.UNARY) || "''";
   return ['#' + text + ' == 0', Order.RELATIONAL];
 };
 
-luaGenerator.forBlock['text_indexOf'] = function(block, generator) {
+export function text_indexOf(block, generator) {
   // Search the text for a substring.
   const substring = generator.valueToCode(block, 'FIND', Order.NONE) || "''";
   const text = generator.valueToCode(block, 'VALUE', Order.NONE) || "''";
@@ -107,7 +107,7 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['text_charAt'] = function(block, generator) {
+export function text_charAt(block, generator) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
@@ -153,7 +153,7 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['text_getSubstring'] = function(block, generator) {
+export function text_getSubstring(block, generator) {
   // Get substring.
   const text = generator.valueToCode(block, 'STRING', Order.NONE) || "''";
 
@@ -190,7 +190,7 @@ luaGenerator.forBlock['text_getSubstring'] = function(block, generator) {
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['text_changeCase'] = function(block, generator) {
+export function text_changeCase(block, generator) {
   // Change capitalization.
   const operator = block.getFieldValue('CASE');
   const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
@@ -227,7 +227,7 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['text_trim'] = function(block, generator) {
+export function text_trim(block, generator) {
   // Trim spaces.
   const OPERATORS = {LEFT: '^%s*(,-)', RIGHT: '(.-)%s*$', BOTH: '^%s*(.-)%s*$'};
   const operator = OPERATORS[block.getFieldValue('MODE')];
@@ -236,13 +236,13 @@ luaGenerator.forBlock['text_trim'] = function(block, generator) {
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['text_print'] = function(block, generator) {
+export function text_print(block, generator) {
   // Print statement.
   const msg = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return 'print(' + msg + ')\n';
 };
 
-luaGenerator.forBlock['text_prompt_ext'] = function(block, generator) {
+export function text_prompt_ext(block, generator) {
   // Prompt function.
   let msg;
   if (block.getField('TEXT')) {
@@ -269,9 +269,9 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['text_prompt'] = luaGenerator.forBlock['text_prompt_ext'];
+export const text_prompt = text_prompt_ext;
 
-luaGenerator.forBlock['text_count'] = function(block, generator) {
+export function text_count(block, generator) {
   const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   const sub = generator.valueToCode(block, 'SUB', Order.NONE) || "''";
   const functionName = generator.provideFunction_('text_count', `
@@ -296,7 +296,7 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['text_replace'] = function(block, generator) {
+export function text_replace(block, generator) {
   const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   const from = generator.valueToCode(block, 'FROM', Order.NONE) || "''";
   const to = generator.valueToCode(block, 'TO', Order.NONE) || "''";
@@ -322,7 +322,7 @@ end
   return [code, Order.HIGH];
 };
 
-luaGenerator.forBlock['text_reverse'] = function(block, generator) {
+export function text_reverse(block, generator) {
   const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   const code = 'string.reverse(' + text + ')';
   return [code, Order.HIGH];

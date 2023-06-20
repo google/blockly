@@ -11,11 +11,9 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.variablesDynamic');
 
-import {javascriptGenerator} from '../javascript.js';
-import './variables.js';
 
 // JavaScript is dynamically typed.
-javascriptGenerator.forBlock['variables_get_dynamic'] =
-    javascriptGenerator.forBlock['variables_get'];
-javascriptGenerator.forBlock['variables_set_dynamic'] =
-    javascriptGenerator.forBlock['variables_set'];
+export {
+  variables_get as variables_get_dynamic,
+  variables_set as variables_set_dynamic,
+} from './variables.js';

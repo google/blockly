@@ -13,10 +13,10 @@ goog.declareModuleId('Blockly.Python.loops');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {pythonGenerator, Order} from '../python.js';
+import {Order} from './python_generator.js';
 
 
-pythonGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {
+export function controls_repeat_ext(block, generator) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -39,10 +39,9 @@ pythonGenerator.forBlock['controls_repeat_ext'] = function(block, generator) {
   return code;
 };
 
-pythonGenerator.forBlock['controls_repeat'] =
-    pythonGenerator.forBlock['controls_repeat_ext'];
+export const controls_repeat = controls_repeat_ext;
 
-pythonGenerator.forBlock['controls_whileUntil'] = function(block, generator) {
+export function controls_whileUntil(block, generator) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 = generator.valueToCode(
@@ -57,7 +56,7 @@ pythonGenerator.forBlock['controls_whileUntil'] = function(block, generator) {
   return 'while ' + argument0 + ':\n' + branch;
 };
 
-pythonGenerator.forBlock['controls_for'] = function(block, generator) {
+export function controls_for(block, generator) {
   // For loop.
   const variable0 =
       generator.nameDB_.getName(
@@ -166,7 +165,7 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(start, stop, step):
   return code;
 };
 
-pythonGenerator.forBlock['controls_forEach'] = function(block, generator) {
+export function controls_forEach(block, generator) {
   // For each loop.
   const variable0 =
       generator.nameDB_.getName(
@@ -179,7 +178,7 @@ pythonGenerator.forBlock['controls_forEach'] = function(block, generator) {
   return code;
 };
 
-pythonGenerator.forBlock['controls_flow_statements'] = function(block, generator) {
+export function controls_flow_statements(block, generator) {
   // Flow statements: continue, break.
   let xfix = '';
   if (generator.STATEMENT_PREFIX) {

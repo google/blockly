@@ -12,17 +12,17 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.JavaScript.variables');
 
 import {NameType} from '../../core/names.js';
-import {Order, javascriptGenerator} from '../javascript.js';
+import {Order} from './javascript_generator.js';
 
 
-javascriptGenerator.forBlock['variables_get'] = function(block, generator) {
+export function variables_get(block, generator) {
   // Variable getter.
   const code = generator.nameDB_.getName(block.getFieldValue('VAR'),
       NameType.VARIABLE);
   return [code, Order.ATOMIC];
 };
 
-javascriptGenerator.forBlock['variables_set'] = function(block, generator) {
+export function variables_set(block, generator) {
   // Variable setter.
   const argument0 = generator.valueToCode(
                         block, 'VALUE', Order.ASSIGNMENT) || '0';

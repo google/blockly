@@ -11,12 +11,9 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.PHP.variablesDynamic');
 
-import {phpGenerator} from '../php.js';
-import './variables.js';
-
 
 // generator is dynamically typed.
-phpGenerator.forBlock['variables_get_dynamic'] =
-    phpGenerator.forBlock['variables_get'];
-phpGenerator.forBlock['variables_set_dynamic'] =
-    phpGenerator.forBlock['variables_set'];
+export {
+  variables_get as variables_get_dynamic,
+  variables_set as variables_set_dynamic,
+} from './variables.js';

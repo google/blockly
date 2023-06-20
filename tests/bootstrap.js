@@ -74,7 +74,7 @@
       {
         id: 'Blockly',
         script: 'dist/blockly_compressed.js',
-        scriptExport: 'Blocky',
+        scriptExport: 'Blockly',
         importAt: 'Blockly',
       },
       {

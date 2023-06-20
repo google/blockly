@@ -1564,7 +1564,7 @@
         pythonGenerator: {
           newModule: 'Blockly.Python.all',
           oldPath: 'Blockly.Python',
-          newPath: 'python.pythonjavascriptGenerator',
+          newPath: 'python.pythonGenerator',
         },
       },
     },

@@ -105,7 +105,7 @@ const chunks = [
   {
     name: 'blocks',
     entry: path.join(TSC_OUTPUT_DIR, 'blocks', 'blocks.js'),
-    exports: 'module$exports$Blockly$libraryBlocks',
+    exports: 'module$build$src$blocks$blocks',
     scriptExport: 'Blockly.libraryBlocks',
   },
   {

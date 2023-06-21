@@ -15,6 +15,10 @@ import type {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 
+/**
+ * A bubble that contains a mini-workspace which can hold arbitrary blocks.
+ * Used by the mutator icon.
+ */
 export class MiniWorkspaceBubble extends Bubble {
   /**
    * The minimum amount of change to the mini workspace view to trigger

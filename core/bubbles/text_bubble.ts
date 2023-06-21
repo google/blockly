@@ -12,6 +12,9 @@ import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
+/**
+ * A bubble that displays non-editable text. Used by the warning icon.
+ */
 export class TextBubble extends Bubble {
   private paragraph: SVGTextElement;
 

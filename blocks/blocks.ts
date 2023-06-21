@@ -18,12 +18,29 @@ import * as variables from './variables.js';
 import * as variablesDynamic from './variables_dynamic.js';
 import type {BlockDefinition} from '../core/blocks.js';
 
-export {colour, lists, loops, math, procedures, texts, variables, variablesDynamic};
+export {
+  colour,
+  lists,
+  loops,
+  math,
+  procedures,
+  texts,
+  variables,
+  variablesDynamic,
+};
 
 /**
  * A dictionary of the block definitions provided by all the
  * Blockly.libraryBlocks.* modules.
  */
 export const blocks: {[key: string]: BlockDefinition} = Object.assign(
-    {}, colour.blocks, lists.blocks, logic.blocks, loops.blocks, math.blocks,
-    procedures.blocks, variables.blocks, variablesDynamic.blocks);
+  {},
+  colour.blocks,
+  lists.blocks,
+  logic.blocks,
+  loops.blocks,
+  math.blocks,
+  procedures.blocks,
+  variables.blocks,
+  variablesDynamic.blocks
+);

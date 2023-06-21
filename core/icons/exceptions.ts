@@ -7,8 +7,7 @@
 import type {IIcon} from '../interfaces/i_icon.js';
 
 /**
- * Thrown when you try to append the same type of icon to a block
- * multiple times.
+ * Thrown when you add more than one icon of the same type to a block.
  */
 export class DuplicateIconType extends Error {
   /**

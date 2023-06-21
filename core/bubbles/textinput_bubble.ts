@@ -17,6 +17,7 @@ import {browserEvents} from '../utils.js';
 
 /**
  * A bubble that displays editable text. It can also be resized by the user.
+ * Used by the comment icon.
  */
 export class TextInputBubble extends Bubble {
   /** The root of the elements specific to the text element. */

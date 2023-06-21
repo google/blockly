@@ -24,9 +24,7 @@ import * as fieldRegistry from '../field_registry.js';
 import type {RenderedConnection} from '../rendered_connection.js';
 import {inputTypes} from './input_types.js';
 
-/**
- * Class for an input with optional fields.
- */
+/** Class for an input with optional fields. */
 export class Input {
   fieldRow: Field[] = [];
   /** Alignment of input's fields (left, right or centre). */

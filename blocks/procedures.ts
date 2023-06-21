@@ -417,6 +417,7 @@ const PROCEDURE_DEF_COMMON = {
   /**
    * Update the display to reflect a newly renamed argument.
    *
+   * @internal
    * @param oldName The old display name of the argument.
    * @param newName The new display name of the argument.
    */
@@ -493,7 +494,7 @@ blocks['procedures_defnoreturn'] = {
   /**
    * Block for defining a procedure with no return value.
    */
-  init: function (this: ProcedureBlock) {
+  init: function (this: ProcedureBlock & BlockSvg) {
     const initName = Procedures.findLegalName('', this);
     const nameField = fieldRegistry.fromJson({
       type: 'field_input',
@@ -505,9 +506,7 @@ blocks['procedures_defnoreturn'] = {
       .appendField(Msg['PROCEDURES_DEFNORETURN_TITLE'])
       .appendField(nameField, 'NAME')
       .appendField('', 'PARAMS');
-    this.setMutator(
-      new Mutator(['procedures_mutatorarg'], this as unknown as BlockSvg)
-    );
+    this.setMutator(new Mutator(['procedures_mutatorarg'], this));
     if (
       (this.workspace.options.comments ||
         (this.workspace.options.parentWorkspace &&
@@ -543,7 +542,7 @@ blocks['procedures_defreturn'] = {
   /**
    * Block for defining a procedure with a return value.
    */
-  init: function (this: ProcedureBlock) {
+  init: function (this: ProcedureBlock & BlockSvg) {
     const initName = Procedures.findLegalName('', this);
     const nameField = fieldRegistry.fromJson({
       type: 'field_input',
@@ -558,9 +557,7 @@ blocks['procedures_defreturn'] = {
     this.appendValueInput('RETURN')
       .setAlign(Align.RIGHT)
       .appendField(Msg['PROCEDURES_DEFRETURN_RETURN']);
-    this.setMutator(
-      new Mutator(['procedures_mutatorarg'], this as unknown as BlockSvg)
-    );
+    this.setMutator(new Mutator(['procedures_mutatorarg'], this));
     if (
       (this.workspace.options.comments ||
         (this.workspace.options.parentWorkspace &&
@@ -584,7 +581,6 @@ blocks['procedures_defreturn'] = {
    *     - the name of the defined procedure,
    *     - a list of all its arguments,
    *     - that it DOES have a return value.
-   * @this {Block}
    */
   getProcedureDef: function (this: ProcedureBlock): [string, string[], true] {
     return [this.getFieldValue('NAME'), this.arguments_, true];
@@ -601,7 +597,7 @@ const PROCEDURES_MUTATORCONTAINER = {
   /**
    * Mutator block for procedure container.
    */
-  init: function (this: Block) {
+  init: function (this: ContainerBlock) {
     this.appendDummyInput().appendField(
       Msg['PROCEDURES_MUTATORCONTAINER_TITLE']
     );
@@ -646,9 +642,6 @@ const PROCEDURES_MUTATORARGUMENT = {
     // Hack: override showEditor to do just a little bit more work.
     // We don't have a good place to hook into the start of a text edit.
     field.oldShowEditorFn_ = (field as AnyDuringMigration).showEditor_;
-    /**
-     * @this {FieldTextInput}
-     */
     const newShowEditorFn = function (this: typeof field) {
       this.createdVariables_ = [];
       this.oldShowEditorFn_();
@@ -679,6 +672,7 @@ const PROCEDURES_MUTATORARGUMENT = {
    * Merge runs of whitespace.  Strip leading and trailing whitespace.
    * Beyond this, all names are legal.
    *
+   * @internal
    * @param varName User-supplied name.
    * @returns Valid name, or null if a name was not specified.
    */
@@ -735,6 +729,7 @@ const PROCEDURES_MUTATORARGUMENT = {
    * Deletes all variables that were created as the user typed their intended
    * variable name.
    *
+   * @internal
    * @param  newText The new variable name.
    */
   deleteIntermediateVars_: function (
@@ -810,6 +805,7 @@ const PROCEDURE_CALL_COMMON = {
   /**
    * Notification that the procedure's parameters have changed.
    *
+   * @internal
    * @param paramNames New param names, e.g. ['x', 'y', 'z'].
    * @param paramIds IDs of params (consistent for each parameter
    *     through the life of a mutator, regardless of param renaming),
@@ -908,6 +904,8 @@ const PROCEDURE_CALL_COMMON = {
   },
   /**
    * Modify this block to have the correct number of arguments.
+   *
+   * @internal
    */
   updateShape_: function (this: CallBlock) {
     for (let i = 0; i < this.arguments_.length; i++) {

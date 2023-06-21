@@ -23,7 +23,8 @@ import {BlockSvg} from './block_svg.js';
 import {BlocklyOptions} from './blockly_options.js';
 import {Blocks} from './blocks.js';
 import * as browserEvents from './browser_events.js';
-import {Bubble} from './bubble_old.js';
+import {Bubble} from './bubbles/bubble.js';
+import * as bubbles from './bubbles.js';
 import {BubbleDragger} from './bubble_dragger.js';
 import * as bumpObjects from './bump_objects.js';
 import * as clipboard from './clipboard.js';
@@ -497,6 +498,8 @@ export {BlocklyOptions};
 export {BlockDragger};
 export {BlockSvg};
 export {Blocks};
+export {bubbles};
+/** @deprecated Use Blockly.bubbles.Bubble instead. To be removed in v11. */
 export {Bubble};
 export {BubbleDragger};
 export {CollapsibleToolboxCategory};

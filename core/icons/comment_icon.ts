@@ -33,6 +33,9 @@ const DEFAULT_BUBBLE_WIDTH = 160;
 /** The default height in workspace-scale units of the text input bubble. */
 const DEFAULT_BUBBLE_HEIGHT = 80;
 
+/**
+ * An icon which allows the user to add comment text to a block.
+ */
 export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   /** The type string used to identify this icon. */
   static readonly TYPE = IconType.COMMENT;

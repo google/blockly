@@ -9,6 +9,9 @@ import {CommentIcon} from './comment_icon.js';
 import {MutatorIcon} from './mutator_icon.js';
 import {WarningIcon} from './warning_icon.js';
 
+/**
+ * Defines the type of an icon, so that it can be retrieved from block.getIcon
+ */
 export class IconType<_T extends IIcon> {
   /** @param name The name of the registry type. */
   constructor(private readonly name: string) {}

@@ -505,6 +505,8 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Modify this block to have the correct number of inputs.
+   *
+   * @internal
    */
   updateShape_: function (this: IfBlock) {
     // Delete everything.

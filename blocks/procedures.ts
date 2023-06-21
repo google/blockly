@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Procedure blocks for Blockly.
- * @suppress {checkTypes|visibility}
- */
-
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.libraryBlocks.procedures');
 
@@ -599,7 +594,7 @@ type FieldTextInputForArgument = FieldTextInput & {
 };
 
 const PROCEDURES_MUTATORARGUMENT = {
-    /**
+  /**
    * Mutator block for procedure argument.
    */
   init: function(this: ArgumentBlock) {
@@ -1229,7 +1224,7 @@ const PROCEDURES_IFRETURN = {
     }
     let legal = false;
     // Is the block nested in a procedure?
-    let block = this;
+    let block = this;  // eslint-disable-line @typescript-eslint/no-this-alias
     do {
       if (this.FUNCTION_TYPES.indexOf(block.type) !== -1) {
         legal = true;

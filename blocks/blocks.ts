@@ -21,24 +21,14 @@ import * as procedures from './procedures.js';
 import * as texts from './text.js';
 import * as variables from './variables.js';
 import * as variablesDynamic from './variables_dynamic.js';
-// import type {BlockDefinition} from '../core/blocks.js';
-// TODO (6248): Properly import the BlockDefinition type.
-/* eslint-disable-next-line no-unused-vars */
-const BlockDefinition = Object;
-export colour;
-export lists;
-export loops;
-export math;
-export procedures;
-export texts;
-export variables;
-export variablesDynamic;
+import type {BlockDefinition} from '../core/blocks.js';
+
+export {colour, lists, loops, math, procedures, texts, variables, variablesDynamic};
 
 /**
  * A dictionary of the block definitions provided by all the
  * Blockly.libraryBlocks.* modules.
- * @type {!Object<string, !BlockDefinition>}
  */
-export const blocks = Object.assign(
+export const blocks: {[key: string]: BlockDefinition} = Object.assign(
     {}, colour.blocks, lists.blocks, logic.blocks, loops.blocks, math.blocks,
     procedures.blocks, variables.blocks, variablesDynamic.blocks);

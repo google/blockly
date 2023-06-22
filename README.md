@@ -27,4 +27,4 @@ Google Blockly typically releases a new version of Blockly once a quarter (every
 ## Release Process
 
 
-
+Use `yarn publish` and NOT `yarn run publish` to publish a new version of the npm package

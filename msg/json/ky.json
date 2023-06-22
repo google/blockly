@@ -62,5 +62,6 @@
 	"LOGIC_TERNARY_IF_FALSE": "ката болсо",
 	"MATH_TRIG_HELPURL": "https://ky.wikipedia.org/wiki/Тригонометриялык_функциялар",
 	"TEXT_ISEMPTY_TITLE": "%1 бош",
-	"DIALOG_OK": "OK"
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Жокко чыгаруу"
 }

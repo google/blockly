@@ -113,7 +113,7 @@ const chunks = [
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'javascript.js'),
     exports: 'module$build$src$generators$javascript',
     scriptExport: 'javascript',
-    scriptNamedExports: {'Blockly.Javascript': 'javascriptGenerator'},
+    scriptNamedExports: {'Blockly.JavaScript': 'javascriptGenerator'},
   },
   {
     name: 'python',
@@ -134,14 +134,14 @@ const chunks = [
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'lua.js'),
     exports: 'module$build$src$generators$lua',
     scriptExport: 'lua',
-    scriptNameExports: {'Blockly.Lua': 'luaGenerator'},
+    scriptNamedExports: {'Blockly.Lua': 'luaGenerator'},
   },
   {
     name: 'dart',
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'dart.js'),
     exports: 'module$build$src$generators$dart',
     scriptExport: 'dart',
-    scriptNameExports: {'Blockly.Dart': 'dartGenerator'},
+    scriptNamedExports: {'Blockly.Dart': 'dartGenerator'},
   }
 ];
 

@@ -313,7 +313,10 @@ export class MutatorIcon extends Icon implements IHasBubble {
     eventUtils.setGroup(existingGroup);
   }
 
-  /** @internal */
+  /**
+   * @returns The workspace of the mini workspace bubble, if the bubble is
+   *     currently open.
+   */
   getWorkspace(): WorkspaceSvg | undefined {
     return this.miniWorkspaceBubble?.getWorkspace();
   }

@@ -722,10 +722,13 @@ suite('XML', function () {
             this.workspace
           );
           chai.assert.isOk(block.getIcon(Blockly.icons.CommentIcon.TYPE));
-          chai.assert.deepEqual(block.getIcon(CommentIcon.TYPE).getBubbleSize(), {
-            width: 100,
-            height: 200,
-          });
+          chai.assert.deepEqual(
+            block.getIcon(CommentIcon.TYPE).getBubbleSize(),
+            {
+              width: 100,
+              height: 200,
+            }
+          );
         });
         suite('Pinned', function () {
           test('Pinned True', function () {

@@ -197,10 +197,10 @@ export class CollapsibleToolboxCategory
       this.subcategoriesDiv_!.style.display = 'block';
       this.openIcon_(this.iconDom_);
     } else {
+      this.parentToolbox_.getFlyout()?.setVisible(false);
       this.subcategoriesDiv_!.style.display = 'none';
       this.closeIcon_(this.iconDom_);
     }
-    this.parentToolbox_.getFlyout()?.setVisible(isExpanded);
     aria.setState(
       this.htmlDiv_ as HTMLDivElement,
       aria.State.EXPANDED,

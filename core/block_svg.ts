@@ -18,6 +18,7 @@ import './events/events_selected.js';
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
 import * as browserEvents from './browser_events.js';
+import {CommentIcon} from './icons/comment_icon.js';
 import * as common from './common.js';
 import {config} from './config.js';
 import type {Connection} from './connection.js';
@@ -59,6 +60,7 @@ import {WarningIcon} from './icons/warning_icon.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {queueRender} from './render_management.js';
+import * as deprecation from './utils/deprecation.js';
 import {IconType} from './icons/icon_types.js';
 
 /**
@@ -884,6 +886,18 @@ export class BlockSvg
     for (const child of this.getChildren(false)) {
       child.updateDisabled();
     }
+  }
+
+  /**
+   * Get the comment icon attached to this block, or null if the block has no
+   * comment.
+   *
+   * @returns The comment icon attached to this block, or null.
+   * @deprecated Use getIcon. To be remove in v11.
+   */
+  getCommentIcon(): CommentIcon | null {
+    deprecation.warn('getCommentIcon', 'v10', 'v11', 'getIcon');
+    return (this.getIcon(CommentIcon.TYPE) ?? null) as CommentIcon | null;
   }
 
   /**

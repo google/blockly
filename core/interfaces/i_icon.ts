@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type {IconType} from '../icons/icon_types.js';
 import type {Coordinate} from '../utils/coordinate.js';
 import type {Size} from '../utils/size.js';
 
 export interface IIcon {
   /**
-   * @returns the string representing the type of the icon.
-   * E.g. 'comment', 'warning', etc. This string should also be used when
-   * registering the icon class.
+   * @returns the IconType representing the type of the icon. This value should
+   *     also be used to register the icon via `Blockly.icons.registry.register`.
    */
-  getType(): string;
+  getType(): IconType<IIcon>;
 
   /**
    * Creates the SVG elements for the icon that will live on the block.

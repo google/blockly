@@ -1,204 +1,40 @@
 /**
  * @license
- * Copyright 2016 Google LLC
+ * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * @fileoverview Helper functions for generating Lua for blocks.
- * Based on Ellen Spertus's blocky-lua project.
- * @suppress {checkTypes|globalThis}
+ * @fileoverview Complete helper functions for generating Lua for
+ *     blocks.  This is the entrypoint for lua_compressed.js.
+ * @suppress {extraRequire}
  */
 
 import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Lua');
+goog.declareModuleId('Blockly.Lua.all');
 
-import * as stringUtils from '../core/utils/string.js';
-// import type {Block} from '../core/block.js';
-import {CodeGenerator} from '../core/generator.js';
-import {inputTypes} from '../core/inputs/input_types.js';
-import {Names} from '../core/names.js';
-// import type {Workspace} from '../core/workspace.js';
+import {LuaGenerator} from './lua/lua_generator.js';
+import * as colour from './lua/colour.js';
+import * as lists from './lua/lists.js';
+import * as logic from './lua/logic.js';
+import * as loops from './lua/loops.js';
+import * as math from './lua/math.js';
+import * as procedures from './lua/procedures.js';
+import * as text from './lua/text.js';
+import * as variables from './lua/variables.js';
+import * as variablesDynamic from './lua/variables_dynamic.js';
 
-
-/**
- * Lua code generator.
- * @type {!CodeGenerator}
- */
-const Lua = new CodeGenerator('Lua');
-
-/**
- * List of illegal variable names.
- * This is not intended to be a security feature.  Blockly is 100% client-side,
- * so bypassing this list is trivial.  This is intended to prevent users from
- * accidentally clobbering a built-in object or function.
- */
-Lua.addReservedWords(
-    // Special character
-    '_,' +
-    // From theoriginalbit's script:
-    // https://github.com/espertus/blockly-lua/issues/6
-    '__inext,assert,bit,colors,colours,coroutine,disk,dofile,error,fs,' +
-    'fetfenv,getmetatable,gps,help,io,ipairs,keys,loadfile,loadstring,math,' +
-    'native,next,os,paintutils,pairs,parallel,pcall,peripheral,print,' +
-    'printError,rawequal,rawget,rawset,read,rednet,redstone,rs,select,' +
-    'setfenv,setmetatable,sleep,string,table,term,textutils,tonumber,' +
-    'tostring,turtle,type,unpack,vector,write,xpcall,_VERSION,__indext,' +
-    // Not included in the script, probably because it wasn't enabled:
-    'HTTP,' +
-    // Keywords (http://www.lua.org/pil/1.3.html).
-    'and,break,do,else,elseif,end,false,for,function,if,in,local,nil,not,or,' +
-    'repeat,return,then,true,until,while,' +
-    // Metamethods (http://www.lua.org/manual/5.2/manual.html).
-    'add,sub,mul,div,mod,pow,unm,concat,len,eq,lt,le,index,newindex,call,' +
-    // Basic functions (http://www.lua.org/manual/5.2/manual.html, section 6.1).
-    'assert,collectgarbage,dofile,error,_G,getmetatable,inpairs,load,' +
-    'loadfile,next,pairs,pcall,print,rawequal,rawget,rawlen,rawset,select,' +
-    'setmetatable,tonumber,tostring,type,_VERSION,xpcall,' +
-    // Modules (http://www.lua.org/manual/5.2/manual.html, section 6.3).
-    'require,package,string,table,math,bit32,io,file,os,debug');
+export * from './lua/lua_generator.js';
 
 /**
- * Order of operation ENUMs.
- * http://www.lua.org/manual/5.3/manual.html#3.4.8
+ * Lua code generator instance.
+ * @type {!LuaGenerator}
  */
-Lua.ORDER_ATOMIC = 0;  // literals
-// The next level was not explicit in documentation and inferred by Ellen.
-Lua.ORDER_HIGH = 1;            // Function calls, tables[]
-Lua.ORDER_EXPONENTIATION = 2;  // ^
-Lua.ORDER_UNARY = 3;           // not # - ~
-Lua.ORDER_MULTIPLICATIVE = 4;  // * / %
-Lua.ORDER_ADDITIVE = 5;        // + -
-Lua.ORDER_CONCATENATION = 6;   // ..
-Lua.ORDER_RELATIONAL = 7;      // < > <=  >= ~= ==
-Lua.ORDER_AND = 8;             // and
-Lua.ORDER_OR = 9;              // or
-Lua.ORDER_NONE = 99;
+export const luaGenerator = new LuaGenerator();
 
-/**
- * Note: Lua is not supporting zero-indexing since the language itself is
- * one-indexed, so the generator does not repoct the oneBasedIndex configuration
- * option used for lists and text.
- */
-
-/**
- * Whether the init method has been called.
- * @type {?boolean}
- */
-Lua.isInitialized = false;
-
-/**
- * Initialise the database of variable names.
- * @param {!Workspace} workspace Workspace to generate code from.
- */
-Lua.init = function(workspace) {
-  // Call Blockly.CodeGenerator's init.
-  Object.getPrototypeOf(this).init.call(this);
-
-  if (!this.nameDB_) {
-    this.nameDB_ = new Names(this.RESERVED_WORDS_);
-  } else {
-    this.nameDB_.reset();
-  }
-  this.nameDB_.setVariableMap(workspace.getVariableMap());
-  this.nameDB_.populateVariables(workspace);
-  this.nameDB_.populateProcedures(workspace);
-
-  this.isInitialized = true;
-};
-
-/**
- * Prepend the generated code with the variable definitions.
- * @param {string} code Generated code.
- * @return {string} Completed code.
- */
-Lua.finish = function(code) {
-  // Convert the definitions dictionary into a list.
-  const definitions = Object.values(this.definitions_);
-  // Call Blockly.CodeGenerator's finish.
-  code = Object.getPrototypeOf(this).finish.call(this, code);
-  this.isInitialized = false;
-
-  this.nameDB_.reset();
-  return definitions.join('\n\n') + '\n\n\n' + code;
-};
-
-/**
- * Naked values are top-level blocks with outputs that aren't plugged into
- * anything. In Lua, an expression is not a legal statement, so we must assign
- * the value to the (conventionally ignored) _.
- * http://lua-users.org/wiki/ExpressionsAsStatements
- * @param {string} line Line of generated code.
- * @return {string} Legal line of code.
- */
-Lua.scrubNakedValue = function(line) {
-  return 'local _ = ' + line + '\n';
-};
-
-/**
- * Encode a string as a properly escaped Lua string, complete with
- * quotes.
- * @param {string} string Text to encode.
- * @return {string} Lua string.
- * @protected
- */
-Lua.quote_ = function(string) {
-  string = string.replace(/\\/g, '\\\\')
-               .replace(/\n/g, '\\\n')
-               .replace(/'/g, '\\\'');
-  return '\'' + string + '\'';
-};
-
-/**
- * Encode a string as a properly escaped multiline Lua string, complete with
- * quotes.
- * @param {string} string Text to encode.
- * @return {string} Lua string.
- * @protected
- */
-Lua.multiline_quote_ = function(string) {
-  const lines = string.split(/\n/g).map(this.quote_);
-  // Join with the following, plus a newline:
-  // .. '\n' ..
-  return lines.join(' .. \'\\n\' ..\n');
-};
-
-/**
- * Common tasks for generating Lua from blocks.
- * Handles comments for the specified block and any connected value blocks.
- * Calls any statements following this block.
- * @param {!Block} block The current block.
- * @param {string} code The Lua code created for this block.
- * @param {boolean=} opt_thisOnly True to generate code for only this statement.
- * @return {string} Lua code with comments and subsequent blocks added.
- * @protected
- */
-Lua.scrub_ = function(block, code, opt_thisOnly) {
-  let commentCode = '';
-  // Only collect comments for blocks that aren't inline.
-  if (!block.outputConnection || !block.outputConnection.targetConnection) {
-    // Collect comment for this block.
-    let comment = block.getCommentText();
-    if (comment) {
-      comment = stringUtils.wrap(comment, this.COMMENT_WRAP - 3);
-      commentCode += this.prefixLines(comment, '-- ') + '\n';
-    }
-    // Collect comments for all value arguments.
-    // Don't collect comments for nested statements.
-    for (let i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type === inputTypes.VALUE) {
-        const childBlock = block.inputList[i].connection.targetBlock();
-        if (childBlock) {
-          comment = this.allNestedComments(childBlock);
-          if (comment) {
-            commentCode += this.prefixLines(comment, '-- ');
-          }
-        }
-      }
-    }
-  }
-  const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
-  return commentCode + code + nextCode;
-};
-export {Lua as luaGenerator};
+// Install per-block-type generator functions:
+Object.assign(
+  luaGenerator.forBlock,
+  colour, lists, logic, loops, math, procedures,
+  text, variables, variablesDynamic
+);

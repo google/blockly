@@ -24,9 +24,7 @@ import * as fieldRegistry from '../field_registry.js';
 import type {RenderedConnection} from '../rendered_connection.js';
 import {inputTypes} from './input_types.js';
 
-/**
- * Class for an input with an optional field.
- */
+/** Class for an input with optional fields. */
 export class Input {
   fieldRow: Field[] = [];
   /** Alignment of input's fields (left, right or centre). */
@@ -307,9 +305,12 @@ export class Input {
 }
 
 export namespace Input {
+  // TODO(v11): When this is removed in v11, also re-enable errors on access
+  //     of deprecated things (in build_tasks.js).
   /**
    * Enum for alignment of inputs.
    *
+   * @deprecated Use Blockly.inputs.Align. To be removed in v11.
    */
   export enum Align {
     LEFT = -1,
@@ -318,5 +319,9 @@ export namespace Input {
   }
 }
 
+/** @deprecated Use Blockly.inputs.Align. To be removed in v11. */
+/** @suppress {deprecated} */
 export type Align = Input.Align;
+/** @deprecated Use Blockly.inputs.Align. To be removed in v11. */
+/** @suppress {deprecated} */
 export const Align = Input.Align;

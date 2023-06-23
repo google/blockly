@@ -1443,7 +1443,7 @@ suite('Blocks', function () {
   suite('Icon management', function () {
     class MockIconA extends MockIcon {
       getType() {
-        return 'A';
+        return new Blockly.icons.IconType('A');
       }
 
       getWeight() {
@@ -1453,7 +1453,7 @@ suite('Blocks', function () {
 
     class MockIconB extends MockIcon {
       getType() {
-        return 'B';
+        return new Blockly.icons.IconType('B');
       }
 
       getWeight() {
@@ -1524,7 +1524,7 @@ suite('Blocks', function () {
       test('icons get removed from the block', function () {
         this.block.addIcon(new MockIconA());
         chai.assert.isTrue(
-          this.block.removeIcon('A'),
+          this.block.removeIcon(new Blockly.icons.IconType('A')),
           'Expected removeIcon to return true'
         );
         chai.assert.isFalse(
@@ -1535,7 +1535,7 @@ suite('Blocks', function () {
 
       test('removing an icon that does not exist returns false', function () {
         chai.assert.isFalse(
-          this.block.removeIcon('B'),
+          this.block.removeIcon(new Blockly.icons.IconType('B')),
           'Expected removeIcon to return false'
         );
       });
@@ -1543,7 +1543,7 @@ suite('Blocks', function () {
       test('removing an icon triggers a render', function () {
         this.block.addIcon(new MockIconA());
         this.renderSpy.resetHistory();
-        this.block.removeIcon('A');
+        this.block.removeIcon(new Blockly.icons.IconType('A'));
         chai.assert.isTrue(
           this.renderSpy.calledOnce,
           'Expected removing an icon to trigger a render'
@@ -2143,6 +2143,22 @@ suite('Blocks', function () {
 
         // Child blocks should stay disabled if they have been set.
         chai.assert.isTrue(blockB.disabled);
+      });
+      test('Disabled blocks from JSON should have proper disabled status', function () {
+        const blockJson = {
+          'type': 'controls_if',
+          'enabled': false,
+        };
+        Blockly.serialization.blocks.append(blockJson, this.workspace);
+        const block = this.workspace.getTopBlocks(false)[0];
+        chai.assert.isTrue(
+          block.visuallyDisabled,
+          'block should have visuallyDisabled set because it is disabled'
+        );
+        chai.assert.isFalse(
+          block.isEnabled(),
+          'block should be marked disabled because enabled json property was set to false'
+        );
       });
     });
   });

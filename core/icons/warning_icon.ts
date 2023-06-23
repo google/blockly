@@ -17,13 +17,20 @@ import {Rect} from '../utils/rect.js';
 import {Size} from '../utils.js';
 import {Svg} from '../utils/svg.js';
 import {TextBubble} from '../bubbles/text_bubble.js';
+import {IconType} from './icon_types.js';
 
 /** The size of the warning icon in workspace-scale units. */
 const SIZE = 17;
 
+/**
+ * An icon that warns the user that something is wrong with their block.
+ *
+ * For example, this could be used to warn them about incorrect field values,
+ * or incorrect placement of the block (putting it somewhere it doesn't belong).
+ */
 export class WarningIcon extends Icon implements IHasBubble {
   /** The type string used to identify this icon. */
-  static readonly TYPE = 'warning';
+  static readonly TYPE = IconType.WARNING;
 
   /**
    * The weight this icon has relative to other icons. Icons with more positive
@@ -42,7 +49,7 @@ export class WarningIcon extends Icon implements IHasBubble {
     super(sourceBlock);
   }
 
-  override getType(): string {
+  override getType(): IconType<WarningIcon> {
     return WarningIcon.TYPE;
   }
 

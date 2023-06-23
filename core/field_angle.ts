@@ -16,6 +16,7 @@ import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import * as eventUtils from './events/utils.js';
 import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {
@@ -363,7 +364,26 @@ export class FieldAngle extends FieldInput<number> {
     }
     angle = this.wrapValue(angle);
     if (angle !== this.value_) {
-      this.setEditorValue_(angle);
+      // Intermediate value changes from user input are not confirmed until the
+      // user closes the editor, and may be numerous. Inhibit reporting these as
+      // normal block change events, and instead report them as special
+      // intermediate changes that do not get recorded in undo history.
+      const oldValue = this.value_;
+      this.setEditorValue_(angle, false);
+      if (
+        this.sourceBlock_ &&
+        eventUtils.isEnabled() &&
+        this.value_ !== oldValue
+      ) {
+        eventUtils.fire(
+          new (eventUtils.get(eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE))(
+            this.sourceBlock_,
+            this.name || null,
+            oldValue,
+            this.value_
+          )
+        );
+      }
     }
   }
 

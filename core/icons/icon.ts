@@ -7,12 +7,20 @@
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import * as browserEvents from '../browser_events.js';
+import {hasBubble} from '../interfaces/i_has_bubble.js';
 import type {IIcon} from '../interfaces/i_icon.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
+import type {IconType} from './icon_types.js';
 
+/**
+ * The abstract icon class. Icons are visual elements that live in the top-start
+ * corner of the block. Usually they provide more "meta" information about a
+ * block (such as warnings or comments) as opposed to fields, which provide
+ * "actual" information, related to how a block functions.
+ */
 export abstract class Icon implements IIcon {
   /**
    * The position of this icon relative to its blocks top-start,
@@ -28,7 +36,7 @@ export abstract class Icon implements IIcon {
 
   constructor(protected sourceBlock: Block) {}
 
-  getType(): string {
+  getType(): IconType<IIcon> {
     throw new Error('Icons must implement getType');
   }
 
@@ -64,16 +72,14 @@ export abstract class Icon implements IIcon {
   updateEditable(): void {}
 
   updateCollapsed(): void {
-    if (!this.svgRoot) {
-      throw new Error(
-        'Attempt to update the collapsed-ness of an icon before its ' +
-          'view has been initialized.'
-      );
-    }
+    if (!this.svgRoot) return;
     if (this.sourceBlock.isCollapsed()) {
       this.svgRoot.style.display = 'none';
     } else {
       this.svgRoot.style.display = 'block';
+    }
+    if (hasBubble(this)) {
+      this.setBubbleVisible(false);
     }
   }
 

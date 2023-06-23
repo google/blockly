@@ -8,10 +8,8 @@
  * @fileoverview Node.js script to run Automated tests in Chrome, via webdriver.
  */
 
-const webdriverio = require('webdriverio');
 const chai = require('chai');
-const path = require('path');
-const {posixPath} = require('../../../scripts/helpers');
+const {testSetup, testFileLocations} = require('./test_setup');
 
 let browser;
 suite('Testing Connecting Blocks', function (done) {
@@ -20,41 +18,7 @@ suite('Testing Connecting Blocks', function (done) {
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    const options = {
-      capabilities: {
-        'browserName': 'chrome',
-        'goog:chromeOptions': {
-          args: ['--allow-file-access-from-files'],
-        },
-      },
-      services: [['selenium-standalone']],
-      logLevel: 'warn',
-    };
-
-    // Run in headless mode on Github Actions.
-    if (process.env.CI) {
-      options.capabilities['goog:chromeOptions'].args.push(
-        '--headless',
-        '--no-sandbox',
-        '--disable-dev-shm-usage'
-      );
-    } else {
-      // --disable-gpu is needed to prevent Chrome from hanging on Linux with
-      // NVIDIA drivers older than v295.20. See
-      // https://github.com/google/blockly/issues/5345 for details.
-      options.capabilities['goog:chromeOptions'].args.push('--disable-gpu');
-    }
-    // Use Selenium to bring up the page
-    const url =
-      'file://' +
-      posixPath(path.join(__dirname, '..', '..')) +
-      '/playground.html';
-    console.log(url);
-    console.log('Starting webdriverio...');
-    browser = await webdriverio.remote(options);
-    console.log('Loading URL: ' + url);
-    await browser.url(url);
-    return browser;
+    browser = await testSetup(testFileLocations.playground);
   });
 
   test('Testing Block Flyout', async function () {

@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.blockJson');
 
-import {Align} from '../../build/src/core/inputs/input.js';
+import {Align} from '../../build/src/core/inputs/align.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,

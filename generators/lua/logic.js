@@ -11,35 +11,39 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.logic');
 
-import {luaGenerator as Lua} from '../lua.js';
+import {Order} from './lua_generator.js';
 
 
-Lua['controls_if'] = function(block) {
+export function controls_if(block, generator) {
   // If/elseif/else condition.
   let n = 0;
   let code = '';
-  if (Lua.STATEMENT_PREFIX) {
+  if (generator.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
-    code += Lua.injectId(Lua.STATEMENT_PREFIX, block);
+    code += generator.injectId(generator.STATEMENT_PREFIX, block);
   }
   do {
     const conditionCode =
-        Lua.valueToCode(block, 'IF' + n, Lua.ORDER_NONE) || 'false';
-    let branchCode = Lua.statementToCode(block, 'DO' + n);
-    if (Lua.STATEMENT_SUFFIX) {
-      branchCode = Lua.prefixLines(
-          Lua.injectId(Lua.STATEMENT_SUFFIX, block), Lua.INDENT) + branchCode;
+        generator.valueToCode(block, 'IF' + n, Order.NONE) || 'false';
+    let branchCode = generator.statementToCode(block, 'DO' + n);
+    if (generator.STATEMENT_SUFFIX) {
+      branchCode = generator.prefixLines(
+          generator.injectId(generator.STATEMENT_SUFFIX, block),
+          generator.INDENT) + branchCode;
     }
     code +=
         (n > 0 ? 'else' : '') + 'if ' + conditionCode + ' then\n' + branchCode;
     n++;
   } while (block.getInput('IF' + n));
 
-  if (block.getInput('ELSE') || Lua.STATEMENT_SUFFIX) {
-    let branchCode = Lua.statementToCode(block, 'ELSE');
-    if (Lua.STATEMENT_SUFFIX) {
-      branchCode = Lua.prefixLines(
-                       Lua.injectId(Lua.STATEMENT_SUFFIX, block), Lua.INDENT) +
+  if (block.getInput('ELSE') || generator.STATEMENT_SUFFIX) {
+    let branchCode = generator.statementToCode(block, 'ELSE');
+    if (generator.STATEMENT_SUFFIX) {
+      branchCode =
+          generator.prefixLines(
+            generator.injectId(
+              generator.STATEMENT_SUFFIX, block),
+            generator.INDENT) +
           branchCode;
     }
     code += 'else\n' + branchCode;
@@ -47,25 +51,27 @@ Lua['controls_if'] = function(block) {
   return code + 'end\n';
 };
 
-Lua['controls_ifelse'] = Lua['controls_if'];
+export const controls_ifelse = controls_if;
 
-Lua['logic_compare'] = function(block) {
+export function logic_compare(block, generator) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '~=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
-  const argument0 = Lua.valueToCode(block, 'A', Lua.ORDER_RELATIONAL) || '0';
-  const argument1 = Lua.valueToCode(block, 'B', Lua.ORDER_RELATIONAL) || '0';
+  const argument0 =
+        generator.valueToCode(block, 'A', Order.RELATIONAL) || '0';
+  const argument1 =
+        generator.valueToCode(block, 'B', Order.RELATIONAL) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
-  return [code, Lua.ORDER_RELATIONAL];
+  return [code, Order.RELATIONAL];
 };
 
-Lua['logic_operation'] = function(block) {
+export function logic_operation(block, generator) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
-  const order = (operator === 'and') ? Lua.ORDER_AND : Lua.ORDER_OR;
-  let argument0 = Lua.valueToCode(block, 'A', order);
-  let argument1 = Lua.valueToCode(block, 'B', order);
+  const order = (operator === 'and') ? Order.AND : Order.OR;
+  let argument0 = generator.valueToCode(block, 'A', order);
+  let argument1 = generator.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
     // If there are no arguments, then the return value is false.
     argument0 = 'false';
@@ -84,29 +90,31 @@ Lua['logic_operation'] = function(block) {
   return [code, order];
 };
 
-Lua['logic_negate'] = function(block) {
+export function logic_negate(block, generator) {
   // Negation.
-  const argument0 = Lua.valueToCode(block, 'BOOL', Lua.ORDER_UNARY) || 'true';
+  const argument0 =
+        generator.valueToCode(block, 'BOOL', Order.UNARY) || 'true';
   const code = 'not ' + argument0;
-  return [code, Lua.ORDER_UNARY];
+  return [code, Order.UNARY];
 };
 
-Lua['logic_boolean'] = function(block) {
+export function logic_boolean(block, generator) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
-  return [code, Lua.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
-Lua['logic_null'] = function(block) {
+export function logic_null(block, generator) {
   // Null data type.
-  return ['nil', Lua.ORDER_ATOMIC];
+  return ['nil', Order.ATOMIC];
 };
 
-Lua['logic_ternary'] = function(block) {
+export function logic_ternary(block, generator) {
   // Ternary operator.
-  const value_if = Lua.valueToCode(block, 'IF', Lua.ORDER_AND) || 'false';
-  const value_then = Lua.valueToCode(block, 'THEN', Lua.ORDER_AND) || 'nil';
-  const value_else = Lua.valueToCode(block, 'ELSE', Lua.ORDER_OR) || 'nil';
+  const value_if = generator.valueToCode(block, 'IF', Order.AND) || 'false';
+  const value_then =
+        generator.valueToCode(block, 'THEN', Order.AND) || 'nil';
+  const value_else = generator.valueToCode(block, 'ELSE', Order.OR) || 'nil';
   const code = value_if + ' and ' + value_then + ' or ' + value_else;
-  return [code, Lua.ORDER_OR];
+  return [code, Order.OR];
 };

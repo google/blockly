@@ -11,10 +11,9 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Python.variablesDynamic');
 
-import {pythonGenerator as Python} from '../python.js';
-import './variables.js';
 
-
-// Python is dynamically typed.
-Python['variables_get_dynamic'] = Python['variables_get'];
-Python['variables_set_dynamic'] = Python['variables_set'];
+// generator is dynamically typed.
+export {
+  variables_get as variables_get_dynamic,
+  variables_set as variables_set_dynamic,
+} from './variables.js';

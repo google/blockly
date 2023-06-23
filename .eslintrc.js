@@ -130,6 +130,7 @@ function buildTSOverride({files, tsconfig}) {
             'remarks',
             'define',
             'nocollapse',
+            'suppress',
           ],
         },
       ],

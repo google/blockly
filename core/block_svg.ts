@@ -39,7 +39,7 @@ import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js'
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
-import {IIcon, isIcon} from './interfaces/i_icon.js';
+import {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
 import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
@@ -61,6 +61,7 @@ import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {queueRender} from './render_management.js';
 import * as deprecation from './utils/deprecation.js';
+import {IconType} from './icons/icon_types.js';
 
 /**
  * Class for a block's SVG representation.
@@ -200,13 +201,8 @@ export class BlockSvg
       input.init();
     }
     for (const icon of this.getIcons()) {
-      if (isIcon(icon)) {
-        icon.initView(this.createIconPointerDownListener(icon));
-        icon.updateEditable();
-      } else {
-        // TODO (#7042): Remove old icon handling.
-        icon.createIcon();
-      }
+      icon.initView(this.createIconPointerDownListener(icon));
+      icon.updateEditable();
     }
     this.applyColour();
     this.pathObject.updateMovable(this.isMovable());
@@ -535,12 +531,7 @@ export class BlockSvg
     }
 
     for (const icon of this.getIcons()) {
-      if (isIcon(icon)) {
-        icon.updateCollapsed();
-      } else if (collapsed) {
-        // TODO(#7042): Remove old icon handling code.
-        icon.setVisible(false);
-      }
+      icon.updateCollapsed();
     }
 
     if (!collapsed) {
@@ -675,12 +666,7 @@ export class BlockSvg
     const icons = this.getIcons();
     const pos = this.getRelativeToSurfaceXY();
     for (const icon of icons) {
-      if (isIcon(icon)) {
-        icon.onLocationChange(pos);
-      } else {
-        // TODO (#7042): Remove old icon handling code.
-        icon.computeIconLocation();
-      }
+      icon.onLocationChange(pos);
     }
 
     // Recurse through all blocks attached under this one.
@@ -952,7 +938,6 @@ export class BlockSvg
       text = null;
     }
 
-    // TODO: Make getIcon take in a type parameter?
     const icon = this.getIcon(WarningIcon.TYPE) as WarningIcon | undefined;
     if (typeof text === 'string') {
       // Bubble up to add a warning on top-most collapsed block.
@@ -1028,11 +1013,11 @@ export class BlockSvg
     };
   }
 
-  override removeIcon(type: string): boolean {
+  override removeIcon(type: IconType<IIcon>): boolean {
     const removed = super.removeIcon(type);
 
-    if (type === WarningIcon.TYPE) this.warning = null;
-    if (type === MutatorIcon.TYPE) this.mutator = null;
+    if (type.equals(WarningIcon.TYPE)) this.warning = null;
+    if (type.equals(MutatorIcon.TYPE)) this.mutator = null;
 
     if (this.rendered) {
       // TODO: Change this based on #7068.
@@ -1040,12 +1025,6 @@ export class BlockSvg
       this.bumpNeighbours();
     }
     return removed;
-  }
-
-  // TODO: remove this implementation after #7038, #7039, and #7040 are
-  //   resolved.
-  override getIcons(): AnyDuringMigration[] {
-    return [...this.icons];
   }
 
   /**
@@ -1599,6 +1578,11 @@ export class BlockSvg
       this.rendered = true;
       dom.startTextWidthCache();
 
+      if (!this.isEnabled()) {
+        // Apply disabled styles if needed.
+        this.updateDisabled();
+      }
+
       if (this.isCollapsed()) {
         this.updateCollapsed_();
       }
@@ -1711,12 +1695,7 @@ export class BlockSvg
     }
 
     for (const icon of this.getIcons()) {
-      if (isIcon(icon)) {
-        icon.onLocationChange(blockTL);
-      }
-      // TODO (#7042): Remove the below comment.
-      // Updating the positions of old style icons is handled directly in the
-      // drawer.
+      icon.onLocationChange(blockTL);
     }
   }
 

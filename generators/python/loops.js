@@ -13,10 +13,10 @@ goog.declareModuleId('Blockly.Python.loops');
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
-import {pythonGenerator as Python} from '../python.js';
+import {Order} from './python_generator.js';
 
 
-Python['controls_repeat_ext'] = function(block) {
+export function controls_repeat_ext(block, generator) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -24,68 +24,70 @@ Python['controls_repeat_ext'] = function(block) {
     repeats = String(parseInt(block.getFieldValue('TIMES'), 10));
   } else {
     // External number.
-    repeats = Python.valueToCode(block, 'TIMES', Python.ORDER_NONE) || '0';
+    repeats = generator.valueToCode(block, 'TIMES', Order.NONE) || '0';
   }
   if (stringUtils.isNumber(repeats)) {
     repeats = parseInt(repeats, 10);
   } else {
     repeats = 'int(' + repeats + ')';
   }
-  let branch = Python.statementToCode(block, 'DO');
-  branch = Python.addLoopTrap(branch, block) || Python.PASS;
-  const loopVar = Python.nameDB_.getDistinctName('count', NameType.VARIABLE);
+  let branch = generator.statementToCode(block, 'DO');
+  branch = generator.addLoopTrap(branch, block) || generator.PASS;
+  const loopVar =
+      generator.nameDB_.getDistinctName('count', NameType.VARIABLE);
   const code = 'for ' + loopVar + ' in range(' + repeats + '):\n' + branch;
   return code;
 };
 
-Python['controls_repeat'] = Python['controls_repeat_ext'];
+export const controls_repeat = controls_repeat_ext;
 
-Python['controls_whileUntil'] = function(block) {
+export function controls_whileUntil(block, generator) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
-  let argument0 = Python.valueToCode(
+  let argument0 = generator.valueToCode(
                       block, 'BOOL',
-                      until ? Python.ORDER_LOGICAL_NOT : Python.ORDER_NONE) ||
+                      until ? Order.LOGICAL_NOT : Order.NONE) ||
       'False';
-  let branch = Python.statementToCode(block, 'DO');
-  branch = Python.addLoopTrap(branch, block) || Python.PASS;
+  let branch = generator.statementToCode(block, 'DO');
+  branch = generator.addLoopTrap(branch, block) || generator.PASS;
   if (until) {
     argument0 = 'not ' + argument0;
   }
   return 'while ' + argument0 + ':\n' + branch;
 };
 
-Python['controls_for'] = function(block) {
+export function controls_for(block, generator) {
   // For loop.
   const variable0 =
-      Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-  let argument0 = Python.valueToCode(block, 'FROM', Python.ORDER_NONE) || '0';
-  let argument1 = Python.valueToCode(block, 'TO', Python.ORDER_NONE) || '0';
-  let increment = Python.valueToCode(block, 'BY', Python.ORDER_NONE) || '1';
-  let branch = Python.statementToCode(block, 'DO');
-  branch = Python.addLoopTrap(branch, block) || Python.PASS;
+      generator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
+  let argument0 = generator.valueToCode(block, 'FROM', Order.NONE) || '0';
+  let argument1 = generator.valueToCode(block, 'TO', Order.NONE) || '0';
+  let increment = generator.valueToCode(block, 'BY', Order.NONE) || '1';
+  let branch = generator.statementToCode(block, 'DO');
+  branch = generator.addLoopTrap(branch, block) || generator.PASS;
 
   let code = '';
   let range;
 
   // Helper functions.
   const defineUpRange = function() {
-    return Python.provideFunction_('upRange', `
-def ${Python.FUNCTION_NAME_PLACEHOLDER_}(start, stop, step):
+    return generator.provideFunction_('upRange', `
+def ${generator.FUNCTION_NAME_PLACEHOLDER_}(start, stop, step):
   while start <= stop:
     yield start
     start += abs(step)
 `);
   };
   const defineDownRange = function() {
-    return Python.provideFunction_('downRange', `
-def ${Python.FUNCTION_NAME_PLACEHOLDER_}(start, stop, step):
+    return generator.provideFunction_('downRange', `
+def ${generator.FUNCTION_NAME_PLACEHOLDER_}(start, stop, step):
   while start >= stop:
     yield start
     start -= abs(step)
 `);
   };
-  // Arguments are legal Python code (numbers or strings returned by scrub()).
+  // Arguments are legal generator code (numbers or strings returned by scrub()).
   const generateUpDownRange = function(start, end, inc) {
     return '(' + start + ' <= ' + end + ') and ' + defineUpRange() + '(' +
         start + ', ' + end + ', ' + inc + ') or ' + defineDownRange() + '(' +
@@ -136,7 +138,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(start, stop, step):
         arg = Number(arg);
       } else if (!arg.match(/^\w+$/)) {
         // Not a variable, it's complicated.
-        const varName = Python.nameDB_.getDistinctName(
+        const varName = generator.nameDB_.getDistinctName(
             variable0 + suffix, NameType.VARIABLE);
         code += varName + ' = ' + arg + '\n';
         arg = varName;
@@ -163,37 +165,38 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(start, stop, step):
   return code;
 };
 
-Python['controls_forEach'] = function(block) {
+export function controls_forEach(block, generator) {
   // For each loop.
   const variable0 =
-      Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+      generator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
   const argument0 =
-      Python.valueToCode(block, 'LIST', Python.ORDER_RELATIONAL) || '[]';
-  let branch = Python.statementToCode(block, 'DO');
-  branch = Python.addLoopTrap(branch, block) || Python.PASS;
+      generator.valueToCode(block, 'LIST', Order.RELATIONAL) || '[]';
+  let branch = generator.statementToCode(block, 'DO');
+  branch = generator.addLoopTrap(branch, block) || generator.PASS;
   const code = 'for ' + variable0 + ' in ' + argument0 + ':\n' + branch;
   return code;
 };
 
-Python['controls_flow_statements'] = function(block) {
+export function controls_flow_statements(block, generator) {
   // Flow statements: continue, break.
   let xfix = '';
-  if (Python.STATEMENT_PREFIX) {
+  if (generator.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
-    xfix += Python.injectId(Python.STATEMENT_PREFIX, block);
+    xfix += generator.injectId(generator.STATEMENT_PREFIX, block);
   }
-  if (Python.STATEMENT_SUFFIX) {
+  if (generator.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the break/continue is triggered.
-    xfix += Python.injectId(Python.STATEMENT_SUFFIX, block);
+    xfix += generator.injectId(generator.STATEMENT_SUFFIX, block);
   }
-  if (Python.STATEMENT_PREFIX) {
+  if (generator.STATEMENT_PREFIX) {
     const loop = block.getSurroundLoop();
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end
       // of the loop will not get executed if 'continue' is triggered.
       // In the case of 'break', a prefix is needed due to the loop's suffix.
-      xfix += Python.injectId(Python.STATEMENT_PREFIX, loop);
+      xfix += generator.injectId(generator.STATEMENT_PREFIX, loop);
     }
   }
   switch (block.getFieldValue('FLOW')) {

@@ -74,7 +74,7 @@ export class Theme implements ITheme {
     this.fontStyle = Object.create(null) as FontStyle;
 
     // Register the theme by name.
-    registry.register(registry.Type.THEME, name, this);
+    registry.register(registry.Type.THEME, name, this, true);
   }
 
   /**

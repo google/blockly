@@ -17,12 +17,31 @@ import type {Block} from './block.js';
 import * as common from './common.js';
 import {Names, NameType} from './names.js';
 import type {Workspace} from './workspace.js';
+import {warn} from './utils/deprecation.js';
+
+/**
+ * Type declaration for per-block-type generator functions.
+ *
+ * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/generating-code}
+ * @param block The Block instance to generate code for.
+ * @param genearator The CodeGenerator calling the function.
+ * @returns A string containing the generated code (for statement blocks),
+ *     or a [code, precedence] tuple (for value/expression blocks), or
+ *     null if no code should be emitted for block.
+ */
+export type BlockGenerator = (
+  block: Block,
+  generator: CodeGenerator
+) => [string, number] | string | null;
 
 /**
  * Class for a code generator that translates the blocks into a language.
  */
 export class CodeGenerator {
   name_: string;
+
+  /** A dictionary of block generator functions keyed by block type. */
+  forBlock: {[type: string]: BlockGenerator} = Object.create(null);
 
   /**
    * This is used as a placeholder in functions defined using
@@ -220,15 +239,22 @@ export class CodeGenerator {
       return opt_thisOnly ? '' : this.blockToCode(block.getChildren(false)[0]);
     }
 
-    const func = (this as any)[block.type];
+    // Look up block generator function in dictionary - but fall back
+    // to looking up on this if not found, for backwards compatibility.
+    let func = this.forBlock[block.type];
+    if (!func && (this as any)[block.type]) {
+      warn(
+        'block generator functions on CodeGenerator objects',
+        '10.0',
+        '11.0',
+        'the .forBlock[blockType] dictionary'
+      );
+      func = (this as any)[block.type];
+    }
     if (typeof func !== 'function') {
       throw Error(
-        'Language "' +
-          this.name_ +
-          '" does not know how to generate ' +
-          'code for block type "' +
-          block.type +
-          '".'
+        `${this.name_} generator does not know how to generate code` +
+          `for block type "${block.type}".`
       );
     }
     // First argument to func.call is the value of 'this' in the generator.
@@ -236,7 +262,7 @@ export class CodeGenerator {
     // The current preferred method of accessing the block is through the second
     // argument to func.call, which becomes the first parameter to the
     // generator.
-    let code = func.call(block, block);
+    let code = func.call(block, block, this);
     if (Array.isArray(code)) {
       // Value blocks return tuples of code and operator order.
       if (!block.outputConnection) {

@@ -10,7 +10,7 @@ goog.declareModuleId('Blockly.libraryBlocks.texts');
 import * as Extensions from '../core/extensions.js';
 import * as fieldRegistry from '../core/field_registry.js';
 import * as xmlUtils from '../core/utils/xml.js';
-import {Align} from '../core/inputs/input.js';
+import {Align} from '../core/inputs/align.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
 import {Connection} from '../core/connection.js';
@@ -297,6 +297,7 @@ const GET_SUBSTRING_BLOCK = {
    * Create or delete an input for a numeric index.
    * This block has two such inputs, independent of each other.
    *
+   * @internal
    * @param n Which input to modify (either 1 or 2).
    * @param isAt True if the input includes a value connection, false otherwise.
    */
@@ -445,6 +446,7 @@ const PROMPT_COMMON = {
   /**
    * Modify this block to have the correct output type.
    *
+   * @internal
    * @param newOp The new output type. Should be either 'TEXT' or 'NUMBER'.
    */
   updateType_: function (this: PromptCommonBlock, newOp: string) {
@@ -857,6 +859,7 @@ const JOIN_MUTATOR_MIXIN = {
   },
   /**
    * Modify this block to have the correct number of inputs.
+   *
    */
   updateShape_: function (this: JoinMutatorBlock) {
     if (this.itemCount_ && this.getInput('EMPTY')) {
@@ -955,6 +958,7 @@ const CHARAT_MUTATOR_MIXIN = {
   /**
    * Create or delete an input for the numeric index.
    *
+   * @internal
    * @param isAt True if the input should exist.
    */
   updateAt_: function (this: CharAtBlock, isAt: boolean) {

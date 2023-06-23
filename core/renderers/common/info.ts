@@ -8,7 +8,8 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.RenderInfo');
 
 import type {BlockSvg} from '../../block_svg.js';
-import {Align, Input} from '../../inputs/input.js';
+import {Input} from '../../inputs/input.js';
+import {Align} from '../../inputs/align.js';
 import type {RenderedConnection} from '../../rendered_connection.js';
 import type {Measurable} from '../measurables/base.js';
 import {BottomRow} from '../measurables/bottom_row.js';
@@ -75,8 +76,6 @@ export class RenderInfo {
   /** An array of input rows on the block. */
   inputRows: InputRow[] = [];
 
-  /** An array of measurable objects containing hidden icons. */
-  hiddenIcons: Icon[] = [];
   topRow: TopRow;
   bottomRow: BottomRow;
 
@@ -174,9 +173,7 @@ export class RenderInfo {
     const icons = this.block_.getIcons();
     for (let i = 0, icon; (icon = icons[i]); i++) {
       const iconInfo = new Icon(this.constants_, icon);
-      if (this.isCollapsed && icon.collapseHidden) {
-        this.hiddenIcons.push(iconInfo);
-      } else {
+      if (!this.isCollapsed || icon.isShownWhenCollapsed()) {
         activeRow.elements.push(iconInfo);
       }
     }

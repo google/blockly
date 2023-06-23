@@ -9,7 +9,7 @@ goog.declareModuleId('Blockly.Comment');
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
-import {COMMENT_TYPE} from './icon_types.js';
+import {IconType} from './icon_types.js';
 import {Coordinate} from '../utils.js';
 import * as dom from '../utils/dom.js';
 import * as eventUtils from '../events/utils.js';
@@ -33,9 +33,12 @@ const DEFAULT_BUBBLE_WIDTH = 160;
 /** The default height in workspace-scale units of the text input bubble. */
 const DEFAULT_BUBBLE_HEIGHT = 80;
 
+/**
+ * An icon which allows the user to add comment text to a block.
+ */
 export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   /** The type string used to identify this icon. */
-  static readonly TYPE = COMMENT_TYPE;
+  static readonly TYPE = IconType.COMMENT;
 
   /**
    * The weight this icon has relative to other icons. Icons with more positive
@@ -68,7 +71,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     super(sourceBlock);
   }
 
-  override getType(): string {
+  override getType(): IconType<CommentIcon> {
     return CommentIcon.TYPE;
   }
 

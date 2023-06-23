@@ -889,18 +889,6 @@ export class BlockSvg
   }
 
   /**
-   * Get the comment icon attached to this block, or null if the block has no
-   * comment.
-   *
-   * @returns The comment icon attached to this block, or null.
-   * @deprecated Use getIcon. To be remove in v11.
-   */
-  getCommentIcon(): CommentIcon | null {
-    deprecation.warn('getCommentIcon', 'v10', 'v11', 'getIcon');
-    return (this.getIcon(CommentIcon.TYPE) ?? null) as CommentIcon | null;
-  }
-
-  /**
    * Set this block's warning text.
    *
    * @param text The text, or null to delete.

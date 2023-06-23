@@ -13,6 +13,7 @@ import {
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
+import {CommentIcon} from '../../core/icons/comment_icon.js';
 import {assertVariableValues} from './test_helpers/variables.js';
 
 suite('XML', function () {
@@ -442,7 +443,7 @@ suite('XML', function () {
         test('Size', function () {
           this.block.setCommentText('test text');
           this.block
-            .getCommentIcon()
+            .getIcon(CommentIcon.TYPE)
             .setBubbleSize(new Blockly.utils.Size(100, 200));
           const xml = Blockly.Xml.blockToDom(this.block);
           const commentXml = xml.firstChild;
@@ -452,7 +453,7 @@ suite('XML', function () {
         });
         test('Pinned True', function () {
           this.block.setCommentText('test text');
-          this.block.getCommentIcon().setBubbleVisible(true);
+          this.block.getIcon(CommentIcon.TYPE).setBubbleVisible(true);
           const xml = Blockly.Xml.blockToDom(this.block);
           const commentXml = xml.firstChild;
           chai.assert.equal(commentXml.tagName, 'comment');
@@ -697,7 +698,7 @@ suite('XML', function () {
             this.workspace
           );
           chai.assert.equal(block.getCommentText(), 'test text');
-          chai.assert.isOk(block.getCommentIcon());
+          chai.assert.isOk(block.getIcon(CommentIcon.TYPE));
         });
         test('No Text', function () {
           const block = Blockly.Xml.domToBlock(
@@ -721,10 +722,13 @@ suite('XML', function () {
             this.workspace
           );
           chai.assert.isOk(block.getIcon(Blockly.icons.CommentIcon.TYPE));
-          chai.assert.deepEqual(block.getCommentIcon().getBubbleSize(), {
-            width: 100,
-            height: 200,
-          });
+          chai.assert.deepEqual(
+            block.getIcon(CommentIcon.TYPE).getBubbleSize(),
+            {
+              width: 100,
+              height: 200,
+            }
+          );
         });
         suite('Pinned', function () {
           test('Pinned True', function () {

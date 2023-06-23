@@ -185,7 +185,7 @@ export class CollapsibleToolboxCategory
   }
 
   /**
-   * Opens or closes the current category.
+   * Opens or closes the current category and the associated flyout.
    *
    * @param isExpanded True to expand the category, false to close.
    */
@@ -200,6 +200,7 @@ export class CollapsibleToolboxCategory
       this.subcategoriesDiv_!.style.display = 'none';
       this.closeIcon_(this.iconDom_);
     }
+    this.parentToolbox_.getFlyout()?.setVisible(isExpanded);
     aria.setState(
       this.htmlDiv_ as HTMLDivElement,
       aria.State.EXPANDED,

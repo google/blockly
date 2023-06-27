@@ -14,6 +14,7 @@ import * as dom from '../utils/dom.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import type {IconType} from './icon_types.js';
+import * as deprecation from '../utils/deprecation.js';
 
 /**
  * The abstract icon class. Icons are visual elements that live in the top-start
@@ -109,4 +110,14 @@ export abstract class Icon implements IIcon {
   }
 
   onClick(): void {}
+
+  /**
+   * Sets the visibility of the icon's bubble if one exists.
+   *
+   * @deprecated Use `setBubbleVisible` instead. To be removed in v11.
+   */
+  setVisible(visibility: boolean): void {
+    deprecation.warn('setVisible', 'v10', 'v11', 'setBubbleVisible');
+    if (hasBubble(this)) this.setBubbleVisible(visibility);
+  }
 }

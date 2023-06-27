@@ -113,7 +113,7 @@ export abstract class Icon implements IIcon {
 
   /**
    * Sets the visibility of the icon's bubble if one exists.
-   * 
+   *
    * @deprecated Use `setBubbleVisible` instead. To be removed in v11.
    */
   setVisible(visibility: boolean): void {

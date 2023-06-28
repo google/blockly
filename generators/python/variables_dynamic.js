@@ -7,15 +7,13 @@
 /**
  * @fileoverview Generating Python for dynamic variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.Python.variablesDynamic');
-
-const {pythonGenerator: Python} = goog.require('Blockly.Python');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Python.variables');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Python.variablesDynamic');
 
 
-// Python is dynamically typed.
-Python['variables_get_dynamic'] = Python['variables_get'];
-Python['variables_set_dynamic'] = Python['variables_set'];
+// generator is dynamically typed.
+export {
+  variables_get as variables_get_dynamic,
+  variables_set as variables_set_dynamic,
+} from './variables.js';

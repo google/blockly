@@ -15,10 +15,17 @@ import {SpacerRow} from '../measurables/spacer_row.js';
 import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 
-import type {HighlightConstantProvider, InsideCorner, JaggedTeeth, Notch, OutsideCorner, PuzzleTab, StartHat} from './highlight_constants.js';
+import type {
+  HighlightConstantProvider,
+  InsideCorner,
+  JaggedTeeth,
+  Notch,
+  OutsideCorner,
+  PuzzleTab,
+  StartHat,
+} from './highlight_constants.js';
 import type {RenderInfo} from './info.js';
 import type {InlineInput} from './measurables/inline_input.js';
-
 
 /**
  * An object that adds highlights to a block based on the given rendering
@@ -38,7 +45,7 @@ export class Highlighter {
   RTL_: boolean;
   constants_: ConstantProvider;
   highlightConstants_: HighlightConstantProvider;
-  private readonly highlightOffset_: number;
+  private readonly highlightOffset: number;
   outsideCornerPaths_: OutsideCorner;
   insideCornerPaths_: InsideCorner;
   puzzleTabPaths_: PuzzleTab;
@@ -55,14 +62,14 @@ export class Highlighter {
 
     this.RTL_ = this.info_.RTL;
 
-    const renderer = (info.getRenderer());
+    const renderer = info.getRenderer();
 
     /** The renderer's constant provider. */
     this.constants_ = renderer.getConstants();
 
     this.highlightConstants_ = renderer.getHighlightConstants();
     /** The offset between the block's main path and highlight path. */
-    this.highlightOffset_ = this.highlightConstants_.OFFSET;
+    this.highlightOffset = this.highlightConstants_.OFFSET;
 
     this.outsideCornerPaths_ = this.highlightConstants_.OUTSIDE_CORNER;
     this.insideCornerPaths_ = this.highlightConstants_.INSIDE_CORNER;
@@ -88,7 +95,7 @@ export class Highlighter {
    */
   drawTopCorner(row: TopRow) {
     this.steps_ += svgPaths.moveBy(row.xPos, this.info_.startY);
-    for (let i = 0, elem; elem = row.elements[i]; i++) {
+    for (let i = 0, elem; (elem = row.elements[i]); i++) {
       if (Types.isLeftSquareCorner(elem)) {
         this.steps_ += this.highlightConstants_.START_POINT;
       } else if (Types.isLeftRoundedCorner(elem)) {
@@ -103,11 +110,13 @@ export class Highlighter {
         // horizontal, use its width and position for an absolute horizontal
         // move.
         this.steps_ += svgPaths.lineOnAxis(
-            'H', elem.xPos + elem.width - this.highlightOffset_);
+          'H',
+          elem.xPos + elem.width - this.highlightOffset
+        );
       }
     }
 
-    const right = row.xPos + row.width - this.highlightOffset_;
+    const right = row.xPos + row.width - this.highlightOffset;
     this.steps_ += svgPaths.lineOnAxis('H', right);
   }
 
@@ -119,9 +128,9 @@ export class Highlighter {
   drawJaggedEdge_(row: Row) {
     if (this.info_.RTL) {
       const remainder =
-          row.height - this.jaggedTeethPaths_.height - this.highlightOffset_;
+        row.height - this.jaggedTeethPaths_.height - this.highlightOffset;
       this.steps_ +=
-          this.jaggedTeethPaths_.pathLeft + svgPaths.lineOnAxis('v', remainder);
+        this.jaggedTeethPaths_.pathLeft + svgPaths.lineOnAxis('v', remainder);
     }
   }
 
@@ -136,13 +145,16 @@ export class Highlighter {
       const belowTabHeight = row.height - input.connectionHeight;
 
       this.steps_ +=
-          svgPaths.moveTo(
-              input.xPos + input.width - this.highlightOffset_, row.yPos) +
-          this.puzzleTabPaths_.pathDown(this.RTL_) +
-          svgPaths.lineOnAxis('v', belowTabHeight);
+        svgPaths.moveTo(
+          input.xPos + input.width - this.highlightOffset,
+          row.yPos
+        ) +
+        this.puzzleTabPaths_.pathDown(this.RTL_) +
+        svgPaths.lineOnAxis('v', belowTabHeight);
     } else {
-      this.steps_ += svgPaths.moveTo(input.xPos + input.width, row.yPos) +
-          this.puzzleTabPaths_.pathDown(this.RTL_);
+      this.steps_ +=
+        svgPaths.moveTo(input.xPos + input.width, row.yPos) +
+        this.puzzleTabPaths_.pathDown(this.RTL_);
     }
   }
 
@@ -156,17 +168,23 @@ export class Highlighter {
     if (!input) return;
     if (this.RTL_) {
       const innerHeight = row.height - 2 * this.insideCornerPaths_.height;
-      this.steps_ += svgPaths.moveTo(input.xPos, row.yPos) +
-          this.insideCornerPaths_.pathTop(this.RTL_) +
-          svgPaths.lineOnAxis('v', innerHeight) +
-          this.insideCornerPaths_.pathBottom(this.RTL_) +
-          svgPaths.lineTo(
-              row.width - input.xPos - this.insideCornerPaths_.width, 0);
+      this.steps_ +=
+        svgPaths.moveTo(input.xPos, row.yPos) +
+        this.insideCornerPaths_.pathTop(this.RTL_) +
+        svgPaths.lineOnAxis('v', innerHeight) +
+        this.insideCornerPaths_.pathBottom(this.RTL_) +
+        svgPaths.lineTo(
+          row.width - input.xPos - this.insideCornerPaths_.width,
+          0
+        );
     } else {
-      this.steps_ += svgPaths.moveTo(input.xPos, row.yPos + row.height) +
-          this.insideCornerPaths_.pathBottom(this.RTL_) +
-          svgPaths.lineTo(
-              row.width - input.xPos - this.insideCornerPaths_.width, 0);
+      this.steps_ +=
+        svgPaths.moveTo(input.xPos, row.yPos + row.height) +
+        this.insideCornerPaths_.pathBottom(this.RTL_) +
+        svgPaths.lineTo(
+          row.width - input.xPos - this.insideCornerPaths_.width,
+          0
+        );
     }
   }
 
@@ -176,15 +194,17 @@ export class Highlighter {
    * @param row The row to highlight.
    */
   drawRightSideRow(row: Row) {
-    const rightEdge = row.xPos + row.width - this.highlightOffset_;
+    const rightEdge = row.xPos + row.width - this.highlightOffset;
     if (row instanceof SpacerRow && row.followsStatement) {
       this.steps_ += svgPaths.lineOnAxis('H', rightEdge);
     }
     if (this.RTL_) {
       this.steps_ += svgPaths.lineOnAxis('H', rightEdge);
-      if (row.height > this.highlightOffset_) {
+      if (row.height > this.highlightOffset) {
         this.steps_ += svgPaths.lineOnAxis(
-            'V', row.yPos + row.height - this.highlightOffset_);
+          'V',
+          row.yPos + row.height - this.highlightOffset
+        );
       }
     }
   }
@@ -198,14 +218,17 @@ export class Highlighter {
     // Highlight the vertical edge of the bottom row on the input side.
     // Highlighting is always from the top left, both in LTR and RTL.
     if (this.RTL_) {
-      this.steps_ +=
-          svgPaths.lineOnAxis('V', row.baseline - this.highlightOffset_);
+      this.steps_ += svgPaths.lineOnAxis(
+        'V',
+        row.baseline - this.highlightOffset
+      );
     } else {
       const cornerElem = this.info_.bottomRow.elements[0];
       if (Types.isLeftSquareCorner(cornerElem)) {
         this.steps_ += svgPaths.moveTo(
-            row.xPos + this.highlightOffset_,
-            row.baseline - this.highlightOffset_);
+          row.xPos + this.highlightOffset,
+          row.baseline - this.highlightOffset
+        );
       } else if (Types.isLeftRoundedCorner(cornerElem)) {
         this.steps_ += svgPaths.moveTo(row.xPos, row.baseline);
         this.steps_ += this.outsideCornerPaths_.bottomLeft();
@@ -220,13 +243,13 @@ export class Highlighter {
     const outputConnection = this.info_.outputConnection;
     if (outputConnection) {
       const tabBottom =
-          outputConnection.connectionOffsetY + outputConnection.height;
+        outputConnection.connectionOffsetY + outputConnection.height;
       // Draw a line up to the bottom of the tab.
       if (this.RTL_) {
         this.steps_ += svgPaths.moveTo(this.info_.startX, tabBottom);
       } else {
-        const left = this.info_.startX + this.highlightOffset_;
-        const bottom = this.info_.bottomRow.baseline - this.highlightOffset_;
+        const left = this.info_.startX + this.highlightOffset;
+        const bottom = this.info_.bottomRow.baseline - this.highlightOffset;
         this.steps_ += svgPaths.moveTo(left, bottom);
         this.steps_ += svgPaths.lineOnAxis('V', tabBottom);
       }
@@ -236,11 +259,15 @@ export class Highlighter {
     if (!this.RTL_) {
       const topRow = this.info_.topRow;
       if (Types.isLeftRoundedCorner(topRow.elements[0])) {
-        this.steps_ +=
-            svgPaths.lineOnAxis('V', this.outsideCornerPaths_.height);
+        this.steps_ += svgPaths.lineOnAxis(
+          'V',
+          this.outsideCornerPaths_.height
+        );
       } else {
-        this.steps_ +=
-            svgPaths.lineOnAxis('V', topRow.capline + this.highlightOffset_);
+        this.steps_ += svgPaths.lineOnAxis(
+          'V',
+          topRow.capline + this.highlightOffset
+        );
       }
     }
   }
@@ -251,7 +278,7 @@ export class Highlighter {
    * @param input The input to highlight.
    */
   drawInlineInput(input: InlineInput) {
-    const offset = this.highlightOffset_;
+    const offset = this.highlightOffset;
 
     // Relative to the block's left.
     const connectionRight = input.xPos + input.connectionWidth;
@@ -261,30 +288,27 @@ export class Highlighter {
 
     if (this.RTL_) {
       const aboveTabHeight = input.connectionOffsetY - offset;
-      const belowTabHeight = input.height -
-          (input.connectionOffsetY + input.connectionHeight) + offset;
+      const belowTabHeight =
+        input.height -
+        (input.connectionOffsetY + input.connectionHeight) +
+        offset;
 
       const startX = connectionRight - offset;
 
       this.inlineSteps_ +=
-          svgPaths.moveTo(startX, startY) +           // Right edge above tab.
-          svgPaths.lineOnAxis('v', aboveTabHeight) +  // Back of tab.
-          this.puzzleTabPaths_.pathDown(this.RTL_) +  // Right edge below tab.
-          svgPaths.lineOnAxis('v', belowTabHeight) +  // Bottom.
-          svgPaths.lineOnAxis('h', bottomHighlightWidth);
+        svgPaths.moveTo(startX, startY) + // Right edge above tab.
+        svgPaths.lineOnAxis('v', aboveTabHeight) + // Back of tab.
+        this.puzzleTabPaths_.pathDown(this.RTL_) + // Right edge below tab.
+        svgPaths.lineOnAxis('v', belowTabHeight) + // Bottom.
+        svgPaths.lineOnAxis('h', bottomHighlightWidth);
     } else {
-      this.inlineSteps_ +=  // Go to top right corner.
-          svgPaths.moveTo(
-              input.xPos + input.width + offset,
-              startY) +  // Highlight right edge, bottom.
-          svgPaths.lineOnAxis('v', input.height) +
-          svgPaths.lineOnAxis(
-              'h', -bottomHighlightWidth) +  // Go to top of tab.
-          svgPaths.moveTo(
-              connectionRight,
-              yPos + input.connectionOffsetY) +  // Short highlight glint at
-          // bottom of tab.
-          this.puzzleTabPaths_.pathDown(this.RTL_);
+      this.inlineSteps_ += // Go to top right corner.
+        svgPaths.moveTo(input.xPos + input.width + offset, startY) + // Highlight right edge, bottom.
+        svgPaths.lineOnAxis('v', input.height) +
+        svgPaths.lineOnAxis('h', -bottomHighlightWidth) + // Go to top of tab.
+        svgPaths.moveTo(connectionRight, yPos + input.connectionOffsetY) + // Short highlight glint at
+        // bottom of tab.
+        this.puzzleTabPaths_.pathDown(this.RTL_);
     }
   }
 }

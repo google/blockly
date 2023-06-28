@@ -7,7 +7,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IASTNodeLocation');
 
-
 /**
  * An AST node location interface.
  */

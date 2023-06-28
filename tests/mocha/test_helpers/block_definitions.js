@@ -6,69 +6,87 @@
 
 goog.declareModuleId('Blockly.test.helpers.blockDefinitions');
 
+export function defineEmptyBlock(name = 'empty_block') {
+  Blockly.defineBlocksWithJsonArray([
+    {
+      'type': name,
+      'message0': '',
+    },
+  ]);
+}
 
 export function defineStackBlock(name = 'stack_block') {
-  Blockly.defineBlocksWithJsonArray([{
-    "type": name,
-    "message0": "",
-    "previousStatement": null,
-    "nextStatement": null,
-  }]);
+  Blockly.defineBlocksWithJsonArray([
+    {
+      'type': name,
+      'message0': '',
+      'previousStatement': null,
+      'nextStatement': null,
+    },
+  ]);
 }
 
 export function defineRowBlock(name = 'row_block') {
-  Blockly.defineBlocksWithJsonArray([{
-    "type": name,
-    "message0": "%1",
-    "args0": [
-      {
-        "type": "input_value",
-        "name": "INPUT",
-      },
-    ],
-    "output": null,
-  }]);
+  Blockly.defineBlocksWithJsonArray([
+    {
+      'type': name,
+      'message0': '%1',
+      'args0': [
+        {
+          'type': 'input_value',
+          'name': 'INPUT',
+        },
+      ],
+      'output': null,
+    },
+  ]);
 }
 
 export function defineRowToStackBlock(name = 'row_to_stack_block') {
-  Blockly.defineBlocksWithJsonArray([{
-    "type": name,
-    "message0": "",
-    "output": null,
-    "nextStatement": null,
-  }]);
+  Blockly.defineBlocksWithJsonArray([
+    {
+      'type': name,
+      'message0': '',
+      'output': null,
+      'nextStatement': null,
+    },
+  ]);
 }
 
 export function defineStatementBlock(name = 'statement_block') {
-  Blockly.defineBlocksWithJsonArray([{
-    "type": name,
-    "message0": "%1",
-    "args0": [
-      {
-        "type": "input_statement",
-        "name": "NAME",
-      },
-    ],
-    "previousStatement": null,
-    "nextStatement": null,
-    "colour": 230,
-    "tooltip": "",
-    "helpUrl": "",
-  }]);
+  Blockly.defineBlocksWithJsonArray([
+    {
+      'type': name,
+      'message0': '%1',
+      'args0': [
+        {
+          'type': 'input_statement',
+          'name': 'NAME',
+        },
+      ],
+      'previousStatement': null,
+      'nextStatement': null,
+      'colour': 230,
+      'tooltip': '',
+      'helpUrl': '',
+    },
+  ]);
 }
 
 export function defineBasicBlockWithField(name = 'test_field_block') {
-  Blockly.defineBlocksWithJsonArray([{
-    "type": name,
-    "message0": "%1",
-    "args0": [
-      {
-        "type": "field_input",
-        "name": "NAME",
-      },
-    ],
-    "output": null,
-  }]);
+  Blockly.defineBlocksWithJsonArray([
+    {
+      'type': name,
+      'message0': '%1',
+      'args0': [
+        {
+          'type': 'field_input',
+          'name': 'NAME',
+        },
+      ],
+      'output': null,
+    },
+  ]);
 }
 
 export function defineMutatorBlocks() {
@@ -96,30 +114,30 @@ export function defineMutatorBlocks() {
   const xmlMutator = {
     hasInput: false,
 
-    mutationToDom: function() {
+    mutationToDom: function () {
       const mutation = Blockly.utils.xml.createElement('mutation');
       mutation.setAttribute('hasInput', this.hasInput);
       return mutation;
     },
 
-    domToMutation: function(mutation) {
+    domToMutation: function (mutation) {
       this.hasInput = mutation.getAttribute('hasInput') == 'true';
       this.updateShape();
     },
 
-    decompose: function(workspace) {
+    decompose: function (workspace) {
       const topBlock = workspace.newBlock('checkbox_block', 'check_block');
       topBlock.initSvg();
       topBlock.render();
       return topBlock;
     },
 
-    compose: function(topBlock) {
+    compose: function (topBlock) {
       this.hasInput = topBlock.getFieldValue('CHECK') == 'TRUE';
       this.updateShape();
     },
 
-    updateShape: function() {
+    updateShape: function () {
       if (this.hasInput && !this.getInput('INPUT')) {
         this.appendValueInput('INPUT');
       } else if (!this.hasInput && this.getInput('INPUT')) {
@@ -132,28 +150,28 @@ export function defineMutatorBlocks() {
   const jsoMutator = {
     hasInput: false,
 
-    saveExtraState: function() {
+    saveExtraState: function () {
       return {hasInput: this.hasInput};
     },
 
-    loadExtraState: function(state) {
+    loadExtraState: function (state) {
       this.hasInput = state.hasInput || false;
       this.updateShape();
     },
 
-    decompose: function(workspace) {
+    decompose: function (workspace) {
       const topBlock = workspace.newBlock('checkbox_block', 'check_block');
       topBlock.initSvg();
       topBlock.render();
       return topBlock;
     },
 
-    compose: function(topBlock) {
+    compose: function (topBlock) {
       this.hasInput = topBlock.getFieldValue('CHECK') == 'TRUE';
       this.updateShape();
     },
 
-    updateShape: function() {
+    updateShape: function () {
       if (this.hasInput && !this.getInput('INPUT')) {
         this.appendValueInput('INPUT');
       } else if (!this.hasInput && this.getInput('INPUT')) {
@@ -171,7 +189,7 @@ export function createTestBlock() {
     'workspace': {
       'rendered': false,
     },
-    'isShadow': function() {
+    'isShadow': function () {
       return false;
     },
     'renameVarById': Blockly.Block.prototype.renameVarById,

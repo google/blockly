@@ -14,14 +14,12 @@ goog.declareModuleId('Blockly.Events.MarkerMove');
 
 import type {Block} from '../block.js';
 import {ASTNode} from '../keyboard_nav/ast_node.js';
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
 import {AbstractEventJson} from './events_abstract.js';
 
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
-
 
 /**
  * Notifies listeners that a marker (used for keyboard navigation) has
@@ -57,8 +55,11 @@ export class MarkerMove extends UiBase {
    *    Undefined for a blank event.
    */
   constructor(
-      opt_block?: Block|null, isCursor?: boolean, opt_oldNode?: ASTNode|null,
-      opt_newNode?: ASTNode) {
+    opt_block?: Block | null,
+    isCursor?: boolean,
+    opt_oldNode?: ASTNode | null,
+    opt_newNode?: ASTNode
+  ) {
     let workspaceId = opt_block ? opt_block.workspace.id : undefined;
     if (opt_newNode && opt_newNode.getType() === ASTNode.types.WORKSPACE) {
       workspaceId = (opt_newNode.getLocation() as Workspace).id;
@@ -80,35 +81,21 @@ export class MarkerMove extends UiBase {
     const json = super.toJson() as MarkerMoveJson;
     if (this.isCursor === undefined) {
       throw new Error(
-          'Whether this is a cursor event or not is undefined. Either pass ' +
-          'a value to the constructor, or call fromJson');
+        'Whether this is a cursor event or not is undefined. Either pass ' +
+          'a value to the constructor, or call fromJson'
+      );
     }
     if (!this.newNode) {
       throw new Error(
-          'The new node is undefined. Either pass a node to ' +
-          'the constructor, or call fromJson');
+        'The new node is undefined. Either pass a node to ' +
+          'the constructor, or call fromJson'
+      );
     }
     json['isCursor'] = this.isCursor;
     json['blockId'] = this.blockId;
     json['oldNode'] = this.oldNode;
     json['newNode'] = this.newNode;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: MarkerMoveJson) {
-    deprecation.warn(
-        'Blockly.Events.MarkerMove.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
-    super.fromJson(json);
-    this.isCursor = json['isCursor'];
-    this.blockId = json['blockId'];
-    this.oldNode = json['oldNode'];
-    this.newNode = json['newNode'];
   }
 
   /**
@@ -120,11 +107,16 @@ export class MarkerMove extends UiBase {
    *     parameters to static methods in superclasses.
    * @internal
    */
-  static fromJson(json: MarkerMoveJson, workspace: Workspace, event?: any):
-      MarkerMove {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new MarkerMove()) as
-        MarkerMove;
+  static fromJson(
+    json: MarkerMoveJson,
+    workspace: Workspace,
+    event?: any
+  ): MarkerMove {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new MarkerMove()
+    ) as MarkerMove;
     newEvent.isCursor = json['isCursor'];
     newEvent.blockId = json['blockId'];
     newEvent.oldNode = json['oldNode'];

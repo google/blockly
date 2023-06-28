@@ -7,21 +7,51 @@
 import {BlockSvg} from './block_svg.js';
 import {Coordinate} from './utils/coordinate.js';
 
-
+/** The set of all blocks in need of rendering which don't have parents. */
 const rootBlocks = new Set<BlockSvg>();
+
+/** The set of all blocks in need of rendering. */
 let dirtyBlocks = new WeakSet<BlockSvg>();
-let pid = 0;
+
+/**
+ * The promise which resolves after the current set of renders is completed. Or
+ * null if there are no queued renders.
+ *
+ * Stored so that we can return it from afterQueuedRenders.
+ */
+let afterRendersPromise: Promise<void> | null = null;
 
 /**
  * Registers that the given block and all of its parents need to be rerendered,
  * and registers a callback to do so after a delay, to allowf or batching.
  *
  * @param block The block to rerender.
+ * @returns A promise that resolves after the currently queued renders have been
+ *     completed. Used for triggering other behavior that relies on updated
+ *     size/position location for the block.
  * @internal
  */
-export function queueRender(block: BlockSvg) {
+export function queueRender(block: BlockSvg): Promise<void> {
   queueBlock(block);
-  if (!pid) pid = window.requestAnimationFrame(doRenders);
+  if (!afterRendersPromise) {
+    afterRendersPromise = new Promise((resolve) => {
+      window.requestAnimationFrame(() => {
+        doRenders();
+        resolve();
+      });
+    });
+  }
+  return afterRendersPromise;
+}
+
+/**
+ * @returns A promise that resolves after the currently queued renders have
+ *     been completed.
+ */
+export function finishQueuedRenders(): Promise<void> {
+  // If there are no queued renders, return a resolved promise so `then`
+  // callbacks trigger immediately.
+  return afterRendersPromise ? afterRendersPromise : Promise.resolve();
 }
 
 /**
@@ -54,8 +84,9 @@ function doRenders() {
     if (block.getParent()) continue;
 
     renderBlock(block);
-    updateConnectionLocations(block, block.getRelativeToSurfaceXY());
-    updateIconLocations(block);
+    const blockOrigin = block.getRelativeToSurfaceXY();
+    updateConnectionLocations(block, blockOrigin);
+    updateIconLocations(block, blockOrigin);
   }
   for (const workspace of workspaces) {
     workspace.resizeContents();
@@ -63,7 +94,7 @@ function doRenders() {
 
   rootBlocks.clear();
   dirtyBlocks = new Set();
-  pid = 0;
+  afterRendersPromise = null;
 }
 
 /**
@@ -95,7 +126,9 @@ function updateConnectionLocations(block: BlockSvg, blockOrigin: Coordinate) {
     if (!target) continue;
     if (moved || dirtyBlocks.has(target)) {
       updateConnectionLocations(
-          target, Coordinate.sum(blockOrigin, target.relativeCoords));
+        target,
+        Coordinate.sum(blockOrigin, target.relativeCoords)
+      );
     }
   }
 }
@@ -106,12 +139,15 @@ function updateConnectionLocations(block: BlockSvg, blockOrigin: Coordinate) {
  *
  * @param block The block to update the icon locations of.
  */
-function updateIconLocations(block: BlockSvg) {
+function updateIconLocations(block: BlockSvg, blockOrigin: Coordinate) {
   if (!block.getIcons) return;
   for (const icon of block.getIcons()) {
-    icon.computeIconLocation();
+    icon.onLocationChange(blockOrigin);
   }
   for (const child of block.getChildren(false)) {
-    updateIconLocations(child);
+    updateIconLocations(
+      child,
+      Coordinate.sum(blockOrigin, child.relativeCoords)
+    );
   }
 }

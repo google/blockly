@@ -16,14 +16,13 @@ import {PathObject as BasePathObject} from '../common/path_object.js';
 
 import type {ConstantProvider} from './constants.js';
 
-
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  */
 export class PathObject extends BasePathObject {
   /** The selected path of the block. */
-  private svgPathSelected_: SVGElement|null = null;
+  private svgPathSelected: SVGElement | null = null;
 
   /** The outline paths on the block. */
   private readonly outlines = new Map<string, SVGElement>();
@@ -40,7 +39,7 @@ export class PathObject extends BasePathObject {
    * The type of block's output connection shape.  This is set when a block
    * with an output connection is drawn.
    */
-  outputShapeType: number|null = null;
+  outputShapeType: number | null = null;
 
   public override constants: ConstantProvider;
 
@@ -50,7 +49,10 @@ export class PathObject extends BasePathObject {
    * @param constants The renderer's constants.
    */
   constructor(
-      root: SVGElement, style: BlockStyle, constants: ConstantProvider) {
+    root: SVGElement,
+    style: BlockStyle,
+    constants: ConstantProvider
+  ) {
     super(root, style, constants);
 
     this.constants = constants;
@@ -58,8 +60,8 @@ export class PathObject extends BasePathObject {
 
   override setPath(pathString: string) {
     super.setPath(pathString);
-    if (this.svgPathSelected_) {
-      this.svgPathSelected_.setAttribute('d', pathString);
+    if (this.svgPathSelected) {
+      this.svgPathSelected.setAttribute('d', pathString);
     }
   }
 
@@ -88,17 +90,19 @@ export class PathObject extends BasePathObject {
   override updateSelected(enable: boolean) {
     this.setClass_('blocklySelected', enable);
     if (enable) {
-      if (!this.svgPathSelected_) {
-        this.svgPathSelected_ = this.svgPath.cloneNode(true) as SVGElement;
-        this.svgPathSelected_.setAttribute('fill', 'none');
-        this.svgPathSelected_.setAttribute(
-            'filter', 'url(#' + this.constants.selectedGlowFilterId + ')');
-        this.svgRoot.appendChild(this.svgPathSelected_);
+      if (!this.svgPathSelected) {
+        this.svgPathSelected = this.svgPath.cloneNode(true) as SVGElement;
+        this.svgPathSelected.setAttribute('fill', 'none');
+        this.svgPathSelected.setAttribute(
+          'filter',
+          'url(#' + this.constants.selectedGlowFilterId + ')'
+        );
+        this.svgRoot.appendChild(this.svgPathSelected);
       }
     } else {
-      if (this.svgPathSelected_) {
-        this.svgRoot.removeChild(this.svgPathSelected_);
-        this.svgPathSelected_ = null;
+      if (this.svgPathSelected) {
+        this.svgRoot.removeChild(this.svgPathSelected);
+        this.svgPathSelected = null;
       }
     }
   }
@@ -107,7 +111,9 @@ export class PathObject extends BasePathObject {
     this.setClass_('blocklyReplaceable', enable);
     if (enable) {
       this.svgPath.setAttribute(
-          'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
+        'filter',
+        'url(#' + this.constants.replacementGlowFilterId + ')'
+      );
     } else {
       this.svgPath.removeAttribute('filter');
     }
@@ -115,13 +121,15 @@ export class PathObject extends BasePathObject {
 
   override updateShapeForInputHighlight(conn: Connection, enable: boolean) {
     const name = conn.getParentInput()!.name;
-    const outlinePath = this.getOutlinePath_(name);
+    const outlinePath = this.getOutlinePath(name);
     if (!outlinePath) {
       return;
     }
     if (enable) {
       outlinePath.setAttribute(
-          'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
+        'filter',
+        'url(#' + this.constants.replacementGlowFilterId + ')'
+      );
     } else {
       outlinePath.removeAttribute('filter');
     }
@@ -145,7 +153,7 @@ export class PathObject extends BasePathObject {
     // remove them.
     if (this.remainingOutlines.size) {
       for (const key of this.remainingOutlines) {
-        this.removeOutlinePath_(key);
+        this.removeOutlinePath(key);
       }
     }
     this.remainingOutlines.clear();
@@ -159,7 +167,7 @@ export class PathObject extends BasePathObject {
    * @param pathString The path.
    */
   setOutlinePath(name: string, pathString: string) {
-    const outline = this.getOutlinePath_(name);
+    const outline = this.getOutlinePath(name);
     outline.setAttribute('d', pathString);
     outline.setAttribute('fill', this.style.colourTertiary);
   }
@@ -170,19 +178,21 @@ export class PathObject extends BasePathObject {
    * @param name The input name.
    * @returns The SVG outline path.
    */
-  private getOutlinePath_(name: string): SVGElement {
+  private getOutlinePath(name: string): SVGElement {
     if (!this.outlines.has(name)) {
       this.outlines.set(
-          name,
-          dom.createSvgElement(
-              Svg.PATH, {
-                'class':
-                    'blocklyOutlinePath',  // IE doesn't like paths without the
-                // data definition, set empty
-                // default
-                'd': '',
-              },
-              this.svgRoot));
+        name,
+        dom.createSvgElement(
+          Svg.PATH,
+          {
+            'class': 'blocklyOutlinePath', // IE doesn't like paths without the
+            // data definition, set empty
+            // default
+            'd': '',
+          },
+          this.svgRoot
+        )
+      );
     }
     this.remainingOutlines.delete(name);
     return this.outlines.get(name)!;
@@ -193,7 +203,7 @@ export class PathObject extends BasePathObject {
    *
    * @param name The input name.
    */
-  private removeOutlinePath_(name: string) {
+  private removeOutlinePath(name: string) {
     this.outlines.get(name)?.parentNode?.removeChild(this.outlines.get(name)!);
     this.outlines.delete(name);
   }

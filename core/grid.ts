@@ -17,7 +17,6 @@ import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import {GridOptions} from './options.js';
 
-
 /**
  * Class for a workspace's grid.
  */
@@ -45,7 +44,7 @@ export class Grid {
     this.line1 = pattern.firstChild as SVGElement;
 
     /** The vertical grid line, if it exists. */
-    this.line2 = this.line1 && this.line1.nextSibling as SVGElement;
+    this.line2 = this.line1 && (this.line1.nextSibling as SVGElement);
 
     /** Whether blocks should snap to the grid. */
     this.snapToGrid = options['snap'] ?? false;
@@ -118,8 +117,13 @@ export class Grid {
    * @param y2 The new y end position of the line (in px).
    */
   private setLineAttributes(
-      line: SVGElement, width: number, x1: number, x2: number, y1: number,
-      y2: number) {
+    line: SVGElement,
+    width: number,
+    x1: number,
+    x2: number,
+    y1: number,
+    y2: number
+  ) {
     if (line) {
       line.setAttribute('stroke-width', `${width}`);
       line.setAttribute('x1', `${x1}`);
@@ -151,8 +155,11 @@ export class Grid {
    * @returns The SVG element for the grid pattern.
    * @internal
    */
-  static createDom(rnd: string, gridOptions: GridOptions, defs: SVGElement):
-      SVGElement {
+  static createDom(
+    rnd: string,
+    gridOptions: GridOptions,
+    defs: SVGElement
+  ): SVGElement {
     /*
           <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse">
             <rect stroke="#888" />
@@ -160,16 +167,23 @@ export class Grid {
           </pattern>
         */
     const gridPattern = dom.createSvgElement(
-        Svg.PATTERN,
-        {'id': 'blocklyGridPattern' + rnd, 'patternUnits': 'userSpaceOnUse'},
-        defs);
+      Svg.PATTERN,
+      {'id': 'blocklyGridPattern' + rnd, 'patternUnits': 'userSpaceOnUse'},
+      defs
+    );
     // x1, y1, x1, x2 properties will be set later in update.
     if ((gridOptions['length'] ?? 1) > 0 && (gridOptions['spacing'] ?? 0) > 0) {
       dom.createSvgElement(
-          Svg.LINE, {'stroke': gridOptions['colour']}, gridPattern);
+        Svg.LINE,
+        {'stroke': gridOptions['colour']},
+        gridPattern
+      );
       if (gridOptions['length'] ?? 1 > 1) {
         dom.createSvgElement(
-            Svg.LINE, {'stroke': gridOptions['colour']}, gridPattern);
+          Svg.LINE,
+          {'stroke': gridOptions['colour']},
+          gridPattern
+        );
       }
     } else {
       // Edge 16 doesn't handle empty patterns

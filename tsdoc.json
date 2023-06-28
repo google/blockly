@@ -8,24 +8,20 @@
       "syntaxKind": "block"
     },
     {
-        "tagName": "@define",
-        "syntaxKind": "block"
+      "tagName": "@define",
+      "syntaxKind": "block"
     },
     {
-        "tagName": "@license",
-        "syntaxKind": "block"
+      "tagName": "@license",
+      "syntaxKind": "block"
     },
     {
-        "tagName": "@nocollapse",
-        "syntaxKind": "modifier"
+      "tagName": "@nocollapse",
+      "syntaxKind": "modifier"
     },
     {
-        "tagName": "@suppress",
-        "syntaxKind": "block"
-    },
-    {
-        "tagName": "@unrestricted",
-        "syntaxKind": "modifier"
+      "tagName": "@suppress",
+      "syntaxKind": "modifier"
     }
   ],
 
@@ -34,7 +30,6 @@
     "@define": true,
     "@license": true,
     "@nocollapse": true,
-    "@suppress": true,
-    "@unrestricted": true
+    "@suppress": true
   }
 }

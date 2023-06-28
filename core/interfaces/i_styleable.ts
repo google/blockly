@@ -7,7 +7,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IStyleable');
 
-
 /**
  * Interface for an object that a style can be added to.
  */

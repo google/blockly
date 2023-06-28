@@ -11,7 +11,6 @@ import type {ConstantProvider} from '../../../renderers/common/constants.js';
 import {Measurable} from '../../../renderers/measurables/base.js';
 import {Types} from '../../../renderers/measurables/types.js';
 
-
 /**
  * An object containing information about the space a right connection shape
  * takes up during rendering.

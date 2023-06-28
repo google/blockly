@@ -20,7 +20,6 @@ import {TopRow} from './measurables/top_row.js';
 import {PathObject} from './path_object.js';
 import {Renderer} from './renderer.js';
 
-
 export {
   BottomRow,
   ConstantProvider,

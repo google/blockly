@@ -13,7 +13,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.Svg');
 
-
 /**
  * A name with the type of the SVG element stored in the generic.
  */
@@ -29,8 +28,9 @@ export class Svg<_T> {
   /** @internal */
   static FECOMPOSITE = new Svg<SVGFECompositeElement>('feComposite');
   /** @internal */
-  static FECOMPONENTTRANSFER =
-      new Svg<SVGFEComponentTransferElement>('feComponentTransfer');
+  static FECOMPONENTTRANSFER = new Svg<SVGFEComponentTransferElement>(
+    'feComponentTransfer'
+  );
   /** @internal */
   static FEFLOOD = new Svg<SVGFEFloodElement>('feFlood');
   /** @internal */
@@ -40,8 +40,9 @@ export class Svg<_T> {
   /** @internal */
   static FEPOINTLIGHT = new Svg<SVGFEPointLightElement>('fePointLight');
   /** @internal */
-  static FESPECULARLIGHTING =
-      new Svg<SVGFESpecularLightingElement>('feSpecularLighting');
+  static FESPECULARLIGHTING = new Svg<SVGFESpecularLightingElement>(
+    'feSpecularLighting'
+  );
   /** @internal */
   static FILTER = new Svg<SVGFilterElement>('filter');
   /** @internal */

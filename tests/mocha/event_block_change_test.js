@@ -6,65 +6,88 @@
 
 goog.declareModuleId('Blockly.test.eventBlockChange');
 
-import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 import {defineMutatorBlocks} from './test_helpers/block_definitions.js';
 
-
-suite('Block Change Event', function() {
-  setup(function() {
+suite('Block Change Event', function () {
+  setup(function () {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
   });
 
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
 
-  suite('Undo and Redo', function() {
-    suite('Mutation', function() {
-      setup(function() {
+  suite('Undo and Redo', function () {
+    suite('Mutation', function () {
+      setup(function () {
         defineMutatorBlocks();
       });
 
-      teardown(function() {
+      teardown(function () {
         Blockly.Extensions.unregister('xml_mutator');
         Blockly.Extensions.unregister('jso_mutator');
       });
 
-      suite('XML', function() {
-        test('Undo', function() {
+      suite('XML', function () {
+        test('Undo', function () {
           const block = this.workspace.newBlock('xml_block', 'block_id');
           block.domToMutation(
-              Blockly.utils.xml.textToDom('<mutation hasInput="true"/>'));
+            Blockly.utils.xml.textToDom('<mutation hasInput="true"/>')
+          );
           const blockChange = new Blockly.Events.BlockChange(
-              block, 'mutation', null, '', '<mutation hasInput="true"/>');
+            block,
+            'mutation',
+            null,
+            '',
+            '<mutation hasInput="true"/>'
+          );
           blockChange.run(false);
           chai.assert.isFalse(block.hasInput);
         });
 
-        test('Redo', function() {
+        test('Redo', function () {
           const block = this.workspace.newBlock('xml_block', 'block_id');
           const blockChange = new Blockly.Events.BlockChange(
-              block, 'mutation', null, '', '<mutation hasInput="true"/>');
+            block,
+            'mutation',
+            null,
+            '',
+            '<mutation hasInput="true"/>'
+          );
           blockChange.run(true);
           chai.assert.isTrue(block.hasInput);
         });
       });
 
-      suite('JSO', function() {
-        test('Undo', function() {
+      suite('JSO', function () {
+        test('Undo', function () {
           const block = this.workspace.newBlock('jso_block', 'block_id');
           block.loadExtraState({hasInput: true});
           const blockChange = new Blockly.Events.BlockChange(
-              block, 'mutation', null, '', '{"hasInput":true}');
+            block,
+            'mutation',
+            null,
+            '',
+            '{"hasInput":true}'
+          );
           blockChange.run(false);
           chai.assert.isFalse(block.hasInput);
         });
 
-        test('Redo', function() {
+        test('Redo', function () {
           const block = this.workspace.newBlock('jso_block', 'block_id');
           const blockChange = new Blockly.Events.BlockChange(
-              block, 'mutation', null, '', '{"hasInput":true}');
+            block,
+            'mutation',
+            null,
+            '',
+            '{"hasInput":true}'
+          );
           blockChange.run(true);
           chai.assert.isTrue(block.hasInput);
         });
@@ -72,22 +95,28 @@ suite('Block Change Event', function() {
     });
   });
 
-  suite('Serialization', function() {
-    setup(function() {
+  suite('Serialization', function () {
+    setup(function () {
       defineMutatorBlocks();
     });
 
-    teardown(function() {
+    teardown(function () {
       Blockly.Extensions.unregister('xml_mutator');
       Blockly.Extensions.unregister('jso_mutator');
     });
 
-    test('events round-trip through JSON', function() {
+    test('events round-trip through JSON', function () {
       const block = this.workspace.newBlock('xml_block', 'block_id');
       block.domToMutation(
-          Blockly.utils.xml.textToDom('<mutation hasInput="true"/>'));
+        Blockly.utils.xml.textToDom('<mutation hasInput="true"/>')
+      );
       const origEvent = new Blockly.Events.BlockChange(
-          block, 'mutation', null, '', '<mutation hasInput="true"/>');
+        block,
+        'mutation',
+        null,
+        '',
+        '<mutation hasInput="true"/>'
+      );
 
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);

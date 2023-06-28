@@ -22,7 +22,6 @@ import type {CommentCreate} from './events_comment_create.js';
 import type {CommentMove} from './events_comment_move.js';
 import type {ViewportChange} from './events_viewport.js';
 
-
 /** Group ID for new events.  Grouped events are indivisible. */
 let group = '';
 
@@ -79,6 +78,13 @@ export const CHANGE = 'change';
  * Name of event that changes a block.
  */
 export const BLOCK_CHANGE = CHANGE;
+
+/**
+ * Name of event representing an in-progress change to a field of a block, which
+ * is expected to be followed by a block change event.
+ */
+export const BLOCK_FIELD_INTERMEDIATE_CHANGE =
+  'block_field_intermediate_change';
 
 /**
  * Name of event that moves a block. Will be deprecated for BLOCK_MOVE.
@@ -187,7 +193,7 @@ export const FINISHED_LOADING = 'finished_loading';
  * Not to be confused with bumping so that disconnected connections do not
  * appear connected.
  */
-export type BumpEvent = BlockCreate|BlockMove|CommentCreate|CommentMove;
+export type BumpEvent = BlockCreate | BlockMove | CommentCreate | CommentMove;
 
 /**
  * List of events that cause objects to be bumped back into the visible
@@ -196,8 +202,12 @@ export type BumpEvent = BlockCreate|BlockMove|CommentCreate|CommentMove;
  * Not to be confused with bumping so that disconnected connections do not
  * appear connected.
  */
-export const BUMP_EVENTS: string[] =
-    [BLOCK_CREATE, BLOCK_MOVE, COMMENT_CREATE, COMMENT_MOVE];
+export const BUMP_EVENTS: string[] = [
+  BLOCK_CREATE,
+  BLOCK_MOVE,
+  COMMENT_CREATE,
+  COMMENT_MOVE,
+];
 
 /** List of events queued for firing. */
 const FIRE_QUEUE: Abstract[] = [];
@@ -235,12 +245,11 @@ function fireInternal(event: Abstract) {
   FIRE_QUEUE.push(event);
 }
 
-
 /** Fire all queued events. */
 function fireNow() {
   const queue = filter(FIRE_QUEUE, true);
   FIRE_QUEUE.length = 0;
-  for (let i = 0, event; event = queue[i]; i++) {
+  for (let i = 0, event; (event = queue[i]); i++) {
     if (!event.workspaceId) {
       continue;
     }
@@ -248,6 +257,46 @@ function fireNow() {
     if (eventWorkspace) {
       eventWorkspace.fireChangeListener(event);
     }
+  }
+
+  // Post-filter the undo stack to squash and remove any events that result in
+  // a null event
+
+  // 1. Determine which workspaces will need to have their undo stacks validated
+  const workspaceIds = new Set(queue.map((e) => e.workspaceId));
+  for (const workspaceId of workspaceIds) {
+    // Only process valid workspaces
+    if (!workspaceId) {
+      continue;
+    }
+    const eventWorkspace = common.getWorkspaceById(workspaceId);
+    if (!eventWorkspace) {
+      continue;
+    }
+
+    // Find the last contiguous group of events on the stack
+    const undoStack = eventWorkspace.getUndoStack();
+    let i;
+    let group: string | undefined = undefined;
+    for (i = undoStack.length; i > 0; i--) {
+      const event = undoStack[i - 1];
+      if (event.group === '') {
+        break;
+      } else if (group === undefined) {
+        group = event.group;
+      } else if (event.group !== group) {
+        break;
+      }
+    }
+    if (!group || i == undoStack.length - 1) {
+      // Need a group of two or more events on the stack. Nothing to do here.
+      continue;
+    }
+
+    // Extract the event group, filter, and add back to the undo stack
+    let events = undoStack.splice(i, undoStack.length - i);
+    events = filter(events, true);
+    undoStack.push(...events);
   }
 }
 
@@ -268,7 +317,7 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
   const mergedQueue = [];
   const hash = Object.create(null);
   // Merge duplicates.
-  for (let i = 0, event; event = queue[i]; i++) {
+  for (let i = 0, event; (event = queue[i]); i++) {
     if (!event.isNull()) {
       // Treat all UI events as the same type in hash table.
       const eventType = event.isUiEvent ? UI : event.type;
@@ -290,11 +339,23 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         lastEvent.newParentId = moveEvent.newParentId;
         lastEvent.newInputName = moveEvent.newInputName;
         lastEvent.newCoordinate = moveEvent.newCoordinate;
+        if (moveEvent.reason) {
+          if (lastEvent.reason) {
+            // Concatenate reasons without duplicates.
+            const reasonSet = new Set(
+              moveEvent.reason.concat(lastEvent.reason)
+            );
+            lastEvent.reason = Array.from(reasonSet);
+          } else {
+            lastEvent.reason = moveEvent.reason;
+          }
+        }
         lastEntry.index = i;
       } else if (
-          event.type === CHANGE &&
-          (event as BlockChange).element === lastEvent.element &&
-          (event as BlockChange).name === lastEvent.name) {
+        event.type === CHANGE &&
+        (event as BlockChange).element === lastEvent.element &&
+        (event as BlockChange).name === lastEvent.name
+      ) {
         const changeEvent = event as BlockChange;
         // Merge change events.
         lastEvent.newValue = changeEvent.newValue;
@@ -316,7 +377,7 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
     }
   }
   // Filter out any events that have become null due to merging.
-  queue = mergedQueue.filter(function(e) {
+  queue = mergedQueue.filter(function (e) {
     return !e.isNull();
   });
   if (!forward) {
@@ -325,11 +386,13 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
   }
   // Move mutation events to the top of the queue.
   // Intentionally skip first event.
-  for (let i = 1, event; event = queue[i]; i++) {
+  for (let i = 1, event; (event = queue[i]); i++) {
     // AnyDuringMigration because:  Property 'element' does not exist on type
     // 'Abstract'.
-    if (event.type === CHANGE &&
-        (event as AnyDuringMigration).element === 'mutation') {
+    if (
+      event.type === CHANGE &&
+      (event as AnyDuringMigration).element === 'mutation'
+    ) {
       queue.unshift(queue.splice(i, 1)[0]);
     }
   }
@@ -341,7 +404,7 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
  * in the undo stack.  Called by Workspace.clearUndo.
  */
 export function clearPendingUndo() {
-  for (let i = 0, event; event = FIRE_QUEUE[i]; i++) {
+  for (let i = 0, event; (event = FIRE_QUEUE[i]); i++) {
     event.recordUndo = false;
   }
 }
@@ -385,14 +448,14 @@ export function getGroup(): string {
  * @param state True to start new group, false to end group.
  *   String to set group explicitly.
  */
-export function setGroup(state: boolean|string) {
+export function setGroup(state: boolean | string) {
   TEST_ONLY.setGroupInternal(state);
 }
 
 /**
  * Private version of setGroup for stubbing in tests.
  */
-function setGroupInternal(state: boolean|string) {
+function setGroupInternal(state: boolean | string) {
   if (typeof state === 'boolean') {
     group = state ? idGenerator.genUid() : '';
   } else {
@@ -410,7 +473,7 @@ function setGroupInternal(state: boolean|string) {
 export function getDescendantIds(block: Block): string[] {
   const ids = [];
   const descendants = block.getDescendants(false);
-  for (let i = 0, descendant; descendant = descendants[i]; i++) {
+  for (let i = 0, descendant; (descendant = descendants[i]); i++) {
     ids[i] = descendant.id;
   }
   return ids;
@@ -425,33 +488,13 @@ export function getDescendantIds(block: Block): string[] {
  * @throws {Error} if an event type is not found in the registry.
  */
 export function fromJson(
-    json: AnyDuringMigration, workspace: Workspace): Abstract {
+  json: AnyDuringMigration,
+  workspace: Workspace
+): Abstract {
   const eventClass = get(json['type']);
   if (!eventClass) throw Error('Unknown event type.');
 
-  if (eventClassHasStaticFromJson(eventClass)) {
-    return (eventClass as any).fromJson(json, workspace);
-  }
-
-  // Fallback to the old deserialization method.
-  const event = new eventClass();
-  event.fromJson(json);
-  event.workspaceId = workspace.id;
-  return event;
-}
-
-/**
- * Returns true if the given event constructor has /its own/ static fromJson
- * method.
- *
- * Returns false if no static fromJson method exists on the contructor, or if
- * the static fromJson method is inheritted.
- */
-function eventClassHasStaticFromJson(eventClass: new (...p: any[]) => Abstract):
-    boolean {
-  const untypedEventClass = eventClass as any;
-  return Object.getOwnPropertyDescriptors(untypedEventClass).fromJson &&
-      typeof untypedEventClass.fromJson === 'function';
+  return (eventClass as any).fromJson(json, workspace);
 }
 
 /**
@@ -460,8 +503,9 @@ function eventClassHasStaticFromJson(eventClass: new (...p: any[]) => Abstract):
  * @param eventType The type of the event to get.
  * @returns The event class with the given type.
  */
-export function get(eventType: string):
-    (new (...p1: AnyDuringMigration[]) => Abstract) {
+export function get(
+  eventType: string
+): new (...p1: AnyDuringMigration[]) => Abstract {
   const event = registry.getClass(registry.Type.EVENT, eventType);
   if (!event) {
     throw new Error(`Event type ${eventType} not found in registry.`);
@@ -483,8 +527,9 @@ export function disableOrphans(event: Abstract) {
     if (!blockEvent.workspaceId) {
       return;
     }
-    const eventWorkspace =
-        common.getWorkspaceById(blockEvent.workspaceId) as WorkspaceSvg;
+    const eventWorkspace = common.getWorkspaceById(
+      blockEvent.workspaceId
+    ) as WorkspaceSvg;
     if (!blockEvent.blockId) {
       throw new Error('Encountered a blockEvent without a proper blockId');
     }
@@ -497,12 +542,13 @@ export function disableOrphans(event: Abstract) {
         const parent = block.getParent();
         if (parent && parent.isEnabled()) {
           const children = block.getDescendants(false);
-          for (let i = 0, child; child = children[i]; i++) {
+          for (let i = 0, child; (child = children[i]); i++) {
             child.setEnabled(true);
           }
         } else if (
-            (block.outputConnection || block.previousConnection) &&
-            !eventWorkspace.isDragging()) {
+          (block.outputConnection || block.previousConnection) &&
+          !eventWorkspace.isDragging()
+        ) {
           do {
             block.setEnabled(false);
             block = block.getNextBlock();

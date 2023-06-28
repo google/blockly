@@ -11,7 +11,6 @@ import type {Theme, ITheme} from './theme.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import type {ToolboxDefinition} from './utils/toolbox.js';
 
-
 /**
  * Blockly options.
  */
@@ -32,14 +31,14 @@ export interface BlocklyOptions {
   renderer?: string;
   rendererOverrides?: {[rendererConstant: string]: any};
   rtl?: boolean;
-  scrollbars?: ScrollbarOptions|boolean;
+  scrollbars?: ScrollbarOptions | boolean;
   sounds?: boolean;
-  theme?: Theme|string|ITheme;
-  toolbox?: string|ToolboxDefinition|Element;
+  theme?: Theme | string | ITheme;
+  toolbox?: string | ToolboxDefinition | Element;
   toolboxPosition?: string;
   trashcan?: boolean;
   maxTrashcanContents?: number;
-  plugins?: {[key: string]: (new(...p1: any[]) => any)|string};
+  plugins?: {[key: string]: (new (...p1: any[]) => any) | string};
   zoom?: ZoomOptions;
   parentWorkspace?: WorkspaceSvg;
 }
@@ -53,7 +52,7 @@ export interface GridOptions {
 
 export interface MoveOptions {
   drag?: boolean;
-  scrollbars?: boolean|ScrollbarOptions;
+  scrollbars?: boolean | ScrollbarOptions;
   wheel?: boolean;
 }
 

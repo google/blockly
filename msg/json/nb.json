@@ -173,6 +173,7 @@
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "tilfeldig flyttall",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Returner et tilfeldig flyttall mellom 0.0 (inkludert) og 1.0 (ikke inkludert).",
 	"MATH_ATAN2_TITLE": "atan2 av X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Returner arctangensen til punkt (X, Y) i grader fra -180 til 180.",
 	"TEXT_TEXT_TOOLTIP": "En bokstav, ett ord eller en linje med tekst.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "lag tekst med",
 	"TEXT_JOIN_TOOLTIP": "Opprett en tekst ved å sette sammen et antall elementer.",
@@ -321,6 +322,8 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Hvis en verdi er sann, returner da en annen verdi.",
 	"PROCEDURES_IFRETURN_WARNING": "Advarsel: Denne blokken kan bare benyttes innenfor en funksjonsdefinisjon.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Si noe …",
+	"WORKSPACE_ARIA_LABEL": "Blockly-arbeidsrom",
+	"COLLAPSED_WARNINGS_WARNING": "Sammenslåtte blokker inneholder advarsler.",
 	"DIALOG_OK": "OK",
 	"DIALOG_CANCEL": "Avbryt"
 }

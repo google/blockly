@@ -14,7 +14,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.Rect');
 
-
 /**
  * Class for representing rectangular regions.
  */
@@ -26,8 +25,19 @@ export class Rect {
    * @param right Right.
    */
   constructor(
-      public top: number, public bottom: number, public left: number,
-      public right: number) {}
+    public top: number,
+    public bottom: number,
+    public left: number,
+    public right: number
+  ) {}
+
+  getHeight(): number {
+    return this.bottom - this.top;
+  }
+
+  getWidth(): number {
+    return this.right - this.left;
+  }
 
   /**
    * Tests whether this rectangle contains a x/y coordinate.
@@ -37,8 +47,9 @@ export class Rect {
    * @returns Whether this rectangle contains given coordinate.
    */
   contains(x: number, y: number): boolean {
-    return x >= this.left && x <= this.right && y >= this.top &&
-        y <= this.bottom;
+    return (
+      x >= this.left && x <= this.right && y >= this.top && y <= this.bottom
+    );
   }
 
   /**
@@ -50,7 +61,10 @@ export class Rect {
    */
   intersects(other: Rect): boolean {
     return !(
-        this.left > other.right || this.right < other.left ||
-        this.top > other.bottom || this.bottom < other.top);
+      this.left > other.right ||
+      this.right < other.left ||
+      this.top > other.bottom ||
+      this.bottom < other.top
+    );
   }
 }

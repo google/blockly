@@ -586,7 +586,7 @@ Blockly.Msg.MATH_IS_EVEN = 'is even';
 /// dropdown - A number is '''odd''' if it is not a multiple of 2.  For example, 3 is odd (yielding true), but 4 is not (false).  The opposite of "odd" is "even".
 Blockly.Msg.MATH_IS_ODD = 'is odd';
 /** @type {string} */
-/// dropdown - A number is [https://en.wikipedia.org/wiki/Prime prime] if it cannot be evenly divided by any positive integers except for 1 and itself.  For example, 5 is prime, but 6 is not because 2 × 3 = 6.
+/// dropdown - A number is [https://en.wikipedia.org/wiki/Prime_number prime] if it cannot be evenly divided by any positive integers except for 1 and itself.  For example, 5 is prime, but 6 is not because 2 × 3 = 6.
 Blockly.Msg.MATH_IS_PRIME = 'is prime';
 /** @type {string} */
 /// dropdown - A number is '''whole''' if it is an [https://en.wikipedia.org/wiki/Integer integer].  For example, 5 is whole, but 5.1 is not.
@@ -882,6 +882,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = 'get last letter';
 /// [[File:Blockly-text-get.png]]
 Blockly.Msg.TEXT_CHARAT_RANDOM = 'get random letter';
 /** @type {string} */
+/// {{Optional|Supply translation only if your language requires it.  Most do not.}}
 /// block text - Text that goes after the rightmost block/dropdown when getting a single letter from
 /// a piece of text, as in [https://blockly-demo.appspot.com/static/apps/code/index.html#3m23km these
 /// blocks] or shown below.  For most languages, this will be blank.
@@ -954,6 +955,7 @@ Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_END = 'to letter # from end';
 /// [[File:Blockly-get-substring.png]]
 Blockly.Msg.TEXT_GET_SUBSTRING_END_LAST = 'to last letter';
 /** @type {string} */
+/// {{Optional|Supply translation only if your language requires it.  Most do not.}}
 /// block text - Text that should go after the rightmost block/dropdown when
 /// [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text
 /// extracting a region of text].  In most languages, this will be the empty string.
@@ -1115,7 +1117,7 @@ Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP = 'Add an item to the list.';
 /// {{Optional}} url - Information about [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].
 Blockly.Msg.LISTS_REPEAT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#create-list-with';
 /** @type {string} */
-/// {{Optional}} url - See [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].
 Blockly.Msg.LISTS_REPEAT_TOOLTIP = 'Creates a list consisting of the given value repeated the specified number of times.';
 /** @type {string} */
 /// block text - See [https://github.com/google/blockly/wiki/Lists#create-list-with
@@ -1220,6 +1222,7 @@ Blockly.Msg.LISTS_GET_INDEX_LAST = 'last';
 /// [[File:Blockly-list-get-item.png]]
 Blockly.Msg.LISTS_GET_INDEX_RANDOM = 'random';
 /** @type {string} */
+/// {{Optional|Supply translation only if your language requires it.  Most do not.}}
 /// block text - Text that should go after the rightmost block/dropdown when
 /// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
 /// accessing an item from a list].  In most languages, this will be the empty string.
@@ -1356,6 +1359,7 @@ Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_END = 'to # from end';
 /// [[File:Blockly-get-sublist.png]]
 Blockly.Msg.LISTS_GET_SUBLIST_END_LAST = 'to last';
 /** @type {string} */
+/// {{Optional|Supply translation only if your language requires it.  Most do not.}}
 /// block text - This appears in the rightmost position ("tail") of the
 /// sublist block, as described at
 /// [https://github.com/google/blockly/wiki/Lists#getting-a-sublist
@@ -1426,6 +1430,7 @@ Blockly.Msg.LISTS_REVERSE_MESSAGE0 = 'reverse %1';
 Blockly.Msg.LISTS_REVERSE_TOOLTIP = 'Reverse a copy of a list.';
 
 /** @type {string} */
+/// {{Optional|Supply translation only if your language requires it.  Most do not.}}
 /// grammar - Text that follows an ordinal number (a number that indicates
 /// position relative to other numbers).  In most languages, such text appears
 /// before the number, so this should be blank.  An exception is Hungarian.
@@ -1484,6 +1489,7 @@ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = 'with:';
 /// function with parameters].
 Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = 'with:';
 /** @type {string} */
+/// {{Optional|Supply translation only if your language requires it.  Most do not.}}
 /// block text - This appears next to the function's "body", the blocks that should be
 /// run when the function is called, as shown in
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample

@@ -7,41 +7,47 @@
 /**
  * @fileoverview Generating Python for logic blocks.
  */
-'use strict';
 
-goog.module('Blockly.Python.logic');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Python.logic');
 
-const {pythonGenerator: Python} = goog.require('Blockly.Python');
+import {Order} from './python_generator.js';
 
 
-Python['controls_if'] = function(block) {
+export function controls_if(block, generator) {
   // If/elseif/else condition.
   let n = 0;
   let code = '', branchCode, conditionCode;
-  if (Python.STATEMENT_PREFIX) {
+  if (generator.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
-    code += Python.injectId(Python.STATEMENT_PREFIX, block);
+    code += generator.injectId(generator.STATEMENT_PREFIX, block);
   }
   do {
     conditionCode =
-        Python.valueToCode(block, 'IF' + n, Python.ORDER_NONE) || 'False';
-    branchCode = Python.statementToCode(block, 'DO' + n) || Python.PASS;
-    if (Python.STATEMENT_SUFFIX) {
+        generator.valueToCode(block, 'IF' + n, Order.NONE) || 'False';
+    branchCode =
+        generator.statementToCode(block, 'DO' + n) ||
+        generator.PASS;
+    if (generator.STATEMENT_SUFFIX) {
       branchCode =
-          Python.prefixLines(
-              Python.injectId(Python.STATEMENT_SUFFIX, block), Python.INDENT) +
+          generator.prefixLines(
+            generator.injectId(generator.STATEMENT_SUFFIX, block),
+            generator.INDENT) +
           branchCode;
     }
     code += (n === 0 ? 'if ' : 'elif ') + conditionCode + ':\n' + branchCode;
     n++;
   } while (block.getInput('IF' + n));
 
-  if (block.getInput('ELSE') || Python.STATEMENT_SUFFIX) {
-    branchCode = Python.statementToCode(block, 'ELSE') || Python.PASS;
-    if (Python.STATEMENT_SUFFIX) {
+  if (block.getInput('ELSE') || generator.STATEMENT_SUFFIX) {
+    branchCode =
+        generator.statementToCode(block, 'ELSE') || generator.PASS;
+    if (generator.STATEMENT_SUFFIX) {
       branchCode =
-          Python.prefixLines(
-              Python.injectId(Python.STATEMENT_SUFFIX, block), Python.INDENT) +
+          generator.prefixLines(
+            generator.injectId(
+              generator.STATEMENT_SUFFIX, block),
+            generator.INDENT) +
           branchCode;
     }
     code += 'else:\n' + branchCode;
@@ -49,27 +55,27 @@ Python['controls_if'] = function(block) {
   return code;
 };
 
-Python['controls_ifelse'] = Python['controls_if'];
+export const controls_ifelse = controls_if;
 
-Python['logic_compare'] = function(block) {
+export function logic_compare(block, generator) {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
-  const order = Python.ORDER_RELATIONAL;
-  const argument0 = Python.valueToCode(block, 'A', order) || '0';
-  const argument1 = Python.valueToCode(block, 'B', order) || '0';
+  const order = Order.RELATIONAL;
+  const argument0 = generator.valueToCode(block, 'A', order) || '0';
+  const argument1 = generator.valueToCode(block, 'B', order) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };
 
-Python['logic_operation'] = function(block) {
+export function logic_operation(block, generator) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
   const order =
-      (operator === 'and') ? Python.ORDER_LOGICAL_AND : Python.ORDER_LOGICAL_OR;
-  let argument0 = Python.valueToCode(block, 'A', order);
-  let argument1 = Python.valueToCode(block, 'B', order);
+      (operator === 'and') ? Order.LOGICAL_AND : Order.LOGICAL_OR;
+  let argument0 = generator.valueToCode(block, 'A', order);
+  let argument1 = generator.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
     // If there are no arguments, then the return value is false.
     argument0 = 'False';
@@ -88,33 +94,33 @@ Python['logic_operation'] = function(block) {
   return [code, order];
 };
 
-Python['logic_negate'] = function(block) {
+export function logic_negate(block, generator) {
   // Negation.
   const argument0 =
-      Python.valueToCode(block, 'BOOL', Python.ORDER_LOGICAL_NOT) || 'True';
+      generator.valueToCode(block, 'BOOL', Order.LOGICAL_NOT) || 'True';
   const code = 'not ' + argument0;
-  return [code, Python.ORDER_LOGICAL_NOT];
+  return [code, Order.LOGICAL_NOT];
 };
 
-Python['logic_boolean'] = function(block) {
+export function logic_boolean(block, generator) {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'True' : 'False';
-  return [code, Python.ORDER_ATOMIC];
+  return [code, Order.ATOMIC];
 };
 
-Python['logic_null'] = function(block) {
+export function logic_null(block, generator) {
   // Null data type.
-  return ['None', Python.ORDER_ATOMIC];
+  return ['None', Order.ATOMIC];
 };
 
-Python['logic_ternary'] = function(block) {
+export function logic_ternary(block, generator) {
   // Ternary operator.
   const value_if =
-      Python.valueToCode(block, 'IF', Python.ORDER_CONDITIONAL) || 'False';
+      generator.valueToCode(block, 'IF', Order.CONDITIONAL) || 'False';
   const value_then =
-      Python.valueToCode(block, 'THEN', Python.ORDER_CONDITIONAL) || 'None';
+      generator.valueToCode(block, 'THEN', Order.CONDITIONAL) || 'None';
   const value_else =
-      Python.valueToCode(block, 'ELSE', Python.ORDER_CONDITIONAL) || 'None';
+      generator.valueToCode(block, 'ELSE', Order.CONDITIONAL) || 'None';
   const code = value_then + ' if ' + value_if + ' else ' + value_else;
-  return [code, Python.ORDER_CONDITIONAL];
+  return [code, Order.CONDITIONAL];
 };

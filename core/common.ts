@@ -15,10 +15,8 @@ import type {ICopyable} from './interfaces/i_copyable.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-
 /** Database of all workspaces. */
 const WorkspaceDB_ = Object.create(null);
-
 
 /**
  * Find the workspace with the specified ID.
@@ -26,7 +24,7 @@ const WorkspaceDB_ = Object.create(null);
  * @param id ID of workspace to find.
  * @returns The sought after workspace or null if not found.
  */
-export function getWorkspaceById(id: string): Workspace|null {
+export function getWorkspaceById(id: string): Workspace | null {
   return WorkspaceDB_[id] || null;
 }
 
@@ -90,12 +88,12 @@ export function setMainWorkspace(workspace: Workspace) {
 /**
  * Currently selected copyable object.
  */
-let selected: ICopyable|null = null;
+let selected: ICopyable | null = null;
 
 /**
  * Returns the currently selected copyable object.
  */
-export function getSelected(): ICopyable|null {
+export function getSelected(): ICopyable | null {
   return selected;
 }
 
@@ -107,14 +105,14 @@ export function getSelected(): ICopyable|null {
  * @param newSelection The newly selected block.
  * @internal
  */
-export function setSelected(newSelection: ICopyable|null) {
+export function setSelected(newSelection: ICopyable | null) {
   selected = newSelection;
 }
 
 /**
  * Container element in which to render the WidgetDiv, DropDownDiv and Tooltip.
  */
-let parentContainer: Element|null;
+let parentContainer: Element | null;
 
 /**
  * Get the container element in which to render the WidgetDiv, DropDownDiv and
@@ -122,7 +120,7 @@ let parentContainer: Element|null;
  *
  * @returns The parent container.
  */
-export function getParentContainer(): Element|null {
+export function getParentContainer(): Element | null {
   return parentContainer;
 }
 
@@ -189,7 +187,9 @@ export const draggingConnections: Connection[] = [];
  * @returns Map of types to type counts for descendants of the bock.
  */
 export function getBlockTypeCounts(
-    block: Block, opt_stripFollowing?: boolean): {[key: string]: number} {
+  block: Block,
+  opt_stripFollowing?: boolean
+): {[key: string]: number} {
   const typeCountsMap = Object.create(null);
   const descendants = block.getDescendants(true);
   if (opt_stripFollowing) {
@@ -199,7 +199,7 @@ export function getBlockTypeCounts(
       descendants.splice(index, descendants.length - index);
     }
   }
-  for (let i = 0, checkBlock; checkBlock = descendants[i]; i++) {
+  for (let i = 0, checkBlock; (checkBlock = descendants[i]); i++) {
     if (typeCountsMap[checkBlock.type]) {
       typeCountsMap[checkBlock.type]++;
     } else {
@@ -218,7 +218,7 @@ export function getBlockTypeCounts(
  *     of jsonDef.
  */
 function jsonInitFactory(jsonDef: AnyDuringMigration): () => void {
-  return function(this: Block) {
+  return function (this: Block) {
     this.jsonInit(jsonDef);
   };
 }
@@ -249,7 +249,8 @@ function defineBlocksWithJsonArrayInternal(jsonArray: AnyDuringMigration[]) {
  *     definitions created.
  */
 export function createBlockDefinitionsFromJsonArray(
-    jsonArray: AnyDuringMigration[]): {[key: string]: BlockDefinition} {
+  jsonArray: AnyDuringMigration[]
+): {[key: string]: BlockDefinition} {
   const blocks: {[key: string]: BlockDefinition} = {};
   for (let i = 0; i < jsonArray.length; i++) {
     const elem = jsonArray[i];
@@ -260,8 +261,9 @@ export function createBlockDefinitionsFromJsonArray(
     const type = elem['type'];
     if (!type) {
       console.warn(
-          `Block definition #${i} in JSON array is missing a type attribute. ` +
-          'Skipping.');
+        `Block definition #${i} in JSON array is missing a type attribute. ` +
+          'Skipping.'
+      );
       continue;
     }
     blocks[type] = {init: jsonInitFactory(elem)};

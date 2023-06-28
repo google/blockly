@@ -14,7 +14,6 @@ import type {Size} from './utils/size.js';
 import * as toolbox from './utils/toolbox.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-
 /**
  * Enum for vertical positioning.
  *
@@ -22,7 +21,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  */
 export enum verticalPosition {
   TOP,
-  BOTTOM
+  BOTTOM,
 }
 
 /**
@@ -32,7 +31,7 @@ export enum verticalPosition {
  */
 export enum horizontalPosition {
   LEFT,
-  RIGHT
+  RIGHT,
 }
 
 /**
@@ -52,7 +51,7 @@ export interface Position {
  */
 export enum bumpDirection {
   UP,
-  DOWN
+  DOWN,
 }
 
 /**
@@ -71,21 +70,29 @@ export enum bumpDirection {
  * @internal
  */
 export function getStartPositionRect(
-    position: Position, size: Size, horizontalPadding: number,
-    verticalPadding: number, metrics: UiMetrics,
-    workspace: WorkspaceSvg): Rect {
+  position: Position,
+  size: Size,
+  horizontalPadding: number,
+  verticalPadding: number,
+  metrics: UiMetrics,
+  workspace: WorkspaceSvg
+): Rect {
   // Horizontal positioning.
   let left = 0;
   const hasVerticalScrollbar =
-      workspace.scrollbar && workspace.scrollbar.canScrollVertically();
+    workspace.scrollbar && workspace.scrollbar.canScrollVertically();
   if (position.horizontal === horizontalPosition.LEFT) {
     left = metrics.absoluteMetrics.left + horizontalPadding;
     if (hasVerticalScrollbar && workspace.RTL) {
       left += Scrollbar.scrollbarThickness;
     }
-  } else {  // position.horizontal === horizontalPosition.RIGHT
-    left = metrics.absoluteMetrics.left + metrics.viewMetrics.width -
-        size.width - horizontalPadding;
+  } else {
+    // position.horizontal === horizontalPosition.RIGHT
+    left =
+      metrics.absoluteMetrics.left +
+      metrics.viewMetrics.width -
+      size.width -
+      horizontalPadding;
     if (hasVerticalScrollbar && !workspace.RTL) {
       left -= Scrollbar.scrollbarThickness;
     }
@@ -94,9 +101,13 @@ export function getStartPositionRect(
   let top = 0;
   if (position.vertical === verticalPosition.TOP) {
     top = metrics.absoluteMetrics.top + verticalPadding;
-  } else {  // position.vertical === verticalPosition.BOTTOM
-    top = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
-        size.height - verticalPadding;
+  } else {
+    // position.vertical === verticalPosition.BOTTOM
+    top =
+      metrics.absoluteMetrics.top +
+      metrics.viewMetrics.height -
+      size.height -
+      verticalPadding;
     if (workspace.scrollbar && workspace.scrollbar.canScrollHorizontally()) {
       // The scrollbars are always positioned on the bottom if they exist.
       top -= Scrollbar.scrollbarThickness;
@@ -117,13 +128,16 @@ export function getStartPositionRect(
  * @internal
  */
 export function getCornerOppositeToolbox(
-    workspace: WorkspaceSvg, metrics: UiMetrics): Position {
+  workspace: WorkspaceSvg,
+  metrics: UiMetrics
+): Position {
   const leftCorner =
-      metrics.toolboxMetrics.position !== toolbox.Position.LEFT &&
-      (!workspace.horizontalLayout || workspace.RTL);
+    metrics.toolboxMetrics.position !== toolbox.Position.LEFT &&
+    (!workspace.horizontalLayout || workspace.RTL);
   const topCorner = metrics.toolboxMetrics.position === toolbox.Position.BOTTOM;
-  const hPosition =
-      leftCorner ? horizontalPosition.LEFT : horizontalPosition.RIGHT;
+  const hPosition = leftCorner
+    ? horizontalPosition.LEFT
+    : horizontalPosition.RIGHT;
   const vPosition = topCorner ? verticalPosition.TOP : verticalPosition.BOTTOM;
   return {horizontal: hPosition, vertical: vPosition};
 }
@@ -143,8 +157,11 @@ export function getCornerOppositeToolbox(
  * @internal
  */
 export function bumpPositionRect(
-    startRect: Rect, margin: number, bumpDir: bumpDirection,
-    savedPositions: Rect[]): Rect {
+  startRect: Rect,
+  margin: number,
+  bumpDir: bumpDirection,
+  savedPositions: Rect[]
+): Rect {
   let top = startRect.top;
   const left = startRect.left;
   const width = startRect.right - startRect.left;
@@ -157,7 +174,8 @@ export function bumpPositionRect(
     if (boundingRect.intersects(otherEl)) {
       if (bumpDir === bumpDirection.UP) {
         top = otherEl.top - height - margin;
-      } else {  // bumpDir === bumpDirection.DOWN
+      } else {
+        // bumpDir === bumpDirection.DOWN
         top = otherEl.bottom + margin;
       }
       // Recheck other savedPositions

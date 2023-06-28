@@ -1447,7 +1447,7 @@
     },
   ],
 
-  'develop': [
+  '10.0.0': [
     // New renamings go here!
     {
       oldName: 'Blockly.Warning',

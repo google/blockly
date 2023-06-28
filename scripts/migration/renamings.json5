@@ -1447,8 +1447,7 @@
     },
   ],
 
-  'develop': [
-    // New renamings go here!
+  '10.0.0': [
     {
       oldName: 'Blockly.Warning',
       exports: {
@@ -1577,4 +1576,6 @@
       },
     },
   ],
+
+  'develop': [],
 }

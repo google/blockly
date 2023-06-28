@@ -1577,8 +1577,5 @@
     },
   ],
 
-  'develop': [
-    // New renamings go here!
-    { },
-  ],
+  'develop': [],
 }

@@ -237,6 +237,7 @@
 	"LISTS_GET_INDEX_GET": "प्राप्त",
 	"LISTS_GET_INDEX_GET_REMOVE": "प्राप्त करे और हटाए",
 	"LISTS_GET_INDEX_REMOVE": "निकालें",
+	"LISTS_GET_INDEX_FROM_START": "#",
 	"LISTS_GET_INDEX_FROM_END": "अंत से #",
 	"LISTS_GET_INDEX_FIRST": "पहला",
 	"LISTS_GET_INDEX_LAST": "आखिरी",

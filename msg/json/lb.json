@@ -147,7 +147,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "mat:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "mat:",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Dës Funktioun beschreiwen...",
-	"PROCEDURES_DEFRETURN_RETURN": "zréck",
+	"PROCEDURES_DEFRETURN_RETURN": "zeréck",
 	"PROCEDURES_CREATE_DO": "'%1' uleeën",
 	"PROCEDURES_IFRETURN_WARNING": "Opgepasst: Dëse Block däerf nëmmen bannent enger Funktiounsdefitioun benotzt ginn.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sot eppes...",

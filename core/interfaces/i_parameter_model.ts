@@ -6,7 +6,6 @@
 
 import {IProcedureModel} from './i_procedure_model';
 
-
 /**
  * A data model for a procedure.
  */

@@ -7,15 +7,13 @@
 /**
  * @fileoverview Generating PHP for dynamic variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.PHP.variablesDynamic');
-
-const {phpGenerator: PHP} = goog.require('Blockly.PHP');
-/** @suppress {extraRequire} */
-goog.require('Blockly.PHP.variables');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.PHP.variablesDynamic');
 
 
-// PHP is dynamically typed.
-PHP['variables_get_dynamic'] = PHP['variables_get'];
-PHP['variables_set_dynamic'] = PHP['variables_set'];
+// generator is dynamically typed.
+export {
+  variables_get as variables_get_dynamic,
+  variables_set as variables_set_dynamic,
+} from './variables.js';

@@ -308,7 +308,7 @@ Blockly.Blocks['field_dropdown'] = {
     this.updateShape_();
     this.setPreviousStatement(true, 'Field');
     this.setNextStatement(true, 'Field');
-    this.setMutator(new Blockly.Mutator(['field_dropdown_option']));
+    this.setMutator(new Blockly.icons.MutatorIcon(['field_dropdown_option']));
     this.setColour(160);
     this.setTooltip('Dropdown menu with a list of options.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=386');
@@ -508,7 +508,7 @@ Blockly.Blocks['type_group'] = {
     this.typeCount_ = 2;
     this.updateShape_();
     this.setOutput(true, 'Type');
-    this.setMutator(new Blockly.Mutator(['type_group_item']));
+    this.setMutator(new Blockly.icons.MutatorIcon(['type_group_item']));
     this.setColour(230);
     this.setTooltip('Allows more than one type to be accepted.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=677');
@@ -568,7 +568,7 @@ Blockly.Blocks['type_group'] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 0; i < this.typeCount_; i++) {
-      Blockly.Mutator.reconnect(connections[i], this, 'TYPE' + i);
+      connections[i]?.reconnect(this, 'TYPE' + i);
     }
   },
   saveConnections: function(containerBlock) {

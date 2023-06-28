@@ -23,7 +23,6 @@ import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 
-
 /**
  * Class for a drag surface for the currently dragged block. This is a separate
  * SVG that contains only the currently moving block, or nothing.
@@ -65,14 +64,16 @@ export class BlockDragSurfaceSvg {
   /** @param container Containing element. */
   constructor(private readonly container: Element) {
     this.svg = dom.createSvgElement(
-        Svg.SVG, {
-          'xmlns': dom.SVG_NS,
-          'xmlns:html': dom.HTML_NS,
-          'xmlns:xlink': dom.XLINK_NS,
-          'version': '1.1',
-          'class': 'blocklyBlockDragSurface',
-        },
-        this.container);
+      Svg.SVG,
+      {
+        'xmlns': dom.SVG_NS,
+        'xmlns:html': dom.HTML_NS,
+        'xmlns:xlink': dom.XLINK_NS,
+        'version': '1.1',
+        'class': 'blocklyBlockDragSurface',
+      },
+      this.container
+    );
 
     this.dragGroup = dom.createSvgElement(Svg.G, {}, this.svg);
   }
@@ -120,8 +121,9 @@ export class BlockDragSurfaceSvg {
     this.childSurfaceXY.x = roundX;
     this.childSurfaceXY.y = roundY;
     this.dragGroup.setAttribute(
-        'transform',
-        'translate(' + roundX + ',' + roundY + ') scale(' + scale + ')');
+      'transform',
+      'translate(' + roundX + ',' + roundY + ') scale(' + scale + ')'
+    );
   }
 
   /**
@@ -200,7 +202,7 @@ export class BlockDragSurfaceSvg {
    *
    * @returns Drag surface block DOM element, or null if no blocks exist.
    */
-  getCurrentBlock(): Element|null {
+  getCurrentBlock(): Element | null {
     return this.dragGroup.firstChild as Element;
   }
 

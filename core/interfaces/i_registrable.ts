@@ -7,7 +7,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IRegistrable');
 
-
 /**
  * The interface for a Blockly component that can be registered.
  */

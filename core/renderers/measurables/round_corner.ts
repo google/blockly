@@ -12,7 +12,6 @@ import type {ConstantProvider} from '../common/constants.js';
 import {Measurable} from './base.js';
 import {Types} from './types.js';
 
-
 /**
  * An object containing information about the space a rounded corner takes up
  * during rendering.
@@ -25,9 +24,9 @@ export class RoundCorner extends Measurable {
   constructor(constants: ConstantProvider, opt_position?: string) {
     super(constants);
     this.type =
-        (!opt_position || opt_position === 'left' ? Types.LEFT_ROUND_CORNER :
-                                                    Types.RIGHT_ROUND_CORNER) |
-        Types.CORNER;
+      (!opt_position || opt_position === 'left'
+        ? Types.LEFT_ROUND_CORNER
+        : Types.RIGHT_ROUND_CORNER) | Types.CORNER;
     this.width = this.constants_.CORNER_RADIUS;
     // The rounded corner extends into the next row by 4 so we only take the
     // height that is aligned with this row.

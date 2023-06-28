@@ -11,7 +11,6 @@ goog.declareModuleId('Blockly.IPositionable');
 
 import type {IComponent} from './i_component.js';
 
-
 /**
  * Interface for a component that is positioned on top of the workspace.
  */
@@ -31,5 +30,5 @@ export interface IPositionable extends IComponent {
    * @returns The UI elements's bounding box. Null if bounding box should be
    *     ignored by other UI elements.
    */
-  getBoundingRectangle(): Rect|null;
+  getBoundingRectangle(): Rect | null;
 }

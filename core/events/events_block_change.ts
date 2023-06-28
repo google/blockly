@@ -14,7 +14,8 @@ goog.declareModuleId('Blockly.Events.BlockChange');
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
-import * as deprecation from '../utils/deprecation.js';
+import {IconType} from '../icons/icon_types.js';
+import {hasBubble} from '../interfaces/i_has_bubble.js';
 import * as registry from '../registry.js';
 import * as utilsXml from '../utils/xml.js';
 import {Workspace} from '../workspace.js';
@@ -22,7 +23,6 @@ import * as Xml from '../xml.js';
 
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
-
 
 /**
  * Notifies listeners when some element of a block has changed (e.g.
@@ -53,12 +53,16 @@ export class BlockChange extends BlockBase {
    * @param opt_newValue New value of element.
    */
   constructor(
-      opt_block?: Block, opt_element?: string, opt_name?: string|null,
-      opt_oldValue?: unknown, opt_newValue?: unknown) {
+    opt_block?: Block,
+    opt_element?: string,
+    opt_name?: string | null,
+    opt_oldValue?: unknown,
+    opt_newValue?: unknown
+  ) {
     super(opt_block);
 
     if (!opt_block) {
-      return;  // Blank event to be populated by fromJson.
+      return; // Blank event to be populated by fromJson.
     }
     this.element = opt_element;
     this.name = opt_name || undefined;
@@ -75,30 +79,15 @@ export class BlockChange extends BlockBase {
     const json = super.toJson() as BlockChangeJson;
     if (!this.element) {
       throw new Error(
-          'The changed element is undefined. Either pass an ' +
-          'element to the constructor, or call fromJson');
+        'The changed element is undefined. Either pass an ' +
+          'element to the constructor, or call fromJson'
+      );
     }
     json['element'] = this.element;
     json['name'] = this.name;
     json['oldValue'] = this.oldValue;
     json['newValue'] = this.newValue;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: BlockChangeJson) {
-    deprecation.warn(
-        'Blockly.Events.BlockChange.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
-    super.fromJson(json);
-    this.element = json['element'];
-    this.name = json['name'];
-    this.oldValue = json['oldValue'];
-    this.newValue = json['newValue'];
   }
 
   /**
@@ -110,11 +99,16 @@ export class BlockChange extends BlockBase {
    *     parameters to static methods in superclasses.
    * @internal
    */
-  static fromJson(json: BlockChangeJson, workspace: Workspace, event?: any):
-      BlockChange {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new BlockChange()) as
-        BlockChange;
+  static fromJson(
+    json: BlockChangeJson,
+    workspace: Workspace,
+    event?: any
+  ): BlockChange {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new BlockChange()
+    ) as BlockChange;
     newEvent.element = json['element'];
     newEvent.name = json['name'];
     newEvent.oldValue = json['oldValue'];
@@ -140,20 +134,22 @@ export class BlockChange extends BlockBase {
     const workspace = this.getEventWorkspace_();
     if (!this.blockId) {
       throw new Error(
-          'The block ID is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson');
+        'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson'
+      );
     }
     const block = workspace.getBlockById(this.blockId);
     if (!block) {
       throw new Error(
-          'The associated block is undefined. Either pass a ' +
-          'block to the constructor, or call fromJson');
+        'The associated block is undefined. Either pass a ' +
+          'block to the constructor, or call fromJson'
+      );
     }
     // Assume the block is rendered so that then we can check.
-    const blockSvg = block as BlockSvg;
-    if (blockSvg.mutator) {
+    const icon = block.getIcon(IconType.MUTATOR);
+    if (icon && hasBubble(icon) && icon.bubbleIsVisible()) {
       // Close the mutator (if open) since we don't want to update it.
-      blockSvg.mutator.setVisible(false);
+      icon.setBubbleVisible(false);
     }
     const value = forward ? this.newValue : this.oldValue;
     switch (this.element) {
@@ -162,12 +158,12 @@ export class BlockChange extends BlockBase {
         if (field) {
           field.setValue(value);
         } else {
-          console.warn('Can\'t set non-existent field: ' + this.name);
+          console.warn("Can't set non-existent field: " + this.name);
         }
         break;
       }
       case 'comment':
-        block.setCommentText(value as string || null);
+        block.setCommentText((value as string) || null);
         break;
       case 'collapsed':
         block.setCollapsed(!!value);
@@ -181,13 +177,15 @@ export class BlockChange extends BlockBase {
       case 'mutation': {
         const oldState = BlockChange.getExtraBlockState_(block as BlockSvg);
         if (block.loadExtraState) {
-          block.loadExtraState(JSON.parse(value as string || '{}'));
+          block.loadExtraState(JSON.parse((value as string) || '{}'));
         } else if (block.domToMutation) {
           block.domToMutation(
-              utilsXml.textToDom(value as string || '<mutation/>'));
+            utilsXml.textToDom((value as string) || '<mutation/>')
+          );
         }
         eventUtils.fire(
-            new BlockChange(block, 'mutation', null, oldState, value));
+          new BlockChange(block, 'mutation', null, oldState, value)
+        );
         break;
       }
       default:

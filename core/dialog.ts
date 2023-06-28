@@ -7,22 +7,28 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.dialog');
 
-
-let alertImplementation = function(message: string, opt_callback?: () => void) {
+let alertImplementation = function (
+  message: string,
+  opt_callback?: () => void
+) {
   window.alert(message);
   if (opt_callback) {
     opt_callback();
   }
 };
 
-let confirmImplementation = function(
-    message: string, callback: (result: boolean) => void) {
+let confirmImplementation = function (
+  message: string,
+  callback: (result: boolean) => void
+) {
   callback(window.confirm(message));
 };
 
-let promptImplementation = function(
-    message: string, defaultValue: string,
-    callback: (result: string|null) => void) {
+let promptImplementation = function (
+  message: string,
+  defaultValue: string,
+  callback: (result: string | null) => void
+) {
   callback(window.prompt(message, defaultValue));
 };
 
@@ -65,7 +71,6 @@ function confirmInternal(message: string, callback: (p1: boolean) => void) {
   confirmImplementation(message, callback);
 }
 
-
 /**
  * Sets the function to be run when Blockly.dialog.confirm() is called.
  *
@@ -73,7 +78,8 @@ function confirmInternal(message: string, callback: (p1: boolean) => void) {
  * @see Blockly.dialog.confirm
  */
 export function setConfirm(
-    confirmFunction: (p1: string, p2: (p1: boolean) => void) => void) {
+  confirmFunction: (p1: string, p2: (p1: boolean) => void) => void
+) {
   confirmImplementation = confirmFunction;
 }
 
@@ -88,8 +94,10 @@ export function setConfirm(
  * @param callback The callback for handling user response.
  */
 export function prompt(
-    message: string, defaultValue: string,
-    callback: (p1: string|null) => void) {
+  message: string,
+  defaultValue: string,
+  callback: (p1: string | null) => void
+) {
   promptImplementation(message, defaultValue, callback);
 }
 
@@ -100,8 +108,12 @@ export function prompt(
  * @see Blockly.dialog.prompt
  */
 export function setPrompt(
-    promptFunction: (p1: string, p2: string, p3: (p1: string|null) => void) =>
-        void) {
+  promptFunction: (
+    p1: string,
+    p2: string,
+    p3: (p1: string | null) => void
+  ) => void
+) {
   promptImplementation = promptFunction;
 }
 

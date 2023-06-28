@@ -6,7 +6,6 @@
 
 goog.declareModuleId('Blockly.test.helpers.variables');
 
-
 /**
  * Check if a variable with the given values exists.
  * @param {Blockly.Workspace|Blockly.VariableMap} container The workspace  or

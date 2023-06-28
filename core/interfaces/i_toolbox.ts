@@ -13,7 +13,6 @@ import type {ToolboxInfo} from '../utils/toolbox.js';
 import type {IFlyout} from './i_flyout.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 
-
 /**
  * Interface for a toolbox.
  */
@@ -47,7 +46,7 @@ export interface IToolbox extends IRegistrable {
    *
    * @returns The toolbox flyout.
    */
-  getFlyout(): IFlyout|null;
+  getFlyout(): IFlyout | null;
 
   /**
    * Gets the workspace for the toolbox.
@@ -107,7 +106,7 @@ export interface IToolbox extends IRegistrable {
    *
    * @returns The selected item, or null if no item is currently selected.
    */
-  getSelectedItem(): IToolboxItem|null;
+  getSelectedItem(): IToolboxItem | null;
 
   /** Disposes of this toolbox. */
   dispose(): void;

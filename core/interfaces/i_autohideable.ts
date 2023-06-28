@@ -9,7 +9,6 @@ goog.declareModuleId('Blockly.IAutoHideable');
 
 import type {IComponent} from './i_component.js';
 
-
 /**
  * Interface for a component that can be automatically hidden.
  */

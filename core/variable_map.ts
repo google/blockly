@@ -27,7 +27,6 @@ import * as idGenerator from './utils/idgenerator.js';
 import {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
 
-
 /**
  * Class for a variable map.  This contains a dictionary data structure with
  * variable types as keys and lists of variables as values.  The list of
@@ -80,7 +79,11 @@ export class VariableMap {
         this.renameVariableAndUses_(variable, newName, blocks);
       } else {
         this.renameVariableWithConflict_(
-            variable, newName, conflictVar, blocks);
+          variable,
+          newName,
+          conflictVar,
+          blocks
+        );
       }
     } finally {
       eventUtils.setGroup(existingGroup);
@@ -97,7 +100,7 @@ export class VariableMap {
   renameVariableById(id: string, newName: string) {
     const variable = this.getVariableById(id);
     if (!variable) {
-      throw Error('Tried to rename a variable that didn\'t exist. ID: ' + id);
+      throw Error("Tried to rename a variable that didn't exist. ID: " + id);
     }
 
     this.renameVariable(variable, newName);
@@ -112,9 +115,13 @@ export class VariableMap {
    * @param blocks The list of all blocks in the workspace.
    */
   private renameVariableAndUses_(
-      variable: VariableModel, newName: string, blocks: Block[]) {
+    variable: VariableModel,
+    newName: string,
+    blocks: Block[]
+  ) {
     eventUtils.fire(
-        new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName));
+      new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName)
+    );
     variable.name = newName;
     for (let i = 0; i < blocks.length; i++) {
       blocks[i].updateVarName(variable);
@@ -133,8 +140,11 @@ export class VariableMap {
    * @param blocks The list of all blocks in the workspace.
    */
   private renameVariableWithConflict_(
-      variable: VariableModel, newName: string, conflictVar: VariableModel,
-      blocks: Block[]) {
+    variable: VariableModel,
+    newName: string,
+    conflictVar: VariableModel,
+    blocks: Block[]
+  ) {
     const type = variable.type;
     const oldCase = conflictVar.name;
 
@@ -166,15 +176,24 @@ export class VariableMap {
    * @param opt_id The unique ID of the variable. This will default to a UUID.
    * @returns The newly created variable.
    */
-  createVariable(name: string, opt_type?: string|null, opt_id?: string|null):
-      VariableModel {
+  createVariable(
+    name: string,
+    opt_type?: string | null,
+    opt_id?: string | null
+  ): VariableModel {
     let variable = this.getVariable(name, opt_type);
     if (variable) {
       if (opt_id && variable.getId() !== opt_id) {
         throw Error(
-            'Variable "' + name + '" is already in use and its id is "' +
-            variable.getId() + '" which conflicts with the passed in ' +
-            'id, "' + opt_id + '".');
+          'Variable "' +
+            name +
+            '" is already in use and its id is "' +
+            variable.getId() +
+            '" which conflicts with the passed in ' +
+            'id, "' +
+            opt_id +
+            '".'
+        );
       }
       // The variable already exists and has the same ID.
       return variable;
@@ -215,7 +234,8 @@ export class VariableMap {
         if (tempVar.getId() === variableId) {
           variableList.splice(i, 1);
           eventUtils.fire(
-              new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
+            new (eventUtils.get(eventUtils.VAR_DELETE))(variable)
+          );
           if (variableList.length === 0) {
             this.variableMap.delete(variable.type);
           }
@@ -237,13 +257,15 @@ export class VariableMap {
       // Check whether this variable is a function parameter before deleting.
       const variableName = variable.name;
       const uses = this.getVariableUsesById(id);
-      for (let i = 0, block; block = uses[i]; i++) {
-        if (block.type === 'procedures_defnoreturn' ||
-            block.type === 'procedures_defreturn') {
+      for (let i = 0, block; (block = uses[i]); i++) {
+        if (
+          block.type === 'procedures_defnoreturn' ||
+          block.type === 'procedures_defreturn'
+        ) {
           const procedureName = String(block.getFieldValue('NAME'));
           const deleteText = Msg['CANNOT_DELETE_VARIABLE_PROCEDURE']
-                                 .replace('%1', variableName)
-                                 .replace('%2', procedureName);
+            .replace('%1', variableName)
+            .replace('%2', procedureName);
           dialog.alert(deleteText);
           return;
         }
@@ -252,8 +274,8 @@ export class VariableMap {
       if (uses.length > 1) {
         // Confirm before deleting multiple blocks.
         const confirmText = Msg['DELETE_VARIABLE_CONFIRMATION']
-                                .replace('%1', String(uses.length))
-                                .replace('%2', variableName);
+          .replace('%1', String(uses.length))
+          .replace('%2', variableName);
         dialog.confirm(confirmText, (ok) => {
           if (ok && variable) {
             this.deleteVariableInternal(variable, uses);
@@ -264,7 +286,7 @@ export class VariableMap {
         this.deleteVariableInternal(variable, uses);
       }
     } else {
-      console.warn('Can\'t delete non-existent variable: ' + id);
+      console.warn("Can't delete non-existent variable: " + id);
     }
   }
 
@@ -300,11 +322,11 @@ export class VariableMap {
    *     the empty string, which is a specific type.
    * @returns The variable with the given name, or null if it was not found.
    */
-  getVariable(name: string, opt_type?: string|null): VariableModel|null {
+  getVariable(name: string, opt_type?: string | null): VariableModel | null {
     const type = opt_type || '';
     const list = this.variableMap.get(type);
     if (list) {
-      for (let j = 0, variable; variable = list[j]; j++) {
+      for (let j = 0, variable; (variable = list[j]); j++) {
         if (Names.equals(variable.name, name)) {
           return variable;
         }
@@ -319,7 +341,7 @@ export class VariableMap {
    * @param id The ID to check for.
    * @returns The variable with the given ID.
    */
-  getVariableById(id: string): VariableModel|null {
+  getVariableById(id: string): VariableModel | null {
     for (const variables of this.variableMap.values()) {
       for (const variable of variables) {
         if (variable.getId() === id) {
@@ -338,7 +360,7 @@ export class VariableMap {
    * @returns The sought after variables of the passed in type. An empty array
    *     if none are found.
    */
-  getVariablesOfType(type: string|null): VariableModel[] {
+  getVariablesOfType(type: string | null): VariableModel[] {
     type = type || '';
     const variableList = this.variableMap.get(type);
     if (variableList) {
@@ -357,7 +379,7 @@ export class VariableMap {
    * @returns List of variable types.
    * @internal
    */
-  getVariableTypes(ws: Workspace|null): string[] {
+  getVariableTypes(ws: Workspace | null): string[] {
     const variableTypes = new Set<string>(this.variableMap.keys());
     if (ws && ws.getPotentialVariableMap()) {
       for (const key of ws.getPotentialVariableMap()!.variableMap.keys()) {
@@ -390,8 +412,8 @@ export class VariableMap {
    */
   getAllVariableNames(): string[] {
     return Array.from(this.variableMap.values())
-        .flat()
-        .map((variable) => variable.name);
+      .flat()
+      .map((variable) => variable.name);
   }
 
   /**

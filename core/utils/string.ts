@@ -9,7 +9,6 @@ goog.declareModuleId('Blockly.utils.string');
 
 import * as deprecation from './deprecation.js';
 
-
 /**
  * Fast prefix-checker.
  * Copied from Closure's goog.string.startsWith.
@@ -21,8 +20,11 @@ import * as deprecation from './deprecation.js';
  */
 export function startsWith(str: string, prefix: string): boolean {
   deprecation.warn(
-      'Blockly.utils.string.startsWith()', 'April 2022', 'April 2023',
-      'Use built-in string.startsWith');
+    'Blockly.utils.string.startsWith()',
+    'April 2022',
+    'April 2023',
+    'Use built-in string.startsWith'
+  );
   return str.startsWith(prefix);
 }
 
@@ -36,11 +38,9 @@ export function shortestStringLength(array: string[]): number {
   if (!array.length) {
     return 0;
   }
-  return array
-      .reduce(function(a, b) {
-        return a.length < b.length ? a : b;
-      })
-      .length;
+  return array.reduce(function (a, b) {
+    return a.length < b.length ? a : b;
+  }).length;
 }
 
 /**
@@ -52,7 +52,9 @@ export function shortestStringLength(array: string[]): number {
  * @returns Length of common prefix.
  */
 export function commonWordPrefix(
-    array: string[], opt_shortest?: number): number {
+  array: string[],
+  opt_shortest?: number
+): number {
   if (!array.length) {
     return 0;
   } else if (array.length === 1) {
@@ -90,7 +92,9 @@ export function commonWordPrefix(
  * @returns Length of common suffix.
  */
 export function commonWordSuffix(
-    array: string[], opt_shortest?: number): number {
+  array: string[],
+  opt_shortest?: number
+): number {
   if (!array.length) {
     return 0;
   } else if (array.length === 1) {
@@ -193,7 +197,10 @@ function wrapLine(text: string, limit: number): string {
  * @returns Larger the better.
  */
 function wrapScore(
-    words: string[], wordBreaks: boolean[], limit: number): number {
+  words: string[],
+  wordBreaks: boolean[],
+  limit: number
+): number {
   // If this function becomes a performance liability, add caching.
   // Compute the length of each line.
   const lineLengths = [0];
@@ -229,9 +236,10 @@ function wrapScore(
   // previous line.  For example, this looks wrong:
   // aaa bbb
   // ccc ddd eee
-  if (lineLengths.length > 1 &&
-      lineLengths[lineLengths.length - 1] <=
-          lineLengths[lineLengths.length - 2]) {
+  if (
+    lineLengths.length > 1 &&
+    lineLengths[lineLengths.length - 1] <= lineLengths[lineLengths.length - 2]
+  ) {
     score += 0.5;
   }
   return score;
@@ -246,7 +254,10 @@ function wrapScore(
  * @returns New array of optimal line breaks.
  */
 function wrapMutate(
-    words: string[], wordBreaks: boolean[], limit: number): boolean[] {
+  words: string[],
+  wordBreaks: boolean[],
+  limit: number
+): boolean[] {
   let bestScore = wrapScore(words, wordBreaks, limit);
   let bestBreaks;
   // Try shifting every line break forward or backward.
@@ -254,7 +265,7 @@ function wrapMutate(
     if (wordBreaks[i] === wordBreaks[i + 1]) {
       continue;
     }
-    const mutatedWordBreaks = (new Array<boolean>()).concat(wordBreaks);
+    const mutatedWordBreaks = new Array<boolean>().concat(wordBreaks);
     mutatedWordBreaks[i] = !mutatedWordBreaks[i];
     mutatedWordBreaks[i + 1] = !mutatedWordBreaks[i + 1];
     const mutatedScore = wrapScore(words, mutatedWordBreaks, limit);

@@ -16,9 +16,14 @@ import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import * as eventUtils from './events/utils.js';
 import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldInput, FieldInputConfig, FieldInputValidator} from './field_input.js';
+import {
+  FieldInput,
+  FieldInputConfig,
+  FieldInputValidator,
+} from './field_input.js';
 import * as dom from './utils/dom.js';
 import * as math from './utils/math.js';
 import {Svg} from './utils/svg.js';
@@ -92,13 +97,13 @@ export class FieldAngle extends FieldInput<number> {
   private boundEvents: browserEvents.Data[] = [];
 
   /** Dynamic red line pointing at the value's angle. */
-  private line: SVGLineElement|null = null;
+  private line: SVGLineElement | null = null;
 
   /** Dynamic pink area extending from 0 to the value's angle. */
-  private gauge: SVGPathElement|null = null;
+  private gauge: SVGPathElement | null = null;
 
   /** The degree symbol for this field. */
-  protected symbol_: SVGTSpanElement|null = null;
+  protected symbol_: SVGTSpanElement | null = null;
 
   /**
    * @param value The initial value of the field. Should cast to a number.
@@ -114,8 +119,10 @@ export class FieldAngle extends FieldInput<number> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|number|typeof Field.SKIP_SETUP,
-      validator?: FieldAngleValidator, config?: FieldAngleConfig) {
+    value?: string | number | typeof Field.SKIP_SETUP,
+    validator?: FieldAngleValidator,
+    config?: FieldAngleConfig
+  ) {
     super(Field.SKIP_SETUP);
 
     if (value === Field.SKIP_SETUP) return;
@@ -192,8 +199,9 @@ export class FieldAngle extends FieldInput<number> {
 
     if (this.sourceBlock_ instanceof BlockSvg) {
       dropDownDiv.setColour(
-          this.sourceBlock_.style.colourPrimary,
-          this.sourceBlock_.style.colourTertiary);
+        this.sourceBlock_.style.colourPrimary,
+        this.sourceBlock_.style.colourTertiary
+      );
     }
 
     dropDownDiv.showPositionedByField(this, this.dropdownDispose.bind(this));
@@ -217,50 +225,80 @@ export class FieldAngle extends FieldInput<number> {
       'style': 'touch-action: none',
     });
     const circle = dom.createSvgElement(
-        Svg.CIRCLE, {
-          'cx': FieldAngle.HALF,
-          'cy': FieldAngle.HALF,
-          'r': FieldAngle.RADIUS,
-          'class': 'blocklyAngleCircle',
-        },
-        svg);
-    this.gauge =
-        dom.createSvgElement(Svg.PATH, {'class': 'blocklyAngleGauge'}, svg);
+      Svg.CIRCLE,
+      {
+        'cx': FieldAngle.HALF,
+        'cy': FieldAngle.HALF,
+        'r': FieldAngle.RADIUS,
+        'class': 'blocklyAngleCircle',
+      },
+      svg
+    );
+    this.gauge = dom.createSvgElement(
+      Svg.PATH,
+      {'class': 'blocklyAngleGauge'},
+      svg
+    );
     this.line = dom.createSvgElement(
-        Svg.LINE, {
-          'x1': FieldAngle.HALF,
-          'y1': FieldAngle.HALF,
-          'class': 'blocklyAngleLine',
-        },
-        svg);
+      Svg.LINE,
+      {
+        'x1': FieldAngle.HALF,
+        'y1': FieldAngle.HALF,
+        'class': 'blocklyAngleLine',
+      },
+      svg
+    );
     // Draw markers around the edge.
     for (let angle = 0; angle < 360; angle += 15) {
       dom.createSvgElement(
-          Svg.LINE, {
-            'x1': FieldAngle.HALF + FieldAngle.RADIUS,
-            'y1': FieldAngle.HALF,
-            'x2': FieldAngle.HALF + FieldAngle.RADIUS -
-                (angle % 45 === 0 ? 10 : 5),
-            'y2': FieldAngle.HALF,
-            'class': 'blocklyAngleMarks',
-            'transform': 'rotate(' + angle + ',' + FieldAngle.HALF + ',' +
-                FieldAngle.HALF + ')',
-          },
-          svg);
+        Svg.LINE,
+        {
+          'x1': FieldAngle.HALF + FieldAngle.RADIUS,
+          'y1': FieldAngle.HALF,
+          'x2':
+            FieldAngle.HALF + FieldAngle.RADIUS - (angle % 45 === 0 ? 10 : 5),
+          'y2': FieldAngle.HALF,
+          'class': 'blocklyAngleMarks',
+          'transform':
+            'rotate(' +
+            angle +
+            ',' +
+            FieldAngle.HALF +
+            ',' +
+            FieldAngle.HALF +
+            ')',
+        },
+        svg
+      );
     }
 
     // The angle picker is different from other fields in that it updates on
     // mousemove even if it's not in the middle of a drag.  In future we may
     // change this behaviour.
     this.boundEvents.push(
-        browserEvents.conditionalBind(svg, 'click', this, this.hide));
+      browserEvents.conditionalBind(svg, 'click', this, this.hide)
+    );
     // On touch devices, the picker's value is only updated with a drag. Add
     // a click handler on the drag surface to update the value if the surface
     // is clicked.
-    this.boundEvents.push(browserEvents.conditionalBind(
-        circle, 'pointerdown', this, this.onMouseMove_, true));
-    this.boundEvents.push(browserEvents.conditionalBind(
-        circle, 'pointermove', this, this.onMouseMove_, true));
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        circle,
+        'pointerdown',
+        this,
+        this.onMouseMove_,
+        true
+      )
+    );
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        circle,
+        'pointermove',
+        this,
+        this.onMouseMove_,
+        true
+      )
+    );
     return svg;
   }
 
@@ -326,7 +364,26 @@ export class FieldAngle extends FieldInput<number> {
     }
     angle = this.wrapValue(angle);
     if (angle !== this.value_) {
-      this.setEditorValue_(angle);
+      // Intermediate value changes from user input are not confirmed until the
+      // user closes the editor, and may be numerous. Inhibit reporting these as
+      // normal block change events, and instead report them as special
+      // intermediate changes that do not get recorded in undo history.
+      const oldValue = this.value_;
+      this.setEditorValue_(angle, false);
+      if (
+        this.sourceBlock_ &&
+        eventUtils.isEnabled() &&
+        this.value_ !== oldValue
+      ) {
+        eventUtils.fire(
+          new (eventUtils.get(eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE))(
+            this.sourceBlock_,
+            this.name || null,
+            oldValue,
+            this.value_
+          )
+        );
+      }
     }
   }
 
@@ -353,14 +410,31 @@ export class FieldAngle extends FieldInput<number> {
       x2 += Math.cos(angleRadians) * FieldAngle.RADIUS;
       y2 -= Math.sin(angleRadians) * FieldAngle.RADIUS;
       // Don't ask how the flag calculations work.  They just do.
-      let largeFlag =
-          Math.abs(Math.floor((angleRadians - angle1) / Math.PI) % 2);
+      let largeFlag = Math.abs(
+        Math.floor((angleRadians - angle1) / Math.PI) % 2
+      );
       if (clockwiseFlag) {
         largeFlag = 1 - largeFlag;
       }
       path.push(
-          ' l ', x1, ',', y1, ' A ', FieldAngle.RADIUS, ',', FieldAngle.RADIUS,
-          ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
+        ' l ',
+        x1,
+        ',',
+        y1,
+        ' A ',
+        FieldAngle.RADIUS,
+        ',',
+        FieldAngle.RADIUS,
+        ' 0 ',
+        largeFlag,
+        ' ',
+        clockwiseFlag,
+        ' ',
+        x2,
+        ',',
+        y2,
+        ' z'
+      );
     }
     this.gauge.setAttribute('d', path.join(''));
     this.line.setAttribute('x2', `${x2}`);
@@ -412,7 +486,7 @@ export class FieldAngle extends FieldInput<number> {
    * @param newValue The input value.
    * @returns A valid angle, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: any): number|null {
+  protected override doClassValidation_(newValue?: any): number | null {
     const value = Number(newValue);
     if (isNaN(value) || !isFinite(value)) {
       return null;
@@ -455,7 +529,6 @@ export class FieldAngle extends FieldInput<number> {
 fieldRegistry.register('field_angle', FieldAngle);
 
 FieldAngle.prototype.DEFAULT_VALUE = 0;
-
 
 /**
  * CSS for angle field.

@@ -18,7 +18,6 @@ import type {Field} from '../field.js';
 import {ASTNode} from './ast_node.js';
 import {BasicCursor} from './basic_cursor.js';
 
-
 /**
  * A cursor for navigating between tab navigable fields.
  */
@@ -29,13 +28,17 @@ export class TabNavigateCursor extends BasicCursor {
    * @param node The AST node to check whether it is valid.
    * @returns True if the node should be visited, false otherwise.
    */
-  override validNode_(node: ASTNode|null): boolean {
+  override validNode_(node: ASTNode | null): boolean {
     let isValid = false;
     const type = node && node.getType();
     if (node) {
       const location = node.getLocation() as Field;
-      if (type === ASTNode.types.FIELD && location &&
-          location.isTabNavigable() && location.isClickable()) {
+      if (
+        type === ASTNode.types.FIELD &&
+        location &&
+        location.isTabNavigable() &&
+        location.isClickable()
+      ) {
         isValid = true;
       }
     }

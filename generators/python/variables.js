@@ -7,26 +7,28 @@
 /**
  * @fileoverview Generating Python for variable blocks.
  */
-'use strict';
 
-goog.module('Blockly.Python.variables');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Python.variables');
 
-const {NameType} = goog.require('Blockly.Names');
-const {pythonGenerator: Python} = goog.require('Blockly.Python');
+import {NameType} from '../../core/names.js';
+import {Order} from './python_generator.js';
 
 
-Python['variables_get'] = function(block) {
+export function variables_get(block, generator) {
   // Variable getter.
   const code =
-      Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-  return [code, Python.ORDER_ATOMIC];
+      generator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
+  return [code, Order.ATOMIC];
 };
 
-Python['variables_set'] = function(block) {
+export function variables_set(block, generator) {
   // Variable setter.
   const argument0 =
-      Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || '0';
+      generator.valueToCode(block, 'VALUE', Order.NONE) || '0';
   const varName =
-      Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+      generator.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = ' + argument0 + '\n';
 };

@@ -13,7 +13,8 @@
 
 {
   // Example entry:
-  '0.0.0': [ // Version that includes the rename.
+  '0.0.0': [
+    // Version that includes the rename.
     // Each entry in the array is a module.
     // All of the properties are optional.
     {
@@ -100,7 +101,7 @@
           newExport: 'conditionalBind',
         },
       },
-    }
+    },
   ],
 
   '7.20211209.0-beta.0': [
@@ -162,20 +163,20 @@
           getMethod: 'getSelected',
           setMethod: 'setSelected',
         },
-      }
+      },
     },
     {
       oldName: 'Blockly.Blocks',
       newName: 'Blockly.blocks',
-      newExport: 'Blocks',        // Previous default export now named.
-      newPath: 'Blockly.Blocks',  // But still on tree with original name.
+      newExport: 'Blocks', // Previous default export now named.
+      newPath: 'Blockly.Blocks', // But still on tree with original name.
     },
     {
       oldName: 'Blockly.ContextMenu',
       exports: {
         currentBlock: {
           getMethod: 'getCurrentBlock',
-          setMethod: 'setCurrentBlock'
+          setMethod: 'setCurrentBlock',
         },
       },
     },
@@ -201,8 +202,8 @@
     {
       oldName: 'Blockly.connectionTypes',
       newName: 'Blockly.ConnectionType',
-      newExport: 'ConnectionType',        // Previous default export now named.
-      newPath: 'Blockly.ConnectionType',  // Type reexported directly.
+      newExport: 'ConnectionType', // Previous default export now named.
+      newPath: 'Blockly.ConnectionType', // Type reexported directly.
     },
     {
       oldName: 'Blockly.utils',
@@ -258,37 +259,37 @@
         resizeSvgContents: {newModule: 'Blockly.WorkspaecSvg'},
         defineBlocksWithJsonArray: {newModule: 'Blockly.common'},
         isNumber: {newModule: 'Blockly.utils.string'},
-      }
+      },
     },
 
     {
       oldName: 'Blockly.Blocks.colour',
-      newName: 'Blockly.blocks.colour'
+      newName: 'Blockly.blocks.colour',
     },
     // Blockly.Blocks.lists not previously provided.
     {
       oldName: 'Blockly.Blocks.logic',
-      newName: 'Blockly.blocks.logic'
+      newName: 'Blockly.blocks.logic',
     },
     {
       oldName: 'Blockly.Blocks.loops',
-      newName: 'Blockly.blocks.loops'
+      newName: 'Blockly.blocks.loops',
     },
     {
       oldName: 'Blockly.Blocks.math',
-      newName: 'Blockly.blocks.math'
+      newName: 'Blockly.blocks.math',
     },
     {
       oldName: 'Blockly.Blocks.procedures',
-      newName: 'Blockly.blocks.procedures'
+      newName: 'Blockly.blocks.procedures',
     },
     {
       oldName: 'Blockly.Blocks.texts',
-      newName: 'Blockly.blocks.texts'
+      newName: 'Blockly.blocks.texts',
     },
     {
       oldName: 'Blockly.Blocks.variables',
-      newName: 'Blockly.blocks.variables'
+      newName: 'Blockly.blocks.variables',
     },
     // Blockly.Blocks.variablesDynamic not previously provided.
 
@@ -302,7 +303,7 @@
         getRelativeXY: {newModule: 'Blockly.utils.svgMath'},
         getInjectionDivXY_: {
           newModule: 'Blockly.utils.svgMath',
-          newExport: 'getInjectionDivXY'
+          newExport: 'getInjectionDivXY',
         },
         parseBlockColour: {newModule: 'Blockly.utils.parsing'},
         checkMessageReferences: {newModule: 'Blockly.utils.parsing'},
@@ -310,12 +311,16 @@
         tokenizeInterpolation: {newModule: 'Blockly.utils.parsing'},
         arrayRemove: {
           newModule: 'Blockly.utils.array',
-          newExport: 'removeElem'
+          newExport: 'removeElem',
         },
-        getBlockTypeCounts:
-            {newModule: 'Blockly.common', newExport: 'getBlockTypeCounts'},
-        runAfterPageLoad:
-            {newModule: 'Blockly.Extensions', newExport: 'runAfterPageLoad'},
+        getBlockTypeCounts: {
+          newModule: 'Blockly.common',
+          newExport: 'getBlockTypeCounts',
+        },
+        runAfterPageLoad: {
+          newModule: 'Blockly.Extensions',
+          newExport: 'runAfterPageLoad',
+        },
       },
     },
 
@@ -1344,8 +1349,8 @@
         globalThis: {
           oldPath: 'Blockly.utils.global',
           newPath: 'globalThis',
-        }
-      }
+        },
+      },
     },
     {
       oldName: 'Blockly.Dart',
@@ -1371,6 +1376,8 @@
       oldName: 'Blockly.Python',
       newExport: 'pythonGenerator',
       newPath: 'Blockly.Python',
+    },
+    {
       oldName: 'Blockly.ContextMenuRegistry',
       exports: {
         'ContextMenuRegistry.ScopeType': {
@@ -1437,10 +1444,138 @@
           newModule: 'Blockly.utils.xml',
         },
       },
-    }
+    },
   ],
 
-  'develop': [
-    // New renamings go here!
+  '10.0.0': [
+    {
+      oldName: 'Blockly.Warning',
+      exports: {
+        Warning: {
+          newExport: 'WarningIcon',
+          oldPath: 'Blockly.Warning',
+          newPath: 'Blocky.icons.WarningIcon',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Comment',
+      exports: {
+        Comment: {
+          newExport: 'CommentIcon',
+          oldPath: 'Blockly.Comment',
+          newPath: 'Blocky.icons.CommentIcon',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Mutator',
+      newName: 'Blockly.icons.MutatorIcon',
+      exports: {
+        Mutator: {
+          newExport: 'MutatorIcon',
+          oldPath: 'Blockly.Mutator',
+          newPath: 'Blocky.icons.MutatorIcon',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Icon',
+      newName: 'Blockly.icons.Icon',
+    },
+    {
+      oldName: 'Blockly.Input',
+      exports: {
+        'Align': {
+          newPath: 'Blockly.inputs.Align',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly',
+      exports: {
+        'Align': {
+          newPath: 'Blockly.inputs.Align',
+        },
+        'ALIGN_LEFT': {
+          newPath: 'Blockly.inputs.Align.LEFT',
+        },
+        'ALIGN_CENTER': {
+          newPath: 'Blockly.inputs.Align.CENTER',
+        },
+        'ALIGN_RIGHT': {
+          newPath: 'Blockly.inputs.Align.RIGHT',
+        },
+        'inputTypes': {
+          newModule: 'Blockly.inputs',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Bubble',
+      newName: 'Blockly.bubbles.Bubble',
+    },
+    {
+      oldName: 'Blockly.minimalist',
+      newPath: 'Blockly.blockRendering',
+    },
+    // The following renamings serve two purposes:
+    // - Record that the langGenerator instances have moved to a
+    //   different module (though this is not actually actioned by the
+    //   renaming script).
+    // - Record a change of path, applicable only to code that imports
+    //   generators via <script> tags.
+    {
+      oldName: 'Blockly.Dart',
+      exports: {
+        dartGenerator: {
+          newModule: 'Blockly.Dart.all',
+          oldPath: 'Blockly.Dart',
+          newPath: 'dart.dartGenerator',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.JavaScript',
+      exports: {
+        javascriptGenerator: {
+          newModule: 'Blockly.Javascript.all',
+          oldPath: 'Blockly.JavaScript',
+          newPath: 'javascript.javascriptGenerator',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Lua',
+      exports: {
+        luaGenerator: {
+          newModule: 'Blockly.Lua.all',
+          oldPath: 'Blockly.Lua',
+          newPath: 'lua.luaGenerator',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Php',
+      exports: {
+        phpGenerator: {
+          newModule: 'Blockly.PHP.all',
+          oldPath: 'Blockly.PHP',
+          newPath: 'php.phpGenerator',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Python',
+      exports: {
+        pythonGenerator: {
+          newModule: 'Blockly.Python.all',
+          oldPath: 'Blockly.Python',
+          newPath: 'python.pythonGenerator',
+        },
+      },
+    },
   ],
+
+  'develop': [],
 }

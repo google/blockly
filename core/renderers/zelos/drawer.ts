@@ -10,7 +10,6 @@ goog.declareModuleId('Blockly.zelos.Drawer');
 import type {BlockSvg} from '../../block_svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import type {BaseShape, DynamicShape, Notch} from '../common/constants.js';
-import * as debug from '../common/debug.js';
 import {Drawer as BaseDrawer} from '../common/drawer.js';
 import type {InlineInput} from '../measurables/inline_input.js';
 import type {Row} from '../measurables/row.js';
@@ -21,7 +20,6 @@ import type {InsideCorners} from './constants.js';
 import type {RenderInfo} from './info.js';
 import type {StatementInput} from './measurables/inputs.js';
 import type {PathObject} from './path_object.js';
-
 
 /**
  * An object that draws a block based on the given rendering information.
@@ -42,16 +40,12 @@ export class Drawer extends BaseDrawer {
   override draw() {
     const pathObject = this.block_.pathObject as PathObject;
     pathObject.beginDrawing();
-    this.hideHiddenIcons_();
     this.drawOutline_();
     this.drawInternals_();
 
     pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);
     if (this.info_.RTL) {
       pathObject.flipRTL();
-    }
-    if (debug.isDebuggerEnabled()) {
-      this.block_?.renderingDebugger?.drawDebug(this.block_, this.info_);
     }
     this.recordSizeOnBlock_();
     if (this.info_.outputConnection) {
@@ -63,10 +57,12 @@ export class Drawer extends BaseDrawer {
   }
 
   override drawOutline_() {
-    if (this.info_.outputConnection &&
-        this.info_.outputConnection.isDynamicShape &&
-        !this.info_.hasStatementInput &&
-        !this.info_.bottomRow.hasNextConnection) {
+    if (
+      this.info_.outputConnection &&
+      this.info_.outputConnection.isDynamicShape &&
+      !this.info_.hasStatementInput &&
+      !this.info_.bottomRow.hasNextConnection
+    ) {
       this.drawFlatTop_();
       this.drawRightDynamicConnection_();
       this.drawFlatBottom_();
@@ -77,8 +73,10 @@ export class Drawer extends BaseDrawer {
   }
 
   override drawLeft_() {
-    if (this.info_.outputConnection &&
-        this.info_.outputConnection.isDynamicShape) {
+    if (
+      this.info_.outputConnection &&
+      this.info_.outputConnection.isDynamicShape
+    ) {
       this.drawLeftDynamicConnection_();
     } else {
       super.drawLeft_();
@@ -97,23 +95,25 @@ export class Drawer extends BaseDrawer {
     }
     if (Types.isSpacer(row)) {
       const spacerRow = row as SpacerRow;
-      if (spacerRow.precedesStatement || spacerRow.followsStatement) {
-        const cornerHeight =
-            (this.constants_.INSIDE_CORNERS as InsideCorners).rightHeight;
+      const precedesStatement = spacerRow.precedesStatement;
+      const followsStatement = spacerRow.followsStatement;
+      if (precedesStatement || followsStatement) {
+        const insideCorners = this.constants_.INSIDE_CORNERS as InsideCorners;
+        const cornerHeight = insideCorners.rightHeight;
         const remainingHeight =
-            spacerRow.height - (spacerRow.precedesStatement ? cornerHeight : 0);
-        this.outlinePath_ +=
-            (spacerRow.followsStatement ?
-                 (this.constants_.INSIDE_CORNERS as InsideCorners)
-                     .pathBottomRight :
-                 '') +
-            (remainingHeight > 0 ?
-                 svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight) :
-                 '') +
-            (spacerRow.precedesStatement ?
-                 (this.constants_.INSIDE_CORNERS as InsideCorners)
-                     .pathTopRight :
-                 '');
+          spacerRow.height - (precedesStatement ? cornerHeight : 0);
+        const bottomRightPath = followsStatement
+          ? insideCorners.pathBottomRight
+          : '';
+        const verticalPath =
+          remainingHeight > 0
+            ? svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight)
+            : '';
+        const topRightPath = precedesStatement
+          ? insideCorners.pathTopRight
+          : '';
+        // Put all of the partial paths together.
+        this.outlinePath_ += bottomRightPath + verticalPath + topRightPath;
         return;
       }
     }
@@ -126,10 +126,12 @@ export class Drawer extends BaseDrawer {
   protected drawRightDynamicConnection_() {
     if (!this.info_.outputConnection) {
       throw new Error(
-          `Cannot draw the output connection of a block that doesn't have one`);
+        `Cannot draw the output connection of a block that doesn't have one`
+      );
     }
-    this.outlinePath_ += (this.info_.outputConnection.shape as DynamicShape)
-                             .pathRightDown(this.info_.outputConnection.height);
+    this.outlinePath_ += (
+      this.info_.outputConnection.shape as DynamicShape
+    ).pathRightDown(this.info_.outputConnection.height);
   }
 
   /**
@@ -138,12 +140,14 @@ export class Drawer extends BaseDrawer {
   protected drawLeftDynamicConnection_() {
     if (!this.info_.outputConnection) {
       throw new Error(
-          `Cannot draw the output connection of a block that doesn't have one`);
+        `Cannot draw the output connection of a block that doesn't have one`
+      );
     }
     this.positionOutputConnection_();
 
-    this.outlinePath_ += (this.info_.outputConnection.shape as DynamicShape)
-                             .pathUp(this.info_.outputConnection.height);
+    this.outlinePath_ += (
+      this.info_.outputConnection.shape as DynamicShape
+    ).pathUp(this.info_.outputConnection.height);
 
     // Close off the path.  This draws a vertical line up to the start of the
     // block's path, which may be either a rounded or a sharp corner.
@@ -156,7 +160,6 @@ export class Drawer extends BaseDrawer {
     this.positionPreviousConnection_();
 
     this.outlinePath_ += svgPaths.moveBy(topRow.xPos, this.info_.startY);
-
     this.outlinePath_ += svgPaths.lineOnAxis('h', topRow.width);
   }
 
@@ -166,7 +169,6 @@ export class Drawer extends BaseDrawer {
     this.positionNextConnection_();
 
     this.outlinePath_ += svgPaths.lineOnAxis('V', bottomRow.baseline);
-
     this.outlinePath_ += svgPaths.lineOnAxis('h', -bottomRow.width);
   }
 
@@ -184,11 +186,13 @@ export class Drawer extends BaseDrawer {
 
     const connectionRight = input.xPos + input.connectionWidth;
 
-    const outlinePath = svgPaths.moveTo(connectionRight, yPos) +
-        svgPaths.lineOnAxis('h', width) +
-        (input.shape as DynamicShape).pathRightDown(input.height) +
-        svgPaths.lineOnAxis('h', -width) +
-        (input.shape as DynamicShape).pathUp(input.height) + 'z';
+    const outlinePath =
+      svgPaths.moveTo(connectionRight, yPos) +
+      svgPaths.lineOnAxis('h', width) +
+      (input.shape as DynamicShape).pathRightDown(input.height) +
+      svgPaths.lineOnAxis('h', -width) +
+      (input.shape as DynamicShape).pathUp(input.height) +
+      'z';
     const pathObject = this.block_.pathObject as PathObject;
     pathObject.setOutlinePath(inputName, outlinePath);
   }
@@ -198,22 +202,27 @@ export class Drawer extends BaseDrawer {
     // Where to start drawing the notch, which is on the right side in LTR.
     const x = input.xPos + input.notchOffset + (input.shape as BaseShape).width;
 
-    const innerTopLeftCorner = (input.shape as Notch).pathRight +
-        svgPaths.lineOnAxis(
-            'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
-        this.constants_.INSIDE_CORNERS.pathTop;
+    const insideCorners = this.constants_.INSIDE_CORNERS;
+    const innerTopLeftCorner =
+      (input.shape as Notch).pathRight +
+      svgPaths.lineOnAxis('h', -(input.notchOffset - insideCorners.width)) +
+      insideCorners.pathTop;
 
-    const innerHeight = row.height - 2 * this.constants_.INSIDE_CORNERS.height;
+    const innerHeight = row.height - 2 * insideCorners.height;
 
-    const innerBottomLeftCorner = this.constants_.INSIDE_CORNERS.pathBottom +
-        svgPaths.lineOnAxis(
-            'h', input.notchOffset - this.constants_.INSIDE_CORNERS.width) +
-        (input.connectedBottomNextConnection ? '' :
-                                               (input.shape as Notch).pathLeft);
+    const innerBottomLeftCorner =
+      insideCorners.pathBottom +
+      svgPaths.lineOnAxis('h', input.notchOffset - insideCorners.width) +
+      (input.connectedBottomNextConnection
+        ? ''
+        : (input.shape as Notch).pathLeft);
 
-    this.outlinePath_ += svgPaths.lineOnAxis('H', x) + innerTopLeftCorner +
-        svgPaths.lineOnAxis('v', innerHeight) + innerBottomLeftCorner +
-        svgPaths.lineOnAxis('H', row.xPos + row.width);
+    this.outlinePath_ +=
+      svgPaths.lineOnAxis('H', x) +
+      innerTopLeftCorner +
+      svgPaths.lineOnAxis('v', innerHeight) +
+      innerBottomLeftCorner +
+      svgPaths.lineOnAxis('H', row.xPos + row.width);
 
     this.positionStatementInputConnection_(row);
   }

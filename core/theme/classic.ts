@@ -9,7 +9,6 @@ goog.declareModuleId('Blockly.Themes.Classic');
 
 import {Theme} from '../theme.js';
 
-
 const defaultBlockStyles = {
   'colour_blocks': {'colourPrimary': '20'},
   'list_blocks': {'colourPrimary': '260'},
@@ -39,5 +38,4 @@ const categoryStyles = {
  * Classic theme.
  * Contains multi-coloured border to create shadow effect.
  */
-export const Classic = new Theme(
-    'classic', defaultBlockStyles as AnyDuringMigration, categoryStyles);
+export const Classic = new Theme('classic', defaultBlockStyles, categoryStyles);

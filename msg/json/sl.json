@@ -44,6 +44,7 @@
 	"NEW_VARIABLE_TITLE": "Ime nove spremenljivke:",
 	"VARIABLE_ALREADY_EXISTS": "Spremenljivka »%1« že obstaja.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Spremenljivka z imenom »%1« za tip »%2« že obstaja.",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "Spremenljivka z imenom »%1« že obstaja kot parameter v postopku »%2«.",
 	"DELETE_VARIABLE_CONFIRMATION": "Izbrišem %1 uporab spremenljivke »%2«?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Ni mogoče izbrisati spremenljivke »%1«, ker je uporabljena v definiciji funkcije »%2«.",
 	"DELETE_VARIABLE": "Izbriši spremenljivko »%1«",

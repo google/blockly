@@ -43,6 +43,7 @@
 	"NEW_VARIABLE_TITLE": "prompt - Prompts the user to enter the name for a new variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].",
 	"VARIABLE_ALREADY_EXISTS": "alert - Tells the user that the name they entered is already in use.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "alert - Tells the user that the name they entered is already in use for another type.",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "alert - Tells the user that the name they entered is already in use as a parameter to a procedure, that the variable they are renaming also exists on. Renaming would create two parameters with the same name, which is not allowed.",
 	"DELETE_VARIABLE_CONFIRMATION": "confirm -  Ask the user to confirm their deletion of multiple uses of a variable.",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "alert - Tell the user that they can't delete a variable because it's part of the definition of a function.",
 	"DELETE_VARIABLE": "dropdown choice - Delete the currently selected variable.",

@@ -1530,14 +1530,6 @@ export class BlockSvg
   }
 
   /**
-   * @returns The first statement connection or null.
-   * @internal
-   */
-  override getFirstStatementConnection(): RenderedConnection | null {
-    return super.getFirstStatementConnection() as RenderedConnection | null;
-  }
-
-  /**
    * Find all the blocks that are directly nested inside this one.
    * Includes value and statement inputs, as well as any following statement.
    * Excludes any connection on an output tab or any preceding statement.

@@ -122,13 +122,8 @@ function deployToAndClean(demoVersion) {
  * package.json.
  */
 function getDemosVersion() {
-  const minorVersion = packageJson.version.split('.')[1];
-  const patchVersion = packageJson.version.split('.')[2];
-  let demoVersion = minorVersion;
-  if (patchVersion !== 0) {
-    demoVersion += '-' + patchVersion;
-  }
-  return demoVersion;
+  // Replace all '.' with '-' e.g. 9-3-3-beta-2
+  return packageJson.version.replace(/\./g, '-');
 }
 
 /**

@@ -37,7 +37,8 @@ function getUpstream() {
   if (upstream) return upstream;
   for (const line of String(execSync('git remote -v')).split('\n')) {
     if (line.includes('google/blockly')) {
-      return line.split('\t')[0];
+      upstream = line.split('\t')[0];
+      return upstream;
     }
   }
   throw new Error('Unable to determine upstream URL');

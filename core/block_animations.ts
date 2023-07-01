@@ -148,9 +148,13 @@ export function connectionUiEffect(block: BlockSvg) {
 
   animation.beginElement();
   // Delete circle after 150ms
-  setTimeout(() => {
-    dom.removeNode(ripple);
-  }, 150, ripple);
+  setTimeout(
+    () => {
+      dom.removeNode(ripple);
+    },
+    150,
+    ripple
+  );
 }
 
 /**

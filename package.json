@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "9.3.3",
+  "version": "10.0.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -37,7 +37,6 @@
     "format:check": "prettier --check .",
     "generate:langfiles": "exit 1 # Deprecated; use \"npm run messages\" instead.",
     "messages": "gulp messages",
-    "license": "gulp checkLicenses",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "langfiles": "gulp langfiles",
@@ -99,7 +98,6 @@
     "gulp-sourcemaps": "^3.0.0",
     "gulp-umd": "^2.0.0",
     "http-server": "^14.0.0",
-    "js-green-licenses": "^4.0.0",
     "json5": "^2.2.0",
     "markdown-tables-to-json": "^0.1.7",
     "mocha": "^10.0.0",

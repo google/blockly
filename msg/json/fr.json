@@ -85,7 +85,7 @@
 	"CONTROLS_FOR_TITLE": "compter avec %1 de %2 à %3 par %4",
 	"CONTROLS_FOREACH_HELPURL": "https://fr.wikipedia.org/wiki/Structure_de_contrôle#Itérateurs",
 	"CONTROLS_FOREACH_TITLE": "pour chaque élément %1 dans la liste %2",
-	"CONTROLS_FOREACH_TOOLTIP": "Pour chaque élément d’une liste, assigner la valeur de l’élément à la variable « %1 », puis exécuter des instructions.",
+	"CONTROLS_FOREACH_TOOLTIP": "Pour chaque élément d’une liste, affecter la valeur de l’élément à la variable « %1 », puis exécuter quelques instructions.",
 	"CONTROLS_FLOW_STATEMENTS_HELPURL": "https://fr.wikipedia.org/wiki/Structure_de_contrôle#Commandes_de_sortie_de_boucle",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "quitter la boucle",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE": "passer à l’itération de boucle suivante",

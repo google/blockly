@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Adriendelucca",
 			"Fohanno",
 			"Fulup",
 			"Gwenn-Ael",
@@ -107,6 +108,12 @@
 	"LOGIC_TERNARY_TOOLTIP": "Gwiriañ an amplegad e 'prouad'. M'eo gwir an amplegad, distreiñ an dalvoudenn 'm'eo gwir'; anez distreiñ ar moned 'm'eo faos'.",
 	"MATH_NUMBER_HELPURL": "https://br.wikipedia.org/wiki/Niver",
 	"MATH_NUMBER_TOOLTIP": "Un niver.",
+	"MATH_TRIG_SIN": "sin",
+	"MATH_TRIG_COS": "cos",
+	"MATH_TRIG_TAN": "tan",
+	"MATH_TRIG_ASIN": "asin",
+	"MATH_TRIG_ACOS": "acos",
+	"MATH_TRIG_ATAN": "atan",
 	"MATH_ARITHMETIC_HELPURL": "https://br.wikipedia.org/wiki/Aritmetik",
 	"MATH_ARITHMETIC_TOOLTIP_ADD": "Distreiñ sammad daou niver.",
 	"MATH_ARITHMETIC_TOOLTIP_MINUS": "Distreiñ diforc'h daou niver",
@@ -243,6 +250,7 @@
 	"LISTS_GET_INDEX_GET": "tapout",
 	"LISTS_GET_INDEX_GET_REMOVE": "tapout ha lemel",
 	"LISTS_GET_INDEX_REMOVE": "lemel",
+	"LISTS_GET_INDEX_FROM_START": "#",
 	"LISTS_GET_INDEX_FROM_END": "# adalek ar fin",
 	"LISTS_GET_INDEX_FIRST": "kentañ",
 	"LISTS_GET_INDEX_LAST": "diwezhañ",

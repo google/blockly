@@ -1447,8 +1447,7 @@
     },
   ],
 
-  'develop': [
-    // New renamings go here!
+  '10.0.0': [
     {
       oldName: 'Blockly.Warning',
       exports: {
@@ -1516,6 +1515,10 @@
       oldName: 'Blockly.Bubble',
       newName: 'Blockly.bubbles.Bubble',
     },
+    {
+      oldName: 'Blockly.minimalist',
+      newPath: 'Blockly.blockRendering',
+    },
     // The following renamings serve two purposes:
     // - Record that the langGenerator instances have moved to a
     //   different module (though this is not actually actioned by the
@@ -1573,4 +1576,6 @@
       },
     },
   ],
+
+  'develop': [],
 }

@@ -428,21 +428,13 @@ export class BlockSvg
     this.getSvgRoot().setAttribute('transform', this.getTranslation());
   }
 
-  /**
-   * Clear the block of transform="..." attributes.
-   * Used when the block is switching from 3d to 2d transform or vice versa.
-   */
-  private clearTransformAttributes_() {
-    this.getSvgRoot().removeAttribute('transform');
-  }
-
   /** Snap this block to the nearest grid point. */
   snapToGrid() {
     if (this.isDeadOrDying()) {
       return; // Deleted block.
     }
     if (this.workspace.isDragging()) {
-      return; // Don't bump blocks during a drag.;
+      return; // Don't bump blocks during a drag.
     }
 
     if (this.getParent()) {
@@ -1085,7 +1077,6 @@ export class BlockSvg
   }
 
   // Overrides of functions on Blockly.Block that take into account whether the
-
   // block has been rendered.
 
   /**
@@ -1527,14 +1518,6 @@ export class BlockSvg
 
       this.moveBy(dx, dy);
     }
-  }
-
-  /**
-   * @returns The first statement connection or null.
-   * @internal
-   */
-  override getFirstStatementConnection(): RenderedConnection | null {
-    return super.getFirstStatementConnection() as RenderedConnection | null;
   }
 
   /**

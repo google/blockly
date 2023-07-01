@@ -15,7 +15,6 @@ const gulp = require('gulp');
 const buildTasks = require('./scripts/gulpfiles/build_tasks');
 const packageTasks = require('./scripts/gulpfiles/package_tasks');
 const gitTasks = require('./scripts/gulpfiles/git_tasks');
-const licenseTasks = require('./scripts/gulpfiles/license_tasks');
 const appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
 const releaseTasks = require('./scripts/gulpfiles/release_tasks');
 const docsTasks = require('./scripts/gulpfiles/docs_tasks');
@@ -41,7 +40,6 @@ module.exports = {
 
   // Manually-invokable targets, with prerequisites where required.
   messages: buildTasks.messages, // Generate msg/json/en.json et al.
-  checkLicenses: licenseTasks.checkLicenses,
   clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),
   test: testTasks.test,
   testGenerators: testTasks.generators,

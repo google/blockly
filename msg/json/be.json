@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"No Sleep till Krupki",
+			"Plaga med",
 			"SimondR",
 			"ZlyiLev"
 		]
@@ -279,7 +280,7 @@
 	"LISTS_GET_SUBLIST_TOOLTIP": "Стварае копію ўказанай частцы спісу.",
 	"LISTS_SORT_TITLE": "сартаваць %1 %2 %3",
 	"LISTS_SORT_TOOLTIP": "Сартаваць копію спісу.",
-	"LISTS_SORT_ORDER_ASCENDING": "па ўзрастанню",
+	"LISTS_SORT_ORDER_ASCENDING": "па ўзрастанні",
 	"LISTS_SORT_ORDER_DESCENDING": "па спаданню",
 	"LISTS_SORT_TYPE_NUMERIC": "лікавая",
 	"LISTS_SORT_TYPE_TEXT": "па алфавіце",

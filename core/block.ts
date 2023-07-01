@@ -625,25 +625,6 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Return the connection on the first statement input on this block, or null
-   * if there are none.
-   *
-   * @returns The first statement connection or null.
-   * @internal
-   */
-  getFirstStatementConnection(): Connection | null {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      if (
-        input.connection &&
-        input.connection.type === ConnectionType.NEXT_STATEMENT
-      ) {
-        return input.connection;
-      }
-    }
-    return null;
-  }
-
-  /**
    * Return the top-most block in this block's tree.
    * This will return itself if this block is at the top level.
    *

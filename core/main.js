@@ -13,9 +13,50 @@
 
 goog.module('Blockly.main');
 
-/** @suppress {extraRequire} */
-goog.require('Blockly');
+const Blockly = goog.require('Blockly');
 const Msg = goog.require('Blockly.Msg');
+const colour = goog.require('Blockly.utils.colour');
+
+/*
+ * Aliased functions and properties that used to be on the Blockly namespace.
+ * Everything in this section is deprecated. Both external and internal code
+ * should avoid using these functions and use the designated replacements.
+ * Everything in this section will be removed in a future version of Blockly.
+ */
+
+// Add accessors for properties on Blockly that have now been deprecated.
+Object.defineProperties(Blockly, {
+  /**
+   * The richness of block colours, regardless of the hue.
+   * Must be in the range of 0 (inclusive) to 1 (exclusive).
+   * @name Blockly.HSV_SATURATION
+   * @type {number}
+   * @suppress {checkTypes}
+   */
+  HSV_SATURATION: {
+    get: function () {
+      return colour.getHsvSaturation();
+    },
+    set: function (newValue) {
+      colour.setHsvSaturation(newValue);
+    },
+  },
+  /**
+   * The intensity of block colours, regardless of the hue.
+   * Must be in the range of 0 (inclusive) to 1 (exclusive).
+   * @name Blockly.HSV_VALUE
+   * @type {number}
+   * @suppress {checkTypes}
+   */
+  HSV_VALUE: {
+    get: function () {
+      return colour.getHsvValue();
+    },
+    set: function (newValue) {
+      colour.setHsvValue(newValue);
+    },
+  },
+});
 
 // If Blockly is compiled with ADVANCED_COMPILATION and/or loaded as a
 // CJS or ES module there will not be a Blockly global variable

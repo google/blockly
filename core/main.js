@@ -16,6 +16,7 @@ goog.module('Blockly.main');
 const Blockly = goog.require('Blockly');
 const Msg = goog.require('Blockly.Msg');
 const colour = goog.require('Blockly.utils.colour');
+const deprecation = goog.require('Blockly.utils.deprecation');
 
 /*
  * Aliased functions and properties that used to be on the Blockly namespace.
@@ -31,13 +32,27 @@ Object.defineProperties(Blockly, {
    * Must be in the range of 0 (inclusive) to 1 (exclusive).
    * @name Blockly.HSV_SATURATION
    * @type {number}
+   * @deprecated Use Blockly.colour.getHsvSaturation() / .setHsvSaturation(
+   *     instead.  (July 2023)
    * @suppress {checkTypes}
    */
   HSV_SATURATION: {
     get: function () {
+      deprecation.warn(
+        'Blockly.HSV_SATURATION',
+        'version 10',
+        'version 11',
+        'Blockly.colour.getHsvSaturation()'
+      );
       return colour.getHsvSaturation();
     },
     set: function (newValue) {
+      deprecation.warn(
+        'Blockly.HSV_SATURATION',
+        'version 10',
+        'version 11',
+        'Blockly.colour.setHsvSaturation()'
+      );
       colour.setHsvSaturation(newValue);
     },
   },
@@ -46,13 +61,27 @@ Object.defineProperties(Blockly, {
    * Must be in the range of 0 (inclusive) to 1 (exclusive).
    * @name Blockly.HSV_VALUE
    * @type {number}
+   * @deprecated Use Blockly.colour.getHsvValue() / .setHsvValue instead.
+   *     (July 2023)
    * @suppress {checkTypes}
    */
   HSV_VALUE: {
     get: function () {
+      deprecation.warn(
+        'Blockly.HSV_VALUE',
+        'version 10',
+        'version 11',
+        'Blockly.colour.getHsvValue()'
+      );
       return colour.getHsvValue();
     },
     set: function (newValue) {
+      deprecation.warn(
+        'Blockly.HSV_VALUE',
+        'version 10',
+        'version 11',
+        'Blockly.colour.setHsvValue()'
+      );
       colour.setHsvValue(newValue);
     },
   },

@@ -227,7 +227,7 @@
 	"TEXT_INDEXOF_TITLE": "%2 %3 dans le texte %1",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "trouver la première occurrence de la chaîne",
 	"TEXT_INDEXOF_OPERATOR_LAST": "trouver la dernière occurrence du texte",
-	"TEXT_CHARAT_TITLE": "%2 dans le texte %1",
+	"TEXT_CHARAT_TITLE": "dans le texte %1 %2",	
 	"TEXT_CHARAT_FROM_START": "obtenir la lettre nº",
 	"TEXT_CHARAT_FROM_END": "obtenir la lettre nº (depuis la fin)",
 	"TEXT_CHARAT_FIRST": "obtenir la première lettre",

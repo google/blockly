@@ -13,9 +13,79 @@
 
 goog.module('Blockly.main');
 
-/** @suppress {extraRequire} */
-goog.require('Blockly');
+const Blockly = goog.require('Blockly');
 const Msg = goog.require('Blockly.Msg');
+const colour = goog.require('Blockly.utils.colour');
+const deprecation = goog.require('Blockly.utils.deprecation');
+
+/*
+ * Aliased functions and properties that used to be on the Blockly namespace.
+ * Everything in this section is deprecated. Both external and internal code
+ * should avoid using these functions and use the designated replacements.
+ * Everything in this section will be removed in a future version of Blockly.
+ */
+
+// Add accessors for properties on Blockly that have now been deprecated.
+Object.defineProperties(Blockly, {
+  /**
+   * The richness of block colours, regardless of the hue.
+   * Must be in the range of 0 (inclusive) to 1 (exclusive).
+   * @name Blockly.HSV_SATURATION
+   * @type {number}
+   * @deprecated Use Blockly.colour.getHsvSaturation() / .setHsvSaturation(
+   *     instead.  (July 2023)
+   * @suppress {checkTypes}
+   */
+  HSV_SATURATION: {
+    get: function () {
+      deprecation.warn(
+        'Blockly.HSV_SATURATION',
+        'version 10',
+        'version 11',
+        'Blockly.colour.getHsvSaturation()'
+      );
+      return colour.getHsvSaturation();
+    },
+    set: function (newValue) {
+      deprecation.warn(
+        'Blockly.HSV_SATURATION',
+        'version 10',
+        'version 11',
+        'Blockly.colour.setHsvSaturation()'
+      );
+      colour.setHsvSaturation(newValue);
+    },
+  },
+  /**
+   * The intensity of block colours, regardless of the hue.
+   * Must be in the range of 0 (inclusive) to 1 (exclusive).
+   * @name Blockly.HSV_VALUE
+   * @type {number}
+   * @deprecated Use Blockly.colour.getHsvValue() / .setHsvValue instead.
+   *     (July 2023)
+   * @suppress {checkTypes}
+   */
+  HSV_VALUE: {
+    get: function () {
+      deprecation.warn(
+        'Blockly.HSV_VALUE',
+        'version 10',
+        'version 11',
+        'Blockly.colour.getHsvValue()'
+      );
+      return colour.getHsvValue();
+    },
+    set: function (newValue) {
+      deprecation.warn(
+        'Blockly.HSV_VALUE',
+        'version 10',
+        'version 11',
+        'Blockly.colour.setHsvValue()'
+      );
+      colour.setHsvValue(newValue);
+    },
+  },
+});
 
 // If Blockly is compiled with ADVANCED_COMPILATION and/or loaded as a
 // CJS or ES module there will not be a Blockly global variable

@@ -92,4 +92,9 @@ async function getBlockElementById(browser, id) {
   return await browser.$(`[data-id="${id}"]`);
 }
 
-module.exports = {testSetup, testFileLocations, getSelectedBlockElement, getBlockElementById};
+module.exports = {
+  testSetup,
+  testFileLocations,
+  getSelectedBlockElement,
+  getBlockElementById,
+};

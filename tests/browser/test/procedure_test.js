@@ -9,7 +9,11 @@
  */
 
 const chai = require('chai');
-const {testSetup, testFileLocations, getSelectedBlockElement} = require('./test_setup');
+const {
+  testSetup,
+  testFileLocations,
+  getSelectedBlockElement,
+} = require('./test_setup');
 
 let browser;
 suite('Testing Connecting Blocks', function (done) {

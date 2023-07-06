@@ -31,6 +31,7 @@ suite('Testing Connecting Blocks', function (done) {
   test('Testing Procedure', async function () {
     // Drag out first function
     let proceduresDefReturn = await getBlockTypeFromCategory(
+      browser,
       'Functions',
       'procedures_defreturn'
     );
@@ -39,6 +40,7 @@ suite('Testing Connecting Blocks', function (done) {
 
     // Drag out second function.
     proceduresDefReturn = await getBlockTypeFromCategory(
+      browser,
       'Functions',
       'procedures_defreturn'
     );
@@ -46,7 +48,11 @@ suite('Testing Connecting Blocks', function (done) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
     // Drag out numeric
-    const mathNumeric = await getBlockTypeFromCategory('Math', 'math_number');
+    const mathNumeric = await getBlockTypeFromCategory(
+      browser,
+      'Math',
+      'math_number'
+    );
     await mathNumeric.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
@@ -64,17 +70,29 @@ suite('Testing Connecting Blocks', function (done) {
     const doSomething2 = await browser.$(
       '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)'
     );
-    const doSomethingFlyout = await getNthBlockOfCategory('Functions', 3);
+    const doSomethingFlyout = await getNthBlockOfCategory(
+      browser,
+      'Functions',
+      3
+    );
     await doSomethingFlyout.dragAndDrop(doSomething2);
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     const doSomethingFlyoutWorkspace = await getSelectedBlockElement(browser);
     await doSomethingFlyoutWorkspace.dragAndDrop({x: 130, y: 20});
 
     // Drag out print from flyout and connect it with doSomething 2
-    const printFlyout = await getBlockTypeFromCategory('Text', 'text_print');
+    const printFlyout = await getBlockTypeFromCategory(
+      browser,
+      'Text',
+      'text_print'
+    );
     await printFlyout.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    const doSomething2Flyout = await getNthBlockOfCategory('Functions', 4);
+    const doSomething2Flyout = await getNthBlockOfCategory(
+      browser,
+      'Functions',
+      4
+    );
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     await doSomething2Flyout.dragAndDrop({x: 130, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec

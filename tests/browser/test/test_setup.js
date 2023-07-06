@@ -95,10 +95,48 @@ async function getSelectedBlockElement(browser) {
 async function getBlockElementById(browser, id) {
   return await browser.$(`[data-id="${id}"]`);
 }
+async function getCategory(categoryName) {
+  const categories = await browser.$$('.blocklyTreeLabel');
+
+  let category;
+  for (const c of categories) {
+    const text = await c.getText();
+    if (text === categoryName) {
+      category = c;
+    }
+  }
+  if (!category) throw Error();
+
+  return category;
+}
+
+async function getNthBlockOfCategory(categoryName, n) {
+  const category = await getCategory(categoryName);
+  category.click();
+  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+  const block = await browser.$(
+      `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`);
+  return block;
+}
+
+async function getBlockTypeFromCategory(categoryName, blockType) {
+  const category = await getCategory(categoryName);
+  category.click();
+  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+
+  const id = browser.execute(() => {
+    return Blockly.getMainWorkspace().getFlyout()
+        .getWorkspace().getBlocksByType(blockType)[0].id;
+  })
+  return await browser.$(`[data-id="${id}"]`);
+}
 
 module.exports = {
   testSetup,
   testFileLocations,
   getSelectedBlockElement,
   getBlockElementById,
+  getCategory,
+  getNthBlockOfCategory,
+  getBlockTypeFromCategory
 };

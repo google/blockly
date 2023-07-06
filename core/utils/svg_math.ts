@@ -177,7 +177,7 @@ export function screenToWsCoordinates(
 
 /**
  * Converts workspace coordinates to screen coordinates.
- * 
+ *
  * @param ws The workspace to get the coordinates out of.
  * @param workspaceCoordinates  The workspace coordinates to be converted
  *     to screen coordinates.
@@ -185,7 +185,7 @@ export function screenToWsCoordinates(
  */
 export function wsToScreenCoordinates(
   ws: WorkspaceSvg,
-  workspaceCoordinates: Coordinate,
+  workspaceCoordinates: Coordinate
 ): Coordinate {
   // Fix workspace scale vs browser scale.
   const screenCoordinates = workspaceCoordinates.scale(ws.scale);

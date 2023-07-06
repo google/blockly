@@ -20,7 +20,6 @@ const {
 
 let browser;
 
-
 suite('Testing Connecting Blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
@@ -75,7 +74,7 @@ suite('Testing Connecting Blocks', function (done) {
     const doSomethingCaller = await getSelectedBlockElement(browser);
 
     // Connect the doSomething caller to doSomething2
-    await connect (browser, doSomethingCaller, 'OUTPUT', doSomething2, 'RETURN');
+    await connect(browser, doSomethingCaller, 'OUTPUT', doSomething2, 'RETURN');
 
     // Drag out print from flyout.
     const printFlyout = await getBlockTypeFromCategory(

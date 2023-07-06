@@ -141,43 +141,62 @@ async function getBlockTypeFromCategory(browser, categoryName, blockType) {
 }
 
 async function getLocationOfBlockConnection(browser, id, connectionName) {
-  return await browser.execute((id, connectionName) => {
-    const block = Blockly.getMainWorkspace().getBlockById(id);
+  return await browser.execute(
+    (id, connectionName) => {
+      const block = Blockly.getMainWorkspace().getBlockById(id);
 
-    let connection;
-    switch (connectionName) {
-      case 'OUTPUT':
-        connection = block.outputConnection;
-        break;
-      case 'PREVIOUS':
-        connection = block.previousConnection;
-        break;
-      case 'NEXT':
-        connection = block.nextConnection;
-        break;
-      default:
-        connection = block.getInput(connectionName).connection;
-        break;
-    }
+      let connection;
+      switch (connectionName) {
+        case 'OUTPUT':
+          connection = block.outputConnection;
+          break;
+        case 'PREVIOUS':
+          connection = block.previousConnection;
+          break;
+        case 'NEXT':
+          connection = block.nextConnection;
+          break;
+        default:
+          connection = block.getInput(connectionName).connection;
+          break;
+      }
 
-    const loc = Blockly.utils.Coordinate.sum(
-        block.getRelativeToSurfaceXY(), connection.getOffsetInBlock());
-    return Blockly.utils.svgMath.wsToScreenCoordinates(
-        Blockly.getMainWorkspace(), loc);
-  }, id, connectionName);
+      const loc = Blockly.utils.Coordinate.sum(
+        block.getRelativeToSurfaceXY(),
+        connection.getOffsetInBlock()
+      );
+      return Blockly.utils.svgMath.wsToScreenCoordinates(
+        Blockly.getMainWorkspace(),
+        loc
+      );
+    },
+    id,
+    connectionName
+  );
 }
 
 async function connect(
-    browser, draggedBlock, draggedConnection, targetBlock, targetConnection) {
+  browser,
+  draggedBlock,
+  draggedConnection,
+  targetBlock,
+  targetConnection
+) {
   const draggedLocation = await getLocationOfBlockConnection(
-      browser, draggedBlock.id, draggedConnection);
+    browser,
+    draggedBlock.id,
+    draggedConnection
+  );
   const targetLocation = await getLocationOfBlockConnection(
-      browser, targetBlock.id, targetConnection);
-  
+    browser,
+    targetBlock.id,
+    targetConnection
+  );
+
   const delta = {
     x: targetLocation.x - draggedLocation.x,
     y: targetLocation.y - draggedLocation.y,
-  }
+  };
   await draggedBlock.dragAndDrop(delta);
 }
 

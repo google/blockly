@@ -73,4 +73,23 @@ const testFileLocations = {
   playground: 2,
 };
 
-module.exports = {testSetup, testFileLocations};
+/**
+ * @returns The selected block's root SVG element, as an interactable browser element.
+ */
+async function getSelectedBlockElement(browser) {
+  const result = await browser.execute(() => {
+    // Note: selected is an ICopyable and I am assuming that it is a BlockSvg.
+    return Blockly.common.getSelected()?.id;
+  });
+  return await browser.$(`[data-id="${result}"]`);
+}
+
+/**
+ * @returns The root SVG element of the block with the given ID, as an interactable browser
+ *     element.
+ */
+async function getBlockElementById(browser, id) {
+  return await browser.$(`[data-id="${id}"]`);
+}
+
+module.exports = {testSetup, testFileLocations, getSelectedBlockElement, getBlockElementById};

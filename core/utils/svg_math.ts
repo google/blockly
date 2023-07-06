@@ -175,6 +175,34 @@ export function screenToWsCoordinates(
   return finalOffsetMainWs;
 }
 
+/**
+ * Converts workspace coordinates to screen coordinates.
+ *
+ * @param ws The workspace to get the coordinates out of.
+ * @param workspaceCoordinates  The workspace coordinates to be converted
+ *     to screen coordinates.
+ * @returns The screen coordinates.
+ */
+export function wsToScreenCoordinates(
+  ws: WorkspaceSvg,
+  workspaceCoordinates: Coordinate
+): Coordinate {
+  // Fix workspace scale vs browser scale.
+  const screenCoordinates = workspaceCoordinates.scale(ws.scale);
+  const screenX = screenCoordinates.x;
+  const screenY = screenCoordinates.y;
+
+  const injectionDiv = ws.getInjectionDiv();
+  const boundingRect = injectionDiv.getBoundingClientRect();
+  const mainOffset = ws.getOriginOffsetInPixels();
+
+  // Fix workspace origin vs browser origin.
+  return new Coordinate(
+    screenX + boundingRect.left + mainOffset.x,
+    screenY + boundingRect.top + mainOffset.y
+  );
+}
+
 export const TEST_ONLY = {
   XY_REGEX,
   XY_STYLE_REGEX,

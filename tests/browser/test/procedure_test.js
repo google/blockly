@@ -13,60 +13,13 @@ const {
   testSetup,
   testFileLocations,
   getSelectedBlockElement,
-  getSelectedBlockId,
   getNthBlockOfCategory,
   getBlockTypeFromCategory,
+  connect,
 } = require('./test_setup');
 
 let browser;
 
-async function getLocationOfBlock(browser, id) {
-  return await browser.execute((id) => {
-    const block = Blockly.getMainWorkspace().getBlockById(id);
-    return block.getRelativeToSurfaceXY();
-  }, id);
-}
-
-async function getLocationOfBlockConnection(browser, id, connectionName) {
-  return await browser.execute((id, connectionName) => {
-    const block = Blockly.getMainWorkspace().getBlockById(id);
-
-    let connection;
-    switch (connectionName) {
-      case 'OUTPUT':
-        connection = block.outputConnection;
-        break;
-      case 'PREVIOUS':
-        connection = block.previousConnection;
-        break;
-      case 'NEXT':
-        connection = block.nextConnection;
-        break;
-      default:
-        connection = block.getInput(connectionName).connection;
-        break;
-    }
-
-    const loc = Blockly.utils.Coordinate.sum(
-        block.getRelativeToSurfaceXY(), connection.getOffsetInBlock());
-    return Blockly.utils.svgMath.wsToScreenCoordinates(
-        Blockly.getMainWorkspace(), loc);
-  }, id, connectionName);
-}
-
-async function connect(
-    browser, draggedBlock, draggedConnection, targetBlock, targetConnection) {
-  const draggedLocation = await getLocationOfBlockConnection(
-      browser, draggedBlock.id, draggedConnection);
-  const targetLocation = await getLocationOfBlockConnection(
-      browser, targetBlock.id, targetConnection);
-  
-  const delta = {
-    x: targetLocation.x - draggedLocation.x,
-    y: targetLocation.y - draggedLocation.y,
-  }
-  await draggedBlock.dragAndDrop(delta);
-}
 
 suite('Testing Connecting Blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
@@ -77,7 +30,7 @@ suite('Testing Connecting Blocks', function (done) {
     browser = await testSetup(testFileLocations.code);
   });
 
-  test.only('Testing Procedure', async function () {
+  test('Testing Procedure', async function () {
     // Drag out first function
     let proceduresDefReturn = await getBlockTypeFromCategory(
       browser,
@@ -159,6 +112,6 @@ suite('Testing Connecting Blocks', function (done) {
 
   // Teardown entire suite after test are done running
   suiteTeardown(async function () {
-    // await browser.deleteSession();
+    await browser.deleteSession();
   });
 });

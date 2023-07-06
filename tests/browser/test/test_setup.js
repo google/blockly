@@ -119,7 +119,7 @@ async function getCategory(browser, categoryName) {
 async function getNthBlockOfCategory(browser, categoryName, n) {
   const category = await getCategory(browser, categoryName);
   category.click();
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+  await browser.pause(100);
   const block = await browser.$(
     `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`
   );
@@ -129,7 +129,7 @@ async function getNthBlockOfCategory(browser, categoryName, n) {
 async function getBlockTypeFromCategory(browser, categoryName, blockType) {
   const category = await getCategory(browser, categoryName);
   category.click();
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+  await browser.pause(100);
 
   const id = await browser.execute((blockType) => {
     return Blockly.getMainWorkspace()
@@ -202,9 +202,7 @@ async function connect(
 
 async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
   const flyoutBlock = await getNthBlockOfCategory(browser, categoryName, n);
-  await browser.pause(2000);
   await flyoutBlock.dragAndDrop({x: x, y: y});
-  await browser.pause(2000);
   return await getSelectedBlockElement(browser);
 }
 
@@ -214,18 +212,16 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
     categoryName,
     type
   );
-  await browser.pause(2000);
   await flyoutBlock.dragAndDrop({x: x, y: y});
-  await browser.pause(2000);
   return await getSelectedBlockElement(browser);
 }
 
 async function contextMenuSelect(browser, block, itemText) {
   await block.click({button: 2});
-  await browser.pause(2000);
+  await browser.pause(200);
   const item = await browser.$(`div=${itemText}`);
   await item.click();
-  await browser.pause(2000);
+  await browser.pause(200);
 }
 
 module.exports = {

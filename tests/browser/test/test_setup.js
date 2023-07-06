@@ -95,7 +95,7 @@ async function getSelectedBlockElement(browser) {
 async function getBlockElementById(browser, id) {
   return await browser.$(`[data-id="${id}"]`);
 }
-async function getCategory(categoryName) {
+async function getCategory(browser, categoryName) {
   const categories = await browser.$$('.blocklyTreeLabel');
 
   let category;
@@ -110,8 +110,8 @@ async function getCategory(categoryName) {
   return category;
 }
 
-async function getNthBlockOfCategory(categoryName, n) {
-  const category = await getCategory(categoryName);
+async function getNthBlockOfCategory(browser, categoryName, n) {
+  const category = await getCategory(browser, categoryName);
   category.click();
   await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
   const block = await browser.$(
@@ -120,17 +120,17 @@ async function getNthBlockOfCategory(categoryName, n) {
   return block;
 }
 
-async function getBlockTypeFromCategory(categoryName, blockType) {
-  const category = await getCategory(categoryName);
+async function getBlockTypeFromCategory(browser, categoryName, blockType) {
+  const category = await getCategory(browser, categoryName);
   category.click();
   await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
-  const id = browser.execute(() => {
+  const id = await browser.execute((blockType) => {
     return Blockly.getMainWorkspace()
       .getFlyout()
       .getWorkspace()
       .getBlocksByType(blockType)[0].id;
-  });
+  }, blockType);
   return await browser.$(`[data-id="${id}"]`);
 }
 

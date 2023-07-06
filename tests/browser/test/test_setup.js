@@ -74,7 +74,9 @@ const testFileLocations = {
 };
 
 /**
- * @returns The selected block's root SVG element, as an interactable browser element.
+ * @param {Browser} browser The active WebdriverIO Browser object.
+ * @return {WebElement} The selected block's root SVG element, as an interactable
+ *     browser element.
  */
 async function getSelectedBlockElement(browser) {
   const result = await browser.execute(() => {
@@ -85,8 +87,10 @@ async function getSelectedBlockElement(browser) {
 }
 
 /**
- * @returns The root SVG element of the block with the given ID, as an interactable browser
- *     element.
+ * @param {Browser} browser The active WebdriverIO Browser object.
+ * @param {string} id The ID of the Blockly block to search for.
+ * @return {WebElement} The root SVG element of the block with the given ID, as an
+ *     interactable browser element.
  */
 async function getBlockElementById(browser, id) {
   return await browser.$(`[data-id="${id}"]`);

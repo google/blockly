@@ -98,6 +98,6 @@ suite('Testing Connecting Blocks', function (done) {
 
   // Teardown entire suite after test are done running
   suiteTeardown(async function () {
-    // await browser.deleteSession();
+    await browser.deleteSession();
   });
 });

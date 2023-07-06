@@ -200,17 +200,13 @@ async function connect(
   await draggedBlock.dragAndDrop(delta);
 }
 
-async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) { 
-    const flyoutBlock = await getNthBlockOfCategory(
-    browser,
-    categoryName,
-    n
-  );
+async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
+  const flyoutBlock = await getNthBlockOfCategory(browser, categoryName, n);
   await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
   await flyoutBlock.dragAndDrop({x: x, y: y});
   await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
   return await getSelectedBlockElement(browser);
-};
+}
 
 module.exports = {
   testSetup,

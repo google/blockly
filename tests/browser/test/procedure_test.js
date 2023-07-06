@@ -34,6 +34,7 @@ suite('Testing Connecting Blocks', function (done) {
       '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(5)'
     );
     await proceduresDefReturn.dragAndDrop({x: 50, y: 20});
+    const doSomething = await getSelectedBlockElement(browser);
 
     // Drag out second function
     functionCategory.click();
@@ -42,6 +43,7 @@ suite('Testing Connecting Blocks', function (done) {
       '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(5)'
     );
     await proceduresDefReturn.dragAndDrop({x: 300, y: 200});
+    const doSomething2 = await getSelectedBlockElement(browser);
 
     // Drag out numeric
     const mathCategory = await browser.$('#blockly-2');
@@ -51,20 +53,16 @@ suite('Testing Connecting Blocks', function (done) {
       '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(3)'
     );
     await mathNumeric.dragAndDrop({x: 50, y: 20});
-    // Connect numeric to first procedure
     const numericWorkspace = await getSelectedBlockElement(browser);
-    const doSomething = await browser.$(
-      '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)'
-    );
+
+    // Connect numeric to first procedure
     await numericWorkspace.dragAndDrop(doSomething);
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     await numericWorkspace.dragAndDrop({x: 100, y: 25});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
     // Drag out doSomething from flyout and connect it to doSomething2
-    const doSomething2 = await browser.$(
-      '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)'
-    );
+
     functionCategory.click();
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     const doSomethingFlyout = await browser.$(
@@ -73,7 +71,7 @@ suite('Testing Connecting Blocks', function (done) {
     await doSomethingFlyout.dragAndDrop(doSomething2);
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     const doSomethingFlyoutWorkspace = await getSelectedBlockElement(browser);
-    await doSomethingFlyoutWorkspace.dragAndDrop({x: 130, y: 20});
+    await doSomethingFlyoutWorkspace.dragAndDrop({x: 140, y: 20});
 
     // Drag out print from flyout and connect it with doSomething 2
     const textButton = await browser.$('#blockly-3');
@@ -82,8 +80,10 @@ suite('Testing Connecting Blocks', function (done) {
     const printFlyout = await browser.$(
       '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(23)'
     );
-    await printFlyout.dragAndDrop({x: 50, y: 20});
+    await printFlyout.dragAndDrop({x: 50, y: 0});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+    const printWorkspace = await getSelectedBlockElement(browser);
+
     functionCategory.click();
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     const doSomething2Flyout = await browser.$(
@@ -94,10 +94,7 @@ suite('Testing Connecting Blocks', function (done) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     const doSomething2FlyoutWorkspace = await getSelectedBlockElement(browser);
 
-    const printWorkSpace = await browser.$(
-      '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(4)'
-    );
-    await doSomething2FlyoutWorkspace.dragAndDrop(printWorkSpace);
+    await doSomething2FlyoutWorkspace.dragAndDrop(printWorkspace);
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     await doSomething2FlyoutWorkspace.dragAndDrop({x: 65, y: 0});
 

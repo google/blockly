@@ -31,13 +31,17 @@ suite('Testing Connecting Blocks', function (done) {
   test('Testing Procedure', async function () {
     // Drag out first function
     let proceduresDefReturn = await getBlockTypeFromCategory(
-        'Functions', 'procedures_defreturn');
+      'Functions',
+      'procedures_defreturn'
+    );
     await proceduresDefReturn.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
     // Drag out second function.
     proceduresDefReturn = await getBlockTypeFromCategory(
-        'Functions', 'procedures_defreturn');
+      'Functions',
+      'procedures_defreturn'
+    );
     await proceduresDefReturn.dragAndDrop({x: 300, y: 200});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 

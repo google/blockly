@@ -3,6 +3,7 @@
 		"authors": [
 			"Elroy",
 			"Festina90",
+			"HanV",
 			"JaapDeKleine",
 			"Jeleniccz",
 			"Klaas van Buiten",
@@ -52,6 +53,7 @@
 	"NEW_VARIABLE_TITLE": "Nieuwe variabelenaam:",
 	"VARIABLE_ALREADY_EXISTS": "Er bestaat al een variabele met de naam \"%1\".",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Een variabele met de naam '%1' bestaat al voor een ander soort variabele: '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "Een variabele met de naam '%1' bestaat al als parameter in de procedure '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "%1 gebruiken van de variabele \"%2\" verwijderen?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "De variabele \"%1\" kan niet verwijderd worden omdat die onderdeel uitmaakt van de definitie van de functie \"%2\"",
 	"DELETE_VARIABLE": "Verwijder de variabele \"%1\"",

@@ -13,9 +13,12 @@ const {
   testSetup,
   testFileLocations,
   getSelectedBlockElement,
+  getNthBlockOfCategory,
+  getBlockTypeFromCategory,
 } = require('./test_setup');
 
 let browser;
+
 suite('Testing Connecting Blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
@@ -27,30 +30,26 @@ suite('Testing Connecting Blocks', function (done) {
 
   test('Testing Procedure', async function () {
     // Drag out first function
-    const functionCategory = await browser.$('#blockly-8');
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    functionCategory.click();
-    let proceduresDefReturn = await browser.$(
-      '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(5)'
+    let proceduresDefReturn = await getBlockTypeFromCategory(
+      'Functions',
+      'procedures_defreturn'
     );
     await proceduresDefReturn.dragAndDrop({x: 50, y: 20});
-
-    // Drag out second function
-    functionCategory.click();
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    proceduresDefReturn = await browser.$(
-      '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(5)'
+
+    // Drag out second function.
+    proceduresDefReturn = await getBlockTypeFromCategory(
+      'Functions',
+      'procedures_defreturn'
     );
     await proceduresDefReturn.dragAndDrop({x: 300, y: 200});
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
     // Drag out numeric
-    const mathCategory = await browser.$('#blockly-2');
-    mathCategory.click();
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    const mathNumeric = await browser.$(
-      '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(3)'
-    );
+    const mathNumeric = await getBlockTypeFromCategory('Math', 'math_number');
     await mathNumeric.dragAndDrop({x: 50, y: 20});
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+
     // Connect numeric to first procedure
     const numericWorkspace = await getSelectedBlockElement(browser);
     const doSomething = await browser.$(
@@ -65,30 +64,17 @@ suite('Testing Connecting Blocks', function (done) {
     const doSomething2 = await browser.$(
       '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)'
     );
-    functionCategory.click();
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    const doSomethingFlyout = await browser.$(
-      '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(9)'
-    );
+    const doSomethingFlyout = await getNthBlockOfCategory('Functions', 3);
     await doSomethingFlyout.dragAndDrop(doSomething2);
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     const doSomethingFlyoutWorkspace = await getSelectedBlockElement(browser);
     await doSomethingFlyoutWorkspace.dragAndDrop({x: 130, y: 20});
 
     // Drag out print from flyout and connect it with doSomething 2
-    const textButton = await browser.$('#blockly-3');
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    textButton.click();
-    const printFlyout = await browser.$(
-      '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(23)'
-    );
+    const printFlyout = await getBlockTypeFromCategory('Text', 'text_print');
     await printFlyout.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    functionCategory.click();
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    const doSomething2Flyout = await browser.$(
-      '#content_blocks > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(11)'
-    );
+    const doSomething2Flyout = await getNthBlockOfCategory('Functions', 4);
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     await doSomething2Flyout.dragAndDrop({x: 130, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec

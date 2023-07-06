@@ -13,11 +13,60 @@ const {
   testSetup,
   testFileLocations,
   getSelectedBlockElement,
+  getSelectedBlockId,
   getNthBlockOfCategory,
   getBlockTypeFromCategory,
 } = require('./test_setup');
 
 let browser;
+
+async function getLocationOfBlock(browser, id) {
+  return await browser.execute((id) => {
+    const block = Blockly.getMainWorkspace().getBlockById(id);
+    return block.getRelativeToSurfaceXY();
+  }, id);
+}
+
+async function getLocationOfBlockConnection(browser, id, connectionName) {
+  return await browser.execute((id, connectionName) => {
+    const block = Blockly.getMainWorkspace().getBlockById(id);
+
+    let connection;
+    switch (connectionName) {
+      case 'OUTPUT':
+        connection = block.outputConnection;
+        break;
+      case 'PREVIOUS':
+        connection = block.previousConnection;
+        break;
+      case 'NEXT':
+        connection = block.nextConnection;
+        break;
+      default:
+        connection = block.getInput(connectionName).connection;
+        break;
+    }
+
+    const loc = Blockly.utils.Coordinate.sum(
+        block.getRelativeToSurfaceXY(), connection.getOffsetInBlock());
+    return Blockly.utils.svgMath.wsToScreenCoordinates(
+        Blockly.getMainWorkspace(), loc);
+  }, id, connectionName);
+}
+
+async function connect(
+    browser, draggedBlock, draggedConnection, targetBlock, targetConnection) {
+  const draggedLocation = await getLocationOfBlockConnection(
+      browser, draggedBlock.id, draggedConnection);
+  const targetLocation = await getLocationOfBlockConnection(
+      browser, targetBlock.id, targetConnection);
+  
+  const delta = {
+    x: targetLocation.x - draggedLocation.x,
+    y: targetLocation.y - draggedLocation.y,
+  }
+  await draggedBlock.dragAndDrop(delta);
+}
 
 suite('Testing Connecting Blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
@@ -28,7 +77,7 @@ suite('Testing Connecting Blocks', function (done) {
     browser = await testSetup(testFileLocations.code);
   });
 
-  test('Testing Procedure', async function () {
+  test.only('Testing Procedure', async function () {
     // Drag out first function
     let proceduresDefReturn = await getBlockTypeFromCategory(
       browser,
@@ -37,6 +86,7 @@ suite('Testing Connecting Blocks', function (done) {
     );
     await proceduresDefReturn.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+    const doSomething = await getSelectedBlockElement(browser);
 
     // Drag out second function.
     proceduresDefReturn = await getBlockTypeFromCategory(
@@ -46,6 +96,7 @@ suite('Testing Connecting Blocks', function (done) {
     );
     await proceduresDefReturn.dragAndDrop({x: 300, y: 200});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+    const doSomething2 = await getSelectedBlockElement(browser);
 
     // Drag out numeric
     const mathNumeric = await getBlockTypeFromCategory(
@@ -55,32 +106,25 @@ suite('Testing Connecting Blocks', function (done) {
     );
     await mathNumeric.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+    const numeric = await getSelectedBlockElement(browser);
 
     // Connect numeric to first procedure
-    const numericWorkspace = await getSelectedBlockElement(browser);
-    const doSomething = await browser.$(
-      '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)'
-    );
-    await numericWorkspace.dragAndDrop(doSomething);
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    await numericWorkspace.dragAndDrop({x: 100, y: 25});
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+    await connect(browser, numeric, 'OUTPUT', doSomething, 'RETURN');
 
-    // Drag out doSomething from flyout and connect it to doSomething2
-    const doSomething2 = await browser.$(
-      '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)'
-    );
+    // Drag out doSomething caller from flyout.
     const doSomethingFlyout = await getNthBlockOfCategory(
       browser,
       'Functions',
       3
     );
-    await doSomethingFlyout.dragAndDrop(doSomething2);
+    await doSomethingFlyout.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    const doSomethingFlyoutWorkspace = await getSelectedBlockElement(browser);
-    await doSomethingFlyoutWorkspace.dragAndDrop({x: 130, y: 20});
+    const doSomethingCaller = await getSelectedBlockElement(browser);
 
-    // Drag out print from flyout and connect it with doSomething 2
+    // Connect the doSomething caller to doSomething2
+    await connect (browser, doSomethingCaller, 'OUTPUT', doSomething2, 'RETURN');
+
+    // Drag out print from flyout.
     const printFlyout = await getBlockTypeFromCategory(
       browser,
       'Text',
@@ -88,6 +132,9 @@ suite('Testing Connecting Blocks', function (done) {
     );
     await printFlyout.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+    const print = await getSelectedBlockElement(browser);
+
+    // Drag out doSomething2 caller from flyout.
     const doSomething2Flyout = await getNthBlockOfCategory(
       browser,
       'Functions',
@@ -96,14 +143,10 @@ suite('Testing Connecting Blocks', function (done) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     await doSomething2Flyout.dragAndDrop({x: 130, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    const doSomething2FlyoutWorkspace = await getSelectedBlockElement(browser);
+    const doSomething2Caller = await getSelectedBlockElement(browser);
 
-    const printWorkSpace = await browser.$(
-      '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(4)'
-    );
-    await doSomething2FlyoutWorkspace.dragAndDrop(printWorkSpace);
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    await doSomething2FlyoutWorkspace.dragAndDrop({x: 65, y: 0});
+    // Connect doSomething2 caller with print.
+    await connect(browser, doSomething2Caller, 'OUTPUT', print, 'TEXT');
 
     // Click run button and verify the number is 123
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
@@ -116,6 +159,6 @@ suite('Testing Connecting Blocks', function (done) {
 
   // Teardown entire suite after test are done running
   suiteTeardown(async function () {
-    await browser.deleteSession();
+    // await browser.deleteSession();
   });
 });

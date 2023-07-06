@@ -175,6 +175,40 @@ export function screenToWsCoordinates(
   return finalOffsetMainWs;
 }
 
+export function wsToScreenCoordinates(
+  ws: WorkspaceSvg,
+  workspaceCoordinates: Coordinate,
+): Coordinate {
+  const workspaceX = workspaceCoordinates.x;
+  const workspaceY = workspaceCoordinates.y;
+
+  const injectionDiv = ws.getInjectionDiv();
+  // Bounding rect coordinates are in client coordinates, meaning that they
+  // are in pixels relative to the upper left corner of the visible browser
+  // window.  These coordinates change when you scroll the browser window.
+  const boundingRect = injectionDiv.getBoundingClientRect();
+
+  // The client coordinates offset by the injection div's upper left corner.
+  const clientOffsetPixels = new Coordinate(
+    workspaceX + boundingRect.left,
+    workspaceY + boundingRect.top
+  );
+
+  // The offset in pixels between the main workspace's origin and the upper
+  // left corner of the injection div.
+  const mainOffsetPixels = ws.getOriginOffsetInPixels();
+
+  // The position of the new comment in pixels relative to the origin of the
+  // main workspace.
+  const finalOffsetPixels = Coordinate.sum(
+    clientOffsetPixels,
+    mainOffsetPixels
+  );
+  // The position in main workspace coordinates.
+  const finalOffsetMainWs = finalOffsetPixels.scale(ws.scale);
+  return finalOffsetMainWs;
+}
+
 export const TEST_ONLY = {
   XY_REGEX,
   XY_STYLE_REGEX,

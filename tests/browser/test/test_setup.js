@@ -73,17 +73,21 @@ const testFileLocations = {
   playground: 2,
 };
 
+async function getSelectedBlockId(browser) {
+  return await browser.execute(() => {
+    // Note: selected is an ICopyable and I am assuming that it is a BlockSvg.
+    return Blockly.common.getSelected()?.id;
+  });
+}
+
 /**
  * @param {Browser} browser The active WebdriverIO Browser object.
  * @return {WebElement} The selected block's root SVG element, as an interactable
  *     browser element.
  */
 async function getSelectedBlockElement(browser) {
-  const result = await browser.execute(() => {
-    // Note: selected is an ICopyable and I am assuming that it is a BlockSvg.
-    return Blockly.common.getSelected()?.id;
-  });
-  return await browser.$(`[data-id="${result}"]`);
+  const id = await getSelectedBlockId(browser);
+  return getBlockElementById(browser, id);
 }
 
 /**
@@ -93,7 +97,9 @@ async function getSelectedBlockElement(browser) {
  *     interactable browser element.
  */
 async function getBlockElementById(browser, id) {
-  return await browser.$(`[data-id="${id}"]`);
+  const elem = await browser.$(`[data-id="${id}"]`);
+  elem['id'] = id;
+  return elem;
 }
 async function getCategory(browser, categoryName) {
   const categories = await browser.$$('.blocklyTreeLabel');
@@ -131,13 +137,14 @@ async function getBlockTypeFromCategory(browser, categoryName, blockType) {
       .getWorkspace()
       .getBlocksByType(blockType)[0].id;
   }, blockType);
-  return await browser.$(`[data-id="${id}"]`);
+  return getBlockElementById(browser, id);
 }
 
 module.exports = {
   testSetup,
   testFileLocations,
   getSelectedBlockElement,
+  getSelectedBlockId,
   getBlockElementById,
   getCategory,
   getNthBlockOfCategory,

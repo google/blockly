@@ -262,7 +262,6 @@ export class RenderedConnection extends Connection {
    * Get the offset of this connection relative to the top left of its block.
    *
    * @returns The offset of the connection.
-   * @internal
    */
   getOffsetInBlock(): Coordinate {
     return this.offsetInBlock;

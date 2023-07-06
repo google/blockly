@@ -30,17 +30,19 @@ suite('Testing Connecting Blocks', function (done) {
 
   test('Testing Procedure', async function () {
     // Drag out first function
-    let proceduresDefReturn = await getNthBlockOfCategory('Functions', 1);
+    let proceduresDefReturn = await getBlockTypeFromCategory(
+        'Functions', 'procedures_defreturn');
     await proceduresDefReturn.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
     // Drag out second function.
-    proceduresDefReturn = await getNthBlockOfCategory('Functions', 1);
+    proceduresDefReturn = await getBlockTypeFromCategory(
+        'Functions', 'procedures_defreturn');
     await proceduresDefReturn.dragAndDrop({x: 300, y: 200});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
     // Drag out numeric
-    const mathNumeric = await getNthBlockOfCategory('Math', 0);
+    const mathNumeric = await getBlockTypeFromCategory('Math', 'math_number');
     await mathNumeric.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
@@ -65,7 +67,7 @@ suite('Testing Connecting Blocks', function (done) {
     await doSomethingFlyoutWorkspace.dragAndDrop({x: 130, y: 20});
 
     // Drag out print from flyout and connect it with doSomething 2
-    const printFlyout = await getNthBlockOfCategory('Text', 10);
+    const printFlyout = await getBlockTypeFromCategory('Text', 'text_print');
     await printFlyout.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     const doSomething2Flyout = await getNthBlockOfCategory('Functions', 4);

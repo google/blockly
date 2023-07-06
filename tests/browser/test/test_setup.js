@@ -115,7 +115,8 @@ async function getNthBlockOfCategory(categoryName, n) {
   category.click();
   await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
   const block = await browser.$(
-      `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`);
+    `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`
+  );
   return block;
 }
 
@@ -125,9 +126,11 @@ async function getBlockTypeFromCategory(categoryName, blockType) {
   await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
   const id = browser.execute(() => {
-    return Blockly.getMainWorkspace().getFlyout()
-        .getWorkspace().getBlocksByType(blockType)[0].id;
-  })
+    return Blockly.getMainWorkspace()
+      .getFlyout()
+      .getWorkspace()
+      .getBlocksByType(blockType)[0].id;
+  });
   return await browser.$(`[data-id="${id}"]`);
 }
 
@@ -138,5 +141,5 @@ module.exports = {
   getBlockElementById,
   getCategory,
   getNthBlockOfCategory,
-  getBlockTypeFromCategory
+  getBlockTypeFromCategory,
 };

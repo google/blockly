@@ -82,7 +82,7 @@ suite('Testing Connecting Blocks', function (done) {
       'Text',
       'text_print'
     );
-    await printFlyout.dragAndDrop({x: 50, y: 20});
+    await printFlyout.dragAndDrop({x: 50, y: 0});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     const print = await getSelectedBlockElement(browser);
 

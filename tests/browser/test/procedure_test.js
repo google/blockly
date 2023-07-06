@@ -9,7 +9,11 @@
  */
 
 const chai = require('chai');
-const {testSetup, testFileLocations} = require('./test_setup');
+const {
+  testSetup,
+  testFileLocations,
+  getSelectedBlockElement,
+} = require('./test_setup');
 
 let browser;
 suite('Testing Connecting Blocks', function (done) {
@@ -48,9 +52,7 @@ suite('Testing Connecting Blocks', function (done) {
     );
     await mathNumeric.dragAndDrop({x: 50, y: 20});
     // Connect numeric to first procedure
-    const numericWorkspace = await browser.$(
-      '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable.blocklySelected'
-    );
+    const numericWorkspace = await getSelectedBlockElement(browser);
     const doSomething = await browser.$(
       '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)'
     );
@@ -70,9 +72,7 @@ suite('Testing Connecting Blocks', function (done) {
     );
     await doSomethingFlyout.dragAndDrop(doSomething2);
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    const doSomethingFlyoutWorkspace = await browser.$(
-      '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable.blocklySelected'
-    );
+    const doSomethingFlyoutWorkspace = await getSelectedBlockElement(browser);
     await doSomethingFlyoutWorkspace.dragAndDrop({x: 130, y: 20});
 
     // Drag out print from flyout and connect it with doSomething 2
@@ -92,9 +92,8 @@ suite('Testing Connecting Blocks', function (done) {
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
     await doSomething2Flyout.dragAndDrop({x: 130, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    const doSomething2FlyoutWorkspace = await browser.$(
-      '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable.blocklySelected'
-    );
+    const doSomething2FlyoutWorkspace = await getSelectedBlockElement(browser);
+
     const printWorkSpace = await browser.$(
       '#content_blocks > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(4)'
     );

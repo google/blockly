@@ -10,7 +10,6 @@ import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
-import {CommentIcon} from '../../build/src/core/icons/comment_icon.js';
 import {simulateClick} from './test_helpers/user_input.js';
 
 suite('Comment Deserialization', function () {
@@ -62,8 +61,7 @@ suite('Comment Deserialization', function () {
       const icon = block.getIcon(Blockly.icons.CommentIcon.TYPE);
       icon.setBubbleVisible(true);
       // Check comment bubble size.
-      const comment = block.getIcon(CommentIcon.TYPE);
-      const bubbleSize = comment.getBubbleSize();
+      const bubbleSize = icon.getBubbleSize();
       chai.assert.isNotNaN(bubbleSize.width);
       chai.assert.isNotNaN(bubbleSize.height);
       chai.assert.equal(icon.getText(), text);

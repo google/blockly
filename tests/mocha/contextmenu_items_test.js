@@ -11,7 +11,6 @@ import {
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
-import {CommentIcon} from '../../build/src/core/icons/comment_icon.js';
 
 suite('Context Menu Items', function () {
   setup(function () {
@@ -460,11 +459,11 @@ suite('Context Menu Items', function () {
 
       test('Creates comment if one did not exist', function () {
         chai.assert.isUndefined(
-          this.block.getIcon(CommentIcon.TYPE),
+          this.block.getIcon(Blockly.icons.CommentIcon.TYPE),
           'New block should not have a comment'
         );
         this.commentOption.callback(this.scope);
-        chai.assert.exists(this.block.getIcon(CommentIcon.TYPE));
+        chai.assert.exists(this.block.getIcon(Blockly.icons.CommentIcon.TYPE));
         chai.assert.isEmpty(
           this.block.getCommentText(),
           'Block should have empty comment text'

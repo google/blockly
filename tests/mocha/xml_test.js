@@ -13,7 +13,7 @@ import {
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
-import {CommentIcon} from '../../core/icons/comment_icon.js';
+import {CommentIcon} from '../../build/src/core/icons/comment_icon.js';
 import {assertVariableValues} from './test_helpers/variables.js';
 
 suite('XML', function () {

@@ -23,11 +23,11 @@ import {
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
 import {runCodeGenerationTestSuites} from './test_helpers/code_generation.js';
-import {dartGenerator} from '../../generators/dart.js';
-import {javascriptGenerator} from '../../generators/javascript.js';
-import {luaGenerator} from '../../generators/lua.js';
-import {phpGenerator} from '../../generators/php.js';
-import {pythonGenerator} from '../../generators/python.js';
+import {dartGenerator} from '../../build/src/generators/dart.js';
+import {javascriptGenerator} from '../../build/src/generators/javascript.js';
+import {luaGenerator} from '../../build/src/generators/lua.js';
+import {phpGenerator} from '../../build/src/generators/php.js';
+import {pythonGenerator} from '../../build/src/generators/python.js';
 
 suite('Multiline Input Fields', function () {
   setup(function () {

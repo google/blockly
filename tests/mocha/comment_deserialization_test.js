@@ -10,7 +10,7 @@ import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
-import {CommentIcon} from '../../core/icons/comment_icon.js';
+import {CommentIcon} from '../../build/src/core/icons/comment_icon.js';
 import {simulateClick} from './test_helpers/user_input.js';
 
 suite('Comment Deserialization', function () {

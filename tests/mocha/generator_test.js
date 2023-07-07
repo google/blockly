@@ -7,11 +7,11 @@
 goog.declareModuleId('Blockly.test.generator');
 
 import * as Blockly from '../../build/src/core/blockly.js';
-import {DartGenerator} from '../../generators/dart/dart_generator.js';
-import {JavascriptGenerator} from '../../generators/javascript/javascript_generator.js';
-import {LuaGenerator} from '../../generators/lua/lua_generator.js';
-import {PhpGenerator} from '../../generators/php/php_generator.js';
-import {PythonGenerator} from '../../generators/python/python_generator.js';
+import {DartGenerator} from '../../build/src/generators/dart/dart_generator.js';
+import {JavascriptGenerator} from '../../build/src/generators/javascript/javascript_generator.js';
+import {LuaGenerator} from '../../build/src/generators/lua/lua_generator.js';
+import {PhpGenerator} from '../../build/src/generators/php/php_generator.js';
+import {PythonGenerator} from '../../build/src/generators/python/python_generator.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,

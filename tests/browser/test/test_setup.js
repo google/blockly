@@ -208,6 +208,14 @@ async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
   return await getSelectedBlockElement(browser);
 }
 
+async function contextMenuSelect(browser, block, itemText) {
+  await block.click({button: 2});
+  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+  const item = await browser.$(`div=${itemText}`);
+  await item.click();
+  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+}
+
 module.exports = {
   testSetup,
   testFileLocations,
@@ -219,4 +227,5 @@ module.exports = {
   getBlockTypeFromCategory,
   dragNthBlockFromFlyout,
   connect,
+  contextMenuSelect,
 };

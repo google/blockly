@@ -13,6 +13,7 @@ const {
   testSetup,
   testFileLocations,
   dragNthBlockFromFlyout,
+  contextMenuSelect,
 } = require('./test_setup');
 
 let browser;
@@ -61,9 +62,8 @@ suite('Right Clicking on Blocks', function (done) {
   });
 
   test('Collapse', async function () {
+    await browser.refresh();
     const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
-    await block.click({button: 2});
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
     const blockId = block.id;
     let isCollapsed = await browser.execute((blockId) => {
@@ -71,35 +71,65 @@ suite('Right Clicking on Blocks', function (done) {
     }, blockId);
     chai.assert.isFalse(isCollapsed);
 
-    const collapse = await browser.$('div=Collapse Block');
-    await collapse.click();
-
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+    await contextMenuSelect(browser, block, 'Collapse Block');
 
     isCollapsed = await browser.execute((blockId) => {
       return Blockly.getMainWorkspace().getBlockById(blockId).isCollapsed();
     }, blockId);
 
     chai.assert.isTrue(isCollapsed);
-    // TODO: assert that the text of the block is correct, maybe.
   });
 
   test('Expand', async function () {
-    // Drag out block
-    // Right click
-    // Collapse
-    // Right click
-    // Expand
-    // Verify expanded
+    await browser.refresh();
+    const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
+
+    await contextMenuSelect(browser, block, 'Collapse Block');
+    await contextMenuSelect(browser, block, 'Expand Block');
+
+    // Verify.
+    const blockId = block.id;
+    const isCollapsed = await browser.execute((blockId) => {
+      return Blockly.getMainWorkspace().getBlockById(blockId).isCollapsed();
+    }, blockId);
+    chai.assert.isFalse(isCollapsed);
   });
 
-  test('Disable', async function () {});
+  test('Disable', async function () {
+    await browser.refresh();
+    const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
 
-  test('Enable', async function () {});
+    const blockId = block.id;
+    let isEnabled = await browser.execute((blockId) => {
+      return Blockly.getMainWorkspace().getBlockById(blockId).isEnabled();
+    }, blockId);
+    chai.assert.isTrue(isEnabled);
 
-  test('Add Comment', async function () {});
+    await contextMenuSelect(browser, block, 'Disable Block');
 
-  test('Remove Comment', async function () {});
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+
+    isEnabled = await browser.execute((blockId) => {
+      return Blockly.getMainWorkspace().getBlockById(blockId).isEnabled();
+    }, blockId);
+    chai.assert.isFalse(isEnabled);
+  });
+
+  test('Enable', async function () {
+    await browser.refresh();
+    const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
+
+    const blockId = block.id;
+    await contextMenuSelect(browser, block, 'Disable Block');
+    await contextMenuSelect(browser, block, 'Enable Block');
+
+    const isEnabled = await browser.execute((blockId) => {
+      return Blockly.getMainWorkspace().getBlockById(blockId).isEnabled();
+    }, blockId);
+
+    chai.assert.isTrue(isEnabled);
+  });
+
   // Teardown entire suite after test are done running
   suiteTeardown(async function () {
     await browser.deleteSession();

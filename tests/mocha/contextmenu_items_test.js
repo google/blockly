@@ -459,7 +459,7 @@ suite('Context Menu Items', function () {
       });
 
       test('Creates comment if one did not exist', function () {
-        chai.assert.isNull(
+        chai.assert.isUndefined(
           this.block.getIcon(CommentIcon.TYPE),
           'New block should not have a comment'
         );

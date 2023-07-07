@@ -256,7 +256,7 @@ export class ZoomControls implements IPositionable {
         */
     this.zoomOutGroup = dom.createSvgElement(
       Svg.G,
-      {'class': 'blocklyZoom'},
+      {'class': 'blocklyZoom blocklyZoomOut'},
       this.svgGroup
     );
     const clip = dom.createSvgElement(
@@ -320,7 +320,7 @@ export class ZoomControls implements IPositionable {
         */
     this.zoomInGroup = dom.createSvgElement(
       Svg.G,
-      {'class': 'blocklyZoom'},
+      {'class': 'blocklyZoom blocklyZoomIn'},
       this.svgGroup
     );
     const clip = dom.createSvgElement(
@@ -401,7 +401,7 @@ export class ZoomControls implements IPositionable {
         */
     this.zoomResetGroup = dom.createSvgElement(
       Svg.G,
-      {'class': 'blocklyZoom'},
+      {'class': 'blocklyZoom blocklyZoomReset'},
       this.svgGroup
     );
     const clip = dom.createSvgElement(

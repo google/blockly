@@ -144,7 +144,7 @@ export class WorkspaceCommentSvg
     }
 
     dom.removeNode(this.svgGroup);
-    
+
     eventUtils.disable();
     super.dispose();
     eventUtils.enable();

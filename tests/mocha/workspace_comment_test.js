@@ -6,7 +6,6 @@
 
 goog.declareModuleId('Blockly.test.workspaceComment');
 
-import {WorkspaceComment} from '../../build/src/core/workspace_comment.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -156,6 +155,19 @@ suite('Workspace comment', function () {
   suite('dispose', function () {
     test('Called twice', function () {
       const comment = new Blockly.WorkspaceComment(
+        this.workspace,
+        'comment text',
+        0,
+        0,
+        'comment id'
+      );
+      comment.dispose();
+      // Nothing should go wrong the second time dispose is called.
+      comment.dispose();
+    });
+
+    test('WorkspaceCommentSvg disposed', function () {
+      const comment = new Blockly.WorkspaceCommentSvg(
         this.workspace,
         'comment text',
         0,

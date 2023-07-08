@@ -144,9 +144,7 @@ export class WorkspaceCommentSvg
     }
 
     dom.removeNode(this.svgGroup);
-    // Dispose of any rendered components
-    this.disposeInternal();
-
+    
     eventUtils.disable();
     super.dispose();
     eventUtils.enable();
@@ -987,11 +985,6 @@ export class WorkspaceCommentSvg
 
     // Allow the contents to resize.
     this.resizeComment();
-  }
-
-  /** Dispose of any rendered comment components. */
-  private disposeInternal() {
-    this.disposed_ = true;
   }
 
   /**

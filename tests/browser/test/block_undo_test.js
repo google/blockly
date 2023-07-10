@@ -28,7 +28,7 @@ suite('Testing Connecting Blocks', function (done) {
   suiteSetup(async function () {
     browser = await testSetup(testFileLocations.playground);
   });
-  test('Testing Field Edits ', async function () {
+  test('Undoing Block Movement', async function () {
     // Drag out first function
     let proceduresDefReturn = await getBlockTypeFromCategory(
       browser,

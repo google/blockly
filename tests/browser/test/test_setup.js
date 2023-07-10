@@ -202,18 +202,30 @@ async function connect(
 
 async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
   const flyoutBlock = await getNthBlockOfCategory(browser, categoryName, n);
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+  await browser.pause(2000);
   await flyoutBlock.dragAndDrop({x: x, y: y});
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+  await browser.pause(2000);
+  return await getSelectedBlockElement(browser);
+}
+
+async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
+  const flyoutBlock = await getBlockTypeFromCategory(
+    browser,
+    categoryName,
+    type
+  );
+  await browser.pause(2000);
+  await flyoutBlock.dragAndDrop({x: x, y: y});
+  await browser.pause(2000);
   return await getSelectedBlockElement(browser);
 }
 
 async function contextMenuSelect(browser, block, itemText) {
   await block.click({button: 2});
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+  await browser.pause(2000);
   const item = await browser.$(`div=${itemText}`);
   await item.click();
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+  await browser.pause(2000);
 }
 
 module.exports = {

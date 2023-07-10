@@ -16,6 +16,18 @@ const {
   contextMenuSelect,
 } = require('./test_setup');
 
+async function getIsCollapsed(browser, blockId) {
+  return await browser.execute((blockId) => {
+    return Blockly.getMainWorkspace().getBlockById(blockId).isCollapsed();
+  }, blockId);
+}
+
+async function getIsEnabled(browser, blockId) {
+  return await browser.execute((blockId) => {
+    return Blockly.getMainWorkspace().getBlockById(blockId).isEnabled();
+  }, blockId);
+}
+
 let browser;
 suite('Testing Connecting Blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
@@ -66,16 +78,12 @@ suite('Right Clicking on Blocks', function (done) {
     const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
 
     const blockId = block.id;
-    let isCollapsed = await browser.execute((blockId) => {
-      return Blockly.getMainWorkspace().getBlockById(blockId).isCollapsed();
-    }, blockId);
+    let isCollapsed = await getIsCollapsed(browser, blockId);
     chai.assert.isFalse(isCollapsed);
 
     await contextMenuSelect(browser, block, 'Collapse Block');
 
-    isCollapsed = await browser.execute((blockId) => {
-      return Blockly.getMainWorkspace().getBlockById(blockId).isCollapsed();
-    }, blockId);
+    isCollapsed = await getIsCollapsed(browser, blockId);
 
     chai.assert.isTrue(isCollapsed);
   });
@@ -89,9 +97,7 @@ suite('Right Clicking on Blocks', function (done) {
 
     // Verify.
     const blockId = block.id;
-    const isCollapsed = await browser.execute((blockId) => {
-      return Blockly.getMainWorkspace().getBlockById(blockId).isCollapsed();
-    }, blockId);
+    const isCollapsed = await getIsCollapsed(browser, blockId);
     chai.assert.isFalse(isCollapsed);
   });
 
@@ -100,18 +106,14 @@ suite('Right Clicking on Blocks', function (done) {
     const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
 
     const blockId = block.id;
-    let isEnabled = await browser.execute((blockId) => {
-      return Blockly.getMainWorkspace().getBlockById(blockId).isEnabled();
-    }, blockId);
+    let isEnabled = await getIsEnabled(browser, blockId);
     chai.assert.isTrue(isEnabled);
 
     await contextMenuSelect(browser, block, 'Disable Block');
 
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
-    isEnabled = await browser.execute((blockId) => {
-      return Blockly.getMainWorkspace().getBlockById(blockId).isEnabled();
-    }, blockId);
+    isEnabled = await getIsEnabled(browser, blockId);
     chai.assert.isFalse(isEnabled);
   });
 
@@ -123,10 +125,7 @@ suite('Right Clicking on Blocks', function (done) {
     await contextMenuSelect(browser, block, 'Disable Block');
     await contextMenuSelect(browser, block, 'Enable Block');
 
-    const isEnabled = await browser.execute((blockId) => {
-      return Blockly.getMainWorkspace().getBlockById(blockId).isEnabled();
-    }, blockId);
-
+    const isEnabled = await getIsEnabled(browser, blockId);
     chai.assert.isTrue(isEnabled);
   });
 

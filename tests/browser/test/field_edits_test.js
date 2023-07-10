@@ -30,32 +30,30 @@ suite('Testing Field Edits', function (done) {
   });
 
   test('Testing Field Edits', async function () {
-    let mathNumber = await getBlockTypeFromCategory(
+    const mathNumber = await getBlockTypeFromCategory(
       browser,
       'Math',
       'math_number'
     );
     await mathNumber.dragAndDrop({x: 50, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-
-    //Click on the field to change the value
+ 
+    // Click on the field to change the value
     const numeric = await getSelectedBlockElement(browser);
     await numeric.click();
     await numeric.click();
     await browser.keys(['2']);
 
-    //Cick on the workspace
+    // Cick on the workspace
     const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
     await workspace.click();
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-    //Get value of the
+    // Get value of the number
     const numericText = await browser
       .$(
         '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable > g > text'
       )
       .getHTML();
-
-    console.log(numericText);
 
     chai.assert.isTrue(numericText.includes('1223'));
   });

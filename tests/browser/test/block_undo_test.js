@@ -30,13 +30,13 @@ suite('Testing undo block movement', function (done) {
   });
   test('Undoing Block Movement', async function () {
     // Drag out first function
-    let proceduresDefReturn = await getBlockTypeFromCategory(
+    const proceduresDefReturn = await getBlockTypeFromCategory(
       browser,
       'Functions',
       'procedures_defreturn'
     );
 
-    //undo the block drag out
+    // undo the block drag out
     await proceduresDefReturn.dragAndDrop({x: 50, y: 20});
     await browser.keys([Key.Ctrl, 'z']);
 

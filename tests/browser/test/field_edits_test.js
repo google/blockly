@@ -19,7 +19,7 @@ const {
 } = require('./test_setup');
 
 let browser;
-suite('Testing Connecting Blocks', function (done) {
+suite('Testing Field Edits', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 
@@ -29,7 +29,7 @@ suite('Testing Connecting Blocks', function (done) {
     // Drag out first function
   });
 
-  test('Testing Field Edits ', async function () {
+  test('Testing Field Edits', async function () {
     let mathNumber = await getBlockTypeFromCategory(
       browser,
       'Math',

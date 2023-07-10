@@ -20,7 +20,7 @@ const {
 } = require('./test_setup');
 
 let browser;
-suite('Testing Connecting Blocks', function (done) {
+suite('Testing undo block movement', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 

@@ -200,6 +200,13 @@ async function connect(
   await draggedBlock.dragAndDrop(delta);
 }
 
+async function switchRTL(browser) {
+  // Switch to RTL
+  const ltrForm = await browser.$('#options > select:nth-child(1)');
+  console.log(await ltrForm.getValue());
+  await ltrForm.selectByIndex(1);
+}
+
 module.exports = {
   testSetup,
   testFileLocations,
@@ -210,4 +217,5 @@ module.exports = {
   getNthBlockOfCategory,
   getBlockTypeFromCategory,
   connect,
+  switchRTL,
 };

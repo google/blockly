@@ -17,6 +17,7 @@ const {
   getNthBlockOfCategory,
   getBlockTypeFromCategory,
   connect,
+  switchRTL,
 } = require('./test_setup');
 
 let browser;
@@ -28,29 +29,14 @@ suite('Testing undo block movement', function (done) {
   suiteSetup(async function () {
     browser = await testSetup(testFileLocations.playground);
   });
-  test('Undoing Block Movement', async function () {
-    // Drag out first function
-    const proceduresDefReturn = await getBlockTypeFromCategory(
-      browser,
-      'Functions',
-      'procedures_defreturn'
-    );
 
-    // undo the block drag out
-    await proceduresDefReturn.dragAndDrop({x: 50, y: 20});
-    await browser.keys([Key.Ctrl, 'z']);
+  test('Undoing Block Movement LTR', async function () {
+    await testUndoBlock(1);
+  });
 
-    const blockOnWorkspace = await browser.execute(() => {
-      const workspaceBlockCheck =
-        Blockly.getMainWorkspace().getAllBlocks(false)[0];
-      if (workspaceBlockCheck) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-
-    chai.assert.isFalse(blockOnWorkspace);
+  test('Undoing Block Movement RTL', async function () {
+    await switchRTL(browser);
+    await testUndoBlock(-1);
   });
 
   // Teardown entire suite after test are done running
@@ -58,3 +44,28 @@ suite('Testing undo block movement', function (done) {
     await browser.deleteSession();
   });
 });
+
+async function testUndoBlock(delta) {
+  // Drag out first function
+  const proceduresDefReturn = await getBlockTypeFromCategory(
+    browser,
+    'Functions',
+    'procedures_defreturn'
+  );
+
+  // undo the block drag out
+  await proceduresDefReturn.dragAndDrop({x: 50 * delta, y: 20 * delta});
+  await browser.keys([Key.Ctrl, 'z']);
+
+  const blockOnWorkspace = await browser.execute(() => {
+    const workspaceBlockCheck =
+      Blockly.getMainWorkspace().getAllBlocks(false)[0];
+    if (workspaceBlockCheck) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+
+  chai.assert.isFalse(blockOnWorkspace);
+}

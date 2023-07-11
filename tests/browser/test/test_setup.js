@@ -145,7 +145,7 @@ async function getCategory(browser, categoryName) {
 /**
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to search.
- * @param n Which block to select, indexed from the top of the category.
+ * @param n Which block to select, 0-indexed from the top of the category.
  * @return A Promise that resolves to the root element of the nth block in the
  *     given category.
  */

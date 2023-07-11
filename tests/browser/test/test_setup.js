@@ -206,6 +206,33 @@ async function switchRTL(browser) {
   console.log(await ltrForm.getValue());
   await ltrForm.selectByIndex(1);
 }
+async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
+  const flyoutBlock = await getNthBlockOfCategory(browser, categoryName, n);
+  await browser.pause(2000);
+  await flyoutBlock.dragAndDrop({x: x, y: y});
+  await browser.pause(2000);
+  return await getSelectedBlockElement(browser);
+}
+
+async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
+  const flyoutBlock = await getBlockTypeFromCategory(
+    browser,
+    categoryName,
+    type
+  );
+  await browser.pause(2000);
+  await flyoutBlock.dragAndDrop({x: x, y: y});
+  await browser.pause(2000);
+  return await getSelectedBlockElement(browser);
+}
+
+async function contextMenuSelect(browser, block, itemText) {
+  await block.click({button: 2});
+  await browser.pause(2000);
+  const item = await browser.$(`div=${itemText}`);
+  await item.click();
+  await browser.pause(2000);
+}
 
 module.exports = {
   testSetup,
@@ -216,6 +243,8 @@ module.exports = {
   getCategory,
   getNthBlockOfCategory,
   getBlockTypeFromCategory,
+  dragNthBlockFromFlyout,
   connect,
   switchRTL,
+  contextMenuSelect,
 };

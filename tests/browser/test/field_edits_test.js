@@ -30,12 +30,12 @@ suite('Testing Field Edits', function (done) {
   });
 
   test('Testing Field Edits LTR', async function () {
-    await testFieldEdits(1);
+    await testFieldEdits(screenDirection.ltr);
   });
 
   test('Testing Field Edits RTL', async function () {
     switchRTL(browser);
-    await testFieldEdits(-1);
+    await testFieldEdits(screenDirection.rtl);
   });
 
   // Teardown entire suite after test are done running

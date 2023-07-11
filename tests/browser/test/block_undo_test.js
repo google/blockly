@@ -54,7 +54,7 @@ async function testUndoBlock(delta) {
   );
 
   // undo the block drag out
-  await proceduresDefReturn.dragAndDrop({x: 50 * delta, y: 20 * delta});
+  await proceduresDefReturn.dragAndDrop({x: 50 * delta, y: 20});
   await browser.keys([Key.Ctrl, 'z']);
 
   const blockOnWorkspace = await browser.execute(() => {

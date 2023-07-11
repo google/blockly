@@ -50,7 +50,7 @@ async function testFieldEdits(delta) {
     'Math',
     'math_number'
   );
-  await mathNumber.dragAndDrop({x: 50 * delta, y: 20 * delta});
+  await mathNumber.dragAndDrop({x: 50 * delta, y: 20});
   await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
 
   // Click on the field to change the value

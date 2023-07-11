@@ -7,6 +7,10 @@
 /**
  * @fileoverview Node.js script to run automated functional tests in Chrome, via webdriver.
  * This file is to be used in the suiteSetup for any automated fuctional test.
+ * Note: In this file many functions return browser elements that can
+ * be clicked or otherwise interacted with through Selenium WebDriver. These
+ * elements are not the raw HTML and SVG elements on the page; they are
+ * identifiers that Selenium can use to find those elements.
  */
 
 const webdriverio = require('webdriverio');
@@ -83,6 +87,10 @@ const screenDirection = {
   LTR: 1,
 };
 
+/**
+ * @param browser The active WebdriverIO Browser object.
+ * @return A Promise that resolves to the ID of the currently selected block.
+ */
 async function getSelectedBlockId(browser) {
   return await browser.execute(() => {
     // Note: selected is an ICopyable and I am assuming that it is a BlockSvg.
@@ -92,8 +100,8 @@ async function getSelectedBlockId(browser) {
 
 /**
  * @param browser The active WebdriverIO Browser object.
- * @return The selected block's root SVG element, as an interactable
- *     browser element.
+ * @return A Promise that resolves to the selected block's root SVG element,
+ *     as an interactable browser element.
  */
 async function getSelectedBlockElement(browser) {
   const id = await getSelectedBlockId(browser);
@@ -101,16 +109,24 @@ async function getSelectedBlockElement(browser) {
 }
 
 /**
- * @param {Browser} browser The active WebdriverIO Browser object.
- * @param {string} id The ID of the Blockly block to search for.
- * @return {WebElement} The root SVG element of the block with the given ID, as an
- *     interactable browser element.
+ * @param browser The active WebdriverIO Browser object.
+ * @param id The ID of the Blockly block to search for.
+ * @return A Promise that resolves to the root SVG element of the block with
+ *     the given ID, as an interactable browser element.
  */
 async function getBlockElementById(browser, id) {
   const elem = await browser.$(`[data-id="${id}"]`);
   elem['id'] = id;
   return elem;
 }
+
+/**
+ * @param browser The active WebdriverIO Browser object.
+ * @param categoryName The name of the toolbox category to find.
+ * @return A Promise that resolves to the root element of the toolbox
+ *     category with the given name, as an interactable browser element.
+ * @throws If the category cannot be found.
+ */
 async function getCategory(browser, categoryName) {
   const categories = await browser.$$('.blocklyTreeLabel');
 
@@ -126,6 +142,13 @@ async function getCategory(browser, categoryName) {
   return category;
 }
 
+/**
+ * @param browser The active WebdriverIO Browser object.
+ * @param categoryName The name of the toolbox category to search.
+ * @param n Which block to select, indexed from the top of the category.
+ * @return A Promise that resolves to the root element of the nth block in the
+ *     given category.
+ */
 async function getNthBlockOfCategory(browser, categoryName, n) {
   const category = await getCategory(browser, categoryName);
   category.click();
@@ -136,6 +159,13 @@ async function getNthBlockOfCategory(browser, categoryName, n) {
   return block;
 }
 
+/**
+ * @param browser The active WebdriverIO Browser object.
+ * @param categoryName The name of the toolbox category to search.
+ * @param blockType The type of the block to search for.
+ * @return A Promise that resolves to the root element of the first block with the
+ *     given type in the given category.
+ */
 async function getBlockTypeFromCategory(browser, categoryName, blockType) {
   const category = await getCategory(browser, categoryName);
   category.click();
@@ -150,6 +180,14 @@ async function getBlockTypeFromCategory(browser, categoryName, blockType) {
   return getBlockElementById(browser, id);
 }
 
+/**
+ * @param browser The active WebdriverIO Browser object.
+ * @param id The ID of the block the connection is on.
+ * @param connectionName Which connection to return. An input name
+ *     to get a value or statement connection, and otherwise the type of the connection.
+ * @return A Promise that resolves to the  location of the specific connection in screen
+ *     coordinates.
+ */
 async function getLocationOfBlockConnection(browser, id, connectionName) {
   return await browser.execute(
     (id, connectionName) => {
@@ -185,6 +223,15 @@ async function getLocationOfBlockConnection(browser, id, connectionName) {
   );
 }
 
+/**
+ * Drags a block toward another block so that the specified connections attach.
+ * @param browser The active WebdriverIO Browser object.
+ * @param draggedBlock The block to drag.
+ * @param draggedConnection The active connection on the block being dragged.
+ * @param targetBlock The block to drag to.
+ * @param targetConnection The connection to connect to on the target block.
+ * @return A Promise that resolves when the actions are completed.
+ */
 async function connect(
   browser,
   draggedBlock,
@@ -210,17 +257,46 @@ async function connect(
   await draggedBlock.dragAndDrop(delta);
 }
 
+/**
+ * Switch the playground to RTL mode.
+ * @param browser The active WebdriverIO Browser object.
+ * @return A Promise that resolves when the actions are completed.
+ */
 async function switchRTL(browser) {
-  // Switch to RTL
   const ltrForm = await browser.$('#options > select:nth-child(1)');
   await ltrForm.selectByIndex(1);
 }
+
+/**
+ * Drag the specified block from the flyout and return the root element
+ * of the block.
+ * @param browser The active WebdriverIO Browser object.
+ * @param categoryName The name of the toolbox category to search.
+ * @param n Which block to select, indexed from the top of the category.
+ * @param x The x-distance to drag, as a delta from the block's initial location
+ *     on screen.
+ * @param y The y-distance to drag, as a delta from the block's initial location
+ *     on screen.
+ * @return A Promise that resolves to the root element of the newly created block.
+ */
 async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
   const flyoutBlock = await getNthBlockOfCategory(browser, categoryName, n);
   await flyoutBlock.dragAndDrop({x: x, y: y});
   return await getSelectedBlockElement(browser);
 }
 
+/**
+ * Drag the specified block from the flyout and return the root element
+ * of the block.
+ * @param browser The active WebdriverIO Browser object.
+ * @param categoryName The name of the toolbox category to search.
+ * @param type The type of the block to search for.
+ * @param x The x-distance to drag, as a delta from the block's initial location
+ *     on screen.
+ * @param y The y-distance to drag, as a delta from the block's initial location
+ *     on screen.
+ * @return A Promise that resolves to the root element of the newly created block.
+ */
 async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
   const flyoutBlock = await getBlockTypeFromCategory(
     browser,
@@ -231,6 +307,14 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
   return await getSelectedBlockElement(browser);
 }
 
+/**
+ * Right-click on the specified block, then click on the specified context menu
+ * item.
+ * @param browser The active WebdriverIO Browser object.
+ * @param block The block to click, as an interactable element.
+ * @param itemText The display text of the context menu item to click.
+ * @return A Promise that resolves when the actions are completed.
+ */
 async function contextMenuSelect(browser, block, itemText) {
   await block.click({button: 2});
   await browser.pause(200);

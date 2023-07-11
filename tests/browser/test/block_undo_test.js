@@ -15,7 +15,7 @@ const {
   testFileLocations,
   switchRTL,
   dragBlockTypeFromFlyout,
-  screenDirection
+  screenDirection,
 } = require('./test_setup');
 
 let browser;
@@ -49,17 +49,15 @@ async function testUndoBlock(delta) {
     browser,
     'Functions',
     'procedures_defreturn',
-    50*delta,
+    50 * delta,
     20
   );
 
   await browser.keys([Key.Ctrl, 'z']);
 
   const blockOnWorkspace = await browser.execute(() => {
-     return !!Blockly.getMainWorkspace().getAllBlocks(false)[0];
+    return !!Blockly.getMainWorkspace().getAllBlocks(false)[0];
   });
 
   chai.assert.isFalse(blockOnWorkspace);
 }
-
-

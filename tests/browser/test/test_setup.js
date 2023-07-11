@@ -74,9 +74,9 @@ const testFileLocations = {
 };
 
 const screenDirection = {
-  rtl:-1,
-  ltr: 1
-}
+  rtl: -1,
+  ltr: 1,
+};
 
 async function getSelectedBlockId(browser) {
   return await browser.execute(() => {
@@ -252,5 +252,5 @@ module.exports = {
   switchRTL,
   contextMenuSelect,
   dragBlockTypeFromFlyout,
-  screenDirection
+  screenDirection,
 };

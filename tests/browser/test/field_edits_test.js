@@ -15,7 +15,7 @@ const {
   getSelectedBlockElement,
   switchRTL,
   dragBlockTypeFromFlyout,
-  screenDirection
+  screenDirection,
 } = require('./test_setup');
 const {Key} = require('webdriverio');
 
@@ -52,18 +52,18 @@ async function testFieldEdits(delta) {
     50 * delta,
     20
   );
-  await browser.pause(2000)
+  await browser.pause(2000);
 
   // Click on the field to change the value
   const numeric = await getSelectedBlockElement(browser);
   await numeric.doubleClick();
   await browser.keys([Key.Delete]);
   await numeric.doubleClick();
-  await browser.keys(['1093'],);
+  await browser.keys(['1093']);
   // Click on the workspace
   const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
   await workspace.click();
-  await browser.pause(2000)
+  await browser.pause(2000);
   // Get value of the number
   const numericText = await browser
     .$(

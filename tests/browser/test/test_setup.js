@@ -73,6 +73,11 @@ const testFileLocations = {
   playground: 2,
 };
 
+const screenDirection = {
+  rtl:-1,
+  ltr: 1
+}
+
 async function getSelectedBlockId(browser) {
   return await browser.execute(() => {
     // Note: selected is an ICopyable and I am assuming that it is a BlockSvg.
@@ -203,7 +208,6 @@ async function connect(
 async function switchRTL(browser) {
   // Switch to RTL
   const ltrForm = await browser.$('#options > select:nth-child(1)');
-  console.log(await ltrForm.getValue());
   await ltrForm.selectByIndex(1);
 }
 async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
@@ -247,4 +251,6 @@ module.exports = {
   connect,
   switchRTL,
   contextMenuSelect,
+  dragBlockTypeFromFlyout,
+  screenDirection
 };

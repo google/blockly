@@ -13,11 +13,9 @@ const {Key} = require('webdriverio');
 const {
   testSetup,
   testFileLocations,
-  getSelectedBlockElement,
-  getNthBlockOfCategory,
-  getBlockTypeFromCategory,
-  connect,
   switchRTL,
+  dragBlockTypeFromFlyout,
+  screenDirection
 } = require('./test_setup');
 
 let browser;
@@ -31,12 +29,12 @@ suite('Testing undo block movement', function (done) {
   });
 
   test('Undoing Block Movement LTR', async function () {
-    await testUndoBlock(1);
+    await testUndoBlock(screenDirection.ltr);
   });
 
   test('Undoing Block Movement RTL', async function () {
     await switchRTL(browser);
-    await testUndoBlock(-1);
+    await testUndoBlock(screenDirection.rtl);
   });
 
   // Teardown entire suite after test are done running
@@ -47,25 +45,21 @@ suite('Testing undo block movement', function (done) {
 
 async function testUndoBlock(delta) {
   // Drag out first function
-  const proceduresDefReturn = await getBlockTypeFromCategory(
+  const defReturnBlock = await dragBlockTypeFromFlyout(
     browser,
     'Functions',
-    'procedures_defreturn'
+    'procedures_defreturn',
+    50*delta,
+    20
   );
 
-  // undo the block drag out
-  await proceduresDefReturn.dragAndDrop({x: 50 * delta, y: 20});
   await browser.keys([Key.Ctrl, 'z']);
 
   const blockOnWorkspace = await browser.execute(() => {
-    const workspaceBlockCheck =
-      Blockly.getMainWorkspace().getAllBlocks(false)[0];
-    if (workspaceBlockCheck) {
-      return true;
-    } else {
-      return false;
-    }
+     return !!Blockly.getMainWorkspace().getAllBlocks(false)[0];
   });
 
   chai.assert.isFalse(blockOnWorkspace);
 }
+
+

@@ -13,11 +13,11 @@ const {
   testSetup,
   testFileLocations,
   getSelectedBlockElement,
-  getNthBlockOfCategory,
-  getBlockTypeFromCategory,
-  connect,
   switchRTL,
+  dragBlockTypeFromFlyout,
+  screenDirection
 } = require('./test_setup');
+const {Key} = require('webdriverio');
 
 let browser;
 suite('Testing Field Edits', function (done) {
@@ -45,24 +45,25 @@ suite('Testing Field Edits', function (done) {
 });
 
 async function testFieldEdits(delta) {
-  const mathNumber = await getBlockTypeFromCategory(
+  const mathNumber = await dragBlockTypeFromFlyout(
     browser,
     'Math',
-    'math_number'
+    'math_number',
+    50 * delta,
+    20
   );
-  await mathNumber.dragAndDrop({x: 50 * delta, y: 20});
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+  await browser.pause(2000)
 
   // Click on the field to change the value
   const numeric = await getSelectedBlockElement(browser);
-  await numeric.click();
-  await numeric.click();
-  await browser.keys(['2']);
-
-  // Cick on the workspace
+  await numeric.doubleClick();
+  await browser.keys([Key.Delete]);
+  await numeric.doubleClick();
+  await browser.keys(['1093'],);
+  // Click on the workspace
   const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
   await workspace.click();
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+  await browser.pause(2000)
   // Get value of the number
   const numericText = await browser
     .$(
@@ -70,5 +71,5 @@ async function testFieldEdits(delta) {
     )
     .getHTML();
 
-  chai.assert.isTrue(numericText.includes('1223'));
+  chai.assert.isTrue(numericText.includes('1093'));
 }

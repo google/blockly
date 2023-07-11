@@ -73,6 +73,16 @@ const testFileLocations = {
   playground: 2,
 };
 
+/**
+ * Enum for both LTR and RTL use cases.
+ * @readonly
+ * @enum {number}
+ */
+const screenDirection = {
+  RTL: -1,
+  LTR: 1,
+};
+
 async function getSelectedBlockId(browser) {
   return await browser.execute(() => {
     // Note: selected is an ICopyable and I am assuming that it is a BlockSvg.
@@ -200,6 +210,11 @@ async function connect(
   await draggedBlock.dragAndDrop(delta);
 }
 
+async function switchRTL(browser) {
+  // Switch to RTL
+  const ltrForm = await browser.$('#options > select:nth-child(1)');
+  await ltrForm.selectByIndex(1);
+}
 async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
   const flyoutBlock = await getNthBlockOfCategory(browser, categoryName, n);
   await flyoutBlock.dragAndDrop({x: x, y: y});
@@ -235,5 +250,8 @@ module.exports = {
   getBlockTypeFromCategory,
   dragNthBlockFromFlyout,
   connect,
+  switchRTL,
   contextMenuSelect,
+  dragBlockTypeFromFlyout,
+  screenDirection,
 };

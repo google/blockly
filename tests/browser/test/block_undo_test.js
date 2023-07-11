@@ -29,12 +29,12 @@ suite('Testing undo block movement', function (done) {
   });
 
   test('Undoing Block Movement LTR', async function () {
-    await testUndoBlock(screenDirection.ltr);
+    await testUndoBlock(screenDirection.LTR);
   });
 
   test('Undoing Block Movement RTL', async function () {
     await switchRTL(browser);
-    await testUndoBlock(screenDirection.rtl);
+    await testUndoBlock(screenDirection.RTL);
   });
 
   // Teardown entire suite after test are done running

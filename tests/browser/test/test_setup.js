@@ -73,9 +73,14 @@ const testFileLocations = {
   playground: 2,
 };
 
+/**
+ * Enum for both LTR and RTL use cases.
+ * @readonly
+ * @enum {number}
+ */
 const screenDirection = {
-  rtl: -1,
-  ltr: 1,
+  RTL: -1,
+  LTR: 1,
 };
 
 async function getSelectedBlockId(browser) {

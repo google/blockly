@@ -73,6 +73,16 @@ const testFileLocations = {
   playground: 2,
 };
 
+/**
+ * Enum for both LTR and RTL use cases.
+ * @readonly
+ * @enum {number}
+ */
+const screenDirection = {
+  RTL: -1,
+  LTR: 1,
+};
+
 async function getSelectedBlockId(browser) {
   return await browser.execute(() => {
     // Note: selected is an ICopyable and I am assuming that it is a BlockSvg.
@@ -119,7 +129,7 @@ async function getCategory(browser, categoryName) {
 async function getNthBlockOfCategory(browser, categoryName, n) {
   const category = await getCategory(browser, categoryName);
   category.click();
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+  await browser.pause(100);
   const block = await browser.$(
     `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`
   );
@@ -129,7 +139,7 @@ async function getNthBlockOfCategory(browser, categoryName, n) {
 async function getBlockTypeFromCategory(browser, categoryName, blockType) {
   const category = await getCategory(browser, categoryName);
   category.click();
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
+  await browser.pause(100);
 
   const id = await browser.execute((blockType) => {
     return Blockly.getMainWorkspace()
@@ -200,11 +210,14 @@ async function connect(
   await draggedBlock.dragAndDrop(delta);
 }
 
+async function switchRTL(browser) {
+  // Switch to RTL
+  const ltrForm = await browser.$('#options > select:nth-child(1)');
+  await ltrForm.selectByIndex(1);
+}
 async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
   const flyoutBlock = await getNthBlockOfCategory(browser, categoryName, n);
-  await browser.pause(2000);
   await flyoutBlock.dragAndDrop({x: x, y: y});
-  await browser.pause(2000);
   return await getSelectedBlockElement(browser);
 }
 
@@ -214,18 +227,16 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
     categoryName,
     type
   );
-  await browser.pause(2000);
   await flyoutBlock.dragAndDrop({x: x, y: y});
-  await browser.pause(2000);
   return await getSelectedBlockElement(browser);
 }
 
 async function contextMenuSelect(browser, block, itemText) {
   await block.click({button: 2});
-  await browser.pause(2000);
+  await browser.pause(200);
   const item = await browser.$(`div=${itemText}`);
   await item.click();
-  await browser.pause(2000);
+  await browser.pause(200);
 }
 
 module.exports = {
@@ -239,5 +250,8 @@ module.exports = {
   getBlockTypeFromCategory,
   dragNthBlockFromFlyout,
   connect,
+  switchRTL,
   contextMenuSelect,
+  dragBlockTypeFromFlyout,
+  screenDirection,
 };

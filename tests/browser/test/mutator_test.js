@@ -14,10 +14,12 @@ const {
   testFileLocations,
   getBlockTypeFromCategory,
   switchRTL,
+  dragBlockTypeFromFlyout,
+  screenDirection,
 } = require('./test_setup');
 
 let browser;
-suite('Testing Field Edits', function (done) {
+suite('Testing Mutator', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 
@@ -27,7 +29,12 @@ suite('Testing Field Edits', function (done) {
   });
 
   test('Testing Field Edits LTR', async function () {
-    await testingMutator(1);
+    await testingMutator(screenDirection.LTR);
+  });
+
+  test('Testing Field Edits RTL', async function () {
+    await switchRTL(browser);
+    await testingMutator(screenDirection.RTL);
   });
 
   // Teardown entire suite after test are done running
@@ -38,18 +45,20 @@ suite('Testing Field Edits', function (done) {
 
 async function testingMutator(delta) {
   // Drag out print from flyout.
-  const controlIfFlyout = await getBlockTypeFromCategory(
+  const controlIfFlyout = await dragBlockTypeFromFlyout(
     browser,
     'Logic',
-    'controls_if'
+    'controls_if',
+    delta * 50,
+    50
   );
-  await controlIfFlyout.dragAndDrop({x: delta * 50, y: 50});
   // Get the number of transform elements on the if do block
   const ifDo = await browser.$(
     '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable.blocklySelected'
   );
   let ifDoNumHTML = await ifDo.getHTML();
-  const ifDoTransformCountBefore = (ifDoNumHTML.match(/transform/g) || []).length;
+  const ifDoTransformCountBefore = (ifDoNumHTML.match(/transform/g) || [])
+    .length;
   console.log(ifDoTransformCountBefore);
   // Click mutator
   const mutatorWheel = await browser.$(
@@ -73,7 +82,8 @@ async function testingMutator(delta) {
   await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
   // Check to see that the new configuration has more transform elements
   ifDoNumHTML = await ifDo.getHTML();
-  const ifDoTransformCountAfter = (ifDoNumHTML.match(/transform/g) || []).length;
+  const ifDoTransformCountAfter = (ifDoNumHTML.match(/transform/g) || [])
+    .length;
 
   chai.assert.isTrue(ifDoTransformCountAfter > ifDoTransformCountBefore);
 }

@@ -91,8 +91,8 @@ async function getSelectedBlockId(browser) {
 }
 
 /**
- * @param {Browser} browser The active WebdriverIO Browser object.
- * @return {WebElement} The selected block's root SVG element, as an interactable
+ * @param browser The active WebdriverIO Browser object.
+ * @return The selected block's root SVG element, as an interactable
  *     browser element.
  */
 async function getSelectedBlockElement(browser) {

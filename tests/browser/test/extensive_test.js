@@ -39,7 +39,7 @@ suite(
         'controls_repeat_ext',
         3
       );
-      await fourthRepeatDo.click({x: -100, y: -40, button: 'right'});
+      await fourthRepeatDo.click({x: -100, y: -40});
       await browser.keys([Key.Delete]);
       await browser.pause(100);
       const blockNum = await browser.execute(() => {

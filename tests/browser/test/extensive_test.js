@@ -45,7 +45,7 @@ suite('This tests loading Large Configuration and Deletion', function (done) {
     chai.assert.equal(blockNum, 10);
   });
 
-  test('Tis test undoing delete block results in the correct number of blocks', async function () {
+  test('This test undoing delete block results in the correct number of blocks', async function () {
     await browser.keys([Key.Ctrl, 'z']);
     await browser.pause(100);
     const blockNum = await browser.execute(() => {

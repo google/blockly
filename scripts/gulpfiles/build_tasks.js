@@ -15,6 +15,7 @@ gulp.sourcemaps = require('gulp-sourcemaps');
 
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const {exec, execSync} = require('child_process');
 
 const closureCompiler = require('google-closure-compiler').gulp();
@@ -379,8 +380,9 @@ error message above, try running:
  * msg/messages.js.
  */
 function generateMessages(done) {
+  const pythonCmd = os.platform() === 'win32' ? 'python' : 'python3';
   // Run js_to_json.py
-  const jsToJsonCmd = `python3 scripts/i18n/js_to_json.py \
+  const jsToJsonCmd = `${pythonCmd} scripts/i18n/js_to_json.py \
       --input_file ${path.join('msg', 'messages.js')} \
       --output_dir ${path.join('msg', 'json')} \
       --quiet`;
@@ -418,7 +420,9 @@ function buildLangfiles(done) {
   json_files = json_files.filter(file => file.endsWith('json') &&
       !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
   json_files = json_files.map(file => path.join('msg', 'json', file));
-  const createMessagesCmd = `python3 ./scripts/i18n/create_messages.py \
+
+  const pythonCmd = os.platform() === 'win32' ? 'python' : 'python3';
+  const createMessagesCmd = `${pythonCmd} ./scripts/i18n/create_messages.py \
   --source_lang_file ${path.join('msg', 'json', 'en.json')} \
   --source_synonym_file ${path.join('msg', 'json', 'synonyms.json')} \
   --source_constants_file ${path.join('msg', 'json', 'constants.json')} \
@@ -559,7 +563,10 @@ function getChunkOptions() {
     // Figure out which chunk this is by looking for one of the
     // known chunk entrypoints in chunkFiles.  N.B.: O(n*m).  :-(
     const chunk = chunks.find(
-        chunk => chunkFiles.find(f => f.endsWith(path.sep + chunk.entry)));
+        chunk => chunkFiles.find(f => {
+          return f.endsWith(path.sep.replace("\\", "/") + chunk.entry.replaceAll("\\", "/"));
+        }
+        ));
     if (!chunk) throw new Error('Unable to identify chunk');
 
     // Replace nicknames with the names we chose.

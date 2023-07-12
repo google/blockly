@@ -28,6 +28,12 @@ async function getIsEnabled(browser, blockId) {
   }, blockId);
 }
 
+async function getCommentText(browser, blockId) {
+  return await browser.execute((blockId) => {
+    return Blockly.getMainWorkspace().getBlockById(blockId).getCommentText();
+  }, blockId);
+}
+
 let browser;
 suite('Testing Connecting Blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
@@ -73,8 +79,13 @@ suite('Right Clicking on Blocks', function (done) {
     browser = await testSetup(testFileLocations.playground);
   });
 
+  teardown(async function () {
+    await browser.execute(() => {
+      Blockly.getMainWorkspace().clear();
+    });
+  });
+
   test('Collapse', async function () {
-    await browser.refresh();
     const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
 
     const blockId = block.id;
@@ -89,20 +100,17 @@ suite('Right Clicking on Blocks', function (done) {
   });
 
   test('Expand', async function () {
-    await browser.refresh();
     const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
 
     await contextMenuSelect(browser, block, 'Collapse Block');
     await contextMenuSelect(browser, block, 'Expand Block');
 
-    // Verify.
     const blockId = block.id;
     const isCollapsed = await getIsCollapsed(browser, blockId);
     chai.assert.isFalse(isCollapsed);
   });
 
   test('Disable', async function () {
-    await browser.refresh();
     const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
 
     const blockId = block.id;
@@ -118,7 +126,6 @@ suite('Right Clicking on Blocks', function (done) {
   });
 
   test('Enable', async function () {
-    await browser.refresh();
     const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
 
     const blockId = block.id;
@@ -127,6 +134,27 @@ suite('Right Clicking on Blocks', function (done) {
 
     const isEnabled = await getIsEnabled(browser, blockId);
     chai.assert.isTrue(isEnabled);
+  });
+
+  test('Add Comment', async function () {
+    const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
+
+    const blockId = block.id;
+    await contextMenuSelect(browser, block, 'Add Comment');
+
+    const commentText = await getCommentText(browser, blockId);
+    chai.assert.equal(commentText, '');
+  });
+
+  test('Remove Comment', async function () {
+    const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
+
+    const blockId = block.id;
+    await contextMenuSelect(browser, block, 'Add Comment');
+    await contextMenuSelect(browser, block, 'Remove Comment');
+
+    const commentText = await getCommentText(browser, blockId);
+    chai.assert.isNull(commentText);
   });
 
   // Teardown entire suite after test are done running

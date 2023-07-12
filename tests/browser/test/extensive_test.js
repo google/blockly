@@ -12,57 +12,53 @@ const chai = require('chai');
 const {
   testSetup,
   testFileLocations,
-  getBlockTypeFromWorkspace,
+  getBlockElementById,
 } = require('./test_setup');
 const {Key} = require('webdriverio');
 
 let browser;
-suite(
-  'Testing Blockly Loading Large Configurations and Deletion',
-  function (done) {
-    // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
-    this.timeout(0);
+suite('This tests loading Large Configuration and Deletion', function (done) {
+  // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
+  this.timeout(0);
 
-    // Setup Selenium for all of the tests
-    suiteSetup(async function () {
-      browser = await testSetup(testFileLocations.playground);
-    });
+  // Setup Selenium for all of the tests
+  suiteSetup(async function () {
+    browser = await testSetup(testFileLocations.playground);
+  });
 
-    test('Testing JSON Loading', async function () {
-      const blockNum = await testingJSONLoad();
-      chai.assert.equal(blockNum, 13);
-    });
+  test('This test loading from JSON results in the correct number of blocks', async function () {
+    const blockNum = await testingJSONLoad();
+    chai.assert.equal(blockNum, 13);
+  });
 
-    test('Testing Delete Block', async function () {
-      const fourthRepeatDo = await getBlockTypeFromWorkspace(
-        browser,
-        'controls_repeat_ext',
-        3
-      );
-      await fourthRepeatDo.click({x: -100, y: -40});
-      await browser.keys([Key.Delete]);
-      await browser.pause(100);
-      const blockNum = await browser.execute(() => {
-        return Blockly.getMainWorkspace().getAllBlocks(false).length;
-      });
-      chai.assert.equal(blockNum, 10);
+  test('This test deleting block results in the correct number of blocks', async function () {
+    const fourthRepeatDo = await getBlockElementById(
+      browser,
+      'E8bF[-r:B~cabGLP#QYd'
+    );
+    await fourthRepeatDo.click({x: -100, y: -40});
+    await browser.keys([Key.Delete]);
+    await browser.pause(100);
+    const blockNum = await browser.execute(() => {
+      return Blockly.getMainWorkspace().getAllBlocks(false).length;
     });
+    chai.assert.equal(blockNum, 10);
+  });
 
-    test('Testing redo Delete Block', async function () {
-      await browser.keys([Key.Ctrl, 'z']);
-      await browser.pause(100);
-      const blockNum = await browser.execute(() => {
-        return Blockly.getMainWorkspace().getAllBlocks(false).length;
-      });
-      chai.assert.equal(blockNum, 13);
+  test('Tis test undoing delete block results in the correct number of blocks', async function () {
+    await browser.keys([Key.Ctrl, 'z']);
+    await browser.pause(100);
+    const blockNum = await browser.execute(() => {
+      return Blockly.getMainWorkspace().getAllBlocks(false).length;
     });
+    chai.assert.equal(blockNum, 13);
+  });
 
-    // Teardown entire suite after test are done running
-    suiteTeardown(async function () {
-      await browser.deleteSession();
-    });
-  }
-);
+  // Teardown entire suite after test are done running
+  suiteTeardown(async function () {
+    await browser.deleteSession();
+  });
+});
 
 async function testingJSONLoad() {
   return await browser.execute(() => {

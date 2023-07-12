@@ -41,7 +41,7 @@ suite('Testing Connecting Blocks', function (done) {
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.playground);
+    browser = await testSetup(testFileLocations.PLAYGROUND);
   });
 
   test('Testing Block Flyout', async function () {
@@ -80,7 +80,7 @@ suite('Right Clicking on Blocks', function (done) {
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.playground);
+    browser = await testSetup(testFileLocations.PLAYGROUND);
     this.block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
     this.blockId = this.block.id;
   });

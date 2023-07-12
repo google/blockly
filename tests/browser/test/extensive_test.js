@@ -23,7 +23,7 @@ suite('This tests loading Large Configuration and Deletion', function (done) {
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.playground);
+    browser = await testSetup(testFileLocations.PLAYGROUND);
   });
 
   test('This test loading from JSON results in the correct number of blocks', async function () {

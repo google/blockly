@@ -25,7 +25,7 @@ suite('Testing undo block movement', function (done) {
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.playground);
+    browser = await testSetup(testFileLocations.PLAYGROUND);
   });
 
   test('Undoing Block Movement LTR', async function () {

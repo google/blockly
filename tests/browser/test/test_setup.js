@@ -18,8 +18,7 @@ const path = require('path');
 const {posixPath} = require('../../../scripts/helpers');
 
 let browser;
-async function testSetup(testFile) {
-  let url;
+async function testSetup(url) {
   const options = {
     capabilities: {
       'browserName': 'chrome',
@@ -45,25 +44,6 @@ async function testSetup(testFile) {
     options.capabilities['goog:chromeOptions'].args.push('--disable-gpu');
   }
   // Use Selenium to bring up the page
-  if (testFile == testFileLocations.blockfactory) {
-    url =
-      'file://' +
-      posixPath(
-        path.join(__dirname, '..', '..', '..', 'demos', 'blockfactory')
-      ) +
-      '/index.html';
-  } else if (testFile == testFileLocations.code) {
-    url =
-      'file://' +
-      posixPath(path.join(__dirname, '..', '..', '..', 'demos', 'code')) +
-      '/index.html';
-  } else {
-    url =
-      'file://' +
-      posixPath(path.join(__dirname, '..', '..')) +
-      '/playground.html';
-  }
-  console.log(url);
   console.log('Starting webdriverio...');
   browser = await webdriverio.remote(options);
   console.log('Loading URL: ' + url);
@@ -72,9 +52,18 @@ async function testSetup(testFile) {
 }
 
 const testFileLocations = {
-  blockfactory: 0,
-  code: 1,
-  playground: 2,
+  BLOCK_FACTORY:
+    'file://' +
+    posixPath(path.join(__dirname, '..', '..', '..', 'demos', 'blockfactory')) +
+    '/index.html',
+  CODE_DEMO:
+    'file://' +
+    posixPath(path.join(__dirname, '..', '..', '..', 'demos', 'code')) +
+    '/index.html',
+  PLAYGROUND:
+    'file://' +
+    posixPath(path.join(__dirname, '..', '..')) +
+    '/playground.html',
 };
 
 /**

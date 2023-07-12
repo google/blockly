@@ -182,6 +182,26 @@ async function getBlockTypeFromCategory(browser, categoryName, blockType) {
 
 /**
  * @param browser The active WebdriverIO Browser object.
+ * @param blockType The type of the block to search for in the workspace.
+ * @param position The the position of the block type on the workspace.
+ * @return A Promise that resolves to the root element of the block with the
+ *     given position and type on the workspace.
+ */
+async function getBlockTypeFromWorkspace(browser, blockType, position) {
+  const id = await browser.execute(
+    (blockType, position) => {
+      return Blockly.getMainWorkspace().getBlocksByType(blockType, true)[
+        position
+      ].id;
+    },
+    blockType,
+    position
+  );
+  return getBlockElementById(browser, id);
+}
+
+/**
+ * @param browser The active WebdriverIO Browser object.
  * @param id The ID of the block the connection is on.
  * @param connectionName Which connection to return. An input name
  *     to get a value or statement connection, and otherwise the type of the connection.
@@ -338,4 +358,5 @@ module.exports = {
   contextMenuSelect,
   dragBlockTypeFromFlyout,
   screenDirection,
+  getBlockTypeFromWorkspace,
 };

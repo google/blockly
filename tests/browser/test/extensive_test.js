@@ -18,7 +18,7 @@ const {Key} = require('webdriverio');
 
 let browser;
 suite(
-  'Testing Blockly Saving Loading and Large Configurations',
+  'Testing Blockly Loading Large Configurations and Deletion',
   function (done) {
     // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
     this.timeout(0);

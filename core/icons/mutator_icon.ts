@@ -229,7 +229,8 @@ export class MutatorIcon extends Icon implements IHasBubble {
   private createRootBlock() {
     if (!this.sourceBlock.decompose) {
       throw new Error(
-          'Blocks with mutator icons must include a decompose method');
+        'Blocks with mutator icons must include a decompose method'
+      );
     }
     this.rootBlock = this.sourceBlock.decompose(
       this.miniWorkspaceBubble!.getWorkspace()
@@ -296,7 +297,8 @@ export class MutatorIcon extends Icon implements IHasBubble {
     if (!this.rootBlock) return;
     if (!this.sourceBlock.compose) {
       throw new Error(
-          'Blocks with mutator icons must include a compose method');
+        'Blocks with mutator icons must include a compose method'
+      );
     }
 
     const existingGroup = eventUtils.getGroup();

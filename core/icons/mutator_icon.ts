@@ -227,7 +227,11 @@ export class MutatorIcon extends Icon implements IHasBubble {
 
   /** Decomposes the source block to create blocks in the mini workspace. */
   private createRootBlock() {
-    this.rootBlock = this.sourceBlock.decompose!(
+    if (!this.sourceBlock.decompose) {
+      throw new Error(
+          'Blocks with mutator icons must include a decompose method');
+    }
+    this.rootBlock = this.sourceBlock.decompose(
       this.miniWorkspaceBubble!.getWorkspace()
     )!;
 
@@ -290,12 +294,16 @@ export class MutatorIcon extends Icon implements IHasBubble {
   /** Recomposes the source block based on changes to the mini workspace. */
   private recomposeSourceBlock() {
     if (!this.rootBlock) return;
+    if (!this.sourceBlock.compose) {
+      throw new Error(
+          'Blocks with mutator icons must include a compose method');
+    }
 
     const existingGroup = eventUtils.getGroup();
     if (!existingGroup) eventUtils.setGroup(true);
 
     const oldExtraState = BlockChange.getExtraBlockState_(this.sourceBlock);
-    this.sourceBlock.compose!(this.rootBlock);
+    this.sourceBlock.compose(this.rootBlock);
     const newExtraState = BlockChange.getExtraBlockState_(this.sourceBlock);
 
     if (oldExtraState !== newExtraState) {

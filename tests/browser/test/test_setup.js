@@ -143,23 +143,14 @@ async function getBlockElementById(browser, id) {
 /**
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to find.
- * @return A Promise that resolves to the root element of the toolbox
- *     category with the given name, as an interactable browser element.
+ * @return The root element of the toolbox category with the given name, as an interactable browser element.
  * @throws If the category cannot be found.
  */
 async function getCategory(browser, categoryName) {
-  const categories = await browser.$$('.blocklyTreeLabel');
+  const category = browser.$(`.blocklyToolboxCategory*=${categoryName}`);
+  category.waitForExist();
 
-  let category;
-  for (const c of categories) {
-    const text = await c.getText();
-    if (text === categoryName) {
-      category = c;
-    }
-  }
-  if (!category) throw Error();
-
-  return category;
+  return await category;
 }
 
 /**
@@ -171,7 +162,7 @@ async function getCategory(browser, categoryName) {
  */
 async function getNthBlockOfCategory(browser, categoryName, n) {
   const category = await getCategory(browser, categoryName);
-  category.click();
+  await category.click();
   await browser.pause(100);
   const block = await browser.$(
     `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`,
@@ -190,8 +181,7 @@ async function getNthBlockOfCategory(browser, categoryName, n) {
 async function getBlockTypeFromCategory(browser, categoryName, blockType) {
   if (categoryName) {
     const category = await getCategory(browser, categoryName);
-    category.click();
-    await browser.pause(100);
+    await category.click();
   }
 
   const id = await browser.execute((blockType) => {
@@ -312,6 +302,7 @@ async function connect(
 async function switchRTL(browser) {
   const ltrForm = await browser.$('#options > select:nth-child(1)');
   await ltrForm.selectByIndex(1);
+  browser.pause(500);
 }
 
 /**
@@ -379,9 +370,9 @@ async function contextMenuSelect(browser, block, itemText) {
   const yOffset = -Math.round(blockHeight * 0.5) + 10;
 
   await block.click({button: 2, x: xOffset, y: yOffset});
-  await browser.pause(100);
 
   const item = await browser.$(`div=${itemText}`);
+  await item.waitForExist();
   await item.click();
 
   await browser.pause(100);

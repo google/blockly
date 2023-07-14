@@ -18,7 +18,7 @@ suite('Testing Connecting Blocks', function (done) {
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.blockfactory);
+    browser = await testSetup(testFileLocations.BLOCK_FACTORY);
   });
 
   test('Testing Block Drag', async function () {

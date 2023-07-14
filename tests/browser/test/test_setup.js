@@ -5,8 +5,11 @@
  */
 
 /**
- * @fileoverview Node.js script to run automated functional tests in Chrome, via webdriver.
+ * @fileoverview Node.js script to run automated functional tests in
+ * Chrome, via webdriver.
+ *
  * This file is to be used in the suiteSetup for any automated fuctional test.
+ *
  * Note: In this file many functions return browser elements that can
  * be clicked or otherwise interacted with through Selenium WebDriver. These
  * elements are not the raw HTML and SVG elements on the page; they are
@@ -18,8 +21,7 @@ const path = require('path');
 const {posixPath} = require('../../../scripts/helpers');
 
 let browser;
-async function testSetup(testFile) {
-  let url;
+async function testSetup(url) {
   const options = {
     capabilities: {
       'browserName': 'chrome',
@@ -45,25 +47,6 @@ async function testSetup(testFile) {
     options.capabilities['goog:chromeOptions'].args.push('--disable-gpu');
   }
   // Use Selenium to bring up the page
-  if (testFile == testFileLocations.blockfactory) {
-    url =
-      'file://' +
-      posixPath(
-        path.join(__dirname, '..', '..', '..', 'demos', 'blockfactory')
-      ) +
-      '/index.html';
-  } else if (testFile == testFileLocations.code) {
-    url =
-      'file://' +
-      posixPath(path.join(__dirname, '..', '..', '..', 'demos', 'code')) +
-      '/index.html';
-  } else {
-    url =
-      'file://' +
-      posixPath(path.join(__dirname, '..', '..')) +
-      '/playground.html';
-  }
-  console.log(url);
   console.log('Starting webdriverio...');
   browser = await webdriverio.remote(options);
   console.log('Loading URL: ' + url);
@@ -72,13 +55,23 @@ async function testSetup(testFile) {
 }
 
 const testFileLocations = {
-  blockfactory: 0,
-  code: 1,
-  playground: 2,
+  BLOCK_FACTORY:
+    'file://' +
+    posixPath(path.join(__dirname, '..', '..', '..', 'demos', 'blockfactory')) +
+    '/index.html',
+  CODE_DEMO:
+    'file://' +
+    posixPath(path.join(__dirname, '..', '..', '..', 'demos', 'code')) +
+    '/index.html',
+  PLAYGROUND:
+    'file://' +
+    posixPath(path.join(__dirname, '..', '..')) +
+    '/playground.html',
 };
 
 /**
  * Enum for both LTR and RTL use cases.
+ *
  * @readonly
  * @enum {number}
  */
@@ -146,8 +139,8 @@ async function getCategory(browser, categoryName) {
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to search.
  * @param n Which block to select, 0-indexed from the top of the category.
- * @return A Promise that resolves to the root element of the nth block in the
- *     given category.
+ * @return A Promise that resolves to the root element of the nth
+ *     block in the given category.
  */
 async function getNthBlockOfCategory(browser, categoryName, n) {
   const category = await getCategory(browser, categoryName);
@@ -163,8 +156,8 @@ async function getNthBlockOfCategory(browser, categoryName, n) {
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to search.
  * @param blockType The type of the block to search for.
- * @return A Promise that resolves to the root element of the first block with the
- *     given type in the given category.
+ * @return A Promise that resolves to the root element of the first
+ *     block with the given type in the given category.
  */
 async function getBlockTypeFromCategory(browser, categoryName, blockType) {
   const category = await getCategory(browser, categoryName);
@@ -203,10 +196,11 @@ async function getBlockTypeFromWorkspace(browser, blockType, position) {
 /**
  * @param browser The active WebdriverIO Browser object.
  * @param id The ID of the block the connection is on.
- * @param connectionName Which connection to return. An input name
- *     to get a value or statement connection, and otherwise the type of the connection.
- * @return A Promise that resolves to the  location of the specific connection in screen
- *     coordinates.
+ * @param connectionName Which connection to return. An input name to
+ *     get a value or statement connection, and otherwise the type of
+ *     the connection.
+ * @return A Promise that resolves to the location of the specific
+ *     connection in screen coordinates.
  */
 async function getLocationOfBlockConnection(browser, id, connectionName) {
   return await browser.execute(
@@ -233,6 +227,7 @@ async function getLocationOfBlockConnection(browser, id, connectionName) {
         block.getRelativeToSurfaceXY(),
         connection.getOffsetInBlock()
       );
+      console.log(Blockly);
       return Blockly.utils.svgMath.wsToScreenCoordinates(
         Blockly.getMainWorkspace(),
         loc
@@ -245,6 +240,7 @@ async function getLocationOfBlockConnection(browser, id, connectionName) {
 
 /**
  * Drags a block toward another block so that the specified connections attach.
+ *
  * @param browser The active WebdriverIO Browser object.
  * @param draggedBlock The block to drag.
  * @param draggedConnection The active connection on the block being dragged.
@@ -279,6 +275,7 @@ async function connect(
 
 /**
  * Switch the playground to RTL mode.
+ *
  * @param browser The active WebdriverIO Browser object.
  * @return A Promise that resolves when the actions are completed.
  */
@@ -290,14 +287,16 @@ async function switchRTL(browser) {
 /**
  * Drag the specified block from the flyout and return the root element
  * of the block.
+ *
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to search.
  * @param n Which block to select, indexed from the top of the category.
- * @param x The x-distance to drag, as a delta from the block's initial location
- *     on screen.
- * @param y The y-distance to drag, as a delta from the block's initial location
- *     on screen.
- * @return A Promise that resolves to the root element of the newly created block.
+ * @param x The x-distance to drag, as a delta from the block's
+ *     initial location on screen.
+ * @param y The y-distance to drag, as a delta from the block's
+ *     initial location on screen.
+ * @return A Promise that resolves to the root element of the newly
+ *     created block.
  */
 async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
   const flyoutBlock = await getNthBlockOfCategory(browser, categoryName, n);
@@ -308,14 +307,16 @@ async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
 /**
  * Drag the specified block from the flyout and return the root element
  * of the block.
+ *
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to search.
  * @param type The type of the block to search for.
- * @param x The x-distance to drag, as a delta from the block's initial location
- *     on screen.
- * @param y The y-distance to drag, as a delta from the block's initial location
- *     on screen.
- * @return A Promise that resolves to the root element of the newly created block.
+ * @param x The x-distance to drag, as a delta from the block's
+ *     initial location on screen.
+ * @param y The y-distance to drag, as a delta from the block's
+ *     initial location on screen.
+ * @return A Promise that resolves to the root element of the newly
+ *     created block.
  */
 async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
   const flyoutBlock = await getBlockTypeFromCategory(
@@ -328,8 +329,9 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
 }
 
 /**
- * Right-click on the specified block, then click on the specified context menu
- * item.
+ * Right-click on the specified block, then click on the specified
+ * context menu item.
+ *
  * @param browser The active WebdriverIO Browser object.
  * @param block The block to click, as an interactable element.
  * @param itemText The display text of the context menu item to click.
@@ -341,6 +343,26 @@ async function contextMenuSelect(browser, block, itemText) {
   const item = await browser.$(`div=${itemText}`);
   await item.click();
   await browser.pause(200);
+}
+
+/**
+ * Get all blocks on the main workspace.  Because the blocks have circular
+ * references that can't be JSON-encoded they can't be returned directly, so
+ * extract relevant properties only.
+ *
+ * @param browser The active WebdriverIO Browser object.
+ * @return A Promise that resolves to an array of blocks on the main workspace.
+ */
+async function getAllBlocks(browser) {
+  return browser.execute(() => {
+    // return Blockly.getMainWorkspace().getAllBlocks(false);
+    return Blockly.getMainWorkspace()
+      .getAllBlocks(false)
+      .map((block) => ({
+        type: block.type,
+        id: block.id,
+      }));
+  });
 }
 
 module.exports = {
@@ -359,4 +381,5 @@ module.exports = {
   dragBlockTypeFromFlyout,
   screenDirection,
   getBlockTypeFromWorkspace,
+  getAllBlocks,
 };

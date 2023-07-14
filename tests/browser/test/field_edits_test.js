@@ -26,7 +26,7 @@ suite('Testing Field Edits', function (done) {
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.playground);
+    browser = await testSetup(testFileLocations.PLAYGROUND);
   });
 
   test('Testing Field Edits LTR', async function () {

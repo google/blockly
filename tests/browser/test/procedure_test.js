@@ -26,7 +26,7 @@ suite('Testing Connecting Blocks', function (done) {
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.code);
+    browser = await testSetup(testFileLocations.CODE_DEMO);
   });
 
   test('Testing Procedure', async function () {

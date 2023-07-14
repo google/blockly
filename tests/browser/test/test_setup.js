@@ -332,6 +332,26 @@ async function contextMenuSelect(browser, block, itemText) {
   await browser.pause(200);
 }
 
+/**
+ * Get all blocks on the main workspace.  Because the blocks can't be
+ * returned directly (because circular references can't be JSON-encoded,
+ * just a select few relevant properties are included.
+ *
+ * @param browser The active WebdriverIO Browser object.
+ * @return A Promise that resolves to an array of blocks on the main workspace.
+ */
+async function getAllBlocks(browser) {
+  return browser.execute(() => {
+    // return Blockly.getMainWorkspace().getAllBlocks(false);
+    return Blockly.getMainWorkspace()
+      .getAllBlocks(false)
+      .map((block) => ({
+        type: block.type,
+        id: block.id,
+      }));
+  });
+}
+
 module.exports = {
   testSetup,
   testFileLocations,
@@ -348,4 +368,5 @@ module.exports = {
   dragBlockTypeFromFlyout,
   screenDirection,
   getBlockTypeFromWorkspace,
+  getAllBlocks,
 };

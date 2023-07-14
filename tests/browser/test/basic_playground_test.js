@@ -28,6 +28,12 @@ async function getIsEnabled(browser, blockId) {
   }, blockId);
 }
 
+async function getCommentText(browser, blockId) {
+  return await browser.execute((blockId) => {
+    return Blockly.getMainWorkspace().getBlockById(blockId).getCommentText();
+  }, blockId);
+}
+
 let browser;
 suite('Testing Connecting Blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
@@ -64,6 +70,10 @@ suite('Testing Connecting Blocks', function (done) {
   });
 });
 
+/**
+ * These tests have to run together. Each test acts on the state left by the
+ * previous test, and each test has a single assertion.
+ */
 suite('Right Clicking on Blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
@@ -71,62 +81,45 @@ suite('Right Clicking on Blocks', function (done) {
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
     browser = await testSetup(testFileLocations.playground);
+    this.block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
+    this.blockId = this.block.id;
   });
 
-  test('Collapse', async function () {
-    await browser.refresh();
-    const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
-
-    const blockId = block.id;
-    let isCollapsed = await getIsCollapsed(browser, blockId);
-    chai.assert.isFalse(isCollapsed);
-
-    await contextMenuSelect(browser, block, 'Collapse Block');
-
-    isCollapsed = await getIsCollapsed(browser, blockId);
-
+  test('clicking the collapse option collapses the block', async function () {
+    await contextMenuSelect(browser, this.block, 'Collapse Block');
+    const isCollapsed = await getIsCollapsed(browser, this.blockId);
     chai.assert.isTrue(isCollapsed);
   });
 
-  test('Expand', async function () {
-    await browser.refresh();
-    const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
-
-    await contextMenuSelect(browser, block, 'Collapse Block');
-    await contextMenuSelect(browser, block, 'Expand Block');
-
-    // Verify.
-    const blockId = block.id;
-    const isCollapsed = await getIsCollapsed(browser, blockId);
+  // Assumes that
+  test('clicking the expand option expands the block', async function () {
+    await contextMenuSelect(browser, this.block, 'Expand Block');
+    const isCollapsed = await getIsCollapsed(browser, this.blockId);
     chai.assert.isFalse(isCollapsed);
   });
 
-  test('Disable', async function () {
-    await browser.refresh();
-    const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
-
-    const blockId = block.id;
-    let isEnabled = await getIsEnabled(browser, blockId);
-    chai.assert.isTrue(isEnabled);
-
-    await contextMenuSelect(browser, block, 'Disable Block');
-
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-
-    isEnabled = await getIsEnabled(browser, blockId);
+  test('clicking the disable option disables the block', async function () {
+    await contextMenuSelect(browser, this.block, 'Disable Block');
+    const isEnabled = await getIsEnabled(browser, this.blockId);
     chai.assert.isFalse(isEnabled);
   });
 
-  test('Enable', async function () {
-    await browser.refresh();
-    const block = await dragNthBlockFromFlyout(browser, 'Loops', 0, 20, 20);
-
-    const blockId = block.id;
-    await contextMenuSelect(browser, block, 'Disable Block');
-    await contextMenuSelect(browser, block, 'Enable Block');
-
-    const isEnabled = await getIsEnabled(browser, blockId);
+  test('clicking the enable option enables the block', async function () {
+    await contextMenuSelect(browser, this.block, 'Enable Block');
+    const isEnabled = await getIsEnabled(browser, this.block.id);
     chai.assert.isTrue(isEnabled);
+  });
+
+  test('clicking the add comment option adds a comment to the block', async function () {
+    await contextMenuSelect(browser, this.block, 'Add Comment');
+    const commentText = await getCommentText(browser, this.block.id);
+    chai.assert.equal(commentText, '');
+  });
+
+  test('clicking the remove comment option removes a comment from the block', async function () {
+    await contextMenuSelect(browser, this.block, 'Remove Comment');
+    const commentText = await getCommentText(browser, this.block.id);
+    chai.assert.isNull(commentText);
   });
 
   // Teardown entire suite after test are done running

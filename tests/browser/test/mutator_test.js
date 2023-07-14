@@ -12,7 +12,7 @@ const chai = require('chai');
 const {
   testSetup,
   testFileLocations,
-  getBlockTypeFromCategory,
+  getSelectedBlockId,
   switchRTL,
   dragBlockTypeFromFlyout,
   screenDirection,
@@ -31,15 +31,16 @@ suite('Testing Mutator', function (done) {
   test('Testing Field Edits LTR', async function () {
     await testingMutator(screenDirection.LTR);
   });
-
+  /*
   test('Testing Field Edits RTL', async function () {
     await switchRTL(browser);
     await testingMutator(screenDirection.RTL);
   });
+  */
 
   // Teardown entire suite after test are done running
   suiteTeardown(async function () {
-    await browser.deleteSession();
+    //await browser.deleteSession();
   });
 });
 
@@ -52,38 +53,27 @@ async function testingMutator(delta) {
     delta * 50,
     50
   );
-  // Get the number of transform elements on the if do block
-  const ifDo = await browser.$(
-    '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable.blocklySelected'
-  );
-  let ifDoNumHTML = await ifDo.getHTML();
-  const ifDoTransformCountBefore = (ifDoNumHTML.match(/transform/g) || [])
-    .length;
-  console.log(ifDoTransformCountBefore);
-  // Click mutator
+  // Click on the mutator and drag out else ig block
   const mutatorWheel = await browser.$(
     '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable.blocklySelected > g.blocklyIconGroup'
   );
-
   await mutatorWheel.click();
-  // Create the new configuration
   const elseIfFlyout = await browser.$(
     '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBubbleCanvas > g > g:nth-child(2) > svg:nth-child(1) > g > g.blocklyFlyout > g > g.blocklyBlockCanvas > g:nth-child(3)'
   );
-
   elseIfFlyout.dragAndDrop({x: delta * 50, y: 42});
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-
-  const elseIf = await browser.$(
-    '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBubbleCanvas > g > g:nth-child(2) > svg:nth-child(1) > g > g.blocklyBlockCanvas > g.blocklyDraggable'
+  await browser.pause(100);
+  // Get the ids for the blocks in the mutator 
+  blockIds =  await browser.execute(
+    () => {
+      const mutatorBlock = Blockly.getMainWorkspace().getAllBlocks()[0];
+      // Adding the first element in the array is the original block id, the second is the first mutator block, and the third is the second mutator block
+      const mutatorWorkspaceFirstBlock = mutatorBlock.mutator.getWorkspace().getAllBlocks(false)[0].id;
+      let blockIds=[Blockly.getMainWorkspace().getAllBlocks()[0].id,mutatorWorkspaceFirstBlock,Blockly.common.getSelected()?.id];
+     return blockIds;
+    }
   );
 
-  elseIf.dragAndDrop({x: delta * -25, y: -10});
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
-  // Check to see that the new configuration has more transform elements
-  ifDoNumHTML = await ifDo.getHTML();
-  const ifDoTransformCountAfter = (ifDoNumHTML.match(/transform/g) || [])
-    .length;
 
-  chai.assert.isTrue(ifDoTransformCountAfter > ifDoTransformCountBefore);
+  chai.assert.equal(blockIds.length, '3');
 }

@@ -72,7 +72,7 @@ export class PythonGenerator extends CodeGenerator {
     // (foo.bar)() -> foo.bar()
     // (foo[0])() -> foo[0]()
     [Order.MEMBER, Order.FUNCTION_CALL],
-  
+
     // not (not foo) -> not not foo
     [Order.LOGICAL_NOT, Order.LOGICAL_NOT],
     // a and (b and c) -> a and b and c
@@ -80,7 +80,7 @@ export class PythonGenerator extends CodeGenerator {
     // a or (b or c) -> a or b or c
     [Order.LOGICAL_OR, Order.LOGICAL_OR]
   ];
-  
+
   constructor(name) {
     super(name ?? 'Python');
     this.isInitialized = false;
@@ -143,7 +143,7 @@ export class PythonGenerator extends CodeGenerator {
       'vars,xrange,zip'
     );
   }
-  
+
   /**
    * Initialise the database of variable names.
    * @param {!Workspace} workspace Workspace to generate code from.
@@ -151,22 +151,22 @@ export class PythonGenerator extends CodeGenerator {
    */
   init(workspace) {
     super.init(workspace);
-  
+
     /**
      * Empty loops or conditionals are not allowed in Python.
      */
     this.PASS = this.INDENT + 'pass\n';
-  
+
     if (!this.nameDB_) {
       this.nameDB_ = new Names(this.RESERVED_WORDS_);
     } else {
       this.nameDB_.reset();
     }
-  
+
     this.nameDB_.setVariableMap(workspace.getVariableMap());
     this.nameDB_.populateVariables(workspace);
     this.nameDB_.populateProcedures(workspace);
-  
+
     const defvars = [];
     // Add developer variables (not created or named by the user).
     const devVarList = Variables.allDeveloperVariables(workspace);
@@ -175,7 +175,7 @@ export class PythonGenerator extends CodeGenerator {
           this.nameDB_.getName(devVarList[i], Names.DEVELOPER_VARIABLE_TYPE) +
           ' = None');
     }
-  
+
     // Add user variables, but only ones that are being used.
     const variables = Variables.allUsedVarModels(workspace);
     for (let i = 0; i < variables.length; i++) {
@@ -183,11 +183,11 @@ export class PythonGenerator extends CodeGenerator {
           this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE) +
           ' = None');
     }
-  
+
     this.definitions_['variables'] = defvars.join('\n');
     this.isInitialized = true;
   }
-  
+
   /**
    * Prepend the generated code with import statements and variable definitions.
    * @param {string} code Generated code.
@@ -208,12 +208,12 @@ export class PythonGenerator extends CodeGenerator {
     // Call Blockly.CodeGenerator's finish.
     code = super.finish(code);
     this.isInitialized = false;
-  
+
     this.nameDB_.reset();
     const allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
     return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
   }
-  
+
   /**
    * Naked values are top-level blocks with outputs that aren't plugged into
    * anything.
@@ -223,7 +223,7 @@ export class PythonGenerator extends CodeGenerator {
   scrubNakedValue(line) {
     return line + '\n';
   }
-  
+
   /**
    * Encode a string as a properly escaped Python string, complete with quotes.
    * @param {string} string Text to encode.
@@ -232,7 +232,7 @@ export class PythonGenerator extends CodeGenerator {
    */
   quote_(string) {
     string = string.replace(/\\/g, '\\\\').replace(/\n/g, '\\\n');
-  
+
     // Follow the CPython behaviour of repr() for a non-byte string.
     let quote = '\'';
     if (string.indexOf('\'') !== -1) {
@@ -244,7 +244,7 @@ export class PythonGenerator extends CodeGenerator {
     }
     return quote + string + quote;
   }
-  
+
   /**
    * Encode a string as a properly escaped multiline Python string, complete
    * with quotes.
@@ -258,7 +258,7 @@ export class PythonGenerator extends CodeGenerator {
     // + '\n' +
     return lines.join(' + \'\\n\' + \n');
   }
-  
+
   /**
    * Common tasks for generating Python from blocks.
    * Handles comments for the specified block and any connected value blocks.
@@ -297,7 +297,7 @@ export class PythonGenerator extends CodeGenerator {
     const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
     return commentCode + code + nextCode;
   }
-  
+
   /**
    * Gets a property and adjusts the value, taking into account indexing.
    * If a static int, casts to an integer, otherwise returns a code string.
@@ -315,7 +315,7 @@ export class PythonGenerator extends CodeGenerator {
     const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
     const atOrder = delta ? this.ORDER_ADDITIVE : this.ORDER_NONE;
     let at = this.valueToCode(block, atId, atOrder) || defaultAtIndex;
-  
+
     if (stringUtils.isNumber(at)) {
       // If the index is a naked number, adjust it right now.
       at = parseInt(at, 10) + delta;

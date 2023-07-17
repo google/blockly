@@ -90,39 +90,33 @@ suite('Right Clicking on Blocks', function () {
 
   test('clicking the collapse option collapses the block', async function () {
     await contextMenuSelect(browser, this.block, 'Collapse Block');
-    const isCollapsed = await getIsCollapsed(browser, this.blockId);
-    chai.assert.isTrue(isCollapsed);
+    chai.assert.isTrue(await getIsCollapsed(browser, this.blockId));
   });
 
   // Assumes that
   test('clicking the expand option expands the block', async function () {
     await contextMenuSelect(browser, this.block, 'Expand Block');
-    const isCollapsed = await getIsCollapsed(browser, this.blockId);
-    chai.assert.isFalse(isCollapsed);
+    chai.assert.isFalse(await getIsCollapsed(browser, this.blockId));
   });
 
   test('clicking the disable option disables the block', async function () {
     await contextMenuSelect(browser, this.block, 'Disable Block');
-    const isDisabled = await getIsDisabled(browser, this.blockId);
-    chai.assert.isTrue(isDisabled);
+    chai.assert.isTrue(await getIsDisabled(browser, this.blockId));
   });
 
   test('clicking the enable option enables the block', async function () {
     await contextMenuSelect(browser, this.block, 'Enable Block');
-    const isDisabled = await getIsDisabled(browser, this.block.id);
-    chai.assert.isFalse(isDisabled);
+    chai.assert.isFalse(await getIsDisabled(browser, this.block.id));
   });
 
   test('clicking the add comment option adds a comment to the block', async function () {
     await contextMenuSelect(browser, this.block, 'Add Comment');
-    const commentText = await getCommentText(browser, this.block.id);
-    chai.assert.equal(commentText, '');
+    chai.assert.equal(await getCommentText(browser, this.block.id), '');
   });
 
   test('clicking the remove comment option removes a comment from the block', async function () {
     await contextMenuSelect(browser, this.block, 'Remove Comment');
-    const commentText = await getCommentText(browser, this.block.id);
-    chai.assert.isNull(commentText);
+    chai.assert.isNull(await getCommentText(browser, this.block.id));
   });
 
   // Teardown entire suite after test are done running

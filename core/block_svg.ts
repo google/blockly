@@ -59,7 +59,7 @@ import * as svgMath from './utils/svg_math.js';
 import {WarningIcon} from './icons/warning_icon.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import {queueRender} from './render_management.js';
+import * as renderManagement from './render_management.js';
 import * as deprecation from './utils/deprecation.js';
 import {IconType} from './icons/icon_types.js';
 
@@ -983,8 +983,8 @@ export class BlockSvg
       icon.initView(this.createIconPointerDownListener(icon));
       icon.applyColour();
       icon.updateEditable();
-      // TODO: Change this based on #7068.
-      this.render();
+      this.queueRender();
+      renderManagement.triggerQueuedRenders();
       this.bumpNeighbours();
     }
 
@@ -1012,8 +1012,8 @@ export class BlockSvg
     if (type.equals(MutatorIcon.TYPE)) this.mutator = null;
 
     if (this.rendered) {
-      // TODO: Change this based on #7068.
-      this.render();
+      this.queueRender();
+      renderManagement.triggerQueuedRenders();
       this.bumpNeighbours();
     }
     return removed;
@@ -1542,7 +1542,7 @@ export class BlockSvg
    * @internal
    */
   queueRender(): Promise<void> {
-    return queueRender(this);
+    return renderManagement.queueRender(this);
   }
 
   /**

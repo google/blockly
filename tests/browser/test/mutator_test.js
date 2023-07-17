@@ -12,7 +12,7 @@ const chai = require('chai');
 const {
   testSetup,
   testFileLocations,
-  getSelectedBlockId,
+  connect,
   switchRTL,
   dragBlockTypeFromFlyout,
   screenDirection,
@@ -69,11 +69,13 @@ async function testingMutator(delta) {
       const mutatorBlock = Blockly.getMainWorkspace().getAllBlocks()[0];
       // Adding the first element in the array is the original block id, the second is the first mutator block, and the third is the second mutator block
       const mutatorWorkspaceFirstBlock = mutatorBlock.mutator.getWorkspace().getAllBlocks(false)[0].id;
-      let blockIds=[Blockly.getMainWorkspace().getAllBlocks()[0].id,mutatorWorkspaceFirstBlock,Blockly.common.getSelected()?.id];
+      let blockIds=[Blockly.getMainWorkspace().getAllBlocks()[0].id];
      return blockIds;
     }
   );
+  // Connect the mutator blocks 
+  await connect(browser, blockIds[1], 'OUTPUT', blockIds[1], 'RETURN',blockIds[0]);
 
 
-  chai.assert.equal(blockIds.length, '3');
+  chai.assert.equal(blockIds, '3');
 }

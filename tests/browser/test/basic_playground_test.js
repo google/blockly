@@ -131,7 +131,7 @@ suite('Disabling', function () {
   this.timeout(0);
 
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.playground);
+    browser = await testSetup(testFileLocations.PLAYGROUND);
   });
 
   setup(async function () {

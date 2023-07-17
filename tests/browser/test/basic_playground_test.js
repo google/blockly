@@ -13,6 +13,8 @@ const {
   testSetup,
   testFileLocations,
   dragNthBlockFromFlyout,
+  dragBlockTypeFromFlyout,
+  connect,
   contextMenuSelect,
 } = require('./test_setup');
 
@@ -22,9 +24,10 @@ async function getIsCollapsed(browser, blockId) {
   }, blockId);
 }
 
-async function getIsEnabled(browser, blockId) {
+async function getIsDisabled(browser, blockId) {
   return await browser.execute((blockId) => {
-    return Blockly.getMainWorkspace().getBlockById(blockId).isEnabled();
+    const block = Blockly.getMainWorkspace().getBlockById(blockId);
+    return !block.isEnabled() || block.getInheritedDisabled();
   }, blockId);
 }
 
@@ -35,7 +38,7 @@ async function getCommentText(browser, blockId) {
 }
 
 let browser;
-suite('Testing Connecting Blocks', function (done) {
+suite('Testing Connecting Blocks', function () {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 
@@ -74,7 +77,7 @@ suite('Testing Connecting Blocks', function (done) {
  * These tests have to run together. Each test acts on the state left by the
  * previous test, and each test has a single assertion.
  */
-suite('Right Clicking on Blocks', function (done) {
+suite('Right Clicking on Blocks', function () {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 
@@ -87,42 +90,132 @@ suite('Right Clicking on Blocks', function (done) {
 
   test('clicking the collapse option collapses the block', async function () {
     await contextMenuSelect(browser, this.block, 'Collapse Block');
-    const isCollapsed = await getIsCollapsed(browser, this.blockId);
-    chai.assert.isTrue(isCollapsed);
+    chai.assert.isTrue(await getIsCollapsed(browser, this.blockId));
   });
 
   // Assumes that
   test('clicking the expand option expands the block', async function () {
     await contextMenuSelect(browser, this.block, 'Expand Block');
-    const isCollapsed = await getIsCollapsed(browser, this.blockId);
-    chai.assert.isFalse(isCollapsed);
+    chai.assert.isFalse(await getIsCollapsed(browser, this.blockId));
   });
 
   test('clicking the disable option disables the block', async function () {
     await contextMenuSelect(browser, this.block, 'Disable Block');
-    const isEnabled = await getIsEnabled(browser, this.blockId);
-    chai.assert.isFalse(isEnabled);
+    chai.assert.isTrue(await getIsDisabled(browser, this.blockId));
   });
 
   test('clicking the enable option enables the block', async function () {
     await contextMenuSelect(browser, this.block, 'Enable Block');
-    const isEnabled = await getIsEnabled(browser, this.block.id);
-    chai.assert.isTrue(isEnabled);
+    chai.assert.isFalse(await getIsDisabled(browser, this.block.id));
   });
 
   test('clicking the add comment option adds a comment to the block', async function () {
     await contextMenuSelect(browser, this.block, 'Add Comment');
-    const commentText = await getCommentText(browser, this.block.id);
-    chai.assert.equal(commentText, '');
+    chai.assert.equal(await getCommentText(browser, this.block.id), '');
   });
 
   test('clicking the remove comment option removes a comment from the block', async function () {
     await contextMenuSelect(browser, this.block, 'Remove Comment');
-    const commentText = await getCommentText(browser, this.block.id);
-    chai.assert.isNull(commentText);
+    chai.assert.isNull(await getCommentText(browser, this.block.id));
   });
 
   // Teardown entire suite after test are done running
+  suiteTeardown(async function () {
+    await browser.deleteSession();
+  });
+});
+
+suite('Disabling', function () {
+  // Setting timeout to unlimited as the webdriver takes a longer
+  // time to run than most mocha tests.
+  this.timeout(0);
+
+  suiteSetup(async function () {
+    browser = await testSetup(testFileLocations.PLAYGROUND);
+  });
+
+  setup(async function () {
+    await browser.refresh();
+  });
+
+  test(
+    'children connected to value inputs are disabled when the ' +
+      'parent is diabled',
+    async function () {
+      const parent = await dragBlockTypeFromFlyout(
+        browser,
+        'Logic',
+        'controls_if',
+        10,
+        10
+      );
+      const child = await dragBlockTypeFromFlyout(
+        browser,
+        'Logic',
+        'logic_boolean',
+        110,
+        110
+      );
+      await connect(browser, child, 'OUTPUT', parent, 'IF0');
+
+      await contextMenuSelect(browser, parent, 'Disable Block');
+
+      chai.assert.isTrue(await getIsDisabled(browser, child.id));
+    }
+  );
+
+  test(
+    'children connected to statement inputs are disabled when the ' +
+      'parent is disabled',
+    async function () {
+      const parent = await dragBlockTypeFromFlyout(
+        browser,
+        'Logic',
+        'controls_if',
+        10,
+        10
+      );
+      const child = await dragBlockTypeFromFlyout(
+        browser,
+        'Logic',
+        'controls_if',
+        110,
+        110
+      );
+      await connect(browser, child, 'PREVIOUS', parent, 'IF0');
+
+      await contextMenuSelect(browser, parent, 'Disable Block');
+
+      chai.assert.isTrue(await getIsDisabled(browser, child.id));
+    }
+  );
+
+  test(
+    'children connected to next connections are not disabled when the ' +
+      'parent is disabled',
+    async function () {
+      const parent = await dragBlockTypeFromFlyout(
+        browser,
+        'Logic',
+        'controls_if',
+        10,
+        10
+      );
+      const child = await dragBlockTypeFromFlyout(
+        browser,
+        'Logic',
+        'controls_if',
+        110,
+        110
+      );
+      await connect(browser, child, 'PREVIOUS', parent, 'NEXT');
+
+      await contextMenuSelect(browser, parent, 'Disable Block');
+
+      chai.assert.isFalse(await getIsDisabled(browser, child.id));
+    }
+  );
+
   suiteTeardown(async function () {
     await browser.deleteSession();
   });

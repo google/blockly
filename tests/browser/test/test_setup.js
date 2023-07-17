@@ -338,11 +338,20 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
  * @return A Promise that resolves when the actions are completed.
  */
 async function contextMenuSelect(browser, block, itemText) {
-  await block.click({button: 2});
-  await browser.pause(200);
+  // Clicking will always happen in the middle of the block's bounds
+  // (including children) by default, which causes problems if it has holes
+  // (e.g. statement inputs).
+  // Instead we want to click 20% from the right and 5% from the top.
+  const xOffset = -Math.round((await block.getSize('width')) * 0.3);
+  const yOffset = -Math.round((await block.getSize('height')) * 0.45);
+
+  await block.click({button: 2, x: xOffset, y: yOffset});
+  await browser.pause(100);
+
   const item = await browser.$(`div=${itemText}`);
   await item.click();
-  await browser.pause(200);
+
+  await browser.pause(100);
 }
 
 /**
@@ -375,10 +384,10 @@ module.exports = {
   getNthBlockOfCategory,
   getBlockTypeFromCategory,
   dragNthBlockFromFlyout,
+  dragBlockTypeFromFlyout,
   connect,
   switchRTL,
   contextMenuSelect,
-  dragBlockTypeFromFlyout,
   screenDirection,
   getBlockTypeFromWorkspace,
   getAllBlocks,

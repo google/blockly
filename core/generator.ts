@@ -471,10 +471,7 @@ export class CodeGenerator {
    * @returns The actual name of the new function.  This may differ from
    *     desiredName if the former has already been taken by the user.
    */
-  provideFunction_(
-    desiredName: string,
-    code: string[] | string
-  ): string {
+  provideFunction_(desiredName: string, code: string[] | string): string {
     if (!this.definitions_[desiredName]) {
       const functionName = this.nameDB_!.getDistinctName(
         desiredName,

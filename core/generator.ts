@@ -49,7 +49,7 @@ export class CodeGenerator {
    * legitimately appear in a function definition (or comment), and it must
    * not confuse the regular expression parser.
    */
-  protected FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
+  FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
   FUNCTION_NAME_PLACEHOLDER_REGEXP_: RegExp;
 
   /**
@@ -471,7 +471,7 @@ export class CodeGenerator {
    * @returns The actual name of the new function.  This may differ from
    *     desiredName if the former has already been taken by the user.
    */
-  protected provideFunction_(
+  provideFunction_(
     desiredName: string,
     code: string[] | string
   ): string {

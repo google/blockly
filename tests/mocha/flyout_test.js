@@ -27,7 +27,7 @@ import {
 
 suite('Flyout', function () {
   setup(function () {
-    sharedTestSetup.call(this);
+    this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
     Blockly.defineBlocksWithJsonArray([
       {
         'type': 'basic_block',
@@ -48,6 +48,7 @@ suite('Flyout', function () {
   });
 
   teardown(function () {
+    this.clock.runAll();
     sharedTestTeardown.call(this);
   });
 

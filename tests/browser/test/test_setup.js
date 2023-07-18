@@ -196,24 +196,16 @@ async function getBlockTypeFromWorkspace(browser, blockType, position) {
 /**
  * @param browser The active WebdriverIO Browser object.
  * @param id The ID of the block the connection is on.
- * @param connectionName Which connection to return. An input name
- *     to get a value or statement connection, and otherwise the type of the connection.
- * @param mutatorBlockId a string that represents the main block id 
- * @return A Promise that resolves to the  location of the specific connection in screen
- *     coordinates.
+ * @param connectionName Which connection to return. An input name to
+ *     get a value or statement connection, and otherwise the type of
+ *     the connection.
+ * @return A Promise that resolves to the location of the specific
+ *     connection in screen coordinates.
  */
-async function getLocationOfBlockConnection(browser, id, connectionName, mutatorBlockId,isSecondBlock) {
+async function getLocationOfBlockConnection(browser, id, connectionName) {
   return await browser.execute(
-    (id, connectionName,mutatorBlockId, isSecondBlock) => {
-      let block;
-       console.log(id);
-      if(mutatorBlockId &&!isSecondBlock){
-       block = Blockly.getMainWorkspace().getBlockById(mutatorBlockId).mutator.getWorkspace().getBlockById(id);
-      }else if(mutatorBlockId && isSecondBlock) {
-        block = Blockly.common.getSelected(); 
-      } else { 
-        block = Blockly.getMainWorkspace().getBlockById(id);
-      }
+    (id, connectionName) => {
+      const block = Blockly.getMainWorkspace().getBlockById(id);
 
       let connection;
       switch (connectionName) {
@@ -242,9 +234,7 @@ async function getLocationOfBlockConnection(browser, id, connectionName, mutator
       );
     },
     id,
-    connectionName,
-    mutatorBlockId,
-    isSecondBlock
+    connectionName
   );
 }
 
@@ -256,7 +246,6 @@ async function getLocationOfBlockConnection(browser, id, connectionName, mutator
  * @param draggedConnection The active connection on the block being dragged.
  * @param targetBlock The block to drag to.
  * @param targetConnection The connection to connect to on the target block.
- * @param mutatorBlockId a string that represents the main block id 
  * @return A Promise that resolves when the actions are completed.
  */
 async function connect(
@@ -264,37 +253,18 @@ async function connect(
   draggedBlock,
   draggedConnection,
   targetBlock,
-  targetConnection,
-  mutatorBlockId
+  targetConnection
 ) {
-  let draggedLocation;
-  let targetLocation;
-  if(mutatorBlockId){
-   draggedLocation = await getLocationOfBlockConnection(
-    browser,
-    draggedBlock,
-    draggedConnection,
-    mutatorBlockId,
-    true
-  );
-   targetLocation = await getLocationOfBlockConnection(
-    browser,
-    targetBlock,
-    targetConnection,
-    mutatorBlockId,
-  );
-}else{
-   draggedLocation = await getLocationOfBlockConnection(
+  const draggedLocation = await getLocationOfBlockConnection(
     browser,
     draggedBlock.id,
-    draggedConnection,
+    draggedConnection
   );
-   targetLocation = await getLocationOfBlockConnection(
+  const targetLocation = await getLocationOfBlockConnection(
     browser,
     targetBlock.id,
-    targetConnection,
-  )
-}
+    targetConnection
+  );
 
   const delta = {
     x: targetLocation.x - draggedLocation.x,

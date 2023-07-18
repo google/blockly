@@ -648,7 +648,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     }
 
     if (shadowDom) {
-      blockShadow = Xml.domToBlock(shadowDom, parentBlock.workspace);
+      blockShadow = Xml.domToBlockInternal(shadowDom, parentBlock.workspace);
       if (attemptToConnect) {
         if (this.type === ConnectionType.INPUT_VALUE) {
           if (!blockShadow.outputConnection) {

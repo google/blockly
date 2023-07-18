@@ -23,6 +23,7 @@ import type {Workspace} from './workspace.js';
 import {WorkspaceComment} from './workspace_comment.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import * as renderManagement from './render_management.js';
 
 /**
  * Encode a block tree as XML.
@@ -430,7 +431,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
         // Allow top-level shadow blocks if recordUndo is disabled since
         // that means an undo is in progress.  Such a block is expected
         // to be moved to a nested destination in the next operation.
-        const block = domToBlock(xmlChildElement, workspace);
+        const block = domToBlockInternal(xmlChildElement, workspace);
         newBlockIds.push(block.id);
         const blockX = parseInt(xmlChildElement.getAttribute('x') ?? '10', 10);
         const blockY = parseInt(xmlChildElement.getAttribute('y') ?? '10', 10);
@@ -467,12 +468,13 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
     }
   } finally {
     eventUtils.setGroup(existingGroup);
+    if ((workspace as WorkspaceSvg).setResizesEnabled) {
+      (workspace as WorkspaceSvg).setResizesEnabled(true);
+    }
+    if (workspace.rendered) renderManagement.triggerQueuedRenders();
     dom.stopTextWidthCache();
   }
   // Re-enable workspace resizing.
-  if ((workspace as WorkspaceSvg).setResizesEnabled) {
-    (workspace as WorkspaceSvg).setResizesEnabled(true);
-  }
   eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
   return newBlockIds;
 }
@@ -545,6 +547,27 @@ export function appendDomToWorkspace(
  * @returns The root block created.
  */
 export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
+  const block = domToBlockInternal(xmlBlock, workspace);
+  if (workspace.rendered) renderManagement.triggerQueuedRenders();
+  return block;
+}
+
+/**
+ * Decode an XML block tag and create a block (and possibly sub blocks) on the
+ * workspace.
+ *
+ * This is defined internally so that it doesn't trigger an immediate render,
+ * which we do want to happen for external calls.
+ *
+ * @param xmlBlock XML block element.
+ * @param workspace The workspace.
+ * @returns The root block created.
+ * @internal
+ */
+export function domToBlockInternal(
+  xmlBlock: Element,
+  workspace: Workspace
+): Block {
   // Create top-level block.
   eventUtils.disable();
   const variablesBeforeCreation = workspace.getAllVariables();
@@ -561,7 +584,7 @@ export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
         (blocks[i] as BlockSvg).initSvg();
       }
       for (let i = blocks.length - 1; i >= 0; i--) {
-        (blocks[i] as BlockSvg).render(false);
+        (blocks[i] as BlockSvg).queueRender();
       }
       // Populating the connection database may be deferred until after the
       // blocks have rendered.

@@ -18,6 +18,7 @@ import * as registry from '../registry.js';
 import * as utilsXml from '../utils/xml.js';
 import type {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
+import * as renderManagement from '../render_management.js';
 
 import {
   BadConnectionCheck,
@@ -349,7 +350,9 @@ export function append(
   workspace: Workspace,
   {recordUndo = false}: {recordUndo?: boolean} = {}
 ): Block {
-  return appendInternal(state, workspace, {recordUndo});
+  const block = appendInternal(state, workspace, {recordUndo});
+  if (workspace.rendered) renderManagement.triggerQueuedRenders();
+  return block;
 }
 
 /**
@@ -701,7 +704,8 @@ function initBlock(block: Block, rendered: boolean) {
     blockSvg.setConnectionTracking(false);
 
     blockSvg.initSvg();
-    blockSvg.render(false);
+    blockSvg.queueRender();
+
     // fixes #6076 JSO deserialization doesn't
     // set .iconXY_ property so here it will be set
     for (const icon of blockSvg.getIcons()) {

@@ -784,7 +784,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
         }
         block = blocks.appendInternal(
           blockInfo as blocks.State,
-          this.workspace_
+          this.workspace_,
         );
       }
     }

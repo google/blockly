@@ -657,13 +657,25 @@ export class Scrollbar {
    * @param visible True if visible.
    */
   setVisible(visible: boolean) {
-    const visibilityChanged = visible !== this.isVisible();
-
     // Ideally this would also apply to scrollbar pairs, but that's a bigger
-    // headache (due to interactions with the corner square).
+    // headache (due to interactions with the corner square), and the fact
+    // that telling the pair to resize itself would cause circular dependencies.
     if (this.pair) {
       throw Error('Unable to toggle visibility of paired scrollbars.');
     }
+    this.setVisibleInternal(visible);
+  }
+
+  /**
+   * Set whether the scrollbar is visible. Bypasses checking whether this
+   * scrollbar is part of a pair so that it can be toggled by the scrollbar
+   * pair.
+   *
+   * @param visible True if visible.
+   * @internal
+   */
+  setVisibleInternal(visible: boolean) {
+    const visibilityChanged = visible !== this.isVisible();
     this.isHandleVisible = visible;
     if (visibilityChanged) {
       this.updateDisplay_();

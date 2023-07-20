@@ -206,15 +206,22 @@ async function getBlockTypeFromWorkspace(browser, blockType, position) {
  * @return A Promise that resolves to the location of the specific
  *     connection in screen coordinates.
  */
-async function getLocationOfBlockConnection(browser, id, connectionName, mutatorBlockId) {
+async function getLocationOfBlockConnection(
+  browser,
+  id,
+  connectionName,
+  mutatorBlockId
+) {
   return await browser.execute(
-    (id, connectionName,mutatorBlockId) => {
-      let block; 
-      if(mutatorBlockId){
-        block = Blockly.getMainWorkspace().getBlockById(mutatorBlockId).mutator.getWorkspace().getBlockById(id);
-
-      }else{
-      block= Blockly.getMainWorkspace().getBlockById(id);
+    (id, connectionName, mutatorBlockId) => {
+      let block;
+      if (mutatorBlockId) {
+        block = Blockly.getMainWorkspace()
+          .getBlockById(mutatorBlockId)
+          .mutator.getWorkspace()
+          .getBlockById(id);
+      } else {
+        block = Blockly.getMainWorkspace().getBlockById(id);
       }
 
       let connection;
@@ -270,11 +277,10 @@ async function connect(
   mutatorBlockId,
   dragBlockSelector
 ) {
-
   let draggedLocation;
-  let targetLocation 
+  let targetLocation;
 
-  if(mutatorBlockId){
+  if (mutatorBlockId) {
     draggedLocation = await getLocationOfBlockConnection(
       browser,
       draggedBlock,
@@ -287,28 +293,27 @@ async function connect(
       targetConnection,
       mutatorBlockId
     );
-
-  }else{
-  draggedLocation = await getLocationOfBlockConnection(
-    browser,
-    draggedBlock.id,
-    draggedConnection
-  );
-  targetLocation = await getLocationOfBlockConnection(
-    browser,
-    targetBlock.id,
-    targetConnection
-  );
+  } else {
+    draggedLocation = await getLocationOfBlockConnection(
+      browser,
+      draggedBlock.id,
+      draggedConnection
+    );
+    targetLocation = await getLocationOfBlockConnection(
+      browser,
+      targetBlock.id,
+      targetConnection
+    );
   }
 
   const delta = {
     x: targetLocation.x - draggedLocation.x,
     y: targetLocation.y - draggedLocation.y,
   };
-  if(mutatorBlockId){
+  if (mutatorBlockId) {
     await dragBlockSelector.dragAndDrop(delta);
-  }else{
-  await draggedBlock.dragAndDrop(delta);
+  } else {
+    await draggedBlock.dragAndDrop(delta);
   }
 }
 

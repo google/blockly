@@ -65,8 +65,6 @@ async function testingMutator(delta) {
   const originalInputs = await browser.execute(() => {
     const originalInputs =
       Blockly.getMainWorkspace().getAllBlocks()[0].inputList.length;
-    // Adding the first element in the array is the original block id, the second is the first mutator block, and the third is the second mutator block
-
     return originalInputs;
   });
 
@@ -83,7 +81,7 @@ async function testingMutator(delta) {
     return blockIds;
   });
 
-  // Click on the mutator and drag out else ig block
+  // The flyout block and the workspace block have the same id, so to get around that I pass in the selector to the connect function
   const dragBlockSelector = await browser.$(
     '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBubbleCanvas > g > g:nth-child(2) > svg:nth-child(1) > g > g.blocklyBlockCanvas > g.blocklyDraggable'
   );
@@ -107,8 +105,6 @@ async function testingMutator(delta) {
   const afterInputs = await browser.execute(() => {
     const afterInputs =
       Blockly.getMainWorkspace().getAllBlocks()[0].inputList.length;
-    // Adding the first element in the array is the original block id, the second is the first mutator block, and the third is the second mutator block
-
     return afterInputs;
   });
 

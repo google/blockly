@@ -144,7 +144,7 @@
 	"MATH_ONLIST_OPERATOR_MIN": "Исемлектәге иң бәләкәйе",
 	"MATH_ONLIST_TOOLTIP_MIN": "Исемлектәге иң бәләкәй һанды күрһәтә.",
 	"MATH_ONLIST_OPERATOR_MAX": "исемлектәге иң ҙуры",
-	"MATH_ONLIST_TOOLTIP_MAX": "Исемлектең иң ҙур һанын  күрһәтә.",
+	"MATH_ONLIST_TOOLTIP_MAX": "Исемлектең иң ҙур һанын күрһәтә.",
 	"MATH_ONLIST_OPERATOR_AVERAGE": "исемлектең уртаса арифметик дәүмәле",
 	"MATH_ONLIST_TOOLTIP_AVERAGE": "Исемлектең уртаса арифметик дәүмәле күрһәтә.",
 	"MATH_ONLIST_OPERATOR_MEDIAN": "исемлек медианаһы",

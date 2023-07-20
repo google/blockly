@@ -155,14 +155,17 @@ async function getNthBlockOfCategory(browser, categoryName, n) {
 /**
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to search.
+ *     Null if the toolbox has no categories (simple).
  * @param blockType The type of the block to search for.
  * @return A Promise that resolves to the root element of the first
  *     block with the given type in the given category.
  */
 async function getBlockTypeFromCategory(browser, categoryName, blockType) {
-  const category = await getCategory(browser, categoryName);
-  category.click();
-  await browser.pause(100);
+  if (categoryName) {
+    const category = await getCategory(browser, categoryName);
+    category.click();
+    await browser.pause(100);
+  }
 
   const id = await browser.execute((blockType) => {
     return Blockly.getMainWorkspace()
@@ -255,6 +258,7 @@ async function getLocationOfBlockConnection(browser, id, connectionName, mutator
  * @param targetBlock The block to drag to.
  * @param targetConnection The connection to connect to on the target block.
  * @param mutatorBlockId The block that holds the mutator icon
+ * @param dragBlockSelector The selector of the block to drag
  * @return A Promise that resolves when the actions are completed.
  */
 async function connect(
@@ -345,6 +349,7 @@ async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
  *
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to search.
+ *     Null if the toolbox has no categories (simple).
  * @param type The type of the block to search for.
  * @param x The x-distance to drag, as a delta from the block's
  *     initial location on screen.

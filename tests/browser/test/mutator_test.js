@@ -15,32 +15,27 @@ const {
   connect,
   switchRTL,
   dragBlockTypeFromFlyout,
+  getSelectedBlockId,
   screenDirection,
 } = require('./test_setup');
 
 let browser;
-suite('Testing Mutator', function (done) {
+suite('This tests mutating a Blockly block', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.playground);
+    browser = await testSetup(testFileLocations.PLAYGROUND);
   });
 
-  test('Testing Field Edits LTR', async function () {
+  test('This test mutating a block creates more inputs', async function () {
     await testingMutator(screenDirection.LTR);
   });
-  /*
-  test('Testing Field Edits RTL', async function () {
-    await switchRTL(browser);
-    await testingMutator(screenDirection.RTL);
-  });
-  */
 
   // Teardown entire suite after test are done running
   suiteTeardown(async function () {
-    //await browser.deleteSession();
+    await browser.deleteSession();
   });
 });
 
@@ -58,24 +53,57 @@ async function testingMutator(delta) {
     '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable.blocklySelected > g.blocklyIconGroup'
   );
   await mutatorWheel.click();
+  await browser.pause(100);
   const elseIfFlyout = await browser.$(
     '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBubbleCanvas > g > g:nth-child(2) > svg:nth-child(1) > g > g.blocklyFlyout > g > g.blocklyBlockCanvas > g:nth-child(3)'
   );
-  elseIfFlyout.dragAndDrop({x: delta * 50, y: 42});
+  await elseIfFlyout.dragAndDrop({x: delta * 50, y: 42});
+  // Get the original number of mutator inputs
+  await browser.pause(100);
+
+   // Get the ids for block before mutating 
+   originalInputs =  await browser.execute(
+    () => {
+      const originalInputs = Blockly.getMainWorkspace().getAllBlocks()[0].inputList.length;
+      // Adding the first element in the array is the original block id, the second is the first mutator block, and the third is the second mutator block
+      
+     return originalInputs;
+    }
+  );
+
   await browser.pause(100);
   // Get the ids for the blocks in the mutator 
   blockIds =  await browser.execute(
     () => {
       const mutatorBlock = Blockly.getMainWorkspace().getAllBlocks()[0];
       // Adding the first element in the array is the original block id, the second is the first mutator block, and the third is the second mutator block
-      const mutatorWorkspaceFirstBlock = mutatorBlock.mutator.getWorkspace().getAllBlocks(false)[0].id;
-      let blockIds=[Blockly.getMainWorkspace().getAllBlocks()[0].id];
+      const blockIds=[mutatorBlock.id,mutatorBlock.mutator.getWorkspace().getAllBlocks()[0].id,mutatorBlock.mutator.getWorkspace().getAllBlocks()[1].id];
      return blockIds;
     }
   );
+
+  // Click on the mutator and drag out else ig block
+  const dragBlockSelector = await browser.$(
+    '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBubbleCanvas > g > g:nth-child(2) > svg:nth-child(1) > g > g.blocklyBlockCanvas > g.blocklyDraggable'
+  );
+  // For some reason this needs a lot more time 
+  await browser.pause(2000);
   // Connect the mutator blocks 
-  await connect(browser, blockIds[1], 'OUTPUT', blockIds[1], 'RETURN',blockIds[0]);
+ await connect(browser, blockIds[2], 'PREVIOUS', blockIds[1], 'NEXT',blockIds[0],dragBlockSelector);
+
+  // For some reason this needs a lot more time 
+  await browser.pause(200);
+
+    // Get the ids for block after mutating 
+    afterInputs =  await browser.execute(
+      () => {
+        const afterInputs = Blockly.getMainWorkspace().getAllBlocks()[0].inputList.length;
+        // Adding the first element in the array is the original block id, the second is the first mutator block, and the third is the second mutator block
+        
+       return afterInputs;
+      }
+    );
 
 
-  chai.assert.equal(blockIds, '3');
+    chai.assert.isTrue(afterInputs>originalInputs);
 }

@@ -16,6 +16,14 @@ The main feature of Varwin Blockly: "Modules" (`/core/module.*`)
 9. In file `/dist/package.json` check package name and update version
 10. Execute `npm publish`
 
+## Updating locales after build for Linux
+1. Run ```npm run build```
+2. Run ```npm run package```
+3. Go to the `dist` directory
+4. In file `/dist/package.json` check package name and update version
+5. In msg files `/dist/msg/*.js` change `define(['Blockly'], factory);` to `define(['blockly'], factory);`
+6. Run `npm publish`
+
 ## How convenient it is to test Varwin Blockly right away in RMS
 
 You can call `gulp package` with the argument `--output "path"` where `path` is the path to the `blockly` folder in `node_modules` RMS.

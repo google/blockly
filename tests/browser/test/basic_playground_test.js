@@ -182,7 +182,7 @@ suite('Disabling', function () {
         110,
         110
       );
-      await connect(browser, child, 'PREVIOUS', parent, 'IF0');
+      await connect(browser, child, 'PREVIOUS', parent, 'DO0');
 
       await contextMenuSelect(browser, parent, 'Disable Block');
 

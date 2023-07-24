@@ -14,10 +14,7 @@ const {
   testSetup,
   testFileLocations,
   getAllBlocks,
-  getSelectedBlockElement,
-  switchRTL,
-  dragBlockTypeFromFlyout,
-  screenDirection,
+  dragNthBlockFromFlyout,
 } = require('./test_setup');
 const {Key} = require('webdriverio');
 
@@ -37,13 +34,7 @@ suite('Basic block tests', function (done) {
 
   test('Drag three blocks into the workspace', async function () {
     for (let i = 1; i <= 3; i++) {
-      await dragBlockTypeFromFlyout(
-        browser,
-        'Basic',
-        'test_basic_empty',
-        250,
-        50 * i
-      );
+      await dragNthBlockFromFlyout(browser, 'Align', 0, 250, 50 * i);
       chai.assert.equal((await getAllBlocks(browser)).length, i);
     }
   });

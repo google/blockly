@@ -70,7 +70,7 @@
   "devDependencies": {
     "@blockly/block-test": "^5.0.0",
     "@blockly/dev-tools": "^7.0.2",
-    "@blockly/theme-modern": "^3.0.0",
+    "@blockly/theme-modern": "^5.0.0",
     "@hyperjump/json-schema": "^1.5.0",
     "@microsoft/api-documenter": "^7.22.4",
     "@microsoft/api-extractor": "^7.29.5",

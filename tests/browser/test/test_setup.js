@@ -20,8 +20,14 @@ const webdriverio = require('webdriverio');
 const path = require('path');
 const {posixPath} = require('../../../scripts/helpers');
 
-let browser;
-async function testSetup(url) {
+let driver = null;
+
+/**
+ * Start up the test page. This should only be done once, to avoid
+ * constantly popping browser windows open and closed.
+ * @return A Promsie that resolves to a webdriverIO browser that tests can manipulate.
+ */
+async function driverSetup() {
   const options = {
     capabilities: {
       'browserName': 'chrome',
@@ -48,10 +54,31 @@ async function testSetup(url) {
   }
   // Use Selenium to bring up the page
   console.log('Starting webdriverio...');
-  browser = await webdriverio.remote(options);
-  console.log('Loading URL: ' + url);
-  await browser.url(url);
-  return browser;
+  driver = await webdriverio.remote(options);
+  return driver;
+}
+
+/**
+ * End the webdriverIO session.
+ * @return A Promise that resolves after the actions have been completed.
+ */
+async function driverTeardown() {
+  await driver.deleteSession();
+  driver = null;
+  return;
+}
+
+/**
+ * Navigate to the correct URL for the test, using the shared driver.
+ * @param {string} url The URL to open for the test.
+ * @return A Promsie that resolves to a webdriverIO browser that tests can manipulate.
+ */
+async function testSetup(url) {
+  if (!driver) {
+    await driverSetup();
+  }
+  await driver.url(url);
+  return driver;
 }
 
 const testFileLocations = {
@@ -382,6 +409,8 @@ async function getAllBlocks(browser) {
 module.exports = {
   testSetup,
   testFileLocations,
+  driverSetup,
+  driverTeardown,
   getSelectedBlockElement,
   getSelectedBlockId,
   getBlockElementById,

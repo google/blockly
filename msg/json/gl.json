@@ -84,7 +84,7 @@
 	"MATH_SINGLE_TOOLTIP_LOG10": "Retorna o logarítmo en base 10 dun número.",
 	"MATH_SINGLE_TOOLTIP_EXP": "Retorna o número e elevado á potencia dun número.",
 	"MATH_SINGLE_TOOLTIP_POW10": "Retorna 10 elevado á potencia dun número.",
-	"MATH_TRIG_HELPURL": "https://gl.wikipedia.org/wiki/Función_trigonométrica",
+	"MATH_TRIG_HELPURL": "https://gl.m.wikipedia.org/wiki/Función_trigonométrica",
 	"MATH_TRIG_TOOLTIP_SIN": "Retorna o seno dun grao (non radiano).",
 	"MATH_TRIG_TOOLTIP_COS": "Retorna o coseno dun grao (non radiano).",
 	"MATH_TRIG_TOOLTIP_TAN": "Retorna a tanxente dun grao (non radiano).",

@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Baonguyen21022003",
+			"Caden99",
 			"Dstream",
 			"Espertus",
 			"Leducthn",
@@ -46,6 +47,7 @@
 	"NEW_VARIABLE_TITLE": "Tên của biến mới:",
 	"VARIABLE_ALREADY_EXISTS": "Một biến có tên '%1' đã tồn tại.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Giá trị '%1' đã tồn tại dưới dạng: '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "Biến có tên '%1' đã tồn tại dưới dạng tham số trong thủ tục '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Xóa %1 lần dùng của giá trị '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Không thể xóa giá trị '%1' vì nó được bao gồm trong định nghĩa của chức năng '%2'",
 	"DELETE_VARIABLE": "Xóa giá trị '%1'",
@@ -150,7 +152,7 @@
 	"MATH_IS_POSITIVE": "là số dương",
 	"MATH_IS_NEGATIVE": "là số âm",
 	"MATH_IS_DIVISIBLE_BY": "chia hết cho",
-	"MATH_IS_TOOLTIP": "Kiểm tra con số xem nó có phải là số chẵn, lẻ, nguyên tố, nguyên, dương, âm, hay xem nó có chia hết cho số đầu vào hay không.  Hoàn trả đúng hay sai.",
+	"MATH_IS_TOOLTIP": "Kiểm tra con số xem nó có phải là số chẵn, lẻ, nguyên tố, nguyên, dương, âm,  hay xem nó có chia hết cho số đầu vào hay không.  Hoàn trả đúng hay sai.",
 	"MATH_CHANGE_HELPURL": "https://vi.wikipedia.org/wiki/Ph%C3%A9p_c%E1%BB%99ng",
 	"MATH_CHANGE_TITLE": "cộng vào %1 giá trị %2",
 	"MATH_CHANGE_TOOLTIP": "Cộng số đầu vào vào biến \"%1\".",

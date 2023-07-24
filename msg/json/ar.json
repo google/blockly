@@ -67,7 +67,7 @@
 	"COLOUR_BLEND_RATIO": "نسبة",
 	"COLOUR_BLEND_TOOLTIP": "دمج لونين ببعضهما البعض بنسبة (0.0 - 1.0).",
 	"CONTROLS_REPEAT_HELPURL": "https://ar.wikipedia.org/wiki/حلقة_تكرار",
-	"CONTROLS_REPEAT_TITLE": "كرر %1 مرات",
+	"CONTROLS_REPEAT_TITLE": "كرر  %1 مرات",
 	"CONTROLS_REPEAT_INPUT_DO": "نفّذ",
 	"CONTROLS_REPEAT_TOOLTIP": "نفّذ بعض الأوامر عدة مرات.",
 	"CONTROLS_WHILEUNTIL_OPERATOR_WHILE": "اكرّر طالما",

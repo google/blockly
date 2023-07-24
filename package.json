@@ -68,7 +68,7 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@blockly/block-test": "^4.0.2",
+    "@blockly/block-test": "^5.0.0",
     "@blockly/dev-tools": "^7.0.1",
     "@blockly/theme-modern": "^3.0.0",
     "@hyperjump/json-schema": "^1.5.0",

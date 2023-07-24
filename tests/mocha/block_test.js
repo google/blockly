@@ -1468,7 +1468,7 @@ suite('Blocks', function () {
         this.block = this.workspace.newBlock('stack_block');
         this.block.initSvg();
         this.block.render();
-        this.renderSpy = sinon.spy(this.block, 'render');
+        this.renderSpy = sinon.spy(this.block, 'queueRender');
       });
 
       teardown(function () {
@@ -1513,7 +1513,7 @@ suite('Blocks', function () {
         this.block = this.workspace.newBlock('stack_block');
         this.block.initSvg();
         this.block.render();
-        this.renderSpy = sinon.spy(this.block, 'render');
+        this.renderSpy = sinon.spy(this.block, 'queueRender');
       });
 
       teardown(function () {

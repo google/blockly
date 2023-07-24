@@ -230,7 +230,6 @@ async function getLocationOfBlockConnection(browser, id, connectionName) {
         block.getRelativeToSurfaceXY(),
         connection.getOffsetInBlock()
       );
-      console.log(Blockly);
       return Blockly.utils.svgMath.wsToScreenCoordinates(
         Blockly.getMainWorkspace(),
         loc
@@ -346,9 +345,11 @@ async function contextMenuSelect(browser, block, itemText) {
   // Clicking will always happen in the middle of the block's bounds
   // (including children) by default, which causes problems if it has holes
   // (e.g. statement inputs).
-  // Instead we want to click 20% from the right and 5% from the top.
-  const xOffset = -Math.round((await block.getSize('width')) * 0.3);
-  const yOffset = -Math.round((await block.getSize('height')) * 0.45);
+  // Instead we want to click 10px from the left and 10px from the top.
+  const blockWidth = await block.getSize('width');
+  const blockHeight = await block.getSize('height');
+  const xOffset = -Math.round(blockWidth * 0.5) + 10;
+  const yOffset = -Math.round(blockHeight * 0.5) + 10;
 
   await block.click({button: 2, x: xOffset, y: yOffset});
   await browser.pause(100);
@@ -369,7 +370,6 @@ async function contextMenuSelect(browser, block, itemText) {
  */
 async function getAllBlocks(browser) {
   return browser.execute(() => {
-    // return Blockly.getMainWorkspace().getAllBlocks(false);
     return Blockly.getMainWorkspace()
       .getAllBlocks(false)
       .map((block) => ({

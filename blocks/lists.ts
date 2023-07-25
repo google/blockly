@@ -130,7 +130,7 @@ const LISTS_CREATE_WITH = {
     this.updateShape_();
     this.setOutput(true, 'Array');
     this.setMutator(
-      new MutatorIcon(['lists_create_with_item'], this as unknown as BlockSvg)
+      new MutatorIcon(['lists_create_with_item'], this as unknown as BlockSvg),
     ); // BUG(#6905)
     this.setTooltip(Msg['LISTS_CREATE_WITH_TOOLTIP']);
   },
@@ -182,16 +182,16 @@ const LISTS_CREATE_WITH = {
    */
   decompose: function (
     this: CreateWithBlock,
-    workspace: Workspace
+    workspace: Workspace,
   ): ContainerBlock {
     const containerBlock = workspace.newBlock(
-      'lists_create_with_container'
+      'lists_create_with_container',
     ) as ContainerBlock;
     (containerBlock as BlockSvg).initSvg();
     let connection = containerBlock.getInput('STACK')!.connection;
     for (let i = 0; i < this.itemCount_; i++) {
       const itemBlock = workspace.newBlock(
-        'lists_create_with_item'
+        'lists_create_with_item',
       ) as ItemBlock;
       (itemBlock as BlockSvg).initSvg();
       if (!itemBlock.previousConnection) {
@@ -209,7 +209,7 @@ const LISTS_CREATE_WITH = {
    */
   compose: function (this: CreateWithBlock, containerBlock: Block) {
     let itemBlock: ItemBlock | null = containerBlock.getInputTargetBlock(
-      'STACK'
+      'STACK',
     ) as ItemBlock;
     // Count number of inputs.
     const connections: Connection[] = [];
@@ -242,7 +242,7 @@ const LISTS_CREATE_WITH = {
    */
   saveConnections: function (this: CreateWithBlock, containerBlock: Block) {
     let itemBlock: ItemBlock | null = containerBlock.getInputTargetBlock(
-      'STACK'
+      'STACK',
     ) as ItemBlock;
     let i = 0;
     while (itemBlock) {
@@ -265,7 +265,7 @@ const LISTS_CREATE_WITH = {
       this.removeInput('EMPTY');
     } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
       this.appendDummyInput('EMPTY').appendField(
-        Msg['LISTS_CREATE_EMPTY_TITLE']
+        Msg['LISTS_CREATE_EMPTY_TITLE'],
       );
     }
     // Add new inputs.
@@ -297,7 +297,7 @@ const LISTS_CREATE_WITH_CONTAINER = {
   init: function (this: ContainerBlock) {
     this.setStyle('list_blocks');
     this.appendDummyInput().appendField(
-      Msg['LISTS_CREATE_WITH_CONTAINER_TITLE_ADD']
+      Msg['LISTS_CREATE_WITH_CONTAINER_TITLE_ADD'],
     );
     this.appendStatementInput('STACK');
     this.setTooltip(Msg['LISTS_CREATE_WITH_CONTAINER_TOOLTIP']);
@@ -358,7 +358,7 @@ const LISTS_INDEXOF = {
     this.setTooltip(() => {
       return Msg['LISTS_INDEX_OF_TOOLTIP'].replace(
         '%1',
-        this.workspace.options.oneBasedIndex ? '0' : '-1'
+        this.workspace.options.oneBasedIndex ? '0' : '-1',
       );
     });
   },
@@ -401,7 +401,7 @@ const LISTS_GETINDEX = {
         const isStatement = value === 'REMOVE';
         (this.getSourceBlock() as GetIndexBlock).updateStatement_(isStatement);
         return undefined;
-      }
+      },
     );
     this.appendValueInput('VALUE')
       .setCheck('Array')
@@ -568,7 +568,7 @@ const LISTS_GETINDEX = {
       this.appendValueInput('AT').setCheck('Number');
       if (Msg['ORDINAL_NUMBER_SUFFIX']) {
         this.appendDummyInput('ORDINAL').appendField(
-          Msg['ORDINAL_NUMBER_SUFFIX']
+          Msg['ORDINAL_NUMBER_SUFFIX'],
         );
       }
     } else {
@@ -596,7 +596,7 @@ const LISTS_GETINDEX = {
           return null;
         }
         return undefined;
-      }
+      },
     );
     this.getInput('AT')!.appendField(menu, 'WHERE');
     if (Msg['LISTS_GET_INDEX_TAIL']) {
@@ -685,7 +685,7 @@ const LISTS_SETINDEX = {
           '  ' +
           Msg['LISTS_INDEX_FROM_START_TOOLTIP'].replace(
             '%1',
-            this.workspace.options.oneBasedIndex ? '#1' : '#0'
+            this.workspace.options.oneBasedIndex ? '#1' : '#0',
           );
       }
       return tooltip;
@@ -747,7 +747,7 @@ const LISTS_SETINDEX = {
       this.appendValueInput('AT').setCheck('Number');
       if (Msg['ORDINAL_NUMBER_SUFFIX']) {
         this.appendDummyInput('ORDINAL').appendField(
-          Msg['ORDINAL_NUMBER_SUFFIX']
+          Msg['ORDINAL_NUMBER_SUFFIX'],
         );
       }
     } else {
@@ -775,7 +775,7 @@ const LISTS_SETINDEX = {
           return null;
         }
         return undefined;
-      }
+      },
     );
     this.moveInputBefore('AT', 'TO');
     if (this.getInput('ORDINAL')) {
@@ -887,7 +887,7 @@ const LISTS_GETSUBLIST = {
       this.appendValueInput('AT' + n).setCheck('Number');
       if (Msg['ORDINAL_NUMBER_SUFFIX']) {
         this.appendDummyInput('ORDINAL' + n).appendField(
-          Msg['ORDINAL_NUMBER_SUFFIX']
+          Msg['ORDINAL_NUMBER_SUFFIX'],
         );
       }
     } else {
@@ -915,7 +915,7 @@ const LISTS_GETSUBLIST = {
           block.setFieldValue(value, 'WHERE' + n);
           return null;
         }
-      }
+      },
     );
     this.getInput('AT' + n)!.appendField(menu, 'WHERE' + n);
     if (n === 1) {

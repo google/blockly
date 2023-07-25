@@ -31,7 +31,7 @@ suite('Bubble Open Event', function () {
       const origEvent = new Blockly.Events.BubbleOpen(
         block,
         true,
-        Blockly.Events.BubbleType.MUTATOR
+        Blockly.Events.BubbleType.MUTATOR,
       );
 
       const json = origEvent.toJson();

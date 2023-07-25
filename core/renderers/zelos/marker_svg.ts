@@ -36,7 +36,7 @@ export class MarkerSvg extends BaseMarkerSvg {
   constructor(
     workspace: WorkspaceSvg,
     constants: BaseConstantProvider,
-    marker: Marker
+    marker: Marker,
   ) {
     super(workspace, constants, marker);
   }
@@ -120,7 +120,7 @@ export class MarkerSvg extends BaseMarkerSvg {
         'style': 'display: none',
         'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
       },
-      this.markerSvg_
+      this.markerSvg_,
     );
 
     // Markers and stack cursors don't blink.

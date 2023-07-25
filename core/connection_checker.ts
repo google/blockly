@@ -40,7 +40,7 @@ export class ConnectionChecker implements IConnectionChecker {
     a: Connection | null,
     b: Connection | null,
     isDragging: boolean,
-    opt_distance?: number
+    opt_distance?: number,
   ): boolean {
     return (
       this.canConnectWithReason(a, b, isDragging, opt_distance) ===
@@ -64,7 +64,7 @@ export class ConnectionChecker implements IConnectionChecker {
     a: Connection | null,
     b: Connection | null,
     isDragging: boolean,
-    opt_distance?: number
+    opt_distance?: number,
   ): number {
     const safety = this.doSafetyChecks(a, b);
     if (safety !== Connection.CAN_CONNECT) {
@@ -83,7 +83,7 @@ export class ConnectionChecker implements IConnectionChecker {
       !this.doDragChecks(
         a as RenderedConnection,
         b as RenderedConnection,
-        opt_distance || 0
+        opt_distance || 0,
       )
     ) {
       return Connection.REASON_DRAG_CHECKS_FAILED;
@@ -103,7 +103,7 @@ export class ConnectionChecker implements IConnectionChecker {
   getErrorMessage(
     errorCode: number,
     a: Connection | null,
-    b: Connection | null
+    b: Connection | null,
   ): string {
     switch (errorCode) {
       case Connection.REASON_SELF_CONNECTION:
@@ -230,7 +230,7 @@ export class ConnectionChecker implements IConnectionChecker {
   doDragChecks(
     a: RenderedConnection,
     b: RenderedConnection,
-    distance: number
+    distance: number,
   ): boolean {
     if (a.distanceFrom(b) > distance) {
       return false;
@@ -345,5 +345,5 @@ export class ConnectionChecker implements IConnectionChecker {
 registry.register(
   registry.Type.CONNECTION_CHECKER,
   registry.DEFAULT,
-  ConnectionChecker
+  ConnectionChecker,
 );

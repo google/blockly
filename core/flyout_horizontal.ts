@@ -60,7 +60,7 @@ export class HorizontalFlyout extends Flyout {
 
     this.workspace_.translate(
       this.workspace_.scrollX + absoluteMetrics.left,
-      this.workspace_.scrollY + absoluteMetrics.top
+      this.workspace_.scrollY + absoluteMetrics.top,
     );
   }
 
@@ -170,7 +170,7 @@ export class HorizontalFlyout extends Flyout {
         0,
         1,
         -this.CORNER_RADIUS,
-        this.CORNER_RADIUS
+        this.CORNER_RADIUS,
       );
       path.push('h', -width);
       // Left.
@@ -182,7 +182,7 @@ export class HorizontalFlyout extends Flyout {
         0,
         1,
         -this.CORNER_RADIUS,
-        -this.CORNER_RADIUS
+        -this.CORNER_RADIUS,
       );
       path.push('z');
     } else {
@@ -195,7 +195,7 @@ export class HorizontalFlyout extends Flyout {
         0,
         1,
         this.CORNER_RADIUS,
-        -this.CORNER_RADIUS
+        -this.CORNER_RADIUS,
       );
       path.push('h', width);
       // Right.
@@ -207,7 +207,7 @@ export class HorizontalFlyout extends Flyout {
         0,
         1,
         this.CORNER_RADIUS,
-        this.CORNER_RADIUS
+        this.CORNER_RADIUS,
       );
       path.push('v', height);
       // Bottom.
@@ -393,7 +393,7 @@ export class HorizontalFlyout extends Flyout {
         // (ie toolbox edge).
         this.targetWorkspace!.translate(
           this.targetWorkspace!.scrollX,
-          this.targetWorkspace!.scrollY + flyoutHeight
+          this.targetWorkspace!.scrollY + flyoutHeight,
         );
       }
       this.height_ = flyoutHeight;
@@ -406,5 +406,5 @@ export class HorizontalFlyout extends Flyout {
 registry.register(
   registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
   registry.DEFAULT,
-  HorizontalFlyout
+  HorizontalFlyout,
 );

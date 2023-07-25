@@ -139,12 +139,12 @@ export class BlockMove extends BlockBase {
   static fromJson(
     json: BlockMoveJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): BlockMove {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new BlockMove()
+      event ?? new BlockMove(),
     ) as BlockMove;
     newEvent.oldParentId = json['oldParentId'];
     newEvent.oldInputName = json['oldInputName'];
@@ -195,13 +195,14 @@ export class BlockMove extends BlockBase {
     if (!this.blockId) {
       throw new Error(
         'The block ID is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     const block = workspace.getBlockById(this.blockId);
     if (!block) {
       throw new Error(
-        'The block associated with the block move event ' + 'could not be found'
+        'The block associated with the block move event ' +
+          'could not be found',
       );
     }
     const location = {} as BlockLocation;
@@ -241,7 +242,7 @@ export class BlockMove extends BlockBase {
     if (!this.blockId) {
       throw new Error(
         'The block ID is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     const block = workspace.getBlockById(this.blockId);

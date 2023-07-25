@@ -69,7 +69,7 @@ suite('Variables', function () {
       chai.assert.equal(
         result.length,
         3,
-        'Expected three variables in the list of used variables'
+        'Expected three variables in the list of used variables',
       );
     });
 
@@ -80,12 +80,12 @@ suite('Variables', function () {
       chai.assert.equal(
         result.length,
         1,
-        'Expected one variable in the list of used variables'
+        'Expected one variable in the list of used variables',
       );
       chai.assert.equal(
         result[0].getId(),
         '2',
-        'Expected variable with ID 2 in the list of used variables'
+        'Expected variable with ID 2 in the list of used variables',
       );
     });
 
@@ -99,12 +99,12 @@ suite('Variables', function () {
       chai.assert.equal(
         result.length,
         1,
-        'Expected one variable in the list of used variables'
+        'Expected one variable in the list of used variables',
       );
       chai.assert.equal(
         result[0].getId(),
         '2',
-        'Expected variable with ID 2 in the list of used variables'
+        'Expected variable with ID 2 in the list of used variables',
       );
     });
 
@@ -113,7 +113,7 @@ suite('Variables', function () {
       chai.assert.equal(
         result.length,
         0,
-        'Expected no variables in the list of used variables'
+        'Expected no variables in the list of used variables',
       );
     });
   });
@@ -140,19 +140,19 @@ suite('Variables', function () {
         this.workspace,
         null,
         'name1',
-        'type1'
+        'type1',
       );
       const result2 = Blockly.Variables.getVariable(
         this.workspace,
         null,
         'name2',
-        'type1'
+        'type1',
       );
       const result3 = Blockly.Variables.getVariable(
         this.workspace,
         null,
         'name3',
-        'type2'
+        'type2',
       );
 
       // Searching by name + type is correct.
@@ -169,19 +169,19 @@ suite('Variables', function () {
         this.workspace,
         'badId',
         'name1',
-        'type1'
+        'type1',
       );
       const result2 = Blockly.Variables.getVariable(
         this.workspace,
         'badId',
         'name2',
-        'type1'
+        'type1',
       );
       const result3 = Blockly.Variables.getVariable(
         this.workspace,
         'badId',
         'name3',
-        'type2'
+        'type2',
       );
 
       // Searching by ID failed, but falling back onto name + type is correct.
@@ -213,14 +213,14 @@ suite('Variables', function () {
               'NAME': 'test name',
             },
           },
-          this.workspace
+          this.workspace,
         );
 
         chai.assert.equal(
           'test name',
           nameUsedWithConflictingParam('x', 'y', this.workspace),
           'Expected the name of the procedure with the conflicting ' +
-            'param to be returned'
+            'param to be returned',
         );
       });
 
@@ -247,14 +247,14 @@ suite('Variables', function () {
                 'NAME': 'test name',
               },
             },
-            this.workspace
+            this.workspace,
           );
 
           chai.assert.isNull(
             nameUsedWithConflictingParam('x', 'y', this.workspace),
-            'Expected there to be no conflict'
+            'Expected there to be no conflict',
           );
-        }
+        },
       );
 
       test('conflicts within procedure models return the procedure name', function () {
@@ -264,19 +264,19 @@ suite('Variables', function () {
             new MockProcedureModel('test name')
               .insertParameter(
                 new MockParameterModelWithVar('x', this.workspace),
-                0
+                0,
               )
               .insertParameter(
                 new MockParameterModelWithVar('y', this.workspace),
-                0
-              )
+                0,
+              ),
           );
 
         chai.assert.equal(
           'test name',
           nameUsedWithConflictingParam('x', 'y', this.workspace),
           'Expected the name of the procedure with the conflicting ' +
-            'param to be returned'
+            'param to be returned',
         );
       });
 
@@ -291,21 +291,21 @@ suite('Variables', function () {
                 .insertParameter(
                   new MockParameterModelWithVar(
                     'definitely not x',
-                    this.workspace
+                    this.workspace,
                   ),
-                  0
+                  0,
                 )
                 .insertParameter(
                   new MockParameterModelWithVar('y', this.workspace),
-                  0
-                )
+                  0,
+                ),
             );
 
           chai.assert.isNull(
             nameUsedWithConflictingParam('x', 'y', this.workspace),
-            'Expected there to be no conflict'
+            'Expected there to be no conflict',
           );
-        }
+        },
       );
     });
   });

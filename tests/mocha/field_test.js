@@ -209,7 +209,7 @@ suite('Abstract Fields', function () {
           const value = field.saveState();
           chai.assert.equal(
             value,
-            '<field name="" attribute="custom value">test value</field>'
+            '<field name="" attribute="custom value">test value</field>',
           );
         });
 
@@ -242,7 +242,7 @@ suite('Abstract Fields', function () {
           const value = Blockly.Xml.domToText(field.toXml(element));
           chai.assert.equal(
             value,
-            '<field xmlns="http://www.w3.org/1999/xhtml">test value</field>'
+            '<field xmlns="http://www.w3.org/1999/xhtml">test value</field>',
           );
         });
 
@@ -252,7 +252,7 @@ suite('Abstract Fields', function () {
           const value = Blockly.Xml.domToText(field.toXml(element));
           chai.assert.equal(
             value,
-            '<field xmlns="http://www.w3.org/1999/xhtml">custom value</field>'
+            '<field xmlns="http://www.w3.org/1999/xhtml">custom value</field>',
           );
         });
 
@@ -263,7 +263,7 @@ suite('Abstract Fields', function () {
           chai.assert.equal(
             value,
             '<field xmlns="http://www.w3.org/1999/xhtml" ' +
-              'attribute="custom value">test value</field>'
+              'attribute="custom value">test value</field>',
           );
         });
 
@@ -273,7 +273,7 @@ suite('Abstract Fields', function () {
           const value = Blockly.Xml.domToText(field.toXml(element));
           chai.assert.equal(
             value,
-            '<field xmlns="http://www.w3.org/1999/xhtml">custom value</field>'
+            '<field xmlns="http://www.w3.org/1999/xhtml">custom value</field>',
           );
         });
       });
@@ -296,7 +296,7 @@ suite('Abstract Fields', function () {
         test('Xml super implementation', function () {
           const field = new CustomXmlCallSuperField('');
           field.loadState(
-            '<field attribute="custom value" name="">test value</field>'
+            '<field attribute="custom value" name="">test value</field>',
           );
           chai.assert.equal(field.getValue(), 'test value');
           chai.assert.equal(field.someProperty, 'custom value');
@@ -326,7 +326,7 @@ suite('Abstract Fields', function () {
         test('No implementations', function () {
           const field = new DefaultSerializationField('');
           field.fromXml(
-            Blockly.utils.xml.textToDom('<field name="">test value</field>')
+            Blockly.utils.xml.textToDom('<field name="">test value</field>'),
           );
           chai.assert.equal(field.getValue(), 'test value');
         });
@@ -334,7 +334,7 @@ suite('Abstract Fields', function () {
         test('Xml implementations', function () {
           const field = new CustomXmlField('');
           field.fromXml(
-            Blockly.utils.xml.textToDom('<field name="">custom value</field>')
+            Blockly.utils.xml.textToDom('<field name="">custom value</field>'),
           );
           chai.assert.equal(field.someProperty, 'custom value');
         });
@@ -343,8 +343,8 @@ suite('Abstract Fields', function () {
           const field = new CustomXmlCallSuperField('');
           field.fromXml(
             Blockly.utils.xml.textToDom(
-              '<field attribute="custom value" name="">test value</field>'
-            )
+              '<field attribute="custom value" name="">test value</field>',
+            ),
           );
           chai.assert.equal(field.getValue(), 'test value');
           chai.assert.equal(field.someProperty, 'custom value');
@@ -353,7 +353,7 @@ suite('Abstract Fields', function () {
         test('XML andd JSO implementations', function () {
           const field = new CustomXmlAndJsoField('');
           field.fromXml(
-            Blockly.utils.xml.textToDom('<field name="">custom value</field>')
+            Blockly.utils.xml.textToDom('<field name="">custom value</field>'),
           );
           chai.assert.equal(field.someProperty, 'custom value');
         });
@@ -684,9 +684,9 @@ suite('Abstract Fields', function () {
             Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
                 '  <block type="tooltip"></block>' +
-                '</xml>'
+                '</xml>',
             ).children[0],
-            this.workspace
+            this.workspace,
           );
           const field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
@@ -704,9 +704,9 @@ suite('Abstract Fields', function () {
             Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
                 '  <block type="tooltip"></block>' +
-                '</xml>'
+                '</xml>',
             ).children[0],
-            this.workspace
+            this.workspace,
           );
           const field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
@@ -723,9 +723,9 @@ suite('Abstract Fields', function () {
             Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
                 '  <block type="tooltip"></block>' +
-                '</xml>'
+                '</xml>',
             ).children[0],
-            this.workspace
+            this.workspace,
           );
           const field = block.getField('TOOLTIP');
           field.setTooltip('tooltip');
@@ -748,9 +748,9 @@ suite('Abstract Fields', function () {
             Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
                 '  <block type="tooltip"></block>' +
-                '</xml>'
+                '</xml>',
             ).children[0],
-            this.workspace
+            this.workspace,
           );
           const field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block.tooltipFunc);
@@ -771,9 +771,9 @@ suite('Abstract Fields', function () {
             Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
                 '  <block type="tooltip"></block>' +
-                '</xml>'
+                '</xml>',
             ).children[0],
-            this.workspace
+            this.workspace,
           );
           const field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block.element);
@@ -791,9 +791,9 @@ suite('Abstract Fields', function () {
             Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
                 '  <block type="tooltip"></block>' +
-                '</xml>'
+                '</xml>',
             ).children[0],
-            this.workspace
+            this.workspace,
           );
           const field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block);
@@ -810,9 +810,9 @@ suite('Abstract Fields', function () {
             Blockly.utils.xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
                 '  <block type="tooltip"></block>' +
-                '</xml>'
+                '</xml>',
             ).children[0],
-            this.workspace
+            this.workspace,
           );
           const field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block);

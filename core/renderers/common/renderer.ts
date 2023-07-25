@@ -66,7 +66,7 @@ export class Renderer implements IRegistrable {
    */
   init(
     theme: Theme,
-    opt_rendererOverrides?: {[rendererConstant: string]: any}
+    opt_rendererOverrides?: {[rendererConstant: string]: any},
   ) {
     this.constants_ = this.makeConstants_();
     if (opt_rendererOverrides) {
@@ -90,7 +90,7 @@ export class Renderer implements IRegistrable {
     this.constants_.createDom(
       svg,
       this.name + '-' + theme.name,
-      '.' + this.getClassName() + '.' + theme.getClassName()
+      '.' + this.getClassName() + '.' + theme.getClassName(),
     );
   }
 
@@ -212,7 +212,7 @@ export class Renderer implements IRegistrable {
   protected orphanCanConnectAtEnd(
     topBlock: BlockSvg,
     orphanBlock: BlockSvg,
-    localType: number
+    localType: number,
   ): boolean {
     const orphanConnection =
       localType === ConnectionType.OUTPUT_VALUE
@@ -220,7 +220,7 @@ export class Renderer implements IRegistrable {
         : orphanBlock.previousConnection;
     return !!Connection.getConnectionForOrphanedConnection(
       topBlock as Block,
-      orphanConnection as Connection
+      orphanConnection as Connection,
     );
   }
 
@@ -236,7 +236,7 @@ export class Renderer implements IRegistrable {
   getConnectionPreviewMethod(
     closest: RenderedConnection,
     local: RenderedConnection,
-    topBlock: BlockSvg
+    topBlock: BlockSvg,
   ): PreviewType {
     if (
       local.type === ConnectionType.OUTPUT_VALUE ||
@@ -247,7 +247,7 @@ export class Renderer implements IRegistrable {
         this.orphanCanConnectAtEnd(
           topBlock,
           closest.targetBlock() as BlockSvg,
-          local.type
+          local.type,
         )
       ) {
         return InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;

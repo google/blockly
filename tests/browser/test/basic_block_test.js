@@ -28,7 +28,7 @@ suite('Basic block tests', function (done) {
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
     browser = await testSetup(
-      testFileLocations.PLAYGROUND + '?toolbox=test-blocks'
+      testFileLocations.PLAYGROUND + '?toolbox=test-blocks',
     );
   });
 

@@ -17,7 +17,7 @@ export class DuplicateIconType extends Error {
     super(
       `Tried to append an icon of type ${icon.getType()} when an icon of ` +
         `that type already exists on the block. ` +
-        `Use getIcon to access the existing icon.`
+        `Use getIcon to access the existing icon.`,
     );
   }
 }

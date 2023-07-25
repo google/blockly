@@ -59,7 +59,7 @@ suite('InsertionMarkers', function () {
         const value = javascriptGenerator.valueToCode(
           block,
           'INPUT',
-          javascriptGenerator.ORDER_NONE
+          javascriptGenerator.ORDER_NONE,
         );
         const code = 'row[' + block.id + '](' + value + ')';
         return [code, javascriptGenerator.ORDER_NONE];
@@ -95,7 +95,7 @@ suite('InsertionMarkers', function () {
           '      <block type="statement_block" id="a"/>' +
           '    </statement>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertGen(xml, 'statement[a]{\n};\n');
     });
@@ -107,7 +107,7 @@ suite('InsertionMarkers', function () {
           '      <block type="statement_block" id="insertion"/>' +
           '    </statement>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertGen(xml, 'statement[a]{\n};\n');
     });
@@ -123,11 +123,11 @@ suite('InsertionMarkers', function () {
           '      </block>' +
           '    </statement>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertGen(
         xml,
-        'statement[a]{\n' + '  statement[b]{\n' + '  };\n' + '};\n'
+        'statement[a]{\n' + '  statement[b]{\n' + '  };\n' + '};\n',
       );
     });
     test('Marker Prev', function () {
@@ -138,7 +138,7 @@ suite('InsertionMarkers', function () {
           '      <block type="stack_block" id="a"/>' +
           '    </next>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertGen(xml, 'stack[a];\n');
     });
@@ -150,7 +150,7 @@ suite('InsertionMarkers', function () {
           '      <block type="stack_block" id="insertion"/>' +
           '    </next>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertGen(xml, 'stack[a];\n');
     });
@@ -166,7 +166,7 @@ suite('InsertionMarkers', function () {
           '      </block>' +
           '    </next>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertGen(xml, 'stack[a];\n' + 'stack[b];\n');
     });
@@ -178,7 +178,7 @@ suite('InsertionMarkers', function () {
           '      <block type="row_block" id="a"/>' +
           '    </value>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertGen(xml, 'row[a]();\n');
     });
@@ -190,7 +190,7 @@ suite('InsertionMarkers', function () {
           '      <block type="row_block" id="insertion"/>' +
           '    </value>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertGen(xml, 'row[a]();\n');
     });
@@ -206,7 +206,7 @@ suite('InsertionMarkers', function () {
           '      </block>' +
           '    </value>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertGen(xml, 'row[a](row[b]());\n');
     });
@@ -215,7 +215,7 @@ suite('InsertionMarkers', function () {
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="stack_block" id="insertion"/>' +
           '  <block type="stack_block" id="a"/>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertGen(xml, 'stack[a];\n');
     });
@@ -240,7 +240,7 @@ suite('InsertionMarkers', function () {
           '      <block type="statement_block" id="a"/>' +
           '    </statement>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       // Note how the x and y are not 20, they are slightly lower and end-er
       // because these are the coords of the wrapped block.
@@ -248,7 +248,7 @@ suite('InsertionMarkers', function () {
         xml,
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="statement_block" id="a" x="41" y="31"></block>' +
-          '</xml>'
+          '</xml>',
       );
     });
     test('Marker Enclosed', function () {
@@ -259,13 +259,13 @@ suite('InsertionMarkers', function () {
           '      <block type="statement_block" id="insertion"/>' +
           '    </statement>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertXml(
         xml,
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="statement_block" id="a" x="20" y="20"></block>' +
-          '</xml>'
+          '</xml>',
       );
     });
     test('Marker Enclosed and Surrounds', function () {
@@ -280,7 +280,7 @@ suite('InsertionMarkers', function () {
           '      </block>' +
           '    </statement>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertXml(
         xml,
@@ -290,7 +290,7 @@ suite('InsertionMarkers', function () {
           '<block type="statement_block" id="b"></block>' +
           '</statement>' +
           '</block>' +
-          '</xml>'
+          '</xml>',
       );
     });
     test('Marker Prev', function () {
@@ -301,7 +301,7 @@ suite('InsertionMarkers', function () {
           '      <block type="stack_block" id="a"/>' +
           '    </next>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       // Note how the y coord is not at 20, it is lower. This is because these
       // are the coords of the next block.
@@ -309,7 +309,7 @@ suite('InsertionMarkers', function () {
         xml,
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="stack_block" id="a" x="20" y="46"></block>' +
-          '</xml>'
+          '</xml>',
       );
     });
     test('Marker Next', function () {
@@ -320,13 +320,13 @@ suite('InsertionMarkers', function () {
           '      <block type="stack_block" id="insertion"/>' +
           '    </next>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertXml(
         xml,
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="stack_block" id="a" x="20" y="20"></block>' +
-          '</xml>'
+          '</xml>',
       );
     });
     test('Marker Middle of Stack', function () {
@@ -341,7 +341,7 @@ suite('InsertionMarkers', function () {
           '      </block>' +
           '    </next>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertXml(
         xml,
@@ -351,7 +351,7 @@ suite('InsertionMarkers', function () {
           '<block type="stack_block" id="b"></block>' +
           '</next>' +
           '</block>' +
-          '</xml>'
+          '</xml>',
       );
     });
     test('Marker On Output', function () {
@@ -362,7 +362,7 @@ suite('InsertionMarkers', function () {
           '      <block type="row_block" id="a"/>' +
           '    </value>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       // Note how the x value is not at 20. This is because these are the coords
       // of the wrapped block.
@@ -370,7 +370,7 @@ suite('InsertionMarkers', function () {
         xml,
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="row_block" id="a" x="41" y="20"></block>' +
-          '</xml>'
+          '</xml>',
       );
     });
     test('Marker On Input', function () {
@@ -381,13 +381,13 @@ suite('InsertionMarkers', function () {
           '      <block type="row_block" id="insertion"/>' +
           '    </value>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertXml(
         xml,
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="row_block" id="a" x="20" y="20"></block>' +
-          '</xml>'
+          '</xml>',
       );
     });
     test('Marker Middle of Row', function () {
@@ -402,7 +402,7 @@ suite('InsertionMarkers', function () {
           '      </block>' +
           '    </value>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertXml(
         xml,
@@ -412,7 +412,7 @@ suite('InsertionMarkers', function () {
           '<block type="row_block" id="b"></block>' +
           '</value>' +
           '</block>' +
-          '</xml>'
+          '</xml>',
       );
     });
     test('Marker Detatched', function () {
@@ -420,13 +420,13 @@ suite('InsertionMarkers', function () {
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="stack_block" id="insertion"/>' +
           '  <block type="stack_block" id="a" x="20" y="20"/>' +
-          '</xml>'
+          '</xml>',
       );
       this.assertXml(
         xml,
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="stack_block" id="a" x="20" y="20"></block>' +
-          '</xml>'
+          '</xml>',
       );
     });
   });

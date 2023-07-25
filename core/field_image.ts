@@ -79,7 +79,7 @@ export class FieldImage extends Field<string> {
     alt?: string,
     onClick?: (p1: FieldImage) => void,
     flipRtl?: boolean,
-    config?: FieldImageConfig
+    config?: FieldImageConfig,
   ) {
     super(Field.SKIP_SETUP);
 
@@ -87,12 +87,13 @@ export class FieldImage extends Field<string> {
     const imageWidth = Number(parsing.replaceMessageReferences(width));
     if (isNaN(imageHeight) || isNaN(imageWidth)) {
       throw Error(
-        'Height and width values of an image field must cast to' + ' numbers.'
+        'Height and width values of an image field must cast to' + ' numbers.',
       );
     }
     if (imageHeight <= 0 || imageWidth <= 0) {
       throw Error(
-        'Height and width values of an image field must be greater' + ' than 0.'
+        'Height and width values of an image field must be greater' +
+          ' than 0.',
       );
     }
 
@@ -145,12 +146,12 @@ export class FieldImage extends Field<string> {
         'width': this.size_.width + 'px',
         'alt': this.altText,
       },
-      this.fieldGroup_
+      this.fieldGroup_,
     );
     this.imageElement.setAttributeNS(
       dom.XLINK_NS,
       'xlink:href',
-      this.value_ as string
+      this.value_ as string,
     );
 
     if (this.clickHandler) {
@@ -256,7 +257,7 @@ export class FieldImage extends Field<string> {
     if (!options.src || !options.width || !options.height) {
       throw new Error(
         'src, width, and height values for an image field are' +
-          'required. The width and height must be non-zero.'
+          'required. The width and height must be non-zero.',
       );
     }
     // `this` might be a subclass of FieldImage if that class doesn't override
@@ -268,7 +269,7 @@ export class FieldImage extends Field<string> {
       undefined,
       undefined,
       undefined,
-      options
+      options,
     );
   }
 }

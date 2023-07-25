@@ -84,7 +84,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     dom.createSvgElement(
       Svg.CIRCLE,
       {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
-      this.svgRoot
+      this.svgRoot,
     );
     // Can't use a real '?' text character since different browsers and
     // operating systems render it differently. Body of question mark.
@@ -97,7 +97,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
           '0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25' +
           '-1.201,0.998 -1.201,1.528 -1.204,2.19z',
       },
-      this.svgRoot
+      this.svgRoot,
     );
     // Dot of question mark.
     dom.createSvgElement(
@@ -109,7 +109,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
         'height': '2',
         'width': '2',
       },
-      this.svgRoot
+      this.svgRoot,
     );
   }
 
@@ -201,7 +201,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     this.text = state['text'] ?? '';
     this.bubbleSize = new Size(
       state['width'] ?? DEFAULT_BUBBLE_WIDTH,
-      state['height'] ?? DEFAULT_BUBBLE_HEIGHT
+      state['height'] ?? DEFAULT_BUBBLE_HEIGHT,
     );
     this.bubbleVisiblity = state['pinned'] ?? false;
     // Give the block a chance to be positioned and rendered before showing.
@@ -260,8 +260,8 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
       new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
         this.sourceBlock,
         visible,
-        'comment'
-      )
+        'comment',
+      ),
     );
   }
 
@@ -273,7 +273,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     this.textInputBubble = new TextInputBubble(
       this.sourceBlock.workspace as WorkspaceSvg,
       this.getAnchorLocation(),
-      this.getBubbleOwnerRect()
+      this.getBubbleOwnerRect(),
     );
     this.textInputBubble.setText(this.getText());
     this.textInputBubble.setSize(this.bubbleSize, true);
@@ -287,7 +287,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
       this.getText(),
       this.sourceBlock.workspace as WorkspaceSvg,
       this.getAnchorLocation(),
-      this.getBubbleOwnerRect()
+      this.getBubbleOwnerRect(),
     );
   }
 
@@ -307,7 +307,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     const midIcon = SIZE / 2;
     return Coordinate.sum(
       this.workspaceLocation,
-      new Coordinate(midIcon, midIcon)
+      new Coordinate(midIcon, midIcon),
     );
   }
 

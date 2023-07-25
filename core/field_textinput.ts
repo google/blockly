@@ -45,7 +45,7 @@ export class FieldTextInput extends FieldInput<string> {
   constructor(
     value?: string | typeof Field.SKIP_SETUP,
     validator?: FieldTextInputValidator | null,
-    config?: FieldTextInputConfig
+    config?: FieldTextInputConfig,
   ) {
     super(value, validator, config);
   }
@@ -57,7 +57,7 @@ export class FieldTextInput extends FieldInput<string> {
    * @returns A valid string, or null if invalid.
    */
   protected override doClassValidation_(
-    newValue?: AnyDuringMigration
+    newValue?: AnyDuringMigration,
   ): string | null {
     if (newValue === undefined) {
       return null;

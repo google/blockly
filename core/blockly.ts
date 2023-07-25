@@ -410,14 +410,14 @@ export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
 // clang-format off
 Workspace.prototype.newBlock = function (
   prototypeName: string,
-  opt_id?: string
+  opt_id?: string,
 ): Block {
   return new Block(this, prototypeName, opt_id);
 };
 
 WorkspaceSvg.prototype.newBlock = function (
   prototypeName: string,
-  opt_id?: string
+  opt_id?: string,
 ): BlockSvg {
   return new BlockSvg(this, prototypeName, opt_id);
 };
@@ -428,7 +428,7 @@ WorkspaceSvg.newTrashcan = function (workspace: WorkspaceSvg): Trashcan {
 
 WorkspaceCommentSvg.prototype.showContextMenu = function (
   this: WorkspaceCommentSvg,
-  e: Event
+  e: Event,
 ) {
   if (this.workspace.options.readOnly) {
     return;
@@ -444,14 +444,14 @@ WorkspaceCommentSvg.prototype.showContextMenu = function (
 };
 
 MiniWorkspaceBubble.prototype.newWorkspaceSvg = function (
-  options: Options
+  options: Options,
 ): WorkspaceSvg {
   return new WorkspaceSvg(options);
 };
 
 Names.prototype.populateProcedures = function (
   this: Names,
-  workspace: Workspace
+  workspace: Workspace,
 ) {
   const procedures = Procedures.allProcedures(workspace);
   // Flatten the return vs no-return procedure lists.

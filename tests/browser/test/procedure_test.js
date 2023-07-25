@@ -34,7 +34,7 @@ suite('Testing Connecting Blocks', function (done) {
     let proceduresDefReturn = await getBlockTypeFromCategory(
       browser,
       'Functions',
-      'procedures_defreturn'
+      'procedures_defreturn',
     );
     await proceduresDefReturn.dragAndDrop({x: 50, y: 20});
     const doSomething = await getSelectedBlockElement(browser);
@@ -43,7 +43,7 @@ suite('Testing Connecting Blocks', function (done) {
     proceduresDefReturn = await getBlockTypeFromCategory(
       browser,
       'Functions',
-      'procedures_defreturn'
+      'procedures_defreturn',
     );
     await proceduresDefReturn.dragAndDrop({x: 300, y: 200});
     const doSomething2 = await getSelectedBlockElement(browser);
@@ -52,7 +52,7 @@ suite('Testing Connecting Blocks', function (done) {
     const mathNumeric = await getBlockTypeFromCategory(
       browser,
       'Math',
-      'math_number'
+      'math_number',
     );
     await mathNumeric.dragAndDrop({x: 50, y: 20});
     const numeric = await getSelectedBlockElement(browser);
@@ -64,7 +64,7 @@ suite('Testing Connecting Blocks', function (done) {
     const doSomethingFlyout = await getNthBlockOfCategory(
       browser,
       'Functions',
-      3
+      3,
     );
     await doSomethingFlyout.dragAndDrop({x: 50, y: 20});
     const doSomethingCaller = await getSelectedBlockElement(browser);
@@ -76,7 +76,7 @@ suite('Testing Connecting Blocks', function (done) {
     const printFlyout = await getBlockTypeFromCategory(
       browser,
       'Text',
-      'text_print'
+      'text_print',
     );
     await printFlyout.dragAndDrop({x: 50, y: 20});
     const print = await getSelectedBlockElement(browser);
@@ -85,7 +85,7 @@ suite('Testing Connecting Blocks', function (done) {
     const doSomething2Flyout = await getNthBlockOfCategory(
       browser,
       'Functions',
-      4
+      4,
     );
     await doSomething2Flyout.dragAndDrop({x: 130, y: 20});
     const doSomething2Caller = await getSelectedBlockElement(browser);

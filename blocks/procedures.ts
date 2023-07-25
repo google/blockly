@@ -77,7 +77,7 @@ const PROCEDURE_DEF_COMMON = {
     }
     if (hasStatements) {
       this.appendStatementInput('STACK').appendField(
-        Msg['PROCEDURES_DEFNORETURN_DO']
+        Msg['PROCEDURES_DEFNORETURN_DO'],
       );
       if (this.getInput('RETURN')) {
         this.moveInputBefore('STACK', 'RETURN');
@@ -118,7 +118,7 @@ const PROCEDURE_DEF_COMMON = {
    */
   mutationToDom: function (
     this: ProcedureBlock,
-    opt_paramIds: boolean
+    opt_paramIds: boolean,
   ): Element {
     const container = xmlUtils.createElement('mutation');
     if (opt_paramIds) {
@@ -162,13 +162,13 @@ const PROCEDURE_DEF_COMMON = {
           this.workspace,
           varId,
           varName,
-          ''
+          '',
         );
         if (variable !== null) {
           this.argumentVarModels_.push(variable);
         } else {
           console.log(
-            `Failed to create a variable named "${varName}", ignoring.`
+            `Failed to create a variable named "${varName}", ignoring.`,
           );
         }
       }
@@ -221,7 +221,7 @@ const PROCEDURE_DEF_COMMON = {
           this.workspace,
           param['id'],
           param['name'],
-          ''
+          '',
         );
         this.arguments_.push(variable.name);
         this.argumentVarModels_.push(variable);
@@ -239,7 +239,7 @@ const PROCEDURE_DEF_COMMON = {
    */
   decompose: function (
     this: ProcedureBlock,
-    workspace: Workspace
+    workspace: Workspace,
   ): ContainerBlock {
     /*
      * Creates the following XML:
@@ -277,7 +277,7 @@ const PROCEDURE_DEF_COMMON = {
 
     const containerBlock = Xml.domToBlock(
       containerBlockNode,
-      workspace
+      workspace,
     ) as ContainerBlock;
 
     if (this.type === 'procedures_defreturn') {
@@ -366,7 +366,7 @@ const PROCEDURE_DEF_COMMON = {
   renameVarById: function (
     this: ProcedureBlock & BlockSvg,
     oldId: string,
-    newId: string
+    newId: string,
   ) {
     const oldVariable = this.workspace.getVariableById(oldId)!;
     if (oldVariable.type !== '') {
@@ -397,7 +397,7 @@ const PROCEDURE_DEF_COMMON = {
    */
   updateVarName: function (
     this: ProcedureBlock & BlockSvg,
-    variable: VariableModel
+    variable: VariableModel,
   ) {
     const newName = variable.name;
     let change = false;
@@ -424,7 +424,7 @@ const PROCEDURE_DEF_COMMON = {
   displayRenamedVar_: function (
     this: ProcedureBlock & BlockSvg,
     oldName: string,
-    newName: string
+    newName: string,
   ) {
     this.updateParams_();
     // Update the mutator's variables if the mutator is open.
@@ -448,7 +448,7 @@ const PROCEDURE_DEF_COMMON = {
    */
   customContextMenu: function (
     this: ProcedureBlock,
-    options: Array<ContextMenuOption | LegacyContextMenuOption>
+    options: Array<ContextMenuOption | LegacyContextMenuOption>,
   ) {
     if (this.isInFlyout) {
       return;
@@ -599,7 +599,7 @@ const PROCEDURES_MUTATORCONTAINER = {
    */
   init: function (this: ContainerBlock) {
     this.appendDummyInput().appendField(
-      Msg['PROCEDURES_MUTATORCONTAINER_TITLE']
+      Msg['PROCEDURES_MUTATORCONTAINER_TITLE'],
     );
     this.appendStatementInput('STACK');
     this.appendDummyInput('STATEMENT_INPUT')
@@ -609,7 +609,7 @@ const PROCEDURES_MUTATORCONTAINER = {
           type: 'field_checkbox',
           checked: true,
         }) as FieldCheckbox,
-        'STATEMENTS'
+        'STATEMENTS',
       );
     this.setStyle('procedure_blocks');
     this.setTooltip(Msg['PROCEDURES_MUTATORCONTAINER_TOOLTIP']);
@@ -678,7 +678,7 @@ const PROCEDURES_MUTATORARGUMENT = {
    */
   validator_: function (
     this: FieldTextInputForArgument,
-    varName: string
+    varName: string,
   ): string | null {
     const sourceBlock = this.getSourceBlock()!;
     const outerWs = sourceBlock!.workspace.getRootWorkspace()!;
@@ -734,7 +734,7 @@ const PROCEDURES_MUTATORARGUMENT = {
    */
   deleteIntermediateVars_: function (
     this: FieldTextInputForArgument,
-    newText: string
+    newText: string,
   ) {
     const outerWs = this.getSourceBlock()!.workspace.getRootWorkspace();
     if (!outerWs) {
@@ -792,7 +792,7 @@ const PROCEDURE_CALL_COMMON = {
   renameProcedure: function (
     this: CallBlock,
     oldName: string,
-    newName: string
+    newName: string,
   ) {
     if (Names.equals(oldName, this.getProcedureCall())) {
       this.setFieldValue(newName, 'NAME');
@@ -814,7 +814,7 @@ const PROCEDURE_CALL_COMMON = {
   setProcedureParameters_: function (
     this: CallBlock,
     paramNames: string[],
-    paramIds: string[]
+    paramIds: string[],
   ) {
     // Data structures:
     // this.arguments = ['x', 'y']
@@ -827,7 +827,7 @@ const PROCEDURE_CALL_COMMON = {
     // which might reappear if a param is reattached in the mutator.
     const defBlock = Procedures.getDefinition(
       this.getProcedureCall(),
-      this.workspace
+      this.workspace,
     );
     const mutatorIcon = defBlock && defBlock.getIcon(Mutator.TYPE);
     const mutatorOpen = mutatorIcon && mutatorIcon.bubbleIsVisible();
@@ -880,7 +880,7 @@ const PROCEDURE_CALL_COMMON = {
         this.workspace,
         null,
         this.arguments_[i],
-        ''
+        '',
       );
       this.argumentVarModels_.push(variable);
     }
@@ -1126,7 +1126,7 @@ const PROCEDURE_CALL_COMMON = {
           // investigate. If the use ends up being valid we may need to reorder
           // events in the undo stack.
           console.log(
-            'Saw an existing group while responding to a definition change'
+            'Saw an existing group while responding to a definition change',
           );
         }
         Events.setGroup(event.group);
@@ -1147,7 +1147,7 @@ const PROCEDURE_CALL_COMMON = {
    */
   customContextMenu: function (
     this: CallBlock,
-    options: Array<ContextMenuOption | LegacyContextMenuOption>
+    options: Array<ContextMenuOption | LegacyContextMenuOption>,
   ) {
     if (!(this.workspace as WorkspaceSvg).isMovable()) {
       // If we center on the block and the workspace isn't movable we could
@@ -1230,7 +1230,7 @@ const PROCEDURES_IFRETURN = {
       .setCheck('Boolean')
       .appendField(Msg['CONTROLS_IF_MSG_IF']);
     this.appendValueInput('VALUE').appendField(
-      Msg['PROCEDURES_DEFRETURN_RETURN']
+      Msg['PROCEDURES_DEFRETURN_RETURN'],
     );
     this.setInputsInline(true);
     this.setPreviousStatement(true);
@@ -1261,7 +1261,7 @@ const PROCEDURES_IFRETURN = {
     if (!this.hasReturnValue_) {
       this.removeInput('VALUE');
       this.appendDummyInput('VALUE').appendField(
-        Msg['PROCEDURES_DEFRETURN_RETURN']
+        Msg['PROCEDURES_DEFRETURN_RETURN'],
       );
     }
   },
@@ -1300,7 +1300,7 @@ const PROCEDURES_IFRETURN = {
       if (block.type === 'procedures_defnoreturn' && this.hasReturnValue_) {
         this.removeInput('VALUE');
         this.appendDummyInput('VALUE').appendField(
-          Msg['PROCEDURES_DEFRETURN_RETURN']
+          Msg['PROCEDURES_DEFRETURN_RETURN'],
         );
         this.hasReturnValue_ = false;
       } else if (
@@ -1309,7 +1309,7 @@ const PROCEDURES_IFRETURN = {
       ) {
         this.removeInput('VALUE');
         this.appendValueInput('VALUE').appendField(
-          Msg['PROCEDURES_DEFRETURN_RETURN']
+          Msg['PROCEDURES_DEFRETURN_RETURN'],
         );
         this.hasReturnValue_ = true;
       }

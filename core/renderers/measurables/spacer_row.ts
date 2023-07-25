@@ -32,7 +32,7 @@ export class SpacerRow extends Row {
   constructor(
     constants: ConstantProvider,
     public override height: number,
-    public override width: number
+    public override width: number,
   ) {
     super(constants);
     this.type |= Types.SPACER | Types.BETWEEN_ROW_SPACER;

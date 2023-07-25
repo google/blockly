@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -55,7 +55,7 @@
       function initPlayground() {
         if (typeof window.createPlayground === 'undefined') {
           alert(
-            "You need to run 'npm install' in order to use this playground."
+            "You need to run 'npm install' in order to use this playground.",
           );
           return;
         }
@@ -108,7 +108,7 @@
           createWorkspace,
           defaultOptions,
           playgroundConfig,
-          'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.19.2/min/vs'
+          'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.19.2/min/vs',
         ).then(function (playground) {
           configurePlayground(playground);
         });
@@ -141,7 +141,7 @@
 
         // Adds a default-sized workspace comment to the workspace.
         menuOptions.push(
-          Blockly.ContextMenu.workspaceCommentOption(workspace, e)
+          Blockly.ContextMenu.workspaceCommentOption(workspace, e),
         );
       }
       start();

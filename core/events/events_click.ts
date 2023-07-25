@@ -46,7 +46,7 @@ export class Click extends UiBase {
   constructor(
     opt_block?: Block | null,
     opt_workspaceId?: string | null,
-    opt_targetType?: ClickTarget
+    opt_targetType?: ClickTarget,
   ) {
     let workspaceId = opt_block ? opt_block.workspace.id : opt_workspaceId;
     if (workspaceId === null) {
@@ -68,7 +68,7 @@ export class Click extends UiBase {
     if (!this.targetType) {
       throw new Error(
         'The click target type is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     json['targetType'] = this.targetType;
@@ -89,7 +89,7 @@ export class Click extends UiBase {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new Click()
+      event ?? new Click(),
     ) as Click;
     newEvent.targetType = json['targetType'];
     newEvent.blockId = json['blockId'];

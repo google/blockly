@@ -103,7 +103,7 @@ suite('Registry', function () {
       test('Type', function () {
         assertWarnings(() => {
           chai.assert.isNull(
-            Blockly.registry.getClass('bad_type', 'test_name')
+            Blockly.registry.getClass('bad_type', 'test_name'),
           );
         }, /Unable to find/);
       });
@@ -145,7 +145,7 @@ suite('Registry', function () {
       test('Type', function () {
         assertWarnings(() => {
           chai.assert.isNull(
-            Blockly.registry.getObject('bad_type', 'test_name')
+            Blockly.registry.getObject('bad_type', 'test_name'),
           );
         }, /Unable to find/);
       });
@@ -242,7 +242,7 @@ suite('Registry', function () {
     test('Simple - Plugin name given', function () {
       const testClass = Blockly.registry.getClassFromOptions(
         'test',
-        this.options
+        this.options,
       );
       chai.assert.instanceOf(new testClass(), TestClass);
     });
@@ -251,7 +251,7 @@ suite('Registry', function () {
       this.options.plugins['test'] = TestClass;
       const testClass = Blockly.registry.getClassFromOptions(
         'test',
-        this.options
+        this.options,
       );
       chai.assert.instanceOf(new testClass(), TestClass);
     });
@@ -260,7 +260,7 @@ suite('Registry', function () {
       delete this.options['plugins']['test'];
       const testClass = Blockly.registry.getClassFromOptions(
         'test',
-        this.options
+        this.options,
       );
       chai.assert.instanceOf(new testClass(), this.defaultClass);
     });

@@ -23,7 +23,7 @@ import * as colourUtils from './colour.js';
  */
 function tokenizeInterpolationInternal(
   message: string,
-  parseInterpolationTokens: boolean
+  parseInterpolationTokens: boolean,
 ): (string | number)[] {
   const tokens = [];
   const chars = message.split('');
@@ -107,8 +107,8 @@ function tokenizeInterpolationInternal(
                 tokens,
                 tokenizeInterpolationInternal(
                   rawValue,
-                  parseInterpolationTokens
-                )
+                  parseInterpolationTokens,
+                ),
               );
             } else if (parseInterpolationTokens) {
               // When parsing interpolation tokens, numbers are special
@@ -247,7 +247,7 @@ export function parseBlockColour(colour: number | string): {
       hex: colourUtils.hsvToHex(
         hue,
         colourUtils.getHsvSaturation(),
-        colourUtils.getHsvValue() * 255
+        colourUtils.getHsvValue() * 255,
       ),
     };
   } else {

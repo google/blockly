@@ -30,7 +30,7 @@ suite('Extensions', function () {
     this.extensionsCleanup_.push('extensions_test_after');
 
     chai.assert.isUndefined(
-      Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test_before']
+      Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test_before'],
     );
     const beforeCallback = sinon.spy();
     // Extension defined before the block type is defined.
@@ -45,7 +45,7 @@ suite('Extensions', function () {
     ]);
 
     chai.assert.isUndefined(
-      Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test_after']
+      Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test_after'],
     );
     const afterCallback = sinon.spy();
     // Extension defined after the block type (but before instantiation).
@@ -53,11 +53,11 @@ suite('Extensions', function () {
 
     chai.assert.typeOf(
       Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test_before'],
-      'function'
+      'function',
     );
     chai.assert.typeOf(
       Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test_after'],
-      'function'
+      'function',
     );
     sinon.assert.notCalled(beforeCallback);
     sinon.assert.notCalled(afterCallback);
@@ -96,7 +96,7 @@ suite('Extensions', function () {
 
     const block = new Blockly.Block(
       this.workspace,
-      'test_parent_tooltip_when_inline'
+      'test_parent_tooltip_when_inline',
     );
 
     // Tooltip is dynamic after extension initialization.
@@ -135,14 +135,14 @@ suite('Extensions', function () {
       };
 
       chai.assert.isUndefined(
-        Blockly.Extensions.TEST_ONLY.allExtensions['mixin_test']
+        Blockly.Extensions.TEST_ONLY.allExtensions['mixin_test'],
       );
       // Extension defined before the block type is defined.
       Blockly.Extensions.registerMixin('mixin_test', testMixin);
 
       chai.assert.typeOf(
         Blockly.Extensions.TEST_ONLY.allExtensions['mixin_test'],
-        'function'
+        'function',
       );
 
       Blockly.defineBlocksWithJsonArray([
@@ -213,7 +213,7 @@ suite('Extensions', function () {
         // meaningful value.
         Blockly.Events.disable();
         chai.assert.isUndefined(
-          Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test']
+          Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test'],
         );
         const helperFunctionSpy = sinon.spy();
         Blockly.Extensions.registerMutator(
@@ -226,7 +226,7 @@ suite('Extensions', function () {
               return 'mutationToDomFn';
             },
           },
-          helperFunctionSpy
+          helperFunctionSpy,
         );
 
         const _ = new Blockly.Block(this.workspace, 'mutator_test_block');
@@ -249,7 +249,7 @@ suite('Extensions', function () {
         // meaningful value.
         Blockly.Events.disable();
         chai.assert.isUndefined(
-          Blockly.Extensions.TEST_ONLY.allExtensions['mutator_test']
+          Blockly.Extensions.TEST_ONLY.allExtensions['mutator_test'],
         );
         Blockly.Extensions.registerMutator('mutator_test', {
           domToMutation: function () {
@@ -282,7 +282,7 @@ suite('Extensions', function () {
       ]);
 
       chai.assert.isUndefined(
-        Blockly.Extensions.TEST_ONLY.allExtensions['missing_extension']
+        Blockly.Extensions.TEST_ONLY.allExtensions['missing_extension'],
       );
       const workspace = this.workspace;
       chai.assert.throws(function () {
@@ -298,16 +298,16 @@ suite('Extensions', function () {
       };
 
       chai.assert.isUndefined(
-        Blockly.Extensions.TEST_ONLY.allExtensions['mixin_bad_inputList']
+        Blockly.Extensions.TEST_ONLY.allExtensions['mixin_bad_inputList'],
       );
       // Extension defined before the block type is defined.
       Blockly.Extensions.registerMixin(
         'mixin_bad_inputList',
-        TEST_MIXIN_BAD_INPUTLIST
+        TEST_MIXIN_BAD_INPUTLIST,
       );
       chai.assert.typeOf(
         Blockly.Extensions.TEST_ONLY.allExtensions['mixin_bad_inputList'],
-        'function'
+        'function',
       );
 
       Blockly.defineBlocksWithJsonArray([
@@ -332,16 +332,16 @@ suite('Extensions', function () {
       };
 
       chai.assert.isUndefined(
-        Blockly.Extensions.TEST_ONLY.allExtensions['mixin_bad_colour_']
+        Blockly.Extensions.TEST_ONLY.allExtensions['mixin_bad_colour_'],
       );
       // Extension defined before the block type is defined.
       Blockly.Extensions.registerMixin(
         'mixin_bad_colour_',
-        TEST_MIXIN_BAD_COLOUR
+        TEST_MIXIN_BAD_COLOUR,
       );
       chai.assert.typeOf(
         Blockly.Extensions.TEST_ONLY.allExtensions['mixin_bad_colour_'],
-        'function'
+        'function',
       );
 
       Blockly.defineBlocksWithJsonArray([
@@ -373,7 +373,7 @@ suite('Extensions', function () {
       // meaningful value.
       Blockly.Events.disable();
       chai.assert.isUndefined(
-        Blockly.Extensions.TEST_ONLY.allExtensions['mutator_test']
+        Blockly.Extensions.TEST_ONLY.allExtensions['mutator_test'],
       );
       Blockly.Extensions.registerMutator('mutator_test', {
         domToMutation: function () {
@@ -390,7 +390,7 @@ suite('Extensions', function () {
       });
       // Should have failed on apply, not on register.
       chai.assert.isNotNull(
-        Blockly.Extensions.TEST_ONLY.allExtensions['mutator_test']
+        Blockly.Extensions.TEST_ONLY.allExtensions['mutator_test'],
       );
     });
 
@@ -409,7 +409,7 @@ suite('Extensions', function () {
       // meaningful value.
       Blockly.Events.disable();
       chai.assert.isUndefined(
-        Blockly.Extensions.TEST_ONLY.allExtensions['mutator_test']
+        Blockly.Extensions.TEST_ONLY.allExtensions['mutator_test'],
       );
       Blockly.Extensions.registerMixin('mutator_test', {
         domToMutation: function () {
@@ -426,7 +426,7 @@ suite('Extensions', function () {
       });
       // Should have failed on apply, not on register.
       chai.assert.isNotNull(
-        Blockly.Extensions.TEST_ONLY.allExtensions['mutator_test']
+        Blockly.Extensions.TEST_ONLY.allExtensions['mutator_test'],
       );
     });
 
@@ -445,7 +445,7 @@ suite('Extensions', function () {
       // meaningful value.
       Blockly.Events.disable();
       chai.assert.isUndefined(
-        Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test']
+        Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test'],
       );
       Blockly.Extensions.register('extensions_test', function () {
         return 'extensions_test_fn';
@@ -457,7 +457,7 @@ suite('Extensions', function () {
       });
       // Should have failed on apply, not on register.
       chai.assert.isNotNull(
-        Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test']
+        Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test'],
       );
     });
 
@@ -465,7 +465,7 @@ suite('Extensions', function () {
       test('Just a string', function () {
         this.extensionsCleanup_.push('extension_just_a_string');
         chai.assert.isUndefined(
-          Blockly.Extensions.TEST_ONLY.allExtensions['extension_just_a_string']
+          Blockly.Extensions.TEST_ONLY.allExtensions['extension_just_a_string'],
         );
         chai.assert.throws(function () {
           Blockly.Extensions.register('extension_just_a_string', null);
@@ -475,7 +475,7 @@ suite('Extensions', function () {
       test('Null', function () {
         this.extensionsCleanup_.push('extension_is_null');
         chai.assert.isUndefined(
-          Blockly.Extensions.TEST_ONLY.allExtensions['extension_is_null']
+          Blockly.Extensions.TEST_ONLY.allExtensions['extension_is_null'],
         );
         chai.assert.throws(function () {
           Blockly.Extensions.register('extension_is_null', null);
@@ -485,7 +485,7 @@ suite('Extensions', function () {
       test('Undefined', function () {
         this.extensionsCleanup_.push('extension_is_undefined');
         chai.assert.isUndefined(
-          Blockly.Extensions.TEST_ONLY.allExtensions['extension_is_undefined']
+          Blockly.Extensions.TEST_ONLY.allExtensions['extension_is_undefined'],
         );
         chai.assert.throws(function () {
           Blockly.Extensions.register('extension_is_undefined', null);

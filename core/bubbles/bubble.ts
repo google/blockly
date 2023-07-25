@@ -88,7 +88,7 @@ export abstract class Bubble implements IBubble {
   constructor(
     protected readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
-    protected ownerRect?: Rect
+    protected ownerRect?: Rect,
   ) {
     this.svgRoot = dom.createSvgElement(Svg.G, {}, workspace.getBubbleCanvas());
     const embossGroup = dom.createSvgElement(
@@ -98,7 +98,7 @@ export abstract class Bubble implements IBubble {
           this.workspace.getRenderer().getConstants().embossFilterId
         })`,
       },
-      this.svgRoot
+      this.svgRoot,
     );
     this.tail = dom.createSvgElement(Svg.PATH, {}, embossGroup);
     this.background = dom.createSvgElement(
@@ -110,7 +110,7 @@ export abstract class Bubble implements IBubble {
         'rx': Bubble.BORDER_WIDTH,
         'ry': Bubble.BORDER_WIDTH,
       },
-      embossGroup
+      embossGroup,
     );
     this.contentContainer = dom.createSvgElement(Svg.G, {}, this.svgRoot);
 
@@ -118,7 +118,7 @@ export abstract class Bubble implements IBubble {
       this.background,
       'pointerdown',
       this,
-      this.onMouseDown
+      this.onMouseDown,
     );
   }
 
@@ -250,7 +250,7 @@ export abstract class Bubble implements IBubble {
     const closerPositionOverlap = this.getOverlap(closerPosition, viewMetrics);
     const fartherPositionOverlap = this.getOverlap(
       fartherPosition,
-      viewMetrics
+      viewMetrics,
     );
 
     // Set the position to whichever position shows the most of the bubble,
@@ -259,7 +259,7 @@ export abstract class Bubble implements IBubble {
       topPositionOverlap,
       startPositionOverlap,
       closerPositionOverlap,
-      fartherPositionOverlap
+      fartherPositionOverlap,
     );
     if (topPositionOverlap === mostOverlap) {
       this.relativeLeft = topPosition.x;
@@ -299,7 +299,7 @@ export abstract class Bubble implements IBubble {
    */
   private getOverlap(
     relativeMin: {x: number; y: number},
-    viewMetrics: ContainerRegion
+    viewMetrics: ContainerRegion,
   ): number {
     // The position of the top-left corner of the bubble in workspace units.
     const bubbleMin = {
@@ -337,8 +337,8 @@ export abstract class Bubble implements IBubble {
       0,
       Math.min(
         1,
-        (overlapWidth * overlapHeight) / (this.size.width * this.size.height)
-      )
+        (overlapWidth * overlapHeight) / (this.size.width * this.size.height),
+      ),
     );
   }
 
@@ -497,7 +497,7 @@ export abstract class Bubble implements IBubble {
 
       // Distortion to curve the tail.
       const radians = math.toRadians(
-        this.workspace.RTL ? -Bubble.TAIL_ANGLE : Bubble.TAIL_ANGLE
+        this.workspace.RTL ? -Bubble.TAIL_ANGLE : Bubble.TAIL_ANGLE,
       );
       let swirlAngle = angle + radians;
       if (swirlAngle > Math.PI * 2) {
@@ -519,7 +519,7 @@ export abstract class Bubble implements IBubble {
           ' ' +
           relAnchorX +
           ',' +
-          relAnchorY
+          relAnchorY,
       );
       steps.push(
         'C' +
@@ -533,7 +533,7 @@ export abstract class Bubble implements IBubble {
           ' ' +
           baseX2 +
           ',' +
-          baseY2
+          baseY2,
       );
     }
     steps.push('z');
@@ -560,7 +560,7 @@ export abstract class Bubble implements IBubble {
       this.workspace.RTL
         ? -this.relativeLeft + this.anchor.x - this.size.width
         : this.anchor.x + this.relativeLeft,
-      this.anchor.y + this.relativeTop
+      this.anchor.y + this.relativeTop,
     );
   }
 

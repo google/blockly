@@ -50,7 +50,7 @@ async function testFieldEdits(delta) {
     'Math',
     'math_number',
     50 * delta,
-    20
+    20,
   );
   await browser.pause(2000);
 
@@ -67,7 +67,7 @@ async function testFieldEdits(delta) {
   // Get value of the number
   const numericText = await browser
     .$(
-      '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable > g > text'
+      '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable > g > text',
     )
     .getHTML();
 

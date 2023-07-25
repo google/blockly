@@ -77,7 +77,7 @@ export abstract class Abstract {
   static fromJson(
     json: AbstractEventJson,
     workspace: Workspace,
-    event: any
+    event: any,
   ): Abstract {
     event.isBlank = false;
     event.group = json['group'] || '';
@@ -119,7 +119,7 @@ export abstract class Abstract {
     if (!workspace) {
       throw Error(
         'Workspace is null. Event must have been generated from real' +
-          ' Blockly events.'
+          ' Blockly events.',
       );
     }
     return workspace;

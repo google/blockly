@@ -91,7 +91,7 @@ export function save(
     addInputBlocks?: boolean;
     addNextBlocks?: boolean;
     doFullSerialization?: boolean;
-  } = {}
+  } = {},
 ): State | null {
   if (block.isInsertionMarker()) {
     return null;
@@ -199,7 +199,7 @@ function saveExtraState(block: Block, state: State) {
     if (extraState !== null) {
       state['extraState'] = Xml.domToText(extraState).replace(
         ' xmlns="https://developers.google.com/blockly/xml"',
-        ''
+        '',
       );
     }
   }
@@ -262,7 +262,7 @@ function saveFields(block: Block, state: State, doFullSerialization: boolean) {
 function saveInputBlocks(
   block: Block,
   state: State,
-  doFullSerialization: boolean
+  doFullSerialization: boolean,
 ) {
   const inputs = Object.create(null);
   for (let i = 0; i < block.inputList.length; i++) {
@@ -270,7 +270,7 @@ function saveInputBlocks(
     if (!input.connection) continue;
     const connectionState = saveConnection(
       input.connection as Connection,
-      doFullSerialization
+      doFullSerialization,
     );
     if (connectionState) {
       inputs[input.name] = connectionState;
@@ -293,14 +293,14 @@ function saveInputBlocks(
 function saveNextBlocks(
   block: Block,
   state: State,
-  doFullSerialization: boolean
+  doFullSerialization: boolean,
 ) {
   if (!block.nextConnection) {
     return;
   }
   const connectionState = saveConnection(
     block.nextConnection,
-    doFullSerialization
+    doFullSerialization,
   );
   if (connectionState) {
     state['next'] = connectionState;
@@ -318,7 +318,7 @@ function saveNextBlocks(
  */
 function saveConnection(
   connection: Connection,
-  doFullSerialization: boolean
+  doFullSerialization: boolean,
 ): ConnectionState | null {
   const shadow = connection.getShadowState(true);
   const child = connection.targetBlock();
@@ -347,7 +347,7 @@ function saveConnection(
 export function append(
   state: State,
   workspace: Workspace,
-  {recordUndo = false}: {recordUndo?: boolean} = {}
+  {recordUndo = false}: {recordUndo?: boolean} = {},
 ): Block {
   return appendInternal(state, workspace, {recordUndo});
 }
@@ -380,7 +380,7 @@ export function appendInternal(
     parentConnection?: Connection;
     isShadow?: boolean;
     recordUndo?: boolean;
-  } = {}
+  } = {},
 ): Block {
   const prevRecordUndo = eventUtils.getRecordUndo();
   eventUtils.setRecordUndo(recordUndo);
@@ -431,7 +431,7 @@ function appendPrivate(
   {
     parentConnection = undefined,
     isShadow = false,
-  }: {parentConnection?: Connection; isShadow?: boolean} = {}
+  }: {parentConnection?: Connection; isShadow?: boolean} = {},
 ): Block {
   if (!state['type']) {
     throw new MissingBlockType(state);
@@ -527,7 +527,7 @@ function loadExtraState(block: Block, state: State) {
 function tryToConnectParent(
   parentConnection: Connection | undefined,
   child: Block,
-  state: State
+  state: State,
 ) {
   if (!parentConnection) {
     return;
@@ -560,13 +560,13 @@ function tryToConnectParent(
       checker.getErrorMessage(
         checker.canConnectWithReason(childConnection, parentConnection, false),
         childConnection,
-        parentConnection
+        parentConnection,
       ),
       parentConnection.type === inputTypes.VALUE
         ? 'output connection'
         : 'previous connection',
       child,
-      state
+      state,
     );
   }
 }
@@ -589,7 +589,7 @@ function loadIcons(block: Block, state: State) {
       const constructor = registry.getClass(
         registry.Type.ICON,
         iconType,
-        false
+        false,
       );
       if (!constructor) throw new UnregisteredIcon(iconType, block, state);
       icon = new constructor(block);
@@ -616,7 +616,7 @@ function loadFields(block: Block, state: State) {
     const field = block.getField(fieldName);
     if (!field) {
       console.warn(
-        `Ignoring non-existant field ${fieldName} in block ${block.type}`
+        `Ignoring non-existant field ${fieldName} in block ${block.type}`,
       );
       continue;
     }
@@ -672,7 +672,7 @@ function loadNextBlocks(block: Block, state: State) {
  */
 function loadConnection(
   connection: Connection,
-  connectionState: ConnectionState
+  connectionState: ConnectionState,
 ) {
   if (connectionState['shadow']) {
     connection.setShadowState(connectionState['shadow']);
@@ -681,7 +681,7 @@ function loadConnection(
     appendPrivate(
       connectionState['block'],
       connection.getSourceBlock().workspace,
-      {parentConnection: connection}
+      {parentConnection: connection},
     );
   }
 }
@@ -735,7 +735,7 @@ export class BlockSerializer implements ISerializer {
    *     blocks.
    */
   save(
-    workspace: Workspace
+    workspace: Workspace,
   ): {languageVersion: number; blocks: State[]} | null {
     const blockStates = [];
     for (const block of workspace.getTopBlocks(false)) {
@@ -765,7 +765,7 @@ export class BlockSerializer implements ISerializer {
    */
   load(
     state: {languageVersion: number; blocks: State[]},
-    workspace: Workspace
+    workspace: Workspace,
   ) {
     const blockStates = state['blocks'];
     for (const state of blockStates) {

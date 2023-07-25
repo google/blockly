@@ -25,7 +25,7 @@ export class NextConnection extends Connection {
    */
   constructor(
     constants: ConstantProvider,
-    connectionModel: RenderedConnection
+    connectionModel: RenderedConnection,
   ) {
     super(constants, connectionModel);
     this.type |= Types.NEXT_CONNECTION;

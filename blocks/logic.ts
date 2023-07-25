@@ -276,7 +276,7 @@ const TOOLTIPS_BY_OP = {
 
 Extensions.register(
   'logic_op_tooltip',
-  Extensions.buildTooltipForDropdown('OP', TOOLTIPS_BY_OP)
+  Extensions.buildTooltipForDropdown('OP', TOOLTIPS_BY_OP),
 );
 
 /** Type of a block that has CONTROLS_IF_MUTATOR_MIXIN */
@@ -417,10 +417,10 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
           this.elseifCount_++;
           // TODO(#6920): null valid, undefined not.
           valueConnections.push(
-            clauseBlock.valueConnection_ as Connection | null
+            clauseBlock.valueConnection_ as Connection | null,
           );
           statementConnections.push(
-            clauseBlock.statementConnection_ as Connection | null
+            clauseBlock.statementConnection_ as Connection | null,
           );
           break;
         case 'controls_if_else':
@@ -438,7 +438,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
     this.reconnectChildBlocks_(
       valueConnections,
       statementConnections,
-      elseStatementConnection
+      elseStatementConnection,
     );
   },
   /**
@@ -500,7 +500,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
     this.reconnectChildBlocks_(
       valueConnections,
       statementConnections,
-      elseStatementConnection
+      elseStatementConnection,
     );
   },
   /**
@@ -523,12 +523,12 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
         .setCheck('Boolean')
         .appendField(Msg['CONTROLS_IF_MSG_ELSEIF']);
       this.appendStatementInput('DO' + i).appendField(
-        Msg['CONTROLS_IF_MSG_THEN']
+        Msg['CONTROLS_IF_MSG_THEN'],
       );
     }
     if (this.elseCount_) {
       this.appendStatementInput('ELSE').appendField(
-        Msg['CONTROLS_IF_MSG_ELSE']
+        Msg['CONTROLS_IF_MSG_ELSE'],
       );
     }
   },
@@ -545,7 +545,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
     this: IfBlock,
     valueConnections: Array<Connection | null>,
     statementConnections: Array<Connection | null>,
-    elseStatementConnection: Connection | null
+    elseStatementConnection: Connection | null,
   ) {
     for (let i = 1; i <= this.elseifCount_; i++) {
       valueConnections[i]?.reconnect(this, 'IF' + i);
@@ -559,7 +559,7 @@ Extensions.registerMutator(
   'controls_if_mutator',
   CONTROLS_IF_MUTATOR_MIXIN,
   null as unknown as undefined, // TODO(#6920)
-  ['controls_if_elseif', 'controls_if_else']
+  ['controls_if_elseif', 'controls_if_else'],
 );
 
 /**
@@ -579,7 +579,7 @@ const CONTROLS_IF_TOOLTIP_EXTENSION = function (this: IfBlock) {
         return Msg['CONTROLS_IF_TOOLTIP_4'];
       }
       return '';
-    }.bind(this)
+    }.bind(this),
   );
 };
 
@@ -617,7 +617,7 @@ const LOGIC_COMPARE_ONCHANGE_MIXIN = {
       blockB &&
       !this.workspace.connectionChecker.doTypeChecks(
         blockA.outputConnection!,
-        blockB.outputConnection!
+        blockB.outputConnection!,
       )
     ) {
       // Mismatch between two inputs.  Revert the block connections,
@@ -686,7 +686,7 @@ const LOGIC_TERNARY_ONCHANGE_MIXIN = {
           block &&
           !block.workspace.connectionChecker.doTypeChecks(
             block.outputConnection!,
-            parentConnection
+            parentConnection,
           )
         ) {
           // Ensure that any disconnections are grouped with the causing

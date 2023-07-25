@@ -118,7 +118,7 @@ export class Drawer extends BaseDrawer {
       }
       input.connectionModel.setOffsetInBlock(
         connX,
-        yPos + input.connectionOffsetY + this.constants_.DARK_PATH_OFFSET
+        yPos + input.connectionOffsetY + this.constants_.DARK_PATH_OFFSET,
       );
     }
   }
@@ -134,7 +134,7 @@ export class Drawer extends BaseDrawer {
       }
       input.connectionModel.setOffsetInBlock(
         connX,
-        row.yPos + this.constants_.DARK_PATH_OFFSET
+        row.yPos + this.constants_.DARK_PATH_OFFSET,
       );
     }
   }
@@ -160,7 +160,7 @@ export class Drawer extends BaseDrawer {
         (this.info_.RTL ? -x : x) + this.constants_.DARK_PATH_OFFSET / 2;
       connInfo.connectionModel.setOffsetInBlock(
         connX,
-        bottomRow.baseline + this.constants_.DARK_PATH_OFFSET
+        bottomRow.baseline + this.constants_.DARK_PATH_OFFSET,
       );
     }
   }

@@ -35,7 +35,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 function bumpObjectIntoBounds(
   workspace: WorkspaceSvg,
   bounds: ContainerRegion,
-  object: IBoundedElement
+  object: IBoundedElement,
 ): boolean {
   // Compute new top/left position for object.
   const objectMetrics = object.getBoundingRectangle();
@@ -50,7 +50,7 @@ function bumpObjectIntoBounds(
   const newYPosition = mathUtils.clamp(
     topClamp,
     objectMetrics.top,
-    bottomClamp
+    bottomClamp,
   );
   const deltaY = newYPosition - objectMetrics.top;
 
@@ -73,7 +73,7 @@ function bumpObjectIntoBounds(
   const newXPosition = mathUtils.clamp(
     leftClamp,
     objectMetrics.left,
-    rightClamp
+    rightClamp,
   );
   const deltaX = newXPosition - objectMetrics.left;
 
@@ -92,7 +92,7 @@ export const bumpIntoBounds = bumpObjectIntoBounds;
  * @returns The event handler.
  */
 export function bumpIntoBoundsHandler(
-  workspace: WorkspaceSvg
+  workspace: WorkspaceSvg,
 ): (p1: Abstract) => void {
   return (e) => {
     const metricsManager = workspace.getMetricsManager();
@@ -106,7 +106,7 @@ export function bumpIntoBoundsHandler(
       // Triggered by move/create event
       const object = extractObjectFromEvent(
         workspace,
-        e as eventUtils.BumpEvent
+        e as eventUtils.BumpEvent,
       );
       if (!object) {
         return;
@@ -118,13 +118,13 @@ export function bumpIntoBoundsHandler(
       const wasBumped = bumpObjectIntoBounds(
         workspace,
         scrollMetricsInWsCoords,
-        object as IBoundedElement
+        object as IBoundedElement,
       );
 
       if (wasBumped && !e.group) {
         console.warn(
           'Moved object in bounds but there was no' +
-            ' event group. This may break undo.'
+            ' event group. This may break undo.',
         );
       }
       eventUtils.setGroup(existingGroup);
@@ -152,7 +152,7 @@ export function bumpIntoBoundsHandler(
  */
 function extractObjectFromEvent(
   workspace: WorkspaceSvg,
-  e: eventUtils.BumpEvent
+  e: eventUtils.BumpEvent,
 ): BlockSvg | null | WorkspaceCommentSvg {
   let object = null;
   switch (e.type) {
@@ -166,7 +166,7 @@ function extractObjectFromEvent(
     case eventUtils.COMMENT_CREATE:
     case eventUtils.COMMENT_MOVE:
       object = workspace.getCommentById(
-        (e as CommentCreate | CommentMove).commentId!
+        (e as CommentCreate | CommentMove).commentId!,
       ) as WorkspaceCommentSvg | null;
       break;
   }

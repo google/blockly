@@ -101,7 +101,7 @@ export function getPageOffset(el: Element): Coordinate {
   // the viewport.
   const scrollCoord = new Coordinate(
     window.pageXOffset || documentElement.scrollLeft,
-    window.pageYOffset || documentElement.scrollTop
+    window.pageYOffset || documentElement.scrollTop,
   );
   pos.x = box.left + scrollCoord.x;
   pos.y = box.top + scrollCoord.y;
@@ -155,7 +155,7 @@ export function getBorderBox(element: Element): Rect {
 export function scrollIntoContainerView(
   element: Element,
   container: Element,
-  opt_center?: boolean
+  opt_center?: boolean,
 ) {
   const offset = getContainerOffsetToScrollInto(element, container, opt_center);
   container.scrollLeft = offset.x;
@@ -179,7 +179,7 @@ export function scrollIntoContainerView(
 export function getContainerOffsetToScrollInto(
   element: Element,
   container: Element,
-  opt_center?: boolean
+  opt_center?: boolean,
 ): Coordinate {
   // Absolute position of the element's border's top left corner.
   const elementPos = getPageOffset(element);

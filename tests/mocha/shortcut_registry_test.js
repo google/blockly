@@ -42,7 +42,7 @@ suite('Keyboard Shortcut Registry Test', function () {
       chai.assert.throws(
         shouldThrow,
         Error,
-        'Shortcut named "test_shortcut" already exists.'
+        'Shortcut named "test_shortcut" already exists.',
       );
     });
     test('Registers shortcut with same name opt_allowOverrides=true', function () {
@@ -109,7 +109,7 @@ suite('Keyboard Shortcut Registry Test', function () {
       chai.assert.isFalse(registry.unregister('test'));
       sinon.assert.calledOnceWithExactly(
         consoleStub,
-        'Keyboard shortcut named "test" not found.'
+        'Keyboard shortcut named "test" not found.',
       );
     });
     test('Unregistering a shortcut with key mappings', function () {
@@ -180,7 +180,7 @@ suite('Keyboard Shortcut Registry Test', function () {
       chai.assert.throws(
         shouldThrow,
         Error,
-        'Shortcut named "test_shortcut" collides with shortcuts "test_shortcut_2"'
+        'Shortcut named "test_shortcut" collides with shortcuts "test_shortcut_2"',
       );
     });
   });
@@ -196,7 +196,7 @@ suite('Keyboard Shortcut Registry Test', function () {
 
       const isRemoved = this.registry.removeKeyMapping(
         'keyCode',
-        'test_shortcut'
+        'test_shortcut',
       );
 
       const shortcutNames = this.registry.getKeyMap()['keyCode'];
@@ -222,13 +222,13 @@ suite('Keyboard Shortcut Registry Test', function () {
 
       const isRemoved = this.registry.removeKeyMapping(
         'keyCode',
-        'test_shortcut'
+        'test_shortcut',
       );
 
       chai.assert.isFalse(isRemoved);
       sinon.assert.calledOnceWithExactly(
         consoleStub,
-        'No keyboard shortcut named "test_shortcut" registered with key code "keyCode"'
+        'No keyboard shortcut named "test_shortcut" registered with key code "keyCode"',
       );
     });
     test('Removes a key map that does not exist from empty key mapping opt_quiet=false', function () {
@@ -236,13 +236,13 @@ suite('Keyboard Shortcut Registry Test', function () {
 
       const isRemoved = this.registry.removeKeyMapping(
         'keyCode',
-        'test_shortcut'
+        'test_shortcut',
       );
 
       chai.assert.isFalse(isRemoved);
       sinon.assert.calledOnceWithExactly(
         consoleStub,
-        'No keyboard shortcut named "test_shortcut" registered with key code "keyCode"'
+        'No keyboard shortcut named "test_shortcut" registered with key code "keyCode"',
       );
     });
   });
@@ -253,7 +253,7 @@ suite('Keyboard Shortcut Registry Test', function () {
       chai.assert.equal(Object.keys(this.registry.getKeyMap()).length, 1);
       chai.assert.equal(
         this.registry.getKeyMap()['keyCode'][0],
-        'test_shortcut'
+        'test_shortcut',
       );
     });
     test('Gets a copy of the key map', function () {
@@ -269,7 +269,7 @@ suite('Keyboard Shortcut Registry Test', function () {
       registrycopy['shortcutName']['name'] = 'shortcutName1';
       chai.assert.equal(
         this.registry.getRegistry()['shortcutName']['name'],
-        'shortcutName'
+        'shortcutName',
       );
     });
     test('Gets keyboard shortcuts from a key code', function () {
@@ -311,7 +311,7 @@ suite('Keyboard Shortcut Registry Test', function () {
         this.registry,
         this.testShortcut,
         Blockly.utils.KeyCodes.C,
-        true
+        true,
       );
     });
     test('Execute a shortcut from event', function () {
@@ -344,7 +344,7 @@ suite('Keyboard Shortcut Registry Test', function () {
         this.registry,
         testShortcut2,
         Blockly.utils.KeyCodes.C,
-        false
+        false,
       );
       chai.assert.isTrue(this.registry.onKeyDown(this.workspace, event));
       sinon.assert.calledOnce(testShortcut2Stub);
@@ -365,7 +365,7 @@ suite('Keyboard Shortcut Registry Test', function () {
         this.registry,
         testShortcut2,
         Blockly.utils.KeyCodes.C,
-        true
+        true,
       );
       chai.assert.isTrue(this.registry.onKeyDown(this.workspace, event));
       sinon.assert.calledOnce(testShortcut2Stub);
@@ -376,7 +376,7 @@ suite('Keyboard Shortcut Registry Test', function () {
   suite('createSerializedKey', function () {
     test('Serialize key', function () {
       const serializedKey = this.registry.createSerializedKey(
-        Blockly.utils.KeyCodes.A
+        Blockly.utils.KeyCodes.A,
       );
       chai.assert.equal(serializedKey, '65');
     });
@@ -384,7 +384,7 @@ suite('Keyboard Shortcut Registry Test', function () {
     test('Serialize key code and modifier', function () {
       const serializedKey = this.registry.createSerializedKey(
         Blockly.utils.KeyCodes.A,
-        [Blockly.utils.KeyCodes.CTRL]
+        [Blockly.utils.KeyCodes.CTRL],
       );
       chai.assert.equal(serializedKey, 'Control+65');
     });

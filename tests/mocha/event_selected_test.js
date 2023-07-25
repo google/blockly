@@ -30,7 +30,7 @@ suite('Selected Event', function () {
       const origEvent = new Blockly.Events.Selected(
         block1.id,
         block2.id,
-        this.workspace.id
+        this.workspace.id,
       );
 
       const json = origEvent.toJson();

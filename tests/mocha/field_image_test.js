@@ -92,14 +92,14 @@ suite('Image Fields', function () {
     Blockly.FieldImage,
     validValueCreationTestCases,
     invalidValueTestCases,
-    validTestCaseAssertField
+    validTestCaseAssertField,
   );
 
   runFromJsonSuiteTests(
     Blockly.FieldImage,
     validValueCreationTestCases,
     invalidValueTestCases,
-    validTestCaseAssertField
+    validTestCaseAssertField,
   );
 
   /**
@@ -123,7 +123,7 @@ suite('Image Fields', function () {
       validValueSetValueTestCases,
       invalidValueTestCases,
       'src',
-      'alt'
+      'alt',
     );
   });
 

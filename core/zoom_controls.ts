@@ -171,7 +171,7 @@ export class ZoomControls implements IPositionable {
 
     const cornerPosition = uiPosition.getCornerOppositeToolbox(
       this.workspace,
-      metrics
+      metrics,
     );
     let height = this.SMALL_SPACING + 2 * this.HEIGHT;
     if (this.zoomResetGroup) {
@@ -183,7 +183,7 @@ export class ZoomControls implements IPositionable {
       this.MARGIN_HORIZONTAL,
       this.MARGIN_VERTICAL,
       metrics,
-      this.workspace
+      this.workspace,
     );
 
     const verticalPosition = cornerPosition.vertical;
@@ -195,21 +195,21 @@ export class ZoomControls implements IPositionable {
       startRect,
       this.MARGIN_VERTICAL,
       bumpDirection,
-      savedPositions
+      savedPositions,
     );
 
     if (verticalPosition === uiPosition.verticalPosition.TOP) {
       const zoomInTranslateY = this.SMALL_SPACING + this.HEIGHT;
       this.zoomInGroup?.setAttribute(
         'transform',
-        'translate(0, ' + zoomInTranslateY + ')'
+        'translate(0, ' + zoomInTranslateY + ')',
       );
       if (this.zoomResetGroup) {
         const zoomResetTranslateY =
           zoomInTranslateY + this.LARGE_SPACING + this.HEIGHT;
         this.zoomResetGroup.setAttribute(
           'transform',
-          'translate(0, ' + zoomResetTranslateY + ')'
+          'translate(0, ' + zoomResetTranslateY + ')',
         );
       }
     } else {
@@ -218,13 +218,13 @@ export class ZoomControls implements IPositionable {
         : 0;
       this.zoomInGroup?.setAttribute(
         'transform',
-        'translate(0, ' + zoomInTranslateY + ')'
+        'translate(0, ' + zoomInTranslateY + ')',
       );
       const zoomOutTranslateY =
         zoomInTranslateY + this.SMALL_SPACING + this.HEIGHT;
       this.zoomOutGroup?.setAttribute(
         'transform',
-        'translate(0, ' + zoomOutTranslateY + ')'
+        'translate(0, ' + zoomOutTranslateY + ')',
       );
     }
 
@@ -232,7 +232,7 @@ export class ZoomControls implements IPositionable {
     this.left = positionRect.left;
     this.svgGroup?.setAttribute(
       'transform',
-      'translate(' + this.left + ',' + this.top + ')'
+      'translate(' + this.left + ',' + this.top + ')',
     );
   }
 
@@ -257,12 +257,12 @@ export class ZoomControls implements IPositionable {
     this.zoomOutGroup = dom.createSvgElement(
       Svg.G,
       {'class': 'blocklyZoom blocklyZoomOut'},
-      this.svgGroup
+      this.svgGroup,
     );
     const clip = dom.createSvgElement(
       Svg.CLIPPATH,
       {'id': 'blocklyZoomoutClipPath' + rnd},
-      this.zoomOutGroup
+      this.zoomOutGroup,
     );
     dom.createSvgElement(
       Svg.RECT,
@@ -270,7 +270,7 @@ export class ZoomControls implements IPositionable {
         'width': 32,
         'height': 32,
       },
-      clip
+      clip,
     );
     const zoomoutSvg = dom.createSvgElement(
       Svg.IMAGE,
@@ -281,12 +281,12 @@ export class ZoomControls implements IPositionable {
         'y': -92,
         'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')',
       },
-      this.zoomOutGroup
+      this.zoomOutGroup,
     );
     zoomoutSvg.setAttributeNS(
       dom.XLINK_NS,
       'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url
+      this.workspace.options.pathToMedia + SPRITE.url,
     );
 
     // Attach listener.
@@ -295,8 +295,8 @@ export class ZoomControls implements IPositionable {
         this.zoomOutGroup,
         'pointerdown',
         null,
-        this.zoom.bind(this, -1)
-      )
+        this.zoom.bind(this, -1),
+      ),
     );
   }
 
@@ -321,12 +321,12 @@ export class ZoomControls implements IPositionable {
     this.zoomInGroup = dom.createSvgElement(
       Svg.G,
       {'class': 'blocklyZoom blocklyZoomIn'},
-      this.svgGroup
+      this.svgGroup,
     );
     const clip = dom.createSvgElement(
       Svg.CLIPPATH,
       {'id': 'blocklyZoominClipPath' + rnd},
-      this.zoomInGroup
+      this.zoomInGroup,
     );
     dom.createSvgElement(
       Svg.RECT,
@@ -334,7 +334,7 @@ export class ZoomControls implements IPositionable {
         'width': 32,
         'height': 32,
       },
-      clip
+      clip,
     );
     const zoominSvg = dom.createSvgElement(
       Svg.IMAGE,
@@ -345,12 +345,12 @@ export class ZoomControls implements IPositionable {
         'y': -92,
         'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')',
       },
-      this.zoomInGroup
+      this.zoomInGroup,
     );
     zoominSvg.setAttributeNS(
       dom.XLINK_NS,
       'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url
+      this.workspace.options.pathToMedia + SPRITE.url,
     );
 
     // Attach listener.
@@ -359,8 +359,8 @@ export class ZoomControls implements IPositionable {
         this.zoomInGroup,
         'pointerdown',
         null,
-        this.zoom.bind(this, 1)
-      )
+        this.zoom.bind(this, 1),
+      ),
     );
   }
 
@@ -402,12 +402,12 @@ export class ZoomControls implements IPositionable {
     this.zoomResetGroup = dom.createSvgElement(
       Svg.G,
       {'class': 'blocklyZoom blocklyZoomReset'},
-      this.svgGroup
+      this.svgGroup,
     );
     const clip = dom.createSvgElement(
       Svg.CLIPPATH,
       {'id': 'blocklyZoomresetClipPath' + rnd},
-      this.zoomResetGroup
+      this.zoomResetGroup,
     );
     dom.createSvgElement(Svg.RECT, {'width': 32, 'height': 32}, clip);
     const zoomresetSvg = dom.createSvgElement(
@@ -418,12 +418,12 @@ export class ZoomControls implements IPositionable {
         'y': -92,
         'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')',
       },
-      this.zoomResetGroup
+      this.zoomResetGroup,
     );
     zoomresetSvg.setAttributeNS(
       dom.XLINK_NS,
       'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url
+      this.workspace.options.pathToMedia + SPRITE.url,
     );
 
     // Attach event listeners.
@@ -432,8 +432,8 @@ export class ZoomControls implements IPositionable {
         this.zoomResetGroup,
         'pointerdown',
         null,
-        this.resetZoom.bind(this)
-      )
+        this.resetZoom.bind(this),
+      ),
     );
   }
 
@@ -471,7 +471,7 @@ export class ZoomControls implements IPositionable {
     const uiEvent = new (eventUtils.get(eventUtils.CLICK))(
       null,
       this.workspace.id,
-      'zoom_controls'
+      'zoom_controls',
     );
     eventUtils.fire(uiEvent);
   }

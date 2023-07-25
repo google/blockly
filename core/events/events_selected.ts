@@ -46,7 +46,7 @@ export class Selected extends UiBase {
   constructor(
     opt_oldElementId?: string | null,
     opt_newElementId?: string | null,
-    opt_workspaceId?: string
+    opt_workspaceId?: string,
   ) {
     super(opt_workspaceId);
 
@@ -78,12 +78,12 @@ export class Selected extends UiBase {
   static fromJson(
     json: SelectedJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): Selected {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new Selected()
+      event ?? new Selected(),
     ) as Selected;
     newEvent.oldElementId = json['oldElementId'];
     newEvent.newElementId = json['newElementId'];

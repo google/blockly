@@ -60,7 +60,7 @@ export class BlockDragger implements IBlockDragger {
 
     /** Object that keeps track of connections on dragged blocks. */
     this.draggedConnectionManager_ = new InsertionMarkerManager(
-      this.draggingBlock_
+      this.draggingBlock_,
     );
 
     this.workspace_ = workspace;
@@ -149,7 +149,7 @@ export class BlockDragger implements IBlockDragger {
    */
   protected disconnectBlock_(
     healStack: boolean,
-    currentDragDeltaXY: Coordinate
+    currentDragDeltaXY: Coordinate,
   ) {
     this.draggingBlock_.unplug(healStack);
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
@@ -165,7 +165,7 @@ export class BlockDragger implements IBlockDragger {
     const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
       this.draggingBlock_,
       true,
-      this.draggingBlock_.getDescendants(false)
+      this.draggingBlock_.getDescendants(false),
     );
     eventUtils.fire(event);
   }
@@ -247,7 +247,7 @@ export class BlockDragger implements IBlockDragger {
         bumpObjects.bumpIntoBounds(
           this.draggingBlock_.workspace,
           this.workspace_.getMetricsManager().getScrollMetrics(true),
-          this.draggingBlock_
+          this.draggingBlock_,
         );
       }
     }
@@ -313,7 +313,7 @@ export class BlockDragger implements IBlockDragger {
     const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
       this.draggingBlock_,
       false,
-      this.draggingBlock_.getDescendants(false)
+      this.draggingBlock_.getDescendants(false),
     );
     eventUtils.fire(event);
   }
@@ -359,7 +359,7 @@ export class BlockDragger implements IBlockDragger {
   protected fireMoveEvent_() {
     if (this.draggingBlock_.isDeadOrDying()) return;
     const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
-      this.draggingBlock_
+      this.draggingBlock_,
     ) as BlockMove;
     event.setReason(['drag']);
     event.oldCoordinate = this.startXY_;
@@ -387,7 +387,7 @@ export class BlockDragger implements IBlockDragger {
   protected pixelsToWorkspaceUnits_(pixelCoord: Coordinate): Coordinate {
     const result = new Coordinate(
       pixelCoord.x / this.workspace_.scale,
-      pixelCoord.y / this.workspace_.scale
+      pixelCoord.y / this.workspace_.scale,
     );
     if (this.workspace_.isMutator) {
       // If we're in a mutator, its scale is always 1, purely because of some
@@ -447,7 +447,7 @@ export interface IconPositionData {
  */
 function initIconData(
   block: BlockSvg,
-  blockOrigin: Coordinate
+  blockOrigin: Coordinate,
 ): IconPositionData[] {
   // Build a list of icons that need to be moved and where they started.
   const dragIconData = [];
@@ -462,7 +462,7 @@ function initIconData(
 
   for (const child of block.getChildren(false)) {
     dragIconData.push(
-      ...initIconData(child, Coordinate.sum(blockOrigin, child.relativeCoords))
+      ...initIconData(child, Coordinate.sum(blockOrigin, child.relativeCoords)),
     );
   }
   // AnyDuringMigration because:  Type '{ location: Coordinate | null; icon:

@@ -174,7 +174,7 @@ export class ASTNode {
     const block = location.getSourceBlock();
     if (!block) {
       throw new Error(
-        'The current AST location is not associated with a block'
+        'The current AST location is not associated with a block',
       );
     }
     const curIdx = block.inputList.indexOf(input);
@@ -238,7 +238,7 @@ export class ASTNode {
     const block = location.getSourceBlock();
     if (!block) {
       throw new Error(
-        'The current AST location is not associated with a block'
+        'The current AST location is not associated with a block',
       );
     }
     const curIdx = block.inputList.indexOf(parentInput);
@@ -301,7 +301,7 @@ export class ASTNode {
       }
     }
     throw Error(
-      "Couldn't find " + (forward ? 'next' : 'previous') + ' stack?!'
+      "Couldn't find " + (forward ? 'next' : 'previous') + ' stack?!',
     );
   }
 
@@ -348,7 +348,7 @@ export class ASTNode {
       // AnyDuringMigration because:  Argument of type 'Input | null' is not
       // assignable to parameter of type 'Input'.
       return ASTNode.createInputNode(
-        topConnection.targetConnection.getParentInput() as AnyDuringMigration
+        topConnection.targetConnection.getParentInput() as AnyDuringMigration,
       );
     } else {
       // Go to stack level if you are not underneath an input.
@@ -534,7 +534,7 @@ export class ASTNode {
         // TODO: Make sure this is in the bounds of the workspace.
         const wsCoordinate = new Coordinate(
           blockPos.x,
-          blockPos.y + ASTNode.DEFAULT_OFFSET_Y
+          blockPos.y + ASTNode.DEFAULT_OFFSET_Y,
         );
         return ASTNode.createWorkspaceNode(block.workspace, wsCoordinate);
       }
@@ -551,7 +551,7 @@ export class ASTNode {
         const block = field.getSourceBlock();
         if (!block) {
           throw new Error(
-            'The current AST location is not associated with a block'
+            'The current AST location is not associated with a block',
           );
         }
         return ASTNode.createBlockNode(block);
@@ -624,7 +624,7 @@ export class ASTNode {
       // AnyDuringMigration because:  Argument of type 'Input | null' is not
       // assignable to parameter of type 'Input'.
       return ASTNode.createInputNode(
-        connection.getParentInput() as AnyDuringMigration
+        connection.getParentInput() as AnyDuringMigration,
       );
     } else if (
       type === ConnectionType.NEXT_STATEMENT &&
@@ -633,7 +633,7 @@ export class ASTNode {
       // AnyDuringMigration because:  Argument of type 'Input | null' is not
       // assignable to parameter of type 'Input'.
       return ASTNode.createInputNode(
-        connection.getParentInput() as AnyDuringMigration
+        connection.getParentInput() as AnyDuringMigration,
       );
     } else if (type === ConnectionType.NEXT_STATEMENT) {
       return new ASTNode(ASTNode.types.NEXT, connection);
@@ -699,7 +699,7 @@ export class ASTNode {
    */
   static createWorkspaceNode(
     workspace: Workspace | null,
-    wsCoordinate: Coordinate | null
+    wsCoordinate: Coordinate | null,
   ): ASTNode | null {
     if (!wsCoordinate || !workspace) {
       return null;

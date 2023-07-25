@@ -41,7 +41,7 @@ export class CommentChange extends CommentBase {
   constructor(
     opt_comment?: WorkspaceComment,
     opt_oldContents?: string,
-    opt_newContents?: string
+    opt_newContents?: string,
   ) {
     super(opt_comment);
 
@@ -65,13 +65,13 @@ export class CommentChange extends CommentBase {
     if (!this.oldContents_) {
       throw new Error(
         'The old contents is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (!this.newContents_) {
       throw new Error(
         'The new contents is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     json['oldContents'] = this.oldContents_;
@@ -91,12 +91,12 @@ export class CommentChange extends CommentBase {
   static fromJson(
     json: CommentChangeJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): CommentChange {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new CommentChange()
+      event ?? new CommentChange(),
     ) as CommentChange;
     newEvent.oldContents_ = json['oldContents'];
     newEvent.newContents_ = json['newContents'];
@@ -122,7 +122,7 @@ export class CommentChange extends CommentBase {
     if (!this.commentId) {
       throw new Error(
         'The comment ID is undefined. Either pass a comment to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     const comment = workspace.getCommentById(this.commentId);
@@ -135,12 +135,12 @@ export class CommentChange extends CommentBase {
       if (forward) {
         throw new Error(
           'The new contents is undefined. Either pass a value to ' +
-            'the constructor, or call fromJson'
+            'the constructor, or call fromJson',
         );
       }
       throw new Error(
         'The old contents is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     comment.setContent(contents);
@@ -155,5 +155,5 @@ export interface CommentChangeJson extends CommentBaseJson {
 registry.register(
   registry.Type.EVENT,
   eventUtils.COMMENT_CHANGE,
-  CommentChange
+  CommentChange,
 );

@@ -50,7 +50,7 @@ suite('Comment Deserialization', function () {
     function createBlock(workspace) {
       const block = Blockly.Xml.domToBlock(
         Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
-        workspace
+        workspace,
       );
       block.setCommentText('test text');
       return block;
@@ -77,8 +77,8 @@ suite('Comment Deserialization', function () {
       // Place from trashcan.
       simulateClick(
         this.workspace.trashcan.flyout.svgGroup_.querySelector(
-          '.blocklyDraggable'
-        )
+          '.blocklyDraggable',
+        ),
       );
       chai.assert.equal(this.workspace.getAllBlocks().length, 1);
       // Check comment.
@@ -115,7 +115,7 @@ suite('Comment Deserialization', function () {
       const toolbox = this.workspace.getToolbox();
       simulateClick(toolbox.HtmlDiv.querySelector('.blocklyTreeRow'));
       simulateClick(
-        toolbox.getFlyout().svgGroup_.querySelector('.blocklyDraggable')
+        toolbox.getFlyout().svgGroup_.querySelector('.blocklyDraggable'),
       );
       chai.assert.equal(this.workspace.getAllBlocks().length, 1);
       // Check comment.

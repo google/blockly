@@ -42,7 +42,7 @@ Object.defineProperties(Blockly, {
         'Blockly.HSV_SATURATION',
         'version 10',
         'version 11',
-        'Blockly.utils.colour.getHsvSaturation()'
+        'Blockly.utils.colour.getHsvSaturation()',
       );
       return colour.getHsvSaturation();
     },
@@ -51,7 +51,7 @@ Object.defineProperties(Blockly, {
         'Blockly.HSV_SATURATION',
         'version 10',
         'version 11',
-        'Blockly.utils.colour.setHsvSaturation()'
+        'Blockly.utils.colour.setHsvSaturation()',
       );
       colour.setHsvSaturation(newValue);
     },
@@ -71,7 +71,7 @@ Object.defineProperties(Blockly, {
         'Blockly.HSV_VALUE',
         'version 10',
         'version 11',
-        'Blockly.utils.colour.getHsvValue()'
+        'Blockly.utils.colour.getHsvValue()',
       );
       return colour.getHsvValue();
     },
@@ -80,7 +80,7 @@ Object.defineProperties(Blockly, {
         'Blockly.HSV_VALUE',
         'version 10',
         'version 11',
-        'Blockly.utils.colour.setHsvValue()'
+        'Blockly.utils.colour.setHsvValue()',
       );
       colour.setHsvValue(newValue);
     },

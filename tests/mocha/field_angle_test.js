@@ -93,7 +93,7 @@ suite('Angle Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   runFromJsonSuiteTests(
@@ -101,7 +101,7 @@ suite('Angle Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   suite('setValue', function () {
@@ -112,7 +112,7 @@ suite('Angle Fields', function () {
       runSetValueTests(
         validValueTestCases,
         invalidValueTestCases,
-        defaultFieldValue
+        defaultFieldValue,
       );
       test('With source block', function () {
         this.field.setSourceBlock(createTestBlock());
@@ -128,7 +128,7 @@ suite('Angle Fields', function () {
       runSetValueTests(
         validValueTestCases,
         invalidValueTestCases,
-        initialValue
+        initialValue,
       );
       test('With source block', function () {
         this.field.setSourceBlock(createTestBlock());
@@ -184,7 +184,7 @@ suite('Angle Fields', function () {
           assertFieldValue(
             this.field,
             suiteInfo.expectedValue,
-            String(suiteInfo.value)
+            String(suiteInfo.value),
           );
         });
         test('When Not Editing', function () {

@@ -67,7 +67,7 @@ export class FlyoutButton {
     private readonly workspace: WorkspaceSvg,
     private readonly targetWorkspace: WorkspaceSvg,
     json: toolbox.ButtonOrLabelInfo,
-    private readonly isLabel_: boolean
+    private readonly isLabel_: boolean,
   ) {
     this.text = json['text'];
 
@@ -102,7 +102,7 @@ export class FlyoutButton {
     this.svgGroup = dom.createSvgElement(
       Svg.G,
       {'class': cssClass},
-      this.workspace.getCanvas()
+      this.workspace.getCanvas(),
     );
 
     let shadow;
@@ -117,7 +117,7 @@ export class FlyoutButton {
           'x': 1,
           'y': 1,
         },
-        this.svgGroup!
+        this.svgGroup!,
       );
     }
     // Background rectangle.
@@ -130,7 +130,7 @@ export class FlyoutButton {
         'rx': FlyoutButton.BORDER_RADIUS,
         'ry': FlyoutButton.BORDER_RADIUS,
       },
-      this.svgGroup!
+      this.svgGroup!,
     );
 
     const svgText = dom.createSvgElement(
@@ -141,7 +141,7 @@ export class FlyoutButton {
         'y': 0,
         'text-anchor': 'middle',
       },
-      this.svgGroup!
+      this.svgGroup!,
     );
     let text = parsing.replaceMessageReferences(this.text);
     if (this.workspace.RTL) {
@@ -163,13 +163,13 @@ export class FlyoutButton {
       svgText,
       fontSize,
       fontWeight,
-      fontFamily
+      fontFamily,
     );
     const fontMetrics = dom.measureFontMetrics(
       text,
       fontSize,
       fontWeight,
-      fontFamily
+      fontFamily,
     );
     this.height = fontMetrics.height;
 
@@ -185,7 +185,7 @@ export class FlyoutButton {
     svgText.setAttribute('x', String(this.width / 2));
     svgText.setAttribute(
       'y',
-      String(this.height / 2 - fontMetrics.height / 2 + fontMetrics.baseline)
+      String(this.height / 2 - fontMetrics.height / 2 + fontMetrics.baseline),
     );
 
     this.updateTransform();
@@ -196,7 +196,7 @@ export class FlyoutButton {
       this.svgGroup as AnyDuringMigration,
       'pointerup',
       this,
-      this.onMouseUp
+      this.onMouseUp,
     );
     return this.svgGroup!;
   }
@@ -211,7 +211,7 @@ export class FlyoutButton {
   private updateTransform() {
     this.svgGroup!.setAttribute(
       'transform',
-      'translate(' + this.position.x + ',' + this.position.y + ')'
+      'translate(' + this.position.x + ',' + this.position.y + ')',
     );
   }
 
@@ -282,7 +282,7 @@ export class FlyoutButton {
 
     if (this.isLabel_ && this.callbackKey) {
       console.warn(
-        'Labels should not have callbacks. Label text: ' + this.text
+        'Labels should not have callbacks. Label text: ' + this.text,
       );
     } else if (
       !this.isLabel_ &&

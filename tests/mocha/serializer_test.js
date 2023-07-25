@@ -55,7 +55,7 @@ const Serializer = new SerializerTestSuite('Serializer');
 // TODO: Make sure all of these properties are documented ad exported properly.
 Serializer.Empty = new SerializerTestCase(
   'Empty',
-  '<xml xmlns="https://developers.google.com/blockly/xml"></xml>'
+  '<xml xmlns="https://developers.google.com/blockly/xml"></xml>',
 );
 Serializer.Data = new SerializerTestCase(
   'Data',
@@ -63,7 +63,7 @@ Serializer.Data = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<data>test data</data>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.testCases = [Serializer.Empty, Serializer.Data];
 
@@ -72,37 +72,37 @@ Serializer.Attributes.Basic = new SerializerTestCase(
   'Basic',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Collapsed = new SerializerTestCase(
   'Collapsed',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" collapsed="true" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Disabled = new SerializerTestCase(
   'Disabled',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" disabled="true" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.NotDeletable = new SerializerTestCase(
   'Deletable',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" deletable="false" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.NotMovable = new SerializerTestCase(
   'Movable',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" movable="false" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.NotEditable = new SerializerTestCase(
   'Editable',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" editable="false" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.testCases = [
   Serializer.Attributes.Basic,
@@ -118,13 +118,13 @@ Serializer.Attributes.Inline.True = new SerializerTestCase(
   'True',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" inline="true" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Inline.False = new SerializerTestCase(
   'False',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" inline="false" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Inline.testCases = [
   Serializer.Attributes.Inline.True,
@@ -136,19 +136,19 @@ Serializer.Attributes.Coordinates.Simple = new SerializerTestCase(
   'Simple',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Coordinates.Negative = new SerializerTestCase(
   'Negative',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" x="-42" y="-42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Coordinates.Zero = new SerializerTestCase(
   'Zero',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" x="0" y="0"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Coordinates.testCases = [
   Serializer.Attributes.Coordinates.Simple,
@@ -163,14 +163,14 @@ Serializer.Attributes.Id.Length.Short = new SerializerTestCase(
   'Short',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Id.Length.Long = new SerializerTestCase(
   'Long',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id***********************" x="42" y="42">' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Id.Length.testCases = [
   Serializer.Attributes.Id.Length.Short,
@@ -183,27 +183,27 @@ Serializer.Attributes.Id.Chars.Symbols = new SerializerTestCase(
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="!#$%()*+,-./:;=?@[]^" x="42" y="42"></block>' +
     '<block type="logic_negate" id="_`{|}~!!!!!!!!!!!!!!" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Id.Chars.Uppercase = new SerializerTestCase(
   'Uppercase',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="ABCDEFGHIJKLMNOPQRST" x="42" y="42"></block>' +
     '<block type="logic_negate" id="TUVWXYZAAAAAAAAAAAAA" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Id.Chars.Lowercase = new SerializerTestCase(
   'Lowercase',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="abcdefghijklmnopqrst" x="42" y="42"></block>' +
     '<block type="logic_negate" id="tuvwxyzaaaaaaaaaaaaa" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Id.Chars.Numbers = new SerializerTestCase(
   'Numbers',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="01234567890000000000" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Attributes.Id.Chars.testCases = [
   Serializer.Attributes.Id.Chars.Symbols,
@@ -232,7 +232,7 @@ Serializer.Fields.Angle.Simple = new SerializerTestCase(
     '<block type="test_fields_angle" id="id******************" x="42" y="42">' +
     '<field name="FIELDNAME">90</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Angle.Negative = new SerializerTestCase(
   'Negative',
@@ -240,7 +240,7 @@ Serializer.Fields.Angle.Negative = new SerializerTestCase(
     '<block type="test_angles_wrap" id="id******************" x="42" y="42">' +
     '<field name="FIELDNAME">-90</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Angle.Decimals = new SerializerTestCase(
   'Decimals',
@@ -248,7 +248,7 @@ Serializer.Fields.Angle.Decimals = new SerializerTestCase(
     '<block type="test_fields_angle" id="id******************" x="42" y="42">' +
     '<field name="FIELDNAME">1.5</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Angle.MaxPrecision = new SerializerTestCase(
   'MaxPrecision',
@@ -256,7 +256,7 @@ Serializer.Fields.Angle.MaxPrecision = new SerializerTestCase(
     '<block type="test_fields_angle" id="id******************" x="42" y="42">' +
     '<field name="FIELDNAME">1.000000000000001</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Angle.SmallestNumber = new SerializerTestCase(
   'SmallestNumber',
@@ -264,7 +264,7 @@ Serializer.Fields.Angle.SmallestNumber = new SerializerTestCase(
     '<block type="test_fields_angle" id="id******************" x="42" y="42">' +
     '<field name="FIELDNAME">5e-324</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Angle.testCases = [
   Serializer.Fields.Angle.Simple,
@@ -281,7 +281,7 @@ Serializer.Fields.Checkbox.True = new SerializerTestCase(
     '<block type="test_fields_checkbox" id="id******************" x="42" y="42">' +
     '<field name="CHECKBOX">TRUE</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Checkbox.False = new SerializerTestCase(
   'False',
@@ -289,7 +289,7 @@ Serializer.Fields.Checkbox.False = new SerializerTestCase(
     '<block type="test_fields_checkbox" id="id******************" x="42" y="42">' +
     '<field name="CHECKBOX">FALSE</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Checkbox.testCases = [
   Serializer.Fields.Checkbox.True,
@@ -303,7 +303,7 @@ Serializer.Fields.Colour.ThreeChar = new SerializerTestCase(
     '<block type="test_fields_colour" id="id******************" x="42" y="42">' +
     '<field name="COLOUR">#ffcc00</field>' + // Could use a 3 char code.
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Colour.SixChar = new SerializerTestCase(
   'SixChar',
@@ -311,7 +311,7 @@ Serializer.Fields.Colour.SixChar = new SerializerTestCase(
     '<block type="test_fields_colour" id="id******************" x="42" y="42">' +
     '<field name="COLOUR">#f1c101</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Colour.Black = new SerializerTestCase(
   'Black',
@@ -319,7 +319,7 @@ Serializer.Fields.Colour.Black = new SerializerTestCase(
     '<block type="test_fields_colour" id="id******************" x="42" y="42">' +
     '<field name="COLOUR">#000000</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Colour.testCases = [
   Serializer.Fields.Colour.ThreeChar,
@@ -334,7 +334,7 @@ Serializer.Fields.Dropdown.Default = new SerializerTestCase(
     '<block type="test_dropdowns_long" id="id******************" x="42" y="42">' +
     '<field name="FIELDNAME">ITEM1</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Dropdown.NotDefault = new SerializerTestCase(
   'NotDefault',
@@ -342,7 +342,7 @@ Serializer.Fields.Dropdown.NotDefault = new SerializerTestCase(
     '<block type="test_dropdowns_long" id="id******************" x="42" y="42">' +
     '<field name="FIELDNAME">ITEM32</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Dropdown.Dynamic = new SerializerTestCase(
   'Dynamic',
@@ -350,7 +350,7 @@ Serializer.Fields.Dropdown.Dynamic = new SerializerTestCase(
     '<block type="test_dropdowns_dynamic_random" id="id******************" x="42" y="42">' +
     '<field name="OPTIONS">0</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Dropdown.testCases = [
   Serializer.Fields.Dropdown.Default,
@@ -359,7 +359,7 @@ Serializer.Fields.Dropdown.testCases = [
 ];
 
 Serializer.Fields.LabelSerializable = new SerializerTestSuite(
-  'LabelSerializable'
+  'LabelSerializable',
 );
 Serializer.Fields.LabelSerializable.Simple = new SerializerTestCase(
   'Simple',
@@ -367,7 +367,7 @@ Serializer.Fields.LabelSerializable.Simple = new SerializerTestCase(
     '<block type="test_fields_label_serializable" id="id******************" x="42" y="42">' +
     '<field name="LABEL">test</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.LabelSerializable.Symbols = new SerializerTestCase(
   'Symbols',
@@ -375,7 +375,7 @@ Serializer.Fields.LabelSerializable.Symbols = new SerializerTestCase(
     '<block type="test_fields_label_serializable" id="id******************" x="42" y="42">' +
     '<field name="LABEL">~`!@#$%^*()_+-={[}]|\\:;,.?/</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.LabelSerializable.EscapedSymbols = new SerializerTestCase(
   'EscapedSymbols',
@@ -383,7 +383,7 @@ Serializer.Fields.LabelSerializable.EscapedSymbols = new SerializerTestCase(
     '<block type="test_fields_label_serializable" id="id******************" x="42" y="42">' +
     '<field name="LABEL">&amp;&lt;&gt;</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.LabelSerializable.SingleQuotes = new SerializerTestCase(
   'SingleQuotes',
@@ -391,7 +391,7 @@ Serializer.Fields.LabelSerializable.SingleQuotes = new SerializerTestCase(
     '<block type="test_fields_label_serializable" id="id******************" x="42" y="42">' +
     '<field name="LABEL">\'test\'</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.LabelSerializable.DoubleQuotes = new SerializerTestCase(
   'DoubleQuotes',
@@ -399,7 +399,7 @@ Serializer.Fields.LabelSerializable.DoubleQuotes = new SerializerTestCase(
     '<block type="test_fields_label_serializable" id="id******************" x="42" y="42">' +
     '<field name="LABEL">"test"</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.LabelSerializable.Numbers = new SerializerTestCase(
   'Numbers',
@@ -407,7 +407,7 @@ Serializer.Fields.LabelSerializable.Numbers = new SerializerTestCase(
     '<block type="test_fields_label_serializable" id="id******************" x="42" y="42">' +
     '<field name="LABEL">1234567890a123a123a</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.LabelSerializable.Emoji = new SerializerTestCase(
   'Emoji',
@@ -415,7 +415,7 @@ Serializer.Fields.LabelSerializable.Emoji = new SerializerTestCase(
     '<block type="test_fields_label_serializable" id="id******************" x="42" y="42">' +
     '<field name="LABEL">😀👋🏿👋🏾👋🏽👋🏼👋🏻😀❤❤❤</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.LabelSerializable.Russian = new SerializerTestCase(
   'Russian',
@@ -423,7 +423,7 @@ Serializer.Fields.LabelSerializable.Russian = new SerializerTestCase(
     '<block type="test_fields_label_serializable" id="id******************" x="42" y="42">' +
     '<field name="LABEL">ты любопытный кот</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.LabelSerializable.Japanese = new SerializerTestCase(
   'Japanese',
@@ -431,7 +431,7 @@ Serializer.Fields.LabelSerializable.Japanese = new SerializerTestCase(
     '<block type="test_fields_label_serializable" id="id******************" x="42" y="42">' +
     '<field name="LABEL">あなたは好奇心旺盛な猫です</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.LabelSerializable.Zalgo = new SerializerTestCase(
   'Zalgo',
@@ -439,7 +439,7 @@ Serializer.Fields.LabelSerializable.Zalgo = new SerializerTestCase(
     '<block type="test_fields_label_serializable" id="id******************" x="42" y="42">' +
     '<field name="LABEL">z̴̪͈̲̜͕̽̈̀͒͂̓̋̉̍a̸̧̧̜̻̘̤̫̱̲͎̞̻͆̋ļ̸̛̖̜̳͚̖͔̟̈́͂̉̀͑̑͑̎ǵ̸̫̳̽̐̃̑̚̕o̶͇̫͔̮̼̭͕̹̘̬͋̀͆̂̇̋͊̒̽</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.LabelSerializable.ControlChars = new SerializerTestCase(
   'ControlChars',
@@ -447,7 +447,7 @@ Serializer.Fields.LabelSerializable.ControlChars = new SerializerTestCase(
     '<block type="test_fields_label_serializable" id="id******************" x="42" y="42">' +
     '<field name="LABEL">&#01;&#a1;</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.LabelSerializable.testCases = [
   Serializer.Fields.LabelSerializable.Simple,
@@ -471,7 +471,7 @@ Serializer.Fields.MultilineInput.SingleLine = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">test</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.MultilineInput.MultipleLines = new SerializerTestCase(
   'MultipleLines',
@@ -479,7 +479,7 @@ Serializer.Fields.MultilineInput.MultipleLines = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">line1&amp;#10;line2&amp;#10;line3</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.MultilineInput.Indentation = new SerializerTestCase(
   'Indentation',
@@ -487,7 +487,7 @@ Serializer.Fields.MultilineInput.Indentation = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">line1&amp;#10;  line2&amp;#10;  line3</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 /* eslint-disable no-tabs */
 Serializer.Fields.MultilineInput.Tabs = new SerializerTestCase(
@@ -498,7 +498,7 @@ Serializer.Fields.MultilineInput.Tabs = new SerializerTestCase(
     'line1&amp;#10;&amp;#x9line2&amp;#10;&amp;#x9line3' +
     '</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 /* eslint-enable no-tabs */
 Serializer.Fields.MultilineInput.Symbols = new SerializerTestCase(
@@ -507,7 +507,7 @@ Serializer.Fields.MultilineInput.Symbols = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">~`!@#$%^*()_+-={[}]|\\:;,.?/</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.MultilineInput.EscapedSymbols = new SerializerTestCase(
   'EscapedSymbols',
@@ -515,7 +515,7 @@ Serializer.Fields.MultilineInput.EscapedSymbols = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">&amp;&lt;&gt;</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.MultilineInput.SingleQuotes = new SerializerTestCase(
   'SingleQuotes',
@@ -523,7 +523,7 @@ Serializer.Fields.MultilineInput.SingleQuotes = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">\'test\'</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.MultilineInput.DoubleQuotes = new SerializerTestCase(
   'DoubleQuotes',
@@ -531,7 +531,7 @@ Serializer.Fields.MultilineInput.DoubleQuotes = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">"test"</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.MultilineInput.Numbers = new SerializerTestCase(
   'Numbers',
@@ -539,7 +539,7 @@ Serializer.Fields.MultilineInput.Numbers = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">1234567890a123a123a</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.MultilineInput.Emoji = new SerializerTestCase(
   'Emoji',
@@ -547,7 +547,7 @@ Serializer.Fields.MultilineInput.Emoji = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">😀👋🏿👋🏾👋🏽👋🏼👋🏻😀❤❤❤</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.MultilineInput.Russian = new SerializerTestCase(
   'Russian',
@@ -555,7 +555,7 @@ Serializer.Fields.MultilineInput.Russian = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">ты любопытный кот</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.MultilineInput.Japanese = new SerializerTestCase(
   'Japanese',
@@ -563,7 +563,7 @@ Serializer.Fields.MultilineInput.Japanese = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">あなたは好奇心旺盛な猫です</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.MultilineInput.Zalgo = new SerializerTestCase(
   'Zalgo',
@@ -571,7 +571,7 @@ Serializer.Fields.MultilineInput.Zalgo = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">z̴̪͈̲̜͕̽̈̀͒͂̓̋̉̍a̸̧̧̜̻̘̤̫̱̲͎̞̻͆̋ļ̸̛̖̜̳͚̖͔̟̈́͂̉̀͑̑͑̎ǵ̸̫̳̽̐̃̑̚̕o̶͇̫͔̮̼̭͕̹̘̬͋̀͆̂̇̋͊̒̽</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.MultilineInput.ControlChars = new SerializerTestCase(
   'ControlChars',
@@ -579,7 +579,7 @@ Serializer.Fields.MultilineInput.ControlChars = new SerializerTestCase(
     '<block type="test_fields_multilinetext" id="id******************" x="42" y="42">' +
     '<field name="CODE">&#01;&#a1;</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.MultilineInput.testCases = [
   Serializer.Fields.MultilineInput.SingleLine,
@@ -606,7 +606,7 @@ Serializer.Fields.Number.Simple = new SerializerTestCase(
     '<block type="test_numbers_float" id="id******************" x="42" y="42">' +
     '<field name="NUM">123</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Number.Negative = new SerializerTestCase(
   'Negative',
@@ -614,7 +614,7 @@ Serializer.Fields.Number.Negative = new SerializerTestCase(
     '<block type="test_numbers_float" id="id******************" x="42" y="42">' +
     '<field name="NUM">-123</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Number.PosInfinity = new SerializerTestCase(
   'PosInfinity',
@@ -622,7 +622,7 @@ Serializer.Fields.Number.PosInfinity = new SerializerTestCase(
     '<block type="test_numbers_float" id="id******************" x="42" y="42">' +
     '<field name="NUM">Infinity</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Number.NegInfinity = new SerializerTestCase(
   'NegInfinity',
@@ -630,7 +630,7 @@ Serializer.Fields.Number.NegInfinity = new SerializerTestCase(
     '<block type="test_numbers_float" id="id******************" x="42" y="42">' +
     '<field name="NUM">-Infinity</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Number.Decimals = new SerializerTestCase(
   'Decimals',
@@ -638,7 +638,7 @@ Serializer.Fields.Number.Decimals = new SerializerTestCase(
     '<block type="test_numbers_float" id="id******************" x="42" y="42">' +
     '<field name="NUM">1.5</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Number.Smallest = new SerializerTestCase(
   'Smallest',
@@ -646,7 +646,7 @@ Serializer.Fields.Number.Smallest = new SerializerTestCase(
     '<block type="test_numbers_float" id="id******************" x="42" y="42">' +
     '<field name="NUM">5e-324</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Number.Largest = new SerializerTestCase(
   'Largest',
@@ -654,7 +654,7 @@ Serializer.Fields.Number.Largest = new SerializerTestCase(
     '<block type="test_numbers_float" id="id******************" x="42" y="42">' +
     '<field name="NUM">1.7976931348623157e+308</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Number.MaxPrecisionSmall = new SerializerTestCase(
   'MaxPrecisionSmall',
@@ -662,7 +662,7 @@ Serializer.Fields.Number.MaxPrecisionSmall = new SerializerTestCase(
     '<block type="test_numbers_float" id="id******************" x="42" y="42">' +
     '<field name="NUM">1.000000000000001</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Number.MaxPrecisionLarge = new SerializerTestCase(
   'MaxPrecisionLarge',
@@ -670,7 +670,7 @@ Serializer.Fields.Number.MaxPrecisionLarge = new SerializerTestCase(
     '<block type="test_numbers_float" id="id******************" x="42" y="42">' +
     '<field name="NUM">1000000000000001</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Number.testCases = [
   Serializer.Fields.Number.Simple,
@@ -691,7 +691,7 @@ Serializer.Fields.TextInput.Simple = new SerializerTestCase(
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
     '<field name="TEXT_INPUT">test</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 /* eslint-disable no-tabs */
 Serializer.Fields.TextInput.Tabs = new SerializerTestCase(
@@ -700,7 +700,7 @@ Serializer.Fields.TextInput.Tabs = new SerializerTestCase(
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
     '<field name="TEXT_INPUT">line1&amp;#x9line2&amp;#x9line3</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 /* eslint-enable no-tabs */
 Serializer.Fields.TextInput.Symbols = new SerializerTestCase(
@@ -709,7 +709,7 @@ Serializer.Fields.TextInput.Symbols = new SerializerTestCase(
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
     '<field name="TEXT_INPUT">~`!@#$%^*()_+-={[}]|\\:;,.?/</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.TextInput.EscapedSymbols = new SerializerTestCase(
   'EscapedSymbols',
@@ -717,7 +717,7 @@ Serializer.Fields.TextInput.EscapedSymbols = new SerializerTestCase(
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
     '<field name="TEXT_INPUT">&amp;&lt;&gt;</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.TextInput.SingleQuotes = new SerializerTestCase(
   'SingleQuotes',
@@ -725,7 +725,7 @@ Serializer.Fields.TextInput.SingleQuotes = new SerializerTestCase(
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
     '<field name="TEXT_INPUT">\'test\'</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.TextInput.DoubleQuotes = new SerializerTestCase(
   'DoubleQuotes',
@@ -733,7 +733,7 @@ Serializer.Fields.TextInput.DoubleQuotes = new SerializerTestCase(
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
     '<field name="TEXT_INPUT">"test"</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.TextInput.Numbers = new SerializerTestCase(
   'Numbers',
@@ -741,7 +741,7 @@ Serializer.Fields.TextInput.Numbers = new SerializerTestCase(
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
     '<field name="TEXT_INPUT">1234567890a123a123a</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.TextInput.Emoji = new SerializerTestCase(
   'Emoji',
@@ -749,7 +749,7 @@ Serializer.Fields.TextInput.Emoji = new SerializerTestCase(
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
     '<field name="TEXT_INPUT">😀👋🏿👋🏾👋🏽👋🏼👋🏻😀❤❤❤</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.TextInput.Russian = new SerializerTestCase(
   'Russian',
@@ -757,7 +757,7 @@ Serializer.Fields.TextInput.Russian = new SerializerTestCase(
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
     '<field name="TEXT_INPUT">ты любопытный кот</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.TextInput.Japanese = new SerializerTestCase(
   'Japanese',
@@ -765,7 +765,7 @@ Serializer.Fields.TextInput.Japanese = new SerializerTestCase(
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
     '<field name="TEXT_INPUT">あなたは好奇心旺盛な猫です</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.TextInput.Zalgo = new SerializerTestCase(
   'Zalgo',
@@ -773,7 +773,7 @@ Serializer.Fields.TextInput.Zalgo = new SerializerTestCase(
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
     '<field name="TEXT_INPUT">z̴̪͈̲̜͕̽̈̀͒͂̓̋̉̍a̸̧̧̜̻̘̤̫̱̲͎̞̻͆̋ļ̸̛̖̜̳͚̖͔̟̈́͂̉̀͑̑͑̎ǵ̸̫̳̽̐̃̑̚̕o̶͇̫͔̮̼̭͕̹̘̬͋̀͆̂̇̋͊̒̽</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.TextInput.ControlChars = new SerializerTestCase(
   'ControlChars',
@@ -781,7 +781,7 @@ Serializer.Fields.TextInput.ControlChars = new SerializerTestCase(
     '<block type="test_fields_text_input" id="id******************" x="42" y="42">' +
     '<field name="TEXT_INPUT">&#01;&#a1;</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.TextInput.testCases = [
   Serializer.Fields.TextInput.Simple,
@@ -809,7 +809,7 @@ Serializer.Fields.Variable.Simple = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">test</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.Types = new SerializerTestCase(
   'Types',
@@ -828,7 +828,7 @@ Serializer.Fields.Variable.Types = new SerializerTestCase(
     '<block type="variables_get_dynamic" id="id3*****************" x="42" y="106">' +
     '<field name="VAR" id="cccccccccccccccccccc" variabletype="Colour">test3</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 /* eslint-disable no-tabs */
 Serializer.Fields.Variable.Tabs = new SerializerTestCase(
@@ -840,7 +840,7 @@ Serializer.Fields.Variable.Tabs = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">line1&amp;#x9line2&amp;#x9line3</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 /* eslint-enable no-tabs */
 Serializer.Fields.Variable.Symbols = new SerializerTestCase(
@@ -852,7 +852,7 @@ Serializer.Fields.Variable.Symbols = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">~`!@#$%^*()_+-={[}]|\\:;,.?/</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.EscapedSymbols = new SerializerTestCase(
   'EscapedSymbols',
@@ -863,7 +863,7 @@ Serializer.Fields.Variable.EscapedSymbols = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">&amp;&lt;&gt;</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.SingleQuotes = new SerializerTestCase(
   'SingleQuotes',
@@ -874,7 +874,7 @@ Serializer.Fields.Variable.SingleQuotes = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">\'test\'</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.DoubleQuotes = new SerializerTestCase(
   'DoubleQuotes',
@@ -885,7 +885,7 @@ Serializer.Fields.Variable.DoubleQuotes = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">"test"</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.Numbers = new SerializerTestCase(
   'Numbers',
@@ -896,7 +896,7 @@ Serializer.Fields.Variable.Numbers = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">1234567890a123a123a</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.Emoji = new SerializerTestCase(
   'Emoji',
@@ -907,7 +907,7 @@ Serializer.Fields.Variable.Emoji = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">😀👋🏿👋🏾👋🏽👋🏼👋🏻😀❤❤❤</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.Russian = new SerializerTestCase(
   'Russian',
@@ -918,7 +918,7 @@ Serializer.Fields.Variable.Russian = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">ты любопытный кот</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.Japanese = new SerializerTestCase(
   'Japanese',
@@ -929,7 +929,7 @@ Serializer.Fields.Variable.Japanese = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">あなたは好奇心旺盛な猫です</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.Zalgo = new SerializerTestCase(
   'Zalgo',
@@ -940,7 +940,7 @@ Serializer.Fields.Variable.Zalgo = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">z̴̪͈̲̜͕̽̈̀͒͂̓̋̉̍a̸̧̧̜̻̘̤̫̱̲͎̞̻͆̋ļ̸̛̖̜̳͚̖͔̟̈́͂̉̀͑̑͑̎ǵ̸̫̳̽̐̃̑̚̕o̶͇̫͔̮̼̭͕̹̘̬͋̀͆̂̇̋͊̒̽</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.ControlChars = new SerializerTestCase(
   'ControlChars',
@@ -951,7 +951,7 @@ Serializer.Fields.Variable.ControlChars = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="aaaaaaaaaaaaaaaaaaaa">&#01;&#a1;</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.testCases = [
   Serializer.Fields.Variable.Simple,
@@ -982,7 +982,7 @@ Serializer.Fields.Variable.Id.Length.Short = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="id">test</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.Id.Length.Long = new SerializerTestCase(
   'Long',
@@ -993,7 +993,7 @@ Serializer.Fields.Variable.Id.Length.Long = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="id***********************">test</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.Id.Length.testCases = [
   Serializer.Fields.Variable.Id.Length.Short,
@@ -1014,7 +1014,7 @@ Serializer.Fields.Variable.Id.Chars.Symbols = new SerializerTestCase(
     '<block type="variables_get" id="id1*****************" x="42" y="42">' +
     '<field name="VAR" id="_`{|}~!!!!!!!!!!!!!!">test2</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.Id.Chars.Uppercase = new SerializerTestCase(
   'Uppercase',
@@ -1029,7 +1029,7 @@ Serializer.Fields.Variable.Id.Chars.Uppercase = new SerializerTestCase(
     '<block type="variables_get" id="id1*****************" x="42" y="42">' +
     '<field name="VAR" id="TUVWXYZAAAAAAAAAAAAA">test2</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.Id.Chars.Lowercase = new SerializerTestCase(
   'Lowercase',
@@ -1044,7 +1044,7 @@ Serializer.Fields.Variable.Id.Chars.Lowercase = new SerializerTestCase(
     '<block type="variables_get" id="id1*****************" x="42" y="42">' +
     '<field name="VAR" id="tuvwxyzaaaaaaaaaaaaa">test2</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.Id.Chars.Numbers = new SerializerTestCase(
   'Numbers',
@@ -1055,7 +1055,7 @@ Serializer.Fields.Variable.Id.Chars.Numbers = new SerializerTestCase(
     '<block type="variables_get" id="id******************" x="42" y="42">' +
     '<field name="VAR" id="01234567890000000000">test</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Fields.Variable.Id.Chars.testCases = [
   Serializer.Fields.Variable.Id.Chars.Symbols,
@@ -1092,7 +1092,7 @@ Serializer.Icons.Comment.Basic = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="80" w="160">test</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 
 Serializer.Icons.Comment.Size = new SerializerTestSuite('Size');
@@ -1102,7 +1102,7 @@ Serializer.Icons.Comment.Size.Different = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="160" w="80">test</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Size.Large = new SerializerTestCase(
   'Large',
@@ -1110,7 +1110,7 @@ Serializer.Icons.Comment.Size.Large = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="10000" w="10000">test</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Size.testCases = [
   Serializer.Icons.Comment.Size.Different,
@@ -1124,7 +1124,7 @@ Serializer.Icons.Comment.Pinned.True = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="true" h="80" w="160">test</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Pinned.False = new SerializerTestCase(
   'False',
@@ -1132,7 +1132,7 @@ Serializer.Icons.Comment.Pinned.False = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="80" w="160">test</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Pinned.testCases = [
   Serializer.Icons.Comment.Pinned.True,
@@ -1146,7 +1146,7 @@ Serializer.Icons.Comment.Text.Symbols = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="80" w="160">~`!@#$%^*()_+-={[}]|\\:;,.?/</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Text.EscapedSymbols = new SerializerTestCase(
   'EscapedSymbols',
@@ -1154,7 +1154,7 @@ Serializer.Icons.Comment.Text.EscapedSymbols = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="80" w="160">&amp;&lt;&gt;</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Text.SingleQuotes = new SerializerTestCase(
   'SingleQuotes',
@@ -1162,7 +1162,7 @@ Serializer.Icons.Comment.Text.SingleQuotes = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="80" w="160">\'test\'</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Text.DoubleQuotes = new SerializerTestCase(
   'DoubleQuotes',
@@ -1170,7 +1170,7 @@ Serializer.Icons.Comment.Text.DoubleQuotes = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="80" w="160">"test"</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Text.Numbers = new SerializerTestCase(
   'Numbers',
@@ -1178,7 +1178,7 @@ Serializer.Icons.Comment.Text.Numbers = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="80" w="160">1234567890a123a123a</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Text.Emoji = new SerializerTestCase(
   'Emoji',
@@ -1186,7 +1186,7 @@ Serializer.Icons.Comment.Text.Emoji = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="80" w="160">😀👋🏿👋🏾👋🏽👋🏼👋🏻😀❤❤❤</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Text.Russian = new SerializerTestCase(
   'Russian',
@@ -1194,7 +1194,7 @@ Serializer.Icons.Comment.Text.Russian = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="80" w="160">ты любопытный кот</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Text.Japanese = new SerializerTestCase(
   'Japanese',
@@ -1202,7 +1202,7 @@ Serializer.Icons.Comment.Text.Japanese = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="80" w="160">あなたは好奇心旺盛な猫です</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Text.Zalgo = new SerializerTestCase(
   'Zalgo',
@@ -1210,7 +1210,7 @@ Serializer.Icons.Comment.Text.Zalgo = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="80" w="160">z̴̪͈̲̜͕̽̈̀͒͂̓̋̉̍a̸̧̧̜̻̘̤̫̱̲͎̞̻͆̋ļ̸̛̖̜̳͚̖͔̟̈́͂̉̀͑̑͑̎ǵ̸̫̳̽̐̃̑̚̕o̶͇̫͔̮̼̭͕̹̘̬͋̀͆̂̇̋͊̒̽</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Text.ControlChars = new SerializerTestCase(
   'ControlChars',
@@ -1218,7 +1218,7 @@ Serializer.Icons.Comment.Text.ControlChars = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<comment pinned="false" h="80" w="160">&#01;&#a1;</comment>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Icons.Comment.Text.testCases = [
   Serializer.Icons.Comment.Text.Symbols,
@@ -1257,7 +1257,7 @@ Serializer.Connections.Child.Value = new SerializerTestCase(
     '</block>' +
     '</value>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.Child.Statement = new SerializerTestCase(
   'Statement',
@@ -1267,7 +1267,7 @@ Serializer.Connections.Child.Statement = new SerializerTestCase(
     '<block type="text_print" id="id2*****************"></block>' +
     '</statement>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.Child.Next = new SerializerTestCase(
   'Next',
@@ -1277,7 +1277,7 @@ Serializer.Connections.Child.Next = new SerializerTestCase(
     '<block type="text_print" id="id2*****************"></block>' +
     '</next>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.Child.Row = new SerializerTestCase(
   'Row',
@@ -1293,7 +1293,7 @@ Serializer.Connections.Child.Row = new SerializerTestCase(
     '</block>' +
     '</value>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.Child.Nested = new SerializerTestCase(
   'Nested',
@@ -1307,7 +1307,7 @@ Serializer.Connections.Child.Nested = new SerializerTestCase(
     '</block>' +
     '</statement>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.Child.Stack = new SerializerTestCase(
   'Stack',
@@ -1321,7 +1321,7 @@ Serializer.Connections.Child.Stack = new SerializerTestCase(
     '</block>' +
     '</next>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.Child.testCases = [
   Serializer.Connections.Child.Value,
@@ -1343,7 +1343,7 @@ Serializer.Connections.Shadow.Value = new SerializerTestCase(
     '</shadow>' +
     '</value>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.Shadow.Statement = new SerializerTestCase(
   'Statement',
@@ -1353,7 +1353,7 @@ Serializer.Connections.Shadow.Statement = new SerializerTestCase(
     '<shadow type="text_print" id="id2*****************"></shadow>' +
     '</statement>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.Shadow.Next = new SerializerTestCase(
   'Next',
@@ -1363,7 +1363,7 @@ Serializer.Connections.Shadow.Next = new SerializerTestCase(
     '<shadow type="text_print" id="id2*****************"></shadow>' +
     '</next>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.Shadow.Row = new SerializerTestCase(
   'Row',
@@ -1379,7 +1379,7 @@ Serializer.Connections.Shadow.Row = new SerializerTestCase(
     '</shadow>' +
     '</value>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.Shadow.Nested = new SerializerTestCase(
   'Nested',
@@ -1393,7 +1393,7 @@ Serializer.Connections.Shadow.Nested = new SerializerTestCase(
     '</shadow>' +
     '</statement>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.Shadow.Stack = new SerializerTestCase(
   'Stack',
@@ -1407,7 +1407,7 @@ Serializer.Connections.Shadow.Stack = new SerializerTestCase(
     '</shadow>' +
     '</next>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.Shadow.testCases = [
   Serializer.Connections.Shadow.Value,
@@ -1419,7 +1419,7 @@ Serializer.Connections.Shadow.testCases = [
 ];
 
 Serializer.Connections.OverwrittenShadow = new SerializerTestSuite(
-  'OverwrittenShadow'
+  'OverwrittenShadow',
 );
 Serializer.Connections.OverwrittenShadow.Value = new SerializerTestCase(
   'Value',
@@ -1434,7 +1434,7 @@ Serializer.Connections.OverwrittenShadow.Value = new SerializerTestCase(
     '</block>' +
     '</value>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.OverwrittenShadow.Statement = new SerializerTestCase(
   'Statement',
@@ -1445,7 +1445,7 @@ Serializer.Connections.OverwrittenShadow.Statement = new SerializerTestCase(
     '<block type="text_print" id="id3*****************"></block>' +
     '</statement>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.OverwrittenShadow.Next = new SerializerTestCase(
   'Next',
@@ -1456,7 +1456,7 @@ Serializer.Connections.OverwrittenShadow.Next = new SerializerTestCase(
     '<shadow type="text_print" id="id3*****************"></shadow>' +
     '</next>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.OverwrittenShadow.Row = new SerializerTestCase(
   'Row',
@@ -1475,7 +1475,7 @@ Serializer.Connections.OverwrittenShadow.Row = new SerializerTestCase(
     '</block>' +
     '</value>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.OverwrittenShadow.Nested = new SerializerTestCase(
   'Nested',
@@ -1490,7 +1490,7 @@ Serializer.Connections.OverwrittenShadow.Nested = new SerializerTestCase(
     '<block type="text_print" id="id4*****************"></block>' +
     '</statement>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.OverwrittenShadow.Stack = new SerializerTestCase(
   'Stack',
@@ -1505,7 +1505,7 @@ Serializer.Connections.OverwrittenShadow.Stack = new SerializerTestCase(
     '</shadow>' +
     '</next>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Connections.OverwrittenShadow.testCases = [
   Serializer.Connections.OverwrittenShadow.Value,
@@ -1531,7 +1531,7 @@ Serializer.Mutations.ListGetIndex = new SerializerTestCase(
     '<field name="MODE">REMOVE</field>' +
     '<field name="WHERE">LAST</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ListSetIndex = new SerializerTestCase(
   'ListSetIndex',
@@ -1541,7 +1541,7 @@ Serializer.Mutations.ListSetIndex = new SerializerTestCase(
     '<field name="MODE">SET</field>' +
     '<field name="WHERE">LAST</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ListGetSublist = new SerializerTestCase(
   'ListGetSublist',
@@ -1551,7 +1551,7 @@ Serializer.Mutations.ListGetSublist = new SerializerTestCase(
     '<field name="WHERE1">FIRST</field>' +
     '<field name="WHERE2">LAST</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.MathNumberProperty = new SerializerTestCase(
   'MathNumberProperty',
@@ -1560,7 +1560,7 @@ Serializer.Mutations.MathNumberProperty = new SerializerTestCase(
     '<mutation divisor_input="true"></mutation>' +
     '<field name="PROPERTY">DIVISIBLE_BY</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.MathOnList = new SerializerTestCase(
   'MathOnList',
@@ -1569,7 +1569,7 @@ Serializer.Mutations.MathOnList = new SerializerTestCase(
     '<mutation op="MODE"></mutation>' +
     '<field name="OP">MODE</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.TextJoin = new SerializerTestCase(
   'TextJoin',
@@ -1577,7 +1577,7 @@ Serializer.Mutations.TextJoin = new SerializerTestCase(
     '<block type="text_join" id="id" x="42" y="42">' +
     '<mutation items="10"></mutation>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.TextCharAt = new SerializerTestCase(
   'TextCharAt',
@@ -1586,7 +1586,7 @@ Serializer.Mutations.TextCharAt = new SerializerTestCase(
     '<mutation at="false"></mutation>' +
     '<field name="WHERE">FIRST</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.TextGetSubstring = new SerializerTestCase(
   'TextGetSubstring',
@@ -1596,7 +1596,7 @@ Serializer.Mutations.TextGetSubstring = new SerializerTestCase(
     '<field name="WHERE1">FROM_START</field>' +
     '<field name="WHERE2">LAST</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.TextPromptExt = new SerializerTestCase(
   'TextPromptExt',
@@ -1605,7 +1605,7 @@ Serializer.Mutations.TextPromptExt = new SerializerTestCase(
     '<mutation type="NUMBER"></mutation>' +
     '<field name="TYPE">NUMBER</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.TextPrompt = new SerializerTestCase(
   'TextPrompt',
@@ -1615,7 +1615,7 @@ Serializer.Mutations.TextPrompt = new SerializerTestCase(
     '<field name="TYPE">NUMBER</field>' +
     '<field name="TEXT"></field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.testCases = [
   Serializer.Mutations.ListGetIndex,
@@ -1635,7 +1635,7 @@ Serializer.Mutations.ControlsIf.NoMutation = new SerializerTestCase(
   'NoMutation',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="controls_if" id="id******************" x="42" y="42"></block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ControlsIf.ElseIfAndElse = new SerializerTestCase(
   'ElseIfAndElse',
@@ -1643,7 +1643,7 @@ Serializer.Mutations.ControlsIf.ElseIfAndElse = new SerializerTestCase(
     '<block type="controls_if" id="id******************" x="42" y="42">' +
     '<mutation elseif="1" else="1"></mutation>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ControlsIf.MultipleElseIfs = new SerializerTestCase(
   'MultipleElseIfs',
@@ -1651,7 +1651,7 @@ Serializer.Mutations.ControlsIf.MultipleElseIfs = new SerializerTestCase(
     '<block type="controls_if" id="id******************" x="42" y="42">' +
     '<mutation elseif="3"></mutation>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ControlsIf.MutlipleElseIfsAndElse = new SerializerTestCase(
   'MutlipleElseIfsAndElse',
@@ -1659,7 +1659,7 @@ Serializer.Mutations.ControlsIf.MutlipleElseIfsAndElse = new SerializerTestCase(
     '<block type="controls_if" id="id******************" x="42" y="42">' +
     '<mutation elseif="3" else="1"></mutation>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ControlsIf.testCases = [
   Serializer.Mutations.ControlsIf.NoMutation,
@@ -1675,7 +1675,7 @@ Serializer.Mutations.ControlsIf.ElseIf.NoChild = new SerializerTestCase(
     '<block type="controls_if" id="id******************" x="42" y="42">' +
     '<mutation elseif="1"></mutation>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ControlsIf.ElseIf.Child = new SerializerTestCase(
   'Child',
@@ -1686,7 +1686,7 @@ Serializer.Mutations.ControlsIf.ElseIf.Child = new SerializerTestCase(
     '<block type="text_print" id="id2*****************"></block>' +
     '</statement>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ControlsIf.ElseIf.Shadow = new SerializerTestCase(
   'Shadow',
@@ -1697,7 +1697,7 @@ Serializer.Mutations.ControlsIf.ElseIf.Shadow = new SerializerTestCase(
     '<shadow type="text_print" id="id2*****************"></shadow>' +
     '</statement>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ControlsIf.ElseIf.OverwrittenShadow =
   new SerializerTestCase(
@@ -1710,7 +1710,7 @@ Serializer.Mutations.ControlsIf.ElseIf.OverwrittenShadow =
       '<block type="text_print" id="id3*****************"></block>' +
       '</statement>' +
       '</block>' +
-      '</xml>'
+      '</xml>',
   );
 Serializer.Mutations.ControlsIf.ElseIf.testCases = [
   Serializer.Mutations.ControlsIf.ElseIf.NoChild,
@@ -1726,7 +1726,7 @@ Serializer.Mutations.ControlsIf.Else.NoChild = new SerializerTestCase(
     '<block type="controls_if" id="id******************" x="42" y="42">' +
     '<mutation else="1"></mutation>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ControlsIf.Else.Child = new SerializerTestCase(
   'Child',
@@ -1737,7 +1737,7 @@ Serializer.Mutations.ControlsIf.Else.Child = new SerializerTestCase(
     '<block type="text_print" id="id2*****************"></block>' +
     '</statement>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ControlsIf.Else.Shadow = new SerializerTestCase(
   'Shadow',
@@ -1748,7 +1748,7 @@ Serializer.Mutations.ControlsIf.Else.Shadow = new SerializerTestCase(
     '<shadow type="text_print" id="id2*****************"></shadow>' +
     '</statement>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ControlsIf.Else.OverwrittenShadow = new SerializerTestCase(
   'OverwrittenShadow',
@@ -1760,7 +1760,7 @@ Serializer.Mutations.ControlsIf.Else.OverwrittenShadow = new SerializerTestCase(
     '<block type="text_print" id="id3*****************"></block>' +
     '</statement>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ControlsIf.Else.testCases = [
   Serializer.Mutations.ControlsIf.Else.NoChild,
@@ -1781,7 +1781,7 @@ Serializer.Mutations.ListCreate.Default = new SerializerTestCase(
     '<block type="lists_create_with" id="id******************" x="42" y="42">' +
     '<mutation items="3"></mutation>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ListCreate.ZeroInputs = new SerializerTestCase(
   'ZeroInputs',
@@ -1789,7 +1789,7 @@ Serializer.Mutations.ListCreate.ZeroInputs = new SerializerTestCase(
     '<block type="lists_create_with" id="id******************" x="42" y="42">' +
     '<mutation items="0"></mutation>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ListCreate.MultipleInputs = new SerializerTestCase(
   'MultipleInputs',
@@ -1797,7 +1797,7 @@ Serializer.Mutations.ListCreate.MultipleInputs = new SerializerTestCase(
     '<block type="lists_create_with" id="id******************" x="42" y="42">' +
     '<mutation items="10"></mutation>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ListCreate.testCases = [
   Serializer.Mutations.ListCreate.Default,
@@ -1812,7 +1812,7 @@ Serializer.Mutations.ListCreate.OneInput.NoChild = new SerializerTestCase(
     '<block type="lists_create_with" id="id******************" x="42" y="42">' +
     '<mutation items="1"></mutation>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ListCreate.OneInput.Child = new SerializerTestCase(
   'Child',
@@ -1823,7 +1823,7 @@ Serializer.Mutations.ListCreate.OneInput.Child = new SerializerTestCase(
     '<block type="math_random_float" id="id2*****************"></block>' +
     '</value>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ListCreate.OneInput.Shadow = new SerializerTestCase(
   'Shadow',
@@ -1834,7 +1834,7 @@ Serializer.Mutations.ListCreate.OneInput.Shadow = new SerializerTestCase(
     '<shadow type="math_random_float" id="id2*****************"></shadow>' +
     '</value>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.ListCreate.OneInput.OverwrittenShadow =
   new SerializerTestCase(
@@ -1847,7 +1847,7 @@ Serializer.Mutations.ListCreate.OneInput.OverwrittenShadow =
       '<block type="math_random_float" id="id3*****************"></block>' +
       '</value>' +
       '</block>' +
-      '</xml>'
+      '</xml>',
   );
 Serializer.Mutations.ListCreate.OneInput.testCases = [
   Serializer.Mutations.ListCreate.OneInput.NoChild,
@@ -1867,7 +1867,7 @@ Serializer.Mutations.Procedure.NoMutation = new SerializerTestCase(
     '<block type="procedures_defreturn" id="id******************" x="42" y="42">' +
     '<field name="NAME">do something</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.Variables = new SerializerTestCase(
   'Variables',
@@ -1885,7 +1885,7 @@ Serializer.Mutations.Procedure.Variables = new SerializerTestCase(
     '</mutation>' +
     '<field name="NAME">do something</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.NoStatements = new SerializerTestCase(
   'NoStatements',
@@ -1894,7 +1894,7 @@ Serializer.Mutations.Procedure.NoStatements = new SerializerTestCase(
     '<mutation statements="false"></mutation>' +
     '<field name="NAME">do something</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.IfReturn = new SerializerTestCase(
   'IfReturn',
@@ -1907,7 +1907,7 @@ Serializer.Mutations.Procedure.IfReturn = new SerializerTestCase(
     '</block>' +
     '</statement>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.Caller = new SerializerTestCase(
   'Caller',
@@ -1929,7 +1929,7 @@ Serializer.Mutations.Procedure.Caller = new SerializerTestCase(
     '<arg name="y"></arg>' +
     '</mutation>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.CollapsedProceduresCallreturn =
   new SerializerTestCase(
@@ -1950,7 +1950,7 @@ Serializer.Mutations.Procedure.CollapsedProceduresCallreturn =
       '<arg name="x"></arg>' +
       '</mutation>' +
       '</block>' +
-      '</xml>'
+      '</xml>',
   );
 Serializer.Mutations.Procedure.CollapsedProceduresCallnoreturn =
   new SerializerTestCase(
@@ -1971,7 +1971,7 @@ Serializer.Mutations.Procedure.CollapsedProceduresCallnoreturn =
       '<arg name="x"></arg>' +
       '</mutation>' +
       '</block>' +
-      '</xml>'
+      '</xml>',
   );
 Serializer.Mutations.Procedure.testCases = [
   Serializer.Mutations.Procedure.NoMutation,
@@ -1990,7 +1990,7 @@ Serializer.Mutations.Procedure.Names.Symbols = new SerializerTestCase(
     '<block type="procedures_defreturn" id="id******************" x="42" y="42">' +
     '<field name="NAME">~`!@#$%^*()_+-={[}]|\\:;,.?/</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.Names.EscapedSymbols = new SerializerTestCase(
   'EscapedSymbols',
@@ -1998,7 +1998,7 @@ Serializer.Mutations.Procedure.Names.EscapedSymbols = new SerializerTestCase(
     '<block type="procedures_defreturn" id="id******************" x="42" y="42">' +
     '<field name="NAME">&amp;&lt;&gt;</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.Names.SingleQuotes = new SerializerTestCase(
   'SingleQuotes',
@@ -2006,7 +2006,7 @@ Serializer.Mutations.Procedure.Names.SingleQuotes = new SerializerTestCase(
     '<block type="procedures_defreturn" id="id******************" x="42" y="42">' +
     '<field name="NAME">\'test\'</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.Names.DoubleQuotes = new SerializerTestCase(
   'DoubleQuotes',
@@ -2014,7 +2014,7 @@ Serializer.Mutations.Procedure.Names.DoubleQuotes = new SerializerTestCase(
     '<block type="procedures_defreturn" id="id******************" x="42" y="42">' +
     '<field name="NAME">"test"</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.Names.Numbers = new SerializerTestCase(
   'Numbers',
@@ -2022,7 +2022,7 @@ Serializer.Mutations.Procedure.Names.Numbers = new SerializerTestCase(
     '<block type="procedures_defreturn" id="id******************" x="42" y="42">' +
     '<field name="NAME">1234567890a123a123a</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.Names.Emoji = new SerializerTestCase(
   'Emoji',
@@ -2030,7 +2030,7 @@ Serializer.Mutations.Procedure.Names.Emoji = new SerializerTestCase(
     '<block type="procedures_defreturn" id="id******************" x="42" y="42">' +
     '<field name="NAME">😀👋🏿👋🏾👋🏽👋🏼👋🏻😀❤❤❤</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.Names.Russian = new SerializerTestCase(
   'Russian',
@@ -2038,7 +2038,7 @@ Serializer.Mutations.Procedure.Names.Russian = new SerializerTestCase(
     '<block type="procedures_defreturn" id="id******************" x="42" y="42">' +
     '<field name="NAME">ты любопытный кот</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.Names.Japanese = new SerializerTestCase(
   'Japanese',
@@ -2046,7 +2046,7 @@ Serializer.Mutations.Procedure.Names.Japanese = new SerializerTestCase(
     '<block type="procedures_defreturn" id="id******************" x="42" y="42">' +
     '<field name="NAME">あなたは好奇心旺盛な猫です</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.Names.Zalgo = new SerializerTestCase(
   'Zalgo',
@@ -2054,7 +2054,7 @@ Serializer.Mutations.Procedure.Names.Zalgo = new SerializerTestCase(
     '<block type="procedures_defreturn" id="id******************" x="42" y="42">' +
     '<field name="NAME">z̴̪͈̲̜͕̽̈̀͒͂̓̋̉̍a̸̧̧̜̻̘̤̫̱̲͎̞̻͆̋ļ̸̛̖̜̳͚̖͔̟̈́͂̉̀͑̑͑̎ǵ̸̫̳̽̐̃̑̚̕o̶͇̫͔̮̼̭͕̹̘̬͋̀͆̂̇̋͊̒̽</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.Names.ControlChars = new SerializerTestCase(
   'ControlChars',
@@ -2062,7 +2062,7 @@ Serializer.Mutations.Procedure.Names.ControlChars = new SerializerTestCase(
     '<block type="procedures_defreturn" id="id******************" x="42" y="42">' +
     '<field name="NAME">&#01;&#a1;</field>' +
     '</block>' +
-    '</xml>'
+    '</xml>',
 );
 Serializer.Mutations.Procedure.Names.testCases = [
   Serializer.Mutations.Procedure.Names.Symbols,
@@ -2103,7 +2103,7 @@ const runSerializerTestSuite = (serializer, deserializer, testSuite) => {
     return function () {
       Blockly.Xml.domToWorkspace(
         Blockly.utils.xml.textToDom(test.xml),
-        this.workspace
+        this.workspace,
       );
       if (serializer && deserializer) {
         const save = serializer(workspaces.save(this.workspace));
@@ -2143,5 +2143,5 @@ runSerializerTestSuite(null, null, Serializer);
 runSerializerTestSuite(
   (state) => state,
   (state) => state,
-  Serializer
+  Serializer,
 );

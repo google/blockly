@@ -53,7 +53,7 @@ suite('Toolbox Item Select Event', function () {
       const origEvent = new Blockly.Events.ToolboxItemSelect(
         items[0].getName(),
         items[1].getName(),
-        this.workspace.id
+        this.workspace.id,
       );
 
       const json = origEvent.toJson();

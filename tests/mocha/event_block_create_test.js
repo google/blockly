@@ -42,7 +42,7 @@ suite('Block Create Event', function () {
           },
         },
       },
-      this.workspace
+      this.workspace,
     );
     Blockly.Events.enable();
     block.getInput('INPUT').connection.disconnect();
@@ -51,7 +51,7 @@ suite('Block Create Event', function () {
       Blockly.Events.BlockCreate,
       {'recordUndo': false, 'type': eventUtils.BLOCK_CREATE},
       this.workspace.id,
-      'shadowId'
+      'shadowId',
     );
     const calls = this.eventsFireStub.getCalls();
     const event = calls[calls.length - 1].args[0];

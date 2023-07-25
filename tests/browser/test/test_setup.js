@@ -38,7 +38,7 @@ async function testSetup(url) {
     options.capabilities['goog:chromeOptions'].args.push(
       '--headless',
       '--no-sandbox',
-      '--disable-dev-shm-usage'
+      '--disable-dev-shm-usage',
     );
   } else {
     // --disable-gpu is needed to prevent Chrome from hanging on Linux with
@@ -147,7 +147,7 @@ async function getNthBlockOfCategory(browser, categoryName, n) {
   category.click();
   await browser.pause(100);
   const block = await browser.$(
-    `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`
+    `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`,
   );
   return block;
 }
@@ -191,7 +191,7 @@ async function getBlockTypeFromWorkspace(browser, blockType, position) {
       ].id;
     },
     blockType,
-    position
+    position,
   );
   return getBlockElementById(browser, id);
 }
@@ -228,15 +228,15 @@ async function getLocationOfBlockConnection(browser, id, connectionName) {
 
       const loc = Blockly.utils.Coordinate.sum(
         block.getRelativeToSurfaceXY(),
-        connection.getOffsetInBlock()
+        connection.getOffsetInBlock(),
       );
       return Blockly.utils.svgMath.wsToScreenCoordinates(
         Blockly.getMainWorkspace(),
-        loc
+        loc,
       );
     },
     id,
-    connectionName
+    connectionName,
   );
 }
 
@@ -255,17 +255,17 @@ async function connect(
   draggedBlock,
   draggedConnection,
   targetBlock,
-  targetConnection
+  targetConnection,
 ) {
   const draggedLocation = await getLocationOfBlockConnection(
     browser,
     draggedBlock.id,
-    draggedConnection
+    draggedConnection,
   );
   const targetLocation = await getLocationOfBlockConnection(
     browser,
     targetBlock.id,
-    targetConnection
+    targetConnection,
   );
 
   const delta = {
@@ -326,7 +326,7 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
   const flyoutBlock = await getBlockTypeFromCategory(
     browser,
     categoryName,
-    type
+    type,
   );
   await flyoutBlock.dragAndDrop({x: x, y: y});
   return await getSelectedBlockElement(browser);

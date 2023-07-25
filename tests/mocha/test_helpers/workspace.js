@@ -43,13 +43,13 @@ export function testAWorkspace() {
     const varModel = block.getVarModels()[0];
     chai.assert.exists(
       varModel,
-      'VariableModel for block at topBlocks[' + blockIndex + ']'
+      'VariableModel for block at topBlocks[' + blockIndex + ']',
     );
     const blockVarName = varModel.name;
     chai.assert.equal(
       blockVarName,
       name,
-      'VariableModel name for block at topBlocks[' + blockIndex + ']'
+      'VariableModel name for block at topBlocks[' + blockIndex + ']',
     );
   }
 
@@ -275,7 +275,7 @@ export function testAWorkspace() {
       chai.assert.equal(
         this.workspace.getTopBlocks(true).length,
         0,
-        'Clear empty workspace'
+        'Clear empty workspace',
       );
       this.workspace.newBlock('');
       this.workspace.newBlock('');
@@ -348,7 +348,7 @@ export function testAWorkspace() {
       chai.assert.equal(
         this.workspace.getAllBlocks(true).length,
         0,
-        'Clear empty workspace'
+        'Clear empty workspace',
       );
       this.workspace.newBlock('');
       this.workspace.newBlock('');
@@ -406,7 +406,7 @@ export function testAWorkspace() {
     test('No instance limit', function () {
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
-        Infinity
+        Infinity,
       );
     });
 
@@ -415,13 +415,13 @@ export function testAWorkspace() {
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
         1,
-        'With maxInstances limit 3'
+        'With maxInstances limit 3',
       );
       this.workspace.options.maxInstances['get_var_block'] = 4;
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
         2,
-        'With maxInstances limit 4'
+        'With maxInstances limit 4',
       );
     });
 
@@ -433,13 +433,13 @@ export function testAWorkspace() {
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
         1,
-        'With maxInstances limit 3'
+        'With maxInstances limit 3',
       );
       this.workspace.options.maxInstances['get_var_block'] = 4;
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
         2,
-        'With maxInstances limit 4'
+        'With maxInstances limit 4',
       );
     });
 
@@ -448,7 +448,7 @@ export function testAWorkspace() {
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
         0,
-        'With maxInstances limit 2'
+        'With maxInstances limit 2',
       );
     });
 
@@ -457,7 +457,7 @@ export function testAWorkspace() {
       this.workspace.options.maxInstances['get_var_block'] = 0;
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
-        0
+        0,
       );
     });
 
@@ -469,7 +469,7 @@ export function testAWorkspace() {
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
         0,
-        'With maxInstances limit 2'
+        'With maxInstances limit 2',
       );
     });
 
@@ -481,7 +481,7 @@ export function testAWorkspace() {
       this.workspace.clear();
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
-        0
+        0,
       );
     });
 
@@ -490,7 +490,7 @@ export function testAWorkspace() {
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
         -1,
-        'With maxInstances limit 1'
+        'With maxInstances limit 1',
       );
     });
 
@@ -499,7 +499,7 @@ export function testAWorkspace() {
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
         -2,
-        'With maxInstances limit 0'
+        'With maxInstances limit 0',
       );
     });
 
@@ -511,7 +511,7 @@ export function testAWorkspace() {
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
         -1,
-        'With maxInstances limit 1'
+        'With maxInstances limit 1',
       );
     });
 
@@ -523,7 +523,7 @@ export function testAWorkspace() {
       chai.assert.equal(
         this.workspace.remainingCapacityOfType('get_var_block'),
         -2,
-        'With maxInstances limit 0'
+        'With maxInstances limit 0',
       );
     });
   });
@@ -559,7 +559,7 @@ export function testAWorkspace() {
       const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(
         this.workspace.isCapacityAvailable(typeCountsMap),
-        'With maxBlocks limit 1 and maxInstances limit 3'
+        'With maxBlocks limit 1 and maxInstances limit 3',
       );
     });
 
@@ -569,7 +569,7 @@ export function testAWorkspace() {
       const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(
         this.workspace.isCapacityAvailable(typeCountsMap),
-        'With maxBlocks limit 0 and maxInstances limit 3'
+        'With maxBlocks limit 0 and maxInstances limit 3',
       );
     });
 
@@ -579,7 +579,7 @@ export function testAWorkspace() {
       const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(
         this.workspace.isCapacityAvailable(typeCountsMap),
-        'With maxBlocks limit 1 and maxInstances limit 2'
+        'With maxBlocks limit 1 and maxInstances limit 2',
       );
     });
 
@@ -589,7 +589,7 @@ export function testAWorkspace() {
       const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(
         this.workspace.isCapacityAvailable(typeCountsMap),
-        'With maxBlocks limit 1 and maxInstances limit 1'
+        'With maxBlocks limit 1 and maxInstances limit 1',
       );
     });
 
@@ -599,7 +599,7 @@ export function testAWorkspace() {
       const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(
         this.workspace.isCapacityAvailable(typeCountsMap),
-        'With maxBlocks limit 0 and maxInstances limit 1'
+        'With maxBlocks limit 0 and maxInstances limit 1',
       );
     });
 
@@ -609,7 +609,7 @@ export function testAWorkspace() {
       const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(
         this.workspace.isCapacityAvailable(typeCountsMap),
-        'With maxBlocks limit 1 and maxInstances limit 0'
+        'With maxBlocks limit 1 and maxInstances limit 0',
       );
     });
 
@@ -636,12 +636,12 @@ export function testAWorkspace() {
       chai.assert.equal(
         Blockly.Workspace.getById(this.workspace.id),
         this.workspace,
-        'Find workspace'
+        'Find workspace',
       );
       chai.assert.equal(
         Blockly.Workspace.getById(this.workspaceB.id),
         this.workspaceB,
-        'Find workspaceB'
+        'Find workspaceB',
       );
     });
 
@@ -675,11 +675,11 @@ export function testAWorkspace() {
     test('Trivial', function () {
       chai.assert.equal(
         this.workspace.getBlockById(this.blockA.id),
-        this.blockA
+        this.blockA,
       );
       chai.assert.equal(
         this.workspace.getBlockById(this.blockB.id),
-        this.blockB
+        this.blockB,
       );
     });
 
@@ -696,7 +696,7 @@ export function testAWorkspace() {
       chai.assert.isNull(this.workspace.getBlockById(this.blockA.id));
       chai.assert.equal(
         this.workspace.getBlockById(this.blockB.id),
-        this.blockB
+        this.blockB,
       );
     });
 
@@ -724,14 +724,14 @@ export function testAWorkspace() {
           actual.getAttribute(attr.name),
           attr.value,
           `expected attribute ${attr.name} on ${actualString} to match ` +
-            `${expectedString}`
+            `${expectedString}`,
         );
       }
       chai.assert.equal(
         actual.childElementCount,
         expected.childElementCount,
         `expected node ${actualString} to have the same children as node ` +
-          `${expectedString}`
+          `${expectedString}`,
       );
       for (let i = 0; i < expected.childElementCount; i++) {
         assertNodesEqual(actual.children[i], expected.children[i]);
@@ -807,7 +807,7 @@ export function testAWorkspace() {
             '  <next>' +
             '    <block type="stack_block" id="2"></block>' +
             '  </next>' +
-            '</block>'
+            '</block>',
         );
       });
 
@@ -818,7 +818,7 @@ export function testAWorkspace() {
             '  <value name="INPUT">' +
             '    <block type="row_block" id="2"></block>' +
             '  </value>' +
-            '</block>'
+            '</block>',
         );
       });
 
@@ -829,7 +829,7 @@ export function testAWorkspace() {
             '  <statement name="STATEMENT">' +
             '    <block type="stack_block" id="2"></block>' +
             '  </statement>' +
-            '</block>'
+            '</block>',
         );
       });
 
@@ -840,7 +840,7 @@ export function testAWorkspace() {
             '  <next>' +
             '    <shadow type="stack_block" id="2"></shadow>' +
             '  </next>' +
-            '</block>'
+            '</block>',
         );
       });
 
@@ -851,7 +851,7 @@ export function testAWorkspace() {
             '  <value name="INPUT">' +
             '    <shadow type="row_block" id="2"></shadow>' +
             '  </value>' +
-            '</block>'
+            '</block>',
         );
       });
 
@@ -862,7 +862,7 @@ export function testAWorkspace() {
             '  <statement name="STATEMENT">' +
             '    <shadow type="stack_block" id="2"></shadow>' +
             '  </statement>' +
-            '</block>'
+            '</block>',
         );
       });
     });
@@ -1218,7 +1218,7 @@ export function testAWorkspace() {
           this.workspace.getAllBlocks().length,
           2,
           'expected there to only be 2 blocks on the workspace ' +
-            '(check for shadows)'
+            '(check for shadows)',
         );
       });
 
@@ -1237,7 +1237,7 @@ export function testAWorkspace() {
           this.workspace.getAllBlocks().length,
           2,
           'expected there to only be 2 blocks on the workspace ' +
-            '(check for shadows)'
+            '(check for shadows)',
         );
       });
 
@@ -1403,7 +1403,7 @@ export function testAWorkspace() {
           chai.assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');
           chai.assert.notEqual(
             undoStack[undoStack.length - 2].type,
-            'var_delete'
+            'var_delete',
           );
 
           // Undo delete
@@ -1434,7 +1434,7 @@ export function testAWorkspace() {
           chai.assert.equal(undoStack[undoStack.length - 2].type, 'delete');
           chai.assert.notEqual(
             undoStack[undoStack.length - 3].type,
-            'var_delete'
+            'var_delete',
           );
 
           // Undo delete

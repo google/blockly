@@ -18,8 +18,6 @@ const {
 } = require('./test_setup');
 const {Key} = require('webdriverio');
 
-let browser;
-
 suite('Basic block tests', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time
   // to run than most mocha test
@@ -27,20 +25,15 @@ suite('Basic block tests', function (done) {
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(
+    this.browser = await testSetup(
       testFileLocations.PLAYGROUND + '?toolbox=test-blocks',
     );
   });
 
   test('Drag three blocks into the workspace', async function () {
     for (let i = 1; i <= 3; i++) {
-      await dragNthBlockFromFlyout(browser, 'Align', 0, 250, 50 * i);
-      chai.assert.equal((await getAllBlocks(browser)).length, i);
+      await dragNthBlockFromFlyout(this.browser, 'Align', 0, 250, 50 * i);
+      chai.assert.equal((await getAllBlocks(this.browser)).length, i);
     }
-  });
-
-  // Teardown entire suite after test are done running
-  suiteTeardown(async function () {
-    await browser.deleteSession();
   });
 });

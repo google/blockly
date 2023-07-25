@@ -551,7 +551,7 @@ export class ConstantProvider {
       'Hg',
       this.FIELD_TEXT_FONTSIZE + 'pt',
       this.FIELD_TEXT_FONTWEIGHT,
-      this.FIELD_TEXT_FONTFAMILY
+      this.FIELD_TEXT_FONTFAMILY,
     );
 
     this.FIELD_TEXT_HEIGHT = fontMetrics.height;
@@ -633,7 +633,7 @@ export class ConstantProvider {
     }
     // Validate required properties.
     const parsedColour = parsing.parseBlockColour(
-      valid['colourPrimary'] || '#000'
+      valid['colourPrimary'] || '#000',
     );
     valid.colourPrimary = parsedColour.hex;
     valid.colourSecondary = valid['colourSecondary']
@@ -820,14 +820,14 @@ export class ConstantProvider {
       'a',
       '0 0,0',
       radius,
-      svgPaths.point(-radius, radius)
+      svgPaths.point(-radius, radius),
     );
 
     const innerBottomLeftCorner = svgPaths.arc(
       'a',
       '0 0,0',
       radius,
-      svgPaths.point(radius, radius)
+      svgPaths.point(radius, radius),
     );
 
     return {
@@ -854,7 +854,7 @@ export class ConstantProvider {
       'a',
       '0 0,1',
       radius,
-      svgPaths.point(radius, radius)
+      svgPaths.point(radius, radius),
     );
 
     /** SVG path for drawing the rounded bottom-left corner. */
@@ -862,7 +862,7 @@ export class ConstantProvider {
       'a',
       '0 0,1',
       radius,
-      svgPaths.point(-radius, -radius)
+      svgPaths.point(-radius, -radius),
     );
 
     /** SVG path for drawing the rounded bottom-right corner. */
@@ -870,7 +870,7 @@ export class ConstantProvider {
       'a',
       '0 0,1',
       radius,
-      svgPaths.point(-radius, radius)
+      svgPaths.point(-radius, radius),
     );
 
     return {
@@ -935,12 +935,12 @@ export class ConstantProvider {
     const embossFilter = dom.createSvgElement(
       Svg.FILTER,
       {'id': 'blocklyEmbossFilter' + this.randomIdentifier},
-      this.defs
+      this.defs,
     );
     dom.createSvgElement(
       Svg.FEGAUSSIANBLUR,
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'},
-      embossFilter
+      embossFilter,
     );
     const feSpecularLighting = dom.createSvgElement(
       Svg.FESPECULARLIGHTING,
@@ -952,12 +952,12 @@ export class ConstantProvider {
         'lighting-color': 'white',
         'result': 'specOut',
       },
-      embossFilter
+      embossFilter,
     );
     dom.createSvgElement(
       Svg.FEPOINTLIGHT,
       {'x': -5000, 'y': -10000, 'z': 20000},
-      feSpecularLighting
+      feSpecularLighting,
     );
     dom.createSvgElement(
       Svg.FECOMPOSITE,
@@ -967,7 +967,7 @@ export class ConstantProvider {
         'operator': 'in',
         'result': 'specOut',
       },
-      embossFilter
+      embossFilter,
     );
     dom.createSvgElement(
       Svg.FECOMPOSITE,
@@ -980,7 +980,7 @@ export class ConstantProvider {
         'k3': 1,
         'k4': 0,
       },
-      embossFilter
+      embossFilter,
     );
     this.embossFilterId = embossFilter.id;
     this.embossFilter = embossFilter;
@@ -1000,17 +1000,17 @@ export class ConstantProvider {
         'width': 10,
         'height': 10,
       },
-      this.defs
+      this.defs,
     );
     dom.createSvgElement(
       Svg.RECT,
       {'width': 10, 'height': 10, 'fill': '#aaa'},
-      disabledPattern
+      disabledPattern,
     );
     dom.createSvgElement(
       Svg.PATH,
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'},
-      disabledPattern
+      disabledPattern,
     );
     this.disabledPatternId = disabledPattern.id;
     this.disabledPattern = disabledPattern;
@@ -1034,18 +1034,18 @@ export class ConstantProvider {
           'y': '-30%',
           'x': '-40%',
         },
-        this.defs
+        this.defs,
       );
       // Set all gaussian blur pixels to 1 opacity before applying flood
       const debugComponentTransfer = dom.createSvgElement(
         Svg.FECOMPONENTTRANSFER,
         {'result': 'outBlur'},
-        debugFilter
+        debugFilter,
       );
       dom.createSvgElement(
         Svg.FEFUNCA,
         {'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'},
-        debugComponentTransfer
+        debugComponentTransfer,
       );
       // Color the highlight
       dom.createSvgElement(
@@ -1055,7 +1055,7 @@ export class ConstantProvider {
           'flood-opacity': 0.5,
           'result': 'outColor',
         },
-        debugFilter
+        debugFilter,
       );
       dom.createSvgElement(
         Svg.FECOMPOSITE,
@@ -1065,7 +1065,7 @@ export class ConstantProvider {
           'operator': 'in',
           'result': 'outGlow',
         },
-        debugFilter
+        debugFilter,
       );
       this.debugFilterId = debugFilter.id;
       this.debugFilter = debugFilter;

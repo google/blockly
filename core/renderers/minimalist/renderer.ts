@@ -35,7 +35,7 @@ export class Renderer extends BaseRenderer {
       'Blockly.minimalist.Renderer',
       'v10',
       'v11',
-      'Blockly.blockRendering.Renderer'
+      'Blockly.blockRendering.Renderer',
     );
   }
 
@@ -68,7 +68,7 @@ export class Renderer extends BaseRenderer {
    */
   protected override makeDrawer_(
     block: BlockSvg,
-    info: BaseRenderInfo
+    info: BaseRenderInfo,
   ): Drawer {
     return new Drawer(block, info as RenderInfo);
   }

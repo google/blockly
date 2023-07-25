@@ -23,7 +23,7 @@
 if (!window.bootstrapInfo) {
   throw new Error(
     'window.bootstrapInfo not found.  ' +
-      'Make sure to load bootstrap.js before importing bootstrap_done.mjs.'
+      'Make sure to load bootstrap.js before importing bootstrap_done.mjs.',
   );
 }
 

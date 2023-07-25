@@ -33,7 +33,7 @@ function assertCallBlockArgsStructure(callBlock, args) {
   chai.assert.equal(
     callBlock.inputList.length - 1,
     args.length,
-    'call block has the expected number of args'
+    'call block has the expected number of args',
   );
 
   for (let i = 0; i < args.length; i++) {
@@ -44,7 +44,7 @@ function assertCallBlockArgsStructure(callBlock, args) {
     chai.assert.equal(
       callInput.fieldRow[0].getValue(),
       expectedName,
-      'Call block consts did not match expected.'
+      'Call block consts did not match expected.',
     );
   }
   chai.assert.sameOrderedMembers(callBlock.getVars(), args);
@@ -66,41 +66,41 @@ export function assertDefBlockStructure(
   hasReturn = false,
   args = [],
   varIds = [],
-  hasStatements = true
+  hasStatements = true,
 ) {
   if (hasStatements) {
     chai.assert.isNotNull(
       defBlock.getInput('STACK'),
-      'Def block should have STACK input'
+      'Def block should have STACK input',
     );
   } else {
     chai.assert.isNull(
       defBlock.getInput('STACK'),
-      'Def block should not have STACK input'
+      'Def block should not have STACK input',
     );
   }
   if (hasReturn) {
     chai.assert.isNotNull(
       defBlock.getInput('RETURN'),
-      'Def block should have RETURN input'
+      'Def block should have RETURN input',
     );
   } else {
     chai.assert.isNull(
       defBlock.getInput('RETURN'),
-      'Def block should not have RETURN input'
+      'Def block should not have RETURN input',
     );
   }
   if (args.length) {
     chai.assert.include(
       defBlock.toString(),
       'with',
-      'Def block string should include "with"'
+      'Def block string should include "with"',
     );
   } else {
     chai.assert.notInclude(
       defBlock.toString(),
       'with',
-      'Def block string should not include "with"'
+      'Def block string should not include "with"',
     );
   }
 
@@ -120,7 +120,7 @@ export function assertCallBlockStructure(
   callBlock,
   args = [],
   varIds = [],
-  name = undefined
+  name = undefined,
 ) {
   if (args.length) {
     chai.assert.include(callBlock.toString(), 'with');
@@ -148,7 +148,7 @@ export function createProcDefBlock(
   workspace,
   hasReturn = false,
   args = [],
-  name = 'proc name'
+  name = 'proc name',
 ) {
   const type = hasReturn ? 'procedures_defreturn' : 'procedures_defnoreturn';
   let xml = `<block type="${type}">`;
@@ -170,14 +170,14 @@ export function createProcDefBlock(
 export function createProcCallBlock(
   workspace,
   hasReturn = false,
-  name = 'proc name'
+  name = 'proc name',
 ) {
   const type = hasReturn ? 'procedures_callreturn' : 'procedures_callnoreturn';
   return Blockly.Xml.domToBlock(
     Blockly.utils.xml.textToDom(
-      `<block type="${type}">` + `  <mutation name="${name}"/>` + `</block>`
+      `<block type="${type}">` + `  <mutation name="${name}"/>` + `</block>`,
     ),
-    workspace
+    workspace,
   );
 }
 

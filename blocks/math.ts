@@ -427,7 +427,7 @@ const TOOLTIPS_BY_OP = {
 
 Extensions.register(
   'math_op_tooltip',
-  Extensions.buildTooltipForDropdown('OP', TOOLTIPS_BY_OP)
+  Extensions.buildTooltipForDropdown('OP', TOOLTIPS_BY_OP),
 );
 
 /** Type of a block that has IS_DIVISBLEBY_MUTATOR_MIXIN */
@@ -502,20 +502,20 @@ const IS_DIVISIBLE_MUTATOR_EXTENSION = function (this: DivisiblebyBlock) {
       const divisorInput = option === 'DIVISIBLE_BY';
       (this.getSourceBlock() as DivisiblebyBlock).updateShape_(divisorInput);
       return undefined; // FieldValidators can't be void.  Use option as-is.
-    }
+    },
   );
 };
 
 Extensions.registerMutator(
   'math_is_divisibleby_mutator',
   IS_DIVISIBLEBY_MUTATOR_MIXIN,
-  IS_DIVISIBLE_MUTATOR_EXTENSION
+  IS_DIVISIBLE_MUTATOR_EXTENSION,
 );
 
 // Update the tooltip of 'math_change' block to reference the variable.
 Extensions.register(
   'math_change_tooltip',
-  Extensions.buildTooltipWithFieldText('%{BKY_MATH_CHANGE_TOOLTIP}', 'VAR')
+  Extensions.buildTooltipWithFieldText('%{BKY_MATH_CHANGE_TOOLTIP}', 'VAR'),
 );
 
 /** Type of a block that has LIST_MODES_MUTATOR_MIXIN */
@@ -578,14 +578,14 @@ const LIST_MODES_MUTATOR_EXTENSION = function (this: ListModesBlock) {
     function (this: ListModesBlock, newOp: string) {
       this.updateType_(newOp);
       return undefined;
-    }.bind(this)
+    }.bind(this),
   );
 };
 
 Extensions.registerMutator(
   'math_modes_of_list_mutator',
   LIST_MODES_MUTATOR_MIXIN,
-  LIST_MODES_MUTATOR_EXTENSION
+  LIST_MODES_MUTATOR_EXTENSION,
 );
 
 // Register provided blocks.

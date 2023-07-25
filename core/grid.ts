@@ -33,7 +33,10 @@ export class Grid {
    *     See grid documentation:
    *     https://developers.google.com/blockly/guides/configure/web/grid
    */
-  constructor(private pattern: SVGElement, options: GridOptions) {
+  constructor(
+    private pattern: SVGElement,
+    options: GridOptions,
+  ) {
     /** The spacing of the grid lines (in px). */
     this.spacing = options['spacing'] ?? 0;
 
@@ -122,7 +125,7 @@ export class Grid {
     x1: number,
     x2: number,
     y1: number,
-    y2: number
+    y2: number,
   ) {
     if (line) {
       line.setAttribute('stroke-width', `${width}`);
@@ -158,7 +161,7 @@ export class Grid {
   static createDom(
     rnd: string,
     gridOptions: GridOptions,
-    defs: SVGElement
+    defs: SVGElement,
   ): SVGElement {
     /*
           <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse">
@@ -169,20 +172,20 @@ export class Grid {
     const gridPattern = dom.createSvgElement(
       Svg.PATTERN,
       {'id': 'blocklyGridPattern' + rnd, 'patternUnits': 'userSpaceOnUse'},
-      defs
+      defs,
     );
     // x1, y1, x1, x2 properties will be set later in update.
     if ((gridOptions['length'] ?? 1) > 0 && (gridOptions['spacing'] ?? 0) > 0) {
       dom.createSvgElement(
         Svg.LINE,
         {'stroke': gridOptions['colour']},
-        gridPattern
+        gridPattern,
       );
       if (gridOptions['length'] ?? 1 > 1) {
         dom.createSvgElement(
           Svg.LINE,
           {'stroke': gridOptions['colour']},
-          gridPattern
+          gridPattern,
         );
       }
     } else {

@@ -34,7 +34,7 @@ suite('This tests loading Large Configuration and Deletion', function (done) {
   test('This test deleting block results in the correct number of blocks', async function () {
     const fourthRepeatDo = await getBlockElementById(
       browser,
-      'E8bF[-r:B~cabGLP#QYd'
+      'E8bF[-r:B~cabGLP#QYd',
     );
     await fourthRepeatDo.click({x: -100, y: -40});
     await browser.keys([Key.Delete]);

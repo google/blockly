@@ -343,7 +343,7 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
           if (lastEvent.reason) {
             // Concatenate reasons without duplicates.
             const reasonSet = new Set(
-              moveEvent.reason.concat(lastEvent.reason)
+              moveEvent.reason.concat(lastEvent.reason),
             );
             lastEvent.reason = Array.from(reasonSet);
           } else {
@@ -489,7 +489,7 @@ export function getDescendantIds(block: Block): string[] {
  */
 export function fromJson(
   json: AnyDuringMigration,
-  workspace: Workspace
+  workspace: Workspace,
 ): Abstract {
   const eventClass = get(json['type']);
   if (!eventClass) throw Error('Unknown event type.');
@@ -504,7 +504,7 @@ export function fromJson(
  * @returns The event class with the given type.
  */
 export function get(
-  eventType: string
+  eventType: string,
 ): new (...p1: AnyDuringMigration[]) => Abstract {
   const event = registry.getClass(registry.Type.EVENT, eventType);
   if (!event) {
@@ -528,7 +528,7 @@ export function disableOrphans(event: Abstract) {
       return;
     }
     const eventWorkspace = common.getWorkspaceById(
-      blockEvent.workspaceId
+      blockEvent.workspaceId,
     ) as WorkspaceSvg;
     if (!blockEvent.blockId) {
       throw new Error('Encountered a blockEvent without a proper blockId');

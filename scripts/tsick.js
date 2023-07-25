@@ -62,7 +62,7 @@ function rewriteEnum(code) {
   // })(names || (names = {}));
   const enumDefs =
     code.match(
-      /\s+\(function \((\w+)\) \{\n[^}]*\}\)\(\1 [^)]+\1 = \{\}\)\);/g
+      /\s+\(function \((\w+)\) \{\n[^}]*\}\)\(\1 [^)]+\1 = \{\}\)\);/g,
     ) || [];
   for (const oldEnumDef of enumDefs) {
     // enumDef looks like a bunch of lines in one of these two formats:

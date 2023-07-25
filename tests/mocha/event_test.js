@@ -87,7 +87,7 @@ suite('Events', function () {
           'recordUndo': false,
           'group': '',
         },
-        true
+        true,
       );
     });
 
@@ -95,7 +95,7 @@ suite('Events', function () {
       const event = new Blockly.Events.Click(
         null,
         this.workspace.id,
-        'workspace'
+        'workspace',
       );
       assertEventEquals(
         event,
@@ -107,7 +107,7 @@ suite('Events', function () {
           'recordUndo': false,
           'group': '',
         },
-        true
+        true,
       );
     });
 
@@ -143,7 +143,7 @@ suite('Events', function () {
           {
             'recordUndo': true,
             'group': '',
-          }
+          },
         );
       });
 
@@ -158,7 +158,7 @@ suite('Events', function () {
           {
             'recordUndo': true,
             'group': '',
-          }
+          },
         );
       });
 
@@ -176,7 +176,7 @@ suite('Events', function () {
             'recordUndo': false,
             'group': TEST_GROUP_ID,
           },
-          true
+          true,
         );
       });
 
@@ -198,7 +198,7 @@ suite('Events', function () {
               'oldCoordinate': coordinate,
               'recordUndo': true,
               'group': '',
-            }
+            },
           );
         });
 
@@ -220,7 +220,7 @@ suite('Events', function () {
                 'oldCoordinate': undefined,
                 'recordUndo': true,
                 'group': '',
-              }
+              },
             );
           } finally {
             // This needs to be cleared, otherwise workspace.dispose will fail.
@@ -259,7 +259,7 @@ suite('Events', function () {
           'field',
           'FIELD_NAME',
           'old',
-          'new'
+          'new',
         );
         sinon.assert.calledOnce(this.genUidStub);
         assertEventEquals(
@@ -275,7 +275,7 @@ suite('Events', function () {
             'newValue': 'new',
             'recordUndo': true,
             'group': '',
-          }
+          },
         );
       });
 
@@ -290,7 +290,7 @@ suite('Events', function () {
           {
             'recordUndo': false,
             'group': '',
-          }
+          },
         );
       });
 
@@ -305,7 +305,7 @@ suite('Events', function () {
           {
             'recordUndo': false,
             'group': '',
-          }
+          },
         );
       });
 
@@ -327,7 +327,7 @@ suite('Events', function () {
               'oldCoordinate': undefined,
               'recordUndo': false,
               'group': '',
-            }
+            },
           );
         } finally {
           // This needs to be cleared, otherwise workspace.dispose will fail.
@@ -347,7 +347,7 @@ suite('Events', function () {
         // at workspace dispose.
         this.block = new Blockly.Block(
           this.workspace,
-          'field_variable_test_block'
+          'field_variable_test_block',
         );
       });
 
@@ -357,7 +357,7 @@ suite('Events', function () {
           'field',
           'VAR',
           'id1',
-          'id2'
+          'id2',
         );
         assertEventEquals(
           event,
@@ -371,7 +371,7 @@ suite('Events', function () {
             'newValue': 'id2',
             'recordUndo': true,
             'group': '',
-          }
+          },
         );
       });
     });
@@ -528,7 +528,7 @@ suite('Events', function () {
           null,
           ASTNode.createWorkspaceNode(
             thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0)
+            new Blockly.utils.Coordinate(0, 0),
           ),
         ],
         getExpectedJson: (thisObj) => ({
@@ -539,7 +539,7 @@ suite('Events', function () {
           oldNode: undefined,
           newNode: ASTNode.createWorkspaceNode(
             thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0)
+            new Blockly.utils.Coordinate(0, 0),
           ),
         }),
       },
@@ -551,7 +551,7 @@ suite('Events', function () {
           true,
           ASTNode.createWorkspaceNode(
             thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0)
+            new Blockly.utils.Coordinate(0, 0),
           ),
           new ASTNode(ASTNode.types.BLOCK, thisObj.block),
         ],
@@ -562,7 +562,7 @@ suite('Events', function () {
           blockId: thisObj.block.id,
           oldNode: ASTNode.createWorkspaceNode(
             thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0)
+            new Blockly.utils.Coordinate(0, 0),
           ),
           newNode: new ASTNode(ASTNode.types.BLOCK, thisObj.block),
         }),
@@ -576,7 +576,7 @@ suite('Events', function () {
           new ASTNode(ASTNode.types.BLOCK, thisObj.block),
           ASTNode.createWorkspaceNode(
             thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0)
+            new Blockly.utils.Coordinate(0, 0),
           ),
         ],
       },
@@ -850,7 +850,7 @@ suite('Events', function () {
           thisObj.variable = thisObj.workspace.createVariable(
             'name1',
             'type1',
-            'id1'
+            'id1',
           );
         },
       },
@@ -880,7 +880,7 @@ suite('Events', function () {
             'comment text',
             0,
             0,
-            'comment id'
+            'comment id',
           );
         },
       },
@@ -899,7 +899,7 @@ suite('Events', function () {
 
               chai.assert.equal(
                 safeStringify(event2.toJson()),
-                safeStringify(json)
+                safeStringify(json),
               );
             });
           });
@@ -914,7 +914,7 @@ suite('Events', function () {
 
                 chai.assert.equal(
                   safeStringify(json),
-                  safeStringify(expectedJson)
+                  safeStringify(expectedJson),
                 );
               });
             }
@@ -968,7 +968,7 @@ suite('Events', function () {
             'varName': 'name1',
             'recordUndo': true,
             'group': '',
-          }
+          },
         );
       });
 
@@ -985,7 +985,7 @@ suite('Events', function () {
             'varName': 'name1',
             'recordUndo': true,
             'group': '',
-          }
+          },
         );
       });
 
@@ -1002,7 +1002,7 @@ suite('Events', function () {
             'newName': 'name2',
             'recordUndo': true,
             'group': '',
-          }
+          },
         );
       });
     });
@@ -1090,11 +1090,11 @@ suite('Events', function () {
       chai.assert.equal(filteredEvents.length, 4); // no event should have been removed.
       // test that the order hasn't changed
       chai.assert.isTrue(
-        filteredEvents[0] instanceof Blockly.Events.BlockCreate
+        filteredEvents[0] instanceof Blockly.Events.BlockCreate,
       );
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
       chai.assert.isTrue(
-        filteredEvents[2] instanceof Blockly.Events.BlockChange
+        filteredEvents[2] instanceof Blockly.Events.BlockChange,
       );
       chai.assert.isTrue(filteredEvents[3] instanceof Blockly.Events.Click);
     });
@@ -1122,7 +1122,7 @@ suite('Events', function () {
       chai.assert.equal(filteredEvents.length, 2); // duplicate moves should have been removed.
       // test that the order hasn't changed
       chai.assert.isTrue(
-        filteredEvents[0] instanceof Blockly.Events.BlockCreate
+        filteredEvents[0] instanceof Blockly.Events.BlockCreate,
       );
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
       chai.assert.equal(filteredEvents[1].newCoordinate.x, 3);
@@ -1139,7 +1139,7 @@ suite('Events', function () {
       chai.assert.equal(filteredEvents.length, 2); // duplicate event should have been removed.
       // test that the order hasn't changed
       chai.assert.isTrue(
-        filteredEvents[0] instanceof Blockly.Events.BlockCreate
+        filteredEvents[0] instanceof Blockly.Events.BlockCreate,
       );
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
       chai.assert.equal(filteredEvents[1].newCoordinate.x, 1);
@@ -1166,7 +1166,7 @@ suite('Events', function () {
           'field',
           'VAR',
           'item1',
-          'item2'
+          'item2',
         ),
       ];
       const filteredEvents = eventUtils.filter(events, true);
@@ -1204,13 +1204,13 @@ suite('Events', function () {
       // click event merged into corresponding *Open event
       chai.assert.equal(filteredEvents.length, 3);
       chai.assert.isTrue(
-        filteredEvents[0] instanceof Blockly.Events.BubbleOpen
+        filteredEvents[0] instanceof Blockly.Events.BubbleOpen,
       );
       chai.assert.isTrue(
-        filteredEvents[1] instanceof Blockly.Events.BubbleOpen
+        filteredEvents[1] instanceof Blockly.Events.BubbleOpen,
       );
       chai.assert.isTrue(
-        filteredEvents[2] instanceof Blockly.Events.BubbleOpen
+        filteredEvents[2] instanceof Blockly.Events.BubbleOpen,
       );
       chai.assert.equal(filteredEvents[0].bubbleType, 'comment');
       chai.assert.equal(filteredEvents[1].bubbleType, 'mutator');
@@ -1273,7 +1273,7 @@ suite('Events', function () {
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockMove);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
       chai.assert.isTrue(
-        filteredEvents[2] instanceof Blockly.Events.BlockDelete
+        filteredEvents[2] instanceof Blockly.Events.BlockDelete,
       );
       chai.assert.isTrue(filteredEvents[3] instanceof Blockly.Events.BlockMove);
     });
@@ -1321,7 +1321,7 @@ suite('Events', function () {
           Blockly.Events.BlockDelete,
           {oldXml: expectedOldXml, group: ''},
           workspaceSvg.id,
-          expectedId
+          expectedId,
         );
 
         // Expect the workspace to not have a variable with ID 'test_block_id'.
@@ -1358,7 +1358,7 @@ suite('Events', function () {
       chai.assert.equal(
         this.workspace.undoStack_.length,
         2,
-        'Undo stack length'
+        'Undo stack length',
       );
 
       assertNthCallEventArgEquals(
@@ -1367,7 +1367,7 @@ suite('Events', function () {
         Blockly.Events.VarCreate,
         {group: TEST_GROUP_ID, varId: TEST_VAR_ID, varName: TEST_VAR_NAME},
         this.workspace.id,
-        undefined
+        undefined,
       );
       assertNthCallEventArgEquals(
         this.changeListenerSpy,
@@ -1375,7 +1375,7 @@ suite('Events', function () {
         Blockly.Events.BlockCreate,
         {group: TEST_GROUP_ID},
         this.workspace.id,
-        TEST_BLOCK_ID
+        TEST_BLOCK_ID,
       );
 
       // Expect the workspace to have a variable with ID 'test_var_id'.
@@ -1390,7 +1390,7 @@ suite('Events', function () {
           '  <block type="field_variable_test_block" id="test_block_id">' +
           '    <field name="VAR" id="test_var_id">name1</field>' +
           '  </block>' +
-          '</xml>'
+          '</xml>',
       );
       Blockly.Xml.domToWorkspace(dom, this.workspace);
       const TEST_BLOCK_ID = 'test_block_id';
@@ -1416,7 +1416,7 @@ suite('Events', function () {
       chai.assert.equal(
         this.workspace.undoStack_.length,
         2,
-        'Undo stack length'
+        'Undo stack length',
       );
 
       assertNthCallEventArgEquals(
@@ -1425,7 +1425,7 @@ suite('Events', function () {
         Blockly.Events.VarCreate,
         {group: TEST_GROUP_ID, varId: TEST_VAR_ID, varName: TEST_VAR_NAME},
         this.workspace.id,
-        undefined
+        undefined,
       );
       assertNthCallEventArgEquals(
         this.changeListenerSpy,
@@ -1433,7 +1433,7 @@ suite('Events', function () {
         Blockly.Events.BlockCreate,
         {group: TEST_GROUP_ID},
         this.workspace.id,
-        TEST_BLOCK_ID
+        TEST_BLOCK_ID,
       );
 
       // Finished loading event should not be part of event group.
@@ -1443,7 +1443,7 @@ suite('Events', function () {
         Blockly.Events.FinishedLoading,
         {group: ''},
         this.workspace.id,
-        undefined
+        undefined,
       );
 
       // Expect the workspace to have a variable with ID 'test_var_id'.
@@ -1470,7 +1470,7 @@ suite('Events', function () {
 
       chai.assert.isFalse(
         block.isEnabled(),
-        'Expected orphan block to be disabled after creation'
+        'Expected orphan block to be disabled after creation',
       );
     });
     test('Created procedure block is enabled', function () {
@@ -1486,7 +1486,7 @@ suite('Events', function () {
 
       chai.assert.isTrue(
         functionBlock.isEnabled(),
-        'Expected top-level procedure block to be enabled'
+        'Expected top-level procedure block to be enabled',
       );
     });
     test('Moving a block to top-level disables it', function () {
@@ -1510,7 +1510,7 @@ suite('Events', function () {
 
       chai.assert.isFalse(
         block.isEnabled(),
-        'Expected disconnected block to be disabled'
+        'Expected disconnected block to be disabled',
       );
     });
     test('Giving block a parent enables it', function () {
@@ -1531,7 +1531,7 @@ suite('Events', function () {
 
       chai.assert.isTrue(
         block.isEnabled(),
-        'Expected block to be enabled after connecting to parent'
+        'Expected block to be enabled after connecting to parent',
       );
     });
     test('disableOrphans events are not undoable', function () {
@@ -1558,7 +1558,7 @@ suite('Events', function () {
       });
       chai.assert.isEmpty(
         disabledEvents,
-        'Undo stack should not contain any disabled events'
+        'Undo stack should not contain any disabled events',
       );
     });
   });

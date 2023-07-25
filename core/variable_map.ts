@@ -82,7 +82,7 @@ export class VariableMap {
           variable,
           newName,
           conflictVar,
-          blocks
+          blocks,
         );
       }
     } finally {
@@ -117,10 +117,10 @@ export class VariableMap {
   private renameVariableAndUses_(
     variable: VariableModel,
     newName: string,
-    blocks: Block[]
+    blocks: Block[],
   ) {
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName)
+      new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName),
     );
     variable.name = newName;
     for (let i = 0; i < blocks.length; i++) {
@@ -143,7 +143,7 @@ export class VariableMap {
     variable: VariableModel,
     newName: string,
     conflictVar: VariableModel,
-    blocks: Block[]
+    blocks: Block[],
   ) {
     const type = variable.type;
     const oldCase = conflictVar.name;
@@ -179,7 +179,7 @@ export class VariableMap {
   createVariable(
     name: string,
     opt_type?: string | null,
-    opt_id?: string | null
+    opt_id?: string | null,
   ): VariableModel {
     let variable = this.getVariable(name, opt_type);
     if (variable) {
@@ -192,7 +192,7 @@ export class VariableMap {
             '" which conflicts with the passed in ' +
             'id, "' +
             opt_id +
-            '".'
+            '".',
         );
       }
       // The variable already exists and has the same ID.
@@ -234,7 +234,7 @@ export class VariableMap {
         if (tempVar.getId() === variableId) {
           variableList.splice(i, 1);
           eventUtils.fire(
-            new (eventUtils.get(eventUtils.VAR_DELETE))(variable)
+            new (eventUtils.get(eventUtils.VAR_DELETE))(variable),
           );
           if (variableList.length === 0) {
             this.variableMap.delete(variable.type);

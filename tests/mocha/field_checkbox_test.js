@@ -99,7 +99,7 @@ suite('Checkbox Fields', function () {
     assertFieldValue(
       field,
       testCase.expectedValue,
-      testCase.expectedValue.toLowerCase()
+      testCase.expectedValue.toLowerCase(),
     );
   };
 
@@ -108,7 +108,7 @@ suite('Checkbox Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   runFromJsonSuiteTests(
@@ -116,7 +116,7 @@ suite('Checkbox Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   suite('setValue', function () {
@@ -128,7 +128,7 @@ suite('Checkbox Fields', function () {
         validValueTestCases,
         invalidValueTestCases,
         'TRUE',
-        'true'
+        'true',
       );
     });
     suite('False -> New Value', function () {
@@ -139,7 +139,7 @@ suite('Checkbox Fields', function () {
         validValueTestCases,
         invalidValueTestCases,
         'FALSE',
-        'false'
+        'false',
       );
     });
   });
@@ -189,7 +189,7 @@ suite('Checkbox Fields', function () {
           assertFieldValue(
             this.field,
             suiteInfo.expectedValue,
-            String(suiteInfo.expectedValue).toLowerCase()
+            String(suiteInfo.expectedValue).toLowerCase(),
           );
         });
       });
@@ -201,7 +201,7 @@ suite('Checkbox Fields', function () {
         field.fieldGroup_ = Blockly.utils.dom.createSvgElement(
           Blockly.utils.Svg.G,
           {},
-          null
+          null,
         );
         field.sourceBlock_ = {
           RTL: false,
@@ -268,7 +268,7 @@ suite('Checkbox Fields', function () {
         field.setCheckCharacter(null);
         chai.assert(
           field.textContent_.nodeValue,
-          Blockly.FieldCheckbox.CHECK_CHAR
+          Blockly.FieldCheckbox.CHECK_CHAR,
         );
       });
     });

@@ -34,7 +34,7 @@ export class Drawer extends BaseDrawer {
       'Blockly.minimalist.Drawer',
       'v10',
       'v11',
-      'Blockly.blockRendering.Drawer'
+      'Blockly.blockRendering.Drawer',
     );
   }
 }

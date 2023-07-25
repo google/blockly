@@ -11,7 +11,7 @@ let domParser: DOMParser = {
   parseFromString: function () {
     throw new Error(
       'DOMParser was not found in the global scope and was not properly ' +
-        'injected using injectDependencies'
+        'injected using injectDependencies',
     );
   },
 };
@@ -20,7 +20,7 @@ let xmlSerializer: XMLSerializer = {
   serializeToString: function () {
     throw new Error(
       'XMLSerializer was not foundin the global scope and was not properly ' +
-        'injected using injectDependencies'
+        'injected using injectDependencies',
     );
   },
 };
@@ -161,6 +161,6 @@ export function domToText(dom: Node): string {
 function sanitizeText(text: string) {
   return text.replace(
     INVALID_CONTROL_CHARS,
-    (match) => `&#${match.charCodeAt(0)};`
+    (match) => `&#${match.charCodeAt(0)};`,
   );
 }

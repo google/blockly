@@ -52,7 +52,7 @@ export class MarkerManager {
       this.unregisterMarker(id);
     }
     marker.setDrawer(
-      this.workspace.getRenderer().makeMarkerDrawer(this.workspace, marker)
+      this.workspace.getRenderer().makeMarkerDrawer(this.workspace, marker),
     );
     this.setMarkerSvg(marker.getDrawer().createDom());
     this.markers.set(id, marker);
@@ -73,7 +73,7 @@ export class MarkerManager {
         'Marker with ID ' +
           id +
           ' does not exist. ' +
-          'Can only unregister markers that exist.'
+          'Can only unregister markers that exist.',
       );
     }
   }

@@ -49,7 +49,7 @@ export class MiniWorkspaceBubble extends Bubble {
     workspaceOptions: BlocklyOptions,
     protected readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
-    protected ownerRect?: Rect
+    protected ownerRect?: Rect,
   ) {
     super(workspace, anchor, ownerRect);
     const options = new Options(workspaceOptions);
@@ -61,7 +61,7 @@ export class MiniWorkspaceBubble extends Bubble {
         'x': Bubble.BORDER_WIDTH,
         'y': Bubble.BORDER_WIDTH,
       },
-      this.contentContainer
+      this.contentContainer,
     );
     workspaceOptions.parentWorkspace = this.workspace;
     this.miniWorkspace = this.newWorkspaceSvg(new Options(workspaceOptions));
@@ -70,7 +70,7 @@ export class MiniWorkspaceBubble extends Bubble {
     if (options.languageTree) {
       background.insertBefore(
         this.miniWorkspace.addFlyout(Svg.G),
-        this.miniWorkspace.getCanvas()
+        this.miniWorkspace.getCanvas(),
       );
       const flyout = this.miniWorkspace.getFlyout();
       flyout?.init(this.miniWorkspace);
@@ -107,7 +107,7 @@ export class MiniWorkspaceBubble extends Bubble {
   private validateWorkspaceOptions(options: Options) {
     if (options.hasCategories) {
       throw new Error(
-        'The miniworkspace bubble does not support toolboxes with categories'
+        'The miniworkspace bubble does not support toolboxes with categories',
       );
     }
     if (options.hasTrashcan) {
@@ -126,12 +126,12 @@ export class MiniWorkspaceBubble extends Bubble {
       options.moveOptions.drag
     ) {
       throw new Error(
-        'The miniworkspace bubble does not scrolling/moving the workspace'
+        'The miniworkspace bubble does not scrolling/moving the workspace',
       );
     }
     if (options.horizontalLayout) {
       throw new Error(
-        'The miniworkspace bubble does not support horizontal layouts'
+        'The miniworkspace bubble does not support horizontal layouts',
       );
     }
   }
@@ -206,9 +206,9 @@ export class MiniWorkspaceBubble extends Bubble {
     this.setSize(
       new Size(
         newSize.width + Bubble.DOUBLE_BORDER,
-        newSize.height + Bubble.DOUBLE_BORDER
+        newSize.height + Bubble.DOUBLE_BORDER,
       ),
-      this.autoLayout
+      this.autoLayout,
     );
     this.miniWorkspace.resize();
     this.miniWorkspace.recordDragTargets();
@@ -276,7 +276,7 @@ export class MiniWorkspaceBubble extends Bubble {
   newWorkspaceSvg(options: Options): WorkspaceSvg {
     throw new Error(
       'The implementation of newWorkspaceSvg should be ' +
-        'monkey-patched in by blockly.ts'
+        'monkey-patched in by blockly.ts',
     );
   }
 }

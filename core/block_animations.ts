@@ -68,7 +68,7 @@ function disposeUiStep(
   rect: CloneRect,
   rtl: boolean,
   start: Date,
-  workspaceScale: number
+  workspaceScale: number,
 ) {
   const ms = new Date().getTime() - start.getTime();
   const percent = ms / 150;
@@ -81,7 +81,7 @@ function disposeUiStep(
     const scale = (1 - percent) * workspaceScale;
     clone.setAttribute(
       'transform',
-      'translate(' + x + ',' + y + ')' + ' scale(' + scale + ')'
+      'translate(' + x + ',' + y + ')' + ' scale(' + scale + ')',
     );
     setTimeout(disposeUiStep, 10, clone, rect, rtl, start, workspaceScale);
   }
@@ -120,7 +120,7 @@ export function connectionUiEffect(block: BlockSvg) {
       'stroke': '#888',
       'stroke-width': 10,
     },
-    workspace.getParentSvg()
+    workspace.getParentSvg(),
   );
   // Start the animation.
   connectionUiStep(ripple, new Date(), scale);
@@ -187,7 +187,7 @@ function disconnectUiStep(block: BlockSvg, magnitude: number, start: Date) {
   let skew = '';
   if (percent <= 1) {
     const val = Math.round(
-      Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude
+      Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude,
     );
     skew = `skewX(${val})`;
     disconnectPid = setTimeout(disconnectUiStep, 10, block, magnitude, start);

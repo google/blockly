@@ -32,7 +32,7 @@ suite('Workspace comment', function () {
         'comment text',
         0,
         0,
-        'comment id'
+        'comment id',
       );
       chai.assert.equal(this.workspace.getTopComments(true).length, 1);
       chai.assert.equal(this.workspace.commentDB.get('comment id'), comment);
@@ -49,7 +49,7 @@ suite('Workspace comment', function () {
         'comment text',
         0,
         0,
-        'comment id'
+        'comment id',
       );
       this.workspace.clear();
       chai.assert.equal(this.workspace.getTopComments(true).length, 0);
@@ -62,7 +62,7 @@ suite('Workspace comment', function () {
         'comment text',
         0,
         0,
-        'comment id'
+        'comment id',
       );
       comment.dispose();
       chai.assert.equal(this.workspace.getTopComments(true).length, 0);
@@ -81,7 +81,7 @@ suite('Workspace comment', function () {
         'comment text',
         0,
         0,
-        'comment id'
+        'comment id',
       );
       chai.assert.equal(this.workspace.getTopComments(false).length, 1);
       chai.assert.equal(this.workspace.commentDB.get('comment id'), comment);
@@ -98,7 +98,7 @@ suite('Workspace comment', function () {
         'comment text',
         0,
         0,
-        'comment id'
+        'comment id',
       );
       this.workspace.clear();
       chai.assert.equal(this.workspace.getTopComments(false).length, 0);
@@ -111,7 +111,7 @@ suite('Workspace comment', function () {
         'comment text',
         0,
         0,
-        'comment id'
+        'comment id',
       );
       comment.dispose();
       chai.assert.equal(this.workspace.getTopComments(false).length, 0);
@@ -126,7 +126,7 @@ suite('Workspace comment', function () {
         'comment text',
         0,
         0,
-        'comment id'
+        'comment id',
       );
       chai.assert.equal(this.workspace.getCommentById(comment.id), comment);
     });
@@ -145,7 +145,7 @@ suite('Workspace comment', function () {
         'comment text',
         0,
         0,
-        'comment id'
+        'comment id',
       );
       comment.dispose();
       chai.assert.isNull(this.workspace.getCommentById(comment.id));
@@ -159,7 +159,7 @@ suite('Workspace comment', function () {
         'comment text',
         0,
         0,
-        'comment id'
+        'comment id',
       );
       comment.dispose();
       // Nothing should go wrong the second time dispose is called.
@@ -172,7 +172,7 @@ suite('Workspace comment', function () {
         'comment text',
         0,
         0,
-        'comment id'
+        'comment id',
       );
       comment.dispose();
       // Nothing should go wrong the second time dispose is called.
@@ -187,7 +187,7 @@ suite('Workspace comment', function () {
         'comment text',
         10,
         20,
-        'comment id'
+        'comment id',
       );
     });
 
@@ -216,7 +216,7 @@ suite('Workspace comment', function () {
         'comment text',
         10,
         20,
-        'comment id'
+        'comment id',
       );
     });
 
@@ -241,7 +241,7 @@ suite('Workspace comment', function () {
         'comment text',
         0,
         0,
-        'comment id'
+        'comment id',
       );
     });
 
@@ -254,7 +254,7 @@ suite('Workspace comment', function () {
       chai.assert.equal(
         this.workspace.undoStack_.length,
         1,
-        'Workspace undo stack'
+        'Workspace undo stack',
       );
     });
 
@@ -265,7 +265,7 @@ suite('Workspace comment', function () {
       chai.assert.equal(
         this.workspace.undoStack_.length,
         1,
-        'Workspace undo stack'
+        'Workspace undo stack',
       );
     });
 
@@ -275,7 +275,7 @@ suite('Workspace comment', function () {
       chai.assert.equal(
         this.workspace.undoStack_.length,
         2,
-        'Workspace undo stack'
+        'Workspace undo stack',
       );
     });
   });

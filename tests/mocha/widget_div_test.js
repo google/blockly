@@ -48,13 +48,13 @@ suite('WidgetDiv', function () {
         rtl,
         expectedX,
         expectedY,
-        expectedHeight
+        expectedHeight,
       ) {
         Blockly.WidgetDiv.positionWithAnchor(
           this.viewportBBox,
           anchorBBox,
           this.widgetSize,
-          rtl
+          rtl,
         );
         const style = Blockly.WidgetDiv.getDiv().style;
         chai.assert.equal(style.left, expectedX + 'px', 'Left');
@@ -70,7 +70,7 @@ suite('WidgetDiv', function () {
           500,
           500,
           this.anchorSize.width,
-          this.anchorSize.height
+          this.anchorSize.height,
         );
         // The widget div should be placed just below at the left side of the
         // anchor.
@@ -81,7 +81,7 @@ suite('WidgetDiv', function () {
           false,
           expectedX,
           expectedY,
-          this.widgetSize.height
+          this.widgetSize.height,
         );
       });
 
@@ -91,7 +91,7 @@ suite('WidgetDiv', function () {
           500,
           50,
           this.anchorSize.width,
-          this.anchorSize.height
+          this.anchorSize.height,
         );
         // The widget div should be placed just below the anchor.
         const expectedX = anchorBBox.left;
@@ -101,7 +101,7 @@ suite('WidgetDiv', function () {
           false,
           expectedX,
           expectedY,
-          this.widgetSize.height
+          this.widgetSize.height,
         );
       });
 
@@ -111,7 +111,7 @@ suite('WidgetDiv', function () {
           500,
           900,
           this.anchorSize.width,
-          this.anchorSize.height
+          this.anchorSize.height,
         );
         // The widget div should be placed just above the anchor.
         const expectedX = anchorBBox.left;
@@ -121,7 +121,7 @@ suite('WidgetDiv', function () {
           false,
           expectedX,
           expectedY,
-          this.widgetSize.height
+          this.widgetSize.height,
         );
       });
 
@@ -131,7 +131,7 @@ suite('WidgetDiv', function () {
           50,
           500,
           this.anchorSize.width,
-          this.anchorSize.height
+          this.anchorSize.height,
         );
         // The widget div should be placed at the anchor.
         const expectedX = anchorBBox.left;
@@ -141,7 +141,7 @@ suite('WidgetDiv', function () {
           false,
           expectedX,
           expectedY,
-          this.widgetSize.height
+          this.widgetSize.height,
         );
       });
 
@@ -151,7 +151,7 @@ suite('WidgetDiv', function () {
           950,
           500,
           this.anchorSize.width,
-          this.anchorSize.height
+          this.anchorSize.height,
         );
         // The widget div should be placed as far right as possible--at the edge of
         // the screen.
@@ -162,7 +162,7 @@ suite('WidgetDiv', function () {
           false,
           expectedX,
           expectedY,
-          this.widgetSize.height
+          this.widgetSize.height,
         );
       });
     });
@@ -173,7 +173,7 @@ suite('WidgetDiv', function () {
           500,
           500,
           this.anchorSize.width,
-          this.anchorSize.height
+          this.anchorSize.height,
         );
         // The widget div should be placed at the right side of the anchor.
         const expectedX = anchorBBox.right - this.widgetSize.width;
@@ -183,7 +183,7 @@ suite('WidgetDiv', function () {
           true,
           expectedX,
           expectedY,
-          this.widgetSize.height
+          this.widgetSize.height,
         );
       });
 
@@ -193,7 +193,7 @@ suite('WidgetDiv', function () {
           500,
           50,
           this.anchorSize.width,
-          this.anchorSize.height
+          this.anchorSize.height,
         );
         // The widget div should be placed just below the anchor.
         const expectedX = anchorBBox.right - this.widgetSize.width;
@@ -203,7 +203,7 @@ suite('WidgetDiv', function () {
           true,
           expectedX,
           expectedY,
-          this.widgetSize.height
+          this.widgetSize.height,
         );
       });
 
@@ -213,7 +213,7 @@ suite('WidgetDiv', function () {
           500,
           900,
           this.anchorSize.width,
-          this.anchorSize.height
+          this.anchorSize.height,
         );
         // The widget div should be placed just above the anchor.
         const expectedX = anchorBBox.right - this.widgetSize.width;
@@ -223,7 +223,7 @@ suite('WidgetDiv', function () {
           true,
           expectedX,
           expectedY,
-          this.widgetSize.height
+          this.widgetSize.height,
         );
       });
 
@@ -233,7 +233,7 @@ suite('WidgetDiv', function () {
           10,
           500,
           this.anchorSize.width,
-          this.anchorSize.height
+          this.anchorSize.height,
         );
         // The widget div should be placed as far left as possible--at the edge of
         // the screen.
@@ -244,7 +244,7 @@ suite('WidgetDiv', function () {
           true,
           expectedX,
           expectedY,
-          this.widgetSize.height
+          this.widgetSize.height,
         );
       });
 
@@ -254,7 +254,7 @@ suite('WidgetDiv', function () {
           950,
           500,
           this.anchorSize.width,
-          this.anchorSize.height
+          this.anchorSize.height,
         );
         // The widget div should be placed as far right as possible--at the edge of
         // the screen.
@@ -265,7 +265,7 @@ suite('WidgetDiv', function () {
           true,
           expectedX,
           expectedY,
-          this.widgetSize.height
+          this.widgetSize.height,
         );
       });
     });

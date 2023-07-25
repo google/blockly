@@ -55,19 +55,19 @@ suite('Metrics', function () {
       this.metricsManager = new Blockly.MetricsManager(this.ws);
       this.toolboxMetricsStub = sinon.stub(
         this.metricsManager,
-        'getToolboxMetrics'
+        'getToolboxMetrics',
       );
       this.flyoutMetricsStub = sinon.stub(
         this.metricsManager,
-        'getFlyoutMetrics'
+        'getFlyoutMetrics',
       );
       this.getToolboxStub = sinon.stub(
         this.metricsManager.workspace_,
-        'getToolbox'
+        'getToolbox',
       );
       this.getFlyoutStub = sinon.stub(
         this.metricsManager.workspace_,
-        'getFlyout'
+        'getFlyout',
       );
     });
     test('Toolbox at left', function () {
@@ -118,19 +118,19 @@ suite('Metrics', function () {
       this.metricsManager = new Blockly.MetricsManager(this.ws);
       this.toolboxMetricsStub = sinon.stub(
         this.metricsManager,
-        'getToolboxMetrics'
+        'getToolboxMetrics',
       );
       this.flyoutMetricsStub = sinon.stub(
         this.metricsManager,
-        'getFlyoutMetrics'
+        'getFlyoutMetrics',
       );
       this.getToolboxStub = sinon.stub(
         this.metricsManager.workspace_,
-        'getToolbox'
+        'getToolbox',
       );
       this.getFlyoutStub = sinon.stub(
         this.metricsManager.workspace_,
-        'getFlyout'
+        'getFlyout',
       );
       this.svgMetricsStub = sinon.stub(this.metricsManager, 'getSvgMetrics');
     });
@@ -190,7 +190,7 @@ suite('Metrics', function () {
       this.getFlyoutStub.returns(true);
 
       const viewMetrics = this.metricsManager.getViewMetrics(
-        getWorkspaceCoordinates
+        getWorkspaceCoordinates,
       );
 
       assertDimensionsMatch(
@@ -198,7 +198,7 @@ suite('Metrics', function () {
         -SCROLL_X / scale,
         -SCROLL_Y / scale,
         500 / scale,
-        393 / scale
+        393 / scale,
       );
     });
   });
@@ -374,7 +374,7 @@ suite('Metrics', function () {
       const contentMetrics = metricsManager.getScrollMetrics(
         true,
         mockViewMetrics,
-        mockContentMetrics
+        mockContentMetrics,
       );
 
       // Should add half the view width to all sides.
@@ -391,7 +391,7 @@ suite('Metrics', function () {
       const contentMetrics = metricsManager.getScrollMetrics(
         true,
         mockViewMetrics,
-        mockContentMetrics
+        mockContentMetrics,
       );
 
       // Should add half the view width to all sides.
@@ -408,7 +408,7 @@ suite('Metrics', function () {
       const contentMetrics = metricsManager.getScrollMetrics(
         true,
         mockViewMetrics,
-        mockContentMetrics
+        mockContentMetrics,
       );
 
       // Should add half the view width to all sides.
@@ -425,7 +425,7 @@ suite('Metrics', function () {
       const contentMetrics = metricsManager.getScrollMetrics(
         true,
         mockViewMetrics,
-        mockContentMetrics
+        mockContentMetrics,
       );
 
       // Should add half of the view width to all sides.
@@ -442,7 +442,7 @@ suite('Metrics', function () {
       const contentMetrics = metricsManager.getScrollMetrics(
         true,
         mockViewMetrics,
-        mockContentMetrics
+        mockContentMetrics,
       );
 
       // Should add half of the view width to all sides.
@@ -459,7 +459,7 @@ suite('Metrics', function () {
       const contentMetrics = metricsManager.getScrollMetrics(
         true,
         mockViewMetrics,
-        mockContentMetrics
+        mockContentMetrics,
       );
 
       // Should add half of the view width to all sides.
@@ -476,7 +476,7 @@ suite('Metrics', function () {
       const contentMetrics = metricsManager.getScrollMetrics(
         false,
         mockViewMetrics,
-        mockContentMetrics
+        mockContentMetrics,
       );
 
       // Should add half the view width to all sides.
@@ -493,7 +493,7 @@ suite('Metrics', function () {
       const contentMetrics = metricsManager.getScrollMetrics(
         false,
         mockViewMetrics,
-        mockContentMetrics
+        mockContentMetrics,
       );
 
       // Should add half the view width to all sides.
@@ -510,7 +510,7 @@ suite('Metrics', function () {
       const contentMetrics = metricsManager.getScrollMetrics(
         false,
         mockViewMetrics,
-        mockContentMetrics
+        mockContentMetrics,
       );
 
       // Should add half the view width to all sides.
@@ -527,7 +527,7 @@ suite('Metrics', function () {
       const contentMetrics = metricsManager.getScrollMetrics(
         false,
         mockViewMetrics,
-        mockContentMetrics
+        mockContentMetrics,
       );
 
       // Should add half of the view width to all sides.
@@ -544,7 +544,7 @@ suite('Metrics', function () {
       const contentMetrics = metricsManager.getScrollMetrics(
         false,
         mockViewMetrics,
-        mockContentMetrics
+        mockContentMetrics,
       );
 
       // Should add half of the view width to all sides.
@@ -561,7 +561,7 @@ suite('Metrics', function () {
       const contentMetrics = metricsManager.getScrollMetrics(
         false,
         mockViewMetrics,
-        mockContentMetrics
+        mockContentMetrics,
       );
 
       // Should add half of the view width to all sides.

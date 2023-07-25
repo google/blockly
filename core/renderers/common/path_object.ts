@@ -47,7 +47,7 @@ export class PathObject implements IPathObject {
   constructor(
     root: SVGElement,
     style: BlockStyle,
-    constants: ConstantProvider
+    constants: ConstantProvider,
   ) {
     this.constants = constants;
     this.style = style;
@@ -57,7 +57,7 @@ export class PathObject implements IPathObject {
     this.svgPath = dom.createSvgElement(
       Svg.PATH,
       {'class': 'blocklyPath'},
-      this.svgRoot
+      this.svgRoot,
     );
   }
 
@@ -165,7 +165,7 @@ export class PathObject implements IPathObject {
     if (enable) {
       this.svgPath.setAttribute(
         'filter',
-        'url(#' + this.constants.embossFilterId + ')'
+        'url(#' + this.constants.embossFilterId + ')',
       );
     } else {
       this.svgPath.setAttribute('filter', 'none');
@@ -194,7 +194,7 @@ export class PathObject implements IPathObject {
     if (disabled) {
       this.svgPath.setAttribute(
         'fill',
-        'url(#' + this.constants.disabledPatternId + ')'
+        'url(#' + this.constants.disabledPatternId + ')',
       );
     }
   }

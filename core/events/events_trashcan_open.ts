@@ -51,7 +51,7 @@ export class TrashcanOpen extends UiBase {
     if (this.isOpen === undefined) {
       throw new Error(
         'Whether this is already open or not is undefined. Either pass ' +
-          'a value to the constructor, or call fromJson'
+          'a value to the constructor, or call fromJson',
       );
     }
     json['isOpen'] = this.isOpen;
@@ -70,12 +70,12 @@ export class TrashcanOpen extends UiBase {
   static fromJson(
     json: TrashcanOpenJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): TrashcanOpen {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new TrashcanOpen()
+      event ?? new TrashcanOpen(),
     ) as TrashcanOpen;
     newEvent.isOpen = json['isOpen'];
     return newEvent;

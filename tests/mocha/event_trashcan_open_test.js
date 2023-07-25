@@ -25,7 +25,7 @@ suite('Trashcan Open Event', function () {
     test('events round-trip through JSON', function () {
       const origEvent = new Blockly.Events.TrashcanOpen(
         true,
-        this.workspace.id
+        this.workspace.id,
       );
 
       const json = origEvent.toJson();

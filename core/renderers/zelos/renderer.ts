@@ -70,7 +70,7 @@ export class Renderer extends BaseRenderer {
    */
   protected override makeDrawer_(
     block: BlockSvg,
-    info: BaseRenderInfo
+    info: BaseRenderInfo,
   ): Drawer {
     return new Drawer(block, info as RenderInfo);
   }
@@ -84,7 +84,7 @@ export class Renderer extends BaseRenderer {
    */
   override makeMarkerDrawer(
     workspace: WorkspaceSvg,
-    marker: Marker
+    marker: Marker,
   ): MarkerSvg {
     return new MarkerSvg(workspace, this.getConstants(), marker);
   }
@@ -120,7 +120,7 @@ export class Renderer extends BaseRenderer {
   override getConnectionPreviewMethod(
     closest: RenderedConnection,
     local: RenderedConnection,
-    topBlock: BlockSvg
+    topBlock: BlockSvg,
   ) {
     if (local.type === ConnectionType.OUTPUT_VALUE) {
       if (!closest.isConnected()) {

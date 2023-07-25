@@ -42,7 +42,10 @@ export class Input {
    *     again.
    * @param sourceBlock The block containing this input.
    */
-  constructor(public name: string, private sourceBlock: Block) {}
+  constructor(
+    public name: string,
+    private sourceBlock: Block,
+  ) {}
 
   /**
    * Get the source block for this input.
@@ -80,7 +83,7 @@ export class Input {
   insertFieldAt<T>(
     index: number,
     field: string | Field<T>,
-    opt_name?: string
+    opt_name?: string,
   ): number {
     if (index < 0 || index > this.fieldRow.length) {
       throw Error('index ' + index + ' out of bounds.');

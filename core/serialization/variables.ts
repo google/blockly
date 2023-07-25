@@ -72,7 +72,7 @@ export class VariableSerializer implements ISerializer {
       workspace.createVariable(
         varState['name'],
         varState['type'],
-        varState['id']
+        varState['id'],
       );
     }
   }

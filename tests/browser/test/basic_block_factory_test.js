@@ -23,10 +23,10 @@ suite('Testing Connecting Blocks', function (done) {
 
   test('Testing Block Drag', async function () {
     const startingBlock = await browser.$(
-      '#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)'
+      '#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)',
     );
     const blocklyCanvas = await browser.$(
-      '#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas'
+      '#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas',
     );
     const firstPostion = await blocklyCanvas.getAttribute('transform');
     await startingBlock.dragAndDrop({x: 20, y: 20});

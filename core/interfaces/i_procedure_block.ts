@@ -18,7 +18,7 @@ export interface IProcedureBlock {
 
 /** A type guard which checks if the given block is a procedure block. */
 export function isProcedureBlock(
-  block: Block | IProcedureBlock
+  block: Block | IProcedureBlock,
 ): block is IProcedureBlock {
   return (
     (block as IProcedureBlock).getProcedureModel !== undefined &&

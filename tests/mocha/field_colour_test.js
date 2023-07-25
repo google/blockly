@@ -156,7 +156,7 @@ suite('Colour Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   runFromJsonSuiteTests(
@@ -164,7 +164,7 @@ suite('Colour Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   suite('setValue', function () {
@@ -176,7 +176,7 @@ suite('Colour Fields', function () {
         validValueTestCases,
         invalidValueTestCases,
         defaultFieldValue,
-        defaultTextValue
+        defaultTextValue,
       );
       test('With source block', function () {
         this.field.setSourceBlock(createTestBlock());
@@ -192,7 +192,7 @@ suite('Colour Fields', function () {
         validValueTestCases,
         invalidValueTestCases,
         '#aaaaaa',
-        '#aaa'
+        '#aaa',
       );
       test('With source block', function () {
         this.field.setSourceBlock(createTestBlock());
@@ -242,7 +242,7 @@ suite('Colour Fields', function () {
           assertFieldValue(
             this.field,
             suiteInfo.expectedValue,
-            suiteInfo.expectedText
+            suiteInfo.expectedText,
           );
         });
       });
@@ -258,7 +258,7 @@ suite('Colour Fields', function () {
           chai.assert.equal(node.getAttribute('title'), titles[index]);
           chai.assert.equal(
             Blockly.utils.colour.parse(node.style.backgroundColor),
-            colours[index]
+            colours[index],
           );
 
           let nextNode = node.nextSibling;
@@ -319,7 +319,7 @@ suite('Colour Fields', function () {
         assertColoursAndTitles(
           field,
           ['#aaaaaa', '#ff0000'],
-          ['grey', '#ff0000']
+          ['grey', '#ff0000'],
         );
       });
       // This is kinda derpy behavior, but I wanted to document it.

@@ -28,7 +28,7 @@ export class ConstantProvider extends BaseConstantProvider {
       'Blockly.minimalist.ConstantProvider',
       'v10',
       'v11',
-      'Blockly.blockRendering.ConstantProvider'
+      'Blockly.blockRendering.ConstantProvider',
     );
   }
 }

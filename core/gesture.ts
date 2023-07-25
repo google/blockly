@@ -177,7 +177,7 @@ export class Gesture {
    */
   constructor(
     e: PointerEvent,
-    private readonly creatorWorkspace: WorkspaceSvg
+    private readonly creatorWorkspace: WorkspaceSvg,
   ) {
     this.mostRecentEvent = e;
 
@@ -245,7 +245,7 @@ export class Gesture {
   private updateDragDelta(currentXY: Coordinate): boolean {
     this.currentDragDeltaXY = Coordinate.difference(
       currentXY,
-      this.mouseDownXY
+      this.mouseDownXY,
     );
 
     if (!this.hasExceededDragRadius) {
@@ -361,7 +361,7 @@ export class Gesture {
     if (!this.startWorkspace_) {
       throw new Error(
         'Cannot update dragging the workspace because the ' +
-          'start workspace is undefined'
+          'start workspace is undefined',
       );
     }
 
@@ -406,12 +406,12 @@ export class Gesture {
     const BlockDraggerClass = registry.getClassFromOptions(
       registry.Type.BLOCK_DRAGGER,
       this.creatorWorkspace.options,
-      true
+      true,
     );
 
     this.blockDragger = new BlockDraggerClass!(
       this.targetBlock,
-      this.startWorkspace_
+      this.startWorkspace_,
     );
     this.blockDragger!.startDrag(this.currentDragDeltaXY, this.healStack);
     this.blockDragger!.drag(this.mostRecentEvent, this.currentDragDeltaXY);
@@ -422,24 +422,24 @@ export class Gesture {
     if (!this.startBubble) {
       throw new Error(
         'Cannot update dragging the bubble because the start ' +
-          'bubble is undefined'
+          'bubble is undefined',
       );
     }
     if (!this.startWorkspace_) {
       throw new Error(
         'Cannot update dragging the bubble because the start ' +
-          'workspace is undefined'
+          'workspace is undefined',
       );
     }
 
     this.bubbleDragger = new BubbleDragger(
       this.startBubble,
-      this.startWorkspace_
+      this.startWorkspace_,
     );
     this.bubbleDragger.startBubbleDrag();
     this.bubbleDragger.dragBubble(
       this.mostRecentEvent,
-      this.currentDragDeltaXY
+      this.currentDragDeltaXY,
     );
   }
 
@@ -454,7 +454,7 @@ export class Gesture {
     if (!this.startWorkspace_) {
       throw new Error(
         'Cannot start the touch gesture becauase the start ' +
-          'workspace is undefined'
+          'workspace is undefined',
       );
     }
     this.isPinchZoomEnabled =
@@ -524,8 +524,8 @@ export class Gesture {
         'pointerdown',
         null,
         this.handleStart.bind(this),
-        /* opt_noCaptureIdentifier */ true
-      )
+        /* opt_noCaptureIdentifier */ true,
+      ),
     );
     this.boundEvents.push(
       browserEvents.conditionalBind(
@@ -533,8 +533,8 @@ export class Gesture {
         'pointermove',
         null,
         this.handleMove.bind(this),
-        /* opt_noCaptureIdentifier */ true
-      )
+        /* opt_noCaptureIdentifier */ true,
+      ),
     );
     this.boundEvents.push(
       browserEvents.conditionalBind(
@@ -542,8 +542,8 @@ export class Gesture {
         'pointerup',
         null,
         this.handleUp.bind(this),
-        /* opt_noCaptureIdentifier */ true
-      )
+        /* opt_noCaptureIdentifier */ true,
+      ),
     );
 
     e.preventDefault();
@@ -587,7 +587,7 @@ export class Gesture {
       } else if (this.bubbleDragger) {
         this.bubbleDragger.dragBubble(
           this.mostRecentEvent,
-          this.currentDragDeltaXY
+          this.currentDragDeltaXY,
         );
       }
       e.preventDefault();
@@ -717,14 +717,14 @@ export class Gesture {
           : gestureScale * ZOOM_OUT_MULTIPLIER;
       if (!this.startWorkspace_) {
         throw new Error(
-          'Cannot handle a pinch because the start workspace ' + 'is undefined'
+          'Cannot handle a pinch because the start workspace ' + 'is undefined',
         );
       }
       const workspace = this.startWorkspace_;
       const position = browserEvents.mouseToSvg(
         e,
         workspace.getParentSvg(),
-        workspace.getInverseScreenCTM()
+        workspace.getInverseScreenCTM(),
       );
       workspace.zoom(position.x, position.y, delta);
     }
@@ -790,7 +790,7 @@ export class Gesture {
     if (this.bubbleDragger) {
       this.bubbleDragger.endBubbleDrag(
         this.mostRecentEvent,
-        this.currentDragDeltaXY
+        this.currentDragDeltaXY,
       );
     } else if (this.blockDragger) {
       this.blockDragger.endDrag(this.mostRecentEvent, this.currentDragDeltaXY);
@@ -836,7 +836,7 @@ export class Gesture {
     if (this.gestureHasStarted) {
       throw Error(
         'Tried to call gesture.handleWsStart, ' +
-          'but the gesture had already been started.'
+          'but the gesture had already been started.',
       );
     }
     this.setStartWorkspace(ws);
@@ -851,7 +851,7 @@ export class Gesture {
    */
   private fireWorkspaceClick(ws: WorkspaceSvg) {
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace')
+      new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'),
     );
   }
 
@@ -866,7 +866,7 @@ export class Gesture {
     if (this.gestureHasStarted) {
       throw Error(
         'Tried to call gesture.handleFlyoutStart, ' +
-          'but the gesture had already been started.'
+          'but the gesture had already been started.',
       );
     }
     this.setStartFlyout(flyout);
@@ -884,7 +884,7 @@ export class Gesture {
     if (this.gestureHasStarted) {
       throw Error(
         'Tried to call gesture.handleBlockStart, ' +
-          'but the gesture had already been started.'
+          'but the gesture had already been started.',
       );
     }
     this.setStartBlock(block);
@@ -902,7 +902,7 @@ export class Gesture {
     if (this.gestureHasStarted) {
       throw Error(
         'Tried to call gesture.handleBubbleStart, ' +
-          'but the gesture had already been started.'
+          'but the gesture had already been started.',
       );
     }
     this.setStartBubble(bubble);
@@ -926,7 +926,7 @@ export class Gesture {
   private doFieldClick() {
     if (!this.startField) {
       throw new Error(
-        'Cannot do a field click because the start field is undefined'
+        'Cannot do a field click because the start field is undefined',
       );
     }
 
@@ -943,7 +943,7 @@ export class Gesture {
   private doIconClick() {
     if (!this.startIcon) {
       throw new Error(
-        'Cannot do an icon click because the start icon is undefined'
+        'Cannot do an icon click because the start icon is undefined',
       );
     }
 
@@ -956,7 +956,7 @@ export class Gesture {
     if (this.flyout && this.flyout.autoClose) {
       if (!this.targetBlock) {
         throw new Error(
-          'Cannot do a block click because the target block is ' + 'undefined'
+          'Cannot do a block click because the target block is ' + 'undefined',
         );
       }
       if (this.targetBlock.isEnabled()) {
@@ -970,14 +970,14 @@ export class Gesture {
       if (!this.startWorkspace_) {
         throw new Error(
           'Cannot do a block click because the start workspace ' +
-            'is undefined'
+            'is undefined',
         );
       }
       // Clicks events are on the start block, even if it was a shadow.
       const event = new (eventUtils.get(eventUtils.CLICK))(
         this.startBlock,
         this.startWorkspace_.id,
-        'block'
+        'block',
       );
       eventUtils.fire(event);
     }
@@ -1027,7 +1027,7 @@ export class Gesture {
     if (this.gestureHasStarted) {
       throw Error(
         'Tried to call gesture.setStartField, ' +
-          'but the gesture had already been started.'
+          'but the gesture had already been started.',
       );
     }
     if (!this.startField) {
@@ -1045,7 +1045,7 @@ export class Gesture {
     if (this.gestureHasStarted) {
       throw Error(
         'Tried to call gesture.setStartIcon, ' +
-          'but the gesture had already been started.'
+          'but the gesture had already been started.',
       );
     }
 

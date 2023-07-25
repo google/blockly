@@ -90,7 +90,7 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
    */
   customContextMenu: function (
     this: VariableBlock,
-    options: Array<ContextMenuOption | LegacyContextMenuOption>
+    options: Array<ContextMenuOption | LegacyContextMenuOption>,
   ) {
     // Getter blocks have the option to create a setter block, and vice versa.
     if (!this.isInFlyout) {
@@ -194,7 +194,7 @@ const deleteOptionCallbackFactory = function (block: VariableBlock) {
 
 Extensions.registerMixin(
   'contextMenu_variableDynamicSetterGetter',
-  CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN
+  CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN,
 );
 
 // Register provided blocks.

@@ -283,7 +283,7 @@ suite('Variable Map', function () {
             varName: 'test name',
             varId: 'test id',
           },
-          this.workspace.id
+          this.workspace.id,
         );
       });
 
@@ -297,7 +297,7 @@ suite('Variable Map', function () {
           this.eventSpy,
           Blockly.Events.VarCreate,
           {},
-          this.workspace.id
+          this.workspace.id,
         );
       });
     });
@@ -308,7 +308,7 @@ suite('Variable Map', function () {
           const variable = this.variableMap.createVariable(
             'test name',
             'test type',
-            'test id'
+            'test id',
           );
           this.variableMap.deleteVariable(variable);
 
@@ -320,7 +320,7 @@ suite('Variable Map', function () {
               varName: 'test name',
               varId: 'test id',
             },
-            this.workspace.id
+            this.workspace.id,
           );
         });
 
@@ -329,7 +329,7 @@ suite('Variable Map', function () {
             this.workspace,
             'test name',
             'test type',
-            'test id'
+            'test id',
           );
           this.variableMap.deleteVariable(variable);
 
@@ -337,7 +337,7 @@ suite('Variable Map', function () {
             this.eventSpy,
             Blockly.Events.VarDelete,
             {},
-            this.workspace.id
+            this.workspace.id,
           );
         });
       });
@@ -355,7 +355,7 @@ suite('Variable Map', function () {
               varName: 'test name',
               varId: 'test id',
             },
-            this.workspace.id
+            this.workspace.id,
           );
         });
 
@@ -366,7 +366,7 @@ suite('Variable Map', function () {
             this.eventSpy,
             Blockly.Events.VarDelete,
             {},
-            this.workspace.id
+            this.workspace.id,
           );
         });
       });
@@ -378,7 +378,7 @@ suite('Variable Map', function () {
           const variable = this.variableMap.createVariable(
             'test name',
             'test type',
-            'test id'
+            'test id',
           );
           this.variableMap.renameVariable(variable, 'new test name');
 
@@ -390,7 +390,7 @@ suite('Variable Map', function () {
               newName: 'new test name',
               varId: 'test id',
             },
-            this.workspace.id
+            this.workspace.id,
           );
         });
 
@@ -398,7 +398,7 @@ suite('Variable Map', function () {
           const variable = this.variableMap.createVariable(
             'test name',
             'test type',
-            'test id'
+            'test id',
           );
           this.variableMap.renameVariable(variable, 'test name');
 
@@ -406,7 +406,7 @@ suite('Variable Map', function () {
             this.eventSpy,
             Blockly.Events.VarRename,
             {},
-            this.workspace.id
+            this.workspace.id,
           );
         });
 
@@ -414,7 +414,7 @@ suite('Variable Map', function () {
           const variable = new Blockly.VariableModel(
             'test name',
             'test type',
-            'test id'
+            'test id',
           );
           this.variableMap.renameVariable(variable, 'test name');
 
@@ -422,7 +422,7 @@ suite('Variable Map', function () {
             this.eventSpy,
             Blockly.Events.VarRename,
             {},
-            this.workspace.id
+            this.workspace.id,
           );
         });
       });
@@ -440,7 +440,7 @@ suite('Variable Map', function () {
               newName: 'new test name',
               varId: 'test id',
             },
-            this.workspace.id
+            this.workspace.id,
           );
         });
 
@@ -452,7 +452,7 @@ suite('Variable Map', function () {
             this.eventSpy,
             Blockly.Events.VarRename,
             {},
-            this.workspace.id
+            this.workspace.id,
           );
         });
 

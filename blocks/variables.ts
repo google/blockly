@@ -89,7 +89,7 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
    */
   customContextMenu: function (
     this: VariableBlock,
-    options: Array<ContextMenuOption | LegacyContextMenuOption>
+    options: Array<ContextMenuOption | LegacyContextMenuOption>,
   ) {
     if (!this.isInFlyout) {
       let oppositeType;
@@ -148,7 +148,7 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
  * @returns A function that renames the variable.
  */
 const renameOptionCallbackFactory = function (
-  block: VariableBlock
+  block: VariableBlock,
 ): () => void {
   return function () {
     const workspace = block.workspace;
@@ -166,7 +166,7 @@ const renameOptionCallbackFactory = function (
  * @returns A function that deletes the variable.
  */
 const deleteOptionCallbackFactory = function (
-  block: VariableBlock
+  block: VariableBlock,
 ): () => void {
   return function () {
     const workspace = block.workspace;
@@ -179,7 +179,7 @@ const deleteOptionCallbackFactory = function (
 
 Extensions.registerMixin(
   'contextMenu_variableSetterGetter',
-  CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN
+  CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN,
 );
 
 // Register provided blocks.

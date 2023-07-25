@@ -114,7 +114,7 @@ export function getViewportBBox(): Rect {
     scrollOffset.y,
     document.documentElement.clientHeight + scrollOffset.y,
     scrollOffset.x,
-    document.documentElement.clientWidth + scrollOffset.x
+    document.documentElement.clientWidth + scrollOffset.x,
   );
 }
 
@@ -129,7 +129,7 @@ export function getDocumentScroll(): Coordinate {
   const win = window;
   return new Coordinate(
     win.pageXOffset || el.scrollLeft,
-    win.pageYOffset || el.scrollTop
+    win.pageYOffset || el.scrollTop,
   );
 }
 
@@ -143,7 +143,7 @@ export function getDocumentScroll(): Coordinate {
  */
 export function screenToWsCoordinates(
   ws: WorkspaceSvg,
-  screenCoordinates: Coordinate
+  screenCoordinates: Coordinate,
 ): Coordinate {
   const screenX = screenCoordinates.x;
   const screenY = screenCoordinates.y;
@@ -157,7 +157,7 @@ export function screenToWsCoordinates(
   // The client coordinates offset by the injection div's upper left corner.
   const clientOffsetPixels = new Coordinate(
     screenX - boundingRect.left,
-    screenY - boundingRect.top
+    screenY - boundingRect.top,
   );
 
   // The offset in pixels between the main workspace's origin and the upper
@@ -168,7 +168,7 @@ export function screenToWsCoordinates(
   // main workspace.
   const finalOffsetPixels = Coordinate.difference(
     clientOffsetPixels,
-    mainOffsetPixels
+    mainOffsetPixels,
   );
   // The position in main workspace coordinates.
   const finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
@@ -185,7 +185,7 @@ export function screenToWsCoordinates(
  */
 export function wsToScreenCoordinates(
   ws: WorkspaceSvg,
-  workspaceCoordinates: Coordinate
+  workspaceCoordinates: Coordinate,
 ): Coordinate {
   // Fix workspace scale vs browser scale.
   const screenCoordinates = workspaceCoordinates.scale(ws.scale);
@@ -199,7 +199,7 @@ export function wsToScreenCoordinates(
   // Fix workspace origin vs browser origin.
   return new Coordinate(
     screenX + boundingRect.left + mainOffset.x,
-    screenY + boundingRect.top + mainOffset.y
+    screenY + boundingRect.top + mainOffset.y,
   );
 }
 

@@ -51,7 +51,7 @@ suite('Testing Connecting Blocks', function () {
     const logicButton = await browser.$('#blockly-0');
     logicButton.click();
     const ifDoBlock = await browser.$(
-      '#blocklyDiv > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(3)'
+      '#blocklyDiv > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(3)',
     );
     await ifDoBlock.dragAndDrop({x: 20, y: 20});
     await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec
@@ -147,21 +147,21 @@ suite('Disabling', function () {
         'Logic',
         'controls_if',
         10,
-        10
+        10,
       );
       const child = await dragBlockTypeFromFlyout(
         browser,
         'Logic',
         'logic_boolean',
         110,
-        110
+        110,
       );
       await connect(browser, child, 'OUTPUT', parent, 'IF0');
 
       await contextMenuSelect(browser, parent, 'Disable Block');
 
       chai.assert.isTrue(await getIsDisabled(browser, child.id));
-    }
+    },
   );
 
   test(
@@ -173,21 +173,21 @@ suite('Disabling', function () {
         'Logic',
         'controls_if',
         10,
-        10
+        10,
       );
       const child = await dragBlockTypeFromFlyout(
         browser,
         'Logic',
         'controls_if',
         110,
-        110
+        110,
       );
       await connect(browser, child, 'PREVIOUS', parent, 'DO0');
 
       await contextMenuSelect(browser, parent, 'Disable Block');
 
       chai.assert.isTrue(await getIsDisabled(browser, child.id));
-    }
+    },
   );
 
   test(
@@ -199,21 +199,21 @@ suite('Disabling', function () {
         'Logic',
         'controls_if',
         10,
-        10
+        10,
       );
       const child = await dragBlockTypeFromFlyout(
         browser,
         'Logic',
         'controls_if',
         110,
-        110
+        110,
       );
       await connect(browser, child, 'PREVIOUS', parent, 'NEXT');
 
       await contextMenuSelect(browser, parent, 'Disable Block');
 
       chai.assert.isFalse(await getIsDisabled(browser, child.id));
-    }
+    },
   );
 
   suiteTeardown(async function () {

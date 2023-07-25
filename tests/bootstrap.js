@@ -156,7 +156,7 @@
     // library we use, mainly for goog.require / goog.provide /
     // goog.module).
     document.write(
-      `<script src="${options.root}build/src/closure/goog/base.js"></script>`
+      `<script src="${options.root}build/src/closure/goog/base.js"></script>`,
     );
 
     // Prevent spurious transpilation warnings.
@@ -198,7 +198,7 @@
       scriptDeps.push(
         `goog.addDependency(${quote('../../../../' + script)}, ` +
           `[${quote(fakeModuleName)}], [${requires.map(quote).join()}], ` +
-          `{'lang': 'es6'});`
+          `{'lang': 'es6'});`,
       );
       requires = [fakeModuleName];
     }

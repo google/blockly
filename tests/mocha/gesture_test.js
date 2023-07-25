@@ -21,7 +21,7 @@ suite('Gesture', function () {
     const eventTarget = field.getClickTarget_();
     chai.assert.exists(
       eventTarget,
-      'Precondition: missing click target for field'
+      'Precondition: missing click target for field',
     );
 
     eventsFireStub.resetHistory();
@@ -44,7 +44,7 @@ suite('Gesture', function () {
       eventsFireStub,
       Blockly.Events.Selected,
       {newElementId: block.id, type: eventUtils.SELECTED},
-      fieldWorkspace.id
+      fieldWorkspace.id,
     );
     assertEventNotFired(eventsFireStub, Blockly.Events.Click, {
       type: eventUtils.CLICK,

@@ -27,12 +27,12 @@ suite('Comment Change Event', function () {
         this.workspace,
         'old text',
         10,
-        10
+        10,
       );
       const origEvent = new Blockly.Events.CommentChange(
         comment,
         'old text',
-        'new text'
+        'new text',
       );
 
       const json = origEvent.toJson();

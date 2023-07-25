@@ -50,7 +50,7 @@ async function testUndoBlock(delta) {
     'Functions',
     'procedures_defreturn',
     50 * delta,
-    20
+    20,
   );
 
   await browser.keys([Key.Ctrl, 'z']);

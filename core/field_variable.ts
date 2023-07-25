@@ -84,7 +84,7 @@ export class FieldVariable extends FieldDropdown {
     validator?: FieldVariableValidator,
     variableTypes?: string[],
     defaultType?: string,
-    config?: FieldVariableConfig
+    config?: FieldVariableConfig,
   ) {
     super(Field.SKIP_SETUP);
 
@@ -145,7 +145,7 @@ export class FieldVariable extends FieldDropdown {
       block.workspace,
       null,
       this.defaultVariableName,
-      this.defaultType
+      this.defaultType,
     );
     // Don't call setValue because we don't want to cause a rerender.
     this.doValueUpdate_(variable.getId());
@@ -189,7 +189,7 @@ export class FieldVariable extends FieldDropdown {
       block.workspace,
       id,
       variableName as AnyDuringMigration,
-      variableType
+      variableType,
     );
 
     // This should never happen :)
@@ -202,7 +202,7 @@ export class FieldVariable extends FieldDropdown {
           ', and ' +
           'does not match variable field that references it: ' +
           Xml.domToText(fieldElement) +
-          '.'
+          '.',
       );
     }
 
@@ -271,7 +271,7 @@ export class FieldVariable extends FieldDropdown {
       block.workspace,
       state['id'] || null,
       state['name'],
-      state['type'] || ''
+      state['type'] || '',
     );
     this.setValue(variable.getId());
   }
@@ -344,7 +344,7 @@ export class FieldVariable extends FieldDropdown {
    * @returns The validated ID, or null if invalid.
    */
   protected override doClassValidation_(
-    newValue?: AnyDuringMigration
+    newValue?: AnyDuringMigration,
   ): string | null {
     if (newValue === null) {
       return null;
@@ -357,7 +357,7 @@ export class FieldVariable extends FieldDropdown {
     const variable = Variables.getVariable(block.workspace, newId);
     if (!variable) {
       console.warn(
-        "Variable id doesn't point to a real variable! " + 'ID was ' + newId
+        "Variable id doesn't point to a real variable! " + 'ID was ' + newId,
       );
       return null;
     }
@@ -425,7 +425,7 @@ export class FieldVariable extends FieldDropdown {
       // Throw an error if variableTypes is an empty list.
       const name = this.getText();
       throw Error(
-        "'variableTypes' of field variable " + name + ' was an empty list'
+        "'variableTypes' of field variable " + name + ' was an empty list',
       );
     }
     return variableTypes;
@@ -460,13 +460,13 @@ export class FieldVariable extends FieldDropdown {
           "Invalid default type '" +
             defaultType +
             "' in " +
-            'the definition of a FieldVariable'
+            'the definition of a FieldVariable',
         );
       }
     } else if (variableTypes !== null) {
       throw Error(
         "'variableTypes' was not an array in the definition of " +
-          'a FieldVariable'
+          'a FieldVariable',
       );
     }
     // Only update the field once all checks pass.
@@ -501,7 +501,7 @@ export class FieldVariable extends FieldDropdown {
         // Rename variable.
         Variables.renameVariable(
           this.sourceBlock_.workspace,
-          this.variable as VariableModel
+          this.variable as VariableModel,
         );
         return;
       } else if (id === internalConstants.DELETE_VARIABLE_ID) {
@@ -536,7 +536,7 @@ export class FieldVariable extends FieldDropdown {
    * @internal
    */
   static override fromJson(
-    options: FieldVariableFromJsonConfig
+    options: FieldVariableFromJsonConfig,
   ): FieldVariable {
     const varName = parsing.replaceMessageReferences(options.variable);
     // `this` might be a subclass of FieldVariable if that class doesn't
@@ -554,7 +554,7 @@ export class FieldVariable extends FieldDropdown {
     if (!this.variable) {
       throw Error(
         'Tried to call dropdownCreate on a variable field with no' +
-          ' variable selected.'
+          ' variable selected.',
       );
     }
     const name = this.getText();

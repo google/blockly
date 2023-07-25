@@ -22,7 +22,10 @@ export class Coordinate {
    * @param x Left.
    * @param y Top.
    */
-  constructor(public x: number, public y: number) {}
+  constructor(
+    public x: number,
+    public y: number,
+  ) {}
 
   /**
    * Creates a new copy of this coordinate.
@@ -109,7 +112,7 @@ export class Coordinate {
    */
   static difference(
     a: Coordinate | SVGPoint,
-    b: Coordinate | SVGPoint
+    b: Coordinate | SVGPoint,
   ): Coordinate {
     return new Coordinate(a.x - b.x, a.y - b.y);
   }

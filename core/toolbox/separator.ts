@@ -102,5 +102,5 @@ Css.register(`
 registry.register(
   registry.Type.TOOLBOX_ITEM,
   ToolboxSeparator.registrationName,
-  ToolboxSeparator
+  ToolboxSeparator,
 );

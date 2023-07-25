@@ -70,7 +70,7 @@ let menu_: Menu | null = null;
 export function show(
   e: Event,
   options: (ContextMenuOption | LegacyContextMenuOption)[],
-  rtl: boolean
+  rtl: boolean,
 ) {
   WidgetDiv.show(dummyOwner, rtl, dispose);
   if (!options.length) {
@@ -98,7 +98,7 @@ export function show(
  */
 function populate_(
   options: (ContextMenuOption | LegacyContextMenuOption)[],
-  rtl: boolean
+  rtl: boolean,
 ): Menu {
   /* Here's what one option object looks like:
       {text: 'Make It So',
@@ -151,7 +151,7 @@ function position_(menu: Menu, e: Event, rtl: boolean) {
     mouseEvent.clientY + viewportBBox.top,
     mouseEvent.clientY + viewportBBox.top,
     mouseEvent.clientX + viewportBBox.left,
-    mouseEvent.clientX + viewportBBox.left
+    mouseEvent.clientX + viewportBBox.left,
   );
 
   createWidget_(menu);
@@ -188,7 +188,7 @@ function createWidget_(menu: Menu) {
     menuDom as EventTarget,
     'contextmenu',
     null,
-    haltPropagation
+    haltPropagation,
   );
   // Focus only after the initial render to avoid issue #1329.
   menu.focus();
@@ -267,7 +267,7 @@ export function callbackFactory(block: Block, xml: Element): () => void {
  * @internal
  */
 export function commentDeleteOption(
-  comment: WorkspaceCommentSvg
+  comment: WorkspaceCommentSvg,
 ): LegacyContextMenuOption {
   const deleteOption = {
     text: Msg['REMOVE_COMMENT'],
@@ -291,7 +291,7 @@ export function commentDeleteOption(
  * @internal
  */
 export function commentDuplicateOption(
-  comment: WorkspaceCommentSvg
+  comment: WorkspaceCommentSvg,
 ): LegacyContextMenuOption {
   const duplicateOption = {
     text: Msg['DUPLICATE_COMMENT'],
@@ -315,7 +315,7 @@ export function commentDuplicateOption(
  */
 export function workspaceCommentOption(
   ws: WorkspaceSvg,
-  e: Event
+  e: Event,
 ): ContextMenuOption {
   /**
    * Helper function to create and position a comment correctly based on the
@@ -326,7 +326,7 @@ export function workspaceCommentOption(
       ws,
       Msg['WORKSPACE_COMMENT_DEFAULT_TEXT'],
       WorkspaceCommentSvg.DEFAULT_SIZE,
-      WorkspaceCommentSvg.DEFAULT_SIZE
+      WorkspaceCommentSvg.DEFAULT_SIZE,
     );
 
     const injectionDiv = ws.getInjectionDiv();
@@ -339,7 +339,7 @@ export function workspaceCommentOption(
     const mouseEvent = e as MouseEvent;
     const clientOffsetPixels = new Coordinate(
       mouseEvent.clientX - boundingRect.left,
-      mouseEvent.clientY - boundingRect.top
+      mouseEvent.clientY - boundingRect.top,
     );
 
     // The offset in pixels between the main workspace's origin and the upper
@@ -350,7 +350,7 @@ export function workspaceCommentOption(
     // main workspace.
     const finalOffset = Coordinate.difference(
       clientOffsetPixels,
-      mainOffsetPixels
+      mainOffsetPixels,
     );
     // The position of the new comment in main workspace coordinates.
     finalOffset.scale(1 / ws.scale);

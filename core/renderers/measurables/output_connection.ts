@@ -29,7 +29,7 @@ export class OutputConnection extends Connection {
    */
   constructor(
     constants: ConstantProvider,
-    connectionModel: RenderedConnection
+    connectionModel: RenderedConnection,
   ) {
     super(constants, connectionModel);
     this.type |= Types.OUTPUT_CONNECTION;

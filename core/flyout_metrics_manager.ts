@@ -70,7 +70,7 @@ export class FlyoutMetricsManager extends MetricsManager {
   override getScrollMetrics(
     opt_getWorkspaceCoordinates?: boolean,
     opt_viewMetrics?: ContainerRegion,
-    opt_contentMetrics?: ContainerRegion
+    opt_contentMetrics?: ContainerRegion,
   ) {
     const contentMetrics = opt_contentMetrics || this.getContentMetrics();
     const margin = this.flyout_.MARGIN * this.workspace_.scale;

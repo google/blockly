@@ -28,7 +28,7 @@ export interface LegacyProcedureDefBlock {
 
 /** @internal */
 export function isLegacyProcedureDefBlock(
-  block: Object
+  block: Object,
 ): block is LegacyProcedureDefBlock {
   return (block as any).getProcedureDef !== undefined;
 }
@@ -41,7 +41,7 @@ export interface LegacyProcedureCallBlock {
 
 /** @internal */
 export function isLegacyProcedureCallBlock(
-  block: Object
+  block: Object,
 ): block is LegacyProcedureCallBlock {
   return (
     (block as any).getProcedureCall !== undefined &&

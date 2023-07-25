@@ -135,7 +135,7 @@ export function setRole(element: Element, roleName: Role) {
 export function setState(
   element: Element,
   stateName: State,
-  value: string | boolean | number | string[]
+  value: string | boolean | number | string[],
 ) {
   if (Array.isArray(value)) {
     value = value.join(' ');

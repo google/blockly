@@ -55,7 +55,7 @@ suite('Lists', function () {
           chai.assert.equal(block.type, 'lists_getIndex');
           chai.assert.isNotTrue(block.outputConnection);
           chai.assert.isTrue(
-            block.getInput('AT').type === ConnectionType.INPUT_VALUE
+            block.getInput('AT').type === ConnectionType.INPUT_VALUE,
           );
         },
       },
@@ -117,7 +117,7 @@ suite('Lists', function () {
    */
   function makeTestCasesForBlockNotNeedingExtraState_(
     serializedJson,
-    xmlMutation
+    xmlMutation,
   ) {
     return [
       {
@@ -153,7 +153,7 @@ suite('Lists', function () {
           'WHERE': 'FROM_START',
         },
       },
-      '<mutation at="true"></mutation>'
+      '<mutation at="true"></mutation>',
     );
     runSerializationTestSuite(testCases);
   });
@@ -172,7 +172,7 @@ suite('Lists', function () {
           'WHERE2': 'FROM_START',
         },
       },
-      '<mutation at1="true" at2="true"></mutation>'
+      '<mutation at1="true" at2="true"></mutation>',
     );
     runSerializationTestSuite(testCases);
   });
@@ -190,7 +190,7 @@ suite('Lists', function () {
           'MODE': 'SPLIT',
         },
       },
-      '<mutation mode="SPLIT"></mutation>'
+      '<mutation mode="SPLIT"></mutation>',
     );
     runSerializationTestSuite(testCases);
   });

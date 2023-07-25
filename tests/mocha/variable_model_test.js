@@ -26,7 +26,7 @@ suite('Variable Model', function () {
       this.workspace,
       'test',
       'test_type',
-      'test_id'
+      'test_id',
     );
     chai.assert.equal(variable.name, 'test');
     chai.assert.equal(variable.type, 'test_type');
@@ -38,7 +38,7 @@ suite('Variable Model', function () {
       this.workspace,
       'test',
       null,
-      'test_id'
+      'test_id',
     );
     chai.assert.equal(variable.type, '');
   });
@@ -48,7 +48,7 @@ suite('Variable Model', function () {
       this.workspace,
       'test',
       undefined,
-      'test_id'
+      'test_id',
     );
     chai.assert.equal(variable.type, '');
   });
@@ -58,7 +58,7 @@ suite('Variable Model', function () {
       this.workspace,
       'test',
       'test_type',
-      null
+      null,
     );
     chai.assert.equal(variable.name, 'test');
     chai.assert.equal(variable.type, 'test_type');
@@ -70,7 +70,7 @@ suite('Variable Model', function () {
       this.workspace,
       'test',
       'test_type',
-      undefined
+      undefined,
     );
     chai.assert.equal(variable.name, 'test');
     chai.assert.equal(variable.type, 'test_type');

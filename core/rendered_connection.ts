@@ -243,7 +243,7 @@ export class RenderedConnection extends Connection {
   moveToOffset(blockTL: Coordinate): boolean {
     return this.moveTo(
       blockTL.x + this.offsetInBlock.x,
-      blockTL.y + this.offsetInBlock.y
+      blockTL.y + this.offsetInBlock.y,
     );
   }
 
@@ -300,7 +300,7 @@ export class RenderedConnection extends Connection {
     if (!target || !block) return;
     const offset = Coordinate.difference(
       this.offsetInBlock,
-      target.offsetInBlock
+      target.offsetInBlock,
     );
     block.translate(offset.x, offset.y);
   }
@@ -317,7 +317,7 @@ export class RenderedConnection extends Connection {
    */
   closest(
     maxLimit: number,
-    dxy: Coordinate
+    dxy: Coordinate,
   ): {connection: RenderedConnection | null; radius: number} {
     return this.dbOpposite.searchForClosest(this, maxLimit, dxy);
   }
@@ -365,7 +365,7 @@ export class RenderedConnection extends Connection {
           `translate(${offset.x}, ${offset.y})` +
           (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
       },
-      this.sourceBlock_.getSvgRoot()
+      this.sourceBlock_.getSvgRoot(),
     );
   }
 
@@ -501,7 +501,7 @@ export class RenderedConnection extends Connection {
             eventUtils.setGroup(false);
           }
         }.bind(this),
-        config.bumpDelay
+        config.bumpDelay,
       );
     }
   }
@@ -616,7 +616,7 @@ export class RenderedConnection extends Connection {
         !this.getConnectionChecker().canConnect(
           this,
           this.targetConnection,
-          false
+          false,
         ))
     ) {
       const child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;

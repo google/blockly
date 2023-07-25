@@ -73,7 +73,7 @@ suite('Testing Connecting Blocks', function (done) {
       doSomethingCaller,
       'OUTPUT',
       doSomething2,
-      'RETURN'
+      'RETURN',
     );
 
     // Drag out print from flyout.

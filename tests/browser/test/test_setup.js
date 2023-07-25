@@ -95,9 +95,9 @@ const testFileLocations = {
     posixPath(path.join(__dirname, '..', '..')) +
     '/playground.html',
   PLAYGROUND_RTL:
-      'file://' +
-      posixPath(path.join(__dirname, '..', '..')) +
-      '/playground.html?dir=rtl',
+    'file://' +
+    posixPath(path.join(__dirname, '..', '..')) +
+    '/playground.html?dir=rtl',
 };
 
 /**

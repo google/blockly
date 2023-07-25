@@ -52,9 +52,11 @@ async function testFieldEdits(browser, delta) {
   await browser.pause(200);
 
   const fieldValue = await browser.execute((id) => {
-    return Blockly.getMainWorkspace().getBlockById(id).getField('NUM').getValue();
-  },
-  numberBlock.id);
+    return Blockly.getMainWorkspace()
+      .getBlockById(id)
+      .getField('NUM')
+      .getValue();
+  }, numberBlock.id);
 
-  chai.assert.equal(fieldValue, "1093");
+  chai.assert.equal(fieldValue, '1093');
 }

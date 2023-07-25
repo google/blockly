@@ -47,7 +47,7 @@ suite('Testing Connecting Blocks', function () {
   });
 
   test('dragging a block from the flyout', async function () {
-    await dragBlockTypeFromFlyout(this.browser, "Logic", "controls_if", 20, 20);
+    await dragBlockTypeFromFlyout(this.browser, 'Logic', 'controls_if', 20, 20);
     const blockCount = await this.browser.execute(() => {
       return Blockly.getMainWorkspace().getAllBlocks(false).length;
     });

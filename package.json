@@ -102,7 +102,7 @@
     "markdown-tables-to-json": "^0.1.7",
     "mocha": "^10.0.0",
     "patch-package": "^7.0.0",
-    "prettier": "2.8.8",
+    "prettier": "3.0.0",
     "readline-sync": "^1.4.10",
     "rimraf": "^5.0.0",
     "selenium-standalone": "^8.0.3",

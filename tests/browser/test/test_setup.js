@@ -143,7 +143,8 @@ async function getBlockElementById(browser, id) {
 /**
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to find.
- * @return A Promise that resolves to the root element of the toolbox category with the given name, as an interactable browser element.
+ * @return A Promise that resolves to the root element of the toolbox
+ *     category with the given name, as an interactable browser element.
  * @throws If the category cannot be found.
  */
 async function getCategory(browser, categoryName) {

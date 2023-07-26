@@ -77,6 +77,7 @@ import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
 import {ContextMenuOption} from './contextmenu_registry.js';
+import * as renderManagement from './render_management.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -1251,11 +1252,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (this.currentGesture_) {
       const imList = this.currentGesture_.getInsertionMarkers();
       for (let i = 0; i < imList.length; i++) {
-        imList[i].render(false);
+        imList[i].queueRender();
       }
     }
 
-    this.markerManager.updateMarkers();
+    renderManagement
+      .finishQueuedRenders()
+      .then(() => void this.markerManager.updateMarkers());
   }
 
   /**

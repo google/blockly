@@ -25,6 +25,7 @@ import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {RenderedConnection} from './rendered_connection.js';
 import type {Coordinate} from './utils/coordinate.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import * as renderManagement from './render_management.js';
 
 /** Represents a nearby valid connection. */
 interface CandidateConnection {
@@ -608,18 +609,17 @@ export class InsertionMarkerManager {
 
     // Render disconnected from everything else so that we have a valid
     // connection location.
-    insertionMarker.render();
-    insertionMarker.rendered = true;
-    insertionMarker.getSvgRoot().setAttribute('visibility', 'visible');
+    insertionMarker.queueRender();
+    renderManagement.triggerQueuedRenders();
 
-    if (imConn && closest) {
-      // Position so that the existing block doesn't move.
-      insertionMarker.positionNearConnection(imConn, closest);
-    }
-    if (closest) {
-      // Connect() also renders the insertion marker.
-      imConn.connect(closest);
-    }
+    // Position so that the existing block doesn't move.
+    insertionMarker.positionNearConnection(imConn, closest);
+    // Connect() also renders the insertion marker.
+    imConn.connect(closest);
+
+    renderManagement.finishQueuedRenders().then(() => {
+      insertionMarker?.getSvgRoot().setAttribute('visibility', 'visible');
+    });
 
     this.markerConnection = imConn;
   }

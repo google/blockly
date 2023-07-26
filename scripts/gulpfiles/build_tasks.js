@@ -15,7 +15,6 @@ gulp.sourcemaps = require('gulp-sourcemaps');
 
 const path = require('path');
 const fs = require('fs');
-const os = require('os');
 const {exec, execSync} = require('child_process');
 
 const closureCompiler = require('google-closure-compiler').gulp();
@@ -30,6 +29,13 @@ const {posixPath} = require('../helpers');
 ////////////////////////////////////////////////////////////
 //                        Build                           //
 ////////////////////////////////////////////////////////////
+
+/**
+ * Path to the python runtime.
+ * This will normalize the command across platforms (e.g. python3 on Linux and
+ * Mac, python on Windows).
+ */
+const PYTHON = process.platform === 'win32' ? 'python' : 'python3';
 
 /**
  * Suffix to add to compiled output files.
@@ -380,9 +386,8 @@ error message above, try running:
  * msg/messages.js.
  */
 function generateMessages(done) {
-  const pythonCmd = os.platform() === 'win32' ? 'python' : 'python3';
   // Run js_to_json.py
-  const jsToJsonCmd = `${pythonCmd} scripts/i18n/js_to_json.py \
+  const jsToJsonCmd = `${PYTHON} scripts/i18n/js_to_json.py \
       --input_file ${path.join('msg', 'messages.js')} \
       --output_dir ${path.join('msg', 'json')} \
       --quiet`;
@@ -421,8 +426,7 @@ function buildLangfiles(done) {
       !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
   json_files = json_files.map(file => path.join('msg', 'json', file));
 
-  const pythonCmd = os.platform() === 'win32' ? 'python' : 'python3';
-  const createMessagesCmd = `${pythonCmd} ./scripts/i18n/create_messages.py \
+  const createMessagesCmd = `${PYTHON} ./scripts/i18n/create_messages.py \
   --source_lang_file ${path.join('msg', 'json', 'en.json')} \
   --source_synonym_file ${path.join('msg', 'json', 'synonyms.json')} \
   --source_constants_file ${path.join('msg', 'json', 'constants.json')} \

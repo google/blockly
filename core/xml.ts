@@ -566,7 +566,7 @@ export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
  */
 export function domToBlockInternal(
   xmlBlock: Element,
-  workspace: Workspace
+  workspace: Workspace,
 ): Block {
   // Create top-level block.
   eventUtils.disable();

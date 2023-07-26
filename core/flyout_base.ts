@@ -36,6 +36,7 @@ import * as Variables from './variables.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 import * as utilsXml from './utils/xml.js';
 import * as Xml from './xml.js';
+import * as renderManagement from './render_management.js';
 
 enum FlyoutItemType {
   BLOCK = 'block',
@@ -626,6 +627,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
     const flyoutInfo = this.createFlyoutInfo(parsedContent);
 
+    renderManagement.triggerQueuedRenders();
+
     this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 
     if (this.horizontalLayout) {
@@ -770,7 +773,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
       ) as Element;
       block = this.getRecycledBlock(xml.getAttribute('type')!);
       if (!block) {
-        block = Xml.domToBlock(xml, this.workspace_);
+        block = Xml.domToBlockInternal(xml, this.workspace_);
       }
     } else {
       block = this.getRecycledBlock(blockInfo['type']!);
@@ -779,7 +782,10 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
           blockInfo['enabled'] =
             blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
         }
-        block = blocks.append(blockInfo as blocks.State, this.workspace_);
+        block = blocks.appendInternal(
+          blockInfo as blocks.State,
+          this.workspace_
+        );
       }
     }
 

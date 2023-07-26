@@ -1349,7 +1349,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       let blockX = 0;
       let blockY = 0;
       if (xmlBlock) {
-        block = Xml.domToBlock(xmlBlock, this) as BlockSvg;
+        block = Xml.domToBlockInternal(xmlBlock, this) as BlockSvg;
         blockX = parseInt(xmlBlock.getAttribute('x') ?? '0');
         if (this.RTL) {
           blockX = -blockX;

@@ -50,7 +50,7 @@ suite('DropDownDiv', function () {
         50,
         0,
         50,
-        -10
+        -10,
       );
       // "Above" in value actually means below in render.
       chai.assert.isAtLeast(metrics.initialY, 0);
@@ -63,7 +63,7 @@ suite('DropDownDiv', function () {
         50,
         100,
         50,
-        90
+        90,
       );
       // "Below" in value actually means above in render.
       chai.assert.isAtMost(metrics.initialY, 100);
@@ -76,7 +76,7 @@ suite('DropDownDiv', function () {
         50,
         60,
         50,
-        50
+        50,
       );
       // "Above" in value actually means below in render.
       chai.assert.isAtLeast(metrics.initialY, 60);
@@ -89,7 +89,7 @@ suite('DropDownDiv', function () {
         50,
         100,
         50,
-        90
+        90,
       );
       // "Below" in value actually means above in render.
       chai.assert.isAtMost(metrics.initialY, 100);
@@ -105,7 +105,7 @@ suite('DropDownDiv', function () {
         50,
         60,
         50,
-        50
+        50,
       );
       // "Above" in value actually means below in render.
       chai.assert.equal(metrics.initialY, 0);

@@ -67,7 +67,7 @@ function fromJsonInternal<T>(options: RegistryOptions): Field<T> | null {
         options['type'] +
         '. The field is probably not being registered. This could be because' +
         ' the file is not loaded, the field does not register itself (Issue' +
-        ' #1584), or the registration is not being reached.'
+        ' #1584), or the registration is not being reached.',
     );
     return null;
   } else if (typeof (fieldObject as any).fromJson !== 'function') {

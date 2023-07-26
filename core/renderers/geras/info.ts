@@ -84,7 +84,7 @@ export class RenderInfo extends BaseRenderInfo {
       activeRow.hasInlineInput = true;
     } else if (input instanceof StatementInput) {
       activeRow.elements.push(
-        new StatementInputMeasurable(this.constants_, input)
+        new StatementInputMeasurable(this.constants_, input),
       );
       activeRow.hasStatement = true;
     } else if (input instanceof ValueInput) {
@@ -95,7 +95,7 @@ export class RenderInfo extends BaseRenderInfo {
       // still important.
       activeRow.minHeight = Math.max(
         activeRow.minHeight,
-        this.constants_.DUMMY_INPUT_MIN_HEIGHT
+        this.constants_.DUMMY_INPUT_MIN_HEIGHT,
       );
       activeRow.hasDummyInput = true;
     }
@@ -121,8 +121,8 @@ export class RenderInfo extends BaseRenderInfo {
         row.elements.push(
           new InRowSpacer(
             this.constants_,
-            this.getInRowSpacing_(null, oldElems[0])
-          )
+            this.getInRowSpacing_(null, oldElems[0]),
+          ),
         );
       }
       if (!oldElems.length) {
@@ -137,7 +137,7 @@ export class RenderInfo extends BaseRenderInfo {
       if (row.endsWithElemSpacer()) {
         let spacing = this.getInRowSpacing_(
           oldElems[oldElems.length - 1],
-          null
+          null,
         );
         if (hasExternalInputs && row.hasDummyInput) {
           spacing += this.constants_.TAB_WIDTH;
@@ -398,7 +398,7 @@ export class RenderInfo extends BaseRenderInfo {
         const currentWidth = row.width;
         const desiredWidth = Math.max(
           prevRightEdge,
-          rowNextRightEdges.get(row)
+          rowNextRightEdges.get(row),
         );
         const missingSpace = desiredWidth - currentWidth;
         if (missingSpace > 0) {
@@ -432,7 +432,7 @@ export class RenderInfo extends BaseRenderInfo {
 
       widestRowWithConnectedBlocks = Math.max(
         widestRowWithConnectedBlocks,
-        row.widthWithConnectedBlocks
+        row.widthWithConnectedBlocks,
       );
       // Add padding to the bottom row if block height is less than minimum
       const heightWithoutHat = yCursor - this.topRow.ascenderHeight;
@@ -457,7 +457,7 @@ export class RenderInfo extends BaseRenderInfo {
         // Include width of connected block in value to stack width measurement.
         widestRowWithConnectedBlocks = Math.max(
           widestRowWithConnectedBlocks,
-          target.getHeightWidth().width - this.constants_.DARK_PATH_OFFSET
+          target.getHeightWidth().width - this.constants_.DARK_PATH_OFFSET,
         );
       }
     }

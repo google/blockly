@@ -27,7 +27,7 @@ suite('Var Create Event', function () {
         this.workspace,
         'name',
         '',
-        'id'
+        'id',
       );
       const origEvent = new Blockly.Events.VarCreate(varModel);
 
@@ -42,7 +42,7 @@ suite('Var Create Event', function () {
         this.workspace,
         'name',
         'type',
-        'id'
+        'id',
       );
       const origEvent = new Blockly.Events.VarCreate(varModel);
 

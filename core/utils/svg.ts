@@ -29,7 +29,7 @@ export class Svg<_T> {
   static FECOMPOSITE = new Svg<SVGFECompositeElement>('feComposite');
   /** @internal */
   static FECOMPONENTTRANSFER = new Svg<SVGFEComponentTransferElement>(
-    'feComponentTransfer'
+    'feComponentTransfer',
   );
   /** @internal */
   static FEFLOOD = new Svg<SVGFEFloodElement>('feFlood');
@@ -41,7 +41,7 @@ export class Svg<_T> {
   static FEPOINTLIGHT = new Svg<SVGFEPointLightElement>('fePointLight');
   /** @internal */
   static FESPECULARLIGHTING = new Svg<SVGFESpecularLightingElement>(
-    'feSpecularLighting'
+    'feSpecularLighting',
   );
   /** @internal */
   static FILTER = new Svg<SVGFilterElement>('filter');

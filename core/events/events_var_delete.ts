@@ -49,13 +49,13 @@ export class VarDelete extends VarBase {
     if (this.varType === undefined) {
       throw new Error(
         'The var type is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (!this.varName) {
       throw new Error(
         'The var name is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     json['varType'] = this.varType;
@@ -75,12 +75,12 @@ export class VarDelete extends VarBase {
   static fromJson(
     json: VarDeleteJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): VarDelete {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new VarDelete()
+      event ?? new VarDelete(),
     ) as VarDelete;
     newEvent.varType = json['varType'];
     newEvent.varName = json['varName'];
@@ -97,13 +97,13 @@ export class VarDelete extends VarBase {
     if (!this.varId) {
       throw new Error(
         'The var ID is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (!this.varName) {
       throw new Error(
         'The var name is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (forward) {

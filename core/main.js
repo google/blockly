@@ -32,8 +32,8 @@ Object.defineProperties(Blockly, {
    * Must be in the range of 0 (inclusive) to 1 (exclusive).
    * @name Blockly.HSV_SATURATION
    * @type {number}
-   * @deprecated Use Blockly.colour.getHsvSaturation() / .setHsvSaturation(
-   *     instead.  (July 2023)
+   * @deprecated Use Blockly.utils.colour.getHsvSaturation() /
+   *     .setHsvSaturation() instead.  (July 2023)
    * @suppress {checkTypes}
    */
   HSV_SATURATION: {
@@ -42,7 +42,7 @@ Object.defineProperties(Blockly, {
         'Blockly.HSV_SATURATION',
         'version 10',
         'version 11',
-        'Blockly.colour.getHsvSaturation()'
+        'Blockly.utils.colour.getHsvSaturation()',
       );
       return colour.getHsvSaturation();
     },
@@ -51,7 +51,7 @@ Object.defineProperties(Blockly, {
         'Blockly.HSV_SATURATION',
         'version 10',
         'version 11',
-        'Blockly.colour.setHsvSaturation()'
+        'Blockly.utils.colour.setHsvSaturation()',
       );
       colour.setHsvSaturation(newValue);
     },
@@ -61,7 +61,7 @@ Object.defineProperties(Blockly, {
    * Must be in the range of 0 (inclusive) to 1 (exclusive).
    * @name Blockly.HSV_VALUE
    * @type {number}
-   * @deprecated Use Blockly.colour.getHsvValue() / .setHsvValue instead.
+   * @deprecated Use Blockly.utils.colour.getHsvValue() / .setHsvValue instead.
    *     (July 2023)
    * @suppress {checkTypes}
    */
@@ -71,7 +71,7 @@ Object.defineProperties(Blockly, {
         'Blockly.HSV_VALUE',
         'version 10',
         'version 11',
-        'Blockly.colour.getHsvValue()'
+        'Blockly.utils.colour.getHsvValue()',
       );
       return colour.getHsvValue();
     },
@@ -80,7 +80,7 @@ Object.defineProperties(Blockly, {
         'Blockly.HSV_VALUE',
         'version 10',
         'version 11',
-        'Blockly.colour.setHsvValue()'
+        'Blockly.utils.colour.setHsvValue()',
       );
       colour.setHsvValue(newValue);
     },

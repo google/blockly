@@ -50,7 +50,7 @@ export function conditionalBind(
   name: string,
   thisObject: Object | null,
   func: Function,
-  opt_noCaptureIdentifier?: boolean
+  opt_noCaptureIdentifier?: boolean,
 ): Data {
   /**
    *
@@ -98,7 +98,7 @@ export function bind(
   node: EventTarget,
   name: string,
   thisObject: Object | null,
-  func: Function
+  func: Function,
 ): Data {
   /**
    *
@@ -208,7 +208,7 @@ export function isRightButton(e: MouseEvent): boolean {
 export function mouseToSvg(
   e: MouseEvent,
   svg: SVGSVGElement,
-  matrix: SVGMatrix | null
+  matrix: SVGMatrix | null,
 ): SVGPoint {
   const svgPoint = svg.createSVGPoint();
   svgPoint.x = e.clientX;

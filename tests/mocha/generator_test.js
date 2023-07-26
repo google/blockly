@@ -43,14 +43,14 @@ suite('Generator', function () {
     test('One line', function () {
       chai.assert.equal(
         this.generator.prefixLines('Hello\n', '12'),
-        '12Hello\n'
+        '12Hello\n',
       );
     });
 
     test('Two lines', function () {
       chai.assert.equal(
         this.generator.prefixLines('Hello\nWorld\n', '***'),
-        '***Hello\n***World\n'
+        '***Hello\n***World\n',
       );
     });
   });
@@ -85,7 +85,7 @@ suite('Generator', function () {
         blockDisabled,
         opt_thisOnly,
         expectedCode,
-        opt_message
+        opt_message,
       ) {
         generator.forBlock['row_block'] = function (_) {
           return 'row_block';
@@ -123,7 +123,7 @@ suite('Generator', function () {
             false,
             false,
             'row_blockstack_block',
-            'thisOnly=false'
+            'thisOnly=false',
           );
         });
       });
@@ -140,7 +140,7 @@ suite('Generator', function () {
             true,
             false,
             'stack_block',
-            'thisOnly=false'
+            'thisOnly=false',
           );
         });
       });
@@ -170,7 +170,7 @@ suite('Generator', function () {
           generator,
           opt_thisOnly,
           expectedCode,
-          opt_message
+          opt_message,
         ) {
           generator.forBlock['test_loop_block'] = function (block) {
             return '{' + generator.statementToCode(block, 'DO') + '}';

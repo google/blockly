@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -119,7 +119,7 @@
             return toolboxTestBlocks;
           } else {
             alert(
-              "You need to run 'npm install' in order to use the test blocks."
+              "You need to run 'npm install' in order to use the test blocks.",
             );
             toolboxSuffix = 'categories';
           }
@@ -267,7 +267,7 @@
 
         // Adds a default-sized workspace comment to the workspace.
         menuOptions.push(
-          Blockly.ContextMenu.workspaceCommentOption(workspace, e)
+          Blockly.ContextMenu.workspaceCommentOption(workspace, e),
         );
       }
 
@@ -295,7 +295,7 @@
                 Math.round(Math.random() * 450 + 40) +
                 ', ' +
                 Math.round(Math.random() * 600 + 40) +
-                ')'
+                ')',
             );
           block.render();
         }
@@ -306,7 +306,7 @@
         for (var i = 0; i < n; i++) {
           xml = xml.replace(
             /(<(statement|next)( name="DO0")?>)<\//g,
-            '$1' + spaghettiXml + '</'
+            '$1' + spaghettiXml + '</',
           );
         }
         xml =

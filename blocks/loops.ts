@@ -227,7 +227,7 @@ const WHILE_UNTIL_TOOLTIPS = {
 
 Extensions.register(
   'controls_whileUntil_tooltip',
-  Extensions.buildTooltipForDropdown('MODE', WHILE_UNTIL_TOOLTIPS)
+  Extensions.buildTooltipForDropdown('MODE', WHILE_UNTIL_TOOLTIPS),
 );
 
 /**
@@ -242,7 +242,7 @@ const BREAK_CONTINUE_TOOLTIPS = {
 
 Extensions.register(
   'controls_flow_tooltip',
-  Extensions.buildTooltipForDropdown('FLOW', BREAK_CONTINUE_TOOLTIPS)
+  Extensions.buildTooltipForDropdown('FLOW', BREAK_CONTINUE_TOOLTIPS),
 );
 
 /** Type of a block that has CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN */
@@ -264,7 +264,7 @@ const CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
    */
   customContextMenu: function (
     this: CustomContextMenuBlock,
-    options: Array<ContextMenuOption | LegacyContextMenuOption>
+    options: Array<ContextMenuOption | LegacyContextMenuOption>,
   ) {
     if (this.isInFlyout) {
       return;
@@ -289,17 +289,20 @@ const CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
 
 Extensions.registerMixin(
   'contextMenu_newGetVariableBlock',
-  CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN
+  CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN,
 );
 
 Extensions.register(
   'controls_for_tooltip',
-  Extensions.buildTooltipWithFieldText('%{BKY_CONTROLS_FOR_TOOLTIP}', 'VAR')
+  Extensions.buildTooltipWithFieldText('%{BKY_CONTROLS_FOR_TOOLTIP}', 'VAR'),
 );
 
 Extensions.register(
   'controls_forEach_tooltip',
-  Extensions.buildTooltipWithFieldText('%{BKY_CONTROLS_FOREACH_TOOLTIP}', 'VAR')
+  Extensions.buildTooltipWithFieldText(
+    '%{BKY_CONTROLS_FOREACH_TOOLTIP}',
+    'VAR',
+  ),
 );
 
 /**
@@ -366,7 +369,7 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     }
     const enabled = !!this.getSurroundLoop();
     this.setWarningText(
-      enabled ? null : Msg['CONTROLS_FLOW_STATEMENTS_WARNING']
+      enabled ? null : Msg['CONTROLS_FLOW_STATEMENTS_WARNING'],
     );
     if (!this.isInFlyout) {
       const group = Events.getGroup();
@@ -380,7 +383,7 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
 
 Extensions.registerMixin(
   'controls_flow_in_loop_check',
-  CONTROL_FLOW_IN_LOOP_CHECK_MIXIN
+  CONTROL_FLOW_IN_LOOP_CHECK_MIXIN,
 );
 
 // Register provided blocks.

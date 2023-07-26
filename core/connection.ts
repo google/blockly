@@ -75,7 +75,10 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @param source The block establishing this connection.
    * @param type The type of the connection.
    */
-  constructor(source: Block, public type: number) {
+  constructor(
+    source: Block,
+    public type: number,
+  ) {
     this.sourceBlock_ = source;
   }
 
@@ -113,7 +116,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     let event;
     if (eventUtils.isEnabled()) {
       event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
-        childBlock
+        childBlock,
       ) as BlockMove;
       event.setReason(['connect']);
     }
@@ -133,7 +136,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       if (!orphanConnection) return;
       const connection = Connection.getConnectionForOrphanedConnection(
         childBlock,
-        orphanConnection
+        orphanConnection,
       );
       if (connection) {
         orphanConnection.connect(connection);
@@ -278,7 +281,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     let event;
     if (eventUtils.isEnabled()) {
       event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
-        childConnection.getSourceBlock()
+        childConnection.getSourceBlock(),
       ) as BlockMove;
       event.setReason(['disconnect']);
     }
@@ -386,7 +389,7 @@ export class Connection implements IASTNodeLocationWithBlock {
         !this.getConnectionChecker().canConnect(
           this,
           this.targetConnection,
-          false
+          false,
         ))
     ) {
       const child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
@@ -666,7 +669,7 @@ export class Connection implements IASTNodeLocationWithBlock {
           }
         } else {
           throw new Error(
-            'Cannot connect a shadow block to a previous/output connection'
+            'Cannot connect a shadow block to a previous/output connection',
           );
         }
       }
@@ -700,12 +703,12 @@ export class Connection implements IASTNodeLocationWithBlock {
    */
   static getConnectionForOrphanedConnection(
     startBlock: Block,
-    orphanConnection: Connection
+    orphanConnection: Connection,
   ): Connection | null {
     if (orphanConnection.type === ConnectionType.OUTPUT_VALUE) {
       return getConnectionForOrphanedOutput(
         startBlock,
-        orphanConnection.getSourceBlock()
+        orphanConnection.getSourceBlock(),
       );
     }
     // Otherwise we're dealing with a stack.
@@ -743,7 +746,7 @@ function connectReciprocally(first: Connection, second: Connection) {
  */
 function getSingleConnection(
   block: Block,
-  orphanBlock: Block
+  orphanBlock: Block,
 ): Connection | null {
   let foundConnection = null;
   const output = orphanBlock.outputConnection;
@@ -774,7 +777,7 @@ function getSingleConnection(
  */
 function getConnectionForOrphanedOutput(
   startBlock: Block,
-  orphanBlock: Block
+  orphanBlock: Block,
 ): Connection | null {
   let newBlock: Block | null = startBlock;
   let connection;

@@ -23,7 +23,7 @@ const SCHEMA_URL = new URL('renamings.schema.json', import.meta.url);
 /** @type {URL} Renamings filename. */
 const RENAMINGS_URL = new URL(
   '../../scripts/migration/renamings.json5',
-  import.meta.url
+  import.meta.url,
 );
 
 const renamingsJson5 = await readFile(RENAMINGS_URL);
@@ -46,7 +46,7 @@ Object.entries(renamings).forEach(([version, modules]) => {
   for (const {oldName} of modules) {
     if (seen.has(oldName)) {
       console.log(
-        `Duplicate entry for module ${oldName} ` + `in version ${version}.`
+        `Duplicate entry for module ${oldName} ` + `in version ${version}.`,
       );
       ok = false;
     }

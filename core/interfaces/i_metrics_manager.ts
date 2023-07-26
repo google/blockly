@@ -43,7 +43,7 @@ export interface IMetricsManager {
   getScrollMetrics(
     opt_getWorkspaceCoordinates?: boolean,
     opt_viewMetrics?: ContainerRegion,
-    opt_contentMetrics?: ContainerRegion
+    opt_contentMetrics?: ContainerRegion,
   ): ContainerRegion;
 
   /**

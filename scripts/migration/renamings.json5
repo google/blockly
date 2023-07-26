@@ -1454,7 +1454,7 @@
         Warning: {
           newExport: 'WarningIcon',
           oldPath: 'Blockly.Warning',
-          newPath: 'Blocky.icons.WarningIcon',
+          newPath: 'Blockly.icons.WarningIcon',
         },
       },
     },
@@ -1464,7 +1464,7 @@
         Comment: {
           newExport: 'CommentIcon',
           oldPath: 'Blockly.Comment',
-          newPath: 'Blocky.icons.CommentIcon',
+          newPath: 'Blockly.icons.CommentIcon',
         },
       },
     },
@@ -1475,7 +1475,7 @@
         Mutator: {
           newExport: 'MutatorIcon',
           oldPath: 'Blockly.Mutator',
-          newPath: 'Blocky.icons.MutatorIcon',
+          newPath: 'Blockly.icons.MutatorIcon',
         },
       },
     },
@@ -1572,6 +1572,24 @@
           newModule: 'Blockly.Python.all',
           oldPath: 'Blockly.Python',
           newPath: 'python.pythonGenerator',
+        },
+      },
+    },
+  ],
+
+  '10.0.1': [
+    {
+      oldName: 'Blockly',
+      exports: {
+        HSV_SATURATION: {
+          newModule: 'Blockly.utils.colour',
+          getMethod: 'getHsvSaturation',
+          setMethod: 'setHsvSaturation',
+        },
+        HSV_VALUE: {
+          newModule: 'Blockly.utils.colour',
+          getMethod: 'getHsvValue',
+          setMethod: 'setHsvValue',
         },
       },
     },

@@ -36,7 +36,7 @@ import {WorkspaceSvg} from './workspace_svg.js';
  */
 export function inject(
   container: Element | string,
-  opt_options?: BlocklyOptions
+  opt_options?: BlocklyOptions,
 ): WorkspaceSvg {
   let containerElement: Element | null = null;
   if (typeof container === 'string') {
@@ -115,7 +115,7 @@ function createDom(container: Element, options: Options): SVGElement {
       'class': 'blocklySvg',
       'tabindex': '0',
     },
-    container
+    container,
   );
   /*
     <defs>
@@ -177,7 +177,7 @@ function createMainWorkspace(svg: SVGElement, options: Options): WorkspaceSvg {
   mainWorkspace.translate(0, 0);
 
   mainWorkspace.addChangeListener(
-    bumpObjects.bumpIntoBoundsHandler(mainWorkspace)
+    bumpObjects.bumpIntoBoundsHandler(mainWorkspace),
   );
 
   // The SVG is now fully assembled.
@@ -206,7 +206,7 @@ function init(mainWorkspace: WorkspaceSvg) {
       if (!browserEvents.isTargetInput(e)) {
         e.preventDefault();
       }
-    }
+    },
   );
 
   const workspaceResizeHandler = browserEvents.conditionalBind(
@@ -222,7 +222,7 @@ function init(mainWorkspace: WorkspaceSvg) {
       WidgetDiv.repositionForWindowResize();
       common.svgResize(mainWorkspace);
       bumpObjects.bumpTopObjectsIntoBounds(mainWorkspace);
-    }
+    },
   );
   mainWorkspace.setResizeHandlerWrapper(workspaceResizeHandler);
 
@@ -261,7 +261,7 @@ function init(mainWorkspace: WorkspaceSvg) {
       mainWorkspace,
       horizontalScroll,
       verticalScroll,
-      'blocklyMainWorkspaceScrollbar'
+      'blocklyMainWorkspaceScrollbar',
     );
     mainWorkspace.scrollbar.resize();
   } else {
@@ -340,7 +340,7 @@ function bindDocumentEvents() {
         function () {
           // TODO (#397): Fix for multiple Blockly workspaces.
           common.svgResize(common.getMainWorkspace() as WorkspaceSvg);
-        }
+        },
       );
     }
   }
@@ -361,7 +361,7 @@ function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
       pathToMedia + 'click.wav',
       pathToMedia + 'click.ogg',
     ],
-    'click'
+    'click',
   );
   audioMgr.load(
     [
@@ -369,7 +369,7 @@ function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
       pathToMedia + 'disconnect.mp3',
       pathToMedia + 'disconnect.ogg',
     ],
-    'disconnect'
+    'disconnect',
   );
   audioMgr.load(
     [
@@ -377,7 +377,7 @@ function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
       pathToMedia + 'delete.ogg',
       pathToMedia + 'delete.wav',
     ],
-    'delete'
+    'delete',
   );
 
   // Bind temporary hooks that preload the sounds.
@@ -407,8 +407,8 @@ function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
       'pointermove',
       null,
       unbindSounds,
-      true
-    )
+      true,
+    ),
   );
   soundBinds.push(
     browserEvents.conditionalBind(
@@ -416,7 +416,7 @@ function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
       'touchstart',
       null,
       unbindSounds,
-      true
-    )
+      true,
+    ),
   );
 }

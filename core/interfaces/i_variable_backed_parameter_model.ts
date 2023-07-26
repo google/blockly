@@ -17,7 +17,7 @@ export interface IVariableBackedParameterModel extends IParameterModel {
  * Returns whether the given object is a variable holder or not.
  */
 export function isVariableBackedParameterModel(
-  param: IParameterModel
+  param: IParameterModel,
 ): param is IVariableBackedParameterModel {
   return (param as any).getVariableModel !== undefined;
 }

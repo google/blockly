@@ -63,7 +63,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getY(),
             0,
-            'y coordinate in vertical flyout should be 0'
+            'y coordinate in vertical flyout should be 0',
           );
         });
         test('x is right of workspace if flyout at right', function () {
@@ -76,7 +76,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getX(),
             100,
-            'x should be right of workspace'
+            'x should be right of workspace',
           );
         });
         test('x is 0 if flyout at left', function () {
@@ -86,7 +86,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getX(),
             0,
-            'x should be 0 if the flyout is on the left'
+            'x should be 0 if the flyout is on the left',
           );
         });
       });
@@ -114,7 +114,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getX(),
             20,
-            'x should be aligned with toolbox'
+            'x should be aligned with toolbox',
           );
         });
         test('x is aligned with toolbox at right', function () {
@@ -132,7 +132,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getX(),
             90,
-            'x + width should be aligned with toolbox'
+            'x + width should be aligned with toolbox',
           );
         });
       });
@@ -154,7 +154,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getX(),
             0,
-            'x should be aligned with left edge'
+            'x should be aligned with left edge',
           );
         });
         test('trashcan on right covers right edge of workspace', function () {
@@ -173,7 +173,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getX(),
             90,
-            'x + width should be aligned with right edge'
+            'x + width should be aligned with right edge',
           );
         });
       });
@@ -199,7 +199,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getX(),
             0,
-            'x coordinate in horizontal flyout should be 0'
+            'x coordinate in horizontal flyout should be 0',
           );
         });
         test('y is 0 if flyout at top', function () {
@@ -209,7 +209,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getY(),
             0,
-            'y should be 0 if flyout is at the top'
+            'y should be 0 if flyout is at the top',
           );
         });
         test('y is below workspace if flyout at bottom', function () {
@@ -222,7 +222,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getY(),
             50,
-            'y should be below the workspace'
+            'y should be below the workspace',
           );
         });
       });
@@ -251,7 +251,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getY(),
             20,
-            'y should be aligned with toolbox'
+            'y should be aligned with toolbox',
           );
         });
         test('y is aligned with toolbox at bottom', function () {
@@ -269,7 +269,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getY(),
             70,
-            'y + height should be aligned with toolbox'
+            'y + height should be aligned with toolbox',
           );
         });
       });
@@ -288,7 +288,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getY(),
             0,
-            'y should be aligned with top'
+            'y should be aligned with top',
           );
         });
         test('trashcan on bottom covers bottom of workspace', function () {
@@ -306,7 +306,7 @@ suite('Flyout', function () {
           chai.assert.equal(
             this.flyout.getY(),
             40,
-            'y + height should be aligned with bottom'
+            'y + height should be aligned with bottom',
           );
         });
       });
@@ -381,7 +381,7 @@ suite('Flyout', function () {
           sinon
             .stub(
               this.flyout.workspace_.targetWorkspace,
-              'getToolboxCategoryCallback'
+              'getToolboxCategoryCallback',
             )
             .returns(function () {
               return val;
@@ -397,7 +397,7 @@ suite('Flyout', function () {
             this.flyout.show('someString');
           }.bind(this),
           "Couldn't find a callback function when opening " +
-            'a toolbox category.'
+            'a toolbox category.',
         );
       });
 
@@ -407,7 +407,7 @@ suite('Flyout', function () {
 
       test('NodeList', function () {
         this.stubAndAssert(
-          document.getElementById('toolbox-simple').childNodes
+          document.getElementById('toolbox-simple').childNodes,
         );
       });
 
@@ -441,7 +441,7 @@ suite('Flyout', function () {
           const xml = Blockly.utils.xml.textToDom(
             '<xml>' +
               '<block type="text_print" disabled="true"></block>' +
-              '</xml>'
+              '</xml>',
           );
           this.flyout.show(xml);
           this.assertDisabled(true);
@@ -451,7 +451,7 @@ suite('Flyout', function () {
           const xml = Blockly.utils.xml.textToDom(
             '<xml>' +
               '<block type="text_print" disabled="false"></block>' +
-              '</xml>'
+              '</xml>',
           );
           this.flyout.show(xml);
           this.assertDisabled(false);
@@ -462,7 +462,7 @@ suite('Flyout', function () {
           const xml = Blockly.utils.xml.textToDom(
             '<xml>' +
               '<block type="text_print" disabled="disabled"></block>' +
-              '</xml>'
+              '</xml>',
           );
           this.flyout.show(xml);
           this.assertDisabled(true);
@@ -472,7 +472,7 @@ suite('Flyout', function () {
           const xml = Blockly.utils.xml.textToDom(
             '<xml>' +
               '<block type="text_print" disabled="random"></block>' +
-              '</xml>'
+              '</xml>',
           );
           this.flyout.show(xml);
           this.assertDisabled(false);

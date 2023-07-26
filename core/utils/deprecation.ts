@@ -22,7 +22,7 @@ export function warn(
   name: string,
   deprecationDate: string,
   deletionDate: string,
-  opt_use?: string
+  opt_use?: string,
 ) {
   let msg =
     name +

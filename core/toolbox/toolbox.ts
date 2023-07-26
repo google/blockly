@@ -153,7 +153,7 @@ export class Toolbox
     themeManager.subscribe(
       this.HtmlDiv,
       'toolboxBackgroundColour',
-      'background-color'
+      'background-color',
     );
     themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
     this.workspace_.getComponentManager().addComponent({
@@ -226,7 +226,7 @@ export class Toolbox
    */
   protected attachEvents_(
     container: HTMLDivElement,
-    contentsContainer: HTMLDivElement
+    contentsContainer: HTMLDivElement,
   ) {
     // Clicking on toolbox closes popups.
     const clickEvent = browserEvents.conditionalBind(
@@ -234,7 +234,7 @@ export class Toolbox
       'pointerdown',
       this,
       this.onClick_,
-      /* opt_noCaptureIdentifier */ false
+      /* opt_noCaptureIdentifier */ false,
     );
     this.boundEvents_.push(clickEvent);
 
@@ -243,7 +243,7 @@ export class Toolbox
       'keydown',
       this,
       this.onKeyDown_,
-      /* opt_noCaptureIdentifier */ false
+      /* opt_noCaptureIdentifier */ false,
     );
     this.boundEvents_.push(keyDownEvent);
   }
@@ -347,13 +347,13 @@ export class Toolbox
       FlyoutClass = registry.getClassFromOptions(
         registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
         workspace.options,
-        true
+        true,
       );
     } else {
       FlyoutClass = registry.getClassFromOptions(
         registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
         workspace.options,
-        true
+        true,
       );
     }
     return new FlyoutClass!(workspaceOptions);
@@ -406,7 +406,7 @@ export class Toolbox
    */
   private createToolboxItem_(
     toolboxItemDef: toolbox.ToolboxItemInfo,
-    fragment: DocumentFragment
+    fragment: DocumentFragment,
   ) {
     let registryName = toolboxItemDef['kind'];
 
@@ -421,7 +421,7 @@ export class Toolbox
 
     const ToolboxItemClass = registry.getClass(
       registry.Type.TOOLBOX_ITEM,
-      registryName.toLowerCase()
+      registryName.toLowerCase(),
     );
     if (ToolboxItemClass) {
       const toolboxItem = new ToolboxItemClass(toolboxItemDef, this);
@@ -853,7 +853,7 @@ export class Toolbox
    */
   protected shouldDeselectItem_(
     oldItem: ISelectableToolboxItem | null,
-    newItem: ISelectableToolboxItem | null
+    newItem: ISelectableToolboxItem | null,
   ): boolean {
     // Deselect the old item unless the old item is collapsible and has been
     // previously clicked on.
@@ -871,7 +871,7 @@ export class Toolbox
    */
   protected shouldSelectItem_(
     oldItem: ISelectableToolboxItem | null,
-    newItem: ISelectableToolboxItem | null
+    newItem: ISelectableToolboxItem | null,
   ): boolean {
     // Select the new item unless the old item equals the new item.
     return newItem !== null && newItem !== oldItem;
@@ -890,7 +890,7 @@ export class Toolbox
     aria.setState(
       this.contentsDiv_ as Element,
       aria.State.ACTIVEDESCENDANT,
-      ''
+      '',
     );
   }
 
@@ -902,7 +902,7 @@ export class Toolbox
    */
   protected selectItem_(
     oldItem: ISelectableToolboxItem | null,
-    newItem: ISelectableToolboxItem
+    newItem: ISelectableToolboxItem,
   ) {
     this.selectedItem_ = newItem;
     this.previouslySelectedItem_ = oldItem;
@@ -910,7 +910,7 @@ export class Toolbox
     aria.setState(
       this.contentsDiv_ as Element,
       aria.State.ACTIVEDESCENDANT,
-      newItem.getId()
+      newItem.getId(),
     );
   }
 
@@ -936,7 +936,7 @@ export class Toolbox
    */
   protected updateFlyout_(
     oldItem: ISelectableToolboxItem | null,
-    newItem: ISelectableToolboxItem | null
+    newItem: ISelectableToolboxItem | null,
   ) {
     if (
       !newItem ||
@@ -958,7 +958,7 @@ export class Toolbox
    */
   private fireSelectEvent_(
     oldItem: ISelectableToolboxItem | null,
-    newItem: ISelectableToolboxItem | null
+    newItem: ISelectableToolboxItem | null,
   ) {
     const oldElement = oldItem && oldItem.getName();
     let newElement = newItem && newItem.getName();
@@ -969,7 +969,7 @@ export class Toolbox
     const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))(
       oldElement,
       newElement,
-      this.workspace_.id
+      this.workspace_.id,
     );
     eventUtils.fire(event);
   }

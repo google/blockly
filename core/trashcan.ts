@@ -124,7 +124,7 @@ export class Trashcan
       const HorizontalFlyout = registry.getClassFromOptions(
         registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
         this.workspace.options,
-        true
+        true,
       );
       this.flyout = new HorizontalFlyout!(flyoutWorkspaceOptions);
     } else {
@@ -135,7 +135,7 @@ export class Trashcan
       const VerticalFlyout = registry.getClassFromOptions(
         registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
         this.workspace.options,
-        true
+        true,
       );
       this.flyout = new VerticalFlyout!(flyoutWorkspaceOptions);
     }
@@ -168,12 +168,12 @@ export class Trashcan
     clip = dom.createSvgElement(
       Svg.CLIPPATH,
       {'id': 'blocklyTrashBodyClipPath' + rnd},
-      this.svgGroup
+      this.svgGroup,
     );
     dom.createSvgElement(
       Svg.RECT,
       {'width': WIDTH, 'height': BODY_HEIGHT, 'y': LID_HEIGHT},
-      clip
+      clip,
     );
     const body = dom.createSvgElement(
       Svg.IMAGE,
@@ -184,23 +184,23 @@ export class Trashcan
         'y': -SPRITE_TOP,
         'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')',
       },
-      this.svgGroup
+      this.svgGroup,
     );
     body.setAttributeNS(
       dom.XLINK_NS,
       'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url
+      this.workspace.options.pathToMedia + SPRITE.url,
     );
 
     clip = dom.createSvgElement(
       Svg.CLIPPATH,
       {'id': 'blocklyTrashLidClipPath' + rnd},
-      this.svgGroup
+      this.svgGroup,
     );
     dom.createSvgElement(
       Svg.RECT,
       {'width': WIDTH, 'height': LID_HEIGHT},
-      clip
+      clip,
     );
     this.svgLid = dom.createSvgElement(
       Svg.IMAGE,
@@ -211,12 +211,12 @@ export class Trashcan
         'y': -SPRITE_TOP,
         'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')',
       },
-      this.svgGroup
+      this.svgGroup,
     );
     this.svgLid.setAttributeNS(
       dom.XLINK_NS,
       'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url
+      this.workspace.options.pathToMedia + SPRITE.url,
     );
 
     // bindEventWithChecks_ quashes events too aggressively. See:
@@ -227,7 +227,7 @@ export class Trashcan
       this.svgGroup,
       'pointerdown',
       this,
-      this.blockMouseDownWhenOpenable
+      this.blockMouseDownWhenOpenable,
     );
     browserEvents.bind(this.svgGroup, 'pointerup', this, this.click);
     // Bind to body instead of this.svgGroup so that we don't get lid jitters
@@ -242,7 +242,7 @@ export class Trashcan
     if (this.workspace.options.maxTrashcanContents > 0) {
       dom.insertAfter(
         this.flyout!.createDom(Svg.SVG)!,
-        this.workspace.getParentSvg()
+        this.workspace.getParentSvg(),
       );
       this.flyout!.init(this.workspace);
     }
@@ -363,7 +363,7 @@ export class Trashcan
 
     const cornerPosition = uiPosition.getCornerOppositeToolbox(
       this.workspace,
-      metrics
+      metrics,
     );
 
     const height = BODY_HEIGHT + LID_HEIGHT;
@@ -373,7 +373,7 @@ export class Trashcan
       MARGIN_HORIZONTAL,
       MARGIN_VERTICAL,
       metrics,
-      this.workspace
+      this.workspace,
     );
 
     const verticalPosition = cornerPosition.vertical;
@@ -385,14 +385,14 @@ export class Trashcan
       startRect,
       MARGIN_VERTICAL,
       bumpDirection,
-      savedPositions
+      savedPositions,
     );
 
     this.top = positionRect.top;
     this.left = positionRect.left;
     this.svgGroup?.setAttribute(
       'transform',
-      'translate(' + this.left + ',' + this.top + ')'
+      'translate(' + this.left + ',' + this.top + ')',
     );
   }
 
@@ -494,7 +494,7 @@ export class Trashcan
     if (this.lidOpen > this.minOpenness && this.lidOpen < 1) {
       this.lidTask = setTimeout(
         this.animateLid.bind(this),
-        ANIMATION_LENGTH / frames
+        ANIMATION_LENGTH / frames,
       );
     }
   }
@@ -516,7 +516,7 @@ export class Trashcan
         (openAtRight ? 4 : WIDTH - 4) +
         ',' +
         (LID_HEIGHT - 2) +
-        ')'
+        ')',
     );
   }
 
@@ -558,7 +558,7 @@ export class Trashcan
   private fireUiEvent(trashcanOpen: boolean) {
     const uiEvent = new (eventUtils.get(eventUtils.TRASHCAN_OPEN))(
       trashcanOpen,
-      this.workspace.id
+      this.workspace.id,
     );
     eventUtils.fire(uiEvent);
   }
@@ -613,7 +613,7 @@ export class Trashcan
         throw new Error('Encountered a delete event without proper oldJson');
       }
       const cleanedJson = JSON.stringify(
-        this.cleanBlockJson(deleteEvent.oldJson)
+        this.cleanBlockJson(deleteEvent.oldJson),
       );
       if (this.contents.indexOf(cleanedJson) !== -1) {
         return;

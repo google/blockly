@@ -21,7 +21,10 @@ export class StatementInput extends Input {
    *     again.
    * @param block The block containing this input.
    */
-  constructor(public name: string, block: Block) {
+  constructor(
+    public name: string,
+    block: Block,
+  ) {
     // Errors are maintained for people not using typescript.
     if (!name) throw new Error('Statement inputs must have a non-empty name');
 

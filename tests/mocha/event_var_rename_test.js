@@ -27,7 +27,7 @@ suite('Var Rename Event', function () {
         this.workspace,
         'old name',
         'type',
-        'id'
+        'id',
       );
       const origEvent = new Blockly.Events.VarRename(varModel, 'new name');
 

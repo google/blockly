@@ -66,7 +66,7 @@ suite('Icon', function () {
 
         chai.assert.isFalse(
           initViewSpy.called,
-          'Expected initView to not be called'
+          'Expected initView to not be called',
         );
       });
 
@@ -79,12 +79,12 @@ suite('Icon', function () {
         block.addIcon(icon);
         chai.assert.isFalse(
           initViewSpy.called,
-          'Expected initView to not be called before initing svg'
+          'Expected initView to not be called before initing svg',
         );
         block.initSvg();
         chai.assert.isTrue(
           initViewSpy.calledOnce,
-          'Expected initView to be called'
+          'Expected initView to be called',
         );
       });
 
@@ -101,9 +101,9 @@ suite('Icon', function () {
           block.addIcon(icon);
           chai.assert.isTrue(
             initViewSpy.calledOnce,
-            'Expected initView to be called'
+            'Expected initView to be called',
           );
-        }
+        },
       );
     });
 
@@ -118,7 +118,7 @@ suite('Icon', function () {
 
         chai.assert.isFalse(
           applyColourSpy.called,
-          'Expected applyColour to not be called'
+          'Expected applyColour to not be called',
         );
       });
 
@@ -131,12 +131,12 @@ suite('Icon', function () {
         block.addIcon(icon);
         chai.assert.isFalse(
           applyColourSpy.called,
-          'Expected applyCOlour to not be called before initing svg'
+          'Expected applyCOlour to not be called before initing svg',
         );
         block.initSvg();
         chai.assert.isTrue(
           applyColourSpy.calledOnce,
-          'Expected applyColour to be called'
+          'Expected applyColour to be called',
         );
       });
 
@@ -152,9 +152,9 @@ suite('Icon', function () {
           block.addIcon(icon);
           chai.assert.isTrue(
             applyColourSpy.calledOnce,
-            'Expected applyColour to be called'
+            'Expected applyColour to be called',
           );
-        }
+        },
       );
 
       test("applyColour is called when the block's color changes", function () {
@@ -168,7 +168,7 @@ suite('Icon', function () {
         block.setColour('#cccccc');
         chai.assert.isTrue(
           applyColourSpy.calledOnce,
-          'Expected applyColour to be called'
+          'Expected applyColour to be called',
         );
       });
 
@@ -183,7 +183,7 @@ suite('Icon', function () {
         block.setStyle('logic_block');
         chai.assert.isTrue(
           applyColourSpy.calledOnce,
-          'Expected applyColour to be called'
+          'Expected applyColour to be called',
         );
       });
 
@@ -198,7 +198,7 @@ suite('Icon', function () {
         block.setEnabled(false);
         chai.assert.isTrue(
           applyColourSpy.calledOnce,
-          'Expected applyColour to be called'
+          'Expected applyColour to be called',
         );
       });
 
@@ -213,7 +213,7 @@ suite('Icon', function () {
         block.setShadow(true);
         chai.assert.isTrue(
           applyColourSpy.calledOnce,
-          'Expected applyColour to be called'
+          'Expected applyColour to be called',
         );
       });
     });
@@ -229,7 +229,7 @@ suite('Icon', function () {
 
         chai.assert.isFalse(
           updateEditableSpy.called,
-          'Expected updateEditable to not be called'
+          'Expected updateEditable to not be called',
         );
       });
 
@@ -242,12 +242,12 @@ suite('Icon', function () {
         block.addIcon(icon);
         chai.assert.isFalse(
           updateEditableSpy.called,
-          'Expected updateEditable to not be called before initing svg'
+          'Expected updateEditable to not be called before initing svg',
         );
         block.initSvg();
         chai.assert.isTrue(
           updateEditableSpy.calledOnce,
-          'Expected updateEditable to be called'
+          'Expected updateEditable to be called',
         );
       });
 
@@ -263,9 +263,9 @@ suite('Icon', function () {
           block.addIcon(icon);
           chai.assert.isTrue(
             updateEditableSpy.calledOnce,
-            'Expected updateEditable to be called'
+            'Expected updateEditable to be called',
           );
-        }
+        },
       );
 
       test('updateEditable is called when the block is made ineditable', function () {
@@ -279,7 +279,7 @@ suite('Icon', function () {
         block.setEditable(false);
         chai.assert.isTrue(
           updateEditableSpy.calledOnce,
-          'Expected updateEditable to be called'
+          'Expected updateEditable to be called',
         );
       });
 
@@ -295,7 +295,7 @@ suite('Icon', function () {
         block.setEditable(true);
         chai.assert.isTrue(
           updateEditableSpy.calledOnce,
-          'Expected updateEditable to be called'
+          'Expected updateEditable to be called',
         );
       });
     });
@@ -313,7 +313,7 @@ suite('Icon', function () {
 
         chai.assert.isFalse(
           updateCollapsedSpy.called,
-          'Expected updateCollapsed to not be called'
+          'Expected updateCollapsed to not be called',
         );
       });
 
@@ -330,7 +330,7 @@ suite('Icon', function () {
 
         chai.assert.isTrue(
           updateCollapsedSpy.called,
-          'Expected updateCollapsed to be called'
+          'Expected updateCollapsed to be called',
         );
       });
 
@@ -347,7 +347,7 @@ suite('Icon', function () {
 
         chai.assert.isTrue(
           updateCollapsedSpy.called,
-          'Expected updateCollapsed to be called'
+          'Expected updateCollapsed to be called',
         );
       });
     });
@@ -362,7 +362,7 @@ suite('Icon', function () {
         json,
         {'icons': {'serializable icon': 'some state'}},
         'Expected the JSON to include the saved state of the ' +
-          'serializable icon.'
+          'serializable icon.',
       );
     });
 
@@ -373,7 +373,7 @@ suite('Icon', function () {
       chai.assert.notProperty(
         json,
         'icons',
-        'Expected the JSON to not include any saved state for icons'
+        'Expected the JSON to not include any saved state for icons',
       );
     });
   });
@@ -382,7 +382,7 @@ suite('Icon', function () {
     test('registered icons are instantiated and added to the block', function () {
       Blockly.icons.registry.register(
         'serializable icon',
-        MockSerializableIcon
+        MockSerializableIcon,
       );
 
       const workspace = createHeadlessWorkspace();
@@ -397,7 +397,7 @@ suite('Icon', function () {
         block.getIcon('serializable icon').state,
         'some state',
         'Expected the icon to have been properly instantiated and ' +
-          'deserialized'
+          'deserialized',
       );
 
       Blockly.icons.registry.unregister('serializable icon');
@@ -417,7 +417,7 @@ suite('Icon', function () {
         },
         Blockly.serialization.exceptions.UnregisteredIcon,
         '',
-        'Expected deserializing an unregistered icon to throw'
+        'Expected deserializing an unregistered icon to throw',
       );
     });
   });

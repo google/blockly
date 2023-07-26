@@ -21,6 +21,15 @@ let dirtyBlocks = new WeakSet<BlockSvg>();
  */
 let afterRendersPromise: Promise<void> | null = null;
 
+/** The function to call to resolve the `afterRendersPromise`. */
+let afterRendersResolver: (() => void) | null = null;
+
+/**
+ * The ID of the current animation frame request. Used to cancel the request
+ * if necessary.
+ */
+let animationRequestId = 0;
+
 /**
  * Registers that the given block and all of its parents need to be rerendered,
  * and registers a callback to do so after a delay, to allowf or batching.
@@ -35,7 +44,8 @@ export function queueRender(block: BlockSvg): Promise<void> {
   queueBlock(block);
   if (!afterRendersPromise) {
     afterRendersPromise = new Promise((resolve) => {
-      window.requestAnimationFrame(() => {
+      afterRendersResolver = resolve;
+      animationRequestId = window.requestAnimationFrame(() => {
         doRenders();
         resolve();
       });
@@ -52,6 +62,19 @@ export function finishQueuedRenders(): Promise<void> {
   // If there are no queued renders, return a resolved promise so `then`
   // callbacks trigger immediately.
   return afterRendersPromise ? afterRendersPromise : Promise.resolve();
+}
+
+/**
+ * Triggers an immediate render of all queued renders. Should only be used in
+ * cases where queueing renders breaks functionality + backwards compatibility
+ * (such as rendering icons).
+ *
+ * @internal
+ */
+export function triggerQueuedRenders() {
+  window.cancelAnimationFrame(animationRequestId);
+  doRenders();
+  if (afterRendersResolver) afterRendersResolver();
 }
 
 /**
@@ -127,7 +150,7 @@ function updateConnectionLocations(block: BlockSvg, blockOrigin: Coordinate) {
     if (moved || dirtyBlocks.has(target)) {
       updateConnectionLocations(
         target,
-        Coordinate.sum(blockOrigin, target.relativeCoords)
+        Coordinate.sum(blockOrigin, target.relativeCoords),
       );
     }
   }
@@ -147,7 +170,7 @@ function updateIconLocations(block: BlockSvg, blockOrigin: Coordinate) {
   for (const child of block.getChildren(false)) {
     updateIconLocations(
       child,
-      Coordinate.sum(blockOrigin, child.relativeCoords)
+      Coordinate.sum(blockOrigin, child.relativeCoords),
     );
   }
 }

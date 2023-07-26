@@ -31,7 +31,7 @@ import {warn} from './utils/deprecation.js';
  */
 export type BlockGenerator = (
   block: Block,
-  generator: CodeGenerator
+  generator: CodeGenerator,
 ) => [string, number] | string | null;
 
 /**
@@ -49,7 +49,7 @@ export class CodeGenerator {
    * legitimately appear in a function definition (or comment), and it must
    * not confuse the regular expression parser.
    */
-  protected FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
+  FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
   FUNCTION_NAME_PLACEHOLDER_REGEXP_: RegExp;
 
   /**
@@ -117,7 +117,7 @@ export class CodeGenerator {
 
     this.FUNCTION_NAME_PLACEHOLDER_REGEXP_ = new RegExp(
       this.FUNCTION_NAME_PLACEHOLDER_,
-      'g'
+      'g',
     );
   }
 
@@ -131,7 +131,7 @@ export class CodeGenerator {
     if (!workspace) {
       // Backwards compatibility from before there could be multiple workspaces.
       console.warn(
-        'No workspace specified in workspaceToCode call.  Guessing.'
+        'No workspace specified in workspaceToCode call.  Guessing.',
       );
       workspace = common.getMainWorkspace();
     }
@@ -220,11 +220,11 @@ export class CodeGenerator {
    */
   blockToCode(
     block: Block | null,
-    opt_thisOnly?: boolean
+    opt_thisOnly?: boolean,
   ): string | [string, number] {
     if (this.isInitialized === false) {
       console.warn(
-        'CodeGenerator init was not called before blockToCode was called.'
+        'CodeGenerator init was not called before blockToCode was called.',
       );
     }
     if (!block) {
@@ -247,14 +247,14 @@ export class CodeGenerator {
         'block generator functions on CodeGenerator objects',
         '10.0',
         '11.0',
-        'the .forBlock[blockType] dictionary'
+        'the .forBlock[blockType] dictionary',
       );
       func = (this as any)[block.type];
     }
     if (typeof func !== 'function') {
       throw Error(
         `${this.name_} generator does not know how to generate code` +
-          `for block type "${block.type}".`
+          `for block type "${block.type}".`,
       );
     }
     // First argument to func.call is the value of 'this' in the generator.
@@ -313,14 +313,14 @@ export class CodeGenerator {
       throw TypeError(
         `Expecting tuple from value block: ${targetBlock.type} See ` +
           `developers.google.com/blockly/guides/create-custom-blocks/generating-code ` +
-          `for more information`
+          `for more information`,
       );
     }
     let code = tuple[0];
     const innerOrder = tuple[1];
     if (isNaN(innerOrder)) {
       throw TypeError(
-        'Expecting valid order from value block: ' + targetBlock.type
+        'Expecting valid order from value block: ' + targetBlock.type,
       );
     }
     if (!code) {
@@ -383,7 +383,7 @@ export class CodeGenerator {
     if (typeof code !== 'string') {
       throw TypeError(
         'Expecting code from statement block: ' +
-          (targetBlock && targetBlock.type)
+          (targetBlock && targetBlock.type),
       );
     }
     if (code) {
@@ -407,14 +407,14 @@ export class CodeGenerator {
       branch =
         this.prefixLines(
           this.injectId(this.INFINITE_LOOP_TRAP, block),
-          this.INDENT
+          this.INDENT,
         ) + branch;
     }
     if (this.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
       branch =
         this.prefixLines(
           this.injectId(this.STATEMENT_SUFFIX, block),
-          this.INDENT
+          this.INDENT,
         ) + branch;
     }
     if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
@@ -422,7 +422,7 @@ export class CodeGenerator {
         branch +
         this.prefixLines(
           this.injectId(this.STATEMENT_PREFIX, block),
-          this.INDENT
+          this.INDENT,
         );
     }
     return branch;
@@ -471,14 +471,11 @@ export class CodeGenerator {
    * @returns The actual name of the new function.  This may differ from
    *     desiredName if the former has already been taken by the user.
    */
-  protected provideFunction_(
-    desiredName: string,
-    code: string[] | string
-  ): string {
+  provideFunction_(desiredName: string, code: string[] | string): string {
     if (!this.definitions_[desiredName]) {
       const functionName = this.nameDB_!.getDistinctName(
         desiredName,
-        NameType.PROCEDURE
+        NameType.PROCEDURE,
       );
       this.functionNames_[desiredName] = functionName;
       if (Array.isArray(code)) {
@@ -534,7 +531,7 @@ export class CodeGenerator {
   protected scrub_(
     _block: Block,
     code: string,
-    _opt_thisOnly?: boolean
+    _opt_thisOnly?: boolean,
   ): string {
     // Optionally override
     return code;

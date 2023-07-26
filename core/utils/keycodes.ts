@@ -7,6 +7,8 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.KeyCodes');
 
+/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
+
 /**
  * Key codes for common characters.
  *

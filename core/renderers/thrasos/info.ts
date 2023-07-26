@@ -66,8 +66,8 @@ export class RenderInfo extends BaseRenderInfo {
         row.elements.push(
           new InRowSpacer(
             this.constants_,
-            this.getInRowSpacing_(null, oldElems[0])
-          )
+            this.getInRowSpacing_(null, oldElems[0]),
+          ),
         );
       }
       if (!oldElems.length) {
@@ -82,7 +82,7 @@ export class RenderInfo extends BaseRenderInfo {
       if (row.endsWithElemSpacer()) {
         let spacing = this.getInRowSpacing_(
           oldElems[oldElems.length - 1],
-          null
+          null,
         );
         if (hasExternalInputs && row.hasDummyInput) {
           spacing += this.constants_.TAB_WIDTH;
@@ -290,7 +290,7 @@ export class RenderInfo extends BaseRenderInfo {
 
       widestRowWithConnectedBlocks = Math.max(
         widestRowWithConnectedBlocks,
-        row.widthWithConnectedBlocks
+        row.widthWithConnectedBlocks,
       );
       // Add padding to the bottom row if block height is less than minimum
       const heightWithoutHat = yCursor - this.topRow.ascenderHeight;
@@ -315,7 +315,7 @@ export class RenderInfo extends BaseRenderInfo {
         // Include width of connected block in value to stack width measurement.
         widestRowWithConnectedBlocks = Math.max(
           widestRowWithConnectedBlocks,
-          target.getHeightWidth().width
+          target.getHeightWidth().width,
         );
       }
     }

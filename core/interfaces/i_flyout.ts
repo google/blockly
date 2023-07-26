@@ -46,7 +46,7 @@ export interface IFlyout extends IRegistrable {
    * @returns The flyout's SVG group.
    */
   createDom(
-    tagName: string | Svg<SVGSVGElement> | Svg<SVGGElement>
+    tagName: string | Svg<SVGSVGElement> | Svg<SVGGElement>,
   ): SVGElement;
 
   /**

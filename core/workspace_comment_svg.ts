@@ -106,7 +106,7 @@ export class WorkspaceCommentSvg
     content: string,
     height: number,
     width: number,
-    opt_id?: string
+    opt_id?: string,
   ) {
     super(workspace, content, height, width, opt_id);
     this.svgGroup = dom.createSvgElement(Svg.G, {'class': 'blocklyComment'});
@@ -166,13 +166,13 @@ export class WorkspaceCommentSvg
         this.svgRectTarget as SVGRectElement,
         'pointerdown',
         this,
-        this.pathMouseDown
+        this.pathMouseDown,
       );
       browserEvents.conditionalBind(
         this.svgHandleTarget as SVGRectElement,
         'pointerdown',
         this,
-        this.pathMouseDown
+        this.pathMouseDown,
       );
     }
     this.eventsInit = true;
@@ -209,7 +209,7 @@ export class WorkspaceCommentSvg
   showContextMenu(e: PointerEvent) {
     throw new Error(
       'The implementation of showContextMenu should be ' +
-        'monkey-patched in by blockly.ts'
+        'monkey-patched in by blockly.ts',
     );
   }
 
@@ -236,7 +236,7 @@ export class WorkspaceCommentSvg
     const event = new (eventUtils.get(eventUtils.SELECTED))(
       oldId,
       this.id,
-      this.workspace.id
+      this.workspace.id,
     );
     eventUtils.fire(event);
     common.setSelected(this);
@@ -255,7 +255,7 @@ export class WorkspaceCommentSvg
     const event = new (eventUtils.get(eventUtils.SELECTED))(
       this.id,
       null,
-      this.workspace.id
+      this.workspace.id,
     );
     eventUtils.fire(event);
     common.setSelected(null);
@@ -342,7 +342,7 @@ export class WorkspaceCommentSvg
    */
   override moveBy(dx: number, dy: number) {
     const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
-      this
+      this,
     ) as CommentMove;
     // TODO: Do I need to look up the relative to surface XY position here?
     const xy = this.getRelativeToSurfaceXY();
@@ -365,7 +365,7 @@ export class WorkspaceCommentSvg
     this.xy_ = new Coordinate(x, y);
     this.getSvgRoot().setAttribute(
       'transform',
-      'translate(' + x + ',' + y + ')'
+      'translate(' + x + ',' + y + ')',
     );
   }
 
@@ -554,7 +554,7 @@ export class WorkspaceCommentSvg
     const xy = this.getRelativeToSurfaceXY();
     element.setAttribute(
       'x',
-      String(Math.round(this.workspace.RTL ? width - xy.x : xy.x))
+      String(Math.round(this.workspace.RTL ? width - xy.x : xy.x)),
     );
     element.setAttribute('y', String(Math.round(xy.y)));
     element.setAttribute('h', String(this.getHeight()));
@@ -636,7 +636,7 @@ export class WorkspaceCommentSvg
         this.resizeGroup,
         'pointerdown',
         this,
-        this.resizeMouseDown
+        this.resizeMouseDown,
       );
     }
 
@@ -645,19 +645,19 @@ export class WorkspaceCommentSvg
         this.deleteGroup as SVGGElement,
         'pointerdown',
         this,
-        this.deleteMouseDown
+        this.deleteMouseDown,
       );
       browserEvents.conditionalBind(
         this.deleteGroup as SVGGElement,
         'pointerout',
         this,
-        this.deleteMouseOut
+        this.deleteMouseOut,
       );
       browserEvents.conditionalBind(
         this.deleteGroup as SVGGElement,
         'pointerup',
         this,
-        this.deleteMouseUp
+        this.deleteMouseUp,
       );
     }
   }
@@ -687,7 +687,7 @@ export class WorkspaceCommentSvg
     body.className = 'blocklyMinimalBody';
     const textarea = document.createElementNS(
       dom.HTML_NS,
-      'textarea'
+      'textarea',
     ) as HTMLTextAreaElement;
     textarea.className = 'blocklyCommentTextarea';
     textarea.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
@@ -702,7 +702,7 @@ export class WorkspaceCommentSvg
       this,
       function (e: WheelEvent) {
         e.stopPropagation();
-      }
+      },
     );
     browserEvents.conditionalBind(
       textarea,
@@ -710,7 +710,7 @@ export class WorkspaceCommentSvg
       this,
       function (this: WorkspaceCommentSvg, _e: Event) {
         this.setContent(textarea.value);
-      }
+      },
     );
     return this.foreignObject;
   }
@@ -720,14 +720,14 @@ export class WorkspaceCommentSvg
     this.resizeGroup = dom.createSvgElement(
       Svg.G,
       {'class': this.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'},
-      this.svgGroup
+      this.svgGroup,
     );
     dom.createSvgElement(
       Svg.POLYGON,
       {
         'points': `0,${RESIZE_SIZE} ${RESIZE_SIZE},${RESIZE_SIZE} ${RESIZE_SIZE},0`,
       },
-      this.resizeGroup
+      this.resizeGroup,
     );
     dom.createSvgElement(
       Svg.LINE,
@@ -738,7 +738,7 @@ export class WorkspaceCommentSvg
         'x2': RESIZE_SIZE - 1,
         'y2': RESIZE_SIZE / 3,
       },
-      this.resizeGroup
+      this.resizeGroup,
     );
     dom.createSvgElement(
       Svg.LINE,
@@ -749,7 +749,7 @@ export class WorkspaceCommentSvg
         'x2': RESIZE_SIZE - 1,
         'y2': (RESIZE_SIZE * 2) / 3,
       },
-      this.resizeGroup
+      this.resizeGroup,
     );
   }
 
@@ -758,12 +758,12 @@ export class WorkspaceCommentSvg
     this.deleteGroup = dom.createSvgElement(
       Svg.G,
       {'class': 'blocklyCommentDeleteIcon'},
-      this.svgGroup
+      this.svgGroup,
     );
     this.deleteIconBorder = dom.createSvgElement(
       Svg.CIRCLE,
       {'class': 'blocklyDeleteIconShape', 'r': '7', 'cx': '7.5', 'cy': '7.5'},
-      this.deleteGroup
+      this.deleteGroup,
     );
     // x icon.
     dom.createSvgElement(
@@ -776,7 +776,7 @@ export class WorkspaceCommentSvg
         'stroke': '#fff',
         'stroke-width': '2',
       },
-      this.deleteGroup
+      this.deleteGroup,
     );
     dom.createSvgElement(
       Svg.LINE,
@@ -788,7 +788,7 @@ export class WorkspaceCommentSvg
         'stroke': '#fff',
         'stroke-width': '2',
       },
-      this.deleteGroup
+      this.deleteGroup,
     );
   }
 
@@ -809,21 +809,21 @@ export class WorkspaceCommentSvg
       e,
       new Coordinate(
         this.workspace.RTL ? -this.width_ : this.width_,
-        this.height_
-      )
+        this.height_,
+      ),
     );
 
     this.onMouseUpWrapper = browserEvents.conditionalBind(
       document,
       'pointerup',
       this,
-      this.resizeMouseUp
+      this.resizeMouseUp,
     );
     this.onMouseMoveWrapper = browserEvents.conditionalBind(
       document,
       'pointermove',
       this,
-      this.resizeMouseMove
+      this.resizeMouseMove,
     );
     this.workspace.hideChaff();
     // This event has been handled.  No need to bubble up to the document.
@@ -941,7 +941,7 @@ export class WorkspaceCommentSvg
     this.svgHandleTarget?.setAttribute('width', `${width}`);
     this.svgHandleTarget?.setAttribute(
       'height',
-      String(WorkspaceCommentSvg.TOP_OFFSET)
+      String(WorkspaceCommentSvg.TOP_OFFSET),
     );
     if (this.RTL) {
       this.svgRect_.setAttribute('transform', 'scale(-1 1)');
@@ -957,7 +957,7 @@ export class WorkspaceCommentSvg
             (-width + RESIZE_SIZE) +
             ',' +
             (height - RESIZE_SIZE) +
-            ') scale(-1 1)'
+            ') scale(-1 1)',
         );
         this.deleteGroup?.setAttribute(
           'transform',
@@ -965,7 +965,7 @@ export class WorkspaceCommentSvg
             (-width + RESIZE_SIZE) +
             ',' +
             -RESIZE_SIZE +
-            ') scale(-1 1)'
+            ') scale(-1 1)',
         );
       } else {
         this.resizeGroup.setAttribute(
@@ -974,11 +974,11 @@ export class WorkspaceCommentSvg
             (width - RESIZE_SIZE) +
             ',' +
             (height - RESIZE_SIZE) +
-            ')'
+            ')',
         );
         this.deleteGroup?.setAttribute(
           'transform',
-          'translate(' + (width - RESIZE_SIZE) + ',' + -RESIZE_SIZE + ')'
+          'translate(' + (width - RESIZE_SIZE) + ',' + -RESIZE_SIZE + ')',
         );
       }
     }
@@ -1031,7 +1031,7 @@ export class WorkspaceCommentSvg
       if (this.svgHandleTarget) {
         dom.removeClass(
           this.svgHandleTarget,
-          'blocklyCommentHandleTargetFocused'
+          'blocklyCommentHandleTargetFocused',
         );
       }
     }, 0);
@@ -1050,7 +1050,7 @@ export class WorkspaceCommentSvg
   static fromXmlRendered(
     xmlComment: Element,
     workspace: WorkspaceSvg,
-    opt_wsWidth?: number
+    opt_wsWidth?: number,
   ): WorkspaceCommentSvg {
     eventUtils.disable();
     let comment;
@@ -1062,7 +1062,7 @@ export class WorkspaceCommentSvg
         info.content,
         info.h,
         info.w,
-        info.id
+        info.id,
       );
       if (workspace.rendered) {
         comment.initSvg(true);

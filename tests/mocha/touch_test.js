@@ -98,7 +98,7 @@ suite('Touch', function () {
       });
       chai.assert.equal(
         Blockly.Touch.getTouchIdentifierFromEvent(pointerdown),
-        7
+        7,
       );
     });
 
@@ -109,7 +109,7 @@ suite('Touch', function () {
       });
       chai.assert.equal(
         Blockly.Touch.getTouchIdentifierFromEvent(pointerdown),
-        42
+        42,
       );
     });
   });

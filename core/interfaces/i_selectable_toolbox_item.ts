@@ -58,7 +58,7 @@ export interface ISelectableToolboxItem extends IToolboxItem {
  * Type guard that checks whether an IToolboxItem is an ISelectableToolboxItem.
  */
 export function isSelectableToolboxItem(
-  toolboxItem: IToolboxItem
+  toolboxItem: IToolboxItem,
 ): toolboxItem is ISelectableToolboxItem {
   return toolboxItem.isSelectable();
 }

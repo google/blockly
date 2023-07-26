@@ -33,11 +33,11 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  */
 export function workspaceToDom(
   workspace: Workspace,
-  opt_noId?: boolean
+  opt_noId?: boolean,
 ): Element {
   const treeXml = utilsXml.createElement('xml');
   const variablesElement = variablesToDom(
-    Variables.allUsedVarModels(workspace)
+    Variables.allUsedVarModels(workspace),
   );
   if (variablesElement.hasChildNodes()) {
     treeXml.appendChild(variablesElement);
@@ -86,7 +86,7 @@ export function variablesToDom(variableList: VariableModel[]): Element {
  */
 export function blockToDomWithXY(
   block: Block,
-  opt_noId?: boolean
+  opt_noId?: boolean,
 ): Element | DocumentFragment {
   if (block.isInsertionMarker()) {
     // Skip over insertion markers.
@@ -107,7 +107,7 @@ export function blockToDomWithXY(
     const xy = block.getRelativeToSurfaceXY();
     element.setAttribute(
       'x',
-      String(Math.round(block.workspace.RTL ? width - xy.x : xy.x))
+      String(Math.round(block.workspace.RTL ? width - xy.x : xy.x)),
     );
     element.setAttribute('y', String(Math.round(xy.y)));
   }
@@ -159,7 +159,7 @@ function allFieldsToDom(block: Block, element: Element) {
  */
 export function blockToDom(
   block: Block,
-  opt_noId?: boolean
+  opt_noId?: boolean,
 ): Element | DocumentFragment {
   // Skip over insertion markers.
   if (block.isInsertionMarker()) {
@@ -385,7 +385,7 @@ export function domToPrettyText(dom: Node): string {
  */
 export function clearWorkspaceAndLoadFromXml(
   xml: Element,
-  workspace: WorkspaceSvg
+  workspace: WorkspaceSvg,
 ): string[] {
   workspace.setResizesEnabled(false);
   workspace.clear();
@@ -447,7 +447,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
           WorkspaceCommentSvg.fromXmlRendered(
             xmlChildElement,
             workspace as WorkspaceSvg,
-            width
+            width,
           );
         } else {
           WorkspaceComment.fromXml(xmlChildElement, workspace);
@@ -459,7 +459,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
           throw Error(
             "'variables' tag must exist once before block and " +
               'shadow tag elements in the workspace XML, but it was found in ' +
-              'another location.'
+              'another location.',
           );
         }
         variablesFirst = false;
@@ -487,7 +487,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
  */
 export function appendDomToWorkspace(
   xml: Element,
-  workspace: WorkspaceSvg
+  workspace: WorkspaceSvg,
 ): string[] {
   // First check if we have a WorkspaceSvg, otherwise the blocks have no shape
   // and the position does not matter.
@@ -586,13 +586,13 @@ export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
   if (eventUtils.isEnabled()) {
     const newVariables = Variables.getAddedVariables(
       workspace,
-      variablesBeforeCreation
+      variablesBeforeCreation,
     );
     // Fire a VarCreate event for each (if any) new variable created.
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable)
+        new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable),
       );
     }
     // Block events come after var events, in case they refer to newly created
@@ -800,7 +800,7 @@ function applyInputTagNodes(
   xmlChildren: Element[],
   workspace: Workspace,
   block: Block,
-  prototypeName: string
+  prototypeName: string,
 ) {
   for (let i = 0; i < xmlChildren.length; i++) {
     const xmlChild = xmlChildren[i];
@@ -808,7 +808,10 @@ function applyInputTagNodes(
     const input = nodeName ? block.getInput(nodeName) : null;
     if (!input) {
       console.warn(
-        'Ignoring non-existent input ' + nodeName + ' in block ' + prototypeName
+        'Ignoring non-existent input ' +
+          nodeName +
+          ' in block ' +
+          prototypeName,
       );
       break;
     }
@@ -821,7 +824,7 @@ function applyInputTagNodes(
         childBlockInfo.childBlockElement,
         workspace,
         input.connection,
-        false
+        false,
       );
     }
     // Set shadow after so we don't create a shadow we delete immediately.
@@ -841,7 +844,7 @@ function applyInputTagNodes(
 function applyNextTagNodes(
   xmlChildren: Element[],
   workspace: Workspace,
-  block: Block
+  block: Block,
 ) {
   for (let i = 0; i < xmlChildren.length; i++) {
     const xmlChild = xmlChildren[i];
@@ -859,7 +862,7 @@ function applyNextTagNodes(
         childBlockInfo.childBlockElement,
         workspace,
         block.nextConnection,
-        true
+        true,
       );
     }
     // Set shadow after so we don't create a shadow we delete immediately.
@@ -885,7 +888,7 @@ function domToBlockHeadless(
   xmlBlock: Element,
   workspace: Workspace,
   parentConnection?: Connection,
-  connectedToParentNext?: boolean
+  connectedToParentNext?: boolean,
 ): Block {
   let block = null;
   const prototypeName = xmlBlock.getAttribute('type');
@@ -900,7 +903,7 @@ function domToBlockHeadless(
 
   const shouldCallInitSvg = applyMutationTagNodes(
     xmlChildNameMap.mutation,
-    block
+    block,
   );
   applyCommentTagNodes(xmlChildNameMap.comment, block);
   applyDataTagNodes(xmlChildNameMap.data, block);
@@ -920,7 +923,7 @@ function domToBlockHeadless(
         parentConnection.connect(block.previousConnection);
       } else {
         throw TypeError(
-          'Child block does not have output or previous statement.'
+          'Child block does not have output or previous statement.',
         );
       }
     }
@@ -991,7 +994,7 @@ function domToField(block: Block, fieldName: string, xml: Element) {
   const field = block.getField(fieldName);
   if (!field) {
     console.warn(
-      'Ignoring non-existent field ' + fieldName + ' in block ' + block.type
+      'Ignoring non-existent field ' + fieldName + ' in block ' + block.type,
     );
     return;
   }

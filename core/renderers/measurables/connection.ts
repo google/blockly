@@ -29,7 +29,7 @@ export class Connection extends Measurable {
    */
   constructor(
     constants: ConstantProvider,
-    public connectionModel: RenderedConnection
+    public connectionModel: RenderedConnection,
   ) {
     super(constants);
 

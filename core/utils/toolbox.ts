@@ -177,7 +177,7 @@ export enum Position {
  * @internal
  */
 export function convertToolboxDefToJson(
-  toolboxDef: ToolboxDefinition | null
+  toolboxDef: ToolboxDefinition | null,
 ): ToolboxInfo | null {
   if (!toolboxDef) {
     return null;
@@ -217,7 +217,7 @@ function validateToolbox(toolboxJson: ToolboxInfo) {
           ' Please supply either ' +
           FLYOUT_TOOLBOX_KIND +
           ' or ' +
-          CATEGORY_TOOLBOX_KIND
+          CATEGORY_TOOLBOX_KIND,
       );
     }
   }
@@ -234,7 +234,7 @@ function validateToolbox(toolboxJson: ToolboxInfo) {
  * @internal
  */
 export function convertFlyoutDefToJsonArray(
-  flyoutDef: FlyoutDefinition | null
+  flyoutDef: FlyoutDefinition | null,
 ): FlyoutItemInfoArray {
   if (!flyoutDef) {
     return [];
@@ -306,7 +306,7 @@ export function isCategoryCollapsible(categoryInfo: CategoryInfo): boolean {
   const categories = (categoryInfo as AnyDuringMigration)['contents'].filter(
     function (item: AnyDuringMigration) {
       return item['kind'].toUpperCase() === 'CATEGORY';
-    }
+    },
   );
   return !!categories.length;
 }
@@ -333,7 +333,7 @@ function convertToToolboxJson(toolboxDef: Node): ToolboxInfo {
  * @returns A list of objects in the toolbox.
  */
 function xmlToJsonArray(
-  toolboxDef: Node | Node[] | NodeList
+  toolboxDef: Node | Node[] | NodeList,
 ): FlyoutItemInfoArray | ToolboxItemInfo[] {
   const arr = [];
   // If it is a node it will have children.
@@ -398,7 +398,7 @@ function addAttributes(node: Node, obj: AnyDuringMigration) {
  * @returns DOM tree of blocks, or null.
  */
 export function parseToolboxTree(
-  toolboxDef: Element | null | string
+  toolboxDef: Element | null | string,
 ): Element | null {
   let parsedToolboxDef: Element | null = null;
   if (toolboxDef) {

@@ -28,7 +28,7 @@ export interface IConnectionChecker {
     a: Connection | null,
     b: Connection | null,
     isDragging: boolean,
-    opt_distance?: number
+    opt_distance?: number,
   ): boolean;
 
   /**
@@ -47,7 +47,7 @@ export interface IConnectionChecker {
     a: Connection | null,
     b: Connection | null,
     isDragging: boolean,
-    opt_distance?: number
+    opt_distance?: number,
   ): number;
 
   /**
@@ -61,7 +61,7 @@ export interface IConnectionChecker {
   getErrorMessage(
     errorCode: number,
     a: Connection | null,
-    b: Connection | null
+    b: Connection | null,
   ): string;
 
   /**
@@ -96,6 +96,6 @@ export interface IConnectionChecker {
   doDragChecks(
     a: RenderedConnection,
     b: RenderedConnection,
-    distance: number
+    distance: number,
   ): boolean;
 }

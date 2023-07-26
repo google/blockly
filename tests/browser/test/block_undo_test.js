@@ -18,39 +18,33 @@ const {
   screenDirection,
 } = require('./test_setup');
 
-let browser;
 suite('Testing undo block movement', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.playground);
+    this.browser = await testSetup(testFileLocations.PLAYGROUND);
   });
 
   test('Undoing Block Movement LTR', async function () {
-    await testUndoBlock(screenDirection.LTR);
+    await testUndoBlock(this.browser, screenDirection.LTR);
   });
 
   test('Undoing Block Movement RTL', async function () {
-    await switchRTL(browser);
-    await testUndoBlock(screenDirection.RTL);
-  });
-
-  // Teardown entire suite after test are done running
-  suiteTeardown(async function () {
-    await browser.deleteSession();
+    await switchRTL(this.browser);
+    await testUndoBlock(this.browser, screenDirection.RTL);
   });
 });
 
-async function testUndoBlock(delta) {
+async function testUndoBlock(browser, delta) {
   // Drag out first function
   const defReturnBlock = await dragBlockTypeFromFlyout(
     browser,
     'Functions',
     'procedures_defreturn',
     50 * delta,
-    20
+    20,
   );
 
   await browser.keys([Key.Ctrl, 'z']);

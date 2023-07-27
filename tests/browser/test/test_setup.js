@@ -220,13 +220,27 @@ async function getBlockTypeFromWorkspace(browser, blockType, position) {
  * @param connectionName Which connection to return. An input name to
  *     get a value or statement connection, and otherwise the type of
  *     the connection.
+ * @param mutatorBlockId The block that holds the mutator icon or null if the target block is on the main workspace
  * @return A Promise that resolves to the location of the specific
  *     connection in screen coordinates.
  */
-async function getLocationOfBlockConnection(browser, id, connectionName) {
+async function getLocationOfBlockConnection(
+  browser,
+  id,
+  connectionName,
+  mutatorBlockId,
+) {
   return await browser.execute(
-    (id, connectionName) => {
-      const block = Blockly.getMainWorkspace().getBlockById(id);
+    (id, connectionName, mutatorBlockId) => {
+      let block;
+      if (mutatorBlockId) {
+        block = Blockly.getMainWorkspace()
+          .getBlockById(mutatorBlockId)
+          .mutator.getWorkspace()
+          .getBlockById(id);
+      } else {
+        block = Blockly.getMainWorkspace().getBlockById(id);
+      }
 
       let connection;
       switch (connectionName) {
@@ -255,6 +269,7 @@ async function getLocationOfBlockConnection(browser, id, connectionName) {
     },
     id,
     connectionName,
+    mutatorBlockId,
   );
 }
 
@@ -266,6 +281,8 @@ async function getLocationOfBlockConnection(browser, id, connectionName) {
  * @param draggedConnection The active connection on the block being dragged.
  * @param targetBlock The block to drag to.
  * @param targetConnection The connection to connect to on the target block.
+ * @param mutatorBlockId The block that holds the mutator icon or null if the target block is on the main workspace
+ * @param dragBlockSelector The selector of the block to drag
  * @return A Promise that resolves when the actions are completed.
  */
 async function connect(
@@ -274,24 +291,47 @@ async function connect(
   draggedConnection,
   targetBlock,
   targetConnection,
+  mutatorBlockId,
+  dragBlockSelector,
 ) {
-  const draggedLocation = await getLocationOfBlockConnection(
-    browser,
-    draggedBlock.id,
-    draggedConnection,
-  );
-  const targetLocation = await getLocationOfBlockConnection(
-    browser,
-    targetBlock.id,
-    targetConnection,
-  );
+  let draggedLocation;
+  let targetLocation;
+
+  if (mutatorBlockId) {
+    draggedLocation = await getLocationOfBlockConnection(
+      browser,
+      draggedBlock,
+      draggedConnection,
+      mutatorBlockId,
+    );
+    targetLocation = await getLocationOfBlockConnection(
+      browser,
+      targetBlock,
+      targetConnection,
+      mutatorBlockId,
+    );
+  } else {
+    draggedLocation = await getLocationOfBlockConnection(
+      browser,
+      draggedBlock.id,
+      draggedConnection,
+    );
+    targetLocation = await getLocationOfBlockConnection(
+      browser,
+      targetBlock.id,
+      targetConnection,
+    );
+  }
 
   const delta = {
     x: targetLocation.x - draggedLocation.x,
     y: targetLocation.y - draggedLocation.y,
   };
-  await draggedBlock.dragAndDrop(delta);
-  await browser.pause(200);
+  if (mutatorBlockId) {
+    await dragBlockSelector.dragAndDrop(delta);
+  } else {
+    await draggedBlock.dragAndDrop(delta);
+  }
 }
 
 /**

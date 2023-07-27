@@ -303,7 +303,7 @@ async function connect(
 async function switchRTL(browser) {
   const ltrForm = await browser.$('#options > select:nth-child(1)');
   await ltrForm.selectByIndex(1);
-  browser.pause(500);
+  await browser.pause(500);
 }
 
 /**

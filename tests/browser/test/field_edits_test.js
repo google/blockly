@@ -33,7 +33,7 @@ suite('Testing Field Edits', function (done) {
   });
 
   test('Testing Field Edits RTL', async function () {
-    switchRTL(this.browser);
+    await switchRTL(this.browser);
     await testFieldEdits(this.browser, screenDirection.RTL);
   });
 });

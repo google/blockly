@@ -125,6 +125,8 @@ suite('Disabling', function () {
 
   setup(async function () {
     await this.browser.refresh();
+    // Pause to allow refresh time to work.
+    await this.browser.pause(200);
   });
 
   test(

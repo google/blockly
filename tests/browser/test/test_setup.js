@@ -404,13 +404,11 @@ async function contextMenuSelect(browser, block, itemText) {
   // Clicking will always happen in the middle of the block's bounds
   // (including children) by default, which causes problems if it has holes
   // (e.g. statement inputs).
-  // Instead we want to click 10px from the left and 10px from the top.
-  const blockWidth = await block.getSize('width');
-  const blockHeight = await block.getSize('height');
-  const xOffset = -Math.round(blockWidth * 0.5) + 10;
-  const yOffset = -Math.round(blockHeight * 0.5) + 10;
+  // Instead, we'll click directly on the first bit of text on the block.
+  const clickEl = block.$('.blocklyText');
+  await clickEl.waitForExist();
 
-  await block.click({button: 2, x: xOffset, y: yOffset});
+  await clickEl.click({button: 2});
 
   const item = await browser.$(`div=${itemText}`);
   await item.waitForExist();

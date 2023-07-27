@@ -105,34 +105,34 @@ export class Menu {
       'pointerover',
       this,
       this.handleMouseOver,
-      true
+      true,
     );
     this.clickHandler = browserEvents.conditionalBind(
       element,
       'pointerup',
       this,
       this.handleClick,
-      true
+      true,
     );
     this.mouseEnterHandler = browserEvents.conditionalBind(
       element,
       'pointerenter',
       this,
       this.handleMouseEnter,
-      true
+      true,
     );
     this.mouseLeaveHandler = browserEvents.conditionalBind(
       element,
       'pointerleave',
       this,
       this.handleMouseLeave,
-      true
+      true,
     );
     this.onKeyDownHandler = browserEvents.conditionalBind(
       element,
       'keydown',
       this,
-      this.handleKeyEvent
+      this.handleKeyEvent,
     );
 
     container.appendChild(element);

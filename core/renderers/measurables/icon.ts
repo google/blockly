@@ -34,7 +34,10 @@ export class Icon extends Measurable {
    * @param constants The rendering constants provider.
    * @param icon The icon to measure and store information for.
    */
-  constructor(constants: ConstantProvider, public icon: BlocklyIcon) {
+  constructor(
+    constants: ConstantProvider,
+    public icon: BlocklyIcon,
+  ) {
     super(constants);
 
     this.isVisible = hasBubble(icon) && icon.bubbleIsVisible();

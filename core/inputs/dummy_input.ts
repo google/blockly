@@ -17,7 +17,10 @@ export class DummyInput extends Input {
    *     again.
    * @param block The block containing this input.
    */
-  constructor(public name: string, block: Block) {
+  constructor(
+    public name: string,
+    block: Block,
+  ) {
     super(name, block);
   }
 }

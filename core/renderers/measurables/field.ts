@@ -33,7 +33,7 @@ export class Field extends Measurable {
   constructor(
     constants: ConstantProvider,
     public field: BlocklyField,
-    public parentInput: Input
+    public parentInput: Input,
   ) {
     super(constants);
 

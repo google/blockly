@@ -95,7 +95,7 @@ suite('Multiline Input Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   runFromJsonSuiteTests(
@@ -103,7 +103,7 @@ suite('Multiline Input Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   suite('setValue', function () {
@@ -114,7 +114,7 @@ suite('Multiline Input Fields', function () {
       runSetValueTests(
         validValueTestCases,
         invalidValueTestCases,
-        defaultFieldValue
+        defaultFieldValue,
       );
       test('With source block', function () {
         this.field.setSourceBlock(createTestBlock());
@@ -130,7 +130,7 @@ suite('Multiline Input Fields', function () {
       runSetValueTests(
         validValueTestCases,
         invalidValueTestCases,
-        initialValue
+        initialValue,
       );
       test('With source block', function () {
         this.field.setSourceBlock(createTestBlock());
@@ -172,7 +172,7 @@ suite('Multiline Input Fields', function () {
             expectedCode:
               "'bark bark' + '\\n' + \n' bark bark bark' + '\\n' + \n' bark bar bark bark' + '\\n' + \n''",
             createBlock: createBlockFn(
-              'bark bark\n bark bark bark\n bark bar bark bark\n'
+              'bark bark\n bark bark bark\n bark bar bark bark\n',
             ),
           },
         ],
@@ -191,7 +191,7 @@ suite('Multiline Input Fields', function () {
             expectedCode:
               "'bark bark' + '\\n' +\n' bark bark bark' + '\\n' +\n' bark bar bark bark' + '\\n' +\n''",
             createBlock: createBlockFn(
-              'bark bark\n bark bark bark\n bark bar bark bark\n'
+              'bark bark\n bark bark bark\n bark bar bark bark\n',
             ),
           },
         ],
@@ -210,7 +210,7 @@ suite('Multiline Input Fields', function () {
             expectedCode:
               "'bark bark' .. '\\n' ..\n' bark bark bark' .. '\\n' ..\n' bark bar bark bark' .. '\\n' ..\n''",
             createBlock: createBlockFn(
-              'bark bark\n bark bark bark\n bark bar bark bark\n'
+              'bark bark\n bark bark bark\n bark bar bark bark\n',
             ),
           },
         ],
@@ -229,7 +229,7 @@ suite('Multiline Input Fields', function () {
             expectedCode:
               "'bark bark' . \"\\n\" .\n' bark bark bark' . \"\\n\" .\n' bark bar bark bark' . \"\\n\" .\n''",
             createBlock: createBlockFn(
-              'bark bark\n bark bark bark\n bark bar bark bark\n'
+              'bark bark\n bark bark bark\n bark bar bark bark\n',
             ),
           },
         ],
@@ -248,7 +248,7 @@ suite('Multiline Input Fields', function () {
             expectedCode:
               "'bark bark' + '\\n' + \n' bark bark bark' + '\\n' + \n' bark bar bark bark' + '\\n' + \n''",
             createBlock: createBlockFn(
-              'bark bark\n bark bark bark\n bark bar bark bark\n'
+              'bark bark\n bark bark bark\n bark bar bark bark\n',
             ),
           },
         ],

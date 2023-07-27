@@ -44,7 +44,7 @@ suite('JSO Deserialization', function () {
           this.eventsFireStub,
           Blockly.Events.FinishedLoading,
           {type: eventUtils.FINISHED_LOADING},
-          this.workspace.id
+          this.workspace.id,
         );
       });
 
@@ -67,7 +67,7 @@ suite('JSO Deserialization', function () {
           this.eventsFireStub,
           Blockly.Events.FinishedLoading,
           {'group': 'my group', 'type': eventUtils.FINISHED_LOADING},
-          this.workspace.id
+          this.workspace.id,
         );
       });
 
@@ -123,7 +123,7 @@ suite('JSO Deserialization', function () {
             'recordUndo': false,
             'type': eventUtils.VAR_CREATE,
           },
-          this.workspace.id
+          this.workspace.id,
         );
       });
 
@@ -149,7 +149,7 @@ suite('JSO Deserialization', function () {
             'recordUndo': true,
             'type': eventUtils.VAR_CREATE,
           },
-          this.workspace.id
+          this.workspace.id,
         );
       });
 
@@ -174,7 +174,7 @@ suite('JSO Deserialization', function () {
             'group': 'my group',
             'type': eventUtils.VAR_CREATE,
           },
-          this.workspace.id
+          this.workspace.id,
         );
       });
 
@@ -239,7 +239,7 @@ suite('JSO Deserialization', function () {
             'varType': '',
             'type': eventUtils.VAR_CREATE,
           },
-          this.workspace.id
+          this.workspace.id,
         );
       });
     });
@@ -265,7 +265,7 @@ suite('JSO Deserialization', function () {
             Blockly.Events.BlockCreate,
             {'recordUndo': false, 'type': eventUtils.BLOCK_CREATE},
             this.workspace.id,
-            'testId'
+            'testId',
           );
         });
 
@@ -290,7 +290,7 @@ suite('JSO Deserialization', function () {
             Blockly.Events.BlockCreate,
             {'recordUndo': true, 'type': eventUtils.BLOCK_CREATE},
             this.workspace.id,
-            'testId'
+            'testId',
           );
         });
 
@@ -314,7 +314,7 @@ suite('JSO Deserialization', function () {
             Blockly.Events.BlockCreate,
             {'group': 'my group', 'type': eventUtils.BLOCK_CREATE},
             this.workspace.id,
-            'testId'
+            'testId',
           );
         });
 
@@ -341,7 +341,7 @@ suite('JSO Deserialization', function () {
           const calls = this.eventsFireStub.getCalls();
           const group = calls[0].args[0].group;
           chai.assert.isTrue(
-            calls.every((call) => call.args[0].group == group)
+            calls.every((call) => call.args[0].group == group),
           );
         });
 
@@ -378,7 +378,7 @@ suite('JSO Deserialization', function () {
             Blockly.Events.BlockCreate,
             {type: eventUtils.BLOCK_CREATE},
             this.workspace.id,
-            'id1'
+            'id1',
           );
         });
       });
@@ -397,7 +397,7 @@ suite('JSO Deserialization', function () {
             Blockly.Events.BlockCreate,
             {'recordUndo': false},
             this.workspace.id,
-            'testId'
+            'testId',
           );
         });
 
@@ -416,7 +416,7 @@ suite('JSO Deserialization', function () {
             Blockly.Events.BlockCreate,
             {'recordUndo': true, 'type': eventUtils.BLOCK_CREATE},
             this.workspace.id,
-            'testId'
+            'testId',
           );
         });
 
@@ -434,7 +434,7 @@ suite('JSO Deserialization', function () {
             Blockly.Events.BlockCreate,
             {'group': 'my group', 'type': eventUtils.BLOCK_CREATE},
             this.workspace.id,
-            'testId'
+            'testId',
           );
         });
       });
@@ -498,7 +498,7 @@ suite('JSO Deserialization', function () {
         };
         this.assertThrows(
           state,
-          Blockly.serialization.exceptions.MissingConnection
+          Blockly.serialization.exceptions.MissingConnection,
         );
       });
 
@@ -521,7 +521,7 @@ suite('JSO Deserialization', function () {
         };
         this.assertThrows(
           state,
-          Blockly.serialization.exceptions.MissingConnection
+          Blockly.serialization.exceptions.MissingConnection,
         );
       });
 
@@ -542,7 +542,7 @@ suite('JSO Deserialization', function () {
         };
         this.assertThrows(
           state,
-          Blockly.serialization.exceptions.MissingConnection
+          Blockly.serialization.exceptions.MissingConnection,
         );
       });
 
@@ -563,7 +563,7 @@ suite('JSO Deserialization', function () {
         };
         this.assertThrows(
           state,
-          Blockly.serialization.exceptions.MissingConnection
+          Blockly.serialization.exceptions.MissingConnection,
         );
       });
 
@@ -586,7 +586,7 @@ suite('JSO Deserialization', function () {
         };
         this.assertThrows(
           state,
-          Blockly.serialization.exceptions.MissingConnection
+          Blockly.serialization.exceptions.MissingConnection,
         );
       });
     });
@@ -611,7 +611,7 @@ suite('JSO Deserialization', function () {
         };
         this.assertThrows(
           state,
-          Blockly.serialization.exceptions.BadConnectionCheck
+          Blockly.serialization.exceptions.BadConnectionCheck,
         );
       });
     });
@@ -643,7 +643,7 @@ suite('JSO Deserialization', function () {
         };
         this.assertThrows(
           state,
-          Blockly.serialization.exceptions.RealChildOfShadow
+          Blockly.serialization.exceptions.RealChildOfShadow,
         );
       });
 
@@ -669,7 +669,7 @@ suite('JSO Deserialization', function () {
         };
         this.assertThrows(
           state,
-          Blockly.serialization.exceptions.RealChildOfShadow
+          Blockly.serialization.exceptions.RealChildOfShadow,
         );
       });
     });
@@ -678,11 +678,11 @@ suite('JSO Deserialization', function () {
   test('Priority', function () {
     const blocksSerializer = Blockly.registry.getClass(
       Blockly.registry.Type.SERIALIZER,
-      'blocks'
+      'blocks',
     );
     const variablesSerializer = Blockly.registry.getClass(
       Blockly.registry.Type.SERIALIZER,
-      'variables'
+      'variables',
     );
 
     Blockly.serialization.registry.unregister('blocks');
@@ -715,7 +715,7 @@ suite('JSO Deserialization', function () {
 
     Blockly.serialization.workspaces.load(
       {'first': {}, 'third': {}, 'second': {}},
-      this.workspace
+      this.workspace,
     );
 
     Blockly.serialization.registry.unregister('first');
@@ -758,7 +758,7 @@ suite('JSO Deserialization', function () {
           'type': 'test_block',
           'extraState': '<mutation value="some value"></mutation>',
         },
-        this.workspace
+        this.workspace,
       );
 
       delete Blockly.Blocks['test_block'];
@@ -861,7 +861,7 @@ suite('JSO Deserialization', function () {
       this.procedureSerializer =
         new Blockly.serialization.procedures.ProcedureSerializer(
           MockProcedureModel,
-          MockParameterModel
+          MockParameterModel,
         );
       this.procedureMap = this.workspace.getProcedureMap();
     });
@@ -884,12 +884,12 @@ suite('JSO Deserialization', function () {
         const procedureModel = this.procedureMap.getProcedures()[0];
         chai.assert.isNotNull(
           procedureModel,
-          'Expected a procedure model to exist'
+          'Expected a procedure model to exist',
         );
         chai.assert.equal(
           procedureModel.getId(),
           'test id',
-          'Expected the procedure model ID to match the serialized ID'
+          'Expected the procedure model ID to match the serialized ID',
         );
       });
 
@@ -905,12 +905,12 @@ suite('JSO Deserialization', function () {
         const procedureModel = this.procedureMap.getProcedures()[0];
         chai.assert.isNotNull(
           procedureModel,
-          'Expected a procedure model to exist'
+          'Expected a procedure model to exist',
         );
         chai.assert.equal(
           procedureModel.getName(),
           'test name',
-          'Expected the procedure model name to match the serialized name'
+          'Expected the procedure model name to match the serialized name',
         );
       });
     });
@@ -928,11 +928,11 @@ suite('JSO Deserialization', function () {
         const procedureModel = this.procedureMap.getProcedures()[0];
         chai.assert.isNotNull(
           procedureModel,
-          'Expected a procedure model to exist'
+          'Expected a procedure model to exist',
         );
         chai.assert.isNull(
           procedureModel.getReturnTypes(),
-          'Expected the procedure model types to be null'
+          'Expected the procedure model types to be null',
         );
       });
 
@@ -948,15 +948,15 @@ suite('JSO Deserialization', function () {
         const procedureModel = this.procedureMap.getProcedures()[0];
         chai.assert.isNotNull(
           procedureModel,
-          'Expected a procedure model to exist'
+          'Expected a procedure model to exist',
         );
         chai.assert.isArray(
           procedureModel.getReturnTypes(),
-          'Expected the procedure model types to be an array'
+          'Expected the procedure model types to be an array',
         );
         chai.assert.isEmpty(
           procedureModel.getReturnTypes(),
-          'Expected the procedure model types array to be empty'
+          'Expected the procedure model types array to be empty',
         );
       });
 
@@ -972,17 +972,17 @@ suite('JSO Deserialization', function () {
         const procedureModel = this.procedureMap.getProcedures()[0];
         chai.assert.isNotNull(
           procedureModel,
-          'Expected a procedure model to exist'
+          'Expected a procedure model to exist',
         );
         chai.assert.isArray(
           procedureModel.getReturnTypes(),
-          'Expected the procedure model types to be an array'
+          'Expected the procedure model types to be an array',
         );
         chai.assert.deepEqual(
           procedureModel.getReturnTypes(),
           ['test type 1', 'test type 2'],
           'Expected the procedure model types array to be match the ' +
-            'serialized array'
+            'serialized array',
         );
       });
     });
@@ -1009,12 +1009,12 @@ suite('JSO Deserialization', function () {
             .getParameters()[0];
           chai.assert.isNotNull(
             parameterModel,
-            'Expected a parameter model to exist'
+            'Expected a parameter model to exist',
           );
           chai.assert.equal(
             parameterModel.getId(),
             'test id',
-            'Expected the parameter model ID to match the serialized ID'
+            'Expected the parameter model ID to match the serialized ID',
           );
         });
 
@@ -1038,12 +1038,12 @@ suite('JSO Deserialization', function () {
             .getParameters()[0];
           chai.assert.isNotNull(
             parameterModel,
-            'Expected a parameter model to exist'
+            'Expected a parameter model to exist',
           );
           chai.assert.equal(
             parameterModel.getName(),
             'test name',
-            'Expected the parameter model name to match the serialized name'
+            'Expected the parameter model name to match the serialized name',
           );
         });
       });
@@ -1088,12 +1088,12 @@ suite('JSO Deserialization', function () {
             .getParameters()[0];
           chai.assert.isNotNull(
             parameterModel,
-            'Expected a parameter model to exist'
+            'Expected a parameter model to exist',
           );
           chai.assert.deepEqual(
             parameterModel.getTypes(),
             ['test type 1', 'test type 2'],
-            'Expected the parameter model types to match the serialized types'
+            'Expected the parameter model types to match the serialized types',
           );
         });
       });

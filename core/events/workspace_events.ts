@@ -43,5 +43,5 @@ export class FinishedLoading extends AbstractEvent {
 registry.register(
   registry.Type.EVENT,
   eventUtils.FINISHED_LOADING,
-  FinishedLoading
+  FinishedLoading,
 );

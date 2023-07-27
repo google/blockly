@@ -41,7 +41,7 @@ export class ToolboxItemSelect extends UiBase {
   constructor(
     opt_oldItem?: string | null,
     opt_newItem?: string | null,
-    opt_workspaceId?: string
+    opt_workspaceId?: string,
   ) {
     super(opt_workspaceId);
     this.oldItem = opt_oldItem ?? undefined;
@@ -72,12 +72,12 @@ export class ToolboxItemSelect extends UiBase {
   static fromJson(
     json: ToolboxItemSelectJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): ToolboxItemSelect {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new ToolboxItemSelect()
+      event ?? new ToolboxItemSelect(),
     ) as ToolboxItemSelect;
     newEvent.oldItem = json['oldItem'];
     newEvent.newItem = json['newItem'];
@@ -93,5 +93,5 @@ export interface ToolboxItemSelectJson extends AbstractEventJson {
 registry.register(
   registry.Type.EVENT,
   eventUtils.TOOLBOX_ITEM_SELECT,
-  ToolboxItemSelect
+  ToolboxItemSelect,
 );

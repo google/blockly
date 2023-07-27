@@ -60,8 +60,8 @@ suite('Mutator', function () {
             ({args}) =>
               args[0].type === Blockly.Events.BLOCK_CHANGE &&
               args[0].element === 'mutation' &&
-              /<mutation.*><\/mutation>/.test(args[0].newValue)
-          )
+              /<mutation.*><\/mutation>/.test(args[0].newValue),
+          ),
       );
     });
 
@@ -81,7 +81,7 @@ suite('Mutator', function () {
           newValue: '{"hasInput":true}',
         },
         this.workspace.id,
-        block.id
+        block.id,
       );
     });
   });

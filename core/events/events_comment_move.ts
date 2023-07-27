@@ -59,13 +59,13 @@ export class CommentMove extends CommentBase {
     if (this.newCoordinate_) {
       throw Error(
         'Tried to record the new position of a comment on the ' +
-          'same event twice.'
+          'same event twice.',
       );
     }
     if (!this.comment_) {
       throw new Error(
         'The comment is undefined. Pass a comment to ' +
-          'the constructor if you want to use the record functionality'
+          'the constructor if you want to use the record functionality',
       );
     }
     this.newCoordinate_ = this.comment_.getRelativeToSurfaceXY();
@@ -92,13 +92,13 @@ export class CommentMove extends CommentBase {
     if (!this.oldCoordinate_) {
       throw new Error(
         'The old comment position is undefined. Either pass a comment to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (!this.newCoordinate_) {
       throw new Error(
         'The new comment position is undefined. Either call recordNew, or ' +
-          'call fromJson'
+          'call fromJson',
       );
     }
     json['oldCoordinate'] =
@@ -123,12 +123,12 @@ export class CommentMove extends CommentBase {
   static fromJson(
     json: CommentMoveJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): CommentMove {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new CommentMove()
+      event ?? new CommentMove(),
     ) as CommentMove;
     let xy = json['oldCoordinate'].split(',');
     newEvent.oldCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
@@ -156,7 +156,7 @@ export class CommentMove extends CommentBase {
     if (!this.commentId) {
       throw new Error(
         'The comment ID is undefined. Either pass a comment to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     const comment = workspace.getCommentById(this.commentId);
@@ -170,7 +170,7 @@ export class CommentMove extends CommentBase {
       throw new Error(
         'Either oldCoordinate_ or newCoordinate_ is undefined. ' +
           'Either pass a comment to the constructor and call recordNew, ' +
-          'or call fromJson'
+          'or call fromJson',
       );
     }
     // TODO: Check if the comment is being dragged, and give up if so.

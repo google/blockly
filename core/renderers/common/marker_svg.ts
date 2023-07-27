@@ -75,7 +75,7 @@ export class MarkerSvg {
   constructor(
     private readonly workspace: WorkspaceSvg,
     constants: ConstantProvider,
-    private readonly marker: Marker
+    private readonly marker: Marker,
   ) {
     this.constants_ = constants;
 
@@ -228,17 +228,17 @@ export class MarkerSvg {
 
     if (block.previousConnection) {
       const connectionShape = this.constants_.shapeFor(
-        block.previousConnection
+        block.previousConnection,
       ) as Notch;
       this.positionPrevious_(
         width,
         markerOffset,
         markerHeight,
-        connectionShape
+        connectionShape,
       );
     } else if (block.outputConnection) {
       const connectionShape = this.constants_.shapeFor(
-        block.outputConnection
+        block.outputConnection,
       ) as PuzzleTab;
       this.positionOutput_(width, height, connectionShape);
     } else {
@@ -402,7 +402,7 @@ export class MarkerSvg {
   protected positionBlock_(
     width: number,
     markerOffset: number,
-    markerHeight: number
+    markerHeight: number,
   ) {
     const markerPath =
       svgPaths.moveBy(-markerOffset, markerHeight) +
@@ -411,7 +411,7 @@ export class MarkerSvg {
       svgPaths.lineOnAxis('V', markerHeight);
     if (!this.markerBlock_) {
       throw new Error(
-        'createDom should be called before positioning the marker'
+        'createDom should be called before positioning the marker',
       );
     }
     this.markerBlock_.setAttribute('d', markerPath);
@@ -443,7 +443,7 @@ export class MarkerSvg {
         ',' +
         y +
         ')' +
-        (this.workspace.RTL ? ' scale(-1 1)' : '')
+        (this.workspace.RTL ? ' scale(-1 1)' : ''),
     );
     this.currentMarkerSvg = this.markerInput_;
   }
@@ -477,11 +477,11 @@ export class MarkerSvg {
   protected positionOutput_(
     width: number,
     height: number,
-    connectionShape: PuzzleTab
+    connectionShape: PuzzleTab,
   ) {
     if (!this.markerBlock_) {
       throw new Error(
-        'createDom should be called before positioning the output'
+        'createDom should be called before positioning the output',
       );
     }
     const markerPath =
@@ -512,11 +512,11 @@ export class MarkerSvg {
     width: number,
     markerOffset: number,
     markerHeight: number,
-    connectionShape: Notch
+    connectionShape: Notch,
   ) {
     if (!this.markerBlock_) {
       throw new Error(
-        'createDom should be called before positioning the previous connection marker'
+        'createDom should be called before positioning the previous connection marker',
       );
     }
     const markerPath =
@@ -590,7 +590,7 @@ export class MarkerSvg {
       curBlock,
       this.isCursor(),
       oldNode,
-      curNode
+      curNode,
     );
     eventUtils.fire(event);
   }
@@ -632,7 +632,7 @@ export class MarkerSvg {
         'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT,
       },
-      this.svgGroup_
+      this.svgGroup_,
     );
 
     // A horizontal line used to represent a workspace coordinate or next
@@ -644,7 +644,7 @@ export class MarkerSvg {
         'height': this.constants_.WS_CURSOR_HEIGHT,
         'style': 'display: none',
       },
-      this.markerSvg_
+      this.markerSvg_,
     );
 
     // A filled in rectangle used to represent a stack.
@@ -656,14 +656,14 @@ export class MarkerSvg {
         'ry': 10,
         'style': 'display: none',
       },
-      this.markerSvg_
+      this.markerSvg_,
     );
 
     // A filled in puzzle piece used to represent an input value.
     this.markerInput_ = dom.createSvgElement(
       Svg.PATH,
       {'transform': '', 'style': 'display: none'},
-      this.markerSvg_
+      this.markerSvg_,
     );
 
     // A path used to represent a previous connection and a block, an output
@@ -676,7 +676,7 @@ export class MarkerSvg {
         'fill': 'none',
         'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
       },
-      this.markerSvg_
+      this.markerSvg_,
     );
 
     // Markers and stack markers don't blink.
@@ -687,7 +687,7 @@ export class MarkerSvg {
       dom.createSvgElement(
         Svg.ANIMATE,
         {...blinkProperties, attributeName: 'stroke'},
-        this.markerBlock_
+        this.markerBlock_,
       );
     }
 
@@ -707,7 +707,7 @@ export class MarkerSvg {
       !this.markerBlock_
     ) {
       throw new Error(
-        'createDom should be called before applying color to the markerj'
+        'createDom should be called before applying color to the markerj',
       );
     }
     this.markerSvgLine_.setAttribute('fill', this.colour_);

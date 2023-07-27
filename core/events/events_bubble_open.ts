@@ -44,7 +44,7 @@ export class BubbleOpen extends UiBase {
   constructor(
     opt_block?: BlockSvg,
     opt_isOpen?: boolean,
-    opt_bubbleType?: BubbleType
+    opt_bubbleType?: BubbleType,
   ) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;
     super(workspaceId);
@@ -65,13 +65,13 @@ export class BubbleOpen extends UiBase {
     if (this.isOpen === undefined) {
       throw new Error(
         'Whether this event is for opening the bubble is undefined. ' +
-          'Either pass the value to the constructor, or call fromJson'
+          'Either pass the value to the constructor, or call fromJson',
       );
     }
     if (!this.bubbleType) {
       throw new Error(
         'The type of bubble is undefined. Either pass the ' +
-          'value to the constructor, or call fromJson'
+          'value to the constructor, or call fromJson',
       );
     }
     json['isOpen'] = this.isOpen;
@@ -92,12 +92,12 @@ export class BubbleOpen extends UiBase {
   static fromJson(
     json: BubbleOpenJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): BubbleOpen {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new BubbleOpen()
+      event ?? new BubbleOpen(),
     ) as BubbleOpen;
     newEvent.isOpen = json['isOpen'];
     newEvent.bubbleType = json['bubbleType'];

@@ -149,7 +149,7 @@ export class RenderInfo extends BaseRenderInfo {
 
   override getInRowSpacing_(
     prev: Measurable | null,
-    next: Measurable | null
+    next: Measurable | null,
   ): number {
     if (!prev || !next) {
       // No need for padding at the beginning or end of the row if the
@@ -205,7 +205,7 @@ export class RenderInfo extends BaseRenderInfo {
         (!this.outputConnection || this.hasStatementInput)
       ) {
         return Math.abs(
-          this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS
+          this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS,
         );
       }
       return this.constants_.NO_PADDING;
@@ -218,13 +218,13 @@ export class RenderInfo extends BaseRenderInfo {
             this.topRow.minHeight,
             Math.max(
               this.constants_.NOTCH_HEIGHT,
-              this.constants_.CORNER_RADIUS
-            )
+              this.constants_.CORNER_RADIUS,
+            ),
           ) - this.constants_.CORNER_RADIUS;
         return topHeight;
       } else if (!bottomRow.hasNextConnection && this.hasStatementInput) {
         return Math.abs(
-          this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS
+          this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS,
         );
       }
       return this.constants_.NO_PADDING;
@@ -278,7 +278,7 @@ export class RenderInfo extends BaseRenderInfo {
     } else if (input instanceof StatementInput) {
       // Handle statements without next connections correctly.
       activeRow.elements.push(
-        new StatementInputMeasurable(this.constants_, input)
+        new StatementInputMeasurable(this.constants_, input),
       );
       activeRow.hasStatement = true;
 

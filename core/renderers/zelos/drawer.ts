@@ -126,7 +126,7 @@ export class Drawer extends BaseDrawer {
   protected drawRightDynamicConnection_() {
     if (!this.info_.outputConnection) {
       throw new Error(
-        `Cannot draw the output connection of a block that doesn't have one`
+        `Cannot draw the output connection of a block that doesn't have one`,
       );
     }
     this.outlinePath_ += (
@@ -140,7 +140,7 @@ export class Drawer extends BaseDrawer {
   protected drawLeftDynamicConnection_() {
     if (!this.info_.outputConnection) {
       throw new Error(
-        `Cannot draw the output connection of a block that doesn't have one`
+        `Cannot draw the output connection of a block that doesn't have one`,
       );
     }
     this.positionOutputConnection_();

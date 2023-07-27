@@ -64,7 +64,7 @@ export class MetricsManager implements IMetricsManager {
    */
   getFlyoutMetrics(opt_own?: boolean): ToolboxMetrics {
     const flyoutDimensions = this.getDimensionsPx_(
-      this.workspace_.getFlyout(opt_own)
+      this.workspace_.getFlyout(opt_own),
     );
     return {
       width: flyoutDimensions.width,
@@ -83,7 +83,7 @@ export class MetricsManager implements IMetricsManager {
    */
   getToolboxMetrics(): ToolboxMetrics {
     const toolboxDimensions = this.getDimensionsPx_(
-      this.workspace_.getToolbox()
+      this.workspace_.getToolbox(),
     );
 
     return {
@@ -237,7 +237,7 @@ export class MetricsManager implements IMetricsManager {
    * @returns The fixed edges of the scroll area.
    */
   protected getComputedFixedEdges_(
-    opt_viewMetrics?: ContainerRegion
+    opt_viewMetrics?: ContainerRegion,
   ): FixedEdges {
     if (!this.hasFixedEdges()) {
       // Return early if there are no edges.
@@ -270,7 +270,7 @@ export class MetricsManager implements IMetricsManager {
    */
   protected getPaddedContent_(
     viewMetrics: ContainerRegion,
-    contentMetrics: ContainerRegion
+    contentMetrics: ContainerRegion,
   ): {top: number; bottom: number; left: number; right: number} {
     const contentBottom = contentMetrics.top + contentMetrics.height;
     const contentRight = contentMetrics.left + contentMetrics.width;
@@ -284,19 +284,19 @@ export class MetricsManager implements IMetricsManager {
     // Ensure padding is wide enough that blocks can scroll over entire screen.
     const top = Math.min(
       contentMetrics.top - halfHeight,
-      contentBottom - viewHeight
+      contentBottom - viewHeight,
     );
     const left = Math.min(
       contentMetrics.left - halfWidth,
-      contentRight - viewWidth
+      contentRight - viewWidth,
     );
     const bottom = Math.max(
       contentBottom + halfHeight,
-      contentMetrics.top + viewHeight
+      contentMetrics.top + viewHeight,
     );
     const right = Math.max(
       contentRight + halfWidth,
-      contentMetrics.left + viewWidth
+      contentMetrics.left + viewWidth,
     );
 
     return {top, bottom, left, right};
@@ -318,7 +318,7 @@ export class MetricsManager implements IMetricsManager {
   getScrollMetrics(
     opt_getWorkspaceCoordinates?: boolean,
     opt_viewMetrics?: ContainerRegion,
-    opt_contentMetrics?: ContainerRegion
+    opt_contentMetrics?: ContainerRegion,
   ): ContainerRegion {
     const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
     const viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
@@ -406,7 +406,7 @@ export class MetricsManager implements IMetricsManager {
     const scrollMetrics = this.getScrollMetrics(
       false,
       viewMetrics,
-      contentMetrics
+      contentMetrics,
     );
 
     return {
@@ -494,5 +494,5 @@ export type UiMetrics = MetricsManager.UiMetrics;
 registry.register(
   registry.Type.METRICS_MANAGER,
   registry.DEFAULT,
-  MetricsManager
+  MetricsManager,
 );

@@ -38,7 +38,7 @@ suite('Zoom Controls', function () {
         Blockly.Events.Click,
         {targetType: 'zoom_controls', type: eventUtils.CLICK},
         this.workspace.id,
-        undefined
+        undefined,
       );
       assertEventNotFired(this.eventsFireStub, Blockly.Events.Click, {
         targetType: 'workspace',
@@ -54,7 +54,7 @@ suite('Zoom Controls', function () {
         Blockly.Events.Click,
         {targetType: 'zoom_controls', type: eventUtils.CLICK},
         this.workspace.id,
-        undefined
+        undefined,
       );
       assertEventNotFired(this.eventsFireStub, Blockly.Events.Click, {
         targetType: 'workspace',
@@ -70,7 +70,7 @@ suite('Zoom Controls', function () {
         Blockly.Events.Click,
         {targetType: 'zoom_controls', type: eventUtils.CLICK},
         this.workspace.id,
-        undefined
+        undefined,
       );
       assertEventNotFired(this.eventsFireStub, Blockly.Events.Click, {
         targetType: 'workspace',

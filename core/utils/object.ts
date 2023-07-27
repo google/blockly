@@ -16,7 +16,7 @@ goog.declareModuleId('Blockly.utils.object');
  */
 export function deepMerge(
   target: AnyDuringMigration,
-  source: AnyDuringMigration
+  source: AnyDuringMigration,
 ): AnyDuringMigration {
   for (const x in source) {
     if (source[x] !== null && typeof source[x] === 'object') {

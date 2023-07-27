@@ -70,7 +70,7 @@ export class ComponentManager {
           id +
           '" with capabilities "' +
           this.componentData.get(id)?.capabilities +
-          '" already added.'
+          '" already added.',
       );
     }
     this.componentData.set(id, componentInfo);
@@ -117,12 +117,12 @@ export class ComponentManager {
           capability +
           '". Plugin "' +
           id +
-          '" has not been added to the ComponentManager'
+          '" has not been added to the ComponentManager',
       );
     }
     if (this.hasCapability(id, capability)) {
       console.warn(
-        'Plugin "' + id + 'already has capability "' + capability + '"'
+        'Plugin "' + id + 'already has capability "' + capability + '"',
       );
       return;
     }
@@ -144,7 +144,7 @@ export class ComponentManager {
           capability +
           '". Plugin "' +
           id +
-          '" has not been added to the ComponentManager'
+          '" has not been added to the ComponentManager',
       );
     }
     if (!this.hasCapability(id, capability)) {
@@ -153,7 +153,7 @@ export class ComponentManager {
           id +
           'doesn\'t have capability "' +
           capability +
-          '" to remove'
+          '" to remove',
       );
       return;
     }
@@ -196,7 +196,7 @@ export class ComponentManager {
    */
   getComponents<T extends IComponent>(
     capability: string | Capability<T>,
-    sorted: boolean
+    sorted: boolean,
   ): T[] {
     capability = `${capability}`.toLowerCase();
     const componentIds = this.capabilityToComponentIds.get(capability);

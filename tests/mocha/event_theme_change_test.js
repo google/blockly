@@ -25,7 +25,7 @@ suite('Theme Change Event', function () {
     test('events round-trip through JSON', function () {
       const origEvent = new Blockly.Events.ThemeChange(
         'new theme name',
-        this.workspace.id
+        this.workspace.id,
       );
 
       const json = origEvent.toJson();

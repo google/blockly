@@ -59,7 +59,7 @@ export class VerticalFlyout extends Flyout {
     }
     this.workspace_.translate(
       this.workspace_.scrollX + absoluteMetrics.left,
-      this.workspace_.scrollY + absoluteMetrics.top
+      this.workspace_.scrollY + absoluteMetrics.top,
     );
   }
 
@@ -167,7 +167,7 @@ export class VerticalFlyout extends Flyout {
       0,
       atRight ? 0 : 1,
       atRight ? -this.CORNER_RADIUS : this.CORNER_RADIUS,
-      this.CORNER_RADIUS
+      this.CORNER_RADIUS,
     );
     // Side closest to workspace.
     path.push('v', Math.max(0, height));
@@ -180,7 +180,7 @@ export class VerticalFlyout extends Flyout {
       0,
       atRight ? 0 : 1,
       atRight ? this.CORNER_RADIUS : -this.CORNER_RADIUS,
-      this.CORNER_RADIUS
+      this.CORNER_RADIUS,
     );
     // Bottom.
     path.push('h', atRight ? width : -width);
@@ -253,7 +253,7 @@ export class VerticalFlyout extends Flyout {
           this.RTL ? moveX - blockHW.width : moveX,
           cursorY,
           blockHW,
-          i
+          i,
         );
 
         this.addBlockListeners_(root, block!, rect);
@@ -386,7 +386,7 @@ export class VerticalFlyout extends Flyout {
         // (ie toolbox edge).
         this.targetWorkspace!.translate(
           this.targetWorkspace!.scrollX + flyoutWidth,
-          this.targetWorkspace!.scrollY
+          this.targetWorkspace!.scrollY,
         );
       }
       this.width_ = flyoutWidth;
@@ -399,5 +399,5 @@ export class VerticalFlyout extends Flyout {
 registry.register(
   registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
   registry.DEFAULT,
-  VerticalFlyout
+  VerticalFlyout,
 );

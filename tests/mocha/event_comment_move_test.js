@@ -27,7 +27,7 @@ suite('Comment Move Event', function () {
         this.workspace,
         'test text',
         10,
-        10
+        10,
       );
       const origEvent = new Blockly.Events.CommentMove(comment);
       comment.moveBy(10, 10);

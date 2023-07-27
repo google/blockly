@@ -55,7 +55,7 @@ let canvasContext: CanvasRenderingContext2D | null = null;
 export function createSvgElement<T extends SVGElement>(
   name: string | Svg<T>,
   attrs: {[key: string]: string | number},
-  opt_parent?: Element | null
+  opt_parent?: Element | null,
 ): T {
   const e = document.createElementNS(SVG_NS, `${name}`) as T;
   for (const key in attrs) {
@@ -168,7 +168,7 @@ export function containsNode(parent: Node, descendant: Node): boolean {
     'Blockly.utils.dom.containsNode',
     'version 10',
     'version 11',
-    'Use native "contains" DOM method'
+    'Use native "contains" DOM method',
   );
   return parent.contains(descendant);
 }
@@ -183,7 +183,7 @@ export function containsNode(parent: Node, descendant: Node): boolean {
  */
 export function setCssTransform(
   element: HTMLElement | SVGElement,
-  transform: string
+  transform: string,
 ) {
   element.style['transform'] = transform;
   element.style['-webkit-transform' as any] = transform;
@@ -261,13 +261,13 @@ export function getFastTextWidth(
   textElement: SVGTextElement,
   fontSize: number,
   fontWeight: string,
-  fontFamily: string
+  fontFamily: string,
 ): number {
   return getFastTextWidthWithSizeString(
     textElement,
     fontSize + 'pt',
     fontWeight,
-    fontFamily
+    fontFamily,
   );
 }
 
@@ -288,7 +288,7 @@ export function getFastTextWidthWithSizeString(
   textElement: SVGTextElement,
   fontSize: string,
   fontWeight: string,
-  fontFamily: string
+  fontFamily: string,
 ): number {
   const text = textElement.textContent;
   const key = text + '\n' + textElement.className.baseVal;
@@ -343,7 +343,7 @@ export function measureFontMetrics(
   text: string,
   fontSize: string,
   fontWeight: string,
-  fontFamily: string
+  fontFamily: string,
 ): {height: number; baseline: number} {
   const span = document.createElement('span');
   span.style.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;

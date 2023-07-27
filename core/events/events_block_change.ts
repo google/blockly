@@ -57,7 +57,7 @@ export class BlockChange extends BlockBase {
     opt_element?: string,
     opt_name?: string | null,
     opt_oldValue?: unknown,
-    opt_newValue?: unknown
+    opt_newValue?: unknown,
   ) {
     super(opt_block);
 
@@ -80,7 +80,7 @@ export class BlockChange extends BlockBase {
     if (!this.element) {
       throw new Error(
         'The changed element is undefined. Either pass an ' +
-          'element to the constructor, or call fromJson'
+          'element to the constructor, or call fromJson',
       );
     }
     json['element'] = this.element;
@@ -102,12 +102,12 @@ export class BlockChange extends BlockBase {
   static fromJson(
     json: BlockChangeJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): BlockChange {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new BlockChange()
+      event ?? new BlockChange(),
     ) as BlockChange;
     newEvent.element = json['element'];
     newEvent.name = json['name'];
@@ -135,14 +135,14 @@ export class BlockChange extends BlockBase {
     if (!this.blockId) {
       throw new Error(
         'The block ID is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     const block = workspace.getBlockById(this.blockId);
     if (!block) {
       throw new Error(
         'The associated block is undefined. Either pass a ' +
-          'block to the constructor, or call fromJson'
+          'block to the constructor, or call fromJson',
       );
     }
     // Assume the block is rendered so that then we can check.
@@ -180,11 +180,11 @@ export class BlockChange extends BlockBase {
           block.loadExtraState(JSON.parse((value as string) || '{}'));
         } else if (block.domToMutation) {
           block.domToMutation(
-            utilsXml.textToDom((value as string) || '<mutation/>')
+            utilsXml.textToDom((value as string) || '<mutation/>'),
           );
         }
         eventUtils.fire(
-          new BlockChange(block, 'mutation', null, oldState, value)
+          new BlockChange(block, 'mutation', null, oldState, value),
         );
         break;
       }

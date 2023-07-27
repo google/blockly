@@ -133,7 +133,7 @@ export class Workspace implements IASTNodeLocation {
     const connectionCheckerClass = registry.getClassFromOptions(
       registry.Type.CONNECTION_CHECKER,
       this.options,
-      true
+      true,
     );
     /**
      * An object that encapsulates logic for safety, type, and dragging checks.
@@ -170,7 +170,7 @@ export class Workspace implements IASTNodeLocation {
    */
   private sortObjects_(
     a: Block | WorkspaceComment,
-    b: Block | WorkspaceComment
+    b: Block | WorkspaceComment,
   ): number {
     const offset =
       Math.sin(math.toRadians(Workspace.SCAN_ANGLE)) * (this.RTL ? -1 : 1);
@@ -276,7 +276,7 @@ export class Workspace implements IASTNodeLocation {
       console.warn(
         'Overriding an existing comment on this workspace, with id "' +
           comment.id +
-          '"'
+          '"',
       );
     }
     this.commentDB.set(comment.id, comment);
@@ -291,7 +291,7 @@ export class Workspace implements IASTNodeLocation {
   removeTopComment(comment: WorkspaceComment) {
     if (!arrayUtils.removeElem(this.topComments, comment)) {
       throw Error(
-        "Comment not present in workspace's list of top-most " + 'comments.'
+        "Comment not present in workspace's list of top-most " + 'comments.',
       );
     }
     // Note: If the comment database starts to hold block comments, this may
@@ -399,7 +399,7 @@ export class Workspace implements IASTNodeLocation {
   createVariable(
     name: string,
     opt_type?: string | null,
-    opt_id?: string | null
+    opt_id?: string | null,
   ): VariableModel {
     return this.variableMap.createVariable(name, opt_type, opt_id);
   }
@@ -513,7 +513,7 @@ export class Workspace implements IASTNodeLocation {
   newBlock(prototypeName: string, opt_id?: string): Block {
     throw new Error(
       'The implementation of newBlock should be ' +
-        'monkey-patched in by blockly.ts'
+        'monkey-patched in by blockly.ts',
     );
   }
   /* eslint-enable */

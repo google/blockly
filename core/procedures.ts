@@ -63,7 +63,7 @@ export const DEFAULT_ARG = 'x';
  *     list of name, parameter list, and return value boolean.
  */
 export function allProcedures(
-  root: Workspace
+  root: Workspace,
 ): [ProcedureTuple[], ProcedureTuple[]] {
   const proceduresNoReturn: ProcedureTuple[] = root
     .getProcedureMap()
@@ -150,7 +150,7 @@ export function findLegalName(name: string, block: Block): string {
 function isLegalName(
   name: string,
   workspace: Workspace,
-  opt_exclude?: Block
+  opt_exclude?: Block,
 ): boolean {
   return !isNameUsed(name, workspace, opt_exclude);
 }
@@ -167,7 +167,7 @@ function isLegalName(
 export function isNameUsed(
   name: string,
   workspace: Workspace,
-  opt_exclude?: Block
+  opt_exclude?: Block,
 ): boolean {
   for (const block of workspace.getAllBlocks(false)) {
     if (block === opt_exclude) continue;
@@ -243,7 +243,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
-      utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE'])
+      utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']),
     );
     block.appendChild(nameField);
     xmlList.push(block);
@@ -258,7 +258,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
-      utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE'])
+      utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']),
     );
     block.appendChild(nameField);
     xmlList.push(block);
@@ -284,7 +284,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
    */
   function populateProcedures(
     procedureList: ProcedureTuple[],
-    templateName: string
+    templateName: string,
   ) {
     for (let i = 0; i < procedureList.length; i++) {
       const name = procedureList[i][0];
@@ -336,7 +336,7 @@ function updateMutatorFlyout(workspace: WorkspaceSvg) {
   nameField.setAttribute('name', 'NAME');
   const argValue = Variables.generateUniqueNameFromOptions(
     DEFAULT_ARG,
-    usedNames
+    usedNames,
   );
   const fieldContent = utilsXml.createTextNode(argValue);
 
@@ -460,8 +460,8 @@ export function mutateCallers(defBlock: Block) {
           'mutation',
           null,
           oldMutation,
-          newMutation
-        )
+          newMutation,
+        ),
       );
       eventUtils.setRecordUndo(oldRecordUndo);
     }
@@ -477,7 +477,7 @@ export function mutateCallers(defBlock: Block) {
  */
 export function getDefinition(
   name: string,
-  workspace: Workspace
+  workspace: Workspace,
 ): Block | null {
   // Do not assume procedure is a top block. Some languages allow nested
   // procedures. Also do not assume it is one of the built-in blocks. Only

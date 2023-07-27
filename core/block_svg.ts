@@ -59,7 +59,7 @@ import * as svgMath from './utils/svg_math.js';
 import {WarningIcon} from './icons/warning_icon.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import {queueRender} from './render_management.js';
+import * as renderManagement from './render_management.js';
 import * as deprecation from './utils/deprecation.js';
 import {IconType} from './icons/icon_types.js';
 
@@ -87,7 +87,7 @@ export class BlockSvg
   // override compose?: ((p1: BlockSvg) => void)|null;
   saveConnections?: (p1: BlockSvg) => void;
   customContextMenu?: (
-    p1: Array<ContextMenuOption | LegacyContextMenuOption>
+    p1: Array<ContextMenuOption | LegacyContextMenuOption>,
   ) => void;
 
   /**
@@ -212,7 +212,7 @@ export class BlockSvg
         svg,
         'pointerdown',
         this,
-        this.onMouseDown_
+        this.onMouseDown_,
       );
     }
     this.eventsInit_ = true;
@@ -267,7 +267,7 @@ export class BlockSvg
     const event = new (eventUtils.get(eventUtils.SELECTED))(
       oldId,
       this.id,
-      this.workspace.id
+      this.workspace.id,
     );
     eventUtils.fire(event);
     common.setSelected(this);
@@ -285,7 +285,7 @@ export class BlockSvg
     const event = new (eventUtils.get(eventUtils.SELECTED))(
       this.id,
       null,
-      this.workspace.id
+      this.workspace.id,
     );
     event.workspaceId = this.workspace.id;
     eventUtils.fire(event);
@@ -451,10 +451,10 @@ export class BlockSvg
     const half = spacing / 2;
     const xy = this.getRelativeToSurfaceXY();
     const dx = Math.round(
-      Math.round((xy.x - half) / spacing) * spacing + half - xy.x
+      Math.round((xy.x - half) / spacing) * spacing + half - xy.x,
     );
     const dy = Math.round(
-      Math.round((xy.y - half) / spacing) * spacing + half - xy.y
+      Math.round((xy.y - half) / spacing) * spacing + half - xy.y,
     );
     if (dx || dy) {
       this.moveBy(dx, dy, ['snap']);
@@ -611,7 +611,7 @@ export class BlockSvg
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
       ContextMenuRegistry.ScopeType.BLOCK,
-      {block: this}
+      {block: this},
     );
 
     // Allow the block to add or modify menuOptions.
@@ -737,7 +737,7 @@ export class BlockSvg
     this.isInsertionMarker_ = insertionMarker;
     if (this.isInsertionMarker_) {
       this.setColour(
-        this.workspace.getRenderer().getConstants().INSERTION_MARKER_COLOUR
+        this.workspace.getRenderer().getConstants().INSERTION_MARKER_COLOUR,
       );
       this.pathObject.updateInsertionMarker(true);
     }
@@ -922,7 +922,7 @@ export class BlockSvg
             this.warningTextDb.delete(id);
             this.setWarningText(text, id);
           }
-        }, 100)
+        }, 100),
       );
       return;
     }
@@ -944,7 +944,7 @@ export class BlockSvg
       if (collapsedParent) {
         collapsedParent.setWarningText(
           Msg['COLLAPSED_WARNINGS_WARNING'],
-          BlockSvg.COLLAPSED_WARNING_ID
+          BlockSvg.COLLAPSED_WARNING_ID,
         );
       }
 
@@ -983,8 +983,8 @@ export class BlockSvg
       icon.initView(this.createIconPointerDownListener(icon));
       icon.applyColour();
       icon.updateEditable();
-      // TODO: Change this based on #7068.
-      this.render();
+      this.queueRender();
+      renderManagement.triggerQueuedRenders();
       this.bumpNeighbours();
     }
 
@@ -1012,8 +1012,8 @@ export class BlockSvg
     if (type.equals(MutatorIcon.TYPE)) this.mutator = null;
 
     if (this.rendered) {
-      // TODO: Change this based on #7068.
-      this.render();
+      this.queueRender();
+      renderManagement.triggerQueuedRenders();
       this.bumpNeighbours();
     }
     return removed;
@@ -1165,7 +1165,7 @@ export class BlockSvg
    */
   override setPreviousStatement(
     newBoolean: boolean,
-    opt_check?: string | string[] | null
+    opt_check?: string | string[] | null,
   ) {
     super.setPreviousStatement(newBoolean, opt_check);
 
@@ -1184,7 +1184,7 @@ export class BlockSvg
    */
   override setNextStatement(
     newBoolean: boolean,
-    opt_check?: string | string[] | null
+    opt_check?: string | string[] | null,
   ) {
     super.setNextStatement(newBoolean, opt_check);
 
@@ -1203,7 +1203,7 @@ export class BlockSvg
    */
   override setOutput(
     newBoolean: boolean,
-    opt_check?: string | string[] | null
+    opt_check?: string | string[] | null,
   ) {
     super.setOutput(newBoolean, opt_check);
 
@@ -1365,7 +1365,7 @@ export class BlockSvg
    * @internal
    */
   override lastConnectionInStack(
-    ignoreShadows: boolean
+    ignoreShadows: boolean,
   ): RenderedConnection | null {
     return super.lastConnectionInStack(ignoreShadows) as RenderedConnection;
   }
@@ -1382,7 +1382,7 @@ export class BlockSvg
    */
   override getMatchingConnection(
     otherBlock: Block,
-    conn: Connection
+    conn: Connection,
   ): RenderedConnection | null {
     return super.getMatchingConnection(otherBlock, conn) as RenderedConnection;
   }
@@ -1505,7 +1505,7 @@ export class BlockSvg
    */
   positionNearConnection(
     sourceConnection: RenderedConnection,
-    targetConnection: RenderedConnection
+    targetConnection: RenderedConnection,
   ) {
     // We only need to position the new block if it's before the existing one,
     // otherwise its position is set by the previous block.
@@ -1542,7 +1542,7 @@ export class BlockSvg
    * @internal
    */
   queueRender(): Promise<void> {
-    return queueRender(this);
+    return renderManagement.queueRender(this);
   }
 
   /**

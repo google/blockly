@@ -53,7 +53,7 @@ export class Names {
     this.variablePrefix = opt_variablePrefix || '';
 
     this.reservedWords = new Set<string>(
-      reservedWordsList ? reservedWordsList.split(',') : []
+      reservedWordsList ? reservedWordsList.split(',') : [],
     );
   }
 
@@ -90,7 +90,7 @@ export class Names {
           'defining a variable map. To fix, add the following code in your ' +
           "generator's init() function:\n" +
           'Blockly.YourGeneratorName.nameDB_.setVariableMap(' +
-          'workspace.getVariableMap());'
+          'workspace.getVariableMap());',
       );
       return null;
     }
@@ -122,7 +122,7 @@ export class Names {
   populateProcedures(workspace: Workspace) {
     throw new Error(
       'The implementation of populateProcedures should be ' +
-        'monkey-patched in by blockly.ts'
+        'monkey-patched in by blockly.ts',
     );
   }
 

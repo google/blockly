@@ -53,13 +53,13 @@ export class TextInputBubble extends Bubble {
   /** The default size of this bubble, including borders. */
   private readonly DEFAULT_SIZE = new Size(
     160 + Bubble.DOUBLE_BORDER,
-    80 + Bubble.DOUBLE_BORDER
+    80 + Bubble.DOUBLE_BORDER,
   );
 
   /** The minimum size of this bubble, including borders. */
   private readonly MIN_SIZE = new Size(
     45 + Bubble.DOUBLE_BORDER,
-    20 + Bubble.DOUBLE_BORDER
+    20 + Bubble.DOUBLE_BORDER,
   );
 
   /**
@@ -72,11 +72,11 @@ export class TextInputBubble extends Bubble {
   constructor(
     protected readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
-    protected ownerRect?: Rect
+    protected ownerRect?: Rect,
   ) {
     super(workspace, anchor, ownerRect);
     ({inputRoot: this.inputRoot, textArea: this.textArea} = this.createEditor(
-      this.contentContainer
+      this.contentContainer,
     ));
     this.resizeGroup = this.createResizeHandle(this.svgRoot);
     this.setSize(this.DEFAULT_SIZE, true);
@@ -115,7 +115,7 @@ export class TextInputBubble extends Bubble {
         'x': Bubble.BORDER_WIDTH,
         'y': Bubble.BORDER_WIDTH,
       },
-      container
+      container,
     );
 
     const body = document.createElementNS(dom.HTML_NS, 'body');
@@ -124,7 +124,7 @@ export class TextInputBubble extends Bubble {
 
     const textArea = document.createElementNS(
       dom.HTML_NS,
-      'textarea'
+      'textarea',
     ) as HTMLTextAreaElement;
     textArea.className = 'blocklyCommentTextarea';
     textArea.setAttribute('dir', this.workspace.RTL ? 'RTL' : 'LTR');
@@ -152,7 +152,7 @@ export class TextInputBubble extends Bubble {
       'focus',
       this,
       this.onStartEdit,
-      true
+      true,
     );
     browserEvents.conditionalBind(textArea, 'change', this, this.onTextChange);
   }
@@ -164,13 +164,13 @@ export class TextInputBubble extends Bubble {
       {
         'class': this.workspace.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE',
       },
-      container
+      container,
     );
     const size = 2 * Bubble.BORDER_WIDTH;
     dom.createSvgElement(
       Svg.POLYGON,
       {'points': `0,${size} ${size},${size} ${size},0`},
-      resizeGroup
+      resizeGroup,
     );
     dom.createSvgElement(
       Svg.LINE,
@@ -181,7 +181,7 @@ export class TextInputBubble extends Bubble {
         'x2': size - 1,
         'y2': size / 3,
       },
-      resizeGroup
+      resizeGroup,
     );
     dom.createSvgElement(
       Svg.LINE,
@@ -192,14 +192,14 @@ export class TextInputBubble extends Bubble {
         'x2': size - 1,
         'y2': (size * 2) / 3,
       },
-      resizeGroup
+      resizeGroup,
     );
 
     browserEvents.conditionalBind(
       resizeGroup,
       'pointerdown',
       this,
-      this.onResizePointerDown
+      this.onResizePointerDown,
     );
 
     return resizeGroup;
@@ -227,12 +227,12 @@ export class TextInputBubble extends Bubble {
     if (this.workspace.RTL) {
       this.resizeGroup.setAttribute(
         'transform',
-        `translate(${Bubble.DOUBLE_BORDER}, ${heightMinusBorder}) scale(-1 1)`
+        `translate(${Bubble.DOUBLE_BORDER}, ${heightMinusBorder}) scale(-1 1)`,
       );
     } else {
       this.resizeGroup.setAttribute(
         'transform',
-        `translate(${widthMinusBorder}, ${heightMinusBorder})`
+        `translate(${widthMinusBorder}, ${heightMinusBorder})`,
       );
     }
 
@@ -258,21 +258,21 @@ export class TextInputBubble extends Bubble {
       e,
       new Coordinate(
         this.workspace.RTL ? -this.getSize().width : this.getSize().width,
-        this.getSize().height
-      )
+        this.getSize().height,
+      ),
     );
 
     this.resizePointerUpListener = browserEvents.conditionalBind(
       document,
       'pointerup',
       this,
-      this.onResizePointerUp
+      this.onResizePointerUp,
     );
     this.resizePointerMoveListener = browserEvents.conditionalBind(
       document,
       'pointermove',
       this,
-      this.onResizePointerMove
+      this.onResizePointerMove,
     );
     this.workspace.hideChaff();
     // This event has been handled.  No need to bubble up to the document.
@@ -297,7 +297,7 @@ export class TextInputBubble extends Bubble {
     const delta = this.workspace.moveDrag(e);
     this.setSize(
       new Size(this.workspace.RTL ? -delta.x : delta.x, delta.y),
-      false
+      false,
     );
     this.onSizeChange();
   }

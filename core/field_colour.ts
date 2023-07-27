@@ -135,7 +135,7 @@ export class FieldColour extends Field<string> {
   constructor(
     value?: string | typeof Field.SKIP_SETUP,
     validator?: FieldColourValidator,
-    config?: FieldColourConfig
+    config?: FieldColourConfig,
   ) {
     super(Field.SKIP_SETUP);
 
@@ -169,7 +169,7 @@ export class FieldColour extends Field<string> {
   override initView() {
     this.size_ = new Size(
       this.getConstants()!.FIELD_COLOUR_DEFAULT_WIDTH,
-      this.getConstants()!.FIELD_COLOUR_DEFAULT_HEIGHT
+      this.getConstants()!.FIELD_COLOUR_DEFAULT_HEIGHT,
     );
     if (!this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) {
       this.createBorderRect_();
@@ -190,7 +190,7 @@ export class FieldColour extends Field<string> {
     } else if (this.sourceBlock_ instanceof BlockSvg) {
       this.sourceBlock_.pathObject.svgPath.setAttribute(
         'fill',
-        this.getValue() as string
+        this.getValue() as string,
       );
       this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
@@ -486,7 +486,7 @@ export class FieldColour extends Field<string> {
     aria.setState(
       table,
       aria.State.ROWCOUNT,
-      Math.floor(colours.length / columns)
+      Math.floor(colours.length / columns),
     );
     aria.setState(table, aria.State.COLCOUNT, columns);
     let row: Element;
@@ -520,8 +520,8 @@ export class FieldColour extends Field<string> {
         'pointerdown',
         this,
         this.onClick,
-        true
-      )
+        true,
+      ),
     );
     this.boundEvents.push(
       browserEvents.conditionalBind(
@@ -529,8 +529,8 @@ export class FieldColour extends Field<string> {
         'pointermove',
         this,
         this.onMouseMove,
-        true
-      )
+        true,
+      ),
     );
     this.boundEvents.push(
       browserEvents.conditionalBind(
@@ -538,8 +538,8 @@ export class FieldColour extends Field<string> {
         'pointerenter',
         this,
         this.onMouseEnter,
-        true
-      )
+        true,
+      ),
     );
     this.boundEvents.push(
       browserEvents.conditionalBind(
@@ -547,8 +547,8 @@ export class FieldColour extends Field<string> {
         'pointerleave',
         this,
         this.onMouseLeave,
-        true
-      )
+        true,
+      ),
     );
     this.boundEvents.push(
       browserEvents.conditionalBind(
@@ -556,8 +556,8 @@ export class FieldColour extends Field<string> {
         'keydown',
         this,
         this.onKeyDown,
-        false
-      )
+        false,
+      ),
     );
 
     this.picker = table;

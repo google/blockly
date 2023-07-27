@@ -286,13 +286,13 @@ export function registerDeleteAll() {
         dialog.confirm(
           Msg['DELETE_ALL_BLOCKS'].replace(
             '%1',
-            String(deletableBlocks.length)
+            String(deletableBlocks.length),
           ),
           function (ok) {
             if (ok) {
               deleteNext_(deletableBlocks);
             }
-          }
+          },
         );
       }
     },

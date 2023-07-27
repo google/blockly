@@ -22,7 +22,7 @@ export class TextBubble extends Bubble {
     private text: string,
     protected readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
-    protected ownerRect?: Rect
+    protected ownerRect?: Rect,
   ) {
     super(workspace, anchor, ownerRect);
     this.paragraph = this.stringToSvg(text, this.contentContainer);
@@ -62,7 +62,7 @@ export class TextBubble extends Bubble {
         'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
         'y': Bubble.BORDER_WIDTH,
       },
-      container
+      container,
     );
   }
 
@@ -72,7 +72,7 @@ export class TextBubble extends Bubble {
       const tspan = dom.createSvgElement(
         Svg.TSPAN,
         {'dy': '1em', 'x': Bubble.BORDER_WIDTH},
-        parent
+        parent,
       );
       const textNode = document.createTextNode(line);
       tspan.appendChild(textNode);
@@ -94,9 +94,9 @@ export class TextBubble extends Bubble {
     this.setSize(
       new Size(
         bbox.width + Bubble.BORDER_WIDTH * 2,
-        bbox.height + Bubble.BORDER_WIDTH * 2
+        bbox.height + Bubble.BORDER_WIDTH * 2,
       ),
-      true
+      true,
     );
   }
 }

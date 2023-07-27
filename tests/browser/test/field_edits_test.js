@@ -19,40 +19,34 @@ const {
 } = require('./test_setup');
 const {Key} = require('webdriverio');
 
-let browser;
 suite('Testing Field Edits', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.PLAYGROUND);
+    this.browser = await testSetup(testFileLocations.PLAYGROUND);
   });
 
   test('Testing Field Edits LTR', async function () {
-    await testFieldEdits(screenDirection.LTR);
+    await testFieldEdits(this.browser, screenDirection.LTR);
   });
 
   test('Testing Field Edits RTL', async function () {
-    switchRTL(browser);
-    await testFieldEdits(screenDirection.RTL);
-  });
-
-  // Teardown entire suite after test are done running
-  suiteTeardown(async function () {
-    await browser.deleteSession();
+    await switchRTL(this.browser);
+    await testFieldEdits(this.browser, screenDirection.RTL);
   });
 });
 
-async function testFieldEdits(delta) {
+async function testFieldEdits(browser, delta) {
   const mathNumber = await dragBlockTypeFromFlyout(
     browser,
     'Math',
     'math_number',
     50 * delta,
-    20
+    20,
   );
-  await browser.pause(2000);
+  await browser.pause(200);
 
   // Click on the field to change the value
   const numeric = await getSelectedBlockElement(browser);
@@ -63,11 +57,11 @@ async function testFieldEdits(delta) {
   // Click on the workspace
   const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
   await workspace.click();
-  await browser.pause(2000);
+  await browser.pause(200);
   // Get value of the number
   const numericText = await browser
     .$(
-      '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable > g > text'
+      '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable > g > text',
     )
     .getHTML();
 

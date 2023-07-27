@@ -20,8 +20,14 @@ const webdriverio = require('webdriverio');
 const path = require('path');
 const {posixPath} = require('../../../scripts/helpers');
 
-let browser;
-async function testSetup(url) {
+let driver = null;
+
+/**
+ * Start up the test page. This should only be done once, to avoid
+ * constantly popping browser windows open and closed.
+ * @return A Promsie that resolves to a webdriverIO browser that tests can manipulate.
+ */
+async function driverSetup() {
   const options = {
     capabilities: {
       'browserName': 'chrome',
@@ -38,7 +44,7 @@ async function testSetup(url) {
     options.capabilities['goog:chromeOptions'].args.push(
       '--headless',
       '--no-sandbox',
-      '--disable-dev-shm-usage'
+      '--disable-dev-shm-usage',
     );
   } else {
     // --disable-gpu is needed to prevent Chrome from hanging on Linux with
@@ -48,10 +54,31 @@ async function testSetup(url) {
   }
   // Use Selenium to bring up the page
   console.log('Starting webdriverio...');
-  browser = await webdriverio.remote(options);
-  console.log('Loading URL: ' + url);
-  await browser.url(url);
-  return browser;
+  driver = await webdriverio.remote(options);
+  return driver;
+}
+
+/**
+ * End the webdriverIO session.
+ * @return A Promise that resolves after the actions have been completed.
+ */
+async function driverTeardown() {
+  await driver.deleteSession();
+  driver = null;
+  return;
+}
+
+/**
+ * Navigate to the correct URL for the test, using the shared driver.
+ * @param {string} url The URL to open for the test.
+ * @return A Promsie that resolves to a webdriverIO browser that tests can manipulate.
+ */
+async function testSetup(url) {
+  if (!driver) {
+    await driverSetup();
+  }
+  await driver.url(url);
+  return driver;
 }
 
 const testFileLocations = {
@@ -121,18 +148,10 @@ async function getBlockElementById(browser, id) {
  * @throws If the category cannot be found.
  */
 async function getCategory(browser, categoryName) {
-  const categories = await browser.$$('.blocklyTreeLabel');
+  const category = browser.$(`.blocklyToolboxCategory*=${categoryName}`);
+  category.waitForExist();
 
-  let category;
-  for (const c of categories) {
-    const text = await c.getText();
-    if (text === categoryName) {
-      category = c;
-    }
-  }
-  if (!category) throw Error();
-
-  return category;
+  return await category;
 }
 
 /**
@@ -144,10 +163,10 @@ async function getCategory(browser, categoryName) {
  */
 async function getNthBlockOfCategory(browser, categoryName, n) {
   const category = await getCategory(browser, categoryName);
-  category.click();
+  await category.click();
   await browser.pause(100);
   const block = await browser.$(
-    `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`
+    `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`,
   );
   return block;
 }
@@ -163,8 +182,7 @@ async function getNthBlockOfCategory(browser, categoryName, n) {
 async function getBlockTypeFromCategory(browser, categoryName, blockType) {
   if (categoryName) {
     const category = await getCategory(browser, categoryName);
-    category.click();
-    await browser.pause(100);
+    await category.click();
   }
 
   const id = await browser.execute((blockType) => {
@@ -191,7 +209,7 @@ async function getBlockTypeFromWorkspace(browser, blockType, position) {
       ].id;
     },
     blockType,
-    position
+    position,
   );
   return getBlockElementById(browser, id);
 }
@@ -242,17 +260,19 @@ async function getLocationOfBlockConnection(
 
       const loc = Blockly.utils.Coordinate.sum(
         block.getRelativeToSurfaceXY(),
-        connection.getOffsetInBlock()
+        connection.getOffsetInBlock(),
       );
-      console.log(Blockly);
       return Blockly.utils.svgMath.wsToScreenCoordinates(
         Blockly.getMainWorkspace(),
-        loc
+        loc,
       );
     },
     id,
     connectionName,
+<<<<<<< HEAD
     mutatorBlockId
+=======
+>>>>>>> upstream/develop
   );
 }
 
@@ -326,6 +346,7 @@ async function connect(
 async function switchRTL(browser) {
   const ltrForm = await browser.$('#options > select:nth-child(1)');
   await ltrForm.selectByIndex(1);
+  await browser.pause(500);
 }
 
 /**
@@ -367,7 +388,7 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
   const flyoutBlock = await getBlockTypeFromCategory(
     browser,
     categoryName,
-    type
+    type,
   );
   await flyoutBlock.dragAndDrop({x: x, y: y});
   return await getSelectedBlockElement(browser);
@@ -386,14 +407,16 @@ async function contextMenuSelect(browser, block, itemText) {
   // Clicking will always happen in the middle of the block's bounds
   // (including children) by default, which causes problems if it has holes
   // (e.g. statement inputs).
-  // Instead we want to click 20% from the right and 5% from the top.
-  const xOffset = -Math.round((await block.getSize('width')) * 0.3);
-  const yOffset = -Math.round((await block.getSize('height')) * 0.45);
+  // Instead we want to click 10px from the left and 10px from the top.
+  const blockWidth = await block.getSize('width');
+  const blockHeight = await block.getSize('height');
+  const xOffset = -Math.round(blockWidth * 0.5) + 10;
+  const yOffset = -Math.round(blockHeight * 0.5) + 10;
 
   await block.click({button: 2, x: xOffset, y: yOffset});
-  await browser.pause(100);
 
   const item = await browser.$(`div=${itemText}`);
+  await item.waitForExist();
   await item.click();
 
   await browser.pause(100);
@@ -409,7 +432,6 @@ async function contextMenuSelect(browser, block, itemText) {
  */
 async function getAllBlocks(browser) {
   return browser.execute(() => {
-    // return Blockly.getMainWorkspace().getAllBlocks(false);
     return Blockly.getMainWorkspace()
       .getAllBlocks(false)
       .map((block) => ({
@@ -422,6 +444,8 @@ async function getAllBlocks(browser) {
 module.exports = {
   testSetup,
   testFileLocations,
+  driverSetup,
+  driverTeardown,
   getSelectedBlockElement,
   getSelectedBlockId,
   getBlockElementById,

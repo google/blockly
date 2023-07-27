@@ -54,7 +54,7 @@ export class WorkspaceComment {
     content: string,
     height: number,
     width: number,
-    opt_id?: string
+    opt_id?: string,
   ) {
     this.id =
       opt_id && !workspace.getCommentById(opt_id)
@@ -169,7 +169,7 @@ export class WorkspaceComment {
    */
   moveBy(dx: number, dy: number) {
     const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
-      this
+      this,
     ) as CommentMove;
     this.xy_.translate(dx, dy);
     event.recordNew();
@@ -260,8 +260,8 @@ export class WorkspaceComment {
         new (eventUtils.get(eventUtils.COMMENT_CHANGE))(
           this,
           this.content_,
-          content
-        )
+          content,
+        ),
       );
       this.content_ = content;
     }
@@ -316,7 +316,7 @@ export class WorkspaceComment {
       }
       try {
         eventUtils.fire(
-          new (eventUtils.get(eventUtils.COMMENT_CREATE))(comment)
+          new (eventUtils.get(eventUtils.COMMENT_CREATE))(comment),
         );
       } finally {
         eventUtils.setGroup(existingGroup);
@@ -340,7 +340,7 @@ export class WorkspaceComment {
       info.content,
       info.h,
       info.w,
-      info.id
+      info.id,
     );
 
     const xmlX = xmlComment.getAttribute('x');

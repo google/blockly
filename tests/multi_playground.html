@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -41,10 +41,10 @@
         setBackgroundColour();
         var match = location.search.match(/toolbox=([^&]+)/);
         var toolbox = document.getElementById(
-          'toolbox-' + (match ? match[1] : 'categories')
+          'toolbox-' + (match ? match[1] : 'categories'),
         );
         document.forms.options.elements.toolbox.selectedIndex = Number(
-          toolbox.getElementsByTagName('category').length == 0
+          toolbox.getElementsByTagName('category').length == 0,
         );
         startBlocklyInstance('VertStartLTR', false, false, 'start', toolbox);
         startBlocklyInstance('VertStartRTL', true, false, 'start', toolbox);
@@ -57,14 +57,14 @@
           false,
           true,
           'start',
-          toolbox
+          toolbox,
         );
         startBlocklyInstance(
           'HorizontalStartRTL',
           true,
           true,
           'start',
-          toolbox
+          toolbox,
         );
 
         startBlocklyInstance('HorizontalEndLTR', false, true, 'end', toolbox);
@@ -76,7 +76,7 @@
         rtl,
         horizontalLayout,
         position,
-        toolbox
+        toolbox,
       ) {
         options.rtl = rtl;
         options.toolbox = toolbox;

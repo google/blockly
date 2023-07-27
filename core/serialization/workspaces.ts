@@ -46,7 +46,7 @@ export function save(workspace: Workspace): {
 export function load(
   state: {[key: string]: AnyDuringMigration},
   workspace: Workspace,
-  {recordUndo = false}: {recordUndo?: boolean} = {}
+  {recordUndo = false}: {recordUndo?: boolean} = {},
 ) {
   const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
   if (!serializerMap) {
@@ -54,7 +54,7 @@ export function load(
   }
 
   const deserializers = Object.entries(serializerMap).sort(
-    (a, b) => (b[1] as ISerializer)!.priority - (a[1] as ISerializer)!.priority
+    (a, b) => (b[1] as ISerializer)!.priority - (a[1] as ISerializer)!.priority,
   );
 
   const prevRecordUndo = eventUtils.getRecordUndo();

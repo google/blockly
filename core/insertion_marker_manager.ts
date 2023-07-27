@@ -25,6 +25,7 @@ import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {RenderedConnection} from './rendered_connection.js';
 import type {Coordinate} from './utils/coordinate.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import * as renderManagement from './render_management.js';
 
 /** Represents a nearby valid connection. */
 interface CandidateConnection {
@@ -136,7 +137,7 @@ export class InsertionMarkerManager {
 
     if (this.lastOnStack) {
       this.lastMarker = this.createMarkerBlock(
-        this.lastOnStack.getSourceBlock()
+        this.lastOnStack.getSourceBlock(),
       );
     }
   }
@@ -311,7 +312,7 @@ export class InsertionMarkerManager {
    */
   private shouldUpdatePreviews(
     newCandidate: CandidateConnection | null,
-    dxy: Coordinate
+    dxy: Coordinate,
   ): boolean {
     // Only need to update if we were showing a preview before.
     if (!newCandidate) return !!this.activeCandidate;
@@ -404,18 +405,18 @@ export class InsertionMarkerManager {
    */
   private shouldDelete(
     newCandidate: boolean,
-    dragTarget: IDragTarget | null
+    dragTarget: IDragTarget | null,
   ): boolean {
     if (dragTarget) {
       const componentManager = this.workspace.getComponentManager();
       const isDeleteArea = componentManager.hasCapability(
         dragTarget.id,
-        ComponentManager.Capability.DELETE_AREA
+        ComponentManager.Capability.DELETE_AREA,
       );
       if (isDeleteArea) {
         return (dragTarget as IDeleteArea).wouldDelete(
           this.topBlock,
-          newCandidate
+          newCandidate,
         );
       }
     }
@@ -462,7 +463,7 @@ export class InsertionMarkerManager {
     const method = renderer.getConnectionPreviewMethod(
       activeCandidate.closest,
       activeCandidate.local,
-      this.topBlock
+      this.topBlock,
     );
 
     switch (method) {
@@ -552,14 +553,14 @@ export class InsertionMarkerManager {
     if (!insertionMarker) {
       throw new Error(
         'Cannot show the insertion marker because there is no insertion ' +
-          'marker block'
+          'marker block',
       );
     }
     let imConn;
     try {
       imConn = insertionMarker.getMatchingConnection(
         local.getSourceBlock(),
-        local
+        local,
       );
     } catch (e) {
       // It's possible that the number of connections on the local block has
@@ -571,7 +572,7 @@ export class InsertionMarkerManager {
       if (isLastInStack && this.lastOnStack) {
         this.disposeInsertionMarker(this.lastMarker);
         this.lastMarker = this.createMarkerBlock(
-          this.lastOnStack.getSourceBlock()
+          this.lastOnStack.getSourceBlock(),
         );
         insertionMarker = this.lastMarker;
       } else {
@@ -583,43 +584,42 @@ export class InsertionMarkerManager {
       if (!insertionMarker) {
         throw new Error(
           'Cannot show the insertion marker because there is no insertion ' +
-            'marker block'
+            'marker block',
         );
       }
       imConn = insertionMarker.getMatchingConnection(
         local.getSourceBlock(),
-        local
+        local,
       );
     }
 
     if (!imConn) {
       throw new Error(
         'Cannot show the insertion marker because there is no ' +
-          'associated connection'
+          'associated connection',
       );
     }
 
     if (imConn === this.markerConnection) {
       throw new Error(
         "Made it to showInsertionMarker_ even though the marker isn't " +
-          'changing'
+          'changing',
       );
     }
 
     // Render disconnected from everything else so that we have a valid
     // connection location.
-    insertionMarker.render();
-    insertionMarker.rendered = true;
-    insertionMarker.getSvgRoot().setAttribute('visibility', 'visible');
+    insertionMarker.queueRender();
+    renderManagement.triggerQueuedRenders();
 
-    if (imConn && closest) {
-      // Position so that the existing block doesn't move.
-      insertionMarker.positionNearConnection(imConn, closest);
-    }
-    if (closest) {
-      // Connect() also renders the insertion marker.
-      imConn.connect(closest);
-    }
+    // Position so that the existing block doesn't move.
+    insertionMarker.positionNearConnection(imConn, closest);
+    // Connect() also renders the insertion marker.
+    imConn.connect(closest);
+
+    renderManagement.finishQueuedRenders().then(() => {
+      insertionMarker?.getSvgRoot().setAttribute('visibility', 'visible');
+    });
 
     this.markerConnection = imConn;
   }
@@ -648,7 +648,7 @@ export class InsertionMarkerManager {
     if (markerConn.targetConnection) {
       throw Error(
         'markerConnection still connected at the end of ' +
-          'disconnectInsertionMarker'
+          'disconnectInsertionMarker',
       );
     }
 
@@ -678,12 +678,12 @@ export class InsertionMarkerManager {
     if (!this.activeCandidate) {
       throw new Error(
         'Cannot hide the insertion marker outline because ' +
-          'there is no active candidate'
+          'there is no active candidate',
       );
     }
     this.highlightedBlock.highlightShapeForInput(
       this.activeCandidate.closest,
-      false
+      false,
     );
     this.highlightedBlock = null;
   }
@@ -700,7 +700,7 @@ export class InsertionMarkerManager {
     if (!this.fadedBlock) {
       throw new Error(
         'Cannot show the replacement fade because the ' +
-          'closest connection does not have a target block'
+          'closest connection does not have a target block',
       );
     }
     this.fadedBlock.fadeForReplacement(true);

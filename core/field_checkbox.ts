@@ -64,7 +64,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
   constructor(
     value?: CheckboxBool | typeof Field.SKIP_SETUP,
     validator?: FieldCheckboxValidator,
-    config?: FieldCheckboxConfig
+    config?: FieldCheckboxConfig,
   ) {
     super(Field.SKIP_SETUP);
 
@@ -155,7 +155,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    * @returns A valid value ('TRUE' or 'FALSE), or null if invalid.
    */
   protected override doClassValidation_(
-    newValue?: AnyDuringMigration
+    newValue?: AnyDuringMigration,
   ): BoolString | null {
     if (newValue === true || newValue === 'TRUE') {
       return 'TRUE';

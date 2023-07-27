@@ -43,7 +43,7 @@ export class ScrollbarPair {
     addHorizontal?: boolean,
     addVertical?: boolean,
     opt_class?: string,
-    opt_margin?: number
+    opt_margin?: number,
   ) {
     addHorizontal = addHorizontal === undefined ? true : addHorizontal;
     addVertical = addVertical === undefined ? true : addVertical;
@@ -55,7 +55,7 @@ export class ScrollbarPair {
         true,
         isPair,
         opt_class,
-        opt_margin
+        opt_margin,
       );
     }
     if (addVertical) {
@@ -64,7 +64,7 @@ export class ScrollbarPair {
         false,
         isPair,
         opt_class,
-        opt_margin
+        opt_margin,
       );
     }
 

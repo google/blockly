@@ -51,7 +51,7 @@ suite('Key Down', function () {
       this.event = createKeyDownEvent(Blockly.utils.KeyCodes.ESC);
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype,
-        'hideChaff'
+        'hideChaff',
       );
     });
     test('Simple', function () {
@@ -76,7 +76,7 @@ suite('Key Down', function () {
     setup(function () {
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype,
-        'hideChaff'
+        'hideChaff',
       );
       setSelectedBlock(this.workspace);
       this.deleteSpy = sinon.spy(Blockly.common.getSelected(), 'dispose');
@@ -113,7 +113,7 @@ suite('Key Down', function () {
       this.copySpy = sinon.spy(Blockly.clipboard.TEST_ONLY, 'copyInternal');
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype,
-        'hideChaff'
+        'hideChaff',
       );
     });
     const testCases = [
@@ -204,7 +204,7 @@ suite('Key Down', function () {
       this.undoSpy = sinon.spy(this.workspace, 'undo');
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype,
-        'hideChaff'
+        'hideChaff',
       );
     });
     const testCases = [
@@ -268,7 +268,7 @@ suite('Key Down', function () {
       this.redoSpy = sinon.spy(this.workspace, 'undo');
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype,
-        'hideChaff'
+        'hideChaff',
       );
     });
     const testCases = [
@@ -338,7 +338,7 @@ suite('Key Down', function () {
       this.undoSpy = sinon.spy(this.workspace, 'undo');
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype,
-        'hideChaff'
+        'hideChaff',
       );
     });
     test('Simple', function () {
@@ -356,7 +356,7 @@ suite('Key Down', function () {
     runReadOnlyTest(
       createKeyDownEvent(Blockly.utils.KeyCodes.Y, [
         Blockly.utils.KeyCodes.CTRL,
-      ])
+      ]),
     );
   });
 });

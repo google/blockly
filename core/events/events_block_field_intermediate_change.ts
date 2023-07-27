@@ -59,7 +59,7 @@ export class BlockFieldIntermediateChange extends BlockBase {
     opt_block?: Block,
     opt_name?: string,
     opt_oldValue?: unknown,
-    opt_newValue?: unknown
+    opt_newValue?: unknown,
   ) {
     super(opt_block);
     if (!opt_block) {
@@ -81,7 +81,7 @@ export class BlockFieldIntermediateChange extends BlockBase {
     if (!this.name) {
       throw new Error(
         'The changed field name is undefined. Either pass a ' +
-          'name to the constructor, or call fromJson.'
+          'name to the constructor, or call fromJson.',
       );
     }
     json['name'] = this.name;
@@ -102,12 +102,12 @@ export class BlockFieldIntermediateChange extends BlockBase {
   static fromJson(
     json: BlockFieldIntermediateChangeJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): BlockFieldIntermediateChange {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new BlockFieldIntermediateChange()
+      event ?? new BlockFieldIntermediateChange(),
     ) as BlockFieldIntermediateChange;
     newEvent.name = json['name'];
     newEvent.oldValue = json['oldValue'];
@@ -134,5 +134,5 @@ export interface BlockFieldIntermediateChangeJson extends BlockBaseJson {
 registry.register(
   registry.Type.EVENT,
   eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE,
-  BlockFieldIntermediateChange
+  BlockFieldIntermediateChange,
 );

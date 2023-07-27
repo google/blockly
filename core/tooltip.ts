@@ -167,7 +167,7 @@ export function getTooltipOfObject(object: AnyDuringMigration | null): string {
  * @returns The target tooltip object.
  */
 function getTargetObject(
-  obj: object | null
+  obj: object | null,
 ): {tooltip: AnyDuringMigration} | null {
   while (obj && (obj as any).tooltip) {
     if (
@@ -206,13 +206,13 @@ export function bindMouseEvents(element: Element) {
     element,
     'pointerover',
     null,
-    onMouseOver
+    onMouseOver,
   );
   (element as AnyDuringMigration).mouseOutWrapper_ = browserEvents.bind(
     element,
     'pointerout',
     null,
-    onMouseOut
+    onMouseOut,
   );
 
   // Don't use bindEvent_ for mousemove since that would create a

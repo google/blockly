@@ -34,7 +34,7 @@ function stringButtonClickHandler(button: FlyoutButton) {
   Variables.createVariableButtonHandler(
     button.getTargetWorkspace(),
     undefined,
-    'String'
+    'String',
   );
 }
 // eslint-disable-next-line camelcase
@@ -49,7 +49,7 @@ function numberButtonClickHandler(button: FlyoutButton) {
   Variables.createVariableButtonHandler(
     button.getTargetWorkspace(),
     undefined,
-    'Number'
+    'Number',
   );
 }
 // eslint-disable-next-line camelcase
@@ -64,7 +64,7 @@ function colourButtonClickHandler(button: FlyoutButton) {
   Variables.createVariableButtonHandler(
     button.getTargetWorkspace(),
     undefined,
-    'Colour'
+    'Colour',
   );
 }
 // eslint-disable-next-line camelcase
@@ -94,15 +94,15 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
 
   workspace.registerButtonCallback(
     'CREATE_VARIABLE_STRING',
-    stringButtonClickHandler
+    stringButtonClickHandler,
   );
   workspace.registerButtonCallback(
     'CREATE_VARIABLE_NUMBER',
-    numberButtonClickHandler
+    numberButtonClickHandler,
   );
   workspace.registerButtonCallback(
     'CREATE_VARIABLE_COLOUR',
-    colourButtonClickHandler
+    colourButtonClickHandler,
   );
 
   const blockList = flyoutCategoryBlocks(workspace);

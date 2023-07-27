@@ -311,7 +311,7 @@ const GET_SUBSTRING_BLOCK = {
       this.appendValueInput('AT' + n).setCheck('Number');
       if (Msg['ORDINAL_NUMBER_SUFFIX']) {
         this.appendDummyInput('ORDINAL' + n).appendField(
-          Msg['ORDINAL_NUMBER_SUFFIX']
+          Msg['ORDINAL_NUMBER_SUFFIX'],
         );
       }
     } else {
@@ -345,7 +345,7 @@ const GET_SUBSTRING_BLOCK = {
           return null;
         }
         return undefined;
-      }
+      },
     );
 
     this.getInput('AT' + n)!.appendField(menu, 'WHERE' + n);
@@ -379,7 +379,7 @@ blocks['text_changeCase'] = {
           type: 'field_dropdown',
           options: OPERATORS,
         }) as FieldDropdown,
-        'CASE'
+        'CASE',
       );
     this.setOutput(true, 'String');
     this.setTooltip(Msg['TEXT_CHANGECASE_TOOLTIP']);
@@ -405,7 +405,7 @@ blocks['text_trim'] = {
           type: 'field_dropdown',
           options: OPERATORS,
         }) as FieldDropdown,
-        'MODE'
+        'MODE',
       );
     this.setOutput(true, 'String');
     this.setTooltip(Msg['TEXT_TRIM_TOOLTIP']);
@@ -542,7 +542,7 @@ const TEXT_PROMPT_BLOCK = {
           type: 'field_input',
           text: '',
         }) as FieldTextInput,
-        'TEXT'
+        'TEXT',
       )
       .appendField(this.newQuote_(false));
     this.setOutput(true, 'String');
@@ -691,7 +691,7 @@ const QUOTE_IMAGE_MIXIN = {
       }
     }
     console.warn(
-      'field named "' + fieldName + '" not found in ' + this.toDevString()
+      'field named "' + fieldName + '" not found in ' + this.toDevString(),
     );
   },
 
@@ -790,13 +790,13 @@ const JOIN_MUTATOR_MIXIN = {
    */
   decompose: function (this: JoinMutatorBlock, workspace: Workspace): Block {
     const containerBlock = workspace.newBlock(
-      'text_create_join_container'
+      'text_create_join_container',
     ) as BlockSvg;
     containerBlock.initSvg();
     let connection = containerBlock.getInput('STACK')!.connection!;
     for (let i = 0; i < this.itemCount_; i++) {
       const itemBlock = workspace.newBlock(
-        'text_create_join_item'
+        'text_create_join_item',
       ) as JoinItemBlock;
       itemBlock.initSvg();
       connection.connect(itemBlock.previousConnection);
@@ -811,7 +811,7 @@ const JOIN_MUTATOR_MIXIN = {
    */
   compose: function (this: JoinMutatorBlock, containerBlock: Block) {
     let itemBlock = containerBlock.getInputTargetBlock(
-      'STACK'
+      'STACK',
     ) as JoinItemBlock;
     // Count number of inputs.
     const connections = [];
@@ -901,7 +901,7 @@ const JOIN_EXTENSION = function (this: JoinMutatorBlock) {
 // Update the tooltip of 'text_append' block to reference the variable.
 Extensions.register(
   'text_append_tooltip',
-  Extensions.buildTooltipWithFieldText('%{BKY_TEXT_APPEND_TOOLTIP}', 'VAR')
+  Extensions.buildTooltipWithFieldText('%{BKY_TEXT_APPEND_TOOLTIP}', 'VAR'),
 );
 
 /**
@@ -911,7 +911,7 @@ const INDEXOF_TOOLTIP_EXTENSION = function (this: Block) {
   this.setTooltip(() => {
     return Msg['TEXT_INDEXOF_TOOLTIP'].replace(
       '%1',
-      this.workspace.options.oneBasedIndex ? '0' : '-1'
+      this.workspace.options.oneBasedIndex ? '0' : '-1',
     );
   });
 };
@@ -970,7 +970,7 @@ const CHARAT_MUTATOR_MIXIN = {
       this.appendValueInput('AT').setCheck('Number');
       if (Msg['ORDINAL_NUMBER_SUFFIX']) {
         this.appendDummyInput('ORDINAL').appendField(
-          Msg['ORDINAL_NUMBER_SUFFIX']
+          Msg['ORDINAL_NUMBER_SUFFIX'],
         );
       }
     }
@@ -1022,13 +1022,13 @@ Extensions.register('text_quotes', QUOTES_EXTENSION);
 Extensions.registerMutator(
   'text_join_mutator',
   JOIN_MUTATOR_MIXIN,
-  JOIN_EXTENSION
+  JOIN_EXTENSION,
 );
 
 Extensions.registerMutator(
   'text_charAt_mutator',
   CHARAT_MUTATOR_MIXIN,
-  CHARAT_EXTENSION
+  CHARAT_EXTENSION,
 );
 
 // Register provided blocks.

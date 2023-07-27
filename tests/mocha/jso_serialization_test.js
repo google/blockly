@@ -236,7 +236,7 @@ suite('JSO Serialization', function () {
         assertProperty(
           jso,
           'extraState',
-          '<mutation value="some value"></mutation>'
+          '<mutation value="some value"></mutation>',
         );
       });
     });
@@ -376,7 +376,7 @@ suite('JSO Serialization', function () {
           block
             .getInput(inputName)
             .connection.connect(
-              childBlock.outputConnection || childBlock.previousConnection
+              childBlock.outputConnection || childBlock.previousConnection,
             );
           return block;
         };
@@ -387,8 +387,8 @@ suite('JSO Serialization', function () {
             .getInput(inputName)
             .connection.setShadowDom(
               Blockly.utils.xml.textToDom(
-                '<shadow type="' + blockType + '" id="test"></shadow>'
-              )
+                '<shadow type="' + blockType + '" id="test"></shadow>',
+              ),
             );
           return block;
         };
@@ -399,14 +399,14 @@ suite('JSO Serialization', function () {
           block
             .getInput(inputName)
             .connection.connect(
-              childBlock.outputConnection || childBlock.previousConnection
+              childBlock.outputConnection || childBlock.previousConnection,
             );
           block
             .getInput(inputName)
             .connection.setShadowDom(
               Blockly.utils.xml.textToDom(
-                '<shadow type="' + blockType + '" id="test"></shadow>'
-              )
+                '<shadow type="' + blockType + '" id="test"></shadow>',
+              ),
             );
           return block;
         };
@@ -430,7 +430,7 @@ suite('JSO Serialization', function () {
         this.assertOverwrittenShadow = function (blockType, inputName) {
           const block = this.createBlockWithShadowAndChild(
             blockType,
-            inputName
+            inputName,
           );
           const jso = Blockly.serialization.blocks.save(block);
           this.assertInput(jso, inputName, {
@@ -464,7 +464,7 @@ suite('JSO Serialization', function () {
         this.assertNoOverwrittenShadow = function (blockType, inputName) {
           const block = this.createBlockWithShadowAndChild(
             blockType,
-            inputName
+            inputName,
           );
           const jso = Blockly.serialization.blocks.save(block, {
             addInputBlocks: false,
@@ -576,7 +576,7 @@ suite('JSO Serialization', function () {
               .getInput('NAME')
               .connection.connect(childBlock.previousConnection);
             childBlock.nextConnection.connect(
-              grandChildBlock.previousConnection
+              grandChildBlock.previousConnection,
             );
             const jso = Blockly.serialization.blocks.save(block);
             this.assertInput(jso, 'NAME', {
@@ -622,8 +622,8 @@ suite('JSO Serialization', function () {
             const block = this.workspace.newBlock('stack_block');
             block.nextConnection.setShadowDom(
               Blockly.utils.xml.textToDom(
-                '<shadow type="stack_block" id="test"></shadow>'
-              )
+                '<shadow type="stack_block" id="test"></shadow>',
+              ),
             );
             return block;
           };
@@ -634,8 +634,8 @@ suite('JSO Serialization', function () {
             block.nextConnection.connect(childBlock.previousConnection);
             block.nextConnection.setShadowDom(
               Blockly.utils.xml.textToDom(
-                '<shadow type="stack_block" id="test"></shadow>'
-              )
+                '<shadow type="stack_block" id="test"></shadow>',
+              ),
             );
             return block;
           };
@@ -748,7 +748,7 @@ suite('JSO Serialization', function () {
           const jso = Blockly.serialization.blocks.save(block);
           chai.assert.deepEqual(
             jso['inputs']['INPUT']['block']['fields']['VAR'],
-            {'id': 'id4', 'name': 'item', 'type': ''}
+            {'id': 'id4', 'name': 'item', 'type': ''},
           );
         });
 
@@ -787,13 +787,13 @@ suite('JSO Serialization', function () {
           });
           chai.assert.deepEqual(
             jso['inputs']['INPUT']['block']['fields']['VAR'],
-            {'id': 'id4'}
+            {'id': 'id4'},
           );
           chai.assert.isUndefined(
-            jso['inputs']['INPUT']['block']['fields']['VAR']['name']
+            jso['inputs']['INPUT']['block']['fields']['VAR']['name'],
           );
           chai.assert.isUndefined(
-            jso['inputs']['INPUT']['block']['fields']['VAR']['type']
+            jso['inputs']['INPUT']['block']['fields']['VAR']['type'],
           );
         });
 
@@ -808,10 +808,10 @@ suite('JSO Serialization', function () {
             'id': 'id4',
           });
           chai.assert.isUndefined(
-            jso['next']['block']['fields']['VAR']['name']
+            jso['next']['block']['fields']['VAR']['name'],
           );
           chai.assert.isUndefined(
-            jso['next']['block']['fields']['VAR']['type']
+            jso['next']['block']['fields']['VAR']['type'],
           );
         });
       });
@@ -844,7 +844,7 @@ suite('JSO Serialization', function () {
       this.serializer =
         new Blockly.serialization.procedures.ProcedureSerializer(
           MockProcedureModel,
-          MockParameterModel
+          MockParameterModel,
         );
     });
 
@@ -912,7 +912,7 @@ suite('JSO Serialization', function () {
         test('the state always has an id property', function () {
           const parameterModel = new MockParameterModel('testparam');
           this.procedureMap.add(
-            new MockProcedureModel().insertParameter(parameterModel, 0)
+            new MockProcedureModel().insertParameter(parameterModel, 0),
           );
           const jso = this.serializer.save(this.workspace);
           const parameter = jso[0]['parameters'][0];
@@ -922,7 +922,7 @@ suite('JSO Serialization', function () {
         test('the state always has a name property', function () {
           const parameterModel = new MockParameterModel('testparam');
           this.procedureMap.add(
-            new MockProcedureModel().insertParameter(parameterModel, 0)
+            new MockProcedureModel().insertParameter(parameterModel, 0),
           );
           const jso = this.serializer.save(this.workspace);
           const parameter = jso[0]['parameters'][0];
@@ -934,7 +934,7 @@ suite('JSO Serialization', function () {
         test('if the parameter has no type, there is no type property', function () {
           const parameterModel = new MockParameterModel('testparam');
           this.procedureMap.add(
-            new MockProcedureModel().insertParameter(parameterModel, 0)
+            new MockProcedureModel().insertParameter(parameterModel, 0),
           );
           const jso = this.serializer.save(this.workspace);
           const parameter = jso[0]['parameters'][0];
@@ -946,7 +946,7 @@ suite('JSO Serialization', function () {
             'a type',
           ]);
           this.procedureMap.add(
-            new MockProcedureModel().insertParameter(parameterModel, 0)
+            new MockProcedureModel().insertParameter(parameterModel, 0),
           );
           const jso = this.serializer.save(this.workspace);
           const parameter = jso[0]['parameters'][0];

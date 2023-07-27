@@ -86,10 +86,10 @@ suite('ASTNode', function () {
 
     statementInput1.nextConnection.connect(statementInput2.previousConnection);
     statementInput1.inputList[0].connection.connect(
-      fieldWithOutput.outputConnection
+      fieldWithOutput.outputConnection,
     );
     statementInput2.inputList[1].connection.connect(
-      statementInput3.previousConnection
+      statementInput3.previousConnection,
     );
 
     this.blocks = {
@@ -143,7 +143,7 @@ suite('ASTNode', function () {
     test('navigateBetweenStacks_Forward', function () {
       const node = new ASTNode(
         ASTNode.types.NEXT,
-        this.blocks.statementInput1.nextConnection
+        this.blocks.statementInput1.nextConnection,
       );
       const newASTNode = node.navigateBetweenStacks(true);
       chai.assert.equal(newASTNode.getLocation(), this.blocks.statementInput4);
@@ -152,7 +152,7 @@ suite('ASTNode', function () {
     test('navigateBetweenStacks_Backward', function () {
       const node = new ASTNode(
         ASTNode.types.BLOCK,
-        this.blocks.statementInput4
+        this.blocks.statementInput4,
       );
       const newASTNode = node.navigateBetweenStacks(false);
       chai.assert.equal(newASTNode.getLocation(), this.blocks.statementInput1);
@@ -160,31 +160,31 @@ suite('ASTNode', function () {
     test('getOutAstNodeForBlock', function () {
       const node = new ASTNode(
         ASTNode.types.BLOCK,
-        this.blocks.statementInput2
+        this.blocks.statementInput2,
       );
       const newASTNode = node.getOutAstNodeForBlock(
-        this.blocks.statementInput2
+        this.blocks.statementInput2,
       );
       chai.assert.equal(newASTNode.getLocation(), this.blocks.statementInput1);
     });
     test('getOutAstNodeForBlock_OneBlock', function () {
       const node = new ASTNode(
         ASTNode.types.BLOCK,
-        this.blocks.statementInput4
+        this.blocks.statementInput4,
       );
       const newASTNode = node.getOutAstNodeForBlock(
-        this.blocks.statementInput4
+        this.blocks.statementInput4,
       );
       chai.assert.equal(newASTNode.getLocation(), this.blocks.statementInput4);
     });
     test('findFirstFieldOrInput_', function () {
       const node = new ASTNode(
         ASTNode.types.BLOCK,
-        this.blocks.statementInput4
+        this.blocks.statementInput4,
       );
       const field = this.blocks.statementInput4.inputList[0].fieldRow[0];
       const newASTNode = node.findFirstFieldOrInput(
-        this.blocks.statementInput4
+        this.blocks.statementInput4,
       );
       chai.assert.equal(newASTNode.getLocation(), field);
     });
@@ -618,7 +618,7 @@ suite('ASTNode', function () {
         const inNode = node.in();
         chai.assert.equal(
           inNode.getLocation(),
-          this.workspace.getTopBlocks()[0]
+          this.workspace.getTopBlocks()[0],
         );
         chai.assert.equal(inNode.getType(), ASTNode.types.STACK);
       });
@@ -626,7 +626,7 @@ suite('ASTNode', function () {
         const coordinate = new Blockly.utils.Coordinate(100, 100);
         const node = ASTNode.createWorkspaceNode(
           this.emptyWorkspace,
-          coordinate
+          coordinate,
         );
         const inNode = node.in();
         chai.assert.isNull(inNode);
@@ -658,10 +658,10 @@ suite('ASTNode', function () {
         const secondBlock = this.blocks.secondBlock;
         const outputNextBlock = this.blocks.outputNextBlock;
         this.blocks.noPrevConnection.nextConnection.connect(
-          secondBlock.previousConnection
+          secondBlock.previousConnection,
         );
         secondBlock.inputList[0].connection.connect(
-          outputNextBlock.outputConnection
+          outputNextBlock.outputConnection,
         );
       });
 
@@ -679,7 +679,7 @@ suite('ASTNode', function () {
         chai.assert.equal(outNode.getType(), ASTNode.types.INPUT);
         chai.assert.equal(
           outNode.getLocation(),
-          this.blocks.statementInput1.inputList[0].connection
+          this.blocks.statementInput1.inputList[0].connection,
         );
       });
       test('fromOutputToStack', function () {
@@ -757,7 +757,7 @@ suite('ASTNode', function () {
         chai.assert.equal(outNode.getType(), ASTNode.types.INPUT);
         chai.assert.equal(
           outNode.getLocation(),
-          this.blocks.secondBlock.inputList[0].connection
+          this.blocks.secondBlock.inputList[0].connection,
         );
       });
       test('fromBlockToStack', function () {

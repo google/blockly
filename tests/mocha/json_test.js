@@ -59,11 +59,11 @@ suite('JSON Block Definitions', function () {
       }, [/missing a type attribute/, /missing a type attribute/]);
       chai.assert.isNotNull(
         Blockly.Blocks[BLOCK_TYPE1],
-        'Block before bad blocks should be defined.'
+        'Block before bad blocks should be defined.',
       );
       chai.assert.isNotNull(
         Blockly.Blocks[BLOCK_TYPE2],
-        'Block after bad blocks should be defined.'
+        'Block after bad blocks should be defined.',
       );
       chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
     });
@@ -91,11 +91,11 @@ suite('JSON Block Definitions', function () {
       }, /is null/);
       chai.assert.isNotNull(
         Blockly.Blocks[BLOCK_TYPE1],
-        'Block before null in array should be defined.'
+        'Block before null in array should be defined.',
       );
       chai.assert.isNotNull(
         Blockly.Blocks[BLOCK_TYPE2],
-        'Block after null in array should be defined.'
+        'Block after null in array should be defined.',
       );
       chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
     });
@@ -122,11 +122,11 @@ suite('JSON Block Definitions', function () {
       }, /is undefined/);
       chai.assert.isNotNull(
         Blockly.Blocks[BLOCK_TYPE1],
-        'Block before undefined in array should be defined.'
+        'Block before undefined in array should be defined.',
       );
       chai.assert.isNotNull(
         Blockly.Blocks[BLOCK_TYPE2],
-        'Block after undefined in array should be defined.'
+        'Block after undefined in array should be defined.',
       );
       chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
     });

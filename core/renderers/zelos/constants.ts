@@ -254,7 +254,7 @@ export class ConstantProvider extends BaseConstantProvider {
       theme.getComponentStyle('selectedGlowColour') ||
       this.SELECTED_GLOW_COLOUR;
     const selectedGlowSize = Number(
-      theme.getComponentStyle('selectedGlowSize')
+      theme.getComponentStyle('selectedGlowSize'),
     );
     this.SELECTED_GLOW_SIZE =
       selectedGlowSize && !isNaN(selectedGlowSize)
@@ -264,7 +264,7 @@ export class ConstantProvider extends BaseConstantProvider {
       theme.getComponentStyle('replacementGlowColour') ||
       this.REPLACEMENT_GLOW_COLOUR;
     const replacementGlowSize = Number(
-      theme.getComponentStyle('replacementGlowSize')
+      theme.getComponentStyle('replacementGlowSize'),
     );
     this.REPLACEMENT_GLOW_SIZE =
       replacementGlowSize && !isNaN(replacementGlowSize)
@@ -387,7 +387,7 @@ export class ConstantProvider extends BaseConstantProvider {
     function makeMainPath(
       blockHeight: number,
       up: boolean,
-      right: boolean
+      right: boolean,
     ): string {
       const remainingHeight =
         blockHeight > maxHeight ? blockHeight - maxHeight : 0;
@@ -398,14 +398,14 @@ export class ConstantProvider extends BaseConstantProvider {
           'a',
           '0 0,1',
           radius,
-          svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)
+          svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius),
         ) +
         svgPaths.lineOnAxis('v', (right ? 1 : -1) * remainingHeight) +
         svgPaths.arc(
           'a',
           '0 0,1',
           radius,
-          svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius)
+          svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius),
         )
       );
     }
@@ -471,14 +471,14 @@ export class ConstantProvider extends BaseConstantProvider {
           'a',
           '0 0,1',
           radius,
-          svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)
+          svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius),
         ) +
         svgPaths.lineOnAxis('v', (right ? 1 : -1) * innerHeight) +
         svgPaths.arc(
           'a',
           '0 0,1',
           radius,
-          svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius)
+          svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius),
         )
       );
     }
@@ -617,28 +617,28 @@ export class ConstantProvider extends BaseConstantProvider {
       'a',
       '0 0,0',
       radius,
-      svgPaths.point(-radius, radius)
+      svgPaths.point(-radius, radius),
     );
 
     const innerTopRightCorner = svgPaths.arc(
       'a',
       '0 0,1',
       radius,
-      svgPaths.point(-radius, radius)
+      svgPaths.point(-radius, radius),
     );
 
     const innerBottomLeftCorner = svgPaths.arc(
       'a',
       '0 0,0',
       radius,
-      svgPaths.point(radius, radius)
+      svgPaths.point(radius, radius),
     );
 
     const innerBottomRightCorner = svgPaths.arc(
       'a',
       '0 0,1',
       radius,
-      svgPaths.point(radius, radius)
+      svgPaths.point(radius, radius),
     );
 
     return {
@@ -680,23 +680,23 @@ export class ConstantProvider extends BaseConstantProvider {
         'y': '-30%',
         'x': '-40%',
       },
-      defs
+      defs,
     );
     dom.createSvgElement(
       Svg.FEGAUSSIANBLUR,
       {'in': 'SourceGraphic', 'stdDeviation': this.SELECTED_GLOW_SIZE},
-      selectedGlowFilter
+      selectedGlowFilter,
     );
     // Set all gaussian blur pixels to 1 opacity before applying flood
     const selectedComponentTransfer = dom.createSvgElement(
       Svg.FECOMPONENTTRANSFER,
       {'result': 'outBlur'},
-      selectedGlowFilter
+      selectedGlowFilter,
     );
     dom.createSvgElement(
       Svg.FEFUNCA,
       {'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'},
-      selectedComponentTransfer
+      selectedComponentTransfer,
     );
     // Color the highlight
     dom.createSvgElement(
@@ -706,7 +706,7 @@ export class ConstantProvider extends BaseConstantProvider {
         'flood-opacity': 1,
         'result': 'outColor',
       },
-      selectedGlowFilter
+      selectedGlowFilter,
     );
     dom.createSvgElement(
       Svg.FECOMPOSITE,
@@ -716,7 +716,7 @@ export class ConstantProvider extends BaseConstantProvider {
         'operator': 'in',
         'result': 'outGlow',
       },
-      selectedGlowFilter
+      selectedGlowFilter,
     );
     this.selectedGlowFilterId = selectedGlowFilter.id;
     this.selectedGlowFilter = selectedGlowFilter;
@@ -732,23 +732,23 @@ export class ConstantProvider extends BaseConstantProvider {
         'y': '-30%',
         'x': '-40%',
       },
-      defs
+      defs,
     );
     dom.createSvgElement(
       Svg.FEGAUSSIANBLUR,
       {'in': 'SourceGraphic', 'stdDeviation': this.REPLACEMENT_GLOW_SIZE},
-      replacementGlowFilter
+      replacementGlowFilter,
     );
     // Set all gaussian blur pixels to 1 opacity before applying flood
     const replacementComponentTransfer = dom.createSvgElement(
       Svg.FECOMPONENTTRANSFER,
       {'result': 'outBlur'},
-      replacementGlowFilter
+      replacementGlowFilter,
     );
     dom.createSvgElement(
       Svg.FEFUNCA,
       {'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'},
-      replacementComponentTransfer
+      replacementComponentTransfer,
     );
     // Color the highlight
     dom.createSvgElement(
@@ -758,7 +758,7 @@ export class ConstantProvider extends BaseConstantProvider {
         'flood-opacity': 1,
         'result': 'outColor',
       },
-      replacementGlowFilter
+      replacementGlowFilter,
     );
     dom.createSvgElement(
       Svg.FECOMPOSITE,
@@ -768,7 +768,7 @@ export class ConstantProvider extends BaseConstantProvider {
         'operator': 'in',
         'result': 'outGlow',
       },
-      replacementGlowFilter
+      replacementGlowFilter,
     );
     dom.createSvgElement(
       Svg.FECOMPOSITE,
@@ -777,7 +777,7 @@ export class ConstantProvider extends BaseConstantProvider {
         'in2': 'outGlow',
         'operator': 'over',
       },
-      replacementGlowFilter
+      replacementGlowFilter,
     );
     this.replacementGlowFilterId = replacementGlowFilter.id;
     this.replacementGlowFilter = replacementGlowFilter;

@@ -206,7 +206,7 @@ suite('Insertion marker manager', function () {
       this.stub
         .withArgs(
           'fakeDragTarget',
-          Blockly.ComponentManager.Capability.DELETE_AREA
+          Blockly.ComponentManager.Capability.DELETE_AREA,
         )
         .returns(true);
       const fakeDragTarget = {
@@ -221,7 +221,7 @@ suite('Insertion marker manager', function () {
       this.stub
         .withArgs(
           'fakeDragTarget',
-          Blockly.ComponentManager.Capability.DELETE_AREA
+          Blockly.ComponentManager.Capability.DELETE_AREA,
         )
         .returns(true);
       const fakeDragTarget = {
@@ -236,7 +236,7 @@ suite('Insertion marker manager', function () {
       this.stub
         .withArgs(
           'fakeDragTarget',
-          Blockly.ComponentManager.Capability.DELETE_AREA
+          Blockly.ComponentManager.Capability.DELETE_AREA,
         )
         .returns(false);
       const fakeDragTarget = {

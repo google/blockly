@@ -19,54 +19,40 @@ const {
   screenDirection,
 } = require('./test_setup');
 
-let browser;
 suite('This tests mutating a Blockly block', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.PLAYGROUND);
+    this.browser = await testSetup(testFileLocations.PLAYGROUND);
   });
 
   test('This test mutating a block creates more inputs', async function () {
-    await testingMutator(screenDirection.LTR);
-  });
-
-  // Teardown entire suite after test are done running
-  suiteTeardown(async function () {
-    await browser.deleteSession();
+    await testingMutator(this.browser, screenDirection.LTR);
   });
 });
 
-async function testingMutator(delta) {
+async function testingMutator(browser, delta) {
   // Drag out print from flyout.
   const controlIfFlyout = await dragBlockTypeFromFlyout(
     browser,
     'Logic',
     'controls_if',
     delta * 50,
-    50
+    50,
   );
   // Click on the mutator and drag out else ig block
   const mutatorWheel = await browser.$(
-    '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable.blocklySelected > g.blocklyIconGroup'
+    '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable.blocklySelected > g.blocklyIconGroup',
   );
   await mutatorWheel.click();
   await browser.pause(100);
   const elseIfFlyout = await browser.$(
-    '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBubbleCanvas > g > g:nth-child(2) > svg:nth-child(1) > g > g.blocklyFlyout > g > g.blocklyBlockCanvas > g:nth-child(3)'
+    '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBubbleCanvas > g > g:nth-child(2) > svg:nth-child(1) > g > g.blocklyFlyout > g > g.blocklyBlockCanvas > g:nth-child(3)',
   );
   await elseIfFlyout.dragAndDrop({x: delta * 50, y: 42});
-  // Get the original number of mutator inputs
   await browser.pause(100);
-
-  // Get the ids for block before mutating
-  const originalInputs = await browser.execute(() => {
-    const originalInputs =
-      Blockly.getMainWorkspace().getAllBlocks()[0].inputList.length;
-    return originalInputs;
-  });
 
   await browser.pause(100);
   // Get the ids for the blocks in the mutator
@@ -83,7 +69,7 @@ async function testingMutator(delta) {
 
   // The flyout block and the workspace block have the same id, so to get around that I pass in the selector to the connect function
   const dragBlockSelector = await browser.$(
-    '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBubbleCanvas > g > g:nth-child(2) > svg:nth-child(1) > g > g.blocklyBlockCanvas > g.blocklyDraggable'
+    '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBubbleCanvas > g > g:nth-child(2) > svg:nth-child(1) > g > g.blocklyBlockCanvas > g.blocklyDraggable',
   );
   // For some reason this needs a lot more time
   await browser.pause(2000);
@@ -95,10 +81,8 @@ async function testingMutator(delta) {
     blockIds[1],
     'NEXT',
     blockIds[0],
-    dragBlockSelector
+    dragBlockSelector,
   );
-
-  // For some reason this needs a lot more time
   await browser.pause(200);
 
   // Get the ids for block after mutating
@@ -108,5 +92,5 @@ async function testingMutator(delta) {
     return afterInputs;
   });
 
-  chai.assert.isTrue(afterInputs > originalInputs);
+  chai.assert.equal(afterInputs, 4);
 }

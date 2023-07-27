@@ -220,7 +220,7 @@ async function getBlockTypeFromWorkspace(browser, blockType, position) {
  * @param connectionName Which connection to return. An input name to
  *     get a value or statement connection, and otherwise the type of
  *     the connection.
- * @param mutatorBlockId The block that holds the mutator icon
+ * @param mutatorBlockId The block that holds the mutator icon or null if the target block is on the main workspace
  * @return A Promise that resolves to the location of the specific
  *     connection in screen coordinates.
  */
@@ -228,7 +228,7 @@ async function getLocationOfBlockConnection(
   browser,
   id,
   connectionName,
-  mutatorBlockId
+  mutatorBlockId,
 ) {
   return await browser.execute(
     (id, connectionName, mutatorBlockId) => {
@@ -269,10 +269,7 @@ async function getLocationOfBlockConnection(
     },
     id,
     connectionName,
-<<<<<<< HEAD
-    mutatorBlockId
-=======
->>>>>>> upstream/develop
+    mutatorBlockId,
   );
 }
 
@@ -284,7 +281,7 @@ async function getLocationOfBlockConnection(
  * @param draggedConnection The active connection on the block being dragged.
  * @param targetBlock The block to drag to.
  * @param targetConnection The connection to connect to on the target block.
- * @param mutatorBlockId The block that holds the mutator icon
+ * @param mutatorBlockId The block that holds the mutator icon or null if the target block is on the main workspace
  * @param dragBlockSelector The selector of the block to drag
  * @return A Promise that resolves when the actions are completed.
  */
@@ -295,7 +292,7 @@ async function connect(
   targetBlock,
   targetConnection,
   mutatorBlockId,
-  dragBlockSelector
+  dragBlockSelector,
 ) {
   let draggedLocation;
   let targetLocation;
@@ -305,24 +302,24 @@ async function connect(
       browser,
       draggedBlock,
       draggedConnection,
-      mutatorBlockId
+      mutatorBlockId,
     );
     targetLocation = await getLocationOfBlockConnection(
       browser,
       targetBlock,
       targetConnection,
-      mutatorBlockId
+      mutatorBlockId,
     );
   } else {
     draggedLocation = await getLocationOfBlockConnection(
       browser,
       draggedBlock.id,
-      draggedConnection
+      draggedConnection,
     );
     targetLocation = await getLocationOfBlockConnection(
       browser,
       targetBlock.id,
-      targetConnection
+      targetConnection,
     );
   }
 

@@ -374,7 +374,6 @@ export class VerticalFlyout extends Flyout {
             button.width -
             this.MARGIN -
             this.tabWidth_;
-          // No 'reason' provided since events are disabled.
           button.moveTo(x, y);
         }
       }

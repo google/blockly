@@ -396,7 +396,8 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
  * context menu item.
  *
  * @param browser The active WebdriverIO Browser object.
- * @param block The block to click, as an interactable element.
+ * @param block The block to click, as an interactable element. This block must
+ *    have text on it, because we use the text element as the click target.
  * @param itemText The display text of the context menu item to click.
  * @return A Promise that resolves when the actions are completed.
  */
@@ -404,13 +405,14 @@ async function contextMenuSelect(browser, block, itemText) {
   // Clicking will always happen in the middle of the block's bounds
   // (including children) by default, which causes problems if it has holes
   // (e.g. statement inputs).
-  // Instead we want to click 10px from the left and 10px from the top.
-  const blockWidth = await block.getSize('width');
-  const blockHeight = await block.getSize('height');
-  const xOffset = -Math.round(blockWidth * 0.5) + 10;
-  const yOffset = -Math.round(blockHeight * 0.5) + 10;
+  // Instead, we'll click directly on the first bit of text on the block.
+  const clickEl = block.$('.blocklyText');
 
-  await block.click({button: 2, x: xOffset, y: yOffset});
+  // Even though the element should definitely already exist,
+  // one specific test breaks if you remove this...
+  await clickEl.waitForExist();
+
+  await clickEl.click({button: 2});
 
   const item = await browser.$(`div=${itemText}`);
   await item.waitForExist();

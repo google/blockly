@@ -14,13 +14,13 @@ goog.declareModuleId('Blockly.VerticalFlyout');
 
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import { Flyout, FlyoutItem } from './flyout_base.js';
-import type { FlyoutButton } from './flyout_button.js';
-import type { Options } from './options.js';
+import {Flyout, FlyoutItem} from './flyout_base.js';
+import type {FlyoutButton} from './flyout_button.js';
+import type {Options} from './options.js';
 import * as registry from './registry.js';
-import { Scrollbar } from './scrollbar.js';
-import { Coordinate } from './utils/coordinate.js';
-import { Rect } from './utils/rect.js';
+import {Scrollbar} from './scrollbar.js';
+import {Coordinate} from './utils/coordinate.js';
+import {Rect} from './utils/rect.js';
 import * as toolbox from './utils/toolbox.js';
 import * as WidgetDiv from './widgetdiv.js';
 
@@ -42,7 +42,7 @@ export class VerticalFlyout extends Flyout {
    * @param xyRatio Contains a y property which is a float between 0 and 1
    *     specifying the degree of scrolling and a similar x property.
    */
-  protected override setMetrics_(xyRatio: { x: number; y: number }) {
+  protected override setMetrics_(xyRatio: {x: number; y: number}) {
     if (!this.isVisible()) {
       return;
     }

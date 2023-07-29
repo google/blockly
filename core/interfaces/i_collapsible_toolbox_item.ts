@@ -4,17 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for a collapsible toolbox item.
- *
- * @namespace Blockly.ICollapsibleToolboxItem
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ICollapsibleToolboxItem');
 
 import type {ISelectableToolboxItem} from './i_selectable_toolbox_item.js';
 import type {IToolboxItem} from './i_toolbox_item.js';
-
 
 /**
  * Interface for an item in the toolbox that can be collapsed.

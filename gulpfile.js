@@ -15,10 +15,8 @@ const gulp = require('gulp');
 const buildTasks = require('./scripts/gulpfiles/build_tasks');
 const packageTasks = require('./scripts/gulpfiles/package_tasks');
 const gitTasks = require('./scripts/gulpfiles/git_tasks');
-const licenseTasks = require('./scripts/gulpfiles/license_tasks');
 const appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
 const releaseTasks = require('./scripts/gulpfiles/release_tasks');
-const cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
 const docsTasks = require('./scripts/gulpfiles/docs_tasks');
 const testTasks = require('./scripts/gulpfiles/test_tasks');
 
@@ -27,7 +25,7 @@ module.exports = {
   default: buildTasks.build,
 
   // Main sequence targets.  They already invoke prerequisites.
-  langfiles: buildTasks.langfiles,  // Build build/msg/*.js from msg/json/*.
+  langfiles: buildTasks.langfiles, // Build build/msg/*.js from msg/json/*.
   tsc: buildTasks.tsc,
   deps: buildTasks.deps,
   minify: buildTasks.minify,
@@ -41,10 +39,7 @@ module.exports = {
   gitUpdateGithubPages: gitTasks.updateGithubPages,
 
   // Manually-invokable targets, with prerequisites where required.
-  format: buildTasks.format,
-  messages: buildTasks.messages,  // Generate msg/json/en.json et al.
-  sortRequires: cleanupTasks.sortRequires,
-  checkLicenses: licenseTasks.checkLicenses,
+  messages: buildTasks.messages, // Generate msg/json/en.json et al.
   clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),
   test: testTasks.test,
   testGenerators: testTasks.generators,

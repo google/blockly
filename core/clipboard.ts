@@ -4,19 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Blockly's internal clipboard for managing copy-paste.
- *
- * @namespace Blockly.clipboard
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.clipboard');
 
 import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
 
-
 /** Metadata about the object that is currently on the clipboard. */
-let copyData: CopyData|null = null;
+let copyData: CopyData | null = null;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
@@ -41,7 +35,7 @@ function copyInternal(toCopy: ICopyable) {
  * @returns The pasted thing if the paste was successful, null otherwise.
  * @internal
  */
-export function paste(): ICopyable|null {
+export function paste(): ICopyable | null {
   if (!copyData) {
     return null;
   }
@@ -51,8 +45,10 @@ export function paste(): ICopyable|null {
   if (workspace.isFlyout) {
     workspace = workspace.targetWorkspace!;
   }
-  if (copyData.typeCounts &&
-      workspace.isCapacityAvailable(copyData.typeCounts)) {
+  if (
+    copyData.typeCounts &&
+    workspace.isCapacityAvailable(copyData.typeCounts)
+  ) {
     return workspace.paste(copyData.saveInfo);
   }
   return null;
@@ -66,18 +62,18 @@ export function paste(): ICopyable|null {
  *     duplication failed.
  * @internal
  */
-export function duplicate(toDuplicate: ICopyable): ICopyable|null {
+export function duplicate(toDuplicate: ICopyable): ICopyable | null {
   return TEST_ONLY.duplicateInternal(toDuplicate);
 }
 
 /**
  * Private version of duplicate for stubbing in tests.
  */
-function duplicateInternal(toDuplicate: ICopyable): ICopyable|null {
+function duplicateInternal(toDuplicate: ICopyable): ICopyable | null {
   const oldCopyData = copyData;
   copy(toDuplicate);
   const pastedThing =
-      toDuplicate.toCopyData()?.source?.paste(copyData!.saveInfo) ?? null;
+    toDuplicate.toCopyData()?.source?.paste(copyData!.saveInfo) ?? null;
   copyData = oldCopyData;
   return pastedThing;
 }

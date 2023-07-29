@@ -21,7 +21,6 @@ import * as internalConstants from './internal_constants.js';
 import * as registry from './registry.js';
 import type {RenderedConnection} from './rendered_connection.js';
 
-
 /**
  * Class for connection type checking logic.
  */
@@ -38,10 +37,15 @@ export class ConnectionChecker implements IConnectionChecker {
    * @returns Whether the connection is legal.
    */
   canConnect(
-      a: Connection|null, b: Connection|null, isDragging: boolean,
-      opt_distance?: number): boolean {
-    return this.canConnectWithReason(a, b, isDragging, opt_distance) ===
-        Connection.CAN_CONNECT;
+    a: Connection | null,
+    b: Connection | null,
+    isDragging: boolean,
+    opt_distance?: number,
+  ): boolean {
+    return (
+      this.canConnectWithReason(a, b, isDragging, opt_distance) ===
+      Connection.CAN_CONNECT
+    );
   }
 
   /**
@@ -57,8 +61,11 @@ export class ConnectionChecker implements IConnectionChecker {
    *     otherwise.
    */
   canConnectWithReason(
-      a: Connection|null, b: Connection|null, isDragging: boolean,
-      opt_distance?: number): number {
+    a: Connection | null,
+    b: Connection | null,
+    isDragging: boolean,
+    opt_distance?: number,
+  ): number {
     const safety = this.doSafetyChecks(a, b);
     if (safety !== Connection.CAN_CONNECT) {
       return safety;
@@ -71,10 +78,14 @@ export class ConnectionChecker implements IConnectionChecker {
       return Connection.REASON_CHECKS_FAILED;
     }
 
-    if (isDragging &&
-        !this.doDragChecks(
-            a as RenderedConnection, b as RenderedConnection,
-            opt_distance || 0)) {
+    if (
+      isDragging &&
+      !this.doDragChecks(
+        a as RenderedConnection,
+        b as RenderedConnection,
+        opt_distance || 0,
+      )
+    ) {
       return Connection.REASON_DRAG_CHECKS_FAILED;
     }
 
@@ -89,8 +100,11 @@ export class ConnectionChecker implements IConnectionChecker {
    * @param b The second of the two connections being checked.
    * @returns A developer-readable error string.
    */
-  getErrorMessage(errorCode: number, a: Connection|null, b: Connection|null):
-      string {
+  getErrorMessage(
+    errorCode: number,
+    a: Connection | null,
+    b: Connection | null,
+  ): string {
     switch (errorCode) {
       case Connection.REASON_SELF_CONNECTION:
         return 'Attempted to connect a block to itself.';
@@ -105,8 +119,12 @@ export class ConnectionChecker implements IConnectionChecker {
         const connOne = a!;
         const connTwo = b!;
         let msg = 'Connection checks failed. ';
-        msg += connOne + ' expected ' + connOne.getCheck() + ', found ' +
-            connTwo.getCheck();
+        msg +=
+          connOne +
+          ' expected ' +
+          connOne.getCheck() +
+          ', found ' +
+          connTwo.getCheck();
         return msg;
       }
       case Connection.REASON_SHADOW_PARENT:
@@ -128,7 +146,7 @@ export class ConnectionChecker implements IConnectionChecker {
    * @param b The second of the connections to check.
    * @returns An enum with the reason this connection is safe or unsafe.
    */
-  doSafetyChecks(a: Connection|null, b: Connection|null): number {
+  doSafetyChecks(a: Connection | null, b: Connection | null): number {
     if (!a || !b) {
       return Connection.REASON_TARGET_NULL;
     }
@@ -150,22 +168,25 @@ export class ConnectionChecker implements IConnectionChecker {
     if (superiorBlock === inferiorBlock) {
       return Connection.REASON_SELF_CONNECTION;
     } else if (
-        inferiorConnection.type !==
-        internalConstants.OPPOSITE_TYPE[superiorConnection.type]) {
+      inferiorConnection.type !==
+      internalConstants.OPPOSITE_TYPE[superiorConnection.type]
+    ) {
       return Connection.REASON_WRONG_TYPE;
     } else if (superiorBlock.workspace !== inferiorBlock.workspace) {
       return Connection.REASON_DIFFERENT_WORKSPACES;
     } else if (superiorBlock.isShadow() && !inferiorBlock.isShadow()) {
       return Connection.REASON_SHADOW_PARENT;
     } else if (
-        inferiorConnection.type === ConnectionType.OUTPUT_VALUE &&
-        inferiorBlock.previousConnection &&
-        inferiorBlock.previousConnection.isConnected()) {
+      inferiorConnection.type === ConnectionType.OUTPUT_VALUE &&
+      inferiorBlock.previousConnection &&
+      inferiorBlock.previousConnection.isConnected()
+    ) {
       return Connection.REASON_PREVIOUS_AND_OUTPUT;
     } else if (
-        inferiorConnection.type === ConnectionType.PREVIOUS_STATEMENT &&
-        inferiorBlock.outputConnection &&
-        inferiorBlock.outputConnection.isConnected()) {
+      inferiorConnection.type === ConnectionType.PREVIOUS_STATEMENT &&
+      inferiorBlock.outputConnection &&
+      inferiorBlock.outputConnection.isConnected()
+    ) {
       return Connection.REASON_PREVIOUS_AND_OUTPUT;
     }
     return Connection.CAN_CONNECT;
@@ -206,8 +227,11 @@ export class ConnectionChecker implements IConnectionChecker {
    * @param distance The maximum allowable distance between connections.
    * @returns True if the connection is allowed during a drag.
    */
-  doDragChecks(a: RenderedConnection, b: RenderedConnection, distance: number):
-      boolean {
+  doDragChecks(
+    a: RenderedConnection,
+    b: RenderedConnection,
+    distance: number,
+  ): boolean {
     if (a.distanceFrom(b) > distance) {
       return false;
     }
@@ -223,8 +247,10 @@ export class ConnectionChecker implements IConnectionChecker {
       case ConnectionType.OUTPUT_VALUE: {
         // Don't offer to connect an already connected left (male) value plug to
         // an available right (female) value plug.
-        if (b.isConnected() && !b.targetBlock()!.isInsertionMarker() ||
-            a.isConnected()) {
+        if (
+          (b.isConnected() && !b.targetBlock()!.isInsertionMarker()) ||
+          a.isConnected()
+        ) {
           return false;
         }
         break;
@@ -233,8 +259,11 @@ export class ConnectionChecker implements IConnectionChecker {
         // Offering to connect the left (male) of a value block to an already
         // connected value pair is ok, we'll splice it in.
         // However, don't offer to splice into an immovable block.
-        if (b.isConnected() && !b.targetBlock()!.isMovable() &&
-            !b.targetBlock()!.isShadow()) {
+        if (
+          b.isConnected() &&
+          !b.targetBlock()!.isMovable() &&
+          !b.targetBlock()!.isShadow()
+        ) {
           return false;
         }
         break;
@@ -244,14 +273,22 @@ export class ConnectionChecker implements IConnectionChecker {
         // the stack.  But covering up a shadow block or stack of shadow blocks
         // is fine.  Similarly, replacing a terminal statement with another
         // terminal statement is allowed.
-        if (b.isConnected() && !a.getSourceBlock().nextConnection &&
-            !b.targetBlock()!.isShadow() && b.targetBlock()!.nextConnection) {
+        if (
+          b.isConnected() &&
+          !a.getSourceBlock().nextConnection &&
+          !b.targetBlock()!.isShadow() &&
+          b.targetBlock()!.nextConnection
+        ) {
           return false;
         }
 
         // Don't offer to splice into a stack where the connected block is
-        // immovable.
-        if (b.targetBlock() && !b.targetBlock()!.isMovable()) {
+        // immovable, unless the block is a shadow block.
+        if (
+          b.targetBlock() &&
+          !b.targetBlock()!.isMovable() &&
+          !b.targetBlock()!.isShadow()
+        ) {
           return false;
         }
         break;
@@ -306,4 +343,7 @@ export class ConnectionChecker implements IConnectionChecker {
 }
 
 registry.register(
-    registry.Type.CONNECTION_CHECKER, registry.DEFAULT, ConnectionChecker);
+  registry.Type.CONNECTION_CHECKER,
+  registry.DEFAULT,
+  ConnectionChecker,
+);

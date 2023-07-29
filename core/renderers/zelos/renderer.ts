@@ -25,7 +25,6 @@ import {RenderInfo} from './info.js';
 import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
 
-
 /**
  * The zelos renderer. This renderer emulates Scratch-style and MakeCode-style
  * rendering.
@@ -69,9 +68,11 @@ export class Renderer extends BaseRenderer {
    *     block.
    * @returns The drawer.
    */
-  protected override makeDrawer_(block: BlockSvg, info: BaseRenderInfo):
-      Drawer {
-    return new Drawer(block, (info as RenderInfo));
+  protected override makeDrawer_(
+    block: BlockSvg,
+    info: BaseRenderInfo,
+  ): Drawer {
+    return new Drawer(block, info as RenderInfo);
   }
 
   /**
@@ -81,8 +82,10 @@ export class Renderer extends BaseRenderer {
    * @param marker The marker.
    * @returns The object in charge of drawing the marker.
    */
-  override makeMarkerDrawer(workspace: WorkspaceSvg, marker: Marker):
-      MarkerSvg {
+  override makeMarkerDrawer(
+    workspace: WorkspaceSvg,
+    marker: Marker,
+  ): MarkerSvg {
     return new MarkerSvg(workspace, this.getConstants(), marker);
   }
 
@@ -94,8 +97,7 @@ export class Renderer extends BaseRenderer {
    * @returns The renderer path object.
    */
   override makePathObject(root: SVGElement, style: BlockStyle): PathObject {
-    return new PathObject(
-        root, style, (this.getConstants() as ConstantProvider));
+    return new PathObject(root, style, this.getConstants() as ConstantProvider);
   }
 
   /**
@@ -109,13 +111,17 @@ export class Renderer extends BaseRenderer {
   }
 
   override shouldHighlightConnection(conn: Connection) {
-    return conn.type !== ConnectionType.INPUT_VALUE &&
-        conn.type !== ConnectionType.OUTPUT_VALUE;
+    return (
+      conn.type !== ConnectionType.INPUT_VALUE &&
+      conn.type !== ConnectionType.OUTPUT_VALUE
+    );
   }
 
   override getConnectionPreviewMethod(
-      closest: RenderedConnection, local: RenderedConnection,
-      topBlock: BlockSvg) {
+    closest: RenderedConnection,
+    local: RenderedConnection,
+    topBlock: BlockSvg,
+  ) {
     if (local.type === ConnectionType.OUTPUT_VALUE) {
       if (!closest.isConnected()) {
         return InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;

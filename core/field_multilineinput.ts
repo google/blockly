@@ -15,11 +15,14 @@ goog.declareModuleId('Blockly.FieldMultilineInput');
 import * as Css from './css.js';
 import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInput, FieldTextInputConfig, FieldTextInputValidator} from './field_textinput.js';
+import {
+  FieldTextInput,
+  FieldTextInputConfig,
+  FieldTextInputValidator,
+} from './field_textinput.js';
 import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
-import type {Sentinel} from './utils/sentinel.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
@@ -32,7 +35,7 @@ export class FieldMultilineInput extends FieldTextInput {
    * The SVG group element that will contain a text element for each text row
    *     when initialized.
    */
-  textGroup: SVGGElement|null = null;
+  textGroup: SVGGElement | null = null;
 
   /**
    * Defines the maximum number of lines of field.
@@ -59,11 +62,13 @@ export class FieldMultilineInput extends FieldTextInput {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|Sentinel, validator?: FieldMultilineInputValidator,
-      config?: FieldMultilineInputConfig) {
+    value?: string | typeof Field.SKIP_SETUP,
+    validator?: FieldMultilineInputValidator,
+    config?: FieldMultilineInputConfig,
+  ) {
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(value)) return;
+    if (value === Field.SKIP_SETUP) return;
     if (config) {
       this.configure_(config);
     }
@@ -96,8 +101,10 @@ export class FieldMultilineInput extends FieldTextInput {
     // needed so the plain-text representation of the XML produced by
     // `Blockly.Xml.domToText` will appear on a single line (this is a
     // limitation of the plain-text format).
-    fieldElement.textContent =
-        (this.getValue() as string).replace(/\n/g, '&#10;');
+    fieldElement.textContent = (this.getValue() as string).replace(
+      /\n/g,
+      '&#10;',
+    );
     return fieldElement;
   }
 
@@ -151,10 +158,12 @@ export class FieldMultilineInput extends FieldTextInput {
   override initView() {
     this.createBorderRect_();
     this.textGroup = dom.createSvgElement(
-        Svg.G, {
-          'class': 'blocklyEditableText',
-        },
-        this.fieldGroup_);
+      Svg.G,
+      {
+        'class': 'blocklyEditableText',
+      },
+      this.fieldGroup_,
+    );
   }
 
   /**
@@ -175,8 +184,9 @@ export class FieldMultilineInput extends FieldTextInput {
     }
     const lines = textLines.split('\n');
     textLines = '';
-    const displayLinesNumber =
-        this.isOverflowedY_ ? this.maxLines_ : lines.length;
+    const displayLinesNumber = this.isOverflowedY_
+      ? this.maxLines_
+      : lines.length;
     for (let i = 0; i < displayLinesNumber; i++) {
       let text = lines[i];
       if (text.length > this.maxDisplayLength) {
@@ -226,7 +236,7 @@ export class FieldMultilineInput extends FieldTextInput {
     // Remove all text group children.
     let currentChild;
     const textGroup = this.textGroup;
-    while (currentChild = textGroup!.firstChild) {
+    while ((currentChild = textGroup!.firstChild)) {
       textGroup!.removeChild(currentChild);
     }
 
@@ -234,16 +244,19 @@ export class FieldMultilineInput extends FieldTextInput {
     const lines = this.getDisplayText_().split('\n');
     let y = 0;
     for (let i = 0; i < lines.length; i++) {
-      const lineHeight = this.getConstants()!.FIELD_TEXT_HEIGHT +
-          this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING;
+      const lineHeight =
+        this.getConstants()!.FIELD_TEXT_HEIGHT +
+        this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING;
       const span = dom.createSvgElement(
-          Svg.TEXT, {
-            'class': 'blocklyText blocklyMultilineText',
-            'x': this.getConstants()!.FIELD_BORDER_RECT_X_PADDING,
-            'y': y + this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING,
-            'dy': this.getConstants()!.FIELD_TEXT_BASELINE,
-          },
-          textGroup);
+        Svg.TEXT,
+        {
+          'class': 'blocklyText blocklyMultilineText',
+          'x': this.getConstants()!.FIELD_BORDER_RECT_X_PADDING,
+          'y': y + this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING,
+          'dy': this.getConstants()!.FIELD_TEXT_BASELINE,
+        },
+        textGroup,
+      );
       span.appendChild(document.createTextNode(lines[i]));
       y += lineHeight;
     }
@@ -289,13 +302,18 @@ export class FieldMultilineInput extends FieldTextInput {
     let totalHeight = 0;
     for (let i = 0; i < nodes.length; i++) {
       const tspan = nodes[i] as SVGTextElement;
-      const textWidth =
-          dom.getFastTextWidth(tspan, fontSize, fontWeight, fontFamily);
+      const textWidth = dom.getFastTextWidth(
+        tspan,
+        fontSize,
+        fontWeight,
+        fontFamily,
+      );
       if (textWidth > totalWidth) {
         totalWidth = textWidth;
       }
-      totalHeight += this.getConstants()!.FIELD_TEXT_HEIGHT +
-          (i > 0 ? this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING : 0);
+      totalHeight +=
+        this.getConstants()!.FIELD_TEXT_HEIGHT +
+        (i > 0 ? this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING : 0);
     }
     if (this.isBeingEdited_) {
       // The default width is based on the longest line in the display text,
@@ -304,24 +322,31 @@ export class FieldMultilineInput extends FieldTextInput {
       // Otherwise we would get wrong editor width when there are more
       // lines than this.maxLines_.
       const actualEditorLines = String(this.value_).split('\n');
-      const dummyTextElement = dom.createSvgElement(
-          Svg.TEXT, {'class': 'blocklyText blocklyMultilineText'});
+      const dummyTextElement = dom.createSvgElement(Svg.TEXT, {
+        'class': 'blocklyText blocklyMultilineText',
+      });
 
       for (let i = 0; i < actualEditorLines.length; i++) {
         if (actualEditorLines[i].length > this.maxDisplayLength) {
-          actualEditorLines[i] =
-              actualEditorLines[i].substring(0, this.maxDisplayLength);
+          actualEditorLines[i] = actualEditorLines[i].substring(
+            0,
+            this.maxDisplayLength,
+          );
         }
         dummyTextElement.textContent = actualEditorLines[i];
         const lineWidth = dom.getFastTextWidth(
-            dummyTextElement, fontSize, fontWeight, fontFamily);
+          dummyTextElement,
+          fontSize,
+          fontWeight,
+          fontFamily,
+        );
         if (lineWidth > totalWidth) {
           totalWidth = lineWidth;
         }
       }
 
       const scrollbarWidth =
-          this.htmlInput_!.offsetWidth - this.htmlInput_!.clientWidth;
+        this.htmlInput_!.offsetWidth - this.htmlInput_!.clientWidth;
       totalWidth += scrollbarWidth;
     }
     if (this.borderRect_) {
@@ -360,7 +385,7 @@ export class FieldMultilineInput extends FieldTextInput {
     const div = WidgetDiv.getDiv();
     const scale = this.workspace_!.getScale();
 
-    const htmlInput = (document.createElement('textarea'));
+    const htmlInput = document.createElement('textarea');
     htmlInput.className = 'blocklyHtmlInput blocklyHtmlTextAreaInput';
     htmlInput.setAttribute('spellcheck', String(this.spellcheck_));
     const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE * scale + 'pt';
@@ -370,11 +395,12 @@ export class FieldMultilineInput extends FieldTextInput {
     htmlInput.style.borderRadius = borderRadius;
     const paddingX = this.getConstants()!.FIELD_BORDER_RECT_X_PADDING * scale;
     const paddingY =
-        this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING * scale / 2;
-    htmlInput.style.padding = paddingY + 'px ' + paddingX + 'px ' + paddingY +
-        'px ' + paddingX + 'px';
-    const lineHeight = this.getConstants()!.FIELD_TEXT_HEIGHT +
-        this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING;
+      (this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING * scale) / 2;
+    htmlInput.style.padding =
+      paddingY + 'px ' + paddingX + 'px ' + paddingY + 'px ' + paddingX + 'px';
+    const lineHeight =
+      this.getConstants()!.FIELD_TEXT_HEIGHT +
+      this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING;
     htmlInput.style.lineHeight = lineHeight * scale + 'px';
 
     div!.appendChild(htmlInput);
@@ -401,8 +427,11 @@ export class FieldMultilineInput extends FieldTextInput {
    *     scrolling functionality is enabled.
    */
   setMaxLines(maxLines: number) {
-    if (typeof maxLines === 'number' && maxLines > 0 &&
-        maxLines !== this.maxLines_) {
+    if (
+      typeof maxLines === 'number' &&
+      maxLines > 0 &&
+      maxLines !== this.maxLines_
+    ) {
       this.maxLines_ = maxLines;
       this.forceRerender();
     }
@@ -438,8 +467,9 @@ export class FieldMultilineInput extends FieldTextInput {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: FieldMultilineInputFromJsonConfig):
-      FieldMultilineInput {
+  static override fromJson(
+    options: FieldMultilineInputFromJsonConfig,
+  ): FieldMultilineInput {
     const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldMultilineInput if that class doesn't
     // override the static fromJson method.
@@ -448,7 +478,6 @@ export class FieldMultilineInput extends FieldTextInput {
 }
 
 fieldRegistry.register('field_multilinetext', FieldMultilineInput);
-
 
 /**
  * CSS for multiline field.
@@ -477,8 +506,8 @@ export interface FieldMultilineInputConfig extends FieldTextInputConfig {
 /**
  * fromJson config options for the multiline input field.
  */
-export interface FieldMultilineInputFromJsonConfig extends
-    FieldMultilineInputConfig {
+export interface FieldMultilineInputFromJsonConfig
+  extends FieldMultilineInputConfig {
   text?: string;
 }
 

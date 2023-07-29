@@ -9,7 +9,7 @@
  */
 'use strict';
 
-phpGenerator['unittest_main'] = function(block) {
+phpGenerator.forBlock['unittest_main'] = function(block) {
   // Container for unit tests.
   var resultsVar = phpGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
@@ -60,7 +60,7 @@ phpGenerator['unittest_main'] = function(block) {
   return code;
 };
 
-phpGenerator['unittest_main'].defineAssert_ = function(block) {
+function phpDefineAssert() {
   var resultsVar = phpGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = phpGenerator.provideFunction_(
@@ -86,7 +86,7 @@ phpGenerator['unittest_main'].defineAssert_ = function(block) {
   return functionName;
 };
 
-phpGenerator['unittest_assertequals'] = function(block) {
+phpGenerator.forBlock['unittest_assertequals'] = function(block) {
   // Asserts that a value equals another value.
   var message = phpGenerator.valueToCode(block, 'MESSAGE',
     phpGenerator.ORDER_NONE) || '';
@@ -94,11 +94,11 @@ phpGenerator['unittest_assertequals'] = function(block) {
           phpGenerator.ORDER_NONE) || 'null';
   var expected = phpGenerator.valueToCode(block, 'EXPECTED',
           phpGenerator.ORDER_NONE) || 'null';
-  return phpGenerator['unittest_main'].defineAssert_() +
+  return phpDefineAssert() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
 
-phpGenerator['unittest_assertvalue'] = function(block) {
+phpGenerator.forBlock['unittest_assertvalue'] = function(block) {
   // Asserts that a value is true, false, or null.
   var message = phpGenerator.valueToCode(block, 'MESSAGE',
     phpGenerator.ORDER_NONE) || '';
@@ -112,11 +112,11 @@ phpGenerator['unittest_assertvalue'] = function(block) {
   } else if (expected == 'NULL') {
       expected = 'null';
   }
-  return phpGenerator['unittest_main'].defineAssert_() +
+  return phpDefineAssert() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
 
-phpGenerator['unittest_fail'] = function(block) {
+phpGenerator.forBlock['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = phpGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
@@ -135,19 +135,19 @@ phpGenerator['unittest_fail'] = function(block) {
   return functionName + '(' + message + ');\n';
 };
 
-phpGenerator['unittest_adjustindex'] = function(block) {
+phpGenerator.forBlock['unittest_adjustindex'] = function(block) {
   var index = phpGenerator.valueToCode(block, 'INDEX',
       phpGenerator.ORDER_ADDITION) || '0';
   // Adjust index if using one-based indexing.
   if (block.workspace.options.oneBasedIndex) {
-    if (Blockly.isNumber(index)) {
+    if (Blockly.utils.string.isNumber(index)) {
       // If the index is a naked number, adjust it right now.
       return [Number(index) + 1, phpGenerator.ORDER_ATOMIC];
     } else {
       // If the index is dynamic, adjust it in code.
       index = index + ' + 1';
     }
-  } else if (Blockly.isNumber(index)) {
+  } else if (Blockly.utils.string.isNumber(index)) {
     return [index, phpGenerator.ORDER_ATOMIC];
   }
   return [index, phpGenerator.ORDER_ADDITION];

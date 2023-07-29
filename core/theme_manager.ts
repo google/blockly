@@ -19,7 +19,6 @@ import * as dom from './utils/dom.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-
 /**
  * Class for storing and updating a workspace's theme and UI components.
  */
@@ -33,7 +32,10 @@ export class ThemeManager {
    * @param theme The workspace theme.
    * @internal
    */
-  constructor(private readonly workspace: WorkspaceSvg, private theme: Theme) {}
+  constructor(
+    private readonly workspace: WorkspaceSvg,
+    private theme: Theme,
+  ) {}
 
   /**
    * Get the workspace theme.
@@ -70,7 +72,11 @@ export class ThemeManager {
     }
 
     // Refresh all subscribed workspaces.
-    for (let i = 0, workspace; workspace = this.subscribedWorkspaces_[i]; i++) {
+    for (
+      let i = 0, workspace;
+      (workspace = this.subscribedWorkspaces_[i]);
+      i++
+    ) {
       (workspace as WorkspaceSvg).refreshTheme();
     }
 
@@ -109,7 +115,8 @@ export class ThemeManager {
   unsubscribeWorkspace(workspace: Workspace) {
     if (!arrayUtils.removeElem(this.subscribedWorkspaces_, workspace)) {
       throw Error(
-          'Cannot unsubscribe a workspace that hasn\'t been subscribed.');
+        "Cannot unsubscribe a workspace that hasn't been subscribed.",
+      );
     }
   }
 
@@ -124,8 +131,10 @@ export class ThemeManager {
    * @internal
    */
   subscribe(
-      element: HTMLElement|SVGElement, componentName: string,
-      propertyName: string) {
+    element: HTMLElement | SVGElement,
+    componentName: string,
+    propertyName: string,
+  ) {
     if (!this.componentDB.has(componentName)) {
       this.componentDB.set(componentName, []);
     }
@@ -144,7 +153,7 @@ export class ThemeManager {
    * @param element The element to unsubscribe.
    * @internal
    */
-  unsubscribe(element: HTMLElement|SVGElement) {
+  unsubscribe(element: HTMLElement | SVGElement) {
     if (!element) {
       return;
     }
@@ -165,7 +174,6 @@ export class ThemeManager {
   /**
    * Dispose of this theme manager.
    *
-   * @suppress {checkTypes}
    * @internal
    */
   dispose() {
@@ -177,7 +185,7 @@ export class ThemeManager {
 export namespace ThemeManager {
   /** The type for a Blockly UI Component. */
   export interface Component {
-    element: HTMLElement|SVGElement;
+    element: HTMLElement | SVGElement;
     propertyName: string;
   }
 }

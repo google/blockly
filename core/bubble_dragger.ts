@@ -12,7 +12,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.BubbleDragger');
 
-import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import {ComponentManager} from './component_manager.js';
 import type {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';
@@ -23,7 +22,6 @@ import {Coordinate} from './utils/coordinate.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
-
 /**
  * Class for a bubble dragger.  It moves things on the bubble canvas around the
  * workspace when they are being dragged by a mouse or touch.  These can be
@@ -31,33 +29,29 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  */
 export class BubbleDragger {
   /** Which drag target the mouse pointer is over, if any. */
-  private dragTarget_: IDragTarget|null = null;
+  private dragTarget_: IDragTarget | null = null;
 
   /** Whether the bubble would be deleted if dropped immediately. */
   private wouldDeleteBubble_ = false;
   private readonly startXY_: Coordinate;
-  private dragSurface_: BlockDragSurfaceSvg|null;
 
   /**
    * @param bubble The item on the bubble canvas to drag.
    * @param workspace The workspace to drag on.
    */
-  constructor(private bubble: IBubble, private workspace: WorkspaceSvg) {
+  constructor(
+    private bubble: IBubble,
+    private workspace: WorkspaceSvg,
+  ) {
     /**
      * The location of the top left corner of the dragging bubble's body at the
      * beginning of the drag, in workspace coordinates.
      */
     this.startXY_ = this.bubble.getRelativeToSurfaceXY();
-
-    /**
-     * The drag surface to move bubbles to during a drag, or null if none should
-     * be used.  Block dragging and bubble dragging use the same surface.
-     */
-    this.dragSurface_ = workspace.getBlockDragSurface();
   }
 
   /**
-   * Start dragging a bubble.  This includes moving it to the drag surface.
+   * Start dragging a bubble.
    *
    * @internal
    */
@@ -67,12 +61,8 @@ export class BubbleDragger {
     }
 
     this.workspace.setResizesEnabled(false);
-    this.bubble.setAutoLayout(false);
-    if (this.dragSurface_) {
-      this.bubble.moveTo(0, 0);
-      this.dragSurface_.translateSurface(this.startXY_.x, this.startXY_.y);
-      // Execute the move on the top-level SVG component.
-      this.dragSurface_.setBlocksAndShow(this.bubble.getSvgRoot());
+    if ((this.bubble as AnyDuringMigration).setAutoLayout) {
+      (this.bubble as AnyDuringMigration).setAutoLayout(false);
     }
 
     this.bubble.setDragging && this.bubble.setDragging(true);
@@ -90,7 +80,7 @@ export class BubbleDragger {
   dragBubble(e: PointerEvent, currentDragDeltaXY: Coordinate) {
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
     const newLoc = Coordinate.sum(this.startXY_, delta);
-    this.bubble.moveDuringDrag(this.dragSurface_, newLoc);
+    this.bubble.moveDuringDrag(newLoc);
 
     const oldDragTarget = this.dragTarget_;
     this.dragTarget_ = this.workspace.getDragTarget(e);
@@ -116,11 +106,13 @@ export class BubbleDragger {
    * @param dragTarget The drag target that the bubblee is currently over.
    * @returns Whether dropping the bubble immediately would delete the block.
    */
-  private shouldDelete_(dragTarget: IDragTarget|null): boolean {
+  private shouldDelete_(dragTarget: IDragTarget | null): boolean {
     if (dragTarget) {
       const componentManager = this.workspace.getComponentManager();
       const isDeleteArea = componentManager.hasCapability(
-          dragTarget.id, ComponentManager.Capability.DELETE_AREA);
+        dragTarget.id,
+        ComponentManager.Capability.DELETE_AREA,
+      );
       if (isDeleteArea) {
         return (dragTarget as IDeleteArea).wouldDelete(this.bubble, false);
       }
@@ -149,7 +141,7 @@ export class BubbleDragger {
     this.dragBubble(e, currentDragDeltaXY);
 
     const preventMove =
-        this.dragTarget_ && this.dragTarget_.shouldPreventMove(this.bubble);
+      this.dragTarget_ && this.dragTarget_.shouldPreventMove(this.bubble);
     let newLoc;
     if (preventMove) {
       newLoc = this.startXY_;
@@ -170,9 +162,6 @@ export class BubbleDragger {
       this.bubble.dispose();
     } else {
       // Put everything back onto the bubble canvas.
-      if (this.dragSurface_) {
-        this.dragSurface_.clearAndHide(this.workspace.getBubbleCanvas());
-      }
       if (this.bubble.setDragging) {
         this.bubble.setDragging(false);
       }
@@ -187,7 +176,8 @@ export class BubbleDragger {
   private fireMoveEvent_() {
     if (this.bubble instanceof WorkspaceCommentSvg) {
       const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
-                        this.bubble) as CommentMove;
+        this.bubble,
+      ) as CommentMove;
       event.setOldCoordinate(this.startXY_);
       event.recordNew();
       eventUtils.fire(event);
@@ -207,8 +197,9 @@ export class BubbleDragger {
    */
   private pixelsToWorkspaceUnits_(pixelCoord: Coordinate): Coordinate {
     const result = new Coordinate(
-        pixelCoord.x / this.workspace.scale,
-        pixelCoord.y / this.workspace.scale);
+      pixelCoord.x / this.workspace.scale,
+      pixelCoord.y / this.workspace.scale,
+    );
     if (this.workspace.isMutator) {
       // If we're in a mutator, its scale is always 1, purely because of some
       // oddities in our rendering optimizations.  The actual scale is the same

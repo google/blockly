@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * This file is a universal registry that provides generic methods
- *    for registering and unregistering different types of classes.
- *
- * @namespace Blockly.registry
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.registry');
 
@@ -19,6 +13,8 @@ import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
+import type {IIcon} from './interfaces/i_icon.js';
+import type {Input} from './inputs/input.js';
 import type {ISerializer} from './interfaces/i_serializer.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
 import type {Cursor} from './keyboard_nav/cursor.js';
@@ -27,15 +23,15 @@ import type {Renderer} from './renderers/common/renderer.js';
 import type {Theme} from './theme.js';
 import type {ToolboxItem} from './toolbox/toolbox_item.js';
 
-
 /**
  * A map of maps. With the keys being the type and name of the class we are
  * registering and the value being the constructor function.
  * e.g. {'field': {'field_angle': Blockly.FieldAngle}}
  */
 const typeMap: {
-  [key: string]:
-      {[key: string]: (new () => AnyDuringMigration)|AnyDuringMigration}
+  [key: string]: {
+    [key: string]: (new () => AnyDuringMigration) | AnyDuringMigration;
+  };
 } = Object.create(null);
 export const TEST_ONLY = {typeMap};
 
@@ -75,6 +71,8 @@ export class Type<_T> {
 
   static FIELD = new Type<Field>('field');
 
+  static INPUT = new Type<Input>('input');
+
   static RENDERER = new Type<Renderer>('renderer');
 
   static TOOLBOX = new Type<IToolbox>('toolbox');
@@ -85,8 +83,9 @@ export class Type<_T> {
 
   static FLYOUTS_VERTICAL_TOOLBOX = new Type<IFlyout>('flyoutsVerticalToolbox');
 
-  static FLYOUTS_HORIZONTAL_TOOLBOX =
-      new Type<IFlyout>('flyoutsHorizontalToolbox');
+  static FLYOUTS_HORIZONTAL_TOOLBOX = new Type<IFlyout>(
+    'flyoutsHorizontalToolbox',
+  );
 
   static METRICS_MANAGER = new Type<IMetricsManager>('metricsManager');
 
@@ -94,6 +93,9 @@ export class Type<_T> {
 
   /** @internal */
   static SERIALIZER = new Type<ISerializer>('serializer');
+
+  /** @internal */
+  static ICON = new Type<IIcon>('icon');
 }
 
 /**
@@ -110,22 +112,31 @@ export class Type<_T> {
  *     its type.
  */
 export function register<T>(
-    type: string|Type<T>, name: string,
-    registryItem: (new (...p1: AnyDuringMigration[]) => T)|null|
-    AnyDuringMigration,
-    opt_allowOverrides?: boolean): void {
-  if (!(type instanceof Type) && typeof type !== 'string' ||
-      `${type}`.trim() === '') {
+  type: string | Type<T>,
+  name: string,
+  registryItem:
+    | (new (...p1: AnyDuringMigration[]) => T)
+    | null
+    | AnyDuringMigration,
+  opt_allowOverrides?: boolean,
+): void {
+  if (
+    (!(type instanceof Type) && typeof type !== 'string') ||
+    `${type}`.trim() === ''
+  ) {
     throw Error(
-        'Invalid type "' + type + '". The type must be a' +
-        ' non-empty string or a Blockly.registry.Type.');
+      'Invalid type "' +
+        type +
+        '". The type must be a' +
+        ' non-empty string or a Blockly.registry.Type.',
+    );
   }
   type = `${type}`.toLowerCase();
 
   if (typeof name !== 'string' || name.trim() === '') {
     throw Error(
-        'Invalid name "' + name + '". The name must be a' +
-        ' non-empty string.');
+      'Invalid name "' + name + '". The name must be a' + ' non-empty string.',
+    );
   }
   const caselessName = name.toLowerCase();
   if (!registryItem) {
@@ -145,8 +156,12 @@ export function register<T>(
   // Don't throw an error if opt_allowOverrides is true.
   if (!opt_allowOverrides && typeRegistry[caselessName]) {
     throw Error(
-        'Name "' + caselessName + '" with type "' + type +
-        '" already registered.');
+      'Name "' +
+        caselessName +
+        '" with type "' +
+        type +
+        '" already registered.',
+    );
   }
   typeRegistry[caselessName] = registryItem;
   nameRegistry[caselessName] = name;
@@ -160,7 +175,7 @@ export function register<T>(
  * @param registryItem A class or object that we are checking for the required
  *     properties.
  */
-function validate(type: string, registryItem: Function|AnyDuringMigration) {
+function validate(type: string, registryItem: Function | AnyDuringMigration) {
   switch (type) {
     case String(Type.FIELD):
       if (typeof registryItem.fromJson !== 'function') {
@@ -177,14 +192,19 @@ function validate(type: string, registryItem: Function|AnyDuringMigration) {
  *     (e.g. Field, Renderer)
  * @param name The plugin's name. (Ex. field_angle, geras)
  */
-export function unregister<T>(type: string|Type<T>, name: string) {
+export function unregister<T>(type: string | Type<T>, name: string) {
   type = `${type}`.toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry || !typeRegistry[name]) {
     console.warn(
-        'Unable to unregister [' + name + '][' + type + '] from the ' +
-        'registry.');
+      'Unable to unregister [' +
+        name +
+        '][' +
+        type +
+        '] from the ' +
+        'registry.',
+    );
     return;
   }
   delete typeMap[type][name];
@@ -204,8 +224,10 @@ export function unregister<T>(type: string|Type<T>, name: string) {
  *     exists.
  */
 function getItem<T>(
-    type: string|Type<T>, name: string, opt_throwIfMissing?: boolean):
-    (new (...p1: AnyDuringMigration[]) => T)|null|AnyDuringMigration {
+  type: string | Type<T>,
+  name: string,
+  opt_throwIfMissing?: boolean,
+): (new (...p1: AnyDuringMigration[]) => T) | null | AnyDuringMigration {
   type = `${type}`.toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
@@ -213,7 +235,8 @@ function getItem<T>(
     const msg = 'Unable to find [' + name + '][' + type + '] in the registry.';
     if (opt_throwIfMissing) {
       throw new Error(
-          msg + ' You must require or register a ' + type + ' plugin.');
+        msg + ' You must require or register a ' + type + ' plugin.',
+      );
     } else {
       console.warn(msg);
     }
@@ -232,7 +255,7 @@ function getItem<T>(
  * @returns True if the registry has an item with the given type and name, false
  *     otherwise.
  */
-export function hasItem<T>(type: string|Type<T>, name: string): boolean {
+export function hasItem<T>(type: string | Type<T>, name: string): boolean {
   type = `${type}`.toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
@@ -253,11 +276,13 @@ export function hasItem<T>(type: string|Type<T>, name: string): boolean {
  * @returns The class with the given name and type or null if none exists.
  */
 export function getClass<T>(
-    type: string|Type<T>, name: string, opt_throwIfMissing?: boolean):
-    (new (...p1: AnyDuringMigration[]) => T)|null {
-  return getItem(type, name, opt_throwIfMissing) as (
-             new (...p1: AnyDuringMigration[]) => T) |
-      null;
+  type: string | Type<T>,
+  name: string,
+  opt_throwIfMissing?: boolean,
+): (new (...p1: AnyDuringMigration[]) => T) | null {
+  return getItem(type, name, opt_throwIfMissing) as
+    | (new (...p1: AnyDuringMigration[]) => T)
+    | null;
 }
 
 /**
@@ -271,7 +296,10 @@ export function getClass<T>(
  * @returns The object with the given name and type or null if none exists.
  */
 export function getObject<T>(
-    type: string|Type<T>, name: string, opt_throwIfMissing?: boolean): T|null {
+  type: string | Type<T>,
+  name: string,
+  opt_throwIfMissing?: boolean,
+): T | null {
   return getItem(type, name, opt_throwIfMissing) as T;
 }
 
@@ -286,8 +314,10 @@ export function getObject<T>(
  * @returns A map of objects with the given type, or null if none exists.
  */
 export function getAllItems<T>(
-    type: string|Type<T>, opt_cased?: boolean, opt_throwIfMissing?: boolean):
-    {[key: string]: T|null|(new (...p1: AnyDuringMigration[]) => T)}|null {
+  type: string | Type<T>,
+  opt_cased?: boolean,
+  opt_throwIfMissing?: boolean,
+): {[key: string]: T | null | (new (...p1: AnyDuringMigration[]) => T)} | null {
   type = `${type}`.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry) {
@@ -321,8 +351,10 @@ export function getAllItems<T>(
  * @returns The class for the plugin.
  */
 export function getClassFromOptions<T>(
-    type: Type<T>, options: Options, opt_throwIfMissing?: boolean):
-    (new (...p1: AnyDuringMigration[]) => T)|null {
+  type: Type<T>,
+  options: Options,
+  opt_throwIfMissing?: boolean,
+): (new (...p1: AnyDuringMigration[]) => T) | null {
   const plugin = options.plugins[String(type)] || DEFAULT;
 
   // If the user passed in a plugin class instead of a registered plugin name.

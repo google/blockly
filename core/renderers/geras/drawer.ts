@@ -9,7 +9,6 @@ goog.declareModuleId('Blockly.geras.Drawer');
 
 import type {BlockSvg} from '../../block_svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
-import * as debug from '../common/debug.js';
 import {Drawer as BaseDrawer} from '../common/drawer.js';
 import type {Row} from '../measurables/row.js';
 
@@ -18,7 +17,6 @@ import {Highlighter} from './highlighter.js';
 import type {RenderInfo} from './info.js';
 import type {InlineInput} from './measurables/inline_input.js';
 import type {PathObject} from './path_object.js';
-
 
 /**
  * An object that draws a block based on the given rendering information,
@@ -41,7 +39,6 @@ export class Drawer extends BaseDrawer {
   }
 
   override draw() {
-    this.hideHiddenIcons_();
     this.drawOutline_();
     this.drawInternals_();
 
@@ -50,9 +47,6 @@ export class Drawer extends BaseDrawer {
     pathObject.setHighlightPath(this.highlighter_.getPath());
     if (this.info_.RTL) {
       pathObject.flipRTL();
-    }
-    if (debug.isDebuggerEnabled()) {
-      this.block_?.renderingDebugger?.drawDebug(this.block_, this.info_);
     }
     this.recordSizeOnBlock_();
   }
@@ -85,8 +79,9 @@ export class Drawer extends BaseDrawer {
   override drawRightSideRow_(row: Row) {
     this.highlighter_.drawRightSideRow(row);
 
-    this.outlinePath_ += svgPaths.lineOnAxis('H', row.xPos + row.width) +
-        svgPaths.lineOnAxis('V', row.yPos + row.height);
+    this.outlinePath_ +=
+      svgPaths.lineOnAxis('H', row.xPos + row.width) +
+      svgPaths.lineOnAxis('V', row.yPos + row.height);
   }
 
   override drawBottom_() {
@@ -117,13 +112,14 @@ export class Drawer extends BaseDrawer {
     if (input.connectionModel) {
       // xPos already contains info about startX
       let connX =
-          input.xPos + input.connectionWidth + this.constants_.DARK_PATH_OFFSET;
+        input.xPos + input.connectionWidth + this.constants_.DARK_PATH_OFFSET;
       if (this.info_.RTL) {
         connX *= -1;
       }
       input.connectionModel.setOffsetInBlock(
-          connX,
-          yPos + input.connectionOffsetY + this.constants_.DARK_PATH_OFFSET);
+        connX,
+        yPos + input.connectionOffsetY + this.constants_.DARK_PATH_OFFSET,
+      );
     }
   }
 
@@ -137,7 +133,9 @@ export class Drawer extends BaseDrawer {
         connX += this.constants_.DARK_PATH_OFFSET;
       }
       input.connectionModel.setOffsetInBlock(
-          connX, row.yPos + this.constants_.DARK_PATH_OFFSET);
+        connX,
+        row.yPos + this.constants_.DARK_PATH_OFFSET,
+      );
     }
   }
 
@@ -157,11 +155,13 @@ export class Drawer extends BaseDrawer {
 
     if (bottomRow.connection) {
       const connInfo = bottomRow.connection;
-      const x = connInfo.xPos;  // Already contains info about startX.
+      const x = connInfo.xPos; // Already contains info about startX.
       const connX =
-          (this.info_.RTL ? -x : x) + this.constants_.DARK_PATH_OFFSET / 2;
+        (this.info_.RTL ? -x : x) + this.constants_.DARK_PATH_OFFSET / 2;
       connInfo.connectionModel.setOffsetInBlock(
-          connX, bottomRow.baseline + this.constants_.DARK_PATH_OFFSET);
+        connX,
+        bottomRow.baseline + this.constants_.DARK_PATH_OFFSET,
+      );
     }
   }
 }

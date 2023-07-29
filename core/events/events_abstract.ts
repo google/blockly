@@ -13,12 +13,10 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.Abstract');
 
-import * as deprecation from '../utils/deprecation.js';
 import * as common from '../common.js';
 import type {Workspace} from '../workspace.js';
 
 import * as eventUtils from './utils.js';
-
 
 /**
  * Abstract class for an event.
@@ -68,19 +66,6 @@ export abstract class Abstract {
   }
 
   /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  fromJson(json: AbstractEventJson) {
-    deprecation.warn(
-        'Blockly.Events.Abstract.prototype.fromJson', 'version 9', 'version 10',
-        'Blockly.Events.fromJson');
-    this.isBlank = false;
-    this.group = json['group'] || '';
-  }
-
-  /**
    * Deserializes the JSON event.
    *
    * @param event The event to append new properties to. Should be a subclass
@@ -89,8 +74,11 @@ export abstract class Abstract {
    *     supertypes of parameters to static methods in superclasses.
    * @internal
    */
-  static fromJson(json: AbstractEventJson, workspace: Workspace, event: any):
-      Abstract {
+  static fromJson(
+    json: AbstractEventJson,
+    workspace: Workspace,
+    event: any,
+  ): Abstract {
     event.isBlank = false;
     event.group = json['group'] || '';
     event.workspaceId = workspace.id;
@@ -130,8 +118,9 @@ export abstract class Abstract {
     }
     if (!workspace) {
       throw Error(
-          'Workspace is null. Event must have been generated from real' +
-          ' Blockly events.');
+        'Workspace is null. Event must have been generated from real' +
+          ' Blockly events.',
+      );
     }
     return workspace;
   }

@@ -60,7 +60,10 @@ function rewriteEnum(code) {
   // (function (names) {
   //   ...
   // })(names || (names = {}));
-  const enumDefs = code.match(/\s+\(function \((\w+)\) \{\n[^}]*\}\)\(\1 [^)]+\1 = \{\}\)\);/g) || [];
+  const enumDefs =
+    code.match(
+      /\s+\(function \((\w+)\) \{\n[^}]*\}\)\(\1 [^)]+\1 = \{\}\)\);/g,
+    ) || [];
   for (const oldEnumDef of enumDefs) {
     // enumDef looks like a bunch of lines in one of these two formats:
     //   ScopeType["BLOCK"] = "block";

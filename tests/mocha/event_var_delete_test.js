@@ -6,23 +6,29 @@
 
 goog.declareModuleId('Blockly.test.eventVarDelete');
 
-import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 
-
-suite('Var Delete Event', function() {
-  setup(function() {
+suite('Var Delete Event', function () {
+  setup(function () {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
   });
 
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
 
-  suite('Serialization', function() {
-    test('untyped variable events round-trip through JSON', function() {
-      const varModel =
-          new Blockly.VariableModel(this.workspace, 'name', '', 'id');
+  suite('Serialization', function () {
+    test('untyped variable events round-trip through JSON', function () {
+      const varModel = new Blockly.VariableModel(
+        this.workspace,
+        'name',
+        '',
+        'id',
+      );
       const origEvent = new Blockly.Events.VarDelete(varModel);
 
       const json = origEvent.toJson();
@@ -31,9 +37,13 @@ suite('Var Delete Event', function() {
       chai.assert.deepEqual(newEvent, origEvent);
     });
 
-    test('typed variable events round-trip through JSON', function() {
-      const varModel =
-          new Blockly.VariableModel(this.workspace, 'name', 'type', 'id');
+    test('typed variable events round-trip through JSON', function () {
+      const varModel = new Blockly.VariableModel(
+        this.workspace,
+        'name',
+        'type',
+        'id',
+      );
       const origEvent = new Blockly.Events.VarDelete(varModel);
 
       const json = origEvent.toJson();

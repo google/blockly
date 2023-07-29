@@ -11,11 +11,11 @@
 const gulp = require('gulp');
 
 const fs = require('fs');
-const rimraf = require('rimraf');
 const path = require('path');
 const execSync = require('child_process').execSync;
 const buildTasks = require('./build_tasks.js');
 const packageTasks = require('./package_tasks.js');
+const {rimraf} = require('rimraf');
 
 const packageJson = require('../../package.json');
 const demoTmpDir = '../_deploy';
@@ -122,13 +122,8 @@ function deployToAndClean(demoVersion) {
  * package.json.
  */
 function getDemosVersion() {
-  const minorVersion = packageJson.version.split('.')[1];
-  const patchVersion = packageJson.version.split('.')[2];
-  let demoVersion = minorVersion;
-  if (patchVersion !== 0) {
-    demoVersion += '-' + patchVersion;
-  }
-  return demoVersion;
+  // Replace all '.' with '-' e.g. 9-3-3-beta-2
+  return packageJson.version.replace(/\./g, '-');
 }
 
 /**

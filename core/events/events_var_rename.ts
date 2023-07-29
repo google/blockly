@@ -7,14 +7,12 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.VarRename');
 
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';
 
 import {VarBase, VarBaseJson} from './events_var_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
-
 
 /**
  * Notifies listeners that a variable model was renamed.
@@ -38,7 +36,7 @@ export class VarRename extends VarBase {
     super(opt_variable);
 
     if (!opt_variable) {
-      return;  // Blank event to be populated by fromJson.
+      return; // Blank event to be populated by fromJson.
     }
     this.oldName = opt_variable.name;
     this.newName = typeof newName === 'undefined' ? '' : newName;
@@ -53,31 +51,19 @@ export class VarRename extends VarBase {
     const json = super.toJson() as VarRenameJson;
     if (!this.oldName) {
       throw new Error(
-          'The old var name is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson');
+        'The old var name is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson',
+      );
     }
     if (!this.newName) {
       throw new Error(
-          'The new var name is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson');
+        'The new var name is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson',
+      );
     }
     json['oldName'] = this.oldName;
     json['newName'] = this.newName;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: VarRenameJson) {
-    deprecation.warn(
-        'Blockly.Events.VarRename.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
-    super.fromJson(json);
-    this.oldName = json['oldName'];
-    this.newName = json['newName'];
   }
 
   /**
@@ -89,10 +75,16 @@ export class VarRename extends VarBase {
    *     static methods in superclasses.
    * @internal
    */
-  static fromJson(json: VarRenameJson, workspace: Workspace, event?: any):
-      VarRename {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new VarRename()) as VarRename;
+  static fromJson(
+    json: VarRenameJson,
+    workspace: Workspace,
+    event?: any,
+  ): VarRename {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new VarRename(),
+    ) as VarRename;
     newEvent.oldName = json['oldName'];
     newEvent.newName = json['newName'];
     return newEvent;
@@ -107,18 +99,21 @@ export class VarRename extends VarBase {
     const workspace = this.getEventWorkspace_();
     if (!this.varId) {
       throw new Error(
-          'The var ID is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson');
+        'The var ID is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson',
+      );
     }
     if (!this.oldName) {
       throw new Error(
-          'The old var name is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson');
+        'The old var name is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson',
+      );
     }
     if (!this.newName) {
       throw new Error(
-          'The new var name is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson');
+        'The new var name is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson',
+      );
     }
     if (forward) {
       workspace.renameVariableById(this.varId, this.newName);

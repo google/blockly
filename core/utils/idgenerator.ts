@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Generators for unique IDs.
- *
- * @namespace Blockly.utils.idGenerator
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.idGenerator');
 
@@ -19,8 +14,9 @@ goog.declareModuleId('Blockly.utils.idGenerator');
  * soup will be denied.  That's your failure to properly escape in
  * your own environment.  Issues #251, #625, #682, #1304.
  */
-const soup = '!#$%()*+,-./:;=?@[]^_`{|}~' +
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const soup =
+  '!#$%()*+,-./:;=?@[]^_`{|}~' +
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 /**
  * Namespace object for internal implementations we want to be able to

@@ -4,16 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * ARIA-related constants and utilities.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- *
- * @namespace Blockly.utils.aria
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.aria');
-
 
 /** ARIA states/properties prefix. */
 const ARIA_PREFIX = 'aria-';
@@ -56,7 +48,7 @@ export enum Role {
   TREE = 'tree',
 
   // ARIA role for a tree item that sometimes may be expanded or collapsed.
-  TREEITEM = 'treeitem'
+  TREEITEM = 'treeitem',
 }
 
 /**
@@ -115,7 +107,7 @@ export enum State {
   VALUEMAX = 'valuemax',
 
   // ARIA property for slider minimum value. Value: number.
-  VALUEMIN = 'valuemin'
+  VALUEMIN = 'valuemin',
 }
 
 /**
@@ -141,7 +133,10 @@ export function setRole(element: Element, roleName: Role) {
  * @param value Value for the state attribute.
  */
 export function setState(
-    element: Element, stateName: State, value: string|boolean|number|string[]) {
+  element: Element,
+  stateName: State,
+  value: string | boolean | number | string[],
+) {
   if (Array.isArray(value)) {
     value = value.join(' ');
   }

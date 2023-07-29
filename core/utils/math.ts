@@ -4,16 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Utility methods for math.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- *
- * @namespace Blockly.utils.math
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.math');
-
 
 /**
  * Converts degrees to radians.
@@ -23,7 +15,7 @@ goog.declareModuleId('Blockly.utils.math');
  * @returns Angle in radians.
  */
 export function toRadians(angleDegrees: number): number {
-  return angleDegrees * Math.PI / 180;
+  return (angleDegrees * Math.PI) / 180;
 }
 
 /**
@@ -34,7 +26,7 @@ export function toRadians(angleDegrees: number): number {
  * @returns Angle in degrees.
  */
 export function toDegrees(angleRadians: number): number {
-  return angleRadians * 180 / Math.PI;
+  return (angleRadians * 180) / Math.PI;
 }
 
 /**
@@ -46,7 +38,10 @@ export function toDegrees(angleRadians: number): number {
  * @returns The clamped number.
  */
 export function clamp(
-    lowerBound: number, number: number, upperBound: number): number {
+  lowerBound: number,
+  number: number,
+  upperBound: number,
+): number {
   if (upperBound < lowerBound) {
     const temp = upperBound;
     upperBound = lowerBound;

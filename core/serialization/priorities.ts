@@ -4,16 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The top level namespace for priorities of plugin serializers.
- * Includes constants for the priorities of different plugin serializers. Higher
- * priorities are deserialized first.
- *
- * @namespace Blockly.serialization.priorities
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.priorities');
-
 
 /**
  * The priority for deserializing variables.

@@ -14,9 +14,12 @@ goog.declareModuleId('Blockly.FieldNumber');
 
 import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldInput, FieldInputConfig, FieldInputValidator} from './field_input.js';
+import {
+  FieldInput,
+  FieldInputConfig,
+  FieldInputValidator,
+} from './field_input.js';
 import * as aria from './utils/aria.js';
-import type {Sentinel} from './utils/sentinel.js';
 
 /**
  * Class for an editable number field.
@@ -35,7 +38,7 @@ export class FieldNumber extends FieldInput<number> {
    * The number of decimal places to allow, or null to allow any number of
    * decimal digits.
    */
-  private decimalPlaces_: number|null = null;
+  private decimalPlaces: number | null = null;
 
   /** Don't spellcheck numbers.  Our validator does a better job. */
   protected override spellcheck_ = false;
@@ -60,13 +63,17 @@ export class FieldNumber extends FieldInput<number> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|number|Sentinel, min?: string|number|null,
-      max?: string|number|null, precision?: string|number|null,
-      validator?: FieldNumberValidator|null, config?: FieldNumberConfig) {
+    value?: string | number | typeof Field.SKIP_SETUP,
+    min?: string | number | null,
+    max?: string | number | null,
+    precision?: string | number | null,
+    validator?: FieldNumberValidator | null,
+    config?: FieldNumberConfig,
+  ) {
     // Pass SENTINEL so that we can define properties before value validation.
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(value)) return;
+    if (value === Field.SKIP_SETUP) return;
     if (config) {
       this.configure_(config);
     } else {
@@ -85,9 +92,9 @@ export class FieldNumber extends FieldInput<number> {
    */
   protected override configure_(config: FieldNumberConfig) {
     super.configure_(config);
-    this.setMinInternal_(config.min);
-    this.setMaxInternal_(config.max);
-    this.setPrecisionInternal_(config.precision);
+    this.setMinInternal(config.min);
+    this.setMaxInternal(config.max);
+    this.setPrecisionInternal(config.precision);
   }
 
   /**
@@ -104,11 +111,13 @@ export class FieldNumber extends FieldInput<number> {
    * @param precision Precision for value.
    */
   setConstraints(
-      min: number|string|undefined|null, max: number|string|undefined|null,
-      precision: number|string|undefined|null) {
-    this.setMinInternal_(min);
-    this.setMaxInternal_(max);
-    this.setPrecisionInternal_(precision);
+    min: number | string | undefined | null,
+    max: number | string | undefined | null,
+    precision: number | string | undefined | null,
+  ) {
+    this.setMinInternal(min);
+    this.setMaxInternal(max);
+    this.setPrecisionInternal(precision);
     this.setValue(this.getValue());
   }
 
@@ -118,8 +127,8 @@ export class FieldNumber extends FieldInput<number> {
    *
    * @param min Minimum value.
    */
-  setMin(min: number|string|undefined|null) {
-    this.setMinInternal_(min);
+  setMin(min: number | string | undefined | null) {
+    this.setMinInternal(min);
     this.setValue(this.getValue());
   }
 
@@ -129,7 +138,7 @@ export class FieldNumber extends FieldInput<number> {
    *
    * @param min Minimum value.
    */
-  private setMinInternal_(min: number|string|undefined|null) {
+  private setMinInternal(min: number | string | undefined | null) {
     if (min == null) {
       this.min_ = -Infinity;
     } else {
@@ -156,8 +165,8 @@ export class FieldNumber extends FieldInput<number> {
    *
    * @param max Maximum value.
    */
-  setMax(max: number|string|undefined|null) {
-    this.setMaxInternal_(max);
+  setMax(max: number | string | undefined | null) {
+    this.setMaxInternal(max);
     this.setValue(this.getValue());
   }
 
@@ -167,7 +176,7 @@ export class FieldNumber extends FieldInput<number> {
    *
    * @param max Maximum value.
    */
-  private setMaxInternal_(max: number|string|undefined|null) {
+  private setMaxInternal(max: number | string | undefined | null) {
     if (max == null) {
       this.max_ = Infinity;
     } else {
@@ -194,8 +203,8 @@ export class FieldNumber extends FieldInput<number> {
    *
    * @param precision The number to which the field's value is rounded.
    */
-  setPrecision(precision: number|string|undefined|null) {
-    this.setPrecisionInternal_(precision);
+  setPrecision(precision: number | string | undefined | null) {
+    this.setPrecisionInternal(precision);
     this.setValue(this.getValue());
   }
 
@@ -205,22 +214,23 @@ export class FieldNumber extends FieldInput<number> {
    *
    * @param precision The number to which the field's value is rounded.
    */
-  private setPrecisionInternal_(precision: number|string|undefined|null) {
+  private setPrecisionInternal(precision: number | string | undefined | null) {
     this.precision_ = Number(precision) || 0;
     let precisionString = String(this.precision_);
     if (precisionString.indexOf('e') !== -1) {
       // String() is fast.  But it turns .0000001 into '1e-7'.
       // Use the much slower toLocaleString to access all the digits.
-      precisionString =
-          this.precision_.toLocaleString('en-US', {maximumFractionDigits: 20});
+      precisionString = this.precision_.toLocaleString('en-US', {
+        maximumFractionDigits: 20,
+      });
     }
     const decimalIndex = precisionString.indexOf('.');
     if (decimalIndex === -1) {
       // If the precision is 0 (float) allow any number of decimals,
       // otherwise allow none.
-      this.decimalPlaces_ = precision ? 0 : null;
+      this.decimalPlaces = precision ? 0 : null;
     } else {
-      this.decimalPlaces_ = precisionString.length - decimalIndex - 1;
+      this.decimalPlaces = precisionString.length - decimalIndex - 1;
     }
   }
 
@@ -242,8 +252,9 @@ export class FieldNumber extends FieldInput<number> {
    * @param newValue The input value.
    * @returns A valid number, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: AnyDuringMigration): number
-      |null {
+  protected override doClassValidation_(
+    newValue?: AnyDuringMigration,
+  ): number | null {
     if (newValue === null) {
       return null;
     }
@@ -252,7 +263,7 @@ export class FieldNumber extends FieldInput<number> {
     newValue = `${newValue}`;
     // TODO: Handle cases like 'ten', '1.203,14', etc.
     // 'O' is sometimes mistaken for '0' by inexperienced users.
-    newValue = newValue.replace(/O/ig, '0');
+    newValue = newValue.replace(/O/gi, '0');
     // Strip out thousands separators.
     newValue = newValue.replace(/,/g, '');
     // Ignore case of 'Infinity'.
@@ -271,8 +282,8 @@ export class FieldNumber extends FieldInput<number> {
       n = Math.round(n / this.precision_) * this.precision_;
     }
     // Clean up floating point errors.
-    if (this.decimalPlaces_ !== null) {
-      n = Number(n.toFixed(this.decimalPlaces_));
+    if (this.decimalPlaces !== null) {
+      n = Number(n.toFixed(this.decimalPlaces));
     }
     return n;
   }
@@ -284,7 +295,6 @@ export class FieldNumber extends FieldInput<number> {
    */
   protected override widgetCreate_(): HTMLInputElement {
     const htmlInput = super.widgetCreate_() as HTMLInputElement;
-    htmlInput.type = 'number';
 
     // Set the accessibility state
     if (this.min_ > -Infinity) {
@@ -310,7 +320,13 @@ export class FieldNumber extends FieldInput<number> {
     // `this` might be a subclass of FieldNumber if that class doesn't override
     // the static fromJson method.
     return new this(
-        options.value, undefined, undefined, undefined, undefined, options);
+      options.value,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      options,
+    );
   }
 }
 

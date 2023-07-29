@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * The interface for a flyout.
- *
- * @namespace Blockly.IFlyout
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IFlyout');
 
@@ -18,7 +13,6 @@ import type {Coordinate} from '../utils/coordinate.js';
 import type {FlyoutDefinition} from '../utils/toolbox.js';
 import type {Svg} from '../utils/svg.js';
 import type {IRegistrable} from './i_registrable.js';
-
 
 /**
  * Interface for a flyout.
@@ -31,7 +25,7 @@ export interface IFlyout extends IRegistrable {
   RTL: boolean;
 
   /** The target workspace */
-  targetWorkspace: WorkspaceSvg|null;
+  targetWorkspace: WorkspaceSvg | null;
 
   /** Margin around the edges of the blocks in the flyout. */
   readonly MARGIN: number;
@@ -51,7 +45,9 @@ export interface IFlyout extends IRegistrable {
    *     or <g>.
    * @returns The flyout's SVG group.
    */
-  createDom(tagName: string|Svg<SVGSVGElement>|Svg<SVGGElement>): SVGElement;
+  createDom(
+    tagName: string | Svg<SVGSVGElement> | Svg<SVGGElement>,
+  ): SVGElement;
 
   /**
    * Initializes the flyout.
@@ -120,7 +116,7 @@ export interface IFlyout extends IRegistrable {
    *     of Nodes, a NodeList, a toolbox definition, or a string with the name
    *     of the dynamic category.
    */
-  show(flyoutDef: FlyoutDefinition|string): void;
+  show(flyoutDef: FlyoutDefinition | string): void;
 
   /**
    * Create a copy of this block on the workspace.

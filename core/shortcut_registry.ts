@@ -17,7 +17,6 @@ import {KeyCodes} from './utils/keycodes.js';
 import * as object from './utils/object.js';
 import type {Workspace} from './workspace.js';
 
-
 /**
  * Class for the registry of keyboard shortcuts. This is intended to be a
  * singleton. You should not create a new instance, and only access this class
@@ -62,7 +61,10 @@ export class ShortcutRegistry {
     if (keyCodes && keyCodes.length > 0) {
       for (let i = 0; i < keyCodes.length; i++) {
         this.addKeyMapping(
-            keyCodes[i], shortcut.name, !!shortcut.allowCollision);
+          keyCodes[i],
+          shortcut.name,
+          !!shortcut.allowCollision,
+        );
       }
     }
   }
@@ -101,13 +103,16 @@ export class ShortcutRegistry {
    * @throws {Error} if the given key code is already mapped to a shortcut.
    */
   addKeyMapping(
-      keyCode: string|number|KeyCodes, shortcutName: string,
-      opt_allowCollision?: boolean) {
+    keyCode: string | number | KeyCodes,
+    shortcutName: string,
+    opt_allowCollision?: boolean,
+  ) {
     keyCode = `${keyCode}`;
     const shortcutNames = this.keyMap.get(keyCode);
     if (shortcutNames && !opt_allowCollision) {
-      throw new Error(`Shortcut named "${
-          shortcutName}" collides with shortcuts "${shortcutNames}"`);
+      throw new Error(
+        `Shortcut named "${shortcutName}" collides with shortcuts "${shortcutNames}"`,
+      );
     } else if (shortcutNames && opt_allowCollision) {
       shortcutNames.unshift(shortcutName);
     } else {
@@ -127,14 +132,18 @@ export class ShortcutRegistry {
    *     remove.
    * @returns True if a key mapping was removed, false otherwise.
    */
-  removeKeyMapping(keyCode: string, shortcutName: string, opt_quiet?: boolean):
-      boolean {
+  removeKeyMapping(
+    keyCode: string,
+    shortcutName: string,
+    opt_quiet?: boolean,
+  ): boolean {
     const shortcutNames = this.keyMap.get(keyCode);
 
     if (!shortcutNames) {
       if (!opt_quiet) {
-        console.warn(`No keyboard shortcut named "${
-            shortcutName}" registered with key code "${keyCode}"`);
+        console.warn(
+          `No keyboard shortcut named "${shortcutName}" registered with key code "${keyCode}"`,
+        );
       }
       return false;
     }
@@ -148,8 +157,9 @@ export class ShortcutRegistry {
       return true;
     }
     if (!opt_quiet) {
-      console.warn(`No keyboard shortcut named "${
-          shortcutName}" registered with key code "${keyCode}"`);
+      console.warn(
+        `No keyboard shortcut named "${shortcutName}" registered with key code "${keyCode}"`,
+      );
     }
     return false;
   }
@@ -200,7 +210,7 @@ export class ShortcutRegistry {
    */
   getRegistry(): {[key: string]: KeyboardShortcut} {
     const legacyRegistry: {[key: string]: KeyboardShortcut} =
-        Object.create(null);
+      Object.create(null);
     for (const [key, value] of this.shortcuts) {
       legacyRegistry[key] = value;
     }
@@ -220,7 +230,7 @@ export class ShortcutRegistry {
     if (!shortcutNames) {
       return false;
     }
-    for (let i = 0, shortcutName; shortcutName = shortcutNames[i]; i++) {
+    for (let i = 0, shortcutName; (shortcutName = shortcutNames[i]); i++) {
       const shortcut = this.shortcuts.get(shortcutName);
       if (!shortcut?.preconditionFn || shortcut?.preconditionFn(workspace)) {
         // If the key has been handled, stop processing shortcuts.
@@ -239,7 +249,7 @@ export class ShortcutRegistry {
    * @returns The list of shortcuts to call when the given keyCode is used.
    *     Undefined if no shortcuts exist.
    */
-  getShortcutNamesByKeyCode(keyCode: string): string[]|undefined {
+  getShortcutNamesByKeyCode(keyCode: string): string[] | undefined {
     return this.keyMap.get(keyCode) || [];
   }
 
@@ -292,7 +302,7 @@ export class ShortcutRegistry {
    * @throws {Error} if the modifier is not in the valid modifiers list.
    */
   private checkModifiers_(modifiers: KeyCodes[]) {
-    for (let i = 0, modifier; modifier = modifiers[i]; i++) {
+    for (let i = 0, modifier; (modifier = modifiers[i]); i++) {
       if (!(modifier in ShortcutRegistry.modifierKeys)) {
         throw new Error(modifier + ' is not a valid modifier key.');
       }
@@ -307,14 +317,15 @@ export class ShortcutRegistry {
    *     valid modifiers can be found in the ShortcutRegistry.modifierKeys.
    * @returns The serialized key code for the given modifiers and key.
    */
-  createSerializedKey(keyCode: number, modifiers: KeyCodes[]|null): string {
+  createSerializedKey(keyCode: number, modifiers: KeyCodes[] | null): string {
     let serializedKey = '';
 
     if (modifiers) {
       this.checkModifiers_(modifiers);
       for (const modifier in ShortcutRegistry.modifierKeys) {
-        const modifierKeyCode =
-            (ShortcutRegistry.modifierKeys as AnyDuringMigration)[modifier];
+        const modifierKeyCode = (
+          ShortcutRegistry.modifierKeys as AnyDuringMigration
+        )[modifier];
         if (modifiers.indexOf(modifierKeyCode) > -1) {
           if (serializedKey !== '') {
             serializedKey += '+';
@@ -335,11 +346,11 @@ export class ShortcutRegistry {
 
 export namespace ShortcutRegistry {
   export interface KeyboardShortcut {
-    callback?: ((p1: Workspace, p2: Event, p3: KeyboardShortcut) => boolean);
+    callback?: (p1: Workspace, p2: Event, p3: KeyboardShortcut) => boolean;
     name: string;
-    preconditionFn?: ((p1: Workspace) => boolean);
+    preconditionFn?: (p1: Workspace) => boolean;
     metadata?: object;
-    keyCodes?: (number|string)[];
+    keyCodes?: (number | string)[];
     allowCollision?: boolean;
   }
 

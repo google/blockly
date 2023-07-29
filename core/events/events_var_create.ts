@@ -12,14 +12,12 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.VarCreate');
 
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';
 
 import {VarBase, VarBaseJson} from './events_var_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
-
 
 /**
  * Notifies listeners that a variable model has been created.
@@ -40,7 +38,7 @@ export class VarCreate extends VarBase {
     super(opt_variable);
 
     if (!opt_variable) {
-      return;  // Blank event to be populated by fromJson.
+      return; // Blank event to be populated by fromJson.
     }
     this.varType = opt_variable.type;
     this.varName = opt_variable.name;
@@ -55,31 +53,19 @@ export class VarCreate extends VarBase {
     const json = super.toJson() as VarCreateJson;
     if (this.varType === undefined) {
       throw new Error(
-          'The var type is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson');
+        'The var type is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson',
+      );
     }
     if (!this.varName) {
       throw new Error(
-          'The var name is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson');
+        'The var name is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson',
+      );
     }
     json['varType'] = this.varType;
     json['varName'] = this.varName;
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: VarCreateJson) {
-    deprecation.warn(
-        'Blockly.Events.VarCreate.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
-    super.fromJson(json);
-    this.varType = json['varType'];
-    this.varName = json['varName'];
   }
 
   /**
@@ -91,10 +77,16 @@ export class VarCreate extends VarBase {
    *     static methods in superclasses.
    * @internal
    */
-  static fromJson(json: VarCreateJson, workspace: Workspace, event?: any):
-      VarCreate {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new VarCreate()) as VarCreate;
+  static fromJson(
+    json: VarCreateJson,
+    workspace: Workspace,
+    event?: any,
+  ): VarCreate {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new VarCreate(),
+    ) as VarCreate;
     newEvent.varType = json['varType'];
     newEvent.varName = json['varName'];
     return newEvent;
@@ -109,13 +101,15 @@ export class VarCreate extends VarBase {
     const workspace = this.getEventWorkspace_();
     if (!this.varId) {
       throw new Error(
-          'The var ID is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson');
+        'The var ID is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson',
+      );
     }
     if (!this.varName) {
       throw new Error(
-          'The var name is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson');
+        'The var name is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson',
+      );
     }
     if (forward) {
       workspace.createVariable(this.varName, this.varType, this.varId);

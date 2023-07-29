@@ -19,7 +19,6 @@ import {HighlightConstantProvider} from './highlight_constants.js';
 import {RenderInfo} from './info.js';
 import {PathObject} from './path_object.js';
 
-
 /**
  * The geras renderer. This renderer was designed to be backwards compatible
  * with pre-2019 Blockly. Newer projects that are not constrained by backwards
@@ -30,7 +29,7 @@ import {PathObject} from './path_object.js';
  */
 export class Renderer extends BaseRenderer {
   /** The renderer's highlight constant provider. */
-  private highlightConstants_: HighlightConstantProvider|null = null;
+  private highlightConstants: HighlightConstantProvider | null = null;
 
   /**
    * @param name The renderer name.
@@ -44,10 +43,12 @@ export class Renderer extends BaseRenderer {
    * the normal constant provider.
    */
   override init(
-      theme: Theme, opt_rendererOverrides?: {[rendererConstant: string]: any}) {
+    theme: Theme,
+    opt_rendererOverrides?: {[rendererConstant: string]: any},
+  ) {
     super.init(theme, opt_rendererOverrides);
-    this.highlightConstants_ = this.makeHighlightConstants_();
-    this.highlightConstants_.init();
+    this.highlightConstants = this.makeHighlightConstants_();
+    this.highlightConstants.init();
   }
 
   override refreshDom(svg: SVGElement, theme: Theme) {
@@ -77,9 +78,11 @@ export class Renderer extends BaseRenderer {
    *     block.
    * @returns The drawer.
    */
-  protected override makeDrawer_(block: BlockSvg, info: BaseRenderInfo):
-      Drawer {
-    return new Drawer(block, (info as RenderInfo));
+  protected override makeDrawer_(
+    block: BlockSvg,
+    info: BaseRenderInfo,
+  ): Drawer {
+    return new Drawer(block, info as RenderInfo);
   }
 
   /**
@@ -90,8 +93,7 @@ export class Renderer extends BaseRenderer {
    * @returns The renderer path object.
    */
   override makePathObject(root: SVGElement, style: BlockStyle): PathObject {
-    return new PathObject(
-        root, style, (this.getConstants() as ConstantProvider));
+    return new PathObject(root, style, this.getConstants() as ConstantProvider);
   }
 
   /**
@@ -100,7 +102,7 @@ export class Renderer extends BaseRenderer {
    * @returns The highlight constant provider.
    */
   protected makeHighlightConstants_(): HighlightConstantProvider {
-    return new HighlightConstantProvider((this.getConstants()));
+    return new HighlightConstantProvider(this.getConstants());
   }
 
   /**
@@ -110,12 +112,13 @@ export class Renderer extends BaseRenderer {
    * @returns The highlight constant provider.
    */
   getHighlightConstants(): HighlightConstantProvider {
-    if (!this.highlightConstants_) {
+    if (!this.highlightConstants) {
       throw new Error(
-          'Cannot access the highlight constants because init has not ' +
-          'been called');
+        'Cannot access the highlight constants because init has not ' +
+          'been called',
+      );
     }
-    return this.highlightConstants_;
+    return this.highlightConstants;
   }
 }
 

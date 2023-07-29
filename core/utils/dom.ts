@@ -4,18 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Utility methods for DOM manipulation.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- *
- * @namespace Blockly.utils.dom
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.dom');
 
+import * as deprecation from './deprecation.js';
 import type {Svg} from './svg.js';
-
 
 /**
  * Required name space for SVG elements.
@@ -40,17 +33,16 @@ export enum NodeType {
   ELEMENT_NODE = 1,
   TEXT_NODE = 3,
   COMMENT_NODE = 8,
-  DOCUMENT_POSITION_CONTAINED_BY = 16
 }
 
 /** Temporary cache of text widths. */
-let cacheWidths: {[key: string]: number}|null = null;
+let cacheWidths: {[key: string]: number} | null = null;
 
 /** Number of current references to cache. */
 let cacheReference = 0;
 
 /** A HTML canvas context used for computing text width. */
-let canvasContext: CanvasRenderingContext2D|null = null;
+let canvasContext: CanvasRenderingContext2D | null = null;
 
 /**
  * Helper method for creating SVG elements.
@@ -61,8 +53,10 @@ let canvasContext: CanvasRenderingContext2D|null = null;
  * @returns if name is a string or a more specific type if it a member of Svg.
  */
 export function createSvgElement<T extends SVGElement>(
-    name: string|Svg<T>, attrs: {[key: string]: string|number},
-    opt_parent?: Element|null): T {
+  name: string | Svg<T>,
+  attrs: {[key: string]: string | number},
+  opt_parent?: Element | null,
+): T {
   const e = document.createElementNS(SVG_NS, `${name}`) as T;
   for (const key in attrs) {
     e.setAttribute(key, `${attrs[key]}`);
@@ -137,7 +131,7 @@ export function hasClass(element: Element, className: string): boolean {
  * @returns The node removed if removed; else, null.
  */
 // Copied from Closure goog.dom.removeNode
-export function removeNode(node: Node|null): Node|null {
+export function removeNode(node: Node | null): Node | null {
   return node && node.parentNode ? node.parentNode.removeChild(node) : null;
 }
 
@@ -167,11 +161,16 @@ export function insertAfter(newNode: Element, refNode: Element) {
  * @param parent The node that should contain the other node.
  * @param descendant The node to test presence of.
  * @returns Whether the parent node contains the descendant node.
+ * @deprecated Use native 'contains' DOM method.
  */
 export function containsNode(parent: Node, descendant: Node): boolean {
-  return !!(
-      parent.compareDocumentPosition(descendant) &
-      NodeType.DOCUMENT_POSITION_CONTAINED_BY);
+  deprecation.warn(
+    'Blockly.utils.dom.containsNode',
+    'version 10',
+    'version 11',
+    'Use native "contains" DOM method',
+  );
+  return parent.contains(descendant);
 }
 
 /**
@@ -183,7 +182,9 @@ export function containsNode(parent: Node, descendant: Node): boolean {
  * @param transform The value of the CSS `transform` property.
  */
 export function setCssTransform(
-    element: HTMLElement|SVGElement, transform: string) {
+  element: HTMLElement | SVGElement,
+  transform: string,
+) {
   element.style['transform'] = transform;
   element.style['-webkit-transform' as any] = transform;
 }
@@ -257,10 +258,17 @@ export function getTextWidth(textElement: SVGTextElement): number {
  * @returns Width of element.
  */
 export function getFastTextWidth(
-    textElement: SVGTextElement, fontSize: number, fontWeight: string,
-    fontFamily: string): number {
+  textElement: SVGTextElement,
+  fontSize: number,
+  fontWeight: string,
+  fontFamily: string,
+): number {
   return getFastTextWidthWithSizeString(
-      textElement, fontSize + 'pt', fontWeight, fontFamily);
+    textElement,
+    fontSize + 'pt',
+    fontWeight,
+    fontFamily,
+  );
 }
 
 /**
@@ -277,8 +285,11 @@ export function getFastTextWidth(
  * @returns Width of element.
  */
 export function getFastTextWidthWithSizeString(
-    textElement: SVGTextElement, fontSize: string, fontWeight: string,
-    fontFamily: string): number {
+  textElement: SVGTextElement,
+  fontSize: string,
+  fontWeight: string,
+  fontFamily: string,
+): number {
   const text = textElement.textContent;
   const key = text + '\n' + textElement.className.baseVal;
   let width;
@@ -293,7 +304,7 @@ export function getFastTextWidthWithSizeString(
 
   if (!canvasContext) {
     // Inject the canvas element used for computing text widths.
-    const computeCanvas = (document.createElement('canvas'));
+    const computeCanvas = document.createElement('canvas');
     computeCanvas.className = 'blocklyComputeCanvas';
     document.body.appendChild(computeCanvas);
 
@@ -329,17 +340,20 @@ export function getFastTextWidthWithSizeString(
  * @returns Font measurements.
  */
 export function measureFontMetrics(
-    text: string, fontSize: string, fontWeight: string,
-    fontFamily: string): {height: number, baseline: number} {
-  const span = (document.createElement('span'));
+  text: string,
+  fontSize: string,
+  fontWeight: string,
+  fontFamily: string,
+): {height: number; baseline: number} {
+  const span = document.createElement('span');
   span.style.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
   span.textContent = text;
 
-  const block = (document.createElement('div'));
+  const block = document.createElement('div');
   block.style.width = '1px';
   block.style.height = '0';
 
-  const div = (document.createElement('div'));
+  const div = document.createElement('div');
   div.setAttribute('style', 'position: fixed; top: 0; left: 0; display: flex;');
   div.appendChild(span);
   div.appendChild(block);

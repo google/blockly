@@ -4,14 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Methods for creating parts of SVG path strings.  See
- *
- * @namespace Blockly.utils.svgPaths
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.svgPaths');
-
 
 /**
  * Create a string representing the given x, y pair.  It does not matter whether
@@ -131,6 +125,10 @@ export function lineOnAxis(command: string, val: number): string {
  * @returns A string of the format 'command radius radius flags point'
  */
 export function arc(
-    command: string, flags: string, radius: number, point: string): string {
+  command: string,
+  flags: string,
+  radius: number,
+  point: string,
+): string {
   return command + ' ' + radius + ' ' + radius + ' ' + flags + point;
 }

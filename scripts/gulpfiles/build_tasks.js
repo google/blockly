@@ -16,12 +16,8 @@ gulp.sourcemaps = require('gulp-sourcemaps');
 const path = require('path');
 const fs = require('fs');
 const {exec, execSync} = require('child_process');
-const through2 = require('through2');
 
-const clangFormat = require('clang-format');
-const clangFormatter = require('gulp-clang-format');
 const closureCompiler = require('google-closure-compiler').gulp();
-const closureDeps = require('google-closure-deps');
 const argv = require('yargs').argv;
 const {rimraf} = require('rimraf');
 
@@ -79,12 +75,15 @@ const NAMESPACE_PROPERTY = '__namespace__';
  *   chunk.
  * - .exports: an expression evaluating to the exports/Module object
  *   of module that is the chunk's entrypoint / top level module.
- * - .reexport: if running in a browser, save the chunk's exports
- *   object (or a single export of it; see reexportOnly, below) at
- *   this location in the global namespace.
- * - .reexportOnly: if reexporting and this property is set,
- *   save only the correspondingly-named export.  Otherwise
- *   save the whole export object.
+ * - .scriptExport: When the chunk is loaded as a script (e.g., via a
+ *   <SCRIPT> tag), the chunk's exports object will be made available
+ *   at the specified location (which must be a variable name or the
+ *   name of a property on an already-existing object) in the global
+ *   namespace.
+ * - .scriptNamedExports: A map of {location: namedExport} pairs; when
+ *   loaded as a script, the specified named exports will be saved at
+ *   the specified locations (which again must be global variables or
+ *   properties on already-existing objects).  Optional.
  *
  * The function getChunkOptions will, after running
  * closure-calculate-chunks, update each chunk to add the following
@@ -101,48 +100,48 @@ const chunks = [
     name: 'blockly',
     entry: path.join(TSC_OUTPUT_DIR, 'core', 'main.js'),
     exports: 'module$build$src$core$blockly',
-    reexport: 'Blockly',
+    scriptExport: 'Blockly',
   },
   {
     name: 'blocks',
     entry: path.join(TSC_OUTPUT_DIR, 'blocks', 'blocks.js'),
-    exports: 'module$exports$Blockly$libraryBlocks',
-    reexport: 'Blockly.libraryBlocks',
+    exports: 'module$build$src$blocks$blocks',
+    scriptExport: 'Blockly.libraryBlocks',
   },
   {
     name: 'javascript',
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'javascript', 'all.js'),
-    exports: 'module$exports$Blockly$JavaScript',
-    reexport: 'Blockly.JavaScript',
-    reexportOnly: 'javascriptGenerator',
+    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'javascript.js'),
+    exports: 'module$build$src$generators$javascript',
+    scriptExport: 'javascript',
+    scriptNamedExports: {'Blockly.JavaScript': 'javascriptGenerator'},
   },
   {
     name: 'python',
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'python', 'all.js'),
-    exports: 'module$exports$Blockly$Python',
-    reexport: 'Blockly.Python',
-    reexportOnly: 'pythonGenerator',
+    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'python.js'),
+    exports: 'module$build$src$generators$python',
+    scriptExport: 'python',
+    scriptNamedExports: {'Blockly.Python': 'pythonGenerator'},
   },
   {
     name: 'php',
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'php', 'all.js'),
-    exports: 'module$exports$Blockly$PHP',
-    reexport: 'Blockly.PHP',
-    reexportOnly: 'phpGenerator',
+    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'php.js'),
+    exports: 'module$build$src$generators$php',
+    scriptExport: 'php',
+    scriptNamedExports: {'Blockly.PHP': 'phpGenerator'},
   },
   {
     name: 'lua',
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'lua', 'all.js'),
-    exports: 'module$exports$Blockly$Lua',
-    reexport: 'Blockly.Lua',
-    reexportOnly: 'luaGenerator',
+    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'lua.js'),
+    exports: 'module$build$src$generators$lua',
+    scriptExport: 'lua',
+    scriptNamedExports: {'Blockly.Lua': 'luaGenerator'},
   },
   {
     name: 'dart',
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'dart', 'all.js'),
-    exports: 'module$exports$Blockly$Dart',
-    reexport: 'Blockly.Dart',
-    reexportOnly: 'dartGenerator',
+    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'dart.js'),
+    exports: 'module$build$src$generators$dart',
+    scriptExport: 'dart',
+    scriptNamedExports: {'Blockly.Dart': 'dartGenerator'},
   }
 ];
 
@@ -187,8 +186,6 @@ const JSCOMP_ERROR = [
   'conformanceViolations',
   'const',
   'constantProperty',
-  'deprecated',
-  'deprecatedAnnotations',
   'duplicateMessage',
   'es5Strict',
   'externsValidation',
@@ -235,6 +232,8 @@ const JSCOMP_ERROR = [
  * it's generally sufficient to remove them from JSCOMP_ERROR.
  */
 const JSCOMP_WARNING = [
+  'deprecated',
+  'deprecatedAnnotations',
 ];
 
 /**
@@ -294,8 +293,8 @@ function buildJavaScript(done) {
 }
 
 /**
- * This task updates DEPS_FILE (deps.js), used by
- * bootstrap.js when loading Blockly in uncompiled mode.
+ * This task updates DEPS_FILE (deps.js), used by the debug module
+ * loader (via bootstrap.js) when loading Blockly in uncompiled mode.
  *
  * Also updates TEST_DEPS_FILE (deps.mocha.js), used by the mocha test
  * suite.
@@ -445,7 +444,7 @@ function chunkWrapper(chunk) {
   // JavaScript expressions for the amd, cjs and browser dependencies.
   let amdDepsExpr = '';
   let cjsDepsExpr = '';
-  let browserDepsExpr = '';
+  let scriptDepsExpr = '';
   // Arguments for the factory function.
   let factoryArgs = '';
   // Expression to get or create the namespace object.
@@ -456,25 +455,22 @@ function chunkWrapper(chunk) {
         JSON.stringify(`./${chunk.parent.name}${COMPILED_SUFFIX}.js`);
     amdDepsExpr = parentFilename;
     cjsDepsExpr = `require(${parentFilename})`;
-    browserDepsExpr = `root.${chunk.parent.reexport}`;
+    scriptDepsExpr = `root.${chunk.parent.scriptExport}`;
     factoryArgs = '__parent__';
     namespaceExpr = `${factoryArgs}.${NAMESPACE_PROPERTY}`;
   }
 
-  // Code to assign the result of the factory function to the desired
-  // export location when running in a browser.  When
-  // chunk.reexportOnly is set, this additionally does two other
-  // things:
-  // - It ensures that only the desired property of the exports object
-  //   is assigned to the specified reexport location.
-  // - It ensures that the namesspace object is accessible via the
-  //   selected sub-object, so that any dependent modules can obtain
-  //   it.
-  const browserExportStatements = chunk.reexportOnly ?
-      `root.${chunk.reexport} = factoryExports.${chunk.reexportOnly};\n` +
-      `    root.${chunk.reexport}.${NAMESPACE_PROPERTY} = ` +
-      `factoryExports.${NAMESPACE_PROPERTY};` :
-      `root.${chunk.reexport} = factoryExports;`;
+  // Code to save the chunk's exports object at chunk.scriptExport and
+  // additionally save individual named exports as directed by
+  // chunk.scriptNamedExports.
+  const scriptExportStatements = [
+    `root.${chunk.scriptExport} = factory(${scriptDepsExpr});`,
+  ];
+  for (var location in chunk.scriptNamedExports) {
+    const namedExport = chunk.scriptNamedExports[location];
+    scriptExportStatements.push( 
+      `root.${location} = root.${chunk.scriptExport}.${namedExport};`);
+  }
 
   // Note that when loading in a browser the base of the exported path
   // (e.g. Blockly.blocks.all - see issue #5932) might not exist
@@ -489,9 +485,8 @@ function chunkWrapper(chunk) {
     define([${amdDepsExpr}], factory);
   } else if (typeof exports === 'object') { // Node.js
     module.exports = factory(${cjsDepsExpr});
-  } else { // Browser
-    var factoryExports = factory(${browserDepsExpr});
-    ${browserExportStatements}
+  } else { // Script
+    ${scriptExportStatements.join('\n    ')}
   }
 }(this, function(${factoryArgs}) {
 var ${NAMESPACE_VARIABLE}=${namespaceExpr};
@@ -564,7 +559,7 @@ function getChunkOptions() {
     // Figure out which chunk this is by looking for one of the
     // known chunk entrypoints in chunkFiles.  N.B.: O(n*m).  :-(
     const chunk = chunks.find(
-        chunk => chunkFiles.find(f => f.endsWith('/' + chunk.entry)));
+        chunk => chunkFiles.find(f => f.endsWith(path.sep + chunk.entry)));
     if (!chunk) throw new Error('Unable to identify chunk');
 
     // Replace nicknames with the names we chose.
@@ -717,19 +712,6 @@ function cleanBuildDir() {
   return rimraf(BUILD_DIR);
 }
 
-/**
- * Runs clang format on all files in the core directory.
- */
-function format() {
-  return gulp.src([
-    'core/**/*.js', 'core/**/*.ts',
-    'blocks/**/*.js', 'blocks/**/*.ts',
-    '.eslintrc.js'
-  ], {base: '.'})
-      .pipe(clangFormatter.format('file', clangFormat))
-      .pipe(gulp.dest('.'));
-}
-
 // Main sequence targets.  Each should invoke any immediate prerequisite(s).
 exports.cleanBuildDir = cleanBuildDir;
 exports.langfiles = buildLangfiles;  // Build build/msg/*.js from msg/json/*.
@@ -739,7 +721,6 @@ exports.minify = gulp.series(exports.deps, buildCompiled);
 exports.build = gulp.parallel(exports.minify, exports.langfiles);
 
 // Manually-invokable targets, with prerequisites where required.
-exports.format = format;
 exports.messages = generateMessages;  // Generate msg/json/en.json et al.
 exports.buildAdvancedCompilationTest =
     gulp.series(exports.deps, buildAdvancedCompilationTest);

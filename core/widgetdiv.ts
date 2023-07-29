@@ -4,28 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * A div that floats on top of Blockly.  This singleton contains
- *     temporary HTML UI widgets that the user is currently interacting with.
- *     E.g. text input areas, colour pickers, context menus.
- *
- * @namespace Blockly.WidgetDiv
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.WidgetDiv');
 
 import * as common from './common.js';
 import * as dom from './utils/dom.js';
+import type {Field} from './field.js';
 import type {Rect} from './utils/rect.js';
 import type {Size} from './utils/size.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-
 
 /** The object currently using this container. */
 let owner: unknown = null;
 
 /** Optional cleanup function set by whichever object uses the widget. */
-let dispose: (() => void)|null = null;
+let dispose: (() => void) | null = null;
 
 /** A class name representing the current owner's workspace renderer. */
 let rendererClassName = '';
@@ -34,14 +27,14 @@ let rendererClassName = '';
 let themeClassName = '';
 
 /** The HTML container for popup overlays (e.g. editor widgets). */
-let containerDiv: HTMLDivElement|null;
+let containerDiv: HTMLDivElement | null;
 
 /**
  * Returns the HTML container for editor widgets.
  *
  * @returns The editor widget container.
  */
-export function getDiv(): HTMLDivElement|null {
+export function getDiv(): HTMLDivElement | null {
   return containerDiv;
 }
 
@@ -51,7 +44,7 @@ export function getDiv(): HTMLDivElement|null {
  * @param newDiv The new value for the DIV field.
  * @internal
  */
-export function testOnly_setDiv(newDiv: HTMLDivElement|null) {
+export function testOnly_setDiv(newDiv: HTMLDivElement | null) {
   containerDiv = newDiv;
 }
 
@@ -60,7 +53,7 @@ export function testOnly_setDiv(newDiv: HTMLDivElement|null) {
  */
 export function createDom() {
   if (containerDiv) {
-    return;  // Already created.
+    return; // Already created.
   }
 
   containerDiv = document.createElement('div') as HTMLDivElement;
@@ -176,7 +169,11 @@ function positionInternal(x: number, y: number, height: number) {
  * @internal
  */
 export function positionWithAnchor(
-    viewportBBox: Rect, anchorBBox: Rect, widgetSize: Size, rtl: boolean) {
+  viewportBBox: Rect,
+  anchorBBox: Rect,
+  widgetSize: Size,
+  rtl: boolean,
+) {
   const y = calculateY(viewportBBox, anchorBBox, widgetSize);
   const x = calculateX(viewportBBox, anchorBBox, widgetSize, rtl);
 
@@ -201,8 +198,11 @@ export function positionWithAnchor(
  *     window coordinates.
  */
 function calculateX(
-    viewportBBox: Rect, anchorBBox: Rect, widgetSize: Size,
-    rtl: boolean): number {
+  viewportBBox: Rect,
+  anchorBBox: Rect,
+  widgetSize: Size,
+  rtl: boolean,
+): number {
   if (rtl) {
     // Try to align the right side of the field and the right side of widget.
     const widgetLeft = anchorBBox.right - widgetSize.width;
@@ -232,7 +232,10 @@ function calculateX(
  *     window coordinates.
  */
 function calculateY(
-    viewportBBox: Rect, anchorBBox: Rect, widgetSize: Size): number {
+  viewportBBox: Rect,
+  anchorBBox: Rect,
+  widgetSize: Size,
+): number {
   // Flip the widget vertically if off the bottom.
   // The widget could go off the top of the window, but it would also go off
   // the bottom.  The window is just too small.
@@ -242,5 +245,27 @@ function calculateY(
   } else {
     // The top of the widget is at the bottom of the field.
     return anchorBBox.bottom;
+  }
+}
+
+/**
+ * Determine if the owner is a field for purposes of repositioning.
+ * We can't simply check `instanceof Field` as that would introduce a circular
+ * dependency.
+ */
+function isRepositionable(item: any): item is Field {
+  return !!item?.repositionForWindowResize;
+}
+
+/**
+ * Reposition the widget div if the owner of it says to.
+ * If the owner isn't a field, just give up and hide it.
+ */
+export function repositionForWindowResize(): void {
+  if (!isRepositionable(owner) || !owner.repositionForWindowResize()) {
+    // If the owner is not a Field, or if the owner returns false from the
+    // reposition method, we should hide the widget div. Otherwise, we'll assume
+    // the owner handled any needed resize.
+    hide();
   }
 }

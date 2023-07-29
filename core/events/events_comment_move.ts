@@ -12,7 +12,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.CommentMove');
 
-import * as deprecation from '../utils/deprecation.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 import type {WorkspaceComment} from '../workspace_comment.js';
@@ -20,7 +19,6 @@ import type {WorkspaceComment} from '../workspace_comment.js';
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
-
 
 /**
  * Notifies listeners that a workspace comment has moved.
@@ -46,7 +44,7 @@ export class CommentMove extends CommentBase {
     super(opt_comment);
 
     if (!opt_comment) {
-      return;  // Blank event to be populated by fromJson.
+      return; // Blank event to be populated by fromJson.
     }
 
     this.comment_ = opt_comment;
@@ -60,13 +58,15 @@ export class CommentMove extends CommentBase {
   recordNew() {
     if (this.newCoordinate_) {
       throw Error(
-          'Tried to record the new position of a comment on the ' +
-          'same event twice.');
+        'Tried to record the new position of a comment on the ' +
+          'same event twice.',
+      );
     }
     if (!this.comment_) {
       throw new Error(
-          'The comment is undefined. Pass a comment to ' +
-          'the constructor if you want to use the record functionality');
+        'The comment is undefined. Pass a comment to ' +
+          'the constructor if you want to use the record functionality',
+      );
     }
     this.newCoordinate_ = this.comment_.getRelativeToSurfaceXY();
   }
@@ -91,35 +91,24 @@ export class CommentMove extends CommentBase {
     const json = super.toJson() as CommentMoveJson;
     if (!this.oldCoordinate_) {
       throw new Error(
-          'The old comment position is undefined. Either pass a comment to ' +
-          'the constructor, or call fromJson');
+        'The old comment position is undefined. Either pass a comment to ' +
+          'the constructor, or call fromJson',
+      );
     }
     if (!this.newCoordinate_) {
       throw new Error(
-          'The new comment position is undefined. Either call recordNew, or ' +
-          'call fromJson');
+        'The new comment position is undefined. Either call recordNew, or ' +
+          'call fromJson',
+      );
     }
-    json['oldCoordinate'] = `${Math.round(this.oldCoordinate_.x)}, ` +
-        `${Math.round(this.oldCoordinate_.y)}`;
-    json['newCoordinate'] = Math.round(this.newCoordinate_.x) + ',' +
-        Math.round(this.newCoordinate_.y);
+    json['oldCoordinate'] =
+      `${Math.round(this.oldCoordinate_.x)}, ` +
+      `${Math.round(this.oldCoordinate_.y)}`;
+    json['newCoordinate'] =
+      Math.round(this.newCoordinate_.x) +
+      ',' +
+      Math.round(this.newCoordinate_.y);
     return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: CommentMoveJson) {
-    deprecation.warn(
-        'Blockly.Events.CommentMove.prototype.fromJson', 'version 9',
-        'version 10', 'Blockly.Events.fromJson');
-    super.fromJson(json);
-    let xy = json['oldCoordinate'].split(',');
-    this.oldCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
-    xy = json['newCoordinate'].split(',');
-    this.newCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
   }
 
   /**
@@ -131,11 +120,16 @@ export class CommentMove extends CommentBase {
    *     parameters to static methods in superclasses.
    * @internal
    */
-  static fromJson(json: CommentMoveJson, workspace: Workspace, event?: any):
-      CommentMove {
-    const newEvent =
-        super.fromJson(json, workspace, event ?? new CommentMove()) as
-        CommentMove;
+  static fromJson(
+    json: CommentMoveJson,
+    workspace: Workspace,
+    event?: any,
+  ): CommentMove {
+    const newEvent = super.fromJson(
+      json,
+      workspace,
+      event ?? new CommentMove(),
+    ) as CommentMove;
     let xy = json['oldCoordinate'].split(',');
     newEvent.oldCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
     xy = json['newCoordinate'].split(',');
@@ -161,21 +155,23 @@ export class CommentMove extends CommentBase {
     const workspace = this.getEventWorkspace_();
     if (!this.commentId) {
       throw new Error(
-          'The comment ID is undefined. Either pass a comment to ' +
-          'the constructor, or call fromJson');
+        'The comment ID is undefined. Either pass a comment to ' +
+          'the constructor, or call fromJson',
+      );
     }
     const comment = workspace.getCommentById(this.commentId);
     if (!comment) {
-      console.warn('Can\'t move non-existent comment: ' + this.commentId);
+      console.warn("Can't move non-existent comment: " + this.commentId);
       return;
     }
 
     const target = forward ? this.newCoordinate_ : this.oldCoordinate_;
     if (!target) {
       throw new Error(
-          'Either oldCoordinate_ or newCoordinate_ is undefined. ' +
+        'Either oldCoordinate_ or newCoordinate_ is undefined. ' +
           'Either pass a comment to the constructor and call recordNew, ' +
-          'or call fromJson');
+          'or call fromJson',
+      );
     }
     // TODO: Check if the comment is being dragged, and give up if so.
     const current = comment.getRelativeToSurfaceXY();

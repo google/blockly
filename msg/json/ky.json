@@ -57,10 +57,13 @@
 	"CONTROLS_IF_MSG_ELSE": "башка",
 	"LOGIC_OPERATION_OR": "же",
 	"LOGIC_NEGATE_TITLE": " %1 эмес",
+	"LOGIC_BOOLEAN_TRUE": "чындык",
+	"LOGIC_BOOLEAN_FALSE": "жаңылыш",
 	"LOGIC_TERNARY_CONDITION": "текшерүү",
 	"LOGIC_TERNARY_IF_TRUE": "туура болсо",
 	"LOGIC_TERNARY_IF_FALSE": "ката болсо",
 	"MATH_TRIG_HELPURL": "https://ky.wikipedia.org/wiki/Тригонометриялык_функциялар",
 	"TEXT_ISEMPTY_TITLE": "%1 бош",
-	"DIALOG_OK": "OK"
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Жокко чыгаруу"
 }

@@ -14,7 +14,7 @@
  * undeclared dependencies on them.
  */
 
-(function() {
+(function () {
   const info = window.bootstrapInfo;
 
   if (!info.compressed) {
@@ -25,22 +25,19 @@
   }
 
   // Create global names for named and destructured imports.
-  for (const varName in info.namedImports) {
-    const id = info.namedImports[varName];
-    const value = info.compressed ? get(id) : goog.module.get(id);
-    if (value) {
-      window[varName] = value;
+  for (const module of info.modules) {
+    const exports = info.compressed
+      ? get(module.scriptExport)
+      : goog.module.get(module.id);
+    if (module.importAt) {
+      window[module.importAt] = exports;
     }
-  }
-  for (const varName in info.destructuredImports) {
-    const id = info.destructuredImports[varName];
-    const value = info.compressed ? get(id) : goog.module.get(id)[varName];
-    if (value) {
-      window[varName] = value;
+    for (const location in module.destructure) {
+      window[location] = exports[module.destructure[location]];
     }
   }
 
-  return;  // All done.  Only helper functions after this point.
+  return; // All done.  Only helper functions after this point.
 
   /**
    * Get the object referred to by a doted-itentifier path

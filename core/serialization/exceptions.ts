@@ -4,17 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Contains custom errors thrown by the serialization system.
- *
- * @namespace Blockly.serialization.exceptions
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.exceptions');
 
 import type {Block} from '../block.js';
 import type {State} from './blocks.js';
-
 
 export class DeserializationError extends Error {}
 
@@ -45,7 +39,11 @@ export class MissingConnection extends DeserializationError {
    * @param state The state object containing the bad connection.
    * @internal
    */
-  constructor(connection: string, public block: Block, public state: State) {
+  constructor(
+    connection: string,
+    public block: Block,
+    public state: State,
+  ) {
     super(`The block ${block.toDevString()} is missing a(n) ${connection}
 connection`);
   }
@@ -65,8 +63,11 @@ export class BadConnectionCheck extends DeserializationError {
    * @internal
    */
   constructor(
-      reason: string, childConnection: string, public childBlock: Block,
-      public childState: State) {
+    reason: string,
+    childConnection: string,
+    public childBlock: Block,
+    public childState: State,
+  ) {
     super(`The block ${childBlock.toDevString()} could not connect its
 ${childConnection} to its parent, because: ${reason}`);
   }
@@ -87,5 +88,26 @@ export class RealChildOfShadow extends DeserializationError {
     super(`Encountered a real block which is defined as a child of a shadow
 block. It is an invariant of Blockly that shadow blocks only have shadow
 children`);
+  }
+}
+
+export class UnregisteredIcon extends DeserializationError {
+  /**
+   * @param iconType The type of the unregistered icon we are attempting to
+   *     deserialize.
+   * @param block The block we are attempting to add the unregistered icon to.
+   * @param state The state object representing the block.
+   */
+  constructor(
+    iconType: string,
+    public block: Block,
+    public state: State,
+  ) {
+    super(
+      `Cannot add an icon of type '${iconType}' to the block ` +
+        `${block.toDevString()}, because there is no icon registered with ` +
+        `type '${iconType}'. Make sure that all of your icons have been ` +
+        `registered.`,
+    );
   }
 }

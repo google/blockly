@@ -4,21 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Utilities for element styles.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- *
- * @namespace Blockly.utils.style
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.style');
 
-import * as deprecation from './deprecation.js';
 import {Coordinate} from './coordinate.js';
 import {Rect} from './rect.js';
 import {Size} from './size.js';
-
 
 /**
  * Gets the height and width of an element.
@@ -88,30 +79,10 @@ export function getComputedStyle(element: Element, property: string): string {
   const styles = window.getComputedStyle(element);
   // element.style[..] is undefined for browser specific styles
   // as 'filter'.
-  return (styles as AnyDuringMigration)[property] ||
-      styles.getPropertyValue(property);
-}
-
-/**
- * Gets the cascaded style value of a node, or null if the value cannot be
- * computed (only Internet Explorer can do this).
- *
- * Copied from Closure's goog.style.getCascadedStyle
- *
- * @param element Element to get style of.
- * @param style Property to get (camel-case).
- * @returns Style value.
- * @deprecated No longer provided by Blockly.
- */
-export function getCascadedStyle(element: Element, style: string): string {
-  deprecation.warn(
-      'Blockly.utils.style.getCascadedStyle', 'version 9', 'version 10');
-  // AnyDuringMigration because:  Property 'currentStyle' does not exist on type
-  // 'Element'. AnyDuringMigration because:  Property 'currentStyle' does not
-  // exist on type 'Element'.
-  return (element as AnyDuringMigration).currentStyle ?
-      (element as AnyDuringMigration).currentStyle[style] :
-      '' as string;
+  return (
+    (styles as AnyDuringMigration)[property] ||
+    styles.getPropertyValue(property)
+  );
 }
 
 /**
@@ -129,8 +100,9 @@ export function getPageOffset(el: Element): Coordinate {
   // of element since getBoundingClientRect returns relative coordinates to
   // the viewport.
   const scrollCoord = new Coordinate(
-      window.pageXOffset || documentElement.scrollLeft,
-      window.pageYOffset || documentElement.scrollTop);
+    window.pageXOffset || documentElement.scrollLeft,
+    window.pageYOffset || documentElement.scrollTop,
+  );
   pos.x = box.left + scrollCoord.x;
   pos.y = box.top + scrollCoord.y;
 
@@ -181,7 +153,10 @@ export function getBorderBox(element: Element): Rect {
  *     Defaults to false.
  */
 export function scrollIntoContainerView(
-    element: Element, container: Element, opt_center?: boolean) {
+  element: Element,
+  container: Element,
+  opt_center?: boolean,
+) {
   const offset = getContainerOffsetToScrollInto(element, container, opt_center);
   container.scrollLeft = offset.x;
   container.scrollTop = offset.y;
@@ -202,7 +177,10 @@ export function scrollIntoContainerView(
  * @returns The new scroll position of the container.
  */
 export function getContainerOffsetToScrollInto(
-    element: Element, container: Element, opt_center?: boolean): Coordinate {
+  element: Element,
+  container: Element,
+  opt_center?: boolean,
+): Coordinate {
   // Absolute position of the element's border's top left corner.
   const elementPos = getPageOffset(element);
   // Absolute position of the container's border's top left corner.

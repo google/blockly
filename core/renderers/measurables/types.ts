@@ -10,38 +10,37 @@ goog.declareModuleId('Blockly.blockRendering.Types');
 import type {Measurable} from './base.js';
 import type {Row} from './row.js';
 
-
 /**
  * Types of rendering elements.
  */
 class TypesContainer {
-  [index: string]: number|Function;
+  [index: string]: number | Function;
 
-  NONE = 0;                       // None
-  FIELD = 1 << 0;                 // Field.
-  HAT = 1 << 1;                   // Hat.
-  ICON = 1 << 2;                  // Icon.
-  SPACER = 1 << 3;                // Spacer.
-  BETWEEN_ROW_SPACER = 1 << 4;    // Between Row Spacer.
-  IN_ROW_SPACER = 1 << 5;         // In Row Spacer.
-  EXTERNAL_VALUE_INPUT = 1 << 6;  // External Value Input.
-  INPUT = 1 << 7;                 // Input.
-  INLINE_INPUT = 1 << 8;          // Inline Input.
-  STATEMENT_INPUT = 1 << 9;       // Statement Input.
-  CONNECTION = 1 << 10;           // Connection.
-  PREVIOUS_CONNECTION = 1 << 11;  // Previous Connection.
-  NEXT_CONNECTION = 1 << 12;      // Next Connection.
-  OUTPUT_CONNECTION = 1 << 13;    // Output Connection.
-  CORNER = 1 << 14;               // Corner.
-  LEFT_SQUARE_CORNER = 1 << 15;   // Square Corner.
-  LEFT_ROUND_CORNER = 1 << 16;    // Round Corner.
-  RIGHT_SQUARE_CORNER = 1 << 17;  // Right Square Corner.
-  RIGHT_ROUND_CORNER = 1 << 18;   // Right Round Corner.
-  JAGGED_EDGE = 1 << 19;          // Jagged Edge.
-  ROW = 1 << 20;                  // Row.
-  TOP_ROW = 1 << 21;              // Top Row.
-  BOTTOM_ROW = 1 << 22;           // Bottom Row.
-  INPUT_ROW = 1 << 23;            // Input Row.
+  NONE = 0; // None
+  FIELD = 1 << 0; // Field.
+  HAT = 1 << 1; // Hat.
+  ICON = 1 << 2; // Icon.
+  SPACER = 1 << 3; // Spacer.
+  BETWEEN_ROW_SPACER = 1 << 4; // Between Row Spacer.
+  IN_ROW_SPACER = 1 << 5; // In Row Spacer.
+  EXTERNAL_VALUE_INPUT = 1 << 6; // External Value Input.
+  INPUT = 1 << 7; // Input.
+  INLINE_INPUT = 1 << 8; // Inline Input.
+  STATEMENT_INPUT = 1 << 9; // Statement Input.
+  CONNECTION = 1 << 10; // Connection.
+  PREVIOUS_CONNECTION = 1 << 11; // Previous Connection.
+  NEXT_CONNECTION = 1 << 12; // Next Connection.
+  OUTPUT_CONNECTION = 1 << 13; // Output Connection.
+  CORNER = 1 << 14; // Corner.
+  LEFT_SQUARE_CORNER = 1 << 15; // Square Corner.
+  LEFT_ROUND_CORNER = 1 << 16; // Round Corner.
+  RIGHT_SQUARE_CORNER = 1 << 17; // Right Square Corner.
+  RIGHT_ROUND_CORNER = 1 << 18; // Right Round Corner.
+  JAGGED_EDGE = 1 << 19; // Jagged Edge.
+  ROW = 1 << 20; // Row.
+  TOP_ROW = 1 << 21; // Top Row.
+  BOTTOM_ROW = 1 << 22; // Bottom Row.
+  INPUT_ROW = 1 << 23; // Input Row.
 
   /**
    * A Left Corner Union Type.
@@ -111,7 +110,7 @@ class TypesContainer {
    * @param elem The element to check.
    * @returns 1 if the object stores information about a spacer.
    */
-  isSpacer(elem: Measurable|Row): number {
+  isSpacer(elem: Measurable | Row): number {
     return elem.type & this.SPACER;
   }
 

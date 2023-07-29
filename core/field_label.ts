@@ -17,20 +17,22 @@ import * as dom from './utils/dom.js';
 import {Field, FieldConfig} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
-import type {Sentinel} from './utils/sentinel.js';
 
 /**
  * Class for a non-editable, non-serializable text field.
  */
 export class FieldLabel extends Field<string> {
   /** The HTML class name to use for this field. */
-  private class_: string|null = null;
+  private class: string | null = null;
 
   /**
    * Editable fields usually show some sort of UI indicating they are
    * editable. This field should not.
    */
   override EDITABLE = false;
+
+  /** Text labels should not truncate. */
+  override maxDisplayLength = Infinity;
 
   /**
    * @param value The initial value of the field. Should cast to a string.
@@ -45,21 +47,24 @@ export class FieldLabel extends Field<string> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|Sentinel, textClass?: string, config?: FieldLabelConfig) {
+    value?: string | typeof Field.SKIP_SETUP,
+    textClass?: string,
+    config?: FieldLabelConfig,
+  ) {
     super(Field.SKIP_SETUP);
 
-    if (Field.isSentinel(value)) return;
+    if (value === Field.SKIP_SETUP) return;
     if (config) {
       this.configure_(config);
     } else {
-      this.class_ = textClass || null;
+      this.class = textClass || null;
     }
     this.setValue(value);
   }
 
   protected override configure_(config: FieldLabelConfig) {
     super.configure_(config);
-    if (config.class) this.class_ = config.class;
+    if (config.class) this.class = config.class;
   }
 
   /**
@@ -69,8 +74,8 @@ export class FieldLabel extends Field<string> {
    */
   override initView() {
     this.createTextElement_();
-    if (this.class_) {
-      dom.addClass(this.getTextElement(), this.class_);
+    if (this.class) {
+      dom.addClass(this.getTextElement(), this.class);
     }
   }
 
@@ -80,8 +85,9 @@ export class FieldLabel extends Field<string> {
    * @param newValue The input value.
    * @returns A valid string, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: AnyDuringMigration): string
-      |null {
+  protected override doClassValidation_(
+    newValue?: AnyDuringMigration,
+  ): string | null {
     if (newValue === null || newValue === undefined) {
       return null;
     }
@@ -93,16 +99,16 @@ export class FieldLabel extends Field<string> {
    *
    * @param cssClass The new CSS class name, or null to remove.
    */
-  setClass(cssClass: string|null) {
+  setClass(cssClass: string | null) {
     if (this.textElement_) {
-      if (this.class_) {
-        dom.removeClass(this.textElement_, this.class_);
+      if (this.class) {
+        dom.removeClass(this.textElement_, this.class);
       }
       if (cssClass) {
         dom.addClass(this.textElement_, cssClass);
       }
     }
-    this.class_ = cssClass;
+    this.class = cssClass;
   }
 
   /**
@@ -135,7 +141,6 @@ export interface FieldLabelConfig extends FieldConfig {
   class?: string;
 }
 // clang-format on
-
 
 /**
  * fromJson config options for the label field.

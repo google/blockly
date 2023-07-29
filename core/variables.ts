@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Utility functions for handling variables.
- *
- * @namespace Blockly.Variables
- */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Variables');
 
@@ -21,7 +16,6 @@ import * as utilsXml from './utils/xml.js';
 import {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -75,7 +69,7 @@ export function allUsedVarModels(ws: Workspace): VariableModel[] {
 export function allDeveloperVariables(workspace: Workspace): string[] {
   const blocks = workspace.getAllBlocks(false);
   const variables = new Set<string>();
-  for (let i = 0, block; block = blocks[i]; i++) {
+  for (let i = 0, block; (block = blocks[i]); i++) {
     const getDeveloperVariables = block.getDeveloperVariables;
     if (getDeveloperVariables) {
       const devVars = getDeveloperVariables();
@@ -101,7 +95,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
   button.setAttribute('text', '%{BKY_NEW_VARIABLE}');
   button.setAttribute('callbackKey', 'CREATE_VARIABLE');
 
-  workspace.registerButtonCallback('CREATE_VARIABLE', function(button) {
+  workspace.registerButtonCallback('CREATE_VARIABLE', function (button) {
     createVariableButtonHandler(button.getTargetWorkspace());
   });
 
@@ -138,18 +132,19 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
       block.setAttribute('gap', Blocks['variables_get'] ? '20' : '8');
       block.appendChild(generateVariableFieldDom(mostRecentVariable));
       const value = utilsXml.textToDom(
-          '<value name="DELTA">' +
+        '<value name="DELTA">' +
           '<shadow type="math_number">' +
           '<field name="NUM">1</field>' +
           '</shadow>' +
-          '</value>');
+          '</value>',
+      );
       block.appendChild(value);
       xmlList.push(block);
     }
 
     if (Blocks['variables_get']) {
       variableModelList.sort(VariableModel.compareByName);
-      for (let i = 0, variable; variable = variableModelList[i]; i++) {
+      for (let i = 0, variable; (variable = variableModelList[i]); i++) {
         const block = utilsXml.createElement('block');
         block.setAttribute('type', 'variables_get');
         block.setAttribute('gap', '8');
@@ -181,7 +176,9 @@ export function generateUniqueName(workspace: Workspace): string {
  */
 function generateUniqueNameInternal(workspace: Workspace): string {
   return generateUniqueNameFromOptions(
-      VAR_LETTER_OPTIONS.charAt(0), workspace.getAllVariableNames());
+    VAR_LETTER_OPTIONS.charAt(0),
+    workspace.getAllVariableNames(),
+  );
 }
 
 /**
@@ -194,7 +191,9 @@ function generateUniqueNameInternal(workspace: Workspace): string {
  * @returns A unique name that is not present in the usedNames array.
  */
 export function generateUniqueNameFromOptions(
-    startChar: string, usedNames: string[]): string {
+  startChar: string,
+  usedNames: string[],
+): string {
   if (!usedNames.length) {
     return startChar;
   }
@@ -245,19 +244,23 @@ export function generateUniqueNameFromOptions(
  *     will default to '', which is a specific type.
  */
 export function createVariableButtonHandler(
-    workspace: Workspace, opt_callback?: (p1?: string|null) => void,
-    opt_type?: string) {
+  workspace: Workspace,
+  opt_callback?: (p1?: string | null) => void,
+  opt_type?: string,
+) {
   const type = opt_type || '';
   // This function needs to be named so it can be called recursively.
   function promptAndCheckWithAlert(defaultName: string) {
-    promptName(Msg['NEW_VARIABLE_TITLE'], defaultName, function(text) {
-      if (!text) {  // User canceled prompt.
+    promptName(Msg['NEW_VARIABLE_TITLE'], defaultName, function (text) {
+      if (!text) {
+        // User canceled prompt.
         if (opt_callback) opt_callback(null);
         return;
       }
 
       const existing = nameUsedWithAnyType(text, workspace);
-      if (!existing) {  // No conflict
+      if (!existing) {
+        // No conflict
         workspace.createVariable(text, type);
         if (opt_callback) opt_callback(text);
         return;
@@ -270,7 +273,7 @@ export function createVariableButtonHandler(
         msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
         msg = msg.replace('%1', existing.name).replace('%2', existing.type);
       }
-      dialog.alert(msg, function() {
+      dialog.alert(msg, function () {
         promptAndCheckWithAlert(text);
       });
     });
@@ -290,22 +293,31 @@ export function createVariableButtonHandler(
  *     an existing variable was chosen.
  */
 export function renameVariable(
-    workspace: Workspace, variable: VariableModel,
-    opt_callback?: (p1?: string|null) => void) {
+  workspace: Workspace,
+  variable: VariableModel,
+  opt_callback?: (p1?: string | null) => void,
+) {
   // This function needs to be named so it can be called recursively.
   function promptAndCheckWithAlert(defaultName: string) {
-    const promptText =
-        Msg['RENAME_VARIABLE_TITLE'].replace('%1', variable.name);
-    promptName(promptText, defaultName, function(newName) {
-      if (!newName) {  // User canceled prompt.
+    const promptText = Msg['RENAME_VARIABLE_TITLE'].replace(
+      '%1',
+      variable.name,
+    );
+    promptName(promptText, defaultName, function (newName) {
+      if (!newName) {
+        // User canceled prompt.
         if (opt_callback) opt_callback(null);
         return;
       }
 
       const existing = nameUsedWithOtherType(newName, variable.type, workspace);
-      const procedure =
-          nameUsedWithConflictingParam(variable.name, newName, workspace);
-      if (!existing && !procedure) {  // No conflict.
+      const procedure = nameUsedWithConflictingParam(
+        variable.name,
+        newName,
+        workspace,
+      );
+      if (!existing && !procedure) {
+        // No conflict.
         workspace.renameVariableById(variable.getId(), newName);
         if (opt_callback) opt_callback(newName);
         return;
@@ -314,14 +326,14 @@ export function renameVariable(
       let msg = '';
       if (existing) {
         msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
-                  .replace('%1', existing.name)
-                  .replace('%2', existing.type);
+          .replace('%1', existing.name)
+          .replace('%2', existing.type);
       } else if (procedure) {
         msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER']
-                  .replace('%1', newName)
-                  .replace('%2', procedure);
+          .replace('%1', newName)
+          .replace('%2', procedure);
       }
-      dialog.alert(msg, function() {
+      dialog.alert(msg, function () {
         promptAndCheckWithAlert(newName);
       });
     });
@@ -338,9 +350,11 @@ export function renameVariable(
  *     if the user picked something illegal.
  */
 export function promptName(
-    promptText: string, defaultText: string,
-    callback: (p1: string|null) => void) {
-  dialog.prompt(promptText, defaultText, function(newVar) {
+  promptText: string,
+  defaultText: string,
+  callback: (p1: string | null) => void,
+) {
+  dialog.prompt(promptText, defaultText, function (newVar) {
     // Merge runs of whitespace.  Strip leading and trailing whitespace.
     // Beyond this, all names are legal.
     if (newVar) {
@@ -364,11 +378,14 @@ export function promptName(
  *     none was found.
  */
 function nameUsedWithOtherType(
-    name: string, type: string, workspace: Workspace): VariableModel|null {
+  name: string,
+  type: string,
+  workspace: Workspace,
+): VariableModel | null {
   const allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();
-  for (let i = 0, variable; variable = allVariables[i]; i++) {
+  for (let i = 0, variable; (variable = allVariables[i]); i++) {
     if (variable.name.toLowerCase() === name && variable.type !== type) {
       return variable;
     }
@@ -384,11 +401,13 @@ function nameUsedWithOtherType(
  * @returns The variable with the given name, or null if none was found.
  */
 export function nameUsedWithAnyType(
-    name: string, workspace: Workspace): VariableModel|null {
+  name: string,
+  workspace: Workspace,
+): VariableModel | null {
   const allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();
-  for (let i = 0, variable; variable = allVariables[i]; i++) {
+  for (let i = 0, variable; (variable = allVariables[i]); i++) {
     if (variable.name.toLowerCase() === name) {
       return variable;
     }
@@ -409,10 +428,13 @@ export function nameUsedWithAnyType(
  * @internal
  */
 export function nameUsedWithConflictingParam(
-    oldName: string, newName: string, workspace: Workspace): string|null {
-  return workspace.getProcedureMap().getProcedures().length ?
-      checkForConflictingParamWithProcedureModels(oldName, newName, workspace) :
-      checkForConflictingParamWithLegacyProcedures(oldName, newName, workspace);
+  oldName: string,
+  newName: string,
+  workspace: Workspace,
+): string | null {
+  return workspace.getProcedureMap().getProcedures().length
+    ? checkForConflictingParamWithProcedureModels(oldName, newName, workspace)
+    : checkForConflictingParamWithLegacyProcedures(oldName, newName, workspace);
 }
 
 /**
@@ -420,15 +442,19 @@ export function nameUsedWithConflictingParam(
  * null if one does not exist.
  */
 function checkForConflictingParamWithProcedureModels(
-    oldName: string, newName: string, workspace: Workspace): string|null {
+  oldName: string,
+  newName: string,
+  workspace: Workspace,
+): string | null {
   oldName = oldName.toLowerCase();
   newName = newName.toLowerCase();
 
   const procedures = workspace.getProcedureMap().getProcedures();
   for (const procedure of procedures) {
-    const params = procedure.getParameters()
-                       .filter(isVariableBackedParameterModel)
-                       .map((param) => param.getVariableModel().name);
+    const params = procedure
+      .getParameters()
+      .filter(isVariableBackedParameterModel)
+      .map((param) => param.getVariableModel().name);
     if (!params) continue;
     const procHasOld = params.some((param) => param.toLowerCase() === oldName);
     const procHasNew = params.some((param) => param.toLowerCase() === newName);
@@ -442,7 +468,10 @@ function checkForConflictingParamWithProcedureModels(
  * null if one does not exist.
  */
 function checkForConflictingParamWithLegacyProcedures(
-    oldName: string, newName: string, workspace: Workspace): string|null {
+  oldName: string,
+  newName: string,
+  workspace: Workspace,
+): string | null {
   oldName = oldName.toLowerCase();
   newName = newName.toLowerCase();
 
@@ -464,8 +493,9 @@ function checkForConflictingParamWithLegacyProcedures(
  * @param variableModel The variable model to represent.
  * @returns The generated DOM.
  */
-export function generateVariableFieldDom(variableModel: VariableModel):
-    Element {
+export function generateVariableFieldDom(
+  variableModel: VariableModel,
+): Element {
   /* Generates the following XML:
    * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
    */
@@ -491,8 +521,11 @@ export function generateVariableFieldDom(variableModel: VariableModel):
  *     combination.
  */
 export function getOrCreateVariablePackage(
-    workspace: Workspace, id: string|null, opt_name?: string,
-    opt_type?: string): VariableModel {
+  workspace: Workspace,
+  id: string | null,
+  opt_name?: string,
+  opt_type?: string,
+): VariableModel {
   let variable = getVariable(workspace, id, opt_name, opt_type);
   if (!variable) {
     variable = createVariable(workspace, id, opt_name, opt_type);
@@ -516,8 +549,11 @@ export function getOrCreateVariablePackage(
  *     combination, or null if not found.
  */
 export function getVariable(
-    workspace: Workspace, id: string|null, opt_name?: string,
-    opt_type?: string): VariableModel|null {
+  workspace: Workspace,
+  id: string | null,
+  opt_name?: string,
+  opt_type?: string,
+): VariableModel | null {
   const potentialVariableMap = workspace.getPotentialVariableMap();
   let variable = null;
   // Try to just get the variable, by ID if possible.
@@ -558,14 +594,17 @@ export function getVariable(
  *     combination.
  */
 function createVariable(
-    workspace: Workspace, id: string|null, opt_name?: string,
-    opt_type?: string): VariableModel {
+  workspace: Workspace,
+  id: string | null,
+  opt_name?: string,
+  opt_type?: string,
+): VariableModel {
   const potentialVariableMap = workspace.getPotentialVariableMap();
   // Variables without names get uniquely named for this workspace.
   if (!opt_name) {
-    const ws =
-        (workspace.isFlyout ? (workspace as WorkspaceSvg).targetWorkspace :
-                              workspace);
+    const ws = workspace.isFlyout
+      ? (workspace as WorkspaceSvg).targetWorkspace
+      : workspace;
     opt_name = generateUniqueName(ws!);
   }
 
@@ -594,7 +633,9 @@ function createVariable(
  * @internal
  */
 export function getAddedVariables(
-    workspace: Workspace, originalVariables: VariableModel[]): VariableModel[] {
+  workspace: Workspace,
+  originalVariables: VariableModel[],
+): VariableModel[] {
   const allCurrentVariables = workspace.getAllVariables();
   const addedVariables = [];
   if (originalVariables.length !== allCurrentVariables.length) {

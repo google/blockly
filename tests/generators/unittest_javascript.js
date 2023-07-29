@@ -9,7 +9,7 @@
  */
 'use strict';
 
-javascriptGenerator['unittest_main'] = function(block) {
+javascriptGenerator.forBlock['unittest_main'] = function(block) {
   // Container for unit tests.
   var resultsVar = javascriptGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
@@ -60,7 +60,7 @@ javascriptGenerator['unittest_main'] = function(block) {
   return code;
 };
 
-javascriptGenerator['unittest_main'].defineAssert_ = function(block) {
+function javascriptDefineAssert() {
   var resultsVar = javascriptGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = javascriptGenerator.provideFunction_(
@@ -100,7 +100,7 @@ javascriptGenerator['unittest_main'].defineAssert_ = function(block) {
   return functionName;
 };
 
-javascriptGenerator['unittest_assertequals'] = function(block) {
+javascriptGenerator.forBlock['unittest_assertequals'] = function(block) {
   // Asserts that a value equals another value.
   var message = javascriptGenerator.valueToCode(block, 'MESSAGE',
       javascriptGenerator.ORDER_NONE) || '';
@@ -108,11 +108,11 @@ javascriptGenerator['unittest_assertequals'] = function(block) {
       javascriptGenerator.ORDER_NONE) || 'null';
   var expected = javascriptGenerator.valueToCode(block, 'EXPECTED',
       javascriptGenerator.ORDER_NONE) || 'null';
-  return javascriptGenerator['unittest_main'].defineAssert_() +
+  return javascriptDefineAssert() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
 
-javascriptGenerator['unittest_assertvalue'] = function(block) {
+javascriptGenerator.forBlock['unittest_assertvalue'] = function(block) {
   // Asserts that a value is true, false, or null.
   var message = javascriptGenerator.valueToCode(block, 'MESSAGE',
       javascriptGenerator.ORDER_NONE) || '';
@@ -126,11 +126,11 @@ javascriptGenerator['unittest_assertvalue'] = function(block) {
   } else if (expected === 'NULL') {
     expected = 'null';
   }
-  return javascriptGenerator['unittest_main'].defineAssert_() +
+  return javascriptDefineAssert() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
 
-javascriptGenerator['unittest_fail'] = function(block) {
+javascriptGenerator.forBlock['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = javascriptGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
@@ -148,19 +148,19 @@ javascriptGenerator['unittest_fail'] = function(block) {
   return functionName + '(' + message + ');\n';
 };
 
-javascriptGenerator['unittest_adjustindex'] = function(block) {
+javascriptGenerator.forBlock['unittest_adjustindex'] = function(block) {
   var index = javascriptGenerator.valueToCode(block, 'INDEX',
       javascriptGenerator.ORDER_ADDITION) || '0';
   // Adjust index if using one-based indexing.
   if (block.workspace.options.oneBasedIndex) {
-    if (Blockly.isNumber(index)) {
+    if (Blockly.utils.string.isNumber(index)) {
       // If the index is a naked number, adjust it right now.
       return [Number(index) + 1, javascriptGenerator.ORDER_ATOMIC];
     } else {
       // If the index is dynamic, adjust it in code.
       index = index + ' + 1';
     }
-  } else if (Blockly.isNumber(index)) {
+  } else if (Blockly.utils.string.isNumber(index)) {
     return [index, javascriptGenerator.ORDER_ATOMIC];
   }
   return [index, javascriptGenerator.ORDER_ADDITION];

@@ -15,10 +15,14 @@ goog.declareModuleId('Blockly.FieldTextInput');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
 
-import {FieldInput, FieldInputConfig, FieldInputValidator} from './field_input.js';
+import {Field} from './field.js';
+import {
+  FieldInput,
+  FieldInputConfig,
+  FieldInputValidator,
+} from './field_input.js';
 import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
-import type {Sentinel} from './utils/sentinel.js';
 
 /**
  * Class for an editable text field.
@@ -39,8 +43,10 @@ export class FieldTextInput extends FieldInput<string> {
    * for a list of properties this parameter supports.
    */
   constructor(
-      value?: string|Sentinel, validator?: FieldTextInputValidator|null,
-      config?: FieldTextInputConfig) {
+    value?: string | typeof Field.SKIP_SETUP,
+    validator?: FieldTextInputValidator | null,
+    config?: FieldTextInputConfig,
+  ) {
     super(value, validator, config);
   }
 
@@ -50,8 +56,9 @@ export class FieldTextInput extends FieldInput<string> {
    * @param newValue The input value.
    * @returns A valid string, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: AnyDuringMigration): string
-      |null {
+  protected override doClassValidation_(
+    newValue?: AnyDuringMigration,
+  ): string | null {
     if (newValue === undefined) {
       return null;
     }

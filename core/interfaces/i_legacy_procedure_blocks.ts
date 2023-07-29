@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 /**
  * Legacy means of representing a procedure signature. The elements are
  * respectively: name, parameter names, and whether it has a return value.
@@ -24,12 +23,13 @@ export interface ProcedureBlock {
 
 /** @internal */
 export interface LegacyProcedureDefBlock {
-  getProcedureDef: () => ProcedureTuple
+  getProcedureDef: () => ProcedureTuple;
 }
 
 /** @internal */
-export function isLegacyProcedureDefBlock(block: Object):
-    block is LegacyProcedureDefBlock {
+export function isLegacyProcedureDefBlock(
+  block: Object,
+): block is LegacyProcedureDefBlock {
   return (block as any).getProcedureDef !== undefined;
 }
 
@@ -40,8 +40,11 @@ export interface LegacyProcedureCallBlock {
 }
 
 /** @internal */
-export function isLegacyProcedureCallBlock(block: Object):
-    block is LegacyProcedureCallBlock {
-  return (block as any).getProcedureCall !== undefined &&
-      (block as any).renameProcedure !== undefined;
+export function isLegacyProcedureCallBlock(
+  block: Object,
+): block is LegacyProcedureCallBlock {
+  return (
+    (block as any).getProcedureCall !== undefined &&
+    (block as any).renameProcedure !== undefined
+  );
 }

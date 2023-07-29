@@ -9,7 +9,7 @@
  */
 'use strict';
 
-luaGenerator['unittest_main'] = function(block) {
+luaGenerator.forBlock['unittest_main'] = function(block) {
   // Container for unit tests.
   var resultsVar = luaGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
@@ -58,7 +58,7 @@ luaGenerator['unittest_main'] = function(block) {
   return code;
 };
 
-luaGenerator['unittest_main'].defineAssert_ = function(block) {
+function luaDefineAssert() {
   var resultsVar = luaGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = luaGenerator.provideFunction_(
@@ -106,7 +106,7 @@ luaGenerator['unittest_main'].defineAssert_ = function(block) {
   return functionName;
 };
 
-luaGenerator['unittest_assertequals'] = function(block) {
+luaGenerator.forBlock['unittest_assertequals'] = function(block) {
   // Asserts that a value equals another value.
   var message = luaGenerator.valueToCode(block, 'MESSAGE',
       luaGenerator.ORDER_NONE) || '';
@@ -114,11 +114,11 @@ luaGenerator['unittest_assertequals'] = function(block) {
       luaGenerator.ORDER_NONE) || 'nil';
   var expected = luaGenerator.valueToCode(block, 'EXPECTED',
       luaGenerator.ORDER_NONE) || 'nil';
-  return luaGenerator['unittest_main'].defineAssert_() +
+  return luaDefineAssert() +
       '(' + actual + ', ' + expected + ', ' + message + ')\n';
 };
 
-luaGenerator['unittest_assertvalue'] = function(block) {
+luaGenerator.forBlock['unittest_assertvalue'] = function(block) {
   // Asserts that a value is true, false, or null.
   var message = luaGenerator.valueToCode(block, 'MESSAGE',
       luaGenerator.ORDER_NONE) || '';
@@ -132,11 +132,11 @@ luaGenerator['unittest_assertvalue'] = function(block) {
   } else if (expected == 'NULL') {
     expected = 'nil';
   }
-  return luaGenerator.unittest_main.defineAssert_() +
+  return luaDefineAssert() +
       '(' + actual + ', ' + expected + ', ' + message + ')\n';
 };
 
-luaGenerator['unittest_fail'] = function(block) {
+luaGenerator.forBlock['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = luaGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
@@ -153,10 +153,10 @@ luaGenerator['unittest_fail'] = function(block) {
   return functionName + '(' + message + ')\n';
 };
 
-luaGenerator['unittest_adjustindex'] = function(block) {
+luaGenerator.forBlock['unittest_adjustindex'] = function(block) {
   var index = luaGenerator.valueToCode(block, 'INDEX',
       luaGenerator.ORDER_ADDITIVE) || '0';
-  if (Blockly.isNumber(index)) {
+  if (Blockly.utils.string.isNumber(index)) {
     // If the index is a naked number, adjust it right now.
     return [Number(index) + 1, luaGenerator.ORDER_ATOMIC];
   }

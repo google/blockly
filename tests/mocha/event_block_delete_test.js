@@ -7,23 +7,26 @@
 goog.declareModuleId('Blockly.test.eventBlockDelete');
 
 import {defineRowBlock} from './test_helpers/block_definitions.js';
-import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 
-suite('Block Delete Event', function() {
-  setup(function() {
+suite('Block Delete Event', function () {
+  setup(function () {
     this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
     defineRowBlock();
     this.workspace = new Blockly.Workspace();
   });
 
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
 
-  suite('Receiving', function() {
-    test('blocks do not receive their own delete events', function() {
+  suite('Receiving', function () {
+    test('blocks do not receive their own delete events', function () {
       Blockly.Blocks['test'] = {
-        onchange: function(e) { },
+        onchange: function (e) {},
       };
       // Need to stub the definition, because the property on the definition is
       // what gets registered as an event listener.
@@ -37,15 +40,15 @@ suite('Block Delete Event', function() {
     });
   });
 
-  suite('Serialization', function() {
-    test('events round-trip through JSON', function() {
+  suite('Serialization', function () {
+    test('events round-trip through JSON', function () {
       const block = this.workspace.newBlock('row_block', 'block_id');
       const origEvent = new Blockly.Events.BlockDelete(block);
 
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);
-      delete origEvent.oldXml;  // xml fails deep equals for some reason.
-      delete newEvent.oldXml;  // xml fails deep equals for some reason.
+      delete origEvent.oldXml; // xml fails deep equals for some reason.
+      delete newEvent.oldXml; // xml fails deep equals for some reason.
 
       chai.assert.deepEqual(newEvent, origEvent);
     });

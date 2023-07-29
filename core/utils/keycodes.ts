@@ -4,16 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Constant declarations for common key codes.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- *
- * @namespace Blockly.utils.KeyCodes
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.KeyCodes');
 
+/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 
 /**
  * Key codes for common characters.
@@ -28,7 +22,7 @@ export enum KeyCodes {
   MAC_ENTER = 3,
   BACKSPACE = 8,
   TAB = 9,
-  NUM_CENTER = 12,  // NUMLOCK on FF/Safari Mac
+  NUM_CENTER = 12, // NUMLOCK on FF/Safari Mac
   ENTER = 13,
   SHIFT = 16,
   CTRL = 17,
@@ -37,18 +31,18 @@ export enum KeyCodes {
   CAPS_LOCK = 20,
   ESC = 27,
   SPACE = 32,
-  PAGE_UP = 33,    // also NUM_NORTH_EAST
-  PAGE_DOWN = 34,  // also NUM_SOUTH_EAST
-  END = 35,        // also NUM_SOUTH_WEST
-  HOME = 36,       // also NUM_NORTH_WEST
-  LEFT = 37,       // also NUM_WEST
-  UP = 38,         // also NUM_NORTH
-  RIGHT = 39,      // also NUM_EAST
-  DOWN = 40,       // also NUM_SOUTH
-  PLUS_SIGN = 43,  // NOT numpad plus
+  PAGE_UP = 33, // also NUM_NORTH_EAST
+  PAGE_DOWN = 34, // also NUM_SOUTH_EAST
+  END = 35, // also NUM_SOUTH_WEST
+  HOME = 36, // also NUM_NORTH_WEST
+  LEFT = 37, // also NUM_WEST
+  UP = 38, // also NUM_NORTH
+  RIGHT = 39, // also NUM_EAST
+  DOWN = 40, // also NUM_SOUTH
+  PLUS_SIGN = 43, // NOT numpad plus
   PRINT_SCREEN = 44,
-  INSERT = 45,  // also NUM_INSERT
-  DELETE = 46,  // also NUM_DELETE
+  INSERT = 45, // also NUM_INSERT
+  DELETE = 46, // also NUM_DELETE
   ZERO = 48,
   ONE = 49,
   TWO = 50,
@@ -59,13 +53,13 @@ export enum KeyCodes {
   SEVEN = 55,
   EIGHT = 56,
   NINE = 57,
-  FF_SEMICOLON = 59,  // Firefox (Gecko) fires this for semicolon instead of 186
-  FF_EQUALS = 61,     // Firefox (Gecko) fires this for equals instead of 187
-  FF_DASH = 173,      // Firefox (Gecko) fires this for dash instead of 189
+  FF_SEMICOLON = 59, // Firefox (Gecko) fires this for semicolon instead of 186
+  FF_EQUALS = 61, // Firefox (Gecko) fires this for equals instead of 187
+  FF_DASH = 173, // Firefox (Gecko) fires this for dash instead of 189
   // Firefox (Gecko) fires this for # on UK keyboards, rather than
   // Shift+SINGLE_QUOTE.
   FF_HASH = 163,
-  QUESTION_MARK = 63,  // needs localization
+  QUESTION_MARK = 63, // needs localization
   AT_SIGN = 64,
   A = 65,
   B = 66,
@@ -93,7 +87,7 @@ export enum KeyCodes {
   X = 88,
   Y = 89,
   Z = 90,
-  META = 91,  // WIN_KEY_LEFT
+  META = 91, // WIN_KEY_LEFT
   WIN_KEY_RIGHT = 92,
   CONTEXT_MENU = 93,
   NUM_ZERO = 96,
@@ -130,23 +124,22 @@ export enum KeyCodes {
   FIRST_MEDIA_KEY = 166,
   LAST_MEDIA_KEY = 183,
 
-  SEMICOLON = 186,             // needs localization
-  DASH = 189,                  // needs localization
-  EQUALS = 187,                // needs localization
-  COMMA = 188,                 // needs localization
-  PERIOD = 190,                // needs localization
-  SLASH = 191,                 // needs localization
-  APOSTROPHE = 192,            // needs localization
-  TILDE = 192,                 // needs localization
-  SINGLE_QUOTE = 222,          // needs localization
-  OPEN_SQUARE_BRACKET = 219,   // needs localization
-  BACKSLASH = 220,             // needs localization
-  CLOSE_SQUARE_BRACKET = 221,  // needs localization
+  SEMICOLON = 186, // needs localization
+  DASH = 189, // needs localization
+  EQUALS = 187, // needs localization
+  COMMA = 188, // needs localization
+  PERIOD = 190, // needs localization
+  SLASH = 191, // needs localization
+  APOSTROPHE = 192, // needs localization
+  TILDE = 192, // needs localization
+  SINGLE_QUOTE = 222, // needs localization
+  OPEN_SQUARE_BRACKET = 219, // needs localization
+  BACKSLASH = 220, // needs localization
+  CLOSE_SQUARE_BRACKET = 221, // needs localization
   WIN_KEY = 224,
-  MAC_FF_META =
-      224,  // Firefox (Gecko) fires this for the meta key instead of 91
-  MAC_WK_CMD_LEFT = 91,   // WebKit Left Command key fired, same as META
-  MAC_WK_CMD_RIGHT = 93,  // WebKit Right Command key fired, different from META
+  MAC_FF_META = 224, // Firefox (Gecko) fires this for the meta key instead of 91
+  MAC_WK_CMD_LEFT = 91, // WebKit Left Command key fired, same as META
+  MAC_WK_CMD_RIGHT = 93, // WebKit Right Command key fired, different from META
   WIN_IME = 229,
 
   // "Reserved for future use". Some programs (e.g. the SlingPlayer 2.4 ActiveX

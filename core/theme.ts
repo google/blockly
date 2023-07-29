@@ -15,14 +15,13 @@ goog.declareModuleId('Blockly.Theme');
 import * as registry from './registry.js';
 import * as object from './utils/object.js';
 
-
 export interface ITheme {
   blockStyles?: {[key: string]: Partial<BlockStyle>};
   categoryStyles?: {[key: string]: CategoryStyle};
   componentStyles?: ComponentStyle;
   fontStyle?: FontStyle;
   startHats?: boolean;
-  base?: string|Theme;
+  base?: string | Theme;
   name: string;
 }
 
@@ -56,10 +55,11 @@ export class Theme implements ITheme {
    * @param opt_componentStyles A map of Blockly component names to style value.
    */
   constructor(
-      public name: string,
-      opt_blockStyles?: {[key: string]: Partial<BlockStyle>},
-      opt_categoryStyles?: {[key: string]: CategoryStyle},
-      opt_componentStyles?: ComponentStyle) {
+    public name: string,
+    opt_blockStyles?: {[key: string]: Partial<BlockStyle>},
+    opt_categoryStyles?: {[key: string]: CategoryStyle},
+    opt_componentStyles?: ComponentStyle,
+  ) {
     /** The block styles map. */
     this.blockStyles = opt_blockStyles || Object.create(null);
 
@@ -68,13 +68,13 @@ export class Theme implements ITheme {
 
     /** The UI components styles map. */
     this.componentStyles =
-        opt_componentStyles || Object.create(null) as ComponentStyle;
+      opt_componentStyles || (Object.create(null) as ComponentStyle);
 
     /** The font style. */
     this.fontStyle = Object.create(null) as FontStyle;
 
     // Register the theme by name.
-    registry.register(registry.Type.THEME, name, this);
+    registry.register(registry.Type.THEME, name, this, true);
   }
 
   /**
@@ -114,7 +114,7 @@ export class Theme implements ITheme {
    * @param componentName The name of the component.
    * @returns The style value.
    */
-  getComponentStyle(componentName: string): string|null {
+  getComponentStyle(componentName: string): string | null {
     const style = (this.componentStyles as AnyDuringMigration)[componentName];
     if (!style) {
       return null;

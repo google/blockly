@@ -12,7 +12,6 @@ on:
 
 jobs:
   tag-module-cleanup:
-
     # Add the type: cleanup label
     runs-on: ubuntu-latest
     steps:

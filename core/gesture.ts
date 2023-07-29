@@ -36,7 +36,7 @@ import {Coordinate} from './utils/coordinate.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-
+import type {IIcon} from './interfaces/i_icon.js';
 
 /**
  * Note: In this file "start" refers to pointerdown
@@ -58,26 +58,32 @@ export class Gesture {
    * pixels, with (0, 0) at the top left of the browser window (pointer event
    * clientX/Y).
    */
-  private mouseDownXY_ = new Coordinate(0, 0);
-  private currentDragDeltaXY_: Coordinate;
+  private mouseDownXY = new Coordinate(0, 0);
+  private currentDragDeltaXY: Coordinate;
 
   /**
    * The bubble that the gesture started on, or null if it did not start on a
    * bubble.
    */
-  private startBubble_: IBubble|null = null;
+  private startBubble: IBubble | null = null;
 
   /**
    * The field that the gesture started on, or null if it did not start on a
    * field.
    */
-  private startField_: Field|null = null;
+  private startField: Field | null = null;
+
+  /**
+   * The icon that the gesture started on, or null if it did not start on an
+   * icon.
+   */
+  private startIcon: IIcon | null = null;
 
   /**
    * The block that the gesture started on, or null if it did not start on a
    * block.
    */
-  private startBlock_: BlockSvg|null = null;
+  private startBlock: BlockSvg | null = null;
 
   /**
    * The block that this gesture targets.  If the gesture started on a
@@ -85,21 +91,21 @@ export class Gesture {
    * gesture started in the flyout, this is the root block of the block group
    * that was clicked or dragged.
    */
-  private targetBlock_: BlockSvg|null = null;
+  private targetBlock: BlockSvg | null = null;
 
   /**
    * The workspace that the gesture started on.  There may be multiple
    * workspaces on a page; this is more accurate than using
    * Blockly.common.getMainWorkspace().
    */
-  protected startWorkspace_: WorkspaceSvg|null = null;
+  protected startWorkspace_: WorkspaceSvg | null = null;
 
   /**
    * Whether the pointer has at any point moved out of the drag radius.
    * A gesture that exceeds the drag radius is a drag even if it ends exactly
    * at its start point.
    */
-  private hasExceededDragRadius_ = false;
+  private hasExceededDragRadius = false;
 
   /**
    * Array holding info needed to unbind events.
@@ -109,38 +115,38 @@ export class Gesture {
   private boundEvents: browserEvents.Data[] = [];
 
   /** The object tracking a bubble drag, or null if none is in progress. */
-  private bubbleDragger_: BubbleDragger|null = null;
+  private bubbleDragger: BubbleDragger | null = null;
 
   /** The object tracking a block drag, or null if none is in progress. */
-  private blockDragger_: IBlockDragger|null = null;
+  private blockDragger: IBlockDragger | null = null;
 
   /**
    * The object tracking a workspace or flyout workspace drag, or null if none
    * is in progress.
    */
-  private workspaceDragger_: WorkspaceDragger|null = null;
+  private workspaceDragger: WorkspaceDragger | null = null;
 
   /** The flyout a gesture started in, if any. */
-  private flyout_: IFlyout|null = null;
+  private flyout: IFlyout | null = null;
 
   /** Boolean for sanity-checking that some code is only called once. */
-  private calledUpdateIsDragging_ = false;
+  private calledUpdateIsDragging = false;
 
   /** Boolean for sanity-checking that some code is only called once. */
-  private hasStarted_ = false;
+  private gestureHasStarted = false;
 
   /** Boolean used internally to break a cycle in disposal. */
   protected isEnding_ = false;
-  private healStack_: boolean;
+  private healStack: boolean;
 
   /** The event that most recently updated this gesture. */
-  private mostRecentEvent_: PointerEvent;
+  private mostRecentEvent: PointerEvent;
 
   /** Boolean for whether or not this gesture is a multi-touch gesture. */
   private isMultiTouch_ = false;
 
   /** A map of cached points used for tracking multi-touch gestures. */
-  private cachedPoints = new Map<string, Coordinate|null>();
+  private cachedPoints = new Map<string, Coordinate | null>();
 
   /**
    * This is the ratio between the starting distance between the touch points
@@ -148,13 +154,13 @@ export class Gesture {
    * Scales between 0 and 1 mean the most recent zoom was a zoom out.
    * Scales above 1.0 mean the most recent zoom was a zoom in.
    */
-  private previousScale_ = 0;
+  private previousScale = 0;
 
   /** The starting distance between two touch points. */
-  private startDistance_ = 0;
+  private startDistance = 0;
 
   /** Boolean for whether or not the workspace supports pinch-zoom. */
-  private isPinchZoomEnabled_: boolean|null = null;
+  private isPinchZoomEnabled: boolean | null = null;
 
   /**
    * The owner of the dropdownDiv when this gesture first starts.
@@ -162,7 +168,7 @@ export class Gesture {
    * act on their events, and some fields care about who owns
    * the dropdown.
    */
-  currentDropdownOwner: Field|null = null;
+  currentDropdownOwner: Field | null = null;
 
   /**
    * @param e The event that kicked off this gesture.
@@ -170,20 +176,22 @@ export class Gesture {
    *     reference to it.
    */
   constructor(
-      e: PointerEvent, private readonly creatorWorkspace: WorkspaceSvg) {
-    this.mostRecentEvent_ = e;
+    e: PointerEvent,
+    private readonly creatorWorkspace: WorkspaceSvg,
+  ) {
+    this.mostRecentEvent = e;
 
     /**
      * How far the pointer has moved during this drag, in pixel units.
      * (0, 0) is at this.mouseDownXY_.
      */
-    this.currentDragDeltaXY_ = new Coordinate(0, 0);
+    this.currentDragDeltaXY = new Coordinate(0, 0);
 
     /**
      * Boolean used to indicate whether or not to heal the stack after
      * disconnecting a block.
      */
-    this.healStack_ = !internalConstants.DRAG_STACK;
+    this.healStack = !internalConstants.DRAG_STACK;
   }
 
   /**
@@ -202,11 +210,11 @@ export class Gesture {
     }
     this.boundEvents.length = 0;
 
-    if (this.blockDragger_) {
-      this.blockDragger_.dispose();
+    if (this.blockDragger) {
+      this.blockDragger.dispose();
     }
-    if (this.workspaceDragger_) {
-      this.workspaceDragger_.dispose();
+    if (this.workspaceDragger) {
+      this.workspaceDragger.dispose();
     }
   }
 
@@ -215,15 +223,15 @@ export class Gesture {
    *
    * @param e The most recent pointer event.
    */
-  private updateFromEvent_(e: PointerEvent) {
+  private updateFromEvent(e: PointerEvent) {
     const currentXY = new Coordinate(e.clientX, e.clientY);
-    const changed = this.updateDragDelta_(currentXY);
+    const changed = this.updateDragDelta(currentXY);
     // Exceeded the drag radius for the first time.
     if (changed) {
-      this.updateIsDragging_();
+      this.updateIsDragging();
       Touch.longStop();
     }
-    this.mostRecentEvent_ = e;
+    this.mostRecentEvent = e;
   }
 
   /**
@@ -234,19 +242,22 @@ export class Gesture {
    *     with (0, 0) at the window's top left corner.
    * @returns True if the drag just exceeded the drag radius for the first time.
    */
-  private updateDragDelta_(currentXY: Coordinate): boolean {
-    this.currentDragDeltaXY_ =
-        Coordinate.difference(currentXY, (this.mouseDownXY_));
+  private updateDragDelta(currentXY: Coordinate): boolean {
+    this.currentDragDeltaXY = Coordinate.difference(
+      currentXY,
+      this.mouseDownXY,
+    );
 
-    if (!this.hasExceededDragRadius_) {
-      const currentDragDelta = Coordinate.magnitude(this.currentDragDeltaXY_);
+    if (!this.hasExceededDragRadius) {
+      const currentDragDelta = Coordinate.magnitude(this.currentDragDeltaXY);
 
       // The flyout has a different drag radius from the rest of Blockly.
-      const limitRadius =
-          this.flyout_ ? config.flyoutDragRadius : config.dragRadius;
+      const limitRadius = this.flyout
+        ? config.flyoutDragRadius
+        : config.dragRadius;
 
-      this.hasExceededDragRadius_ = currentDragDelta > limitRadius;
-      return this.hasExceededDragRadius_;
+      this.hasExceededDragRadius = currentDragDelta > limitRadius;
+      return this.hasExceededDragRadius;
     }
     return false;
   }
@@ -262,18 +273,19 @@ export class Gesture {
    *
    * @returns True if a block is being dragged from the flyout.
    */
-  private updateIsDraggingFromFlyout_(): boolean {
-    if (!this.targetBlock_ ||
-        !this.flyout_?.isBlockCreatable(this.targetBlock_)) {
+  private updateIsDraggingFromFlyout(): boolean {
+    if (!this.targetBlock || !this.flyout?.isBlockCreatable(this.targetBlock)) {
       return false;
     }
-    if (!this.flyout_.targetWorkspace) {
+    if (!this.flyout.targetWorkspace) {
       throw new Error(`Cannot update dragging from the flyout because the ' +
           'flyout's target workspace is undefined`);
     }
-    if (!this.flyout_.isScrollable() ||
-        this.flyout_.isDragTowardWorkspace(this.currentDragDeltaXY_)) {
-      this.startWorkspace_ = this.flyout_.targetWorkspace;
+    if (
+      !this.flyout.isScrollable() ||
+      this.flyout.isDragTowardWorkspace(this.currentDragDeltaXY)
+    ) {
+      this.startWorkspace_ = this.flyout.targetWorkspace;
       this.startWorkspace_.updateScreenCalculationsIfScrolled();
       // Start the event group now, so that the same event group is used for
       // block creation and block dragging.
@@ -281,9 +293,9 @@ export class Gesture {
         eventUtils.setGroup(true);
       }
       // The start block is no longer relevant, because this is a drag.
-      this.startBlock_ = null;
-      this.targetBlock_ = this.flyout_.createBlock(this.targetBlock_);
-      this.targetBlock_.select();
+      this.startBlock = null;
+      this.targetBlock = this.flyout.createBlock(this.targetBlock);
+      this.targetBlock.select();
       return true;
     }
     return false;
@@ -298,12 +310,12 @@ export class Gesture {
    *
    * @returns True if a bubble is being dragged.
    */
-  private updateIsDraggingBubble_(): boolean {
-    if (!this.startBubble_) {
+  private updateIsDraggingBubble(): boolean {
+    if (!this.startBubble) {
       return false;
     }
 
-    this.startDraggingBubble_();
+    this.startDraggingBubble();
     return true;
   }
 
@@ -320,17 +332,17 @@ export class Gesture {
    *
    * @returns True if a block is being dragged.
    */
-  private updateIsDraggingBlock_(): boolean {
-    if (!this.targetBlock_) {
+  private updateIsDraggingBlock(): boolean {
+    if (!this.targetBlock) {
       return false;
     }
-    if (this.flyout_) {
-      if (this.updateIsDraggingFromFlyout_()) {
-        this.startDraggingBlock_();
+    if (this.flyout) {
+      if (this.updateIsDraggingFromFlyout()) {
+        this.startDraggingBlock();
         return true;
       }
-    } else if (this.targetBlock_.isMovable()) {
-      this.startDraggingBlock_();
+    } else if (this.targetBlock.isMovable()) {
+      this.startDraggingBlock();
       return true;
     }
     return false;
@@ -345,21 +357,22 @@ export class Gesture {
    * gesture. If a workspace is being dragged this function creates the
    * necessary WorkspaceDragger and starts the drag.
    */
-  private updateIsDraggingWorkspace_() {
+  private updateIsDraggingWorkspace() {
     if (!this.startWorkspace_) {
       throw new Error(
-          'Cannot update dragging the workspace because the ' +
-          'start workspace is undefined');
+        'Cannot update dragging the workspace because the ' +
+          'start workspace is undefined',
+      );
     }
 
-    const wsMovable = this.flyout_ ?
-        this.flyout_.isScrollable() :
-        this.startWorkspace_ && this.startWorkspace_.isDraggable();
+    const wsMovable = this.flyout
+      ? this.flyout.isScrollable()
+      : this.startWorkspace_ && this.startWorkspace_.isDraggable();
     if (!wsMovable) return;
 
-    this.workspaceDragger_ = new WorkspaceDragger(this.startWorkspace_);
+    this.workspaceDragger = new WorkspaceDragger(this.startWorkspace_);
 
-    this.workspaceDragger_.startDrag();
+    this.workspaceDragger.startDrag();
   }
 
   /**
@@ -368,56 +381,66 @@ export class Gesture {
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture.
    */
-  private updateIsDragging_() {
+  private updateIsDragging() {
     // Sanity check.
-    if (this.calledUpdateIsDragging_) {
+    if (this.calledUpdateIsDragging) {
       throw Error('updateIsDragging_ should only be called once per gesture.');
     }
-    this.calledUpdateIsDragging_ = true;
+    this.calledUpdateIsDragging = true;
 
     // First check if it was a bubble drag.  Bubbles always sit on top of
     // blocks.
-    if (this.updateIsDraggingBubble_()) {
+    if (this.updateIsDraggingBubble()) {
       return;
     }
     // Then check if it was a block drag.
-    if (this.updateIsDraggingBlock_()) {
+    if (this.updateIsDraggingBlock()) {
       return;
     }
     // Then check if it's a workspace drag.
-    this.updateIsDraggingWorkspace_();
+    this.updateIsDraggingWorkspace();
   }
 
   /** Create a block dragger and start dragging the selected block. */
-  private startDraggingBlock_() {
+  private startDraggingBlock() {
     const BlockDraggerClass = registry.getClassFromOptions(
-        registry.Type.BLOCK_DRAGGER, this.creatorWorkspace.options, true);
+      registry.Type.BLOCK_DRAGGER,
+      this.creatorWorkspace.options,
+      true,
+    );
 
-    this.blockDragger_ =
-        new BlockDraggerClass!((this.targetBlock_), (this.startWorkspace_));
-    this.blockDragger_!.startDrag(this.currentDragDeltaXY_, this.healStack_);
-    this.blockDragger_!.drag(this.mostRecentEvent_, this.currentDragDeltaXY_);
+    this.blockDragger = new BlockDraggerClass!(
+      this.targetBlock,
+      this.startWorkspace_,
+    );
+    this.blockDragger!.startDrag(this.currentDragDeltaXY, this.healStack);
+    this.blockDragger!.drag(this.mostRecentEvent, this.currentDragDeltaXY);
   }
 
-  // TODO (fenichel): Possibly combine this and startDraggingBlock_.
   /** Create a bubble dragger and start dragging the selected bubble. */
-  private startDraggingBubble_() {
-    if (!this.startBubble_) {
+  private startDraggingBubble() {
+    if (!this.startBubble) {
       throw new Error(
-          'Cannot update dragging the bubble because the start ' +
-          'bubble is undefined');
+        'Cannot update dragging the bubble because the start ' +
+          'bubble is undefined',
+      );
     }
     if (!this.startWorkspace_) {
       throw new Error(
-          'Cannot update dragging the bubble because the start ' +
-          'workspace is undefined');
+        'Cannot update dragging the bubble because the start ' +
+          'workspace is undefined',
+      );
     }
 
-    this.bubbleDragger_ =
-        new BubbleDragger(this.startBubble_, this.startWorkspace_);
-    this.bubbleDragger_.startBubbleDrag();
-    this.bubbleDragger_.dragBubble(
-        this.mostRecentEvent_, this.currentDragDeltaXY_);
+    this.bubbleDragger = new BubbleDragger(
+      this.startBubble,
+      this.startWorkspace_,
+    );
+    this.bubbleDragger.startBubbleDrag();
+    this.bubbleDragger.dragBubble(
+      this.mostRecentEvent,
+      this.currentDragDeltaXY,
+    );
   }
 
   /**
@@ -430,18 +453,20 @@ export class Gesture {
   doStart(e: PointerEvent) {
     if (!this.startWorkspace_) {
       throw new Error(
-          'Cannot start the touch gesture becauase the start ' +
-          'workspace is undefined');
+        'Cannot start the touch gesture becauase the start ' +
+          'workspace is undefined',
+      );
     }
-    this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
-        this.startWorkspace_.options.zoomOptions.pinch;
+    this.isPinchZoomEnabled =
+      this.startWorkspace_.options.zoomOptions &&
+      this.startWorkspace_.options.zoomOptions.pinch;
 
     if (browserEvents.isTargetInput(e)) {
       this.cancel();
       return;
     }
 
-    this.hasStarted_ = true;
+    this.gestureHasStarted = true;
 
     blockAnimations.disconnectUiStop();
 
@@ -456,15 +481,15 @@ export class Gesture {
     this.currentDropdownOwner = dropDownDiv.getOwner();
     // Hide chaff also hides the flyout, so don't do it if the click is in a
     // flyout.
-    this.startWorkspace_.hideChaff(!!this.flyout_);
+    this.startWorkspace_.hideChaff(!!this.flyout);
 
     this.startWorkspace_.markFocused();
-    this.mostRecentEvent_ = e;
+    this.mostRecentEvent = e;
 
     Tooltip.block();
 
-    if (this.targetBlock_) {
-      this.targetBlock_.select();
+    if (this.targetBlock) {
+      this.targetBlock.select();
     }
 
     if (browserEvents.isRightButton(e)) {
@@ -476,8 +501,8 @@ export class Gesture {
       Touch.longStart(e, this);
     }
 
-    this.mouseDownXY_ = new Coordinate(e.clientX, e.clientY);
-    this.healStack_ = e.altKey || e.ctrlKey || e.metaKey;
+    this.mouseDownXY = new Coordinate(e.clientX, e.clientY);
+    this.healStack = e.altKey || e.ctrlKey || e.metaKey;
 
     this.bindMouseEvents(e);
 
@@ -493,15 +518,33 @@ export class Gesture {
    * @internal
    */
   bindMouseEvents(e: PointerEvent) {
-    this.boundEvents.push(browserEvents.conditionalBind(
-        document, 'pointerdown', null, this.handleStart.bind(this),
-        /* opt_noCaptureIdentifier */ true));
-    this.boundEvents.push(browserEvents.conditionalBind(
-        document, 'pointermove', null, this.handleMove.bind(this),
-        /* opt_noCaptureIdentifier */ true));
-    this.boundEvents.push(browserEvents.conditionalBind(
-        document, 'pointerup', null, this.handleUp.bind(this),
-        /* opt_noCaptureIdentifier */ true));
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        document,
+        'pointerdown',
+        null,
+        this.handleStart.bind(this),
+        /* opt_noCaptureIdentifier */ true,
+      ),
+    );
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        document,
+        'pointermove',
+        null,
+        this.handleMove.bind(this),
+        /* opt_noCaptureIdentifier */ true,
+      ),
+    );
+    this.boundEvents.push(
+      browserEvents.conditionalBind(
+        document,
+        'pointerup',
+        null,
+        this.handleUp.bind(this),
+        /* opt_noCaptureIdentifier */ true,
+      ),
+    );
 
     e.preventDefault();
     e.stopPropagation();
@@ -532,17 +575,20 @@ export class Gesture {
    * @internal
    */
   handleMove(e: PointerEvent) {
-    if ((this.isDragging() && Touch.shouldHandleEvent(e)) ||
-        !this.isMultiTouch()) {
-      this.updateFromEvent_(e);
-      if (this.workspaceDragger_) {
-        this.workspaceDragger_.drag(this.currentDragDeltaXY_);
-      } else if (this.blockDragger_) {
-        this.blockDragger_.drag(
-            this.mostRecentEvent_, this.currentDragDeltaXY_);
-      } else if (this.bubbleDragger_) {
-        this.bubbleDragger_.dragBubble(
-            this.mostRecentEvent_, this.currentDragDeltaXY_);
+    if (
+      (this.isDragging() && Touch.shouldHandleEvent(e)) ||
+      !this.isMultiTouch()
+    ) {
+      this.updateFromEvent(e);
+      if (this.workspaceDragger) {
+        this.workspaceDragger.drag(this.currentDragDeltaXY);
+      } else if (this.blockDragger) {
+        this.blockDragger.drag(this.mostRecentEvent, this.currentDragDeltaXY);
+      } else if (this.bubbleDragger) {
+        this.bubbleDragger.dragBubble(
+          this.mostRecentEvent,
+          this.currentDragDeltaXY,
+        );
       }
       e.preventDefault();
       e.stopPropagation();
@@ -566,7 +612,7 @@ export class Gesture {
       if (!Touch.shouldHandleEvent(e)) {
         return;
       }
-      this.updateFromEvent_(e);
+      this.updateFromEvent(e);
       Touch.longStop();
 
       if (this.isEnding_) {
@@ -575,24 +621,26 @@ export class Gesture {
       }
       this.isEnding_ = true;
       // The ordering of these checks is important: drags have higher priority
-      // than clicks.  Fields have higher priority than blocks; blocks have
-      // higher priority than workspaces. The ordering within drags does not
-      // matter, because the three types of dragging are exclusive.
-      if (this.bubbleDragger_) {
-        this.bubbleDragger_.endBubbleDrag(e, this.currentDragDeltaXY_);
-      } else if (this.blockDragger_) {
-        this.blockDragger_.endDrag(e, this.currentDragDeltaXY_);
-      } else if (this.workspaceDragger_) {
-        this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
-      } else if (this.isBubbleClick_()) {
+      // than clicks.  Fields and icons have higher priority than blocks; blocks
+      // have higher priority than workspaces. The ordering within drags does
+      // not matter, because the three types of dragging are exclusive.
+      if (this.bubbleDragger) {
+        this.bubbleDragger.endBubbleDrag(e, this.currentDragDeltaXY);
+      } else if (this.blockDragger) {
+        this.blockDragger.endDrag(e, this.currentDragDeltaXY);
+      } else if (this.workspaceDragger) {
+        this.workspaceDragger.endDrag(this.currentDragDeltaXY);
+      } else if (this.isBubbleClick()) {
         // Bubbles are in front of all fields and blocks.
-        this.doBubbleClick_();
-      } else if (this.isFieldClick_()) {
-        this.doFieldClick_();
-      } else if (this.isBlockClick_()) {
-        this.doBlockClick_();
-      } else if (this.isWorkspaceClick_()) {
-        this.doWorkspaceClick_(e);
+        this.doBubbleClick();
+      } else if (this.isFieldClick()) {
+        this.doFieldClick();
+      } else if (this.isIconClick()) {
+        this.doIconClick();
+      } else if (this.isBlockClick()) {
+        this.doBlockClick();
+      } else if (this.isWorkspaceClick()) {
+        this.doWorkspaceClick(e);
       }
 
       e.preventDefault();
@@ -621,9 +669,9 @@ export class Gesture {
     const pointers = Array.from(this.cachedPoints.keys());
     // If two pointers are down, store info
     if (pointers.length === 2) {
-      const point0 = (this.cachedPoints.get(pointers[0]))!;
-      const point1 = (this.cachedPoints.get(pointers[1]))!;
-      this.startDistance_ = Coordinate.distance(point0, point1);
+      const point0 = this.cachedPoints.get(pointers[0])!;
+      const point1 = this.cachedPoints.get(pointers[1])!;
+      this.startDistance = Coordinate.distance(point0, point1);
       this.isMultiTouch_ = true;
       e.preventDefault();
     }
@@ -641,8 +689,8 @@ export class Gesture {
     // Update the cache
     this.cachedPoints.set(pointerId, this.getTouchPoint(e));
 
-    if (this.isPinchZoomEnabled_ && this.cachedPoints.size === 2) {
-      this.handlePinch_(e);
+    if (this.isPinchZoomEnabled && this.cachedPoints.size === 2) {
+      this.handlePinch(e);
     } else {
       this.handleMove(e);
     }
@@ -653,29 +701,34 @@ export class Gesture {
    *
    * @param e A pointermove event.
    */
-  private handlePinch_(e: PointerEvent) {
+  private handlePinch(e: PointerEvent) {
     const pointers = Array.from(this.cachedPoints.keys());
     // Calculate the distance between the two pointers
-    const point0 = (this.cachedPoints.get(pointers[0]))!;
-    const point1 = (this.cachedPoints.get(pointers[1]))!;
+    const point0 = this.cachedPoints.get(pointers[0])!;
+    const point1 = this.cachedPoints.get(pointers[1])!;
     const moveDistance = Coordinate.distance(point0, point1);
-    const scale = moveDistance / this.startDistance_;
+    const scale = moveDistance / this.startDistance;
 
-    if (this.previousScale_ > 0 && this.previousScale_ < Infinity) {
-      const gestureScale = scale - this.previousScale_;
-      const delta = gestureScale > 0 ? gestureScale * ZOOM_IN_MULTIPLIER :
-                                       gestureScale * ZOOM_OUT_MULTIPLIER;
+    if (this.previousScale > 0 && this.previousScale < Infinity) {
+      const gestureScale = scale - this.previousScale;
+      const delta =
+        gestureScale > 0
+          ? gestureScale * ZOOM_IN_MULTIPLIER
+          : gestureScale * ZOOM_OUT_MULTIPLIER;
       if (!this.startWorkspace_) {
         throw new Error(
-            'Cannot handle a pinch because the start workspace ' +
-            'is undefined');
+          'Cannot handle a pinch because the start workspace ' + 'is undefined',
+        );
       }
       const workspace = this.startWorkspace_;
       const position = browserEvents.mouseToSvg(
-          e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
+        e,
+        workspace.getParentSvg(),
+        workspace.getInverseScreenCTM(),
+      );
       workspace.zoom(position.x, position.y, delta);
     }
-    this.previousScale_ = scale;
+    this.previousScale = scale;
     e.preventDefault();
   }
 
@@ -692,7 +745,7 @@ export class Gesture {
     }
     if (this.cachedPoints.size < 2) {
       this.cachedPoints.clear();
-      this.previousScale_ = 0;
+      this.previousScale = 0;
     }
   }
 
@@ -703,7 +756,7 @@ export class Gesture {
    * @returns The current touch point coordinate
    * @internal
    */
-  getTouchPoint(e: PointerEvent): Coordinate|null {
+  getTouchPoint(e: PointerEvent): Coordinate | null {
     if (!this.startWorkspace_) {
       return null;
     }
@@ -734,14 +787,15 @@ export class Gesture {
       return;
     }
     Touch.longStop();
-    if (this.bubbleDragger_) {
-      this.bubbleDragger_.endBubbleDrag(
-          this.mostRecentEvent_, this.currentDragDeltaXY_);
-    } else if (this.blockDragger_) {
-      this.blockDragger_.endDrag(
-          this.mostRecentEvent_, this.currentDragDeltaXY_);
-    } else if (this.workspaceDragger_) {
-      this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
+    if (this.bubbleDragger) {
+      this.bubbleDragger.endBubbleDrag(
+        this.mostRecentEvent,
+        this.currentDragDeltaXY,
+      );
+    } else if (this.blockDragger) {
+      this.blockDragger.endDrag(this.mostRecentEvent, this.currentDragDeltaXY);
+    } else if (this.workspaceDragger) {
+      this.workspaceDragger.endDrag(this.currentDragDeltaXY);
     }
     this.dispose();
   }
@@ -753,13 +807,13 @@ export class Gesture {
    * @internal
    */
   handleRightClick(e: PointerEvent) {
-    if (this.targetBlock_) {
-      this.bringBlockToFront_();
-      this.targetBlock_.workspace.hideChaff(!!this.flyout_);
-      this.targetBlock_.showContextMenu(e);
-    } else if (this.startBubble_) {
-      this.startBubble_.showContextMenu(e);
-    } else if (this.startWorkspace_ && !this.flyout_) {
+    if (this.targetBlock) {
+      this.bringBlockToFront();
+      this.targetBlock.workspace.hideChaff(!!this.flyout);
+      this.targetBlock.showContextMenu(e);
+    } else if (this.startBubble) {
+      this.startBubble.showContextMenu(e);
+    } else if (this.startWorkspace_ && !this.flyout) {
       this.startWorkspace_.hideChaff();
       this.startWorkspace_.showContextMenu(e);
     }
@@ -779,13 +833,14 @@ export class Gesture {
    * @internal
    */
   handleWsStart(e: PointerEvent, ws: WorkspaceSvg) {
-    if (this.hasStarted_) {
+    if (this.gestureHasStarted) {
       throw Error(
-          'Tried to call gesture.handleWsStart, ' +
-          'but the gesture had already been started.');
+        'Tried to call gesture.handleWsStart, ' +
+          'but the gesture had already been started.',
+      );
     }
-    this.setStartWorkspace_(ws);
-    this.mostRecentEvent_ = e;
+    this.setStartWorkspace(ws);
+    this.mostRecentEvent = e;
     this.doStart(e);
   }
 
@@ -794,9 +849,10 @@ export class Gesture {
    *
    * @param ws The workspace that a user clicks on.
    */
-  private fireWorkspaceClick_(ws: WorkspaceSvg) {
+  private fireWorkspaceClick(ws: WorkspaceSvg) {
     eventUtils.fire(
-        new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'));
+      new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'),
+    );
   }
 
   /**
@@ -807,12 +863,13 @@ export class Gesture {
    * @internal
    */
   handleFlyoutStart(e: PointerEvent, flyout: IFlyout) {
-    if (this.hasStarted_) {
+    if (this.gestureHasStarted) {
       throw Error(
-          'Tried to call gesture.handleFlyoutStart, ' +
-          'but the gesture had already been started.');
+        'Tried to call gesture.handleFlyoutStart, ' +
+          'but the gesture had already been started.',
+      );
     }
-    this.setStartFlyout_(flyout);
+    this.setStartFlyout(flyout);
     this.handleWsStart(e, flyout.getWorkspace());
   }
 
@@ -824,13 +881,14 @@ export class Gesture {
    * @internal
    */
   handleBlockStart(e: PointerEvent, block: BlockSvg) {
-    if (this.hasStarted_) {
+    if (this.gestureHasStarted) {
       throw Error(
-          'Tried to call gesture.handleBlockStart, ' +
-          'but the gesture had already been started.');
+        'Tried to call gesture.handleBlockStart, ' +
+          'but the gesture had already been started.',
+      );
     }
     this.setStartBlock(block);
-    this.mostRecentEvent_ = e;
+    this.mostRecentEvent = e;
   }
 
   /**
@@ -841,13 +899,14 @@ export class Gesture {
    * @internal
    */
   handleBubbleStart(e: PointerEvent, bubble: IBubble) {
-    if (this.hasStarted_) {
+    if (this.gestureHasStarted) {
       throw Error(
-          'Tried to call gesture.handleBubbleStart, ' +
-          'but the gesture had already been started.');
+        'Tried to call gesture.handleBubbleStart, ' +
+          'but the gesture had already been started.',
+      );
     }
     this.setStartBubble(bubble);
-    this.mostRecentEvent_ = e;
+    this.mostRecentEvent = e;
   }
 
   /* Begin functions defining what actions to take to execute clicks on each
@@ -855,59 +914,74 @@ export class Gesture {
    * modify only this code. */
 
   /** Execute a bubble click. */
-  private doBubbleClick_() {
+  private doBubbleClick() {
     // TODO (#1673): Consistent handling of single clicks.
-    if (this.startBubble_ instanceof WorkspaceCommentSvg) {
-      this.startBubble_.setFocus();
-      this.startBubble_.select();
+    if (this.startBubble instanceof WorkspaceCommentSvg) {
+      this.startBubble.setFocus();
+      this.startBubble.select();
     }
   }
 
   /** Execute a field click. */
-  private doFieldClick_() {
-    if (!this.startField_) {
+  private doFieldClick() {
+    if (!this.startField) {
       throw new Error(
-          'Cannot do a field click because the start field is ' +
-          'undefined');
+        'Cannot do a field click because the start field is undefined',
+      );
     }
 
     // Only show the editor if the field's editor wasn't already open
     // right before this gesture started.
-    const dropdownAlreadyOpen = this.currentDropdownOwner === this.startField_;
+    const dropdownAlreadyOpen = this.currentDropdownOwner === this.startField;
     if (!dropdownAlreadyOpen) {
-      this.startField_.showEditor(this.mostRecentEvent_);
+      this.startField.showEditor(this.mostRecentEvent);
     }
-    this.bringBlockToFront_();
+    this.bringBlockToFront();
+  }
+
+  /** Execute an icon click. */
+  private doIconClick() {
+    if (!this.startIcon) {
+      throw new Error(
+        'Cannot do an icon click because the start icon is undefined',
+      );
+    }
+
+    this.startIcon.onClick();
   }
 
   /** Execute a block click. */
-  private doBlockClick_() {
+  private doBlockClick() {
     // Block click in an autoclosing flyout.
-    if (this.flyout_ && this.flyout_.autoClose) {
-      if (!this.targetBlock_) {
+    if (this.flyout && this.flyout.autoClose) {
+      if (!this.targetBlock) {
         throw new Error(
-            'Cannot do a block click because the target block is ' +
-            'undefined');
+          'Cannot do a block click because the target block is ' + 'undefined',
+        );
       }
-      if (this.targetBlock_.isEnabled()) {
+      if (this.targetBlock.isEnabled()) {
         if (!eventUtils.getGroup()) {
           eventUtils.setGroup(true);
         }
-        const newBlock = this.flyout_.createBlock(this.targetBlock_);
+        const newBlock = this.flyout.createBlock(this.targetBlock);
         newBlock.scheduleSnapAndBump();
       }
     } else {
       if (!this.startWorkspace_) {
         throw new Error(
-            'Cannot do a block click because the start workspace ' +
-            'is undefined');
+          'Cannot do a block click because the start workspace ' +
+            'is undefined',
+        );
       }
       // Clicks events are on the start block, even if it was a shadow.
       const event = new (eventUtils.get(eventUtils.CLICK))(
-          this.startBlock_, this.startWorkspace_.id, 'block');
+        this.startBlock,
+        this.startWorkspace_.id,
+        'block',
+      );
       eventUtils.fire(event);
     }
-    this.bringBlockToFront_();
+    this.bringBlockToFront();
     eventUtils.setGroup(false);
   }
 
@@ -917,12 +991,12 @@ export class Gesture {
    *
    * @param _e A pointerup event.
    */
-  private doWorkspaceClick_(_e: PointerEvent) {
+  private doWorkspaceClick(_e: PointerEvent) {
     const ws = this.creatorWorkspace;
     if (common.getSelected()) {
       common.getSelected()!.unselect();
     }
-    this.fireWorkspaceClick_(this.startWorkspace_ || ws);
+    this.fireWorkspaceClick(this.startWorkspace_ || ws);
   }
 
   /* End functions defining what actions to take to execute clicks on each type
@@ -934,10 +1008,10 @@ export class Gesture {
    * Move the dragged/clicked block to the front of the workspace so that it is
    * not occluded by other blocks.
    */
-  private bringBlockToFront_() {
+  private bringBlockToFront() {
     // Blocks in the flyout don't overlap, so skip the work.
-    if (this.targetBlock_ && !this.flyout_) {
-      this.targetBlock_.bringToFront();
+    if (this.targetBlock && !this.flyout) {
+      this.targetBlock.bringToFront();
     }
   }
 
@@ -950,14 +1024,32 @@ export class Gesture {
    * @internal
    */
   setStartField<T>(field: Field<T>) {
-    if (this.hasStarted_) {
+    if (this.gestureHasStarted) {
       throw Error(
-          'Tried to call gesture.setStartField, ' +
-          'but the gesture had already been started.');
+        'Tried to call gesture.setStartField, ' +
+          'but the gesture had already been started.',
+      );
     }
-    if (!this.startField_) {
-      this.startField_ = field as Field;
+    if (!this.startField) {
+      this.startField = field as Field;
     }
+  }
+
+  /**
+   * Record the icon that a gesture started on.
+   *
+   * @param icon The icon the gesture started on.
+   * @internal
+   */
+  setStartIcon(icon: IIcon) {
+    if (this.gestureHasStarted) {
+      throw Error(
+        'Tried to call gesture.setStartIcon, ' +
+          'but the gesture had already been started.',
+      );
+    }
+
+    if (!this.startIcon) this.startIcon = icon;
   }
 
   /**
@@ -967,8 +1059,8 @@ export class Gesture {
    * @internal
    */
   setStartBubble(bubble: IBubble) {
-    if (!this.startBubble_) {
-      this.startBubble_ = bubble;
+    if (!this.startBubble) {
+      this.startBubble = bubble;
     }
   }
 
@@ -981,12 +1073,12 @@ export class Gesture {
    */
   setStartBlock(block: BlockSvg) {
     // If the gesture already went through a bubble, don't set the start block.
-    if (!this.startBlock_ && !this.startBubble_) {
-      this.startBlock_ = block;
+    if (!this.startBlock && !this.startBubble) {
+      this.startBlock = block;
       if (block.isInFlyout && block !== block.getRootBlock()) {
-        this.setTargetBlock_(block.getRootBlock());
+        this.setTargetBlock(block.getRootBlock());
       } else {
-        this.setTargetBlock_(block);
+        this.setTargetBlock(block);
       }
     }
   }
@@ -998,13 +1090,13 @@ export class Gesture {
    *
    * @param block The block the gesture targets.
    */
-  private setTargetBlock_(block: BlockSvg) {
+  private setTargetBlock(block: BlockSvg) {
     if (block.isShadow()) {
       // Non-null assertion is fine b/c it is an invariant that shadows always
       // have parents.
-      this.setTargetBlock_(block.getParent()!);
+      this.setTargetBlock(block.getParent()!);
     } else {
-      this.targetBlock_ = block;
+      this.targetBlock = block;
     }
   }
 
@@ -1013,7 +1105,7 @@ export class Gesture {
    *
    * @param ws The workspace the gesture started on.
    */
-  private setStartWorkspace_(ws: WorkspaceSvg) {
+  private setStartWorkspace(ws: WorkspaceSvg) {
     if (!this.startWorkspace_) {
       this.startWorkspace_ = ws;
     }
@@ -1024,9 +1116,9 @@ export class Gesture {
    *
    * @param flyout The flyout the gesture started on.
    */
-  private setStartFlyout_(flyout: IFlyout) {
-    if (!this.flyout_) {
-      this.flyout_ = flyout;
+  private setStartFlyout(flyout: IFlyout) {
+    if (!this.flyout) {
+      this.flyout = flyout;
     }
   }
 
@@ -1041,10 +1133,10 @@ export class Gesture {
    *
    * @returns Whether this gesture was a click on a bubble.
    */
-  private isBubbleClick_(): boolean {
+  private isBubbleClick(): boolean {
     // A bubble click starts on a bubble and never escapes the drag radius.
-    const hasStartBubble = !!this.startBubble_;
-    return hasStartBubble && !this.hasExceededDragRadius_;
+    const hasStartBubble = !!this.startBubble;
+    return hasStartBubble && !this.hasExceededDragRadius;
   }
 
   /**
@@ -1053,12 +1145,16 @@ export class Gesture {
    *
    * @returns Whether this gesture was a click on a block.
    */
-  private isBlockClick_(): boolean {
+  private isBlockClick(): boolean {
     // A block click starts on a block, never escapes the drag radius, and is
     // not a field click.
-    const hasStartBlock = !!this.startBlock_;
-    return hasStartBlock && !this.hasExceededDragRadius_ &&
-        !this.isFieldClick_();
+    const hasStartBlock = !!this.startBlock;
+    return (
+      hasStartBlock &&
+      !this.hasExceededDragRadius &&
+      !this.isFieldClick() &&
+      !this.isIconClick()
+    );
   }
 
   /**
@@ -1067,11 +1163,20 @@ export class Gesture {
    *
    * @returns Whether this gesture was a click on a field.
    */
-  private isFieldClick_(): boolean {
-    const fieldClickable =
-        this.startField_ ? this.startField_.isClickable() : false;
-    return fieldClickable && !this.hasExceededDragRadius_ &&
-        (!this.flyout_ || !this.flyout_.autoClose);
+  private isFieldClick(): boolean {
+    const fieldClickable = this.startField
+      ? this.startField.isClickable()
+      : false;
+    return (
+      fieldClickable &&
+      !this.hasExceededDragRadius &&
+      (!this.flyout || !this.flyout.autoClose)
+    );
+  }
+
+  /** @returns Whether this gesture is a click on an icon. */
+  private isIconClick(): boolean {
+    return !!this.startIcon && !this.hasExceededDragRadius;
   }
 
   /**
@@ -1080,10 +1185,10 @@ export class Gesture {
    *
    * @returns Whether this gesture was a click on a workspace.
    */
-  private isWorkspaceClick_(): boolean {
+  private isWorkspaceClick(): boolean {
     const onlyTouchedWorkspace =
-        !this.startBlock_ && !this.startBubble_ && !this.startField_;
-    return onlyTouchedWorkspace && !this.hasExceededDragRadius_;
+      !this.startBlock && !this.startBubble && !this.startField;
+    return onlyTouchedWorkspace && !this.hasExceededDragRadius;
   }
 
   /* End helper functions defining types of clicks. */
@@ -1097,8 +1202,9 @@ export class Gesture {
    * @internal
    */
   isDragging(): boolean {
-    return !!this.workspaceDragger_ || !!this.blockDragger_ ||
-        !!this.bubbleDragger_;
+    return (
+      !!this.workspaceDragger || !!this.blockDragger || !!this.bubbleDragger
+    );
   }
 
   /**
@@ -1110,7 +1216,7 @@ export class Gesture {
    * @internal
    */
   hasStarted(): boolean {
-    return this.hasStarted_;
+    return this.gestureHasStarted;
   }
 
   /**
@@ -1121,8 +1227,8 @@ export class Gesture {
    * @internal
    */
   getInsertionMarkers(): BlockSvg[] {
-    if (this.blockDragger_) {
-      return this.blockDragger_.getInsertionMarkers();
+    if (this.blockDragger) {
+      return this.blockDragger.getInsertionMarkers();
     }
     return [];
   }
@@ -1134,8 +1240,8 @@ export class Gesture {
    * @returns The dragger that is currently in use or null if no drag is in
    *     progress.
    */
-  getCurrentDragger(): WorkspaceDragger|BubbleDragger|IBlockDragger|null {
-    return this.blockDragger_ ?? this.workspaceDragger_ ?? this.bubbleDragger_;
+  getCurrentDragger(): WorkspaceDragger | BubbleDragger | IBlockDragger | null {
+    return this.blockDragger ?? this.workspaceDragger ?? this.bubbleDragger;
   }
 
   /**
@@ -1145,7 +1251,7 @@ export class Gesture {
    */
   static inProgress(): boolean {
     const workspaces = common.getAllWorkspaces();
-    for (let i = 0, workspace; workspace = workspaces[i]; i++) {
+    for (let i = 0, workspace; (workspace = workspaces[i]); i++) {
       // Not actually necessarily a WorkspaceSvg, but it doesn't matter b/c
       // we're just checking if the property exists. Theoretically we would
       // want to use instanceof, but that causes a circular dependency.

@@ -1,40 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>Blockly &lt;iframe&gt; Playground</title>
-<style>
-  html, body {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-  }
-  h1#title {
-    border: 0;
-    margin: 2px;
-    padding: 0;
-    width: 100%;
-  }
-  #playground-iframe {
-    border: 0;
-    width: 100%;
-  }
-</style>
-<script type="text/javascript">
-  var onWindowResize = function() {
-    var iframe = document.getElementById('playground-iframe');
-    var top = iframe.getBoundingClientRect().top;
-    iframe.height = window.innerHeight - top;
-    iframe.width = window.innerWidth;
-  };
-  window.addEventListener("resize", onWindowResize);
-  window.addEventListener("load", onWindowResize);
-</script>
-</head>
-<body>
-  <h1 id="title">Outer Frame</h1>
-  <iframe id="playground-iframe" src="../playground.html">
-  </iframe>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Blockly &lt;iframe&gt; Playground</title>
+    <style>
+      html,
+      body {
+        border: 0;
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      h1#title {
+        border: 0;
+        margin: 2px;
+        padding: 0;
+        width: 100%;
+      }
+      #playground-iframe {
+        border: 0;
+        width: 100%;
+      }
+    </style>
+    <script type="text/javascript">
+      var onWindowResize = function () {
+        var iframe = document.getElementById('playground-iframe');
+        var top = iframe.getBoundingClientRect().top;
+        iframe.height = window.innerHeight - top;
+        iframe.width = window.innerWidth;
+      };
+      window.addEventListener('resize', onWindowResize);
+      window.addEventListener('load', onWindowResize);
+    </script>
+  </head>
+  <body>
+    <h1 id="title">Outer Frame</h1>
+    <iframe id="playground-iframe" src="../playground.html"> </iframe>
+  </body>
 </html>

@@ -4,14 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Events fired as a result of actions in Blockly's editor.
- *
- * @namespace Blockly.Events
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events');
-
 
 import {Abstract, AbstractEventJson} from './events_abstract.js';
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
@@ -19,6 +13,10 @@ import {BlockChange, BlockChangeJson} from './events_block_change.js';
 import {BlockCreate, BlockCreateJson} from './events_block_create.js';
 import {BlockDelete, BlockDeleteJson} from './events_block_delete.js';
 import {BlockDrag, BlockDragJson} from './events_block_drag.js';
+import {
+  BlockFieldIntermediateChange,
+  BlockFieldIntermediateChangeJson,
+} from './events_block_field_intermediate_change.js';
 import {BlockMove, BlockMoveJson} from './events_block_move.js';
 import {BubbleOpen, BubbleOpenJson, BubbleType} from './events_bubble_open.js';
 import {Click, ClickJson, ClickTarget} from './events_click.js';
@@ -30,9 +28,11 @@ import {CommentMove, CommentMoveJson} from './events_comment_move.js';
 import {MarkerMove, MarkerMoveJson} from './events_marker_move.js';
 import {Selected, SelectedJson} from './events_selected.js';
 import {ThemeChange, ThemeChangeJson} from './events_theme_change.js';
-import {ToolboxItemSelect, ToolboxItemSelectJson} from './events_toolbox_item_select.js';
+import {
+  ToolboxItemSelect,
+  ToolboxItemSelectJson,
+} from './events_toolbox_item_select.js';
 import {TrashcanOpen, TrashcanOpenJson} from './events_trashcan_open.js';
-import {Ui} from './events_ui.js';
 import {UiBase} from './events_ui_base.js';
 import {VarBase, VarBaseJson} from './events_var_base.js';
 import {VarCreate, VarCreateJson} from './events_var_create.js';
@@ -40,8 +40,7 @@ import {VarDelete, VarDeleteJson} from './events_var_delete.js';
 import {VarRename, VarRenameJson} from './events_var_rename.js';
 import {ViewportChange, ViewportChangeJson} from './events_viewport.js';
 import * as eventUtils from './utils.js';
-import {FinishedLoading, FinishedLoadingJson} from './workspace_events.js';
-
+import {FinishedLoading} from './workspace_events.js';
 
 // Events.
 export {Abstract};
@@ -59,6 +58,8 @@ export {BlockDelete};
 export {BlockDeleteJson};
 export {BlockDrag};
 export {BlockDragJson};
+export {BlockFieldIntermediateChange};
+export {BlockFieldIntermediateChangeJson};
 export {BlockMove};
 export {BlockMoveJson};
 export {Click};
@@ -74,7 +75,6 @@ export {CommentDelete};
 export {CommentMove};
 export {CommentMoveJson};
 export {FinishedLoading};
-export {FinishedLoadingJson};
 export {MarkerMove};
 export {MarkerMoveJson};
 export {Selected};
@@ -85,7 +85,6 @@ export {ToolboxItemSelect};
 export {ToolboxItemSelectJson};
 export {TrashcanOpen};
 export {TrashcanOpenJson};
-export {Ui};
 export {UiBase};
 export {VarBase};
 export {VarBaseJson};
@@ -104,6 +103,8 @@ export const BLOCK_CREATE = eventUtils.BLOCK_CREATE;
 export const BLOCK_DELETE = eventUtils.BLOCK_DELETE;
 export const BLOCK_DRAG = eventUtils.BLOCK_DRAG;
 export const BLOCK_MOVE = eventUtils.BLOCK_MOVE;
+export const BLOCK_FIELD_INTERMEDIATE_CHANGE =
+  eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE;
 export const BUBBLE_OPEN = eventUtils.BUBBLE_OPEN;
 export type BumpEvent = eventUtils.BumpEvent;
 export const BUMP_EVENTS = eventUtils.BUMP_EVENTS;

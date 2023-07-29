@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Handles serializing variables to plain JavaScript objects, only containing
- * state.
- *
- * @namespace Blockly.serialization.variables
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.variables');
 
@@ -19,14 +13,13 @@ import type {Workspace} from '../workspace.js';
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
 
-
 /**
  * Represents the state of a given variable.
  */
 export interface State {
   name: string;
   id: string;
-  type: string|undefined;
+  type: string | undefined;
 }
 
 /**
@@ -48,7 +41,7 @@ export class VariableSerializer implements ISerializer {
    * @returns The state of the workspace's variables, or null if there are no
    *     variables.
    */
-  save(workspace: Workspace): State[]|null {
+  save(workspace: Workspace): State[] | null {
     const variableStates = [];
     for (const variable of workspace.getAllVariables()) {
       const state = {
@@ -62,8 +55,9 @@ export class VariableSerializer implements ISerializer {
     }
     // AnyDuringMigration because:  Type '{ name: string; id: string; }[] |
     // null' is not assignable to type 'State[] | null'.
-    return (variableStates.length ? variableStates : null) as
-        AnyDuringMigration;
+    return (
+      variableStates.length ? variableStates : null
+    ) as AnyDuringMigration;
   }
 
   /**
@@ -76,7 +70,10 @@ export class VariableSerializer implements ISerializer {
   load(state: State[], workspace: Workspace) {
     for (const varState of state) {
       workspace.createVariable(
-          varState['name'], varState['type'], varState['id']);
+        varState['name'],
+        varState['type'],
+        varState['id'],
+      );
     }
   }
 

@@ -20,10 +20,10 @@
 	"DELETE_X_BLOCKS": "Deler %1 blocos",
 	"DELETE_ALL_BLOCKS": "Deler tote le %1 blocos?",
 	"CLEAN_UP": "Rangiar le blocos",
-	"COLLAPSE_BLOCK": "Plicar bloco",
-	"COLLAPSE_ALL": "Plicar blocos",
-	"EXPAND_BLOCK": "Displicar bloco",
-	"EXPAND_ALL": "Displicar blocos",
+	"COLLAPSE_BLOCK": "Contraher bloco",
+	"COLLAPSE_ALL": "Contraher blocos",
+	"EXPAND_BLOCK": "Expander bloco",
+	"EXPAND_ALL": "Expander blocos",
 	"DISABLE_BLOCK": "Disactivar bloco",
 	"ENABLE_BLOCK": "Activar bloco",
 	"HELP": "Adjuta",
@@ -328,7 +328,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Attention: Iste bloco pote solmente esser usate in le definition de un function.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Dice qualcosa...",
 	"WORKSPACE_ARIA_LABEL": "Spatio de travalio de Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Blocos plicate contine advertimentos.",
+	"COLLAPSED_WARNINGS_WARNING": "Il ha blocos contrahite con advertimentos.",
 	"DIALOG_OK": "OK",
 	"DIALOG_CANCEL": "Cancellar"
 }

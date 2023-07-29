@@ -4,14 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * Utility methods for colour manipulation.
- *
- * @namespace Blockly.utils.colour
- */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.colour');
-
 
 /**
  * The richness of block colours, regardless of the hue.
@@ -79,7 +73,7 @@ export function setHsvValue(newValue: number) {
  * @returns A string containing a hex representation of the colour, or null if
  *     can't be parsed.
  */
-export function parse(str: string|number): string|null {
+export function parse(str: string | number): string | null {
   str = `${str}`.toLowerCase().trim();
   let hex = names[str];
   if (hex) {
@@ -118,7 +112,7 @@ export function parse(str: string|number): string|null {
  * @returns Hex representation of the colour.
  */
 export function rgbToHex(r: number, g: number, b: number): string {
-  const rgb = r << 16 | g << 8 | b;
+  const rgb = (r << 16) | (g << 8) | b;
   if (r < 0x10) {
     return '#' + (0x1000000 | rgb).toString(16).substr(1);
   }
@@ -140,7 +134,7 @@ export function hexToRgb(colour: string): number[] {
 
   const rgb = parseInt(hex.substr(1), 16);
   const r = rgb >> 16;
-  const g = rgb >> 8 & 255;
+  const g = (rgb >> 8) & 255;
   const b = rgb & 255;
 
   return [r, g, b];
@@ -215,8 +209,11 @@ export function hsvToHex(h: number, s: number, v: number): string {
  *     Values should be in the range [0, 1].
  * @returns Combined colour represented in hex.
  */
-export function blend(colour1: string, colour2: string, factor: number): string|
-    null {
+export function blend(
+  colour1: string,
+  colour2: string,
+  factor: number,
+): string | null {
   const hex1 = parse(colour1);
   if (!hex1) {
     return null;

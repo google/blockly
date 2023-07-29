@@ -10,7 +10,8 @@ jobs:
     steps:
       - uses: bcoe/conventional-release-labels@v1
         with:
-          type_labels: '{"feat": "PR: feature", "fix": "PR: fix", "breaking": "breaking
+          type_labels:
+            '{"feat": "PR: feature", "fix": "PR: fix", "breaking": "breaking
             change", "chore": "PR: chore", "docs": "PR: docs", "refactor": "PR:
             refactor", "revert": "PR: revert", "deprecate": "deprecation"}'
           ignored_types: '[]'

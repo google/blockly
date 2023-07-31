@@ -9,10 +9,13 @@ import {CopyData} from '../interfaces/i_copyable.js';
 import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {WorkspaceCommentSvg} from '../workspace_comment_svg.js';
+import {registry} from '../clipboard.js';
 
 export class WorkspaceCommentPaster
   implements IPaster<WorkspaceCommentCopyData, WorkspaceCommentSvg>
 {
+  static TYPE = 'workspace-comment';
+
   paste(
     copyData: WorkspaceCommentCopyData,
     workspace: WorkspaceSvg,
@@ -28,3 +31,5 @@ export class WorkspaceCommentPaster
 }
 
 export interface WorkspaceCommentCopyData extends CopyData {}
+
+registry.register(WorkspaceCommentPaster.TYPE, new WorkspaceCommentPaster());

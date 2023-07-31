@@ -22,6 +22,8 @@ import type {Options} from './options.js';
 import type {Renderer} from './renderers/common/renderer.js';
 import type {Theme} from './theme.js';
 import type {ToolboxItem} from './toolbox/toolbox_item.js';
+import {IPaster} from './interfaces/i_paster.js';
+import {CopyData, ICopyable} from './interfaces/i_copyable.js';
 
 /**
  * A map of maps. With the keys being the type and name of the class we are
@@ -96,6 +98,9 @@ export class Type<_T> {
 
   /** @internal */
   static ICON = new Type<IIcon>('icon');
+
+  /** @internal */
+  static PASTER = new Type<IPaster<CopyData, ICopyable>>('paster');
 }
 
 /**

@@ -25,6 +25,7 @@
 	"DISABLE_BLOCK": "Блок жараксыз",
 	"ENABLE_BLOCK": "Блок жарактуу",
 	"HELP": "Жардам",
+	"UNDO": "Жокко чыгаруу",
 	"CHANGE_VALUE_TITLE": "маанисин өзгөрт",
 	"RENAME_VARIABLE": "Өзгөрмөнүн атын алмаштыруу",
 	"RENAME_VARIABLE_TITLE": "Баардык '%1' өзгөрмөнүнүн атын алмаштыр",
@@ -65,6 +66,6 @@
 	"MATH_TRIG_HELPURL": "https://ky.wikipedia.org/wiki/Тригонометриялык_функциялар",
 	"TEXT_ISEMPTY_TITLE": "%1 бош",
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "тизме",
-	"DIALOG_OK": "OK",
+	"DIALOG_OK": "Макул",
 	"DIALOG_CANCEL": "Жокко чыгаруу"
 }

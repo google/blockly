@@ -82,7 +82,7 @@
 	"CONTROLS_IF_TOOLTIP_4": "Se o primeiro valor é verdadeiro, executa o primeiro bloque de instrucións. En caso contrario, se o segundo valor é verdadeiro, executa o segundo bloque de instrucións. Se ningún valor é verdadeiro, executa o último bloque de instrucións.",
 	"CONTROLS_IF_MSG_IF": "se",
 	"CONTROLS_IF_MSG_ELSEIF": "mais se",
-	"CONTROLS_IF_MSG_ELSE": "senón",
+	"CONTROLS_IF_MSG_ELSE": "se non",
 	"CONTROLS_IF_IF_TOOLTIP": "Engade, elimina ou reordena as seccións para reconfigurar este bloque \"se\".",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Engade unha condición ao bloque \"se\".",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Engade unha condición final e predeterminada ao bloque \"se\".",

@@ -22,15 +22,17 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
   ): BlockSvg | null {
     if (!workspace.isCapacityAvailable(copyData.typeCounts!)) return null;
 
-    const state = copyData.saveInfo as State;
     if (coordinate) {
-      state['x'] = coordinate.x;
-      state['y'] = coordinate.y;
+      copyData.saveInfo['x'] = coordinate.x;
+      copyData.saveInfo['y'] = coordinate.y;
     }
-    return append(state, workspace, {recordUndo: true}) as BlockSvg;
+    return append(copyData.saveInfo, workspace, {recordUndo: true}) as BlockSvg;
   }
 }
 
-export interface BlockCopyData extends ICopyData {}
+export interface BlockCopyData extends ICopyData {
+  saveInfo: State;
+  typeCounts: {[key: string]: number};
+}
 
 registry.register(BlockPaster.TYPE, new BlockPaster());

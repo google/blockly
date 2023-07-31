@@ -21,15 +21,16 @@ export class WorkspaceCommentPaster
     workspace: WorkspaceSvg,
     coordinate?: Coordinate,
   ): WorkspaceCommentSvg {
-    const state = copyData.saveInfo as Element;
     if (coordinate) {
-      state.setAttribute('x', `${coordinate.x}`);
-      state.setAttribute('y', `${coordinate.y}`);
+      copyData.saveInfo.setAttribute('x', `${coordinate.x}`);
+      copyData.saveInfo.setAttribute('y', `${coordinate.y}`);
     }
-    return WorkspaceCommentSvg.fromXmlRendered(state, workspace);
+    return WorkspaceCommentSvg.fromXmlRendered(copyData.saveInfo, workspace);
   }
 }
 
-export interface WorkspaceCommentCopyData extends ICopyData {}
+export interface WorkspaceCommentCopyData extends ICopyData {
+  saveInfo: Element;
+}
 
 registry.register(WorkspaceCommentPaster.TYPE, new WorkspaceCommentPaster());

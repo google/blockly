@@ -1549,44 +1549,14 @@ export class BlockSvg
    * Immediately lays out and reflows a block based on its contents and
    * settings.
    *
-   * @param opt_bubble If false, just render this block.
-   *   If true, also render block's parent, grandparent, etc.  Defaults to true.
+   * @deprecated Renders are triggered automatically when the block is modified
+   *     (e.g. fields are modified or inputs are added). Any calls to render()
+   *     are no longer necessary. To be removed in v11.
    */
-  render(opt_bubble?: boolean) {
-    if (this.renderIsInProgress_) {
-      return; // Don't allow recursive renders.
-    }
-    this.renderIsInProgress_ = true;
-    try {
-      this.rendered = true;
-      dom.startTextWidthCache();
-
-      if (!this.isEnabled()) {
-        // Apply disabled styles if needed.
-        this.updateDisabled();
-      }
-
-      if (this.isCollapsed()) {
-        this.updateCollapsed_();
-      }
-      this.workspace.getRenderer().render(this);
-      this.updateConnectionAndIconLocations();
-
-      if (opt_bubble !== false) {
-        const parentBlock = this.getParent();
-        if (parentBlock) {
-          parentBlock.render(true);
-        } else {
-          // Top-most block. Fire an event to allow scrollbars to resize.
-          this.workspace.resizeContents();
-        }
-      }
-
-      dom.stopTextWidthCache();
-      this.updateMarkers_();
-    } finally {
-      this.renderIsInProgress_ = false;
-    }
+  render() {
+    deprecation.warn('Blockly.BlockSvg.prototype.render', 'v10', 'v11');
+    this.queueRender();
+    renderManagement.triggerQueuedRenders();
   }
 
   /**

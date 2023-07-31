@@ -53,7 +53,7 @@ suite('Testing Connecting Blocks', function () {
       '#blocklyDiv > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(3)',
     );
     await ifDoBlock.dragAndDrop({x: 20, y: 20});
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await this.browser.pause(200);
     const blockOnWorkspace = await this.browser.execute(() => {
       const newBlock = Blockly.getMainWorkspace().getAllBlocks(false)[0];
       if (newBlock.id) {
@@ -125,6 +125,8 @@ suite('Disabling', function () {
 
   setup(async function () {
     await this.browser.refresh();
+    // Pause to allow refresh time to work.
+    await this.browser.pause(200);
   });
 
   test(

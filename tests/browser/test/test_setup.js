@@ -148,18 +148,10 @@ async function getBlockElementById(browser, id) {
  * @throws If the category cannot be found.
  */
 async function getCategory(browser, categoryName) {
-  const categories = await browser.$$('.blocklyTreeLabel');
+  const category = browser.$(`.blocklyToolboxCategory*=${categoryName}`);
+  category.waitForExist();
 
-  let category;
-  for (const c of categories) {
-    const text = await c.getText();
-    if (text === categoryName) {
-      category = c;
-    }
-  }
-  if (!category) throw Error();
-
-  return category;
+  return await category;
 }
 
 /**
@@ -171,7 +163,7 @@ async function getCategory(browser, categoryName) {
  */
 async function getNthBlockOfCategory(browser, categoryName, n) {
   const category = await getCategory(browser, categoryName);
-  category.click();
+  await category.click();
   await browser.pause(100);
   const block = await browser.$(
     `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`,
@@ -190,8 +182,7 @@ async function getNthBlockOfCategory(browser, categoryName, n) {
 async function getBlockTypeFromCategory(browser, categoryName, blockType) {
   if (categoryName) {
     const category = await getCategory(browser, categoryName);
-    category.click();
-    await browser.pause(100);
+    await category.click();
   }
 
   const id = await browser.execute((blockType) => {
@@ -229,13 +220,27 @@ async function getBlockTypeFromWorkspace(browser, blockType, position) {
  * @param connectionName Which connection to return. An input name to
  *     get a value or statement connection, and otherwise the type of
  *     the connection.
+ * @param mutatorBlockId The block that holds the mutator icon or null if the target block is on the main workspace
  * @return A Promise that resolves to the location of the specific
  *     connection in screen coordinates.
  */
-async function getLocationOfBlockConnection(browser, id, connectionName) {
+async function getLocationOfBlockConnection(
+  browser,
+  id,
+  connectionName,
+  mutatorBlockId,
+) {
   return await browser.execute(
-    (id, connectionName) => {
-      const block = Blockly.getMainWorkspace().getBlockById(id);
+    (id, connectionName, mutatorBlockId) => {
+      let block;
+      if (mutatorBlockId) {
+        block = Blockly.getMainWorkspace()
+          .getBlockById(mutatorBlockId)
+          .mutator.getWorkspace()
+          .getBlockById(id);
+      } else {
+        block = Blockly.getMainWorkspace().getBlockById(id);
+      }
 
       let connection;
       switch (connectionName) {
@@ -264,6 +269,7 @@ async function getLocationOfBlockConnection(browser, id, connectionName) {
     },
     id,
     connectionName,
+    mutatorBlockId,
   );
 }
 
@@ -275,6 +281,8 @@ async function getLocationOfBlockConnection(browser, id, connectionName) {
  * @param draggedConnection The active connection on the block being dragged.
  * @param targetBlock The block to drag to.
  * @param targetConnection The connection to connect to on the target block.
+ * @param mutatorBlockId The block that holds the mutator icon or null if the target block is on the main workspace
+ * @param dragBlockSelector The selector of the block to drag
  * @return A Promise that resolves when the actions are completed.
  */
 async function connect(
@@ -283,24 +291,47 @@ async function connect(
   draggedConnection,
   targetBlock,
   targetConnection,
+  mutatorBlockId,
+  dragBlockSelector,
 ) {
-  const draggedLocation = await getLocationOfBlockConnection(
-    browser,
-    draggedBlock.id,
-    draggedConnection,
-  );
-  const targetLocation = await getLocationOfBlockConnection(
-    browser,
-    targetBlock.id,
-    targetConnection,
-  );
+  let draggedLocation;
+  let targetLocation;
+
+  if (mutatorBlockId) {
+    draggedLocation = await getLocationOfBlockConnection(
+      browser,
+      draggedBlock,
+      draggedConnection,
+      mutatorBlockId,
+    );
+    targetLocation = await getLocationOfBlockConnection(
+      browser,
+      targetBlock,
+      targetConnection,
+      mutatorBlockId,
+    );
+  } else {
+    draggedLocation = await getLocationOfBlockConnection(
+      browser,
+      draggedBlock.id,
+      draggedConnection,
+    );
+    targetLocation = await getLocationOfBlockConnection(
+      browser,
+      targetBlock.id,
+      targetConnection,
+    );
+  }
 
   const delta = {
     x: targetLocation.x - draggedLocation.x,
     y: targetLocation.y - draggedLocation.y,
   };
-  await draggedBlock.dragAndDrop(delta);
-  await browser.pause(200);
+  if (mutatorBlockId) {
+    await dragBlockSelector.dragAndDrop(delta);
+  } else {
+    await draggedBlock.dragAndDrop(delta);
+  }
 }
 
 /**
@@ -312,6 +343,7 @@ async function connect(
 async function switchRTL(browser) {
   const ltrForm = await browser.$('#options > select:nth-child(1)');
   await ltrForm.selectByIndex(1);
+  await browser.pause(500);
 }
 
 /**
@@ -364,7 +396,8 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
  * context menu item.
  *
  * @param browser The active WebdriverIO Browser object.
- * @param block The block to click, as an interactable element.
+ * @param block The block to click, as an interactable element. This block must
+ *    have text on it, because we use the text element as the click target.
  * @param itemText The display text of the context menu item to click.
  * @return A Promise that resolves when the actions are completed.
  */
@@ -372,16 +405,17 @@ async function contextMenuSelect(browser, block, itemText) {
   // Clicking will always happen in the middle of the block's bounds
   // (including children) by default, which causes problems if it has holes
   // (e.g. statement inputs).
-  // Instead we want to click 10px from the left and 10px from the top.
-  const blockWidth = await block.getSize('width');
-  const blockHeight = await block.getSize('height');
-  const xOffset = -Math.round(blockWidth * 0.5) + 10;
-  const yOffset = -Math.round(blockHeight * 0.5) + 10;
+  // Instead, we'll click directly on the first bit of text on the block.
+  const clickEl = block.$('.blocklyText');
 
-  await block.click({button: 2, x: xOffset, y: yOffset});
-  await browser.pause(100);
+  // Even though the element should definitely already exist,
+  // one specific test breaks if you remove this...
+  await clickEl.waitForExist();
+
+  await clickEl.click({button: 2});
 
   const item = await browser.$(`div=${itemText}`);
+  await item.waitForExist();
   await item.click();
 
   await browser.pause(100);

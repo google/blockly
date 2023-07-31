@@ -307,6 +307,16 @@ export class ScrollbarPair {
   }
 
   /**
+   * Sets the visibility of any existing scrollbars.
+   *
+   * @param visible True if visible.
+   */
+  setVisible(visible: boolean) {
+    if (this.hScroll) this.hScroll.setVisibleInternal(visible);
+    if (this.vScroll) this.vScroll.setVisibleInternal(visible);
+  }
+
+  /**
    * Recalculates the scrollbars' locations within their path and length.
    * This should be called when the contents of the workspace have changed.
    *

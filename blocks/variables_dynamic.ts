@@ -25,6 +25,7 @@ import {
   defineBlocks,
 } from '../core/common.js';
 import '../core/field_label.js';
+import type {BlockSvg} from '../core/block_svg.js';
 
 /**
  * A dictionary of the block definitions provided by this module.
@@ -155,6 +156,10 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
       this.outputConnection!.setCheck(variableModel.type);
     } else {
       this.getInput('VALUE')!.connection!.setCheck(variableModel.type);
+    }
+
+    if (this.rendered) {
+      (this as BlockSvg).queueRender();
     }
   },
 };

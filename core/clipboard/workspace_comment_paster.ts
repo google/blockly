@@ -5,7 +5,7 @@
  */
 
 import {IPaster} from '../interfaces/i_paster.js';
-import {CopyData} from '../interfaces/i_copyable.js';
+import {ICopyData} from '../interfaces/i_copyable.js';
 import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {WorkspaceCommentSvg} from '../workspace_comment_svg.js';
@@ -30,6 +30,6 @@ export class WorkspaceCommentPaster
   }
 }
 
-export interface WorkspaceCommentCopyData extends CopyData {}
+export interface WorkspaceCommentCopyData extends ICopyData {}
 
 registry.register(WorkspaceCommentPaster.TYPE, new WorkspaceCommentPaster());

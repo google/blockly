@@ -6,7 +6,7 @@
 
 import {BlockSvg} from '../block_svg.js';
 import {registry} from '../clipboard.js';
-import {CopyData} from '../interfaces/i_copyable.js';
+import {ICopyData} from '../interfaces/i_copyable.js';
 import {IPaster} from '../interfaces/i_paster.js';
 import {State, append} from '../serialization/blocks.js';
 import {Coordinate} from '../utils/coordinate.js';
@@ -31,6 +31,6 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
   }
 }
 
-export interface BlockCopyData extends CopyData {}
+export interface BlockCopyData extends ICopyData {}
 
 registry.register(BlockPaster.TYPE, new BlockPaster());

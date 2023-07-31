@@ -17,15 +17,15 @@ export interface ICopyable extends ISelectable {
    * @returns Copy metadata.
    * @internal
    */
-  toCopyData(): CopyData | null;
+  toCopyData(): ICopyData | null;
 }
 
 export namespace ICopyable {
-  export interface CopyData {
+  export interface ICopyData {
     saveInfo: Object | Element;
     source: WorkspaceSvg;
     typeCounts: {[key: string]: number} | null;
   }
 }
 
-export type CopyData = ICopyable.CopyData;
+export type ICopyData = ICopyable.ICopyData;

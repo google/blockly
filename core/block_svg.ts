@@ -37,7 +37,7 @@ import {FieldLabel} from './field_label.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
-import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
 import {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
@@ -825,7 +825,7 @@ export class BlockSvg
    * @returns Copy metadata, or null if the block is an insertion marker.
    * @internal
    */
-  toCopyData(): CopyData | null {
+  toCopyData(): ICopyData | null {
     if (this.isInsertionMarker_) {
       return null;
     }

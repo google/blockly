@@ -7,12 +7,12 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.clipboard');
 
-import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import {BlockPaster} from './clipboard/block_paster.js';
 import * as registry from './clipboard/registry.js';
 
 /** Metadata about the object that is currently on the clipboard. */
-let copyData: CopyData | null = null;
+let copyData: ICopyData | null = null;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.

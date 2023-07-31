@@ -23,7 +23,7 @@ import type {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IBubble} from './interfaces/i_bubble.js';
-import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
@@ -568,7 +568,7 @@ export class WorkspaceCommentSvg
    * @returns Copy metadata.
    * @internal
    */
-  toCopyData(): CopyData {
+  toCopyData(): ICopyData {
     return {
       saveInfo: this.toXmlWithXY(),
       source: this.workspace,

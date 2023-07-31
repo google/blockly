@@ -625,6 +625,22 @@ export class RenderedConnection extends Connection {
       this.sourceBlock_.bumpNeighbours();
     }
   }
+
+  /**
+   * Change a connection's compatibility.
+   * Rerender blocks as needed.
+   *
+   * @param check Compatible value type or list of value types. Null if all
+   *     types are compatible.
+   * @returns The connection being modified (to allow chaining).
+   */
+  override setCheck(check: string | string[] | null): RenderedConnection {
+    super.setCheck(check);
+    if (this.sourceBlock_.rendered) {
+      this.sourceBlock_.queueRender();
+    }
+    return this;
+  }
 }
 
 export namespace RenderedConnection {

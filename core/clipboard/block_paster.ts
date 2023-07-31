@@ -5,7 +5,7 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
-import {registry} from '../clipboard.js';
+import * as registry from './registry.js';
 import {ICopyData} from '../interfaces/i_copyable.js';
 import {IPaster} from '../interfaces/i_paster.js';
 import {State, append} from '../serialization/blocks.js';

@@ -9,7 +9,7 @@ import {ICopyData} from '../interfaces/i_copyable.js';
 import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {WorkspaceCommentSvg} from '../workspace_comment_svg.js';
-import {registry} from '../clipboard.js';
+import * as registry from './registry.js';
 
 export class WorkspaceCommentPaster
   implements IPaster<WorkspaceCommentCopyData, WorkspaceCommentSvg>

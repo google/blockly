@@ -69,8 +69,6 @@ export class FieldLabel extends Field<string> {
 
   /**
    * Create block UI for this label.
-   *
-   * @internal
    */
   override initView() {
     this.createTextElement_();

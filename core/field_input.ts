@@ -141,7 +141,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     }
   }
 
-  /** @internal */
   override initView() {
     const block = this.getSourceBlock();
     if (!block) {

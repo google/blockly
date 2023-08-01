@@ -135,8 +135,6 @@ export class FieldImage extends Field<string> {
 
   /**
    * Create the block UI for this image.
-   *
-   * @internal
    */
   override initView() {
     this.imageElement = dom.createSvgElement(

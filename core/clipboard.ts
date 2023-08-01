@@ -40,8 +40,11 @@ function copyInternal<T extends ICopyData>(toCopy: ICopyable<T>): T | null {
 }
 
 /**
- * Paste a block or workspace comment on to the main workspace.
+ * Paste a pasteable element into the workspace.
  *
+ * @param copyData The data to paste into the workspace.
+ * @param workspace The workspace to paste the data into.
+ * @param coordinate The location to paste the thing at.
  * @returns The pasted thing if the paste was successful, null otherwise.
  */
 export function paste<T extends ICopyData>(
@@ -49,7 +52,23 @@ export function paste<T extends ICopyData>(
   workspace: WorkspaceSvg,
   coordinate?: Coordinate,
 ): ICopyable<T> | null;
+
+/**
+ * Pastes the last copied ICopyable into the workspace.
+ *
+ * @returns the pasted thing if the paste was successful, null otherwise.
+ */
 export function paste(): ICopyable<ICopyData> | null;
+
+/**
+ * Pastes the given data into the workspace, or the last copied ICopyable if
+ * no data is passed.
+ *
+ * @param copyData The data to paste into the workspace.
+ * @param workspace The workspace to paste the data into.
+ * @param coordinate The location to paste the thing at.
+ * @returns The pasted thing if the paste was successful, null otherwise.
+ */
 export function paste<T extends ICopyData>(
   copyData?: T,
   workspace?: WorkspaceSvg,
@@ -62,17 +81,23 @@ export function paste<T extends ICopyData>(
   return pasteFromData(copyData, workspace, coordinate);
 }
 
+/**
+ * Paste a pasteable element into the workspace.
+ *
+ * @param copyData The data to paste into the workspace.
+ * @param workspace The workspace to paste the data into.
+ * @param coordinate The location to paste the thing at.
+ * @returns The pasted thing if the paste was successful, null otherwise.
+ */
 function pasteFromData<T extends ICopyData>(
   copyData: T,
   workspace: WorkspaceSvg,
   coordinate?: Coordinate,
 ): ICopyable<T> | null {
   workspace = workspace.getRootWorkspace() ?? workspace;
-  return (
-    globalRegistry
-      .getObject(globalRegistry.Type.PASTER, copyData.paster, false)
-      ?.paste(copyData, workspace, coordinate) ?? null
-  ) as ICopyable<T> | null;
+  return (globalRegistry
+    .getObject(globalRegistry.Type.PASTER, copyData.paster, false)
+    ?.paste(copyData, workspace, coordinate) ?? null) as ICopyable<T> | null;
 }
 
 /**
@@ -104,8 +129,8 @@ function duplicateInternal<
 
   // I hate side effects.
   stashedCopyData = oldCopyData;
-  stashedWorkspace = oldWorkspace
-  
+  stashedWorkspace = oldWorkspace;
+
   if (!data) return null;
   return paste(data, toDuplicate.workspace) as T;
 }

@@ -32,9 +32,7 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
     eventUtils.disable();
     let block;
     try {
-      block = append(copyData.blockState, workspace, {
-        recordUndo: true,
-      }) as BlockSvg;
+      block = append(copyData.blockState, workspace) as BlockSvg;
       moveBlockToNotConflict(block);
     } finally {
       eventUtils.enable();
@@ -54,9 +52,12 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
  * Moves the given block to a location where it does not: (1) overlap exactly
  * with any other blocks, or (2) look like it is connected to any other blocks.
  *
+ * Exported for testing.
+ *
  * @param block The block to move to an unambiguous location.
+ * @internal
  */
-function moveBlockToNotConflict(block: BlockSvg) {
+export function moveBlockToNotConflict(block: BlockSvg) {
   const workspace = block.workspace;
   const snapRadius = config.snapRadius;
   const coord = block.getRelativeToSurfaceXY();

@@ -29,13 +29,13 @@ export class FieldImage extends Field<string> {
    */
   private static readonly Y_PADDING = 1;
   protected override size_: Size;
-  private readonly imageHeight: number;
+  protected readonly imageHeight: number;
 
   /** The function to be called when this field is clicked. */
   private clickHandler: ((p1: FieldImage) => void) | null = null;
 
   /** The rendered field's image element. */
-  private imageElement: SVGImageElement | null = null;
+  protected imageElement: SVGImageElement | null = null;
 
   /**
    * Editable fields usually show some sort of UI indicating they are

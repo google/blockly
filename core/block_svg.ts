@@ -70,7 +70,11 @@ import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
  */
 export class BlockSvg
   extends Block
-  implements IASTNodeLocationSvg, IBoundedElement, ICopyable, IDraggable
+  implements
+    IASTNodeLocationSvg,
+    IBoundedElement,
+    ICopyable<BlockCopyData>,
+    IDraggable
 {
   /**
    * Constant for identifying rows that are to be rendered inline.

@@ -72,7 +72,7 @@ function pasteFromData<T extends ICopyData>(
     globalRegistry
       .getObject(globalRegistry.Type.PASTER, copyData.paster, false)
       ?.paste(copyData, workspace, coordinate) ?? null
-  );
+  ) as ICopyable<T> | null;
 }
 
 /**

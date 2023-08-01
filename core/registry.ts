@@ -100,7 +100,7 @@ export class Type<_T> {
   static ICON = new Type<IIcon>('icon');
 
   /** @internal */
-  static PASTER = new Type<IPaster<ICopyData, ICopyable>>('paster');
+  static PASTER = new Type<IPaster<ICopyData, ICopyable<ICopyData>>>('paster');
 }
 
 /**

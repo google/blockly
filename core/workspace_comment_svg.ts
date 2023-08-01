@@ -51,7 +51,7 @@ const TEXTAREA_OFFSET = 2;
  */
 export class WorkspaceCommentSvg
   extends WorkspaceComment
-  implements IBoundedElement, IBubble, ICopyable
+  implements IBoundedElement, IBubble, ICopyable<WorkspaceCommentCopyData>
 {
   /**
    * The width and height to use to size a workspace comment when it is first

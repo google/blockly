@@ -9,13 +9,13 @@ goog.declareModuleId('Blockly.ICopyable');
 
 import type {ISelectable} from './i_selectable.js';
 
-export interface ICopyable extends ISelectable {
+export interface ICopyable<T extends ICopyData> extends ISelectable {
   /**
    * Encode for copying.
    *
    * @returns Copy metadata.
    */
-  toCopyData(): ICopyData | null;
+  toCopyData(): T | null;
 }
 
 export namespace ICopyable {

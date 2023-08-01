@@ -12,6 +12,7 @@ import {BlockPaster} from './clipboard/block_paster.js';
 import * as globalRegistry from './registry.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 import * as registry from './clipboard/registry.js';
+import {Coordinate} from './utils/coordinate.js';
 
 /** Metadata about the object that is currently on the clipboard. */
 let stashedCopyData: ICopyData | null = null;
@@ -24,39 +25,53 @@ let stashedWorkspace: WorkspaceSvg | null = null;
  * @param toCopy Block or Workspace Comment to be copied.
  * @internal
  */
-export function copy(toCopy: ICopyable) {
-  TEST_ONLY.copyInternal(toCopy);
+export function copy<T extends ICopyData>(toCopy: ICopyable<T>): T | null {
+  return TEST_ONLY.copyInternal(toCopy);
 }
 
 /**
  * Private version of copy for stubbing in tests.
  */
-function copyInternal(toCopy: ICopyable) {
-  stashedCopyData = toCopy.toCopyData();
+function copyInternal<T extends ICopyData>(toCopy: ICopyable<T>): T | null {
+  const data = toCopy.toCopyData();
+  stashedCopyData = data; // Necessary for propery typing. This is why state sucks.
   stashedWorkspace = (toCopy as any).workspace ?? null;
+  return data;
 }
 
 /**
  * Paste a block or workspace comment on to the main workspace.
  *
  * @returns The pasted thing if the paste was successful, null otherwise.
- * @internal
  */
-export function paste(): ICopyable | null {
-  if (!stashedCopyData) {
-    return null;
+export function paste<T extends ICopyData>(
+  copyData: T,
+  workspace: WorkspaceSvg,
+  coordinate?: Coordinate,
+): ICopyable<T> | null;
+export function paste(): ICopyable<ICopyData> | null;
+export function paste<T extends ICopyData>(
+  copyData?: T,
+  workspace?: WorkspaceSvg,
+  coordinate?: Coordinate,
+): ICopyable<ICopyData> | null {
+  if (!copyData || !workspace) {
+    if (!stashedCopyData || !stashedWorkspace) return null;
+    return pasteFromData(stashedCopyData, stashedWorkspace);
   }
-  // Pasting always pastes to the main workspace, even if the copy
-  // started in a flyout workspace.
-  let workspace = stashedWorkspace;
-  if (workspace?.isFlyout) {
-    workspace = workspace.targetWorkspace!;
-  }
-  if (!workspace) return null;
+  return pasteFromData(copyData, workspace, coordinate);
+}
+
+function pasteFromData<T extends ICopyData>(
+  copyData: T,
+  workspace: WorkspaceSvg,
+  coordinate?: Coordinate,
+): ICopyable<T> | null {
+  workspace = workspace.getRootWorkspace() ?? workspace;
   return (
     globalRegistry
-      .getObject(globalRegistry.Type.PASTER, stashedCopyData.paster, false)
-      ?.paste(stashedCopyData, workspace) ?? null
+      .getObject(globalRegistry.Type.PASTER, copyData.paster, false)
+      ?.paste(copyData, workspace, coordinate) ?? null
   );
 }
 
@@ -68,23 +83,35 @@ export function paste(): ICopyable | null {
  *     duplication failed.
  * @internal
  */
-export function duplicate(toDuplicate: ICopyable): ICopyable | null {
+export function duplicate<
+  U extends ICopyData,
+  T extends ICopyable<U> & IHasWorkspace,
+>(toDuplicate: T): T | null {
   return TEST_ONLY.duplicateInternal(toDuplicate);
 }
 
 /**
  * Private version of duplicate for stubbing in tests.
  */
-function duplicateInternal(toDuplicate: ICopyable): ICopyable | null {
+function duplicateInternal<
+  U extends ICopyData,
+  T extends ICopyable<U> & IHasWorkspace,
+>(toDuplicate: T): T | null {
   const oldCopyData = stashedCopyData;
-  copy(toDuplicate);
-  if (!stashedCopyData || !stashedWorkspace) return null;
-  const pastedThing =
-    globalRegistry
-      .getObject(globalRegistry.Type.PASTER, stashedCopyData.paster, false)
-      ?.paste(stashedCopyData, stashedWorkspace) ?? null;
+  const oldWorkspace = stashedWorkspace;
+
+  const data = copy(toDuplicate);
+
+  // I hate side effects.
   stashedCopyData = oldCopyData;
-  return pastedThing;
+  stashedWorkspace = oldWorkspace
+  
+  if (!data) return null;
+  return paste(data, toDuplicate.workspace) as T;
+}
+
+interface IHasWorkspace {
+  workspace: WorkspaceSvg;
 }
 
 export const TEST_ONLY = {

@@ -568,7 +568,7 @@ function getChunkOptions() {
     // known chunk entrypoints in chunkFiles.  N.B.: O(n*m).  :-(
     const chunk = chunks.find(
         chunk => chunkFiles.find(f => {
-          return f.endsWith("/" + chunk.entry.replaceAll("\\", "/"));
+          return f.endsWith('/' + chunk.entry.replaceAll('\\', '/'));
         }
         ));
     if (!chunk) throw new Error('Unable to identify chunk');

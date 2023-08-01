@@ -574,7 +574,7 @@ export class WorkspaceCommentSvg
   toCopyData(): WorkspaceCommentCopyData {
     return {
       paster: WorkspaceCommentPaster.TYPE,
-      saveInfo: this.toXmlWithXY(),
+      commentState: this.toXmlWithXY(),
     };
   }
 

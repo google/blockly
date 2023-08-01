@@ -831,7 +831,7 @@ export class BlockSvg
     }
     return {
       paster: BlockPaster.TYPE,
-      saveInfo: blocks.save(this, {
+      blockState: blocks.save(this, {
         addCoordinates: true,
         addNextBlocks: false,
       }) as blocks.State,

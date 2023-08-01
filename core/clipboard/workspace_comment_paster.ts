@@ -22,15 +22,18 @@ export class WorkspaceCommentPaster
     coordinate?: Coordinate,
   ): WorkspaceCommentSvg {
     if (coordinate) {
-      copyData.saveInfo.setAttribute('x', `${coordinate.x}`);
-      copyData.saveInfo.setAttribute('y', `${coordinate.y}`);
+      copyData.commentState.setAttribute('x', `${coordinate.x}`);
+      copyData.commentState.setAttribute('y', `${coordinate.y}`);
     }
-    return WorkspaceCommentSvg.fromXmlRendered(copyData.saveInfo, workspace);
+    return WorkspaceCommentSvg.fromXmlRendered(
+      copyData.commentState,
+      workspace,
+    );
   }
 }
 
 export interface WorkspaceCommentCopyData extends ICopyData {
-  saveInfo: Element;
+  commentState: Element;
 }
 
 registry.register(WorkspaceCommentPaster.TYPE, new WorkspaceCommentPaster());

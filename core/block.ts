@@ -366,8 +366,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * change).
    */
   initModel() {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
+    for (const input of this.inputList) {
+      for (const field of input.fieldRow) {
         if (field.initModel) {
           field.initModel();
         }

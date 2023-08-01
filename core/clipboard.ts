@@ -14,9 +14,9 @@ import {WorkspaceSvg} from './workspace_svg.js';
 import * as registry from './clipboard/registry.js';
 
 /** Metadata about the object that is currently on the clipboard. */
-let copyData: ICopyData | null = null;
+let stashedCopyData: ICopyData | null = null;
 
-let source: WorkspaceSvg | null = null;
+let stashedWorkspace: WorkspaceSvg | null = null;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
@@ -32,8 +32,8 @@ export function copy(toCopy: ICopyable) {
  * Private version of copy for stubbing in tests.
  */
 function copyInternal(toCopy: ICopyable) {
-  copyData = toCopy.toCopyData();
-  source = (toCopy as any).workspace ?? null;
+  stashedCopyData = toCopy.toCopyData();
+  stashedWorkspace = (toCopy as any).workspace ?? null;
 }
 
 /**
@@ -43,20 +43,20 @@ function copyInternal(toCopy: ICopyable) {
  * @internal
  */
 export function paste(): ICopyable | null {
-  if (!copyData) {
+  if (!stashedCopyData) {
     return null;
   }
   // Pasting always pastes to the main workspace, even if the copy
   // started in a flyout workspace.
-  let workspace = source;
+  let workspace = stashedWorkspace;
   if (workspace?.isFlyout) {
     workspace = workspace.targetWorkspace!;
   }
   if (!workspace) return null;
   return (
     globalRegistry
-      .getObject(globalRegistry.Type.PASTER, copyData.paster, false)
-      ?.paste(copyData, workspace) ?? null
+      .getObject(globalRegistry.Type.PASTER, stashedCopyData.paster, false)
+      ?.paste(stashedCopyData, workspace) ?? null
   );
 }
 
@@ -76,14 +76,14 @@ export function duplicate(toDuplicate: ICopyable): ICopyable | null {
  * Private version of duplicate for stubbing in tests.
  */
 function duplicateInternal(toDuplicate: ICopyable): ICopyable | null {
-  const oldCopyData = copyData;
+  const oldCopyData = stashedCopyData;
   copy(toDuplicate);
-  if (!copyData || !source) return null;
+  if (!stashedCopyData || !stashedWorkspace) return null;
   const pastedThing =
     globalRegistry
-      .getObject(globalRegistry.Type.PASTER, copyData.paster, false)
-      ?.paste(copyData, source) ?? null;
-  copyData = oldCopyData;
+      .getObject(globalRegistry.Type.PASTER, stashedCopyData.paster, false)
+      ?.paste(stashedCopyData, stashedWorkspace) ?? null;
+  stashedCopyData = oldCopyData;
   return pastedThing;
 }
 

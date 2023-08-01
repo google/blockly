@@ -11,7 +11,7 @@ import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import * as common from './common.js';
 import {Gesture} from './gesture.js';
-import type {ICopyable} from './interfaces/i_copyable.js';
+import {isCopyable} from './interfaces/i_copyable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
@@ -114,7 +114,9 @@ export function registerCopy() {
       // AnyDuringMigration because:  Property 'hideChaff' does not exist on
       // type 'Workspace'.
       (workspace as AnyDuringMigration).hideChaff();
-      clipboard.copy(common.getSelected() as ICopyable);
+      const selected = common.getSelected();
+      if (!selected || !isCopyable(selected)) return false;
+      clipboard.copy(selected);
       return true;
     },
     keyCodes: [ctrlC, altC, metaC],
@@ -152,10 +154,7 @@ export function registerCut() {
     },
     callback() {
       const selected = common.getSelected();
-      if (!selected) {
-        // Shouldn't happen but appeases the type system
-        return false;
-      }
+      if (!selected || !isCopyable(selected)) return false;
       clipboard.copy(selected);
       (selected as BlockSvg).checkAndDelete();
       return true;

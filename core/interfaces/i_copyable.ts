@@ -25,3 +25,8 @@ export namespace ICopyable {
 }
 
 export type ICopyData = ICopyable.ICopyData;
+
+/** @returns true if the given object is copyable. */
+export function isCopyable(obj: any): obj is ICopyable<ICopyData> {
+  return obj.toCopyData !== undefined;
+}

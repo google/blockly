@@ -7,12 +7,16 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.clipboard');
 
-import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import {BlockPaster} from './clipboard/block_paster.js';
+import * as globalRegistry from './registry.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 import * as registry from './clipboard/registry.js';
 
 /** Metadata about the object that is currently on the clipboard. */
-let copyData: CopyData | null = null;
+let copyData: ICopyData | null = null;
+
+let source: WorkspaceSvg | null = null;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
@@ -29,6 +33,7 @@ export function copy(toCopy: ICopyable) {
  */
 function copyInternal(toCopy: ICopyable) {
   copyData = toCopy.toCopyData();
+  source = (toCopy as any).workspace ?? null;
 }
 
 /**
@@ -43,17 +48,16 @@ export function paste(): ICopyable | null {
   }
   // Pasting always pastes to the main workspace, even if the copy
   // started in a flyout workspace.
-  let workspace = copyData.source;
-  if (workspace.isFlyout) {
+  let workspace = source;
+  if (workspace?.isFlyout) {
     workspace = workspace.targetWorkspace!;
   }
-  if (
-    copyData.typeCounts &&
-    workspace.isCapacityAvailable(copyData.typeCounts)
-  ) {
-    return workspace.paste(copyData.saveInfo);
-  }
-  return null;
+  if (!workspace) return null;
+  return (
+    globalRegistry
+      .getObject(globalRegistry.Type.PASTER, copyData.paster, false)
+      ?.paste(copyData, workspace) ?? null
+  );
 }
 
 /**
@@ -74,8 +78,11 @@ export function duplicate(toDuplicate: ICopyable): ICopyable | null {
 function duplicateInternal(toDuplicate: ICopyable): ICopyable | null {
   const oldCopyData = copyData;
   copy(toDuplicate);
+  if (!copyData || !source) return null;
   const pastedThing =
-    toDuplicate.toCopyData()?.source?.paste(copyData!.saveInfo) ?? null;
+    globalRegistry
+      .getObject(globalRegistry.Type.PASTER, copyData.paster, false)
+      ?.paste(copyData, source) ?? null;
   copyData = oldCopyData;
   return pastedThing;
 }

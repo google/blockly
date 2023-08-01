@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {ICopyable, CopyData} from '../interfaces/i_copyable.js';
+import {ICopyable, ICopyData} from '../interfaces/i_copyable.js';
 import type {IPaster} from '../interfaces/i_paster.js';
 import * as registry from '../registry.js';
 
@@ -14,7 +14,7 @@ import * as registry from '../registry.js';
  * @param type The type of the paster to register, e.g. 'block', 'comment', etc.
  * @param paster The paster to register.
  */
-export function register<U extends CopyData, T extends ICopyable>(
+export function register<U extends ICopyData, T extends ICopyable>(
   type: string,
   paster: IPaster<U, T>,
 ) {

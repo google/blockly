@@ -37,7 +37,7 @@ import {FieldLabel} from './field_label.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
-import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {ICopyable} from './interfaces/i_copyable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
 import {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
@@ -62,6 +62,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import * as renderManagement from './render_management.js';
 import * as deprecation from './utils/deprecation.js';
 import {IconType} from './icons/icon_types.js';
+import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
 
 /**
  * Class for a block's SVG representation.
@@ -823,18 +824,17 @@ export class BlockSvg
    * Encode a block for copying.
    *
    * @returns Copy metadata, or null if the block is an insertion marker.
-   * @internal
    */
-  toCopyData(): CopyData | null {
+  toCopyData(): BlockCopyData | null {
     if (this.isInsertionMarker_) {
       return null;
     }
     return {
-      saveInfo: blocks.save(this, {
+      paster: BlockPaster.TYPE,
+      blockState: blocks.save(this, {
         addCoordinates: true,
         addNextBlocks: false,
       }) as blocks.State,
-      source: this.workspace,
       typeCounts: common.getBlockTypeCounts(this, true),
     };
   }

@@ -145,7 +145,7 @@ async function openCategories(browser, categoryList, directionMultiplier) {
           await browser.keys(['\uE00C']);
           await browser.pause(PAUSE_TIME);
         } else {
-          let flyoutBlock = await browser.$(
+          const flyoutBlock = await browser.$(
             `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + i * 2})`,
           );
           if (!(await elementInBounds(browser, flyoutBlock))) {

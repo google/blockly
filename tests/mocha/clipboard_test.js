@@ -114,4 +114,23 @@ suite('Clipboard', function () {
       });
     });
   });
+
+  suite('pasting comments', function () {
+    test('pasted comments are bumped to not overlap', function () {
+      Blockly.Xml.domToWorkspace(
+        Blockly.utils.xml.textToDom(
+          '<xml><comment id="test" x=10 y=10/></xml>',
+        ),
+        this.workspace,
+      );
+      const comment = this.workspace.getTopComments(false)[0];
+      const data = comment.toCopyData();
+
+      const newComment = Blockly.clipboard.paste(data, this.workspace);
+      chai.assert.deepEqual(
+        newComment.getRelativeToSurfaceXY(),
+        new Blockly.utils.Coordinate(60, 60),
+      );
+    });
+  });
 });

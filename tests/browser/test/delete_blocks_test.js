@@ -98,7 +98,7 @@ const startBlocks = {
     ],
   },
 };
-const pauseLength = 20;
+const pauseLength = 200;
 
 suite('Delete blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test

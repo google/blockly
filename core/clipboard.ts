@@ -13,6 +13,7 @@ import * as globalRegistry from './registry.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 import * as registry from './clipboard/registry.js';
 import {Coordinate} from './utils/coordinate.js';
+import * as deprecation from './utils/deprecation.js';
 
 /** Metadata about the object that is currently on the clipboard. */
 let stashedCopyData: ICopyData | null = null;
@@ -20,12 +21,18 @@ let stashedCopyData: ICopyData | null = null;
 let stashedWorkspace: WorkspaceSvg | null = null;
 
 /**
- * Copy a block or workspace comment onto the local clipboard.
+ * Copy a copyable element onto the local clipboard.
  *
- * @param toCopy Block or Workspace Comment to be copied.
+ * @param toCopy The copyable element to be copied.
  * @internal
  */
 export function copy<T extends ICopyData>(toCopy: ICopyable<T>): T | null {
+  deprecation.warn(
+    'Blockly.clipboard.copy',
+    'v11',
+    'v12',
+    'myCopyable.toCopyData()',
+  );
   return TEST_ONLY.copyInternal(toCopy);
 }
 
@@ -34,7 +41,7 @@ export function copy<T extends ICopyData>(toCopy: ICopyable<T>): T | null {
  */
 function copyInternal<T extends ICopyData>(toCopy: ICopyable<T>): T | null {
   const data = toCopy.toCopyData();
-  stashedCopyData = data; // Necessary for propery typing. This is why state sucks.
+  stashedCopyData = data;
   stashedWorkspace = (toCopy as any).workspace ?? null;
   return data;
 }
@@ -101,11 +108,10 @@ function pasteFromData<T extends ICopyData>(
 }
 
 /**
- * Duplicate this block and its children, or a workspace comment.
+ * Duplicate this copy-paste-able element.
  *
- * @param toDuplicate Block or Workspace Comment to be duplicated.
- * @returns The block or workspace comment that was duplicated, or null if the
- *     duplication failed.
+ * @param toDuplicate The element to be duplicated.
+ * @returns The element that was duplicated, or null if the duplication failed.
  * @internal
  */
 export function duplicate<
@@ -122,15 +128,13 @@ function duplicateInternal<
   U extends ICopyData,
   T extends ICopyable<U> & IHasWorkspace,
 >(toDuplicate: T): T | null {
-  const oldCopyData = stashedCopyData;
-  const oldWorkspace = stashedWorkspace;
-
-  const data = copy(toDuplicate);
-
-  // I hate side effects.
-  stashedCopyData = oldCopyData;
-  stashedWorkspace = oldWorkspace;
-
+  deprecation.warn(
+    'Blockly.clipboard.duplicate',
+    'v11',
+    'v12',
+    'Blockly.clipboard.paste(myCopyable.toCopyData(), myWorkspace)',
+  );
+  const data = toDuplicate.toCopyData();
   if (!data) return null;
   return paste(data, toDuplicate.workspace) as T;
 }

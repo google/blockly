@@ -30,7 +30,7 @@ suite('Key Down', function () {
    */
   function setSelectedBlock(workspace) {
     defineStackBlock();
-    const block = workspace.newBlock('stack_block')
+    const block = workspace.newBlock('stack_block');
     Blockly.common.setSelected(block);
     return block;
   }

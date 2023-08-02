@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.ShortcutRegistry');
 
 import {KeyCodes} from './utils/keycodes.js';
 import * as object from './utils/object.js';
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for the registry of keyboard shortcuts. This is intended to be a

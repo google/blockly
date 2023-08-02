@@ -1445,6 +1445,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         // with any blocks.
         commentX += 50;
         commentY += 50;
+        // TODO: This code doesn't work because it's using absolute coords
+        //    where relative coords are expected. Need to figure out what I'm
+        //    doing with this function and if I need to fix it.
         comment.moveBy(commentX, commentY);
       }
     } finally {

@@ -167,9 +167,7 @@ suite('Delete blocks', function (done) {
   test('Delete block using context menu', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using context menu.
-    const block = (await getBlockElementById(this.browser, firstBlockId)).$(
-      '.blocklyPath',
-    );
+    const block = await getBlockElementById(this.browser, firstBlockId);
     await contextMenuSelect(this.browser, block, 'Delete 2 Blocks');
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(

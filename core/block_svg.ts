@@ -187,6 +187,8 @@ export class BlockSvg
     this.svgGroup_.setAttribute('data-id', this.id);
 
     this.doInit_();
+    this.initSvg();
+    this.queueRender();
   }
 
   /**

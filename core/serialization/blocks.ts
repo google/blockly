@@ -703,8 +703,6 @@ function initBlock(block: Block, rendered: boolean) {
     // operation to decrease load time.
     blockSvg.setConnectionTracking(false);
 
-    blockSvg.initSvg();
-    blockSvg.queueRender();
     blockSvg.updateDisabled();
 
     // fixes #6076 JSO deserialization doesn't

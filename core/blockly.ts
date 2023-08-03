@@ -407,7 +407,6 @@ export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
 // Context for why we need to monkey-patch in these functions (internal):
 //   https://docs.google.com/document/d/1MbO0LEA-pAyx1ErGLJnyUqTLrcYTo-5zga9qplnxeXo/edit?usp=sharing&resourcekey=0-5h_32-i-dHwHjf_9KYEVKg
 
-// clang-format off
 Workspace.prototype.newBlock = function (
   prototypeName: string,
   opt_id?: string,
@@ -460,7 +459,6 @@ Names.prototype.populateProcedures = function (
     this.getName(flattenedProcedures[i][0], Names.NameType.PROCEDURE);
   }
 };
-// clang-format on
 
 // Re-export submodules that no longer declareLegacyNamespace.
 export {browserEvents};

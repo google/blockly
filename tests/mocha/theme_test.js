@@ -128,7 +128,7 @@ suite('Theme', function () {
     try {
       const blockStyles = createBlockStyles();
       const theme = new Blockly.Theme('themeName', blockStyles);
-      workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+      workspace = Blockly.inject('blocklyDiv', {});
       const blockA = workspace.newBlock('stack_block');
 
       blockA.setStyle = function () {

@@ -94,6 +94,10 @@ const testFileLocations = {
     'file://' +
     posixPath(path.join(__dirname, '..', '..')) +
     '/playground.html',
+  PLAYGROUND_RTL:
+    'file://' +
+    posixPath(path.join(__dirname, '..', '..')) +
+    '/playground.html?dir=rtl',
 };
 
 /**
@@ -164,7 +168,6 @@ async function getCategory(browser, categoryName) {
 async function getNthBlockOfCategory(browser, categoryName, n) {
   const category = await getCategory(browser, categoryName);
   await category.click();
-  await browser.pause(100);
   const block = await browser.$(
     `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`,
   );
@@ -440,6 +443,29 @@ async function getAllBlocks(browser) {
   });
 }
 
+/**
+ * Find the flyout's scrollbar and scroll by the specified amount.
+ * This makes several assumptions:
+ *  - A flyout with a valid scrollbar exists, is open, and is in view.
+ *  - The workspace has a trash can, which means it has a second (hidden) flyout.
+ * @param browser The active WebdriverIO Browser object.
+ * @param xDelta How far to drag the flyout in the x direction. Positive is right.
+ * @param yDelta How far to drag thte flyout in the y direction. Positive is down.
+ * @return A Promise that resolves when the actions are completed.
+ */
+async function scrollFlyout(browser, xDelta, yDelta) {
+  // There are two flyouts on the playground workspace: one for the trash can
+  // and one for the toolbox. We want the second one.
+  // This assumes there is only one scrollbar handle in the flyout, but it could
+  // be either horizontal or vertical.
+  await browser.pause(50);
+  const scrollbarHandle = await browser
+    .$$(`.blocklyFlyoutScrollbar`)[1]
+    .$(`rect.blocklyScrollbarHandle`);
+  await scrollbarHandle.dragAndDrop({x: xDelta, y: yDelta});
+  await browser.pause(50);
+}
+
 module.exports = {
   testSetup,
   testFileLocations,
@@ -459,4 +485,5 @@ module.exports = {
   screenDirection,
   getBlockTypeFromWorkspace,
   getAllBlocks,
+  scrollFlyout,
 };

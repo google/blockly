@@ -459,10 +459,10 @@ async function scrollFlyout(browser, xDelta, yDelta) {
   // This assumes there is only one scrollbar handle in the flyout, but it could
   // be either horizontal or vertical.
   await browser.pause(50);
-  const selected = await browser
+  const scrollbarHandle = await browser
     .$$(`.blocklyFlyoutScrollbar`)[1]
     .$(`rect.blocklyScrollbarHandle`);
-  await selected.dragAndDrop({x: xDelta, y: yDelta});
+  await scrollbarHandle.dragAndDrop({x: xDelta, y: yDelta});
   await browser.pause(50);
 }
 

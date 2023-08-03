@@ -32,12 +32,12 @@ suite('Testing Field Edits', function (done) {
   });
 });
 
-async function testFieldEdits(browser, delta) {
+async function testFieldEdits(browser, direction) {
   const numberBlock = await dragBlockTypeFromFlyout(
     browser,
     'Math',
     'math_number',
-    50 * delta,
+    50 * direction,
     20,
   );
 

@@ -58,10 +58,10 @@ const testCategories = [
 ];
 
 /**
- * Check whether an element is inside the bounds of the Blockly div. You can use this
+ * Check whether an element is fully inside the bounds of the Blockly div. You can use this
  * to determine whether a block on the workspace or flyout is inside the Blockly div.
  * This does not check whether there are other Blockly elements (such as a toolbox or
- * flyout) on top of the element.
+ * flyout) on top of the element. A partially visible block is considered out of bounds.
  * @param browser The active WebdriverIO Browser object.
  * @param element The element to look for.
  * @returns A Promise resolving to true if the element is in bounds and false otherwise.
@@ -164,7 +164,7 @@ async function openCategories(browser, categoryList, directionMultiplier) {
             console.log(`fail: block ${i} in category ${categoryName}`);
           }
 
-          // Clean up between blocks so they can't interact with each other
+          // Clean up between blocks so they can't interact with each other.
           await browser.execute(() => {
             Blockly.getMainWorkspace().clear();
           });

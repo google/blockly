@@ -140,7 +140,7 @@ import {ICollapsibleToolboxItem} from './interfaces/i_collapsible_toolbox_item.j
 import {IComponent} from './interfaces/i_component.js';
 import {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
-import {ICopyable} from './interfaces/i_copyable.js';
+import {ICopyable, isCopyable} from './interfaces/i_copyable.js';
 import {IDeletable} from './interfaces/i_deletable.js';
 import {IDeleteArea} from './interfaces/i_delete_area.js';
 import {IDragTarget} from './interfaces/i_drag_target.js';
@@ -592,7 +592,7 @@ export {IComponent};
 export {IConnectionChecker};
 export {IContextMenu};
 export {icons};
-export {ICopyable};
+export {ICopyable, isCopyable};
 export {IDeletable};
 export {IDeleteArea};
 export {IDragTarget};

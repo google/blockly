@@ -14,7 +14,7 @@ import * as registry from '../registry.js';
  * @param type The type of the paster to register, e.g. 'block', 'comment', etc.
  * @param paster The paster to register.
  */
-export function register<U extends ICopyData, T extends ICopyable>(
+export function register<U extends ICopyData, T extends ICopyable<U>>(
   type: string,
   paster: IPaster<U, T>,
 ) {

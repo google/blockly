@@ -24,6 +24,7 @@ let stashedWorkspace: WorkspaceSvg | null = null;
  * Copy a copyable element onto the local clipboard.
  *
  * @param toCopy The copyable element to be copied.
+ * @deprecated v11. Use `myCopyable.toCopyData()` instead. To be removed v12.
  * @internal
  */
 export function copy<T extends ICopyData>(toCopy: ICopyable<T>): T | null {
@@ -112,12 +113,21 @@ function pasteFromData<T extends ICopyData>(
  *
  * @param toDuplicate The element to be duplicated.
  * @returns The element that was duplicated, or null if the duplication failed.
+ * @deprecated v11. Use
+ *     `Blockly.clipboard.paste(myCopyable.toCopyData(), myWorkspace)` instead.
+ *     To be removed v12.
  * @internal
  */
 export function duplicate<
   U extends ICopyData,
   T extends ICopyable<U> & IHasWorkspace,
 >(toDuplicate: T): T | null {
+  deprecation.warn(
+    'Blockly.clipboard.duplicate',
+    'v11',
+    'v12',
+    'Blockly.clipboard.paste(myCopyable.toCopyData(), myWorkspace)',
+  );
   return TEST_ONLY.duplicateInternal(toDuplicate);
 }
 
@@ -128,12 +138,6 @@ function duplicateInternal<
   U extends ICopyData,
   T extends ICopyable<U> & IHasWorkspace,
 >(toDuplicate: T): T | null {
-  deprecation.warn(
-    'Blockly.clipboard.duplicate',
-    'v11',
-    'v12',
-    'Blockly.clipboard.paste(myCopyable.toCopyData(), myWorkspace)',
-  );
   const data = toDuplicate.toCopyData();
   if (!data) return null;
   return paste(data, toDuplicate.workspace) as T;

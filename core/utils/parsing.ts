@@ -118,9 +118,9 @@ function tokenizeInterpolationInternal(
               Array.prototype.push.apply(
                 tokens,
                 tokenizeInterpolationInternal(
-                    rawValue,
-                    parseInterpolationTokens,
-                    tokenizeNewlines,
+                  rawValue,
+                  parseInterpolationTokens,
+                  tokenizeNewlines,
                 ),
               );
             } else if (parseInterpolationTokens) {
@@ -155,8 +155,10 @@ function tokenizeInterpolationInternal(
   const mergedTokens = [];
   buffer.length = 0;
   for (let i = 0; i < tokens.length; i++) {
-    if (typeof tokens[i] === 'string' &&
-        !(tokenizeNewlines && tokens[i] === '\n')) {
+    if (
+      typeof tokens[i] === 'string' &&
+      !(tokenizeNewlines && tokens[i] === '\n')
+    ) {
       buffer.push(tokens[i] as string);
     } else {
       text = buffer.join('');
@@ -205,8 +207,11 @@ export function replaceMessageReferences(message: string | any): string {
   if (typeof message !== 'string') {
     return message;
   }
-  const interpolatedResult =
-      tokenizeInterpolationInternal(message, false, false);
+  const interpolatedResult = tokenizeInterpolationInternal(
+    message,
+    false,
+    false,
+  );
   // When parseInterpolationTokens and tokenizeNewlines are false,
   // interpolatedResult should be at most length 1.
   return interpolatedResult.length ? String(interpolatedResult[0]) : '';

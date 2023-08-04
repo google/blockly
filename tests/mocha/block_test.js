@@ -2404,21 +2404,23 @@ suite('Blocks', function () {
     });
   });
 
-  suite('EndOfRow', function() {
-    setup(function() {
+  suite('EndOfRow', function () {
+    setup(function () {
       Blockly.defineBlocksWithJsonArray([
         {
-          "type": "end_row_test_block",
-          "message0": "Row1\nRow2",
+          'type': 'end_row_test_block',
+          'message0': 'Row1\nRow2',
           'inputsInline': true,
         },
       ]);
     });
-    test('Newline is converted to an end-row input', function() {
+    test('Newline is converted to an end-row input', function () {
       const block = this.workspace.newBlock('end_row_test_block');
       chai.assert.equal(block.inputList[0].fieldRow[0].getValue(), 'Row1');
-      chai.assert.isTrue(block.inputList[0] instanceof EndRowInput,
-          'newline should be converted to an end-row input');
+      chai.assert.isTrue(
+        block.inputList[0] instanceof EndRowInput,
+        'newline should be converted to an end-row input',
+      );
       chai.assert.equal(block.inputList[1].fieldRow[0].getValue(), 'Row2');
     });
   });

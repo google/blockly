@@ -12,4 +12,12 @@ import {StatementInput} from './inputs/statement_input.js';
 import {ValueInput} from './inputs/value_input.js';
 import {inputTypes} from './inputs/input_types.js';
 
-export {Align, Input, DummyInput, EndRowInput, StatementInput, ValueInput, inputTypes};
+export {
+  Align,
+  Input,
+  DummyInput,
+  EndRowInput,
+  StatementInput,
+  ValueInput,
+  inputTypes,
+};

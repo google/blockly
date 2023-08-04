@@ -64,30 +64,21 @@ Blockly.Blocks['factory_base'] = {
   spawnOutputShadow_: function(option) {
     // Helper method for deciding which type of outputs this block needs
     // to attach shadow blocks to.
+    const shadowState = {'type': 'type_null'};
     switch (option) {
       case 'LEFT':
-        this.connectOutputShadow_('OUTPUTTYPE');
+        this.getInput('OUTPUTTYPE').connection.setShadowState(shadowState);
         break;
       case 'TOP':
-        this.connectOutputShadow_('TOPTYPE');
+        this.getInput('TOPTYPE').connection.setShadowState(shadowState);
         break;
       case 'BOTTOM':
-        this.connectOutputShadow_('BOTTOMTYPE');
+        this.getInput('BOTTOMTYPE').connection.setShadowState(shadowState);
         break;
       case 'BOTH':
-        this.connectOutputShadow_('TOPTYPE');
-        this.connectOutputShadow_('BOTTOMTYPE');
+        this.getInput('TOPTYPE').connection.setShadowState(shadowState);
+        this.getInput('BOTTOMTYPE').connection.setShadowState(shadowState);
         break;
-    }
-  },
-  connectOutputShadow_: function(outputType) {
-    // Helper method to create & connect shadow block.
-    var type = this.workspace.newBlock('type_null');
-    type.setShadow(true);
-    type.outputConnection.connect(this.getInput(outputType).connection);
-    type.initSvg();
-    if (this.rendered) {
-      type.render();
     }
   },
   updateShape_: function(option) {

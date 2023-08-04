@@ -365,12 +365,10 @@ Blockly.Blocks['field_dropdown'] = {
   decompose: function(workspace) {
     // Populate the mutator's dialog with this block's components.
     var containerBlock = workspace.newBlock('field_dropdown_container');
-    containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
     for (var i = 0; i < this.optionList_.length; i++) {
       var optionBlock = workspace.newBlock(
           'field_dropdown_option_' + this.optionList_[i]);
-      optionBlock.initSvg();
       connection.connect(optionBlock.previousConnection);
       connection = optionBlock.nextConnection;
     }
@@ -640,11 +638,9 @@ Blockly.Blocks['type_group'] = {
   decompose: function(workspace) {
     // Populate the mutator's dialog with this block's components.
     var containerBlock = workspace.newBlock('type_group_container');
-    containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
     for (var i = 0; i < this.typeCount_; i++) {
       var typeBlock = workspace.newBlock('type_group_item');
-      typeBlock.initSvg();
       connection.connect(typeBlock.previousConnection);
       connection = typeBlock.nextConnection;
     }

@@ -187,13 +187,11 @@ const LISTS_CREATE_WITH = {
     const containerBlock = workspace.newBlock(
       'lists_create_with_container',
     ) as ContainerBlock;
-    (containerBlock as BlockSvg).initSvg();
     let connection = containerBlock.getInput('STACK')!.connection;
     for (let i = 0; i < this.itemCount_; i++) {
       const itemBlock = workspace.newBlock(
         'lists_create_with_item',
       ) as ItemBlock;
-      (itemBlock as BlockSvg).initSvg();
       if (!itemBlock.previousConnection) {
         throw new Error('itemBlock has no previousConnection');
       }

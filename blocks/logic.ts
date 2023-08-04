@@ -375,17 +375,14 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
    */
   decompose: function (this: IfBlock, workspace: Workspace): ContainerBlock {
     const containerBlock = workspace.newBlock('controls_if_if');
-    (containerBlock as BlockSvg).initSvg();
     let connection = containerBlock.nextConnection!;
     for (let i = 1; i <= this.elseifCount_; i++) {
       const elseifBlock = workspace.newBlock('controls_if_elseif');
-      (elseifBlock as BlockSvg).initSvg();
       connection.connect(elseifBlock.previousConnection!);
       connection = elseifBlock.nextConnection!;
     }
     if (this.elseCount_) {
       const elseBlock = workspace.newBlock('controls_if_else');
-      (elseBlock as BlockSvg).initSvg();
       connection.connect(elseBlock.previousConnection!);
     }
     return containerBlock;

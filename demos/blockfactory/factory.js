@@ -227,8 +227,6 @@ BlockFactory.updatePreview = function() {
 
     // Create the preview block.
     var previewBlock = BlockFactory.previewWorkspace.newBlock(blockType);
-    previewBlock.initSvg();
-    previewBlock.render();
     previewBlock.setMovable(false);
     previewBlock.setDeletable(false);
     previewBlock.moveBy(15, 10);

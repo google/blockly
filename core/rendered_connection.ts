@@ -534,20 +534,6 @@ export class RenderedConnection extends Connection {
   }
 
   /**
-   * Respawn the shadow block if there was one connected to the this connection.
-   * Render/rerender blocks as needed.
-   */
-  protected override respawnShadow_() {
-    super.respawnShadow_();
-    const blockShadow = this.targetBlock();
-    if (!blockShadow) {
-      return;
-    }
-    blockShadow.initSvg();
-    blockShadow.queueRender();
-  }
-
-  /**
    * Find all nearby compatible connections to this connection.
    * Type checking does not apply, since this function is used for bumping.
    *

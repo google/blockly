@@ -19,7 +19,7 @@ import type {FlyoutButton} from './flyout_button.js';
 import type {Options} from './options.js';
 import * as registry from './registry.js';
 import {Scrollbar} from './scrollbar.js';
-import type {Coordinate} from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import {Rect} from './utils/rect.js';
 import * as toolbox from './utils/toolbox.js';
 import * as WidgetDiv from './widgetdiv.js';
@@ -285,7 +285,8 @@ export class HorizontalFlyout extends Flyout {
         } else {
           moveX = cursorX - tab;
         }
-        block!.moveBy(moveX, cursorY);
+        // No 'reason' provided since events are disabled.
+        block!.moveTo(new Coordinate(moveX, cursorY));
 
         const rect = this.createRect_(block!, moveX, cursorY, blockHW, i);
         cursorX += blockHW.width + gaps[i];

@@ -306,6 +306,7 @@ export class Trashcan
     setTimeout(() => {
       this.flyout?.show(contents);
       blocklyStyle.cursor = '';
+      this.workspace.scrollbar?.setVisible(false);
     }, 10);
     this.fireUiEvent(true);
   }
@@ -316,6 +317,7 @@ export class Trashcan
       return;
     }
     this.flyout?.hide();
+    this.workspace.scrollbar?.setVisible(true);
     this.fireUiEvent(false);
     this.workspace.recordDragTargets();
   }

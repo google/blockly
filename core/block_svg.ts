@@ -1548,13 +1548,8 @@ export class BlockSvg
   /**
    * Immediately lays out and reflows a block based on its contents and
    * settings.
-   *
-   * @deprecated Renders are triggered automatically when the block is modified
-   *     (e.g. fields are modified or inputs are added). Any calls to render()
-   *     are no longer necessary. To be removed in v11.
    */
   render() {
-    deprecation.warn('Blockly.BlockSvg.prototype.render', 'v10', 'v11');
     this.queueRender();
     renderManagement.triggerQueuedRenders();
   }

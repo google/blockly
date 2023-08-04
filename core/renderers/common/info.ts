@@ -14,6 +14,7 @@ import type {RenderedConnection} from '../../rendered_connection.js';
 import type {Measurable} from '../measurables/base.js';
 import {BottomRow} from '../measurables/bottom_row.js';
 import {DummyInput} from '../../inputs/dummy_input.js';
+import {EndRowInput} from '../../inputs/end_row_input.js';
 import {ExternalValueInput} from '../measurables/external_value_input.js';
 import {Field} from '../measurables/field.js';
 import {Hat} from '../measurables/hat.js';
@@ -326,7 +327,7 @@ export class RenderInfo {
     } else if (input instanceof ValueInput) {
       activeRow.elements.push(new ExternalValueInput(this.constants_, input));
       activeRow.hasExternalInput = true;
-    } else if (input instanceof DummyInput) {
+    } else if (input instanceof DummyInput || input instanceof EndRowInput) {
       // Dummy inputs have no visual representation, but the information is
       // still important.
       activeRow.minHeight = Math.max(
@@ -355,9 +356,9 @@ export class RenderInfo {
     if (!lastInput) {
       return false;
     }
-    // If the last input was marked as the end of a row, then the next input
-    // should always be on the next row.
-    if (lastInput.isEndOfRow()) {
+    // If the previous input was an end-row input, then any following input
+    // should always be rendered on the next row.
+    if (lastInput instanceof EndRowInput) {
       return true;
     }
     // A statement input or an input following one always gets a new row.

@@ -213,7 +213,7 @@ export function blockToDom(
     const input = block.inputList[i];
     let container: Element;
     let empty = true;
-    if (input.type === inputTypes.DUMMY) {
+    if (input.type === inputTypes.DUMMY || input.type === inputTypes.END_ROW) {
       continue;
     } else {
       const childBlock = input.connection!.targetBlock();

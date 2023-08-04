@@ -317,9 +317,9 @@ suite('Block JSON initialization', function () {
       ]);
     });
 
-    test('endOfRow property is included in interpolation output', function() {
+    test('interpolation output includes end-row inputs', function() {
       this.assertInterpolation(
-          ['test1', {'type': 'input_dummy', 'endOfRow': true}, 'test2'],
+          ['test1', {'type': 'input_end_row'}, 'test2'],
           [],
           undefined,
           [
@@ -328,8 +328,7 @@ suite('Block JSON initialization', function () {
               'text': 'test1',
             },
             {
-              'type': 'input_dummy',
-              'endOfRow': true,
+              'type': 'input_end_row',
             },
             {
               'type': 'field_label',
@@ -341,7 +340,7 @@ suite('Block JSON initialization', function () {
           ]);
     });
 
-    test('Newline is converted to dummy with endOfRow', function() {
+    test('Newline is converted to end-row input', function() {
       this.assertInterpolation(
           ['test1', '\n', 'test2'],
           [],
@@ -352,8 +351,7 @@ suite('Block JSON initialization', function () {
               'text': 'test1',
             },
             {
-              'type': 'input_dummy',
-              'endOfRow': true,
+              'type': 'input_end_row',
             },
             {
               'type': 'field_label',
@@ -365,7 +363,7 @@ suite('Block JSON initialization', function () {
           ]);
     });
 
-    test('Newline converted to dummy aligned like last dummy', function() {
+    test('Newline converted to end-row aligned like last dummy', function() {
       this.assertInterpolation(
           ['test1', '\n', 'test2'],
           [],
@@ -376,8 +374,7 @@ suite('Block JSON initialization', function () {
               'text': 'test1',
             },
             {
-              'type': 'input_dummy',
-              'endOfRow': true,
+              'type': 'input_end_row',
               'align': 'CENTER',
             },
             {

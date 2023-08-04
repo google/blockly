@@ -13,45 +13,38 @@ const {Key} = require('webdriverio');
 const {
   testSetup,
   testFileLocations,
-  switchRTL,
   dragBlockTypeFromFlyout,
   screenDirection,
+  getAllBlocks,
 } = require('./test_setup');
 
 suite('Testing undo block movement', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 
-  // Setup Selenium for all of the tests
-  suiteSetup(async function () {
-    this.browser = await testSetup(testFileLocations.PLAYGROUND);
-  });
-
   test('Undoing Block Movement LTR', async function () {
+    this.browser = await testSetup(testFileLocations.PLAYGROUND);
     await testUndoBlock(this.browser, screenDirection.LTR);
   });
 
   test('Undoing Block Movement RTL', async function () {
-    await switchRTL(this.browser);
+    this.browser = await testSetup(testFileLocations.PLAYGROUND_RTL);
     await testUndoBlock(this.browser, screenDirection.RTL);
   });
 });
 
-async function testUndoBlock(browser, delta) {
+async function testUndoBlock(browser, direction) {
   // Drag out first function
-  const defReturnBlock = await dragBlockTypeFromFlyout(
+  await dragBlockTypeFromFlyout(
     browser,
     'Functions',
     'procedures_defreturn',
-    50 * delta,
+    50 * direction,
     20,
   );
 
   await browser.keys([Key.Ctrl, 'z']);
 
-  const blockOnWorkspace = await browser.execute(() => {
-    return !!Blockly.getMainWorkspace().getAllBlocks(false)[0];
-  });
-
-  chai.assert.isFalse(blockOnWorkspace);
+  const allBlocks = await getAllBlocks(browser);
+  chai.assert.equal(allBlocks.length, 0);
 }

@@ -13,6 +13,7 @@ const {
   testSetup,
   testFileLocations,
   getBlockElementById,
+  getAllBlocks,
 } = require('./test_setup');
 const {Key} = require('webdriverio');
 
@@ -25,12 +26,12 @@ suite('This tests loading Large Configuration and Deletion', function (done) {
     this.browser = await testSetup(testFileLocations.PLAYGROUND);
   });
 
-  test('This test loading from JSON results in the correct number of blocks', async function () {
+  test('loading from JSON results in the correct number of blocks', async function () {
     const blockNum = await testingJSONLoad(this.browser);
     chai.assert.equal(blockNum, 13);
   });
 
-  test('This test deleting block results in the correct number of blocks', async function () {
+  test('deleting block results in the correct number of blocks', async function () {
     const fourthRepeatDo = await getBlockElementById(
       this.browser,
       'E8bF[-r:B~cabGLP#QYd',
@@ -38,19 +39,15 @@ suite('This tests loading Large Configuration and Deletion', function (done) {
     await fourthRepeatDo.click({x: -100, y: -40});
     await this.browser.keys([Key.Delete]);
     await this.browser.pause(100);
-    const blockNum = await this.browser.execute(() => {
-      return Blockly.getMainWorkspace().getAllBlocks(false).length;
-    });
-    chai.assert.equal(blockNum, 10);
+    const allBlocks = await getAllBlocks(this.browser);
+    chai.assert.equal(allBlocks.length, 10);
   });
 
-  test('This test undoing delete block results in the correct number of blocks', async function () {
+  test('undoing delete block results in the correct number of blocks', async function () {
     await this.browser.keys([Key.Ctrl, 'z']);
     await this.browser.pause(100);
-    const blockNum = await this.browser.execute(() => {
-      return Blockly.getMainWorkspace().getAllBlocks(false).length;
-    });
-    chai.assert.equal(blockNum, 13);
+    const allBlocks = await getAllBlocks(this.browser);
+    chai.assert.equal(allBlocks.length, 13);
   });
 });
 

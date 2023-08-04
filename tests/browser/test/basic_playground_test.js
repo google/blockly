@@ -46,24 +46,13 @@ suite('Testing Connecting Blocks', function () {
     this.browser = await testSetup(testFileLocations.PLAYGROUND);
   });
 
-  test('Testing Block Flyout', async function () {
-    const logicButton = await this.browser.$('#blockly-0');
-    logicButton.click();
-    const ifDoBlock = await this.browser.$(
-      '#blocklyDiv > div > svg:nth-child(7) > g > g.blocklyBlockCanvas > g:nth-child(3)',
-    );
-    await ifDoBlock.dragAndDrop({x: 20, y: 20});
-    await this.browser.pause(200);
-    const blockOnWorkspace = await this.browser.execute(() => {
-      const newBlock = Blockly.getMainWorkspace().getAllBlocks(false)[0];
-      if (newBlock.id) {
-        return true;
-      } else {
-        return false;
-      }
+  test('dragging a block from the flyout results in a block on the workspace', async function () {
+    await dragBlockTypeFromFlyout(this.browser, 'Logic', 'controls_if', 20, 20);
+    const blockCount = await this.browser.execute(() => {
+      return Blockly.getMainWorkspace().getAllBlocks(false).length;
     });
 
-    chai.assert.isTrue(blockOnWorkspace);
+    chai.assert.equal(blockCount, 1);
   });
 });
 

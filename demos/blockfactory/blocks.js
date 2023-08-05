@@ -228,6 +228,24 @@ Blockly.Blocks['input_dummy'] = {
   }
 };
 
+Blockly.Blocks['input_end_row'] = {
+  // End-row input.
+  init: function() {
+    this.jsonInit({
+      "message0": "end-row input",
+      "message1": FIELD_MESSAGE,
+      "args1": FIELD_ARGS,
+      "previousStatement": "Input",
+      "nextStatement": "Input",
+      "colour": 210,
+      "tooltip": "For adding fields at the end of a row with no " +
+                 "connections. Alignment options (left, right, centre) " +
+                 "apply only to multi-line fields.",
+      "helpUrl": "https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks#block_inputs"
+    });
+  }
+};
+
 Blockly.Blocks['field_static'] = {
   // Text value.
   init: function() {

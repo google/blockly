@@ -205,7 +205,7 @@ export class BlockChange extends BlockBase {
    */
   static getExtraBlockState_(block: BlockSvg): string {
     if (block.saveExtraState) {
-      const state = block.saveExtraState();
+      const state = block.saveExtraState(false);
       return state ? JSON.stringify(state) : '';
     } else if (block.mutationToDom) {
       const state = block.mutationToDom();

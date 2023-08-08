@@ -133,7 +133,7 @@ export function connectionUiEffect(block: BlockSvg) {
       'from': 0,
       'to': 25 * scale,
     },
-    ripple
+    ripple,
   );
   const opacityAnimation = dom.createSvgElement(
     Svg.ANIMATE,
@@ -143,9 +143,9 @@ export function connectionUiEffect(block: BlockSvg) {
       'attributeName': 'opacity',
       'dur': '150ms',
       'from': 1,
-      'to': 0
+      'to': 0,
     },
-    ripple
+    ripple,
   );
 
   scaleAnimation.beginElement();

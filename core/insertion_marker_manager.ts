@@ -22,6 +22,7 @@ import * as eventUtils from './events/utils.js';
 import type {IDeleteArea} from './interfaces/i_delete_area.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {RenderedConnection} from './rendered_connection.js';
+import * as blocks from './serialization/blocks.js';
 import type {Coordinate} from './utils/coordinate.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import * as renderManagement from './render_management.js';
@@ -225,10 +226,12 @@ export class InsertionMarkerManager {
     let result: BlockSvg;
     try {
       // 1. Serialize the source block to JSON
-      const blockJson = Blockly.serialization.blocks.save(sourceBlock);
-
+      const blockJson = blocks.save(sourceBlock);
+      if (!blockJson) {
+        throw new Error('Failed to serialize source block.');
+      }
       // 2. Deserialize the JSON back to a block in the same workspace
-      result = Blockly.serialization.blocks.append(blockJson, this.workspace);
+      result = blocks.append(blockJson, this.workspace) as BlockSvg;
 
       // Setting the result as an insertion marker
       result.setInsertionMarker(true);

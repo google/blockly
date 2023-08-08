@@ -18,7 +18,6 @@ import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
 import {config} from './config.js';
-import * as constants from './constants.js';
 import * as eventUtils from './events/utils.js';
 import type {IDeleteArea} from './interfaces/i_delete_area.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
@@ -42,16 +41,6 @@ interface CandidateConnection {
   local: RenderedConnection;
   radius: number;
 }
-
-/**
- * An error message to throw if the block created by createMarkerBlock_ is
- * missing any components.
- */
-const DUPLICATE_BLOCK_ERROR =
-  'The insertion marker ' +
-  'manager tried to create a marker but the result is missing %1. If ' +
-  'you are using a mutator, make sure your domToMutation method is ' +
-  'properly defined.';
 
 /**
  * Class that controls updates to connections during drags.  It is primarily

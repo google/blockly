@@ -232,49 +232,19 @@ export class InsertionMarkerManager {
    * @returns The insertion marker that represents the given block.
    */
   private createMarkerBlock(sourceBlock: BlockSvg): BlockSvg {
-    const imType = sourceBlock.type;
-
     eventUtils.disable();
     let result: BlockSvg;
     try {
-      result = this.workspace.newBlock(imType);
+      // 1. Serialize the source block to JSON
+      const blockJson = Blockly.serialization.blocks.save(sourceBlock);
+
+      // 2. Deserialize the JSON back to a block in the same workspace
+      result = Blockly.serialization.blocks.append(blockJson, this.workspace);
+
+      // Setting the result as an insertion marker
       result.setInsertionMarker(true);
-      if (sourceBlock.saveExtraState) {
-        const state = sourceBlock.saveExtraState();
-        if (state && result.loadExtraState) {
-          result.loadExtraState(state);
-        }
-      } else if (sourceBlock.mutationToDom) {
-        const oldMutationDom = sourceBlock.mutationToDom();
-        if (oldMutationDom && result.domToMutation) {
-          result.domToMutation(oldMutationDom);
-        }
-      }
-      // Copy field values from the other block.  These values may impact the
-      // rendered size of the insertion marker.  Note that we do not care about
-      // child blocks here.
-      for (let i = 0; i < sourceBlock.inputList.length; i++) {
-        const sourceInput = sourceBlock.inputList[i];
-        if (sourceInput.name === constants.COLLAPSED_INPUT_NAME) {
-          continue; // Ignore the collapsed input.
-        }
-        const resultInput = result.inputList[i];
-        if (!resultInput) {
-          throw new Error(DUPLICATE_BLOCK_ERROR.replace('%1', 'an input'));
-        }
-        for (let j = 0; j < sourceInput.fieldRow.length; j++) {
-          const sourceField = sourceInput.fieldRow[j];
-          const resultField = resultInput.fieldRow[j];
-          if (!resultField) {
-            throw new Error(DUPLICATE_BLOCK_ERROR.replace('%1', 'a field'));
-          }
-          resultField.setValue(sourceField.getValue());
-        }
-      }
 
-      result.setCollapsed(sourceBlock.isCollapsed());
-      result.setInputsInline(sourceBlock.getInputsInline());
-
+      // Initialize the SVG for rendering
       result.initSvg();
       result.getSvgRoot().setAttribute('visibility', 'hidden');
     } finally {

@@ -321,10 +321,8 @@ export abstract class Field<T = any>
 
   /**
    * Create the block UI for this field.
-   *
-   * @internal
    */
-  initView() {
+  protected initView() {
     this.createBorderRect_();
     this.createTextElement_();
   }
@@ -332,8 +330,6 @@ export abstract class Field<T = any>
   /**
    * Initializes the model of the field after it has been installed on a block.
    * No-op by default.
-   *
-   * @internal
    */
   initModel() {}
 

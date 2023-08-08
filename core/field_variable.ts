@@ -130,8 +130,6 @@ export class FieldVariable extends FieldDropdown {
    * Initialize the model for this field if it has not already been initialized.
    * If the value has not been set to a variable by the first render, we make up
    * a variable rather than let the value be invalid.
-   *
-   * @internal
    */
   override initModel() {
     const block = this.getSourceBlock();

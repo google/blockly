@@ -163,8 +163,6 @@ export class FieldColour extends Field<string> {
 
   /**
    * Create the block UI for this colour field.
-   *
-   * @internal
    */
   override initView() {
     this.size_ = new Size(

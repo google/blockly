@@ -152,8 +152,6 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Create the block UI for this field.
-   *
-   * @internal
    */
   override initView() {
     this.createBorderRect_();

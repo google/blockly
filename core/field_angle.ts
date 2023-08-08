@@ -165,8 +165,6 @@ export class FieldAngle extends FieldInput<number> {
 
   /**
    * Create the block UI for this field.
-   *
-   * @internal
    */
   override initView() {
     super.initView();

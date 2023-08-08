@@ -122,27 +122,36 @@ export function connectionUiEffect(block: BlockSvg) {
     },
     workspace.getParentSvg(),
   );
-  // Start the animation.
-  connectionUiStep(ripple, new Date(), scale);
-}
 
-/**
- * Expand a ripple around a connection.
- *
- * @param ripple Element to animate.
- * @param start Date of animation's start.
- * @param scale Scale of workspace.
- */
-function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
-  const ms = new Date().getTime() - start.getTime();
-  const percent = ms / 150;
-  if (percent > 1) {
-    dom.removeNode(ripple);
-  } else {
-    ripple.setAttribute('r', String(percent * 25 * scale));
-    ripple.style.opacity = String(1 - percent);
-    disconnectPid = setTimeout(connectionUiStep, 10, ripple, start, scale);
-  }
+  const scaleAnimation = dom.createSvgElement(
+    Svg.ANIMATE,
+    {
+      'id': 'animationCircle',
+      'begin': 'indefinite',
+      'attributeName': 'r',
+      'dur': '150ms',
+      'from': 0,
+      'to': 25 * scale,
+    },
+    ripple
+  );
+  const opacityAnimation = dom.createSvgElement(
+    Svg.ANIMATE,
+    {
+      'id': 'animationOpacity',
+      'begin': 'indefinite',
+      'attributeName': 'opacity',
+      'dur': '150ms',
+      'from': 1,
+      'to': 0
+    },
+    ripple
+  );
+
+  scaleAnimation.beginElement();
+  opacityAnimation.beginElement();
+
+  setTimeout(() => void dom.removeNode(ripple), 150);
 }
 
 /**

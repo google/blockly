@@ -21,9 +21,15 @@ export class WorkspaceCommentPaster
     workspace: WorkspaceSvg,
     coordinate?: Coordinate,
   ): WorkspaceCommentSvg {
+    const state = copyData.commentState;
     if (coordinate) {
-      copyData.commentState.setAttribute('x', `${coordinate.x}`);
-      copyData.commentState.setAttribute('y', `${coordinate.y}`);
+      state.setAttribute('x', `${coordinate.x}`);
+      state.setAttribute('y', `${coordinate.y}`);
+    } else {
+      const x = parseInt(state.getAttribute('x') ?? '0') + 50;
+      const y = parseInt(state.getAttribute('y') ?? '0') + 50;
+      state.setAttribute('x', `${x}`);
+      state.setAttribute('y', `${y}`);
     }
     return WorkspaceCommentSvg.fromXmlRendered(
       copyData.commentState,

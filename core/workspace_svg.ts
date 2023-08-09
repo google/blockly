@@ -1388,6 +1388,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
             for (let i = 0, connection; (connection = connections[i]); i++) {
               const neighbour = connection.closest(
                 config.snapRadius,
+                // TODO: This code doesn't work because it's passing an absolute
+                //     coordinate instead of a relative coordinate. Need to
+                //     figure out if I'm deprecating this function or if I
+                //     need to fix this.
                 new Coordinate(blockX, blockY),
               );
               if (neighbour.connection) {
@@ -1441,6 +1445,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         // with any blocks.
         commentX += 50;
         commentY += 50;
+        // TODO: This code doesn't work because it's using absolute coords
+        //    where relative coords are expected. Need to figure out what I'm
+        //    doing with this function and if I need to fix it.
         comment.moveBy(commentX, commentY);
       }
     } finally {

@@ -149,13 +149,10 @@ export function assertEventFired(
   expectedWorkspaceId,
   expectedBlockId,
 ) {
-  expectedProperties = Object.assign(
-    {
-      workspaceId: expectedWorkspaceId,
-      blockId: expectedBlockId,
-    },
-    expectedProperties,
-  );
+  const baseProps = {};
+  if (expectedWorkspaceId) baseProps.workspaceId = expectedWorkspaceId;
+  if (expectedBlockId) baseProps.blockId = expectedBlockId;
+  expectedProperties = Object.assign(baseProps, expectedProperties);
   const expectedEvent = sinon.match
     .instanceOf(instanceType)
     .and(sinon.match(expectedProperties));

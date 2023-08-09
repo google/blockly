@@ -225,18 +225,14 @@ export class InsertionMarkerManager {
     eventUtils.disable();
     let result: BlockSvg;
     try {
-      // 1. Serialize the source block to JSON
       const blockJson = blocks.save(sourceBlock);
       if (!blockJson) {
         throw new Error('Failed to serialize source block.');
       }
-      // 2. Deserialize the JSON back to a block in the same workspace
       result = blocks.append(blockJson, this.workspace) as BlockSvg;
 
-      // Setting the result as an insertion marker
       result.setInsertionMarker(true);
 
-      // Initialize the SVG for rendering
       result.initSvg();
       result.getSvgRoot().setAttribute('visibility', 'hidden');
     } finally {

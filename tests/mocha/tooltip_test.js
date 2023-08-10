@@ -59,16 +59,16 @@ suite('Tooltip', function () {
 
       // Fire pointer events directly on the relevant SVG.
       this.block.pathObject.svgPath.dispatchEvent(
-        new PointerEvent('pointerover')
+        new PointerEvent('pointerover'),
       );
       this.block.pathObject.svgPath.dispatchEvent(
-        new PointerEvent('pointermove')
+        new PointerEvent('pointermove'),
       );
       this.clock.runAll();
 
       chai.assert.isTrue(
         wasCalled,
-        'Expected custom tooltip function to have been called'
+        'Expected custom tooltip function to have been called',
       );
     });
   });
@@ -134,7 +134,7 @@ suite('Tooltip', function () {
         setFunctionReturningObjectTooltip(this.block);
         chai.assert.throws(
           this.block.getTooltip.bind(this.block),
-          'Tooltip function must return a string.'
+          'Tooltip function must return a string.',
         );
       });
 
@@ -175,7 +175,7 @@ suite('Tooltip', function () {
         setFunctionReturningObjectTooltip(this.block);
         chai.assert.throws(
           this.block.getTooltip.bind(this.block),
-          'Tooltip function must return a string.'
+          'Tooltip function must return a string.',
         );
       });
 
@@ -210,7 +210,7 @@ suite('Tooltip', function () {
         setFunctionReturningObjectTooltip(this.field);
         chai.assert.throws(
           this.field.getTooltip.bind(this.field),
-          'Tooltip function must return a string.'
+          'Tooltip function must return a string.',
         );
       });
 
@@ -258,7 +258,7 @@ suite('Tooltip', function () {
         setFunctionReturningObjectTooltip(this.field);
         chai.assert.throws(
           this.field.getTooltip.bind(this.field),
-          'Tooltip function must return a string.'
+          'Tooltip function must return a string.',
         );
       });
 

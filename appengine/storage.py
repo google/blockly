@@ -44,9 +44,9 @@ def xmlToKey(xml_content):
   # Store XML and return a generated key.
   xml_hash = int(hashlib.sha1(xml_content.encode("utf-8")).hexdigest(), 16)
   xml_hash = int(xml_hash % (2 ** 64) - (2 ** 63))
-  lookup_query = Xml.query(Xml.xml_hash == xml_hash)
   client = ndb.Client()
   with client.context():
+    lookup_query = Xml.query(Xml.xml_hash == xml_hash)
     lookup_result = lookup_query.get()
     if lookup_result:
       xml_key = lookup_result.key.string_id()

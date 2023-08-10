@@ -188,7 +188,7 @@ export const draggingConnections: Connection[] = [];
  */
 export function getBlockTypeCounts(
   block: Block,
-  opt_stripFollowing?: boolean
+  opt_stripFollowing?: boolean,
 ): {[key: string]: number} {
   const typeCountsMap = Object.create(null);
   const descendants = block.getDescendants(true);
@@ -249,7 +249,7 @@ function defineBlocksWithJsonArrayInternal(jsonArray: AnyDuringMigration[]) {
  *     definitions created.
  */
 export function createBlockDefinitionsFromJsonArray(
-  jsonArray: AnyDuringMigration[]
+  jsonArray: AnyDuringMigration[],
 ): {[key: string]: BlockDefinition} {
   const blocks: {[key: string]: BlockDefinition} = {};
   for (let i = 0; i < jsonArray.length; i++) {
@@ -262,7 +262,7 @@ export function createBlockDefinitionsFromJsonArray(
     if (!type) {
       console.warn(
         `Block definition #${i} in JSON array is missing a type attribute. ` +
-          'Skipping.'
+          'Skipping.',
       );
       continue;
     }

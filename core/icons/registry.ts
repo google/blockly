@@ -18,7 +18,7 @@ import {IconType} from './icon_types.js';
  */
 export function register(
   type: IconType<IIcon>,
-  iconConstructor: new (block: Block) => IIcon
+  iconConstructor: new (block: Block) => IIcon,
 ) {
   registry.register(registry.Type.ICON, type.toString(), iconConstructor);
 }

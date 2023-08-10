@@ -41,7 +41,7 @@ export class VariableModel {
     public workspace: Workspace,
     public name: string,
     opt_type?: string,
-    opt_id?: string
+    opt_id?: string,
   ) {
     /**
      * The type of the variable, such as 'int' or 'sound_effect'. This may be

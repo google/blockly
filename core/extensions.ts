@@ -75,7 +75,7 @@ export function registerMutator(
   name: string,
   mixinObj: AnyDuringMigration,
   opt_helperFn?: () => AnyDuringMigration,
-  opt_blockList?: string[]
+  opt_blockList?: string[],
 ) {
   const errorPrefix = 'Error when registering mutator "' + name + '": ';
 
@@ -110,7 +110,7 @@ export function unregister(name: string) {
     delete allExtensions[name];
   } else {
     console.warn(
-      'No extension mapping for name "' + name + '" found to unregister'
+      'No extension mapping for name "' + name + '" found to unregister',
     );
   }
 }
@@ -161,7 +161,7 @@ export function apply(name: string, block: Block, isMutator: boolean) {
         'Error when applying extension "' +
           name +
           '": ' +
-          'mutation properties changed when applying a non-mutator extension.'
+          'mutation properties changed when applying a non-mutator extension.',
       );
     }
   }
@@ -184,7 +184,7 @@ function checkNoMutatorProperties(mutationName: string, block: Block) {
         mutationName +
         '" to a block that already has mutator functions.' +
         '  Block id: ' +
-        block.id
+        block.id,
     );
   }
 }
@@ -202,12 +202,12 @@ function checkNoMutatorProperties(mutationName: string, block: Block) {
  */
 function checkXmlHooks(
   object: AnyDuringMigration,
-  errorPrefix: string
+  errorPrefix: string,
 ): boolean {
   return checkHasFunctionPair(
     object.mutationToDom,
     object.domToMutation,
-    errorPrefix + ' mutationToDom/domToMutation'
+    errorPrefix + ' mutationToDom/domToMutation',
   );
 }
 /**
@@ -223,12 +223,12 @@ function checkXmlHooks(
  */
 function checkJsonHooks(
   object: AnyDuringMigration,
-  errorPrefix: string
+  errorPrefix: string,
 ): boolean {
   return checkHasFunctionPair(
     object.saveExtraState,
     object.loadExtraState,
-    errorPrefix + ' saveExtraState/loadExtraState'
+    errorPrefix + ' saveExtraState/loadExtraState',
   );
 }
 
@@ -244,12 +244,12 @@ function checkJsonHooks(
  */
 function checkMutatorDialog(
   object: AnyDuringMigration,
-  errorPrefix: string
+  errorPrefix: string,
 ): boolean {
   return checkHasFunctionPair(
     object.compose,
     object.decompose,
-    errorPrefix + ' compose/decompose'
+    errorPrefix + ' compose/decompose',
   );
 }
 
@@ -268,7 +268,7 @@ function checkMutatorDialog(
 function checkHasFunctionPair(
   func1: AnyDuringMigration,
   func2: AnyDuringMigration,
-  errorPrefix: string
+  errorPrefix: string,
 ): boolean {
   if (func1 && func2) {
     if (typeof func1 !== 'function' || typeof func2 !== 'function') {
@@ -289,14 +289,14 @@ function checkHasFunctionPair(
  */
 function checkHasMutatorProperties(
   errorPrefix: string,
-  object: AnyDuringMigration
+  object: AnyDuringMigration,
 ) {
   const hasXmlHooks = checkXmlHooks(object, errorPrefix);
   const hasJsonHooks = checkJsonHooks(object, errorPrefix);
   if (!hasXmlHooks && !hasJsonHooks) {
     throw Error(
       errorPrefix +
-        'Mutations must contain either XML hooks, or JSON hooks, or both'
+        'Mutations must contain either XML hooks, or JSON hooks, or both',
     );
   }
   // A block with a mutator isn't required to have a mutation dialog, but
@@ -347,7 +347,7 @@ function getMutatorProperties(block: Block): AnyDuringMigration[] {
  */
 function mutatorPropertiesMatch(
   oldProperties: AnyDuringMigration[],
-  block: Block
+  block: Block,
 ): boolean {
   const newProperties = getMutatorProperties(block);
   if (newProperties.length !== oldProperties.length) {
@@ -406,7 +406,7 @@ export function runAfterPageLoad(fn: () => void) {
  */
 export function buildTooltipForDropdown(
   dropdownName: string,
-  lookupTable: {[key: string]: string}
+  lookupTable: {[key: string]: string},
 ): Function {
   // List of block types already validated, to minimize duplicate warnings.
   const blockTypesChecked: AnyDuringMigration[] = [];
@@ -453,7 +453,7 @@ export function buildTooltipForDropdown(
           tooltip = parsing.replaceMessageReferences(tooltip);
         }
         return tooltip;
-      }.bind(this)
+      }.bind(this),
     );
   }
   return extensionFn;
@@ -470,7 +470,7 @@ export function buildTooltipForDropdown(
 function checkDropdownOptionsInTable(
   block: Block,
   dropdownName: string,
-  lookupTable: {[key: string]: string}
+  lookupTable: {[key: string]: string},
 ) {
   // Validate all dropdown options have values.
   const dropdown = block.getField(dropdownName);
@@ -485,7 +485,7 @@ function checkDropdownOptionsInTable(
             ' of field ' +
             dropdownName +
             ' of block type ' +
-            block.type
+            block.type,
         );
       }
     }
@@ -504,7 +504,7 @@ function checkDropdownOptionsInTable(
  */
 export function buildTooltipWithFieldText(
   msgTemplate: string,
-  fieldName: string
+  fieldName: string,
 ): Function {
   // Check the tooltip string messages for invalid references.
   // Wait for load, in case Blockly.Msg is not yet populated.
@@ -526,7 +526,7 @@ export function buildTooltipWithFieldText(
         return parsing
           .replaceMessageReferences(msgTemplate)
           .replace('%1', field ? field.getText() : '');
-      }.bind(this)
+      }.bind(this),
     );
   }
   return extensionFn;
@@ -547,7 +547,7 @@ function extensionParentTooltip(this: Block) {
         (parent && parent.getInputsInline() && parent.tooltip) ||
         tooltipWhenNotConnected
       );
-    }.bind(this)
+    }.bind(this),
   );
 }
 register('parent_tooltip_when_inline', extensionParentTooltip);

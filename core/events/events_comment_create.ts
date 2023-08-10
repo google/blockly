@@ -55,7 +55,7 @@ export class CommentCreate extends CommentBase {
     if (!this.xml) {
       throw new Error(
         'The comment XML is undefined. Either pass a comment to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     json['xml'] = Xml.domToText(this.xml);
@@ -74,12 +74,12 @@ export class CommentCreate extends CommentBase {
   static fromJson(
     json: CommentCreateJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): CommentCreate {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new CommentCreate()
+      event ?? new CommentCreate(),
     ) as CommentCreate;
     newEvent.xml = utilsXml.textToDom(json['xml']);
     return newEvent;
@@ -102,5 +102,5 @@ export interface CommentCreateJson extends CommentBaseJson {
 registry.register(
   registry.Type.EVENT,
   eventUtils.COMMENT_CREATE,
-  CommentCreate
+  CommentCreate,
 );

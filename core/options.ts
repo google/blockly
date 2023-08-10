@@ -92,7 +92,7 @@ export class Options {
     const readOnly = !!options['readOnly'];
     if (!readOnly) {
       toolboxJsonDef = toolbox.convertToolboxDefToJson(
-        options['toolbox'] ?? null
+        options['toolbox'] ?? null,
       );
       hasCategories = toolbox.hasCategories(toolboxJsonDef);
       const rawHasTrashcan = options['trashcan'];
@@ -209,7 +209,7 @@ export class Options {
    */
   private static parseMoveOptions_(
     options: BlocklyOptions,
-    hasCategories: boolean
+    hasCategories: boolean,
   ): MoveOptions {
     const move = options['move'] || {};
     const moveOptions = {} as MoveOptions;
@@ -342,7 +342,7 @@ export class Options {
     }
     return Theme.defineTheme(
       theme.name || 'builtin' + idGenerator.getNextUniqueId(),
-      theme
+      theme,
     );
   }
 }

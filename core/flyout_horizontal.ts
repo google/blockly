@@ -19,7 +19,7 @@ import type {FlyoutButton} from './flyout_button.js';
 import type {Options} from './options.js';
 import * as registry from './registry.js';
 import {Scrollbar} from './scrollbar.js';
-import type {Coordinate} from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import {Rect} from './utils/rect.js';
 import * as toolbox from './utils/toolbox.js';
 import * as WidgetDiv from './widgetdiv.js';
@@ -60,7 +60,7 @@ export class HorizontalFlyout extends Flyout {
 
     this.workspace_.translate(
       this.workspace_.scrollX + absoluteMetrics.left,
-      this.workspace_.scrollY + absoluteMetrics.top
+      this.workspace_.scrollY + absoluteMetrics.top,
     );
   }
 
@@ -170,7 +170,7 @@ export class HorizontalFlyout extends Flyout {
         0,
         1,
         -this.CORNER_RADIUS,
-        this.CORNER_RADIUS
+        this.CORNER_RADIUS,
       );
       path.push('h', -width);
       // Left.
@@ -182,7 +182,7 @@ export class HorizontalFlyout extends Flyout {
         0,
         1,
         -this.CORNER_RADIUS,
-        -this.CORNER_RADIUS
+        -this.CORNER_RADIUS,
       );
       path.push('z');
     } else {
@@ -195,7 +195,7 @@ export class HorizontalFlyout extends Flyout {
         0,
         1,
         this.CORNER_RADIUS,
-        -this.CORNER_RADIUS
+        -this.CORNER_RADIUS,
       );
       path.push('h', width);
       // Right.
@@ -207,7 +207,7 @@ export class HorizontalFlyout extends Flyout {
         0,
         1,
         this.CORNER_RADIUS,
-        this.CORNER_RADIUS
+        this.CORNER_RADIUS,
       );
       path.push('v', height);
       // Bottom.
@@ -285,7 +285,8 @@ export class HorizontalFlyout extends Flyout {
         } else {
           moveX = cursorX - tab;
         }
-        block!.moveBy(moveX, cursorY);
+        // No 'reason' provided since events are disabled.
+        block!.moveTo(new Coordinate(moveX, cursorY));
 
         const rect = this.createRect_(block!, moveX, cursorY, blockHW, i);
         cursorX += blockHW.width + gaps[i];
@@ -393,7 +394,7 @@ export class HorizontalFlyout extends Flyout {
         // (ie toolbox edge).
         this.targetWorkspace!.translate(
           this.targetWorkspace!.scrollX,
-          this.targetWorkspace!.scrollY + flyoutHeight
+          this.targetWorkspace!.scrollY + flyoutHeight,
         );
       }
       this.height_ = flyoutHeight;
@@ -406,5 +407,5 @@ export class HorizontalFlyout extends Flyout {
 registry.register(
   registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
   registry.DEFAULT,
-  HorizontalFlyout
+  HorizontalFlyout,
 );

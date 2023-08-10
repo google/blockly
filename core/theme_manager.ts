@@ -32,7 +32,10 @@ export class ThemeManager {
    * @param theme The workspace theme.
    * @internal
    */
-  constructor(private readonly workspace: WorkspaceSvg, private theme: Theme) {}
+  constructor(
+    private readonly workspace: WorkspaceSvg,
+    private theme: Theme,
+  ) {}
 
   /**
    * Get the workspace theme.
@@ -112,7 +115,7 @@ export class ThemeManager {
   unsubscribeWorkspace(workspace: Workspace) {
     if (!arrayUtils.removeElem(this.subscribedWorkspaces_, workspace)) {
       throw Error(
-        "Cannot unsubscribe a workspace that hasn't been subscribed."
+        "Cannot unsubscribe a workspace that hasn't been subscribed.",
       );
     }
   }
@@ -130,7 +133,7 @@ export class ThemeManager {
   subscribe(
     element: HTMLElement | SVGElement,
     componentName: string,
-    propertyName: string
+    propertyName: string,
   ) {
     if (!this.componentDB.has(componentName)) {
       this.componentDB.set(componentName, []);

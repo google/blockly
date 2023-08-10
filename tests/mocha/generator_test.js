@@ -7,11 +7,11 @@
 goog.declareModuleId('Blockly.test.generator');
 
 import * as Blockly from '../../build/src/core/blockly.js';
-import {DartGenerator} from '../../generators/dart/dart_generator.js';
-import {JavascriptGenerator} from '../../generators/javascript/javascript_generator.js';
-import {LuaGenerator} from '../../generators/lua/lua_generator.js';
-import {PhpGenerator} from '../../generators/php/php_generator.js';
-import {PythonGenerator} from '../../generators/python/python_generator.js';
+import {DartGenerator} from '../../build/src/generators/dart/dart_generator.js';
+import {JavascriptGenerator} from '../../build/src/generators/javascript/javascript_generator.js';
+import {LuaGenerator} from '../../build/src/generators/lua/lua_generator.js';
+import {PhpGenerator} from '../../build/src/generators/php/php_generator.js';
+import {PythonGenerator} from '../../build/src/generators/python/python_generator.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -43,14 +43,14 @@ suite('Generator', function () {
     test('One line', function () {
       chai.assert.equal(
         this.generator.prefixLines('Hello\n', '12'),
-        '12Hello\n'
+        '12Hello\n',
       );
     });
 
     test('Two lines', function () {
       chai.assert.equal(
         this.generator.prefixLines('Hello\nWorld\n', '***'),
-        '***Hello\n***World\n'
+        '***Hello\n***World\n',
       );
     });
   });
@@ -85,7 +85,7 @@ suite('Generator', function () {
         blockDisabled,
         opt_thisOnly,
         expectedCode,
-        opt_message
+        opt_message,
       ) {
         generator.forBlock['row_block'] = function (_) {
           return 'row_block';
@@ -123,7 +123,7 @@ suite('Generator', function () {
             false,
             false,
             'row_blockstack_block',
-            'thisOnly=false'
+            'thisOnly=false',
           );
         });
       });
@@ -140,7 +140,7 @@ suite('Generator', function () {
             true,
             false,
             'stack_block',
-            'thisOnly=false'
+            'thisOnly=false',
           );
         });
       });
@@ -170,7 +170,7 @@ suite('Generator', function () {
           generator,
           opt_thisOnly,
           expectedCode,
-          opt_message
+          opt_message,
         ) {
           generator.forBlock['test_loop_block'] = function (block) {
             return '{' + generator.statementToCode(block, 'DO') + '}';

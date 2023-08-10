@@ -10,7 +10,6 @@ import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
-import {CommentIcon} from '../../core/icons/comment_icon.js';
 import {simulateClick} from './test_helpers/user_input.js';
 
 suite('Comment Deserialization', function () {
@@ -51,7 +50,7 @@ suite('Comment Deserialization', function () {
     function createBlock(workspace) {
       const block = Blockly.Xml.domToBlock(
         Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
-        workspace
+        workspace,
       );
       block.setCommentText('test text');
       return block;
@@ -62,8 +61,7 @@ suite('Comment Deserialization', function () {
       const icon = block.getIcon(Blockly.icons.CommentIcon.TYPE);
       icon.setBubbleVisible(true);
       // Check comment bubble size.
-      const comment = block.getIcon(CommentIcon.TYPE);
-      const bubbleSize = comment.getBubbleSize();
+      const bubbleSize = icon.getBubbleSize();
       chai.assert.isNotNaN(bubbleSize.width);
       chai.assert.isNotNaN(bubbleSize.height);
       chai.assert.equal(icon.getText(), text);
@@ -79,8 +77,8 @@ suite('Comment Deserialization', function () {
       // Place from trashcan.
       simulateClick(
         this.workspace.trashcan.flyout.svgGroup_.querySelector(
-          '.blocklyDraggable'
-        )
+          '.blocklyDraggable',
+        ),
       );
       chai.assert.equal(this.workspace.getAllBlocks().length, 1);
       // Check comment.
@@ -117,7 +115,7 @@ suite('Comment Deserialization', function () {
       const toolbox = this.workspace.getToolbox();
       simulateClick(toolbox.HtmlDiv.querySelector('.blocklyTreeRow'));
       simulateClick(
-        toolbox.getFlyout().svgGroup_.querySelector('.blocklyDraggable')
+        toolbox.getFlyout().svgGroup_.querySelector('.blocklyDraggable'),
       );
       chai.assert.equal(this.workspace.getAllBlocks().length, 1);
       // Check comment.

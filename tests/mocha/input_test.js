@@ -25,7 +25,7 @@ suite('Inputs', function () {
     this.workspace = Blockly.inject('blocklyDiv');
     this.block = Blockly.Xml.domToBlock(
       Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
-      this.workspace
+      this.workspace,
     );
 
     this.renderStub = sinon.stub(this.block, 'queueRender');

@@ -51,7 +51,7 @@ export class PathObject extends BasePathObject {
   constructor(
     root: SVGElement,
     style: BlockStyle,
-    constants: ConstantProvider
+    constants: ConstantProvider,
   ) {
     super(root, style, constants);
 
@@ -95,7 +95,7 @@ export class PathObject extends BasePathObject {
         this.svgPathSelected.setAttribute('fill', 'none');
         this.svgPathSelected.setAttribute(
           'filter',
-          'url(#' + this.constants.selectedGlowFilterId + ')'
+          'url(#' + this.constants.selectedGlowFilterId + ')',
         );
         this.svgRoot.appendChild(this.svgPathSelected);
       }
@@ -112,7 +112,7 @@ export class PathObject extends BasePathObject {
     if (enable) {
       this.svgPath.setAttribute(
         'filter',
-        'url(#' + this.constants.replacementGlowFilterId + ')'
+        'url(#' + this.constants.replacementGlowFilterId + ')',
       );
     } else {
       this.svgPath.removeAttribute('filter');
@@ -128,7 +128,7 @@ export class PathObject extends BasePathObject {
     if (enable) {
       outlinePath.setAttribute(
         'filter',
-        'url(#' + this.constants.replacementGlowFilterId + ')'
+        'url(#' + this.constants.replacementGlowFilterId + ')',
       );
     } else {
       outlinePath.removeAttribute('filter');
@@ -190,8 +190,8 @@ export class PathObject extends BasePathObject {
             // default
             'd': '',
           },
-          this.svgRoot
-        )
+          this.svgRoot,
+        ),
       );
     }
     this.remainingOutlines.delete(name);

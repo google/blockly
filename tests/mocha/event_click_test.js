@@ -29,7 +29,7 @@ suite('Click Event', function () {
       const origEvent = new Blockly.Events.Click(
         block,
         undefined,
-        Blockly.Events.ClickTarget.BLOCK
+        Blockly.Events.ClickTarget.BLOCK,
       );
 
       const json = origEvent.toJson();

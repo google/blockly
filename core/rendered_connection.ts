@@ -243,7 +243,7 @@ export class RenderedConnection extends Connection {
   moveToOffset(blockTL: Coordinate): boolean {
     return this.moveTo(
       blockTL.x + this.offsetInBlock.x,
-      blockTL.y + this.offsetInBlock.y
+      blockTL.y + this.offsetInBlock.y,
     );
   }
 
@@ -262,7 +262,6 @@ export class RenderedConnection extends Connection {
    * Get the offset of this connection relative to the top left of its block.
    *
    * @returns The offset of the connection.
-   * @internal
    */
   getOffsetInBlock(): Coordinate {
     return this.offsetInBlock;
@@ -301,7 +300,7 @@ export class RenderedConnection extends Connection {
     if (!target || !block) return;
     const offset = Coordinate.difference(
       this.offsetInBlock,
-      target.offsetInBlock
+      target.offsetInBlock,
     );
     block.translate(offset.x, offset.y);
   }
@@ -318,7 +317,7 @@ export class RenderedConnection extends Connection {
    */
   closest(
     maxLimit: number,
-    dxy: Coordinate
+    dxy: Coordinate,
   ): {connection: RenderedConnection | null; radius: number} {
     return this.dbOpposite.searchForClosest(this, maxLimit, dxy);
   }
@@ -366,7 +365,7 @@ export class RenderedConnection extends Connection {
           `translate(${offset.x}, ${offset.y})` +
           (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
       },
-      this.sourceBlock_.getSvgRoot()
+      this.sourceBlock_.getSvgRoot(),
     );
   }
 
@@ -502,7 +501,7 @@ export class RenderedConnection extends Connection {
             eventUtils.setGroup(false);
           }
         }.bind(this),
-        config.bumpDelay
+        config.bumpDelay,
       );
     }
   }
@@ -617,7 +616,7 @@ export class RenderedConnection extends Connection {
         !this.getConnectionChecker().canConnect(
           this,
           this.targetConnection,
-          false
+          false,
         ))
     ) {
       const child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
@@ -625,6 +624,22 @@ export class RenderedConnection extends Connection {
       // Bump away.
       this.sourceBlock_.bumpNeighbours();
     }
+  }
+
+  /**
+   * Change a connection's compatibility.
+   * Rerender blocks as needed.
+   *
+   * @param check Compatible value type or list of value types. Null if all
+   *     types are compatible.
+   * @returns The connection being modified (to allow chaining).
+   */
+  override setCheck(check: string | string[] | null): RenderedConnection {
+    super.setCheck(check);
+    if (this.sourceBlock_.rendered) {
+      this.sourceBlock_.queueRender();
+    }
+    return this;
   }
 }
 

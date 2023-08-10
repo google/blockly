@@ -44,7 +44,7 @@ export class Renderer extends BaseRenderer {
    */
   override init(
     theme: Theme,
-    opt_rendererOverrides?: {[rendererConstant: string]: any}
+    opt_rendererOverrides?: {[rendererConstant: string]: any},
   ) {
     super.init(theme, opt_rendererOverrides);
     this.highlightConstants = this.makeHighlightConstants_();
@@ -80,7 +80,7 @@ export class Renderer extends BaseRenderer {
    */
   protected override makeDrawer_(
     block: BlockSvg,
-    info: BaseRenderInfo
+    info: BaseRenderInfo,
   ): Drawer {
     return new Drawer(block, info as RenderInfo);
   }
@@ -115,7 +115,7 @@ export class Renderer extends BaseRenderer {
     if (!this.highlightConstants) {
       throw new Error(
         'Cannot access the highlight constants because init has not ' +
-          'been called'
+          'been called',
       );
     }
     return this.highlightConstants;

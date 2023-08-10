@@ -40,7 +40,7 @@ export interface ParameterState {
 type ProcedureModelConstructor<ProcedureModel extends IProcedureModel> = new (
   workspace: Workspace,
   name: string,
-  id: string
+  id: string,
 ) => ProcedureModel;
 
 /**
@@ -53,7 +53,7 @@ type ProcedureModelConstructor<ProcedureModel extends IProcedureModel> = new (
 type ParameterModelConstructor<ParameterModel extends IParameterModel> = new (
   workspace: Workspace,
   name: string,
-  id: string
+  id: string,
 ) => ParameterModel;
 
 /**
@@ -94,23 +94,23 @@ export function saveParameter(param: IParameterModel): ParameterState {
  */
 export function loadProcedure<
   ProcedureModel extends IProcedureModel,
-  ParameterModel extends IParameterModel
+  ParameterModel extends IParameterModel,
 >(
   procedureModelClass: ProcedureModelConstructor<ProcedureModel>,
   parameterModelClass: ParameterModelConstructor<ParameterModel>,
   state: State,
-  workspace: Workspace
+  workspace: Workspace,
 ): ProcedureModel {
   const proc = new procedureModelClass(
     workspace,
     state.name,
-    state.id
+    state.id,
   ).setReturnTypes(state.returnTypes);
   if (!state.parameters) return proc;
   for (const [index, param] of state.parameters.entries()) {
     proc.insertParameter(
       loadParameter(parameterModelClass, param, workspace),
-      index
+      index,
     );
   }
   return proc;
@@ -124,7 +124,7 @@ export function loadProcedure<
 export function loadParameter<ParameterModel extends IParameterModel>(
   parameterModelClass: ParameterModelConstructor<ParameterModel>,
   state: ParameterState,
-  workspace: Workspace
+  workspace: Workspace,
 ): ParameterModel {
   const model = new parameterModelClass(workspace, state.name, state.id);
   if (state.types) model.setTypes(state.types);
@@ -134,7 +134,7 @@ export function loadParameter<ParameterModel extends IParameterModel>(
 /** Serializer for saving and loading procedure state. */
 export class ProcedureSerializer<
   ProcedureModel extends IProcedureModel,
-  ParameterModel extends IParameterModel
+  ParameterModel extends IParameterModel,
 > implements ISerializer
 {
   public priority = priorities.PROCEDURES;
@@ -152,7 +152,7 @@ export class ProcedureSerializer<
    */
   constructor(
     private readonly procedureModelClass: ProcedureModelConstructor<ProcedureModel>,
-    private readonly parameterModelClass: ParameterModelConstructor<ParameterModel>
+    private readonly parameterModelClass: ParameterModelConstructor<ParameterModel>,
   ) {}
 
   /** Serializes the procedure models of the given workspace. */
@@ -176,8 +176,8 @@ export class ProcedureSerializer<
           this.procedureModelClass,
           this.parameterModelClass,
           procState,
-          workspace
-        )
+          workspace,
+        ),
       );
     }
   }

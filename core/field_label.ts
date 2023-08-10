@@ -49,7 +49,7 @@ export class FieldLabel extends Field<string> {
   constructor(
     value?: string | typeof Field.SKIP_SETUP,
     textClass?: string,
-    config?: FieldLabelConfig
+    config?: FieldLabelConfig,
   ) {
     super(Field.SKIP_SETUP);
 
@@ -69,8 +69,6 @@ export class FieldLabel extends Field<string> {
 
   /**
    * Create block UI for this label.
-   *
-   * @internal
    */
   override initView() {
     this.createTextElement_();
@@ -86,7 +84,7 @@ export class FieldLabel extends Field<string> {
    * @returns A valid string, or null if invalid.
    */
   protected override doClassValidation_(
-    newValue?: AnyDuringMigration
+    newValue?: AnyDuringMigration,
   ): string | null {
     if (newValue === null || newValue === undefined) {
       return null;

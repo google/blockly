@@ -73,7 +73,7 @@ export function unregister(name: string) {
 export function init(
   name: string,
   theme: Theme,
-  opt_rendererOverrides?: {[rendererConstant: string]: any}
+  opt_rendererOverrides?: {[rendererConstant: string]: any},
 ): Renderer {
   const rendererClass = registry.getClass(registry.Type.RENDERER, name);
   const renderer = new rendererClass!(name);

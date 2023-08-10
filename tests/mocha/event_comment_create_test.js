@@ -27,7 +27,7 @@ suite('Comment Create Event', function () {
         this.workspace,
         'test text',
         10,
-        10
+        10,
       );
       const origEvent = new Blockly.Events.CommentCreate(comment);
 

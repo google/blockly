@@ -26,7 +26,7 @@ suite('Trashcan', function () {
     let xml = Blockly.utils.xml.textToDom(
       '<xml xmlns="https://developers.google.com/blockly/xml">' +
         xmlString +
-        '</xml>'
+        '</xml>',
     );
     xml = xml.children[0];
     const block = Blockly.Xml.domToBlock(xml, workspace);
@@ -78,7 +78,7 @@ suite('Trashcan', function () {
       let xml = Blockly.utils.xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="test_field_block"/>' +
-          '</xml>'
+          '</xml>',
       );
       xml = xml.children[0];
       fireNonDeleteEvent(this.workspace, xml);
@@ -99,7 +99,7 @@ suite('Trashcan', function () {
         Blockly.Events.Click,
         {targetType: 'workspace', type: eventUtils.CLICK},
         this.workspace.id,
-        undefined
+        undefined,
       );
     });
     test('Click with contents - fires trashcanOpen', function () {
@@ -116,7 +116,7 @@ suite('Trashcan', function () {
         this.eventsFireStub,
         Blockly.Events.TrashcanOpen,
         {isOpen: true, type: eventUtils.TRASHCAN_OPEN},
-        this.workspace.id
+        this.workspace.id,
       );
       assertEventNotFired(this.eventsFireStub, Blockly.Events.Click, {
         type: eventUtils.TRASHCAN_OPEN,
@@ -135,14 +135,14 @@ suite('Trashcan', function () {
         this.eventsFireStub,
         Blockly.Events.TrashcanOpen,
         {isOpen: false, type: eventUtils.TRASHCAN_OPEN},
-        this.workspace.id
+        this.workspace.id,
       );
       assertEventFired(
         this.eventsFireStub,
         Blockly.Events.Click,
         {targetType: 'workspace', type: eventUtils.CLICK},
         this.workspace.id,
-        undefined
+        undefined,
       );
     });
   });
@@ -155,22 +155,22 @@ suite('Trashcan', function () {
     test('Different Coords', function () {
       fireDeleteEvent(
         this.workspace,
-        '<block type="test_field_block" x="10" y="10"/>'
+        '<block type="test_field_block" x="10" y="10"/>',
       );
       fireDeleteEvent(
         this.workspace,
-        '<block type="test_field_block" x="20" y="20"/>'
+        '<block type="test_field_block" x="20" y="20"/>',
       );
       chai.assert.equal(this.trashcan.contents.length, 1);
     });
     test('Different IDs', function () {
       fireDeleteEvent(
         this.workspace,
-        '<block type="test_field_block" id="id1"/>'
+        '<block type="test_field_block" id="id1"/>',
       );
       fireDeleteEvent(
         this.workspace,
-        '<block type="test_field_block" id="id2"/>'
+        '<block type="test_field_block" id="id2"/>',
       );
       chai.assert.equal(this.trashcan.contents.length, 1);
     });
@@ -178,7 +178,7 @@ suite('Trashcan', function () {
       fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
       fireDeleteEvent(
         this.workspace,
-        '<block type="test_field_block" disabled="true"/>'
+        '<block type="test_field_block" disabled="true"/>',
       );
       // Disabled tags get removed because disabled blocks aren't allowed to
       // be dragged from flyouts. See #2239 and #3243.
@@ -189,13 +189,13 @@ suite('Trashcan', function () {
         this.workspace,
         '<block type="test_field_block">' +
           '  <field name="NAME">dummy_value1</field>' +
-          '</block>'
+          '</block>',
       );
       fireDeleteEvent(
         this.workspace,
         '<block type="test_field_block">' +
           '  <field name="NAME">dummy_value2</field>' +
-          '</block>'
+          '</block>',
       );
       chai.assert.equal(this.trashcan.contents.length, 2);
     });
@@ -207,7 +207,7 @@ suite('Trashcan', function () {
           '  <value name="INPUT">' +
           '    <block type="row_block"/>' +
           '  </value>' +
-          '</block>'
+          '</block>',
       );
       chai.assert.equal(this.trashcan.contents.length, 2);
     });
@@ -218,7 +218,7 @@ suite('Trashcan', function () {
           '  <value name="INPUT">' +
           '    <block type="row_block"/>' +
           '  </value>' +
-          '</block>'
+          '</block>',
       );
       fireDeleteEvent(
         this.workspace,
@@ -226,7 +226,7 @@ suite('Trashcan', function () {
           '  <value name="INPUT">' +
           '    <block type="row_block2"/>' +
           '  </value>' +
-          '</block>'
+          '</block>',
       );
       chai.assert.equal(this.trashcan.contents.length, 2);
     });
@@ -238,7 +238,7 @@ suite('Trashcan', function () {
           '  <statement name="NAME">' +
           '    <block type="statement_block"/>' +
           '  </statement>' +
-          '</block>'
+          '</block>',
       );
       chai.assert.equal(this.trashcan.contents.length, 2);
     });
@@ -249,7 +249,7 @@ suite('Trashcan', function () {
           '  <statement name="NAME">' +
           '    <block type="statement_block"/>' +
           '  </statement>' +
-          '</block>'
+          '</block>',
       );
       fireDeleteEvent(
         this.workspace,
@@ -257,7 +257,7 @@ suite('Trashcan', function () {
           '  <statement name="NAME">' +
           '    <block type="statement_block2"/>' +
           '  </statement>' +
-          '</block>'
+          '</block>',
       );
       chai.assert.equal(this.trashcan.contents.length, 2);
     });
@@ -269,7 +269,7 @@ suite('Trashcan', function () {
           '  <next>' +
           '    <block type="stack_block"/>' +
           '  </next>' +
-          '</block>'
+          '</block>',
       );
       chai.assert.equal(this.trashcan.contents.length, 2);
     });
@@ -280,7 +280,7 @@ suite('Trashcan', function () {
           '  <next>' +
           '    <block type="stack_block"/>' +
           '  </next>' +
-          '</block>'
+          '</block>',
       );
       fireDeleteEvent(
         this.workspace,
@@ -288,7 +288,7 @@ suite('Trashcan', function () {
           '  <next>' +
           '    <block type="stack_block2"/>' +
           '  </next>' +
-          '</block>'
+          '</block>',
       );
       chai.assert.equal(this.trashcan.contents.length, 2);
     });
@@ -298,7 +298,7 @@ suite('Trashcan', function () {
         this.workspace,
         '<block type="test_field_block">' +
           '  <comment>comment_text</comment>' +
-          '</block>'
+          '</block>',
       );
       chai.assert.equal(this.trashcan.contents.length, 2);
     });
@@ -307,13 +307,13 @@ suite('Trashcan', function () {
         this.workspace,
         '<block type="test_field_block">' +
           '  <comment>comment_text1</comment>' +
-          '</block>'
+          '</block>',
       );
       fireDeleteEvent(
         this.workspace,
         '<block type="test_field_block">' +
           '  <comment>comment_text2</comment>' +
-          '</block>'
+          '</block>',
       );
       chai.assert.equal(this.trashcan.contents.length, 2);
     });
@@ -322,13 +322,13 @@ suite('Trashcan', function () {
         this.workspace,
         '<block type="test_field_block">' +
           '  <comment h="10" w="10">comment_text</comment>' +
-          '</block>'
+          '</block>',
       );
       fireDeleteEvent(
         this.workspace,
         '<block type="test_field_block">' +
           '  <comment h="20" w="20">comment_text</comment>' +
-          '</block>'
+          '</block>',
       );
       // h & w tags are removed b/c the blocks appear the same.
       chai.assert.equal(this.trashcan.contents.length, 1);
@@ -338,13 +338,13 @@ suite('Trashcan', function () {
         this.workspace,
         '<block type="test_field_block">' +
           '  <comment pinned="false">comment_text</comment>' +
-          '</block>'
+          '</block>',
       );
       fireDeleteEvent(
         this.workspace,
         '<block type="test_field_block">' +
           '  <comment pinned="true">comment_text</comment>' +
-          '</block>'
+          '</block>',
       );
       // pinned tags are removed b/c the blocks appear the same.
       chai.assert.equal(this.trashcan.contents.length, 1);
@@ -354,13 +354,13 @@ suite('Trashcan', function () {
         this.workspace,
         '<block type="xml_block">' +
           '  <mutation hasInput="true"></mutation>' +
-          '</block>'
+          '</block>',
       );
       fireDeleteEvent(
         this.workspace,
         '<block type="xml_block">' +
           '  <mutation hasInputt="false"></mutation>' +
-          '</block>'
+          '</block>',
       );
       chai.assert.equal(this.trashcan.contents.length, 2);
     });

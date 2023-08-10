@@ -59,41 +59,41 @@ suite('WorkspaceSvg', function () {
       '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '  <block type="math_random_float" inline="true" x="21" y="23">' +
         '  </block>' +
-        '</xml>'
+        '</xml>',
     );
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
     chai.assert.equal(
       this.workspace.getAllBlocks(false).length,
       1,
-      'Block count'
+      'Block count',
     );
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
     chai.assert.equal(
       this.workspace.getAllBlocks(false).length,
       2,
-      'Block count'
+      'Block count',
     );
     const blocks = this.workspace.getAllBlocks(false);
     chai.assert.equal(
       blocks[0].getRelativeToSurfaceXY().x,
       21,
-      'Block 1 position x'
+      'Block 1 position x',
     );
     chai.assert.equal(
       blocks[0].getRelativeToSurfaceXY().y,
       23,
-      'Block 1 position y'
+      'Block 1 position y',
     );
     chai.assert.equal(
       blocks[1].getRelativeToSurfaceXY().x,
       21,
-      'Block 2 position x'
+      'Block 2 position x',
     );
     // Y separation value defined in appendDomToWorkspace as 10
     chai.assert.equal(
       blocks[1].getRelativeToSurfaceXY().y,
       23 + blocks[0].getHeightWidth().height + 10,
-      'Block 2 position y'
+      'Block 2 position y',
     );
   });
 
@@ -105,7 +105,7 @@ suite('WorkspaceSvg', function () {
         '<shadow type="simple_test_block"></shadow>' +
         '</value>' +
         '</block>' +
-        '</xml>'
+        '</xml>',
     );
 
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
@@ -131,7 +131,7 @@ suite('WorkspaceSvg', function () {
         function () {
           this.workspace.updateToolbox(null);
         }.bind(this),
-        "Can't nullify an existing toolbox."
+        "Can't nullify an existing toolbox.",
       );
     });
     test('Passes in toolbox def when current toolbox is null', function () {
@@ -140,7 +140,7 @@ suite('WorkspaceSvg', function () {
         function () {
           this.workspace.updateToolbox({'contents': []});
         }.bind(this),
-        "Existing toolbox is null.  Can't create new toolbox."
+        "Existing toolbox is null.  Can't create new toolbox.",
       );
     });
     test('Existing toolbox has no categories', function () {
@@ -152,7 +152,7 @@ suite('WorkspaceSvg', function () {
         function () {
           this.workspace.updateToolbox({'contents': []});
         }.bind(this),
-        "Existing toolbox has no categories.  Can't change mode."
+        "Existing toolbox has no categories.  Can't change mode.",
       );
     });
     test('Existing toolbox has categories', function () {
@@ -164,7 +164,7 @@ suite('WorkspaceSvg', function () {
         function () {
           this.workspace.updateToolbox({'contents': []});
         }.bind(this),
-        "Existing toolbox has categories.  Can't change mode."
+        "Existing toolbox has categories.  Can't change mode.",
       );
     });
   });
@@ -179,20 +179,20 @@ suite('WorkspaceSvg', function () {
         spy,
         Blockly.Events.ViewportChange,
         expectedProperties,
-        workspace.id
+        workspace.id,
       );
       assertEventFired(
         spy,
         Blockly.Events.ViewportChange,
         expectedProperties,
-        workspace.id
+        workspace.id,
       );
     }
     function assertViewportEventFired(
       eventsFireStub,
       changeListenerSpy,
       workspace,
-      expectedEventCount = 1
+      expectedEventCount = 1,
     ) {
       const metrics = workspace.getMetrics();
       const expectedProperties = {
@@ -205,12 +205,12 @@ suite('WorkspaceSvg', function () {
       assertSpyFiredViewportEvent(
         eventsFireStub,
         workspace,
-        expectedProperties
+        expectedProperties,
       );
       assertSpyFiredViewportEvent(
         changeListenerSpy,
         workspace,
-        expectedProperties
+        expectedProperties,
       );
       sinon.assert.callCount(changeListenerSpy, expectedEventCount);
       sinon.assert.callCount(eventsFireStub, expectedEventCount);
@@ -221,7 +221,7 @@ suite('WorkspaceSvg', function () {
       changeListenerSpy,
       workspace,
       clock,
-      expectedEventCount = 1
+      expectedEventCount = 1,
     ) {
       clock.runAll();
       resetEventHistory(eventsFireStub, changeListenerSpy);
@@ -230,7 +230,7 @@ suite('WorkspaceSvg', function () {
         eventsFireStub,
         changeListenerSpy,
         workspace,
-        expectedEventCount
+        expectedEventCount,
       );
     }
     setup(function () {
@@ -248,7 +248,7 @@ suite('WorkspaceSvg', function () {
           this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
-          this.clock
+          this.clock,
         );
       });
       test('zoom(50, 50, 1)', function () {
@@ -257,7 +257,7 @@ suite('WorkspaceSvg', function () {
           this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
-          this.clock
+          this.clock,
         );
       });
       test('zoom(50, 50, -1)', function () {
@@ -266,7 +266,7 @@ suite('WorkspaceSvg', function () {
           this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
-          this.clock
+          this.clock,
         );
       });
       test('zoomCenter(1)', function () {
@@ -275,7 +275,7 @@ suite('WorkspaceSvg', function () {
           this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
-          this.clock
+          this.clock,
         );
       });
       test('zoomCenter(-1)', function () {
@@ -284,7 +284,7 @@ suite('WorkspaceSvg', function () {
           this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
-          this.clock
+          this.clock,
         );
       });
       test('zoomToFit', function () {
@@ -296,7 +296,7 @@ suite('WorkspaceSvg', function () {
           this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
-          this.clock
+          this.clock,
         );
       });
     });
@@ -310,7 +310,7 @@ suite('WorkspaceSvg', function () {
           this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
-          this.clock
+          this.clock,
         );
       });
       test('scroll', function () {
@@ -319,7 +319,7 @@ suite('WorkspaceSvg', function () {
           this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
-          this.clock
+          this.clock,
         );
       });
       test('scrollCenter', function () {
@@ -328,7 +328,7 @@ suite('WorkspaceSvg', function () {
           this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
-          this.clock
+          this.clock,
         );
       });
     });
@@ -348,7 +348,7 @@ suite('WorkspaceSvg', function () {
           this.changeListenerSpy,
           this.workspace,
           this.clock,
-          2
+          2,
         );
       });
       test("domToWorkspace that doesn't trigger scroll", function () {
@@ -360,32 +360,32 @@ suite('WorkspaceSvg', function () {
               '<block type="controls_if" x="288" y="88"></block>' +
               '<block type="controls_if" x="88" y="238"></block>' +
               '<block type="controls_if" x="288" y="238"></block>' +
-              '</xml>'
+              '</xml>',
           ),
-          this.workspace
+          this.workspace,
         );
         const xmlDom = Blockly.utils.xml.textToDom(
-          '<block type="controls_if" x="188" y="163"></block>'
+          '<block type="controls_if" x="188" y="163"></block>',
         );
         this.clock.runAll();
         resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
         // Add block in center of other blocks, not triggering scroll.
         Blockly.Xml.domToWorkspace(
           Blockly.utils.xml.textToDom(
-            '<block type="controls_if" x="188" y="163"></block>'
+            '<block type="controls_if" x="188" y="163"></block>',
           ),
-          this.workspace
+          this.workspace,
         );
         this.clock.runAll();
         assertEventNotFired(
           this.eventsFireStub,
           Blockly.Events.ViewportChange,
-          {type: eventUtils.VIEWPORT_CHANGE}
+          {type: eventUtils.VIEWPORT_CHANGE},
         );
         assertEventNotFired(
           this.changeListenerSpy,
           Blockly.Events.ViewportChange,
-          {type: eventUtils.VIEWPORT_CHANGE}
+          {type: eventUtils.VIEWPORT_CHANGE},
         );
       });
       test("domToWorkspace at 0,0 that doesn't trigger scroll", function () {
@@ -397,12 +397,12 @@ suite('WorkspaceSvg', function () {
               '<block type="controls_if" x="75" y="-72"></block>' +
               '<block type="controls_if" x="-75" y="75"></block>' +
               '<block type="controls_if" x="75" y="75"></block>' +
-              '</xml>'
+              '</xml>',
           ),
-          this.workspace
+          this.workspace,
         );
         const xmlDom = Blockly.utils.xml.textToDom(
-          '<block type="controls_if" x="0" y="0"></block>'
+          '<block type="controls_if" x="0" y="0"></block>',
         );
         this.clock.runAll();
         resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
@@ -412,12 +412,12 @@ suite('WorkspaceSvg', function () {
         assertEventNotFired(
           this.eventsFireStub,
           Blockly.Events.ViewportChange,
-          {type: eventUtils.VIEWPORT_CHANGE}
+          {type: eventUtils.VIEWPORT_CHANGE},
         );
         assertEventNotFired(
           this.changeListenerSpy,
           Blockly.Events.ViewportChange,
-          {type: eventUtils.VIEWPORT_CHANGE}
+          {type: eventUtils.VIEWPORT_CHANGE},
         );
       });
       test.skip('domToWorkspace multiple blocks triggers one viewport event', function () {
@@ -430,9 +430,9 @@ suite('WorkspaceSvg', function () {
                 '<block type="controls_if" x="288" y="88"></block>' +
                 '<block type="controls_if" x="88" y="238"></block>' +
                 '<block type="controls_if" x="288" y="238"></block>' +
-                '</xml>'
+                '</xml>',
             ),
-            this.workspace
+            this.workspace,
           );
         };
         // Expect 10 events, 4 create, 4 move, 1 viewport, 1 finished loading
@@ -442,7 +442,7 @@ suite('WorkspaceSvg', function () {
           this.changeListenerSpy,
           this.workspace,
           this.clock,
-          10
+          10,
         );
       });
     });

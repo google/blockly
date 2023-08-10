@@ -50,7 +50,7 @@ suite('Toolbox', function () {
         .childNodes[0];
       chai.assert.equal(
         toolboxDiv.className,
-        'blocklyToolboxDiv blocklyNonSelectable'
+        'blocklyToolboxDiv blocklyNonSelectable',
       );
     });
     test('Init called -> Toolbox is subscribed to background and foreground colour', function () {
@@ -63,13 +63,13 @@ suite('Toolbox', function () {
         themeManagerSpy,
         this.toolbox.HtmlDiv,
         'toolboxBackgroundColour',
-        'background-color'
+        'background-color',
       );
       sinon.assert.calledWith(
         themeManagerSpy,
         this.toolbox.HtmlDiv,
         'toolboxForegroundColour',
-        'color'
+        'color',
       );
     });
     test('Init called -> Render is called', function () {
@@ -195,7 +195,7 @@ suite('Toolbox', function () {
     test('Toolbox clicked -> Should close flyout', function () {
       const hideChaffStub = sinon.stub(
         Blockly.WorkspaceSvg.prototype,
-        'hideChaff'
+        'hideChaff',
       );
       const evt = new PointerEvent('pointerdown', {});
       this.toolbox.HtmlDiv.dispatchEvent(evt);
@@ -248,7 +248,7 @@ suite('Toolbox', function () {
         this.toolbox,
         'ArrowUp',
         'selectPrevious_',
-        true
+        true,
       );
     });
     test('Left button is pushed -> Should call selectParent_', function () {
@@ -256,7 +256,7 @@ suite('Toolbox', function () {
         this.toolbox,
         'ArrowLeft',
         'selectParent_',
-        true
+        true,
       );
     });
     test('Right button is pushed -> Should call selectChild_', function () {
@@ -264,14 +264,14 @@ suite('Toolbox', function () {
         this.toolbox,
         'ArrowRight',
         'selectChild_',
-        true
+        true,
       );
     });
     test('Enter button is pushed -> Should toggle expanded', function () {
       this.toolbox.selectedItem_ = getCollapsibleItem(this.toolbox);
       const toggleExpandedStub = sinon.stub(
         this.toolbox.selectedItem_,
-        'toggleExpanded'
+        'toggleExpanded',
       );
       const event = createKeyDownMock('Enter');
       const preventDefaultEvent = sinon.stub(event, 'preventDefault');
@@ -364,7 +364,7 @@ suite('Toolbox', function () {
         chai.assert.isTrue(handled);
         chai.assert.equal(
           this.toolbox.selectedItem_,
-          this.toolbox.contents_[1]
+          this.toolbox.contents_[1],
         );
       });
       test('Selected item is last item -> Should not handle event', function () {
@@ -505,7 +505,7 @@ suite('Toolbox', function () {
       const showFlyoutstub = sinon.stub(this.toolbox.flyout_, 'show');
       const scrollToStartFlyout = sinon.stub(
         this.toolbox.flyout_,
-        'scrollToStart'
+        'scrollToStart',
       );
       const newItem = getNonCollapsibleItem(this.toolbox);
       this.toolbox.updateFlyout_(null, newItem);
@@ -525,14 +525,14 @@ suite('Toolbox', function () {
       chai.assert.equal(
         toolbox.HtmlDiv.style.left,
         '0px',
-        'Check left position'
+        'Check left position',
       );
       chai.assert.equal(toolbox.HtmlDiv.style.height, 'auto', 'Check height');
       chai.assert.equal(toolbox.HtmlDiv.style.width, '100%', 'Check width');
       chai.assert.equal(
         toolbox.height_,
         toolbox.HtmlDiv.offsetHeight,
-        'Check height'
+        'Check height',
       );
     }
     function checkVerticalToolbox(toolbox) {
@@ -540,7 +540,7 @@ suite('Toolbox', function () {
       chai.assert.equal(
         toolbox.width_,
         toolbox.HtmlDiv.offsetWidth,
-        'Check width'
+        'Check width',
       );
     }
     test('HtmlDiv is not created -> Should not resize', function () {
@@ -596,7 +596,7 @@ suite('Toolbox', function () {
       chai.assert.equal(
         actualVal.toUpperCase(),
         expectedVal.toUpperCase(),
-        'Checking value for: ' + value
+        'Checking value for: ' + value,
       );
     }
     function checkContents(actualContents, expectedContents) {
@@ -605,7 +605,7 @@ suite('Toolbox', function () {
         // TODO: Check the values as well as all the keys.
         chai.assert.containsAllKeys(
           actualContents[i],
-          Object.keys(expectedContents[i])
+          Object.keys(expectedContents[i]),
         );
       }
     }
@@ -630,14 +630,14 @@ suite('Toolbox', function () {
     suite('parseToolbox', function () {
       test('Category Toolbox: JSON', function () {
         const toolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(
-          this.categoryToolboxJSON
+          this.categoryToolboxJSON,
         );
         chai.assert.isNotNull(toolboxDef);
         checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
       });
       test('Simple Toolbox: JSON', function () {
         const toolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(
-          this.simpleToolboxJSON
+          this.simpleToolboxJSON,
         );
         chai.assert.isNotNull(toolboxDef);
         checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
@@ -726,7 +726,7 @@ suite('Toolbox', function () {
       });
       test('Json', function () {
         const flyoutDef = Blockly.utils.toolbox.convertFlyoutDefToJsonArray(
-          this.simpleToolboxJSON
+          this.simpleToolboxJSON,
         );
         checkContents(flyoutDef, this.simpleToolboxJSON['contents']);
       });
@@ -751,7 +751,7 @@ suite('Toolbox', function () {
 
       chai.assert.isTrue(
         innerCategory.isVisible(),
-        'All ancestors are expanded, so category should be visible'
+        'All ancestors are expanded, so category should be visible',
       );
     });
     test('Child categories not visible if any ancestor not expanded', function () {
@@ -767,7 +767,7 @@ suite('Toolbox', function () {
 
       chai.assert.isFalse(
         innerCategory.isVisible(),
-        'Not all ancestors are expanded, so category should not be visible'
+        'Not all ancestors are expanded, so category should not be visible',
       );
     });
   });

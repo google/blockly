@@ -62,7 +62,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
 
   constructor(
     private readonly flyoutBlockTypes: string[],
-    protected readonly sourceBlock: BlockSvg
+    protected readonly sourceBlock: BlockSvg,
   ) {
     super(sourceBlock);
   }
@@ -86,7 +86,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
         'height': '16',
         'width': '16',
       },
-      this.svgRoot
+      this.svgRoot,
     );
     // Gear teeth.
     dom.createSvgElement(
@@ -102,13 +102,13 @@ export class MutatorIcon extends Icon implements IHasBubble {
           '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
           '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z',
       },
-      this.svgRoot
+      this.svgRoot,
     );
     // Axle hole.
     dom.createSvgElement(
       Svg.CIRCLE,
       {'class': 'blocklyIconShape', 'r': '2.7', 'cx': '8', 'cy': '8'},
-      this.svgRoot
+      this.svgRoot,
     );
   }
 
@@ -158,13 +158,13 @@ export class MutatorIcon extends Icon implements IHasBubble {
         this.getMiniWorkspaceConfig(),
         this.sourceBlock.workspace,
         this.getAnchorLocation(),
-        this.getBubbleOwnerRect()
+        this.getBubbleOwnerRect(),
       );
       this.applyColour();
       this.createRootBlock();
       this.addSaveConnectionsListener();
       this.miniWorkspaceBubble?.addWorkspaceChangeListener(
-        this.createMiniWorkspaceChangeListener()
+        this.createMiniWorkspaceChangeListener(),
       );
     } else {
       this.miniWorkspaceBubble?.dispose();
@@ -175,8 +175,8 @@ export class MutatorIcon extends Icon implements IHasBubble {
       new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
         this.sourceBlock,
         visible,
-        'mutator'
-      )
+        'mutator',
+      ),
     );
   }
 
@@ -212,7 +212,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
     const midIcon = SIZE / 2;
     return Coordinate.sum(
       this.workspaceLocation,
-      new Coordinate(midIcon, midIcon)
+      new Coordinate(midIcon, midIcon),
     );
   }
 
@@ -227,8 +227,13 @@ export class MutatorIcon extends Icon implements IHasBubble {
 
   /** Decomposes the source block to create blocks in the mini workspace. */
   private createRootBlock() {
-    this.rootBlock = this.sourceBlock.decompose!(
-      this.miniWorkspaceBubble!.getWorkspace()
+    if (!this.sourceBlock.decompose) {
+      throw new Error(
+        'Blocks with mutator icons must include a decompose method',
+      );
+    }
+    this.rootBlock = this.sourceBlock.decompose(
+      this.miniWorkspaceBubble!.getWorkspace(),
     )!;
 
     for (const child of this.rootBlock.getDescendants(false)) {
@@ -242,7 +247,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
       this.miniWorkspaceBubble?.getWorkspace()?.getFlyout()?.getWidth() ?? 0;
     this.rootBlock.moveBy(
       this.rootBlock.RTL ? -(flyoutWidth + WORKSPACE_MARGIN) : WORKSPACE_MARGIN,
-      WORKSPACE_MARGIN
+      WORKSPACE_MARGIN,
     );
   }
 
@@ -290,12 +295,17 @@ export class MutatorIcon extends Icon implements IHasBubble {
   /** Recomposes the source block based on changes to the mini workspace. */
   private recomposeSourceBlock() {
     if (!this.rootBlock) return;
+    if (!this.sourceBlock.compose) {
+      throw new Error(
+        'Blocks with mutator icons must include a compose method',
+      );
+    }
 
     const existingGroup = eventUtils.getGroup();
     if (!existingGroup) eventUtils.setGroup(true);
 
     const oldExtraState = BlockChange.getExtraBlockState_(this.sourceBlock);
-    this.sourceBlock.compose!(this.rootBlock);
+    this.sourceBlock.compose(this.rootBlock);
     const newExtraState = BlockChange.getExtraBlockState_(this.sourceBlock);
 
     if (oldExtraState !== newExtraState) {
@@ -305,8 +315,8 @@ export class MutatorIcon extends Icon implements IHasBubble {
           'mutation',
           null,
           oldExtraState,
-          newExtraState
-        )
+          newExtraState,
+        ),
       );
     }
 
@@ -329,13 +339,13 @@ export class MutatorIcon extends Icon implements IHasBubble {
   static reconnect(
     connectionChild: Connection | null,
     block: Block,
-    inputName: string
+    inputName: string,
   ): boolean {
     deprecation.warn(
       'MutatorIcon.reconnect',
       'v10',
       'v11',
-      'connection.reconnect'
+      'connection.reconnect',
     );
     if (!connectionChild) return false;
     return connectionChild.reconnect(block, inputName);
@@ -352,7 +362,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
       'MutatorIcon.findParentWs',
       'v10',
       'v11',
-      'workspace.getRootWorkspace'
+      'workspace.getRootWorkspace',
     );
     return workspace.getRootWorkspace();
   }

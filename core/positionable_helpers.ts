@@ -75,7 +75,7 @@ export function getStartPositionRect(
   horizontalPadding: number,
   verticalPadding: number,
   metrics: UiMetrics,
-  workspace: WorkspaceSvg
+  workspace: WorkspaceSvg,
 ): Rect {
   // Horizontal positioning.
   let left = 0;
@@ -129,7 +129,7 @@ export function getStartPositionRect(
  */
 export function getCornerOppositeToolbox(
   workspace: WorkspaceSvg,
-  metrics: UiMetrics
+  metrics: UiMetrics,
 ): Position {
   const leftCorner =
     metrics.toolboxMetrics.position !== toolbox.Position.LEFT &&
@@ -160,7 +160,7 @@ export function bumpPositionRect(
   startRect: Rect,
   margin: number,
   bumpDir: bumpDirection,
-  savedPositions: Rect[]
+  savedPositions: Rect[],
 ): Rect {
   let top = startRect.top;
   const left = startRect.left;

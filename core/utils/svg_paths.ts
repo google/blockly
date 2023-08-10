@@ -128,7 +128,7 @@ export function arc(
   command: string,
   flags: string,
   radius: number,
-  point: string
+  point: string,
 ): string {
   return command + ' ' + radius + ' ' + radius + ' ' + flags + point;
 }

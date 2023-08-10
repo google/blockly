@@ -87,7 +87,7 @@ suite('Cursor', function () {
 
   test('Next - From a Previous skip over next connection and block', function () {
     const prevNode = ASTNode.createConnectionNode(
-      this.blocks.A.previousConnection
+      this.blocks.A.previousConnection,
     );
     this.cursor.setCurNode(prevNode);
     this.cursor.next();
@@ -96,7 +96,7 @@ suite('Cursor', function () {
   });
   test('Next - From last block in a stack go to next connection', function () {
     const prevNode = ASTNode.createConnectionNode(
-      this.blocks.B.previousConnection
+      this.blocks.B.previousConnection,
     );
     this.cursor.setCurNode(prevNode);
     this.cursor.next();
@@ -107,14 +107,14 @@ suite('Cursor', function () {
   test('In - From output connection', function () {
     const fieldBlock = this.blocks.E;
     const outputNode = ASTNode.createConnectionNode(
-      fieldBlock.outputConnection
+      fieldBlock.outputConnection,
     );
     this.cursor.setCurNode(outputNode);
     this.cursor.in();
     const curNode = this.cursor.getCurNode();
     chai.assert.equal(
       curNode.getLocation(),
-      fieldBlock.inputList[0].fieldRow[0]
+      fieldBlock.inputList[0].fieldRow[0],
     );
   });
 

@@ -37,7 +37,7 @@ export class PathObject extends BasePathObject {
   constructor(
     root: SVGElement,
     style: BlockStyle,
-    public override constants: ConstantProvider
+    public override constants: ConstantProvider,
   ) {
     super(root, style, constants);
 
@@ -55,7 +55,7 @@ export class PathObject extends BasePathObject {
     this.svgPathLight = dom.createSvgElement(
       Svg.PATH,
       {'class': 'blocklyPathLight'},
-      this.svgRoot
+      this.svgRoot,
     );
   }
 
@@ -86,7 +86,7 @@ export class PathObject extends BasePathObject {
     if (!this.style.colourTertiary) {
       throw new Error(
         'The renderer did not properly initialize the tertiary colour of ' +
-          'the block style'
+          'the block style',
       );
     }
     this.svgPathLight.setAttribute('stroke', this.style.colourTertiary);
@@ -107,7 +107,7 @@ export class PathObject extends BasePathObject {
     if (highlighted) {
       this.svgPath.setAttribute(
         'filter',
-        'url(#' + this.constants.embossFilterId + ')'
+        'url(#' + this.constants.embossFilterId + ')',
       );
       this.svgPathLight.style.display = 'none';
     } else {
@@ -122,7 +122,7 @@ export class PathObject extends BasePathObject {
       if (!this.style.colourSecondary) {
         throw new Error(
           'The renderer did not properly initialize the secondary colour ' +
-            'of the block style block style'
+            'of the block style block style',
         );
       }
       this.svgPathDark.setAttribute('fill', this.style.colourSecondary);

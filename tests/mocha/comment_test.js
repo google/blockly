@@ -29,7 +29,7 @@ suite('Comments', function () {
     });
     this.block = Blockly.Xml.domToBlock(
       Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
-      this.workspace
+      this.workspace,
     );
     this.comment = new Blockly.icons.CommentIcon(this.block);
   });
@@ -58,7 +58,7 @@ suite('Comments', function () {
         Blockly.Events.BubbleOpen,
         {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
         this.workspace.id,
-        this.block.id
+        this.block.id,
       );
     });
     test('Not Editable', function () {
@@ -73,7 +73,7 @@ suite('Comments', function () {
         Blockly.Events.BubbleOpen,
         {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
         this.workspace.id,
-        this.block.id
+        this.block.id,
       );
     });
     test('Editable -> Not Editable', function () {
@@ -89,7 +89,7 @@ suite('Comments', function () {
         Blockly.Events.BubbleOpen,
         {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
         this.workspace.id,
-        this.block.id
+        this.block.id,
       );
     });
     test('Not Editable -> Editable', function () {
@@ -107,7 +107,7 @@ suite('Comments', function () {
         Blockly.Events.BubbleOpen,
         {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
         this.workspace.id,
-        this.block.id
+        this.block.id,
       );
     });
   });

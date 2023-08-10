@@ -40,7 +40,7 @@ export function toDegrees(angleRadians: number): number {
 export function clamp(
   lowerBound: number,
   number: number,
-  upperBound: number
+  upperBound: number,
 ): number {
   if (upperBound < lowerBound) {
     const temp = upperBound;

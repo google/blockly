@@ -115,13 +115,13 @@ export class FieldDropdown extends Field<string> {
   constructor(
     menuGenerator: MenuGenerator,
     validator?: FieldDropdownValidator,
-    config?: FieldDropdownConfig
+    config?: FieldDropdownConfig,
   );
   constructor(menuGenerator: typeof Field.SKIP_SETUP);
   constructor(
     menuGenerator: MenuGenerator | typeof Field.SKIP_SETUP,
     validator?: FieldDropdownValidator,
-    config?: FieldDropdownConfig
+    config?: FieldDropdownConfig,
   ) {
     super(Field.SKIP_SETUP);
 
@@ -185,8 +185,6 @@ export class FieldDropdown extends Field<string> {
 
   /**
    * Create the block UI for this dropdown.
-   *
-   * @internal
    */
   override initView() {
     if (this.shouldAddBorderRect_()) {
@@ -229,8 +227,8 @@ export class FieldDropdown extends Field<string> {
       document.createTextNode(
         this.getSourceBlock()?.RTL
           ? FieldDropdown.ARROW_CHAR + ' '
-          : ' ' + FieldDropdown.ARROW_CHAR
-      )
+          : ' ' + FieldDropdown.ARROW_CHAR,
+      ),
     );
     if (this.getSourceBlock()?.RTL) {
       this.getTextElement().insertBefore(this.arrow, this.textContent_);
@@ -247,12 +245,12 @@ export class FieldDropdown extends Field<string> {
         'height': this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
         'width': this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
       },
-      this.fieldGroup_
+      this.fieldGroup_,
     );
     this.svgArrow!.setAttributeNS(
       dom.XLINK_NS,
       'xlink:href',
-      this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_DATAURI
+      this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_DATAURI,
     );
   }
 
@@ -302,7 +300,7 @@ export class FieldDropdown extends Field<string> {
       style.scrollIntoContainerView(
         this.selectedMenuItem.getElement()!,
         dropDownDiv.getContentDiv(),
-        true
+        true,
       );
     }
 
@@ -428,7 +426,7 @@ export class FieldDropdown extends Field<string> {
             ', Field name: ' +
             this.name +
             ', Value: ' +
-            newValue
+            newValue,
         );
       }
       return null;
@@ -506,7 +504,7 @@ export class FieldDropdown extends Field<string> {
     this.imageElement!.setAttributeNS(
       dom.XLINK_NS,
       'xlink:href',
-      imageJson.src
+      imageJson.src,
     );
     this.imageElement!.setAttribute('height', String(imageJson.height));
     this.imageElement!.setAttribute('width', String(imageJson.width));
@@ -518,7 +516,7 @@ export class FieldDropdown extends Field<string> {
     const hasBorder = !!this.borderRect_;
     const height = Math.max(
       hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
-      imageHeight + IMAGE_Y_PADDING
+      imageHeight + IMAGE_Y_PADDING,
     );
     const xPadding = hasBorder
       ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING
@@ -527,14 +525,14 @@ export class FieldDropdown extends Field<string> {
     if (this.svgArrow) {
       arrowWidth = this.positionSVGArrow(
         imageWidth + xPadding,
-        height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2
+        height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2,
       );
     } else {
       arrowWidth = dom.getFastTextWidth(
         this.arrow as SVGTSpanElement,
         this.getConstants()!.FIELD_TEXT_FONTSIZE,
         this.getConstants()!.FIELD_TEXT_FONTWEIGHT,
-        this.getConstants()!.FIELD_TEXT_FONTFAMILY
+        this.getConstants()!.FIELD_TEXT_FONTFAMILY,
       );
     }
     this.size_.width = imageWidth + arrowWidth + xPadding * 2;
@@ -566,13 +564,13 @@ export class FieldDropdown extends Field<string> {
     const hasBorder = !!this.borderRect_;
     const height = Math.max(
       hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
-      this.getConstants()!.FIELD_TEXT_HEIGHT
+      this.getConstants()!.FIELD_TEXT_HEIGHT,
     );
     const textWidth = dom.getFastTextWidth(
       this.getTextElement(),
       this.getConstants()!.FIELD_TEXT_FONTSIZE,
       this.getConstants()!.FIELD_TEXT_FONTWEIGHT,
-      this.getConstants()!.FIELD_TEXT_FONTFAMILY
+      this.getConstants()!.FIELD_TEXT_FONTFAMILY,
     );
     const xPadding = hasBorder
       ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING
@@ -581,7 +579,7 @@ export class FieldDropdown extends Field<string> {
     if (this.svgArrow) {
       arrowWidth = this.positionSVGArrow(
         textWidth + xPadding,
-        height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2
+        height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2,
       );
     }
     this.size_.width = textWidth + arrowWidth + xPadding * 2;
@@ -614,7 +612,7 @@ export class FieldDropdown extends Field<string> {
     const arrowX = block.RTL ? xPadding : x + textPadding;
     this.svgArrow.setAttribute(
       'transform',
-      'translate(' + arrowX + ',' + y + ')'
+      'translate(' + arrowX + ',' + y + ')',
     );
     return svgArrowSize + textPadding;
   }
@@ -650,7 +648,7 @@ export class FieldDropdown extends Field<string> {
       throw new Error(
         'options are required for the dropdown field. The ' +
           'options property must be assigned an array of ' +
-          '[humanReadableValue, languageNeutralValue] tuples.'
+          '[humanReadableValue, languageNeutralValue] tuples.',
       );
     }
     // `this` might be a subclass of FieldDropdown if that class doesn't
@@ -794,7 +792,7 @@ function trimOptions(options: MenuOption[]): {
 function applyTrim(
   options: [string, string][],
   prefixLength: number,
-  suffixLength: number
+  suffixLength: number,
 ): MenuOption[] {
   return options.map(([text, value]) => [
     text.substring(prefixLength, text.length - suffixLength),
@@ -825,7 +823,7 @@ function validateOptions(options: MenuOption[]) {
           i +
           ']: Each FieldDropdown option must be an ' +
           'array. Found: ',
-        tuple
+        tuple,
       );
     } else if (typeof tuple[1] !== 'string') {
       foundError = true;
@@ -836,7 +834,7 @@ function validateOptions(options: MenuOption[]) {
           'a string. Found ' +
           tuple[1] +
           ' in: ',
-        tuple
+        tuple,
       );
     } else if (
       tuple[0] &&
@@ -851,7 +849,7 @@ function validateOptions(options: MenuOption[]) {
           'string label or image description. Found' +
           tuple[0] +
           ' in: ',
-        tuple
+        tuple,
       );
     }
   }

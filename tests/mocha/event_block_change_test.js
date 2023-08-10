@@ -37,14 +37,14 @@ suite('Block Change Event', function () {
         test('Undo', function () {
           const block = this.workspace.newBlock('xml_block', 'block_id');
           block.domToMutation(
-            Blockly.utils.xml.textToDom('<mutation hasInput="true"/>')
+            Blockly.utils.xml.textToDom('<mutation hasInput="true"/>'),
           );
           const blockChange = new Blockly.Events.BlockChange(
             block,
             'mutation',
             null,
             '',
-            '<mutation hasInput="true"/>'
+            '<mutation hasInput="true"/>',
           );
           blockChange.run(false);
           chai.assert.isFalse(block.hasInput);
@@ -57,7 +57,7 @@ suite('Block Change Event', function () {
             'mutation',
             null,
             '',
-            '<mutation hasInput="true"/>'
+            '<mutation hasInput="true"/>',
           );
           blockChange.run(true);
           chai.assert.isTrue(block.hasInput);
@@ -73,7 +73,7 @@ suite('Block Change Event', function () {
             'mutation',
             null,
             '',
-            '{"hasInput":true}'
+            '{"hasInput":true}',
           );
           blockChange.run(false);
           chai.assert.isFalse(block.hasInput);
@@ -86,7 +86,7 @@ suite('Block Change Event', function () {
             'mutation',
             null,
             '',
-            '{"hasInput":true}'
+            '{"hasInput":true}',
           );
           blockChange.run(true);
           chai.assert.isTrue(block.hasInput);
@@ -108,14 +108,14 @@ suite('Block Change Event', function () {
     test('events round-trip through JSON', function () {
       const block = this.workspace.newBlock('xml_block', 'block_id');
       block.domToMutation(
-        Blockly.utils.xml.textToDom('<mutation hasInput="true"/>')
+        Blockly.utils.xml.textToDom('<mutation hasInput="true"/>'),
       );
       const origEvent = new Blockly.Events.BlockChange(
         block,
         'mutation',
         null,
         '',
-        '<mutation hasInput="true"/>'
+        '<mutation hasInput="true"/>',
       );
 
       const json = origEvent.toJson();

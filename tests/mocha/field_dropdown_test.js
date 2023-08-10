@@ -149,14 +149,14 @@ suite('Dropdown Fields', function () {
     Blockly.FieldDropdown,
     validValueCreationTestCases,
     invalidValueCreationTestCases,
-    validTestCaseAssertField
+    validTestCaseAssertField,
   );
 
   runFromJsonSuiteTests(
     Blockly.FieldDropdown,
     validValueCreationTestCases,
     invalidValueCreationTestCases,
-    validTestCaseAssertField
+    validTestCaseAssertField,
   );
 
   /**
@@ -188,7 +188,7 @@ suite('Dropdown Fields', function () {
       validValueSetValueTestCases,
       invalidValueSetValueTestCases,
       'A',
-      'a'
+      'a',
     );
     test('With source block', function () {
       this.field.setSourceBlock(createTestBlock());

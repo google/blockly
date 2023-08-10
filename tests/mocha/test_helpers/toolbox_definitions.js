@@ -206,11 +206,11 @@ export function getXmlArray() {
             <field name="NUM">2</field>
           </block>
         </value>
-      </block>`
+      </block>`,
   );
   const separator = Blockly.utils.xml.textToDom('<sep gap="20"></sep>');
   const button = Blockly.utils.xml.textToDom(
-    '<button text="insert" callbackkey="insertConnectionRows"></button>'
+    '<button text="insert" callbackkey="insertConnectionRows"></button>',
   );
   const label = Blockly.utils.xml.textToDom('<label text="tooltips"></label>');
   return [block, separator, button, label];

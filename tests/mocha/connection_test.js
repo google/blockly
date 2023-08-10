@@ -44,7 +44,7 @@ suite('Connection', function () {
       chai.assert.equal(
         block.isShadow(),
         isShadow,
-        `expected block ${block.id} to ${isShadow ? '' : 'not'} be a shadow`
+        `expected block ${block.id} to ${isShadow ? '' : 'not'} be a shadow`,
       );
       if (opt_id) {
         chai.assert.equal(block.id, opt_id);
@@ -55,7 +55,7 @@ suite('Connection', function () {
       const block = parent.getInputTargetBlock(inputName);
       chai.assert.exists(
         block,
-        `expected block ${opt_name || ''} to be attached to ${inputName}`
+        `expected block ${opt_name || ''} to be attached to ${inputName}`,
       );
       assertBlockMatches(block, isShadow, opt_name);
     }
@@ -64,7 +64,7 @@ suite('Connection', function () {
       const block = parent.getNextBlock();
       chai.assert.exists(
         block,
-        `expected block ${opt_name || ''} to be attached to next connection`
+        `expected block ${opt_name || ''} to be attached to next connection`,
       );
       assertBlockMatches(block, isShadow, opt_name);
     }
@@ -73,7 +73,9 @@ suite('Connection', function () {
       const block = parent.getInputTargetBlock(inputName);
       chai.assert.notExists(
         block,
-        `expected block ${block && block.id} to not be attached to ${inputName}`
+        `expected block ${
+          block && block.id
+        } to not be attached to ${inputName}`,
       );
     }
 
@@ -83,7 +85,7 @@ suite('Connection', function () {
         block,
         `expected block ${
           block && block.id
-        } to not be attached to next connection`
+        } to not be attached to next connection`,
       );
     }
 
@@ -122,7 +124,7 @@ suite('Connection', function () {
           defineStackBlock();
 
           createGenUidStubWithReturns(
-            new Array(30).fill().map((_, i) => 'id' + i)
+            new Array(30).fill().map((_, i) => 'id' + i),
           );
         });
 
@@ -136,9 +138,9 @@ suite('Connection', function () {
             function createRowBlock(workspace) {
               const block = Blockly.Xml.domToBlock(
                 Blockly.utils.xml.textToDom(
-                  '<block type="row_block" id="id0"/>'
+                  '<block type="row_block" id="id0"/>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -146,9 +148,9 @@ suite('Connection', function () {
             function createStatementBlock(workspace) {
               const block = Blockly.Xml.domToBlock(
                 Blockly.utils.xml.textToDom(
-                  '<block type="statement_block" id="id0"/>'
+                  '<block type="statement_block" id="id0"/>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -156,9 +158,9 @@ suite('Connection', function () {
             function createStackBlock(workspace) {
               const block = Blockly.Xml.domToBlock(
                 Blockly.utils.xml.textToDom(
-                  '<block type="stack_block" id="id0"/>'
+                  '<block type="stack_block" id="id0"/>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -166,7 +168,7 @@ suite('Connection', function () {
             test('Value', function () {
               const parent = createRowBlock(this.workspace);
               const xml = Blockly.utils.xml.textToDom(
-                '<shadow type="row_block" id="id1"/>'
+                '<shadow type="row_block" id="id1"/>',
               );
               parent.getInput('INPUT').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'INPUT', true);
@@ -189,7 +191,7 @@ suite('Connection', function () {
                   '<value name="INPUT">' +
                   '<shadow type="row_block" id="id1"></shadow>' +
                   '</value>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -200,14 +202,14 @@ suite('Connection', function () {
                   '  <value name="INPUT">' +
                   '    <shadow type="row_block" id="id2"/>' +
                   '  </value>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.getInput('INPUT').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'INPUT', true);
               assertInputHasBlock(
                 parent.getInputTargetBlock('INPUT'),
                 'INPUT',
-                true
+                true,
               );
               assertSerialization(
                 parent,
@@ -240,14 +242,14 @@ suite('Connection', function () {
                   '</value>' +
                   '</shadow>' +
                   '</value>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
             test('Statement', function () {
               const parent = createStatementBlock(this.workspace);
               const xml = Blockly.utils.xml.textToDom(
-                '<shadow type="statement_block" id="id1"/>'
+                '<shadow type="statement_block" id="id1"/>',
               );
               parent.getInput('NAME').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'NAME', true);
@@ -270,7 +272,7 @@ suite('Connection', function () {
                   '<statement name="NAME">' +
                   '<shadow type="statement_block" id="id1"></shadow>' +
                   '</statement>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -281,14 +283,14 @@ suite('Connection', function () {
                   '  <statement name="NAME">' +
                   '    <shadow type="statement_block" id="id2"/>' +
                   '  </statement>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.getInput('NAME').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'NAME', true);
               assertInputHasBlock(
                 parent.getInputTargetBlock('NAME'),
                 'NAME',
-                true
+                true,
               );
               assertSerialization(
                 parent,
@@ -321,14 +323,14 @@ suite('Connection', function () {
                   '</statement>' +
                   '</shadow>' +
                   '</statement>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
             test('Next', function () {
               const parent = createStackBlock(this.workspace);
               const xml = Blockly.utils.xml.textToDom(
-                '<shadow type="stack_block" id="id1"/>'
+                '<shadow type="stack_block" id="id1"/>',
               );
               parent.nextConnection.setShadowDom(xml);
               assertNextHasBlock(parent, true);
@@ -349,7 +351,7 @@ suite('Connection', function () {
                   '<next>' +
                   '<shadow type="stack_block" id="id1"></shadow>' +
                   '</next>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -360,7 +362,7 @@ suite('Connection', function () {
                   '  <next>' +
                   '    <shadow type="stack_block" id="id2"/>' +
                   '  </next>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.nextConnection.setShadowDom(xml);
               assertNextHasBlock(parent, true);
@@ -392,7 +394,7 @@ suite('Connection', function () {
                   '</next>' +
                   '</shadow>' +
                   '</next>' +
-                  '</block>'
+                  '</block>',
               );
             });
           });
@@ -406,9 +408,9 @@ suite('Connection', function () {
                     '  <value name="INPUT">' +
                     '    <block type="row_block" id="idA"/>' +
                     '  </value>' +
-                    '</block>'
+                    '</block>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -420,9 +422,9 @@ suite('Connection', function () {
                     '  <statement name="NAME">' +
                     '    <block type="statement_block" id="idA"/>' +
                     '  </statement>' +
-                    '</block>'
+                    '</block>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -434,9 +436,9 @@ suite('Connection', function () {
                     '  <next>' +
                     '    <block type="stack_block" id="idA"/>' +
                     '  </next>' +
-                    '</block>'
+                    '</block>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -444,7 +446,7 @@ suite('Connection', function () {
             test('Value', function () {
               const parent = createRowBlocks(this.workspace);
               const xml = Blockly.utils.xml.textToDom(
-                '<shadow type="row_block" id="id1"/>'
+                '<shadow type="row_block" id="id1"/>',
               );
               parent.getInput('INPUT').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'INPUT', false);
@@ -469,7 +471,7 @@ suite('Connection', function () {
                   '<value name="INPUT">' +
                   '<shadow type="row_block" id="id1"></shadow>' +
                   '</value>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -480,20 +482,20 @@ suite('Connection', function () {
                   '  <value name="INPUT">' +
                   '    <shadow type="row_block" id="id2"/>' +
                   '  </value>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.getInput('INPUT').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'INPUT', false);
               assertInputNotHasBlock(
                 parent.getInputTargetBlock('INPUT'),
-                'INPUT'
+                'INPUT',
               );
               parent.getInput('INPUT').connection.disconnect();
               assertInputHasBlock(parent, 'INPUT', true);
               assertInputHasBlock(
                 parent.getInputTargetBlock('INPUT'),
                 'INPUT',
-                true
+                true,
               );
               assertSerialization(
                 parent,
@@ -526,14 +528,14 @@ suite('Connection', function () {
                   '</value>' +
                   '</shadow>' +
                   '</value>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
             test('Statement', function () {
               const parent = createStatementBlocks(this.workspace);
               const xml = Blockly.utils.xml.textToDom(
-                '<shadow type="statement_block" id="id1"/>'
+                '<shadow type="statement_block" id="id1"/>',
               );
               parent.getInput('NAME').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'NAME', false);
@@ -558,7 +560,7 @@ suite('Connection', function () {
                   '<statement name="NAME">' +
                   '<shadow type="statement_block" id="id1"></shadow>' +
                   '</statement>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -569,20 +571,20 @@ suite('Connection', function () {
                   '  <statement name="NAME">' +
                   '    <shadow type="statement_block" id="id2"/>' +
                   '  </statement>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.getInput('NAME').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'NAME', false);
               assertInputNotHasBlock(
                 parent.getInputTargetBlock('NAME'),
-                'NAME'
+                'NAME',
               );
               parent.getInput('NAME').connection.disconnect();
               assertInputHasBlock(parent, 'NAME', true);
               assertInputHasBlock(
                 parent.getInputTargetBlock('NAME'),
                 'NAME',
-                true
+                true,
               );
               assertSerialization(
                 parent,
@@ -615,14 +617,14 @@ suite('Connection', function () {
                   '</statement>' +
                   '</shadow>' +
                   '</statement>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
             test('Next', function () {
               const parent = createStackBlocks(this.workspace);
               const xml = Blockly.utils.xml.textToDom(
-                '<shadow type="stack_block" id="id1"/>'
+                '<shadow type="stack_block" id="id1"/>',
               );
               parent.nextConnection.setShadowDom(xml);
               assertNextHasBlock(parent, false);
@@ -645,7 +647,7 @@ suite('Connection', function () {
                   '<next>' +
                   '<shadow type="stack_block" id="id1"></shadow>' +
                   '</next>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -656,7 +658,7 @@ suite('Connection', function () {
                   '  <next>' +
                   '    <shadow type="stack_block" id="id2"/>' +
                   '  </next>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.nextConnection.setShadowDom(xml);
               assertNextHasBlock(parent, false);
@@ -691,7 +693,7 @@ suite('Connection', function () {
                   '</next>' +
                   '</shadow>' +
                   '</next>' +
-                  '</block>'
+                  '</block>',
               );
             });
           });
@@ -701,9 +703,9 @@ suite('Connection', function () {
             function createRowBlock(workspace) {
               const block = Blockly.Xml.domToBlock(
                 Blockly.utils.xml.textToDom(
-                  '<block type="row_block" id="id0"/>'
+                  '<block type="row_block" id="id0"/>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -711,9 +713,9 @@ suite('Connection', function () {
             function createStatementBlock(workspace) {
               const block = Blockly.Xml.domToBlock(
                 Blockly.utils.xml.textToDom(
-                  '<block type="statement_block" id="id0"/>'
+                  '<block type="statement_block" id="id0"/>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -721,9 +723,9 @@ suite('Connection', function () {
             function createStackBlock(workspace) {
               const block = Blockly.Xml.domToBlock(
                 Blockly.utils.xml.textToDom(
-                  '<block type="stack_block" id="id0"/>'
+                  '<block type="stack_block" id="id0"/>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -731,12 +733,12 @@ suite('Connection', function () {
             test('Value', function () {
               const parent = createRowBlock(this.workspace);
               const xml1 = Blockly.utils.xml.textToDom(
-                '<shadow type="row_block" id="1"/>'
+                '<shadow type="row_block" id="1"/>',
               );
               parent.getInput('INPUT').connection.setShadowDom(xml1);
               assertInputHasBlock(parent, 'INPUT', true, '1');
               const xml2 = Blockly.utils.xml.textToDom(
-                '<shadow type="row_block" id="2"/>'
+                '<shadow type="row_block" id="2"/>',
               );
               parent.getInput('INPUT').connection.setShadowDom(xml2);
               assertInputHasBlock(parent, 'INPUT', true, '2');
@@ -759,7 +761,7 @@ suite('Connection', function () {
                   '<value name="INPUT">' +
                   '<shadow type="row_block" id="2"></shadow>' +
                   '</value>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -770,7 +772,7 @@ suite('Connection', function () {
                   '  <value name="INPUT">' +
                   '    <shadow type="row_block" id="a"/>' +
                   '  </value>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.getInput('INPUT').connection.setShadowDom(xml1);
               assertInputHasBlock(parent, 'INPUT', true, '1');
@@ -778,14 +780,14 @@ suite('Connection', function () {
                 parent.getInputTargetBlock('INPUT'),
                 'INPUT',
                 true,
-                'a'
+                'a',
               );
               const xml2 = Blockly.utils.xml.textToDom(
                 '<shadow type="row_block" id="2">' +
                   '  <value name="INPUT">' +
                   '    <shadow type="row_block" id="b"/>' +
                   '  </value>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.getInput('INPUT').connection.setShadowDom(xml2);
               assertInputHasBlock(parent, 'INPUT', true, '2');
@@ -793,7 +795,7 @@ suite('Connection', function () {
                 parent.getInputTargetBlock('INPUT'),
                 'INPUT',
                 true,
-                'b'
+                'b',
               );
               assertSerialization(
                 parent,
@@ -826,19 +828,19 @@ suite('Connection', function () {
                   '</value>' +
                   '</shadow>' +
                   '</value>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
             test('Statement', function () {
               const parent = createStatementBlock(this.workspace);
               const xml1 = Blockly.utils.xml.textToDom(
-                '<shadow type="statement_block" id="1"/>'
+                '<shadow type="statement_block" id="1"/>',
               );
               parent.getInput('NAME').connection.setShadowDom(xml1);
               assertInputHasBlock(parent, 'NAME', true, '1');
               const xml2 = Blockly.utils.xml.textToDom(
-                '<shadow type="statement_block" id="2"/>'
+                '<shadow type="statement_block" id="2"/>',
               );
               parent.getInput('NAME').connection.setShadowDom(xml2);
               assertInputHasBlock(parent, 'NAME', true, '2');
@@ -861,7 +863,7 @@ suite('Connection', function () {
                   '<statement name="NAME">' +
                   '<shadow type="statement_block" id="2"></shadow>' +
                   '</statement>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -872,7 +874,7 @@ suite('Connection', function () {
                   '  <statement name="NAME">' +
                   '    <shadow type="statement_block" id="a"/>' +
                   '  </statement>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.getInput('NAME').connection.setShadowDom(xml1);
               assertInputHasBlock(parent, 'NAME', true, '1');
@@ -880,14 +882,14 @@ suite('Connection', function () {
                 parent.getInputTargetBlock('NAME'),
                 'NAME',
                 true,
-                'a'
+                'a',
               );
               const xml2 = Blockly.utils.xml.textToDom(
                 '<shadow type="statement_block" id="2">' +
                   '  <statement name="NAME">' +
                   '    <shadow type="statement_block" id="b"/>' +
                   '  </statement>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.getInput('NAME').connection.setShadowDom(xml2);
               assertInputHasBlock(parent, 'NAME', true, '2');
@@ -895,7 +897,7 @@ suite('Connection', function () {
                 parent.getInputTargetBlock('NAME'),
                 'NAME',
                 true,
-                'b'
+                'b',
               );
               assertSerialization(
                 parent,
@@ -928,19 +930,19 @@ suite('Connection', function () {
                   '</statement>' +
                   '</shadow>' +
                   '</statement>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
             test('Next', function () {
               const parent = createStackBlock(this.workspace);
               const xml1 = Blockly.utils.xml.textToDom(
-                '<shadow type="stack_block" id="1"/>'
+                '<shadow type="stack_block" id="1"/>',
               );
               parent.nextConnection.setShadowDom(xml1);
               assertNextHasBlock(parent, true, '1');
               const xml2 = Blockly.utils.xml.textToDom(
-                '<shadow type="stack_block" id="2"/>'
+                '<shadow type="stack_block" id="2"/>',
               );
               parent.nextConnection.setShadowDom(xml2);
               assertNextHasBlock(parent, true, '2');
@@ -961,7 +963,7 @@ suite('Connection', function () {
                   '<next>' +
                   '<shadow type="stack_block" id="2"></shadow>' +
                   '</next>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -972,7 +974,7 @@ suite('Connection', function () {
                   '  <next>' +
                   '    <shadow type="stack_block" id="a"/>' +
                   '  </next>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.nextConnection.setShadowDom(xml1);
               assertNextHasBlock(parent, true, '1');
@@ -982,7 +984,7 @@ suite('Connection', function () {
                   '  <next>' +
                   '    <shadow type="stack_block" id="b"/>' +
                   '  </next>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.nextConnection.setShadowDom(xml2);
               assertNextHasBlock(parent, true, '2');
@@ -1014,7 +1016,7 @@ suite('Connection', function () {
                   '</next>' +
                   '</shadow>' +
                   '</next>' +
-                  '</block>'
+                  '</block>',
               );
             });
           });
@@ -1028,9 +1030,9 @@ suite('Connection', function () {
                     '  <value name="INPUT">' +
                     '    <shadow type="row_block" id="idA"/>' +
                     '  </value>' +
-                    '</block>'
+                    '</block>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -1042,9 +1044,9 @@ suite('Connection', function () {
                     '  <statement name="NAME">' +
                     '    <shadow type="statement_block" id="idA"/>' +
                     '  </statement>' +
-                    '</block>'
+                    '</block>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -1056,9 +1058,9 @@ suite('Connection', function () {
                     '  <next>' +
                     '    <shadow type="stack_block" id="idA"/>' +
                     '  </next>' +
-                    '</block>'
+                    '</block>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -1075,7 +1077,7 @@ suite('Connection', function () {
                 },
                 '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -1091,7 +1093,7 @@ suite('Connection', function () {
                 },
                 '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -1107,7 +1109,7 @@ suite('Connection', function () {
                 },
                 '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
-                  '</block>'
+                  '</block>',
               );
             });
           });
@@ -1122,9 +1124,9 @@ suite('Connection', function () {
                     '    <shadow type="row_block" id="idA"/>' +
                     '    <block type="row_block" id="idB"/>' +
                     '  </value>' +
-                    '</block>'
+                    '</block>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -1137,9 +1139,9 @@ suite('Connection', function () {
                     '    <shadow type="statement_block" id="idA"/>' +
                     '    <block type="statement_block" id="idB"/>' +
                     '  </statement>' +
-                    '</block>'
+                    '</block>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -1152,9 +1154,9 @@ suite('Connection', function () {
                     '    <shadow type="stack_block" id="idA"/>' +
                     '    <block type="stack_block" id="idB"/>' +
                     '  </next>' +
-                    '</block>'
+                    '</block>',
                 ),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -1173,7 +1175,7 @@ suite('Connection', function () {
                 },
                 '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -1191,7 +1193,7 @@ suite('Connection', function () {
                 },
                 '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -1209,7 +1211,7 @@ suite('Connection', function () {
                 },
                 '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
-                  '</block>'
+                  '</block>',
               );
             });
           });
@@ -1219,7 +1221,7 @@ suite('Connection', function () {
             function createRowBlock(workspace) {
               const block = Blockly.Xml.domToBlock(
                 Blockly.utils.xml.textToDom('<block type="row_block"/>'),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -1227,7 +1229,7 @@ suite('Connection', function () {
             function createStatementBlock(workspace) {
               const block = Blockly.Xml.domToBlock(
                 Blockly.utils.xml.textToDom('<block type="statement_block"/>'),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -1235,7 +1237,7 @@ suite('Connection', function () {
             function createStackBlock(workspace) {
               const block = Blockly.Xml.domToBlock(
                 Blockly.utils.xml.textToDom('<block type="stack_block"/>'),
-                workspace
+                workspace,
               );
               return block;
             }
@@ -1243,7 +1245,7 @@ suite('Connection', function () {
             test('Value', function () {
               const parent = createRowBlock(this.workspace);
               const xml = Blockly.utils.xml.textToDom(
-                '<shadow type="row_block"/>'
+                '<shadow type="row_block"/>',
               );
               parent.getInput('INPUT').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'INPUT', true);
@@ -1265,14 +1267,14 @@ suite('Connection', function () {
                   '  <value name="INPUT">' +
                   '    <shadow type="row_block"/>' +
                   '  </value>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.getInput('INPUT').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'INPUT', true);
               assertInputHasBlock(
                 parent.getInputTargetBlock('INPUT'),
                 'INPUT',
-                true
+                true,
               );
               const child = createRowBlock(this.workspace);
               parent
@@ -1284,7 +1286,7 @@ suite('Connection', function () {
               assertInputHasBlock(
                 parent.getInputTargetBlock('INPUT'),
                 'INPUT',
-                true
+                true,
               );
               parent.getInput('INPUT').connection.setShadowDom(null);
               assertInputNotHasBlock(parent, 'INPUT');
@@ -1293,7 +1295,7 @@ suite('Connection', function () {
             test('Statement', function () {
               const parent = createStatementBlock(this.workspace);
               const xml = Blockly.utils.xml.textToDom(
-                '<shadow type="statement_block"/>'
+                '<shadow type="statement_block"/>',
               );
               parent.getInput('NAME').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'NAME', true);
@@ -1315,14 +1317,14 @@ suite('Connection', function () {
                   '  <statement name="NAME">' +
                   '    <shadow type="statement_block"/>' +
                   '  </statement>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.getInput('NAME').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'NAME', true);
               assertInputHasBlock(
                 parent.getInputTargetBlock('NAME'),
                 'NAME',
-                true
+                true,
               );
               const child = createStatementBlock(this.workspace);
               parent
@@ -1334,7 +1336,7 @@ suite('Connection', function () {
               assertInputHasBlock(
                 parent.getInputTargetBlock('NAME'),
                 'NAME',
-                true
+                true,
               );
               parent.getInput('NAME').connection.setShadowDom(null);
               assertInputNotHasBlock(parent, 'NAME');
@@ -1343,7 +1345,7 @@ suite('Connection', function () {
             test('Next', function () {
               const parent = createStackBlock(this.workspace);
               const xml = Blockly.utils.xml.textToDom(
-                '<shadow type="stack_block"/>'
+                '<shadow type="stack_block"/>',
               );
               parent.nextConnection.setShadowDom(xml);
               assertNextHasBlock(parent, true);
@@ -1363,7 +1365,7 @@ suite('Connection', function () {
                   '  <next>' +
                   '    <shadow type="stack_block" id="child"/>' +
                   '  </next>' +
-                  '</shadow>'
+                  '</shadow>',
               );
               parent.nextConnection.setShadowDom(xml);
               assertNextHasBlock(parent, true);
@@ -1384,8 +1386,8 @@ suite('Connection', function () {
               const block = this.workspace.newBlock('row_block');
               chai.assert.throws(() =>
                 block.outputConnection.setShadowDom(
-                  Blockly.utils.xml.textToDom('<block type="row_block">')
-                )
+                  Blockly.utils.xml.textToDom('<block type="row_block">'),
+                ),
               );
             });
 
@@ -1393,8 +1395,8 @@ suite('Connection', function () {
               const block = this.workspace.newBlock('stack_block');
               chai.assert.throws(() =>
                 block.previousConnection.setShadowDom(
-                  Blockly.utils.xml.textToDom('<block type="stack_block">')
-                )
+                  Blockly.utils.xml.textToDom('<block type="stack_block">'),
+                ),
               );
             });
 
@@ -1402,8 +1404,8 @@ suite('Connection', function () {
               const block = this.workspace.newBlock('row_block');
               chai.assert.throws(() =>
                 block.outputConnection.setShadowDom(
-                  Blockly.utils.xml.textToDom('<block type="stack_block">')
-                )
+                  Blockly.utils.xml.textToDom('<block type="stack_block">'),
+                ),
               );
             });
 
@@ -1411,8 +1413,8 @@ suite('Connection', function () {
               const block = this.workspace.newBlock('stack_block');
               chai.assert.throws(() =>
                 block.previousConnection.setShadowDom(
-                  Blockly.utils.xml.textToDom('<block type="row_block">')
-                )
+                  Blockly.utils.xml.textToDom('<block type="row_block">'),
+                ),
               );
             });
 
@@ -1422,8 +1424,8 @@ suite('Connection', function () {
                 block
                   .getInput('A')
                   .connection.setShadowDom(
-                    Blockly.utils.xml.textToDom('<block type="stack_block">')
-                  )
+                    Blockly.utils.xml.textToDom('<block type="stack_block">'),
+                  ),
               );
             });
 
@@ -1440,9 +1442,9 @@ suite('Connection', function () {
               chai.assert.throws(() =>
                 block.nextConnection.setShadowDom(
                   Blockly.utils.xml.textToDom(
-                    '<block type="stack_checks_block">'
-                  )
-                )
+                    '<block type="stack_checks_block">',
+                  ),
+                ),
               );
             });
           });
@@ -1454,21 +1456,21 @@ suite('Connection', function () {
             function createRowBlock(workspace) {
               return Blockly.serialization.blocks.append(
                 {'type': 'row_block', 'id': 'id0'},
-                workspace
+                workspace,
               );
             }
 
             function createStatementBlock(workspace) {
               return Blockly.serialization.blocks.append(
                 {'type': 'statement_block', 'id': 'id0'},
-                workspace
+                workspace,
               );
             }
 
             function createStackBlock(workspace) {
               return Blockly.serialization.blocks.append(
                 {'type': 'stack_block', 'id': 'id0'},
-                workspace
+                workspace,
               );
             }
 
@@ -1497,7 +1499,7 @@ suite('Connection', function () {
                   '<value name="INPUT">' +
                   '<shadow type="row_block" id="id1"></shadow>' +
                   '</value>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -1519,7 +1521,7 @@ suite('Connection', function () {
               assertInputHasBlock(
                 parent.getInputTargetBlock('INPUT'),
                 'INPUT',
-                true
+                true,
               );
               assertSerialization(
                 parent,
@@ -1552,7 +1554,7 @@ suite('Connection', function () {
                   '</value>' +
                   '</shadow>' +
                   '</value>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -1582,7 +1584,7 @@ suite('Connection', function () {
                   '<statement name="NAME">' +
                   '<shadow type="statement_block" id="id1"></shadow>' +
                   '</statement>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -1604,7 +1606,7 @@ suite('Connection', function () {
               assertInputHasBlock(
                 parent.getInputTargetBlock('NAME'),
                 'NAME',
-                true
+                true,
               );
               assertSerialization(
                 parent,
@@ -1637,7 +1639,7 @@ suite('Connection', function () {
                   '</statement>' +
                   '</shadow>' +
                   '</statement>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -1665,7 +1667,7 @@ suite('Connection', function () {
                   '<next>' +
                   '<shadow type="stack_block" id="id1"></shadow>' +
                   '</next>' +
-                  '</block>'
+                  '</block>',
               );
             });
             test('Multiple Next', function () {
@@ -1709,7 +1711,7 @@ suite('Connection', function () {
                   '</next>' +
                   '</shadow>' +
                   '</next>' +
-                  '</block>'
+                  '</block>',
               );
             });
           });
@@ -1730,7 +1732,7 @@ suite('Connection', function () {
                     },
                   },
                 },
-                workspace
+                workspace,
               );
             }
 
@@ -1748,7 +1750,7 @@ suite('Connection', function () {
                     },
                   },
                 },
-                workspace
+                workspace,
               );
             }
 
@@ -1764,7 +1766,7 @@ suite('Connection', function () {
                     },
                   },
                 },
-                workspace
+                workspace,
               );
             }
 
@@ -1795,7 +1797,7 @@ suite('Connection', function () {
                   '<value name="INPUT">' +
                   '<shadow type="row_block" id="id1"></shadow>' +
                   '</value>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -1816,14 +1818,14 @@ suite('Connection', function () {
               assertInputHasBlock(parent, 'INPUT', false);
               assertInputNotHasBlock(
                 parent.getInputTargetBlock('INPUT'),
-                'INPUT'
+                'INPUT',
               );
               parent.getInput('INPUT').connection.disconnect();
               assertInputHasBlock(parent, 'INPUT', true);
               assertInputHasBlock(
                 parent.getInputTargetBlock('INPUT'),
                 'INPUT',
-                true
+                true,
               );
               assertSerialization(
                 parent,
@@ -1856,7 +1858,7 @@ suite('Connection', function () {
                   '</value>' +
                   '</shadow>' +
                   '</value>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -1888,7 +1890,7 @@ suite('Connection', function () {
                   '<statement name="NAME">' +
                   '<shadow type="statement_block" id="id1"></shadow>' +
                   '</statement>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -1909,14 +1911,14 @@ suite('Connection', function () {
               assertInputHasBlock(parent, 'NAME', false);
               assertInputNotHasBlock(
                 parent.getInputTargetBlock('NAME'),
-                'NAME'
+                'NAME',
               );
               parent.getInput('NAME').connection.disconnect();
               assertInputHasBlock(parent, 'NAME', true);
               assertInputHasBlock(
                 parent.getInputTargetBlock('NAME'),
                 'NAME',
-                true
+                true,
               );
               assertSerialization(
                 parent,
@@ -1949,7 +1951,7 @@ suite('Connection', function () {
                   '</statement>' +
                   '</shadow>' +
                   '</statement>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -1979,7 +1981,7 @@ suite('Connection', function () {
                   '<next>' +
                   '<shadow type="stack_block" id="id1"></shadow>' +
                   '</next>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -2027,7 +2029,7 @@ suite('Connection', function () {
                   '</next>' +
                   '</shadow>' +
                   '</next>' +
-                  '</block>'
+                  '</block>',
               );
             });
           });
@@ -2037,21 +2039,21 @@ suite('Connection', function () {
             function createRowBlock(workspace) {
               return Blockly.serialization.blocks.append(
                 {'type': 'row_block', 'id': 'id0'},
-                workspace
+                workspace,
               );
             }
 
             function createStatementBlock(workspace) {
               return Blockly.serialization.blocks.append(
                 {'type': 'statement_block', 'id': 'id0'},
-                workspace
+                workspace,
               );
             }
 
             function createStackBlock(workspace) {
               return Blockly.serialization.blocks.append(
                 {'type': 'stack_block', 'id': 'id0'},
-                workspace
+                workspace,
               );
             }
 
@@ -2084,7 +2086,7 @@ suite('Connection', function () {
                   '<value name="INPUT">' +
                   '<shadow type="row_block" id="2"></shadow>' +
                   '</value>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -2107,7 +2109,7 @@ suite('Connection', function () {
                 parent.getInputTargetBlock('INPUT'),
                 'INPUT',
                 true,
-                'a'
+                'a',
               );
               parent.getInput('INPUT').connection.setShadowState({
                 'type': 'row_block',
@@ -2126,7 +2128,7 @@ suite('Connection', function () {
                 parent.getInputTargetBlock('INPUT'),
                 'INPUT',
                 true,
-                'b'
+                'b',
               );
               assertSerialization(
                 parent,
@@ -2159,7 +2161,7 @@ suite('Connection', function () {
                   '</value>' +
                   '</shadow>' +
                   '</value>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -2194,7 +2196,7 @@ suite('Connection', function () {
                   '<statement name="NAME">' +
                   '<shadow type="statement_block" id="2"></shadow>' +
                   '</statement>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -2217,7 +2219,7 @@ suite('Connection', function () {
                 parent.getInputTargetBlock('NAME'),
                 'NAME',
                 true,
-                'a'
+                'a',
               );
               parent.getInput('NAME').connection.setShadowState({
                 'type': 'statement_block',
@@ -2236,7 +2238,7 @@ suite('Connection', function () {
                 parent.getInputTargetBlock('NAME'),
                 'NAME',
                 true,
-                'b'
+                'b',
               );
               assertSerialization(
                 parent,
@@ -2269,7 +2271,7 @@ suite('Connection', function () {
                   '</statement>' +
                   '</shadow>' +
                   '</statement>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -2302,7 +2304,7 @@ suite('Connection', function () {
                   '<next>' +
                   '<shadow type="stack_block" id="2"></shadow>' +
                   '</next>' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -2359,7 +2361,7 @@ suite('Connection', function () {
                   '</next>' +
                   '</shadow>' +
                   '</next>' +
-                  '</block>'
+                  '</block>',
               );
             });
           });
@@ -2380,7 +2382,7 @@ suite('Connection', function () {
                     },
                   },
                 },
-                workspace
+                workspace,
               );
             }
 
@@ -2398,7 +2400,7 @@ suite('Connection', function () {
                     },
                   },
                 },
-                workspace
+                workspace,
               );
             }
 
@@ -2414,7 +2416,7 @@ suite('Connection', function () {
                     },
                   },
                 },
-                workspace
+                workspace,
               );
             }
 
@@ -2430,7 +2432,7 @@ suite('Connection', function () {
                 },
                 '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -2446,7 +2448,7 @@ suite('Connection', function () {
                 },
                 '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -2462,7 +2464,7 @@ suite('Connection', function () {
                 },
                 '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
-                  '</block>'
+                  '</block>',
               );
             });
           });
@@ -2487,7 +2489,7 @@ suite('Connection', function () {
                     },
                   },
                 },
-                workspace
+                workspace,
               );
             }
 
@@ -2509,7 +2511,7 @@ suite('Connection', function () {
                     },
                   },
                 },
-                workspace
+                workspace,
               );
             }
 
@@ -2529,7 +2531,7 @@ suite('Connection', function () {
                     },
                   },
                 },
-                workspace
+                workspace,
               );
             }
 
@@ -2547,7 +2549,7 @@ suite('Connection', function () {
                 },
                 '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -2565,7 +2567,7 @@ suite('Connection', function () {
                 },
                 '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
-                  '</block>'
+                  '</block>',
               );
             });
 
@@ -2583,7 +2585,7 @@ suite('Connection', function () {
                 },
                 '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
-                  '</block>'
+                  '</block>',
               );
             });
           });
@@ -2593,21 +2595,21 @@ suite('Connection', function () {
             function createRowBlock(workspace) {
               return Blockly.serialization.blocks.append(
                 {'type': 'row_block'},
-                workspace
+                workspace,
               );
             }
 
             function createStatementBlock(workspace) {
               return Blockly.serialization.blocks.append(
                 {'type': 'statement_block'},
-                workspace
+                workspace,
               );
             }
 
             function createStackBlock(workspace) {
               return Blockly.serialization.blocks.append(
                 {'type': 'stack_block'},
-                workspace
+                workspace,
               );
             }
 
@@ -2644,7 +2646,7 @@ suite('Connection', function () {
               assertInputHasBlock(
                 parent.getInputTargetBlock('INPUT'),
                 'INPUT',
-                true
+                true,
               );
               const child = createRowBlock(this.workspace);
               parent
@@ -2656,7 +2658,7 @@ suite('Connection', function () {
               assertInputHasBlock(
                 parent.getInputTargetBlock('INPUT'),
                 'INPUT',
-                true
+                true,
               );
               parent.getInput('INPUT').connection.setShadowState(null);
               assertInputNotHasBlock(parent, 'INPUT');
@@ -2695,7 +2697,7 @@ suite('Connection', function () {
               assertInputHasBlock(
                 parent.getInputTargetBlock('NAME'),
                 'NAME',
-                true
+                true,
               );
               const child = createStatementBlock(this.workspace);
               parent
@@ -2707,7 +2709,7 @@ suite('Connection', function () {
               assertInputHasBlock(
                 parent.getInputTargetBlock('NAME'),
                 'NAME',
-                true
+                true,
               );
               parent.getInput('NAME').connection.setShadowState(null);
               assertInputNotHasBlock(parent, 'NAME');
@@ -2752,28 +2754,30 @@ suite('Connection', function () {
             test('Attach to output', function () {
               const block = this.workspace.newBlock('row_block');
               chai.assert.throws(() =>
-                block.outputConnection.setShadowState({'type': 'row_block'})
+                block.outputConnection.setShadowState({'type': 'row_block'}),
               );
             });
 
             test('Attach to previous', function () {
               const block = this.workspace.newBlock('stack_block');
               chai.assert.throws(() =>
-                block.previousConnection.setShadowState({'type': 'stack_block'})
+                block.previousConnection.setShadowState({
+                  'type': 'stack_block',
+                }),
               );
             });
 
             test('Missing output', function () {
               const block = this.workspace.newBlock('row_block');
               chai.assert.throws(() =>
-                block.outputConnection.setShadowState({'type': 'stack_block'})
+                block.outputConnection.setShadowState({'type': 'stack_block'}),
               );
             });
 
             test('Missing previous', function () {
               const block = this.workspace.newBlock('stack_block');
               chai.assert.throws(() =>
-                block.previousConnection.setShadowState({'type': 'row_block'})
+                block.previousConnection.setShadowState({'type': 'row_block'}),
               );
             });
 
@@ -2782,7 +2786,7 @@ suite('Connection', function () {
               chai.assert.throws(() =>
                 block
                   .getInput('A')
-                  .connection.setShadowState({'type': 'math_number'})
+                  .connection.setShadowState({'type': 'math_number'}),
               );
             });
 
@@ -2799,7 +2803,7 @@ suite('Connection', function () {
               chai.assert.throws(() =>
                 block.nextConnection.setShadowState({
                   'type': 'stack_checks_block',
-                })
+                }),
               );
             });
           });
@@ -2996,7 +3000,7 @@ suite('Connection', function () {
         newParent.getInput('INPUT').connection.connect(child.outputConnection);
 
         chai.assert.isFalse(
-          oldParent.getInput('INPUT').connection.isConnected()
+          oldParent.getInput('INPUT').connection.isConnected(),
         );
         this.assertBlockCount(3);
       });
@@ -3010,7 +3014,7 @@ suite('Connection', function () {
         newParent.getInput('NAME').connection.connect(child.previousConnection);
 
         chai.assert.isFalse(
-          oldParent.getInput('NAME').connection.isConnected()
+          oldParent.getInput('NAME').connection.isConnected(),
         );
         this.assertBlockCount(3);
       });
@@ -3135,7 +3139,7 @@ suite('Connection', function () {
               .connection.connect(newChild.outputConnection);
 
             chai.assert.isTrue(
-              parent.getInput('INPUT').connection.isConnected()
+              parent.getInput('INPUT').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
             chai.assert.isFalse(oldChild.outputConnection.isConnected());
@@ -3154,7 +3158,7 @@ suite('Connection', function () {
               .connection.connect(newChild.outputConnection);
 
             chai.assert.isTrue(
-              parent.getInput('INPUT').connection.isConnected()
+              parent.getInput('INPUT').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
             chai.assert.isFalse(oldChild.outputConnection.isConnected());
@@ -3173,7 +3177,7 @@ suite('Connection', function () {
               .connection.connect(newChild.outputConnection);
 
             chai.assert.isTrue(
-              parent.getInput('INPUT').connection.isConnected()
+              parent.getInput('INPUT').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
             chai.assert.isFalse(oldChild.outputConnection.isConnected());
@@ -3197,7 +3201,7 @@ suite('Connection', function () {
               .connection.connect(newChild.outputConnection);
 
             chai.assert.isTrue(
-              parent.getInput('INPUT').connection.isConnected()
+              parent.getInput('INPUT').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
             chai.assert.isFalse(oldChild.outputConnection.isConnected());
@@ -3210,7 +3214,7 @@ suite('Connection', function () {
               const parent = this.workspace.newBlock('row_block');
               const oldChild = this.workspace.newBlock('row_block');
               const newChild = this.workspace.newBlock(
-                'row_block_multiple_inputs'
+                'row_block_multiple_inputs',
               );
 
               parent
@@ -3222,7 +3226,7 @@ suite('Connection', function () {
                 .connection.connect(newChild.outputConnection);
 
               chai.assert.isTrue(
-                parent.getInput('INPUT').connection.isConnected()
+                parent.getInput('INPUT').connection.isConnected(),
               );
               chai.assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
               chai.assert.isFalse(oldChild.outputConnection.isConnected());
@@ -3232,7 +3236,7 @@ suite('Connection', function () {
               const parent = this.workspace.newBlock('row_block');
               const oldChild = this.workspace.newBlock('row_block');
               const newChild = this.workspace.newBlock(
-                'row_block_multiple_inputs'
+                'row_block_multiple_inputs',
               );
               const childX = this.workspace.newBlock('row_block');
               const childY = this.workspace.newBlock('row_block');
@@ -3252,7 +3256,7 @@ suite('Connection', function () {
                 .connection.connect(newChild.outputConnection);
 
               chai.assert.isTrue(
-                parent.getInput('INPUT').connection.isConnected()
+                parent.getInput('INPUT').connection.isConnected(),
               );
               chai.assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
               chai.assert.isFalse(oldChild.outputConnection.isConnected());
@@ -3262,7 +3266,7 @@ suite('Connection', function () {
               const parent = this.workspace.newBlock('row_block');
               const oldChild = this.workspace.newBlock('row_block');
               const newChild = this.workspace.newBlock(
-                'row_block_multiple_inputs'
+                'row_block_multiple_inputs',
               );
               const otherChild = this.workspace.newBlock('row_block_noend');
 
@@ -3278,7 +3282,7 @@ suite('Connection', function () {
                 .connection.connect(newChild.outputConnection);
 
               chai.assert.isTrue(
-                parent.getInput('INPUT').connection.isConnected()
+                parent.getInput('INPUT').connection.isConnected(),
               );
               chai.assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
               chai.assert.isFalse(oldChild.outputConnection.isConnected());
@@ -3290,7 +3294,7 @@ suite('Connection', function () {
               const parent = this.workspace.newBlock('row_block');
               const oldChild = this.workspace.newBlock('row_block');
               const newChild = this.workspace.newBlock(
-                'row_block_multiple_inputs'
+                'row_block_multiple_inputs',
               );
 
               parent
@@ -3300,15 +3304,15 @@ suite('Connection', function () {
                 .getInput('INPUT')
                 .connection.setShadowDom(
                   Blockly.utils.xml.textToDom(
-                    '<xml><shadow type="row_block"/></xml>'
-                  ).firstChild
+                    '<xml><shadow type="row_block"/></xml>',
+                  ).firstChild,
                 );
               newChild
                 .getInput('INPUT2')
                 .connection.setShadowDom(
                   Blockly.utils.xml.textToDom(
-                    '<xml><shadow type="row_block"/></xml>'
-                  ).firstChild
+                    '<xml><shadow type="row_block"/></xml>',
+                  ).firstChild,
                 );
 
               parent
@@ -3316,7 +3320,7 @@ suite('Connection', function () {
                 .connection.connect(newChild.outputConnection);
 
               chai.assert.isTrue(
-                parent.getInput('INPUT').connection.isConnected()
+                parent.getInput('INPUT').connection.isConnected(),
               );
               chai.assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
               chai.assert.isFalse(oldChild.outputConnection.isConnected());
@@ -3326,7 +3330,7 @@ suite('Connection', function () {
               const parent = this.workspace.newBlock('row_block');
               const oldChild = this.workspace.newBlock('row_block');
               const newChild = this.workspace.newBlock(
-                'row_block_multiple_inputs'
+                'row_block_multiple_inputs',
               );
               const childX = this.workspace.newBlock('row_block');
               const childY = this.workspace.newBlock('row_block');
@@ -3344,15 +3348,15 @@ suite('Connection', function () {
                 .getInput('INPUT')
                 .connection.setShadowDom(
                   Blockly.utils.xml.textToDom(
-                    '<xml><shadow type="row_block"/></xml>'
-                  ).firstChild
+                    '<xml><shadow type="row_block"/></xml>',
+                  ).firstChild,
                 );
               childY
                 .getInput('INPUT')
                 .connection.setShadowDom(
                   Blockly.utils.xml.textToDom(
-                    '<xml><shadow type="row_block"/></xml>'
-                  ).firstChild
+                    '<xml><shadow type="row_block"/></xml>',
+                  ).firstChild,
                 );
 
               parent
@@ -3360,7 +3364,7 @@ suite('Connection', function () {
                 .connection.connect(newChild.outputConnection);
 
               chai.assert.isTrue(
-                parent.getInput('INPUT').connection.isConnected()
+                parent.getInput('INPUT').connection.isConnected(),
               );
               chai.assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
               chai.assert.isFalse(oldChild.outputConnection.isConnected());
@@ -3370,7 +3374,7 @@ suite('Connection', function () {
               const parent = this.workspace.newBlock('row_block');
               const oldChild = this.workspace.newBlock('row_block');
               const newChild = this.workspace.newBlock(
-                'row_block_multiple_inputs'
+                'row_block_multiple_inputs',
               );
               const otherChild = this.workspace.newBlock('row_block_noend');
 
@@ -3384,8 +3388,8 @@ suite('Connection', function () {
                 .getInput('INPUT2')
                 .connection.setShadowDom(
                   Blockly.utils.xml.textToDom(
-                    '<xml><shadow type="row_block"/></xml>'
-                  ).firstChild
+                    '<xml><shadow type="row_block"/></xml>',
+                  ).firstChild,
                 );
 
               parent
@@ -3393,7 +3397,7 @@ suite('Connection', function () {
                 .connection.connect(newChild.outputConnection);
 
               chai.assert.isTrue(
-                parent.getInput('INPUT').connection.isConnected()
+                parent.getInput('INPUT').connection.isConnected(),
               );
               chai.assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
               chai.assert.isFalse(oldChild.outputConnection.isConnected());
@@ -3416,11 +3420,11 @@ suite('Connection', function () {
               .connection.connect(newChild.outputConnection);
 
             chai.assert.isTrue(
-              parent.getInput('INPUT').connection.isConnected()
+              parent.getInput('INPUT').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
             chai.assert.isTrue(
-              newChild.getInput('INPUT').connection.isConnected()
+              newChild.getInput('INPUT').connection.isConnected(),
             );
             chai.assert.equal(newChild.getInputTargetBlock('INPUT'), oldChild);
           });
@@ -3437,8 +3441,8 @@ suite('Connection', function () {
               .getInput('INPUT')
               .connection.setShadowDom(
                 Blockly.utils.xml.textToDom(
-                  '<xml><shadow type="row_block"/></xml>'
-                ).firstChild
+                  '<xml><shadow type="row_block"/></xml>',
+                ).firstChild,
               );
 
             parent
@@ -3446,11 +3450,11 @@ suite('Connection', function () {
               .connection.connect(newChild.outputConnection);
 
             chai.assert.isTrue(
-              parent.getInput('INPUT').connection.isConnected()
+              parent.getInput('INPUT').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
             chai.assert.isTrue(
-              newChild.getInput('INPUT').connection.isConnected()
+              newChild.getInput('INPUT').connection.isConnected(),
             );
             chai.assert.equal(newChild.getInputTargetBlock('INPUT'), oldChild);
           });
@@ -3472,7 +3476,7 @@ suite('Connection', function () {
               .connection.connect(newChild.previousConnection);
 
             chai.assert.isTrue(
-              parent.getInput('NAME').connection.isConnected()
+              parent.getInput('NAME').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('NAME'), newChild);
             chai.assert.isTrue(newChild.nextConnection.isConnected());
@@ -3495,7 +3499,7 @@ suite('Connection', function () {
               .connection.connect(newChild1.previousConnection);
 
             chai.assert.isTrue(
-              parent.getInput('NAME').connection.isConnected()
+              parent.getInput('NAME').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('NAME'), newChild1);
             chai.assert.isTrue(newChild2.nextConnection.isConnected());
@@ -3512,7 +3516,7 @@ suite('Connection', function () {
               .connection.connect(oldChild.previousConnection);
             const spy = sinon.spy(
               oldChild.previousConnection,
-              'onFailedConnect'
+              'onFailedConnect',
             );
 
             parent
@@ -3520,7 +3524,7 @@ suite('Connection', function () {
               .connection.connect(newChild.previousConnection);
 
             chai.assert.isTrue(
-              parent.getInput('NAME').connection.isConnected()
+              parent.getInput('NAME').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('NAME'), newChild);
             chai.assert.isFalse(newChild.nextConnection.isConnected());
@@ -3537,7 +3541,7 @@ suite('Connection', function () {
               .connection.connect(oldChild.previousConnection);
             const spy = sinon.spy(
               oldChild.previousConnection,
-              'onFailedConnect'
+              'onFailedConnect',
             );
 
             parent
@@ -3545,7 +3549,7 @@ suite('Connection', function () {
               .connection.connect(newChild.previousConnection);
 
             chai.assert.isTrue(
-              parent.getInput('NAME').connection.isConnected()
+              parent.getInput('NAME').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('NAME'), newChild);
             chai.assert.isTrue(spy.calledOnce);
@@ -3562,7 +3566,7 @@ suite('Connection', function () {
               .getInput('NAME')
               .connection.connect(oldChild.previousConnection);
             const xml = Blockly.utils.xml.textToDom(
-              '<shadow type="stack_block"/>'
+              '<shadow type="stack_block"/>',
             );
             newChild.nextConnection.setShadowDom(xml);
 
@@ -3571,7 +3575,7 @@ suite('Connection', function () {
               .connection.connect(newChild.previousConnection);
 
             chai.assert.isTrue(
-              parent.getInput('NAME').connection.isConnected()
+              parent.getInput('NAME').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('NAME'), newChild);
             chai.assert.isTrue(newChild.nextConnection.isConnected());
@@ -3589,7 +3593,7 @@ suite('Connection', function () {
               .connection.connect(oldChild.previousConnection);
             newChild1.nextConnection.connect(newChild2.previousConnection);
             const xml = Blockly.utils.xml.textToDom(
-              '<shadow type="stack_block"/>'
+              '<shadow type="stack_block"/>',
             );
             newChild2.nextConnection.setShadowDom(xml);
 
@@ -3598,7 +3602,7 @@ suite('Connection', function () {
               .connection.connect(newChild1.previousConnection);
 
             chai.assert.isTrue(
-              parent.getInput('NAME').connection.isConnected()
+              parent.getInput('NAME').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('NAME'), newChild1);
             chai.assert.isTrue(newChild2.nextConnection.isConnected());
@@ -3614,12 +3618,12 @@ suite('Connection', function () {
               .getInput('NAME')
               .connection.connect(oldChild.previousConnection);
             const xml = Blockly.utils.xml.textToDom(
-              '<shadow type="stack_block_2to1"/>'
+              '<shadow type="stack_block_2to1"/>',
             );
             newChild.nextConnection.setShadowDom(xml);
             const spy = sinon.spy(
               oldChild.previousConnection,
-              'onFailedConnect'
+              'onFailedConnect',
             );
 
             parent
@@ -3627,7 +3631,7 @@ suite('Connection', function () {
               .connection.connect(newChild.previousConnection);
 
             chai.assert.isTrue(
-              parent.getInput('NAME').connection.isConnected()
+              parent.getInput('NAME').connection.isConnected(),
             );
             chai.assert.equal(parent.getInputTargetBlock('NAME'), newChild);
             chai.assert.isTrue(newChild.nextConnection.isConnected());
@@ -3679,7 +3683,7 @@ suite('Connection', function () {
             parent.nextConnection.connect(oldChild.previousConnection);
             const spy = sinon.spy(
               oldChild.previousConnection,
-              'onFailedConnect'
+              'onFailedConnect',
             );
 
             parent.nextConnection.connect(newChild.previousConnection);
@@ -3698,7 +3702,7 @@ suite('Connection', function () {
             parent.nextConnection.connect(oldChild.previousConnection);
             const spy = sinon.spy(
               oldChild.previousConnection,
-              'onFailedConnect'
+              'onFailedConnect',
             );
 
             parent.nextConnection.connect(newChild.previousConnection);
@@ -3717,7 +3721,7 @@ suite('Connection', function () {
             const newChild = this.workspace.newBlock('stack_block');
             parent.nextConnection.connect(oldChild.previousConnection);
             const xml = Blockly.utils.xml.textToDom(
-              '<shadow type="stack_block"/>'
+              '<shadow type="stack_block"/>',
             );
             newChild.nextConnection.setShadowDom(xml);
 
@@ -3738,7 +3742,7 @@ suite('Connection', function () {
             parent.nextConnection.connect(oldChild.previousConnection);
             newChild1.nextConnection.connect(newChild2.previousConnection);
             const xml = Blockly.utils.xml.textToDom(
-              '<shadow type="stack_block"/>'
+              '<shadow type="stack_block"/>',
             );
             newChild2.nextConnection.setShadowDom(xml);
 
@@ -3757,12 +3761,12 @@ suite('Connection', function () {
             const newChild = this.workspace.newBlock('stack_block_1to2');
             parent.nextConnection.connect(oldChild.previousConnection);
             const xml = Blockly.utils.xml.textToDom(
-              '<shadow type="stack_block_2to1"/>'
+              '<shadow type="stack_block_2to1"/>',
             );
             newChild.nextConnection.setShadowDom(xml);
             const spy = sinon.spy(
               oldChild.previousConnection,
-              'onFailedConnect'
+              'onFailedConnect',
             );
 
             parent.nextConnection.connect(newChild.previousConnection);

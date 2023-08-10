@@ -82,7 +82,7 @@ export class ContextMenuRegistry {
    */
   getContextMenuOptions(
     scopeType: ScopeType,
-    scope: Scope
+    scope: Scope,
   ): ContextMenuOption[] {
     const menuOptions: ContextMenuOption[] = [];
     for (const item of this.registry_.values()) {

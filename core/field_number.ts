@@ -68,7 +68,7 @@ export class FieldNumber extends FieldInput<number> {
     max?: string | number | null,
     precision?: string | number | null,
     validator?: FieldNumberValidator | null,
-    config?: FieldNumberConfig
+    config?: FieldNumberConfig,
   ) {
     // Pass SENTINEL so that we can define properties before value validation.
     super(Field.SKIP_SETUP);
@@ -113,7 +113,7 @@ export class FieldNumber extends FieldInput<number> {
   setConstraints(
     min: number | string | undefined | null,
     max: number | string | undefined | null,
-    precision: number | string | undefined | null
+    precision: number | string | undefined | null,
   ) {
     this.setMinInternal(min);
     this.setMaxInternal(max);
@@ -253,7 +253,7 @@ export class FieldNumber extends FieldInput<number> {
    * @returns A valid number, or null if invalid.
    */
   protected override doClassValidation_(
-    newValue?: AnyDuringMigration
+    newValue?: AnyDuringMigration,
   ): number | null {
     if (newValue === null) {
       return null;
@@ -325,7 +325,7 @@ export class FieldNumber extends FieldInput<number> {
       undefined,
       undefined,
       undefined,
-      options
+      options,
     );
   }
 }

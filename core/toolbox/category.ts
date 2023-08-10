@@ -100,7 +100,7 @@ export class ToolboxCategory
   constructor(
     categoryDef: CategoryInfo,
     parentToolbox: IToolbox,
-    opt_parent?: ICollapsibleToolboxItem
+    opt_parent?: ICollapsibleToolboxItem,
   ) {
     super(categoryDef, parentToolbox, opt_parent);
 
@@ -180,7 +180,7 @@ export class ToolboxCategory
     this.colour_ = this.getColour_(categoryDef);
     Object.assign(
       this.cssConfig_,
-      categoryDef['cssconfig'] || (categoryDef as any)['cssConfig']
+      categoryDef['cssconfig'] || (categoryDef as any)['cssConfig'],
     );
   }
 
@@ -344,7 +344,7 @@ export class ToolboxCategory
       console.warn(
         'Toolbox category "' +
           this.name_ +
-          '" must not have both a style and a colour'
+          '" must not have both a style and a colour',
       );
     } else if (styleName) {
       return this.getColourfromStyle_(styleName);
@@ -369,7 +369,7 @@ export class ToolboxCategory
         return this.parseColour_(style.colour);
       } else {
         console.warn(
-          'Style "' + styleName + '" must exist and contain a colour value'
+          'Style "' + styleName + '" must exist and contain a colour value',
         );
       }
     }
@@ -415,7 +415,7 @@ export class ToolboxCategory
             'Toolbox category "' +
               this.name_ +
               '" has unrecognized colour attribute: ' +
-              colour
+              colour,
           );
           return '';
         }
@@ -542,7 +542,7 @@ export class ToolboxCategory
     const className = this.cssConfig_['selected'];
     if (isSelected) {
       const defaultColour = this.parseColour_(
-        ToolboxCategory.defaultBackgroundColour
+        ToolboxCategory.defaultBackgroundColour,
       );
       this.rowDiv_.style.backgroundColor = this.colour_ || defaultColour;
       if (className) {
@@ -736,5 +736,5 @@ Css.register(`
 registry.register(
   registry.Type.TOOLBOX_ITEM,
   ToolboxCategory.registrationName,
-  ToolboxCategory
+  ToolboxCategory,
 );

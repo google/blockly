@@ -189,7 +189,7 @@ export class Drawer {
       (input.shape as Notch).pathRight +
       svgPaths.lineOnAxis(
         'h',
-        -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)
+        -(input.notchOffset - this.constants_.INSIDE_CORNERS.width),
       ) +
       this.constants_.INSIDE_CORNERS.pathTop;
 
@@ -243,7 +243,7 @@ export class Drawer {
 
     this.outlinePath_ += svgPaths.lineOnAxis(
       'V',
-      bottomRow.baseline - rightCornerYOffset
+      bottomRow.baseline - rightCornerYOffset,
     );
     this.outlinePath_ += outlinePath;
   }
@@ -314,7 +314,7 @@ export class Drawer {
       const svgGroup = (fieldInfo as Field).field.getSvgRoot()!;
       svgGroup.setAttribute(
         'transform',
-        'translate(' + xPos + ',' + yPos + ')' + scale
+        'translate(' + xPos + ',' + yPos + ')' + scale,
       );
       if (this.info_.isInsertionMarker) {
         svgGroup.setAttribute('display', 'none');
@@ -366,7 +366,7 @@ export class Drawer {
       }
       input.connectionModel.setOffsetInBlock(
         connX,
-        yPos + input.connectionOffsetY
+        yPos + input.connectionOffsetY,
       );
     }
   }
@@ -437,7 +437,7 @@ export class Drawer {
       const connX = this.info_.RTL ? -x : x;
       this.block_.outputConnection.setOffsetInBlock(
         connX,
-        this.info_.outputConnection.connectionOffsetY
+        this.info_.outputConnection.connectionOffsetY,
       );
     }
   }

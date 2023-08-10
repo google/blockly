@@ -172,7 +172,7 @@ export function positionWithAnchor(
   viewportBBox: Rect,
   anchorBBox: Rect,
   widgetSize: Size,
-  rtl: boolean
+  rtl: boolean,
 ) {
   const y = calculateY(viewportBBox, anchorBBox, widgetSize);
   const x = calculateX(viewportBBox, anchorBBox, widgetSize, rtl);
@@ -201,7 +201,7 @@ function calculateX(
   viewportBBox: Rect,
   anchorBBox: Rect,
   widgetSize: Size,
-  rtl: boolean
+  rtl: boolean,
 ): number {
   if (rtl) {
     // Try to align the right side of the field and the right side of widget.
@@ -234,7 +234,7 @@ function calculateX(
 function calculateY(
   viewportBBox: Rect,
   anchorBBox: Rect,
-  widgetSize: Size
+  widgetSize: Size,
 ): number {
   // Flip the widget vertically if off the bottom.
   // The widget could go off the top of the window, but it would also go off

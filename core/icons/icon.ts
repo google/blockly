@@ -52,7 +52,7 @@ export abstract class Icon implements IIcon {
       this.svgRoot,
       'pointerdown',
       this,
-      pointerdownListener
+      pointerdownListener,
     );
   }
 
@@ -101,7 +101,7 @@ export abstract class Icon implements IIcon {
   private updateSvgRootOffset(): void {
     this.svgRoot?.setAttribute(
       'transform',
-      `translate(${this.offsetInBlock.x}, ${this.offsetInBlock.y})`
+      `translate(${this.offsetInBlock.x}, ${this.offsetInBlock.y})`,
     );
   }
 

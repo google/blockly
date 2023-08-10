@@ -33,7 +33,7 @@ suite('Marker Move Event', function () {
         block2,
         false,
         node1,
-        node2
+        node2,
       );
 
       const json = origEvent.toJson();

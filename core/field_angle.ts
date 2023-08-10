@@ -121,7 +121,7 @@ export class FieldAngle extends FieldInput<number> {
   constructor(
     value?: string | number | typeof Field.SKIP_SETUP,
     validator?: FieldAngleValidator,
-    config?: FieldAngleConfig
+    config?: FieldAngleConfig,
   ) {
     super(Field.SKIP_SETUP);
 
@@ -165,8 +165,6 @@ export class FieldAngle extends FieldInput<number> {
 
   /**
    * Create the block UI for this field.
-   *
-   * @internal
    */
   override initView() {
     super.initView();
@@ -200,7 +198,7 @@ export class FieldAngle extends FieldInput<number> {
     if (this.sourceBlock_ instanceof BlockSvg) {
       dropDownDiv.setColour(
         this.sourceBlock_.style.colourPrimary,
-        this.sourceBlock_.style.colourTertiary
+        this.sourceBlock_.style.colourTertiary,
       );
     }
 
@@ -232,12 +230,12 @@ export class FieldAngle extends FieldInput<number> {
         'r': FieldAngle.RADIUS,
         'class': 'blocklyAngleCircle',
       },
-      svg
+      svg,
     );
     this.gauge = dom.createSvgElement(
       Svg.PATH,
       {'class': 'blocklyAngleGauge'},
-      svg
+      svg,
     );
     this.line = dom.createSvgElement(
       Svg.LINE,
@@ -246,7 +244,7 @@ export class FieldAngle extends FieldInput<number> {
         'y1': FieldAngle.HALF,
         'class': 'blocklyAngleLine',
       },
-      svg
+      svg,
     );
     // Draw markers around the edge.
     for (let angle = 0; angle < 360; angle += 15) {
@@ -268,7 +266,7 @@ export class FieldAngle extends FieldInput<number> {
             FieldAngle.HALF +
             ')',
         },
-        svg
+        svg,
       );
     }
 
@@ -276,7 +274,7 @@ export class FieldAngle extends FieldInput<number> {
     // mousemove even if it's not in the middle of a drag.  In future we may
     // change this behaviour.
     this.boundEvents.push(
-      browserEvents.conditionalBind(svg, 'click', this, this.hide)
+      browserEvents.conditionalBind(svg, 'click', this, this.hide),
     );
     // On touch devices, the picker's value is only updated with a drag. Add
     // a click handler on the drag surface to update the value if the surface
@@ -287,8 +285,8 @@ export class FieldAngle extends FieldInput<number> {
         'pointerdown',
         this,
         this.onMouseMove_,
-        true
-      )
+        true,
+      ),
     );
     this.boundEvents.push(
       browserEvents.conditionalBind(
@@ -296,8 +294,8 @@ export class FieldAngle extends FieldInput<number> {
         'pointermove',
         this,
         this.onMouseMove_,
-        true
-      )
+        true,
+      ),
     );
     return svg;
   }
@@ -380,8 +378,8 @@ export class FieldAngle extends FieldInput<number> {
             this.sourceBlock_,
             this.name || null,
             oldValue,
-            this.value_
-          )
+            this.value_,
+          ),
         );
       }
     }
@@ -411,7 +409,7 @@ export class FieldAngle extends FieldInput<number> {
       y2 -= Math.sin(angleRadians) * FieldAngle.RADIUS;
       // Don't ask how the flag calculations work.  They just do.
       let largeFlag = Math.abs(
-        Math.floor((angleRadians - angle1) / Math.PI) % 2
+        Math.floor((angleRadians - angle1) / Math.PI) % 2,
       );
       if (clockwiseFlag) {
         largeFlag = 1 - largeFlag;
@@ -433,7 +431,7 @@ export class FieldAngle extends FieldInput<number> {
         x2,
         ',',
         y2,
-        ' z'
+        ' z',
       );
     }
     this.gauge.setAttribute('d', path.join(''));

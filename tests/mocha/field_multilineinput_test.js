@@ -23,11 +23,11 @@ import {
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
 import {runCodeGenerationTestSuites} from './test_helpers/code_generation.js';
-import {dartGenerator} from '../../generators/dart.js';
-import {javascriptGenerator} from '../../generators/javascript.js';
-import {luaGenerator} from '../../generators/lua.js';
-import {phpGenerator} from '../../generators/php.js';
-import {pythonGenerator} from '../../generators/python.js';
+import {dartGenerator} from '../../build/src/generators/dart.js';
+import {javascriptGenerator} from '../../build/src/generators/javascript.js';
+import {luaGenerator} from '../../build/src/generators/lua.js';
+import {phpGenerator} from '../../build/src/generators/php.js';
+import {pythonGenerator} from '../../build/src/generators/python.js';
 
 suite('Multiline Input Fields', function () {
   setup(function () {
@@ -95,7 +95,7 @@ suite('Multiline Input Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   runFromJsonSuiteTests(
@@ -103,7 +103,7 @@ suite('Multiline Input Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   suite('setValue', function () {
@@ -114,7 +114,7 @@ suite('Multiline Input Fields', function () {
       runSetValueTests(
         validValueTestCases,
         invalidValueTestCases,
-        defaultFieldValue
+        defaultFieldValue,
       );
       test('With source block', function () {
         this.field.setSourceBlock(createTestBlock());
@@ -130,7 +130,7 @@ suite('Multiline Input Fields', function () {
       runSetValueTests(
         validValueTestCases,
         invalidValueTestCases,
-        initialValue
+        initialValue,
       );
       test('With source block', function () {
         this.field.setSourceBlock(createTestBlock());
@@ -172,7 +172,7 @@ suite('Multiline Input Fields', function () {
             expectedCode:
               "'bark bark' + '\\n' + \n' bark bark bark' + '\\n' + \n' bark bar bark bark' + '\\n' + \n''",
             createBlock: createBlockFn(
-              'bark bark\n bark bark bark\n bark bar bark bark\n'
+              'bark bark\n bark bark bark\n bark bar bark bark\n',
             ),
           },
         ],
@@ -191,7 +191,7 @@ suite('Multiline Input Fields', function () {
             expectedCode:
               "'bark bark' + '\\n' +\n' bark bark bark' + '\\n' +\n' bark bar bark bark' + '\\n' +\n''",
             createBlock: createBlockFn(
-              'bark bark\n bark bark bark\n bark bar bark bark\n'
+              'bark bark\n bark bark bark\n bark bar bark bark\n',
             ),
           },
         ],
@@ -210,7 +210,7 @@ suite('Multiline Input Fields', function () {
             expectedCode:
               "'bark bark' .. '\\n' ..\n' bark bark bark' .. '\\n' ..\n' bark bar bark bark' .. '\\n' ..\n''",
             createBlock: createBlockFn(
-              'bark bark\n bark bark bark\n bark bar bark bark\n'
+              'bark bark\n bark bark bark\n bark bar bark bark\n',
             ),
           },
         ],
@@ -229,7 +229,7 @@ suite('Multiline Input Fields', function () {
             expectedCode:
               "'bark bark' . \"\\n\" .\n' bark bark bark' . \"\\n\" .\n' bark bar bark bark' . \"\\n\" .\n''",
             createBlock: createBlockFn(
-              'bark bark\n bark bark bark\n bark bar bark bark\n'
+              'bark bark\n bark bark bark\n bark bar bark bark\n',
             ),
           },
         ],
@@ -248,7 +248,7 @@ suite('Multiline Input Fields', function () {
             expectedCode:
               "'bark bark' + '\\n' + \n' bark bark bark' + '\\n' + \n' bark bar bark bark' + '\\n' + \n''",
             createBlock: createBlockFn(
-              'bark bark\n bark bark bark\n bark bar bark bark\n'
+              'bark bark\n bark bark bark\n bark bar bark bark\n',
             ),
           },
         ],

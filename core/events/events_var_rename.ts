@@ -52,13 +52,13 @@ export class VarRename extends VarBase {
     if (!this.oldName) {
       throw new Error(
         'The old var name is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (!this.newName) {
       throw new Error(
         'The new var name is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     json['oldName'] = this.oldName;
@@ -78,12 +78,12 @@ export class VarRename extends VarBase {
   static fromJson(
     json: VarRenameJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): VarRename {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new VarRename()
+      event ?? new VarRename(),
     ) as VarRename;
     newEvent.oldName = json['oldName'];
     newEvent.newName = json['newName'];
@@ -100,19 +100,19 @@ export class VarRename extends VarBase {
     if (!this.varId) {
       throw new Error(
         'The var ID is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (!this.oldName) {
       throw new Error(
         'The old var name is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (!this.newName) {
       throw new Error(
         'The new var name is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (forward) {

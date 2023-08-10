@@ -109,3 +109,14 @@ export {SquareCorner};
 export {StatementInput};
 export {TopRow};
 export {Types};
+
+export {
+  OutsideCorners,
+  InsideCorners,
+  StartHat,
+  Notch,
+  PuzzleTab,
+  JaggedTeeth,
+  BaseShape,
+  DynamicShape,
+} from './constants.js';

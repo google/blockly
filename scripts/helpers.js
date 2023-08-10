@@ -12,22 +12,15 @@
 const path = require('path');
 
 /**
- * Escape regular expression pattern
- * @param {string} pattern regular expression pattern
- * @return {string} escaped regular expression pattern
- */
-function escapeRegex(pattern) {
-  return pattern.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
-}
-
-/**
  * Replaces OS-specific path with POSIX style path.
+ * Simplified implementation based on
+ * https://stackoverflow.com/a/63251716/4969945
+ *
  * @param {string} target target path
  * @return {string} posix path
  */
 function posixPath(target) {
-  const osSpecificSep = new RegExp(escapeRegex(path.sep), 'g');
-  return target.replace(osSpecificSep, path.posix.sep);
+  return target.split(path.sep).join(path.posix.sep);
 }
 
 module.exports = {

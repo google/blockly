@@ -61,7 +61,7 @@ export class ViewportChange extends UiBase {
     opt_left?: number,
     opt_scale?: number,
     opt_workspaceId?: string,
-    opt_oldScale?: number
+    opt_oldScale?: number,
   ) {
     super(opt_workspaceId);
 
@@ -81,25 +81,25 @@ export class ViewportChange extends UiBase {
     if (this.viewTop === undefined) {
       throw new Error(
         'The view top is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (this.viewLeft === undefined) {
       throw new Error(
         'The view left is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (this.scale === undefined) {
       throw new Error(
         'The scale is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (this.oldScale === undefined) {
       throw new Error(
         'The old scale is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     json['viewTop'] = this.viewTop;
@@ -121,12 +121,12 @@ export class ViewportChange extends UiBase {
   static fromJson(
     json: ViewportChangeJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): ViewportChange {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new ViewportChange()
+      event ?? new ViewportChange(),
     ) as ViewportChange;
     newEvent.viewTop = json['viewTop'];
     newEvent.viewLeft = json['viewLeft'];
@@ -146,5 +146,5 @@ export interface ViewportChangeJson extends AbstractEventJson {
 registry.register(
   registry.Type.EVENT,
   eventUtils.VIEWPORT_CHANGE,
-  ViewportChange
+  ViewportChange,
 );

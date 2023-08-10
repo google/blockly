@@ -23,7 +23,7 @@ export function startsWith(str: string, prefix: string): boolean {
     'Blockly.utils.string.startsWith()',
     'April 2022',
     'April 2023',
-    'Use built-in string.startsWith'
+    'Use built-in string.startsWith',
   );
   return str.startsWith(prefix);
 }
@@ -53,7 +53,7 @@ export function shortestStringLength(array: string[]): number {
  */
 export function commonWordPrefix(
   array: string[],
-  opt_shortest?: number
+  opt_shortest?: number,
 ): number {
   if (!array.length) {
     return 0;
@@ -93,7 +93,7 @@ export function commonWordPrefix(
  */
 export function commonWordSuffix(
   array: string[],
-  opt_shortest?: number
+  opt_shortest?: number,
 ): number {
   if (!array.length) {
     return 0;
@@ -199,7 +199,7 @@ function wrapLine(text: string, limit: number): string {
 function wrapScore(
   words: string[],
   wordBreaks: boolean[],
-  limit: number
+  limit: number,
 ): number {
   // If this function becomes a performance liability, add caching.
   // Compute the length of each line.
@@ -256,7 +256,7 @@ function wrapScore(
 function wrapMutate(
   words: string[],
   wordBreaks: boolean[],
-  limit: number
+  limit: number,
 ): boolean[] {
   let bestScore = wrapScore(words, wordBreaks, limit);
   let bestBreaks;

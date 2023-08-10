@@ -83,7 +83,7 @@ suite('Text Input Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   runFromJsonSuiteTests(
@@ -91,7 +91,7 @@ suite('Text Input Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   suite('setValue', function () {
@@ -102,7 +102,7 @@ suite('Text Input Fields', function () {
       runSetValueTests(
         validValueTestCases,
         invalidValueTestCases,
-        defaultFieldValue
+        defaultFieldValue,
       );
       test('With source block', function () {
         this.field.setSourceBlock(createTestBlock());
@@ -118,7 +118,7 @@ suite('Text Input Fields', function () {
       runSetValueTests(
         validValueTestCases,
         invalidValueTestCases,
-        initialValue
+        initialValue,
       );
       test('With source block', function () {
         this.field.setSourceBlock(createTestBlock());
@@ -176,7 +176,7 @@ suite('Text Input Fields', function () {
           assertFieldValue(
             this.field,
             suiteInfo.expectedValue,
-            suiteInfo.value
+            suiteInfo.value,
           );
         });
         test('When Not Editing', function () {
@@ -231,7 +231,7 @@ suite('Text Input Fields', function () {
           field.showEditor_();
           chai.assert.equal(
             field.htmlInput_.getAttribute('spellcheck'),
-            value.toString()
+            value.toString(),
           );
         };
       });

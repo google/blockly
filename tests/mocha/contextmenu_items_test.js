@@ -11,7 +11,6 @@ import {
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
-import {CommentIcon} from '../../core/icons/comment_icon.js';
 
 suite('Context Menu Items', function () {
   setup(function () {
@@ -45,7 +44,7 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           precondition,
           'disabled',
-          'Should be disabled when there is nothing to undo'
+          'Should be disabled when there is nothing to undo',
         );
       });
 
@@ -56,7 +55,7 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           precondition,
           'enabled',
-          'Should be enabled when there are actions to undo'
+          'Should be enabled when there are actions to undo',
         );
       });
 
@@ -67,7 +66,7 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           this.workspace.getTopBlocks(false).length,
           0,
-          'Should be no blocks after undo'
+          'Should be no blocks after undo',
         );
       });
 
@@ -88,7 +87,7 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           precondition,
           'disabled',
-          'Should be disabled when there is nothing to redo'
+          'Should be disabled when there is nothing to redo',
         );
       });
 
@@ -100,7 +99,7 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           precondition,
           'enabled',
-          'Should be enabled when there are actions to redo'
+          'Should be enabled when there are actions to redo',
         );
       });
 
@@ -113,7 +112,7 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           this.workspace.getTopBlocks(false).length,
           1,
-          'Should be 1 block after redo'
+          'Should be 1 block after redo',
         );
       });
 
@@ -134,7 +133,7 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           this.cleanupOption.preconditionFn(this.scope),
           'enabled',
-          'Should be enabled if there are multiple blocks'
+          'Should be enabled if there are multiple blocks',
         );
       });
 
@@ -142,7 +141,7 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           this.cleanupOption.preconditionFn(this.scope),
           'disabled',
-          'Should be disabled if there are no blocks'
+          'Should be disabled if there are no blocks',
         );
       });
 
@@ -151,7 +150,7 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           this.cleanupOption.preconditionFn(this.scope),
           'hidden',
-          'Should be hidden if the workspace is not movable'
+          'Should be hidden if the workspace is not movable',
         );
       });
 
@@ -177,7 +176,7 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           this.collapseOption.preconditionFn(this.scope),
           'enabled',
-          'Should be enabled when any blocks are expanded'
+          'Should be enabled when any blocks are expanded',
         );
       });
 
@@ -186,13 +185,13 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           this.collapseOption.preconditionFn(this.scope),
           'disabled',
-          'Should be disabled when no blocks are expanded'
+          'Should be disabled when no blocks are expanded',
         );
       });
 
       test('Hidden when no collapse option', function () {
         const workspaceWithOptions = new Blockly.Workspace(
-          new Blockly.Options({collapse: false})
+          new Blockly.Options({collapse: false}),
         );
         this.scope.workspace = workspaceWithOptions;
 
@@ -200,7 +199,7 @@ suite('Context Menu Items', function () {
           chai.assert.equal(
             this.collapseOption.preconditionFn(this.scope),
             'hidden',
-            'Should be hidden if collapse is disabled in options'
+            'Should be hidden if collapse is disabled in options',
           );
         } finally {
           workspaceTeardown.call(this, workspaceWithOptions);
@@ -221,11 +220,11 @@ suite('Context Menu Items', function () {
 
         chai.assert.isTrue(
           block1.isCollapsed(),
-          'Previously collapsed block should still be collapsed'
+          'Previously collapsed block should still be collapsed',
         );
         chai.assert.isTrue(
           block2.isCollapsed(),
-          'Previously expanded block should now be collapsed'
+          'Previously expanded block should now be collapsed',
         );
       });
 
@@ -247,7 +246,7 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           this.expandOption.preconditionFn(this.scope),
           'enabled',
-          'Should be enabled when any blocks are collapsed'
+          'Should be enabled when any blocks are collapsed',
         );
       });
 
@@ -256,13 +255,13 @@ suite('Context Menu Items', function () {
         chai.assert.equal(
           this.expandOption.preconditionFn(this.scope),
           'disabled',
-          'Should be disabled when no blocks are collapsed'
+          'Should be disabled when no blocks are collapsed',
         );
       });
 
       test('Hidden when no collapse option', function () {
         const workspaceWithOptions = new Blockly.Workspace(
-          new Blockly.Options({collapse: false})
+          new Blockly.Options({collapse: false}),
         );
         this.scope.workspace = workspaceWithOptions;
 
@@ -270,7 +269,7 @@ suite('Context Menu Items', function () {
           chai.assert.equal(
             this.expandOption.preconditionFn(this.scope),
             'hidden',
-            'Should be hidden if collapse is disabled in options'
+            'Should be hidden if collapse is disabled in options',
           );
         } finally {
           workspaceTeardown.call(this, workspaceWithOptions);
@@ -291,11 +290,11 @@ suite('Context Menu Items', function () {
 
         chai.assert.isFalse(
           block1.isCollapsed(),
-          'Previously expanded block should still be expanded'
+          'Previously expanded block should still be expanded',
         );
         chai.assert.isFalse(
           block2.isCollapsed(),
-          'Previously collapsed block should now be expanded'
+          'Previously collapsed block should now be expanded',
         );
       });
 
@@ -313,14 +312,14 @@ suite('Context Menu Items', function () {
         this.workspace.newBlock('text');
         chai.assert.equal(
           this.deleteOption.preconditionFn(this.scope),
-          'enabled'
+          'enabled',
         );
       });
 
       test('Disabled when no blocks to delete', function () {
         chai.assert.equal(
           this.deleteOption.preconditionFn(this.scope),
-          'disabled'
+          'disabled',
         );
       });
 
@@ -355,7 +354,7 @@ suite('Context Menu Items', function () {
       test('No dialog for single block', function () {
         const confirmStub = sinon.stub(
           Blockly.dialog.TEST_ONLY,
-          'confirmInternal'
+          'confirmInternal',
         );
         this.workspace.newBlock('text');
         this.deleteOption.callback(this.scope);
@@ -371,7 +370,7 @@ suite('Context Menu Items', function () {
 
         chai.assert.equal(
           this.deleteOption.displayText(this.scope),
-          'Delete 2 Blocks'
+          'Delete 2 Blocks',
         );
       });
 
@@ -379,7 +378,7 @@ suite('Context Menu Items', function () {
         this.workspace.newBlock('text');
         chai.assert.equal(
           this.deleteOption.displayText(this.scope),
-          'Delete Block'
+          'Delete Block',
         );
       });
     });
@@ -400,7 +399,7 @@ suite('Context Menu Items', function () {
         // Block is duplicatable by default
         chai.assert.equal(
           this.duplicateOption.preconditionFn(this.scope),
-          'enabled'
+          'enabled',
         );
       });
 
@@ -408,7 +407,7 @@ suite('Context Menu Items', function () {
         sinon.stub(this.block, 'isDuplicatable').returns(false);
         chai.assert.equal(
           this.duplicateOption.preconditionFn(this.scope),
-          'disabled'
+          'disabled',
         );
       });
 
@@ -416,7 +415,7 @@ suite('Context Menu Items', function () {
         this.block.isInFlyout = true;
         chai.assert.equal(
           this.duplicateOption.preconditionFn(this.scope),
-          'hidden'
+          'hidden',
         );
       });
 
@@ -442,7 +441,7 @@ suite('Context Menu Items', function () {
       test('Enabled for normal block', function () {
         chai.assert.equal(
           this.commentOption.preconditionFn(this.scope),
-          'enabled'
+          'enabled',
         );
       });
 
@@ -454,20 +453,20 @@ suite('Context Menu Items', function () {
 
         chai.assert.equal(
           this.commentOption.preconditionFn(this.scope),
-          'hidden'
+          'hidden',
         );
       });
 
       test('Creates comment if one did not exist', function () {
-        chai.assert.isNull(
-          this.block.getIcon(CommentIcon.TYPE),
-          'New block should not have a comment'
+        chai.assert.isUndefined(
+          this.block.getIcon(Blockly.icons.CommentIcon.TYPE),
+          'New block should not have a comment',
         );
         this.commentOption.callback(this.scope);
-        chai.assert.exists(this.block.getIcon(CommentIcon.TYPE));
+        chai.assert.exists(this.block.getIcon(Blockly.icons.CommentIcon.TYPE));
         chai.assert.isEmpty(
           this.block.getCommentText(),
-          'Block should have empty comment text'
+          'Block should have empty comment text',
         );
       });
 
@@ -476,14 +475,14 @@ suite('Context Menu Items', function () {
         this.commentOption.callback(this.scope);
         chai.assert.isNull(
           this.block.getCommentText(),
-          'Block should not have comment after removal'
+          'Block should not have comment after removal',
         );
       });
 
       test('Has correct label for add comment', function () {
         chai.assert.equal(
           this.commentOption.displayText(this.scope),
-          'Add Comment'
+          'Add Comment',
         );
       });
 
@@ -491,7 +490,7 @@ suite('Context Menu Items', function () {
         this.block.setCommentText('Test comment');
         chai.assert.equal(
           this.commentOption.displayText(this.scope),
-          'Remove Comment'
+          'Remove Comment',
         );
       });
     });
@@ -506,7 +505,7 @@ suite('Context Menu Items', function () {
         this.block.appendValueInput('test2');
         chai.assert.equal(
           this.inlineOption.preconditionFn(this.scope),
-          'enabled'
+          'enabled',
         );
       });
     });

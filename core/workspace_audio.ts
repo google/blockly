@@ -99,7 +99,7 @@ export class WorkspaceAudio {
         // https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
         playPromise.then(sound.pause).catch(
           // Play without user interaction was prevented.
-          function () {}
+          function () {},
         );
       } else {
         sound.pause();

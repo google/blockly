@@ -64,7 +64,7 @@ export class FieldMultilineInput extends FieldTextInput {
   constructor(
     value?: string | typeof Field.SKIP_SETUP,
     validator?: FieldMultilineInputValidator,
-    config?: FieldMultilineInputConfig
+    config?: FieldMultilineInputConfig,
   ) {
     super(Field.SKIP_SETUP);
 
@@ -103,7 +103,7 @@ export class FieldMultilineInput extends FieldTextInput {
     // limitation of the plain-text format).
     fieldElement.textContent = (this.getValue() as string).replace(
       /\n/g,
-      '&#10;'
+      '&#10;',
     );
     return fieldElement;
   }
@@ -152,8 +152,6 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Create the block UI for this field.
-   *
-   * @internal
    */
   override initView() {
     this.createBorderRect_();
@@ -162,7 +160,7 @@ export class FieldMultilineInput extends FieldTextInput {
       {
         'class': 'blocklyEditableText',
       },
-      this.fieldGroup_
+      this.fieldGroup_,
     );
   }
 
@@ -255,7 +253,7 @@ export class FieldMultilineInput extends FieldTextInput {
           'y': y + this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING,
           'dy': this.getConstants()!.FIELD_TEXT_BASELINE,
         },
-        textGroup
+        textGroup,
       );
       span.appendChild(document.createTextNode(lines[i]));
       y += lineHeight;
@@ -306,7 +304,7 @@ export class FieldMultilineInput extends FieldTextInput {
         tspan,
         fontSize,
         fontWeight,
-        fontFamily
+        fontFamily,
       );
       if (textWidth > totalWidth) {
         totalWidth = textWidth;
@@ -330,7 +328,7 @@ export class FieldMultilineInput extends FieldTextInput {
         if (actualEditorLines[i].length > this.maxDisplayLength) {
           actualEditorLines[i] = actualEditorLines[i].substring(
             0,
-            this.maxDisplayLength
+            this.maxDisplayLength,
           );
         }
         dummyTextElement.textContent = actualEditorLines[i];
@@ -338,7 +336,7 @@ export class FieldMultilineInput extends FieldTextInput {
           dummyTextElement,
           fontSize,
           fontWeight,
-          fontFamily
+          fontFamily,
         );
         if (lineWidth > totalWidth) {
           totalWidth = lineWidth;
@@ -468,7 +466,7 @@ export class FieldMultilineInput extends FieldTextInput {
    * @internal
    */
   static override fromJson(
-    options: FieldMultilineInputFromJsonConfig
+    options: FieldMultilineInputFromJsonConfig,
   ): FieldMultilineInput {
     const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldMultilineInput if that class doesn't

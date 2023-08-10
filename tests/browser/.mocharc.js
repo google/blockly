@@ -2,5 +2,5 @@
 
 module.exports = {
   ui: 'tdd',
-  reporter: 'landing',
+  require: __dirname + '/test/hooks.js',
 };

@@ -13,7 +13,14 @@
     // Allow uncommented helper functions in tests.
     "require-jsdoc": ["off"],
     "prefer-rest-params": ["off"],
-    "no-invalid-this": ["off"]
+    "no-invalid-this": ["off"],
+    "valid-jsdoc": [
+      "error",
+      {
+        "requireReturnType": false,
+        "requireParamType": false
+      }
+    ]
   },
   "extends": "../../.eslintrc.js",
   "parserOptions": {

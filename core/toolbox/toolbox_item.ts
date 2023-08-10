@@ -40,7 +40,7 @@ export class ToolboxItem implements IToolboxItem {
   constructor(
     toolboxItemDef: toolbox.ToolboxItemInfo,
     parentToolbox: IToolbox,
-    opt_parent?: ICollapsibleToolboxItem
+    opt_parent?: ICollapsibleToolboxItem,
   ) {
     /** The ID for the category. */
     this.id_ =

@@ -120,7 +120,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
   constructor(
     value?: string | typeof Field.SKIP_SETUP,
     validator?: FieldInputValidator<T> | null,
-    config?: FieldInputConfig
+    config?: FieldInputConfig,
   ) {
     super(Field.SKIP_SETUP);
 
@@ -141,7 +141,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     }
   }
 
-  /** @internal */
   override initView() {
     const block = this.getSourceBlock();
     if (!block) {
@@ -200,8 +199,8 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
             'field',
             this.name || null,
             oldValue,
-            this.value_
-          )
+            this.value_,
+          ),
         );
       }
     }
@@ -234,7 +233,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     } else {
       source.pathObject.svgPath.setAttribute(
         'fill',
-        this.getConstants()!.FIELD_BORDER_RECT_COLOUR
+        this.getConstants()!.FIELD_BORDER_RECT_COLOUR,
       );
     }
   }
@@ -275,7 +274,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       // assignable to parameter of type 'string'.
       this.htmlInput_.setAttribute(
         'spellcheck',
-        this.spellcheck_ as AnyDuringMigration
+        this.spellcheck_ as AnyDuringMigration,
       );
     }
   }
@@ -318,7 +317,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
         if (text !== null) {
           this.setValue(this.getValueFromEditorText_(text));
         }
-      }
+      },
     );
   }
 
@@ -368,7 +367,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     // to parameter of type 'string'.
     htmlInput.setAttribute(
       'spellcheck',
-      this.spellcheck_ as AnyDuringMigration
+      this.spellcheck_ as AnyDuringMigration,
     );
     const scale = this.workspace_!.getScale();
     const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE * scale + 'pt';
@@ -435,8 +434,8 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
           'field',
           this.name || null,
           this.valueWhenEditorWasOpened_,
-          this.value_
-        )
+          this.value_,
+        ),
       );
       this.valueWhenEditorWasOpened_ = null;
     }
@@ -478,14 +477,14 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       htmlInput,
       'keydown',
       this,
-      this.onHtmlInputKeyDown_
+      this.onHtmlInputKeyDown_,
     );
     // Resize after every input change.
     this.onKeyInputWrapper_ = browserEvents.conditionalBind(
       htmlInput,
       'input',
       this,
-      this.onHtmlInputChange_
+      this.onHtmlInputChange_,
     );
   }
 
@@ -512,7 +511,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       dropDownDiv.hideWithoutAnimation();
     } else if (e.key === 'Escape') {
       this.setValue(
-        this.htmlInput_!.getAttribute('data-untyped-default-value')
+        this.htmlInput_!.getAttribute('data-untyped-default-value'),
       );
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
@@ -549,8 +548,8 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
           this.sourceBlock_,
           this.name || null,
           oldValue,
-          this.value_
-        )
+          this.value_,
+        ),
       );
     }
 
@@ -572,7 +571,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   protected setEditorValue_(
     newValue: AnyDuringMigration,
-    fireChangeEvent = true
+    fireChangeEvent = true,
   ) {
     this.isDirty_ = true;
     if (this.isBeingEdited_) {
@@ -622,7 +621,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     bumpObjects.bumpIntoBounds(
       this.workspace_!,
       this.workspace_!.getMetricsManager().getViewMetrics(true),
-      block
+      block,
     );
 
     this.resizeEditor_();

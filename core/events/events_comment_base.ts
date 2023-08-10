@@ -61,7 +61,7 @@ export class CommentBase extends AbstractEvent {
     if (!this.commentId) {
       throw new Error(
         'The comment ID is undefined. Either pass a comment to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     json['commentId'] = this.commentId;
@@ -80,12 +80,12 @@ export class CommentBase extends AbstractEvent {
   static fromJson(
     json: CommentBaseJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): CommentBase {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new CommentBase()
+      event ?? new CommentBase(),
     ) as CommentBase;
     newEvent.commentId = json['commentId'];
     return newEvent;
@@ -99,7 +99,7 @@ export class CommentBase extends AbstractEvent {
    */
   static CommentCreateDeleteHelper(
     event: CommentCreate | CommentDelete,
-    create: boolean
+    create: boolean,
   ) {
     const workspace = event.getEventWorkspace_();
     if (create) {
@@ -113,7 +113,7 @@ export class CommentBase extends AbstractEvent {
       if (!event.commentId) {
         throw new Error(
           'The comment ID is undefined. Either pass a comment to ' +
-            'the constructor, or call fromJson'
+            'the constructor, or call fromJson',
         );
       }
       const comment = workspace.getCommentById(event.commentId);

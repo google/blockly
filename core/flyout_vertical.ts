@@ -19,7 +19,7 @@ import type {FlyoutButton} from './flyout_button.js';
 import type {Options} from './options.js';
 import * as registry from './registry.js';
 import {Scrollbar} from './scrollbar.js';
-import type {Coordinate} from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import {Rect} from './utils/rect.js';
 import * as toolbox from './utils/toolbox.js';
 import * as WidgetDiv from './widgetdiv.js';
@@ -59,7 +59,7 @@ export class VerticalFlyout extends Flyout {
     }
     this.workspace_.translate(
       this.workspace_.scrollX + absoluteMetrics.left,
-      this.workspace_.scrollY + absoluteMetrics.top
+      this.workspace_.scrollY + absoluteMetrics.top,
     );
   }
 
@@ -167,7 +167,7 @@ export class VerticalFlyout extends Flyout {
       0,
       atRight ? 0 : 1,
       atRight ? -this.CORNER_RADIUS : this.CORNER_RADIUS,
-      this.CORNER_RADIUS
+      this.CORNER_RADIUS,
     );
     // Side closest to workspace.
     path.push('v', Math.max(0, height));
@@ -180,7 +180,7 @@ export class VerticalFlyout extends Flyout {
       0,
       atRight ? 0 : 1,
       atRight ? this.CORNER_RADIUS : -this.CORNER_RADIUS,
-      this.CORNER_RADIUS
+      this.CORNER_RADIUS,
     );
     // Bottom.
     path.push('h', atRight ? width : -width);
@@ -246,14 +246,15 @@ export class VerticalFlyout extends Flyout {
         const moveX = block!.outputConnection
           ? cursorX - this.tabWidth_
           : cursorX;
-        block!.moveBy(moveX, cursorY);
+        // No 'reason' provided since events are disabled.
+        block!.moveTo(new Coordinate(moveX, cursorY));
 
         const rect = this.createRect_(
           block!,
           this.RTL ? moveX - blockHW.width : moveX,
           cursorY,
           blockHW,
-          i
+          i,
         );
 
         this.addBlockListeners_(root, block!, rect);
@@ -357,7 +358,8 @@ export class VerticalFlyout extends Flyout {
           if (!block.outputConnection) {
             newX -= this.tabWidth_;
           }
-          block.moveBy(newX - oldX, 0);
+          // No 'reason' provided since events are disabled.
+          block.moveTo(new Coordinate(newX - oldX, 0));
         }
         if (this.rectMap_.has(block)) {
           this.moveRectToBlock_(this.rectMap_.get(block)!, block);
@@ -386,7 +388,7 @@ export class VerticalFlyout extends Flyout {
         // (ie toolbox edge).
         this.targetWorkspace!.translate(
           this.targetWorkspace!.scrollX + flyoutWidth,
-          this.targetWorkspace!.scrollY
+          this.targetWorkspace!.scrollY,
         );
       }
       this.width_ = flyoutWidth;
@@ -399,5 +401,5 @@ export class VerticalFlyout extends Flyout {
 registry.register(
   registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
   registry.DEFAULT,
-  VerticalFlyout
+  VerticalFlyout,
 );

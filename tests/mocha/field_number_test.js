@@ -86,7 +86,7 @@ suite('Number Fields', function () {
     expectedMin,
     expectedMax,
     expectedPrecision,
-    expectedValue
+    expectedValue,
   ) {
     assertFieldValue(field, expectedValue);
     chai.assert.equal(field.getMin(), expectedMin, 'Min');
@@ -111,7 +111,7 @@ suite('Number Fields', function () {
       testCase.expectedValue,
       testCase.expectedValue,
       testCase.expectedValue,
-      testCase.expectedValue
+      testCase.expectedValue,
     );
   };
 
@@ -120,7 +120,7 @@ suite('Number Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   runFromJsonSuiteTests(
@@ -128,7 +128,7 @@ suite('Number Fields', function () {
     validValueTestCases,
     invalidValueTestCases,
     validTestCaseAssertField,
-    assertFieldDefault
+    assertFieldDefault,
   );
 
   suite('setValue', function () {
@@ -139,7 +139,7 @@ suite('Number Fields', function () {
       runSetValueTests(
         validValueTestCases,
         invalidValueTestCases,
-        defaultFieldValue
+        defaultFieldValue,
       );
     });
     suite('Value -> New Value', function () {
@@ -150,7 +150,7 @@ suite('Number Fields', function () {
       runSetValueTests(
         validValueTestCases,
         invalidValueTestCases,
-        initialValue
+        initialValue,
       );
     });
     suite('Constraints', function () {
@@ -307,7 +307,7 @@ suite('Number Fields', function () {
           assertFieldValue(
             this.field,
             suiteInfo.expectedValue,
-            String(suiteInfo.value)
+            String(suiteInfo.value),
           );
         });
         test('When Not Editing', function () {
@@ -348,7 +348,7 @@ suite('Number Fields', function () {
           undefined,
           {
             min: -10,
-          }
+          },
         );
         assertNumberField(field, -10, Infinity, 0, 0);
       });
@@ -361,7 +361,7 @@ suite('Number Fields', function () {
           undefined,
           {
             min: -10,
-          }
+          },
         );
         assertNumberField(field, -10, Infinity, 0, 0);
       });
@@ -396,7 +396,7 @@ suite('Number Fields', function () {
           undefined,
           {
             max: 10,
-          }
+          },
         );
         assertNumberField(field, -Infinity, 10, 0, 0);
       });
@@ -409,7 +409,7 @@ suite('Number Fields', function () {
           undefined,
           {
             max: 10,
-          }
+          },
         );
         assertNumberField(field, -Infinity, 10, 0, 0);
       });
@@ -444,7 +444,7 @@ suite('Number Fields', function () {
           undefined,
           {
             precision: 1,
-          }
+          },
         );
         assertNumberField(field, -Infinity, Infinity, 1, 0);
       });
@@ -457,7 +457,7 @@ suite('Number Fields', function () {
           undefined,
           {
             precision: 1,
-          }
+          },
         );
         assertNumberField(field, -Infinity, Infinity, 1, 0);
       });

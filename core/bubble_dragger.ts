@@ -39,7 +39,10 @@ export class BubbleDragger {
    * @param bubble The item on the bubble canvas to drag.
    * @param workspace The workspace to drag on.
    */
-  constructor(private bubble: IBubble, private workspace: WorkspaceSvg) {
+  constructor(
+    private bubble: IBubble,
+    private workspace: WorkspaceSvg,
+  ) {
     /**
      * The location of the top left corner of the dragging bubble's body at the
      * beginning of the drag, in workspace coordinates.
@@ -108,7 +111,7 @@ export class BubbleDragger {
       const componentManager = this.workspace.getComponentManager();
       const isDeleteArea = componentManager.hasCapability(
         dragTarget.id,
-        ComponentManager.Capability.DELETE_AREA
+        ComponentManager.Capability.DELETE_AREA,
       );
       if (isDeleteArea) {
         return (dragTarget as IDeleteArea).wouldDelete(this.bubble, false);
@@ -173,7 +176,7 @@ export class BubbleDragger {
   private fireMoveEvent_() {
     if (this.bubble instanceof WorkspaceCommentSvg) {
       const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
-        this.bubble
+        this.bubble,
       ) as CommentMove;
       event.setOldCoordinate(this.startXY_);
       event.recordNew();
@@ -195,7 +198,7 @@ export class BubbleDragger {
   private pixelsToWorkspaceUnits_(pixelCoord: Coordinate): Coordinate {
     const result = new Coordinate(
       pixelCoord.x / this.workspace.scale,
-      pixelCoord.y / this.workspace.scale
+      pixelCoord.y / this.workspace.scale,
     );
     if (this.workspace.isMutator) {
       // If we're in a mutator, its scale is always 1, purely because of some

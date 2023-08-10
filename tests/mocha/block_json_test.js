@@ -53,7 +53,7 @@ suite('Block JSON initialization', function () {
       this.assertError(
         ['test', 1, 'test'],
         0,
-        'Block "test": Message index %1 out of range.'
+        'Block "test": Message index %1 out of range.',
       );
     });
 
@@ -61,7 +61,7 @@ suite('Block JSON initialization', function () {
       this.assertError(
         ['test', 'test'],
         1,
-        'Block "test": Message does not reference all 1 arg(s).'
+        'Block "test": Message does not reference all 1 arg(s).',
       );
     });
 
@@ -73,7 +73,7 @@ suite('Block JSON initialization', function () {
       this.assertError(
         ['test', 1, 1, 'test'],
         1,
-        'Block "test": Message index %1 duplicated.'
+        'Block "test": Message index %1 duplicated.',
       );
     });
 
@@ -81,7 +81,7 @@ suite('Block JSON initialization', function () {
       this.assertError(
         ['test', 0, 'test'],
         1,
-        'Block "test": Message index %0 out of range.'
+        'Block "test": Message index %0 out of range.',
       );
     });
 
@@ -89,7 +89,7 @@ suite('Block JSON initialization', function () {
       this.assertError(
         ['test', 2, 'test'],
         1,
-        'Block "test": Message index %2 out of range.'
+        'Block "test": Message index %2 out of range.',
       );
     });
   });
@@ -105,7 +105,7 @@ suite('Block JSON initialization', function () {
         };
         chai.assert.deepEqual(
           block.interpolateArguments_(tokens, args, lastAlign),
-          elements
+          elements,
         );
       };
     });
@@ -131,7 +131,7 @@ suite('Block JSON initialization', function () {
           {
             'type': 'input_dummy',
           },
-        ]
+        ],
       );
     });
 
@@ -148,7 +148,7 @@ suite('Block JSON initialization', function () {
           {
             'type': 'input_dummy',
           },
-        ]
+        ],
       );
     });
 
@@ -186,7 +186,7 @@ suite('Block JSON initialization', function () {
           {
             'type': 'input_dummy',
           },
-        ]
+        ],
       );
     });
 
@@ -211,7 +211,7 @@ suite('Block JSON initialization', function () {
           {
             'type': 'input_dummy',
           },
-        ]
+        ],
       );
     });
 
@@ -228,7 +228,7 @@ suite('Block JSON initialization', function () {
           {
             'type': 'input_dummy',
           },
-        ]
+        ],
       );
     });
 
@@ -268,7 +268,7 @@ suite('Block JSON initialization', function () {
           {
             'type': 'input_dummy',
           },
-        ]
+        ],
       );
     });
 
@@ -288,7 +288,7 @@ suite('Block JSON initialization', function () {
           {
             'type': 'input_dummy',
           },
-        ]
+        ],
       );
     });
 
@@ -353,7 +353,7 @@ suite('Block JSON initialization', function () {
           'type': 'field_label',
           'text': 'text',
         },
-        'field_label'
+        'field_label',
       );
     });
 
@@ -362,7 +362,7 @@ suite('Block JSON initialization', function () {
         {
           'type': 'field_bad',
         },
-        null
+        null,
       );
     });
 
@@ -371,7 +371,7 @@ suite('Block JSON initialization', function () {
         {
           'type': 'no_field_prefix_field',
         },
-        'no_field_prefix_field'
+        'no_field_prefix_field',
       );
     });
 
@@ -380,7 +380,7 @@ suite('Block JSON initialization', function () {
         {
           'type': 'input_prefix_field',
         },
-        'input_prefix_field'
+        'input_prefix_field',
       );
     });
 
@@ -390,7 +390,7 @@ suite('Block JSON initialization', function () {
           'type': 'field_undefined',
           'alt': 'alt text',
         },
-        'field_label'
+        'field_label',
       );
     });
 
@@ -400,7 +400,7 @@ suite('Block JSON initialization', function () {
           'type': 'input_prefix_bad',
           'alt': 'alt string',
         },
-        'field_label'
+        'field_label',
       );
     });
 
@@ -413,7 +413,7 @@ suite('Block JSON initialization', function () {
             'name': 'FIELDNAME',
           },
         },
-        'field_number'
+        'field_number',
       );
     });
 
@@ -435,7 +435,7 @@ suite('Block JSON initialization', function () {
             },
           },
         },
-        'field_label'
+        'field_label',
       );
     });
 
@@ -460,7 +460,7 @@ suite('Block JSON initialization', function () {
             },
           },
         },
-        'field_number'
+        'field_number',
       );
     });
 
@@ -469,7 +469,7 @@ suite('Block JSON initialization', function () {
         {
           'type': 'field_undefined',
         },
-        null
+        null,
       );
     });
 
@@ -481,7 +481,7 @@ suite('Block JSON initialization', function () {
             'type': 'field_undefined',
           },
         },
-        null
+        null,
       );
     });
 
@@ -491,7 +491,7 @@ suite('Block JSON initialization', function () {
           'type': 'field_undefined',
           'alt': '        ',
         },
-        null
+        null,
       );
     });
   });
@@ -509,34 +509,34 @@ suite('Block JSON initialization', function () {
           case 'input_dummy':
             chai.assert.isTrue(
               block.appendDummyInput.calledOnce,
-              'Expected a dummy input to be created.'
+              'Expected a dummy input to be created.',
             );
             break;
           case 'input_value':
             chai.assert.isTrue(
               block.appendValueInput.calledOnce,
-              'Expected a value input to be created.'
+              'Expected a value input to be created.',
             );
             break;
           case 'input_statement':
             chai.assert.isTrue(
               block.appendStatementInput.calledOnce,
-              'Expected a statement input to be created.'
+              'Expected a statement input to be created.',
             );
             break;
           default:
             chai.assert.isNull(input, 'Expected input to be null');
             chai.assert.isTrue(
               block.appendDummyInput.notCalled,
-              'Expected no input to be created'
+              'Expected no input to be created',
             );
             chai.assert.isTrue(
               block.appendValueInput.notCalled,
-              'Expected no input to be created'
+              'Expected no input to be created',
             );
             chai.assert.isTrue(
               block.appendStatementInput.notCalled,
-              'Expected no input to be created'
+              'Expected no input to be created',
             );
             return;
         }
@@ -559,7 +559,7 @@ suite('Block JSON initialization', function () {
           {
             'type': 'input_dummy',
           },
-          'input_dummy'
+          'input_dummy',
         );
       });
 
@@ -569,7 +569,7 @@ suite('Block JSON initialization', function () {
             'type': 'input_value',
             'name': 'NAME',
           },
-          'input_value'
+          'input_value',
         );
       });
 
@@ -579,7 +579,7 @@ suite('Block JSON initialization', function () {
             'type': 'input_statement',
             'name': 'NAME',
           },
-          'input_statement'
+          'input_statement',
         );
       });
 
@@ -588,7 +588,7 @@ suite('Block JSON initialization', function () {
           {
             'type': 'input_bad',
           },
-          'input_bad'
+          'input_bad',
         );
       });
 
@@ -597,14 +597,14 @@ suite('Block JSON initialization', function () {
         Blockly.registry.register(
           Blockly.registry.Type.INPUT,
           'custom',
-          CustomInput
+          CustomInput,
         );
         const block = this.workspace.newBlock('test_basic_empty');
         block.inputFromJson_({'type': 'custom'});
         chai.assert.instanceOf(
           block.inputList[0],
           CustomInput,
-          'Expected the registered input to be constructed'
+          'Expected the registered input to be constructed',
         );
       });
     });
@@ -618,7 +618,7 @@ suite('Block JSON initialization', function () {
             'check': 'Integer',
           },
           'input_value',
-          'Integer'
+          'Integer',
         );
       });
 
@@ -630,7 +630,7 @@ suite('Block JSON initialization', function () {
             'check': ['Integer', 'Number'],
           },
           'input_value',
-          ['Integer', 'Number']
+          ['Integer', 'Number'],
         );
       });
 
@@ -641,7 +641,7 @@ suite('Block JSON initialization', function () {
             'name': 'NAME',
             'check': '',
           },
-          'input_value'
+          'input_value',
         );
       });
 
@@ -652,7 +652,7 @@ suite('Block JSON initialization', function () {
             'name': 'NAME',
             'check': null,
           },
-          'input_value'
+          'input_value',
         );
       });
     });
@@ -666,7 +666,7 @@ suite('Block JSON initialization', function () {
           },
           'input_dummy',
           undefined,
-          Align.LEFT
+          Align.LEFT,
         );
       });
 
@@ -678,7 +678,7 @@ suite('Block JSON initialization', function () {
           },
           'input_dummy',
           undefined,
-          Align.RIGHT
+          Align.RIGHT,
         );
       });
 
@@ -690,7 +690,7 @@ suite('Block JSON initialization', function () {
           },
           'input_dummy',
           undefined,
-          Align.CENTRE
+          Align.CENTRE,
         );
       });
 
@@ -702,7 +702,7 @@ suite('Block JSON initialization', function () {
           },
           'input_dummy',
           undefined,
-          Align.CENTRE
+          Align.CENTRE,
         );
       });
     });

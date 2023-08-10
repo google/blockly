@@ -63,12 +63,12 @@ export const runSerializationTestSuite = (testCases) => {
         block = Blockly.serialization.blocks.append(
           testCase.json,
           this.workspace,
-          {recordUndo: true}
+          {recordUndo: true},
         );
       } else {
         block = Blockly.Xml.domToBlock(
           Blockly.utils.xml.textToDom(testCase.xml),
-          this.workspace
+          this.workspace,
         );
       }
       this.clock.runAll();
@@ -86,7 +86,7 @@ export const runSerializationTestSuite = (testCases) => {
         const block = Blockly.serialization.blocks.append(
           testCase.json,
           this.workspace,
-          {recordUndo: true}
+          {recordUndo: true},
         );
         this.clock.runAll();
         const generatedJson = Blockly.serialization.blocks.save(block);
@@ -95,11 +95,11 @@ export const runSerializationTestSuite = (testCases) => {
       } else {
         const block = Blockly.Xml.domToBlock(
           Blockly.utils.xml.textToDom(testCase.xml),
-          this.workspace
+          this.workspace,
         );
         this.clock.runAll();
         const generatedXml = Blockly.Xml.domToPrettyText(
-          Blockly.Xml.blockToDom(block)
+          Blockly.Xml.blockToDom(block),
         );
         const expectedXml = testCase.expectedXml || testCase.xml;
         chai.assert.equal(generatedXml, expectedXml);

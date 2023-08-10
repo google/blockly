@@ -75,25 +75,25 @@ export class BlockDelete extends BlockBase {
     if (!this.oldXml) {
       throw new Error(
         'The old block XML is undefined. Either pass a block ' +
-          'to the constructor, or call fromJson'
+          'to the constructor, or call fromJson',
       );
     }
     if (!this.ids) {
       throw new Error(
         'The block IDs are undefined. Either pass a block to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (this.wasShadow === undefined) {
       throw new Error(
         'Whether the block was a shadow is undefined. Either ' +
-          'pass a block to the constructor, or call fromJson'
+          'pass a block to the constructor, or call fromJson',
       );
     }
     if (!this.oldJson) {
       throw new Error(
         'The old block JSON is undefined. Either pass a block ' +
-          'to the constructor, or call fromJson'
+          'to the constructor, or call fromJson',
       );
     }
     json['oldXml'] = Xml.domToText(this.oldXml);
@@ -118,12 +118,12 @@ export class BlockDelete extends BlockBase {
   static fromJson(
     json: BlockDeleteJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): BlockDelete {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new BlockDelete()
+      event ?? new BlockDelete(),
     ) as BlockDelete;
     newEvent.oldXml = utilsXml.textToDom(json['oldXml']);
     newEvent.ids = json['ids'];
@@ -146,13 +146,13 @@ export class BlockDelete extends BlockBase {
     if (!this.ids) {
       throw new Error(
         'The block IDs are undefined. Either pass a block to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (!this.oldJson) {
       throw new Error(
         'The old block JSON is undefined. Either pass a block ' +
-          'to the constructor, or call fromJson'
+          'to the constructor, or call fromJson',
       );
     }
     if (forward) {

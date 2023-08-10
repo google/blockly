@@ -28,7 +28,7 @@ suite('Field Intermediate Change Event', function () {
         block,
         'TEXT',
         'old value',
-        'new value'
+        'new value',
       );
 
       const json = origEvent.toJson();

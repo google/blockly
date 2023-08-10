@@ -160,7 +160,7 @@ export class Scrollbar {
     private readonly horizontal: boolean,
     opt_pair?: boolean,
     opt_class?: string,
-    opt_margin?: number
+    opt_margin?: number,
   ) {
     this.pair = opt_pair || false;
 
@@ -190,14 +190,14 @@ export class Scrollbar {
     this.svgBackground = dom.createSvgElement(
       Svg.RECT,
       {'class': 'blocklyScrollbarBackground'},
-      group
+      group,
     );
 
     const radius = Math.floor((Scrollbar.scrollbarThickness - 5) / 2);
     this.svgHandle = dom.createSvgElement(
       Svg.RECT,
       {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
-      group
+      group,
     );
 
     this.workspace
@@ -224,13 +224,13 @@ export class Scrollbar {
       this.svgBackground,
       'pointerdown',
       this,
-      this.onMouseDownBar
+      this.onMouseDownBar,
     );
     this.onMouseDownHandleWrapper_ = browserEvents.conditionalBind(
       this.svgHandle,
       'pointerdown',
       this,
-      this.onMouseDownHandle
+      this.onMouseDownHandle,
     );
   }
 
@@ -291,7 +291,7 @@ export class Scrollbar {
     this.handleLength = newLength;
     this.svgHandle.setAttribute(
       this.lengthAttribute_,
-      String(this.handleLength)
+      String(this.handleLength),
     );
   }
 
@@ -324,7 +324,7 @@ export class Scrollbar {
     this.handlePosition = newPosition;
     this.svgHandle.setAttribute(
       this.positionAttribute_,
-      String(this.handlePosition)
+      String(this.handlePosition),
     );
   }
 
@@ -338,11 +338,11 @@ export class Scrollbar {
     this.scrollbarLength = newSize;
     this.outerSvg.setAttribute(
       this.lengthAttribute_,
-      String(this.scrollbarLength)
+      String(this.scrollbarLength),
     );
     this.svgBackground.setAttribute(
       this.lengthAttribute_,
-      String(this.scrollbarLength)
+      String(this.scrollbarLength),
     );
   }
 
@@ -657,13 +657,25 @@ export class Scrollbar {
    * @param visible True if visible.
    */
   setVisible(visible: boolean) {
-    const visibilityChanged = visible !== this.isVisible();
-
     // Ideally this would also apply to scrollbar pairs, but that's a bigger
-    // headache (due to interactions with the corner square).
+    // headache (due to interactions with the corner square), and the fact
+    // that telling the pair to resize itself would cause circular dependencies.
     if (this.pair) {
       throw Error('Unable to toggle visibility of paired scrollbars.');
     }
+    this.setVisibleInternal(visible);
+  }
+
+  /**
+   * Set whether the scrollbar is visible. Bypasses checking whether this
+   * scrollbar is part of a pair so that it can be toggled by the scrollbar
+   * pair.
+   *
+   * @param visible True if visible.
+   * @internal
+   */
+  setVisibleInternal(visible: boolean) {
+    const visibilityChanged = visible !== this.isVisible();
     this.isHandleVisible = visible;
     if (visibilityChanged) {
       this.updateDisplay_();
@@ -710,7 +722,7 @@ export class Scrollbar {
     const mouseXY = browserEvents.mouseToSvg(
       e,
       this.workspace.getParentSvg(),
-      this.workspace.getInverseScreenCTM()
+      this.workspace.getInverseScreenCTM(),
     );
     const mouseLocation = this.horizontal ? mouseXY.x : mouseXY.y;
 
@@ -758,13 +770,13 @@ export class Scrollbar {
       document,
       'pointerup',
       this,
-      this.onMouseUpHandle
+      this.onMouseUpHandle,
     );
     this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
       document,
       'pointermove',
       this,
-      this.onMouseMoveHandle
+      this.onMouseMoveHandle,
     );
     e.stopPropagation();
     e.preventDefault();
@@ -869,7 +881,7 @@ export class Scrollbar {
    */
   private static metricsAreEquivalent(
     first: Metrics,
-    second: Metrics
+    second: Metrics,
   ): boolean {
     return (
       first.viewWidth === second.viewWidth &&

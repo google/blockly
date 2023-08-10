@@ -31,6 +31,13 @@ const {posixPath} = require('../helpers');
 ////////////////////////////////////////////////////////////
 
 /**
+ * Path to the python runtime.
+ * This will normalize the command across platforms (e.g. python3 on Linux and
+ * Mac, python on Windows).
+ */
+const PYTHON = process.platform === 'win32' ? 'python' : 'python3';
+
+/**
  * Suffix to add to compiled output files.
  */
 const COMPILED_SUFFIX = '_compressed';
@@ -380,7 +387,7 @@ error message above, try running:
  */
 function generateMessages(done) {
   // Run js_to_json.py
-  const jsToJsonCmd = `python3 scripts/i18n/js_to_json.py \
+  const jsToJsonCmd = `${PYTHON} scripts/i18n/js_to_json.py \
       --input_file ${path.join('msg', 'messages.js')} \
       --output_dir ${path.join('msg', 'json')} \
       --quiet`;
@@ -418,7 +425,8 @@ function buildLangfiles(done) {
   json_files = json_files.filter(file => file.endsWith('json') &&
       !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
   json_files = json_files.map(file => path.join('msg', 'json', file));
-  const createMessagesCmd = `python3 ./scripts/i18n/create_messages.py \
+
+  const createMessagesCmd = `${PYTHON} ./scripts/i18n/create_messages.py \
   --source_lang_file ${path.join('msg', 'json', 'en.json')} \
   --source_synonym_file ${path.join('msg', 'json', 'synonyms.json')} \
   --source_constants_file ${path.join('msg', 'json', 'constants.json')} \
@@ -559,7 +567,10 @@ function getChunkOptions() {
     // Figure out which chunk this is by looking for one of the
     // known chunk entrypoints in chunkFiles.  N.B.: O(n*m).  :-(
     const chunk = chunks.find(
-        chunk => chunkFiles.find(f => f.endsWith(path.sep + chunk.entry)));
+        chunk => chunkFiles.find(f => {
+          return f.endsWith('/' + chunk.entry.replaceAll('\\', '/'));
+        }
+        ));
     if (!chunk) throw new Error('Unable to identify chunk');
 
     // Replace nicknames with the names we chose.

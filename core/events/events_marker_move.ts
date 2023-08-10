@@ -58,7 +58,7 @@ export class MarkerMove extends UiBase {
     opt_block?: Block | null,
     isCursor?: boolean,
     opt_oldNode?: ASTNode | null,
-    opt_newNode?: ASTNode
+    opt_newNode?: ASTNode,
   ) {
     let workspaceId = opt_block ? opt_block.workspace.id : undefined;
     if (opt_newNode && opt_newNode.getType() === ASTNode.types.WORKSPACE) {
@@ -82,13 +82,13 @@ export class MarkerMove extends UiBase {
     if (this.isCursor === undefined) {
       throw new Error(
         'Whether this is a cursor event or not is undefined. Either pass ' +
-          'a value to the constructor, or call fromJson'
+          'a value to the constructor, or call fromJson',
       );
     }
     if (!this.newNode) {
       throw new Error(
         'The new node is undefined. Either pass a node to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     json['isCursor'] = this.isCursor;
@@ -110,12 +110,12 @@ export class MarkerMove extends UiBase {
   static fromJson(
     json: MarkerMoveJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): MarkerMove {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new MarkerMove()
+      event ?? new MarkerMove(),
     ) as MarkerMove;
     newEvent.isCursor = json['isCursor'];
     newEvent.blockId = json['blockId'];

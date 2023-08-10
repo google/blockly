@@ -51,7 +51,7 @@ export class VarBase extends AbstractEvent {
     if (!this.varId) {
       throw new Error(
         'The var ID is undefined. Either pass a variable to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     json['varId'] = this.varId;
@@ -70,12 +70,12 @@ export class VarBase extends AbstractEvent {
   static fromJson(
     json: VarBaseJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): VarBase {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new VarBase()
+      event ?? new VarBase(),
     ) as VarBase;
     newEvent.varId = json['varId'];
     return newEvent;

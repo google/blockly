@@ -136,7 +136,7 @@ suite('Theme', function () {
       };
       const refreshToolboxSelectionStub = sinon.stub(
         workspace,
-        'refreshToolboxSelection'
+        'refreshToolboxSelection',
       );
       blockA.styleName_ = 'styleOne';
 
@@ -155,7 +155,7 @@ suite('Theme', function () {
         this.eventsFireStub,
         Blockly.Events.ThemeChange,
         {themeName: 'themeName', type: eventUtils.THEME_CHANGE},
-        workspace.id
+        workspace.id,
       );
     } finally {
       workspaceTeardown.call(this, workspace);
@@ -177,7 +177,7 @@ suite('Theme', function () {
       };
       stringifyAndCompare(
         this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput
+        expectedOutput,
       );
     });
 
@@ -191,7 +191,7 @@ suite('Theme', function () {
       };
       stringifyAndCompare(
         this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput
+        expectedOutput,
       );
     });
 
@@ -207,7 +207,7 @@ suite('Theme', function () {
       };
       stringifyAndCompare(
         this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput
+        expectedOutput,
       );
     });
 
@@ -226,7 +226,7 @@ suite('Theme', function () {
       };
       stringifyAndCompare(
         this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput
+        expectedOutput,
       );
     });
 
@@ -244,7 +244,7 @@ suite('Theme', function () {
       };
       stringifyAndCompare(
         this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput
+        expectedOutput,
       );
     });
 
@@ -260,7 +260,7 @@ suite('Theme', function () {
       };
       stringifyAndCompare(
         this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput
+        expectedOutput,
       );
     });
 
@@ -278,7 +278,7 @@ suite('Theme', function () {
       };
       stringifyAndCompare(
         this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput
+        expectedOutput,
       );
     });
 
@@ -294,7 +294,7 @@ suite('Theme', function () {
       };
       stringifyAndCompare(
         this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput
+        expectedOutput,
       );
     });
   });

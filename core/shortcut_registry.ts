@@ -63,7 +63,7 @@ export class ShortcutRegistry {
         this.addKeyMapping(
           keyCodes[i],
           shortcut.name,
-          !!shortcut.allowCollision
+          !!shortcut.allowCollision,
         );
       }
     }
@@ -105,13 +105,13 @@ export class ShortcutRegistry {
   addKeyMapping(
     keyCode: string | number | KeyCodes,
     shortcutName: string,
-    opt_allowCollision?: boolean
+    opt_allowCollision?: boolean,
   ) {
     keyCode = `${keyCode}`;
     const shortcutNames = this.keyMap.get(keyCode);
     if (shortcutNames && !opt_allowCollision) {
       throw new Error(
-        `Shortcut named "${shortcutName}" collides with shortcuts "${shortcutNames}"`
+        `Shortcut named "${shortcutName}" collides with shortcuts "${shortcutNames}"`,
       );
     } else if (shortcutNames && opt_allowCollision) {
       shortcutNames.unshift(shortcutName);
@@ -135,14 +135,14 @@ export class ShortcutRegistry {
   removeKeyMapping(
     keyCode: string,
     shortcutName: string,
-    opt_quiet?: boolean
+    opt_quiet?: boolean,
   ): boolean {
     const shortcutNames = this.keyMap.get(keyCode);
 
     if (!shortcutNames) {
       if (!opt_quiet) {
         console.warn(
-          `No keyboard shortcut named "${shortcutName}" registered with key code "${keyCode}"`
+          `No keyboard shortcut named "${shortcutName}" registered with key code "${keyCode}"`,
         );
       }
       return false;
@@ -158,7 +158,7 @@ export class ShortcutRegistry {
     }
     if (!opt_quiet) {
       console.warn(
-        `No keyboard shortcut named "${shortcutName}" registered with key code "${keyCode}"`
+        `No keyboard shortcut named "${shortcutName}" registered with key code "${keyCode}"`,
       );
     }
     return false;

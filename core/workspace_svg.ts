@@ -77,6 +77,7 @@ import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
 import {ContextMenuOption} from './contextmenu_registry.js';
+import * as renderManagement from './render_management.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -323,7 +324,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const MetricsManagerClass = registry.getClassFromOptions(
       registry.Type.METRICS_MANAGER,
       options,
-      true
+      true,
     );
     /** Object in charge of calculating metrics for the workspace. */
     this.metricsManager = new MetricsManagerClass!(this);
@@ -345,7 +346,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
      * Object in charge of loading, storing, and playing audio for a workspace.
      */
     this.audioManager = new WorkspaceAudio(
-      options.parentWorkspace as WorkspaceSvg
+      options.parentWorkspace as WorkspaceSvg,
     );
 
     /** This workspace's grid object or null. */
@@ -359,21 +360,21 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (Variables && Variables.flyoutCategory) {
       this.registerToolboxCategoryCallback(
         Variables.CATEGORY_NAME,
-        Variables.flyoutCategory
+        Variables.flyoutCategory,
       );
     }
 
     if (VariablesDynamic && VariablesDynamic.flyoutCategory) {
       this.registerToolboxCategoryCallback(
         VariablesDynamic.CATEGORY_NAME,
-        VariablesDynamic.flyoutCategory
+        VariablesDynamic.flyoutCategory,
       );
     }
 
     if (Procedures && Procedures.flyoutCategory) {
       this.registerToolboxCategoryCallback(
         Procedures.CATEGORY_NAME,
-        Procedures.flyoutCategory
+        Procedures.flyoutCategory,
       );
       this.addChangeListener(Procedures.mutatorOpenListener);
     }
@@ -388,7 +389,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     this.renderer = blockRendering.init(
       this.options.renderer || 'geras',
       this.getTheme(),
-      this.options.rendererOverrides ?? undefined
+      this.options.rendererOverrides ?? undefined,
     );
 
     /**
@@ -538,7 +539,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     this.updateBlockStyles_(
       this.getAllBlocks(false).filter(function (block) {
         return !!block.getStyleName();
-      })
+      }),
     );
 
     // Update current toolbox selection.
@@ -554,7 +555,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     const event = new (eventUtils.get(eventUtils.THEME_CHANGE))(
       this.getTheme().name,
-      this.id
+      this.id,
     );
     eventUtils.fire(event);
   }
@@ -736,7 +737,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.svgBackground_ = dom.createSvgElement(
         Svg.RECT,
         {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
-        this.svgGroup_
+        this.svgGroup_,
       );
 
       if (opt_backgroundClass === 'blocklyMainBackground' && this.grid) {
@@ -746,19 +747,19 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         this.themeManager_.subscribe(
           this.svgBackground_,
           'workspaceBackgroundColour',
-          'fill'
+          'fill',
         );
       }
     }
     this.svgBlockCanvas_ = dom.createSvgElement(
       Svg.G,
       {'class': 'blocklyBlockCanvas'},
-      this.svgGroup_
+      this.svgGroup_,
     );
     this.svgBubbleCanvas_ = dom.createSvgElement(
       Svg.G,
       {'class': 'blocklyBubbleCanvas'},
-      this.svgGroup_
+      this.svgGroup_,
     );
 
     if (!this.isFlyout) {
@@ -767,7 +768,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         'pointerdown',
         this,
         this.onMouseDown_,
-        false
+        false,
       );
       // This no-op works around https://bugs.webkit.org/show_bug.cgi?id=226683,
       // which otherwise prevents zoom/scroll events from being observed in
@@ -777,7 +778,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         this.svgGroup_,
         'wheel',
         this,
-        this.onMouseWheel_
+        this.onMouseWheel_,
       );
     }
 
@@ -787,7 +788,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       const ToolboxClass = registry.getClassFromOptions(
         registry.Type.TOOLBOX,
         this.options,
-        true
+        true,
       );
       this.toolbox_ = new ToolboxClass!(this);
     }
@@ -797,7 +798,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     this.recordDragTargets();
     const CursorClass = registry.getClassFromOptions(
       registry.Type.CURSOR,
-      this.options
+      this.options,
     );
 
     CursorClass && this.markerManager.setCursor(new CursorClass());
@@ -901,7 +902,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   static newTrashcan(_workspace: WorkspaceSvg): Trashcan {
     throw new Error(
       'The implementation of newTrashcan should be ' +
-        'monkey-patched in by blockly.ts'
+        'monkey-patched in by blockly.ts',
     );
   }
 
@@ -940,14 +941,14 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       const HorizontalFlyout = registry.getClassFromOptions(
         registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
         this.options,
-        true
+        true,
       );
       this.flyout = new HorizontalFlyout!(workspaceOptions);
     } else {
       const VerticalFlyout = registry.getClassFromOptions(
         registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
         this.options,
-        true
+        true,
       );
       this.flyout = new VerticalFlyout!(workspaceOptions);
     }
@@ -1030,7 +1031,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     const positionables = this.componentManager.getComponents(
       ComponentManager.Capability.POSITIONABLE,
-      true
+      true,
     );
     const metrics = this.getMetricsManager().getUiMetrics();
     const savedPositions = [];
@@ -1154,7 +1155,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       left,
       scale,
       this.id,
-      this.oldScale
+      this.oldScale,
     );
     this.oldScale = scale;
     this.oldTop = top;
@@ -1223,23 +1224,14 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       // Currently does not support toolboxes in mutators.
       this.toolbox_.setVisible(isVisible);
     }
-    if (isVisible) {
-      const blocks = this.getAllBlocks(false);
-      // Tell each block on the workspace to mark its fields as dirty.
-      for (let i = blocks.length - 1; i >= 0; i--) {
-        blocks[i].markDirty();
-      }
-
-      this.render();
-      if (this.toolbox_) {
-        this.toolbox_.position();
-      }
-    } else {
+    if (!isVisible) {
       this.hideChaff(true);
     }
   }
 
-  /** Render all blocks in workspace. */
+  /**
+   * Render all blocks in workspace.
+   */
   render() {
     // Generate list of all blocks.
     const blocks = this.getAllBlocks(false);
@@ -1251,11 +1243,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (this.currentGesture_) {
       const imList = this.currentGesture_.getInsertionMarkers();
       for (let i = 0; i < imList.length; i++) {
-        imList[i].render(false);
+        imList[i].queueRender();
       }
     }
 
-    this.markerManager.updateMarkers();
+    renderManagement
+      .finishQueuedRenders()
+      .then(() => void this.markerManager.updateMarkers());
   }
 
   /**
@@ -1299,7 +1293,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns The pasted thing, or null if the paste was not successful.
    */
   paste(
-    state: AnyDuringMigration | Element | DocumentFragment
+    state: AnyDuringMigration | Element | DocumentFragment,
   ): ICopyable | null {
     if (!this.rendered || (!state['type'] && !state['tagName'])) {
       return null;
@@ -1341,7 +1335,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   private pasteBlock_(
     xmlBlock: Element | null,
-    jsonBlock: blocks.State | null
+    jsonBlock: blocks.State | null,
   ): BlockSvg {
     eventUtils.disable();
     let block: BlockSvg;
@@ -1349,7 +1343,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       let blockX = 0;
       let blockY = 0;
       if (xmlBlock) {
-        block = Xml.domToBlock(xmlBlock, this) as BlockSvg;
+        block = Xml.domToBlockInternal(xmlBlock, this) as BlockSvg;
         blockX = parseInt(xmlBlock.getAttribute('x') ?? '0');
         if (this.RTL) {
           blockX = -blockX;
@@ -1388,7 +1382,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
             for (let i = 0, connection; (connection = connections[i]); i++) {
               const neighbour = connection.closest(
                 config.snapRadius,
-                new Coordinate(blockX, blockY)
+                new Coordinate(blockX, blockY),
               );
               if (neighbour.connection) {
                 collide = true;
@@ -1502,7 +1496,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   override createVariable(
     name: string,
     opt_type?: string | null,
-    opt_id?: string | null
+    opt_id?: string | null,
   ): VariableModel {
     const newVar = super.createVariable(name, opt_type, opt_id);
     this.refreshToolboxSelection();
@@ -1513,7 +1507,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   recordDragTargets() {
     const dragTargets = this.componentManager.getComponents(
       ComponentManager.Capability.DRAG_TARGET,
-      true
+      true,
     );
 
     this.dragTargetAreas = [];
@@ -1541,7 +1535,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   override newBlock(prototypeName: string, opt_id?: string): BlockSvg {
     throw new Error(
       'The implementation of newBlock should be ' +
-        'monkey-patched in by blockly.ts'
+        'monkey-patched in by blockly.ts',
     );
   }
   /* eslint-enable */
@@ -1585,7 +1579,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const point = browserEvents.mouseToSvg(
       e,
       this.getParentSvg(),
-      this.getInverseScreenCTM()
+      this.getInverseScreenCTM(),
     );
     // Fix scale of mouse event.
     point.x /= this.scale;
@@ -1603,7 +1597,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const point = browserEvents.mouseToSvg(
       e,
       this.getParentSvg(),
-      this.getInverseScreenCTM()
+      this.getInverseScreenCTM(),
     );
     // Fix scale of mouse event.
     point.x /= this.scale;
@@ -1716,7 +1710,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       const position = browserEvents.mouseToSvg(
         e,
         this.getParentSvg(),
-        this.getInverseScreenCTM()
+        this.getInverseScreenCTM(),
       );
       this.zoom(position.x, position.y, delta);
     } else {
@@ -1813,7 +1807,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
       ContextMenuRegistry.ScopeType.WORKSPACE,
-      {workspace: this}
+      {workspace: this},
     );
 
     // Allow the developer to add or modify menuOptions.
@@ -1955,7 +1949,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (!this.isMovable()) {
       console.warn(
         'Tried to move a non-movable workspace. This could result' +
-          ' in blocks becoming inaccessible.'
+          ' in blocks becoming inaccessible.',
       );
       return;
     }
@@ -2025,7 +2019,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (!this.isMovable()) {
       console.warn(
         'Tried to move a non-movable workspace. This could result' +
-          ' in blocks becoming inaccessible.'
+          ' in blocks becoming inaccessible.',
       );
       return;
     }
@@ -2052,7 +2046,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (!this.isMovable()) {
       console.warn(
         'Tried to move a non-movable workspace. This could result' +
-          ' in blocks becoming inaccessible.'
+          ' in blocks becoming inaccessible.',
       );
       return;
     }
@@ -2187,12 +2181,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     y = Math.min(y, -metrics.scrollTop);
     const maxXDisplacement = Math.max(
       0,
-      metrics.scrollWidth - metrics.viewWidth
+      metrics.scrollWidth - metrics.viewWidth,
     );
     const maxXScroll = metrics.scrollLeft + maxXDisplacement;
     const maxYDisplacement = Math.max(
       0,
-      metrics.scrollHeight - metrics.viewHeight
+      metrics.scrollHeight - metrics.viewHeight,
     );
     const maxYScroll = metrics.scrollTop + maxYDisplacement;
     x = Math.max(x, -maxXScroll);
@@ -2210,7 +2204,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.scrollbar.set(
         -(x + metrics.scrollLeft),
         -(y + metrics.scrollTop),
-        false
+        false,
       );
     }
     // We have to shift the translation so that when the canvas is at 0, 0 the
@@ -2400,7 +2394,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   registerToolboxCategoryCallback(
     key: string,
-    func: (p1: WorkspaceSvg) => toolbox.FlyoutDefinition
+    func: (p1: WorkspaceSvg) => toolbox.FlyoutDefinition,
   ) {
     if (typeof func !== 'function') {
       throw TypeError('Toolbox category callbacks must be functions.');
@@ -2417,7 +2411,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     null if no function is registered.
    */
   getToolboxCategoryCallback(
-    key: string
+    key: string,
   ): ((p1: WorkspaceSvg) => toolbox.FlyoutDefinition) | null {
     return this.toolboxCategoryCallbacks.get(key) || null;
   }
@@ -2528,10 +2522,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   hideComponents(onlyClosePopups = false) {
     const autoHideables = this.getComponentManager().getComponents(
       ComponentManager.Capability.AUTOHIDEABLE,
-      true
+      true,
     );
     autoHideables.forEach((autoHideable) =>
-      autoHideable.autoHide(onlyClosePopups)
+      autoHideable.autoHide(onlyClosePopups),
     );
   }
 
@@ -2543,7 +2537,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   private static setTopLevelWorkspaceMetrics_(
     this: WorkspaceSvg,
-    xyRatio: {x?: number; y?: number}
+    xyRatio: {x?: number; y?: number},
   ) {
     const metrics = this.getMetrics();
 

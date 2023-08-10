@@ -36,9 +36,8 @@ let upstream = null;
 function getUpstream() {
   if (upstream) return upstream;
   for (const line of String(execSync('git remote -v')).split('\n')) {
-    const [remote, url] = line.split('\t');
-    if (url.includes('github.com/google/blockly')) {
-      upstream = remote;
+    if (line.includes('google/blockly')) {
+      upstream = line.split('\t')[0];
       return upstream;
     }
   }

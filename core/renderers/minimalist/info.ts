@@ -39,7 +39,7 @@ export class RenderInfo extends BaseRenderInfo {
       'Blockly.minimalist.RenderInfo',
       'v10',
       'v11',
-      'Blockly.blockRendering.RenderInfo'
+      'Blockly.blockRendering.RenderInfo',
     );
   }
 

@@ -52,7 +52,7 @@ export class CollapsibleToolboxCategory
   constructor(
     categoryDef: toolbox.CategoryInfo,
     toolbox: IToolbox,
-    opt_parent?: ICollapsibleToolboxItem
+    opt_parent?: ICollapsibleToolboxItem,
   ) {
     super(categoryDef, toolbox, opt_parent);
   }
@@ -110,12 +110,12 @@ export class CollapsibleToolboxCategory
     }
     const ToolboxItemClass = registry.getClass(
       registry.Type.TOOLBOX_ITEM,
-      registryName
+      registryName,
     );
     const toolboxItem = new ToolboxItemClass!(
       itemDef,
       this.parentToolbox_,
-      this
+      this,
     );
     this.toolboxItems_.push(toolboxItem);
   }
@@ -125,7 +125,7 @@ export class CollapsibleToolboxCategory
 
     this.setExpanded(
       this.toolboxItemDef_['expanded'] === 'true' ||
-        this.toolboxItemDef_['expanded'] === true
+        this.toolboxItemDef_['expanded'] === true,
     );
   }
 
@@ -163,7 +163,7 @@ export class CollapsibleToolboxCategory
    * @returns The div holding all the subcategories.
    */
   protected createSubCategoriesDom_(
-    subcategories: IToolboxItem[]
+    subcategories: IToolboxItem[],
   ): HTMLDivElement {
     const contentsContainer = document.createElement('div');
     contentsContainer.style.display = 'none';
@@ -185,7 +185,7 @@ export class CollapsibleToolboxCategory
   }
 
   /**
-   * Opens or closes the current category.
+   * Opens or closes the current category and the associated flyout.
    *
    * @param isExpanded True to expand the category, false to close.
    */
@@ -197,13 +197,14 @@ export class CollapsibleToolboxCategory
       this.subcategoriesDiv_!.style.display = 'block';
       this.openIcon_(this.iconDom_);
     } else {
+      this.parentToolbox_.getFlyout()?.setVisible(false);
       this.subcategoriesDiv_!.style.display = 'none';
       this.closeIcon_(this.iconDom_);
     }
     aria.setState(
       this.htmlDiv_ as HTMLDivElement,
       aria.State.EXPANDED,
-      isExpanded
+      isExpanded,
     );
 
     this.parentToolbox_.handleToolboxItemResize();
@@ -284,5 +285,5 @@ export type CssConfig = CollapsibleToolboxCategory.CssConfig;
 registry.register(
   registry.Type.TOOLBOX_ITEM,
   CollapsibleToolboxCategory.registrationName,
-  CollapsibleToolboxCategory
+  CollapsibleToolboxCategory,
 );

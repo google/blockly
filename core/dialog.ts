@@ -9,7 +9,7 @@ goog.declareModuleId('Blockly.dialog');
 
 let alertImplementation = function (
   message: string,
-  opt_callback?: () => void
+  opt_callback?: () => void,
 ) {
   window.alert(message);
   if (opt_callback) {
@@ -19,7 +19,7 @@ let alertImplementation = function (
 
 let confirmImplementation = function (
   message: string,
-  callback: (result: boolean) => void
+  callback: (result: boolean) => void,
 ) {
   callback(window.confirm(message));
 };
@@ -27,7 +27,7 @@ let confirmImplementation = function (
 let promptImplementation = function (
   message: string,
   defaultValue: string,
-  callback: (result: string | null) => void
+  callback: (result: string | null) => void,
 ) {
   callback(window.prompt(message, defaultValue));
 };
@@ -78,7 +78,7 @@ function confirmInternal(message: string, callback: (p1: boolean) => void) {
  * @see Blockly.dialog.confirm
  */
 export function setConfirm(
-  confirmFunction: (p1: string, p2: (p1: boolean) => void) => void
+  confirmFunction: (p1: string, p2: (p1: boolean) => void) => void,
 ) {
   confirmImplementation = confirmFunction;
 }
@@ -96,7 +96,7 @@ export function setConfirm(
 export function prompt(
   message: string,
   defaultValue: string,
-  callback: (p1: string | null) => void
+  callback: (p1: string | null) => void,
 ) {
   promptImplementation(message, defaultValue, callback);
 }
@@ -111,8 +111,8 @@ export function setPrompt(
   promptFunction: (
     p1: string,
     p2: string,
-    p3: (p1: string | null) => void
-  ) => void
+    p3: (p1: string | null) => void,
+  ) => void,
 ) {
   promptImplementation = promptFunction;
 }

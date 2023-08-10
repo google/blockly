@@ -34,7 +34,7 @@ function svgToPng_(data, width, height, callback) {
       0,
       0,
       canvas.width,
-      canvas.height
+      canvas.height,
     );
     try {
       const dataUri = canvas.toDataURL('image/png');
@@ -80,7 +80,7 @@ function workspaceToSvg_(workspace, callback, customCss) {
     'blocklySvg ' +
       (workspace.options.renderer || 'geras') +
       '-renderer ' +
-      (workspace.getTheme ? workspace.getTheme().name + '-theme' : '')
+      (workspace.getTheme ? workspace.getTheme().name + '-theme' : ''),
   );
   svg.setAttribute('width', width);
   svg.setAttribute('height', height);
@@ -90,7 +90,7 @@ function workspaceToSvg_(workspace, callback, customCss) {
     .call(document.head.querySelectorAll('style'))
     .filter(
       (el) =>
-        /\.blocklySvg/.test(el.innerText) || el.id.indexOf('blockly-') === 0
+        /\.blocklySvg/.test(el.innerText) || el.id.indexOf('blockly-') === 0,
     )
     .map((el) => el.innerText)
     .join('\n');

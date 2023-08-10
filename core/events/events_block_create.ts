@@ -67,19 +67,19 @@ export class BlockCreate extends BlockBase {
     if (!this.xml) {
       throw new Error(
         'The block XML is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (!this.ids) {
       throw new Error(
         'The block IDs are undefined. Either pass a block to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (!this.json) {
       throw new Error(
         'The block JSON is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     json['xml'] = Xml.domToText(this.xml);
@@ -103,12 +103,12 @@ export class BlockCreate extends BlockBase {
   static fromJson(
     json: BlockCreateJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): BlockCreate {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new BlockCreate()
+      event ?? new BlockCreate(),
     ) as BlockCreate;
     newEvent.xml = utilsXml.textToDom(json['xml']);
     newEvent.ids = json['ids'];
@@ -129,13 +129,13 @@ export class BlockCreate extends BlockBase {
     if (!this.json) {
       throw new Error(
         'The block JSON is undefined. Either pass a block to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (!this.ids) {
       throw new Error(
         'The block IDs are undefined. Either pass a block to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     if (forward) {

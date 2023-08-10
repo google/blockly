@@ -22,7 +22,10 @@ export class Size {
    * @param width Width.
    * @param height Height.
    */
-  constructor(public width: number, public height: number) {}
+  constructor(
+    public width: number,
+    public height: number,
+  ) {}
 
   /**
    * Compares sizes for equality.

@@ -65,7 +65,7 @@ export class WarningIcon extends Icon implements IHasBubble {
         'class': 'blocklyIconShape',
         'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z',
       },
-      this.svgRoot
+      this.svgRoot,
     );
     // Can't use a real '!' text character since different browsers and
     // operating systems render it differently. Body of exclamation point.
@@ -75,7 +75,7 @@ export class WarningIcon extends Icon implements IHasBubble {
         'class': 'blocklyIconSymbol',
         'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z',
       },
-      this.svgRoot
+      this.svgRoot,
     );
     // Dot of exclamation point.
     dom.createSvgElement(
@@ -87,7 +87,7 @@ export class WarningIcon extends Icon implements IHasBubble {
         'height': '2',
         'width': '2',
       },
-      this.svgRoot
+      this.svgRoot,
     );
   }
 
@@ -172,7 +172,7 @@ export class WarningIcon extends Icon implements IHasBubble {
         this.getText(),
         this.sourceBlock.workspace,
         this.getAnchorLocation(),
-        this.getBubbleOwnerRect()
+        this.getBubbleOwnerRect(),
       );
       this.applyColour();
     } else {
@@ -184,8 +184,8 @@ export class WarningIcon extends Icon implements IHasBubble {
       new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
         this.sourceBlock,
         visible,
-        'warning'
-      )
+        'warning',
+      ),
     );
   }
 
@@ -197,7 +197,7 @@ export class WarningIcon extends Icon implements IHasBubble {
     const midIcon = SIZE / 2;
     return Coordinate.sum(
       this.workspaceLocation,
-      new Coordinate(midIcon, midIcon)
+      new Coordinate(midIcon, midIcon),
     );
   }
 

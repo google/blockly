@@ -42,5 +42,5 @@ export const blocks: {[key: string]: BlockDefinition} = Object.assign(
   math.blocks,
   procedures.blocks,
   variables.blocks,
-  variablesDynamic.blocks
+  variablesDynamic.blocks,
 );

@@ -214,7 +214,7 @@ export abstract class Field<T = any>
   constructor(
     value: T | typeof Field.SKIP_SETUP,
     validator?: FieldValidator<T> | null,
-    config?: FieldConfig
+    config?: FieldConfig,
   ) {
     /**
      * A generic value possessed by the field.
@@ -321,10 +321,8 @@ export abstract class Field<T = any>
 
   /**
    * Create the block UI for this field.
-   *
-   * @internal
    */
-  initView() {
+  protected initView() {
     this.createBorderRect_();
     this.createTextElement_();
   }
@@ -332,8 +330,6 @@ export abstract class Field<T = any>
   /**
    * Initializes the model of the field after it has been installed on a block.
    * No-op by default.
-   *
-   * @internal
    */
   initModel() {}
 
@@ -354,7 +350,7 @@ export abstract class Field<T = any>
         'width': this.size_.width,
         'class': 'blocklyFieldRect',
       },
-      this.fieldGroup_
+      this.fieldGroup_,
     );
   }
 
@@ -369,7 +365,7 @@ export abstract class Field<T = any>
       {
         'class': 'blocklyText',
       },
-      this.fieldGroup_
+      this.fieldGroup_,
     );
     if (this.getConstants()!.FIELD_TEXT_BASELINE_CENTER) {
       this.textElement_.setAttribute('dominant-baseline', 'central');
@@ -390,7 +386,7 @@ export abstract class Field<T = any>
       clickTarget,
       'pointerdown',
       this,
-      this.onMouseDown_
+      this.onMouseDown_,
     );
   }
 
@@ -471,7 +467,7 @@ export abstract class Field<T = any>
       const text = utilsXml.domToText(this.toXml(elem));
       return text.replace(
         ' xmlns="https://developers.google.com/blockly/xml"',
-        ''
+        '',
       );
     }
     // Either they called this on purpose from their saveState, or they have
@@ -490,7 +486,7 @@ export abstract class Field<T = any>
    */
   loadLegacyState(
     callingClass: FieldProto,
-    state: AnyDuringMigration
+    state: AnyDuringMigration,
   ): boolean {
     if (
       callingClass.prototype.loadState === this.loadState &&
@@ -605,7 +601,7 @@ export abstract class Field<T = any>
         console.warn(
           'Detected an editable field that was not serializable.' +
             ' Please define SERIALIZABLE property as true on all editable custom' +
-            ' fields. Proceeding with serialization.'
+            ' fields. Proceeding with serialization.',
         );
         isSerializable = true;
       }
@@ -813,7 +809,7 @@ export abstract class Field<T = any>
         this.textElement_,
         constants!.FIELD_TEXT_FONTSIZE,
         constants!.FIELD_TEXT_FONTWEIGHT,
-        constants!.FIELD_TEXT_FONTFAMILY
+        constants!.FIELD_TEXT_FONTFAMILY,
       );
       totalWidth += contentWidth;
     }
@@ -847,8 +843,8 @@ export abstract class Field<T = any>
       String(
         this.getSourceBlock()?.RTL
           ? this.size_.width - contentWidth - xOffset
-          : xOffset
-      )
+          : xOffset,
+      ),
     );
     this.textElement_.setAttribute(
       'y',
@@ -857,8 +853,8 @@ export abstract class Field<T = any>
           ? halfHeight
           : halfHeight -
               constants!.FIELD_TEXT_HEIGHT / 2 +
-              constants!.FIELD_TEXT_BASELINE
-      )
+              constants!.FIELD_TEXT_BASELINE,
+      ),
     );
   }
 
@@ -871,11 +867,11 @@ export abstract class Field<T = any>
     this.borderRect_.setAttribute('height', String(this.size_.height));
     this.borderRect_.setAttribute(
       'rx',
-      String(this.getConstants()!.FIELD_BORDER_RECT_RADIUS)
+      String(this.getConstants()!.FIELD_BORDER_RECT_RADIUS),
     );
     this.borderRect_.setAttribute(
       'ry',
-      String(this.getConstants()!.FIELD_BORDER_RECT_RADIUS)
+      String(this.getConstants()!.FIELD_BORDER_RECT_RADIUS),
     );
   }
 
@@ -902,7 +898,7 @@ export abstract class Field<T = any>
       if (this.size_.width !== 0) {
         console.warn(
           'Deprecated use of setting size_.width to 0 to rerender a' +
-            ' field. Set field.isDirty_ to true instead.'
+            ' field. Set field.isDirty_ to true instead.',
         );
       }
     }
@@ -1090,8 +1086,8 @@ export abstract class Field<T = any>
           'field',
           this.name || null,
           oldValue,
-          localValue
-        )
+          localValue,
+        ),
       );
     }
     if (this.isDirty_) {
@@ -1109,7 +1105,7 @@ export abstract class Field<T = any>
    */
   private processValidation_(
     newValue: AnyDuringMigration,
-    validatedValue: T | null | undefined
+    validatedValue: T | null | undefined,
   ): T | Error {
     if (validatedValue === null) {
       this.doValueInvalid_(newValue);
@@ -1153,7 +1149,7 @@ export abstract class Field<T = any>
   protected doClassValidation_(newValue: T): T | null | undefined;
   protected doClassValidation_(newValue?: AnyDuringMigration): T | null;
   protected doClassValidation_(
-    newValue?: T | AnyDuringMigration
+    newValue?: T | AnyDuringMigration,
   ): T | null | undefined {
     if (newValue === null || newValue === undefined) {
       return null;
@@ -1416,7 +1412,7 @@ export class UnattachedFieldError extends Error {
   constructor() {
     super(
       'The field has not yet been attached to its input. ' +
-        'Call appendField to attach it.'
+        'Call appendField to attach it.',
     );
   }
 }

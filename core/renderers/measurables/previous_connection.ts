@@ -25,7 +25,7 @@ export class PreviousConnection extends Connection {
    */
   constructor(
     constants: ConstantProvider,
-    connectionModel: RenderedConnection
+    connectionModel: RenderedConnection,
   ) {
     super(constants, connectionModel);
     this.type |= Types.PREVIOUS_CONNECTION;

@@ -47,7 +47,7 @@ export class ThemeChange extends UiBase {
     if (!this.themeName) {
       throw new Error(
         'The theme name is undefined. Either pass a theme name to ' +
-          'the constructor, or call fromJson'
+          'the constructor, or call fromJson',
       );
     }
     json['themeName'] = this.themeName;
@@ -66,12 +66,12 @@ export class ThemeChange extends UiBase {
   static fromJson(
     json: ThemeChangeJson,
     workspace: Workspace,
-    event?: any
+    event?: any,
   ): ThemeChange {
     const newEvent = super.fromJson(
       json,
       workspace,
-      event ?? new ThemeChange()
+      event ?? new ThemeChange(),
     ) as ThemeChange;
     newEvent.themeName = json['themeName'];
     return newEvent;

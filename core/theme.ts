@@ -58,7 +58,7 @@ export class Theme implements ITheme {
     public name: string,
     opt_blockStyles?: {[key: string]: Partial<BlockStyle>},
     opt_categoryStyles?: {[key: string]: CategoryStyle},
-    opt_componentStyles?: ComponentStyle
+    opt_componentStyles?: ComponentStyle,
   ) {
     /** The block styles map. */
     this.blockStyles = opt_blockStyles || Object.create(null);

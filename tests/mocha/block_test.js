@@ -245,7 +245,7 @@ suite('Blocks', function () {
 
         chai.assert.isTrue(
           disposing,
-          'Expected disposing to be set to true before destroy is called.'
+          'Expected disposing to be set to true before destroy is called.',
         );
       });
 
@@ -259,7 +259,7 @@ suite('Blocks', function () {
 
         chai.assert.isFalse(
           disposed,
-          'Expected disposed to be false when destroy is called'
+          'Expected disposed to be false when destroy is called',
         );
       });
 
@@ -275,7 +275,7 @@ suite('Blocks', function () {
 
         chai.assert.isTrue(
           spy.calledWith(mockEvent),
-          'Expected to be able to fire events from destroy'
+          'Expected to be able to fire events from destroy',
         );
       });
 
@@ -295,7 +295,7 @@ suite('Blocks', function () {
 
         chai.assert.isTrue(
           spy.calledWith(mockEvent),
-          'Expected to be able to fire events from destroy'
+          'Expected to be able to fire events from destroy',
         );
       });
     });
@@ -558,7 +558,7 @@ suite('Blocks', function () {
       });
       test('Stack', function () {
         this.deserializationHelper(
-          '<xml>' + '  <block type="stack_block"/>' + '</xml>'
+          '<xml>' + '  <block type="stack_block"/>' + '</xml>',
         );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
@@ -575,14 +575,14 @@ suite('Blocks', function () {
             '      </block>' +
             '    </next>' +
             '  </block>' +
-            '</xml>'
+            '</xml>',
         );
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 3);
       });
       test('Collapsed Stack', function () {
         this.deserializationHelper(
-          '<xml>' + '  <block type="stack_block" collapsed="true"/>' + '</xml>'
+          '<xml>' + '  <block type="stack_block" collapsed="true"/>' + '</xml>',
         );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
@@ -599,14 +599,14 @@ suite('Blocks', function () {
             '      </block>' +
             '    </next>' +
             '  </block>' +
-            '</xml>'
+            '</xml>',
         );
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 3);
       });
       test('Row', function () {
         this.deserializationHelper(
-          '<xml>' + '  <block type="row_block"/>' + '</xml>'
+          '<xml>' + '  <block type="row_block"/>' + '</xml>',
         );
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 1);
@@ -623,14 +623,14 @@ suite('Blocks', function () {
             '      </block>' +
             '    </value>' +
             '  </block>' +
-            '</xml>'
+            '</xml>',
         );
         chai.assert.equal(this.getOutputs().length, 3);
         chai.assert.equal(this.getInputs().length, 3);
       });
       test('Collapsed Row', function () {
         this.deserializationHelper(
-          '<xml>' + '  <block type="row_block" collapsed="true"/>' + '</xml>'
+          '<xml>' + '  <block type="row_block" collapsed="true"/>' + '</xml>',
         );
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 0);
@@ -647,7 +647,7 @@ suite('Blocks', function () {
             '      </block>' +
             '    </value>' +
             '  </block>' +
-            '</xml>'
+            '</xml>',
         );
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 0);
@@ -665,9 +665,9 @@ suite('Blocks', function () {
               '      </block>' +
               '    </value>' +
               '  </block>' +
-              '</xml>'
+              '</xml>',
           ),
-          this.workspace
+          this.workspace,
         );
         this.assertConnectionsEmpty();
         this.clock.runAll();
@@ -676,7 +676,7 @@ suite('Blocks', function () {
       });
       test('Statement', function () {
         this.deserializationHelper(
-          '<xml>' + '  <block type="statement_block"/>' + '</xml>'
+          '<xml>' + '  <block type="statement_block"/>' + '</xml>',
         );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 2);
@@ -693,7 +693,7 @@ suite('Blocks', function () {
             '      </block>' +
             '    </statement>' +
             '  </block>' +
-            '</xml>'
+            '</xml>',
         );
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 6);
@@ -702,7 +702,7 @@ suite('Blocks', function () {
         this.deserializationHelper(
           '<xml>' +
             '  <block type="statement_block" collapsed="true"/>' +
-            '</xml>'
+            '</xml>',
         );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
@@ -719,7 +719,7 @@ suite('Blocks', function () {
             '      </block>' +
             '    </statement>' +
             '  </block>' +
-            '</xml>'
+            '</xml>',
         );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
@@ -736,7 +736,7 @@ suite('Blocks', function () {
             '      </block>' +
             '    </statement>' +
             '  </block>' +
-            '</xml>'
+            '</xml>',
         );
         chai.assert.equal(this.getPrevious().length, 2);
         chai.assert.equal(this.getNext().length, 3);
@@ -775,7 +775,7 @@ suite('Blocks', function () {
       test('Stack', function () {
         const block = Blockly.Xml.domToBlock(
           Blockly.utils.xml.textToDom('<block type="stack_block"/>'),
-          this.workspace
+          this.workspace,
         );
         this.clock.runAll();
         chai.assert.equal(this.getPrevious().length, 1);
@@ -800,9 +800,9 @@ suite('Blocks', function () {
               '      </next>' +
               '    </block>' +
               '  </next>' +
-              '</block>'
+              '</block>',
           ),
-          this.workspace
+          this.workspace,
         );
         this.assertConnectionsEmpty();
         this.clock.runAll();
@@ -820,7 +820,7 @@ suite('Blocks', function () {
       test('Row', function () {
         const block = Blockly.Xml.domToBlock(
           Blockly.utils.xml.textToDom('<block type="row_block"/>'),
-          this.workspace
+          this.workspace,
         );
         this.clock.runAll();
         chai.assert.equal(this.getOutputs().length, 1);
@@ -845,9 +845,9 @@ suite('Blocks', function () {
               '      </value>' +
               '    </block>' +
               '  </value>' +
-              '</block>'
+              '</block>',
           ),
-          this.workspace
+          this.workspace,
         );
         this.clock.runAll();
         chai.assert.equal(this.getOutputs().length, 3);
@@ -872,9 +872,9 @@ suite('Blocks', function () {
               '      </value>' +
               '    </block>' +
               '  </value>' +
-              '</block>'
+              '</block>',
           ),
-          this.workspace
+          this.workspace,
         );
         this.clock.runAll();
         chai.assert.equal(this.getOutputs().length, 3);
@@ -902,9 +902,9 @@ suite('Blocks', function () {
               '      </value>' +
               '    </block>' +
               '  </value>' +
-              '</block>'
+              '</block>',
           ),
-          this.workspace
+          this.workspace,
         );
         this.clock.runAll();
         chai.assert.equal(this.getOutputs().length, 3);
@@ -930,7 +930,7 @@ suite('Blocks', function () {
       test('Statement', function () {
         const block = Blockly.Xml.domToBlock(
           Blockly.utils.xml.textToDom('<block type="statement_block"/>'),
-          this.workspace
+          this.workspace,
         );
         this.clock.runAll();
         chai.assert.equal(this.getPrevious().length, 1);
@@ -955,9 +955,9 @@ suite('Blocks', function () {
               '      </statement>' +
               '    </block>' +
               '  </statement>' +
-              '</block>'
+              '</block>',
           ),
-          this.workspace
+          this.workspace,
         );
         this.assertConnectionsEmpty();
         this.clock.runAll();
@@ -983,9 +983,9 @@ suite('Blocks', function () {
               '      </statement>' +
               '    </block>' +
               '  </statement>' +
-              '</block>'
+              '</block>',
           ),
-          this.workspace
+          this.workspace,
         );
         this.assertConnectionsEmpty();
         this.clock.runAll();
@@ -1012,9 +1012,9 @@ suite('Blocks', function () {
               '      </statement>' +
               '    </block>' +
               '  </statement>' +
-              '</block>'
+              '</block>',
           ),
-          this.workspace
+          this.workspace,
         );
         this.assertConnectionsEmpty();
         this.clock.runAll();
@@ -1053,9 +1053,9 @@ suite('Blocks', function () {
               '      </value>' +
               '    </block>' +
               '  </value>' +
-              '</block>'
+              '</block>',
           ),
-          this.workspace
+          this.workspace,
         );
         this.textJoinBlock = this.printBlock.getInputTargetBlock('TEXT');
         this.textBlock = this.textJoinBlock.getInputTargetBlock('ADD0');
@@ -1078,29 +1078,32 @@ suite('Blocks', function () {
 
       test('Setting to connected parent', function () {
         chai.assert.doesNotThrow(
-          this.textJoinBlock.setParent.bind(this.textJoinBlock, this.printBlock)
+          this.textJoinBlock.setParent.bind(
+            this.textJoinBlock,
+            this.printBlock,
+          ),
         );
         assertOriginalSetup.call(this);
       });
       test('Setting to new parent after connecting to it', function () {
         this.textJoinBlock.outputConnection.disconnect();
         this.textBlock.outputConnection.connect(
-          this.printBlock.getInput('TEXT').connection
+          this.printBlock.getInput('TEXT').connection,
         );
         chai.assert.doesNotThrow(
-          this.textBlock.setParent.bind(this.textBlock, this.printBlock)
+          this.textBlock.setParent.bind(this.textBlock, this.printBlock),
         );
         assertBlockIsOnlyChild(this.printBlock, this.textBlock, 'TEXT');
       });
       test('Setting to new parent while connected to other block', function () {
         // Setting to grandparent with no available input connection.
         chai.assert.throws(
-          this.textBlock.setParent.bind(this.textBlock, this.printBlock)
+          this.textBlock.setParent.bind(this.textBlock, this.printBlock),
         );
         this.textJoinBlock.outputConnection.disconnect();
         // Setting to block with available input connection.
         chai.assert.throws(
-          this.textBlock.setParent.bind(this.textBlock, this.printBlock)
+          this.textBlock.setParent.bind(this.textBlock, this.printBlock),
         );
         assertNonParentAndOrphan(this.printBlock, this.textJoinBlock, 'TEXT');
         assertBlockIsOnlyChild(this.textJoinBlock, this.textBlock, 'ADD0');
@@ -1108,7 +1111,10 @@ suite('Blocks', function () {
       test('Setting to same parent after disconnecting from it', function () {
         this.textJoinBlock.outputConnection.disconnect();
         chai.assert.throws(
-          this.textJoinBlock.setParent.bind(this.textJoinBlock, this.printBlock)
+          this.textJoinBlock.setParent.bind(
+            this.textJoinBlock,
+            this.printBlock,
+          ),
         );
         assertNonParentAndOrphan(this.printBlock, this.textJoinBlock, 'TEXT');
       });
@@ -1116,12 +1122,12 @@ suite('Blocks', function () {
         this.textBlock.outputConnection.disconnect();
         // When new parent has no available input connection.
         chai.assert.throws(
-          this.textBlock.setParent.bind(this.textBlock, this.printBlock)
+          this.textBlock.setParent.bind(this.textBlock, this.printBlock),
         );
         this.textJoinBlock.outputConnection.disconnect();
         // When new parent has available input connection.
         chai.assert.throws(
-          this.textBlock.setParent.bind(this.textBlock, this.printBlock)
+          this.textBlock.setParent.bind(this.textBlock, this.printBlock),
         );
 
         assertNonParentAndOrphan(this.printBlock, this.textJoinBlock, 'TEXT');
@@ -1131,7 +1137,7 @@ suite('Blocks', function () {
       test('Setting parent to null after disconnecting', function () {
         this.textBlock.outputConnection.disconnect();
         chai.assert.doesNotThrow(
-          this.textBlock.setParent.bind(this.textBlock, null)
+          this.textBlock.setParent.bind(this.textBlock, null),
         );
         assertNonParentAndOrphan(this.textJoinBlock, this.textBlock, 'ADD0');
       });
@@ -1238,17 +1244,17 @@ suite('Blocks', function () {
         chai.assert.equal(
           event.element,
           'comment',
-          'Expected the element to be a comment'
+          'Expected the element to be a comment',
         );
         chai.assert.equal(
           event.oldValue,
           oldValue,
-          'Expected the old values to match'
+          'Expected the old values to match',
         );
         chai.assert.equal(
           event.newValue,
           newValue,
-          'Expected the new values to match'
+          'Expected the new values to match',
         );
       }
       function assertNoCommentEvent(eventSpy) {
@@ -1266,7 +1272,7 @@ suite('Blocks', function () {
         setup(function () {
           this.block = Blockly.Xml.domToBlock(
             Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
-            this.workspace
+            this.workspace,
           );
         });
         test('Text', function () {
@@ -1300,7 +1306,7 @@ suite('Blocks', function () {
           });
           this.block = Blockly.Xml.domToBlock(
             Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
-            this.workspace
+            this.workspace,
           );
         });
         teardown(function () {
@@ -1357,9 +1363,9 @@ suite('Blocks', function () {
       this.workspace = Blockly.inject('blocklyDiv');
       this.block = Blockly.Xml.domToBlock(
         Blockly.utils.xml.textToDom(
-          '<block type="text"><field name = "TEXT">test</field></block>'
+          '<block type="text"><field name = "TEXT">test</field></block>',
         ),
-        this.workspace
+        this.workspace,
       );
     });
 
@@ -1390,7 +1396,7 @@ suite('Blocks', function () {
       for (let i = 0; i < inputs.length; i++) {
         chai.assert.throws(
           this.block.getField.bind(this.block, inputs[i]),
-          TypeError
+          TypeError,
         );
       }
     });
@@ -1408,7 +1414,7 @@ suite('Blocks', function () {
       for (let i = 0; i < inputs.length; i++) {
         chai.assert.throws(
           this.block.getFieldValue.bind(this.block, inputs[i]),
-          TypeError
+          TypeError,
         );
       }
     });
@@ -1434,7 +1440,7 @@ suite('Blocks', function () {
       for (let i = 0; i < inputs.length; i++) {
         chai.assert.throws(
           this.block.setFieldValue.bind(this.block, 'test', inputs[i]),
-          TypeError
+          TypeError,
         );
       }
     });
@@ -1468,7 +1474,7 @@ suite('Blocks', function () {
         this.block = this.workspace.newBlock('stack_block');
         this.block.initSvg();
         this.block.render();
-        this.renderSpy = sinon.spy(this.block, 'render');
+        this.renderSpy = sinon.spy(this.block, 'queueRender');
       });
 
       teardown(function () {
@@ -1480,7 +1486,7 @@ suite('Blocks', function () {
         this.block.addIcon(new MockIconA());
         chai.assert.isTrue(
           this.block.hasIcon('A'),
-          'Expected the icon to be added'
+          'Expected the icon to be added',
         );
       });
 
@@ -1492,7 +1498,7 @@ suite('Blocks', function () {
           },
           Blockly.icons.DuplicateIconType,
           '',
-          'Expected adding an icon of the same type to throw'
+          'Expected adding an icon of the same type to throw',
         );
       });
 
@@ -1501,7 +1507,7 @@ suite('Blocks', function () {
         this.block.addIcon(new MockIconA());
         chai.assert.isTrue(
           this.renderSpy.calledOnce,
-          'Expected adding an icon to trigger a render'
+          'Expected adding an icon to trigger a render',
         );
       });
     });
@@ -1513,7 +1519,7 @@ suite('Blocks', function () {
         this.block = this.workspace.newBlock('stack_block');
         this.block.initSvg();
         this.block.render();
-        this.renderSpy = sinon.spy(this.block, 'render');
+        this.renderSpy = sinon.spy(this.block, 'queueRender');
       });
 
       teardown(function () {
@@ -1525,18 +1531,18 @@ suite('Blocks', function () {
         this.block.addIcon(new MockIconA());
         chai.assert.isTrue(
           this.block.removeIcon(new Blockly.icons.IconType('A')),
-          'Expected removeIcon to return true'
+          'Expected removeIcon to return true',
         );
         chai.assert.isFalse(
           this.block.hasIcon('A'),
-          'Expected the icon to be removed'
+          'Expected the icon to be removed',
         );
       });
 
       test('removing an icon that does not exist returns false', function () {
         chai.assert.isFalse(
           this.block.removeIcon(new Blockly.icons.IconType('B')),
-          'Expected removeIcon to return false'
+          'Expected removeIcon to return false',
         );
       });
 
@@ -1546,7 +1552,7 @@ suite('Blocks', function () {
         this.block.removeIcon(new Blockly.icons.IconType('A'));
         chai.assert.isTrue(
           this.renderSpy.calledOnce,
-          'Expected removing an icon to trigger a render'
+          'Expected removing an icon to trigger a render',
         );
       });
     });
@@ -1564,7 +1570,7 @@ suite('Blocks', function () {
         chai.assert.sameOrderedMembers(
           this.block.getIcons(),
           [iconA, iconB],
-          'Expected getIcon to return both icons in order of weight'
+          'Expected getIcon to return both icons in order of weight',
         );
       });
 
@@ -1572,7 +1578,7 @@ suite('Blocks', function () {
         chai.assert.isEmpty(
           this.block.getIcons(),
           'Expected getIcons to return an empty array ' +
-            'for a block with no icons'
+            'for a block with no icons',
         );
       });
 
@@ -1580,7 +1586,7 @@ suite('Blocks', function () {
         chai.assert.isEmpty(
           this.block.getIcons(),
           'Expected getIcons to return an empty array ' +
-            'for a block with no icons'
+            'for a block with no icons',
         );
       });
 
@@ -1592,7 +1598,7 @@ suite('Blocks', function () {
         chai.assert.equal(
           this.block.getIcon('B'),
           iconB,
-          'Expected getIcon to return the icon with the given type'
+          'Expected getIcon to return the icon with the given type',
         );
       });
 
@@ -1601,7 +1607,7 @@ suite('Blocks', function () {
         chai.assert.isUndefined(
           this.block.getIcon('B'),
           'Expected getIcon to return null if there is no ' +
-            'icon with a matching type'
+            'icon with a matching type',
         );
       });
     });
@@ -1627,7 +1633,7 @@ suite('Blocks', function () {
               },
             },
           },
-          this.workspace
+          this.workspace,
         );
         const childBlock = parentBlock.getInputTargetBlock('STATEMENT');
         const icon = new MockBubbleIcon();
@@ -1639,7 +1645,7 @@ suite('Blocks', function () {
         chai.assert.isFalse(
           icon.bubbleIsVisible(),
           "Expected collapsing the parent block to hide the child block's " +
-            "icon's bubble"
+            "icon's bubble",
         );
       });
 
@@ -1653,7 +1659,7 @@ suite('Blocks', function () {
               },
             },
           },
-          this.workspace
+          this.workspace,
         );
         const nextBlock = parentBlock.getNextBlock();
         const icon = new MockBubbleIcon();
@@ -1665,7 +1671,7 @@ suite('Blocks', function () {
         chai.assert.isTrue(
           icon.bubbleIsVisible(),
           'Expected collapsing the parent block to not hide the next ' +
-            "block's bubble"
+            "block's bubble",
         );
       });
     });
@@ -2120,7 +2126,7 @@ suite('Blocks', function () {
         // The child blocks should be enabled.
         chai.assert.isFalse(blockB.disabled);
         chai.assert.isFalse(
-          blockB.getSvgRoot().classList.contains('blocklyDisabled')
+          blockB.getSvgRoot().classList.contains('blocklyDisabled'),
         );
       });
       test('Disabled Children of Collapsed Blocks Should Stay Disabled', function () {
@@ -2153,11 +2159,11 @@ suite('Blocks', function () {
         const block = this.workspace.getTopBlocks(false)[0];
         chai.assert.isTrue(
           block.visuallyDisabled,
-          'block should have visuallyDisabled set because it is disabled'
+          'block should have visuallyDisabled set because it is disabled',
         );
         chai.assert.isFalse(
           block.isEnabled(),
-          'block should be marked disabled because enabled json property was set to false'
+          'block should be marked disabled because enabled json property was set to false',
         );
       });
     });
@@ -2168,7 +2174,7 @@ suite('Blocks', function () {
       setup(function () {
         this.block = Blockly.Xml.domToBlock(
           Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
-          this.workspace
+          this.workspace,
         );
       });
       test('Set colour', function () {
@@ -2190,7 +2196,7 @@ suite('Blocks', function () {
         this.workspace = Blockly.inject('blocklyDiv', {});
         this.block = Blockly.Xml.domToBlock(
           Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
-          this.workspace
+          this.workspace,
         );
         this.workspace.setTheme(
           new Blockly.Theme('test', {
@@ -2201,7 +2207,7 @@ suite('Blocks', function () {
               'hat': '',
             },
           }),
-          {}
+          {},
         );
       });
       teardown(function () {
@@ -2354,7 +2360,7 @@ suite('Blocks', function () {
       test(t.name, function () {
         const block = Blockly.Xml.domToBlock(
           Blockly.utils.xml.textToDom(t.xml),
-          this.workspace
+          this.workspace,
         );
         chai.assert.equal(block.toString(), t.toString);
       });
@@ -2383,15 +2389,15 @@ suite('Blocks', function () {
       chai.assert.throws(
         function () {
           this.workspace.newBlock('init_test_block');
-        }.bind(this)
+        }.bind(this),
       );
       chai.assert.isFalse(
         recordUndoDuringInit,
-        'recordUndo should be false during block init function'
+        'recordUndo should be false during block init function',
       );
       chai.assert.isTrue(
         eventUtils.getRecordUndo(),
-        'recordUndo should be reset to true after init'
+        'recordUndo should be reset to true after init',
       );
       chai.assert.isTrue(initCalled, 'expected init function to be called');
     });

@@ -11,22 +11,21 @@
 const chai = require('chai');
 const {testSetup, testFileLocations} = require('./test_setup');
 
-let browser;
 suite('Testing Connecting Blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
-    browser = await testSetup(testFileLocations.blockfactory);
+    this.browser = await testSetup(testFileLocations.BLOCK_FACTORY);
   });
 
   test('Testing Block Drag', async function () {
-    const startingBlock = await browser.$(
-      '#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)'
+    const startingBlock = await this.browser.$(
+      '#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g:nth-child(2)',
     );
-    const blocklyCanvas = await browser.$(
-      '#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas'
+    const blocklyCanvas = await this.browser.$(
+      '#blockly > div > svg.blocklySvg > g > g.blocklyBlockCanvas',
     );
     const firstPostion = await blocklyCanvas.getAttribute('transform');
     await startingBlock.dragAndDrop({x: 20, y: 20});
@@ -34,8 +33,12 @@ suite('Testing Connecting Blocks', function (done) {
     chai.assert.notEqual(firstPostion, secondPosition);
   });
 
-  // Teardown entire suite after test are done running
   suiteTeardown(async function () {
-    await browser.deleteSession();
+    await this.browser.execute(() => {
+      // If you leave blocks on the workspace, the block factory pops up an alert asking
+      // if you really want to lose your work when you try to load a new page.
+      // Clearing blocks resolves this and is easier than waiting for the alert.
+      Blockly.getMainWorkspace().clear();
+    });
   });
 });

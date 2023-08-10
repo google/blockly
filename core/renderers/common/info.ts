@@ -237,7 +237,7 @@ export class RenderInfo {
       this.topRow.hasPreviousConnection = true;
       this.topRow.connection = new PreviousConnection(
         this.constants_,
-        this.block_.previousConnection as RenderedConnection
+        this.block_.previousConnection as RenderedConnection,
       );
       this.topRow.elements.push(this.topRow.connection);
     }
@@ -292,7 +292,7 @@ export class RenderInfo {
     if (this.bottomRow.hasNextConnection) {
       this.bottomRow.connection = new NextConnection(
         this.constants_,
-        this.block_.nextConnection as RenderedConnection
+        this.block_.nextConnection as RenderedConnection,
       );
       this.bottomRow.elements.push(this.bottomRow.connection);
     }
@@ -320,7 +320,7 @@ export class RenderInfo {
       activeRow.hasInlineInput = true;
     } else if (input instanceof StatementInput) {
       activeRow.elements.push(
-        new StatementInputMeasurable(this.constants_, input)
+        new StatementInputMeasurable(this.constants_, input),
       );
       activeRow.hasStatement = true;
     } else if (input instanceof ValueInput) {
@@ -333,7 +333,7 @@ export class RenderInfo {
         activeRow.minHeight,
         input.getSourceBlock() && input.getSourceBlock()!.isShadow()
           ? this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT
-          : this.constants_.DUMMY_INPUT_MIN_HEIGHT
+          : this.constants_.DUMMY_INPUT_MIN_HEIGHT,
       );
       activeRow.hasDummyInput = true;
     }
@@ -380,8 +380,8 @@ export class RenderInfo {
         row.elements.push(
           new InRowSpacer(
             this.constants_,
-            this.getInRowSpacing_(null, oldElems[0])
-          )
+            this.getInRowSpacing_(null, oldElems[0]),
+          ),
         );
       }
       if (!oldElems.length) {
@@ -398,8 +398,8 @@ export class RenderInfo {
         row.elements.push(
           new InRowSpacer(
             this.constants_,
-            this.getInRowSpacing_(oldElems[oldElems.length - 1], null)
-          )
+            this.getInRowSpacing_(oldElems[oldElems.length - 1], null),
+          ),
         );
       }
     }
@@ -416,7 +416,7 @@ export class RenderInfo {
    */
   protected getInRowSpacing_(
     prev: Measurable | null,
-    next: Measurable | null
+    next: Measurable | null,
   ): number {
     if (!prev) {
       // Statement input padding.
@@ -468,12 +468,12 @@ export class RenderInfo {
         const innerWidth = row.width - (statementInput?.width ?? 0);
         widestStatementRowFields = Math.max(
           widestStatementRowFields,
-          innerWidth
+          innerWidth,
         );
       }
       widestRowWithConnectedBlocks = Math.max(
         widestRowWithConnectedBlocks,
-        row.widthWithConnectedBlocks
+        row.widthWithConnectedBlocks,
       );
     }
 
@@ -588,7 +588,7 @@ export class RenderInfo {
     row.width += desiredWidth - currentWidth;
     row.widthWithConnectedBlocks = Math.max(
       row.width,
-      this.statementEdge + row.connectedBlockWidths
+      this.statementEdge + row.connectedBlockWidths,
     );
   }
 
@@ -717,7 +717,7 @@ export class RenderInfo {
 
       widestRowWithConnectedBlocks = Math.max(
         widestRowWithConnectedBlocks,
-        row.widthWithConnectedBlocks
+        row.widthWithConnectedBlocks,
       );
       this.recordElemPositions_(row);
     }
@@ -727,7 +727,7 @@ export class RenderInfo {
         // Include width of connected block in value to stack width measurement.
         widestRowWithConnectedBlocks = Math.max(
           widestRowWithConnectedBlocks,
-          target.getHeightWidth().width
+          target.getHeightWidth().width,
         );
       }
     }

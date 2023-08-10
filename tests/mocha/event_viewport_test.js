@@ -28,7 +28,7 @@ suite('Viewport Change Event', function () {
         10,
         1,
         this.workspace.id,
-        0.8
+        0.8,
       );
 
       const json = origEvent.toJson();

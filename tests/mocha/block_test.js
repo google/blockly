@@ -1612,6 +1612,83 @@ suite('Blocks', function () {
       });
     });
 
+    suite('Warning icons', function () {
+      setup(function () {
+        this.workspace = Blockly.inject('blocklyDiv');
+
+        this.block = this.workspace.newBlock('stack_block');
+        this.block.initSvg();
+        this.block.render();
+      });
+
+      test('Block with no warning text does not have warning icon', function () {
+        const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
+        chai.assert.isUndefined(
+          icon,
+          'Block with no warning should not have warning icon',
+        );
+      });
+
+      test('Set warning text creates new icon if none existed', function () {
+        const text = 'Warning Text';
+        this.block.setWarningText(text);
+        const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
+        chai.assert.equal(
+          icon.getText(),
+          text,
+          'Expected warning icon text to be set',
+        );
+      });
+
+      test('Set warning text adds text to existing icon if needed', function () {
+        const text1 = 'Warning Text 1';
+        const text2 = 'Warning Text 2';
+        this.block.setWarningText(text1, '1');
+        this.block.setWarningText(text2, '2');
+        const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
+        chai.assert.equal(icon.getText(), `${text1}\n${text2}`);
+      });
+
+      test('Clearing all warning text deletes the warning icon', function () {
+        const text = 'Warning Text';
+        this.block.setWarningText(text);
+        this.block.setWarningText(null);
+        const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
+        chai.assert.isUndefined(
+          icon,
+          'Expected warning icon to be undefined after deleting all warning text',
+        );
+      });
+
+      test('Clearing specific warning does not delete the icon if other warnings present', function () {
+        const text1 = 'Warning Text 1';
+        const text2 = 'Warning Text 2';
+        this.block.setWarningText(text1, '1');
+        this.block.setWarningText(text2, '2');
+        this.block.setWarningText(null, '1');
+        const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
+        chai.assert.equal(
+          icon.getText(),
+          text2,
+          'Expected first warning text to be deleted',
+        );
+      });
+
+      test('Clearing specific warning removes icon if it was only warning present', function () {
+        const text1 = 'Warning Text 1';
+        const text2 = 'Warning Text 2';
+        this.block.setWarningText(text1, '1');
+        this.block.setWarningText(text2, '2');
+        this.block.setWarningText(null, '1');
+        this.block.setWarningText(null, '2');
+        const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
+        chai.assert.isUndefined(
+          icon,
+          'Expected warning icon to be deleted after all warning text is cleared',
+        );
+      });
+    });
+
     suite('Bubbles and collapsing', function () {
       setup(function () {
         this.workspace = Blockly.inject('blocklyDiv');

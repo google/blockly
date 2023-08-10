@@ -254,7 +254,7 @@ export class CodeGenerator {
     if (typeof func !== 'function') {
       throw Error(
         `${this.name_} generator does not know how to generate code` +
-          `for block type "${block.type}".`,
+          ` for block type "${block.type}".`,
       );
     }
     // First argument to func.call is the value of 'this' in the generator.

@@ -4,23 +4,21 @@
     <meta charset="utf-8" />
     <title>Blockly Playground</title>
 
-    <!-- This script loads uncompressed when on localhost and loads
-     compressed when it is being hosted or on Internet Explorer.  -->
-    <script>
-      var BLOCKLY_BOOTSTRAP_OPTIONS = {
-        scripts: [
-          'build/msg/en.js',
-          'tests/playgrounds/screenshot.js',
-          'node_modules/@blockly/dev-tools/dist/index.js',
-        ],
-      };
-    </script>
-    <script src="bootstrap.js"></script>
     <script type="module">
-      // Wait for Blockly to finish loading.
-      import './bootstrap_done.mjs';
+      import {COMPRESSED, loadScript} from './scripts/load.mjs';
 
-      const IS_UNCOMPRESSED = !window.bootstrapInfo.compressed; // See bootstrap.js
+      import * as Blockly from '../build/blockly.mjs';
+      import '../build/blocks.mjs';
+      import {dartGenerator} from '../build/dart.mjs';
+      import {luaGenerator} from '../build/lua.mjs';
+      import {javascriptGenerator} from '../build/javascript.mjs';
+      import {phpGenerator} from '../build/php.mjs';
+      import {pythonGenerator} from '../build/python.mjs';
+
+      await loadScript('../build/msg/en.js');
+      await loadScript('playgrounds/screenshot.js');
+      await loadScript('../node_modules/@blockly/dev-tools/dist/index.js');
+
       var workspace = null;
 
       function start() {
@@ -96,9 +94,12 @@
         addEventHandlers();
       }
 
+      /**
+       * Set background colour to differentiate between compressed and
+       * uncompressed mode.
+       */
       function setBackgroundColour() {
-        // Set background colour to differentiate between compressed and uncompressed mode.
-        if (IS_UNCOMPRESSED) {
+        if (!COMPRESSED) {
           document.body.style.backgroundColor = '#d6d6ff'; // Familiar lilac.
         } else {
           document.body.style.backgroundColor = '#60fcfc'; // Unfamiliar blue.

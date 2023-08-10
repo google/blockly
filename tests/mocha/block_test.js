@@ -1621,6 +1621,10 @@ suite('Blocks', function () {
         this.block.render();
       });
 
+      teardown(function () {
+        workspaceTeardown.call(this, this.workspace);
+      });
+
       test('Block with no warning text does not have warning icon', function () {
         const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
         chai.assert.isUndefined(

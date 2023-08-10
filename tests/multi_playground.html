@@ -4,14 +4,13 @@
     <meta charset="utf-8" />
     <title>Multi-toolbox Playground</title>
 
-    <!-- This script loads uncompressed when on localhost and loads
-     compressed when it is being hosted or on Internet Explorer.  -->
-    <script src="bootstrap.js"></script>
     <script type="module">
-      // Wait for Blockly to finish loading.
-      import './bootstrap_done.mjs';
+      import {COMPRESSED, loadScript} from './scripts/load.mjs';
 
-      const IS_UNCOMPRESSED = !window.bootstrapInfo.compressed; // See bootstrap.js
+      import * as Blockly from '../build/blockly.mjs';
+      import '../build/blocks.mjs';
+
+      await loadScript('../build/msg/en.js');
 
       var options = {
         comments: true,
@@ -87,7 +86,7 @@
 
       function setBackgroundColour() {
         // Set background colour to differentiate between compressed and uncompressed mode.
-        if (IS_UNCOMPRESSED) {
+        if (!COMPRESSED) {
           document.body.style.backgroundColor = '#d6d6ff'; // Familiar lilac.
         } else {
           document.body.style.backgroundColor = '#60fcfc'; // Unfamiliar blue.

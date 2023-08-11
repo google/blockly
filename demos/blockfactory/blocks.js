@@ -220,9 +220,9 @@ Blockly.Blocks['input_dummy'] = {
       "previousStatement": "Input",
       "nextStatement": "Input",
       "colour": 210,
-      "tooltip": "For adding fields on a separate row with no " +
-                 "connections. Alignment options (left, right, centre) " +
-                 "apply only to multi-line fields.",
+      "tooltip": "For adding fields without any block connections." +
+                 "Alignment options (left, right, centre) only affect " +
+                 "multi-row blocks.",
       "helpUrl": "https://www.youtube.com/watch?v=s2_xaEvcVI0#t=293"
     });
   }
@@ -238,9 +238,10 @@ Blockly.Blocks['input_end_row'] = {
       "previousStatement": "Input",
       "nextStatement": "Input",
       "colour": 210,
-      "tooltip": "For adding fields at the end of a row with no " +
-                 "connections. Alignment options (left, right, centre) " +
-                 "apply only to multi-line fields.",
+      "tooltip": "For adding fields without any block connections that will " +
+                 "be rendered on a separate row from any following inputs. " +
+                 "Alignment options (left, right, centre) only affect " +
+                 "multi-row blocks.",
       "helpUrl": "https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks#block_inputs"
     });
   }

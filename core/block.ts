@@ -1647,7 +1647,7 @@ export class Block implements IASTNodeLocation, IDeletable {
         json['message' + i],
         json['args' + i] || [],
         // Backwards compatibility: lastDummyAlign aliases implicitAlign.
-        json['lastDummyAlign' + i] || json['implicitAlign' + i],
+        json['implicitAlign' + i] || json['lastDummyAlign' + i],
         warningPrefix,
       );
       i++;

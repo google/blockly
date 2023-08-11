@@ -92,8 +92,8 @@ export class RenderInfo extends BaseRenderInfo {
       activeRow.elements.push(new ExternalValueInput(this.constants_, input));
       activeRow.hasExternalInput = true;
     } else if (input instanceof DummyInput || input instanceof EndRowInput) {
-      // Dummy inputs have no visual representation, but the information is
-      // still important.
+      // Dummy and end-row inputs have no visual representation, but the
+      // information is still important.
       activeRow.minHeight = Math.max(
         activeRow.minHeight,
         this.constants_.DUMMY_INPUT_MIN_HEIGHT,
@@ -383,8 +383,8 @@ export class RenderInfo extends BaseRenderInfo {
         } else if (row.hasStatement) {
           nextRightEdge = row.width;
         } else {
-          // To avoid jagged right edges along consecutive non-statement rows,
-          // use the maximum width.
+          // To keep right edges of consecutive non-statement rows aligned, use
+          // the maximum width.
           nextRightEdge = Math.max(nextRightEdge, row.width);
         }
         prevInput = row;

@@ -137,8 +137,12 @@ export class RenderInfo extends BaseRenderInfo {
     ) {
       return true;
     }
-    // Value and dummy inputs get new row if inputs are not inlined.
-    if (input instanceof ValueInput || input instanceof DummyInput) {
+    // Value, dummy, and end-row inputs get new row if inputs are not inlined.
+    if (
+      input instanceof ValueInput ||
+      input instanceof DummyInput ||
+      input instanceof EndRowInput
+    ) {
       return !this.isInline || this.isMultiRow;
     }
     return false;

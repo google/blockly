@@ -328,8 +328,8 @@ export class RenderInfo {
       activeRow.elements.push(new ExternalValueInput(this.constants_, input));
       activeRow.hasExternalInput = true;
     } else if (input instanceof DummyInput || input instanceof EndRowInput) {
-      // Dummy inputs have no visual representation, but the information is
-      // still important.
+      // Dummy and end-row inputs have no visual representation, but the
+      // information is still important.
       activeRow.minHeight = Math.max(
         activeRow.minHeight,
         input.getSourceBlock() && input.getSourceBlock()!.isShadow()
@@ -368,8 +368,13 @@ export class RenderInfo {
     ) {
       return true;
     }
-    // Value and dummy inputs get new row if inputs are not inlined.
-    if (input instanceof ValueInput || input instanceof DummyInput) {
+    // Value inputs, dummy inputs, and any input following an external value
+    // input get a new row if inputs are not inlined.
+    if (
+      input instanceof ValueInput ||
+      input instanceof DummyInput ||
+      lastInput instanceof ValueInput
+    ) {
       return !this.isInline;
     }
     return false;

@@ -203,7 +203,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
     if (fields && FactoryUtils.getFieldsJson_(fields).join('').trim() !== '') {
       var align = lastInput.getFieldValue('ALIGN');
       if (align !== 'LEFT') {
-        JS.lastDummyAlign0 = align;
+        JS.implicitAlign0 = align;
       }
       args.pop();
       message.pop();

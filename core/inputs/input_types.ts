@@ -21,4 +21,8 @@ export enum inputTypes {
   DUMMY = 5,
   // An unknown type of input defined by an external developer.
   CUSTOM = 6,
+  // An input with no connections that is always the last input of a row. Any
+  // subsequent input will be rendered on the next row. Any newline character in
+  // a JSON block definition's message will be parsed as an end-row input.
+  END_ROW = 7,
 }

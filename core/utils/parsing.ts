@@ -17,13 +17,16 @@ import * as colourUtils from './colour.js';
  *
  * @param message Text which might contain string table references and
  *     interpolation tokens.
- * @param parseInterpolationTokens Option to parse numeric
- *     interpolation tokens (%1, %2, ...) when true.
+ * @param parseInterpolationTokens Option to parse numeric interpolation
+ *     tokens (%1, %2, ...) when true.
+ * @param tokenizeNewlines Split individual newline characters into separate
+ *     tokens when true.
  * @returns Array of strings and numbers.
  */
 function tokenizeInterpolationInternal(
   message: string,
   parseInterpolationTokens: boolean,
+  tokenizeNewlines: boolean,
 ): (string | number)[] {
   const tokens = [];
   const chars = message.split('');
@@ -47,6 +50,15 @@ function tokenizeInterpolationInternal(
         }
         buffer.length = 0;
         state = 1;
+      } else if (tokenizeNewlines && c === '\n') {
+        // Output newline characters as single-character tokens, to be replaced
+        // with endOfRow dummies during interpolation.
+        const text = buffer.join('');
+        if (text) {
+          tokens.push(text);
+        }
+        buffer.length = 0;
+        tokens.push(c);
       } else {
         buffer.push(c); // Regular char.
       }
@@ -108,6 +120,7 @@ function tokenizeInterpolationInternal(
                 tokenizeInterpolationInternal(
                   rawValue,
                   parseInterpolationTokens,
+                  tokenizeNewlines,
                 ),
               );
             } else if (parseInterpolationTokens) {
@@ -137,11 +150,15 @@ function tokenizeInterpolationInternal(
     tokens.push(text);
   }
 
-  // Merge adjacent text tokens into a single string.
+  // Merge adjacent text tokens into a single string (but if newlines should be
+  // tokenized, don't merge those with adjacent text).
   const mergedTokens = [];
   buffer.length = 0;
   for (let i = 0; i < tokens.length; i++) {
-    if (typeof tokens[i] === 'string') {
+    if (
+      typeof tokens[i] === 'string' &&
+      !(tokenizeNewlines && tokens[i] === '\n')
+    ) {
       buffer.push(tokens[i] as string);
     } else {
       text = buffer.join('');
@@ -166,14 +183,15 @@ function tokenizeInterpolationInternal(
  * It will also replace string table references (e.g., %{bky_my_msg} and
  * %{BKY_MY_MSG} will both be replaced with the value in
  * Msg['MY_MSG']). Percentage sign characters '%' may be self-escaped
- * (e.g., '%%').
+ * (e.g., '%%'). Newline characters will also be output as string tokens
+ * containing a single newline character.
  *
  * @param message Text which might contain string table references and
  *     interpolation tokens.
  * @returns Array of strings and numbers.
  */
 export function tokenizeInterpolation(message: string): (string | number)[] {
-  return tokenizeInterpolationInternal(message, true);
+  return tokenizeInterpolationInternal(message, true, true);
 }
 
 /**
@@ -189,9 +207,13 @@ export function replaceMessageReferences(message: string | any): string {
   if (typeof message !== 'string') {
     return message;
   }
-  const interpolatedResult = tokenizeInterpolationInternal(message, false);
-  // When parseInterpolationTokens === false, interpolatedResult should be at
-  // most length 1.
+  const interpolatedResult = tokenizeInterpolationInternal(
+    message,
+    false,
+    false,
+  );
+  // When parseInterpolationTokens and tokenizeNewlines are false,
+  // interpolatedResult should be at most length 1.
   return interpolatedResult.length ? String(interpolatedResult[0]) : '';
 }
 

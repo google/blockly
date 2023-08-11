@@ -89,7 +89,7 @@ export class Row {
   hasInlineInput = false;
 
   /**
-   * Whether the row has any dummy inputs.
+   * Whether the row has any dummy inputs or end-row inputs.
    */
   hasDummyInput = false;
 

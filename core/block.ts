@@ -48,6 +48,7 @@ import {Size} from './utils/size.js';
 import type {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
 import {DummyInput} from './inputs/dummy_input.js';
+import {EndRowInput} from './inputs/end_row_input.js';
 import {ValueInput} from './inputs/value_input.js';
 import {StatementInput} from './inputs/statement_input.js';
 import {IconType} from './icons/icon_types.js';
@@ -1339,6 +1340,12 @@ export class Block implements IASTNodeLocation, IDeletable {
         return true;
       }
     }
+    for (let i = 0; i < this.inputList.length; i++) {
+      if (this.inputList[i] instanceof EndRowInput) {
+        // A row-end input is present. Inline value inputs.
+        return true;
+      }
+    }
     return false;
   }
 
@@ -1561,6 +1568,17 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
+   * Appends an input that ends the row.
+   *
+   * @param name Optional language-neutral identifier which may used to find
+   *     this input again.  Should be unique to this block.
+   * @returns The input object created.
+   */
+  appendEndRowInput(name = ''): Input {
+    return this.appendInput(new EndRowInput(name, this));
+  }
+
+  /**
    * Appends the given input row.
    *
    * Allows for custom inputs to be appended to the block.
@@ -1628,7 +1646,8 @@ export class Block implements IASTNodeLocation, IDeletable {
       this.interpolate_(
         json['message' + i],
         json['args' + i] || [],
-        json['lastDummyAlign' + i],
+        // Backwards compatibility: lastDummyAlign aliases implicitAlign.
+        json['implicitAlign' + i] || json['lastDummyAlign' + i],
         warningPrefix,
       );
       i++;
@@ -1765,19 +1784,19 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param message Text contains interpolation tokens (%1, %2, ...) that match
    *     with fields or inputs defined in the args array.
    * @param args Array of arguments to be interpolated.
-   * @param lastDummyAlign If a dummy input is added at the end, how should it
-   *     be aligned?
+   * @param implicitAlign If an implicit input is added at the end or in place
+   *     of newline tokens, how should it be aligned?
    * @param warningPrefix Warning prefix string identifying block.
    */
   private interpolate_(
     message: string,
     args: AnyDuringMigration[],
-    lastDummyAlign: string | undefined,
+    implicitAlign: string | undefined,
     warningPrefix: string,
   ) {
     const tokens = parsing.tokenizeInterpolation(message);
     this.validateTokens_(tokens, args.length);
-    const elements = this.interpolateArguments_(tokens, args, lastDummyAlign);
+    const elements = this.interpolateArguments_(tokens, args, implicitAlign);
 
     // An array of [field, fieldName] tuples.
     const fieldStack = [];
@@ -1855,19 +1874,20 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Inserts args in place of numerical tokens. String args are converted to
-   * JSON that defines a label field. If necessary an extra dummy input is added
-   * to the end of the elements.
+   * JSON that defines a label field. Newline characters are converted to
+   * end-row inputs, and if necessary an extra dummy input is added to the end
+   * of the elements.
    *
    * @param tokens The tokens to interpolate
    * @param args The arguments to insert.
-   * @param lastDummyAlign The alignment the added dummy input should have, if
-   *     we are required to add one.
+   * @param implicitAlign The alignment to use for any implicitly added end-row
+   *     or dummy inputs, if necessary.
    * @returns The JSON definitions of field and inputs to add to the block.
    */
   private interpolateArguments_(
     tokens: Array<string | number>,
     args: Array<AnyDuringMigration | string>,
-    lastDummyAlign: string | undefined,
+    implicitAlign: string | undefined,
   ): AnyDuringMigration[] {
     const elements = [];
     for (let i = 0; i < tokens.length; i++) {
@@ -1877,11 +1897,20 @@ export class Block implements IASTNodeLocation, IDeletable {
       }
       // Args can be strings, which is why this isn't elseif.
       if (typeof element === 'string') {
-        // AnyDuringMigration because:  Type '{ text: string; type: string; } |
-        // null' is not assignable to type 'string | number'.
-        element = this.stringToFieldJson_(element) as AnyDuringMigration;
-        if (!element) {
-          continue;
+        if (element === '\n') {
+          // Convert newline tokens to end-row inputs.
+          const newlineInput = {'type': 'input_end_row'};
+          if (implicitAlign) {
+            (newlineInput as AnyDuringMigration)['align'] = implicitAlign;
+          }
+          element = newlineInput as AnyDuringMigration;
+        } else {
+          // AnyDuringMigration because:  Type '{ text: string; type: string; }
+          // | null' is not assignable to type 'string | number'.
+          element = this.stringToFieldJson_(element) as AnyDuringMigration;
+          if (!element) {
+            continue;
+          }
         }
       }
       elements.push(element);
@@ -1895,8 +1924,8 @@ export class Block implements IASTNodeLocation, IDeletable {
       )
     ) {
       const dummyInput = {'type': 'input_dummy'};
-      if (lastDummyAlign) {
-        (dummyInput as AnyDuringMigration)['align'] = lastDummyAlign;
+      if (implicitAlign) {
+        (dummyInput as AnyDuringMigration)['align'] = implicitAlign;
       }
       elements.push(dummyInput);
     }
@@ -1960,6 +1989,9 @@ export class Block implements IASTNodeLocation, IDeletable {
       case 'input_dummy':
         input = this.appendDummyInput(element['name']);
         break;
+      case 'input_end_row':
+        input = this.appendEndRowInput(element['name']);
+        break;
       default: {
         input = this.appendInputFromRegistry(element['type'], element['name']);
         break;
@@ -1998,6 +2030,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       str === 'input_value' ||
       str === 'input_statement' ||
       str === 'input_dummy' ||
+      str === 'input_end_row' ||
       registry.hasItem(registry.Type.INPUT, str)
     );
   }

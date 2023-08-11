@@ -10,6 +10,7 @@ import {ConnectionType} from '../../build/src/core/connection_type.js';
 import {createDeprecationWarningStub} from './test_helpers/warnings.js';
 import {createRenderedBlock} from './test_helpers/block_definitions.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
+import {EndRowInput} from '../../build/src/core/inputs/end_row_input.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -2492,6 +2493,27 @@ suite('Blocks', function () {
         'recordUndo should be reset to true after init',
       );
       chai.assert.isTrue(initCalled, 'expected init function to be called');
+    });
+  });
+
+  suite('EndOfRow', function () {
+    setup(function () {
+      Blockly.defineBlocksWithJsonArray([
+        {
+          'type': 'end_row_test_block',
+          'message0': 'Row1\nRow2',
+          'inputsInline': true,
+        },
+      ]);
+    });
+    test('Newline is converted to an end-row input', function () {
+      const block = this.workspace.newBlock('end_row_test_block');
+      chai.assert.equal(block.inputList[0].fieldRow[0].getValue(), 'Row1');
+      chai.assert.isTrue(
+        block.inputList[0] instanceof EndRowInput,
+        'newline should be converted to an end-row input',
+      );
+      chai.assert.equal(block.inputList[1].fieldRow[0].getValue(), 'Row2');
     });
   });
 });

@@ -177,7 +177,8 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
 
       var input = {type: contentsBlock.type};
       // Dummy inputs don't have names.  Other inputs do.
-      if (contentsBlock.type !== 'input_dummy') {
+      if (contentsBlock.type !== 'input_dummy' &&
+          contentsBlock.type !== 'input_end_row') {
         input.name = contentsBlock.getFieldValue('INPUTNAME');
       }
       var check = JSON.parse(
@@ -202,7 +203,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
     if (fields && FactoryUtils.getFieldsJson_(fields).join('').trim() !== '') {
       var align = lastInput.getFieldValue('ALIGN');
       if (align !== 'LEFT') {
-        JS.lastDummyAlign0 = align;
+        JS.implicitAlign0 = align;
       }
       args.pop();
       message.pop();
@@ -272,13 +273,15 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
   // Generate inputs.
   var TYPES = {'input_value': 'appendValueInput',
                'input_statement': 'appendStatementInput',
-               'input_dummy': 'appendDummyInput'};
+               'input_dummy': 'appendDummyInput',
+               'input_end_row': 'appendEndRowInput'};
   var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
   while (contentsBlock) {
     if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
       var name = '';
       // Dummy inputs don't have names.  Other inputs do.
-      if (contentsBlock.type !== 'input_dummy') {
+      if (contentsBlock.type !== 'input_dummy' &&
+          contentsBlock.type !== 'input_end_row') {
         name =
             JSON.stringify(contentsBlock.getFieldValue('INPUTNAME'));
       }

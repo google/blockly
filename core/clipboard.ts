@@ -7,78 +7,149 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.clipboard');
 
-import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
+import {BlockPaster} from './clipboard/block_paster.js';
+import * as globalRegistry from './registry.js';
+import {WorkspaceSvg} from './workspace_svg.js';
+import * as registry from './clipboard/registry.js';
+import {Coordinate} from './utils/coordinate.js';
+import * as deprecation from './utils/deprecation.js';
 
 /** Metadata about the object that is currently on the clipboard. */
-let copyData: CopyData | null = null;
+let stashedCopyData: ICopyData | null = null;
+
+let stashedWorkspace: WorkspaceSvg | null = null;
 
 /**
- * Copy a block or workspace comment onto the local clipboard.
+ * Copy a copyable element onto the local clipboard.
  *
- * @param toCopy Block or Workspace Comment to be copied.
+ * @param toCopy The copyable element to be copied.
+ * @deprecated v11. Use `myCopyable.toCopyData()` instead. To be removed v12.
  * @internal
  */
-export function copy(toCopy: ICopyable) {
-  TEST_ONLY.copyInternal(toCopy);
+export function copy<T extends ICopyData>(toCopy: ICopyable<T>): T | null {
+  deprecation.warn(
+    'Blockly.clipboard.copy',
+    'v11',
+    'v12',
+    'myCopyable.toCopyData()',
+  );
+  return TEST_ONLY.copyInternal(toCopy);
 }
 
 /**
  * Private version of copy for stubbing in tests.
  */
-function copyInternal(toCopy: ICopyable) {
-  copyData = toCopy.toCopyData();
+function copyInternal<T extends ICopyData>(toCopy: ICopyable<T>): T | null {
+  const data = toCopy.toCopyData();
+  stashedCopyData = data;
+  stashedWorkspace = (toCopy as any).workspace ?? null;
+  return data;
 }
 
 /**
- * Paste a block or workspace comment on to the main workspace.
+ * Paste a pasteable element into the workspace.
  *
+ * @param copyData The data to paste into the workspace.
+ * @param workspace The workspace to paste the data into.
+ * @param coordinate The location to paste the thing at.
  * @returns The pasted thing if the paste was successful, null otherwise.
- * @internal
  */
-export function paste(): ICopyable | null {
-  if (!copyData) {
-    return null;
+export function paste<T extends ICopyData>(
+  copyData: T,
+  workspace: WorkspaceSvg,
+  coordinate?: Coordinate,
+): ICopyable<T> | null;
+
+/**
+ * Pastes the last copied ICopyable into the workspace.
+ *
+ * @returns the pasted thing if the paste was successful, null otherwise.
+ */
+export function paste(): ICopyable<ICopyData> | null;
+
+/**
+ * Pastes the given data into the workspace, or the last copied ICopyable if
+ * no data is passed.
+ *
+ * @param copyData The data to paste into the workspace.
+ * @param workspace The workspace to paste the data into.
+ * @param coordinate The location to paste the thing at.
+ * @returns The pasted thing if the paste was successful, null otherwise.
+ */
+export function paste<T extends ICopyData>(
+  copyData?: T,
+  workspace?: WorkspaceSvg,
+  coordinate?: Coordinate,
+): ICopyable<ICopyData> | null {
+  if (!copyData || !workspace) {
+    if (!stashedCopyData || !stashedWorkspace) return null;
+    return pasteFromData(stashedCopyData, stashedWorkspace);
   }
-  // Pasting always pastes to the main workspace, even if the copy
-  // started in a flyout workspace.
-  let workspace = copyData.source;
-  if (workspace.isFlyout) {
-    workspace = workspace.targetWorkspace!;
-  }
-  if (
-    copyData.typeCounts &&
-    workspace.isCapacityAvailable(copyData.typeCounts)
-  ) {
-    return workspace.paste(copyData.saveInfo);
-  }
-  return null;
+  return pasteFromData(copyData, workspace, coordinate);
 }
 
 /**
- * Duplicate this block and its children, or a workspace comment.
+ * Paste a pasteable element into the workspace.
  *
- * @param toDuplicate Block or Workspace Comment to be duplicated.
- * @returns The block or workspace comment that was duplicated, or null if the
- *     duplication failed.
+ * @param copyData The data to paste into the workspace.
+ * @param workspace The workspace to paste the data into.
+ * @param coordinate The location to paste the thing at.
+ * @returns The pasted thing if the paste was successful, null otherwise.
+ */
+function pasteFromData<T extends ICopyData>(
+  copyData: T,
+  workspace: WorkspaceSvg,
+  coordinate?: Coordinate,
+): ICopyable<T> | null {
+  workspace = workspace.getRootWorkspace() ?? workspace;
+  return (globalRegistry
+    .getObject(globalRegistry.Type.PASTER, copyData.paster, false)
+    ?.paste(copyData, workspace, coordinate) ?? null) as ICopyable<T> | null;
+}
+
+/**
+ * Duplicate this copy-paste-able element.
+ *
+ * @param toDuplicate The element to be duplicated.
+ * @returns The element that was duplicated, or null if the duplication failed.
+ * @deprecated v11. Use
+ *     `Blockly.clipboard.paste(myCopyable.toCopyData(), myWorkspace)` instead.
+ *     To be removed v12.
  * @internal
  */
-export function duplicate(toDuplicate: ICopyable): ICopyable | null {
+export function duplicate<
+  U extends ICopyData,
+  T extends ICopyable<U> & IHasWorkspace,
+>(toDuplicate: T): T | null {
+  deprecation.warn(
+    'Blockly.clipboard.duplicate',
+    'v11',
+    'v12',
+    'Blockly.clipboard.paste(myCopyable.toCopyData(), myWorkspace)',
+  );
   return TEST_ONLY.duplicateInternal(toDuplicate);
 }
 
 /**
  * Private version of duplicate for stubbing in tests.
  */
-function duplicateInternal(toDuplicate: ICopyable): ICopyable | null {
-  const oldCopyData = copyData;
-  copy(toDuplicate);
-  const pastedThing =
-    toDuplicate.toCopyData()?.source?.paste(copyData!.saveInfo) ?? null;
-  copyData = oldCopyData;
-  return pastedThing;
+function duplicateInternal<
+  U extends ICopyData,
+  T extends ICopyable<U> & IHasWorkspace,
+>(toDuplicate: T): T | null {
+  const data = toDuplicate.toCopyData();
+  if (!data) return null;
+  return paste(data, toDuplicate.workspace) as T;
+}
+
+interface IHasWorkspace {
+  workspace: WorkspaceSvg;
 }
 
 export const TEST_ONLY = {
   duplicateInternal,
   copyInternal,
 };
+
+export {BlockPaster, registry};

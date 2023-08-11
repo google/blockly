@@ -297,7 +297,9 @@ export function commentDuplicateOption(
     text: Msg['DUPLICATE_COMMENT'],
     enabled: true,
     callback: function () {
-      clipboard.duplicate(comment);
+      const data = comment.toCopyData();
+      if (!data) return;
+      clipboard.paste(data, comment.workspace);
     },
   };
   return duplicateOption;

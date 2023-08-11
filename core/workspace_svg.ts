@@ -36,7 +36,7 @@ import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
-import type {ICopyable} from './interfaces/i_copyable.js';
+import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
@@ -1294,7 +1294,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   paste(
     state: AnyDuringMigration | Element | DocumentFragment,
-  ): ICopyable | null {
+  ): ICopyable<ICopyData> | null {
     if (!this.rendered || (!state['type'] && !state['tagName'])) {
       return null;
     }
@@ -1382,6 +1382,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
             for (let i = 0, connection; (connection = connections[i]); i++) {
               const neighbour = connection.closest(
                 config.snapRadius,
+                // TODO: This code doesn't work because it's passing an absolute
+                //     coordinate instead of a relative coordinate. Need to
+                //     figure out if I'm deprecating this function or if I
+                //     need to fix this.
                 new Coordinate(blockX, blockY),
               );
               if (neighbour.connection) {
@@ -1435,6 +1439,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         // with any blocks.
         commentX += 50;
         commentY += 50;
+        // TODO: This code doesn't work because it's using absolute coords
+        //    where relative coords are expected. Need to figure out what I'm
+        //    doing with this function and if I need to fix it.
         comment.moveBy(commentX, commentY);
       }
     } finally {

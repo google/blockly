@@ -11,7 +11,7 @@ import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import * as common from './common.js';
 import {Gesture} from './gesture.js';
-import type {ICopyable} from './interfaces/i_copyable.js';
+import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
@@ -81,6 +81,9 @@ export function registerDelete() {
   ShortcutRegistry.registry.register(deleteShortcut);
 }
 
+let copyData: ICopyData | null = null;
+let copyWorkspace: WorkspaceSvg | null = null;
+
 /**
  * Keyboard shortcut to copy a block on ctrl+c, cmd+c, or alt+c.
  */
@@ -104,18 +107,20 @@ export function registerCopy() {
         !Gesture.inProgress() &&
         selected != null &&
         selected.isDeletable() &&
-        selected.isMovable()
+        selected.isMovable() &&
+        isCopyable(selected)
       );
     },
     callback(workspace, e) {
       // Prevent the default copy behavior, which may beep or otherwise indicate
       // an error due to the lack of a selection.
       e.preventDefault();
-      // AnyDuringMigration because:  Property 'hideChaff' does not exist on
-      // type 'Workspace'.
-      (workspace as AnyDuringMigration).hideChaff();
-      clipboard.copy(common.getSelected() as ICopyable);
-      return true;
+      workspace.hideChaff();
+      const selected = common.getSelected();
+      if (!selected || !isCopyable(selected)) return false;
+      copyData = selected.toCopyData();
+      copyWorkspace = workspace;
+      return !!copyData;
     },
     keyCodes: [ctrlC, altC, metaC],
   };
@@ -150,13 +155,11 @@ export function registerCut() {
         !selected.workspace!.isFlyout
       );
     },
-    callback() {
+    callback(workspace) {
       const selected = common.getSelected();
-      if (!selected) {
-        // Shouldn't happen but appeases the type system
-        return false;
-      }
-      clipboard.copy(selected);
+      if (!selected || !isCopyable(selected)) return false;
+      copyData = selected.toCopyData();
+      copyWorkspace = workspace;
       (selected as BlockSvg).checkAndDelete();
       return true;
     },
@@ -186,7 +189,8 @@ export function registerPaste() {
       return !workspace.options.readOnly && !Gesture.inProgress();
     },
     callback() {
-      return !!clipboard.paste();
+      if (!copyData || !copyWorkspace) return false;
+      return !!clipboard.paste(copyData, copyWorkspace);
     },
     keyCodes: [ctrlV, altV, metaV],
   };

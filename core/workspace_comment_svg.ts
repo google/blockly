@@ -23,7 +23,7 @@ import type {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IBubble} from './interfaces/i_bubble.js';
-import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {ICopyable} from './interfaces/i_copyable.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
@@ -32,6 +32,10 @@ import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 import {WorkspaceComment} from './workspace_comment.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import {
+  WorkspaceCommentCopyData,
+  WorkspaceCommentPaster,
+} from './clipboard/workspace_comment_paster.js';
 
 /** Size of the resize icon. */
 const RESIZE_SIZE = 8;
@@ -47,7 +51,7 @@ const TEXTAREA_OFFSET = 2;
  */
 export class WorkspaceCommentSvg
   extends WorkspaceComment
-  implements IBoundedElement, IBubble, ICopyable
+  implements IBoundedElement, IBubble, ICopyable<WorkspaceCommentCopyData>
 {
   /**
    * The width and height to use to size a workspace comment when it is first
@@ -566,13 +570,11 @@ export class WorkspaceCommentSvg
    * Encode a comment for copying.
    *
    * @returns Copy metadata.
-   * @internal
    */
-  toCopyData(): CopyData {
+  toCopyData(): WorkspaceCommentCopyData {
     return {
-      saveInfo: this.toXmlWithXY(),
-      source: this.workspace,
-      typeCounts: null,
+      paster: WorkspaceCommentPaster.TYPE,
+      commentState: this.toXmlWithXY(),
     };
   }
 

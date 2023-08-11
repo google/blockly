@@ -331,9 +331,10 @@ export function registerDuplicate() {
       return 'hidden';
     },
     callback(scope: Scope) {
-      if (scope.block) {
-        clipboard.duplicate(scope.block);
-      }
+      if (!scope.block) return;
+      const data = scope.block.toCopyData();
+      if (!data) return;
+      clipboard.paste(data, scope.block.workspace);
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockDuplicate',

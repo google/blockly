@@ -78,6 +78,7 @@ import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
 import {ContextMenuOption} from './contextmenu_registry.js';
 import * as renderManagement from './render_management.js';
+import * as deprecation from './utils/deprecation.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;

@@ -112,6 +112,8 @@ export function registerCopy() {
       );
     },
     callback(workspace, e) {
+      // Prevent the default copy behavior, which may beep or otherwise indicate
+      // an error due to the lack of a selection.
       e.preventDefault();
       workspace.hideChaff();
       const selected = common.getSelected();

@@ -896,11 +896,10 @@ export class BlockSvg
    * Set this block's warning text.
    *
    * @param text The text, or null to delete.
-   * @param opt_id An optional ID for the warning text to be able to maintain
+   * @param id An optional ID for the warning text to be able to maintain
    *     multiple warnings.
    */
-  override setWarningText(text: string | null, opt_id?: string) {
-    const id = opt_id || '';
+  override setWarningText(text: string | null, id: string = '') {
     if (!id) {
       // Kill all previous pending processes, this edit supersedes them all.
       for (const timeout of this.warningTextDb.values()) {
@@ -931,8 +930,9 @@ export class BlockSvg
     }
 
     const icon = this.getIcon(WarningIcon.TYPE) as WarningIcon | undefined;
-    if (typeof text === 'string') {
+    if (text) {
       // Bubble up to add a warning on top-most collapsed block.
+      // TODO(#6020): This warning is never removed.
       let parent = this.getSurroundParent();
       let collapsedParent = null;
       while (parent) {
@@ -958,6 +958,9 @@ export class BlockSvg
       if (!id) {
         this.removeIcon(WarningIcon.TYPE);
       } else {
+        // Remove just this warning id's message.
+        icon.addMessage('', id);
+        // Then remove the entire icon if there is no longer any text.
         if (!icon.getText()) this.removeIcon(WarningIcon.TYPE);
       }
     }

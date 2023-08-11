@@ -110,8 +110,6 @@ export class FieldCheckbox extends Field<CheckboxBool> {
 
   /**
    * Create the block UI for this checkbox.
-   *
-   * @internal
    */
   override initView() {
     super.initView();

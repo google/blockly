@@ -78,7 +78,6 @@ import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
 import {ContextMenuOption} from './contextmenu_registry.js';
 import * as renderManagement from './render_management.js';
-import * as deprecation from './utils/deprecation.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -1232,13 +1231,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Render all blocks in workspace.
-   *
-   * @deprecated Renders are triggered automatically when the block is modified
-   *     (e.g. fields are modified or inputs are added). Any calls to render()
-   *     are no longer necessary. To be removed in v11.
    */
   render() {
-    deprecation.warn('Blockly.WorkspaceSvg.prototype.render', 'v10', 'v11');
     // Generate list of all blocks.
     const blocks = this.getAllBlocks(false);
     // Render each block.

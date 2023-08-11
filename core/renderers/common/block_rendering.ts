@@ -32,7 +32,6 @@ import {StatementInput} from '../measurables/statement_input.js';
 import {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 
-import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';
 import type {IPathObject} from './i_path_object.js';
 import {RenderInfo} from './info.js';
@@ -82,7 +81,6 @@ export function init(
 }
 export {BottomRow};
 export {Connection};
-export {ConstantProvider};
 export {Drawer};
 export {ExternalValueInput};
 export {Field};
@@ -109,3 +107,15 @@ export {SquareCorner};
 export {StatementInput};
 export {TopRow};
 export {Types};
+
+export {
+  OutsideCorners,
+  InsideCorners,
+  StartHat,
+  Notch,
+  PuzzleTab,
+  JaggedTeeth,
+  BaseShape,
+  DynamicShape,
+  ConstantProvider,
+} from './constants.js';

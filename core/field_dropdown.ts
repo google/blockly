@@ -185,8 +185,6 @@ export class FieldDropdown extends Field<string> {
 
   /**
    * Create the block UI for this dropdown.
-   *
-   * @internal
    */
   override initView() {
     if (this.shouldAddBorderRect_()) {

@@ -26,10 +26,13 @@ suite('Key Down', function () {
   /**
    * Creates a block and sets it as Blockly.selected.
    * @param {Blockly.Workspace} workspace The workspace to create a new block on.
+   * @return {Blockly.Block} The block being selected.
    */
   function setSelectedBlock(workspace) {
     defineStackBlock();
-    Blockly.common.setSelected(workspace.newBlock('stack_block'));
+    const block = workspace.newBlock('stack_block');
+    Blockly.common.setSelected(block);
+    return block;
   }
 
   /**
@@ -109,8 +112,8 @@ suite('Key Down', function () {
 
   suite('Copy', function () {
     setup(function () {
-      setSelectedBlock(this.workspace);
-      this.copySpy = sinon.spy(Blockly.clipboard.TEST_ONLY, 'copyInternal');
+      this.block = setSelectedBlock(this.workspace);
+      this.copySpy = sinon.spy(this.block, 'toCopyData');
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype,
         'hideChaff',

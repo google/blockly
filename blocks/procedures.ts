@@ -455,34 +455,30 @@ const PROCEDURE_DEF_COMMON = {
     }
     // Add option to create caller.
     const name = this.getFieldValue('NAME');
-    const xmlMutation = xmlUtils.createElement('mutation');
-    xmlMutation.setAttribute('name', name);
-    for (let i = 0; i < this.arguments_.length; i++) {
-      const xmlArg = xmlUtils.createElement('arg');
-      xmlArg.setAttribute('name', this.arguments_[i]);
-      xmlMutation.appendChild(xmlArg);
-    }
-    const xmlBlock = xmlUtils.createElement('block');
-    xmlBlock.setAttribute('type', (this as AnyDuringMigration).callType_);
-    xmlBlock.appendChild(xmlMutation);
+    const callProcedureBlockState = {
+      type: (this as AnyDuringMigration).callType_,
+      extraState: {name: name, params: this.arguments_},
+    };
     options.push({
       enabled: true,
       text: Msg['PROCEDURES_CREATE_DO'].replace('%1', name),
-      callback: ContextMenu.callbackFactory(this, xmlBlock),
+      callback: ContextMenu.callbackFactory(this, callProcedureBlockState),
     });
 
     // Add options to create getters for each parameter.
     if (!this.isCollapsed()) {
       for (let i = 0; i < this.argumentVarModels_.length; i++) {
         const argVar = this.argumentVarModels_[i];
-        const argXmlField = Variables.generateVariableFieldDom(argVar);
-        const argXmlBlock = xmlUtils.createElement('block');
-        argXmlBlock.setAttribute('type', 'variables_get');
-        argXmlBlock.appendChild(argXmlField);
+        const getVarBlockState = {
+          type: 'variables_get',
+          fields: {
+            VAR: {name: argVar.name, id: argVar.getId(), type: argVar.type},
+          },
+        };
         options.push({
           enabled: true,
           text: Msg['VARIABLES_SET_CREATE_GET'].replace('%1', argVar.name),
-          callback: ContextMenu.callbackFactory(this, argXmlBlock),
+          callback: ContextMenu.callbackFactory(this, getVarBlockState),
         });
       }
     }

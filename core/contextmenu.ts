@@ -24,6 +24,7 @@ import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import {Rect} from './utils/rect.js';
+import * as serializationBlocks from './serialization/blocks.js';
 import * as svgMath from './utils/svg_math.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
@@ -227,15 +228,25 @@ export function dispose() {
  *   then places the new block next to the original.
  *
  * @param block Original block.
- * @param xml XML representation of new block.
+ * @param state XML or JSON object representation of the new block.
  * @returns Function that creates a block.
  */
-export function callbackFactory(block: Block, xml: Element): () => void {
+export function callbackFactory(
+  block: Block,
+  state: Element | serializationBlocks.State,
+): () => void {
   return () => {
     eventUtils.disable();
     let newBlock;
     try {
-      newBlock = Xml.domToBlockInternal(xml, block.workspace!) as BlockSvg;
+      if (state instanceof Element) {
+        newBlock = Xml.domToBlockInternal(state, block.workspace!) as BlockSvg;
+      } else {
+        newBlock = serializationBlocks.appendInternal(
+          state,
+          block.workspace,
+        ) as BlockSvg;
+      }
       // Move the new block next to the old block.
       const xy = block.getRelativeToSurfaceXY();
       if (block.RTL) {

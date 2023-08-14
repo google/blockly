@@ -225,7 +225,12 @@ export class InsertionMarkerManager {
     eventUtils.disable();
     let result: BlockSvg;
     try {
-      const blockJson = blocks.save(sourceBlock);
+      const blockJson = blocks.save(sourceBlock, {
+        addCoordinates: false,
+        addInputBlocks: false,
+        addNextBlocks: false,
+        doFullSerialization: false,
+      });
       if (!blockJson) {
         throw new Error('Failed to serialize source block.');
       }

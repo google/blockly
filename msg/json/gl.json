@@ -107,6 +107,7 @@
 	"LOGIC_TERNARY_IF_TRUE": "se é verdadeiro",
 	"LOGIC_TERNARY_IF_FALSE": "se é falso",
 	"LOGIC_TERNARY_TOOLTIP": "Comproba a condición que hai en \"condición\". Se a condición é verdadeira, devolve o valor de \"se é verdadeiro\"; en caso contrario, devolve o valor de \"se é falso\".",
+	"MATH_NUMBER_HELPURL": "https://gl.wikipedia.org/wiki/Número",
 	"MATH_NUMBER_TOOLTIP": "Un número.",
 	"MATH_TRIG_SIN": "sen",
 	"MATH_TRIG_COS": "cos",

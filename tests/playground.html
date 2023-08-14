@@ -7,13 +7,13 @@
     <script type="module">
       import {COMPRESSED, loadScript} from './scripts/load.mjs';
 
-      import * as Blockly from '../build/blockly.mjs';
-      import '../build/blocks.mjs';
-      import {dartGenerator} from '../build/dart.mjs';
-      import {luaGenerator} from '../build/lua.mjs';
-      import {javascriptGenerator} from '../build/javascript.mjs';
-      import {phpGenerator} from '../build/php.mjs';
-      import {pythonGenerator} from '../build/python.mjs';
+      import * as Blockly from '../build/blockly.loader.mjs';
+      import '../build/blocks.loader.mjs';
+      import {dartGenerator} from '../build/dart.loader.mjs';
+      import {luaGenerator} from '../build/lua.loader.mjs';
+      import {javascriptGenerator} from '../build/javascript.loader.mjs';
+      import {phpGenerator} from '../build/php.loader.mjs';
+      import {pythonGenerator} from '../build/python.loader.mjs';
 
       await loadScript('../build/msg/en.js');
       await loadScript('playgrounds/screenshot.js');

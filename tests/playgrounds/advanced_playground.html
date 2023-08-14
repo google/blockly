@@ -7,8 +7,8 @@
     <script type="module">
       import {loadScript} from '../scripts/load.mjs';
 
-      import * as Blockly from '../../build/blockly.mjs';
-      import '../../build/blocks.mjs';
+      import * as Blockly from '../../build/blockly.loader.mjs';
+      import '../../build/blocks.loader.mjs';
       // Generators not needed (but see also bug #6597).
 
       await loadScript('../../build/msg/en.js');

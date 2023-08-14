@@ -677,7 +677,8 @@ function buildCompiled() {
 /**
  * This task builds the shims used by the playgrounds and tests to
  * load Blockly in either compressed or uncompressed mode, creating
- * build/blockly.mjs, blocks.mjs, javascript.mjs, etc.
+ * build/blockly.loader.mjs, blocks.loader.mjs, javascript.loader.mjs,
+ * etc.
  *
  * Prerequisite: getChunkOptions (via buildCompiled, for chunks[].parent).
  */
@@ -702,7 +703,7 @@ async function buildShims() {
     const modulePath = posixPath(chunk.moduleEntry ?? chunk.entry);
     const scriptPath =
         path.posix.join(RELEASE_DIR, `${chunk.name}${COMPILED_SUFFIX}.js`);
-    const shimPath = path.join(BUILD_DIR, `${chunk.name}.mjs`);
+    const shimPath = path.join(BUILD_DIR, `${chunk.name}.loader.mjs`);
     const parentImport =
         chunk.parent ? `import ${quote(`./${chunk.parent.name}.mjs`)};` : '';
     const exports = await import(`../../${modulePath}`);

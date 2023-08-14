@@ -43,7 +43,7 @@ export const ROOT = window.location.href.replace(/\/tests\/.*$/, '/');
  * uncompressed for when loading from local machine and compressed
  * otherwise.  See issue #5557 for additional background.
  *
- * @return {boolean} True if shoudl load in compressed mode.
+ * @return {boolean} True if should load in compressed mode.
  */
 function compressed() {
   const param = location.search.match(/compressed=([^&]+)/)?.[1];
@@ -68,14 +68,14 @@ export const COMPRESSED = compressed();
  *
  * When loading in uncompressed mode, if scriptExports is a simple
  * variable name (e.g. 'Blockly') then globalThis[scriptExports] will
- * be set to the the chunk's Module object.  This attempts provide
+ * be set to the the chunk's Module object.  This attempts to provide
  * backward compatibility with loading the compressed chunk as a
  * script, where this is done by the compressed chunk's UMD wrapper.
  * The compatibility is not complete, however: since Module objects
  * are immutable, it is not possible to set (e.g.)
  * Blockly.libraryBlocks.
  *
- * The intention is to allow the chunk to be accessed accessed either
+ * The intention is to allow the chunk to be accessed either via
  * the returned Module / exports object (preferred) or via the global
  * scope (needed by dev-tools) regardless of whether it was loaded
  * compressed or uncompressed.
@@ -124,7 +124,7 @@ export function loadScript(src) {
 }
 
 /**
- * Get the value referred to by a doted-itentifier path
+ * Get the value referred to by a dotted-identifier path
  * (e.g. foo.bar.baz).  Throws TypeError if path is is not valid,
  * i.e., if any component but the last does not exist).
  *

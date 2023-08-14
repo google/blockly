@@ -15,6 +15,7 @@ gulp.sourcemaps = require('gulp-sourcemaps');
 
 const path = require('path');
 const fs = require('fs');
+const fsPromises = require('fs/promises');
 const {exec, execSync} = require('child_process');
 
 const closureCompiler = require('google-closure-compiler').gulp();
@@ -24,7 +25,7 @@ const {rimraf} = require('rimraf');
 const {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 const {getPackageJson} = require('./helper_tasks');
 
-const {posixPath} = require('../helpers');
+const {posixPath, quote} = require('../helpers');
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
@@ -106,6 +107,7 @@ const chunks = [
   {
     name: 'blockly',
     entry: path.join(TSC_OUTPUT_DIR, 'core', 'main.js'),
+    moduleEntry: path.join(TSC_OUTPUT_DIR, 'core', 'blockly.js'),
     exports: 'module$build$src$core$blockly',
     scriptExport: 'Blockly',
   },
@@ -673,6 +675,57 @@ function buildCompiled() {
 }
 
 /**
+ * This task builds the shims used by the playgrounds and tests to
+ * load Blockly in either compressed or uncompressed mode, creating
+ * build/blockly.loader.mjs, blocks.loader.mjs, javascript.loader.mjs,
+ * etc.
+ *
+ * Prerequisite: getChunkOptions (via buildCompiled, for chunks[].parent).
+ */
+async function buildShims() {
+  // Install a package.json file in BUILD_DIR to tell node.js that the
+  // .js files therein are ESM not CJS, so we can import the
+  // entrypoints to enumerate their exported names.
+  //
+  // N.B.: There is an exception: core/main.js is a goog.module not
+  // ESM, but fortunately we don't attempt to import or require this
+  // file from node.js - we only feed it to Closure Compiler, which
+  // uses the type information in deps.js rather than package.json.
+  await fsPromises.writeFile(
+    path.join(BUILD_DIR, 'package.json'),
+    '{"type": "module"}'
+  );
+
+  // Import each entrypoint module, enumerate its exports, and write
+  // a shim to load the chunk either by importing the entrypoint
+  // module or by loading the compiled script.
+  await Promise.all(chunks.map(async (chunk) => {
+    const modulePath = posixPath(chunk.moduleEntry ?? chunk.entry);
+    const scriptPath =
+        path.posix.join(RELEASE_DIR, `${chunk.name}${COMPILED_SUFFIX}.js`);
+    const shimPath = path.join(BUILD_DIR, `${chunk.name}.loader.mjs`);
+    const parentImport =
+        chunk.parent ? `import ${quote(`./${chunk.parent.name}.mjs`)};` : '';
+    const exports = await import(`../../${modulePath}`);
+
+    await fsPromises.writeFile(shimPath,
+        `import {loadChunk} from '../tests/scripts/load.mjs';
+${parentImport}
+
+export const {
+${Object.keys(exports).map((name) => `  ${name},`).join('\n')}
+} = await loadChunk(
+  ${quote(modulePath)},
+  ${quote(scriptPath)},
+  ${quote(chunk.scriptExport)},
+);
+`);
+  }));
+}
+
+
+
+/**
  * This task builds Blockly core, blocks and generators together and uses
  * Closure Compiler's ADVANCED_COMPILATION mode.
  *
@@ -728,7 +781,7 @@ exports.cleanBuildDir = cleanBuildDir;
 exports.langfiles = buildLangfiles;  // Build build/msg/*.js from msg/json/*.
 exports.tsc = buildJavaScript;
 exports.deps = gulp.series(exports.tsc, buildDeps);
-exports.minify = gulp.series(exports.deps, buildCompiled);
+exports.minify = gulp.series(exports.deps, buildCompiled, buildShims);
 exports.build = gulp.parallel(exports.minify, exports.langfiles);
 
 // Manually-invokable targets, with prerequisites where required.

@@ -72,9 +72,9 @@ export const global = globalThis;
 // export const scope = goog.scope;
 // export const defineClass = goog.defineClass;
 export const declareModuleId = function(namespace) {
-  if (window.goog && window.goog.declareModuleId) {
-    window.goog.declareModuleId.call(this, namespace);
-  }
+  // Use globalThis instead of window to find goog, so this can be
+  // imported in node.js (e.g. when running buildShims gulp task).
+  globalThis?.goog?.declareModuleId.call(this, namespace);
 };
 
 

@@ -207,7 +207,7 @@ export class JavascriptGenerator extends CodeGenerator {
    * @param {string} string Text to encode.
    * @return {string} JavaScript string.
    */
-  quote_(string) {
+  quote(string) {
     // Can't use goog.string.quote since Google's style guide recommends
     // JS string literals use single quotes.
     string = string.replace(/\\/g, '\\\\')
@@ -216,18 +216,24 @@ export class JavascriptGenerator extends CodeGenerator {
     return '\'' + string + '\'';
   }
 
+  /** Alias for the `quote` method. Use `quote` instead. */
+  quote_ = this.quote;
+
   /**
    * Encode a string as a properly escaped multiline JavaScript string, complete
    * with quotes.
    * @param {string} string Text to encode.
    * @return {string} JavaScript string.
    */
-  multiline_quote_(string) {
+  multilineQuote(string) {
     // Can't use goog.string.quote since Google's style guide recommends
     // JS string literals use single quotes.
     const lines = string.split(/\n/g).map(this.quote_);
     return lines.join(' + \'\\n\' +\n');
   }
+
+  /** Alias for the `multilineQuote` method. Use `multilineQuote` instead. */
+  multiline_quote_ = this.multilineQuote;
 
   /**
    * Common tasks for generating JavaScript from blocks.

@@ -37,7 +37,7 @@ export type BlockGenerator = (
 /**
  * Class for a code generator that translates the blocks into a language.
  */
-export abstract class CodeGenerator {
+export class CodeGenerator {
   name_: string;
 
   /** A dictionary of block generator functions keyed by block type. */
@@ -436,10 +436,6 @@ export abstract class CodeGenerator {
     const id = block.id.replace(/\$/g, '$$$$'); // Issue 251.
     return msg.replace(/%1/g, "'" + id + "'");
   }
-
-  abstract quote_(toQuote: string): string;
-
-  abstract multiline_quote_(toQuote: string): string;
 
   /**
    * Add one or more words to the list of reserved words for this language.

@@ -185,12 +185,15 @@ export class PhpGenerator extends CodeGenerator {
    * @param {string} string Text to encode.
    * @return {string} PHP string.
    */
-  quote_(string) {
+  quote(string) {
     string = string.replace(/\\/g, '\\\\')
         .replace(/\n/g, '\\\n')
         .replace(/'/g, '\\\'');
     return '\'' + string + '\'';
   };
+
+  /** Alias for the `quote` method. Use `quote` instead. */
+  quote_ = this.quote;
 
   /**
    * Encode a string as a properly escaped multiline PHP string, complete with
@@ -198,13 +201,16 @@ export class PhpGenerator extends CodeGenerator {
    * @param {string} string Text to encode.
    * @return {string} PHP string.
    */
-  multiline_quote_(string) {
+  multilineQuote(string) {
     const lines = string.split(/\n/g).map(this.quote_);
     // Join with the following, plus a newline:
     // . "\n" .
     // Newline escaping only works in double-quoted strings.
     return lines.join(' . \"\\n\" .\n');
   };
+
+  /** Alias for the `multilineQuote` method. Use `multilineQuote` instead. */
+  multiline_quote_ = this.multilineQuote;
 
   /**
    * Common tasks for generating PHP from blocks.

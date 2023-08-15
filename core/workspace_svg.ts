@@ -1300,8 +1300,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   ): ICopyable<ICopyData> | null {
     deprecation.warn(
       'Blockly.WorkspaceSvg.prototype.paste',
+      'v10',
       'v11',
-      'v12',
       'Blockly.clipboard.paste',
     );
     if (!this.rendered || (!state['type'] && !state['tagName'])) {
@@ -1391,6 +1391,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
             for (let i = 0, connection; (connection = connections[i]); i++) {
               const neighbour = connection.closest(
                 config.snapRadius,
+                // This code doesn't work because it's passing absolute coords
+                // instead of relative coords. But we're deprecating the `paste`
+                // function anyway so we're not going to fix it.
                 new Coordinate(blockX, blockY),
               );
               if (neighbour.connection) {
@@ -1444,6 +1447,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         // with any blocks.
         commentX += 50;
         commentY += 50;
+        // This code doesn't work because it's passing absolute coords
+        // instead of relative coords. But we're deprecating the `paste`
+        // function anyway so we're not going to fix it.
         comment.moveBy(commentX, commentY);
       }
     } finally {

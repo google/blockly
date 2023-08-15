@@ -78,6 +78,7 @@ import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
 import {ContextMenuOption} from './contextmenu_registry.js';
 import * as renderManagement from './render_management.js';
+import * as deprecation from './utils/deprecation.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -1291,10 +1292,18 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param state The representation of the thing to paste.
    * @returns The pasted thing, or null if the paste was not successful.
+   * @deprecated v10. Use `Blockly.clipboard.paste` instead. To be removed in
+   *     v11.
    */
   paste(
     state: AnyDuringMigration | Element | DocumentFragment,
   ): ICopyable<ICopyData> | null {
+    deprecation.warn(
+      'Blockly.WorkspaceSvg.prototype.paste',
+      'v10',
+      'v11',
+      'Blockly.clipboard.paste',
+    );
     if (!this.rendered || (!state['type'] && !state['tagName'])) {
       return null;
     }
@@ -1382,10 +1391,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
             for (let i = 0, connection; (connection = connections[i]); i++) {
               const neighbour = connection.closest(
                 config.snapRadius,
-                // TODO: This code doesn't work because it's passing an absolute
-                //     coordinate instead of a relative coordinate. Need to
-                //     figure out if I'm deprecating this function or if I
-                //     need to fix this.
+                // This code doesn't work because it's passing absolute coords
+                // instead of relative coords. But we're deprecating the `paste`
+                // function anyway so we're not going to fix it.
                 new Coordinate(blockX, blockY),
               );
               if (neighbour.connection) {
@@ -1439,9 +1447,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         // with any blocks.
         commentX += 50;
         commentY += 50;
-        // TODO: This code doesn't work because it's using absolute coords
-        //    where relative coords are expected. Need to figure out what I'm
-        //    doing with this function and if I need to fix it.
+        // This code doesn't work because it's passing absolute coords
+        // instead of relative coords. But we're deprecating the `paste`
+        // function anyway so we're not going to fix it.
         comment.moveBy(commentX, commentY);
       }
     } finally {

@@ -1292,8 +1292,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param state The representation of the thing to paste.
    * @returns The pasted thing, or null if the paste was not successful.
-   * @deprecated v11. Use `Blockly.clipboard.paste` instead. To be removed in
-   *     v12.
+   * @deprecated v10. Use `Blockly.clipboard.paste` instead. To be removed in
+   *     v11.
    */
   paste(
     state: AnyDuringMigration | Element | DocumentFragment,

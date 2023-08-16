@@ -113,7 +113,7 @@ export function save(
   saveAttributes(block, state as AnyDuringMigration);
   // AnyDuringMigration because:  Argument of type '{ type: string; id: string;
   // }' is not assignable to parameter of type 'State'.
-  saveExtraState(block, state as AnyDuringMigration);
+  saveExtraState(block, state as AnyDuringMigration, doFullSerialization);
   // AnyDuringMigration because:  Argument of type '{ type: string; id: string;
   // }' is not assignable to parameter of type 'State'.
   saveIcons(block, state as AnyDuringMigration, doFullSerialization);
@@ -183,15 +183,22 @@ function saveCoords(block: Block, state: State) {
   state['x'] = Math.round(workspace.RTL ? workspace.getWidth() - xy.x : xy.x);
   state['y'] = Math.round(xy.y);
 }
+
 /**
  * Adds any extra state the block may provide to the given state object.
  *
  * @param block The block to serialize the extra state of.
  * @param state The state object to append to.
+ * @param doFullSerialization Whether or not to serialize the full state of the
+ *     extra state (rather than possibly saving a reference to some state).
  */
-function saveExtraState(block: Block, state: State) {
+function saveExtraState(
+  block: Block,
+  state: State,
+  doFullSerialization: boolean,
+) {
   if (block.saveExtraState) {
-    const extraState = block.saveExtraState();
+    const extraState = block.saveExtraState(doFullSerialization);
     if (extraState !== null) {
       state['extraState'] = extraState;
     }

@@ -54,21 +54,17 @@ const getSubstringIndex = function(stringName, where, opt_at) {
 };
 
 export function text(block, generator) {
-  if (generator.quote) {
-    return [generator.quote(block.getFieldValue('TEXT')), Order.ATOMIC];
-  }
-  return [generator.quote_(block.getFieldValue('TEXT')), Order.ATOMIC];
+  // Text value.
+  const code = generator.quote_(block.getFieldValue('TEXT'));
+  return [code, Order.ATOMIC];
 };
 
 export function text_multiline(block, generator) {
-  let code;
-  if (generator.multilineQuote) {
-    code = generator.multilineQuote(block.getFieldValue('TEXT'));
-  } else {
-    code = generator.multiline_quote_(block.getFieldValue('TEXT'));
-  }
-  const order =
-      code.indexOf('+') !== -1 ? Order.ADDITION : Order.ATOMIC;
+  // Text value.
+  const code =
+      generator.multiline_quote_(block.getFieldValue('TEXT'));
+  const order = code.indexOf('+') !== -1 ? Order.ADDITION :
+      Order.ATOMIC;
   return [code, order];
 };
 

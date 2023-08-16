@@ -14,6 +14,7 @@ const {
   testFileLocations,
   dragBlockTypeFromFlyout,
   screenDirection,
+  PAUSE_TIME,
 } = require('./test_setup');
 const {Key} = require('webdriverio');
 
@@ -49,7 +50,7 @@ async function testFieldEdits(browser, direction) {
   // Click on the workspace to exit the field editor
   const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
   await workspace.click();
-  await browser.pause(200);
+  await browser.pause(PAUSE_TIME);
 
   const fieldValue = await browser.execute((id) => {
     return Blockly.getMainWorkspace()

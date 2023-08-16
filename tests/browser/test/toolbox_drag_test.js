@@ -15,9 +15,8 @@ const {
   getCategory,
   scrollFlyout,
   screenDirection,
+  PAUSE_TIME,
 } = require('./test_setup');
-
-const PAUSE_TIME = 50;
 
 // Categories in the basic toolbox.
 const basicCategories = [
@@ -179,7 +178,7 @@ async function openCategories(browser, categoryList, directionMultiplier) {
   chai.assert.equal(failureCount, 0);
 }
 
-suite.skip('Open toolbox categories', function () {
+suite('Open toolbox categories', function () {
   this.timeout(0);
 
   test('opening every toolbox category in the category toolbox in LTR', async function () {

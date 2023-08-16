@@ -16,6 +16,7 @@ const {
   dragBlockTypeFromFlyout,
   connect,
   contextMenuSelect,
+  PAUSE_TIME,
 } = require('./test_setup');
 
 async function getIsCollapsed(browser, blockId) {
@@ -115,12 +116,12 @@ suite('Disabling', function () {
   setup(async function () {
     await this.browser.refresh();
     // Pause to allow refresh time to work.
-    await this.browser.pause(200);
+    await this.browser.pause(PAUSE_TIME + 150);
   });
 
   test(
     'children connected to value inputs are disabled when the ' +
-      'parent is diabled',
+      'parent is disabled',
     async function () {
       const parent = await dragBlockTypeFromFlyout(
         this.browser,

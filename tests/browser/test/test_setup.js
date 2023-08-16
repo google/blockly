@@ -23,6 +23,12 @@ const {posixPath} = require('../../../scripts/helpers');
 let driver = null;
 
 /**
+ * The default amount of time to wait during a test. Increase this to make
+ * tests easier to watch; decrease it to make tests run faster.
+ */
+const PAUSE_TIME = 50;
+
+/**
  * Start up the test page. This should only be done once, to avoid
  * constantly popping browser windows open and closed.
  * @return A Promsie that resolves to a webdriverIO browser that tests can manipulate.
@@ -351,7 +357,7 @@ async function connect(
 async function switchRTL(browser) {
   const ltrForm = await browser.$('#options > select:nth-child(1)');
   await ltrForm.selectByIndex(1);
-  await browser.pause(500);
+  await browser.pause(PAUSE_TIME + 450);
 }
 
 /**
@@ -426,7 +432,7 @@ async function contextMenuSelect(browser, block, itemText) {
   await item.waitForExist();
   await item.click();
 
-  await browser.pause(100);
+  await browser.pause(PAUSE_TIME);
 }
 
 /**
@@ -463,12 +469,12 @@ async function scrollFlyout(browser, xDelta, yDelta) {
   // and one for the toolbox. We want the second one.
   // This assumes there is only one scrollbar handle in the flyout, but it could
   // be either horizontal or vertical.
-  await browser.pause(50);
+  await browser.pause(PAUSE_TIME);
   const scrollbarHandle = await browser
     .$$(`.blocklyFlyoutScrollbar`)[1]
     .$(`rect.blocklyScrollbarHandle`);
   await scrollbarHandle.dragAndDrop({x: xDelta, y: yDelta});
-  await browser.pause(50);
+  await browser.pause(PAUSE_TIME);
 }
 
 module.exports = {
@@ -491,4 +497,5 @@ module.exports = {
   getBlockTypeFromWorkspace,
   getAllBlocks,
   scrollFlyout,
+  PAUSE_TIME,
 };

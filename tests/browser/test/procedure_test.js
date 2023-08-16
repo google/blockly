@@ -16,6 +16,7 @@ const {
   getNthBlockOfCategory,
   getBlockTypeFromCategory,
   connect,
+  PAUSE_TIME,
 } = require('./test_setup');
 
 suite('Testing Connecting Blocks', function (done) {
@@ -100,7 +101,7 @@ suite('Testing Connecting Blocks', function (done) {
     // Click run button and verify the number is 123
     const runButton = await this.browser.$('#runButton');
     runButton.click();
-    await this.browser.pause(200);
+    await this.browser.pause(PAUSE_TIME);
     const alertText = await this.browser.getAlertText(); // get the alert text
     chai.assert.equal(alertText, '123');
   });

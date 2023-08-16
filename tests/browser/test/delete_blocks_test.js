@@ -11,6 +11,7 @@ const {
   getAllBlocks,
   getBlockElementById,
   contextMenuSelect,
+  PAUSE_TIME,
 } = require('./test_setup');
 const {Key} = require('webdriverio');
 
@@ -98,7 +99,6 @@ const startBlocks = {
     ],
   },
 };
-const pauseLength = 200;
 
 suite('Delete blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
@@ -185,7 +185,7 @@ suite('Delete blocks', function (done) {
     );
     await block.click();
     await this.browser.keys([Key.Backspace]);
-    await this.browser.pause(pauseLength);
+    await this.browser.pause(PAUSE_TIME);
     // Undo
     await this.browser.keys([Key.Ctrl, 'Z']);
     const after = (await getAllBlocks(this.browser)).length;
@@ -204,13 +204,13 @@ suite('Delete blocks', function (done) {
     );
     await block.click();
     await this.browser.keys([Key.Backspace]);
-    await this.browser.pause(pauseLength);
+    await this.browser.pause(PAUSE_TIME);
     // Undo
     await this.browser.keys([Key.Ctrl, 'Z']);
-    await this.browser.pause(pauseLength);
+    await this.browser.pause(PAUSE_TIME);
     // Redo
     await this.browser.keys([Key.Ctrl, Key.Shift, 'Z']);
-    await this.browser.pause(pauseLength);
+    await this.browser.pause(PAUSE_TIME);
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(
       before - 2,

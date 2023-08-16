@@ -17,6 +17,7 @@ const {
   dragBlockTypeFromFlyout,
   getSelectedBlockId,
   screenDirection,
+  PAUSE_TIME,
 } = require('./test_setup');
 
 suite('This tests mutating a Blockly block', function (done) {
@@ -42,19 +43,19 @@ async function testingMutator(browser, delta) {
     delta * 50,
     50,
   );
-  // Click on the mutator and drag out else ig block
+  // Click on the mutator and drag out else if block
   const mutatorWheel = await browser.$(
     '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > g.blocklyDraggable.blocklySelected > g.blocklyIconGroup',
   );
   await mutatorWheel.click();
-  await browser.pause(100);
+  await browser.pause(PAUSE_TIME);
   const elseIfFlyout = await browser.$(
     '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBubbleCanvas > g > g:nth-child(2) > svg:nth-child(1) > g > g.blocklyFlyout > g > g.blocklyBlockCanvas > g:nth-child(3)',
   );
   await elseIfFlyout.dragAndDrop({x: delta * 50, y: 42});
-  await browser.pause(100);
+  await browser.pause(PAUSE_TIME);
 
-  await browser.pause(100);
+  await browser.pause(PAUSE_TIME);
   // Get the ids for the blocks in the mutator
   const blockIds = await browser.execute(() => {
     const mutatorBlock = Blockly.getMainWorkspace().getAllBlocks()[0];
@@ -83,7 +84,7 @@ async function testingMutator(browser, delta) {
     blockIds[0],
     dragBlockSelector,
   );
-  await browser.pause(200);
+  await browser.pause(PAUSE_TIME);
 
   // Get the ids for block after mutating
   const afterInputs = await browser.execute(() => {

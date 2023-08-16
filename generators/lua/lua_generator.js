@@ -150,15 +150,12 @@ export class LuaGenerator extends CodeGenerator {
    * @param {string} string Text to encode.
    * @return {string} Lua string.
    */
-  quote(string) {
+  quote_(string) {
     string = string.replace(/\\/g, '\\\\')
         .replace(/\n/g, '\\\n')
         .replace(/'/g, '\\\'');
     return '\'' + string + '\'';
   };
-
-  /** Alias for the `quote` method. Use `quote` instead. */
-  quote_ = this.quote;
 
   /**
    * Encode a string as a properly escaped multiline Lua string, complete with
@@ -166,15 +163,12 @@ export class LuaGenerator extends CodeGenerator {
    * @param {string} string Text to encode.
    * @return {string} Lua string.
    */
-  multilineQuote(string) {
+  multiline_quote_(string) {
     const lines = string.split(/\n/g).map(this.quote_);
     // Join with the following, plus a newline:
     // .. '\n' ..
     return lines.join(' .. \'\\n\' ..\n');
   };
-
-  /** Alias for the `multilineQuote` method. Use `multilineQuote` instead. */
-  multiline_quote_ = this.multilineQuote;
 
   /**
    * Common tasks for generating Lua from blocks.

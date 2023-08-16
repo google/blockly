@@ -177,7 +177,7 @@ export class DartGenerator extends CodeGenerator {
    * @param {string} string Text to encode.
    * @return {string} Dart string.
    */
-  quote(string) {
+  quote_(string) {
     // Can't use goog.string.quote since $ must also be escaped.
     string = string.replace(/\\/g, '\\\\')
         .replace(/\n/g, '\\\n')
@@ -186,24 +186,18 @@ export class DartGenerator extends CodeGenerator {
     return '\'' + string + '\'';
   }
 
-  /** Alias for the `quote` method. Use `quote` instead. */
-  quote_ = this.quote;
-
   /**
    * Encode a string as a properly escaped multiline Dart string, complete with
    * quotes.
    * @param {string} string Text to encode.
    * @return {string} Dart string.
    */
-  multilineQuote(string) {
+  multiline_quote_(string) {
     const lines = string.split(/\n/g).map(this.quote_);
     // Join with the following, plus a newline:
     // + '\n' +
     return lines.join(' + \'\\n\' + \n');
   }
-
-  /** Alias for the `multilineQuote` method. Use `multilineQuote` instead. */
-  multiline_quote_ = this.multilineQuote;
 
   /**
    * Common tasks for generating Dart from blocks.

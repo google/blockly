@@ -691,10 +691,8 @@ async function buildShims() {
   // ESM, but fortunately we don't attempt to import or require this
   // file from node.js - we only feed it to Closure Compiler, which
   // uses the type information in deps.js rather than package.json.
-  await fsPromises.writeFile(
-    path.join(BUILD_DIR, 'package.json'),
-    '{"type": "module"}'
-  );
+  const TMP_PACKAGE_JSON = path.join(BUILD_DIR, 'package.json');
+  await fsPromises.writeFile(TMP_PACKAGE_JSON, '{"type": "module"}');
 
   // Import each entrypoint module, enumerate its exports, and write
   // a shim to load the chunk either by importing the entrypoint
@@ -723,6 +721,8 @@ ${Object.keys(exports).map((name) => `  ${name},`).join('\n')}
 );
 `);
   }));
+
+  await fsPromises.rm(TMP_PACKAGE_JSON);
 }
 
 

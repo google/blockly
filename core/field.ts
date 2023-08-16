@@ -79,9 +79,7 @@ export abstract class Field<T = any>
    * the prototype.
    *
    * Example:
-   * ```typescript
-   * FieldImage.prototype.DEFAULT_VALUE = null;
-   * ```
+   * `FieldImage.prototype.DEFAULT_VALUE = null;`
    */
   DEFAULT_VALUE: T | null = null;
 

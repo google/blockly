@@ -70,14 +70,19 @@ async function driverTeardown() {
 
 /**
  * Navigate to the correct URL for the test, using the shared driver.
- * @param {string} url The URL to open for the test.
+ * @param {string} playgroundUrl The URL to open for the test, which should be
+ *     a Blockly playground with a workspace.
  * @return A Promsie that resolves to a webdriverIO browser that tests can manipulate.
  */
-async function testSetup(url) {
+async function testSetup(playgroundUrl) {
   if (!driver) {
     await driverSetup();
   }
-  await driver.url(url);
+  await driver.url(playgroundUrl);
+  // Wait for the workspace to exist and be rendered.
+  await driver
+    .$('.blocklySvg .blocklyWorkspace > .blocklyBlockCanvas')
+    .waitForExist({timeout: 2000});
   return driver;
 }
 

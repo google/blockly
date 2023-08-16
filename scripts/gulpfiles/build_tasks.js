@@ -705,7 +705,9 @@ async function buildShims() {
         path.posix.join(RELEASE_DIR, `${chunk.name}${COMPILED_SUFFIX}.js`);
     const shimPath = path.join(BUILD_DIR, `${chunk.name}.loader.mjs`);
     const parentImport =
-        chunk.parent ? `import ${quote(`./${chunk.parent.name}.mjs`)};` : '';
+        chunk.parent ?
+        `import ${quote(`./${chunk.parent.name}.loader.mjs`)};` :
+        '';
     const exports = await import(`../../${modulePath}`);
 
     await fsPromises.writeFile(shimPath,

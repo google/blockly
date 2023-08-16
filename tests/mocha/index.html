@@ -130,6 +130,22 @@
     </script>
     <script src="../bootstrap.js"></script>
 
+    <script type="module">
+      // Wait for Blockly to finish loading before running tests.
+      import '../bootstrap_done.mjs';
+
+      let runner = mocha.run(function (failures) {
+        var failureDiv = document.getElementById('failureCount');
+        failureDiv.setAttribute('tests_failed', failures);
+      });
+      runner.on('fail', function (test, err) {
+        const msg = document.createElement('p');
+        msg.textContent = `"${test.fullTitle()}" failed: ${err.message}`;
+        const div = document.getElementById('failureMessages');
+        div.appendChild(msg);
+      });
+    </script>
+
     <div id="blocklyDiv"></div>
 
     <xml
@@ -203,20 +219,5 @@
       <block type="test_field_block"></block>
     </xml>
 
-    <script type="module">
-      // Wait for Blockly to finish loading before running tests.
-      import '../bootstrap_done.mjs';
-
-      let runner = mocha.run(function (failures) {
-        var failureDiv = document.getElementById('failureCount');
-        failureDiv.setAttribute('tests_failed', failures);
-      });
-      runner.on('fail', function (test, err) {
-        const msg = document.createElement('p');
-        msg.textContent = `"${test.fullTitle()}" failed: ${err.message}`;
-        const div = document.getElementById('failureMessages');
-        div.appendChild(msg);
-      });
-    </script>
   </body>
 </html>

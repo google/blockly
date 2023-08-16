@@ -695,6 +695,15 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   }
 
   /**
+   * Returns the SVG group for the workspace.
+   *
+   * @returns The SVG group for the workspace.
+   */
+  getSvgGroup(): Element {
+    return this.svgGroup_;
+  }
+
+  /**
    * Get the SVG block canvas for the workspace.
    *
    * @returns The SVG group for the workspace.

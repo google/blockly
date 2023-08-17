@@ -218,12 +218,10 @@ export class MiniWorkspaceBubble extends Bubble {
    * Calculates the size of the mini workspace for use in resizing the bubble.
    */
   private calculateWorkspaceSize(): Size {
-    // TODO (#7104): Clean this up to be more readable and unified for RTL
-    //     vs LTR.
-    const canvas = this.miniWorkspace.getCanvas();
-    const workspaceSize = canvas.getBBox();
-    let width = workspaceSize.width + workspaceSize.x;
+    const workspaceSize = this.miniWorkspace.getCanvas().getBBox();
+    let width = workspaceSize.width + MiniWorkspaceBubble.MARGIN;
     let height = workspaceSize.height + MiniWorkspaceBubble.MARGIN;
+
     const flyout = this.miniWorkspace.getFlyout();
     if (flyout) {
       const flyoutScrollMetrics = flyout
@@ -233,10 +231,6 @@ export class MiniWorkspaceBubble extends Bubble {
       height = Math.max(height, flyoutScrollMetrics.height + 20);
       width += flyout.getWidth();
     }
-    if (this.miniWorkspace.RTL) {
-      width = -workspaceSize.x;
-    }
-    width += MiniWorkspaceBubble.MARGIN;
     return new Size(width, height);
   }
 

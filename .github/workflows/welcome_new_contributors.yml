@@ -13,7 +13,7 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           pr-message: >
-            Welcome! It looks like this is your first pull request in blockly,
+            Welcome! It looks like this is your first pull request in Blockly,
             so here are a couple of tips:
 
               - You can find tips about contributing to Blockly and how to

@@ -15,7 +15,7 @@ jobs:
           pr-message: >
             Welcome! It looks like this is your first pull request in blockly,
             so here are a couple of tips:
-            
+
               - You can find tips about contributing to Blockly and how to
               validate your changes on our
               [developer site](https://developers.google.com/blockly/guides/contribute/core#making_and_verifying_a_change).

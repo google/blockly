@@ -110,25 +110,7 @@ export const runSerializationTestSuite = (testCases) => {
     });
     suite('xml round-trip', function () {
       setup(function () {
-        // The genUid is undergoing change as part of the 2021Q3
-        // goog.module migration:
-        //
-        // - It is being moved from Blockly.utils to
-        //   Blockly.utils.idGenerator (which itself is being renamed
-        //   from IdGenerator).
-        // - For compatibility with changes to the module system (from
-        //   goog.provide to goog.module and in future to ES modules),
-        //   .genUid is now a wrapper around .TEST_ONLY.genUid, which
-        //   can be safely stubbed by sinon or other similar
-        //   frameworks in a way that will continue to work.
-        if (Blockly.utils.idGenerator && Blockly.utils.idGenerator.TEST_ONLY) {
-          sinon
-            .stub(Blockly.utils.idGenerator.TEST_ONLY, 'genUid')
-            .returns('1');
-        } else {
-          // Fall back to stubbing original version on Blockly.utils.
-          sinon.stub(Blockly.utils, 'genUid').returns('1');
-        }
+        sinon.stub(Blockly.utils.idGenerator.TEST_ONLY, 'genUid').returns('1');
       });
 
       teardown(function () {

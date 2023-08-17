@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../build/src/closure/goog/goog.js';
-goog.declareModuleId('Blockly.test.logicTernary');
-
 import * as eventUtils from '../../../build/src/core/events/utils.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {

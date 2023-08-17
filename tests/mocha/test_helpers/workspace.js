@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../build/src/closure/goog/goog.js';
-goog.declareModuleId('Blockly.test.helpers.workspace');
-
 import {assertVariableValues} from './variables.js';
 import {assertWarnings} from './warnings.js';
 import * as eventUtils from '../../../build/src/core/events/utils.js';

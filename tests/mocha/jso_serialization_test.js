@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../build/src/closure/goog/goog.js';
-goog.declareModuleId('Blockly.test.jsoSerialization');
-
 import * as Blockly from '../../build/src/core/blockly.js';
 import {
   createGenUidStubWithReturns,

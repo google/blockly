@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../build/src/closure/goog/goog.js';
-goog.declareModuleId('Blockly.test.gesture');
-
 import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
 import {defineBasicBlockWithField} from './test_helpers/block_definitions.js';
 import {dispatchPointerEvent} from './test_helpers/user_input.js';

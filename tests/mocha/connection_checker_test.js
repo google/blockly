@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../build/src/closure/goog/goog.js';
-goog.declareModuleId('Blockly.test.connectionChecker');
-
 import {ConnectionType} from '../../build/src/core/connection_type.js';
 import {
   sharedTestSetup,

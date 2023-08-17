@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../build/src/closure/goog/goog.js';
-goog.declareModuleId('Blockly.test.helpers.toolboxDefinitions');
-
 /**
  * Get JSON for a toolbox that contains categories.
  * @return {Blockly.utils.toolbox.ToolboxJson} The array holding information

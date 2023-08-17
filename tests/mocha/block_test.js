@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../build/src/closure/goog/goog.js';
-goog.declareModuleId('Blockly.test.blocks');
-
 import {ConnectionType} from '../../build/src/core/connection_type.js';
 import {createDeprecationWarningStub} from './test_helpers/warnings.js';
 import {createRenderedBlock} from './test_helpers/block_definitions.js';

@@ -3,8 +3,6 @@
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as goog from '../../../build/src/closure/goog/goog.js';
-goog.declareModuleId('Blockly.test.helpers.procedures');
 
 import {ConnectionType} from '../../../build/src/core/connection_type.js';
 import {VariableModel} from '../../../build/src/core/variable_model.js';

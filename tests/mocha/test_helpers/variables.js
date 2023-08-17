@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../build/src/closure/goog/goog.js';
-goog.declareModuleId('Blockly.test.helpers.variables');
-
 /**
  * Check if a variable with the given values exists.
  * @param {Blockly.Workspace|Blockly.VariableMap} container The workspace  or

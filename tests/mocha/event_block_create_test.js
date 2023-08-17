@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../build/src/closure/goog/goog.js';
-goog.declareModuleId('Blockly.test.eventBlockCreate');
-
 import {assertEventFired} from './test_helpers/events.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {

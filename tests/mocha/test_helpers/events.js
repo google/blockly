@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.helpers.events');
-
 /**
  * Creates spy for workspace fireChangeListener
  * @param {!Blockly.Workspace} workspace The workspace to spy fireChangeListener

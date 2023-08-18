@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.logicTernary');
-
 import * as eventUtils from '../../../build/src/core/events/utils.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {

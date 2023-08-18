@@ -15,16 +15,17 @@ gulp.sourcemaps = require('gulp-sourcemaps');
 
 const path = require('path');
 const fs = require('fs');
+const fsPromises = require('fs/promises');
 const {exec, execSync} = require('child_process');
 
 const closureCompiler = require('google-closure-compiler').gulp();
 const argv = require('yargs').argv;
 const {rimraf} = require('rimraf');
 
-const {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
+const {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 const {getPackageJson} = require('./helper_tasks');
 
-const {posixPath} = require('../helpers');
+const {posixPath, quote} = require('../helpers');
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
@@ -106,6 +107,7 @@ const chunks = [
   {
     name: 'blockly',
     entry: path.join(TSC_OUTPUT_DIR, 'core', 'main.js'),
+    moduleEntry: path.join(TSC_OUTPUT_DIR, 'core', 'blockly.js'),
     exports: 'module$build$src$core$blockly',
     scriptExport: 'Blockly',
   },
@@ -303,35 +305,16 @@ function buildJavaScript(done) {
  * This task updates DEPS_FILE (deps.js), used by the debug module
  * loader (via bootstrap.js) when loading Blockly in uncompiled mode.
  *
- * Also updates TEST_DEPS_FILE (deps.mocha.js), used by the mocha test
- * suite.
- *
  * Prerequisite: buildJavaScript.
  */
 function buildDeps() {
   const roots = [
     path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base.js'),
     TSC_OUTPUT_DIR,
-    'tests/mocha',
   ];
 
   /** Maximum buffer size, in bytes for child process stdout/stderr. */
   const MAX_BUFFER_SIZE = 10 * 1024 * 1024;
-
-  /**
-   * Filter a string to extract lines containing (or not containing) the
-   * specified target string.
-   *
-   * @param {string} text Text to filter.
-   * @param {string} target String to search for.
-   * @param {boolean?} exclude If true, extract only non-matching lines.
-   * @returns {string} Filtered text.
-   */
-  function filter(text, target, exclude) {
-    return text.split('\n')
-        .filter((line) => Boolean(line.match(target)) !== Boolean(exclude))
-        .join('\n');
-  }
 
   /**
    * Log unexpected diagnostics, after removing expected warnings.
@@ -372,9 +355,7 @@ error message above, try running:
           } else {
             log(stderr);
             // Anything not about mocha goes in DEPS_FILE.
-            fs.writeFileSync(DEPS_FILE, filter(stdout, 'tests/mocha', true));
-            // Anything about mocha does in TEST_DEPS_FILE.
-            fs.writeFileSync(TEST_DEPS_FILE, filter(stdout, 'tests/mocha'));
+            fs.writeFileSync(DEPS_FILE, stdout);
             resolve();
           }
         });
@@ -673,6 +654,59 @@ function buildCompiled() {
 }
 
 /**
+ * This task builds the shims used by the playgrounds and tests to
+ * load Blockly in either compressed or uncompressed mode, creating
+ * build/blockly.loader.mjs, blocks.loader.mjs, javascript.loader.mjs,
+ * etc.
+ *
+ * Prerequisite: getChunkOptions (via buildCompiled, for chunks[].parent).
+ */
+async function buildShims() {
+  // Install a package.json file in BUILD_DIR to tell node.js that the
+  // .js files therein are ESM not CJS, so we can import the
+  // entrypoints to enumerate their exported names.
+  //
+  // N.B.: There is an exception: core/main.js is a goog.module not
+  // ESM, but fortunately we don't attempt to import or require this
+  // file from node.js - we only feed it to Closure Compiler, which
+  // uses the type information in deps.js rather than package.json.
+  const TMP_PACKAGE_JSON = path.join(BUILD_DIR, 'package.json');
+  await fsPromises.writeFile(TMP_PACKAGE_JSON, '{"type": "module"}');
+
+  // Import each entrypoint module, enumerate its exports, and write
+  // a shim to load the chunk either by importing the entrypoint
+  // module or by loading the compiled script.
+  await Promise.all(chunks.map(async (chunk) => {
+    const modulePath = posixPath(chunk.moduleEntry ?? chunk.entry);
+    const scriptPath =
+        path.posix.join(RELEASE_DIR, `${chunk.name}${COMPILED_SUFFIX}.js`);
+    const shimPath = path.join(BUILD_DIR, `${chunk.name}.loader.mjs`);
+    const parentImport =
+        chunk.parent ?
+        `import ${quote(`./${chunk.parent.name}.loader.mjs`)};` :
+        '';
+    const exports = await import(`../../${modulePath}`);
+
+    await fsPromises.writeFile(shimPath,
+        `import {loadChunk} from '../tests/scripts/load.mjs';
+${parentImport}
+
+export const {
+${Object.keys(exports).map((name) => `  ${name},`).join('\n')}
+} = await loadChunk(
+  ${quote(modulePath)},
+  ${quote(scriptPath)},
+  ${quote(chunk.scriptExport)},
+);
+`);
+  }));
+
+  await fsPromises.rm(TMP_PACKAGE_JSON);
+}
+
+
+
+/**
  * This task builds Blockly core, blocks and generators together and uses
  * Closure Compiler's ADVANCED_COMPILATION mode.
  *
@@ -728,7 +762,7 @@ exports.cleanBuildDir = cleanBuildDir;
 exports.langfiles = buildLangfiles;  // Build build/msg/*.js from msg/json/*.
 exports.tsc = buildJavaScript;
 exports.deps = gulp.series(exports.tsc, buildDeps);
-exports.minify = gulp.series(exports.deps, buildCompiled);
+exports.minify = gulp.series(exports.deps, buildCompiled, buildShims);
 exports.build = gulp.parallel(exports.minify, exports.langfiles);
 
 // Manually-invokable targets, with prerequisites where required.

@@ -15,8 +15,6 @@ import {
 } from './test_helpers/events.js';
 import {MockProcedureModel} from './test_helpers/procedures.js';
 
-goog.declareModuleId('Blockly.test.procedureMap');
-
 suite('Procedure Map', function () {
   setup(function () {
     sharedTestSetup.call(this);

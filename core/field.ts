@@ -79,9 +79,7 @@ export abstract class Field<T = any>
    * the prototype.
    *
    * Example:
-   * ```typescript
-   * FieldImage.prototype.DEFAULT_VALUE = null;
-   * ```
+   * `FieldImage.prototype.DEFAULT_VALUE = null;`
    */
   DEFAULT_VALUE: T | null = null;
 
@@ -423,6 +421,9 @@ export abstract class Field<T = any>
    * @param _doFullSerialization If true, this signals to the field that if it
    *     normally just saves a reference to some state (eg variable fields) it
    *     should instead serialize the full state of the thing being referenced.
+   *     See the
+   *     {@link https://developers.devsite.google.com/blockly/guides/create-custom-blocks/fields/customizing-fields/creating#full_serialization_and_backing_data | field serialization docs}
+   *     for more information.
    * @returns JSON serializable state.
    * @internal
    */

@@ -7,10 +7,7 @@
 
 <!-- TODO: Verify the following, checking each box with an 'x' between the brackets: [x] -->
 
-- [ ] I branched from develop
-- [ ] My pull request is against develop
-- [ ] My code follows the [style guide](https://developers.google.com/blockly/guides/modify/web/style-guide)
-- [ ] I ran `npm run format` and `npm run lint`
+- [ ] I [validated my changes](https://developers.google.com/blockly/guides/contribute/core#making_and_verifying_a_change)
 
 ## The details
 ### Resolves

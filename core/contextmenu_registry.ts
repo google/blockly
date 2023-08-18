@@ -137,7 +137,7 @@ export namespace ContextMenuRegistry {
   export interface RegistryItem {
     callback: (p1: Scope) => void;
     scopeType: ScopeType;
-    displayText: ((p1: Scope) => string) | string;
+    displayText: ((p1: Scope) => string | HTMLElement) | string | HTMLElement;
     preconditionFn: (p1: Scope) => string;
     weight: number;
     id: string;
@@ -147,7 +147,7 @@ export namespace ContextMenuRegistry {
    * A menu item as presented to contextmenu.js.
    */
   export interface ContextMenuOption {
-    text: string;
+    text: string | HTMLElement;
     enabled: boolean;
     callback: (p1: Scope) => void;
     scope: Scope;

@@ -120,8 +120,14 @@ export class Block implements IASTNodeLocation, IDeletable {
    * An optional serialization method for defining how to serialize the
    * block's extra state (eg mutation state) to something JSON compatible.
    * This must be coupled with defining `loadExtraState`.
+   *
+   * @param doFullSerialization Whether or not to serialize the full state of
+   *     the extra state (rather than possibly saving a reference to some
+   *     state). This is used during copy-paste. See the
+   *     {@link https://developers.devsite.google.com/blockly/guides/create-custom-blocks/extensions#full_serialization_and_backing_data | block serialization docs}
+   *     for more information.
    */
-  saveExtraState?: () => AnyDuringMigration;
+  saveExtraState?: (doFullSerialization?: boolean) => AnyDuringMigration;
 
   /**
    * An optional serialization method for defining how to deserialize the

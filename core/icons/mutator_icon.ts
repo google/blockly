@@ -60,6 +60,15 @@ export class MutatorIcon extends Icon implements IHasBubble {
   /** The PID tracking updating the workkspace in response to user events. */
   private updateWorkspacePid: ReturnType<typeof setTimeout> | null = null;
 
+  /**
+   * The change listener in the main workspace that triggers the saveConnections
+   * method when anything in the main workspace changes.
+   *
+   * Only actually registered to listen for events while the mutator bubble is
+   * open.
+   */
+  private saveConnectionsListener: (() => void) | null = null;
+
   constructor(
     private readonly flyoutBlockTypes: string[],
     protected readonly sourceBlock: BlockSvg,
@@ -169,6 +178,12 @@ export class MutatorIcon extends Icon implements IHasBubble {
     } else {
       this.miniWorkspaceBubble?.dispose();
       this.miniWorkspaceBubble = null;
+      if (this.saveConnectionsListener) {
+        this.sourceBlock.workspace.removeChangeListener(
+          this.saveConnectionsListener,
+        );
+      }
+      this.saveConnectionsListener = null;
     }
 
     eventUtils.fire(
@@ -254,12 +269,12 @@ export class MutatorIcon extends Icon implements IHasBubble {
   /** Adds a listen to the source block that triggers saving connections. */
   private addSaveConnectionsListener() {
     if (!this.sourceBlock.saveConnections || !this.rootBlock) return;
-    const saveConnectionsListener = () => {
+    this.saveConnectionsListener = () => {
       if (!this.sourceBlock.saveConnections || !this.rootBlock) return;
       this.sourceBlock.saveConnections(this.rootBlock);
     };
-    saveConnectionsListener();
-    this.sourceBlock.workspace.addChangeListener(saveConnectionsListener);
+    this.saveConnectionsListener();
+    this.sourceBlock.workspace.addChangeListener(this.saveConnectionsListener);
   }
 
   /**

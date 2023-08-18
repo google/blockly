@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.helpers.setupTeardown');
-
 import * as eventUtils from '../../../build/src/core/events/utils.js';
 
 /**

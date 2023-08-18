@@ -711,7 +711,7 @@ ${Object.keys(exports).map((name) => `  ${name},`).join('\n')}
  * This task builds Blockly core, blocks and generators together and uses
  * Closure Compiler's ADVANCED_COMPILATION mode.
  *
- * Prerequisite: buildDeps.
+ * Prerequisite: buildJavaScript.
  */
 function buildAdvancedCompilationTest() {
   // If main_compressed.js exists (from a previous run) delete it so that
@@ -762,14 +762,13 @@ function cleanBuildDir() {
 exports.cleanBuildDir = cleanBuildDir;
 exports.langfiles = buildLangfiles;  // Build build/msg/*.js from msg/json/*.
 exports.tsc = buildJavaScript;
-exports.deps = gulp.series(exports.tsc, buildDeps);
-exports.minify = gulp.series(exports.deps, buildCompiled, buildShims);
+exports.minify = gulp.series(exports.tsc, buildDeps, buildCompiled, buildShims);
 exports.build = gulp.parallel(exports.minify, exports.langfiles);
 
 // Manually-invokable targets, with prerequisites where required.
 exports.messages = generateMessages;  // Generate msg/json/en.json et al.
 exports.buildAdvancedCompilationTest =
-    gulp.series(exports.deps, buildAdvancedCompilationTest);
+    gulp.series(exports.tsc, buildAdvancedCompilationTest);
 
 // Targets intended only for invocation by scripts; may omit prerequisites.
 exports.onlyBuildAdvancedCompilationTest = buildAdvancedCompilationTest;

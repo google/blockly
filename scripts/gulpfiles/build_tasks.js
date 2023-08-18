@@ -302,8 +302,9 @@ function buildJavaScript(done) {
 }
 
 /**
- * This task updates DEPS_FILE (deps.js), used by the debug module
- * loader (via bootstrap.js) when loading Blockly in uncompiled mode.
+ * This task updates DEPS_FILE (deps.js), used by
+ * closure-calculate-chunks when determining how to organise .js
+ * source files into chunks.
  *
  * Prerequisite: buildJavaScript.
  */

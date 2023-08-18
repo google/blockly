@@ -19,7 +19,6 @@ const path = require('path');
 // - tests/scripts/compile_typings.sh
 // - tests/scripts/check_metadata.sh
 // - tests/scripts/update_metadata.sh
-// - tests/bootstrap.js (for location of deps.js)
 // - tests/mocha/index.html (for location of deps.mocha.js)
 
 // Directory to write compiled output to.

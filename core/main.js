@@ -7,7 +7,7 @@
 /**
  * @fileoverview The entrypoint for blockly_compressed.js.  Provides
  *     various backwards-compatibility hacks.  Not used when loading
- *     in uncompiled (uncompressed) mode via bootstrap.js.
+ *     in uncompiled (uncompressed) mode via blockly.loader.mjs.
  */
 'use strict';
 

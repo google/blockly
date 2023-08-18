@@ -22,7 +22,7 @@ const closureCompiler = require('google-closure-compiler').gulp();
 const argv = require('yargs').argv;
 const {rimraf} = require('rimraf');
 
-const {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
+const {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 const {getPackageJson} = require('./helper_tasks');
 
 const {posixPath, quote} = require('../helpers');
@@ -305,35 +305,16 @@ function buildJavaScript(done) {
  * This task updates DEPS_FILE (deps.js), used by the debug module
  * loader (via bootstrap.js) when loading Blockly in uncompiled mode.
  *
- * Also updates TEST_DEPS_FILE (deps.mocha.js), used by the mocha test
- * suite.
- *
  * Prerequisite: buildJavaScript.
  */
 function buildDeps() {
   const roots = [
     path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base.js'),
     TSC_OUTPUT_DIR,
-    'tests/mocha',
   ];
 
   /** Maximum buffer size, in bytes for child process stdout/stderr. */
   const MAX_BUFFER_SIZE = 10 * 1024 * 1024;
-
-  /**
-   * Filter a string to extract lines containing (or not containing) the
-   * specified target string.
-   *
-   * @param {string} text Text to filter.
-   * @param {string} target String to search for.
-   * @param {boolean?} exclude If true, extract only non-matching lines.
-   * @returns {string} Filtered text.
-   */
-  function filter(text, target, exclude) {
-    return text.split('\n')
-        .filter((line) => Boolean(line.match(target)) !== Boolean(exclude))
-        .join('\n');
-  }
 
   /**
    * Log unexpected diagnostics, after removing expected warnings.
@@ -374,9 +355,7 @@ error message above, try running:
           } else {
             log(stderr);
             // Anything not about mocha goes in DEPS_FILE.
-            fs.writeFileSync(DEPS_FILE, filter(stdout, 'tests/mocha', true));
-            // Anything about mocha does in TEST_DEPS_FILE.
-            fs.writeFileSync(TEST_DEPS_FILE, filter(stdout, 'tests/mocha'));
+            fs.writeFileSync(DEPS_FILE, stdout);
             resolve();
           }
         });
@@ -691,10 +670,8 @@ async function buildShims() {
   // ESM, but fortunately we don't attempt to import or require this
   // file from node.js - we only feed it to Closure Compiler, which
   // uses the type information in deps.js rather than package.json.
-  await fsPromises.writeFile(
-    path.join(BUILD_DIR, 'package.json'),
-    '{"type": "module"}'
-  );
+  const TMP_PACKAGE_JSON = path.join(BUILD_DIR, 'package.json');
+  await fsPromises.writeFile(TMP_PACKAGE_JSON, '{"type": "module"}');
 
   // Import each entrypoint module, enumerate its exports, and write
   // a shim to load the chunk either by importing the entrypoint
@@ -723,6 +700,8 @@ ${Object.keys(exports).map((name) => `  ${name},`).join('\n')}
 );
 `);
   }));
+
+  await fsPromises.rm(TMP_PACKAGE_JSON);
 }
 
 

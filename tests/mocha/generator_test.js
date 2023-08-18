@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.generator');
-
 import * as Blockly from '../../build/src/core/blockly.js';
 import {DartGenerator} from '../../build/src/generators/dart/dart_generator.js';
 import {JavascriptGenerator} from '../../build/src/generators/javascript/javascript_generator.js';

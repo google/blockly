@@ -28,9 +28,6 @@ exports.BUILD_DIR = 'build';
 // Dependencies file (used by bootstrap.js in uncompiled mode):
 exports.DEPS_FILE = path.join(exports.BUILD_DIR, 'deps.js');
 
-// Mocha test dependencies file (used by tests/mocha/index.html):
-exports.TEST_DEPS_FILE = path.join(exports.BUILD_DIR, 'deps.mocha.js');
-
 // Directory to write typings output to.
 exports.TYPINGS_BUILD_DIR = path.join(exports.BUILD_DIR, 'declarations');
 

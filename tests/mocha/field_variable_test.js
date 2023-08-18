@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.fieldVariable');
-
 import * as Blockly from '../../build/src/core/blockly.js';
 import {
   assertFieldValue,

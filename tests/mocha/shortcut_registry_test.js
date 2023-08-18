@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.shortcutRegistry');
-
 import {createKeyDownEvent} from './test_helpers/user_input.js';
 import {
   sharedTestSetup,

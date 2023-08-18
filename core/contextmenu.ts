@@ -225,7 +225,7 @@ export function dispose() {
 
 /**
  * Create a callback function that creates and configures a block,
- *   then places the new block next to the original.
+ *   then places the new block next to the original and returns it.
  *
  * @param block Original block.
  * @param state XML or JSON object representation of the new block.
@@ -234,10 +234,10 @@ export function dispose() {
 export function callbackFactory(
   block: Block,
   state: Element | serializationBlocks.State,
-): () => void {
+): () => BlockSvg {
   return () => {
     eventUtils.disable();
-    let newBlock;
+    let newBlock: BlockSvg;
     try {
       if (state instanceof Element) {
         newBlock = Xml.domToBlockInternal(state, block.workspace!) as BlockSvg;
@@ -263,6 +263,7 @@ export function callbackFactory(
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(newBlock));
     }
     newBlock.select();
+    return newBlock;
   };
 }
 

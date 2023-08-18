@@ -22,7 +22,7 @@ const closureCompiler = require('google-closure-compiler').gulp();
 const argv = require('yargs').argv;
 const {rimraf} = require('rimraf');
 
-const {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
+const {BUILD_DIR, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 const {getPackageJson} = require('./helper_tasks');
 
 const {posixPath, quote} = require('../helpers');
@@ -42,6 +42,11 @@ const PYTHON = process.platform === 'win32' ? 'python' : 'python3';
  * Suffix to add to compiled output files.
  */
 const COMPILED_SUFFIX = '_compressed';
+
+/**
+ * Dependencies file (used by buildCompiled for chunking.
+ */
+const DEPS_FILE = path.join(BUILD_DIR, 'deps.js');
 
 /**
  * Name of an object to be used as a shared "global" namespace by
@@ -355,7 +360,6 @@ error message above, try running:
             reject(error);
           } else {
             log(stderr);
-            // Anything not about mocha goes in DEPS_FILE.
             fs.writeFileSync(DEPS_FILE, stdout);
             resolve();
           }

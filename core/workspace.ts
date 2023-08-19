@@ -323,7 +323,7 @@ export class Workspace implements IASTNodeLocation {
    * @param ordered Sort the list if true.
    * @returns Array of blocks.
    */
-  getAllBlocks(ordered: boolean): Block[] {
+  getAllBlocks(ordered?: boolean): Block[] {
     let blocks: Block[];
     if (ordered) {
       // Slow, but ordered.

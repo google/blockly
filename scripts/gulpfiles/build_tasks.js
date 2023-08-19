@@ -680,11 +680,6 @@ async function buildShims() {
   // Install a package.json file in BUILD_DIR to tell node.js that the
   // .js files therein are ESM not CJS, so we can import the
   // entrypoints to enumerate their exported names.
-  //
-  // N.B.: There is an exception: core/main.js is a goog.module not
-  // ESM, but fortunately we don't attempt to import or require this
-  // file from node.js - we only feed it to Closure Compiler, which
-  // uses the type information in deps.js rather than package.json.
   const TMP_PACKAGE_JSON = path.join(BUILD_DIR, 'package.json');
   await fsPromises.writeFile(TMP_PACKAGE_JSON, '{"type": "module"}');
 

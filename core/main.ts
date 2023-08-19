@@ -5,18 +5,18 @@
  */
 
 /**
- * @fileoverview The entrypoint for blockly_compressed.js.  Provides
- *     various backwards-compatibility hacks.  Not used when loading
- *     in uncompiled (uncompressed) mode via bootstrap.js.
+ * @file The entrypoint for blockly_compressed.js.  Provides various
+ * backwards-compatibility hacks.  Not used when loading in
+ * uncompressed mode.
  */
-'use strict';
 
-goog.module('Blockly.main');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.main');
 
-const Blockly = goog.require('Blockly');
-const Msg = goog.require('Blockly.Msg');
-const colour = goog.require('Blockly.utils.colour');
-const deprecation = goog.require('Blockly.utils.deprecation');
+import * as Blockly from './blockly.js';
+import * as Msg from './msg.js';
+import * as colour from './utils/colour.js';
+import * as deprecation from './utils/deprecation.js';
 
 /*
  * Aliased functions and properties that used to be on the Blockly namespace.
@@ -26,10 +26,13 @@ const deprecation = goog.require('Blockly.utils.deprecation');
  */
 
 // Add accessors for properties on Blockly that have now been deprecated.
+// This will not work in uncompressed mode; it depends on Blockly being
+// transpiled from a ES Module object to a plain object by Closure Compiler.
 Object.defineProperties(Blockly, {
   /**
    * The richness of block colours, regardless of the hue.
-   * Must be in the range of 0 (inclusive) to 1 (exclusive).
+   * Must be in the range of 0 (inclusive) to 1 (exclusive).J
+   *
    * @name Blockly.HSV_SATURATION
    * @type {number}
    * @deprecated Use Blockly.utils.colour.getHsvSaturation() /
@@ -59,6 +62,7 @@ Object.defineProperties(Blockly, {
   /**
    * The intensity of block colours, regardless of the hue.
    * Must be in the range of 0 (inclusive) to 1 (exclusive).
+   *
    * @name Blockly.HSV_VALUE
    * @type {number}
    * @deprecated Use Blockly.utils.colour.getHsvValue() / .setHsvValue instead.
@@ -100,5 +104,5 @@ Object.defineProperties(Blockly, {
 // Blockly.Msg module - so make sure it is, but only if there is not
 // yet a Blockly global variable.
 if (!('Blockly' in globalThis)) {
-  globalThis['Blockly'] = {'Msg': Msg};
+  (globalThis as any)['Blockly'] = {'Msg': Msg};
 }

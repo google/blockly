@@ -15,9 +15,8 @@ const {
   getCategory,
   scrollFlyout,
   screenDirection,
+  PAUSE_TIME,
 } = require('./test_setup');
-
-const PAUSE_TIME = 50;
 
 // Categories in the basic toolbox.
 const basicCategories = [
@@ -144,32 +143,32 @@ async function openCategories(browser, categoryList, directionMultiplier) {
           // Unicode escape to close flyout.
           await browser.keys(['\uE00C']);
           await browser.pause(PAUSE_TIME);
-        } else {
-          const flyoutBlock = await browser.$(
-            `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + i * 2})`,
-          );
-          if (!(await elementInBounds(browser, flyoutBlock))) {
-            await scrollFlyout(browser, 0, 500);
-          }
-
-          await flyoutBlock.dragAndDrop({x: directionMultiplier * 50, y: 0});
-          await browser.pause(PAUSE_TIME);
-          // Should be one top level block on the workspace.
-          const topBlockCount = await browser.execute(() => {
-            return Blockly.getMainWorkspace().getTopBlocks(false).length;
-          });
-
-          if (topBlockCount != 1) {
-            failureCount++;
-            console.log(`fail: block ${i} in category ${categoryName}`);
-          }
-
-          // Clean up between blocks so they can't interact with each other.
-          await browser.execute(() => {
-            Blockly.getMainWorkspace().clear();
-          });
-          await browser.pause(PAUSE_TIME);
+          continue;
         }
+        const flyoutBlock = await browser.$(
+          `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + i * 2})`,
+        );
+        if (!(await elementInBounds(browser, flyoutBlock))) {
+          await scrollFlyout(browser, 0, 500);
+        }
+
+        await flyoutBlock.dragAndDrop({x: directionMultiplier * 50, y: 0});
+        await browser.pause(PAUSE_TIME);
+        // Should be one top level block on the workspace.
+        const topBlockCount = await browser.execute(() => {
+          return Blockly.getMainWorkspace().getTopBlocks(false).length;
+        });
+
+        if (topBlockCount != 1) {
+          failureCount++;
+          console.log(`fail: block ${i} in category ${categoryName}`);
+        }
+
+        // Clean up between blocks so they can't interact with each other.
+        await browser.execute(() => {
+          Blockly.getMainWorkspace().clear();
+        });
+        await browser.pause(PAUSE_TIME);
       }
     } catch (e) {
       failureCount++;
@@ -179,7 +178,7 @@ async function openCategories(browser, categoryList, directionMultiplier) {
   chai.assert.equal(failureCount, 0);
 }
 
-suite.skip('Open toolbox categories', function () {
+suite('Open toolbox categories', function () {
   this.timeout(0);
 
   test('opening every toolbox category in the category toolbox in LTR', async function () {

@@ -309,7 +309,6 @@ function buildJavaScript(done) {
  */
 function buildDeps() {
   const roots = [
-    path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base.js'),
     TSC_OUTPUT_DIR,
   ];
 
@@ -348,7 +347,8 @@ function buildDeps() {
   }
 
   return new Promise((resolve, reject) => {
-    const args = roots.map(root => `--root '${root}' `).join('');
+    const args = '--closure-path ./build/src ' +
+        roots.map(root => `--root '${root}' `).join('');
     exec(
         `closure-make-deps ${args}`, {maxBuffer: MAX_BUFFER_SIZE},
         (error, stdout, stderr) => {
@@ -514,10 +514,7 @@ return ${chunk.exports};
  *     closure-calculate-chunks.
  */
 function getChunkOptions() {
-  const basePath =
-      path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base.js');
   const cccArgs = [
-    `--closure-library-base-js-path ./${basePath}`,
     `--deps-file './${DEPS_FILE}'`,
     ...(chunks.map(chunk => `--entrypoint '${chunk.entry}'`)),
   ];
@@ -536,8 +533,8 @@ function getChunkOptions() {
   //     /* ... remaining handful of chunks */
   //   ],
   //   js: [
-  //     './build/ts/core/serialization/workspaces.js',
-  //     './build/ts/core/serialization/variables.js',
+  //     './build/src/core/serialization/workspaces.js',
+  //     './build/src/core/serialization/variables.js',
   //     /* ... remaining several hundred files */
   //   ],
   // }

@@ -317,6 +317,21 @@ function buildDeps() {
   const MAX_BUFFER_SIZE = 10 * 1024 * 1024;
 
   /**
+   * Filter a string to extract lines containing (or not containing) the
+   * specified target string.
+   *
+   * @param {string} text Text to filter.
+   * @param {string} target String to search for.
+   * @param {boolean?} exclude If true, extract only non-matching lines.
+   * @returns {string} Filtered text.
+   */
+  function filter(text, target, exclude) {
+    return text.split('\n')
+        .filter((line) => Boolean(line.match(target)) !== Boolean(exclude))
+        .join('\n');
+  }
+
+  /**
    * Log unexpected diagnostics, after removing expected warnings.
    *
    * @param {string} text Standard error output from closure-make-deps

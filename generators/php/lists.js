@@ -19,8 +19,7 @@
  * ex:  end(true ? list1 : list2)
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.generator.lists');
+// Former goog.module ID: Blockly.generator.lists
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';

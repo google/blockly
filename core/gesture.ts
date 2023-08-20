@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Gesture');
+// Former goog.module ID: Blockly.Gesture
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_click.js';

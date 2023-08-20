@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ShortcutItems');
+// Former goog.module ID: Blockly.ShortcutItems
 
 import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';

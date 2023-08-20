@@ -8,8 +8,7 @@
  * @fileoverview Generating Python for math blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Python.math');
+// Former goog.module ID: Blockly.Python.math
 
 import {NameType} from '../../core/names.js';
 import {Order} from './python_generator.js';

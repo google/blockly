@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Scrollbar');
+// Former goog.module ID: Blockly.Scrollbar
 
 import * as browserEvents from './browser_events.js';
 import * as Touch from './touch.js';

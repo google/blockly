@@ -8,8 +8,7 @@
  * @fileoverview Generating PHP for procedure blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.PHP.procedures');
+// Former goog.module ID: Blockly.PHP.procedures
 
 import * as Variables from '../../core/variables.js';
 import {NameType} from '../../core/names.js';

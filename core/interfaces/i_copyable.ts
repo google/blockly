@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ICopyable');
+// Former goog.module ID: Blockly.ICopyable
 
 import type {ISelectable} from './i_selectable.js';
 

@@ -8,8 +8,7 @@
  * @fileoverview Generating Lua for dynamic variable blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Lua.variablesDynamic');
+// Former goog.module ID: Blockly.Lua.variablesDynamic
 
 
 // Lua is dynamically typed.

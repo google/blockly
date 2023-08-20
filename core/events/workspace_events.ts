@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.FinishedLoading');
+// Former goog.module ID: Blockly.Events.FinishedLoading
 
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';

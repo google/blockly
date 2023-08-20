@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.FlyoutButton');
+// Former goog.module ID: Blockly.FlyoutButton
 
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';

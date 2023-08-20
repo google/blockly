@@ -8,8 +8,7 @@
  * @fileoverview Generating Lua for math blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Lua.math');
+// Former goog.module ID: Blockly.Lua.math
 
 import {NameType} from '../../core/names.js';
 import {Order} from './lua_generator.js';

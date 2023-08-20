@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.HorizontalFlyout');
+// Former goog.module ID: Blockly.HorizontalFlyout
 
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';

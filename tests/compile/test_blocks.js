@@ -8,8 +8,7 @@
  * @fileoverview Test blocks for advanced compilation.
  */
 
-import * as goog from '../../build/src/closure/goog/goog.js';
-goog.declareModuleId('testBlocks');
+// Former goog.module ID: testBlocks
 
 import {defineBlocksWithJsonArray}  from '../../build/src/core/common.js';
 

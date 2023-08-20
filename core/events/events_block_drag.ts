@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.BlockDrag');
+// Former goog.module ID: Blockly.Events.BlockDrag
 
 import type {Block} from '../block.js';
 import * as registry from '../registry.js';

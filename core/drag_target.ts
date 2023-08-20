@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.DragTarget');
+// Former goog.module ID: Blockly.DragTarget
 
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IDraggable} from './interfaces/i_draggable.js';

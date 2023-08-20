@@ -8,8 +8,7 @@
  * @fileoverview Generating JavaScript for text blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript.texts');
+// Former goog.module ID: Blockly.JavaScript.texts
 
 import {NameType} from '../../core/names.js';
 import {Order} from './javascript_generator.js';

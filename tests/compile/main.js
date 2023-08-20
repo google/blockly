@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../build/src/closure/goog/goog.js';
-goog.declareModuleId('Main');
+// Former goog.module ID: Main
 
 // Core
 // Either require 'Blockly.requires', or just the components you use:

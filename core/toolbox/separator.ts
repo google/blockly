@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ToolboxSeparator');
+// Former goog.module ID: Blockly.ToolboxSeparator
 
 import * as Css from '../css.js';
 import type {IToolbox} from '../interfaces/i_toolbox.js';

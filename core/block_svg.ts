@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.BlockSvg');
+// Former goog.module ID: Blockly.BlockSvg
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_selected.js';

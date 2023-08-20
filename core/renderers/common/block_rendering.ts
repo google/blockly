@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.blockRendering');
+// Former goog.module ID: Blockly.blockRendering
 
 import * as registry from '../../registry.js';
 import type {Theme} from '../../theme.js';

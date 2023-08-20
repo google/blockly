@@ -8,8 +8,7 @@
  * @fileoverview Generating Python for text blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Python.texts');
+// Former goog.module ID: Blockly.Python.texts
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';

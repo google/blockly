@@ -8,8 +8,7 @@
  * @fileoverview Generating Dart for variable blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Dart.variables');
+// Former goog.module ID: Blockly.Dart.variables
 
 import {NameType} from '../../core/names.js';
 import {Order} from './dart_generator.js';

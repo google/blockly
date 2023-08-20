@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.geras.PathObject');
+// Former goog.module ID: Blockly.geras.PathObject
 
 import type {BlockSvg} from '../../block_svg.js';
 import type {BlockStyle} from '../../theme.js';

@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Names');
+// Former goog.module ID: Blockly.Names
 
 import {Msg} from './msg.js';
 // import * as Procedures from './procedures.js';

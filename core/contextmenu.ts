@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ContextMenu');
+// Former goog.module ID: Blockly.ContextMenu
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';

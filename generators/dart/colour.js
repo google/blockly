@@ -8,8 +8,7 @@
  * @fileoverview Generating Dart for colour blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Dart.colour');
+// Former goog.module ID: Blockly.Dart.colour
 
 import {Order} from './dart_generator.js';
 

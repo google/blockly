@@ -8,8 +8,7 @@
  * @fileoverview Generating JavaScript for colour blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript.colour');
+// Former goog.module ID: Blockly.JavaScript.colour
 
 import {Order} from './javascript_generator.js';
 

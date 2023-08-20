@@ -8,8 +8,7 @@
  * @fileoverview Generating Lua for loop blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Lua.loops');
+// Former goog.module ID: Blockly.Lua.loops
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';

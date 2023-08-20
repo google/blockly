@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.FieldAngle');
+// Former goog.module ID: Blockly.FieldAngle
 
 import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';

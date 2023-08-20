@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.zelos.Drawer');
+// Former goog.module ID: Blockly.zelos.Drawer
 
 import type {BlockSvg} from '../../block_svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';

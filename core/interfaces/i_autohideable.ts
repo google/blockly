@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.IAutoHideable');
+// Former goog.module ID: Blockly.IAutoHideable
 
 import type {IComponent} from './i_component.js';
 

@@ -11,8 +11,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.utils.Coordinate');
+// Former goog.module ID: Blockly.utils.Coordinate
 
 /**
  * Class for representing coordinates and positions.

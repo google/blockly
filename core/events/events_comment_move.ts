@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.CommentMove');
+// Former goog.module ID: Blockly.Events.CommentMove
 
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';

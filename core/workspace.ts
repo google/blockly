@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Workspace');
+// Former goog.module ID: Blockly.Workspace
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './connection_checker.js';

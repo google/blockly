@@ -8,8 +8,7 @@
  * @fileoverview Generating Dart for list blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Dart.lists');
+// Former goog.module ID: Blockly.Dart.lists
 
 import {NameType} from '../../core/names.js';
 import {Order} from './dart_generator.js';

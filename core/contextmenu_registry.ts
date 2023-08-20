@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ContextMenuRegistry');
+// Former goog.module ID: Blockly.ContextMenuRegistry
 
 import type {BlockSvg} from './block_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';

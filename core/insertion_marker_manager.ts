@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.InsertionMarkerManager');
+// Former goog.module ID: Blockly.InsertionMarkerManager
 
 import {finishQueuedRenders} from './render_management.js';
 import * as blockAnimations from './block_animations.js';

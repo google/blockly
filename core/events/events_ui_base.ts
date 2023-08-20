@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.UiBase');
+// Former goog.module ID: Blockly.Events.UiBase
 
 import {Abstract as AbstractEvent} from './events_abstract.js';
 

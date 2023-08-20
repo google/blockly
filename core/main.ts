@@ -10,8 +10,7 @@
  * uncompressed mode.
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.main');
+// Former goog.module ID: Blockly.main
 
 import * as Blockly from './blockly.js';
 import * as Msg from './msg.js';

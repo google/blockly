@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.serialization.priorities');
+// Former goog.module ID: Blockly.serialization.priorities
 
 /**
  * The priority for deserializing variables.

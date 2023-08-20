@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.utils.style');
+// Former goog.module ID: Blockly.utils.style
 
 import {Coordinate} from './coordinate.js';
 import {Rect} from './rect.js';

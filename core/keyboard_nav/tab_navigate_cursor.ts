@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.TabNavigateCursor');
+// Former goog.module ID: Blockly.TabNavigateCursor
 
 import type {Field} from '../field.js';
 

@@ -8,8 +8,7 @@
  * @fileoverview Generating Python for procedure blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Python.procedures');
+// Former goog.module ID: Blockly.Python.procedures
 
 import * as Variables from '../../core/variables.js';
 import {NameType} from '../../core/names.js';

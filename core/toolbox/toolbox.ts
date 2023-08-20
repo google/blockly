@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Toolbox');
+// Former goog.module ID: Blockly.Toolbox
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../events/events_toolbox_item_select.js';

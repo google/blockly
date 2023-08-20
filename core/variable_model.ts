@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.VariableModel');
+// Former goog.module ID: Blockly.VariableModel
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_var_create.js';

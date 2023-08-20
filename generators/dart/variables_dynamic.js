@@ -8,8 +8,7 @@
  * @fileoverview Generating Dart for dynamic variable blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Dart.variablesDynamic');
+// Former goog.module ID: Blockly.Dart.variablesDynamic
 
 
 // generator is dynamically typed.

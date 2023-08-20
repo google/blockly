@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.uiPosition');
+// Former goog.module ID: Blockly.uiPosition
 
 import type {UiMetrics} from './metrics_manager.js';
 import {Scrollbar} from './scrollbar.js';

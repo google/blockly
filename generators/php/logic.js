@@ -8,8 +8,7 @@
  * @fileoverview Generating PHP for logic blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.PHP.logic');
+// Former goog.module ID: Blockly.PHP.logic
 
 import {Order} from './php_generator.js';
 

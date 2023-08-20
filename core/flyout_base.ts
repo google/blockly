@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Flyout');
+// Former goog.module ID: Blockly.Flyout
 
 import type {Abstract as AbstractEvent} from './events/events_abstract.js';
 import type {Block} from './block.js';

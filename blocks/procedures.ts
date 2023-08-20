@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.libraryBlocks.procedures');
+// Former goog.module ID: Blockly.libraryBlocks.procedures
 
 import * as ContextMenu from '../core/contextmenu.js';
 import * as Events from '../core/events/events.js';

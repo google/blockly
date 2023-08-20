@@ -8,8 +8,7 @@
  * @fileoverview Generating Dart for math blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Dart.math');
+// Former goog.module ID: Blockly.Dart.math
 
 import {NameType} from '../../core/names.js';
 import {Order} from './dart_generator.js';

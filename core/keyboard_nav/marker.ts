@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Marker');
+// Former goog.module ID: Blockly.Marker
 
 /* eslint-disable-next-line no-unused-vars */
 import type {MarkerSvg} from '../renderers/common/marker_svg.js';

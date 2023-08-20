@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.geras.RenderInfo');
+// Former goog.module ID: Blockly.geras.RenderInfo
 
 import type {BlockSvg} from '../../block_svg.js';
 import type {Input} from '../../inputs/input.js';

@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.dropDownDiv');
+// Former goog.module ID: Blockly.dropDownDiv
 
 import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';

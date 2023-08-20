@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.utils.xml');
+// Former goog.module ID: Blockly.utils.xml
 
 let domParser: DOMParser = {
   parseFromString: function () {

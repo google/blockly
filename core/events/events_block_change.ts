@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.BlockChange');
+// Former goog.module ID: Blockly.Events.BlockChange
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';

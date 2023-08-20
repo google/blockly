@@ -10,8 +10,7 @@
  * @suppress {checkTypes|globalThis}
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Lua');
+// Former goog.module ID: Blockly.Lua
 
 import * as stringUtils from '../../core/utils/string.js';
 // import type {Block} from '../../core/block.js';

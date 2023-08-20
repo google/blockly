@@ -8,8 +8,7 @@
  * @fileoverview Generating Dart for procedure blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Dart.procedures');
+// Former goog.module ID: Blockly.Dart.procedures
 
 import {NameType} from '../../core/names.js';
 import {Order} from './dart_generator.js';

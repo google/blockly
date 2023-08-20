@@ -515,7 +515,7 @@ return ${chunk.exports};
  */
 function getChunkOptions() {
   const basePath =
-      path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base_minimal.js');
+      path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base.js');
   const cccArgs = [
     `--closure-library-base-js-path ./${basePath}`,
     `--deps-file './${DEPS_FILE}'`,
@@ -607,13 +607,8 @@ function compile(options) {
     language_out: 'ECMASCRIPT_2015',
     jscomp_off: [...JSCOMP_OFF],
     rewrite_polyfills: true,
-    // N.B.: goog.js refers to lots of properties on goog that are not
-    // declared by base_minimal.js, while if you compile against
-    // base.js instead you will discover that it uses @deprecated
-    // inherits, forwardDeclare etc.
     hide_warnings_for: [
       'node_modules',
-      path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'goog.js'),
     ],
     define: ['COMPILED=true'],
   };
@@ -736,9 +731,6 @@ function buildAdvancedCompilationTest() {
     'tests/compile/main.js',
     'tests/compile/test_blocks.js',
   ];
-  const ignore = [
-    TSC_OUTPUT_DIR + '/closure/goog/base.js',  // Use base_minimal.js only.
-  ];
 
   // Closure Compiler options.
   const options = {
@@ -747,7 +739,7 @@ function buildAdvancedCompilationTest() {
     entry_point: './tests/compile/main.js',
     js_output_file: 'main_compressed.js',
   };
-  return gulp.src(srcs, {base: './', ignore})
+  return gulp.src(srcs, {base: './'})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
       .pipe(compile(options))

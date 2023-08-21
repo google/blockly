@@ -328,7 +328,14 @@ export class BlockSvg
     } else if (oldParent) {
       // If we are losing a parent, we want to move our DOM element to the
       // root of the workspace.
-      this.workspace.getCanvas().appendChild(svgRoot);
+      const draggingBlock = this.workspace
+        .getCanvas()
+        .querySelector('.blocklyDragging');
+      if (draggingBlock) {
+        this.workspace.getCanvas().insertBefore(svgRoot, draggingBlock);
+      } else {
+        this.workspace.getCanvas().appendChild(svgRoot);
+      }
       this.translate(oldXY.x, oldXY.y);
     }
 
@@ -1146,9 +1153,11 @@ export class BlockSvg
    * order that they are in the DOM.  By placing this block first within the
    * block group's <g>, it will render on top of any other blocks.
    *
+   * @param blockOnly: True to only move this block to the front without
+   *     adjusting its parents.
    * @internal
    */
-  bringToFront() {
+  bringToFront(blockOnly = false) {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block: this | null = this;
     do {
@@ -1159,6 +1168,7 @@ export class BlockSvg
       if (childNodes[childNodes.length - 1] !== root) {
         parent!.appendChild(root);
       }
+      if (blockOnly) break;
       block = block.getParent();
     } while (block);
   }

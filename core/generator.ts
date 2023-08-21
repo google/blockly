@@ -170,10 +170,6 @@ export class CodeGenerator {
     return codeString;
   }
 
-  // The following are some helpful functions which can be used by multiple
-
-  // languages.
-
   /**
    * Prepend a common prefix onto each line of code.
    * Intended for indenting code or adding comment markers.

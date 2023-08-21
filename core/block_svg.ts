@@ -328,8 +328,9 @@ export class BlockSvg
     } else if (oldParent) {
       // If we are losing a parent, we want to move our DOM element to the
       // root of the workspace.
-      const draggingBlock =
-          this.workspace.getCanvas().querySelector('.blocklyDragging');
+      const draggingBlock = this.workspace
+        .getCanvas()
+        .querySelector('.blocklyDragging');
       if (draggingBlock) {
         this.workspace.getCanvas().insertBefore(svgRoot, draggingBlock);
       } else {

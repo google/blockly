@@ -184,7 +184,6 @@ export class PhpGenerator extends CodeGenerator {
    * quotes.
    * @param {string} string Text to encode.
    * @return {string} PHP string.
-   * @protected
    */
   quote_(string) {
     string = string.replace(/\\/g, '\\\\')
@@ -198,7 +197,6 @@ export class PhpGenerator extends CodeGenerator {
    * quotes.
    * @param {string} string Text to encode.
    * @return {string} PHP string.
-   * @protected
    */
   multiline_quote_(string) {
     const lines = string.split(/\n/g).map(this.quote_);

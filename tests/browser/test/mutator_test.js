@@ -61,13 +61,6 @@ async function testMutator(browser, delta) {
         };
       });
 
-  // The flyout block and the workspace block have the same id, so to get
-  // around that I pass in the selector to the connect function.
-  const dragBlockSelector = await browser.$(
-    '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBubbleCanvas > g > ' +
-    'g:nth-child(2) > svg:nth-child(1) > g > g.blocklyBlockCanvas > ' +
-    'g.blocklyDraggable',
-  );
   // For some reason this needs a lot more time.
   await browser.pause(2000);
   await connect(
@@ -77,7 +70,6 @@ async function testMutator(browser, delta) {
     await getBlockElementById(browser, ifQuarkId),
     'NEXT',
     mutatorBlockId,
-    dragBlockSelector,
   );
   await browser.pause(PAUSE_TIME);
 

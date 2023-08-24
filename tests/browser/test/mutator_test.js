@@ -17,7 +17,6 @@ const {
   openMutatorForBlock,
 } = require('./test_setup');
 
-
 suite('Mutating a block', function (done) {
   this.timeout(0);
 
@@ -32,23 +31,34 @@ suite('Mutating a block', function (done) {
 
 async function testMutator(browser, delta) {
   const mutatorBlock = await dragBlockTypeFromFlyout(
-      browser, 'Logic', 'controls_if', delta * 50, 50);
+    browser,
+    'Logic',
+    'controls_if',
+    delta * 50,
+    50,
+  );
   await openMutatorForBlock(browser, mutatorBlock);
   await browser.pause(PAUSE_TIME);
   await dragBlockFromMutatorFlyout(
-      browser, mutatorBlock, 'controls_if_elseif', delta * 50, 50);
+    browser,
+    mutatorBlock,
+    'controls_if_elseif',
+    delta * 50,
+    50,
+  );
   await browser.pause(PAUSE_TIME);
 
-  const {mutatorBlockId, ifQuarkId, elseIfQuarkId} =
-      await browser.execute(() => {
-        const mutatorBlock = Blockly.getMainWorkspace().getAllBlocks()[0];
-        const quarkBlocks = mutatorBlock.mutator.getWorkspace().getAllBlocks();
-        return {
-          mutatorBlockId: mutatorBlock.id,
-          ifQuarkId: quarkBlocks[0].id,
-          elseIfQuarkId: quarkBlocks[1].id,
-        };
-      });
+  const {mutatorBlockId, ifQuarkId, elseIfQuarkId} = await browser.execute(
+    () => {
+      const mutatorBlock = Blockly.getMainWorkspace().getAllBlocks()[0];
+      const quarkBlocks = mutatorBlock.mutator.getWorkspace().getAllBlocks();
+      return {
+        mutatorBlockId: mutatorBlock.id,
+        ifQuarkId: quarkBlocks[0].id,
+        elseIfQuarkId: quarkBlocks[1].id,
+      };
+    },
+  );
 
   // For some reason this needs a lot more time.
   await browser.pause(2000);

@@ -248,8 +248,10 @@ async function getLocationOfBlockConnection(
     (id, connectionName, mutatorBlockId) => {
       let block;
       if (mutatorBlockId) {
-        block = Blockly.getMainWorkspace().getBlockById(mutatorBlockId)
-          .mutator.getWorkspace().getBlockById(id);
+        block = Blockly.getMainWorkspace()
+          .getBlockById(mutatorBlockId)
+          .mutator.getWorkspace()
+          .getBlockById(id);
       } else {
         block = Blockly.getMainWorkspace().getBlockById(id);
       }
@@ -399,15 +401,34 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
   return await getSelectedBlockElement(browser);
 }
 
+/**
+ * Drags the specified block type from the mutator flyout of the given block and
+ * returns the root element of the block.
+ *
+ * @param browser The active WebdriverIO Browser object.
+ * @param mutatorBlock The block with the mutator attached that we want to drag
+ *     a block from.
+ * @param type The type of the block to search for.
+ * @param x The x-distance to drag, as a delta from the block's
+ *     initial location on screen.
+ * @param y The y-distance to drag, as a delta from the block's
+ *     initial location on screen.
+ * @return A Promise that resolves to the root element of the newly
+ *     created block.
+ */
 async function dragBlockFromMutatorFlyout(browser, mutatorBlock, type, x, y) {
-  const id = await browser.execute((mutatorBlockId, blockType) => {
-    return Blockly.getMainWorkspace()
-      .getBlockById(mutatorBlockId)
-      .mutator.getWorkspace()
-      .getFlyout()
-      .getWorkspace()
-      .getBlocksByType(blockType)[0].id;
-  }, mutatorBlock.id, type);
+  const id = await browser.execute(
+    (mutatorBlockId, blockType) => {
+      return Blockly.getMainWorkspace()
+        .getBlockById(mutatorBlockId)
+        .mutator.getWorkspace()
+        .getFlyout()
+        .getWorkspace()
+        .getBlocksByType(blockType)[0].id;
+    },
+    mutatorBlock.id,
+    type,
+  );
   const flyoutBlock = await getBlockElementById(browser, id);
   await flyoutBlock.dragAndDrop({x: x, y: y});
   return await getSelectedBlockElement(browser);
@@ -443,6 +464,13 @@ async function contextMenuSelect(browser, block, itemText) {
   await browser.pause(PAUSE_TIME);
 }
 
+/**
+ * Opens the mutator bubble for the given block.
+ *
+ * @param browser The active WebdriverIO Browser object.
+ * @param block The block to click, as an interactable element.
+ * @return A Promise that resolves when the actions are complete.
+ */
 async function openMutatorForBlock(browser, block) {
   const icon = await browser.$(`[data-id="${block.id}"] > g.blocklyIconGroup`);
   await icon.click();

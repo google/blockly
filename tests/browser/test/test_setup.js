@@ -399,6 +399,20 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
   return await getSelectedBlockElement(browser);
 }
 
+async function dragBlockFromMutatorFlyout(browser, mutatorBlock, type, x, y) {
+  const id = await browser.execute((mutatorBlockId, blockType) => {
+    return Blockly.getMainWorkspace()
+      .getBlockById(mutatorBlockId)
+      .mutator.getWorkspace()
+      .getFlyout()
+      .getWorkspace()
+      .getBlocksByType(blockType)[0].id;
+  }, mutatorBlock.id, type);
+  const flyoutBlock = await getBlockElementById(browser, id);
+  await flyoutBlock.dragAndDrop({x: x, y: y});
+  return await getSelectedBlockElement(browser);
+}
+
 /**
  * Right-click on the specified block, then click on the specified
  * context menu item.
@@ -427,6 +441,11 @@ async function contextMenuSelect(browser, block, itemText) {
   await item.click();
 
   await browser.pause(PAUSE_TIME);
+}
+
+async function openMutatorForBlock(browser, block) {
+  const icon = await browser.$(`[data-id="${block.id}"] > g.blocklyIconGroup`);
+  await icon.click();
 }
 
 /**
@@ -484,9 +503,11 @@ module.exports = {
   getBlockTypeFromCategory,
   dragNthBlockFromFlyout,
   dragBlockTypeFromFlyout,
+  dragBlockFromMutatorFlyout,
   connect,
   switchRTL,
   contextMenuSelect,
+  openMutatorForBlock,
   screenDirection,
   getBlockTypeFromWorkspace,
   getAllBlocks,

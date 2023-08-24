@@ -12,7 +12,9 @@ const {
   dragBlockTypeFromFlyout,
   screenDirection,
   PAUSE_TIME,
-  getBlockElementById
+  getBlockElementById,
+  dragBlockFromMutatorFlyout,
+  openMutatorForBlock,
 } = require('./test_setup');
 
 
@@ -29,25 +31,12 @@ suite('Mutating a block', function (done) {
 });
 
 async function testMutator(browser, delta) {
-  await dragBlockTypeFromFlyout(
-    browser,
-    'Logic',
-    'controls_if',
-    delta * 50,
-    50,
-  );
-  const mutatorWheel = await browser.$(
-    '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBlockCanvas > ' +
-    'g.blocklyDraggable.blocklySelected > g.blocklyIconGroup',
-  );
-  await mutatorWheel.click();
+  const mutatorBlock = await dragBlockTypeFromFlyout(
+      browser, 'Logic', 'controls_if', delta * 50, 50);
+  await openMutatorForBlock(browser, mutatorBlock);
   await browser.pause(PAUSE_TIME);
-  const elseIfFlyout = await browser.$(
-    '#blocklyDiv > div > svg.blocklySvg > g > g.blocklyBubbleCanvas > g > ' +
-    'g:nth-child(2) > svg:nth-child(1) > g > g.blocklyFlyout > g > ' +
-    'g.blocklyBlockCanvas > g:nth-child(3)',
-  );
-  await elseIfFlyout.dragAndDrop({x: delta * 50, y: 42});
+  await dragBlockFromMutatorFlyout(
+      browser, mutatorBlock, 'controls_if_elseif', delta * 50, 50);
   await browser.pause(PAUSE_TIME);
 
   const {mutatorBlockId, ifQuarkId, elseIfQuarkId} =

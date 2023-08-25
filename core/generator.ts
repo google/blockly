@@ -496,6 +496,42 @@ export class CodeGenerator {
   }
 
   /**
+   * Gets a unique, legal name for a user-defined variable.
+   * Before calling this method, the `nameDB_` property of the class
+   * must have been initialized already. This is typically done in
+   * the `init` function of the code generator class.
+   *
+   * @param nameOrId The ID of the variable to get a name for,
+   *    or the proposed name for a variable not associated with an id.
+   * @returns A unique, legal name for the variable.
+   */
+  getVariableName(nameOrId: string): string {
+    return this.getName(nameOrId, NameType.VARIABLE);
+  }
+
+  /**
+   * Gets a unique, legal name for a user-defined procedure.
+   * Before calling this method, the `nameDB_` property of the class
+   * must have been initialized already. This is typically done in
+   * the `init` function of the code generator class.
+   *
+   * @param name The proposed name for a procedure.
+   * @returns A unique, legal name for the procedure.
+   */
+  getProcedureName(name: string): string {
+    return this.getName(name, NameType.PROCEDURE);
+  }
+
+  private getName(nameOrId: string, type: NameType): string {
+    if (!this.nameDB_) {
+      throw new Error(
+        'Name database is not defined. You must initialize `nameDB_` in your generator class and call `init`.',
+      );
+    }
+    return this.nameDB_.getName(nameOrId, type);
+  }
+
+  /**
    * Hook for code to run before code generation starts.
    * Subclasses may override this, e.g. to initialise the database of variable
    * names.

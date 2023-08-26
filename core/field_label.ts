@@ -126,7 +126,10 @@ export class FieldLabel extends Field<string> {
     return new this(text, undefined, options);
   }
 
-  applyColour() {
+  /**
+   * Update field's textElement_ color.
+   */
+  override applyColour() {
     const style = (this.sourceBlock_ as BlockSvg).style;
     if (this.textElement_) {
       this.textElement_.style.fill = this.sourceBlock_?.isEnabled()

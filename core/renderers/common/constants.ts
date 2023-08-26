@@ -642,6 +642,9 @@ export class ConstantProvider {
     valid.colourTertiary = valid['colourTertiary']
       ? parsing.parseBlockColour(valid['colourTertiary']).hex
       : this.generateTertiaryColour_(valid.colourPrimary);
+    valid.colourFieldLabel = valid['colourFieldLabel']
+      ? parsing.parseBlockColour(valid['colourFieldLabel']).hex
+      : '#ffffff';
 
     valid.hat = valid['hat'] || '';
     return valid;

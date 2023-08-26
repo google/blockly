@@ -194,6 +194,7 @@ export namespace Theme {
     colourPrimary: string;
     colourSecondary: string;
     colourTertiary: string;
+    colourFieldLabel: string;
     hat: string;
   }
 

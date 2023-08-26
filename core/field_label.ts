@@ -17,6 +17,7 @@ import * as dom from './utils/dom.js';
 import {Field, FieldConfig} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
+import {BlockSvg} from './block_svg.js';
 
 /**
  * Class for a non-editable, non-serializable text field.
@@ -123,6 +124,15 @@ export class FieldLabel extends Field<string> {
     // `this` might be a subclass of FieldLabel if that class doesn't override
     // the static fromJson method.
     return new this(text, undefined, options);
+  }
+
+  applyColour() {
+    const style = (this.sourceBlock_ as BlockSvg).style;
+    if (this.textElement_) {
+      this.textElement_.style.fill = this.sourceBlock_?.isEnabled()
+        ? style.colourFieldLabel
+        : '#ffffff';
+    }
   }
 }
 

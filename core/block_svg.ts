@@ -246,6 +246,15 @@ export class BlockSvg
   }
 
   /**
+   * Get the field_label colour of a block.
+   *
+   * @returns #RRGGBB string.
+   */
+  getColourFieldLabel(): string | undefined {
+    return this.style.colourFieldLabel;
+  }
+
+  /**
    * Selects this block. Highlights the block visually and fires a select event
    * if the block is not already selected.
    */

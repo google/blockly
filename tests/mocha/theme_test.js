@@ -50,6 +50,7 @@ suite('Theme', function () {
         'colourPrimary': '#aaaaaa',
         'colourSecondary': '#bbbbbb',
         'colourTertiary': '#cccccc',
+        'colourFieldLabel': '#dddddd',
         'hat': 'cap',
       },
     };
@@ -61,12 +62,14 @@ suite('Theme', function () {
         'colourPrimary': '#aaaaaa',
         'colourSecondary': '#bbbbbb',
         'colourTertiary': '#cccccc',
+        'colourFieldLabel': '#dddddd',
         'hat': 'cap',
       },
       'styleTwo': {
         'colourPrimary': '#000000',
         'colourSecondary': '#999999',
         'colourTertiary': '#4d4d4d',
+        'colourFieldLabel': '#0f0f0f',
         'hat': '',
       },
     };
@@ -171,6 +174,7 @@ suite('Theme', function () {
         'colourPrimary': '#000000',
         'colourSecondary': '#999999',
         'colourTertiary': '#4d4d4d',
+        'colourFieldLabel': '#ffffff',
         'hat': '',
       };
       stringifyAndCompare(
@@ -185,6 +189,7 @@ suite('Theme', function () {
         'colourPrimary': '#000000',
         'colourSecondary': '#999999',
         'colourTertiary': '#4d4d4d',
+        'colourFieldLabel': '#ffffff',
         'hat': '',
       };
       stringifyAndCompare(
@@ -201,6 +206,7 @@ suite('Theme', function () {
         'colourPrimary': '#012345',
         'colourSecondary': '#99a7b5',
         'colourTertiary': '#4d657d',
+        'colourFieldLabel': '#ffffff',
         'hat': '',
       };
       stringifyAndCompare(
@@ -214,12 +220,14 @@ suite('Theme', function () {
         'colourPrimary': '#aaaaaa',
         'colourSecondary': '#bbbbbb',
         'colourTertiary': '#cccccc',
+        'colourFieldLabel': '#dddddd',
         'hat': 'cap',
       };
       const expectedOutput = {
         'colourPrimary': '#aaaaaa',
         'colourSecondary': '#bbbbbb',
         'colourTertiary': '#cccccc',
+        'colourFieldLabel': '#dddddd',
         'hat': 'cap',
       };
       stringifyAndCompare(
@@ -233,11 +241,13 @@ suite('Theme', function () {
         'colourPrimary': '20',
         'colourSecondary': '40',
         'colourTertiary': '60',
+        'colourFieldLabel': '60',
       };
       const expectedOutput = {
         'colourPrimary': '#a5745b',
         'colourSecondary': '#a58c5b',
         'colourTertiary': '#a5a55b',
+        'colourFieldLabel': '#a5a55b',
         'hat': '',
       };
       stringifyAndCompare(
@@ -254,6 +264,7 @@ suite('Theme', function () {
         'colourPrimary': '#a5745b',
         'colourSecondary': '#dbc7bd',
         'colourTertiary': '#c09e8c',
+        'colourFieldLabel': '#ffffff',
         'hat': '',
       };
       stringifyAndCompare(
@@ -267,11 +278,13 @@ suite('Theme', function () {
         'colourPrimary': 'red',
         'colourSecondary': 'white',
         'colourTertiary': 'blue',
+        'colourFieldLabel': 'black',
       };
       const expectedOutput = {
         'colourPrimary': '#ff0000',
         'colourSecondary': '#ffffff',
         'colourTertiary': '#0000ff',
+        'colourFieldLabel': '#000000',
         'hat': '',
       };
       stringifyAndCompare(
@@ -288,6 +301,7 @@ suite('Theme', function () {
         'colourPrimary': '#000000',
         'colourSecondary': '#999999',
         'colourTertiary': '#4d4d4d',
+        'colourFieldLabel': '#ffffff',
         'hat': '',
       };
       stringifyAndCompare(

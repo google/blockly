@@ -109,7 +109,7 @@ export class CodeGenerator {
   protected functionNames_: {[key: string]: string} = Object.create(null);
 
   /** A database of variable and procedure names. */
-  protected nameDB_?: Names = undefined;
+  nameDB_?: Names = undefined;
 
   /** @param name Language name of this generator. */
   constructor(name: string) {
@@ -525,7 +525,7 @@ export class CodeGenerator {
   private getName(nameOrId: string, type: NameType): string {
     if (!this.nameDB_) {
       throw new Error(
-        'Name database is not defined. You must initialize `nameDB_` in your generator class and call `init`.',
+        'Name database is not defined. You must initialize `nameDB_` in your generator class and call `init` first.',
       );
     }
     return this.nameDB_.getName(nameOrId, type);

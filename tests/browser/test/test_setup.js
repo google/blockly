@@ -307,6 +307,7 @@ async function connect(
   targetBlock,
   targetConnection,
   mutatorBlockId,
+  dragBlockSelector,
 ) {
   let draggedLocation;
   let targetLocation;
@@ -341,7 +342,11 @@ async function connect(
     x: targetLocation.x - draggedLocation.x,
     y: targetLocation.y - draggedLocation.y,
   };
+  if (mutatorBlockId) {
+    await dragBlockSelector.dragAndDrop(delta);
+  } else {
   await draggedBlock.dragAndDrop(delta);
+  }
 }
 
 /**

@@ -1213,6 +1213,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     }
 
     // Clone the block.
+    // TODO(#7432): Add a saveIds parameter to `save`.
     const json = blocks.save(oldBlock) as blocks.State;
     // Normallly this resizes leading to weird jumps. Save it for terminateDrag.
     targetWorkspace.setResizesEnabled(false);

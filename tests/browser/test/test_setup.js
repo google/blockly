@@ -309,34 +309,18 @@ async function connect(
   mutatorBlockId,
   dragBlockSelector,
 ) {
-  let draggedLocation;
-  let targetLocation;
-
-  if (mutatorBlockId) {
-    draggedLocation = await getLocationOfBlockConnection(
-      browser,
-      draggedBlock.id,
-      draggedConnection,
-      mutatorBlockId,
-    );
-    targetLocation = await getLocationOfBlockConnection(
-      browser,
-      targetBlock.id,
-      targetConnection,
-      mutatorBlockId,
-    );
-  } else {
-    draggedLocation = await getLocationOfBlockConnection(
-      browser,
-      draggedBlock.id,
-      draggedConnection,
-    );
-    targetLocation = await getLocationOfBlockConnection(
-      browser,
-      targetBlock.id,
-      targetConnection,
-    );
-  }
+  const draggedLocation = await getLocationOfBlockConnection(
+    browser,
+    draggedBlock.id,
+    draggedConnection,
+    mutatorBlockId,
+  );
+  const targetLocation = await getLocationOfBlockConnection(
+    browser,
+    targetBlock.id,
+    targetConnection,
+    mutatorBlockId,
+  );
 
   const delta = {
     x: targetLocation.x - draggedLocation.x,

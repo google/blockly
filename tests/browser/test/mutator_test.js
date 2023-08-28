@@ -24,7 +24,7 @@ suite('Mutating a block', function (done) {
     this.browser = await testSetup(testFileLocations.PLAYGROUND);
   });
 
-  test.only('Mutating a block creates more inputs', async function () {
+  test('Mutating a block creates more inputs', async function () {
     await testMutator(this.browser, screenDirection.LTR);
   });
 });

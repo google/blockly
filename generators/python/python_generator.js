@@ -16,7 +16,7 @@ import * as stringUtils from '../../core/utils/string.js';
 import * as Variables from '../../core/variables.js';
 // import type {Block} from '../../core/block.js';
 import {CodeGenerator} from '../../core/generator.js';
-import {Names, NameType} from '../../core/names.js';
+import {Names} from '../../core/names.js';
 // import type {Workspace} from '../../core/workspace.js';
 import {inputTypes} from '../../core/inputs/input_types.js';
 

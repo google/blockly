@@ -11,7 +11,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Lua.procedures');
 
-import {NameType} from '../../core/names.js';
 import {Order} from './lua_generator.js';
 
 

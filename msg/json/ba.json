@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Alfiya55",
+			"Sagan",
 			"Азат Хәлилов",
 			"Айсар",
 			"Кутлубаева Кунсулу Закиевна",
@@ -11,7 +12,7 @@
 	},
 	"VARIABLES_DEFAULT_NAME": "элемент",
 	"TODAY": "Бөгөн",
-	"DUPLICATE_BLOCK": "Күсереп алырға",
+	"DUPLICATE_BLOCK": "Дубликатын эшләргә",
 	"ADD_COMMENT": "Фекер өҫтәргә",
 	"REMOVE_COMMENT": "Аңлатмаларҙы юйырға",
 	"EXTERNAL_INPUTS": "Тышҡы өҫтәлмә",

@@ -329,7 +329,7 @@ async function connect(
   if (mutatorBlockId) {
     await dragBlockSelector.dragAndDrop(delta);
   } else {
-  await draggedBlock.dragAndDrop(delta);
+    await draggedBlock.dragAndDrop(delta);
   }
 }
 

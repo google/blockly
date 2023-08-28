@@ -180,7 +180,7 @@ export class PythonGenerator extends CodeGenerator {
     const variables = Variables.allUsedVarModels(workspace);
     for (let i = 0; i < variables.length; i++) {
       defvars.push(
-          this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE) +
+          this.getVariableName(variables[i].getId()) +
           ' = None');
     }
 

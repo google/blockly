@@ -217,9 +217,7 @@ export function math_change(block, generator) {
       'from numbers import Number';
   const argument0 =
       generator.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
-  const varName =
-      generator.nameDB_.getName(
-        block.getFieldValue('VAR'), NameType.VARIABLE);
+  const varName = generator.getVariableName(block.getFieldValue('VAR'));
   return varName + ' = (' + varName + ' if isinstance(' + varName +
       ', Number) else 0) + ' + argument0 + '\n';
 };

@@ -17,8 +17,7 @@ import {Order} from './javascript_generator.js';
 
 export function procedures_defreturn(block, generator) {
   // Define a procedure with a return value.
-  const funcName = generator.nameDB_.getName(
-      block.getFieldValue('NAME'), NameType.PROCEDURE);
+  const funcName = generator.getProcedureName(block.getFieldValue('NAME'));
   let xfix1 = '';
   if (generator.STATEMENT_PREFIX) {
     xfix1 += generator.injectId(
@@ -53,7 +52,7 @@ export function procedures_defreturn(block, generator) {
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
     args[i] =
-        generator.nameDB_.getName(variables[i], NameType.VARIABLE);
+        generator.getVariableName(variables[i]);
   }
   let code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' + xfix1 +
       loopTrap + branch + xfix2 + returnValue + '}';
@@ -69,8 +68,7 @@ export const procedures_defnoreturn = procedures_defreturn;
 
 export function procedures_callreturn(block, generator) {
   // Call a procedure with a return value.
-  const funcName = generator.nameDB_.getName(
-      block.getFieldValue('NAME'), NameType.PROCEDURE);
+  const funcName = generator.getProcedureName(block.getFieldValue('NAME'));
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {

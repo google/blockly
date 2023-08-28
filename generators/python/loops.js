@@ -59,8 +59,7 @@ export function controls_whileUntil(block, generator) {
 export function controls_for(block, generator) {
   // For loop.
   const variable0 =
-      generator.nameDB_.getName(
-        block.getFieldValue('VAR'), NameType.VARIABLE);
+      generator.getVariableName(block.getFieldValue('VAR'));
   let argument0 = generator.valueToCode(block, 'FROM', Order.NONE) || '0';
   let argument1 = generator.valueToCode(block, 'TO', Order.NONE) || '0';
   let increment = generator.valueToCode(block, 'BY', Order.NONE) || '1';
@@ -168,8 +167,7 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(start, stop, step):
 export function controls_forEach(block, generator) {
   // For each loop.
   const variable0 =
-      generator.nameDB_.getName(
-        block.getFieldValue('VAR'), NameType.VARIABLE);
+      generator.getVariableName(block.getFieldValue('VAR'));
   const argument0 =
       generator.valueToCode(block, 'LIST', Order.RELATIONAL) || '[]';
   let branch = generator.statementToCode(block, 'DO');

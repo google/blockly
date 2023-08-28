@@ -105,7 +105,7 @@
     "prettier": "3.0.0",
     "readline-sync": "^1.4.10",
     "rimraf": "^5.0.0",
-    "selenium-standalone": "^8.0.3",
+    "selenium-standalone": "^9.0.6",
     "typescript": "^5.0.2",
     "webdriverio": "^8.0.5",
     "yargs": "^17.2.1"

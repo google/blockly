@@ -29,6 +29,7 @@ export function procedures_defreturn(block, generator) {
     if (block.getVars().indexOf(varName) === -1) {
       globals.push(generator.getVariableName(varName));
     }
+  }
   // Add developer variables.
   const devVarList = Variables.allDeveloperVariables(workspace);
   for (let i = 0; i < devVarList.length; i++) {

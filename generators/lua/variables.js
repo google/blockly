@@ -26,6 +26,6 @@ export function variables_set(block, generator) {
   // Variable setter.
   const argument0 = generator.valueToCode(block, 'VALUE', Order.NONE) || '0';
   const varName =
-      generator.getVariableName(block.getFieldValue('VAR');
+      generator.getVariableName(block.getFieldValue('VAR'));
   return varName + ' = ' + argument0 + '\n';
 };

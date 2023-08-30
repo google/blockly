@@ -94,6 +94,10 @@ export class RenderedConnection extends Connection {
     if (this.trackedState === RenderedConnection.TrackedState.TRACKED) {
       this.db.removeConnection(this, this.y);
     }
+    if (this.highlightPath) {
+      dom.removeNode(this.highlightPath);
+      this.highlightPath = null;
+    }
   }
 
   /**

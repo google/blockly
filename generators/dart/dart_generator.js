@@ -175,7 +175,6 @@ export class DartGenerator extends CodeGenerator {
    * Encode a string as a properly escaped Dart string, complete with quotes.
    * @param {string} string Text to encode.
    * @return {string} Dart string.
-   * @protected
    */
   quote_(string) {
     // Can't use goog.string.quote since $ must also be escaped.
@@ -191,7 +190,6 @@ export class DartGenerator extends CodeGenerator {
    * quotes.
    * @param {string} string Text to encode.
    * @return {string} Dart string.
-   * @protected
    */
   multiline_quote_(string) {
     const lines = string.split(/\n/g).map(this.quote_);

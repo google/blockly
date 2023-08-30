@@ -148,7 +148,6 @@ export class LuaGenerator extends CodeGenerator {
    * quotes.
    * @param {string} string Text to encode.
    * @return {string} Lua string.
-   * @protected
    */
   quote_(string) {
     string = string.replace(/\\/g, '\\\\')
@@ -162,7 +161,6 @@ export class LuaGenerator extends CodeGenerator {
    * quotes.
    * @param {string} string Text to encode.
    * @return {string} Lua string.
-   * @protected
    */
   multiline_quote_(string) {
     const lines = string.split(/\n/g).map(this.quote_);

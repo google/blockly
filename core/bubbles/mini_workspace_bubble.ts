@@ -65,6 +65,9 @@ export class MiniWorkspaceBubble extends Bubble {
     );
     workspaceOptions.parentWorkspace = this.workspace;
     this.miniWorkspace = this.newWorkspaceSvg(new Options(workspaceOptions));
+    // TODO (#7422): Change this to `internalIsMiniWorkspace` or something. Not
+    //   all mini workspaces are necessarily mutators.
+    this.miniWorkspace.internalIsMutator = true;
     const background = this.miniWorkspace.createDom('blocklyMutatorBackground');
     this.svgDialog.appendChild(background);
     if (options.languageTree) {

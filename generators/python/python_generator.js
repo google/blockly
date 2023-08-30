@@ -227,7 +227,6 @@ export class PythonGenerator extends CodeGenerator {
    * Encode a string as a properly escaped Python string, complete with quotes.
    * @param {string} string Text to encode.
    * @return {string} Python string.
-   * @protected
    */
   quote_(string) {
     string = string.replace(/\\/g, '\\\\').replace(/\n/g, '\\\n');
@@ -249,7 +248,6 @@ export class PythonGenerator extends CodeGenerator {
    * with quotes.
    * @param {string} string Text to encode.
    * @return {string} Python string.
-   * @protected
    */
   multiline_quote_(string) {
     const lines = string.split(/\n/g).map(this.quote_);

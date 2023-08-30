@@ -19,14 +19,9 @@ const path = require('path');
 // - tests/scripts/compile_typings.sh
 // - tests/scripts/check_metadata.sh
 // - tests/scripts/update_metadata.sh
-// - tests/bootstrap.js (for location of deps.js)
-// - tests/mocha/index.html (for location of deps.mocha.js)
 
 // Directory to write compiled output to.
 exports.BUILD_DIR = 'build';
-
-// Dependencies file (used by bootstrap.js in uncompiled mode):
-exports.DEPS_FILE = path.join(exports.BUILD_DIR, 'deps.js');
 
 // Directory to write typings output to.
 exports.TYPINGS_BUILD_DIR = path.join(exports.BUILD_DIR, 'declarations');

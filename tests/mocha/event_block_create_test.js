@@ -56,6 +56,42 @@ suite('Block Create Event', function () {
     chai.assert.equal(event.xml.tagName, 'shadow');
   });
 
+  test('Does not create extra shadow blocks', function () {
+    const shadowId = 'shadow_block';
+    const blockJson = {
+      'type': 'math_arithmetic',
+      'id': 'parent_with_shadow',
+      'fields': {'OP': 'ADD'},
+      'inputs': {
+        'A': {
+          'shadow': {
+            'type': 'math_number',
+            'id': shadowId,
+            'fields': {'NUM': 1},
+          },
+        },
+      },
+    };
+
+    // If there is a shadow block on the workspace and then we get
+    // a block create event with the same ID as the shadow block,
+    // this represents a block that had been covering a shadow block
+    // being removed.
+    Blockly.serialization.blocks.append(blockJson, this.workspace);
+    const shadowBlock = this.workspace.getBlockById(shadowId);
+    const blocksBefore = this.workspace.getAllBlocks();
+
+    const event = new Blockly.Events.BlockCreate(shadowBlock);
+    event.run(true);
+
+    const blocksAfter = this.workspace.getAllBlocks();
+    chai.assert.deepEqual(
+      blocksAfter,
+      blocksBefore,
+      'No new blocks should be created from an event that only creates shadow blocks',
+    );
+  });
+
   suite('Serialization', function () {
     test('events round-trip through JSON', function () {
       const block = this.workspace.newBlock('row_block', 'block_id');

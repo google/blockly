@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "10.1.2",
+  "version": "10.1.3",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -24,14 +24,12 @@
     "build-strict-log": "npm run build:strict > build-debug.log 2>&1 && tail -3 build-debug.log",
     "build:compiled": "exit 1 # Deprecated; use \"npm run minify\" instead.",
     "build:compressed": "exit 1 # Deprecated; use \"npm run minify\" instead.",
-    "build:deps": "exit 1 # Deprecated; use \"npm run deps\" instead.",
     "build:js": "exit 1 # Deprecated; use \"npm run tsc\" instead.",
     "build:langfiles": "exit 1 # Deprecated; use \"npm run langfiles\" instead.",
     "bump": "npm --no-git-tag-version version 4.$(date +'%Y%m%d').0",
     "clean": "gulp clean",
     "deployDemos": "npm ci && gulp deployDemos",
     "deployDemos:beta": "npm ci && gulp deployDemosBeta",
-    "deps": "gulp deps",
     "docs": "gulp docs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -82,7 +80,7 @@
     "concurrently": "^8.0.1",
     "eslint": "^8.4.1",
     "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-jsdoc": "^46.2.6",
     "google-closure-compiler": "^20230802.0.0",
     "google-closure-deps": "^20230502.0.0",

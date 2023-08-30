@@ -2254,7 +2254,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param ordered Sort the list if true.
    * @returns Array of blocks.
    */
-  override getAllBlocks(ordered: boolean): BlockSvg[] {
+  override getAllBlocks(ordered = false): BlockSvg[] {
     return super.getAllBlocks(ordered) as BlockSvg[];
   }
 
@@ -2265,7 +2265,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param ordered Sort the list if true.
    * @returns The top-level block objects.
    */
-  override getTopBlocks(ordered: boolean): BlockSvg[] {
+  override getTopBlocks(ordered = false): BlockSvg[] {
     return super.getTopBlocks(ordered) as BlockSvg[];
   }
 

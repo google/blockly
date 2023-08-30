@@ -54,7 +54,6 @@ goog.addDependency = function(relPath, provides, _requires, opt_loadFlags) {
 
 // Load deps files relative to this script's location.
 require(path.resolve(__dirname, '../../build/deps.js'));
-require(path.resolve(__dirname, '../../build/deps.mocha.js'));
 
 //////////////////////////////////////////////////////////////////////
 // Process files mentioned on the command line.

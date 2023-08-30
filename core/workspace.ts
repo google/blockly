@@ -205,7 +205,7 @@ export class Workspace implements IASTNodeLocation {
    * @param ordered Sort the list if true.
    * @returns The top-level block objects.
    */
-  getTopBlocks(ordered: boolean): Block[] {
+  getTopBlocks(ordered = false): Block[] {
     // Copy the topBlocks list.
     const blocks = new Array<Block>().concat(this.topBlocks);
     if (ordered && blocks.length > 1) {
@@ -246,7 +246,7 @@ export class Workspace implements IASTNodeLocation {
    * @param ordered Sort the list if true.
    * @returns The blocks of the given type.
    */
-  getBlocksByType(type: string, ordered: boolean): Block[] {
+  getBlocksByType(type: string, ordered = false): Block[] {
     if (!this.typedBlocksDB.has(type)) {
       return [];
     }
@@ -306,7 +306,7 @@ export class Workspace implements IASTNodeLocation {
    * @returns The top-level comment objects.
    * @internal
    */
-  getTopComments(ordered: boolean): WorkspaceComment[] {
+  getTopComments(ordered = false): WorkspaceComment[] {
     // Copy the topComments list.
     const comments = new Array<WorkspaceComment>().concat(this.topComments);
     if (ordered && comments.length > 1) {
@@ -322,7 +322,7 @@ export class Workspace implements IASTNodeLocation {
    * @param ordered Sort the list if true.
    * @returns Array of blocks.
    */
-  getAllBlocks(ordered: boolean): Block[] {
+  getAllBlocks(ordered = false): Block[] {
     let blocks: Block[];
     if (ordered) {
       // Slow, but ordered.

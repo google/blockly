@@ -205,7 +205,6 @@ export class JavascriptGenerator extends CodeGenerator {
    * quotes.
    * @param {string} string Text to encode.
    * @return {string} JavaScript string.
-   * @protected
    */
   quote_(string) {
     // Can't use goog.string.quote since Google's style guide recommends
@@ -221,7 +220,6 @@ export class JavascriptGenerator extends CodeGenerator {
    * with quotes.
    * @param {string} string Text to encode.
    * @return {string} JavaScript string.
-   * @protected
    */
   multiline_quote_(string) {
     // Can't use goog.string.quote since Google's style guide recommends

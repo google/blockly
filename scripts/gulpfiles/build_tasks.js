@@ -22,7 +22,7 @@ const closureCompiler = require('google-closure-compiler').gulp();
 const argv = require('yargs').argv;
 const {rimraf} = require('rimraf');
 
-const {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
+const {BUILD_DIR, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 const {getPackageJson} = require('./helper_tasks');
 
 const {posixPath, quote} = require('../helpers');
@@ -42,6 +42,11 @@ const PYTHON = process.platform === 'win32' ? 'python' : 'python3';
  * Suffix to add to compiled output files.
  */
 const COMPILED_SUFFIX = '_compressed';
+
+/**
+ * Dependencies file (used by buildCompiled for chunking.
+ */
+const DEPS_FILE = path.join(BUILD_DIR, 'deps.js');
 
 /**
  * Name of an object to be used as a shared "global" namespace by
@@ -302,8 +307,9 @@ function buildJavaScript(done) {
 }
 
 /**
- * This task updates DEPS_FILE (deps.js), used by the debug module
- * loader (via bootstrap.js) when loading Blockly in uncompiled mode.
+ * This task updates DEPS_FILE (deps.js), used by
+ * closure-calculate-chunks when determining how to organise .js
+ * source files into chunks.
  *
  * Prerequisite: buildJavaScript.
  */
@@ -354,7 +360,6 @@ error message above, try running:
             reject(error);
           } else {
             log(stderr);
-            // Anything not about mocha goes in DEPS_FILE.
             fs.writeFileSync(DEPS_FILE, stdout);
             resolve();
           }
@@ -710,7 +715,7 @@ ${Object.keys(exports).map((name) => `  ${name},`).join('\n')}
  * This task builds Blockly core, blocks and generators together and uses
  * Closure Compiler's ADVANCED_COMPILATION mode.
  *
- * Prerequisite: buildDeps.
+ * Prerequisite: buildJavaScript.
  */
 function buildAdvancedCompilationTest() {
   // If main_compressed.js exists (from a previous run) delete it so that
@@ -761,14 +766,13 @@ function cleanBuildDir() {
 exports.cleanBuildDir = cleanBuildDir;
 exports.langfiles = buildLangfiles;  // Build build/msg/*.js from msg/json/*.
 exports.tsc = buildJavaScript;
-exports.deps = gulp.series(exports.tsc, buildDeps);
-exports.minify = gulp.series(exports.deps, buildCompiled, buildShims);
+exports.minify = gulp.series(exports.tsc, buildDeps, buildCompiled, buildShims);
 exports.build = gulp.parallel(exports.minify, exports.langfiles);
 
 // Manually-invokable targets, with prerequisites where required.
 exports.messages = generateMessages;  // Generate msg/json/en.json et al.
 exports.buildAdvancedCompilationTest =
-    gulp.series(exports.deps, buildAdvancedCompilationTest);
+    gulp.series(exports.tsc, buildAdvancedCompilationTest);
 
 // Targets intended only for invocation by scripts; may omit prerequisites.
 exports.onlyBuildAdvancedCompilationTest = buildAdvancedCompilationTest;

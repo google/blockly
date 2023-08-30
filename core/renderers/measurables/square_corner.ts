@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.blockRendering.SquareCorner');
+// Former goog.module ID: Blockly.blockRendering.SquareCorner
 
 import type {ConstantProvider} from '../common/constants.js';
 

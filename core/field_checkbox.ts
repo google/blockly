@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.FieldCheckbox');
+// Former goog.module ID: Blockly.FieldCheckbox
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';

@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.minimalist.Drawer');
+// Former goog.module ID: Blockly.minimalist.Drawer
 
 import type {BlockSvg} from '../../block_svg.js';
 import {Drawer as BaseDrawer} from '../common/drawer.js';

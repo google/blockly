@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.Abstract');
+// Former goog.module ID: Blockly.Events.Abstract
 
 import * as common from '../common.js';
 import type {Workspace} from '../workspace.js';

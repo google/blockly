@@ -8,8 +8,7 @@
  * @fileoverview Generating Python for variable blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Python.variables');
+// Former goog.module ID: Blockly.Python.variables
 
 import {NameType} from '../../core/names.js';
 import {Order} from './python_generator.js';

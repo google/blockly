@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.CodeGenerator');
+// Former goog.module ID: Blockly.CodeGenerator
 
 import type {Block} from './block.js';
 import * as common from './common.js';

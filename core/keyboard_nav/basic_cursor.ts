@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.BasicCursor');
+// Former goog.module ID: Blockly.BasicCursor
 
 import * as registry from '../registry.js';
 

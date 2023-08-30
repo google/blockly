@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.libraryBlocks.texts');
+// Former goog.module ID: Blockly.libraryBlocks.texts
 
 import * as Extensions from '../core/extensions.js';
 import * as fieldRegistry from '../core/field_registry.js';

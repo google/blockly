@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.DeleteArea');
+// Former goog.module ID: Blockly.DeleteArea
 
 import {BlockSvg} from './block_svg.js';
 import {DragTarget} from './drag_target.js';

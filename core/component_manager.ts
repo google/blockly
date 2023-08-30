@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ComponentManager');
+// Former goog.module ID: Blockly.ComponentManager
 
 import type {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IComponent} from './interfaces/i_component.js';

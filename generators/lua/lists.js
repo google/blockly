@@ -8,8 +8,7 @@
  * @fileoverview Generating Lua for list blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Lua.lists');
+// Former goog.module ID: Blockly.Lua.lists
 
 import {NameType} from '../../core/names.js';
 import {Order} from './lua_generator.js';

@@ -8,8 +8,7 @@
  * @fileoverview Generating JavaScript for loop blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript.loops');
+// Former goog.module ID: Blockly.JavaScript.loops
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';

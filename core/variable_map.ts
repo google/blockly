@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.VariableMap');
+// Former goog.module ID: Blockly.VariableMap
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_var_delete.js';

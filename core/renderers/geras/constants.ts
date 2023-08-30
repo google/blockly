@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.geras.ConstantProvider');
+// Former goog.module ID: Blockly.geras.ConstantProvider
 
 import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 

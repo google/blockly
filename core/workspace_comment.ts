@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.WorkspaceComment');
+// Former goog.module ID: Blockly.WorkspaceComment
 
 import type {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';

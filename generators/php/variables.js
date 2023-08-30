@@ -8,8 +8,7 @@
  * @fileoverview Generating PHP for variable blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.PHP.variables');
+// Former goog.module ID: Blockly.PHP.variables
 
 import {NameType} from '../../core/names.js';
 import {Order} from './php_generator.js';

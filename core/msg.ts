@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Msg');
+// Former goog.module ID: Blockly.Msg
 
 /** A dictionary of localised messages. */
 export const Msg: {[key: string]: string} = Object.create(null);

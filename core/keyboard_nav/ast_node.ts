@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ASTNode');
+// Former goog.module ID: Blockly.ASTNode
 
 import type {Block} from '../block.js';
 import type {Connection} from '../connection.js';

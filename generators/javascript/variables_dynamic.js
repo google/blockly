@@ -8,8 +8,7 @@
  * @fileoverview Generating JavaScript for dynamic variable blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript.variablesDynamic');
+// Former goog.module ID: Blockly.JavaScript.variablesDynamic
 
 
 // JavaScript is dynamically typed.

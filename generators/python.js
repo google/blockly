@@ -10,8 +10,7 @@
  * @suppress {extraRequire}
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Python.all');
+// Former goog.module ID: Blockly.Python.all
 
 import {PythonGenerator} from './python/python_generator.js';
 import * as colour from './python/colour.js';

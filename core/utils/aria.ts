@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.utils.aria');
+// Former goog.module ID: Blockly.utils.aria
 
 /** ARIA states/properties prefix. */
 const ARIA_PREFIX = 'aria-';

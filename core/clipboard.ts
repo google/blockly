@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.clipboard');
+// Former goog.module ID: Blockly.clipboard
 
 import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import {BlockPaster} from './clipboard/block_paster.js';

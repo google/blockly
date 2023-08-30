@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.FieldNumber');
+// Former goog.module ID: Blockly.FieldNumber
 
 import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';

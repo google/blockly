@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.BubbleOpen');
+// Former goog.module ID: Blockly.Events.BubbleOpen
 
 import type {AbstractEventJson} from './events_abstract.js';
 import type {BlockSvg} from '../block_svg.js';

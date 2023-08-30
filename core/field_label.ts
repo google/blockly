@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.FieldLabel');
+// Former goog.module ID: Blockly.FieldLabel
 
 import * as dom from './utils/dom.js';
 import {Field, FieldConfig} from './field.js';

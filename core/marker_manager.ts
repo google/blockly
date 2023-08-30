@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.MarkerManager');
+// Former goog.module ID: Blockly.MarkerManager
 
 import type {Cursor} from './keyboard_nav/cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';

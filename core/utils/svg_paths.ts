@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.utils.svgPaths');
+// Former goog.module ID: Blockly.utils.svgPaths
 
 /**
  * Create a string representing the given x, y pair.  It does not matter whether

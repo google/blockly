@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.geras.Highlighter');
+// Former goog.module ID: Blockly.geras.Highlighter
 
 import * as svgPaths from '../../utils/svg_paths.js';
 import type {ConstantProvider} from '../common/constants.js';

@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.RenderedConnection');
+// Former goog.module ID: Blockly.RenderedConnection
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';

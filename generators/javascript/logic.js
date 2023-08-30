@@ -8,8 +8,7 @@
  * @fileoverview Generating JavaScript for logic blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript.logic');
+// Former goog.module ID: Blockly.JavaScript.logic
 
 import {Order} from './javascript_generator.js';
 

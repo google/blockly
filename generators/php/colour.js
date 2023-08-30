@@ -8,8 +8,7 @@
  * @fileoverview Generating PHP for colour blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.PHP.colour');
+// Former goog.module ID: Blockly.PHP.colour
 
 import {Order} from './php_generator.js';
 

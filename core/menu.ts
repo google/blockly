@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Menu');
+// Former goog.module ID: Blockly.Menu
 
 import * as browserEvents from './browser_events.js';
 import type {MenuItem} from './menuitem.js';

@@ -8,8 +8,7 @@
  * @fileoverview Generating Dart for loop blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Dart.loops');
+// Former goog.module ID: Blockly.Dart.loops
 
 import {Order} from './dart_generator.js';
 import * as stringUtils from '../../core/utils/string.js';

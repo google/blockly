@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
 import {Rect} from '../utils/rect.js';
 
 import {IDraggable} from './i_draggable.js';
 
-goog.declareModuleId('Blockly.IDragTarget');
+// Former goog.module ID: Blockly.IDragTarget
 
 import type {IComponent} from './i_component.js';
 

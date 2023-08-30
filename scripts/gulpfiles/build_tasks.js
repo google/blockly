@@ -315,12 +315,26 @@ function buildJavaScript(done) {
  */
 function buildDeps() {
   const roots = [
-    path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base.js'),
     TSC_OUTPUT_DIR,
   ];
 
   /** Maximum buffer size, in bytes for child process stdout/stderr. */
   const MAX_BUFFER_SIZE = 10 * 1024 * 1024;
+
+  /**
+   * Filter a string to extract lines containing (or not containing) the
+   * specified target string.
+   *
+   * @param {string} text Text to filter.
+   * @param {string} target String to search for.
+   * @param {boolean?} exclude If true, extract only non-matching lines.
+   * @returns {string} Filtered text.
+   */
+  function filter(text, target, exclude) {
+    return text.split('\n')
+        .filter((line) => Boolean(line.match(target)) !== Boolean(exclude))
+        .join('\n');
+  }
 
   /**
    * Log unexpected diagnostics, after removing expected warnings.
@@ -339,7 +353,8 @@ function buildDeps() {
   }
 
   return new Promise((resolve, reject) => {
-    const args = roots.map(root => `--root '${root}' `).join('');
+    const args = '--closure-path ./build/src ' +
+        roots.map(root => `--root '${root}' `).join('');
     exec(
         `closure-make-deps ${args}`, {maxBuffer: MAX_BUFFER_SIZE},
         (error, stdout, stderr) => {
@@ -504,10 +519,7 @@ return ${chunk.exports};
  *     closure-calculate-chunks.
  */
 function getChunkOptions() {
-  const basePath =
-      path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base_minimal.js');
   const cccArgs = [
-    `--closure-library-base-js-path ./${basePath}`,
     `--deps-file './${DEPS_FILE}'`,
     ...(chunks.map(chunk => `--entrypoint '${chunk.entry}'`)),
   ];
@@ -526,8 +538,8 @@ function getChunkOptions() {
   //     /* ... remaining handful of chunks */
   //   ],
   //   js: [
-  //     './build/ts/core/serialization/workspaces.js',
-  //     './build/ts/core/serialization/variables.js',
+  //     './build/src/core/serialization/workspaces.js',
+  //     './build/src/core/serialization/variables.js',
   //     /* ... remaining several hundred files */
   //   ],
   // }
@@ -597,13 +609,8 @@ function compile(options) {
     language_out: 'ECMASCRIPT_2015',
     jscomp_off: [...JSCOMP_OFF],
     rewrite_polyfills: true,
-    // N.B.: goog.js refers to lots of properties on goog that are not
-    // declared by base_minimal.js, while if you compile against
-    // base.js instead you will discover that it uses @deprecated
-    // inherits, forwardDeclare etc.
     hide_warnings_for: [
       'node_modules',
-      path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'goog.js'),
     ],
     define: ['COMPILED=true'],
   };
@@ -670,11 +677,6 @@ async function buildShims() {
   // Install a package.json file in BUILD_DIR to tell node.js that the
   // .js files therein are ESM not CJS, so we can import the
   // entrypoints to enumerate their exported names.
-  //
-  // N.B.: There is an exception: core/main.js is a goog.module not
-  // ESM, but fortunately we don't attempt to import or require this
-  // file from node.js - we only feed it to Closure Compiler, which
-  // uses the type information in deps.js rather than package.json.
   const TMP_PACKAGE_JSON = path.join(BUILD_DIR, 'package.json');
   await fsPromises.writeFile(TMP_PACKAGE_JSON, '{"type": "module"}');
 
@@ -731,9 +733,6 @@ function buildAdvancedCompilationTest() {
     'tests/compile/main.js',
     'tests/compile/test_blocks.js',
   ];
-  const ignore = [
-    TSC_OUTPUT_DIR + '/closure/goog/base.js',  // Use base_minimal.js only.
-  ];
 
   // Closure Compiler options.
   const options = {
@@ -742,7 +741,7 @@ function buildAdvancedCompilationTest() {
     entry_point: './tests/compile/main.js',
     js_output_file: 'main_compressed.js',
   };
-  return gulp.src(srcs, {base: './', ignore})
+  return gulp.src(srcs, {base: './'})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
       .pipe(compile(options))

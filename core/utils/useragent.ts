@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.utils.userAgent');
+// Former goog.module ID: Blockly.utils.userAgent
 
 /** The raw useragent string. */
 let rawUserAgent: string;

@@ -8,8 +8,7 @@
  * @fileoverview Generating JavaScript for procedure blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript.procedures');
+// Former goog.module ID: Blockly.JavaScript.procedures
 
 import {NameType} from '../../core/names.js';
 import {Order} from './javascript_generator.js';

@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.Selected');
+// Former goog.module ID: Blockly.Events.Selected
 
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';

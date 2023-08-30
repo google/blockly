@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Tooltip');
+// Former goog.module ID: Blockly.Tooltip
 
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';

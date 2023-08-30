@@ -8,8 +8,7 @@
  * @fileoverview Generating JavaScript for variable blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript.variables');
+// Former goog.module ID: Blockly.JavaScript.variables
 
 import {NameType} from '../../core/names.js';
 import {Order} from './javascript_generator.js';

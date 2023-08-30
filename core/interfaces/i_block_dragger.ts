@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
 import type {Coordinate} from '../utils/coordinate.js';
 import type {BlockSvg} from '../block_svg.js';
-goog.declareModuleId('Blockly.IBlockDragger');
+// Former goog.module ID: Blockly.IBlockDragger
 
 /**
  * A block dragger interface.

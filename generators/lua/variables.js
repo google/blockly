@@ -8,8 +8,7 @@
  * @fileoverview Generating Lua for variable blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Lua.variables');
+// Former goog.module ID: Blockly.Lua.variables
 
 import {NameType} from '../../core/names.js';
 import {Order} from './lua_generator.js';

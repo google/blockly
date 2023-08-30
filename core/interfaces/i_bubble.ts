@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
 import type {Coordinate} from '../utils/coordinate.js';
-goog.declareModuleId('Blockly.IBubble');
+// Former goog.module ID: Blockly.IBubble
 
 import type {IContextMenu} from './i_contextmenu.js';
 import type {IDraggable} from './i_draggable.js';

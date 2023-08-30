@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.FlyoutMetricsManager');
+// Former goog.module ID: Blockly.FlyoutMetricsManager
 
 import type {IFlyout} from './interfaces/i_flyout.js';
 import {ContainerRegion, MetricsManager} from './metrics_manager.js';

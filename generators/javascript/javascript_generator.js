@@ -9,8 +9,7 @@
  * @suppress {checkTypes|globalThis}
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript');
+// Former goog.module ID: Blockly.JavaScript
 
 import * as Variables from '../../core/variables.js';
 import * as stringUtils from '../../core/utils/string.js';

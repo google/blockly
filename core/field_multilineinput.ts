@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.FieldMultilineInput');
+// Former goog.module ID: Blockly.FieldMultilineInput
 
 import * as Css from './css.js';
 import {Field, UnattachedFieldError} from './field.js';

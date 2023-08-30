@@ -8,8 +8,7 @@
  * @fileoverview Generating Python for loop blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Python.loops');
+// Former goog.module ID: Blockly.Python.loops
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';

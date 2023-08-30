@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.FieldImage');
+// Former goog.module ID: Blockly.FieldImage
 
 import {Field, FieldConfig} from './field.js';
 import * as fieldRegistry from './field_registry.js';

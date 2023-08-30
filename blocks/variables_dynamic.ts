@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.libraryBlocks.variablesDynamic');
+// Former goog.module ID: Blockly.libraryBlocks.variablesDynamic
 
 import * as ContextMenu from '../core/contextmenu.js';
 import * as Extensions from '../core/extensions.js';

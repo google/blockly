@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Themes.Classic');
+// Former goog.module ID: Blockly.Themes.Classic
 
 import {Theme} from '../theme.js';
 

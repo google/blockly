@@ -30,7 +30,7 @@ import * as deprecation from './utils/deprecation.js';
 Object.defineProperties(Blockly, {
   /**
    * The richness of block colours, regardless of the hue.
-   * Must be in the range of 0 (inclusive) to 1 (exclusive).J
+   * Must be in the range of 0 (inclusive) to 1 (exclusive).
    *
    * @name Blockly.HSV_SATURATION
    * @type {number}

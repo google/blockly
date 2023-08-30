@@ -5,7 +5,10 @@
 <title>Blockly Generator Tests</title>
 <script>
 // N.B.: This script depends on the following (module) script to load
-// Blockly, the code generators, and the unittest*.js scripts.
+// Blockly, the code generators, and the unittest*.js scripts.  The
+// module script actually gets executed after this one, so although
+// Blockly will be available when the defined global functions are
+// called it isn't yet available when this script runs.
 
 var demoWorkspace = null;
 

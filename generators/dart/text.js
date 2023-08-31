@@ -10,7 +10,6 @@
 
 // Former goog.module ID: Blockly.Dart.texts
 
-import {NameType} from '../../core/names.js';
 import {Order} from './dart_generator.js';
 
 
@@ -56,8 +55,7 @@ export function text_join(block, generator) {
 export function text_append(block, generator) {
   // Append to a variable in place.
   const varName =
-      generator.nameDB_.getName(
-        block.getFieldValue('VAR'), NameType.VARIABLE);
+      generator.getVariableName(block.getFieldValue('VAR'));
   const value = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return varName + ' = [' + varName + ', ' + value + '].join();\n';
 };

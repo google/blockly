@@ -190,5 +190,36 @@ suite('Generator', function () {
         });
       });
     });
+
+    suite('Names', function () {
+      setup(function () {
+        class TestGenerator extends Blockly.CodeGenerator {
+          init() {
+            super.init();
+            this.nameDB_ = sinon.createStubInstance(Blockly.Names, {
+              getName: 'foo',
+            });
+          }
+        }
+        this.generator = new TestGenerator();
+      });
+      test('No nameDB_ initialized', function () {
+        chai.assert.throws(() => {
+          this.generator.getVariableName('foo');
+        });
+      });
+
+      test('Get variable name', function () {
+        this.generator.init();
+
+        chai.assert.equal(this.generator.getVariableName('foo'), 'foo');
+      });
+
+      test('Get procedure name', function () {
+        this.generator.init();
+
+        chai.assert.equal(this.generator.getProcedureName('foo'), 'foo');
+      });
+    });
   });
 });

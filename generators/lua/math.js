@@ -10,7 +10,6 @@
 
 // Former goog.module ID: Blockly.Lua.math
 
-import {NameType} from '../../core/names.js';
 import {Order} from './lua_generator.js';
 
 
@@ -185,8 +184,7 @@ export function math_change(block, generator) {
   const argument0 =
       generator.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
   const varName =
-      generator.nameDB_.getName(
-        block.getFieldValue('VAR'), NameType.VARIABLE);
+      generator.getVariableName(block.getFieldValue('VAR'));
   return varName + ' = ' + varName + ' + ' + argument0 + '\n';
 };
 

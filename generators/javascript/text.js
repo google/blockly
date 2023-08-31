@@ -10,7 +10,6 @@
 
 // Former goog.module ID: Blockly.JavaScript.texts
 
-import {NameType} from '../../core/names.js';
 import {Order} from './javascript_generator.js';
 
 
@@ -101,8 +100,7 @@ export function text_join(block, generator) {
 
 export function text_append(block, generator) {
   // Append to a variable in place.
-  const varName = generator.nameDB_.getName(
-      block.getFieldValue('VAR'), NameType.VARIABLE);
+  const varName = generator.getVariableName(block.getFieldValue('VAR'));
   const value = generator.valueToCode(block, 'TEXT',
       Order.NONE) || "''";
   const code = varName + ' += ' +

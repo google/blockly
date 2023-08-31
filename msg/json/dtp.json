@@ -122,5 +122,21 @@
 	"MATH_SINGLE_TOOLTIP_LOG10": "Potonduliono impohon logaritma 10 numbul.",
 	"MATH_SINGLE_TOOLTIP_EXP": "Potonduliono e kumaa kuasa numbul.",
 	"MATH_SINGLE_TOOLTIP_POW10": "Potonduliono 10 kumaa kuasa numbul.",
-	"MATH_TRIG_TOOLTIP_SIN": "Potonduliono darjah sine (okon radian)."
+	"MATH_TRIG_TOOLTIP_SIN": "Potonduliono darjah sine (okon radian).",
+	"MATH_TRIG_TOOLTIP_COS": "Potonduliono cosine do darjah (okon radian).",
+	"MATH_TRIG_TOOLTIP_TAN": "Potonduliono tangen do darjah (okon ko' radian).",
+	"MATH_TRIG_TOOLTIP_ASIN": "Potonduliono arcsine mantad numbul.",
+	"MATH_TRIG_TOOLTIP_ACOS": "Potonduliono arccosine mantad do numbul.",
+	"MATH_TRIG_TOOLTIP_ATAN": "Potonduliono arctangen mantad numbul.",
+	"MATH_CONSTANT_TOOLTIP": "Potonduliono iso mantad do pemalar koubasanan: π (3.141…), e (2.718…), φ (1.618…), sqrt(2) (1.414…), sqrt(½) (0.707…), or ∞ (infinity).",
+	"MATH_IS_EVEN": "poinggonop no",
+	"MATH_IS_ODD": "suusuai",
+	"MATH_IS_PRIME": "pordana",
+	"MATH_IS_WHOLE": "koinsanai",
+	"MATH_IS_POSITIVE": "positif",
+	"MATH_IS_NEGATIVE": "negatif",
+	"MATH_IS_DIVISIBLE_BY": "milo piboogion miampai",
+	"MATH_IS_TOOLTIP": "Intangai nung numbul di poinggonop, suusuai, pordana, koinsanai, positif, negatif, toi ko' milo piboogion do numbul. Potonduliono otopot toi ko' kasala.",
+	"MATH_CHANGE_TITLE": "kounolihon %1 miampai %2",
+	"MATH_CHANGE_TOOLTIP": "Poruhango numbul kumaa pombolehubah '%1'."
 }

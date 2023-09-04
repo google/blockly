@@ -1537,6 +1537,32 @@ export class BlockSvg
   }
 
   /**
+ * Reposition a block after its connection has been resized, to match exactly the target block position.
+ * The block to position is usually either the first block in a dragged stack
+ * or an insertion marker.
+ *
+ * @param sourceConnection The connection on the moving block's stack.
+ * @param originalOffsetInBlock The connection original offset in its block, before the resize occured
+ * @internal
+ */
+  repositionAfterConnectionResize(
+    sourceConnection: RenderedConnection,
+    originalOffsetInBlock: Coordinate,
+  ) {
+    // We only need to position the new block if it's before the existing one,
+    // otherwise its position is set by the previous block.
+    if (
+      sourceConnection.type === ConnectionType.NEXT_STATEMENT ||
+      sourceConnection.type === ConnectionType.INPUT_VALUE
+    ) {
+      const dx = originalOffsetInBlock.x - sourceConnection.getOffsetInBlock().x;
+      const dy = originalOffsetInBlock.y - sourceConnection.getOffsetInBlock().y;
+
+      this.moveBy(dx, dy);
+    }
+  }
+
+  /**
    * Find all the blocks that are directly nested inside this one.
    * Includes value and statement inputs, as well as any following statement.
    * Excludes any connection on an output tab or any preceding statement.

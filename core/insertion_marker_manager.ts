@@ -239,7 +239,7 @@ export class InsertionMarkerManager {
       result = this.workspace.newBlock(imType);
       result.setInsertionMarker(true);
       if (sourceBlock.saveExtraState) {
-        const state = sourceBlock.saveExtraState();
+        const state = sourceBlock.saveExtraState(true);
         if (state && result.loadExtraState) {
           result.loadExtraState(state);
         }

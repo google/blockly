@@ -16,6 +16,7 @@
  const moduleExports = goog.require('Blockly.Arduino');
  goog.require('Blockly.Arduino.leaphyCommon');
  goog.require('Blockly.Arduino.leaphyOriginal');
+ goog.require('Blockly.Arduino.leaphyNano');
  goog.require('Blockly.Arduino.leaphyClick');
  goog.require('Blockly.Arduino.leaphyFlitz');
  goog.require('Blockly.Arduino.leaphyExtra');

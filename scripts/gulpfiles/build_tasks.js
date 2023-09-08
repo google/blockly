@@ -40,6 +40,11 @@ const {posixPath, quote} = require('../helpers');
 const PYTHON = process.platform === 'win32' ? 'python' : 'python3';
 
 /**
+ * Posix version of TSC_OUTPUT_DIR
+ */
+const TSC_OUTPUT_DIR_POSIX = posixPath(TSC_OUTPUT_DIR);
+
+/**
  * Suffix to add to compiled output files.
  */
 const COMPILED_SUFFIX = '_compressed';
@@ -84,8 +89,6 @@ const NAMESPACE_PROPERTY = '__namespace__';
  *   matching the files to include in the chunk.
  * - .entry: the source .js file which is the entrypoint for the
  *   chunk, relative to TSC_OUTPUT_DIR.
- * - .exports: an expression evaluating to the exports/Module object
- *   of module that is the chunk's entrypoint / top level module.
  * - .scriptExport: When the chunk is loaded as a script (e.g., via a
  *   <SCRIPT> tag), the chunk's exports object will be made available
  *   at the specified location (which must be a variable name or the
@@ -104,55 +107,47 @@ const chunks = [
   {
     name: 'blockly',
     files: 'core/**/*.js',
-    entry: path.join(TSC_OUTPUT_DIR, 'core', 'main.js'),
-    moduleEntry: path.join(TSC_OUTPUT_DIR, 'core', 'blockly.js'),
-    exports: 'module$core$blockly',
+    entry: 'core/blockly.js',
     scriptExport: 'Blockly',
   },
   {
     name: 'blocks',
     files: 'blocks/**/*.js',
-    entry: path.join(TSC_OUTPUT_DIR, 'blocks', 'blocks.js'),
-    exports: 'module$blocks$blocks',
+    entry: 'blocks/blocks.js',
     scriptExport: 'Blockly.libraryBlocks',
   },
   {
     name: 'javascript',
     files: ['generators/javascript.js', 'generators/javascript/**/*.js'],
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'javascript.js'),
-    exports: 'module$generators$javascript',
+    entry: 'generators/javascript.js',
     scriptExport: 'javascript',
     scriptNamedExports: {'Blockly.JavaScript': 'javascriptGenerator'},
   },
   {
     name: 'python',
     files: ['generators/python.js', 'generators/python/**/*.js'],
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'python.js'),
-    exports: 'module$generators$python',
+    entry: 'generators/python.js',
     scriptExport: 'python',
     scriptNamedExports: {'Blockly.Python': 'pythonGenerator'},
   },
   {
     name: 'php',
     files: ['generators/php.js', 'generators/php/**/*.js'],
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'php.js'),
-    exports: 'module$generators$php',
+    entry: 'generators/php.js',
     scriptExport: 'php',
     scriptNamedExports: {'Blockly.PHP': 'phpGenerator'},
   },
   {
     name: 'lua',
     files: ['generators/lua.js', 'generators/lua/**/*.js'],
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'lua.js'),
-    exports: 'module$generators$lua',
+    entry: 'generators/lua.js',
     scriptExport: 'lua',
     scriptNamedExports: {'Blockly.Lua': 'luaGenerator'},
   },
   {
     name: 'dart',
     files: ['generators/dart.js', 'generators/dart/**/*.js'],
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'dart.js'),
-    exports: 'module$generators$dart',
+    entry: 'generators/dart.js',
     scriptExport: 'dart',
     scriptNamedExports: {'Blockly.Dart': 'dartGenerator'},
   },
@@ -161,6 +156,14 @@ const chunks = [
 chunks[0].parent = null;
 for (let i = 1; i < chunks.length; i++) {
   chunks[i].parent = chunks[0];
+}
+
+/**
+ * Return the name of the module object for the entrypoint of the given chunk,
+ * as munged by Closure Compiler.
+ */
+function modulePath(chunk) {
+  return 'module$' + chunk.entry.replace(/\.js$/, '').replaceAll('/', '$');
 }
 
 const licenseRegex = `\\/\\*\\*
@@ -428,8 +431,8 @@ function chunkWrapper(chunk) {
 }(this, function(${factoryArgs}) {
 var ${NAMESPACE_VARIABLE}=${namespaceExpr};
 %output%
-${chunk.exports}.${NAMESPACE_PROPERTY}=${NAMESPACE_VARIABLE};
-return ${chunk.exports};
+${modulePath(chunk)}.${NAMESPACE_PROPERTY}=${NAMESPACE_VARIABLE};
+return ${modulePath(chunk)};
 }));
 `;
 }
@@ -474,8 +477,8 @@ function getChunkOptions() {
   for (const chunk of chunks) {
     const globs = typeof chunk.files === 'string' ? [chunk.files] : chunk.files;
     const files = globs
-      .flatMap((glob) => globSync(glob, {cwd: TSC_OUTPUT_DIR}))
-      .map((s) => `${TSC_OUTPUT_DIR}/${s}`);
+      .flatMap((glob) => globSync(glob, {cwd: TSC_OUTPUT_DIR_POSIX}))
+      .map((file) => path.posix.join(TSC_OUTPUT_DIR_POSIX, file));
     chunkOptions.push(
       `${chunk.name}:${files.length}` +
         (chunk.parent ? `:${chunk.parent.name}` : ''),
@@ -543,7 +546,7 @@ function buildCompiled() {
     // declareLegacyNamespace this was very straightforward.  Without
     // it, we have to rely on implmentation details.  See
     // https://github.com/google/closure-compiler/issues/1601#issuecomment-483452226
-    define: `VERSION$$${chunks[0].exports}='${packageJson.version}'`,
+    define: `VERSION$$${modulePath(chunks[0])}='${packageJson.version}'`,
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,
     rename_prefix_namespace: NAMESPACE_VARIABLE,
@@ -552,7 +555,7 @@ function buildCompiled() {
   };
 
   // Fire up compilation pipline.
-  return gulp.src(chunkOptions.js, {base: TSC_OUTPUT_DIR})
+  return gulp.src(chunkOptions.js, {base: TSC_OUTPUT_DIR_POSIX})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
       .pipe(compile(options))
@@ -580,7 +583,7 @@ async function buildShims() {
   // a shim to load the chunk either by importing the entrypoint
   // module or by loading the compiled script.
   await Promise.all(chunks.map(async (chunk) => {
-    const modulePath = posixPath(chunk.moduleEntry ?? chunk.entry);
+    const entryPath = path.posix.join(TSC_OUTPUT_DIR_POSIX, chunk.entry);
     const scriptPath =
         path.posix.join(RELEASE_DIR, `${chunk.name}${COMPILED_SUFFIX}.js`);
     const shimPath = path.join(BUILD_DIR, `${chunk.name}.loader.mjs`);
@@ -588,7 +591,7 @@ async function buildShims() {
         chunk.parent ?
         `import ${quote(`./${chunk.parent.name}.loader.mjs`)};` :
         '';
-    const exports = await import(`../../${modulePath}`);
+    const exports = await import(`../../${entryPath}`);
 
     await fsPromises.writeFile(shimPath,
         `import {loadChunk} from '../tests/scripts/load.mjs';
@@ -597,7 +600,7 @@ ${parentImport}
 export const {
 ${Object.keys(exports).map((name) => `  ${name},`).join('\n')}
 } = await loadChunk(
-  ${quote(modulePath)},
+  ${quote(entryPath)},
   ${quote(scriptPath)},
   ${quote(chunk.scriptExport)},
 );

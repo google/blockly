@@ -106,21 +106,21 @@ const chunks = [
     files: 'core/**/*.js',
     entry: path.join(TSC_OUTPUT_DIR, 'core', 'main.js'),
     moduleEntry: path.join(TSC_OUTPUT_DIR, 'core', 'blockly.js'),
-    exports: 'module$build$src$core$blockly',
+    exports: 'module$core$blockly',
     scriptExport: 'Blockly',
   },
   {
     name: 'blocks',
     files: 'blocks/**/*.js',
     entry: path.join(TSC_OUTPUT_DIR, 'blocks', 'blocks.js'),
-    exports: 'module$build$src$blocks$blocks',
+    exports: 'module$blocks$blocks',
     scriptExport: 'Blockly.libraryBlocks',
   },
   {
     name: 'javascript',
     files: ['generators/javascript.js', 'generators/javascript/**/*.js'],
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'javascript.js'),
-    exports: 'module$build$src$generators$javascript',
+    exports: 'module$generators$javascript',
     scriptExport: 'javascript',
     scriptNamedExports: {'Blockly.JavaScript': 'javascriptGenerator'},
   },
@@ -128,7 +128,7 @@ const chunks = [
     name: 'python',
     files: ['generators/python.js', 'generators/python/**/*.js'],
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'python.js'),
-    exports: 'module$build$src$generators$python',
+    exports: 'module$generators$python',
     scriptExport: 'python',
     scriptNamedExports: {'Blockly.Python': 'pythonGenerator'},
   },
@@ -136,7 +136,7 @@ const chunks = [
     name: 'php',
     files: ['generators/php.js', 'generators/php/**/*.js'],
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'php.js'),
-    exports: 'module$build$src$generators$php',
+    exports: 'module$generators$php',
     scriptExport: 'php',
     scriptNamedExports: {'Blockly.PHP': 'phpGenerator'},
   },
@@ -144,7 +144,7 @@ const chunks = [
     name: 'lua',
     files: ['generators/lua.js', 'generators/lua/**/*.js'],
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'lua.js'),
-    exports: 'module$build$src$generators$lua',
+    exports: 'module$generators$lua',
     scriptExport: 'lua',
     scriptNamedExports: {'Blockly.Lua': 'luaGenerator'},
   },
@@ -152,7 +152,7 @@ const chunks = [
     name: 'dart',
     files: ['generators/dart.js', 'generators/dart/**/*.js'],
     entry: path.join(TSC_OUTPUT_DIR, 'generators', 'dart.js'),
-    exports: 'module$build$src$generators$dart',
+    exports: 'module$generators$dart',
     scriptExport: 'dart',
     scriptNamedExports: {'Blockly.Dart': 'dartGenerator'},
   },
@@ -552,7 +552,7 @@ function buildCompiled() {
   };
 
   // Fire up compilation pipline.
-  return gulp.src(chunkOptions.js, {base: './'})
+  return gulp.src(chunkOptions.js, {base: TSC_OUTPUT_DIR})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
       .pipe(compile(options))

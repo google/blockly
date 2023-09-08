@@ -23,6 +23,7 @@ import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import {Rect} from './utils/rect.js';
+import * as serializationBlocks from './serialization/blocks.js';
 import * as svgMath from './utils/svg_math.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
@@ -223,18 +224,28 @@ export function dispose() {
 
 /**
  * Create a callback function that creates and configures a block,
- *   then places the new block next to the original.
+ *   then places the new block next to the original and returns it.
  *
  * @param block Original block.
- * @param xml XML representation of new block.
+ * @param state XML or JSON object representation of the new block.
  * @returns Function that creates a block.
  */
-export function callbackFactory(block: Block, xml: Element): () => void {
+export function callbackFactory(
+  block: Block,
+  state: Element | serializationBlocks.State,
+): () => BlockSvg {
   return () => {
     eventUtils.disable();
-    let newBlock;
+    let newBlock: BlockSvg;
     try {
-      newBlock = Xml.domToBlockInternal(xml, block.workspace!) as BlockSvg;
+      if (state instanceof Element) {
+        newBlock = Xml.domToBlockInternal(state, block.workspace!) as BlockSvg;
+      } else {
+        newBlock = serializationBlocks.appendInternal(
+          state,
+          block.workspace,
+        ) as BlockSvg;
+      }
       // Move the new block next to the old block.
       const xy = block.getRelativeToSurfaceXY();
       if (block.RTL) {
@@ -251,6 +262,7 @@ export function callbackFactory(block: Block, xml: Element): () => void {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(newBlock));
     }
     newBlock.select();
+    return newBlock;
   };
 }
 

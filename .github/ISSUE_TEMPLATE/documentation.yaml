@@ -1,5 +1,5 @@
-name: Documentation
-description: Report an issue with our documentation
+name: Report a documentation problem 📖
+description: Could our documentation be better? Tell us how.
 labels: 'issue: docs, issue: triage'
 body:
   - type: markdown

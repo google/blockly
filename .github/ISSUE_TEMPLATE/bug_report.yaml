@@ -1,5 +1,5 @@
-name: Bug Report
-description: Create a report to help us improve
+name: Report a bug 🐛
+description: Report bugs in Blockly, so we can fix them.
 labels: 'issue: bug, issue: triage'
 body:
   - type: markdown

@@ -1,4 +1,4 @@
-name: Report a bug 🪳
+name: Report a bug 🐛
 description: Report bugs in Blockly, so we can fix them.
 labels: 'issue: bug, issue: triage'
 body:

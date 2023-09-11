@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Ajeje Brazorf",
+			"Atzerritik",
 			"Codynguyen1116",
 			"Fitoschido",
 			"Harvest",
@@ -52,6 +53,7 @@
 	"NEW_VARIABLE_TITLE": "Nombre de variable nueva:",
 	"VARIABLE_ALREADY_EXISTS": "Ya existe una variable nombrada '%1'.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Ya existe una variable nombrada '%1' para otra variable del tipo: '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "Ya existe una variable denominada '%1' como parámetro en el procedimiento '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "¿Borrar %1 usos de la variable '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "No se puede eliminar la variable '%1' porque es parte de la definición de la función '%2'",
 	"DELETE_VARIABLE": "Borrar la variable '%1'",

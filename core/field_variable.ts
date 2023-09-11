@@ -312,7 +312,7 @@ export class FieldVariable extends FieldDropdown {
    * @returns The selected variable, or null if none was selected.
    * @internal
    */
-  getVariable(): VariableModel | null {
+  override getVariable(): VariableModel | null {
     return this.variable;
   }
 

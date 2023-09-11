@@ -137,6 +137,7 @@ suite('Variable Fields', function () {
       const fieldVariable = new Blockly.FieldVariable('name1');
       chai.assert.equal(fieldVariable.getText(), '');
       chai.assert.isNull(fieldVariable.getValue());
+      chai.assert.isNull(fieldVariable.getVariable());
     });
   });
 
@@ -571,10 +572,12 @@ suite('Variable Fields', function () {
         },
         this.workspace,
       );
-      const variable = block.getField('VAR').getVariable();
+      const field = block.getField('VAR');
+      const variable = field.getVariable();
       chai.assert.equal(variable.name, 'test');
       chai.assert.equal(variable.type, '');
       chai.assert.equal(variable.getId(), 'id1');
+      chai.assert.equal(variable.getId(), field.getValue());
     });
 
     test('Name, untyped', function () {

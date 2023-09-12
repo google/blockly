@@ -136,7 +136,10 @@ suite('Delete blocks', function (done) {
   test('Delete block using backspace key', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    const clickEl = await getClickableBlockElementById(this.browser, firstBlockId);
+    const clickEl = await getClickableBlockElementById(
+      this.browser,
+      firstBlockId,
+    );
     await clickEl.click();
     await this.browser.keys([Key.Backspace]);
     const after = (await getAllBlocks(this.browser)).length;
@@ -150,7 +153,10 @@ suite('Delete blocks', function (done) {
   test('Delete block using delete key', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using delete key.
-    const clickEl = await getClickableBlockElementById(this.browser, firstBlockId);
+    const clickEl = await getClickableBlockElementById(
+      this.browser,
+      firstBlockId,
+    );
     await clickEl.click();
     await this.browser.keys([Key.Delete]);
     const after = (await getAllBlocks(this.browser)).length;
@@ -176,7 +182,10 @@ suite('Delete blocks', function (done) {
   test('Undo block deletion', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    const clickEl = await getClickableBlockElementById(this.browser, firstBlockId);
+    const clickEl = await getClickableBlockElementById(
+      this.browser,
+      firstBlockId,
+    );
     await clickEl.click();
     await this.browser.keys([Key.Backspace]);
     await this.browser.pause(PAUSE_TIME);
@@ -193,7 +202,10 @@ suite('Delete blocks', function (done) {
   test('Redo block deletion', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    const clickEl = await getClickableBlockElementById(this.browser, firstBlockId);
+    const clickEl = await getClickableBlockElementById(
+      this.browser,
+      firstBlockId,
+    );
     await clickEl.click();
     await this.browser.keys([Key.Backspace]);
     await this.browser.pause(PAUSE_TIME);

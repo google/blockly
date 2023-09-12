@@ -611,16 +611,16 @@ export class InsertionMarkerManager {
     insertionMarker.queueRender();
     renderManagement.triggerQueuedRenders();
 
-    // Position so that the existing block doesn't move.
-    insertionMarker.positionNearConnection(imConn, closest);
     // Connect() also renders the insertion marker.
     imConn.connect(closest);
 
-    let originalOffsetInBlock = imConn.getOffsetInBlock().clone();
+    const originalOffsetToTarget = {x: closest.x - imConn.x, y: closest.y - imConn.y}
+    const originalOffsetInBlock = imConn.getOffsetInBlock().clone();
     const imConnConst = imConn;
     renderManagement.finishQueuedRenders().then(() => {
+      // Position so that the existing block doesn't move.
+      insertionMarker?.positionNearConnection(imConnConst, originalOffsetToTarget, originalOffsetInBlock);
       insertionMarker?.getSvgRoot().setAttribute('visibility', 'visible');
-      insertionMarker?.repositionAfterConnectionResize(imConnConst, originalOffsetInBlock);
     });
 
     this.markerConnection = imConn;

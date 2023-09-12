@@ -460,13 +460,13 @@ async function dragBlockFromMutatorFlyout(browser, mutatorBlock, type, x, y) {
  * context menu item.
  *
  * @param browser The active WebdriverIO Browser object.
- * @param block The block to click, as an interactable element. This block must
+ * @param blockId The ID of the block to click. This block should
  *    have text on it, because we use the text element as the click target.
  * @param itemText The display text of the context menu item to click.
  * @return A Promise that resolves when the actions are completed.
  */
-async function contextMenuSelect(browser, block, itemText) {
-  const clickEl = await getClickableBlockElementById(browser, block.id);
+async function contextMenuSelect(browser, blockId, itemText) {
+  const clickEl = await getClickableBlockElementById(browser, blockId);
   // Even though the element should definitely already exist,
   // one specific test breaks if you remove this...
   await clickEl.waitForExist();

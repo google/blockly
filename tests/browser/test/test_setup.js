@@ -542,6 +542,7 @@ module.exports = {
   getSelectedBlockElement,
   getSelectedBlockId,
   getBlockElementById,
+  getClickableBlockElementById,
   getCategory,
   getNthBlockOfCategory,
   getBlockTypeFromCategory,

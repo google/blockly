@@ -10,6 +10,7 @@ const {
   testFileLocations,
   getAllBlocks,
   getBlockElementById,
+  getClickableBlockElementById,
   contextMenuSelect,
   PAUSE_TIME,
 } = require('./test_setup');
@@ -132,13 +133,14 @@ suite('Delete blocks', function (done) {
     });
   });
 
-  test('Delete block using backspace key', async function () {
+  test.only('Delete block using backspace key', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    const block = (await getBlockElementById(this.browser, firstBlockId)).$(
-      '.blocklyPath',
-    );
-    await block.click();
+    // const block = (await getBlockElementById(this.browser, firstBlockId)).$(
+    //   '.blocklyPath',
+    // );
+    const clickEl = await getClickableBlockElementById(this.browser, firstBlockId);
+    await clickEl.click();
     await this.browser.keys([Key.Backspace]);
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(

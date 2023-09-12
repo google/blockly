@@ -156,6 +156,38 @@ async function getBlockElementById(browser, id) {
 }
 
 /**
+ * Get a clickable element on the block. We can't always use the block's SVG root
+ * because clicking will always happen in the middle of the block's bounds
+ * (including children) by default, which causes problems if it has holes
+ * (e.g. statement inputs). Instead, this tries to get the first text field on the
+ * block. It falls back on the block's SVG root.
+ * @param browser The active WebdriverIO Browser object.
+ * @param id The ID of the Blockly block to search for.
+ * @return A Promise that resolves to the text element of the first label
+ *     field on the block, or the block's SVG root if no label field was found.
+ */
+async function getClickableBlockElementById(browser, id) {
+  // In the browser context, find the element that we want and give it a findable ID.
+  await browser.execute((blockId) => {
+    const block = Blockly.getMainWorkspace().getBlockById(blockId);
+    for (const input of block.inputList) {
+      for (const field of input.fieldRow) {
+        if (field instanceof Blockly.FieldLabel) {
+          field.getSvgRoot().id = 'clickTargetElement';
+          return;
+        }
+      }
+    }
+    // No label field found. Fall back to the block's SVG root.
+    block.getSvgRoot().id = 'clickTargetElement';
+  }, id);
+
+  // In the test context, get the Webdriverio Element that we've identified.
+  const elem = await browser.$('#clickTargetElement');
+  return elem;
+}
+
+/**
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to find.
  * @return A Promise that resolves to the root element of the toolbox
@@ -434,12 +466,7 @@ async function dragBlockFromMutatorFlyout(browser, mutatorBlock, type, x, y) {
  * @return A Promise that resolves when the actions are completed.
  */
 async function contextMenuSelect(browser, block, itemText) {
-  // Clicking will always happen in the middle of the block's bounds
-  // (including children) by default, which causes problems if it has holes
-  // (e.g. statement inputs).
-  // Instead, we'll click directly on the first bit of text on the block.
-  const clickEl = block.$('.blocklyText');
-
+  const clickEl = await getClickableBlockElementById(browser, block.id);
   // Even though the element should definitely already exist,
   // one specific test breaks if you remove this...
   await clickEl.waitForExist();

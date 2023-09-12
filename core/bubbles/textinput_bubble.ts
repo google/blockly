@@ -43,7 +43,7 @@ export class TextInputBubble extends Bubble {
 
   /** Functions listening for changes to the text of this bubble. */
   private textChangeListeners: (() => void)[] = [];
-
+  
   /** Functions listening for changes to the size of this bubble. */
   private sizeChangeListeners: (() => void)[] = [];
 

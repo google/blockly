@@ -38,7 +38,7 @@ const DEFAULT_BUBBLE_HEIGHT = 80;
 export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   /** The type string used to identify this icon. */
   static readonly TYPE = IconType.COMMENT;
-
+  
   /**
    * The weight this icon has relative to other icons. Icons with more positive
    * weight values are rendered farther toward the end of the block.
@@ -219,6 +219,15 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   onTextChange(): void {
     if (this.textInputBubble) {
       this.text = this.textInputBubble.getText();
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this.sourceBlock,
+          'comment',
+          null,
+          null,
+          this.text,
+        ),
+      );
     }
   }
 

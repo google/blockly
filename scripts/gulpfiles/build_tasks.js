@@ -18,6 +18,7 @@ const fs = require('fs');
 const fsPromises = require('fs/promises');
 const {exec, execSync} = require('child_process');
 
+const {globSync} = require('glob');
 const closureCompiler = require('google-closure-compiler').gulp();
 const argv = require('yargs').argv;
 const {rimraf} = require('rimraf');
@@ -39,14 +40,14 @@ const {posixPath, quote} = require('../helpers');
 const PYTHON = process.platform === 'win32' ? 'python' : 'python3';
 
 /**
+ * Posix version of TSC_OUTPUT_DIR
+ */
+const TSC_OUTPUT_DIR_POSIX = posixPath(TSC_OUTPUT_DIR);
+
+/**
  * Suffix to add to compiled output files.
  */
 const COMPILED_SUFFIX = '_compressed';
-
-/**
- * Dependencies file (used by buildCompiled for chunking.
- */
-const DEPS_FILE = path.join(BUILD_DIR, 'deps.js');
 
 /**
  * Name of an object to be used as a shared "global" namespace by
@@ -84,10 +85,10 @@ const NAMESPACE_PROPERTY = '__namespace__';
  * - .name: the name of the chunk.  Used to label it when describing
  *   it to Closure Compiler and forms the prefix of filename the chunk
  *   will be written to.
+ * - .files: A glob or array of globs, relative to TSC_OUTPUT_DIR,
+ *   matching the files to include in the chunk.
  * - .entry: the source .js file which is the entrypoint for the
- *   chunk.
- * - .exports: an expression evaluating to the exports/Module object
- *   of module that is the chunk's entrypoint / top level module.
+ *   chunk, relative to TSC_OUTPUT_DIR.
  * - .scriptExport: When the chunk is loaded as a script (e.g., via a
  *   <SCRIPT> tag), the chunk's exports object will be made available
  *   at the specified location (which must be a variable name or the
@@ -97,67 +98,73 @@ const NAMESPACE_PROPERTY = '__namespace__';
  *   loaded as a script, the specified named exports will be saved at
  *   the specified locations (which again must be global variables or
  *   properties on already-existing objects).  Optional.
- *
- * The function getChunkOptions will, after running
- * closure-calculate-chunks, update each chunk to add the following
- * properties:
- *
- * - .parent: the parent chunk of the given chunk.  Typically
- *    chunks[0], except for chunk[0].parent which will be null.
- * - .wrapper: the generated chunk wrapper.
+ * - .parent: the parent chunk of the given chunk; null for the root
+ *   chunk.
  *
  * Output files will be named <chunk.name><COMPILED_SUFFIX>.js.
  */
 const chunks = [
   {
     name: 'blockly',
-    entry: path.join(TSC_OUTPUT_DIR, 'core', 'main.js'),
-    moduleEntry: path.join(TSC_OUTPUT_DIR, 'core', 'blockly.js'),
-    exports: 'module$build$src$core$blockly',
+    files: 'core/**/*.js',
+    entry: 'core/blockly.js',
     scriptExport: 'Blockly',
   },
   {
     name: 'blocks',
-    entry: path.join(TSC_OUTPUT_DIR, 'blocks', 'blocks.js'),
-    exports: 'module$build$src$blocks$blocks',
+    files: 'blocks/**/*.js',
+    entry: 'blocks/blocks.js',
     scriptExport: 'Blockly.libraryBlocks',
   },
   {
     name: 'javascript',
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'javascript.js'),
-    exports: 'module$build$src$generators$javascript',
+    files: ['generators/javascript.js', 'generators/javascript/**/*.js'],
+    entry: 'generators/javascript.js',
     scriptExport: 'javascript',
     scriptNamedExports: {'Blockly.JavaScript': 'javascriptGenerator'},
   },
   {
     name: 'python',
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'python.js'),
-    exports: 'module$build$src$generators$python',
+    files: ['generators/python.js', 'generators/python/**/*.js'],
+    entry: 'generators/python.js',
     scriptExport: 'python',
     scriptNamedExports: {'Blockly.Python': 'pythonGenerator'},
   },
   {
     name: 'php',
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'php.js'),
-    exports: 'module$build$src$generators$php',
+    files: ['generators/php.js', 'generators/php/**/*.js'],
+    entry: 'generators/php.js',
     scriptExport: 'php',
     scriptNamedExports: {'Blockly.PHP': 'phpGenerator'},
   },
   {
     name: 'lua',
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'lua.js'),
-    exports: 'module$build$src$generators$lua',
+    files: ['generators/lua.js', 'generators/lua/**/*.js'],
+    entry: 'generators/lua.js',
     scriptExport: 'lua',
     scriptNamedExports: {'Blockly.Lua': 'luaGenerator'},
   },
   {
     name: 'dart',
-    entry: path.join(TSC_OUTPUT_DIR, 'generators', 'dart.js'),
-    exports: 'module$build$src$generators$dart',
+    files: ['generators/dart.js', 'generators/dart/**/*.js'],
+    entry: 'generators/dart.js',
     scriptExport: 'dart',
     scriptNamedExports: {'Blockly.Dart': 'dartGenerator'},
-  }
+  },
 ];
+
+chunks[0].parent = null;
+for (let i = 1; i < chunks.length; i++) {
+  chunks[i].parent = chunks[0];
+}
+
+/**
+ * Return the name of the module object for the entrypoint of the given chunk,
+ * as munged by Closure Compiler.
+ */
+function modulePath(chunk) {
+  return 'module$' + chunk.entry.replace(/\.js$/, '').replaceAll('/', '$');
+}
 
 const licenseRegex = `\\/\\*\\*
  \\* @license
@@ -307,82 +314,6 @@ function buildJavaScript(done) {
 }
 
 /**
- * This task updates DEPS_FILE (deps.js), used by
- * closure-calculate-chunks when determining how to organise .js
- * source files into chunks.
- *
- * Prerequisite: buildJavaScript.
- */
-function buildDeps() {
-  const roots = [
-    TSC_OUTPUT_DIR,
-  ];
-
-  /** Maximum buffer size, in bytes for child process stdout/stderr. */
-  const MAX_BUFFER_SIZE = 10 * 1024 * 1024;
-
-  /**
-   * Filter a string to extract lines containing (or not containing) the
-   * specified target string.
-   *
-   * @param {string} text Text to filter.
-   * @param {string} target String to search for.
-   * @param {boolean?} exclude If true, extract only non-matching lines.
-   * @returns {string} Filtered text.
-   */
-  function filter(text, target, exclude) {
-    return text.split('\n')
-        .filter((line) => Boolean(line.match(target)) !== Boolean(exclude))
-        .join('\n');
-  }
-
-  /**
-   * Log unexpected diagnostics, after removing expected warnings.
-   *
-   * @param {string} text Standard error output from closure-make-deps
-   */
-  function log(text) {
-    for (const line of text.split('\n')) {
-      if (line &&
-          !/^WARNING .*: Bounded generic semantics are currently/.test(line) &&
-          !/^WARNING .*: Missing type declaration/.test(line) &&
-          !/^WARNING .*: illegal use of unknown JSDoc tag/.test(line)) {
-        console.error(line);
-      }
-    }
-  }
-
-  return new Promise((resolve, reject) => {
-    const args = '--closure-path ./build/src ' +
-        roots.map(root => `--root '${root}' `).join('');
-    exec(
-        `closure-make-deps ${args}`, {maxBuffer: MAX_BUFFER_SIZE},
-        (error, stdout, stderr) => {
-          if (error) {
-            // Remove warnings from stack trace to show only errors.
-            error.stack = filter(error.stack, /^WARNING/, true);
-            // Due to some race condition, the stderr parameter is
-            // often badly truncated if an error is non-null, so the
-            // error message might not actually be shown to the user.
-            // Print a helpful message to the user to help them find
-            // out what the problem is.
-            error.stack += `
-
-If you do not see an helpful diagnostic from closure-make-deps in the
-error message above, try running:
-
-    npx closure-make-deps ${args} 2>&1 |grep -v WARNING`;
-            reject(error);
-          } else {
-            log(stderr);
-            fs.writeFileSync(DEPS_FILE, stdout);
-            resolve();
-          }
-        });
-  });
-}
-
-/**
  * This task regenerates msg/json/en.js and msg/json/qqq.js from
  * msg/messages.js.
  */
@@ -500,94 +431,66 @@ function chunkWrapper(chunk) {
 }(this, function(${factoryArgs}) {
 var ${NAMESPACE_VARIABLE}=${namespaceExpr};
 %output%
-${chunk.exports}.${NAMESPACE_PROPERTY}=${NAMESPACE_VARIABLE};
-return ${chunk.exports};
+${modulePath(chunk)}.${NAMESPACE_PROPERTY}=${NAMESPACE_VARIABLE};
+return ${modulePath(chunk)};
 }));
 `;
 }
 
 /**
- * Get chunking options to pass to Closure Compiler by using
- * closure-calculate-chunks (hereafter "ccc") to generate them based
- * on the deps.js file (which must be up to date!).
+ * Compute the chunking options to pass to Closure Compiler.  Output
+ * is in the form:
  *
- * The generated options are modified to use the original chunk names
- * given in chunks instead of the entry-point based names used by ccc.
+ * {
+ *   "chunk": [
+ *     "blockly:286",
+ *     "blocks:10:blockly",
+ *     "javascript:11:blockly",
+ *     // ... one per chunk
+ *   ],
+ *   "js": [
+ *     "build/src/core/any_aliases.js",
+ *     "build/src/core/block.js",
+ *     "build/src/core/block_animations.js",
+ *     // ... many more files, in order by chunk
+ *   ],
+ *   "chunk_wrapper": [
+ *     "blockly:// Do not edit this file...",
+ *     "blocks:// Do not edit this file...",
+ *     // ... one per chunk
+ *   ]
+ * }
  *
- * @return {{chunk: !Array<string>, js: !Array<string>}} The chunking
- *     information, in the same form as emitted by
- *     closure-calculate-chunks.
+ * This is designed to be passed directly as-is as the options object
+ * to the Closure Compiler node API, and be compatible with that
+ * emitted by closure-calculate-chunks.
+ *
+ * @return {{chunk: !Array<string>,
+ *           js: !Array<string>,
+ *           chunk_wrapper: !Array<string>}}
+ *     The chunking options, in the format described above.
  */
 function getChunkOptions() {
-  const cccArgs = [
-    `--deps-file './${DEPS_FILE}'`,
-    ...(chunks.map(chunk => `--entrypoint '${chunk.entry}'`)),
-  ];
-  const cccCommand = `closure-calculate-chunks ${cccArgs.join(' ')}`;
+  const chunkOptions = [];
+  const allFiles = [];
 
-  const rawOptions = JSON.parse(execSync(cccCommand));
-
-  // rawOptions should now be of the form:
-  //
-  // {
-  //   chunk: [
-  //     'blockly:258',
-  //     'all:10:blockly',
-  //     'all1:11:blockly',
-  //     'all2:11:blockly',
-  //     /* ... remaining handful of chunks */
-  //   ],
-  //   js: [
-  //     './build/src/core/serialization/workspaces.js',
-  //     './build/src/core/serialization/variables.js',
-  //     /* ... remaining several hundred files */
-  //   ],
-  // }
-  //
-  // This is designed to be passed directly as-is as the options
-  // object to the Closure Compiler node API, but we want to replace
-  // the unhelpful entry-point based chunk names (let's call these
-  // "nicknames") with the ones from chunks.  Unforutnately there's no
-  // guarnatee they will be in the same order that the entry points
-  // were supplied in (though it happens to work out that way if no
-  // chunk depends on any chunk but the first), so we look for
-  // one of the entrypoints amongst the files in each chunk.
-  const chunkByNickname = Object.create(null);
-  // Copy and convert to posix js file paths.
-  // Result will be modified via `.splice`!
-  const jsFiles = rawOptions.js.map(p => posixPath(p));
-  const chunkList = rawOptions.chunk.map((element) => {
-    const [nickname, numJsFiles, parentNick] = element.split(':');
-
-    // Get array of files for just this chunk.
-    const chunkFiles = jsFiles.splice(0, numJsFiles);
-
-    // Figure out which chunk this is by looking for one of the
-    // known chunk entrypoints in chunkFiles.  N.B.: O(n*m).  :-(
-    const chunk = chunks.find(
-        chunk => chunkFiles.find(f => {
-          return f.endsWith('/' + chunk.entry.replaceAll('\\', '/'));
-        }
-        ));
-    if (!chunk) throw new Error('Unable to identify chunk');
-
-    // Replace nicknames with the names we chose.
-    chunkByNickname[nickname] = chunk;
-    if (!parentNick) {  // Chunk has no parent.
-      chunk.parent = null;
-      return `${chunk.name}:${numJsFiles}`;
-    }
-    chunk.parent = chunkByNickname[parentNick];
-    return `${chunk.name}:${numJsFiles}:${chunk.parent.name}`;
-  });
-
-  // Generate a chunk wrapper for each chunk.
   for (const chunk of chunks) {
-    chunk.wrapper = chunkWrapper(chunk);
+    const globs = typeof chunk.files === 'string' ? [chunk.files] : chunk.files;
+    const files = globs
+      .flatMap((glob) => globSync(glob, {cwd: TSC_OUTPUT_DIR_POSIX}))
+      .map((file) => path.posix.join(TSC_OUTPUT_DIR_POSIX, file));
+    chunkOptions.push(
+      `${chunk.name}:${files.length}` +
+        (chunk.parent ? `:${chunk.parent.name}` : ''),
+    );
+    allFiles.push(...files);
   }
-  const chunkWrappers = chunks.map(chunk => `${chunk.name}:${chunk.wrapper}`);
 
-  return {chunk: chunkList, js: rawOptions.js, chunk_wrapper: chunkWrappers};
+  const chunkWrappers = chunks.map(
+    (chunk) => `${chunk.name}:${chunkWrapper(chunk)}`,
+  );
+
+  return {chunk: chunkOptions, js: allFiles, chunk_wrapper: chunkWrappers};
 }
 
 /**
@@ -630,10 +533,6 @@ function compile(options) {
 /**
  * This task compiles the core library, blocks and generators, creating
  * blockly_compressed.js, blocks_compressed.js, etc.
- *
- * The deps.js file must be up-to-date.
- *
- * Prerequisite: buildDeps.
  */
 function buildCompiled() {
   // Get chunking.
@@ -647,7 +546,7 @@ function buildCompiled() {
     // declareLegacyNamespace this was very straightforward.  Without
     // it, we have to rely on implmentation details.  See
     // https://github.com/google/closure-compiler/issues/1601#issuecomment-483452226
-    define: `VERSION$$${chunks[0].exports}='${packageJson.version}'`,
+    define: `VERSION$$${modulePath(chunks[0])}='${packageJson.version}'`,
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,
     rename_prefix_namespace: NAMESPACE_VARIABLE,
@@ -656,7 +555,7 @@ function buildCompiled() {
   };
 
   // Fire up compilation pipline.
-  return gulp.src(chunkOptions.js, {base: './'})
+  return gulp.src(chunkOptions.js, {base: TSC_OUTPUT_DIR_POSIX})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
       .pipe(compile(options))
@@ -684,7 +583,7 @@ async function buildShims() {
   // a shim to load the chunk either by importing the entrypoint
   // module or by loading the compiled script.
   await Promise.all(chunks.map(async (chunk) => {
-    const modulePath = posixPath(chunk.moduleEntry ?? chunk.entry);
+    const entryPath = path.posix.join(TSC_OUTPUT_DIR_POSIX, chunk.entry);
     const scriptPath =
         path.posix.join(RELEASE_DIR, `${chunk.name}${COMPILED_SUFFIX}.js`);
     const shimPath = path.join(BUILD_DIR, `${chunk.name}.loader.mjs`);
@@ -692,7 +591,7 @@ async function buildShims() {
         chunk.parent ?
         `import ${quote(`./${chunk.parent.name}.loader.mjs`)};` :
         '';
-    const exports = await import(`../../${modulePath}`);
+    const exports = await import(`../../${entryPath}`);
 
     await fsPromises.writeFile(shimPath,
         `import {loadChunk} from '../tests/scripts/load.mjs';
@@ -701,7 +600,7 @@ ${parentImport}
 export const {
 ${Object.keys(exports).map((name) => `  ${name},`).join('\n')}
 } = await loadChunk(
-  ${quote(modulePath)},
+  ${quote(entryPath)},
   ${quote(scriptPath)},
   ${quote(chunk.scriptExport)},
 );
@@ -765,7 +664,7 @@ function cleanBuildDir() {
 exports.cleanBuildDir = cleanBuildDir;
 exports.langfiles = buildLangfiles;  // Build build/msg/*.js from msg/json/*.
 exports.tsc = buildJavaScript;
-exports.minify = gulp.series(exports.tsc, buildDeps, buildCompiled, buildShims);
+exports.minify = gulp.series(exports.tsc, buildCompiled, buildShims);
 exports.build = gulp.parallel(exports.minify, exports.langfiles);
 
 // Manually-invokable targets, with prerequisites where required.

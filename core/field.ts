@@ -331,6 +331,18 @@ export abstract class Field<T = any>
   initModel() {}
 
   /**
+   * Defines whether this field should take up the full block or not.
+   *
+   * Be cautious when overriding this function. It may not work as you expect /
+   * intend because the behavior was kind of hacked in. If you are thinking
+   * about overriding this function, post on the forum with your intended
+   * behavior to see if there's another approach.
+   */
+  protected isFullBlockField(): boolean {
+    return !this.borderRect_;
+  }
+
+  /**
    * Create a field border rect element. Not to be overridden by subclasses.
    * Instead modify the result of the function inside initView, or create a
    * separate function to call.
@@ -797,7 +809,7 @@ export abstract class Field<T = any>
     const xOffset =
       margin !== undefined
         ? margin
-        : this.borderRect_
+        : !this.isFullBlockField()
         ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING
         : 0;
     let totalWidth = xOffset * 2;
@@ -813,7 +825,7 @@ export abstract class Field<T = any>
       );
       totalWidth += contentWidth;
     }
-    if (this.borderRect_) {
+    if (!this.isFullBlockField()) {
       totalHeight = Math.max(totalHeight, constants!.FIELD_BORDER_RECT_HEIGHT);
     }
 
@@ -922,7 +934,7 @@ export abstract class Field<T = any>
       throw new UnattachedFieldError();
     }
 
-    if (!this.borderRect_) {
+    if (this.isFullBlockField()) {
       // Browsers are inconsistent in what they return for a bounding box.
       // - Webkit / Blink: fill-box / object bounding box
       // - Gecko: stroke-box
@@ -940,8 +952,8 @@ export abstract class Field<T = any>
         xy.y -= 0.5 * scale;
       }
     } else {
-      const bBox = this.borderRect_.getBoundingClientRect();
-      xy = style.getPageOffset(this.borderRect_);
+      const bBox = this.borderRect_!.getBoundingClientRect();
+      xy = style.getPageOffset(this.borderRect_!);
       scaledWidth = bBox.width;
       scaledHeight = bBox.height;
     }

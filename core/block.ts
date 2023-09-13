@@ -940,6 +940,25 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
+   * @returns True if this block is a value block with a single editable field.
+   * @internal
+   */
+  isSimpleReporter(): boolean {
+    if (!this.outputConnection) return false;
+
+    let nFields = 0;
+    for (const input of this.inputList) {
+      if (input.connection) return false;
+      // TODO: This comment is innacurate. Not sure what we want the spec to be.
+      // Count the number of fields excluding text fields.
+      for (const _ of input.fieldRow) {
+        nFields++;
+      }
+    }
+    return nFields <= 1;
+  }
+
+  /**
    * Find the connection on this block that corresponds to the given connection
    * on the other block.
    * Used to match connections between a block and its insertion marker.

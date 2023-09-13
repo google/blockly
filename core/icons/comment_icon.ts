@@ -218,14 +218,16 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
    */
   onTextChange(): void {
     if (this.textInputBubble) {
-      this.text = this.textInputBubble.getText();
+      const newText = this.textInputBubble.getText();
+      this.text = newText
+      const sourceBlock = this.sourceBlock
       eventUtils.fire(
         new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          this.sourceBlock,
+          sourceBlock,
           'comment',
           null,
           null,
-          this.text,
+          newText,
         ),
       );
     }

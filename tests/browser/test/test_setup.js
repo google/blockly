@@ -156,6 +156,50 @@ async function getBlockElementById(browser, id) {
 }
 
 /**
+ * Find a clickable element on the block and click it.
+ * We can't always use the block's SVG root because clicking will always happen
+ * in the middle of the block's bounds (including children) by default, which
+ * causes problems if it has holes (e.g. statement inputs). Instead, this tries
+ * to get the first text field on the block. It falls back on the block's SVG root.
+ * @param browser The active WebdriverIO Browser object.
+ * @param block The block to click, as an interactable element.
+ * @param clickOptions The options to pass to webdriverio's element.click function.
+ * @return A Promise that resolves when the actions are completed.
+ */
+async function clickBlock(browser, block, clickOptions) {
+  const findableId = 'clickTargetElement';
+  // In the browser context, find the element that we want and give it a findable ID.
+  await browser.execute(
+    (blockId, newElemId) => {
+      const block = Blockly.getMainWorkspace().getBlockById(blockId);
+      for (const input of block.inputList) {
+        for (const field of input.fieldRow) {
+          if (field instanceof Blockly.FieldLabel) {
+            field.getSvgRoot().id = newElemId;
+            return;
+          }
+        }
+      }
+      // No label field found. Fall back to the block's SVG root.
+      block.getSvgRoot().id = findableId;
+    },
+    block.id,
+    findableId,
+  );
+
+  // In the test context, get the Webdriverio Element that we've identified.
+  const elem = await browser.$(`#${findableId}`);
+
+  await elem.click(clickOptions);
+
+  // In the browser context, remove the ID.
+  await browser.execute((elemId) => {
+    const clickElem = document.getElementById(elemId);
+    clickElem.removeAttribute('id');
+  }, findableId);
+}
+
+/**
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to find.
  * @return A Promise that resolves to the root element of the toolbox
@@ -428,23 +472,13 @@ async function dragBlockFromMutatorFlyout(browser, mutatorBlock, type, x, y) {
  * context menu item.
  *
  * @param browser The active WebdriverIO Browser object.
- * @param block The block to click, as an interactable element. This block must
+ * @param block The block to click, as an interactable element. This block should
  *    have text on it, because we use the text element as the click target.
  * @param itemText The display text of the context menu item to click.
  * @return A Promise that resolves when the actions are completed.
  */
 async function contextMenuSelect(browser, block, itemText) {
-  // Clicking will always happen in the middle of the block's bounds
-  // (including children) by default, which causes problems if it has holes
-  // (e.g. statement inputs).
-  // Instead, we'll click directly on the first bit of text on the block.
-  const clickEl = block.$('.blocklyText');
-
-  // Even though the element should definitely already exist,
-  // one specific test breaks if you remove this...
-  await clickEl.waitForExist();
-
-  await clickEl.click({button: 2});
+  await clickBlock(browser, block, {button: 2});
 
   const item = await browser.$(`div=${itemText}`);
   await item.waitForExist();
@@ -515,6 +549,7 @@ module.exports = {
   getSelectedBlockElement,
   getSelectedBlockId,
   getBlockElementById,
+  clickBlock,
   getCategory,
   getNthBlockOfCategory,
   getBlockTypeFromCategory,

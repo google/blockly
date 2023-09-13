@@ -156,35 +156,47 @@ async function getBlockElementById(browser, id) {
 }
 
 /**
- * Get a clickable element on the block. We can't always use the block's SVG root
- * because clicking will always happen in the middle of the block's bounds
- * (including children) by default, which causes problems if it has holes
- * (e.g. statement inputs). Instead, this tries to get the first text field on the
- * block. It falls back on the block's SVG root.
+ * Find a clickable element on the block and click it.
+ * We can't always use the block's SVG root because clicking will always happen
+ * in the middle of the block's bounds (including children) by default, which
+ * causes problems if it has holes (e.g. statement inputs). Instead, this tries
+ * to get the first text field on the block. It falls back on the block's SVG root.
  * @param browser The active WebdriverIO Browser object.
  * @param block The block to click, as an interactable element.
- * @return A Promise that resolves to the text element of the first label
- *     field on the block, or the block's SVG root if no label field was found.
+ * @param clickOptions The options to pass to webdriverio's element.click function.
+ * @return A Promise that resolves when the actions are completed.
  */
-async function getClickableBlockElement(browser, block) {
+async function clickBlock(browser, block, clickOptions) {
+  const findableId = 'clickTargetElement';
   // In the browser context, find the element that we want and give it a findable ID.
-  await browser.execute((blockId) => {
-    const block = Blockly.getMainWorkspace().getBlockById(blockId);
-    for (const input of block.inputList) {
-      for (const field of input.fieldRow) {
-        if (field instanceof Blockly.FieldLabel) {
-          field.getSvgRoot().id = 'clickTargetElement';
-          return;
+  await browser.execute(
+    (blockId, newElemId) => {
+      const block = Blockly.getMainWorkspace().getBlockById(blockId);
+      for (const input of block.inputList) {
+        for (const field of input.fieldRow) {
+          if (field instanceof Blockly.FieldLabel) {
+            field.getSvgRoot().id = newElemId;
+            return;
+          }
         }
       }
-    }
-    // No label field found. Fall back to the block's SVG root.
-    block.getSvgRoot().id = 'clickTargetElement';
-  }, block.id);
+      // No label field found. Fall back to the block's SVG root.
+      block.getSvgRoot().id = findableId;
+    },
+    block.id,
+    findableId,
+  );
 
   // In the test context, get the Webdriverio Element that we've identified.
-  const elem = await browser.$('#clickTargetElement');
-  return elem;
+  const elem = await browser.$(`#${findableId}`);
+
+  await elem.click(clickOptions);
+
+  // In the browser context, remove the ID.
+  await browser.execute((elemId) => {
+    const clickElem = document.getElementById(elemId);
+    clickElem.removeAttribute('id');
+  }, findableId);
 }
 
 /**
@@ -466,12 +478,7 @@ async function dragBlockFromMutatorFlyout(browser, mutatorBlock, type, x, y) {
  * @return A Promise that resolves when the actions are completed.
  */
 async function contextMenuSelect(browser, block, itemText) {
-  const clickEl = await getClickableBlockElement(browser, block);
-  // Even though the element should definitely already exist,
-  // one specific test breaks if you remove this...
-  await clickEl.waitForExist();
-
-  await clickEl.click({button: 2});
+  await clickBlock(browser, block, {button: 2});
 
   const item = await browser.$(`div=${itemText}`);
   await item.waitForExist();
@@ -542,7 +549,7 @@ module.exports = {
   getSelectedBlockElement,
   getSelectedBlockId,
   getBlockElementById,
-  getClickableBlockElement,
+  clickBlock,
   getCategory,
   getNthBlockOfCategory,
   getBlockTypeFromCategory,

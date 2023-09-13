@@ -1515,13 +1515,14 @@ export class BlockSvg
    * or an insertion marker.
    *
    * @param sourceConnection The connection on the moving block's stack.
-   * @param targetConnection The connection that should stay stationary as this
-   *     block is positioned.
+   * @param originalOffsetToTarget The connection original offset to the target connection
+   * @param originalOffsetInBlock The connection original offset in its block
    * @internal
    */
   positionNearConnection(
     sourceConnection: RenderedConnection,
-    targetConnection: RenderedConnection,
+    originalOffsetToTarget: {x: number; y: number},
+    originalOffsetInBlock: Coordinate,
   ) {
     // We only need to position the new block if it's before the existing one,
     // otherwise its position is set by the previous block.
@@ -1529,8 +1530,12 @@ export class BlockSvg
       sourceConnection.type === ConnectionType.NEXT_STATEMENT ||
       sourceConnection.type === ConnectionType.INPUT_VALUE
     ) {
-      const dx = targetConnection.x - sourceConnection.x;
-      const dy = targetConnection.y - sourceConnection.y;
+      // First move the block to match the orginal target connection position
+      let dx = originalOffsetToTarget.x;
+      let dy = originalOffsetToTarget.y;
+      // Then adjust its position according to the connection resize
+      dx += originalOffsetInBlock.x - sourceConnection.getOffsetInBlock().x;
+      dy += originalOffsetInBlock.y - sourceConnection.getOffsetInBlock().y;
 
       this.moveBy(dx, dy);
     }

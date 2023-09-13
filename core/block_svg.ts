@@ -1534,8 +1534,8 @@ export class BlockSvg
       let dx = originalOffsetToTarget.x;
       let dy = originalOffsetToTarget.y;
       // Then adjust its position according to the connection resize
-      dx +=  originalOffsetInBlock.x - sourceConnection.getOffsetInBlock().x;
-      dy +=  originalOffsetInBlock.y - sourceConnection.getOffsetInBlock().y;
+      dx += originalOffsetInBlock.x - sourceConnection.getOffsetInBlock().x;
+      dy += originalOffsetInBlock.y - sourceConnection.getOffsetInBlock().y;
 
       this.moveBy(dx, dy);
     }

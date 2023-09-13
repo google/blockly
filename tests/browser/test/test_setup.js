@@ -162,11 +162,11 @@ async function getBlockElementById(browser, id) {
  * (e.g. statement inputs). Instead, this tries to get the first text field on the
  * block. It falls back on the block's SVG root.
  * @param browser The active WebdriverIO Browser object.
- * @param id The ID of the Blockly block to search for.
+ * @param block The block to click, as an interactable element.
  * @return A Promise that resolves to the text element of the first label
  *     field on the block, or the block's SVG root if no label field was found.
  */
-async function getClickableBlockElementById(browser, id) {
+async function getClickableBlockElement(browser, block) {
   // In the browser context, find the element that we want and give it a findable ID.
   await browser.execute((blockId) => {
     const block = Blockly.getMainWorkspace().getBlockById(blockId);
@@ -180,7 +180,7 @@ async function getClickableBlockElementById(browser, id) {
     }
     // No label field found. Fall back to the block's SVG root.
     block.getSvgRoot().id = 'clickTargetElement';
-  }, id);
+  }, block.id);
 
   // In the test context, get the Webdriverio Element that we've identified.
   const elem = await browser.$('#clickTargetElement');
@@ -460,13 +460,13 @@ async function dragBlockFromMutatorFlyout(browser, mutatorBlock, type, x, y) {
  * context menu item.
  *
  * @param browser The active WebdriverIO Browser object.
- * @param blockId The ID of the block to click. This block should
+ * @param block The block to click, as an interactable element. This block should
  *    have text on it, because we use the text element as the click target.
  * @param itemText The display text of the context menu item to click.
  * @return A Promise that resolves when the actions are completed.
  */
-async function contextMenuSelect(browser, blockId, itemText) {
-  const clickEl = await getClickableBlockElementById(browser, blockId);
+async function contextMenuSelect(browser, block, itemText) {
+  const clickEl = await getClickableBlockElement(browser, block);
   // Even though the element should definitely already exist,
   // one specific test breaks if you remove this...
   await clickEl.waitForExist();
@@ -542,7 +542,7 @@ module.exports = {
   getSelectedBlockElement,
   getSelectedBlockId,
   getBlockElementById,
-  getClickableBlockElementById,
+  getClickableBlockElement,
   getCategory,
   getNthBlockOfCategory,
   getBlockTypeFromCategory,

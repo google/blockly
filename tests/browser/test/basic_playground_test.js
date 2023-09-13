@@ -72,33 +72,33 @@ suite('Right Clicking on Blocks', function () {
   });
 
   test('clicking the collapse option collapses the block', async function () {
-    await contextMenuSelect(this.browser, this.block.id, 'Collapse Block');
+    await contextMenuSelect(this.browser, this.block, 'Collapse Block');
     chai.assert.isTrue(await getIsCollapsed(this.browser, this.block.id));
   });
 
   // Assumes that
   test('clicking the expand option expands the block', async function () {
-    await contextMenuSelect(this.browser, this.block.id, 'Expand Block');
+    await contextMenuSelect(this.browser, this.block, 'Expand Block');
     chai.assert.isFalse(await getIsCollapsed(this.browser, this.block.id));
   });
 
   test('clicking the disable option disables the block', async function () {
-    await contextMenuSelect(this.browser, this.block.id, 'Disable Block');
+    await contextMenuSelect(this.browser, this.block, 'Disable Block');
     chai.assert.isTrue(await getIsDisabled(this.browser, this.block.id));
   });
 
   test('clicking the enable option enables the block', async function () {
-    await contextMenuSelect(this.browser, this.block.id, 'Enable Block');
+    await contextMenuSelect(this.browser, this.block, 'Enable Block');
     chai.assert.isFalse(await getIsDisabled(this.browser, this.block.id));
   });
 
   test('clicking the add comment option adds a comment to the block', async function () {
-    await contextMenuSelect(this.browser, this.block.id, 'Add Comment');
+    await contextMenuSelect(this.browser, this.block, 'Add Comment');
     chai.assert.equal(await getCommentText(this.browser, this.block.id), '');
   });
 
   test('clicking the remove comment option removes a comment from the block', async function () {
-    await contextMenuSelect(this.browser, this.block.id, 'Remove Comment');
+    await contextMenuSelect(this.browser, this.block, 'Remove Comment');
     chai.assert.isNull(await getCommentText(this.browser, this.block.id));
   });
 });
@@ -138,7 +138,7 @@ suite('Disabling', function () {
       );
       await connect(this.browser, child, 'OUTPUT', parent, 'IF0');
 
-      await contextMenuSelect(this.browser, parent.id, 'Disable Block');
+      await contextMenuSelect(this.browser, parent, 'Disable Block');
 
       chai.assert.isTrue(await getIsDisabled(this.browser, child.id));
     },
@@ -164,7 +164,7 @@ suite('Disabling', function () {
       );
       await connect(this.browser, child, 'PREVIOUS', parent, 'DO0');
 
-      await contextMenuSelect(this.browser, parent.id, 'Disable Block');
+      await contextMenuSelect(this.browser, parent, 'Disable Block');
 
       chai.assert.isTrue(await getIsDisabled(this.browser, child.id));
     },
@@ -190,7 +190,7 @@ suite('Disabling', function () {
       );
       await connect(this.browser, child, 'PREVIOUS', parent, 'NEXT');
 
-      await contextMenuSelect(this.browser, parent.id, 'Disable Block');
+      await contextMenuSelect(this.browser, parent, 'Disable Block');
 
       chai.assert.isFalse(await getIsDisabled(this.browser, child.id));
     },

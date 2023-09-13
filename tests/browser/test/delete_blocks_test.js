@@ -10,7 +10,7 @@ const {
   testFileLocations,
   getAllBlocks,
   getBlockElementById,
-  getClickableBlockElementById,
+  getClickableBlockElement,
   contextMenuSelect,
   PAUSE_TIME,
 } = require('./test_setup');
@@ -131,14 +131,15 @@ suite('Delete blocks', function (done) {
     (await getBlockElementById(this.browser, firstBlockId)).waitForExist({
       timeout: 2000,
     });
+    this.firstBlock = await getBlockElementById(this.browser, firstBlockId);
   });
 
   test('Delete block using backspace key', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    const clickEl = await getClickableBlockElementById(
+    const clickEl = await getClickableBlockElement(
       this.browser,
-      firstBlockId,
+      this.firstBlock,
     );
     await clickEl.click();
     await this.browser.keys([Key.Backspace]);
@@ -153,9 +154,9 @@ suite('Delete blocks', function (done) {
   test('Delete block using delete key', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using delete key.
-    const clickEl = await getClickableBlockElementById(
+    const clickEl = await getClickableBlockElement(
       this.browser,
-      firstBlockId,
+      this.firstBlock,
     );
     await clickEl.click();
     await this.browser.keys([Key.Delete]);
@@ -170,7 +171,7 @@ suite('Delete blocks', function (done) {
   test('Delete block using context menu', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using context menu.
-    await contextMenuSelect(this.browser, firstBlockId, 'Delete 2 Blocks');
+    await contextMenuSelect(this.browser, this.firstBlock, 'Delete 2 Blocks');
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(
       before - 2,
@@ -182,9 +183,9 @@ suite('Delete blocks', function (done) {
   test('Undo block deletion', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    const clickEl = await getClickableBlockElementById(
+    const clickEl = await getClickableBlockElement(
       this.browser,
-      firstBlockId,
+      this.firstBlock,
     );
     await clickEl.click();
     await this.browser.keys([Key.Backspace]);
@@ -202,9 +203,9 @@ suite('Delete blocks', function (done) {
   test('Redo block deletion', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    const clickEl = await getClickableBlockElementById(
+    const clickEl = await getClickableBlockElement(
       this.browser,
-      firstBlockId,
+      this.firstBlock,
     );
     await clickEl.click();
     await this.browser.keys([Key.Backspace]);

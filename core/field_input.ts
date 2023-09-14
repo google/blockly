@@ -216,10 +216,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     if (!this.fieldGroup_) return;
 
     if (!this.isFullBlockField() && this.borderRect_) {
-      this.borderRect_!.style.visibility = 'visible';
+      this.borderRect_!.style.display = 'block';
       this.borderRect_.setAttribute('stroke', block.style.colourTertiary);
     } else {
-      this.borderRect_!.style.visibility = 'hidden';
+      this.borderRect_!.style.display = 'none';
       // In general, do *not* let fields control the color of blocks. Having the
       // field control the color is unexpected, and could have performance
       // impacts.

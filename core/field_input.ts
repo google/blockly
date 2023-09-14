@@ -34,6 +34,7 @@ import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import * as renderManagement from './render_management.js';
+import {Size} from './utils/size.js';
 
 /**
  * Supported types for FieldInput subclasses.
@@ -88,7 +89,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * Whether the field should consider the whole parent block to be its click
    * target.
    */
-  fullBlockClickTarget_: boolean | null = false;
+  fullBlockClickTarget_: boolean = false;
 
   /** The workspace that this field belongs to. */
   protected workspace_: WorkspaceSvg | null = null;
@@ -142,37 +143,22 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
   override initView() {
     const block = this.getSourceBlock();
-    if (!block) {
-      throw new UnattachedFieldError();
-    }
-    if (this.getConstants()!.FULL_BLOCK_FIELDS) {
-      // Step one: figure out if this is the only field on this block.
-      // Rendering is quite different in that case.
-      let nFields = 0;
-      let nConnections = 0;
-      // Count the number of fields, excluding text fields
-      for (let i = 0, input; (input = block.inputList[i]); i++) {
-        for (let j = 0; input.fieldRow[j]; j++) {
-          nFields++;
-        }
-        if (input.connection) {
-          nConnections++;
-        }
-      }
-      // The special case is when this is the only non-label field on the block
-      // and it has an output but no inputs.
-      this.fullBlockClickTarget_ =
-        nFields <= 1 && block.outputConnection && !nConnections;
-    } else {
-      this.fullBlockClickTarget_ = false;
-    }
+    if (!block) throw new UnattachedFieldError();
+    super.initView();
 
-    if (this.fullBlockClickTarget_) {
+    if (this.isFullBlockField()) {
       this.clickTarget_ = (this.sourceBlock_ as BlockSvg).getSvgRoot();
-    } else {
-      this.createBorderRect_();
     }
-    this.createTextElement_();
+  }
+
+  protected override isFullBlockField(): boolean {
+    const block = this.getSourceBlock();
+    if (!block) throw new UnattachedFieldError();
+
+    // Side effect for backwards compatibility.
+    this.fullBlockClickTarget_ =
+      !!this.getConstants()?.FULL_BLOCK_FIELDS && block.isSimpleReporter();
+    return this.fullBlockClickTarget_;
   }
 
   /**
@@ -223,14 +209,21 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * Updates text field to match the colour/style of the block.
    */
   override applyColour() {
-    if (!this.sourceBlock_ || !this.getConstants()!.FULL_BLOCK_FIELDS) return;
+    const block = this.getSourceBlock() as BlockSvg | null;
+    if (!block) throw new UnattachedFieldError();
 
-    const source = this.sourceBlock_ as BlockSvg;
+    if (!this.getConstants()!.FULL_BLOCK_FIELDS) return;
+    if (!this.fieldGroup_) return;
 
-    if (this.borderRect_) {
-      this.borderRect_.setAttribute('stroke', source.style.colourTertiary);
+    if (!this.isFullBlockField() && this.borderRect_) {
+      this.borderRect_!.style.display = 'block';
+      this.borderRect_.setAttribute('stroke', block.style.colourTertiary);
     } else {
-      source.pathObject.svgPath.setAttribute(
+      this.borderRect_!.style.display = 'none';
+      // In general, do *not* let fields control the color of blocks. Having the
+      // field control the color is unexpected, and could have performance
+      // impacts.
+      block.pathObject.svgPath.setAttribute(
         'fill',
         this.getConstants()!.FIELD_BORDER_RECT_COLOUR,
       );
@@ -238,8 +231,32 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
   }
 
   /**
+   * Returns the height and width of the field.
+   *
+   * This should *in general* be the only place render_ gets called from.
+   *
+   * @returns Height and width.
+   */
+  override getSize(): Size {
+    if (this.getConstants()?.FULL_BLOCK_FIELDS) {
+      // In general, do *not* let fields control the color of blocks. Having the
+      // field control the color is unexpected, and could have performance
+      // impacts.
+      // Full block fields have more control of the block than they should
+      // (i.e. updating fill colour). Whenever we get the size, the field may
+      // no longer be a full-block field, so we need to rerender.
+      this.render_();
+      this.isDirty_ = false;
+    }
+    return super.getSize();
+  }
+
+  /**
    * Updates the colour of the htmlInput given the current validity of the
    * field's value.
+   *
+   * Also updates the colour of the block to reflect whether this is a full
+   * block field or not.
    */
   protected override render_() {
     super.render_();
@@ -256,6 +273,15 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
         aria.setState(htmlInput, aria.State.INVALID, false);
       }
     }
+
+    const block = this.getSourceBlock() as BlockSvg | null;
+    if (!block) throw new UnattachedFieldError();
+    // In general, do *not* let fields control the color of blocks. Having the
+    // field control the color is unexpected, and could have performance
+    // impacts.
+    // Whenever we render, the field may no longer be a full-block-field so
+    // we need to update the colour.
+    if (this.getConstants()!.FULL_BLOCK_FIELDS) block.applyColour();
   }
 
   /**
@@ -374,7 +400,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     htmlInput.style.fontSize = fontSize;
     let borderRadius = FieldInput.BORDERRADIUS * scale + 'px';
 
-    if (this.fullBlockClickTarget_) {
+    if (this.isFullBlockField()) {
       const bBox = this.getScaledBBox();
 
       // Override border radius.
@@ -462,8 +488,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * @param _value The new value of the field.
    */
   onFinishEditing_(_value: AnyDuringMigration) {}
-  // NOP by default.
-  // TODO(#2496): Support people passing a func into the field.
 
   /**
    * Bind handlers for user input on the text input field's editor.

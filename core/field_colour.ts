@@ -19,7 +19,12 @@ import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dom from './utils/dom.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {Field, FieldConfig, FieldValidator} from './field.js';
+import {
+  Field,
+  FieldConfig,
+  FieldValidator,
+  UnattachedFieldError,
+} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as aria from './utils/aria.js';
 import * as colour from './utils/colour.js';
@@ -168,29 +173,118 @@ export class FieldColour extends Field<string> {
       this.getConstants()!.FIELD_COLOUR_DEFAULT_WIDTH,
       this.getConstants()!.FIELD_COLOUR_DEFAULT_HEIGHT,
     );
-    if (!this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) {
-      this.createBorderRect_();
-      this.getBorderRect().style['fillOpacity'] = '1';
-    } else if (this.sourceBlock_ instanceof BlockSvg) {
-      this.clickTarget_ = this.sourceBlock_.getSvgRoot();
+    this.createBorderRect_();
+    this.getBorderRect().style['fillOpacity'] = '1';
+    this.getBorderRect().setAttribute('stroke', '#fff');
+    if (this.isFullBlockField()) {
+      this.clickTarget_ = (this.sourceBlock_ as BlockSvg).getSvgRoot();
     }
+  }
+
+  protected override isFullBlockField(): boolean {
+    const block = this.getSourceBlock();
+    if (!block) throw new UnattachedFieldError();
+
+    const constants = this.getConstants();
+    return block.isSimpleReporter() && !!constants?.FIELD_COLOUR_FULL_BLOCK;
   }
 
   /**
    * Updates text field to match the colour/style of the block.
    */
   override applyColour() {
-    if (!this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) {
-      if (this.borderRect_) {
-        this.borderRect_.style.fill = this.getValue() as string;
-      }
-    } else if (this.sourceBlock_ instanceof BlockSvg) {
-      this.sourceBlock_.pathObject.svgPath.setAttribute(
-        'fill',
-        this.getValue() as string,
-      );
-      this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
+    const block = this.getSourceBlock() as BlockSvg | null;
+    if (!block) throw new UnattachedFieldError();
+
+    if (!this.fieldGroup_) return;
+
+    const borderRect = this.borderRect_;
+    if (!borderRect) {
+      throw new Error('The border rect has not been initialized');
     }
+
+    if (!this.isFullBlockField()) {
+      borderRect.style.display = 'block';
+      borderRect.style.fill = this.getValue() as string;
+    } else {
+      borderRect.style.display = 'none';
+      // In general, do *not* let fields control the color of blocks. Having the
+      // field control the color is unexpected, and could have performance
+      // impacts.
+      block.pathObject.svgPath.setAttribute('fill', this.getValue() as string);
+      block.pathObject.svgPath.setAttribute('stroke', '#fff');
+    }
+  }
+
+  /**
+   * Returns the height and width of the field.
+   *
+   * This should *in general* be the only place render_ gets called from.
+   *
+   * @returns Height and width.
+   */
+  override getSize(): Size {
+    if (this.getConstants()?.FIELD_COLOUR_FULL_BLOCK) {
+      // In general, do *not* let fields control the color of blocks. Having the
+      // field control the color is unexpected, and could have performance
+      // impacts.
+      // Full block fields have more control of the block than they should
+      // (i.e. updating fill colour). Whenever we get the size, the field may
+      // no longer be a full-block field, so we need to rerender.
+      this.render_();
+      this.isDirty_ = false;
+    }
+    return super.getSize();
+  }
+
+  /**
+   * Updates the colour of the block to reflect whether this is a full
+   * block field or not.
+   */
+  protected override render_() {
+    super.render_();
+
+    const block = this.getSourceBlock() as BlockSvg | null;
+    if (!block) throw new UnattachedFieldError();
+    // In general, do *not* let fields control the color of blocks. Having the
+    // field control the color is unexpected, and could have performance
+    // impacts.
+    // Whenever we render, the field may no longer be a full-block-field so
+    // we need to update the colour.
+    if (this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) block.applyColour();
+  }
+
+  /**
+   * Updates the size of the field based on whether it is a full block field
+   * or not.
+   *
+   * @param margin margin to use when positioning the field.
+   */
+  protected updateSize_(margin?: number) {
+    const constants = this.getConstants();
+    const xOffset =
+      margin !== undefined
+        ? margin
+        : !this.isFullBlockField()
+        ? constants!.FIELD_BORDER_RECT_X_PADDING
+        : 0;
+    let totalWidth = xOffset * 2;
+    let contentWidth = 0;
+    if (!this.isFullBlockField()) {
+      contentWidth = constants!.FIELD_COLOUR_DEFAULT_WIDTH;
+      totalWidth += contentWidth;
+    }
+
+    let totalHeight = constants!.FIELD_TEXT_HEIGHT;
+    if (!this.isFullBlockField()) {
+      totalHeight = Math.max(totalHeight, constants!.FIELD_BORDER_RECT_HEIGHT);
+    }
+
+    this.size_.height = totalHeight;
+    this.size_.width = totalWidth;
+
+    this.positionTextElement_(xOffset, contentWidth);
+    this.positionBorderRect_();
   }
 
   /**
@@ -204,26 +298,6 @@ export class FieldColour extends Field<string> {
       return null;
     }
     return colour.parse(newValue);
-  }
-
-  /**
-   * Update the value of this colour field, and update the displayed colour.
-   *
-   * @param newValue The value to be saved. The default validator guarantees
-   *     that this is a colour in '#rrggbb' format.
-   */
-  protected override doValueUpdate_(newValue: string) {
-    this.value_ = newValue;
-    if (this.borderRect_) {
-      this.borderRect_.style.fill = newValue;
-    } else if (
-      this.sourceBlock_ &&
-      this.sourceBlock_.rendered &&
-      this.sourceBlock_ instanceof BlockSvg
-    ) {
-      this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
-      this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
-    }
   }
 
   /**

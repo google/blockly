@@ -282,7 +282,9 @@ export class JavascriptGenerator extends CodeGenerator {
   }
 
   /**
-   * Gets a property and adjusts the value while taking into account indexing.
+   * Generate code representing the specified value input, adjusted to take into
+   * account indexing (zero- or one-based) and optionally by a specified delta
+   * and/or by negation.
    *
    * @param block The block.
    * @param atId The property ID of the element to get.
@@ -297,46 +299,42 @@ export class JavascriptGenerator extends CodeGenerator {
     }
     const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
 
-    let innerOrder;
-    let outerOrder = order;
+    let innerOrder = order;
     if (delta > 0) {
-      outerOrder = Order.ADDITION;
       innerOrder = Order.ADDITION;
     } else if (delta < 0) {
-      outerOrder = Order.SUBTRACTION;
       innerOrder = Order.SUBTRACTION;
     } else if (negate) {
-      outerOrder = Order.UNARY_NEGATION;
       innerOrder = Order.UNARY_NEGATION;
     }
 
     let at = this.valueToCode(block, atId, innerOrder) || defaultAtIndex;
 
+    // Easy case: no adjustments.
+    if (delta === 0 && !negate) {
+      return at;
+    }
+    // If the index is a naked number, adjust it right now.
     if (stringUtils.isNumber(at)) {
-      // If the index is a naked number, adjust it right now.
       at = String(Number(at) + delta);
       if (negate) {
         at = String(-Number(at));
       }
-    } else {
-      // If the index is dynamic, adjust it in code.
-      if (delta > 0) {
-        at = at + ' + ' + delta;
-      } else if (delta < 0) {
-        at = at + ' - ' + -delta;
-      }
-      if (negate) {
-        if (delta) {
-          at = '-(' + at + ')';
-        } else {
-          at = '-' + at;
-        }
-      }
-      innerOrder = innerOrder === undefined ? NaN : Math.floor(innerOrder);
-      order = Math.floor(order);
-      if (innerOrder && order >= innerOrder) {
-        at = '(' + at + ')';
-      }
+      return at;
+    }
+    // If the index is dynamic, adjust it in code.
+    if (delta > 0) {
+      at = `${at} + ${delta}`;
+    } else if (delta < 0) {
+      at = `${at} - ${-delta}`;
+    }
+    if (negate) {
+      at = delta ? `-(${at})` : `-${at}`;
+    }
+    innerOrder = Math.floor(innerOrder);
+    order = Math.floor(order);
+    if (order >= innerOrder) {
+      at = `(${at})`;
     }
     return at;
   }

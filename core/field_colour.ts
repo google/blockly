@@ -206,6 +206,7 @@ export class FieldColour extends Field<string> {
       // In general, do *not* let fields control the color of blocks. Having the
       // field control the color is unexpected, and could have performance
       // impacts.
+      console.log('updating colour');
       block.pathObject.svgPath.setAttribute('fill', this.getValue() as string);
       block.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
@@ -222,6 +223,7 @@ export class FieldColour extends Field<string> {
     if (this.getConstants()?.FIELD_COLOUR_FULL_BLOCK) {
       // Full block fields have more control of the block than they should
       // (i.e. updating fill colour) so they always need to be rerendered.
+      console.log('rendering');
       this.render_();
       this.isDirty_ = false;
     }
@@ -289,26 +291,6 @@ export class FieldColour extends Field<string> {
       return null;
     }
     return colour.parse(newValue);
-  }
-
-  /**
-   * Update the value of this colour field, and update the displayed colour.
-   *
-   * @param newValue The value to be saved. The default validator guarantees
-   *     that this is a colour in '#rrggbb' format.
-   */
-  protected override doValueUpdate_(newValue: string) {
-    this.value_ = newValue;
-    if (this.borderRect_) {
-      this.borderRect_.style.fill = newValue;
-    } else if (
-      this.sourceBlock_ &&
-      this.sourceBlock_.rendered &&
-      this.sourceBlock_ instanceof BlockSvg
-    ) {
-      this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
-      this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
-    }
   }
 
   /**

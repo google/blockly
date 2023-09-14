@@ -198,15 +198,19 @@ export class FieldColour extends Field<string> {
 
     if (!this.fieldGroup_) return;
 
-    if (!this.isFullBlockField() && this.borderRect_) {
-      this.borderRect_!.style.display = 'block';
-      this.borderRect_.style.fill = this.getValue() as string;
+    const borderRect = this.borderRect_;
+    if (!borderRect) {
+      throw new Error('The border rect has not been initialized');
+    }
+
+    if (!this.isFullBlockField()) {
+      borderRect.style.display = 'block';
+      borderRect.style.fill = this.getValue() as string;
     } else {
-      this.borderRect_!.style.display = 'none';
+      borderRect.style.display = 'none';
       // In general, do *not* let fields control the color of blocks. Having the
       // field control the color is unexpected, and could have performance
       // impacts.
-      console.log('updating colour');
       block.pathObject.svgPath.setAttribute('fill', this.getValue() as string);
       block.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
@@ -221,9 +225,11 @@ export class FieldColour extends Field<string> {
    */
   override getSize(): Size {
     if (this.getConstants()?.FIELD_COLOUR_FULL_BLOCK) {
+      // In general, do *not* let fields control the color of blocks. Having the
+      // field control the color is unexpected, and could have performance
+      // impacts.
       // Full block fields have more control of the block than they should
       // (i.e. updating fill colour) so they always need to be rerendered.
-      console.log('rendering');
       this.render_();
       this.isDirty_ = false;
     }

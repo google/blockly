@@ -58,7 +58,7 @@
           },
           toolbox: toolbox,
           toolboxPosition: 'start',
-          renderer: 'zelos',
+          renderer: 'geras',
           zoom: {
             controls: true,
             wheel: true,
@@ -475,45 +475,6 @@
           workspace.setVisible(false);
         });
       }
-
-      Blockly.Blocks['test'] = {
-        init: function () {
-          const field = new Blockly.FieldTextInput('test', () => {
-            this.getInput('test').appendField(
-              new Blockly.FieldDropdown([['test', 'test']]),
-            );
-          });
-          this.appendDummyInput('test').appendField(field);
-          this.setStyle('math_blocks');
-          this.setOutput(true);
-        },
-      };
-
-      Blockly.Blocks['test2'] = {
-        init: function () {
-          const field = new Blockly.FieldColour(
-            // 'media/arrow.png', 50, 50, '🐶',
-            '#ffcccc',
-            () => {
-              this.getInput('test').appendField(
-                new Blockly.FieldDropdown([['test', 'test']]),
-              );
-            },
-          );
-          this.appendDummyInput('test').appendField(field);
-          this.setStyle('math_blocks');
-          this.setOutput(true);
-        },
-      };
-
-      Blockly.Blocks['test3'] = {
-        init: function () {
-          const field = new Blockly.FieldTextInput('test');
-          this.appendDummyInput('test').appendField(field);
-          this.setStyle('math_blocks');
-          this.setOutput(true, 'Boolean');
-        },
-      };
 
       // Call start().  Because this <script> has type=module, it is
       // automatically deferred, so it will not be run until after the

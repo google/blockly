@@ -218,7 +218,7 @@ export class FieldColour extends Field<string> {
    *
    * @returns Height and width.
    */
-  getSize(): Size {
+  override getSize(): Size {
     if (this.getConstants()?.FIELD_COLOUR_FULL_BLOCK) {
       // Full block fields have more control of the block than they should
       // (i.e. updating fill colour) so they always need to be rerendered.

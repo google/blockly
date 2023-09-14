@@ -237,7 +237,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *
    * @returns Height and width.
    */
-  getSize(): Size {
+  override getSize(): Size {
     if (this.getConstants()?.FULL_BLOCK_FIELDS) {
       // Full block fields have more control of the block than they should
       // (i.e. updating fill colour) so they always need to be rerendered.

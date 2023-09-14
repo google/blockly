@@ -946,16 +946,10 @@ export class Block implements IASTNodeLocation, IDeletable {
   isSimpleReporter(): boolean {
     if (!this.outputConnection) return false;
 
-    let nFields = 0;
     for (const input of this.inputList) {
-      if (input.connection) return false;
-      // TODO: This comment is innacurate. Not sure what we want the spec to be.
-      // Count the number of fields excluding text fields.
-      for (const _ of input.fieldRow) {
-        nFields++;
-      }
+      if (input.connection || input.fieldRow.length > 1) return false;
     }
-    return nFields <= 1;
+    return true;
   }
 
   /**

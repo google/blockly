@@ -229,7 +229,8 @@ export class FieldColour extends Field<string> {
       // field control the color is unexpected, and could have performance
       // impacts.
       // Full block fields have more control of the block than they should
-      // (i.e. updating fill colour) so they always need to be rerendered.
+      // (i.e. updating fill colour). Whenever we get the size, the field may
+      // no longer be a full-block field, so we need to rerender.
       this.render_();
       this.isDirty_ = false;
     }

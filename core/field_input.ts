@@ -239,8 +239,12 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   override getSize(): Size {
     if (this.getConstants()?.FULL_BLOCK_FIELDS) {
+      // In general, do *not* let fields control the color of blocks. Having the
+      // field control the color is unexpected, and could have performance
+      // impacts.
       // Full block fields have more control of the block than they should
-      // (i.e. updating fill colour) so they always need to be rerendered.
+      // (i.e. updating fill colour). Whenever we get the size, the field may
+      // no longer be a full-block field, so we need to rerender.
       this.render_();
       this.isDirty_ = false;
     }

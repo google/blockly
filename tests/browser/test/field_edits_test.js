@@ -45,8 +45,8 @@ async function testFieldEdits(browser, direction) {
   // Click on the field to change the value
   await numberBlock.click();
   await browser.keys([Key.Delete]);
-  await numberBlock.click();
   await browser.keys(['1093']);
+
   // Click on the workspace to exit the field editor
   const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
   await workspace.click();

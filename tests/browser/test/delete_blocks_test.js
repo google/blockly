@@ -179,7 +179,8 @@ suite('Delete blocks', function (done) {
     await this.browser.keys([Key.Backspace]);
     await this.browser.pause(PAUSE_TIME);
     // Undo
-    await this.browser.keys([Key.Ctrl, 'Z']);
+    await this.browser.keys([Key.Ctrl, 'z']);
+    await this.browser.pause(PAUSE_TIME);
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(
       before,
@@ -195,10 +196,10 @@ suite('Delete blocks', function (done) {
     await this.browser.keys([Key.Backspace]);
     await this.browser.pause(PAUSE_TIME);
     // Undo
-    await this.browser.keys([Key.Ctrl, 'Z']);
+    await this.browser.keys([Key.Ctrl, 'z']);
     await this.browser.pause(PAUSE_TIME);
     // Redo
-    await this.browser.keys([Key.Ctrl, Key.Shift, 'Z']);
+    await this.browser.keys([Key.Ctrl, Key.Shift, 'z']);
     await this.browser.pause(PAUSE_TIME);
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(

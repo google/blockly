@@ -213,6 +213,17 @@ export class Block implements IASTNodeLocation, IDeletable {
   private onchangeWrapper_: ((p1: Abstract) => void) | null = null;
 
   /**
+   * Collection of unbound onchange handlers added with addOnChange().
+   */
+  private onChangeHandlers_: ((p1: Abstract) => void)[] = [];
+
+  /**
+   * A bound callback function that calls the onchange handlers added with
+   * addOnChange() when the parent workspace changes.
+   */
+  private onChangeHandlersCaller_: ((p1: Abstract) => void) | null = null;
+
+  /**
    * A count of statement inputs on the block.
    *
    * @internal
@@ -301,6 +312,14 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (typeof this.onchange === 'function') {
       this.setOnChange(this.onchange);
     }
+
+    // Makes workspace call all of this block's on change handlers.
+    this.onChangeHandlersCaller_ = ((p1: Abstract) => {
+      for (const handler of this.onChangeHandlers_) {
+        handler.call(this, p1);
+      }
+    })
+    this.workspace.addChangeListener(this.onChangeHandlersCaller_);
   }
 
   /**
@@ -319,6 +338,9 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (this.onchangeWrapper_) {
       this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
+    if (this.onChangeHandlersCaller_) {
+      this.workspace.removeChangeListener(this.onChangeHandlersCaller_);
+    }    
 
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
@@ -339,6 +361,9 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (this.onchangeWrapper_) {
       this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
+    if (this.onChangeHandlersCaller_) {
+      this.workspace.removeChangeListener(this.onChangeHandlersCaller_);
+    }    
 
     this.workspace.removeTypedBlock(this);
     this.workspace.removeBlockById(this.id);
@@ -1063,6 +1088,27 @@ export class Block implements IASTNodeLocation, IDeletable {
     this.onchange = onchangeFn;
     this.onchangeWrapper_ = onchangeFn.bind(this);
     this.workspace.addChangeListener(this.onchangeWrapper_);
+  }
+
+  /**
+   * Adds a callback function to use whenever the block's parent workspace
+   * changes. This is usually only called from the constructor, the block type
+   * initializer function, or an extension initializer function.
+   *
+   * Handlers added via this method will be run in the order they were added,
+   * and after the legacy handler set with setOnChange() or this.onchange.
+   *
+   * @param onchangeFn A callback to call when the block's workspace changes.
+   * @throws {Error} if onchangeFn is not falsey and not a function.
+   */
+  addOnChange(onchangeFn: (p1: Abstract) => void) {
+    if (onchangeFn && typeof onchangeFn !== 'function') {
+      throw Error('onchange must be a function.');
+    }
+    if (this.onChangeHandlers_.includes(onchangeFn)) {
+      throw Error('function was already added.');
+    }
+    this.onChangeHandlers_.push(onchangeFn);
   }
 
   /**

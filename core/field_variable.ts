@@ -317,6 +317,16 @@ export class FieldVariable extends FieldDropdown {
   }
 
   /**
+   * Sets or clears the variable model.
+   *
+   * @param variable The variable to set or null to clear.
+   */
+  override setVariable(variable: VariableModel | null) {
+    this.variable = variable;
+    this.refreshVariableName();
+  }
+
+  /**
    * Gets the validation function for this field, or null if not set.
    * Returns null if the variable is not set, because validators should not
    * run on the initial setValue call, because the field won't be attached to
@@ -515,8 +525,10 @@ export class FieldVariable extends FieldDropdown {
    * Overrides referencesVariables(), indicating this field refers to a
    * variable.
    *
+   * @deprecated `Blockly.Block.getVariable` returns a a variable, which is
+   *             an equivalent indicator for returning true from here.
+   *             To be removed in v??.
    * @returns True.
-   * @internal
    */
   override referencesVariables(): boolean {
     return true;

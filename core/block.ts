@@ -1104,7 +1104,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Return all variables referenced by this block.
+   * Return id strings of all variables referenced by this block.
    *
    * @returns List of variable ids.
    */
@@ -1112,11 +1112,17 @@ export class Block implements IASTNodeLocation, IDeletable {
     const vars: string[] = [];
     for (let i = 0, input; (input = this.inputList[i]); i++) {
       for (let j = 0, field; (field = input.fieldRow[j]); j++) {
+        const variable = field.getVariable();
+        if (variable) {
+          vars.push(variable.getId());
+          continue;
+        }
+
+        // Backwards-compatible check used for fields that stored variable id
+        // as their value. Deprecated, implement Field.getVariable() instead.
+        // When this is removed, the continue keyword above can be removed too.
         if (field.referencesVariables()) {
-          const variable = field.getVariable();
-          if (variable) {
-            vars.push(variable.getId());
-          }
+          vars.push(field.getValue() as string);
         }
       }
     }
@@ -1132,8 +1138,9 @@ export class Block implements IASTNodeLocation, IDeletable {
   getVarModels(): VariableModel[] {
     const vars = [];
     for (const id of this.getVars()) {
+      // We have a variable at this point, but filter it through the workspace
+      // to be certain it's not just a potential variable.
       const model = this.workspace.getVariableById(id);
-      // Check if the variable exists (and isn't just a potential variable).
       if (model) {
         vars.push(model);
       }
@@ -1151,9 +1158,17 @@ export class Block implements IASTNodeLocation, IDeletable {
   updateVarName(variable: VariableModel) {
     for (let i = 0, input; (input = this.inputList[i]); i++) {
       for (let j = 0, field; (field = input.fieldRow[j]); j++) {
+        if (variable.getId() === field.getVariable()?.getId()) {
+          field.refreshVariableName();
+          continue;
+        }
+
+        // Backwards-compatible check used for fields that stored variable id
+        // as their value. Deprecated, implement Field.getVariable() instead.
+        // When this is removed, the continue keyword above can be removed too.
         if (
           field.referencesVariables() &&
-          variable.getId() === field.getVariable()?.getId()
+          variable.getId() === field.getValue()
         ) {
           field.refreshVariableName();
         }
@@ -1172,10 +1187,16 @@ export class Block implements IASTNodeLocation, IDeletable {
   renameVarById(oldId: string, newId: string) {
     for (let i = 0, input; (input = this.inputList[i]); i++) {
       for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (
-          field.referencesVariables() &&
-          oldId === field.getVariable()?.getId()
-        ) {
+        if (oldId === field.getVariable()?.getId()) {
+          field.setVariable(this.workspace.getVariableById(newId));
+          continue;
+        }
+
+        // Backwards-compatible check used for fields that stored variable id
+        // as their value. Deprecated, implement Field.getVariable() and
+        // Field.setVariable() instead. When this is removed, the continue
+        // keyword above can be removed too.
+        if (field.referencesVariables() && oldId === field.getValue()) {
           field.setValue(newId);
         }
       }

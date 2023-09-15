@@ -1269,8 +1269,10 @@ export abstract class Field<T = any>
    * to be handled differently during serialization and deserialization.
    * Subclasses may override this.
    *
-   * @returns True if this field has any variable references.
-   * @internal
+   * @deprecated Implement `Blockly.Block.getVariable` instead. If you do,
+   *             ensure this method returns false, indicating that
+   *             To be removed in v??. 
+   * @returns    True if this field has any variable references.
    */
   referencesVariables(): boolean {
     return false;
@@ -1280,10 +1282,17 @@ export abstract class Field<T = any>
    * Get the variable model if this field refers to one.
    *
    * @returns The field's variable, or null if none exists.
-   * @internal
    */
   getVariable(): VariableModel | null {
     return null;
+  }
+
+  /**
+   * Sets or clears the variable model.
+   *
+   * @param variable The variable to set or null to clear.
+   */
+  setVariable(_variable: VariableModel | null) {
   }
 
   /**

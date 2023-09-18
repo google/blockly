@@ -148,8 +148,8 @@ async function openCategories(browser, categoryList, directionMultiplier) {
         const flyoutBlock = await browser.$(
           `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + i * 2})`,
         );
-        if (!(await elementInBounds(browser, flyoutBlock))) {
-          await scrollFlyout(browser, 0, 500);
+        while (!(await elementInBounds(browser, flyoutBlock))) {
+          await scrollFlyout(browser, 0, 50);
         }
 
         await flyoutBlock.dragAndDrop({x: directionMultiplier * 50, y: 0});

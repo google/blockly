@@ -43,7 +43,7 @@ export class TextInputBubble extends Bubble {
 
   /** Functions listening for changes to the text of this bubble. */
   private textChangeListeners: (() => void)[] = [];
-  
+
   /** Functions listening for changes to the size of this bubble. */
   private sizeChangeListeners: (() => void)[] = [];
 
@@ -316,6 +316,7 @@ export class TextInputBubble extends Bubble {
   /** Handles a text change event for the text area. Calls event listeners. */
   private onTextChange() {
     this.text = this.textArea.value;
+    // debugger
     for (const listener of this.textChangeListeners) {
       listener();
     }

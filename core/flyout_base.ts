@@ -340,8 +340,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     // hide/show code will set up proper visibility and size later.
     this.svgGroup_ = dom.createSvgElement(tagName, {
       'class': 'blocklyFlyout',
-      'style': 'display: none',
     });
+    this.svgGroup_.style.display = 'none';
     this.svgBackground_ = dom.createSvgElement(
       Svg.PATH,
       {'class': 'blocklyFlyoutBackground'},

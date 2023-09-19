@@ -120,7 +120,7 @@ export class MarkerSvg extends BaseMarkerSvg {
       },
       this.markerSvg_,
     );
-    this.markerCircle.style.display = 'none';
+    this.hide();
 
     // Markers and stack cursors don't blink.
     if (this.isCursor()) {

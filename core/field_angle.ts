@@ -219,8 +219,8 @@ export class FieldAngle extends FieldInput<number> {
       'version': '1.1',
       'height': FieldAngle.HALF * 2 + 'px',
       'width': FieldAngle.HALF * 2 + 'px',
-      'style': 'touch-action: none',
     });
+    svg.style.touchAction = 'none';
     const circle = dom.createSvgElement(
       Svg.CIRCLE,
       {

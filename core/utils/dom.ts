@@ -353,7 +353,10 @@ export function measureFontMetrics(
   block.style.height = '0';
 
   const div = document.createElement('div');
-  div.setAttribute('style', 'position: fixed; top: 0; left: 0; display: flex;');
+  div.style.display = 'flex';
+  div.style.position = 'fixed';
+  div.style.top = '0';
+  div.style.left = '0';
   div.appendChild(span);
   div.appendChild(block);
 

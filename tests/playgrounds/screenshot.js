@@ -84,7 +84,7 @@ function workspaceToSvg_(workspace, callback, customCss) {
   );
   svg.setAttribute('width', width);
   svg.setAttribute('height', height);
-  svg.setAttribute('style', 'background-color: transparent');
+  svg.style.backgroundColor = 'transparent';
 
   const css = [].slice
     .call(document.head.querySelectorAll('style'))

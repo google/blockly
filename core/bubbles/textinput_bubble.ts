@@ -316,7 +316,6 @@ export class TextInputBubble extends Bubble {
   /** Handles a text change event for the text area. Calls event listeners. */
   private onTextChange() {
     this.text = this.textArea.value;
-    // debugger
     for (const listener of this.textChangeListeners) {
       listener();
     }

@@ -399,9 +399,13 @@ export function appendInternal(
   }
   eventUtils.disable();
 
-  const block = appendPrivate(state, workspace, {parentConnection, isShadow});
+  let block;
+  try {
+    block = appendPrivate(state, workspace, {parentConnection, isShadow});
+  } finally {
+    eventUtils.enable();
+  }
 
-  eventUtils.enable();
   if (eventUtils.isEnabled()) {
     eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
   }

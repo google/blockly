@@ -398,7 +398,7 @@ export function buildTooltipForDropdown(
   lookupTable: {[key: string]: string},
 ): (this: Block) => void {
   // List of block types already validated, to minimize duplicate warnings.
-  const blockTypesChecked: AnyDuringMigration[] = [];
+  const blockTypesChecked: string[] = [];
 
   return function (this: Block) {
     if (blockTypesChecked.indexOf(this.type) === -1) {

@@ -155,9 +155,6 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
 
   /** Sets the text of this comment. Updates any bubbles if they are visible. */
   setText(text: string) {
-    this.text = text;
-    this.textInputBubble?.setText(this.text);
-    this.textBubble?.setText(this.text);
     eventUtils.fire(
       new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this.sourceBlock,
@@ -167,6 +164,9 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
         text,
       ),
     );
+    this.text = text;
+    this.textInputBubble?.setText(this.text);
+    this.textBubble?.setText(this.text);
   }
 
   /** Returns the text of this comment. */

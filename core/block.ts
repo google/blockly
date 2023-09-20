@@ -2192,7 +2192,6 @@ export class Block implements IASTNodeLocation, IDeletable {
     const comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | null;
     const oldText = comment?.getText() ?? null;
     if (oldText === text) return;
-    
     if (text !== null) {
       let comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | undefined;
       if (!comment) {

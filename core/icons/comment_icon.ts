@@ -54,9 +54,6 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   /** The text of this comment. */
   private text = '';
 
-  /** The text of this comment before the most recent change event. */
-  private oldText = '';
-
   /** The size of this comment (which is applied to the editable bubble). */
   private bubbleSize = new Size(DEFAULT_BUBBLE_WIDTH, DEFAULT_BUBBLE_HEIGHT);
 
@@ -222,17 +219,16 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   onTextChange(): void {
     if (this.textInputBubble) {
       const newText = this.textInputBubble.getText();
-      this.text = newText;
       eventUtils.fire(
         new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
           this.sourceBlock,
           'comment',
           null,
-          this.oldText,
+          this.text,
           newText,
         ),
       );
-      this.oldText = newText;
+      this.text = newText;
     }
   }
 

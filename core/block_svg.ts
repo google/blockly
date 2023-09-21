@@ -384,9 +384,13 @@ export class BlockSvg
       event = new (eventUtils.get(eventUtils.BLOCK_MOVE)!)(this) as BlockMove;
       reason && event.setReason(reason);
     }
-    const xy = this.getRelativeToSurfaceXY();
-    this.translate(xy.x + dx, xy.y + dy);
-    this.moveConnections(dx, dy);
+
+    const delta = new Coordinate(dx, dy);
+    const currLoc = this.getRelativeToSurfaceXY();
+    const newLoc = Coordinate.sum(currLoc, delta);
+    this.translate(newLoc.x, newLoc.y);
+    this.updateComponentLocations(newLoc);
+
     if (eventsEnabled && event) {
       event!.recordNew();
       eventUtils.fire(event);
@@ -649,32 +653,38 @@ export class BlockSvg
   }
 
   /**
-   * Move the connections for this block and all blocks attached under it.
-   * Also update any attached bubbles.
-   *
-   * @param dx Horizontal offset from current location, in workspace units.
-   * @param dy Vertical offset from current location, in workspace units.
+   * Updates the locations of any parts of the block that need to know where
+   * they are (e.g. connections, icons).
+   * 
+   * @param blockOrigin The top-left of this block in workspace coordinates.
    * @internal
    */
-  moveConnections(dx: number, dy: number) {
+  updateComponentLocations(blockOrigin: Coordinate) {
     if (!this.rendered) {
       // Rendering is required to lay out the blocks.
       // This is probably an invisible block attached to a collapsed block.
       return;
     }
-    const myConnections = this.getConnections_(false);
-    for (let i = 0; i < myConnections.length; i++) {
-      myConnections[i].moveBy(dx, dy);
-    }
-    const icons = this.getIcons();
-    const pos = this.getRelativeToSurfaceXY();
-    for (const icon of icons) {
-      icon.onLocationChange(pos);
-    }
 
-    // Recurse through all blocks attached under this one.
-    for (let i = 0; i < this.childBlocks_.length; i++) {
-      (this.childBlocks_[i] as BlockSvg).moveConnections(dx, dy);
+    this.updateConnectionLocations(blockOrigin);
+    this.updateIconLocations(blockOrigin);
+
+    for (const child of this.getChildren(false)) {
+      child.updateComponentLocations(
+        Coordinate.sum(blockOrigin, child.relativeCoords),
+      );
+    }
+  }
+
+  private updateConnectionLocations(blockOrigin: Coordinate) {
+    for (const conn of this.getConnections_(false)) {
+      conn.moveToOffset(blockOrigin);
+    }
+  }
+
+  private updateIconLocations(blockOrigin: Coordinate) {
+    for (const icon of this.getIcons()) {
+      icon.onLocationChange(blockOrigin);
     }
   }
 

@@ -1663,7 +1663,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       this.setInputsInline(json['inputsInline']);
       eventUtils.enable();
     }
-  
+
     // Set output and previous/next connections.
     if (json['output'] !== undefined) {
       this.setOutput(true, json['output']);

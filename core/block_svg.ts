@@ -672,6 +672,7 @@ export class BlockSvg
 
     if (!this.dragging) this.updateConnectionLocations(blockOrigin);
     this.updateIconLocations(blockOrigin);
+    this.updateFieldLocations(blockOrigin);
 
     for (const child of this.getChildren(false)) {
       child.updateComponentLocations(
@@ -689,6 +690,14 @@ export class BlockSvg
   private updateIconLocations(blockOrigin: Coordinate) {
     for (const icon of this.getIcons()) {
       icon.onLocationChange(blockOrigin);
+    }
+  }
+
+  private updateFieldLocations(blockOrigin: Coordinate) {
+    for (const input of this.inputList) {
+      for (const field of input.fieldRow) {
+        field.onLocationChange(blockOrigin);
+      }
     }
   }
 

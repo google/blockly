@@ -252,6 +252,14 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
   }
 
   /**
+   * Notifies the field that it has changed locations. Moves the widget div to
+   * be in the correct place if it is open.
+   */
+  onLocationChange(): void {
+    if (this.isBeingEdited_) this.resizeEditor_();
+  }
+
+  /**
    * Updates the colour of the htmlInput given the current validity of the
    * field's value.
    *

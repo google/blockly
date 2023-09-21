@@ -154,6 +154,9 @@ export class BlockSvg
    */
   private bumpNeighboursPid = 0;
 
+  /** Whether this block is currently being dragged. */
+  private dragging = false;
+
   /**
    * The location of the top left of this block (in workspace coordinates)
    * relative to either its parent block, or the workspace origin if it has no
@@ -441,6 +444,7 @@ export class BlockSvg
   moveDuringDrag(newLoc: Coordinate) {
     this.translate(newLoc.x, newLoc.y);
     this.getSvgRoot().setAttribute('transform', this.getTranslation());
+    this.updateComponentLocations(newLoc);
   }
 
   /** Snap this block to the nearest grid point. */
@@ -666,7 +670,7 @@ export class BlockSvg
       return;
     }
 
-    this.updateConnectionLocations(blockOrigin);
+    if (!this.dragging) this.updateConnectionLocations(blockOrigin);
     this.updateIconLocations(blockOrigin);
 
     for (const child of this.getChildren(false)) {
@@ -696,6 +700,7 @@ export class BlockSvg
    * @internal
    */
   setDragging(adding: boolean) {
+    this.dragging = adding;
     if (adding) {
       this.translation = '';
       common.draggingConnections.push(...this.getConnections_(true));

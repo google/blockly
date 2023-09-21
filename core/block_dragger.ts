@@ -28,7 +28,7 @@ import * as registry from './registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import {hasBubble} from './interfaces/i_has_bubble.js';
+import * as deprecation from './utils/deprecation.js';
 
 /**
  * Class for a block dragger.  It moves blocks around the workspace when they
@@ -48,7 +48,12 @@ export class BlockDragger implements IBlockDragger {
   /** Whether the block would be deleted if dropped immediately. */
   protected wouldDeleteBlock_ = false;
   protected startXY_: Coordinate;
-  protected dragIconData_: IconPositionData[];
+
+  /**
+   * @deprecated To be removed in v11. Updating icons is now handled by the
+   *     block's `moveDuringDrag` method.
+   */
+  protected dragIconData_: IconPositionData[] = [];
 
   /**
    * @param block The block to drag.
@@ -69,13 +74,6 @@ export class BlockDragger implements IBlockDragger {
      * beginning of the drag in workspace coordinates.
      */
     this.startXY_ = this.draggingBlock_.getRelativeToSurfaceXY();
-
-    /**
-     * A list of all of the icons (comment, warning, and mutator) that are
-     * on this block and its descendants.  Moving an icon moves the bubble that
-     * extends from it if that bubble is open.
-     */
-    this.dragIconData_ = initIconData(block, this.startXY_);
   }
 
   /**
@@ -84,8 +82,6 @@ export class BlockDragger implements IBlockDragger {
    * @internal
    */
   dispose() {
-    this.dragIconData_.length = 0;
-
     if (this.draggedConnectionManager_) {
       this.draggedConnectionManager_.dispose();
     }
@@ -178,7 +174,6 @@ export class BlockDragger implements IBlockDragger {
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
     const newLoc = Coordinate.sum(this.startXY_, delta);
     this.draggingBlock_.moveDuringDrag(newLoc);
-    this.dragIcons_(delta);
 
     const oldDragTarget = this.dragTarget_;
     this.dragTarget_ = this.workspace_.getDragTarget(e);
@@ -210,7 +205,6 @@ export class BlockDragger implements IBlockDragger {
   endDrag(e: PointerEvent, currentDragDeltaXY: Coordinate) {
     // Make sure internal state is fresh.
     this.drag(e, currentDragDeltaXY);
-    this.dragIconData_ = [];
     this.fireDragEndEvent_();
 
     dom.stopTextWidthCache();
@@ -400,12 +394,11 @@ export class BlockDragger implements IBlockDragger {
    *
    * @param dxy How far to move the icons from their original positions, in
    *     workspace units.
+   * @deprecated To be removed in v11. This is now handled by the block's
+   *     `moveDuringDrag` method.
    */
-  protected dragIcons_(dxy: Coordinate) {
-    // Moving icons moves their associated bubbles.
-    for (const data of this.dragIconData_) {
-      data.icon.onLocationChange(Coordinate.sum(data.location, dxy));
-    }
+  protected dragIcons_() {
+    deprecation.warn('Blockly.BlockDragger.prototype.dragIcons_', 'v10', 'v11');
   }
 
   /**
@@ -430,40 +423,6 @@ export class BlockDragger implements IBlockDragger {
 export interface IconPositionData {
   location: Coordinate;
   icon: Icon;
-}
-
-/**
- * Make a list of all of the icons (comment, warning, and mutator) that are
- * on this block and its descendants.  Moving an icon moves the bubble that
- * extends from it if that bubble is open.
- *
- * @param block The root block that is being dragged.
- * @param blockOrigin The top left of the given block in workspace coordinates.
- * @returns The list of all icons and their locations.
- */
-function initIconData(
-  block: BlockSvg,
-  blockOrigin: Coordinate,
-): IconPositionData[] {
-  // Build a list of icons that need to be moved and where they started.
-  const dragIconData = [];
-
-  for (const icon of block.getIcons()) {
-    // Only bother to track icons whose bubble is visible.
-    if (hasBubble(icon) && !icon.bubbleIsVisible()) continue;
-
-    dragIconData.push({location: blockOrigin, icon: icon});
-    icon.onLocationChange(blockOrigin);
-  }
-
-  for (const child of block.getChildren(false)) {
-    dragIconData.push(
-      ...initIconData(child, Coordinate.sum(blockOrigin, child.relativeCoords)),
-    );
-  }
-  // AnyDuringMigration because:  Type '{ location: Coordinate | null; icon:
-  // Icon; }[]' is not assignable to type 'IconPositionData[]'.
-  return dragIconData as AnyDuringMigration;
 }
 
 registry.register(registry.Type.BLOCK_DRAGGER, registry.DEFAULT, BlockDragger);

@@ -1629,46 +1629,6 @@ export class BlockSvg
   }
 
   /**
-   * Update all of the connections on this block with the new locations
-   * calculated during rendering.  Also move all of the connected blocks based
-   * on the new connection locations.
-   *
-   * @internal
-   */
-  private updateConnectionAndIconLocations() {
-    const blockTL = this.getRelativeToSurfaceXY();
-    // Don't tighten previous or output connections because they are inferior
-    // connections.
-    if (this.previousConnection) {
-      this.previousConnection.moveToOffset(blockTL);
-    }
-    if (this.outputConnection) {
-      this.outputConnection.moveToOffset(blockTL);
-    }
-
-    for (let i = 0; i < this.inputList.length; i++) {
-      const conn = this.inputList[i].connection as RenderedConnection;
-      if (conn) {
-        conn.moveToOffset(blockTL);
-        if (conn.isConnected()) {
-          conn.tighten();
-        }
-      }
-    }
-
-    if (this.nextConnection) {
-      this.nextConnection.moveToOffset(blockTL);
-      if (this.nextConnection.isConnected()) {
-        this.nextConnection.tighten();
-      }
-    }
-
-    for (const icon of this.getIcons()) {
-      icon.onLocationChange(blockTL);
-    }
-  }
-
-  /**
    * Add the cursor SVG to this block's SVG group.
    *
    * @param cursorSvg The SVG root of the cursor to be added to the block SVG

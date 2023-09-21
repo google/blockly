@@ -132,9 +132,9 @@ function doRenders() {
 
 /**
  * Returns true if the block should be rendered.
- * 
+ *
  * No need to render dead blocks.
- * 
+ *
  * No need to render blocks with parents. A render for the block may have been
  * queued, and the the block was connected to a parent, so it is no longer a
  * root block. Rendering will be triggered through the real root block.

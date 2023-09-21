@@ -659,7 +659,7 @@ export class BlockSvg
   /**
    * Updates the locations of any parts of the block that need to know where
    * they are (e.g. connections, icons).
-   * 
+   *
    * @param blockOrigin The top-left of this block in workspace coordinates.
    * @internal
    */

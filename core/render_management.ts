@@ -120,7 +120,7 @@ function doRenders() {
   for (const workspace of workspaces) {
     workspace.resizeContents();
   }
-  for (const block of rootBlocks) {
+  for (const block of blocks) {
     const blockOrigin = block.getRelativeToSurfaceXY();
     block.updateComponentLocations(blockOrigin);
   }

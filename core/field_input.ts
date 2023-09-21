@@ -33,7 +33,6 @@ import {Coordinate} from './utils/coordinate.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import * as renderManagement from './render_management.js';
 import {Size} from './utils/size.js';
 
 /**
@@ -271,7 +270,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     // This logic is done in render_ rather than doValueInvalid_ or
     // doValueUpdate_ so that the code is more centralized.
     if (this.isBeingEdited_) {
-      this.resizeEditor_();
       const htmlInput = this.htmlInput_ as HTMLElement;
       if (!this.isTextValid_) {
         dom.addClass(htmlInput, 'blocklyInvalidInput');
@@ -584,11 +582,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
         ),
       );
     }
-
-    // Resize the widget div after the block has finished rendering.
-    renderManagement.finishQueuedRenders().then(() => {
-      this.resizeEditor_();
-    });
   }
 
   /**
@@ -624,6 +617,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     }
     const div = WidgetDiv.getDiv();
     const bBox = this.getScaledBBox();
+    console.log(bBox);
     div!.style.width = bBox.right - bBox.left + 'px';
     div!.style.height = bBox.bottom - bBox.top + 'px';
 
@@ -639,7 +633,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
   /**
    * Handles repositioning the WidgetDiv used for input fields when the
    * workspace is resized. Will bump the block into the viewport and update the
-   * position of the field if necessary.
+   * position of the text input if necessary.
    *
    * @returns True for rendered workspaces, as we never want to hide the widget
    *     div.
@@ -650,13 +644,13 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     // rendered blocks.
     if (!(block instanceof BlockSvg)) return false;
 
-    bumpObjects.bumpIntoBounds(
+    const bumped = bumpObjects.bumpIntoBounds(
       this.workspace_!,
       this.workspace_!.getMetricsManager().getViewMetrics(true),
       block,
     );
 
-    this.resizeEditor_();
+    if (!bumped) this.resizeEditor_();
 
     return true;
   }

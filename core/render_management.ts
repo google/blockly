@@ -113,25 +113,34 @@ function queueBlock(block: BlockSvg) {
  */
 function doRenders() {
   const workspaces = new Set([...rootBlocks].map((block) => block.workspace));
-  for (const block of rootBlocks) {
-    // No need to render a dead block.
-    if (block.isDisposed()) continue;
-    // A render for this block may have been queued, and then the block was
-    // connected to a parent, so it is no longer a root block.
-    // Rendering will be triggered through the real root block.
-    if (block.getParent()) continue;
-
+  const blocks = [...rootBlocks].filter(shouldRenderRootBlock);
+  for (const block of blocks) {
     renderBlock(block);
-    const blockOrigin = block.getRelativeToSurfaceXY();
-    block.updateComponentLocations(blockOrigin);
   }
   for (const workspace of workspaces) {
     workspace.resizeContents();
+  }
+  for (const block of rootBlocks) {
+    const blockOrigin = block.getRelativeToSurfaceXY();
+    block.updateComponentLocations(blockOrigin);
   }
 
   rootBlocks.clear();
   dirtyBlocks = new Set();
   afterRendersPromise = null;
+}
+
+/**
+ * Returns true if the block should be rendered.
+ * 
+ * No need to render dead blocks.
+ * 
+ * No need to render blocks with parents. A render for the block may have been
+ * queued, and the the block was connected to a parent, so it is no longer a
+ * root block. Rendering will be triggered through the real root block.
+ */
+function shouldRenderRootBlock(block: BlockSvg): boolean {
+  return !block.isDisposed() && !block.getParent();
 }
 
 /**

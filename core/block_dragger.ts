@@ -392,8 +392,6 @@ export class BlockDragger implements IBlockDragger {
   /**
    * Move all of the icons connected to this drag.
    *
-   * @param dxy How far to move the icons from their original positions, in
-   *     workspace units.
    * @deprecated To be removed in v11. This is now handled by the block's
    *     `moveDuringDrag` method.
    */

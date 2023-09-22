@@ -41,6 +41,7 @@ async function driverSetup() {
         args: ['--allow-file-access-from-files'],
       },
     },
+    services: [['selenium-standalone']],
     logLevel: 'warn',
   };
 
@@ -366,8 +367,8 @@ async function connect(
   );
 
   const delta = {
-    x: Math.round(targetLocation.x - draggedLocation.x),
-    y: Math.round(targetLocation.y - draggedLocation.y),
+    x: targetLocation.x - draggedLocation.x,
+    y: targetLocation.y - draggedLocation.y,
   };
   if (mutatorBlockId) {
     await dragBlockSelector.dragAndDrop(delta);
@@ -524,7 +525,7 @@ async function getAllBlocks(browser) {
  *  - The workspace has a trash can, which means it has a second (hidden) flyout.
  * @param browser The active WebdriverIO Browser object.
  * @param xDelta How far to drag the flyout in the x direction. Positive is right.
- * @param yDelta How far to drag the flyout in the y direction. Positive is down.
+ * @param yDelta How far to drag thte flyout in the y direction. Positive is down.
  * @return A Promise that resolves when the actions are completed.
  */
 async function scrollFlyout(browser, xDelta, yDelta) {

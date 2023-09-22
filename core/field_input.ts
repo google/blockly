@@ -358,7 +358,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       throw new UnattachedFieldError();
     }
     WidgetDiv.show(this, block.RTL, this.widgetDispose_.bind(this));
-    this.htmlInput_ = this.widgetCreate_();
+    this.htmlInput_ = this.widgetCreate_() as HTMLInputElement;
     this.isBeingEdited_ = true;
     this.valueWhenEditorWasOpened_ = this.value_;
 
@@ -375,7 +375,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *
    * @returns The newly created text input editor.
    */
-  protected widgetCreate_(): HTMLInputElement {
+  protected widgetCreate_(): HTMLInputElement | HTMLTextAreaElement {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();

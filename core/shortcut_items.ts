@@ -12,6 +12,7 @@ import * as common from './common.js';
 import {Gesture} from './gesture.js';
 import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
+import { Coordinate } from './utils.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -82,6 +83,7 @@ export function registerDelete() {
 
 let copyData: ICopyData | null = null;
 let copyWorkspace: WorkspaceSvg | null = null;
+let copyCoords: Coordinate | null = null;
 
 /**
  * Keyboard shortcut to copy a block on ctrl+c, cmd+c, or alt+c.
@@ -118,6 +120,7 @@ export function registerCopy() {
       const selected = common.getSelected();
       if (!selected || !isCopyable(selected)) return false;
       copyData = selected.toCopyData();
+      copyCoords = selected.getRelativeToSurfaceXY();
       copyWorkspace = workspace;
       return !!copyData;
     },
@@ -158,6 +161,7 @@ export function registerCut() {
       const selected = common.getSelected();
       if (!selected || !isCopyable(selected)) return false;
       copyData = selected.toCopyData();
+      copyCoords = selected.getRelativeToSurfaceXY();
       copyWorkspace = workspace;
       (selected as BlockSvg).checkAndDelete();
       return true;
@@ -188,8 +192,22 @@ export function registerPaste() {
       return !workspace.options.readOnly && !Gesture.inProgress();
     },
     callback() {
-      if (!copyData || !copyWorkspace) return false;
-      return !!clipboard.paste(copyData, copyWorkspace);
+      if (!copyData || !copyCoords || !copyWorkspace) return false;
+      const {left:vpLeft, top:vpTop, width:vpWidth, height:vpHeight } =  
+              copyWorkspace.getMetricsManager().getViewMetrics(true);
+      if(
+        copyCoords.x >= vpLeft
+        && copyCoords.x <= (vpLeft + vpWidth)
+        && copyCoords.y >= vpTop
+        && copyCoords.y <= (vpTop + vpHeight)
+        ){
+        return !!clipboard.paste(copyData, copyWorkspace, copyCoords);
+      }
+      else{
+        const centerCoords = new Coordinate(vpLeft + Math.trunc(vpWidth / 2),
+                                            vpTop + Math.trunc(vpHeight / 2));
+        return !!clipboard.paste(copyData, copyWorkspace, centerCoords);
+      }
     },
     keyCodes: [ctrlV, altV, metaV],
   };

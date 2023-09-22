@@ -101,7 +101,7 @@
     "prettier": "3.0.3",
     "readline-sync": "^1.4.10",
     "rimraf": "^5.0.0",
-    "typescript": "^5.0.2",
+    "typescript": "^5.2.2",
     "webdriverio": "^8.16.7",
     "yargs": "^17.2.1"
   },

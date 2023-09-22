@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {Coordinate} from '../utils';
+
 // Former goog.module ID: Blockly.IMovable
 
 /**
@@ -16,4 +18,5 @@ export interface IMovable {
    * @returns True if movable.
    */
   isMovable(): boolean;
+  getRelativeToSurfaceXY(): Coordinate;
 }

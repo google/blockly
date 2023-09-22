@@ -481,6 +481,15 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   }
 
   /**
+   * Get the target workspace inside the flyout.
+   *
+   * @returns The target workspace inside the flyout.
+   */
+  getTargetWorkspace(): WorkspaceSvg {
+    return this.targetWorkspace;
+  }
+
+  /**
    * Is the flyout visible?
    *
    * @returns True if visible.

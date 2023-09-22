@@ -7,7 +7,7 @@
 /**
  * @fileoverview Node.js script to run Automated tests in Chrome, via webdriver.
  */
-
+import { myNewFunction } from './test_setup';
 const chai = require('chai');
 const {
   testSetup,
@@ -47,10 +47,11 @@ async function testFieldEdits(browser, direction) {
   await browser.keys([Key.Delete]);
   await browser.keys(['1093']);
 
-  // Click on the workspace to exit the field editor
-  const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
-  await workspace.click();
-  await browser.pause(PAUSE_TIME);
+  // // Click on the workspace to exit the field editor
+  // const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
+  // await workspace.click();
+  // await browser.pause(PAUSE_TIME);
+  myNewFunction();
 
   const fieldValue = await browser.execute((id) => {
     return Blockly.getMainWorkspace()

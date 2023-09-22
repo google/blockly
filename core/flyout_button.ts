@@ -59,14 +59,14 @@ export class FlyoutButton {
    * @param workspace The workspace in which to place this button.
    * @param targetWorkspace The flyout's target workspace.
    * @param json The JSON specifying the label/button.
-   * @param isLabel_ Whether this button should be styled as a label.
+   * @param isLabel Whether this button should be styled as a label.
    * @internal
    */
   constructor(
     private readonly workspace: WorkspaceSvg,
     private readonly targetWorkspace: WorkspaceSvg,
     json: toolbox.ButtonOrLabelInfo,
-    private readonly isLabel_: boolean,
+    private readonly isLabel: boolean,
   ) {
     this.text = json['text'];
 
@@ -93,7 +93,7 @@ export class FlyoutButton {
    * @returns The button's SVG group.
    */
   createDom(): SVGElement {
-    let cssClass = this.isLabel_ ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton';
+    let cssClass = this.isLabel ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton';
     if (this.cssClass) {
       cssClass += ' ' + this.cssClass;
     }
@@ -105,7 +105,7 @@ export class FlyoutButton {
     );
 
     let shadow;
-    if (!this.isLabel_) {
+    if (!this.isLabel) {
       // Shadow rectangle (light source does not mirror in RTL).
       shadow = dom.createSvgElement(
         Svg.RECT,
@@ -123,7 +123,7 @@ export class FlyoutButton {
     const rect = dom.createSvgElement(
       Svg.RECT,
       {
-        'class': this.isLabel_
+        'class': this.isLabel
           ? 'blocklyFlyoutLabelBackground'
           : 'blocklyFlyoutButtonBackground',
         'rx': FlyoutButton.BORDER_RADIUS,
@@ -135,7 +135,7 @@ export class FlyoutButton {
     const svgText = dom.createSvgElement(
       Svg.TEXT,
       {
-        'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
+        'class': this.isLabel ? 'blocklyFlyoutLabelText' : 'blocklyText',
         'x': 0,
         'y': 0,
         'text-anchor': 'middle',
@@ -148,7 +148,7 @@ export class FlyoutButton {
       text += '\u200F';
     }
     svgText.textContent = text;
-    if (this.isLabel_) {
+    if (this.isLabel) {
       this.svgText = svgText;
       this.workspace
         .getThemeManager()
@@ -172,7 +172,7 @@ export class FlyoutButton {
     );
     this.height = fontMetrics.height;
 
-    if (!this.isLabel_) {
+    if (!this.isLabel) {
       this.width += 2 * FlyoutButton.TEXT_MARGIN_X;
       this.height += 2 * FlyoutButton.TEXT_MARGIN_Y;
       shadow?.setAttribute('width', String(this.width));
@@ -227,8 +227,8 @@ export class FlyoutButton {
   }
 
   /** @returns Whether or not the button is a label. */
-  isLabel(): boolean {
-    return this.isLabel_;
+  isButtonLabel(): boolean {
+    return this.isLabel;
   }
 
   /**
@@ -279,19 +279,19 @@ export class FlyoutButton {
       gesture.cancel();
     }
 
-    if (this.isLabel_ && this.callbackKey) {
+    if (this.isLabel && this.callbackKey) {
       console.warn(
         'Labels should not have callbacks. Label text: ' + this.text,
       );
     } else if (
-      !this.isLabel_ &&
+      !this.isLabel &&
       !(
         this.callbackKey &&
         this.targetWorkspace.getButtonCallback(this.callbackKey)
       )
     ) {
       console.warn('Buttons should have callbacks. Button text: ' + this.text);
-    } else if (!this.isLabel_) {
+    } else if (!this.isLabel) {
       const callback = this.targetWorkspace.getButtonCallback(this.callbackKey);
       if (callback) {
         callback(this);

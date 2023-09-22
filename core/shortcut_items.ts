@@ -59,7 +59,8 @@ export function registerDelete() {
       return (
         !workspace.options.readOnly &&
         selected != null &&
-        selected.isDeletable()
+        selected.isDeletable() &&
+        !Gesture.inProgress()
       );
     },
     callback(workspace, e) {
@@ -68,10 +69,6 @@ export function registerDelete() {
       // Do this first to prevent an error in the delete code from resulting in
       // data loss.
       e.preventDefault();
-      // Don't delete while dragging.  Jeez.
-      if (Gesture.inProgress()) {
-        return false;
-      }
       (common.getSelected() as BlockSvg).checkAndDelete();
       return true;
     },

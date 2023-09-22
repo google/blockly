@@ -59,7 +59,6 @@
   "types": "./dist/index.d.ts",
   "umd": "./blockly.min.js",
   "unpkg": "./blockly.min.js",
-  "types": "./index.d.ts",
   "browser": {
     "./node.js": "./browser.js",
     "./core.js": "./core-browser.js",

@@ -20,7 +20,7 @@ import type {BlockMove} from './events_block_move.js';
 import type {CommentCreate} from './events_comment_create.js';
 import type {CommentMove} from './events_comment_move.js';
 import type {ViewportChange} from './events_viewport.js';
-import { isProcedureBlock } from '../procedures.js';
+import { isProcedureBlock } from '../interfaces/i_procedure_block.js'
 
 /** Group ID for new events.  Grouped events are indivisible. */
 let group = '';

@@ -2184,6 +2184,26 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     return this.scale;
   }
 
+// Add two new methods to WorkspaceSvg
+
+/**
+ * Scroll the workspace horizontally by a relative amount.
+ * @param {number} deltaX Pixels to scroll horizontally.
+ */
+workspace.scrollHorizontal(deltaX) {
+  // Use existing scroll method with updated x
+  this.scroll(this.scrollX + deltaX, this.scrollY); 
+}
+
+/** 
+ * Scroll the workspace vertically by a relative amount.
+ * @param {number} deltaY Pixels to scroll vertically.
+ */
+workspace.scrollVertical(deltaY) {
+  // Use existing scroll method with updated y
+  this.scroll(this.scrollX, this.scrollY + deltaY);
+}
+  
   /**
  * Scroll the workspace to a specified offset (in pixels), keeping in the
  * workspace bounds. See comment on workspaceSvg.scrollX for more detail on

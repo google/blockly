@@ -20,6 +20,7 @@ import type {BlockMove} from './events_block_move.js';
 import type {CommentCreate} from './events_comment_create.js';
 import type {CommentMove} from './events_comment_move.js';
 import type {ViewportChange} from './events_viewport.js';
+import { isProcedureBlock } from '../procedures.js';
 
 /** Group ID for new events.  Grouped events are indivisible. */
 let group = '';
@@ -542,6 +543,10 @@ export function disableOrphans(event: Abstract) {
         if (parent && parent.isEnabled()) {
           const children = block.getDescendants(false);
           for (let i = 0, child; (child = children[i]); i++) {
+            // Check if the block is a procedure block and if its procedure model is enabled
+            if(isProcedureBlock(child) && !child.getProcedureModel().getEnabled()){
+              continue;
+            }
             child.setEnabled(true);
           }
         } else if (

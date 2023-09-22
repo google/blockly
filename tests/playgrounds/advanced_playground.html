@@ -22,6 +22,7 @@
       function start() {
         setBackgroundColour();
         initPlayground();
+        workspace.addChangeListener(Blockly.Events.disableOrphans);
       }
 
       function createWorkspace(blocklyDiv, options) {

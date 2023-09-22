@@ -267,11 +267,11 @@ export class HorizontalFlyout extends Flyout {
     for (let i = 0, item; (item = contents[i]); i++) {
       if (item.type === 'block') {
         const block = item.block;
-        // CHANGE: Checked whether block is undefined:
-        if (typeof block === "undefined") {
+
+        if (block === undefined || block === null) { {
           continue;
         }
-        // CHANGE: Removed ! from after the remaining uses of block within the for loop.
+
         const allBlocks = block.getDescendants(false);
 
         for (let j = 0, child; (child = allBlocks[j]); j++) {

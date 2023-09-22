@@ -358,7 +358,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       throw new UnattachedFieldError();
     }
     WidgetDiv.show(this, block.RTL, this.widgetDispose_.bind(this));
-    this.htmlInput_ = this.widgetCreate_() as HTMLInputElement;
+    this.htmlInput_ = this.widgetCreate_();
     this.isBeingEdited_ = true;
     this.valueWhenEditorWasOpened_ = this.value_;
 

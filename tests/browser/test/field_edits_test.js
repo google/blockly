@@ -7,7 +7,7 @@
 /**
  * @fileoverview Node.js script to run Automated tests in Chrome, via webdriver.
  */
-import { myNewFunction } from './test_setup';
+import {myNewFunction} from './test_setup';
 const chai = require('chai');
 const {
   testSetup,

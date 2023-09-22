@@ -567,12 +567,12 @@ module.exports = {
   PAUSE_TIME,
 };
 
-
-async function myNewFunction() {
+async function myNewFunction(browser) {
   // Click on the workspace to exit the field editor
-const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
-await workspace.click();
-await browser.pause(PAUSE_TIME);
+  // const browser;
+  const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
+  await workspace.click();
+  await browser.pause(PAUSE_TIME);
 }
 
-export { myNewFunction };
+export {myNewFunction};

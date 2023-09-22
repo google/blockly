@@ -233,7 +233,7 @@ export class VerticalFlyout extends Flyout {
     for (let i = 0, item; (item = contents[i]); i++) {
       if (item.type === 'block') {
         const block = item.block;
-        if(block == undefined || block == null) {
+        if (block == undefined || block == null) {
           continue;
         }
         const allBlocks = block.getDescendants(false);

@@ -25,6 +25,9 @@ async function runMochaTestsInBrowser() {
         args: ['--allow-file-access-from-files'],
       },
     },
+    services: [
+      ['selenium-standalone'],
+    ],
     logLevel: 'warn',
   };
 

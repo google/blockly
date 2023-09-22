@@ -233,6 +233,9 @@ export class VerticalFlyout extends Flyout {
     for (let i = 0, item; (item = contents[i]); i++) {
       if (item.type === 'block') {
         const block = item.block;
+        if(block == undefined || block == null){
+          continue;
+        }
         const allBlocks = block!.getDescendants(false);
         for (let j = 0, child; (child = allBlocks[j]); j++) {
           // Mark blocks as being inside a flyout.  This is used to detect and
@@ -240,15 +243,15 @@ export class VerticalFlyout extends Flyout {
           // a block.
           child.isInFlyout = true;
         }
-        const root = block!.getSvgRoot();
-        const blockHW = block!.getHeightWidth();
-        const moveX = block!.outputConnection
+        const root = block.getSvgRoot();
+        const blockHW = block.getHeightWidth();
+        const moveX = block.outputConnection
           ? cursorX - this.tabWidth_
           : cursorX;
-        block!.moveBy(moveX, cursorY);
+        block.moveBy(moveX, cursorY);
 
         const rect = this.createRect_(
-          block!,
+          block,
           this.RTL ? moveX - blockHW.width : moveX,
           cursorY,
           blockHW,

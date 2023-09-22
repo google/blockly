@@ -73,6 +73,7 @@
     "@microsoft/api-documenter": "^7.22.4",
     "@microsoft/api-extractor": "^7.29.5",
     "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@wdio/selenium-standalone-service": "^8.0.2",
     "async-done": "^2.0.0",
     "chai": "^4.2.0",
     "concurrently": "^8.0.1",
@@ -101,8 +102,9 @@
     "prettier": "3.0.3",
     "readline-sync": "^1.4.10",
     "rimraf": "^5.0.0",
+    "selenium-standalone": "^9.1.1",
     "typescript": "^5.0.2",
-    "webdriverio": "^8.16.7",
+    "webdriverio": "^8.0.5",
     "yargs": "^17.2.1"
   },
   "dependencies": {

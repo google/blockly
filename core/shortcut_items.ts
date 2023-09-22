@@ -194,22 +194,28 @@ export function registerPaste() {
     callback() {
       if (!copyData || !copyCoords || !copyWorkspace) return false;
       const {
-        left: vpLeft,
-        top: vpTop,
-        width: vpWidth,
-        height: vpHeight,
+        left: viewportLeft,
+        top: viewportTop,
+        width: viewportWidth,
+        height: viewportHeight,
       } = copyWorkspace.getMetricsManager().getViewMetrics(true);
+      const selected = common.getSelected() as BlockSvg;
+
+      // Pass the default copy coordinates when
+      // default location is inside viewport.
       if (
-        copyCoords.x >= vpLeft &&
-        copyCoords.x <= vpLeft + vpWidth &&
-        copyCoords.y >= vpTop &&
-        copyCoords.y <= vpTop + vpHeight
+        copyCoords.x >= viewportLeft &&
+        copyCoords.x + selected.width <= viewportLeft + viewportWidth &&
+        copyCoords.y >= viewportTop &&
+        copyCoords.y + selected.height <= viewportTop + viewportHeight
       ) {
         return !!clipboard.paste(copyData, copyWorkspace, copyCoords);
       } else {
+        // Pass the center of the new viewport
+        // to paste the copied block
         const centerCoords = new Coordinate(
-          vpLeft + Math.trunc(vpWidth / 2),
-          vpTop + Math.trunc(vpHeight / 2),
+          viewportLeft + Math.trunc(viewportWidth / 2 - selected.width / 2),
+          viewportTop + Math.trunc(viewportHeight / 2 - selected.height / 2),
         );
         return !!clipboard.paste(copyData, copyWorkspace, centerCoords);
       }

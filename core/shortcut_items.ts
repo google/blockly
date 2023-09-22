@@ -12,7 +12,7 @@ import * as common from './common.js';
 import {Gesture} from './gesture.js';
 import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
-import { Coordinate } from './utils.js';
+import {Coordinate} from './utils.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -193,19 +193,24 @@ export function registerPaste() {
     },
     callback() {
       if (!copyData || !copyCoords || !copyWorkspace) return false;
-      const {left:vpLeft, top:vpTop, width:vpWidth, height:vpHeight } =  
-              copyWorkspace.getMetricsManager().getViewMetrics(true);
-      if(
-        copyCoords.x >= vpLeft
-        && copyCoords.x <= (vpLeft + vpWidth)
-        && copyCoords.y >= vpTop
-        && copyCoords.y <= (vpTop + vpHeight)
-        ){
+      const {
+        left: vpLeft,
+        top: vpTop,
+        width: vpWidth,
+        height: vpHeight,
+      } = copyWorkspace.getMetricsManager().getViewMetrics(true);
+      if (
+        copyCoords.x >= vpLeft &&
+        copyCoords.x <= vpLeft + vpWidth &&
+        copyCoords.y >= vpTop &&
+        copyCoords.y <= vpTop + vpHeight
+      ) {
         return !!clipboard.paste(copyData, copyWorkspace, copyCoords);
-      }
-      else{
-        const centerCoords = new Coordinate(vpLeft + Math.trunc(vpWidth / 2),
-                                            vpTop + Math.trunc(vpHeight / 2));
+      } else {
+        const centerCoords = new Coordinate(
+          vpLeft + Math.trunc(vpWidth / 2),
+          vpTop + Math.trunc(vpHeight / 2),
+        );
         return !!clipboard.paste(copyData, copyWorkspace, centerCoords);
       }
     },

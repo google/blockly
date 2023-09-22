@@ -93,7 +93,9 @@ export class FlyoutButton {
    * @returns The button's SVG group.
    */
   createDom(): SVGElement {
-    let cssClass = this.isFlyoutLabel ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton';
+    let cssClass = this.isFlyoutLabel
+      ? 'blocklyFlyoutLabel'
+      : 'blocklyFlyoutButton';
     if (this.cssClass) {
       cssClass += ' ' + this.cssClass;
     }

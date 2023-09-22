@@ -47,6 +47,7 @@ async function runGeneratorsInBrowser(outputDir) {
       },
     },
     logLevel: 'warn',
+    services: ['selenium-standalone']
   };
 
   // Run in headless mode on Github Actions.

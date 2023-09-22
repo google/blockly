@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {Coordinate} from '../utils';
+import {Coordinate} from '../utils/coordinate.js';
 
 // Former goog.module ID: Blockly.IMovable
 

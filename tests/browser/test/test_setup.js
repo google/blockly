@@ -566,3 +566,13 @@ module.exports = {
   scrollFlyout,
   PAUSE_TIME,
 };
+
+
+async function myNewFunction() {
+  // Click on the workspace to exit the field editor
+const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
+await workspace.click();
+await browser.pause(PAUSE_TIME);
+}
+
+export { myNewFunction };

@@ -2185,57 +2185,56 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   }
 
   /**
- * Scroll the workspace to a specified offset (in pixels), keeping in the
- * workspace bounds. See comment on workspaceSvg.scrollX for more detail on
- * the meaning of these values.
- *
- * @param x Target X to scroll to.
- * @param y Target Y to scroll to.
- */
-scroll(x: number, y: number) {
-  this.hideChaff(/* opt_onlyClosePopups= */ true);
+   * Scroll the workspace to a specified offset (in pixels), keeping in the
+   * workspace bounds. See comment on workspaceSvg.scrollX for more detail on
+   * the meaning of these values.
+   *
+   * @param x Target X to scroll to.
+   * @param y Target Y to scroll to.
+   */
+  scroll(x: number, y: number) {
+    this.hideChaff(/* opt_onlyClosePopups= */ true);
 
-  // Keep scrolling within the bounds of the content.
-  const metrics = this.getMetrics();
-  // Canvas coordinates (aka scroll coordinates) have inverse directionality
-  // to workspace coordinates so we have to inverse them.
-  x = Math.min(x, -metrics.scrollLeft);
-  y = Math.min(y, -metrics.scrollTop);
-  const maxXDisplacement = Math.max(
-    0,
-    metrics.scrollWidth - metrics.viewWidth,
-  );
-  const maxXScroll = metrics.scrollLeft + maxXDisplacement;
-  const maxYDisplacement = Math.max(
-    0,
-    metrics.scrollHeight - metrics.viewHeight,
-  );
-  const maxYScroll = metrics.scrollTop + maxYDisplacement;
-  x = Math.max(x, -maxXScroll);
-  y = Math.max(y, -maxYScroll);
-  this.scrollX = x;
-  this.scrollY = y;
-
-  if (this.scrollbar) {
-    // The content position (displacement from the content's top-left to the
-    // origin) plus the scroll position (displacement from the view's top-left
-    // to the origin) gives us the distance from the view's top-left to the
-    // content's top-left. Then we negate this so we get the displacement from
-    // the content's top-left to the view's top-left, matching the
-    // directionality of the scrollbars.
-    this.scrollbar.set(
-      -(x + metrics.scrollLeft),
-      -(y + metrics.scrollTop),
-      false,
+    // Keep scrolling within the bounds of the content.
+    const metrics = this.getMetrics();
+    // Canvas coordinates (aka scroll coordinates) have inverse directionality
+    // to workspace coordinates so we have to inverse them.
+    x = Math.min(x, -metrics.scrollLeft);
+    y = Math.min(y, -metrics.scrollTop);
+    const maxXDisplacement = Math.max(
+      0,
+      metrics.scrollWidth - metrics.viewWidth,
     );
-  }
-  // We have to shift the translation so that when the canvas is at 0, 0 the
-  // workspace origin is not underneath the toolbox.
-  x += metrics.absoluteLeft;
-  y += metrics.absoluteTop;
-  this.translate(x, y);
-}
+    const maxXScroll = metrics.scrollLeft + maxXDisplacement;
+    const maxYDisplacement = Math.max(
+      0,
+      metrics.scrollHeight - metrics.viewHeight,
+    );
+    const maxYScroll = metrics.scrollTop + maxYDisplacement;
+    x = Math.max(x, -maxXScroll);
+    y = Math.max(y, -maxYScroll);
+    this.scrollX = x;
+    this.scrollY = y;
 
+    if (this.scrollbar) {
+      // The content position (displacement from the content's top-left to the
+      // origin) plus the scroll position (displacement from the view's top-left
+      // to the origin) gives us the distance from the view's top-left to the
+      // content's top-left. Then we negate this so we get the displacement from
+      // the content's top-left to the view's top-left, matching the
+      // directionality of the scrollbars.
+      this.scrollbar.set(
+        -(x + metrics.scrollLeft),
+        -(y + metrics.scrollTop),
+        false,
+      );
+    }
+    // We have to shift the translation so that when the canvas is at 0, 0 the
+    // workspace origin is not underneath the toolbox.
+    x += metrics.absoluteLeft;
+    y += metrics.absoluteTop;
+    this.translate(x, y);
+  }
 
   /**
    * Find the block on this workspace with the specified ID.

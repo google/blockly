@@ -268,7 +268,7 @@ export class HorizontalFlyout extends Flyout {
       if (item.type === 'block') {
         const block = item.block;
 
-        if (block === undefined || block === null) { {
+        if (block === undefined || block === null) {
           continue;
         }
 

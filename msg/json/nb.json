@@ -41,6 +41,7 @@
 	"NEW_VARIABLE_TITLE": "Nytt variabelnavn:",
 	"VARIABLE_ALREADY_EXISTS": "En variabel med navn «%1» finnes allerede.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "En variabel med navn «%1» finnes allerede for en annen type: «%2».",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "En variabel med navn «%1» finnes allerede som en parameter i prosedyren «%2».",
 	"DELETE_VARIABLE_CONFIRMATION": "Slett %1 bruk av variabelen «%2»?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Kan ikke slette variabelen «%1» fordi den er del av definisjonen for funksjonen «%2»",
 	"DELETE_VARIABLE": "Slett variabelen «%1»",

@@ -58,6 +58,7 @@
 	"NEW_VARIABLE_TITLE": "Yeni değişken ismi:",
 	"VARIABLE_ALREADY_EXISTS": "'%1' isimli değişken adı zaten var.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "'%1' isimli değişken '%2' tipli başka bir değişkende tanımlı.",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "'%1' adlı bir değişken, '%2' prosedüründe bir parametre olarak zaten mevcut.",
 	"DELETE_VARIABLE_CONFIRMATION": "'%2' değişkeninin %1 kullanımını silmek istiyor musunuz?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "'%1' değişkeni, '%2' fonksiyonunun tanımının bir parçası olduğu için silinemez",
 	"DELETE_VARIABLE": "'%1' değişkenini silmek istiyor musunuz?",

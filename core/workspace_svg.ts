@@ -2191,7 +2191,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param x Target X to scroll to.
    * @param y Target Y to scroll to.
-   * @internal
    */
   scroll(x: number, y: number) {
     this.hideChaff(/* opt_onlyClosePopups= */ true);

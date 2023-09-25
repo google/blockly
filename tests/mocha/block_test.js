@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.blocks');
-
 import {ConnectionType} from '../../build/src/core/connection_type.js';
 import {createDeprecationWarningStub} from './test_helpers/warnings.js';
 import {createRenderedBlock} from './test_helpers/block_definitions.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
+import {EndRowInput} from '../../build/src/core/inputs/end_row_input.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -1612,6 +1611,98 @@ suite('Blocks', function () {
       });
     });
 
+    suite('Warning icons', function () {
+      setup(function () {
+        this.workspace = Blockly.inject('blocklyDiv');
+
+        this.block = this.workspace.newBlock('stack_block');
+        this.block.initSvg();
+        this.block.render();
+      });
+
+      teardown(function () {
+        workspaceTeardown.call(this, this.workspace);
+      });
+
+      test('Block with no warning text does not have warning icon', function () {
+        const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
+
+        chai.assert.isUndefined(
+          icon,
+          'Block with no warning should not have warning icon',
+        );
+      });
+
+      test('Set warning text creates new icon if none existed', function () {
+        const text = 'Warning Text';
+
+        this.block.setWarningText(text);
+
+        const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
+        chai.assert.equal(
+          icon.getText(),
+          text,
+          'Expected warning icon text to be set',
+        );
+      });
+
+      test('Set warning text adds text to existing icon if needed', function () {
+        const text1 = 'Warning Text 1';
+        const text2 = 'Warning Text 2';
+
+        this.block.setWarningText(text1, '1');
+        this.block.setWarningText(text2, '2');
+
+        const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
+        chai.assert.equal(icon.getText(), `${text1}\n${text2}`);
+      });
+
+      test('Clearing all warning text deletes the warning icon', function () {
+        const text = 'Warning Text';
+        this.block.setWarningText(text);
+
+        this.block.setWarningText(null);
+
+        const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
+        chai.assert.isUndefined(
+          icon,
+          'Expected warning icon to be undefined after deleting all warning text',
+        );
+      });
+
+      test('Clearing specific warning does not delete the icon if other warnings present', function () {
+        const text1 = 'Warning Text 1';
+        const text2 = 'Warning Text 2';
+
+        this.block.setWarningText(text1, '1');
+        this.block.setWarningText(text2, '2');
+        this.block.setWarningText(null, '1');
+
+        const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
+        chai.assert.equal(
+          icon.getText(),
+          text2,
+          'Expected first warning text to be deleted',
+        );
+      });
+
+      test('Clearing specific warning removes icon if it was only warning present', function () {
+        const text1 = 'Warning Text 1';
+        const text2 = 'Warning Text 2';
+
+        this.block.setWarningText(text1, '1');
+        this.block.setWarningText(text2, '2');
+        this.block.setWarningText(null, '1');
+        this.block.setWarningText(null, '2');
+
+        const icon = this.block.getIcon(Blockly.icons.WarningIcon.TYPE);
+        chai.assert.isUndefined(
+          icon,
+          'Expected warning icon to be deleted after all warning text is cleared',
+        );
+      });
+    });
+
     suite('Bubbles and collapsing', function () {
       setup(function () {
         this.workspace = Blockly.inject('blocklyDiv');
@@ -2400,6 +2491,27 @@ suite('Blocks', function () {
         'recordUndo should be reset to true after init',
       );
       chai.assert.isTrue(initCalled, 'expected init function to be called');
+    });
+  });
+
+  suite('EndOfRow', function () {
+    setup(function () {
+      Blockly.defineBlocksWithJsonArray([
+        {
+          'type': 'end_row_test_block',
+          'message0': 'Row1\nRow2',
+          'inputsInline': true,
+        },
+      ]);
+    });
+    test('Newline is converted to an end-row input', function () {
+      const block = this.workspace.newBlock('end_row_test_block');
+      chai.assert.equal(block.inputList[0].fieldRow[0].getValue(), 'Row1');
+      chai.assert.isTrue(
+        block.inputList[0] instanceof EndRowInput,
+        'newline should be converted to an end-row input',
+      );
+      chai.assert.equal(block.inputList[1].fieldRow[0].getValue(), 'Row2');
     });
   });
 });

@@ -11,8 +11,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.utils.Rect');
+// Former goog.module ID: Blockly.utils.Rect
 
 /**
  * Class for representing rectangular regions.

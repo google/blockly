@@ -8,8 +8,7 @@
  * @fileoverview Generating Python for list blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Python.lists');
+// Former goog.module ID: Blockly.Python.lists
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';

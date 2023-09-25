@@ -10,7 +10,9 @@ const {
   testFileLocations,
   getAllBlocks,
   getBlockElementById,
+  clickBlock,
   contextMenuSelect,
+  PAUSE_TIME,
 } = require('./test_setup');
 const {Key} = require('webdriverio');
 
@@ -98,7 +100,6 @@ const startBlocks = {
     ],
   },
 };
-const pauseLength = 200;
 
 suite('Delete blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
@@ -130,15 +131,13 @@ suite('Delete blocks', function (done) {
     (await getBlockElementById(this.browser, firstBlockId)).waitForExist({
       timeout: 2000,
     });
+    this.firstBlock = await getBlockElementById(this.browser, firstBlockId);
   });
 
   test('Delete block using backspace key', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    const block = (await getBlockElementById(this.browser, firstBlockId)).$(
-      '.blocklyPath',
-    );
-    await block.click();
+    await clickBlock(this.browser, this.firstBlock, {button: 1});
     await this.browser.keys([Key.Backspace]);
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(
@@ -151,10 +150,7 @@ suite('Delete blocks', function (done) {
   test('Delete block using delete key', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using delete key.
-    const block = (await getBlockElementById(this.browser, firstBlockId)).$(
-      '.blocklyPath',
-    );
-    await block.click();
+    await clickBlock(this.browser, this.firstBlock, {button: 1});
     await this.browser.keys([Key.Delete]);
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(
@@ -167,8 +163,7 @@ suite('Delete blocks', function (done) {
   test('Delete block using context menu', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using context menu.
-    const block = await getBlockElementById(this.browser, firstBlockId);
-    await contextMenuSelect(this.browser, block, 'Delete 2 Blocks');
+    await contextMenuSelect(this.browser, this.firstBlock, 'Delete 2 Blocks');
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(
       before - 2,
@@ -180,14 +175,12 @@ suite('Delete blocks', function (done) {
   test('Undo block deletion', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    const block = (await getBlockElementById(this.browser, firstBlockId)).$(
-      '.blocklyPath',
-    );
-    await block.click();
+    await clickBlock(this.browser, this.firstBlock, {button: 1});
     await this.browser.keys([Key.Backspace]);
-    await this.browser.pause(pauseLength);
+    await this.browser.pause(PAUSE_TIME);
     // Undo
-    await this.browser.keys([Key.Ctrl, 'Z']);
+    await this.browser.keys([Key.Ctrl, 'z']);
+    await this.browser.pause(PAUSE_TIME);
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(
       before,
@@ -199,18 +192,15 @@ suite('Delete blocks', function (done) {
   test('Redo block deletion', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    const block = (await getBlockElementById(this.browser, firstBlockId)).$(
-      '.blocklyPath',
-    );
-    await block.click();
+    await clickBlock(this.browser, this.firstBlock, {button: 1});
     await this.browser.keys([Key.Backspace]);
-    await this.browser.pause(pauseLength);
+    await this.browser.pause(PAUSE_TIME);
     // Undo
-    await this.browser.keys([Key.Ctrl, 'Z']);
-    await this.browser.pause(pauseLength);
+    await this.browser.keys([Key.Ctrl, 'z']);
+    await this.browser.pause(PAUSE_TIME);
     // Redo
-    await this.browser.keys([Key.Ctrl, Key.Shift, 'Z']);
-    await this.browser.pause(pauseLength);
+    await this.browser.keys([Key.Ctrl, Key.Shift, 'z']);
+    await this.browser.pause(PAUSE_TIME);
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(
       before - 2,

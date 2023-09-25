@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.libraryBlocks.variables');
+// Former goog.module ID: Blockly.libraryBlocks.variables
 
 import * as ContextMenu from '../core/contextmenu.js';
 import * as Extensions from '../core/extensions.js';
 import * as Variables from '../core/variables.js';
-import * as xmlUtils from '../core/utils/xml.js';
 import type {Block} from '../core/block.js';
 import type {
   ContextMenuOption,
@@ -103,18 +101,16 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
         contextMenuMsg = Msg['VARIABLES_SET_CREATE_GET'];
       }
 
-      const name = this.getField('VAR')!.getText();
-      const xmlField = xmlUtils.createElement('field');
-      xmlField.setAttribute('name', 'VAR');
-      xmlField.appendChild(xmlUtils.createTextNode(name));
-      const xmlBlock = xmlUtils.createElement('block');
-      xmlBlock.setAttribute('type', oppositeType);
-      xmlBlock.appendChild(xmlField);
+      const varField = this.getField('VAR')!;
+      const newVarBlockState = {
+        type: oppositeType,
+        fields: {VAR: varField.saveState(true)},
+      };
 
       options.push({
         enabled: this.workspace.remainingCapacity() > 0,
-        text: contextMenuMsg.replace('%1', name),
-        callback: ContextMenu.callbackFactory(this, xmlBlock),
+        text: contextMenuMsg.replace('%1', varField.getText()),
+        callback: ContextMenu.callbackFactory(this, newVarBlockState),
       });
       // Getter blocks have the option to rename or delete that variable.
     } else {

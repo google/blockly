@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.CommentDelete');
+// Former goog.module ID: Blockly.Events.CommentDelete
 
 import * as registry from '../registry.js';
 import type {WorkspaceComment} from '../workspace_comment.js';

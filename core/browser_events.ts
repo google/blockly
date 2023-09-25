@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.browserEvents');
+// Former goog.module ID: Blockly.browserEvents
 
 import * as Touch from './touch.js';
 import * as userAgent from './utils/useragent.js';

@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.lists');
-
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {
   sharedTestSetup,

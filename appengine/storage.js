@@ -130,6 +130,8 @@ BlocklyStorage.handleRequest_ = function() {
           BlocklyStorage.alert(BlocklyStorage.HASH_ERROR.replace('%1',
               window.location.hash));
         } else {
+          // Remove poison line to prevent raw content from being served.
+          data = data.replace(/^\{\[\(\< UNTRUSTED CONTENT \>\)\]\}\n/, '');
           BlocklyStorage.loadXml_(data, BlocklyStorage.httpRequest_.workspace);
         }
       }

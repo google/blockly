@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly');
+// Former goog.module ID: Blockly
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_create.js';
@@ -140,7 +139,7 @@ import {ICollapsibleToolboxItem} from './interfaces/i_collapsible_toolbox_item.j
 import {IComponent} from './interfaces/i_component.js';
 import {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
-import {ICopyable} from './interfaces/i_copyable.js';
+import {ICopyable, isCopyable} from './interfaces/i_copyable.js';
 import {IDeletable} from './interfaces/i_deletable.js';
 import {IDeleteArea} from './interfaces/i_delete_area.js';
 import {IDragTarget} from './interfaces/i_drag_target.js';
@@ -152,6 +151,7 @@ import {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
 import {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import {IMovable} from './interfaces/i_movable.js';
 import {IObservable, isObservable} from './interfaces/i_observable.js';
+import {IPaster, isPaster} from './interfaces/i_paster.js';
 import {IPositionable} from './interfaces/i_positionable.js';
 import {IRegistrable} from './interfaces/i_registrable.js';
 import {ISelectable} from './interfaces/i_selectable.js';
@@ -591,7 +591,7 @@ export {IComponent};
 export {IConnectionChecker};
 export {IContextMenu};
 export {icons};
-export {ICopyable};
+export {ICopyable, isCopyable};
 export {IDeletable};
 export {IDeleteArea};
 export {IDragTarget};
@@ -606,6 +606,7 @@ export {Input};
 export {inputs};
 export {InsertionMarkerManager};
 export {IObservable, isObservable};
+export {IPaster, isPaster};
 export {IPositionable};
 export {IRegistrable};
 export {ISelectable};

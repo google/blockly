@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.serialization.blocks');
+// Former goog.module ID: Blockly.serialization.blocks
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
@@ -113,7 +112,7 @@ export function save(
   saveAttributes(block, state as AnyDuringMigration);
   // AnyDuringMigration because:  Argument of type '{ type: string; id: string;
   // }' is not assignable to parameter of type 'State'.
-  saveExtraState(block, state as AnyDuringMigration);
+  saveExtraState(block, state as AnyDuringMigration, doFullSerialization);
   // AnyDuringMigration because:  Argument of type '{ type: string; id: string;
   // }' is not assignable to parameter of type 'State'.
   saveIcons(block, state as AnyDuringMigration, doFullSerialization);
@@ -183,15 +182,22 @@ function saveCoords(block: Block, state: State) {
   state['x'] = Math.round(workspace.RTL ? workspace.getWidth() - xy.x : xy.x);
   state['y'] = Math.round(xy.y);
 }
+
 /**
  * Adds any extra state the block may provide to the given state object.
  *
  * @param block The block to serialize the extra state of.
  * @param state The state object to append to.
+ * @param doFullSerialization Whether or not to serialize the full state of the
+ *     extra state (rather than possibly saving a reference to some state).
  */
-function saveExtraState(block: Block, state: State) {
+function saveExtraState(
+  block: Block,
+  state: State,
+  doFullSerialization: boolean,
+) {
   if (block.saveExtraState) {
-    const extraState = block.saveExtraState();
+    const extraState = block.saveExtraState(doFullSerialization);
     if (extraState !== null) {
       state['extraState'] = extraState;
     }
@@ -393,10 +399,16 @@ export function appendInternal(
   }
   eventUtils.disable();
 
-  const block = appendPrivate(state, workspace, {parentConnection, isShadow});
+  let block;
+  try {
+    block = appendPrivate(state, workspace, {parentConnection, isShadow});
+  } finally {
+    eventUtils.enable();
+  }
 
-  eventUtils.enable();
-  eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
+  if (eventUtils.isEnabled()) {
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
+  }
   eventUtils.setGroup(existingGroup);
   eventUtils.setRecordUndo(prevRecordUndo);
 

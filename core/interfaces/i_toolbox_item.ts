@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.IToolboxItem');
+// Former goog.module ID: Blockly.IToolboxItem
 
 /**
  * Interface for an item in the toolbox.

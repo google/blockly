@@ -8,8 +8,7 @@
  * @fileoverview Generating JavaScript for loop blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript.loops');
+// Former goog.module ID: Blockly.JavaScript.loops
 
 import * as stringUtils from '../../core/utils/string.js';
 import {NameType} from '../../core/names.js';
@@ -66,8 +65,8 @@ export function controls_whileUntil(block, generator) {
 export function controls_for(block, generator) {
   // For loop.
   const variable0 =
-      generator.nameDB_.getName(
-        block.getFieldValue('VAR'), NameType.VARIABLE);
+      generator.getVariableName(
+        block.getFieldValue('VAR'));
   const argument0 =
       generator.valueToCode(block, 'FROM', Order.ASSIGNMENT) || '0';
   const argument1 =
@@ -129,8 +128,7 @@ export function controls_for(block, generator) {
 export function controls_forEach(block, generator) {
   // For each loop.
   const variable0 =
-      generator.nameDB_.getName(
-        block.getFieldValue('VAR'), NameType.VARIABLE);
+      generator.getVariableName(block.getFieldValue('VAR'));
   const argument0 =
       generator.valueToCode(block, 'LIST', Order.ASSIGNMENT) ||
       '[]';

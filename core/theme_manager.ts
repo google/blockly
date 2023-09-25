@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ThemeManager');
+// Former goog.module ID: Blockly.ThemeManager
 
 import type {Theme} from './theme.js';
 import * as arrayUtils from './utils/array.js';

@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.serialization.workspaces');
+// Former goog.module ID: Blockly.serialization.workspaces
 
 import * as eventUtils from '../events/utils.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';

@@ -10,8 +10,7 @@
  * @suppress {extraRequire}
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.PHP.all');
+// Former goog.module ID: Blockly.PHP.all
 
 import {PhpGenerator} from './php/php_generator.js';
 import * as colour from './php/colour.js';

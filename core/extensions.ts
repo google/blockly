@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Extensions');
+// Former goog.module ID: Blockly.Extensions
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
@@ -389,16 +388,6 @@ export function runAfterPageLoad(fn: () => void) {
  * Builds an extension function that will map a dropdown value to a tooltip
  * string.
  *
- * This method includes multiple checks to ensure tooltips, dropdown options,
- * and message references are aligned. This aims to catch errors as early as
- * possible, without requiring developers to manually test tooltips under each
- * option. After the page is loaded, each tooltip text string will be checked
- * for matching message keys in the internationalized string table. Deferring
- * this until the page is loaded decouples loading dependencies. Later, upon
- * loading the first block of any given type, the extension will validate every
- * dropdown option has a matching tooltip in the lookupTable.  Errors are
- * reported as warnings in the console, and are never fatal.
- *
  * @param dropdownName The name of the field whose value is the key to the
  *     lookup table.
  * @param lookupTable The table of field values to tooltip text.
@@ -407,27 +396,12 @@ export function runAfterPageLoad(fn: () => void) {
 export function buildTooltipForDropdown(
   dropdownName: string,
   lookupTable: {[key: string]: string},
-): Function {
+): (this: Block) => void {
   // List of block types already validated, to minimize duplicate warnings.
-  const blockTypesChecked: AnyDuringMigration[] = [];
+  const blockTypesChecked: string[] = [];
 
-  // Check the tooltip string messages for invalid references.
-  // Wait for load, in case Blockly.Msg is not yet populated.
-  // runAfterPageLoad() does not run in a Node.js environment due to lack
-  // of document object, in which case skip the validation.
-  if (typeof document === 'object') {
-    // Relies on document.readyState
-    runAfterPageLoad(function () {
-      for (const key in lookupTable) {
-        // Will print warnings if reference is missing.
-        parsing.checkMessageReferences(lookupTable[key]);
-      }
-    });
-  }
-
-  /** The actual extension. */
-  function extensionFn(this: Block) {
-    if (this.type && blockTypesChecked.indexOf(this.type) === -1) {
+  return function (this: Block) {
+    if (blockTypesChecked.indexOf(this.type) === -1) {
       checkDropdownOptionsInTable(this, dropdownName, lookupTable);
       blockTypesChecked.push(this.type);
     }
@@ -435,28 +409,10 @@ export function buildTooltipForDropdown(
     this.setTooltip(
       function (this: Block) {
         const value = String(this.getFieldValue(dropdownName));
-        let tooltip = lookupTable[value];
-        if (tooltip === null) {
-          if (blockTypesChecked.indexOf(this.type) === -1) {
-            // Warn for missing values on generated tooltips.
-            let warning =
-              'No tooltip mapping for value ' +
-              value +
-              ' of field ' +
-              dropdownName;
-            if (this.type !== null) {
-              warning += ' of block type ' + this.type;
-            }
-            console.warn(warning + '.');
-          }
-        } else {
-          tooltip = parsing.replaceMessageReferences(tooltip);
-        }
-        return tooltip;
+        return parsing.replaceMessageReferences(lookupTable[value]);
       }.bind(this),
     );
-  }
-  return extensionFn;
+  };
 }
 
 /**
@@ -472,22 +428,18 @@ function checkDropdownOptionsInTable(
   dropdownName: string,
   lookupTable: {[key: string]: string},
 ) {
-  // Validate all dropdown options have values.
   const dropdown = block.getField(dropdownName);
-  if (dropdown instanceof FieldDropdown && !dropdown.isOptionListDynamic()) {
-    const options = dropdown.getOptions();
-    for (let i = 0; i < options.length; i++) {
-      const optionKey = options[i][1]; // label, then value
-      if (lookupTable[optionKey] === null) {
-        console.warn(
-          'No tooltip mapping for value ' +
-            optionKey +
-            ' of field ' +
-            dropdownName +
-            ' of block type ' +
-            block.type,
-        );
-      }
+  if (!(dropdown instanceof FieldDropdown) || dropdown.isOptionListDynamic()) {
+    return;
+  }
+
+  const options = dropdown.getOptions();
+  for (const [, key] of options) {
+    if (lookupTable[key] === undefined) {
+      console.warn(
+        `No tooltip mapping for value ${key} of field ` +
+          `${dropdownName} of block type ${block.type}.`,
+      );
     }
   }
 }
@@ -505,21 +457,8 @@ function checkDropdownOptionsInTable(
 export function buildTooltipWithFieldText(
   msgTemplate: string,
   fieldName: string,
-): Function {
-  // Check the tooltip string messages for invalid references.
-  // Wait for load, in case Blockly.Msg is not yet populated.
-  // runAfterPageLoad() does not run in a Node.js environment due to lack
-  // of document object, in which case skip the validation.
-  if (typeof document === 'object') {
-    // Relies on document.readyState
-    runAfterPageLoad(function () {
-      // Will print warnings if reference is missing.
-      parsing.checkMessageReferences(msgTemplate);
-    });
-  }
-
-  /** The actual extension. */
-  function extensionFn(this: Block) {
+): (this: Block) => void {
+  return function (this: Block) {
     this.setTooltip(
       function (this: Block) {
         const field = this.getField(fieldName);
@@ -528,8 +467,7 @@ export function buildTooltipWithFieldText(
           .replace('%1', field ? field.getText() : '');
       }.bind(this),
     );
-  }
-  return extensionFn;
+  };
 }
 
 /**

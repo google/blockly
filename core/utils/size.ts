@@ -11,8 +11,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.utils.Size');
+// Former goog.module ID: Blockly.utils.Size
 
 /**
  * Class for representing sizes consisting of a width and height.

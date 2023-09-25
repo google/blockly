@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.InsertionMarkerManager');
+// Former goog.module ID: Blockly.InsertionMarkerManager
 
 import {finishQueuedRenders} from './render_management.js';
 import * as blockAnimations from './block_animations.js';
@@ -240,7 +239,7 @@ export class InsertionMarkerManager {
       result = this.workspace.newBlock(imType);
       result.setInsertionMarker(true);
       if (sourceBlock.saveExtraState) {
-        const state = sourceBlock.saveExtraState();
+        const state = sourceBlock.saveExtraState(true);
         if (state && result.loadExtraState) {
           result.loadExtraState(state);
         }
@@ -612,12 +611,22 @@ export class InsertionMarkerManager {
     insertionMarker.queueRender();
     renderManagement.triggerQueuedRenders();
 
-    // Position so that the existing block doesn't move.
-    insertionMarker.positionNearConnection(imConn, closest);
     // Connect() also renders the insertion marker.
     imConn.connect(closest);
 
+    const originalOffsetToTarget = {
+      x: closest.x - imConn.x,
+      y: closest.y - imConn.y,
+    };
+    const originalOffsetInBlock = imConn.getOffsetInBlock().clone();
+    const imConnConst = imConn;
     renderManagement.finishQueuedRenders().then(() => {
+      // Position so that the existing block doesn't move.
+      insertionMarker?.positionNearConnection(
+        imConnConst,
+        originalOffsetToTarget,
+        originalOffsetInBlock,
+      );
       insertionMarker?.getSvgRoot().setAttribute('visibility', 'visible');
     });
 

@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.registry');
-
 import {assertWarnings} from './test_helpers/warnings.js';
 import {
   sharedTestSetup,

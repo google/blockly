@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.BlockCreate');
+// Former goog.module ID: Blockly.Events.BlockCreate
 
 import type {Block} from '../block.js';
 import * as registry from '../registry.js';
@@ -138,6 +137,7 @@ export class BlockCreate extends BlockBase {
           'the constructor, or call fromJson',
       );
     }
+    if (allShadowBlocks(workspace, this.ids)) return;
     if (forward) {
       blocks.append(this.json, workspace);
     } else {
@@ -154,6 +154,26 @@ export class BlockCreate extends BlockBase {
     }
   }
 }
+/**
+ * Returns true if all blocks in the list are shadow blocks. If so, that means
+ * the top-level block being created is a shadow block. This only happens when a
+ * block that was covering up a shadow block is removed. We don't need to create
+ * an additional block in that case because the original block still has its
+ * shadow block.
+ *
+ * @param workspace Workspace to check for blocks
+ * @param ids A list of block ids that were created in this event
+ * @returns True if all block ids in the list are shadow blocks
+ */
+const allShadowBlocks = function (
+  workspace: Workspace,
+  ids: string[],
+): boolean {
+  const shadows = ids
+    .map((id) => workspace.getBlockById(id))
+    .filter((block) => block && block.isShadow());
+  return shadows.length === ids.length;
+};
 
 export interface BlockCreateJson extends BlockBaseJson {
   xml: string;

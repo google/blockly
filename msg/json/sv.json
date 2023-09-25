@@ -45,6 +45,7 @@
 	"NEW_VARIABLE_TITLE": "Nytt variabelnamn:",
 	"VARIABLE_ALREADY_EXISTS": "En variabel med namnet \"%1\" finns redan.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "En variabel med namnet \"%1\" finns redan för en annan typ: \"%2\".",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "En variabel med namnet \"%1\" finns redan som en parameter i proceduren \"%2\".",
 	"DELETE_VARIABLE_CONFIRMATION": "Radera %1 användningar av variabeln \"%2\"?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Kan inte radera variabeln '%1' eftersom den är en del av definition för funktionen '%2'",
 	"DELETE_VARIABLE": "Radera variabeln \"%1\"",

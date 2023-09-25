@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Xml');
+// Former goog.module ID: Blockly.Xml
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
@@ -213,7 +212,7 @@ export function blockToDom(
     const input = block.inputList[i];
     let container: Element;
     let empty = true;
-    if (input.type === inputTypes.DUMMY) {
+    if (input.type === inputTypes.DUMMY || input.type === inputTypes.END_ROW) {
       continue;
     } else {
       const childBlock = input.connection!.targetBlock();

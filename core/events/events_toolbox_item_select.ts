@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.ToolboxItemSelect');
+// Former goog.module ID: Blockly.Events.ToolboxItemSelect
 
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';

@@ -1,5 +1,5 @@
-name: Feature request
-description: Suggest an idea for this project
+name: Make a feature request ✨
+description: Suggest an idea to make Blockly better.
 labels: 'issue: feature request, issue: triage'
 body:
   - type: markdown

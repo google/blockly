@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.TrashcanOpen');
+// Former goog.module ID: Blockly.Events.TrashcanOpen
 
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';

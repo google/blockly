@@ -10,8 +10,7 @@
  * @suppress {extraRequire}
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Dart.all');
+// Former goog.module ID: Blockly.Dart.all
 
 import {DartGenerator} from './dart/dart_generator.js';
 import * as colour from './dart/colour.js';

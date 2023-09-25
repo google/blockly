@@ -8,8 +8,7 @@
  * @fileoverview Generating PHP for dynamic variable blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.PHP.variablesDynamic');
+// Former goog.module ID: Blockly.PHP.variablesDynamic
 
 
 // generator is dynamically typed.

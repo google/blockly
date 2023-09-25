@@ -10,8 +10,7 @@
  * @suppress {extraRequire}
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Lua.all');
+// Former goog.module ID: Blockly.Lua.all
 
 import {LuaGenerator} from './lua/lua_generator.js';
 import * as colour from './lua/colour.js';

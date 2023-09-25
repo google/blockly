@@ -8,10 +8,8 @@
  * @fileoverview Generating Python for math blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Python.math');
+// Former goog.module ID: Blockly.Python.math
 
-import {NameType} from '../../core/names.js';
 import {Order} from './python_generator.js';
 
 
@@ -217,9 +215,7 @@ export function math_change(block, generator) {
       'from numbers import Number';
   const argument0 =
       generator.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
-  const varName =
-      generator.nameDB_.getName(
-        block.getFieldValue('VAR'), NameType.VARIABLE);
+  const varName = generator.getVariableName(block.getFieldValue('VAR'));
   return varName + ' = (' + varName + ' if isinstance(' + varName +
       ', Number) else 0) + ' + argument0 + '\n';
 };

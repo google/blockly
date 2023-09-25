@@ -23,6 +23,12 @@ const {posixPath} = require('../../../scripts/helpers');
 let driver = null;
 
 /**
+ * The default amount of time to wait during a test. Increase this to make
+ * tests easier to watch; decrease it to make tests run faster.
+ */
+const PAUSE_TIME = 50;
+
+/**
  * Start up the test page. This should only be done once, to avoid
  * constantly popping browser windows open and closed.
  * @return A Promsie that resolves to a webdriverIO browser that tests can manipulate.
@@ -35,7 +41,6 @@ async function driverSetup() {
         args: ['--allow-file-access-from-files'],
       },
     },
-    services: [['selenium-standalone']],
     logLevel: 'warn',
   };
 
@@ -70,14 +75,19 @@ async function driverTeardown() {
 
 /**
  * Navigate to the correct URL for the test, using the shared driver.
- * @param {string} url The URL to open for the test.
+ * @param {string} playgroundUrl The URL to open for the test, which should be
+ *     a Blockly playground with a workspace.
  * @return A Promsie that resolves to a webdriverIO browser that tests can manipulate.
  */
-async function testSetup(url) {
+async function testSetup(playgroundUrl) {
   if (!driver) {
     await driverSetup();
   }
-  await driver.url(url);
+  await driver.url(playgroundUrl);
+  // Wait for the workspace to exist and be rendered.
+  await driver
+    .$('.blocklySvg .blocklyWorkspace > .blocklyBlockCanvas')
+    .waitForExist({timeout: 2000});
   return driver;
 }
 
@@ -142,6 +152,50 @@ async function getBlockElementById(browser, id) {
   const elem = await browser.$(`[data-id="${id}"]`);
   elem['id'] = id;
   return elem;
+}
+
+/**
+ * Find a clickable element on the block and click it.
+ * We can't always use the block's SVG root because clicking will always happen
+ * in the middle of the block's bounds (including children) by default, which
+ * causes problems if it has holes (e.g. statement inputs). Instead, this tries
+ * to get the first text field on the block. It falls back on the block's SVG root.
+ * @param browser The active WebdriverIO Browser object.
+ * @param block The block to click, as an interactable element.
+ * @param clickOptions The options to pass to webdriverio's element.click function.
+ * @return A Promise that resolves when the actions are completed.
+ */
+async function clickBlock(browser, block, clickOptions) {
+  const findableId = 'clickTargetElement';
+  // In the browser context, find the element that we want and give it a findable ID.
+  await browser.execute(
+    (blockId, newElemId) => {
+      const block = Blockly.getMainWorkspace().getBlockById(blockId);
+      for (const input of block.inputList) {
+        for (const field of input.fieldRow) {
+          if (field instanceof Blockly.FieldLabel) {
+            field.getSvgRoot().id = newElemId;
+            return;
+          }
+        }
+      }
+      // No label field found. Fall back to the block's SVG root.
+      block.getSvgRoot().id = findableId;
+    },
+    block.id,
+    findableId,
+  );
+
+  // In the test context, get the Webdriverio Element that we've identified.
+  const elem = await browser.$(`#${findableId}`);
+
+  await elem.click(clickOptions);
+
+  // In the browser context, remove the ID.
+  await browser.execute((elemId) => {
+    const clickElem = document.getElementById(elemId);
+    clickElem.removeAttribute('id');
+  }, findableId);
 }
 
 /**
@@ -284,7 +338,8 @@ async function getLocationOfBlockConnection(
  * @param draggedConnection The active connection on the block being dragged.
  * @param targetBlock The block to drag to.
  * @param targetConnection The connection to connect to on the target block.
- * @param mutatorBlockId The block that holds the mutator icon or null if the target block is on the main workspace
+ * @param mutatorBlockId The block that holds the mutator icon or null if the
+ *     target block is on the main workspace
  * @param dragBlockSelector The selector of the block to drag
  * @return A Promise that resolves when the actions are completed.
  */
@@ -297,38 +352,22 @@ async function connect(
   mutatorBlockId,
   dragBlockSelector,
 ) {
-  let draggedLocation;
-  let targetLocation;
-
-  if (mutatorBlockId) {
-    draggedLocation = await getLocationOfBlockConnection(
-      browser,
-      draggedBlock,
-      draggedConnection,
-      mutatorBlockId,
-    );
-    targetLocation = await getLocationOfBlockConnection(
-      browser,
-      targetBlock,
-      targetConnection,
-      mutatorBlockId,
-    );
-  } else {
-    draggedLocation = await getLocationOfBlockConnection(
-      browser,
-      draggedBlock.id,
-      draggedConnection,
-    );
-    targetLocation = await getLocationOfBlockConnection(
-      browser,
-      targetBlock.id,
-      targetConnection,
-    );
-  }
+  const draggedLocation = await getLocationOfBlockConnection(
+    browser,
+    draggedBlock.id,
+    draggedConnection,
+    mutatorBlockId,
+  );
+  const targetLocation = await getLocationOfBlockConnection(
+    browser,
+    targetBlock.id,
+    targetConnection,
+    mutatorBlockId,
+  );
 
   const delta = {
-    x: targetLocation.x - draggedLocation.x,
-    y: targetLocation.y - draggedLocation.y,
+    x: Math.round(targetLocation.x - draggedLocation.x),
+    y: Math.round(targetLocation.y - draggedLocation.y),
   };
   if (mutatorBlockId) {
     await dragBlockSelector.dragAndDrop(delta);
@@ -346,7 +385,7 @@ async function connect(
 async function switchRTL(browser) {
   const ltrForm = await browser.$('#options > select:nth-child(1)');
   await ltrForm.selectByIndex(1);
-  await browser.pause(500);
+  await browser.pause(PAUSE_TIME + 450);
 }
 
 /**
@@ -395,33 +434,68 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
 }
 
 /**
+ * Drags the specified block type from the mutator flyout of the given block and
+ * returns the root element of the block.
+ *
+ * @param browser The active WebdriverIO Browser object.
+ * @param mutatorBlock The block with the mutator attached that we want to drag
+ *     a block from.
+ * @param type The type of the block to search for.
+ * @param x The x-distance to drag, as a delta from the block's
+ *     initial location on screen.
+ * @param y The y-distance to drag, as a delta from the block's
+ *     initial location on screen.
+ * @return A Promise that resolves to the root element of the newly
+ *     created block.
+ */
+async function dragBlockFromMutatorFlyout(browser, mutatorBlock, type, x, y) {
+  const id = await browser.execute(
+    (mutatorBlockId, blockType) => {
+      return Blockly.getMainWorkspace()
+        .getBlockById(mutatorBlockId)
+        .mutator.getWorkspace()
+        .getFlyout()
+        .getWorkspace()
+        .getBlocksByType(blockType)[0].id;
+    },
+    mutatorBlock.id,
+    type,
+  );
+  const flyoutBlock = await getBlockElementById(browser, id);
+  await flyoutBlock.dragAndDrop({x: x, y: y});
+  return await getSelectedBlockElement(browser);
+}
+
+/**
  * Right-click on the specified block, then click on the specified
  * context menu item.
  *
  * @param browser The active WebdriverIO Browser object.
- * @param block The block to click, as an interactable element. This block must
+ * @param block The block to click, as an interactable element. This block should
  *    have text on it, because we use the text element as the click target.
  * @param itemText The display text of the context menu item to click.
  * @return A Promise that resolves when the actions are completed.
  */
 async function contextMenuSelect(browser, block, itemText) {
-  // Clicking will always happen in the middle of the block's bounds
-  // (including children) by default, which causes problems if it has holes
-  // (e.g. statement inputs).
-  // Instead, we'll click directly on the first bit of text on the block.
-  const clickEl = block.$('.blocklyText');
-
-  // Even though the element should definitely already exist,
-  // one specific test breaks if you remove this...
-  await clickEl.waitForExist();
-
-  await clickEl.click({button: 2});
+  await clickBlock(browser, block, {button: 2});
 
   const item = await browser.$(`div=${itemText}`);
   await item.waitForExist();
   await item.click();
 
-  await browser.pause(100);
+  await browser.pause(PAUSE_TIME);
+}
+
+/**
+ * Opens the mutator bubble for the given block.
+ *
+ * @param browser The active WebdriverIO Browser object.
+ * @param block The block to click, as an interactable element.
+ * @return A Promise that resolves when the actions are complete.
+ */
+async function openMutatorForBlock(browser, block) {
+  const icon = await browser.$(`[data-id="${block.id}"] > g.blocklyIconGroup`);
+  await icon.click();
 }
 
 /**
@@ -450,7 +524,7 @@ async function getAllBlocks(browser) {
  *  - The workspace has a trash can, which means it has a second (hidden) flyout.
  * @param browser The active WebdriverIO Browser object.
  * @param xDelta How far to drag the flyout in the x direction. Positive is right.
- * @param yDelta How far to drag thte flyout in the y direction. Positive is down.
+ * @param yDelta How far to drag the flyout in the y direction. Positive is down.
  * @return A Promise that resolves when the actions are completed.
  */
 async function scrollFlyout(browser, xDelta, yDelta) {
@@ -458,12 +532,12 @@ async function scrollFlyout(browser, xDelta, yDelta) {
   // and one for the toolbox. We want the second one.
   // This assumes there is only one scrollbar handle in the flyout, but it could
   // be either horizontal or vertical.
-  await browser.pause(50);
+  await browser.pause(PAUSE_TIME);
   const scrollbarHandle = await browser
     .$$(`.blocklyFlyoutScrollbar`)[1]
     .$(`rect.blocklyScrollbarHandle`);
   await scrollbarHandle.dragAndDrop({x: xDelta, y: yDelta});
-  await browser.pause(50);
+  await browser.pause(PAUSE_TIME);
 }
 
 module.exports = {
@@ -474,16 +548,20 @@ module.exports = {
   getSelectedBlockElement,
   getSelectedBlockId,
   getBlockElementById,
+  clickBlock,
   getCategory,
   getNthBlockOfCategory,
   getBlockTypeFromCategory,
   dragNthBlockFromFlyout,
   dragBlockTypeFromFlyout,
+  dragBlockFromMutatorFlyout,
   connect,
   switchRTL,
   contextMenuSelect,
+  openMutatorForBlock,
   screenDirection,
   getBlockTypeFromWorkspace,
   getAllBlocks,
   scrollFlyout,
+  PAUSE_TIME,
 };

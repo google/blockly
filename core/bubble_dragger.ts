@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.BubbleDragger');
+// Former goog.module ID: Blockly.BubbleDragger
 
 import {ComponentManager} from './component_manager.js';
 import type {CommentMove} from './events/events_comment_move.js';

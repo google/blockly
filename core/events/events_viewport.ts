@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.ViewportChange');
+// Former goog.module ID: Blockly.Events.ViewportChange
 
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';

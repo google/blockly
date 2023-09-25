@@ -10,12 +10,11 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ShortcutRegistry');
+// Former goog.module ID: Blockly.ShortcutRegistry
 
 import {KeyCodes} from './utils/keycodes.js';
 import * as object from './utils/object.js';
-import type {Workspace} from './workspace.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for the registry of keyboard shortcuts. This is intended to be a
@@ -224,7 +223,7 @@ export class ShortcutRegistry {
    * @param e The key down event.
    * @returns True if the event was handled, false otherwise.
    */
-  onKeyDown(workspace: Workspace, e: KeyboardEvent): boolean {
+  onKeyDown(workspace: WorkspaceSvg, e: KeyboardEvent): boolean {
     const key = this.serializeKeyEvent_(e);
     const shortcutNames = this.getShortcutNamesByKeyCode(key);
     if (!shortcutNames) {
@@ -346,9 +345,9 @@ export class ShortcutRegistry {
 
 export namespace ShortcutRegistry {
   export interface KeyboardShortcut {
-    callback?: (p1: Workspace, p2: Event, p3: KeyboardShortcut) => boolean;
+    callback?: (p1: WorkspaceSvg, p2: Event, p3: KeyboardShortcut) => boolean;
     name: string;
-    preconditionFn?: (p1: Workspace) => boolean;
+    preconditionFn?: (p1: WorkspaceSvg) => boolean;
     metadata?: object;
     keyCodes?: (number | string)[];
     allowCollision?: boolean;

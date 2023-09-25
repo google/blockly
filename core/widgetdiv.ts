@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.WidgetDiv');
+// Former goog.module ID: Blockly.WidgetDiv
 
 import * as common from './common.js';
 import * as dom from './utils/dom.js';

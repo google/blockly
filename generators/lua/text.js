@@ -8,10 +8,8 @@
  * @fileoverview Generating Lua for text blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Lua.texts');
+// Former goog.module ID: Blockly.Lua.texts
 
-import {NameType} from '../../core/names.js';
 import {Order} from './lua_generator.js';
 
 
@@ -58,8 +56,7 @@ export function text_join(block, generator) {
 export function text_append(block, generator) {
   // Append to a variable in place.
   const varName =
-      generator.nameDB_.getName(
-        block.getFieldValue('VAR'), NameType.VARIABLE);
+      generator.getVariableName(block.getFieldValue('VAR'));
   const value =
       generator.valueToCode(block, 'TEXT', Order.CONCATENATION) || "''";
   return varName + ' = ' + varName + ' .. ' + value + '\n';

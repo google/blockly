@@ -9,8 +9,7 @@
  * @suppress {missingRequire}
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript.lists');
+// Former goog.module ID: Blockly.JavaScript.lists
 
 import {NameType} from '../../core/names.js';
 import {Order} from './javascript_generator.js';

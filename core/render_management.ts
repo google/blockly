@@ -6,6 +6,7 @@
 
 import {BlockSvg} from './block_svg.js';
 import {Coordinate} from './utils/coordinate.js';
+import * as userAgent from './utils/useragent.js';
 
 /** The set of all blocks in need of rendering which don't have parents. */
 const rootBlocks = new Set<BlockSvg>();
@@ -42,6 +43,12 @@ let animationRequestId = 0;
  */
 export function queueRender(block: BlockSvg): Promise<void> {
   queueBlock(block);
+
+  if (alwaysImmediatelyRender()) {
+    doRenders();
+    return Promise.resolve();
+  }
+
   if (!afterRendersPromise) {
     afterRendersPromise = new Promise((resolve) => {
       afterRendersResolver = resolve;
@@ -75,6 +82,15 @@ export function triggerQueuedRenders() {
   window.cancelAnimationFrame(animationRequestId);
   doRenders();
   if (afterRendersResolver) afterRendersResolver();
+}
+
+/**
+ * @returns True if we should always trigger an immediate render.
+ *     Some platforms don't properly support `requestAnimationFrame`, so to
+ *     avoid glitchiness, we give up the performance improvements.
+ */
+function alwaysImmediatelyRender() {
+  return userAgent.JavaFx;
 }
 
 /**

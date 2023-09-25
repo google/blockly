@@ -36,7 +36,6 @@ async function runCompileCheckInBrowser() {
       browserName: 'chrome',
     },
     logLevel: 'warn',
-    services: ['selenium-standalone']
   };
   // Run in headless mode on Github Actions.
   if (process.env.CI) {

@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Input');
+// Former goog.module ID: Blockly.Input
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../field_label.js';

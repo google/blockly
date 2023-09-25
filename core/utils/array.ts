@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.utils.array');
+// Former goog.module ID: Blockly.utils.array
 
 /**
  * Removes the first occurrence of a particular value from an array.

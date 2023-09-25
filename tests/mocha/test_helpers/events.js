@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.helpers.events');
-
 /**
  * Creates spy for workspace fireChangeListener
  * @param {!Blockly.Workspace} workspace The workspace to spy fireChangeListener
@@ -149,13 +147,10 @@ export function assertEventFired(
   expectedWorkspaceId,
   expectedBlockId,
 ) {
-  expectedProperties = Object.assign(
-    {
-      workspaceId: expectedWorkspaceId,
-      blockId: expectedBlockId,
-    },
-    expectedProperties,
-  );
+  const baseProps = {};
+  if (expectedWorkspaceId) baseProps.workspaceId = expectedWorkspaceId;
+  if (expectedBlockId) baseProps.blockId = expectedBlockId;
+  expectedProperties = Object.assign(baseProps, expectedProperties);
   const expectedEvent = sinon.match
     .instanceOf(instanceType)
     .and(sinon.match(expectedProperties));

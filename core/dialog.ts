@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.dialog');
+// Former goog.module ID: Blockly.dialog
 
 let alertImplementation = function (
   message: string,

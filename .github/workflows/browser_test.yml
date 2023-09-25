@@ -24,7 +24,7 @@ jobs:
         # https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           persist-credentials: false
 
@@ -44,10 +44,6 @@ jobs:
       - name: Linux Test Setup
         if: runner.os == 'Linux'
         run: source ./tests/scripts/setup_linux_env.sh
-
-      - name: MacOS Test Setup
-        if: runner.os == 'macOS'
-        run: source ./tests/scripts/setup_osx_env.sh
 
       - name: Run Build
         run: npm run build

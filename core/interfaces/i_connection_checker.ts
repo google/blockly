@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
 import type {Connection} from '../connection.js';
 import type {RenderedConnection} from '../rendered_connection.js';
-goog.declareModuleId('Blockly.IConnectionChecker');
+// Former goog.module ID: Blockly.IConnectionChecker
 
 /**
  * Class for connection type checking logic.

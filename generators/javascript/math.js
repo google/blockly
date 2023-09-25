@@ -9,10 +9,8 @@
  * @suppress {missingRequire}
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript.math');
+// Former goog.module ID: Blockly.JavaScript.math
 
-import {NameType} from '../../core/names.js';
 import {Order} from './javascript_generator.js';
 
 
@@ -203,8 +201,7 @@ export function math_change(block, generator) {
   // Add to a variable in place.
   const argument0 = generator.valueToCode(block, 'DELTA',
       Order.ADDITION) || '0';
-  const varName = generator.nameDB_.getName(
-      block.getFieldValue('VAR'), NameType.VARIABLE);
+  const varName = generator.getVariableName(block.getFieldValue('VAR'));
   return varName + ' = (typeof ' + varName + ' === \'number\' ? ' + varName +
       ' : 0) + ' + argument0 + ';\n';
 };

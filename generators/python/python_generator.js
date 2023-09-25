@@ -9,14 +9,13 @@
  * @suppress {checkTypes|globalThis}
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Python');
+// Former goog.module ID: Blockly.Python
 
 import * as stringUtils from '../../core/utils/string.js';
 import * as Variables from '../../core/variables.js';
 // import type {Block} from '../../core/block.js';
 import {CodeGenerator} from '../../core/generator.js';
-import {Names, NameType} from '../../core/names.js';
+import {Names} from '../../core/names.js';
 // import type {Workspace} from '../../core/workspace.js';
 import {inputTypes} from '../../core/inputs/input_types.js';
 
@@ -180,7 +179,7 @@ export class PythonGenerator extends CodeGenerator {
     const variables = Variables.allUsedVarModels(workspace);
     for (let i = 0; i < variables.length; i++) {
       defvars.push(
-          this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE) +
+          this.getVariableName(variables[i].getId()) +
           ' = None');
     }
 
@@ -228,7 +227,6 @@ export class PythonGenerator extends CodeGenerator {
    * Encode a string as a properly escaped Python string, complete with quotes.
    * @param {string} string Text to encode.
    * @return {string} Python string.
-   * @protected
    */
   quote_(string) {
     string = string.replace(/\\/g, '\\\\').replace(/\n/g, '\\\n');
@@ -250,7 +248,6 @@ export class PythonGenerator extends CodeGenerator {
    * with quotes.
    * @param {string} string Text to encode.
    * @return {string} Python string.
-   * @protected
    */
   multiline_quote_(string) {
     const lines = string.split(/\n/g).map(this.quote_);

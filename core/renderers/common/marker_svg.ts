@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.blockRendering.MarkerSvg');
+// Former goog.module ID: Blockly.blockRendering.MarkerSvg
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../events/events_marker_move.js';
@@ -642,7 +641,6 @@ export class MarkerSvg {
       {
         'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT,
-        'style': 'display: none',
       },
       this.markerSvg_,
     );
@@ -654,7 +652,6 @@ export class MarkerSvg {
         'class': 'blocklyVerticalMarker',
         'rx': 10,
         'ry': 10,
-        'style': 'display: none',
       },
       this.markerSvg_,
     );
@@ -662,7 +659,7 @@ export class MarkerSvg {
     // A filled in puzzle piece used to represent an input value.
     this.markerInput_ = dom.createSvgElement(
       Svg.PATH,
-      {'transform': '', 'style': 'display: none'},
+      {'transform': ''},
       this.markerSvg_,
     );
 
@@ -672,12 +669,13 @@ export class MarkerSvg {
       Svg.PATH,
       {
         'transform': '',
-        'style': 'display: none',
         'fill': 'none',
         'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
       },
       this.markerSvg_,
     );
+
+    this.hide();
 
     // Markers and stack markers don't blink.
     if (this.isCursor()) {

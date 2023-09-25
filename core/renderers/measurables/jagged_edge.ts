@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.blockRendering.JaggedEdge');
+// Former goog.module ID: Blockly.blockRendering.JaggedEdge
 
 import type {ConstantProvider} from '../common/constants.js';
 

@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.jsoDeserialization');
-
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -25,6 +23,25 @@ suite('JSO Deserialization', function () {
   });
 
   suite('Events', function () {
+    test('bad JSON does not leave events disabled', function () {
+      const state = {
+        'blocks': {
+          'blocks': [
+            {
+              'type': 'undefined_block',
+            },
+          ],
+        },
+      };
+      chai.assert.throws(() => {
+        Blockly.serialization.workspaces.load(state, this.workspace);
+      });
+      chai.assert.isTrue(
+        Blockly.Events.isEnabled(),
+        'Expected events to be enabled',
+      );
+    });
+
     suite('Finished loading', function () {
       test('Just var', function () {
         const state = {

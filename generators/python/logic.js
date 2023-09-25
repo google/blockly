@@ -8,8 +8,7 @@
  * @fileoverview Generating Python for logic blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Python.logic');
+// Former goog.module ID: Blockly.Python.logic
 
 import {Order} from './python_generator.js';
 

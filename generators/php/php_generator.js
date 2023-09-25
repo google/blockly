@@ -9,8 +9,7 @@
  * @suppress {checkTypes|globalThis}
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.PHP');
+// Former goog.module ID: Blockly.PHP
 
 import * as stringUtils from '../../core/utils/string.js';
 // import type {Block} from '../../core/block.js';
@@ -184,7 +183,6 @@ export class PhpGenerator extends CodeGenerator {
    * quotes.
    * @param {string} string Text to encode.
    * @return {string} PHP string.
-   * @protected
    */
   quote_(string) {
     string = string.replace(/\\/g, '\\\\')
@@ -198,7 +196,6 @@ export class PhpGenerator extends CodeGenerator {
    * quotes.
    * @param {string} string Text to encode.
    * @return {string} PHP string.
-   * @protected
    */
   multiline_quote_(string) {
     const lines = string.split(/\n/g).map(this.quote_);

@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.FieldAngle');
+// Former goog.module ID: Blockly.FieldAngle
 
 import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
@@ -220,8 +219,8 @@ export class FieldAngle extends FieldInput<number> {
       'version': '1.1',
       'height': FieldAngle.HALF * 2 + 'px',
       'width': FieldAngle.HALF * 2 + 'px',
-      'style': 'touch-action: none',
     });
+    svg.style.touchAction = 'none';
     const circle = dom.createSvgElement(
       Svg.CIRCLE,
       {

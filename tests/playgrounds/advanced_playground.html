@@ -4,22 +4,20 @@
     <meta charset="utf-8" />
     <title>Advanced Blockly Playground</title>
 
-    <script>
-      var BLOCKLY_BOOTSTRAP_OPTIONS = {
-        scripts: [
-          'build/msg/en.js',
-          'tests/playgrounds/screenshot.js',
-          'tests/themes/test_themes.js',
-          'node_modules/@blockly/dev-tools/dist/index.js',
-          'node_modules/@blockly/theme-modern/dist/index.js',
-        ],
-      };
-    </script>
-    <script src="../bootstrap.js"></script>
-
     <script type="module">
-      // Wait for Blockly to finish loading.
-      import '../bootstrap_done.mjs';
+      import {loadScript} from '../scripts/load.mjs';
+
+      import * as Blockly from '../../build/blockly.loader.mjs';
+      import '../../build/blocks.loader.mjs';
+      // Generators not needed (but see also bug #6597).
+
+      await loadScript('../../build/msg/en.js');
+      await loadScript('screenshot.js');
+      await loadScript('../themes/test_themes.js');
+      await loadScript('../../node_modules/@blockly/dev-tools/dist/index.js');
+      await loadScript(
+        '../../node_modules/@blockly/theme-modern/dist/index.js',
+      );
 
       function start() {
         setBackgroundColour();

@@ -45,7 +45,7 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
   // Create DOM for XML.
   var xmlDom = Blockly.utils.xml.createElement('xml');
   xmlDom.id = 'toolbox';
-  xmlDom.setAttribute('style', 'display: none');
+  xmlDom.style.display = 'none';
 
   if (!this.model.hasElements()) {
     // Toolbox has no categories. Use XML directly from workspace.
@@ -111,7 +111,7 @@ WorkspaceFactoryGenerator.prototype.generateWorkspaceXml = function() {
   // Generate XML and set attributes.
   var xmlDom = Blockly.Xml.workspaceToDom(this.hiddenWorkspace);
   xmlDom.id = 'workspaceBlocks';
-  xmlDom.setAttribute('style', 'display: none');
+  xmlDom.style.display = 'none';
   return xmlDom;
 };
 

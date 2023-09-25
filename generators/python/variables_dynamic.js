@@ -8,8 +8,7 @@
  * @fileoverview Generating Python for dynamic variable blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Python.variablesDynamic');
+// Former goog.module ID: Blockly.Python.variablesDynamic
 
 
 // generator is dynamically typed.

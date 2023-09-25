@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ZoomControls');
+// Former goog.module ID: Blockly.ZoomControls
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_click.js';

@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.VarDelete');
+// Former goog.module ID: Blockly.Events.VarDelete
 
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';

@@ -6,8 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.geras');
+// Former goog.module ID: Blockly.geras
 
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';

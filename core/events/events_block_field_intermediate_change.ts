@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.BlockFieldIntermediateChange');
+// Former goog.module ID: Blockly.Events.BlockFieldIntermediateChange
 
 import type {Block} from '../block.js';
 import * as registry from '../registry.js';

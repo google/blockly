@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.RenderedConnection');
+// Former goog.module ID: Blockly.RenderedConnection
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
@@ -93,6 +92,10 @@ export class RenderedConnection extends Connection {
     super.dispose();
     if (this.trackedState === RenderedConnection.TrackedState.TRACKED) {
       this.db.removeConnection(this, this.y);
+    }
+    if (this.highlightPath) {
+      dom.removeNode(this.highlightPath);
+      this.highlightPath = null;
     }
   }
 

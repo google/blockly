@@ -163,7 +163,8 @@ for (let i = 1; i < chunks.length; i++) {
  * as munged by Closure Compiler.
  */
 function modulePath(chunk) {
-  return 'module$' + chunk.entry.replace(/\.js$/, '').replaceAll('/', '$');
+  const entryPath = path.posix.join(TSC_OUTPUT_DIR_POSIX, chunk.entry);
+  return 'module$' + entryPath.replace(/\.js$/, '').replaceAll('/', '$');
 }
 
 const licenseRegex = `\\/\\*\\*
@@ -555,7 +556,7 @@ function buildCompiled() {
   };
 
   // Fire up compilation pipline.
-  return gulp.src(chunkOptions.js, {base: TSC_OUTPUT_DIR_POSIX})
+  return gulp.src(chunkOptions.js, {base: './'})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
       .pipe(compile(options))

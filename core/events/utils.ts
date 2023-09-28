@@ -218,6 +218,9 @@ const FIRE_QUEUE: Abstract[] = [];
  */
 export function fire(event: Abstract) {
   TEST_ONLY.fireInternal(event);
+  if (event.type === 'change') {
+    console.trace();
+  }
 }
 
 /**

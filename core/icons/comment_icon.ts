@@ -232,8 +232,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   onTextChange(): void {
     if (this.textInputBubble) {
       const newText = this.textInputBubble.getText();
-      
-      if (this.textBubble) {
+      if (this.textInputBubble.getText() !== this.text) {
         eventUtils.fire(
           new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
             this.sourceBlock,
@@ -243,8 +242,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
             newText,
           ),
         );
-      }
-      
+      }     
       this.text = newText;
     }
   }

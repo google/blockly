@@ -42,7 +42,6 @@
 	"NEW_VARIABLE_TITLE": "Nome da nova variable:",
 	"VARIABLE_ALREADY_EXISTS": "Xa existe unha variable co nome \"%1\".",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Xa existe unha variable co nome \"%1\" para outro tipo: '%2'.",
-	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "Xa existe unha variable co nome \"%1\" como parámetro no procedemento '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Queres eliminar %1 usos da variable '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Non se pode eliminar a variable \"%1\" porque forma parte da definición da función '%2'",
 	"DELETE_VARIABLE": "Eliminar a variable \"%1\"",

@@ -38,7 +38,6 @@
 	"NEW_VARIABLE_TITLE": "Керла хийцалун цӀе:",
 	"VARIABLE_ALREADY_EXISTS": "Хийцалург %1 цӀарца хӀинцале йолуш йу",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Хийцалучун цӀе '%1' хӀинцале лелош кхечу тайпано: '%2'.",
-	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "Хийцалуг цӀарца '%1' хӀинцале йолуш ю процедурехь параметр '%2' хьокъехь.",
 	"DELETE_VARIABLE_CONFIRMATION": "ДӀадаккха %1 хийцалург лелор %2",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "ДӀа ца даккхало хийцалург '%1', хӀунда аьлча иза дакъа долун дера функцин билгалонан '%2'",
 	"DELETE_VARIABLE": "ДӀайаккха хийцалург %1",

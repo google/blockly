@@ -52,7 +52,6 @@
 	"NEW_VARIABLE_TITLE": "新變數名稱：",
 	"VARIABLE_ALREADY_EXISTS": "已存在變數「%1」。",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "已存在名為「%1」，且用於其它類型「%2」的變數。",
-	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "已存在名為「%1」的變數，該變數作為程序「%2」的參數使用。",
 	"DELETE_VARIABLE_CONFIRMATION": "刪除使用%1次的「%2」變數？",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "無法刪除變數「%1」，因為這是功能「%2」定義的一部份內容",
 	"DELETE_VARIABLE": "刪除變數「%1」",

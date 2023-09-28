@@ -37,7 +37,6 @@
 	"NEW_VARIABLE_TITLE": "Ngaran pembolehubah wagu:",
 	"VARIABLE_ALREADY_EXISTS": "Pembolehubah pinungaranan %1 haro no.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Pembolehubah pinungaranan '%1' haro no ngaran montok suai kawo: '%2'.",
-	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "Pembolehubah pinungaranan do '%1' haro no sabaagi parameter id prosedur '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Pugaso %1 pomogunoon pembolehubah %2?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Au milo momugas do pembolehubah '%1' tu' soboogian do definisi montok kogunoon '%2'",
 	"DELETE_VARIABLE": "Pugaso pembolehubah '%1'",

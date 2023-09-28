@@ -371,6 +371,7 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         // Collision: newer events should merge into this event to maintain
         // order.
         hash[key] = {event, index: i};
+        mergedQueue.push(event);
       }
     }
   }

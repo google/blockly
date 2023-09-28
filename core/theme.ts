@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Theme');
+// Former goog.module ID: Blockly.Theme
 
 import * as registry from './registry.js';
 import * as object from './utils/object.js';

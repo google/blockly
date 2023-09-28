@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.MarkerMove');
+// Former goog.module ID: Blockly.Events.MarkerMove
 
 import type {Block} from '../block.js';
 import {ASTNode} from '../keyboard_nav/ast_node.js';

@@ -8,8 +8,7 @@
  * @fileoverview Generating PHP for procedure blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.PHP.procedures');
+// Former goog.module ID: Blockly.PHP.procedures
 
 import * as Variables from '../../core/variables.js';
 import {NameType} from '../../core/names.js';
@@ -23,10 +22,11 @@ export function procedures_defreturn(block, generator) {
   const globals = [];
   const workspace = block.workspace;
   const usedVariables = Variables.allUsedVarModels(workspace) || [];
-  for (let i = 0, variable; variable = usedVariables[i]; i++) {
+  for (const variable of usedVariables) {
     const varName = variable.name;
+    // getVars returns parameter names, not ids, for procedure blocks
     if (block.getVars().indexOf(varName) === -1) {
-      globals.push(generator.nameDB_.getName(varName, NameType.VARIABLE));
+      globals.push(generator.getVariableName(varName));
     }
   }
   // Add developer variables.
@@ -41,8 +41,7 @@ export function procedures_defreturn(block, generator) {
       generator.INDENT + 'global ' + globals.join(', ') + ';\n' : '';
 
   const funcName =
-      generator.nameDB_.getName(
-        block.getFieldValue('NAME'), NameType.PROCEDURE);
+      generator.getProcedureName(block.getFieldValue('NAME'));
   let xfix1 = '';
   if (generator.STATEMENT_PREFIX) {
     xfix1 += generator.injectId(generator.STATEMENT_PREFIX, block);
@@ -72,7 +71,7 @@ export function procedures_defreturn(block, generator) {
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = generator.nameDB_.getName(variables[i], NameType.VARIABLE);
+    args[i] = generator.getVariableName(variables[i]);
   }
   let code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
       globalStr + xfix1 + loopTrap + branch + xfix2 + returnValue + '}';
@@ -89,8 +88,7 @@ export const procedures_defnoreturn = procedures_defreturn;
 export function procedures_callreturn(block, generator) {
   // Call a procedure with a return value.
   const funcName =
-      generator.nameDB_.getName(
-        block.getFieldValue('NAME'), NameType.PROCEDURE);
+      generator.getProcedureName(block.getFieldValue('NAME'));
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {

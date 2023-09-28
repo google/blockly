@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.eventClick');
-
 import {defineRowBlock} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,

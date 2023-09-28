@@ -9,6 +9,7 @@
 			"Marwan Mohamad",
 			"Mirws",
 			"PutriAmalia1991",
+			"Veracious",
 			"아라"
 		]
 	},
@@ -45,6 +46,7 @@
 	"NEW_VARIABLE_TITLE": "Nama variabel baru:",
 	"VARIABLE_ALREADY_EXISTS": "Sebuah variabel dengan nama '%1' sudah ada.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Variabel yg bernama '%1' sudah ada untuk tipe lain: '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "Variabel bernama '%1' sudah ada sebagai parameter dalam prosedur '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Hapus %1 yang digunakan pada variabel '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Tidak bisa menghapus variabel '%1' karena variabel ini bagian dari sebuah definisi dari fungsi '%2'",
 	"DELETE_VARIABLE": "Hapus variabel '%1'",

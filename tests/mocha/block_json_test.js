@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.blockJson');
-
 import {Align} from '../../build/src/core/inputs/align.js';
 import {
   sharedTestSetup,
@@ -91,6 +89,10 @@ suite('Block JSON initialization', function () {
         1,
         'Block "test": Message index %2 out of range.',
       );
+    });
+
+    test('Newline tokens are valid', function () {
+      this.assertNoError(['test', '\n', 'test'], 0);
     });
   });
 
@@ -305,6 +307,70 @@ suite('Block JSON initialization', function () {
         {
           'type': 'field_label',
           'text': 'test3',
+        },
+        {
+          'type': 'input_dummy',
+          'align': 'CENTER',
+        },
+      ]);
+    });
+
+    test('interpolation output includes end-row inputs', function () {
+      this.assertInterpolation(
+        ['test1', {'type': 'input_end_row'}, 'test2'],
+        [],
+        undefined,
+        [
+          {
+            'type': 'field_label',
+            'text': 'test1',
+          },
+          {
+            'type': 'input_end_row',
+          },
+          {
+            'type': 'field_label',
+            'text': 'test2',
+          },
+          {
+            'type': 'input_dummy',
+          },
+        ],
+      );
+    });
+
+    test('Newline is converted to end-row input', function () {
+      this.assertInterpolation(['test1', '\n', 'test2'], [], undefined, [
+        {
+          'type': 'field_label',
+          'text': 'test1',
+        },
+        {
+          'type': 'input_end_row',
+        },
+        {
+          'type': 'field_label',
+          'text': 'test2',
+        },
+        {
+          'type': 'input_dummy',
+        },
+      ]);
+    });
+
+    test('Newline converted to end-row aligned like last dummy', function () {
+      this.assertInterpolation(['test1', '\n', 'test2'], [], 'CENTER', [
+        {
+          'type': 'field_label',
+          'text': 'test1',
+        },
+        {
+          'type': 'input_end_row',
+          'align': 'CENTER',
+        },
+        {
+          'type': 'field_label',
+          'text': 'test2',
         },
         {
           'type': 'input_dummy',

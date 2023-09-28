@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Grid');
+// Former goog.module ID: Blockly.Grid
 
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';

@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.BlockDragger');
+// Former goog.module ID: Blockly.BlockDragger
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_drag.js';
@@ -105,13 +104,10 @@ export class BlockDragger implements IBlockDragger {
     }
     this.fireDragStartEvent_();
 
-    // Mutators don't have the same type of z-ordering as the normal workspace
-    // during a drag.  They have to rely on the order of the blocks in the SVG.
-    // For performance reasons that usually happens at the end of a drag,
-    // but do it at the beginning for mutators.
-    if (this.workspace_.isMutator) {
-      this.draggingBlock_.bringToFront();
-    }
+    // The z-order of blocks depends on their order in the SVG, so move the
+    // block being dragged to the front so that it will appear atop other blocks
+    // in the workspace.
+    this.draggingBlock_.bringToFront(true);
 
     // During a drag there may be a lot of rerenders, but not field changes.
     // Turn the cache on so we don't do spurious remeasures during the drag.

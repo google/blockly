@@ -132,7 +132,7 @@ Blockly.Msg.REDO = 'Redo';
 
 // Variable renaming.
 /** @type {string} */
-/// prompt - This message is only seen in the Opera browser.  With most browsers, users can edit numeric values in blocks by just clicking and typing.  Opera does not allows this, so we have to open a new window and prompt users with this message to chanage a value.
+/// prompt - This message is seen on mobile devices and the Opera browser.  With most browsers, users can edit numeric values in blocks by just clicking and typing.  Opera does not allow this and mobile browsers may have issues with in-line textareas. So we prompt users with this message (usually a popup) to change a value.
 Blockly.Msg.CHANGE_VALUE_TITLE = 'Change value:';
 /** @type {string} */
 /// dropdown choice - When the user clicks on a variable block, this is one of the dropdown menu choices.  It is used to rename the current variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].

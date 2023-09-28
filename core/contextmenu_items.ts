@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ContextMenuItems');
+// Former goog.module ID: Blockly.ContextMenuItems
 
 import type {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
@@ -331,9 +330,10 @@ export function registerDuplicate() {
       return 'hidden';
     },
     callback(scope: Scope) {
-      if (scope.block) {
-        clipboard.duplicate(scope.block);
-      }
+      if (!scope.block) return;
+      const data = scope.block.toCopyData();
+      if (!data) return;
+      clipboard.paste(data, scope.block.workspace);
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockDuplicate',

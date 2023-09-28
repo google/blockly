@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.blockRendering.Row');
+// Former goog.module ID: Blockly.blockRendering.Row
 
 import type {ConstantProvider} from '../common/constants.js';
 
@@ -89,7 +88,7 @@ export class Row {
   hasInlineInput = false;
 
   /**
-   * Whether the row has any dummy inputs.
+   * Whether the row has any dummy inputs or end-row inputs.
    */
   hasDummyInput = false;
 

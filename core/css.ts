@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Css');
+// Former goog.module ID: Blockly.Css
 
 /** Has CSS already been injected? */
 let injected = false;

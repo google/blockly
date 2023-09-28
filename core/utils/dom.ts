@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.utils.dom');
+// Former goog.module ID: Blockly.utils.dom
 
 import * as deprecation from './deprecation.js';
 import type {Svg} from './svg.js';
@@ -354,7 +353,10 @@ export function measureFontMetrics(
   block.style.height = '0';
 
   const div = document.createElement('div');
-  div.setAttribute('style', 'position: fixed; top: 0; left: 0; display: flex;');
+  div.style.display = 'flex';
+  div.style.position = 'fixed';
+  div.style.top = '0';
+  div.style.left = '0';
   div.appendChild(span);
   div.appendChild(block);
 

@@ -8,8 +8,7 @@
  * @fileoverview Generating Dart for logic blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Dart.logic');
+// Former goog.module ID: Blockly.Dart.logic
 
 import {Order} from './dart_generator.js';
 

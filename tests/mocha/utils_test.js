@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.utils');
-
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -56,6 +54,13 @@ suite('Utils', function () {
         chai.assert.deepEqual(
           Blockly.utils.parsing.tokenizeInterpolation('Hello%%World'),
           ['Hello%World'],
+        );
+      });
+
+      test('Newlines are tokenized', function () {
+        chai.assert.deepEqual(
+          Blockly.utils.parsing.tokenizeInterpolation('Hello\nWorld'),
+          ['Hello', '\n', 'World'],
         );
       });
     });
@@ -229,6 +234,14 @@ suite('Utils', function () {
       resultString,
       '%a',
       'Unrecognized % escape code treated as literal',
+    );
+
+    resultString =
+      Blockly.utils.parsing.replaceMessageReferences('Hello\nWorld');
+    chai.assert.equal(
+      resultString,
+      'Hello\nWorld',
+      'Newlines are not tokenized',
     );
 
     resultString = Blockly.utils.parsing.replaceMessageReferences('%1');

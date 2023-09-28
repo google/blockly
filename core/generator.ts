@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.CodeGenerator');
+// Former goog.module ID: Blockly.CodeGenerator
 
 import type {Block} from './block.js';
 import * as common from './common.js';
@@ -109,7 +108,7 @@ export class CodeGenerator {
   protected functionNames_: {[key: string]: string} = Object.create(null);
 
   /** A database of variable and procedure names. */
-  protected nameDB_?: Names = undefined;
+  nameDB_?: Names = undefined;
 
   /** @param name Language name of this generator. */
   constructor(name: string) {
@@ -169,10 +168,6 @@ export class CodeGenerator {
     codeString = codeString.replace(/[ \t]+\n/g, '\n');
     return codeString;
   }
-
-  // The following are some helpful functions which can be used by multiple
-
-  // languages.
 
   /**
    * Prepend a common prefix onto each line of code.
@@ -497,6 +492,42 @@ export class CodeGenerator {
       this.definitions_[desiredName] = codeText;
     }
     return this.functionNames_[desiredName];
+  }
+
+  /**
+   * Gets a unique, legal name for a user-defined variable.
+   * Before calling this method, the `nameDB_` property of the class
+   * must have been initialized already. This is typically done in
+   * the `init` function of the code generator class.
+   *
+   * @param nameOrId The ID of the variable to get a name for,
+   *    or the proposed name for a variable not associated with an id.
+   * @returns A unique, legal name for the variable.
+   */
+  getVariableName(nameOrId: string): string {
+    return this.getName(nameOrId, NameType.VARIABLE);
+  }
+
+  /**
+   * Gets a unique, legal name for a user-defined procedure.
+   * Before calling this method, the `nameDB_` property of the class
+   * must have been initialized already. This is typically done in
+   * the `init` function of the code generator class.
+   *
+   * @param name The proposed name for a procedure.
+   * @returns A unique, legal name for the procedure.
+   */
+  getProcedureName(name: string): string {
+    return this.getName(name, NameType.PROCEDURE);
+  }
+
+  private getName(nameOrId: string, type: NameType): string {
+    if (!this.nameDB_) {
+      throw new Error(
+        'Name database is not defined. You must initialize `nameDB_` in your generator class and call `init` first.',
+      );
+    }
+    return this.nameDB_.getName(nameOrId, type);
   }
 
   /**

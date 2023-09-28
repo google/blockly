@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.BlockChange');
+// Former goog.module ID: Blockly.Events.BlockChange
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
@@ -205,7 +204,7 @@ export class BlockChange extends BlockBase {
    */
   static getExtraBlockState_(block: BlockSvg): string {
     if (block.saveExtraState) {
-      const state = block.saveExtraState();
+      const state = block.saveExtraState(true);
       return state ? JSON.stringify(state) : '';
     } else if (block.mutationToDom) {
       const state = block.mutationToDom();

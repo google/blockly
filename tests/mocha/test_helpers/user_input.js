@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.helpers.userInput');
-
 import {KeyCodes} from '../../../build/src/core/utils/keycodes.js';
 
 /**

@@ -8,8 +8,7 @@
  * @fileoverview Generating Python for colour blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Python.colour');
+// Former goog.module ID: Blockly.Python.colour
 
 import {Order} from './python_generator.js';
 

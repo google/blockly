@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.IStyleable');
+// Former goog.module ID: Blockly.IStyleable
 
 /**
  * Interface for an object that a style can be added to.

@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.eventViewportChange');
-
 import {
   sharedTestSetup,
   sharedTestTeardown,

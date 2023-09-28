@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Flyout');
+// Former goog.module ID: Blockly.Flyout
 
 import type {Abstract as AbstractEvent} from './events/events_abstract.js';
 import type {Block} from './block.js';
@@ -341,8 +340,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     // hide/show code will set up proper visibility and size later.
     this.svgGroup_ = dom.createSvgElement(tagName, {
       'class': 'blocklyFlyout',
-      'style': 'display: none',
     });
+    this.svgGroup_.style.display = 'none';
     this.svgBackground_ = dom.createSvgElement(
       Svg.PATH,
       {'class': 'blocklyFlyoutBackground'},
@@ -1213,6 +1212,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     }
 
     // Clone the block.
+    // TODO(#7432): Add a saveIds parameter to `save`.
     const json = blocks.save(oldBlock) as blocks.State;
     // Normallly this resizes leading to weird jumps. Save it for terminateDrag.
     targetWorkspace.setResizesEnabled(false);

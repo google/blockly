@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.VarRename');
+// Former goog.module ID: Blockly.Events.VarRename
 
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';

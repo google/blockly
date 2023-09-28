@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ToolboxCategory');
+// Former goog.module ID: Blockly.ToolboxCategory
 
 import * as Css from '../css.js';
 import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';

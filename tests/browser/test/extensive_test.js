@@ -14,6 +14,7 @@ const {
   testFileLocations,
   getBlockElementById,
   getAllBlocks,
+  PAUSE_TIME,
 } = require('./test_setup');
 const {Key} = require('webdriverio');
 
@@ -38,14 +39,14 @@ suite('This tests loading Large Configuration and Deletion', function (done) {
     );
     await fourthRepeatDo.click({x: -100, y: -40});
     await this.browser.keys([Key.Delete]);
-    await this.browser.pause(100);
+    await this.browser.pause(PAUSE_TIME);
     const allBlocks = await getAllBlocks(this.browser);
     chai.assert.equal(allBlocks.length, 10);
   });
 
   test('undoing delete block results in the correct number of blocks', async function () {
     await this.browser.keys([Key.Ctrl, 'z']);
-    await this.browser.pause(100);
+    await this.browser.pause(PAUSE_TIME);
     const allBlocks = await getAllBlocks(this.browser);
     chai.assert.equal(allBlocks.length, 13);
   });

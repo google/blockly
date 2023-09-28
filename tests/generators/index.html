@@ -4,20 +4,12 @@
 <meta charset="utf-8">
 <title>Blockly Generator Tests</title>
 <script>
-  var BLOCKLY_BOOTSTRAP_OPTIONS = {
-    scripts: [
-      'build/msg/en.js',
-      'tests/generators/unittest_javascript.js',
-      'tests/generators/unittest_python.js',
-      'tests/generators/unittest_php.js',
-      'tests/generators/unittest_lua.js',
-      'tests/generators/unittest_dart.js',
-      'tests/generators/unittest.js',
-    ],
-  }
-</script>
-<script src="../bootstrap.js"></script>
-<script>
+// N.B.: This script depends on the following (module) script to load
+// Blockly, the code generators, and the unittest*.js scripts.  The
+// module script actually gets executed after this one, so although
+// Blockly will be available when the defined global functions are
+// called it isn't yet available when this script runs.
+
 var demoWorkspace = null;
 
 function start() {
@@ -199,9 +191,31 @@ function changeIndex() {
   demoWorkspace.getToolbox().flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
 }
 </script>
+
 <script type="module">
-// Wait for Blockly to finish loading before running tests.
-import '../bootstrap_done.mjs';
+import {loadScript} from '../scripts/load.mjs';
+
+import * as Blockly from '../../build/blockly.loader.mjs';
+import '../../build/blocks.loader.mjs';
+import {dartGenerator} from '../../build/dart.loader.mjs';
+import {luaGenerator} from '../../build/lua.loader.mjs';
+import {javascriptGenerator} from '../../build/javascript.loader.mjs';
+import {phpGenerator} from '../../build/php.loader.mjs';
+import {pythonGenerator} from '../../build/python.loader.mjs';
+
+globalThis.dartGenerator = dartGenerator;
+globalThis.luaGenerator = luaGenerator;
+globalThis.javascriptGenerator = javascriptGenerator;
+globalThis.phpGenerator = phpGenerator;
+globalThis.pythonGenerator = pythonGenerator;
+
+await loadScript('../../build/msg/en.js');
+await loadScript('./unittest_javascript.js');
+await loadScript('./unittest_python.js');
+await loadScript('./unittest_php.js');
+await loadScript('./unittest_lua.js');
+await loadScript('./unittest_dart.js');
+await loadScript('./unittest.js');
 
 start();
 </script>

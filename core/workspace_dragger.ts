@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.WorkspaceDragger');
+// Former goog.module ID: Blockly.WorkspaceDragger
 
 import * as common from './common.js';
 import {Coordinate} from './utils/coordinate.js';

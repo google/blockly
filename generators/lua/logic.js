@@ -8,8 +8,7 @@
  * @fileoverview Generating Lua for logic blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Lua.logic');
+// Former goog.module ID: Blockly.Lua.logic
 
 import {Order} from './lua_generator.js';
 

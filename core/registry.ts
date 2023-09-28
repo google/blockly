@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.registry');
+// Former goog.module ID: Blockly.registry
 
 import type {Abstract} from './events/events_abstract.js';
 import type {Field} from './field.js';
@@ -22,6 +21,8 @@ import type {Options} from './options.js';
 import type {Renderer} from './renderers/common/renderer.js';
 import type {Theme} from './theme.js';
 import type {ToolboxItem} from './toolbox/toolbox_item.js';
+import {IPaster} from './interfaces/i_paster.js';
+import {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 
 /**
  * A map of maps. With the keys being the type and name of the class we are
@@ -96,6 +97,9 @@ export class Type<_T> {
 
   /** @internal */
   static ICON = new Type<IIcon>('icon');
+
+  /** @internal */
+  static PASTER = new Type<IPaster<ICopyData, ICopyable<ICopyData>>>('paster');
 }
 
 /**

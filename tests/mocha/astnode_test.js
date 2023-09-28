@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.astNode');
-
 import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
 import {
   sharedTestSetup,

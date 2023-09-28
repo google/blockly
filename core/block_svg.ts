@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.BlockSvg');
+// Former goog.module ID: Blockly.BlockSvg
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_selected.js';
@@ -37,7 +36,7 @@ import {FieldLabel} from './field_label.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
-import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {ICopyable} from './interfaces/i_copyable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
 import {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
@@ -62,6 +61,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import * as renderManagement from './render_management.js';
 import * as deprecation from './utils/deprecation.js';
 import {IconType} from './icons/icon_types.js';
+import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
 
 /**
  * Class for a block's SVG representation.
@@ -69,7 +69,11 @@ import {IconType} from './icons/icon_types.js';
  */
 export class BlockSvg
   extends Block
-  implements IASTNodeLocationSvg, IBoundedElement, ICopyable, IDraggable
+  implements
+    IASTNodeLocationSvg,
+    IBoundedElement,
+    ICopyable<BlockCopyData>,
+    IDraggable
 {
   /**
    * Constant for identifying rows that are to be rendered inline.
@@ -323,7 +327,14 @@ export class BlockSvg
     } else if (oldParent) {
       // If we are losing a parent, we want to move our DOM element to the
       // root of the workspace.
-      this.workspace.getCanvas().appendChild(svgRoot);
+      const draggingBlock = this.workspace
+        .getCanvas()
+        .querySelector('.blocklyDragging');
+      if (draggingBlock) {
+        this.workspace.getCanvas().insertBefore(svgRoot, draggingBlock);
+      } else {
+        this.workspace.getCanvas().appendChild(svgRoot);
+      }
       this.translate(oldXY.x, oldXY.y);
     }
 
@@ -823,18 +834,17 @@ export class BlockSvg
    * Encode a block for copying.
    *
    * @returns Copy metadata, or null if the block is an insertion marker.
-   * @internal
    */
-  toCopyData(): CopyData | null {
+  toCopyData(): BlockCopyData | null {
     if (this.isInsertionMarker_) {
       return null;
     }
     return {
-      saveInfo: blocks.save(this, {
+      paster: BlockPaster.TYPE,
+      blockState: blocks.save(this, {
         addCoordinates: true,
         addNextBlocks: false,
       }) as blocks.State,
-      source: this.workspace,
       typeCounts: common.getBlockTypeCounts(this, true),
     };
   }
@@ -896,11 +906,10 @@ export class BlockSvg
    * Set this block's warning text.
    *
    * @param text The text, or null to delete.
-   * @param opt_id An optional ID for the warning text to be able to maintain
+   * @param id An optional ID for the warning text to be able to maintain
    *     multiple warnings.
    */
-  override setWarningText(text: string | null, opt_id?: string) {
-    const id = opt_id || '';
+  override setWarningText(text: string | null, id: string = '') {
     if (!id) {
       // Kill all previous pending processes, this edit supersedes them all.
       for (const timeout of this.warningTextDb.values()) {
@@ -931,8 +940,9 @@ export class BlockSvg
     }
 
     const icon = this.getIcon(WarningIcon.TYPE) as WarningIcon | undefined;
-    if (typeof text === 'string') {
+    if (text) {
       // Bubble up to add a warning on top-most collapsed block.
+      // TODO(#6020): This warning is never removed.
       let parent = this.getSurroundParent();
       let collapsedParent = null;
       while (parent) {
@@ -958,6 +968,9 @@ export class BlockSvg
       if (!id) {
         this.removeIcon(WarningIcon.TYPE);
       } else {
+        // Remove just this warning id's message.
+        icon.addMessage('', id);
+        // Then remove the entire icon if there is no longer any text.
         if (!icon.getText()) this.removeIcon(WarningIcon.TYPE);
       }
     }
@@ -1139,9 +1152,11 @@ export class BlockSvg
    * order that they are in the DOM.  By placing this block first within the
    * block group's <g>, it will render on top of any other blocks.
    *
+   * @param blockOnly: True to only move this block to the front without
+   *     adjusting its parents.
    * @internal
    */
-  bringToFront() {
+  bringToFront(blockOnly = false) {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block: this | null = this;
     do {
@@ -1152,6 +1167,7 @@ export class BlockSvg
       if (childNodes[childNodes.length - 1] !== root) {
         parent!.appendChild(root);
       }
+      if (blockOnly) break;
       block = block.getParent();
     } while (block);
   }
@@ -1499,13 +1515,14 @@ export class BlockSvg
    * or an insertion marker.
    *
    * @param sourceConnection The connection on the moving block's stack.
-   * @param targetConnection The connection that should stay stationary as this
-   *     block is positioned.
+   * @param originalOffsetToTarget The connection original offset to the target connection
+   * @param originalOffsetInBlock The connection original offset in its block
    * @internal
    */
   positionNearConnection(
     sourceConnection: RenderedConnection,
-    targetConnection: RenderedConnection,
+    originalOffsetToTarget: {x: number; y: number},
+    originalOffsetInBlock: Coordinate,
   ) {
     // We only need to position the new block if it's before the existing one,
     // otherwise its position is set by the previous block.
@@ -1513,8 +1530,12 @@ export class BlockSvg
       sourceConnection.type === ConnectionType.NEXT_STATEMENT ||
       sourceConnection.type === ConnectionType.INPUT_VALUE
     ) {
-      const dx = targetConnection.x - sourceConnection.x;
-      const dy = targetConnection.y - sourceConnection.y;
+      // First move the block to match the orginal target connection position
+      let dx = originalOffsetToTarget.x;
+      let dy = originalOffsetToTarget.y;
+      // Then adjust its position according to the connection resize
+      dx += originalOffsetInBlock.x - sourceConnection.getOffsetInBlock().x;
+      dy += originalOffsetInBlock.y - sourceConnection.getOffsetInBlock().y;
 
       this.moveBy(dx, dy);
     }

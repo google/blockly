@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.IFlyout');
+// Former goog.module ID: Blockly.IFlyout
 
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import type {BlockSvg} from '../block_svg.js';

@@ -8,8 +8,7 @@
  * @fileoverview Generating Lua for colour blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Lua.colour');
+// Former goog.module ID: Blockly.Lua.colour
 
 import {Order} from './lua_generator.js';
 

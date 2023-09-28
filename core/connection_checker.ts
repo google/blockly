@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ConnectionChecker');
+// Former goog.module ID: Blockly.ConnectionChecker
 
 import * as common from './common.js';
 import {Connection} from './connection.js';

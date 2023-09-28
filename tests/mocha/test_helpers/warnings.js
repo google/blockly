@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.helpers.warnings');
-
 /**
  * Captures the strings sent to console.warn() when calling a function.
  * Copies from core.

@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events');
+// Former goog.module ID: Blockly.Events
 
 import {Abstract, AbstractEventJson} from './events_abstract.js';
 import {BlockBase, BlockBaseJson} from './events_block_base.js';

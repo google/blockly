@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.zelos.ConstantProvider');
+// Former goog.module ID: Blockly.zelos.ConstantProvider
 
 import {ConnectionType} from '../../connection_type.js';
 import type {RenderedConnection} from '../../rendered_connection.js';

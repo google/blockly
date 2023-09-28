@@ -4,14 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.common');
+// Former goog.module ID: Blockly.common
 
 /* eslint-disable-next-line no-unused-vars */
 import type {Block} from './block.js';
+import {ISelectable} from './blockly.js';
 import {BlockDefinition, Blocks} from './blocks.js';
 import type {Connection} from './connection.js';
-import type {ICopyable} from './interfaces/i_copyable.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -88,12 +87,12 @@ export function setMainWorkspace(workspace: Workspace) {
 /**
  * Currently selected copyable object.
  */
-let selected: ICopyable | null = null;
+let selected: ISelectable | null = null;
 
 /**
  * Returns the currently selected copyable object.
  */
-export function getSelected(): ICopyable | null {
+export function getSelected(): ISelectable | null {
   return selected;
 }
 
@@ -105,7 +104,7 @@ export function getSelected(): ICopyable | null {
  * @param newSelection The newly selected block.
  * @internal
  */
-export function setSelected(newSelection: ICopyable | null) {
+export function setSelected(newSelection: ISelectable | null) {
   selected = newSelection;
 }
 

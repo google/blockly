@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.libraryBlocks.loops');
+// Former goog.module ID: Blockly.libraryBlocks.loops
 
 import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import type {Block} from '../core/block.js';
@@ -16,8 +15,6 @@ import type {
 } from '../core/contextmenu_registry.js';
 import * as Events from '../core/events/events.js';
 import * as Extensions from '../core/extensions.js';
-import * as Variables from '../core/variables.js';
-import * as xmlUtils from '../core/utils/xml.js';
 import {Msg} from '../core/msg.js';
 import {
   createBlockDefinitionsFromJsonArray,
@@ -273,15 +270,15 @@ const CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
     const variable = varField.getVariable()!;
     const varName = variable.name;
     if (!this.isCollapsed() && varName !== null) {
-      const xmlField = Variables.generateVariableFieldDom(variable);
-      const xmlBlock = xmlUtils.createElement('block');
-      xmlBlock.setAttribute('type', 'variables_get');
-      xmlBlock.appendChild(xmlField);
+      const getVarBlockState = {
+        type: 'variables_get',
+        fields: {VAR: varField.saveState(true)},
+      };
 
       options.push({
         enabled: true,
         text: Msg['VARIABLES_SET_CREATE_GET'].replace('%1', varName),
-        callback: ContextMenu.callbackFactory(this, xmlBlock),
+        callback: ContextMenu.callbackFactory(this, getVarBlockState),
       });
     }
   },

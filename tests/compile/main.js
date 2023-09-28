@@ -4,32 +4,28 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Main');
+// Former goog.module ID: Main
 
 // Core
 // Either require 'Blockly.requires', or just the components you use:
 /* eslint-disable-next-line no-unused-vars */
 // TODO: I think we need to make sure these get exported?
-// const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-const {inject} = goog.require('Blockly.inject');
-const {getMainWorkspace} = goog.require('Blockly.common');
-const {Msg} = goog.require('Blockly.Msg');
-/** @suppress {extraRequire} */
-goog.require('Blockly.geras.Renderer');
-/** @suppress {extraRequire} */
-goog.require('Blockly.VerticalFlyout');
+// import type {BlocklyOptions} from '../../core/blockly_options.js';
+import {inject} from '../../build/src/core/inject.js';
+import {getMainWorkspace} from '../../build/src/core/common.js';
+import {Msg} from '../../build/src/core/msg.js';
+import '../../build/src/core/renderers/geras/renderer.js';
+import '../../build/src/core/flyout_vertical.js';
+
+// Needed to ensure internal monkey-patching of newBlock is done.
+import '../../build/src/core/blockly.js';
 
 // Blocks
-/** @suppress {extraRequire} */
-goog.require('Blockly.libraryBlocks.logic');
-/** @suppress {extraRequire} */
-goog.require('Blockly.libraryBlocks.loops');
-/** @suppress {extraRequire} */
-goog.require('Blockly.libraryBlocks.math');
-/** @suppress {extraRequire} */
-goog.require('Blockly.libraryBlocks.texts');
-/** @suppress {extraRequire} */
-goog.require('testBlocks');
+import '../../build/src/blocks/logic.js';
+import '../../build/src/blocks/loops.js';
+import '../../build/src/blocks/math.js';
+import '../../build/src/blocks/text.js';
+import './test_blocks.js';
 
 
 function init() {

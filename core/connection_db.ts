@@ -11,8 +11,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.ConnectionDB');
+// Former goog.module ID: Blockly.ConnectionDB
 
 import {ConnectionType} from './connection_type.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';

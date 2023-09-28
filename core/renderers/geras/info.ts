@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.geras.RenderInfo');
+// Former goog.module ID: Blockly.geras.RenderInfo
 
 import type {BlockSvg} from '../../block_svg.js';
 import type {Input} from '../../inputs/input.js';
@@ -13,6 +12,7 @@ import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 import type {Measurable} from '../measurables/base.js';
 import type {BottomRow} from '../measurables/bottom_row.js';
 import {DummyInput} from '../../inputs/dummy_input.js';
+import {EndRowInput} from '../../inputs/end_row_input.js';
 import {ExternalValueInput} from '../measurables/external_value_input.js';
 import type {Field} from '../measurables/field.js';
 import {InRowSpacer} from '../measurables/in_row_spacer.js';
@@ -90,9 +90,9 @@ export class RenderInfo extends BaseRenderInfo {
     } else if (input instanceof ValueInput) {
       activeRow.elements.push(new ExternalValueInput(this.constants_, input));
       activeRow.hasExternalInput = true;
-    } else if (input instanceof DummyInput) {
-      // Dummy inputs have no visual representation, but the information is
-      // still important.
+    } else if (input instanceof DummyInput || input instanceof EndRowInput) {
+      // Dummy and end-row inputs have no visual representation, but the
+      // information is still important.
       activeRow.minHeight = Math.max(
         activeRow.minHeight,
         this.constants_.DUMMY_INPUT_MIN_HEIGHT,
@@ -379,8 +379,12 @@ export class RenderInfo extends BaseRenderInfo {
           row.width < prevInput.width
         ) {
           rowNextRightEdges.set(row, prevInput.width);
-        } else {
+        } else if (row.hasStatement) {
           nextRightEdge = row.width;
+        } else {
+          // To keep right edges of consecutive non-statement rows aligned, use
+          // the maximum width.
+          nextRightEdge = Math.max(nextRightEdge, row.width);
         }
         prevInput = row;
       }

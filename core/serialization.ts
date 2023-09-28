@@ -7,8 +7,7 @@
 /**
  * Serialization methods.
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.serialization');
+// Former goog.module ID: Blockly.serialization
 
 import * as blocks from './serialization/blocks.js';
 import * as exceptions from './serialization/exceptions.js';

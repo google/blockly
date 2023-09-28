@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.generator');
-
 import * as Blockly from '../../build/src/core/blockly.js';
 import {DartGenerator} from '../../build/src/generators/dart/dart_generator.js';
 import {JavascriptGenerator} from '../../build/src/generators/javascript/javascript_generator.js';
@@ -190,6 +188,37 @@ suite('Generator', function () {
           this.loopTest(generator, true, '{  {}}');
           this.loopTest(generator, false, '{  {}}{}', 'thisOnly=false');
         });
+      });
+    });
+
+    suite('Names', function () {
+      setup(function () {
+        class TestGenerator extends Blockly.CodeGenerator {
+          init() {
+            super.init();
+            this.nameDB_ = sinon.createStubInstance(Blockly.Names, {
+              getName: 'foo',
+            });
+          }
+        }
+        this.generator = new TestGenerator();
+      });
+      test('No nameDB_ initialized', function () {
+        chai.assert.throws(() => {
+          this.generator.getVariableName('foo');
+        });
+      });
+
+      test('Get variable name', function () {
+        this.generator.init();
+
+        chai.assert.equal(this.generator.getVariableName('foo'), 'foo');
+      });
+
+      test('Get procedure name', function () {
+        this.generator.init();
+
+        chai.assert.equal(this.generator.getProcedureName('foo'), 'foo');
       });
     });
   });

@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.blockRendering.RenderInfo');
+// Former goog.module ID: Blockly.blockRendering.RenderInfo
 
 import type {BlockSvg} from '../../block_svg.js';
 import {Input} from '../../inputs/input.js';
@@ -14,6 +13,7 @@ import type {RenderedConnection} from '../../rendered_connection.js';
 import type {Measurable} from '../measurables/base.js';
 import {BottomRow} from '../measurables/bottom_row.js';
 import {DummyInput} from '../../inputs/dummy_input.js';
+import {EndRowInput} from '../../inputs/end_row_input.js';
 import {ExternalValueInput} from '../measurables/external_value_input.js';
 import {Field} from '../measurables/field.js';
 import {Hat} from '../measurables/hat.js';
@@ -326,9 +326,9 @@ export class RenderInfo {
     } else if (input instanceof ValueInput) {
       activeRow.elements.push(new ExternalValueInput(this.constants_, input));
       activeRow.hasExternalInput = true;
-    } else if (input instanceof DummyInput) {
-      // Dummy inputs have no visual representation, but the information is
-      // still important.
+    } else if (input instanceof DummyInput || input instanceof EndRowInput) {
+      // Dummy and end-row inputs have no visual representation, but the
+      // information is still important.
       activeRow.minHeight = Math.max(
         activeRow.minHeight,
         input.getSourceBlock() && input.getSourceBlock()!.isShadow()
@@ -355,6 +355,11 @@ export class RenderInfo {
     if (!lastInput) {
       return false;
     }
+    // If the previous input was an end-row input, then any following input
+    // should always be rendered on the next row.
+    if (lastInput instanceof EndRowInput) {
+      return true;
+    }
     // A statement input or an input following one always gets a new row.
     if (
       input instanceof StatementInput ||
@@ -362,8 +367,13 @@ export class RenderInfo {
     ) {
       return true;
     }
-    // Value and dummy inputs get new row if inputs are not inlined.
-    if (input instanceof ValueInput || input instanceof DummyInput) {
+    // Value inputs, dummy inputs, and any input following an external value
+    // input get a new row if inputs are not inlined.
+    if (
+      input instanceof ValueInput ||
+      input instanceof DummyInput ||
+      lastInput instanceof ValueInput
+    ) {
       return !this.isInline;
     }
     return false;

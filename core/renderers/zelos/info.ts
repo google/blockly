@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.zelos.RenderInfo');
+// Former goog.module ID: Blockly.zelos.RenderInfo
 
 import type {BlockSvg} from '../../block_svg.js';
 import {DummyInput} from '../../inputs/dummy_input.js';
+import {EndRowInput} from '../../inputs/end_row_input.js';
 import {FieldImage} from '../../field_image.js';
 import {FieldLabel} from '../../field_label.js';
 import {FieldTextInput} from '../../field_textinput.js';
@@ -124,6 +124,11 @@ export class RenderInfo extends BaseRenderInfo {
     if (!lastInput) {
       return false;
     }
+    // If the previous input was an end-row input, then any following input
+    // should always be rendered on the next row.
+    if (lastInput instanceof EndRowInput) {
+      return true;
+    }
     // A statement input or an input following one always gets a new row.
     if (
       input instanceof StatementInput ||
@@ -131,8 +136,12 @@ export class RenderInfo extends BaseRenderInfo {
     ) {
       return true;
     }
-    // Value and dummy inputs get new row if inputs are not inlined.
-    if (input instanceof ValueInput || input instanceof DummyInput) {
+    // Value, dummy, and end-row inputs get new row if inputs are not inlined.
+    if (
+      input instanceof ValueInput ||
+      input instanceof DummyInput ||
+      input instanceof EndRowInput
+    ) {
       return !this.isInline || this.isMultiRow;
     }
     return false;
@@ -267,9 +276,9 @@ export class RenderInfo extends BaseRenderInfo {
   override addInput_(input: Input, activeRow: Row) {
     // If we have two dummy inputs on the same row, one aligned left and the
     // other right, keep track of the right aligned dummy input so we can add
-    // padding later.
+    // padding later. An end-row input after a dummy input also counts.
     if (
-      input instanceof DummyInput &&
+      (input instanceof DummyInput || input instanceof EndRowInput) &&
       activeRow.hasDummyInput &&
       activeRow.align === Align.LEFT &&
       input.align === Align.RIGHT
@@ -502,7 +511,7 @@ export class RenderInfo extends BaseRenderInfo {
     const connectionWidth = this.outputConnection.width;
     const outerShape = this.outputConnection.shape.type;
     const constants = this.constants_;
-    if (this.isMultiRow && this.inputRows.length > 1) {
+    if (this.inputRows.length > 1) {
       switch (outerShape) {
         case constants.SHAPES.ROUND: {
           // Special case for multi-row round reporter blocks.

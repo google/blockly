@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Events.VarBase');
+// Former goog.module ID: Blockly.Events.VarBase
 
 import type {VariableModel} from '../variable_model.js';
 

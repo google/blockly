@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.blockRendering.StatementInput');
+// Former goog.module ID: Blockly.blockRendering.StatementInput
 
 /* eslint-disable-next-line no-unused-vars */
 import type {Input} from '../../inputs/input.js';

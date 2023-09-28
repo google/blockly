@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.contextMenuItem');
-
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -419,13 +417,13 @@ suite('Context Menu Items', function () {
         );
       });
 
-      test('Calls duplicate', function () {
-        const spy = sinon.spy(Blockly.clipboard.TEST_ONLY, 'duplicateInternal');
-
+      test('the block is duplicated', function () {
         this.duplicateOption.callback(this.scope);
-
-        sinon.assert.calledOnce(spy);
-        sinon.assert.calledWith(spy, this.block);
+        chai.assert.equal(
+          this.workspace.getTopBlocks(false).length,
+          2,
+          'Expected a second block',
+        );
       });
 
       test('Has correct label', function () {

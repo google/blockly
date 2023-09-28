@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.IComponent');
+// Former goog.module ID: Blockly.IComponent
 
 /**
  * The interface for a workspace component that can be registered with the

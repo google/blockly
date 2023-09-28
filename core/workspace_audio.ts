@@ -10,8 +10,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.WorkspaceAudio');
+// Former goog.module ID: Blockly.WorkspaceAudio
 
 import * as userAgent from './utils/useragent.js';
 import type {WorkspaceSvg} from './workspace_svg.js';

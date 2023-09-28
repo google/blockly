@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.IDeleteArea');
+// Former goog.module ID: Blockly.IDeleteArea
 
 import type {IDragTarget} from './i_drag_target.js';
 import type {IDraggable} from './i_draggable.js';

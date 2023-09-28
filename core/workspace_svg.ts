@@ -9,8 +9,7 @@
  *
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.WorkspaceSvg');
+// Former goog.module ID: Blockly.WorkspaceSvg
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_create.js';
@@ -36,7 +35,7 @@ import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
-import type {ICopyable} from './interfaces/i_copyable.js';
+import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
@@ -78,6 +77,7 @@ import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
 import {ContextMenuOption} from './contextmenu_registry.js';
 import * as renderManagement from './render_management.js';
+import * as deprecation from './utils/deprecation.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -694,6 +694,15 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   }
 
   /**
+   * Returns the SVG group for the workspace.
+   *
+   * @returns The SVG group for the workspace.
+   */
+  getSvgGroup(): Element {
+    return this.svgGroup_;
+  }
+
+  /**
    * Get the SVG block canvas for the workspace.
    *
    * @returns The SVG group for the workspace.
@@ -1291,10 +1300,18 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param state The representation of the thing to paste.
    * @returns The pasted thing, or null if the paste was not successful.
+   * @deprecated v10. Use `Blockly.clipboard.paste` instead. To be removed in
+   *     v11.
    */
   paste(
     state: AnyDuringMigration | Element | DocumentFragment,
-  ): ICopyable | null {
+  ): ICopyable<ICopyData> | null {
+    deprecation.warn(
+      'Blockly.WorkspaceSvg.prototype.paste',
+      'v10',
+      'v11',
+      'Blockly.clipboard.paste',
+    );
     if (!this.rendered || (!state['type'] && !state['tagName'])) {
       return null;
     }
@@ -1382,6 +1399,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
             for (let i = 0, connection; (connection = connections[i]); i++) {
               const neighbour = connection.closest(
                 config.snapRadius,
+                // This code doesn't work because it's passing absolute coords
+                // instead of relative coords. But we're deprecating the `paste`
+                // function anyway so we're not going to fix it.
                 new Coordinate(blockX, blockY),
               );
               if (neighbour.connection) {
@@ -1435,6 +1455,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         // with any blocks.
         commentX += 50;
         commentY += 50;
+        // This code doesn't work because it's passing absolute coords
+        // instead of relative coords. But we're deprecating the `paste`
+        // function anyway so we're not going to fix it.
         comment.moveBy(commentX, commentY);
       }
     } finally {
@@ -2231,7 +2254,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param ordered Sort the list if true.
    * @returns Array of blocks.
    */
-  override getAllBlocks(ordered: boolean): BlockSvg[] {
+  override getAllBlocks(ordered = false): BlockSvg[] {
     return super.getAllBlocks(ordered) as BlockSvg[];
   }
 
@@ -2242,7 +2265,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param ordered Sort the list if true.
    * @returns The top-level block objects.
    */
-  override getTopBlocks(ordered: boolean): BlockSvg[] {
+  override getTopBlocks(ordered = false): BlockSvg[] {
     return super.getTopBlocks(ordered) as BlockSvg[];
   }
 

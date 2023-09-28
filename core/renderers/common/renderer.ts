@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.blockRendering.Renderer');
+// Former goog.module ID: Blockly.blockRendering.Renderer
 
 import type {Block} from '../../block.js';
 import type {BlockSvg} from '../../block_svg.js';

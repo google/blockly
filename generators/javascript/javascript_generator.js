@@ -9,8 +9,7 @@
  * @suppress {checkTypes|globalThis}
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript');
+// Former goog.module ID: Blockly.JavaScript
 
 import * as Variables from '../../core/variables.js';
 import * as stringUtils from '../../core/utils/string.js';
@@ -206,7 +205,6 @@ export class JavascriptGenerator extends CodeGenerator {
    * quotes.
    * @param {string} string Text to encode.
    * @return {string} JavaScript string.
-   * @protected
    */
   quote_(string) {
     // Can't use goog.string.quote since Google's style guide recommends
@@ -222,7 +220,6 @@ export class JavascriptGenerator extends CodeGenerator {
    * with quotes.
    * @param {string} string Text to encode.
    * @return {string} JavaScript string.
-   * @protected
    */
   multiline_quote_(string) {
     // Can't use goog.string.quote since Google's style guide recommends

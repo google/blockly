@@ -40,6 +40,7 @@
 	"NEW_VARIABLE_TITLE": "Nomine del nove variabile:",
 	"VARIABLE_ALREADY_EXISTS": "Un variabile con le nomine '%1' jam existe.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Un variabile con le nomine '%1' jam existe pro un altere typo: '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "Un variabile con le nomine '%1' ja existe como parametro in le procedura '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Deler %1 usos del variabile '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Impossibile deler le variabile '%1' perque illo face parte del definition del function '%2'",
 	"DELETE_VARIABLE": "Deler le variabile '%1'",

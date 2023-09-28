@@ -10,8 +10,7 @@
  * @suppress {extraRequire}
  */
 
-import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.JavaScript.all');
+// Former goog.module ID: Blockly.JavaScript.all
 
 import {JavascriptGenerator} from './javascript/javascript_generator.js';
 import * as colour from './javascript/colour.js';

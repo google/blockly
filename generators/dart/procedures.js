@@ -8,18 +8,15 @@
  * @fileoverview Generating Dart for procedure blocks.
  */
 
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Dart.procedures');
+// Former goog.module ID: Blockly.Dart.procedures
 
-import {NameType} from '../../core/names.js';
 import {Order} from './dart_generator.js';
 
 
 export function procedures_defreturn(block, generator) {
   // Define a procedure with a return value.
   const funcName =
-      generator.nameDB_.getName(
-        block.getFieldValue('NAME'), NameType.PROCEDURE);
+      generator.getProcedureName(block.getFieldValue('NAME'));
   let xfix1 = '';
   if (generator.STATEMENT_PREFIX) {
     xfix1 += generator.injectId(generator.STATEMENT_PREFIX, block);
@@ -51,7 +48,7 @@ export function procedures_defreturn(block, generator) {
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = generator.nameDB_.getName(variables[i], NameType.VARIABLE);
+    args[i] = generator.getVariableName(variables[i]);
   }
   let code = returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' +
       xfix1 + loopTrap + branch + xfix2 + returnValue + '}';
@@ -68,8 +65,7 @@ export const procedures_defnoreturn = procedures_defreturn;
 export function procedures_callreturn(block, generator) {
   // Call a procedure with a return value.
   const funcName =
-      generator.nameDB_.getName(
-        block.getFieldValue('NAME'),NameType.PROCEDURE);
+      generator.getProcedureName(block.getFieldValue('NAME'));
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {

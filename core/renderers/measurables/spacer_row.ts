@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as goog from '../../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.blockRendering.SpacerRow');
+// Former goog.module ID: Blockly.blockRendering.SpacerRow
 
 import type {ConstantProvider} from '../common/constants.js';
 

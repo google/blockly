@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.eventBlockCreate');
-
 import {assertEventFired} from './test_helpers/events.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {
@@ -56,6 +54,42 @@ suite('Block Create Event', function () {
     const calls = this.eventsFireStub.getCalls();
     const event = calls[calls.length - 1].args[0];
     chai.assert.equal(event.xml.tagName, 'shadow');
+  });
+
+  test('Does not create extra shadow blocks', function () {
+    const shadowId = 'shadow_block';
+    const blockJson = {
+      'type': 'math_arithmetic',
+      'id': 'parent_with_shadow',
+      'fields': {'OP': 'ADD'},
+      'inputs': {
+        'A': {
+          'shadow': {
+            'type': 'math_number',
+            'id': shadowId,
+            'fields': {'NUM': 1},
+          },
+        },
+      },
+    };
+
+    // If there is a shadow block on the workspace and then we get
+    // a block create event with the same ID as the shadow block,
+    // this represents a block that had been covering a shadow block
+    // being removed.
+    Blockly.serialization.blocks.append(blockJson, this.workspace);
+    const shadowBlock = this.workspace.getBlockById(shadowId);
+    const blocksBefore = this.workspace.getAllBlocks();
+
+    const event = new Blockly.Events.BlockCreate(shadowBlock);
+    event.run(true);
+
+    const blocksAfter = this.workspace.getAllBlocks();
+    chai.assert.deepEqual(
+      blocksAfter,
+      blocksBefore,
+      'No new blocks should be created from an event that only creates shadow blocks',
+    );
   });
 
   suite('Serialization', function () {

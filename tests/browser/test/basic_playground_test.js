@@ -16,6 +16,7 @@ const {
   dragBlockTypeFromFlyout,
   connect,
   contextMenuSelect,
+  PAUSE_TIME,
 } = require('./test_setup');
 
 async function getIsCollapsed(browser, blockId) {
@@ -68,23 +69,22 @@ suite('Right Clicking on Blocks', function () {
   suiteSetup(async function () {
     this.browser = await testSetup(testFileLocations.PLAYGROUND);
     this.block = await dragNthBlockFromFlyout(this.browser, 'Loops', 0, 20, 20);
-    this.blockId = this.block.id;
   });
 
   test('clicking the collapse option collapses the block', async function () {
     await contextMenuSelect(this.browser, this.block, 'Collapse Block');
-    chai.assert.isTrue(await getIsCollapsed(this.browser, this.blockId));
+    chai.assert.isTrue(await getIsCollapsed(this.browser, this.block.id));
   });
 
   // Assumes that
   test('clicking the expand option expands the block', async function () {
     await contextMenuSelect(this.browser, this.block, 'Expand Block');
-    chai.assert.isFalse(await getIsCollapsed(this.browser, this.blockId));
+    chai.assert.isFalse(await getIsCollapsed(this.browser, this.block.id));
   });
 
   test('clicking the disable option disables the block', async function () {
     await contextMenuSelect(this.browser, this.block, 'Disable Block');
-    chai.assert.isTrue(await getIsDisabled(this.browser, this.blockId));
+    chai.assert.isTrue(await getIsDisabled(this.browser, this.block.id));
   });
 
   test('clicking the enable option enables the block', async function () {
@@ -115,12 +115,12 @@ suite('Disabling', function () {
   setup(async function () {
     await this.browser.refresh();
     // Pause to allow refresh time to work.
-    await this.browser.pause(200);
+    await this.browser.pause(PAUSE_TIME + 150);
   });
 
   test(
     'children connected to value inputs are disabled when the ' +
-      'parent is diabled',
+      'parent is disabled',
     async function () {
       const parent = await dragBlockTypeFromFlyout(
         this.browser,

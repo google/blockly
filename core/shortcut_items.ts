@@ -191,9 +191,10 @@ export function registerPaste() {
     },
     callback() {
       if (!copyData || !copyCoords || !copyWorkspace) return false;
-      const {left, top, width, height} =
-          copyWorkspace.getMetricsManager().getViewMetrics(true);
-      const viewportRect = new Rect(top, top + height, left, left + width)
+      const {left, top, width, height} = copyWorkspace
+        .getMetricsManager()
+        .getViewMetrics(true);
+      const viewportRect = new Rect(top, top + height, left, left + width);
 
       if (viewportRect.contains(copyCoords.x, copyCoords.y)) {
         // Pass the default copy coordinates when they are inside the viewport.

@@ -12,6 +12,7 @@ import * as common from './common.js';
 import {Gesture} from './gesture.js';
 import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
+import { Rect } from './utils.js';
 import {Coordinate} from './utils/coordinate.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
@@ -190,30 +191,16 @@ export function registerPaste() {
     },
     callback() {
       if (!copyData || !copyCoords || !copyWorkspace) return false;
-      const {
-        left: viewportLeft,
-        top: viewportTop,
-        width: viewportWidth,
-        height: viewportHeight,
-      } = copyWorkspace.getMetricsManager().getViewMetrics(true);
-      const selected = common.getSelected() as BlockSvg;
+      const {left, top, width, height} =
+          copyWorkspace.getMetricsManager().getViewMetrics(true);
+      const viewportRect = new Rect(top, top + height, left, left + width)
 
-      // Pass the default copy coordinates when
-      // default location is inside viewport.
-      if (
-        copyCoords.x >= viewportLeft &&
-        copyCoords.x + selected.width <= viewportLeft + viewportWidth &&
-        copyCoords.y >= viewportTop &&
-        copyCoords.y + selected.height <= viewportTop + viewportHeight
-      ) {
+      if (viewportRect.contains(copyCoords.x, copyCoords.y)) {
+        // Pass the default copy coordinates when they are inside the viewport.
         return !!clipboard.paste(copyData, copyWorkspace, copyCoords);
       } else {
-        // Pass the center of the new viewport
-        // to paste the copied block
-        const centerCoords = new Coordinate(
-          viewportLeft + Math.trunc(viewportWidth / 2 - selected.width / 2),
-          viewportTop + Math.trunc(viewportHeight / 2 - selected.height / 2),
-        );
+        // Otherwise paste in the middle of the viewport.
+        const centerCoords = new Coordinate(left + width / 2, top + height / 2);
         return !!clipboard.paste(copyData, copyWorkspace, centerCoords);
       }
     },

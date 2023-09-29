@@ -51,7 +51,7 @@ function copyStaticSrc(done) {
  * Prerequisite: clean, build.
  */
 function copyBuilt(done) {
-  return gulp.src(['build/msg/*', 'dist/*_compressed.js*'], {base: '.'})
+  return gulp.src(['build/msg/*', 'dist/*_compressed.js*', 'build/*.loader.mjs'], {base: '.'})
       .pipe(gulp.dest(demoStaticTmpDir));
 }
 

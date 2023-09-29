@@ -26,7 +26,6 @@
     "build:compressed": "exit 1 # Deprecated; use \"npm run minify\" instead.",
     "build:js": "exit 1 # Deprecated; use \"npm run tsc\" instead.",
     "build:langfiles": "exit 1 # Deprecated; use \"npm run langfiles\" instead.",
-    "bump": "npm --no-git-tag-version version 4.$(date +'%Y%m%d').0",
     "clean": "gulp clean",
     "deployDemos": "npm ci && gulp deployDemos",
     "deployDemos:beta": "npm ci && gulp deployDemosBeta",

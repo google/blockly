@@ -25,6 +25,7 @@ const EXTRAS = [
   'build/msg',
   'dist/*_compressed.js*',
   'node_modules/@blockly',
+  'build/*.loader.mjs',
 ];
 
 let upstream = null;

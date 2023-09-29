@@ -12,7 +12,7 @@ import * as common from './common.js';
 import {Gesture} from './gesture.js';
 import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
-import { Rect } from './utils.js';
+import {Rect} from './utils/rect.js';
 import {Coordinate} from './utils/coordinate.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {WorkspaceSvg} from './workspace_svg.js';

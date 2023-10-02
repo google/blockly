@@ -217,9 +217,9 @@ export class ConstantProvider extends BaseConstantProvider {
 
     this.FIELD_DROPDOWN_SVG_ARROW_PADDING = this.FIELD_BORDER_RECT_X_PADDING;
 
-    this.FIELD_COLOUR_DEFAULT_WIDTH = 2 * this.GRID_UNIT;
+    this.FIELD_COLOUR_DEFAULT_WIDTH = 6 * this.GRID_UNIT;
 
-    this.FIELD_COLOUR_DEFAULT_HEIGHT = 4 * this.GRID_UNIT;
+    this.FIELD_COLOUR_DEFAULT_HEIGHT = 8 * this.GRID_UNIT;
 
     this.FIELD_CHECKBOX_X_OFFSET = 1 * this.GRID_UNIT;
 

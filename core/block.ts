@@ -2208,6 +2208,18 @@ export class Block implements IASTNodeLocation, IDeletable {
     const comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | null;
     const oldText = comment?.getText() ?? null;
     if (oldText === text) return;
+    if (text !== null) {
+      let comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | undefined;
+      if (!comment) {
+        comment = this.addIcon(new CommentIcon(this));
+      }
+      eventUtils.disable();
+      comment.setText(text);
+      eventUtils.enable();
+    } else {
+      this.removeIcon(CommentIcon.TYPE);
+    }
+
     eventUtils.fire(
       new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this,
@@ -2217,16 +2229,6 @@ export class Block implements IASTNodeLocation, IDeletable {
         text,
       ),
     );
-
-    if (text !== null) {
-      let comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | undefined;
-      if (!comment) {
-        comment = this.addIcon(new CommentIcon(this));
-      }
-      comment.setText(text);
-    } else {
-      this.removeIcon(CommentIcon.TYPE);
-    }
   }
 
   /**

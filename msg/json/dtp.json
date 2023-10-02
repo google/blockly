@@ -176,5 +176,21 @@
 	"TEXT_CREATE_JOIN_ITEM_TOOLTIP": "Ruhangai item kumaa teks.",
 	"TEXT_APPEND_TITLE": "kumaa %1 ruhangai teks %2",
 	"TEXT_APPEND_TOOLTIP": "Ruhangai soboogian teks kumaa pembolehubah '%1'.",
-	"TEXT_LENGTH_TITLE": "Ninaru %1"
+	"TEXT_LENGTH_TITLE": "Ninaru %1",
+	"TEXT_LENGTH_TOOLTIP": "Pogulio ginumu pimato (kohompit no liwang) id suang teks di pinotounda.",
+	"TEXT_ISEMPTY_TITLE": "%1 nopo nga' kusung",
+	"TEXT_ISEMPTY_TOOLTIP": "Potonduliono otopot sokiro teks di pinotounda nopo nga' kusung.",
+	"TEXT_INDEXOF_TOOLTIP": "Potonduliono Indeks kinaantakan koiso/kotohuri mantad teks koiso kumaa teks koduo. Potonduliono %1 sokiro au koruba teks.",
+	"TEXT_INDEXOF_TITLE": "id suang teks %1 %2 %3",
+	"TEXT_INDEXOF_OPERATOR_FIRST": "mogihum kinaantakan koiso teks",
+	"TEXT_INDEXOF_OPERATOR_LAST": "mogihum kinaantakan kotohuri teks",
+	"TEXT_CHARAT_TITLE": "is suang teks %1 %2",
+	"TEXT_CHARAT_FROM_START": "maganu pimato #",
+	"TEXT_CHARAT_FROM_END": "mogihum pimato # mantad kotohuri",
+	"TEXT_CHARAT_FIRST": "mogihum pimato koiso",
+	"TEXT_CHARAT_LAST": "mogihum pimato kotohuri",
+	"TEXT_CHARAT_RANDOM": "mogihum pimato rawak",
+	"TEXT_CHARAT_TOOLTIP": "Potondulionon pimato kumaa kinoyonon spesifik.",
+	"TEXT_GET_SUBSTRING_TOOLTIP": "Potonduliono ginumu spesifik do teks.",
+	"TEXT_GET_SUBSTRING_INPUT_IN_TEXT": "id suang teks"
 }

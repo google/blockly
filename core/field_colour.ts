@@ -262,28 +262,20 @@ export class FieldColour extends Field<string> {
    */
   protected updateSize_(margin?: number) {
     const constants = this.getConstants();
-    const xOffset =
-      margin !== undefined
-        ? margin
-        : !this.isFullBlockField()
-        ? constants!.FIELD_BORDER_RECT_X_PADDING
-        : 0;
-    let totalWidth = xOffset * 2;
-    let contentWidth = 0;
-    if (!this.isFullBlockField()) {
-      contentWidth = constants!.FIELD_COLOUR_DEFAULT_WIDTH;
-      totalWidth += contentWidth;
-    }
-
-    let totalHeight = constants!.FIELD_TEXT_HEIGHT;
-    if (!this.isFullBlockField()) {
-      totalHeight = Math.max(totalHeight, constants!.FIELD_BORDER_RECT_HEIGHT);
+    let totalWidth;
+    let totalHeight;
+    if (this.isFullBlockField()) {
+      const xOffset = margin ?? 0;
+      totalWidth = xOffset * 2;
+      totalHeight = constants!.FIELD_TEXT_HEIGHT;
+    } else {
+      totalWidth = constants!.FIELD_COLOUR_DEFAULT_WIDTH;
+      totalHeight = constants!.FIELD_COLOUR_DEFAULT_HEIGHT;
     }
 
     this.size_.height = totalHeight;
     this.size_.width = totalWidth;
 
-    this.positionTextElement_(xOffset, contentWidth);
     this.positionBorderRect_();
   }
 

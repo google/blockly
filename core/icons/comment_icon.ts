@@ -155,10 +155,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
 
   /** Sets the text of this comment. Updates any bubbles if they are visible. */
   setText(text: string) {
-    let oldText: null | string = null;
-    if (this.bubbleIsVisible()) {
-      oldText = this.text;
-    }
+    const oldText = this.text;
     eventUtils.fire(
       new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this.sourceBlock,

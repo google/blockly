@@ -2197,19 +2197,21 @@ export class Block implements IASTNodeLocation, IDeletable {
       if (!comment) {
         comment = this.addIcon(new CommentIcon(this));
       }
+      eventUtils.disable()
       comment.setText(text);
+      eventUtils.enable()
     } else {
       this.removeIcon(CommentIcon.TYPE);
-      eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          this,
-          'comment',
-          null,
-          oldText,
-          text,
-        ),
-      );
     }
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        this,
+        'comment',
+        null,
+        oldText,
+        text,
+      ),
+    );
   }
 
   /**

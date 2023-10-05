@@ -93,7 +93,7 @@
 	"LOGIC_OPERATION_OR": "йа",
 	"LOGIC_NEGATE_TITLE": "хӀанхӀа %1",
 	"LOGIC_NEGATE_TOOLTIP": "Нагахь диллар харц далахь, йухадерзадо бакъ долу маьӀна. Нагахь диллар нийса делахь, йухадерзадо харц маьӀна.",
-	"LOGIC_BOOLEAN_TRUE": "бакъ дерг",
+	"LOGIC_BOOLEAN_TRUE": "бакъдерг",
 	"LOGIC_BOOLEAN_FALSE": "харц дерг",
 	"LOGIC_BOOLEAN_TOOLTIP": "Йухадерзадо бакъ йа харц долу маьӀна",
 	"LOGIC_NULL": "ХӀумма а доцург",

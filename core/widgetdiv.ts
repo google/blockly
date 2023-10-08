@@ -51,7 +51,7 @@ export function testOnly_setDiv(newDiv: HTMLDivElement | null) {
  * Create the widget div and inject it onto the page.
  */
 export function createDom() {
-  if (containerDiv) {
+  if (document.querySelector('.blocklyWidgetDiv')) {
     return; // Already created.
   }
 

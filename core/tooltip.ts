@@ -184,7 +184,7 @@ function getTargetObject(
  * Create the tooltip div and inject it onto the page.
  */
 export function createDom() {
-  if (containerDiv) {
+  if (document.querySelector('.blocklyTooltipDiv')) {
     return; // Already created.
   }
   // Create an HTML container for popup overlays (e.g. editor widgets).

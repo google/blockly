@@ -246,12 +246,7 @@ export class FieldColour extends Field<string> {
 
     const block = this.getSourceBlock() as BlockSvg | null;
     if (!block) throw new UnattachedFieldError();
-    // In general, do *not* let fields control the color of blocks. Having the
-    // field control the color is unexpected, and could have performance
-    // impacts.
-    // Whenever we render, the field may no longer be a full-block-field so
-    // we need to update the colour.
-    if (this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) block.applyColour();
+    block.applyColour();
   }
 
   /**

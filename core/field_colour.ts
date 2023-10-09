@@ -246,6 +246,8 @@ export class FieldColour extends Field<string> {
 
     const block = this.getSourceBlock() as BlockSvg | null;
     if (!block) throw new UnattachedFieldError();
+    // Calling applyColour updates the UI (full-block vs non-full-block) for the
+    // colour field, and the colour of the field/block.
     block.applyColour();
   }
 

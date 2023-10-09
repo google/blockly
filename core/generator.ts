@@ -248,7 +248,7 @@ export class CodeGenerator {
     }
     if (typeof func !== 'function') {
       throw Error(
-        `${this.name_} generator does not know how to generate code` +
+        `${this.name_} generator does not know how to generate code ` +
           `for block type "${block.type}".`,
       );
     }

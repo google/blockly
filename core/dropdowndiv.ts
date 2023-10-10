@@ -113,7 +113,7 @@ export interface PositionMetrics {
  * @internal
  */
 export function createDom() {
-  if (div) {
+  if (document.querySelector('.blocklyDropDownDiv')) {
     return; // Already created.
   }
   div = document.createElement('div');

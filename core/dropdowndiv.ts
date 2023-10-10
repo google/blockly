@@ -55,14 +55,14 @@ let animateOutTimer: ReturnType<typeof setTimeout> | null = null;
 /** Callback for when the drop-down is hidden. */
 let onHide: Function | null = null;
 
-/** A class name representing the current owner's workspace container. */
-const containerClassName = 'blocklyDropDownDiv';
-
 /** A class name representing the current owner's workspace renderer. */
 let renderedClassName = '';
 
 /** A class name representing the current owner's workspace theme. */
 let themeClassName = '';
+
+/** The content element. */
+let div: HTMLDivElement;
 
 /** The content element. */
 let content: HTMLDivElement;
@@ -108,25 +108,16 @@ export interface PositionMetrics {
 }
 
 /**
- * Returns the HTML container for dropdown div.
- *
- * @returns The editor widget container.
- */
-export function getDiv(): HTMLDivElement | null {
-  return document.querySelector('.' + containerClassName);
-}
-
-/**
  * Create and insert the DOM element for this div.
  *
  * @internal
  */
 export function createDom() {
-  if (getDiv()) {
+  if (document.querySelector('.blocklyDropDownDiv')) {
     return; // Already created.
   }
-  const div = document.createElement('div');
-  div.className = containerClassName;
+  div = document.createElement('div');
+  div.className = 'blocklyDropDownDiv';
   const parentDiv = common.getParentContainer() || document.body;
   parentDiv.appendChild(div);
 
@@ -192,7 +183,6 @@ export function clearContent() {
  * @param borderColour Any CSS colour for the border.
  */
 export function setColour(backgroundColour: string, borderColour: string) {
-  const div = getDiv()!;
   div.style.backgroundColor = backgroundColour;
   div.style.borderColor = borderColour;
 }
@@ -348,11 +338,6 @@ export function show<T>(
 ): boolean {
   owner = newOwner as Field;
   onHide = opt_onHide || null;
-  const div = getDiv();
-  if (!div) {
-    return false;
-  }
-
   // Set direction.
   div.style.direction = rtl ? 'rtl' : 'ltr';
 
@@ -416,7 +401,7 @@ const internal = {
     secondaryY: number,
   ): PositionMetrics {
     const boundsInfo = internal.getBoundsInfo();
-    const divSize = style.getSize(getDiv()! as Element);
+    const divSize = style.getSize(div as Element);
 
     // Can we fit in-bounds below the target?
     if (primaryY + divSize.height < boundsInfo.bottom) {
@@ -643,11 +628,6 @@ export function hideIfOwner<T>(
 
 /** Hide the menu, triggering animation. */
 export function hide() {
-  const div = getDiv();
-  if (!div) {
-    return;
-  }
-
   // Start the animation by setting the translation and fading out.
   // Reset to (initialX, initialY) - i.e., no translation.
   div.style.transform = 'translate(0, 0)';
@@ -669,10 +649,6 @@ export function hideWithoutAnimation() {
   }
   if (animateOutTimer) {
     clearTimeout(animateOutTimer);
-  }
-  const div = getDiv();
-  if (!div) {
-    return;
   }
 
   // Reset style properties in case this gets called directly
@@ -718,11 +694,6 @@ function positionInternal(
   secondaryX: number,
   secondaryY: number,
 ): boolean {
-  const div = getDiv();
-  if (!div) {
-    return false;
-  }
-
   const metrics = internal.getPositionMetrics(
     primaryX,
     primaryY,

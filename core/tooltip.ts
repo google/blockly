@@ -125,8 +125,8 @@ export const HOVER_MS = 750;
  */
 export const MARGINS = 5;
 
-/** A class name representing the HTML tooltip container. */
-const containerClassName = 'blocklyTooltipDiv';
+/** The HTML container.  Set once by createDom. */
+let containerDiv: HTMLDivElement | null = null;
 
 /**
  * Returns the HTML tooltip container.
@@ -134,7 +134,7 @@ const containerClassName = 'blocklyTooltipDiv';
  * @returns The HTML tooltip container.
  */
 export function getDiv(): HTMLDivElement | null {
-  return document.querySelector('.' + containerClassName);
+  return containerDiv;
 }
 
 /**
@@ -184,12 +184,12 @@ function getTargetObject(
  * Create the tooltip div and inject it onto the page.
  */
 export function createDom() {
-  if (getDiv()) {
+  if (document.querySelector('.blocklyTooltipDiv')) {
     return; // Already created.
   }
   // Create an HTML container for popup overlays (e.g. editor widgets).
-  const containerDiv = document.createElement('div');
-  containerDiv.className = containerClassName;
+  containerDiv = document.createElement('div');
+  containerDiv.className = 'blocklyTooltipDiv';
   const container = common.getParentContainer() || document.body;
   container.appendChild(containerDiv);
 }
@@ -339,7 +339,6 @@ export function dispose() {
 export function hide() {
   if (visible) {
     visible = false;
-    const containerDiv = getDiv();
     if (containerDiv) {
       containerDiv.style.display = 'none';
     }
@@ -373,7 +372,6 @@ export function unblock() {
 
 /** Renders the tooltip content into the tooltip div. */
 function renderContent() {
-  const containerDiv = getDiv();
   if (!containerDiv || !element) {
     // This shouldn't happen, but if it does, we can't render.
     return;
@@ -394,7 +392,7 @@ function renderDefaultContent() {
   for (let i = 0; i < lines.length; i++) {
     const div = document.createElement('div');
     div.appendChild(document.createTextNode(lines[i]));
-    getDiv()!.appendChild(div);
+    containerDiv!.appendChild(div);
   }
 }
 
@@ -406,22 +404,21 @@ function renderDefaultContent() {
  * @returns Coordinates at which the tooltip div should be placed.
  */
 function getPosition(rtl: boolean): {x: number; y: number} {
-  const containerDiv = getDiv()!;
   // Position the tooltip just below the cursor.
   const windowWidth = document.documentElement.clientWidth;
   const windowHeight = document.documentElement.clientHeight;
 
   let anchorX = lastX;
   if (rtl) {
-    anchorX -= OFFSET_X + containerDiv.offsetWidth;
+    anchorX -= OFFSET_X + containerDiv!.offsetWidth;
   } else {
     anchorX += OFFSET_X;
   }
 
   let anchorY = lastY + OFFSET_Y;
-  if (anchorY + containerDiv.offsetHeight > windowHeight + window.scrollY) {
+  if (anchorY + containerDiv!.offsetHeight > windowHeight + window.scrollY) {
     // Falling off the bottom of the screen; shift the tooltip up.
-    anchorY -= containerDiv.offsetHeight + 2 * OFFSET_Y;
+    anchorY -= containerDiv!.offsetHeight + 2 * OFFSET_Y;
   }
 
   if (rtl) {
@@ -429,12 +426,12 @@ function getPosition(rtl: boolean): {x: number; y: number} {
     anchorX = Math.max(MARGINS - window.scrollX, anchorX);
   } else {
     if (
-      anchorX + containerDiv.offsetWidth >
+      anchorX + containerDiv!.offsetWidth >
       windowWidth + window.scrollX - 2 * MARGINS
     ) {
       // Falling off the right edge of the screen;
       // clamp the tooltip on the edge.
-      anchorX = windowWidth - containerDiv.offsetWidth - 2 * MARGINS;
+      anchorX = windowWidth - containerDiv!.offsetWidth - 2 * MARGINS;
     }
   }
 
@@ -448,7 +445,6 @@ function show() {
     return;
   }
   poisonedElement = element;
-  const containerDiv = getDiv();
   if (!containerDiv) {
     return;
   }

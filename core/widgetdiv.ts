@@ -19,14 +19,14 @@ let owner: unknown = null;
 /** Optional cleanup function set by whichever object uses the widget. */
 let dispose: (() => void) | null = null;
 
-/** A class name representing the current owner's workspace container. */
-const containerClassName = 'blocklyWidgetDiv';
-
 /** A class name representing the current owner's workspace renderer. */
 let rendererClassName = '';
 
 /** A class name representing the current owner's workspace theme. */
 let themeClassName = '';
+
+/** The HTML container for popup overlays (e.g. editor widgets). */
+let containerDiv: HTMLDivElement | null;
 
 /**
  * Returns the HTML container for editor widgets.
@@ -34,7 +34,7 @@ let themeClassName = '';
  * @returns The editor widget container.
  */
 export function getDiv(): HTMLDivElement | null {
-  return document.querySelector('.' + containerClassName);
+  return containerDiv;
 }
 
 /**
@@ -44,28 +44,19 @@ export function getDiv(): HTMLDivElement | null {
  * @internal
  */
 export function testOnly_setDiv(newDiv: HTMLDivElement | null) {
-  const div = getDiv();
-  if (!div) {
-    return;
-  }
-
-  if (newDiv === null) {
-    div.remove();
-  } else {
-    div.replaceWith(newDiv);
-  }
+  containerDiv = newDiv;
 }
 
 /**
  * Create the widget div and inject it onto the page.
  */
 export function createDom() {
-  if (getDiv()) {
+  if (document.querySelector('.blocklyWidgetDiv')) {
     return; // Already created.
   }
 
-  const containerDiv = document.createElement('div') as HTMLDivElement;
-  containerDiv.className = containerClassName;
+  containerDiv = document.createElement('div') as HTMLDivElement;
+  containerDiv.className = 'blocklyWidgetDiv';
   const container = common.getParentContainer() || document.body;
   container.appendChild(containerDiv);
 }
@@ -82,10 +73,8 @@ export function show(newOwner: unknown, rtl: boolean, newDispose: () => void) {
   hide();
   owner = newOwner;
   dispose = newDispose;
-  const div = getDiv();
-  if (!div) {
-    return;
-  }
+  const div = containerDiv;
+  if (!div) return;
   div.style.direction = rtl ? 'rtl' : 'ltr';
   div.style.display = 'block';
   const mainWorkspace = common.getMainWorkspace() as WorkspaceSvg;
@@ -108,7 +97,7 @@ export function hide() {
   }
   owner = null;
 
-  const div = getDiv();
+  const div = containerDiv;
   if (!div) return;
   div.style.display = 'none';
   div.style.left = '';
@@ -157,10 +146,9 @@ export function hideIfOwner(oldOwner: unknown) {
  * @param height The height of the widget div (pixels).
  */
 function positionInternal(x: number, y: number, height: number) {
-  const div = getDiv()!;
-  div.style.left = x + 'px';
-  div.style.top = y + 'px';
-  div.style.height = height + 'px';
+  containerDiv!.style.left = x + 'px';
+  containerDiv!.style.top = y + 'px';
+  containerDiv!.style.height = height + 'px';
 }
 
 /**

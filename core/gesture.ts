@@ -945,7 +945,7 @@ export class Gesture {
         'Cannot do an icon click because the start icon is undefined',
       );
     }
-
+    this.bringBlockToFront();
     this.startIcon.onClick();
   }
 

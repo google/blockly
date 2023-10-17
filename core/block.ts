@@ -1641,6 +1641,18 @@ export class Block implements IASTNodeLocation, IDeletable {
       );
     }
 
+    // Validate that each arg has a corresponding message
+    let n = 0;
+    while (json['args' + n]) {
+      if (json['message' + n] === undefined) {
+        throw Error(
+          warningPrefix +
+            `args${n} must have a corresponding message (message${n}).`,
+        );
+      }
+      n++;
+    }
+
     // Set basic properties of block.
     // Makes styles backward compatible with old way of defining hat style.
     if (json['style'] && json['style'].hat) {

@@ -118,29 +118,29 @@ export class RenderInfo extends BaseRenderInfo {
     this.finalize_();
   }
 
-  override shouldStartNewRow_(input: Input, lastInput: Input): boolean {
+  override shouldStartNewRow_(currInput: Input, prevInput: Input): boolean {
     // If this is the first input, just add to the existing row.
     // That row is either empty or has some icons in it.
-    if (!lastInput) {
+    if (!prevInput) {
       return false;
     }
     // If the previous input was an end-row input, then any following input
     // should always be rendered on the next row.
-    if (lastInput instanceof EndRowInput) {
+    if (prevInput instanceof EndRowInput) {
       return true;
     }
     // A statement input or an input following one always gets a new row.
     if (
-      input instanceof StatementInput ||
-      lastInput instanceof StatementInput
+      currInput instanceof StatementInput ||
+      prevInput instanceof StatementInput
     ) {
       return true;
     }
     // Value, dummy, and end-row inputs get new row if inputs are not inlined.
     if (
-      input instanceof ValueInput ||
-      input instanceof DummyInput ||
-      input instanceof EndRowInput
+      currInput instanceof ValueInput ||
+      currInput instanceof DummyInput ||
+      currInput instanceof EndRowInput
     ) {
       return !this.isInline || this.isMultiRow;
     }

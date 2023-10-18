@@ -10,16 +10,18 @@
 
 // Former goog.module ID: Blockly.JavaScript.variables
 
+import type {Block} from '../../core/block.js';
+import type {JavascriptGenerator} from './javascript_generator.js';
 import {Order} from './javascript_generator.js';
 
 
-export function variables_get(block, generator) {
+export function variables_get(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Variable getter.
   const code = generator.getVariableName(block.getFieldValue('VAR'));
   return [code, Order.ATOMIC];
 };
 
-export function variables_set(block, generator) {
+export function variables_set(block: Block, generator: JavascriptGenerator) {
   // Variable setter.
   const argument0 = generator.valueToCode(
                         block, 'VALUE', Order.ASSIGNMENT) || '0';

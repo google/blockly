@@ -11,10 +11,12 @@
 
 // Former goog.module ID: Blockly.JavaScript.math
 
+import type {Block} from '../../core/block.js';
+import type {JavascriptGenerator} from './javascript_generator.js';
 import {Order} from './javascript_generator.js';
 
 
-export function math_number(block, generator) {
+export function math_number(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Numeric value.
   const code = Number(block.getFieldValue('NUM'));
   const order = code >= 0 ? Order.ATOMIC :
@@ -22,7 +24,7 @@ export function math_number(block, generator) {
   return [code, order];
 };
 
-export function math_arithmetic(block, generator) {
+export function math_arithmetic(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', Order.ADDITION],
@@ -46,7 +48,7 @@ export function math_arithmetic(block, generator) {
   return [code, order];
 };
 
-export function math_single(block, generator) {
+export function math_single(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
@@ -130,7 +132,7 @@ export function math_single(block, generator) {
   return [code, Order.DIVISION];
 };
 
-export function math_constant(block, generator) {
+export function math_constant(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['Math.PI', Order.MEMBER],
@@ -143,7 +145,7 @@ export function math_constant(block, generator) {
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
 
-export function math_number_property(block, generator) {
+export function math_number_property(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -197,7 +199,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(n) {
   return [code, outputOrder];
 };
 
-export function math_change(block, generator) {
+export function math_change(block: Block, generator: JavascriptGenerator) {
   // Add to a variable in place.
   const argument0 = generator.valueToCode(block, 'DELTA',
       Order.ADDITION) || '0';
@@ -211,7 +213,7 @@ export const math_round = math_single;
 // Trigonometry functions have a single operand.
 export const math_trig = math_single;
 
-export function math_on_list(block, generator) {
+export function math_on_list(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   let list;
@@ -341,7 +343,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(list) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function math_modulo(block, generator) {
+export function math_modulo(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Remainder computation.
   const argument0 = generator.valueToCode(block, 'DIVIDEND',
       Order.MODULUS) || '0';
@@ -351,7 +353,7 @@ export function math_modulo(block, generator) {
   return [code, Order.MODULUS];
 };
 
-export function math_constrain(block, generator) {
+export function math_constrain(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Constrain a number between two limits.
   const argument0 = generator.valueToCode(block, 'VALUE',
       Order.NONE) || '0';
@@ -364,7 +366,7 @@ export function math_constrain(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function math_random_int(block, generator) {
+export function math_random_int(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Random integer between [X] and [Y].
   const argument0 = generator.valueToCode(block, 'FROM',
       Order.NONE) || '0';
@@ -385,12 +387,12 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(a, b) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function math_random_float(block, generator) {
+export function math_random_float(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Random fraction between 0 and 1.
   return ['Math.random()', Order.FUNCTION_CALL];
 };
 
-export function math_atan2(block, generator) {
+export function math_atan2(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   const argument0 = generator.valueToCode(block, 'X',
       Order.NONE) || '0';

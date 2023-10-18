@@ -10,10 +10,12 @@
 
 // Former goog.module ID: Blockly.JavaScript.procedures
 
+import type {Block} from '../../core/block.js';
+import type {JavascriptGenerator} from './javascript_generator.js';
 import {Order} from './javascript_generator.js';
 
 
-export function procedures_defreturn(block, generator) {
+export function procedures_defreturn(block: Block, generator: JavascriptGenerator) {
   // Define a procedure with a return value.
   const funcName = generator.getProcedureName(block.getFieldValue('NAME'));
   let xfix1 = '';
@@ -64,7 +66,7 @@ export function procedures_defreturn(block, generator) {
 // a procedure with a return value.
 export const procedures_defnoreturn = procedures_defreturn;
 
-export function procedures_callreturn(block, generator) {
+export function procedures_callreturn(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Call a procedure with a return value.
   const funcName = generator.getProcedureName(block.getFieldValue('NAME'));
   const args = [];
@@ -77,7 +79,7 @@ export function procedures_callreturn(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function procedures_callnoreturn(block, generator) {
+export function procedures_callnoreturn(block: Block, generator: JavascriptGenerator) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
@@ -85,7 +87,7 @@ export function procedures_callnoreturn(block, generator) {
   return tuple[0] + ';\n';
 };
 
-export function procedures_ifreturn(block, generator) {
+export function procedures_ifreturn(block: Block, generator: JavascriptGenerator) {
   // Conditionally return value from a procedure.
   const condition =
       generator.valueToCode(block, 'CONDITION', Order.NONE) ||

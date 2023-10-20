@@ -10,7 +10,6 @@
 
 // Former goog.module ID: Blockly.JavaScript.variablesDynamic
 
-
 // JavaScript is dynamically typed.
 export {
   variables_get as variables_get_dynamic,

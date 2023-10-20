@@ -19,11 +19,11 @@ import {Names, NameType} from '../../core/names.js';
 import type {Workspace} from '../../core/workspace.js';
 import {inputTypes} from '../../core/inputs/input_types.js';
 
-
 /**
  * Order of operation ENUMs.
  * https://developer.mozilla.org/en/JavaScript/Reference/Operators/Operator_Precedence
  */
+// prettier-ignore
 export enum Order {
   ATOMIC = 0,            // 0 "" ...
   NEW = 1.1,             // new
@@ -60,7 +60,7 @@ export enum Order {
   YIELD = 17,            // yield
   COMMA = 18,            // ,
   NONE = 99,             // (...)
-};
+}
 
 /**
  * JavaScript code generator class.
@@ -93,7 +93,7 @@ export class JavascriptGenerator extends CodeGenerator {
     // a && (b && c) -> a && b && c
     [Order.LOGICAL_AND, Order.LOGICAL_AND],
     // a || (b || c) -> a || b || c
-    [Order.LOGICAL_OR, Order.LOGICAL_OR]
+    [Order.LOGICAL_OR, Order.LOGICAL_OR],
   ];
 
   /** @param name Name of language generator is for. */
@@ -126,8 +126,8 @@ export class JavascriptGenerator extends CodeGenerator {
     // this list is trivial.  This is intended to prevent users from
     // accidentally clobbering a built-in object or function.
     this.addReservedWords(
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords
-        'break,case,catch,class,const,continue,debugger,default,delete,do,' +
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords
+      'break,case,catch,class,const,continue,debugger,default,delete,do,' +
         'else,export,extends,finally,for,function,if,import,in,instanceof,' +
         'new,return,super,switch,this,throw,try,typeof,var,void,' +
         'while,with,yield,' +
@@ -139,7 +139,7 @@ export class JavascriptGenerator extends CodeGenerator {
         'arguments,' +
         // Everything in the current environment (835 items in Chrome,
         // 104 in Node).
-        Object.getOwnPropertyNames(globalThis).join(',')
+        Object.getOwnPropertyNames(globalThis).join(','),
     );
   }
 
@@ -166,14 +166,16 @@ export class JavascriptGenerator extends CodeGenerator {
     const devVarList = Variables.allDeveloperVariables(workspace);
     for (let i = 0; i < devVarList.length; i++) {
       defvars.push(
-          this.nameDB_.getName(devVarList[i], NameType.DEVELOPER_VARIABLE));
+        this.nameDB_.getName(devVarList[i], NameType.DEVELOPER_VARIABLE),
+      );
     }
 
     // Add user variables, but only ones that are being used.
     const variables = Variables.allUsedVarModels(workspace);
     for (let i = 0; i < variables.length; i++) {
       defvars.push(
-        this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE));
+        this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE),
+      );
     }
 
     // Declare all of the variables.
@@ -221,10 +223,11 @@ export class JavascriptGenerator extends CodeGenerator {
   quote_(string: string): string {
     // Can't use goog.string.quote since Google's style guide recommends
     // JS string literals use single quotes.
-    string = string.replace(/\\/g, '\\\\')
-        .replace(/\n/g, '\\\n')
-        .replace(/'/g, '\\\'');
-    return '\'' + string + '\'';
+    string = string
+      .replace(/\\/g, '\\\\')
+      .replace(/\n/g, '\\\n')
+      .replace(/'/g, "\\'");
+    return "'" + string + "'";
   }
 
   /**
@@ -237,7 +240,7 @@ export class JavascriptGenerator extends CodeGenerator {
     // Can't use goog.string.quote since Google's style guide recommends
     // JS string literals use single quotes.
     const lines = string.split(/\n/g).map(this.quote_);
-    return lines.join(' + \'\\n\' +\n');
+    return lines.join(" + '\\n' +\n");
   }
 
   /**
@@ -276,7 +279,7 @@ export class JavascriptGenerator extends CodeGenerator {
       }
     }
     const nextBlock =
-        block.nextConnection && block.nextConnection.targetBlock();
+      block.nextConnection && block.nextConnection.targetBlock();
     const nextCode = thisOnly ? '' : this.blockToCode(nextBlock);
     return commentCode + code + nextCode;
   }
@@ -293,7 +296,13 @@ export class JavascriptGenerator extends CodeGenerator {
    * @param order The highest order acting on this value.
    * @returns The adjusted value.
    */
-  getAdjusted(block: Block, atId: string, delta = 0, negate = false, order = Order.NONE): string|number {
+  getAdjusted(
+    block: Block,
+    atId: string,
+    delta = 0,
+    negate = false,
+    order = Order.NONE,
+  ): string | number {
     if (block.workspace.options.oneBasedIndex) {
       delta--;
     }

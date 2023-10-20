@@ -33,8 +33,15 @@ export const javascriptGenerator = new JavascriptGenerator();
 
 // Install per-block-type generator functions:
 const generators: typeof javascriptGenerator.forBlock = {
-  ...colour, ...lists, ...logic, ...loops, ...math,
-  ...procedures, ...text, ...variables, ...variablesDynamic
+  ...colour,
+  ...lists,
+  ...logic,
+  ...loops,
+  ...math,
+  ...procedures,
+  ...text,
+  ...variables,
+  ...variablesDynamic,
 };
 for (const name in generators) {
   javascriptGenerator.forBlock[name] = generators[name];

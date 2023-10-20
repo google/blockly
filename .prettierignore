@@ -18,7 +18,6 @@
 
 # Demos, scripts, misc
 /node_modules/*
-/generators/*
 /demos/*
 /appengine/*
 /externs/*
@@ -27,5 +26,5 @@
 CHANGELOG.md
 PULL_REQUEST_TEMPLATE.md
 
-# Don't bother formatting js blocks since we're getting rid of them
-/blocks/*.js
+# Don't bother formatting JavaScript files we're about to migrate:
+/generators/**/*.js

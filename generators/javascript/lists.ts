@@ -12,6 +12,7 @@
 // Former goog.module ID: Blockly.JavaScript.lists
 
 import type {Block} from '../../core/block.js';
+import type {CreateWithBlock} from '../../blocks/lists.js';
 import type {JavascriptGenerator} from './javascript_generator.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './javascript_generator.js';
@@ -23,9 +24,10 @@ export function lists_create_empty(block: Block, generator: JavascriptGenerator)
 };
 
 export function lists_create_with(block: Block, generator: JavascriptGenerator): [string, Order] {
+  const createWithBlock = block as CreateWithBlock;
   // Create a list with any number of elements of any type.
-  const elements = new Array(block.itemCount_);
-  for (let i = 0; i < block.itemCount_; i++) {
+  const elements = new Array(createWithBlock.itemCount_);
+  for (let i = 0; i < createWithBlock.itemCount_; i++) {
     elements[i] =
         generator.valueToCode(block, 'ADD' + i, Order.NONE) ||
         'null';
@@ -182,8 +184,8 @@ export function lists_setIndex(block: Block, generator: JavascriptGenerator) {
       return '';
     }
     const listVar =
-        generator.nameDB_.getDistinctName(
-          'tmpList', NameType.VARIABLE);
+        generator.nameDB_!.getDistinctName(
+          'tmpList', NameType.VARIABLE)!;
     const code = 'var ' + listVar + ' = ' + list + ';\n';
     list = listVar;
     return code;
@@ -231,7 +233,7 @@ export function lists_setIndex(block: Block, generator: JavascriptGenerator) {
     case ('RANDOM'): {
       let code = cacheList();
       const xVar =
-          generator.nameDB_.getDistinctName(
+          generator.nameDB_!.getDistinctName(
             'tmpX', NameType.VARIABLE);
       code += 'var ' + xVar + ' = Math.floor(Math.random() * ' + list +
           '.length);\n';
@@ -268,11 +270,19 @@ const getSubstringIndex = function(listName: string, where: string, opt_at?: str
 };
 
 export function lists_getSublist(block: Block, generator: JavascriptGenerator): [string, Order] {
+  // Dictionary of WHEREn field choices and their CamelCase equivalents.
+  const wherePascalCase = {
+    'FIRST': 'First',
+    'LAST': 'Last',
+    'FROM_START': 'FromStart',
+    'FROM_END': 'FromEnd',
+  };
+  type WhereOption = keyof typeof wherePascalCase;
   // Get sublist.
   const list =
       generator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
-  const where1 = block.getFieldValue('WHERE1');
-  const where2 = block.getFieldValue('WHERE2');
+  const where1 = block.getFieldValue('WHERE1') as WhereOption;
+  const where2 = block.getFieldValue('WHERE2') as WhereOption;
   let code;
   if (where1 === 'FIRST' && where2 === 'LAST') {
     code = list + '.slice(0)';
@@ -317,12 +327,6 @@ export function lists_getSublist(block: Block, generator: JavascriptGenerator): 
   } else {
     const at1 = generator.getAdjusted(block, 'AT1');
     const at2 = generator.getAdjusted(block, 'AT2');
-    const wherePascalCase = {
-      'FIRST': 'First',
-      'LAST': 'Last',
-      'FROM_START': 'FromStart',
-      'FROM_END': 'FromEnd',
-    };
     // The value for 'FROM_END' and'FROM_START' depends on `at` so
     // we add it as a parameter.
     const at1Param =

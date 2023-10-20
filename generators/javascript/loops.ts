@@ -12,6 +12,7 @@
 
 import * as stringUtils from '../../core/utils/string.js';
 import type {Block} from '../../core/block.js';
+import type {ControlFlowInLoopBlock} from '../../blocks/loops.js';
 import type {JavascriptGenerator} from './javascript_generator.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './javascript_generator.js';
@@ -33,11 +34,11 @@ export function controls_repeat_ext(block: Block, generator: JavascriptGenerator
   branch = generator.addLoopTrap(branch, block);
   let code = '';
   const loopVar =
-      generator.nameDB_.getDistinctName('count', NameType.VARIABLE);
+      generator.nameDB_!.getDistinctName('count', NameType.VARIABLE);
   let endVar = repeats;
   if (!repeats.match(/^\w+$/) && !stringUtils.isNumber(repeats)) {
     endVar =
-        generator.nameDB_.getDistinctName(
+        generator.nameDB_!.getDistinctName(
           'repeat_end', NameType.VARIABLE);
     code += 'var ' + endVar + ' = ' + repeats + ';\n';
   }
@@ -96,23 +97,23 @@ export function controls_for(block: Block, generator: JavascriptGenerator) {
     // Cache non-trivial values to variables to prevent repeated look-ups.
     let startVar = argument0;
     if (!argument0.match(/^\w+$/) && !stringUtils.isNumber(argument0)) {
-      startVar = generator.nameDB_.getDistinctName(
+      startVar = generator.nameDB_!.getDistinctName(
           variable0 + '_start', NameType.VARIABLE);
       code += 'var ' + startVar + ' = ' + argument0 + ';\n';
     }
     let endVar = argument1;
     if (!argument1.match(/^\w+$/) && !stringUtils.isNumber(argument1)) {
-      endVar = generator.nameDB_.getDistinctName(
+      endVar = generator.nameDB_!.getDistinctName(
           variable0 + '_end', NameType.VARIABLE);
       code += 'var ' + endVar + ' = ' + argument1 + ';\n';
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    const incVar = generator.nameDB_.getDistinctName(
+    const incVar = generator.nameDB_!.getDistinctName(
         variable0 + '_inc', NameType.VARIABLE);
     code += 'var ' + incVar + ' = ';
     if (stringUtils.isNumber(increment)) {
-      code += Math.abs(increment) + ';\n';
+      code += Math.abs(Number(increment)) + ';\n';
     } else {
       code += 'Math.abs(' + increment + ');\n';
     }
@@ -140,11 +141,11 @@ export function controls_forEach(block: Block, generator: JavascriptGenerator) {
   // Cache non-trivial values to variables to prevent repeated look-ups.
   let listVar = argument0;
   if (!argument0.match(/^\w+$/)) {
-    listVar = generator.nameDB_.getDistinctName(
+    listVar = generator.nameDB_!.getDistinctName(
         variable0 + '_list', NameType.VARIABLE);
     code += 'var ' + listVar + ' = ' + argument0 + ';\n';
   }
-  const indexVar = generator.nameDB_.getDistinctName(
+  const indexVar = generator.nameDB_!.getDistinctName(
       variable0 + '_index', NameType.VARIABLE);
   branch = generator.INDENT + variable0 + ' = ' + listVar +
       '[' + indexVar + '];\n' + branch;
@@ -167,7 +168,7 @@ export function controls_flow_statements(block: Block, generator: JavascriptGene
         generator.STATEMENT_SUFFIX, block);
   }
   if (generator.STATEMENT_PREFIX) {
-    const loop = block.getSurroundLoop();
+    const loop = (block as ControlFlowInLoopBlock).getSurroundLoop();
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end
       // of the loop will not get executed if 'continue' is triggered.

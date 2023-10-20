@@ -18,22 +18,23 @@ import {Order} from './javascript_generator.js';
 
 export function math_number(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Numeric value.
-  const code = Number(block.getFieldValue('NUM'));
-  const order = code >= 0 ? Order.ATOMIC :
+  const number = Number(block.getFieldValue('NUM'));
+  const order = number >= 0 ? Order.ATOMIC :
               Order.UNARY_NEGATION;
-  return [code, order];
+  return [String(number), order];
 };
 
 export function math_arithmetic(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Basic arithmetic operators, and power.
-  const OPERATORS = {
+  const OPERATORS: Record<string, [string | null, Order]> = {
     'ADD': [' + ', Order.ADDITION],
     'MINUS': [' - ', Order.SUBTRACTION],
     'MULTIPLY': [' * ', Order.MULTIPLICATION],
     'DIVIDE': [' / ', Order.DIVISION],
     'POWER': [null, Order.NONE],  // Handle power separately.
   };
-  const tuple = OPERATORS[block.getFieldValue('OP')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const tuple = OPERATORS[block.getFieldValue('OP') as OperatorOption];
   const operator = tuple[0];
   const order = tuple[1];
   const argument0 = generator.valueToCode(block, 'A', order) || '0';
@@ -134,7 +135,7 @@ export function math_single(block: Block, generator: JavascriptGenerator): [stri
 
 export function math_constant(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
-  const CONSTANTS = {
+  const CONSTANTS: Record<string, [string, Order]> = {
     'PI': ['Math.PI', Order.MEMBER],
     'E': ['Math.E', Order.MEMBER],
     'GOLDEN_RATIO': ['(1 + Math.sqrt(5)) / 2', Order.DIVISION],
@@ -142,13 +143,14 @@ export function math_constant(block: Block, generator: JavascriptGenerator): [st
     'SQRT1_2': ['Math.SQRT1_2', Order.MEMBER],
     'INFINITY': ['Infinity', Order.ATOMIC],
   };
-  return CONSTANTS[block.getFieldValue('CONSTANT')];
+  type ConstantOption = keyof typeof CONSTANTS
+  return CONSTANTS[block.getFieldValue('CONSTANT') as ConstantOption];
 };
 
 export function math_number_property(block: Block, generator: JavascriptGenerator): [string, Order] {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
-  const PROPERTIES = {
+  const PROPERTIES: Record<string, [string | null, Order, Order]> = {
     'EVEN': [' % 2 === 0', Order.MODULUS, Order.EQUALITY],
     'ODD': [' % 2 === 1', Order.MODULUS, Order.EQUALITY],
     'WHOLE': [' % 1 === 0', Order.MODULUS,
@@ -160,7 +162,8 @@ export function math_number_property(block: Block, generator: JavascriptGenerato
     'DIVISIBLE_BY': [null, Order.MODULUS, Order.EQUALITY],
     'PRIME': [null, Order.NONE, Order.FUNCTION_CALL],
   };
-  const dropdownProperty = block.getFieldValue('PROPERTY');
+  type PropertyOption = keyof typeof PROPERTIES;
+  const dropdownProperty = block.getFieldValue('PROPERTY') as PropertyOption;
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
   const numberToCheck =
       generator.valueToCode(block, 'NUMBER_TO_CHECK', inputOrder) ||

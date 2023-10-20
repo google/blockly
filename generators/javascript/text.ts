@@ -11,6 +11,7 @@
 // Former goog.module ID: Blockly.JavaScript.texts
 
 import type {Block} from '../../core/block.js';
+import type {JoinMutatorBlock} from '../../blocks/text.js';
 import type {JavascriptGenerator} from './javascript_generator.js';
 import {Order} from './javascript_generator.js';
 
@@ -69,29 +70,30 @@ export function text_multiline(block: Block, generator: JavascriptGenerator): [s
 };
 
 export function text_join(block: Block, generator: JavascriptGenerator): [string, Order] {
+  const joinBlock = block as JoinMutatorBlock;
   // Create a string made up of any number of elements of any type.
-  switch (block.itemCount_) {
+  switch (joinBlock.itemCount_) {
     case 0:
       return ["''", Order.ATOMIC];
     case 1: {
-      const element = generator.valueToCode(block, 'ADD0',
+      const element = generator.valueToCode(joinBlock, 'ADD0',
           Order.NONE) || "''";
       const codeAndOrder = forceString(element);
       return codeAndOrder;
     }
     case 2: {
-      const element0 = generator.valueToCode(block, 'ADD0',
+      const element0 = generator.valueToCode(joinBlock, 'ADD0',
           Order.NONE) || "''";
-      const element1 = generator.valueToCode(block, 'ADD1',
+      const element1 = generator.valueToCode(joinBlock, 'ADD1',
           Order.NONE) || "''";
       const code = forceString(element0)[0] +
           ' + ' + forceString(element1)[0];
       return [code, Order.ADDITION];
     }
     default: {
-      const elements = new Array(block.itemCount_);
-      for (let i = 0; i < block.itemCount_; i++) {
-        elements[i] = generator.valueToCode(block, 'ADD' + i,
+      const elements = new Array(joinBlock.itemCount_);
+      for (let i = 0; i < joinBlock.itemCount_; i++) {
+        elements[i] = generator.valueToCode(joinBlock, 'ADD' + i,
             Order.NONE) || "''";
       }
       const code = '[' + elements.join(',') + '].join(\'\')';
@@ -184,9 +186,17 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(text) {
 };
 
 export function text_getSubstring(block: Block, generator: JavascriptGenerator): [string, Order] {
+  // Dictionary of WHEREn field choices and their CamelCase equivalents. */
+  const wherePascalCase = {
+    'FIRST': 'First',
+    'LAST': 'Last',
+    'FROM_START': 'FromStart',
+    'FROM_END': 'FromEnd',
+  };
+  type WhereOption = keyof typeof wherePascalCase;
   // Get substring.
-  const where1 = block.getFieldValue('WHERE1');
-  const where2 = block.getFieldValue('WHERE2');
+  const where1 = block.getFieldValue('WHERE1') as WhereOption;
+  const where2 = block.getFieldValue('WHERE2') as WhereOption;
   const requiresLengthCall = (where1 !== 'FROM_END' && where1 !== 'LAST' &&
       where2 !== 'FROM_END' && where2 !== 'LAST');
   const textOrder = requiresLengthCall ? Order.MEMBER :
@@ -236,8 +246,6 @@ export function text_getSubstring(block: Block, generator: JavascriptGenerator):
   } else {
     const at1 = generator.getAdjusted(block, 'AT1');
     const at2 = generator.getAdjusted(block, 'AT2');
-    const wherePascalCase = {'FIRST': 'First', 'LAST': 'Last',
-      'FROM_START': 'FromStart', 'FROM_END': 'FromEnd'};
     // The value for 'FROM_END' and'FROM_START' depends on `at` so
     // we add it as a parameter.
     const at1Param =
@@ -269,7 +277,8 @@ export function text_changeCase(block: Block, generator: JavascriptGenerator): [
     'LOWERCASE': '.toLowerCase()',
     'TITLECASE': null,
   };
-  const operator = OPERATORS[block.getFieldValue('CASE')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const operator = OPERATORS[block.getFieldValue('CASE') as OperatorOption];
   const textOrder = operator ? Order.MEMBER : Order.NONE;
   const text =
       generator.valueToCode(block, 'TEXT', textOrder) || "''";
@@ -298,7 +307,8 @@ export function text_trim(block: Block, generator: JavascriptGenerator): [string
     'RIGHT': ".replace(/[\\s\\xa0]+$/, '')",
     'BOTH': '.trim()',
   };
-  const operator = OPERATORS[block.getFieldValue('MODE')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const operator = OPERATORS[block.getFieldValue('MODE') as OperatorOption];
   const text = generator.valueToCode(block, 'TEXT',
       Order.MEMBER) || "''";
   return [text + operator, Order.FUNCTION_CALL];

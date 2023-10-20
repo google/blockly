@@ -725,8 +725,12 @@ const QUOTES_EXTENSION = function (this: QuoteImageBlock) {
   this.quoteField_('TEXT');
 };
 
-/** Type of a block that has TEXT_JOIN_MUTATOR_MIXIN */
-type JoinMutatorBlock = BlockSvg & JoinMutatorMixin & QuoteImageMixin;
+/**
+ * Type of a block that has TEXT_JOIN_MUTATOR_MIXIN
+ *
+ * @internal
+ */
+export type JoinMutatorBlock = BlockSvg & JoinMutatorMixin & QuoteImageMixin;
 interface JoinMutatorMixin extends JoinMutatorMixinType {}
 type JoinMutatorMixinType = typeof JOIN_MUTATOR_MIXIN;
 

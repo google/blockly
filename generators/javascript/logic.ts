@@ -58,10 +58,11 @@ export function controls_if(block: Block, generator: JavascriptGenerator) {
 export const controls_ifelse = controls_if;
 
 export function logic_compare(block: Block, generator: JavascriptGenerator): [string, Order] {
-  // Comparison operator.
+  // Dictionary of OP comparison operators and their implementations.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
-  const operator = OPERATORS[block.getFieldValue('OP')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const operator = OPERATORS[block.getFieldValue('OP') as OperatorOption];
   const order = (operator === '==' || operator === '!=') ?
       Order.EQUALITY :
       Order.RELATIONAL;

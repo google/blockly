@@ -1018,6 +1018,8 @@ Extensions.register('text_indexOf_tooltip', INDEXOF_TOOLTIP_EXTENSION);
 
 Extensions.register('text_quotes', QUOTES_EXTENSION);
 
+Extensions.registerMixin('quote_image_mixin', QUOTE_IMAGE_MIXIN);
+
 Extensions.registerMutator(
   'text_join_mutator',
   JOIN_MUTATOR_MIXIN,

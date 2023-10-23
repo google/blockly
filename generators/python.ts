@@ -36,8 +36,11 @@ export const pythonGenerator = new PythonGenerator();
 pythonGenerator.addReservedWords('math,random,Number');
 
 // Install per-block-type generator functions:
-Object.assign(
-  pythonGenerator.forBlock,
-  colour, lists, logic, loops, math, procedures,
-  text, variables, variablesDynamic
-);
+// Install per-block-type generator functions:
+const generators: typeof pythonGenerator.forBlock = {
+  ...colour, ...lists, ...logic, ...loops, ...math,
+  ...procedures, ...text, ...variables, ...variablesDynamic
+};
+for (const name in generators) {
+  pythonGenerator.forBlock[name] = generators[name];
+}

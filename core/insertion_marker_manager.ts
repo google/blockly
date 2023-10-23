@@ -271,6 +271,10 @@ export class InsertionMarkerManager {
         }
       }
 
+      for (const block of result.getDescendants(false)) {
+        block.setInsertionMarker(true);
+      }
+
       result.setCollapsed(sourceBlock.isCollapsed());
       result.setInputsInline(sourceBlock.getInputsInline());
 

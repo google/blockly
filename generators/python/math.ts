@@ -20,30 +20,27 @@ import {Order} from './python_generator.js';
 
 export function math_number(block: Block, generator: PythonGenerator): [string, Order] {
   // Numeric value.
-  let code = Number(block.getFieldValue('NUM'));
-  let order;
-  if (code === Infinity) {
-    code = 'float("inf")';
-    order = Order.FUNCTION_CALL;
-  } else if (code === -Infinity) {
-    code = '-float("inf")';
-    order = Order.UNARY_SIGN;
+  let number = Number(block.getFieldValue('NUM'));
+  if (number === Infinity) {
+    return ['float("inf")', Order.FUNCTION_CALL];
+  } else if (number === -Infinity) {
+    return ['-float("inf")', Order.UNARY_SIGN];
   } else {
-    order = code < 0 ? Order.UNARY_SIGN : Order.ATOMIC;
+    return [String(number), number < 0 ? Order.UNARY_SIGN : Order.ATOMIC];
   }
-  return [code, order];
 };
 
 export function math_arithmetic(block: Block, generator: PythonGenerator): [string, Order] {
   // Basic arithmetic operators, and power.
-  const OPERATORS = {
+  const OPERATORS: Record<string, [string | null, Order]> = {
     'ADD': [' + ', Order.ADDITIVE],
     'MINUS': [' - ', Order.ADDITIVE],
     'MULTIPLY': [' * ', Order.MULTIPLICATIVE],
     'DIVIDE': [' / ', Order.MULTIPLICATIVE],
     'POWER': [' ** ', Order.EXPONENTIATION],
   };
-  const tuple = OPERATORS[block.getFieldValue('OP')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const tuple = OPERATORS[block.getFieldValue('OP') as OperatorOption];
   const operator = tuple[0];
   const order = tuple[1];
   const argument0 = generator.valueToCode(block, 'A', order) || '0';
@@ -67,7 +64,9 @@ export function math_single(block: Block, generator: PythonGenerator): [string, 
     code = generator.valueToCode(block, 'NUM', Order.UNARY_SIGN) || '0';
     return ['-' + code, Order.UNARY_SIGN];
   }
-  generator.definitions_['import_math'] = 'import math';
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected (here and below).
+  (generator as AnyDuringMigration).definitions_['import_math'] = 'import math';
   if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
     arg =
         generator.valueToCode(block, 'NUM', Order.MULTIPLICATIVE) || '0';
@@ -137,7 +136,7 @@ export function math_single(block: Block, generator: PythonGenerator): [string, 
 
 export function math_constant(block: Block, generator: PythonGenerator): [string, Order] {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
-  const CONSTANTS = {
+  const CONSTANTS: Record<string, [string, Order]> = {
     'PI': ['math.pi', Order.MEMBER],
     'E': ['math.e', Order.MEMBER],
     'GOLDEN_RATIO': ['(1 + math.sqrt(5)) / 2', Order.MULTIPLICATIVE],
@@ -145,9 +144,10 @@ export function math_constant(block: Block, generator: PythonGenerator): [string
     'SQRT1_2': ['math.sqrt(1.0 / 2)', Order.MEMBER],
     'INFINITY': ['float(\'inf\')', Order.ATOMIC],
   };
-  const constant = block.getFieldValue('CONSTANT');
+  type ConstantOption = keyof typeof CONSTANTS;
+  const constant = block.getFieldValue('CONSTANT') as ConstantOption;
   if (constant !== 'INFINITY') {
-    generator.definitions_['import_math'] = 'import math';
+    (generator as AnyDuringMigration).definitions_['import_math'] = 'import math';
   }
   return CONSTANTS[constant];
 };
@@ -155,7 +155,7 @@ export function math_constant(block: Block, generator: PythonGenerator): [string
 export function math_number_property(block: Block, generator: PythonGenerator): [string, Order] {
    // Check if a number is even, odd, prime, whole, positive, or negative
    // or if it is divisible by certain number. Returns true or false.
-  const PROPERTIES = {
+  const PROPERTIES: Record<string, [string | null, Order, Order]> = {
     'EVEN': [' % 2 == 0', Order.MULTIPLICATIVE, Order.RELATIONAL],
     'ODD': [' % 2 == 1', Order.MULTIPLICATIVE, Order.RELATIONAL],
     'WHOLE': [' % 1 == 0', Order.MULTIPLICATIVE,
@@ -166,15 +166,16 @@ export function math_number_property(block: Block, generator: PythonGenerator): 
         Order.RELATIONAL],
     'PRIME': [null, Order.NONE, Order.FUNCTION_CALL],
   }
-  const dropdownProperty = block.getFieldValue('PROPERTY');
+  type PropertyOption = keyof typeof PROPERTIES;
+  const dropdownProperty = block.getFieldValue('PROPERTY') as PropertyOption;
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
   const numberToCheck = generator.valueToCode(block, 'NUMBER_TO_CHECK',
       inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    generator.definitions_['import_math'] = 'import math';
-    generator.definitions_['from_numbers_import_Number'] =
+    (generator as AnyDuringMigration).definitions_['import_math'] = 'import math';
+    (generator as AnyDuringMigration).definitions_['from_numbers_import_Number'] =
         'from numbers import Number';
     const functionName = generator.provideFunction_('math_isPrime', `
 def ${generator.FUNCTION_NAME_PLACEHOLDER_}(n):
@@ -213,7 +214,7 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(n):
 
 export function math_change(block: Block, generator: PythonGenerator) {
   // Add to a variable in place.
-  generator.definitions_['from_numbers_import_Number'] =
+  (generator as AnyDuringMigration).definitions_['from_numbers_import_Number'] =
       'from numbers import Number';
   const argument0 =
       generator.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
@@ -243,7 +244,7 @@ export function math_on_list(block: Block, generator: PythonGenerator): [string,
       code = 'max(' + list + ')';
       break;
     case 'AVERAGE': {
-      generator.definitions_['from_numbers_import_Number'] =
+      (generator as AnyDuringMigration).definitions_['from_numbers_import_Number'] =
           'from numbers import Number';
       // This operation excludes null and values that aren't int or float:
       // math_mean([null, null, "aString", 1, 9]) -> 5.0
@@ -257,7 +258,7 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(myList):
       break;
     }
     case 'MEDIAN': {
-      generator.definitions_['from_numbers_import_Number'] =
+      (generator as AnyDuringMigration).definitions_['from_numbers_import_Number'] =
           'from numbers import Number';
       // This operation excludes null values:
       // math_median([null, null, 1, 3]) -> 2.0
@@ -302,7 +303,7 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(some_list):
       break;
     }
     case 'STD_DEV': {
-      generator.definitions_['import_math'] = 'import math';
+      (generator as AnyDuringMigration).definitions_['import_math'] = 'import math';
       const functionName =
           generator.provideFunction_('math_standard_deviation', `
 def ${generator.FUNCTION_NAME_PLACEHOLDER_}(numbers):
@@ -316,7 +317,7 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(numbers):
       break;
     }
     case 'RANDOM':
-      generator.definitions_['import_random'] = 'import random';
+      (generator as AnyDuringMigration).definitions_['import_random'] = 'import random';
       code = 'random.choice(' + list + ')';
       break;
     default:
@@ -353,7 +354,7 @@ export function math_constrain(block: Block, generator: PythonGenerator): [strin
 
 export function math_random_int(block: Block, generator: PythonGenerator): [string, Order] {
   // Random integer between [X] and [Y].
-  generator.definitions_['import_random'] = 'import random';
+  (generator as AnyDuringMigration).definitions_['import_random'] = 'import random';
   const argument0 =
       generator.valueToCode(block, 'FROM', Order.NONE) || '0';
   const argument1 =
@@ -364,13 +365,13 @@ export function math_random_int(block: Block, generator: PythonGenerator): [stri
 
 export function math_random_float(block: Block, generator: PythonGenerator): [string, Order] {
   // Random fraction between 0 and 1.
-  generator.definitions_['import_random'] = 'import random';
+  (generator as AnyDuringMigration).definitions_['import_random'] = 'import random';
   return ['random.random()', Order.FUNCTION_CALL];
 };
 
 export function math_atan2(block: Block, generator: PythonGenerator): [string, Order] {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  generator.definitions_['import_math'] = 'import math';
+  (generator as AnyDuringMigration).definitions_['import_math'] = 'import math';
   const argument0 = generator.valueToCode(block, 'X', Order.NONE) || '0';
   const argument1 = generator.valueToCode(block, 'Y', Order.NONE) || '0';
   return [

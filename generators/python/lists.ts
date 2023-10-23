@@ -12,6 +12,7 @@
 
 import * as stringUtils from '../../core/utils/string.js';
 import type {Block} from '../../core/block.js';
+import type {CreateWithBlock} from '../../blocks/lists.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './python_generator.js';
 import type {PythonGenerator} from './python_generator.js';
@@ -23,9 +24,10 @@ export function lists_create_empty(block: Block, generator: PythonGenerator): [s
 };
 
 export function lists_create_with(block: Block, generator: PythonGenerator): [string, Order] {
+  const createWithBlock = block as CreateWithBlock;
   // Create a list with any number of elements of any type.
-  const elements = new Array(block.itemCount_);
-  for (let i = 0; i < block.itemCount_; i++) {
+  const elements = new Array(createWithBlock.itemCount_);
+  for (let i = 0; i < createWithBlock.itemCount_; i++) {
     elements[i] =
         generator.valueToCode(block, 'ADD' + i, Order.NONE) || 'None';
   }
@@ -148,7 +150,7 @@ export function lists_getIndex(block: Block, generator: PythonGenerator): [strin
       break;
     }
     case 'RANDOM':
-      generator.definitions_['import_random'] = 'import random';
+      (generator as AnyDuringMigration).definitions_['import_random'] = 'import random';
       if (mode === 'GET') {
         const code = 'random.choice(' + list + ')';
         return [code, Order.FUNCTION_CALL];
@@ -185,7 +187,7 @@ export function lists_setIndex(block: Block, generator: PythonGenerator) {
       return '';
     }
     const listVar =
-        generator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
+        generator.nameDB_!.getDistinctName('tmp_list', NameType.VARIABLE);
     const code = listVar + ' = ' + list + '\n';
     list = listVar;
     return code;
@@ -225,10 +227,10 @@ export function lists_setIndex(block: Block, generator: PythonGenerator) {
       break;
     }
     case 'RANDOM': {
-      generator.definitions_['import_random'] = 'import random';
+      (generator as AnyDuringMigration).definitions_['import_random'] = 'import random';
       let code = cacheList();
       const xVar =
-          generator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
+          generator.nameDB_!.getDistinctName('tmp_x', NameType.VARIABLE);
       code += xVar + ' = int(random.random() * len(' + list + '))\n';
       if (mode === 'SET') {
         code += list + '[' + xVar + '] = ' + value + '\n';
@@ -276,7 +278,7 @@ export function lists_getSublist(block: Block, generator: PythonGenerator): [str
       // Ensure that if the result calculated is 0 that sub-sequence will
       // include all elements as expected.
       if (!stringUtils.isNumber(String(at2))) {
-        generator.definitions_['import_sys'] = 'import sys';
+        (generator as AnyDuringMigration).definitions_['import_sys'] = 'import sys';
         at2 += ' or sys.maxsize';
       } else if (at2 === 0) {
         at2 = '';

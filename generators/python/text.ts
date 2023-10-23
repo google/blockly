@@ -12,6 +12,7 @@
 
 import * as stringUtils from '../../core/utils/string.js';
 import type {Block} from '../../core/block.js';
+import type {JoinMutatorBlock} from '../../blocks/text.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './python_generator.js';
 import type {PythonGenerator} from './python_generator.js';
@@ -53,9 +54,10 @@ const forceString = function(value: string): [string, Order] {
 };
 
 export function text_join(block: Block, generator: PythonGenerator): [string, Order] {
+  const joinBlock = block as JoinMutatorBlock;
   // Create a string made up of any number of elements of any type.
   // Should we allow joining by '-' or ',' or any other characters?
-  switch (block.itemCount_) {
+  switch (joinBlock.itemCount_) {
     case 0:
       return ["''", Order.ATOMIC];
     case 1: {
@@ -74,12 +76,12 @@ export function text_join(block: Block, generator: PythonGenerator): [string, Or
     }
     default: {
       const elements = [];
-      for (let i = 0; i < block.itemCount_; i++) {
+      for (let i = 0; i < joinBlock.itemCount_; i++) {
         elements[i] =
             generator.valueToCode(block, 'ADD' + i, Order.NONE) || "''";
       }
       const tempVar =
-          generator.nameDB_.getDistinctName('x', NameType.VARIABLE);
+          generator.nameDB_!.getDistinctName('x', NameType.VARIABLE);
       const code = '\'\'.join([str(' + tempVar + ') for ' + tempVar + ' in [' +
           elements.join(', ') + ']])';
       return [code, Order.FUNCTION_CALL];
@@ -150,7 +152,9 @@ export function text_charAt(block: Block, generator: PythonGenerator): [string, 
       return [code, Order.MEMBER];
     }
     case 'RANDOM': {
-      generator.definitions_['import_random'] = 'import random';
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected (here and below).
+      (generator as AnyDuringMigration).definitions_['import_random'] = 'import random';
       const functionName =
           generator.provideFunction_('text_random_letter', `
 def ${generator.FUNCTION_NAME_PLACEHOLDER_}(text):
@@ -198,7 +202,7 @@ export function text_getSubstring(block: Block, generator: PythonGenerator): [st
       // Ensure that if the result calculated is 0 that sub-sequence will
       // include all elements as expected.
       if (!stringUtils.isNumber(String(at2))) {
-        generator.definitions_['import_sys'] = 'import sys';
+        (generator as AnyDuringMigration).definitions_['import_sys'] = 'import sys';
         at2 += ' or sys.maxsize';
       } else if (at2 === 0) {
         at2 = '';
@@ -221,7 +225,8 @@ export function text_changeCase(block: Block, generator: PythonGenerator): [stri
     'LOWERCASE': '.lower()',
     'TITLECASE': '.title()'
   };
-  const operator = OPERATORS[block.getFieldValue('CASE')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const operator = OPERATORS[block.getFieldValue('CASE') as OperatorOption];
   const text = generator.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
   const code = text + operator;
   return [code, Order.FUNCTION_CALL];
@@ -234,7 +239,8 @@ export function text_trim(block: Block, generator: PythonGenerator): [string, Or
     'RIGHT': '.rstrip()',
     'BOTH': '.strip()'
   };
-  const operator = OPERATORS[block.getFieldValue('MODE')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const operator = OPERATORS[block.getFieldValue('MODE') as OperatorOption];
   const text = generator.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
   const code = text + operator;
   return [code, Order.FUNCTION_CALL];

@@ -62,7 +62,8 @@ export function logic_compare(block: Block, generator: PythonGenerator): [string
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
-  const operator = OPERATORS[block.getFieldValue('OP')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const operator = OPERATORS[block.getFieldValue('OP') as OperatorOption];
   const order = Order.RELATIONAL;
   const argument0 = generator.valueToCode(block, 'A', order) || '0';
   const argument1 = generator.valueToCode(block, 'B', order) || '0';

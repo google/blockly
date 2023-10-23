@@ -23,7 +23,9 @@ export function colour_picker(block: Block, generator: PythonGenerator): [string
 
 export function colour_random(block: Block, generator: PythonGenerator): [string, Order] {
   // Generate a random colour.
-  generator.definitions_['import_random'] = 'import random';
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_random'] = 'import random';
   const code = '\'#%06x\' % random.randint(0, 2**24 - 1)';
   return [code, Order.FUNCTION_CALL];
 };

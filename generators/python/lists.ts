@@ -11,16 +11,18 @@
 // Former goog.module ID: Blockly.Python.lists
 
 import * as stringUtils from '../../core/utils/string.js';
+import type {Block} from '../../core/block.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './python_generator.js';
+import type {PythonGenerator} from './python_generator.js';
 
 
-export function lists_create_empty(block, generator) {
+export function lists_create_empty(block: Block, generator: PythonGenerator): [string, Order] {
   // Create an empty list.
   return ['[]', Order.ATOMIC];
 };
 
-export function lists_create_with(block, generator) {
+export function lists_create_with(block: Block, generator: PythonGenerator): [string, Order] {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
@@ -31,7 +33,7 @@ export function lists_create_with(block, generator) {
   return [code, Order.ATOMIC];
 };
 
-export function lists_repeat(block, generator) {
+export function lists_repeat(block: Block, generator: PythonGenerator): [string, Order] {
   // Create a list with one element repeated.
   const item = generator.valueToCode(block, 'ITEM', Order.NONE) || 'None';
   const times =
@@ -40,20 +42,20 @@ export function lists_repeat(block, generator) {
   return [code, Order.MULTIPLICATIVE];
 };
 
-export function lists_length(block, generator) {
+export function lists_length(block: Block, generator: PythonGenerator): [string, Order] {
   // String or array length.
   const list = generator.valueToCode(block, 'VALUE', Order.NONE) || '[]';
   return ['len(' + list + ')', Order.FUNCTION_CALL];
 };
 
-export function lists_isEmpty(block, generator) {
+export function lists_isEmpty(block: Block, generator: PythonGenerator): [string, Order] {
   // Is the string null or array empty?
   const list = generator.valueToCode(block, 'VALUE', Order.NONE) || '[]';
   const code = 'not len(' + list + ')';
   return [code, Order.LOGICAL_NOT];
 };
 
-export function lists_indexOf(block, generator) {
+export function lists_indexOf(block: Block, generator: PythonGenerator): [string, Order] {
   // Find an item in the list.
   const item = generator.valueToCode(block, 'FIND', Order.NONE) || '[]';
   const list = generator.valueToCode(block, 'VALUE', Order.NONE) || "''";
@@ -87,7 +89,7 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(my_list, elem):
   return [code, Order.FUNCTION_CALL];
 };
 
-export function lists_getIndex(block, generator) {
+export function lists_getIndex(block: Block, generator: PythonGenerator): [string, Order] | string {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -169,7 +171,7 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(myList):
   throw Error('Unhandled combination (lists_getIndex).');
 };
 
-export function lists_setIndex(block, generator) {
+export function lists_setIndex(block: Block, generator: PythonGenerator) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   let list = generator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
@@ -241,7 +243,7 @@ export function lists_setIndex(block, generator) {
   throw Error('Unhandled combination (lists_setIndex).');
 };
 
-export function lists_getSublist(block, generator) {
+export function lists_getSublist(block: Block, generator: PythonGenerator): [string, Order] {
   // Get sublist.
   const list = generator.valueToCode(block, 'LIST', Order.MEMBER) || '[]';
   const where1 = block.getFieldValue('WHERE1');
@@ -290,7 +292,7 @@ export function lists_getSublist(block, generator) {
   return [code, Order.MEMBER];
 };
 
-export function lists_sort(block, generator) {
+export function lists_sort(block: Block, generator: PythonGenerator): [string, Order] {
   // Block for sorting a list.
   const list = (generator.valueToCode(block, 'LIST', Order.NONE) || '[]');
   const type = block.getFieldValue('TYPE');
@@ -317,7 +319,7 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(my_list, type, reverse):
   return [code, Order.FUNCTION_CALL];
 };
 
-export function lists_split(block, generator) {
+export function lists_split(block: Block, generator: PythonGenerator): [string, Order] {
   // Block for splitting text into a list, or joining a list into text.
   const mode = block.getFieldValue('MODE');
   let code;
@@ -338,7 +340,7 @@ export function lists_split(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function lists_reverse(block, generator) {
+export function lists_reverse(block: Block, generator: PythonGenerator): [string, Order] {
   // Block for reversing a list.
   const list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
   const code = 'list(reversed(' + list + '))';

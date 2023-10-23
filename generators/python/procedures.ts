@@ -11,11 +11,13 @@
 // Former goog.module ID: Blockly.Python.procedures
 
 import * as Variables from '../../core/variables.js';
+import type {Block} from '../../core/block.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './python_generator.js';
+import type {PythonGenerator} from './python_generator.js';
 
 
-export function procedures_defreturn(block, generator) {
+export function procedures_defreturn(block: Block, generator: PythonGenerator) {
   // Define a procedure with a return value.
   // First, add a 'global' statement for every variable that is not shadowed by
   // a local parameter.
@@ -88,7 +90,7 @@ export function procedures_defreturn(block, generator) {
 // a procedure with a return value.
 export const procedures_defnoreturn = procedures_defreturn;
 
-export function procedures_callreturn(block, generator) {
+export function procedures_callreturn(block: Block, generator: PythonGenerator): [string, Order] {
   // Call a procedure with a return value.
   const funcName =
       generator.getProcedureName(block.getFieldValue('NAME'));
@@ -102,7 +104,7 @@ export function procedures_callreturn(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function procedures_callnoreturn(block, generator) {
+export function procedures_callnoreturn(block: Block, generator: PythonGenerator) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
@@ -110,7 +112,7 @@ export function procedures_callnoreturn(block, generator) {
   return tuple[0] + '\n';
 };
 
-export function procedures_ifreturn(block, generator) {
+export function procedures_ifreturn(block: Block, generator: PythonGenerator) {
   // Conditionally return value from a procedure.
   const condition =
       generator.valueToCode(block, 'CONDITION', Order.NONE) || 'False';

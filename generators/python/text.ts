@@ -11,17 +11,19 @@
 // Former goog.module ID: Blockly.Python.texts
 
 import * as stringUtils from '../../core/utils/string.js';
+import type {Block} from '../../core/block.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './python_generator.js';
+import type {PythonGenerator} from './python_generator.js';
 
 
-export function text(block, generator) {
+export function text(block: Block, generator: PythonGenerator): [string, Order] {
   // Text value.
   const code = generator.quote_(block.getFieldValue('TEXT'));
   return [code, Order.ATOMIC];
 };
 
-export function text_multiline(block, generator) {
+export function text_multiline(block: Block, generator: PythonGenerator): [string, Order] {
   // Text value.
   const code = generator.multiline_quote_(block.getFieldValue('TEXT'));
   const order =
@@ -37,19 +39,20 @@ const strRegExp = /^\s*'([^']|\\')*'\s*$/;
 /**
  * Enclose the provided value in 'str(...)' function.
  * Leave string literals alone.
- * @param {string} value Code evaluating to a value.
- * @return {Array<string|number>} Array containing code evaluating to a string
+ *
+ * @param value Code evaluating to a value.
+ * @returns Array containing code evaluating to a string
  *     and
  *    the order of the returned code.[string, number]
  */
-const forceString = function(value) {
+const forceString = function(value: string): [string, Order] {
   if (strRegExp.test(value)) {
     return [value, Order.ATOMIC];
   }
   return ['str(' + value + ')', Order.FUNCTION_CALL];
 };
 
-export function text_join(block, generator) {
+export function text_join(block: Block, generator: PythonGenerator): [string, Order] {
   // Create a string made up of any number of elements of any type.
   // Should we allow joining by '-' or ',' or any other characters?
   switch (block.itemCount_) {
@@ -84,7 +87,7 @@ export function text_join(block, generator) {
   }
 };
 
-export function text_append(block, generator) {
+export function text_append(block: Block, generator: PythonGenerator) {
   // Append to a variable in place.
   const varName =
       generator.getVariableName(block.getFieldValue('VAR'));
@@ -92,20 +95,20 @@ export function text_append(block, generator) {
   return varName + ' = str(' + varName + ') + ' + forceString(value)[0] + '\n';
 };
 
-export function text_length(block, generator) {
+export function text_length(block: Block, generator: PythonGenerator): [string, Order] {
   // Is the string null or array empty?
   const text = generator.valueToCode(block, 'VALUE', Order.NONE) || "''";
   return ['len(' + text + ')', Order.FUNCTION_CALL];
 };
 
-export function text_isEmpty(block, generator) {
+export function text_isEmpty(block: Block, generator: PythonGenerator): [string, Order] {
   // Is the string null or array empty?
   const text = generator.valueToCode(block, 'VALUE', Order.NONE) || "''";
   const code = 'not len(' + text + ')';
   return [code, Order.LOGICAL_NOT];
 };
 
-export function text_indexOf(block, generator) {
+export function text_indexOf(block: Block, generator: PythonGenerator): [string, Order] {
   // Search the text for a substring.
   // Should we allow for non-case sensitive???
   const operator = block.getFieldValue('END') === 'FIRST' ? 'find' : 'rfind';
@@ -120,7 +123,7 @@ export function text_indexOf(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function text_charAt(block, generator) {
+export function text_charAt(block: Block, generator: PythonGenerator): [string, Order] {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
@@ -161,7 +164,7 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(text):
   throw Error('Unhandled option (text_charAt).');
 };
 
-export function text_getSubstring(block, generator) {
+export function text_getSubstring(block: Block, generator: PythonGenerator): [string, Order] {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
@@ -211,7 +214,7 @@ export function text_getSubstring(block, generator) {
   return [code, Order.MEMBER];
 };
 
-export function text_changeCase(block, generator) {
+export function text_changeCase(block: Block, generator: PythonGenerator): [string, Order] {
   // Change capitalization.
   const OPERATORS = {
     'UPPERCASE': '.upper()',
@@ -224,7 +227,7 @@ export function text_changeCase(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function text_trim(block, generator) {
+export function text_trim(block: Block, generator: PythonGenerator): [string, Order] {
   // Trim spaces.
   const OPERATORS = {
     'LEFT': '.lstrip()',
@@ -237,13 +240,13 @@ export function text_trim(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function text_print(block, generator) {
+export function text_print(block: Block, generator: PythonGenerator) {
   // Print statement.
   const msg = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return 'print(' + msg + ')\n';
 };
 
-export function text_prompt_ext(block, generator) {
+export function text_prompt_ext(block: Block, generator: PythonGenerator): [string, Order] {
   // Prompt function.
   const functionName = generator.provideFunction_('text_prompt', `
 def ${generator.FUNCTION_NAME_PLACEHOLDER_}(msg):
@@ -270,14 +273,14 @@ def ${generator.FUNCTION_NAME_PLACEHOLDER_}(msg):
 
 export const text_prompt = text_prompt_ext;
 
-export function text_count(block, generator) {
+export function text_count(block: Block, generator: PythonGenerator): [string, Order] {
   const text = generator.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
   const sub = generator.valueToCode(block, 'SUB', Order.NONE) || "''";
   const code = text + '.count(' + sub + ')';
   return [code, Order.FUNCTION_CALL];
 };
 
-export function text_replace(block, generator) {
+export function text_replace(block: Block, generator: PythonGenerator): [string, Order] {
   const text = generator.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
   const from = generator.valueToCode(block, 'FROM', Order.NONE) || "''";
   const to = generator.valueToCode(block, 'TO', Order.NONE) || "''";
@@ -285,7 +288,7 @@ export function text_replace(block, generator) {
   return [code, Order.MEMBER];
 };
 
-export function text_reverse(block, generator) {
+export function text_reverse(block: Block, generator: PythonGenerator): [string, Order] {
   const text = generator.valueToCode(block, 'TEXT', Order.MEMBER) || "''";
   const code = text + '[::-1]';
   return [code, Order.MEMBER];

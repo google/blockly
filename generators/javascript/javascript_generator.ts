@@ -96,7 +96,7 @@ export class JavascriptGenerator extends CodeGenerator {
     [Order.LOGICAL_OR, Order.LOGICAL_OR],
   ];
 
-  /** @param name Name of language generator is for. */
+  /** @param name Name of the language the generator is for. */
   constructor(name = 'JavaScript') {
     super(name);
     this.isInitialized = false;
@@ -125,8 +125,9 @@ export class JavascriptGenerator extends CodeGenerator {
     // security feature.  Blockly is 100% client-side, so bypassing
     // this list is trivial.  This is intended to prevent users from
     // accidentally clobbering a built-in object or function.
+    //
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords
     this.addReservedWords(
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords
       'break,case,catch,class,const,continue,debugger,default,delete,do,' +
         'else,export,extends,finally,for,function,if,import,in,instanceof,' +
         'new,return,super,switch,this,throw,try,typeof,var,void,' +
@@ -198,7 +199,7 @@ export class JavascriptGenerator extends CodeGenerator {
     super.finish(code);
     this.isInitialized = false;
 
-    this.nameDB_?.reset();
+    this.nameDB_!.reset();
     return definitions.join('\n\n') + '\n\n\n' + code;
   }
 
@@ -268,7 +269,7 @@ export class JavascriptGenerator extends CodeGenerator {
       // Don't collect comments for nested statements.
       for (let i = 0; i < block.inputList.length; i++) {
         if (block.inputList[i].type === inputTypes.VALUE) {
-          const childBlock = block.inputList[i].connection?.targetBlock();
+          const childBlock = block.inputList[i].connection!.targetBlock();
           if (childBlock) {
             comment = this.allNestedComments(childBlock);
             if (comment) {
@@ -290,7 +291,7 @@ export class JavascriptGenerator extends CodeGenerator {
    * and/or by negation.
    *
    * @param block The block.
-   * @param atId The property ID of the element to get.
+   * @param atId The ID of the input block to get (and adjust) the value of.
    * @param delta Value to add.
    * @param negate Whether to negate the value.
    * @param order The highest order acting on this value.
@@ -308,16 +309,16 @@ export class JavascriptGenerator extends CodeGenerator {
     }
     const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
 
-    let innerOrder = order;
+    let inputOrder = order;
     if (delta > 0) {
-      innerOrder = Order.ADDITION;
+      orderForInput = Order.ADDITION;
     } else if (delta < 0) {
-      innerOrder = Order.SUBTRACTION;
+      orderForInput = Order.SUBTRACTION;
     } else if (negate) {
-      innerOrder = Order.UNARY_NEGATION;
+      orderForInput = Order.UNARY_NEGATION;
     }
 
-    let at = this.valueToCode(block, atId, innerOrder) || defaultAtIndex;
+    let at = this.valueToCode(block, atId, orderForInput) || defaultAtIndex;
 
     // Easy case: no adjustments.
     if (delta === 0 && !negate) {
@@ -340,9 +341,7 @@ export class JavascriptGenerator extends CodeGenerator {
     if (negate) {
       at = delta ? `-(${at})` : `-${at}`;
     }
-    innerOrder = Math.floor(innerOrder);
-    order = Math.floor(order);
-    if (order >= innerOrder) {
+    if (Math.floor(order) >= Math.floor(orderForInput)) {
       at = `(${at})`;
     }
     return at;

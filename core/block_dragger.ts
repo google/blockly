@@ -437,7 +437,7 @@ export interface IconPositionData {
  * @returns The list of all icons and their locations.
  */
 function initIconData(
-    block: BlockSvg,
+  block: BlockSvg,
   blockOrigin: Coordinate,
 ): IconPositionData[] {
   // Build a list of icons that need to be moved and where they started.
@@ -460,6 +460,5 @@ function initIconData(
   // Icon; }[]' is not assignable to type 'IconPositionData[]'.
   return dragIconData as AnyDuringMigration;
 }
-
 
 registry.register(registry.Type.BLOCK_DRAGGER, registry.DEFAULT, BlockDragger);

@@ -28,6 +28,7 @@ import * as registry from './registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as deprecation from './utils/deprecation.js';
 
 /**
@@ -74,6 +75,8 @@ export class BlockDragger implements IBlockDragger {
      * beginning of the drag in workspace coordinates.
      */
     this.startXY_ = this.draggingBlock_.getRelativeToSurfaceXY();
+
+    this.dragIconData_ = initIconData(block, this.startXY_);
   }
 
   /**
@@ -82,6 +85,7 @@ export class BlockDragger implements IBlockDragger {
    * @internal
    */
   dispose() {
+    this.dragIconData_.length = 0;
     if (this.draggedConnectionManager_) {
       this.draggedConnectionManager_.dispose();
     }
@@ -422,5 +426,40 @@ export interface IconPositionData {
   location: Coordinate;
   icon: Icon;
 }
+
+/**
+ * Make a list of all of the icons (comment, warning, and mutator) that are
+ * on this block and its descendants.  Moving an icon moves the bubble that
+ * extends from it if that bubble is open.
+ *
+ * @param block The root block that is being dragged.
+ * @param blockOrigin The top left of the given block in workspace coordinates.
+ * @returns The list of all icons and their locations.
+ */
+function initIconData(
+    block: BlockSvg,
+  blockOrigin: Coordinate,
+): IconPositionData[] {
+  // Build a list of icons that need to be moved and where they started.
+  const dragIconData = [];
+
+  for (const icon of block.getIcons()) {
+    // Only bother to track icons whose bubble is visible.
+    if (hasBubble(icon) && !icon.bubbleIsVisible()) continue;
+
+    dragIconData.push({location: blockOrigin, icon: icon});
+    icon.onLocationChange(blockOrigin);
+  }
+
+  for (const child of block.getChildren(false)) {
+    dragIconData.push(
+      ...initIconData(child, Coordinate.sum(blockOrigin, child.relativeCoords)),
+    );
+  }
+  // AnyDuringMigration because:  Type '{ location: Coordinate | null; icon:
+  // Icon; }[]' is not assignable to type 'IconPositionData[]'.
+  return dragIconData as AnyDuringMigration;
+}
+
 
 registry.register(registry.Type.BLOCK_DRAGGER, registry.DEFAULT, BlockDragger);

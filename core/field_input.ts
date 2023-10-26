@@ -617,7 +617,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     }
     const div = WidgetDiv.getDiv();
     const bBox = this.getScaledBBox();
-    console.log(bBox);
     div!.style.width = bBox.right - bBox.left + 'px';
     div!.style.height = bBox.bottom - bBox.top + 'px';
 

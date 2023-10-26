@@ -961,6 +961,14 @@ export abstract class Field<T = any>
   }
 
   /**
+   * Notifies the field that it has changed locations.
+   *
+   * @param _ The location of this field's block's top-start corner
+   *     in workspace coordinates.
+   */
+  onLocationChange(_: Coordinate) {}
+
+  /**
    * Get the text from this field to display on the block. May differ from
    * `getText` due to ellipsis, and other formatting.
    *

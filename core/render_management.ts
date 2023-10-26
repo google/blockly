@@ -5,7 +5,6 @@
  */
 
 import {BlockSvg} from './block_svg.js';
-import {Coordinate} from './utils/coordinate.js';
 import * as userAgent from './utils/useragent.js';
 
 /** The set of all blocks in need of rendering which don't have parents. */
@@ -114,26 +113,34 @@ function queueBlock(block: BlockSvg) {
  */
 function doRenders() {
   const workspaces = new Set([...rootBlocks].map((block) => block.workspace));
-  for (const block of rootBlocks) {
-    // No need to render a dead block.
-    if (block.isDisposed()) continue;
-    // A render for this block may have been queued, and then the block was
-    // connected to a parent, so it is no longer a root block.
-    // Rendering will be triggered through the real root block.
-    if (block.getParent()) continue;
-
+  const blocks = [...rootBlocks].filter(shouldRenderRootBlock);
+  for (const block of blocks) {
     renderBlock(block);
-    const blockOrigin = block.getRelativeToSurfaceXY();
-    updateConnectionLocations(block, blockOrigin);
-    updateIconLocations(block, blockOrigin);
   }
   for (const workspace of workspaces) {
     workspace.resizeContents();
+  }
+  for (const block of blocks) {
+    const blockOrigin = block.getRelativeToSurfaceXY();
+    block.updateComponentLocations(blockOrigin);
   }
 
   rootBlocks.clear();
   dirtyBlocks = new Set();
   afterRendersPromise = null;
+}
+
+/**
+ * Returns true if the block should be rendered.
+ *
+ * No need to render dead blocks.
+ *
+ * No need to render blocks with parents. A render for the block may have been
+ * queued, and the the block was connected to a parent, so it is no longer a
+ * root block. Rendering will be triggered through the real root block.
+ */
+function shouldRenderRootBlock(block: BlockSvg): boolean {
+  return !block.isDisposed() && !block.getParent();
 }
 
 /**
@@ -148,45 +155,4 @@ function renderBlock(block: BlockSvg) {
     renderBlock(child);
   }
   block.renderEfficiently();
-}
-
-/**
- * Updates the connection database with the new locations of all of the
- * connections that are children of the given block.
- *
- * @param block The block to update the connection locations of.
- * @param blockOrigin The top left of the given block in workspace coordinates.
- */
-function updateConnectionLocations(block: BlockSvg, blockOrigin: Coordinate) {
-  for (const conn of block.getConnections_(false)) {
-    const moved = conn.moveToOffset(blockOrigin);
-    const target = conn.targetBlock();
-    if (!conn.isSuperior()) continue;
-    if (!target) continue;
-    if (moved || dirtyBlocks.has(target)) {
-      updateConnectionLocations(
-        target,
-        Coordinate.sum(blockOrigin, target.relativeCoords),
-      );
-    }
-  }
-}
-
-/**
- * Updates all icons that are children of the given block with their new
- * locations.
- *
- * @param block The block to update the icon locations of.
- */
-function updateIconLocations(block: BlockSvg, blockOrigin: Coordinate) {
-  if (!block.getIcons) return;
-  for (const icon of block.getIcons()) {
-    icon.onLocationChange(blockOrigin);
-  }
-  for (const child of block.getChildren(false)) {
-    updateIconLocations(
-      child,
-      Coordinate.sum(blockOrigin, child.relativeCoords),
-    );
-  }
 }

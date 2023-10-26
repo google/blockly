@@ -154,6 +154,9 @@ export class BlockSvg
    */
   private bumpNeighboursPid = 0;
 
+  /** Whether this block is currently being dragged. */
+  private dragging = false;
+
   /**
    * The location of the top left of this block (in workspace coordinates)
    * relative to either its parent block, or the workspace origin if it has no
@@ -384,9 +387,13 @@ export class BlockSvg
       event = new (eventUtils.get(eventUtils.BLOCK_MOVE)!)(this) as BlockMove;
       reason && event.setReason(reason);
     }
-    const xy = this.getRelativeToSurfaceXY();
-    this.translate(xy.x + dx, xy.y + dy);
-    this.moveConnections(dx, dy);
+
+    const delta = new Coordinate(dx, dy);
+    const currLoc = this.getRelativeToSurfaceXY();
+    const newLoc = Coordinate.sum(currLoc, delta);
+    this.translate(newLoc.x, newLoc.y);
+    this.updateComponentLocations(newLoc);
+
     if (eventsEnabled && event) {
       event!.recordNew();
       eventUtils.fire(event);
@@ -437,6 +444,7 @@ export class BlockSvg
   moveDuringDrag(newLoc: Coordinate) {
     this.translate(newLoc.x, newLoc.y);
     this.getSvgRoot().setAttribute('transform', this.getTranslation());
+    this.updateComponentLocations(newLoc);
   }
 
   /** Snap this block to the nearest grid point. */
@@ -649,32 +657,47 @@ export class BlockSvg
   }
 
   /**
-   * Move the connections for this block and all blocks attached under it.
-   * Also update any attached bubbles.
+   * Updates the locations of any parts of the block that need to know where
+   * they are (e.g. connections, icons).
    *
-   * @param dx Horizontal offset from current location, in workspace units.
-   * @param dy Vertical offset from current location, in workspace units.
+   * @param blockOrigin The top-left of this block in workspace coordinates.
    * @internal
    */
-  moveConnections(dx: number, dy: number) {
+  updateComponentLocations(blockOrigin: Coordinate) {
     if (!this.rendered) {
       // Rendering is required to lay out the blocks.
       // This is probably an invisible block attached to a collapsed block.
       return;
     }
-    const myConnections = this.getConnections_(false);
-    for (let i = 0; i < myConnections.length; i++) {
-      myConnections[i].moveBy(dx, dy);
-    }
-    const icons = this.getIcons();
-    const pos = this.getRelativeToSurfaceXY();
-    for (const icon of icons) {
-      icon.onLocationChange(pos);
-    }
 
-    // Recurse through all blocks attached under this one.
-    for (let i = 0; i < this.childBlocks_.length; i++) {
-      (this.childBlocks_[i] as BlockSvg).moveConnections(dx, dy);
+    if (!this.dragging) this.updateConnectionLocations(blockOrigin);
+    this.updateIconLocations(blockOrigin);
+    this.updateFieldLocations(blockOrigin);
+
+    for (const child of this.getChildren(false)) {
+      child.updateComponentLocations(
+        Coordinate.sum(blockOrigin, child.relativeCoords),
+      );
+    }
+  }
+
+  private updateConnectionLocations(blockOrigin: Coordinate) {
+    for (const conn of this.getConnections_(false)) {
+      conn.moveToOffset(blockOrigin);
+    }
+  }
+
+  private updateIconLocations(blockOrigin: Coordinate) {
+    for (const icon of this.getIcons()) {
+      icon.onLocationChange(blockOrigin);
+    }
+  }
+
+  private updateFieldLocations(blockOrigin: Coordinate) {
+    for (const input of this.inputList) {
+      for (const field of input.fieldRow) {
+        field.onLocationChange(blockOrigin);
+      }
     }
   }
 
@@ -686,6 +709,7 @@ export class BlockSvg
    * @internal
    */
   setDragging(adding: boolean) {
+    this.dragging = adding;
     if (adding) {
       this.translation = '';
       common.draggingConnections.push(...this.getConnections_(true));
@@ -1625,46 +1649,6 @@ export class BlockSvg
       for (const field of input.fieldRow) {
         field.updateMarkers_();
       }
-    }
-  }
-
-  /**
-   * Update all of the connections on this block with the new locations
-   * calculated during rendering.  Also move all of the connected blocks based
-   * on the new connection locations.
-   *
-   * @internal
-   */
-  private updateConnectionAndIconLocations() {
-    const blockTL = this.getRelativeToSurfaceXY();
-    // Don't tighten previous or output connections because they are inferior
-    // connections.
-    if (this.previousConnection) {
-      this.previousConnection.moveToOffset(blockTL);
-    }
-    if (this.outputConnection) {
-      this.outputConnection.moveToOffset(blockTL);
-    }
-
-    for (let i = 0; i < this.inputList.length; i++) {
-      const conn = this.inputList[i].connection as RenderedConnection;
-      if (conn) {
-        conn.moveToOffset(blockTL);
-        if (conn.isConnected()) {
-          conn.tighten();
-        }
-      }
-    }
-
-    if (this.nextConnection) {
-      this.nextConnection.moveToOffset(blockTL);
-      if (this.nextConnection.isConnected()) {
-        this.nextConnection.tighten();
-      }
-    }
-
-    for (const icon of this.getIcons()) {
-      icon.onLocationChange(blockTL);
     }
   }
 

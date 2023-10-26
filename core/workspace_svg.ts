@@ -641,7 +641,11 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       x += xy.x * scale;
       y += xy.y * scale;
       element = element.parentNode as SVGElement;
-    } while (element && element !== this.getParentSvg());
+    } while (
+      element &&
+      element !== this.getParentSvg() &&
+      element !== this.getInjectionDiv()
+    );
     return new Coordinate(x, y);
   }
 

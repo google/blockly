@@ -1207,7 +1207,6 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   private placeNewBlock(oldBlock: BlockSvg): BlockSvg {
     const targetWorkspace = this.targetWorkspace;
     const svgRootOld = oldBlock.getSvgRoot();
-
     if (!svgRootOld) {
       throw Error('oldBlock is not rendered');
     }

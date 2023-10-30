@@ -233,10 +233,9 @@ export class BlockDragger implements IBlockDragger {
     const deleted = this.maybeDeleteBlock_();
     if (!deleted) {
       // These are expensive and don't need to be done if we're deleting.
-      this.workspace_.getLayerManager()?.moveOffDragLayer(
-        this.draggingBlock_,
-        layers.BLOCK,
-      );
+      this.workspace_
+        .getLayerManager()
+        ?.moveOffDragLayer(this.draggingBlock_, layers.BLOCK);
       this.draggingBlock_.setDragging(false);
       if (delta) {
         // !preventMove

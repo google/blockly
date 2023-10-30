@@ -14,7 +14,7 @@ export interface IRenderedElement {
 
 /**
  * @returns True if the given object is an IRenderedElement.
- * 
+ *
  * @internal
  */
 export function isRenderedElement(obj: any): obj is IRenderedElement {

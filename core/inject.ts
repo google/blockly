@@ -138,12 +138,18 @@ function createDom(container: Element, options: Options): SVGElement {
  * @param options Dictionary of options.
  * @returns Newly created main workspace.
  */
-function createMainWorkspace(injectionDiv: Element, svg: SVGElement, options: Options): WorkspaceSvg {
+function createMainWorkspace(
+  injectionDiv: Element,
+  svg: SVGElement,
+  options: Options,
+): WorkspaceSvg {
   options.parentWorkspace = null;
   const mainWorkspace = new WorkspaceSvg(options);
   const wsOptions = mainWorkspace.options;
   mainWorkspace.scale = wsOptions.zoomOptions.startScale;
-  svg.appendChild(mainWorkspace.createDom('blocklyMainBackground', injectionDiv));
+  svg.appendChild(
+    mainWorkspace.createDom('blocklyMainBackground', injectionDiv),
+  );
 
   // Set the theme name and renderer name onto the injection div.
   const rendererClassName = mainWorkspace.getRenderer().getClassName();

@@ -333,11 +333,7 @@ export class WorkspaceCommentSvg
         x += xy.x;
         y += xy.y;
         element = element.parentNode as SVGElement;
-      } while (
-        element &&
-        !layerManger.hasLayer(element) &&
-        element !== null
-      );
+      } while (element && !layerManger.hasLayer(element) && element !== null);
     }
     this.xy_ = new Coordinate(x, y);
     return this.xy_;

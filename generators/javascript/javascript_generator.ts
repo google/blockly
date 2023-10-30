@@ -309,7 +309,7 @@ export class JavascriptGenerator extends CodeGenerator {
     }
     const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
 
-    let inputOrder = order;
+    let orderForInput = order;
     if (delta > 0) {
       orderForInput = Order.ADDITION;
     } else if (delta < 0) {

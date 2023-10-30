@@ -19,11 +19,11 @@ import {Names} from '../../core/names.js';
 import type {Workspace} from '../../core/workspace.js';
 import {inputTypes} from '../../core/inputs/input_types.js';
 
-
 /**
  * Order of operation ENUMs.
  * http://docs.python.org/reference/expressions.html#summary
  */
+// prettier-ignore
 export enum Order {
   ATOMIC = 0,             // 0 "" ...
   COLLECTION = 1,         // tuples, lists, dictionaries
@@ -75,13 +75,13 @@ export class PythonGenerator extends CodeGenerator {
     // a and (b and c) -> a and b and c
     [Order.LOGICAL_AND, Order.LOGICAL_AND],
     // a or (b or c) -> a or b or c
-    [Order.LOGICAL_OR, Order.LOGICAL_OR]
+    [Order.LOGICAL_OR, Order.LOGICAL_OR],
   ];
 
   /**
    * Empty loops or conditionals are not allowed in Python.
    */
-  PASS: string = '';  // Initialised by init().
+  PASS: string = ''; // Initialised by init().
 
   /** @param name Name of the language the generator is for. */
   constructor(name = 'Python') {
@@ -118,41 +118,41 @@ export class PythonGenerator extends CodeGenerator {
       // https://docs.python.org/3/reference/lexical_analysis.html#keywords
       // https://docs.python.org/2/reference/lexical_analysis.html#keywords
       'False,None,True,and,as,assert,break,class,continue,def,del,elif,else,' +
-      'except,exec,finally,for,from,global,if,import,in,is,lambda,nonlocal,' +
-      'not,or,pass,print,raise,return,try,while,with,yield,' +
-      // https://docs.python.org/3/library/constants.html
-      // https://docs.python.org/2/library/constants.html
-      'NotImplemented,Ellipsis,__debug__,quit,exit,copyright,license,credits,' +
-      // >>> print(','.join(sorted(dir(__builtins__))))
-      // https://docs.python.org/3/library/functions.html
-      // https://docs.python.org/2/library/functions.html
-      'ArithmeticError,AssertionError,AttributeError,BaseException,' +
-      'BlockingIOError,BrokenPipeError,BufferError,BytesWarning,' +
-      'ChildProcessError,ConnectionAbortedError,ConnectionError,' +
-      'ConnectionRefusedError,ConnectionResetError,DeprecationWarning,' +
-      'EOFError,Ellipsis,EnvironmentError,Exception,FileExistsError,' +
-      'FileNotFoundError,FloatingPointError,FutureWarning,GeneratorExit,' +
-      'IOError,ImportError,ImportWarning,IndentationError,IndexError,' +
-      'InterruptedError,IsADirectoryError,KeyError,KeyboardInterrupt,' +
-      'LookupError,MemoryError,ModuleNotFoundError,NameError,' +
-      'NotADirectoryError,NotImplemented,NotImplementedError,OSError,' +
-      'OverflowError,PendingDeprecationWarning,PermissionError,' +
-      'ProcessLookupError,RecursionError,ReferenceError,ResourceWarning,' +
-      'RuntimeError,RuntimeWarning,StandardError,StopAsyncIteration,' +
-      'StopIteration,SyntaxError,SyntaxWarning,SystemError,SystemExit,' +
-      'TabError,TimeoutError,TypeError,UnboundLocalError,UnicodeDecodeError,' +
-      'UnicodeEncodeError,UnicodeError,UnicodeTranslateError,UnicodeWarning,' +
-      'UserWarning,ValueError,Warning,ZeroDivisionError,_,__build_class__,' +
-      '__debug__,__doc__,__import__,__loader__,__name__,__package__,__spec__,' +
-      'abs,all,any,apply,ascii,basestring,bin,bool,buffer,bytearray,bytes,' +
-      'callable,chr,classmethod,cmp,coerce,compile,complex,copyright,credits,' +
-      'delattr,dict,dir,divmod,enumerate,eval,exec,execfile,exit,file,filter,' +
-      'float,format,frozenset,getattr,globals,hasattr,hash,help,hex,id,input,' +
-      'int,intern,isinstance,issubclass,iter,len,license,list,locals,long,' +
-      'map,max,memoryview,min,next,object,oct,open,ord,pow,print,property,' +
-      'quit,range,raw_input,reduce,reload,repr,reversed,round,set,setattr,' +
-      'slice,sorted,staticmethod,str,sum,super,tuple,type,unichr,unicode,' +
-      'vars,xrange,zip'
+        'except,exec,finally,for,from,global,if,import,in,is,lambda,nonlocal,' +
+        'not,or,pass,print,raise,return,try,while,with,yield,' +
+        // https://docs.python.org/3/library/constants.html
+        // https://docs.python.org/2/library/constants.html
+        'NotImplemented,Ellipsis,__debug__,quit,exit,copyright,license,credits,' +
+        // >>> print(','.join(sorted(dir(__builtins__))))
+        // https://docs.python.org/3/library/functions.html
+        // https://docs.python.org/2/library/functions.html
+        'ArithmeticError,AssertionError,AttributeError,BaseException,' +
+        'BlockingIOError,BrokenPipeError,BufferError,BytesWarning,' +
+        'ChildProcessError,ConnectionAbortedError,ConnectionError,' +
+        'ConnectionRefusedError,ConnectionResetError,DeprecationWarning,' +
+        'EOFError,Ellipsis,EnvironmentError,Exception,FileExistsError,' +
+        'FileNotFoundError,FloatingPointError,FutureWarning,GeneratorExit,' +
+        'IOError,ImportError,ImportWarning,IndentationError,IndexError,' +
+        'InterruptedError,IsADirectoryError,KeyError,KeyboardInterrupt,' +
+        'LookupError,MemoryError,ModuleNotFoundError,NameError,' +
+        'NotADirectoryError,NotImplemented,NotImplementedError,OSError,' +
+        'OverflowError,PendingDeprecationWarning,PermissionError,' +
+        'ProcessLookupError,RecursionError,ReferenceError,ResourceWarning,' +
+        'RuntimeError,RuntimeWarning,StandardError,StopAsyncIteration,' +
+        'StopIteration,SyntaxError,SyntaxWarning,SystemError,SystemExit,' +
+        'TabError,TimeoutError,TypeError,UnboundLocalError,UnicodeDecodeError,' +
+        'UnicodeEncodeError,UnicodeError,UnicodeTranslateError,UnicodeWarning,' +
+        'UserWarning,ValueError,Warning,ZeroDivisionError,_,__build_class__,' +
+        '__debug__,__doc__,__import__,__loader__,__name__,__package__,__spec__,' +
+        'abs,all,any,apply,ascii,basestring,bin,bool,buffer,bytearray,bytes,' +
+        'callable,chr,classmethod,cmp,coerce,compile,complex,copyright,credits,' +
+        'delattr,dict,dir,divmod,enumerate,eval,exec,execfile,exit,file,filter,' +
+        'float,format,frozenset,getattr,globals,hasattr,hash,help,hex,id,input,' +
+        'int,intern,isinstance,issubclass,iter,len,license,list,locals,long,' +
+        'map,max,memoryview,min,next,object,oct,open,ord,pow,print,property,' +
+        'quit,range,raw_input,reduce,reload,repr,reversed,round,set,setattr,' +
+        'slice,sorted,staticmethod,str,sum,super,tuple,type,unichr,unicode,' +
+        'vars,xrange,zip',
     );
   }
 
@@ -181,16 +181,15 @@ export class PythonGenerator extends CodeGenerator {
     const devVarList = Variables.allDeveloperVariables(workspace);
     for (let i = 0; i < devVarList.length; i++) {
       defvars.push(
-          this.nameDB_.getName(devVarList[i], Names.DEVELOPER_VARIABLE_TYPE) +
-          ' = None');
+        this.nameDB_.getName(devVarList[i], Names.DEVELOPER_VARIABLE_TYPE) +
+          ' = None',
+      );
     }
 
     // Add user variables, but only ones that are being used.
     const variables = Variables.allUsedVarModels(workspace);
     for (let i = 0; i < variables.length; i++) {
-      defvars.push(
-          this.getVariableName(variables[i].getId()) +
-          ' = None');
+      defvars.push(this.getVariableName(variables[i].getId()) + ' = None');
     }
 
     this.definitions_['variables'] = defvars.join('\n');
@@ -245,12 +244,12 @@ export class PythonGenerator extends CodeGenerator {
     string = string.replace(/\\/g, '\\\\').replace(/\n/g, '\\\n');
 
     // Follow the CPython behaviour of repr() for a non-byte string.
-    let quote = '\'';
-    if (string.indexOf('\'') !== -1) {
+    let quote = "'";
+    if (string.indexOf("'") !== -1) {
       if (string.indexOf('"') === -1) {
         quote = '"';
       } else {
-        string = string.replace(/'/g, '\\\'');
+        string = string.replace(/'/g, "\\'");
       }
     }
     return quote + string + quote;
@@ -267,7 +266,7 @@ export class PythonGenerator extends CodeGenerator {
     const lines = string.split(/\n/g).map(this.quote_);
     // Join with the following, plus a newline:
     // + '\n' +
-    return lines.join(' + \'\\n\' + \n');
+    return lines.join(" + '\\n' + \n");
   }
 
   /**
@@ -305,7 +304,8 @@ export class PythonGenerator extends CodeGenerator {
         }
       }
     }
-    const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+    const nextBlock =
+      block.nextConnection && block.nextConnection.targetBlock();
     const nextCode = thisOnly ? '' : this.blockToCode(nextBlock);
     return commentCode + code + nextCode;
   }
@@ -320,13 +320,19 @@ export class PythonGenerator extends CodeGenerator {
    * @param negate Whether to negate the value.
    * @returns The adjusted value.
    */
-  getAdjustedInt(block: Block, atId: string, delta = 0, negate = false): string|number {
+  getAdjustedInt(
+    block: Block,
+    atId: string,
+    delta = 0,
+    negate = false,
+  ): string | number {
     if (block.workspace.options.oneBasedIndex) {
       delta--;
     }
     const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
     const atOrder = delta ? Order.ADDITIVE : Order.NONE;
-    let at: string | number = this.valueToCode(block, atId, atOrder) || defaultAtIndex;
+    let at: string | number =
+      this.valueToCode(block, atId, atOrder) || defaultAtIndex;
 
     if (stringUtils.isNumber(at)) {
       // If the index is a naked number, adjust it right now.

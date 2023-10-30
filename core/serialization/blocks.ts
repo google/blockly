@@ -123,12 +123,12 @@ export function save(
   if (addInputBlocks) {
     // AnyDuringMigration because:  Argument of type '{ type: string; id:
     // string; }' is not assignable to parameter of type 'State'.
-    saveInputBlocks(block, state as AnyDuringMigration, doFullSerialization);
+    saveInputBlocks(block, state as AnyDuringMigration, doFullSerialization, saveIds);
   }
   if (addNextBlocks) {
     // AnyDuringMigration because:  Argument of type '{ type: string; id:
     // string; }' is not assignable to parameter of type 'State'.
-    saveNextBlocks(block, state as AnyDuringMigration, doFullSerialization);
+    saveNextBlocks(block, state as AnyDuringMigration, doFullSerialization, saveIds);
   }
 
   // AnyDuringMigration because:  Type '{ type: string; id: string; }' is not
@@ -271,6 +271,7 @@ function saveInputBlocks(
   block: Block,
   state: State,
   doFullSerialization: boolean,
+  addIds: boolean,
 ) {
   const inputs = Object.create(null);
   for (let i = 0; i < block.inputList.length; i++) {
@@ -279,6 +280,7 @@ function saveInputBlocks(
     const connectionState = saveConnection(
       input.connection as Connection,
       doFullSerialization,
+      addIds
     );
     if (connectionState) {
       inputs[input.name] = connectionState;
@@ -302,6 +304,7 @@ function saveNextBlocks(
   block: Block,
   state: State,
   doFullSerialization: boolean,
+  saveIds: boolean
 ) {
   if (!block.nextConnection) {
     return;
@@ -309,6 +312,7 @@ function saveNextBlocks(
   const connectionState = saveConnection(
     block.nextConnection,
     doFullSerialization,
+    saveIds
   );
   if (connectionState) {
     state['next'] = connectionState;
@@ -327,6 +331,7 @@ function saveNextBlocks(
 function saveConnection(
   connection: Connection,
   doFullSerialization: boolean,
+  saveIds: boolean
 ): ConnectionState | null {
   const shadow = connection.getShadowState(true);
   const child = connection.targetBlock();
@@ -338,7 +343,7 @@ function saveConnection(
     state['shadow'] = shadow;
   }
   if (child && !child.isShadow()) {
-    state['block'] = save(child, {doFullSerialization});
+    state['block'] = save(child, {doFullSerialization, saveIds});
   }
   return state;
 }

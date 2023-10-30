@@ -1207,13 +1207,14 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   private placeNewBlock(oldBlock: BlockSvg): BlockSvg {
     const targetWorkspace = this.targetWorkspace;
     const svgRootOld = oldBlock.getSvgRoot();
+
     if (!svgRootOld) {
       throw Error('oldBlock is not rendered');
     }
 
     // Clone the block.
     // TODO(#7432): Add a saveIds parameter to `save`.
-    const json = blocks.save(oldBlock) as blocks.State;
+    const json = blocks.save(oldBlock, {saveIds: false}) as blocks.State;
     // Normallly this resizes leading to weird jumps. Save it for terminateDrag.
     targetWorkspace.setResizesEnabled(false);
     const block = blocks.append(json, targetWorkspace) as BlockSvg;

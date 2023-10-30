@@ -86,20 +86,21 @@ export function save(
     addInputBlocks = true,
     addNextBlocks = true,
     doFullSerialization = true,
+    saveIds = true,
   }: {
     addCoordinates?: boolean;
     addInputBlocks?: boolean;
     addNextBlocks?: boolean;
     doFullSerialization?: boolean;
+    saveIds?: boolean;
   } = {},
 ): State | null {
   if (block.isInsertionMarker()) {
     return null;
   }
-
   const state = {
     'type': block.type,
-    'id': block.id,
+    'id': saveIds ? block.id : null,
   };
 
   if (addCoordinates) {

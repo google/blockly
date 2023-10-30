@@ -111,8 +111,12 @@ export const blocks = createBlockDefinitionsFromJsonArray([
   },
 ]);
 
-/** Type of a 'lists_create_with' block. */
-type CreateWithBlock = Block & ListCreateWithMixin;
+/**
+ * Type of a 'lists_create_with' block.
+ *
+ * @internal
+ */
+export type CreateWithBlock = Block & ListCreateWithMixin;
 interface ListCreateWithMixin extends ListCreateWithMixinType {
   itemCount_: number;
 }

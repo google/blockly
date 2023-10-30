@@ -77,7 +77,7 @@ export class LayerManager {
    * @internal
    */
   moveOffDragLayer(elem: IRenderedElement, layerNum: number) {
-    this.appendRenderedElement(elem, layerNum);
+    this.append(elem, layerNum);
   }
 
   /**
@@ -86,7 +86,7 @@ export class LayerManager {
    *
    * @internal
    */
-  appendRenderedElement(elem: IRenderedElement, layerNum: number) {
+  append(elem: IRenderedElement, layerNum: number) {
     if (!this.layers.has(layerNum)) {
       this.createLayer(layerNum);
     }

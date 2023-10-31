@@ -1183,11 +1183,11 @@ export class BlockSvg
   bringToFront(blockOnly = false) {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block: this | null = this;
+    const isDeadOrDying: boolean = block.isDeadOrDying();
+    if (isDeadOrDying) {
+      return;
+    }
     do {
-      const isDeadOrDying: boolean = block.isDeadOrDying();
-      if (isDeadOrDying) {
-        break;
-      }
       const root = block.getSvgRoot();
       const parent = root.parentNode;
       const childNodes = parent!.childNodes;

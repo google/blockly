@@ -1185,7 +1185,7 @@ export class BlockSvg
     let block: this | null = this;
     do {
       const isDeadOrDying: boolean = block.isDeadOrDying();
-      if(isDeadOrDying){
+      if (isDeadOrDying) {
         break;
       }
       const root = block.getSvgRoot();

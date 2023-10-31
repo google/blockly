@@ -281,7 +281,7 @@ function saveInputBlocks(
   block: Block,
   state: State,
   doFullSerialization: boolean,
-  addIds: boolean,
+  saveIds: boolean,
 ) {
   const inputs = Object.create(null);
   for (let i = 0; i < block.inputList.length; i++) {
@@ -290,7 +290,7 @@ function saveInputBlocks(
     const connectionState = saveConnection(
       input.connection as Connection,
       doFullSerialization,
-      addIds,
+      saveIds,
     );
     if (connectionState) {
       inputs[input.name] = connectionState;

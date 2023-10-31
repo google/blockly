@@ -151,7 +151,9 @@ export class MutatorIcon extends Icon implements IHasBubble {
 
   override onClick(): void {
     super.onClick();
-    this.setBubbleVisible(!this.bubbleIsVisible());
+    if (this.sourceBlock.isEditable()) {
+      this.setBubbleVisible(!this.bubbleIsVisible());
+    }
   }
 
   bubbleIsVisible(): boolean {

@@ -1184,6 +1184,10 @@ export class BlockSvg
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block: this | null = this;
     do {
+      const isDeadOrDying: boolean = block.isDeadOrDying();
+      if(isDeadOrDying){
+        break;
+      }
       const root = block.getSvgRoot();
       const parent = root.parentNode;
       const childNodes = parent!.childNodes;

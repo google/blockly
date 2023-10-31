@@ -1183,8 +1183,7 @@ export class BlockSvg
   bringToFront(blockOnly = false) {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block: this | null = this;
-    const isDeadOrDying: boolean = block.isDeadOrDying();
-    if (isDeadOrDying) {
+    if (block.isDeadOrDying()) {
       return;
     }
     do {

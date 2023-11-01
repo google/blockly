@@ -100,7 +100,7 @@ export function save(
   }
   const state = {
     'type': block.type,
-    'id': saveIds ? block.id : null,
+    'id': saveIds ? block.id : undefined,
   };
 
   if (addCoordinates) {

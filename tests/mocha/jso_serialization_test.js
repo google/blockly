@@ -64,7 +64,7 @@ suite('JSO Serialization', function () {
     test('saveId false', function () {
       const block = this.workspace.newBlock('row_block');
       const jso = Blockly.serialization.blocks.save(block, {saveIds: false});
-      assertProperty(jso, 'id', null);
+      assertProperty(jso, 'id', undefined);
     });
 
     suite('Attributes', function () {

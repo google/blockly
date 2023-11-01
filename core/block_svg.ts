@@ -1183,6 +1183,9 @@ export class BlockSvg
   bringToFront(blockOnly = false) {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block: this | null = this;
+    if (block.isDeadOrDying()) {
+      return;
+    }
     do {
       const root = block.getSvgRoot();
       const parent = root.parentNode;

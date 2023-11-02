@@ -480,6 +480,11 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     return this.workspace_;
   }
 
+  setAutoClose(autoClose: boolean) {
+    console.log('set');
+    this.autoClose = autoClose;
+  }
+
   /**
    * Is the flyout visible?
    *
@@ -624,6 +629,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
     // Parse the Array, Node or NodeList into a a list of flyout items.
     const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
+    if (!parsedContent.length) return; // No need to show an empty flyout.
     const flyoutInfo = this.createFlyoutInfo(parsedContent);
 
     renderManagement.triggerQueuedRenders();

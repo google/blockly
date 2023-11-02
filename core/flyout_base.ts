@@ -426,7 +426,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    */
   dispose() {
     this.hide();
-    this.workspace_.getComponentManager().removeComponent(this.id);
+    this.targetWorkspace.getComponentManager().removeComponent(this.id);
     for (const event of this.boundEvents) {
       browserEvents.unbind(event);
     }
@@ -483,6 +483,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   setAutoClose(autoClose: boolean) {
     console.log('set');
     this.autoClose = autoClose;
+    this.targetWorkspace.recordDragTargets();
   }
 
   /**
@@ -509,7 +510,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
       if (!this.autoClose) {
         // Auto-close flyouts are ignored as drag targets, so only non
         // auto-close flyouts need to have their drag target updated.
-        this.workspace_.recordDragTargets();
+        this.targetWorkspace.recordDragTargets();
       }
       this.updateDisplay();
     }

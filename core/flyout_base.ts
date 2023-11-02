@@ -389,7 +389,6 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
       this.filterWrapper = this.filterForCapacity.bind(this);
       this.targetWorkspace.addChangeListener(this.filterWrapper);
     }
-
     // Dragging the flyout up and down.
     this.boundEvents.push(
       browserEvents.conditionalBind(
@@ -481,9 +480,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   }
 
   setAutoClose(autoClose: boolean) {
-    console.log('set');
     this.autoClose = autoClose;
     this.targetWorkspace.recordDragTargets();
+    this.targetWorkspace.resizeContents();
   }
 
   /**

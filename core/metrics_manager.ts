@@ -113,23 +113,23 @@ export class MetricsManager implements IMetricsManager {
     let absoluteLeft = 0;
     const toolboxMetrics = this.getToolboxMetrics();
     const flyoutMetrics = this.getFlyoutMetrics(true);
-    const doesToolboxExist = !!this.workspace_.getToolbox();
-    const doesFlyoutExist = !!this.workspace_.getFlyout(true);
-    const toolboxPosition = doesToolboxExist
+    const respectToolbox = !!this.workspace_.getToolbox();
+    const respectFlyout = !this.workspace_.getFlyout(true)?.autoClose;
+    const toolboxPosition = respectToolbox
       ? toolboxMetrics.position
       : flyoutMetrics.position;
 
     const atLeft = toolboxPosition === toolboxUtils.Position.LEFT;
     const atTop = toolboxPosition === toolboxUtils.Position.TOP;
-    if (doesToolboxExist && atLeft) {
+    if (respectToolbox && atLeft) {
       absoluteLeft = toolboxMetrics.width;
-    } else if (doesFlyoutExist && atLeft) {
+    } else if (respectFlyout && atLeft) {
       absoluteLeft = flyoutMetrics.width;
     }
     let absoluteTop = 0;
-    if (doesToolboxExist && atTop) {
+    if (respectToolbox && atTop) {
       absoluteTop = toolboxMetrics.height;
-    } else if (doesFlyoutExist && atTop) {
+    } else if (respectFlyout && atTop) {
       absoluteTop = flyoutMetrics.height;
     }
 
@@ -153,12 +153,13 @@ export class MetricsManager implements IMetricsManager {
     const svgMetrics = this.getSvgMetrics();
     const toolboxMetrics = this.getToolboxMetrics();
     const flyoutMetrics = this.getFlyoutMetrics(true);
-    const doesToolboxExist = !!this.workspace_.getToolbox();
-    const toolboxPosition = doesToolboxExist
+    const respectToolbox = !!this.workspace_.getToolbox();
+    const respectFlyout = !this.workspace_.getFlyout(true)?.autoClose;
+    const toolboxPosition = respectToolbox
       ? toolboxMetrics.position
       : flyoutMetrics.position;
 
-    if (this.workspace_.getToolbox()) {
+    if (respectToolbox) {
       if (
         toolboxPosition === toolboxUtils.Position.TOP ||
         toolboxPosition === toolboxUtils.Position.BOTTOM
@@ -170,7 +171,7 @@ export class MetricsManager implements IMetricsManager {
       ) {
         svgMetrics.width -= toolboxMetrics.width;
       }
-    } else if (this.workspace_.getFlyout(true)) {
+    } else if (respectFlyout) {
       if (
         toolboxPosition === toolboxUtils.Position.TOP ||
         toolboxPosition === toolboxUtils.Position.BOTTOM

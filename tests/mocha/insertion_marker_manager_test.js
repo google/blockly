@@ -178,7 +178,7 @@ suite('Insertion marker manager', function () {
       chai.assert.equal(markers.length, 2);
     });
 
-    suite.only('children being set as insertion markers', function () {
+    suite('children being set as insertion markers', function () {
       setup(function () {
         Blockly.Blocks['shadows_in_init'] = {
           init: function () {

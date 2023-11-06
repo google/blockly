@@ -483,12 +483,17 @@ export abstract class Flyout
     return this.workspace_;
   }
 
+  /**
+   * Sets whether this flyout automatically closes when blocks are dragged out,
+   * the workspace is clicked, etc, or not.
+   */
   setAutoClose(autoClose: boolean) {
     this.autoClose = autoClose;
     this.targetWorkspace.recordDragTargets();
     this.targetWorkspace.resizeContents();
   }
 
+  /** Automatically hides the flyout if it is an autoclosing flyout. */
   autoHide(onlyClosePopups: boolean): void {
     if (!onlyClosePopups && this.autoClose) this.hide();
   }

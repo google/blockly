@@ -116,7 +116,7 @@ export class MetricsManager implements IMetricsManager {
     const toolboxMetrics = this.getToolboxMetrics();
     const flyoutMetrics = this.getFlyoutMetrics();
     const respectToolbox = !!this.workspace_.getToolbox();
-    const respectFlyout = !(this.workspace_.getFlyout()?.autoClose);
+    const respectFlyout = !this.workspace_.getFlyout()?.autoClose;
     const toolboxPosition = respectToolbox
       ? toolboxMetrics.position
       : flyoutMetrics.position;

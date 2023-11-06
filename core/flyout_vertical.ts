@@ -375,23 +375,10 @@ export class VerticalFlyout extends Flyout {
         }
       }
 
-      if (
-        this.targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
-        this.toolboxPosition_ === toolbox.Position.LEFT &&
-        this.targetWorkspace.getFlyout() === this &&
-        !this.autoClose
-      ) {
-        // This flyout is a simple non-closing toolbox. Reposition the workspace
-        // so that (0,0) is in the correct position relative to the new
-        // absolute edge (ie toolbox edge).
-        this.targetWorkspace.translate(
-          this.targetWorkspace.scrollX + flyoutWidth,
-          this.targetWorkspace.scrollY,
-        );
-      }
       this.width_ = flyoutWidth;
       this.position();
-      this.targetWorkspace!.recordDragTargets();
+      this.targetWorkspace.resizeContents();
+      this.targetWorkspace.recordDragTargets();
     }
   }
 }

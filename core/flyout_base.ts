@@ -389,10 +389,9 @@ export abstract class Flyout
         this.wheel_,
       ),
     );
-    if (!this.autoClose) {
-      this.filterWrapper = this.filterForCapacity.bind(this);
-      this.targetWorkspace.addChangeListener(this.filterWrapper);
-    }
+    this.filterWrapper = this.filterForCapacity.bind(this);
+    this.targetWorkspace.addChangeListener(this.filterWrapper);
+
     // Dragging the flyout up and down.
     this.boundEvents.push(
       browserEvents.conditionalBind(

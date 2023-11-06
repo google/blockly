@@ -36,6 +36,7 @@ import {WorkspaceSvg} from './workspace_svg.js';
 import * as utilsXml from './utils/xml.js';
 import * as Xml from './xml.js';
 import * as renderManagement from './render_management.js';
+import {IAutoHideable} from './interfaces/i_autohideable.js';
 
 enum FlyoutItemType {
   BLOCK = 'block',
@@ -45,7 +46,10 @@ enum FlyoutItemType {
 /**
  * Class for a flyout.
  */
-export abstract class Flyout extends DeleteArea implements IFlyout {
+export abstract class Flyout
+  extends DeleteArea
+  implements IAutoHideable, IFlyout
+{
   /**
    * Position the flyout.
    */
@@ -413,6 +417,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
       component: this,
       weight: 1,
       capabilities: [
+        ComponentManager.Capability.AUTOHIDEABLE,
         ComponentManager.Capability.DELETE_AREA,
         ComponentManager.Capability.DRAG_TARGET,
       ],
@@ -483,6 +488,10 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     this.autoClose = autoClose;
     this.targetWorkspace.recordDragTargets();
     this.targetWorkspace.resizeContents();
+  }
+
+  autoHide(onlyClosePopups: boolean): void {
+    if (!onlyClosePopups && this.autoClose) this.hide();
   }
 
   /**

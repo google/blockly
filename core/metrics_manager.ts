@@ -151,37 +151,26 @@ export class MetricsManager implements IMetricsManager {
     const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
     const svgMetrics = this.getSvgMetrics();
     const toolboxMetrics = this.getToolboxMetrics();
-    const flyoutMetrics = this.getFlyoutMetrics(true);
+    const flyoutMetrics = this.getFlyoutMetrics();
     const respectToolbox = !!this.workspace_.getToolbox();
-    const respectFlyout = !this.workspace_.getFlyout(true)?.autoClose;
+    const respectFlyout = !this.workspace_.getFlyout()?.autoClose;
     const toolboxPosition = respectToolbox
       ? toolboxMetrics.position
       : flyoutMetrics.position;
 
-    if (respectToolbox) {
-      if (
-        toolboxPosition === toolboxUtils.Position.TOP ||
-        toolboxPosition === toolboxUtils.Position.BOTTOM
-      ) {
-        svgMetrics.height -= toolboxMetrics.height;
-      } else if (
-        toolboxPosition === toolboxUtils.Position.LEFT ||
-        toolboxPosition === toolboxUtils.Position.RIGHT
-      ) {
-        svgMetrics.width -= toolboxMetrics.width;
-      }
-    } else if (respectFlyout) {
-      if (
-        toolboxPosition === toolboxUtils.Position.TOP ||
-        toolboxPosition === toolboxUtils.Position.BOTTOM
-      ) {
-        svgMetrics.height -= flyoutMetrics.height;
-      } else if (
-        toolboxPosition === toolboxUtils.Position.LEFT ||
-        toolboxPosition === toolboxUtils.Position.RIGHT
-      ) {
-        svgMetrics.width -= flyoutMetrics.width;
-      }
+    const horizToolbox =
+      toolboxPosition === toolboxUtils.Position.TOP ||
+      toolboxPosition === toolboxUtils.Position.BOTTOM;
+    const vertToolbox =
+      toolboxPosition === toolboxUtils.Position.LEFT ||
+      toolboxPosition === toolboxUtils.Position.RIGHT;
+    if (horizToolbox) {
+      if (respectToolbox) svgMetrics.height -= toolboxMetrics.height;
+      if (respectFlyout) svgMetrics.height -= flyoutMetrics.height;
+    }
+    if (vertToolbox) {
+      if (respectToolbox) svgMetrics.width -= toolboxMetrics.width;
+      if (respectFlyout) svgMetrics.width -= flyoutMetrics.width;
     }
     return {
       height: svgMetrics.height / scale,

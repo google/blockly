@@ -1181,7 +1181,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     the Blockly div.
    */
   translate(x: number, y: number) {
-    console.trace();
     const translation =
       'translate(' + x + ',' + y + ') ' + 'scale(' + this.scale + ')';
     this.svgBlockCanvas_.setAttribute('transform', translation);

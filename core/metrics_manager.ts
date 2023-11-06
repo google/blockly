@@ -111,26 +111,25 @@ export class MetricsManager implements IMetricsManager {
    */
   getAbsoluteMetrics(): AbsoluteMetrics {
     let absoluteLeft = 0;
+    let absoluteTop = 0;
+
     const toolboxMetrics = this.getToolboxMetrics();
-    const flyoutMetrics = this.getFlyoutMetrics(true);
+    const flyoutMetrics = this.getFlyoutMetrics();
     const respectToolbox = !!this.workspace_.getToolbox();
-    const respectFlyout = !this.workspace_.getFlyout(true)?.autoClose;
+    const respectFlyout = !(this.workspace_.getFlyout()?.autoClose);
     const toolboxPosition = respectToolbox
       ? toolboxMetrics.position
       : flyoutMetrics.position;
 
     const atLeft = toolboxPosition === toolboxUtils.Position.LEFT;
     const atTop = toolboxPosition === toolboxUtils.Position.TOP;
-    if (respectToolbox && atLeft) {
-      absoluteLeft = toolboxMetrics.width;
-    } else if (respectFlyout && atLeft) {
-      absoluteLeft = flyoutMetrics.width;
+    if (atLeft) {
+      if (respectToolbox) absoluteLeft += toolboxMetrics.width;
+      if (respectFlyout) absoluteLeft += flyoutMetrics.width;
     }
-    let absoluteTop = 0;
-    if (respectToolbox && atTop) {
-      absoluteTop = toolboxMetrics.height;
-    } else if (respectFlyout && atTop) {
-      absoluteTop = flyoutMetrics.height;
+    if (atTop) {
+      if (respectToolbox) absoluteTop += toolboxMetrics.height;
+      if (respectFlyout) absoluteTop += flyoutMetrics.height;
     }
 
     return {

@@ -495,7 +495,12 @@ export abstract class Flyout
 
   /** Automatically hides the flyout if it is an autoclosing flyout. */
   autoHide(onlyClosePopups: boolean): void {
-    if (!onlyClosePopups && this.autoClose) this.hide();
+    if (
+      !onlyClosePopups &&
+      this.targetWorkspace.getFlyout(true) === this &&
+      this.autoClose
+    )
+      this.hide();
   }
 
   /**

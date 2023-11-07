@@ -382,22 +382,10 @@ export class HorizontalFlyout extends Flyout {
         }
       }
 
-      if (
-        this.targetWorkspace!.toolboxPosition === this.toolboxPosition_ &&
-        this.toolboxPosition_ === toolbox.Position.TOP &&
-        !this.targetWorkspace!.getToolbox()
-      ) {
-        // This flyout is a simple toolbox. Reposition the workspace so that
-        // (0,0) is in the correct position relative to the new absolute edge
-        // (ie toolbox edge).
-        this.targetWorkspace!.translate(
-          this.targetWorkspace!.scrollX,
-          this.targetWorkspace!.scrollY + flyoutHeight,
-        );
-      }
       this.height_ = flyoutHeight;
       this.position();
-      this.targetWorkspace!.recordDragTargets();
+      this.targetWorkspace.resizeContents();
+      this.targetWorkspace.recordDragTargets();
     }
   }
 }

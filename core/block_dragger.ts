@@ -30,6 +30,7 @@ import * as dom from './utils/dom.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as deprecation from './utils/deprecation.js';
+import * as layers from './layers.js';
 
 /**
  * Class for a block dragger.  It moves blocks around the workspace when they
@@ -119,6 +120,7 @@ export class BlockDragger implements IBlockDragger {
       this.disconnectBlock_(healStack, currentDragDeltaXY);
     }
     this.draggingBlock_.setDragging(true);
+    this.workspace_.getLayerManager()?.moveToDragLayer(this.draggingBlock_);
   }
 
   /**
@@ -231,6 +233,9 @@ export class BlockDragger implements IBlockDragger {
     const deleted = this.maybeDeleteBlock_();
     if (!deleted) {
       // These are expensive and don't need to be done if we're deleting.
+      this.workspace_
+        .getLayerManager()
+        ?.moveOffDragLayer(this.draggingBlock_, layers.BLOCK);
       this.draggingBlock_.setDragging(false);
       if (delta) {
         // !preventMove

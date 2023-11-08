@@ -315,22 +315,25 @@ export class WorkspaceCommentSvg
    * @internal
    */
   override getRelativeToSurfaceXY(): Coordinate {
+    const layerManger = this.workspace.getLayerManager();
+    if (!layerManger) {
+      throw new Error(
+        'Cannot calculate position because the workspace has not been appended',
+      );
+    }
+
     let x = 0;
     let y = 0;
 
-    let element: Node | null = this.getSvgRoot();
+    let element: SVGElement | null = this.getSvgRoot();
     if (element) {
       do {
         // Loop through this comment and every parent.
-        const xy = svgMath.getRelativeXY(element as Element);
+        const xy = svgMath.getRelativeXY(element);
         x += xy.x;
         y += xy.y;
-        element = element.parentNode;
-      } while (
-        element &&
-        element !== this.workspace.getBubbleCanvas() &&
-        element !== null
-      );
+        element = element.parentNode as SVGElement;
+      } while (element && !layerManger.hasLayer(element) && element !== null);
     }
     this.xy_ = new Coordinate(x, y);
     return this.xy_;

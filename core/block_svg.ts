@@ -354,6 +354,12 @@ export class BlockSvg
    * @returns Object with .x and .y properties in workspace coordinates.
    */
   override getRelativeToSurfaceXY(): Coordinate {
+    const layerManger = this.workspace.getLayerManager();
+    if (!layerManger) {
+      throw new Error(
+        'Cannot calculate position because the workspace has not been appended',
+      );
+    }
     let x = 0;
     let y = 0;
 
@@ -365,7 +371,7 @@ export class BlockSvg
         x += xy.x;
         y += xy.y;
         element = element.parentNode as SVGElement;
-      } while (element && element !== this.workspace.getCanvas());
+      } while (element && !layerManger.hasLayer(element));
     }
     return new Coordinate(x, y);
   }

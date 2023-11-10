@@ -755,7 +755,8 @@ export class BlockSvg
 
   /**
    * Sets whether this block is a shadow block or not.
-   * This method is internal and should not be called by users of Blockly. To create shadow blocks programmatically call connection.setShadowState
+   * This method is internal and should not be called by users of Blockly. To 
+   * create shadow blocks programmatically call connection.setShadowState
    *
    * @param shadow True if a shadow.
    * @internal

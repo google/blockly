@@ -527,7 +527,7 @@ export class FieldVariable extends FieldDropdown {
    *
    * @deprecated `Blockly.Block.getVariable` returns a a variable, which is
    *             an equivalent indicator for returning true from here.
-   *             To be removed in v??.
+   *             To be removed in v11.
    * @returns True.
    */
   override referencesVariables(): boolean {

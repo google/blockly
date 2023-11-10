@@ -51,6 +51,7 @@ import {EndRowInput} from './inputs/end_row_input.js';
 import {ValueInput} from './inputs/value_input.js';
 import {StatementInput} from './inputs/statement_input.js';
 import {IconType} from './icons/icon_types.js';
+import { deprecation } from './utils.js';
 
 /**
  * Class for one block.
@@ -1122,6 +1123,12 @@ export class Block implements IASTNodeLocation, IDeletable {
         // as their value. Deprecated, implement Field.getVariable() instead.
         // When this is removed, the continue keyword above can be removed too.
         if (field.referencesVariables()) {
+          deprecation.warn(
+            'Blockly.Field.referencesVariables',
+            'version 10',
+            'version 11',
+            'Blockly.Field.getVariable()',
+          );
           vars.push(field.getValue() as string);
         }
       }
@@ -1170,6 +1177,12 @@ export class Block implements IASTNodeLocation, IDeletable {
           field.referencesVariables() &&
           variable.getId() === field.getValue()
         ) {
+          deprecation.warn(
+            'Blockly.Field.referencesVariables',
+            'version 10',
+            'version 11',
+            'Blockly.Field.getVariable()',
+          );
           field.refreshVariableName();
         }
       }
@@ -1197,6 +1210,12 @@ export class Block implements IASTNodeLocation, IDeletable {
         // Field.setVariable() instead. When this is removed, the continue
         // keyword above can be removed too.
         if (field.referencesVariables() && oldId === field.getValue()) {
+          deprecation.warn(
+            'Blockly.Field.referencesVariables',
+            'version 10',
+            'version 11',
+            'Blockly.Field.setVariable()',
+          );
           field.setValue(newId);
         }
       }

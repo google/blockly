@@ -865,6 +865,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set whether this block is a shadow block or not.
+   * This method is internal and should not be called by users of Blockly. To
+   * create shadow blocks programmatically call connection.setShadowState
    *
    * @param shadow True if a shadow.
    * @internal

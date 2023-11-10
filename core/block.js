@@ -340,7 +340,7 @@ class Block {
       if (!prototype || typeof prototype !== 'object') {
         const errorMessage = `${Blockly.Msg['UNKNOWN_BLOCK_TYPE']}: "${prototypeName}"`;
         eventUtils.fire(new (eventUtils.get(eventUtils.LOADING_ERROR))(this.workspace, errorMessage), true);
-        throw TypeError("Unknown block type", prototypeName);
+        throw TypeError("Unknown block type: " + this.type);
       }
 
       object.mixin(this, prototype);

@@ -14,7 +14,8 @@ The main feature of Varwin Blockly: "Modules" (`/core/module.*`)
 7. Run ```npm run package```
 8. Go to the `dist` directory
 9. In file `/dist/package.json` check package name and update version
-10. Execute `npm publish`
+10. `npm config set registry https://registry.npmjs.org/`
+11. Run `npm publish`
 
 ## Updating locales after build for Linux
 1. Run ```npm run build```
@@ -22,7 +23,8 @@ The main feature of Varwin Blockly: "Modules" (`/core/module.*`)
 3. Go to the `dist` directory
 4. In file `/dist/package.json` check package name and update version
 5. In msg files `/dist/msg/*.js` change `define(['Blockly'], factory);` to `define(['blockly'], factory);`
-6. Run `npm publish`
+6. `npm config set registry https://registry.npmjs.org/`
+7. Run `npm publish`
 
 ## How convenient it is to test Varwin Blockly right away in RMS
 

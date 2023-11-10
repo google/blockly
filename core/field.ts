@@ -1271,7 +1271,7 @@ export abstract class Field<T = any>
    *
    * @deprecated Implement `Blockly.Block.getVariable` instead. If you do,
    *             ensure this method returns false, indicating that
-   *             To be removed in v11. 
+   *             To be removed in v11.
    * @returns    True if this field has any variable references.
    */
   referencesVariables(): boolean {
@@ -1290,10 +1290,10 @@ export abstract class Field<T = any>
   /**
    * Sets or clears the variable model.
    *
-   * @param variable The variable to set or null to clear.
+   * @param _variable The variable to set or null to clear.
    */
-  setVariable(_variable: VariableModel | null) {
-  }
+  setVariable(_variable: VariableModel | null) {}
+  // NOP
 
   /**
    * Refresh the variable name referenced by this field if this field references

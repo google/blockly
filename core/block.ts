@@ -51,7 +51,7 @@ import {EndRowInput} from './inputs/end_row_input.js';
 import {ValueInput} from './inputs/value_input.js';
 import {StatementInput} from './inputs/statement_input.js';
 import {IconType} from './icons/icon_types.js';
-import { deprecation } from './utils.js';
+import {deprecation} from './utils.js';
 
 /**
  * Class for one block.

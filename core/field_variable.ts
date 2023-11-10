@@ -288,10 +288,34 @@ export class FieldVariable extends FieldDropdown {
   /**
    * Get the variable's ID.
    *
+   * It is recommended to use `getVariable()` instead.
+   *
    * @returns Current variable's ID.
    */
   override getValue(): string | null {
     return this.variable ? this.variable.getId() : null;
+  }
+
+  /**
+   * Set the variable by ID.
+   *
+   * It is recommended to use `setVariable()` instead.
+   *
+   * @param newValue New value.
+   * @param fireChangeEvent Whether to fire a change event. Defaults to true.
+   *     Should usually be true unless the change will be reported some other
+   *     way, e.g. an intermediate field change event.
+   */
+  override setValue(newValue: AnyDuringMigration, fireChangeEvent = true) {
+    // Although getVariable/setVariable are used to get/set the variable,
+    // the ID is kept as the field's value for backwards compatibility.
+    super.setValue(newValue, fireChangeEvent);
+
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
+    this.variable = Variables.getVariable(block.workspace, newValue as string);
   }
 
   /**
@@ -324,6 +348,11 @@ export class FieldVariable extends FieldDropdown {
   override setVariable(variable: VariableModel | null) {
     this.variable = variable;
     this.refreshVariableName();
+
+    // Although getVariable/setVariable are used to get/set the variable,
+    // the ID is kept as the field's value for backwards compatibility.
+    // This also ensures events are fired when the variable is changed.
+    super.setValue(variable?.getId());
   }
 
   /**

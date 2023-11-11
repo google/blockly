@@ -5,49 +5,48 @@
  */
 
 /**
- * @fileoverview Helper functions for generating Python for blocks.
- * @suppress {checkTypes|globalThis}
+ * @file Python code generator class, including helper methods for
+ * generating Python for blocks.
  */
 
 // Former goog.module ID: Blockly.Python
 
 import * as stringUtils from '../../core/utils/string.js';
 import * as Variables from '../../core/variables.js';
-// import type {Block} from '../../core/block.js';
+import type {Block} from '../../core/block.js';
 import {CodeGenerator} from '../../core/generator.js';
 import {Names} from '../../core/names.js';
-// import type {Workspace} from '../../core/workspace.js';
+import type {Workspace} from '../../core/workspace.js';
 import {inputTypes} from '../../core/inputs/input_types.js';
-
 
 /**
  * Order of operation ENUMs.
  * http://docs.python.org/reference/expressions.html#summary
- * @enum {number}
  */
-export const Order = {
-  ATOMIC: 0,             // 0 "" ...
-  COLLECTION: 1,         // tuples, lists, dictionaries
-  STRING_CONVERSION: 1,  // `expression...`
-  MEMBER: 2.1,           // . []
-  FUNCTION_CALL: 2.2,    // ()
-  EXPONENTIATION: 3,     // **
-  UNARY_SIGN: 4,         // + -
-  BITWISE_NOT: 4,        // ~
-  MULTIPLICATIVE: 5,     // * / // %
-  ADDITIVE: 6,           // + -
-  BITWISE_SHIFT: 7,      // << >>
-  BITWISE_AND: 8,        // &
-  BITWISE_XOR: 9,        // ^
-  BITWISE_OR: 10,        // |
-  RELATIONAL: 11,        // in, not in, is, is not, >, >=, <>, !=, ==
-  LOGICAL_NOT: 12,       // not
-  LOGICAL_AND: 13,       // and
-  LOGICAL_OR: 14,        // or
-  CONDITIONAL: 15,       // if else
-  LAMBDA: 16,            // lambda
-  NONE: 99,              // (...)
-};
+// prettier-ignore
+export enum Order {
+  ATOMIC = 0,             // 0 "" ...
+  COLLECTION = 1,         // tuples, lists, dictionaries
+  STRING_CONVERSION = 1,  // `expression...`
+  MEMBER = 2.1,           // . []
+  FUNCTION_CALL = 2.2,    // ()
+  EXPONENTIATION = 3,     // **
+  UNARY_SIGN = 4,         // + -
+  BITWISE_NOT = 4,        // ~
+  MULTIPLICATIVE = 5,     // * / // %
+  ADDITIVE = 6,           // + -
+  BITWISE_SHIFT = 7,      // << >>
+  BITWISE_AND = 8,        // &
+  BITWISE_XOR = 9,        // ^
+  BITWISE_OR = 10,        // |
+  RELATIONAL = 11,        // in, not in, is, is not, >, >=, <>, !=, ==
+  LOGICAL_NOT = 12,       // not
+  LOGICAL_AND = 13,       // and
+  LOGICAL_OR = 14,        // or
+  CONDITIONAL = 15,       // if else
+  LAMBDA = 16,            // lambda
+  NONE = 99,              // (...)
+}
 
 /**
  * PythonScript code generator class.
@@ -55,9 +54,8 @@ export const Order = {
 export class PythonGenerator extends CodeGenerator {
   /**
    * List of outer-inner pairings that do NOT require parentheses.
-   * @type {!Array<!Array<number>>}
    */
-  ORDER_OVERRIDES = [
+  ORDER_OVERRIDES: number[][] = [
     // (foo()).bar -> foo().bar
     // (foo())[0] -> foo()[0]
     [Order.FUNCTION_CALL, Order.MEMBER],
@@ -77,11 +75,17 @@ export class PythonGenerator extends CodeGenerator {
     // a and (b and c) -> a and b and c
     [Order.LOGICAL_AND, Order.LOGICAL_AND],
     // a or (b or c) -> a or b or c
-    [Order.LOGICAL_OR, Order.LOGICAL_OR]
+    [Order.LOGICAL_OR, Order.LOGICAL_OR],
   ];
 
-  constructor(name) {
-    super(name ?? 'Python');
+  /**
+   * Empty loops or conditionals are not allowed in Python.
+   */
+  PASS: string = ''; // Initialised by init().
+
+  /** @param name Name of the language the generator is for. */
+  constructor(name = 'Python') {
+    super(name);
     this.isInitialized = false;
 
     // Copy Order values onto instance for backwards compatibility
@@ -92,7 +96,16 @@ export class PythonGenerator extends CodeGenerator {
     // replace data properties with get accessors that call
     // deprecate.warn().)
     for (const key in Order) {
-      this['ORDER_' + key] = Order[key];
+      // Must assign Order[key] to a temporary to get the type guard to work;
+      // see https://github.com/microsoft/TypeScript/issues/10530.
+      const value = Order[key];
+      // Skip reverse-lookup entries in the enum.  Due to
+      // https://github.com/microsoft/TypeScript/issues/55713 this (as
+      // of TypeScript 5.5.2) actually narrows the type of value to
+      // never - but that still allows the following assignment to
+      // succeed.
+      if (typeof value === 'string') continue;
+      (this as unknown as Record<string, Order>)['ORDER_' + key] = value;
     }
 
     // List of illegal variable names.  This is not intended to be a
@@ -105,55 +118,52 @@ export class PythonGenerator extends CodeGenerator {
       // https://docs.python.org/3/reference/lexical_analysis.html#keywords
       // https://docs.python.org/2/reference/lexical_analysis.html#keywords
       'False,None,True,and,as,assert,break,class,continue,def,del,elif,else,' +
-      'except,exec,finally,for,from,global,if,import,in,is,lambda,nonlocal,' +
-      'not,or,pass,print,raise,return,try,while,with,yield,' +
-      // https://docs.python.org/3/library/constants.html
-      // https://docs.python.org/2/library/constants.html
-      'NotImplemented,Ellipsis,__debug__,quit,exit,copyright,license,credits,' +
-      // >>> print(','.join(sorted(dir(__builtins__))))
-      // https://docs.python.org/3/library/functions.html
-      // https://docs.python.org/2/library/functions.html
-      'ArithmeticError,AssertionError,AttributeError,BaseException,' +
-      'BlockingIOError,BrokenPipeError,BufferError,BytesWarning,' +
-      'ChildProcessError,ConnectionAbortedError,ConnectionError,' +
-      'ConnectionRefusedError,ConnectionResetError,DeprecationWarning,' +
-      'EOFError,Ellipsis,EnvironmentError,Exception,FileExistsError,' +
-      'FileNotFoundError,FloatingPointError,FutureWarning,GeneratorExit,' +
-      'IOError,ImportError,ImportWarning,IndentationError,IndexError,' +
-      'InterruptedError,IsADirectoryError,KeyError,KeyboardInterrupt,' +
-      'LookupError,MemoryError,ModuleNotFoundError,NameError,' +
-      'NotADirectoryError,NotImplemented,NotImplementedError,OSError,' +
-      'OverflowError,PendingDeprecationWarning,PermissionError,' +
-      'ProcessLookupError,RecursionError,ReferenceError,ResourceWarning,' +
-      'RuntimeError,RuntimeWarning,StandardError,StopAsyncIteration,' +
-      'StopIteration,SyntaxError,SyntaxWarning,SystemError,SystemExit,' +
-      'TabError,TimeoutError,TypeError,UnboundLocalError,UnicodeDecodeError,' +
-      'UnicodeEncodeError,UnicodeError,UnicodeTranslateError,UnicodeWarning,' +
-      'UserWarning,ValueError,Warning,ZeroDivisionError,_,__build_class__,' +
-      '__debug__,__doc__,__import__,__loader__,__name__,__package__,__spec__,' +
-      'abs,all,any,apply,ascii,basestring,bin,bool,buffer,bytearray,bytes,' +
-      'callable,chr,classmethod,cmp,coerce,compile,complex,copyright,credits,' +
-      'delattr,dict,dir,divmod,enumerate,eval,exec,execfile,exit,file,filter,' +
-      'float,format,frozenset,getattr,globals,hasattr,hash,help,hex,id,input,' +
-      'int,intern,isinstance,issubclass,iter,len,license,list,locals,long,' +
-      'map,max,memoryview,min,next,object,oct,open,ord,pow,print,property,' +
-      'quit,range,raw_input,reduce,reload,repr,reversed,round,set,setattr,' +
-      'slice,sorted,staticmethod,str,sum,super,tuple,type,unichr,unicode,' +
-      'vars,xrange,zip'
+        'except,exec,finally,for,from,global,if,import,in,is,lambda,nonlocal,' +
+        'not,or,pass,print,raise,return,try,while,with,yield,' +
+        // https://docs.python.org/3/library/constants.html
+        // https://docs.python.org/2/library/constants.html
+        'NotImplemented,Ellipsis,__debug__,quit,exit,copyright,license,credits,' +
+        // >>> print(','.join(sorted(dir(__builtins__))))
+        // https://docs.python.org/3/library/functions.html
+        // https://docs.python.org/2/library/functions.html
+        'ArithmeticError,AssertionError,AttributeError,BaseException,' +
+        'BlockingIOError,BrokenPipeError,BufferError,BytesWarning,' +
+        'ChildProcessError,ConnectionAbortedError,ConnectionError,' +
+        'ConnectionRefusedError,ConnectionResetError,DeprecationWarning,' +
+        'EOFError,Ellipsis,EnvironmentError,Exception,FileExistsError,' +
+        'FileNotFoundError,FloatingPointError,FutureWarning,GeneratorExit,' +
+        'IOError,ImportError,ImportWarning,IndentationError,IndexError,' +
+        'InterruptedError,IsADirectoryError,KeyError,KeyboardInterrupt,' +
+        'LookupError,MemoryError,ModuleNotFoundError,NameError,' +
+        'NotADirectoryError,NotImplemented,NotImplementedError,OSError,' +
+        'OverflowError,PendingDeprecationWarning,PermissionError,' +
+        'ProcessLookupError,RecursionError,ReferenceError,ResourceWarning,' +
+        'RuntimeError,RuntimeWarning,StandardError,StopAsyncIteration,' +
+        'StopIteration,SyntaxError,SyntaxWarning,SystemError,SystemExit,' +
+        'TabError,TimeoutError,TypeError,UnboundLocalError,UnicodeDecodeError,' +
+        'UnicodeEncodeError,UnicodeError,UnicodeTranslateError,UnicodeWarning,' +
+        'UserWarning,ValueError,Warning,ZeroDivisionError,_,__build_class__,' +
+        '__debug__,__doc__,__import__,__loader__,__name__,__package__,__spec__,' +
+        'abs,all,any,apply,ascii,basestring,bin,bool,buffer,bytearray,bytes,' +
+        'callable,chr,classmethod,cmp,coerce,compile,complex,copyright,credits,' +
+        'delattr,dict,dir,divmod,enumerate,eval,exec,execfile,exit,file,filter,' +
+        'float,format,frozenset,getattr,globals,hasattr,hash,help,hex,id,input,' +
+        'int,intern,isinstance,issubclass,iter,len,license,list,locals,long,' +
+        'map,max,memoryview,min,next,object,oct,open,ord,pow,print,property,' +
+        'quit,range,raw_input,reduce,reload,repr,reversed,round,set,setattr,' +
+        'slice,sorted,staticmethod,str,sum,super,tuple,type,unichr,unicode,' +
+        'vars,xrange,zip',
     );
   }
 
   /**
    * Initialise the database of variable names.
-   * @param {!Workspace} workspace Workspace to generate code from.
-   * @this {CodeGenerator}
+   *
+   * @param workspace Workspace to generate code from.
    */
-  init(workspace) {
+  init(workspace: Workspace) {
     super.init(workspace);
 
-    /**
-     * Empty loops or conditionals are not allowed in Python.
-     */
     this.PASS = this.INDENT + 'pass\n';
 
     if (!this.nameDB_) {
@@ -171,16 +181,15 @@ export class PythonGenerator extends CodeGenerator {
     const devVarList = Variables.allDeveloperVariables(workspace);
     for (let i = 0; i < devVarList.length; i++) {
       defvars.push(
-          this.nameDB_.getName(devVarList[i], Names.DEVELOPER_VARIABLE_TYPE) +
-          ' = None');
+        this.nameDB_.getName(devVarList[i], Names.DEVELOPER_VARIABLE_TYPE) +
+          ' = None',
+      );
     }
 
     // Add user variables, but only ones that are being used.
     const variables = Variables.allUsedVarModels(workspace);
     for (let i = 0; i < variables.length; i++) {
-      defvars.push(
-          this.getVariableName(variables[i].getId()) +
-          ' = None');
+      defvars.push(this.getVariableName(variables[i].getId()) + ' = None');
     }
 
     this.definitions_['variables'] = defvars.join('\n');
@@ -189,10 +198,11 @@ export class PythonGenerator extends CodeGenerator {
 
   /**
    * Prepend the generated code with import statements and variable definitions.
-   * @param {string} code Generated code.
-   * @return {string} Completed code.
+   *
+   * @param code Generated code.
+   * @returns Completed code.
    */
-  finish(code) {
+  finish(code: string): string {
     // Convert the definitions dictionary into a list.
     const imports = [];
     const definitions = [];
@@ -208,7 +218,7 @@ export class PythonGenerator extends CodeGenerator {
     code = super.finish(code);
     this.isInitialized = false;
 
-    this.nameDB_.reset();
+    this.nameDB_!.reset();
     const allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
     return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
   }
@@ -216,28 +226,30 @@ export class PythonGenerator extends CodeGenerator {
   /**
    * Naked values are top-level blocks with outputs that aren't plugged into
    * anything.
-   * @param {string} line Line of generated code.
-   * @return {string} Legal line of code.
+   *
+   * @param line Line of generated code.
+   * @returns Legal line of code.
    */
-  scrubNakedValue(line) {
+  scrubNakedValue(line: string): string {
     return line + '\n';
   }
 
   /**
    * Encode a string as a properly escaped Python string, complete with quotes.
-   * @param {string} string Text to encode.
-   * @return {string} Python string.
+   *
+   * @param string Text to encode.
+   * @returns Python string.
    */
-  quote_(string) {
+  quote_(string: string): string {
     string = string.replace(/\\/g, '\\\\').replace(/\n/g, '\\\n');
 
     // Follow the CPython behaviour of repr() for a non-byte string.
-    let quote = '\'';
-    if (string.indexOf('\'') !== -1) {
+    let quote = "'";
+    if (string.indexOf("'") !== -1) {
       if (string.indexOf('"') === -1) {
         quote = '"';
       } else {
-        string = string.replace(/'/g, '\\\'');
+        string = string.replace(/'/g, "\\'");
       }
     }
     return quote + string + quote;
@@ -246,27 +258,29 @@ export class PythonGenerator extends CodeGenerator {
   /**
    * Encode a string as a properly escaped multiline Python string, complete
    * with quotes.
-   * @param {string} string Text to encode.
-   * @return {string} Python string.
+   *
+   * @param string Text to encode.
+   * @returns Python string.
    */
-  multiline_quote_(string) {
+  multiline_quote_(string: string): string {
     const lines = string.split(/\n/g).map(this.quote_);
     // Join with the following, plus a newline:
     // + '\n' +
-    return lines.join(' + \'\\n\' + \n');
+    return lines.join(" + '\\n' + \n");
   }
 
   /**
    * Common tasks for generating Python from blocks.
    * Handles comments for the specified block and any connected value blocks.
    * Calls any statements following this block.
-   * @param {!Block} block The current block.
-   * @param {string} code The Python code created for this block.
-   * @param {boolean=} opt_thisOnly True to generate code for only this statement.
-   * @return {string} Python code with comments and subsequent blocks added.
-   * @protected
+   *
+   * @param block The current block.
+   * @param code The Python code created for this block.
+   * @param thisOnly True to generate code for only this statement.
+   * @returns Python code with comments and subsequent blocks added.
+
    */
-  scrub_(block, code, opt_thisOnly) {
+  scrub_(block: Block, code: string, thisOnly = false): string {
     let commentCode = '';
     // Only collect comments for blocks that aren't inline.
     if (!block.outputConnection || !block.outputConnection.targetConnection) {
@@ -280,7 +294,7 @@ export class PythonGenerator extends CodeGenerator {
       // Don't collect comments for nested statements.
       for (let i = 0; i < block.inputList.length; i++) {
         if (block.inputList[i].type === inputTypes.VALUE) {
-          const childBlock = block.inputList[i].connection.targetBlock();
+          const childBlock = block.inputList[i].connection!.targetBlock();
           if (childBlock) {
             comment = this.allNestedComments(childBlock);
             if (comment) {
@@ -290,33 +304,40 @@ export class PythonGenerator extends CodeGenerator {
         }
       }
     }
-    const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-    const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
+    const nextBlock =
+      block.nextConnection && block.nextConnection.targetBlock();
+    const nextCode = thisOnly ? '' : this.blockToCode(nextBlock);
     return commentCode + code + nextCode;
   }
 
   /**
    * Gets a property and adjusts the value, taking into account indexing.
    * If a static int, casts to an integer, otherwise returns a code string.
-   * @param {!Block} block The block.
-   * @param {string} atId The property ID of the element to get.
-   * @param {number=} opt_delta Value to add.
-   * @param {boolean=} opt_negate Whether to negate the value.
-   * @return {string|number}
+   *
+   * @param block The block.
+   * @param atId The ID of the input block to get (and adjust) the value of.
+   * @param delta Value to add.
+   * @param negate Whether to negate the value.
+   * @returns The adjusted value.
    */
-  getAdjustedInt(block, atId, opt_delta, opt_negate) {
-    let delta = opt_delta || 0;
+  getAdjustedInt(
+    block: Block,
+    atId: string,
+    delta = 0,
+    negate = false,
+  ): string | number {
     if (block.workspace.options.oneBasedIndex) {
       delta--;
     }
     const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
-    const atOrder = delta ? this.ORDER_ADDITIVE : this.ORDER_NONE;
-    let at = this.valueToCode(block, atId, atOrder) || defaultAtIndex;
+    const atOrder = delta ? Order.ADDITIVE : Order.NONE;
+    let at: string | number =
+      this.valueToCode(block, atId, atOrder) || defaultAtIndex;
 
     if (stringUtils.isNumber(at)) {
       // If the index is a naked number, adjust it right now.
       at = parseInt(at, 10) + delta;
-      if (opt_negate) {
+      if (negate) {
         at = -at;
       }
     } else {
@@ -328,7 +349,7 @@ export class PythonGenerator extends CodeGenerator {
       } else {
         at = 'int(' + at + ')';
       }
-      if (opt_negate) {
+      if (negate) {
         at = '-' + at;
       }
     }

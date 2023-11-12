@@ -19,11 +19,11 @@ import {Names, NameType} from '../../core/names.js';
 import type {Workspace} from '../../core/workspace.js';
 import {inputTypes} from '../../core/inputs/input_types.js';
 
-
 /**
  * Order of operation ENUMs.
  * https://dart.dev/guides/language/language-tour#operators
  */
+// prettier-ignore
 export enum Order {
   ATOMIC = 0,         // 0 "" ...
   UNARY_POSTFIX = 1,  // expr++ expr-- () [] . ?.
@@ -82,19 +82,19 @@ export class DartGenerator extends CodeGenerator {
       // https://www.dartlang.org/docs/spec/latest/dart-language-specification.pdf
       // Section 16.1.1
       'assert,break,case,catch,class,const,continue,default,do,else,enum,' +
-      'extends,false,final,finally,for,if,in,is,new,null,rethrow,return,' +
-      'super,switch,this,throw,true,try,var,void,while,with,' +
-      // https://api.dartlang.org/dart_core.html
-      'print,identityHashCode,identical,BidirectionalIterator,Comparable,' +
-      'double,Function,int,Invocation,Iterable,Iterator,List,Map,Match,num,' +
-      'Pattern,RegExp,Set,StackTrace,String,StringSink,Type,bool,DateTime,' +
-      'Deprecated,Duration,Expando,Null,Object,RuneIterator,Runes,Stopwatch,' +
-      'StringBuffer,Symbol,Uri,Comparator,AbstractClassInstantiationError,' +
-      'ArgumentError,AssertionError,CastError,ConcurrentModificationError,' +
-      'CyclicInitializationError,Error,Exception,FallThroughError,' +
-      'FormatException,IntegerDivisionByZeroException,NoSuchMethodError,' +
-      'NullThrownError,OutOfMemoryError,RangeError,StackOverflowError,' +
-      'StateError,TypeError,UnimplementedError,UnsupportedError'
+        'extends,false,final,finally,for,if,in,is,new,null,rethrow,return,' +
+        'super,switch,this,throw,true,try,var,void,while,with,' +
+        // https://api.dartlang.org/dart_core.html
+        'print,identityHashCode,identical,BidirectionalIterator,Comparable,' +
+        'double,Function,int,Invocation,Iterable,Iterator,List,Map,Match,num,' +
+        'Pattern,RegExp,Set,StackTrace,String,StringSink,Type,bool,DateTime,' +
+        'Deprecated,Duration,Expando,Null,Object,RuneIterator,Runes,Stopwatch,' +
+        'StringBuffer,Symbol,Uri,Comparator,AbstractClassInstantiationError,' +
+        'ArgumentError,AssertionError,CastError,ConcurrentModificationError,' +
+        'CyclicInitializationError,Error,Exception,FallThroughError,' +
+        'FormatException,IntegerDivisionByZeroException,NoSuchMethodError,' +
+        'NullThrownError,OutOfMemoryError,RangeError,StackOverflowError,' +
+        'StateError,TypeError,UnimplementedError,UnsupportedError',
     );
   }
 
@@ -120,21 +120,22 @@ export class DartGenerator extends CodeGenerator {
     // Add developer variables (not created or named by the user).
     const devVarList = Variables.allDeveloperVariables(workspace);
     for (let i = 0; i < devVarList.length; i++) {
-      defvars.push(this.nameDB_.getName(devVarList[i],
-                                        NameType.DEVELOPER_VARIABLE));
+      defvars.push(
+        this.nameDB_.getName(devVarList[i], NameType.DEVELOPER_VARIABLE),
+      );
     }
 
     // Add user variables, but only ones that are being used.
     const variables = Variables.allUsedVarModels(workspace);
     for (let i = 0; i < variables.length; i++) {
-      defvars.push(this.nameDB_.getName(variables[i].getId(),
-                                        NameType.VARIABLE));
+      defvars.push(
+        this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE),
+      );
     }
 
     // Declare all of the variables.
     if (defvars.length) {
-      this.definitions_['variables'] =
-          'var ' + defvars.join(', ') + ';';
+      this.definitions_['variables'] = 'var ' + defvars.join(', ') + ';';
     }
     this.isInitialized = true;
   }
@@ -191,11 +192,12 @@ export class DartGenerator extends CodeGenerator {
    */
   quote_(string: string): string {
     // Can't use goog.string.quote since $ must also be escaped.
-    string = string.replace(/\\/g, '\\\\')
-        .replace(/\n/g, '\\\n')
-        .replace(/\$/g, '\\$')
-        .replace(/'/g, '\\\'');
-    return '\'' + string + '\'';
+    string = string
+      .replace(/\\/g, '\\\\')
+      .replace(/\n/g, '\\\n')
+      .replace(/\$/g, '\\$')
+      .replace(/'/g, "\\'");
+    return "'" + string + "'";
   }
 
   /**
@@ -209,7 +211,7 @@ export class DartGenerator extends CodeGenerator {
     const lines = string.split(/\n/g).map(this.quote_);
     // Join with the following, plus a newline:
     // + '\n' +
-    return lines.join(' + \'\\n\' + \n');
+    return lines.join(" + '\\n' + \n");
   }
 
   /**
@@ -252,7 +254,7 @@ export class DartGenerator extends CodeGenerator {
       }
     }
     const nextBlock =
-        block.nextConnection && block.nextConnection.targetBlock();
+      block.nextConnection && block.nextConnection.targetBlock();
     const nextCode = thisOnly ? '' : this.blockToCode(nextBlock);
     return commentCode + code + nextCode;
   }
@@ -269,7 +271,13 @@ export class DartGenerator extends CodeGenerator {
    * @param order The highest order acting on this value.
    * @returns The adjusted value.
    */
-  getAdjusted(block: Block, atId: string, delta = 0, negate = false, order = Order.NONE): string | number {
+  getAdjusted(
+    block: Block,
+    atId: string,
+    delta = 0,
+    negate = false,
+    order = Order.NONE,
+  ): string | number {
     if (block.workspace.options.oneBasedIndex) {
       delta--;
     }

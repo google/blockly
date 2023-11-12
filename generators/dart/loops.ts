@@ -10,12 +10,14 @@
 
 // Former goog.module ID: Blockly.Dart.loops
 
-import {Order} from './dart_generator.js';
 import * as stringUtils from '../../core/utils/string.js';
+import type {Block} from '../../core/block.js';
+import type {DartGenerator} from './dart_generator.js';
 import {NameType} from '../../core/names.js';
+import {Order} from './dart_generator.js';
 
 
-export function controls_repeat_ext(block, generator) {
+export function controls_repeat_ext(block: Block, generator: DartGenerator) {
   let repeats;
   // Repeat n times.
   if (block.getField('TIMES')) {
@@ -44,7 +46,7 @@ export function controls_repeat_ext(block, generator) {
 
 export const controls_repeat = controls_repeat_ext;
 
-export function controls_whileUntil(block, generator) {
+export function controls_whileUntil(block: Block, generator: DartGenerator) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
@@ -59,7 +61,7 @@ export function controls_whileUntil(block, generator) {
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
 };
 
-export function controls_for(block, generator) {
+export function controls_for(block: Block, generator: DartGenerator) {
   // For loop.
   const variable0 =
         generator.getVariableName(block.getFieldValue('VAR'));
@@ -124,7 +126,7 @@ export function controls_for(block, generator) {
   return code;
 };
 
-export function controls_forEach(block, generator) {
+export function controls_forEach(block: Block, generator: DartGenerator) {
   // For each loop.
   const variable0 =
       generator.getVariableName(block.getFieldValue('VAR'));
@@ -137,7 +139,7 @@ export function controls_forEach(block, generator) {
   return code;
 };
 
-export function controls_flow_statements(block, generator) {
+export function controls_flow_statements(block: Block, generator: DartGenerator) {
   // Flow statements: continue, break.
   let xfix = '';
   if (generator.STATEMENT_PREFIX) {

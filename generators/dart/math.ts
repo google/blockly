@@ -10,12 +10,14 @@
 
 // Former goog.module ID: Blockly.Dart.math
 
+import type {Block} from '../../core/block.js';
+import type {DartGenerator} from './dart_generator.js';
 import {Order} from './dart_generator.js';
 
 
 // RESERVED WORDS: 'Math'
 
-export function math_number(block, generator) {
+export function math_number(block: Block, generator: DartGenerator): [string, Order] {
   // Numeric value.
   let code = Number(block.getFieldValue('NUM'));
   let order;
@@ -33,7 +35,7 @@ export function math_number(block, generator) {
   return [code, order];
 };
 
-export function math_arithmetic(block, generator) {
+export function math_arithmetic(block: Block, generator: DartGenerator): [string, Order] {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
     'ADD': [' + ', Order.ADDITIVE],
@@ -59,7 +61,7 @@ export function math_arithmetic(block, generator) {
   return [code, order];
 };
 
-export function math_single(block, generator) {
+export function math_single(block: Block, generator: DartGenerator): [string, Order] {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
@@ -144,7 +146,7 @@ export function math_single(block, generator) {
   return [code, Order.MULTIPLICATIVE];
 };
 
-export function math_constant(block, generator) {
+export function math_constant(block: Block, generator: DartGenerator): [string, Order] {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
     'PI': ['Math.pi', Order.UNARY_POSTFIX],
@@ -162,7 +164,7 @@ export function math_constant(block, generator) {
   return CONSTANTS[constant];
 };
 
-export function math_number_property(block, generator) {
+export function math_number_property(block: Block, generator: DartGenerator): [string, Order] {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
@@ -217,7 +219,7 @@ bool ${generator.FUNCTION_NAME_PLACEHOLDER_}(n) {
   return [code, outputOrder];
 };
 
-export function math_change(block, generator) {
+export function math_change(block: Block, generator: DartGenerator) {
   // Add to a variable in place.
   const argument0 =
       generator.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
@@ -232,7 +234,7 @@ export const math_round = math_single;
 // Trigonometry functions have a single operand.
 export const math_trig = math_single;
 
-export function math_on_list(block, generator) {
+export function math_on_list(block: Block, generator: DartGenerator): [string, Order] {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   const list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
@@ -393,7 +395,7 @@ dynamic ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-export function math_modulo(block, generator) {
+export function math_modulo(block: Block, generator: DartGenerator): [string, Order] {
   // Remainder computation.
   const argument0 =
       generator.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) || '0';
@@ -403,7 +405,7 @@ export function math_modulo(block, generator) {
   return [code, Order.MULTIPLICATIVE];
 };
 
-export function math_constrain(block, generator) {
+export function math_constrain(block: Block, generator: DartGenerator): [string, Order] {
   // Constrain a number between two limits.
   generator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
@@ -417,7 +419,7 @@ export function math_constrain(block, generator) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-export function math_random_int(block, generator) {
+export function math_random_int(block: Block, generator: DartGenerator): [string, Order] {
   // Random integer between [X] and [Y].
   generator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
@@ -438,14 +440,14 @@ int ${generator.FUNCTION_NAME_PLACEHOLDER_}(num a, num b) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-export function math_random_float(block, generator) {
+export function math_random_float(block: Block, generator: DartGenerator): [string, Order] {
   // Random fraction between 0 and 1.
   generator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
   return ['new Math.Random().nextDouble()', Order.UNARY_POSTFIX];
 };
 
-export function math_atan2(block, generator) {
+export function math_atan2(block: Block, generator: DartGenerator): [string, Order] {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   generator.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';

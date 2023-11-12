@@ -10,18 +10,20 @@
 
 // Former goog.module ID: Blockly.Dart.texts
 
+import type {Block} from '../../core/block.js';
+import type {DartGenerator} from './dart_generator.js';
 import {Order} from './dart_generator.js';
 
 
 // RESERVED WORDS: 'Html,Math'
 
-export function text(block, generator) {
+export function text(block: Block, generator: DartGenerator): [string, Order] {
   // Text value.
   const code = generator.quote_(block.getFieldValue('TEXT'));
   return [code, Order.ATOMIC];
 };
 
-export function text_multiline(block, generator) {
+export function text_multiline(block: Block, generator: DartGenerator): [string, Order] {
   // Text value.
   const code = generator.multiline_quote_(block.getFieldValue('TEXT'));
   const order =
@@ -29,7 +31,7 @@ export function text_multiline(block, generator) {
   return [code, order];
 };
 
-export function text_join(block, generator) {
+export function text_join(block: Block, generator: DartGenerator): [string, Order] {
   // Create a string made up of any number of elements of any type.
   switch (block.itemCount_) {
     case 0:
@@ -52,7 +54,7 @@ export function text_join(block, generator) {
   }
 };
 
-export function text_append(block, generator) {
+export function text_append(block: Block, generator: DartGenerator) {
   // Append to a variable in place.
   const varName =
       generator.getVariableName(block.getFieldValue('VAR'));
@@ -60,21 +62,21 @@ export function text_append(block, generator) {
   return varName + ' = [' + varName + ', ' + value + '].join();\n';
 };
 
-export function text_length(block, generator) {
+export function text_length(block: Block, generator: DartGenerator): [string, Order] {
   // String or array length.
   const text =
       generator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || "''";
   return [text + '.length', Order.UNARY_POSTFIX];
 };
 
-export function text_isEmpty(block, generator) {
+export function text_isEmpty(block: Block, generator: DartGenerator): [string, Order] {
   // Is the string null or array empty?
   const text =
       generator.valueToCode(block, 'VALUE', Order.UNARY_POSTFIX) || "''";
   return [text + '.isEmpty', Order.UNARY_POSTFIX];
 };
 
-export function text_indexOf(block, generator) {
+export function text_indexOf(block: Block, generator: DartGenerator): [string, Order] {
   // Search the text for a substring.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'indexOf' : 'lastIndexOf';
@@ -89,7 +91,7 @@ export function text_indexOf(block, generator) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-export function text_charAt(block, generator) {
+export function text_charAt(block: Block, generator: DartGenerator): [string, Order] {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
@@ -138,7 +140,7 @@ String ${generator.FUNCTION_NAME_PLACEHOLDER_}(String text) {
   throw Error('Unhandled option (text_charAt).');
 };
 
-export function text_getSubstring(block, generator) {
+export function text_getSubstring(block: Block, generator: DartGenerator): [string, Order] {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
@@ -217,7 +219,7 @@ String ${generator.FUNCTION_NAME_PLACEHOLDER_}(String text, String where1, num a
   return [code, Order.UNARY_POSTFIX];
 };
 
-export function text_changeCase(block, generator) {
+export function text_changeCase(block: Block, generator: DartGenerator): [string, Order] {
   // Change capitalization.
   const OPERATORS = {
     'UPPERCASE': '.toUpperCase()',
@@ -254,7 +256,7 @@ String ${generator.FUNCTION_NAME_PLACEHOLDER_}(String str) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-export function text_trim(block, generator) {
+export function text_trim(block: Block, generator: DartGenerator): [string, Order] {
   // Trim spaces.
   const OPERATORS = {
     'LEFT': '.replaceFirst(new RegExp(r\'^\\s+\'), \'\')',
@@ -267,13 +269,13 @@ export function text_trim(block, generator) {
   return [text + operator, Order.UNARY_POSTFIX];
 };
 
-export function text_print(block, generator) {
+export function text_print(block: Block, generator: DartGenerator) {
   // Print statement.
   const msg = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return 'print(' + msg + ');\n';
 };
 
-export function text_prompt_ext(block, generator) {
+export function text_prompt_ext(block: Block, generator: DartGenerator): [string, Order] {
   // Prompt function.
   generator.definitions_['import_dart_html'] =
       'import \'dart:html\' as Html;';
@@ -297,7 +299,7 @@ export function text_prompt_ext(block, generator) {
 
 export const text_prompt = text_prompt_ext;
 
-export function text_count(block, generator) {
+export function text_count(block: Block, generator: DartGenerator): [string, Order] {
   const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   const sub = generator.valueToCode(block, 'SUB', Order.NONE) || "''";
   // Substring count is not a native generator function.  Define one.
@@ -322,7 +324,7 @@ int ${generator.FUNCTION_NAME_PLACEHOLDER_}(String haystack, String needle) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-export function text_replace(block, generator) {
+export function text_replace(block: Block, generator: DartGenerator): [string, Order] {
   const text =
       generator.valueToCode(block, 'TEXT', Order.UNARY_POSTFIX) || "''";
   const from = generator.valueToCode(block, 'FROM', Order.NONE) || "''";
@@ -331,7 +333,7 @@ export function text_replace(block, generator) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-export function text_reverse(block, generator) {
+export function text_reverse(block: Block, generator: DartGenerator): [string, Order] {
   // There isn't a sensible way to do this in generator. See:
   // http://stackoverflow.com/a/21613700/3529104
   // Implementing something is possibly better than not implementing anything?

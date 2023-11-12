@@ -10,10 +10,12 @@
 
 // Former goog.module ID: Blockly.Dart.procedures
 
+import type {Block} from '../../core/block.js';
+import type {DartGenerator} from './dart_generator.js';
 import {Order} from './dart_generator.js';
 
 
-export function procedures_defreturn(block, generator) {
+export function procedures_defreturn(block: Block, generator: DartGenerator) {
   // Define a procedure with a return value.
   const funcName =
       generator.getProcedureName(block.getFieldValue('NAME'));
@@ -62,7 +64,7 @@ export function procedures_defreturn(block, generator) {
 // a procedure with a return value.
 export const procedures_defnoreturn = procedures_defreturn;
 
-export function procedures_callreturn(block, generator) {
+export function procedures_callreturn(block: Block, generator: DartGenerator): [string, Order] {
   // Call a procedure with a return value.
   const funcName =
       generator.getProcedureName(block.getFieldValue('NAME'));
@@ -75,7 +77,7 @@ export function procedures_callreturn(block, generator) {
   return [code, Order.UNARY_POSTFIX];
 };
 
-export function procedures_callnoreturn(block, generator) {
+export function procedures_callnoreturn(block: Block, generator: DartGenerator) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
@@ -83,7 +85,7 @@ export function procedures_callnoreturn(block, generator) {
   return tuple[0] + ';\n';
 };
 
-export function procedures_ifreturn(block, generator) {
+export function procedures_ifreturn(block: Block, generator: DartGenerator) {
   // Conditionally return value from a procedure.
   const condition =
       generator.valueToCode(block, 'CONDITION', Order.NONE) || 'false';

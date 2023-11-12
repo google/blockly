@@ -61,9 +61,9 @@ export function text_join(
   block: Block,
   generator: PythonGenerator,
 ): [string, Order] {
-  const joinBlock = block as JoinMutatorBlock;
   // Create a string made up of any number of elements of any type.
   // Should we allow joining by '-' or ',' or any other characters?
+  const joinBlock = block as JoinMutatorBlock;
   switch (joinBlock.itemCount_) {
     case 0:
       return ["''", Order.ATOMIC];

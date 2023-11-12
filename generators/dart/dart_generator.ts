@@ -5,53 +5,53 @@
  */
 
 /**
- * @fileoverview Helper functions for generating Dart for blocks.
- * @suppress {checkTypes|globalThis}
+ * @file Dart code generator class, including helper methods for
+ * generating Dart for blocks.
  */
 
 // Former goog.module ID: Blockly.Dart
 
 import * as Variables from '../../core/variables.js';
 import * as stringUtils from '../../core/utils/string.js';
-// import type {Block} from '../../core/block.js';
+import type {Block} from '../../core/block.js';
 import {CodeGenerator} from '../../core/generator.js';
 import {Names, NameType} from '../../core/names.js';
-// import type {Workspace} from '../../core/workspace.js';
+import type {Workspace} from '../../core/workspace.js';
 import {inputTypes} from '../../core/inputs/input_types.js';
 
 
 /**
  * Order of operation ENUMs.
  * https://dart.dev/guides/language/language-tour#operators
- * @enum {number}
  */
-export const Order = {
-  ATOMIC: 0,         // 0 "" ...
-  UNARY_POSTFIX: 1,  // expr++ expr-- () [] . ?.
-  UNARY_PREFIX: 2,   // -expr !expr ~expr ++expr --expr
-  MULTIPLICATIVE: 3, // * / % ~/
-  ADDITIVE: 4,       // + -
-  SHIFT: 5,          // << >>
-  BITWISE_AND: 6,    // &
-  BITWISE_XOR: 7,    // ^
-  BITWISE_OR: 8,     // |
-  RELATIONAL: 9,     // >= > <= < as is is!
-  EQUALITY: 10,      // == !=
-  LOGICAL_AND: 11,   // &&
-  LOGICAL_OR: 12,    // ||
-  IF_NULL: 13,       // ??
-  CONDITIONAL: 14,   // expr ? expr : expr
-  CASCADE: 15,       // ..
-  ASSIGNMENT: 16,    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
-  NONE: 99,          // (...)
-};
+export enum Order {
+  ATOMIC = 0,         // 0 "" ...
+  UNARY_POSTFIX = 1,  // expr++ expr-- () [] . ?.
+  UNARY_PREFIX = 2,   // -expr !expr ~expr ++expr --expr
+  MULTIPLICATIVE = 3, // * / % ~/
+  ADDITIVE = 4,       // + -
+  SHIFT = 5,          // << >>
+  BITWISE_AND = 6,    // &
+  BITWISE_XOR = 7,    // ^
+  BITWISE_OR = 8,     // |
+  RELATIONAL = 9,     // >= > <= < as is is!
+  EQUALITY = 10,      // == !=
+  LOGICAL_AND = 11,   // &&
+  LOGICAL_OR = 12,    // ||
+  IF_NULL = 13,       // ??
+  CONDITIONAL = 14,   // expr ? expr  = expr
+  CASCADE = 15,       // ..
+  ASSIGNMENT = 16,    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
+  NONE = 99,          // (...)
+}
 
 /**
  * Dart code generator class.
  */
 export class DartGenerator extends CodeGenerator {
-  constructor(name) {
-    super(name ?? 'Dart');
+  /** @param name Name of the language the generator is for. */
+  constructor(name = 'Dart') {
+    super(name);
     this.isInitialized = false;
 
     // Copy Order values onto instance for backwards compatibility
@@ -62,7 +62,16 @@ export class DartGenerator extends CodeGenerator {
     // replace data properties with get accessors that call
     // deprecate.warn().)
     for (const key in Order) {
-      this['ORDER_' + key] = Order[key];
+      // Must assign Order[key] to a temporary to get the type guard to work;
+      // see https://github.com/microsoft/TypeScript/issues/10530.
+      const value = Order[key];
+      // Skip reverse-lookup entries in the enum.  Due to
+      // https://github.com/microsoft/TypeScript/issues/55713 this (as
+      // of TypeScript 5.5.2) actually narrows the type of value to
+      // never - but that still allows the following assignment to
+      // succeed.
+      if (typeof value === 'string') continue;
+      (this as unknown as Record<string, Order>)['ORDER_' + key] = value;
     }
 
     // List of illegal variable names.  This is not intended to be a
@@ -91,10 +100,11 @@ export class DartGenerator extends CodeGenerator {
 
   /**
    * Initialise the database of variable names.
-   * @param {!Workspace} workspace Workspace to generate code from.
+   *
+   * @param workspace Workspace to generate code from.
    */
-  init(workspace) {
-    super.init();
+  init(workspace: Workspace) {
+    super.init(workspace);
 
     if (!this.nameDB_) {
       this.nameDB_ = new Names(this.RESERVED_WORDS_);
@@ -131,10 +141,11 @@ export class DartGenerator extends CodeGenerator {
 
   /**
    * Prepend the generated code with import statements and variable definitions.
-   * @param {string} code Generated code.
-   * @return {string} Completed code.
+   *
+   * @param code Generated code.
+   * @returns Completed code.
    */
-  finish(code) {
+  finish(code: string): string {
     // Indent every line.
     if (code) {
       code = this.prefixLines(code, this.INDENT);
@@ -156,27 +167,29 @@ export class DartGenerator extends CodeGenerator {
     code = super.finish(code);
     this.isInitialized = false;
 
-    this.nameDB_.reset();
+    this.nameDB_!.reset();
     const allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
     return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
   }
 
   /**
    * Naked values are top-level blocks with outputs that aren't plugged into
-   * anything.  A trailing semicolon is needed to make this legal.
-   * @param {string} line Line of generated code.
-   * @return {string} Legal line of code.
+   * anything.
+   *
+   * @param line Line of generated code.
+   * @returns Legal line of code.
    */
-  scrubNakedValue(line) {
+  scrubNakedValue(line: string): string {
     return line + ';\n';
   }
 
   /**
    * Encode a string as a properly escaped Dart string, complete with quotes.
-   * @param {string} string Text to encode.
-   * @return {string} Dart string.
+   *
+   * @param string Text to encode.
+   * @returns Dart string.
    */
-  quote_(string) {
+  quote_(string: string): string {
     // Can't use goog.string.quote since $ must also be escaped.
     string = string.replace(/\\/g, '\\\\')
         .replace(/\n/g, '\\\n')
@@ -186,12 +199,13 @@ export class DartGenerator extends CodeGenerator {
   }
 
   /**
-   * Encode a string as a properly escaped multiline Dart string, complete with
-   * quotes.
-   * @param {string} string Text to encode.
-   * @return {string} Dart string.
+   * Encode a string as a properly escaped multiline Dart string, complete
+   * with quotes.
+   *
+   * @param string Text to encode.
+   * @returns Dart string.
    */
-  multiline_quote_(string) {
+  multiline_quote_(string: string): string {
     const lines = string.split(/\n/g).map(this.quote_);
     // Join with the following, plus a newline:
     // + '\n' +
@@ -202,14 +216,13 @@ export class DartGenerator extends CodeGenerator {
    * Common tasks for generating Dart from blocks.
    * Handles comments for the specified block and any connected value blocks.
    * Calls any statements following this block.
-   * @param {!Block} block The current block.
-   * @param {string} code The Dart code created for this block.
-   * @param {boolean=} opt_thisOnly True to generate code for only this
-   *     statement.
-   * @return {string} Dart code with comments and subsequent blocks added.
-   * @protected
+   *
+   * @param block The current block.
+   * @param code The Dart code created for this block.
+   * @param thisOnly True to generate code for only this statement.
+   * @returns Dart code with comments and subsequent blocks added.
    */
-  scrub_(block, code, opt_thisOnly) {
+  scrub_(block: Block, code: string, thisOnly = false): string {
     let commentCode = '';
     // Only collect comments for blocks that aren't inline.
     if (!block.outputConnection || !block.outputConnection.targetConnection) {
@@ -217,7 +230,7 @@ export class DartGenerator extends CodeGenerator {
       let comment = block.getCommentText();
       if (comment) {
         comment = stringUtils.wrap(comment, this.COMMENT_WRAP - 3);
-        if (block.getProcedureDef) {
+        if ((block as AnyDuringMigration).getProcedureDef) {
           // Use documentation comment for function comments.
           commentCode += this.prefixLines(comment + '\n', '/// ');
         } else {
@@ -228,7 +241,7 @@ export class DartGenerator extends CodeGenerator {
       // Don't collect comments for nested statements.
       for (let i = 0; i < block.inputList.length; i++) {
         if (block.inputList[i].type === inputTypes.VALUE) {
-          const childBlock = block.inputList[i].connection.targetBlock();
+          const childBlock = block.inputList[i].connection!.targetBlock();
           if (childBlock) {
             comment = this.allNestedComments(childBlock);
             if (comment) {
@@ -240,48 +253,45 @@ export class DartGenerator extends CodeGenerator {
     }
     const nextBlock =
         block.nextConnection && block.nextConnection.targetBlock();
-    const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
+    const nextCode = thisOnly ? '' : this.blockToCode(nextBlock);
     return commentCode + code + nextCode;
   }
 
   /**
    * Gets a property and adjusts the value while taking into account indexing.
-   * @param {!Block} block The block.
-   * @param {string} atId The property ID of the element to get.
-   * @param {number=} opt_delta Value to add.
-   * @param {boolean=} opt_negate Whether to negate the value.
-   * @param {number=} opt_order The highest order acting on this value.
-   * @return {string|number}
+   *
+   * @param block The block.
+   * @param atId The ID of the input block to get (and adjust) the value of.
+   * @param delta Value to add.
+   * @param negate Whether to negate the value.
+   * @param order The highest order acting on this value.
+   * @returns The adjusted value.
    */
-  getAdjusted(block, atId, opt_delta, opt_negate, opt_order) {
-    let delta = opt_delta || 0;
-    let order = opt_order || this.ORDER_NONE;
+  getAdjusted(block: Block, atId: string, delta = 0, negate = false, order = Order.NONE): string | number {
     if (block.workspace.options.oneBasedIndex) {
       delta--;
     }
     const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
 
-    /** @type {number} */
-    let outerOrder;
-    let innerOrder;
+    let outerOrder: Order;
+    let innerOrder: Order | undefined;
     if (delta) {
-      outerOrder = this.ORDER_ADDITIVE;
-      innerOrder = this.ORDER_ADDITIVE;
-    } else if (opt_negate) {
-      outerOrder = this.ORDER_UNARY_PREFIX;
-      innerOrder = this.ORDER_UNARY_PREFIX;
+      outerOrder = Order.ADDITIVE;
+      innerOrder = Order.ADDITIVE;
+    } else if (negate) {
+      outerOrder = Order.UNARY_PREFIX;
+      innerOrder = Order.UNARY_PREFIX;
     } else {
       outerOrder = order;
     }
 
-    /** @type {string|number} */
     let at = this.valueToCode(block, atId, outerOrder) || defaultAtIndex;
 
     if (stringUtils.isNumber(at)) {
       // If the index is a naked number, adjust it right now.
-      at = parseInt(at, 10) + delta;
-      if (opt_negate) {
-        at = -at;
+      at = String(Number(at) + delta);
+      if (negate) {
+        at = String(-Number(at));
       }
     } else {
       // If the index is dynamic, adjust it in code.
@@ -290,14 +300,14 @@ export class DartGenerator extends CodeGenerator {
       } else if (delta < 0) {
         at = at + ' - ' + -delta;
       }
-      if (opt_negate) {
+      if (negate) {
         if (delta) {
           at = '-(' + at + ')';
         } else {
           at = '-' + at;
         }
       }
-      innerOrder = Math.floor(innerOrder);
+      innerOrder = innerOrder === undefined ? NaN : Math.floor(innerOrder);
       order = Math.floor(order);
       if (innerOrder && order >= innerOrder) {
         at = '(' + at + ')';

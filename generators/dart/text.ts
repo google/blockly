@@ -12,6 +12,7 @@
 
 import type {Block} from '../../core/block.js';
 import type {DartGenerator} from './dart_generator.js';
+import type {JoinMutatorBlock} from '../../blocks/text.js';
 import {Order} from './dart_generator.js';
 
 
@@ -33,7 +34,8 @@ export function text_multiline(block: Block, generator: DartGenerator): [string,
 
 export function text_join(block: Block, generator: DartGenerator): [string, Order] {
   // Create a string made up of any number of elements of any type.
-  switch (block.itemCount_) {
+  const joinBlock = block as JoinMutatorBlock;
+  switch (joinBlock.itemCount_) {
     case 0:
       return ["''", Order.ATOMIC];
     case 1: {
@@ -43,8 +45,8 @@ export function text_join(block: Block, generator: DartGenerator): [string, Orde
       return [code, Order.UNARY_POSTFIX];
     }
     default: {
-      const elements = new Array(block.itemCount_);
-      for (let i = 0; i < block.itemCount_; i++) {
+      const elements = new Array(joinBlock.itemCount_);
+      for (let i = 0; i < joinBlock.itemCount_; i++) {
         elements[i] =
             generator.valueToCode(block, 'ADD' + i, Order.NONE) || "''";
       }
@@ -124,7 +126,9 @@ String ${generator.FUNCTION_NAME_PLACEHOLDER_}(String text, num x) {
       return [code, Order.UNARY_POSTFIX];
     }
     case 'RANDOM': {
-      generator.definitions_['import_dart_math'] =
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       const functionName =
           generator.provideFunction_('text_random_letter', `
@@ -226,7 +230,8 @@ export function text_changeCase(block: Block, generator: DartGenerator): [string
     'LOWERCASE': '.toLowerCase()',
     'TITLECASE': null
   };
-  const operator = OPERATORS[block.getFieldValue('CASE')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const operator = OPERATORS[block.getFieldValue('CASE') as OperatorOption];
   const textOrder = operator ? Order.UNARY_POSTFIX : Order.NONE;
   const text = generator.valueToCode(block, 'TEXT', textOrder) || "''";
   let code;
@@ -263,7 +268,8 @@ export function text_trim(block: Block, generator: DartGenerator): [string, Orde
     'RIGHT': '.replaceFirst(new RegExp(r\'\\s+$\'), \'\')',
     'BOTH': '.trim()'
   };
-  const operator = OPERATORS[block.getFieldValue('MODE')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const operator = OPERATORS[block.getFieldValue('MODE') as OperatorOption];
   const text =
       generator.valueToCode(block, 'TEXT', Order.UNARY_POSTFIX) || "''";
   return [text + operator, Order.UNARY_POSTFIX];
@@ -277,7 +283,9 @@ export function text_print(block: Block, generator: DartGenerator) {
 
 export function text_prompt_ext(block: Block, generator: DartGenerator): [string, Order] {
   // Prompt function.
-  generator.definitions_['import_dart_html'] =
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_html'] =
       'import \'dart:html\' as Html;';
   let msg;
   if (block.getField('TEXT')) {
@@ -290,7 +298,9 @@ export function text_prompt_ext(block: Block, generator: DartGenerator): [string
   let code = 'Html.window.prompt(' + msg + ', \'\')';
   const toNumber = block.getFieldValue('TYPE') === 'NUMBER';
   if (toNumber) {
-    generator.definitions_['import_dart_math'] =
+    // TODO(#7600): find better approach than casting to any to override
+    // CodeGenerator declaring .definitions protected.
+    (generator as AnyDuringMigration).definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
     code = 'Math.parseDouble(' + code + ')';
   }

@@ -11,6 +11,7 @@
 // Former goog.module ID: Blockly.Dart.lists
 
 import type {Block} from '../../core/block.js';
+import type {CreateWithBlock} from '../../blocks/lists.js';
 import type {DartGenerator} from './dart_generator.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './dart_generator.js';
@@ -25,8 +26,9 @@ export function lists_create_empty(block: Block, generator: DartGenerator): [str
 
 export function lists_create_with(block: Block, generator: DartGenerator): [string, Order] {
   // Create a list with any number of elements of any type.
-  const elements = new Array(block.itemCount_);
-  for (let i = 0; i < block.itemCount_; i++) {
+  const createWithBlock = block as CreateWithBlock;
+  const elements = new Array(createWithBlock.itemCount_);
+  for (let i = 0; i < createWithBlock.itemCount_; i++) {
     elements[i] =
         generator.valueToCode(block, 'ADD' + i, Order.NONE) || 'null';
   }
@@ -85,7 +87,7 @@ export function lists_getIndex(block: Block, generator: DartGenerator): [string,
   // Closure, which accesses and modifies 'list'.
   function cacheList() {
     const listVar =
-        generator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
+        generator.nameDB_!.getDistinctName('tmp_list', NameType.VARIABLE);
     const code = 'List ' + listVar + ' = ' + list + ';\n';
     list = listVar;
     return code;
@@ -97,12 +99,14 @@ export function lists_getIndex(block: Block, generator: DartGenerator): [string,
       !list.match(/^\w+$/)) {
     // `list` is an expression, so we may not evaluate it more than once.
     if (where === 'RANDOM') {
-      generator.definitions_['import_dart_math'] =
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       // We can use multiple statements.
       let code = cacheList();
       const xVar =
-          generator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
+          generator.nameDB_!.getDistinctName('tmp_x', NameType.VARIABLE);
       code += 'int ' + xVar + ' = new Math.Random().nextInt(' + list +
           '.length);\n';
       code += list + '.removeAt(' + xVar + ');\n';
@@ -198,12 +202,14 @@ dynamic ${generator.FUNCTION_NAME_PLACEHOLDER_}(List my_list, num x) {
         break;
       }
       case 'RANDOM':
-        generator.definitions_['import_dart_math'] =
+        // TODO(#7600): find better approach than casting to any to override
+        // CodeGenerator declaring .definitions protected.
+        (generator as AnyDuringMigration).definitions_['import_dart_math'] =
             'import \'dart:math\' as Math;';
         if (mode === 'REMOVE') {
           // We can use multiple statements.
           const xVar =
-              generator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
+              generator.nameDB_!.getDistinctName('tmp_x', NameType.VARIABLE);
           let code = 'int ' + xVar + ' = new Math.Random().nextInt(' + list +
               '.length);\n';
           code += list + '.removeAt(' + xVar + ');\n';
@@ -251,7 +257,7 @@ export function lists_setIndex(block: Block, generator: DartGenerator) {
       return '';
     }
     const listVar =
-        generator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
+        generator.nameDB_!.getDistinctName('tmp_list', NameType.VARIABLE);
     const code = 'List ' + listVar + ' = ' + list + ';\n';
     list = listVar;
     return code;
@@ -297,11 +303,13 @@ export function lists_setIndex(block: Block, generator: DartGenerator) {
       break;
     }
     case 'RANDOM': {
-      generator.definitions_['import_dart_math'] =
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       let code = cacheList();
       const xVar =
-          generator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
+          generator.nameDB_!.getDistinctName('tmp_x', NameType.VARIABLE);
       code += 'int ' + xVar + ' = new Math.Random().nextInt(' + list +
           '.length);\n';
       if (mode === 'SET') {

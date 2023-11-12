@@ -59,7 +59,8 @@ export function logic_compare(block: Block, generator: DartGenerator): [string, 
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
-  const operator = OPERATORS[block.getFieldValue('OP')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const operator = OPERATORS[block.getFieldValue('OP') as OperatorOption];
   const order = (operator === '==' || operator === '!=') ?
       Order.EQUALITY :
       Order.RELATIONAL;

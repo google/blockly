@@ -19,32 +19,30 @@ import {Order} from './dart_generator.js';
 
 export function math_number(block: Block, generator: DartGenerator): [string, Order] {
   // Numeric value.
-  let code = Number(block.getFieldValue('NUM'));
-  let order;
-  if (code === Infinity) {
-    code = 'double.infinity';
-    order = Order.UNARY_POSTFIX;
-  } else if (code === -Infinity) {
-    code = '-double.infinity';
-    order = Order.UNARY_PREFIX;
+  const number = Number(block.getFieldValue('NUM'));
+  if (number === Infinity) {
+    return ['double.infinity', Order.UNARY_POSTFIX];
+  } else if (number === -Infinity) {
+    return ['-double.infinity', Order.UNARY_PREFIX];
   } else {
-    // -4.abs() returns -4 in generator due to strange order of operation choices.
-    // -4 is actually an operator and a number.  Reflect this in the order.
-    order = code < 0 ? Order.UNARY_PREFIX : Order.ATOMIC;
+    // -4.abs() returns -4 in generator due to strange order of
+    // operation choices.  4 is actually an operator and a number.
+    // Reflect this in the order.
+    return [String(number), number < 0 ? Order.UNARY_PREFIX : Order.ATOMIC];
   }
-  return [code, order];
 };
 
 export function math_arithmetic(block: Block, generator: DartGenerator): [string, Order] {
   // Basic arithmetic operators, and power.
-  const OPERATORS = {
+  const OPERATORS: Record<string, [string | null, Order]> = {
     'ADD': [' + ', Order.ADDITIVE],
     'MINUS': [' - ', Order.ADDITIVE],
     'MULTIPLY': [' * ', Order.MULTIPLICATIVE],
     'DIVIDE': [' / ', Order.MULTIPLICATIVE],
     'POWER': [null, Order.NONE],  // Handle power separately.
   };
-  const tuple = OPERATORS[block.getFieldValue('OP')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const tuple = OPERATORS[block.getFieldValue('OP') as OperatorOption];
   const operator = tuple[0];
   const order = tuple[1];
   const argument0 = generator.valueToCode(block, 'A', order) || '0';
@@ -52,7 +50,9 @@ export function math_arithmetic(block: Block, generator: DartGenerator): [string
   let code;
   // Power in generator requires a special case since it has no operator.
   if (!operator) {
-    generator.definitions_['import_dart_math'] =
+    // TODO(#7600): find better approach than casting to any to override
+    // CodeGenerator declaring .definitions protected.
+    (generator as AnyDuringMigration).definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
     code = 'Math.pow(' + argument0 + ', ' + argument1 + ')';
     return [code, Order.UNARY_POSTFIX];
@@ -76,7 +76,9 @@ export function math_single(block: Block, generator: DartGenerator): [string, Or
     code = '-' + arg;
     return [code, Order.UNARY_PREFIX];
   }
-  generator.definitions_['import_dart_math'] =
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
   if (operator === 'ABS' || operator.substring(0, 5) === 'ROUND') {
     arg = generator.valueToCode(block, 'NUM', Order.UNARY_POSTFIX) || '0';
@@ -148,7 +150,7 @@ export function math_single(block: Block, generator: DartGenerator): [string, Or
 
 export function math_constant(block: Block, generator: DartGenerator): [string, Order] {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
-  const CONSTANTS = {
+  const CONSTANTS: Record<string, [string, Order]>  = {
     'PI': ['Math.pi', Order.UNARY_POSTFIX],
     'E': ['Math.e', Order.UNARY_POSTFIX],
     'GOLDEN_RATIO': ['(1 + Math.sqrt(5)) / 2', Order.MULTIPLICATIVE],
@@ -156,9 +158,12 @@ export function math_constant(block: Block, generator: DartGenerator): [string, 
     'SQRT1_2': ['Math.sqrt1_2', Order.UNARY_POSTFIX],
     'INFINITY': ['double.infinity', Order.ATOMIC],
   };
-  const constant = block.getFieldValue('CONSTANT');
+  type ConstantOption = keyof typeof CONSTANTS;
+  const constant = block.getFieldValue('CONSTANT') as ConstantOption;
   if (constant !== 'INFINITY') {
-    generator.definitions_['import_dart_math'] =
+    // TODO(#7600): find better approach than casting to any to override
+    // CodeGenerator declaring .definitions protected.
+    (generator as AnyDuringMigration).definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
   }
   return CONSTANTS[constant];
@@ -167,7 +172,7 @@ export function math_constant(block: Block, generator: DartGenerator): [string, 
 export function math_number_property(block: Block, generator: DartGenerator): [string, Order] {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
-  const PROPERTIES = {
+  const PROPERTIES: Record<string, [string | null, Order, Order]> = {
     'EVEN': [' % 2 == 0', Order.MULTIPLICATIVE, Order.EQUALITY],
     'ODD': [' % 2 == 1', Order.MULTIPLICATIVE, Order.EQUALITY],
     'WHOLE': [' % 1 == 0', Order.MULTIPLICATIVE, Order.EQUALITY],
@@ -176,14 +181,17 @@ export function math_number_property(block: Block, generator: DartGenerator): [s
     'DIVISIBLE_BY': [null, Order.MULTIPLICATIVE, Order.EQUALITY],
     'PRIME': [null, Order.NONE, Order.UNARY_POSTFIX],
   };
-  const dropdownProperty = block.getFieldValue('PROPERTY');
+  type PropertyOption = keyof typeof PROPERTIES;
+  const dropdownProperty = block.getFieldValue('PROPERTY') as PropertyOption;
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
   const numberToCheck = generator.valueToCode(block, 'NUMBER_TO_CHECK',
       inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    generator.definitions_['import_dart_math'] =
+    // TODO(#7600): find better approach than casting to any to override
+    // CodeGenerator declaring .definitions protected.
+    (generator as AnyDuringMigration).definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
     const functionName = generator.provideFunction_('math_isPrime', `
 bool ${generator.FUNCTION_NAME_PLACEHOLDER_}(n) {
@@ -252,7 +260,9 @@ num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
       break;
     }
     case 'MIN': {
-      generator.definitions_['import_dart_math'] =
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       const functionName = generator.provideFunction_('math_min', `
 num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
@@ -266,7 +276,9 @@ num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
       break;
     }
     case 'MAX': {
-      generator.definitions_['import_dart_math'] =
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       const functionName = generator.provideFunction_('math_max', `
 num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
@@ -317,7 +329,9 @@ num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
       break;
     }
     case 'MODE': {
-      generator.definitions_['import_dart_math'] =
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
@@ -356,7 +370,9 @@ List ${generator.FUNCTION_NAME_PLACEHOLDER_}(List values) {
       break;
     }
     case 'STD_DEV': {
-      generator.definitions_['import_dart_math'] =
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       const functionName =
           generator.provideFunction_('math_standard_deviation', `
@@ -378,7 +394,9 @@ num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
       break;
     }
     case 'RANDOM': {
-      generator.definitions_['import_dart_math'] =
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       const functionName = generator.provideFunction_('math_random_item', `
 dynamic ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
@@ -407,7 +425,9 @@ export function math_modulo(block: Block, generator: DartGenerator): [string, Or
 
 export function math_constrain(block: Block, generator: DartGenerator): [string, Order] {
   // Constrain a number between two limits.
-  generator.definitions_['import_dart_math'] =
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
   const argument0 =
       generator.valueToCode(block, 'VALUE', Order.NONE) || '0';
@@ -421,7 +441,9 @@ export function math_constrain(block: Block, generator: DartGenerator): [string,
 
 export function math_random_int(block: Block, generator: DartGenerator): [string, Order] {
   // Random integer between [X] and [Y].
-  generator.definitions_['import_dart_math'] =
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
   const argument0 = generator.valueToCode(block, 'FROM', Order.NONE) || '0';
   const argument1 = generator.valueToCode(block, 'TO', Order.NONE) || '0';
@@ -442,14 +464,18 @@ int ${generator.FUNCTION_NAME_PLACEHOLDER_}(num a, num b) {
 
 export function math_random_float(block: Block, generator: DartGenerator): [string, Order] {
   // Random fraction between 0 and 1.
-  generator.definitions_['import_dart_math'] =
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
   return ['new Math.Random().nextDouble()', Order.UNARY_POSTFIX];
 };
 
 export function math_atan2(block: Block, generator: DartGenerator): [string, Order] {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  generator.definitions_['import_dart_math'] =
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
   const argument0 = generator.valueToCode(block, 'X', Order.NONE) || '0';
   const argument1 = generator.valueToCode(block, 'Y', Order.NONE) || '0';

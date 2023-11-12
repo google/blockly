@@ -25,7 +25,9 @@ export function colour_picker(block: Block, generator: DartGenerator): [string, 
 
 export function colour_random(block: Block, generator: DartGenerator): [string, Order] {
   // Generate a random colour.
-  generator.definitions_['import_dart_math'] =
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
       "import 'dart:math' as Math;";
   const functionName = generator.provideFunction_('colour_random', `
 String ${generator.FUNCTION_NAME_PLACEHOLDER_}() {
@@ -46,7 +48,9 @@ export function colour_rgb(block: Block, generator: DartGenerator): [string, Ord
   const green = generator.valueToCode(block, 'GREEN', Order.NONE) || 0;
   const blue = generator.valueToCode(block, 'BLUE', Order.NONE) || 0;
 
-  generator.definitions_['import_dart_math'] =
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
       "import 'dart:math' as Math;";
   const functionName = generator.provideFunction_('colour_rgb', `
 String ${generator.FUNCTION_NAME_PLACEHOLDER_}(num r, num g, num b) {
@@ -78,7 +82,9 @@ export function colour_blend(block: Block, generator: DartGenerator): [string, O
   const ratio =
       generator.valueToCode(block, 'RATIO', Order.NONE) || 0.5;
 
-  generator.definitions_['import_dart_math'] =
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
       "import 'dart:math' as Math;";
   const functionName = generator.provideFunction_('colour_blend', `
 String ${generator.FUNCTION_NAME_PLACEHOLDER_}(String c1, String c2, num ratio) {

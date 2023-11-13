@@ -12,6 +12,7 @@
 
 import * as Variables from '../../core/variables.js';
 import type {Block} from '../../core/block.js';
+import type {IfReturnBlock} from '../../blocks/procedures.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './php_generator.js';
 import type {PhpGenerator} from './php_generator.js';
@@ -35,7 +36,7 @@ export function procedures_defreturn(block: Block, generator: PhpGenerator) {
   const devVarList = Variables.allDeveloperVariables(workspace);
   for (let i = 0; i < devVarList.length; i++) {
     globals.push(
-        generator.nameDB_.getName(
+        generator.nameDB_!.getName(
           devVarList[i], NameType.DEVELOPER_VARIABLE));
   }
   const globalStr =
@@ -79,7 +80,9 @@ export function procedures_defreturn(block: Block, generator: PhpGenerator) {
       globalStr + xfix1 + loopTrap + branch + xfix2 + returnValue + '}';
   code = generator.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
-  generator.definitions_['%' + funcName] = code;
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['%' + funcName] = code;
   return null;
 };
 
@@ -104,7 +107,7 @@ export function procedures_callnoreturn(block: Block, generator: PhpGenerator) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  const tuple = generator.forBlock['procedures_callreturn'](block, generator);
+  const tuple = generator.forBlock['procedures_callreturn'](block, generator) as [string, Order];
   return tuple[0] + ';\n';
 };
 
@@ -121,7 +124,7 @@ export function procedures_ifreturn(block: Block, generator: PhpGenerator) {
           generator.injectId(generator.STATEMENT_SUFFIX, block),
           generator.INDENT);
   }
-  if (block.hasReturnValue_) {
+  if ((block as IfReturnBlock).hasReturnValue_) {
     const value = generator.valueToCode(block, 'VALUE', Order.NONE) || 'null';
     code += generator.INDENT + 'return ' + value + ';\n';
   } else {

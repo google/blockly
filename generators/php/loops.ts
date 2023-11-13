@@ -12,6 +12,7 @@
 
 import * as stringUtils from '../../core/utils/string.js';
 import type {Block} from '../../core/block.js';
+import type {ControlFlowInLoopBlock} from '../../blocks/loops.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './php_generator.js';
 import type {PhpGenerator} from './php_generator.js';
@@ -31,11 +32,11 @@ export function controls_repeat_ext(block: Block, generator: PhpGenerator) {
   branch = generator.addLoopTrap(branch, block);
   let code = '';
   const loopVar =
-        generator.nameDB_.getDistinctName('count', NameType.VARIABLE);
+        generator.nameDB_!.getDistinctName('count', NameType.VARIABLE);
   let endVar = repeats;
   if (!repeats.match(/^\w+$/) && !stringUtils.isNumber(repeats)) {
     endVar =
-        generator.nameDB_.getDistinctName('repeat_end', NameType.VARIABLE);
+        generator.nameDB_!.getDistinctName('repeat_end', NameType.VARIABLE);
     code += endVar + ' = ' + repeats + ';\n';
   }
   code += 'for (' + loopVar + ' = 0; ' + loopVar + ' < ' + endVar + '; ' +
@@ -92,25 +93,25 @@ export function controls_for(block: Block, generator: PhpGenerator) {
     let startVar = argument0;
     if (!argument0.match(/^\w+$/) && !stringUtils.isNumber(argument0)) {
       startVar =
-          generator.nameDB_.getDistinctName(
+          generator.nameDB_!.getDistinctName(
             variable0 + '_start', NameType.VARIABLE);
       code += startVar + ' = ' + argument0 + ';\n';
     }
     let endVar = argument1;
     if (!argument1.match(/^\w+$/) && !stringUtils.isNumber(argument1)) {
       endVar =
-          generator.nameDB_.getDistinctName(
+          generator.nameDB_!.getDistinctName(
             variable0 + '_end', NameType.VARIABLE);
       code += endVar + ' = ' + argument1 + ';\n';
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
     const incVar =
-        generator.nameDB_.getDistinctName(
+        generator.nameDB_!.getDistinctName(
           variable0 + '_inc', NameType.VARIABLE);
     code += incVar + ' = ';
     if (stringUtils.isNumber(increment)) {
-      code += Math.abs(increment) + ';\n';
+      code += Math.abs(Number(increment)) + ';\n';
     } else {
       code += 'abs(' + increment + ');\n';
     }
@@ -152,7 +153,7 @@ export function controls_flow_statements(block: Block, generator: PhpGenerator) 
     xfix += generator.injectId(generator.STATEMENT_SUFFIX, block);
   }
   if (generator.STATEMENT_PREFIX) {
-    const loop = block.getSurroundLoop();
+    const loop = (block as ControlFlowInLoopBlock).getSurroundLoop();
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end
       // of the loop will not get executed if 'continue' is triggered.

@@ -11,6 +11,7 @@
 // Former goog.module ID: Blockly.PHP.texts
 
 import type {Block} from '../../core/block.js';
+import type {JoinMutatorBlock} from '../../blocks/text.js';
 import {Order} from './php_generator.js';
 import type {PhpGenerator} from './php_generator.js';
 
@@ -31,13 +32,14 @@ export function text_multiline(block: Block, generator: PhpGenerator): [string, 
 
 export function text_join(block: Block, generator: PhpGenerator): [string, Order] {
   // Create a string made up of any number of elements of any type.
-  if (block.itemCount_ === 0) {
+  const joinBlock = block as JoinMutatorBlock;
+  if (joinBlock.itemCount_ === 0) {
     return ["''", Order.ATOMIC];
-  } else if (block.itemCount_ === 1) {
+  } else if (joinBlock.itemCount_ === 1) {
     const element = generator.valueToCode(block, 'ADD0', Order.NONE) || "''";
     const code = element;
     return [code, Order.NONE];
-  } else if (block.itemCount_ === 2) {
+  } else if (joinBlock.itemCount_ === 2) {
     const element0 =
         generator.valueToCode(block, 'ADD0', Order.STRING_CONCAT) || "''";
     const element1 =
@@ -45,8 +47,8 @@ export function text_join(block: Block, generator: PhpGenerator): [string, Order
     const code = element0 + ' . ' + element1;
     return [code, Order.STRING_CONCAT];
   } else {
-    const elements = new Array(block.itemCount_);
-    for (let i = 0; i < block.itemCount_; i++) {
+    const elements = new Array(joinBlock.itemCount_);
+    for (let i = 0; i < joinBlock.itemCount_; i++) {
       elements[i] =
           generator.valueToCode(block, 'ADD' + i, Order.NONE) || "''";
     }
@@ -196,13 +198,14 @@ export function text_changeCase(block: Block, generator: PhpGenerator): [string,
   } else if (block.getFieldValue('CASE') === 'TITLECASE') {
     code = 'ucwords(strtolower(' + text + '))';
   }
-  return [code, Order.FUNCTION_CALL];
+  return [code as string, Order.FUNCTION_CALL];
 };
 
 export function text_trim(block: Block, generator: PhpGenerator): [string, Order] {
   // Trim spaces.
   const OPERATORS = {'LEFT': 'ltrim', 'RIGHT': 'rtrim', 'BOTH': 'trim'};
-  const operator = OPERATORS[block.getFieldValue('MODE')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const operator = OPERATORS[block.getFieldValue('MODE') as OperatorOption];
   const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return [operator + '(' + text + ')', Order.FUNCTION_CALL];
 };

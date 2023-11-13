@@ -23,6 +23,7 @@
 
 import * as stringUtils from '../../core/utils/string.js';
 import type {Block} from '../../core/block.js';
+import type {CreateWithBlock} from '../../blocks/lists.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './php_generator.js';
 import type {PhpGenerator} from './php_generator.js';
@@ -34,11 +35,12 @@ export function lists_create_empty(block: Block, generator: PhpGenerator): [stri
 
 export function lists_create_with(block: Block, generator: PhpGenerator): [string, Order] {
   // Create a list with any number of elements of any type.
-  let code = new Array(block.itemCount_);
-  for (let i = 0; i < block.itemCount_; i++) {
-    code[i] = generator.valueToCode(block, 'ADD' + i, Order.NONE) || 'null';
+  const createWithBlock = block as CreateWithBlock;
+  const elements = new Array(createWithBlock.itemCount_);
+  for (let i = 0; i < createWithBlock.itemCount_; i++) {
+    elements[i] = generator.valueToCode(block, 'ADD' + i, Order.NONE) || 'null';
   }
-  code = 'array(' + code.join(', ') + ')';
+  const code = 'array(' + elements.join(', ') + ')';
   return [code, Order.FUNCTION_CALL];
 };
 
@@ -247,13 +249,13 @@ export function lists_setIndex(block: Block, generator: PhpGenerator) {
       generator.valueToCode(block, 'TO', Order.ASSIGNMENT) || 'null';
   // Cache non-trivial values to variables to prevent repeated look-ups.
   // Closure, which accesses and modifies 'list'.
-  let cachedList;
+  let cachedList: string;
   function cacheList() {
     if (cachedList.match(/^\$\w+$/)) {
       return '';
     }
     const listVar =
-        generator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
+        generator.nameDB_!.getDistinctName('tmp_list', NameType.VARIABLE);
     const code = listVar + ' = &' + cachedList + ';\n';
     cachedList = listVar;
     return code;
@@ -328,7 +330,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(&$list, $at, $value) {
       let code = cacheList();
       const list = cachedList;
       const xVar =
-          generator.nameDB_.getDistinctName('tmp_x', NameType.VARIABLE);
+          generator.nameDB_!.getDistinctName('tmp_x', NameType.VARIABLE);
       code += xVar + ' = rand(0, count(' + list + ')-1);\n';
       if (mode === 'SET') {
         code += list + '[' + xVar + '] = ' + value + ';\n';
@@ -344,9 +346,17 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}(&$list, $at, $value) {
 
 export function lists_getSublist(block: Block, generator: PhpGenerator): [string, Order] {
   // Get sublist.
+  // Dictionary of WHEREn field choices and their CamelCase equivalents.
+  const wherePascalCase = {
+    'FIRST': 'First',
+    'LAST': 'Last',
+    'FROM_START': 'FromStart',
+    'FROM_END': 'FromEnd',
+  };
+  type WhereOption = keyof typeof wherePascalCase;
   const list = generator.valueToCode(block, 'LIST', Order.NONE) || 'array()';
-  const where1 = block.getFieldValue('WHERE1');
-  const where2 = block.getFieldValue('WHERE2');
+  const where1 = block.getFieldValue('WHERE1') as WhereOption;
+  const where2 = block.getFieldValue('WHERE2') as WhereOption;
   let code;
   if (where1 === 'FIRST' && where2 === 'LAST') {
     code = list;

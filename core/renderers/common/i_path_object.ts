@@ -9,6 +9,8 @@
 import type {BlockStyle} from '../../theme.js';
 import type {BlockSvg} from '../../block_svg.js';
 import type {ConstantProvider} from './constants.js';
+import type {RenderedConnection} from '../../rendered_connection.js';
+import type {Coordinate} from '../../utils/coordinate.js';
 
 /**
  * An interface for a block's path object.
@@ -119,4 +121,13 @@ export interface IPathObject {
    * @param enable True if the block is movable, false otherwise.
    */
   updateMovable(enabled: boolean): void;
+
+  addConnectionHighlight?(
+    connection: RenderedConnection,
+    connectionPath: string,
+    offset: Coordinate,
+    rtl: boolean,
+  ): void;
+
+  removeConnectionHighlight?(connection: RenderedConnection): void;
 }

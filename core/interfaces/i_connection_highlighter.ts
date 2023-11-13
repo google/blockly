@@ -10,7 +10,7 @@ import type {RenderedConnection} from '../rendered_connection';
  * Visually highlights connections, usually to preview where a block will be
  * connected if it is dropped.
  *
- * Often implemented by IPathObject classes.
+ * Often implemented by Renderer classes.
  */
 export interface IConnectionHighlighter {
   /** Visually highlights the given connection. */
@@ -18,4 +18,14 @@ export interface IConnectionHighlighter {
 
   /** Visually unhighlights the given connnection (if it was highlighted). */
   unhighlightConnection(conn: RenderedConnection): void;
+}
+
+/** Returns whether the object is a connection highlighter or not. */
+export function isConnectionHighlighter(
+  obj: any,
+): obj is IConnectionHighlighter {
+  return (
+    (obj as IConnectionHighlighter).highlightConnection !== undefined &&
+    (obj as IConnectionHighlighter).unhighlightConnection !== undefined
+  );
 }

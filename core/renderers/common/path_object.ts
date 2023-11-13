@@ -8,7 +8,9 @@
 
 import type {BlockSvg} from '../../block_svg.js';
 import type {Connection} from '../../connection.js';
+import { RenderedConnection } from '../../rendered_connection.js';
 import type {BlockStyle} from '../../theme.js';
+import { Coordinate } from '../../utils/coordinate.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
 
@@ -37,6 +39,13 @@ export class PathObject implements IPathObject {
 
   constants: ConstantProvider;
   style: BlockStyle;
+
+  /**
+   * Highlight paths associated with connections.
+   *
+   * @protected
+   */
+  connectionHighlights = new WeakMap<RenderedConnection, SVGElement>();
 
   /**
    * @param root The root SVG element.
@@ -255,5 +264,36 @@ export class PathObject implements IPathObject {
    */
   updateShapeForInputHighlight(_conn: Connection, _enable: boolean) {
     // NOOP
+  }
+
+  /** Adds the given path as a connection highlight for the given connection. */
+  addConnectionHighlight(
+    connection: RenderedConnection,
+    connectionPath: string,
+    offset: Coordinate,
+    rtl: boolean,
+  ) {
+    if (this.connectionHighlights.has(connection)) return;
+    const highlight = dom.createSvgElement(
+      Svg.PATH,
+      {
+        'class': 'blocklyHighlightedConnectionPath',
+        'd': connectionPath,
+        'transform':
+          `translate(${offset.x}, ${offset.y})` + (rtl ? ' scale(-1 1)' : ''),
+      },
+      this.svgRoot,
+    );
+    this.connectionHighlights.set(connection, highlight);
+  }
+
+  /**
+   * Removes any highlight associated with the given connection, if it exists.
+   */
+  removeConnectionHighlight(connection: RenderedConnection) {
+    const highlight = this.connectionHighlights.get(connection);
+    if (!highlight) return;
+    dom.removeNode(highlight);
+    this.connectionHighlights.delete(connection);
   }
 }

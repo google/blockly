@@ -19,6 +19,7 @@ import {Connection} from './connection.js';
 import type {ConnectionDB} from './connection_db.js';
 import {ConnectionType} from './connection_type.js';
 import * as eventUtils from './events/utils.js';
+import {isConnectionHighlighter} from './interfaces/i_connection_highlighter.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -305,6 +306,32 @@ export class RenderedConnection extends Connection {
 
   /** Add highlighting around this connection. */
   highlight() {
+    const renderer = this.getSourceBlock().workspace.getRenderer();
+    if (isConnectionHighlighter(renderer)) {
+      console.log('here');
+      // We unhighlight because the legacy behavior early returns if the
+      // connection is highlighted, but we no longer track highlight at the
+      // connection level, so we can't.
+      renderer.unhighlightConnection(this);
+      renderer.highlightConnection(this);
+    } else {
+      console.log('legacy');
+      this.legacyHighlight();
+    }
+  }
+
+  /** Remove the highlighting around this connection. */
+  unhighlight() {
+    const renderer = this.getSourceBlock().workspace.getRenderer();
+    if (isConnectionHighlighter(renderer)) {
+      renderer.unhighlightConnection(this);
+    } else {
+      this.legacyUnhighlight();
+    }
+  }
+
+  /** Create a highlight path matching the geras renderer. */
+  private legacyHighlight() {
     if (this.highlightPath) {
       // This connection is already highlighted
       return;
@@ -350,8 +377,8 @@ export class RenderedConnection extends Connection {
     );
   }
 
-  /** Remove the highlighting around this connection. */
-  unhighlight() {
+  /** Remove a highlight path if it exists. */
+  private legacyUnhighlight() {
     if (this.highlightPath) {
       dom.removeNode(this.highlightPath);
       this.highlightPath = null;

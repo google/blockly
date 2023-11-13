@@ -17,6 +17,7 @@ import {Drawer} from './drawer.js';
 import {HighlightConstantProvider} from './highlight_constants.js';
 import {RenderInfo} from './info.js';
 import {PathObject} from './path_object.js';
+import {IConnectionHighlighter} from '../../interfaces/i_connection_highlighter.js';
 
 /**
  * The geras renderer. This renderer was designed to be backwards compatible
@@ -26,7 +27,7 @@ import {PathObject} from './path_object.js';
  *
  * Geras is the ancient Greek spirit of old age.
  */
-export class Renderer extends BaseRenderer {
+export class Renderer extends BaseRenderer implements IConnectionHighlighter {
   /** The renderer's highlight constant provider. */
   private highlightConstants: HighlightConstantProvider | null = null;
 

@@ -39,7 +39,7 @@ export enum Order {
   LOGICAL_AND = 11,   // &&
   LOGICAL_OR = 12,    // ||
   IF_NULL = 13,       // ??
-  CONDITIONAL = 14,   // expr ? expr  = expr
+  CONDITIONAL = 14,   // expr ? expr: expr
   CASCADE = 15,       // ..
   ASSIGNMENT = 16,    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
   NONE = 99,          // (...)

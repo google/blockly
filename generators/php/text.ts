@@ -10,16 +10,18 @@
 
 // Former goog.module ID: Blockly.PHP.texts
 
+import type {Block} from '../../core/block.js';
 import {Order} from './php_generator.js';
+import type {PhpGenerator} from './php_generator.js';
 
 
-export function text(block, generator) {
+export function text(block: Block, generator: PhpGenerator): [string, Order] {
   // Text value.
   const code = generator.quote_(block.getFieldValue('TEXT'));
   return [code, Order.ATOMIC];
 };
 
-export function text_multiline(block, generator) {
+export function text_multiline(block: Block, generator: PhpGenerator): [string, Order] {
   // Text value.
   const code = generator.multiline_quote_(block.getFieldValue('TEXT'));
   const order =
@@ -27,7 +29,7 @@ export function text_multiline(block, generator) {
   return [code, order];
 };
 
-export function text_join(block, generator) {
+export function text_join(block: Block, generator: PhpGenerator): [string, Order] {
   // Create a string made up of any number of elements of any type.
   if (block.itemCount_ === 0) {
     return ["''", Order.ATOMIC];
@@ -53,7 +55,7 @@ export function text_join(block, generator) {
   }
 };
 
-export function text_append(block, generator) {
+export function text_append(block: Block, generator: PhpGenerator) {
   // Append to a variable in place.
   const varName =
       generator.getVariableName(block.getFieldValue('VAR'));
@@ -62,7 +64,7 @@ export function text_append(block, generator) {
   return varName + ' .= ' + value + ';\n';
 };
 
-export function text_length(block, generator) {
+export function text_length(block: Block, generator: PhpGenerator): [string, Order] {
   // String or array length.
   const functionName = generator.provideFunction_('length', `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}($value) {
@@ -76,13 +78,13 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}($value) {
   return [functionName + '(' + text + ')', Order.FUNCTION_CALL];
 };
 
-export function text_isEmpty(block, generator) {
+export function text_isEmpty(block: Block, generator: PhpGenerator): [string, Order] {
   // Is the string null or array empty?
   const text = generator.valueToCode(block, 'VALUE', Order.NONE) || "''";
   return ['empty(' + text + ')', Order.FUNCTION_CALL];
 };
 
-export function text_indexOf(block, generator) {
+export function text_indexOf(block: Block, generator: PhpGenerator): [string, Order] {
   // Search the text for a substring.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'strpos' : 'strrpos';
@@ -107,7 +109,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}($text, $search) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function text_charAt(block, generator) {
+export function text_charAt(block: Block, generator: PhpGenerator): [string, Order] {
   // Get letter at index.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const textOrder = (where === 'RANDOM') ? Order.NONE : Order.NONE;
@@ -144,7 +146,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}($text) {
   throw Error('Unhandled option (text_charAt).');
 };
 
-export function text_getSubstring(block, generator) {
+export function text_getSubstring(block: Block, generator: PhpGenerator): [string, Order] {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
   const where2 = block.getFieldValue('WHERE2');
@@ -183,7 +185,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}($text, $where1, $at1, $where2, 
   }
 };
 
-export function text_changeCase(block, generator) {
+export function text_changeCase(block: Block, generator: PhpGenerator): [string, Order] {
   // Change capitalization.
   const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   let code;
@@ -197,7 +199,7 @@ export function text_changeCase(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function text_trim(block, generator) {
+export function text_trim(block: Block, generator: PhpGenerator): [string, Order] {
   // Trim spaces.
   const OPERATORS = {'LEFT': 'ltrim', 'RIGHT': 'rtrim', 'BOTH': 'trim'};
   const operator = OPERATORS[block.getFieldValue('MODE')];
@@ -205,13 +207,13 @@ export function text_trim(block, generator) {
   return [operator + '(' + text + ')', Order.FUNCTION_CALL];
 };
 
-export function text_print(block, generator) {
+export function text_print(block: Block, generator: PhpGenerator) {
   // Print statement.
   const msg = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   return 'print(' + msg + ');\n';
 };
 
-export function text_prompt_ext(block, generator) {
+export function text_prompt_ext(block: Block, generator: PhpGenerator): [string, Order] {
   // Prompt function.
   let msg;
   if (block.getField('TEXT')) {
@@ -231,7 +233,7 @@ export function text_prompt_ext(block, generator) {
 
 export const text_prompt = text_prompt_ext;
 
-export function text_count(block, generator) {
+export function text_count(block: Block, generator: PhpGenerator): [string, Order] {
   const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   const sub = generator.valueToCode(block, 'SUB', Order.NONE) || "''";
   const code = 'strlen(' + sub + ') === 0' +
@@ -240,7 +242,7 @@ export function text_count(block, generator) {
   return [code, Order.CONDITIONAL];
 };
 
-export function text_replace(block, generator) {
+export function text_replace(block: Block, generator: PhpGenerator): [string, Order] {
   const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   const from = generator.valueToCode(block, 'FROM', Order.NONE) || "''";
   const to = generator.valueToCode(block, 'TO', Order.NONE) || "''";
@@ -248,7 +250,7 @@ export function text_replace(block, generator) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function text_reverse(block, generator) {
+export function text_reverse(block: Block, generator: PhpGenerator): [string, Order] {
   const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   const code = 'strrev(' + text + ')';
   return [code, Order.FUNCTION_CALL];

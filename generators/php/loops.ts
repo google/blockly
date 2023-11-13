@@ -11,11 +11,13 @@
 // Former goog.module ID: Blockly.PHP.loops
 
 import * as stringUtils from '../../core/utils/string.js';
+import type {Block} from '../../core/block.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './php_generator.js';
+import type {PhpGenerator} from './php_generator.js';
 
 
-export function controls_repeat_ext(block, generator) {
+export function controls_repeat_ext(block: Block, generator: PhpGenerator) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -43,7 +45,7 @@ export function controls_repeat_ext(block, generator) {
 
 export const controls_repeat = controls_repeat_ext;
 
-export function controls_whileUntil(block, generator) {
+export function controls_whileUntil(block: Block, generator: PhpGenerator) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
@@ -58,7 +60,7 @@ export function controls_whileUntil(block, generator) {
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
 };
 
-export function controls_for(block, generator) {
+export function controls_for(block: Block, generator: PhpGenerator) {
   // For loop.
   const variable0 =
       generator.getVariableName(block.getFieldValue('VAR'));
@@ -123,7 +125,7 @@ export function controls_for(block, generator) {
   return code;
 };
 
-export function controls_forEach(block, generator) {
+export function controls_forEach(block: Block, generator: PhpGenerator) {
   // For each loop.
   const variable0 =
       generator.getVariableName(block.getFieldValue('VAR'));
@@ -137,7 +139,7 @@ export function controls_forEach(block, generator) {
   return code;
 };
 
-export function controls_flow_statements(block, generator) {
+export function controls_flow_statements(block: Block, generator: PhpGenerator) {
   // Flow statements: continue, break.
   let xfix = '';
   if (generator.STATEMENT_PREFIX) {

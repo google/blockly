@@ -10,16 +10,18 @@
 
 // Former goog.module ID: Blockly.PHP.colour
 
+import type {Block} from '../../core/block.js';
 import {Order} from './php_generator.js';
+import type {PhpGenerator} from './php_generator.js';
 
 
-export function colour_picker(block, generator) {
+export function colour_picker(block: Block, generator: PhpGenerator): [string, Order] {
   // Colour picker.
   const code = generator.quote_(block.getFieldValue('COLOUR'));
   return [code, Order.ATOMIC];
 };
 
-export function colour_random(block, generator) {
+export function colour_random(block: Block, generator: PhpGenerator): [string, Order] {
   // Generate a random colour.
   const functionName = generator.provideFunction_('colour_random', `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}() {
@@ -30,7 +32,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}() {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function colour_rgb(block, generator) {
+export function colour_rgb(block: Block, generator: PhpGenerator): [string, Order] {
   // Compose a colour from RGB components expressed as percentages.
   const red = generator.valueToCode(block, 'RED', Order.NONE) || 0;
   const green = generator.valueToCode(block, 'GREEN', Order.NONE) || 0;
@@ -51,7 +53,7 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}($r, $g, $b) {
   return [code, Order.FUNCTION_CALL];
 };
 
-export function colour_blend(block, generator) {
+export function colour_blend(block: Block, generator: PhpGenerator): [string, Order] {
   // Blend two colours together.
   const c1 =
       generator.valueToCode(block, 'COLOUR1', Order.NONE) || "'#000000'";

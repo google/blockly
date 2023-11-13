@@ -21,8 +21,9 @@ import type {Options} from './options.js';
 import type {Renderer} from './renderers/common/renderer.js';
 import type {Theme} from './theme.js';
 import type {ToolboxItem} from './toolbox/toolbox_item.js';
-import {IPaster} from './interfaces/i_paster.js';
-import {ICopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {IPaster} from './interfaces/i_paster.js';
+import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {IConnectionPreviewer} from './interfaces/i_connection_previewer.js';
 
 /**
  * A map of maps. With the keys being the type and name of the class we are
@@ -65,6 +66,10 @@ export class Type<_T> {
   }
 
   static CONNECTION_CHECKER = new Type<IConnectionChecker>('connectionChecker');
+
+  static CONNECTION_PREVIEWER = new Type<IConnectionPreviewer>(
+    'connectionPreviewer',
+  );
 
   static CURSOR = new Type<Cursor>('cursor');
 

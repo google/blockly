@@ -66,10 +66,8 @@ export enum Order {
  * JavaScript code generator class.
  */
 export class JavascriptGenerator extends CodeGenerator {
-  /**
-   * List of outer-inner pairings that do NOT require parentheses.
-   */
-  ORDER_OVERRIDES: number[][] = [
+  /** List of outer-inner pairings that do NOT require parentheses. */
+  ORDER_OVERRIDES: [Order, Order][] = [
     // (foo()).bar -> foo().bar
     // (foo())[0] -> foo()[0]
     [Order.FUNCTION_CALL, Order.MEMBER],

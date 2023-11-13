@@ -33,8 +33,15 @@ export const phpGenerator = new PhpGenerator();
 
 // Install per-block-type generator functions:
 const generators: typeof phpGenerator.forBlock = {
-  ...colour, ...lists, ...logic, ...loops, ...math,
-  ...procedures, ...text, ...variables, ...variablesDynamic
+  ...colour,
+  ...lists,
+  ...logic,
+  ...loops,
+  ...math,
+  ...procedures,
+  ...text,
+  ...variables,
+  ...variablesDynamic,
 };
 for (const name in generators) {
   phpGenerator.forBlock[name] = generators[name];

@@ -10,7 +10,6 @@
 
 // Former goog.module ID: Blockly.PHP.variablesDynamic
 
-
 // generator is dynamically typed.
 export {
   variables_get as variables_get_dynamic,

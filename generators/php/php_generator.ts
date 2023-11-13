@@ -256,7 +256,9 @@ export class PhpGenerator extends CodeGenerator {
   };
 
   /**
-   * Gets a property and adjusts the value while taking into account indexing.
+   * Generate code representing the specified value input, adjusted to take into
+   * account indexing (zero- or one-based) and optionally by a specified delta
+   * and/or by negation.
    *
    * @param block The block.
    * @param atId The ID of the input block to get (and adjust) the value of.
@@ -270,46 +272,41 @@ export class PhpGenerator extends CodeGenerator {
       delta--;
     }
     let defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
-    let outerOrder: Order = order;
-    let innerOrder: Order | undefined;
+
+    let orderForInput = order;
     if (delta > 0) {
-      outerOrder = Order.ADDITION;
-      innerOrder = Order.ADDITION;
+      orderForInput = Order.ADDITION;
     } else if (delta < 0) {
-      outerOrder = Order.SUBTRACTION;
-      innerOrder = Order.SUBTRACTION;
+      orderForInput = Order.SUBTRACTION;
     } else if (negate) {
-      outerOrder = Order.UNARY_NEGATION;
-      innerOrder = Order.UNARY_NEGATION;
+      orderForInput = Order.UNARY_NEGATION;
     }
 
-    let at = this.valueToCode(block, atId, outerOrder) || defaultAtIndex;
+    let at = this.valueToCode(block, atId, orderForInput) || defaultAtIndex;
 
-    if (stringUtils.isNumber(at)) {
-      // If the index is a naked number, adjust it right now.
+    // Easy case: no adjustments.
+    if (delta === 0 && !negate) {
+      return at;
+    }
+    // If the index is a naked number, adjust it right now.
+     if (stringUtils.isNumber(at)) {
       at = String(Number(at) + delta);
       if (negate) {
         at = String(-Number(at));
       }
-    } else {
-      // If the index is dynamic, adjust it in code.
-      if (delta > 0) {
-        at = at + ' + ' + delta;
-      } else if (delta < 0) {
-        at = at + ' - ' + -delta;
-      }
-      if (negate) {
-        if (delta) {
-          at = '-(' + at + ')';
-        } else {
-          at = '-' + at;
-        }
-      }
-      innerOrder = innerOrder === undefined ? NaN : Math.floor(innerOrder);
-      order = Math.floor(order);
-      if (innerOrder && order >= innerOrder) {
-        at = '(' + at + ')';
-      }
+      return at;
+    }
+    // If the index is dynamic, adjust it in code.
+    if (delta > 0) {
+      at = `${at} + ${delta}`;
+    } else if (delta < 0) {
+      at = `${at} - ${-delta}`;
+    }
+    if (negate) {
+      at = delta ? `-(${at})` : `-${at}`;
+    }
+    if (Math.floor(order) >= Math.floor(orderForInput)) {
+      at = `(${at})`;
     }
     return at;
   };

@@ -24,8 +24,8 @@ export interface IConnectionPreviewer {
    *     is being replaced.
    */
   previewReplacement(
-    draggedCon: RenderedConnection,
-    staticCon: RenderedConnection,
+    draggedConn: RenderedConnection,
+    staticConn: RenderedConnection,
     replacedBlock: BlockSvg,
   ): void;
 
@@ -38,8 +38,8 @@ export interface IConnectionPreviewer {
    *     connecting to.
    */
   previewConnection(
-    draggedCon: RenderedConnection,
-    staticCon: RenderedConnection,
+    draggedConn: RenderedConnection,
+    staticConn: RenderedConnection,
   ): void;
 
   /** Hide any previews that are currently displayed. */

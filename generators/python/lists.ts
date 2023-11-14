@@ -29,8 +29,8 @@ export function lists_create_with(
   block: Block,
   generator: PythonGenerator,
 ): [string, Order] {
-  const createWithBlock = block as CreateWithBlock;
   // Create a list with any number of elements of any type.
+  const createWithBlock = block as CreateWithBlock;
   const elements = new Array(createWithBlock.itemCount_);
   for (let i = 0; i < createWithBlock.itemCount_; i++) {
     elements[i] = generator.valueToCode(block, 'ADD' + i, Order.NONE) || 'None';

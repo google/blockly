@@ -63,7 +63,7 @@ export function logic_compare(
   block: Block,
   generator: JavascriptGenerator,
 ): [string, Order] {
-  // Dictionary of OP comparison operators and their implementations.
+  // Comparison operator.
   const OPERATORS = {
     'EQ': '==',
     'NEQ': '!=',

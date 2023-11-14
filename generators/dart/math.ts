@@ -10,39 +10,44 @@
 
 // Former goog.module ID: Blockly.Dart.math
 
+import type {Block} from '../../core/block.js';
+import type {DartGenerator} from './dart_generator.js';
 import {Order} from './dart_generator.js';
-
 
 // RESERVED WORDS: 'Math'
 
-export function math_number(block, generator) {
+export function math_number(
+  block: Block,
+  generator: DartGenerator,
+): [string, Order] {
   // Numeric value.
-  let code = Number(block.getFieldValue('NUM'));
-  let order;
-  if (code === Infinity) {
-    code = 'double.infinity';
-    order = Order.UNARY_POSTFIX;
-  } else if (code === -Infinity) {
-    code = '-double.infinity';
-    order = Order.UNARY_PREFIX;
+  const number = Number(block.getFieldValue('NUM'));
+  if (number === Infinity) {
+    return ['double.infinity', Order.UNARY_POSTFIX];
+  } else if (number === -Infinity) {
+    return ['-double.infinity', Order.UNARY_PREFIX];
   } else {
-    // -4.abs() returns -4 in generator due to strange order of operation choices.
-    // -4 is actually an operator and a number.  Reflect this in the order.
-    order = code < 0 ? Order.UNARY_PREFIX : Order.ATOMIC;
+    // -4.abs() returns -4 in generator due to strange order of
+    // operation choices.  4 is actually an operator and a number.
+    // Reflect this in the order.
+    return [String(number), number < 0 ? Order.UNARY_PREFIX : Order.ATOMIC];
   }
-  return [code, order];
-};
+}
 
-export function math_arithmetic(block, generator) {
+export function math_arithmetic(
+  block: Block,
+  generator: DartGenerator,
+): [string, Order] {
   // Basic arithmetic operators, and power.
-  const OPERATORS = {
+  const OPERATORS: Record<string, [string | null, Order]> = {
     'ADD': [' + ', Order.ADDITIVE],
     'MINUS': [' - ', Order.ADDITIVE],
     'MULTIPLY': [' * ', Order.MULTIPLICATIVE],
     'DIVIDE': [' / ', Order.MULTIPLICATIVE],
-    'POWER': [null, Order.NONE],  // Handle power separately.
+    'POWER': [null, Order.NONE], // Handle power separately.
   };
-  const tuple = OPERATORS[block.getFieldValue('OP')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const tuple = OPERATORS[block.getFieldValue('OP') as OperatorOption];
   const operator = tuple[0];
   const order = tuple[1];
   const argument0 = generator.valueToCode(block, 'A', order) || '0';
@@ -50,16 +55,21 @@ export function math_arithmetic(block, generator) {
   let code;
   // Power in generator requires a special case since it has no operator.
   if (!operator) {
-    generator.definitions_['import_dart_math'] =
-        'import \'dart:math\' as Math;';
+    // TODO(#7600): find better approach than casting to any to override
+    // CodeGenerator declaring .definitions protected.
+    (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+      "import 'dart:math' as Math;";
     code = 'Math.pow(' + argument0 + ', ' + argument1 + ')';
     return [code, Order.UNARY_POSTFIX];
   }
   code = argument0 + operator + argument1;
   return [code, order];
-};
+}
 
-export function math_single(block, generator) {
+export function math_single(
+  block: Block,
+  generator: DartGenerator,
+): [string, Order] {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
@@ -74,8 +84,10 @@ export function math_single(block, generator) {
     code = '-' + arg;
     return [code, Order.UNARY_PREFIX];
   }
-  generator.definitions_['import_dart_math'] =
-      'import \'dart:math\' as Math;';
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+    "import 'dart:math' as Math;";
   if (operator === 'ABS' || operator.substring(0, 5) === 'ROUND') {
     arg = generator.valueToCode(block, 'NUM', Order.UNARY_POSTFIX) || '0';
   } else if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
@@ -142,11 +154,14 @@ export function math_single(block, generator) {
       throw Error('Unknown math operator: ' + operator);
   }
   return [code, Order.MULTIPLICATIVE];
-};
+}
 
-export function math_constant(block, generator) {
+export function math_constant(
+  block: Block,
+  generator: DartGenerator,
+): [string, Order] {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
-  const CONSTANTS = {
+  const CONSTANTS: Record<string, [string, Order]> = {
     'PI': ['Math.pi', Order.UNARY_POSTFIX],
     'E': ['Math.e', Order.UNARY_POSTFIX],
     'GOLDEN_RATIO': ['(1 + Math.sqrt(5)) / 2', Order.MULTIPLICATIVE],
@@ -154,18 +169,24 @@ export function math_constant(block, generator) {
     'SQRT1_2': ['Math.sqrt1_2', Order.UNARY_POSTFIX],
     'INFINITY': ['double.infinity', Order.ATOMIC],
   };
-  const constant = block.getFieldValue('CONSTANT');
+  type ConstantOption = keyof typeof CONSTANTS;
+  const constant = block.getFieldValue('CONSTANT') as ConstantOption;
   if (constant !== 'INFINITY') {
-    generator.definitions_['import_dart_math'] =
-        'import \'dart:math\' as Math;';
+    // TODO(#7600): find better approach than casting to any to override
+    // CodeGenerator declaring .definitions protected.
+    (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+      "import 'dart:math' as Math;";
   }
   return CONSTANTS[constant];
-};
+}
 
-export function math_number_property(block, generator) {
+export function math_number_property(
+  block: Block,
+  generator: DartGenerator,
+): [string, Order] {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
-  const PROPERTIES = {
+  const PROPERTIES: Record<string, [string | null, Order, Order]> = {
     'EVEN': [' % 2 == 0', Order.MULTIPLICATIVE, Order.EQUALITY],
     'ODD': [' % 2 == 1', Order.MULTIPLICATIVE, Order.EQUALITY],
     'WHOLE': [' % 1 == 0', Order.MULTIPLICATIVE, Order.EQUALITY],
@@ -174,16 +195,21 @@ export function math_number_property(block, generator) {
     'DIVISIBLE_BY': [null, Order.MULTIPLICATIVE, Order.EQUALITY],
     'PRIME': [null, Order.NONE, Order.UNARY_POSTFIX],
   };
-  const dropdownProperty = block.getFieldValue('PROPERTY');
+  type PropertyOption = keyof typeof PROPERTIES;
+  const dropdownProperty = block.getFieldValue('PROPERTY') as PropertyOption;
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
-  const numberToCheck = generator.valueToCode(block, 'NUMBER_TO_CHECK',
-      inputOrder) || '0';
+  const numberToCheck =
+    generator.valueToCode(block, 'NUMBER_TO_CHECK', inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    generator.definitions_['import_dart_math'] =
-        'import \'dart:math\' as Math;';
-    const functionName = generator.provideFunction_('math_isPrime', `
+    // TODO(#7600): find better approach than casting to any to override
+    // CodeGenerator declaring .definitions protected.
+    (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+      "import 'dart:math' as Math;";
+    const functionName = generator.provideFunction_(
+      'math_isPrime',
+      `
 bool ${generator.FUNCTION_NAME_PLACEHOLDER_}(n) {
   // https://en.wikipedia.org/wiki/Primality_test#Naive_methods
   if (n == 2 || n == 3) {
@@ -202,11 +228,12 @@ bool ${generator.FUNCTION_NAME_PLACEHOLDER_}(n) {
   }
   return true;
 }
-`);
+`,
+    );
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = generator.valueToCode(block, 'DIVISOR',
-        Order.MULTIPLICATIVE) || '0';
+    const divisor =
+      generator.valueToCode(block, 'DIVISOR', Order.MULTIPLICATIVE) || '0';
     if (divisor === '0') {
       return ['false', Order.ATOMIC];
     }
@@ -215,72 +242,97 @@ bool ${generator.FUNCTION_NAME_PLACEHOLDER_}(n) {
     code = numberToCheck + suffix;
   }
   return [code, outputOrder];
-};
+}
 
-export function math_change(block, generator) {
+export function math_change(block: Block, generator: DartGenerator) {
   // Add to a variable in place.
   const argument0 =
-      generator.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
-  const varName =
-      generator.getVariableName(block.getFieldValue('VAR'));
-  return varName + ' = (' + varName + ' is num ? ' + varName + ' : 0) + ' +
-      argument0 + ';\n';
-};
+    generator.valueToCode(block, 'DELTA', Order.ADDITIVE) || '0';
+  const varName = generator.getVariableName(block.getFieldValue('VAR'));
+  return (
+    varName +
+    ' = (' +
+    varName +
+    ' is num ? ' +
+    varName +
+    ' : 0) + ' +
+    argument0 +
+    ';\n'
+  );
+}
 
 // Rounding functions have a single operand.
 export const math_round = math_single;
 // Trigonometry functions have a single operand.
 export const math_trig = math_single;
 
-export function math_on_list(block, generator) {
+export function math_on_list(
+  block: Block,
+  generator: DartGenerator,
+): [string, Order] {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   const list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
   let code;
   switch (func) {
     case 'SUM': {
-      const functionName = generator.provideFunction_('math_sum', `
+      const functionName = generator.provideFunction_(
+        'math_sum',
+        `
 num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
   num sumVal = 0;
   myList.forEach((num entry) {sumVal += entry;});
   return sumVal;
 }
-`);
+`,
+      );
       code = functionName + '(' + list + ')';
       break;
     }
     case 'MIN': {
-      generator.definitions_['import_dart_math'] =
-          'import \'dart:math\' as Math;';
-      const functionName = generator.provideFunction_('math_min', `
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+        "import 'dart:math' as Math;";
+      const functionName = generator.provideFunction_(
+        'math_min',
+        `
 num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
   if (myList.isEmpty) return null;
   num minVal = myList[0];
   myList.forEach((num entry) {minVal = Math.min(minVal, entry);});
   return minVal;
 }
-`);
+`,
+      );
       code = functionName + '(' + list + ')';
       break;
     }
     case 'MAX': {
-      generator.definitions_['import_dart_math'] =
-          'import \'dart:math\' as Math;';
-      const functionName = generator.provideFunction_('math_max', `
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+        "import 'dart:math' as Math;";
+      const functionName = generator.provideFunction_(
+        'math_max',
+        `
 num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List<num> myList) {
   if (myList.isEmpty) return null;
   num maxVal = myList[0];
   myList.forEach((num entry) {maxVal = Math.max(maxVal, entry);});
   return maxVal;
 }
-`);
+`,
+      );
       code = functionName + '(' + list + ')';
       break;
     }
     case 'AVERAGE': {
       // This operation exclude null and values that are not int or float:
       //   math_mean([null,null,"aString",1,9]) -> 5.0
-      const functionName = generator.provideFunction_('math_mean', `
+      const functionName = generator.provideFunction_(
+        'math_mean',
+        `
 num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   // First filter list for numbers only.
   List localList = new List.from(myList);
@@ -290,12 +342,15 @@ num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   localList.forEach((var entry) {sumVal += entry;});
   return sumVal / localList.length;
 }
-`);
+`,
+      );
       code = functionName + '(' + list + ')';
       break;
     }
     case 'MEDIAN': {
-      const functionName = generator.provideFunction_('math_median', `
+      const functionName = generator.provideFunction_(
+        'math_median',
+        `
 num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   // First filter list for numbers only, then sort, then return middle value
   // or the average of two middle values if list has an even number of elements.
@@ -310,17 +365,22 @@ num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
     return (localList[index - 1] + localList[index]) / 2;
   }
 }
-`);
+`,
+      );
       code = functionName + '(' + list + ')';
       break;
     }
     case 'MODE': {
-      generator.definitions_['import_dart_math'] =
-          'import \'dart:math\' as Math;';
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+        "import 'dart:math' as Math;";
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1]
-      const functionName = generator.provideFunction_('math_modes', `
+      const functionName = generator.provideFunction_(
+        'math_modes',
+        `
 List ${generator.FUNCTION_NAME_PLACEHOLDER_}(List values) {
   List modes = [];
   List counts = [];
@@ -349,15 +409,19 @@ List ${generator.FUNCTION_NAME_PLACEHOLDER_}(List values) {
   }
   return modes;
 }
-`);
+`,
+      );
       code = functionName + '(' + list + ')';
       break;
     }
     case 'STD_DEV': {
-      generator.definitions_['import_dart_math'] =
-          'import \'dart:math\' as Math;';
-      const functionName =
-          generator.provideFunction_('math_standard_deviation', `
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+        "import 'dart:math' as Math;";
+      const functionName = generator.provideFunction_(
+        'math_standard_deviation',
+        `
 num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   // First filter list for numbers only.
   List numbers = new List.from(myList);
@@ -371,19 +435,25 @@ num ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   numbers.forEach((x) => sumSquare += Math.pow(x - mean, 2));
   return Math.sqrt(sumSquare / n);
 }
-`);
+`,
+      );
       code = functionName + '(' + list + ')';
       break;
     }
     case 'RANDOM': {
-      generator.definitions_['import_dart_math'] =
-          'import \'dart:math\' as Math;';
-      const functionName = generator.provideFunction_('math_random_item', `
+      // TODO(#7600): find better approach than casting to any to override
+      // CodeGenerator declaring .definitions protected.
+      (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+        "import 'dart:math' as Math;";
+      const functionName = generator.provideFunction_(
+        'math_random_item',
+        `
 dynamic ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
   int x = new Math.Random().nextInt(myList.length);
   return myList[x];
 }
-`);
+`,
+      );
       code = functionName + '(' + list + ')';
       break;
     }
@@ -391,39 +461,59 @@ dynamic ${generator.FUNCTION_NAME_PLACEHOLDER_}(List myList) {
       throw Error('Unknown operator: ' + func);
   }
   return [code, Order.UNARY_POSTFIX];
-};
+}
 
-export function math_modulo(block, generator) {
+export function math_modulo(
+  block: Block,
+  generator: DartGenerator,
+): [string, Order] {
   // Remainder computation.
   const argument0 =
-      generator.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) || '0';
+    generator.valueToCode(block, 'DIVIDEND', Order.MULTIPLICATIVE) || '0';
   const argument1 =
-      generator.valueToCode(block, 'DIVISOR', Order.MULTIPLICATIVE) || '0';
+    generator.valueToCode(block, 'DIVISOR', Order.MULTIPLICATIVE) || '0';
   const code = argument0 + ' % ' + argument1;
   return [code, Order.MULTIPLICATIVE];
-};
+}
 
-export function math_constrain(block, generator) {
+export function math_constrain(
+  block: Block,
+  generator: DartGenerator,
+): [string, Order] {
   // Constrain a number between two limits.
-  generator.definitions_['import_dart_math'] =
-      'import \'dart:math\' as Math;';
-  const argument0 =
-      generator.valueToCode(block, 'VALUE', Order.NONE) || '0';
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+    "import 'dart:math' as Math;";
+  const argument0 = generator.valueToCode(block, 'VALUE', Order.NONE) || '0';
   const argument1 = generator.valueToCode(block, 'LOW', Order.NONE) || '0';
   const argument2 =
-      generator.valueToCode(block, 'HIGH', Order.NONE) || 'double.infinity';
-  const code = 'Math.min(Math.max(' + argument0 + ', ' + argument1 + '), ' +
-      argument2 + ')';
+    generator.valueToCode(block, 'HIGH', Order.NONE) || 'double.infinity';
+  const code =
+    'Math.min(Math.max(' +
+    argument0 +
+    ', ' +
+    argument1 +
+    '), ' +
+    argument2 +
+    ')';
   return [code, Order.UNARY_POSTFIX];
-};
+}
 
-export function math_random_int(block, generator) {
+export function math_random_int(
+  block: Block,
+  generator: DartGenerator,
+): [string, Order] {
   // Random integer between [X] and [Y].
-  generator.definitions_['import_dart_math'] =
-      'import \'dart:math\' as Math;';
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+    "import 'dart:math' as Math;";
   const argument0 = generator.valueToCode(block, 'FROM', Order.NONE) || '0';
   const argument1 = generator.valueToCode(block, 'TO', Order.NONE) || '0';
-  const functionName = generator.provideFunction_('math_random_int', `
+  const functionName = generator.provideFunction_(
+    'math_random_int',
+    `
 int ${generator.FUNCTION_NAME_PLACEHOLDER_}(num a, num b) {
   if (a > b) {
     // Swap a and b to ensure a is smaller.
@@ -433,26 +523,37 @@ int ${generator.FUNCTION_NAME_PLACEHOLDER_}(num a, num b) {
   }
   return new Math.Random().nextInt(b - a + 1) + a;
 }
-`);
+`,
+  );
   const code = functionName + '(' + argument0 + ', ' + argument1 + ')';
   return [code, Order.UNARY_POSTFIX];
-};
+}
 
-export function math_random_float(block, generator) {
+export function math_random_float(
+  block: Block,
+  generator: DartGenerator,
+): [string, Order] {
   // Random fraction between 0 and 1.
-  generator.definitions_['import_dart_math'] =
-      'import \'dart:math\' as Math;';
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+    "import 'dart:math' as Math;";
   return ['new Math.Random().nextDouble()', Order.UNARY_POSTFIX];
-};
+}
 
-export function math_atan2(block, generator) {
+export function math_atan2(
+  block: Block,
+  generator: DartGenerator,
+): [string, Order] {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  generator.definitions_['import_dart_math'] =
-      'import \'dart:math\' as Math;';
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['import_dart_math'] =
+    "import 'dart:math' as Math;";
   const argument0 = generator.valueToCode(block, 'X', Order.NONE) || '0';
   const argument1 = generator.valueToCode(block, 'Y', Order.NONE) || '0';
   return [
     'Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.pi * 180',
-    Order.MULTIPLICATIVE
+    Order.MULTIPLICATIVE,
   ];
-};
+}

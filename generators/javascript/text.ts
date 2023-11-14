@@ -11,8 +11,8 @@
 // Former goog.module ID: Blockly.JavaScript.texts
 
 import type {Block} from '../../core/block.js';
-import type {JoinMutatorBlock} from '../../blocks/text.js';
 import type {JavascriptGenerator} from './javascript_generator.js';
+import type {JoinMutatorBlock} from '../../blocks/text.js';
 import {Order} from './javascript_generator.js';
 
 /**
@@ -80,8 +80,8 @@ export function text_join(
   block: Block,
   generator: JavascriptGenerator,
 ): [string, Order] {
-  const joinBlock = block as JoinMutatorBlock;
   // Create a string made up of any number of elements of any type.
+  const joinBlock = block as JoinMutatorBlock;
   switch (joinBlock.itemCount_) {
     case 0:
       return ["''", Order.ATOMIC];

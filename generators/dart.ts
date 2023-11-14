@@ -36,8 +36,17 @@ export const dartGenerator = new DartGenerator();
 dartGenerator.addReservedWords('Html,Math');
 
 // Install per-block-type generator functions:
-Object.assign(
-  dartGenerator.forBlock,
-  colour, lists, logic, loops, math, procedures,
-  text, variables, variablesDynamic
-);
+const generators: typeof dartGenerator.forBlock = {
+  ...colour,
+  ...lists,
+  ...logic,
+  ...loops,
+  ...math,
+  ...procedures,
+  ...text,
+  ...variables,
+  ...variablesDynamic,
+};
+for (const name in generators) {
+  dartGenerator.forBlock[name] = generators[name];
+}

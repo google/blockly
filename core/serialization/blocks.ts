@@ -733,7 +733,6 @@ function initBlock(block: Block, rendered: boolean) {
 
     blockSvg.initSvg();
     blockSvg.queueRender();
-    blockSvg.updateDisabled();
 
     // fixes #6076 JSO deserialization doesn't
     // set .iconXY_ property so here it will be set

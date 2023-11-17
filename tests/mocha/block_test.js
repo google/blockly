@@ -2255,14 +2255,13 @@ suite('Blocks', function () {
           },
         };
         Blockly.serialization.blocks.append(blockJson, this.workspace);
-        // Inner block
-        const block = this.workspace.getTopBlocks(false)[0].getChildren()[0];
+        const innerBlock = this.workspace.getTopBlocks(false)[0].getChildren()[0];
         chai.assert.isTrue(
-          block.visuallyDisabled,
+          innerBlock.visuallyDisabled,
           'block should have visuallyDisabled set because it is disabled',
         );
         chai.assert.isFalse(
-          block.isEnabled(),
+          innerBlock.isEnabled(),
           'block should be marked disabled because enabled json property was set to false',
         );
       });
@@ -2279,14 +2278,13 @@ suite('Blocks', function () {
           Blockly.utils.xml.textToDom(blockXml),
           this.workspace,
         );
-        // Inner block
-        const block = this.workspace.getTopBlocks(false)[0].getChildren()[0];
+        const innerBlock = this.workspace.getTopBlocks(false)[0].getChildren()[0];
         chai.assert.isTrue(
-          block.visuallyDisabled,
+          innerBlock.visuallyDisabled,
           'block should have visuallyDisabled set because it is disabled',
         );
         chai.assert.isFalse(
-          block.isEnabled(),
+          innerBlock.isEnabled(),
           'block should be marked disabled because enabled xml property was set to false',
         );
       });

@@ -2255,7 +2255,9 @@ suite('Blocks', function () {
           },
         };
         Blockly.serialization.blocks.append(blockJson, this.workspace);
-        const innerBlock = this.workspace.getTopBlocks(false)[0].getChildren()[0];
+        const innerBlock = this.workspace
+          .getTopBlocks(false)[0]
+          .getChildren()[0];
         chai.assert.isTrue(
           innerBlock.visuallyDisabled,
           'block should have visuallyDisabled set because it is disabled',
@@ -2278,7 +2280,9 @@ suite('Blocks', function () {
           Blockly.utils.xml.textToDom(blockXml),
           this.workspace,
         );
-        const innerBlock = this.workspace.getTopBlocks(false)[0].getChildren()[0];
+        const innerBlock = this.workspace
+          .getTopBlocks(false)[0]
+          .getChildren()[0];
         chai.assert.isTrue(
           innerBlock.visuallyDisabled,
           'block should have visuallyDisabled set because it is disabled',

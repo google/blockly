@@ -1715,7 +1715,8 @@ export class BlockSvg
    * @internal
    */
   fadeForReplacement(add: boolean) {
-    this.pathObject.updateReplacementFade(add);
+    // TODO (7204): Remove these internal methods.
+    (this.pathObject as AnyDuringMigration).updateReplacementFade(add);
   }
 
   /**
@@ -1727,6 +1728,10 @@ export class BlockSvg
    * @internal
    */
   highlightShapeForInput(conn: RenderedConnection, add: boolean) {
-    this.pathObject.updateShapeForInputHighlight(conn, add);
+    // TODO (7204): Remove these internal methods.
+    (this.pathObject as AnyDuringMigration).updateShapeForInputHighlight(
+      conn,
+      add,
+    );
   }
 }

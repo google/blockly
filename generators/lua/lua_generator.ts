@@ -5,18 +5,17 @@
  */
 
 /**
- * @fileoverview Helper functions for generating Lua for blocks.
+ * @file Helper functions for generating Lua for blocks.
  * Based on Ellen Spertus's blocky-lua project.
- * @suppress {checkTypes|globalThis}
  */
 
 // Former goog.module ID: Blockly.Lua
 
 import * as stringUtils from '../../core/utils/string.js';
-// import type {Block} from '../../core/block.js';
+import type {Block} from '../../core/block.js';
 import {CodeGenerator} from '../../core/generator.js';
 import {Names} from '../../core/names.js';
-// import type {Workspace} from '../../core/workspace.js';
+import type {Workspace} from '../../core/workspace.js';
 import {inputTypes} from '../../core/inputs/input_types.js';
 
 
@@ -25,20 +24,20 @@ import {inputTypes} from '../../core/inputs/input_types.js';
  * http://www.lua.org/manual/5.3/manual.html#3.4.8
  * @enum {number}
  */
-export const Order = {
-  ATOMIC: 0,    // literals
+export enum Order {
+  ATOMIC = 0,    // literals
   // The next level was not explicit in documentation and inferred by Ellen.
-  HIGH: 1,            // Function calls, tables[]
-  EXPONENTIATION: 2,  // ^
-  UNARY: 3,           // not # - ~
-  MULTIPLICATIVE: 4,  // * / %
-  ADDITIVE: 5,        // + -
-  CONCATENATION: 6,   // ..
-  RELATIONAL: 7,      // < > <=  >= ~= ==
-  AND: 8,             // and
-  OR: 9,              // or
-  NONE: 99,
-};
+  HIGH = 1,            // Function calls, tables[]
+  EXPONENTIATION = 2,  // ^
+  UNARY = 3,           // not # - ~
+  MULTIPLICATIVE = 4,  // * / %
+  ADDITIVE = 5,        // + -
+  CONCATENATION = 6,   // ..
+  RELATIONAL = 7,      // < > <=  >= ~= ==
+  AND = 8,             // and
+  OR = 9,              // or
+  NONE = 99,
+}
 
 /**
  * Lua code generator class.
@@ -48,8 +47,8 @@ export const Order = {
  * option used for lists and text.
  */
 export class LuaGenerator extends CodeGenerator {
-  constructor(name) {
-    super(name ?? 'Lua');
+  constructor(name = 'Lua') {
+    super(name);
     this.isInitialized = false;
 
     // Copy Order values onto instance for backwards compatibility
@@ -60,7 +59,16 @@ export class LuaGenerator extends CodeGenerator {
     // replace data properties with get accessors that call
     // deprecate.warn().)
     for (const key in Order) {
-      this['ORDER_' + key] = Order[key];
+      // Must assign Order[key] to a temporary to get the type guard to work;
+      // see https://github.com/microsoft/TypeScript/issues/10530.
+      const value = Order[key];
+      // Skip reverse-lookup entries in the enum.  Due to
+      // https://github.com/microsoft/TypeScript/issues/55713 this (as
+      // of TypeScript 5.5.2) actually narrows the type of value to
+      // never - but that still allows the following assignment to
+      // succeed.
+      if (typeof value === 'string') continue;
+      (this as unknown as Record<string, Order>)['ORDER_' + key] = value;
     }
 
     // List of illegal variable names.  This is not intended to be a
@@ -97,11 +105,12 @@ export class LuaGenerator extends CodeGenerator {
 
   /**
    * Initialise the database of variable names.
-   * @param {!Workspace} workspace Workspace to generate code from.
+   *
+   * @param workspace Workspace to generate code from.
    */
-  init(workspace) {
+  init(workspace: Workspace) {
     // Call Blockly.CodeGenerator's init.
-    super.init();
+    super.init(workspace);
 
     if (!this.nameDB_) {
       this.nameDB_ = new Names(this.RESERVED_WORDS_);
@@ -113,43 +122,46 @@ export class LuaGenerator extends CodeGenerator {
     this.nameDB_.populateProcedures(workspace);
 
     this.isInitialized = true;
-  };
+  }
 
   /**
    * Prepend the generated code with the variable definitions.
-   * @param {string} code Generated code.
-   * @return {string} Completed code.
+   *
+   * @param code Generated code.
+   * @returns Completed code.
    */
-  finish(code) {
+  finish(code: string): string {
     // Convert the definitions dictionary into a list.
     const definitions = Object.values(this.definitions_);
     // Call Blockly.CodeGenerator's finish.
     code = super.finish(code);
     this.isInitialized = false;
 
-    this.nameDB_.reset();
+    this.nameDB_!.reset();
     return definitions.join('\n\n') + '\n\n\n' + code;
-  };
+  }
 
   /**
    * Naked values are top-level blocks with outputs that aren't plugged into
    * anything. In Lua, an expression is not a legal statement, so we must assign
    * the value to the (conventionally ignored) _.
    * http://lua-users.org/wiki/ExpressionsAsStatements
-   * @param {string} line Line of generated code.
-   * @return {string} Legal line of code.
+   *
+   * @param line Line of generated code.
+   * @return Legal line of code.
    */
-  scrubNakedValue(line) {
+  scrubNakedValue(line: string): string {
     return 'local _ = ' + line + '\n';
-  };
+  }
 
   /**
    * Encode a string as a properly escaped Lua string, complete with
    * quotes.
-   * @param {string} string Text to encode.
-   * @return {string} Lua string.
+   *
+   * @param string Text to encode.
+   * @returns Lua string.
    */
-  quote_(string) {
+  quote_(string: string): string {
     string = string.replace(/\\/g, '\\\\')
         .replace(/\n/g, '\\\n')
         .replace(/'/g, '\\\'');
@@ -159,27 +171,27 @@ export class LuaGenerator extends CodeGenerator {
   /**
    * Encode a string as a properly escaped multiline Lua string, complete with
    * quotes.
-   * @param {string} string Text to encode.
-   * @return {string} Lua string.
+   *
+   * @param string Text to encode.
+   * @returns Lua string.
    */
-  multiline_quote_(string) {
+  multiline_quote_(string: string): string {
     const lines = string.split(/\n/g).map(this.quote_);
     // Join with the following, plus a newline:
     // .. '\n' ..
     return lines.join(' .. \'\\n\' ..\n');
-  };
+  }
 
   /**
    * Common tasks for generating Lua from blocks.
    * Handles comments for the specified block and any connected value blocks.
    * Calls any statements following this block.
-   * @param {!Block} block The current block.
-   * @param {string} code The Lua code created for this block.
-   * @param {boolean=} opt_thisOnly True to generate code for only this statement.
-   * @return {string} Lua code with comments and subsequent blocks added.
-   * @protected
+   * @param block The current block.
+   * @param code The Lua code created for this block.
+   * @param thisOnly True to generate code for only this statement.
+   * @returns Lua code with comments and subsequent blocks added.
    */
-  scrub_(block, code, opt_thisOnly) {
+  scrub_(block: Block, code: string, thisOnly = false): string {
     let commentCode = '';
     // Only collect comments for blocks that aren't inline.
     if (!block.outputConnection || !block.outputConnection.targetConnection) {
@@ -193,7 +205,7 @@ export class LuaGenerator extends CodeGenerator {
       // Don't collect comments for nested statements.
       for (let i = 0; i < block.inputList.length; i++) {
         if (block.inputList[i].type === inputTypes.VALUE) {
-          const childBlock = block.inputList[i].connection.targetBlock();
+          const childBlock = block.inputList[i].connection!.targetBlock();
           if (childBlock) {
             comment = this.allNestedComments(childBlock);
             if (comment) {
@@ -204,7 +216,7 @@ export class LuaGenerator extends CodeGenerator {
       }
     }
     const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-    const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
+    const nextCode = thisOnly ? '' : this.blockToCode(nextBlock);
     return commentCode + code + nextCode;
-  };
+  }
 }

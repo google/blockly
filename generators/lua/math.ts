@@ -19,19 +19,20 @@ export function math_number(block: Block, generator: LuaGenerator): [string, Ord
   // Numeric value.
   const code = Number(block.getFieldValue('NUM'));
   const order = code < 0 ? Order.UNARY : Order.ATOMIC;
-  return [code, order];
+  return [String(code), order];
 };
 
 export function math_arithmetic(block: Block, generator: LuaGenerator): [string, Order] {
   // Basic arithmetic operators, and power.
-  const OPERATORS = {
+  const OPERATORS: Record<string, [string, Order]> = {
     'ADD': [' + ', Order.ADDITIVE],
     'MINUS': [' - ', Order.ADDITIVE],
     'MULTIPLY': [' * ', Order.MULTIPLICATIVE],
     'DIVIDE': [' / ', Order.MULTIPLICATIVE],
     'POWER': [' ^ ', Order.EXPONENTIATION],
   };
-  const tuple = OPERATORS[block.getFieldValue('OP')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const tuple = OPERATORS[block.getFieldValue('OP') as OperatorOption];
   const operator = tuple[0];
   const order = tuple[1];
   const argument0 = generator.valueToCode(block, 'A', order) || '0';
@@ -112,7 +113,7 @@ export function math_single(block: Block, generator: LuaGenerator): [string, Ord
 
 export function math_constant(block: Block, generator: LuaGenerator): [string, Order] {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
-  const CONSTANTS: {[key: string]: [string, Order]} = {
+  const CONSTANTS: Record<string, [string, Order]> = {
     'PI': ['math.pi', Order.HIGH],
     'E': ['math.exp(1)', Order.HIGH],
     'GOLDEN_RATIO': ['(1 + math.sqrt(5)) / 2', Order.MULTIPLICATIVE],
@@ -126,7 +127,7 @@ export function math_constant(block: Block, generator: LuaGenerator): [string, O
 export function math_number_property(block: Block, generator: LuaGenerator): [string, Order] {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
-  const PROPERTIES: {[key: string]: [string|null, Order, Order]} = {
+  const PROPERTIES: Record<string, [string | null, Order, Order]> = {
     'EVEN': [' % 2 == 0', Order.MULTIPLICATIVE, Order.RELATIONAL],
     'ODD': [' % 2 == 1', Order.MULTIPLICATIVE, Order.RELATIONAL],
     'WHOLE': [' % 1 == 0', Order.MULTIPLICATIVE, Order.RELATIONAL],

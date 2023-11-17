@@ -11,6 +11,7 @@
 // Former goog.module ID: Blockly.Lua.lists
 
 import type {Block} from '../../core/block.js';
+import type {CreateWithBlock} from '../../blocks/lists.js';
 import type {LuaGenerator} from './lua_generator.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './lua_generator.js';
@@ -22,11 +23,12 @@ export function lists_create_empty(block: Block, generator: LuaGenerator): [stri
 };
 
 export function lists_create_with(block: Block, generator: LuaGenerator): [string, Order] {
+  const createWithBlock = block as CreateWithBlock;
   // Create a list with any number of elements of any type.
-  const elements = new Array(block.itemCount_);
-  for (let i = 0; i < block.itemCount_; i++) {
+  const elements = new Array(createWithBlock.itemCount_);
+  for (let i = 0; i < createWithBlock.itemCount_; i++) {
     elements[i] =
-        generator.valueToCode(block, 'ADD' + i, Order.NONE) || 'None';
+        generator.valueToCode(createWithBlock, 'ADD' + i, Order.NONE) || 'None';
   }
   const code = '{' + elements.join(', ') + '}';
   return [code, Order.HIGH];

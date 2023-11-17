@@ -11,6 +11,7 @@
 // Former goog.module ID: Blockly.Lua.texts
 
 import type {Block} from '../../core/block.js';
+import type {JoinMutatorBlock} from '../../blocks/text.js';
 import type {LuaGenerator} from './lua_generator.js';
 import {Order} from './lua_generator.js';
 
@@ -30,14 +31,15 @@ export function text_multiline(block: Block, generator: LuaGenerator): [string, 
 };
 
 export function text_join(block: Block, generator: LuaGenerator): [string, Order] {
+  const joinBlock = block as JoinMutatorBlock;
   // Create a string made up of any number of elements of any type.
-  if (block.itemCount_ === 0) {
+  if (joinBlock.itemCount_ === 0) {
     return ["''", Order.ATOMIC];
-  } else if (block.itemCount_ === 1) {
+  } else if (joinBlock.itemCount_ === 1) {
     const element = generator.valueToCode(block, 'ADD0', Order.NONE) || "''";
     const code = 'tostring(' + element + ')';
     return [code, Order.HIGH];
-  } else if (block.itemCount_ === 2) {
+  } else if (joinBlock.itemCount_ === 2) {
     const element0 =
         generator.valueToCode(block, 'ADD0', Order.CONCATENATION) || "''";
     const element1 =
@@ -46,7 +48,7 @@ export function text_join(block: Block, generator: LuaGenerator): [string, Order
     return [code, Order.CONCATENATION];
   } else {
     const elements = [];
-    for (let i = 0; i < block.itemCount_; i++) {
+    for (let i = 0; i < joinBlock.itemCount_; i++) {
       elements[i] =
           generator.valueToCode(block, 'ADD' + i, Order.NONE) || "''";
     }
@@ -229,7 +231,8 @@ end
 export function text_trim(block: Block, generator: LuaGenerator): [string, Order] {
   // Trim spaces.
   const OPERATORS = {LEFT: '^%s*(,-)', RIGHT: '(.-)%s*$', BOTH: '^%s*(.-)%s*$'};
-  const operator = OPERATORS[block.getFieldValue('MODE')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const operator = OPERATORS[block.getFieldValue('MODE') as OperatorOption];
   const text = generator.valueToCode(block, 'TEXT', Order.NONE) || "''";
   const code = 'string.gsub(' + text + ', "' + operator + '", "%1")';
   return [code, Order.HIGH];

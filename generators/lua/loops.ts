@@ -12,6 +12,7 @@
 
 import * as stringUtils from '../../core/utils/string.js';
 import type {Block} from '../../core/block.js';
+import type {ControlFlowInLoopBlock} from '../../blocks/loops.js';
 import type {LuaGenerator} from './lua_generator.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './lua_generator.js';
@@ -152,7 +153,7 @@ export function controls_flow_statements(block: Block, generator: LuaGenerator):
     xfix += generator.injectId(generator.STATEMENT_SUFFIX, block);
   }
   if (generator.STATEMENT_PREFIX) {
-    const loop = block.getSurroundLoop();
+    const loop = (block as ControlFlowInLoopBlock).getSurroundLoop();
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end
       // of the loop will not get executed if 'continue' is triggered.

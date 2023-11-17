@@ -11,11 +11,12 @@
 // Former goog.module ID: Blockly.Lua.procedures
 
 import type {Block} from '../../core/block.js';
+import type {IfReturnBlock} from '../../blocks/procedures.js';
 import type {LuaGenerator} from './lua_generator.js';
 import {Order} from './lua_generator.js';
 
 
-export function procedures_defreturn(block: Block, generator: LuaGenerator): [string, Order] {
+export function procedures_defreturn(block: Block, generator: LuaGenerator): null {
   // Define a procedure with a return value.
   const funcName =
       generator.getProcedureName(block.getFieldValue('NAME'));
@@ -56,7 +57,9 @@ export function procedures_defreturn(block: Block, generator: LuaGenerator): [st
       loopTrap + branch + xfix2 + returnValue + 'end\n';
   code = generator.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
-  generator.definitions_['%' + funcName] = code;
+  // TODO(#7600): find better approach than casting to any to override
+  // CodeGenerator declaring .definitions protected.
+  (generator as AnyDuringMigration).definitions_['%' + funcName] = code;
   return null;
 };
 
@@ -98,7 +101,7 @@ export function procedures_ifreturn(block: Block, generator: LuaGenerator): stri
           generator.injectId(generator.STATEMENT_SUFFIX, block),
           generator.INDENT);
   }
-  if (block.hasReturnValue_) {
+  if ((block as IfReturnBlock).hasReturnValue_) {
     const value = generator.valueToCode(block, 'VALUE', Order.NONE) || 'nil';
     code += generator.INDENT + 'return ' + value + '\n';
   } else {

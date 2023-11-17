@@ -58,7 +58,8 @@ export function logic_compare(block: Block, generator: LuaGenerator): [string, O
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '~=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
-  const operator = OPERATORS[block.getFieldValue('OP')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const operator = OPERATORS[block.getFieldValue('OP') as OperatorOption];
   const argument0 =
         generator.valueToCode(block, 'A', Order.RELATIONAL) || '0';
   const argument1 =

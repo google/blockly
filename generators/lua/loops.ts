@@ -17,7 +17,6 @@ import type {LuaGenerator} from './lua_generator.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './lua_generator.js';
 
-
 /**
  * This is the text used to implement a <pre>continue</pre>.
  * It is also used to recognise <pre>continue</pre>s in generated code so that
@@ -42,9 +41,12 @@ function addContinueLabel(branch: string, indent: string): string {
   } else {
     return branch;
   }
-};
+}
 
-export function controls_repeat_ext(block: Block, generator: LuaGenerator): string {
+export function controls_repeat_ext(
+  block: Block,
+  generator: LuaGenerator,
+): string {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -62,21 +64,26 @@ export function controls_repeat_ext(block: Block, generator: LuaGenerator): stri
   let branch = generator.statementToCode(block, 'DO');
   branch = generator.addLoopTrap(branch, block);
   branch = addContinueLabel(branch, generator.INDENT);
-  const loopVar = generator.nameDB_!.getDistinctName('count', NameType.VARIABLE);
+  const loopVar = generator.nameDB_!.getDistinctName(
+    'count',
+    NameType.VARIABLE,
+  );
   const code =
-      'for ' + loopVar + ' = 1, ' + repeats + ' do\n' + branch + 'end\n';
+    'for ' + loopVar + ' = 1, ' + repeats + ' do\n' + branch + 'end\n';
   return code;
-};
+}
 
 export const controls_repeat = controls_repeat_ext;
 
-export function controls_whileUntil(block: Block, generator: LuaGenerator): string {
+export function controls_whileUntil(
+  block: Block,
+  generator: LuaGenerator,
+): string {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
-      generator.valueToCode(
-          block, 'BOOL', until ? Order.UNARY : Order.NONE) ||
-      'false';
+    generator.valueToCode(block, 'BOOL', until ? Order.UNARY : Order.NONE) ||
+    'false';
   let branch = generator.statementToCode(block, 'DO');
   branch = generator.addLoopTrap(branch, block);
   branch = addContinueLabel(branch, generator.INDENT);
@@ -84,12 +91,11 @@ export function controls_whileUntil(block: Block, generator: LuaGenerator): stri
     argument0 = 'not ' + argument0;
   }
   return 'while ' + argument0 + ' do\n' + branch + 'end\n';
-};
+}
 
 export function controls_for(block: Block, generator: LuaGenerator): string {
   // For loop.
-  const variable0 =
-      generator.getVariableName(block.getFieldValue('VAR'));
+  const variable0 = generator.getVariableName(block.getFieldValue('VAR'));
   const startVar = generator.valueToCode(block, 'FROM', Order.NONE) || '0';
   const endVar = generator.valueToCode(block, 'TO', Order.NONE) || '0';
   const increment = generator.valueToCode(block, 'BY', Order.NONE) || '1';
@@ -98,8 +104,11 @@ export function controls_for(block: Block, generator: LuaGenerator): string {
   branch = addContinueLabel(branch, generator.INDENT);
   let code = '';
   let incValue;
-  if (stringUtils.isNumber(startVar) && stringUtils.isNumber(endVar) &&
-      stringUtils.isNumber(increment)) {
+  if (
+    stringUtils.isNumber(startVar) &&
+    stringUtils.isNumber(endVar) &&
+    stringUtils.isNumber(increment)
+  ) {
     // All arguments are simple numbers.
     const up = Number(startVar) <= Number(endVar);
     const step = Math.abs(Number(increment));
@@ -108,9 +117,10 @@ export function controls_for(block: Block, generator: LuaGenerator): string {
     code = '';
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    incValue =
-        generator.nameDB_!.getDistinctName(
-          variable0 + '_inc', NameType.VARIABLE);
+    incValue = generator.nameDB_!.getDistinctName(
+      variable0 + '_inc',
+      NameType.VARIABLE,
+    );
     code += incValue + ' = ';
     if (stringUtils.isNumber(increment)) {
       code += Math.abs(increment as unknown as number) + '\n';
@@ -122,25 +132,36 @@ export function controls_for(block: Block, generator: LuaGenerator): string {
     code += 'end\n';
   }
   code +=
-      'for ' + variable0 + ' = ' + startVar + ', ' + endVar + ', ' + incValue;
+    'for ' + variable0 + ' = ' + startVar + ', ' + endVar + ', ' + incValue;
   code += ' do\n' + branch + 'end\n';
   return code;
-};
+}
 
-export function controls_forEach(block: Block, generator: LuaGenerator): string {
+export function controls_forEach(
+  block: Block,
+  generator: LuaGenerator,
+): string {
   // For each loop.
-  const variable0 =
-      generator.getVariableName(block.getFieldValue('VAR'));
+  const variable0 = generator.getVariableName(block.getFieldValue('VAR'));
   const argument0 = generator.valueToCode(block, 'LIST', Order.NONE) || '{}';
   let branch = generator.statementToCode(block, 'DO');
   branch = generator.addLoopTrap(branch, block);
   branch = addContinueLabel(branch, generator.INDENT);
-  const code = 'for _, ' + variable0 + ' in ipairs(' + argument0 + ') do \n' +
-      branch + 'end\n';
+  const code =
+    'for _, ' +
+    variable0 +
+    ' in ipairs(' +
+    argument0 +
+    ') do \n' +
+    branch +
+    'end\n';
   return code;
-};
+}
 
-export function controls_flow_statements(block: Block, generator: LuaGenerator): string {
+export function controls_flow_statements(
+  block: Block,
+  generator: LuaGenerator,
+): string {
   // Flow statements: continue, break.
   let xfix = '';
   if (generator.STATEMENT_PREFIX) {
@@ -168,4 +189,4 @@ export function controls_flow_statements(block: Block, generator: LuaGenerator):
       return xfix + CONTINUE_STATEMENT;
   }
   throw Error('Unknown flow statement.');
-};
+}

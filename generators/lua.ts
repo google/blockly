@@ -7,7 +7,6 @@
 /**
  * @file Complete helper functions for generating Lua for
  *     blocks.  This is the entrypoint for lua_compressed.js.
- * @suppress {extraRequire}
  */
 
 // Former goog.module ID: Blockly.Lua.all
@@ -32,8 +31,15 @@ export const luaGenerator = new LuaGenerator();
 
 // Install per-block-type generator functions:
 const generators: typeof luaGenerator.forBlock = {
-  ...colour, ...lists, ...logic, ...loops, ...math,
-  ...procedures, ...text, ...variables, ...variablesDynamic
+  ...colour,
+  ...lists,
+  ...logic,
+  ...loops,
+  ...math,
+  ...procedures,
+  ...text,
+  ...variables,
+  ...variablesDynamic,
 };
 for (const name in generators) {
   luaGenerator.forBlock[name] = generators[name];

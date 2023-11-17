@@ -18,24 +18,23 @@ import {Names} from '../../core/names.js';
 import type {Workspace} from '../../core/workspace.js';
 import {inputTypes} from '../../core/inputs/input_types.js';
 
-
 /**
  * Order of operation ENUMs.
  * http://www.lua.org/manual/5.3/manual.html#3.4.8
  * @enum {number}
  */
 export enum Order {
-  ATOMIC = 0,    // literals
+  ATOMIC = 0, // literals
   // The next level was not explicit in documentation and inferred by Ellen.
-  HIGH = 1,            // Function calls, tables[]
-  EXPONENTIATION = 2,  // ^
-  UNARY = 3,           // not # - ~
-  MULTIPLICATIVE = 4,  // * / %
-  ADDITIVE = 5,        // + -
-  CONCATENATION = 6,   // ..
-  RELATIONAL = 7,      // < > <=  >= ~= ==
-  AND = 8,             // and
-  OR = 9,              // or
+  HIGH = 1, // Function calls, tables[]
+  EXPONENTIATION = 2, // ^
+  UNARY = 3, // not # - ~
+  MULTIPLICATIVE = 4, // * / %
+  ADDITIVE = 5, // + -
+  CONCATENATION = 6, // ..
+  RELATIONAL = 7, // < > <=  >= ~= ==
+  AND = 8, // and
+  OR = 9, // or
   NONE = 99,
 }
 
@@ -78,28 +77,28 @@ export class LuaGenerator extends CodeGenerator {
     this.addReservedWords(
       // Special character
       '_,' +
-      // From theoriginalbit's script:
-      // https://github.com/espertus/blockly-lua/issues/6
-      '__inext,assert,bit,colors,colours,coroutine,disk,dofile,error,fs,' +
-      'fetfenv,getmetatable,gps,help,io,ipairs,keys,loadfile,loadstring,math,' +
-      'native,next,os,paintutils,pairs,parallel,pcall,peripheral,print,' +
-      'printError,rawequal,rawget,rawset,read,rednet,redstone,rs,select,' +
-      'setfenv,setmetatable,sleep,string,table,term,textutils,tonumber,' +
-      'tostring,turtle,type,unpack,vector,write,xpcall,_VERSION,__indext,' +
-      // Not included in the script, probably because it wasn't enabled:
-      'HTTP,' +
-      // Keywords (http://www.lua.org/pil/1.3.html).
-      'and,break,do,else,elseif,end,false,for,function,if,in,local,nil,not,' +
-      'or,repeat,return,then,true,until,while,' +
-      // Metamethods (http://www.lua.org/manual/5.2/manual.html).
-      'add,sub,mul,div,mod,pow,unm,concat,len,eq,lt,le,index,newindex,call,' +
-      // Basic functions (http://www.lua.org/manual/5.2/manual.html,
-      // section 6.1).
-      'assert,collectgarbage,dofile,error,_G,getmetatable,inpairs,load,' +
-      'loadfile,next,pairs,pcall,print,rawequal,rawget,rawlen,rawset,select,' +
-      'setmetatable,tonumber,tostring,type,_VERSION,xpcall,' +
-      // Modules (http://www.lua.org/manual/5.2/manual.html, section 6.3).
-      'require,package,string,table,math,bit32,io,file,os,debug'
+        // From theoriginalbit's script:
+        // https://github.com/espertus/blockly-lua/issues/6
+        '__inext,assert,bit,colors,colours,coroutine,disk,dofile,error,fs,' +
+        'fetfenv,getmetatable,gps,help,io,ipairs,keys,loadfile,loadstring,math,' +
+        'native,next,os,paintutils,pairs,parallel,pcall,peripheral,print,' +
+        'printError,rawequal,rawget,rawset,read,rednet,redstone,rs,select,' +
+        'setfenv,setmetatable,sleep,string,table,term,textutils,tonumber,' +
+        'tostring,turtle,type,unpack,vector,write,xpcall,_VERSION,__indext,' +
+        // Not included in the script, probably because it wasn't enabled:
+        'HTTP,' +
+        // Keywords (http://www.lua.org/pil/1.3.html).
+        'and,break,do,else,elseif,end,false,for,function,if,in,local,nil,not,' +
+        'or,repeat,return,then,true,until,while,' +
+        // Metamethods (http://www.lua.org/manual/5.2/manual.html).
+        'add,sub,mul,div,mod,pow,unm,concat,len,eq,lt,le,index,newindex,call,' +
+        // Basic functions (http://www.lua.org/manual/5.2/manual.html,
+        // section 6.1).
+        'assert,collectgarbage,dofile,error,_G,getmetatable,inpairs,load,' +
+        'loadfile,next,pairs,pcall,print,rawequal,rawget,rawlen,rawset,select,' +
+        'setmetatable,tonumber,tostring,type,_VERSION,xpcall,' +
+        // Modules (http://www.lua.org/manual/5.2/manual.html, section 6.3).
+        'require,package,string,table,math,bit32,io,file,os,debug',
     );
   }
 
@@ -162,11 +161,12 @@ export class LuaGenerator extends CodeGenerator {
    * @returns Lua string.
    */
   quote_(string: string): string {
-    string = string.replace(/\\/g, '\\\\')
-        .replace(/\n/g, '\\\n')
-        .replace(/'/g, '\\\'');
-    return '\'' + string + '\'';
-  };
+    string = string
+      .replace(/\\/g, '\\\\')
+      .replace(/\n/g, '\\\n')
+      .replace(/'/g, "\\'");
+    return "'" + string + "'";
+  }
 
   /**
    * Encode a string as a properly escaped multiline Lua string, complete with
@@ -179,7 +179,7 @@ export class LuaGenerator extends CodeGenerator {
     const lines = string.split(/\n/g).map(this.quote_);
     // Join with the following, plus a newline:
     // .. '\n' ..
-    return lines.join(' .. \'\\n\' ..\n');
+    return lines.join(" .. '\\n' ..\n");
   }
 
   /**
@@ -215,7 +215,8 @@ export class LuaGenerator extends CodeGenerator {
         }
       }
     }
-    const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+    const nextBlock =
+      block.nextConnection && block.nextConnection.targetBlock();
     const nextCode = thisOnly ? '' : this.blockToCode(nextBlock);
     return commentCode + code + nextCode;
   }

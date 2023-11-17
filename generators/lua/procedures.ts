@@ -5,15 +5,17 @@
  */
 
 /**
- * @fileoverview Generating Lua for procedure blocks.
+ * @file Generating Lua for procedure blocks.
  */
 
 // Former goog.module ID: Blockly.Lua.procedures
 
+import type {Block} from '../../core/block.js';
+import type {LuaGenerator} from './lua_generator.js';
 import {Order} from './lua_generator.js';
 
 
-export function procedures_defreturn(block, generator) {
+export function procedures_defreturn(block: Block, generator: LuaGenerator): [string, Order] {
   // Define a procedure with a return value.
   const funcName =
       generator.getProcedureName(block.getFieldValue('NAME'));
@@ -62,7 +64,7 @@ export function procedures_defreturn(block, generator) {
 // a procedure with a return value.
 export const procedures_defnoreturn = procedures_defreturn;
 
-export function procedures_callreturn(block, generator) {
+export function procedures_callreturn(block: Block, generator: LuaGenerator): [string, Order] {
   // Call a procedure with a return value.
   const funcName =
       generator.getProcedureName(block.getFieldValue('NAME'));
@@ -75,15 +77,15 @@ export function procedures_callreturn(block, generator) {
   return [code, Order.HIGH];
 };
 
-export function procedures_callnoreturn(block, generator) {
+export function procedures_callnoreturn(block: Block, generator: LuaGenerator): string {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  const tuple = generator.forBlock['procedures_callreturn'](block, generator);
+  const tuple = generator.forBlock['procedures_callreturn'](block, generator) as [string, number];
   return tuple[0] + '\n';
 };
 
-export function procedures_ifreturn(block, generator) {
+export function procedures_ifreturn(block: Block, generator: LuaGenerator): string {
   // Conditionally return value from a procedure.
   const condition =
       generator.valueToCode(block, 'CONDITION', Order.NONE) || 'false';

@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Lua for dynamic variable blocks.
+ * @file Generating Lua for dynamic variable blocks.
  */
 
 // Former goog.module ID: Blockly.Lua.variablesDynamic

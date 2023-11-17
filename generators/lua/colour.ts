@@ -5,27 +5,29 @@
  */
 
 /**
- * @fileoverview Generating Lua for colour blocks.
+ * @file Generating Lua for colour blocks.
  */
 
 // Former goog.module ID: Blockly.Lua.colour
 
+import type {Block} from '../../core/block.js';
+import type {LuaGenerator} from './lua_generator.js';
 import {Order} from './lua_generator.js';
 
 
-export function colour_picker(block, generator) {
+export function colour_picker(block: Block, generator: LuaGenerator): [string, Order] {
   // Colour picker.
   const code = generator.quote_(block.getFieldValue('COLOUR'));
   return [code, Order.ATOMIC];
 };
 
-export function colour_random(block, generator) {
+export function colour_random(block: Block, generator: LuaGenerator): [string, Order] {
   // Generate a random colour.
   const code = 'string.format("#%06x", math.random(0, 2^24 - 1))';
   return [code, Order.HIGH];
 };
 
-export function colour_rgb(block, generator) {
+export function colour_rgb(block: Block, generator: LuaGenerator): [string, Order] {
   // Compose a colour from RGB components expressed as percentages.
   const functionName = generator.provideFunction_('colour_rgb', `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}(r, g, b)
@@ -42,7 +44,7 @@ end
   return [code, Order.HIGH];
 };
 
-export function colour_blend(block, generator) {
+export function colour_blend(block: Block, generator: LuaGenerator): [string, Order] {
   // Blend two colours together.
   const functionName = generator.provideFunction_('colour_blend', `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}(colour1, colour2, ratio)

@@ -5,12 +5,14 @@
  */
 
 /**
- * @fileoverview Generating Lua for loop blocks.
+ * @file Generating Lua for loop blocks.
  */
 
 // Former goog.module ID: Blockly.Lua.loops
 
 import * as stringUtils from '../../core/utils/string.js';
+import type {Block} from '../../core/block.js';
+import type {LuaGenerator} from './lua_generator.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './lua_generator.js';
 
@@ -19,7 +21,6 @@ import {Order} from './lua_generator.js';
  * This is the text used to implement a <pre>continue</pre>.
  * It is also used to recognise <pre>continue</pre>s in generated code so that
  * the appropriate label can be put at the end of the loop body.
- * @const {string}
  */
 const CONTINUE_STATEMENT = 'goto continue\n';
 
@@ -29,11 +30,11 @@ const CONTINUE_STATEMENT = 'goto continue\n';
  * in all outer loops, but this is safer than duplicating the logic of
  * blockToCode.
  *
- * @param {string} branch Generated code of the loop body
- * @param {string} indent Whitespace by which to indent a continue statement.
- * @return {string} Generated label or '' if unnecessary
+ * @param branch Generated code of the loop body
+ * @param indent Whitespace by which to indent a continue statement.
+ * @returns Generated label or '' if unnecessary
  */
-function addContinueLabel(branch, indent) {
+function addContinueLabel(branch: string, indent: string): string {
   if (branch.indexOf(CONTINUE_STATEMENT) !== -1) {
     // False positives are possible (e.g. a string literal), but are harmless.
     return branch + indent + '::continue::\n';
@@ -42,7 +43,7 @@ function addContinueLabel(branch, indent) {
   }
 };
 
-export function controls_repeat_ext(block, generator) {
+export function controls_repeat_ext(block: Block, generator: LuaGenerator): string {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -60,7 +61,7 @@ export function controls_repeat_ext(block, generator) {
   let branch = generator.statementToCode(block, 'DO');
   branch = generator.addLoopTrap(branch, block);
   branch = addContinueLabel(branch, generator.INDENT);
-  const loopVar = generator.nameDB_.getDistinctName('count', NameType.VARIABLE);
+  const loopVar = generator.nameDB_!.getDistinctName('count', NameType.VARIABLE);
   const code =
       'for ' + loopVar + ' = 1, ' + repeats + ' do\n' + branch + 'end\n';
   return code;
@@ -68,7 +69,7 @@ export function controls_repeat_ext(block, generator) {
 
 export const controls_repeat = controls_repeat_ext;
 
-export function controls_whileUntil(block, generator) {
+export function controls_whileUntil(block: Block, generator: LuaGenerator): string {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
@@ -84,7 +85,7 @@ export function controls_whileUntil(block, generator) {
   return 'while ' + argument0 + ' do\n' + branch + 'end\n';
 };
 
-export function controls_for(block, generator) {
+export function controls_for(block: Block, generator: LuaGenerator): string {
   // For loop.
   const variable0 =
       generator.getVariableName(block.getFieldValue('VAR'));
@@ -107,11 +108,11 @@ export function controls_for(block, generator) {
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
     incValue =
-        generator.nameDB_.getDistinctName(
+        generator.nameDB_!.getDistinctName(
           variable0 + '_inc', NameType.VARIABLE);
     code += incValue + ' = ';
     if (stringUtils.isNumber(increment)) {
-      code += Math.abs(increment) + '\n';
+      code += Math.abs(increment as unknown as number) + '\n';
     } else {
       code += 'math.abs(' + increment + ')\n';
     }
@@ -125,7 +126,7 @@ export function controls_for(block, generator) {
   return code;
 };
 
-export function controls_forEach(block, generator) {
+export function controls_forEach(block: Block, generator: LuaGenerator): string {
   // For each loop.
   const variable0 =
       generator.getVariableName(block.getFieldValue('VAR'));
@@ -138,7 +139,7 @@ export function controls_forEach(block, generator) {
   return code;
 };
 
-export function controls_flow_statements(block, generator) {
+export function controls_flow_statements(block: Block, generator: LuaGenerator): string {
   // Flow statements: continue, break.
   let xfix = '';
   if (generator.STATEMENT_PREFIX) {

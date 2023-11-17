@@ -5,15 +5,17 @@
  */
 
 /**
- * @fileoverview Generating Lua for logic blocks.
+ * @file Generating Lua for logic blocks.
  */
 
 // Former goog.module ID: Blockly.Lua.logic
 
+import type {Block} from '../../core/block.js';
+import type {LuaGenerator} from './lua_generator.js';
 import {Order} from './lua_generator.js';
 
 
-export function controls_if(block, generator) {
+export function controls_if(block: Block, generator: LuaGenerator): string {
   // If/elseif/else condition.
   let n = 0;
   let code = '';
@@ -52,7 +54,7 @@ export function controls_if(block, generator) {
 
 export const controls_ifelse = controls_if;
 
-export function logic_compare(block, generator) {
+export function logic_compare(block: Block, generator: LuaGenerator): [string, Order] {
   // Comparison operator.
   const OPERATORS =
       {'EQ': '==', 'NEQ': '~=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
@@ -65,7 +67,7 @@ export function logic_compare(block, generator) {
   return [code, Order.RELATIONAL];
 };
 
-export function logic_operation(block, generator) {
+export function logic_operation(block: Block, generator: LuaGenerator): [string, Order] {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
   const order = (operator === 'and') ? Order.AND : Order.OR;
@@ -89,7 +91,7 @@ export function logic_operation(block, generator) {
   return [code, order];
 };
 
-export function logic_negate(block, generator) {
+export function logic_negate(block: Block, generator: LuaGenerator): [string, Order] {
   // Negation.
   const argument0 =
         generator.valueToCode(block, 'BOOL', Order.UNARY) || 'true';
@@ -97,18 +99,18 @@ export function logic_negate(block, generator) {
   return [code, Order.UNARY];
 };
 
-export function logic_boolean(block, generator) {
+export function logic_boolean(block: Block, generator: LuaGenerator): [string, Order] {
   // Boolean values true and false.
   const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
   return [code, Order.ATOMIC];
 };
 
-export function logic_null(block, generator) {
+export function logic_null(block: Block, generator: LuaGenerator): [string, Order] {
   // Null data type.
   return ['nil', Order.ATOMIC];
 };
 
-export function logic_ternary(block, generator) {
+export function logic_ternary(block: Block, generator: LuaGenerator): [string, Order] {
   // Ternary operator.
   const value_if = generator.valueToCode(block, 'IF', Order.AND) || 'false';
   const value_then =

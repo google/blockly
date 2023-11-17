@@ -5,21 +5,23 @@
  */
 
 /**
- * @fileoverview Generating Lua for list blocks.
+ * @file Generating Lua for list blocks.
  */
 
 // Former goog.module ID: Blockly.Lua.lists
 
+import type {Block} from '../../core/block.js';
+import type {LuaGenerator} from './lua_generator.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './lua_generator.js';
 
 
-export function lists_create_empty(block, generator) {
+export function lists_create_empty(block: Block, generator: LuaGenerator): [string, Order] {
   // Create an empty list.
   return ['{}', Order.HIGH];
 };
 
-export function lists_create_with(block, generator) {
+export function lists_create_with(block: Block, generator: LuaGenerator): [string, Order] {
   // Create a list with any number of elements of any type.
   const elements = new Array(block.itemCount_);
   for (let i = 0; i < block.itemCount_; i++) {
@@ -30,7 +32,7 @@ export function lists_create_with(block, generator) {
   return [code, Order.HIGH];
 };
 
-export function lists_repeat(block, generator) {
+export function lists_repeat(block: Block, generator: LuaGenerator): [string, Order] {
   // Create a list with one element repeated.
   const functionName = generator.provideFunction_('create_list_repeated', `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}(item, count)
@@ -47,20 +49,20 @@ end
   return [code, Order.HIGH];
 };
 
-export function lists_length(block, generator) {
+export function lists_length(block: Block, generator: LuaGenerator): [string, Order] {
   // String or array length.
   const list = generator.valueToCode(block, 'VALUE', Order.UNARY) || '{}';
   return ['#' + list, Order.UNARY];
 };
 
-export function lists_isEmpty(block, generator) {
+export function lists_isEmpty(block: Block, generator: LuaGenerator): [string, Order] {
   // Is the string null or array empty?
   const list = generator.valueToCode(block, 'VALUE', Order.UNARY) || '{}';
   const code = '#' + list + ' == 0';
   return [code, Order.RELATIONAL];
 };
 
-export function lists_indexOf(block, generator) {
+export function lists_indexOf(block: Block, generator: LuaGenerator): [string, Order] {
   // Find an item in the list.
   const item = generator.valueToCode(block, 'FIND', Order.NONE) || "''";
   const list = generator.valueToCode(block, 'VALUE', Order.NONE) || '{}';
@@ -94,12 +96,13 @@ end
 
 /**
  * Returns an expression calculating the index into a list.
- * @param {string} listName Name of the list, used to calculate length.
- * @param {string} where The method of indexing, selected by dropdown in Blockly
- * @param {string=} opt_at The optional offset when indexing from start/end.
- * @return {string|undefined} Index expression.
+ *
+ * @param listName Name of the list, used to calculate length.
+ * @param where The method of indexing, selected by dropdown in Blockly
+ * @param opt_at The optional offset when indexing from start/end.
+ * @returns Index expression.
  */
-const getListIndex = function(listName, where, opt_at) {
+const getListIndex = function(listName: string, where: string, opt_at: string): string {
   if (where === 'FIRST') {
     return '1';
   } else if (where === 'FROM_END') {
@@ -113,7 +116,7 @@ const getListIndex = function(listName, where, opt_at) {
   }
 };
 
-export function lists_getIndex(block, generator) {
+export function lists_getIndex(block: Block, generator: LuaGenerator): [string, Order] | string {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   const mode = block.getFieldValue('MODE') || 'GET';
@@ -131,7 +134,7 @@ export function lists_getIndex(block, generator) {
           (where === 'FROM_END') ? Order.ADDITIVE : Order.NONE;
       let at = generator.valueToCode(block, 'AT', atOrder) || '1';
       const listVar =
-          generator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
+          generator.nameDB_!.getDistinctName('tmp_list', NameType.VARIABLE);
       at = getListIndex(listVar, where, at);
       const code = listVar + ' = ' + list + '\n' +
           'table.remove(' + listVar + ', ' + at + ')\n';
@@ -193,7 +196,7 @@ export function lists_getIndex(block, generator) {
   }
 };
 
-export function lists_setIndex(block, generator) {
+export function lists_setIndex(block: Block, generator: LuaGenerator): string {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   let list = generator.valueToCode(block, 'LIST', Order.HIGH) || '{}';
@@ -210,7 +213,7 @@ export function lists_setIndex(block, generator) {
     // `list` is an expression, so we may not evaluate it more than once.
     // We can use multiple statements.
     const listVar =
-        generator.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
+        generator.nameDB_!.getDistinctName('tmp_list', NameType.VARIABLE);
     code = listVar + ' = ' + list + '\n';
     list = listVar;
   }
@@ -226,7 +229,7 @@ export function lists_setIndex(block, generator) {
   return code + '\n';
 };
 
-export function lists_getSublist(block, generator) {
+export function lists_getSublist(block: Block, generator: LuaGenerator): [string, Order] {
   // Get sublist.
   const list = generator.valueToCode(block, 'LIST', Order.NONE) || '{}';
   const where1 = block.getFieldValue('WHERE1');
@@ -261,7 +264,7 @@ end
   return [code, Order.HIGH];
 };
 
-export function lists_sort(block, generator) {
+export function lists_sort(block: Block, generator: LuaGenerator): [string, Order] {
   // Block for sorting a list.
   const list = generator.valueToCode(block, 'LIST', Order.NONE) || '{}';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
@@ -295,7 +298,7 @@ end
   return [code, Order.HIGH];
 };
 
-export function lists_split(block, generator) {
+export function lists_split(block: Block, generator: LuaGenerator): [string, Order] {
   // Block for splitting text into a list, or joining a list into text.
   let input = generator.valueToCode(block, 'INPUT', Order.NONE);
   const delimiter =
@@ -335,7 +338,7 @@ end
   return [code, Order.HIGH];
 };
 
-export function lists_reverse(block, generator) {
+export function lists_reverse(block: Block, generator: LuaGenerator): [string, Order] {
   // Block for reversing a list.
   const list = generator.valueToCode(block, 'LIST', Order.NONE) || '{}';
   const functionName = generator.provideFunction_('list_reverse', `

@@ -1623,6 +1623,11 @@ export class BlockSvg
     if (this.isCollapsed()) {
       this.updateCollapsed_();
     }
+
+    if (!this.isEnabled()) {
+      this.updateDisabled();
+    }
+
     this.workspace.getRenderer().render(this);
     this.tightenChildrenEfficiently();
 

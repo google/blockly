@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for procedure blocks.
+ * @file Generating JavaScript for procedure blocks.
  */
 
 // Former goog.module ID: Blockly.JavaScript.procedures

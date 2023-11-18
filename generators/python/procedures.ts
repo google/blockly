@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Python for procedure blocks.
+ * @file Generating Python for procedure blocks.
  */
 
 // Former goog.module ID: Blockly.Python.procedures

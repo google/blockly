@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Python for math blocks.
+ * @file Generating Python for math blocks.
  */
 
 // Former goog.module ID: Blockly.Python.math

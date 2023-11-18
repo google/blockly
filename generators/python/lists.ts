@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Python for list blocks.
+ * @file Generating Python for list blocks.
  */
 
 // Former goog.module ID: Blockly.Python.lists

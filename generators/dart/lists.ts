@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Dart for list blocks.
+ * @file Generating Dart for list blocks.
  */
 
 // Former goog.module ID: Blockly.Dart.lists

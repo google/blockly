@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for loop blocks.
+ * @file Generating JavaScript for loop blocks.
  */
 
 // Former goog.module ID: Blockly.JavaScript.loops

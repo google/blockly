@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Dart for math blocks.
+ * @file Generating Dart for math blocks.
  */
 
 // Former goog.module ID: Blockly.Dart.math

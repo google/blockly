@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Dart for logic blocks.
+ * @file Generating Dart for logic blocks.
  */
 
 // Former goog.module ID: Blockly.Dart.logic

@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Dart for loop blocks.
+ * @file Generating Dart for loop blocks.
  */
 
 // Former goog.module ID: Blockly.Dart.loops

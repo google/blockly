@@ -5,8 +5,7 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for list blocks.
- * @suppress {missingRequire}
+ * @file Generating JavaScript for list blocks.
  */
 
 // Former goog.module ID: Blockly.JavaScript.lists

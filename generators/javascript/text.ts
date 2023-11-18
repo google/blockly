@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for text blocks.
+ * @file Generating JavaScript for text blocks.
  */
 
 // Former goog.module ID: Blockly.JavaScript.texts

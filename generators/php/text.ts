@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating PHP for text blocks.
+ * @file Generating PHP for text blocks.
  */
 
 // Former goog.module ID: Blockly.PHP.texts

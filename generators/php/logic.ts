@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating PHP for logic blocks.
+ * @file Generating PHP for logic blocks.
  */
 
 // Former goog.module ID: Blockly.PHP.logic

@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating PHP for colour blocks.
+ * @file Generating PHP for colour blocks.
  */
 
 // Former goog.module ID: Blockly.PHP.colour

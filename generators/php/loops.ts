@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating PHP for loop blocks.
+ * @file Generating PHP for loop blocks.
  */
 
 // Former goog.module ID: Blockly.PHP.loops

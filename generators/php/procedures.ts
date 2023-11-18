@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating PHP for procedure blocks.
+ * @file Generating PHP for procedure blocks.
  */
 
 // Former goog.module ID: Blockly.PHP.procedures

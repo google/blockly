@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating PHP for dynamic variable blocks.
+ * @file Generating PHP for dynamic variable blocks.
  */
 
 // Former goog.module ID: Blockly.PHP.variablesDynamic

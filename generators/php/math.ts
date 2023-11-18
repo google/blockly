@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating PHP for math blocks.
+ * @file Generating PHP for math blocks.
  */
 
 // Former goog.module ID: Blockly.PHP.math

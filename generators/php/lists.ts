@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating PHP for list blocks.
+ * @file Generating PHP for list blocks.
  */
 
 /**

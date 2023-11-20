@@ -5,7 +5,9 @@
  */
 
 /**
- * @file Helper functions for generating Lua for blocks.
+ * @file Lua code generator class, including helper methods for
+ * generating Lua for blocks.
+ *
  * Based on Ellen Spertus's blocky-lua project.
  */
 
@@ -21,20 +23,20 @@ import {inputTypes} from '../../core/inputs/input_types.js';
 /**
  * Order of operation ENUMs.
  * http://www.lua.org/manual/5.3/manual.html#3.4.8
- * @enum {number}
  */
+// prettier-ignore
 export enum Order {
-  ATOMIC = 0, // literals
+  ATOMIC = 0,    // literals
   // The next level was not explicit in documentation and inferred by Ellen.
-  HIGH = 1, // Function calls, tables[]
-  EXPONENTIATION = 2, // ^
-  UNARY = 3, // not # - ~
-  MULTIPLICATIVE = 4, // * / %
-  ADDITIVE = 5, // + -
-  CONCATENATION = 6, // ..
-  RELATIONAL = 7, // < > <=  >= ~= ==
-  AND = 8, // and
-  OR = 9, // or
+  HIGH = 1,            // Function calls, tables[]
+  EXPONENTIATION = 2,  // ^
+  UNARY = 3,           // not # - ~
+  MULTIPLICATIVE = 4,  // * / %
+  ADDITIVE = 5,        // + -
+  CONCATENATION = 6,   // ..
+  RELATIONAL = 7,      // < > <=  >= ~= ==
+  AND = 8,             // and
+  OR = 9,              // or
   NONE = 99,
 }
 

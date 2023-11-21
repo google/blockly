@@ -317,6 +317,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   svgBubbleCanvas_!: SVGElement;
   zoomControls_: ZoomControls | null = null;
 
+  private const wheelHandler = () => {}
   /**
    * @param options Dictionary of options.
    */
@@ -787,7 +788,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       // This no-op works around https://bugs.webkit.org/show_bug.cgi?id=226683,
       // which otherwise prevents zoom/scroll events from being observed in
       // Safari. Once that bug is fixed it should be removed.
-      document.body.addEventListener('wheel', function () {});
+      document.body.addEventListener('wheel', this.wheelHandler);
       browserEvents.conditionalBind(
         this.svgGroup_,
         'wheel',
@@ -896,6 +897,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       browserEvents.unbind(this.resizeHandlerWrapper);
       this.resizeHandlerWrapper = null;
     }
+
+    document.body.removeEventListener('wheel', this.wheelHandler)
   }
 
   /**

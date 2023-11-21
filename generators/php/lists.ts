@@ -400,17 +400,9 @@ export function lists_getSublist(
   generator: PhpGenerator,
 ): [string, Order] {
   // Get sublist.
-  // Dictionary of WHEREn field choices and their CamelCase equivalents.
-  const wherePascalCase = {
-    'FIRST': 'First',
-    'LAST': 'Last',
-    'FROM_START': 'FromStart',
-    'FROM_END': 'FromEnd',
-  };
-  type WhereOption = keyof typeof wherePascalCase;
   const list = generator.valueToCode(block, 'LIST', Order.NONE) || 'array()';
-  const where1 = block.getFieldValue('WHERE1') as WhereOption;
-  const where2 = block.getFieldValue('WHERE2') as WhereOption;
+  const where1 = block.getFieldValue('WHERE1');
+  const where2 = block.getFieldValue('WHERE2');
   let code;
   if (where1 === 'FIRST' && where2 === 'LAST') {
     code = list;

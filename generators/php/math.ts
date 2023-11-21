@@ -33,7 +33,7 @@ export function math_arithmetic(
   generator: PhpGenerator,
 ): [string, Order] {
   // Basic arithmetic operators, and power.
-  const OPERATORS: Record<string, [string | null, Order]> = {
+  const OPERATORS: Record<string, [string, Order]> = {
     'ADD': [' + ', Order.ADDITION],
     'MINUS': [' - ', Order.SUBTRACTION],
     'MULTIPLY': [' * ', Order.MULTIPLICATION],

@@ -269,7 +269,7 @@ export class DartGenerator extends CodeGenerator {
    * @param delta Value to add.
    * @param negate Whether to negate the value.
    * @param order The highest order acting on this value.
-   * @returns The adjusted value.
+   * @returns The adjusted value or code that evaluates to it.
    */
   getAdjusted(
     block: Block,
@@ -277,7 +277,7 @@ export class DartGenerator extends CodeGenerator {
     delta = 0,
     negate = false,
     order = Order.NONE,
-  ): string | number {
+  ): string {
     if (block.workspace.options.oneBasedIndex) {
       delta--;
     }

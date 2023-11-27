@@ -810,8 +810,8 @@ export abstract class Field<T = any>
       margin !== undefined
         ? margin
         : !this.isFullBlockField()
-        ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING
-        : 0;
+          ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING
+          : 0;
     let totalWidth = xOffset * 2;
     let totalHeight = constants!.FIELD_TEXT_HEIGHT;
 

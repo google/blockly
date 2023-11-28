@@ -1,87 +1,77 @@
 /**
  * @license
- * Copyright 2012 Google LLC
+ * Copyright 2015 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * @file JavaScript code generator class, including helper methods for
- * generating JavaScript for blocks.
+ * @file PHP code generator class, including helper methods for
+ * generating PHP for blocks.
  */
 
-// Former goog.module ID: Blockly.JavaScript
+// Former goog.module ID: Blockly.PHP
 
-import * as Variables from '../../core/variables.js';
 import * as stringUtils from '../../core/utils/string.js';
 import type {Block} from '../../core/block.js';
 import {CodeGenerator} from '../../core/generator.js';
-import {Names, NameType} from '../../core/names.js';
+import {Names} from '../../core/names.js';
 import type {Workspace} from '../../core/workspace.js';
 import {inputTypes} from '../../core/inputs/input_types.js';
 
 /**
  * Order of operation ENUMs.
- * https://developer.mozilla.org/en/JavaScript/Reference/Operators/Operator_Precedence
+ * http://php.net/manual/en/language.operators.precedence.php
  */
 // prettier-ignore
 export enum Order {
-  ATOMIC = 0,            // 0 "" ...
-  NEW = 1.1,             // new
-  MEMBER = 1.2,          // . []
-  FUNCTION_CALL = 2,     // ()
-  INCREMENT = 3,         // ++
-  DECREMENT = 3,         // --
-  BITWISE_NOT = 4.1,     // ~
-  UNARY_PLUS = 4.2,      // +
-  UNARY_NEGATION = 4.3,  // -
-  LOGICAL_NOT = 4.4,     // !
-  TYPEOF = 4.5,          // typeof
-  VOID = 4.6,            // void
-  DELETE = 4.7,          // delete
-  AWAIT = 4.8,           // await
-  EXPONENTIATION = 5.0,  // **
-  MULTIPLICATION = 5.1,  // *
-  DIVISION = 5.2,        // /
-  MODULUS = 5.3,         // %
-  SUBTRACTION = 6.1,     // -
-  ADDITION = 6.2,        // +
-  BITWISE_SHIFT = 7,     // << >> >>>
-  RELATIONAL = 8,        // < <= > >=
-  IN = 8,                // in
-  INSTANCEOF = 8,        // instanceof
-  EQUALITY = 9,          // == != === !==
-  BITWISE_AND = 10,      // &
-  BITWISE_XOR = 11,      // ^
-  BITWISE_OR = 12,       // |
-  LOGICAL_AND = 13,      // &&
-  LOGICAL_OR = 14,       // ||
-  CONDITIONAL = 15,      // ?:
-  ASSIGNMENT = 16,       // = += -= **= *= /= %= <<= >>= ...
-  YIELD = 17,            // yield
-  COMMA = 18,            // ,
-  NONE = 99,             // (...)
+  ATOMIC = 0,             // 0 "" ...
+  CLONE = 1,              // clone
+  NEW = 1,                // new
+  MEMBER = 2.1,           // []
+  FUNCTION_CALL = 2.2,    // ()
+  POWER = 3,              // **
+  INCREMENT = 4,          // ++
+  DECREMENT = 4,          // --
+  BITWISE_NOT = 4,        // ~
+  CAST = 4,               // (int) (float) (string) (array) ...
+  SUPPRESS_ERROR = 4,     // @
+  INSTANCEOF = 5,         // instanceof
+  LOGICAL_NOT = 6,        // !
+  UNARY_PLUS = 7.1,       // +
+  UNARY_NEGATION = 7.2,   // -
+  MULTIPLICATION = 8.1,   // *
+  DIVISION = 8.2,         // /
+  MODULUS = 8.3,          // %
+  ADDITION = 9.1,         // +
+  SUBTRACTION = 9.2,      // -
+  STRING_CONCAT = 9.3,    // .
+  BITWISE_SHIFT = 10,     // << >>
+  RELATIONAL = 11,        // < <= > >=
+  EQUALITY = 12,          // == != === !== <> <=>
+  REFERENCE = 13,         // &
+  BITWISE_AND = 13,       // &
+  BITWISE_XOR = 14,       // ^
+  BITWISE_OR = 15,        // |
+  LOGICAL_AND = 16,       // &&
+  LOGICAL_OR = 17,        // ||
+  IF_NULL = 18,           // ??
+  CONDITIONAL = 19,       // ?:
+  ASSIGNMENT = 20,        // = += -= *= /= %= <<= >>= ...
+  LOGICAL_AND_WEAK = 21,  // and
+  LOGICAL_XOR = 22,       // xor
+  LOGICAL_OR_WEAK = 23,   // or
+  NONE = 99,              // (...)
 }
 
-/**
- * JavaScript code generator class.
- */
-export class JavascriptGenerator extends CodeGenerator {
+export class PhpGenerator extends CodeGenerator {
   /** List of outer-inner pairings that do NOT require parentheses. */
   ORDER_OVERRIDES: [Order, Order][] = [
-    // (foo()).bar -> foo().bar
+    // (foo()).bar() -> foo().bar()
     // (foo())[0] -> foo()[0]
-    [Order.FUNCTION_CALL, Order.MEMBER],
-    // (foo())() -> foo()()
-    [Order.FUNCTION_CALL, Order.FUNCTION_CALL],
-    // (foo.bar).baz -> foo.bar.baz
-    // (foo.bar)[0] -> foo.bar[0]
-    // (foo[0]).bar -> foo[0].bar
-    // (foo[0])[1] -> foo[0][1]
-    [Order.MEMBER, Order.MEMBER],
-    // (foo.bar)() -> foo.bar()
-    // (foo[0])() -> foo[0]()
     [Order.MEMBER, Order.FUNCTION_CALL],
-
+    // (foo[0])[1] -> foo[0][1]
+    // (foo.bar).baz -> foo.bar.baz
+    [Order.MEMBER, Order.MEMBER],
     // !(!foo) -> !!foo
     [Order.LOGICAL_NOT, Order.LOGICAL_NOT],
     // a * (b * c) -> a * b * c
@@ -95,7 +85,7 @@ export class JavascriptGenerator extends CodeGenerator {
   ];
 
   /** @param name Name of the language the generator is for. */
-  constructor(name = 'JavaScript') {
+  constructor(name = 'PHP') {
     super(name);
     this.isInitialized = false;
 
@@ -123,22 +113,28 @@ export class JavascriptGenerator extends CodeGenerator {
     // security feature.  Blockly is 100% client-side, so bypassing
     // this list is trivial.  This is intended to prevent users from
     // accidentally clobbering a built-in object or function.
-    //
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords
     this.addReservedWords(
-      'break,case,catch,class,const,continue,debugger,default,delete,do,' +
-        'else,export,extends,finally,for,function,if,import,in,instanceof,' +
-        'new,return,super,switch,this,throw,try,typeof,var,void,' +
-        'while,with,yield,' +
-        'enum,' +
-        'implements,interface,let,package,private,protected,public,static,' +
-        'await,' +
-        'null,true,false,' +
-        // Magic variable.
-        'arguments,' +
-        // Everything in the current environment (835 items in Chrome,
-        // 104 in Node).
-        Object.getOwnPropertyNames(globalThis).join(','),
+      // http://php.net/manual/en/reserved.keywords.php
+      '__halt_compiler,abstract,and,array,as,break,callable,case,catch,class,' +
+        'clone,const,continue,declare,default,die,do,echo,else,elseif,empty,' +
+        'enddeclare,endfor,endforeach,endif,endswitch,endwhile,eval,exit,' +
+        'extends,final,for,foreach,function,global,goto,if,implements,include,' +
+        'include_once,instanceof,insteadof,interface,isset,list,namespace,new,' +
+        'or,print,private,protected,public,require,require_once,return,static,' +
+        'switch,throw,trait,try,unset,use,var,while,xor,' +
+        // http://php.net/manual/en/reserved.constants.php
+        'PHP_VERSION,PHP_MAJOR_VERSION,PHP_MINOR_VERSION,PHP_RELEASE_VERSION,' +
+        'PHP_VERSION_ID,PHP_EXTRA_VERSION,PHP_ZTS,PHP_DEBUG,PHP_MAXPATHLEN,' +
+        'PHP_OS,PHP_SAPI,PHP_EOL,PHP_INT_MAX,PHP_INT_SIZE,DEFAULT_INCLUDE_PATH,' +
+        'PEAR_INSTALL_DIR,PEAR_EXTENSION_DIR,PHP_EXTENSION_DIR,PHP_PREFIX,' +
+        'PHP_BINDIR,PHP_BINARY,PHP_MANDIR,PHP_LIBDIR,PHP_DATADIR,' +
+        'PHP_SYSCONFDIR,PHP_LOCALSTATEDIR,PHP_CONFIG_FILE_PATH,' +
+        'PHP_CONFIG_FILE_SCAN_DIR,PHP_SHLIB_SUFFIX,E_ERROR,E_WARNING,E_PARSE,' +
+        'E_NOTICE,E_CORE_ERROR,E_CORE_WARNING,E_COMPILE_ERROR,' +
+        'E_COMPILE_WARNING,E_USER_ERROR,E_USER_WARNING,E_USER_NOTICE,' +
+        'E_DEPRECATED,E_USER_DEPRECATED,E_ALL,E_STRICT,' +
+        '__COMPILER_HALT_OFFSET__,TRUE,FALSE,NULL,__CLASS__,__DIR__,__FILE__,' +
+        '__FUNCTION__,__LINE__,__METHOD__,__NAMESPACE__,__TRAIT__',
     );
   }
 
@@ -151,7 +147,7 @@ export class JavascriptGenerator extends CodeGenerator {
     super.init(workspace);
 
     if (!this.nameDB_) {
-      this.nameDB_ = new Names(this.RESERVED_WORDS_);
+      this.nameDB_ = new Names(this.RESERVED_WORDS_, '$');
     } else {
       this.nameDB_.reset();
     }
@@ -160,27 +156,6 @@ export class JavascriptGenerator extends CodeGenerator {
     this.nameDB_.populateVariables(workspace);
     this.nameDB_.populateProcedures(workspace);
 
-    const defvars = [];
-    // Add developer variables (not created or named by the user).
-    const devVarList = Variables.allDeveloperVariables(workspace);
-    for (let i = 0; i < devVarList.length; i++) {
-      defvars.push(
-        this.nameDB_.getName(devVarList[i], NameType.DEVELOPER_VARIABLE),
-      );
-    }
-
-    // Add user variables, but only ones that are being used.
-    const variables = Variables.allUsedVarModels(workspace);
-    for (let i = 0; i < variables.length; i++) {
-      defvars.push(
-        this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE),
-      );
-    }
-
-    // Declare all of the variables.
-    if (defvars.length) {
-      this.definitions_['variables'] = 'var ' + defvars.join(', ') + ';';
-    }
     this.isInitialized = true;
   }
 
@@ -194,7 +169,7 @@ export class JavascriptGenerator extends CodeGenerator {
     // Convert the definitions dictionary into a list.
     const definitions = Object.values(this.definitions_);
     // Call Blockly.CodeGenerator's finish.
-    super.finish(code);
+    code = super.finish(code);
     this.isInitialized = false;
 
     this.nameDB_!.reset();
@@ -203,7 +178,7 @@ export class JavascriptGenerator extends CodeGenerator {
 
   /**
    * Naked values are top-level blocks with outputs that aren't plugged into
-   * anything.  A trailing semicolon is needed to make this legal.
+   * anything.
    *
    * @param line Line of generated code.
    * @returns Legal line of code.
@@ -213,15 +188,13 @@ export class JavascriptGenerator extends CodeGenerator {
   }
 
   /**
-   * Encode a string as a properly escaped JavaScript string, complete with
+   * Encode a string as a properly escaped PHP string, complete with
    * quotes.
    *
    * @param string Text to encode.
-   * @returns JavaScript string.
+   * @returns PHP string.
    */
   quote_(string: string): string {
-    // Can't use goog.string.quote since Google's style guide recommends
-    // JS string literals use single quotes.
     string = string
       .replace(/\\/g, '\\\\')
       .replace(/\n/g, '\\\n')
@@ -230,28 +203,28 @@ export class JavascriptGenerator extends CodeGenerator {
   }
 
   /**
-   * Encode a string as a properly escaped multiline JavaScript string, complete
-   * with quotes.
+   * Encode a string as a properly escaped multiline PHP string, complete with
+   * quotes.
    * @param string Text to encode.
-   * @returns JavaScript string.
+   * @returns PHP string.
    */
   multiline_quote_(string: string): string {
-    // Can't use goog.string.quote since Google's style guide recommends
-    // JS string literals use single quotes.
     const lines = string.split(/\n/g).map(this.quote_);
-    return lines.join(" + '\\n' +\n");
+    // Join with the following, plus a newline:
+    // . "\n" .
+    // Newline escaping only works in double-quoted strings.
+    return lines.join(' . "\\n" .\n');
   }
 
   /**
-   * Common tasks for generating JavaScript from blocks.
+   * Common tasks for generating PHP from blocks.
    * Handles comments for the specified block and any connected value blocks.
    * Calls any statements following this block.
    *
    * @param block The current block.
-   * @param code The JavaScript code created for this block.
+   * @param code The PHP code created for this block.
    * @param thisOnly True to generate code for only this statement.
-   * @returns JavaScript code with comments and subsequent blocks added.
-   * @protected
+   * @returns PHP code with comments and subsequent blocks added.
    */
   scrub_(block: Block, code: string, thisOnly = false): string {
     let commentCode = '';
@@ -261,7 +234,7 @@ export class JavascriptGenerator extends CodeGenerator {
       let comment = block.getCommentText();
       if (comment) {
         comment = stringUtils.wrap(comment, this.COMMENT_WRAP - 3);
-        commentCode += this.prefixLines(comment + '\n', '// ');
+        commentCode += this.prefixLines(comment, '// ') + '\n';
       }
       // Collect comments for all value arguments.
       // Don't collect comments for nested statements.
@@ -305,7 +278,7 @@ export class JavascriptGenerator extends CodeGenerator {
     if (block.workspace.options.oneBasedIndex) {
       delta--;
     }
-    const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
+    let defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
 
     let orderForInput = order;
     if (delta > 0) {

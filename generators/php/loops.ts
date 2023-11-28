@@ -5,17 +5,19 @@
  */
 
 /**
- * @fileoverview Generating PHP for loop blocks.
+ * @file Generating PHP for loop blocks.
  */
 
 // Former goog.module ID: Blockly.PHP.loops
 
 import * as stringUtils from '../../core/utils/string.js';
+import type {Block} from '../../core/block.js';
+import type {ControlFlowInLoopBlock} from '../../blocks/loops.js';
 import {NameType} from '../../core/names.js';
 import {Order} from './php_generator.js';
+import type {PhpGenerator} from './php_generator.js';
 
-
-export function controls_repeat_ext(block, generator) {
+export function controls_repeat_ext(block: Block, generator: PhpGenerator) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
@@ -28,55 +30,80 @@ export function controls_repeat_ext(block, generator) {
   let branch = generator.statementToCode(block, 'DO');
   branch = generator.addLoopTrap(branch, block);
   let code = '';
-  const loopVar =
-        generator.nameDB_.getDistinctName('count', NameType.VARIABLE);
+  const loopVar = generator.nameDB_!.getDistinctName(
+    'count',
+    NameType.VARIABLE,
+  );
   let endVar = repeats;
   if (!repeats.match(/^\w+$/) && !stringUtils.isNumber(repeats)) {
-    endVar =
-        generator.nameDB_.getDistinctName('repeat_end', NameType.VARIABLE);
+    endVar = generator.nameDB_!.getDistinctName(
+      'repeat_end',
+      NameType.VARIABLE,
+    );
     code += endVar + ' = ' + repeats + ';\n';
   }
-  code += 'for (' + loopVar + ' = 0; ' + loopVar + ' < ' + endVar + '; ' +
-      loopVar + '++) {\n' + branch + '}\n';
+  code +=
+    'for (' +
+    loopVar +
+    ' = 0; ' +
+    loopVar +
+    ' < ' +
+    endVar +
+    '; ' +
+    loopVar +
+    '++) {\n' +
+    branch +
+    '}\n';
   return code;
-};
+}
 
 export const controls_repeat = controls_repeat_ext;
 
-export function controls_whileUntil(block, generator) {
+export function controls_whileUntil(block: Block, generator: PhpGenerator) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
-      generator.valueToCode(
-          block, 'BOOL', until ? Order.LOGICAL_NOT : Order.NONE) ||
-      'false';
+    generator.valueToCode(
+      block,
+      'BOOL',
+      until ? Order.LOGICAL_NOT : Order.NONE,
+    ) || 'false';
   let branch = generator.statementToCode(block, 'DO');
   branch = generator.addLoopTrap(branch, block);
   if (until) {
     argument0 = '!' + argument0;
   }
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
-};
+}
 
-export function controls_for(block, generator) {
+export function controls_for(block: Block, generator: PhpGenerator) {
   // For loop.
-  const variable0 =
-      generator.getVariableName(block.getFieldValue('VAR'));
+  const variable0 = generator.getVariableName(block.getFieldValue('VAR'));
   const argument0 =
-        generator.valueToCode(block, 'FROM', Order.ASSIGNMENT) || '0';
-  const argument1 =
-        generator.valueToCode(block, 'TO', Order.ASSIGNMENT) || '0';
-  const increment =
-        generator.valueToCode(block, 'BY', Order.ASSIGNMENT) || '1';
+    generator.valueToCode(block, 'FROM', Order.ASSIGNMENT) || '0';
+  const argument1 = generator.valueToCode(block, 'TO', Order.ASSIGNMENT) || '0';
+  const increment = generator.valueToCode(block, 'BY', Order.ASSIGNMENT) || '1';
   let branch = generator.statementToCode(block, 'DO');
   branch = generator.addLoopTrap(branch, block);
   let code;
-  if (stringUtils.isNumber(argument0) && stringUtils.isNumber(argument1) &&
-      stringUtils.isNumber(increment)) {
+  if (
+    stringUtils.isNumber(argument0) &&
+    stringUtils.isNumber(argument1) &&
+    stringUtils.isNumber(increment)
+  ) {
     // All arguments are simple numbers.
     const up = Number(argument0) <= Number(argument1);
-    code = 'for (' + variable0 + ' = ' + argument0 + '; ' + variable0 +
-        (up ? ' <= ' : ' >= ') + argument1 + '; ' + variable0;
+    code =
+      'for (' +
+      variable0 +
+      ' = ' +
+      argument0 +
+      '; ' +
+      variable0 +
+      (up ? ' <= ' : ' >= ') +
+      argument1 +
+      '; ' +
+      variable0;
     const step = Math.abs(Number(increment));
     if (step === 1) {
       code += up ? '++' : '--';
@@ -89,55 +116,78 @@ export function controls_for(block, generator) {
     // Cache non-trivial values to variables to prevent repeated look-ups.
     let startVar = argument0;
     if (!argument0.match(/^\w+$/) && !stringUtils.isNumber(argument0)) {
-      startVar =
-          generator.nameDB_.getDistinctName(
-            variable0 + '_start', NameType.VARIABLE);
+      startVar = generator.nameDB_!.getDistinctName(
+        variable0 + '_start',
+        NameType.VARIABLE,
+      );
       code += startVar + ' = ' + argument0 + ';\n';
     }
     let endVar = argument1;
     if (!argument1.match(/^\w+$/) && !stringUtils.isNumber(argument1)) {
-      endVar =
-          generator.nameDB_.getDistinctName(
-            variable0 + '_end', NameType.VARIABLE);
+      endVar = generator.nameDB_!.getDistinctName(
+        variable0 + '_end',
+        NameType.VARIABLE,
+      );
       code += endVar + ' = ' + argument1 + ';\n';
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    const incVar =
-        generator.nameDB_.getDistinctName(
-          variable0 + '_inc', NameType.VARIABLE);
+    const incVar = generator.nameDB_!.getDistinctName(
+      variable0 + '_inc',
+      NameType.VARIABLE,
+    );
     code += incVar + ' = ';
     if (stringUtils.isNumber(increment)) {
-      code += Math.abs(increment) + ';\n';
+      code += Math.abs(Number(increment)) + ';\n';
     } else {
       code += 'abs(' + increment + ');\n';
     }
     code += 'if (' + startVar + ' > ' + endVar + ') {\n';
     code += generator.INDENT + incVar + ' = -' + incVar + ';\n';
     code += '}\n';
-    code += 'for (' + variable0 + ' = ' + startVar + '; ' + incVar +
-        ' >= 0 ? ' + variable0 + ' <= ' + endVar + ' : ' + variable0 +
-        ' >= ' + endVar + '; ' + variable0 + ' += ' + incVar + ') {\n' +
-        branch + '}\n';
+    code +=
+      'for (' +
+      variable0 +
+      ' = ' +
+      startVar +
+      '; ' +
+      incVar +
+      ' >= 0 ? ' +
+      variable0 +
+      ' <= ' +
+      endVar +
+      ' : ' +
+      variable0 +
+      ' >= ' +
+      endVar +
+      '; ' +
+      variable0 +
+      ' += ' +
+      incVar +
+      ') {\n' +
+      branch +
+      '}\n';
   }
   return code;
-};
+}
 
-export function controls_forEach(block, generator) {
+export function controls_forEach(block: Block, generator: PhpGenerator) {
   // For each loop.
-  const variable0 =
-      generator.getVariableName(block.getFieldValue('VAR'));
+  const variable0 = generator.getVariableName(block.getFieldValue('VAR'));
   const argument0 =
-      generator.valueToCode(block, 'LIST', Order.ASSIGNMENT) || '[]';
+    generator.valueToCode(block, 'LIST', Order.ASSIGNMENT) || '[]';
   let branch = generator.statementToCode(block, 'DO');
   branch = generator.addLoopTrap(branch, block);
   let code = '';
   code +=
-      'foreach (' + argument0 + ' as ' + variable0 + ') {\n' + branch + '}\n';
+    'foreach (' + argument0 + ' as ' + variable0 + ') {\n' + branch + '}\n';
   return code;
-};
+}
 
-export function controls_flow_statements(block, generator) {
+export function controls_flow_statements(
+  block: Block,
+  generator: PhpGenerator,
+) {
   // Flow statements: continue, break.
   let xfix = '';
   if (generator.STATEMENT_PREFIX) {
@@ -150,7 +200,7 @@ export function controls_flow_statements(block, generator) {
     xfix += generator.injectId(generator.STATEMENT_SUFFIX, block);
   }
   if (generator.STATEMENT_PREFIX) {
-    const loop = block.getSurroundLoop();
+    const loop = (block as ControlFlowInLoopBlock).getSurroundLoop();
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end
       // of the loop will not get executed if 'continue' is triggered.
@@ -165,4 +215,4 @@ export function controls_flow_statements(block, generator) {
       return xfix + 'continue;\n';
   }
   throw Error('Unknown flow statement.');
-};
+}

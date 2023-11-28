@@ -5,45 +5,55 @@
  */
 
 /**
- * @fileoverview Generating PHP for math blocks.
+ * @file Generating PHP for math blocks.
  */
 
 // Former goog.module ID: Blockly.PHP.math
 
+import type {Block} from '../../core/block.js';
 import {Order} from './php_generator.js';
+import type {PhpGenerator} from './php_generator.js';
 
-
-export function math_number(block, generator) {
+export function math_number(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Numeric value.
-  let code = Number(block.getFieldValue('NUM'));
-  const order = code >= 0 ? Order.ATOMIC : Order.UNARY_NEGATION;
-  if (code === Infinity) {
-    code = 'INF';
-  } else if (code === -Infinity) {
-    code = '-INF';
+  let number = Number(block.getFieldValue('NUM'));
+  if (number === Infinity) {
+    return ['INF', Order.ATOMIC];
+  } else if (number === -Infinity) {
+    return ['-INF', Order.UNARY_NEGATION];
   }
-  return [code, order];
-};
+  return [String(number), number >= 0 ? Order.ATOMIC : Order.UNARY_NEGATION];
+}
 
-export function math_arithmetic(block, generator) {
+export function math_arithmetic(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Basic arithmetic operators, and power.
-  const OPERATORS = {
+  const OPERATORS: Record<string, [string, Order]> = {
     'ADD': [' + ', Order.ADDITION],
     'MINUS': [' - ', Order.SUBTRACTION],
     'MULTIPLY': [' * ', Order.MULTIPLICATION],
     'DIVIDE': [' / ', Order.DIVISION],
     'POWER': [' ** ', Order.POWER],
   };
-  const tuple = OPERATORS[block.getFieldValue('OP')];
+  type OperatorOption = keyof typeof OPERATORS;
+  const tuple = OPERATORS[block.getFieldValue('OP') as OperatorOption];
   const operator = tuple[0];
   const order = tuple[1];
   const argument0 = generator.valueToCode(block, 'A', order) || '0';
   const argument1 = generator.valueToCode(block, 'B', order) || '0';
   const code = argument0 + operator + argument1;
   return [code, order];
-};
+}
 
-export function math_single(block, generator) {
+export function math_single(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
@@ -122,11 +132,14 @@ export function math_single(block, generator) {
       throw Error('Unknown math operator: ' + operator);
   }
   return [code, Order.DIVISION];
-};
+}
 
-export function math_constant(block, generator) {
+export function math_constant(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
-  const CONSTANTS = {
+  const CONSTANTS: Record<string, [string, Order]> = {
     'PI': ['M_PI', Order.ATOMIC],
     'E': ['M_E', Order.ATOMIC],
     'GOLDEN_RATIO': ['(1 + sqrt(5)) / 2', Order.DIVISION],
@@ -134,13 +147,20 @@ export function math_constant(block, generator) {
     'SQRT1_2': ['M_SQRT1_2', Order.ATOMIC],
     'INFINITY': ['INF', Order.ATOMIC],
   };
-  return CONSTANTS[block.getFieldValue('CONSTANT')];
-};
+  type ConstantOption = keyof typeof CONSTANTS;
+  return CONSTANTS[block.getFieldValue('CONSTANT') as ConstantOption];
+}
 
-export function math_number_property(block, generator) {
+export function math_number_property(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
-  const PROPERTIES = {
+  const PROPERTIES: Record<
+    string,
+    [string, string, Order, Order] | [null, null, Order, Order]
+  > = {
     'EVEN': ['', ' % 2 == 0', Order.MODULUS, Order.EQUALITY],
     'ODD': ['', ' % 2 == 1', Order.MODULUS, Order.EQUALITY],
     'WHOLE': ['is_int(', ')', Order.NONE, Order.FUNCTION_CALL],
@@ -149,15 +169,18 @@ export function math_number_property(block, generator) {
     'DIVISIBLE_BY': [null, null, Order.MODULUS, Order.EQUALITY],
     'PRIME': [null, null, Order.NONE, Order.FUNCTION_CALL],
   };
-  const dropdownProperty = block.getFieldValue('PROPERTY');
+  type PropertyOption = keyof typeof PROPERTIES;
+  const dropdownProperty = block.getFieldValue('PROPERTY') as PropertyOption;
   const [prefix, suffix, inputOrder, outputOrder] =
-      PROPERTIES[dropdownProperty];
-  const numberToCheck = generator.valueToCode(block, 'NUMBER_TO_CHECK',
-      inputOrder) || '0';
+    PROPERTIES[dropdownProperty];
+  const numberToCheck =
+    generator.valueToCode(block, 'NUMBER_TO_CHECK', inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    const functionName = generator.provideFunction_('math_isPrime', `
+    const functionName = generator.provideFunction_(
+      'math_isPrime',
+      `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}($n) {
   // https://en.wikipedia.org/wiki/Primality_test#Naive_methods
   if ($n == 2 || $n == 3) {
@@ -176,37 +199,39 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}($n) {
   }
   return true;
 }
-`);
+`,
+    );
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = generator.valueToCode(block, 'DIVISOR',
-        Order.MODULUS) || '0';
+    const divisor =
+      generator.valueToCode(block, 'DIVISOR', Order.MODULUS) || '0';
     if (divisor === '0') {
       return ['false', Order.ATOMIC];
-
     }
     code = numberToCheck + ' % ' + divisor + ' == 0';
   } else {
     code = prefix + numberToCheck + suffix;
   }
   return [code, outputOrder];
-};
+}
 
-export function math_change(block, generator) {
+export function math_change(block: Block, generator: PhpGenerator) {
   // Add to a variable in place.
   const argument0 =
-      generator.valueToCode(block, 'DELTA', Order.ADDITION) || '0';
-  const varName =
-      generator.getVariableName(block.getFieldValue('VAR'));
+    generator.valueToCode(block, 'DELTA', Order.ADDITION) || '0';
+  const varName = generator.getVariableName(block.getFieldValue('VAR'));
   return varName + ' += ' + argument0 + ';\n';
-};
+}
 
 // Rounding functions have a single operand.
 export const math_round = math_single;
 // Trigonometry functions have a single operand.
 export const math_trig = math_single;
 
-export function math_on_list(block, generator) {
+export function math_on_list(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   let list;
@@ -214,40 +239,43 @@ export function math_on_list(block, generator) {
   switch (func) {
     case 'SUM':
       list =
-          generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL)
-          || 'array()';
+        generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL) || 'array()';
       code = 'array_sum(' + list + ')';
       break;
     case 'MIN':
       list =
-          generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL)
-          || 'array()';
+        generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL) || 'array()';
       code = 'min(' + list + ')';
       break;
     case 'MAX':
       list =
-          generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL)
-          || 'array()';
+        generator.valueToCode(block, 'LIST', Order.FUNCTION_CALL) || 'array()';
       code = 'max(' + list + ')';
       break;
     case 'AVERAGE': {
-      const functionName = generator.provideFunction_('math_mean', `
+      const functionName = generator.provideFunction_(
+        'math_mean',
+        `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}($myList) {
   return array_sum($myList) / count($myList);
 }
-`);
+`,
+      );
       list = generator.valueToCode(block, 'LIST', Order.NONE) || 'array()';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'MEDIAN': {
-      const functionName = generator.provideFunction_('math_median', `
+      const functionName = generator.provideFunction_(
+        'math_median',
+        `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}($arr) {
   sort($arr,SORT_NUMERIC);
   return (count($arr) % 2) ? $arr[floor(count($arr) / 2)] :
       ($arr[floor(count($arr) / 2)] + $arr[floor(count($arr) / 2) - 1]) / 2;
 }
-`);
+`,
+      );
       list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
@@ -256,7 +284,9 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}($arr) {
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
-      const functionName = generator.provideFunction_('math_modes', `
+      const functionName = generator.provideFunction_(
+        'math_modes',
+        `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}($values) {
   if (empty($values)) return array();
   $counts = array_count_values($values);
@@ -264,14 +294,16 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}($values) {
   $modes = array_keys($counts, current($counts), true);
   return $modes;
 }
-`);
+`,
+      );
       list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'STD_DEV': {
-      const functionName =
-          generator.provideFunction_('math_standard_deviation', `
+      const functionName = generator.provideFunction_(
+        'math_standard_deviation',
+        `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}($numbers) {
   $n = count($numbers);
   if (!$n) return null;
@@ -279,18 +311,22 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}($numbers) {
   foreach($numbers as $key => $num) $devs[$key] = pow($num - $mean, 2);
   return sqrt(array_sum($devs) / (count($devs) - 1));
 }
-`);
+`,
+      );
       list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'RANDOM': {
-      const functionName = generator.provideFunction_('math_random_list', `
+      const functionName = generator.provideFunction_(
+        'math_random_list',
+        `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}($list) {
   $x = rand(0, count($list)-1);
   return $list[$x];
 }
-`);
+`,
+      );
       list = generator.valueToCode(block, 'LIST', Order.NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
@@ -299,56 +335,74 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}($list) {
       throw Error('Unknown operator: ' + func);
   }
   return [code, Order.FUNCTION_CALL];
-};
+}
 
-export function math_modulo(block, generator) {
+export function math_modulo(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Remainder computation.
   const argument0 =
-      generator.valueToCode(block, 'DIVIDEND', Order.MODULUS) || '0';
+    generator.valueToCode(block, 'DIVIDEND', Order.MODULUS) || '0';
   const argument1 =
-      generator.valueToCode(block, 'DIVISOR', Order.MODULUS) || '0';
+    generator.valueToCode(block, 'DIVISOR', Order.MODULUS) || '0';
   const code = argument0 + ' % ' + argument1;
   return [code, Order.MODULUS];
-};
+}
 
-export function math_constrain(block, generator) {
+export function math_constrain(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Constrain a number between two limits.
   const argument0 = generator.valueToCode(block, 'VALUE', Order.NONE) || '0';
   const argument1 = generator.valueToCode(block, 'LOW', Order.NONE) || '0';
   const argument2 =
-      generator.valueToCode(block, 'HIGH', Order.NONE) || 'Infinity';
+    generator.valueToCode(block, 'HIGH', Order.NONE) || 'Infinity';
   const code =
-      'min(max(' + argument0 + ', ' + argument1 + '), ' + argument2 + ')';
+    'min(max(' + argument0 + ', ' + argument1 + '), ' + argument2 + ')';
   return [code, Order.FUNCTION_CALL];
-};
+}
 
-export function math_random_int(block, generator) {
+export function math_random_int(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Random integer between [X] and [Y].
   const argument0 = generator.valueToCode(block, 'FROM', Order.NONE) || '0';
   const argument1 = generator.valueToCode(block, 'TO', Order.NONE) || '0';
-  const functionName = generator.provideFunction_('math_random_int', `
+  const functionName = generator.provideFunction_(
+    'math_random_int',
+    `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}($a, $b) {
   if ($a > $b) {
     return rand($b, $a);
   }
   return rand($a, $b);
 }
-`);
+`,
+  );
   const code = functionName + '(' + argument0 + ', ' + argument1 + ')';
   return [code, Order.FUNCTION_CALL];
-};
+}
 
-export function math_random_float(block, generator) {
+export function math_random_float(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Random fraction between 0 and 1.
   return ['(float)rand()/(float)getrandmax()', Order.FUNCTION_CALL];
-};
+}
 
-export function math_atan2(block, generator) {
+export function math_atan2(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   const argument0 = generator.valueToCode(block, 'X', Order.NONE) || '0';
   const argument1 = generator.valueToCode(block, 'Y', Order.NONE) || '0';
   return [
     'atan2(' + argument1 + ', ' + argument0 + ') / pi() * 180',
-    Order.DIVISION
+    Order.DIVISION,
   ];
-};
+}

@@ -5,9 +5,9 @@
  */
 
 /**
- * @fileoverview Complete helper functions for generating PHP for
- *     blocks.  This is the entrypoint for php_compressed.js.
- * @suppress {extraRequire}
+ * @file Instantiate a PhpGenerator and populate it with the complete
+ * set of block generator functions for PHP.  This is the entrypoint
+ * for php_compressed.js.
  */
 
 // Former goog.module ID: Blockly.PHP.all
@@ -32,8 +32,17 @@ export * from './php/php_generator.js';
 export const phpGenerator = new PhpGenerator();
 
 // Install per-block-type generator functions:
-Object.assign(
-  phpGenerator.forBlock,
-  colour, lists, logic, loops, math, procedures,
-  text, variables, variablesDynamic
-);
+const generators: typeof phpGenerator.forBlock = {
+  ...colour,
+  ...lists,
+  ...logic,
+  ...loops,
+  ...math,
+  ...procedures,
+  ...text,
+  ...variables,
+  ...variablesDynamic,
+};
+for (const name in generators) {
+  phpGenerator.forBlock[name] = generators[name];
+}

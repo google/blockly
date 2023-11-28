@@ -5,37 +5,52 @@
  */
 
 /**
- * @fileoverview Generating PHP for colour blocks.
+ * @file Generating PHP for colour blocks.
  */
 
 // Former goog.module ID: Blockly.PHP.colour
 
+import type {Block} from '../../core/block.js';
 import {Order} from './php_generator.js';
+import type {PhpGenerator} from './php_generator.js';
 
-
-export function colour_picker(block, generator) {
+export function colour_picker(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Colour picker.
   const code = generator.quote_(block.getFieldValue('COLOUR'));
   return [code, Order.ATOMIC];
-};
+}
 
-export function colour_random(block, generator) {
+export function colour_random(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Generate a random colour.
-  const functionName = generator.provideFunction_('colour_random', `
+  const functionName = generator.provideFunction_(
+    'colour_random',
+    `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}() {
   return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
 }
-`);
+`,
+  );
   const code = functionName + '()';
   return [code, Order.FUNCTION_CALL];
-};
+}
 
-export function colour_rgb(block, generator) {
+export function colour_rgb(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Compose a colour from RGB components expressed as percentages.
   const red = generator.valueToCode(block, 'RED', Order.NONE) || 0;
   const green = generator.valueToCode(block, 'GREEN', Order.NONE) || 0;
   const blue = generator.valueToCode(block, 'BLUE', Order.NONE) || 0;
-  const functionName = generator.provideFunction_('colour_rgb', `
+  const functionName = generator.provideFunction_(
+    'colour_rgb',
+    `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}($r, $g, $b) {
   $r = round(max(min($r, 100), 0) * 2.55);
   $g = round(max(min($g, 100), 0) * 2.55);
@@ -46,19 +61,23 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}($r, $g, $b) {
   $hex .= str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
   return $hex;
 }
-`);
+`,
+  );
   const code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
   return [code, Order.FUNCTION_CALL];
-};
+}
 
-export function colour_blend(block, generator) {
+export function colour_blend(
+  block: Block,
+  generator: PhpGenerator,
+): [string, Order] {
   // Blend two colours together.
-  const c1 =
-      generator.valueToCode(block, 'COLOUR1', Order.NONE) || "'#000000'";
-  const c2 =
-      generator.valueToCode(block, 'COLOUR2', Order.NONE) || "'#000000'";
+  const c1 = generator.valueToCode(block, 'COLOUR1', Order.NONE) || "'#000000'";
+  const c2 = generator.valueToCode(block, 'COLOUR2', Order.NONE) || "'#000000'";
   const ratio = generator.valueToCode(block, 'RATIO', Order.NONE) || 0.5;
-  const functionName = generator.provideFunction_('colour_blend', `
+  const functionName = generator.provideFunction_(
+    'colour_blend',
+    `
 function ${generator.FUNCTION_NAME_PLACEHOLDER_}($c1, $c2, $ratio) {
   $ratio = max(min($ratio, 1), 0);
   $r1 = hexdec(substr($c1, 1, 2));
@@ -76,7 +95,8 @@ function ${generator.FUNCTION_NAME_PLACEHOLDER_}($c1, $c2, $ratio) {
   $hex .= str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
   return $hex;
 }
-`);
+`,
+  );
   const code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
   return [code, Order.FUNCTION_CALL];
-};
+}

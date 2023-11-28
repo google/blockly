@@ -5,9 +5,9 @@
  */
 
 /**
- * @fileoverview Complete helper functions for generating Python for
- *     blocks.  This is the entrypoint for python_compressed.js.
- * @suppress {extraRequire}
+ * @file Instantiate a PythonGenerator and populate it with the
+ * complete set of block generator functions for Python.  This is the
+ * entrypoint for python_compressed.js.
  */
 
 // Former goog.module ID: Blockly.Python.all

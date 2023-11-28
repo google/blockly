@@ -318,7 +318,7 @@ export class PythonGenerator extends CodeGenerator {
    * @param atId The ID of the input block to get (and adjust) the value of.
    * @param delta Value to add.
    * @param negate Whether to negate the value.
-   * @returns The adjusted value.
+   * @returns The adjusted value or code that evaluates to it.
    */
   getAdjustedInt(
     block: Block,

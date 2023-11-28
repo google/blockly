@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for colour blocks.
+ * @file Generating JavaScript for colour blocks.
  */
 
 // Former goog.module ID: Blockly.JavaScript.colour

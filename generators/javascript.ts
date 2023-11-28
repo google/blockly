@@ -5,9 +5,9 @@
  */
 
 /**
- * @fileoverview Complete helper functions for generating JavaScript for
- *     blocks.  This is the entrypoint for javascript_compressed.js.
- * @suppress {extraRequire}
+ * @file Instantiate a JavascriptGenerator and populate it with the
+ * complete set of block generator functions for JavaScript.  This is
+ * the entrypoint for javascript_compressed.js.
  */
 
 // Former goog.module ID: Blockly.JavaScript.all

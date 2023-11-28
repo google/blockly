@@ -5,9 +5,9 @@
  */
 
 /**
- * @fileoverview Complete helper functions for generating Dart for
- *     blocks.  This is the entrypoint for dart_compressed.js.
- * @suppress {extraRequire}
+ * @file Instantiate a DartGenerator and populate it with the complete
+ * set of block generator functions for Dart.  This is the entrypoint
+ * for dart_compressed.js.
  */
 
 // Former goog.module ID: Blockly.Dart.all

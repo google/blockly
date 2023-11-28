@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Dart for dynamic variable blocks.
+ * @file Generating Dart for dynamic variable blocks.
  */
 
 // Former goog.module ID: Blockly.Dart.variablesDynamic

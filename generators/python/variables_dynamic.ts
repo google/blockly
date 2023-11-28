@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Python for dynamic variable blocks.
+ * @file Generating Python for dynamic variable blocks.
  */
 
 // Former goog.module ID: Blockly.Python.variablesDynamic

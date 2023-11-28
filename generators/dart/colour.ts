@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Dart for colour blocks.
+ * @file Generating Dart for colour blocks.
  */
 
 // Former goog.module ID: Blockly.Dart.colour

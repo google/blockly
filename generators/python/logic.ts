@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Python for logic blocks.
+ * @file Generating Python for logic blocks.
  */
 
 // Former goog.module ID: Blockly.Python.logic

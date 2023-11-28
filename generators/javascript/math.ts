@@ -5,8 +5,7 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for math blocks.
- * @suppress {missingRequire}
+ * @file Generating JavaScript for math blocks.
  */
 
 // Former goog.module ID: Blockly.JavaScript.math

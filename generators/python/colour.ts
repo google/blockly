@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Python for colour blocks.
+ * @file Generating Python for colour blocks.
  */
 
 // Former goog.module ID: Blockly.Python.colour

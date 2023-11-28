@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for logic blocks.
+ * @file Generating JavaScript for logic blocks.
  */
 
 // Former goog.module ID: Blockly.JavaScript.logic

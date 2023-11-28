@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Dart for text blocks.
+ * @file Generating Dart for text blocks.
  */
 
 // Former goog.module ID: Blockly.Dart.texts

@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for dynamic variable blocks.
+ * @file Generating JavaScript for dynamic variable blocks.
  */
 
 // Former goog.module ID: Blockly.JavaScript.variablesDynamic

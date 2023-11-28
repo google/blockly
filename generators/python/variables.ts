@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Python for variable blocks.
+ * @file Generating Python for variable blocks.
  */
 
 // Former goog.module ID: Blockly.Python.variables

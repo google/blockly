@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Python for loop blocks.
+ * @file Generating Python for loop blocks.
  */
 
 // Former goog.module ID: Blockly.Python.loops

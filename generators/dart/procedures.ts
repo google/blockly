@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Dart for procedure blocks.
+ * @file Generating Dart for procedure blocks.
  */
 
 // Former goog.module ID: Blockly.Dart.procedures

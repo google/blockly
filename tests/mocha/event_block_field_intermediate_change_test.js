@@ -35,4 +35,32 @@ suite('Field Intermediate Change Event', function () {
       chai.assert.deepEqual(newEvent, origEvent);
     });
   });
+
+  suite('Change Value', function () {
+    test("runs with forward change block's value to new value", function () {
+      const block = this.workspace.newBlock('text', 'block_id');
+      const origEvent = new Blockly.Events.BlockFieldIntermediateChange(
+        block,
+        'TEXT',
+        'old value',
+        'new value',
+      );
+      origEvent.run(true);
+
+      chai.assert.deepEqual(block.getField(origEvent.name).getValue(), "new value");
+    });
+
+    test("runs without forward change block's value to old value", function () {
+      const block = this.workspace.newBlock('text', 'block_id');
+      const origEvent = new Blockly.Events.BlockFieldIntermediateChange(
+        block,
+        'TEXT',
+        'old value',
+        'new value',
+      );
+      origEvent.run(false);
+
+      chai.assert.deepEqual(block.getField(origEvent.name).getValue(), "old value");
+    });
+  });
 });

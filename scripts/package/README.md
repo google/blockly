@@ -73,17 +73,20 @@ const {javascriptGenerator} = require('blockly/javascript');
 const En = require('blockly/msg/en');
 ```
 
-## Applying blocks and messages
+## Applying messages
 
-Once you have the library blocks and the message files, you also need to apply
-them.
+Once you have the message files, you also need to apply them.
 
 ```js
-Blockly.Blocks = libraryBlocks;
 Blockly.setLocal(En);
 ```
 
 For a full list of supported Blockly locales, see: [https://github.com/google/blockly/tree/master/msg/js](https://github.com/google/blockly/tree/master/msg/js)
+
+## Docs
+
+For more information about how to use Blockly, check out our
+[devsite](https://developers.google.com/blockly/guides/overview).
 
 ## License
 

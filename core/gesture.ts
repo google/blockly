@@ -1173,9 +1173,14 @@ export class Gesture {
     );
   }
 
-  /** @returns Whether this gesture is a click on an icon. */
+  /** @returns Whether this gesture is a click on an icon that should be handled. */
   private isIconClick(): boolean {
-    return !!this.startIcon && !this.hasExceededDragRadius;
+    if (!this.startIcon) return false;
+    const handleInFlyout =
+      !this.flyout ||
+      !this.startIcon.isClickableInFlyout ||
+      this.startIcon.isClickableInFlyout(this.flyout.autoClose);
+    return !this.hasExceededDragRadius && handleInFlyout;
   }
 
   /**

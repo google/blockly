@@ -1158,19 +1158,18 @@ export class Gesture {
   }
 
   /**
-   * Whether this gesture is a click on a field.  This should only be called
+   * Whether this gesture is a click on a field that should be handled.  This should only be called
    * when ending a gesture (pointerup).
    *
    * @returns Whether this gesture was a click on a field.
    */
   private isFieldClick(): boolean {
-    const fieldClickable = this.startField
-      ? this.startField.isClickable()
-      : false;
+    if (!this.startField) return false;
     return (
-      fieldClickable &&
+      this.startField.isClickable() &&
       !this.hasExceededDragRadius &&
-      (!this.flyout || !this.flyout.autoClose)
+      (!this.flyout ||
+        this.startField.isClickableInFlyout(this.flyout.autoClose))
     );
   }
 

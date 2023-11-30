@@ -574,6 +574,21 @@ export abstract class Field<T = any>
   }
 
   /**
+   * Check whether the field should be clickable while the block is in a flyout.
+   * The default is that fields are clickable in always-open flyouts such as the
+   * simple toolbox, but not in autoclosing flyouts such as the category toolbox.
+   * Subclasses may override this function to change this behavior. Note that
+   * `isClickable` must also return true for this to have any effect.
+   *
+   * @param autoClosingFlyout true if the containing flyout is an auto-closing one.
+   * @returns Whether the field should be clickable while the block is in a flyout.
+   */
+  isClickableInFlyout(autoClosingFlyout: boolean): boolean {
+    if (autoClosingFlyout) return false;
+    return true;
+  }
+
+  /**
    * Check whether this field is currently editable.  Some fields are never
    * EDITABLE (e.g. text labels). Other fields may be EDITABLE but may exist on
    * non-editable blocks or be currently disabled.

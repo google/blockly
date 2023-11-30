@@ -144,7 +144,6 @@ export class BlockFieldIntermediateChange extends BlockBase {
       );
     }
 
-    // Assume the block is rendered so that then we can check.
     const value = forward ? this.newValue : this.oldValue;
     const field = block.getField(this.name!);
     if (field) {

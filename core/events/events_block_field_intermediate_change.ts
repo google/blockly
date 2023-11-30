@@ -143,7 +143,7 @@ export class BlockFieldIntermediateChange extends BlockBase {
           'block to the constructor, or call fromJson',
       );
     }
-    
+
     // Assume the block is rendered so that then we can check.
     const value = forward ? this.newValue : this.oldValue;
     const field = block.getField(this.name!);

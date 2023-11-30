@@ -47,7 +47,10 @@ suite('Field Intermediate Change Event', function () {
       );
       origEvent.run(true);
 
-      chai.assert.deepEqual(block.getField(origEvent.name).getValue(), "new value");
+      chai.assert.deepEqual(
+        block.getField(origEvent.name).getValue(),
+        'new value',
+      );
     });
 
     test("runs without forward change block's value to old value", function () {
@@ -60,7 +63,10 @@ suite('Field Intermediate Change Event', function () {
       );
       origEvent.run(false);
 
-      chai.assert.deepEqual(block.getField(origEvent.name).getValue(), "old value");
+      chai.assert.deepEqual(
+        block.getField(origEvent.name).getValue(),
+        'old value',
+      );
     });
   });
 });

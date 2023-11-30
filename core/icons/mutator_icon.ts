@@ -146,6 +146,10 @@ export class MutatorIcon extends Icon implements IHasBubble {
     this.setBubbleVisible(!this.bubbleIsVisible());
   }
 
+  override isClickableInFlyout(): boolean {
+    return false;
+  }
+
   bubbleIsVisible(): boolean {
     return !!this.miniWorkspaceBubble;
   }

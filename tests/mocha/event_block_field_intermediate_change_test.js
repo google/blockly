@@ -37,7 +37,7 @@ suite('Field Intermediate Change Event', function () {
   });
 
   suite('Change Value', function () {
-    test("this tests that running forward changes the block's value to new value", function () {
+    test("running forward changes the block's value to new value", function () {
       const block = this.workspace.newBlock('text', 'block_id');
       const origEvent = new Blockly.Events.BlockFieldIntermediateChange(
         block,
@@ -53,7 +53,7 @@ suite('Field Intermediate Change Event', function () {
       );
     });
 
-    test("this tests that running backward changes the block's value to old value", function () {
+    test("running backward changes the block's value to old value", function () {
       const block = this.workspace.newBlock('text', 'block_id');
       const origEvent = new Blockly.Events.BlockFieldIntermediateChange(
         block,

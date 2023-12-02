@@ -8,12 +8,12 @@
 
 import {Blocks} from './blocks.js';
 import {Msg} from './msg.js';
-import * as xml from './utils/xml.js';
 import {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import type {FlyoutButton} from './flyout_button.js';
+import {BlockInfo, ButtonInfo} from './utils/toolbox.js';
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -76,20 +76,26 @@ export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
  * @param workspace The workspace containing variables.
  * @returns Array of XML elements.
  */
-export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
-  let xmlList = new Array<Element>();
-  let button = document.createElement('button');
-  button.setAttribute('text', Msg['NEW_STRING_VARIABLE']);
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE_STRING');
-  xmlList.push(button);
-  button = document.createElement('button');
-  button.setAttribute('text', Msg['NEW_NUMBER_VARIABLE']);
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE_NUMBER');
-  xmlList.push(button);
-  button = document.createElement('button');
-  button.setAttribute('text', Msg['NEW_COLOUR_VARIABLE']);
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE_COLOUR');
-  xmlList.push(button);
+export function flyoutCategory(workspace: WorkspaceSvg): AnyDuringMigration[] {
+  let jsonList = new Array<AnyDuringMigration>();
+  const stringButton: ButtonInfo = {
+    kind: 'BUTTON',
+    text: Msg['NEW_STRING_VARIABLE'],
+    callbackkey: 'CREATE_VARIABLE_STRING',
+  };
+  jsonList.push(stringButton);
+  const numberButton: ButtonInfo = {
+    kind: 'BUTTON',
+    text: Msg['NEW_NUMBER_VARIABLE'],
+    callbackkey: 'NEW_NUMBER_VARIABLE',
+  };
+  jsonList.push(numberButton);
+  const colourButton: ButtonInfo = {
+    kind: 'BUTTON',
+    text: Msg['NEW_COLOUR_VARIABLE'],
+    callbackkey: 'CREATE_VARIABLE_COLOUR',
+  };
+  jsonList.push(colourButton);
 
   workspace.registerButtonCallback(
     'CREATE_VARIABLE_STRING',
@@ -105,8 +111,8 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
   );
 
   const blockList = flyoutCategoryBlocks(workspace);
-  xmlList = xmlList.concat(blockList);
-  return xmlList;
+  jsonList = jsonList.concat(blockList);
+  return jsonList;
 }
 
 /**
@@ -115,29 +121,36 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
  * @param workspace The workspace containing variables.
  * @returns Array of XML block elements.
  */
-export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
+export function flyoutCategoryBlocks(
+  workspace: Workspace,
+): AnyDuringMigration[] {
   const variableModelList = workspace.getAllVariables();
 
-  const xmlList = [];
+  const jsonList = [];
   if (variableModelList.length > 0) {
     if (Blocks['variables_set_dynamic']) {
       const firstVariable = variableModelList[variableModelList.length - 1];
-      const block = xml.createElement('block');
-      block.setAttribute('type', 'variables_set_dynamic');
-      block.setAttribute('gap', '24');
-      block.appendChild(Variables.generateVariableFieldDom(firstVariable));
-      xmlList.push(block);
+      const block: BlockInfo = {
+        kind: 'BLOCK',
+        type: 'variables_set_dynamic',
+        gap: '24',
+        fields: Variables.generateVariableFieldDom(firstVariable),
+      };
+      jsonList.push(block);
     }
     if (Blocks['variables_get_dynamic']) {
       variableModelList.sort(VariableModel.compareByName);
       for (let i = 0, variable; (variable = variableModelList[i]); i++) {
-        const block = xml.createElement('block');
-        block.setAttribute('type', 'variables_get_dynamic');
-        block.setAttribute('gap', '8');
-        block.appendChild(Variables.generateVariableFieldDom(variable));
-        xmlList.push(block);
+        const block: BlockInfo = {
+          kind: 'BLOCK',
+          type: 'variables_get_dynamic',
+          gap: '8',
+          fields: Variables.generateVariableFieldDom(variable),
+        };
+
+        jsonList.push(block);
       }
     }
   }
-  return xmlList;
+  return jsonList;
 }

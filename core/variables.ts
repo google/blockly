@@ -11,10 +11,11 @@ import * as dialog from './dialog.js';
 import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
 import {Msg} from './msg.js';
 import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.js';
-import * as utilsXml from './utils/xml.js';
 import {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import {BlockInfo, ButtonInfo} from './utils/toolbox.js';
+import {State} from './serialization/blocks.js';
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -86,23 +87,24 @@ export function allDeveloperVariables(workspace: Workspace): string[] {
  * variable category.
  *
  * @param workspace The workspace containing variables.
- * @returns Array of XML elements.
+ * @returns
  */
-export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
-  let xmlList = new Array<Element>();
-  const button = document.createElement('button');
-  button.setAttribute('text', '%{BKY_NEW_VARIABLE}');
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE');
 
+export function flyoutCategory(workspace: WorkspaceSvg): AnyDuringMigration[] {
+  let jsonList = new Array<AnyDuringMigration>();
+  const button: ButtonInfo = {
+    kind: 'BUTTON',
+    text: '%{BKY_NEW_VARIABLE}',
+    callbackkey: 'CREATE_VARIABLE',
+  };
   workspace.registerButtonCallback('CREATE_VARIABLE', function (button) {
     createVariableButtonHandler(button.getTargetWorkspace());
   });
 
-  xmlList.push(button);
-
+  jsonList.push(button);
   const blockList = flyoutCategoryBlocks(workspace);
-  xmlList = xmlList.concat(blockList);
-  return xmlList;
+  jsonList = jsonList.concat(blockList);
+  return jsonList;
 }
 
 /**
@@ -111,48 +113,59 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
  * @param workspace The workspace containing variables.
  * @returns Array of XML block elements.
  */
-export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
+export function flyoutCategoryBlocks(
+  workspace: Workspace,
+): AnyDuringMigration[] {
   const variableModelList = workspace.getVariablesOfType('');
-
-  const xmlList = [];
+  const jsonList = [];
   if (variableModelList.length > 0) {
     // New variables are added to the end of the variableModelList.
     const mostRecentVariable = variableModelList[variableModelList.length - 1];
     if (Blocks['variables_set']) {
-      const block = utilsXml.createElement('block');
-      block.setAttribute('type', 'variables_set');
-      block.setAttribute('gap', Blocks['math_change'] ? '8' : '24');
-      block.appendChild(generateVariableFieldDom(mostRecentVariable));
-      xmlList.push(block);
+      const block: BlockInfo = {
+        kind: 'BLOCK',
+        type: 'variables_set',
+        gap: Blocks['math_change'] ? '8' : '24',
+        fields: generateVariableFieldDom(mostRecentVariable),
+      };
+      jsonList.push(block);
     }
     if (Blocks['math_change']) {
-      const block = utilsXml.createElement('block');
-      block.setAttribute('type', 'math_change');
-      block.setAttribute('gap', Blocks['variables_get'] ? '20' : '8');
-      block.appendChild(generateVariableFieldDom(mostRecentVariable));
-      const value = utilsXml.textToDom(
-        '<value name="DELTA">' +
-          '<shadow type="math_number">' +
-          '<field name="NUM">1</field>' +
-          '</shadow>' +
-          '</value>',
-      );
-      block.appendChild(value);
-      xmlList.push(block);
+      const shadowState: State = {
+        type: 'math_number',
+        fields: {
+          'NUM': 1,
+        },
+      };
+      const block: BlockInfo = {
+        kind: 'BLOCK',
+        type: 'math_change',
+        gap: Blocks['variables_get'] ? '20' : '8',
+        fields: generateVariableFieldDom(mostRecentVariable),
+        inputs: {
+          'DELTA': {
+            shadow: shadowState,
+          },
+        },
+      };
+
+      jsonList.push(block);
     }
 
     if (Blocks['variables_get']) {
       variableModelList.sort(VariableModel.compareByName);
       for (let i = 0, variable; (variable = variableModelList[i]); i++) {
-        const block = utilsXml.createElement('block');
-        block.setAttribute('type', 'variables_get');
-        block.setAttribute('gap', '8');
-        block.appendChild(generateVariableFieldDom(variable));
-        xmlList.push(block);
+        const block: BlockInfo = {
+          kind: 'BLOCK',
+          type: 'variables_get',
+          gap: '8',
+          fields: generateVariableFieldDom(variable),
+        };
+        jsonList.push(block);
       }
     }
   }
-  return xmlList;
+  return jsonList;
 }
 
 export const VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';
@@ -492,18 +505,19 @@ function checkForConflictingParamWithLegacyProcedures(
  * @param variableModel The variable model to represent.
  * @returns The generated DOM.
  */
-export function generateVariableFieldDom(
-  variableModel: VariableModel,
-): Element {
+export function generateVariableFieldDom(variableModel: VariableModel): {
+  [key: string]: AnyDuringMigration;
+} {
   /* Generates the following XML:
    * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
    */
-  const field = utilsXml.createElement('field');
-  field.setAttribute('name', 'VAR');
-  field.setAttribute('id', variableModel.getId());
-  field.setAttribute('variabletype', variableModel.type);
-  const name = utilsXml.createTextNode(variableModel.name);
-  field.appendChild(name);
+  const field: {[key: string]: AnyDuringMigration} = {
+    name: 'VAR',
+    id: variableModel.getId(),
+    variabletype: variableModel.type,
+    variable: variableModel.name,
+  };
+
   return field;
 }
 

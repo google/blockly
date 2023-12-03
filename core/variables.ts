@@ -508,15 +508,12 @@ function checkForConflictingParamWithLegacyProcedures(
 export function generateVariableFieldDom(variableModel: VariableModel): {
   [key: string]: AnyDuringMigration;
 } {
-  /* Generates the following XML:
-   * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
-   */
   const field: {[key: string]: AnyDuringMigration} = {
-     'VAR': {
+    'VAR': {
       id: variableModel.getId(),
       variabletype: variableModel.type,
       name: variableModel.name,
-     }
+    },
   };
 
   return field;

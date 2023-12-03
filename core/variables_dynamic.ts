@@ -87,7 +87,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): AnyDuringMigration[] {
   const numberButton: ButtonInfo = {
     kind: 'BUTTON',
     text: Msg['NEW_NUMBER_VARIABLE'],
-    callbackkey: 'NEW_NUMBER_VARIABLE',
+    callbackkey: 'CREATE_VARIABLE_NUMBER',
   };
   jsonList.push(numberButton);
   const colourButton: ButtonInfo = {

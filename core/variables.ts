@@ -512,10 +512,11 @@ export function generateVariableFieldDom(variableModel: VariableModel): {
    * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
    */
   const field: {[key: string]: AnyDuringMigration} = {
-    name: 'VAR',
-    id: variableModel.getId(),
-    variabletype: variableModel.type,
-    variable: variableModel.name,
+     'VAR': {
+      id: variableModel.getId(),
+      variabletype: variableModel.type,
+      name: variableModel.name,
+     }
   };
 
   return field;

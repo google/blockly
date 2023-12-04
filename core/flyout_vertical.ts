@@ -375,6 +375,22 @@ export class VerticalFlyout extends Flyout {
         }
       }
 
+      // TODO(#7689): Remove this.
+      // Workspace with no scrollbars where this is permanently
+      // open on the left.
+      // If scrollbars exist they properly update the metrics.
+      if (
+        !this.targetWorkspace.scrollbar &&
+        !this.autoClose &&
+        this.targetWorkspace!.toolboxPosition === this.toolboxPosition_ &&
+        this.toolboxPosition_ === toolbox.Position.LEFT
+      ) {
+        this.targetWorkspace!.translate(
+          this.targetWorkspace!.scrollX + flyoutWidth,
+          this.targetWorkspace!.scrollY,
+        );
+      }
+
       this.width_ = flyoutWidth;
       this.position();
       this.targetWorkspace.resizeContents();

@@ -386,15 +386,14 @@ export class HorizontalFlyout extends Flyout {
       // Workspace with no scrollbars where this is permanently open on the top.
       // If scrollbars exist they properly update the metrics.
       if (
-        this.targetWorkspace!.toolboxPosition === this.toolboxPosition_ &&
-        this.toolboxPosition_ === toolbox.Position.TOP &&
-        !this.targetWorkspace!.getToolbox() &&
+        !this.targetWorkspace.scrollbar &&
         !this.autoClose &&
-        !this.targetWorkspace.scrollbar
+        this.targetWorkspace.getFlyout() === this &&
+        this.toolboxPosition_ === toolbox.Position.TOP
       ) {
-        this.targetWorkspace!.translate(
-          this.targetWorkspace!.scrollX,
-          this.targetWorkspace!.scrollY + flyoutHeight,
+        this.targetWorkspace.translate(
+          this.targetWorkspace.scrollX,
+          this.targetWorkspace.scrollY + flyoutHeight,
         );
       }
 

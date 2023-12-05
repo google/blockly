@@ -382,12 +382,12 @@ export class VerticalFlyout extends Flyout {
       if (
         !this.targetWorkspace.scrollbar &&
         !this.autoClose &&
-        this.targetWorkspace!.toolboxPosition === this.toolboxPosition_ &&
+        this.targetWorkspace.getFlyout() === this &&
         this.toolboxPosition_ === toolbox.Position.LEFT
       ) {
-        this.targetWorkspace!.translate(
-          this.targetWorkspace!.scrollX + flyoutWidth,
-          this.targetWorkspace!.scrollY,
+        this.targetWorkspace.translate(
+          this.targetWorkspace.scrollX + flyoutWidth,
+          this.targetWorkspace.scrollY,
         );
       }
 

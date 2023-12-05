@@ -248,6 +248,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     | null = null;
 
   /**
+   * A dummy wheel event listener used as a workaround for a Safari scrolling issue.
+   * Set in createDom and used for removal in dispose to ensure proper cleanup.
+   */
+  private dummyWheelListener: (() => void) | null = null;
+
+  /**
    * In a flyout, the target workspace where blocks should be placed after a
    * drag. Otherwise null.
    *
@@ -787,7 +793,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       // This no-op works around https://bugs.webkit.org/show_bug.cgi?id=226683,
       // which otherwise prevents zoom/scroll events from being observed in
       // Safari. Once that bug is fixed it should be removed.
-      document.body.addEventListener('wheel', function () {});
+      this.dummyWheelListener = () => {};
+      document.body.addEventListener('wheel', this.dummyWheelListener);
       browserEvents.conditionalBind(
         this.svgGroup_,
         'wheel',
@@ -895,6 +902,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (this.resizeHandlerWrapper) {
       browserEvents.unbind(this.resizeHandlerWrapper);
       this.resizeHandlerWrapper = null;
+    }
+
+    // Remove the dummy wheel listener
+    if (this.dummyWheelListener) {
+      document.body.removeEventListener('wheel', this.dummyWheelListener);
+      this.dummyWheelListener = null;
     }
   }
 

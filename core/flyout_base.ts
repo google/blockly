@@ -647,7 +647,6 @@ export abstract class Flyout
 
     // Parse the Array, Node or NodeList into a a list of flyout items.
     const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
-    if (!parsedContent.length) return; // No need to show an empty flyout.
     const flyoutInfo = this.createFlyoutInfo(parsedContent);
 
     renderManagement.triggerQueuedRenders();

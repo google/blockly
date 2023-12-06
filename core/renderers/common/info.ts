@@ -749,6 +749,7 @@ export class RenderInfo {
     this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
   }
 
+  /** Returns the connection measurable associated with the given connection. */
   getMeasureableForConnection(conn: RenderedConnection): Connection | null {
     if (
       this.outputConnection &&

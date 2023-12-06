@@ -122,6 +122,7 @@ export interface IPathObject {
    */
   updateMovable(enabled: boolean): void;
 
+  /** Adds the given path as a connection highlight for the given connection. */
   addConnectionHighlight?(
     connection: RenderedConnection,
     connectionPath: string,
@@ -129,5 +130,8 @@ export interface IPathObject {
     rtl: boolean,
   ): void;
 
+  /**
+   * Removes any highlight associated with the given connection, if it exists.
+   */
   removeConnectionHighlight?(connection: RenderedConnection): void;
 }

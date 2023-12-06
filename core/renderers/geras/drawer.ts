@@ -15,7 +15,7 @@ import type {ConstantProvider} from './constants.js';
 import {Highlighter} from './highlighter.js';
 import type {RenderInfo} from './info.js';
 import type {InlineInput} from './measurables/inline_input.js';
-import {PathObject} from './path_object.js';
+import type {PathObject} from './path_object.js';
 
 /**
  * An object that draws a block based on the given rendering information,

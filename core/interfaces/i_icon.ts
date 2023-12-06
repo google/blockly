@@ -83,6 +83,15 @@ export interface IIcon {
    * Notifies the icon that it has been clicked.
    */
   onClick(): void;
+
+  /**
+   * Check whether the icon should be clickable while the block is in a flyout.
+   * If this function is not defined, the icon will be clickable in all flyouts.
+   *
+   * @param autoClosingFlyout true if the containing flyout is an auto-closing one.
+   * @returns Whether the icon should be clickable while the block is in a flyout.
+   */
+  isClickableInFlyout?(autoClosingFlyout: boolean): boolean;
 }
 
 /** Type guard that checks whether the given object is an IIcon. */

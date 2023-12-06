@@ -8,9 +8,9 @@
 
 import type {BlockSvg} from '../../block_svg.js';
 import type {Connection} from '../../connection.js';
-import { RenderedConnection } from '../../rendered_connection.js';
+import {RenderedConnection} from '../../rendered_connection.js';
 import type {BlockStyle} from '../../theme.js';
-import { Coordinate } from '../../utils/coordinate.js';
+import {Coordinate} from '../../utils/coordinate.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
 

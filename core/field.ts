@@ -584,8 +584,7 @@ export abstract class Field<T = any>
    * @returns Whether the field should be clickable while the block is in a flyout.
    */
   isClickableInFlyout(autoClosingFlyout: boolean): boolean {
-    if (autoClosingFlyout) return false;
-    return true;
+    return !autoClosingFlyout;
   }
 
   /**

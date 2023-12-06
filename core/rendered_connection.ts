@@ -19,23 +19,10 @@ import {Connection} from './connection.js';
 import type {ConnectionDB} from './connection_db.js';
 import {ConnectionType} from './connection_type.js';
 import * as eventUtils from './events/utils.js';
-import {isConnectionHighlighter} from './interfaces/i_connection_highlighter.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import {Svg} from './utils/svg.js';
-import * as svgPaths from './utils/svg_paths.js';
-
-/** A shape that has a pathDown property. */
-interface PathDownShape {
-  pathDown: string;
-}
-
-/** A shape that has a pathLeft property. */
-interface PathLeftShape {
-  pathLeft: string;
-}
 
 /** Maximum randomness in workspace units for bumping a block. */
 const BUMP_RANDOMNESS = 10;
@@ -307,82 +294,14 @@ export class RenderedConnection extends Connection {
   /** Add highlighting around this connection. */
   highlight() {
     const renderer = this.getSourceBlock().workspace.getRenderer();
-    if (isConnectionHighlighter(renderer)) {
-      console.log('here');
-      // We unhighlight because the legacy behavior early returns if the
-      // connection is highlighted, but we no longer track highlight at the
-      // connection level, so we can't.
-      renderer.unhighlightConnection(this);
-      renderer.highlightConnection(this);
-    } else {
-      console.log('legacy');
-      this.legacyHighlight();
-    }
+    renderer.unhighlightConnection(this);
+    renderer.highlightConnection(this);
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
     const renderer = this.getSourceBlock().workspace.getRenderer();
-    if (isConnectionHighlighter(renderer)) {
-      renderer.unhighlightConnection(this);
-    } else {
-      this.legacyUnhighlight();
-    }
-  }
-
-  /** Create a highlight path matching the geras renderer. */
-  private legacyHighlight() {
-    if (this.highlightPath) {
-      // This connection is already highlighted
-      return;
-    }
-    let steps;
-    const sourceBlockSvg = this.sourceBlock_;
-    const renderConstants = sourceBlockSvg.workspace
-      .getRenderer()
-      .getConstants();
-    const shape = renderConstants.shapeFor(this);
-    if (
-      this.type === ConnectionType.INPUT_VALUE ||
-      this.type === ConnectionType.OUTPUT_VALUE
-    ) {
-      // Vertical line, puzzle tab, vertical line.
-      const yLen = renderConstants.TAB_OFFSET_FROM_TOP;
-      steps =
-        svgPaths.moveBy(0, -yLen) +
-        svgPaths.lineOnAxis('v', yLen) +
-        (shape as unknown as PathDownShape).pathDown +
-        svgPaths.lineOnAxis('v', yLen);
-    } else {
-      const xLen =
-        renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
-      // Horizontal line, notch, horizontal line.
-      steps =
-        svgPaths.moveBy(-xLen, 0) +
-        svgPaths.lineOnAxis('h', xLen) +
-        (shape as unknown as PathLeftShape).pathLeft +
-        svgPaths.lineOnAxis('h', xLen);
-    }
-    const offset = this.offsetInBlock;
-    this.highlightPath = dom.createSvgElement(
-      Svg.PATH,
-      {
-        'class': 'blocklyHighlightedConnectionPath',
-        'd': steps,
-        'transform':
-          `translate(${offset.x}, ${offset.y})` +
-          (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
-      },
-      this.sourceBlock_.getSvgRoot(),
-    );
-  }
-
-  /** Remove a highlight path if it exists. */
-  private legacyUnhighlight() {
-    if (this.highlightPath) {
-      dom.removeNode(this.highlightPath);
-      this.highlightPath = null;
-    }
+    renderer.unhighlightConnection(this);
   }
 
   /**

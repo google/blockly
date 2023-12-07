@@ -945,7 +945,7 @@ export class Gesture {
         'Cannot do an icon click because the start icon is undefined',
       );
     }
-
+    this.bringBlockToFront();
     this.startIcon.onClick();
   }
 
@@ -1157,25 +1157,29 @@ export class Gesture {
   }
 
   /**
-   * Whether this gesture is a click on a field.  This should only be called
+   * Whether this gesture is a click on a field that should be handled.  This should only be called
    * when ending a gesture (pointerup).
    *
    * @returns Whether this gesture was a click on a field.
    */
   private isFieldClick(): boolean {
-    const fieldClickable = this.startField
-      ? this.startField.isClickable()
-      : false;
+    if (!this.startField) return false;
     return (
-      fieldClickable &&
+      this.startField.isClickable() &&
       !this.hasExceededDragRadius &&
-      (!this.flyout || !this.flyout.autoClose)
+      (!this.flyout ||
+        this.startField.isClickableInFlyout(this.flyout.autoClose))
     );
   }
 
-  /** @returns Whether this gesture is a click on an icon. */
+  /** @returns Whether this gesture is a click on an icon that should be handled. */
   private isIconClick(): boolean {
-    return !!this.startIcon && !this.hasExceededDragRadius;
+    if (!this.startIcon) return false;
+    const handleInFlyout =
+      !this.flyout ||
+      !this.startIcon.isClickableInFlyout ||
+      this.startIcon.isClickableInFlyout(this.flyout.autoClose);
+    return !this.hasExceededDragRadius && handleInFlyout;
   }
 
   /**

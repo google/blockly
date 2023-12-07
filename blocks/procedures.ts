@@ -1209,8 +1209,12 @@ blocks['procedures_callreturn'] = {
   defType_: 'procedures_defreturn',
 };
 
-/** Type of a procedures_ifreturn block. */
-type IfReturnBlock = Block & IfReturnMixin;
+/**
+ * Type of a procedures_ifreturn block.
+ *
+ * @internal
+ */
+export type IfReturnBlock = Block & IfReturnMixin;
 interface IfReturnMixin extends IfReturnMixinType {
   hasReturnValue_: boolean;
 }

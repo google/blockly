@@ -163,19 +163,6 @@ suite('Workspace comment', function () {
       // Nothing should go wrong the second time dispose is called.
       comment.dispose();
     });
-
-    test('WorkspaceCommentSvg disposed', function () {
-      const comment = new Blockly.WorkspaceCommentSvg(
-        this.workspace,
-        'comment text',
-        0,
-        0,
-        'comment id',
-      );
-      comment.dispose();
-      // Nothing should go wrong the second time dispose is called.
-      comment.dispose();
-    });
   });
 
   suite('Width and height', function () {

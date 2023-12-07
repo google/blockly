@@ -582,6 +582,20 @@ export abstract class Field<T = any>
   }
 
   /**
+   * Check whether the field should be clickable while the block is in a flyout.
+   * The default is that fields are clickable in always-open flyouts such as the
+   * simple toolbox, but not in autoclosing flyouts such as the category toolbox.
+   * Subclasses may override this function to change this behavior. Note that
+   * `isClickable` must also return true for this to have any effect.
+   *
+   * @param autoClosingFlyout true if the containing flyout is an auto-closing one.
+   * @returns Whether the field should be clickable while the block is in a flyout.
+   */
+  isClickableInFlyout(autoClosingFlyout: boolean): boolean {
+    return !autoClosingFlyout;
+  }
+
+  /**
    * Check whether this field is currently editable.  Some fields are never
    * EDITABLE (e.g. text labels). Other fields may be EDITABLE but may exist on
    * non-editable blocks or be currently disabled.
@@ -810,8 +824,8 @@ export abstract class Field<T = any>
       margin !== undefined
         ? margin
         : !this.isFullBlockField()
-        ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING
-        : 0;
+          ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING
+          : 0;
     let totalWidth = xOffset * 2;
     let totalHeight = constants!.FIELD_TEXT_HEIGHT;
 
@@ -959,6 +973,14 @@ export abstract class Field<T = any>
     }
     return new Rect(xy.y, xy.y + scaledHeight, xy.x, xy.x + scaledWidth);
   }
+
+  /**
+   * Notifies the field that it has changed locations.
+   *
+   * @param _ The location of this field's block's top-start corner
+   *     in workspace coordinates.
+   */
+  onLocationChange(_: Coordinate) {}
 
   /**
    * Get the text from this field to display on the block. May differ from

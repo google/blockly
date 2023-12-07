@@ -68,45 +68,93 @@ suite('Metrics', function () {
         'getFlyout',
       );
     });
-    test('Toolbox at left', function () {
-      this.toolboxMetricsStub.returns({width: 107, height: 0, position: 2});
-      this.flyoutMetricsStub.returns({});
+
+    test('left toolboxes with always open flyouts have both offsets', function () {
+      this.toolboxMetricsStub.returns({width: 50, height: 0, position: 2});
+      this.flyoutMetricsStub.returns({width: 100, height: 0, position: 2});
       this.getToolboxStub.returns(true);
-      this.getFlyoutStub.returns(false);
+      this.getFlyoutStub.returns({autoClose: false});
 
       const absoluteMetrics = this.metricsManager.getAbsoluteMetrics();
 
-      assertDimensionsMatch(absoluteMetrics, 107, 0);
+      assertDimensionsMatch(absoluteMetrics, 150, 0);
     });
-    test('Toolbox at top', function () {
-      this.toolboxMetricsStub.returns({width: 0, height: 107, position: 0});
-      this.flyoutMetricsStub.returns({});
+
+    test('top toolboxes with always open flyouts have both offsets', function () {
+      this.toolboxMetricsStub.returns({width: 0, height: 50, position: 0});
+      this.flyoutMetricsStub.returns({width: 0, height: 100, position: 0});
       this.getToolboxStub.returns(true);
-      this.getFlyoutStub.returns(false);
+      this.getFlyoutStub.returns({autoClose: false});
 
       const absoluteMetrics = this.metricsManager.getAbsoluteMetrics();
 
-      assertDimensionsMatch(absoluteMetrics, 0, 107);
+      assertDimensionsMatch(absoluteMetrics, 0, 150);
     });
-    test('Flyout at left', function () {
-      this.toolboxMetricsStub.returns({});
-      this.flyoutMetricsStub.returns({width: 107, height: 0, position: 2});
-      this.getToolboxStub.returns(false);
-      this.getFlyoutStub.returns(true);
+
+    test('left toolboxes with autoclosing flyouts only have a toolbox offset', function () {
+      this.toolboxMetricsStub.returns({width: 50, height: 0, position: 2});
+      this.flyoutMetricsStub.returns({width: 100, height: 0, position: 2});
+      this.getToolboxStub.returns(true);
+      this.getFlyoutStub.returns({autoClose: true});
 
       const absoluteMetrics = this.metricsManager.getAbsoluteMetrics();
 
-      assertDimensionsMatch(absoluteMetrics, 107, 0);
+      assertDimensionsMatch(absoluteMetrics, 50, 0);
     });
-    test('Flyout at top', function () {
-      this.toolboxMetricsStub.returns({});
-      this.flyoutMetricsStub.returns({width: 0, height: 107, position: 0});
-      this.getToolboxStub.returns(false);
-      this.getFlyoutStub.returns(true);
+
+    test('top toolboxes with autoclosing flyouts only have a toolbox offset', function () {
+      this.toolboxMetricsStub.returns({width: 0, height: 50, position: 0});
+      this.flyoutMetricsStub.returns({width: 0, height: 100, position: 0});
+      this.getToolboxStub.returns(true);
+      this.getFlyoutStub.returns({autoClose: true});
 
       const absoluteMetrics = this.metricsManager.getAbsoluteMetrics();
 
-      assertDimensionsMatch(absoluteMetrics, 0, 107);
+      assertDimensionsMatch(absoluteMetrics, 0, 50);
+    });
+
+    test('left always open flyouts have a flyout offset', function () {
+      this.toolboxMetricsStub.returns({width: 50, height: 0, position: 2});
+      this.flyoutMetricsStub.returns({width: 100, height: 0, position: 2});
+      this.getToolboxStub.returns(false);
+      this.getFlyoutStub.returns({autoClose: false});
+
+      const absoluteMetrics = this.metricsManager.getAbsoluteMetrics();
+
+      assertDimensionsMatch(absoluteMetrics, 100, 0);
+    });
+
+    test('top always open flyouts have a flyout offset', function () {
+      this.toolboxMetricsStub.returns({width: 0, height: 50, position: 0});
+      this.flyoutMetricsStub.returns({width: 0, height: 100, position: 0});
+      this.getToolboxStub.returns(false);
+      this.getFlyoutStub.returns({autoClose: false});
+
+      const absoluteMetrics = this.metricsManager.getAbsoluteMetrics();
+
+      assertDimensionsMatch(absoluteMetrics, 0, 100);
+    });
+
+    test('left autoclosing flyouts have no offset', function () {
+      this.toolboxMetricsStub.returns({width: 50, height: 0, position: 2});
+      this.flyoutMetricsStub.returns({width: 100, height: 0, position: 2});
+      this.getToolboxStub.returns(false);
+      this.getFlyoutStub.returns({autoClose: true});
+
+      const absoluteMetrics = this.metricsManager.getAbsoluteMetrics();
+
+      assertDimensionsMatch(absoluteMetrics, 0, 0);
+    });
+
+    test('top autoclosing flyouts have no offset', function () {
+      this.toolboxMetricsStub.returns({width: 0, height: 50, position: 0});
+      this.flyoutMetricsStub.returns({width: 0, height: 100, position: 0});
+      this.getToolboxStub.returns(false);
+      this.getFlyoutStub.returns({autoClose: true});
+
+      const absoluteMetrics = this.metricsManager.getAbsoluteMetrics();
+
+      assertDimensionsMatch(absoluteMetrics, 0, 0);
     });
   });
 
@@ -132,50 +180,103 @@ suite('Metrics', function () {
       );
       this.svgMetricsStub = sinon.stub(this.metricsManager, 'getSvgMetrics');
     });
-    test('Toolbox at left', function () {
-      this.toolboxMetricsStub.returns({width: 107, height: 0, position: 2});
-      this.flyoutMetricsStub.returns({});
+
+    test('left toolboxes with always open flyouts have both offsets', function () {
+      this.toolboxMetricsStub.returns({width: 50, height: 0, position: 2});
+      this.flyoutMetricsStub.returns({width: 100, height: 0, position: 2});
       this.svgMetricsStub.returns({width: 500, height: 500});
       this.getToolboxStub.returns(true);
-      this.getFlyoutStub.returns(false);
+      this.getFlyoutStub.returns({autoClose: false});
 
       const viewMetrics = this.metricsManager.getViewMetrics();
 
-      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 393, 500);
+      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 350, 500);
     });
-    test('Toolbox at top', function () {
-      this.toolboxMetricsStub.returns({width: 0, height: 107, position: 0});
-      this.flyoutMetricsStub.returns({});
+
+    test('top toolboxes with always open flyouts have both offsets', function () {
+      this.toolboxMetricsStub.returns({width: 0, height: 50, position: 0});
+      this.flyoutMetricsStub.returns({width: 0, height: 100, position: 0});
       this.svgMetricsStub.returns({width: 500, height: 500});
       this.getToolboxStub.returns(true);
-      this.getFlyoutStub.returns(false);
+      this.getFlyoutStub.returns({autoClose: false});
 
       const viewMetrics = this.metricsManager.getViewMetrics();
 
-      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 500, 393);
+      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 500, 350);
     });
-    test('Flyout at left', function () {
-      this.toolboxMetricsStub.returns({});
-      this.flyoutMetricsStub.returns({width: 107, height: 0, position: 2});
+
+    test('left toolboxes with autoclosing flyouts only have a toolbox offset', function () {
+      this.toolboxMetricsStub.returns({width: 50, height: 0, position: 2});
+      this.flyoutMetricsStub.returns({width: 100, height: 0, position: 2});
+      this.svgMetricsStub.returns({width: 500, height: 500});
+      this.getToolboxStub.returns(true);
+      this.getFlyoutStub.returns({autoClose: true});
+
+      const viewMetrics = this.metricsManager.getViewMetrics();
+
+      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 450, 500);
+    });
+
+    test('top toolboxes with autoclosing flyouts only have a toolbox offset', function () {
+      this.toolboxMetricsStub.returns({width: 0, height: 50, position: 0});
+      this.flyoutMetricsStub.returns({width: 0, height: 100, position: 0});
+      this.svgMetricsStub.returns({width: 500, height: 500});
+      this.getToolboxStub.returns(true);
+      this.getFlyoutStub.returns({autoClose: true});
+
+      const viewMetrics = this.metricsManager.getViewMetrics();
+
+      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 500, 450);
+    });
+
+    test('left always open flyouts have a flyout offset', function () {
+      this.toolboxMetricsStub.returns({width: 50, height: 0, position: 2});
+      this.flyoutMetricsStub.returns({width: 100, height: 0, position: 2});
       this.svgMetricsStub.returns({width: 500, height: 500});
       this.getToolboxStub.returns(false);
-      this.getFlyoutStub.returns(true);
+      this.getFlyoutStub.returns({autoClose: false});
 
       const viewMetrics = this.metricsManager.getViewMetrics();
 
-      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 393, 500);
+      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 400, 500);
     });
-    test('Flyout at top', function () {
-      this.toolboxMetricsStub.returns({});
-      this.flyoutMetricsStub.returns({width: 0, height: 107, position: 0});
+
+    test('top always open flyouts have a flyout offset', function () {
+      this.toolboxMetricsStub.returns({width: 0, height: 50, position: 0});
+      this.flyoutMetricsStub.returns({width: 0, height: 100, position: 0});
       this.svgMetricsStub.returns({width: 500, height: 500});
       this.getToolboxStub.returns(false);
-      this.getFlyoutStub.returns(true);
+      this.getFlyoutStub.returns({autoClose: false});
 
       const viewMetrics = this.metricsManager.getViewMetrics();
 
-      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 500, 393);
+      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 500, 400);
     });
+
+    test('left autoclosing flyouts have no offset', function () {
+      this.toolboxMetricsStub.returns({width: 50, height: 0, position: 2});
+      this.flyoutMetricsStub.returns({width: 100, height: 0, position: 2});
+      this.svgMetricsStub.returns({width: 500, height: 500});
+      this.getToolboxStub.returns(false);
+      this.getFlyoutStub.returns({autoClose: true});
+
+      const viewMetrics = this.metricsManager.getViewMetrics();
+
+      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 500, 500);
+    });
+
+    test('top autoclosing flyouts have no offset', function () {
+      this.toolboxMetricsStub.returns({width: 0, height: 50, position: 0});
+      this.flyoutMetricsStub.returns({width: 0, height: 100, position: 0});
+      this.svgMetricsStub.returns({width: 500, height: 500});
+      this.getToolboxStub.returns(false);
+      this.getFlyoutStub.returns({autoClose: true});
+
+      const viewMetrics = this.metricsManager.getViewMetrics();
+
+      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 500, 500);
+    });
+
     test('Get view metrics in workspace coordinates ', function () {
       const scale = 2;
       const getWorkspaceCoordinates = true;

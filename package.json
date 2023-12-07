@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "10.2.2",
+  "version": "10.3.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -26,7 +26,6 @@
     "build:compressed": "exit 1 # Deprecated; use \"npm run minify\" instead.",
     "build:js": "exit 1 # Deprecated; use \"npm run tsc\" instead.",
     "build:langfiles": "exit 1 # Deprecated; use \"npm run langfiles\" instead.",
-    "bump": "npm --no-git-tag-version version 4.$(date +'%Y%m%d').0",
     "clean": "gulp clean",
     "deployDemos": "npm ci && gulp deployDemos",
     "deployDemos:beta": "npm ci && gulp deployDemosBeta",
@@ -51,7 +50,7 @@
     "test": "gulp test",
     "test:browser": "cd tests/browser && npx mocha",
     "test:generators": "gulp testGenerators",
-    "test:mocha:interactive": "http-server ./ -o /tests/mocha/index.html -c-1",
+    "test:mocha:interactive": "npm run build && concurrently -n tsc,server \"tsc --watch --preserveWatchOutput --outDir \"build/src\" --declarationDir \"build/declarations\"\" \"http-server ./ -o /tests/mocha/index.html -c-1\"",
     "test:compile:advanced": "gulp buildAdvancedCompilationTest --debug",
     "updateGithubPages": "npm ci && gulp gitUpdateGithubPages"
   },
@@ -98,7 +97,7 @@
     "markdown-tables-to-json": "^0.1.7",
     "mocha": "^10.0.0",
     "patch-package": "^8.0.0",
-    "prettier": "3.0.3",
+    "prettier": "3.1.0",
     "readline-sync": "^1.4.10",
     "rimraf": "^5.0.0",
     "typescript": "^5.0.2",

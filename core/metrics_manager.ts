@@ -111,26 +111,25 @@ export class MetricsManager implements IMetricsManager {
    */
   getAbsoluteMetrics(): AbsoluteMetrics {
     let absoluteLeft = 0;
+    let absoluteTop = 0;
+
     const toolboxMetrics = this.getToolboxMetrics();
-    const flyoutMetrics = this.getFlyoutMetrics(true);
-    const doesToolboxExist = !!this.workspace_.getToolbox();
-    const doesFlyoutExist = !!this.workspace_.getFlyout(true);
-    const toolboxPosition = doesToolboxExist
+    const flyoutMetrics = this.getFlyoutMetrics();
+    const respectToolbox = !!this.workspace_.getToolbox();
+    const respectFlyout = !this.workspace_.getFlyout()?.autoClose;
+    const toolboxPosition = respectToolbox
       ? toolboxMetrics.position
       : flyoutMetrics.position;
 
     const atLeft = toolboxPosition === toolboxUtils.Position.LEFT;
     const atTop = toolboxPosition === toolboxUtils.Position.TOP;
-    if (doesToolboxExist && atLeft) {
-      absoluteLeft = toolboxMetrics.width;
-    } else if (doesFlyoutExist && atLeft) {
-      absoluteLeft = flyoutMetrics.width;
+    if (atLeft) {
+      if (respectToolbox) absoluteLeft += toolboxMetrics.width;
+      if (respectFlyout) absoluteLeft += flyoutMetrics.width;
     }
-    let absoluteTop = 0;
-    if (doesToolboxExist && atTop) {
-      absoluteTop = toolboxMetrics.height;
-    } else if (doesFlyoutExist && atTop) {
-      absoluteTop = flyoutMetrics.height;
+    if (atTop) {
+      if (respectToolbox) absoluteTop += toolboxMetrics.height;
+      if (respectFlyout) absoluteTop += flyoutMetrics.height;
     }
 
     return {
@@ -152,36 +151,26 @@ export class MetricsManager implements IMetricsManager {
     const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
     const svgMetrics = this.getSvgMetrics();
     const toolboxMetrics = this.getToolboxMetrics();
-    const flyoutMetrics = this.getFlyoutMetrics(true);
-    const doesToolboxExist = !!this.workspace_.getToolbox();
-    const toolboxPosition = doesToolboxExist
+    const flyoutMetrics = this.getFlyoutMetrics();
+    const respectToolbox = !!this.workspace_.getToolbox();
+    const respectFlyout = !this.workspace_.getFlyout()?.autoClose;
+    const toolboxPosition = respectToolbox
       ? toolboxMetrics.position
       : flyoutMetrics.position;
 
-    if (this.workspace_.getToolbox()) {
-      if (
-        toolboxPosition === toolboxUtils.Position.TOP ||
-        toolboxPosition === toolboxUtils.Position.BOTTOM
-      ) {
-        svgMetrics.height -= toolboxMetrics.height;
-      } else if (
-        toolboxPosition === toolboxUtils.Position.LEFT ||
-        toolboxPosition === toolboxUtils.Position.RIGHT
-      ) {
-        svgMetrics.width -= toolboxMetrics.width;
-      }
-    } else if (this.workspace_.getFlyout(true)) {
-      if (
-        toolboxPosition === toolboxUtils.Position.TOP ||
-        toolboxPosition === toolboxUtils.Position.BOTTOM
-      ) {
-        svgMetrics.height -= flyoutMetrics.height;
-      } else if (
-        toolboxPosition === toolboxUtils.Position.LEFT ||
-        toolboxPosition === toolboxUtils.Position.RIGHT
-      ) {
-        svgMetrics.width -= flyoutMetrics.width;
-      }
+    const horizToolbox =
+      toolboxPosition === toolboxUtils.Position.TOP ||
+      toolboxPosition === toolboxUtils.Position.BOTTOM;
+    const vertToolbox =
+      toolboxPosition === toolboxUtils.Position.LEFT ||
+      toolboxPosition === toolboxUtils.Position.RIGHT;
+    if (horizToolbox) {
+      if (respectToolbox) svgMetrics.height -= toolboxMetrics.height;
+      if (respectFlyout) svgMetrics.height -= flyoutMetrics.height;
+    }
+    if (vertToolbox) {
+      if (respectToolbox) svgMetrics.width -= toolboxMetrics.width;
+      if (respectFlyout) svgMetrics.width -= flyoutMetrics.width;
     }
     return {
       height: svgMetrics.height / scale,

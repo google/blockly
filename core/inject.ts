@@ -60,7 +60,7 @@ export function inject(
   containerElement!.appendChild(subContainer);
   const svg = createDom(subContainer, options);
 
-  const workspace = createMainWorkspace(svg, options);
+  const workspace = createMainWorkspace(subContainer, svg, options);
 
   init(workspace);
 
@@ -138,15 +138,20 @@ function createDom(container: Element, options: Options): SVGElement {
  * @param options Dictionary of options.
  * @returns Newly created main workspace.
  */
-function createMainWorkspace(svg: SVGElement, options: Options): WorkspaceSvg {
+function createMainWorkspace(
+  injectionDiv: Element,
+  svg: SVGElement,
+  options: Options,
+): WorkspaceSvg {
   options.parentWorkspace = null;
   const mainWorkspace = new WorkspaceSvg(options);
   const wsOptions = mainWorkspace.options;
   mainWorkspace.scale = wsOptions.zoomOptions.startScale;
-  svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
+  svg.appendChild(
+    mainWorkspace.createDom('blocklyMainBackground', injectionDiv),
+  );
 
   // Set the theme name and renderer name onto the injection div.
-  const injectionDiv = mainWorkspace.getInjectionDiv();
   const rendererClassName = mainWorkspace.getRenderer().getClassName();
   if (rendererClassName) {
     dom.addClass(injectionDiv, rendererClassName);

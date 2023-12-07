@@ -496,4 +496,15 @@ input[type=number] {
   float: right;
   margin-right: -24px;
 }
+
+.blocklyBlockDragSurface {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: visible !important;
+  z-index: 80;
+  pointer-events: none;
+}
 `;

@@ -110,6 +110,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
       },
       this.svgRoot,
     );
+    dom.addClass(this.svgRoot!, 'blockly-icon-comment');
   }
 
   override dispose() {
@@ -155,6 +156,16 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
 
   /** Sets the text of this comment. Updates any bubbles if they are visible. */
   setText(text: string) {
+    const oldText = this.text;
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        this.sourceBlock,
+        'comment',
+        null,
+        oldText,
+        text,
+      ),
+    );
     this.text = text;
     this.textInputBubble?.setText(this.text);
     this.textBubble?.setText(this.text);
@@ -212,14 +223,30 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     this.setBubbleVisible(!this.bubbleIsVisible());
   }
 
+  override isClickableInFlyout(): boolean {
+    return false;
+  }
+
   /**
    * Updates the text of this comment in response to changes in the text of
    * the input bubble.
    */
   onTextChange(): void {
-    if (this.textInputBubble) {
-      this.text = this.textInputBubble.getText();
-    }
+    if (!this.textInputBubble) return;
+
+    const newText = this.textInputBubble.getText();
+    if (this.text === newText) return;
+
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        this.sourceBlock,
+        'comment',
+        null,
+        this.text,
+        newText,
+      ),
+    );
+    this.text = newText;
   }
 
   /**

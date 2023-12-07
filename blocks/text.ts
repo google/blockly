@@ -725,8 +725,12 @@ const QUOTES_EXTENSION = function (this: QuoteImageBlock) {
   this.quoteField_('TEXT');
 };
 
-/** Type of a block that has TEXT_JOIN_MUTATOR_MIXIN */
-type JoinMutatorBlock = BlockSvg & JoinMutatorMixin & QuoteImageMixin;
+/**
+ * Type of a block that has TEXT_JOIN_MUTATOR_MIXIN
+ *
+ * @internal
+ */
+export type JoinMutatorBlock = BlockSvg & JoinMutatorMixin & QuoteImageMixin;
 interface JoinMutatorMixin extends JoinMutatorMixinType {}
 type JoinMutatorMixinType = typeof JOIN_MUTATOR_MIXIN;
 
@@ -1017,6 +1021,8 @@ const CHARAT_EXTENSION = function (this: CharAtBlock) {
 Extensions.register('text_indexOf_tooltip', INDEXOF_TOOLTIP_EXTENSION);
 
 Extensions.register('text_quotes', QUOTES_EXTENSION);
+
+Extensions.registerMixin('quote_image_mixin', QUOTE_IMAGE_MIXIN);
 
 Extensions.registerMutator(
   'text_join_mutator',

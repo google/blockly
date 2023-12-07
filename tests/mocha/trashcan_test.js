@@ -121,14 +121,14 @@ suite('Trashcan', function () {
       });
     });
     test('Click outside trashcan - fires trashcanClose', function () {
-      sinon.stub(this.trashcan.flyout, 'isVisible').returns(true);
-      // Stub flyout interaction.
-      const hideFlyoutStub = sinon.stub(this.trashcan.flyout, 'hide');
+      this.trashcan.flyout.setVisible(true);
 
       simulateClick(this.workspace.svgGroup_);
 
-      sinon.assert.calledOnce(hideFlyoutStub);
-
+      chai.assert.isFalse(
+        this.trashcan.flyout.isVisible(),
+        'Expected flyout to be hidden',
+      );
       assertEventFired(
         this.eventsFireStub,
         Blockly.Events.TrashcanOpen,

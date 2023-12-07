@@ -19,8 +19,10 @@ import type {Workspace} from './workspace.js';
 import {warn} from './utils/deprecation.js';
 
 /**
- * Type declaration for per-block-type generator functions.
+ * Deprecated, no-longer used type declaration for per-block-type generator
+ * functions.
  *
+ * @deprecated
  * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/generating-code}
  * @param block The Block instance to generate code for.
  * @param genearator The CodeGenerator calling the function.
@@ -39,8 +41,25 @@ export type BlockGenerator = (
 export class CodeGenerator {
   name_: string;
 
-  /** A dictionary of block generator functions keyed by block type. */
-  forBlock: {[type: string]: BlockGenerator} = Object.create(null);
+  /**
+   * A dictionary of block generator functions, keyed by block type.
+   * Each block generator function takes two parameters:
+   *
+   * - the Block to generate code for, and
+   * - the calling CodeGenerator (or subclass) instance, so the
+   *   function can call methods defined below (e.g. blockToCode) or
+   *   on the relevant subclass (e.g. JavascripGenerator),
+   *
+   * and returns:
+   *
+   * - a [code, precedence] tuple (for value/expression blocks), or
+   * - a string containing the generated code (for statement blocks), or
+   * - null if no code should be emitted for block.
+   */
+  forBlock: Record<
+    string,
+    (block: Block, generator: this) => [string, number] | string | null
+  > = Object.create(null);
 
   /**
    * This is used as a placeholder in functions defined using
@@ -248,7 +267,7 @@ export class CodeGenerator {
     }
     if (typeof func !== 'function') {
       throw Error(
-        `${this.name_} generator does not know how to generate code` +
+        `${this.name_} generator does not know how to generate code ` +
           `for block type "${block.type}".`,
       );
     }

@@ -78,6 +78,7 @@ import {ZoomControls} from './zoom_controls.js';
 import {ContextMenuOption} from './contextmenu_registry.js';
 import * as renderManagement from './render_management.js';
 import * as deprecation from './utils/deprecation.js';
+import {LayerManager} from './layer_manager.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -247,6 +248,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     | null = null;
 
   /**
+   * A dummy wheel event listener used as a workaround for a Safari scrolling issue.
+   * Set in createDom and used for removal in dispose to ensure proper cleanup.
+   */
+  private dummyWheelListener: (() => void) | null = null;
+
+  /**
    * In a flyout, the target workspace where blocks should be placed after a
    * drag. Otherwise null.
    *
@@ -305,6 +312,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   private dragTargetAreas: Array<{component: IDragTarget; clientRect: Rect}> =
     [];
   private readonly cachedParentSvgSize: Size;
+  private layerManager: LayerManager | null = null;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   svgGroup_!: SVGElement;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -639,7 +647,11 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       x += xy.x * scale;
       y += xy.y * scale;
       element = element.parentNode as SVGElement;
-    } while (element && element !== this.getParentSvg());
+    } while (
+      element &&
+      element !== this.getParentSvg() &&
+      element !== this.getInjectionDiv()
+    );
     return new Coordinate(x, y);
   }
 
@@ -709,7 +721,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   getBlockCanvas(): SVGElement | null {
-    return this.svgBlockCanvas_;
+    return this.getCanvas();
   }
 
   /**
@@ -728,7 +740,11 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     'blocklyMutatorBackground'.
    * @returns The workspace's SVG group.
    */
-  createDom(opt_backgroundClass?: string): Element {
+  createDom(opt_backgroundClass?: string, injectionDiv?: Element): Element {
+    if (!this.injectionDiv) {
+      this.injectionDiv = injectionDiv ?? null;
+    }
+
     /**
      * <g class="blocklyWorkspace">
      *   <rect class="blocklyMainBackground" height="100%" width="100%"></rect>
@@ -760,16 +776,11 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         );
       }
     }
-    this.svgBlockCanvas_ = dom.createSvgElement(
-      Svg.G,
-      {'class': 'blocklyBlockCanvas'},
-      this.svgGroup_,
-    );
-    this.svgBubbleCanvas_ = dom.createSvgElement(
-      Svg.G,
-      {'class': 'blocklyBubbleCanvas'},
-      this.svgGroup_,
-    );
+
+    this.layerManager = new LayerManager(this);
+    // Assign the canvases for backwards compatibility.
+    this.svgBlockCanvas_ = this.layerManager.getBlockLayer();
+    this.svgBubbleCanvas_ = this.layerManager.getBubbleLayer();
 
     if (!this.isFlyout) {
       browserEvents.conditionalBind(
@@ -782,7 +793,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       // This no-op works around https://bugs.webkit.org/show_bug.cgi?id=226683,
       // which otherwise prevents zoom/scroll events from being observed in
       // Safari. Once that bug is fixed it should be removed.
-      document.body.addEventListener('wheel', function () {});
+      this.dummyWheelListener = () => {};
+      document.body.addEventListener('wheel', this.dummyWheelListener);
       browserEvents.conditionalBind(
         this.svgGroup_,
         'wheel',
@@ -891,6 +903,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       browserEvents.unbind(this.resizeHandlerWrapper);
       this.resizeHandlerWrapper = null;
     }
+
+    // Remove the dummy wheel listener
+    if (this.dummyWheelListener) {
+      document.body.removeEventListener('wheel', this.dummyWheelListener);
+      this.dummyWheelListener = null;
+    }
   }
 
   /**
@@ -901,7 +919,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   addTrashcan() {
     this.trashcan = WorkspaceSvg.newTrashcan(this);
     const svgTrashcan = this.trashcan.createDom();
-    this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
+    this.svgGroup_.insertBefore(svgTrashcan, this.getCanvas());
   }
 
   /**
@@ -1075,12 +1093,21 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /* eslint-enable indent */
 
   /**
+   * @returns The layer manager for this workspace.
+   *
+   * @internal
+   */
+  getLayerManager(): LayerManager | null {
+    return this.layerManager;
+  }
+
+  /**
    * Get the SVG element that forms the drawing surface.
    *
    * @returns SVG group element.
    */
   getCanvas(): SVGGElement {
-    return this.svgBlockCanvas_ as SVGGElement;
+    return this.layerManager!.getBlockLayer();
   }
 
   /**
@@ -1113,7 +1140,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns SVG group element.
    */
   getBubbleCanvas(): SVGGElement {
-    return this.svgBubbleCanvas_ as SVGGElement;
+    return this.layerManager!.getBubbleLayer();
   }
 
   /**
@@ -1181,15 +1208,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     the Blockly div.
    */
   translate(x: number, y: number) {
-    const translation =
-      'translate(' + x + ',' + y + ') ' + 'scale(' + this.scale + ')';
-    this.svgBlockCanvas_.setAttribute('transform', translation);
-    this.svgBubbleCanvas_.setAttribute('transform', translation);
-    // And update the grid if we're using one.
-    if (this.grid) {
-      this.grid.moveTo(x, y);
-    }
-
+    this.layerManager?.translateLayers(new Coordinate(x, y), this.scale);
+    this.grid?.moveTo(x, y);
     this.maybeFireViewportChangeEvent();
   }
 
@@ -2023,8 +2043,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   beginCanvasTransition() {
-    dom.addClass(this.svgBlockCanvas_, 'blocklyCanvasTransitioning');
-    dom.addClass(this.svgBubbleCanvas_, 'blocklyCanvasTransitioning');
+    dom.addClass(this.getCanvas(), 'blocklyCanvasTransitioning');
+    dom.addClass(this.getBubbleCanvas(), 'blocklyCanvasTransitioning');
   }
 
   /**
@@ -2033,8 +2053,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   endCanvasTransition() {
-    dom.removeClass(this.svgBlockCanvas_, 'blocklyCanvasTransitioning');
-    dom.removeClass(this.svgBubbleCanvas_, 'blocklyCanvasTransitioning');
+    dom.removeClass(this.getCanvas(), 'blocklyCanvasTransitioning');
+    dom.removeClass(this.getBubbleCanvas(), 'blocklyCanvasTransitioning');
   }
 
   /** Center the workspace. */

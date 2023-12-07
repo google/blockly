@@ -2242,20 +2242,150 @@ suite('Blocks', function () {
         chai.assert.isTrue(blockB.disabled);
       });
       test('Disabled blocks from JSON should have proper disabled status', function () {
+        // Nested c-shaped blocks, inner block is disabled
         const blockJson = {
           'type': 'controls_if',
-          'enabled': false,
+          'inputs': {
+            'DO0': {
+              'block': {
+                'type': 'controls_if',
+                'enabled': false,
+              },
+            },
+          },
         };
         Blockly.serialization.blocks.append(blockJson, this.workspace);
-        const block = this.workspace.getTopBlocks(false)[0];
+        const innerBlock = this.workspace
+          .getTopBlocks(false)[0]
+          .getChildren()[0];
         chai.assert.isTrue(
-          block.visuallyDisabled,
+          innerBlock.visuallyDisabled,
           'block should have visuallyDisabled set because it is disabled',
         );
         chai.assert.isFalse(
-          block.isEnabled(),
+          innerBlock.isEnabled(),
           'block should be marked disabled because enabled json property was set to false',
         );
+      });
+      test('Disabled blocks from XML should have proper disabled status', function () {
+        // Nested c-shaped blocks, inner block is disabled
+        const blockXml = `<xml xmlns="https://developers.google.com/blockly/xml">
+        <block type="controls_if" x="63" y="87">
+          <statement name="DO0">
+            <block type="controls_if" disabled="true"></block>
+          </statement>
+        </block>
+      </xml>`;
+        Blockly.Xml.domToWorkspace(
+          Blockly.utils.xml.textToDom(blockXml),
+          this.workspace,
+        );
+        const innerBlock = this.workspace
+          .getTopBlocks(false)[0]
+          .getChildren()[0];
+        chai.assert.isTrue(
+          innerBlock.visuallyDisabled,
+          'block should have visuallyDisabled set because it is disabled',
+        );
+        chai.assert.isFalse(
+          innerBlock.isEnabled(),
+          'block should be marked disabled because enabled xml property was set to false',
+        );
+      });
+      suite('Disabling blocks with children and neighbors', function () {
+        setup(function () {
+          // c-shape block with a stack of 4 blocks in the input
+          const blockJson = {
+            'type': 'controls_if',
+            'id': 'parent',
+            'inputs': {
+              'DO0': {
+                'block': {
+                  'type': 'controls_repeat_ext',
+                  'id': 'child1',
+                  'next': {
+                    'block': {
+                      'type': 'controls_for',
+                      'id': 'child2',
+                      'enabled': false,
+                      'next': {
+                        'block': {
+                          'type': 'controls_whileUntil',
+                          'id': 'child3',
+                          'next': {
+                            'block': {
+                              'type': 'controls_forEach',
+                              'id': 'child4',
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          };
+          Blockly.serialization.blocks.append(blockJson, this.workspace);
+          this.parent = this.workspace.getBlockById('parent');
+          this.child1 = this.workspace.getBlockById('child1');
+          this.child2 = this.workspace.getBlockById('child2');
+          this.child3 = this.workspace.getBlockById('child3');
+          this.child4 = this.workspace.getBlockById('child4');
+        });
+        test('Disabling parent block visually disables all descendants', async function () {
+          this.parent.setEnabled(false);
+          await Blockly.renderManagement.finishQueuedRenders();
+          for (const child of this.parent.getDescendants(false)) {
+            chai.assert.isTrue(
+              child.visuallyDisabled,
+              `block ${child.id} should be visually disabled`,
+            );
+          }
+        });
+        test('Child blocks regain original status after parent is re-enabled', async function () {
+          this.parent.setEnabled(false);
+          await Blockly.renderManagement.finishQueuedRenders();
+          this.parent.setEnabled(true);
+          await Blockly.renderManagement.finishQueuedRenders();
+
+          // child2 is disabled, rest should be enabled
+          chai.assert.isTrue(
+            this.child1.isEnabled(),
+            'child1 should be enabled',
+          );
+          chai.assert.isFalse(
+            this.child1.visuallyDisabled,
+            'child1 should not be visually disabled',
+          );
+
+          chai.assert.isFalse(
+            this.child2.isEnabled(),
+            'child2 should be disabled',
+          );
+          chai.assert.isTrue(
+            this.child2.visuallyDisabled,
+            'child2 should be visually disabled',
+          );
+
+          chai.assert.isTrue(
+            this.child3.isEnabled(),
+            'child3 should be enabled',
+          );
+          chai.assert.isFalse(
+            this.child3.visuallyDisabled,
+            'child3 should not be visually disabled',
+          );
+
+          chai.assert.isTrue(
+            this.child4.isEnabled(),
+            'child34 should be enabled',
+          );
+          chai.assert.isFalse(
+            this.child4.visuallyDisabled,
+            'child4 should not be visually disabled',
+          );
+        });
       });
     });
   });

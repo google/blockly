@@ -118,6 +118,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
       {'class': 'blocklyIconShape', 'r': '2.7', 'cx': '8', 'cy': '8'},
       this.svgRoot,
     );
+    dom.addClass(this.svgRoot!, 'blockly-icon-mutator');
   }
 
   override dispose(): void {
@@ -151,7 +152,13 @@ export class MutatorIcon extends Icon implements IHasBubble {
 
   override onClick(): void {
     super.onClick();
-    this.setBubbleVisible(!this.bubbleIsVisible());
+    if (this.sourceBlock.isEditable()) {
+      this.setBubbleVisible(!this.bubbleIsVisible());
+    }
+  }
+
+  override isClickableInFlyout(): boolean {
+    return false;
   }
 
   bubbleIsVisible(): boolean {

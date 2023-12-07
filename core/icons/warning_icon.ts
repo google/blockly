@@ -88,6 +88,7 @@ export class WarningIcon extends Icon implements IHasBubble {
       },
       this.svgRoot,
     );
+    dom.addClass(this.svgRoot!, 'blockly-icon-warning');
   }
 
   override dispose() {
@@ -157,6 +158,10 @@ export class WarningIcon extends Icon implements IHasBubble {
   override onClick(): void {
     super.onClick();
     this.setBubbleVisible(!this.bubbleIsVisible());
+  }
+
+  override isClickableInFlyout(): boolean {
+    return false;
   }
 
   bubbleIsVisible(): boolean {

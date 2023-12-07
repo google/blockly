@@ -15,6 +15,7 @@ import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import type {IconType} from './icon_types.js';
 import * as deprecation from '../utils/deprecation.js';
+import * as tooltip from '../tooltip.js';
 
 /**
  * The abstract icon class. Icons are visual elements that live in the top-start
@@ -35,7 +36,12 @@ export abstract class Icon implements IIcon {
   /** The root svg element visually representing this icon. */
   protected svgRoot: SVGGElement | null = null;
 
-  constructor(protected sourceBlock: Block) {}
+  /** The tooltip for this icon. */
+  protected tooltip: tooltip.TipInfo;
+
+  constructor(protected sourceBlock: Block) {
+    this.tooltip = sourceBlock;
+  }
 
   getType(): IconType<IIcon> {
     throw new Error('Icons must implement getType');
@@ -54,9 +60,12 @@ export abstract class Icon implements IIcon {
       this,
       pointerdownListener,
     );
+    (this.svgRoot as any).tooltip = this;
+    tooltip.bindMouseEvents(this.svgRoot);
   }
 
   dispose(): void {
+    tooltip.unbindMouseEvents(this.svgRoot);
     dom.removeNode(this.svgRoot);
   }
 
@@ -66,6 +75,19 @@ export abstract class Icon implements IIcon {
 
   getSize(): Size {
     return new Size(0, 0);
+  }
+
+  /**
+   * Sets the tooltip for this icon to the given value. Null to show the
+   * tooltip of the block.
+   */
+  setTooltip(tip: tooltip.TipInfo | null) {
+    this.tooltip = tip ?? this.sourceBlock;
+  }
+
+  /** Returns the tooltip for this icon. */
+  getTooltip(): tooltip.TipInfo {
+    return this.tooltip;
   }
 
   applyColour(): void {}
@@ -110,6 +132,19 @@ export abstract class Icon implements IIcon {
   }
 
   onClick(): void {}
+
+  /**
+   * Check whether the icon should be clickable while the block is in a flyout.
+   * The default is that icons are clickable in all flyouts (auto-closing or not).
+   * Subclasses may override this function to change this behavior.
+   *
+   * @param autoClosingFlyout true if the containing flyout is an auto-closing one.
+   * @returns Whether the icon should be clickable while the block is in a flyout.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isClickableInFlyout(autoClosingFlyout: boolean): boolean {
+    return true;
+  }
 
   /**
    * Sets the visibility of the icon's bubble if one exists.

@@ -545,7 +545,7 @@ export class Trashcan
 
   /** Inspect the contents of the trash. */
   click() {
-    if (!this.hasContents()) {
+    if (!this.hasContents() || this.workspace.isDragging()) {
       return;
     }
     this.openFlyout();

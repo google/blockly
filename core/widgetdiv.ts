@@ -19,6 +19,9 @@ let owner: unknown = null;
 /** Optional cleanup function set by whichever object uses the widget. */
 let dispose: (() => void) | null = null;
 
+/** A class name representing the current owner's workspace container. */
+const containerClassName = 'blocklyWidgetDiv';
+
 /** A class name representing the current owner's workspace renderer. */
 let rendererClassName = '';
 
@@ -45,18 +48,21 @@ export function getDiv(): HTMLDivElement | null {
  */
 export function testOnly_setDiv(newDiv: HTMLDivElement | null) {
   containerDiv = newDiv;
+  if (newDiv === null) {
+    document.querySelector('.' + containerClassName)?.remove();
+  }
 }
 
 /**
  * Create the widget div and inject it onto the page.
  */
 export function createDom() {
-  if (containerDiv) {
+  if (document.querySelector('.' + containerClassName)) {
     return; // Already created.
   }
 
   containerDiv = document.createElement('div') as HTMLDivElement;
-  containerDiv.className = 'blocklyWidgetDiv';
+  containerDiv.className = containerClassName;
   const container = common.getParentContainer() || document.body;
   container.appendChild(containerDiv);
 }

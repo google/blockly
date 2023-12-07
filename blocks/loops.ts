@@ -325,8 +325,12 @@ export const loopTypes: Set<string> = new Set([
   'controls_whileUntil',
 ]);
 
-/** Type of a block that has CONTROL_FLOW_IN_LOOP_CHECK_MIXIN */
-type ControlFlowInLoopBlock = Block & ControlFlowInLoopMixin;
+/**
+ * Type of a block that has CONTROL_FLOW_IN_LOOP_CHECK_MIXIN
+ *
+ * @internal
+ */
+export type ControlFlowInLoopBlock = Block & ControlFlowInLoopMixin;
 interface ControlFlowInLoopMixin extends ControlFlowInLoopMixinType {}
 type ControlFlowInLoopMixinType = typeof CONTROL_FLOW_IN_LOOP_CHECK_MIXIN;
 

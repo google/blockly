@@ -177,6 +177,79 @@ suite('Insertion marker manager', function () {
       const markers = manager.getInsertionMarkers();
       chai.assert.equal(markers.length, 2);
     });
+
+    suite('children being set as insertion markers', function () {
+      setup(function () {
+        Blockly.Blocks['shadows_in_init'] = {
+          init: function () {
+            this.appendValueInput('test').connection.setShadowState({
+              'type': 'math_number',
+            });
+            this.setPreviousStatement(true);
+          },
+        };
+
+        Blockly.Blocks['shadows_in_load'] = {
+          init: function () {
+            this.appendValueInput('test');
+            this.setPreviousStatement(true);
+          },
+
+          loadExtraState: function () {
+            this.getInput('test').connection.setShadowState({
+              'type': 'math_number',
+            });
+          },
+
+          saveExtraState: function () {
+            return true;
+          },
+        };
+      });
+
+      teardown(function () {
+        delete Blockly.Blocks['shadows_in_init'];
+        delete Blockly.Blocks['shadows_in_load'];
+      });
+
+      test('Shadows added in init are set as insertion markers', function () {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'id': 'first',
+                'type': 'shadows_in_init',
+              },
+            ],
+          },
+        };
+        const manager = createBlocksAndManager(this.workspace, state);
+        const markers = manager.getInsertionMarkers();
+        chai.assert.isTrue(
+          markers[0].getChildren()[0].isInsertionMarker(),
+          'Expected the shadow block to be an insertion maker',
+        );
+      });
+
+      test('Shadows added in `loadExtraState` are set as insertion markers', function () {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'id': 'first',
+                'type': 'shadows_in_load',
+              },
+            ],
+          },
+        };
+        const manager = createBlocksAndManager(this.workspace, state);
+        const markers = manager.getInsertionMarkers();
+        chai.assert.isTrue(
+          markers[0].getChildren()[0].isInsertionMarker(),
+          'Expected the shadow block to be an insertion maker',
+        );
+      });
+    });
   });
 
   suite('Would delete block', function () {

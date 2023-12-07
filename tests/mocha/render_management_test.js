@@ -30,8 +30,8 @@ suite('Render Management', function () {
         getParent: () => null,
         getChildren: () => [],
         isDisposed: () => false,
-        getConnections_: () => [],
         getRelativeToSurfaceXY: () => ({x: 0, y: 0}),
+        updateComponentLocations: () => {},
         workspace: {
           resizeContents: () => {},
         },

@@ -865,6 +865,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set whether this block is a shadow block or not.
+   * This method is internal and should not be called by users of Blockly. To
+   * create shadow blocks programmatically call connection.setShadowState
    *
    * @param shadow True if a shadow.
    * @internal
@@ -1641,6 +1643,18 @@ export class Block implements IASTNodeLocation, IDeletable {
       );
     }
 
+    // Validate that each arg has a corresponding message
+    let n = 0;
+    while (json['args' + n]) {
+      if (json['message' + n] === undefined) {
+        throw Error(
+          warningPrefix +
+            `args${n} must have a corresponding message (message${n}).`,
+        );
+      }
+      n++;
+    }
+
     // Set basic properties of block.
     // Makes styles backward compatible with old way of defining hat style.
     if (json['style'] && json['style'].hat) {
@@ -2208,6 +2222,18 @@ export class Block implements IASTNodeLocation, IDeletable {
     const comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | null;
     const oldText = comment?.getText() ?? null;
     if (oldText === text) return;
+    if (text !== null) {
+      let comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | undefined;
+      if (!comment) {
+        comment = this.addIcon(new CommentIcon(this));
+      }
+      eventUtils.disable();
+      comment.setText(text);
+      eventUtils.enable();
+    } else {
+      this.removeIcon(CommentIcon.TYPE);
+    }
+
     eventUtils.fire(
       new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this,
@@ -2217,16 +2243,6 @@ export class Block implements IASTNodeLocation, IDeletable {
         text,
       ),
     );
-
-    if (text !== null) {
-      let comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | undefined;
-      if (!comment) {
-        comment = this.addIcon(new CommentIcon(this));
-      }
-      comment.setText(text);
-    } else {
-      this.removeIcon(CommentIcon.TYPE);
-    }
   }
 
   /**

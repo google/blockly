@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ajeje Brazorf",
+			"Hello903hello",
+			"Liuxinyu970226",
+			"Moon0319"
+		]
+	},
+	"TODAY": "今日",
+	"HELP": "幫手",
+	"UNDO": "還原",
+	"REDO": "復原",
+	"COLOUR_PICKER_HELPURL": "https://zh-yue.wikipedia.org/wiki/色",
+	"CONTROLS_REPEAT_HELPURL": "https://zh-yue.wikipedia.org/wiki/For_迴圈",
+	"LISTS_GET_INDEX_RANDOM": "是但",
+	"DIALOG_OK": "仲可以",
+	"DIALOG_CANCEL": "取消"
+}

@@ -59,6 +59,7 @@
 	"NEW_VARIABLE_TITLE": "Nowa nazwa zmiennej:",
 	"VARIABLE_ALREADY_EXISTS": "Zmienna o nazwie '%1' już istnieje.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Zmienna o nazwie '%1' już istnieje i jest typu '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "Zmienna o nazwie '%1' już istnieje jako parametr w procedurze '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Usunąć %1 wystąpień zmiennej '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Nie można usunąć zmiennej '%1', ponieważ jest częścią definicji funkcji '%2'",
 	"DELETE_VARIABLE": "Usuń zmienną '%1'",

@@ -114,20 +114,29 @@ def main():
   write_files(args.author, args.lang, args.output_dir, results, False)
 
   # Create synonyms.json.
+  synonyms_sorted = sort_dict(synonyms)
   synonym_file_name = os.path.join(os.curdir, args.output_dir, 'synonyms.json')
   with open(synonym_file_name, 'w') as outfile:
-    json.dump(synonyms, outfile)
+    json.dump(synonyms_sorted, outfile)
   if not args.quiet:
     print("Wrote {0} synonym pairs to {1}.".format(
-        len(synonyms), synonym_file_name))
+        len(synonyms_sorted), synonym_file_name))
 
   # Create constants.json
+  constants_sorted = sort_dict(constants)
   constants_file_name = os.path.join(os.curdir, args.output_dir, 'constants.json')
   with open(constants_file_name, 'w') as outfile:
-    json.dump(constants, outfile)
+    json.dump(constants_sorted, outfile)
   if not args.quiet:
     print("Wrote {0} constant pairs to {1}.".format(
-        len(constants), synonym_file_name))
+        len(constants_sorted), synonym_file_name))
+
+def sort_dict(unsorted_dict):
+  # Sort the dictionary (thereby enabling better diffing of changes).
+  myKeys = list(unsorted_dict.keys())
+  myKeys.sort()
+  sorted_dict = {i: unsorted_dict[i] for i in myKeys}
+  return sorted_dict
 
 if __name__ == '__main__':
   main()

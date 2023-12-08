@@ -1578,7 +1578,7 @@ Blockly.Msg.PROCEDURES_CREATE_DO = 'Create "%1"';
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = 'If a value is true, then return a second value.';
 /** @type {string} */
 /// {{Optional}} url - Information about guard clauses.
-Blockly.Msg.PROCEDURES_IFRETURN_HELPURL = 'http://c2.com/cgi/wiki?GuardClause';
+Blockly.Msg.PROCEDURES_IFRETURN_HELPURL = 'https://c2.com/cgi/wiki?GuardClause';
 /** @type {string} */
 /// warning - This appears if the user tries to use this block outside of a function definition.
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = 'Warning: This block may be used only within a function definition.';

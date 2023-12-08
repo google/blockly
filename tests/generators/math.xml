@@ -1,7 +1,7 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable>varToChange</variable>
-    <variable>rand</variable>
+    <variable id="M6vR1)E_7:oMxt?0uMou">varToChange</variable>
+    <variable id="ZqIQdx@nHv+|#h.vBRxR">rand</variable>
   </variables>
   <block type="unittest_main" x="13" y="13">
     <field name="SUITE_NAME">Math</field>
@@ -71,7 +71,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="388">
+  <block type="procedures_defnoreturn" x="13" y="413">
     <field name="NAME">test single</field>
     <comment pinned="false" h="80" w="160">Tests the "single" block.</comment>
     <statement name="STACK">
@@ -1255,7 +1255,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="48" y="3799">
+  <block type="procedures_defnoreturn" x="13" y="4038">
     <field name="NAME">test round</field>
     <comment pinned="false" h="80" w="160">Tests the "round" block.</comment>
     <statement name="STACK">
@@ -1331,12 +1331,12 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="46" y="4064">
+  <block type="procedures_defnoreturn" x="13" y="4338">
     <field name="NAME">test change</field>
     <comment pinned="false" h="80" w="160">Tests the "change" block.</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
-        <field name="VAR">varToChange</field>
+        <field name="VAR" id="M6vR1)E_7:oMxt?0uMou">varToChange</field>
         <value name="VALUE">
           <block type="math_number">
             <field name="NUM">100</field>
@@ -1344,7 +1344,7 @@
         </value>
         <next>
           <block type="math_change" inline="false">
-            <field name="VAR">varToChange</field>
+            <field name="VAR" id="M6vR1)E_7:oMxt?0uMou">varToChange</field>
             <value name="DELTA">
               <block type="math_number">
                 <field name="NUM">42</field>
@@ -1359,7 +1359,7 @@
                 </value>
                 <value name="ACTUAL">
                   <block type="variables_get">
-                    <field name="VAR">varToChange</field>
+                    <field name="VAR" id="M6vR1)E_7:oMxt?0uMou">varToChange</field>
                   </block>
                 </value>
                 <value name="EXPECTED">
@@ -1374,7 +1374,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="4238">
+  <block type="procedures_defnoreturn" x="13" y="4538">
     <field name="NAME">test operations on list</field>
     <comment pinned="false" h="80" w="160">Tests the "list operation" blocks.</comment>
     <statement name="STACK">
@@ -1799,7 +1799,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="5213">
+  <block type="procedures_defnoreturn" x="13" y="5513">
     <field name="NAME">test mod</field>
     <comment pinned="false" h="80" w="160">Tests the "mod" block.</comment>
     <statement name="STACK">
@@ -1831,7 +1831,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="5363">
+  <block type="procedures_defnoreturn" x="13" y="5663">
     <field name="NAME">test constraint</field>
     <comment pinned="false" h="80" w="160">Tests the "constrain" block.</comment>
     <statement name="STACK">
@@ -1868,12 +1868,12 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="5513">
+  <block type="procedures_defnoreturn" x="13" y="5813">
     <field name="NAME">test random integer</field>
     <comment pinned="false" h="80" w="160">Tests the "random integer" block.</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
-        <field name="VAR">rand</field>
+        <field name="VAR" id="ZqIQdx@nHv+|#h.vBRxR">rand</field>
         <value name="VALUE">
           <block type="math_random_int">
             <value name="FROM">
@@ -1904,7 +1904,7 @@
                     <field name="OP">GTE</field>
                     <value name="A">
                       <block type="variables_get">
-                        <field name="VAR">rand</field>
+                        <field name="VAR" id="ZqIQdx@nHv+|#h.vBRxR">rand</field>
                       </block>
                     </value>
                     <value name="B">
@@ -1919,7 +1919,7 @@
                     <field name="OP">LTE</field>
                     <value name="A">
                       <block type="variables_get">
-                        <field name="VAR">rand</field>
+                        <field name="VAR" id="ZqIQdx@nHv+|#h.vBRxR">rand</field>
                       </block>
                     </value>
                     <value name="B">
@@ -1945,7 +1945,7 @@
                     <field name="PROPERTY">WHOLE</field>
                     <value name="NUMBER_TO_CHECK">
                       <block type="variables_get">
-                        <field name="VAR">rand</field>
+                        <field name="VAR" id="ZqIQdx@nHv+|#h.vBRxR">rand</field>
                       </block>
                     </value>
                   </block>
@@ -1957,12 +1957,12 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="5763">
+  <block type="procedures_defnoreturn" x="13" y="6063">
     <field name="NAME">test random fraction</field>
     <comment pinned="false" h="80" w="160">Tests the "random fraction" block.</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
-        <field name="VAR">rand</field>
+        <field name="VAR" id="ZqIQdx@nHv+|#h.vBRxR">rand</field>
         <value name="VALUE">
           <block type="math_random_float"></block>
         </value>
@@ -1982,7 +1982,7 @@
                     <field name="OP">GTE</field>
                     <value name="A">
                       <block type="variables_get">
-                        <field name="VAR">rand</field>
+                        <field name="VAR" id="ZqIQdx@nHv+|#h.vBRxR">rand</field>
                       </block>
                     </value>
                     <value name="B">
@@ -1997,7 +1997,7 @@
                     <field name="OP">LTE</field>
                     <value name="A">
                       <block type="variables_get">
-                        <field name="VAR">rand</field>
+                        <field name="VAR" id="ZqIQdx@nHv+|#h.vBRxR">rand</field>
                       </block>
                     </value>
                     <value name="B">
@@ -2014,9 +2014,9 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" y="5938" x="13">
+  <block type="procedures_defnoreturn" x="13" y="6238">
     <field name="NAME">test atan2</field>
-    <comment w="160" h="80" pinned="false">Describe this function...</comment>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertequals">
         <value name="MESSAGE">

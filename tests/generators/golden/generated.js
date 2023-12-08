@@ -560,11 +560,19 @@ function test_constraint() {
 }
 
 function mathRandomInt(a, b) {
+  a = Number(a);
+  b = Number(b);
   if (a > b) {
     // Swap a and b to ensure a is smaller.
     var c = a;
     a = b;
     b = c;
+  }
+  a = Math.ceil(a);
+  b = Math.floor(b);
+  if (a > b) {
+    // No integers between the inputs (e.g. 2.4 & 2.6).
+    return NaN;
   }
   return Math.floor(Math.random() * (b - a + 1) + a);
 }

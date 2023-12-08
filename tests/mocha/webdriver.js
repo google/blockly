@@ -64,7 +64,7 @@ async function runMochaTestsInBrowser() {
     }
     for (const el of failureMessagesEls) {
       const messageHtml = await el.getHTML();
-      console.log(messageHtml.replace("<p>", "").replace("</p>", ""));
+      console.log(messageHtml.replace('<p>', '').replace('</p>', ''));
     }
   }
 

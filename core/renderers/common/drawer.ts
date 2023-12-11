@@ -460,14 +460,12 @@ export class Drawer {
       path = this.getStatementConnectionHighlightPath(measurable);
     }
     const block = conn.getSourceBlock();
-    if (block.pathObject.addConnectionHighlight) {
-      block.pathObject.addConnectionHighlight(
-        conn,
-        path,
-        conn.getOffsetInBlock(),
-        block.RTL,
-      );
-    }
+    block.pathObject.addConnectionHighlight?.(
+      conn,
+      path,
+      conn.getOffsetInBlock(),
+      block.RTL,
+    );
   }
 
   /**

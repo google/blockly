@@ -293,15 +293,12 @@ export class RenderedConnection extends Connection {
 
   /** Add highlighting around this connection. */
   highlight() {
-    const renderer = this.getSourceBlock().workspace.getRenderer();
-    renderer.unhighlightConnection(this);
-    renderer.highlightConnection(this);
+    this.getSourceBlock().workspace.getRenderer().highlightConnection(this);
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
-    const renderer = this.getSourceBlock().workspace.getRenderer();
-    renderer.unhighlightConnection(this);
+    this.getSourceBlock().workspace.getRenderer().unhighlightConnection(this);
   }
 
   /**

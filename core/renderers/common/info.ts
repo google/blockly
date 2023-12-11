@@ -751,10 +751,7 @@ export class RenderInfo {
 
   /** Returns the connection measurable associated with the given connection. */
   getMeasureableForConnection(conn: RenderedConnection): Connection | null {
-    if (
-      this.outputConnection &&
-      this.outputConnection.connectionModel === conn
-    ) {
+    if (this.outputConnection?.connectionModel === conn) {
       return this.outputConnection;
     }
 

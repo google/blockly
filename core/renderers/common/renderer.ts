@@ -273,10 +273,7 @@ export class Renderer implements IRegistrable {
 
   /** Visually unhighlights the given connection, if it is highlighted. */
   unhighlightConnection(conn: RenderedConnection): void {
-    const pathObject = conn.getSourceBlock().pathObject;
-    if (pathObject.removeConnectionHighlight) {
-      pathObject.removeConnectionHighlight(conn);
-    }
+    conn.getSourceBlock().pathObject.removeConnectionHighlight?.(conn);
   }
 
   /**

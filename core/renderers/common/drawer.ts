@@ -18,10 +18,12 @@ import type {PreviousConnection} from '../measurables/previous_connection.js';
 import type {Row} from '../measurables/row.js';
 import {Types} from '../measurables/types.js';
 
-import {isDynamicShape} from './constants.js';
+import {isDynamicShape, isNotch, isPuzzleTab} from './constants.js';
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
 import type {RenderInfo} from './info.js';
 import * as deprecation from '../../utils/deprecation.js';
+import type {RenderedConnection} from '../../rendered_connection.js';
+import {ConnectionType} from '../../connection_type.js';
 
 /**
  * An object that draws a block based on the given rendering information.
@@ -439,5 +441,72 @@ export class Drawer {
         this.info_.outputConnection.connectionOffsetY,
       );
     }
+  }
+
+  /** Returns a path to highlight the given connection. */
+  drawConnectionHighlightPath(conn: RenderedConnection) {
+    const measurable = this.info_.getMeasureableForConnection(conn);
+    if (!measurable) {
+      throw new Error('Could not find measurable for connection');
+    }
+
+    let path = '';
+    if (
+      conn.type === ConnectionType.INPUT_VALUE ||
+      conn.type === ConnectionType.OUTPUT_VALUE
+    ) {
+      path = this.getExpressionConnectionHighlightPath(measurable);
+    } else {
+      path = this.getStatementConnectionHighlightPath(measurable);
+    }
+    const block = conn.getSourceBlock();
+    block.pathObject.addConnectionHighlight?.(
+      conn,
+      path,
+      conn.getOffsetInBlock(),
+      block.RTL,
+    );
+  }
+
+  /**
+   * Returns a path to highlight the given conneciton, assuming it is an
+   * input or output connection.
+   */
+  private getExpressionConnectionHighlightPath(connection: Connection): string {
+    let connPath = '';
+    if (isDynamicShape(connection.shape)) {
+      connPath = connection.shape.pathDown(connection.height);
+    } else if (isPuzzleTab(connection.shape)) {
+      connPath = connection.shape.pathDown;
+    }
+
+    // We are assuming that there is room for the tab offset above and below
+    // the tab.
+    const yLen = this.constants_.TAB_OFFSET_FROM_TOP;
+    return (
+      svgPaths.moveBy(0, -yLen) +
+      svgPaths.lineOnAxis('v', yLen) +
+      connPath +
+      svgPaths.lineOnAxis('v', yLen)
+    );
+  }
+
+  /**
+   * Returns a path to highlight the given conneciton, assuming it is a
+   * next or previous connection.
+   */
+  private getStatementConnectionHighlightPath(connection: Connection): string {
+    if (!isNotch(connection.shape)) {
+      throw new Error('Statement connections should have notch shapes');
+    }
+
+    const xLen =
+      this.constants_.NOTCH_OFFSET_LEFT - this.constants_.CORNER_RADIUS;
+    return (
+      svgPaths.moveBy(-xLen, 0) +
+      svgPaths.lineOnAxis('h', xLen) +
+      connection.shape.pathLeft +
+      svgPaths.lineOnAxis('h', xLen)
+    );
   }
 }

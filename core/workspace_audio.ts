@@ -164,7 +164,7 @@ export class WorkspaceAudio {
   }
 
   /**
-   * @return muted
+   * @returns muted
    */
   getMuted(): boolean {
     return this.muted;

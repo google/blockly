@@ -225,7 +225,7 @@
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "İstifadəçiyə ədəd daxil etməsi üçün sorğu/tələb göndərin.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "İstifadəçiyə mətn daxil etməsi üçün sorğu/tələb göndərin.",
 	"TEXT_COUNT_MESSAGE0": "%2 içindən %1 sayını hesabla",
-	"TEXT_COUNT_TOOLTIP": "Hesablayaq, mətnin bu hissəsi başqa mətndə neçə dəfə  rast gəlinir.",
+	"TEXT_COUNT_TOOLTIP": "Hesablayaq, mətnin bu hissəsi başqa mətndə neçə dəfə rast gəlinir.",
 	"TEXT_REPLACE_MESSAGE0": "%3 -də %1 əvəz et %2",
 	"TEXT_REPLACE_TOOLTIP": "Bütün uyğunluqlu bəzi mətnlərin digər bəzi mətnlərə dəyişdirilməsi.",
 	"TEXT_REVERSE_MESSAGE0": "əksinə dəyiş %1",

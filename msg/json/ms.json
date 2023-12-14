@@ -261,7 +261,7 @@
 	"LISTS_GET_SUBLIST_START_FROM_END": "dapatkan sub-senarai daripada # daripada terakhir",
 	"LISTS_GET_SUBLIST_START_FIRST": "dapatkan sub-senarai daripada pertama",
 	"LISTS_GET_SUBLIST_END_FROM_START": "ke #",
-	"LISTS_GET_SUBLIST_END_FROM_END": "ke  # dari akhir",
+	"LISTS_GET_SUBLIST_END_FROM_END": "ke # dari akhir",
 	"LISTS_GET_SUBLIST_END_LAST": "ke akhir",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Wujudkan salinan bahagian yang ditentukan dari senarai.",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "buat senarai dgn teks",

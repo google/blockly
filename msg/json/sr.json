@@ -90,7 +90,7 @@
 	"CONTROLS_IF_MSG_ELSE": "иначе",
 	"CONTROLS_IF_IF_TOOLTIP": "Додај, уклони, или преуреди делове како бих реконфигурисали овај иф блок.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Додајте услов блоку „ако“.",
-	"CONTROLS_IF_ELSE_TOOLTIP": "Додај коначни, catch-all  (ухвати све) услове иф блока.",
+	"CONTROLS_IF_ELSE_TOOLTIP": "Додај коначни, catch-all (ухвати све) услове иф блока.",
 	"LOGIC_COMPARE_HELPURL": "https://sr.wikipedia.org/wiki/Неједнакост",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Враћа вредност „тачно“ ако су оба улаза једнака.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Враћа вредност „тачно“ ако су оба уноса неједнака.",

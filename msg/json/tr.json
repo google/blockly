@@ -87,7 +87,7 @@
 	"CONTROLS_FOR_TOOLTIP": "Başlangıç sayısından bitiş sayısına kadar belirtilen aralık ve belirtilen engeller ile devam eden değerler alan '%1' değişkeni oluştur.",
 	"CONTROLS_FOR_TITLE": "ile sayılır %1 %2 den %3 ye, her adımda %4 değişim",
 	"CONTROLS_FOREACH_TITLE": "her öğe için %1 listede %2",
-	"CONTROLS_FOREACH_TOOLTIP": "Bir listedeki her öğe için  '%1' değişkenini maddeye atayın  ve bundan sonra bazı açıklamalar yapın.",
+	"CONTROLS_FOREACH_TOOLTIP": "Bir listedeki her öğe için '%1' değişkenini maddeye atayın ve bundan sonra bazı açıklamalar yapın.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "döngüden çık",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE": "döngünün sonraki adımından devam et",
 	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK": "İçeren döngüden çık.",

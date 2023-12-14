@@ -41,7 +41,7 @@
 	"NEW_COLOUR_VARIABLE": "Crează o variabilă culoare",
 	"NEW_VARIABLE_TYPE_TITLE": "Tip nou de variabilă",
 	"NEW_VARIABLE_TITLE": "Noul nume de variabilă:",
-	"VARIABLE_ALREADY_EXISTS": "O variabilă cu numele '%1'  există deja.",
+	"VARIABLE_ALREADY_EXISTS": "O variabilă cu numele '%1' există deja.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "o variabilă numită '%1' există deja pentru alt tip: '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Șterge %1 utilizările variabilei '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Nu se poate șterge variabila '%1' deoarece face parte din definiția funcției '%2'",

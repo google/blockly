@@ -281,7 +281,7 @@
 	"LISTS_GET_SUBLIST_START_FROM_END": "ดึงรายการย่อยจาก # จากท้ายสุด",
 	"LISTS_GET_SUBLIST_START_FIRST": "ดึงรายการย่อยทั้งแต่แรกสุด",
 	"LISTS_GET_SUBLIST_END_FROM_START": "จนถึง #",
-	"LISTS_GET_SUBLIST_END_FROM_END": "ถึง #  จากท้ายสุด",
+	"LISTS_GET_SUBLIST_END_FROM_END": "ถึง # จากท้ายสุด",
 	"LISTS_GET_SUBLIST_END_LAST": "ถึง ท้ายสุด",
 	"LISTS_GET_SUBLIST_TOOLTIP": "สร้างสำเนารายการในช่วงที่กำหนด",
 	"LISTS_SORT_TITLE": "เรียงลำดับ %1 %2 %3",

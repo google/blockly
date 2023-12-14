@@ -152,7 +152,7 @@
 	"MATH_TRIG_TOOLTIP_ACOS": "Geeft de arccosinus van een getal.",
 	"MATH_TRIG_TOOLTIP_ATAN": "Geeft de arctangens van een getal.",
 	"MATH_CONSTANT_HELPURL": "https://nl.wikipedia.org/wiki/Wiskundige_constante",
-	"MATH_CONSTANT_TOOLTIP": "Geeft een van de vaak voorkomende constante waardes: π (3.141…), e (2.718…), φ (1.618…), √2 (1.414…), √½ (0.707…), of ∞ (oneindig).",
+	"MATH_CONSTANT_TOOLTIP": "Geeft een van de vaak voorkomende constante waardes:  π (3.141…), e (2.718…), φ (1.618…), √2 (1.414…), √½ (0.707…), of ∞ (oneindig).",
 	"MATH_IS_EVEN": "is even",
 	"MATH_IS_ODD": "is oneven",
 	"MATH_IS_PRIME": "is priemgetal",

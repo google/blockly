@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Blockly Playground Webcomponent</title>
+
+  <script type="module">
+    import { COMPRESSED, loadScript } from './scripts/load.mjs';
+
+    import * as Blockly from '../build/blockly.loader.mjs';
+    import '../build/blocks.loader.mjs';
+    import { dartGenerator } from '../build/dart.loader.mjs';
+    import { luaGenerator } from '../build/lua.loader.mjs';
+    import { javascriptGenerator } from '../build/javascript.loader.mjs';
+    import { phpGenerator } from '../build/php.loader.mjs';
+    import { pythonGenerator } from '../build/python.loader.mjs';
+
+    await loadScript('../build/msg/en.js');
+    await loadScript('playgrounds/screenshot.js');
+    await loadScript('../node_modules/@blockly/dev-tools/dist/index.js');
+
+    function toParString(strings, values) {
+      if (strings.length === 1)
+        return strings.raw[0];
+      else {
+        let r = ''
+        for (let i = 0; i < strings.length; i++) {
+          r += strings[i] + (values[i] ?? '');
+        }
+        return r;
+      }
+    }
+
+    const html = function (strings, ...values) {
+      const template = document.createElement('template');
+      template.innerHTML = toParString(strings, values);
+      return template;
+    };
+
+    const css = function (strings, ...values) {
+      const cssStyleSheet = new CSSStyleSheet();
+      cssStyleSheet.replaceSync(toParString(strings, values));
+      return cssStyleSheet;
+    };
+
+    let toolbox = {
+      "kind": "flyoutToolbox",
+      "contents": [
+        {
+          "kind": "block",
+          "type": "controls_if"
+        },
+        {
+          "kind": "block",
+          "type": "controls_whileUntil"
+        },
+        {
+          type: 'text',
+          kind: 'block',
+          fields: {
+            TEXT: '',
+          },
+        },
+      ]
+    };
+
+    class BlocklyComponent extends HTMLElement {
+
+      static template = html`
+            <div id="blocklyDiv" style="position: absolute; width: 100%; height: 100%;"></div>
+        `;
+
+      static style = css`
+            :host {
+                box-sizing: border-box;
+                position: absolute;
+                height: 100%;
+                width: 100%;
+            }`;
+
+      static blocklyStyle1;
+      static blocklyStyle2;
+
+      blocklyDiv;
+      workspace;
+      resizeObserver;
+
+      constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.adoptedStyleSheets = [BlocklyComponent.style];
+        this.shadowRoot.appendChild(BlocklyComponent.template.content.cloneNode(true));
+
+        this.blocklyDiv = this.shadowRoot.getElementById('blocklyDiv');
+        this.createBlockly();
+      }
+
+      createBlockly() {
+        this.workspace = Blockly.inject(this.blocklyDiv, {
+          toolbox: toolbox,
+          renderer: 'zelos',
+          trashcan: true,
+          zoom: {
+            controls: true,
+            wheel: false,
+            startScale: 0.7,
+            maxScale: 3,
+            minScale: 0.3,
+            scaleSpeed: 1.2,
+            pinch: false
+          },
+          move: {
+            scrollbars: {
+              horizontal: true,
+              vertical: true
+            },
+            drag: true,
+            wheel: true
+          }
+        });
+
+        if (!BlocklyComponent.blocklyStyle1) {
+          BlocklyComponent.blocklyStyle1 = document.getElementById('blockly-renderer-style-zelos-classic');
+          this.shadowRoot.appendChild(BlocklyComponent.blocklyStyle1);
+          BlocklyComponent.blocklyStyle2 = document.getElementById('blockly-common-style');
+          this.shadowRoot.appendChild(BlocklyComponent.blocklyStyle2);
+        } else {
+          this.shadowRoot.appendChild(BlocklyComponent.blocklyStyle1.cloneNode(true));
+          this.shadowRoot.appendChild(BlocklyComponent.blocklyStyle2.cloneNode(true));
+        }
+      }
+
+      connectedCallback() {
+        Blockly.svgResize(this.workspace);
+
+        if (!resizeObserver) {
+          this.resizeObserver = new ResizeObserver((entries) => {
+            Blockly.svgResize(this.workspace);
+          });
+          this.resizeObserver.observe(this);
+        }
+      }
+
+      save() {
+        const state = Blockly.serialization.workspaces.save(this.workspace);
+        return state;
+      }
+
+      load(data) {
+        Blockly.serialization.workspaces.load(data, this.workspace);
+      }
+    }
+    customElements.define('blockly-component', BlocklyComponent);
+  </script>
+
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+
+    #blocklyDiv {
+      float: right;
+      height: 95%;
+      width: 70%;
+    }
+
+    #importExport {
+      font-family: monospace;
+    }
+
+    .ioLabel>.blocklyFlyoutLabelText {
+      font-style: italic;
+    }
+
+    #blocklyDiv.renderingDebug .blockRenderDebug {
+      display: block;
+    }
+
+    .playgroundToggleOptions {
+      list-style: none;
+      padding: 0;
+    }
+
+    .playgroundToggleOptions li {
+      margin-top: 1em;
+    }
+
+    .zelos-renderer .blocklyFlyoutButton .blocklyText {
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <blockly-component style="position:absolute; left: 50px; top: 50px; width: 500px; height: 600px;"></blockly-component>
+  <blockly-component
+    style="position:absolute; left: 600px; top: 50px; width: 500px; height: 600px;"></blockly-component>
+</body>
+
+</html>

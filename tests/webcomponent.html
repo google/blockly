@@ -97,6 +97,7 @@
       }
 
       createBlockly() {
+        //Blockly.setParentContainer(this.shadowRoot);
         this.workspace = Blockly.inject(this.blocklyDiv, {
           toolbox: toolbox,
           renderer: 'zelos',
@@ -119,22 +120,12 @@
             wheel: true
           }
         });
-
-        if (!BlocklyComponent.blocklyStyle1) {
-          BlocklyComponent.blocklyStyle1 = document.getElementById('blockly-renderer-style-zelos-classic');
-          this.shadowRoot.appendChild(BlocklyComponent.blocklyStyle1);
-          BlocklyComponent.blocklyStyle2 = document.getElementById('blockly-common-style');
-          this.shadowRoot.appendChild(BlocklyComponent.blocklyStyle2);
-        } else {
-          this.shadowRoot.appendChild(BlocklyComponent.blocklyStyle1.cloneNode(true));
-          this.shadowRoot.appendChild(BlocklyComponent.blocklyStyle2.cloneNode(true));
-        }
       }
 
       connectedCallback() {
         Blockly.svgResize(this.workspace);
 
-        if (!resizeObserver) {
+        if (!this.resizeObserver) {
           this.resizeObserver = new ResizeObserver((entries) => {
             Blockly.svgResize(this.workspace);
           });

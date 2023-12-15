@@ -91,7 +91,7 @@ function createDom(container: Element, options: Options): SVGElement {
   container.setAttribute('dir', 'LTR');
 
   // Load CSS.
-  Css.inject(options.hasCss, options.pathToMedia);
+  Css.inject(options.hasCss, options.pathToMedia, container);
 
   // Build the SVG DOM.
   /*

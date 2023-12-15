@@ -1077,7 +1077,9 @@ export class ConstantProvider {
    * @param tagName The name of the style tag to use.
    * @param selector The CSS selector to use.
    */
-  protected injectCSS_(tagName: string, selector: string) {
+  protected injectCSS_(tagName: string, selector: string, svg: SVGElement) {
+    const root = svg?.getRootNode() ?? document;
+
     const cssArray = this.getCSS_(selector);
     const cssNodeId = 'blockly-renderer-style-' + tagName;
     this.cssNode = document.getElementById(cssNodeId) as HTMLStyleElement;
@@ -1092,7 +1094,10 @@ export class ConstantProvider {
     cssNode.id = cssNodeId;
     const cssTextNode = document.createTextNode(text);
     cssNode.appendChild(cssTextNode);
-    document.head.insertBefore(cssNode, document.head.firstChild);
+    if (root === document)
+      document.head.insertBefore(cssNode, document.head.firstChild);
+    else
+      root.insertBefore(cssNode, root.firstChild);
     this.cssNode = cssNode;
   }
 

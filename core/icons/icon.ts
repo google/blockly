@@ -134,6 +134,19 @@ export abstract class Icon implements IIcon {
   onClick(): void {}
 
   /**
+   * Check whether the icon should be clickable while the block is in a flyout.
+   * The default is that icons are clickable in all flyouts (auto-closing or not).
+   * Subclasses may override this function to change this behavior.
+   *
+   * @param autoClosingFlyout true if the containing flyout is an auto-closing one.
+   * @returns Whether the icon should be clickable while the block is in a flyout.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isClickableInFlyout(autoClosingFlyout: boolean): boolean {
+    return true;
+  }
+
+  /**
    * Sets the visibility of the icon's bubble if one exists.
    *
    * @deprecated Use `setBubbleVisible` instead. To be removed in v11.

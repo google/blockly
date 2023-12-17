@@ -47,7 +47,7 @@
 	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK": "Hatiin ang nilalaman ng loop.",
 	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE": "Laktawan ang natitirang bahagi ng loop, at magpatuloy sa susunod na pag-ulit.",
 	"CONTROLS_FLOW_STATEMENTS_WARNING": "Babala: Ang block ito ay maaari lamang magamit sa loob ng loop.",
-	"CONTROLS_IF_TOOLTIP_1": "kung ang value ay true,  gagawin ang do statements.",
+	"CONTROLS_IF_TOOLTIP_1": "kung ang value ay true, gagawin ang do statements.",
 	"CONTROLS_IF_TOOLTIP_2": "Kung ang value ay true, gagawin ang unang block ng do statements. Kung hindi, gagawin ang pangalawang block ng statement.",
 	"CONTROLS_IF_TOOLTIP_3": "Kung ang unang value ay true, gagawin ang first block ng statement. Kung hindi, kung ang second value ay true, gagawin ang second block ng statement.",
 	"CONTROLS_IF_TOOLTIP_4": "Kung ang first value ay true, gagawin ang first block ng statement. Kung hindi true ang second value, gagawin ang second block ng statement. Kung wala sa mga values ay true, gagawin ang last block ng statements.",

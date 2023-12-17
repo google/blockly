@@ -15,7 +15,7 @@
 	"EXTERNAL_INPUTS": "भाइरका इन्पुटहरू",
 	"INLINE_INPUTS": "इनलाइन इन्पुटहरू",
 	"DELETE_BLOCK": "ब्लक हटाउन्या",
-	"DELETE_X_BLOCKS": " %1 ब्लकहरू हटाउन्या",
+	"DELETE_X_BLOCKS": "%1 ब्लकहरू हटाउन्या",
 	"DELETE_ALL_BLOCKS": "सबै %1 ब्लकनलाई हटाउन्या ?",
 	"CLEAN_UP": "ब्लकनलाई हटाओ",
 	"COLLAPSE_BLOCK": "ब्लक भत्का",

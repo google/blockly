@@ -223,6 +223,10 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     this.setBubbleVisible(!this.bubbleIsVisible());
   }
 
+  override isClickableInFlyout(): boolean {
+    return false;
+  }
+
   /**
    * Updates the text of this comment in response to changes in the text of
    * the input bubble.

@@ -365,7 +365,7 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Si une valeur est vraie, alors renvoyer une seconde valeur.",
 	"PROCEDURES_IFRETURN_WARNING": "Attention : ce bloc ne peut être utilisé que dans une définition de fonction.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Expliquez quelque chose...",
-	"WORKSPACE_ARIA_LABEL": "Espace de travail de Blocky",
+	"WORKSPACE_ARIA_LABEL": "Espace de travail de Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "Les blocs repliés contiennent des avertissements.",
 	"DIALOG_OK": "OK",
 	"DIALOG_CANCEL": "Annuler"

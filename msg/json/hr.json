@@ -180,7 +180,7 @@
 	"TEXT_CREATE_JOIN_TOOLTIP": "Dodaj, ukloni ili promijeni redoslijed kako biste presložili ovaj tekstualni blok",
 	"TEXT_CREATE_JOIN_ITEM_TOOLTIP": "Dodajte stavku u tekst",
 	"TEXT_APPEND_TITLE": "varijabli %1 dodajte tekst %2",
-	"TEXT_APPEND_TOOLTIP": "Dodajte neki tekst varijabli  '%1'.",
+	"TEXT_APPEND_TOOLTIP": "Dodajte neki tekst varijabli '%1'.",
 	"TEXT_LENGTH_TITLE": "duljina %1",
 	"TEXT_LENGTH_TOOLTIP": "Vraća broj slova (uključivši razmake) teksta",
 	"TEXT_ISEMPTY_TITLE": "%1 je prazno",

@@ -14,7 +14,7 @@ import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.
 import {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import {BlockInfo, ButtonInfo} from './utils/toolbox.js';
+import {BlockInfo, ButtonInfo, ToolboxItemInfo} from './utils/toolbox.js';
 import {State} from './serialization/blocks.js';
 
 /**
@@ -87,11 +87,11 @@ export function allDeveloperVariables(workspace: Workspace): string[] {
  * variable category.
  *
  * @param workspace The workspace containing variables.
- * @returns
+ * @returns Array of JSON elements.
  */
 
-export function flyoutCategory(workspace: WorkspaceSvg): AnyDuringMigration[] {
-  let jsonList = new Array<AnyDuringMigration>();
+export function flyoutCategory(workspace: WorkspaceSvg): ToolboxItemInfo[] {
+  const jsonList = new Array<AnyDuringMigration>();
   const button: ButtonInfo = {
     kind: 'BUTTON',
     text: '%{BKY_NEW_VARIABLE}',
@@ -103,19 +103,16 @@ export function flyoutCategory(workspace: WorkspaceSvg): AnyDuringMigration[] {
 
   jsonList.push(button);
   const blockList = flyoutCategoryBlocks(workspace);
-  jsonList = jsonList.concat(blockList);
-  return jsonList;
+  return [...jsonList, ...blockList];
 }
 
 /**
  * Construct the blocks required by the flyout for the variable category.
  *
  * @param workspace The workspace containing variables.
- * @returns Array of XML block elements.
+ * @returns Array of JSON block elements.
  */
-export function flyoutCategoryBlocks(
-  workspace: Workspace,
-): AnyDuringMigration[] {
+export function flyoutCategoryBlocks(workspace: Workspace): ToolboxItemInfo[] {
   const variableModelList = workspace.getVariablesOfType('');
   const jsonList = [];
   if (variableModelList.length > 0) {
@@ -508,15 +505,13 @@ function checkForConflictingParamWithLegacyProcedures(
 export function generateVariableFieldDom(variableModel: VariableModel): {
   [key: string]: AnyDuringMigration;
 } {
-  const field: {[key: string]: AnyDuringMigration} = {
+  return {
     'VAR': {
       id: variableModel.getId(),
       variabletype: variableModel.type,
       name: variableModel.name,
     },
   };
-
-  return field;
 }
 
 /**

@@ -13,7 +13,7 @@ import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import type {FlyoutButton} from './flyout_button.js';
-import {BlockInfo, ButtonInfo} from './utils/toolbox.js';
+import {BlockInfo, ButtonInfo, ToolboxItemInfo} from './utils/toolbox.js';
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -74,10 +74,10 @@ export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
  * variable category.
  *
  * @param workspace The workspace containing variables.
- * @returns Array of XML elements.
+ * @returns Array of JSON elements.
  */
-export function flyoutCategory(workspace: WorkspaceSvg): AnyDuringMigration[] {
-  let jsonList = new Array<AnyDuringMigration>();
+export function flyoutCategory(workspace: WorkspaceSvg): ToolboxItemInfo[] {
+  const jsonList = new Array<AnyDuringMigration>();
   const stringButton: ButtonInfo = {
     kind: 'BUTTON',
     text: Msg['NEW_STRING_VARIABLE'],
@@ -111,19 +111,16 @@ export function flyoutCategory(workspace: WorkspaceSvg): AnyDuringMigration[] {
   );
 
   const blockList = flyoutCategoryBlocks(workspace);
-  jsonList = jsonList.concat(blockList);
-  return jsonList;
+  return [...jsonList, ...blockList];
 }
 
 /**
  * Construct the blocks required by the flyout for the variable category.
  *
  * @param workspace The workspace containing variables.
- * @returns Array of XML block elements.
+ * @returns Array of JSON block elements.
  */
-export function flyoutCategoryBlocks(
-  workspace: Workspace,
-): AnyDuringMigration[] {
+export function flyoutCategoryBlocks(workspace: Workspace): ToolboxItemInfo[] {
   const variableModelList = workspace.getAllVariables();
 
   const jsonList = [];

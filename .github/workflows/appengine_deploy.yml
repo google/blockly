@@ -36,7 +36,7 @@ jobs:
     needs: prepare
     steps:
       - name: Download prepared files
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: appengine_files
           path: _deploy/

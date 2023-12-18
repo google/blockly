@@ -988,16 +988,32 @@ export abstract class Flyout
       ),
     );
     this.listeners.push(
-      browserEvents.bind(root, 'pointerenter', block, block.addSelect),
+      browserEvents.bind(root, 'pointerenter', block, () => {
+        if (!this.targetWorkspace.isDragging()) {
+          block.addSelect();
+        }
+      }),
     );
     this.listeners.push(
-      browserEvents.bind(root, 'pointerleave', block, block.removeSelect),
+      browserEvents.bind(root, 'pointerleave', block, () => {
+        if (!this.targetWorkspace.isDragging()) {
+          block.removeSelect();
+        }
+      }),
     );
     this.listeners.push(
-      browserEvents.bind(rect, 'pointerenter', block, block.addSelect),
+      browserEvents.bind(rect, 'pointerenter', block, () => {
+        if (!this.targetWorkspace.isDragging()) {
+          block.addSelect();
+        }
+      }),
     );
     this.listeners.push(
-      browserEvents.bind(rect, 'pointerleave', block, block.removeSelect),
+      browserEvents.bind(rect, 'pointerleave', block, () => {
+        if (!this.targetWorkspace.isDragging()) {
+          block.removeSelect();
+        }
+      }),
     );
   }
 

@@ -319,6 +319,7 @@
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "Διαίρεση του κειμένου σε μια λίστα κειμένων, με σπάσιμο σε κάθε διαχωριστικό.",
 	"LISTS_SPLIT_TOOLTIP_JOIN": "Ενώστε μια λίστα κειμένων σε ένα κείμενο, που χωρίζονται από ένα διαχωριστικό.",
 	"LISTS_REVERSE_MESSAGE0": "ανάκληση %1",
+	"LISTS_REVERSE_TOOLTIP": "Α",
 	"VARIABLES_GET_TOOLTIP": "Επιστρέφει την τιμή αυτής της μεταβλητής.",
 	"VARIABLES_GET_CREATE_SET": "Δημιούργησε «όρισε %1»",
 	"VARIABLES_SET": "ανάθεσε στην %1 το %2",

@@ -6,6 +6,9 @@
 
 // Former goog.module ID: Blockly.utils.deprecation
 
+// create a set variable to store messages
+const checkMsg = new Set();
+
 /**
  * Warn developers that a function or property is deprecated.
  *
@@ -33,5 +36,12 @@ export function warn(
   if (opt_use) {
     msg += '\nUse ' + opt_use + ' instead.';
   }
-  console.warn(msg);
+
+  // this will help prevent logging deprecation warnings multiple times
+  if (!checkMsg.has(msg)) {
+    checkMsg.add(msg);
+    console.warn(msg);
+  } else {
+    return;
+  }
 }

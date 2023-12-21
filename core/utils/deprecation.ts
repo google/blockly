@@ -37,11 +37,11 @@ export function warn(
     msg += '\nUse ' + opt_use + ' instead.';
   }
 
-  // this will help prevent logging deprecation warnings multiple times
-  if (!checkMsg.has(msg)) {
-    checkMsg.add(msg);
-    console.warn(msg);
-  } else {
+  // Don't log deprecation warnings multiple times.
+  if (checkMsg.has(msg)) {
     return;
   }
+
+  checkMsg.add(msg);
+  console.warn(msg);
 }

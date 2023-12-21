@@ -6,8 +6,8 @@
 
 // Former goog.module ID: Blockly.utils.deprecation
 
-// create a set variable to store messages
-const checkMsg = new Set();
+// Set of previously-emitted warnings.
+const previousWarnings = new Set();
 
 /**
  * Warn developers that a function or property is deprecated.

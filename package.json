@@ -106,5 +106,8 @@
   },
   "dependencies": {
     "jsdom": "23.0.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

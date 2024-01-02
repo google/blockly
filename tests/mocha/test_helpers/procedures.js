@@ -189,6 +189,14 @@ export class MockProcedureModel {
     this.enabled = true;
   }
 
+  static loadState(state, workspace) {
+    return new MockProcedureModel();
+  }
+
+  saveState() {
+    return {};
+  }
+
   setName(name) {
     this.name = name;
     return this;
@@ -248,6 +256,14 @@ export class MockParameterModel {
     this.id = Blockly.utils.idGenerator.genUid();
     this.name = name;
     this.types = [];
+  }
+
+  static loadState(state, workspace) {
+    return new MockParameterModel('test');
+  }
+
+  saveState() {
+    return {};
   }
 
   setName(name) {

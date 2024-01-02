@@ -25,6 +25,7 @@ suite('JSO Serialization', function () {
   setup(function () {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
+    this.sandbox = sinon.createSandbox();
 
     defineStackBlock();
     defineRowBlock();
@@ -34,6 +35,7 @@ suite('JSO Serialization', function () {
   });
 
   teardown(function () {
+    this.sandbox.restore();
     workspaceTeardown.call(this, this.workspace);
     sharedTestTeardown.call(this);
   });
@@ -857,106 +859,39 @@ suite('JSO Serialization', function () {
       this.serializer = null;
     });
 
-    suite('invariant properties', function () {
-      test('the state always has an id property', function () {
-        const procedureModel = new MockProcedureModel();
-        this.procedureMap.add(procedureModel);
-        const jso = this.serializer.save(this.workspace);
-        const procedure = jso[0];
-        assertProperty(procedure, 'id', procedureModel.getId());
-      });
+    test('save is called on the procedure model', function () {
+      const proc = new MockProcedureModel();
+      this.workspace.getProcedureMap().set('test', proc);
+      const spy = this.sandbox.spy(proc, 'saveState');
 
-      test('if the name has not been set, name is an empty string', function () {
-        const procedureModel = new MockProcedureModel();
-        this.procedureMap.add(procedureModel);
-        const jso = this.serializer.save(this.workspace);
-        const procedure = jso[0];
-        assertProperty(procedure, 'name', '');
-      });
+      this.serializer.save(this.workspace);
 
-      test('if the name has been set, name is the string', function () {
-        const procedureModel = new MockProcedureModel().setName('testName');
-        this.procedureMap.add(procedureModel);
-        const jso = this.serializer.save(this.workspace);
-        const procedure = jso[0];
-        assertProperty(procedure, 'name', 'testName');
-      });
+      chai.assert.isTrue(
+        spy.calledOnce,
+        'Expected the saveState method to be called on the procedure model',
+      );
     });
 
-    suite('return types', function () {
-      test('if the procedure does not return, returnTypes is null', function () {
-        const procedureModel = new MockProcedureModel();
-        this.procedureMap.add(procedureModel);
-        const jso = this.serializer.save(this.workspace);
-        const procedure = jso[0];
-        assertProperty(procedure, 'returnTypes', null);
-      });
+    test('save is called on each parameter model', function () {
+      const proc = new MockProcedureModel();
+      const param1 = new MockParameterModel();
+      const param2 = new MockParameterModel();
+      proc.insertParameter(param1, 0);
+      proc.insertParameter(param2, 1);
+      this.workspace.getProcedureMap().set('test', proc);
+      const spy1 = this.sandbox.spy(param1, 'saveState');
+      const spy2 = this.sandbox.spy(param2, 'saveState');
 
-      test('if the procedure has no return type, returnTypes is an empty array', function () {
-        const procedureModel = new MockProcedureModel().setReturnTypes([]);
-        this.procedureMap.add(procedureModel);
-        const jso = this.serializer.save(this.workspace);
-        const procedure = jso[0];
-        assertProperty(procedure, 'returnTypes', []);
-      });
+      this.serializer.save(this.workspace);
 
-      test('if the procedure has return types, returnTypes is the array', function () {
-        const procedureModel = new MockProcedureModel().setReturnTypes([
-          'a type',
-        ]);
-        this.procedureMap.add(procedureModel);
-        const jso = this.serializer.save(this.workspace);
-        const procedure = jso[0];
-        assertProperty(procedure, 'returnTypes', ['a type']);
-      });
-    });
-
-    suite('parameters', function () {
-      suite('invariant properties', function () {
-        test('the state always has an id property', function () {
-          const parameterModel = new MockParameterModel('testparam');
-          this.procedureMap.add(
-            new MockProcedureModel().insertParameter(parameterModel, 0),
-          );
-          const jso = this.serializer.save(this.workspace);
-          const parameter = jso[0]['parameters'][0];
-          assertProperty(parameter, 'id', parameterModel.getId());
-        });
-
-        test('the state always has a name property', function () {
-          const parameterModel = new MockParameterModel('testparam');
-          this.procedureMap.add(
-            new MockProcedureModel().insertParameter(parameterModel, 0),
-          );
-          const jso = this.serializer.save(this.workspace);
-          const parameter = jso[0]['parameters'][0];
-          assertProperty(parameter, 'name', 'testparam');
-        });
-      });
-
-      suite('types', function () {
-        test('if the parameter has no type, there is no type property', function () {
-          const parameterModel = new MockParameterModel('testparam');
-          this.procedureMap.add(
-            new MockProcedureModel().insertParameter(parameterModel, 0),
-          );
-          const jso = this.serializer.save(this.workspace);
-          const parameter = jso[0]['parameters'][0];
-          assertNoProperty(parameter, 'types');
-        });
-
-        test('if the parameter has types, types is an array', function () {
-          const parameterModel = new MockParameterModel('testparam').setTypes([
-            'a type',
-          ]);
-          this.procedureMap.add(
-            new MockProcedureModel().insertParameter(parameterModel, 0),
-          );
-          const jso = this.serializer.save(this.workspace);
-          const parameter = jso[0]['parameters'][0];
-          assertProperty(parameter, 'types', ['a type']);
-        });
-      });
+      chai.assert.isTrue(
+        spy1.calledOnce,
+        'Expected the saveState method to be called on the first parameter model',
+      );
+      chai.assert.isTrue(
+        spy2.calledOnce,
+        'Expected the saveState method to be called on the first parameter model',
+      );
     });
   });
 });

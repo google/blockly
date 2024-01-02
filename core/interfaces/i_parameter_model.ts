@@ -40,4 +40,11 @@ export interface IParameterModel {
 
   /** Sets the procedure model this parameter is associated with. */
   setProcedureModel(model: IProcedureModel): this;
+
+  /**
+   * Serializes the state of the parameter to JSON.
+   *
+   * @returns JSON serializable state of the parameter.
+   */
+  saveState(): Object;
 }

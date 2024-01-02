@@ -60,4 +60,11 @@ export interface IProcedureModel {
    * disabled, all procedure caller blocks should be disabled as well.
    */
   getEnabled(): boolean;
+
+  /**
+   * Serializes the state of the procedure to JSON.
+   *
+   * @returns JSON serializable state of the procedure.
+   */
+  saveState(): Object;
 }

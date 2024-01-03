@@ -1029,7 +1029,6 @@ export class BlockSvg
       icon.applyColour();
       icon.updateEditable();
       this.queueRender();
-      renderManagement.triggerQueuedRenders();
       this.bumpNeighbours();
     }
 
@@ -1058,7 +1057,6 @@ export class BlockSvg
 
     if (this.rendered) {
       this.queueRender();
-      renderManagement.triggerQueuedRenders();
       this.bumpNeighbours();
     }
     return removed;

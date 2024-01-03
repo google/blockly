@@ -202,7 +202,8 @@ export class Block implements IASTNodeLocation, IDeletable {
   /** Name of the type of hat. */
   hat?: string;
 
-  rendered: boolean | null = null;
+  /** Is this block a BlockSVG? */
+  readonly rendered: boolean = false;
 
   /**
    * String for block help, or function that returns a URL. Null for no help.

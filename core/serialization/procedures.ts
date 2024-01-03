@@ -10,9 +10,21 @@ import type {ISerializer} from '../interfaces/i_serializer.js';
 import * as priorities from './priorities.js';
 import type {Workspace} from '../workspace.js';
 
-/** Reperesents the state of a procedure model. */
-interface ProcedureState {
-  parameters?: Object[];
+/** Represents the state of a procedure model. */
+export interface State {
+  id: string;
+  name: string;
+  returnTypes: string[] | null;
+  parameters?: ParameterState[];
+  [key: string]: unknown;
+}
+
+/** Represents the state of a parameter model. */
+export interface ParameterState {
+  id: string;
+  name: string;
+  types?: string[];
+  [key: string]: unknown;
 }
 
 /**
@@ -58,8 +70,8 @@ interface ParameterModelConstructor<ParameterModel extends IParameterModel> {
 /**
  * Serializes the given IProcedureModel to JSON.
  */
-function saveProcedure(proc: IProcedureModel): ProcedureState {
-  const state: ProcedureState = proc.saveState();
+function saveProcedure(proc: IProcedureModel): State {
+  const state: State = proc.saveState();
   if (!proc.getParameters().length) return state;
   state.parameters = proc.getParameters().map((param) => param.saveState());
   return state;
@@ -74,7 +86,7 @@ function loadProcedure<
 >(
   procedureModelClass: ProcedureModelConstructor<ProcedureModel>,
   parameterModelClass: ParameterModelConstructor<ParameterModel>,
-  state: ProcedureState,
+  state: State,
   workspace: Workspace,
 ): ProcedureModel {
   const proc = procedureModelClass.loadState(state, workspace);
@@ -113,7 +125,7 @@ export class ProcedureSerializer<
   ) {}
 
   /** Serializes the procedure models of the given workspace. */
-  save(workspace: Workspace): ProcedureState[] | null {
+  save(workspace: Workspace): State[] | null {
     const save = workspace
       .getProcedureMap()
       .getProcedures()
@@ -125,7 +137,7 @@ export class ProcedureSerializer<
    * Deserializes the procedures models defined by the given state into the
    * workspace.
    */
-  load(state: ProcedureState[], workspace: Workspace) {
+  load(state: State[], workspace: Workspace) {
     const map = workspace.getProcedureMap();
     for (const procState of state) {
       map.add(

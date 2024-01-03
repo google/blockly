@@ -123,7 +123,6 @@ export class Input {
 
     if (this.sourceBlock.rendered) {
       (this.sourceBlock as BlockSvg).queueRender();
-      // Adding a field will cause the block to change shape.
       this.sourceBlock.bumpNeighbours();
     }
     return index;
@@ -145,7 +144,6 @@ export class Input {
         this.fieldRow.splice(i, 1);
         if (this.sourceBlock.rendered) {
           (this.sourceBlock as BlockSvg).queueRender();
-          // Removing a field will cause the block to change shape.
           this.sourceBlock.bumpNeighbours();
         }
         return true;
@@ -273,7 +271,7 @@ export class Input {
 
   /** Initialize the fields on this input. */
   init() {
-    if (!this.sourceBlock.workspace.rendered) {
+    if (!this.sourceBlock.rendered) {
       return; // Headless blocks don't need fields initialized.
     }
     for (let i = 0; i < this.fieldRow.length; i++) {

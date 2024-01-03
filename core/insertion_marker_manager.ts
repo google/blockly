@@ -186,18 +186,16 @@ export class InsertionMarkerManager {
     eventUtils.enable();
     const {local, closest} = this.activeCandidate;
     local.connect(closest);
-    if (this.topBlock.rendered) {
-      const inferiorConnection = local.isSuperior() ? closest : local;
-      const rootBlock = this.topBlock.getRootBlock();
+    const inferiorConnection = local.isSuperior() ? closest : local;
+    const rootBlock = this.topBlock.getRootBlock();
 
-      finishQueuedRenders().then(() => {
-        blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
-        // bringToFront is incredibly expensive. Delay until the next frame.
-        setTimeout(() => {
-          rootBlock.bringToFront();
-        }, 0);
-      });
-    }
+    finishQueuedRenders().then(() => {
+      blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
+      // bringToFront is incredibly expensive. Delay until the next frame.
+      setTimeout(() => {
+        rootBlock.bringToFront();
+      }, 0);
+    });
   }
 
   /**

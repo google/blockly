@@ -57,31 +57,18 @@ interface ParameterModelConstructor<ParameterModel extends IParameterModel> {
 
 /**
  * Serializes the given IProcedureModel to JSON.
- *
- * @internal
  */
-export function saveProcedure(proc: IProcedureModel): ProcedureState {
+function saveProcedure(proc: IProcedureModel): ProcedureState {
   const state: ProcedureState = proc.saveState();
   if (!proc.getParameters().length) return state;
-  state.parameters = proc.getParameters().map((param) => saveParameter(param));
+  state.parameters = proc.getParameters().map((param) => param.saveState());
   return state;
 }
 
 /**
- * Serializes the given IParameterModel to JSON.
- *
- * @internal
- */
-export function saveParameter(param: IParameterModel): Object {
-  return param.saveState();
-}
-
-/**
  * Deserializes the given procedure model State from JSON.
- *
- * @internal
  */
-export function loadProcedure<
+function loadProcedure<
   ProcedureModel extends IProcedureModel,
   ParameterModel extends IParameterModel,
 >(
@@ -94,24 +81,11 @@ export function loadProcedure<
   if (!state.parameters) return proc;
   for (const [index, param] of state.parameters.entries()) {
     proc.insertParameter(
-      loadParameter(parameterModelClass, param, workspace),
+      parameterModelClass.loadState(param, workspace),
       index,
     );
   }
   return proc;
-}
-
-/**
- * Deserializes the given ParameterState from JSON.
- *
- * @internal
- */
-export function loadParameter<ParameterModel extends IParameterModel>(
-  parameterModelClass: ParameterModelConstructor<ParameterModel>,
-  state: Object,
-  workspace: Workspace,
-): ParameterModel {
-  return parameterModelClass.loadState(state, workspace);
 }
 
 /** Serializer for saving and loading procedure state. */

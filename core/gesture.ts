@@ -963,7 +963,8 @@ export class Gesture {
           eventUtils.setGroup(true);
         }
         const newBlock = this.flyout.createBlock(this.targetBlock);
-        newBlock.scheduleSnapAndBump();
+        newBlock.snapToGrid();
+        newBlock.bumpNeighboursInternal();
       }
     } else {
       if (!this.startWorkspace_) {

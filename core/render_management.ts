@@ -124,6 +124,9 @@ function doRenders() {
     const blockOrigin = block.getRelativeToSurfaceXY();
     block.updateComponentLocations(blockOrigin);
   }
+  for (const block of blocks) {
+    block.bumpNeighboursInternal();
+  }
 
   rootBlocks.clear();
   dirtyBlocks = new Set();

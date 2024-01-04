@@ -1397,24 +1397,21 @@ export class BlockSvg
    *
    * Two blocks which aren't actually connected should not coincidentally line
    * up on screen, because that creates confusion for end-users.
+   * 
+   * @deprecated v11 - You should not need to call bump neighbours directly.
    */
   override bumpNeighbours() {
-    if (this.bumpNeighboursPid) return;
-    const group = eventUtils.getGroup();
-
-    this.bumpNeighboursPid = setTimeout(() => {
-      const oldGroup = eventUtils.getGroup();
-      eventUtils.setGroup(group);
-      this.getRootBlock().bumpNeighboursInternal();
-      eventUtils.setGroup(oldGroup);
-      this.bumpNeighboursPid = 0;
-    }, config.bumpDelay);
+    deprecation.warn('bumpNeighbours', 'v11', 'v12');
+    // After rendering neighbours will get bumped.
+    this.queueRender();
   }
 
   /**
    * Bumps unconnected blocks out of alignment.
+   * 
+   * @internal
    */
-  private bumpNeighboursInternal() {
+  public bumpNeighboursInternal() {
     const root = this.getRootBlock();
     if (
       this.isDeadOrDying() ||
@@ -1435,12 +1432,9 @@ export class BlockSvg
       }
 
       for (const neighbour of conn.neighbours(config.snapRadius)) {
-        // Don't bump away from things that are in our stack.
         if (neighbourIsInStack(neighbour)) continue;
-        // If both connections are connected, that's fine.
         if (conn.isConnected() && neighbour.isConnected()) continue;
 
-        // Always bump the inferior connection.
         if (conn.isSuperior()) {
           neighbour.bumpAwayFrom(conn);
         } else {
@@ -1458,7 +1452,7 @@ export class BlockSvg
    */
   scheduleSnapAndBump() {
     this.snapToGrid();
-    this.bumpNeighbours();
+    this.bumpNeighboursInternal();
   }
 
   /**

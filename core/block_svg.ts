@@ -142,12 +142,6 @@ export class BlockSvg
 
   private translation = '';
 
-  /**
-   * The ID of the setTimeout callback for bumping neighbours, or 0 if no bump
-   * is currently scheduled.
-   */
-  private bumpNeighboursPid = 0;
-
   /** Whether this block is currently being dragged. */
   private dragging = false;
 
@@ -990,7 +984,6 @@ export class BlockSvg
     icon.applyColour();
     icon.updateEditable();
     this.queueRender();
-    this.bumpNeighbours();
 
     return icon;
   }
@@ -1015,7 +1008,6 @@ export class BlockSvg
     if (type.equals(MutatorIcon.TYPE)) this.mutator = null;
 
     this.queueRender();
-    this.bumpNeighbours();
 
     return removed;
   }
@@ -1173,7 +1165,6 @@ export class BlockSvg
   ) {
     super.setPreviousStatement(newBoolean, opt_check);
     this.queueRender();
-    this.bumpNeighbours();
   }
 
   /**
@@ -1189,7 +1180,6 @@ export class BlockSvg
   ) {
     super.setNextStatement(newBoolean, opt_check);
     this.queueRender();
-    this.bumpNeighbours();
   }
 
   /**
@@ -1205,7 +1195,6 @@ export class BlockSvg
   ) {
     super.setOutput(newBoolean, opt_check);
     this.queueRender();
-    this.bumpNeighbours();
   }
 
   /**
@@ -1216,7 +1205,6 @@ export class BlockSvg
   override setInputsInline(newBoolean: boolean) {
     super.setInputsInline(newBoolean);
     this.queueRender();
-    this.bumpNeighbours();
   }
 
   /**
@@ -1231,7 +1219,6 @@ export class BlockSvg
   override removeInput(name: string, opt_quiet?: boolean): boolean {
     const removed = super.removeInput(name, opt_quiet);
     this.queueRender();
-    this.bumpNeighbours();
     return removed;
   }
 
@@ -1244,14 +1231,12 @@ export class BlockSvg
   override moveNumberedInputBefore(inputIndex: number, refIndex: number) {
     super.moveNumberedInputBefore(inputIndex, refIndex);
     this.queueRender();
-    this.bumpNeighbours();
   }
 
   /** @override */
   override appendInput(input: Input): Input {
     super.appendInput(input);
     this.queueRender();
-    this.bumpNeighbours();
     return input;
   }
 

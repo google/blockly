@@ -558,9 +558,10 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
    * connected should not coincidentally line up on screen.
+   * 
+   * @deprecated v11 - You should not need to call bump neighbours directly.
    */
   bumpNeighbours() {}
-  // noop.
 
   /**
    * Return the parent block or null if this block is at the top level. The

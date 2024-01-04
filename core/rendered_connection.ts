@@ -579,8 +579,6 @@ export class RenderedConnection extends Connection {
     ) {
       const child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
       child!.unplug();
-      // Bump away.
-      this.sourceBlock_.bumpNeighbours();
     }
   }
 

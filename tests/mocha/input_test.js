@@ -27,14 +27,12 @@ suite('Inputs', function () {
     );
 
     this.renderStub = sinon.stub(this.block, 'queueRender');
-    this.bumpNeighboursStub = sinon.stub(this.block, 'bumpNeighbours');
 
     this.dummy = this.block.appendDummyInput('DUMMY');
     this.value = this.block.appendValueInput('VALUE');
     this.statement = this.block.appendStatementInput('STATEMENT');
 
     this.renderStub.resetHistory();
-    this.bumpNeighboursStub.resetHistory();
   });
   teardown(function () {
     sharedTestTeardown.call(this);
@@ -158,7 +156,6 @@ suite('Inputs', function () {
         chai.assert.equal(setBlockSpy.getCall(0).args[0], this.block);
         sinon.assert.calledOnce(initSpy);
         sinon.assert.calledOnce(this.renderStub);
-        sinon.assert.calledOnce(this.bumpNeighboursStub);
 
         setBlockSpy.restore();
         initSpy.restore();
@@ -177,7 +174,6 @@ suite('Inputs', function () {
         chai.assert.equal(setBlockSpy.getCall(0).args[0], this.block);
         sinon.assert.calledOnce(initModelSpy);
         sinon.assert.notCalled(this.renderStub);
-        sinon.assert.notCalled(this.bumpNeighboursStub);
 
         setBlockSpy.restore();
         initModelSpy.restore();
@@ -196,12 +192,10 @@ suite('Inputs', function () {
       this.dummy.appendField(field, 'FIELD');
 
       this.renderStub.resetHistory();
-      this.bumpNeighboursStub.resetHistory();
 
       this.dummy.removeField('FIELD');
       sinon.assert.calledOnce(disposeSpy);
       sinon.assert.calledOnce(this.renderStub);
-      sinon.assert.calledOnce(this.bumpNeighboursStub);
     });
     test('Headless', function () {
       const field = new Blockly.FieldLabel('field');
@@ -209,14 +203,12 @@ suite('Inputs', function () {
       this.dummy.appendField(field, 'FIELD');
 
       this.renderStub.resetHistory();
-      this.bumpNeighboursStub.resetHistory();
 
       this.block.rendered = false;
 
       this.dummy.removeField('FIELD');
       sinon.assert.calledOnce(disposeSpy);
       sinon.assert.notCalled(this.renderStub);
-      sinon.assert.notCalled(this.bumpNeighboursStub);
     });
   });
   suite('Field Ordering/Manipulation', function () {

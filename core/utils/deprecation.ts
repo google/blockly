@@ -38,10 +38,10 @@ export function warn(
   }
 
   // Don't log deprecation warnings multiple times.
-  if (checkMsg.has(msg)) {
+  if (previousWarnings.has(msg)) {
     return;
   }
 
-  checkMsg.add(msg);
+  previousWarnings.add(msg);
   console.warn(msg);
 }

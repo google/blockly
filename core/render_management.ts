@@ -6,12 +6,16 @@
 
 import {BlockSvg} from './block_svg.js';
 import * as userAgent from './utils/useragent.js';
+import * as eventUtils from './events/utils.js';
 
 /** The set of all blocks in need of rendering which don't have parents. */
 const rootBlocks = new Set<BlockSvg>();
 
 /** The set of all blocks in need of rendering. */
 let dirtyBlocks = new WeakSet<BlockSvg>();
+
+/** A map from queued blocks to the event group from when they were queued. */
+let eventGroups = new WeakMap<BlockSvg, string>();
 
 /**
  * The promise which resolves after the current set of renders is completed. Or
@@ -100,6 +104,7 @@ function alwaysImmediatelyRender() {
  */
 function queueBlock(block: BlockSvg) {
   dirtyBlocks.add(block);
+  eventGroups.set(block, eventUtils.getGroup());
   const parent = block.getParent();
   if (parent) {
     queueBlock(parent);
@@ -125,11 +130,18 @@ function doRenders() {
     block.updateComponentLocations(blockOrigin);
   }
   for (const block of blocks) {
+    const oldGroup = eventUtils.getGroup();
+    const newGroup = eventGroups.get(block);
+    if (newGroup) eventUtils.setGroup(newGroup);
+
     block.bumpNeighboursInternal();
+
+    eventUtils.setGroup(oldGroup);
   }
 
   rootBlocks.clear();
-  dirtyBlocks = new Set();
+  dirtyBlocks = new WeakSet();
+  eventGroups = new WeakMap();
   afterRendersPromise = null;
 }
 

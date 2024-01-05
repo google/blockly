@@ -499,6 +499,9 @@ export class RenderedConnection extends Connection {
     const {parentConnection, childConnection} =
       this.getParentAndChildConnections();
     if (!parentConnection || !childConnection) return;
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) eventUtils.setGroup(true);
+
     const parent = parentConnection.getSourceBlock() as BlockSvg;
     const child = childConnection.getSourceBlock() as BlockSvg;
     super.disconnectInternal(setParent);
@@ -508,6 +511,8 @@ export class RenderedConnection extends Connection {
     child.queueRender();
     // Reset visibility, since the child is now a top block.
     child.getSvgRoot().style.display = 'block';
+
+    eventUtils.setGroup(existingGroup);
   }
 
   /**

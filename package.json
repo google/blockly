@@ -105,6 +105,9 @@
     "yargs": "^17.2.1"
   },
   "dependencies": {
-    "jsdom": "22.1.0"
+    "jsdom": "23.0.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

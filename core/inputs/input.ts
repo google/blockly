@@ -103,10 +103,7 @@ export class Input {
     }
 
     field.setSourceBlock(this.sourceBlock);
-    if (this.sourceBlock.rendered) {
-      field.init();
-      field.applyColour();
-    }
+    if (this.sourceBlock.initialized) this.initField(field);
     field.name = opt_name;
     field.setVisible(this.isVisible());
 
@@ -270,13 +267,30 @@ export class Input {
 
   /** Initialize the fields on this input. */
   init() {
-    if (!this.sourceBlock.rendered) {
-      return; // Headless blocks don't need fields initialized.
-    }
-    for (let i = 0; i < this.fieldRow.length; i++) {
-      this.fieldRow[i].init();
+    for (const field of this.fieldRow) {
+      field.init();
     }
   }
+
+  /**
+   * Initializes the fields on this input for a headless block.
+   *
+   * @internal
+   */
+  public initModel() {
+    for (const field of this.fieldRow) {
+      field.initModel();
+    }
+  }
+
+  /** Initializes the given field. */
+  private initField(field: Field) {
+    if (this.sourceBlock.rendered) {
+      field.init();
+    } else {
+      field.initModel();
+    }
+  } 
 
   /**
    * Sever all links to this input.

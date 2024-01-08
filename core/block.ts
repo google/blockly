@@ -191,6 +191,13 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   private disposing = false;
 
+  /**
+   * Has this block been fully initialized? E.g. all fields initailized.
+   *
+   * @internal
+   */
+  initialized = false;
+
   private readonly xy_: Coordinate;
   isInFlyout: boolean;
   isInMutator: boolean;
@@ -373,13 +380,11 @@ export class Block implements IASTNodeLocation, IDeletable {
    * change).
    */
   initModel() {
+    if (this.initialized) return;
     for (const input of this.inputList) {
-      for (const field of input.fieldRow) {
-        if (field.initModel) {
-          field.initModel();
-        }
-      }
+      input.initModel();
     }
+    this.initialized = true;
   }
 
   /**

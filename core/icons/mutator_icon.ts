@@ -24,6 +24,7 @@ import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import * as deprecation from '../utils/deprecation.js';
 import {IconType} from './icon_types.js';
+import * as renderManagement from '../render_management.js';
 
 /** The size of the mutator icon in workspace-scale units. */
 const SIZE = 17;
@@ -165,8 +166,10 @@ export class MutatorIcon extends Icon implements IHasBubble {
     return !!this.miniWorkspaceBubble;
   }
 
-  setBubbleVisible(visible: boolean): void {
+  async setBubbleVisible(visible: boolean): Promise<void> {
     if (this.bubbleIsVisible() === visible) return;
+
+    await renderManagement.finishQueuedRenders();
 
     if (visible) {
       this.miniWorkspaceBubble = new MiniWorkspaceBubble(

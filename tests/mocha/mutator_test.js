@@ -31,10 +31,10 @@ suite('Mutator', function () {
       sharedTestTeardown.call(this);
     });
 
-    test('No change', function () {
+    test('No change', async function () {
       const block = createRenderedBlock(this.workspace, 'xml_block');
       const icon = block.getIcon(Blockly.icons.MutatorIcon.TYPE);
-      icon.setBubbleVisible(true);
+      await icon.setBubbleVisible(true);
       const mutatorWorkspace = icon.getWorkspace();
       // Trigger mutator change listener.
       createRenderedBlock(mutatorWorkspace, 'checkbox_block');
@@ -43,10 +43,10 @@ suite('Mutator', function () {
       });
     });
 
-    test('XML', function () {
+    test('XML', async function () {
       const block = createRenderedBlock(this.workspace, 'xml_block');
       const icon = block.getIcon(Blockly.icons.MutatorIcon.TYPE);
-      icon.setBubbleVisible(true);
+      await icon.setBubbleVisible(true);
       const mutatorWorkspace = icon.getWorkspace();
       mutatorWorkspace
         .getBlockById('check_block')
@@ -63,10 +63,10 @@ suite('Mutator', function () {
       );
     });
 
-    test('JSO', function () {
+    test('JSO', async function () {
       const block = createRenderedBlock(this.workspace, 'jso_block');
       const icon = block.getIcon(Blockly.icons.MutatorIcon.TYPE);
-      icon.setBubbleVisible(true);
+      await icon.setBubbleVisible(true);
       const mutatorWorkspace = icon.getWorkspace();
       mutatorWorkspace
         .getBlockById('check_block')

@@ -166,6 +166,7 @@ function shouldRenderRootBlock(block: BlockSvg): boolean {
  */
 function renderBlock(block: BlockSvg) {
   if (!dirtyBlocks.has(block)) return;
+  if (!block.initialized) return;
   for (const child of block.getChildren(false)) {
     renderBlock(child);
   }

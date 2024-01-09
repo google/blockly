@@ -290,7 +290,7 @@ export class Input {
     } else {
       field.initModel();
     }
-  } 
+  }
 
   /**
    * Sever all links to this input.

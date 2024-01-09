@@ -455,23 +455,12 @@ export class BlockSvg
 
   /** Snap this block to the nearest grid point. */
   snapToGrid() {
-    if (this.isDeadOrDying()) {
-      return; // Deleted block.
-    }
-    if (this.workspace.isDragging()) {
-      return; // Don't bump blocks during a drag.
-    }
-
-    if (this.getParent()) {
-      return; // Only snap top-level blocks.
-    }
-    if (this.isInFlyout) {
-      return; // Don't move blocks around in a flyout.
-    }
+    if (this.isDeadOrDying()) return;
+    if (this.getParent()) return;
+    if (this.isInFlyout) return;
     const grid = this.workspace.getGrid();
-    if (!grid || !grid.shouldSnap()) {
-      return; // Config says no snapping.
-    }
+    if (!grid || !grid.shouldSnap()) return;
+
     const spacing = grid.getSpacing();
     const half = spacing / 2;
     const xy = this.getRelativeToSurfaceXY();
@@ -1530,15 +1519,7 @@ export class BlockSvg
    * @internal
    */
   scheduleSnapAndBump() {
-    // Ensure that any snap and bump are part of this move's event group.
-    const group = eventUtils.getGroup();
-
-    setTimeout(() => {
-      eventUtils.setGroup(group);
-      this.snapToGrid();
-      eventUtils.setGroup(false);
-    }, config.bumpDelay / 2);
-
+    this.snapToGrid();
     this.bumpNeighbours();
   }
 

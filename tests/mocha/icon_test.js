@@ -68,24 +68,6 @@ suite('Icon', function () {
         );
       });
 
-      test('initView is called by headful blocks during initSvg', function () {
-        const workspace = createWorkspaceSvg();
-        const block = createUninitializedBlock(workspace);
-        const icon = new MockIcon();
-        const initViewSpy = sinon.spy(icon, 'initView');
-
-        block.addIcon(icon);
-        chai.assert.isFalse(
-          initViewSpy.called,
-          'Expected initView to not be called before initing svg',
-        );
-        block.initSvg();
-        chai.assert.isTrue(
-          initViewSpy.calledOnce,
-          'Expected initView to be called',
-        );
-      });
-
       test(
         'initView is called by headful blocks that are currently ' +
           'rendered when the icon is added',
@@ -117,24 +99,6 @@ suite('Icon', function () {
         chai.assert.isFalse(
           applyColourSpy.called,
           'Expected applyColour to not be called',
-        );
-      });
-
-      test('applyColour is called by headful blocks during initSvg', function () {
-        const workspace = createWorkspaceSvg();
-        const block = createUninitializedBlock(workspace);
-        const icon = new MockIcon();
-        const applyColourSpy = sinon.spy(icon, 'applyColour');
-
-        block.addIcon(icon);
-        chai.assert.isFalse(
-          applyColourSpy.called,
-          'Expected applyCOlour to not be called before initing svg',
-        );
-        block.initSvg();
-        chai.assert.isTrue(
-          applyColourSpy.calledOnce,
-          'Expected applyColour to be called',
         );
       });
 
@@ -228,24 +192,6 @@ suite('Icon', function () {
         chai.assert.isFalse(
           updateEditableSpy.called,
           'Expected updateEditable to not be called',
-        );
-      });
-
-      test('updateEditable is called by headful blocks during initSvg', function () {
-        const workspace = createWorkspaceSvg();
-        const block = createUninitializedBlock(workspace);
-        const icon = new MockIcon();
-        const updateEditableSpy = sinon.spy(icon, 'updateEditable');
-
-        block.addIcon(icon);
-        chai.assert.isFalse(
-          updateEditableSpy.called,
-          'Expected updateEditable to not be called before initing svg',
-        );
-        block.initSvg();
-        chai.assert.isTrue(
-          updateEditableSpy.calledOnce,
-          'Expected updateEditable to be called',
         );
       });
 

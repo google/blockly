@@ -60,6 +60,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import * as renderManagement from './render_management.js';
 import {IconType} from './icons/icon_types.js';
 import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
+import * as deprecation from './utils/deprecation.js';
 
 /**
  * Class for a block's SVG representation.

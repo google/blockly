@@ -14,7 +14,7 @@ import * as Xml from '../core/xml.js';
 import * as fieldRegistry from '../core/field_registry.js';
 import * as xmlUtils from '../core/utils/xml.js';
 import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
-import {Align} from '../core/inputs/input.js';
+import {Align} from '../core/inputs/align.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
 import type {BlockCreate} from '../core/events/events_block_create.js';

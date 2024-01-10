@@ -17,7 +17,6 @@ import './events/events_selected.js';
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
 import * as browserEvents from './browser_events.js';
-import {CommentIcon} from './icons/comment_icon.js';
 import * as common from './common.js';
 import {config} from './config.js';
 import type {Connection} from './connection.js';
@@ -59,7 +58,6 @@ import {WarningIcon} from './icons/warning_icon.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import * as renderManagement from './render_management.js';
-import * as deprecation from './utils/deprecation.js';
 import {IconType} from './icons/icon_types.js';
 import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
 
@@ -114,13 +112,6 @@ export class BlockSvg
 
   /** Block's mutator icon (if any). */
   mutator: MutatorIcon | null = null;
-
-  /**
-   * Block's warning icon (if any).
-   *
-   * @deprecated Use `setWarningText` to modify warnings on this block.
-   */
-  warning: WarningIcon | null = null;
 
   private svgGroup_: SVGGElement;
   style: BlockStyle;
@@ -912,18 +903,6 @@ export class BlockSvg
   }
 
   /**
-   * Get the comment icon attached to this block, or null if the block has no
-   * comment.
-   *
-   * @returns The comment icon attached to this block, or null.
-   * @deprecated Use getIcon. To be remove in v11.
-   */
-  getCommentIcon(): CommentIcon | null {
-    deprecation.warn('getCommentIcon', 'v10', 'v11', 'getIcon');
-    return (this.getIcon(CommentIcon.TYPE) ?? null) as CommentIcon | null;
-  }
-
-  /**
    * Set this block's warning text.
    *
    * @param text The text, or null to delete.
@@ -1010,7 +989,6 @@ export class BlockSvg
   override addIcon<T extends IIcon>(icon: T): T {
     super.addIcon(icon);
 
-    if (icon instanceof WarningIcon) this.warning = icon;
     if (icon instanceof MutatorIcon) this.mutator = icon;
 
     if (this.rendered) {
@@ -1041,7 +1019,6 @@ export class BlockSvg
   override removeIcon(type: IconType<IIcon>): boolean {
     const removed = super.removeIcon(type);
 
-    if (type.equals(WarningIcon.TYPE)) this.warning = null;
     if (type.equals(MutatorIcon.TYPE)) this.mutator = null;
 
     if (this.rendered) {

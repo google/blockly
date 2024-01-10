@@ -22,6 +22,7 @@ import type {Field} from '../field.js';
 import * as fieldRegistry from '../field_registry.js';
 import type {RenderedConnection} from '../rendered_connection.js';
 import {inputTypes} from './input_types.js';
+import {Align} from './align.js';
 
 /** Class for an input with optional fields. */
 export class Input {
@@ -305,25 +306,3 @@ export class Input {
     return this.sourceBlock.makeConnection_(type);
   }
 }
-
-export namespace Input {
-  // TODO(v11): When this is removed in v11, also re-enable errors on access
-  //     of deprecated things (in build_tasks.js).
-  /**
-   * Enum for alignment of inputs.
-   *
-   * @deprecated Use Blockly.inputs.Align. To be removed in v11.
-   */
-  export enum Align {
-    LEFT = -1,
-    CENTRE = 0,
-    RIGHT = 1,
-  }
-}
-
-/** @deprecated Use Blockly.inputs.Align. To be removed in v11. */
-/** @suppress {deprecated} */
-export type Align = Input.Align;
-/** @deprecated Use Blockly.inputs.Align. To be removed in v11. */
-/** @suppress {deprecated} */
-export const Align = Input.Align;

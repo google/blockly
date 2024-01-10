@@ -662,9 +662,6 @@ export class BlockSvg
    * @internal
    */
   updateComponentLocations(blockOrigin: Coordinate) {
-    // TODO: make sure this doesn't have a performance impact
-    // when deserializing.
-
     if (!this.dragging) this.updateConnectionLocations(blockOrigin);
     this.updateIconLocations(blockOrigin);
     this.updateFieldLocations(blockOrigin);

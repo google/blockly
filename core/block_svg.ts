@@ -117,7 +117,10 @@ export class BlockSvg
   style: BlockStyle;
   /** @internal */
   pathObject: IPathObject;
-  override rendered = false;
+
+  /** Is this block a BlockSVG? */
+  override readonly rendered = true;
+
   private visuallyDisabled = false;
 
   /**
@@ -650,12 +653,6 @@ export class BlockSvg
    * @internal
    */
   updateComponentLocations(blockOrigin: Coordinate) {
-    if (!this.rendered) {
-      // Rendering is required to lay out the blocks.
-      // This is probably an invisible block attached to a collapsed block.
-      return;
-    }
-
     if (!this.dragging) this.updateConnectionLocations(blockOrigin);
     this.updateIconLocations(blockOrigin);
     this.updateFieldLocations(blockOrigin);
@@ -789,7 +786,7 @@ export class BlockSvg
     Tooltip.dispose();
     ContextMenu.hide();
 
-    if (animate && this.rendered) {
+    if (animate) {
       this.unplug(healStack);
       blockAnimations.disposeUiEffect(this);
     }
@@ -805,8 +802,6 @@ export class BlockSvg
   override disposeInternal() {
     if (this.isDeadOrDying()) return;
     super.disposeInternal();
-
-    this.rendered = false;
 
     if (common.getSelected() === this) {
       this.unselect();
@@ -991,13 +986,11 @@ export class BlockSvg
 
     if (icon instanceof MutatorIcon) this.mutator = icon;
 
-    if (this.rendered) {
-      icon.initView(this.createIconPointerDownListener(icon));
-      icon.applyColour();
-      icon.updateEditable();
-      this.queueRender();
-      this.bumpNeighbours();
-    }
+    icon.initView(this.createIconPointerDownListener(icon));
+    icon.applyColour();
+    icon.updateEditable();
+    this.queueRender();
+    this.bumpNeighbours();
 
     return icon;
   }
@@ -1021,10 +1014,9 @@ export class BlockSvg
 
     if (type.equals(MutatorIcon.TYPE)) this.mutator = null;
 
-    if (this.rendered) {
-      this.queueRender();
-      this.bumpNeighbours();
-    }
+    this.queueRender();
+    this.bumpNeighbours();
+
     return removed;
   }
 
@@ -1036,7 +1028,7 @@ export class BlockSvg
   override setEnabled(enabled: boolean) {
     if (this.isEnabled() !== enabled) {
       super.setEnabled(enabled);
-      if (this.rendered && !this.getInheritedDisabled()) {
+      if (!this.getInheritedDisabled()) {
         this.updateDisabled();
       }
     }
@@ -1049,9 +1041,6 @@ export class BlockSvg
    * @param highlighted True if highlighted.
    */
   setHighlighted(highlighted: boolean) {
-    if (!this.rendered) {
-      return;
-    }
     this.pathObject.updateHighlighted(highlighted);
   }
 
@@ -1183,11 +1172,8 @@ export class BlockSvg
     opt_check?: string | string[] | null,
   ) {
     super.setPreviousStatement(newBoolean, opt_check);
-
-    if (this.rendered) {
-      this.queueRender();
-      this.bumpNeighbours();
-    }
+    this.queueRender();
+    this.bumpNeighbours();
   }
 
   /**
@@ -1202,11 +1188,8 @@ export class BlockSvg
     opt_check?: string | string[] | null,
   ) {
     super.setNextStatement(newBoolean, opt_check);
-
-    if (this.rendered) {
-      this.queueRender();
-      this.bumpNeighbours();
-    }
+    this.queueRender();
+    this.bumpNeighbours();
   }
 
   /**
@@ -1221,11 +1204,8 @@ export class BlockSvg
     opt_check?: string | string[] | null,
   ) {
     super.setOutput(newBoolean, opt_check);
-
-    if (this.rendered) {
-      this.queueRender();
-      this.bumpNeighbours();
-    }
+    this.queueRender();
+    this.bumpNeighbours();
   }
 
   /**
@@ -1235,11 +1215,8 @@ export class BlockSvg
    */
   override setInputsInline(newBoolean: boolean) {
     super.setInputsInline(newBoolean);
-
-    if (this.rendered) {
-      this.queueRender();
-      this.bumpNeighbours();
-    }
+    this.queueRender();
+    this.bumpNeighbours();
   }
 
   /**
@@ -1253,13 +1230,8 @@ export class BlockSvg
    */
   override removeInput(name: string, opt_quiet?: boolean): boolean {
     const removed = super.removeInput(name, opt_quiet);
-
-    if (this.rendered) {
-      this.queueRender();
-      // Removing an input will cause the block to change shape.
-      this.bumpNeighbours();
-    }
-
+    this.queueRender();
+    this.bumpNeighbours();
     return removed;
   }
 
@@ -1271,23 +1243,15 @@ export class BlockSvg
    */
   override moveNumberedInputBefore(inputIndex: number, refIndex: number) {
     super.moveNumberedInputBefore(inputIndex, refIndex);
-
-    if (this.rendered) {
-      this.queueRender();
-      // Moving an input will cause the block to change shape.
-      this.bumpNeighbours();
-    }
+    this.queueRender();
+    this.bumpNeighbours();
   }
 
   /** @override */
   override appendInput(input: Input): Input {
     super.appendInput(input);
-
-    if (this.rendered) {
-      this.queueRender();
-      // Adding an input will cause the block to change shape.
-      this.bumpNeighbours();
-    }
+    this.queueRender();
+    this.bumpNeighbours();
     return input;
   }
 
@@ -1341,28 +1305,25 @@ export class BlockSvg
    * Returns connections originating from this block.
    *
    * @param all If true, return all connections even hidden ones.
-   *     Otherwise, for a non-rendered block return an empty list, and for a
-   *     collapsed block don't return inputs connections.
+   *     Otherwise, for a collapsed block don't return inputs connections.
    * @returns Array of connections.
    * @internal
    */
   override getConnections_(all: boolean): RenderedConnection[] {
     const myConnections = [];
-    if (all || this.rendered) {
-      if (this.outputConnection) {
-        myConnections.push(this.outputConnection);
-      }
-      if (this.previousConnection) {
-        myConnections.push(this.previousConnection);
-      }
-      if (this.nextConnection) {
-        myConnections.push(this.nextConnection);
-      }
-      if (all || !this.collapsed_) {
-        for (let i = 0, input; (input = this.inputList[i]); i++) {
-          if (input.connection) {
-            myConnections.push(input.connection as RenderedConnection);
-          }
+    if (this.outputConnection) {
+      myConnections.push(this.outputConnection);
+    }
+    if (this.previousConnection) {
+      myConnections.push(this.previousConnection);
+    }
+    if (this.nextConnection) {
+      myConnections.push(this.nextConnection);
+    }
+    if (all || !this.collapsed_) {
+      for (let i = 0, input; (input = this.inputList[i]); i++) {
+        if (input.connection) {
+          myConnections.push(input.connection as RenderedConnection);
         }
       }
     }
@@ -1573,7 +1534,6 @@ export class BlockSvg
    * @internal
    */
   renderEfficiently() {
-    this.rendered = true;
     dom.startTextWidthCache();
 
     if (this.isCollapsed()) {

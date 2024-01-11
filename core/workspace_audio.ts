@@ -156,7 +156,7 @@ export class WorkspaceAudio {
   }
 
   /**
-   * @param muted: if false, play sounds, otherwise mute
+   * @param muted If true, mute sounds. Otherwise, play them.
    */
   setMuted(muted: boolean) {
     this.muted = muted;

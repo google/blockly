@@ -31,6 +31,9 @@ export class WorkspaceAudio {
   /** Time that the last sound was played. */
   private lastSound_: Date | null = null;
 
+  /** Whether the audio is muted or not. */
+  private muted: boolean = false;
+
   /**
    * @param parentWorkspace The parent of the workspace this audio object
    *     belongs to, or null.
@@ -121,6 +124,9 @@ export class WorkspaceAudio {
    * @param opt_volume Volume of sound (0-1).
    */
   play(name: string, opt_volume?: number) {
+    if (this.muted) {
+      return;
+    }
     const sound = this.sounds.get(name);
     if (sound) {
       // Don't play one sound on top of another.
@@ -147,5 +153,19 @@ export class WorkspaceAudio {
       // Maybe a workspace on a lower level knows about this sound.
       this.parentWorkspace.getAudioManager().play(name, opt_volume);
     }
+  }
+
+  /**
+   * @param muted If true, mute sounds. Otherwise, play them.
+   */
+  setMuted(muted: boolean) {
+    this.muted = muted;
+  }
+
+  /**
+   * @returns Whether the audio is currently muted or not.
+   */
+  getMuted(): boolean {
+    return this.muted;
   }
 }

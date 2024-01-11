@@ -163,7 +163,7 @@ export class WorkspaceAudio {
   }
 
   /**
-   * @returns muted
+   * @returns Whether the audio is currently muted or not.
    */
   getMuted(): boolean {
     return this.muted;

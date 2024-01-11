@@ -10,10 +10,16 @@ import type {BlockSvg} from '../../block_svg.js';
 import {ConnectionType} from '../../connection_type.js';
 import {RenderedConnection} from '../../rendered_connection.js';
 import * as svgPaths from '../../utils/svg_paths.js';
-import type {BaseShape, DynamicShape, Notch} from '../common/constants.js';
+import type {
+  BaseShape,
+  DynamicShape,
+  Notch,
+  PuzzleTab,
+} from '../common/constants.js';
 import {Drawer as BaseDrawer} from '../common/drawer.js';
 import {Connection} from '../measurables/connection.js';
 import type {InlineInput} from '../measurables/inline_input.js';
+import {OutputConnection} from '../measurables/output_connection.js';
 import type {Row} from '../measurables/row.js';
 import type {SpacerRow} from '../measurables/spacer_row.js';
 import {Types} from '../measurables/types.js';
@@ -237,27 +243,34 @@ export class Drawer extends BaseDrawer {
 
   /** Returns a path to highlight the given connection. */
   drawConnectionHighlightPath(conn: RenderedConnection) {
+    const measurable = this.info_.getMeasureableForConnection(conn);
+    if (!measurable) {
+      throw new Error('Could not find measurable for connection');
+    }
     if (
       conn.type === ConnectionType.NEXT_STATEMENT ||
-      conn.type === ConnectionType.PREVIOUS_STATEMENT
+      conn.type === ConnectionType.PREVIOUS_STATEMENT ||
+      (conn.type === ConnectionType.OUTPUT_VALUE && !measurable.isDynamicShape)
     ) {
       super.drawConnectionHighlightPath(conn);
       return;
     }
 
-    const measurable = this.info_.getMeasureableForConnection(conn);
-    if (!measurable) {
-      throw new Error('Could not find measurable for connection');
-    }
-
     let path = '';
     if (conn.type === ConnectionType.INPUT_VALUE) {
       const input = measurable as InlineInput;
-      const yPos = -input.height / 2;
       const xPos = input.connectionWidth;
+      const yPos = -input.height / 2;
       path = svgPaths.moveTo(xPos, yPos) + this.getInlineInputPath(input);
     } else {
-      path = this.getOutputHighlightPath(measurable);
+      // Dynamic output.
+      const output = measurable as OutputConnection;
+      const xPos = output.width;
+      const yPos = -output.height / 2;
+      console.log((output.shape as DynamicShape).pathDown(output.height));
+      path =
+        svgPaths.moveTo(xPos, yPos) +
+        (output.shape as DynamicShape).pathDown(output.height);
     }
     const block = conn.getSourceBlock();
     block.pathObject.addConnectionHighlight?.(
@@ -266,9 +279,5 @@ export class Drawer extends BaseDrawer {
       conn.getOffsetInBlock(),
       block.RTL,
     );
-  }
-
-  private getOutputHighlightPath(conn: Connection): string {
-    return '';
   }
 }

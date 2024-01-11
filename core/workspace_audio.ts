@@ -124,7 +124,6 @@ export class WorkspaceAudio {
    * @param opt_volume Volume of sound (0-1).
    */
   play(name: string, opt_volume?: number) {
-    // don't play if muted
     if (this.muted) {
       return;
     }

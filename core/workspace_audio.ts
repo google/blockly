@@ -31,7 +31,7 @@ export class WorkspaceAudio {
   /** Time that the last sound was played. */
   private lastSound_: Date | null = null;
 
-  /** Allow muting sounds on apps */
+  /** Whether the audio is muted or not. */
   private muted: boolean = false;
 
   /**

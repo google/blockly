@@ -10,14 +10,8 @@ import type {BlockSvg} from '../../block_svg.js';
 import {ConnectionType} from '../../connection_type.js';
 import {RenderedConnection} from '../../rendered_connection.js';
 import * as svgPaths from '../../utils/svg_paths.js';
-import type {
-  BaseShape,
-  DynamicShape,
-  Notch,
-  PuzzleTab,
-} from '../common/constants.js';
+import type {BaseShape, DynamicShape, Notch} from '../common/constants.js';
 import {Drawer as BaseDrawer} from '../common/drawer.js';
-import {Connection} from '../measurables/connection.js';
 import type {InlineInput} from '../measurables/inline_input.js';
 import {OutputConnection} from '../measurables/output_connection.js';
 import type {Row} from '../measurables/row.js';
@@ -267,7 +261,6 @@ export class Drawer extends BaseDrawer {
       const output = measurable as OutputConnection;
       const xPos = output.width;
       const yPos = -output.height / 2;
-      console.log((output.shape as DynamicShape).pathDown(output.height));
       path =
         svgPaths.moveTo(xPos, yPos) +
         (output.shape as DynamicShape).pathDown(output.height);

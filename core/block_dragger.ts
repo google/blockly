@@ -287,13 +287,13 @@ export class BlockDragger implements IBlockDragger {
    */
   protected updateBlockAfterMove_() {
     this.fireMoveEvent_();
-    this.draggingBlock_.snapToGrid();
     if (this.draggedConnectionManager_.wouldConnectBlock()) {
       // Applying connections also rerenders the relevant blocks.
       this.draggedConnectionManager_.applyConnections();
     } else {
       this.draggingBlock_.queueRender();
     }
+    this.draggingBlock_.snapToGrid();
   }
 
   /** Fire a UI event at the end of a block drag. */

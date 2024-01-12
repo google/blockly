@@ -964,7 +964,7 @@ export class Gesture {
         }
         const newBlock = this.flyout.createBlock(this.targetBlock);
         newBlock.snapToGrid();
-        newBlock.bumpNeighboursInternal();
+        newBlock.bumpNeighbours();
       }
     } else {
       if (!this.startWorkspace_) {

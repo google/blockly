@@ -60,7 +60,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import * as renderManagement from './render_management.js';
 import {IconType} from './icons/icon_types.js';
 import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
-import * as deprecation from './utils/deprecation.js';
 
 /**
  * Class for a block's SVG representation.
@@ -1383,11 +1382,8 @@ export class BlockSvg
    *
    * Two blocks which aren't actually connected should not coincidentally line
    * up on screen, because that creates confusion for end-users.
-   *
-   * @deprecated v11 - You should not need to call bump neighbours directly.
    */
   override bumpNeighbours() {
-    deprecation.warn('bumpNeighbours', 'v11', 'v12');
     // After rendering neighbours will get bumped.
     this.queueRender();
   }

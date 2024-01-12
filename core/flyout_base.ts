@@ -649,7 +649,7 @@ export abstract class Flyout
     const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
     const flyoutInfo = this.createFlyoutInfo(parsedContent);
 
-    renderManagement.triggerQueuedRenders();
+    renderManagement.triggerQueuedRenders(this.workspace_);
 
     this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 

@@ -6,6 +6,7 @@
 
 import {BlockSvg} from './block_svg.js';
 import * as userAgent from './utils/useragent.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 /** The set of all blocks in need of rendering which don't have parents. */
 const rootBlocks = new Set<BlockSvg>();
@@ -75,11 +76,13 @@ export function finishQueuedRenders(): Promise<void> {
  * cases where queueing renders breaks functionality + backwards compatibility
  * (such as rendering icons).
  *
+ * @param workspace If provided, only rerender blocks in this workspace.
+ *
  * @internal
  */
-export function triggerQueuedRenders() {
+export function triggerQueuedRenders(workspace?: WorkspaceSvg) {
   window.cancelAnimationFrame(animationRequestId);
-  doRenders();
+  doRenders(workspace);
   if (afterRendersResolver) afterRendersResolver();
 }
 
@@ -110,10 +113,16 @@ function queueBlock(block: BlockSvg) {
 
 /**
  * Rerenders all of the blocks in the queue.
+ *
+ * @param workspace If provided, only rerender blocks in this workspace.
  */
-function doRenders() {
-  const workspaces = new Set([...rootBlocks].map((block) => block.workspace));
-  const blocks = [...rootBlocks].filter(shouldRenderRootBlock);
+function doRenders(workspace?: WorkspaceSvg) {
+  const workspaces = workspace
+    ? new Set([workspace])
+    : new Set([...rootBlocks].map((block) => block.workspace));
+  const blocks = [...rootBlocks]
+    .filter(shouldRenderRootBlock)
+    .filter((b) => workspaces.has(b.workspace));
   for (const block of blocks) {
     renderBlock(block);
   }
@@ -126,7 +135,7 @@ function doRenders() {
   }
 
   rootBlocks.clear();
-  dirtyBlocks = new Set();
+  dirtyBlocks = new WeakSet();
   afterRendersPromise = null;
 }
 

@@ -7,10 +7,13 @@
 // Former goog.module ID: Blockly.zelos.Drawer
 
 import type {BlockSvg} from '../../block_svg.js';
+import {ConnectionType} from '../../connection_type.js';
+import {RenderedConnection} from '../../rendered_connection.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import type {BaseShape, DynamicShape, Notch} from '../common/constants.js';
 import {Drawer as BaseDrawer} from '../common/drawer.js';
 import type {InlineInput} from '../measurables/inline_input.js';
+import {OutputConnection} from '../measurables/output_connection.js';
 import type {Row} from '../measurables/row.js';
 import type {SpacerRow} from '../measurables/spacer_row.js';
 import {Types} from '../measurables/types.js';
@@ -179,21 +182,27 @@ export class Drawer extends BaseDrawer {
       return;
     }
 
-    const width = input.width - input.connectionWidth * 2;
-    const height = input.height;
-    const yPos = input.centerline - height / 2;
-
+    const yPos = input.centerline - input.height / 2;
     const connectionRight = input.xPos + input.connectionWidth;
 
-    const outlinePath =
-      svgPaths.moveTo(connectionRight, yPos) +
-      svgPaths.lineOnAxis('h', width) +
-      (input.shape as DynamicShape).pathRightDown(input.height) +
-      svgPaths.lineOnAxis('h', -width) +
-      (input.shape as DynamicShape).pathUp(input.height) +
-      'z';
+    const path =
+      svgPaths.moveTo(connectionRight, yPos) + this.getInlineInputPath(input);
+
     const pathObject = this.block_.pathObject as PathObject;
-    pathObject.setOutlinePath(inputName, outlinePath);
+    pathObject.setOutlinePath(inputName, path);
+  }
+
+  private getInlineInputPath(input: InlineInput) {
+    const width = input.width - input.connectionWidth * 2;
+    const height = input.height;
+
+    return (
+      svgPaths.lineOnAxis('h', width) +
+      (input.shape as DynamicShape).pathRightDown(height) +
+      svgPaths.lineOnAxis('h', -width) +
+      (input.shape as DynamicShape).pathUp(height) +
+      'z'
+    );
   }
 
   override drawStatementInput_(row: Row) {
@@ -224,5 +233,44 @@ export class Drawer extends BaseDrawer {
       svgPaths.lineOnAxis('H', row.xPos + row.width);
 
     this.positionStatementInputConnection_(row);
+  }
+
+  /** Returns a path to highlight the given connection. */
+  drawConnectionHighlightPath(conn: RenderedConnection) {
+    const measurable = this.info_.getMeasureableForConnection(conn);
+    if (!measurable) {
+      throw new Error('Could not find measurable for connection');
+    }
+    if (
+      conn.type === ConnectionType.NEXT_STATEMENT ||
+      conn.type === ConnectionType.PREVIOUS_STATEMENT ||
+      (conn.type === ConnectionType.OUTPUT_VALUE && !measurable.isDynamicShape)
+    ) {
+      super.drawConnectionHighlightPath(conn);
+      return;
+    }
+
+    let path = '';
+    if (conn.type === ConnectionType.INPUT_VALUE) {
+      const input = measurable as InlineInput;
+      const xPos = input.connectionWidth;
+      const yPos = -input.height / 2;
+      path = svgPaths.moveTo(xPos, yPos) + this.getInlineInputPath(input);
+    } else {
+      // Dynamic output.
+      const output = measurable as OutputConnection;
+      const xPos = output.width;
+      const yPos = -output.height / 2;
+      path =
+        svgPaths.moveTo(xPos, yPos) +
+        (output.shape as DynamicShape).pathDown(output.height);
+    }
+    const block = conn.getSourceBlock();
+    block.pathObject.addConnectionHighlight?.(
+      conn,
+      path,
+      conn.getOffsetInBlock(),
+      block.RTL,
+    );
   }
 }

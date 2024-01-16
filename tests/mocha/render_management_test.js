@@ -32,7 +32,7 @@ suite('Render Management', function () {
         isDisposed: () => false,
         getRelativeToSurfaceXY: () => ({x: 0, y: 0}),
         updateComponentLocations: () => {},
-        bumpNeighboursInternal: () => {},
+        bumpNeighbours: () => {},
         workspace: {
           resizeContents: () => {},
         },

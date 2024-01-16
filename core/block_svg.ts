@@ -1384,16 +1384,6 @@ export class BlockSvg
    * up on screen, because that creates confusion for end-users.
    */
   override bumpNeighbours() {
-    // After rendering neighbours will get bumped.
-    this.queueRender();
-  }
-
-  /**
-   * Bumps unconnected blocks out of alignment.
-   *
-   * @internal
-   */
-  bumpNeighboursInternal() {
     const root = this.getRootBlock();
     if (
       this.isDeadOrDying() ||
@@ -1410,7 +1400,7 @@ export class BlockSvg
     for (const conn of this.getConnections_(false)) {
       if (conn.isSuperior()) {
         // Recurse down the block stack.
-        conn.targetBlock()?.bumpNeighboursInternal();
+        conn.targetBlock()?.bumpNeighbours();
       }
 
       for (const neighbour of conn.neighbours(config.snapRadius)) {

@@ -134,7 +134,7 @@ function doRenders() {
     const newGroup = eventGroups.get(block);
     if (newGroup) eventUtils.setGroup(newGroup);
 
-    block.bumpNeighboursInternal();
+    block.bumpNeighbours();
 
     eventUtils.setGroup(oldGroup);
   }

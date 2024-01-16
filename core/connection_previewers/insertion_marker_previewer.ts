@@ -6,11 +6,13 @@
 
 import {BlockSvg} from '../block_svg.js';
 import {IConnectionPreviewer} from '../interfaces/i_connection_previewer.js';
-// import {RenderedConnection} from '../rendered_connection.js';
+import {RenderedConnection} from '../rendered_connection.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
 export class InsertionMarkerPreviewer implements IConnectionPreviewer {
   private readonly workspace: WorkspaceSvg;
+
+  private fadedBlock: BlockSvg | null = null;
 
   constructor(draggedBlock: BlockSvg) {
     this.workspace = draggedBlock.workspace;
@@ -28,10 +30,14 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
    *     is being replaced.
    */
   previewReplacement(
-    // draggedConn: RenderedConnection,
-    // staticConn: RenderedConnection,
-    // replacedBlock: BlockSvg,
-  ) {}
+    draggedConn: RenderedConnection,
+    staticConn: RenderedConnection,
+    replacedBlock: BlockSvg,
+  ) {
+    this.hidePreview();
+    this.fadedBlock = replacedBlock;
+    replacedBlock.fadeForReplacement(true);
+  }
 
   /**
    * Display a connection preview where the draggedCon connects to the
@@ -47,8 +53,15 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
   ) {}
 
   /** Hide any previews that are currently displayed. */
-  hidePreview() {}
+  hidePreview() {
+    if (this.fadedBlock) {
+      this.fadedBlock.fadeForReplacement(false);
+      this.fadedBlock = null;
+    }
+  }
 
   /** Dispose of any references held by this connection previewer. */
-  dispose() {}
+  dispose() {
+    this.hidePreview();
+  }
 }

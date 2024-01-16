@@ -1417,6 +1417,15 @@ export class BlockSvg
   }
 
   /**
+   * Schedule snapping to grid and bumping neighbours to occur after a brief
+   * delay.
+   */
+  scheduleSnapAndBump() {
+    this.snapToGrid();
+    this.bumpNeighbours();
+  }
+
+  /**
    * Position a block so that it doesn't move the target block when connected.
    * The block to position is usually either the first block in a dragged stack
    * or an insertion marker.

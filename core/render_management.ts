@@ -12,7 +12,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 const rootBlocks = new Set<BlockSvg>();
 
 /** The set of all blocks in need of rendering. */
-let dirtyBlocks = new WeakSet<BlockSvg>();
+const dirtyBlocks = new WeakSet<BlockSvg>();
 
 /**
  * The promise which resolves after the current set of renders is completed. Or
@@ -81,9 +81,9 @@ export function finishQueuedRenders(): Promise<void> {
  * @internal
  */
 export function triggerQueuedRenders(workspace?: WorkspaceSvg) {
-  window.cancelAnimationFrame(animationRequestId);
+  if (!workspace) window.cancelAnimationFrame(animationRequestId);
   doRenders(workspace);
-  if (afterRendersResolver) afterRendersResolver();
+  if (!workspace && afterRendersResolver) afterRendersResolver();
 }
 
 /**
@@ -134,9 +134,19 @@ function doRenders(workspace?: WorkspaceSvg) {
     block.updateComponentLocations(blockOrigin);
   }
 
-  rootBlocks.clear();
-  dirtyBlocks = new WeakSet();
-  afterRendersPromise = null;
+  for (const block of blocks) {
+    dequeueBlock(block);
+  }
+  if (!workspace) afterRendersPromise = null;
+}
+
+/** Removes the given block and children from the render queue. */
+function dequeueBlock(block: BlockSvg) {
+  rootBlocks.delete(block);
+  dirtyBlocks.delete(block);
+  for (const child of block.getChildren(false)) {
+    dequeueBlock(child);
+  }
 }
 
 /**

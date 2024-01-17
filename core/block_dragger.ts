@@ -31,6 +31,8 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as deprecation from './utils/deprecation.js';
 import * as layers from './layers.js';
+import {IConnectionPreviewer} from './blockly.js';
+import {InsertionMarkerPreviewer} from './connection_previewers/insertion_marker_previewer.js';
 
 /**
  * Class for a block dragger.  It moves blocks around the workspace when they
@@ -40,6 +42,8 @@ export class BlockDragger implements IBlockDragger {
   /** The top block in the stack that is being dragged. */
   protected draggingBlock_: BlockSvg;
   protected draggedConnectionManager_: InsertionMarkerManager;
+
+  protected connectionPreviewer: IConnectionPreviewer;
 
   /** The workspace on which the block is being dragged. */
   protected workspace_: WorkspaceSvg;
@@ -69,6 +73,9 @@ export class BlockDragger implements IBlockDragger {
       this.draggingBlock_,
     );
 
+    // TODO: have this access the registry instead.
+    this.connectionPreviewer = new InsertionMarkerPreviewer(block);
+
     this.workspace_ = workspace;
 
     /**
@@ -90,6 +97,7 @@ export class BlockDragger implements IBlockDragger {
     if (this.draggedConnectionManager_) {
       this.draggedConnectionManager_.dispose();
     }
+    this.connectionPreviewer.dispose();
   }
 
   /**
@@ -155,7 +163,6 @@ export class BlockDragger implements IBlockDragger {
 
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
     blockAnimation.disconnectUiEffect(this.draggingBlock_);
-    this.draggedConnectionManager_.updateAvailableConnections();
   }
 
   /** Fire a UI event at the start of a block drag. */
@@ -177,28 +184,38 @@ export class BlockDragger implements IBlockDragger {
    *     at the start of the drag, in pixel units.
    */
   drag(e: PointerEvent, currentDragDeltaXY: Coordinate) {
-    const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+    this.moveBlock(this.draggingBlock_, currentDragDeltaXY);
+    this.updateDragTargets(e, this.draggingBlock_);
+    this.updateDeletePreview(this.draggingBlock_);
+    this.updateConnectionPreview(this.draggingBlock_);
+  }
+
+  private moveBlock(draggingBlock: BlockSvg, dragDelta: Coordinate) {
+    const delta = this.pixelsToWorkspaceUnits_(dragDelta);
     const newLoc = Coordinate.sum(this.startXY_, delta);
-    this.draggingBlock_.moveDuringDrag(newLoc);
+    draggingBlock.moveDuringDrag(newLoc);
+  }
 
-    const oldDragTarget = this.dragTarget_;
-    this.dragTarget_ = this.workspace_.getDragTarget(e);
-
-    this.draggedConnectionManager_.update(delta, this.dragTarget_);
-    const oldWouldDeleteBlock = this.wouldDeleteBlock_;
-    this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock;
-    if (oldWouldDeleteBlock !== this.wouldDeleteBlock_) {
-      // Prevent unnecessary add/remove class calls.
-      this.updateCursorDuringBlockDrag_();
+  private updateDragTargets(e: PointerEvent, draggingBlock: BlockSvg) {
+    const newDragTarget = this.workspace_.getDragTarget(e);
+    if (this.dragTarget_ !== newDragTarget) {
+      this.dragTarget_?.onDragExit(draggingBlock);
+      newDragTarget?.onDragEnter(draggingBlock);
     }
+    newDragTarget?.onDragOver(draggingBlock);
+    this.dragTarget_ = newDragTarget;
+  }
 
-    // Call drag enter/exit/over after wouldDeleteBlock is called in
-    // InsertionMarkerManager.update.
-    if (this.dragTarget_ !== oldDragTarget) {
-      oldDragTarget && oldDragTarget.onDragExit(this.draggingBlock_);
-      this.dragTarget_ && this.dragTarget_.onDragEnter(this.draggingBlock_);
-    }
-    this.dragTarget_ && this.dragTarget_.onDragOver(this.draggingBlock_);
+  private updateDeletePreview(draggingBlock: BlockSvg) {
+    draggingBlock.setDeleteStyle(this.wouldDeleteBlock(this.draggingBlock_));
+  }
+
+  private wouldDeleteBlock(draggedBlock: blockSvg): boolean {
+    // TODO: Implement.
+  }
+
+  private updateConnectionPreview(draggingBlock: BlockSvg) {
+    // TODO: Implement this.
   }
 
   /**

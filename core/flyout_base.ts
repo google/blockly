@@ -1251,8 +1251,7 @@ export abstract class Flyout
     }
 
     // Clone the block.
-    // TODO(#7432): Add a saveIds parameter to `save`.
-    const json = blocks.save(oldBlock, {saveIds: false}) as blocks.State;
+    const json = blocks.save(oldBlock) as blocks.State;
     // Normallly this resizes leading to weird jumps. Save it for terminateDrag.
     targetWorkspace.setResizesEnabled(false);
     const block = blocks.append(json, targetWorkspace) as BlockSvg;

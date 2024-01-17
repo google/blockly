@@ -1417,8 +1417,8 @@ export class BlockSvg
   }
 
   /**
-   * Schedule snapping to grid and bumping neighbours to occur after a brief
-   * delay.
+   * Snap to grid, and then bump neighbouring blocks away at the ned of the next
+   * render.
    */
   scheduleSnapAndBump() {
     this.snapToGrid();

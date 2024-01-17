@@ -142,12 +142,6 @@ export class BlockSvg
 
   private translation = '';
 
-  /**
-   * The ID of the setTimeout callback for bumping neighbours, or 0 if no bump
-   * is currently scheduled.
-   */
-  private bumpNeighboursPid = 0;
-
   /** Whether this block is currently being dragged. */
   private dragging = false;
 
@@ -990,7 +984,6 @@ export class BlockSvg
     icon.applyColour();
     icon.updateEditable();
     this.queueRender();
-    this.bumpNeighbours();
 
     return icon;
   }
@@ -1015,7 +1008,6 @@ export class BlockSvg
     if (type.equals(MutatorIcon.TYPE)) this.mutator = null;
 
     this.queueRender();
-    this.bumpNeighbours();
 
     return removed;
   }
@@ -1173,7 +1165,6 @@ export class BlockSvg
   ) {
     super.setPreviousStatement(newBoolean, opt_check);
     this.queueRender();
-    this.bumpNeighbours();
   }
 
   /**
@@ -1189,7 +1180,6 @@ export class BlockSvg
   ) {
     super.setNextStatement(newBoolean, opt_check);
     this.queueRender();
-    this.bumpNeighbours();
   }
 
   /**
@@ -1205,7 +1195,6 @@ export class BlockSvg
   ) {
     super.setOutput(newBoolean, opt_check);
     this.queueRender();
-    this.bumpNeighbours();
   }
 
   /**
@@ -1216,7 +1205,6 @@ export class BlockSvg
   override setInputsInline(newBoolean: boolean) {
     super.setInputsInline(newBoolean);
     this.queueRender();
-    this.bumpNeighbours();
   }
 
   /**
@@ -1231,7 +1219,6 @@ export class BlockSvg
   override removeInput(name: string, opt_quiet?: boolean): boolean {
     const removed = super.removeInput(name, opt_quiet);
     this.queueRender();
-    this.bumpNeighbours();
     return removed;
   }
 
@@ -1244,14 +1231,12 @@ export class BlockSvg
   override moveNumberedInputBefore(inputIndex: number, refIndex: number) {
     super.moveNumberedInputBefore(inputIndex, refIndex);
     this.queueRender();
-    this.bumpNeighbours();
   }
 
   /** @override */
   override appendInput(input: Input): Input {
     super.appendInput(input);
     this.queueRender();
-    this.bumpNeighbours();
     return input;
   }
 
@@ -1399,22 +1384,6 @@ export class BlockSvg
    * up on screen, because that creates confusion for end-users.
    */
   override bumpNeighbours() {
-    if (this.bumpNeighboursPid) return;
-    const group = eventUtils.getGroup();
-
-    this.bumpNeighboursPid = setTimeout(() => {
-      const oldGroup = eventUtils.getGroup();
-      eventUtils.setGroup(group);
-      this.getRootBlock().bumpNeighboursInternal();
-      eventUtils.setGroup(oldGroup);
-      this.bumpNeighboursPid = 0;
-    }, config.bumpDelay);
-  }
-
-  /**
-   * Bumps unconnected blocks out of alignment.
-   */
-  private bumpNeighboursInternal() {
     const root = this.getRootBlock();
     if (
       this.isDeadOrDying() ||
@@ -1431,16 +1400,13 @@ export class BlockSvg
     for (const conn of this.getConnections_(false)) {
       if (conn.isSuperior()) {
         // Recurse down the block stack.
-        conn.targetBlock()?.bumpNeighboursInternal();
+        conn.targetBlock()?.bumpNeighbours();
       }
 
       for (const neighbour of conn.neighbours(config.snapRadius)) {
-        // Don't bump away from things that are in our stack.
         if (neighbourIsInStack(neighbour)) continue;
-        // If both connections are connected, that's fine.
         if (conn.isConnected() && neighbour.isConnected()) continue;
 
-        // Always bump the inferior connection.
         if (conn.isSuperior()) {
           neighbour.bumpAwayFrom(conn);
         } else {
@@ -1451,10 +1417,8 @@ export class BlockSvg
   }
 
   /**
-   * Schedule snapping to grid and bumping neighbours to occur after a brief
-   * delay.
-   *
-   * @internal
+   * Snap to grid, and then bump neighbouring blocks away at the end of the next
+   * render.
    */
   scheduleSnapAndBump() {
     this.snapToGrid();

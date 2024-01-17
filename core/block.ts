@@ -560,7 +560,6 @@ export class Block implements IASTNodeLocation, IDeletable {
    * connected should not coincidentally line up on screen.
    */
   bumpNeighbours() {}
-  // noop.
 
   /**
    * Return the parent block or null if this block is at the top level. The

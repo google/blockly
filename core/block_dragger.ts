@@ -293,7 +293,7 @@ export class BlockDragger implements IBlockDragger {
     } else {
       this.draggingBlock_.queueRender();
     }
-    this.draggingBlock_.scheduleSnapAndBump();
+    this.draggingBlock_.snapToGrid();
   }
 
   /** Fire a UI event at the end of a block drag. */

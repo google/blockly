@@ -33,6 +33,22 @@ import * as deprecation from './utils/deprecation.js';
 import * as layers from './layers.js';
 import {IConnectionPreviewer} from './blockly.js';
 import {InsertionMarkerPreviewer} from './connection_previewers/insertion_marker_previewer.js';
+import {RenderedConnection} from './rendered_connection.js';
+import {config} from './config.js';
+import {ComponentManager} from './component_manager.js';
+import {IDeleteArea} from './interfaces/i_delete_area.js';
+
+/** Represents a nearby valid connection. */
+interface ConnectionCandidate {
+  /** A connection on the dragging stack that is compatible with neighbour. */
+  local: RenderedConnection;
+
+  /** A nearby connection that is compatible with local. */
+  neighbour: RenderedConnection;
+
+  /** The distance between the local connection and the neighbour connection. */
+  distance: number;
+}
 
 /**
  * Class for a block dragger.  It moves blocks around the workspace when they
@@ -186,7 +202,7 @@ export class BlockDragger implements IBlockDragger {
   drag(e: PointerEvent, currentDragDeltaXY: Coordinate) {
     this.moveBlock(this.draggingBlock_, currentDragDeltaXY);
     this.updateDragTargets(e, this.draggingBlock_);
-    this.updateDeletePreview(this.draggingBlock_);
+    this.updateDeletePreview(e, this.draggingBlock_, currentDragDeltaXY);
     this.updateConnectionPreview(this.draggingBlock_);
   }
 
@@ -206,16 +222,101 @@ export class BlockDragger implements IBlockDragger {
     this.dragTarget_ = newDragTarget;
   }
 
-  private updateDeletePreview(draggingBlock: BlockSvg) {
-    draggingBlock.setDeleteStyle(this.wouldDeleteBlock(this.draggingBlock_));
+  private updateDeletePreview(
+    e: PointerEvent,
+    draggingBlock: BlockSvg,
+    delta: Coordinate,
+  ) {
+    draggingBlock.setDeleteStyle(
+      this.wouldDeleteBlock(e, this.draggingBlock_, delta),
+    );
   }
 
-  private wouldDeleteBlock(draggedBlock: blockSvg): boolean {
-    // TODO: Implement.
+  /**
+   * Returns true if we would delete the block if it was dropped at this time,
+   * false otherwise.
+   */
+  private wouldDeleteBlock(
+    e: PointerEvent,
+    draggingBlock: BlockSvg,
+    delta: Coordinate,
+  ): boolean {
+    const dragTarget = this.workspace_.getDragTarget(e);
+    if (!dragTarget) return false;
+
+    const componentManager = this.workspace_.getComponentManager();
+    const isDeleteArea = componentManager.hasCapability(
+      dragTarget.id,
+      ComponentManager.Capability.DELETE_AREA,
+    );
+    if (!isDeleteArea) return false;
+
+    return (dragTarget as IDeleteArea).wouldDelete(
+      draggingBlock,
+      !!this.getConnectionCandidate(draggingBlock, delta),
+    );
   }
 
   private updateConnectionPreview(draggingBlock: BlockSvg) {
     // TODO: Implement this.
+  }
+
+  /**
+   * Returns the closest valid candidate connection, if one can be found.
+   *
+   * Valid neighbour connections are within the configured start radius, with a
+   * compatible type (input, output, etc) and connection check.
+   */
+  private getConnectionCandidate(
+    draggingBlock: BlockSvg,
+    delta: Coordinate,
+  ): ConnectionCandidate | null {
+    const localConns = this.getLocalConnections(draggingBlock);
+    // TODO: Pass the actual candidate.
+    let radius = this.getStartRadius(null);
+    let candidate = null;
+
+    for (const conn of localConns) {
+      const {connection: neighbour, radius: rad} = conn.closest(radius, delta);
+      if (neighbour) {
+        candidate = {
+          local: conn,
+          neighbour: neighbour,
+          distance: rad,
+        };
+        radius = rad;
+      }
+    }
+
+    return candidate;
+  }
+
+  private getStartRadius(activeCandidate: ConnectionCandidate | null): number {
+    // TODO: Can we not just use the radius on the active candidate? Using
+    // two constants seems very fragile.
+
+    // If there is already a connection highlighted,
+    // increase the radius we check for making new connections.
+    // When a connection is highlighted, blocks move around when the
+    // insertion marker is created, which could cause the connection became out
+    // of range. By increasing radiusConnection when a connection already
+    // exists, we never "lose" the connection from the offset.
+    return activeCandidate ? config.connectingSnapRadius : config.snapRadius;
+  }
+
+  /**
+   * Returns all of the connections we might connect to blocks on the workspace.
+   *
+   * Includes any connections on the dragging block, and any last next
+   * connection on the stack (if one exists).
+   */
+  private getLocalConnections(draggingBlock: BlockSvg): RenderedConnection[] {
+    const available = draggingBlock.getConnections_(false);
+    const lastOnStack = draggingBlock.lastConnectionInStack(true);
+    if (lastOnStack && lastOnStack !== draggingBlock.nextConnection) {
+      available.push(lastOnStack);
+    }
+    return available;
   }
 
   /**

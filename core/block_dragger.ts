@@ -21,7 +21,6 @@ import * as common from './common.js';
 import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
 import type {Icon} from './icons/icon.js';
-import {InsertionMarkerManager} from './insertion_marker_manager.js';
 import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import * as registry from './registry.js';
@@ -60,7 +59,6 @@ interface ConnectionCandidate {
 export class BlockDragger implements IBlockDragger {
   /** The top block in the stack that is being dragged. */
   protected draggingBlock_: BlockSvg;
-  protected draggedConnectionManager_: InsertionMarkerManager;
 
   protected connectionPreviewer: IConnectionPreviewer;
 
@@ -89,11 +87,6 @@ export class BlockDragger implements IBlockDragger {
   constructor(block: BlockSvg, workspace: WorkspaceSvg) {
     this.draggingBlock_ = block;
 
-    /** Object that keeps track of connections on dragged blocks. */
-    this.draggedConnectionManager_ = new InsertionMarkerManager(
-      this.draggingBlock_,
-    );
-
     // TODO: have this access the registry instead.
     this.connectionPreviewer = new InsertionMarkerPreviewer(block);
 
@@ -115,9 +108,6 @@ export class BlockDragger implements IBlockDragger {
    */
   dispose() {
     this.dragIconData_.length = 0;
-    if (this.draggedConnectionManager_) {
-      this.draggedConnectionManager_.dispose();
-    }
     this.connectionPreviewer.dispose();
   }
 
@@ -614,14 +604,9 @@ export class BlockDragger implements IBlockDragger {
    * @returns A possibly empty list of insertion marker blocks.
    */
   getInsertionMarkers(): BlockSvg[] {
-    // No insertion markers with the old style of dragged connection managers.
-    if (
-      this.draggedConnectionManager_ &&
-      this.draggedConnectionManager_.getInsertionMarkers
-    ) {
-      return this.draggedConnectionManager_.getInsertionMarkers();
-    }
-    return [];
+    return this.workspace_
+      .getAllBlocks()
+      .filter((block) => block.isInsertionMarker());
   }
 }
 

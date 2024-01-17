@@ -6,12 +6,13 @@
 
 import {BlockSvg} from './block_svg.js';
 import * as userAgent from './utils/useragent.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 /** The set of all blocks in need of rendering which don't have parents. */
 const rootBlocks = new Set<BlockSvg>();
 
 /** The set of all blocks in need of rendering. */
-let dirtyBlocks = new WeakSet<BlockSvg>();
+const dirtyBlocks = new WeakSet<BlockSvg>();
 
 /**
  * The promise which resolves after the current set of renders is completed. Or
@@ -75,12 +76,14 @@ export function finishQueuedRenders(): Promise<void> {
  * cases where queueing renders breaks functionality + backwards compatibility
  * (such as rendering icons).
  *
+ * @param workspace If provided, only rerender blocks in this workspace.
+ *
  * @internal
  */
-export function triggerQueuedRenders() {
-  window.cancelAnimationFrame(animationRequestId);
-  doRenders();
-  if (afterRendersResolver) afterRendersResolver();
+export function triggerQueuedRenders(workspace?: WorkspaceSvg) {
+  if (!workspace) window.cancelAnimationFrame(animationRequestId);
+  doRenders(workspace);
+  if (!workspace && afterRendersResolver) afterRendersResolver();
 }
 
 /**
@@ -110,10 +113,16 @@ function queueBlock(block: BlockSvg) {
 
 /**
  * Rerenders all of the blocks in the queue.
+ *
+ * @param workspace If provided, only rerender blocks in this workspace.
  */
-function doRenders() {
-  const workspaces = new Set([...rootBlocks].map((block) => block.workspace));
-  const blocks = [...rootBlocks].filter(shouldRenderRootBlock);
+function doRenders(workspace?: WorkspaceSvg) {
+  const workspaces = workspace
+    ? new Set([workspace])
+    : new Set([...rootBlocks].map((block) => block.workspace));
+  const blocks = [...rootBlocks]
+    .filter(shouldRenderRootBlock)
+    .filter((b) => workspaces.has(b.workspace));
   for (const block of blocks) {
     renderBlock(block);
   }
@@ -125,9 +134,19 @@ function doRenders() {
     block.updateComponentLocations(blockOrigin);
   }
 
-  rootBlocks.clear();
-  dirtyBlocks = new Set();
-  afterRendersPromise = null;
+  for (const block of blocks) {
+    dequeueBlock(block);
+  }
+  if (!workspace) afterRendersPromise = null;
+}
+
+/** Removes the given block and children from the render queue. */
+function dequeueBlock(block: BlockSvg) {
+  rootBlocks.delete(block);
+  dirtyBlocks.delete(block);
+  for (const child of block.getChildren(false)) {
+    dequeueBlock(child);
+  }
 }
 
 /**

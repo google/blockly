@@ -649,7 +649,7 @@ export abstract class Flyout
     const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
     const flyoutInfo = this.createFlyoutInfo(parsedContent);
 
-    renderManagement.triggerQueuedRenders();
+    renderManagement.triggerQueuedRenders(this.workspace_);
 
     this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 
@@ -1235,8 +1235,7 @@ export abstract class Flyout
     }
 
     // Clone the block.
-    // TODO(#7432): Add a saveIds parameter to `save`.
-    const json = blocks.save(oldBlock, {saveIds: false}) as blocks.State;
+    const json = blocks.save(oldBlock) as blocks.State;
     // Normallly this resizes leading to weird jumps. Save it for terminateDrag.
     targetWorkspace.setResizesEnabled(false);
     const block = blocks.append(json, targetWorkspace) as BlockSvg;

@@ -1417,7 +1417,7 @@ export class BlockSvg
   }
 
   /**
-   * Snap to grid, and then bump neighbouring blocks away at the ned of the next
+   * Snap to grid, and then bump neighbouring blocks away at the end of the next
    * render.
    */
   scheduleSnapAndBump() {

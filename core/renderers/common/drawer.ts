@@ -300,7 +300,6 @@ export class Drawer {
       }
     } else {
       const svgGroup = (fieldInfo as Field).field.getSvgRoot()!;
-      if (!svgGroup) console.trace(this.block_.initialized, fieldInfo);
       svgGroup.setAttribute(
         'transform',
         'translate(' + xPos + ',' + yPos + ')' + scale,

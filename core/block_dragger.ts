@@ -31,12 +31,14 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as deprecation from './utils/deprecation.js';
 import * as layers from './layers.js';
-import {IConnectionPreviewer} from './blockly.js';
+import {ConnectionType, IConnectionPreviewer} from './blockly.js';
 import {InsertionMarkerPreviewer} from './connection_previewers/insertion_marker_previewer.js';
 import {RenderedConnection} from './rendered_connection.js';
 import {config} from './config.js';
 import {ComponentManager} from './component_manager.js';
 import {IDeleteArea} from './interfaces/i_delete_area.js';
+import {Connection} from './connection.js';
+import {Block} from './block.js';
 
 /** Represents a nearby valid connection. */
 interface ConnectionCandidate {
@@ -66,6 +68,8 @@ export class BlockDragger implements IBlockDragger {
 
   /** Which drag area the mouse pointer is over, if any. */
   private dragTarget_: IDragTarget | null = null;
+
+  private connectionCandidate: ConnectionCandidate | null = null;
 
   /** Whether the block would be deleted if dropped immediately. */
   protected wouldDeleteBlock_ = false;
@@ -203,7 +207,7 @@ export class BlockDragger implements IBlockDragger {
     this.moveBlock(this.draggingBlock_, currentDragDeltaXY);
     this.updateDragTargets(e, this.draggingBlock_);
     this.updateDeletePreview(e, this.draggingBlock_, currentDragDeltaXY);
-    this.updateConnectionPreview(this.draggingBlock_);
+    this.updateConnectionPreview(this.draggingBlock_, currentDragDeltaXY);
   }
 
   private moveBlock(draggingBlock: BlockSvg, dragDelta: Coordinate) {
@@ -257,8 +261,77 @@ export class BlockDragger implements IBlockDragger {
     );
   }
 
-  private updateConnectionPreview(draggingBlock: BlockSvg) {
-    // TODO: Implement this.
+  private updateConnectionPreview(draggingBlock: BlockSvg, delta: Coordinate) {
+    const currCandidate = this.connectionCandidate;
+    const newCandidate = this.getConnectionCandidate(draggingBlock, delta);
+    if (!newCandidate) {
+      this.connectionPreviewer.hidePreview();
+      return;
+    }
+    const candidate =
+      currCandidate &&
+      this.currCandidateIsBetter(currCandidate, delta, newCandidate)
+        ? currCandidate
+        : newCandidate;
+    const {local, neighbour} = candidate;
+    if (
+      (local.type === ConnectionType.OUTPUT_VALUE ||
+        local.type === ConnectionType.PREVIOUS_STATEMENT) &&
+      neighbour.isConnected() &&
+      !neighbour.targetBlock()!.isInsertionMarker() &&
+      !this.orphanCanConnectAtEnd(
+        draggingBlock,
+        neighbour.targetBlock()!,
+        local.type,
+      )
+    ) {
+      this.connectionPreviewer.previewReplacement(
+        local,
+        neighbour,
+        neighbour.targetBlock()!,
+      );
+      return;
+    }
+    this.connectionPreviewer.previewConnection(local, neighbour);
+  }
+
+  /**
+   * Returns true if the given orphan block can connect at the end of the
+   * top block's stack or row, false otherwise.
+   */
+  private orphanCanConnectAtEnd(
+    topBlock: BlockSvg,
+    orphanBlock: BlockSvg,
+    localType: number,
+  ): boolean {
+    const orphanConnection =
+      localType === ConnectionType.OUTPUT_VALUE
+        ? orphanBlock.outputConnection
+        : orphanBlock.previousConnection;
+    return !!Connection.getConnectionForOrphanedConnection(
+      topBlock as Block,
+      orphanConnection as Connection,
+    );
+  }
+
+  /**
+   * Returns true if the current candidate is better than the new candidate.
+   *
+   * We slightly prefer the current candidate even if it is farther away.
+   */
+  private currCandidateIsBetter(
+    currCandiate: ConnectionCandidate,
+    delta: Coordinate,
+    newCandidate: ConnectionCandidate,
+  ): boolean {
+    const {local: currLocal, neighbour: currNeighbour} = currCandiate;
+    const localPos = new Coordinate(currLocal.x, currLocal.y);
+    const neighbourPos = new Coordinate(currNeighbour.x, currNeighbour.y);
+    const distance = Coordinate.distance(
+      Coordinate.sum(localPos, delta),
+      neighbourPos,
+    );
+    return newCandidate.distance > distance - config.currentConnectionPreference;
   }
 
   /**

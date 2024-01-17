@@ -39,6 +39,7 @@ import {ComponentManager} from './component_manager.js';
 import {IDeleteArea} from './interfaces/i_delete_area.js';
 import {Connection} from './connection.js';
 import {Block} from './block.js';
+import {finishQueuedRenders} from './render_management.js';
 
 /** Represents a nearby valid connection. */
 interface ConnectionCandidate {
@@ -266,6 +267,7 @@ export class BlockDragger implements IBlockDragger {
     const newCandidate = this.getConnectionCandidate(draggingBlock, delta);
     if (!newCandidate) {
       this.connectionPreviewer.hidePreview();
+      this.connectionCandidate = null;
       return;
     }
     const candidate =
@@ -273,6 +275,7 @@ export class BlockDragger implements IBlockDragger {
       this.currCandidateIsBetter(currCandidate, delta, newCandidate)
         ? currCandidate
         : newCandidate;
+    this.connectionCandidate = candidate;
     const {local, neighbour} = candidate;
     if (
       (local.type === ConnectionType.OUTPUT_VALUE ||
@@ -393,6 +396,7 @@ export class BlockDragger implements IBlockDragger {
     dom.stopTextWidthCache();
 
     blockAnimation.disconnectUiStop();
+    this.connectionPreviewer.hidePreview();
 
     const preventMove =
       !!this.dragTarget_ &&
@@ -475,13 +479,31 @@ export class BlockDragger implements IBlockDragger {
    */
   protected updateBlockAfterMove_() {
     this.fireMoveEvent_();
-    if (this.draggedConnectionManager_.wouldConnectBlock()) {
+    if (this.connectionCandidate) {
       // Applying connections also rerenders the relevant blocks.
-      this.draggedConnectionManager_.applyConnections();
+      this.applyConnections(this.connectionCandidate);
     } else {
       this.draggingBlock_.queueRender();
     }
     this.draggingBlock_.scheduleSnapAndBump();
+  }
+
+  private applyConnections(candidate: ConnectionCandidate) {
+    const {local, neighbour} = candidate;
+    local.connect(neighbour);
+    // TODO: We can remove this `rendered` check when we reconcile with v11.
+    if (this.draggingBlock_.rendered) {
+      const inferiorConnection = local.isSuperior() ? neighbour : local;
+      const rootBlock = this.draggingBlock_.getRootBlock();
+
+      finishQueuedRenders().then(() => {
+        blockAnimation.connectionUiEffect(inferiorConnection.getSourceBlock());
+        // bringToFront is incredibly expensive. Delay until the next frame.
+        setTimeout(() => {
+          rootBlock.bringToFront();
+        }, 0);
+      });
+    }
   }
 
   /** Fire a UI event at the end of a block drag. */

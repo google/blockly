@@ -52,12 +52,17 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     staticConn: RenderedConnection,
     replacedBlock: BlockSvg,
   ) {
-    this.hidePreview();
-    this.fadedBlock = replacedBlock;
-    replacedBlock.fadeForReplacement(true);
-    if (this.workspace.getRenderer().shouldHighlightConnection(staticConn)) {
-      staticConn.highlight();
-      this.staticConn = staticConn;
+    eventUtils.disable();
+    try {
+      this.hidePreview();
+      this.fadedBlock = replacedBlock;
+      replacedBlock.fadeForReplacement(true);
+      if (this.workspace.getRenderer().shouldHighlightConnection(staticConn)) {
+        staticConn.highlight();
+        this.staticConn = staticConn;
+      }
+    } finally {
+      eventUtils.enable();
     }
   }
 
@@ -76,98 +81,101 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     if (draggedConn === this.draggedConn && staticConn === this.staticConn) {
       return;
     }
-    this.hidePreview();
-    const dragged = draggedConn.getSourceBlock();
-    const marker = this.createInsertionMarker(dragged);
-    const markerConn = this.getMatchingConnection(dragged, marker, draggedConn);
-    if (!markerConn) {
-      throw Error('Could not create insertion marker to preview connection');
-    }
 
-    // Render disconnected from everything else so that we have a valid
-    // connection location.
-    marker.queueRender();
-    renderManagement.triggerQueuedRenders();
-
-    // Connect() also renders the insertion marker.
-    markerConn.connect(staticConn);
-
-    const originalOffsetToTarget = {
-      x: staticConn.x - markerConn.x,
-      y: staticConn.y - markerConn.y,
-    };
-    const originalOffsetInBlock = markerConn.getOffsetInBlock().clone();
-    renderManagement.finishQueuedRenders().then(() => {
-      // Position so that the existing block doesn't move.
-      marker?.positionNearConnection(
-        markerConn,
-        originalOffsetToTarget,
-        originalOffsetInBlock,
-      );
-      marker?.getSvgRoot().setAttribute('visibility', 'visible');
-    });
-
-    if (this.workspace.getRenderer().shouldHighlightConnection(staticConn)) {
-      staticConn.highlight();
-    }
-
-    this.markerConn = markerConn;
-    this.draggedConn = draggedConn;
-    this.staticConn = staticConn;
-  }
-
-  private createInsertionMarker(origBlock: BlockSvg) {
     eventUtils.disable();
-    let result: BlockSvg;
     try {
-      result = this.workspace.newBlock(origBlock.type);
-      result.setInsertionMarker(true);
-      if (origBlock.saveExtraState) {
-        const state = origBlock.saveExtraState(true);
-        if (state && result.loadExtraState) {
-          result.loadExtraState(state);
-        }
-      } else if (origBlock.mutationToDom) {
-        const oldMutationDom = origBlock.mutationToDom();
-        if (oldMutationDom && result.domToMutation) {
-          result.domToMutation(oldMutationDom);
-        }
-      }
-      // Copy field values from the other block.  These values may impact the
-      // rendered size of the insertion marker.  Note that we do not care about
-      // child blocks here.
-      for (let i = 0; i < origBlock.inputList.length; i++) {
-        const sourceInput = origBlock.inputList[i];
-        if (sourceInput.name === constants.COLLAPSED_INPUT_NAME) {
-          continue; // Ignore the collapsed input.
-        }
-        const resultInput = result.inputList[i];
-        if (!resultInput) {
-          throw new Error(DUPLICATE_BLOCK_ERROR.replace('%1', 'an input'));
-        }
-        for (let j = 0; j < sourceInput.fieldRow.length; j++) {
-          const sourceField = sourceInput.fieldRow[j];
-          const resultField = resultInput.fieldRow[j];
-          if (!resultField) {
-            throw new Error(DUPLICATE_BLOCK_ERROR.replace('%1', 'a field'));
-          }
-          resultField.setValue(sourceField.getValue());
-        }
+      this.hidePreview();
+      const dragged = draggedConn.getSourceBlock();
+      const marker = this.createInsertionMarker(dragged);
+      const markerConn = this.getMatchingConnection(
+        dragged,
+        marker,
+        draggedConn,
+      );
+      if (!markerConn) {
+        throw Error('Could not create insertion marker to preview connection');
       }
 
-      for (const block of result.getDescendants(false)) {
-        block.setInsertionMarker(true);
+      // Render disconnected from everything else so that we have a valid
+      // connection location.
+      marker.queueRender();
+      renderManagement.triggerQueuedRenders();
+
+      // Connect() also renders the insertion marker.
+      markerConn.connect(staticConn);
+
+      const originalOffsetToTarget = {
+        x: staticConn.x - markerConn.x,
+        y: staticConn.y - markerConn.y,
+      };
+      const originalOffsetInBlock = markerConn.getOffsetInBlock().clone();
+      renderManagement.finishQueuedRenders().then(() => {
+        // Position so that the existing block doesn't move.
+        marker?.positionNearConnection(
+          markerConn,
+          originalOffsetToTarget,
+          originalOffsetInBlock,
+        );
+        marker?.getSvgRoot().setAttribute('visibility', 'visible');
+      });
+
+      if (this.workspace.getRenderer().shouldHighlightConnection(staticConn)) {
+        staticConn.highlight();
       }
 
-      result.setCollapsed(origBlock.isCollapsed());
-      result.setInputsInline(origBlock.getInputsInline());
-
-      result.initSvg();
-      result.getSvgRoot().setAttribute('visibility', 'hidden');
+      this.markerConn = markerConn;
+      this.draggedConn = draggedConn;
+      this.staticConn = staticConn;
     } finally {
       eventUtils.enable();
     }
+  }
 
+  private createInsertionMarker(origBlock: BlockSvg) {
+    const result = this.workspace.newBlock(origBlock.type);
+    result.setInsertionMarker(true);
+    if (origBlock.saveExtraState) {
+      const state = origBlock.saveExtraState(true);
+      if (state && result.loadExtraState) {
+        result.loadExtraState(state);
+      }
+    } else if (origBlock.mutationToDom) {
+      const oldMutationDom = origBlock.mutationToDom();
+      if (oldMutationDom && result.domToMutation) {
+        result.domToMutation(oldMutationDom);
+      }
+    }
+    // Copy field values from the other block.  These values may impact the
+    // rendered size of the insertion marker.  Note that we do not care about
+    // child blocks here.
+    for (let i = 0; i < origBlock.inputList.length; i++) {
+      const sourceInput = origBlock.inputList[i];
+      if (sourceInput.name === constants.COLLAPSED_INPUT_NAME) {
+        continue; // Ignore the collapsed input.
+      }
+      const resultInput = result.inputList[i];
+      if (!resultInput) {
+        throw new Error(DUPLICATE_BLOCK_ERROR.replace('%1', 'an input'));
+      }
+      for (let j = 0; j < sourceInput.fieldRow.length; j++) {
+        const sourceField = sourceInput.fieldRow[j];
+        const resultField = resultInput.fieldRow[j];
+        if (!resultField) {
+          throw new Error(DUPLICATE_BLOCK_ERROR.replace('%1', 'a field'));
+        }
+        resultField.setValue(sourceField.getValue());
+      }
+    }
+
+    for (const block of result.getDescendants(false)) {
+      block.setInsertionMarker(true);
+    }
+
+    result.setCollapsed(origBlock.isCollapsed());
+    result.setInputsInline(origBlock.getInputsInline());
+
+    result.initSvg();
+    result.getSvgRoot().setAttribute('visibility', 'hidden');
     return result;
   }
 
@@ -188,18 +196,23 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
 
   /** Hide any previews that are currently displayed. */
   hidePreview() {
-    if (this.staticConn) {
-      this.staticConn.unhighlight();
-      this.staticConn = null;
-    }
-    if (this.fadedBlock) {
-      this.fadedBlock.fadeForReplacement(false);
-      this.fadedBlock = null;
-    }
-    if (this.markerConn) {
-      this.hideInsertionMarker(this.markerConn);
-      this.markerConn = null;
-      this.draggedConn = null;
+    eventUtils.disable();
+    try {
+      if (this.staticConn) {
+        this.staticConn.unhighlight();
+        this.staticConn = null;
+      }
+      if (this.fadedBlock) {
+        this.fadedBlock.fadeForReplacement(false);
+        this.fadedBlock = null;
+      }
+      if (this.markerConn) {
+        this.hideInsertionMarker(this.markerConn);
+        this.markerConn = null;
+        this.draggedConn = null;
+      }
+    } finally {
+      eventUtils.enable();
     }
   }
 

@@ -125,6 +125,9 @@ export class Gesture {
    */
   private workspaceDragger: WorkspaceDragger | null = null;
 
+  /** Whether the gesture is dragging or not. */
+  private dragging: boolean = false;
+
   /** The flyout a gesture started in, if any. */
   private flyout: IFlyout | null = null;
 
@@ -369,6 +372,7 @@ export class Gesture {
       : this.startWorkspace_ && this.startWorkspace_.isDraggable();
     if (!wsMovable) return;
 
+    this.dragging = true;
     this.workspaceDragger = new WorkspaceDragger(this.startWorkspace_);
 
     this.workspaceDragger.startDrag();
@@ -408,6 +412,7 @@ export class Gesture {
       true,
     );
 
+    this.dragging = true;
     this.blockDragger = new BlockDraggerClass!(
       this.targetBlock,
       this.startWorkspace_,
@@ -431,6 +436,7 @@ export class Gesture {
       );
     }
 
+    this.dragging = true;
     this.bubbleDragger = new BubbleDragger(
       this.startBubble,
       this.startWorkspace_,
@@ -963,7 +969,8 @@ export class Gesture {
           eventUtils.setGroup(true);
         }
         const newBlock = this.flyout.createBlock(this.targetBlock);
-        newBlock.scheduleSnapAndBump();
+        newBlock.snapToGrid();
+        newBlock.bumpNeighbours();
       }
     } else {
       if (!this.startWorkspace_) {
@@ -1205,9 +1212,7 @@ export class Gesture {
    * @internal
    */
   isDragging(): boolean {
-    return (
-      !!this.workspaceDragger || !!this.blockDragger || !!this.bubbleDragger
-    );
+    return this.dragging;
   }
 
   /**

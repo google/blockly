@@ -124,7 +124,6 @@ export class Input {
 
     if (this.sourceBlock.rendered) {
       (this.sourceBlock as BlockSvg).queueRender();
-      this.sourceBlock.bumpNeighbours();
     }
     return index;
   }
@@ -145,7 +144,6 @@ export class Input {
         this.fieldRow.splice(i, 1);
         if (this.sourceBlock.rendered) {
           (this.sourceBlock as BlockSvg).queueRender();
-          this.sourceBlock.bumpNeighbours();
         }
         return true;
       }

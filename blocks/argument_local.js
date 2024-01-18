@@ -86,9 +86,7 @@ blocks['argument_local'] = {
     field.forceRerender();
   },
 
-  changeArgumentName: function(newName) {
-    const parentBlock = this.getParent();
-
+  changeArgumentName: function(newName, parentBlock) {
     const argumentField = this.getField('VALUE');
     const argumentFieldText = argumentField.getText('VALUE');
     
@@ -169,7 +167,8 @@ const renameOptionCallbackFactory = function(block) {
 
   return function() {
     const callback = (newName) => {
-      block.changeArgumentName.call(block, newName);
+      const parentBlock = block.getParent();
+      block.changeArgumentName.call(block, newName, parentBlock);
     };
     const msg = Msg['RENAME_ARGUMENT_TITLE'].replace('%1', argumentValue);
     dialog.prompt(msg, 'default', callback);

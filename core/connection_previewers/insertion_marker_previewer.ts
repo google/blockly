@@ -179,6 +179,15 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     return result;
   }
 
+  /**
+   * Gets the connection on the marker block that matches the original
+   * connection on the original block.
+   *
+   * @param orig The original block.
+   * @param marker The marker block (where  we want to find the matching
+   *     connection).
+   * @param origConn The original connection.
+   */
   private getMatchingConnection(
     orig: BlockSvg,
     marker: BlockSvg,

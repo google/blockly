@@ -272,8 +272,7 @@ export class BlockDragger implements IBlockDragger {
     delta: Coordinate,
   ): ConnectionCandidate | null {
     const localConns = this.getLocalConnections(draggingBlock);
-    // TODO: Pass the actual candidate.
-    let radius = this.getStartRadius(null);
+    let radius = config.snapRadius;
     let candidate = null;
 
     for (const conn of localConns) {
@@ -289,19 +288,6 @@ export class BlockDragger implements IBlockDragger {
     }
 
     return candidate;
-  }
-
-  private getStartRadius(activeCandidate: ConnectionCandidate | null): number {
-    // TODO: Can we not just use the radius on the active candidate? Using
-    // two constants seems very fragile.
-
-    // If there is already a connection highlighted,
-    // increase the radius we check for making new connections.
-    // When a connection is highlighted, blocks move around when the
-    // insertion marker is created, which could cause the connection became out
-    // of range. By increasing radiusConnection when a connection already
-    // exists, we never "lose" the connection from the offset.
-    return activeCandidate ? config.connectingSnapRadius : config.snapRadius;
   }
 
   /**

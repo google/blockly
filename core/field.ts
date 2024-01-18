@@ -314,6 +314,7 @@ export abstract class Field<T = any>
     this.setTooltip(this.tooltip_);
     this.bindEvents_();
     this.initModel();
+    this.applyColour();
   }
 
   /**

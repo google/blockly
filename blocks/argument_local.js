@@ -20,7 +20,7 @@ const {Msg} = goog.require('Blockly.Msg');
 const {defineBlocks} = goog.require('Blockly.common');
 
 // For local argument block of this block type should rename label and value equally.
-const blockTypesRenameValue = ['controls_for_with_argument', 'controls_forEach_with_argument'];
+const blockTypesRenameValue = ['controls_for_with_argument', 'controls_forEach_with_argument', 'procedures_with_argument_defnoreturn', 'procedures_with_argument_defreturn'];
 
 
 const blocks = {};

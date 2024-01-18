@@ -163,6 +163,9 @@ export class BlockSvg
    */
   constructor(workspace: WorkspaceSvg, prototypeName: string, opt_id?: string) {
     super(workspace, prototypeName, opt_id);
+    if (!workspace.rendered) {
+      throw TypeError('Cannot create a rendered block in a headless workspace');
+    }
     this.workspace = workspace;
     this.svgGroup_ = dom.createSvgElement(Svg.G, {});
 
@@ -189,10 +192,8 @@ export class BlockSvg
    * May be called more than once.
    */
   initSvg() {
-    if (!this.workspace.rendered) {
-      throw TypeError('Workspace is headless.');
-    }
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
+    if (this.initialized) return;
+    for (const input of this.inputList) {
       input.init();
     }
     for (const icon of this.getIcons()) {
@@ -202,7 +203,7 @@ export class BlockSvg
     this.applyColour();
     this.pathObject.updateMovable(this.isMovable());
     const svg = this.getSvgRoot();
-    if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
+    if (!this.workspace.options.readOnly && svg) {
       browserEvents.conditionalBind(
         svg,
         'pointerdown',
@@ -210,11 +211,11 @@ export class BlockSvg
         this.onMouseDown_,
       );
     }
-    this.eventsInit_ = true;
 
     if (!svg.parentNode) {
       this.workspace.getCanvas().appendChild(svg);
     }
+    this.initialized = true;
   }
 
   /**

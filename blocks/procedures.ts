@@ -921,10 +921,9 @@ const PROCEDURE_CALL_COMMON = {
           type: 'field_label',
           text: this.arguments_[i],
         }) as FieldLabel;
-        const input = this.appendValueInput('ARG' + i)
+        this.appendValueInput('ARG' + i)
           .setAlign(Align.RIGHT)
           .appendField(newField, 'ARGNAME' + i);
-        input.init();
       }
     }
     // Remove deleted inputs.
@@ -937,7 +936,6 @@ const PROCEDURE_CALL_COMMON = {
       if (this.arguments_.length) {
         if (!this.getField('WITH')) {
           topRow.appendField(Msg['PROCEDURES_CALL_BEFORE_PARAMS'], 'WITH');
-          topRow.init();
         }
       } else {
         if (this.getField('WITH')) {

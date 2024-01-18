@@ -191,14 +191,16 @@ export class BlockDragger implements IBlockDragger {
    * display accordingly.
    *
    * @param e The most recent move event.
-   * @param currentDragDeltaXY How far the pointer has moved from the position
+   * @param delta How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
    */
-  drag(e: PointerEvent, currentDragDeltaXY: Coordinate) {
-    this.moveBlock(this.draggingBlock_, currentDragDeltaXY);
-    this.updateDragTargets(e, this.draggingBlock_);
-    this.updateDeletePreview(e, this.draggingBlock_, currentDragDeltaXY);
-    this.updateConnectionPreview(this.draggingBlock_, currentDragDeltaXY);
+  drag(e: PointerEvent, delta: Coordinate) {
+    const block = this.draggingBlock_;
+    this.moveBlock(block, delta);
+    this.updateDragTargets(e, block);
+    this.wouldDeleteBlock_ = this.wouldDeleteBlock(e, block, delta);
+    this.updateCursorDuringBlockDrag_();
+    this.updateConnectionPreview(block, delta);
   }
 
   private moveBlock(draggingBlock: BlockSvg, dragDelta: Coordinate) {
@@ -215,16 +217,6 @@ export class BlockDragger implements IBlockDragger {
     }
     newDragTarget?.onDragOver(draggingBlock);
     this.dragTarget_ = newDragTarget;
-  }
-
-  private updateDeletePreview(
-    e: PointerEvent,
-    draggingBlock: BlockSvg,
-    delta: Coordinate,
-  ) {
-    draggingBlock.setDeleteStyle(
-      this.wouldDeleteBlock(e, this.draggingBlock_, delta),
-    );
   }
 
   /**
@@ -324,7 +316,9 @@ export class BlockDragger implements IBlockDragger {
       Coordinate.sum(localPos, delta),
       neighbourPos,
     );
-    return newCandidate.distance > distance - config.currentConnectionPreference;
+    return (
+      newCandidate.distance > distance - config.currentConnectionPreference
+    );
   }
 
   /**

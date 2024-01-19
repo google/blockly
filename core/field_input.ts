@@ -542,6 +542,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     } else if (e.key === 'Escape') {
       this.setValue(
         this.htmlInput_!.getAttribute('data-untyped-default-value'),
+        false,
       );
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();

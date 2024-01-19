@@ -289,13 +289,13 @@ export class RenderedConnection extends Connection {
   /** Add highlighting around this connection. */
   highlight() {
     this.highlighted = true;
-    this.getSourceBlock().workspace.getRenderer().highlightConnection(this);
+    this.getSourceBlock().queueRender();
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
     this.highlighted = false;
-    this.getSourceBlock().workspace.getRenderer().unhighlightConnection(this);
+    this.getSourceBlock().queueRender();
   }
 
   /** Returns true if this connection is highlighted, false otherwise. */

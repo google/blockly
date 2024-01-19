@@ -222,7 +222,8 @@ const PROCEDURES_WITH_ARGUMENT = {
     for (let i = 0, argumentBlock; (argumentBlock = argumentsInProcedures[i]); i++) {
       const argumentShouldRename = shouldRename.find((a) => a.id === argumentBlock.data);
       if (shouldRename.length && argumentShouldRename) {
-        argumentBlock.changeArgumentName.call(argumentBlock, argumentShouldRename.name);
+        const parentBlock = argumentBlock.getRootBlock();
+        argumentBlock.changeArgumentName.call(argumentBlock, argumentShouldRename.name, parentBlock);
       }
 
       const argumentShouldRemove = shouldRemove.find((f) => f.id === argumentBlock.data);

@@ -22,7 +22,6 @@ import * as eventUtils from './events/utils.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
 
 /** Maximum randomness in workspace units for bumping a block. */
 const BUMP_RANDOMNESS = 10;
@@ -37,7 +36,6 @@ export class RenderedConnection extends Connection {
   private readonly dbOpposite: ConnectionDB;
   private readonly offsetInBlock: Coordinate;
   private trackedState: TrackedState;
-  private highlightPath: SVGPathElement | null = null;
 
   /** Connection this connection connects to.  Null if not connected. */
   override targetConnection: RenderedConnection | null = null;
@@ -79,10 +77,6 @@ export class RenderedConnection extends Connection {
     super.dispose();
     if (this.trackedState === RenderedConnection.TrackedState.TRACKED) {
       this.db.removeConnection(this, this.y);
-    }
-    if (this.highlightPath) {
-      dom.removeNode(this.highlightPath);
-      this.highlightPath = null;
     }
   }
 

@@ -268,7 +268,14 @@ export class Renderer implements IRegistrable {
     info.measure();
     const drawer = this.makeDrawer_(block, info);
 
-    drawer.drawConnectionHighlightPath(conn);
+    const measurable = info.getMeasureableForConnection(conn);
+    if (!measurable) {
+      throw new Error(
+        'Could not find measurable for connection. ' +
+          'The render info is probably being generated incorrectly.',
+      );
+    }
+    drawer.drawConnectionHighlightPath(measurable);
   }
 
   /** Visually unhighlights the given connection, if it is highlighted. */

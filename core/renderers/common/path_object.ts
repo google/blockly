@@ -40,12 +40,11 @@ export class PathObject implements IPathObject {
   constants: ConstantProvider;
   style: BlockStyle;
 
-  /**
-   * Highlight paths associated with connections.
-   *
-   * @protected
-   */
-  connectionHighlights = new WeakMap<RenderedConnection, SVGElement>();
+  /** Highlight paths associated with connections. */
+  private connectionHighlights = new WeakMap<RenderedConnection, SVGElement>();
+
+  /** Locations of connection highlights. */
+  private highlightOffsets = new WeakMap<RenderedConnection, Coordinate>();
 
   /**
    * @param root The root SVG element.
@@ -273,7 +272,21 @@ export class PathObject implements IPathObject {
     offset: Coordinate,
     rtl: boolean,
   ) {
-    if (this.connectionHighlights.has(connection)) return;
+    if (this.connectionHighlights.has(connection)) {
+      const currPath = this.connectionHighlights
+        .get(connection)
+        ?.getAttribute('d');
+      const currOffset = this.highlightOffsets.get(connection);
+      if (
+        connectionPath === currPath &&
+        Coordinate.equals(offset, currOffset)
+      ) {
+        return;
+      } else {
+        this.removeConnectionHighlight(connection);
+      }
+    }
+
     const highlight = dom.createSvgElement(
       Svg.PATH,
       {

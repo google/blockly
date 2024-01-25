@@ -273,18 +273,10 @@ export class PathObject implements IPathObject {
     rtl: boolean,
   ) {
     if (this.connectionHighlights.has(connection)) {
-      const currPath = this.connectionHighlights
-        .get(connection)
-        ?.getAttribute('d');
-      const currOffset = this.highlightOffsets.get(connection);
-      if (
-        connectionPath === currPath &&
-        Coordinate.equals(offset, currOffset)
-      ) {
+      if (this.currentHighlightMatchesNew(connection, connectionPath, offset)) {
         return;
-      } else {
-        this.removeConnectionHighlight(connection);
       }
+      this.removeConnectionHighlight(connection);
     }
 
     const highlight = dom.createSvgElement(
@@ -298,6 +290,18 @@ export class PathObject implements IPathObject {
       this.svgRoot,
     );
     this.connectionHighlights.set(connection, highlight);
+  }
+
+  private currentHighlightMatchesNew(
+    connection: RenderedConnection,
+    newPath: string,
+    newOffset: Coordinate,
+  ): boolean {
+    const currPath = this.connectionHighlights
+      .get(connection)
+      ?.getAttribute('d');
+    const currOffset = this.highlightOffsets.get(connection);
+    return currPath === newPath && Coordinate.equals(currOffset, newOffset);
   }
 
   /**

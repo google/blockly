@@ -70,7 +70,7 @@ interface ParameterModelConstructor<ParameterModel extends IParameterModel> {
 /**
  * Serializes the given IProcedureModel to JSON.
  */
-function saveProcedure(proc: IProcedureModel): State {
+export function saveProcedure(proc: IProcedureModel): State {
   const state: State = proc.saveState();
   if (!proc.getParameters().length) return state;
   state.parameters = proc.getParameters().map((param) => param.saveState());
@@ -80,7 +80,7 @@ function saveProcedure(proc: IProcedureModel): State {
 /**
  * Deserializes the given procedure model State from JSON.
  */
-function loadProcedure<
+export function loadProcedure<
   ProcedureModel extends IProcedureModel,
   ParameterModel extends IParameterModel,
 >(

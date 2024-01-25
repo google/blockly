@@ -22,7 +22,6 @@ import {isDynamicShape, isNotch, isPuzzleTab} from './constants.js';
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
 import type {RenderInfo} from './info.js';
 import * as deprecation from '../../utils/deprecation.js';
-import type {RenderedConnection} from '../../rendered_connection.js';
 import {ConnectionType} from '../../connection_type.js';
 
 /**
@@ -62,6 +61,7 @@ export class Drawer {
   draw() {
     this.drawOutline_();
     this.drawInternals_();
+    this.updateConnectionHighlights();
 
     this.block_.pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);
     if (this.info_.RTL) {
@@ -443,13 +443,29 @@ export class Drawer {
     }
   }
 
-  /** Returns a path to highlight the given connection. */
-  drawConnectionHighlightPath(conn: RenderedConnection) {
-    const measurable = this.info_.getMeasureableForConnection(conn);
-    if (!measurable) {
-      throw new Error('Could not find measurable for connection');
-    }
+  /**
+   * Updates the path object to reflect which connections on the block are
+   * highlighted.
+   */
+  protected updateConnectionHighlights() {
+    for (const row of this.info_.rows) {
+      for (const elem of row.elements) {
+        if (!(elem instanceof Connection)) continue;
 
+        if (elem.highlighted) {
+          this.drawConnectionHighlightPath(elem);
+        } else {
+          this.block_.pathObject.removeConnectionHighlight?.(
+            elem.connectionModel,
+          );
+        }
+      }
+    }
+  }
+
+  /** Returns a path to highlight the given connection. */
+  drawConnectionHighlightPath(measurable: Connection) {
+    const conn = measurable.connectionModel;
     let path = '';
     if (
       conn.type === ConnectionType.INPUT_VALUE ||

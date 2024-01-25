@@ -20,6 +20,7 @@ import {Types} from './types.js';
 export class Connection extends Measurable {
   shape: Shape;
   isDynamicShape: boolean;
+  highlighted: boolean;
 
   /**
    * @param constants The rendering constants provider.
@@ -32,9 +33,11 @@ export class Connection extends Measurable {
   ) {
     super(constants);
 
-    this.shape = this.constants_.shapeFor(connectionModel);
-
-    this.isDynamicShape = 'isDynamic' in this.shape && this.shape.isDynamic;
     this.type |= Types.CONNECTION;
+
+    this.shape = this.constants_.shapeFor(connectionModel);
+    this.isDynamicShape = 'isDynamic' in this.shape && this.shape.isDynamic;
+
+    this.highlighted = connectionModel.isHighlighted();
   }
 }

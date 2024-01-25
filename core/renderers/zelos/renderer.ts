@@ -7,7 +7,6 @@
 // Former goog.module ID: Blockly.zelos.Renderer
 
 import type {BlockSvg} from '../../block_svg.js';
-import type {Connection} from '../../connection.js';
 import {ConnectionType} from '../../connection_type.js';
 import {InsertionMarkerManager} from '../../insertion_marker_manager.js';
 import type {Marker} from '../../keyboard_nav/marker.js';
@@ -107,13 +106,6 @@ export class Renderer extends BaseRenderer {
    */
   override getConstants(): ConstantProvider {
     return this.constants_;
-  }
-
-  override shouldHighlightConnection(conn: Connection) {
-    return (
-      conn.type !== ConnectionType.INPUT_VALUE &&
-      conn.type !== ConnectionType.OUTPUT_VALUE
-    );
   }
 
   override getConnectionPreviewMethod(

@@ -8,10 +8,10 @@
 
 import type {BlockSvg} from '../../block_svg.js';
 import {ConnectionType} from '../../connection_type.js';
-import {RenderedConnection} from '../../rendered_connection.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import type {BaseShape, DynamicShape, Notch} from '../common/constants.js';
 import {Drawer as BaseDrawer} from '../common/drawer.js';
+import {Connection} from '../measurables/connection.js';
 import type {InlineInput} from '../measurables/inline_input.js';
 import {OutputConnection} from '../measurables/output_connection.js';
 import type {Row} from '../measurables/row.js';
@@ -44,6 +44,7 @@ export class Drawer extends BaseDrawer {
     pathObject.beginDrawing();
     this.drawOutline_();
     this.drawInternals_();
+    this.updateConnectionHighlights();
 
     pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);
     if (this.info_.RTL) {
@@ -236,17 +237,14 @@ export class Drawer extends BaseDrawer {
   }
 
   /** Returns a path to highlight the given connection. */
-  drawConnectionHighlightPath(conn: RenderedConnection) {
-    const measurable = this.info_.getMeasureableForConnection(conn);
-    if (!measurable) {
-      throw new Error('Could not find measurable for connection');
-    }
+  drawConnectionHighlightPath(measurable: Connection) {
+    const conn = measurable.connectionModel;
     if (
       conn.type === ConnectionType.NEXT_STATEMENT ||
       conn.type === ConnectionType.PREVIOUS_STATEMENT ||
       (conn.type === ConnectionType.OUTPUT_VALUE && !measurable.isDynamicShape)
     ) {
-      super.drawConnectionHighlightPath(conn);
+      super.drawConnectionHighlightPath(measurable);
       return;
     }
 

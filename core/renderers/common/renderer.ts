@@ -258,25 +258,6 @@ export class Renderer implements IRegistrable {
   }
 
   /**
-   * Visually highlights the given connection with a border, if it is not
-   * already highlighted.
-   */
-  highlightConnection(conn: RenderedConnection): void {
-    const block = conn.getSourceBlock();
-
-    const info = this.makeRenderInfo_(block);
-    info.measure();
-    const drawer = this.makeDrawer_(block, info);
-
-    drawer.drawConnectionHighlightPath(conn);
-  }
-
-  /** Visually unhighlights the given connection, if it is highlighted. */
-  unhighlightConnection(conn: RenderedConnection): void {
-    conn.getSourceBlock().pathObject.removeConnectionHighlight?.(conn);
-  }
-
-  /**
    * Render the block.
    *
    * @param block The block to render.

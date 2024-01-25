@@ -40,6 +40,7 @@ export class Drawer extends BaseDrawer {
   override draw() {
     this.drawOutline_();
     this.drawInternals_();
+    this.updateConnectionHighlights();
 
     const pathObject = this.block_.pathObject as PathObject;
     pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);

@@ -36,6 +36,7 @@ export class RenderedConnection extends Connection {
   private readonly dbOpposite: ConnectionDB;
   private readonly offsetInBlock: Coordinate;
   private trackedState: TrackedState;
+  private highlighted: boolean = false;
 
   /** Connection this connection connects to.  Null if not connected. */
   override targetConnection: RenderedConnection | null = null;
@@ -287,12 +288,19 @@ export class RenderedConnection extends Connection {
 
   /** Add highlighting around this connection. */
   highlight() {
-    this.getSourceBlock().workspace.getRenderer().highlightConnection(this);
+    this.highlighted = true;
+    this.getSourceBlock().queueRender();
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
-    this.getSourceBlock().workspace.getRenderer().unhighlightConnection(this);
+    this.highlighted = false;
+    this.getSourceBlock().queueRender();
+  }
+
+  /** Returns true if this connection is highlighted, false otherwise. */
+  isHighlighted(): boolean {
+    return this.highlighted;
   }
 
   /**

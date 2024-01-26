@@ -11,6 +11,7 @@ import {WorkspaceSvg} from '../workspace_svg.js';
 import * as eventUtils from '../events/utils.js';
 import * as constants from '../constants.js';
 import * as renderManagement from '../render_management.js';
+import * as registry from '../registry.js';
 
 /**
  * An error message to throw if the block created by createMarkerBlock_ is
@@ -247,3 +248,9 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     this.hidePreview();
   }
 }
+
+registry.register(
+  registry.Type.CONNECTION_PREVIEWER,
+  registry.DEFAULT,
+  InsertionMarkerPreviewer,
+);

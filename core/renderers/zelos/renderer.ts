@@ -22,6 +22,7 @@ import {Drawer} from './drawer.js';
 import {RenderInfo} from './info.js';
 import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
+import * as deprecation from '../../utils/deprecation.js';
 
 /**
  * The zelos renderer. This renderer emulates Scratch-style and MakeCode-style
@@ -108,11 +109,21 @@ export class Renderer extends BaseRenderer {
     return this.constants_;
   }
 
+  /**
+   * @deprecated v10 - This function is no longer respected. A custom
+   *    IConnectionPreviewer may be able to fulfill the functionality.
+   */
   override getConnectionPreviewMethod(
     closest: RenderedConnection,
     local: RenderedConnection,
     topBlock: BlockSvg,
   ) {
+    deprecation.warn(
+      'getConnectionPreviewMethod',
+      'v10',
+      'v12',
+      'an IConnectionPreviewer, if it fulfills your use case.',
+    );
     if (local.type === ConnectionType.OUTPUT_VALUE) {
       if (!closest.isConnected()) {
         return InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;

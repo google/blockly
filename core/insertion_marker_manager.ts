@@ -56,6 +56,8 @@ const DUPLICATE_BLOCK_ERROR =
  * Class that controls updates to connections during drags.  It is primarily
  * responsible for finding the closest eligible connection and highlighting or
  * unhighlighting it as needed during a drag.
+ *
+ * @deprecated v10 - Use an IConnectionPreviewer instead.
  */
 export class InsertionMarkerManager {
   /**

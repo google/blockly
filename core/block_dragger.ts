@@ -31,7 +31,6 @@ import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as deprecation from './utils/deprecation.js';
 import * as layers from './layers.js';
 import {ConnectionType, IConnectionPreviewer} from './blockly.js';
-import {InsertionMarkerPreviewer} from './connection_previewers/insertion_marker_previewer.js';
 import {RenderedConnection} from './rendered_connection.js';
 import {config} from './config.js';
 import {ComponentManager} from './component_manager.js';
@@ -86,11 +85,13 @@ export class BlockDragger implements IBlockDragger {
    */
   constructor(block: BlockSvg, workspace: WorkspaceSvg) {
     this.draggingBlock_ = block;
-
-    // TODO: have this access the registry instead.
-    this.connectionPreviewer = new InsertionMarkerPreviewer(block);
-
     this.workspace_ = workspace;
+
+    const previewerConstructor = registry.getClassFromOptions(
+      registry.Type.CONNECTION_PREVIEWER,
+      this.workspace_.options,
+    );
+    this.connectionPreviewer = new previewerConstructor!(block);
 
     /**
      * The location of the top left corner of the dragging block at the

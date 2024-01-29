@@ -23,7 +23,7 @@ const closureCompiler = require('google-closure-compiler').gulp();
 const argv = require('yargs').argv;
 const {rimraf} = require('rimraf');
 
-const {BUILD_DIR, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
+const {BUILD_DIR, LANG_BUILD_DIR, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 const {getPackageJson} = require('./helper_tasks');
 
 const {posixPath, quote} = require('../helpers');
@@ -350,8 +350,7 @@ this removal!
  */
 function buildLangfiles(done) {
   // Create output directory.
-  const outputDir = path.join(BUILD_DIR, 'msg');
-  fs.mkdirSync(outputDir, {recursive: true});
+  fs.mkdirSync(LANG_BUILD_DIR, {recursive: true});
 
   // Run create_messages.py.
   let json_files = fs.readdirSync(path.join('msg', 'json'));
@@ -364,7 +363,7 @@ function buildLangfiles(done) {
   --source_synonym_file ${path.join('msg', 'json', 'synonyms.json')} \
   --source_constants_file ${path.join('msg', 'json', 'constants.json')} \
   --key_file ${path.join('msg', 'json', 'keys.json')} \
-  --output_dir ${outputDir} \
+  --output_dir ${LANG_BUILD_DIR} \
   --quiet ${json_files.join(' ')}`;
   execSync(createMessagesCmd, {stdio: 'inherit'});
 

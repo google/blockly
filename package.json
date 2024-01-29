@@ -54,14 +54,45 @@
     "test:compile:advanced": "gulp buildAdvancedCompilationTest --debug",
     "updateGithubPages": "npm ci && gulp gitUpdateGithubPages"
   },
-  "main": "./index.js",
-  "umd": "./blockly.min.js",
-  "unpkg": "./blockly.min.js",
-  "types": "./index.d.ts",
-  "browser": {
-    "./node.js": "./browser.js",
-    "./core.js": "./core-browser.js",
-    "./blockly-node.js": "./blockly.js"
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "browser": "./browser.js",
+      "node": "./node.js",
+      "umd": "./blockly.min.js"
+    },
+    "./core": {
+      "browser": "./core-browser.js",
+      "node": "./core.js"
+    },
+    "./blocks": {
+      "types": "./blocks.d.ts",
+      "default": "./blocks.js"
+    },
+    "./dart": {
+      "types": "./dart.d.ts",
+      "default": "./dart.js"
+    },
+    "./lua": {
+      "types": "./lua.d.ts",
+      "default": "./lua.js"
+    },
+    "./javascript": {
+      "types": "./javascript.d.ts",
+      "default": "./javascript.js"
+    },
+    "./php": {
+      "types": "./php.d.ts",
+      "default": "./php.js"
+    },
+    "./python": {
+      "types": "./python.d.ts",
+      "default": "./python.js"
+    },
+    "./msg/en": {
+      "types": "./msg/en.d.ts",
+      "default": "./msg/en.js"
+    }
   },
   "license": "Apache-2.0",
   "devDependencies": {

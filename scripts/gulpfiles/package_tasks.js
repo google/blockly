@@ -21,7 +21,7 @@ const fs = require('fs');
 const {rimraf} = require('rimraf');
 const build = require('./build_tasks');
 const {getPackageJson} = require('./helper_tasks');
-const {BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
+const {BUILD_DIR, LANG_BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
 
 // Path to template files for gulp-umd.
 const TEMPLATE_DIR = 'scripts/package/templates';
@@ -81,23 +81,6 @@ function packageBlocks() {
         cjs: './blocks_compressed',
       }]))
     .pipe(gulp.rename('blocks.js'))
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
- * This task wraps scripts/package/index.js into a UMD module.
- * We implicitly require the Node entry point in CommonJS environments,
- * and the Browser entry point for AMD environments.
- * @example import * as Blockly from 'blockly';
- */
-function packageIndex() {
-  return gulp.src('scripts/package/index.js')
-    .pipe(packageUMD('Blockly', [{
-        name: 'Blockly',
-        amd: './browser',
-        cjs: './node',
-      }]))
-    .pipe(gulp.rename('index.js'))
     .pipe(gulp.dest(RELEASE_DIR));
 };
 
@@ -277,7 +260,7 @@ function packagePHP() {
  */
 function packageLocales() {
   // Remove references to goog.provide and goog.require.
-  return gulp.src(`${BUILD_DIR}/msg/*.js`)
+  return gulp.src(`${LANG_BUILD_DIR}/*.js`)
       .pipe(gulp.replace(/goog\.[^\n]+/g, ''))
       .pipe(packageUMD('Blockly.Msg', [], 'umd-msg.template'))
       .pipe(gulp.dest(`${RELEASE_DIR}/msg`));
@@ -310,12 +293,31 @@ function packageMedia() {
 };
 
 /**
- * This task copies the package.json file into the release directory.
+ * This task copies the package.json file into the release directory,
+ * with modifications:
+ *
+ * - The scripts section is removed.
+ * - Additional entries are added to the exports section for each of
+ *   the published languages.
+ *
+ * Prerequisite: buildLangfiles.
  */
 function packageJSON(cb) {
-  const packageJson = getPackageJson();
-  const json = Object.assign({}, packageJson);
+  // Copy package.json, so we can safely modify it.
+  const json = JSON.parse(JSON.stringify(getPackageJson()));
+  // Remove unwanted entries.
   delete json['scripts'];
+  // Add langfile entrypoints to exports.
+  const langfiles = fs.readdirSync(LANG_BUILD_DIR).filter(f => /\.js$/.test(f));
+  langfiles.sort();
+  for (const langfile of langfiles) {
+    const lang = langfile.replace(/\.js$/, '');
+    json.exports[`./msg/${lang}`] = {
+      types: `./msg/${lang}.d.ts`,
+      default: `./msg/${langfile}`,
+    };
+  }
+  // Write resulting package.json file to release directory.
   if (!fs.existsSync(RELEASE_DIR)) {
     fs.mkdirSync(RELEASE_DIR, {recursive: true});
   }
@@ -376,7 +378,6 @@ const package = gulp.series(
         cleanReleaseDir),
     build.build,
     gulp.parallel(
-        packageIndex,
         packageBrowser,
         packageNode,
         packageCore,

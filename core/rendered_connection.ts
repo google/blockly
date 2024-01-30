@@ -79,6 +79,7 @@ export class RenderedConnection extends Connection {
     if (this.trackedState === RenderedConnection.TrackedState.TRACKED) {
       this.db.removeConnection(this, this.y);
     }
+    this.sourceBlock_.pathObject.removeConnectionHighlight?.(this);
   }
 
   /**

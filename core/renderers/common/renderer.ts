@@ -188,7 +188,10 @@ export class Renderer implements IRegistrable {
   }
 
   /**
-   * Determine whether or not to highlight a connection.
+   * Determine whether or not to highlight a connection when previewing a
+   * connection.
+   *
+   * This may not be respected by all connection previewers.
    *
    * @param _conn The connection to determine whether or not to highlight.
    * @returns True if we should highlight the connection.

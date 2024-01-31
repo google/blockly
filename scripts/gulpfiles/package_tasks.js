@@ -55,36 +55,6 @@ function packageCommonJS(namespace, dependencies) {
 };
 
 /**
- * This task wraps scripts/package/blockly.js into a UMD module.
- * @example import 'blockly/blockly';
- */
-function packageBlockly() {
-  return gulp.src('scripts/package/blockly.js')
-    .pipe(packageUMD('Blockly', [{
-        name: 'Blockly',
-        amd: './blockly_compressed',
-        cjs: './blockly_compressed',
-      }]))
-    .pipe(gulp.rename('blockly.js'))
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
- * This task wraps scripts/package/blocks.js into a UMD module.
- * @example import 'blockly/blocks';
- */
-function packageBlocks() {
-  return gulp.src('scripts/package/blocks.js')
-    .pipe(packageUMD('BlocklyBlocks', [{
-        name: 'BlocklyBlocks',
-        amd: './blocks_compressed',
-        cjs: './blocks_compressed',
-      }]))
-    .pipe(gulp.rename('blocks.js'))
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
  * This task wraps scripts/package/browser/index.js into a UMD module.
  * By default, the module includes Blockly core and built-in blocks,
  * as well as the JavaScript code generator and the English block
@@ -113,25 +83,6 @@ function packageBrowser() {
         cjs: 'blockly/javascript',
       }]))
     .pipe(gulp.rename('browser.js'))
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
- * This task wraps scripts/package/browser/core.js into a UMD module.
- * By default, the module includes the Blockly core package and a
- * helper method to set the locale.
- * This module is configured (in package.json) to replaces the module
- * built by package-node-core in browser environments.
- * @example import * as Blockly from 'blockly/core';
- */
-function packageCore() {
-  return gulp.src('scripts/package/browser/core.js')
-    .pipe(packageUMD('Blockly', [{
-        name: 'Blockly',
-        amd: './blockly',
-        cjs: './blockly',
-      }]))
-    .pipe(gulp.rename('core-browser.js'))
     .pipe(gulp.dest(RELEASE_DIR));
 };
 
@@ -191,67 +142,6 @@ function packageNodeCore() {
       }]))
     .pipe(gulp.rename('core.js'))
     .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
- * A helper method for wrapping a generator file into a UMD module.
- * @param {string} file Source file name.
- * @param {string} rename Destination file name.
- * @param {string} namespace Export namespace.
- */
-function packageGenerator(file, rename, namespace) {
-  return gulp.src(`scripts/package/${rename}`)
-    .pipe(packageUMD(`Blockly${namespace}`, [{
-        name: 'Blockly',
-        amd: 'blockly/core',
-        cjs: 'blockly/core',
-      }, {
-        name: `Blockly${namespace}`,
-        amd: `./${file}`,
-        cjs: `./${file}`,
-      }]))
-    .pipe(gulp.rename(rename))
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
- * This task wraps javascript_compressed.js into a UMD module.
- * @example import 'blockly/javascript';
- */
-function packageJavascript() {
-  return packageGenerator('javascript_compressed.js', 'javascript.js', 'JavaScript');
-};
-
-/**
- * This task wraps python_compressed.js into a UMD module.
- * @example import 'blockly/python';
- */
-function packagePython() {
-  return packageGenerator('python_compressed.js', 'python.js', 'Python');
-};
-
-/**
- * This task wraps lua_compressed.js into a UMD module.
- * @example import 'blockly/lua';
- */
-function packageLua() {
-  return packageGenerator('lua_compressed.js', 'lua.js', 'Lua');
-};
-
-/**
- * This task wraps dart_compressed.js into a UMD module.
- * @example import 'blockly/dart';
- */
-function packageDart() {
-  return packageGenerator('dart_compressed.js', 'dart.js', 'Dart');
-};
-
-/**
- * This task wraps php_compressed.js into a UMD module.
- * @example import 'blockly/php';
- */
-function packagePHP() {
-  return packageGenerator('php_compressed.js', 'php.js', 'PHP');
 };
 
 /**
@@ -380,15 +270,7 @@ const package = gulp.series(
     gulp.parallel(
         packageBrowser,
         packageNode,
-        packageCore,
         packageNodeCore,
-        packageBlockly,
-        packageBlocks,
-        packageJavascript,
-        packagePython,
-        packageLua,
-        packageDart,
-        packagePHP,
         packageMedia,
         gulp.series(packageLocales, packageUMDBundle),
         packageJSON,

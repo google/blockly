@@ -62,32 +62,32 @@
       "umd": "./blockly.min.js"
     },
     "./core": {
-      "browser": "./core-browser.js",
+      "browser": "./blockly_compressed.js",
       "node": "./core.js"
     },
     "./blocks": {
       "types": "./blocks.d.ts",
-      "default": "./blocks.js"
+      "default": "./blocks_compressed.js"
     },
     "./dart": {
       "types": "./dart.d.ts",
-      "default": "./dart.js"
+      "default": "./dart_compressed.js"
     },
     "./lua": {
       "types": "./lua.d.ts",
-      "default": "./lua.js"
+      "default": "./lua_compressed.js"
     },
     "./javascript": {
       "types": "./javascript.d.ts",
-      "default": "./javascript.js"
+      "default": "./javascript_compressed.js"
     },
     "./php": {
       "types": "./php.d.ts",
-      "default": "./php.js"
+      "default": "./php_compressed.js"
     },
     "./python": {
       "types": "./python.d.ts",
-      "default": "./python.js"
+      "default": "./python_compressed.js"
     },
     "./msg/en": {
       "types": "./msg/en.d.ts",

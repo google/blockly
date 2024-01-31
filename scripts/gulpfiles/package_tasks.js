@@ -41,20 +41,6 @@ function packageUMD(namespace, dependencies, template = 'umd.template') {
 };
 
 /**
- * A helper method for wrapping a file into a CommonJS module for Node.js.
- * @param {string} namespace The export namespace.
- * @param {Array<Object>} dependencies An array of dependencies to inject.
- */
-function packageCommonJS(namespace, dependencies) {
-  return gulp.umd({
-    dependencies: function () { return dependencies; },
-    namespace: function () { return namespace; },
-    exports: function () { return namespace; },
-    template: path.join(TEMPLATE_DIR, 'node.template')
-  });
-};
-
-/**
  * This task wraps scripts/package/index.js into a UMD module.
  *
  * This module is the main entrypoint for the blockly package, and

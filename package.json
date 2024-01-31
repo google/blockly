@@ -88,9 +88,9 @@
       "types": "./python.d.ts",
       "default": "./python_compressed.js"
     },
-    "./msg/en": {
-      "types": "./msg/en.d.ts",
-      "default": "./msg/en.js"
+    "./msg/*": {
+      "types": "./msg/*.d.ts",
+      "default": "./msg/*.js"
     }
   },
   "license": "Apache-2.0",

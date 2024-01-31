@@ -124,8 +124,6 @@ function packageMedia() {
  * with modifications:
  *
  * - The scripts section is removed.
- * - Additional entries are added to the exports section for each of
- *   the published languages.
  *
  * Prerequisite: buildLangfiles.
  */
@@ -134,16 +132,6 @@ function packageJSON(cb) {
   const json = JSON.parse(JSON.stringify(getPackageJson()));
   // Remove unwanted entries.
   delete json['scripts'];
-  // Add langfile entrypoints to exports.
-  const langfiles = fs.readdirSync(LANG_BUILD_DIR).filter(f => /\.js$/.test(f));
-  langfiles.sort();
-  for (const langfile of langfiles) {
-    const lang = langfile.replace(/\.js$/, '');
-    json.exports[`./msg/${lang}`] = {
-      types: `./msg/${lang}.d.ts`,
-      default: `./msg/${langfile}`,
-    };
-  }
   // Write resulting package.json file to release directory.
   if (!fs.existsSync(RELEASE_DIR)) {
     fs.mkdirSync(RELEASE_DIR, {recursive: true});

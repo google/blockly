@@ -62,7 +62,7 @@
     },
     "./core": {
       "browser": "./blockly_compressed.js",
-      "node": "./core.js"
+      "node": "./core-node.js"
     },
     "./blocks": {
       "types": "./blocks.d.ts",

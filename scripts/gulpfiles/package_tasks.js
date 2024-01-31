@@ -82,21 +82,16 @@ function packageIndex() {
 };
 
 /**
- * This task wraps scripts/package/node/core.js into a CommonJS module for Node.js.
- * By default, the module includes the Blockly core package for Node.js
- * and a helper method to set the locale.
- * This module is configured (in package.json) to be replaced by the module
- * built by package-core in browser environments.
- * @example import * as Blockly from 'blockly/core';
+ * This task copies scripts/package/core-node.js into into the
+ * package.  This module will be the 'blockly/core' entrypoint for
+ * node.js environments.
+ *
+ * Note that, unlike index.js, this file does not get a UMD wrapper.
+ * This is because it is only used in node.js environments and so is
+ * guaranteed to be loaded as a CJS module.
  */
-function packageNodeCore() {
-  return gulp.src('scripts/package/node/core.js')
-    .pipe(packageCommonJS('Blockly', [{
-        name: 'Blockly',
-        amd: './blockly',
-        cjs: './blockly',
-      }]))
-    .pipe(gulp.rename('core.js'))
+function packageCoreNode() {
+  return gulp.src('scripts/package/core-node.js')
     .pipe(gulp.dest(RELEASE_DIR));
 };
 
@@ -225,7 +220,7 @@ const package = gulp.series(
     build.build,
     gulp.parallel(
         packageIndex,
-        packageNodeCore,
+        packageCoreNode,
         packageMedia,
         gulp.series(packageLocales, packageUMDBundle),
         packageJSON,

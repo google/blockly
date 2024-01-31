@@ -55,73 +55,29 @@ function packageCommonJS(namespace, dependencies) {
 };
 
 /**
- * This task wraps scripts/package/browser/index.js into a UMD module.
- * By default, the module includes Blockly core and built-in blocks,
- * as well as the JavaScript code generator and the English block
- * localization files.
- * This module is configured (in package.json) to replaces the module
- * built by package-node in browser environments.
- * @example import * as Blockly from 'blockly/browser';
+ * This task wraps scripts/package/index.js into a UMD module.
+ *
+ * This module is the main entrypoint for the blockly package, and
+ * loads blockly/core, blockly/blocks and blockly/msg/en and then
+ * calls setLocale(en).
  */
-function packageBrowser() {
-  return gulp.src('scripts/package/browser/index.js')
+function packageIndex() {
+  return gulp.src('scripts/package/index.js')
     .pipe(packageUMD('Blockly', [{
         name: 'Blockly',
         amd: 'blockly/core',
         cjs: 'blockly/core',
       },{
-        name: 'En',
+        name: 'en',
         amd: 'blockly/msg/en',
         cjs: 'blockly/msg/en',
+        global: 'Blockly.Msg',
       },{
-        name: 'BlocklyBlocks',
+        name: 'blocks',
         amd: 'blockly/blocks',
         cjs: 'blockly/blocks',
-      },{
-        name: 'BlocklyJS',
-        amd: 'blockly/javascript',
-        cjs: 'blockly/javascript',
+        global: 'Blockly.Blocks',
       }]))
-    .pipe(gulp.rename('browser.js'))
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
- * This task wraps scripts/package/node/index.js into a CommonJS module for Node.js.
- * By default, the module includes Blockly core and built-in blocks,
- * as well as all the code generators and the English block localization files.
- * This module is configured (in package.json) to be replaced by the module
- * built by package-browser in browser environments.
- * @example import * as Blockly from 'blockly/node';
- */
-function packageNode() {
-  return gulp.src('scripts/package/node/index.js')
-    .pipe(packageCommonJS('Blockly', [{
-        name: 'Blockly',
-        cjs: 'blockly/core',
-      },{
-        name: 'En',
-        cjs: 'blockly/msg/en',
-      },{
-        name: 'BlocklyBlocks',
-        cjs: 'blockly/blocks',
-      },{
-        name: 'BlocklyJS',
-        cjs: 'blockly/javascript',
-      },{
-        name: 'BlocklyPython',
-        cjs: 'blockly/python',
-      },{
-        name: 'BlocklyPHP',
-        cjs: 'blockly/php',
-      },{
-        name: 'BlocklyLua',
-        cjs: 'blockly/lua',
-      }, {
-        name: 'BlocklyDart',
-        cjs: 'blockly/dart',
-      }]))
-    .pipe(gulp.rename('node.js'))
     .pipe(gulp.dest(RELEASE_DIR));
 };
 
@@ -268,8 +224,7 @@ const package = gulp.series(
         cleanReleaseDir),
     build.build,
     gulp.parallel(
-        packageBrowser,
-        packageNode,
+        packageIndex,
         packageNodeCore,
         packageMedia,
         gulp.series(packageLocales, packageUMDBundle),

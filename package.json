@@ -57,9 +57,8 @@
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "browser": "./browser.js",
-      "node": "./node.js",
-      "umd": "./blockly.min.js"
+      "umd": "./blockly.min.js",
+      "default": "./index.js"
     },
     "./core": {
       "browser": "./blockly_compressed.js",

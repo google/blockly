@@ -14,8 +14,7 @@
  * your own environment.  Issues #251, #625, #682, #1304.
  */
 const soup =
-  '!#$%()*+,-./:;=?@[]^_`{|}~' +
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  'ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 
 /**
  * Namespace object for internal implementations we want to be able to

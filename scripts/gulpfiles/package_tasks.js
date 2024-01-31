@@ -97,20 +97,20 @@ function packageBrowser() {
   return gulp.src('scripts/package/browser/index.js')
     .pipe(packageUMD('Blockly', [{
         name: 'Blockly',
-        amd: './core-browser',
-        cjs: './core-browser',
+        amd: 'blockly/core',
+        cjs: 'blockly/core',
       },{
         name: 'En',
-        amd: './msg/en',
-        cjs: './msg/en',
+        amd: 'blockly/msg/en',
+        cjs: 'blockly/msg/en',
       },{
         name: 'BlocklyBlocks',
-        amd: './blocks',
-        cjs: './blocks',
+        amd: 'blockly/blocks',
+        cjs: 'blockly/blocks',
       },{
         name: 'BlocklyJS',
-        amd: './javascript',
-        cjs: './javascript',
+        amd: 'blockly/javascript',
+        cjs: 'blockly/javascript',
       }]))
     .pipe(gulp.rename('browser.js'))
     .pipe(gulp.dest(RELEASE_DIR));
@@ -147,28 +147,28 @@ function packageNode() {
   return gulp.src('scripts/package/node/index.js')
     .pipe(packageCommonJS('Blockly', [{
         name: 'Blockly',
-        cjs: './core',
+        cjs: 'blockly/core',
       },{
         name: 'En',
-        cjs: './msg/en',
+        cjs: 'blockly/msg/en',
       },{
         name: 'BlocklyBlocks',
-        cjs: './blocks',
+        cjs: 'blockly/blocks',
       },{
         name: 'BlocklyJS',
-        cjs: './javascript',
+        cjs: 'blockly/javascript',
       },{
         name: 'BlocklyPython',
-        cjs: './python',
+        cjs: 'blockly/python',
       },{
         name: 'BlocklyPHP',
-        cjs: './php',
+        cjs: 'blockly/php',
       },{
         name: 'BlocklyLua',
-        cjs: './lua',
+        cjs: 'blockly/lua',
       }, {
         name: 'BlocklyDart',
-        cjs: './dart',
+        cjs: 'blockly/dart',
       }]))
     .pipe(gulp.rename('node.js'))
     .pipe(gulp.dest(RELEASE_DIR));
@@ -203,8 +203,8 @@ function packageGenerator(file, rename, namespace) {
   return gulp.src(`scripts/package/${rename}`)
     .pipe(packageUMD(`Blockly${namespace}`, [{
         name: 'Blockly',
-        amd: './core',
-        cjs: './core',
+        amd: 'blockly/core',
+        cjs: 'blockly/core',
       }, {
         name: `Blockly${namespace}`,
         amd: `./${file}`,

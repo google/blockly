@@ -14,7 +14,7 @@ const execSync = require('child_process').execSync;
 const buildTasks = require('./build_tasks');
 const packageTasks = require('./package_tasks');
 
-const UPSTREAM_URL = 'https://github.com/google/blockly.git';
+const UPSTREAM_URL = 'https://github.com/str11ngfello/blockly.git';
 
 /**
  * Extra paths to include in the gh_pages branch (beyond the normal

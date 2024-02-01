@@ -43,3 +43,5 @@ export enum Order {
 }
 
 export declare const javascriptGenerator: any;
+
+export declare const JavascriptGenerator: any;

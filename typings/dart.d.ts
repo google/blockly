@@ -26,3 +26,5 @@ export enum Order {
 }
 
 export declare const dartGenerator: any;
+
+export declare const DartGenerator: any;

@@ -30,4 +30,4 @@ export enum Order {
 
 export declare const pythonGenerator: any;
 
-export declare const PythonGenerator: any;
+export {PythonGenerator} from './generators/python';

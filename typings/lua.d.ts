@@ -20,3 +20,5 @@ export enum Order {
 }
 
 export declare const luaGenerator: any;
+
+export {LuaGenerator} from './generators/lua';

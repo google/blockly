@@ -53,8 +53,8 @@ export interface PuzzleTab {
   type: number;
   width: number;
   height: number;
-  pathDown: string | ((p1: number) => string);
-  pathUp: string | ((p1: number) => string);
+  pathDown: string;
+  pathUp: string;
 }
 
 /**
@@ -98,6 +98,22 @@ export type Shape = BaseShape | DynamicShape;
  */
 export function isDynamicShape(shape: Shape): shape is DynamicShape {
   return (shape as DynamicShape).isDynamic;
+}
+
+/** Returns whether the shape is a puzzle tab or not. */
+export function isPuzzleTab(shape: Shape): shape is PuzzleTab {
+  return (
+    (shape as PuzzleTab).pathDown !== undefined &&
+    (shape as PuzzleTab).pathUp !== undefined
+  );
+}
+
+/** Returns whether the shape is a notch or not. */
+export function isNotch(shape: Shape): shape is Notch {
+  return (
+    (shape as Notch).pathLeft !== undefined &&
+    (shape as Notch).pathRight !== undefined
+  );
 }
 
 /**

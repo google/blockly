@@ -1,4 +1,4 @@
-runtime: python37
+runtime: python312
 
 handlers:
 # Redirect obsolete URLs.

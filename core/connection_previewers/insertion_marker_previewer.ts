@@ -1,0 +1,235 @@
+/**
+ * @license
+ * Copyright 2024 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import {BlockSvg} from '../block_svg.js';
+import {IConnectionPreviewer} from '../interfaces/i_connection_previewer.js';
+import {RenderedConnection} from '../rendered_connection.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
+import * as eventUtils from '../events/utils.js';
+import * as renderManagement from '../render_management.js';
+import * as registry from '../registry.js';
+import * as blocks from '../serialization/blocks.js';
+
+/**
+ * An error message to throw if the block created by createMarkerBlock_ is
+ * missing any components.
+ */
+const DUPLICATE_BLOCK_ERROR =
+  'The insertion marker previewer tried to create a marker but the result ' +
+  'is missing a connection. If you are using a mutator, make sure your ' +
+  'domToMutation method is properly defined.';
+
+export class InsertionMarkerPreviewer implements IConnectionPreviewer {
+  private readonly workspace: WorkspaceSvg;
+
+  private fadedBlock: BlockSvg | null = null;
+
+  private markerConn: RenderedConnection | null = null;
+
+  private draggedConn: RenderedConnection | null = null;
+
+  private staticConn: RenderedConnection | null = null;
+
+  constructor(draggedBlock: BlockSvg) {
+    this.workspace = draggedBlock.workspace;
+  }
+
+  /**
+   * Display a connection preview where the draggedCon connects to the
+   * staticCon, replacing the replacedBlock (currently connected to the
+   * staticCon).
+   *
+   * @param draggedConn The connection on the block stack being dragged.
+   * @param staticConn The connection not being dragged that we are
+   *     connecting to.
+   * @param replacedBlock The block currently connected to the staticCon that
+   *     is being replaced.
+   */
+  previewReplacement(
+    draggedConn: RenderedConnection,
+    staticConn: RenderedConnection,
+    replacedBlock: BlockSvg,
+  ) {
+    eventUtils.disable();
+    try {
+      this.hidePreview();
+      this.fadedBlock = replacedBlock;
+      replacedBlock.fadeForReplacement(true);
+      if (this.workspace.getRenderer().shouldHighlightConnection(staticConn)) {
+        staticConn.highlight();
+        this.staticConn = staticConn;
+      }
+    } finally {
+      eventUtils.enable();
+    }
+  }
+
+  /**
+   * Display a connection preview where the draggedCon connects to the
+   * staticCon, and no block is being relaced.
+   *
+   * @param draggedConn The connection on the block stack being dragged.
+   * @param staticConn The connection not being dragged that we are
+   *     connecting to.
+   */
+  previewConnection(
+    draggedConn: RenderedConnection,
+    staticConn: RenderedConnection,
+  ) {
+    if (draggedConn === this.draggedConn && staticConn === this.staticConn) {
+      return;
+    }
+
+    eventUtils.disable();
+    try {
+      this.hidePreview();
+      const dragged = draggedConn.getSourceBlock();
+      const marker = this.createInsertionMarker(dragged);
+      const markerConn = this.getMatchingConnection(
+        dragged,
+        marker,
+        draggedConn,
+      );
+      if (!markerConn) {
+        throw Error(DUPLICATE_BLOCK_ERROR);
+      }
+
+      // Render disconnected from everything else so that we have a valid
+      // connection location.
+      marker.queueRender();
+      renderManagement.triggerQueuedRenders();
+
+      // Connect() also renders the insertion marker.
+      markerConn.connect(staticConn);
+
+      const originalOffsetToTarget = {
+        x: staticConn.x - markerConn.x,
+        y: staticConn.y - markerConn.y,
+      };
+      const originalOffsetInBlock = markerConn.getOffsetInBlock().clone();
+      renderManagement.finishQueuedRenders().then(() => {
+        // Position so that the existing block doesn't move.
+        marker?.positionNearConnection(
+          markerConn,
+          originalOffsetToTarget,
+          originalOffsetInBlock,
+        );
+        marker?.getSvgRoot().setAttribute('visibility', 'visible');
+      });
+
+      if (this.workspace.getRenderer().shouldHighlightConnection(staticConn)) {
+        staticConn.highlight();
+      }
+
+      this.markerConn = markerConn;
+      this.draggedConn = draggedConn;
+      this.staticConn = staticConn;
+    } finally {
+      eventUtils.enable();
+    }
+  }
+
+  private createInsertionMarker(origBlock: BlockSvg) {
+    const blockJson = blocks.save(origBlock, {
+      addCoordinates: false,
+      addInputBlocks: false,
+      addNextBlocks: false,
+      doFullSerialization: false,
+    });
+
+    if (!blockJson) {
+      throw new Error(
+        `Failed to serialize source block. ${origBlock.toDevString()}`,
+      );
+    }
+
+    const result = blocks.append(blockJson, this.workspace) as BlockSvg;
+
+    // Turn shadow blocks that are created programmatically during
+    // initalization to insertion markers too.
+    for (const block of result.getDescendants(false)) {
+      block.setInsertionMarker(true);
+    }
+
+    result.initSvg();
+    result.getSvgRoot().setAttribute('visibility', 'hidden');
+    return result;
+  }
+
+  /**
+   * Gets the connection on the marker block that matches the original
+   * connection on the original block.
+   *
+   * @param orig The original block.
+   * @param marker The marker block (where we want to find the matching
+   *     connection).
+   * @param origConn The original connection.
+   */
+  private getMatchingConnection(
+    orig: BlockSvg,
+    marker: BlockSvg,
+    origConn: RenderedConnection,
+  ) {
+    const origConns = orig.getConnections_(true);
+    const markerConns = marker.getConnections_(true);
+    for (let i = 0; i < origConns.length; i++) {
+      if (origConns[i] === origConn) {
+        return markerConns[i];
+      }
+    }
+    return null;
+  }
+
+  /** Hide any previews that are currently displayed. */
+  hidePreview() {
+    eventUtils.disable();
+    try {
+      if (this.staticConn) {
+        this.staticConn.unhighlight();
+        this.staticConn = null;
+      }
+      if (this.fadedBlock) {
+        this.fadedBlock.fadeForReplacement(false);
+        this.fadedBlock = null;
+      }
+      if (this.markerConn) {
+        this.hideInsertionMarker(this.markerConn);
+        this.markerConn = null;
+        this.draggedConn = null;
+      }
+    } finally {
+      eventUtils.enable();
+    }
+  }
+
+  private hideInsertionMarker(markerConn: RenderedConnection) {
+    const marker = markerConn.getSourceBlock();
+    const markerPrev = marker.previousConnection;
+    const markerOutput = marker.outputConnection;
+
+    if (!markerPrev?.targetConnection && !markerOutput?.targetConnection) {
+      // If we are the top block, unplugging doesn't do anything.
+      // The marker connection may not have a target block if we are hiding
+      // as part of applying connections.
+      markerConn.targetBlock()?.unplug(false);
+    } else {
+      marker.unplug(true);
+    }
+
+    marker.dispose();
+  }
+
+  /** Dispose of any references held by this connection previewer. */
+  dispose() {
+    this.hidePreview();
+  }
+}
+
+registry.register(
+  registry.Type.CONNECTION_PREVIEWER,
+  registry.DEFAULT,
+  InsertionMarkerPreviewer,
+);

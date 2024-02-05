@@ -196,6 +196,7 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
   ) {
     const origConns = orig.getConnections_(true);
     const markerConns = marker.getConnections_(true);
+    if (origConns.length !== markerConns.length) return null;
     for (let i = 0; i < origConns.length; i++) {
       if (origConns[i] === origConn) {
         return markerConns[i];

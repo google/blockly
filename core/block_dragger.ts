@@ -382,6 +382,7 @@ export class BlockDragger implements IBlockDragger {
 
     blockAnimation.disconnectUiStop();
     this.connectionPreviewer.hidePreview();
+    this.connectionPreviewer.dispose();
 
     const preventMove =
       !!this.dragTarget_ &&

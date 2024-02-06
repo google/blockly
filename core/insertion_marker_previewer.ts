@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {BlockSvg} from '../block_svg.js';
-import {IConnectionPreviewer} from '../interfaces/i_connection_previewer.js';
-import {RenderedConnection} from '../rendered_connection.js';
-import {WorkspaceSvg} from '../workspace_svg.js';
-import * as eventUtils from '../events/utils.js';
-import * as constants from '../constants.js';
-import * as renderManagement from '../render_management.js';
-import * as registry from '../registry.js';
+import {BlockSvg} from './block_svg.js';
+import {IConnectionPreviewer} from './interfaces/i_connection_previewer.js';
+import {RenderedConnection} from './rendered_connection.js';
+import {WorkspaceSvg} from './workspace_svg.js';
+import * as eventUtils from './events/utils.js';
+import * as constants from './constants.js';
+import * as renderManagement from './render_management.js';
+import * as registry from './registry.js';
 
 /**
  * An error message to throw if the block created by createMarkerBlock_ is

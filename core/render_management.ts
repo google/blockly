@@ -16,7 +16,7 @@ const rootBlocks = new Set<BlockSvg>();
 const dirtyBlocks = new WeakSet<BlockSvg>();
 
 /** A map from queued blocks to the event group from when they were queued. */
-let eventGroups = new WeakMap<BlockSvg, string>();
+const eventGroups = new WeakMap<BlockSvg, string>();
 
 /**
  * The promise which resolves after the current set of renders is completed. Or

@@ -208,8 +208,6 @@ const JSCOMP_ERROR = [
   'conformanceViolations',
   'const',
   'constantProperty',
-  'deprecated',
-  'deprecatedAnnotations',
   'duplicateMessage',
   'es5Strict',
   'externsValidation',
@@ -256,6 +254,8 @@ const JSCOMP_ERROR = [
  * it's generally sufficient to remove them from JSCOMP_ERROR.
  */
 const JSCOMP_WARNING = [
+  'deprecated',
+  'deprecatedAnnotations',
 ];
 
 /**

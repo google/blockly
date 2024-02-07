@@ -88,11 +88,7 @@ export class Dragger implements IDragger {
     );
     if (!isDeleteArea) return false;
 
-    return (dragTarget as IDeleteArea).wouldDelete(
-      draggable,
-      false,
-      // !!this.getConnectionCandidate(draggable, delta),
-    );
+    return (dragTarget as IDeleteArea).wouldDelete(draggable);
   }
 
   /** Handles any drag cleanup. */

@@ -188,7 +188,7 @@ export class BlockDragger implements IBlockDragger {
     const block = this.draggingBlock_;
     this.moveBlock(block, delta);
     this.updateDragTargets(e, block);
-    this.wouldDeleteBlock_ = this.wouldDeleteBlock(e, block, delta);
+    this.wouldDeleteBlock_ = this.wouldDeleteBlock(e, block);
     this.updateCursorDuringBlockDrag_();
     this.updateConnectionPreview(block, delta);
   }
@@ -213,11 +213,7 @@ export class BlockDragger implements IBlockDragger {
    * Returns true if we would delete the block if it was dropped at this time,
    * false otherwise.
    */
-  private wouldDeleteBlock(
-    e: PointerEvent,
-    draggingBlock: BlockSvg,
-    delta: Coordinate,
-  ): boolean {
+  private wouldDeleteBlock(e: PointerEvent, draggingBlock: BlockSvg): boolean {
     const dragTarget = this.workspace_.getDragTarget(e);
     if (!dragTarget) return false;
 
@@ -228,10 +224,7 @@ export class BlockDragger implements IBlockDragger {
     );
     if (!isDeleteArea) return false;
 
-    return (dragTarget as IDeleteArea).wouldDelete(
-      draggingBlock,
-      !!this.getConnectionCandidate(draggingBlock, delta),
-    );
+    return (dragTarget as IDeleteArea).wouldDelete(draggingBlock);
   }
 
   private updateConnectionPreview(draggingBlock: BlockSvg, delta: Coordinate) {

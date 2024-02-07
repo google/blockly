@@ -116,7 +116,7 @@ export class BubbleDragger {
         ComponentManager.Capability.DELETE_AREA,
       );
       if (isDeleteArea) {
-        return (dragTarget as IDeleteArea).wouldDelete(this.bubble, false);
+        return (dragTarget as IDeleteArea).wouldDelete(this.bubble);
       }
     }
     return false;

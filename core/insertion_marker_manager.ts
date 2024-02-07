@@ -384,10 +384,7 @@ export class InsertionMarkerManager {
         ComponentManager.Capability.DELETE_AREA,
       );
       if (isDeleteArea) {
-        return (dragTarget as IDeleteArea).wouldDelete(
-          this.topBlock,
-          newCandidate,
-        );
+        return (dragTarget as IDeleteArea).wouldDelete(this.topBlock);
       }
     }
     return false;

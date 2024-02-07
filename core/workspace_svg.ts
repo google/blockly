@@ -2535,7 +2535,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Get the grid object for this workspace, or null if there is none.
    *
    * @returns The grid object for this workspace.
-   * @internal
    */
   getGrid(): Grid | null {
     return this.grid;

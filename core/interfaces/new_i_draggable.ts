@@ -14,7 +14,7 @@ import {IDragTarget} from './i_drag_target';
  */
 export interface IDraggable {
   /** Returns true if the element is currently movable. False otherwise. */
-  isMovable(e: PointerEvent): boolean;
+  isMovable(e?: PointerEvent): boolean;
 
   /** Returns the current location of the draggable in workspace coordinates. */
   getLocation(): Coordinate;

@@ -17,3 +17,8 @@ export interface IDeletable {
    */
   isDeletable(): boolean;
 }
+
+/** Returns whether the given object is an IDeletable. */
+export function isDeletable(obj: any): obj is IDeletable {
+  return obj['isDeletable'] !== undefined;
+}

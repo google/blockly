@@ -29,7 +29,7 @@ export interface IDraggable {
    * Handles moving elements to the new location, and updating any visuals
    * based on that (e.g connection previews for blocks).
    */
-  drag(newLoc: Coordinate, target: IDragTarget, e?: PointerEvent): void;
+  drag(newLoc: Coordinate, target?: IDragTarget, e?: PointerEvent): void;
 
   /** Handles any drag cleanup. */
   endDrag(e?: PointerEvent): void;

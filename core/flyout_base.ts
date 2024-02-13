@@ -162,6 +162,11 @@ export abstract class Flyout
   protected buttons_: FlyoutButton[] = [];
 
   /**
+   * List of visible buttons and blocks.
+   */
+  protected contents_: (FlyoutButton | BlockSvg | undefined)[] = [];
+
+  /**
    * List of event listeners.
    */
   private listeners: browserEvents.Data[] = [];
@@ -547,6 +552,32 @@ export abstract class Flyout
   }
 
   /**
+   * Get the list of buttons and blocks of the current flyout.
+   *
+   * @returns The array of flyout buttons and blocks.
+   */
+  getContents(): (FlyoutButton | BlockSvg | undefined)[] {
+    return this.contents_;
+  }
+
+  /**
+   * Store the list of buttons and blocks on the flyout.
+   *
+   * @param contents - The array of items for the flyout.
+   */
+  setContents(contents: FlyoutItem[]): void {
+    const blocksAndButtons = contents.map((item) => {
+      if (item.type === 'block' && item.block) {
+        return item.block;
+      }
+      if (item.type === 'button' && item.button) {
+        return item.button;
+      }
+    });
+
+    this.contents_ = blocksAndButtons;
+  }
+  /**
    * Update the display property of the flyout based whether it thinks it should
    * be visible and whether its containing workspace is visible.
    */
@@ -650,6 +681,8 @@ export abstract class Flyout
     const flyoutInfo = this.createFlyoutInfo(parsedContent);
 
     renderManagement.triggerQueuedRenders(this.workspace_);
+
+    this.setContents(flyoutInfo.contents);
 
     this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 

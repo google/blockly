@@ -56,6 +56,7 @@
 	"NEW_VARIABLE_TITLE": "新しい変数の名前:",
 	"VARIABLE_ALREADY_EXISTS": "変数名 '%1' は既に存在しています。",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "'%2' 型の '%1' という名前の変数が既に存在します。",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "'%2' 手続きの '%1' という名前の変数が既に存在します。",
 	"DELETE_VARIABLE_CONFIRMATION": "%1か所で使われている変数 '%2' を削除しますか？",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "変数 '%1' は関数 '%2' の定義の一部であるため、削除できません",
 	"DELETE_VARIABLE": "変数 '%1' を削除",

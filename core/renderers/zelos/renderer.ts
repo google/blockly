@@ -7,7 +7,6 @@
 // Former goog.module ID: Blockly.zelos.Renderer
 
 import type {BlockSvg} from '../../block_svg.js';
-import type {Connection} from '../../connection.js';
 import {ConnectionType} from '../../connection_type.js';
 import {InsertionMarkerManager} from '../../insertion_marker_manager.js';
 import type {Marker} from '../../keyboard_nav/marker.js';
@@ -23,6 +22,7 @@ import {Drawer} from './drawer.js';
 import {RenderInfo} from './info.js';
 import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
+import * as deprecation from '../../utils/deprecation.js';
 
 /**
  * The zelos renderer. This renderer emulates Scratch-style and MakeCode-style
@@ -109,18 +109,21 @@ export class Renderer extends BaseRenderer {
     return this.constants_;
   }
 
-  override shouldHighlightConnection(conn: Connection) {
-    return (
-      conn.type !== ConnectionType.INPUT_VALUE &&
-      conn.type !== ConnectionType.OUTPUT_VALUE
-    );
-  }
-
+  /**
+   * @deprecated v10 - This function is no longer respected. A custom
+   *    IConnectionPreviewer may be able to fulfill the functionality.
+   */
   override getConnectionPreviewMethod(
     closest: RenderedConnection,
     local: RenderedConnection,
     topBlock: BlockSvg,
   ) {
+    deprecation.warn(
+      'getConnectionPreviewMethod',
+      'v10',
+      'v12',
+      'an IConnectionPreviewer, if it fulfills your use case.',
+    );
     if (local.type === ConnectionType.OUTPUT_VALUE) {
       if (!closest.isConnected()) {
         return InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;

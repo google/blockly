@@ -37,6 +37,7 @@ import {ValueInput} from '../../inputs/value_input.js';
 
 import type {ConstantProvider} from './constants.js';
 import type {Renderer} from './renderer.js';
+import {Connection} from '../measurables/connection.js';
 
 /**
  * An object containing all sizing information needed to draw this block.
@@ -143,8 +144,7 @@ export class RenderInfo {
   }
 
   /**
-   * Populate and return an object containing all sizing information needed to
-   * draw this block.
+   * Populate this object with all sizing information needed to draw the block.
    *
    * This measure pass does not propagate changes to the block (although fields
    * may choose to rerender when getSize() is called).  However, calling it
@@ -747,5 +747,22 @@ export class RenderInfo {
     this.height = yCursor;
     this.startY = this.topRow.capline;
     this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
+  }
+
+  /** Returns the connection measurable associated with the given connection. */
+  getMeasureableForConnection(conn: RenderedConnection): Connection | null {
+    if (this.outputConnection?.connectionModel === conn) {
+      return this.outputConnection;
+    }
+
+    for (const row of this.rows) {
+      for (const elem of row.elements) {
+        if (elem instanceof Connection && elem.connectionModel === conn) {
+          return elem;
+        }
+      }
+    }
+
+    return null;
   }
 }

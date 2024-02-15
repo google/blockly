@@ -65,7 +65,7 @@
 	"CONTROLS_IF_IF_TOOLTIP": "ເພີ່ມ, ລຶບ, ຫຼື ຈັດລຽງບລັອກ \"ຖ້າ\" ນີ້ໃໝ່.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "ເພີ່ມເງື່ອນໄຂລົງໃນບລັອກ \"ຖ້າ\".",
 	"CONTROLS_IF_ELSE_TOOLTIP": "ເພີ່ມສິ່ງສຸດທ້າຍ, ກວດຫາຄວາມເປັນໄປໄດ້ທັງໝົດຂອງບລັອກ \"ຖ້າ\".",
-	"LOGIC_COMPARE_HELPURL": "https://​​lo.wikipedia.org/wiki/ອະສົມຜົນ",
+	"LOGIC_COMPARE_HELPURL": "https://lo.wikipedia.org/wiki/ອະສົມຜົນ",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "ຄືນຄ່າຈິງຖ້າຄ່າທີ່ີໃສ່ທັງສອງຄ່ານັ້ນເທົ່າກັນ.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "ຄືນຄ່າຈິງຖ້າຄ່າທີ່ີໃສ່ທັງສອງຄ່ານັ້ນບໍ່ເທົ່າກັນ.",
 	"LOGIC_COMPARE_TOOLTIP_LT": "ຄືນຄ່າເປັນຈິງຖ້າຄ່າທຳອິດນ້ອຍກວ່າຄ່າທີ່ສອງ.",

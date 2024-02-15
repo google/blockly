@@ -22,19 +22,6 @@ import * as eventUtils from './events/utils.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import {Svg} from './utils/svg.js';
-import * as svgPaths from './utils/svg_paths.js';
-
-/** A shape that has a pathDown property. */
-interface PathDownShape {
-  pathDown: string;
-}
-
-/** A shape that has a pathLeft property. */
-interface PathLeftShape {
-  pathLeft: string;
-}
 
 /** Maximum randomness in workspace units for bumping a block. */
 const BUMP_RANDOMNESS = 10;
@@ -49,7 +36,7 @@ export class RenderedConnection extends Connection {
   private readonly dbOpposite: ConnectionDB;
   private readonly offsetInBlock: Coordinate;
   private trackedState: TrackedState;
-  private highlightPath: SVGPathElement | null = null;
+  private highlighted: boolean = false;
 
   /** Connection this connection connects to.  Null if not connected. */
   override targetConnection: RenderedConnection | null = null;
@@ -92,10 +79,7 @@ export class RenderedConnection extends Connection {
     if (this.trackedState === RenderedConnection.TrackedState.TRACKED) {
       this.db.removeConnection(this, this.y);
     }
-    if (this.highlightPath) {
-      dom.removeNode(this.highlightPath);
-      this.highlightPath = null;
-    }
+    this.sourceBlock_.pathObject.removeConnectionHighlight?.(this);
   }
 
   /**
@@ -305,57 +289,19 @@ export class RenderedConnection extends Connection {
 
   /** Add highlighting around this connection. */
   highlight() {
-    if (this.highlightPath) {
-      // This connection is already highlighted
-      return;
-    }
-    let steps;
-    const sourceBlockSvg = this.sourceBlock_;
-    const renderConstants = sourceBlockSvg.workspace
-      .getRenderer()
-      .getConstants();
-    const shape = renderConstants.shapeFor(this);
-    if (
-      this.type === ConnectionType.INPUT_VALUE ||
-      this.type === ConnectionType.OUTPUT_VALUE
-    ) {
-      // Vertical line, puzzle tab, vertical line.
-      const yLen = renderConstants.TAB_OFFSET_FROM_TOP;
-      steps =
-        svgPaths.moveBy(0, -yLen) +
-        svgPaths.lineOnAxis('v', yLen) +
-        (shape as unknown as PathDownShape).pathDown +
-        svgPaths.lineOnAxis('v', yLen);
-    } else {
-      const xLen =
-        renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
-      // Horizontal line, notch, horizontal line.
-      steps =
-        svgPaths.moveBy(-xLen, 0) +
-        svgPaths.lineOnAxis('h', xLen) +
-        (shape as unknown as PathLeftShape).pathLeft +
-        svgPaths.lineOnAxis('h', xLen);
-    }
-    const offset = this.offsetInBlock;
-    this.highlightPath = dom.createSvgElement(
-      Svg.PATH,
-      {
-        'class': 'blocklyHighlightedConnectionPath',
-        'd': steps,
-        'transform':
-          `translate(${offset.x}, ${offset.y})` +
-          (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
-      },
-      this.sourceBlock_.getSvgRoot(),
-    );
+    this.highlighted = true;
+    this.getSourceBlock().queueRender();
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
-    if (this.highlightPath) {
-      dom.removeNode(this.highlightPath);
-      this.highlightPath = null;
-    }
+    this.highlighted = false;
+    this.getSourceBlock().queueRender();
+  }
+
+  /** Returns true if this connection is highlighted, false otherwise. */
+  isHighlighted(): boolean {
+    return this.highlighted;
   }
 
   /**

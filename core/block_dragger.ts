@@ -21,7 +21,6 @@ import * as common from './common.js';
 import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
 import type {Icon} from './icons/icon.js';
-import {InsertionMarkerManager} from './insertion_marker_manager.js';
 import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import * as registry from './registry.js';
@@ -31,6 +30,26 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as deprecation from './utils/deprecation.js';
 import * as layers from './layers.js';
+import {ConnectionType, IConnectionPreviewer} from './blockly.js';
+import {RenderedConnection} from './rendered_connection.js';
+import {config} from './config.js';
+import {ComponentManager} from './component_manager.js';
+import {IDeleteArea} from './interfaces/i_delete_area.js';
+import {Connection} from './connection.js';
+import {Block} from './block.js';
+import {finishQueuedRenders} from './render_management.js';
+
+/** Represents a nearby valid connection. */
+interface ConnectionCandidate {
+  /** A connection on the dragging stack that is compatible with neighbour. */
+  local: RenderedConnection;
+
+  /** A nearby connection that is compatible with local. */
+  neighbour: RenderedConnection;
+
+  /** The distance between the local connection and the neighbour connection. */
+  distance: number;
+}
 
 /**
  * Class for a block dragger.  It moves blocks around the workspace when they
@@ -39,13 +58,16 @@ import * as layers from './layers.js';
 export class BlockDragger implements IBlockDragger {
   /** The top block in the stack that is being dragged. */
   protected draggingBlock_: BlockSvg;
-  protected draggedConnectionManager_: InsertionMarkerManager;
+
+  protected connectionPreviewer: IConnectionPreviewer;
 
   /** The workspace on which the block is being dragged. */
   protected workspace_: WorkspaceSvg;
 
   /** Which drag area the mouse pointer is over, if any. */
   private dragTarget_: IDragTarget | null = null;
+
+  private connectionCandidate: ConnectionCandidate | null = null;
 
   /** Whether the block would be deleted if dropped immediately. */
   protected wouldDeleteBlock_ = false;
@@ -63,13 +85,13 @@ export class BlockDragger implements IBlockDragger {
    */
   constructor(block: BlockSvg, workspace: WorkspaceSvg) {
     this.draggingBlock_ = block;
-
-    /** Object that keeps track of connections on dragged blocks. */
-    this.draggedConnectionManager_ = new InsertionMarkerManager(
-      this.draggingBlock_,
-    );
-
     this.workspace_ = workspace;
+
+    const previewerConstructor = registry.getClassFromOptions(
+      registry.Type.CONNECTION_PREVIEWER,
+      this.workspace_.options,
+    );
+    this.connectionPreviewer = new previewerConstructor!(block);
 
     /**
      * The location of the top left corner of the dragging block at the
@@ -87,9 +109,7 @@ export class BlockDragger implements IBlockDragger {
    */
   dispose() {
     this.dragIconData_.length = 0;
-    if (this.draggedConnectionManager_) {
-      this.draggedConnectionManager_.dispose();
-    }
+    this.connectionPreviewer.dispose();
   }
 
   /**
@@ -155,7 +175,6 @@ export class BlockDragger implements IBlockDragger {
 
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
     blockAnimation.disconnectUiEffect(this.draggingBlock_);
-    this.draggedConnectionManager_.updateAvailableConnections();
   }
 
   /** Fire a UI event at the start of a block drag. */
@@ -173,32 +192,178 @@ export class BlockDragger implements IBlockDragger {
    * display accordingly.
    *
    * @param e The most recent move event.
-   * @param currentDragDeltaXY How far the pointer has moved from the position
+   * @param delta How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
    */
-  drag(e: PointerEvent, currentDragDeltaXY: Coordinate) {
-    const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+  drag(e: PointerEvent, delta: Coordinate) {
+    const block = this.draggingBlock_;
+    this.moveBlock(block, delta);
+    this.updateDragTargets(e, block);
+    this.wouldDeleteBlock_ = this.wouldDeleteBlock(e, block, delta);
+    this.updateCursorDuringBlockDrag_();
+    this.updateConnectionPreview(block, delta);
+  }
+
+  private moveBlock(draggingBlock: BlockSvg, dragDelta: Coordinate) {
+    const delta = this.pixelsToWorkspaceUnits_(dragDelta);
     const newLoc = Coordinate.sum(this.startXY_, delta);
-    this.draggingBlock_.moveDuringDrag(newLoc);
+    draggingBlock.moveDuringDrag(newLoc);
+  }
 
-    const oldDragTarget = this.dragTarget_;
-    this.dragTarget_ = this.workspace_.getDragTarget(e);
+  private updateDragTargets(e: PointerEvent, draggingBlock: BlockSvg) {
+    const newDragTarget = this.workspace_.getDragTarget(e);
+    if (this.dragTarget_ !== newDragTarget) {
+      this.dragTarget_?.onDragExit(draggingBlock);
+      newDragTarget?.onDragEnter(draggingBlock);
+    }
+    newDragTarget?.onDragOver(draggingBlock);
+    this.dragTarget_ = newDragTarget;
+  }
 
-    this.draggedConnectionManager_.update(delta, this.dragTarget_);
-    const oldWouldDeleteBlock = this.wouldDeleteBlock_;
-    this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock;
-    if (oldWouldDeleteBlock !== this.wouldDeleteBlock_) {
-      // Prevent unnecessary add/remove class calls.
-      this.updateCursorDuringBlockDrag_();
+  /**
+   * Returns true if we would delete the block if it was dropped at this time,
+   * false otherwise.
+   */
+  private wouldDeleteBlock(
+    e: PointerEvent,
+    draggingBlock: BlockSvg,
+    delta: Coordinate,
+  ): boolean {
+    const dragTarget = this.workspace_.getDragTarget(e);
+    if (!dragTarget) return false;
+
+    const componentManager = this.workspace_.getComponentManager();
+    const isDeleteArea = componentManager.hasCapability(
+      dragTarget.id,
+      ComponentManager.Capability.DELETE_AREA,
+    );
+    if (!isDeleteArea) return false;
+
+    return (dragTarget as IDeleteArea).wouldDelete(
+      draggingBlock,
+      !!this.getConnectionCandidate(draggingBlock, delta),
+    );
+  }
+
+  private updateConnectionPreview(draggingBlock: BlockSvg, delta: Coordinate) {
+    const currCandidate = this.connectionCandidate;
+    const newCandidate = this.getConnectionCandidate(draggingBlock, delta);
+    if (!newCandidate) {
+      this.connectionPreviewer.hidePreview();
+      this.connectionCandidate = null;
+      return;
+    }
+    const candidate =
+      currCandidate &&
+      this.currCandidateIsBetter(currCandidate, delta, newCandidate)
+        ? currCandidate
+        : newCandidate;
+    this.connectionCandidate = candidate;
+    const {local, neighbour} = candidate;
+    if (
+      (local.type === ConnectionType.OUTPUT_VALUE ||
+        local.type === ConnectionType.PREVIOUS_STATEMENT) &&
+      neighbour.isConnected() &&
+      !neighbour.targetBlock()!.isInsertionMarker() &&
+      !this.orphanCanConnectAtEnd(
+        draggingBlock,
+        neighbour.targetBlock()!,
+        local.type,
+      )
+    ) {
+      this.connectionPreviewer.previewReplacement(
+        local,
+        neighbour,
+        neighbour.targetBlock()!,
+      );
+      return;
+    }
+    this.connectionPreviewer.previewConnection(local, neighbour);
+  }
+
+  /**
+   * Returns true if the given orphan block can connect at the end of the
+   * top block's stack or row, false otherwise.
+   */
+  private orphanCanConnectAtEnd(
+    topBlock: BlockSvg,
+    orphanBlock: BlockSvg,
+    localType: number,
+  ): boolean {
+    const orphanConnection =
+      localType === ConnectionType.OUTPUT_VALUE
+        ? orphanBlock.outputConnection
+        : orphanBlock.previousConnection;
+    return !!Connection.getConnectionForOrphanedConnection(
+      topBlock as Block,
+      orphanConnection as Connection,
+    );
+  }
+
+  /**
+   * Returns true if the current candidate is better than the new candidate.
+   *
+   * We slightly prefer the current candidate even if it is farther away.
+   */
+  private currCandidateIsBetter(
+    currCandiate: ConnectionCandidate,
+    delta: Coordinate,
+    newCandidate: ConnectionCandidate,
+  ): boolean {
+    const {local: currLocal, neighbour: currNeighbour} = currCandiate;
+    const localPos = new Coordinate(currLocal.x, currLocal.y);
+    const neighbourPos = new Coordinate(currNeighbour.x, currNeighbour.y);
+    const distance = Coordinate.distance(
+      Coordinate.sum(localPos, delta),
+      neighbourPos,
+    );
+    return (
+      newCandidate.distance > distance - config.currentConnectionPreference
+    );
+  }
+
+  /**
+   * Returns the closest valid candidate connection, if one can be found.
+   *
+   * Valid neighbour connections are within the configured start radius, with a
+   * compatible type (input, output, etc) and connection check.
+   */
+  private getConnectionCandidate(
+    draggingBlock: BlockSvg,
+    delta: Coordinate,
+  ): ConnectionCandidate | null {
+    const localConns = this.getLocalConnections(draggingBlock);
+    let radius = config.snapRadius;
+    let candidate = null;
+
+    for (const conn of localConns) {
+      const {connection: neighbour, radius: rad} = conn.closest(radius, delta);
+      if (neighbour) {
+        candidate = {
+          local: conn,
+          neighbour: neighbour,
+          distance: rad,
+        };
+        radius = rad;
+      }
     }
 
-    // Call drag enter/exit/over after wouldDeleteBlock is called in
-    // InsertionMarkerManager.update.
-    if (this.dragTarget_ !== oldDragTarget) {
-      oldDragTarget && oldDragTarget.onDragExit(this.draggingBlock_);
-      this.dragTarget_ && this.dragTarget_.onDragEnter(this.draggingBlock_);
+    return candidate;
+  }
+
+  /**
+   * Returns all of the connections we might connect to blocks on the workspace.
+   *
+   * Includes any connections on the dragging block, and any last next
+   * connection on the stack (if one exists).
+   */
+  private getLocalConnections(draggingBlock: BlockSvg): RenderedConnection[] {
+    const available = draggingBlock.getConnections_(false);
+    const lastOnStack = draggingBlock.lastConnectionInStack(true);
+    if (lastOnStack && lastOnStack !== draggingBlock.nextConnection) {
+      available.push(lastOnStack);
     }
-    this.dragTarget_ && this.dragTarget_.onDragOver(this.draggingBlock_);
+    return available;
   }
 
   /**
@@ -216,6 +381,8 @@ export class BlockDragger implements IBlockDragger {
     dom.stopTextWidthCache();
 
     blockAnimation.disconnectUiStop();
+    this.connectionPreviewer.hidePreview();
+    this.connectionPreviewer.dispose();
 
     const preventMove =
       !!this.dragTarget_ &&
@@ -298,13 +465,31 @@ export class BlockDragger implements IBlockDragger {
    */
   protected updateBlockAfterMove_() {
     this.fireMoveEvent_();
-    if (this.draggedConnectionManager_.wouldConnectBlock()) {
+    if (this.connectionCandidate) {
       // Applying connections also rerenders the relevant blocks.
-      this.draggedConnectionManager_.applyConnections();
+      this.applyConnections(this.connectionCandidate);
     } else {
       this.draggingBlock_.queueRender();
     }
     this.draggingBlock_.scheduleSnapAndBump();
+  }
+
+  private applyConnections(candidate: ConnectionCandidate) {
+    const {local, neighbour} = candidate;
+    local.connect(neighbour);
+    // TODO: We can remove this `rendered` check when we reconcile with v11.
+    if (this.draggingBlock_.rendered) {
+      const inferiorConnection = local.isSuperior() ? neighbour : local;
+      const rootBlock = this.draggingBlock_.getRootBlock();
+
+      finishQueuedRenders().then(() => {
+        blockAnimation.connectionUiEffect(inferiorConnection.getSourceBlock());
+        // bringToFront is incredibly expensive. Delay until the next frame.
+        setTimeout(() => {
+          rootBlock.bringToFront();
+        }, 0);
+      });
+    }
   }
 
   /** Fire a UI event at the end of a block drag. */
@@ -415,14 +600,9 @@ export class BlockDragger implements IBlockDragger {
    * @returns A possibly empty list of insertion marker blocks.
    */
   getInsertionMarkers(): BlockSvg[] {
-    // No insertion markers with the old style of dragged connection managers.
-    if (
-      this.draggedConnectionManager_ &&
-      this.draggedConnectionManager_.getInsertionMarkers
-    ) {
-      return this.draggedConnectionManager_.getInsertionMarkers();
-    }
-    return [];
+    return this.workspace_
+      .getAllBlocks()
+      .filter((block) => block.isInsertionMarker());
   }
 }
 

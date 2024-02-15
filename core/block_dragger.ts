@@ -382,7 +382,6 @@ export class BlockDragger implements IBlockDragger {
 
     blockAnimation.disconnectUiStop();
     this.connectionPreviewer.hidePreview();
-    this.connectionPreviewer.dispose();
 
     const preventMove =
       !!this.dragTarget_ &&
@@ -417,6 +416,9 @@ export class BlockDragger implements IBlockDragger {
         );
       }
     }
+    // Must dispose after `updateBlockAfterMove_` is called to not break the
+    // dynamic connections plugin.
+    this.connectionPreviewer.dispose();
     this.workspace_.setResizesEnabled(true);
 
     eventUtils.setGroup(false);

@@ -251,7 +251,7 @@
 	"LISTS_GET_SUBLIST_TOOLTIP": "Fait una copia de sa parti inditada de sa lista.",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "fai una lista de unu testu",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "fai unu testu de una lista",
-	"LISTS_SPLIT_WITH_DELIMITER": "cun  separadori",
+	"LISTS_SPLIT_WITH_DELIMITER": "cun separadori",
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "Dividi su testu in un'elencu de testus, firmendi po dònnia separadori.",
 	"LISTS_SPLIT_TOOLTIP_JOIN": "Auni una lista de testus in d-unu sceti, ponendi separadoris.",
 	"VARIABLES_GET_TOOLTIP": "Torrat su valori de custa variabili.",

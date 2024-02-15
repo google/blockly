@@ -45,3 +45,5 @@ export enum Order {
 }
 
 export declare const phpGenerator: any;
+
+export {PhpGenerator} from './generators/php';

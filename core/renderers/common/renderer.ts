@@ -26,6 +26,7 @@ import type {IPathObject} from './i_path_object.js';
 import {RenderInfo} from './info.js';
 import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
+import * as deprecation from '../../utils/deprecation.js';
 
 /**
  * The base class for a block renderer.
@@ -231,12 +232,21 @@ export class Renderer implements IRegistrable {
    * @param local The connection currently being dragged.
    * @param topBlock The block currently being dragged.
    * @returns The preview type to display.
+   *
+   * @deprecated v10 - This function is no longer respected. A custom
+   *    IConnectionPreviewer may be able to fulfill the functionality.
    */
   getConnectionPreviewMethod(
     closest: RenderedConnection,
     local: RenderedConnection,
     topBlock: BlockSvg,
   ): PreviewType {
+    deprecation.warn(
+      'getConnectionPreviewMethod',
+      'v10',
+      'v12',
+      'an IConnectionPreviewer, if it fulfills your use case.',
+    );
     if (
       local.type === ConnectionType.OUTPUT_VALUE ||
       local.type === ConnectionType.PREVIOUS_STATEMENT

@@ -173,7 +173,7 @@
 	"MATH_IS_NEGATIVE": "가 음(-)수 이면",
 	"MATH_IS_DIVISIBLE_BY": "가 다음 수로 나누어 떨어지면 :",
 	"MATH_IS_TOOLTIP": "어떤 수가 짝 수, 홀 수, 소 수, 정 수, 양 수, 음 수, 나누어 떨어지는 수 인지 검사해 결과값을 돌려줍니다. 참(true) 또는 거짓(false) 값을 돌려줌.",
-	"MATH_CHANGE_TITLE": "%1 을  %2 만큼 바꾸기",
+	"MATH_CHANGE_TITLE": "%1 을 %2 만큼 바꾸기",
 	"MATH_CHANGE_TOOLTIP": "변수 '%1' 에 저장되어있는 값에, 어떤 수를 더해, 변수에 다시 저장합니다.",
 	"MATH_ROUND_HELPURL": "https://ko.wikipedia.org/wiki/반올림",
 	"MATH_ROUND_TOOLTIP": "어떤 수를 반올림/올림/버림한 결과를, 정수값으로 돌려줍니다.",

@@ -98,7 +98,7 @@
 	"LOGIC_TERNARY_CONDITION": "idanwo",
 	"LOGIC_TERNARY_IF_TRUE": "bi otitọ",
 	"LOGIC_TERNARY_IF_FALSE": "bi irọ",
-	"LOGIC_TERNARY_TOOLTIP": "Ṣe ayewo ipo naa ni 'idanwo'. Bi ipo nab a je otito, Da pada 'bi otito' iye; bibẹẹkọ da pada  'bi iro' iye.",
+	"LOGIC_TERNARY_TOOLTIP": "Ṣe ayewo ipo naa ni 'idanwo'. Bi ipo nab a je otito, Da pada 'bi otito' iye; bibẹẹkọ da pada 'bi iro' iye.",
 	"MATH_NUMBER_HELPURL": "https://yo.wikipedia.org/wiki/Nọ́mbà",
 	"MATH_NUMBER_TOOLTIP": "Nọ́mbà kan.",
 	"MATH_ARITHMETIC_HELPURL": "https://yo.wikipedia.org/wiki/Ìṣírò",

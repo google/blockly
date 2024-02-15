@@ -29,3 +29,5 @@ export enum Order {
 }
 
 export declare const pythonGenerator: any;
+
+export {PythonGenerator} from './generators/python';

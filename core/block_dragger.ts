@@ -204,6 +204,10 @@ export class BlockDragger implements IBlockDragger {
     this.updateConnectionPreview(block, delta);
   }
 
+  /**
+   * @param dragDelta How far the pointer has moved from the position
+   *     at the start of the drag, in pixel units.
+   */
   private moveBlock(draggingBlock: BlockSvg, dragDelta: Coordinate) {
     const delta = this.pixelsToWorkspaceUnits_(dragDelta);
     const newLoc = Coordinate.sum(this.startXY_, delta);
@@ -223,6 +227,9 @@ export class BlockDragger implements IBlockDragger {
   /**
    * Returns true if we would delete the block if it was dropped at this time,
    * false otherwise.
+   *
+   * @param delta How far the pointer has moved from the position
+   *     at the start of the drag, in pixel units.
    */
   private wouldDeleteBlock(
     e: PointerEvent,
@@ -245,7 +252,15 @@ export class BlockDragger implements IBlockDragger {
     );
   }
 
-  private updateConnectionPreview(draggingBlock: BlockSvg, delta: Coordinate) {
+  /**
+   * @param dragDelta How far the pointer has moved from the position
+   *     at the start of the drag, in pixel units.
+   */
+  private updateConnectionPreview(
+    draggingBlock: BlockSvg,
+    dragDelta: Coordinate,
+  ) {
+    const delta = this.pixelsToWorkspaceUnits_(dragDelta);
     const currCandidate = this.connectionCandidate;
     const newCandidate = this.getConnectionCandidate(draggingBlock, delta);
     if (!newCandidate) {

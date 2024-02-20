@@ -205,6 +205,7 @@ export class BlockDragger implements IBlockDragger {
   }
 
   /**
+   * @param draggingBlock The block being dragged.
    * @param dragDelta How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
    */
@@ -228,6 +229,8 @@ export class BlockDragger implements IBlockDragger {
    * Returns true if we would delete the block if it was dropped at this time,
    * false otherwise.
    *
+   * @param e The most recent move event.
+   * @param draggingBlock The block being dragged.
    * @param delta How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
    */
@@ -253,6 +256,7 @@ export class BlockDragger implements IBlockDragger {
   }
 
   /**
+   * @param draggingBlock The block being dragged.
    * @param dragDelta How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
    */

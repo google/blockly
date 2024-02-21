@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "10.4.1",
+  "version": "10.4.2",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -101,7 +101,7 @@
     "readline-sync": "^1.4.10",
     "rimraf": "^5.0.0",
     "typescript": "^5.0.2",
-    "webdriverio": "^8.16.7",
+    "webdriverio": "^8.32.2",
     "yargs": "^17.2.1"
   },
   "dependencies": {

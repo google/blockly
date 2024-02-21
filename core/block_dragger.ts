@@ -352,7 +352,9 @@ export class BlockDragger implements IBlockDragger {
     delta: Coordinate,
   ): ConnectionCandidate | null {
     const localConns = this.getLocalConnections(draggingBlock);
-    let radius = config.snapRadius;
+    let radius = this.connectionCandidate
+      ? config.connectingSnapRadius
+      : config.snapRadius;
     let candidate = null;
 
     for (const conn of localConns) {

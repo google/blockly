@@ -20,7 +20,7 @@
       await loadScript('../node_modules/@blockly/dev-tools/dist/index.js');
 
       var workspace = null;
-      var Next = 0;
+
       function start() {
         setBackgroundColour();
 
@@ -55,9 +55,6 @@
             scrollbars: true,
             drag: true,
             wheel: false,
-          },
-          genUid: () => {
-            return 'blala' + Next++;
           },
           toolbox: toolbox,
           toolboxPosition: 'start',
@@ -146,9 +143,6 @@
       }
 
       function initToolbox(workspace) {
-        workspace.genUid = () => {
-          return 'blal';
-        };
         var toolboxSuffix = getToolboxSuffix();
         if (
           toolboxSuffix == 'test-blocks' &&

@@ -95,7 +95,11 @@ const createToc = function(done) {
   const files = fs.readdirSync(DOCS_DIR);
   const map = buildAlternatePathsMap(files);
   const referencePath = '/blockly/reference/js';
-  fs.writeSync(toc, 'toc:\n');
+
+  const tocHeader = `toc:
+- title: Overview
+  path: /blockly/reference/js/blockly.md\n`;
+  fs.writeSync(toc, tocHeader);
 
   // Generate a section of TOC for each section/heading in the overview file.
   const sections = fileContent.split('##');

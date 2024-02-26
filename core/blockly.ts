@@ -125,7 +125,7 @@ import {inject} from './inject.js';
 import {Input} from './inputs/input.js';
 import * as inputs from './inputs.js';
 import {InsertionMarkerManager} from './insertion_marker_manager.js';
-import {InsertionMarkerPreviewer} from './connection_previewers/insertion_marker_previewer.js';
+import {InsertionMarkerPreviewer} from './insertion_marker_previewer.js';
 import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';

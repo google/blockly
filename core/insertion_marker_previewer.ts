@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {BlockSvg} from '../block_svg.js';
-import {IConnectionPreviewer} from '../interfaces/i_connection_previewer.js';
-import {RenderedConnection} from '../rendered_connection.js';
-import {WorkspaceSvg} from '../workspace_svg.js';
-import * as eventUtils from '../events/utils.js';
-import * as renderManagement from '../render_management.js';
-import * as registry from '../registry.js';
-import * as blocks from '../serialization/blocks.js';
+import {BlockSvg} from './block_svg.js';
+import {IConnectionPreviewer} from './interfaces/i_connection_previewer.js';
+import {RenderedConnection} from './rendered_connection.js';
+import {WorkspaceSvg} from './workspace_svg.js';
+import * as blocks from './serialization/blocks.js';
+import * as eventUtils from './events/utils.js';
+import * as renderManagement from './render_management.js';
+import * as registry from './registry.js';
 
 /**
  * An error message to throw if the block created by createMarkerBlock_ is
@@ -175,6 +175,7 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
   ) {
     const origConns = orig.getConnections_(true);
     const markerConns = marker.getConnections_(true);
+    if (origConns.length !== markerConns.length) return null;
     for (let i = 0; i < origConns.length; i++) {
       if (origConns[i] === origConn) {
         return markerConns[i];

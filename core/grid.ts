@@ -20,11 +20,12 @@ import {GridOptions} from './options.js';
  * Class for a workspace's grid.
  */
 export class Grid {
-  private readonly spacing: number;
-  private readonly length: number;
+  private spacing: number;
+  private length: number;
+  private scale: number = 1;
   private readonly line1: SVGElement;
   private readonly line2: SVGElement;
-  private readonly snapToGrid: boolean;
+  private snapToGrid: boolean;
 
   /**
    * @param pattern The grid's SVG pattern, created during injection.
@@ -50,6 +51,37 @@ export class Grid {
 
     /** Whether blocks should snap to the grid. */
     this.snapToGrid = options['snap'] ?? false;
+  }
+
+  /**
+   * Sets the spacing between the centers of the grid lines.
+   *
+   * This does not trigger snapping to the newly spaced grid. If you want to
+   * snap blocks to the grid programmatically that needs to be triggered
+   * on individual top-level blocks. The next time a block is dragged and
+   * dropped it will snap to the grid if snapping to the grid is enabled.
+   */
+  setSpacing(spacing: number) {
+    this.spacing = spacing;
+    this.update(this.scale);
+  }
+
+  /** Sets the length of the grid lines. */
+  setLength(length: number) {
+    this.length = length;
+    this.update(this.scale);
+  }
+
+  /**
+   * Sets whether blocks should snap to the grid or not.
+   *
+   * Setting this to true does not trigger snapping. If you want to snap blocks
+   * to the grid programmatically that needs to be triggered on individual
+   * top-level blocks. The next time a block is dragged and dropped it will
+   * snap to the grid.
+   */
+  setSnapToGrid(snap: boolean) {
+    this.snapToGrid = snap;
   }
 
   /**
@@ -90,6 +122,7 @@ export class Grid {
    * @internal
    */
   update(scale: number) {
+    this.scale = scale;
     const safeSpacing = this.spacing * scale;
 
     this.pattern.setAttribute('width', `${safeSpacing}`);

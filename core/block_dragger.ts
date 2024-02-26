@@ -193,6 +193,11 @@ export class BlockDragger implements IBlockDragger {
     this.updateConnectionPreview(block, delta);
   }
 
+  /**
+   * @param draggingBlock The block being dragged.
+   * @param dragDelta How far the pointer has moved from the position
+   *     at the start of the drag, in pixel units.
+   */
   private moveBlock(draggingBlock: BlockSvg, dragDelta: Coordinate) {
     const delta = this.pixelsToWorkspaceUnits_(dragDelta);
     const newLoc = Coordinate.sum(this.startXY_, delta);
@@ -212,6 +217,11 @@ export class BlockDragger implements IBlockDragger {
   /**
    * Returns true if we would delete the block if it was dropped at this time,
    * false otherwise.
+   *
+   * @param e The most recent move event.
+   * @param draggingBlock The block being dragged.
+   * @param delta How far the pointer has moved from the position
+   *     at the start of the drag, in pixel units.
    */
   private wouldDeleteBlock(
     e: PointerEvent,
@@ -234,7 +244,16 @@ export class BlockDragger implements IBlockDragger {
     );
   }
 
-  private updateConnectionPreview(draggingBlock: BlockSvg, delta: Coordinate) {
+  /**
+   * @param draggingBlock The block being dragged.
+   * @param dragDelta How far the pointer has moved from the position
+   *     at the start of the drag, in pixel units.
+   */
+  private updateConnectionPreview(
+    draggingBlock: BlockSvg,
+    dragDelta: Coordinate,
+  ) {
+    const delta = this.pixelsToWorkspaceUnits_(dragDelta);
     const currCandidate = this.connectionCandidate;
     const newCandidate = this.getConnectionCandidate(draggingBlock, delta);
     if (!newCandidate) {
@@ -322,7 +341,9 @@ export class BlockDragger implements IBlockDragger {
     delta: Coordinate,
   ): ConnectionCandidate | null {
     const localConns = this.getLocalConnections(draggingBlock);
-    let radius = config.snapRadius;
+    let radius = this.connectionCandidate
+      ? config.connectingSnapRadius
+      : config.snapRadius;
     let candidate = null;
 
     for (const conn of localConns) {
@@ -405,6 +426,9 @@ export class BlockDragger implements IBlockDragger {
         );
       }
     }
+    // Must dispose after `updateBlockAfterMove_` is called to not break the
+    // dynamic connections plugin.
+    this.connectionPreviewer.dispose();
     this.workspace_.setResizesEnabled(true);
 
     eventUtils.setGroup(false);

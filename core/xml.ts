@@ -250,13 +250,13 @@ export function blockToDom(
   if (!block.isEnabled()) {
     element.setAttribute('disabled', 'true');
   }
-  if (!block.isDeletable() && !block.isShadow()) {
+  if (!block.isOwnDeletable()) {
     element.setAttribute('deletable', 'false');
   }
-  if (!block.isMovable() && !block.isShadow()) {
+  if (!block.isOwnMovable()) {
     element.setAttribute('movable', 'false');
   }
-  if (!block.isEditable()) {
+  if (!block.isOwnEditable()) {
     element.setAttribute('editable', 'false');
   }
 

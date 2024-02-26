@@ -67,9 +67,9 @@ suite('Blocks', function () {
 
   function createTestBlocks(workspace, isRow) {
     const blockType = isRow ? 'row_block' : 'stack_block';
-    const blockA = workspace.newBlock(blockType);
-    const blockB = workspace.newBlock(blockType);
-    const blockC = workspace.newBlock(blockType);
+    const blockA = workspace.newBlock(blockType, 'a');
+    const blockB = workspace.newBlock(blockType, 'b');
+    const blockC = workspace.newBlock(blockType, 'c');
 
     if (isRow) {
       blockA.inputList[0].connection.connect(blockB.outputConnection);
@@ -386,8 +386,14 @@ suite('Blocks', function () {
 
         test('Child is shadow', function () {
           const blocks = this.blocks;
-          blocks.C.setShadow(true);
+          blocks.C.dispose();
+          blocks.B.inputList[0].connection.setShadowState({
+            'type': 'row_block',
+            'id': 'c',
+          });
+
           blocks.B.dispose(true);
+
           // Even though we're asking to heal, it will appear as if it has not
           // healed because shadows always get destroyed.
           assertDisposedNoheal(blocks);
@@ -423,8 +429,14 @@ suite('Blocks', function () {
 
         test('Child is shadow', function () {
           const blocks = this.blocks;
-          blocks.C.setShadow(true);
+          blocks.C.dispose();
+          blocks.B.nextConnection.setShadowState({
+            'type': 'stack_block',
+            'id': 'c',
+          });
+
           blocks.B.dispose(true);
+
           // Even though we're asking to heal, it will appear as if it has not
           // healed because shadows always get destroyed.
           assertDisposedNoheal(blocks);

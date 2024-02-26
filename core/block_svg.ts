@@ -776,7 +776,7 @@ export class BlockSvg
    * @param animate If true, show a disposal animation and sound.
    */
   override dispose(healStack?: boolean, animate?: boolean) {
-    if (this.isDeadOrDying()) return;
+    this.disposing = true;
 
     Tooltip.dispose();
     ContextMenu.hide();
@@ -795,7 +795,7 @@ export class BlockSvg
    * E.g. does trigger UI effects, remove nodes, etc.
    */
   override disposeInternal() {
-    if (this.isDeadOrDying()) return;
+    this.disposing = true;
     super.disposeInternal();
 
     if (common.getSelected() === this) {

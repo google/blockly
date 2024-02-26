@@ -27,6 +27,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  */
 export class Options {
   RTL: boolean;
+  genUid?: () => string;
   oneBasedIndex: boolean;
   collapse: boolean;
   comments: boolean;
@@ -88,6 +89,10 @@ export class Options {
     let hasComments = false;
     let hasDisable = false;
     let hasSounds = false;
+    if (options.genUid) {
+      this.genUid = options.genUid;
+    }
+
     const readOnly = !!options['readOnly'];
     if (!readOnly) {
       toolboxJsonDef = toolbox.convertToolboxDefToJson(

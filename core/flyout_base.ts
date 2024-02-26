@@ -370,6 +370,7 @@ export abstract class Flyout
   init(targetWorkspace: WorkspaceSvg) {
     this.targetWorkspace = targetWorkspace;
     this.workspace_.targetWorkspace = targetWorkspace;
+    this.workspace_.genUid = targetWorkspace.genUid;
 
     this.workspace_.scrollbar = new ScrollbarPair(
       this.workspace_,

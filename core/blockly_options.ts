@@ -18,6 +18,7 @@ export interface BlocklyOptions {
   comments?: boolean;
   css?: boolean;
   disable?: boolean;
+  genUid?: () => string;
   grid?: GridOptions;
   horizontalLayout?: boolean;
   maxBlocks?: number;

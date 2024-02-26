@@ -40,7 +40,6 @@ import type {MutatorIcon} from './icons/mutator_icon.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as idGenerator from './utils/idgenerator.js';
 import * as parsing from './utils/parsing.js';
 import * as registry from './registry.js';
 import {Size} from './utils/size.js';
@@ -236,7 +235,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     this.workspace = workspace;
 
     this.id =
-      opt_id && !workspace.getBlockById(opt_id) ? opt_id : idGenerator.genUid();
+      opt_id && !workspace.getBlockById(opt_id) ? opt_id : workspace.genUid();
     workspace.setBlockById(this.id, this);
 
     /**

@@ -109,6 +109,7 @@ export class Workspace implements IASTNodeLocation {
   private readonly typedBlocksDB = new Map<string, Block[]>();
   private variableMap: VariableMap;
   private procedureMap: IProcedureMap = new ObservableProcedureMap();
+  genUid: () => string = idGenerator.genUid;
 
   /**
    * Blocks in the flyout can refer to variables that don't exist in the main
@@ -128,6 +129,9 @@ export class Workspace implements IASTNodeLocation {
     this.RTL = !!this.options.RTL;
     this.horizontalLayout = !!this.options.horizontalLayout;
     this.toolboxPosition = this.options.toolboxPosition;
+    if (this.options.genUid) {
+      this.genUid = this.options.genUid;
+    }
 
     const connectionCheckerClass = registry.getClassFromOptions(
       registry.Type.CONNECTION_CHECKER,

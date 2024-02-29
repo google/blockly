@@ -17,10 +17,12 @@ export class CommentView implements IRenderedElement {
   private topBar: SVGRectElement;
   private deleteIcon: SVGImageElement;
   private foldoutIcon: SVGImageElement;
+  private textPreview: SVGTextElement;
   private resizeHandle: SVGImageElement;
   private foreignObject: SVGForeignObjectElement;
   private textarea: HTMLTextAreaElement;
   private size: Size = new Size(120, 100);
+  private collapsed: boolean = false;
 
   constructor(private readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {'class': 'blocklyComment'});
@@ -52,6 +54,11 @@ export class CommentView implements IRenderedElement {
       },
       this.svgRoot,
     );
+    this.textPreview = dom.createSvgElement(
+      Svg.TEXT,
+      {'class': 'blocklyCommentText blocklyText'},
+      this.svgRoot,
+    );
 
     this.foreignObject = dom.createSvgElement(
       Svg.FOREIGNOBJECT,
@@ -67,7 +74,7 @@ export class CommentView implements IRenderedElement {
       dom.HTML_NS,
       'textarea',
     ) as HTMLTextAreaElement;
-    this.textarea.className = 'blocklyTextarea blocklyText';
+    this.textarea.className = 'blocklyCommentText blocklyTextarea blocklyText';
     // TODO: Handle RTL.
     // this.textarea.setAttribute('dir', this.workspace.RTL ? 'RTL' : 'LTR');
     body.appendChild(this.textarea);
@@ -103,6 +110,7 @@ export class CommentView implements IRenderedElement {
     const topBarSize = this.topBar.getBBox();
     const deleteSize = this.deleteIcon.getBBox();
     const foldoutSize = this.foldoutIcon.getBBox();
+    const textPreviewSize = this.textPreview.getBBox();
     const resizeSize = this.resizeHandle.getBBox();
 
     this.svgRoot.setAttribute('height', `${size.height}`);
@@ -128,8 +136,44 @@ export class CommentView implements IRenderedElement {
     this.foldoutIcon.setAttribute('y', `${foldoutMargin}`);
     this.foldoutIcon.setAttribute('x', `${foldoutMargin}`);
 
+    const textPreviewMargin = (topBarSize.height - textPreviewSize.height) / 2;
+    console.log(textPreviewSize.height, textPreviewMargin);
+    const textPreviewWidth =
+      size.width -
+      foldoutSize.width -
+      foldoutMargin * 2 -
+      deleteSize.width -
+      deleteMargin * 2;
+    this.textPreview.setAttribute(
+      'x',
+      `${foldoutSize.width + foldoutMargin * 2}`,
+    );
+    this.textPreview.setAttribute(
+      'y',
+      `${textPreviewMargin + textPreviewSize.height / 2}`,
+    );
+    this.textPreview.setAttribute('width', `${textPreviewWidth}`);
+
     this.resizeHandle.setAttribute('x', `${size.width - resizeSize.width}`);
     this.resizeHandle.setAttribute('y', `${size.height - resizeSize.height}`);
+  }
+
+  isCollapsed(): boolean {
+    return this.collapsed;
+  }
+
+  setCollapsed(collapsed: boolean) {
+    this.collapsed = collapsed;
+    if (collapsed) {
+      dom.addClass(this.svgRoot, 'blocklyCollapsed');
+    } else {
+      dom.removeClass(this.svgRoot, 'blocklyCollapsed');
+    }
+    this.setSize(this.size);
+  }
+
+  private truncateText(text: string): string {
+    return `${text.substring(0, 9)}...`;
   }
 }
 
@@ -140,7 +184,7 @@ css.register(`
   --commentIconColour: #1A1A1A
 }
 
-.blocklyComment .blocklyTextarea {
+.blocklyComment .blocklyCommentText.blocklyTextarea.blocklyText {
   background-color: var(--commentFillColour);
   border: 1px solid var(--commentBorderColour);
   outline: 0;
@@ -150,6 +194,7 @@ css.register(`
   padding: 8px;
   width: 100%;
   height: 100%;
+  display: block;
 }
 
 .blocklyDeleteIcon {
@@ -163,6 +208,7 @@ css.register(`
   width: 20px;
   height: 20px;
   fill: var(--commentIconColour);
+  transform-origin: 12px 12px;
 }
 .blocklyResizeHandle {
   width: 12px;
@@ -170,13 +216,27 @@ css.register(`
   stroke: var(--commentIconColour);
 }
 
-.blocklyCommentRect {
-  fill: var(--commentFillColour);
-  stroke: var(--commentBorderColour);
-  stroke-width: 1px;
-}
 .blocklyCommentTopbar {
   fill: var(--commentBorderColour);
   height: 24px;
+}
+
+.blocklyComment .blocklyCommentText.blocklyText {
+  fill: var(--commentIconColour);
+  dominant-baseline: middle;
+  display: none;
+}
+
+.blocklyCollapsed.blocklyComment .blocklyCommentText.blocklyText {
+  display: block;
+}
+
+.blocklyCollapsed.blocklyComment .blocklyCommentForeignObject,
+.blocklyCollapsed.blocklyComment .blocklyResizeHandle {
+  display: none;
+}
+
+.blocklyCollapsed.blocklyComment .blocklyFoldoutIcon {
+  transform: rotate(-90deg);
 }
 `);

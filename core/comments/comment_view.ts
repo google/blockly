@@ -20,6 +20,7 @@ export class CommentView implements IRenderedElement {
   private resizeHandle: SVGImageElement;
   private foreignObject: SVGForeignObjectElement;
   private textarea: HTMLTextAreaElement;
+  private size: Size = new Size(120, 100);
 
   constructor(private readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {'class': 'blocklyComment'});
@@ -85,14 +86,20 @@ export class CommentView implements IRenderedElement {
     // I think we want comments to exist on the same layer as blocks.
     workspace.getLayerManager()?.append(this, layers.BLOCK);
 
-    this.setSize(new Size(120, 100));
+    // Set size to the default size.
+    this.setSize(this.size);
   }
 
   getSvgRoot(): SVGElement {
     return this.svgRoot;
   }
 
+  getSize(): Size {
+    return this.size;
+  }
+
   setSize(size: Size) {
+    this.size = size;
     const topBarSize = this.topBar.getBBox();
     const deleteSize = this.deleteIcon.getBBox();
     const foldoutSize = this.foldoutIcon.getBBox();

@@ -118,7 +118,7 @@
 	"LOGIC_BOOLEAN_TOOLTIP": "Возвращает значение истина или ложь.",
 	"LOGIC_NULL": "ничто",
 	"LOGIC_NULL_TOOLTIP": "Возвращает ничто.",
-	"LOGIC_TERNARY_HELPURL": "https://ru.wikipedia.org/wiki/Тернарная_условная_операция",
+	"LOGIC_TERNARY_HELPURL": "https://ru.wikipedia.org/wiki/%3F#В_компьютерах",
 	"LOGIC_TERNARY_CONDITION": "выбрать по",
 	"LOGIC_TERNARY_IF_TRUE": "если истина",
 	"LOGIC_TERNARY_IF_FALSE": "если ложь",

@@ -23,9 +23,12 @@ export class CommentView implements IRenderedElement {
   private textarea: HTMLTextAreaElement;
   private size: Size = new Size(120, 100);
   private collapsed: boolean = false;
+  private editable: boolean = true;
 
   constructor(private readonly workspace: WorkspaceSvg) {
-    this.svgRoot = dom.createSvgElement(Svg.G, {'class': 'blocklyComment'});
+    this.svgRoot = dom.createSvgElement(Svg.G, {
+      'class': 'blocklyComment blocklyEditable',
+    });
 
     this.topBar = dom.createSvgElement(
       Svg.RECT,
@@ -175,6 +178,23 @@ export class CommentView implements IRenderedElement {
   private truncateText(text: string): string {
     return `${text.substring(0, 9)}...`;
   }
+
+  isEditable(): boolean {
+    return this.editable;
+  }
+
+  setEditable(editable: boolean) {
+    this.editable = editable;
+    if (this.editable) {
+      dom.addClass(this.svgRoot, 'blocklyEditable');
+      dom.removeClass(this.svgRoot, 'blocklyReadonly');
+      this.textarea.removeAttribute('readonly');
+    } else {
+      dom.removeClass(this.svgRoot, 'blocklyEditable');
+      dom.addClass(this.svgRoot, 'blocklyReadonly');
+      this.textarea.setAttribute('readonly', 'true');
+    }
+  }
 }
 
 css.register(`
@@ -195,6 +215,10 @@ css.register(`
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.blocklyReadonly.blocklyComment .blocklyCommentText.blocklyTextarea.blocklyText {
+  cursor: inherit;
 }
 
 .blocklyDeleteIcon {

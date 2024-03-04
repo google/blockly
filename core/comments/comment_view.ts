@@ -10,7 +10,7 @@ import * as dom from '../utils/dom.js';
 import {Svg} from '../utils/svg.js';
 import * as layers from '../layers.js';
 import * as css from '../css.js';
-import {Size} from '../utils.js';
+import {Coordinate, Size, browserEvents} from '../utils.js';
 
 export class CommentView implements IRenderedElement {
   private svgRoot: SVGGElement;
@@ -18,12 +18,18 @@ export class CommentView implements IRenderedElement {
   private deleteIcon: SVGImageElement;
   private foldoutIcon: SVGImageElement;
   private textPreview: SVGTextElement;
+  private textPreviewNode: Text;
   private resizeHandle: SVGImageElement;
   private foreignObject: SVGForeignObjectElement;
   private textarea: HTMLTextAreaElement;
   private size: Size = new Size(120, 100);
   private collapsed: boolean = false;
   private editable: boolean = true;
+  private location: Coordinate = new Coordinate(0, 0);
+  private text: string = '';
+  private textChangeListeners: Array<
+    (oldText: string, newText: string) => void
+  > = [];
 
   constructor(private readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
@@ -62,6 +68,8 @@ export class CommentView implements IRenderedElement {
       {'class': 'blocklyCommentText blocklyText'},
       this.svgRoot,
     );
+    this.textPreviewNode = document.createTextNode('');
+    this.textPreview.appendChild(this.textPreviewNode);
 
     this.foreignObject = dom.createSvgElement(
       Svg.FOREIGNOBJECT,
@@ -98,6 +106,13 @@ export class CommentView implements IRenderedElement {
 
     // Set size to the default size.
     this.setSize(this.size);
+
+    browserEvents.conditionalBind(
+      this.textarea,
+      'change',
+      this,
+      this.onTextChange,
+    );
   }
 
   getSvgRoot(): SVGElement {
@@ -175,10 +190,6 @@ export class CommentView implements IRenderedElement {
     this.setSize(this.size);
   }
 
-  private truncateText(text: string): string {
-    return `${text.substring(0, 9)}...`;
-  }
-
   isEditable(): boolean {
     return this.editable;
   }
@@ -194,6 +205,49 @@ export class CommentView implements IRenderedElement {
       dom.addClass(this.svgRoot, 'blocklyReadonly');
       this.textarea.setAttribute('readonly', 'true');
     }
+  }
+
+  getRelativeToSurfaceXY(): Coordinate {
+    return this.location;
+  }
+
+  /**
+   * Moves the comment view to the given location.
+   *
+   * @param location The location to move to in workspace coordinates.
+   */
+  moveTo(location: Coordinate) {
+    this.location = location;
+    this.svgRoot.setAttribute(
+      'transform',
+      `translate(${location.x}, ${location.y})`,
+    );
+  }
+
+  getText() {
+    return this.text;
+  }
+
+  setText(text: string) {
+    this.textarea.value = text;
+    this.onTextChange();
+  }
+
+  addTextChangeListener(listener: (oldText: string, newText: string) => void) {
+    this.textChangeListeners.push(listener);
+  }
+
+  private onTextChange() {
+    const oldText = this.text;
+    this.text = this.textarea.value;
+    this.textPreviewNode.textContent = this.truncateText(this.text);
+    for (const listener of this.textChangeListeners) {
+      listener(oldText, this.text);
+    }
+  }
+
+  private truncateText(text: string): string {
+    return text.length >= 12 ? `${text.substring(0, 9)}...` : text;
   }
 }
 

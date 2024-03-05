@@ -37,6 +37,7 @@ export class CommentView implements IRenderedElement {
   > = [];
   private sizeChangeListeners: Array<(oldSize: Size, newSize: Size) => void> =
     [];
+  private collapseChangeListeners: Array<(newCollapse: boolean) => void> = [];
   private resizePointerUpListener: browserEvents.Data | null = null;
   private resizePointerMoveListener: browserEvents.Data | null = null;
 
@@ -121,6 +122,14 @@ export class CommentView implements IRenderedElement {
       'change',
       this,
       this.onTextChange,
+    );
+    // TODO: Triggering this on pointerdown means that we can't start drags
+    //   on the foldout icon. We need to open up the gesture system to fix this.
+    browserEvents.conditionalBind(
+      this.foldoutIcon,
+      'pointerdown',
+      this,
+      this.onFoldoutUp,
     );
     browserEvents.conditionalBind(
       this.resizeHandle,
@@ -272,7 +281,34 @@ export class CommentView implements IRenderedElement {
     } else {
       dom.removeClass(this.svgRoot, 'blocklyCollapsed');
     }
+    // Repositions resize handle and such.
     this.setSize(this.size);
+    this.onCollapse();
+  }
+
+  private onCollapse() {
+    for (const listener of this.collapseChangeListeners) {
+      listener(this.collapsed);
+    }
+  }
+
+  addOnCollapseListener(listener: (newCollapse: boolean) => void) {
+    this.collapseChangeListeners.push(listener);
+  }
+
+  private onFoldoutUp(e: PointerEvent) {
+    // TODO: Add this before merging.
+    // this.bringToFront();
+    if (browserEvents.isRightButton(e)) {
+      e.stopPropagation();
+      return;
+    }
+
+    this.setCollapsed(!this.collapsed);
+
+    this.workspace.hideChaff();
+
+    e.stopPropagation();
   }
 
   isEditable(): boolean {

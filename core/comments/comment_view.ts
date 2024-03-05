@@ -66,7 +66,6 @@ export class CommentView implements IRenderedElement {
 
     // Set size to the default size.
     this.setSize(this.size);
-
   }
 
   private createTopBar(
@@ -218,25 +217,62 @@ export class CommentView implements IRenderedElement {
 
     this.topBar.setAttribute('width', `${size.width}`);
 
+    this.updateTextAreaSize(size, topBarSize);
+    this.updateDeleteIconPosition(size, topBarSize, deleteSize);
+    this.updateFoldoutIconPosition(topBarSize, foldoutSize);
+    this.updateTextPreviewSize(
+      size,
+      topBarSize,
+      textPreviewSize,
+      deleteSize,
+      resizeSize,
+    );
+
+    this.resizeHandle.setAttribute('x', `${size.width - resizeSize.width}`);
+    this.resizeHandle.setAttribute('y', `${size.height - resizeSize.height}`);
+
+    this.onSizeChange(oldSize, this.size);
+  }
+
+  private updateTextAreaSize(size: Size, topBarSize: Size) {
     this.foreignObject.setAttribute(
       'height',
       `${size.height - topBarSize.height}`,
     );
     this.foreignObject.setAttribute('y', `${topBarSize.height}`);
     this.foreignObject.setAttribute('width', `${size.width}`);
+  }
 
+  private updateDeleteIconPosition(
+    size: Size,
+    topBarSize: Size,
+    deleteSize: Size,
+  ) {
     const deleteMargin = (topBarSize.height - deleteSize.height) / 2;
     this.deleteIcon.setAttribute('y', `${deleteMargin}`);
     this.deleteIcon.setAttribute(
       'x',
       `${size.width - deleteSize.width - deleteMargin}`,
     );
+  }
 
+  private updateFoldoutIconPosition(topBarSize: Size, foldoutSize: Size) {
     const foldoutMargin = (topBarSize.height - foldoutSize.height) / 2;
     this.foldoutIcon.setAttribute('y', `${foldoutMargin}`);
     this.foldoutIcon.setAttribute('x', `${foldoutMargin}`);
+  }
 
+  private updateTextPreviewSize(
+    size: Size,
+    topBarSize: Size,
+    textPreviewSize: Size,
+    deleteSize: Size,
+    foldoutSize: Size,
+  ) {
     const textPreviewMargin = (topBarSize.height - textPreviewSize.height) / 2;
+    const deleteMargin = (topBarSize.height - deleteSize.height) / 2;
+    const foldoutMargin = (topBarSize.height - foldoutSize.height) / 2;
+
     const textPreviewWidth =
       size.width -
       foldoutSize.width -
@@ -252,11 +288,6 @@ export class CommentView implements IRenderedElement {
       `${textPreviewMargin + textPreviewSize.height / 2}`,
     );
     this.textPreview.setAttribute('width', `${textPreviewWidth}`);
-
-    this.resizeHandle.setAttribute('x', `${size.width - resizeSize.width}`);
-    this.resizeHandle.setAttribute('y', `${size.height - resizeSize.height}`);
-
-    this.onSizeChange(oldSize, this.size);
   }
 
   private onSizeChange(oldSize: Size, newSize: Size) {

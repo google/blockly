@@ -89,6 +89,10 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     try {
       this.hidePreview();
 
+      // TODO(7898): Instead of special casing, we should change the dragger to
+      //   track the change in distance between the dragged connection and the
+      //   static connection, so that it doesn't disconnect  unless that
+      //   (+ a bit) has been exceeded.
       if (this.shouldUseMarkerPreview(draggedConn, staticConn)) {
         this.markerConn = this.previewMarker(draggedConn, staticConn);
       }

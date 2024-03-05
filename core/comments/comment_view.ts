@@ -107,7 +107,9 @@ export class CommentView implements IRenderedElement {
     );
     const textPreview = dom.createSvgElement(
       Svg.TEXT,
-      {'class': 'blocklyCommentText blocklyText'},
+      {
+        'class': 'blocklyCommentPreview blocklyCommentText blocklyText',
+      },
       svgRoot,
     );
     const textPreviewNode = document.createTextNode('');
@@ -152,17 +154,10 @@ export class CommentView implements IRenderedElement {
     dom.addClass(textArea, 'blocklyCommentText');
     dom.addClass(textArea, 'blocklyTextarea');
     dom.addClass(textArea, 'blocklyText');
-    // TODO: Handle RTL.
-    // this.textarea.setAttribute('dir', this.workspace.RTL ? 'RTL' : 'LTR');
     body.appendChild(textArea);
     foreignObject.appendChild(body);
 
-    browserEvents.conditionalBind(
-      textArea,
-      'change',
-      this,
-      this.onTextChange,
-    );
+    browserEvents.conditionalBind(textArea, 'change', this, this.onTextChange);
 
     return {foreignObject, textArea};
   }
@@ -239,8 +234,11 @@ export class CommentView implements IRenderedElement {
       'height',
       `${size.height - topBarSize.height}`,
     );
-    this.foreignObject.setAttribute('y', `${topBarSize.height}`);
     this.foreignObject.setAttribute('width', `${size.width}`);
+    this.foreignObject.setAttribute('y', `${topBarSize.height}`);
+    if (this.workspace.RTL) {
+      this.foreignObject.setAttribute('x', `${-size.width}`);
+    }
   }
 
   private updateDeleteIconPosition(
@@ -281,7 +279,7 @@ export class CommentView implements IRenderedElement {
       deleteMargin * 2;
     this.textPreview.setAttribute(
       'x',
-      `${foldoutSize.width + foldoutMargin * 2}`,
+      `${foldoutSize.width + foldoutMargin * 2 * (this.workspace.RTL ? -1 : 1)}`,
     );
     this.textPreview.setAttribute(
       'y',
@@ -551,5 +549,25 @@ css.register(`
 
 .blocklyCollapsed.blocklyComment .blocklyFoldoutIcon {
   transform: rotate(-90deg);
+}
+
+.blocklyRTL .blocklyComment {
+  transform: scale(-1, 1);
+}
+
+.blocklyRTL .blocklyCommentForeignObject {
+  /* Revert the scale and control RTL using direction instead. */
+  transform: scale(-1, 1);
+  direction: rtl;
+}
+
+.blocklyRTL .blocklyCommentPreview {
+  /* Revert the scale and control RTL using direction instead. */
+  transform: scale(-1, 1);
+  direction: rtl;
+}
+
+.blocklyRTL .blocklyResizeHandle {
+  cursor: sw-resize;
 }
 `);

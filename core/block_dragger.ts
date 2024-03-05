@@ -457,17 +457,17 @@ export class BlockDragger implements IBlockDragger {
 
   /**
    * Moves the dragged block back to its original position before the start of
-   * the drag. Reconnects any parent and child blocks.\
+   * the drag. Reconnects any parent and child blocks.
    */
   private moveToOriginalPosition() {
     this.startChildConn?.connect(this.draggingBlock_.nextConnection);
     if (this.startParentConn) {
-      switch (this.startParentConn?.type) {
+      switch (this.startParentConn.type) {
         case ConnectionType.INPUT_VALUE:
-          this.startParentConn?.connect(this.draggingBlock_.outputConnection);
+          this.startParentConn.connect(this.draggingBlock_.outputConnection);
           break;
         case ConnectionType.NEXT_STATEMENT:
-          this.startParentConn?.connect(this.draggingBlock_.previousConnection);
+          this.startParentConn.connect(this.draggingBlock_.previousConnection);
       }
     } else {
       this.draggingBlock_.moveTo(this.startXY_, ['drag']);

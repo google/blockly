@@ -26,7 +26,7 @@ export class CommentView implements IRenderedElement {
   private textPreviewNode: Text;
   private resizeHandle: SVGImageElement;
   private foreignObject: SVGForeignObjectElement;
-  private textarea: HTMLTextAreaElement;
+  private textArea: HTMLTextAreaElement;
   private size: Size = new Size(120, 100);
   private collapsed: boolean = false;
   private editable: boolean = true;
@@ -47,69 +47,18 @@ export class CommentView implements IRenderedElement {
       'class': 'blocklyComment blocklyEditable',
     });
 
-    this.topBar = dom.createSvgElement(
-      Svg.RECT,
-      {
-        'class': 'blocklyCommentTopbar',
-        'x': 0,
-        'y': 0,
-      },
-      this.svgRoot,
-    );
-    // TODO: Before merging, does this mean to override an individual image,
-    // folks need to replace the whole media folder?
-    this.deleteIcon = dom.createSvgElement(
-      Svg.IMAGE,
-      {
-        'class': 'blocklyDeleteIcon',
-        'href': `${workspace.options.pathToMedia}delete-icon.svg`,
-      },
-      this.svgRoot,
-    );
-    this.foldoutIcon = dom.createSvgElement(
-      Svg.IMAGE,
-      {
-        'class': 'blocklyFoldoutIcon',
-        'href': `${workspace.options.pathToMedia}arrow-dropdown.svg`,
-      },
-      this.svgRoot,
-    );
-    this.textPreview = dom.createSvgElement(
-      Svg.TEXT,
-      {'class': 'blocklyCommentText blocklyText'},
-      this.svgRoot,
-    );
-    this.textPreviewNode = document.createTextNode('');
-    this.textPreview.appendChild(this.textPreviewNode);
+    ({
+      topBar: this.topBar,
+      deleteIcon: this.deleteIcon,
+      foldoutIcon: this.foldoutIcon,
+      textPreview: this.textPreview,
+      textPreviewNode: this.textPreviewNode,
+    } = this.createTopBar(this.svgRoot, workspace));
 
-    this.foreignObject = dom.createSvgElement(
-      Svg.FOREIGNOBJECT,
-      {
-        'class': 'blocklyCommentForeignObject',
-      },
-      this.svgRoot,
-    );
-    const body = document.createElementNS(dom.HTML_NS, 'body');
-    body.setAttribute('xmlns', dom.HTML_NS);
-    body.className = 'blocklyMinimalBody';
-    this.textarea = document.createElementNS(
-      dom.HTML_NS,
-      'textarea',
-    ) as HTMLTextAreaElement;
-    this.textarea.className = 'blocklyCommentText blocklyTextarea blocklyText';
-    // TODO: Handle RTL.
-    // this.textarea.setAttribute('dir', this.workspace.RTL ? 'RTL' : 'LTR');
-    body.appendChild(this.textarea);
-    this.foreignObject.appendChild(body);
+    ({foreignObject: this.foreignObject, textArea: this.textArea} =
+      this.createTextArea(this.svgRoot));
 
-    this.resizeHandle = dom.createSvgElement(
-      Svg.IMAGE,
-      {
-        'class': 'blocklyResizeHandle',
-        'href': `${workspace.options.pathToMedia}resize-handle.svg`,
-      },
-      this.svgRoot,
-    );
+    this.resizeHandle = this.createResizeHandle(this.svgRoot, workspace);
 
     // TODO: Remove this comment before merging.
     // I think we want comments to exist on the same layer as blocks.
@@ -118,32 +67,128 @@ export class CommentView implements IRenderedElement {
     // Set size to the default size.
     this.setSize(this.size);
 
-    browserEvents.conditionalBind(
-      this.textarea,
-      'change',
-      this,
-      this.onTextChange,
+  }
+
+  private createTopBar(
+    svgRoot: SVGGElement,
+    workspace: WorkspaceSvg,
+  ): {
+    topBar: SVGRectElement;
+    deleteIcon: SVGImageElement;
+    foldoutIcon: SVGImageElement;
+    textPreview: SVGTextElement;
+    textPreviewNode: Text;
+  } {
+    const topBar = dom.createSvgElement(
+      Svg.RECT,
+      {
+        'class': 'blocklyCommentTopbar',
+        'x': 0,
+        'y': 0,
+      },
+      svgRoot,
     );
+    // TODO: Before merging, does this mean to override an individual image,
+    // folks need to replace the whole media folder?
+    const deleteIcon = dom.createSvgElement(
+      Svg.IMAGE,
+      {
+        'class': 'blocklyDeleteIcon',
+        'href': `${workspace.options.pathToMedia}delete-icon.svg`,
+      },
+      svgRoot,
+    );
+    const foldoutIcon = dom.createSvgElement(
+      Svg.IMAGE,
+      {
+        'class': 'blocklyFoldoutIcon',
+        'href': `${workspace.options.pathToMedia}arrow-dropdown.svg`,
+      },
+      svgRoot,
+    );
+    const textPreview = dom.createSvgElement(
+      Svg.TEXT,
+      {'class': 'blocklyCommentText blocklyText'},
+      svgRoot,
+    );
+    const textPreviewNode = document.createTextNode('');
+    textPreview.appendChild(textPreviewNode);
+
     // TODO: Triggering this on pointerdown means that we can't start drags
     //   on the foldout icon. We need to open up the gesture system to fix this.
     browserEvents.conditionalBind(
-      this.foldoutIcon,
+      foldoutIcon,
       'pointerdown',
       this,
       this.onFoldoutUp,
     );
     browserEvents.conditionalBind(
-      this.deleteIcon,
+      deleteIcon,
       'pointerdown',
       this,
       this.onDeleteDown,
     );
+
+    return {topBar, deleteIcon, foldoutIcon, textPreview, textPreviewNode};
+  }
+
+  private createTextArea(svgRoot: SVGGElement): {
+    foreignObject: SVGForeignObjectElement;
+    textArea: HTMLTextAreaElement;
+  } {
+    const foreignObject = dom.createSvgElement(
+      Svg.FOREIGNOBJECT,
+      {
+        'class': 'blocklyCommentForeignObject',
+      },
+      svgRoot,
+    );
+    const body = document.createElementNS(dom.HTML_NS, 'body');
+    body.setAttribute('xmlns', dom.HTML_NS);
+    body.className = 'blocklyMinimalBody';
+    const textArea = document.createElementNS(
+      dom.HTML_NS,
+      'textarea',
+    ) as HTMLTextAreaElement;
+    dom.addClass(textArea, 'blocklyCommentText');
+    dom.addClass(textArea, 'blocklyTextarea');
+    dom.addClass(textArea, 'blocklyText');
+    // TODO: Handle RTL.
+    // this.textarea.setAttribute('dir', this.workspace.RTL ? 'RTL' : 'LTR');
+    body.appendChild(textArea);
+    foreignObject.appendChild(body);
+
     browserEvents.conditionalBind(
-      this.resizeHandle,
+      textArea,
+      'change',
+      this,
+      this.onTextChange,
+    );
+
+    return {foreignObject, textArea};
+  }
+
+  private createResizeHandle(
+    svgRoot: SVGGElement,
+    workspace: WorkspaceSvg,
+  ): SVGImageElement {
+    const resizeHandle = dom.createSvgElement(
+      Svg.IMAGE,
+      {
+        'class': 'blocklyResizeHandle',
+        'href': `${workspace.options.pathToMedia}resize-handle.svg`,
+      },
+      svgRoot,
+    );
+
+    browserEvents.conditionalBind(
+      resizeHandle,
       'pointerdown',
       this,
       this.onResizePointerDown,
     );
+
+    return resizeHandle;
   }
 
   getSvgRoot(): SVGElement {
@@ -325,11 +370,11 @@ export class CommentView implements IRenderedElement {
     if (this.editable) {
       dom.addClass(this.svgRoot, 'blocklyEditable');
       dom.removeClass(this.svgRoot, 'blocklyReadonly');
-      this.textarea.removeAttribute('readonly');
+      this.textArea.removeAttribute('readonly');
     } else {
       dom.removeClass(this.svgRoot, 'blocklyEditable');
       dom.addClass(this.svgRoot, 'blocklyReadonly');
-      this.textarea.setAttribute('readonly', 'true');
+      this.textArea.setAttribute('readonly', 'true');
     }
   }
 
@@ -355,7 +400,7 @@ export class CommentView implements IRenderedElement {
   }
 
   setText(text: string) {
-    this.textarea.value = text;
+    this.textArea.value = text;
     this.onTextChange();
   }
 
@@ -365,7 +410,7 @@ export class CommentView implements IRenderedElement {
 
   private onTextChange() {
     const oldText = this.text;
-    this.text = this.textarea.value;
+    this.text = this.textArea.value;
     this.textPreviewNode.textContent = this.truncateText(this.text);
     for (const listener of this.textChangeListeners) {
       listener(oldText, this.text);

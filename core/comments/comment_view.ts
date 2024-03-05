@@ -11,7 +11,12 @@ import {Svg} from '../utils/svg.js';
 import * as layers from '../layers.js';
 import * as css from '../css.js';
 import {Coordinate, Size, browserEvents} from '../utils.js';
+import * as touch from '../touch.js';
 
+// TODO: Before merging file an issue for calculating a better min size. We
+//   don't want text to go off the top bar when collapsing, but we also don't
+//   want to require an excessively large min size.
+const MIN_SIZE = new Size(100, 60);
 export class CommentView implements IRenderedElement {
   private svgRoot: SVGGElement;
   private topBar: SVGRectElement;
@@ -32,6 +37,8 @@ export class CommentView implements IRenderedElement {
   > = [];
   private sizeChangeListeners: Array<(oldSize: Size, newSize: Size) => void> =
     [];
+  private resizePointerUpListener: browserEvents.Data | null = null;
+  private resizePointerMoveListener: browserEvents.Data | null = null;
 
   constructor(private readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
@@ -115,6 +122,12 @@ export class CommentView implements IRenderedElement {
       this,
       this.onTextChange,
     );
+    browserEvents.conditionalBind(
+      this.resizeHandle,
+      'pointerdown',
+      this,
+      this.onResizePointerDown,
+    );
   }
 
   getSvgRoot(): SVGElement {
@@ -126,6 +139,11 @@ export class CommentView implements IRenderedElement {
   }
 
   setSize(size: Size) {
+    size = new Size(
+      Math.max(size.width, MIN_SIZE.width),
+      Math.max(size.height, MIN_SIZE.height),
+    );
+
     const oldSize = this.size;
     this.size = size;
     const topBarSize = this.topBar.getBBox();
@@ -158,7 +176,6 @@ export class CommentView implements IRenderedElement {
     this.foldoutIcon.setAttribute('x', `${foldoutMargin}`);
 
     const textPreviewMargin = (topBarSize.height - textPreviewSize.height) / 2;
-    console.log(textPreviewSize.height, textPreviewMargin);
     const textPreviewWidth =
       size.width -
       foldoutSize.width -
@@ -189,6 +206,59 @@ export class CommentView implements IRenderedElement {
 
   addSizeChangeListener(listener: (oldSize: Size, newSize: Size) => void) {
     this.sizeChangeListeners.push(listener);
+  }
+
+  private onResizePointerDown(e: PointerEvent) {
+    // TODO: Add this before merging.
+    // this.bringToFront();
+    if (browserEvents.isRightButton(e)) {
+      e.stopPropagation();
+      return;
+    }
+
+    // TODO: Write an issue to move this into a utils file before merging.
+    //   Same for moveDrag below.
+    this.workspace.startDrag(
+      e,
+      new Coordinate(
+        this.workspace.RTL ? -this.getSize().width : this.getSize().width,
+        this.getSize().height,
+      ),
+    );
+
+    this.resizePointerUpListener = browserEvents.conditionalBind(
+      document,
+      'pointerup',
+      this,
+      this.onResizePointerUp,
+    );
+    this.resizePointerMoveListener = browserEvents.conditionalBind(
+      document,
+      'pointermove',
+      this,
+      this.onResizePointerMove,
+    );
+
+    this.workspace.hideChaff();
+
+    e.stopPropagation();
+  }
+
+  private onResizePointerUp(_e: PointerEvent) {
+    touch.clearTouchIdentifier();
+    if (this.resizePointerUpListener) {
+      browserEvents.unbind(this.resizePointerUpListener);
+      this.resizePointerUpListener = null;
+    }
+    if (this.resizePointerMoveListener) {
+      browserEvents.unbind(this.resizePointerMoveListener);
+      this.resizePointerMoveListener = null;
+    }
+  }
+
+  private onResizePointerMove(e: PointerEvent) {
+    const delta = this.workspace.moveDrag(e);
+    this.setSize(new Size(this.workspace.RTL ? -delta.x : delta.x, delta.y));
   }
 
   isCollapsed(): boolean {

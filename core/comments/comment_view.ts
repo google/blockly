@@ -225,8 +225,7 @@ export class CommentView implements IRenderedElement {
   }
 
   private onResizePointerDown(e: PointerEvent) {
-    // TODO: Add this before merging.
-    // this.bringToFront();
+    this.bringToFront();
     if (browserEvents.isRightButton(e)) {
       e.stopPropagation();
       return;
@@ -304,8 +303,7 @@ export class CommentView implements IRenderedElement {
   }
 
   private onFoldoutUp(e: PointerEvent) {
-    // TODO: Add this before merging.
-    // this.bringToFront();
+    this.bringToFront();
     if (browserEvents.isRightButton(e)) {
       e.stopPropagation();
       return;
@@ -376,6 +374,15 @@ export class CommentView implements IRenderedElement {
 
   private truncateText(text: string): string {
     return text.length >= 12 ? `${text.substring(0, 9)}...` : text;
+  }
+
+  bringToFront() {
+    const parent = this.svgRoot.parentNode;
+    const childNodes = parent!.childNodes;
+    // Avoid moving the comment if it's already at the bottom.
+    if (childNodes[childNodes.length - 1] !== this.svgRoot) {
+      parent!.appendChild(this.svgRoot);
+    }
   }
 
   private onDeleteDown(e: PointerEvent) {

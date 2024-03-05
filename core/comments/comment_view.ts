@@ -429,6 +429,7 @@ css.register(`
   height: 20px;
   display: none;
   fill: var(--commentIconColour);
+  cursor: pointer;
 }
 
 .blocklyFoldoutIcon {
@@ -436,11 +437,13 @@ css.register(`
   height: 20px;
   fill: var(--commentIconColour);
   transform-origin: 12px 12px;
+  cursor: pointer;
 }
 .blocklyResizeHandle {
   width: 12px;
   height: 12px;
   stroke: var(--commentIconColour);
+  cursor: se-resize;
 }
 
 .blocklyCommentTopbar {

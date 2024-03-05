@@ -30,6 +30,8 @@ export class CommentView implements IRenderedElement {
   private textChangeListeners: Array<
     (oldText: string, newText: string) => void
   > = [];
+  private sizeChangeListeners: Array<(oldSize: Size, newSize: Size) => void> =
+    [];
 
   constructor(private readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
@@ -124,6 +126,7 @@ export class CommentView implements IRenderedElement {
   }
 
   setSize(size: Size) {
+    const oldSize = this.size;
     this.size = size;
     const topBarSize = this.topBar.getBBox();
     const deleteSize = this.deleteIcon.getBBox();
@@ -174,6 +177,18 @@ export class CommentView implements IRenderedElement {
 
     this.resizeHandle.setAttribute('x', `${size.width - resizeSize.width}`);
     this.resizeHandle.setAttribute('y', `${size.height - resizeSize.height}`);
+
+    this.onSizeChange(oldSize, this.size);
+  }
+
+  private onSizeChange(oldSize: Size, newSize: Size) {
+    for (const listener of this.sizeChangeListeners) {
+      listener(oldSize, newSize);
+    }
+  }
+
+  addSizeChangeListener(listener: (oldSize: Size, newSize: Size) => void) {
+    this.sizeChangeListeners.push(listener);
   }
 
   isCollapsed(): boolean {

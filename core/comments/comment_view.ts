@@ -37,6 +37,7 @@ export class CommentView implements IRenderedElement {
   > = [];
   private sizeChangeListeners: Array<(oldSize: Size, newSize: Size) => void> =
     [];
+  private disposeListeners: Array<() => void> = [];
   private collapseChangeListeners: Array<(newCollapse: boolean) => void> = [];
   private resizePointerUpListener: browserEvents.Data | null = null;
   private resizePointerMoveListener: browserEvents.Data | null = null;
@@ -130,6 +131,12 @@ export class CommentView implements IRenderedElement {
       'pointerdown',
       this,
       this.onFoldoutUp,
+    );
+    browserEvents.conditionalBind(
+      this.deleteIcon,
+      'pointerdown',
+      this,
+      this.onDeleteDown,
     );
     browserEvents.conditionalBind(
       this.resizeHandle,
@@ -369,6 +376,27 @@ export class CommentView implements IRenderedElement {
 
   private truncateText(text: string): string {
     return text.length >= 12 ? `${text.substring(0, 9)}...` : text;
+  }
+
+  private onDeleteDown(e: PointerEvent) {
+    if (browserEvents.isRightButton(e)) {
+      e.stopPropagation();
+      return;
+    }
+
+    this.dispose();
+    e.stopPropagation();
+  }
+
+  dispose() {
+    dom.removeNode(this.svgRoot);
+    for (const listener of this.disposeListeners) {
+      listener();
+    }
+  }
+
+  addDisposeListener(listener: () => void) {
+    this.disposeListeners.push(listener);
   }
 }
 

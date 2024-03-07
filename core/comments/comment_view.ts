@@ -18,28 +18,73 @@ import * as touch from '../touch.js';
 //   want to require an excessively large min size.
 const MIN_SIZE = new Size(100, 60);
 export class CommentView implements IRenderedElement {
+  /** The root group element of the comment view. */
   private svgRoot: SVGGElement;
+
+  /** The rect background for the top bar. */
   private topBar: SVGRectElement;
+
+  /** The delete icon that goes in the top bar. */
   private deleteIcon: SVGImageElement;
+
+  /** The foldout icon that goes in the top bar. */
   private foldoutIcon: SVGImageElement;
+
+  /** The text element that goes in the top bar. */
   private textPreview: SVGTextElement;
+
+  /** The actual text node in the text preview. */
   private textPreviewNode: Text;
+
+  /** The resize handle element. */
   private resizeHandle: SVGImageElement;
+
+  /** The foreignObject containing the HTML text area. */
   private foreignObject: SVGForeignObjectElement;
+
+  /** The text area where the user can type. */
   private textArea: HTMLTextAreaElement;
+
+  /** The current size of the comment. */
   private size: Size = new Size(120, 100);
+
+  /** Whether the comment is collapsed or not. */
   private collapsed: boolean = false;
+
+  /** Whether the comment is editable or not. */
   private editable: boolean = true;
+
+  /** The current location of the comment. */
   private location: Coordinate = new Coordinate(0, 0);
+
+  /** The current text of the comment. Updates on  text area change. */
   private text: string = '';
+
+  /** Listeners for changes to text. */
   private textChangeListeners: Array<
     (oldText: string, newText: string) => void
   > = [];
+
+  /** Listeners for changes to size. */
   private sizeChangeListeners: Array<(oldSize: Size, newSize: Size) => void> =
     [];
+
+  /** Listeners for disposal. */
   private disposeListeners: Array<() => void> = [];
+
+  /** Listeners for collapsing. */
   private collapseChangeListeners: Array<(newCollapse: boolean) => void> = [];
+
+  /**
+   * Event data for the pointer up event on the resize handle. Used to
+   * unregister the listener.
+   */
   private resizePointerUpListener: browserEvents.Data | null = null;
+
+  /**
+   * Event data for the pointer move event on the resize handle. Used to
+   * unregister the listener.
+   */
   private resizePointerMoveListener: browserEvents.Data | null = null;
 
   constructor(private readonly workspace: WorkspaceSvg) {
@@ -68,6 +113,10 @@ export class CommentView implements IRenderedElement {
     this.setSize(this.size);
   }
 
+  /**
+   * Creates the top bar and the elements visually within it.
+   * Registers event listeners.
+   */
   private createTopBar(
     svgRoot: SVGGElement,
     workspace: WorkspaceSvg,
@@ -121,7 +170,7 @@ export class CommentView implements IRenderedElement {
       foldoutIcon,
       'pointerdown',
       this,
-      this.onFoldoutUp,
+      this.onFoldoutDown,
     );
     browserEvents.conditionalBind(
       deleteIcon,
@@ -133,6 +182,9 @@ export class CommentView implements IRenderedElement {
     return {topBar, deleteIcon, foldoutIcon, textPreview, textPreviewNode};
   }
 
+  /**
+   * Creates the text area where users can type. Registers event listeners.
+   */
   private createTextArea(svgRoot: SVGGElement): {
     foreignObject: SVGForeignObjectElement;
     textArea: HTMLTextAreaElement;
@@ -162,6 +214,7 @@ export class CommentView implements IRenderedElement {
     return {foreignObject, textArea};
   }
 
+  /** Creates the DOM elements for the comment resize handle. */
   private createResizeHandle(
     svgRoot: SVGGElement,
     workspace: WorkspaceSvg,
@@ -185,14 +238,20 @@ export class CommentView implements IRenderedElement {
     return resizeHandle;
   }
 
-  getSvgRoot(): SVGElement {
+  /** Returns the root SVG group element of the comment view. */
+  getSvgRoot(): SVGGElement {
     return this.svgRoot;
   }
 
+  /** Returns the current size of the comment in workspace units. */
   getSize(): Size {
     return this.size;
   }
 
+  /**
+   * Sets the size of the comment in workspace units, and updates the view
+   * elements to reflect the new size.
+   */
   setSize(size: Size) {
     size = new Size(
       Math.max(size.width, MIN_SIZE.width),
@@ -229,6 +288,7 @@ export class CommentView implements IRenderedElement {
     this.onSizeChange(oldSize, this.size);
   }
 
+  /** Updates the size of the text area elements to reflect the new size. */
   private updateTextAreaSize(size: Size, topBarSize: Size) {
     this.foreignObject.setAttribute(
       'height',
@@ -241,6 +301,9 @@ export class CommentView implements IRenderedElement {
     }
   }
 
+  /**
+   * Updates the position of the delete icon elements to reflect the new size.
+   */
   private updateDeleteIconPosition(
     size: Size,
     topBarSize: Size,
@@ -254,12 +317,18 @@ export class CommentView implements IRenderedElement {
     );
   }
 
+  /**
+   * Updates the position of the foldout icon elements to reflect the new size.
+   */
   private updateFoldoutIconPosition(topBarSize: Size, foldoutSize: Size) {
     const foldoutMargin = (topBarSize.height - foldoutSize.height) / 2;
     this.foldoutIcon.setAttribute('y', `${foldoutMargin}`);
     this.foldoutIcon.setAttribute('x', `${foldoutMargin}`);
   }
 
+  /**
+   * Updates the size and position of the text preview elements to reflect the new size.
+   */
   private updateTextPreviewSize(
     size: Size,
     topBarSize: Size,
@@ -288,16 +357,25 @@ export class CommentView implements IRenderedElement {
     this.textPreview.setAttribute('width', `${textPreviewWidth}`);
   }
 
+  /**
+   * Triggers listeners when the size of the comment changes, either
+   * progrmatically or manually by the user.
+   */
   private onSizeChange(oldSize: Size, newSize: Size) {
     for (const listener of this.sizeChangeListeners) {
       listener(oldSize, newSize);
     }
   }
 
+  /** Registers a callback that listens for size changes. */
   addSizeChangeListener(listener: (oldSize: Size, newSize: Size) => void) {
     this.sizeChangeListeners.push(listener);
   }
 
+  /**
+   * Handles starting an interaction with the resize handle to resize the
+   * comment.
+   */
   private onResizePointerDown(e: PointerEvent) {
     this.bringToFront();
     if (browserEvents.isRightButton(e)) {
@@ -333,6 +411,7 @@ export class CommentView implements IRenderedElement {
     e.stopPropagation();
   }
 
+  /** Ends an interaction with the resize handle. */
   private onResizePointerUp(_e: PointerEvent) {
     touch.clearTouchIdentifier();
     if (this.resizePointerUpListener) {
@@ -345,15 +424,18 @@ export class CommentView implements IRenderedElement {
     }
   }
 
+  /** Resizes the comment in response to a drag on the resize handle. */
   private onResizePointerMove(e: PointerEvent) {
     const delta = this.workspace.moveDrag(e);
     this.setSize(new Size(this.workspace.RTL ? -delta.x : delta.x, delta.y));
   }
 
+  /** Returns true if the comment is currently collapsed. */
   isCollapsed(): boolean {
     return this.collapsed;
   }
 
+  /** Sets whether the comment is currently collapsed or not. */
   setCollapsed(collapsed: boolean) {
     this.collapsed = collapsed;
     if (collapsed) {
@@ -366,17 +448,26 @@ export class CommentView implements IRenderedElement {
     this.onCollapse();
   }
 
+  /**
+   * Triggers listeners when the collapsed-ness of the comment changes, either
+   * progrmatically or manually by the user.
+   */
   private onCollapse() {
     for (const listener of this.collapseChangeListeners) {
       listener(this.collapsed);
     }
   }
 
+  /** Registers a callback that listens for collapsed-ness changes. */
   addOnCollapseListener(listener: (newCollapse: boolean) => void) {
     this.collapseChangeListeners.push(listener);
   }
 
-  private onFoldoutUp(e: PointerEvent) {
+  /**
+   * Toggles the collapsedness of the block when we receive a pointer down
+   * event on the foldout icon.
+   */
+  private onFoldoutDown(e: PointerEvent) {
     this.bringToFront();
     if (browserEvents.isRightButton(e)) {
       e.stopPropagation();
@@ -390,10 +481,12 @@ export class CommentView implements IRenderedElement {
     e.stopPropagation();
   }
 
+  /** Returns true if the comment is currently editable. */
   isEditable(): boolean {
     return this.editable;
   }
 
+  /** Sets the editability of the comment. */
   setEditable(editable: boolean) {
     this.editable = editable;
     if (this.editable) {
@@ -407,6 +500,7 @@ export class CommentView implements IRenderedElement {
     }
   }
 
+  /** Returns the current location of the comment in workspace coordinates. */
   getRelativeToSurfaceXY(): Coordinate {
     return this.location;
   }
@@ -424,19 +518,26 @@ export class CommentView implements IRenderedElement {
     );
   }
 
+  /** Retursn the current text of the comment. */
   getText() {
     return this.text;
   }
 
+  /** Sets the current text of the comment. */
   setText(text: string) {
     this.textArea.value = text;
     this.onTextChange();
   }
 
+  /** Registers a callback that listens for text changes. */
   addTextChangeListener(listener: (oldText: string, newText: string) => void) {
     this.textChangeListeners.push(listener);
   }
 
+  /**
+   * Triggers listeners when the text of the comment changes, either
+   * progrmatically or manually by the user.
+   */
   private onTextChange() {
     const oldText = this.text;
     this.text = this.textArea.value;
@@ -446,11 +547,15 @@ export class CommentView implements IRenderedElement {
     }
   }
 
+  /** Truncates the text to fit within the top view. */
   private truncateText(text: string): string {
+    // TODO: before merging ile an issue to calculate how much this should be
+    //   truncated automatically.
     return text.length >= 12 ? `${text.substring(0, 9)}...` : text;
   }
 
-  bringToFront() {
+  /** Brings the workspace comment to the front of its layer. */
+  private bringToFront() {
     const parent = this.svgRoot.parentNode;
     const childNodes = parent!.childNodes;
     // Avoid moving the comment if it's already at the bottom.
@@ -459,6 +564,10 @@ export class CommentView implements IRenderedElement {
     }
   }
 
+  /**
+   * Handles disposing of the comment when we get a pointer down event on the
+   * delete icon.
+   */
   private onDeleteDown(e: PointerEvent) {
     if (browserEvents.isRightButton(e)) {
       e.stopPropagation();
@@ -469,6 +578,7 @@ export class CommentView implements IRenderedElement {
     e.stopPropagation();
   }
 
+  /** Disposes of this comment view. */
   dispose() {
     dom.removeNode(this.svgRoot);
     for (const listener of this.disposeListeners) {
@@ -476,6 +586,7 @@ export class CommentView implements IRenderedElement {
     }
   }
 
+  /** Registers a callback that listens for disposal of this view. */
   addDisposeListener(listener: () => void) {
     this.disposeListeners.push(listener);
   }

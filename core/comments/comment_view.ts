@@ -599,7 +599,7 @@ css.register(`
   --commentIconColour: #1A1A1A
 }
 
-.blocklyComment .blocklyCommentText.blocklyTextarea.blocklyText {
+.blocklyComment .blocklyTextarea {
   background-color: var(--commentFillColour);
   border: 1px solid var(--commentBorderColour);
   outline: 0;
@@ -612,7 +612,7 @@ css.register(`
   display: block;
 }
 
-.blocklyReadonly.blocklyComment .blocklyCommentText.blocklyTextarea.blocklyText {
+.blocklyReadonly.blocklyComment .blocklyTextarea {
   cursor: inherit;
 }
 
@@ -643,13 +643,13 @@ css.register(`
   height: 24px;
 }
 
-.blocklyComment .blocklyCommentText.blocklyText {
+.blocklyComment .blocklyCommentPreview.blocklyText {
   fill: var(--commentIconColour);
   dominant-baseline: middle;
   display: none;
 }
 
-.blocklyCollapsed.blocklyComment .blocklyCommentText.blocklyText {
+.blocklyCollapsed.blocklyComment .blocklyCommentPreview {
   display: block;
 }
 

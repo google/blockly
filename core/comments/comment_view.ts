@@ -348,7 +348,9 @@ export class CommentView implements IRenderedElement {
       deleteMargin * 2;
     this.textPreview.setAttribute(
       'x',
-      `${foldoutSize.width + foldoutMargin * 2 * (this.workspace.RTL ? -1 : 1)}`,
+      `${
+        foldoutSize.width + foldoutMargin * 2 * (this.workspace.RTL ? -1 : 1)
+      }`,
     );
     this.textPreview.setAttribute(
       'y',

@@ -7,12 +7,15 @@
 import {WorkspaceComment} from './workspace_comment.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {CommentView} from './comment_view.js';
-import {Coordinate, Rect, Size} from '../utils.js';
-import {IBoundedElement} from '../blockly.js';
+import {Coordinate} from '../utils/coordinate.js';
+import {Rect} from '../utils/rect.js';
+import {Size} from '../utils/size.js';
+import {IBoundedElement} from '../interfaces/i_bounded_element.js';
+import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
-  implements IBoundedElement
+  implements IBoundedElement, IRenderedElement
 {
   /** The class encompassing the svg elements making up the workspace comment. */
   private view: CommentView;
@@ -74,6 +77,11 @@ export class RenderedWorkspaceComment
     super.setEditable(editable);
     // Use isEditable rather than isOwnEditable to account for workspace state.
     this.view.setEditable(this.isEditable());
+  }
+
+  /** Returns the root SVG element of this comment. */
+  getSvgRoot(): SVGElement {
+    return this.view.getSvgRoot();
   }
 
   /** Returns the bounding rectangle of this comment in workspace coordinates. */

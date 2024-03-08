@@ -5,3 +5,4 @@
  */
 
 export {CommentView} from './comments/comment_view.js';
+export {WorkspaceComment} from './comments/workspace_comment.js';

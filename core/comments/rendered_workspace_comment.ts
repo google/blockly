@@ -7,7 +7,7 @@
 import {WorkspaceComment} from './workspace_comment.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {CommentView} from './comment_view.js';
-import {Size} from '../utils.js';
+import {Coordinate, Size} from '../utils.js';
 
 export class RenderedWorkspaceComment extends WorkspaceComment {
   private view: CommentView;
@@ -57,5 +57,10 @@ export class RenderedWorkspaceComment extends WorkspaceComment {
     super.setEditable(editable);
     // Use isEditable rather than isOwnEditable to account for workspace state.
     this.view.setEditable(this.isEditable());
+  }
+
+  moveTo(location: Coordinate): void {
+    super.moveTo(location);
+    this.view.moveTo(location);
   }
 }

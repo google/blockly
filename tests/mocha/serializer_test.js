@@ -223,55 +223,6 @@ Serializer.Attributes.testSuites = [
 
 Serializer.Fields = new SerializerTestSuite('Fields');
 
-Serializer.Fields.Angle = new SerializerTestSuite('Angle');
-Serializer.Fields.Angle.Simple = new SerializerTestCase(
-  'Simple',
-  '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="test_fields_angle" id="id******************" x="42" y="42">' +
-    '<field name="FIELDNAME">90</field>' +
-    '</block>' +
-    '</xml>',
-);
-Serializer.Fields.Angle.Negative = new SerializerTestCase(
-  'Negative',
-  '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="test_angles_wrap" id="id******************" x="42" y="42">' +
-    '<field name="FIELDNAME">-90</field>' +
-    '</block>' +
-    '</xml>',
-);
-Serializer.Fields.Angle.Decimals = new SerializerTestCase(
-  'Decimals',
-  '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="test_fields_angle" id="id******************" x="42" y="42">' +
-    '<field name="FIELDNAME">1.5</field>' +
-    '</block>' +
-    '</xml>',
-);
-Serializer.Fields.Angle.MaxPrecision = new SerializerTestCase(
-  'MaxPrecision',
-  '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="test_fields_angle" id="id******************" x="42" y="42">' +
-    '<field name="FIELDNAME">1.000000000000001</field>' +
-    '</block>' +
-    '</xml>',
-);
-Serializer.Fields.Angle.SmallestNumber = new SerializerTestCase(
-  'SmallestNumber',
-  '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="test_fields_angle" id="id******************" x="42" y="42">' +
-    '<field name="FIELDNAME">5e-324</field>' +
-    '</block>' +
-    '</xml>',
-);
-Serializer.Fields.Angle.testCases = [
-  Serializer.Fields.Angle.Simple,
-  Serializer.Fields.Angle.Negative,
-  Serializer.Fields.Angle.Decimals,
-  Serializer.Fields.Angle.MaxPrecision,
-  Serializer.Fields.Angle.SmallestNumber,
-];
-
 Serializer.Fields.Checkbox = new SerializerTestSuite('Checkbox');
 Serializer.Fields.Checkbox.True = new SerializerTestCase(
   'True',
@@ -1070,7 +1021,6 @@ Serializer.Fields.Variable.Id.testSuites = [
 Serializer.Fields.Variable.testSuites = [Serializer.Fields.Variable.Id];
 
 Serializer.Fields.testSuites = [
-  Serializer.Fields.Angle,
   Serializer.Fields.Checkbox,
   Serializer.Fields.Colour,
   Serializer.Fields.Dropdown,

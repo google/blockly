@@ -63,4 +63,9 @@ export class RenderedWorkspaceComment extends WorkspaceComment {
     super.moveTo(location);
     this.view.moveTo(location);
   }
+
+  dispose() {
+    this.view.dispose();
+    super.dispose();
+  }
 }

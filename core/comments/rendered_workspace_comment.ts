@@ -18,6 +18,7 @@ export class RenderedWorkspaceComment extends WorkspaceComment {
     this.view = new CommentView(workspace);
     // Set the size to the default size as defined in the superclass.
     this.view.setSize(this.getSize());
+    this.view.setEditable(this.isEditable());
 
     this.addModelUpdateBindings();
   }
@@ -50,5 +51,11 @@ export class RenderedWorkspaceComment extends WorkspaceComment {
     // setCollapsed will trigger the change listener that updates
     // the model aka superclass.
     this.view.setCollapsed(collapsed);
+  }
+
+  setEditable(editable: boolean): void {
+    super.setEditable(editable);
+    // Use isEditable rather than isOwnEditable to account for workspace state.
+    this.view.setEditable(this.isEditable());
   }
 }

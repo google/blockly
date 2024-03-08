@@ -364,14 +364,23 @@ export class CommentView implements IRenderedElement {
    * progrmatically or manually by the user.
    */
   private onSizeChange(oldSize: Size, newSize: Size) {
-    for (const listener of this.sizeChangeListeners) {
-      listener(oldSize, newSize);
+    // Loop through listeners backwards in case they remove themselves.
+    for (let i = this.sizeChangeListeners.length - 1; i >= 0; i--) {
+      this.sizeChangeListeners[i](oldSize, newSize);
     }
   }
 
   /** Registers a callback that listens for size changes. */
   addSizeChangeListener(listener: (oldSize: Size, newSize: Size) => void) {
     this.sizeChangeListeners.push(listener);
+  }
+
+  /** Removes the given listener from the list of size change listeners. */
+  sizeChangeListener(listener: () => void) {
+    this.sizeChangeListeners.splice(
+      this.sizeChangeListeners.indexOf(listener),
+      1,
+    );
   }
 
   /**
@@ -455,14 +464,23 @@ export class CommentView implements IRenderedElement {
    * progrmatically or manually by the user.
    */
   private onCollapse() {
-    for (const listener of this.collapseChangeListeners) {
-      listener(this.collapsed);
+    // Loop through listeners backwards in case they remove themselves.
+    for (let i = this.collapseChangeListeners.length - 1; i >= 0; i--) {
+      this.collapseChangeListeners[i](this.collapsed);
     }
   }
 
   /** Registers a callback that listens for collapsed-ness changes. */
   addOnCollapseListener(listener: (newCollapse: boolean) => void) {
     this.collapseChangeListeners.push(listener);
+  }
+
+  /** Removes the given listener from the list of on collapse listeners. */
+  removeOnCollapseListener(listener: () => void) {
+    this.collapseChangeListeners.splice(
+      this.collapseChangeListeners.indexOf(listener),
+      1,
+    );
   }
 
   /**
@@ -536,6 +554,14 @@ export class CommentView implements IRenderedElement {
     this.textChangeListeners.push(listener);
   }
 
+  /** Removes the given listener from the list of text change listeners. */
+  removeTextChangeListener(listener: () => void) {
+    this.textChangeListeners.splice(
+      this.textChangeListeners.indexOf(listener),
+      1,
+    );
+  }
+
   /**
    * Triggers listeners when the text of the comment changes, either
    * progrmatically or manually by the user.
@@ -544,8 +570,9 @@ export class CommentView implements IRenderedElement {
     const oldText = this.text;
     this.text = this.textArea.value;
     this.textPreviewNode.textContent = this.truncateText(this.text);
-    for (const listener of this.textChangeListeners) {
-      listener(oldText, this.text);
+    // Loop through listeners backwards in case they remove themselves.
+    for (let i = this.textChangeListeners.length - 1; i >= 0; i--) {
+      this.textChangeListeners[i](oldText, this.text);
     }
   }
 
@@ -583,14 +610,20 @@ export class CommentView implements IRenderedElement {
   /** Disposes of this comment view. */
   dispose() {
     dom.removeNode(this.svgRoot);
-    for (const listener of this.disposeListeners) {
-      listener();
+    // Loop through listeners backwards in case they remove themselves.
+    for (let i = this.disposeListeners.length - 1; i >= 0; i--) {
+      this.disposeListeners[i]();
     }
   }
 
   /** Registers a callback that listens for disposal of this view. */
   addDisposeListener(listener: () => void) {
     this.disposeListeners.push(listener);
+  }
+
+  /** Removes the given listener from the list of disposal listeners. */
+  removeDisposeListener(listener: () => void) {
+    this.disposeListeners.splice(this.disposeListeners.indexOf(listener), 1);
   }
 }
 

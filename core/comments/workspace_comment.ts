@@ -53,6 +53,9 @@ export class WorkspaceComment {
   ) {
     this.id = id && !workspace.getCommentById(id) ? id : idGenerator.genUid();
 
+    // TODO: File an issue to remove this once everything is migrated.
+    workspace.addTopComment(this as AnyDuringMigration);
+
     // TODO(7909): Fire events.
   }
 
@@ -162,6 +165,7 @@ export class WorkspaceComment {
   /** Disposes of this comment. */
   dispose() {
     this.disposing = true;
+    this.workspace.removeTopComment(this as AnyDuringMigration);
     this.disposed = true;
   }
 

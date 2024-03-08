@@ -12,6 +12,15 @@ import * as idGenerator from '../utils/idgenerator.js';
 export class WorkspaceComment {
   public readonly id: string;
 
+  private text = '';
+  private size = new Size(120, 100);
+  private collapsed = false;
+  private editable = true;
+  private movable = true;
+  private deletable = true;
+  private location = new Coordinate(0, 0);
+  private disposed = false;
+
   constructor(
     protected readonly workspace: Workspace,
     id?: string,
@@ -25,33 +34,67 @@ export class WorkspaceComment {
     // TODO(7909): Fire events.
   }
 
-  setText(text: string) {}
+  setText(text: string) {
+    this.text = text;
+  }
 
-  getText(): string;
+  getText(): string {
+    return this.text;
+  }
 
-  setSize(size: Size) {}
+  setSize(size: Size) {
+    this.size = size;
+  }
 
-  getSize(): Size {}
+  getSize(): Size {
+    return this.size;
+  }
 
-  setCollapsed(collapsed: boolean) {}
+  setCollapsed(collapsed: boolean) {
+    this.collapsed = collapsed;
+  }
 
-  isCollapssed(): boolean {}
+  isCollapssed(): boolean {
+    return this.collapsed;
+  }
 
-  setEditable(editable: boolean) {}
+  setEditable(editable: boolean) {
+    this.editable = editable;
+  }
 
-  isEditable(): boolean {}
+  isEditable(): boolean {
+    return this.editable && !this.workspace.options.readOnly;
+  }
 
-  setMovable(movable: boolean) {}
+  setMovable(movable: boolean) {
+    this.movable = movable;
+  }
 
-  isMovable() {}
+  isMovable() {
+    return this.movable && !this.workspace.options.readOnly;
+  }
 
-  setDeletable(deletable: boolean) {}
+  setDeletable(deletable: boolean) {
+    this.deletable = deletable;
+  }
 
-  isDeletable(): boolean {}
+  isDeletable(): boolean {
+    return this.deletable && !this.workspace.options.readOnly;
+  }
 
-  moveTo(loc: Coordinate) {}
+  moveTo(location: Coordinate) {
+    this.location = location;
+  }
 
-  getRelativetoSurfaceXY(): Coordinate {}
+  getRelativetoSurfaceXY(): Coordinate {
+    return this.location;
+  }
 
-  dispose() {}
+  dispose() {
+    this.disposed = true;
+  }
+
+  isDisposed() {
+    return this.disposed;
+  }
 }

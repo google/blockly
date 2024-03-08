@@ -282,7 +282,9 @@ export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
   for (const type of Object.keys(blocks)) {
     const definition = blocks[type];
     if (type in Blocks) {
-      console.warn(`Block definiton "${type}" overwrites previous definition.`);
+      console.warn(
+        `Block definition "${type}" overwrites previous definition.`,
+      );
     }
     Blocks[type] = definition;
   }

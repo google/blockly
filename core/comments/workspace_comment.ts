@@ -63,7 +63,11 @@ export class WorkspaceComment {
   }
 
   isEditable(): boolean {
-    return this.editable && !this.workspace.options.readOnly;
+    return this.isOwnEditable() && !this.workspace.options.readOnly;
+  }
+
+  isOwnEditable(): boolean {
+    return this.editable;
   }
 
   setMovable(movable: boolean) {
@@ -71,7 +75,11 @@ export class WorkspaceComment {
   }
 
   isMovable() {
-    return this.movable && !this.workspace.options.readOnly;
+    return this.isOwnMovable() && !this.workspace.options.readOnly;
+  }
+
+  isOwnMovable() {
+    return this.movable;
   }
 
   setDeletable(deletable: boolean) {
@@ -79,7 +87,11 @@ export class WorkspaceComment {
   }
 
   isDeletable(): boolean {
-    return this.deletable && !this.workspace.options.readOnly;
+    return this.isOwnDeletable() && !this.workspace.options.readOnly;
+  }
+
+  isOwnDeletable(): boolean {
+    return this.deletable;
   }
 
   moveTo(location: Coordinate) {

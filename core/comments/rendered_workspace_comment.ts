@@ -7,9 +7,13 @@
 import {WorkspaceComment} from './workspace_comment.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {CommentView} from './comment_view.js';
-import {Coordinate, Size} from '../utils.js';
+import {Coordinate, Rect, Size} from '../utils.js';
+import {IBoundedElement} from '../blockly.js';
 
-export class RenderedWorkspaceComment extends WorkspaceComment {
+export class RenderedWorkspaceComment
+  extends WorkspaceComment
+  implements IBoundedElement
+{
   /** The class encompassing the svg elements making up the workspace comment. */
   private view: CommentView;
 
@@ -70,6 +74,21 @@ export class RenderedWorkspaceComment extends WorkspaceComment {
     super.setEditable(editable);
     // Use isEditable rather than isOwnEditable to account for workspace state.
     this.view.setEditable(this.isEditable());
+  }
+
+  /** Returns the bounding rectangle of this comment in workspace coordinates. */
+  getBoundingRectangle(): Rect {
+    const loc = this.getRelativeToSurfaceXY();
+    const size = this.getSize();
+    return new Rect(loc.y, loc.y + size.height, loc.x, loc.x + size.width);
+  }
+
+  /** Move the comment by the given amounts in workspace coordinates. */
+  moveBy(dx: number, dy: number, _reason?: string[] | undefined): void {
+    // TODO(#7909): Deal with reason when we add events.
+    const loc = this.getRelativeToSurfaceXY();
+    const newLoc = new Coordinate(loc.x + dx, loc.y + dy);
+    this.moveTo(newLoc);
   }
 
   /** Moves the comment to the given location in workspace coordinates. */

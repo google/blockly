@@ -45,7 +45,7 @@ export class CommentView implements IRenderedElement {
   /** The text area where the user can type. */
   private textArea: HTMLTextAreaElement;
 
-  /** The current size of the comment. */
+  /** The current size of the comment in workspace units. */
   private size: Size = new Size(120, 100);
 
   /** Whether the comment is collapsed or not. */
@@ -54,7 +54,7 @@ export class CommentView implements IRenderedElement {
   /** Whether the comment is editable or not. */
   private editable: boolean = true;
 
-  /** The current location of the comment. */
+  /** The current location of the comment in workspace coordinates. */
   private location: Coordinate = new Coordinate(0, 0);
 
   /** The current text of the comment. Updates on  text area change. */
@@ -376,7 +376,12 @@ export class CommentView implements IRenderedElement {
     }
   }
 
-  /** Registers a callback that listens for size changes. */
+  /**
+   * Registers a callback that listens for size changes.
+   *
+   * @param listener Receives callbacks when the size of the comment changes.
+   *     The new and old size are in workspace units.
+   */
   addSizeChangeListener(listener: (oldSize: Size, newSize: Size) => void) {
     this.sizeChangeListeners.push(listener);
   }

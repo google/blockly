@@ -376,7 +376,7 @@ export class CommentView implements IRenderedElement {
   }
 
   /** Removes the given listener from the list of size change listeners. */
-  sizeChangeListener(listener: () => void) {
+  removeSizeChangeListener(listener: () => void) {
     this.sizeChangeListeners.splice(
       this.sizeChangeListeners.indexOf(listener),
       1,

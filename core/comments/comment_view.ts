@@ -87,6 +87,12 @@ export class CommentView implements IRenderedElement {
    */
   private resizePointerMoveListener: browserEvents.Data | null = null;
 
+  /** Whether this comment view is currently being disposed or not. */
+  private disposing = false;
+
+  /** Whether this comment view has been disposed or not. */
+  private disposed = false;
+
   constructor(private readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
       'class': 'blocklyComment blocklyEditable',
@@ -609,11 +615,26 @@ export class CommentView implements IRenderedElement {
 
   /** Disposes of this comment view. */
   dispose() {
+    this.disposing = true;
     dom.removeNode(this.svgRoot);
     // Loop through listeners backwards in case they remove themselves.
     for (let i = this.disposeListeners.length - 1; i >= 0; i--) {
       this.disposeListeners[i]();
     }
+    this.disposed = true;
+  }
+
+  /** Returns whether this comment view has been disposed or not. */
+  isDisposed(): boolean {
+    return this.disposed;
+  }
+
+  /**
+   * Returns true if this comment view is currently being disposed or has
+   * already been disposed.
+   */
+  isDeadOrDying(): boolean {
+    return this.disposing || this.disposed;
   }
 
   /** Registers a callback that listens for disposal of this view. */

@@ -894,4 +894,166 @@ suite('JSO Serialization', function () {
       );
     });
   });
+
+  suite.only('Workspace comments', function () {
+    suite('IDs', function () {
+      test('IDs are saved by default', function () {
+        const comment = new Blockly.comments.WorkspaceComment(
+          this.workspace,
+          'testID',
+        );
+
+        const json = Blockly.serialization.workspaceComments.save(comment);
+
+        assertProperty(json, 'id', 'testID');
+      });
+
+      test('saving IDs can be disabled', function () {
+        const comment = new Blockly.comments.WorkspaceComment(
+          this.workspace,
+          'testID',
+        );
+
+        const json = Blockly.serialization.workspaceComments.save(comment, {
+          saveIds: false,
+        });
+
+        assertNoProperty(json, 'id');
+      });
+    });
+
+    suite('Coordinates', function () {
+      test('coordinates are not saved by default', function () {
+        const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+        comment.moveTo(new Blockly.utils.Coordinate(42, 1337));
+
+        const json = Blockly.serialization.workspaceComments.save(comment);
+
+        assertNoProperty(json, 'x');
+        assertNoProperty(json, 'y');
+      });
+
+      test('saving coordinates can be enabled', function () {
+        const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+        comment.moveTo(new Blockly.utils.Coordinate(42, 1337));
+
+        const json = Blockly.serialization.workspaceComments.save(comment, {
+          addCoordinates: true,
+        });
+
+        assertProperty(json, 'x', 42);
+        assertProperty(json, 'y', 1337);
+      });
+    });
+
+    suite('Text', function () {
+      test('the empty string is not saved', function () {
+        const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+        comment.setText('');
+
+        const json = Blockly.serialization.workspaceComments.save(comment);
+
+        assertNoProperty(json, 'text');
+      });
+
+      test('text is saved', function () {
+        const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+        comment.setText('test text');
+
+        const json = Blockly.serialization.workspaceComments.save(comment);
+
+        assertProperty(json, 'text', 'test text');
+      });
+    });
+
+    test('size is saved', function () {
+      const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+      comment.setSize(new Blockly.utils.Size(42, 1337));
+
+      const json = Blockly.serialization.workspaceComments.save(comment);
+
+      assertProperty(json, 'width', 42);
+      assertProperty(json, 'height', 1337);
+    });
+
+    suite('Collapsed', function () {
+      test('collapsed is not saved if false', function () {
+        const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+        comment.setCollapsed(false);
+
+        const json = Blockly.serialization.workspaceComments.save(comment);
+
+        assertNoProperty(json, 'collapsed');
+      });
+
+      test('collapsed is saved if true', function () {
+        const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+        comment.setCollapsed(true);
+
+        const json = Blockly.serialization.workspaceComments.save(comment);
+
+        assertProperty(json, 'collapsed', true);
+      });
+    });
+
+    suite('Editable', function () {
+      test('editable is not saved if true', function () {
+        const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+        comment.setEditable(true);
+
+        const json = Blockly.serialization.workspaceComments.save(comment);
+
+        assertNoProperty(json, 'editable');
+      });
+
+      test('editable is saved if false', function () {
+        const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+        comment.setEditable(false);
+
+        const json = Blockly.serialization.workspaceComments.save(comment);
+
+        assertProperty(json, 'editable', false);
+      });
+    });
+
+    suite('Movable', function () {
+      test('movable is not saved if true', function () {
+        const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+        comment.setMovable(true);
+
+        const json = Blockly.serialization.workspaceComments.save(comment);
+
+        assertNoProperty(json, 'movable');
+      });
+
+      test('movable is saved if false', function () {
+        const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+        comment.setMovable(false);
+
+        const json = Blockly.serialization.workspaceComments.save(comment);
+
+        assertProperty(json, 'movable', false);
+      });
+    });
+
+    suite('Deletable', function () {
+      test('deletable is not saved if true', function () {
+        const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+        comment.setDeletable(true);
+
+        const json = Blockly.serialization.workspaceComments.save(comment);
+
+        assertNoProperty(json, 'deletable');
+      });
+
+      test('deletable is saved if false', function () {
+        const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+        comment.setDeletable(false);
+
+        const json = Blockly.serialization.workspaceComments.save(comment);
+
+        assertProperty(json, 'deletable', false);
+      });
+    });
+  });
 });

@@ -45,7 +45,7 @@ export class Size {
   }
 
   /**
-   * Returns a new size with the maximum width and heigh values out of both
+   * Returns a new size with the maximum width and height values out of both
    * sizes.
    */
   static max(a: Size, b: Size): Size {
@@ -53,7 +53,7 @@ export class Size {
   }
 
   /**
-   * Returns a new size with the minimum width and heigh values out of both
+   * Returns a new size with the minimum width and height values out of both
    * sizes.
    */
   static min(a: Size, b: Size): Size {

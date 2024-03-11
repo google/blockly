@@ -328,10 +328,12 @@ export class CommentView implements IRenderedElement {
     return new Size(width, height);
   }
 
+  /** Calculates the margin that should exist around the delete icon. */
   private calcDeleteMargin(topBarSize: Size, deleteSize: Size) {
     return (topBarSize.height - deleteSize.height) / 2;
   }
 
+  /** Calculates the margin that should exist around the foldout icon. */
   private calcFoldoutMargin(topBarSize: Size, foldoutSize: Size) {
     return (topBarSize.height - foldoutSize.height) / 2;
   }
@@ -631,6 +633,7 @@ export class CommentView implements IRenderedElement {
     }
   }
 
+  /** Updates the preview text element to reflect the given text. */
   private updateTextPreview(text: string) {
     this.textPreviewNode.textContent = this.truncateText(text);
   }

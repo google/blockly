@@ -13,9 +13,6 @@ import * as css from '../css.js';
 import {Coordinate, Size, browserEvents} from '../utils.js';
 import * as touch from '../touch.js';
 
-// TODO: Before merging file an issue for calculating a better min size. We
-//   don't want text to go off the top bar when collapsing, but we also don't
-//   want to require an excessively large min size.
 const MIN_SIZE = new Size(100, 60);
 export class CommentView implements IRenderedElement {
   /** The root group element of the comment view. */
@@ -170,8 +167,9 @@ export class CommentView implements IRenderedElement {
     const textPreviewNode = document.createTextNode('');
     textPreview.appendChild(textPreviewNode);
 
-    // TODO: Triggering this on pointerdown means that we can't start drags
-    //   on the foldout icon. We need to open up the gesture system to fix this.
+    // TODO(toychest): Triggering this on pointerdown means that we can't start
+    //   drags on the foldout icon. We need to open up the gesture system
+    //   to fix this.
     browserEvents.conditionalBind(
       foldoutIcon,
       'pointerdown',
@@ -405,8 +403,7 @@ export class CommentView implements IRenderedElement {
       return;
     }
 
-    // TODO: Write an issue to move this into a utils file before merging.
-    //   Same for moveDrag below.
+    // TODO(#7926): Move this into a utils file.
     this.workspace.startDrag(
       e,
       new Coordinate(
@@ -448,6 +445,7 @@ export class CommentView implements IRenderedElement {
 
   /** Resizes the comment in response to a drag on the resize handle. */
   private onResizePointerMove(e: PointerEvent) {
+    // TODO(#7926): Move this into a utils file.
     const delta = this.workspace.moveDrag(e);
     this.setSize(new Size(this.workspace.RTL ? -delta.x : delta.x, delta.y));
   }
@@ -589,8 +587,6 @@ export class CommentView implements IRenderedElement {
 
   /** Truncates the text to fit within the top view. */
   private truncateText(text: string): string {
-    // TODO: before merging ile an issue to calculate how much this should be
-    //   truncated automatically.
     return text.length >= 12 ? `${text.substring(0, 9)}...` : text;
   }
 

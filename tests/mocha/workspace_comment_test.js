@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2020 Google LLC
+ * Copyright 2024 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,256 +12,188 @@ import {
 suite('Workspace comment', function () {
   setup(function () {
     sharedTestSetup.call(this);
-    this.workspace = new Blockly.Workspace();
+    this.workspace = new Blockly.inject('blocklyDiv', {});
+    this.commentView = new Blockly.comments.CommentView(this.workspace);
   });
 
   teardown(function () {
     sharedTestTeardown.call(this);
   });
 
-  suite('getTopComments(ordered=true)', function () {
-    test('No comments', function () {
-      chai.assert.equal(this.workspace.getTopComments(true).length, 0);
+  suite('Listeners', function () {
+    suite('Text change listeners', function () {
+      test('text change listeners are called when text is changed', function () {
+        const spy = sinon.spy();
+        this.commentView.addTextChangeListener(spy);
+
+        this.commentView.setText('test');
+
+        chai.assert.isTrue(
+          spy.calledOnce,
+          'Expected the spy to be called once',
+        );
+        chai.assert.isTrue(
+          spy.calledWith('', 'test'),
+          'Expected the spy to be called with the given args',
+        );
+      });
+
+      test('text change listeners can remove themselves without skipping others', function () {
+        const fake1 = sinon.fake();
+        const fake2 = sinon.fake(() =>
+          this.commentView.removeTextChangeListener(fake2),
+        );
+        const fake3 = sinon.fake();
+        this.commentView.addTextChangeListener(fake1);
+        this.commentView.addTextChangeListener(fake2);
+        this.commentView.addTextChangeListener(fake3);
+
+        this.commentView.setText('test');
+
+        chai.assert.isTrue(
+          fake1.calledOnce,
+          'Expected the first listener to be called',
+        );
+        chai.assert.isTrue(
+          fake2.calledOnce,
+          'Expected the second listener to be called',
+        );
+        chai.assert.isTrue(
+          fake3.calledOnce,
+          'Expected the third listener to be called',
+        );
+      });
     });
 
-    test('One comment', function () {
-      const comment = new Blockly.WorkspaceComment(
-        this.workspace,
-        'comment text',
-        0,
-        0,
-        'comment id',
-      );
-      chai.assert.equal(this.workspace.getTopComments(true).length, 1);
-      chai.assert.equal(this.workspace.commentDB.get('comment id'), comment);
+    suite('Size change listeners', function () {
+      test('size change listeners are called when text is changed', function () {
+        const spy = sinon.spy();
+        this.commentView.addSizeChangeListener(spy);
+        const originalSize = this.commentView.getSize();
+        const newSize = new Blockly.utils.Size(1337, 1337);
+
+        this.commentView.setSize(newSize);
+
+        chai.assert.isTrue(
+          spy.calledOnce,
+          'Expected the spy to be called once',
+        );
+        chai.assert.isTrue(
+          spy.calledWith(originalSize, newSize),
+          'Expected the spy to be called with the given args',
+        );
+      });
+
+      test('size change listeners can remove themselves without skipping others', function () {
+        const fake1 = sinon.fake();
+        const fake2 = sinon.fake(() =>
+          this.commentView.removeSizeChangeListener(fake2),
+        );
+        const fake3 = sinon.fake();
+        this.commentView.addSizeChangeListener(fake1);
+        this.commentView.addSizeChangeListener(fake2);
+        this.commentView.addSizeChangeListener(fake3);
+        const newSize = new Blockly.utils.Size(1337, 1337);
+
+        this.commentView.setSize(newSize);
+
+        chai.assert.isTrue(
+          fake1.calledOnce,
+          'Expected the first listener to be called',
+        );
+        chai.assert.isTrue(
+          fake2.calledOnce,
+          'Expected the second listener to be called',
+        );
+        chai.assert.isTrue(
+          fake3.calledOnce,
+          'Expected the third listener to be called',
+        );
+      });
     });
 
-    test('After clear empty workspace', function () {
-      this.workspace.clear();
-      chai.assert.equal(this.workspace.getTopComments(true).length, 0);
+    suite('Collapse change listeners', function () {
+      test('collapse change listeners are called when text is changed', function () {
+        const spy = sinon.spy();
+        this.commentView.addOnCollapseListener(spy);
+
+        this.commentView.setCollapsed(true);
+
+        chai.assert.isTrue(
+          spy.calledOnce,
+          'Expected the spy to be called once',
+        );
+        chai.assert.isTrue(
+          spy.calledWith(true),
+          'Expected the spy to be called with the given args',
+        );
+      });
+
+      test('collapse change listeners can remove themselves without skipping others', function () {
+        const fake1 = sinon.fake();
+        const fake2 = sinon.fake(() =>
+          this.commentView.removeOnCollapseListener(fake2),
+        );
+        const fake3 = sinon.fake();
+        this.commentView.addOnCollapseListener(fake1);
+        this.commentView.addOnCollapseListener(fake2);
+        this.commentView.addOnCollapseListener(fake3);
+
+        this.commentView.setCollapsed(true);
+
+        chai.assert.isTrue(
+          fake1.calledOnce,
+          'Expected the first listener to be called',
+        );
+        chai.assert.isTrue(
+          fake2.calledOnce,
+          'Expected the second listener to be called',
+        );
+        chai.assert.isTrue(
+          fake3.calledOnce,
+          'Expected the third listener to be called',
+        );
+      });
     });
 
-    test('After clear non-empty workspace', function () {
-      new Blockly.WorkspaceComment(
-        this.workspace,
-        'comment text',
-        0,
-        0,
-        'comment id',
-      );
-      this.workspace.clear();
-      chai.assert.equal(this.workspace.getTopComments(true).length, 0);
-      chai.assert.isFalse(this.workspace.commentDB.has('comment id'));
-    });
+    suite('Dispose change listeners', function () {
+      test('dispose listeners are called when text is changed', function () {
+        const spy = sinon.spy();
+        this.commentView.addDisposeListener(spy);
 
-    test('After dispose', function () {
-      const comment = new Blockly.WorkspaceComment(
-        this.workspace,
-        'comment text',
-        0,
-        0,
-        'comment id',
-      );
-      comment.dispose();
-      chai.assert.equal(this.workspace.getTopComments(true).length, 0);
-      chai.assert.isFalse(this.workspace.commentDB.has('comment id'));
-    });
-  });
+        this.commentView.dispose();
 
-  suite('getTopComments(ordered=false)', function () {
-    test('No comments', function () {
-      chai.assert.equal(this.workspace.getTopComments(false).length, 0);
-    });
+        chai.assert.isTrue(
+          spy.calledOnce,
+          'Expected the spy to be called once',
+        );
+      });
 
-    test('One comment', function () {
-      const comment = new Blockly.WorkspaceComment(
-        this.workspace,
-        'comment text',
-        0,
-        0,
-        'comment id',
-      );
-      chai.assert.equal(this.workspace.getTopComments(false).length, 1);
-      chai.assert.equal(this.workspace.commentDB.get('comment id'), comment);
-    });
+      test('dispose listeners can remove themselves without skipping others', function () {
+        const fake1 = sinon.fake();
+        const fake2 = sinon.fake(() =>
+          this.commentView.removeDisposeListener(fake2),
+        );
+        const fake3 = sinon.fake();
+        this.commentView.addDisposeListener(fake1);
+        this.commentView.addDisposeListener(fake2);
+        this.commentView.addDisposeListener(fake3);
 
-    test('After clear empty workspace', function () {
-      this.workspace.clear();
-      chai.assert.equal(this.workspace.getTopComments(false).length, 0);
-    });
+        this.commentView.dispose();
 
-    test('After clear non-empty workspace', function () {
-      new Blockly.WorkspaceComment(
-        this.workspace,
-        'comment text',
-        0,
-        0,
-        'comment id',
-      );
-      this.workspace.clear();
-      chai.assert.equal(this.workspace.getTopComments(false).length, 0);
-      chai.assert.isFalse(this.workspace.commentDB.has('comment id'));
-    });
-
-    test('After dispose', function () {
-      const comment = new Blockly.WorkspaceComment(
-        this.workspace,
-        'comment text',
-        0,
-        0,
-        'comment id',
-      );
-      comment.dispose();
-      chai.assert.equal(this.workspace.getTopComments(false).length, 0);
-      chai.assert.isFalse(this.workspace.commentDB.has('comment id'));
-    });
-  });
-
-  suite('getCommentById', function () {
-    test('Trivial', function () {
-      const comment = new Blockly.WorkspaceComment(
-        this.workspace,
-        'comment text',
-        0,
-        0,
-        'comment id',
-      );
-      chai.assert.equal(this.workspace.getCommentById(comment.id), comment);
-    });
-
-    test('Null id', function () {
-      chai.assert.isNull(this.workspace.getCommentById(null));
-    });
-
-    test('Non-existent id', function () {
-      chai.assert.isNull(this.workspace.getCommentById('badId'));
-    });
-
-    test('After dispose', function () {
-      const comment = new Blockly.WorkspaceComment(
-        this.workspace,
-        'comment text',
-        0,
-        0,
-        'comment id',
-      );
-      comment.dispose();
-      chai.assert.isNull(this.workspace.getCommentById(comment.id));
-    });
-  });
-
-  suite('dispose', function () {
-    test('Called twice', function () {
-      const comment = new Blockly.WorkspaceComment(
-        this.workspace,
-        'comment text',
-        0,
-        0,
-        'comment id',
-      );
-      comment.dispose();
-      // Nothing should go wrong the second time dispose is called.
-      comment.dispose();
-    });
-  });
-
-  suite('Width and height', function () {
-    setup(function () {
-      this.comment = new Blockly.WorkspaceComment(
-        this.workspace,
-        'comment text',
-        10,
-        20,
-        'comment id',
-      );
-    });
-
-    test('Initial values', function () {
-      chai.assert.equal(this.comment.getWidth(), 20, 'Width');
-      chai.assert.equal(this.comment.getHeight(), 10, 'Height');
-    });
-
-    test('setWidth does not affect height', function () {
-      this.comment.setWidth(30);
-      chai.assert.equal(this.comment.getWidth(), 30, 'Width');
-      chai.assert.equal(this.comment.getHeight(), 10, 'Height');
-    });
-
-    test('setHeight does not affect width', function () {
-      this.comment.setHeight(30);
-      chai.assert.equal(this.comment.getWidth(), 20, 'Width');
-      chai.assert.equal(this.comment.getHeight(), 30, 'Height');
-    });
-  });
-
-  suite('XY position', function () {
-    setup(function () {
-      this.comment = new Blockly.WorkspaceComment(
-        this.workspace,
-        'comment text',
-        10,
-        20,
-        'comment id',
-      );
-    });
-
-    test('Initial position', function () {
-      const xy = this.comment.getRelativeToSurfaceXY();
-      chai.assert.equal(xy.x, 0, 'Initial X position');
-      chai.assert.equal(xy.y, 0, 'Initial Y position');
-    });
-
-    test('moveBy', function () {
-      this.comment.moveBy(10, 100);
-      const xy = this.comment.getRelativeToSurfaceXY();
-      chai.assert.equal(xy.x, 10, 'New X position');
-      chai.assert.equal(xy.y, 100, 'New Y position');
-    });
-  });
-
-  suite('Content', function () {
-    setup(function () {
-      this.comment = new Blockly.WorkspaceComment(
-        this.workspace,
-        'comment text',
-        0,
-        0,
-        'comment id',
-      );
-    });
-
-    teardown(function () {
-      sinon.restore();
-    });
-
-    test('After creation', function () {
-      chai.assert.equal(this.comment.getContent(), 'comment text');
-      chai.assert.equal(
-        this.workspace.undoStack_.length,
-        1,
-        'Workspace undo stack',
-      );
-    });
-
-    test('Set to same value', function () {
-      this.comment.setContent('comment text');
-      chai.assert.equal(this.comment.getContent(), 'comment text');
-      // Setting the text to the old value does not fire an event.
-      chai.assert.equal(
-        this.workspace.undoStack_.length,
-        1,
-        'Workspace undo stack',
-      );
-    });
-
-    test('Set to different value', function () {
-      this.comment.setContent('new comment text');
-      chai.assert.equal(this.comment.getContent(), 'new comment text');
-      chai.assert.equal(
-        this.workspace.undoStack_.length,
-        2,
-        'Workspace undo stack',
-      );
+        chai.assert.isTrue(
+          fake1.calledOnce,
+          'Expected the first listener to be called',
+        );
+        chai.assert.isTrue(
+          fake2.calledOnce,
+          'Expected the second listener to be called',
+        );
+        chai.assert.isTrue(
+          fake3.calledOnce,
+          'Expected the third listener to be called',
+        );
+      });
     });
   });
 });

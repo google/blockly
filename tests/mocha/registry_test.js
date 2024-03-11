@@ -34,21 +34,30 @@ suite('Registry', function () {
 
     test('Empty String Key', function () {
       chai.assert.throws(function () {
-        Blockly.registry.register('test', '', TestClass);
-      }, 'Invalid name');
+        Blockly.registry.register('test', ' ', TestClass);
+      }, 'Empty name');
     });
 
     test('Class as Key', function () {
       chai.assert.throws(function () {
-        Blockly.registry.register('test', TestClass, '');
+        Blockly.registry.register('test', TestClass, TestClass);
       }, 'Invalid name');
     });
 
     test('Overwrite a Key', function () {
       Blockly.registry.register('test', 'test_name', TestClass);
+      // Duplicate registration of the same object is ok.
+      Blockly.registry.register('test', 'test_name', TestClass);
+      // Registering some other value is not ok.
       chai.assert.throws(function () {
-        Blockly.registry.register('test', 'test_name', TestClass);
+        Blockly.registry.register('test', 'test_name', {});
       }, 'already registered');
+      // Changing the case or padding doesn't help.
+      chai.assert.throws(function () {
+        Blockly.registry.register('test', ' test_NAME ', {});
+      }, 'already registered');
+      // But it's ok if explicitly allowed with 'true'.
+      Blockly.registry.register('test', 'test_name', {}, true);
     });
 
     test('Null Value', function () {
@@ -77,13 +86,17 @@ suite('Registry', function () {
       });
     });
 
-    suite('Case', function () {
+    suite('Name normalization', function () {
       test('Caseless type', function () {
         chai.assert.isTrue(Blockly.registry.hasItem('TEST', 'test_name'));
       });
 
       test('Caseless name', function () {
         chai.assert.isTrue(Blockly.registry.hasItem('test', 'TEST_NAME'));
+      });
+
+      test('Padded name', function () {
+        chai.assert.isTrue(Blockly.registry.hasItem('  test  ', 'TEST_NAME'));
       });
     });
   });
@@ -119,13 +132,17 @@ suite('Registry', function () {
       });
     });
 
-    suite('Case', function () {
+    suite('Name normalization', function () {
       test('Caseless type', function () {
         chai.assert.isNotNull(Blockly.registry.getClass('TEST', 'test_name'));
       });
 
       test('Caseless name', function () {
         chai.assert.isNotNull(Blockly.registry.getClass('test', 'TEST_NAME'));
+      });
+
+      test('Padded name', function () {
+        chai.assert.isTrue(Blockly.registry.hasItem('  test  ', 'TEST_NAME'));
       });
     });
   });
@@ -161,13 +178,17 @@ suite('Registry', function () {
       });
     });
 
-    suite('Case', function () {
+    suite('Name normalization', function () {
       test('Caseless type', function () {
         chai.assert.isNotNull(Blockly.registry.getObject('TEST', 'test_name'));
       });
 
       test('Caseless name', function () {
         chai.assert.isNotNull(Blockly.registry.getObject('test', 'TEST_NAME'));
+      });
+
+      test('Padded name', function () {
+        chai.assert.isTrue(Blockly.registry.hasItem('  test  ', 'TEST_NAME'));
       });
     });
   });
@@ -194,7 +215,7 @@ suite('Registry', function () {
 
     test('Throw if missing', function () {
       chai.assert.throws(function () {
-        Blockly.registry.getAllItems('bad_type', false, true);
+        Blockly.registry.getAllItems('bad_type', undefined, true);
       });
     });
 
@@ -202,18 +223,11 @@ suite('Registry', function () {
       chai.assert.isNotNull(Blockly.registry.getAllItems('TEST'));
     });
 
-    test('Respect name case', function () {
-      chai.assert.deepEqual(Blockly.registry.getAllItems('test', true), {
-        'test_name': {},
-        'casedNAME': {},
-      });
-    });
-
-    test('Respect overwriting name case', function () {
+    test('Overwriting name case', function () {
       Blockly.registry.register('test', 'CASEDname', {}, true);
-      chai.assert.deepEqual(Blockly.registry.getAllItems('test', true), {
+      chai.assert.deepEqual(Blockly.registry.getAllItems('test'), {
         'test_name': {},
-        'CASEDname': {},
+        'casedname': {},
       });
     });
   });

@@ -28,6 +28,7 @@ export interface State {
   deletable?: boolean;
 }
 
+/** Serializes the state of the given comment to JSON. */
 export function save(
   comment: WorkspaceComment,
   {
@@ -58,6 +59,7 @@ export function save(
   return state;
 }
 
+/** Appends the comment defined by the given state to the given workspace. */
 export function append(
   state: State,
   workspace: Workspace,
@@ -100,9 +102,13 @@ export function append(
 // Alias to disambiguate saving within the serializer.
 const saveComment = save;
 
+/** Serializer for saving and loading workspace comment state. */
 export class WorkspaceCommentSerializer implements ISerializer {
   priority = priorities.WORKSPACE_COMMENTS;
 
+  /**
+   * Returns the state of all workspace comments in the given workspace.
+   */
   save(workspace: Workspace): State[] | null {
     const commentStates = [];
     for (const comment of workspace.getTopComments()) {
@@ -115,12 +121,17 @@ export class WorkspaceCommentSerializer implements ISerializer {
     return commentStates.length ? commentStates : null;
   }
 
+  /**
+   * Deserializes the comments defined by the given state into the given
+   * workspace.
+   */
   load(state: State[], workspace: Workspace) {
     for (const commentState of state) {
       append(commentState, workspace, {recordUndo: eventUtils.getRecordUndo()});
     }
   }
 
+  /** Disposes of any comments that exist on the given workspace. */
   clear(workspace: Workspace) {
     for (const comment of workspace.getTopComments()) {
       comment.dispose();

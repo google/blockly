@@ -12,6 +12,8 @@ import * as eventUtils from '../events/utils.js';
 import * as constants from '../constants.js';
 import * as renderManagement from '../render_management.js';
 import * as registry from '../registry.js';
+import {Renderer as ZelosRenderer} from '../renderers/zelos/renderer.js';
+import {ConnectionType} from '../connection_type.js';
 
 /**
  * An error message to throw if the block created by createMarkerBlock_ is
@@ -86,50 +88,71 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     eventUtils.disable();
     try {
       this.hidePreview();
-      const dragged = draggedConn.getSourceBlock();
-      const marker = this.createInsertionMarker(dragged);
-      const markerConn = this.getMatchingConnection(
-        dragged,
-        marker,
-        draggedConn,
-      );
-      if (!markerConn) {
-        throw Error('Could not create insertion marker to preview connection');
+
+      // TODO(7898): Instead of special casing, we should change the dragger to
+      //   track the change in distance between the dragged connection and the
+      //   static connection, so that it doesn't disconnect  unless that
+      //   (+ a bit) has been exceeded.
+      if (this.shouldUseMarkerPreview(draggedConn, staticConn)) {
+        this.markerConn = this.previewMarker(draggedConn, staticConn);
       }
-
-      // Render disconnected from everything else so that we have a valid
-      // connection location.
-      marker.queueRender();
-      renderManagement.triggerQueuedRenders();
-
-      // Connect() also renders the insertion marker.
-      markerConn.connect(staticConn);
-
-      const originalOffsetToTarget = {
-        x: staticConn.x - markerConn.x,
-        y: staticConn.y - markerConn.y,
-      };
-      const originalOffsetInBlock = markerConn.getOffsetInBlock().clone();
-      renderManagement.finishQueuedRenders().then(() => {
-        // Position so that the existing block doesn't move.
-        marker?.positionNearConnection(
-          markerConn,
-          originalOffsetToTarget,
-          originalOffsetInBlock,
-        );
-        marker?.getSvgRoot().setAttribute('visibility', 'visible');
-      });
 
       if (this.workspace.getRenderer().shouldHighlightConnection(staticConn)) {
         staticConn.highlight();
       }
 
-      this.markerConn = markerConn;
       this.draggedConn = draggedConn;
       this.staticConn = staticConn;
     } finally {
       eventUtils.enable();
     }
+  }
+
+  private shouldUseMarkerPreview(
+    _draggedConn: RenderedConnection,
+    staticConn: RenderedConnection,
+  ): boolean {
+    return (
+      staticConn.type === ConnectionType.PREVIOUS_STATEMENT ||
+      staticConn.type === ConnectionType.NEXT_STATEMENT ||
+      !(this.workspace.getRenderer() instanceof ZelosRenderer)
+    );
+  }
+
+  private previewMarker(
+    draggedConn: RenderedConnection,
+    staticConn: RenderedConnection,
+  ): RenderedConnection {
+    const dragged = draggedConn.getSourceBlock();
+    const marker = this.createInsertionMarker(dragged);
+    const markerConn = this.getMatchingConnection(dragged, marker, draggedConn);
+    if (!markerConn) {
+      throw Error('Could not create insertion marker to preview connection');
+    }
+
+    // Render disconnected from everything else so that we have a valid
+    // connection location.
+    marker.queueRender();
+    renderManagement.triggerQueuedRenders();
+
+    // Connect() also renders the insertion marker.
+    markerConn.connect(staticConn);
+
+    const originalOffsetToTarget = {
+      x: staticConn.x - markerConn.x,
+      y: staticConn.y - markerConn.y,
+    };
+    const originalOffsetInBlock = markerConn.getOffsetInBlock().clone();
+    renderManagement.finishQueuedRenders().then(() => {
+      // Position so that the existing block doesn't move.
+      marker?.positionNearConnection(
+        markerConn,
+        originalOffsetToTarget,
+        originalOffsetInBlock,
+      );
+      marker?.getSvgRoot().setAttribute('visibility', 'visible');
+    });
+    return markerConn;
   }
 
   private createInsertionMarker(origBlock: BlockSvg) {

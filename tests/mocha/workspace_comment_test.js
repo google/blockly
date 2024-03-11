@@ -9,7 +9,7 @@ import {
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
 
-suite.only('Workspace comment', function () {
+suite('Workspace comment', function () {
   setup(function () {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.inject('blocklyDiv', {});

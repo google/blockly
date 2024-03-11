@@ -13,7 +13,6 @@ import * as css from '../css.js';
 import {Coordinate, Size, browserEvents} from '../utils.js';
 import * as touch from '../touch.js';
 
-const MIN_SIZE = new Size(100, 60);
 export class CommentView implements IRenderedElement {
   /** The root group element of the comment view. */
   private svgRoot: SVGGElement;
@@ -257,18 +256,18 @@ export class CommentView implements IRenderedElement {
    * elements to reflect the new size.
    */
   setSize(size: Size) {
-    size = new Size(
-      Math.max(size.width, MIN_SIZE.width),
-      Math.max(size.height, MIN_SIZE.height),
-    );
-
-    const oldSize = this.size;
-    this.size = size;
     const topBarSize = this.topBar.getBBox();
     const deleteSize = this.deleteIcon.getBBox();
     const foldoutSize = this.foldoutIcon.getBBox();
     const textPreviewSize = this.textPreview.getBBox();
     const resizeSize = this.resizeHandle.getBBox();
+
+    size = Size.max(
+      size,
+      this.calcMinSize(topBarSize, foldoutSize, deleteSize),
+    );
+    const oldSize = this.size;
+    this.size = size;
 
     this.svgRoot.setAttribute('height', `${size.height}`);
     this.svgRoot.setAttribute('width', `${size.width}`);
@@ -292,6 +291,53 @@ export class CommentView implements IRenderedElement {
     this.onSizeChange(oldSize, this.size);
   }
 
+  /**
+   * Calculates the minimum size for the uncollapsed comment based on text
+   * size and visible icons.
+   *
+   * The minimum width is based on the width of the truncated preview text.
+   *
+   * The minimum height is based on the height of the top bar.
+   */
+  private calcMinSize(
+    topBarSize: Size,
+    foldoutSize: Size,
+    deleteSize: Size,
+  ): Size {
+    this.updateTextPreview(this.textArea.value ?? '');
+    const textPreviewWidth = dom.getTextWidth(this.textPreview);
+
+    const foldoutMargin = this.calcFoldoutMargin(topBarSize, foldoutSize);
+    const deleteMargin = this.calcDeleteMargin(topBarSize, deleteSize);
+
+    let width = textPreviewWidth;
+    if (this.foldoutIcon.checkVisibility()) {
+      width += foldoutSize.width + foldoutMargin * 2;
+    } else if (textPreviewWidth) {
+      width += 4; // Arbitrary margin before text.
+    }
+    if (this.deleteIcon.checkVisibility()) {
+      width += deleteSize.width + deleteMargin * 2;
+    } else if (textPreviewWidth) {
+      width += 4; // Arbitrary margin after text.
+    }
+
+    // Arbitrary additional height.
+    const height = topBarSize.height + 20;
+
+    return new Size(width, height);
+  }
+
+  /** Calculates the margin that should exist around the delete icon. */
+  private calcDeleteMargin(topBarSize: Size, deleteSize: Size) {
+    return (topBarSize.height - deleteSize.height) / 2;
+  }
+
+  /** Calculates the margin that should exist around the foldout icon. */
+  private calcFoldoutMargin(topBarSize: Size, foldoutSize: Size) {
+    return (topBarSize.height - foldoutSize.height) / 2;
+  }
+
   /** Updates the size of the text area elements to reflect the new size. */
   private updateTextAreaSize(size: Size, topBarSize: Size) {
     this.foreignObject.setAttribute(
@@ -313,7 +359,7 @@ export class CommentView implements IRenderedElement {
     topBarSize: Size,
     deleteSize: Size,
   ) {
-    const deleteMargin = (topBarSize.height - deleteSize.height) / 2;
+    const deleteMargin = this.calcDeleteMargin(topBarSize, deleteSize);
     this.deleteIcon.setAttribute('y', `${deleteMargin}`);
     this.deleteIcon.setAttribute(
       'x',
@@ -325,7 +371,7 @@ export class CommentView implements IRenderedElement {
    * Updates the position of the foldout icon elements to reflect the new size.
    */
   private updateFoldoutIconPosition(topBarSize: Size, foldoutSize: Size) {
-    const foldoutMargin = (topBarSize.height - foldoutSize.height) / 2;
+    const foldoutMargin = this.calcFoldoutMargin(topBarSize, foldoutSize);
     this.foldoutIcon.setAttribute('y', `${foldoutMargin}`);
     this.foldoutIcon.setAttribute('x', `${foldoutMargin}`);
   }
@@ -341,8 +387,8 @@ export class CommentView implements IRenderedElement {
     foldoutSize: Size,
   ) {
     const textPreviewMargin = (topBarSize.height - textPreviewSize.height) / 2;
-    const deleteMargin = (topBarSize.height - deleteSize.height) / 2;
-    const foldoutMargin = (topBarSize.height - foldoutSize.height) / 2;
+    const deleteMargin = this.calcDeleteMargin(topBarSize, deleteSize);
+    const foldoutMargin = this.calcFoldoutMargin(topBarSize, foldoutSize);
 
     const textPreviewWidth =
       size.width -
@@ -578,11 +624,18 @@ export class CommentView implements IRenderedElement {
   private onTextChange() {
     const oldText = this.text;
     this.text = this.textArea.value;
-    this.textPreviewNode.textContent = this.truncateText(this.text);
+    this.updateTextPreview(this.text);
+    // Update size in case our minimum size increased.
+    this.setSize(this.size);
     // Loop through listeners backwards in case they remove themselves.
     for (let i = this.textChangeListeners.length - 1; i >= 0; i--) {
       this.textChangeListeners[i](oldText, this.text);
     }
+  }
+
+  /** Updates the preview text element to reflect the given text. */
+  private updateTextPreview(text: string) {
+    this.textPreviewNode.textContent = this.truncateText(text);
   }
 
   /** Truncates the text to fit within the top view. */
@@ -703,11 +756,11 @@ css.register(`
 .blocklyComment .blocklyCommentPreview.blocklyText {
   fill: var(--commentIconColour);
   dominant-baseline: middle;
-  display: none;
+  visibility: hidden;
 }
 
 .blocklyCollapsed.blocklyComment .blocklyCommentPreview {
-  display: block;
+  visibility: visible;
 }
 
 .blocklyCollapsed.blocklyComment .blocklyCommentForeignObject,

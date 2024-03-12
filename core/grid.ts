@@ -66,10 +66,24 @@ export class Grid {
     this.update(this.scale);
   }
 
+  /**
+   * Get the spacing of the grid points (in px).
+   *
+   * @returns The spacing of the grid points.
+   */
+  getSpacing(): number {
+    return this.spacing;
+  }
+
   /** Sets the length of the grid lines. */
   setLength(length: number) {
     this.length = length;
     this.update(this.scale);
+  }
+
+  /** Get the length of the grid lines (in px). */
+  getLength(): number {
+    return this.length;
   }
 
   /**
@@ -85,23 +99,12 @@ export class Grid {
   }
 
   /**
-   * Whether blocks should snap to the grid, based on the initial configuration.
+   * Whether blocks should snap to the grid.
    *
    * @returns True if blocks should snap, false otherwise.
-   * @internal
    */
   shouldSnap(): boolean {
     return this.snapToGrid;
-  }
-
-  /**
-   * Get the spacing of the grid points (in px).
-   *
-   * @returns The spacing of the grid points.
-   * @internal
-   */
-  getSpacing(): number {
-    return this.spacing;
   }
 
   /**

@@ -71,7 +71,7 @@ function saveWorkspaceComment(
   if (comment.isCollapsed()) elem.setAttribute('collapsed', 'true');
   if (!comment.isOwnEditable()) elem.setAttribute('editable', 'false');
   if (!comment.isOwnMovable()) elem.setAttribute('movable', 'false');
-  if (!comment.isOwnDeletable()) elem.setAttribute('deltable', 'false');
+  if (!comment.isOwnDeletable()) elem.setAttribute('deletable', 'false');
 
   return elem;
 }

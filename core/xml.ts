@@ -22,7 +22,7 @@ import type {Workspace} from './workspace.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 import * as renderManagement from './render_management.js';
 import {WorkspaceComment} from './comments/workspace_comment.js';
-import {RenderedWorkspaceComment} from './comments.js';
+import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 import {Coordinate} from './utils/coordinate.js';
 
 /**
@@ -497,10 +497,9 @@ function loadWorkspaceComment(
   workspace: Workspace,
 ): WorkspaceComment {
   const id = elem.getAttribute('id') ?? undefined;
-  const comment =
-    workspace instanceof WorkspaceSvg
-      ? new RenderedWorkspaceComment(workspace, id)
-      : new WorkspaceComment(workspace, id);
+  const comment = workspace.rendered
+    ? new RenderedWorkspaceComment(workspace as WorkspaceSvg, id)
+    : new WorkspaceComment(workspace, id);
 
   comment.setText(elem.textContent ?? '');
 

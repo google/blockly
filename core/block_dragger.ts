@@ -69,7 +69,17 @@ export class BlockDragger implements IBlockDragger {
 
   /** Whether the block would be deleted if dropped immediately. */
   protected wouldDeleteBlock_ = false;
+
   protected startXY_: Coordinate;
+
+  /** The parent block at the start of the drag. */
+  private startParentConn: RenderedConnection | null = null;
+
+  /**
+   * The child block at the start of the drag. Only gets set if
+   * `healStack` is true.
+   */
+  private startChildConn: RenderedConnection | null = null;
 
   /**
    * @param block The block to drag.
@@ -126,6 +136,13 @@ export class BlockDragger implements IBlockDragger {
     blockAnimation.disconnectUiStop();
 
     if (this.shouldDisconnect_(healStack)) {
+      this.startParentConn =
+        this.draggingBlock_.outputConnection?.targetConnection ??
+        this.draggingBlock_.previousConnection?.targetConnection;
+      if (healStack) {
+        this.startChildConn =
+          this.draggingBlock_.nextConnection?.targetConnection;
+      }
       this.disconnectBlock_(healStack, currentDragDeltaXY);
     }
     this.draggingBlock_.setDragging(true);
@@ -413,17 +430,10 @@ export class BlockDragger implements IBlockDragger {
         .getLayerManager()
         ?.moveOffDragLayer(this.draggingBlock_, layers.BLOCK);
       this.draggingBlock_.setDragging(false);
-      if (delta) {
-        // !preventMove
+      if (preventMove) {
+        this.moveToOriginalPosition();
+      } else if (delta) {
         this.updateBlockAfterMove_();
-      } else {
-        // Blocks dragged directly from a flyout may need to be bumped into
-        // bounds.
-        bumpObjects.bumpIntoBounds(
-          this.draggingBlock_.workspace,
-          this.workspace_.getMetricsManager().getScrollMetrics(true),
-          this.draggingBlock_,
-        );
       }
     }
     // Must dispose after `updateBlockAfterMove_` is called to not break the
@@ -432,6 +442,32 @@ export class BlockDragger implements IBlockDragger {
     this.workspace_.setResizesEnabled(true);
 
     eventUtils.setGroup(false);
+  }
+
+  /**
+   * Moves the dragged block back to its original position before the start of
+   * the drag. Reconnects any parent and child blocks.
+   */
+  private moveToOriginalPosition() {
+    this.startChildConn?.connect(this.draggingBlock_.nextConnection);
+    if (this.startParentConn) {
+      switch (this.startParentConn.type) {
+        case ConnectionType.INPUT_VALUE:
+          this.startParentConn.connect(this.draggingBlock_.outputConnection);
+          break;
+        case ConnectionType.NEXT_STATEMENT:
+          this.startParentConn.connect(this.draggingBlock_.previousConnection);
+      }
+    } else {
+      this.draggingBlock_.moveTo(this.startXY_, ['drag']);
+      // Blocks dragged directly from a flyout may need to be bumped into
+      // bounds.
+      bumpObjects.bumpIntoBounds(
+        this.draggingBlock_.workspace,
+        this.workspace_.getMetricsManager().getScrollMetrics(true),
+        this.draggingBlock_,
+      );
+    }
   }
 
   /**

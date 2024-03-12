@@ -20,6 +20,7 @@ import type {BlockDefinition} from '../core/blocks.js';
 export {
   colour,
   lists,
+  logic,
   loops,
   math,
   procedures,
@@ -40,6 +41,7 @@ export const blocks: {[key: string]: BlockDefinition} = Object.assign(
   loops.blocks,
   math.blocks,
   procedures.blocks,
+  texts.blocks,
   variables.blocks,
   variablesDynamic.blocks,
 );

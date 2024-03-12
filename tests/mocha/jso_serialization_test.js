@@ -895,7 +895,7 @@ suite('JSO Serialization', function () {
     });
   });
 
-  suite.only('Workspace comments', function () {
+  suite('Workspace comments', function () {
     suite('IDs', function () {
       test('IDs are saved by default', function () {
         const comment = new Blockly.comments.WorkspaceComment(

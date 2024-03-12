@@ -19,22 +19,21 @@ import * as utilsXml from './utils/xml.js';
 import type {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
-import {WorkspaceComment} from './workspace_comment.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 import * as renderManagement from './render_management.js';
+import {WorkspaceComment} from './comments/workspace_comment.js';
+import {RenderedWorkspaceComment} from './comments.js';
+import {Coordinate} from './utils/coordinate.js';
 
 /**
  * Encode a block tree as XML.
  *
  * @param workspace The workspace containing blocks.
- * @param opt_noId True if the encoder should skip the block IDs.
+ * @param skipId True if the encoder should skip the block IDs. False by
+ *     default.
  * @returns XML DOM element.
  */
-export function workspaceToDom(
-  workspace: Workspace,
-  opt_noId?: boolean,
-): Element {
+export function workspaceToDom(workspace: Workspace, skipId = false): Element {
   const treeXml = utilsXml.createElement('xml');
   const variablesElement = variablesToDom(
     Variables.allUsedVarModels(workspace),
@@ -42,17 +41,39 @@ export function workspaceToDom(
   if (variablesElement.hasChildNodes()) {
     treeXml.appendChild(variablesElement);
   }
-  const comments = workspace.getTopComments(true);
-  for (let i = 0; i < comments.length; i++) {
-    const comment = comments[i];
-    treeXml.appendChild(comment.toXmlWithXY(opt_noId));
+  for (const comment of workspace.getTopComments()) {
+    treeXml.appendChild(
+      saveWorkspaceComment(comment as AnyDuringMigration, !skipId),
+    );
   }
   const blocks = workspace.getTopBlocks(true);
   for (let i = 0; i < blocks.length; i++) {
     const block = blocks[i];
-    treeXml.appendChild(blockToDomWithXY(block, opt_noId));
+    treeXml.appendChild(blockToDomWithXY(block, skipId));
   }
   return treeXml;
+}
+
+/** Serializes the given workspace comment to XML. */
+function saveWorkspaceComment(
+  comment: WorkspaceComment,
+  saveId = true,
+): Element {
+  const elem = utilsXml.createElement('comment');
+  if (saveId) elem.setAttribute('id', comment.id);
+
+  elem.setAttribute('x', `${comment.getRelativeToSurfaceXY().x}`);
+  elem.setAttribute('y', `${comment.getRelativeToSurfaceXY().y}`);
+  elem.setAttribute('w', `${comment.getSize().width}`);
+  elem.setAttribute('h', `${comment.getSize().height}`);
+
+  if (comment.getText()) elem.textContent = comment.getText();
+  if (comment.isCollapsed()) elem.setAttribute('collapsed', 'true');
+  if (!comment.isOwnEditable()) elem.setAttribute('editable', 'false');
+  if (!comment.isOwnMovable()) elem.setAttribute('movable', 'false');
+  if (!comment.isOwnDeletable()) elem.setAttribute('deltable', 'false');
+
+  return elem;
 }
 
 /**
@@ -443,15 +464,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
       } else if (name === 'shadow') {
         throw TypeError('Shadow block cannot be a top-level block.');
       } else if (name === 'comment') {
-        if (workspace.rendered) {
-          WorkspaceCommentSvg.fromXmlRendered(
-            xmlChildElement,
-            workspace as WorkspaceSvg,
-            width,
-          );
-        } else {
-          WorkspaceComment.fromXml(xmlChildElement, workspace);
-        }
+        loadWorkspaceComment(xmlChildElement, workspace);
       } else if (name === 'variables') {
         if (variablesFirst) {
           domToVariables(xmlChildElement, workspace);
@@ -476,6 +489,35 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
   // Re-enable workspace resizing.
   eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
   return newBlockIds;
+}
+
+/** Deserializes the given comment state into the given workspace. */
+function loadWorkspaceComment(
+  elem: Element,
+  workspace: Workspace,
+): WorkspaceComment {
+  const id = elem.getAttribute('id') ?? undefined;
+  const comment =
+    workspace instanceof WorkspaceSvg
+      ? new RenderedWorkspaceComment(workspace, id)
+      : new WorkspaceComment(workspace, id);
+
+  comment.setText(elem.textContent ?? '');
+
+  const x = parseInt(elem.getAttribute('x') ?? '', 10);
+  const y = parseInt(elem.getAttribute('y') ?? '', 10);
+  if (!isNaN(x) && !isNaN(y)) comment.moveTo(new Coordinate(x, y));
+
+  const w = parseInt(elem.getAttribute('w') ?? '', 10);
+  const h = parseInt(elem.getAttribute('h') ?? '', 10);
+  if (!isNaN(w) && !isNaN(h)) comment.setSize(new Size(w, h));
+
+  if (elem.getAttribute('collapsed') === 'true') comment.setCollapsed(true);
+  if (elem.getAttribute('editable') === 'false') comment.setEditable(false);
+  if (elem.getAttribute('movable') === 'false') comment.setMovable(false);
+  if (elem.getAttribute('deletable') === 'false') comment.setDeletable(false);
+
+  return comment;
 }
 
 /**

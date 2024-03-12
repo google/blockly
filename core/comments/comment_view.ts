@@ -10,7 +10,9 @@ import * as dom from '../utils/dom.js';
 import {Svg} from '../utils/svg.js';
 import * as layers from '../layers.js';
 import * as css from '../css.js';
-import {Coordinate, Size, browserEvents} from '../utils.js';
+import {Coordinate} from '../utils/coordinate.js';
+import {Size} from '../utils/size.js';
+import * as browserEvents from '../browser_events.js';
 import * as touch from '../touch.js';
 
 export class CommentView implements IRenderedElement {

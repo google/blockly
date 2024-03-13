@@ -39,6 +39,7 @@ export function save(
     saveIds?: boolean;
   } = {},
 ): State {
+  const workspace = comment.workspace;
   const state: State = Object.create(null);
 
   state.height = comment.getSize().height;
@@ -46,8 +47,9 @@ export function save(
 
   if (saveIds) state.id = comment.id;
   if (addCoordinates) {
-    state.x = comment.getRelativeToSurfaceXY().x;
-    state.y = comment.getRelativeToSurfaceXY().y;
+    const loc = comment.getRelativeToSurfaceXY();
+    state.x = workspace.RTL ? workspace.getWidth() - loc.x : loc.x;
+    state.y = loc.y;
   }
 
   if (comment.getText()) state.text = comment.getText();
@@ -76,9 +78,10 @@ export function append(
   if (state.text !== undefined) comment.setText(state.text);
   if (state.x !== undefined || state.y !== undefined) {
     const defaultLoc = comment.getRelativeToSurfaceXY();
-    comment.moveTo(
-      new Coordinate(state.x ?? defaultLoc.x, state.y ?? defaultLoc.y),
-    );
+    let x = state.x ?? defaultLoc.x;
+    x = workspace.RTL ? workspace.getWidth() - x : x;
+    const y = state.y ?? defaultLoc.y;
+    comment.moveTo(new Coordinate(x, y));
   }
   if (state.width !== undefined || state.height) {
     const defaultSize = comment.getSize();

@@ -62,8 +62,11 @@ function saveWorkspaceComment(
   const elem = utilsXml.createElement('comment');
   if (saveId) elem.setAttribute('id', comment.id);
 
-  elem.setAttribute('x', `${comment.getRelativeToSurfaceXY().x}`);
-  elem.setAttribute('y', `${comment.getRelativeToSurfaceXY().y}`);
+  const workspace = comment.workspace;
+  const loc = comment.getRelativeToSurfaceXY();
+  loc.x = workspace.RTL ? workspace.getWidth() - loc.x : loc.x;
+  elem.setAttribute('x', `${loc.x}`);
+  elem.setAttribute('y', `${loc.y}`);
   elem.setAttribute('w', `${comment.getSize().width}`);
   elem.setAttribute('h', `${comment.getSize().height}`);
 
@@ -503,9 +506,12 @@ function loadWorkspaceComment(
 
   comment.setText(elem.textContent ?? '');
 
-  const x = parseInt(elem.getAttribute('x') ?? '', 10);
+  let x = parseInt(elem.getAttribute('x') ?? '', 10);
   const y = parseInt(elem.getAttribute('y') ?? '', 10);
-  if (!isNaN(x) && !isNaN(y)) comment.moveTo(new Coordinate(x, y));
+  if (!isNaN(x) && !isNaN(y)) {
+    x = workspace.RTL ? workspace.getWidth() - x : x;
+    comment.moveTo(new Coordinate(x, y));
+  }
 
   const w = parseInt(elem.getAttribute('w') ?? '', 10);
   const h = parseInt(elem.getAttribute('h') ?? '', 10);

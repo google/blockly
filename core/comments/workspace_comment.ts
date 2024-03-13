@@ -48,7 +48,7 @@ export class WorkspaceComment {
    *     be generated.
    */
   constructor(
-    protected readonly workspace: Workspace,
+    public readonly workspace: Workspace,
     id?: string,
   ) {
     this.id = id && !workspace.getCommentById(id) ? id : idGenerator.genUid();

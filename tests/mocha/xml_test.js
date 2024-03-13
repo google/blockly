@@ -148,27 +148,6 @@ suite('XML', function () {
         const resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertNonVariableField(resultFieldDom, 'CHECKBOX', 'TRUE');
       });
-      test('Colour', function () {
-        Blockly.defineBlocksWithJsonArray([
-          {
-            'type': 'field_colour_test_block',
-            'message0': '%1',
-            'args0': [
-              {
-                'type': 'field_colour',
-                'name': 'COLOUR',
-                'colour': '#000099',
-              },
-            ],
-          },
-        ]);
-        const block = new Blockly.Block(
-          this.workspace,
-          'field_colour_test_block',
-        );
-        const resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-        assertNonVariableField(resultFieldDom, 'COLOUR', '#000099');
-      });
       test('Dropdown', function () {
         Blockly.defineBlocksWithJsonArray([
           {

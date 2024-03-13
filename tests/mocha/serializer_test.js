@@ -245,37 +245,6 @@ Serializer.Fields.Checkbox.testCases = [
   Serializer.Fields.Checkbox.False,
 ];
 
-Serializer.Fields.Colour = new SerializerTestSuite('Colour');
-Serializer.Fields.Colour.ThreeChar = new SerializerTestCase(
-  'ThreeChar',
-  '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="test_fields_colour" id="id******************" x="42" y="42">' +
-    '<field name="COLOUR">#ffcc00</field>' + // Could use a 3 char code.
-    '</block>' +
-    '</xml>',
-);
-Serializer.Fields.Colour.SixChar = new SerializerTestCase(
-  'SixChar',
-  '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="test_fields_colour" id="id******************" x="42" y="42">' +
-    '<field name="COLOUR">#f1c101</field>' +
-    '</block>' +
-    '</xml>',
-);
-Serializer.Fields.Colour.Black = new SerializerTestCase(
-  'Black',
-  '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="test_fields_colour" id="id******************" x="42" y="42">' +
-    '<field name="COLOUR">#000000</field>' +
-    '</block>' +
-    '</xml>',
-);
-Serializer.Fields.Colour.testCases = [
-  Serializer.Fields.Colour.ThreeChar,
-  Serializer.Fields.Colour.SixChar,
-  Serializer.Fields.Colour.Black,
-];
-
 Serializer.Fields.Dropdown = new SerializerTestSuite('Dropdown');
 Serializer.Fields.Dropdown.Default = new SerializerTestCase(
   'Default',
@@ -1022,7 +991,6 @@ Serializer.Fields.Variable.testSuites = [Serializer.Fields.Variable.Id];
 
 Serializer.Fields.testSuites = [
   Serializer.Fields.Checkbox,
-  Serializer.Fields.Colour,
   Serializer.Fields.Dropdown,
   Serializer.Fields.LabelSerializable,
   Serializer.Fields.MultilineInput,

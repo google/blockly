@@ -127,27 +127,6 @@ suite('XML', function () {
       workspaceTeardown.call(this, this.workspace);
     });
     suite('Fields', function () {
-      test('Angle', function () {
-        Blockly.defineBlocksWithJsonArray([
-          {
-            'type': 'field_angle_test_block',
-            'message0': '%1',
-            'args0': [
-              {
-                'type': 'field_angle',
-                'name': 'ANGLE',
-                'angle': 90,
-              },
-            ],
-          },
-        ]);
-        const block = new Blockly.Block(
-          this.workspace,
-          'field_angle_test_block',
-        );
-        const resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-        assertNonVariableField(resultFieldDom, 'ANGLE', '90');
-      });
       test('Checkbox', function () {
         Blockly.defineBlocksWithJsonArray([
           {
@@ -168,27 +147,6 @@ suite('XML', function () {
         );
         const resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertNonVariableField(resultFieldDom, 'CHECKBOX', 'TRUE');
-      });
-      test('Colour', function () {
-        Blockly.defineBlocksWithJsonArray([
-          {
-            'type': 'field_colour_test_block',
-            'message0': '%1',
-            'args0': [
-              {
-                'type': 'field_colour',
-                'name': 'COLOUR',
-                'colour': '#000099',
-              },
-            ],
-          },
-        ]);
-        const block = new Blockly.Block(
-          this.workspace,
-          'field_colour_test_block',
-        );
-        const resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-        assertNonVariableField(resultFieldDom, 'COLOUR', '#000099');
       });
       test('Dropdown', function () {
         Blockly.defineBlocksWithJsonArray([

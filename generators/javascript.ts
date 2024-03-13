@@ -13,7 +13,6 @@
 // Former goog.module ID: Blockly.JavaScript.all
 
 import {JavascriptGenerator} from './javascript/javascript_generator.js';
-import * as colour from './javascript/colour.js';
 import * as lists from './javascript/lists.js';
 import * as logic from './javascript/logic.js';
 import * as loops from './javascript/loops.js';
@@ -33,7 +32,6 @@ export const javascriptGenerator = new JavascriptGenerator();
 
 // Install per-block-type generator functions:
 const generators: typeof javascriptGenerator.forBlock = {
-  ...colour,
   ...lists,
   ...logic,
   ...loops,

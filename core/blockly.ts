@@ -51,23 +51,11 @@ import {
   UnattachedFieldError,
 } from './field.js';
 import {
-  FieldAngle,
-  FieldAngleConfig,
-  FieldAngleFromJsonConfig,
-  FieldAngleValidator,
-} from './field_angle.js';
-import {
   FieldCheckbox,
   FieldCheckboxConfig,
   FieldCheckboxFromJsonConfig,
   FieldCheckboxValidator,
 } from './field_checkbox.js';
-import {
-  FieldColour,
-  FieldColourConfig,
-  FieldColourFromJsonConfig,
-  FieldColourValidator,
-} from './field_colour.js';
 import {
   FieldDropdown,
   FieldDropdownConfig,
@@ -88,12 +76,6 @@ import {
   FieldLabelFromJsonConfig,
 } from './field_label.js';
 import {FieldLabelSerializable} from './field_label_serializable.js';
-import {
-  FieldMultilineInput,
-  FieldMultilineInputConfig,
-  FieldMultilineInputFromJsonConfig,
-  FieldMultilineInputValidator,
-} from './field_multilineinput.js';
 import {
   FieldNumber,
   FieldNumberConfig,
@@ -488,22 +470,10 @@ export {DragTarget};
 export const DropDownDiv = dropDownDiv;
 export {Field, FieldConfig, FieldValidator, UnattachedFieldError};
 export {
-  FieldAngle,
-  FieldAngleConfig,
-  FieldAngleFromJsonConfig,
-  FieldAngleValidator,
-};
-export {
   FieldCheckbox,
   FieldCheckboxConfig,
   FieldCheckboxFromJsonConfig,
   FieldCheckboxValidator,
-};
-export {
-  FieldColour,
-  FieldColourConfig,
-  FieldColourFromJsonConfig,
-  FieldColourValidator,
 };
 export {
   FieldDropdown,
@@ -517,12 +487,6 @@ export {
 export {FieldImage, FieldImageConfig, FieldImageFromJsonConfig};
 export {FieldLabel, FieldLabelConfig, FieldLabelFromJsonConfig};
 export {FieldLabelSerializable};
-export {
-  FieldMultilineInput,
-  FieldMultilineInputConfig,
-  FieldMultilineInputFromJsonConfig,
-  FieldMultilineInputValidator,
-};
 export {
   FieldNumber,
   FieldNumberConfig,

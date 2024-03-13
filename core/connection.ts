@@ -153,8 +153,10 @@ export class Connection implements IASTNodeLocationWithBlock {
   dispose() {
     // isConnected returns true for shadows and non-shadows.
     if (this.isConnected()) {
-      // Destroy the attached shadow block & its children (if it exists).
-      this.setShadowStateInternal();
+      if (this.isSuperior()) {
+        // Destroy the attached shadow block & its children (if it exists).
+        this.setShadowStateInternal();
+      }
 
       const targetBlock = this.targetBlock();
       if (targetBlock && !targetBlock.isDeadOrDying()) {
@@ -600,6 +602,8 @@ export class Connection implements IASTNodeLocationWithBlock {
     this.shadowDom = shadowDom;
     this.shadowState = shadowState;
 
+    if (this.getSourceBlock().isDeadOrDying()) return;
+
     const target = this.targetBlock();
     if (!target) {
       this.respawnShadow_();
@@ -608,7 +612,6 @@ export class Connection implements IASTNodeLocationWithBlock {
       }
     } else if (target.isShadow()) {
       target.dispose(false);
-      if (this.getSourceBlock().isDeadOrDying()) return;
       this.respawnShadow_();
       if (this.targetBlock() && this.targetBlock()!.isShadow()) {
         this.serializeShadow(this.targetBlock());

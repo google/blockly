@@ -189,7 +189,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Is the current block currently in the process of being disposed?
    */
-  private disposing = false;
+  protected disposing = false;
 
   /**
    * Has this block been fully initialized? E.g. all fields initailized.
@@ -319,7 +319,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *     children of this block.
    */
   dispose(healStack: boolean) {
-    if (this.isDeadOrDying()) return;
+    this.disposing = true;
 
     // Dispose of this change listener before unplugging.
     // Technically not necessary due to the event firing delay.
@@ -342,15 +342,13 @@ export class Block implements IASTNodeLocation, IDeletable {
    * E.g. does not fire events, unplug the block, etc.
    */
   protected disposeInternal() {
-    if (this.isDeadOrDying()) return;
-
+    this.disposing = true;
     if (this.onchangeWrapper_) {
       this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
 
     this.workspace.removeTypedBlock(this);
     this.workspace.removeBlockById(this.id);
-    this.disposing = true;
 
     if (typeof this.destroy === 'function') this.destroy();
 

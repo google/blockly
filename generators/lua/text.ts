@@ -21,16 +21,6 @@ export function text(block: Block, generator: LuaGenerator): [string, Order] {
   return [code, Order.ATOMIC];
 }
 
-export function text_multiline(
-  block: Block,
-  generator: LuaGenerator,
-): [string, Order] {
-  // Text value.
-  const code = generator.multiline_quote_(block.getFieldValue('TEXT'));
-  const order = code.indexOf('..') !== -1 ? Order.CONCATENATION : Order.ATOMIC;
-  return [code, order];
-}
-
 export function text_join(
   block: Block,
   generator: LuaGenerator,

@@ -26,16 +26,6 @@ export function text(
   return [code, Order.ATOMIC];
 }
 
-export function text_multiline(
-  block: Block,
-  generator: PythonGenerator,
-): [string, Order] {
-  // Text value.
-  const code = generator.multiline_quote_(block.getFieldValue('TEXT'));
-  const order = code.indexOf('+') !== -1 ? Order.ADDITIVE : Order.ATOMIC;
-  return [code, order];
-}
-
 /**
  * Regular expression to detect a single-quoted string literal.
  */

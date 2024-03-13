@@ -66,16 +66,6 @@ export function text(
   return [code, Order.ATOMIC];
 }
 
-export function text_multiline(
-  block: Block,
-  generator: JavascriptGenerator,
-): [string, Order] {
-  // Text value.
-  const code = generator.multiline_quote_(block.getFieldValue('TEXT'));
-  const order = code.indexOf('+') !== -1 ? Order.ADDITION : Order.ATOMIC;
-  return [code, order];
-}
-
 export function text_join(
   block: Block,
   generator: JavascriptGenerator,

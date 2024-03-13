@@ -76,12 +76,6 @@ import {
 } from './field_label.js';
 import {FieldLabelSerializable} from './field_label_serializable.js';
 import {
-  FieldMultilineInput,
-  FieldMultilineInputConfig,
-  FieldMultilineInputFromJsonConfig,
-  FieldMultilineInputValidator,
-} from './field_multilineinput.js';
-import {
   FieldNumber,
   FieldNumberConfig,
   FieldNumberFromJsonConfig,
@@ -491,12 +485,6 @@ export {
 export {FieldImage, FieldImageConfig, FieldImageFromJsonConfig};
 export {FieldLabel, FieldLabelConfig, FieldLabelFromJsonConfig};
 export {FieldLabelSerializable};
-export {
-  FieldMultilineInput,
-  FieldMultilineInputConfig,
-  FieldMultilineInputFromJsonConfig,
-  FieldMultilineInputValidator,
-};
 export {
   FieldNumber,
   FieldNumberConfig,

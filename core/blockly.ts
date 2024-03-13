@@ -56,12 +56,6 @@ import {
   FieldCheckboxValidator,
 } from './field_checkbox.js';
 import {
-  FieldColour,
-  FieldColourConfig,
-  FieldColourFromJsonConfig,
-  FieldColourValidator,
-} from './field_colour.js';
-import {
   FieldDropdown,
   FieldDropdownConfig,
   FieldDropdownFromJsonConfig,
@@ -484,12 +478,6 @@ export {
   FieldCheckboxConfig,
   FieldCheckboxFromJsonConfig,
   FieldCheckboxValidator,
-};
-export {
-  FieldColour,
-  FieldColourConfig,
-  FieldColourFromJsonConfig,
-  FieldColourValidator,
 };
 export {
   FieldDropdown,

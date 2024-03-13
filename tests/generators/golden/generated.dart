@@ -941,20 +941,6 @@ void test_replace() {
   unittest_assertequals(''.replaceAll('a', 'chicken'), '', 'empty source');
 }
 
-/// Tests the "multiline" block.
-void test_multiline() {
-  unittest_assertequals('', '', 'no text');
-  unittest_assertequals('Google', 'Google', 'simple');
-  unittest_assertequals('paragraph' + '\n' +
-  'with newlines' + '\n' +
-  'yup', 'paragraph' + '\n' +
-  'with newlines' + '\n' +
-  'yup', 'no compile error with newlines');
-  unittest_assertequals(text_count('bark bark' + '\n' +
-  'bark bark bark' + '\n' +
-  'bark bark bark bark', 'bark'), 9, 'count with newlines');
-}
-
 /// Checks that the number of calls is one in order
 /// to confirm that a function was only called once.
 void check_number_of_calls2(test_name) {
@@ -1568,7 +1554,6 @@ main() {
   test_count_text();
   test_text_reverse();
   test_replace();
-  test_multiline();
   print(unittest_report());
   unittestResults = null;
 

@@ -785,20 +785,6 @@ def test_replace():
   assertEquals('aaaaa'.replace('a', ''), '', 'empty replacement 3')
   assertEquals(''.replace('a', 'chicken'), '', 'empty source')
 
-# Tests the "multiline" block.
-def test_multiline():
-  global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, loglist, changing_list, list_copy, unittestResults
-  assertEquals('', '', 'no text')
-  assertEquals('Google', 'Google', 'simple')
-  assertEquals('paragraph' + '\n' +
-  'with newlines' + '\n' +
-  'yup', 'paragraph' + '\n' +
-  'with newlines' + '\n' +
-  'yup', 'no compile error with newlines')
-  assertEquals(('bark bark' + '\n' +
-  'bark bark bark' + '\n' +
-  'bark bark bark bark').count('bark'), 9, 'count with newlines')
-
 # Checks that the number of calls is one in order
 # to confirm that a function was only called once.
 def check_number_of_calls2(test_name):
@@ -1372,7 +1358,6 @@ test_trim()
 test_count_text()
 test_text_reverse()
 test_replace()
-test_multiline()
 print(unittest_report())
 unittestResults = None
 

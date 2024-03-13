@@ -920,20 +920,6 @@ function test_replace() {
   assertEquals(textReplace('', 'a', 'chicken'), '', 'empty source');
 }
 
-// Tests the "multiline" block.
-function test_multiline() {
-  assertEquals('', '', 'no text');
-  assertEquals('Google', 'Google', 'simple');
-  assertEquals('paragraph' + '\n' +
-  'with newlines' + '\n' +
-  'yup', 'paragraph' + '\n' +
-  'with newlines' + '\n' +
-  'yup', 'no compile error with newlines');
-  assertEquals(textCount('bark bark' + '\n' +
-  'bark bark bark' + '\n' +
-  'bark bark bark bark', 'bark'), 9, 'count with newlines');
-}
-
 // Checks that the number of calls is one in order
 // to confirm that a function was only called once.
 function check_number_of_calls2(test_name) {
@@ -1517,7 +1503,6 @@ test_trim();
 test_count_text();
 test_text_reverse();
 test_replace();
-test_multiline();
 console.log(unittest_report());
 unittestResults = null;
 

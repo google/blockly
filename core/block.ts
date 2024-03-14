@@ -1527,7 +1527,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       }
       return (
         !!checks &&
-        (checks.indexOf('Boolean') !== -1 || checks.indexOf('Number') !== -1)
+        (checks.includes('Boolean') || checks.includes('Number'))
       );
     }
 

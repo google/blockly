@@ -642,7 +642,7 @@ export function getAddedVariables(
       const variable = allCurrentVariables[i];
       // For any variable that is present in allCurrentVariables but not
       // present in originalVariables, add the variable to addedVariables.
-      if (originalVariables.indexOf(variable) === -1) {
+      if (!originalVariables.includes(variable)) {
         addedVariables.push(variable);
       }
     }

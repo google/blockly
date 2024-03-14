@@ -27,7 +27,7 @@ export function procedures_defreturn(block: Block, generator: PythonGenerator) {
   for (const variable of usedVariables) {
     const varName = variable.name;
     // getVars returns parameter names, not ids, for procedure blocks
-    if (block.getVars().indexOf(varName) === -1) {
+    if (!block.getVars().includes(varName)) {
       globals.push(generator.getVariableName(varName));
     }
   }

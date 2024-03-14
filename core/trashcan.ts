@@ -616,7 +616,7 @@ export class Trashcan
       const cleanedJson = JSON.stringify(
         this.cleanBlockJson(deleteEvent.oldJson),
       );
-      if (this.contents.indexOf(cleanedJson) !== -1) {
+      if (this.contents.includes(cleanedJson)) {
         return;
       }
       this.contents.unshift(cleanedJson);

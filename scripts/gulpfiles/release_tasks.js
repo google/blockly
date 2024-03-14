@@ -131,7 +131,7 @@ function updateBetaVersion(done) {
   const latestBetaVersion = execSync('npm show blockly version --tag beta').toString().trim();
   while (!isValid) {
     newVersion = readlineSync.question(`What is the new beta version? (latest beta version: ${latestBetaVersion})`);
-    const existsOnNpm = blocklyVersions.indexOf(newVersion) > -1;
+    const existsOnNpm = blocklyVersions.includes(newVersion);
     const isFormatted = newVersion.search(re) > -1;
     if (!existsOnNpm && isFormatted) {
       isValid = true;

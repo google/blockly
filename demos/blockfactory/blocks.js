@@ -682,7 +682,7 @@ Blockly.Blocks['type_group'] = {
     // Disconnect any children that don't belong.
     for (var i = 0; i < this.typeCount_; i++) {
       var connection = this.getInput('TYPE' + i).connection.targetConnection;
-      if (connection && connections.indexOf(connection) === -1) {
+      if (connection && !connections.includes(connection)) {
         connection.disconnect();
       }
     }

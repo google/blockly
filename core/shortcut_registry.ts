@@ -325,7 +325,7 @@ export class ShortcutRegistry {
         const modifierKeyCode = (
           ShortcutRegistry.modifierKeys as AnyDuringMigration
         )[modifier];
-        if (modifiers.indexOf(modifierKeyCode) > -1) {
+        if (modifiers.includes(modifierKeyCode)) {
           if (serializedKey !== '') {
             serializedKey += '+';
           }

@@ -594,7 +594,7 @@ FactoryUtils.getOptTypesFrom = function(block, name) {
   var types = FactoryUtils.getTypesFrom_(block, name);
   if (types.length === 0) {
     return undefined;
-  } else if (types.indexOf('null') !== -1) {
+  } else if (types.includes('null')) {
     return 'null';
   } else if (types.length === 1) {
     return types[0];
@@ -771,7 +771,7 @@ FactoryUtils.parseJsBlockDefinitions = function(blockDefsString) {
   var blockDefArray = [];
   var defStart = blockDefsString.indexOf('Blockly.Blocks');
 
-  while (blockDefsString.indexOf('Blockly.Blocks', defStart) !== -1) {
+  while (blockDefsString.includes('Blockly.Blocks', defStart)) {
     var nextStart = blockDefsString.indexOf('Blockly.Blocks', defStart + 1);
     if (nextStart === -1) {
       // This is the last block definition.

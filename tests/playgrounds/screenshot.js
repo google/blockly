@@ -90,7 +90,7 @@ function workspaceToSvg_(workspace, callback, customCss) {
     .call(document.head.querySelectorAll('style'))
     .filter(
       (el) =>
-        /\.blocklySvg/.test(el.innerText) || el.id.indexOf('blockly-') === 0,
+        /\.blocklySvg/.test(el.innerText) || el.id.startsWith('blockly-'),
     )
     .map((el) => el.innerText)
     .join('\n');

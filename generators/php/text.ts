@@ -27,7 +27,7 @@ export function text_multiline(
 ): [string, Order] {
   // Text value.
   const code = generator.multiline_quote_(block.getFieldValue('TEXT'));
-  const order = code.indexOf('.') !== -1 ? Order.STRING_CONCAT : Order.ATOMIC;
+  const order = code.includes('.') ? Order.STRING_CONCAT : Order.ATOMIC;
   return [code, order];
 }
 

@@ -12,7 +12,7 @@
 // Former goog.module ID: Blockly.Events.CommentCreate
 
 import * as registry from '../registry.js';
-import type {WorkspaceComment} from '../workspace_comment.js';
+import type {WorkspaceComment} from '../comments/workspace_comment.js';
 import * as utilsXml from '../utils/xml.js';
 import * as Xml from '../xml.js';
 
@@ -40,7 +40,7 @@ export class CommentCreate extends CommentBase {
       return;
     }
     // Blank event to be populated by fromJson.
-    this.xml = opt_comment.toXmlWithXY();
+    this.xml = Xml.saveWorkspaceComment(opt_comment);
   }
 
   // TODO (#1266): "Full" and "minimal" serialization.

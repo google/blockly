@@ -90,7 +90,11 @@ export abstract class Bubble implements IBubble {
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
   ) {
-    this.svgRoot = dom.createSvgElement(Svg.G, {}, workspace.getBubbleCanvas());
+    this.svgRoot = dom.createSvgElement(
+      Svg.G,
+      {'class': 'blocklyBubble'},
+      workspace.getBubbleCanvas(),
+    );
     const embossGroup = dom.createSvgElement(
       Svg.G,
       {
@@ -100,7 +104,11 @@ export abstract class Bubble implements IBubble {
       },
       this.svgRoot,
     );
-    this.tail = dom.createSvgElement(Svg.PATH, {}, embossGroup);
+    this.tail = dom.createSvgElement(
+      Svg.PATH,
+      {'class': 'blocklyBubbleTail'},
+      embossGroup,
+    );
     this.background = dom.createSvgElement(
       Svg.RECT,
       {

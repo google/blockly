@@ -35,7 +35,6 @@ import {Align} from './inputs/align.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IDeletable} from './interfaces/i_deletable.js';
 import {type IIcon} from './interfaces/i_icon.js';
-// import {CommentIcon} from './comment_icon.js';
 import {isCommentIcon} from './interfaces/i_comment_icon.js';
 import type {MutatorIcon} from './icons/mutator_icon.js';
 import * as Tooltip from './tooltip.js';

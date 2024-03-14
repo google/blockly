@@ -12,7 +12,7 @@
 // Former goog.module ID: Blockly.Events.CommentBase
 
 import * as utilsXml from '../utils/xml.js';
-import type {WorkspaceComment} from '../workspace_comment.js';
+import type {WorkspaceComment} from '../comments/workspace_comment.js';
 import * as Xml from '../xml.js';
 
 import {
@@ -104,7 +104,7 @@ export class CommentBase extends AbstractEvent {
     if (create) {
       const xmlElement = utilsXml.createElement('xml');
       if (!event.xml) {
-        throw new Error('Ecountered a comment event without proper xml');
+        throw new Error('Encountered a comment event without proper xml');
       }
       xmlElement.appendChild(event.xml);
       Xml.domToWorkspace(xmlElement, workspace);

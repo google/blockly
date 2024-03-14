@@ -12,7 +12,7 @@
 // Former goog.module ID: Blockly.Events.CommentDelete
 
 import * as registry from '../registry.js';
-import type {WorkspaceComment} from '../workspace_comment.js';
+import type {WorkspaceComment} from '../comments/workspace_comment.js';
 
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
@@ -40,7 +40,7 @@ export class CommentDelete extends CommentBase {
       return; // Blank event to be populated by fromJson.
     }
 
-    this.xml = opt_comment.toXmlWithXY();
+    this.xml = Xml.saveWorkspaceComment(opt_comment);
   }
 
   /**

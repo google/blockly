@@ -1201,7 +1201,7 @@ export abstract class Flyout
   private filterForCapacity() {
     const blocks = this.workspace_.getTopBlocks(false);
     for (let i = 0, block; (block = blocks[i]); i++) {
-      if (this.permanentlyDisabled.indexOf(block) === -1) {
+      if (!this.permanentlyDisabled.includes(block)) {
         const enable = this.targetWorkspace.isCapacityAvailable(
           common.getBlockTypeCounts(block),
         );

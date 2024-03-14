@@ -243,8 +243,8 @@ export class PythonGenerator extends CodeGenerator {
 
     // Follow the CPython behaviour of repr() for a non-byte string.
     let quote = "'";
-    if (string.indexOf("'") !== -1) {
-      if (string.indexOf('"') === -1) {
+    if (string.includes("'")) {
+      if (!string.includes('"')) {
         quote = '"';
       } else {
         string = string.replace(/'/g, "\\'");

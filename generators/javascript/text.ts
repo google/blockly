@@ -72,7 +72,7 @@ export function text_multiline(
 ): [string, Order] {
   // Text value.
   const code = generator.multiline_quote_(block.getFieldValue('TEXT'));
-  const order = code.indexOf('+') !== -1 ? Order.ADDITION : Order.ATOMIC;
+  const order = code.includes('+') ? Order.ADDITION : Order.ATOMIC;
   return [code, order];
 }
 

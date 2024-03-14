@@ -35,7 +35,7 @@ const CONTINUE_STATEMENT = 'goto continue\n';
  * @returns Generated label or '' if unnecessary
  */
 function addContinueLabel(branch: string, indent: string): string {
-  if (branch.indexOf(CONTINUE_STATEMENT) !== -1) {
+  if (branch.includes(CONTINUE_STATEMENT)) {
     // False positives are possible (e.g. a string literal), but are harmless.
     return branch + indent + '::continue::\n';
   } else {

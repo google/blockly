@@ -1526,8 +1526,7 @@ export class Block implements IASTNodeLocation, IDeletable {
         checks = connection.targetConnection.getCheck();
       }
       return (
-        !!checks &&
-        (checks.indexOf('Boolean') !== -1 || checks.indexOf('Number') !== -1)
+        !!checks && (checks.includes('Boolean') || checks.includes('Number'))
       );
     }
 

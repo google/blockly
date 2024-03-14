@@ -490,7 +490,7 @@ function getOptTypesFrom(block, name) {
   var types = getTypesFrom_(block, name);
   if (types.length === 0) {
     return undefined;
-  } else if (types.indexOf('null') !== -1) {
+  } else if (types.includes('null')) {
     return 'null';
   } else if (types.length === 1) {
     return types[0];

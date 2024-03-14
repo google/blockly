@@ -139,8 +139,11 @@ export function register<T>(
 
   // Don't throw an error if opt_allowOverrides is true.
   // Don't throw an error if the registryItem is not changing.
-  if (!opt_allowOverrides && typeRegistry[name] &&
-      typeRegistry[name] !== registryItem) {
+  if (
+    !opt_allowOverrides &&
+    typeRegistry[name] &&
+    typeRegistry[name] !== registryItem
+  ) {
     throw Error(`Name "${name}" with type "${type}" already registered`);
   }
   typeRegistry[name] = registryItem;
@@ -302,11 +305,7 @@ export function getAllItems<T>(
   opt_throwIfMissing?: boolean,
 ): {[key: string]: T | null | (new (...p1: AnyDuringMigration[]) => T)} | null {
   if (typeof opt_cased !== 'undefined') {
-    deprecation.warn(
-      'Blockly.registry.getAllItems',
-      'v11',
-      'v12',
-    );
+    deprecation.warn('Blockly.registry.getAllItems', 'v11', 'v12');
   }
   type = normalizeName(`${type}`);
   const typeRegistry = typeMap[type];

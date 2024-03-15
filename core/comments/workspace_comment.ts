@@ -83,7 +83,7 @@ export class WorkspaceComment {
   }
 
   /** Returns whether the comment is collapsed or not. */
-  isCollapssed(): boolean {
+  isCollapsed(): boolean {
     return this.collapsed;
   }
 
@@ -156,7 +156,7 @@ export class WorkspaceComment {
   }
 
   /** Returns the position of the comment in workspace coordinates. */
-  getRelativetoSurfaceXY(): Coordinate {
+  getRelativeToSurfaceXY(): Coordinate {
     return this.location;
   }
 
@@ -165,7 +165,7 @@ export class WorkspaceComment {
     this.disposed = true;
   }
 
-  /** Returns whether teh comment has been disposed or not. */
+  /** Returns whether the comment has been disposed or not. */
   isDisposed() {
     return this.disposed;
   }

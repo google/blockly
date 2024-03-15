@@ -408,9 +408,7 @@ export class FieldDropdown extends Field<string> {
    * @param newValue The input value.
    * @returns A valid language-neutral option, or null if invalid.
    */
-  protected override doClassValidation_(
-    newValue: string,
-  ): string | null | undefined;
+  protected override doClassValidation_(newValue: string): string | null;
   protected override doClassValidation_(newValue?: string): string | null;
   protected override doClassValidation_(newValue?: string): string | null {
     const options = this.getOptions(true);

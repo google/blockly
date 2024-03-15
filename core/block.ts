@@ -34,8 +34,8 @@ import {Input} from './inputs/input.js';
 import {Align} from './inputs/align.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IDeletable} from './interfaces/i_deletable.js';
-import type {IIcon} from './interfaces/i_icon.js';
-import {CommentIcon} from './icons/comment_icon.js';
+import {type IIcon} from './interfaces/i_icon.js';
+import {isCommentIcon} from './interfaces/i_comment_icon.js';
 import type {MutatorIcon} from './icons/mutator_icon.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
@@ -2212,7 +2212,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns Block's comment.
    */
   getCommentText(): string | null {
-    const comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | null;
+    const comment = this.getIcon(IconType.COMMENT);
     return comment?.getText() ?? null;
   }
 
@@ -2222,19 +2222,36 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param text The text, or null to delete.
    */
   setCommentText(text: string | null) {
-    const comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | null;
+    const comment = this.getIcon(IconType.COMMENT);
     const oldText = comment?.getText() ?? null;
     if (oldText === text) return;
     if (text !== null) {
-      let comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | undefined;
+      let comment = this.getIcon(IconType.COMMENT);
       if (!comment) {
-        comment = this.addIcon(new CommentIcon(this));
+        const commentConstructor = registry.getClass(
+          registry.Type.ICON,
+          IconType.COMMENT.toString(),
+          false,
+        );
+        if (!commentConstructor) {
+          throw new Error(
+            'No comment icon class is registered, so a comment cannot be set',
+          );
+        }
+        const icon = new commentConstructor(this);
+        if (!isCommentIcon(icon)) {
+          throw new Error(
+            'The class registered as a comment icon does not conform to the ' +
+              'ICommentIcon interface',
+          );
+        }
+        comment = this.addIcon(icon);
       }
       eventUtils.disable();
       comment.setText(text);
       eventUtils.enable();
     } else {
-      this.removeIcon(CommentIcon.TYPE);
+      this.removeIcon(IconType.COMMENT);
     }
 
     eventUtils.fire(

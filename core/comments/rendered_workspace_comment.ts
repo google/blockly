@@ -39,6 +39,7 @@ export class RenderedWorkspaceComment extends WorkspaceComment {
     this.view.addOnCollapseListener(
       () => void super.setCollapsed(this.view.isCollapsed()),
     );
+    this.view.addDisposeListener(() => void this.dispose());
   }
 
   /** Sets the text of the comment. */
@@ -77,7 +78,7 @@ export class RenderedWorkspaceComment extends WorkspaceComment {
 
   /** Disposes of the view. */
   override dispose() {
-    this.view.dispose();
+    if (!this.view.isDeadOrDying()) this.view.dispose();
     super.dispose();
   }
 }

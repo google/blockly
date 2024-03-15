@@ -251,7 +251,6 @@ export class JavascriptGenerator extends CodeGenerator {
    * @param code The JavaScript code created for this block.
    * @param thisOnly True to generate code for only this statement.
    * @returns JavaScript code with comments and subsequent blocks added.
-   * @protected
    */
   scrub_(block: Block, code: string, thisOnly = false): string {
     let commentCode = '';

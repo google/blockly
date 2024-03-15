@@ -54,14 +54,45 @@
     "test:compile:advanced": "gulp buildAdvancedCompilationTest --debug",
     "updateGithubPages": "npm ci && gulp gitUpdateGithubPages"
   },
-  "main": "./index.js",
-  "umd": "./blockly.min.js",
-  "unpkg": "./blockly.min.js",
-  "types": "./index.d.ts",
-  "browser": {
-    "./node.js": "./browser.js",
-    "./core.js": "./core-browser.js",
-    "./blockly-node.js": "./blockly.js"
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "umd": "./blockly.min.js",
+      "default": "./index.js"
+    },
+    "./core": {
+      "types": "./core.d.ts",
+      "node": "./core-node.js",
+      "default": "./blockly_compressed.js"
+    },
+    "./blocks": {
+      "types": "./blocks.d.ts",
+      "default": "./blocks_compressed.js"
+    },
+    "./dart": {
+      "types": "./dart.d.ts",
+      "default": "./dart_compressed.js"
+    },
+    "./lua": {
+      "types": "./lua.d.ts",
+      "default": "./lua_compressed.js"
+    },
+    "./javascript": {
+      "types": "./javascript.d.ts",
+      "default": "./javascript_compressed.js"
+    },
+    "./php": {
+      "types": "./php.d.ts",
+      "default": "./php_compressed.js"
+    },
+    "./python": {
+      "types": "./python.d.ts",
+      "default": "./python_compressed.js"
+    },
+    "./msg/*": {
+      "types": "./msg/*.d.ts",
+      "default": "./msg/*.js"
+    }
   },
   "license": "Apache-2.0",
   "devDependencies": {

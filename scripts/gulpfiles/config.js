@@ -26,6 +26,9 @@ exports.BUILD_DIR = 'build';
 // Directory to write typings output to.
 exports.TYPINGS_BUILD_DIR = path.join(exports.BUILD_DIR, 'declarations');
 
+// Directory to write langfile output to.
+exports.LANG_BUILD_DIR = path.join(exports.BUILD_DIR, 'msg');
+
 // Directory where typescript compiler output can be found.
 // Matches the value in tsconfig.json: outDir
 exports.TSC_OUTPUT_DIR = path.join(exports.BUILD_DIR, 'src');

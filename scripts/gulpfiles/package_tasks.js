@@ -21,7 +21,7 @@ const fs = require('fs');
 const {rimraf} = require('rimraf');
 const build = require('./build_tasks');
 const {getPackageJson} = require('./helper_tasks');
-const {BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
+const {BUILD_DIR, LANG_BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
 
 // Path to template files for gulp-umd.
 const TEMPLATE_DIR = 'scripts/package/templates';
@@ -41,234 +41,44 @@ function packageUMD(namespace, dependencies, template = 'umd.template') {
 };
 
 /**
- * A helper method for wrapping a file into a CommonJS module for Node.js.
- * @param {string} namespace The export namespace.
- * @param {Array<Object>} dependencies An array of dependencies to inject.
- */
-function packageCommonJS(namespace, dependencies) {
-  return gulp.umd({
-    dependencies: function () { return dependencies; },
-    namespace: function () { return namespace; },
-    exports: function () { return namespace; },
-    template: path.join(TEMPLATE_DIR, 'node.template')
-  });
-};
-
-/**
- * This task wraps scripts/package/blockly.js into a UMD module.
- * @example import 'blockly/blockly';
- */
-function packageBlockly() {
-  return gulp.src('scripts/package/blockly.js')
-    .pipe(packageUMD('Blockly', [{
-        name: 'Blockly',
-        amd: './blockly_compressed',
-        cjs: './blockly_compressed',
-      }]))
-    .pipe(gulp.rename('blockly.js'))
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
- * This task wraps scripts/package/blocks.js into a UMD module.
- * @example import 'blockly/blocks';
- */
-function packageBlocks() {
-  return gulp.src('scripts/package/blocks.js')
-    .pipe(packageUMD('BlocklyBlocks', [{
-        name: 'BlocklyBlocks',
-        amd: './blocks_compressed',
-        cjs: './blocks_compressed',
-      }]))
-    .pipe(gulp.rename('blocks.js'))
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
  * This task wraps scripts/package/index.js into a UMD module.
- * We implicitly require the Node entry point in CommonJS environments,
- * and the Browser entry point for AMD environments.
- * @example import * as Blockly from 'blockly';
+ *
+ * This module is the main entrypoint for the blockly package, and
+ * loads blockly/core, blockly/blocks and blockly/msg/en and then
+ * calls setLocale(en).
  */
 function packageIndex() {
   return gulp.src('scripts/package/index.js')
     .pipe(packageUMD('Blockly', [{
         name: 'Blockly',
-        amd: './browser',
-        cjs: './node',
+        amd: 'blockly/core',
+        cjs: 'blockly/core',
+      },{
+        name: 'en',
+        amd: 'blockly/msg/en',
+        cjs: 'blockly/msg/en',
+        global: 'Blockly.Msg',
+      },{
+        name: 'blocks',
+        amd: 'blockly/blocks',
+        cjs: 'blockly/blocks',
+        global: 'Blockly.Blocks',
       }]))
-    .pipe(gulp.rename('index.js'))
     .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
- * This task wraps scripts/package/browser/index.js into a UMD module.
- * By default, the module includes Blockly core and built-in blocks,
- * as well as the JavaScript code generator and the English block
- * localization files.
- * This module is configured (in package.json) to replaces the module
- * built by package-node in browser environments.
- * @example import * as Blockly from 'blockly/browser';
+ * This task copies scripts/package/core-node.js into into the
+ * package.  This module will be the 'blockly/core' entrypoint for
+ * node.js environments.
+ *
+ * Note that, unlike index.js, this file does not get a UMD wrapper.
+ * This is because it is only used in node.js environments and so is
+ * guaranteed to be loaded as a CJS module.
  */
-function packageBrowser() {
-  return gulp.src('scripts/package/browser/index.js')
-    .pipe(packageUMD('Blockly', [{
-        name: 'Blockly',
-        amd: './core-browser',
-        cjs: './core-browser',
-      },{
-        name: 'En',
-        amd: './msg/en',
-        cjs: './msg/en',
-      },{
-        name: 'BlocklyBlocks',
-        amd: './blocks',
-        cjs: './blocks',
-      },{
-        name: 'BlocklyJS',
-        amd: './javascript',
-        cjs: './javascript',
-      }]))
-    .pipe(gulp.rename('browser.js'))
+function packageCoreNode() {
+  return gulp.src('scripts/package/core-node.js')
     .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
- * This task wraps scripts/package/browser/core.js into a UMD module.
- * By default, the module includes the Blockly core package and a
- * helper method to set the locale.
- * This module is configured (in package.json) to replaces the module
- * built by package-node-core in browser environments.
- * @example import * as Blockly from 'blockly/core';
- */
-function packageCore() {
-  return gulp.src('scripts/package/browser/core.js')
-    .pipe(packageUMD('Blockly', [{
-        name: 'Blockly',
-        amd: './blockly',
-        cjs: './blockly',
-      }]))
-    .pipe(gulp.rename('core-browser.js'))
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
- * This task wraps scripts/package/node/index.js into a CommonJS module for Node.js.
- * By default, the module includes Blockly core and built-in blocks,
- * as well as all the code generators and the English block localization files.
- * This module is configured (in package.json) to be replaced by the module
- * built by package-browser in browser environments.
- * @example import * as Blockly from 'blockly/node';
- */
-function packageNode() {
-  return gulp.src('scripts/package/node/index.js')
-    .pipe(packageCommonJS('Blockly', [{
-        name: 'Blockly',
-        cjs: './core',
-      },{
-        name: 'En',
-        cjs: './msg/en',
-      },{
-        name: 'BlocklyBlocks',
-        cjs: './blocks',
-      },{
-        name: 'BlocklyJS',
-        cjs: './javascript',
-      },{
-        name: 'BlocklyPython',
-        cjs: './python',
-      },{
-        name: 'BlocklyPHP',
-        cjs: './php',
-      },{
-        name: 'BlocklyLua',
-        cjs: './lua',
-      }, {
-        name: 'BlocklyDart',
-        cjs: './dart',
-      }]))
-    .pipe(gulp.rename('node.js'))
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
- * This task wraps scripts/package/node/core.js into a CommonJS module for Node.js.
- * By default, the module includes the Blockly core package for Node.js
- * and a helper method to set the locale.
- * This module is configured (in package.json) to be replaced by the module
- * built by package-core in browser environments.
- * @example import * as Blockly from 'blockly/core';
- */
-function packageNodeCore() {
-  return gulp.src('scripts/package/node/core.js')
-    .pipe(packageCommonJS('Blockly', [{
-        name: 'Blockly',
-        amd: './blockly',
-        cjs: './blockly',
-      }]))
-    .pipe(gulp.rename('core.js'))
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
- * A helper method for wrapping a generator file into a UMD module.
- * @param {string} file Source file name.
- * @param {string} rename Destination file name.
- * @param {string} namespace Export namespace.
- */
-function packageGenerator(file, rename, namespace) {
-  return gulp.src(`scripts/package/${rename}`)
-    .pipe(packageUMD(`Blockly${namespace}`, [{
-        name: 'Blockly',
-        amd: './core',
-        cjs: './core',
-      }, {
-        name: `Blockly${namespace}`,
-        amd: `./${file}`,
-        cjs: `./${file}`,
-      }]))
-    .pipe(gulp.rename(rename))
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
- * This task wraps javascript_compressed.js into a UMD module.
- * @example import 'blockly/javascript';
- */
-function packageJavascript() {
-  return packageGenerator('javascript_compressed.js', 'javascript.js', 'JavaScript');
-};
-
-/**
- * This task wraps python_compressed.js into a UMD module.
- * @example import 'blockly/python';
- */
-function packagePython() {
-  return packageGenerator('python_compressed.js', 'python.js', 'Python');
-};
-
-/**
- * This task wraps lua_compressed.js into a UMD module.
- * @example import 'blockly/lua';
- */
-function packageLua() {
-  return packageGenerator('lua_compressed.js', 'lua.js', 'Lua');
-};
-
-/**
- * This task wraps dart_compressed.js into a UMD module.
- * @example import 'blockly/dart';
- */
-function packageDart() {
-  return packageGenerator('dart_compressed.js', 'dart.js', 'Dart');
-};
-
-/**
- * This task wraps php_compressed.js into a UMD module.
- * @example import 'blockly/php';
- */
-function packagePHP() {
-  return packageGenerator('php_compressed.js', 'php.js', 'PHP');
 };
 
 /**
@@ -277,7 +87,7 @@ function packagePHP() {
  */
 function packageLocales() {
   // Remove references to goog.provide and goog.require.
-  return gulp.src(`${BUILD_DIR}/msg/*.js`)
+  return gulp.src(`${LANG_BUILD_DIR}/*.js`)
       .pipe(gulp.replace(/goog\.[^\n]+/g, ''))
       .pipe(packageUMD('Blockly.Msg', [], 'umd-msg.template'))
       .pipe(gulp.dest(`${RELEASE_DIR}/msg`));
@@ -310,12 +120,19 @@ function packageMedia() {
 };
 
 /**
- * This task copies the package.json file into the release directory.
+ * This task copies the package.json file into the release directory,
+ * with modifications:
+ *
+ * - The scripts section is removed.
+ *
+ * Prerequisite: buildLangfiles.
  */
 function packageJSON(cb) {
-  const packageJson = getPackageJson();
-  const json = Object.assign({}, packageJson);
+  // Copy package.json, so we can safely modify it.
+  const json = JSON.parse(JSON.stringify(getPackageJson()));
+  // Remove unwanted entries.
   delete json['scripts'];
+  // Write resulting package.json file to release directory.
   if (!fs.existsSync(RELEASE_DIR)) {
     fs.mkdirSync(RELEASE_DIR, {recursive: true});
   }
@@ -377,17 +194,7 @@ const package = gulp.series(
     build.build,
     gulp.parallel(
         packageIndex,
-        packageBrowser,
-        packageNode,
-        packageCore,
-        packageNodeCore,
-        packageBlockly,
-        packageBlocks,
-        packageJavascript,
-        packagePython,
-        packageLua,
-        packageDart,
-        packagePHP,
+        packageCoreNode,
         packageMedia,
         gulp.series(packageLocales, packageUMDBundle),
         packageJSON,

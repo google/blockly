@@ -4,13 +4,27 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Mocha tests that test Blockly in Node.
- */
+/** @fileoverview Mocha tests that test Blockly in Node. */
+
+console.log(process.cwd());
+
+// N.B. the file ./node_modules/blockly-test should be a symlink to
+// RELEASE_DIR (i.e. dist/) so that require will load the packaged
+// version of blockly as if it were an external dependency.
+//
+// Moreover, (as with the typescript tests) this link has to be
+// called something other than "blockly", because the node module
+// resolution will favour loading the nearest enclosing package
+// of the same name, which means that require('blockly') will load
+// based on the exports section of the package.json in the repository
+// root, but this fails because (at the time of writing) those paths
+// are relative to RELEASE_DIR (dist/, into which package.json is
+// copied when packaged), resulting in require() looking for the
+// compressed bundles in the wrong place.
 
 const assert = require('chai').assert;
-const Blockly = require('../../dist/');
-const {javascriptGenerator} = require('../../dist/javascript');
+const Blockly = require('blockly-test');
+const {javascriptGenerator} = require('blockly-test/javascript');
 
 const xmlText =
   '<xml xmlns="https://developers.google.com/blockly/xml">\n' +

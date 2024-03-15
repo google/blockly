@@ -48,11 +48,7 @@ export class WorkspaceComment {
     protected readonly workspace: Workspace,
     id?: string,
   ) {
-    // TODO: Before merging, file issue to update getCommentById.
     this.id = id && !workspace.getCommentById(id) ? id : idGenerator.genUid();
-
-    // TODO: Before merging, file issue to add top comment.
-    // workspace.addTopComment(this);
 
     // TODO(7909): Fire events.
   }

@@ -276,7 +276,6 @@ export class PythonGenerator extends CodeGenerator {
    * @param code The Python code created for this block.
    * @param thisOnly True to generate code for only this statement.
    * @returns Python code with comments and subsequent blocks added.
-
    */
   scrub_(block: Block, code: string, thisOnly = false): string {
     let commentCode = '';

@@ -578,11 +578,7 @@ export class CodeGenerator {
    * @param _opt_thisOnly True to generate code for only this statement.
    * @returns Code with comments and subsequent blocks added.
    */
-  protected scrub_(
-    _block: Block,
-    code: string,
-    _opt_thisOnly?: boolean,
-  ): string {
+  scrub_(_block: Block, code: string, _opt_thisOnly?: boolean): string {
     // Optionally override
     return code;
   }

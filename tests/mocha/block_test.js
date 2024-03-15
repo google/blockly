@@ -1386,6 +1386,12 @@ suite('Blocks', function () {
         getBubbleSize() {
           return Blockly.utils.Size(0, 0);
         }
+
+        bubbleIsVisible() {
+          return true;
+        }
+
+        setBubbleVisible() {}
       }
 
       setup(function () {

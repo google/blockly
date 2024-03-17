@@ -125,7 +125,7 @@ import {ICopyable, isCopyable} from './interfaces/i_copyable.js';
 import {IDeletable} from './interfaces/i_deletable.js';
 import {IDeleteArea} from './interfaces/i_delete_area.js';
 import {IDragTarget} from './interfaces/i_drag_target.js';
-import {IDraggable} from './interfaces/i_draggable.js';
+import {IDraggable} from './interfaces/i_draggable.old.js';
 import {IFlyout} from './interfaces/i_flyout.js';
 import {IHasBubble, hasBubble} from './interfaces/i_has_bubble.js';
 import {IIcon, isIcon} from './interfaces/i_icon.js';

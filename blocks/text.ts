@@ -796,7 +796,7 @@ const JOIN_MUTATOR_MIXIN = {
     // Disconnect any children that don't belong.
     for (let i = 0; i < this.itemCount_; i++) {
       const connection = this.getInput('ADD' + i)!.connection!.targetConnection;
-      if (connection && connections.indexOf(connection) === -1) {
+      if (connection && !connections.includes(connection)) {
         connection.disconnect();
       }
     }

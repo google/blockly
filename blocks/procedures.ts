@@ -858,7 +858,7 @@ const PROCEDURE_CALL_COMMON = {
         if (
           mutatorOpen &&
           connection &&
-          paramIds.indexOf(this.quarkIds_[i]) === -1
+          !paramIds.includes(this.quarkIds_[i])
         ) {
           // This connection should no longer be attached to this block.
           connection.disconnect();
@@ -1041,7 +1041,7 @@ const PROCEDURE_CALL_COMMON = {
     }
     if (
       event.type === Events.BLOCK_CREATE &&
-      (event as BlockCreate).ids!.indexOf(this.id) !== -1
+      (event as BlockCreate).ids!.includes(this.id)
     ) {
       // Look for the case where a procedure call was created (usually through
       // paste) and there is no matching definition.  In this case, create
@@ -1286,7 +1286,7 @@ const PROCEDURES_IFRETURN = {
     // Is the block nested in a procedure?
     let block = this; // eslint-disable-line @typescript-eslint/no-this-alias
     do {
-      if (this.FUNCTION_TYPES.indexOf(block.type) !== -1) {
+      if (this.FUNCTION_TYPES.includes(block.type)) {
         legal = true;
         break;
       }

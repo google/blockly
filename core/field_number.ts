@@ -216,7 +216,7 @@ export class FieldNumber extends FieldInput<number> {
   private setPrecisionInternal(precision: number | string | undefined | null) {
     this.precision_ = Number(precision) || 0;
     let precisionString = String(this.precision_);
-    if (precisionString.indexOf('e') !== -1) {
+    if (precisionString.includes('e')) {
       // String() is fast.  But it turns .0000001 into '1e-7'.
       // Use the much slower toLocaleString to access all the digits.
       precisionString = this.precision_.toLocaleString('en-US', {

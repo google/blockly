@@ -99,7 +99,7 @@ export function bumpIntoBoundsHandler(
       return;
     }
 
-    if (eventUtils.BUMP_EVENTS.indexOf(e.type ?? '') !== -1) {
+    if (eventUtils.BUMP_EVENTS.includes(e.type ?? '')) {
       const scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
 
       // Triggered by move/create event

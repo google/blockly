@@ -204,9 +204,9 @@ function wrapScore(
     score -= Math.pow(maxLength - lineLengths[i], 1.5);
     // Optimize for structure.
     // Add score to line endings after punctuation.
-    if ('.?!'.indexOf(linePunctuation[i]) !== -1) {
+    if ('.?!'.includes(linePunctuation[i])) {
       score += limit / 3;
-    } else if (',;)]}'.indexOf(linePunctuation[i]) !== -1) {
+    } else if (',;)]}'.includes(linePunctuation[i])) {
       score += limit / 4;
     }
   }

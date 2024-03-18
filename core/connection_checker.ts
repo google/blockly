@@ -210,7 +210,7 @@ export class ConnectionChecker implements IConnectionChecker {
     }
     // Find any intersection in the check lists.
     for (let i = 0; i < checkArrayOne.length; i++) {
-      if (checkArrayTwo.indexOf(checkArrayOne[i]) !== -1) {
+      if (checkArrayTwo.includes(checkArrayOne[i])) {
         return true;
       }
     }
@@ -298,7 +298,7 @@ export class ConnectionChecker implements IConnectionChecker {
     }
 
     // Don't let blocks try to connect to themselves or ones they nest.
-    if (common.draggingConnections.indexOf(b) !== -1) {
+    if (common.draggingConnections.includes(b)) {
       return false;
     }
 
@@ -321,7 +321,7 @@ export class ConnectionChecker implements IConnectionChecker {
     }
 
     // Don't let blocks try to connect to themselves or ones they nest.
-    if (common.draggingConnections.indexOf(b) !== -1) {
+    if (common.draggingConnections.includes(b)) {
       return false;
     }
 

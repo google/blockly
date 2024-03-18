@@ -690,7 +690,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       let element: Element = this.svgGroup_;
       while (element) {
         const classes = element.getAttribute('class') || '';
-        if ((' ' + classes + ' ').indexOf(' injectionDiv ') !== -1) {
+        if ((' ' + classes + ' ').includes(' injectionDiv ')) {
           this.injectionDiv = element;
           break;
         }
@@ -1301,7 +1301,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       // Using Set here would be great, but at the cost of IE10 support.
       if (!state) {
         arrayUtils.removeElem(this.highlightedBlocks, block);
-      } else if (this.highlightedBlocks.indexOf(block) === -1) {
+      } else if (!this.highlightedBlocks.includes(block)) {
         this.highlightedBlocks.push(block);
       }
       block.setHighlighted(state);

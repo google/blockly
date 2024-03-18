@@ -401,7 +401,7 @@ export function buildTooltipForDropdown(
   const blockTypesChecked: string[] = [];
 
   return function (this: Block) {
-    if (blockTypesChecked.indexOf(this.type) === -1) {
+    if (!blockTypesChecked.includes(this.type)) {
       checkDropdownOptionsInTable(this, dropdownName, lookupTable);
       blockTypesChecked.push(this.type);
     }

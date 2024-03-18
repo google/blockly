@@ -824,7 +824,19 @@ suite('Events', function () {
           type: 'comment_create',
           group: '',
           commentId: thisObj.comment.id,
-          xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY()),
+          // TODO: Before merging, is this a dumb change detector?
+          xml: Blockly.Xml.domToText(
+            Blockly.Xml.saveWorkspaceComment(thisObj.comment),
+            {addCoordinates: true},
+          ),
+          json: {
+            height: 100,
+            width: 120,
+            id: 'comment id',
+            x: 0,
+            y: 0,
+            text: 'test text',
+          },
         }),
       },
       {
@@ -835,7 +847,19 @@ suite('Events', function () {
           type: 'comment_delete',
           group: '',
           commentId: thisObj.comment.id,
-          xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY()),
+          // TODO: Before merging, is this a dumb change detector?
+          xml: Blockly.Xml.domToText(
+            Blockly.Xml.saveWorkspaceComment(thisObj.comment),
+            {addCoordinates: true},
+          ),
+          json: {
+            height: 100,
+            width: 120,
+            id: 'comment id',
+            x: 0,
+            y: 0,
+            text: 'test text',
+          },
         }),
       },
       // TODO(#4577) Test serialization of move event coordinate properties.
@@ -873,13 +897,11 @@ suite('Events', function () {
         title: 'WorkspaceComment events',
         testCases: workspaceCommentEventTestCases,
         setup: (thisObj) => {
-          thisObj.comment = new Blockly.WorkspaceComment(
+          thisObj.comment = new Blockly.comments.WorkspaceComment(
             thisObj.workspace,
-            'comment text',
-            0,
-            0,
             'comment id',
           );
+          thisObj.comment.setText('test text');
         },
       },
     ];

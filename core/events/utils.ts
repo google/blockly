@@ -180,6 +180,9 @@ export const COMMENT_CHANGE = 'comment_change';
  */
 export const COMMENT_MOVE = 'comment_move';
 
+/** Type of event that moves a comment. */
+export const COMMENT_COLLAPSE = 'comment_collapse';
+
 /**
  * Name of event that records a workspace load.
  */

@@ -45,7 +45,9 @@ export function disposeUiEffect(block: BlockSvg) {
   clone.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   if (workspace.isDragging()) {
     workspace.getLayerManager()?.moveToDragLayer({
-      getSvgRoot: () => { return clone; }
+      getSvgRoot: () => {
+        return clone;
+      },
     });
   } else {
     workspace.getLayerManager()?.getBlockLayer().appendChild(clone);
@@ -79,10 +81,9 @@ function disposeUiStep(
   if (percent > 1) {
     dom.removeNode(clone);
   } else {
-    const x =
-      rect.x + (((rtl ? -1 : 1) * rect.width) / 2) * percent;
-    const y = rect.y + rect.height / 2 * percent;
-    const scale = (1 - percent);
+    const x = rect.x + (((rtl ? -1 : 1) * rect.width) / 2) * percent;
+    const y = rect.y + (rect.height / 2) * percent;
+    const scale = 1 - percent;
     clone.setAttribute(
       'transform',
       'translate(' + x + ',' + y + ')' + ' scale(' + scale + ')',

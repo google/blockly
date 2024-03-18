@@ -57,7 +57,7 @@ export function disposeUiEffect(block: BlockSvg) {
     'width': block.width,
     'height': block.height,
   };
-  disposeUiStep(clone, cloneRect, workspace.RTL, new Date(), workspace.scale);
+  disposeUiStep(clone, cloneRect, workspace.RTL, new Date());
 }
 /**
  * Animate a cloned block and eventually dispose of it.

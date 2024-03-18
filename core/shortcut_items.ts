@@ -221,10 +221,11 @@ export function registerUndo() {
     preconditionFn(workspace) {
       return !workspace.options.readOnly && !Gesture.inProgress();
     },
-    callback(workspace) {
+    callback(workspace, e) {
       // 'z' for undo 'Z' is for redo.
       (workspace as WorkspaceSvg).hideChaff();
       workspace.undo(false);
+      e.preventDefault()
       return true;
     },
     keyCodes: [ctrlZ, altZ, metaZ],
@@ -259,10 +260,11 @@ export function registerRedo() {
     preconditionFn(workspace) {
       return !Gesture.inProgress() && !workspace.options.readOnly;
     },
-    callback(workspace) {
+    callback(workspace, e) {
       // 'z' for undo 'Z' is for redo.
       (workspace as WorkspaceSvg).hideChaff();
       workspace.undo(true);
+      e.preventDefault();
       return true;
     },
     keyCodes: [ctrlShiftZ, altShiftZ, metaShiftZ, ctrlY],

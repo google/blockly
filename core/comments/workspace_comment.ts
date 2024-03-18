@@ -167,10 +167,11 @@ export class WorkspaceComment {
   }
 
   /** Moves the comment to the given location in workspace coordinates. */
-  moveTo(location: Coordinate) {
+  moveTo(location: Coordinate, reason?: string[] | undefined) {
     const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
       this,
     ) as CommentMove;
+    if (reason) event.setReason(reason);
 
     this.location = location;
 

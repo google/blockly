@@ -36,6 +36,17 @@ export class CommentMove extends CommentBase {
   newCoordinate_?: Coordinate;
 
   /**
+   * An explanation of what this move is for.  Known values include:
+   *  'drag' -- A drag operation completed.
+   *  'snap' -- Comment got shifted to line up with the grid.
+   *  'inbounds' -- Block got pushed back into a non-scrolling workspace.
+   *  'create' -- Block created via deserialization.
+   *  'cleanup' -- Workspace aligned top-level blocks.
+   * Event merging may create multiple reasons: ['drag', 'inbounds', 'snap'].
+   */
+  reason?: string[];
+
+  /**
    * @param opt_comment The comment that is being moved.  Undefined for a blank
    *     event.
    */
@@ -68,6 +79,15 @@ export class CommentMove extends CommentBase {
       );
     }
     this.newCoordinate_ = this.comment_.getRelativeToSurfaceXY();
+  }
+
+  /**
+   * Sets the reason for a move event.
+   *
+   * @param reason Why is this move happening?  'drag', 'bump', 'snap', ...
+   */
+  setReason(reason: string[]) {
+    this.reason = reason;
   }
 
   /**

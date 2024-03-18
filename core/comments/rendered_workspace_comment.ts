@@ -101,16 +101,15 @@ export class RenderedWorkspaceComment
   }
 
   /** Move the comment by the given amounts in workspace coordinates. */
-  moveBy(dx: number, dy: number, _reason?: string[] | undefined): void {
-    // TODO(#7909): Deal with reason when we add events.
+  moveBy(dx: number, dy: number, reason?: string[] | undefined): void {
     const loc = this.getRelativeToSurfaceXY();
     const newLoc = new Coordinate(loc.x + dx, loc.y + dy);
-    this.moveTo(newLoc);
+    this.moveTo(newLoc, reason);
   }
 
   /** Moves the comment to the given location in workspace coordinates. */
-  override moveTo(location: Coordinate): void {
-    super.moveTo(location);
+  override moveTo(location: Coordinate, reason?: string[] | undefined): void {
+    super.moveTo(location, reason);
     this.view.moveTo(location);
   }
 

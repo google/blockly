@@ -12,7 +12,7 @@
 // Former goog.module ID: Blockly.Events.CommentChange
 
 import * as registry from '../registry.js';
-import type {WorkspaceComment} from '../workspace_comment.js';
+import type {WorkspaceComment} from '../comments/workspace_comment.js';
 
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
@@ -124,13 +124,16 @@ export class CommentChange extends CommentBase {
           'the constructor, or call fromJson',
       );
     }
-    const comment = workspace.getCommentById(this.commentId);
+    // TODO: Remove the cast when we fix the type of getCommentById.
+    const comment = workspace.getCommentById(
+      this.commentId,
+    ) as unknown as WorkspaceComment;
     if (!comment) {
       console.warn("Can't change non-existent comment: " + this.commentId);
       return;
     }
     const contents = forward ? this.newContents_ : this.oldContents_;
-    if (!contents) {
+    if (contents === undefined) {
       if (forward) {
         throw new Error(
           'The new contents is undefined. Either pass a value to ' +
@@ -142,7 +145,7 @@ export class CommentChange extends CommentBase {
           'the constructor, or call fromJson',
       );
     }
-    comment.setContent(contents);
+    comment.setText(contents);
   }
 }
 

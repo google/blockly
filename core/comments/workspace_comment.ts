@@ -8,6 +8,8 @@ import {Workspace} from '../workspace.js';
 import {Size} from '../utils/size.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as idGenerator from '../utils/idgenerator.js';
+import * as eventUtils from '../events/utils.js';
+import {CommentMove} from '../events/events_comment_move.js';
 
 export class WorkspaceComment {
   /** The unique identifier for this comment. */
@@ -35,7 +37,10 @@ export class WorkspaceComment {
   private location = new Coordinate(0, 0);
 
   /** Whether this comment has been disposed or not. */
-  private disposed = false;
+  protected disposed = false;
+
+  /** Whether this comment is being disposed or not. */
+  protected disposing = false;
 
   /**
    * Constructs the comment.
@@ -45,17 +50,45 @@ export class WorkspaceComment {
    *     be generated.
    */
   constructor(
-    protected readonly workspace: Workspace,
+    public readonly workspace: Workspace,
     id?: string,
   ) {
     this.id = id && !workspace.getCommentById(id) ? id : idGenerator.genUid();
 
-    // TODO(7909): Fire events.
+    // TODO: File an issue to remove this once everything is migrated.
+    workspace.addTopComment(this as AnyDuringMigration);
+
+    this.fireCreateEvent();
+  }
+
+  private fireCreateEvent() {
+    if (eventUtils.isEnabled()) {
+      // TODO: Before merging. In the old class, this is wrapped by a setGroup
+      //   call. Is there any reason that's actually necessary?
+      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CREATE))(this));
+    }
+  }
+
+  private fireDeleteEvent() {
+    if (eventUtils.isEnabled()) {
+      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_DELETE))(this));
+    }
+  }
+
+  /** Fires a comment change event. */
+  private fireChangeEvent(oldText: string, newText: string) {
+    if (eventUtils.isEnabled()) {
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.COMMENT_CHANGE))(this, oldText, newText),
+      );
+    }
   }
 
   /** Sets the text of the comment. */
   setText(text: string) {
+    const oldText = this.text;
     this.text = text;
+    this.fireChangeEvent(oldText, text);
   }
 
   /** Returns the text of the comment. */
@@ -147,8 +180,16 @@ export class WorkspaceComment {
   }
 
   /** Moves the comment to the given location in workspace coordinates. */
-  moveTo(location: Coordinate) {
+  moveTo(location: Coordinate, reason?: string[] | undefined) {
+    const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
+      this,
+    ) as CommentMove;
+    if (reason) event.setReason(reason);
+
     this.location = location;
+
+    event.recordNew();
+    if (eventUtils.isEnabled()) eventUtils.fire(event);
   }
 
   /** Returns the position of the comment in workspace coordinates. */
@@ -158,11 +199,22 @@ export class WorkspaceComment {
 
   /** Disposes of this comment. */
   dispose() {
+    this.disposing = true;
+    this.fireDeleteEvent();
+    this.workspace.removeTopComment(this as AnyDuringMigration);
     this.disposed = true;
   }
 
   /** Returns whether the comment has been disposed or not. */
   isDisposed() {
     return this.disposed;
+  }
+
+  /**
+   * Returns true if this comment view is currently being disposed or has
+   * already been disposed.
+   */
+  isDeadOrDying(): boolean {
+    return this.disposing || this.disposed;
   }
 }

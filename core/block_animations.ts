@@ -9,6 +9,7 @@
 import type {BlockSvg} from './block_svg.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
+import * as svgMath from './utils/svg_math.js';
 
 /** A bounding box for a cloned block. */
 interface CloneRect {
@@ -38,11 +39,17 @@ export function disposeUiEffect(block: BlockSvg) {
   const svgGroup = block.getSvgRoot();
   workspace.getAudioManager().play('delete');
 
-  const xy = workspace.getSvgXY(svgGroup);
+  const xy = block.getRelativeToSurfaceXY();
   // Deeply clone the current block.
   const clone: SVGGElement = svgGroup.cloneNode(true) as SVGGElement;
   clone.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
-  workspace.getParentSvg().appendChild(clone);
+  if (workspace.isDragging()) {
+    workspace.getLayerManager()?.moveToDragLayer({
+      getSvgRoot: () => { return clone; }
+    });
+  } else {
+    workspace.getLayerManager()?.getBlockLayer().appendChild(clone);
+  }
   const cloneRect = {
     'x': xy.x,
     'y': xy.y,
@@ -60,14 +67,12 @@ export function disposeUiEffect(block: BlockSvg) {
  * @param rect Starting rect of the clone.
  * @param rtl True if RTL, false if LTR.
  * @param start Date of animation's start.
- * @param workspaceScale Scale of workspace.
  */
 function disposeUiStep(
   clone: Element,
   rect: CloneRect,
   rtl: boolean,
   start: Date,
-  workspaceScale: number,
 ) {
   const ms = new Date().getTime() - start.getTime();
   const percent = ms / 150;
@@ -75,14 +80,14 @@ function disposeUiStep(
     dom.removeNode(clone);
   } else {
     const x =
-      rect.x + (((rtl ? -1 : 1) * rect.width * workspaceScale) / 2) * percent;
-    const y = rect.y + rect.height * workspaceScale * percent;
-    const scale = (1 - percent) * workspaceScale;
+      rect.x + (((rtl ? -1 : 1) * rect.width) / 2) * percent;
+    const y = rect.y + rect.height / 2 * percent;
+    const scale = (1 - percent);
     clone.setAttribute(
       'transform',
       'translate(' + x + ',' + y + ')' + ' scale(' + scale + ')',
     );
-    setTimeout(disposeUiStep, 10, clone, rect, rtl, start, workspaceScale);
+    setTimeout(disposeUiStep, 10, clone, rect, rtl, start);
   }
 }
 

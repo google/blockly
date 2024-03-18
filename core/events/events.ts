@@ -24,6 +24,10 @@ import {CommentChange, CommentChangeJson} from './events_comment_change.js';
 import {CommentCreate, CommentCreateJson} from './events_comment_create.js';
 import {CommentDelete} from './events_comment_delete.js';
 import {CommentMove, CommentMoveJson} from './events_comment_move.js';
+import {
+  CommentCollapse,
+  CommentCollapseJson,
+} from './events_comment_collapse.js';
 import {MarkerMove, MarkerMoveJson} from './events_marker_move.js';
 import {Selected, SelectedJson} from './events_selected.js';
 import {ThemeChange, ThemeChangeJson} from './events_theme_change.js';
@@ -73,6 +77,8 @@ export {CommentCreateJson};
 export {CommentDelete};
 export {CommentMove};
 export {CommentMoveJson};
+export {CommentCollapse};
+export {CommentCollapseJson};
 export {FinishedLoading};
 export {MarkerMove};
 export {MarkerMoveJson};

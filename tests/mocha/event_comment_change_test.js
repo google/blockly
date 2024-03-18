@@ -21,12 +21,8 @@ suite('Comment Change Event', function () {
 
   suite('Serialization', function () {
     test('events round-trip through JSON', function () {
-      const comment = new Blockly.WorkspaceComment(
-        this.workspace,
-        'old text',
-        10,
-        10,
-      );
+      const comment = new Blockly.comments.WorkspaceComment(this.workspace);
+      comment.setText('old text');
       const origEvent = new Blockly.Events.CommentChange(
         comment,
         'old text',

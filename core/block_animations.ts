@@ -9,7 +9,6 @@
 import type {BlockSvg} from './block_svg.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
-import * as svgMath from './utils/svg_math.js';
 
 /** A bounding box for a cloned block. */
 interface CloneRect {

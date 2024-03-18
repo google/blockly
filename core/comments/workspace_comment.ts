@@ -9,6 +9,7 @@ import {Size} from '../utils/size.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as idGenerator from '../utils/idgenerator.js';
 import * as eventUtils from '../events/utils.js';
+import {CommentMove} from '../events/events_comment_move.js';
 
 export class WorkspaceComment {
   /** The unique identifier for this comment. */
@@ -167,7 +168,14 @@ export class WorkspaceComment {
 
   /** Moves the comment to the given location in workspace coordinates. */
   moveTo(location: Coordinate) {
+    const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
+      this,
+    ) as CommentMove;
+
     this.location = location;
+
+    event.recordNew();
+    if (eventUtils.isEnabled()) eventUtils.fire(event);
   }
 
   /** Returns the position of the comment in workspace coordinates. */

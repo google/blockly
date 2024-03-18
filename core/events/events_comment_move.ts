@@ -158,7 +158,10 @@ export class CommentMove extends CommentBase {
           'the constructor, or call fromJson',
       );
     }
-    const comment = workspace.getCommentById(this.commentId);
+    // TODO: Remove cast when we update getCommentById.
+    const comment = workspace.getCommentById(
+      this.commentId,
+    ) as unknown as WorkspaceComment;
     if (!comment) {
       console.warn("Can't move non-existent comment: " + this.commentId);
       return;
@@ -172,9 +175,7 @@ export class CommentMove extends CommentBase {
           'or call fromJson',
       );
     }
-    // TODO: Check if the comment is being dragged, and give up if so.
-    const current = comment.getRelativeToSurfaceXY();
-    comment.moveBy(target.x - current.x, target.y - current.y);
+    comment.moveTo(target);
   }
 }
 

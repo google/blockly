@@ -73,9 +73,20 @@ export class WorkspaceComment {
     }
   }
 
+  /** Fires a comment change event. */
+  private fireChangeEvent(oldText: string, newText: string) {
+    if (eventUtils.isEnabled()) {
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.COMMENT_CHANGE))(this, oldText, newText),
+      );
+    }
+  }
+
   /** Sets the text of the comment. */
   setText(text: string) {
+    const oldText = this.text;
     this.text = text;
+    this.fireChangeEvent(oldText, text);
   }
 
   /** Returns the text of the comment. */

@@ -35,7 +35,10 @@ export class WorkspaceComment {
   private location = new Coordinate(0, 0);
 
   /** Whether this comment has been disposed or not. */
-  private disposed = false;
+  protected disposed = false;
+
+  /** Whether this comment is being disposed or not. */
+  protected disposing = false;
 
   /**
    * Constructs the comment.
@@ -158,11 +161,20 @@ export class WorkspaceComment {
 
   /** Disposes of this comment. */
   dispose() {
+    this.disposing = true;
     this.disposed = true;
   }
 
   /** Returns whether the comment has been disposed or not. */
   isDisposed() {
     return this.disposed;
+  }
+
+  /**
+   * Returns true if this comment view is currently being disposed or has
+   * already been disposed.
+   */
+  isDeadOrDying(): boolean {
+    return this.disposing || this.disposed;
   }
 }

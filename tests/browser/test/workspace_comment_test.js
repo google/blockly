@@ -131,4 +131,29 @@ suite('Workspace comments', function () {
       );
     });
   });
+
+  suite('Resizing', function () {
+    async function getCommentSize(browser, id) {
+      return await browser.execute(
+        (id) => Blockly.getMainWorkspace().getCommentById(id).getSize(),
+        id,
+      );
+    }
+
+    test('resizing updates the size value', async function () {
+      const commentId = await createComment(this.browser);
+      const origSize = await getCommentSize(this.browser, commentId);
+      const delta = {x: 20, y: 20};
+
+      const resizeHandle = await this.browser.$(
+        '.blocklyComment .blocklyResizeHandle',
+      );
+      await resizeHandle.dragAndDrop(delta);
+
+      chai.assert.deepEqual(await getCommentSize(this.browser, commentId), {
+        width: origSize.width + delta.x,
+        height: origSize.height + delta.y,
+      });
+    });
+  });
 });

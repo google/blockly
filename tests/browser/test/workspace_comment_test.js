@@ -6,12 +6,8 @@
 
 const chai = require('chai');
 const sinon = require('sinon');
-const {
-  testSetup,
-  testFileLocations,
-  getAllBlocks,
-  dragNthBlockFromFlyout,
-} = require('./test_setup');
+const {Key} = require('webdriverio');
+const {testSetup, testFileLocations} = require('./test_setup');
 
 suite('Workspace comments', function () {
   // Setting timeout to unlimited as the webdriver takes a longer time
@@ -110,6 +106,29 @@ suite('Workspace comments', function () {
         const comment = await this.browser.$('.blocklyComment');
         chai.assert.isFalse(await hasClass(comment, 'blocklyCollapsed'));
       });
+    });
+  });
+
+  suite('Typing', function () {
+    async function getCommentText(browser, id) {
+      return await browser.execute(
+        (id) => Blockly.getMainWorkspace().getCommentById(id).getText(),
+        id,
+      );
+    }
+
+    test('typing updates the text value', async function () {
+      const commentId = await createComment(this.browser);
+
+      const textArea = await this.browser.$('.blocklyComment .blocklyTextarea');
+      await textArea.addValue('test text');
+      // Deselect text area to fire browser change event.
+      await this.browser.$('.blocklyWorkspace').click();
+
+      chai.assert.equal(
+        await getCommentText(this.browser, commentId),
+        'test text',
+      );
     });
   });
 });

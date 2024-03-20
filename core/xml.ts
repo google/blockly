@@ -43,7 +43,7 @@ export function workspaceToDom(workspace: Workspace, skipId = false): Element {
   }
   for (const comment of workspace.getTopComments()) {
     treeXml.appendChild(
-      saveWorkspaceComment(comment as AnyDuringMigration, !skipId),
+      saveWorkspaceComment(comment as AnyDuringMigration, skipId),
     );
   }
   const blocks = workspace.getTopBlocks(true);
@@ -57,10 +57,10 @@ export function workspaceToDom(workspace: Workspace, skipId = false): Element {
 /** Serializes the given workspace comment to XML. */
 function saveWorkspaceComment(
   comment: WorkspaceComment,
-  saveId = true,
+  skipId = false,
 ): Element {
   const elem = utilsXml.createElement('comment');
-  if (saveId) elem.setAttribute('id', comment.id);
+  if (!skipId) elem.setAttribute('id', comment.id);
 
   elem.setAttribute('x', `${comment.getRelativeToSurfaceXY().x}`);
   elem.setAttribute('y', `${comment.getRelativeToSurfaceXY().y}`);

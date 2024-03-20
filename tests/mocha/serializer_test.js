@@ -2060,7 +2060,6 @@ const runSerializerTestSuite = (serializer, deserializer, testSuite) => {
         workspaces.load(deserializer(save), this.workspace);
       }
       const newXml = Blockly.Xml.workspaceToDom(this.workspace);
-      // console.log(Blockly.Xml.domToText(newXml));
       chai.assert.equal(Blockly.Xml.domToText(newXml), test.xml);
     };
   };

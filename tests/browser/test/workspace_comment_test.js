@@ -14,7 +14,6 @@ suite('Workspace comments', function () {
   // to run than most mocha test
   this.timeout(0);
 
-  // Setup Selenium for all of the tests
   suiteSetup(async function () {
     this.browser = await testSetup(
       testFileLocations.PLAYGROUND + '?toolbox=test-blocks',
@@ -106,6 +105,49 @@ suite('Workspace comments', function () {
         const comment = await this.browser.$('.blocklyComment');
         chai.assert.isFalse(await hasClass(comment, 'blocklyCollapsed'));
       });
+    });
+  });
+
+  suite('Deleting', function () {
+    async function makeDeleteVisible(browser, commentId) {
+      await browser.execute((id) => {
+        document.querySelector(
+          '.blocklyComment .blocklyDeleteIcon',
+        ).style.display = 'block';
+        const comment = Blockly.getMainWorkspace().getCommentById(id);
+        comment.setSize(comment.getSize());
+      }, commentId);
+    }
+
+    async function commentIsDisposed(browser, commentId) {
+      return await browser.execute(
+        (id) => !Blockly.getMainWorkspace().getCommentById(id),
+        commentId,
+      );
+    }
+
+    test('deleting disposes of comment', async function () {
+      const commentId = await createComment(this.browser);
+      await makeDeleteVisible(this.browser, commentId);
+
+      const deleteIcon = await this.browser.$(
+        '.blocklyComment .blocklyDeleteIcon',
+      );
+      await deleteIcon.click();
+
+      chai.assert.isTrue(await commentIsDisposed(this.browser, commentId));
+    });
+
+    test('deleting disposes of DOM elements', async function () {
+      const commentId = await createComment(this.browser);
+      await makeDeleteVisible(this.browser, commentId);
+
+      const deleteIcon = await this.browser.$(
+        '.blocklyComment .blocklyDeleteIcon',
+      );
+      await deleteIcon.click();
+
+      chai.assert.isFalse(await this.browser.$('.blocklyComment').isExisting());
     });
   });
 

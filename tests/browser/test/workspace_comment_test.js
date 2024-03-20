@@ -58,7 +58,10 @@ suite('Workspace comments', function () {
         );
         await foldout.click();
 
-        chai.assert.isTrue(await isCommentCollapsed(this.browser, commentId));
+        chai.assert.isTrue(
+          await isCommentCollapsed(this.browser, commentId),
+          'Expected the comment to be collapsed',
+        );
       });
 
       test('collapsing adds the css class', async function () {
@@ -70,7 +73,10 @@ suite('Workspace comments', function () {
         await foldout.click();
 
         const comment = await this.browser.$('.blocklyComment');
-        chai.assert.isTrue(await hasClass(comment, 'blocklyCollapsed'));
+        chai.assert.isTrue(
+          await hasClass(comment, 'blocklyCollapsed'),
+          'Expected the comment to have the blocklyCollapsed class',
+        );
       });
     });
 
@@ -90,7 +96,10 @@ suite('Workspace comments', function () {
         );
         await foldout.click();
 
-        chai.assert.isFalse(await isCommentCollapsed(this.browser, commentId));
+        chai.assert.isFalse(
+          await isCommentCollapsed(this.browser, commentId),
+          'Expected the comment to not be collapsed',
+        );
       });
 
       test('collapsing adds the css class', async function () {
@@ -103,7 +112,10 @@ suite('Workspace comments', function () {
         await foldout.click();
 
         const comment = await this.browser.$('.blocklyComment');
-        chai.assert.isFalse(await hasClass(comment, 'blocklyCollapsed'));
+        chai.assert.isFalse(
+          await hasClass(comment, 'blocklyCollapsed'),
+          'Expected the comment to not have the blocklyCollapsed class',
+        );
       });
     });
   });
@@ -135,7 +147,10 @@ suite('Workspace comments', function () {
       );
       await deleteIcon.click();
 
-      chai.assert.isTrue(await commentIsDisposed(this.browser, commentId));
+      chai.assert.isTrue(
+        await commentIsDisposed(this.browser, commentId),
+        'Expected the comment model to be disposed',
+      );
     });
 
     test('deleting disposes of DOM elements', async function () {
@@ -147,7 +162,10 @@ suite('Workspace comments', function () {
       );
       await deleteIcon.click();
 
-      chai.assert.isFalse(await this.browser.$('.blocklyComment').isExisting());
+      chai.assert.isFalse(
+        await this.browser.$('.blocklyComment').isExisting(),
+        'Expected the comment DOM elements to not exist',
+      );
     });
   });
 
@@ -170,6 +188,7 @@ suite('Workspace comments', function () {
       chai.assert.equal(
         await getCommentText(this.browser, commentId),
         'test text',
+        'Expected the comment model text to match the entered text',
       );
     });
   });
@@ -192,10 +211,14 @@ suite('Workspace comments', function () {
       );
       await resizeHandle.dragAndDrop(delta);
 
-      chai.assert.deepEqual(await getCommentSize(this.browser, commentId), {
-        width: origSize.width + delta.x,
-        height: origSize.height + delta.y,
-      });
+      chai.assert.deepEqual(
+        await getCommentSize(this.browser, commentId),
+        {
+          width: origSize.width + delta.x,
+          height: origSize.height + delta.y,
+        },
+        'Expected the comment model size to match the resized size',
+      );
     });
   });
 });

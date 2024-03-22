@@ -55,7 +55,7 @@ export function workspaceToDom(workspace: Workspace, skipId = false): Element {
 }
 
 /** Serializes the given workspace comment to XML. */
-function saveWorkspaceComment(
+export function saveWorkspaceComment(
   comment: WorkspaceComment,
   skipId = false,
 ): Element {
@@ -495,7 +495,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
 }
 
 /** Deserializes the given comment state into the given workspace. */
-function loadWorkspaceComment(
+export function loadWorkspaceComment(
   elem: Element,
   workspace: Workspace,
 ): WorkspaceComment {

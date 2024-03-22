@@ -10,6 +10,7 @@ import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
 export class Dragger implements IDragger {
+  /** Starting location of the draggable, in workspace coordinates. */
   private startLoc: Coordinate;
 
   constructor(

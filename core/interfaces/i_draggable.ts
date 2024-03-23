@@ -5,12 +5,17 @@
  */
 
 import {Coordinate} from '../utils/coordinate';
+import {IDeletable} from './i_deletable';
 import {IDragTarget} from './i_drag_target';
+import {IRenderedElement} from './i_rendered_element';
 
 /**
  * Represents an object that can be dragged.
  */
-export interface IDraggable extends IDragStrategy {
+export interface IDraggable
+  extends IDragStrategy,
+    IRenderedElement,
+    IDeletable {
   /** Returns true iff the element is currently movable. */
   isMovable(): boolean;
 

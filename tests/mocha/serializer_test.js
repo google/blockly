@@ -1868,12 +1868,181 @@ Serializer.Mutations.testSuites = [
   Serializer.Mutations.Procedure,
 ];
 
+Serializer.Comments = new SerializerTestSuite('Comments');
+
+Serializer.Comments.Coordinates = new SerializerTestSuite('Coordinates');
+Serializer.Comments.Coordinates.Basic = new SerializerTestCase(
+  'Basic',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42">' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Coordinates.Negative = new SerializerTestCase(
+  'Negative',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="-42" y="-42" w="42" h="42">' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Coordinates.Zero = new SerializerTestCase(
+  'Zero',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="0" y="0" w="42" h="42">' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Coordinates.testCases = [
+  Serializer.Comments.Coordinates.Basic,
+  Serializer.Comments.Coordinates.Negative,
+  Serializer.Comments.Coordinates.Zero,
+];
+
+Serializer.Comments.Size = new SerializerTestSuite('Size');
+Serializer.Comments.Size.Basic = new SerializerTestCase(
+  'Basic',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42">' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Size.testCases = [Serializer.Comments.Size.Basic];
+
+Serializer.Comments.Text = new SerializerTestSuite('Text');
+Serializer.Comments.Text.Symbols = new SerializerTestCase(
+  'Symbols',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42">' +
+    '~`!@#$%^*()_+-={[}]|\\:;,.?/' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Text.EscapedSymbols = new SerializerTestCase(
+  'EscapedSymbols',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42">' +
+    '&amp;&lt;&gt;' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Text.SingleQuotes = new SerializerTestCase(
+  'SingleQuotes',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42">' +
+    "'test'" +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Text.DoubleQuotes = new SerializerTestCase(
+  'DoubleQuotes',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42">' +
+    '"test"' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Text.Numbers = new SerializerTestCase(
+  'Numbers',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42">' +
+    '1234567890a123a123a' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Text.Emoji = new SerializerTestCase(
+  'Emoji',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42">' +
+    '😀👋🏿👋🏾👋🏽👋🏼👋🏻😀❤❤❤' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Text.Russian = new SerializerTestCase(
+  'Russian',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42">' +
+    'ты любопытный кот' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Text.Japanese = new SerializerTestCase(
+  'Japanese',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42">' +
+    'あなたは好奇心旺盛な猫です' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Text.Zalgo = new SerializerTestCase(
+  'Zalgo',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42">' +
+    'z̴̪͈̲̜͕̽̈̀͒͂̓̋̉̍a̸̧̧̜̻̘̤̫̱̲͎̞̻͆̋ļ̸̛̖̜̳͚̖͔̟̈́͂̉̀͑̑͑̎ǵ̸̫̳̽̐̃̑̚̕o̶͇̫͔̮̼̭͕̹̘̬͋̀͆̂̇̋͊̒̽' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Text.testCases = [
+  Serializer.Comments.Text.Symbols,
+  Serializer.Comments.Text.EscapedSymbols,
+  Serializer.Comments.Text.SingleQuotes,
+  Serializer.Comments.Text.DoubleQuotes,
+  Serializer.Comments.Text.Numbers,
+  Serializer.Comments.Text.Emoji,
+  Serializer.Comments.Text.Russian,
+  Serializer.Comments.Text.Japanese,
+  Serializer.Comments.Text.Zalgo,
+];
+
+Serializer.Comments.Attributes = new SerializerTestSuite('Attributes');
+Serializer.Comments.Attributes.Collapsed = new SerializerTestCase(
+  'Collapsed',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42" collapsed="true">' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Attributes.NotEditable = new SerializerTestCase(
+  'NotEditable',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42" editable="false">' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Attributes.NotMovable = new SerializerTestCase(
+  'NotMovable',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42" movable="false">' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Attributes.NotDeletable = new SerializerTestCase(
+  'NotDeletable',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<comment id="id******************" x="42" y="42" w="42" h="42" deletable="false">' +
+    '</comment>' +
+    '</xml>',
+);
+Serializer.Comments.Attributes.testCases = [
+  Serializer.Comments.Attributes.Collapsed,
+  Serializer.Comments.Attributes.NotEditable,
+  Serializer.Comments.Attributes.NotMovable,
+  Serializer.Comments.Attributes.NotDeletable,
+];
+
+Serializer.Comments.testSuites = [
+  Serializer.Comments.Coordinates,
+  Serializer.Comments.Size,
+  Serializer.Comments.Text,
+  Serializer.Comments.Attributes,
+];
+
 Serializer.testSuites = [
   Serializer.Attributes,
   Serializer.Fields,
   Serializer.Icons,
   Serializer.Connections,
   Serializer.Mutations,
+  Serializer.Comments,
 ];
 
 const runSerializerTestSuite = (serializer, deserializer, testSuite) => {

@@ -13,7 +13,7 @@
 // Former goog.module ID: Blockly.DragTarget
 
 import type {IDragTarget} from './interfaces/i_drag_target.js';
-import type {IDraggable} from './interfaces/i_draggable.js';
+import type {IDraggable} from './interfaces/i_draggable.old.js';
 import type {Rect} from './utils/rect.js';
 
 /**

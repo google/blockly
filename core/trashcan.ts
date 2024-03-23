@@ -22,7 +22,7 @@ import type {Abstract} from './events/events_abstract.js';
 import type {BlockDelete} from './events/events_block_delete.js';
 import * as eventUtils from './events/utils.js';
 import type {IAutoHideable} from './interfaces/i_autohideable.js';
-import type {IDraggable} from './interfaces/i_draggable.js';
+import type {IDraggable} from './interfaces/i_draggable.old.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IPositionable} from './interfaces/i_positionable.js';
 import type {UiMetrics} from './metrics_manager.js';

@@ -6,3 +6,4 @@
 
 export {CommentView} from './comments/comment_view.js';
 export {WorkspaceComment} from './comments/workspace_comment.js';
+export {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';

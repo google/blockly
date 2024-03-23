@@ -36,7 +36,7 @@ import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {ICopyable} from './interfaces/i_copyable.js';
-import type {IDraggable} from './interfaces/i_draggable.js';
+import type {IDraggable} from './interfaces/i_draggable.old.js';
 import {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';

@@ -10,15 +10,20 @@ import * as dom from '../utils/dom.js';
 import {Svg} from '../utils/svg.js';
 import * as layers from '../layers.js';
 import * as css from '../css.js';
-import {Coordinate, Size, browserEvents} from '../utils.js';
+import {Coordinate} from '../utils/coordinate.js';
+import {Size} from '../utils/size.js';
+import * as browserEvents from '../browser_events.js';
 import * as touch from '../touch.js';
 
 export class CommentView implements IRenderedElement {
   /** The root group element of the comment view. */
   private svgRoot: SVGGElement;
 
+  /** The group containing all of the top bar elements. */
+  private topBarGroup: SVGGElement;
+
   /** The rect background for the top bar. */
-  private topBar: SVGRectElement;
+  private topBarBackground: SVGRectElement;
 
   /** The delete icon that goes in the top bar. */
   private deleteIcon: SVGImageElement;
@@ -95,7 +100,8 @@ export class CommentView implements IRenderedElement {
     });
 
     ({
-      topBar: this.topBar,
+      topBarGroup: this.topBarGroup,
+      topBarBackground: this.topBarBackground,
       deleteIcon: this.deleteIcon,
       foldoutIcon: this.foldoutIcon,
       textPreview: this.textPreview,
@@ -113,6 +119,9 @@ export class CommentView implements IRenderedElement {
 
     // Set size to the default size.
     this.setSize(this.size);
+
+    // Set default transform (including inverted scale for RTL).
+    this.moveTo(new Coordinate(0, 0));
   }
 
   /**
@@ -123,20 +132,26 @@ export class CommentView implements IRenderedElement {
     svgRoot: SVGGElement,
     workspace: WorkspaceSvg,
   ): {
-    topBar: SVGRectElement;
+    topBarGroup: SVGGElement;
+    topBarBackground: SVGRectElement;
     deleteIcon: SVGImageElement;
     foldoutIcon: SVGImageElement;
     textPreview: SVGTextElement;
     textPreviewNode: Text;
   } {
-    const topBar = dom.createSvgElement(
-      Svg.RECT,
+    const topBarGroup = dom.createSvgElement(
+      Svg.G,
       {
         'class': 'blocklyCommentTopbar',
-        'x': 0,
-        'y': 0,
       },
       svgRoot,
+    );
+    const topBarBackground = dom.createSvgElement(
+      Svg.RECT,
+      {
+        'class': 'blocklyCommentTopbarBackground',
+      },
+      topBarGroup,
     );
     // TODO: Before merging, does this mean to override an individual image,
     // folks need to replace the whole media folder?
@@ -146,7 +161,7 @@ export class CommentView implements IRenderedElement {
         'class': 'blocklyDeleteIcon',
         'href': `${workspace.options.pathToMedia}delete-icon.svg`,
       },
-      svgRoot,
+      topBarGroup,
     );
     const foldoutIcon = dom.createSvgElement(
       Svg.IMAGE,
@@ -154,14 +169,14 @@ export class CommentView implements IRenderedElement {
         'class': 'blocklyFoldoutIcon',
         'href': `${workspace.options.pathToMedia}arrow-dropdown.svg`,
       },
-      svgRoot,
+      topBarGroup,
     );
     const textPreview = dom.createSvgElement(
       Svg.TEXT,
       {
         'class': 'blocklyCommentPreview blocklyCommentText blocklyText',
       },
-      svgRoot,
+      topBarGroup,
     );
     const textPreviewNode = document.createTextNode('');
     textPreview.appendChild(textPreviewNode);
@@ -182,7 +197,14 @@ export class CommentView implements IRenderedElement {
       this.onDeleteDown,
     );
 
-    return {topBar, deleteIcon, foldoutIcon, textPreview, textPreviewNode};
+    return {
+      topBarGroup,
+      topBarBackground,
+      deleteIcon,
+      foldoutIcon,
+      textPreview,
+      textPreviewNode,
+    };
   }
 
   /**
@@ -256,7 +278,7 @@ export class CommentView implements IRenderedElement {
    * elements to reflect the new size.
    */
   setSize(size: Size) {
-    const topBarSize = this.topBar.getBBox();
+    const topBarSize = this.topBarBackground.getBBox();
     const deleteSize = this.deleteIcon.getBBox();
     const foldoutSize = this.foldoutIcon.getBBox();
     const textPreviewSize = this.textPreview.getBBox();
@@ -272,8 +294,7 @@ export class CommentView implements IRenderedElement {
     this.svgRoot.setAttribute('height', `${size.height}`);
     this.svgRoot.setAttribute('width', `${size.width}`);
 
-    this.topBar.setAttribute('width', `${size.width}`);
-
+    this.updateTopBarSize(size);
     this.updateTextAreaSize(size, topBarSize);
     this.updateDeleteIconPosition(size, topBarSize, deleteSize);
     this.updateFoldoutIconPosition(topBarSize, foldoutSize);
@@ -284,9 +305,7 @@ export class CommentView implements IRenderedElement {
       deleteSize,
       resizeSize,
     );
-
-    this.resizeHandle.setAttribute('x', `${size.width - resizeSize.width}`);
-    this.resizeHandle.setAttribute('y', `${size.height - resizeSize.height}`);
+    this.updateResizeHandlePosition(size, resizeSize);
 
     this.onSizeChange(oldSize, this.size);
   }
@@ -336,6 +355,11 @@ export class CommentView implements IRenderedElement {
   /** Calculates the margin that should exist around the foldout icon. */
   private calcFoldoutMargin(topBarSize: Size, foldoutSize: Size) {
     return (topBarSize.height - foldoutSize.height) / 2;
+  }
+
+  /** Updates the size of the top bar to reflect the new size. */
+  private updateTopBarSize(size: Size) {
+    this.topBarBackground.setAttribute('width', `${size.width}`);
   }
 
   /** Updates the size of the text area elements to reflect the new size. */
@@ -407,6 +431,12 @@ export class CommentView implements IRenderedElement {
       `${textPreviewMargin + textPreviewSize.height / 2}`,
     );
     this.textPreview.setAttribute('width', `${textPreviewWidth}`);
+  }
+
+  /** Updates the position of the resize handle to reflect the new size. */
+  private updateResizeHandlePosition(size: Size, resizeSize: Size) {
+    this.resizeHandle.setAttribute('y', `${size.height - resizeSize.height}`);
+    this.resizeHandle.setAttribute('x', `${size.width - resizeSize.width}`);
   }
 
   /**
@@ -748,7 +778,7 @@ css.register(`
   cursor: se-resize;
 }
 
-.blocklyCommentTopbar {
+.blocklyCommentTopbarBackground {
   fill: var(--commentBorderColour);
   height: 24px;
 }
@@ -772,13 +802,11 @@ css.register(`
   transform: rotate(-90deg);
 }
 
-.blocklyRTL .blocklyComment {
+.blocklyRTL .blocklyCommentTopbar {
   transform: scale(-1, 1);
 }
 
 .blocklyRTL .blocklyCommentForeignObject {
-  /* Revert the scale and control RTL using direction instead. */
-  transform: scale(-1, 1);
   direction: rtl;
 }
 
@@ -789,6 +817,7 @@ css.register(`
 }
 
 .blocklyRTL .blocklyResizeHandle {
+  transform: scale(-1, 1);
   cursor: sw-resize;
 }
 `);

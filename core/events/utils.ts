@@ -513,14 +513,13 @@ export function get(
 }
 
 /**
- * Enable/disable a block depending on whether it is properly connected.
+ * Set if a block is invalid depending on whether it is properly connected.
  * Use this on applications where all blocks should be connected to a top block.
- * Recommend setting the 'disable' option to 'false' in the config so that
- * users don't try to re-enable disabled orphan blocks.
  *
  * @param event Custom data for event.
  */
 export function disableOrphans(event: Abstract) {
+  const invalidReason = 'orphaned block';
   if (event.type === MOVE || event.type === CREATE) {
     const blockEvent = event as BlockMove | BlockCreate;
     if (!blockEvent.workspaceId) {
@@ -539,17 +538,17 @@ export function disableOrphans(event: Abstract) {
       try {
         recordUndo = false;
         const parent = block.getParent();
-        if (parent && parent.isEnabled()) {
+        if (parent && !parent.hasInvalidReason(invalidReason)) {
           const children = block.getDescendants(false);
           for (let i = 0, child; (child = children[i]); i++) {
-            child.setEnabled(true);
+            child.setInvalidReason(false, invalidReason);
           }
         } else if (
           (block.outputConnection || block.previousConnection) &&
           !eventWorkspace.isDragging()
         ) {
           do {
-            block.setEnabled(false);
+            block.setInvalidReason(true, invalidReason);
             block = block.getNextBlock();
           } while (block);
         }

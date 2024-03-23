@@ -806,7 +806,7 @@ suite('Procedures', function () {
   suite('enabling and disabling procedure blocks', function () {
     test(
       'if a procedure definition is disabled, the procedure caller ' +
-        'is also disabled',
+        'is invalid',
       function () {
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
@@ -815,15 +815,32 @@ suite('Procedures', function () {
         this.clock.runAll();
 
         chai.assert.isFalse(
-          callBlock.isEnabled(),
-          'Expected the caller block to be disabled',
+          callBlock.isValid(),
+          'Expected the caller block to be invalid',
+        );
+      },
+    );
+
+    test(
+      'if a procedure definition is invalid, the procedure caller ' +
+        'is also invalid',
+      function () {
+        const defBlock = createProcDefBlock(this.workspace);
+        const callBlock = createProcCallBlock(this.workspace);
+
+        defBlock.setInvalidReason(true, 'test reason');
+        this.clock.runAll();
+
+        chai.assert.isFalse(
+          callBlock.isValid(),
+          'Expected the caller block to be invalid',
         );
       },
     );
 
     test(
       'if a procedure definition is enabled, the procedure caller ' +
-        'is also enabled',
+        'is valid',
       function () {
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
@@ -834,8 +851,8 @@ suite('Procedures', function () {
         this.clock.runAll();
 
         chai.assert.isTrue(
-          callBlock.isEnabled(),
-          'Expected the caller block to be enabled',
+          callBlock.isValid(),
+          'Expected the caller block to be valid',
         );
       },
     );
@@ -861,6 +878,36 @@ suite('Procedures', function () {
         );
       },
     );
+  });
+
+  suite('procedures_ifreturn blocks', function () {
+    test('ifreturn block is invalid outside of def block', function () {
+      const ifreturnBlock = Blockly.serialization.blocks.append(
+        {'type': 'procedures_ifreturn'},
+        this.workspace,
+      );
+      this.clock.runAll();
+      chai.assert.isFalse(
+        ifreturnBlock.isValid(),
+        'Expected the ifreturn block to be invalid',
+      );
+    });
+
+    test('ifreturn block is valid inside of def block', function () {
+      const defBlock = createProcDefBlock(this.workspace);
+      const ifreturnBlock = Blockly.serialization.blocks.append(
+        {'type': 'procedures_ifreturn'},
+        this.workspace,
+      );
+      defBlock
+        .getInput('STACK')
+        .connection.connect(ifreturnBlock.previousConnection);
+      this.clock.runAll();
+      chai.assert.isTrue(
+        ifreturnBlock.isValid(),
+        'Expected the ifreturn block to be valid',
+      );
+    });
   });
 
   suite('deleting procedure blocks', function () {

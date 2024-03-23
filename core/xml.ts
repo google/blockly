@@ -250,6 +250,15 @@ export function blockToDom(
   if (!block.isEnabled()) {
     element.setAttribute('disabled', 'true');
   }
+  if (!block.isValid()) {
+    // Set the value of the attribute to a comma-separated list of reasons.
+    // Use encodeURIComponent to escape commas in the reasons so that they
+    // won't be confused with separator commas.
+    element.setAttribute(
+      'invalid-reasons',
+      Array.from(block.getInvalidReasons()).map(encodeURIComponent).join(','),
+    );
+  }
   if (!block.isOwnDeletable()) {
     element.setAttribute('deletable', 'false');
   }
@@ -969,6 +978,14 @@ function domToBlockHeadless(
   const disabled = xmlBlock.getAttribute('disabled');
   if (disabled) {
     block.setEnabled(disabled !== 'true' && disabled !== 'disabled');
+  }
+  const invalidReasons = xmlBlock.getAttribute('invalid-reasons');
+  if (invalidReasons !== null) {
+    for (const reason of invalidReasons.split(',')) {
+      // Use decodeURIComponent to restore characters that were encoded in the
+      // value, such as commas.
+      block.setInvalidReason(true, decodeURIComponent(reason));
+    }
   }
   const deletable = xmlBlock.getAttribute('deletable');
   if (deletable) {

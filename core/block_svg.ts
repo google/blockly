@@ -121,7 +121,7 @@ export class BlockSvg
   /** Is this block a BlockSVG? */
   override readonly rendered = true;
 
-  private visuallyDisabled = false;
+  private visuallyDisabledOrInvalid = false;
 
   /**
    * Is this block currently rendering? Used to stop recursive render calls
@@ -530,7 +530,7 @@ export class BlockSvg
     }
 
     if (!collapsed) {
-      this.updateDisabled();
+      this.updateDisabledOrInvalid();
       this.removeInput(collapsedInputName);
       return;
     }
@@ -877,18 +877,21 @@ export class BlockSvg
    *
    * @internal
    */
-  updateDisabled() {
-    const disabled = !this.isEnabled() || this.getInheritedDisabled();
+  updateDisabledOrInvalid() {
+    const disabledOrInvalid =
+      !this.isEnabled() ||
+      !this.isValid() ||
+      this.getInheritedDisabledOrInvalid();
 
-    if (this.visuallyDisabled === disabled) {
-      this.getNextBlock()?.updateDisabled();
+    if (this.visuallyDisabledOrInvalid === disabledOrInvalid) {
+      this.getNextBlock()?.updateDisabledOrInvalid();
       return;
     }
 
     this.applyColour();
-    this.visuallyDisabled = disabled;
+    this.visuallyDisabledOrInvalid = disabledOrInvalid;
     for (const child of this.getChildren(false)) {
-      child.updateDisabled();
+      child.updateDisabledOrInvalid();
     }
   }
 
@@ -1021,8 +1024,32 @@ export class BlockSvg
   override setEnabled(enabled: boolean) {
     if (this.isEnabled() !== enabled) {
       super.setEnabled(enabled);
-      if (!this.getInheritedDisabled()) {
-        this.updateDisabled();
+      if (!this.getInheritedDisabledOrInvalid()) {
+        this.updateDisabledOrInvalid();
+      }
+    }
+  }
+
+  /**
+   * Add or remove a reason why the block might be invalid. If a block has
+   * any reasons to be invalid, then the block itself will be considered
+   * invalid. A block could be invalid for multiple independent reasons
+   * simultaneously. Automatic processes in the Blockly library and in plugins
+   * can call this to cooperatively determine whether the block is invalid.
+   *
+   * @param invalid If true, then the block should be considered invalid for
+   *     at least the provided reason, otherwise the block is no longer invalid
+   *     for that reason.
+   * @param reason A language-neutral identifier for a reason why the block
+   *     could be invalid. Call this method again with the same identifier to
+   *     update whether the block is currently invalid for this reason.
+   */
+  override setInvalidReason(invalid: boolean, reason: string): void {
+    const wasValid = this.isValid();
+    super.setInvalidReason(invalid, reason);
+    if (this.isValid() !== wasValid) {
+      if (!this.getInheritedDisabledOrInvalid()) {
+        this.updateDisabledOrInvalid();
       }
     }
   }
@@ -1505,8 +1532,8 @@ export class BlockSvg
       this.updateCollapsed_();
     }
 
-    if (!this.isEnabled()) {
-      this.updateDisabled();
+    if (!this.isEnabled() || !this.isValid()) {
+      this.updateDisabledOrInvalid();
     }
 
     this.workspace.getRenderer().render(this);

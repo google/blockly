@@ -365,18 +365,20 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     // Don't change state if:
     //   * It's at the start of a drag.
     //   * It's not a move event.
-    if (!ws.isDragging || ws.isDragging() || e.type !== Events.BLOCK_MOVE) {
+    if (
+      !ws.isDragging ||
+      ws.isDragging() ||
+      (e.type !== Events.BLOCK_MOVE && e.type !== Events.BLOCK_CREATE)
+    ) {
       return;
     }
-    const enabled = !!this.getSurroundLoop();
-    this.setWarningText(
-      enabled ? null : Msg['CONTROLS_FLOW_STATEMENTS_WARNING'],
-    );
+    const valid = !!this.getSurroundLoop();
+    this.setWarningText(valid ? null : Msg['CONTROLS_FLOW_STATEMENTS_WARNING']);
     if (!this.isInFlyout) {
       const group = Events.getGroup();
       // Makes it so the move and the disable event get undone together.
       Events.setGroup(e.group);
-      this.setEnabled(enabled);
+      this.setInvalidReason(!valid, 'unparented control flow');
       Events.setGroup(group);
     }
   },

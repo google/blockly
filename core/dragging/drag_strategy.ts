@@ -5,7 +5,9 @@
  */
 
 import * as eventUtils from '../events/utils.js';
+import type {ComponentManager} from '../component_manager.js';
 import type {Coordinate} from '../utils/coordinate.js';
+import type {IDeleteArea} from '../interfaces/i_delete_area.js';
 import type {IDragTarget} from '../interfaces/i_drag_target.js';
 import type {IDraggable} from '../interfaces/i_draggable.js';
 import type {IDragStrategy} from '../interfaces/i_draggable.js';
@@ -67,7 +69,11 @@ export abstract class DragStrategy<T extends IDraggable>
    *     if any.
    */
   drag(newLoc: Coordinate, eOrTarget?: PointerEvent | IDragTarget): void {
-    const _target = this.getDragTarget(eOrTarget);
+    const target = this.getDragTarget(eOrTarget);
+    this.move(newLoc);
+    this.updateDragTargets(target);
+    const wouldBeDeleted = this.wouldBeDeletedBy(target, this.couldConnect());
+    this.dragInner(newLoc, target, wouldBeDeleted);
   }
 
   /**
@@ -83,7 +89,7 @@ export abstract class DragStrategy<T extends IDraggable>
    *     be supplied as an alternative to providing a PointerEvent for
    *     programatic drags.
    */
-  endDrag(newLoc: Coordinate, eOrTarget?: PointerEvent | IDragTarget): void {
+  endDrag(_newLoc: Coordinate, eOrTarget?: PointerEvent | IDragTarget): void {
     const _target = this.getDragTarget(eOrTarget);
   }
 
@@ -119,4 +125,75 @@ export abstract class DragStrategy<T extends IDraggable>
       return null;
     }
   }
+
+  /**
+   * Actually move the draggable.
+   *
+   * @param newLoc Workspace coordinate to which the draggable has
+   *     been dragged.
+   */
+  protected abstract move(_newLoc: Coordinate): void;
+
+  /**
+   * Call callbacks on previous and/or current drag target.
+   *
+   * @param target Drag target the pointer is over, if any.
+   */
+  protected updateDragTargets(target: IDragTarget | null) {
+    if (this.dragTarget !== target) {
+      this.dragTarget?.onDragExit(this.draggable);
+      target?.onDragEnter(this.draggable);
+    }
+    target?.onDragOver(this.draggable);
+    this.dragTarget = target;
+  }
+
+  /**
+   * @param newLoc Workspace coordinate to which the draggable has
+   *     been dragged.
+   * @returns True iff the draggable could could connect (e.g. block
+   *     to other block) if the drag finished at the current location.
+   *     This is passed to IDeleteArea's .wouldDelete() method.
+   */
+  protected couldConnect(_newLoc: Coordinate): boolean {
+    return false;
+  }
+
+  /**
+   * Returns true iff target would delete draggable if the latter was
+   * dropped at this time.
+   *
+   * @param target Drag target the pointer is over, if any.
+   * @param couldConnect Set to true if the draggable could could
+   *     connect.  This is passed to IDeleteArea's .wouldDelete()
+   *     method if appropriate.
+   * @returns True iff target would delete draggable.
+   */
+  private wouldBeDeletedBy(target: IDragTarget, couldConnect = false): boolean {
+    if (!target) return false;
+
+    const componentManager = this.workspace_.getComponentManager();
+    const isDeleteArea = componentManager.hasCapability(
+      target.id,
+      ComponentManager.Capability.DELETE_AREA,
+    );
+    if (!isDeleteArea) return false;
+
+    return (target as IDeleteArea).wouldDelete(this.draggable, couldConnect);
+  }
+
+  /**
+   * Does any type-specific drag work (e.g. connection previews).
+   *
+   * @param newLoc Workspace coordinate to which the draggable has
+   *     been dragged.
+   * @param target Drag target the pointer is over, if any.
+   * @param wouldBeDeleted Set to true to indicate that draggable
+   *     would be deleted if droppeda at the current location.
+   */
+  protected dragInner(
+    _newLoc: Coordinate,
+    _target: IDragTarget | null,
+    _wouldBeDeleted: boolean,
+  ): void {}
 }

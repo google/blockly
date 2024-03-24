@@ -9,10 +9,13 @@ import * as dom from '../utils/dom.js';
 import * as registry from '../registry.js';
 import * as eventUtils from '../events/utils.js';
 import type {BlockSvg} from '../block_svg.js';
+import type {Coordinate} from '../utils/coordinate.js';
 import {DragStrategy} from './drag_strategy.js';
 import type {IConnectionPreviewer} from '../interfaces/i_connection_previewer.js';
+import type {IDragTarget} from '../interfaces/i_drag_target.js';
 import type {RenderedConnection} from '../rendered_connection.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
+import {config} from './config.js';
 
 /** Represents a nearby valid connection. */
 interface ConnectionCandidate {
@@ -35,6 +38,7 @@ export class BlockDragStrategy extends DragStrategy<BlockSvg> {
   private connectionPreviewer: IConnectionPreviewer;
 
   private connectionCandidate: ConnectionCandidate | null = null;
+  private newConnectionCandidate: ConnectionCandidate | null = null;
 
   /** The parent block at the start of the drag. */
   private startParentConn: RenderedConnection | null = null;
@@ -123,5 +127,123 @@ export class BlockDragStrategy extends DragStrategy<BlockSvg> {
       this.draggable.getDescendants(false),
     );
     eventUtils.fire(event);
+  }
+
+  protected move(newLoc: Coordinate) {
+    this.draggable.moveDuringDrag(newLoc);
+  }
+
+  /**
+   * Calls getConnectionCandidate, stores results in
+   * this.newCandidateConnection for later use by
+   * updateConnectionPreview, and returns true iff a candidate
+   * connection was found.
+   */
+  protected couldConnect(_newLoc: Coordinate): boolean {
+    // Not sure best way to compute delta.
+    const delta = new Coordinate();
+    this.newConnectionCandidate = getConnectionCandidate(delta);
+
+    return Boolean(this.newConnectionCandidate);
+  }
+
+  /**
+   * Returns the closest valid candidate connection, if one can be found.
+   *
+   * Valid neighbour connections are within the configured start radius, with a
+   * compatible type (input, output, etc) and connection check.
+   *
+   * @param delta How far the pointer has moved from the position
+   *     at the start of the drag, in pixel units.
+   */
+  private getConnectionCandidate(
+    delta: Coordinate,
+  ): ConnectionCandidate | null {
+    const localConns = this.getLocalConnections();
+    let radius = this.connectionCandidate
+      ? config.connectingSnapRadius
+      : config.snapRadius;
+    let candidate = null;
+
+    for (const conn of localConns) {
+      const {connection: neighbour, radius: rad} = conn.closest(radius, delta);
+      if (neighbour) {
+        candidate = {
+          local: conn,
+          neighbour: neighbour,
+          distance: rad,
+        };
+        radius = rad;
+      }
+    }
+    return candidate;
+  }
+
+  /**
+   * Returns all of the connections we might connect to blocks on the
+   * workspace. Includes any connections on the dragging block, and
+   * any last next connection on the stack (if one exists).
+   */
+  private getLocalConnections(): RenderedConnection[] {
+    const available = this.draggable.getConnections_(false);
+    const lastOnStack = this.draggable.lastConnectionInStack(true);
+    if (lastOnStack && lastOnStack !== this.draggable.nextConnection) {
+      available.push(lastOnStack);
+    }
+    return available;
+  }
+
+  /**
+   * Update the cursor (and possibly the trash can lid) to reflect
+   * whether the dragging block would be deleted if released
+   * immediately, then update the connection previewer.
+   */
+  protected dragInner(
+    newLoc: Coordinate,
+    target: IDragTarget | null,
+    wouldBeDeleted: boolean,
+  ): void {
+    this.draggable.setDeleteStyle(wouldBeDeleted);
+    // this.updateConnectionPreview(block, delta);
+  }
+
+  /**
+   * @param dragDelta How far the pointer has moved from the position
+   *     at the start of the drag, in pixel units.
+   */
+  private updateConnectionPreview() {
+    const currCandidate = this.connectionCandidate;
+    const newCandidate = this.newConnectionCandidate;
+    if (!newCandidate) {
+      this.connectionPreviewer.hidePreview();
+      this.connectionCandidate = null;
+      return;
+    }
+    const candidate =
+      currCandidate &&
+      this.currCandidateIsBetter(currCandidate, delta, newCandidate)
+        ? currCandidate
+        : newCandidate;
+    this.connectionCandidate = candidate;
+    const {local, neighbour} = candidate;
+    if (
+      (local.type === ConnectionType.OUTPUT_VALUE ||
+        local.type === ConnectionType.PREVIOUS_STATEMENT) &&
+      neighbour.isConnected() &&
+      !neighbour.targetBlock()!.isInsertionMarker() &&
+      !this.orphanCanConnectAtEnd(
+        draggingBlock,
+        neighbour.targetBlock()!,
+        local.type,
+      )
+    ) {
+      this.connectionPreviewer.previewReplacement(
+        local,
+        neighbour,
+        neighbour.targetBlock()!,
+      );
+      return;
+    }
+    this.connectionPreviewer.previewConnection(local, neighbour);
   }
 }

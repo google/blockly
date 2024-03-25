@@ -53,7 +53,7 @@ export interface State {
   movable?: boolean;
   editable?: boolean;
   enabled?: boolean;
-  invalid?: string[];
+  invalidReasons?: string[];
   inline?: boolean;
   data?: string;
   extraState?: AnyDuringMigration;
@@ -162,7 +162,7 @@ function saveAttributes(block: Block, state: State) {
     state['enabled'] = false;
   }
   if (!block.isValid()) {
-    state['invalid'] = Array.from(block.getInvalidReasons());
+    state['invalidReasons'] = Array.from(block.getInvalidReasons());
   }
   if (!block.isOwnDeletable()) {
     state['deletable'] = false;
@@ -526,8 +526,8 @@ function loadAttributes(block: Block, state: State) {
   if (state['enabled'] === false) {
     block.setEnabled(false);
   }
-  if (Array.isArray(state['invalid'])) {
-    for (const reason of state['invalid']) {
+  if (Array.isArray(state['invalidReasons'])) {
+    for (const reason of state['invalidReasons']) {
       block.setInvalidReason(true, reason);
     }
   }

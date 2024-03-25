@@ -513,7 +513,7 @@ function mathModes(values) {
   }
   for (var j = 0; j < counts.length; j++) {
     if (counts[j][1] === maxCount) {
-        modes.push(counts[j][0]);
+      modes.push(counts[j][0]);
     }
   }
   return modes;
@@ -527,7 +527,7 @@ function mathStandardDeviation(numbers) {
   for (var j = 0; j < n; j++) {
     variance += Math.pow(numbers[j] - mean, 2);
   }
-  variance = variance / n;
+  variance /= n;
   return Math.sqrt(variance);
 }
 

@@ -87,8 +87,8 @@ export function getInjectionDivXY(element: Element): Coordinate {
   let y = 0;
   while (element) {
     const xy = getRelativeXY(element);
-    x = x + xy.x;
-    y = y + xy.y;
+    x += xy.x;
+    y += xy.y;
     const classes = element.getAttribute('class') || '';
     if ((' ' + classes + ' ').includes(' injectionDiv ')) {
       break;

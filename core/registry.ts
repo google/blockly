@@ -271,7 +271,7 @@ export function hasItem<T>(type: string | Type<T>, name: string): boolean {
 /**
  * Normalize a string to be used as a type.  Trim whitespaces and lowercase.
  *
- * @param name The type. (Ex. 'FiELd ')
+ * @param type The type. (Ex. 'FiELd ')
  * @returns A normalized string. (Ex. 'field')
  */
 function normalizeType(type: any): string {

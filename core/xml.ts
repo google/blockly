@@ -899,7 +899,7 @@ function applyNextTagNodes(
  *
  * @param xmlBlock XML block element.
  * @param workspace The workspace.
- * @param parentConnection The parent connection to to connect this block to
+ * @param parentConnection The parent connection to connect this block to
  *     after instantiating.
  * @param connectedToParentNext Whether the provided parent connection is a next
  *     connection, rather than output or statement.

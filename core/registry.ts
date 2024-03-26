@@ -43,7 +43,7 @@ export const TEST_ONLY = {typeMap};
  * This enables an error to be thrown if a name of conflicting case is used.
  */
 const noCaseNameMap: {
-  [key: string]: {[key: string]: string}
+  [key: string]: {[key: string]: string};
 } = Object.create(null);
 
 /**
@@ -168,7 +168,10 @@ export function register<T>(
  * @param registryItem A class or object that we are checking for the required
  *     properties.
  */
-function validateItem(type: string, registryItem: Function | AnyDuringMigration) {
+function validateItem(
+  type: string,
+  registryItem: Function | AnyDuringMigration,
+) {
   switch (type) {
     case String(Type.FIELD):
       if (typeof registryItem.fromJson !== 'function') {

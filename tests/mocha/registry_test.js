@@ -93,7 +93,7 @@ suite('Registry', function () {
     suite('Name normalization', function () {
       test('Padded', function () {
         chai.assert.isTrue(
-          Blockly.registry.hasItem('  test  ', '  test_name  ')
+          Blockly.registry.hasItem('  test  ', '  test_name  '),
         );
       });
 
@@ -143,7 +143,7 @@ suite('Registry', function () {
     suite('Name normalization', function () {
       test('Padded', function () {
         chai.assert.isNotNull(
-          Blockly.registry.getClass('  test  ', '  test_name'  )
+          Blockly.registry.getClass('  test  ', '  test_name'),
         );
       });
 
@@ -193,7 +193,7 @@ suite('Registry', function () {
     suite('Name normalization', function () {
       test('Padded', function () {
         chai.assert.isNotNull(
-          Blockly.registry.getObject('  test  ', '  test_name  ')
+          Blockly.registry.getObject('  test  ', '  test_name  '),
         );
       });
 

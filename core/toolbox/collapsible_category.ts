@@ -76,7 +76,10 @@ export class CollapsibleToolboxCategory
         // Separators can exist as either a flyout item or a toolbox item so
         // decide where it goes based on the type of the previous item.
         if (
-          !registry.hasItem(registry.Type.TOOLBOX_ITEM, itemDef['kind'].toLowerCase()) ||
+          !registry.hasItem(
+            registry.Type.TOOLBOX_ITEM,
+            itemDef['kind'].toLowerCase(),
+          ) ||
           (itemDef['kind'].toLowerCase() ===
             ToolboxSeparator.registrationName &&
             prevIsFlyoutItem)

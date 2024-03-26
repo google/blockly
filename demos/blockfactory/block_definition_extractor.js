@@ -71,7 +71,7 @@ BlockDefinitionExtractor.newDomElement_ = function(name, opt_attrs, opt_text) {
  * requested type.
  *
  * @param {string} type Type name of desired connection constraint.
- * @return {!Element} The <block> representing the the constraint type.
+ * @return {!Element} The <block> representing the constraint type.
  * @private
  */
 BlockDefinitionExtractor.buildBlockForType_ = function(type) {

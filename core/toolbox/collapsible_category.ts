@@ -30,7 +30,8 @@ export class CollapsibleToolboxCategory
   implements ICollapsibleToolboxItem
 {
   /** Name used for registering a collapsible toolbox category. */
-  static override registrationName = 'collapsibleCategory';
+  /** Must be lowercase. */
+  static override registrationName = 'collapsiblecategory';
 
   /** Container for any child categories. */
   protected subcategoriesDiv_: HTMLDivElement | null = null;
@@ -75,7 +76,7 @@ export class CollapsibleToolboxCategory
         // Separators can exist as either a flyout item or a toolbox item so
         // decide where it goes based on the type of the previous item.
         if (
-          !registry.hasItem(registry.Type.TOOLBOX_ITEM, itemDef['kind']) ||
+          !registry.hasItem(registry.Type.TOOLBOX_ITEM, itemDef['kind'].toLowerCase()) ||
           (itemDef['kind'].toLowerCase() ===
             ToolboxSeparator.registrationName &&
             prevIsFlyoutItem)
@@ -109,7 +110,7 @@ export class CollapsibleToolboxCategory
     }
     const ToolboxItemClass = registry.getClass(
       registry.Type.TOOLBOX_ITEM,
-      registryName,
+      registryName.toLowerCase(),
     );
     const toolboxItem = new ToolboxItemClass!(
       itemDef,

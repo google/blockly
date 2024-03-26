@@ -24,7 +24,6 @@ import type {ToolboxItem} from './toolbox/toolbox_item.js';
 import type {IPaster} from './interfaces/i_paster.js';
 import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IConnectionPreviewer} from './interfaces/i_connection_previewer.js';
-import * as deprecation from './utils/deprecation.js';
 
 /**
  * A map of maps. With the keys being the type and name of the class we are
@@ -37,6 +36,15 @@ const typeMap: {
   };
 } = Object.create(null);
 export const TEST_ONLY = {typeMap};
+
+/**
+ * A map of maps.  Record the case-insensitive version of each name.
+ * e.g. {'field': {'field_angle': 'fIeLd_AnGle'}}
+ * This enables an error to be thrown if a name of conflicting case is used.
+ */
+const noCaseNameMap: {
+  [key: string]: {[key: string]: string}
+} = Object.create(null);
 
 /**
  * The string used to register the default class for a type of plugin.
@@ -123,7 +131,7 @@ export function register<T>(
     | AnyDuringMigration,
   opt_allowOverrides?: boolean,
 ): void {
-  type = normalizeName(`${type}`);
+  type = normalizeType(type);
   name = normalizeName(name);
   if (!registryItem) {
     throw Error('Can not register a null value');
@@ -132,10 +140,12 @@ export function register<T>(
   // If the type registry has not been created, create it.
   if (!typeRegistry) {
     typeRegistry = typeMap[type] = Object.create(null);
+    noCaseNameMap[type] = Object.create(null);
   }
 
   // Validate that the given class has all the required properties.
-  validate(type, registryItem);
+  validateItem(type, registryItem);
+  validateCase(type, name);
 
   // Don't throw an error if opt_allowOverrides is true.
   // Don't throw an error if the registryItem is not changing.
@@ -147,6 +157,7 @@ export function register<T>(
     throw Error(`Name "${name}" with type "${type}" already registered`);
   }
   typeRegistry[name] = registryItem;
+  noCaseNameMap[type][name.toLowerCase()] = name;
 }
 
 /**
@@ -157,13 +168,26 @@ export function register<T>(
  * @param registryItem A class or object that we are checking for the required
  *     properties.
  */
-function validate(type: string, registryItem: Function | AnyDuringMigration) {
+function validateItem(type: string, registryItem: Function | AnyDuringMigration) {
   switch (type) {
     case String(Type.FIELD):
       if (typeof registryItem.fromJson !== 'function') {
-        throw Error('Type "' + type + '" must have a fromJson function');
+        throw Error(`Type "${type}" must have a fromJson function`);
       }
       break;
+  }
+}
+
+/**
+ * Checks that the name hasn't been registered using a different case.
+ *
+ * @param type The type of the plugin. (e.g. Field, Renderer)
+ * @param name The plugin's name. (Ex. field_angle, geras)
+ */
+function validateCase(type: string, name: string) {
+  const caseName = noCaseNameMap[type]?.[name.toLowerCase()];
+  if (caseName && caseName !== name) {
+    throw Error(`Inconsistent case with name "${name}" vs "${caseName}"`);
   }
 }
 
@@ -175,14 +199,16 @@ function validate(type: string, registryItem: Function | AnyDuringMigration) {
  * @param name The plugin's name. (Ex. field_angle, geras)
  */
 export function unregister<T>(type: string | Type<T>, name: string) {
-  type = normalizeName(`${type}`);
+  type = normalizeType(type);
   name = normalizeName(name);
+  validateCase(type, name);
   const typeRegistry = typeMap[type];
   if (!typeRegistry || !typeRegistry[name]) {
     console.warn(`Unable to unregister [${name}][${type}] from the registry`);
     return;
   }
-  delete typeMap[type][name];
+  delete typeRegistry[name];
+  delete noCaseNameMap[type][name.toLowerCase()];
 }
 
 /**
@@ -202,8 +228,9 @@ function getItem<T>(
   name: string,
   opt_throwIfMissing?: boolean,
 ): (new (...p1: AnyDuringMigration[]) => T) | null | AnyDuringMigration {
-  type = normalizeName(`${type}`);
+  type = normalizeType(type);
   name = normalizeName(name);
+  validateCase(type, name);
   const typeRegistry = typeMap[type];
   if (!typeRegistry || !typeRegistry[name]) {
     const msg = `Unable to find [${name}][${type}] in the registry.`;
@@ -228,8 +255,9 @@ function getItem<T>(
  *     otherwise.
  */
 export function hasItem<T>(type: string | Type<T>, name: string): boolean {
-  type = normalizeName(`${type}`);
+  type = normalizeType(type);
   name = normalizeName(name);
+  validateCase(type, name);
   const typeRegistry = typeMap[type];
   if (!typeRegistry) {
     return false;
@@ -238,16 +266,26 @@ export function hasItem<T>(type: string | Type<T>, name: string): boolean {
 }
 
 /**
- * Normalize a string to be used as a key.  By default, lowercase and trimmed.
+ * Normalize a string to be used as a type.  Trim whitespaces and lowercase.
  *
- * @param name The key's name. (Ex. 'FiELd_AnGlE ')
+ * @param name The type. (Ex. 'FiELd ')
+ * @returns A normalized string. (Ex. 'field')
+ */
+function normalizeType(type: any): string {
+  type = `${type}`.trim().toLowerCase();
+  if (!type) throw Error('Empty type');
+  return type;
+}
+
+/**
+ * Normalize a string to be used as a key.  Trim whitespaces.
+ *
+ * @param name The key's name. (Ex. 'field_angle ')
  * @returns A normalized string. (Ex. 'field_angle')
  */
 function normalizeName(name: string): string {
-  // Do we need this type checking?  We are using TypeScript after all.
-  // But there's a unit test that depends on throwing this error.
   if (typeof name !== 'string') throw Error('Invalid name');
-  name = name.toLowerCase().trim();
+  name = name.trim();
   if (!name) throw Error('Empty name');
   return name;
 }
@@ -305,9 +343,9 @@ export function getAllItems<T>(
   opt_throwIfMissing?: boolean,
 ): {[key: string]: T | null | (new (...p1: AnyDuringMigration[]) => T)} | null {
   if (typeof opt_cased !== 'undefined') {
-    deprecation.warn('Blockly.registry.getAllItems', 'v11', 'v12');
+    console.warn('Blockly.registry.getAllItems deprecated "cased" argument');
   }
-  type = normalizeName(`${type}`);
+  type = normalizeType(type);
   const typeRegistry = typeMap[type];
   if (!typeRegistry) {
     const msg = `Unable to find [${type}] in the registry.`;

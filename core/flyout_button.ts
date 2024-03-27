@@ -20,11 +20,12 @@ import * as style from './utils/style.js';
 import {Svg} from './utils/svg.js';
 import type * as toolbox from './utils/toolbox.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import type {IASTNodeLocationSvg} from './blockly.js';
 
 /**
  * Class for a button or label in the flyout.
  */
-export class FlyoutButton {
+export class FlyoutButton implements IASTNodeLocationSvg {
   /** The horizontal margin around the text in the button. */
   static TEXT_MARGIN_X = 5;
 
@@ -54,6 +55,12 @@ export class FlyoutButton {
 
   /** The SVG element with the text of the label or button. */
   private svgText: SVGTextElement | null = null;
+
+  /**
+   * Holds the cursors svg element when the cursor is attached to the button.
+   * This is null if there is no cursor on the button.
+   */
+  cursorSvg: SVGElement | null = null;
 
   /**
    * @param workspace The workspace in which to place this button.
@@ -266,6 +273,31 @@ export class FlyoutButton {
     if (this.svgText) {
       this.workspace.getThemeManager().unsubscribe(this.svgText);
     }
+  }
+
+  /**
+   * Add the cursor SVG to this buttons's SVG group.
+   *
+   * @param cursorSvg The SVG root of the cursor to be added to the button SVG
+   *     group.
+   */
+  setCursorSvg(cursorSvg: SVGElement) {
+    if (!cursorSvg) {
+      this.cursorSvg = null;
+      return;
+    }
+    if (this.svgGroup) {
+      this.svgGroup.appendChild(cursorSvg);
+      this.cursorSvg = cursorSvg;
+    }
+  }
+
+  /**
+   * Required by IASTNodeLocationSvg, but not used. A marker cannot be set on a button.
+   * If the 'mark' shortcut is used on a button, its associated callback function is triggered.
+   */
+  setMarkerSvg() {
+    throw new Error('Attempted to set a marker on a button.');
   }
 
   /**

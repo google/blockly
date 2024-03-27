@@ -53,5 +53,8 @@ export interface IDragStrategy {
    * @param e PointerEvent that finished the drag.  Can be
    *     used to check modifier keys, etc.
    */
-  endDrag(newLoc: Coordinate, e?: PointerEvent): void;
+  endDrag(e?: PointerEvent): void;
+
+  /** Moves the draggable back to where it was at the start of the drag. */
+  moveToStart(): void;
 }

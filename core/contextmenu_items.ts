@@ -466,7 +466,7 @@ export function registerDisable() {
         block!.workspace.options.disable &&
         block!.isEditable()
       ) {
-        if (block!.getInheritedDisabled()) {
+        if (block!.getInheritedDisabledOrInvalid() || !block!.isValid()) {
           return 'disabled';
         }
         return 'enabled';

@@ -53,6 +53,7 @@ export interface State {
   movable?: boolean;
   editable?: boolean;
   enabled?: boolean;
+  invalidReasons?: string[];
   inline?: boolean;
   data?: string;
   extraState?: AnyDuringMigration;
@@ -159,6 +160,9 @@ function saveAttributes(block: Block, state: State) {
   }
   if (!block.isEnabled()) {
     state['enabled'] = false;
+  }
+  if (!block.isValid()) {
+    state['invalidReasons'] = Array.from(block.getInvalidReasons());
   }
   if (!block.isOwnDeletable()) {
     state['deletable'] = false;
@@ -521,6 +525,11 @@ function loadAttributes(block: Block, state: State) {
   }
   if (state['enabled'] === false) {
     block.setEnabled(false);
+  }
+  if (Array.isArray(state['invalidReasons'])) {
+    for (const reason of state['invalidReasons']) {
+      block.setInvalidReason(true, reason);
+    }
   }
   if (state['inline'] !== undefined) {
     block.setInputsInline(state['inline']);

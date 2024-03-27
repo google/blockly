@@ -163,7 +163,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
   var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
   var lastInput = null;
   while (contentsBlock) {
-    if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
+    if (!contentsBlock.disabled && contentsBlock.isValid() && !contentsBlock.getInheritedDisabledOrInvalid()) {
       var fields = FactoryUtils.getFieldsJson_(
           contentsBlock.getInputTargetBlock('FIELDS'));
       for (var i = 0; i < fields.length; i++) {
@@ -277,7 +277,7 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
                'input_end_row': 'appendEndRowInput'};
   var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
   while (contentsBlock) {
-    if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
+    if (!contentsBlock.disabled && contentsBlock.isValid() && !contentsBlock.getInheritedDisabledOrInvalid()) {
       var name = '';
       // Dummy inputs don't have names.  Other inputs do.
       if (contentsBlock.type !== 'input_dummy' &&
@@ -377,7 +377,7 @@ FactoryUtils.connectionLineJs_ = function(functionName, typeName, workspace) {
 FactoryUtils.getFieldsJs_ = function(block) {
   var fields = [];
   while (block) {
-    if (!block.disabled && !block.getInheritedDisabled()) {
+    if (!block.disabled && block.isValid() && !block.getInheritedDisabledOrInvalid()) {
       switch (block.type) {
         case 'field_static':
           // Result: 'hello'
@@ -484,7 +484,7 @@ FactoryUtils.getFieldsJs_ = function(block) {
 FactoryUtils.getFieldsJson_ = function(block) {
   var fields = [];
   while (block) {
-    if (!block.disabled && !block.getInheritedDisabled()) {
+    if (!block.disabled && block.isValid() && !block.getInheritedDisabledOrInvalid()) {
       switch (block.type) {
         case 'field_static':
           // Result: 'hello'

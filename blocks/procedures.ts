@@ -753,7 +753,6 @@ interface CallMixin extends CallMixinType {
   defType_: string;
   quarkIds_: string[] | null;
   quarkConnections_: {[id: string]: Connection};
-  previousEnabledState_: boolean;
 }
 type CallMixinType = typeof PROCEDURE_CALL_COMMON;
 
@@ -1105,7 +1104,8 @@ const PROCEDURE_CALL_COMMON = {
       }
     } else if (
       event.type === Events.BLOCK_CHANGE &&
-      (event as BlockChange).element === 'disabled'
+      ((event as BlockChange).element === 'disabled' ||
+        (event as BlockChange).element === 'invalid')
     ) {
       const blockChangeEvent = event as BlockChange;
       const name = this.getProcedureCall();
@@ -1123,12 +1123,13 @@ const PROCEDURE_CALL_COMMON = {
           );
         }
         Events.setGroup(event.group);
-        if (blockChangeEvent.newValue) {
-          this.previousEnabledState_ = this.isEnabled();
-          this.setEnabled(false);
-        } else {
-          this.setEnabled(this.previousEnabledState_);
-        }
+        const invalid = !def.isEnabled() || !def.isValid();
+        this.setInvalidReason(invalid, 'disabled procedure definition');
+        this.setWarningText(
+          invalid
+            ? Msg['PROCEDURES_CALL_DISABLED_DEF_WARNING'].replace('%1', name)
+            : null,
+        );
         Events.setGroup(oldGroup);
       }
     }
@@ -1180,7 +1181,6 @@ blocks['procedures_callnoreturn'] = {
     this.argumentVarModels_ = [];
     this.quarkConnections_ = {};
     this.quarkIds_ = null;
-    this.previousEnabledState_ = true;
   },
 
   defType_: 'procedures_defnoreturn',
@@ -1201,7 +1201,6 @@ blocks['procedures_callreturn'] = {
     this.argumentVarModels_ = [];
     this.quarkConnections_ = {};
     this.quarkIds_ = null;
-    this.previousEnabledState_ = true;
   },
 
   defType_: 'procedures_defreturn',
@@ -1278,21 +1277,21 @@ const PROCEDURES_IFRETURN = {
     if (
       ((this.workspace as WorkspaceSvg).isDragging &&
         (this.workspace as WorkspaceSvg).isDragging()) ||
-      e.type !== Events.BLOCK_MOVE
+      (e.type !== Events.BLOCK_MOVE && e.type !== Events.BLOCK_CREATE)
     ) {
       return; // Don't change state at the start of a drag.
     }
-    let legal = false;
+    let valid = false;
     // Is the block nested in a procedure?
     let block = this; // eslint-disable-line @typescript-eslint/no-this-alias
     do {
       if (this.FUNCTION_TYPES.includes(block.type)) {
-        legal = true;
+        valid = true;
         break;
       }
       block = block.getSurroundParent()!;
     } while (block);
-    if (legal) {
+    if (valid) {
       // If needed, toggle whether this block has a return value.
       if (block.type === 'procedures_defnoreturn' && this.hasReturnValue_) {
         this.removeInput('VALUE');
@@ -1318,7 +1317,7 @@ const PROCEDURES_IFRETURN = {
       const group = Events.getGroup();
       // Makes it so the move and the disable event get undone together.
       Events.setGroup(e.group);
-      this.setEnabled(legal);
+      this.setInvalidReason(!valid, 'unparented ifreturn');
       Events.setGroup(group);
     }
   },

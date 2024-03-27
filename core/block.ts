@@ -168,6 +168,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   inputsInline?: boolean;
   icons: IIcon[] = [];
   private disabled = false;
+  private invalidReasons = new Set<string>();
   tooltip: Tooltip.TipInfo = '';
   contextMenu = true;
 
@@ -1391,7 +1392,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Get whether this block is enabled or not.
+   * Get whether this block is enabled or not. This should reflect whether the user intentionally disabled a block.
    *
    * @returns True if enabled.
    */
@@ -1400,7 +1401,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Set whether the block is enabled or not.
+   * Set whether the block is enabled or not. The user can toggle whether a block is disabled from a context menu option.
    *
    * @param enabled True if enabled.
    */
@@ -1426,16 +1427,80 @@ export class Block implements IASTNodeLocation, IDeletable {
    *
    * @returns True if disabled.
    */
-  getInheritedDisabled(): boolean {
+  getInheritedDisabledOrInvalid(): boolean {
     let ancestor = this.getSurroundParent();
     while (ancestor) {
-      if (ancestor.disabled) {
+      if (ancestor.disabled || !ancestor.isValid()) {
         return true;
       }
       ancestor = ancestor.getSurroundParent();
     }
     // Ran off the top.
     return false;
+  }
+
+  /**
+   * Get whether this block is valid or not. A block is considered valid if
+   * there aren't any reasons why it would be invalid.
+   *
+   * @returns True if valid.
+   */
+  isValid(): boolean {
+    return this.invalidReasons.size === 0;
+  }
+
+  /**
+   * Add or remove a reason why the block might be invalid. If a block has
+   * any reasons to be invalid, then the block itself will be considered
+   * invalid. A block could be invalid for multiple independent reasons
+   * simultaneously. Automatic processes in the Blockly library and in plugins
+   * can call this to cooperatively determine whether the block is invalid.
+   *
+   * @param invalid If true, then the block should be considered invalid for
+   *     at least the provided reason, otherwise the block is no longer invalid
+   *     for that reason.
+   * @param reason A language-neutral identifier for a reason why the block
+   *     could be invalid. Call this method again with the same identifier to
+   *     update whether the block is currently invalid for this reason.
+   */
+  setInvalidReason(invalid: boolean, reason: string): void {
+    if (this.invalidReasons.has(reason) !== invalid) {
+      if (invalid) {
+        this.invalidReasons.add(reason);
+      } else {
+        this.invalidReasons.delete(reason);
+      }
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this,
+          'invalid',
+          null,
+          /* oldValue= */ {[reason]: !invalid},
+          /* newValue= */ {[reason]: invalid},
+        ),
+      );
+    }
+  }
+
+  /**
+   * Get whether the block is currently invalid for the provided reason.
+   *
+   * @param reason A language-neutral identifier for a reason why the block
+   *     could be invalid.
+   * @returns Whether the block is invalid for the provided reason.
+   */
+  hasInvalidReason(reason: string): boolean {
+    return this.invalidReasons.has(reason);
+  }
+
+  /**
+   * Get a set of reasons why the block is currently invalid, if any. If the
+   * block is valid, this set will be empty.
+   *
+   * @returns The set of reasons why the block is invalid, if any.
+   */
+  getInvalidReasons(): ReadonlySet<string> {
+    return this.invalidReasons;
   }
 
   /**

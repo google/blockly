@@ -964,7 +964,7 @@ export class Gesture {
           'Cannot do a block click because the target block is ' + 'undefined',
         );
       }
-      if (this.targetBlock.isEnabled()) {
+      if (this.targetBlock.isEnabled() && this.targetBlock.isValid()) {
         if (!eventUtils.getGroup()) {
           eventUtils.setGroup(true);
         }

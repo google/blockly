@@ -453,7 +453,7 @@ export class RenderedConnection extends Connection {
     super.disconnectInternal(setParent);
 
     parent.queueRender();
-    child.updateDisabled();
+    child.updateDisabledOrInvalid();
     child.queueRender();
     // Reset visibility, since the child is now a top block.
     child.getSvgRoot().style.display = 'block';
@@ -502,8 +502,8 @@ export class RenderedConnection extends Connection {
     const parentBlock = this.getSourceBlock();
     const childBlock = renderedChildConnection.getSourceBlock();
 
-    parentBlock.updateDisabled();
-    childBlock.updateDisabled();
+    parentBlock.updateDisabledOrInvalid();
+    childBlock.updateDisabledOrInvalid();
     childBlock.queueRender();
 
     // The input the child block is connected to (if any).

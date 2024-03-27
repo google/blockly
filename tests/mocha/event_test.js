@@ -1402,7 +1402,7 @@ suite('Events', function () {
       sinon.assert.calledOnce(genUidStub);
 
       // When block is created using domToWorkspace, 5 events are fired:
-      // 1. varCreate (events disabled)
+      // 1. varCreate (events invalid)
       // 2. varCreate
       // 3. block create
       // 4. move (no-op, is filtered out)
@@ -1457,7 +1457,7 @@ suite('Events', function () {
     teardown(function () {
       workspaceTeardown.call(this, this.workspace);
     });
-    test('Created orphan block is disabled', function () {
+    test('Created orphan block is invalid', function () {
       this.workspace.addChangeListener(eventUtils.disableOrphans);
       const block = this.workspace.newBlock('controls_for');
       block.initSvg();
@@ -1467,11 +1467,11 @@ suite('Events', function () {
       this.clock.runAll();
 
       chai.assert.isFalse(
-        block.isEnabled(),
-        'Expected orphan block to be disabled after creation',
+        block.isValid(),
+        'Expected orphan block to be invalid after creation',
       );
     });
-    test('Created procedure block is enabled', function () {
+    test('Created procedure block is valid', function () {
       this.workspace.addChangeListener(eventUtils.disableOrphans);
 
       // Procedure block is never an orphan
@@ -1483,8 +1483,8 @@ suite('Events', function () {
       this.clock.runAll();
 
       chai.assert.isTrue(
-        functionBlock.isEnabled(),
-        'Expected top-level procedure block to be enabled',
+        functionBlock.isValid(),
+        'Expected top-level procedure block to be valid',
       );
     });
     test('Moving a block to top-level disables it', function () {
@@ -1507,8 +1507,8 @@ suite('Events', function () {
       this.clock.runAll();
 
       chai.assert.isFalse(
-        block.isEnabled(),
-        'Expected disconnected block to be disabled',
+        block.isValid(),
+        'Expected disconnected block to be invalid',
       );
     });
     test('Giving block a parent enables it', function () {
@@ -1528,8 +1528,8 @@ suite('Events', function () {
       this.clock.runAll();
 
       chai.assert.isTrue(
-        block.isEnabled(),
-        'Expected block to be enabled after connecting to parent',
+        block.isValid(),
+        'Expected block to be valid after connecting to parent',
       );
     });
     test('disableOrphans events are not undoable', function () {
@@ -1551,12 +1551,12 @@ suite('Events', function () {
       // Fire all events
       this.clock.runAll();
 
-      const disabledEvents = this.workspace.getUndoStack().filter(function (e) {
-        return e.element === 'disabled';
+      const invalidEvents = this.workspace.getUndoStack().filter(function (e) {
+        return e.element === 'invalid';
       });
       chai.assert.isEmpty(
-        disabledEvents,
-        'Undo stack should not contain any disabled events',
+        invalidEvents,
+        'Undo stack should not contain any invalid events',
       );
     });
   });

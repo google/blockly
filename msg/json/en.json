@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-12-08 18:42:04.679586",
+		"lastupdated": "2024-03-08 22:38:32.330785",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -369,6 +369,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "do something",
 	"PROCEDURES_BEFORE_PARAMS": "with:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "with:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Can't run the user-defined function '%1' because the definition block is disabled.",
 	"PROCEDURES_DEFNORETURN_DO": "",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Creates a function with no output.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Describe this function...",

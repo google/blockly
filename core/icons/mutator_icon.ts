@@ -309,7 +309,8 @@ export class MutatorIcon extends Icon implements IHasBubble {
       e.isUiEvent ||
       e.type === eventUtils.CREATE ||
       (e.type === eventUtils.CHANGE &&
-        (e as BlockChange).element === 'disabled')
+        (e as BlockChange).element === 'disabled') ||
+      (e as BlockChange).element === 'invalid'
     );
   }
 

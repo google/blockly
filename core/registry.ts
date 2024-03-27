@@ -38,11 +38,13 @@ const typeMap: {
 export const TEST_ONLY = {typeMap};
 
 /**
- * A map of maps. With the keys being the type and caseless name of the class we
- * are registring, and the value being the most recent cased name for that
- * registration.
+ * A map of maps.  Record the case-insensitive version of each name.
+ * e.g. {'field': {'field_angle': 'fIeLd_AnGle'}}
+ * This enables an error to be thrown if a name of conflicting case is used.
  */
-const nameMap: {[key: string]: {[key: string]: string}} = Object.create(null);
+const noCaseNameMap: {
+  [key: string]: {[key: string]: string};
+} = Object.create(null);
 
 /**
  * The string used to register the default class for a type of plugin.
@@ -129,51 +131,33 @@ export function register<T>(
     | AnyDuringMigration,
   opt_allowOverrides?: boolean,
 ): void {
-  if (
-    (!(type instanceof Type) && typeof type !== 'string') ||
-    `${type}`.trim() === ''
-  ) {
-    throw Error(
-      'Invalid type "' +
-        type +
-        '". The type must be a' +
-        ' non-empty string or a Blockly.registry.Type.',
-    );
-  }
-  type = `${type}`.toLowerCase();
-
-  if (typeof name !== 'string' || name.trim() === '') {
-    throw Error(
-      'Invalid name "' + name + '". The name must be a' + ' non-empty string.',
-    );
-  }
-  const caselessName = name.toLowerCase();
+  type = normalizeType(type);
+  name = normalizeName(name);
   if (!registryItem) {
     throw Error('Can not register a null value');
   }
   let typeRegistry = typeMap[type];
-  let nameRegistry = nameMap[type];
   // If the type registry has not been created, create it.
   if (!typeRegistry) {
     typeRegistry = typeMap[type] = Object.create(null);
-    nameRegistry = nameMap[type] = Object.create(null);
+    noCaseNameMap[type] = Object.create(null);
   }
 
   // Validate that the given class has all the required properties.
-  validate(type, registryItem);
+  validateItem(type, registryItem);
+  validateCase(type, name);
 
   // Don't throw an error if opt_allowOverrides is true.
-  if (!opt_allowOverrides && typeRegistry[caselessName]) {
-    throw Error(
-      'Name "' +
-        caselessName +
-        '" with type "' +
-        type +
-        '" already registered.',
-    );
+  // Don't throw an error if the registryItem is not changing.
+  if (
+    !opt_allowOverrides &&
+    typeRegistry[name] &&
+    typeRegistry[name] !== registryItem
+  ) {
+    throw Error(`Name "${name}" with type "${type}" already registered`);
   }
-  typeRegistry[caselessName] = registryItem;
-  nameRegistry[caselessName] = name;
+  typeRegistry[name] = registryItem;
+  noCaseNameMap[type][name.toLowerCase()] = name;
 }
 
 /**
@@ -184,13 +168,29 @@ export function register<T>(
  * @param registryItem A class or object that we are checking for the required
  *     properties.
  */
-function validate(type: string, registryItem: Function | AnyDuringMigration) {
+function validateItem(
+  type: string,
+  registryItem: Function | AnyDuringMigration,
+) {
   switch (type) {
     case String(Type.FIELD):
       if (typeof registryItem.fromJson !== 'function') {
-        throw Error('Type "' + type + '" must have a fromJson function');
+        throw Error(`Type "${type}" must have a fromJson function`);
       }
       break;
+  }
+}
+
+/**
+ * Checks that the name hasn't been registered using a different case.
+ *
+ * @param type The type of the plugin. (e.g. Field, Renderer)
+ * @param name The plugin's name. (Ex. field_angle, geras)
+ */
+function validateCase(type: string, name: string) {
+  const caseName = noCaseNameMap[type]?.[name.toLowerCase()];
+  if (caseName && caseName !== name) {
+    throw Error(`Inconsistent case with name "${name}" vs "${caseName}"`);
   }
 }
 
@@ -202,22 +202,16 @@ function validate(type: string, registryItem: Function | AnyDuringMigration) {
  * @param name The plugin's name. (Ex. field_angle, geras)
  */
 export function unregister<T>(type: string | Type<T>, name: string) {
-  type = `${type}`.toLowerCase();
-  name = name.toLowerCase();
+  type = normalizeType(type);
+  name = normalizeName(name);
+  validateCase(type, name);
   const typeRegistry = typeMap[type];
   if (!typeRegistry || !typeRegistry[name]) {
-    console.warn(
-      'Unable to unregister [' +
-        name +
-        '][' +
-        type +
-        '] from the ' +
-        'registry.',
-    );
+    console.warn(`Unable to unregister [${name}][${type}] from the registry`);
     return;
   }
-  delete typeMap[type][name];
-  delete nameMap[type][name];
+  delete typeRegistry[name];
+  delete noCaseNameMap[type][name.toLowerCase()];
 }
 
 /**
@@ -237,15 +231,14 @@ function getItem<T>(
   name: string,
   opt_throwIfMissing?: boolean,
 ): (new (...p1: AnyDuringMigration[]) => T) | null | AnyDuringMigration {
-  type = `${type}`.toLowerCase();
-  name = name.toLowerCase();
+  type = normalizeType(type);
+  name = normalizeName(name);
+  validateCase(type, name);
   const typeRegistry = typeMap[type];
   if (!typeRegistry || !typeRegistry[name]) {
-    const msg = 'Unable to find [' + name + '][' + type + '] in the registry.';
+    const msg = `Unable to find [${name}][${type}] in the registry.`;
     if (opt_throwIfMissing) {
-      throw new Error(
-        msg + ' You must require or register a ' + type + ' plugin.',
-      );
+      throw Error(`${msg} You must require or register a ${type} plugin`);
     } else {
       console.warn(msg);
     }
@@ -265,13 +258,39 @@ function getItem<T>(
  *     otherwise.
  */
 export function hasItem<T>(type: string | Type<T>, name: string): boolean {
-  type = `${type}`.toLowerCase();
-  name = name.toLowerCase();
+  type = normalizeType(type);
+  name = normalizeName(name);
+  validateCase(type, name);
   const typeRegistry = typeMap[type];
   if (!typeRegistry) {
     return false;
   }
   return !!typeRegistry[name];
+}
+
+/**
+ * Normalize a string to be used as a type.  Trim whitespaces and lowercase.
+ *
+ * @param type The type. (Ex. 'FiELd ')
+ * @returns A normalized string. (Ex. 'field')
+ */
+function normalizeType(type: any): string {
+  type = `${type}`.trim().toLowerCase();
+  if (!type) throw Error('Empty type');
+  return type;
+}
+
+/**
+ * Normalize a string to be used as a key.  Trim whitespaces.
+ *
+ * @param name The key's name. (Ex. 'field_angle ')
+ * @returns A normalized string. (Ex. 'field_angle')
+ */
+function normalizeName(name: string): string {
+  if (typeof name !== 'string') throw Error('Invalid name');
+  name = name.trim();
+  if (!name) throw Error('Empty name');
+  return name;
 }
 
 /**
@@ -316,18 +335,20 @@ export function getObject<T>(
  * Returns a map of items registered with the given type.
  *
  * @param type The type of the plugin. (e.g. Category)
- * @param opt_cased Whether or not to return a map with cased keys (rather than
- *     caseless keys). False by default.
+ * @param opt_cased Deprecated.
  * @param opt_throwIfMissing Whether or not to throw an error if we are unable
  *     to find the object. False by default.
  * @returns A map of objects with the given type, or null if none exists.
  */
 export function getAllItems<T>(
   type: string | Type<T>,
-  opt_cased?: boolean,
+  opt_cased?: any,
   opt_throwIfMissing?: boolean,
 ): {[key: string]: T | null | (new (...p1: AnyDuringMigration[]) => T)} | null {
-  type = `${type}`.toLowerCase();
+  if (typeof opt_cased !== 'undefined') {
+    console.warn('Blockly.registry.getAllItems deprecated "cased" argument');
+  }
+  type = normalizeType(type);
   const typeRegistry = typeMap[type];
   if (!typeRegistry) {
     const msg = `Unable to find [${type}] in the registry.`;
@@ -338,15 +359,7 @@ export function getAllItems<T>(
     }
     return null;
   }
-  if (!opt_cased) {
-    return typeRegistry;
-  }
-  const nameRegistry = nameMap[type];
-  const casedRegistry = Object.create(null);
-  for (const key of Object.keys(typeRegistry)) {
-    casedRegistry[nameRegistry[key]] = typeRegistry[key];
-  }
-  return casedRegistry;
+  return typeRegistry;
 }
 
 /**

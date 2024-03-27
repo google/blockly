@@ -366,11 +366,8 @@ export class Toolbox
    */
   render(toolboxDef: toolbox.ToolboxInfo) {
     this.toolboxDef_ = toolboxDef;
-    for (let i = 0; i < this.contents_.length; i++) {
-      const toolboxItem = this.contents_[i];
-      if (toolboxItem) {
-        toolboxItem.dispose();
-      }
+    for (const toolboxItem of this.contents_) {
+      toolboxItem?.dispose();
     }
     this.contents_ = [];
     this.contentMap_ = Object.create(null);

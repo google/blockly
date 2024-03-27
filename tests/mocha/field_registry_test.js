@@ -91,11 +91,9 @@ suite('Field Registry', function () {
         type: 'FIELD_CUSTOM_TEST',
         value: 'ok',
       };
-
-      const field = Blockly.fieldRegistry.fromJson(json);
-
-      chai.assert.isNotNull(field);
-      chai.assert.equal(field.getValue(), 'ok');
+      chai.assert.throws(function () {
+        Blockly.fieldRegistry.fromJson(json);
+      }, 'Inconsistent case');
     });
   });
 });

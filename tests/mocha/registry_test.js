@@ -34,21 +34,34 @@ suite('Registry', function () {
 
     test('Empty String Key', function () {
       chai.assert.throws(function () {
-        Blockly.registry.register('test', '', TestClass);
-      }, 'Invalid name');
+        Blockly.registry.register('test', ' ', TestClass);
+      }, 'Empty name');
     });
 
     test('Class as Key', function () {
       chai.assert.throws(function () {
-        Blockly.registry.register('test', TestClass, '');
+        Blockly.registry.register('test', TestClass, TestClass);
       }, 'Invalid name');
     });
 
     test('Overwrite a Key', function () {
       Blockly.registry.register('test', 'test_name', TestClass);
+      // Duplicate registration of the same object is ok.
+      Blockly.registry.register('test', 'test_name', TestClass);
+      // Registering some other value is not ok.
       chai.assert.throws(function () {
-        Blockly.registry.register('test', 'test_name', TestClass);
+        Blockly.registry.register('test', 'test_name', {});
       }, 'already registered');
+      // Changing the case or padding doesn't help.
+      chai.assert.throws(function () {
+        Blockly.registry.register('test', ' test_NAME ', {});
+      }, 'Inconsistent case');
+      // But it's ok if explicitly allowed with 'true'.
+      Blockly.registry.register('test', 'test_name', {}, true);
+      // But not ok if it's a different case.
+      chai.assert.throws(function () {
+        Blockly.registry.register('test', 'Test_Name', {}, true);
+      }, 'Inconsistent case');
     });
 
     test('Null Value', function () {
@@ -77,13 +90,21 @@ suite('Registry', function () {
       });
     });
 
-    suite('Case', function () {
-      test('Caseless type', function () {
+    suite('Name normalization', function () {
+      test('Padded', function () {
+        chai.assert.isTrue(
+          Blockly.registry.hasItem('  test  ', '  test_name  '),
+        );
+      });
+
+      test('Case type', function () {
         chai.assert.isTrue(Blockly.registry.hasItem('TEST', 'test_name'));
       });
 
-      test('Caseless name', function () {
-        chai.assert.isTrue(Blockly.registry.hasItem('test', 'TEST_NAME'));
+      test('Case name', function () {
+        chai.assert.throws(function () {
+          Blockly.registry.hasItem('test', 'TEST_NAME');
+        }, 'Inconsistent case');
       });
     });
   });
@@ -119,13 +140,21 @@ suite('Registry', function () {
       });
     });
 
-    suite('Case', function () {
-      test('Caseless type', function () {
+    suite('Name normalization', function () {
+      test('Padded', function () {
+        chai.assert.isNotNull(
+          Blockly.registry.getClass('  test  ', '  test_name'),
+        );
+      });
+
+      test('Case type', function () {
         chai.assert.isNotNull(Blockly.registry.getClass('TEST', 'test_name'));
       });
 
-      test('Caseless name', function () {
-        chai.assert.isNotNull(Blockly.registry.getClass('test', 'TEST_NAME'));
+      test('Case name', function () {
+        chai.assert.throws(function () {
+          Blockly.registry.getClass('test', 'TEST_NAME');
+        }, 'Inconsistent case');
       });
     });
   });
@@ -161,13 +190,21 @@ suite('Registry', function () {
       });
     });
 
-    suite('Case', function () {
-      test('Caseless type', function () {
-        chai.assert.isNotNull(Blockly.registry.getObject('TEST', 'test_name'));
+    suite('Name normalization', function () {
+      test('Padded', function () {
+        chai.assert.isNotNull(
+          Blockly.registry.getObject('  test  ', '  test_name  '),
+        );
       });
 
-      test('Caseless name', function () {
-        chai.assert.isNotNull(Blockly.registry.getObject('test', 'TEST_NAME'));
+      test('Case type', function () {
+        chai.assert.isTrue(Blockly.registry.hasItem('TEST', 'test_name'));
+      });
+
+      test('Case name', function () {
+        chai.assert.throws(function () {
+          Blockly.registry.getObject('test', 'TEST_NAME');
+        }, 'Inconsistent case');
       });
     });
   });
@@ -179,11 +216,15 @@ suite('Registry', function () {
     });
 
     teardown(function () {
-      Blockly.registry.unregister('test', 'casedname');
+      Blockly.registry.unregister('test', 'test_name');
+      Blockly.registry.unregister('test', 'casedNAME');
     });
 
     test('Has', function () {
-      chai.assert.isNotNull(Blockly.registry.getAllItems('test'));
+      chai.assert.deepEqual(Blockly.registry.getAllItems('test'), {
+        'test_name': {},
+        'casedNAME': {},
+      });
     });
 
     test('Does not have', function () {
@@ -194,27 +235,12 @@ suite('Registry', function () {
 
     test('Throw if missing', function () {
       chai.assert.throws(function () {
-        Blockly.registry.getAllItems('bad_type', false, true);
+        Blockly.registry.getAllItems('bad_type', undefined, true);
       });
     });
 
     test('Ignore type case', function () {
       chai.assert.isNotNull(Blockly.registry.getAllItems('TEST'));
-    });
-
-    test('Respect name case', function () {
-      chai.assert.deepEqual(Blockly.registry.getAllItems('test', true), {
-        'test_name': {},
-        'casedNAME': {},
-      });
-    });
-
-    test('Respect overwriting name case', function () {
-      Blockly.registry.register('test', 'CASEDname', {}, true);
-      chai.assert.deepEqual(Blockly.registry.getAllItems('test', true), {
-        'test_name': {},
-        'CASEDname': {},
-      });
     });
   });
 

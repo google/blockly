@@ -24,7 +24,7 @@ export function save(workspace: Workspace): {
   [key: string]: AnyDuringMigration;
 } {
   const state = Object.create(null);
-  const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
+  const serializerMap = registry.getAllItems(registry.Type.SERIALIZER);
   for (const key in serializerMap) {
     const save = (serializerMap[key] as ISerializer)?.save(workspace);
     if (save) {
@@ -47,7 +47,7 @@ export function load(
   workspace: Workspace,
   {recordUndo = false}: {recordUndo?: boolean} = {},
 ) {
-  const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
+  const serializerMap = registry.getAllItems(registry.Type.SERIALIZER);
   if (!serializerMap) {
     return;
   }

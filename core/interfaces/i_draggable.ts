@@ -56,5 +56,5 @@ export interface IDragStrategy {
   endDrag(e?: PointerEvent): void;
 
   /** Moves the draggable back to where it was at the start of the drag. */
-  moveToStart(): void;
+  revertDrag(): void;
 }

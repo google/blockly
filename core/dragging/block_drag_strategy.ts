@@ -78,7 +78,7 @@ export class BlockDragStrategy implements IDragStrategy {
     if (!eventUtils.getGroup()) {
       eventUtils.setGroup(true);
     }
-    this.fireDragStartEvent_();
+    this.fireDragStartEvent();
 
     this.startLoc = this.block.getRelativeToSurfaceXY();
 
@@ -96,8 +96,8 @@ export class BlockDragStrategy implements IDragStrategy {
 
     const healStack = !!e && (e.altKey || e.ctrlKey || e.metaKey);
 
-    if (this.shouldDisconnect_(healStack)) {
-      this.disconnectBlock_(healStack);
+    if (this.shouldDisconnect(healStack)) {
+      this.disconnectBlock(healStack);
     }
     this.block.setDragging(true);
     this.workspace.getLayerManager()?.moveToDragLayer(this.block);
@@ -109,7 +109,7 @@ export class BlockDragStrategy implements IDragStrategy {
    * @param healStack Whether or not to heal the stack after disconnecting.
    * @returns True to disconnect the block, false otherwise.
    */
-  private shouldDisconnect_(healStack: boolean): boolean {
+  private shouldDisconnect(healStack: boolean): boolean {
     return !!(
       this.block.getParent() ||
       (healStack &&
@@ -125,7 +125,7 @@ export class BlockDragStrategy implements IDragStrategy {
    *
    * @param healStack Whether or not to heal the stack after disconnecting.
    */
-  private disconnectBlock_(healStack: boolean) {
+  private disconnectBlock(healStack: boolean) {
     this.startParentConn =
       this.block.outputConnection?.targetConnection ??
       this.block.previousConnection?.targetConnection;
@@ -138,7 +138,7 @@ export class BlockDragStrategy implements IDragStrategy {
   }
 
   /** Fire a UI event at the start of a block drag. */
-  private fireDragStartEvent_() {
+  private fireDragStartEvent() {
     const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
       this.block,
       true,
@@ -148,7 +148,7 @@ export class BlockDragStrategy implements IDragStrategy {
   }
 
   /** Fire a UI event at the end of a block drag. */
-  private fireDragEndEvent_() {
+  private fireDragEndEvent() {
     const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
       this.block,
       false,
@@ -158,7 +158,7 @@ export class BlockDragStrategy implements IDragStrategy {
   }
 
   /** Fire a move event at the end of a block drag. */
-  private fireMoveEvent_() {
+  private fireMoveEvent() {
     if (this.block.isDeadOrDying()) return;
     const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
       this.block,
@@ -311,8 +311,8 @@ export class BlockDragStrategy implements IDragStrategy {
    * connections.
    */
   endDrag(): void {
-    this.fireDragEndEvent_();
-    this.fireMoveEvent_();
+    this.fireDragEndEvent();
+    this.fireMoveEvent();
 
     dom.stopTextWidthCache();
 

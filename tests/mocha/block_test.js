@@ -1392,6 +1392,12 @@ suite('Blocks', function () {
         }
 
         setBubbleVisible() {}
+
+        saveState() {
+          return {};
+        }
+
+        loadState() {}
       }
 
       setup(function () {

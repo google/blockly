@@ -349,10 +349,18 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   }
 }
 
+/** The save state format for a comment icon. */
 export interface CommentState {
+  /** The text of the comment. */
   text?: string;
+
+  /** True if the comment is open, false otherwise. */
   pinned?: boolean;
+
+  /** The height of the comment bubble. */
   height?: number;
+
+  /** The width of the comment bubble. */
   width?: number;
 }
 

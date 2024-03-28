@@ -205,7 +205,7 @@ export class BlockDragger implements IBlockDragger {
     const block = this.draggingBlock_;
     this.moveBlock(block, delta);
     this.updateDragTargets(e, block);
-    this.wouldDeleteBlock_ = this.wouldDeleteBlock(e, block, delta);
+    this.wouldDeleteBlock_ = this.wouldDeleteBlock(e, block);
     this.updateCursorDuringBlockDrag_();
     this.updateConnectionPreview(block, delta);
   }
@@ -237,14 +237,8 @@ export class BlockDragger implements IBlockDragger {
    *
    * @param e The most recent move event.
    * @param draggingBlock The block being dragged.
-   * @param delta How far the pointer has moved from the position
-   *     at the start of the drag, in pixel units.
    */
-  private wouldDeleteBlock(
-    e: PointerEvent,
-    draggingBlock: BlockSvg,
-    delta: Coordinate,
-  ): boolean {
+  private wouldDeleteBlock(e: PointerEvent, draggingBlock: BlockSvg): boolean {
     const dragTarget = this.workspace_.getDragTarget(e);
     if (!dragTarget) return false;
 
@@ -255,10 +249,7 @@ export class BlockDragger implements IBlockDragger {
     );
     if (!isDeleteArea) return false;
 
-    return (dragTarget as IDeleteArea).wouldDelete(
-      draggingBlock,
-      !!this.getConnectionCandidate(draggingBlock, delta),
-    );
+    return (dragTarget as IDeleteArea).wouldDelete(draggingBlock);
   }
 
   /**

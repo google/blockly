@@ -313,6 +313,9 @@ export class CodeGenerator {
       throw TypeError('Expecting valid order from block: ' + block.type);
     }
     const targetBlock = block.getInputTargetBlock(name);
+    if (!targetBlock && !block.getInput(name)) {
+      throw ReferenceError(`Input "${name}" doesn't exist on "${block.type}"`);
+    }
     if (!targetBlock) {
       return '';
     }
@@ -391,6 +394,9 @@ export class CodeGenerator {
    */
   statementToCode(block: Block, name: string): string {
     const targetBlock = block.getInputTargetBlock(name);
+    if (!targetBlock && !block.getInput(name)) {
+      throw ReferenceError(`Input "${name}" doesn't exist on "${block.type}"`);
+    }
     let code = this.blockToCode(targetBlock);
     // Value blocks must return code and order of operations info.
     // Statement blocks must only return code.

@@ -103,7 +103,7 @@ export class Dragger implements IDragger {
     }
 
     if (this.shouldReturnToStart(e, this.draggable)) {
-      this.draggable.moveToStart();
+      this.draggable.revertDrag();
     }
 
     this.draggable.endDrag(e);

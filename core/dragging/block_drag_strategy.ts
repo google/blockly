@@ -255,12 +255,12 @@ export class BlockDragStrategy implements IDragStrategy {
     const {local: currLocal, neighbour: currNeighbour} = currCandiate;
     const localPos = new Coordinate(currLocal.x, currLocal.y);
     const neighbourPos = new Coordinate(currNeighbour.x, currNeighbour.y);
-    const distance = Coordinate.distance(
+    const currDistance = Coordinate.distance(
       Coordinate.sum(localPos, delta),
       neighbourPos,
     );
     return (
-      newCandidate.distance > distance - config.currentConnectionPreference
+      newCandidate.distance > currDistance - config.currentConnectionPreference
     );
   }
 

@@ -197,12 +197,16 @@ export class BlockDragStrategy implements IDragStrategy {
         ? currCandidate
         : newCandidate;
     this.connectionCandidate = candidate;
+
     const {local, neighbour} = candidate;
+    const localIsOutputOrPrevious =
+      local.type === ConnectionType.OUTPUT_VALUE ||
+      local.type === ConnectionType.PREVIOUS_STATEMENT;
+    const neighbourIsConnectedToRealBlock =
+      neighbour.isConnected() && !neighbour.targetBlock()!.isInsertionMarker();
     if (
-      (local.type === ConnectionType.OUTPUT_VALUE ||
-        local.type === ConnectionType.PREVIOUS_STATEMENT) &&
-      neighbour.isConnected() &&
-      !neighbour.targetBlock()!.isInsertionMarker() &&
+      localIsOutputOrPrevious &&
+      neighbourIsConnectedToRealBlock &&
       !this.orphanCanConnectAtEnd(
         draggingBlock,
         neighbour.targetBlock()!,

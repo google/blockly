@@ -61,6 +61,7 @@ import * as renderManagement from './render_management.js';
 import {IconType} from './icons/icon_types.js';
 import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
 import {BlockDragStrategy} from './dragging/block_drag_strategy.js';
+import {IDeletable} from './blockly.js';
 
 /**
  * Class for a block's SVG representation.
@@ -72,7 +73,8 @@ export class BlockSvg
     IASTNodeLocationSvg,
     IBoundedElement,
     ICopyable<BlockCopyData>,
-    IDraggable
+    IDraggable,
+    IDeletable
 {
   /**
    * Constant for identifying rows that are to be rendered inline.

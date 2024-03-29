@@ -15,7 +15,8 @@
 import {BlockSvg} from './block_svg.js';
 import {DragTarget} from './drag_target.js';
 import type {IDeleteArea} from './interfaces/i_delete_area.js';
-import type {IDraggable} from './interfaces/i_draggable.old.js';
+import type {IDraggable} from './interfaces/i_draggable.js';
+import {isDeletable} from './interfaces/i_deletable.js';
 
 /**
  * Abstract class for a component that can delete a block or bubble that is
@@ -60,7 +61,7 @@ export class DeleteArea extends DragTarget implements IDeleteArea {
       const couldDeleteBlock = !block.getParent() && block.isDeletable();
       this.updateWouldDelete_(couldDeleteBlock);
     } else {
-      this.updateWouldDelete_(element.isDeletable());
+      this.updateWouldDelete_(isDeletable(element) && element.isDeletable());
     }
     return this.wouldDelete_;
   }

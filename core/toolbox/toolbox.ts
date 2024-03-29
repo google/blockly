@@ -24,7 +24,7 @@ import {DeleteArea} from '../delete_area.js';
 import * as eventUtils from '../events/utils.js';
 import type {IAutoHideable} from '../interfaces/i_autohideable.js';
 import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
-import type {IDraggable} from '../interfaces/i_draggable.old.js';
+import type {IDraggable} from '../interfaces/i_draggable.js';
 import type {IFlyout} from '../interfaces/i_flyout.js';
 import type {IKeyboardAccessible} from '../interfaces/i_keyboard_accessible.js';
 import type {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
@@ -41,9 +41,9 @@ import * as dom from '../utils/dom.js';
 import {Rect} from '../utils/rect.js';
 import * as toolbox from '../utils/toolbox.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
-
 import type {ToolboxCategory} from './category.js';
 import {CollapsibleToolboxCategory} from './collapsible_category.js';
+import {isDeletable} from '../interfaces/i_deletable.js';
 
 /**
  * Class for a Toolbox.
@@ -540,7 +540,7 @@ export class Toolbox
       const block = element;
       this.updateWouldDelete_(!block.getParent() && block.isDeletable());
     } else {
-      this.updateWouldDelete_(element.isDeletable());
+      this.updateWouldDelete_(isDeletable(element) && element.isDeletable());
     }
     return this.wouldDelete_;
   }

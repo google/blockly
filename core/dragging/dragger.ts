@@ -12,6 +12,7 @@ import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {ComponentManager} from '../component_manager.js';
 import {IDeleteArea} from '../interfaces/i_delete_area.js';
+import * as registry from '../registry.js';
 
 export class Dragger implements IDragger {
   private startLoc: Coordinate;
@@ -137,3 +138,5 @@ export class Dragger implements IDragger {
     return result;
   }
 }
+
+registry.register(registry.Type.DRAGGER, registry.DEFAULT, Dragger);

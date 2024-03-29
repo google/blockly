@@ -28,7 +28,6 @@ import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IBubble} from './interfaces/i_bubble.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import * as internalConstants from './internal_constants.js';
-import * as registry from './registry.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -36,6 +35,8 @@ import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import type {IIcon} from './interfaces/i_icon.js';
+import {IDragger} from './interfaces/i_dragger.js';
+import * as registry from './registry.js';
 
 /**
  * Note: In this file "start" refers to pointerdown
@@ -116,8 +117,7 @@ export class Gesture {
   /** The object tracking a bubble drag, or null if none is in progress. */
   private bubbleDragger: BubbleDragger | null = null;
 
-  /** The object tracking a block drag, or null if none is in progress. */
-  private blockDragger: IBlockDragger | null = null;
+  private dragger: IDragger | null = null;
 
   /**
    * The object tracking a workspace or flyout workspace drag, or null if none
@@ -212,9 +212,6 @@ export class Gesture {
     }
     this.boundEvents.length = 0;
 
-    if (this.blockDragger) {
-      this.blockDragger.dispose();
-    }
     if (this.workspaceDragger) {
       this.workspaceDragger.dispose();
     }
@@ -230,7 +227,7 @@ export class Gesture {
     const changed = this.updateDragDelta(currentXY);
     // Exceeded the drag radius for the first time.
     if (changed) {
-      this.updateIsDragging();
+      this.updateIsDragging(e);
       Touch.longStop();
     }
     this.mostRecentEvent = e;
@@ -334,17 +331,17 @@ export class Gesture {
    *
    * @returns True if a block is being dragged.
    */
-  private updateIsDraggingBlock(): boolean {
+  private updateIsDraggingBlock(e: PointerEvent): boolean {
     if (!this.targetBlock) {
       return false;
     }
     if (this.flyout) {
       if (this.updateIsDraggingFromFlyout()) {
-        this.startDraggingBlock();
+        this.startDraggingBlock(e);
         return true;
       }
     } else if (this.targetBlock.isMovable()) {
-      this.startDraggingBlock();
+      this.startDraggingBlock(e);
       return true;
     }
     return false;
@@ -384,7 +381,7 @@ export class Gesture {
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture.
    */
-  private updateIsDragging() {
+  private updateIsDragging(e: PointerEvent) {
     // Sanity check.
     if (this.calledUpdateIsDragging) {
       throw Error('updateIsDragging_ should only be called once per gesture.');
@@ -397,7 +394,7 @@ export class Gesture {
       return;
     }
     // Then check if it was a block drag.
-    if (this.updateIsDraggingBlock()) {
+    if (this.updateIsDraggingBlock(e)) {
       return;
     }
     // Then check if it's a workspace drag.
@@ -405,20 +402,18 @@ export class Gesture {
   }
 
   /** Create a block dragger and start dragging the selected block. */
-  private startDraggingBlock() {
-    const BlockDraggerClass = registry.getClassFromOptions(
-      registry.Type.BLOCK_DRAGGER,
+  private startDraggingBlock(e: PointerEvent) {
+    this.dragging = true;
+
+    const DraggerClass = registry.getClassFromOptions(
+      registry.Type.DRAGGER,
       this.creatorWorkspace.options,
       true,
     );
 
-    this.dragging = true;
-    this.blockDragger = new BlockDraggerClass!(
-      this.targetBlock,
-      this.startWorkspace_,
-    );
-    this.blockDragger!.startDrag(this.currentDragDeltaXY, this.healStack);
-    this.blockDragger!.drag(this.mostRecentEvent, this.currentDragDeltaXY);
+    this.dragger = new DraggerClass!(this.targetBlock!, this.startWorkspace_!);
+    this.dragger.onDragStart(e);
+    this.dragger.onDrag(e, this.currentDragDeltaXY);
   }
 
   /** Create a bubble dragger and start dragging the selected bubble. */
@@ -587,8 +582,8 @@ export class Gesture {
       this.updateFromEvent(e);
       if (this.workspaceDragger) {
         this.workspaceDragger.drag(this.currentDragDeltaXY);
-      } else if (this.blockDragger) {
-        this.blockDragger.drag(this.mostRecentEvent, this.currentDragDeltaXY);
+      } else if (this.dragger) {
+        this.dragger.onDrag(this.mostRecentEvent, this.currentDragDeltaXY);
       } else if (this.bubbleDragger) {
         this.bubbleDragger.dragBubble(
           this.mostRecentEvent,
@@ -631,8 +626,8 @@ export class Gesture {
       // not matter, because the three types of dragging are exclusive.
       if (this.bubbleDragger) {
         this.bubbleDragger.endBubbleDrag(e, this.currentDragDeltaXY);
-      } else if (this.blockDragger) {
-        this.blockDragger.endDrag(e, this.currentDragDeltaXY);
+      } else if (this.dragger) {
+        this.dragger.onDragEnd(e, this.currentDragDeltaXY);
       } else if (this.workspaceDragger) {
         this.workspaceDragger.endDrag(this.currentDragDeltaXY);
       } else if (this.isBubbleClick()) {
@@ -797,8 +792,8 @@ export class Gesture {
         this.mostRecentEvent,
         this.currentDragDeltaXY,
       );
-    } else if (this.blockDragger) {
-      this.blockDragger.endDrag(this.mostRecentEvent, this.currentDragDeltaXY);
+    } else if (this.dragger) {
+      this.dragger.onDragEnd(this.mostRecentEvent, this.currentDragDeltaXY);
     } else if (this.workspaceDragger) {
       this.workspaceDragger.endDrag(this.currentDragDeltaXY);
     }
@@ -1228,20 +1223,6 @@ export class Gesture {
   }
 
   /**
-   * Get a list of the insertion markers that currently exist.  Block drags have
-   * 0, 1, or 2 insertion markers.
-   *
-   * @returns A possibly empty list of insertion marker blocks.
-   * @internal
-   */
-  getInsertionMarkers(): BlockSvg[] {
-    if (this.blockDragger) {
-      return this.blockDragger.getInsertionMarkers();
-    }
-    return [];
-  }
-
-  /**
    * Gets the current dragger if an item is being dragged. Null if nothing is
    * being dragged.
    *
@@ -1249,7 +1230,9 @@ export class Gesture {
    *     progress.
    */
   getCurrentDragger(): WorkspaceDragger | BubbleDragger | IBlockDragger | null {
-    return this.blockDragger ?? this.workspaceDragger ?? this.bubbleDragger;
+    // TODO: Change this to return the `dragger`, when we get rid of the last
+    //   other dragger.
+    return this.workspaceDragger ?? this.bubbleDragger;
   }
 
   /**

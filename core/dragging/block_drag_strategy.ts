@@ -390,6 +390,9 @@ export class BlockDragStrategy implements IDragStrategy {
       );
     }
 
+    this.startChildConn = null;
+    this.startParentConn = null;
+
     this.connectionPreviewer!.hidePreview();
     this.connectionCandidate = null;
 

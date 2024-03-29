@@ -21,7 +21,6 @@ import * as Css from './css.js';
 import type {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
-import type {IBubble} from './interfaces/i_bubble.js';
 import type {ICopyable} from './interfaces/i_copyable.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -50,7 +49,7 @@ const TEXTAREA_OFFSET = 2;
  */
 export class WorkspaceCommentSvg
   extends WorkspaceComment
-  implements IBoundedElement, IBubble, ICopyable<WorkspaceCommentCopyData>
+  implements IBoundedElement, ICopyable<WorkspaceCommentCopyData>
 {
   /**
    * The width and height to use to size a workspace comment when it is first
@@ -198,7 +197,7 @@ export class WorkspaceCommentSvg
   private pathMouseDown(e: PointerEvent) {
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
-      gesture.handleBubbleStart(e, this);
+      gesture.handleBubbleStart(e, this as AnyDuringMigration);
     }
   }
 

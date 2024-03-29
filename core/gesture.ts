@@ -18,7 +18,6 @@ import './events/events_click.js';
 import * as blockAnimations from './block_animations.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
-import {BubbleDragger} from './bubble_dragger.js';
 import * as common from './common.js';
 import {config} from './config.js';
 import * as dropDownDiv from './dropdowndiv.js';
@@ -37,6 +36,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import type {IIcon} from './interfaces/i_icon.js';
 import {IDragger} from './interfaces/i_dragger.js';
 import * as registry from './registry.js';
+import {IDraggable} from './interfaces/i_draggable.js';
 
 /**
  * Note: In this file "start" refers to pointerdown
@@ -113,9 +113,6 @@ export class Gesture {
    * Ex: [[node, name, func], [node, name, func]].
    */
   private boundEvents: browserEvents.Data[] = [];
-
-  /** The object tracking a bubble drag, or null if none is in progress. */
-  private bubbleDragger: BubbleDragger | null = null;
 
   private dragger: IDragger | null = null;
 
@@ -309,12 +306,12 @@ export class Gesture {
    *
    * @returns True if a bubble is being dragged.
    */
-  private updateIsDraggingBubble(): boolean {
+  private updateIsDraggingBubble(e: PointerEvent): boolean {
     if (!this.startBubble) {
       return false;
     }
 
-    this.startDraggingBubble();
+    this.startDraggingBubble(e);
     return true;
   }
 
@@ -390,7 +387,7 @@ export class Gesture {
 
     // First check if it was a bubble drag.  Bubbles always sit on top of
     // blocks.
-    if (this.updateIsDraggingBubble()) {
+    if (this.updateIsDraggingBubble(e)) {
       return;
     }
     // Then check if it was a block drag.
@@ -404,20 +401,13 @@ export class Gesture {
   /** Create a block dragger and start dragging the selected block. */
   private startDraggingBlock(e: PointerEvent) {
     this.dragging = true;
-
-    const DraggerClass = registry.getClassFromOptions(
-      registry.Type.DRAGGER,
-      this.creatorWorkspace.options,
-      true,
-    );
-
-    this.dragger = new DraggerClass!(this.targetBlock!, this.startWorkspace_!);
+    this.dragger = this.createDragger(this.targetBlock!, this.startWorkspace_!);
     this.dragger.onDragStart(e);
     this.dragger.onDrag(e, this.currentDragDeltaXY);
   }
 
   /** Create a bubble dragger and start dragging the selected bubble. */
-  private startDraggingBubble() {
+  private startDraggingBubble(e: PointerEvent) {
     if (!this.startBubble) {
       throw new Error(
         'Cannot update dragging the bubble because the start ' +
@@ -432,15 +422,21 @@ export class Gesture {
     }
 
     this.dragging = true;
-    this.bubbleDragger = new BubbleDragger(
-      this.startBubble,
-      this.startWorkspace_,
+    this.dragger = this.createDragger(this.startBubble, this.startWorkspace_);
+    this.dragger.onDragStart(e);
+    this.dragger.onDrag(e, this.currentDragDeltaXY);
+  }
+
+  private createDragger(
+    draggable: IDraggable,
+    workspace: WorkspaceSvg,
+  ): IDragger {
+    const DraggerClass = registry.getClassFromOptions(
+      registry.Type.DRAGGER,
+      this.creatorWorkspace.options,
+      true,
     );
-    this.bubbleDragger.startBubbleDrag();
-    this.bubbleDragger.dragBubble(
-      this.mostRecentEvent,
-      this.currentDragDeltaXY,
-    );
+    return new DraggerClass!(draggable, workspace);
   }
 
   /**
@@ -584,11 +580,6 @@ export class Gesture {
         this.workspaceDragger.drag(this.currentDragDeltaXY);
       } else if (this.dragger) {
         this.dragger.onDrag(this.mostRecentEvent, this.currentDragDeltaXY);
-      } else if (this.bubbleDragger) {
-        this.bubbleDragger.dragBubble(
-          this.mostRecentEvent,
-          this.currentDragDeltaXY,
-        );
       }
       e.preventDefault();
       e.stopPropagation();
@@ -624,9 +615,7 @@ export class Gesture {
       // than clicks.  Fields and icons have higher priority than blocks; blocks
       // have higher priority than workspaces. The ordering within drags does
       // not matter, because the three types of dragging are exclusive.
-      if (this.bubbleDragger) {
-        this.bubbleDragger.endBubbleDrag(e, this.currentDragDeltaXY);
-      } else if (this.dragger) {
+      if (this.dragger) {
         this.dragger.onDragEnd(e, this.currentDragDeltaXY);
       } else if (this.workspaceDragger) {
         this.workspaceDragger.endDrag(this.currentDragDeltaXY);
@@ -787,12 +776,7 @@ export class Gesture {
       return;
     }
     Touch.longStop();
-    if (this.bubbleDragger) {
-      this.bubbleDragger.endBubbleDrag(
-        this.mostRecentEvent,
-        this.currentDragDeltaXY,
-      );
-    } else if (this.dragger) {
+    if (this.dragger) {
       this.dragger.onDragEnd(this.mostRecentEvent, this.currentDragDeltaXY);
     } else if (this.workspaceDragger) {
       this.workspaceDragger.endDrag(this.currentDragDeltaXY);
@@ -1229,10 +1213,10 @@ export class Gesture {
    * @returns The dragger that is currently in use or null if no drag is in
    *     progress.
    */
-  getCurrentDragger(): WorkspaceDragger | BubbleDragger | IBlockDragger | null {
+  getCurrentDragger(): WorkspaceDragger | IBlockDragger | null {
     // TODO: Change this to return the `dragger`, when we get rid of the last
     //   other dragger.
-    return this.workspaceDragger ?? this.bubbleDragger;
+    return this.workspaceDragger;
   }
 
   /**

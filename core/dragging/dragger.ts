@@ -43,7 +43,7 @@ export class Dragger implements IDragger {
     // Must check `wouldDelete` before calling other hooks on drag targets
     // since we have documented that we would do so.
     if (isDeletable(this.draggable)) {
-      (this.draggable as AnyDuringMigration).setDeleteStyle(
+      this.draggable.setDeleteStyle(
         this.wouldDeleteDraggable(e, this.draggable),
       );
     }
@@ -109,7 +109,7 @@ export class Dragger implements IDragger {
       isDeletable(this.draggable) &&
       this.wouldDeleteDraggable(e, this.draggable)
     ) {
-      (this.draggable as AnyDuringMigration).dispose();
+      this.draggable.dispose();
     }
   }
 

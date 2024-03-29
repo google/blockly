@@ -58,3 +58,15 @@ export interface IDragStrategy {
   /** Moves the draggable back to where it was at the start of the drag. */
   revertDrag(): void;
 }
+
+/** Returns whether the given object is an IDraggable or not. */
+export function isDraggable(obj: any): obj is IDraggable {
+  return (
+    obj.getRelativeToSurfaceXY !== undefined &&
+    obj.isMovable !== undefined &&
+    obj.startDrag !== undefined &&
+    obj.drag !== undefined &&
+    obj.endDrag !== undefined &&
+    obj.revertDrag !== undefined
+  );
+}

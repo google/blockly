@@ -14,17 +14,24 @@ import {IBoundedElement} from '../interfaces/i_bounded_element.js';
 import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 import * as dom from '../utils/dom.js';
 import {IDraggable} from '../interfaces/i_draggable.js';
+import {CommentDragStrategy} from '../dragging/comment_drag_strategy.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
-  implements IBoundedElement, IRenderedElement
+  implements IBoundedElement, IRenderedElement, IDraggable
 {
   /** The class encompassing the svg elements making up the workspace comment. */
   private view: CommentView;
 
+  public readonly workspace: WorkspaceSvg;
+
+  private dragStrategy = new CommentDragStrategy(this);
+
   /** Constructs the workspace comment, including the view. */
   constructor(workspace: WorkspaceSvg, id?: string) {
     super(workspace, id);
+
+    this.workspace = workspace;
 
     this.view = new CommentView(workspace);
     // Set the size to the default size as defined in the superclass.
@@ -135,5 +142,30 @@ export class RenderedWorkspaceComment
     this.disposing = true;
     if (!this.view.isDeadOrDying()) this.view.dispose();
     super.dispose();
+  }
+
+  /** Returns whether this comment is movable or not. */
+  isMovable(): boolean {
+    return this.dragStrategy.isMovable();
+  }
+
+  /** Starts a drag on the comment. */
+  startDrag(): void {
+    this.dragStrategy.startDrag();
+  }
+
+  /** Drags the comment to the given location. */
+  drag(newLoc: Coordinate): void {
+    this.dragStrategy.drag(newLoc);
+  }
+
+  /** Ends the drag on the comment. */
+  endDrag(): void {
+    this.dragStrategy.endDrag();
+  }
+
+  /** Moves the comment back to where it was at the start of a drag. */
+  revertDrag(): void {
+    this.dragStrategy.revertDrag();
   }
 }

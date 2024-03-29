@@ -14,10 +14,11 @@ import {WorkspaceSvg} from '../workspace_svg.js';
 export class CommentDragStrategy implements IDragStrategy {
   private startLoc: Coordinate | null = null;
 
-  constructor(
-    private comment: RenderedWorkspaceComment,
-    private workspace: WorkspaceSvg,
-  ) {}
+  private workspace: WorkspaceSvg;
+
+  constructor(private comment: RenderedWorkspaceComment) {
+    this.workspace = comment.workspace;
+  }
 
   isMovable(): boolean {
     return this.comment.isOwnMovable() && !this.workspace.options.readOnly;

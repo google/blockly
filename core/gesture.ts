@@ -37,6 +37,7 @@ import type {IIcon} from './interfaces/i_icon.js';
 import {IDragger} from './interfaces/i_dragger.js';
 import * as registry from './registry.js';
 import {IDraggable} from './interfaces/i_draggable.js';
+import {RenderedWorkspaceComment} from './comments.js';
 
 /**
  * Note: In this file "start" refers to pointerdown
@@ -84,6 +85,12 @@ export class Gesture {
    * block.
    */
   private startBlock: BlockSvg | null = null;
+
+  /**
+   * The comment that the gesture started on, or null if it did not start on a
+   * comment.
+   */
+  private startComment: RenderedWorkspaceComment | null = null;
 
   /**
    * The block that this gesture targets.  If the gesture started on a
@@ -316,6 +323,23 @@ export class Gesture {
   }
 
   /**
+   * Update this gesture to record whether a comment is being dragged.
+   * This function should be called on a pointermove event the first time
+   * the drag radius is exceeded.  It should be called no more than once per
+   * gesture.
+   *
+   * @returns True if a comment is being dragged.
+   */
+  private updateIsDraggingComment(e: PointerEvent): boolean {
+    if (!this.startComment) {
+      return false;
+    }
+
+    this.startDraggingComment(e);
+    return true;
+  }
+
+  /**
    * Check whether to start a block drag. If a block should be dragged, either
    * from the flyout or in the workspace, create the necessary BlockDragger and
    * start the drag.
@@ -394,11 +418,14 @@ export class Gesture {
     if (this.updateIsDraggingBlock(e)) {
       return;
     }
+    if (this.updateIsDraggingComment(e)) {
+      return;
+    }
     // Then check if it's a workspace drag.
     this.updateIsDraggingWorkspace();
   }
 
-  /** Create a block dragger and start dragging the selected block. */
+  /** Start dragging the selected block. */
   private startDraggingBlock(e: PointerEvent) {
     this.dragging = true;
     this.dragger = this.createDragger(this.targetBlock!, this.startWorkspace_!);
@@ -406,7 +433,7 @@ export class Gesture {
     this.dragger.onDrag(e, this.currentDragDeltaXY);
   }
 
-  /** Create a bubble dragger and start dragging the selected bubble. */
+  /** Start dragging the selected bubble. */
   private startDraggingBubble(e: PointerEvent) {
     if (!this.startBubble) {
       throw new Error(
@@ -423,6 +450,27 @@ export class Gesture {
 
     this.dragging = true;
     this.dragger = this.createDragger(this.startBubble, this.startWorkspace_);
+    this.dragger.onDragStart(e);
+    this.dragger.onDrag(e, this.currentDragDeltaXY);
+  }
+
+  /** Start dragging the selected bubble. */
+  private startDraggingComment(e: PointerEvent) {
+    if (!this.startComment) {
+      throw new Error(
+        'Cannot update dragging the comment because the start ' +
+          'comment is undefined',
+      );
+    }
+    if (!this.startWorkspace_) {
+      throw new Error(
+        'Cannot update dragging the bubble because the start ' +
+          'workspace is undefined',
+      );
+    }
+
+    this.dragging = true;
+    this.dragger = this.createDragger(this.startComment, this.startWorkspace_);
     this.dragger.onDragStart(e);
     this.dragger.onDrag(e, this.currentDragDeltaXY);
   }
@@ -893,6 +941,24 @@ export class Gesture {
     this.mostRecentEvent = e;
   }
 
+  /**
+   * Handle a pointerdown event on a workspace comment.
+   *
+   * @param e A pointerdown event.
+   * @param comment The comment the event hit.
+   * @internal
+   */
+  handleCommentStart(e: PointerEvent, comment: RenderedWorkspaceComment) {
+    if (this.gestureHasStarted) {
+      throw Error(
+        'Tried to call gesture.handleBubbleStart, ' +
+          'but the gesture had already been started.',
+      );
+    }
+    this.setStartComment(comment);
+    this.mostRecentEvent = e;
+  }
+
   /* Begin functions defining what actions to take to execute clicks on each
    * type of target.  Any developer wanting to add behaviour on clicks should
    * modify only this code. */
@@ -1046,6 +1112,18 @@ export class Gesture {
   setStartBubble(bubble: IBubble) {
     if (!this.startBubble) {
       this.startBubble = bubble;
+    }
+  }
+
+  /**
+   * Record the comment that a gesture started on
+   *
+   * @param comment The comment the gesture started on.
+   * @internal
+   */
+  setStartComment(comment: RenderedWorkspaceComment) {
+    if (!this.startComment) {
+      this.startComment = comment;
     }
   }
 

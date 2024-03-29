@@ -15,6 +15,7 @@ import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 import * as dom from '../utils/dom.js';
 import {IDraggable} from '../interfaces/i_draggable.js';
 import {CommentDragStrategy} from '../dragging/comment_drag_strategy.js';
+import * as browserEvents from '../browser_events.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
@@ -39,6 +40,13 @@ export class RenderedWorkspaceComment
     this.view.setEditable(this.isEditable());
 
     this.addModelUpdateBindings();
+
+    browserEvents.conditionalBind(
+      this.view.getSvgRoot(),
+      'pointerdown',
+      this,
+      this.startGesture,
+    );
   }
 
   /**
@@ -142,6 +150,17 @@ export class RenderedWorkspaceComment
     this.disposing = true;
     if (!this.view.isDeadOrDying()) this.view.dispose();
     super.dispose();
+  }
+
+  /**
+   * Starts a gesture because we detected a pointer down on the comment
+   * (that wasn't otherwise gobbled up, e.g. by resizing).
+   */
+  private startGesture(e: PointerEvent) {
+    const gesture = this.workspace.getGesture(e);
+    if (gesture) {
+      gesture.handleCommentStart(e, this);
+    }
   }
 
   /** Returns whether this comment is movable or not. */

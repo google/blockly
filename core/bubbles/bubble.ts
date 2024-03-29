@@ -5,6 +5,7 @@
  */
 
 import * as browserEvents from '../browser_events.js';
+import {BubbleDragStrategy} from '../dragging/bubble_drag_strategy.js';
 import {IBubble} from '../interfaces/i_bubble.js';
 import {ContainerRegion} from '../metrics_manager.js';
 import {Scrollbar} from '../scrollbar.js';
@@ -77,6 +78,8 @@ export abstract class Bubble implements IBubble {
 
   /** The position of the left of the bubble realtive to its anchor. */
   private relativeLeft = 0;
+
+  private dragStrategy = new BubbleDragStrategy(this, this.workspace);
 
   /**
    * @param workspace The workspace this bubble belongs to.
@@ -611,5 +614,30 @@ export abstract class Bubble implements IBubble {
   /** @internal */
   showContextMenu(_e: Event) {
     // NOOP in base class.
+  }
+
+  /** Returns whether this bubble is movable or not. */
+  isMovable(): boolean {
+    return true;
+  }
+
+  /** Starts a drag on the bubble. */
+  startDrag(): void {
+    this.dragStrategy.startDrag();
+  }
+
+  /** Drags the bubble to the given location. */
+  drag(newLoc: Coordinate): void {
+    this.dragStrategy.drag(newLoc);
+  }
+
+  /** Ends the drag on the bubble. */
+  endDrag(): void {
+    this.dragStrategy.endDrag();
+  }
+
+  /** Moves the bubble back to where it was at the start of a drag. */
+  revertDrag(): void {
+    this.dragStrategy.revertDrag();
   }
 }

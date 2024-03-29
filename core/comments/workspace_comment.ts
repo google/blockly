@@ -32,7 +32,7 @@ export class WorkspaceComment {
   private deletable = true;
 
   /** The location of the comment in workspace coordinates. */
-  private location = new Coordinate(0, 0);
+  protected location = new Coordinate(0, 0);
 
   /** Whether this comment has been disposed or not. */
   protected disposed = false;

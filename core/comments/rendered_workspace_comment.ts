@@ -12,6 +12,8 @@ import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {IBoundedElement} from '../interfaces/i_bounded_element.js';
 import {IRenderedElement} from '../interfaces/i_rendered_element.js';
+import * as dom from '../utils/dom.js';
+import {IDraggable} from '../interfaces/i_draggable.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
@@ -103,6 +105,29 @@ export class RenderedWorkspaceComment
   override moveTo(location: Coordinate): void {
     super.moveTo(location);
     this.view.moveTo(location);
+  }
+
+  /**
+   * Moves the comment during a drag. Doesn't fire move events.
+   *
+   * @internal
+   */
+  moveDuringDrag(location: Coordinate): void {
+    this.location = location;
+    this.view.moveTo(location);
+  }
+
+  /**
+   * Adds the dragging CSS class to this comment.
+   *
+   * @internal
+   */
+  setDragging(dragging: boolean): void {
+    if (dragging) {
+      dom.addClass(this.getSvgRoot(), 'blocklyDragging');
+    } else {
+      dom.removeClass(this.getSvgRoot(), 'blocklyDragging');
+    }
   }
 
   /** Disposes of the view. */

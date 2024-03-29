@@ -29,6 +29,7 @@ import * as WidgetDiv from './widgetdiv.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
+import * as common from './common.js';
 
 /**
  * Which block is the context menu attached to?
@@ -261,7 +262,7 @@ export function callbackFactory(
     if (eventUtils.isEnabled() && !newBlock.isShadow()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(newBlock));
     }
-    newBlock.select();
+    common.setSelected(newBlock);
     return newBlock;
   };
 }
@@ -374,7 +375,7 @@ export function workspaceCommentOption(
     if (ws.rendered) {
       comment.initSvg();
       comment.render();
-      comment.select();
+      common.setSelected(comment);
     }
   }
 

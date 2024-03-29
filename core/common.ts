@@ -13,6 +13,7 @@ import {BlockDefinition, Blocks} from './blocks.js';
 import type {Connection} from './connection.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import * as eventUtils from './events/utils.js';
 
 /** Database of all workspaces. */
 const WorkspaceDB_ = Object.create(null);
@@ -105,7 +106,18 @@ export function getSelected(): ISelectable | null {
  * @internal
  */
 export function setSelected(newSelection: ISelectable | null) {
+  if (selected === newSelection) return;
+
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+    selected?.id ?? null,
+    newSelection?.id ?? null,
+    newSelection?.workspace.id ?? selected?.workspace.id ?? '',
+  );
+  eventUtils.fire(event);
+
+  selected?.unselect();
   selected = newSelection;
+  selected?.select();
 }
 
 /**

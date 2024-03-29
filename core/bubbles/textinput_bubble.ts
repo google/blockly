@@ -70,7 +70,7 @@ export class TextInputBubble extends Bubble {
    *     when automatically positioning.
    */
   constructor(
-    protected readonly workspace: WorkspaceSvg,
+    public readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
   ) {

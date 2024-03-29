@@ -241,37 +241,19 @@ export class BlockSvg
     return this.style.colourTertiary;
   }
 
+  // TODO: Before merging, is it better to just remove these or to leave them
+  //   but with change behavior? Not sure what the better UX is.
   /**
    * Selects this block. Highlights the block visually and fires a select event
    * if the block is not already selected.
    */
   select() {
+    // TODO: Before merging, file an issue to allow shadows to be selected.
     if (this.isShadow() && this.getParent()) {
       // Shadow blocks should not be selected.
       this.getParent()!.select();
       return;
     }
-    if (common.getSelected() === this) {
-      return;
-    }
-    let oldId = null;
-    if (common.getSelected()) {
-      oldId = common.getSelected()!.id;
-      // Unselect any previously selected block.
-      eventUtils.disable();
-      try {
-        common.getSelected()!.unselect();
-      } finally {
-        eventUtils.enable();
-      }
-    }
-    const event = new (eventUtils.get(eventUtils.SELECTED))(
-      oldId,
-      this.id,
-      this.workspace.id,
-    );
-    eventUtils.fire(event);
-    common.setSelected(this);
     this.addSelect();
   }
 
@@ -280,17 +262,6 @@ export class BlockSvg
    * event if the block is currently selected.
    */
   unselect() {
-    if (common.getSelected() !== this) {
-      return;
-    }
-    const event = new (eventUtils.get(eventUtils.SELECTED))(
-      this.id,
-      null,
-      this.workspace.id,
-    );
-    event.workspaceId = this.workspace.id;
-    eventUtils.fire(event);
-    common.setSelected(null);
     this.removeSelect();
   }
 

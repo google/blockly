@@ -1223,17 +1223,6 @@ export class Gesture {
   }
 
   /**
-   * Get a list of the insertion markers that currently exist.  Block drags have
-   * 0, 1, or 2 insertion markers.
-   *
-   * @returns A possibly empty list of insertion marker blocks.
-   * @internal
-   */
-  getInsertionMarkers(): BlockSvg[] {
-    return [];
-  }
-
-  /**
    * Gets the current dragger if an item is being dragged. Null if nothing is
    * being dragged.
    *

@@ -58,6 +58,9 @@ export function testOnly_setDiv(newDiv: HTMLDivElement | null) {
  */
 export function createDom() {
   if (document.querySelector('.' + containerClassName)) {
+    containerDiv = document.querySelector('.' + containerClassName);
+    const container = common.getParentContainer() || document.body;
+    container.appendChild(containerDiv!);
     return; // Already created.
   }
 

@@ -61,12 +61,12 @@ export function createDom() {
     containerDiv = document.querySelector('.' + containerClassName);
     const container = common.getParentContainer() || document.body;
     container.appendChild(containerDiv!);
+  } else {
+    containerDiv = document.createElement('div') as HTMLDivElement;
+    containerDiv.className = containerClassName;
+    const container = common.getParentContainer() || document.body;
+    container.appendChild(containerDiv); 
   }
-
-  containerDiv = document.createElement('div') as HTMLDivElement;
-  containerDiv.className = containerClassName;
-  const container = common.getParentContainer() || document.body;
-  container.appendChild(containerDiv);
 }
 
 /**

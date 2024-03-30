@@ -61,7 +61,6 @@ export function createDom() {
     containerDiv = document.querySelector('.' + containerClassName);
     const container = common.getParentContainer() || document.body;
     container.appendChild(containerDiv!);
-    return; // Already created.
   }
 
   containerDiv = document.createElement('div') as HTMLDivElement;

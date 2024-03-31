@@ -45,9 +45,17 @@ suite('Registry', function () {
     });
 
     test('Overwrite a Key', function () {
+      // Set entry the first time.
       Blockly.registry.register('test', 'test_name', TestClass);
+      // Overwrite with same case, same object.
+      Blockly.registry.register('test', 'test_name', TestClass);
+      // Throw with same case, different object.
       chai.assert.throws(function () {
-        Blockly.registry.register('test', 'test_name', TestClass);
+        Blockly.registry.register('test', 'test_name', {});
+      }, 'already registered');
+      // Throw with different case, same object.
+      chai.assert.throws(function () {
+        Blockly.registry.register('test', 'TEST_NAME', TestClass);
       }, 'already registered');
     });
 

@@ -25,6 +25,7 @@ import {ToolboxItem} from './toolbox_item.js';
  */
 export class ToolboxSeparator extends ToolboxItem {
   /** Name used for registering a toolbox separator. */
+  /** Must be lowercase. */
   static registrationName = 'sep';
 
   /** All the CSS class names that are used to create a separator. */

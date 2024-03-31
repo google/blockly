@@ -159,6 +159,11 @@ export function register<T>(
     nameRegistry = nameMap[type] = Object.create(null);
   }
 
+  // Allow the same item to be registered more than once.
+  if (typeRegistry[caselessName] === registryItem) {
+    return;
+  }
+
   // Validate that the given class has all the required properties.
   validate(type, registryItem);
 

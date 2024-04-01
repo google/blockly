@@ -62,8 +62,6 @@ export class WorkspaceComment {
 
   private fireCreateEvent() {
     if (eventUtils.isEnabled()) {
-      // TODO: Before merging. In the old class, this is wrapped by a setGroup
-      //   call. Is there any reason that's actually necessary?
       eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CREATE))(this));
     }
   }

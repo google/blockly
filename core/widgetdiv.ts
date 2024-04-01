@@ -65,7 +65,7 @@ export function createDom() {
     containerDiv = document.createElement('div') as HTMLDivElement;
     containerDiv.className = containerClassName;
     const container = common.getParentContainer() || document.body;
-    container.appendChild(containerDiv); 
+    container.appendChild(containerDiv);
   }
 }
 

@@ -57,16 +57,16 @@ export function testOnly_setDiv(newDiv: HTMLDivElement | null) {
  * Create the widget div and inject it onto the page.
  */
 export function createDom() {
+  const container = common.getParentContainer() || document.body;
+
   if (document.querySelector('.' + containerClassName)) {
     containerDiv = document.querySelector('.' + containerClassName);
-    const container = common.getParentContainer() || document.body;
-    container.appendChild(containerDiv!);
   } else {
     containerDiv = document.createElement('div') as HTMLDivElement;
     containerDiv.className = containerClassName;
-    const container = common.getParentContainer() || document.body;
-    container.appendChild(containerDiv);
   }
+
+  container.appendChild(containerDiv!);
 }
 
 /**

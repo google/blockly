@@ -12,17 +12,26 @@ import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {IBoundedElement} from '../interfaces/i_bounded_element.js';
 import {IRenderedElement} from '../interfaces/i_rendered_element.js';
+import * as dom from '../utils/dom.js';
+import {IDraggable} from '../interfaces/i_draggable.js';
+import {CommentDragStrategy} from '../dragging/comment_drag_strategy.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
-  implements IBoundedElement, IRenderedElement
+  implements IBoundedElement, IRenderedElement, IDraggable
 {
   /** The class encompassing the svg elements making up the workspace comment. */
   private view: CommentView;
 
+  public readonly workspace: WorkspaceSvg;
+
+  private dragStrategy = new CommentDragStrategy(this);
+
   /** Constructs the workspace comment, including the view. */
   constructor(workspace: WorkspaceSvg, id?: string) {
     super(workspace, id);
+
+    this.workspace = workspace;
 
     this.view = new CommentView(workspace);
     // Set the size to the default size as defined in the superclass.
@@ -105,10 +114,58 @@ export class RenderedWorkspaceComment
     this.view.moveTo(location);
   }
 
+  /**
+   * Moves the comment during a drag. Doesn't fire move events.
+   *
+   * @internal
+   */
+  moveDuringDrag(location: Coordinate): void {
+    this.location = location;
+    this.view.moveTo(location);
+  }
+
+  /**
+   * Adds the dragging CSS class to this comment.
+   *
+   * @internal
+   */
+  setDragging(dragging: boolean): void {
+    if (dragging) {
+      dom.addClass(this.getSvgRoot(), 'blocklyDragging');
+    } else {
+      dom.removeClass(this.getSvgRoot(), 'blocklyDragging');
+    }
+  }
+
   /** Disposes of the view. */
   override dispose() {
     this.disposing = true;
     if (!this.view.isDeadOrDying()) this.view.dispose();
     super.dispose();
+  }
+
+  /** Returns whether this comment is movable or not. */
+  isMovable(): boolean {
+    return this.dragStrategy.isMovable();
+  }
+
+  /** Starts a drag on the comment. */
+  startDrag(): void {
+    this.dragStrategy.startDrag();
+  }
+
+  /** Drags the comment to the given location. */
+  drag(newLoc: Coordinate): void {
+    this.dragStrategy.drag(newLoc);
+  }
+
+  /** Ends the drag on the comment. */
+  endDrag(): void {
+    this.dragStrategy.endDrag();
+  }
+
+  /** Moves the comment back to where it was at the start of a drag. */
+  revertDrag(): void {
+    this.dragStrategy.revertDrag();
   }
 }

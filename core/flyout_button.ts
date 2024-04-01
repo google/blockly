@@ -262,6 +262,15 @@ export class FlyoutButton implements IASTNodeLocationSvg {
     return this.targetWorkspace;
   }
 
+  /**
+   * Get the button's workspace.
+   *
+   * @returns The workspace in which to place this button.
+   */
+  getWorkspace(): WorkspaceSvg {
+    return this.workspace;
+  }
+
   /** Dispose of this button. */
   dispose() {
     if (this.onMouseUpWrapper) {
@@ -293,8 +302,9 @@ export class FlyoutButton implements IASTNodeLocationSvg {
   }
 
   /**
-   * Required by IASTNodeLocationSvg, but not used. A marker cannot be set on a button.
-   * If the 'mark' shortcut is used on a button, its associated callback function is triggered.
+   * Required by IASTNodeLocationSvg, but not used. A marker cannot be set on a
+   * button. If the 'mark' shortcut is used on a button, its associated callback
+   * function is triggered.
    */
   setMarkerSvg() {
     throw new Error('Attempted to set a marker on a button.');

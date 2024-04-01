@@ -289,6 +289,9 @@ export class ASTNode {
     if (!curLocationAsBlock || curLocationAsBlock.isDeadOrDying()) {
       return null;
     }
+    if (curLocationAsBlock.workspace.isFlyout) {
+      return this.navigateFlyoutContents(forward);
+    }
     const curRoot = curLocationAsBlock.getRootBlock();
     const topBlocks = curRoot.workspace.getTopBlocks(true);
     for (let i = 0; i < topBlocks.length; i++) {
@@ -456,14 +459,9 @@ export class ASTNode {
    */
   next(): ASTNode | null {
     switch (this.type) {
-      case ASTNode.types.STACK: {
-        const block = this.location as Block;
-        if (block.workspace.isFlyout) {
-          return this.navigateFlyoutContents(true);
-        } else {
-          return this.navigateBetweenStacks(true);
-        }
-      }
+      case ASTNode.types.STACK:
+        return this.navigateBetweenStacks(true);
+
       case ASTNode.types.OUTPUT: {
         const connection = this.location as Connection;
         return ASTNode.createBlockNode(connection.getSourceBlock());
@@ -539,14 +537,8 @@ export class ASTNode {
    */
   prev(): ASTNode | null {
     switch (this.type) {
-      case ASTNode.types.STACK: {
-        const block = this.location as Block;
-        if (block.workspace.isFlyout) {
-          return this.navigateFlyoutContents(false);
-        } else {
-          return this.navigateBetweenStacks(false);
-        }
-      }
+      case ASTNode.types.STACK:
+        return this.navigateBetweenStacks(false);
 
       case ASTNode.types.OUTPUT:
         return null;

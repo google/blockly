@@ -13,7 +13,7 @@
 
 import type {Abstract as AbstractEvent} from './events/events_abstract.js';
 import type {Block} from './block.js';
-import type {BlockSvg} from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
@@ -164,7 +164,7 @@ export abstract class Flyout
   /**
    * List of visible buttons and blocks.
    */
-  protected contents_: (FlyoutButton | BlockSvg | undefined)[] = [];
+  protected contents: FlyoutItem[] = [];
 
   /**
    * List of event listeners.
@@ -556,8 +556,8 @@ export abstract class Flyout
    *
    * @returns The array of flyout buttons and blocks.
    */
-  getContents(): (FlyoutButton | BlockSvg | undefined)[] {
-    return this.contents_;
+  getContents(): FlyoutItem[] {
+    return this.contents;
   }
 
   /**
@@ -568,14 +568,14 @@ export abstract class Flyout
   setContents(contents: FlyoutItem[]): void {
     const blocksAndButtons = contents.map((item) => {
       if (item.type === 'block' && item.block) {
-        return item.block;
+        return item.block as BlockSvg;
       }
       if (item.type === 'button' && item.button) {
-        return item.button;
+        return item.button as FlyoutButton;
       }
     });
 
-    this.contents_ = blocksAndButtons;
+    this.contents = blocksAndButtons as FlyoutItem[];
   }
   /**
    * Update the display property of the flyout based whether it thinks it should

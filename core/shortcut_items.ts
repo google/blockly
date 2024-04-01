@@ -225,7 +225,7 @@ export function registerUndo() {
       // 'z' for undo 'Z' is for redo.
       (workspace as WorkspaceSvg).hideChaff();
       workspace.undo(false);
-      e.preventDefault()
+      e.preventDefault();
       return true;
     },
     keyCodes: [ctrlZ, altZ, metaZ],

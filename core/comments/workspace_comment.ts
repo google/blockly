@@ -8,6 +8,7 @@ import {Workspace} from '../workspace.js';
 import {Size} from '../utils/size.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as idGenerator from '../utils/idgenerator.js';
+import * as eventUtils from '../events/utils.js';
 
 export class WorkspaceComment {
   /** The unique identifier for this comment. */
@@ -56,7 +57,19 @@ export class WorkspaceComment {
     // TODO: File an issue to remove this once everything is migrated.
     workspace.addTopComment(this as AnyDuringMigration);
 
-    // TODO(7909): Fire events.
+    this.fireCreateEvent();
+  }
+
+  private fireCreateEvent() {
+    if (eventUtils.isEnabled()) {
+      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CREATE))(this));
+    }
+  }
+
+  private fireDeleteEvent() {
+    if (eventUtils.isEnabled()) {
+      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_DELETE))(this));
+    }
   }
 
   /** Sets the text of the comment. */
@@ -165,6 +178,7 @@ export class WorkspaceComment {
   /** Disposes of this comment. */
   dispose() {
     this.disposing = true;
+    this.fireDeleteEvent();
     this.workspace.removeTopComment(this as AnyDuringMigration);
     this.disposed = true;
   }

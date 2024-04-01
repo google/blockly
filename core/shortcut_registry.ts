@@ -287,7 +287,7 @@ export class ShortcutRegistry {
       }
     }
     if (serializedKey !== '' && e.keyCode) {
-      serializedKey = serializedKey + '+' + e.keyCode;
+      serializedKey += '+' + e.keyCode;
     } else if (e.keyCode) {
       serializedKey = String(e.keyCode);
     }
@@ -335,7 +335,7 @@ export class ShortcutRegistry {
     }
 
     if (serializedKey !== '' && keyCode) {
-      serializedKey = serializedKey + '+' + keyCode;
+      serializedKey += '+' + keyCode;
     } else if (keyCode) {
       serializedKey = `${keyCode}`;
     }

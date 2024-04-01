@@ -224,7 +224,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * Connect this connection to another connection.
    *
    * @param otherConnection Connection to connect to.
-   * @returns Whether the the blocks are now connected or not.
+   * @returns Whether the blocks are now connected or not.
    */
   connect(otherConnection: Connection): boolean {
     if (this.targetConnection === otherConnection) {

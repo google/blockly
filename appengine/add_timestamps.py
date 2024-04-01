@@ -62,8 +62,8 @@ def run_query():
     while more:
       results, cursor, more = query.fetch_page(PAGE_SIZE, start_cursor=cursor)
       handle_results(results)
-      page_count = page_count + 1
-      result_count = result_count + len(results)
+      page_count += 1
+      result_count += len(results)
       print(f'{datetime.datetime.now().strftime("%I:%M:%S %p")} : page {page_count} : {result_count}')
 
 run_query()

@@ -162,8 +162,13 @@ export function register<T>(
   // Validate that the given class has all the required properties.
   validate(type, registryItem);
 
-  // Don't throw an error if opt_allowOverrides is true.
-  if (!opt_allowOverrides && typeRegistry[caselessName]) {
+  // Don't throw an error if opt_allowOverrides is true,
+  // or if we're trying to register the same item.
+  if (
+    !opt_allowOverrides &&
+    typeRegistry[caselessName] &&
+    typeRegistry[caselessName] !== registryItem
+  ) {
     throw Error(
       'Name "' +
         caselessName +

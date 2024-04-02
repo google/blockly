@@ -8,7 +8,6 @@
 
 import type {Abstract} from './events/events_abstract.js';
 import type {Field} from './field.js';
-import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
@@ -95,8 +94,6 @@ export class Type<_T> {
   );
 
   static METRICS_MANAGER = new Type<IMetricsManager>('metricsManager');
-
-  static BLOCK_DRAGGER = new Type<IBlockDragger>('blockDragger');
 
   static DRAGGER = new Type<IDragger>('dragger');
 

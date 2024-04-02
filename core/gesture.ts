@@ -26,7 +26,6 @@ import type {Field} from './field.js';
 import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IBubble} from './interfaces/i_bubble.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
-import * as internalConstants from './internal_constants.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -142,7 +141,6 @@ export class Gesture {
 
   /** Boolean used internally to break a cycle in disposal. */
   protected isEnding_ = false;
-  private healStack: boolean;
 
   /** The event that most recently updated this gesture. */
   private mostRecentEvent: PointerEvent;
@@ -191,12 +189,6 @@ export class Gesture {
      * (0, 0) is at this.mouseDownXY_.
      */
     this.currentDragDeltaXY = new Coordinate(0, 0);
-
-    /**
-     * Boolean used to indicate whether or not to heal the stack after
-     * disconnecting a block.
-     */
-    this.healStack = !internalConstants.DRAG_STACK;
   }
 
   /**
@@ -431,7 +423,6 @@ export class Gesture {
     }
 
     this.mouseDownXY = new Coordinate(e.clientX, e.clientY);
-    this.healStack = e.altKey || e.ctrlKey || e.metaKey;
 
     this.bindMouseEvents(e);
 

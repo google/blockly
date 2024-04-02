@@ -733,7 +733,7 @@ export class CommentView implements IRenderedElement {
 }
 
 css.register(`
-.blocklyWorkspace {
+.injectionDiv {
   --commentFillColour: #FFFCC7;
   --commentBorderColour: #F2E49B;
 }
@@ -758,6 +758,7 @@ css.register(`
 .blocklyDeleteIcon {
   width: 20px;
   height: 20px;
+  display: none;
   cursor: pointer;
 }
 

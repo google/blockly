@@ -72,14 +72,10 @@ suite('Comment Deserialization', function () {
       chai.assert.equal(this.workspace.getAllBlocks().length, 0);
       // Open trashcan.
       simulateClick(this.workspace.trashcan.svgGroup);
-      console.log(
-        this.workspace.trashcan.flyout.svgGroup_,
-      );
+      console.log(this.workspace.trashcan.flyout.svgGroup_);
       // Place from trashcan.
       simulateClick(
-        this.workspace.trashcan.flyout.svgGroup_.querySelector(
-          '.blocklyPath',
-        ),
+        this.workspace.trashcan.flyout.svgGroup_.querySelector('.blocklyPath'),
       );
       chai.assert.equal(this.workspace.getAllBlocks().length, 1);
       // Check comment.

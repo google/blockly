@@ -13,7 +13,7 @@
 
 import type {Abstract as AbstractEvent} from './events/events_abstract.js';
 import type {Block} from './block.js';
-import type {BlockSvg} from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
@@ -160,6 +160,11 @@ export abstract class Flyout
    * List of visible buttons.
    */
   protected buttons_: FlyoutButton[] = [];
+
+  /**
+   * List of visible buttons and blocks.
+   */
+  protected contents: FlyoutItem[] = [];
 
   /**
    * List of event listeners.
@@ -547,6 +552,32 @@ export abstract class Flyout
   }
 
   /**
+   * Get the list of buttons and blocks of the current flyout.
+   *
+   * @returns The array of flyout buttons and blocks.
+   */
+  getContents(): FlyoutItem[] {
+    return this.contents;
+  }
+
+  /**
+   * Store the list of buttons and blocks on the flyout.
+   *
+   * @param contents - The array of items for the flyout.
+   */
+  setContents(contents: FlyoutItem[]): void {
+    const blocksAndButtons = contents.map((item) => {
+      if (item.type === 'block' && item.block) {
+        return item.block as BlockSvg;
+      }
+      if (item.type === 'button' && item.button) {
+        return item.button as FlyoutButton;
+      }
+    });
+
+    this.contents = blocksAndButtons as FlyoutItem[];
+  }
+  /**
    * Update the display property of the flyout based whether it thinks it should
    * be visible and whether its containing workspace is visible.
    */
@@ -650,6 +681,8 @@ export abstract class Flyout
     const flyoutInfo = this.createFlyoutInfo(parsedContent);
 
     renderManagement.triggerQueuedRenders(this.workspace_);
+
+    this.setContents(flyoutInfo.contents);
 
     this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 

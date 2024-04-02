@@ -454,7 +454,7 @@ export class Gesture {
     this.dragger.onDrag(e, this.currentDragDeltaXY);
   }
 
-  /** Start dragging the selected bubble. */
+  /** Start dragging the selected comment. */
   private startDraggingComment(e: PointerEvent) {
     if (!this.startComment) {
       throw new Error(
@@ -464,7 +464,7 @@ export class Gesture {
     }
     if (!this.startWorkspace_) {
       throw new Error(
-        'Cannot update dragging the bubble because the start ' +
+        'Cannot update dragging the comment because the start ' +
           'workspace is undefined',
       );
     }
@@ -951,7 +951,7 @@ export class Gesture {
   handleCommentStart(e: PointerEvent, comment: RenderedWorkspaceComment) {
     if (this.gestureHasStarted) {
       throw Error(
-        'Tried to call gesture.handleBubbleStart, ' +
+        'Tried to call gesture.handleCommentStart, ' +
           'but the gesture had already been started.',
       );
     }

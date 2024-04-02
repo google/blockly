@@ -47,6 +47,15 @@ suite('Registry', function () {
     test('Overwrite a Key', function () {
       Blockly.registry.register('test', 'test_name', TestClass);
       chai.assert.throws(function () {
+        // Registers a different object under the same name
+        Blockly.registry.register('test', 'test_name', {});
+      }, 'already registered');
+    });
+
+    test('Register a Duplicate Item', function () {
+      Blockly.registry.register('test', 'test_name', TestClass);
+      chai.assert.doesNotThrow(function () {
+        // Registering the same object under the same name is allowed
         Blockly.registry.register('test', 'test_name', TestClass);
       }, 'already registered');
     });

@@ -6,7 +6,7 @@
 
 import {Rect} from '../utils/rect.js';
 
-import {IDraggable} from './i_draggable.old.js';
+import {IDraggable} from './i_draggable.js';
 
 // Former goog.module ID: Blockly.IDragTarget
 

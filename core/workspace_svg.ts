@@ -1264,12 +1264,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       blocks[i].queueRender();
     }
 
-    if (this.currentGesture_) {
-      const imList = this.currentGesture_.getInsertionMarkers();
-      for (let i = 0; i < imList.length; i++) {
-        imList[i].queueRender();
-      }
-    }
+    this.getTopBlocks()
+      .flatMap((block) => block.getDescendants(false))
+      .filter((block) => block.isInsertionMarker())
+      .forEach((block) => block.queueRender());
 
     renderManagement
       .finishQueuedRenders()

@@ -36,7 +36,7 @@ import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {ICopyable} from './interfaces/i_copyable.js';
-import type {IDraggable} from './interfaces/i_draggable.old.js';
+import type {IDragStrategy, IDraggable} from './interfaces/i_draggable.js';
 import {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
@@ -60,6 +60,8 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import * as renderManagement from './render_management.js';
 import {IconType} from './icons/icon_types.js';
 import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
+import {BlockDragStrategy} from './dragging/block_drag_strategy.js';
+import {IDeletable} from './blockly.js';
 
 /**
  * Class for a block's SVG representation.
@@ -71,7 +73,8 @@ export class BlockSvg
     IASTNodeLocationSvg,
     IBoundedElement,
     ICopyable<BlockCopyData>,
-    IDraggable
+    IDraggable,
+    IDeletable
 {
   /**
    * Constant for identifying rows that are to be rendered inline.
@@ -153,6 +156,8 @@ export class BlockSvg
    * @internal
    */
   relativeCoords = new Coordinate(0, 0);
+
+  private dragStrategy: IDragStrategy = new BlockDragStrategy(this);
 
   /**
    * @param workspace The block's workspace.
@@ -1648,5 +1653,35 @@ export class BlockSvg
       conn,
       add,
     );
+  }
+
+  /** Sets the drag strategy for this block. */
+  setDragStrategy(dragStrategy: IDragStrategy) {
+    this.dragStrategy = dragStrategy;
+  }
+
+  /** Returns whether this block is movable or not. */
+  override isMovable(): boolean {
+    return this.dragStrategy.isMovable();
+  }
+
+  /** Starts a drag on the block. */
+  startDrag(e?: PointerEvent): void {
+    this.dragStrategy.startDrag(e);
+  }
+
+  /** Drags the block to the given location. */
+  drag(newLoc: Coordinate, e?: PointerEvent): void {
+    this.dragStrategy.drag(newLoc, e);
+  }
+
+  /** Ends the drag on the block. */
+  endDrag(e?: PointerEvent): void {
+    this.dragStrategy.endDrag(e);
+  }
+
+  /** Moves the block back to where it was at the start of a drag. */
+  revertDrag(): void {
+    this.dragStrategy.revertDrag();
   }
 }

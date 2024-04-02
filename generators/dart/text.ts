@@ -118,10 +118,12 @@ export function text_charAt(
       return [code, Order.UNARY_POSTFIX];
     }
     case 'LAST':
-      at = 1;
-    // Fall through.
     case 'FROM_END': {
-      at = generator.getAdjusted(block, 'AT', 1);
+      if (where === 'LAST') {
+        at = 1;
+      } else {
+        at = generator.getAdjusted(block, 'AT', 1);
+      }
       const functionName = generator.provideFunction_(
         'text_get_from_end',
         `
@@ -130,7 +132,7 @@ String ${generator.FUNCTION_NAME_PLACEHOLDER_}(String text, num x) {
 }
 `,
       );
-      const code = functionName + '(' + text + ', ' + at + ')';
+      const code = `${functionName}(${text}, ${at})`;
       return [code, Order.UNARY_POSTFIX];
     }
     case 'RANDOM': {

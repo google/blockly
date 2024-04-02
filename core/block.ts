@@ -33,7 +33,6 @@ import * as fieldRegistry from './field_registry.js';
 import {Input} from './inputs/input.js';
 import {Align} from './inputs/align.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
-import type {IDeletable} from './interfaces/i_deletable.js';
 import {type IIcon} from './interfaces/i_icon.js';
 import {isCommentIcon} from './interfaces/i_comment_icon.js';
 import type {MutatorIcon} from './icons/mutator_icon.js';
@@ -56,7 +55,7 @@ import {IconType} from './icons/icon_types.js';
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
  */
-export class Block implements IASTNodeLocation, IDeletable {
+export class Block implements IASTNodeLocation {
   /**
    * An optional callback method to use whenever the block's parent workspace
    * changes. This is usually only called from the constructor, the block type
@@ -319,7 +318,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *     statement with the previous statement.  Otherwise, dispose of all
    *     children of this block.
    */
-  dispose(healStack: boolean) {
+  dispose(healStack = false) {
     this.disposing = true;
 
     // Dispose of this change listener before unplugging.

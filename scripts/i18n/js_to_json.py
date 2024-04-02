@@ -81,7 +81,7 @@ def main():
   for line in infile:
     if line.startswith('///'):
       if description:
-        description = description + ' ' + line[3:].strip()
+        description += ' ' + line[3:].strip()
       else:
         description = line[3:].strip()
     else:

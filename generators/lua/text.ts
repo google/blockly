@@ -122,8 +122,6 @@ export function text_charAt(
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   const where = block.getFieldValue('WHERE') || 'FROM_START';
-  const atOrder = where === 'FROM_END' ? Order.UNARY : Order.NONE;
-  const at = generator.valueToCode(block, 'AT', atOrder) || '1';
   const text = generator.valueToCode(block, 'VALUE', Order.NONE) || "''";
   let code;
   if (where === 'RANDOM') {
@@ -144,6 +142,8 @@ end
     } else if (where === 'LAST') {
       start = '-1';
     } else {
+      const atOrder = where === 'FROM_END' ? Order.UNARY : Order.NONE;
+      const at = generator.valueToCode(block, 'AT', atOrder) || '1';
       if (where === 'FROM_START') {
         start = at;
       } else if (where === 'FROM_END') {

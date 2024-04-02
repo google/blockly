@@ -11,9 +11,11 @@ import * as clipboard from './clipboard.js';
 import * as common from './common.js';
 import {Gesture} from './gesture.js';
 import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
+import {isDeletable} from './interfaces/i_deletable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import {isDraggable} from './interfaces/i_draggable.js';
 
 /**
  * Object holding the names of the default shortcut items.
@@ -59,6 +61,7 @@ export function registerDelete() {
       return (
         !workspace.options.readOnly &&
         selected != null &&
+        isDeletable(selected) &&
         selected.isDeletable()
       );
     },
@@ -105,7 +108,9 @@ export function registerCopy() {
         !workspace.options.readOnly &&
         !Gesture.inProgress() &&
         selected != null &&
+        isDeletable(selected) &&
         selected.isDeletable() &&
+        isDraggable(selected) &&
         selected.isMovable() &&
         isCopyable(selected)
       );

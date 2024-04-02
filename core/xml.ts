@@ -55,7 +55,7 @@ export function workspaceToDom(workspace: Workspace, skipId = false): Element {
 }
 
 /** Serializes the given workspace comment to XML. */
-function saveWorkspaceComment(
+export function saveWorkspaceComment(
   comment: WorkspaceComment,
   skipId = false,
 ): Element {
@@ -504,7 +504,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
 }
 
 /** Deserializes the given comment state into the given workspace. */
-function loadWorkspaceComment(
+export function loadWorkspaceComment(
   elem: Element,
   workspace: Workspace,
 ): WorkspaceComment {
@@ -955,7 +955,7 @@ function applyNextTagNodes(
  *
  * @param xmlBlock XML block element.
  * @param workspace The workspace.
- * @param parentConnection The parent connection to to connect this block to
+ * @param parentConnection The parent connection to connect this block to
  *     after instantiating.
  * @param connectedToParentNext Whether the provided parent connection is a next
  *     connection, rather than output or statement.

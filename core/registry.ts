@@ -24,6 +24,7 @@ import type {ToolboxItem} from './toolbox/toolbox_item.js';
 import type {IPaster} from './interfaces/i_paster.js';
 import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IConnectionPreviewer} from './interfaces/i_connection_previewer.js';
+import type {IDragger} from './interfaces/i_dragger.js';
 
 /**
  * A map of maps. With the keys being the type and name of the class we are
@@ -97,6 +98,8 @@ export class Type<_T> {
 
   static BLOCK_DRAGGER = new Type<IBlockDragger>('blockDragger');
 
+  static DRAGGER = new Type<IDragger>('dragger');
+
   /** @internal */
   static SERIALIZER = new Type<ISerializer>('serializer');
 
@@ -162,8 +165,13 @@ export function register<T>(
   // Validate that the given class has all the required properties.
   validate(type, registryItem);
 
-  // Don't throw an error if opt_allowOverrides is true.
-  if (!opt_allowOverrides && typeRegistry[caselessName]) {
+  // Don't throw an error if opt_allowOverrides is true,
+  // or if we're trying to register the same item.
+  if (
+    !opt_allowOverrides &&
+    typeRegistry[caselessName] &&
+    typeRegistry[caselessName] !== registryItem
+  ) {
     throw Error(
       'Name "' +
         caselessName +

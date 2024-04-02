@@ -167,7 +167,7 @@ export class CommentView implements IRenderedElement {
       Svg.IMAGE,
       {
         'class': 'blocklyFoldoutIcon',
-        'href': `${workspace.options.pathToMedia}arrow-dropdown.svg`,
+        'href': `${workspace.options.pathToMedia}foldout-icon.svg`,
       },
       topBarGroup,
     );
@@ -736,7 +736,6 @@ css.register(`
 .blocklyWorkspace {
   --commentFillColour: #FFFCC7;
   --commentBorderColour: #F2E49B;
-  --commentIconColour: #1A1A1A
 }
 
 .blocklyComment .blocklyTextarea {
@@ -759,22 +758,18 @@ css.register(`
 .blocklyDeleteIcon {
   width: 20px;
   height: 20px;
-  display: none;
-  fill: var(--commentIconColour);
   cursor: pointer;
 }
 
 .blocklyFoldoutIcon {
   width: 20px;
   height: 20px;
-  fill: var(--commentIconColour);
   transform-origin: 12px 12px;
   cursor: pointer;
 }
 .blocklyResizeHandle {
   width: 12px;
   height: 12px;
-  stroke: var(--commentIconColour);
   cursor: se-resize;
 }
 
@@ -784,7 +779,7 @@ css.register(`
 }
 
 .blocklyComment .blocklyCommentPreview.blocklyText {
-  fill: var(--commentIconColour);
+  fill: #000;
   dominant-baseline: middle;
   visibility: hidden;
 }

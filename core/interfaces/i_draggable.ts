@@ -5,33 +5,29 @@
  */
 
 import {Coordinate} from '../utils/coordinate';
-import {IDragTarget} from './i_drag_target';
 
 /**
  * Represents an object that can be dragged.
  */
 export interface IDraggable extends IDragStrategy {
-  /** Returns true iff the element is currently movable. */
-  isMovable(): boolean;
-
   /**
    * Returns the current location of the draggable in workspace
    * coordinates.
    *
    * @returns Coordinate of current location on workspace.
    */
-  getLocation(): Coordinate;
+  getRelativeToSurfaceXY(): Coordinate;
 }
 
-/**
- * Represents an object that can be dragged.
- */
 export interface IDragStrategy {
+  /** Returns true iff the element is currently movable. */
+  isMovable(): boolean;
+
   /**
    * Handles any drag startup (e.g moving elements to the front of the
    * workspace).
    *
-   * @param e PointerEvent that started the drag; could be used to
+   * @param e PointerEvent that started the drag; can be used to
    *     check modifier keys, etc.  May be missing when dragging is
    *     triggered programatically rather than by user.
    */
@@ -43,15 +39,10 @@ export interface IDragStrategy {
    *
    * @param newLoc Workspace coordinate to which the draggable has
    *     been dragged.
-   * @param e PointerEvent that continued the drag.  Should be used to
-   *     look up any IDragTarget the pointer is over; could also be
+   * @param e PointerEvent that continued the drag.  Can be
    *     used to check modifier keys, etc.
-   * @param target The drag target the pointer is over, if any.  Could
-   *     be supplied as an alternative to providing a PointerEvent for
-   *     programatic drags.
    */
   drag(newLoc: Coordinate, e?: PointerEvent): void;
-  drag(newLoc: Coordinate, target: IDragTarget): void;
 
   /**
    * Handles any drag cleanup, including e.g. connecting or deleting
@@ -59,13 +50,23 @@ export interface IDragStrategy {
    *
    * @param newLoc Workspace coordinate at which the drag finished.
    *     been dragged.
-   * @param e PointerEvent that finished the drag.  Should be used to
-   *     look up any IDragTarget the pointer is over; could also be
+   * @param e PointerEvent that finished the drag.  Can be
    *     used to check modifier keys, etc.
-   * @param target The drag target the pointer is over, if any.  Could
-   *     be supplied as an alternative to providing a PointerEvent for
-   *     programatic drags.
    */
-  endDrag(newLoc: Coordinate, e?: PointerEvent): void;
-  endDrag(newLoc: Coordinate, target: IDragTarget): void;
+  endDrag(e?: PointerEvent): void;
+
+  /** Moves the draggable back to where it was at the start of the drag. */
+  revertDrag(): void;
+}
+
+/** Returns whether the given object is an IDraggable or not. */
+export function isDraggable(obj: any): obj is IDraggable {
+  return (
+    obj.getRelativeToSurfaceXY !== undefined &&
+    obj.isMovable !== undefined &&
+    obj.startDrag !== undefined &&
+    obj.drag !== undefined &&
+    obj.endDrag !== undefined &&
+    obj.revertDrag !== undefined
+  );
 }

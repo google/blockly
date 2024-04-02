@@ -75,8 +75,7 @@ export function load(
   }
 
   // reverse() is destructive, so we have to re-reverse to correct the order.
-  for (let [name, deserializer] of deserializers.reverse()) {
-    name = name;
+  for (const [name, deserializer] of deserializers.reverse()) {
     const pluginState = state[name];
     if (pluginState) {
       (deserializer as ISerializer)?.load(state[name], workspace);

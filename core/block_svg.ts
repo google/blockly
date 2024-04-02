@@ -243,9 +243,8 @@ export class BlockSvg
 
   /** Selects this block. Highlights the block visually. */
   select() {
-    if (this.isShadow() && this.getParent()) {
-      // Shadow blocks should not be selected.
-      this.getParent()!.select();
+    if (this.isShadow()) {
+      this.getParent()?.select();
       return;
     }
     this.addSelect();

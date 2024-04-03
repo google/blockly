@@ -413,6 +413,11 @@ export class BlockDragStrategy implements IDragStrategy {
    * including reconnecting connections.
    */
   revertDrag(): void {
+    if (this.block.isShadow()) {
+      this.block.getParent()?.revertDrag();
+      return;
+    }
+
     this.startChildConn?.connect(this.block.nextConnection);
     if (this.startParentConn) {
       switch (this.startParentConn.type) {

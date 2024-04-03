@@ -429,6 +429,9 @@ export class BlockDragStrategy implements IDragStrategy {
       }
     } else {
       this.block.moveTo(this.startLoc!, ['drag']);
+      this.workspace
+        .getLayerManager()
+        ?.moveOffDragLayer(this.block, layers.BLOCK);
       // Blocks dragged directly from a flyout may need to be bumped into
       // bounds.
       bumpObjects.bumpIntoBounds(

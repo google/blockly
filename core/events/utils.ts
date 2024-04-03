@@ -513,13 +513,13 @@ export function get(
 }
 
 /**
- * Set if a block is invalid depending on whether it is properly connected.
+ * Set if a block is disabled depending on whether it is properly connected.
  * Use this on applications where all blocks should be connected to a top block.
  *
  * @param event Custom data for event.
  */
 export function disableOrphans(event: Abstract) {
-  const invalidReason = 'orphaned block';
+  const disabledReason = 'orphaned block';
   if (event.type === MOVE || event.type === CREATE) {
     const blockEvent = event as BlockMove | BlockCreate;
     if (!blockEvent.workspaceId) {
@@ -538,17 +538,17 @@ export function disableOrphans(event: Abstract) {
       try {
         recordUndo = false;
         const parent = block.getParent();
-        if (parent && !parent.hasInvalidReason(invalidReason)) {
+        if (parent && !parent.hasDisabledReason(disabledReason)) {
           const children = block.getDescendants(false);
           for (let i = 0, child; (child = children[i]); i++) {
-            child.setInvalidReason(false, invalidReason);
+            child.setDisabledReason(false, disabledReason);
           }
         } else if (
           (block.outputConnection || block.previousConnection) &&
           !eventWorkspace.isDragging()
         ) {
           do {
-            block.setInvalidReason(true, invalidReason);
+            block.setDisabledReason(true, disabledReason);
             block = block.getNextBlock();
           } while (block);
         }

@@ -243,7 +243,7 @@ export class CodeGenerator {
     if (!block) {
       return '';
     }
-    if (!block.isEnabled() || !block.isValid()) {
+    if (!block.isEnabled()) {
       // Skip past this block if it is disabled.
       return opt_thisOnly ? '' : this.blockToCode(block.getNextBlock());
     }

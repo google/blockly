@@ -89,16 +89,16 @@ suite('JSO Serialization', function () {
       suite('Enabled', function () {
         test('False', function () {
           const block = this.workspace.newBlock('row_block');
-          block.setEnabled(false);
+          block.setDisabledReason(true, 'test reason');
           const jso = Blockly.serialization.blocks.save(block);
-          assertProperty(jso, 'enabled', false);
+          assertProperty(jso, 'disabledReasons', ['test reason']);
         });
 
         test('True', function () {
           const block = this.workspace.newBlock('row_block');
-          block.setEnabled(true);
+          block.setDisabledReason(false, 'test reason');
           const jso = Blockly.serialization.blocks.save(block);
-          assertNoProperty(jso, 'enabled');
+          assertNoProperty(jso, 'disabledReasons');
         });
       });
 

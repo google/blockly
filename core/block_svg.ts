@@ -29,6 +29,7 @@ import {
   LegacyContextMenuOption,
 } from './contextmenu_registry.js';
 import type {BlockMove} from './events/events_block_move.js';
+import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
@@ -124,7 +125,7 @@ export class BlockSvg
   /** Is this block a BlockSVG? */
   override readonly rendered = true;
 
-  private visuallyDisabledOrInvalid = false;
+  private visuallyDisabled = false;
 
   /**
    * Is this block currently rendering? Used to stop recursive render calls
@@ -535,7 +536,7 @@ export class BlockSvg
     }
 
     if (!collapsed) {
-      this.updateDisabledOrInvalid();
+      this.updateDisabled();
       this.removeInput(collapsedInputName);
       return;
     }
@@ -882,21 +883,18 @@ export class BlockSvg
    *
    * @internal
    */
-  updateDisabledOrInvalid() {
-    const disabledOrInvalid =
-      !this.isEnabled() ||
-      !this.isValid() ||
-      this.getInheritedDisabledOrInvalid();
+  updateDisabled() {
+    const disabled = !this.isEnabled() || this.getInheritedDisabled();
 
-    if (this.visuallyDisabledOrInvalid === disabledOrInvalid) {
-      this.getNextBlock()?.updateDisabledOrInvalid();
+    if (this.visuallyDisabled === disabled) {
+      this.getNextBlock()?.updateDisabled();
       return;
     }
 
     this.applyColour();
-    this.visuallyDisabledOrInvalid = disabledOrInvalid;
+    this.visuallyDisabled = disabled;
     for (const child of this.getChildren(false)) {
-      child.updateDisabledOrInvalid();
+      child.updateDisabled();
     }
   }
 
@@ -1022,40 +1020,48 @@ export class BlockSvg
   }
 
   /**
-   * Set whether the block is enabled or not.
+   * @deprecated v11 - Set whether the block is manually enabled or disabled.
+   * The user can toggle whether a block is disabled from a context menu
+   * option. A block may still be disabled for other reasons even if the user
+   * attempts to manually enable it, such as when the block is in an invalid
+   * location. This method is deprecated and setDisabledReason should be used
+   * instead.
    *
    * @param enabled True if enabled.
    */
   override setEnabled(enabled: boolean) {
-    if (this.isEnabled() !== enabled) {
-      super.setEnabled(enabled);
-      if (!this.getInheritedDisabledOrInvalid()) {
-        this.updateDisabledOrInvalid();
-      }
+    deprecation.warn(
+      'setEnabled',
+      'v11',
+      'v12',
+      'Use the setDisabledReason method of BlockSvg instead.',
+    );
+    const wasEnabled = this.isEnabled();
+    super.setEnabled(enabled);
+    if (this.isEnabled() !== wasEnabled && !this.getInheritedDisabled()) {
+      this.updateDisabled();
     }
   }
 
   /**
-   * Add or remove a reason why the block might be invalid. If a block has
-   * any reasons to be invalid, then the block itself will be considered
-   * invalid. A block could be invalid for multiple independent reasons
-   * simultaneously. Automatic processes in the Blockly library and in plugins
-   * can call this to cooperatively determine whether the block is invalid.
+   * Add or remove a reason why the block might be disabled. If a block has
+   * any reasons to be disabled, then the block itself will be considered
+   * disabled. A block could be disabled for multiple independent reasons
+   * simultaneously, such as when the user manually disables it, or the block
+   * is invalid.
    *
-   * @param invalid If true, then the block should be considered invalid for
-   *     at least the provided reason, otherwise the block is no longer invalid
+   * @param disabled If true, then the block should be considered disabled for
+   *     at least the provided reason, otherwise the block is no longer disabled
    *     for that reason.
    * @param reason A language-neutral identifier for a reason why the block
-   *     could be invalid. Call this method again with the same identifier to
-   *     update whether the block is currently invalid for this reason.
+   *     could be disabled. Call this method again with the same identifier to
+   *     update whether the block is currently disabled for this reason.
    */
-  override setInvalidReason(invalid: boolean, reason: string): void {
-    const wasValid = this.isValid();
-    super.setInvalidReason(invalid, reason);
-    if (this.isValid() !== wasValid) {
-      if (!this.getInheritedDisabledOrInvalid()) {
-        this.updateDisabledOrInvalid();
-      }
+  override setDisabledReason(disabled: boolean, reason: string): void {
+    const wasEnabled = this.isEnabled();
+    super.setDisabledReason(disabled, reason);
+    if (this.isEnabled() !== wasEnabled && !this.getInheritedDisabled()) {
+      this.updateDisabled();
     }
   }
 
@@ -1537,8 +1543,8 @@ export class BlockSvg
       this.updateCollapsed_();
     }
 
-    if (!this.isEnabled() || !this.isValid()) {
-      this.updateDisabledOrInvalid();
+    if (!this.isEnabled()) {
+      this.updateDisabled();
     }
 
     this.workspace.getRenderer().render(this);

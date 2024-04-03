@@ -13,6 +13,7 @@ import {
   RegistryItem,
   Scope,
 } from './contextmenu_registry.js';
+import * as constants from './constants.js';
 import * as dialog from './dialog.js';
 import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
@@ -466,7 +467,7 @@ export function registerDisable() {
         block!.workspace.options.disable &&
         block!.isEditable()
       ) {
-        if (block!.getInheritedDisabledOrInvalid() || !block!.isValid()) {
+        if (block!.getInheritedDisabled()) {
           return 'disabled';
         }
         return 'enabled';
@@ -479,7 +480,10 @@ export function registerDisable() {
       if (!existingGroup) {
         eventUtils.setGroup(true);
       }
-      block!.setEnabled(!block!.isEnabled());
+      block!.setDisabledReason(
+        !block!.hasDisabledReason(constants.MANUALLY_DISABLED),
+        constants.MANUALLY_DISABLED,
+      );
       eventUtils.setGroup(existingGroup);
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,

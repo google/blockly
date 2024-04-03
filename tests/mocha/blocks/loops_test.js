@@ -28,8 +28,8 @@ suite('Loops', function () {
       );
       this.clock.runAll();
       chai.assert.isFalse(
-        breakBlock.isValid(),
-        'Expected the break block to be invalid',
+        breakBlock.isEnabled(),
+        'Expected the break block to be disabled',
       );
     });
 
@@ -47,8 +47,8 @@ suite('Loops', function () {
         .connection.connect(breakBlock.previousConnection);
       this.clock.runAll();
       chai.assert.isTrue(
-        breakBlock.isValid(),
-        'Expected the break block to be valid',
+        breakBlock.isEnabled(),
+        'Expected the break block to be enabled',
       );
     });
   });

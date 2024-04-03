@@ -9,6 +9,8 @@
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {Connection} from './connection.js';
+import * as constants from './constants.js';
+import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {IconType} from './icons/icon_types.js';
@@ -272,15 +274,12 @@ export function blockToDom(
     element.setAttribute('collapsed', 'true');
   }
   if (!block.isEnabled()) {
-    element.setAttribute('disabled', 'true');
-  }
-  if (!block.isValid()) {
     // Set the value of the attribute to a comma-separated list of reasons.
     // Use encodeURIComponent to escape commas in the reasons so that they
     // won't be confused with separator commas.
     element.setAttribute(
-      'invalid-reasons',
-      Array.from(block.getInvalidReasons()).map(encodeURIComponent).join(','),
+      'disabled-reasons',
+      Array.from(block.getDisabledReasons()).map(encodeURIComponent).join(','),
     );
   }
   if (!block.isOwnDeletable()) {
@@ -1024,14 +1023,23 @@ function domToBlockHeadless(
   }
   const disabled = xmlBlock.getAttribute('disabled');
   if (disabled) {
-    block.setEnabled(disabled !== 'true' && disabled !== 'disabled');
+    deprecation.warn(
+      'disabled',
+      'v11',
+      'v12',
+      'Set disabled-reasons to "MANUALLY_DISABLED" instead.',
+    );
+    block.setDisabledReason(
+      disabled === 'true' || disabled === 'disabled',
+      constants.MANUALLY_DISABLED,
+    );
   }
-  const invalidReasons = xmlBlock.getAttribute('invalid-reasons');
-  if (invalidReasons !== null) {
-    for (const reason of invalidReasons.split(',')) {
+  const disabledReasons = xmlBlock.getAttribute('disabled-reasons');
+  if (disabledReasons !== null) {
+    for (const reason of disabledReasons.split(',')) {
       // Use decodeURIComponent to restore characters that were encoded in the
       // value, such as commas.
-      block.setInvalidReason(true, decodeURIComponent(reason));
+      block.setDisabledReason(true, decodeURIComponent(reason));
     }
   }
   const deletable = xmlBlock.getAttribute('deletable');

@@ -81,7 +81,6 @@ suite('Generator', function () {
       this.blockToCodeTest = function (
         generator,
         blockDisabled,
-        blockInvalid,
         opt_thisOnly,
         expectedCode,
         opt_message,
@@ -93,8 +92,7 @@ suite('Generator', function () {
           return 'stack_block';
         };
         rowBlock.nextConnection.connect(stackBlock.previousConnection);
-        rowBlock.disabled = blockDisabled;
-        rowBlock.setInvalidReason(blockInvalid, 'test reason');
+        rowBlock.setDisabledReason(blockDisabled, 'test reason');
 
         const code = generator.blockToCode(rowBlock, opt_thisOnly);
         delete generator.forBlock['stack_block'];
@@ -120,14 +118,12 @@ suite('Generator', function () {
           this.blockToCodeTest(
             generator,
             /* blockDisabled = */ false,
-            /* blockInvalid = */ false,
             /* opt_thisOnly = */ true,
             'row_block',
           );
           this.blockToCodeTest(
             generator,
             /* blockDisabled = */ false,
-            /* blockInvalid = */ false,
             /* opt_thisOnly = */ false,
             'row_blockstack_block',
             'thisOnly=false',
@@ -144,38 +140,12 @@ suite('Generator', function () {
           this.blockToCodeTest(
             generator,
             /* blockDisabled = */ true,
-            /* blockInvalid = */ false,
             /* opt_thisOnly = */ true,
             '',
           );
           this.blockToCodeTest(
             generator,
             /* blockDisabled = */ true,
-            /* blockInvalid = */ false,
-            /* opt_thisOnly = */ false,
-            'stack_block',
-            'thisOnly=false',
-          );
-        });
-      });
-    });
-
-    suite('Invalid block', function () {
-      testCase.forEach(function (testCase) {
-        const generator = testCase[0];
-        const name = testCase[1];
-        test(name, function () {
-          this.blockToCodeTest(
-            generator,
-            /* blockDisabled = */ false,
-            /* blockInvalid = */ true,
-            /* opt_thisOnly = */ true,
-            '',
-          );
-          this.blockToCodeTest(
-            generator,
-            /* blockDisabled = */ false,
-            /* blockInvalid = */ true,
             /* opt_thisOnly = */ false,
             'stack_block',
             'thisOnly=false',

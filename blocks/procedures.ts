@@ -1104,8 +1104,7 @@ const PROCEDURE_CALL_COMMON = {
       }
     } else if (
       event.type === Events.BLOCK_CHANGE &&
-      ((event as BlockChange).element === 'disabled' ||
-        (event as BlockChange).element === 'invalid')
+      (event as BlockChange).element === 'disabled'
     ) {
       const blockChangeEvent = event as BlockChange;
       const name = this.getProcedureCall();
@@ -1123,12 +1122,12 @@ const PROCEDURE_CALL_COMMON = {
           );
         }
         Events.setGroup(event.group);
-        const invalid = !def.isEnabled() || !def.isValid();
-        this.setInvalidReason(invalid, 'disabled procedure definition');
+        const valid = def.isEnabled();
+        this.setDisabledReason(!valid, 'DISABLED_PROCEDURE_DEFINITION');
         this.setWarningText(
-          invalid
-            ? Msg['PROCEDURES_CALL_DISABLED_DEF_WARNING'].replace('%1', name)
-            : null,
+          valid
+            ? null
+            : Msg['PROCEDURES_CALL_DISABLED_DEF_WARNING'].replace('%1', name),
         );
         Events.setGroup(oldGroup);
       }
@@ -1317,7 +1316,7 @@ const PROCEDURES_IFRETURN = {
       const group = Events.getGroup();
       // Makes it so the move and the disable event get undone together.
       Events.setGroup(e.group);
-      this.setInvalidReason(!valid, 'unparented ifreturn');
+      this.setDisabledReason(!valid, 'UNPARENTED_IFRETURN');
       Events.setGroup(group);
     }
   },

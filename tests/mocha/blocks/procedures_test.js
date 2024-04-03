@@ -811,11 +811,11 @@ suite('Procedures', function () {
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
 
-        defBlock.setEnabled(false);
+        defBlock.setDisabledReason(true, 'MANUALLY_DISABLED');
         this.clock.runAll();
 
         chai.assert.isFalse(
-          callBlock.isValid(),
+          callBlock.isEnabled(),
           'Expected the caller block to be invalid',
         );
       },
@@ -828,11 +828,11 @@ suite('Procedures', function () {
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
 
-        defBlock.setInvalidReason(true, 'test reason');
+        defBlock.setDisabledReason(true, 'test reason');
         this.clock.runAll();
 
         chai.assert.isFalse(
-          callBlock.isValid(),
+          callBlock.isEnabled(),
           'Expected the caller block to be invalid',
         );
       },
@@ -844,14 +844,14 @@ suite('Procedures', function () {
       function () {
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
-        defBlock.setEnabled(false);
+        defBlock.setDisabledReason(true, 'MANUALLY_DISABLED');
         this.clock.runAll();
 
-        defBlock.setEnabled(true);
+        defBlock.setDisabledReason(false, 'MANUALLY_DISABLED');
         this.clock.runAll();
 
         chai.assert.isTrue(
-          callBlock.isValid(),
+          callBlock.isEnabled(),
           'Expected the caller block to be valid',
         );
       },
@@ -864,12 +864,12 @@ suite('Procedures', function () {
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
         this.clock.runAll();
-        callBlock.setEnabled(false);
+        callBlock.setDisabledReason(true, 'MANUALLY_DISABLED');
         this.clock.runAll();
-        defBlock.setEnabled(false);
+        defBlock.setDisabledReason(true, 'MANUALLY_DISABLED');
         this.clock.runAll();
 
-        defBlock.setEnabled(true);
+        defBlock.setDisabledReason(false, 'MANUALLY_DISABLED');
         this.clock.runAll();
 
         chai.assert.isFalse(
@@ -888,7 +888,7 @@ suite('Procedures', function () {
       );
       this.clock.runAll();
       chai.assert.isFalse(
-        ifreturnBlock.isValid(),
+        ifreturnBlock.isEnabled(),
         'Expected the ifreturn block to be invalid',
       );
     });
@@ -904,7 +904,7 @@ suite('Procedures', function () {
         .connection.connect(ifreturnBlock.previousConnection);
       this.clock.runAll();
       chai.assert.isTrue(
-        ifreturnBlock.isValid(),
+        ifreturnBlock.isEnabled(),
         'Expected the ifreturn block to be valid',
       );
     });

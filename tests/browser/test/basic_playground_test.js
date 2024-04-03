@@ -28,11 +28,7 @@ async function getIsCollapsed(browser, blockId) {
 async function getIsDisabled(browser, blockId) {
   return await browser.execute((blockId) => {
     const block = Blockly.getMainWorkspace().getBlockById(blockId);
-    return (
-      !block.isEnabled() ||
-      !block.isValid() ||
-      block.getInheritedDisabledOrInvalid()
-    );
+    return !block.isEnabled() || block.getInheritedDisabled();
   }, blockId);
 }
 

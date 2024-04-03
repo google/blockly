@@ -1206,7 +1206,7 @@ export abstract class Flyout
           common.getBlockTypeCounts(block),
         );
         while (block) {
-          block.setEnabled(enable);
+          block.setDisabledReason(!enable, 'WORKSPACE_AT_BLOCK_CAPACITY');
           block = block.getNextBlock();
         }
       }

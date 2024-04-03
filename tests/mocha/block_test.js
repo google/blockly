@@ -2313,15 +2313,15 @@ suite('Blocks', function () {
           .getInput('STATEMENT')
           .connection.connect(blockB.previousConnection);
         // Disable the block and collapse it.
-        blockA.setEnabled(false);
+        blockA.setDisabledReason(true, 'test reason');
         blockA.setCollapsed(true);
 
         // Enable the block before expanding it.
-        blockA.setEnabled(true);
+        blockA.setDisabledReason(false, 'test reason');
         blockA.setCollapsed(false);
 
         // The child blocks should be enabled.
-        chai.assert.isFalse(blockB.disabled);
+        chai.assert.isTrue(blockB.isEnabled());
         chai.assert.isFalse(
           blockB.getSvgRoot().classList.contains('blocklyDisabled'),
         );
@@ -2334,18 +2334,18 @@ suite('Blocks', function () {
           .connection.connect(blockB.previousConnection);
 
         // Disable the child block.
-        blockB.setEnabled(false);
+        blockB.setDisabledReason(true, 'test reason');
 
         // Collapse and disable the parent block.
         blockA.setCollapsed(false);
-        blockA.setEnabled(false);
+        blockA.setDisabledReason(true, 'test reason');
 
         // Enable the parent block.
-        blockA.setEnabled(true);
+        blockA.setDisabledReason(false, 'test reason');
         blockA.setCollapsed(true);
 
         // Child blocks should stay disabled if they have been set.
-        chai.assert.isTrue(blockB.disabled);
+        chai.assert.isFalse(blockB.isEnabled());
       });
       test('Disabled blocks from JSON should have proper disabled status', function () {
         // Nested c-shaped blocks, inner block is disabled
@@ -2365,8 +2365,8 @@ suite('Blocks', function () {
           .getTopBlocks(false)[0]
           .getChildren()[0];
         chai.assert.isTrue(
-          innerBlock.visuallyDisabledOrInvalid,
-          'block should have visuallyDisabledOrInvalid set because it is disabled',
+          innerBlock.visuallyDisabled,
+          'block should have visuallyDisabled set because it is disabled',
         );
         chai.assert.isFalse(
           innerBlock.isEnabled(),
@@ -2390,8 +2390,8 @@ suite('Blocks', function () {
           .getTopBlocks(false)[0]
           .getChildren()[0];
         chai.assert.isTrue(
-          innerBlock.visuallyDisabledOrInvalid,
-          'block should have visuallyDisabledOrInvalid set because it is disabled',
+          innerBlock.visuallyDisabled,
+          'block should have visuallyDisabled set because it is disabled',
         );
         chai.assert.isFalse(
           innerBlock.isEnabled(),
@@ -2440,19 +2440,19 @@ suite('Blocks', function () {
           this.child4 = this.workspace.getBlockById('child4');
         });
         test('Disabling parent block visually disables all descendants', async function () {
-          this.parent.setEnabled(false);
+          this.parent.setDisabledReason(true, 'test reason');
           await Blockly.renderManagement.finishQueuedRenders();
           for (const child of this.parent.getDescendants(false)) {
             chai.assert.isTrue(
-              child.visuallyDisabledOrInvalid,
+              child.visuallyDisabled,
               `block ${child.id} should be visually disabled`,
             );
           }
         });
         test('Child blocks regain original status after parent is re-enabled', async function () {
-          this.parent.setEnabled(false);
+          this.parent.setDisabledReason(true, 'test reason');
           await Blockly.renderManagement.finishQueuedRenders();
-          this.parent.setEnabled(true);
+          this.parent.setDisabledReason(false, 'test reason');
           await Blockly.renderManagement.finishQueuedRenders();
 
           // child2 is disabled, rest should be enabled
@@ -2461,7 +2461,7 @@ suite('Blocks', function () {
             'child1 should be enabled',
           );
           chai.assert.isFalse(
-            this.child1.visuallyDisabledOrInvalid,
+            this.child1.visuallyDisabled,
             'child1 should not be visually disabled',
           );
 
@@ -2470,7 +2470,7 @@ suite('Blocks', function () {
             'child2 should be disabled',
           );
           chai.assert.isTrue(
-            this.child2.visuallyDisabledOrInvalid,
+            this.child2.visuallyDisabled,
             'child2 should be visually disabled',
           );
 
@@ -2479,7 +2479,7 @@ suite('Blocks', function () {
             'child3 should be enabled',
           );
           chai.assert.isFalse(
-            this.child3.visuallyDisabledOrInvalid,
+            this.child3.visuallyDisabled,
             'child3 should not be visually disabled',
           );
 
@@ -2488,7 +2488,7 @@ suite('Blocks', function () {
             'child34 should be enabled',
           );
           chai.assert.isFalse(
-            this.child4.visuallyDisabledOrInvalid,
+            this.child4.visuallyDisabled,
             'child4 should not be visually disabled',
           );
         });

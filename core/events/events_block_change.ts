@@ -31,11 +31,14 @@ export class BlockChange extends BlockBase {
   override type = eventUtils.BLOCK_CHANGE;
   /**
    * The element that changed; one of 'field', 'comment', 'collapsed',
-   * 'disabled', 'invalid', 'inline', or 'mutation'
+   * 'disabled', 'inline', or 'mutation'
    */
   element?: string;
 
-  /** The name of the field that changed, if this is a change to a field. */
+  /**
+   * The name of the field that changed, if this is a change to a field, or
+   * the identifier of the reason why a block can be disabled.
+   */
   name?: string;
 
   /** The original value of the element. */
@@ -168,12 +171,7 @@ export class BlockChange extends BlockBase {
         block.setCollapsed(!!value);
         break;
       case 'disabled':
-        block.setEnabled(!value);
-        break;
-      case 'invalid':
-        for (const entry of Object.entries(value as Object)) {
-          block.setInvalidReason(!!entry[1], entry[0]);
-        }
+        block.setDisabledReason(!!value, this.name!);
         break;
       case 'inline':
         block.setInputsInline(!!value);

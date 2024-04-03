@@ -9,6 +9,8 @@
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
+import * as constants from '../constants.js';
+import * as deprecation from '../utils/deprecation.js';
 import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../inputs/input_types.js';
 import {isSerializable} from '../interfaces/i_serializable.js';
@@ -53,7 +55,7 @@ export interface State {
   movable?: boolean;
   editable?: boolean;
   enabled?: boolean;
-  invalidReasons?: string[];
+  disabledReasons?: string[];
   inline?: boolean;
   data?: string;
   extraState?: AnyDuringMigration;
@@ -159,10 +161,7 @@ function saveAttributes(block: Block, state: State) {
     state['collapsed'] = true;
   }
   if (!block.isEnabled()) {
-    state['enabled'] = false;
-  }
-  if (!block.isValid()) {
-    state['invalidReasons'] = Array.from(block.getInvalidReasons());
+    state['disabledReasons'] = Array.from(block.getDisabledReasons());
   }
   if (!block.isOwnDeletable()) {
     state['deletable'] = false;
@@ -524,11 +523,17 @@ function loadAttributes(block: Block, state: State) {
     block.setEditable(false);
   }
   if (state['enabled'] === false) {
-    block.setEnabled(false);
+    deprecation.warn(
+      'enabled',
+      'v11',
+      'v12',
+      'Set disabledReasons to ["MANUALLY_DISABLED"] instead.',
+    );
+    block.setDisabledReason(true, constants.MANUALLY_DISABLED);
   }
-  if (Array.isArray(state['invalidReasons'])) {
-    for (const reason of state['invalidReasons']) {
-      block.setInvalidReason(true, reason);
+  if (Array.isArray(state['disabledReasons'])) {
+    for (const reason of state['disabledReasons']) {
+      block.setDisabledReason(true, reason);
     }
   }
   if (state['inline'] !== undefined) {

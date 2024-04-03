@@ -132,11 +132,7 @@ export class PathObject implements IPathObject {
     this.svgPath.setAttribute('fill', this.style.colourPrimary);
 
     this.updateShadow_(block.isShadow());
-    this.updateDisabledOrInvalid_(
-      !block.isEnabled() ||
-        !block.isValid() ||
-        block.getInheritedDisabledOrInvalid(),
-    );
+    this.updateDisabled_(!block.isEnabled() || block.getInheritedDisabled());
   }
 
   /**
@@ -200,7 +196,7 @@ export class PathObject implements IPathObject {
    *
    * @param disabled True if disabled.
    */
-  protected updateDisabledOrInvalid_(disabled: boolean) {
+  protected updateDisabled_(disabled: boolean) {
     this.setClass_('blocklyDisabled', disabled);
     if (disabled) {
       this.svgPath.setAttribute(

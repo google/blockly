@@ -130,8 +130,8 @@ export class PathObject extends BasePathObject {
     }
   }
 
-  override updateDisabledOrInvalid_(disabled: boolean) {
-    super.updateDisabledOrInvalid_(disabled);
+  override updateDisabled_(disabled: boolean) {
+    super.updateDisabled_(disabled);
     if (disabled) {
       this.svgPath.setAttribute('stroke', 'none');
     }

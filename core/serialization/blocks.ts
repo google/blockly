@@ -527,7 +527,7 @@ function loadAttributes(block: Block, state: State) {
       'enabled',
       'v11',
       'v12',
-      'Set disabledReasons to ["MANUALLY_DISABLED"] instead.',
+      'disabledReasons to ["MANUALLY_DISABLED"]',
     );
     block.setDisabledReason(true, constants.MANUALLY_DISABLED);
   }

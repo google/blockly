@@ -1027,7 +1027,7 @@ function domToBlockHeadless(
       'disabled',
       'v11',
       'v12',
-      'Set disabled-reasons to "MANUALLY_DISABLED" instead.',
+      'disabled-reasons to "MANUALLY_DISABLED"',
     );
     block.setDisabledReason(
       disabled === 'true' || disabled === 'disabled',

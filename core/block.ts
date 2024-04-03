@@ -1403,14 +1403,25 @@ export class Block implements IASTNodeLocation {
   }
 
   /** @deprecated v11 - Get whether the block is manually disabled. */
-  get disabled() {
+  get disabled(): boolean {
     deprecation.warn(
       'disabled',
       'v11',
       'v12',
-      'Use the isEnabled or hasDisabledReason methods of Block instead.',
+      'the isEnabled or hasDisabledReason methods of Block',
     );
     return this.hasDisabledReason(constants.MANUALLY_DISABLED);
+  }
+
+  /** @deprecated v11 - Set whether the block is manually disabled. */
+  set disabled(value: boolean) {
+    deprecation.warn(
+      'disabled',
+      'v11',
+      'v12',
+      'the setDisabledReason method of Block',
+    );
+    this.setDisabledReason(value, constants.MANUALLY_DISABLED);
   }
 
   /**
@@ -1428,7 +1439,7 @@ export class Block implements IASTNodeLocation {
       'setEnabled',
       'v11',
       'v12',
-      'Use the setDisabledReason method of Block instead.',
+      'the setDisabledReason method of Block',
     );
     this.setDisabledReason(!enabled, constants.MANUALLY_DISABLED);
   }

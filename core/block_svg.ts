@@ -1034,7 +1034,7 @@ export class BlockSvg
       'setEnabled',
       'v11',
       'v12',
-      'Use the setDisabledReason method of BlockSvg instead.',
+      'the setDisabledReason method of BlockSvg',
     );
     const wasEnabled = this.isEnabled();
     super.setEnabled(enabled);

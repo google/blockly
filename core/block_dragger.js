@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -150,7 +151,7 @@ const BlockDragger = class {
       eventUtils.setGroup(true);
     }
     this.fireDragStartEvent_();
-  
+
     // Mutators don't have the same type of z-ordering as the normal workspace
     // during a drag.  They have to rely on the order of the blocks in the SVG.
     // For performance reasons that usually happens at the end of a drag,
@@ -158,17 +159,17 @@ const BlockDragger = class {
     if (this.workspace_.isMutator) {
       this.draggingBlock_.bringToFront();
     }
-  
+
     // During a drag there may be a lot of rerenders, but not field changes.
     // Turn the cache on so we don't do spurious remeasures during the drag.
     dom.startTextWidthCache();
     this.workspace_.setResizesEnabled(false);
     blockAnimation.disconnectUiStop();
-  
+
     if (this.shouldDisconnect_(healStack)) {
       this.disconnectBlock_(healStack, currentDragDeltaXY);
     }
-  
+
     this.draggingBlock_.setDragging(true);
     // For future consideration: we may be able to put moveToDragSurface inside
     // the block dragger, which would also let the block not track the block drag

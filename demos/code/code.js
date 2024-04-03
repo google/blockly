@@ -127,11 +127,11 @@ Code.loadBlocks = function(defaultXml) {
   } else if (loadOnce) {
     // Language switching stores the blocks during the reload.
     delete window.sessionStorage.loadOnceBlocks;
-    var xml = Blockly.Xml.textToDom(loadOnce);
+    var xml = Blockly.utils.xml.textToDom(loadOnce);
     Blockly.Xml.domToWorkspace(xml, Code.workspace);
   } else if (defaultXml) {
     // Load the editor with default starting blocks.
-    var xml = Blockly.Xml.textToDom(defaultXml);
+    var xml = Blockly.utils.xml.textToDom(defaultXml);
     Blockly.Xml.domToWorkspace(xml, Code.workspace);
   } else if ('BlocklyStorage' in window) {
     // Restore saved blocks in a separate thread so that subsequent
@@ -201,7 +201,7 @@ Code.bindClick = function(el, func) {
  */
 Code.importPrettify = function() {
   var script = document.createElement('script');
-  script.setAttribute('src', 'https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js');
+  script.setAttribute('src', 'https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js');
   document.head.appendChild(script);
 };
 
@@ -264,7 +264,7 @@ Code.tabClick = function(clickedName) {
     var xmlText = xmlTextarea.value;
     var xmlDom = null;
     try {
-      xmlDom = Blockly.Xml.textToDom(xmlText);
+      xmlDom = Blockly.utils.xml.textToDom(xmlText);
     } catch (e) {
       var q = window.confirm(
           MSG['parseError'].replace(/%1/g, 'XML').replace('%2', e));
@@ -356,15 +356,15 @@ Code.renderContent = function() {
         Blockly.serialization.workspaces.save(Code.workspace), null, 2);
     jsonTextarea.focus();
   } else if (content.id === 'content_javascript') {
-    Code.attemptCodeGeneration(Blockly.JavaScript);
+    Code.attemptCodeGeneration(javascript.javascriptGenerator);
   } else if (content.id === 'content_python') {
-    Code.attemptCodeGeneration(Blockly.Python);
+    Code.attemptCodeGeneration(python.pythonGenerator);
   } else if (content.id === 'content_php') {
-    Code.attemptCodeGeneration(Blockly.PHP);
+    Code.attemptCodeGeneration(php.phpGenerator);
   } else if (content.id === 'content_dart') {
-    Code.attemptCodeGeneration(Blockly.Dart);
+    Code.attemptCodeGeneration(dart.dartGenerator);
   } else if (content.id === 'content_lua') {
-    Code.attemptCodeGeneration(Blockly.Lua);
+    Code.attemptCodeGeneration(lua.luaGenerator);
   }
   if (typeof PR === 'object') {
     PR.prettyPrint();
@@ -373,7 +373,7 @@ Code.renderContent = function() {
 
 /**
  * Attempt to generate the code and display it in the UI, pretty printed.
- * @param generator {!Blockly.Generator} The generator to use.
+ * @param generator {!Blockly.CodeGenerator} The generator to use.
  */
 Code.attemptCodeGeneration = function(generator) {
   var content = document.getElementById('content_' + Code.selected);
@@ -388,14 +388,14 @@ Code.attemptCodeGeneration = function(generator) {
 
 /**
  * Check whether all blocks in use have generator functions.
- * @param generator {!Blockly.Generator} The generator to use.
+ * @param generator {!Blockly.CodeGenerator} The generator to use.
  */
 Code.checkAllGeneratorFunctionsDefined = function(generator) {
   var blocks = Code.workspace.getAllBlocks(false);
   var missingBlockGenerators = [];
   for (var i = 0; i < blocks.length; i++) {
     var blockType = blocks[i].type;
-    if (!generator[blockType]) {
+    if (!generator.forBlock[blockType]) {
       if (missingBlockGenerators.indexOf(blockType) === -1) {
         missingBlockGenerators.push(blockType);
       }
@@ -459,7 +459,7 @@ Code.init = function() {
   var toolboxText = document.getElementById('toolbox').outerHTML;
   toolboxText = toolboxText.replace(/(^|[^%]){(\w+)}/g,
       function(m, p1, p2) {return p1 + MSG[p2];});
-  var toolboxXml = Blockly.Xml.textToDom(toolboxText);
+  var toolboxXml = Blockly.utils.xml.textToDom(toolboxText);
 
   Code.workspace = Blockly.inject('content_blocks',
       {grid:
@@ -477,7 +477,7 @@ Code.init = function() {
 
   // Add to reserved word list: Local variables in execution environment (runJS)
   // and the infinite loop detection function.
-  Blockly.JavaScript.addReservedWords('code,timeouts,checkTimeout');
+  javascript.javascriptGenerator.addReservedWords('code,timeouts,checkTimeout');
 
   Code.loadBlocks('');
 
@@ -588,15 +588,15 @@ Code.runJS = function(event) {
     event.preventDefault();
   }
 
-  Blockly.JavaScript.INFINITE_LOOP_TRAP = 'checkTimeout();\n';
+  javascript.javascriptGenerator.INFINITE_LOOP_TRAP = 'checkTimeout();\n';
   var timeouts = 0;
   var checkTimeout = function() {
     if (timeouts++ > 1000000) {
       throw MSG['timeout'];
     }
   };
-  var code = Blockly.JavaScript.workspaceToCode(Code.workspace);
-  Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+  var code = javascript.javascriptGenerator.workspaceToCode(Code.workspace);
+  javascript.javascriptGenerator.INFINITE_LOOP_TRAP = null;
   try {
     eval(code);
   } catch (e) {
@@ -621,6 +621,6 @@ Code.discard = function() {
 // Load the Code demo's language strings.
 document.write('<script src="msg/' + Code.LANG + '.js"></script>\n');
 // Load Blockly's language strings.
-document.write('<script src="../../msg/js/' + Code.LANG + '.js"></script>\n');
+document.write('<script src="../../build/msg/' + Code.LANG + '.js"></script>\n');
 
 window.addEventListener('load', Code.init);

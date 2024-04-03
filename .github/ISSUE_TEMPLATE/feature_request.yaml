@@ -1,0 +1,39 @@
+name: Make a feature request ✨
+description: Suggest an idea to make Blockly better.
+labels: 'issue: feature request, issue: triage'
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Thank you for taking the time to fill out a feature request!
+        If you have a question about how to use Blockly in your application,
+        please ask on the [forum](https://groups.google.com/forum/#!forum/blockly) instead of filing an issue.
+  - type: checkboxes
+    id: duplicates
+    attributes:
+      label: Check for duplicates
+      options:
+        - label: I have searched for similar issues before opening a new one.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: I'm always frustrated when...
+  - type: textarea
+    id: request
+    attributes:
+      label: Request
+      description: Describe your feature request and how it solves your problem.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe any alternative solutions or features you've considered.
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context or screenshots about the feature request here.

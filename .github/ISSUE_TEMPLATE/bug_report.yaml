@@ -1,0 +1,58 @@
+name: Report a bug 🐛
+description: Report bugs in Blockly, so we can fix them.
+labels: 'issue: bug, issue: triage'
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Thank you for taking the time to fill out a bug report!
+        If you have a question about how to use Blockly in your application,
+        please ask on the [forum](https://groups.google.com/forum/#!forum/blockly) instead of filing an issue.
+  - type: checkboxes
+    id: duplicates
+    attributes:
+      label: Check for duplicates
+      options:
+        - label: I have searched for similar issues before opening a new one.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please provide a clear and concise description of the bug.
+      placeholder: What happened? What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
+      description: What steps should we take to reproduce the issue?
+      value: |
+        1. 
+        2. 
+        3.
+  - type: textarea
+    id: stack-trace
+    attributes:
+      label: Stack trace
+      description: If you saw an error message or stack trace, please include it here.
+      placeholder: The text in this section will be formatted automatically; no need to include backticks.
+      render: shell
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Screenshots can help us see the behavior you're describing. Please add a screenshot or gif, especially if you are describing a rendering or visual bug.
+      placeholder: Paste or drag-and-drop an image to upload it.
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: Browsers
+      description: Please select all browsers you've observed this behavior on. If the bug isn't browser-specific, you can leave this blank.
+      multiple: true
+      options:
+        - Chrome desktop
+        - Safari desktop
+        - Firefox desktop
+        - Android mobile
+        - iOS mobile

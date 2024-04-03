@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright 2019 Google LLC
@@ -71,5 +72,4 @@ const Rect = class {
         this.top > other.bottom || this.bottom < other.top);
   }
 };
-
 exports.Rect = Rect;

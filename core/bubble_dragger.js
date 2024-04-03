@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright 2018 Google LLC
@@ -294,5 +295,4 @@ const BubbleDragger = class {
     this.dragSurface_.setBlocksAndShow(this.draggingBubble_.getSvgRoot());
   }
 };
-
 exports.BubbleDragger = BubbleDragger;

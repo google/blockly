@@ -5,12 +5,10 @@
  */
 
 /**
- * @fileoverview Type definitions for the Blockly qqq locale.
- * @author samelh@google.com (Sam El-Husseini)
+ *  Type definitions for the Blockly qqq locale.
  */
 
 /// <reference path="msg.d.ts" />
 
 import BlocklyMsg = Blockly.Msg;
 export = BlocklyMsg;
-

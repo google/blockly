@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright 2019 Google LLC
@@ -349,5 +350,4 @@ Types.isTopOrBottomRow = function(row) {
 Types.isInputRow = function(row) {
   return row.type & Types.INPUT_ROW;
 };
-
 exports.Types = Types;

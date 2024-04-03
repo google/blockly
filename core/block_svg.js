@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright 2012 Google LLC
@@ -860,10 +861,10 @@ class BlockSvg extends Block {
     if (this.workspace.options.readOnly || !this.contextMenu) {
       return null;
     }
-    
+
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
         ContextMenuRegistry.ScopeType.BLOCK, {block: this});
-    
+
     if (this.workspace.options.showModuleBar && this.isMovable()) {
       const block = this;
       menuOptions.push(ContextMenu.blockMoveToNewModuleOption(block));

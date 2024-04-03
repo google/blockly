@@ -4,10 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.helpers.userInput');
-
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
-
+import {KeyCodes} from '../../../build/src/core/utils/keycodes.js';
 
 /**
  * Triggers pointer event on target.
@@ -17,7 +14,7 @@ const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
  * @param {Object<string, string>=} properties Properties to pass into event
  *    constructor.
  */
-function dispatchPointerEvent(target, type, properties) {
+export function dispatchPointerEvent(target, type, properties) {
   const eventInitDict = {
     cancelable: true,
     bubbles: true,
@@ -32,7 +29,6 @@ function dispatchPointerEvent(target, type, properties) {
   const event = new PointerEvent(type, eventInitDict);
   target.dispatchEvent(event);
 }
-exports.dispatchPointerEvent = dispatchPointerEvent;
 
 /**
  * Creates a key down event used for testing.
@@ -40,7 +36,7 @@ exports.dispatchPointerEvent = dispatchPointerEvent;
  * @param {!Array<number>=} modifiers A list of modifiers. Use Blockly.utils.KeyCodes enum.
  * @return {!KeyboardEvent} The mocked keydown event.
  */
-function createKeyDownEvent(keyCode, modifiers) {
+export function createKeyDownEvent(keyCode, modifiers) {
   const event = {
     keyCode: keyCode,
   };
@@ -52,7 +48,6 @@ function createKeyDownEvent(keyCode, modifiers) {
   }
   return new KeyboardEvent('keydown', event);
 }
-exports.createKeyDownEvent = createKeyDownEvent;
 
 /**
  * Simulates mouse click by triggering relevant mouse events.
@@ -60,9 +55,8 @@ exports.createKeyDownEvent = createKeyDownEvent;
  * @param {Object<string, string>=} properties Properties to pass into event
  *    constructor.
  */
-function simulateClick(target, properties) {
+export function simulateClick(target, properties) {
   dispatchPointerEvent(target, 'pointerdown', properties);
   dispatchPointerEvent(target, 'pointerup', properties);
   dispatchPointerEvent(target, 'click', properties);
 }
-exports.simulateClick = simulateClick;

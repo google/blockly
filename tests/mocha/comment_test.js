@@ -4,104 +4,113 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.comments');
+import {assertEventFired} from './test_helpers/events.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 
-const {assertEventFired} = goog.require('Blockly.test.helpers.events');
-const eventUtils = goog.require('Blockly.Events.utils');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-
-
-suite('Comments', function() {
-  setup(function() {
+suite('Comments', function () {
+  setup(function () {
     sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([
       {
-        "type": "empty_block",
-        "message0": "",
-        "args0": [],
+        'type': 'empty_block',
+        'message0': '',
+        'args0': [],
       },
     ]);
     this.workspace = Blockly.inject('blocklyDiv', {
       comments: true,
       scrollbars: true,
     });
-    this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-        '<block type="empty_block"/>'
-    ), this.workspace);
-    this.comment = new Blockly.Comment(this.block);
-    this.comment.computeIconLocation();
+    this.block = Blockly.Xml.domToBlock(
+      Blockly.utils.xml.textToDom('<block type="empty_block"/>'),
+      this.workspace,
+    );
+    this.comment = new Blockly.icons.CommentIcon(this.block);
   });
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
-  suite('Visibility and Editability', function() {
-    setup(function() {
+  suite('Visibility and Editability', function () {
+    setup(function () {
       this.block.setCommentText('test text');
     });
 
     function assertEditable(comment) {
-      chai.assert.isNotOk(comment.paragraphElement_);
-      chai.assert.isOk(comment.textarea_);
-      chai.assert.equal(comment.textarea_.value, 'test text');
+      chai.assert.isNotOk(comment.textBubble);
+      chai.assert.isOk(comment.textInputBubble);
     }
     function assertNotEditable(comment) {
-      chai.assert.isNotOk(comment.textarea_);
-      chai.assert.isOk(comment.paragraphElement_);
-      chai.assert.equal(comment.paragraphElement_.firstChild.textContent,
-          'test text');
+      chai.assert.isNotOk(comment.textInputBubble);
+      chai.assert.isOk(comment.textBubble);
     }
-    test('Editable', function() {
-      this.comment.setVisible(true);
-      chai.assert.isTrue(this.comment.isVisible());
+    test('Editable', function () {
+      this.comment.setBubbleVisible(true);
+      chai.assert.isTrue(this.comment.bubbleIsVisible());
       assertEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN}, this.workspace.id,
-          this.block.id);
+        this.eventsFireStub,
+        Blockly.Events.BubbleOpen,
+        {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
+        this.workspace.id,
+        this.block.id,
+      );
     });
-    test('Not Editable', function() {
+    test('Not Editable', function () {
       sinon.stub(this.block, 'isEditable').returns(false);
 
-      this.comment.setVisible(true);
+      this.comment.setBubbleVisible(true);
 
-      chai.assert.isTrue(this.comment.isVisible());
+      chai.assert.isTrue(this.comment.bubbleIsVisible());
       assertNotEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
-          this.workspace.id, this.block.id);
+        this.eventsFireStub,
+        Blockly.Events.BubbleOpen,
+        {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
+        this.workspace.id,
+        this.block.id,
+      );
     });
-    test('Editable -> Not Editable', function() {
-      this.comment.setVisible(true);
+    test('Editable -> Not Editable', function () {
+      this.comment.setBubbleVisible(true);
       sinon.stub(this.block, 'isEditable').returns(false);
 
       this.comment.updateEditable();
 
-      chai.assert.isTrue(this.comment.isVisible());
+      chai.assert.isTrue(this.comment.bubbleIsVisible());
       assertNotEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
-          this.workspace.id, this.block.id);
+        this.eventsFireStub,
+        Blockly.Events.BubbleOpen,
+        {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
+        this.workspace.id,
+        this.block.id,
+      );
     });
-    test('Not Editable -> Editable', function() {
+    test('Not Editable -> Editable', function () {
       const editableStub = sinon.stub(this.block, 'isEditable').returns(false);
 
-      this.comment.setVisible(true);
+      this.comment.setBubbleVisible(true);
 
       editableStub.returns(true);
 
       this.comment.updateEditable();
-      chai.assert.isTrue(this.comment.isVisible());
+      chai.assert.isTrue(this.comment.bubbleIsVisible());
       assertEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
-          this.workspace.id, this.block.id);
+        this.eventsFireStub,
+        Blockly.Events.BubbleOpen,
+        {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
+        this.workspace.id,
+        this.block.id,
+      );
     });
   });
-  suite('Set/Get Bubble Size', function() {
-    teardown(function() {
+  suite('Set/Get Bubble Size', function () {
+    teardown(function () {
       sinon.restore();
     });
     function assertBubbleSize(comment, height, width) {
@@ -112,24 +121,22 @@ suite('Comments', function() {
     function assertBubbleSizeDefault(comment) {
       assertBubbleSize(comment, 80, 160);
     }
-    test('Set Size While Visible', function() {
-      this.comment.setVisible(true);
-      const bubbleSizeSpy = sinon.spy(this.comment.bubble_, 'setBubbleSize');
+    test('Set Size While Visible', function () {
+      this.comment.setBubbleVisible(true);
 
       assertBubbleSizeDefault(this.comment);
-      this.comment.setBubbleSize(100, 100);
+      this.comment.setBubbleSize(new Blockly.utils.Size(100, 100));
       assertBubbleSize(this.comment, 100, 100);
-      sinon.assert.calledOnce(bubbleSizeSpy);
 
-      this.comment.setVisible(false);
+      this.comment.setBubbleVisible(false);
       assertBubbleSize(this.comment, 100, 100);
     });
-    test('Set Size While Invisible', function() {
+    test('Set Size While Invisible', function () {
       assertBubbleSizeDefault(this.comment);
-      this.comment.setBubbleSize(100, 100);
+      this.comment.setBubbleSize(new Blockly.utils.Size(100, 100));
       assertBubbleSize(this.comment, 100, 100);
 
-      this.comment.setVisible(true);
+      this.comment.setBubbleVisible(true);
       assertBubbleSize(this.comment, 100, 100);
     });
   });

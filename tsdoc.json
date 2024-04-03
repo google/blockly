@@ -1,0 +1,35 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
+  // Include the definitions that are required for API Extractor
+  "extends": ["@microsoft/api-extractor/extends/tsdoc-base.json"],
+  "tagDefinitions": [
+    {
+      "tagName": "@alias",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@define",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@license",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@nocollapse",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@suppress",
+      "syntaxKind": "modifier"
+    }
+  ],
+
+  "supportForTags": {
+    "@alias": true,
+    "@define": true,
+    "@license": true,
+    "@nocollapse": true,
+    "@suppress": true
+  }
+}

@@ -4,17 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.helpers.fields');
-
-const {runTestCases, TestCase} = goog.require('Blockly.test.helpers.common');
-
+import {runTestCases, TestCase} from './common.js';
 
 /**
  * Field value test case.
  * @implements {TestCase}
  * @record
  */
-class FieldValueTestCase {
+export class FieldValueTestCase {
   /**
    * Class for a a field value test case.
    */
@@ -39,14 +36,13 @@ class FieldValueTestCase {
     this.errMsgMatcher;
   }
 }
-exports.FieldValueTestCase = FieldValueTestCase;
 
 /**
  * Field creation test case.
  * @extends {FieldValueTestCase}
  * @record
  */
-class FieldCreationTestCase {
+export class FieldCreationTestCase {
   /**
    * Class for a field creation test case.
    */
@@ -61,7 +57,6 @@ class FieldCreationTestCase {
     this.json;
   }
 }
-exports.FieldCreationTestCase = FieldCreationTestCase;
 
 /**
  * Assert a field's value is the same as the expected value.
@@ -69,16 +64,19 @@ exports.FieldCreationTestCase = FieldCreationTestCase;
  * @param {*} expectedValue The expected value.
  * @param {string=} expectedText The expected text.
  */
-function assertFieldValue(field, expectedValue, expectedText = undefined) {
+export function assertFieldValue(
+  field,
+  expectedValue,
+  expectedText = undefined,
+) {
   const actualValue = field.getValue();
   const actualText = field.getText();
   if (expectedText === undefined) {
     expectedText = String(expectedValue);
   }
-  chai.assert.equal(actualValue, expectedValue, 'Value');
-  chai.assert.equal(actualText, expectedText, 'Text');
+  chai.assert.deepEqual(actualValue, expectedValue);
+  chai.assert.deepEqual(actualText, expectedText);
 }
-exports.assertFieldValue = assertFieldValue;
 
 /**
  * Runs provided creation test cases.
@@ -97,7 +95,7 @@ function runCreationTests_(testCases, assertion, creation) {
    * @return {Function} The test callback.
    */
   const createTestFn = (testCase) => {
-    return function() {
+    return function () {
       const field = creation.call(this, testCase);
       assertion(field, testCase);
     };
@@ -120,8 +118,8 @@ function runCreationTestsAssertThrows_(testCases, creation) {
    * @return {!Function} The test callback.
    */
   const createTestFn = (testCase) => {
-    return function() {
-      chai.assert.throws(function() {
+    return function () {
+      chai.assert.throws(function () {
         creation.call(this, testCase);
       }, testCase.errMsgMatcher);
     };
@@ -145,21 +143,28 @@ function runCreationTestsAssertThrows_(testCases, creation) {
  * @param {function(!FieldCreationTestCase=)=} customCreateWithJs Custom
  *    creation function to use in tests.
  */
-function runConstructorSuiteTests(TestedField, validValueTestCases,
-    invalidValueTestCases, validRunAssertField, assertFieldDefault,
-    customCreateWithJs) {
-  suite('Constructor', function() {
+export function runConstructorSuiteTests(
+  TestedField,
+  validValueTestCases,
+  invalidValueTestCases,
+  validRunAssertField,
+  assertFieldDefault,
+  customCreateWithJs,
+) {
+  suite('Constructor', function () {
     if (assertFieldDefault) {
-      test('Empty', function() {
-        const field = customCreateWithJs ? customCreateWithJs.call(this) :
-            new TestedField();
+      test('Empty', function () {
+        const field = customCreateWithJs
+          ? customCreateWithJs.call(this)
+          : new TestedField();
         assertFieldDefault(field);
       });
     } else {
-      test('Empty', function() {
-        chai.assert.throws(function() {
-          customCreateWithJs ? customCreateWithJs.call(this) :
-              new TestedField();
+      test('Empty', function () {
+        chai.assert.throws(function () {
+          customCreateWithJs
+            ? customCreateWithJs.call(this)
+            : new TestedField();
         });
       });
     }
@@ -169,20 +174,23 @@ function runConstructorSuiteTests(TestedField, validValueTestCases,
      * @param {!FieldCreationTestCase} testCase The test case information.
      * @return {!Blockly.Field} The instantiated field.
      */
-    const createWithJs = function(testCase) {
-      return customCreateWithJs ? customCreateWithJs.call(this, testCase) :
-          new TestedField(...testCase.args);
+    const createWithJs = function (testCase) {
+      return customCreateWithJs
+        ? customCreateWithJs.call(this, testCase)
+        : new TestedField(...testCase.args);
     };
     if (assertFieldDefault) {
       runCreationTests_(
-          invalidValueTestCases, assertFieldDefault, createWithJs);
+        invalidValueTestCases,
+        assertFieldDefault,
+        createWithJs,
+      );
     } else {
       runCreationTestsAssertThrows_(invalidValueTestCases, createWithJs);
     }
     runCreationTests_(validValueTestCases, validRunAssertField, createWithJs);
   });
 }
-exports.runConstructorSuiteTests = runConstructorSuiteTests;
 
 /**
  * Runs suite of tests for fromJson creation of specified field.
@@ -200,21 +208,28 @@ exports.runConstructorSuiteTests = runConstructorSuiteTests;
  * @param {function(!FieldCreationTestCase=)=} customCreateWithJson Custom
  *    creation function to use in tests.
  */
-function runFromJsonSuiteTests(TestedField, validValueTestCases,
-    invalidValueTestCases, validRunAssertField, assertFieldDefault,
-    customCreateWithJson) {
-  suite('fromJson', function() {
+export function runFromJsonSuiteTests(
+  TestedField,
+  validValueTestCases,
+  invalidValueTestCases,
+  validRunAssertField,
+  assertFieldDefault,
+  customCreateWithJson,
+) {
+  suite('fromJson', function () {
     if (assertFieldDefault) {
-      test('Empty', function() {
-        const field = customCreateWithJson ? customCreateWithJson.call(this) :
-            TestedField.fromJson({});
+      test('Empty', function () {
+        const field = customCreateWithJson
+          ? customCreateWithJson.call(this)
+          : TestedField.fromJson({});
         assertFieldDefault(field);
       });
     } else {
-      test('Empty', function() {
-        chai.assert.throws(function() {
-          customCreateWithJson ? customCreateWithJson.call(this) :
-              TestedField.fromJson({});
+      test('Empty', function () {
+        chai.assert.throws(function () {
+          customCreateWithJson
+            ? customCreateWithJson.call(this)
+            : TestedField.fromJson({});
         });
       });
     }
@@ -224,20 +239,23 @@ function runFromJsonSuiteTests(TestedField, validValueTestCases,
      * @param {!FieldCreationTestCase} testCase The test case information.
      * @return {!Blockly.Field} The instantiated field.
      */
-    const createWithJson = function(testCase) {
-      return customCreateWithJson ? customCreateWithJson.call(this, testCase) :
-          TestedField.fromJson(testCase.json);
+    const createWithJson = function (testCase) {
+      return customCreateWithJson
+        ? customCreateWithJson.call(this, testCase)
+        : TestedField.fromJson(testCase.json);
     };
     if (assertFieldDefault) {
       runCreationTests_(
-          invalidValueTestCases, assertFieldDefault, createWithJson);
+        invalidValueTestCases,
+        assertFieldDefault,
+        createWithJson,
+      );
     } else {
       runCreationTestsAssertThrows_(invalidValueTestCases, createWithJson);
     }
     runCreationTests_(validValueTestCases, validRunAssertField, createWithJson);
   });
 }
-exports.runFromJsonSuiteTests = runFromJsonSuiteTests;
 
 /**
  * Runs tests for setValue calls.
@@ -250,18 +268,25 @@ exports.runFromJsonSuiteTests = runFromJsonSuiteTests;
  * @param {string=} invalidRunExpectedText Expected text for field after invalid
  *    call to setValue.
  */
-function runSetValueTests(validValueTestCases, invalidValueTestCases,
-    invalidRunExpectedValue, invalidRunExpectedText) {
+export function runSetValueTests(
+  validValueTestCases,
+  invalidValueTestCases,
+  invalidRunExpectedValue,
+  invalidRunExpectedText,
+) {
   /**
    * Creates test callback for invalid setValue test.
    * @param {!FieldValueTestCase} testCase The test case information.
    * @return {!Function} The test callback.
    */
   const createInvalidSetValueTestCallback = (testCase) => {
-    return function() {
+    return function () {
       this.field.setValue(testCase.value);
       assertFieldValue(
-          this.field, invalidRunExpectedValue, invalidRunExpectedText);
+        this.field,
+        invalidRunExpectedValue,
+        invalidRunExpectedText,
+      );
     };
   };
   /**
@@ -270,13 +295,15 @@ function runSetValueTests(validValueTestCases, invalidValueTestCases,
    * @return {!Function} The test callback.
    */
   const createValidSetValueTestCallback = (testCase) => {
-    return function() {
+    return function () {
       this.field.setValue(testCase.value);
       assertFieldValue(
-          this.field, testCase.expectedValue, testCase.expectedText);
+        this.field,
+        testCase.expectedValue,
+        testCase.expectedText,
+      );
     };
   };
   runTestCases(invalidValueTestCases, createInvalidSetValueTestCallback);
   runTestCases(validValueTestCases, createValidSetValueTestCallback);
 }
-exports.runSetValueTests = runSetValueTests;

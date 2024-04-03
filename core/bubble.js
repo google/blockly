@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright 2012 Google LLC
@@ -941,7 +942,6 @@ const Bubble = class {
     return bubble;
   }
 };
-
 /**
  * Width of the border around the bubble.
  */

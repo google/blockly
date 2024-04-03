@@ -8,25 +8,20 @@
  * @fileoverview Gulp tasks to package Blockly for distribution on NPM.
  */
 
-var gulp = require('gulp');
+const gulp = require('gulp');
 gulp.concat = require('gulp-concat');
 gulp.replace = require('gulp-replace');
 gulp.rename = require('gulp-rename');
 gulp.insert = require('gulp-insert');
 gulp.umd = require('gulp-umd');
+gulp.replace = require('gulp-replace');
 
-var path = require('path');
-var fs = require('fs');
-var rimraf = require('rimraf');
-var {getPackageJson} = require('./helper_tasks');
-var {BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
-
-let releaseDir = RELEASE_DIR;
-
-const outputArgIndex = process.argv.indexOf("--output");
-if (outputArgIndex > -1 && process.argv[outputArgIndex + 1]) {
-  releaseDir = process.argv[outputArgIndex + 1];
-}
+const path = require('path');
+const fs = require('fs');
+const {rimraf} = require('rimraf');
+const build = require('./build_tasks');
+const {getPackageJson} = require('./helper_tasks');
+const {BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
 
 // Path to template files for gulp-umd.
 const TEMPLATE_DIR = 'scripts/package/templates';
@@ -59,50 +54,6 @@ function packageCommonJS(namespace, dependencies) {
   });
 };
 
-// Sanity check that the BUILD_DIR directory exists, and that certain
-// files are in it.
-function checkBuildDir(done) {
-  // Check that directory exists.
-  if (!fs.existsSync(BUILD_DIR)) {
-    done(new Error(`The ${BUILD_DIR} directory does not exist.  ` +
-        'Has packageTasks.build been run?'));
-    return;
-  }
-  // Check files built by buildTasks.build exist in BUILD_DIR.
-  for (const fileName of [
-    'blockly_compressed.js',  // buildTasks.buildCompressed
-    'blocks_compressed.js',  // buildTasks.buildBlocks
-    'javascript_compressed.js',  // buildTasks.buildGenerators
-    'msg/js/en.js',  // buildTaks.buildLangfiles
-  ]) {
-    if (!fs.existsSync(`${BUILD_DIR}/${fileName}`)) {
-      done(new Error(
-          `Your ${BUILD_DIR} directory does not contain ${fileName}.  ` +
-          'Has packageTasks.build been run?  Try "npm run build".'));
-      return;
-    }
-  }
-  done();
-}
-
-/**
- * This task copies source files into the release directory.
- */
-function packageSources() {
-  return gulp.src(['core/**/**.js', 'blocks/**.js', 'generators/**/**.js'],
-      {base: '.'})
-    .pipe(gulp.dest(releaseDir));
-};
-
-/**
- * This task copies the compressed files and their source maps into
- * the release directory.
- */
-function packageCompressed() {
-  return gulp.src('*_compressed.js?(.map)', {cwd: BUILD_DIR})
-    .pipe(gulp.dest(releaseDir));
-};
-
 /**
  * This task wraps scripts/package/blockly.js into a UMD module.
  * @example import 'blockly/blockly';
@@ -115,7 +66,7 @@ function packageBlockly() {
         cjs: './blockly_compressed',
       }]))
     .pipe(gulp.rename('blockly.js'))
-    .pipe(gulp.dest(releaseDir));
+    .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
@@ -130,7 +81,7 @@ function packageBlocks() {
         cjs: './blocks_compressed',
       }]))
     .pipe(gulp.rename('blocks.js'))
-    .pipe(gulp.dest(releaseDir));
+    .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
@@ -147,7 +98,7 @@ function packageIndex() {
         cjs: './node',
       }]))
     .pipe(gulp.rename('index.js'))
-    .pipe(gulp.dest(releaseDir));
+    .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
@@ -179,7 +130,7 @@ function packageBrowser() {
         cjs: './javascript',
       }]))
     .pipe(gulp.rename('browser.js'))
-    .pipe(gulp.dest(releaseDir));
+    .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
@@ -198,7 +149,7 @@ function packageCore() {
         cjs: './blockly',
       }]))
     .pipe(gulp.rename('core-browser.js'))
-    .pipe(gulp.dest(releaseDir));
+    .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
@@ -223,21 +174,21 @@ function packageNode() {
       },{
         name: 'BlocklyJS',
         cjs: './javascript',
-      // },{
-      //   name: 'BlocklyPython',
-      //   cjs: './python',
-      // },{
-      //   name: 'BlocklyPHP',
-      //   cjs: './php',
-      // },{
-      //   name: 'BlocklyLua',
-      //   cjs: './lua',
-      // }, {
-      //   name: 'BlocklyDart',
-      //   cjs: './dart',
+      },{
+        name: 'BlocklyPython',
+        cjs: './python',
+      },{
+        name: 'BlocklyPHP',
+        cjs: './php',
+      },{
+        name: 'BlocklyLua',
+        cjs: './lua',
+      }, {
+        name: 'BlocklyDart',
+        cjs: './dart',
       }]))
     .pipe(gulp.rename('node.js'))
-    .pipe(gulp.dest(releaseDir));
+    .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
@@ -256,7 +207,7 @@ function packageNodeCore() {
         cjs: './blockly',
       }]))
     .pipe(gulp.rename('core.js'))
-    .pipe(gulp.dest(releaseDir));
+    .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
@@ -277,7 +228,7 @@ function packageGenerator(file, rename, namespace) {
         cjs: `./${file}`,
       }]))
     .pipe(gulp.rename(rename))
-    .pipe(gulp.dest(releaseDir));
+    .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
@@ -321,18 +272,15 @@ function packagePHP() {
 };
 
 /**
- * This task wraps each of the ${BUILD_DIR}/msg/js/* files into a UMD module.
+ * This task wraps each of the files in ${BUILD_DIR/msg/ into a UMD module.
  * @example import * as En from 'blockly/msg/en';
  */
 function packageLocales() {
   // Remove references to goog.provide and goog.require.
-  return gulp.src(`${BUILD_DIR}/msg/js/*.js`)
+  return gulp.src(`${BUILD_DIR}/msg/*.js`)
       .pipe(gulp.replace(/goog\.[^\n]+/g, ''))
-      .pipe(packageUMD(
-        'Blockly.Msg',
-        [{name: 'Blockly'}],
-        'umd-msg.template'))
-      .pipe(gulp.dest(`${releaseDir}/msg`));
+      .pipe(packageUMD('Blockly.Msg', [], 'umd-msg.template'))
+      .pipe(gulp.dest(`${RELEASE_DIR}/msg`));
 };
 
 /**
@@ -342,15 +290,15 @@ function packageLocales() {
  * @example <script src="https://unpkg.com/blockly/blockly.min.js"></script>
  */
 function packageUMDBundle() {
-  var srcs = [
-    `${BUILD_DIR}/blockly_compressed.js`,
-    `${BUILD_DIR}/msg/js/en.js`,
-    `${BUILD_DIR}/blocks_compressed.js`,
-    `${BUILD_DIR}/javascript_compressed.js`,
+  const srcs = [
+    `${RELEASE_DIR}/blockly_compressed.js`,
+    `${RELEASE_DIR}/msg/en.js`,
+    `${RELEASE_DIR}/blocks_compressed.js`,
+    `${RELEASE_DIR}/javascript_compressed.js`,
   ];
   return gulp.src(srcs)
       .pipe(gulp.concat('blockly.min.js'))
-      .pipe(gulp.dest(`${releaseDir}`));
+      .pipe(gulp.dest(`${RELEASE_DIR}`));
 };
 
 /**
@@ -358,7 +306,7 @@ function packageUMDBundle() {
  */
 function packageMedia() {
   return gulp.src('media/*')
-    .pipe(gulp.dest(`${releaseDir}/media`));
+    .pipe(gulp.dest(`${RELEASE_DIR}/media`));
 };
 
 /**
@@ -368,10 +316,10 @@ function packageJSON(cb) {
   const packageJson = getPackageJson();
   const json = Object.assign({}, packageJson);
   delete json['scripts'];
-  if (!fs.existsSync(releaseDir)) {
-    fs.mkdirSync(releaseDir, {recursive: true});
+  if (!fs.existsSync(RELEASE_DIR)) {
+    fs.mkdirSync(RELEASE_DIR, {recursive: true});
   }
-  fs.writeFileSync(`${releaseDir}/package.json`,
+  fs.writeFileSync(`${RELEASE_DIR}/package.json`,
       JSON.stringify(json, null, 2));
   cb();
 };
@@ -382,50 +330,53 @@ function packageJSON(cb) {
  * https://www.npmjs.com/package/blockly .
  */
 function packageReadme() {
-  return gulp.src('./README.md')
-    .pipe(gulp.dest(releaseDir));
+  return gulp.src('scripts/package/README.md')
+    .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
- * This task copies the typings/blockly.d.ts TypeScript definition
- * file into the release directory.  The bundled declaration file is
- * referenced in package.json in the types property.
- * As of Q4 2021 this simply copies the existing ts definition files, since
- * generation through typescript-closure-tools does not work with goog.module.
- * TODO(5621): Regenerate definition files and copy them into the release dir as
- * needed.
+ * This task copies the generated .d.ts files in build/declarations and the
+ * hand-written .d.ts files in typings/ into the release directory. The main
+ * entrypoint file (index.d.ts) is referenced in package.json in the types
+ * property.
  */
 function packageDTS() {
   const handwrittenSrcs = [
     'typings/*.d.ts',
-    'typings/msg/msg.d.ts',
+    'typings/msg/*.d.ts',
   ];
   return gulp.src(handwrittenSrcs, {base: 'typings'})
-      .pipe(gulp.dest(releaseDir));
+      .pipe(gulp.src(`${TYPINGS_BUILD_DIR}/**/*.d.ts`, {ignore: [
+	`${TYPINGS_BUILD_DIR}/blocks/**/*`,
+      ]}))
+      .pipe(gulp.replace('AnyDuringMigration', 'any'))
+      .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
  * This task cleans the release directory (by deleting it).
  */
-function cleanReleaseDir(done) {
+function cleanReleaseDir() {
   // Sanity check.
-  if (releaseDir === '.' || releaseDir === '/') {
-    throw new Error(`Refusing to rm -rf ${releaseDir}`);
+  if (RELEASE_DIR === '.' || RELEASE_DIR === '/') {
+    return Promise.reject(`Refusing to rm -rf ${RELEASE_DIR}`);
   }
-  rimraf(releaseDir, done);
+  return rimraf(RELEASE_DIR);
 }
 
 /**
  * This task prepares the files to be included in the NPM by copying
  * them into the release directory.
+ *
+ * Prerequisite: build.
  */
 const package = gulp.series(
-    checkBuildDir,
-    cleanReleaseDir,
+    gulp.parallel(
+        build.cleanBuildDir,
+        cleanReleaseDir),
+    build.build,
     gulp.parallel(
         packageIndex,
-        packageSources,
-        packageCompressed,
         packageBrowser,
         packageNode,
         packageCore,
@@ -433,19 +384,19 @@ const package = gulp.series(
         packageBlockly,
         packageBlocks,
         packageJavascript,
-        // packagePython,
-        // packageLua,
-        // packageDart,
-        // packagePHP,
-        packageLocales,
+        packagePython,
+        packageLua,
+        packageDart,
+        packagePHP,
         packageMedia,
-        packageUMDBundle,
+        gulp.series(packageLocales, packageUMDBundle),
         packageJSON,
         packageReadme,
         packageDTS)
     );
 
 module.exports = {
+  // Main sequence targets.  Each should invoke any immediate prerequisite(s).
   cleanReleaseDir: cleanReleaseDir,
   package: package,
 };

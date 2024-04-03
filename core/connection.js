@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright 2011 Google LLC
@@ -564,7 +565,7 @@ class Connection {
     } else {
       const shadow = this.createShadowBlock_(false);
       this.serializeShadow_(shadow);
-      
+
       if (shadow) {
         shadow.dispose(false);
       }
@@ -720,7 +721,6 @@ const getSingleConnection = function(block, orphanBlock) {
   }
   return foundConnection;
 };
-
 /**
  * Walks down a row a blocks, at each stage checking if there are any
  * connections that will accept the orphaned block.  If at any point there

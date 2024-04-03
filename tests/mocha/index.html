@@ -1,13 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Mocha Tests for Blockly</title>
 
     <link href="../../node_modules/mocha/mocha.css" rel="stylesheet" />
-    <script src="../../blockly_uncompressed.js"></script>
-    <script src="../deps.mocha.js"></script>
-    <script src="../../msg/messages.js"></script>
   </head>
   <style>
     #blocklyDiv {
@@ -19,8 +16,11 @@
   </style>
   <body>
     <div id="mocha"></div>
-    <div id="failureCount" style="display:none" tests_failed="unset"></div>
-    <div id="failureMessages" style="display:none"></div>
+    <div id="failureCount" style="display: none" tests_failed="unset"></div>
+    <div id="failureMessages" style="display: none"></div>
+    <!-- Load mocha et al. before Blockly and the test modules so that
+         we can safely import the test modules that make calls
+         to (e.g.)  suite() at the top level. -->
     <script src="../../node_modules/chai/chai.js"></script>
     <script src="../../node_modules/mocha/mocha.js"></script>
     <script src="../../node_modules/sinon/pkg/sinon.js"></script>
@@ -31,93 +31,130 @@
       });
     </script>
 
-    <script>
-      // Require optional modules needed by tests.
-      goog.require('Blockly.Dart');
-      goog.require('Blockly.Dart.texts');
-      goog.require('Blockly.JavaScript');
-      goog.require('Blockly.JavaScript.texts');
-      goog.require('Blockly.Lua');
-      goog.require('Blockly.Lua.texts');
-      goog.require('Blockly.PHP');
-      goog.require('Blockly.PHP.texts');
-      goog.require('Blockly.Python');
-      goog.require('Blockly.Python.texts');
-      goog.require('Blockly.libraryBlocks.colour');
-      goog.require('Blockly.libraryBlocks.logic');
-      goog.require('Blockly.libraryBlocks.lists');
-      goog.require('Blockly.libraryBlocks.loops');
-      goog.require('Blockly.libraryBlocks.math');
-      goog.require('Blockly.libraryBlocks.procedures');
-      goog.require('Blockly.libraryBlocks.texts');
-      goog.require('Blockly.libraryBlocks.variables');
-      goog.require('Blockly.libraryBlocks.variablesDynamic');
+    <script type="module">
+      import {loadScript} from '../scripts/load.mjs';
 
-      // Run tests.
-      goog.require('Blockly.test.astNode');
-      goog.require('Blockly.test.blockChangeEvent');
-      goog.require('Blockly.test.blockCreateEvent');
-      goog.require('Blockly.test.blockJson');
-      goog.require('Blockly.test.blocks');
-      goog.require('Blockly.test.comments');
-      goog.require('Blockly.test.commentDeserialization');
-      goog.require('Blockly.test.connectionChecker');
-      goog.require('Blockly.test.connectionDb');
-      goog.require('Blockly.test.connection');
-      goog.require('Blockly.test.contextMenuItem');
-      goog.require('Blockly.test.cursor');
-      goog.require('Blockly.test.dropdown');
-      goog.require('Blockly.test.event');
-      goog.require('Blockly.test.extensions');
-      goog.require('Blockly.test.fieldAngle');
-      goog.require('Blockly.test.fieldCheckbox');
-      goog.require('Blockly.test.fieldColour');
-      goog.require('Blockly.test.fieldDropdown');
-      goog.require('Blockly.test.fieldImage');
-      goog.require('Blockly.test.fieldLabelSerialization');
-      goog.require('Blockly.test.fieldLabel');
-      goog.require('Blockly.test.fieldMultiline');
-      goog.require('Blockly.test.fieldNumber');
-      goog.require('Blockly.test.fieldRegistry');
-      goog.require('Blockly.test.fieldTest');
-      goog.require('Blockly.test.fieldTextInput');
-      goog.require('Blockly.test.fieldVariable');
-      goog.require('Blockly.test.flyout');
-      goog.require('Blockly.test.generator');
-      goog.require('Blockly.test.gesture');
-      goog.require('Blockly.test.input');
-      goog.require('Blockly.test.insertionMarker');
-      goog.require('Blockly.test.jsoDeserialization');
-      goog.require('Blockly.test.jsoSerialization');
-      goog.require('Blockly.test.json');
-      goog.require('Blockly.test.keydown');
-      goog.require('Blockly.test.logicTernary');
-      goog.require('Blockly.test.metrics');
-      goog.require('Blockly.test.mutator');
-      goog.require('Blockly.test.names');
-      goog.require('Blockly.test.procedures');
-      goog.require('Blockly.test.registry');
-      goog.require('Blockly.test.serialization');
-      goog.require('Blockly.test.shortcutRegistry');
-      goog.require('Blockly.test.theme');
-      goog.require('Blockly.test.toolbox');
-      goog.require('Blockly.test.tooltip');
-      goog.require('Blockly.test.trashcan');
-      goog.require('Blockly.test.utils');
-      goog.require('Blockly.test.variableMap');
-      goog.require('Blockly.test.variableModel');
-      goog.require('Blockly.test.variables');
-      goog.require('Blockly.test.widgetDiv');
-      goog.require('Blockly.test.workspaceComment');
-      goog.require('Blockly.test.workspaceSvg');
-      goog.require('Blockly.test.workspace');
-      goog.require('Blockly.test.xml');
-      goog.require('Blockly.test.zoomControls');
+      // Load Blockly in uncompressed mode.
+      import * as Blockly from '../../build/blockly.loader.mjs';
+      import '../../build/blocks.loader.mjs';
+      import {javascriptGenerator} from '../../build/javascript.loader.mjs';
+
+      // Import tests.
+      import './astnode_test.js';
+      import './block_json_test.js';
+      import './block_test.js';
+      import './clipboard_test.js';
+      import './comment_test.js';
+      import './comment_deserialization_test.js';
+      import './connection_checker_test.js';
+      import './connection_db_test.js';
+      import './connection_test.js';
+      import './contextmenu_items_test.js';
+      import './contextmenu_test.js';
+      import './cursor_test.js';
+      import './dropdowndiv_test.js';
+      import './event_test.js';
+      import './event_block_change_test.js';
+      import './event_block_create_test.js';
+      import './event_block_delete_test.js';
+      import './event_block_drag_test.js';
+      import './event_block_field_intermediate_change_test.js';
+      import './event_block_move_test.js';
+      import './event_bubble_open_test.js';
+      import './event_click_test.js';
+      import './event_comment_change_test.js';
+      import './event_comment_create_test.js';
+      import './event_comment_delete_test.js';
+      import './event_comment_move_test.js';
+      import './event_marker_move_test.js';
+      import './event_selected_test.js';
+      import './event_theme_change_test.js';
+      import './event_toolbox_item_select_test.js';
+      import './event_trashcan_open_test.js';
+      import './event_var_create_test.js';
+      import './event_var_delete_test.js';
+      import './event_var_rename_test.js';
+      import './event_viewport_test.js';
+      import './extensions_test.js';
+      import './field_angle_test.js';
+      import './field_checkbox_test.js';
+      import './field_colour_test.js';
+      import './field_dropdown_test.js';
+      import './field_image_test.js';
+      import './field_label_serializable_test.js';
+      import './field_label_test.js';
+      import './field_multilineinput_test.js';
+      import './field_number_test.js';
+      import './field_registry_test.js';
+      import './field_test.js';
+      import './field_textinput_test.js';
+      import './field_variable_test.js';
+      import './flyout_test.js';
+      import './generator_test.js';
+      import './gesture_test.js';
+      import './icon_test.js';
+      import './input_test.js';
+      import './insertion_marker_test.js';
+      import './insertion_marker_manager_test.js';
+      import './jso_deserialization_test.js';
+      import './jso_serialization_test.js';
+      import './json_test.js';
+      import './keydown_test.js';
+      import './layering_test.js';
+      import './blocks/lists_test.js';
+      import './blocks/logic_ternary_test.js';
+      import './metrics_test.js';
+      import './mutator_test.js';
+      import './names_test.js';
+      import './procedure_map_test.js';
+      import './blocks/procedures_test.js';
+      import './registry_test.js';
+      import './render_management_test.js';
+      import './serializer_test.js';
+      import './shortcut_registry_test.js';
+      import './touch_test.js';
+      import './theme_test.js';
+      import './toolbox_test.js';
+      import './tooltip_test.js';
+      import './trashcan_test.js';
+      import './utils_test.js';
+      import './variable_map_test.js';
+      import './variable_model_test.js';
+      import './blocks/variables_test.js';
+      import './widget_div_test.js';
+      import './workspace_comment_test.js';
+      import './workspace_svg_test.js';
+      import './workspace_test.js';
+      import './xml_test.js';
+      import './zoom_controls_test.js';
+
+      // Make Blockly and generators available via global scope.
+      globalThis.Blockly = Blockly;
+      globalThis.javascriptGenerator = javascriptGenerator;
+
+      // Load additional scripts.
+      await loadScript('../../build/msg/en.js');
+      await loadScript('../playgrounds/screenshot.js');
+      await loadScript('../../node_modules/@blockly/dev-tools/dist/index.js');
+
+      let runner = mocha.run(function (failures) {
+        var failureDiv = document.getElementById('failureCount');
+        failureDiv.setAttribute('tests_failed', failures);
+      });
+      runner.on('fail', function (test, err) {
+        const msg = document.createElement('p');
+        msg.textContent = `"${test.fullTitle()}" failed: ${err.message}`;
+        const div = document.getElementById('failureMessages');
+        div.appendChild(msg);
+      });
     </script>
 
     <div id="blocklyDiv"></div>
 
-    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
+    <xml
+      xmlns="https://developers.google.com/blockly/xml"
+      id="toolbox-simple"
+      style="display: none">
       <block type="logic_compare">
         <field name="OP">NEQ</field>
         <value name="A">
@@ -136,7 +173,10 @@
       <label text="tooltips"></label>
     </xml>
 
-    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
+    <xml
+      xmlns="https://developers.google.com/blockly/xml"
+      id="toolbox-categories"
+      style="display: none">
       <category name="First" css-container="something">
         <block type="basic_block">
           <field name="TEXT">FirstCategory-FirstBlock</field>
@@ -152,7 +192,10 @@
       </category>
     </xml>
 
-    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-test" style="display: none">
+    <xml
+      xmlns="https://developers.google.com/blockly/xml"
+      id="toolbox-test"
+      style="display: none">
       <category name="First" expanded="true" categorystyle="logic_category">
         <sep gap="-1"></sep>
         <button text="insert" callbackkey="insertConnectionRows"></button>
@@ -164,27 +207,19 @@
       </category>
       <sep toolboxitemid="separator" gap="-1"></sep>
       <category name="Variables" custom="VARIABLE"></category>
-      <category name="NestedCategory" >
-        <category toolboxitemid="nestedCategory" name="NestedItemOne"></category>
+      <category name="NestedCategory">
+        <category
+          toolboxitemid="nestedCategory"
+          name="NestedItemOne"></category>
       </category>
       <category name="lastItem"></category>
     </xml>
 
-    <xml xmlns="https://developers.google.com/blockly/xml" id="gesture-test-toolbox" style="display: none">
+    <xml
+      xmlns="https://developers.google.com/blockly/xml"
+      id="gesture-test-toolbox"
+      style="display: none">
       <block type="test_field_block"></block>
     </xml>
-
-    <script>
-      let runner = mocha.run(function(failures) {
-        var failureDiv = document.getElementById('failureCount');
-        failureDiv.setAttribute('tests_failed', failures);
-      });
-      runner.on('fail', function(test, err) {
-        const msg = document.createElement('p');
-        msg.textContent = `"${test.fullTitle()}" failed: ${err.message}`;
-        const div = document.getElementById('failureMessages');
-        div.appendChild(msg);
-      });
-    </script>
   </body>
 </html>

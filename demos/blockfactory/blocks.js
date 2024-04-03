@@ -220,10 +220,29 @@ Blockly.Blocks['input_dummy'] = {
       "previousStatement": "Input",
       "nextStatement": "Input",
       "colour": 210,
-      "tooltip": "For adding fields on a separate row with no " +
-                 "connections. Alignment options (left, right, centre) " +
-                 "apply only to multi-line fields.",
+      "tooltip": "For adding fields without any block connections." +
+                 "Alignment options (left, right, centre) only affect " +
+                 "multi-row blocks.",
       "helpUrl": "https://www.youtube.com/watch?v=s2_xaEvcVI0#t=293"
+    });
+  }
+};
+
+Blockly.Blocks['input_end_row'] = {
+  // End-row input.
+  init: function() {
+    this.jsonInit({
+      "message0": "end-row input",
+      "message1": FIELD_MESSAGE,
+      "args1": FIELD_ARGS,
+      "previousStatement": "Input",
+      "nextStatement": "Input",
+      "colour": 210,
+      "tooltip": "For adding fields without any block connections that will " +
+                 "be rendered on a separate row from any following inputs. " +
+                 "Alignment options (left, right, centre) only affect " +
+                 "multi-row blocks.",
+      "helpUrl": "https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks#block_inputs"
     });
   }
 };
@@ -336,8 +355,8 @@ Blockly.Blocks['field_dropdown'] = {
     this.updateShape_();
     this.setPreviousStatement(true, 'Field');
     this.setNextStatement(true, 'Field');
-    this.setMutator(new Blockly.Mutator(['field_dropdown_option_text',
-                                         'field_dropdown_option_image']));
+    this.setMutator(new Blockly.icons.MutatorIcon(
+        ['field_dropdown_option_text', 'field_dropdown_option_image'], this));
     this.setColour(160);
     this.setTooltip('Dropdown menu with a list of options.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=386');
@@ -611,7 +630,7 @@ Blockly.Blocks['type_group'] = {
     this.typeCount_ = 2;
     this.updateShape_();
     this.setOutput(true, 'Type');
-    this.setMutator(new Blockly.Mutator(['type_group_item']));
+    this.setMutator(new Blockly.icons.MutatorIcon(['type_group_item'], this));
     this.setColour(230);
     this.setTooltip('Allows more than one type to be accepted.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=677');
@@ -671,7 +690,7 @@ Blockly.Blocks['type_group'] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 0; i < this.typeCount_; i++) {
-      Blockly.Mutator.reconnect(connections[i], this, 'TYPE' + i);
+      connections[i]?.reconnect(this, 'TYPE' + i);
     }
   },
   saveConnections: function(containerBlock) {

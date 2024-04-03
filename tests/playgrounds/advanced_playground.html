@@ -1,160 +1,174 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>Advanced Blockly Playground</title>
-<script src="prepare.js"></script>
-<script src="./screenshot.js"></script>
-<script src="../themes/test_themes.js"></script>
-<script src="../../node_modules/@blockly/dev-tools/dist/index.js"></script>
-<script src="../../node_modules/@blockly/theme-modern/dist/index.js"></script>
+  <head>
+    <meta charset="utf-8" />
+    <title>Advanced Blockly Playground</title>
 
-<script type="module">
-import Blockly from './blockly.mjs';
-'use strict';
+    <script type="module">
+      import {loadScript} from '../scripts/load.mjs';
 
-function start() {
-  setBackgroundColour();
-  initPlayground();
-}
+      import * as Blockly from '../../build/blockly.loader.mjs';
+      import '../../build/blocks.loader.mjs';
+      // Generators not needed (but see also bug #6597).
 
-function createWorkspace(blocklyDiv, options) {
-  var workspace = Blockly.inject(blocklyDiv, options);
-  workspace.configureContextMenu = configureContextMenu.bind(workspace);
-  return workspace;
-}
+      await loadScript('../../build/msg/en.js');
+      await loadScript('screenshot.js');
+      await loadScript('../themes/test_themes.js');
+      await loadScript('../../node_modules/@blockly/dev-tools/dist/index.js');
+      await loadScript(
+        '../../node_modules/@blockly/theme-modern/dist/index.js',
+      );
 
-function configurePlayground(playground) {
-  // Rendering options.
-  var gui = playground.getGUI();
-  var renderingFolder = gui.addFolder('Rendering');
-  var renderingOptions = {
-    'font Size': 10,
-  };
-  renderingFolder.add(renderingOptions, 'font Size', 0, 50)
-    .onChange(function(value) {
-      var ws = playground.getWorkspace();
-      var fontStyle = {
-        'size': value
-      };
-      ws.getTheme().setFontStyle(fontStyle);
-      // Refresh theme.
-      ws.setTheme(ws.getTheme());
-    });
-}
+      function start() {
+        setBackgroundColour();
+        initPlayground();
+      }
 
-function initPlayground() {
-  if (typeof window.createPlayground === 'undefined') {
-    alert('You need to run \'npm install\' in order to use this playground.');
-    return;
-  }
-  var defaultOptions = {
-        comments: true,
-        collapse: true,
-        disable: true,
-        grid:
-          {
+      function createWorkspace(blocklyDiv, options) {
+        var workspace = Blockly.inject(blocklyDiv, options);
+        workspace.configureContextMenu = configureContextMenu.bind(workspace);
+        return workspace;
+      }
+
+      function configurePlayground(playground) {
+        // Rendering options.
+        var gui = playground.getGUI();
+        var renderingFolder = gui.addFolder('Rendering');
+        var renderingOptions = {
+          'font Size': 10,
+        };
+        renderingFolder
+          .add(renderingOptions, 'font Size', 0, 50)
+          .onChange(function (value) {
+            var ws = playground.getWorkspace();
+            var fontStyle = {
+              'size': value,
+            };
+            ws.getTheme().setFontStyle(fontStyle);
+            // Refresh theme.
+            ws.setTheme(ws.getTheme());
+          });
+      }
+
+      function initPlayground() {
+        if (typeof window.createPlayground === 'undefined') {
+          alert(
+            "You need to run 'npm install' in order to use this playground.",
+          );
+          return;
+        }
+        var defaultOptions = {
+          comments: true,
+          collapse: true,
+          disable: true,
+          grid: {
             spacing: 25,
             length: 3,
             colour: '#ccc',
-            snap: true
+            snap: true,
           },
-        horizontalLayout: false,
-        maxBlocks: Infinity,
-        maxInstances: {'test_basic_limit_instances': 3},
-        maxTrashcanContents: 256,
-        media: '../../media/',
-        oneBasedIndex: true,
-        readOnly: false,
-        rtl: false,
-        move: {
-          scrollbars: true,
-          drag: true,
-          wheel: false,
-        },
-        toolbox: toolboxCategories,
-        toolboxPosition: 'start',
-        renderer: 'geras',
-        zoom:
-          {
+          horizontalLayout: false,
+          maxBlocks: Infinity,
+          maxInstances: {'test_basic_limit_instances': 3},
+          maxTrashcanContents: 256,
+          media: '../../media/',
+          oneBasedIndex: true,
+          readOnly: false,
+          rtl: false,
+          move: {
+            scrollbars: true,
+            drag: true,
+            wheel: false,
+          },
+          toolbox: toolboxCategories,
+          toolboxPosition: 'start',
+          renderer: 'geras',
+          zoom: {
             controls: true,
             wheel: true,
             startScale: 1.0,
             maxScale: 4,
             minScale: 0.25,
-            scaleSpeed: 1.1
-          }
-  };
+            scaleSpeed: 1.1,
+          },
+        };
 
-  const playgroundConfig = {
-    toolboxes: {
-      'categories': toolboxCategories,
-      'simple': toolboxSimple,
-      'test blocks': toolboxTestBlocks,
-    }
-  }
+        const playgroundConfig = {
+          toolboxes: {
+            'categories': toolboxCategories,
+            'simple': toolboxSimple,
+            'test blocks': toolboxTestBlocks,
+          },
+        };
 
-  createPlayground(document.getElementById('root'), createWorkspace,
-      defaultOptions, playgroundConfig,
-      'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.19.2/min/vs')
-      .then(function(playground) {
-        configurePlayground(playground);
-      });
-}
+        createPlayground(
+          document.getElementById('root'),
+          createWorkspace,
+          defaultOptions,
+          playgroundConfig,
+          'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.19.2/min/vs',
+        ).then(function (playground) {
+          configurePlayground(playground);
+        });
+      }
 
-function setBackgroundColour() {
-  // Set background colour to differentiate file: vs. localhost
-  // vs. server copy.
-  if (location.protocol == 'file:') {
-    document.body.style.backgroundColor = '#89A203';  // Unpleasant green.
-  } else if (location.hostname  === 'localhost' ||
-      location.hostname === '127.0.0.1' ||
-      location.hostname === '[::1]') {
-    document.body.style.backgroundColor = '#d6d6ff';  // Familliar lilac.
-  }
-}
+      function setBackgroundColour() {
+        // Set background colour to differentiate file: vs. localhost
+        // vs. server copy.
+        if (location.protocol == 'file:') {
+          document.body.style.backgroundColor = '#89A203'; // Unpleasant green.
+        } else if (
+          location.hostname === 'localhost' ||
+          location.hostname === '127.0.0.1' ||
+          location.hostname === '[::1]'
+        ) {
+          document.body.style.backgroundColor = '#d6d6ff'; // Familliar lilac.
+        }
+      }
 
+      function configureContextMenu(menuOptions, e) {
+        var workspace = this;
+        var screenshotOption = {
+          text: 'Download Screenshot',
+          enabled: workspace.getTopBlocks().length,
+          callback: function () {
+            downloadScreenshot(workspace);
+          },
+        };
+        menuOptions.push(screenshotOption);
 
-function configureContextMenu(menuOptions, e) {
-  var workspace = this;
-  var screenshotOption = {
-    text: 'Download Screenshot',
-    enabled: workspace.getTopBlocks().length,
-    callback: function() {
-      downloadScreenshot(workspace);
-    }
-  };
-  menuOptions.push(screenshotOption);
+        // Adds a default-sized workspace comment to the workspace.
+        menuOptions.push(
+          Blockly.ContextMenu.workspaceCommentOption(workspace, e),
+        );
+      }
+      start();
+    </script>
 
-  // Adds a default-sized workspace comment to the workspace.
-  menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
-}
-start();
-</script>
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
 
-<style>
-  html, body {
-    margin: 0;
-  }
+      .ioLabel > .blocklyFlyoutLabelText {
+        font-style: italic;
+      }
 
-  .ioLabel>.blocklyFlyoutLabelText {
-    font-style: italic;
-  }
+      .playgroundToggleOptions {
+        list-style: none;
+        padding: 0;
+      }
+      .playgroundToggleOptions li {
+        margin-top: 1em;
+      }
 
-  .playgroundToggleOptions {
-    list-style: none;
-    padding: 0;
-  }
-  .playgroundToggleOptions li {
-    margin-top: 1em;
-  }
-
-  .zelos-renderer .blocklyFlyoutButton .blocklyText {
-    font-size: 1.5rem;
-  }
-</style>
-</head>
-<body>
-  <div id="root"></div>
-</body>
+      .zelos-renderer .blocklyFlyoutButton .blocklyText {
+        font-size: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>

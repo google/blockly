@@ -1,19 +1,28 @@
-*_compressed*.js
+# Build Artifacts
 /msg/*
 /build/*
 /dist/*
+/typings/*
+/docs/*
+
+# Tests other than mocha unit tests
 /tests/blocks/*
 /tests/themes/*
 /tests/compile/*
 /tests/jsunit/*
 /tests/generators/*
-/tests/mocha/run_mocha_tests_in_browser.js
+/tests/mocha/webdriver.js
 /tests/screenshot/*
 /tests/test_runner.js
 /tests/workspace_svg/*
+
+# Demos, scripts, misc
+/node_modules/*
 /generators/*
 /demos/*
 /appengine/*
 /externs/*
 /closure/*
 /scripts/gulpfiles/*
+CHANGELOG.md
+PULL_REQUEST_TEMPLATE.md

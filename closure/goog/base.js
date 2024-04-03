@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright The Closure Library Authors.
@@ -1205,7 +1206,7 @@ goog.loadFileSync_ = function(src) {
       // No need to rethrow or log, since errors should show up on their own.
       return null;
     }
-  } 
+  }
 };
 
 
@@ -3834,7 +3835,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
   /** @private @const */
   goog.debugLoader_ = new goog.DebugLoader_();
-
 
   /**
    * Loads the Closure Dependency file.

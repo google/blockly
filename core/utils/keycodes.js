@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright 2019 Google LLC
@@ -168,5 +169,4 @@ const KeyCodes = {
   // http://en.community.dell.com/support-forums/laptop/f/3518/p/19285957/19523128.aspx
   PHANTOM: 255,
 };
-
 exports.KeyCodes = KeyCodes;

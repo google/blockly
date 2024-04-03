@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright 2020 Google LLC
@@ -244,11 +245,11 @@ class ConnectionChecker {
       !b.targetBlock().isShadow()) {
         return false;
       }
-      
+
       // don't allow connecting a block to an argument local
       if (b && b.targetBlock()) {
         const targetBlock = b.targetBlock();
-        
+
         if (isShadowArgumentLocal(targetBlock)) {
           return false;
         }

@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright 2016 Google LLC
@@ -583,5 +584,4 @@ RenderedConnection.TrackedState = {
   UNTRACKED: 0,
   TRACKED: 1,
 };
-
 exports.RenderedConnection = RenderedConnection;

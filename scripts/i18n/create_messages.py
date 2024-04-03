@@ -41,7 +41,7 @@ def load_constants(filename):
   for key in constant_defs:
     value = constant_defs[key]
     value = value.replace('"', '\\"')
-    constants_text += u'\nmessages["{0}"] = \"{1}\";'.format(
+    constants_text += u'\nBlockly.Msg["{0}"] = \"{1}\";'.format(
         key, value)
   return constants_text
 
@@ -88,7 +88,7 @@ def main():
       os.curdir, args.source_synonym_file))
 
   # synonym_defs is also being sorted to ensure the same order is kept
-  synonym_text = '\n'.join([u'messages["{0}"] = messages["{1}"];'
+  synonym_text = '\n'.join([u'Blockly.Msg["{0}"] = Blockly.Msg["{1}"];'
       .format(key, synonym_defs[key]) for key in sorted(synonym_defs)])
 
   # Read in constants file, which must be output in every language.
@@ -123,7 +123,7 @@ def main():
 
 'use strict';
 
-const messages = Object.create(null);
+var Blockly = Blockly || {{ Msg: Object.create(null) }};
 
 """.format(target_lang.replace('-', '.')))
         # For each key in the source language file, output the target value
@@ -138,7 +138,7 @@ const messages = Object.create(null);
             value = source_defs[key]
             comment = '  // untranslated'
           value = value.replace('"', '\\"')
-          outfile.write(u'messages["{0}"] = "{1}";{2}\n'
+          outfile.write(u'Blockly.Msg["{0}"] = "{1}";{2}\n'
               .format(key, value, comment))
 
         # Announce any keys defined only for target language.

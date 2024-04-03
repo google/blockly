@@ -4,39 +4,48 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.event');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
+import {
+  assertEventEquals,
+  assertNthCallEventArgEquals,
+  createChangeListenerSpy,
+} from './test_helpers/events.js';
+import {assertVariableValues} from './test_helpers/variables.js';
+import {
+  createGenUidStubWithReturns,
+  sharedTestSetup,
+  sharedTestTeardown,
+  workspaceTeardown,
+} from './test_helpers/setup_teardown.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
+import {WorkspaceComment} from '../../build/src/core/workspace_comment.js';
 
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {assertEventEquals, assertNthCallEventArgEquals, createFireChangeListenerSpy} = goog.require('Blockly.test.helpers.events');
-const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
-const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const eventUtils = goog.require('Blockly.Events.utils');
-goog.require('Blockly.WorkspaceComment');
-
-
-suite('Events', function() {
-  setup(function() {
+suite('Events', function () {
+  setup(function () {
     sharedTestSetup.call(this, {fireEventsNow: false});
-    this.eventsFireSpy = sinon.spy(eventUtils, 'fire');
+    this.eventsFireSpy = sinon.spy(eventUtils.TEST_ONLY, 'fireInternal');
     this.workspace = new Blockly.Workspace();
-    Blockly.defineBlocksWithJsonArray([{
-      'type': 'field_variable_test_block',
-      'message0': '%1',
-      'args0': [
-        {
-          'type': 'field_variable',
-          'name': 'VAR',
-          'variable': 'item',
-        },
-      ],
-    },
-    {
-      'type': 'simple_test_block',
-      'message0': 'simple test block',
-    }]);
+    Blockly.defineBlocksWithJsonArray([
+      {
+        'type': 'field_variable_test_block',
+        'message0': '%1',
+        'args0': [
+          {
+            'type': 'field_variable',
+            'name': 'VAR',
+            'variable': 'item',
+          },
+        ],
+      },
+      {
+        'type': 'simple_test_block',
+        'message0': 'simple test block',
+      },
+    ]);
   });
 
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
 
@@ -48,8 +57,7 @@ suite('Events', function() {
     let block;
     try {
       eventUtils.setGroup('unused');
-      block = new Blockly.Block(
-          workspace, 'simple_test_block');
+      block = new Blockly.Block(workspace, 'simple_test_block');
     } finally {
       eventUtils.setGroup(false);
     }
@@ -57,149 +65,161 @@ suite('Events', function() {
     return block;
   }
 
-  suite('Constructors', function() {
-    test('Abstract', function() {
+  suite('Constructors', function () {
+    test('Abstract', function () {
       const event = new Blockly.Events.Abstract();
-      assertEventEquals(event, undefined, undefined, undefined, {
+      assertEventEquals(event, '', undefined, undefined, {
         'recordUndo': true,
         'group': '',
       });
     });
 
-    test('UI event without block', function() {
+    test('UI event without block', function () {
       const event = new Blockly.Events.UiBase(this.workspace.id);
-      assertEventEquals(event, undefined, this.workspace.id, undefined, {
-        'recordUndo': false,
-        'group': '',
-      }, true);
+      assertEventEquals(
+        event,
+        '',
+        this.workspace.id,
+        undefined,
+        {
+          'recordUndo': false,
+          'group': '',
+        },
+        true,
+      );
     });
 
-    test('Click without block', function() {
-      const event = new Blockly.Events.Click(null, this.workspace.id, 'workspace');
-      assertEventEquals(event, Blockly.Events.CLICK, this.workspace.id, null, {
-        'targetType': 'workspace',
-        'recordUndo': false,
-        'group': '',
-      }, true);
+    test('Click without block', function () {
+      const event = new Blockly.Events.Click(
+        null,
+        this.workspace.id,
+        'workspace',
+      );
+      assertEventEquals(
+        event,
+        Blockly.Events.CLICK,
+        this.workspace.id,
+        null,
+        {
+          'targetType': 'workspace',
+          'recordUndo': false,
+          'group': '',
+        },
+        true,
+      );
     });
 
-    test('Old UI event without block', function() {
-      const TEST_GROUP_ID = 'testGroup';
-      eventUtils.setGroup(TEST_GROUP_ID);
-      const event = new Blockly.Events.Ui(null, 'foo', 'bar', 'baz');
-      assertEventEquals(event, Blockly.Events.UI, '', null, {
-        'element': 'foo',
-        'oldValue': 'bar',
-        'newValue': 'baz',
-        'recordUndo': false,
-        'group': TEST_GROUP_ID,
-      }, true);
-    });
-
-    suite('With simple blocks', function() {
-      setup(function() {
+    suite('With simple blocks', function () {
+      setup(function () {
         this.TEST_BLOCK_ID = 'test_block_id';
         this.TEST_PARENT_ID = 'parent';
         // genUid is expected to be called either once or twice in this suite.
-        this.genUidStub = createGenUidStubWithReturns(
-            [this.TEST_BLOCK_ID, this.TEST_PARENT_ID]);
+        this.genUidStub = createGenUidStubWithReturns([
+          this.TEST_BLOCK_ID,
+          this.TEST_PARENT_ID,
+        ]);
         this.block = createSimpleTestBlock(this.workspace);
       });
 
-      test('Block base', function() {
+      test('Block base', function () {
         const event = new Blockly.Events.BlockBase(this.block);
         sinon.assert.calledOnce(this.genUidStub);
-        assertEventEquals(event, undefined,
-            this.workspace.id, this.TEST_BLOCK_ID,
-            {
-              'varId': undefined,
-              'recordUndo': true,
-              'group': '',
-            });
+        assertEventEquals(event, '', this.workspace.id, this.TEST_BLOCK_ID, {
+          'recordUndo': true,
+          'group': '',
+        });
       });
 
-      test('Block create', function() {
+      test('Block create', function () {
         const event = new Blockly.Events.BlockCreate(this.block);
         sinon.assert.calledOnce(this.genUidStub);
-        assertEventEquals(event, Blockly.Events.BLOCK_CREATE,
-            this.workspace.id, this.TEST_BLOCK_ID,
-            {
-              'recordUndo': true,
-              'group': '',
-            });
+        assertEventEquals(
+          event,
+          Blockly.Events.BLOCK_CREATE,
+          this.workspace.id,
+          this.TEST_BLOCK_ID,
+          {
+            'recordUndo': true,
+            'group': '',
+          },
+        );
       });
 
-      test('Block delete', function() {
+      test('Block delete', function () {
         const event = new Blockly.Events.BlockDelete(this.block);
         sinon.assert.calledOnce(this.genUidStub);
-        assertEventEquals(event, Blockly.Events.BLOCK_DELETE,
-            this.workspace.id, this.TEST_BLOCK_ID,
-            {
-              'recordUndo': true,
-              'group': '',
-            });
+        assertEventEquals(
+          event,
+          Blockly.Events.BLOCK_DELETE,
+          this.workspace.id,
+          this.TEST_BLOCK_ID,
+          {
+            'recordUndo': true,
+            'group': '',
+          },
+        );
       });
 
-      test('Old UI event with block', function() {
-        const TEST_GROUP_ID = 'testGroup';
-        eventUtils.setGroup(TEST_GROUP_ID);
-        const event = new Blockly.Events.Ui(this.block, 'foo', 'bar', 'baz');
-        sinon.assert.calledOnce(this.genUidStub);
-        assertEventEquals(event, Blockly.Events.UI, this.workspace.id,
-            this.TEST_BLOCK_ID,
-            {
-              'element': 'foo',
-              'oldValue': 'bar',
-              'newValue': 'baz',
-              'recordUndo': false,
-              'group': TEST_GROUP_ID,
-            }, true);
-      });
-
-      test('Click with block', function() {
+      test('Click with block', function () {
         const TEST_GROUP_ID = 'testGroup';
         eventUtils.setGroup(TEST_GROUP_ID);
         const event = new Blockly.Events.Click(this.block, null, 'block');
-        assertEventEquals(event, Blockly.Events.CLICK, this.workspace.id,
-            this.TEST_BLOCK_ID, {
-              'targetType': 'block',
-              'recordUndo': false,
-              'group': TEST_GROUP_ID,
-            }, true);
+        assertEventEquals(
+          event,
+          Blockly.Events.CLICK,
+          this.workspace.id,
+          this.TEST_BLOCK_ID,
+          {
+            'targetType': 'block',
+            'recordUndo': false,
+            'group': TEST_GROUP_ID,
+          },
+          true,
+        );
       });
 
-      suite('Block Move', function() {
-        test('by coordinate', function() {
+      suite('Block Move', function () {
+        test('by coordinate', function () {
           const coordinate = new Blockly.utils.Coordinate(3, 4);
           this.block.xy_ = coordinate;
 
           const event = new Blockly.Events.BlockMove(this.block);
           sinon.assert.calledOnce(this.genUidStub);
-          assertEventEquals(event, Blockly.Events.BLOCK_MOVE, this.workspace.id,
-              this.TEST_BLOCK_ID, {
-                'oldParentId': undefined,
-                'oldInputName': undefined,
-                'oldCoordinate': coordinate,
-                'recordUndo': true,
-                'group': '',
-              });
+          assertEventEquals(
+            event,
+            Blockly.Events.BLOCK_MOVE,
+            this.workspace.id,
+            this.TEST_BLOCK_ID,
+            {
+              'oldParentId': undefined,
+              'oldInputName': undefined,
+              'oldCoordinate': coordinate,
+              'recordUndo': true,
+              'group': '',
+            },
+          );
         });
 
-        test('by parent', function() {
+        test('by parent', function () {
           try {
             this.parentBlock = createSimpleTestBlock(this.workspace);
             this.block.parentBlock_ = this.parentBlock;
             this.block.xy_ = new Blockly.utils.Coordinate(3, 4);
             const event = new Blockly.Events.BlockMove(this.block);
             sinon.assert.calledTwice(this.genUidStub);
-            assertEventEquals(event, Blockly.Events.BLOCK_MOVE, this.workspace.id,
-                this.TEST_BLOCK_ID, {
-                  'oldParentId': this.TEST_PARENT_ID,
-                  'oldInputName': undefined,
-                  'oldCoordinate': undefined,
-                  'recordUndo': true,
-                  'group': '',
-                });
+            assertEventEquals(
+              event,
+              Blockly.Events.BLOCK_MOVE,
+              this.workspace.id,
+              this.TEST_BLOCK_ID,
+              {
+                'oldParentId': this.TEST_PARENT_ID,
+                'oldInputName': undefined,
+                'oldCoordinate': undefined,
+                'recordUndo': true,
+                'group': '',
+              },
+            );
           } finally {
             // This needs to be cleared, otherwise workspace.dispose will fail.
             this.block.parentBlock_ = null;
@@ -208,84 +228,105 @@ suite('Events', function() {
       });
     });
 
-    suite('With shadow blocks', function() {
-      setup(function() {
+    suite('With shadow blocks', function () {
+      setup(function () {
         this.TEST_BLOCK_ID = 'test_block_id';
         this.TEST_PARENT_ID = 'parent';
         // genUid is expected to be called either once or twice in this suite.
-        this.genUidStub = createGenUidStubWithReturns(
-            [this.TEST_BLOCK_ID, this.TEST_PARENT_ID]);
+        this.genUidStub = createGenUidStubWithReturns([
+          this.TEST_BLOCK_ID,
+          this.TEST_PARENT_ID,
+        ]);
         this.block = createSimpleTestBlock(this.workspace);
         this.block.setShadow(true);
       });
 
-      test('Block base', function() {
+      test('Block base', function () {
         const event = new Blockly.Events.BlockBase(this.block);
         sinon.assert.calledOnce(this.genUidStub);
-        assertEventEquals(event, undefined,
-            this.workspace.id, this.TEST_BLOCK_ID,
-            {
-              'varId': undefined,
-              'recordUndo': true,
-              'group': '',
-            });
+        assertEventEquals(event, '', this.workspace.id, this.TEST_BLOCK_ID, {
+          'varId': undefined,
+          'recordUndo': true,
+          'group': '',
+        });
       });
 
-      test('Block change', function() {
+      test('Block change', function () {
         const event = new Blockly.Events.BlockChange(
-            this.block, 'field', 'FIELD_NAME', 'old', 'new');
+          this.block,
+          'field',
+          'FIELD_NAME',
+          'old',
+          'new',
+        );
         sinon.assert.calledOnce(this.genUidStub);
-        assertEventEquals(event, Blockly.Events.BLOCK_CHANGE,
-            this.workspace.id, this.TEST_BLOCK_ID,
-            {
-              'varId': undefined,
-              'element': 'field',
-              'name': 'FIELD_NAME',
-              'oldValue': 'old',
-              'newValue': 'new',
-              'recordUndo': true,
-              'group': '',
-            });
+        assertEventEquals(
+          event,
+          Blockly.Events.BLOCK_CHANGE,
+          this.workspace.id,
+          this.TEST_BLOCK_ID,
+          {
+            'varId': undefined,
+            'element': 'field',
+            'name': 'FIELD_NAME',
+            'oldValue': 'old',
+            'newValue': 'new',
+            'recordUndo': true,
+            'group': '',
+          },
+        );
       });
 
-      test('Block create', function() {
+      test('Block create', function () {
         const event = new Blockly.Events.BlockCreate(this.block);
         sinon.assert.calledOnce(this.genUidStub);
-        assertEventEquals(event, Blockly.Events.BLOCK_CREATE,
-            this.workspace.id, this.TEST_BLOCK_ID,
-            {
-              'recordUndo': false,
-              'group': '',
-            });
+        assertEventEquals(
+          event,
+          Blockly.Events.BLOCK_CREATE,
+          this.workspace.id,
+          this.TEST_BLOCK_ID,
+          {
+            'recordUndo': false,
+            'group': '',
+          },
+        );
       });
 
-      test('Block delete', function() {
+      test('Block delete', function () {
         const event = new Blockly.Events.BlockDelete(this.block);
         sinon.assert.calledOnce(this.genUidStub);
-        assertEventEquals(event, Blockly.Events.BLOCK_DELETE,
-            this.workspace.id, this.TEST_BLOCK_ID,
-            {
-              'recordUndo': false,
-              'group': '',
-            });
+        assertEventEquals(
+          event,
+          Blockly.Events.BLOCK_DELETE,
+          this.workspace.id,
+          this.TEST_BLOCK_ID,
+          {
+            'recordUndo': false,
+            'group': '',
+          },
+        );
       });
 
-      test('Block move', function() {
+      test('Block move', function () {
         try {
           this.parentBlock = createSimpleTestBlock(this.workspace);
           this.block.parentBlock_ = this.parentBlock;
           this.block.xy_ = new Blockly.utils.Coordinate(3, 4);
           const event = new Blockly.Events.BlockMove(this.block);
           sinon.assert.calledTwice(this.genUidStub);
-          assertEventEquals(event, Blockly.Events.BLOCK_MOVE, this.workspace.id,
-              this.TEST_BLOCK_ID,
-              {
-                'oldParentId': this.TEST_PARENT_ID,
-                'oldInputName': undefined,
-                'oldCoordinate': undefined,
-                'recordUndo': false,
-                'group': '',
-              });
+          assertEventEquals(
+            event,
+            Blockly.Events.BLOCK_MOVE,
+            this.workspace.id,
+            this.TEST_BLOCK_ID,
+            {
+              'oldParentId': this.TEST_PARENT_ID,
+              'oldInputName': undefined,
+              'oldCoordinate': undefined,
+              'recordUndo': false,
+              'group': '',
+            },
+          );
         } finally {
           // This needs to be cleared, otherwise workspace.dispose will fail.
           this.block.parentBlock_ = null;
@@ -293,34 +334,48 @@ suite('Events', function() {
       });
     });
 
-    suite('With variable getter blocks', function() {
-      setup(function() {
-        this.genUidStub = createGenUidStubWithReturns(
-            [this.TEST_BLOCK_ID, 'test_var_id', 'test_group_id']);
+    suite('With variable getter blocks', function () {
+      setup(function () {
+        this.genUidStub = createGenUidStubWithReturns([
+          this.TEST_BLOCK_ID,
+          'test_var_id',
+          'test_group_id',
+        ]);
         // Disabling events when creating a block with variable can cause issues
         // at workspace dispose.
         this.block = new Blockly.Block(
-            this.workspace, 'field_variable_test_block');
+          this.workspace,
+          'field_variable_test_block',
+        );
       });
 
-      test('Block change', function() {
+      test('Block change', function () {
         const event = new Blockly.Events.BlockChange(
-            this.block, 'field', 'VAR', 'id1', 'id2');
-        assertEventEquals(event, Blockly.Events.BLOCK_CHANGE, this.workspace.id,
-            this.TEST_BLOCK_ID,
-            {
-              'element': 'field',
-              'name': 'VAR',
-              'oldValue': 'id1',
-              'newValue': 'id2',
-              'recordUndo': true,
-              'group': '',
-            });
+          this.block,
+          'field',
+          'VAR',
+          'id1',
+          'id2',
+        );
+        assertEventEquals(
+          event,
+          Blockly.Events.BLOCK_CHANGE,
+          this.workspace.id,
+          this.TEST_BLOCK_ID,
+          {
+            'element': 'field',
+            'name': 'VAR',
+            'oldValue': 'id1',
+            'newValue': 'id2',
+            'recordUndo': true,
+            'group': '',
+          },
+        );
       });
     });
   });
 
-  suite('Serialization', function() {
+  suite('Serialization', function () {
     const safeStringify = (json) => {
       const cache = [];
       return JSON.stringify(json, (key, value) => {
@@ -336,110 +391,290 @@ suite('Events', function() {
       });
     };
     const variableEventTestCases = [
-      {title: 'Var create', class: Blockly.Events.VarCreate,
+      {
+        title: 'Var create',
+        class: Blockly.Events.VarCreate,
         getArgs: (thisObj) => [thisObj.variable],
-        getExpectedJson: () => ({type: 'var_create', varId: 'id1',
-          varType: 'type1', varName: 'name1'})},
-      {title: 'Var delete', class: Blockly.Events.VarDelete,
+        getExpectedJson: () => ({
+          type: 'var_create',
+          group: '',
+          varId: 'id1',
+          varType: 'type1',
+          varName: 'name1',
+        }),
+      },
+      {
+        title: 'Var delete',
+        class: Blockly.Events.VarDelete,
         getArgs: (thisObj) => [thisObj.variable],
-        getExpectedJson: () => ({type: 'var_delete', varId: 'id1',
-          varType: 'type1', varName: 'name1'})},
-      {title: 'Var rename', class: Blockly.Events.VarRename,
+        getExpectedJson: () => ({
+          type: 'var_delete',
+          group: '',
+          varId: 'id1',
+          varType: 'type1',
+          varName: 'name1',
+        }),
+      },
+      {
+        title: 'Var rename',
+        class: Blockly.Events.VarRename,
         getArgs: (thisObj) => [thisObj.variable, 'name2'],
-        getExpectedJson: () => ({type: 'var_rename', varId: 'id1',
-          oldName: 'name1', newName: 'name2'})},
+        getExpectedJson: () => ({
+          type: 'var_rename',
+          group: '',
+          varId: 'id1',
+          oldName: 'name1',
+          newName: 'name2',
+        }),
+      },
     ];
     const uiEventTestCases = [
-      {title: 'Bubble open', class: Blockly.Events.BubbleOpen,
+      {
+        title: 'Bubble open',
+        class: Blockly.Events.BubbleOpen,
         getArgs: (thisObj) => [thisObj.block, true, 'mutator'],
-        getExpectedJson: (thisObj) => ({type: 'bubble_open', isOpen: true,
-          bubbleType: 'mutator', blockId: thisObj.block.id})},
-      {title: 'Block click', class: Blockly.Events.Click,
+        getExpectedJson: (thisObj) => ({
+          type: 'bubble_open',
+          group: '',
+          isOpen: true,
+          bubbleType: 'mutator',
+          blockId: thisObj.block.id,
+        }),
+      },
+      {
+        title: 'Block click',
+        class: Blockly.Events.Click,
         getArgs: (thisObj) => [thisObj.block, null, 'block'],
-        getExpectedJson: (thisObj) => ({type: 'click', targetType: 'block',
-          blockId: thisObj.block.id})},
-      {title: 'Workspace click', class: Blockly.Events.Click,
+        getExpectedJson: (thisObj) => ({
+          type: 'click',
+          group: '',
+          targetType: 'block',
+          blockId: thisObj.block.id,
+        }),
+      },
+      {
+        title: 'Workspace click',
+        class: Blockly.Events.Click,
         getArgs: (thisObj) => [null, thisObj.workspace.id, 'workspace'],
-        getExpectedJson: (thisObj) => ({type: 'click',
-          targetType: 'workspace'})},
-      {title: 'Drag start', class: Blockly.Events.BlockDrag,
+        getExpectedJson: (thisObj) => ({
+          type: 'click',
+          group: '',
+          targetType: 'workspace',
+        }),
+      },
+      {
+        title: 'Drag start',
+        class: Blockly.Events.BlockDrag,
         getArgs: (thisObj) => [thisObj.block, true, [thisObj.block]],
-        getExpectedJson: (thisObj) => ({type: 'drag',
-          isStart: true, blockId: thisObj.block.id, blocks: [thisObj.block]})},
-      {title: 'Drag end', class: Blockly.Events.BlockDrag,
+        getExpectedJson: (thisObj) => ({
+          type: 'drag',
+          group: '',
+          isStart: true,
+          blockId: thisObj.block.id,
+          blocks: [thisObj.block],
+        }),
+      },
+      {
+        title: 'Drag end',
+        class: Blockly.Events.BlockDrag,
         getArgs: (thisObj) => [thisObj.block, false, [thisObj.block]],
-        getExpectedJson: (thisObj) => ({type: 'drag',
-          isStart: false, blockId: thisObj.block.id, blocks: [thisObj.block]})},
-      {title: 'null to Block Marker move', class: Blockly.Events.MarkerMove,
-        getArgs: (thisObj) => [thisObj.block, true, null,
-          new ASTNode(ASTNode.types.BLOCK, thisObj.block)],
-        getExpectedJson: (thisObj) => ({type: 'marker_move',
-          isCursor: true, blockId: thisObj.block.id, oldNode: null,
-          newNode: new ASTNode(ASTNode.types.BLOCK,
-              thisObj.block)})},
-      {title: 'null to Workspace Marker move', class: Blockly.Events.MarkerMove,
-        getArgs: (thisObj) => [null, true, null,
-          ASTNode.createWorkspaceNode(thisObj.workspace,
-              new Blockly.utils.Coordinate(0, 0))],
-        getExpectedJson: (thisObj) => ({type: 'marker_move',
-          isCursor: true, blockId: null, oldNode: null,
-          newNode: ASTNode.createWorkspaceNode(thisObj.workspace,
-              new Blockly.utils.Coordinate(0, 0))})},
-      {title: 'Workspace to Block Marker move',
+        getExpectedJson: (thisObj) => ({
+          type: 'drag',
+          group: '',
+          isStart: false,
+          blockId: thisObj.block.id,
+          blocks: [thisObj.block],
+        }),
+      },
+      {
+        title: 'Field Edit Intermediate Change',
+        class: Blockly.Events.BlockFieldIntermediateChange,
+        getArgs: (thisObj) => [thisObj.block, 'test', 'old value', 'new value'],
+        getExpectedJson: (thisObj) => ({
+          type: 'block_field_intermediate_change',
+          group: '',
+          blockId: thisObj.block.id,
+          name: 'test',
+          oldValue: 'old value',
+          newValue: 'new value',
+        }),
+      },
+      {
+        title: 'null to Block Marker move',
         class: Blockly.Events.MarkerMove,
-        getArgs: (thisObj) => [thisObj.block, true,
-          ASTNode.createWorkspaceNode(thisObj.workspace,
-              new Blockly.utils.Coordinate(0, 0)),
-          new ASTNode(ASTNode.types.BLOCK, thisObj.block)],
-        getExpectedJson: (thisObj) => ({type: 'marker_move',
-          isCursor: true, blockId: thisObj.block.id,
-          oldNode: ASTNode.createWorkspaceNode(thisObj.workspace,
-              new Blockly.utils.Coordinate(0, 0)),
-          newNode: new ASTNode(ASTNode.types.BLOCK,
-              thisObj.block)})},
-      {title: 'Block to Workspace Marker move',
-        class: Blockly.Events.MarkerMove,
-        getArgs: (thisObj) => [null, true,
+        getArgs: (thisObj) => [
+          thisObj.block,
+          true,
+          null,
           new ASTNode(ASTNode.types.BLOCK, thisObj.block),
-          ASTNode.createWorkspaceNode(thisObj.workspace,
-              new Blockly.utils.Coordinate(0, 0))]},
-      {title: 'Selected', class: Blockly.Events.Selected,
+        ],
+        getExpectedJson: (thisObj) => ({
+          type: 'marker_move',
+          group: '',
+          isCursor: true,
+          blockId: thisObj.block.id,
+          oldNode: undefined,
+          newNode: new ASTNode(ASTNode.types.BLOCK, thisObj.block),
+        }),
+      },
+      {
+        title: 'null to Workspace Marker move',
+        class: Blockly.Events.MarkerMove,
+        getArgs: (thisObj) => [
+          null,
+          true,
+          null,
+          ASTNode.createWorkspaceNode(
+            thisObj.workspace,
+            new Blockly.utils.Coordinate(0, 0),
+          ),
+        ],
+        getExpectedJson: (thisObj) => ({
+          type: 'marker_move',
+          group: '',
+          isCursor: true,
+          blockId: undefined,
+          oldNode: undefined,
+          newNode: ASTNode.createWorkspaceNode(
+            thisObj.workspace,
+            new Blockly.utils.Coordinate(0, 0),
+          ),
+        }),
+      },
+      {
+        title: 'Workspace to Block Marker move',
+        class: Blockly.Events.MarkerMove,
+        getArgs: (thisObj) => [
+          thisObj.block,
+          true,
+          ASTNode.createWorkspaceNode(
+            thisObj.workspace,
+            new Blockly.utils.Coordinate(0, 0),
+          ),
+          new ASTNode(ASTNode.types.BLOCK, thisObj.block),
+        ],
+        getExpectedJson: (thisObj) => ({
+          type: 'marker_move',
+          group: '',
+          isCursor: true,
+          blockId: thisObj.block.id,
+          oldNode: ASTNode.createWorkspaceNode(
+            thisObj.workspace,
+            new Blockly.utils.Coordinate(0, 0),
+          ),
+          newNode: new ASTNode(ASTNode.types.BLOCK, thisObj.block),
+        }),
+      },
+      {
+        title: 'Block to Workspace Marker move',
+        class: Blockly.Events.MarkerMove,
+        getArgs: (thisObj) => [
+          null,
+          true,
+          new ASTNode(ASTNode.types.BLOCK, thisObj.block),
+          ASTNode.createWorkspaceNode(
+            thisObj.workspace,
+            new Blockly.utils.Coordinate(0, 0),
+          ),
+        ],
+      },
+      {
+        title: 'Selected',
+        class: Blockly.Events.Selected,
         getArgs: (thisObj) => [null, thisObj.block.id, thisObj.workspace.id],
-        getExpectedJson: (thisObj) => ({type: 'selected', oldElementId: null,
-          newElementId: thisObj.block.id})},
-      {title: 'Selected (deselect)', class: Blockly.Events.Selected,
+        getExpectedJson: (thisObj) => ({
+          type: 'selected',
+          group: '',
+          newElementId: thisObj.block.id,
+        }),
+      },
+      {
+        title: 'Selected (deselect)',
+        class: Blockly.Events.Selected,
         getArgs: (thisObj) => [thisObj.block.id, null, thisObj.workspace.id],
-        getExpectedJson: (thisObj) => ({type: 'selected',
-          oldElementId: thisObj.block.id, newElementId: null})},
-      {title: 'Theme Change', class: Blockly.Events.ThemeChange,
+        getExpectedJson: (thisObj) => ({
+          type: 'selected',
+          group: '',
+          oldElementId: thisObj.block.id,
+        }),
+      },
+      {
+        title: 'Theme Change',
+        class: Blockly.Events.ThemeChange,
         getArgs: (thisObj) => ['classic', thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'theme_change', themeName: 'classic'})},
-      {title: 'Toolbox item select',
+        getExpectedJson: () => ({
+          type: 'theme_change',
+          group: '',
+          themeName: 'classic',
+        }),
+      },
+      {
+        title: 'Toolbox item select',
         class: Blockly.Events.ToolboxItemSelect,
         getArgs: (thisObj) => ['Math', 'Loops', thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'toolbox_item_select', oldItem: 'Math',
-          newItem: 'Loops'})},
-      {title: 'Toolbox item select (no previous)',
+        getExpectedJson: () => ({
+          type: 'toolbox_item_select',
+          group: '',
+          oldItem: 'Math',
+          newItem: 'Loops',
+        }),
+      },
+      {
+        title: 'Toolbox item select (no previous)',
         class: Blockly.Events.ToolboxItemSelect,
         getArgs: (thisObj) => [null, 'Loops', thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'toolbox_item_select', oldItem: null,
-          newItem: 'Loops'})},
-      {title: 'Toolbox item select (deselect)',
+        getExpectedJson: () => ({
+          type: 'toolbox_item_select',
+          group: '',
+          newItem: 'Loops',
+        }),
+      },
+      {
+        title: 'Toolbox item select (deselect)',
         class: Blockly.Events.ToolboxItemSelect,
         getArgs: (thisObj) => ['Math', null, thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'toolbox_item_select', oldItem: 'Math',
-          newItem: null})},
-      {title: 'Trashcan open', class: Blockly.Events.TrashcanOpen,
+        getExpectedJson: () => ({
+          type: 'toolbox_item_select',
+          group: '',
+          oldItem: 'Math',
+        }),
+      },
+      {
+        title: 'Trashcan open',
+        class: Blockly.Events.TrashcanOpen,
         getArgs: (thisObj) => [true, thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'trashcan_open', isOpen: true})},
-      {title: 'Viewport change', class: Blockly.Events.ViewportChange,
+        getExpectedJson: () => ({
+          type: 'trashcan_open',
+          group: '',
+          isOpen: true,
+        }),
+      },
+      {
+        title: 'Viewport change',
+        class: Blockly.Events.ViewportChange,
         getArgs: (thisObj) => [2.666, 1.333, 1.2, thisObj.workspace.id, 1],
-        getExpectedJson: () => ({type: 'viewport_change', viewTop: 2.666,
-          viewLeft: 1.333, scale: 1.2, oldScale: 1})},
-      {title: 'Viewport change (0,0)', class: Blockly.Events.ViewportChange,
+        getExpectedJson: () => ({
+          type: 'viewport_change',
+          group: '',
+          viewTop: 2.666,
+          viewLeft: 1.333,
+          scale: 1.2,
+          oldScale: 1,
+        }),
+      },
+      {
+        title: 'Viewport change (0,0)',
+        class: Blockly.Events.ViewportChange,
         getArgs: (thisObj) => [0, 0, 1.2, thisObj.workspace.id, 1],
-        getExpectedJson: () => ({type: 'viewport_change', viewTop: 0,
-          viewLeft: 0, scale: 1.2, oldScale: 1})},
+        getExpectedJson: () => ({
+          type: 'viewport_change',
+          group: '',
+          viewTop: 0,
+          viewLeft: 0,
+          scale: 1.2,
+          oldScale: 1,
+        }),
+      },
     ];
     const blockEventTestCases = [
       {
@@ -448,6 +683,7 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.block, 'collapsed', null, false, true],
         getExpectedJson: (thisObj) => ({
           type: 'change',
+          group: '',
           blockId: thisObj.block.id,
           element: 'collapsed',
           oldValue: false,
@@ -460,10 +696,12 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.block],
         getExpectedJson: (thisObj) => ({
           type: 'create',
+          group: '',
           blockId: thisObj.block.id,
-          xml: '<block xmlns="https://developers.google.com/blockly/xml"' +
-              ' type="simple_test_block" id="testBlockId1" x="0" y="0">' +
-              '</block>',
+          xml:
+            '<block xmlns="https://developers.google.com/blockly/xml"' +
+            ' type="simple_test_block" id="testBlockId1" x="0" y="0">' +
+            '</block>',
           ids: [thisObj.block.id],
           json: {
             'type': 'simple_test_block',
@@ -479,10 +717,12 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.shadowBlock],
         getExpectedJson: (thisObj) => ({
           type: 'create',
+          group: '',
           blockId: thisObj.shadowBlock.id,
-          xml: '<shadow xmlns="https://developers.google.com/blockly/xml"' +
-              ' type="simple_test_block" id="testBlockId2" x="0" y="0">' +
-              '</shadow>',
+          xml:
+            '<shadow xmlns="https://developers.google.com/blockly/xml"' +
+            ' type="simple_test_block" id="testBlockId2" x="0" y="0">' +
+            '</shadow>',
           ids: [thisObj.shadowBlock.id],
           json: {
             'type': 'simple_test_block',
@@ -499,10 +739,12 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.block],
         getExpectedJson: (thisObj) => ({
           type: 'delete',
+          group: '',
           blockId: thisObj.block.id,
-          oldXml: '<block xmlns="https://developers.google.com/blockly/xml"' +
-              ' type="simple_test_block" id="testBlockId1" x="0" y="0">' +
-              '</block>',
+          oldXml:
+            '<block xmlns="https://developers.google.com/blockly/xml"' +
+            ' type="simple_test_block" id="testBlockId1" x="0" y="0">' +
+            '</block>',
           ids: [thisObj.block.id],
           wasShadow: false,
           oldJson: {
@@ -519,10 +761,12 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.shadowBlock],
         getExpectedJson: (thisObj) => ({
           type: 'delete',
+          group: '',
           blockId: thisObj.shadowBlock.id,
-          oldXml: '<shadow xmlns="https://developers.google.com/blockly/xml"' +
-              ' type="simple_test_block" id="testBlockId2" x="0" y="0">' +
-              '</shadow>',
+          oldXml:
+            '<shadow xmlns="https://developers.google.com/blockly/xml"' +
+            ' type="simple_test_block" id="testBlockId2" x="0" y="0">' +
+            '</shadow>',
           ids: [thisObj.shadowBlock.id],
           wasShadow: true,
           oldJson: {
@@ -541,7 +785,9 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.block],
         getExpectedJson: (thisObj) => ({
           type: 'move',
+          group: '',
           blockId: thisObj.block.id,
+          oldCoordinate: '0, 0',
         }),
       },
       {
@@ -550,93 +796,124 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.shadowBlock],
         getExpectedJson: (thisObj) => ({
           type: 'move',
+          group: '',
           blockId: thisObj.shadowBlock.id,
+          oldCoordinate: '0, 0',
           recordUndo: false,
         }),
       },
     ];
-    const workspaceEventTestCases = [
-      {title: 'Finished Loading', class: Blockly.Events.FinishedLoading,
-        getArgs: (thisObj) => [thisObj.workspace],
-        getExpectedJson: (thisObj) => ({type: 'finished_loading',
-          workspaceId: thisObj.workspace.id})},
-    ];
     const workspaceCommentEventTestCases = [
-      {title: 'Comment change', class: Blockly.Events.CommentChange,
+      {
+        title: 'Comment change',
+        class: Blockly.Events.CommentChange,
         getArgs: (thisObj) => [thisObj.comment, 'bar', 'foo'],
-        getExpectedJson: (thisObj) => ({type: 'comment_change',
-          commentId: thisObj.comment.id, oldContents: 'bar',
-          newContents: 'foo'})},
-      {title: 'Comment create', class: Blockly.Events.CommentCreate,
-        getArgs: (thisObj) => [thisObj.comment],
-        getExpectedJson: (thisObj) => ({type: 'comment_create',
+        getExpectedJson: (thisObj) => ({
+          type: 'comment_change',
+          group: '',
           commentId: thisObj.comment.id,
-          xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY())})},
-      {title: 'Comment delete', class: Blockly.Events.CommentDelete,
+          oldContents: 'bar',
+          newContents: 'foo',
+        }),
+      },
+      {
+        title: 'Comment create',
+        class: Blockly.Events.CommentCreate,
         getArgs: (thisObj) => [thisObj.comment],
-        getExpectedJson: (thisObj) => ({type: 'comment_delete',
-          commentId: thisObj.comment.id})},
+        getExpectedJson: (thisObj) => ({
+          type: 'comment_create',
+          group: '',
+          commentId: thisObj.comment.id,
+          xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY()),
+        }),
+      },
+      {
+        title: 'Comment delete',
+        class: Blockly.Events.CommentDelete,
+        getArgs: (thisObj) => [thisObj.comment],
+        getExpectedJson: (thisObj) => ({
+          type: 'comment_delete',
+          group: '',
+          commentId: thisObj.comment.id,
+          xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY()),
+        }),
+      },
       // TODO(#4577) Test serialization of move event coordinate properties.
-      {title: 'Comment move', class: Blockly.Events.CommentMove,
-        getArgs: (thisObj) => [thisObj.comment],
-        getExpectedJson: (thisObj) => ({type: 'comment_move',
-          commentId: thisObj.comment.id, oldCoordinate: '0,0'})},
     ];
     const testSuites = [
-      {title: 'Variable events', testCases: variableEventTestCases,
+      {
+        title: 'Variable events',
+        testCases: variableEventTestCases,
         setup: (thisObj) => {
-          thisObj.variable =
-              thisObj.workspace.createVariable('name1', 'type1', 'id1');
-        }},
-      {title: 'UI events', testCases: uiEventTestCases,
+          thisObj.variable = thisObj.workspace.createVariable(
+            'name1',
+            'type1',
+            'id1',
+          );
+        },
+      },
+      {
+        title: 'UI events',
+        testCases: uiEventTestCases,
         setup: (thisObj) => {
           thisObj.block = createSimpleTestBlock(thisObj.workspace);
-        }},
-      {title: 'Block events', testCases: blockEventTestCases,
+        },
+      },
+      {
+        title: 'Block events',
+        testCases: blockEventTestCases,
         setup: (thisObj) => {
           createGenUidStubWithReturns(['testBlockId1', 'testBlockId2']);
           thisObj.block = createSimpleTestBlock(thisObj.workspace);
           thisObj.shadowBlock = createSimpleTestBlock(thisObj.workspace);
           thisObj.shadowBlock.setShadow(true);
-        }},
-      {title: 'Workspace events',
-        testCases: workspaceEventTestCases,
-        setup: (_) => {}},
-      {title: 'WorkspaceComment events',
+        },
+      },
+      {
+        title: 'WorkspaceComment events',
         testCases: workspaceCommentEventTestCases,
         setup: (thisObj) => {
           thisObj.comment = new Blockly.WorkspaceComment(
-              thisObj.workspace, 'comment text', 0, 0, 'comment id');
-        }},
+            thisObj.workspace,
+            'comment text',
+            0,
+            0,
+            'comment id',
+          );
+        },
+      },
     ];
     testSuites.forEach((testSuite) => {
-      suite(testSuite.title, function() {
-        setup(function() {
+      suite(testSuite.title, function () {
+        setup(function () {
           testSuite.setup(this);
         });
-        suite('fromJson', function() {
+        suite('fromJson', function () {
           testSuite.testCases.forEach((testCase) => {
-            test(testCase.title, function() {
+            test(testCase.title, function () {
               const event = new testCase.class(...testCase.getArgs(this));
-              const event2 = new testCase.class();
               const json = event.toJson();
-              event2.fromJson(json);
+              const event2 = Blockly.Events.fromJson(json, this.workspace);
 
               chai.assert.equal(
-                  safeStringify(event2.toJson()), safeStringify(json));
+                safeStringify(event2.toJson()),
+                safeStringify(json),
+              );
             });
           });
         });
-        suite('toJson', function() {
+        suite('toJson', function () {
           testSuite.testCases.forEach((testCase) => {
             if (testCase.getExpectedJson) {
-              test(testCase.title, function() {
+              test(testCase.title, function () {
                 const event = new testCase.class(...testCase.getArgs(this));
                 const json = event.toJson();
                 const expectedJson = testCase.getExpectedJson(this);
 
                 chai.assert.equal(
-                    safeStringify(json), safeStringify(expectedJson));
+                  safeStringify(json),
+                  safeStringify(expectedJson),
+                );
               });
             }
           });
@@ -645,8 +922,8 @@ suite('Events', function() {
     });
   });
 
-  suite('Variable events', function() {
-    setup(function() {
+  suite('Variable events', function () {
+    setup(function () {
       this.variable = this.workspace.createVariable('name1', 'type1', 'id1');
     });
 
@@ -666,60 +943,76 @@ suite('Events', function() {
       chai.assert.equal(id, variable.getId());
     }
 
-    suite('Constructors', function() {
-      test('Var base', function() {
+    suite('Constructors', function () {
+      test('Var base', function () {
         const event = new Blockly.Events.VarBase(this.variable);
-        assertEventEquals(event, undefined, this.workspace.id, undefined, {
+        assertEventEquals(event, '', this.workspace.id, undefined, {
           'varId': 'id1',
           'recordUndo': true,
           'group': '',
         });
       });
 
-      test('Var create', function() {
+      test('Var create', function () {
         const event = new Blockly.Events.VarCreate(this.variable);
-        assertEventEquals(event, Blockly.Events.VAR_CREATE, this.workspace.id,
-            undefined,
-            {
-              'varId': 'id1',
-              'varType': 'type1',
-              'varName': 'name1',
-              'recordUndo': true,
-              'group': '',
-            });
+        assertEventEquals(
+          event,
+          Blockly.Events.VAR_CREATE,
+          this.workspace.id,
+          undefined,
+          {
+            'varId': 'id1',
+            'varType': 'type1',
+            'varName': 'name1',
+            'recordUndo': true,
+            'group': '',
+          },
+        );
       });
 
-      test('Var delete', function() {
+      test('Var delete', function () {
         const event = new Blockly.Events.VarDelete(this.variable);
-        assertEventEquals(event, Blockly.Events.VAR_DELETE, this.workspace.id,
-            undefined,
-            {
-              'varId': 'id1',
-              'varType': 'type1',
-              'varName': 'name1',
-              'recordUndo': true,
-              'group': '',
-            });
+        assertEventEquals(
+          event,
+          Blockly.Events.VAR_DELETE,
+          this.workspace.id,
+          undefined,
+          {
+            'varId': 'id1',
+            'varType': 'type1',
+            'varName': 'name1',
+            'recordUndo': true,
+            'group': '',
+          },
+        );
       });
 
-      test('Var rename', function() {
+      test('Var rename', function () {
         const event = new Blockly.Events.VarRename(this.variable, 'name2');
-        assertEventEquals(event, Blockly.Events.VAR_RENAME, this.workspace.id,
-            undefined,
-            {
-              'varId': 'id1',
-              'oldName': 'name1',
-              'newName': 'name2',
-              'recordUndo': true,
-              'group': '',
-            });
+        assertEventEquals(
+          event,
+          Blockly.Events.VAR_RENAME,
+          this.workspace.id,
+          undefined,
+          {
+            'varId': 'id1',
+            'oldName': 'name1',
+            'newName': 'name2',
+            'recordUndo': true,
+            'group': '',
+          },
+        );
       });
     });
 
-    suite('Run Forward', function() {
-      test('Var create', function() {
-        const json = {type: "var_create", varId: "id2", varType: "type2",
-          varName: "name2"};
+    suite('Run Forward', function () {
+      test('Var create', function () {
+        const json = {
+          type: 'var_create',
+          varId: 'id2',
+          varType: 'type2',
+          varName: 'name2',
+        };
         const event = eventUtils.fromJson(json, this.workspace);
         const x = this.workspace.getVariableById('id2');
         chai.assert.isNull(x);
@@ -727,37 +1020,41 @@ suite('Events', function() {
         assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       });
 
-      test('Var delete', function() {
+      test('Var delete', function () {
         const event = new Blockly.Events.VarDelete(this.variable);
         chai.assert.isNotNull(this.workspace.getVariableById('id1'));
         event.run(true);
         chai.assert.isNull(this.workspace.getVariableById('id1'));
       });
 
-      test('Var rename', function() {
+      test('Var rename', function () {
         const event = new Blockly.Events.VarRename(this.variable, 'name2');
         event.run(true);
         chai.assert.isNull(this.workspace.getVariable('name1'));
         checkVariableValues(this.workspace, 'name2', 'type1', 'id1');
       });
     });
-    suite('Run Backward', function() {
-      test('Var create', function() {
+    suite('Run Backward', function () {
+      test('Var create', function () {
         const event = new Blockly.Events.VarCreate(this.variable);
         chai.assert.isNotNull(this.workspace.getVariableById('id1'));
         event.run(false);
       });
 
-      test('Var delete', function() {
-        const json = {type: "var_delete", varId: "id2", varType: "type2",
-          varName: "name2"};
+      test('Var delete', function () {
+        const json = {
+          type: 'var_delete',
+          varId: 'id2',
+          varType: 'type2',
+          varName: 'name2',
+        };
         const event = eventUtils.fromJson(json, this.workspace);
         chai.assert.isNull(this.workspace.getVariableById('id2'));
         event.run(false);
         assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       });
 
-      test('Var rename', function() {
+      test('Var rename', function () {
         const event = new Blockly.Events.VarRename(this.variable, 'name2');
         event.run(false);
         chai.assert.isNull(this.workspace.getVariable('name2'));
@@ -766,7 +1063,7 @@ suite('Events', function() {
     });
   });
 
-  suite('Filters', function() {
+  suite('Filters', function () {
     function addMoveEvent(events, block, newX, newY) {
       events.push(new Blockly.Events.BlockMove(block));
       block.xy_ = new Blockly.utils.Coordinate(newX, newY);
@@ -779,7 +1076,7 @@ suite('Events', function() {
       events[events.length - 1].recordNew();
     }
 
-    test('No removed, order unchanged', function() {
+    test('No removed, order unchanged', function () {
       const block = this.workspace.newBlock('field_variable_test_block', '1');
       const events = [
         new Blockly.Events.BlockCreate(block),
@@ -788,15 +1085,19 @@ suite('Events', function() {
         new Blockly.Events.Click(block),
       ];
       const filteredEvents = eventUtils.filter(events, true);
-      chai.assert.equal(filteredEvents.length, 4);  // no event should have been removed.
+      chai.assert.equal(filteredEvents.length, 4); // no event should have been removed.
       // test that the order hasn't changed
-      chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
+      chai.assert.isTrue(
+        filteredEvents[0] instanceof Blockly.Events.BlockCreate,
+      );
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      chai.assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BlockChange);
+      chai.assert.isTrue(
+        filteredEvents[2] instanceof Blockly.Events.BlockChange,
+      );
       chai.assert.isTrue(filteredEvents[3] instanceof Blockly.Events.Click);
     });
 
-    test('Different blocks no removed', function() {
+    test('Different blocks no removed', function () {
       const block1 = this.workspace.newBlock('field_variable_test_block', '1');
       const block2 = this.workspace.newBlock('field_variable_test_block', '2');
       const events = [
@@ -806,76 +1107,86 @@ suite('Events', function() {
         new Blockly.Events.BlockMove(block2),
       ];
       const filteredEvents = eventUtils.filter(events, true);
-      chai.assert.equal(filteredEvents.length, 4);  // no event should have been removed.
+      chai.assert.equal(filteredEvents.length, 4); // no event should have been removed.
     });
 
-    test('Forward', function() {
+    test('Forward', function () {
       const block = this.workspace.newBlock('field_variable_test_block', '1');
       const events = [new Blockly.Events.BlockCreate(block)];
       addMoveEvent(events, block, 1, 1);
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);
       const filteredEvents = eventUtils.filter(events, true);
-      chai.assert.equal(filteredEvents.length, 2);  // duplicate moves should have been removed.
+      chai.assert.equal(filteredEvents.length, 2); // duplicate moves should have been removed.
       // test that the order hasn't changed
-      chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
+      chai.assert.isTrue(
+        filteredEvents[0] instanceof Blockly.Events.BlockCreate,
+      );
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
       chai.assert.equal(filteredEvents[1].newCoordinate.x, 3);
       chai.assert.equal(filteredEvents[1].newCoordinate.y, 3);
     });
 
-    test('Backward', function() {
+    test('Backward', function () {
       const block = this.workspace.newBlock('field_variable_test_block', '1');
       const events = [new Blockly.Events.BlockCreate(block)];
       addMoveEvent(events, block, 1, 1);
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);
       const filteredEvents = eventUtils.filter(events, false);
-      chai.assert.equal(filteredEvents.length, 2);  // duplicate event should have been removed.
+      chai.assert.equal(filteredEvents.length, 2); // duplicate event should have been removed.
       // test that the order hasn't changed
-      chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
+      chai.assert.isTrue(
+        filteredEvents[0] instanceof Blockly.Events.BlockCreate,
+      );
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
       chai.assert.equal(filteredEvents[1].newCoordinate.x, 1);
       chai.assert.equal(filteredEvents[1].newCoordinate.y, 1);
     });
 
-    test('Merge block move events', function() {
+    test('Merge block move events', function () {
       const block = this.workspace.newBlock('field_variable_test_block', '1');
       const events = [];
       addMoveEvent(events, block, 0, 0);
       addMoveEvent(events, block, 1, 1);
       const filteredEvents = eventUtils.filter(events, true);
-      chai.assert.equal(filteredEvents.length, 1);  // second move event merged into first
+      chai.assert.equal(filteredEvents.length, 1); // second move event merged into first
       chai.assert.equal(filteredEvents[0].newCoordinate.x, 1);
       chai.assert.equal(filteredEvents[0].newCoordinate.y, 1);
     });
 
-    test('Merge block change events', function() {
+    test('Merge block change events', function () {
       const block1 = this.workspace.newBlock('field_variable_test_block', '1');
       const events = [
         new Blockly.Events.BlockChange(block1, 'field', 'VAR', 'item', 'item1'),
-        new Blockly.Events.BlockChange(block1, 'field', 'VAR', 'item1', 'item2'),
+        new Blockly.Events.BlockChange(
+          block1,
+          'field',
+          'VAR',
+          'item1',
+          'item2',
+        ),
       ];
       const filteredEvents = eventUtils.filter(events, true);
-      chai.assert.equal(filteredEvents.length, 1);  // second change event merged into first
+      chai.assert.equal(filteredEvents.length, 1); // second change event merged into first
       chai.assert.equal(filteredEvents[0].oldValue, 'item');
       chai.assert.equal(filteredEvents[0].newValue, 'item2');
     });
 
-    test('Merge viewport change events', function() {
+    test('Merge viewport change events', function () {
       const events = [
         new Blockly.Events.ViewportChange(1, 2, 3, this.workspace, 4),
         new Blockly.Events.ViewportChange(5, 6, 7, this.workspace, 8),
       ];
       const filteredEvents = eventUtils.filter(events, true);
-      chai.assert.equal(filteredEvents.length, 1);  // second change event merged into first
+      chai.assert.equal(filteredEvents.length, 1); // second change event merged into first
       chai.assert.equal(filteredEvents[0].viewTop, 5);
       chai.assert.equal(filteredEvents[0].viewLeft, 6);
       chai.assert.equal(filteredEvents[0].scale, 7);
       chai.assert.equal(filteredEvents[0].oldScale, 8);
     });
 
-    test('Merge ui events', function() {
+    test('Merge ui events', function () {
       const block1 = this.workspace.newBlock('field_variable_test_block', '1');
       const block2 = this.workspace.newBlock('field_variable_test_block', '2');
       const block3 = this.workspace.newBlock('field_variable_test_block', '3');
@@ -890,30 +1201,36 @@ suite('Events', function() {
       const filteredEvents = eventUtils.filter(events, true);
       // click event merged into corresponding *Open event
       chai.assert.equal(filteredEvents.length, 3);
-      chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BubbleOpen);
-      chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BubbleOpen);
-      chai.assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BubbleOpen);
+      chai.assert.isTrue(
+        filteredEvents[0] instanceof Blockly.Events.BubbleOpen,
+      );
+      chai.assert.isTrue(
+        filteredEvents[1] instanceof Blockly.Events.BubbleOpen,
+      );
+      chai.assert.isTrue(
+        filteredEvents[2] instanceof Blockly.Events.BubbleOpen,
+      );
       chai.assert.equal(filteredEvents[0].bubbleType, 'comment');
       chai.assert.equal(filteredEvents[1].bubbleType, 'mutator');
       chai.assert.equal(filteredEvents[2].bubbleType, 'warning');
     });
 
-    test('Colliding events not dropped', function() {
+    test('Colliding events not dropped', function () {
       // Tests that events that collide on a (event, block, workspace) tuple
       // but cannot be merged do not get dropped during filtering.
       const block = this.workspace.newBlock('field_variable_test_block', '1');
       const events = [
         new Blockly.Events.Click(block),
-        new Blockly.Events.Ui(block, 'stackclick', undefined, undefined),
+        new Blockly.Events.BlockDrag(block, true),
       ];
       const filteredEvents = eventUtils.filter(events, true);
       // click and stackclick should both exist
       chai.assert.equal(filteredEvents.length, 2);
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.Click);
-      chai.assert.equal(filteredEvents[1].element, 'stackclick');
+      chai.assert.equal(filteredEvents[1].isStart, true);
     });
 
-    test('Merging null operations dropped', function() {
+    test('Merging null operations dropped', function () {
       // Mutator composition could result in move events for blocks
       // connected to the mutated block that were null operations. This
       // leads to events in the undo/redo queue that do nothing, requiring
@@ -932,7 +1249,7 @@ suite('Events', function() {
       chai.assert.equal(filteredEvents.length, 0);
     });
 
-    test('Move events different blocks not merged', function() {
+    test('Move events different blocks not merged', function () {
       // Move events should only merge if they refer to the same block and are
       // consecutive.
       // See github.com/google/blockly/pull/1892 for a worked example showing
@@ -953,24 +1270,28 @@ suite('Events', function() {
       // test that the order hasn't changed
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockMove);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      chai.assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BlockDelete);
+      chai.assert.isTrue(
+        filteredEvents[2] instanceof Blockly.Events.BlockDelete,
+      );
       chai.assert.isTrue(filteredEvents[3] instanceof Blockly.Events.BlockMove);
     });
   });
 
-  suite('Firing', function() {
-    setup(function() {
-      this.changeListenerSpy = createFireChangeListenerSpy(this.workspace);
+  suite('Firing', function () {
+    setup(function () {
+      this.changeListenerSpy = createChangeListenerSpy(this.workspace);
     });
 
-    test('Block dispose triggers Delete', function() {
+    test('Block dispose triggers Delete', function () {
       let workspaceSvg;
       try {
         const toolbox = document.getElementById('toolbox-categories');
         workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
         const TEST_BLOCK_ID = 'test_block_id';
-        const genUidStub = createGenUidStubWithReturns(
-            [TEST_BLOCK_ID, 'test_group_id']);
+        const genUidStub = createGenUidStubWithReturns([
+          TEST_BLOCK_ID,
+          'test_group_id',
+        ]);
 
         const block = workspaceSvg.newBlock('');
         block.initSvg();
@@ -982,7 +1303,7 @@ suite('Events', function() {
         this.clock.runAll();
 
         this.eventsFireSpy.resetHistory();
-        const changeListenerSpy = createFireChangeListenerSpy(workspaceSvg);
+        const changeListenerSpy = createChangeListenerSpy(workspaceSvg);
         block.dispose();
 
         // Run all queued events.
@@ -993,13 +1314,13 @@ suite('Events', function() {
         sinon.assert.calledTwice(genUidStub);
 
         assertNthCallEventArgEquals(
-            this.eventsFireSpy, 0, Blockly.Events.BlockDelete,
-            {oldXml: expectedOldXml, group: ''},
-            workspaceSvg.id, expectedId);
-        assertNthCallEventArgEquals(
-            changeListenerSpy, 0, Blockly.Events.BlockDelete,
-            {oldXml: expectedOldXml, group: ''},
-            workspaceSvg.id, expectedId);
+          this.eventsFireSpy,
+          0,
+          Blockly.Events.BlockDelete,
+          {oldXml: expectedOldXml, group: ''},
+          workspaceSvg.id,
+          expectedId,
+        );
 
         // Expect the workspace to not have a variable with ID 'test_block_id'.
         chai.assert.isNull(this.workspace.getVariableById(TEST_BLOCK_ID));
@@ -1008,14 +1329,17 @@ suite('Events', function() {
       }
     });
 
-    test('New block new var', function() {
+    test('New block new var', function () {
       const TEST_BLOCK_ID = 'test_block_id';
       const TEST_GROUP_ID = 'test_group_id';
       const TEST_VAR_ID = 'test_var_id';
-      const genUidStub = createGenUidStubWithReturns(
-          [TEST_BLOCK_ID, TEST_GROUP_ID, TEST_VAR_ID]);
+      const genUidStub = createGenUidStubWithReturns([
+        TEST_BLOCK_ID,
+        TEST_GROUP_ID,
+        TEST_VAR_ID,
+      ]);
       const _ = this.workspace.newBlock('field_variable_test_block');
-      const TEST_VAR_NAME = 'item';  //  As defined in block's json.
+      const TEST_VAR_NAME = 'item'; //  As defined in block's json.
 
       // Run all queued events.
       this.clock.runAll();
@@ -1029,30 +1353,43 @@ suite('Events', function() {
       // Expect both events to trigger change listener.
       sinon.assert.calledTwice(this.changeListenerSpy);
       // Both events should be on undo stack
-      chai.assert.equal(this.workspace.undoStack_.length, 2,
-          'Undo stack length');
+      chai.assert.equal(
+        this.workspace.undoStack_.length,
+        2,
+        'Undo stack length',
+      );
 
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 0, Blockly.Events.VarCreate,
-          {group: TEST_GROUP_ID, varId: TEST_VAR_ID, varName: TEST_VAR_NAME},
-          this.workspace.id, undefined);
+        this.changeListenerSpy,
+        0,
+        Blockly.Events.VarCreate,
+        {group: TEST_GROUP_ID, varId: TEST_VAR_ID, varName: TEST_VAR_NAME},
+        this.workspace.id,
+        undefined,
+      );
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 1, Blockly.Events.BlockCreate,
-          {group: TEST_GROUP_ID}, this.workspace.id, TEST_BLOCK_ID);
+        this.changeListenerSpy,
+        1,
+        Blockly.Events.BlockCreate,
+        {group: TEST_GROUP_ID},
+        this.workspace.id,
+        TEST_BLOCK_ID,
+      );
 
       // Expect the workspace to have a variable with ID 'test_var_id'.
       chai.assert.isNotNull(this.workspace.getVariableById(TEST_VAR_ID));
     });
 
-    test('New block new var xml', function() {
+    test('New block new var xml', function () {
       const TEST_GROUP_ID = 'test_group_id';
       const genUidStub = createGenUidStubWithReturns(TEST_GROUP_ID);
-      const dom = Blockly.Xml.textToDom(
-          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+      const dom = Blockly.utils.xml.textToDom(
+        '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="field_variable_test_block" id="test_block_id">' +
           '    <field name="VAR" id="test_var_id">name1</field>' +
           '  </block>' +
-          '</xml>');
+          '</xml>',
+      );
       Blockly.Xml.domToWorkspace(dom, this.workspace);
       const TEST_BLOCK_ID = 'test_block_id';
       const TEST_VAR_ID = 'test_var_id';
@@ -1074,36 +1411,53 @@ suite('Events', function() {
       // The first varCreate and move event should have been ignored.
       sinon.assert.callCount(this.changeListenerSpy, 3);
       // Expect two events on undo stack: varCreate and block create.
-      chai.assert.equal(this.workspace.undoStack_.length, 2,
-          'Undo stack length');
+      chai.assert.equal(
+        this.workspace.undoStack_.length,
+        2,
+        'Undo stack length',
+      );
 
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 0, Blockly.Events.VarCreate,
-          {group: TEST_GROUP_ID, varId: TEST_VAR_ID, varName: TEST_VAR_NAME},
-          this.workspace.id, undefined);
+        this.changeListenerSpy,
+        0,
+        Blockly.Events.VarCreate,
+        {group: TEST_GROUP_ID, varId: TEST_VAR_ID, varName: TEST_VAR_NAME},
+        this.workspace.id,
+        undefined,
+      );
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 1, Blockly.Events.BlockCreate,
-          {group: TEST_GROUP_ID}, this.workspace.id, TEST_BLOCK_ID);
+        this.changeListenerSpy,
+        1,
+        Blockly.Events.BlockCreate,
+        {group: TEST_GROUP_ID},
+        this.workspace.id,
+        TEST_BLOCK_ID,
+      );
 
       // Finished loading event should not be part of event group.
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 2, Blockly.Events.FinishedLoading,
-          {group: ''}, this.workspace.id, undefined);
+        this.changeListenerSpy,
+        2,
+        Blockly.Events.FinishedLoading,
+        {group: ''},
+        this.workspace.id,
+        undefined,
+      );
 
       // Expect the workspace to have a variable with ID 'test_var_id'.
       chai.assert.isNotNull(this.workspace.getVariableById(TEST_VAR_ID));
     });
   });
-  suite('Disable orphans', function() {
-    setup(function() {
+  suite('Disable orphans', function () {
+    setup(function () {
       // disableOrphans needs a WorkspaceSVG
       const toolbox = document.getElementById('toolbox-categories');
       this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
     });
-    teardown(function() {
+    teardown(function () {
       workspaceTeardown.call(this, this.workspace);
     });
-    test('Created orphan block is disabled', function() {
+    test('Created orphan block is disabled', function () {
       this.workspace.addChangeListener(eventUtils.disableOrphans);
       const block = this.workspace.newBlock('controls_for');
       block.initSvg();
@@ -1112,10 +1466,12 @@ suite('Events', function() {
       // Fire all events
       this.clock.runAll();
 
-      chai.assert.isFalse(block.isEnabled(),
-          'Expected orphan block to be disabled after creation');
+      chai.assert.isFalse(
+        block.isEnabled(),
+        'Expected orphan block to be disabled after creation',
+      );
     });
-    test('Created procedure block is enabled', function() {
+    test('Created procedure block is enabled', function () {
       this.workspace.addChangeListener(eventUtils.disableOrphans);
 
       // Procedure block is never an orphan
@@ -1126,10 +1482,12 @@ suite('Events', function() {
       // Fire all events
       this.clock.runAll();
 
-      chai.assert.isTrue(functionBlock.isEnabled(),
-          'Expected top-level procedure block to be enabled');
+      chai.assert.isTrue(
+        functionBlock.isEnabled(),
+        'Expected top-level procedure block to be enabled',
+      );
     });
-    test('Moving a block to top-level disables it', function() {
+    test('Moving a block to top-level disables it', function () {
       this.workspace.addChangeListener(eventUtils.disableOrphans);
       const functionBlock = this.workspace.newBlock('procedures_defnoreturn');
       functionBlock.initSvg();
@@ -1148,10 +1506,12 @@ suite('Events', function() {
       // Fire all events
       this.clock.runAll();
 
-      chai.assert.isFalse(block.isEnabled(),
-          'Expected disconnected block to be disabled');
+      chai.assert.isFalse(
+        block.isEnabled(),
+        'Expected disconnected block to be disabled',
+      );
     });
-    test('Giving block a parent enables it', function() {
+    test('Giving block a parent enables it', function () {
       this.workspace.addChangeListener(eventUtils.disableOrphans);
       const functionBlock = this.workspace.newBlock('procedures_defnoreturn');
       functionBlock.initSvg();
@@ -1167,10 +1527,12 @@ suite('Events', function() {
       // Fire all events
       this.clock.runAll();
 
-      chai.assert.isTrue(block.isEnabled(),
-          'Expected block to be enabled after connecting to parent');
+      chai.assert.isTrue(
+        block.isEnabled(),
+        'Expected block to be enabled after connecting to parent',
+      );
     });
-    test('disableOrphans events are not undoable', function() {
+    test('disableOrphans events are not undoable', function () {
       this.workspace.addChangeListener(eventUtils.disableOrphans);
       const functionBlock = this.workspace.newBlock('procedures_defnoreturn');
       functionBlock.initSvg();
@@ -1189,11 +1551,13 @@ suite('Events', function() {
       // Fire all events
       this.clock.runAll();
 
-      const disabledEvents = this.workspace.getUndoStack().filter(function(e) {
+      const disabledEvents = this.workspace.getUndoStack().filter(function (e) {
         return e.element === 'disabled';
       });
-      chai.assert.isEmpty(disabledEvents,
-          'Undo stack should not contain any disabled events');
+      chai.assert.isEmpty(
+        disabledEvents,
+        'Undo stack should not contain any disabled events',
+      );
     });
   });
 });

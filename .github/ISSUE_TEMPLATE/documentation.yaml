@@ -1,0 +1,38 @@
+name: Report a documentation problem 📖
+description: Could our documentation be better? Tell us how.
+labels: 'issue: docs, issue: triage'
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Thanks for helping us improve our developer site documentation!
+        Use this template to describe issues with the content on our
+        [developer site](https://developers.google.com/blockly/guides).
+  - type: input
+    id: link
+    attributes:
+      label: Location
+      description: >
+        A link to the page with the documentation you want us to be updated.
+        If no page exists, describe what the page should be, and where.
+  - type: checkboxes
+    id: type
+    attributes:
+      label: Type
+      description: What kind of content is it?
+      options:
+        - label: Text
+        - label: Image or Gif
+        - label: Other
+  - type: textarea
+    id: content
+    attributes:
+      label: Suggested content
+      description: Your suggestion for improved documentation. If it's helpful, also include the old content for comparison.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem. If this is related to a specific pull request, link to it.

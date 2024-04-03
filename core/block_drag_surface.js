@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright 2016 Google LLC
@@ -287,5 +288,4 @@ const BlockDragSurfaceSvg = class {
     this.surfaceXY_ = null;
   }
 };
-
 exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;

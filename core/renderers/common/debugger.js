@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright 2019 Google LLC
@@ -453,5 +454,4 @@ Debug.config = {
   connectedBlockBounds: true,
   render: true,
 };
-
 exports.Debug = Debug;

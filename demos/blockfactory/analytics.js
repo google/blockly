@@ -171,8 +171,7 @@ BlocklyDevTools.Analytics.onExport = function(typeId, optMetadata) {
  */
 BlocklyDevTools.Analytics.onError = function(e) {
   // stub
-  this.LOG_TO_CONSOLE_ &&
-      console.log('Analytics.onError("' + e.toString() + '")');
+  this.LOG_TO_CONSOLE_ && console.log('Analytics.onError("' + e + '")');
 };
 
 /**
@@ -194,4 +193,3 @@ BlocklyDevTools.Analytics.sendQueued = function() {
   // stub
   this.LOG_TO_CONSOLE_ && console.log('Analytics.sendQueued');
 };
-

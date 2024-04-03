@@ -3,41 +3,27 @@
 <head>
 <meta charset="utf-8">
 <title>Blockly Generator Tests</title>
-<script src="../../blockly_uncompressed.js"></script>
-<script src="../../msg/messages.js"></script>
-
 <script>
-// Require optional modules needed by tests.
-goog.require('Blockly.Dart.all');
-goog.require('Blockly.JavaScript.all');
-goog.require('Blockly.Lua.all');
-goog.require('Blockly.PHP.all');
-goog.require('Blockly.Python.all');
-goog.require('Blockly.libraryBlocks');
-</script>
-<script src="unittest_javascript.js"></script>
-<script src="unittest_python.js"></script>
-<script src="unittest_php.js"></script>
-<script src="unittest_lua.js"></script>
-<script src="unittest_dart.js"></script>
-<script src="unittest.js"></script>
-<script>
-'use strict';
+// N.B.: This script depends on the following (module) script to load
+// Blockly, the code generators, and the unittest*.js scripts.  The
+// module script actually gets executed after this one, so although
+// Blockly will be available when the defined global functions are
+// called it isn't yet available when this script runs.
 
 var demoWorkspace = null;
-var outputCode = '';
 
 function start() {
-  demoWorkspace = Blockly.inject('blocklyDiv',
-      {grid:
-         {spacing: 25,
-          length: 3,
-          colour: '#ccc',
-          snap: true},
-       media: '../../media/',
-       toolbox: document.getElementById('toolbox'),
-       zoom: {controls: true, wheel: true}
-       });
+  demoWorkspace = Blockly.inject('blocklyDiv', {
+    grid: {
+      spacing: 25,
+      length: 3,
+      colour: '#ccc',
+      snap: true
+    },
+    media: '../../media/',
+    toolbox: document.getElementById('toolbox'),
+    zoom: {controls: true, wheel: true}
+  });
   changeIndex();
 }
 
@@ -127,7 +113,7 @@ function fromXml(filename, xmlText, opt_append) {
     demoWorkspace.clear();
   }
   try {
-    var xmlDoc = Blockly.Xml.textToDom(xmlText);
+    var xmlDoc = Blockly.utils.xml.textToDom(xmlText);
     if (opt_append) {
       Blockly.Xml.appendDomToWorkspace(xmlDoc, demoWorkspace);
     } else {
@@ -175,33 +161,28 @@ function toXml() {
 
 function toJavaScript() {
   var code = '\'use strict\';\n\n'
-  code += Blockly.JavaScript.workspaceToCode(demoWorkspace);
+  code += javascriptGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
-  outputCode = code;
 }
 
 function toPython() {
-  var code = Blockly.Python.workspaceToCode(demoWorkspace);
+  var code = pythonGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
-  outputCode = code;
 }
 
 function toPhp() {
-  var code = Blockly.PHP.workspaceToCode(demoWorkspace);
+  var code = phpGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
-  outputCode = code;
 }
 
 function toLua() {
-  var code = Blockly.Lua.workspaceToCode(demoWorkspace);
+  var code = luaGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
-  outputCode = code;
 }
 
 function toDart() {
-  var code = Blockly.Dart.workspaceToCode(demoWorkspace);
+  var code = dartGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
-  outputCode = code;
 }
 
 function changeIndex() {
@@ -209,6 +190,34 @@ function changeIndex() {
   demoWorkspace.options.oneBasedIndex = oneBasedIndex;
   demoWorkspace.getToolbox().flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
 }
+</script>
+
+<script type="module">
+import {loadScript} from '../scripts/load.mjs';
+
+import * as Blockly from '../../build/blockly.loader.mjs';
+import '../../build/blocks.loader.mjs';
+import {dartGenerator} from '../../build/dart.loader.mjs';
+import {luaGenerator} from '../../build/lua.loader.mjs';
+import {javascriptGenerator} from '../../build/javascript.loader.mjs';
+import {phpGenerator} from '../../build/php.loader.mjs';
+import {pythonGenerator} from '../../build/python.loader.mjs';
+
+globalThis.dartGenerator = dartGenerator;
+globalThis.luaGenerator = luaGenerator;
+globalThis.javascriptGenerator = javascriptGenerator;
+globalThis.phpGenerator = phpGenerator;
+globalThis.pythonGenerator = pythonGenerator;
+
+await loadScript('../../build/msg/en.js');
+await loadScript('./unittest_javascript.js');
+await loadScript('./unittest_python.js');
+await loadScript('./unittest_php.js');
+await loadScript('./unittest_lua.js');
+await loadScript('./unittest_dart.js');
+await loadScript('./unittest.js');
+
+start();
 </script>
 
 <style>
@@ -240,7 +249,7 @@ h1 {
 }
 </style>
 </head>
-<body onload="start()">
+<body>
 
   <div id="blocklyDiv"></div>
 

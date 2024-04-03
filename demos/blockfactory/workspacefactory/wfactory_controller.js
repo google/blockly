@@ -16,7 +16,6 @@
  * - updating the preview workspace
  * - changing a category name
  * - moving the position of a category.
- *
  */
 
 /**
@@ -606,7 +605,7 @@ WorkspaceFactoryController.prototype.loadCategoryByName = function(name) {
   // Update the copy in the view.
   var tab = this.view.addCategoryRow(copy.name, copy.id);
   this.addClickToSwitch(tab, copy.id);
-  // Color the category tab in the view.
+  // Colour the category tab in the view.
   if (copy.colour) {
     this.view.setBorderColour(copy.id, copy.colour);
   }
@@ -702,7 +701,7 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
     // Try to parse XML from file and load it into toolbox editing area.
     // Print error message if fail.
     try {
-      var tree = Blockly.Xml.textToDom(reader.result);
+      var tree = Blockly.utils.xml.textToDom(reader.result);
       if (importMode === WorkspaceFactoryController.MODE_TOOLBOX) {
         // Switch mode.
         controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);

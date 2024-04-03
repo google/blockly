@@ -44,7 +44,7 @@ BlocklyStorage.restoreBlocks = function(opt_workspace) {
   var url = window.location.href.split('#')[0];
   if ('localStorage' in window && window.localStorage[url]) {
     var workspace = opt_workspace || Blockly.getMainWorkspace();
-    var xml = Blockly.Xml.textToDom(window.localStorage[url]);
+    var xml = Blockly.utils.xml.textToDom(window.localStorage[url]);
     Blockly.Xml.domToWorkspace(xml, workspace);
   }
 };
@@ -130,6 +130,8 @@ BlocklyStorage.handleRequest_ = function() {
           BlocklyStorage.alert(BlocklyStorage.HASH_ERROR.replace('%1',
               window.location.hash));
         } else {
+          // Remove poison line to prevent raw content from being served.
+          data = data.replace(/^\{\[\(\< UNTRUSTED CONTENT \>\)\]\}\n/, '');
           BlocklyStorage.loadXml_(data, BlocklyStorage.httpRequest_.workspace);
         }
       }
@@ -168,7 +170,7 @@ BlocklyStorage.monitorChanges_ = function(workspace) {
  */
 BlocklyStorage.loadXml_ = function(xml, workspace) {
   try {
-    xml = Blockly.Xml.textToDom(xml);
+    xml = Blockly.utils.xml.textToDom(xml);
   } catch (e) {
     BlocklyStorage.alert(BlocklyStorage.XML_ERROR + '\nXML: ' + xml);
     return;

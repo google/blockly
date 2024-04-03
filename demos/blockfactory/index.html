@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Blockly Demo: Blockly Developer Tools</title>
-  <script src="../../blockly_compressed.js"></script>
-  <script src="../../javascript_compressed.js"></script>
-  <script src="../../msg/js/en.js"></script>
-  <script src="../../blocks_compressed.js"></script>
+  <script src="../../dist/blockly_compressed.js"></script>
+  <script src="../../dist/blocks_compressed.js"></script>
+  <script src="../../dist/javascript_compressed.js"></script>
+  <script src="../../build/msg/en.js"></script>
   <script src="analytics.js"></script>
   <script src="block_definition_extractor.js"></script>
   <script src="factory_utils.js"></script>
@@ -31,7 +31,7 @@
   <script src="/storage.js"></script>
   <link rel="stylesheet" href="factory.css">
   <link rel="stylesheet" href="cp.css">
-  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script>
     var blocklyFactory;
     var init = function() {
@@ -422,6 +422,7 @@
         </value>
       </block>
       <block type="input_dummy"></block>
+      <block type="input_end_row"></block>
     </category>
     <category name="Field">
       <block type="field_static"></block>

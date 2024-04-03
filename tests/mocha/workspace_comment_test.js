@@ -95,7 +95,7 @@ suite('Workspace comment', function () {
       );
     });
 
-    test('collapse events are fired when a comment is collapsed', function() {
+    test('collapse events are fired when a comment is collapsed', function () {
       this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
         this.workspace,
       );
@@ -114,7 +114,7 @@ suite('Workspace comment', function () {
       );
     });
 
-    test('collapse events are fired when a comment is uncollapsed', function() {
+    test('collapse events are fired when a comment is uncollapsed', function () {
       this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
         this.workspace,
       );

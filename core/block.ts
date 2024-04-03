@@ -1403,7 +1403,7 @@ export class Block implements IASTNodeLocation {
   }
 
   /** @deprecated v11 - Get whether the block is manually disabled. */
-  get disabled(): boolean {
+  private get disabled(): boolean {
     deprecation.warn(
       'disabled',
       'v11',
@@ -1414,7 +1414,7 @@ export class Block implements IASTNodeLocation {
   }
 
   /** @deprecated v11 - Set whether the block is manually disabled. */
-  set disabled(value: boolean) {
+  private set disabled(value: boolean) {
     deprecation.warn(
       'disabled',
       'v11',

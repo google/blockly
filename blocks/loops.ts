@@ -372,13 +372,15 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     ) {
       return;
     }
-    const valid = !!this.getSurroundLoop();
-    this.setWarningText(valid ? null : Msg['CONTROLS_FLOW_STATEMENTS_WARNING']);
+    const enabled = !!this.getSurroundLoop();
+    this.setWarningText(
+      enabled ? null : Msg['CONTROLS_FLOW_STATEMENTS_WARNING'],
+    );
     if (!this.isInFlyout) {
       const group = Events.getGroup();
       // Makes it so the move and the disable event get undone together.
       Events.setGroup(e.group);
-      this.setDisabledReason(!valid, 'CONTROL_FLOW_NOT_IN_LOOP');
+      this.setDisabledReason(!enabled, 'CONTROL_FLOW_NOT_IN_LOOP');
       Events.setGroup(group);
     }
   },

@@ -241,14 +241,8 @@ export class BlockSvg
     return this.style.colourTertiary;
   }
 
-  // TODO: Before merging, is it better to just remove these or to leave them
-  //   but with change behavior? Not sure what the better UX is.
-  /**
-   * Selects this block. Highlights the block visually and fires a select event
-   * if the block is not already selected.
-   */
+  /** Selects this block. Highlights the block visually. */
   select() {
-    // TODO: Before merging, file an issue to allow shadows to be selected.
     if (this.isShadow() && this.getParent()) {
       // Shadow blocks should not be selected.
       this.getParent()!.select();
@@ -257,10 +251,7 @@ export class BlockSvg
     this.addSelect();
   }
 
-  /**
-   * Unselects this block. Unhighlights the block and fires a select (false)
-   * event if the block is currently selected.
-   */
+  /** Unselects this block. Unhighlights the blockv visually.   */
   unselect() {
     this.removeSelect();
   }

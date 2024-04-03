@@ -553,8 +553,7 @@ export class Gesture {
       } else if (this.workspaceDragger) {
         this.workspaceDragger.endDrag(this.currentDragDeltaXY);
       } else if (this.isBubbleClick()) {
-        // Bubbles are in front of all fields and blocks.
-        this.doBubbleClick();
+        // Do nothing, bubbles don't currently respond to clicks.
       } else if (this.isFieldClick()) {
         this.doFieldClick();
       } else if (this.isIconClick()) {
@@ -854,9 +853,6 @@ export class Gesture {
   /* Begin functions defining what actions to take to execute clicks on each
    * type of target.  Any developer wanting to add behaviour on clicks should
    * modify only this code. */
-
-  /** Execute a bubble click. */
-  private doBubbleClick() {}
 
   /** Execute a field click. */
   private doFieldClick() {

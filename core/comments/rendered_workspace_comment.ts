@@ -191,11 +191,7 @@ export class RenderedWorkspaceComment
     this.dragStrategy.revertDrag();
   }
 
-  select(): void {
-    // TODO: Before merging, file an issue to implement this.
-  }
+  select(): void {}
 
-  unselect(): void {
-    // TODO: Before merging, file an issue to implement this.
-  }
+  unselect(): void {}
 }

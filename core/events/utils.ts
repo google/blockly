@@ -519,7 +519,7 @@ export function get(
  * @param event Custom data for event.
  */
 export function disableOrphans(event: Abstract) {
-  const disabledReason = 'orphaned block';
+  const disabledReason = 'ORPHANED_BLOCK';
   if (event.type === MOVE || event.type === CREATE) {
     const blockEvent = event as BlockMove | BlockCreate;
     if (!blockEvent.workspaceId) {

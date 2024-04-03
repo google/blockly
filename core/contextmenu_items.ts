@@ -456,9 +456,9 @@ export function registerCollapseExpandBlock() {
 export function registerDisable() {
   const disableOption: RegistryItem = {
     displayText(scope: Scope) {
-      return scope.block!.isEnabled()
-        ? Msg['DISABLE_BLOCK']
-        : Msg['ENABLE_BLOCK'];
+      return scope.block!.hasDisabledReason(constants.MANUALLY_DISABLED)
+        ? Msg['ENABLE_BLOCK']
+        : Msg['DISABLE_BLOCK'];
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;

@@ -806,7 +806,7 @@ suite('Procedures', function () {
   suite('enabling and disabling procedure blocks', function () {
     test(
       'if a procedure definition is disabled, the procedure caller ' +
-        'is invalid',
+        'is also disabled',
       function () {
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
@@ -816,7 +816,7 @@ suite('Procedures', function () {
 
         chai.assert.isFalse(
           callBlock.isEnabled(),
-          'Expected the caller block to be invalid',
+          'Expected the caller block to be disabled',
         );
       },
     );
@@ -840,7 +840,7 @@ suite('Procedures', function () {
 
     test(
       'if a procedure definition is enabled, the procedure caller ' +
-        'is valid',
+        'is also enabled',
       function () {
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
@@ -852,7 +852,7 @@ suite('Procedures', function () {
 
         chai.assert.isTrue(
           callBlock.isEnabled(),
-          'Expected the caller block to be valid',
+          'Expected the caller block to be enabled',
         );
       },
     );

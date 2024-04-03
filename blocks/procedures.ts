@@ -1280,17 +1280,17 @@ const PROCEDURES_IFRETURN = {
     ) {
       return; // Don't change state at the start of a drag.
     }
-    let valid = false;
+    let legal = false;
     // Is the block nested in a procedure?
     let block = this; // eslint-disable-line @typescript-eslint/no-this-alias
     do {
       if (this.FUNCTION_TYPES.includes(block.type)) {
-        valid = true;
+        legal = true;
         break;
       }
       block = block.getSurroundParent()!;
     } while (block);
-    if (valid) {
+    if (legal) {
       // If needed, toggle whether this block has a return value.
       if (block.type === 'procedures_defnoreturn' && this.hasReturnValue_) {
         this.removeInput('VALUE');
@@ -1316,7 +1316,7 @@ const PROCEDURES_IFRETURN = {
       const group = Events.getGroup();
       // Makes it so the move and the disable event get undone together.
       Events.setGroup(e.group);
-      this.setDisabledReason(!valid, 'UNPARENTED_IFRETURN');
+      this.setDisabledReason(!legal, 'UNPARENTED_IFRETURN');
       Events.setGroup(group);
     }
   },

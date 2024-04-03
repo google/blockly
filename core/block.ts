@@ -1402,6 +1402,17 @@ export class Block implements IASTNodeLocation {
     return this.disabledReasons.size === 0;
   }
 
+  /** @deprecated v11 - Get whether the block is manually disabled. */
+  get disabled() {
+    deprecation.warn(
+      'disabled',
+      'v11',
+      'v12',
+      'Use the isEnabled or hasDisabledReason methods of Block instead.',
+    );
+    return this.hasDisabledReason(constants.MANUALLY_DISABLED);
+  }
+
   /**
    * @deprecated v11 - Set whether the block is manually enabled or disabled.
    * The user can toggle whether a block is disabled from a context menu

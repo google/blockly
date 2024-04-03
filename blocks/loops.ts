@@ -378,7 +378,7 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
       const group = Events.getGroup();
       // Makes it so the move and the disable event get undone together.
       Events.setGroup(e.group);
-      this.setDisabledReason(!valid, 'UNPARENTED_CONTROL_FLOW');
+      this.setDisabledReason(!valid, 'CONTROL_FLOW_NOT_IN_LOOP');
       Events.setGroup(group);
     }
   },

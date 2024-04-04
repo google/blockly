@@ -241,56 +241,18 @@ export class BlockSvg
     return this.style.colourTertiary;
   }
 
-  /**
-   * Selects this block. Highlights the block visually and fires a select event
-   * if the block is not already selected.
-   */
+  /** Selects this block. Highlights the block visually. */
   select() {
     if (this.isShadow() && this.getParent()) {
       // Shadow blocks should not be selected.
       this.getParent()!.select();
       return;
     }
-    if (common.getSelected() === this) {
-      return;
-    }
-    let oldId = null;
-    if (common.getSelected()) {
-      oldId = common.getSelected()!.id;
-      // Unselect any previously selected block.
-      eventUtils.disable();
-      try {
-        common.getSelected()!.unselect();
-      } finally {
-        eventUtils.enable();
-      }
-    }
-    const event = new (eventUtils.get(eventUtils.SELECTED))(
-      oldId,
-      this.id,
-      this.workspace.id,
-    );
-    eventUtils.fire(event);
-    common.setSelected(this);
     this.addSelect();
   }
 
-  /**
-   * Unselects this block. Unhighlights the block and fires a select (false)
-   * event if the block is currently selected.
-   */
+  /** Unselects this block. Unhighlights the blockv visually.   */
   unselect() {
-    if (common.getSelected() !== this) {
-      return;
-    }
-    const event = new (eventUtils.get(eventUtils.SELECTED))(
-      this.id,
-      null,
-      this.workspace.id,
-    );
-    event.workspaceId = this.workspace.id;
-    eventUtils.fire(event);
-    common.setSelected(null);
     this.removeSelect();
   }
 

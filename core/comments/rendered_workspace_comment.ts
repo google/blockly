@@ -16,10 +16,12 @@ import * as dom from '../utils/dom.js';
 import {IDraggable} from '../interfaces/i_draggable.js';
 import {CommentDragStrategy} from '../dragging/comment_drag_strategy.js';
 import * as browserEvents from '../browser_events.js';
+import * as common from '../common.js';
+import {ISelectable} from '../interfaces/i_selectable.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
-  implements IBoundedElement, IRenderedElement, IDraggable
+  implements IBoundedElement, IRenderedElement, IDraggable, ISelectable
 {
   /** The class encompassing the svg elements making up the workspace comment. */
   private view: CommentView;
@@ -159,6 +161,7 @@ export class RenderedWorkspaceComment
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleCommentStart(e, this);
+      common.setSelected(this);
     }
   }
 
@@ -186,4 +189,8 @@ export class RenderedWorkspaceComment
   revertDrag(): void {
     this.dragStrategy.revertDrag();
   }
+
+  select(): void {}
+
+  unselect(): void {}
 }

@@ -30,13 +30,12 @@ import * as internalConstants from './internal_constants.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import type {IIcon} from './interfaces/i_icon.js';
 import {IDragger} from './interfaces/i_dragger.js';
 import * as registry from './registry.js';
-import {IDraggable} from './interfaces/i_draggable.js';
+import {IDraggable, isDraggable} from './interfaces/i_draggable.js';
 import {RenderedWorkspaceComment} from './comments.js';
 
 /**
@@ -298,71 +297,7 @@ export class Gesture {
       // The start block is no longer relevant, because this is a drag.
       this.startBlock = null;
       this.targetBlock = this.flyout.createBlock(this.targetBlock);
-      this.targetBlock.select();
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Update this gesture to record whether a bubble is being dragged.
-   * This function should be called on a pointermove event the first time
-   * the drag radius is exceeded.  It should be called no more than once per
-   * gesture. If a bubble should be dragged this function creates the necessary
-   * BubbleDragger and starts the drag.
-   *
-   * @returns True if a bubble is being dragged.
-   */
-  private updateIsDraggingBubble(e: PointerEvent): boolean {
-    if (!this.startBubble) {
-      return false;
-    }
-
-    this.startDraggingBubble(e);
-    return true;
-  }
-
-  /**
-   * Update this gesture to record whether a comment is being dragged.
-   * This function should be called on a pointermove event the first time
-   * the drag radius is exceeded.  It should be called no more than once per
-   * gesture.
-   *
-   * @returns True if a comment is being dragged.
-   */
-  private updateIsDraggingComment(e: PointerEvent): boolean {
-    if (!this.startComment) {
-      return false;
-    }
-
-    this.startDraggingComment(e);
-    return true;
-  }
-
-  /**
-   * Check whether to start a block drag. If a block should be dragged, either
-   * from the flyout or in the workspace, create the necessary BlockDragger and
-   * start the drag.
-   *
-   * This function should be called on a pointermove event the first time
-   * the drag radius is exceeded.  It should be called no more than once per
-   * gesture. If a block should be dragged, either from the flyout or in the
-   * workspace, this function creates the necessary BlockDragger and starts the
-   * drag.
-   *
-   * @returns True if a block is being dragged.
-   */
-  private updateIsDraggingBlock(e: PointerEvent): boolean {
-    if (!this.targetBlock) {
-      return false;
-    }
-    if (this.flyout) {
-      if (this.updateIsDraggingFromFlyout()) {
-        this.startDraggingBlock(e);
-        return true;
-      }
-    } else if (this.targetBlock.isMovable()) {
-      this.startDraggingBlock(e);
+      common.setSelected(this.targetBlock);
       return true;
     }
     return false;
@@ -403,76 +338,30 @@ export class Gesture {
    * gesture.
    */
   private updateIsDragging(e: PointerEvent) {
-    // Sanity check.
+    if (!this.startWorkspace_) {
+      throw new Error(
+        'Cannot update dragging because the start workspace is undefined',
+      );
+    }
+
     if (this.calledUpdateIsDragging) {
       throw Error('updateIsDragging_ should only be called once per gesture.');
     }
     this.calledUpdateIsDragging = true;
 
-    // First check if it was a bubble drag.  Bubbles always sit on top of
-    // blocks.
-    if (this.updateIsDraggingBubble(e)) {
-      return;
-    }
-    // Then check if it was a block drag.
-    if (this.updateIsDraggingBlock(e)) {
-      return;
-    }
-    if (this.updateIsDraggingComment(e)) {
-      return;
-    }
-    // Then check if it's a workspace drag.
-    this.updateIsDraggingWorkspace();
-  }
+    // If we drag a block out of the flyout, it updates `common.getSelected`
+    // to return the new block.
+    if (this.flyout) this.updateIsDraggingFromFlyout();
 
-  /** Start dragging the selected block. */
-  private startDraggingBlock(e: PointerEvent) {
-    this.dragging = true;
-    this.dragger = this.createDragger(this.targetBlock!, this.startWorkspace_!);
-    this.dragger.onDragStart(e);
-    this.dragger.onDrag(e, this.currentDragDeltaXY);
-  }
-
-  /** Start dragging the selected bubble. */
-  private startDraggingBubble(e: PointerEvent) {
-    if (!this.startBubble) {
-      throw new Error(
-        'Cannot update dragging the bubble because the start ' +
-          'bubble is undefined',
-      );
+    const selected = common.getSelected();
+    if (selected && isDraggable(selected) && selected.isMovable()) {
+      this.dragging = true;
+      this.dragger = this.createDragger(selected, this.startWorkspace_);
+      this.dragger.onDragStart(e);
+      this.dragger.onDrag(e, this.currentDragDeltaXY);
+    } else {
+      this.updateIsDraggingWorkspace();
     }
-    if (!this.startWorkspace_) {
-      throw new Error(
-        'Cannot update dragging the bubble because the start ' +
-          'workspace is undefined',
-      );
-    }
-
-    this.dragging = true;
-    this.dragger = this.createDragger(this.startBubble, this.startWorkspace_);
-    this.dragger.onDragStart(e);
-    this.dragger.onDrag(e, this.currentDragDeltaXY);
-  }
-
-  /** Start dragging the selected comment. */
-  private startDraggingComment(e: PointerEvent) {
-    if (!this.startComment) {
-      throw new Error(
-        'Cannot update dragging the comment because the start ' +
-          'comment is undefined',
-      );
-    }
-    if (!this.startWorkspace_) {
-      throw new Error(
-        'Cannot update dragging the comment because the start ' +
-          'workspace is undefined',
-      );
-    }
-
-    this.dragging = true;
-    this.dragger = this.createDragger(this.startComment, this.startWorkspace_);
-    this.dragger.onDragStart(e);
-    this.dragger.onDrag(e, this.currentDragDeltaXY);
   }
 
   private createDragger(
@@ -531,10 +420,6 @@ export class Gesture {
     this.mostRecentEvent = e;
 
     Tooltip.block();
-
-    if (this.targetBlock) {
-      this.targetBlock.select();
-    }
 
     if (browserEvents.isRightButton(e)) {
       this.handleRightClick(e);
@@ -668,8 +553,7 @@ export class Gesture {
       } else if (this.workspaceDragger) {
         this.workspaceDragger.endDrag(this.currentDragDeltaXY);
       } else if (this.isBubbleClick()) {
-        // Bubbles are in front of all fields and blocks.
-        this.doBubbleClick();
+        // Do nothing, bubbles don't currently respond to clicks.
       } else if (this.isFieldClick()) {
         this.doFieldClick();
       } else if (this.isIconClick()) {
@@ -873,6 +757,13 @@ export class Gesture {
     }
     this.setStartWorkspace(ws);
     this.mostRecentEvent = e;
+
+    if (!this.startBlock && !this.startBubble && !this.startComment) {
+      // Selection determines what things start drags. So to drag the workspace,
+      // we need to deselect anything that was previously selected.
+      common.setSelected(null);
+    }
+
     this.doStart(e);
   }
 
@@ -962,15 +853,6 @@ export class Gesture {
   /* Begin functions defining what actions to take to execute clicks on each
    * type of target.  Any developer wanting to add behaviour on clicks should
    * modify only this code. */
-
-  /** Execute a bubble click. */
-  private doBubbleClick() {
-    // TODO (#1673): Consistent handling of single clicks.
-    if (this.startBubble instanceof WorkspaceCommentSvg) {
-      this.startBubble.setFocus();
-      this.startBubble.select();
-    }
-  }
 
   /** Execute a field click. */
   private doFieldClick() {
@@ -1138,6 +1020,7 @@ export class Gesture {
     // If the gesture already went through a bubble, don't set the start block.
     if (!this.startBlock && !this.startBubble) {
       this.startBlock = block;
+      common.setSelected(this.startBlock);
       if (block.isInFlyout && block !== block.getRootBlock()) {
         this.setTargetBlock(block.getRootBlock());
       } else {

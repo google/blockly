@@ -47,7 +47,7 @@ export class MiniWorkspaceBubble extends Bubble {
   /** @internal */
   constructor(
     workspaceOptions: BlocklyOptions,
-    protected readonly workspace: WorkspaceSvg,
+    public readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
   ) {

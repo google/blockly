@@ -330,7 +330,6 @@ export const setParentContainer = common.setParentContainer;
 
 // Aliases to allow external code to access these values for legacy reasons.
 export const COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
-export const DRAG_STACK = internalConstants.DRAG_STACK;
 export const OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
 export const RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
 export const DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;

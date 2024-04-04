@@ -82,6 +82,15 @@ export class WorkspaceComment {
     }
   }
 
+  /** Fires a comment collapse event. */
+  private fireCollapseEvent(newCollapsed: boolean) {
+    if (eventUtils.isEnabled()) {
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.COMMENT_COLLAPSE))(this, newCollapsed),
+      );
+    }
+  }
+
   /** Sets the text of the comment. */
   setText(text: string) {
     const oldText = this.text;
@@ -107,6 +116,7 @@ export class WorkspaceComment {
   /** Sets whether the comment is collapsed or not. */
   setCollapsed(collapsed: boolean) {
     this.collapsed = collapsed;
+    this.fireCollapseEvent(collapsed);
   }
 
   /** Returns whether the comment is collapsed or not. */

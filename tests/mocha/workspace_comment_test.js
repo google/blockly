@@ -94,5 +94,44 @@ suite('Workspace comment', function () {
         this.workspace.id,
       );
     });
+
+    test('collapse events are fired when a comment is collapsed', function () {
+      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
+        this.workspace,
+      );
+      const spy = createChangeListenerSpy(this.workspace);
+
+      this.renderedComment.setCollapsed(true);
+
+      assertEventFired(
+        spy,
+        Blockly.Events.CommentCollapse,
+        {
+          commentId: this.renderedComment.id,
+          newCollapsed: true,
+        },
+        this.workspace.id,
+      );
+    });
+
+    test('collapse events are fired when a comment is uncollapsed', function () {
+      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
+        this.workspace,
+      );
+      this.renderedComment.setCollapsed(true);
+      const spy = createChangeListenerSpy(this.workspace);
+
+      this.renderedComment.setCollapsed(false);
+
+      assertEventFired(
+        spy,
+        Blockly.Events.CommentCollapse,
+        {
+          commentId: this.renderedComment.id,
+          newCollapsed: false,
+        },
+        this.workspace.id,
+      );
+    });
   });
 });

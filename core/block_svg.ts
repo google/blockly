@@ -252,6 +252,10 @@ export class BlockSvg
 
   /** Unselects this block. Unhighlights the blockv visually.   */
   unselect() {
+    if (this.isShadow()) {
+      this.getParent()?.unselect();
+      return;
+    }
     this.removeSelect();
   }
 

@@ -23,7 +23,6 @@ import {config} from './config.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
-import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IBubble} from './interfaces/i_bubble.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import * as Tooltip from './tooltip.js';
@@ -1156,19 +1155,6 @@ export class Gesture {
    */
   hasStarted(): boolean {
     return this.gestureHasStarted;
-  }
-
-  /**
-   * Gets the current dragger if an item is being dragged. Null if nothing is
-   * being dragged.
-   *
-   * @returns The dragger that is currently in use or null if no drag is in
-   *     progress.
-   */
-  getCurrentDragger(): WorkspaceDragger | IBlockDragger | null {
-    // TODO: Change this to return the `dragger`, when we get rid of the last
-    //   other dragger.
-    return this.workspaceDragger;
   }
 
   /**

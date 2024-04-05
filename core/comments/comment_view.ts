@@ -19,6 +19,11 @@ export class CommentView implements IRenderedElement {
   /** The root group element of the comment view. */
   private svgRoot: SVGGElement;
 
+  /**
+   * The svg rect element that we use to create a hightlight around the comment.
+   */
+  private highlightRect: SVGRectElement;
+
   /** The group containing all of the top bar elements. */
   private topBarGroup: SVGGElement;
 
@@ -99,6 +104,8 @@ export class CommentView implements IRenderedElement {
       'class': 'blocklyComment blocklyEditable',
     });
 
+    this.highlightRect = this.createHighlightRect(this.svgRoot);
+
     ({
       topBarGroup: this.topBarGroup,
       topBarBackground: this.topBarBackground,
@@ -122,6 +129,17 @@ export class CommentView implements IRenderedElement {
 
     // Set default transform (including inverted scale for RTL).
     this.moveTo(new Coordinate(0, 0));
+  }
+
+  /**
+   * Creates the rect we use for highlighting the comment when it's selected.
+   */
+  private createHighlightRect(svgRoot: SVGGElement): SVGRectElement {
+    return dom.createSvgElement(
+      Svg.RECT,
+      {'class': 'blocklyCommentHighlight'},
+      svgRoot,
+    );
   }
 
   /**
@@ -293,6 +311,8 @@ export class CommentView implements IRenderedElement {
 
     this.svgRoot.setAttribute('height', `${size.height}`);
     this.svgRoot.setAttribute('width', `${size.width}`);
+    this.highlightRect.setAttribute('height', `${size.height}`);
+    this.highlightRect.setAttribute('width', `${size.width}`);
 
     this.updateTopBarSize(size);
     this.updateTextAreaSize(size, topBarSize);
@@ -815,5 +835,14 @@ css.register(`
 .blocklyRTL .blocklyResizeHandle {
   transform: scale(-1, 1);
   cursor: sw-resize;
+}
+
+.blocklyCommentHighlight {
+  fill: none;
+}
+
+.blocklySelected .blocklyCommentHighlight {
+  stroke: #fc3;
+  stroke-width: 3px;
 }
 `);

@@ -544,6 +544,8 @@ export class Gesture {
         this.workspaceDragger.endDrag(this.currentDragDeltaXY);
       } else if (this.isBubbleClick()) {
         // Do nothing, bubbles don't currently respond to clicks.
+      } else if (this.isCommentClick()) {
+        // Do nothing, comments don't currently respond to clicks.
       } else if (this.isFieldClick()) {
         this.doFieldClick();
       } else if (this.isIconClick()) {
@@ -1073,6 +1075,10 @@ export class Gesture {
     // A bubble click starts on a bubble and never escapes the drag radius.
     const hasStartBubble = !!this.startBubble;
     return hasStartBubble && !this.hasExceededDragRadius;
+  }
+
+  private isCommentClick(): boolean {
+    return !!this.startComment && !this.hasExceededDragRadius;
   }
 
   /**

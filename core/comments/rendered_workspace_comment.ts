@@ -190,7 +190,13 @@ export class RenderedWorkspaceComment
     this.dragStrategy.revertDrag();
   }
 
-  select(): void {}
+  /** Visually highlights the comment. */
+  select(): void {
+    dom.addClass(this.getSvgRoot(), 'blocklySelected');
+  }
 
-  unselect(): void {}
+  /** Visually unhighlights the comment. */
+  unselect(): void {
+    dom.removeClass(this.getSvgRoot(), 'blocklySelected');
+  }
 }

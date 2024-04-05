@@ -131,6 +131,9 @@ export class CommentView implements IRenderedElement {
     this.moveTo(new Coordinate(0, 0));
   }
 
+  /**
+   * Creates the rect we use for highlighting the comment when it's selected.
+   */
   private createHighlightRect(svgRoot: SVGGElement): SVGRectElement {
     return dom.createSvgElement(
       Svg.RECT,

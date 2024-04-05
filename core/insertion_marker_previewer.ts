@@ -154,13 +154,18 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     };
     const originalOffsetInBlock = markerConn.getOffsetInBlock().clone();
     renderManagement.finishQueuedRenders().then(() => {
-      // Position so that the existing block doesn't move.
-      marker?.positionNearConnection(
-        markerConn,
-        originalOffsetToTarget,
-        originalOffsetInBlock,
-      );
-      marker?.getSvgRoot().setAttribute('visibility', 'visible');
+      eventUtils.disable();
+      try {
+        // Position so that the existing block doesn't move.
+        marker?.positionNearConnection(
+          markerConn,
+          originalOffsetToTarget,
+          originalOffsetInBlock,
+        );
+        marker?.getSvgRoot().setAttribute('visibility', 'visible');
+      } finally {
+        eventUtils.enable();
+      }
     });
     return markerConn;
   }

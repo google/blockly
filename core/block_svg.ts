@@ -62,6 +62,7 @@ import {IconType} from './icons/icon_types.js';
 import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
 import {BlockDragStrategy} from './dragging/block_drag_strategy.js';
 import {IDeletable} from './blockly.js';
+import {FlyoutItemInfo} from './utils/toolbox.js';
 
 /**
  * Class for a block's SVG representation.
@@ -1621,5 +1622,31 @@ export class BlockSvg
   /** Moves the block back to where it was at the start of a drag. */
   revertDrag(): void {
     this.dragStrategy.revertDrag();
+  }
+
+  /**
+   * Returns a representation of this block that can be displayed in a flyout.
+   */
+  toFlyoutData(): FlyoutItemInfo[] {
+    const json: FlyoutItemInfo = {
+      kind: 'BLOCK',
+      ...blocks.save(this),
+    };
+
+    const toRemove = new Set(['id', 'height', 'width', 'pinned', 'enabled']);
+
+    // Traverse the JSON recursively.
+    const traverseJson = function (json: {[key: string]: unknown}) {
+      for (const key in json) {
+        if (toRemove.has(key)) {
+          delete json[key];
+        } else if (typeof json[key] === 'object') {
+          traverseJson(json[key] as {[key: string]: unknown});
+        }
+      }
+    };
+
+    traverseJson(json as unknown as {[key: string]: unknown});
+    return [json];
   }
 }

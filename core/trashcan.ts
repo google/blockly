@@ -697,14 +697,6 @@ export class Trashcan
     };
     return blockInfo;
   }
-
-  wouldDelete(_element: IDraggable): boolean {
-    return false;
-  }
-
-  shouldPreventMove(_dragElement: IDraggable): boolean {
-    return true;
-  }
 }
 
 /** Width of both the trash can and lid images. */

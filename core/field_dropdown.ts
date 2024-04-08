@@ -229,6 +229,9 @@ export class FieldDropdown extends Field<string> {
           : ' ' + FieldDropdown.ARROW_CHAR,
       ),
     );
+    if (this.getConstants()!.FIELD_TEXT_BASELINE_CENTER) {
+      this.arrow.setAttribute('dominant-baseline', 'central');
+    }
     if (this.getSourceBlock()?.RTL) {
       this.getTextElement().insertBefore(this.arrow, this.textContent_);
     } else {

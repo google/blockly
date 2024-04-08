@@ -1139,6 +1139,11 @@ export class Gesture {
 
   /* End helper functions defining types of clicks. */
 
+  /** Returns the current dragger if the gesture is a drag. */
+  getCurrentDragger(): WorkspaceDragger | IDragger | null {
+    return this.workspaceDragger ?? this.dragger ?? null;
+  }
+
   /**
    * Whether this gesture is a drag of either a workspace or block.
    * This function is called externally to block actions that cannot be taken

@@ -1627,7 +1627,7 @@ export class BlockSvg
   /**
    * Returns a representation of this block that can be displayed in a flyout.
    */
-  toFlyoutData(): FlyoutItemInfo[] {
+  toFlyoutInfo(): FlyoutItemInfo[] {
     const json: FlyoutItemInfo = {
       kind: 'BLOCK',
       ...blocks.save(this),

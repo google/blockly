@@ -95,7 +95,11 @@ export class Type<_T> {
 
   static METRICS_MANAGER = new Type<IMetricsManager>('metricsManager');
 
-  static DRAGGER = new Type<IDragger>('dragger');
+  /**
+   * Type for an IDragger. Formerly behavior was mostly covered by
+   * BlockDraggeers, which is why the name is inaccurate.
+   */
+  static BLOCK_DRAGGER = new Type<IDragger>('blockDragger');
 
   /** @internal */
   static SERIALIZER = new Type<ISerializer>('serializer');

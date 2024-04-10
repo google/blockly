@@ -360,7 +360,7 @@ export class Gesture {
     workspace: WorkspaceSvg,
   ): IDragger {
     const DraggerClass = registry.getClassFromOptions(
-      registry.Type.DRAGGER,
+      registry.Type.BLOCK_DRAGGER,
       this.creatorWorkspace.options,
       true,
     );

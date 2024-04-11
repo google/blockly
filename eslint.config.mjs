@@ -2,7 +2,6 @@
 import jsdoc from 'eslint-plugin-jsdoc';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
-//import babelParser from '@babel/eslint-parser';
 import globals from 'globals';
 import tsParser from '@typescript-eslint/parser';
 import typescript from '@typescript-eslint/eslint-plugin';
@@ -85,7 +84,7 @@ const testConfig =
         // instantiate them.
         'guard-for-in': ['off'],
         'prefer-spread': ['off'],
-    },    
+    },
 };
 
 const blocklyDefaultConfig = {
@@ -98,12 +97,6 @@ const blocklyDefaultConfig = {
             Blockly: true,
             goog: true,
         },
-        //   parser: babelParser,
-        //   parserOptions: {
-        //     ecmaVersion: 6,
-        //     sourceType: 'module',
-        //     requireConfigFile: false,
-        //   },
     },
 
     linterOptions: {
@@ -344,146 +337,96 @@ const tsConfig = {
 
         // Copied from blockly eslintrc
 
-      // TS rules
-      // Blockly uses namespaces to do declaration merging in some cases.
-      '@typescript-eslint/no-namespace': ['off'],
-      // Use the updated TypeScript-specific rule.
-      'no-invalid-this': ['off'],
-      '@typescript-eslint/no-invalid-this': ['error'],
-      // Needs decision. 601 problems.
-      '@typescript-eslint/no-non-null-assertion': ['off'],
-      // Use TS-specific rule.
-      'no-unused-vars': ['off'],
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          'argsIgnorePattern': '^_',
-          'varsIgnorePattern': '^_',
-        },
-      ],
-      // Temporarily disable. 23 problems.
-      '@typescript-eslint/no-explicit-any': ['off'],
-      // Temporarily disable. 128 problems.
-      'require-jsdoc': ['off'],
-      // Temporarily disable. 55 problems.
-      '@typescript-eslint/ban-types': ['off'],
-      // Temporarily disable. 33 problems.
-      '@typescript-eslint/no-empty-function': ['off'],
-      // Temporarily disable. 3 problems.
-      '@typescript-eslint/no-empty-interface': ['off'],
+        // TS rules
+        // Blockly uses namespaces to do declaration merging in some cases.
+        '@typescript-eslint/no-namespace': ['off'],
+        // Use the updated TypeScript-specific rule.
+        'no-invalid-this': ['off'],
+        '@typescript-eslint/no-invalid-this': ['error'],
+        // Needs decision. 601 problems.
+        '@typescript-eslint/no-non-null-assertion': ['off'],
+        // Use TS-specific rule.
+        'no-unused-vars': ['off'],
+        '@typescript-eslint/no-unused-vars': [
+            'error',
+            {
+                'argsIgnorePattern': '^_',
+                'varsIgnorePattern': '^_',
+            },
+        ],
+        // Temporarily disable. 23 problems.
+        '@typescript-eslint/no-explicit-any': ['off'],
+        // Temporarily disable. 128 problems.
+        'require-jsdoc': ['off'],
+        // Temporarily disable. 55 problems.
+        '@typescript-eslint/ban-types': ['off'],
+        // Temporarily disable. 33 problems.
+        '@typescript-eslint/no-empty-function': ['off'],
+        // Temporarily disable. 3 problems.
+        '@typescript-eslint/no-empty-interface': ['off'],
 
-      // TsDoc rules (using JsDoc plugin)
-      // Disable built-in jsdoc verifier.
-      'valid-jsdoc': ['off'],
-      // Don't require types in params and returns docs.
-      'jsdoc/require-param-type': ['off'],
-      'jsdoc/require-returns-type': ['off'],
-      // params and returns docs are optional.
-      'jsdoc/require-param-description': ['off'],
-      'jsdoc/require-returns': ['off'],
-      // Disable for now (breaks on `this` which is not really a param).
-      'jsdoc/require-param': ['off'],
-      // Don't auto-add missing jsdoc. Only required on exported items.
-      'jsdoc/require-jsdoc': [
-        'warn',
-        {
-          'enableFixer': false,
-          'publicOnly': true,
-        },
-      ],
-      'jsdoc/check-tag-names': [
-        'error',
-        {
-          'definedTags': [
-            'sealed',
-            'typeParam',
-            'remarks',
-            'define',
-            'nocollapse',
-            'suppress',
-          ],
-        },
-      ],
-      // Re-enable after Closure is removed. There shouldn't even be
-      // types in the TsDoc.
-      // These are "types" because of Closure's @suppress {warningName}
-      'jsdoc/no-undefined-types': ['off'],
-      'jsdoc/valid-types': ['off'],
-      // Disabled due to not handling `this`. If re-enabled,
-      // checkDestructured option
-      // should be left as false.
-      'jsdoc/check-param-names': ['off', {'checkDestructured': false}],
-      // Allow any text in the license tag. Other checks are not relevant.
-      'jsdoc/check-values': ['off'],
-      // Ensure there is a blank line between the body and any @tags,
-      // as required by the tsdoc spec (see #6353).
-      'jsdoc/tag-lines': ['error', 'any', {'startLines': 1}],
+        // TsDoc rules (using JsDoc plugin)
+        // Disable built-in jsdoc verifier.
+        'valid-jsdoc': ['off'],
+        // Don't require types in params and returns docs.
+        'jsdoc/require-param-type': ['off'],
+        'jsdoc/require-returns-type': ['off'],
+        // params and returns docs are optional.
+        'jsdoc/require-param-description': ['off'],
+        'jsdoc/require-returns': ['off'],
+        // Disable for now (breaks on `this` which is not really a param).
+        'jsdoc/require-param': ['off'],
+        // Don't auto-add missing jsdoc. Only required on exported items.
+        'jsdoc/require-jsdoc': [
+            'warn',
+            {
+                'enableFixer': false,
+                'publicOnly': true,
+            },
+        ],
+        'jsdoc/check-tag-names': [
+            'error',
+            {
+                'definedTags': [
+                    'sealed',
+                    'typeParam',
+                    'remarks',
+                    'define',
+                    'nocollapse',
+                    'suppress',
+                ],
+            },
+        ],
+        // Re-enable after Closure is removed. There shouldn't even be
+        // types in the TsDoc.
+        // These are "types" because of Closure's @suppress {warningName}
+        'jsdoc/no-undefined-types': ['off'],
+        'jsdoc/valid-types': ['off'],
+        // Disabled due to not handling `this`. If re-enabled,
+        // checkDestructured option
+        // should be left as false.
+        'jsdoc/check-param-names': ['off', { 'checkDestructured': false }],
+        // Allow any text in the license tag. Other checks are not relevant.
+        'jsdoc/check-values': ['off'],
+        // Ensure there is a blank line between the body and any @tags,
+        // as required by the tsdoc spec (see #6353).
+        'jsdoc/tag-lines': ['error', 'any', { 'startLines': 1 }],
 
 
 
-      // Added April 2024 for migration. TODO: Reenable rules or make
-      // exceptions more explicit.
-  // Blockly uses capital letters for some non-constructor namespaces.
-  // Keep them for legacy reasons.
-  'new-cap': ['off'],
-  // Added April 2024.
-  '@typescript-eslint/consistent-type-definitions': ['off'],
-  '@typescript-eslint/array-type': ['off'],
-  '@typescript-eslint/no-inferrable-types': ['off'],
-  'no-import-assign': ['off'],
-  '@typescript-eslint/explicit-member-accessibility': ['off'],
+        // Added April 2024 for migration. TODO: Reenable rules or make
+        // exceptions more explicit.
+        // Blockly uses capital letters for some non-constructor namespaces.
+        // Keep them for legacy reasons.
+        'new-cap': ['off'],
+        // Added April 2024.
+        '@typescript-eslint/consistent-type-definitions': ['off'],
+        '@typescript-eslint/array-type': ['off'],
+        '@typescript-eslint/no-inferrable-types': ['off'],
+        'no-import-assign': ['off'],
+        '@typescript-eslint/explicit-member-accessibility': ['off'],
     },
 };
-
-const rules = {
-    'no-unused-vars': [
-        'error',
-        {
-            'args': 'after-used',
-            // Ignore vars starting with an underscore.
-            'varsIgnorePattern': '^_',
-            // Ignore arguments starting with an underscore.
-            'argsIgnorePattern': '^_',
-        },
-    ],
-    // Blockly uses for exporting symbols. no-self-assign added in eslint 5.
-    'no-self-assign': ['off'],
-    // Blockly uses single quotes except for JSON blobs, which must use double
-    // quotes.
-    'quotes': ['off'],
-    // Blockly uses 'use strict' in files.
-    'strict': ['off'],
-    // Closure style allows redeclarations.
-    'no-redeclare': ['off'],
-    'valid-jsdoc': ['error'],
-    'no-console': ['off'],
-    'spaced-comment': [
-        'error',
-        'always',
-        {
-            'block': {
-                'balanced': true,
-            },
-            'exceptions': ['*'],
-        },
-    ],
-    // Blockly uses prefixes for optional arguments and test-only functions.
-    'camelcase': [
-        'error',
-        {
-            'properties': 'never',
-            'allow': ['^opt_', '^_opt_', '^testOnly_'],
-        },
-    ],
-    // Blockly uses capital letters for some non-constructor namespaces.
-    // Keep them for legacy reasons.
-    'new-cap': ['off'],
-    // Blockly uses objects as maps, but uses Object.create(null) to
-    // instantiate them.
-    'guard-for-in': ['off'],
-    'prefer-spread': ['off'],
-};
-
 
 const ignoreConfig =
 {
@@ -510,7 +453,7 @@ const ignoreConfig =
         'tests/scripts/*',
         'tests/browser/**/*.js',
         'tests/migration/*',
-        
+
         // Demos, scripts, misc
         'node_modules/*',
         'generators/*',
@@ -541,7 +484,4 @@ export default [
     blocklyDefaultConfig,
     testConfig,
     tsConfig,
-    // {
-    //     rules: rules,
-    // }
 ];

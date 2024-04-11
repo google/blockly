@@ -48,6 +48,7 @@ suite('InsertionMarkers', function () {
   teardown(function () {
     sharedTestTeardown.call(this);
   });
+  /* eslint-disable no-undef */
   suite('Code Generation', function () {
     setup(function () {
       javascriptGenerator.forBlock['stack_block'] = function (block) {
@@ -85,6 +86,7 @@ suite('InsertionMarkers', function () {
       delete javascriptGenerator.forBlock['row_block'];
       delete javascriptGenerator.forBlock['statement_block'];
     });
+    /* eslint-enable no-undef */
     test('Marker Surrounds', function () {
       const xml = Blockly.utils.xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +

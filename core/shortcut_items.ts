@@ -16,6 +16,7 @@ import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {isDraggable} from './interfaces/i_draggable.js';
+import * as eventUtils from './events/utils.js';
 
 /**
  * Object holding the names of the default shortcut items.
@@ -75,7 +76,14 @@ export function registerDelete() {
       if (Gesture.inProgress()) {
         return false;
       }
-      (common.getSelected() as BlockSvg).checkAndDelete();
+      const selected = common.getSelected();
+      if (selected instanceof BlockSvg) {
+        selected.checkAndDelete();
+      } else if (isDeletable(selected) && selected.isDeletable()) {
+        eventUtils.setGroup(true);
+        selected.dispose();
+        eventUtils.setGroup(false);
+      }
       return true;
     },
     keyCodes: [KeyCodes.DELETE, KeyCodes.BACKSPACE],

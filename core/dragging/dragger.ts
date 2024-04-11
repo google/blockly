@@ -139,4 +139,4 @@ export class Dragger implements IDragger {
   }
 }
 
-registry.register(registry.Type.DRAGGER, registry.DEFAULT, Dragger);
+registry.register(registry.Type.BLOCK_DRAGGER, registry.DEFAULT, Dragger);

@@ -18,10 +18,16 @@ import {CommentDragStrategy} from '../dragging/comment_drag_strategy.js';
 import * as browserEvents from '../browser_events.js';
 import * as common from '../common.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
+import {IDeletable} from '../interfaces/i_deletable.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
-  implements IBoundedElement, IRenderedElement, IDraggable, ISelectable
+  implements
+    IBoundedElement,
+    IRenderedElement,
+    IDraggable,
+    ISelectable,
+    IDeletable
 {
   /** The class encompassing the svg elements making up the workspace comment. */
   private view: CommentView;
@@ -162,6 +168,20 @@ export class RenderedWorkspaceComment
     if (gesture) {
       gesture.handleCommentStart(e, this);
       common.setSelected(this);
+    }
+  }
+
+  /** Returns whether this comment is deletable or not. */
+  isDeletable(): boolean {
+    return !this.workspace.options.readOnly;
+  }
+
+  /** Visually indicates that this comment would be deleted if dropped. */
+  setDeleteStyle(wouldDelete: boolean): void {
+    if (wouldDelete) {
+      dom.addClass(this.getSvgRoot(), 'blocklyDraggingDelete');
+    } else {
+      dom.removeClass(this.getSvgRoot(), 'blocklyDraggingDelete');
     }
   }
 

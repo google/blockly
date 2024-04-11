@@ -20,7 +20,7 @@ import * as common from '../common.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
 import {IDeletable} from '../interfaces/i_deletable.js';
 import {ICopyable} from '../interfaces/i_copyable.js';
-import * as commentSerialiation from '../serialization/workspace_comments.js';
+import * as commentSerialization from '../serialization/workspace_comments.js';
 import {
   WorkspaceCommentPaster,
   WorkspaceCommentCopyData,
@@ -234,7 +234,7 @@ export class RenderedWorkspaceComment
   toCopyData(): WorkspaceCommentCopyData | null {
     return {
       paster: WorkspaceCommentPaster.TYPE,
-      commentState: commentSerialiation.save(this, {
+      commentState: commentSerialization.save(this, {
         addCoordinates: true,
       }),
     };

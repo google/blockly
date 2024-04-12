@@ -554,6 +554,47 @@ export function registerHelp() {
   ContextMenuRegistry.registry.register(helpOption);
 }
 
+/** Registers an option for deleting a workspace comment. */
+export function registerCommentDelete() {
+  const deleteOption: RegistryItem = {
+    // TODO: Before merging, I had to make this a function because I don't think
+    //   the messages were loaded in time. Is that a larger bug?
+    displayText: () => Msg['REMOVE_COMMENT'],
+    preconditionFn(scope: Scope) {
+      return scope.comment?.isDeletable() ? 'enabled' : 'hidden';
+    },
+    callback(scope: Scope) {
+      eventUtils.setGroup(true);
+      scope.comment?.dispose();
+      eventUtils.setGroup(false);
+    },
+    scopeType: ContextMenuRegistry.ScopeType.COMMENT,
+    id: 'commentDelete',
+    weight: 6,
+  };
+  ContextMenuRegistry.registry.register(deleteOption);
+}
+
+/** Registers an option for duplicating a worksapce comment. */
+export function registerCommentDuplicate() {
+  const duplicateOption: RegistryItem = {
+    displayText: () => Msg['DUPLICATE_COMMENT'],
+    preconditionFn(scope: Scope) {
+      return scope.comment?.isMovable() ? 'enabled' : 'hidden';
+    },
+    callback(scope: Scope) {
+      if (!scope.comment) return;
+      const data = scope.comment.toCopyData();
+      if (!data) return;
+      clipboard.paste(data, scope.comment.workspace);
+    },
+    scopeType: ContextMenuRegistry.ScopeType.COMMENT,
+    id: 'commentDuplicate',
+    weight: 1,
+  };
+  ContextMenuRegistry.registry.register(duplicateOption);
+}
+
 /** Registers all block-scoped context menu items. */
 function registerBlockOptions_() {
   registerDuplicate();

@@ -721,6 +721,9 @@ export class Gesture {
       this.targetBlock.showContextMenu(e);
     } else if (this.startBubble) {
       this.startBubble.showContextMenu(e);
+    } else if (this.startComment) {
+      this.startComment.workspace.hideChaff();
+      this.startComment.showContextMenu(e);
     } else if (this.startWorkspace_ && !this.flyout) {
       this.startWorkspace_.hideChaff();
       this.startWorkspace_.showContextMenu(e);

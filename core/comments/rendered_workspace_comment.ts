@@ -25,6 +25,9 @@ import {
   WorkspaceCommentPaster,
   WorkspaceCommentCopyData,
 } from '../clipboard/workspace_comment_paster.js';
+import {IContextMenu} from '../interfaces/i_contextmenu.js';
+import * as contextMenu from '../contextmenu.js';
+import {ContextMenuRegistry} from '../contextmenu_registry.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
@@ -34,7 +37,8 @@ export class RenderedWorkspaceComment
     IDraggable,
     ISelectable,
     IDeletable,
-    ICopyable<WorkspaceCommentCopyData>
+    ICopyable<WorkspaceCommentCopyData>,
+    IContextMenu
 {
   /** The class encompassing the svg elements making up the workspace comment. */
   private view: CommentView;
@@ -178,11 +182,6 @@ export class RenderedWorkspaceComment
     }
   }
 
-  /** Returns whether this comment is deletable or not. */
-  isDeletable(): boolean {
-    return !this.workspace.options.readOnly;
-  }
-
   /** Visually indicates that this comment would be deleted if dropped. */
   setDeleteStyle(wouldDelete: boolean): void {
     if (wouldDelete) {
@@ -238,5 +237,14 @@ export class RenderedWorkspaceComment
         addCoordinates: true,
       }),
     };
+  }
+
+  /** Show a context menu for this comment. */
+  showContextMenu(e: Event): void {
+    const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
+      ContextMenuRegistry.ScopeType.COMMENT,
+      {comment: this},
+    );
+    contextMenu.show(e, menuOptions, this.workspace.RTL);
   }
 }

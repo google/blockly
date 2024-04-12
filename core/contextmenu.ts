@@ -9,7 +9,6 @@
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
-import * as clipboard from './clipboard.js';
 import {config} from './config.js';
 import * as dom from './utils/dom.js';
 import type {
@@ -265,56 +264,6 @@ export function callbackFactory(
     common.setSelected(newBlock);
     return newBlock;
   };
-}
-
-// Helper functions for creating context menu options.
-
-/**
- * Make a context menu option for deleting the current workspace comment.
- *
- * @param comment The workspace comment where the
- *     right-click originated.
- * @returns A menu option,
- *     containing text, enabled, and a callback.
- * @internal
- */
-export function commentDeleteOption(
-  comment: WorkspaceCommentSvg,
-): LegacyContextMenuOption {
-  const deleteOption = {
-    text: Msg['REMOVE_COMMENT'],
-    enabled: true,
-    callback: function () {
-      eventUtils.setGroup(true);
-      comment.dispose();
-      eventUtils.setGroup(false);
-    },
-  };
-  return deleteOption;
-}
-
-/**
- * Make a context menu option for duplicating the current workspace comment.
- *
- * @param comment The workspace comment where the
- *     right-click originated.
- * @returns A menu option,
- *     containing text, enabled, and a callback.
- * @internal
- */
-export function commentDuplicateOption(
-  comment: WorkspaceCommentSvg,
-): LegacyContextMenuOption {
-  const duplicateOption = {
-    text: Msg['DUPLICATE_COMMENT'],
-    enabled: true,
-    callback: function () {
-      const data = comment.toCopyData();
-      if (!data) return;
-      clipboard.paste(data, comment.workspace);
-    },
-  };
-  return duplicateOption;
 }
 
 /**

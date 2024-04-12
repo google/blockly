@@ -12,6 +12,7 @@
 // Former goog.module ID: Blockly.ContextMenuRegistry
 
 import type {BlockSvg} from './block_svg.js';
+import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
@@ -119,6 +120,7 @@ export namespace ContextMenuRegistry {
   export enum ScopeType {
     BLOCK = 'block',
     WORKSPACE = 'workspace',
+    COMMENT = 'comment',
   }
 
   /**
@@ -128,6 +130,7 @@ export namespace ContextMenuRegistry {
   export interface Scope {
     block?: BlockSvg;
     workspace?: WorkspaceSvg;
+    comment?: RenderedWorkspaceComment;
   }
 
   /**

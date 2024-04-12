@@ -251,6 +251,9 @@ export class TextInputBubble extends Bubble {
     this.bringToFront();
     if (browserEvents.isRightButton(e)) {
       e.stopPropagation();
+      // REVIEW NOTE: Only triggered on 'pointerdown', so can never be context
+      // menu event. Similar to other sections - is there another reason why
+      // stopping propagation is important here?
       return;
     }
 

@@ -7,7 +7,6 @@
 // Former goog.module ID: Blockly.browserEvents
 
 import * as Touch from './touch.js';
-import * as userAgent from './utils/useragent.js';
 
 /**
  * Blockly opaque event data used to unbind events when using
@@ -187,13 +186,14 @@ export function isTargetInput(e: Event): boolean {
  * @returns True if right-click.
  */
 export function isRightButton(e: MouseEvent): boolean {
-  if ((e.metaKey || e.ctrlKey) && userAgent.MAC) {
-    // Control-clicking on Mac OS X is treated as a right-click.
-    // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
-    return true;
-  }
   return e.button === 2;
 }
+
+// REVIEW NOTE: Not needed unless funneled through a common space, like
+// 'handleWsStart'. If we confirm this isn't needed, will remove.
+// export function isContextMenu(e: PointerEvent): boolean {
+//   return e.type === 'contextmenu';
+// }
 
 /**
  * Returns the converted coordinates of the given mouse event.

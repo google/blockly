@@ -492,9 +492,21 @@ export class Gesture {
     }
 
     if (browserEvents.isRightButton(e)) {
-      this.handleRightClick(e);
+      // Right-click.
+      // Context menus are activated through 'contextmenu' event.
+      e.stopPropagation();
+      // REVIEW NOTE: Is stopping propagation important here? Only including if
+      // it's needed still in `scrollbar.ts`, for example.
       return;
     }
+
+    // REVIEW NOTE: No way to detect ctrl + left click on Mac, so contextmenu
+    // event bypasses this section since it's otherwise blocked by the click
+    // event triggering in this section.
+    // if (browserEvents.isContextMenu(e)) {
+    //   console.log('handle context menu!');
+    //   this.handleContextMenu(e);
+    // }
 
     if (e.type.toLowerCase() === 'pointerdown' && e.pointerType !== 'mouse') {
       Touch.longStart(e, this);
@@ -800,12 +812,12 @@ export class Gesture {
   }
 
   /**
-   * Handle a real or faked right-click event by showing a context menu.
+   * Handle the context menu event.
    *
    * @param e A pointerdown event.
    * @internal
    */
-  handleRightClick(e: PointerEvent) {
+  handleContextMenu(e: Event) {
     if (this.targetBlock) {
       this.bringBlockToFront();
       this.targetBlock.workspace.hideChaff(!!this.flyout);
@@ -817,7 +829,6 @@ export class Gesture {
       this.startWorkspace_.showContextMenu(e);
     }
 
-    // TODO: Handle right-click on a bubble.
     e.preventDefault();
     e.stopPropagation();
 

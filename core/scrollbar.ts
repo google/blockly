@@ -716,6 +716,9 @@ export class Scrollbar {
       // Right-click.
       // Scrollbars have no context menu.
       e.stopPropagation();
+      // REVIEW NOTE: Is stopping propagation important here? Stopping wrapping
+      // right click events seems irrelevant at a glance - especially with right
+      // click not being used for anything internally except context menu.
       return;
     }
     const mouseXY = browserEvents.mouseToSvg(
@@ -758,6 +761,9 @@ export class Scrollbar {
       // Right-click.
       // Scrollbars have no context menu.
       e.stopPropagation();
+      // REVIEW NOTE: Is stopping propagation important here? Stopping wrapping
+      // right click events seems irrelevant at a glance - especially with right
+      // click not being used for anything internally except context menu.
       return;
     }
     // Look up the current translation and record it.

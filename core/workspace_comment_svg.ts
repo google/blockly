@@ -806,6 +806,9 @@ export class WorkspaceCommentSvg
     if (browserEvents.isRightButton(e)) {
       // No right-click.
       e.stopPropagation();
+      // REVIEW NOTE: Only triggered on 'pointerdown', so can never be context
+      // menu event. Similar to other sections - is there another reason why
+      // stopping propagation is important here?
       return;
     }
     // Left-click (or middle click)

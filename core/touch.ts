@@ -67,7 +67,7 @@ export function longStart(e: PointerEvent, gesture: Gesture) {
   longPid_ = setTimeout(function () {
     // Let the gesture route the right-click correctly.
     if (gesture) {
-      gesture.handleRightClick(e);
+      gesture.handleContextMenu(e);
     }
   }, LONGPRESS);
 }

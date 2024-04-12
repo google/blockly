@@ -783,6 +783,16 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     this.svgBubbleCanvas_ = this.layerManager.getBubbleLayer();
 
     if (!this.isFlyout) {
+      // Handle the 'contextmenu' event.
+      // NOTE: ctrlKey is not detectable on Mac on a click event, though
+      // 'contextmenu' is available across systems & browsers.
+      browserEvents.conditionalBind(
+        this.svgGroup_,
+        'contextmenu',
+        this,
+        this.onContextMenu,
+      );
+
       browserEvents.conditionalBind(
         this.svgGroup_,
         'pointerdown',
@@ -1608,6 +1618,25 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const gesture = this.getGesture(e);
     if (gesture) {
       gesture.handleWsStart(e, this);
+    }
+  }
+
+  /**
+   * Handle a pointerdown on SVG drawing surface.
+   *
+   * @param e Pointer down event.
+   */
+  private onContextMenu(e: PointerEvent) {
+    // REVIEW NOTE: Rename to "onContextMenu_"? Or fine to leave as is? I'm
+    // assuming the "_" is that just a remnant of JS naming where "private"
+    // wasn't available.
+    const gesture = this.getGesture(e);
+    if (gesture) {
+      // REVIEW NOTE: `pointerdown` triggers before 'contextmenu', and we cannot
+      // reliably determine on Mac that a click event is a ctrl + left click.
+      // Bypass `handleWsStart` and directly handle the context menu. Do we
+      // forsee any issues with this?
+      gesture.handleContextMenu(e);
     }
   }
 

@@ -38,7 +38,7 @@ import * as comments from './comments.js';
 import * as Css from './css.js';
 import {DeleteArea} from './delete_area.js';
 import * as dialog from './dialog.js';
-import {Dragger} from './dragging/dragger.js';
+import * as dragging from './dragging.js';
 import {DragTarget} from './drag_target.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as Events from './events/events.js';
@@ -124,7 +124,11 @@ import {IDeletable, isDeletable} from './interfaces/i_deletable.js';
 import {IDeleteArea} from './interfaces/i_delete_area.js';
 import {IDragTarget} from './interfaces/i_drag_target.js';
 import {IDragger} from './interfaces/i_dragger.js';
-import {IDraggable, isDraggable} from './interfaces/i_draggable.js';
+import {
+  IDraggable,
+  isDraggable,
+  IDragStrategy,
+} from './interfaces/i_draggable.js';
 import {IFlyout} from './interfaces/i_flyout.js';
 import {IHasBubble, hasBubble} from './interfaces/i_has_bubble.js';
 import {IIcon, isIcon} from './interfaces/i_icon.js';
@@ -467,7 +471,7 @@ export {ContextMenuRegistry};
 export {comments};
 export {Cursor};
 export {DeleteArea};
-export {Dragger};
+export {dragging};
 export {DragTarget};
 export const DropDownDiv = dropDownDiv;
 export {Field, FieldConfig, FieldValidator, UnattachedFieldError};
@@ -532,7 +536,7 @@ export {IDeletable, isDeletable};
 export {IDeleteArea};
 export {IDragTarget};
 export {IDragger};
-export {IDraggable, isDraggable};
+export {IDraggable, isDraggable, IDragStrategy};
 export {IFlyout};
 export {IHasBubble, hasBubble};
 export {IIcon, isIcon};

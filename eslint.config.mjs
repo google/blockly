@@ -161,7 +161,7 @@ const tsConfigRules = {
     ],
     // Re-enable after Closure is removed. There shouldn't even be
     // types in the TsDoc.
-    // These are "types" because of Closure's @suppress {warningName}
+    // These are 'types' because of Closure's @suppress {warningName}
     'jsdoc/no-undefined-types': ['off'],
     'jsdoc/valid-types': ['off'],
     // Disabled due to not handling `this`. If re-enabled,
@@ -234,11 +234,6 @@ const ignoreConfig =
         'scripts/*',
         'CHANGELOG.md',
         'PULL_REQUEST_TEMPLATE.md',
-
-        // Linting.
-        'eslint.config.mjs',
-        'ignore.eslintrc.js',
-        'ignore.eslintignore',
     ],
 };
 
@@ -330,6 +325,20 @@ const nodeTestConfig = {
     }
 }
 
+const rootTestConfig = {
+    files: ['tests/**/*.js'],
+    languageOptions: {
+        globals: {
+            'Blockly': true,
+            'dartGenerator': true,
+            'javascriptGenerator': true,
+            'luaGenerator': true,
+            'phpGenerator': true,
+            'pythonGenerator': true
+        }
+    }
+}
+
 export default [
     ignoreConfig,
 
@@ -341,7 +350,7 @@ export default [
 
     // Default config that applies to all files
     blocklyDefaultConfig,
-    //testConfig,
+    rootTestConfig,
     mochaConfig,
     browserTestConfig,
     nodeTestConfig,

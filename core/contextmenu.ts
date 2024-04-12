@@ -18,15 +18,11 @@ import type {
 import * as eventUtils from './events/utils.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
-import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
-import {Coordinate} from './utils/coordinate.js';
 import {Rect} from './utils/rect.js';
 import * as serializationBlocks from './serialization/blocks.js';
 import * as svgMath from './utils/svg_math.js';
 import * as WidgetDiv from './widgetdiv.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 import * as common from './common.js';
 
@@ -266,76 +262,4 @@ export function callbackFactory(
     common.setSelected(newBlock);
     return newBlock;
   };
-}
-
-/**
- * Make a context menu option for adding a comment on the workspace.
- *
- * @param ws The workspace where the right-click
- *     originated.
- * @param e The right-click mouse event.
- * @returns A menu option, containing text, enabled, and a callback.
- *     comments are not bundled in.
- * @internal
- */
-export function workspaceCommentOption(
-  ws: WorkspaceSvg,
-  e: Event,
-): ContextMenuOption {
-  /**
-   * Helper function to create and position a comment correctly based on the
-   * location of the mouse event.
-   */
-  function addWsComment() {
-    const comment = new WorkspaceCommentSvg(
-      ws,
-      Msg['WORKSPACE_COMMENT_DEFAULT_TEXT'],
-      WorkspaceCommentSvg.DEFAULT_SIZE,
-      WorkspaceCommentSvg.DEFAULT_SIZE,
-    );
-
-    const injectionDiv = ws.getInjectionDiv();
-    // Bounding rect coordinates are in client coordinates, meaning that they
-    // are in pixels relative to the upper left corner of the visible browser
-    // window.  These coordinates change when you scroll the browser window.
-    const boundingRect = injectionDiv.getBoundingClientRect();
-
-    // The client coordinates offset by the injection div's upper left corner.
-    const mouseEvent = e as MouseEvent;
-    const clientOffsetPixels = new Coordinate(
-      mouseEvent.clientX - boundingRect.left,
-      mouseEvent.clientY - boundingRect.top,
-    );
-
-    // The offset in pixels between the main workspace's origin and the upper
-    // left corner of the injection div.
-    const mainOffsetPixels = ws.getOriginOffsetInPixels();
-
-    // The position of the new comment in pixels relative to the origin of the
-    // main workspace.
-    const finalOffset = Coordinate.difference(
-      clientOffsetPixels,
-      mainOffsetPixels,
-    );
-    // The position of the new comment in main workspace coordinates.
-    finalOffset.scale(1 / ws.scale);
-
-    const commentX = finalOffset.x;
-    const commentY = finalOffset.y;
-    comment.moveBy(commentX, commentY);
-    if (ws.rendered) {
-      comment.initSvg();
-      comment.render();
-      common.setSelected(comment);
-    }
-  }
-
-  const wsCommentOption = {
-    enabled: true,
-  } as ContextMenuOption;
-  wsCommentOption.text = Msg['ADD_COMMENT'];
-  wsCommentOption.callback = function () {
-    addWsComment();
-  };
-  return wsCommentOption;
 }

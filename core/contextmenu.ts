@@ -68,7 +68,7 @@ let menu_: Menu | null = null;
  * @param rtl True if RTL, false if LTR.
  */
 export function show(
-  e: Event,
+  e: PointerEvent,
   options: (ContextMenuOption | LegacyContextMenuOption)[],
   rtl: boolean,
 ) {
@@ -77,7 +77,7 @@ export function show(
     hide();
     return;
   }
-  const menu = populate_(options, rtl);
+  const menu = populate_(options, rtl, e);
   menu_ = menu;
 
   position_(menu, e, rtl);
@@ -94,11 +94,13 @@ export function show(
  *
  * @param options Array of menu options.
  * @param rtl True if RTL, false if LTR.
+ * @param e The event that triggered the context menu to open.
  * @returns The menu that will be shown on right click.
  */
 function populate_(
   options: (ContextMenuOption | LegacyContextMenuOption)[],
   rtl: boolean,
+  e: PointerEvent,
 ): Menu {
   /* Here's what one option object looks like:
       {text: 'Make It So',
@@ -123,7 +125,7 @@ function populate_(
             // will not be expecting a scope parameter, so there should be
             // no problems. Just assume it is a ContextMenuOption and we'll
             // pass undefined if it's not.
-            option.callback((option as ContextMenuOption).scope);
+            option.callback((option as ContextMenuOption).scope, e);
           }, 0);
         });
       };

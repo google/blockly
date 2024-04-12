@@ -240,7 +240,7 @@ export class RenderedWorkspaceComment
   }
 
   /** Show a context menu for this comment. */
-  showContextMenu(e: Event): void {
+  showContextMenu(e: PointerEvent): void {
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
       ContextMenuRegistry.ScopeType.COMMENT,
       {comment: this},

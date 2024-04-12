@@ -1673,7 +1673,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param e Mouse event.
    * @internal
    */
-  showContextMenu(e: Event) {
+  showContextMenu(e: PointerEvent) {
     if (this.options.readOnly || this.isFlyout) {
       return;
     }

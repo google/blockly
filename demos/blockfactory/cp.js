@@ -60,7 +60,7 @@ function cp_updateSwatch(swatch) {
     swatch.textContent = '\xa0';
   } else {
     swatch.style.backgroundColor = '#fff';
-    swatch.innerHTML = 'X';
+    swatch.innerText = 'X';
   }
 }
 

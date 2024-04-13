@@ -189,6 +189,12 @@ export const COMMENT_COLLAPSE = 'comment_collapse';
 export const FINISHED_LOADING = 'finished_loading';
 
 /**
+ * The language-neutral ID for when the reason why a block is disabled is
+ * because the block is not descended from a root block.
+ */
+const ORPHANED_BLOCK_DISABLED_REASON = 'ORPHANED_BLOCK';
+
+/**
  * Type of events that cause objects to be bumped back into the visible
  * portion of the workspace.
  *
@@ -522,7 +528,6 @@ export function get(
  * @param event Custom data for event.
  */
 export function disableOrphans(event: Abstract) {
-  const disabledReason = 'ORPHANED_BLOCK';
   if (event.type === MOVE || event.type === CREATE) {
     const blockEvent = event as BlockMove | BlockCreate;
     if (!blockEvent.workspaceId) {
@@ -541,17 +546,20 @@ export function disableOrphans(event: Abstract) {
       try {
         recordUndo = false;
         const parent = block.getParent();
-        if (parent && !parent.hasDisabledReason(disabledReason)) {
+        if (
+          parent &&
+          !parent.hasDisabledReason(ORPHANED_BLOCK_DISABLED_REASON)
+        ) {
           const children = block.getDescendants(false);
           for (let i = 0, child; (child = children[i]); i++) {
-            child.setDisabledReason(false, disabledReason);
+            child.setDisabledReason(false, ORPHANED_BLOCK_DISABLED_REASON);
           }
         } else if (
           (block.outputConnection || block.previousConnection) &&
           !eventWorkspace.isDragging()
         ) {
           do {
-            block.setDisabledReason(true, disabledReason);
+            block.setDisabledReason(true, ORPHANED_BLOCK_DISABLED_REASON);
             block = block.getNextBlock();
           } while (block);
         }

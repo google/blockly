@@ -467,7 +467,14 @@ export function registerDisable() {
         block!.workspace.options.disable &&
         block!.isEditable()
       ) {
-        if (block!.getInheritedDisabled()) {
+        // Determine whether this block is currently disabled for any reason
+        // other than the manual reason that this context menu item controls.
+        const disabledReasons = block!.getDisabledReasons();
+        const isDisabledForOtherReason =
+          disabledReasons.size >
+          (disabledReasons.has(constants.MANUALLY_DISABLED) ? 1 : 0);
+
+        if (block!.getInheritedDisabled() || isDisabledForOtherReason) {
           return 'disabled';
         }
         return 'enabled';

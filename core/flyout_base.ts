@@ -44,6 +44,13 @@ enum FlyoutItemType {
 }
 
 /**
+ * The language-neutral ID for when the reason why a block is disabled is
+ * because the workspace is at block capacity.
+ */
+const WORKSPACE_AT_BLOCK_CAPACITY_DISABLED_REASON =
+  'WORKSPACE_AT_BLOCK_CAPACITY';
+
+/**
  * Class for a flyout.
  */
 export abstract class Flyout
@@ -1239,7 +1246,10 @@ export abstract class Flyout
           common.getBlockTypeCounts(block),
         );
         while (block) {
-          block.setDisabledReason(!enable, 'WORKSPACE_AT_BLOCK_CAPACITY');
+          block.setDisabledReason(
+            !enable,
+            WORKSPACE_AT_BLOCK_CAPACITY_DISABLED_REASON,
+          );
           block = block.getNextBlock();
         }
       }

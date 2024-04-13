@@ -764,6 +764,13 @@ type CallExtraState = {
 };
 
 /**
+ * The language-neutral ID for when the reason why a block is disabled is
+ * because the block's corresponding procedure definition is disabled.
+ */
+const DISABLED_PROCEDURE_DEFINITION_DISABLED_REASON =
+  'DISABLED_PROCEDURE_DEFINITION';
+
+/**
  * Common properties for the procedure_callnoreturn and
  * procedure_callreturn blocks.
  */
@@ -1124,7 +1131,10 @@ const PROCEDURE_CALL_COMMON = {
         }
         Events.setGroup(event.group);
         const valid = def.isEnabled();
-        this.setDisabledReason(!valid, 'DISABLED_PROCEDURE_DEFINITION');
+        this.setDisabledReason(
+          !valid,
+          DISABLED_PROCEDURE_DEFINITION_DISABLED_REASON,
+        );
         this.setWarningText(
           valid
             ? null
@@ -1216,6 +1226,12 @@ interface IfReturnMixin extends IfReturnMixinType {
   hasReturnValue_: boolean;
 }
 type IfReturnMixinType = typeof PROCEDURES_IFRETURN;
+
+/**
+ * The language-neutral ID for when the reason why a block is disabled is
+ * because the block is only valid inside of a procedure body.
+ */
+const UNPARENTED_IFRETURN_DISABLED_REASON = 'UNPARENTED_IFRETURN';
 
 const PROCEDURES_IFRETURN = {
   /**
@@ -1317,7 +1333,7 @@ const PROCEDURES_IFRETURN = {
       const group = Events.getGroup();
       // Makes it so the move and the disable event get undone together.
       Events.setGroup(e.group);
-      this.setDisabledReason(!legal, 'UNPARENTED_IFRETURN');
+      this.setDisabledReason(!legal, UNPARENTED_IFRETURN_DISABLED_REASON);
       Events.setGroup(group);
     }
   },

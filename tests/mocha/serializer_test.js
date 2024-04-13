@@ -84,6 +84,12 @@ Serializer.Attributes.Disabled = new SerializerTestCase(
     '<block type="logic_negate" id="id******************" disabled-reasons="test%20reason,another%20reason" x="42" y="42"></block>' +
     '</xml>',
 );
+Serializer.Attributes.DisabledWithEncodedComma = new SerializerTestCase(
+  'DisabledWithEncodedComma',
+  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id******************" disabled-reasons="test%2Creason" x="42" y="42"></block>' +
+    '</xml>',
+);
 Serializer.Attributes.NotDeletable = new SerializerTestCase(
   'Deletable',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -106,6 +112,7 @@ Serializer.Attributes.testCases = [
   Serializer.Attributes.Basic,
   Serializer.Attributes.Collapsed,
   Serializer.Attributes.Disabled,
+  Serializer.Attributes.DisabledWithEncodedComma,
   Serializer.Attributes.NotDeletable,
   Serializer.Attributes.NotMovable,
   Serializer.Attributes.NotEditable,

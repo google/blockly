@@ -16,13 +16,16 @@ import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
+import * as common from '../common.js';
+import {ISelectable} from '../blockly.js';
+import * as idGenerator from '../utils/idgenerator.js';
 
 /**
  * The abstract pop-up bubble class. This creates a UI that looks like a speech
  * bubble, where it has a "tail" that points to the block, and a "head" that
  * displays arbitrary svg elements.
  */
-export abstract class Bubble implements IBubble {
+export abstract class Bubble implements IBubble, ISelectable {
   /** The width of the border around the bubble. */
   static readonly BORDER_WIDTH = 6;
 
@@ -49,6 +52,8 @@ export abstract class Bubble implements IBubble {
 
   /** Distance between arrow point and anchor point. */
   static readonly ANCHOR_RADIUS = 8;
+
+  public id: string;
 
   /** The SVG group containing all parts of the bubble. */
   protected svgRoot: SVGGElement;
@@ -89,10 +94,11 @@ export abstract class Bubble implements IBubble {
    *     when automatically positioning.
    */
   constructor(
-    protected readonly workspace: WorkspaceSvg,
+    public readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
   ) {
+    this.id = idGenerator.getNextUniqueId();
     this.svgRoot = dom.createSvgElement(
       Svg.G,
       {'class': 'blocklyBubble'},
@@ -209,6 +215,7 @@ export abstract class Bubble implements IBubble {
   /** Passes the pointer event off to the gesture system. */
   private onMouseDown(e: PointerEvent) {
     this.workspace.getGesture(e)?.handleBubbleStart(e, this);
+    common.setSelected(this);
   }
 
   /** Positions the bubble relative to its anchor. Does not render its tail. */
@@ -639,5 +646,13 @@ export abstract class Bubble implements IBubble {
   /** Moves the bubble back to where it was at the start of a drag. */
   revertDrag(): void {
     this.dragStrategy.revertDrag();
+  }
+
+  select(): void {
+    // Bubbles don't have any visual for being selected.
+  }
+
+  unselect(): void {
+    // Bubbles don't have any visual for being selected.
   }
 }

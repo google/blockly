@@ -54,5 +54,84 @@ suite('Workspace comment', function () {
         this.workspace.id,
       );
     });
+
+    test('move events are fired when a comment is moved', function () {
+      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
+        this.workspace,
+      );
+      const spy = createChangeListenerSpy(this.workspace);
+
+      this.renderedComment.moveTo(new Blockly.utils.Coordinate(42, 42));
+
+      assertEventFired(
+        spy,
+        Blockly.Events.CommentMove,
+        {
+          commentId: this.renderedComment.id,
+          oldCoordinate_: {x: 0, y: 0},
+          newCoordinate_: {x: 42, y: 42},
+        },
+        this.workspace.id,
+      );
+    });
+
+    test('change events are fired when a comments text is edited', function () {
+      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
+        this.workspace,
+      );
+      const spy = createChangeListenerSpy(this.workspace);
+
+      this.renderedComment.setText('test text');
+
+      assertEventFired(
+        spy,
+        Blockly.Events.CommentChange,
+        {
+          commentId: this.renderedComment.id,
+          oldContents_: '',
+          newContents_: 'test text',
+        },
+        this.workspace.id,
+      );
+    });
+
+    test('collapse events are fired when a comment is collapsed', function () {
+      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
+        this.workspace,
+      );
+      const spy = createChangeListenerSpy(this.workspace);
+
+      this.renderedComment.setCollapsed(true);
+
+      assertEventFired(
+        spy,
+        Blockly.Events.CommentCollapse,
+        {
+          commentId: this.renderedComment.id,
+          newCollapsed: true,
+        },
+        this.workspace.id,
+      );
+    });
+
+    test('collapse events are fired when a comment is uncollapsed', function () {
+      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
+        this.workspace,
+      );
+      this.renderedComment.setCollapsed(true);
+      const spy = createChangeListenerSpy(this.workspace);
+
+      this.renderedComment.setCollapsed(false);
+
+      assertEventFired(
+        spy,
+        Blockly.Events.CommentCollapse,
+        {
+          commentId: this.renderedComment.id,
+          newCollapsed: false,
+        },
+        this.workspace.id,
+      );
+    });
   });
 });

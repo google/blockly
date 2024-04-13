@@ -42,7 +42,7 @@ export class BubbleDragStrategy implements IDragStrategy {
 
     this.workspace
       .getLayerManager()
-      ?.moveOffDragLayer(this.bubble, layers.BLOCK);
+      ?.moveOffDragLayer(this.bubble, layers.BUBBLE);
     this.bubble.setDragging(false);
   }
 

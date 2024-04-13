@@ -15,10 +15,19 @@ import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 import * as dom from '../utils/dom.js';
 import {IDraggable} from '../interfaces/i_draggable.js';
 import {CommentDragStrategy} from '../dragging/comment_drag_strategy.js';
+import * as browserEvents from '../browser_events.js';
+import * as common from '../common.js';
+import {ISelectable} from '../interfaces/i_selectable.js';
+import {IDeletable} from '../interfaces/i_deletable.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
-  implements IBoundedElement, IRenderedElement, IDraggable
+  implements
+    IBoundedElement,
+    IRenderedElement,
+    IDraggable,
+    ISelectable,
+    IDeletable
 {
   /** The class encompassing the svg elements making up the workspace comment. */
   private view: CommentView;
@@ -39,6 +48,13 @@ export class RenderedWorkspaceComment
     this.view.setEditable(this.isEditable());
 
     this.addModelUpdateBindings();
+
+    browserEvents.conditionalBind(
+      this.view.getSvgRoot(),
+      'pointerdown',
+      this,
+      this.startGesture,
+    );
   }
 
   /**
@@ -101,16 +117,15 @@ export class RenderedWorkspaceComment
   }
 
   /** Move the comment by the given amounts in workspace coordinates. */
-  moveBy(dx: number, dy: number, _reason?: string[] | undefined): void {
-    // TODO(#7909): Deal with reason when we add events.
+  moveBy(dx: number, dy: number, reason?: string[] | undefined): void {
     const loc = this.getRelativeToSurfaceXY();
     const newLoc = new Coordinate(loc.x + dx, loc.y + dy);
-    this.moveTo(newLoc);
+    this.moveTo(newLoc, reason);
   }
 
   /** Moves the comment to the given location in workspace coordinates. */
-  override moveTo(location: Coordinate): void {
-    super.moveTo(location);
+  override moveTo(location: Coordinate, reason?: string[] | undefined): void {
+    super.moveTo(location, reason);
     this.view.moveTo(location);
   }
 
@@ -144,6 +159,32 @@ export class RenderedWorkspaceComment
     super.dispose();
   }
 
+  /**
+   * Starts a gesture because we detected a pointer down on the comment
+   * (that wasn't otherwise gobbled up, e.g. by resizing).
+   */
+  private startGesture(e: PointerEvent) {
+    const gesture = this.workspace.getGesture(e);
+    if (gesture) {
+      gesture.handleCommentStart(e, this);
+      common.setSelected(this);
+    }
+  }
+
+  /** Returns whether this comment is deletable or not. */
+  isDeletable(): boolean {
+    return !this.workspace.options.readOnly;
+  }
+
+  /** Visually indicates that this comment would be deleted if dropped. */
+  setDeleteStyle(wouldDelete: boolean): void {
+    if (wouldDelete) {
+      dom.addClass(this.getSvgRoot(), 'blocklyDraggingDelete');
+    } else {
+      dom.removeClass(this.getSvgRoot(), 'blocklyDraggingDelete');
+    }
+  }
+
   /** Returns whether this comment is movable or not. */
   isMovable(): boolean {
     return this.dragStrategy.isMovable();
@@ -167,5 +208,15 @@ export class RenderedWorkspaceComment
   /** Moves the comment back to where it was at the start of a drag. */
   revertDrag(): void {
     this.dragStrategy.revertDrag();
+  }
+
+  /** Visually highlights the comment. */
+  select(): void {
+    dom.addClass(this.getSvgRoot(), 'blocklySelected');
+  }
+
+  /** Visually unhighlights the comment. */
+  unselect(): void {
+    dom.removeClass(this.getSvgRoot(), 'blocklySelected');
   }
 }

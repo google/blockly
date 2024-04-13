@@ -23,20 +23,18 @@ import {config} from './config.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
-import type {IBlockDragger} from './interfaces/i_block_dragger.js';
 import type {IBubble} from './interfaces/i_bubble.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
-import * as internalConstants from './internal_constants.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import type {IIcon} from './interfaces/i_icon.js';
 import {IDragger} from './interfaces/i_dragger.js';
 import * as registry from './registry.js';
-import {IDraggable} from './interfaces/i_draggable.js';
+import {IDraggable, isDraggable} from './interfaces/i_draggable.js';
+import {RenderedWorkspaceComment} from './comments.js';
 
 /**
  * Note: In this file "start" refers to pointerdown
@@ -84,6 +82,12 @@ export class Gesture {
    * block.
    */
   private startBlock: BlockSvg | null = null;
+
+  /**
+   * The comment that the gesture started on, or null if it did not start on a
+   * comment.
+   */
+  private startComment: RenderedWorkspaceComment | null = null;
 
   /**
    * The block that this gesture targets.  If the gesture started on a
@@ -136,7 +140,6 @@ export class Gesture {
 
   /** Boolean used internally to break a cycle in disposal. */
   protected isEnding_ = false;
-  private healStack: boolean;
 
   /** The event that most recently updated this gesture. */
   private mostRecentEvent: PointerEvent;
@@ -185,12 +188,6 @@ export class Gesture {
      * (0, 0) is at this.mouseDownXY_.
      */
     this.currentDragDeltaXY = new Coordinate(0, 0);
-
-    /**
-     * Boolean used to indicate whether or not to heal the stack after
-     * disconnecting a block.
-     */
-    this.healStack = !internalConstants.DRAG_STACK;
   }
 
   /**
@@ -291,54 +288,7 @@ export class Gesture {
       // The start block is no longer relevant, because this is a drag.
       this.startBlock = null;
       this.targetBlock = this.flyout.createBlock(this.targetBlock);
-      this.targetBlock.select();
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Update this gesture to record whether a bubble is being dragged.
-   * This function should be called on a pointermove event the first time
-   * the drag radius is exceeded.  It should be called no more than once per
-   * gesture. If a bubble should be dragged this function creates the necessary
-   * BubbleDragger and starts the drag.
-   *
-   * @returns True if a bubble is being dragged.
-   */
-  private updateIsDraggingBubble(e: PointerEvent): boolean {
-    if (!this.startBubble) {
-      return false;
-    }
-
-    this.startDraggingBubble(e);
-    return true;
-  }
-
-  /**
-   * Check whether to start a block drag. If a block should be dragged, either
-   * from the flyout or in the workspace, create the necessary BlockDragger and
-   * start the drag.
-   *
-   * This function should be called on a pointermove event the first time
-   * the drag radius is exceeded.  It should be called no more than once per
-   * gesture. If a block should be dragged, either from the flyout or in the
-   * workspace, this function creates the necessary BlockDragger and starts the
-   * drag.
-   *
-   * @returns True if a block is being dragged.
-   */
-  private updateIsDraggingBlock(e: PointerEvent): boolean {
-    if (!this.targetBlock) {
-      return false;
-    }
-    if (this.flyout) {
-      if (this.updateIsDraggingFromFlyout()) {
-        this.startDraggingBlock(e);
-        return true;
-      }
-    } else if (this.targetBlock.isMovable()) {
-      this.startDraggingBlock(e);
+      common.setSelected(this.targetBlock);
       return true;
     }
     return false;
@@ -379,52 +329,30 @@ export class Gesture {
    * gesture.
    */
   private updateIsDragging(e: PointerEvent) {
-    // Sanity check.
+    if (!this.startWorkspace_) {
+      throw new Error(
+        'Cannot update dragging because the start workspace is undefined',
+      );
+    }
+
     if (this.calledUpdateIsDragging) {
       throw Error('updateIsDragging_ should only be called once per gesture.');
     }
     this.calledUpdateIsDragging = true;
 
-    // First check if it was a bubble drag.  Bubbles always sit on top of
-    // blocks.
-    if (this.updateIsDraggingBubble(e)) {
-      return;
-    }
-    // Then check if it was a block drag.
-    if (this.updateIsDraggingBlock(e)) {
-      return;
-    }
-    // Then check if it's a workspace drag.
-    this.updateIsDraggingWorkspace();
-  }
+    // If we drag a block out of the flyout, it updates `common.getSelected`
+    // to return the new block.
+    if (this.flyout) this.updateIsDraggingFromFlyout();
 
-  /** Create a block dragger and start dragging the selected block. */
-  private startDraggingBlock(e: PointerEvent) {
-    this.dragging = true;
-    this.dragger = this.createDragger(this.targetBlock!, this.startWorkspace_!);
-    this.dragger.onDragStart(e);
-    this.dragger.onDrag(e, this.currentDragDeltaXY);
-  }
-
-  /** Create a bubble dragger and start dragging the selected bubble. */
-  private startDraggingBubble(e: PointerEvent) {
-    if (!this.startBubble) {
-      throw new Error(
-        'Cannot update dragging the bubble because the start ' +
-          'bubble is undefined',
-      );
+    const selected = common.getSelected();
+    if (selected && isDraggable(selected) && selected.isMovable()) {
+      this.dragging = true;
+      this.dragger = this.createDragger(selected, this.startWorkspace_);
+      this.dragger.onDragStart(e);
+      this.dragger.onDrag(e, this.currentDragDeltaXY);
+    } else {
+      this.updateIsDraggingWorkspace();
     }
-    if (!this.startWorkspace_) {
-      throw new Error(
-        'Cannot update dragging the bubble because the start ' +
-          'workspace is undefined',
-      );
-    }
-
-    this.dragging = true;
-    this.dragger = this.createDragger(this.startBubble, this.startWorkspace_);
-    this.dragger.onDragStart(e);
-    this.dragger.onDrag(e, this.currentDragDeltaXY);
   }
 
   private createDragger(
@@ -432,7 +360,7 @@ export class Gesture {
     workspace: WorkspaceSvg,
   ): IDragger {
     const DraggerClass = registry.getClassFromOptions(
-      registry.Type.DRAGGER,
+      registry.Type.BLOCK_DRAGGER,
       this.creatorWorkspace.options,
       true,
     );
@@ -484,10 +412,6 @@ export class Gesture {
 
     Tooltip.block();
 
-    if (this.targetBlock) {
-      this.targetBlock.select();
-    }
-
     if (browserEvents.isRightButton(e)) {
       this.handleRightClick(e);
       return;
@@ -498,7 +422,6 @@ export class Gesture {
     }
 
     this.mouseDownXY = new Coordinate(e.clientX, e.clientY);
-    this.healStack = e.altKey || e.ctrlKey || e.metaKey;
 
     this.bindMouseEvents(e);
 
@@ -620,8 +543,9 @@ export class Gesture {
       } else if (this.workspaceDragger) {
         this.workspaceDragger.endDrag(this.currentDragDeltaXY);
       } else if (this.isBubbleClick()) {
-        // Bubbles are in front of all fields and blocks.
-        this.doBubbleClick();
+        // Do nothing, bubbles don't currently respond to clicks.
+      } else if (this.isCommentClick()) {
+        // Do nothing, comments don't currently respond to clicks.
       } else if (this.isFieldClick()) {
         this.doFieldClick();
       } else if (this.isIconClick()) {
@@ -825,6 +749,13 @@ export class Gesture {
     }
     this.setStartWorkspace(ws);
     this.mostRecentEvent = e;
+
+    if (!this.startBlock && !this.startBubble && !this.startComment) {
+      // Selection determines what things start drags. So to drag the workspace,
+      // we need to deselect anything that was previously selected.
+      common.setSelected(null);
+    }
+
     this.doStart(e);
   }
 
@@ -893,18 +824,27 @@ export class Gesture {
     this.mostRecentEvent = e;
   }
 
+  /**
+   * Handle a pointerdown event on a workspace comment.
+   *
+   * @param e A pointerdown event.
+   * @param comment The comment the event hit.
+   * @internal
+   */
+  handleCommentStart(e: PointerEvent, comment: RenderedWorkspaceComment) {
+    if (this.gestureHasStarted) {
+      throw Error(
+        'Tried to call gesture.handleCommentStart, ' +
+          'but the gesture had already been started.',
+      );
+    }
+    this.setStartComment(comment);
+    this.mostRecentEvent = e;
+  }
+
   /* Begin functions defining what actions to take to execute clicks on each
    * type of target.  Any developer wanting to add behaviour on clicks should
    * modify only this code. */
-
-  /** Execute a bubble click. */
-  private doBubbleClick() {
-    // TODO (#1673): Consistent handling of single clicks.
-    if (this.startBubble instanceof WorkspaceCommentSvg) {
-      this.startBubble.setFocus();
-      this.startBubble.select();
-    }
-  }
 
   /** Execute a field click. */
   private doFieldClick() {
@@ -1050,6 +990,18 @@ export class Gesture {
   }
 
   /**
+   * Record the comment that a gesture started on
+   *
+   * @param comment The comment the gesture started on.
+   * @internal
+   */
+  setStartComment(comment: RenderedWorkspaceComment) {
+    if (!this.startComment) {
+      this.startComment = comment;
+    }
+  }
+
+  /**
    * Record the block that a gesture started on, and set the target block
    * appropriately.
    *
@@ -1060,6 +1012,7 @@ export class Gesture {
     // If the gesture already went through a bubble, don't set the start block.
     if (!this.startBlock && !this.startBubble) {
       this.startBlock = block;
+      common.setSelected(this.startBlock);
       if (block.isInFlyout && block !== block.getRootBlock()) {
         this.setTargetBlock(block.getRootBlock());
       } else {
@@ -1124,6 +1077,10 @@ export class Gesture {
     return hasStartBubble && !this.hasExceededDragRadius;
   }
 
+  private isCommentClick(): boolean {
+    return !!this.startComment && !this.hasExceededDragRadius;
+  }
+
   /**
    * Whether this gesture is a click on a block.  This should only be called
    * when ending a gesture (pointerup).
@@ -1182,6 +1139,11 @@ export class Gesture {
 
   /* End helper functions defining types of clicks. */
 
+  /** Returns the current dragger if the gesture is a drag. */
+  getCurrentDragger(): WorkspaceDragger | IDragger | null {
+    return this.workspaceDragger ?? this.dragger ?? null;
+  }
+
   /**
    * Whether this gesture is a drag of either a workspace or block.
    * This function is called externally to block actions that cannot be taken
@@ -1204,19 +1166,6 @@ export class Gesture {
    */
   hasStarted(): boolean {
     return this.gestureHasStarted;
-  }
-
-  /**
-   * Gets the current dragger if an item is being dragged. Null if nothing is
-   * being dragged.
-   *
-   * @returns The dragger that is currently in use or null if no drag is in
-   *     progress.
-   */
-  getCurrentDragger(): WorkspaceDragger | IBlockDragger | null {
-    // TODO: Change this to return the `dragger`, when we get rid of the last
-    //   other dragger.
-    return this.workspaceDragger;
   }
 
   /**

@@ -13,6 +13,7 @@ import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import * as eventUtils from '../events/utils.js';
 import {config} from '../config.js';
+import * as common from '../common.js';
 
 export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
   static TYPE = 'block';
@@ -43,7 +44,7 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
     if (eventUtils.isEnabled() && !block.isShadow()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
     }
-    block.select();
+    common.setSelected(block);
     return block;
   }
 }

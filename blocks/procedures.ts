@@ -38,6 +38,7 @@ import {config} from '../core/config.js';
 import {defineBlocks} from '../core/common.js';
 import '../core/icons/comment_icon.js';
 import '../core/icons/warning_icon.js';
+import * as common from '../core/common.js';
 
 /** A dictionary of the block definitions provided by this module. */
 export const blocks: {[key: string]: BlockDefinition} = {};
@@ -1157,7 +1158,7 @@ const PROCEDURE_CALL_COMMON = {
         const def = Procedures.getDefinition(name, workspace);
         if (def) {
           (workspace as WorkspaceSvg).centerOnBlock(def.id);
-          (def as BlockSvg).select();
+          common.setSelected(def as BlockSvg);
         }
       },
     });

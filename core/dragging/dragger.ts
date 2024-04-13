@@ -15,13 +15,13 @@ import {IDeleteArea} from '../interfaces/i_delete_area.js';
 import * as registry from '../registry.js';
 
 export class Dragger implements IDragger {
-  private startLoc: Coordinate;
+  protected startLoc: Coordinate;
 
-  private dragTarget: IDragTarget | null = null;
+  protected dragTarget: IDragTarget | null = null;
 
   constructor(
-    private draggable: IDraggable,
-    private workspace: WorkspaceSvg,
+    protected draggable: IDraggable,
+    protected workspace: WorkspaceSvg,
   ) {
     this.startLoc = draggable.getRelativeToSurfaceXY();
   }
@@ -139,4 +139,4 @@ export class Dragger implements IDragger {
   }
 }
 
-registry.register(registry.Type.DRAGGER, registry.DEFAULT, Dragger);
+registry.register(registry.Type.BLOCK_DRAGGER, registry.DEFAULT, Dragger);

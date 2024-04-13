@@ -16,6 +16,7 @@ import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {isDraggable} from './interfaces/i_draggable.js';
+import * as eventUtils from './events/utils.js';
 
 /**
  * Object holding the names of the default shortcut items.
@@ -75,7 +76,14 @@ export function registerDelete() {
       if (Gesture.inProgress()) {
         return false;
       }
-      (common.getSelected() as BlockSvg).checkAndDelete();
+      const selected = common.getSelected();
+      if (selected instanceof BlockSvg) {
+        selected.checkAndDelete();
+      } else if (isDeletable(selected) && selected.isDeletable()) {
+        eventUtils.setGroup(true);
+        selected.dispose();
+        eventUtils.setGroup(false);
+      }
       return true;
     },
     keyCodes: [KeyCodes.DELETE, KeyCodes.BACKSPACE],
@@ -221,10 +229,11 @@ export function registerUndo() {
     preconditionFn(workspace) {
       return !workspace.options.readOnly && !Gesture.inProgress();
     },
-    callback(workspace) {
+    callback(workspace, e) {
       // 'z' for undo 'Z' is for redo.
       (workspace as WorkspaceSvg).hideChaff();
       workspace.undo(false);
+      e.preventDefault();
       return true;
     },
     keyCodes: [ctrlZ, altZ, metaZ],
@@ -259,10 +268,11 @@ export function registerRedo() {
     preconditionFn(workspace) {
       return !Gesture.inProgress() && !workspace.options.readOnly;
     },
-    callback(workspace) {
+    callback(workspace, e) {
       // 'z' for undo 'Z' is for redo.
       (workspace as WorkspaceSvg).hideChaff();
       workspace.undo(true);
+      e.preventDefault();
       return true;
     },
     keyCodes: [ctrlShiftZ, altShiftZ, metaShiftZ, ctrlY],

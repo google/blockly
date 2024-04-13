@@ -9,6 +9,7 @@ import {Size} from '../utils/size.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as idGenerator from '../utils/idgenerator.js';
 import * as eventUtils from '../events/utils.js';
+import {CommentMove} from '../events/events_comment_move.js';
 
 export class WorkspaceComment {
   /** The unique identifier for this comment. */
@@ -72,9 +73,29 @@ export class WorkspaceComment {
     }
   }
 
+  /** Fires a comment change event. */
+  private fireChangeEvent(oldText: string, newText: string) {
+    if (eventUtils.isEnabled()) {
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.COMMENT_CHANGE))(this, oldText, newText),
+      );
+    }
+  }
+
+  /** Fires a comment collapse event. */
+  private fireCollapseEvent(newCollapsed: boolean) {
+    if (eventUtils.isEnabled()) {
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.COMMENT_COLLAPSE))(this, newCollapsed),
+      );
+    }
+  }
+
   /** Sets the text of the comment. */
   setText(text: string) {
+    const oldText = this.text;
     this.text = text;
+    this.fireChangeEvent(oldText, text);
   }
 
   /** Returns the text of the comment. */
@@ -95,6 +116,7 @@ export class WorkspaceComment {
   /** Sets whether the comment is collapsed or not. */
   setCollapsed(collapsed: boolean) {
     this.collapsed = collapsed;
+    this.fireCollapseEvent(collapsed);
   }
 
   /** Returns whether the comment is collapsed or not. */
@@ -166,8 +188,16 @@ export class WorkspaceComment {
   }
 
   /** Moves the comment to the given location in workspace coordinates. */
-  moveTo(location: Coordinate) {
+  moveTo(location: Coordinate, reason?: string[] | undefined) {
+    const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
+      this,
+    ) as CommentMove;
+    if (reason) event.setReason(reason);
+
     this.location = location;
+
+    event.recordNew();
+    if (eventUtils.isEnabled()) eventUtils.fire(event);
   }
 
   /** Returns the position of the comment in workspace coordinates. */

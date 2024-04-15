@@ -68,8 +68,9 @@ import * as VariablesDynamic from './variables_dynamic.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
-import {WorkspaceComment} from './workspace_comment.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+import {WorkspaceComment as OldWorkspaceComment} from './workspace_comment.js';
+import {WorkspaceCommentSvg as OldWorkspaceCommentSvg} from './workspace_comment_svg.js';
+import {WorkspaceComment} from './comments/workspace_comment.js';
 import {ZoomControls} from './zoom_controls.js';
 import {ContextMenuOption} from './contextmenu_registry.js';
 import * as renderManagement from './render_management.js';
@@ -1395,6 +1396,20 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         'monkey-patched in by blockly.ts',
     );
   }
+
+  /**
+   * Obtain a newly created comment.
+   *
+   * @param id Optional ID.  Use this ID if provided, otherwise create a new
+   *     ID.
+   * @returns The created comment.
+   */
+  newComment(id?: string): WorkspaceComment {
+    throw new Error(
+      'The implementation of newComment should be ' +
+        'monkey-patched in by blockly.ts',
+    );
+  }
   /* eslint-enable */
 
   /**
@@ -2128,8 +2143,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param comment comment to add.
    */
-  override addTopComment(comment: WorkspaceComment) {
-    this.addTopBoundedElement(comment as WorkspaceCommentSvg);
+  override addTopComment(comment: OldWorkspaceComment) {
+    this.addTopBoundedElement(comment as OldWorkspaceCommentSvg);
     super.addTopComment(comment);
   }
 
@@ -2138,8 +2153,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param comment comment to remove.
    */
-  override removeTopComment(comment: WorkspaceComment) {
-    this.removeTopBoundedElement(comment as WorkspaceCommentSvg);
+  override removeTopComment(comment: OldWorkspaceComment) {
+    this.removeTopBoundedElement(comment as OldWorkspaceCommentSvg);
     super.removeTopComment(comment);
   }
 

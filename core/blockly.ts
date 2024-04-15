@@ -383,6 +383,18 @@ WorkspaceSvg.prototype.newBlock = function (
   return new BlockSvg(this, prototypeName, opt_id);
 };
 
+Workspace.prototype.newComment = function (
+  id?: string,
+): comments.WorkspaceComment {
+  return new comments.WorkspaceComment(this, id);
+};
+
+WorkspaceSvg.prototype.newComment = function (
+  id?: string,
+): comments.RenderedWorkspaceComment {
+  return new comments.RenderedWorkspaceComment(this, id);
+};
+
 WorkspaceSvg.newTrashcan = function (workspace: WorkspaceSvg): Trashcan {
   return new Trashcan(workspace);
 };

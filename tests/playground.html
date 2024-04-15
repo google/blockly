@@ -69,7 +69,10 @@
           },
         });
         initToolbox(workspace);
+
         workspace.configureContextMenu = configureContextMenu;
+        Blockly.ContextMenuItems.registerCommentOptions();
+
         // Restore previously displayed text.
         if (sessionStorage) {
           var text = sessionStorage.getItem('textarea');
@@ -265,11 +268,6 @@
           },
         };
         menuOptions.push(screenshotOption);
-
-        // Adds a default-sized workspace comment to the workspace.
-        menuOptions.push(
-          Blockly.ContextMenu.workspaceCommentOption(workspace, e),
-        );
       }
 
       function logger(e) {

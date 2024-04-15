@@ -670,6 +670,13 @@ function registerBlockOptions_() {
   registerHelp();
 }
 
+/** Registers all workspace comment related menu items. */
+export function registerCommentOptions() {
+  registerCommentDuplicate();
+  registerCommentDelete();
+  registerCommentCreate();
+}
+
 /**
  * Registers all default context menu items. This should be called once per
  * instance of ContextMenuRegistry.

@@ -61,7 +61,7 @@ function moveCommentToNotConflict(comment: RenderedWorkspaceComment) {
   // getRelativeToSurfaceXY is really expensive, so we want to cache this.
   const otherCoords = workspace
     .getTopComments(false)
-    .filter((otherComment) => otherComment.id != comment.id)
+    .filter((otherComment) => otherComment.id !== comment.id)
     .map((c) => c.getRelativeToSurfaceXY());
 
   while (

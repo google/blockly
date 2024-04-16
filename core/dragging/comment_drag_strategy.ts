@@ -10,6 +10,7 @@ import * as eventUtils from '../events/utils.js';
 import * as layers from '../layers.js';
 import {RenderedWorkspaceComment} from '../comments.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
+import {CommentMove} from '../events/events_comment_move.js';
 
 export class CommentDragStrategy implements IDragStrategy {
   private startLoc: Coordinate | null = null;
@@ -39,6 +40,8 @@ export class CommentDragStrategy implements IDragStrategy {
   }
 
   endDrag(): void {
+    this.fireMoveEvent();
+
     this.workspace.setResizesEnabled(true);
     eventUtils.setGroup(false);
 
@@ -46,6 +49,17 @@ export class CommentDragStrategy implements IDragStrategy {
       .getLayerManager()
       ?.moveOffDragLayer(this.comment, layers.BLOCK);
     this.comment.setDragging(false);
+  }
+
+  private fireMoveEvent() {
+    if (this.comment.isDeadOrDying()) return;
+    const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
+      this.comment,
+    ) as CommentMove;
+    event.setReason(['drag']);
+    event.oldCoordinate_ = this.startLoc!;
+    event.recordNew();
+    eventUtils.fire(event);
   }
 
   revertDrag(): void {

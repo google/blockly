@@ -30,7 +30,6 @@ import * as math from './utils/math.js';
 import type * as toolbox from './utils/toolbox.js';
 import {VariableMap} from './variable_map.js';
 import type {VariableModel} from './variable_model.js';
-import type {WorkspaceComment as OldWorkspaceComment} from './workspace_comment.js';
 import {WorkspaceComment} from './comments/workspace_comment.js';
 import {IProcedureMap} from './interfaces/i_procedure_map.js';
 import {ObservableProcedureMap} from './observable_procedure_map.js';
@@ -101,8 +100,8 @@ export class Workspace implements IASTNodeLocation {
   connectionChecker: IConnectionChecker;
 
   private readonly topBlocks: Block[] = [];
-  private readonly topComments: OldWorkspaceComment[] = [];
-  private readonly commentDB = new Map<string, OldWorkspaceComment>();
+  private readonly topComments: WorkspaceComment[] = [];
+  private readonly commentDB = new Map<string, WorkspaceComment>();
   private readonly listeners: Function[] = [];
   protected undoStack_: Abstract[] = [];
   protected redoStack_: Abstract[] = [];
@@ -169,8 +168,8 @@ export class Workspace implements IASTNodeLocation {
    *     a's index.
    */
   private sortObjects_(
-    a: Block | OldWorkspaceComment,
-    b: Block | OldWorkspaceComment,
+    a: Block | WorkspaceComment,
+    b: Block | WorkspaceComment,
   ): number {
     const offset =
       Math.sin(math.toRadians(Workspace.SCAN_ANGLE)) * (this.RTL ? -1 : 1);
@@ -267,7 +266,7 @@ export class Workspace implements IASTNodeLocation {
    * @param comment comment to add.
    * @internal
    */
-  addTopComment(comment: OldWorkspaceComment) {
+  addTopComment(comment: WorkspaceComment) {
     this.topComments.push(comment);
 
     // Note: If the comment database starts to hold block comments, this may
@@ -288,7 +287,7 @@ export class Workspace implements IASTNodeLocation {
    * @param comment comment to remove.
    * @internal
    */
-  removeTopComment(comment: OldWorkspaceComment) {
+  removeTopComment(comment: WorkspaceComment) {
     if (!arrayUtils.removeElem(this.topComments, comment)) {
       throw Error(
         "Comment not present in workspace's list of top-most " + 'comments.',
@@ -307,9 +306,9 @@ export class Workspace implements IASTNodeLocation {
    * @returns The top-level comment objects.
    * @internal
    */
-  getTopComments(ordered = false): OldWorkspaceComment[] {
+  getTopComments(ordered = false): WorkspaceComment[] {
     // Copy the topComments list.
-    const comments = new Array<OldWorkspaceComment>().concat(this.topComments);
+    const comments = new Array<WorkspaceComment>().concat(this.topComments);
     if (ordered && comments.length > 1) {
       comments.sort(this.sortObjects_.bind(this));
     }
@@ -751,7 +750,7 @@ export class Workspace implements IASTNodeLocation {
    * @returns The sought after comment, or null if not found.
    * @internal
    */
-  getCommentById(id: string): OldWorkspaceComment | null {
+  getCommentById(id: string): WorkspaceComment | null {
     return this.commentDB.get(id) ?? null;
   }
 

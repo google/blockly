@@ -19,7 +19,6 @@ import {
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
-import {WorkspaceComment} from '../../build/src/core/workspace_comment.js';
 
 suite('Events', function () {
   setup(function () {

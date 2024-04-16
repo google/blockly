@@ -6,7 +6,7 @@
 
 // Former goog.module ID: Blockly.bumpObjects
 
-import {RenderedWorkspaceComment} from './comments.js';
+import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BlockCreate} from './events/events_block_create.js';
 import type {BlockMove} from './events/events_block_move.js';
@@ -93,12 +93,15 @@ export function bumpIntoBoundsHandler(
   workspace: WorkspaceSvg,
 ): (p1: Abstract) => void {
   return (e) => {
+    console.log('got event');
     const metricsManager = workspace.getMetricsManager();
     if (!metricsManager.hasFixedEdges() || workspace.isDragging()) {
+      console.log('retunring');
       return;
     }
 
     if (eventUtils.BUMP_EVENTS.includes(e.type ?? '')) {
+      console.log('bumping');
       const scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
 
       // Triggered by move/create event
@@ -127,6 +130,7 @@ export function bumpIntoBoundsHandler(
       }
       eventUtils.setGroup(existingGroup);
     } else if (e.type === eventUtils.VIEWPORT_CHANGE) {
+      console.log('viewport event');
       const viewportEvent = e as ViewportChange;
       if (
         viewportEvent.scale &&
@@ -165,7 +169,7 @@ function extractObjectFromEvent(
     case eventUtils.COMMENT_MOVE:
       object = workspace.getCommentById(
         (e as CommentCreate | CommentMove).commentId!,
-      ) as AnyDuringMigration as RenderedWorkspaceComment;
+      ) as RenderedWorkspaceComment;
       break;
   }
   return object;

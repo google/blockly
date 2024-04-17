@@ -19,6 +19,12 @@ import * as browserEvents from '../browser_events.js';
 import * as common from '../common.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
 import {IDeletable} from '../interfaces/i_deletable.js';
+import {ICopyable} from '../interfaces/i_copyable.js';
+import * as commentSerialization from '../serialization/workspace_comments.js';
+import {
+  WorkspaceCommentPaster,
+  WorkspaceCommentCopyData,
+} from '../clipboard/workspace_comment_paster.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
@@ -27,7 +33,8 @@ export class RenderedWorkspaceComment
     IRenderedElement,
     IDraggable,
     ISelectable,
-    IDeletable
+    IDeletable,
+    ICopyable<WorkspaceCommentCopyData>
 {
   /** The class encompassing the svg elements making up the workspace comment. */
   private view: CommentView;
@@ -218,5 +225,18 @@ export class RenderedWorkspaceComment
   /** Visually unhighlights the comment. */
   unselect(): void {
     dom.removeClass(this.getSvgRoot(), 'blocklySelected');
+  }
+
+  /**
+   * Returns a JSON serializable representation of this comment's state that
+   * can be used for pasting.
+   */
+  toCopyData(): WorkspaceCommentCopyData | null {
+    return {
+      paster: WorkspaceCommentPaster.TYPE,
+      commentState: commentSerialization.save(this, {
+        addCoordinates: true,
+      }),
+    };
   }
 }

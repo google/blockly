@@ -6,10 +6,8 @@
 
 import {ISerializer} from '../interfaces/i_serializer.js';
 import {Workspace} from '../workspace.js';
-import {WorkspaceSvg} from '../workspace_svg.js';
 import * as priorities from './priorities.js';
-import {WorkspaceComment} from '../comments/workspace_comment.js';
-import {RenderedWorkspaceComment} from '../comments/rendered_workspace_comment.js';
+import type {WorkspaceComment} from '../comments/workspace_comment.js';
 import * as eventUtils from '../events/utils.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as serializationRegistry from './registry.js';
@@ -70,10 +68,7 @@ export function append(
   const prevRecordUndo = eventUtils.getRecordUndo();
   eventUtils.setRecordUndo(recordUndo);
 
-  const comment =
-    workspace instanceof WorkspaceSvg
-      ? new RenderedWorkspaceComment(workspace, state.id)
-      : new WorkspaceComment(workspace, state.id);
+  const comment = workspace.newComment(state.id);
 
   if (state.text !== undefined) comment.setText(state.text);
   if (state.x !== undefined || state.y !== undefined) {

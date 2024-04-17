@@ -68,13 +68,12 @@ import * as VariablesDynamic from './variables_dynamic.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
-import {WorkspaceComment as OldWorkspaceComment} from './workspace_comment.js';
-import {WorkspaceCommentSvg as OldWorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceComment} from './comments/workspace_comment.js';
 import {ZoomControls} from './zoom_controls.js';
 import {ContextMenuOption} from './contextmenu_registry.js';
 import * as renderManagement from './render_management.js';
 import {LayerManager} from './layer_manager.js';
+import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -2143,8 +2142,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param comment comment to add.
    */
-  override addTopComment(comment: OldWorkspaceComment) {
-    this.addTopBoundedElement(comment as OldWorkspaceCommentSvg);
+  override addTopComment(comment: WorkspaceComment) {
+    this.addTopBoundedElement(comment as RenderedWorkspaceComment);
     super.addTopComment(comment);
   }
 
@@ -2153,8 +2152,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param comment comment to remove.
    */
-  override removeTopComment(comment: OldWorkspaceComment) {
-    this.removeTopBoundedElement(comment as OldWorkspaceCommentSvg);
+  override removeTopComment(comment: WorkspaceComment) {
+    this.removeTopBoundedElement(comment as RenderedWorkspaceComment);
     super.removeTopComment(comment);
   }
 

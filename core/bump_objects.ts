@@ -6,7 +6,7 @@
 
 // Former goog.module ID: Blockly.bumpObjects
 
-import {RenderedWorkspaceComment} from './comments.js';
+import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BlockCreate} from './events/events_block_create.js';
 import type {BlockMove} from './events/events_block_move.js';
@@ -165,7 +165,7 @@ function extractObjectFromEvent(
     case eventUtils.COMMENT_MOVE:
       object = workspace.getCommentById(
         (e as CommentCreate | CommentMove).commentId!,
-      ) as AnyDuringMigration as RenderedWorkspaceComment;
+      ) as RenderedWorkspaceComment;
       break;
   }
   return object;

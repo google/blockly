@@ -161,19 +161,32 @@ export function registerCut() {
         !workspace.options.readOnly &&
         !Gesture.inProgress() &&
         selected != null &&
-        selected instanceof BlockSvg &&
+        isDeletable(selected) &&
         selected.isDeletable() &&
+        isDraggable(selected) &&
         selected.isMovable() &&
         !selected.workspace!.isFlyout
       );
     },
     callback(workspace) {
       const selected = common.getSelected();
-      if (!selected || !isCopyable(selected)) return false;
-      copyData = selected.toCopyData();
-      copyWorkspace = workspace;
-      (selected as BlockSvg).checkAndDelete();
-      return true;
+
+      if (selected instanceof BlockSvg) {
+        copyData = selected.toCopyData();
+        copyWorkspace = workspace;
+        selected.checkAndDelete();
+        return true;
+      } else if (
+        isDeletable(selected) &&
+        selected.isDeletable() &&
+        isCopyable(selected)
+      ) {
+        copyData = selected.toCopyData();
+        copyWorkspace = workspace;
+        selected.dispose();
+        return true;
+      }
+      return false;
     },
     keyCodes: [ctrlX, altX, metaX],
   };

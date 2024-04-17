@@ -845,4 +845,13 @@ css.register(`
   stroke: #fc3;
   stroke-width: 3px;
 }
+
+.blocklyCollapsed.blocklySelected .blocklyCommentHighlight {
+  stroke: none;
+}
+
+.blocklyCollapsed.blocklySelected .blocklyCommentTopbarBackground {
+  stroke: #fc3;
+  stroke-width: 3px;
+}
 `);

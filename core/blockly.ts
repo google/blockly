@@ -399,23 +399,6 @@ WorkspaceSvg.newTrashcan = function (workspace: WorkspaceSvg): Trashcan {
   return new Trashcan(workspace);
 };
 
-WorkspaceCommentSvg.prototype.showContextMenu = function (
-  this: WorkspaceCommentSvg,
-  e: Event,
-) {
-  if (this.workspace.options.readOnly) {
-    return;
-  }
-  const menuOptions = [];
-
-  if (this.isDeletable() && this.isMovable()) {
-    menuOptions.push(ContextMenu.commentDuplicateOption(this));
-    menuOptions.push(ContextMenu.commentDeleteOption(this));
-  }
-
-  ContextMenu.show(e, menuOptions, this.RTL);
-};
-
 MiniWorkspaceBubble.prototype.newWorkspaceSvg = function (
   options: Options,
 ): WorkspaceSvg {

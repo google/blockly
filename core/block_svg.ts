@@ -602,7 +602,7 @@ export class BlockSvg
    * @param e Mouse event.
    * @internal
    */
-  showContextMenu(e: Event) {
+  showContextMenu(e: PointerEvent) {
     const menuOptions = this.generateContextMenu();
 
     if (menuOptions && menuOptions.length) {

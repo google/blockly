@@ -307,8 +307,8 @@ export class TextInputBubble extends Bubble {
 }
 
 Css.register(`
-.blocklyCommentTextarea {
-  background-color: #fef49c;
+.blocklyTextInputBubble .blocklyTextarea {
+  background-color: var(--commentFillColour);
   border: 0;
   display: block;
   margin: 0;

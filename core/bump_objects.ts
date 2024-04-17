@@ -93,15 +93,12 @@ export function bumpIntoBoundsHandler(
   workspace: WorkspaceSvg,
 ): (p1: Abstract) => void {
   return (e) => {
-    console.log('got event');
     const metricsManager = workspace.getMetricsManager();
     if (!metricsManager.hasFixedEdges() || workspace.isDragging()) {
-      console.log('retunring');
       return;
     }
 
     if (eventUtils.BUMP_EVENTS.includes(e.type ?? '')) {
-      console.log('bumping');
       const scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
 
       // Triggered by move/create event
@@ -130,7 +127,6 @@ export function bumpIntoBoundsHandler(
       }
       eventUtils.setGroup(existingGroup);
     } else if (e.type === eventUtils.VIEWPORT_CHANGE) {
-      console.log('viewport event');
       const viewportEvent = e as ViewportChange;
       if (
         viewportEvent.scale &&

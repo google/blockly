@@ -560,8 +560,6 @@ export function registerHelp() {
 /** Registers an option for deleting a workspace comment. */
 export function registerCommentDelete() {
   const deleteOption: RegistryItem = {
-    // TODO: Before merging, I had to make this a function because I don't think
-    //   the messages were loaded in time. Is that a larger bug?
     displayText: () => Msg['REMOVE_COMMENT'],
     preconditionFn(scope: Scope) {
       return scope.comment?.isDeletable() ? 'enabled' : 'hidden';
@@ -578,7 +576,7 @@ export function registerCommentDelete() {
   ContextMenuRegistry.registry.register(deleteOption);
 }
 
-/** Registers an option for duplicating a worksapce comment. */
+/** Registers an option for duplicating a workspace comment. */
 export function registerCommentDuplicate() {
   const duplicateOption: RegistryItem = {
     displayText: () => Msg['DUPLICATE_COMMENT'],

@@ -49,7 +49,7 @@ export class BlockChange extends BlockBase {
    * If element is 'disabled', this is the language-neutral identifier of the
    * reason why the block was or was not disabled.
    */
-  disabledReason?: string;
+  private disabledReason?: string;
 
   /**
    * @param opt_block The changed block.  Undefined for a blank event.

@@ -157,7 +157,7 @@ suite('Icon', function () {
 
         block.addIcon(icon);
         applyColourSpy.resetHistory();
-        block.setEnabled(false);
+        block.setDisabledReason(true, 'test reason');
         chai.assert.isTrue(
           applyColourSpy.calledOnce,
           'Expected applyColour to be called',

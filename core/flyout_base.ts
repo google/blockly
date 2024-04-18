@@ -22,6 +22,7 @@ import * as eventUtils from './events/utils.js';
 import {FlyoutButton} from './flyout_button.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
+import {MANUALLY_DISABLED} from './constants.js';
 import type {Options} from './options.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
 import * as blocks from './serialization/blocks.js';
@@ -42,6 +43,13 @@ enum FlyoutItemType {
   BLOCK = 'block',
   BUTTON = 'button',
 }
+
+/**
+ * The language-neutral ID for when the reason why a block is disabled is
+ * because the workspace is at block capacity.
+ */
+const WORKSPACE_AT_BLOCK_CAPACITY_DISABLED_REASON =
+  'WORKSPACE_AT_BLOCK_CAPACITY';
 
 /**
  * Class for a flyout.
@@ -837,6 +845,12 @@ export abstract class Flyout
           blockInfo['enabled'] =
             blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
         }
+        if (
+          blockInfo['disabledReasons'] === undefined &&
+          blockInfo['enabled'] === false
+        ) {
+          blockInfo['disabledReasons'] = [MANUALLY_DISABLED];
+        }
         block = blocks.appendInternal(
           blockInfo as blocks.State,
           this.workspace_,
@@ -1239,7 +1253,10 @@ export abstract class Flyout
           common.getBlockTypeCounts(block),
         );
         while (block) {
-          block.setEnabled(enable);
+          block.setDisabledReason(
+            !enable,
+            WORKSPACE_AT_BLOCK_CAPACITY_DISABLED_REASON,
+          );
           block = block.getNextBlock();
         }
       }

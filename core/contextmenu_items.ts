@@ -14,6 +14,7 @@ import {
   RegistryItem,
   Scope,
 } from './contextmenu_registry.js';
+import {MANUALLY_DISABLED} from './constants.js';
 import * as dialog from './dialog.js';
 import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
@@ -458,9 +459,9 @@ export function registerCollapseExpandBlock() {
 export function registerDisable() {
   const disableOption: RegistryItem = {
     displayText(scope: Scope) {
-      return scope.block!.isEnabled()
-        ? Msg['DISABLE_BLOCK']
-        : Msg['ENABLE_BLOCK'];
+      return scope.block!.hasDisabledReason(MANUALLY_DISABLED)
+        ? Msg['ENABLE_BLOCK']
+        : Msg['DISABLE_BLOCK'];
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
@@ -469,7 +470,14 @@ export function registerDisable() {
         block!.workspace.options.disable &&
         block!.isEditable()
       ) {
-        if (block!.getInheritedDisabled()) {
+        // Determine whether this block is currently disabled for any reason
+        // other than the manual reason that this context menu item controls.
+        const disabledReasons = block!.getDisabledReasons();
+        const isDisabledForOtherReason =
+          disabledReasons.size >
+          (disabledReasons.has(MANUALLY_DISABLED) ? 1 : 0);
+
+        if (block!.getInheritedDisabled() || isDisabledForOtherReason) {
           return 'disabled';
         }
         return 'enabled';
@@ -482,7 +490,10 @@ export function registerDisable() {
       if (!existingGroup) {
         eventUtils.setGroup(true);
       }
-      block!.setEnabled(!block!.isEnabled());
+      block!.setDisabledReason(
+        !block!.hasDisabledReason(MANUALLY_DISABLED),
+        MANUALLY_DISABLED,
+      );
       eventUtils.setGroup(existingGroup);
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,

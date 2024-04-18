@@ -86,19 +86,30 @@ suite('JSO Serialization', function () {
         });
       });
 
-      suite('Enabled', function () {
-        test('False', function () {
+      suite('DisabledReasons', function () {
+        test('One reason', function () {
           const block = this.workspace.newBlock('row_block');
-          block.setEnabled(false);
+          block.setDisabledReason(true, 'test reason');
           const jso = Blockly.serialization.blocks.save(block);
-          assertProperty(jso, 'enabled', false);
+          assertProperty(jso, 'disabledReasons', ['test reason']);
         });
 
-        test('True', function () {
+        test('Zero reasons', function () {
           const block = this.workspace.newBlock('row_block');
-          block.setEnabled(true);
+          block.setDisabledReason(false, 'test reason');
           const jso = Blockly.serialization.blocks.save(block);
-          assertNoProperty(jso, 'enabled');
+          assertNoProperty(jso, 'disabledReasons');
+        });
+
+        test('Multiple reasons', function () {
+          const block = this.workspace.newBlock('row_block');
+          block.setDisabledReason(true, 'test reason 1');
+          block.setDisabledReason(true, 'test reason 2');
+          const jso = Blockly.serialization.blocks.save(block);
+          assertProperty(jso, 'disabledReasons', [
+            'test reason 1',
+            'test reason 2',
+          ]);
         });
       });
 

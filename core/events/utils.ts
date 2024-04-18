@@ -189,6 +189,12 @@ export const COMMENT_COLLAPSE = 'comment_collapse';
 export const FINISHED_LOADING = 'finished_loading';
 
 /**
+ * The language-neutral ID for when the reason why a block is disabled is
+ * because the block is not descended from a root block.
+ */
+const ORPHANED_BLOCK_DISABLED_REASON = 'ORPHANED_BLOCK';
+
+/**
  * Type of events that cause objects to be bumped back into the visible
  * portion of the workspace.
  *
@@ -516,10 +522,8 @@ export function get(
 }
 
 /**
- * Enable/disable a block depending on whether it is properly connected.
+ * Set if a block is disabled depending on whether it is properly connected.
  * Use this on applications where all blocks should be connected to a top block.
- * Recommend setting the 'disable' option to 'false' in the config so that
- * users don't try to re-enable disabled orphan blocks.
  *
  * @param event Custom data for event.
  */
@@ -542,17 +546,20 @@ export function disableOrphans(event: Abstract) {
       try {
         recordUndo = false;
         const parent = block.getParent();
-        if (parent && parent.isEnabled()) {
+        if (
+          parent &&
+          !parent.hasDisabledReason(ORPHANED_BLOCK_DISABLED_REASON)
+        ) {
           const children = block.getDescendants(false);
           for (let i = 0, child; (child = children[i]); i++) {
-            child.setEnabled(true);
+            child.setDisabledReason(false, ORPHANED_BLOCK_DISABLED_REASON);
           }
         } else if (
           (block.outputConnection || block.previousConnection) &&
           !eventWorkspace.isDragging()
         ) {
           do {
-            block.setEnabled(false);
+            block.setDisabledReason(true, ORPHANED_BLOCK_DISABLED_REASON);
             block = block.getNextBlock();
           } while (block);
         }

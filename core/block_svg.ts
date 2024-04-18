@@ -29,6 +29,7 @@ import {
   LegacyContextMenuOption,
 } from './contextmenu_registry.js';
 import type {BlockMove} from './events/events_block_move.js';
+import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
@@ -985,16 +986,48 @@ export class BlockSvg
   }
 
   /**
-   * Set whether the block is enabled or not.
+   * @deprecated v11 - Set whether the block is manually enabled or disabled.
+   * The user can toggle whether a block is disabled from a context menu
+   * option. A block may still be disabled for other reasons even if the user
+   * attempts to manually enable it, such as when the block is in an invalid
+   * location. This method is deprecated and setDisabledReason should be used
+   * instead.
    *
    * @param enabled True if enabled.
    */
   override setEnabled(enabled: boolean) {
-    if (this.isEnabled() !== enabled) {
-      super.setEnabled(enabled);
-      if (!this.getInheritedDisabled()) {
-        this.updateDisabled();
-      }
+    deprecation.warn(
+      'setEnabled',
+      'v11',
+      'v12',
+      'the setDisabledReason method of BlockSvg',
+    );
+    const wasEnabled = this.isEnabled();
+    super.setEnabled(enabled);
+    if (this.isEnabled() !== wasEnabled && !this.getInheritedDisabled()) {
+      this.updateDisabled();
+    }
+  }
+
+  /**
+   * Add or remove a reason why the block might be disabled. If a block has
+   * any reasons to be disabled, then the block itself will be considered
+   * disabled. A block could be disabled for multiple independent reasons
+   * simultaneously, such as when the user manually disables it, or the block
+   * is invalid.
+   *
+   * @param disabled If true, then the block should be considered disabled for
+   *     at least the provided reason, otherwise the block is no longer disabled
+   *     for that reason.
+   * @param reason A language-neutral identifier for a reason why the block
+   *     could be disabled. Call this method again with the same identifier to
+   *     update whether the block is currently disabled for this reason.
+   */
+  override setDisabledReason(disabled: boolean, reason: string): void {
+    const wasEnabled = this.isEnabled();
+    super.setDisabledReason(disabled, reason);
+    if (this.isEnabled() !== wasEnabled && !this.getInheritedDisabled()) {
+      this.updateDisabled();
     }
   }
 

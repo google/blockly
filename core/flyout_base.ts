@@ -22,6 +22,7 @@ import * as eventUtils from './events/utils.js';
 import {FlyoutButton} from './flyout_button.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
+import {MANUALLY_DISABLED} from './constants.js';
 import type {Options} from './options.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
 import * as blocks from './serialization/blocks.js';
@@ -843,6 +844,12 @@ export abstract class Flyout
         if (blockInfo['enabled'] === undefined) {
           blockInfo['enabled'] =
             blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
+        }
+        if (
+          blockInfo['disabledReasons'] === undefined &&
+          blockInfo['enabled'] === false
+        ) {
+          blockInfo['disabledReasons'] = [MANUALLY_DISABLED];
         }
         block = blocks.appendInternal(
           blockInfo as blocks.State,

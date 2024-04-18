@@ -25,6 +25,7 @@ import {ConnectionType} from './connection_type.js';
 import * as constants from './constants.js';
 import {DuplicateIconType} from './icons/exceptions.js';
 import type {Abstract} from './events/events_abstract.js';
+import type {BlockChange} from './events/events_block_change.js';
 import type {BlockMove} from './events/events_block_move.js';
 import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
@@ -1465,15 +1466,15 @@ export class Block implements IASTNodeLocation {
       } else {
         this.disabledReasons.delete(reason);
       }
-      eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          this,
-          'disabled',
-          reason,
-          /* oldValue= */ !disabled,
-          /* newValue= */ disabled,
-        ),
-      );
+      const blockChangeEvent = new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        this,
+        'disabled',
+        /* name= */ null,
+        /* oldValue= */ !disabled,
+        /* newValue= */ disabled,
+      ) as BlockChange;
+      blockChangeEvent.setDisabledReason(reason);
+      eventUtils.fire(blockChangeEvent);
     }
   }
 

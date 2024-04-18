@@ -13,7 +13,7 @@ import {
   RegistryItem,
   Scope,
 } from './contextmenu_registry.js';
-import * as constants from './constants.js';
+import {MANUALLY_DISABLED} from './constants.js';
 import * as dialog from './dialog.js';
 import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
@@ -456,7 +456,7 @@ export function registerCollapseExpandBlock() {
 export function registerDisable() {
   const disableOption: RegistryItem = {
     displayText(scope: Scope) {
-      return scope.block!.hasDisabledReason(constants.MANUALLY_DISABLED)
+      return scope.block!.hasDisabledReason(MANUALLY_DISABLED)
         ? Msg['ENABLE_BLOCK']
         : Msg['DISABLE_BLOCK'];
     },
@@ -472,7 +472,7 @@ export function registerDisable() {
         const disabledReasons = block!.getDisabledReasons();
         const isDisabledForOtherReason =
           disabledReasons.size >
-          (disabledReasons.has(constants.MANUALLY_DISABLED) ? 1 : 0);
+          (disabledReasons.has(MANUALLY_DISABLED) ? 1 : 0);
 
         if (block!.getInheritedDisabled() || isDisabledForOtherReason) {
           return 'disabled';
@@ -488,8 +488,8 @@ export function registerDisable() {
         eventUtils.setGroup(true);
       }
       block!.setDisabledReason(
-        !block!.hasDisabledReason(constants.MANUALLY_DISABLED),
-        constants.MANUALLY_DISABLED,
+        !block!.hasDisabledReason(MANUALLY_DISABLED),
+        MANUALLY_DISABLED,
       );
       eventUtils.setGroup(existingGroup);
     },

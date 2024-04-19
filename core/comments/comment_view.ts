@@ -495,6 +495,8 @@ export class CommentView implements IRenderedElement {
    * comment.
    */
   private onResizePointerDown(e: PointerEvent) {
+    if (!this.isEditable()) return;
+
     this.bringToFront();
     if (browserEvents.isRightButton(e)) {
       e.stopPropagation();
@@ -794,6 +796,9 @@ css.register(`
   width: 12px;
   height: 12px;
   cursor: se-resize;
+}
+.blocklyReadonly.blocklyComment .blocklyResizeHandle {
+  cursor: inherit;
 }
 
 .blocklyCommentTopbarBackground {

@@ -311,9 +311,8 @@ export class CommentView implements IRenderedElement {
 
     this.svgRoot.setAttribute('height', `${size.height}`);
     this.svgRoot.setAttribute('width', `${size.width}`);
-    this.highlightRect.setAttribute('height', `${size.height}`);
-    this.highlightRect.setAttribute('width', `${size.width}`);
 
+    this.updateHighlightRect(size);
     this.updateTopBarSize(size);
     this.updateTextAreaSize(size, topBarSize);
     this.updateDeleteIconPosition(size, topBarSize, deleteSize);
@@ -375,6 +374,15 @@ export class CommentView implements IRenderedElement {
   /** Calculates the margin that should exist around the foldout icon. */
   private calcFoldoutMargin(topBarSize: Size, foldoutSize: Size) {
     return (topBarSize.height - foldoutSize.height) / 2;
+  }
+
+  /** Updates the size of the highlight rect to reflect the new size. */
+  private updateHighlightRect(size: Size) {
+    this.highlightRect.setAttribute('height', `${size.height}`);
+    this.highlightRect.setAttribute('width', `${size.width}`);
+    if (this.workspace.RTL) {
+      this.highlightRect.setAttribute('x', `${-size.width}`);
+    }
   }
 
   /** Updates the size of the top bar to reflect the new size. */

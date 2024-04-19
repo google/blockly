@@ -251,7 +251,8 @@
         if (sessionStorage) {
           sessionStorage.setItem('logFlyoutEvents', Number(state));
         }
-        var flyoutWorkspace = workspace.getFlyout().getWorkspace();
+        var flyoutWorkspace = workspace.getFlyout()?.getWorkspace();
+        if (!flyoutWorkspace) return;
         if (state) {
           flyoutWorkspace.addChangeListener(logger);
         } else {

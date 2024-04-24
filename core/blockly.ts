@@ -47,6 +47,7 @@ import * as Extensions from './extensions.js';
 import {
   Field,
   FieldConfig,
+  FieldProto,
   FieldValidator,
   UnattachedFieldError,
 } from './field.js';
@@ -518,7 +519,7 @@ export {Cursor};
 export {DeleteArea};
 export {DragTarget};
 export const DropDownDiv = dropDownDiv;
-export {Field, FieldConfig, FieldValidator, UnattachedFieldError};
+export {Field, FieldConfig, FieldProto, FieldValidator, UnattachedFieldError};
 export {
   FieldAngle,
   FieldAngleConfig,

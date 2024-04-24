@@ -1431,8 +1431,6 @@ export interface FieldConfig {
 /**
  * For use by Field and descendants of Field. Constructors can change
  * in descendants, though they should contain all of Field's prototype methods.
- *
- * @internal
  */
 export type FieldProto = Pick<typeof Field, 'prototype'>;
 

@@ -633,15 +633,13 @@ export class Workspace implements IASTNodeLocation {
     }
     // Push these popped events on the opposite stack.
     for (let i = 0; i < events.length; i++) {
-      const event = events[i];
-      outputStack.push(event);
+      outputStack.push(events[i]);
     }
     events = eventUtils.filter(events, redo);
     eventUtils.setRecordUndo(false);
     try {
       for (let i = 0; i < events.length; i++) {
-        const event = events[i];
-        event.run(redo);
+        events[i].run(redo);
       }
     } finally {
       eventUtils.setRecordUndo(true);

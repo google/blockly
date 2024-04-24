@@ -20,6 +20,7 @@ import {
   createBlockDefinitionsFromJsonArray,
   defineBlocks,
 } from '../core/common.js';
+import * as eventUtils from '../core/events/utils.js';
 import '../core/field_dropdown.js';
 import '../core/field_label.js';
 import '../core/field_number.js';
@@ -372,12 +373,16 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     this.setWarningText(
       enabled ? null : Msg['CONTROLS_FLOW_STATEMENTS_WARNING'],
     );
+
     if (!this.isInFlyout) {
-      const group = Events.getGroup();
-      // Makes it so the move and the disable event get undone together.
-      Events.setGroup(e.group);
-      this.setEnabled(enabled);
-      Events.setGroup(group);
+      try {
+        // There is no need to record the enable/disable change on the undo/redo
+        // list since the change will be automatically recreated when replayed.
+        eventUtils.setRecordUndo(false);
+        this.setEnabled(enabled);
+      } finally {
+        eventUtils.setRecordUndo(true);
+      }
     }
   },
 };

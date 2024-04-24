@@ -25,6 +25,7 @@ import type {
   ContextMenuOption,
   LegacyContextMenuOption,
 } from '../core/contextmenu_registry.js';
+import * as eventUtils from '../core/events/utils.js';
 import {FieldCheckbox} from '../core/field_checkbox.js';
 import {FieldLabel} from '../core/field_label.js';
 import {FieldTextInput} from '../core/field_textinput.js';
@@ -1316,12 +1317,16 @@ const PROCEDURES_IFRETURN = {
     } else {
       this.setWarningText(Msg['PROCEDURES_IFRETURN_WARNING']);
     }
+
     if (!this.isInFlyout) {
-      const group = Events.getGroup();
-      // Makes it so the move and the disable event get undone together.
-      Events.setGroup(e.group);
-      this.setEnabled(legal);
-      Events.setGroup(group);
+      try {
+        // There is no need to record the enable/disable change on the undo/redo
+        // list since the change will be automatically recreated when replayed.
+        eventUtils.setRecordUndo(false);
+        this.setEnabled(legal);
+      } finally {
+        eventUtils.setRecordUndo(true);
+      }
     }
   },
   /**

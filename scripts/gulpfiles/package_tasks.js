@@ -111,6 +111,50 @@ function packageUMDBundle() {
       .pipe(gulp.dest(`${RELEASE_DIR}`));
 };
 
+
+/**
+ * This task creates shims for the submodule entrypoints, for the
+ * benefit of bundlers and other build tools that do not correctly
+ * support the exports declaration in package.json.  These shims just
+ * require() and reexport the corresponding *_compressed.js bundle.
+ *
+ * This should solve issues encountered by users of bundlers that don't
+ * support exports at all (e.g. browserify) as well as ones that don't
+ * support it in certain circumstances (e.g., when using webpack's
+ * resolve.alias configuration option to alias 'blockly' to
+ * 'node_modules/blockly', as we formerly did in most plugins, which
+ * causes webpack to ignore blockly's package.json entirely).
+ *
+ * Assumptions:
+ * - Such bundlers will _completely_ ignore the exports declaration.
+ * - The bundles are intended to be used in a browser—or at least not
+ *   in node.js—so the core entrypoint never needs to route to
+ *   core-node.js.  This is reasonable since there's little reason to
+ *   bundle code for node.js, and node.js has supported the exports
+ *   clause since at least v12, consideably older than any version of
+ *   node.js we officially support.
+ * - It suffices to provide only a CJS entrypoint (because we can only
+ *   provide CJS or ESM, not both.  (We could in future switch to
+ *   providing only an ESM entrypoint instead, though.)
+ *
+ * @param {Function} done Callback to call when done.
+ */
+function packageLegacyEntrypoints(done) {
+  for (entrypoint of [
+    'core', 'blocks', 'dart', 'javascript', 'lua', 'php', 'python'
+  ]) {
+    const bundle =
+        (entrypoint === 'core' ? 'blockly' : entrypoint) + '_compressed.js';
+    fs.writeFileSync(path.join(RELEASE_DIR, `${entrypoint}.js`),
+        `// Shim for backwards-compatibility with bundlers that do not
+// support the 'exports' clause in package.json, to allow them
+// to load the blockly/${entrypoint} submodule entrypoint.
+module.exports = require('./${bundle}');
+`);
+  }
+  done();
+}
+
 /**
  * This task copies all the media/* files into the release directory.
  */
@@ -126,8 +170,10 @@ function packageMedia() {
  * - The scripts section is removed.
  *
  * Prerequisite: buildLangfiles.
+ *
+ * @param {Function} done Callback to call when done.
  */
-function packageJSON(cb) {
+function packageJSON(done) {
   // Copy package.json, so we can safely modify it.
   const json = JSON.parse(JSON.stringify(getPackageJson()));
   // Remove unwanted entries.
@@ -138,7 +184,7 @@ function packageJSON(cb) {
   }
   fs.writeFileSync(`${RELEASE_DIR}/package.json`,
       JSON.stringify(json, null, 2));
-  cb();
+  done();
 };
 
 /**
@@ -195,6 +241,7 @@ const package = gulp.series(
     gulp.parallel(
         packageIndex,
         packageCoreNode,
+        packageLegacyEntrypoints,
         packageMedia,
         gulp.series(packageLocales, packageUMDBundle),
         packageJSON,

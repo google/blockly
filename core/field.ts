@@ -1219,11 +1219,11 @@ export abstract class Field<T = any>
    * No-op by default.
    *
    * @param _invalidValue The input value that was determined to be invalid.
-   * @param fireChangeEvent Whether to fire a change event if the value changes.
+   * @param _fireChangeEvent Whether to fire a change event if the value changes.
    */
   protected doValueInvalid_(
     _invalidValue: AnyDuringMigration,
-    fireChangeEvent: boolean = true,
+    _fireChangeEvent: boolean = true,
   ) {}
   // NOP
 

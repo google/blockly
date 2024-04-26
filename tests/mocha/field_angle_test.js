@@ -138,6 +138,7 @@ suite('Angle Fields', function () {
   suite('Validators', function () {
     setup(function () {
       this.field = new Blockly.FieldAngle(1);
+      this.field.valueWhenEditorWasOpened_ = this.field.getValue();
       this.field.htmlInput_ = document.createElement('input');
       this.field.htmlInput_.setAttribute('data-old-value', '1');
       this.field.htmlInput_.setAttribute('data-untyped-default-value', '1');
@@ -153,7 +154,7 @@ suite('Angle Fields', function () {
           return null;
         },
         value: 2,
-        expectedValue: '1',
+        expectedValue: 1,
       },
       {
         title: 'Force Mult of 30 Validator',

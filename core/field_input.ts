@@ -166,17 +166,26 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * value while allowing the display text to be handled by the htmlInput_.
    *
    * @param _invalidValue The input value that was determined to be invalid.
-   *    This is not used by the text input because its display value is stored
-   * on the htmlInput_.
+   *     This is not used by the text input because its display value is stored
+   *     on the htmlInput_.
+   * @param fireChangeEvent Whether to fire a change event if the value changes.
    */
-  protected override doValueInvalid_(_invalidValue: AnyDuringMigration) {
+  protected override doValueInvalid_(
+    _invalidValue: AnyDuringMigration,
+    fireChangeEvent: boolean = true,
+  ) {
     if (this.isBeingEdited_) {
       this.isDirty_ = true;
       this.isTextValid_ = false;
       const oldValue = this.value_;
       // Revert value when the text becomes invalid.
-      this.value_ = this.htmlInput_!.getAttribute('data-untyped-default-value');
-      if (this.sourceBlock_ && eventUtils.isEnabled()) {
+      this.value_ = this.valueWhenEditorWasOpened_;
+      if (
+        this.sourceBlock_ &&
+        eventUtils.isEnabled() &&
+        this.value_ !== oldValue &&
+        fireChangeEvent
+      ) {
         eventUtils.fire(
           new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
             this.sourceBlock_,
@@ -566,7 +575,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     // intermediate changes that do not get recorded in undo history.
     const oldValue = this.value_;
     // Change the field's value without firing the normal change event.
-    this.setValue(this.getValueFromEditorText_(this.htmlInput_!.value), false);
+    this.setValue(
+      this.getValueFromEditorText_(this.htmlInput_!.value),
+      /* fireChangeEvent= */ false,
+    );
     if (
       this.sourceBlock_ &&
       eventUtils.isEnabled() &&

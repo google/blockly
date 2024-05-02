@@ -264,14 +264,17 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   }
 
   async setBubbleVisible(visible: boolean): Promise<void> {
-    if (visible && (this.textBubble || this.textInputBubble)) return;
-    if (!visible && !(this.textBubble || this.textInputBubble)) return;
-
+    if (this.bubbleVisiblity === visible) return;
     this.bubbleVisiblity = visible;
 
-    if (!this.sourceBlock.rendered || this.sourceBlock.isInFlyout) return;
-
     await renderManagement.finishQueuedRenders();
+
+    if (
+      !this.sourceBlock.rendered ||
+      this.sourceBlock.isInFlyout ||
+      this.sourceBlock.isInsertionMarker()
+    )
+      return;
 
     if (visible) {
       if (this.sourceBlock.isEditable()) {

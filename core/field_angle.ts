@@ -516,7 +516,7 @@ export class FieldAngle extends FieldInput<number> {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FieldAngleFromJsonConfig): FieldAngle {
+  static override fromJson(options: FieldAngleFromJsonConfig): FieldAngle {
     // `this` might be a subclass of FieldAngle if that class doesn't override
     // the static fromJson method.
     return new this(options.angle, undefined, options);

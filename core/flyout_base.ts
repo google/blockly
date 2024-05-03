@@ -1301,14 +1301,18 @@ export abstract class Flyout
     }
 
     // Clone the block.
-    const json = blocks.save(oldBlock) as blocks.State;
-    // Normallly this resizes leading to weird jumps. Save it for terminateDrag.
+    const json = this.serializeBlock(oldBlock);
+    // Normally this resizes leading to weird jumps. Save it for terminateDrag.
     targetWorkspace.setResizesEnabled(false);
     const block = blocks.append(json, targetWorkspace) as BlockSvg;
 
     this.positionNewBlock(oldBlock, block);
 
     return block;
+  }
+  
+  protected serializeBlock(block: BlockSvg): blocks.State {
+    return blocks.save(block) as blocks.State;
   }
 
   /**

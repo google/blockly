@@ -1311,6 +1311,11 @@ export abstract class Flyout
     return block;
   }
   
+  /**
+   * Serialize a block to JSON.
+   * @param block The block to serialize.
+   * @returns A serialized representation of the block.
+   */
   protected serializeBlock(block: BlockSvg): blocks.State {
     return blocks.save(block) as blocks.State;
   }

@@ -12,7 +12,7 @@
  */
 // Former goog.module ID: Blockly.ASTNode
 
-import type {Block} from '../block.js';
+import {Block} from '../block.js';
 import type {Connection} from '../connection.js';
 import {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
@@ -23,7 +23,7 @@ import {Coordinate} from '../utils/coordinate.js';
 import type {Workspace} from '../workspace.js';
 import {FlyoutButton} from '../flyout_button.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
-import {Flyout} from '../flyout_base.js';
+import {FlyoutItem} from '../flyout_base.js';
 
 /**
  * Class for an AST node.
@@ -337,21 +337,59 @@ export class ASTNode {
         return null;
     }
 
-    const flyout = targetWorkspace.getFlyout() as Flyout;
-    const flyoutContents = flyout.getContents() as (Block | FlyoutButton)[];
+    const flyout = targetWorkspace.getFlyout();
+    if (!flyout) return null;
 
-    const currentIndex = flyoutContents.indexOf(location);
+    const nextItem = this.findNextLocationInFlyout(
+      flyout.getContents(),
+      location,
+      forward,
+    );
+    if (!nextItem) return null;
+
+    if (nextItem.type === 'button' && nextItem.button) {
+      return ASTNode.createButtonNode(nextItem.button);
+    } else if (nextItem.type === 'block' && nextItem.block) {
+      return ASTNode.createStackNode(nextItem.block);
+    }
+
+    return null;
+  }
+
+  /**
+   * Finds the next (or previous if navigating backward) item in the flyout that should be navigated to.
+   *
+   * @param flyoutContents Contents of the current flyout.
+   * @param currentLocation Current ASTNode location.
+   * @param forward True if we're navigating forward, else false.
+   * @returns The next (or previous) FlyoutItem, or null if there is none.
+   */
+  private findNextLocationInFlyout(
+    flyoutContents: FlyoutItem[],
+    currentLocation: IASTNodeLocation,
+    forward: boolean,
+  ): FlyoutItem | null {
+    const currentIndex = flyoutContents.findIndex((item: FlyoutItem) => {
+      if (currentLocation instanceof Block && item.block === currentLocation) {
+        return true;
+      }
+      if (
+        currentLocation instanceof FlyoutButton &&
+        item.button === currentLocation
+      ) {
+        return true;
+      }
+      return false;
+    });
+
+    if (currentIndex < 0) return null;
+
     const resultIndex = forward ? currentIndex + 1 : currentIndex - 1;
     if (resultIndex === -1 || resultIndex === flyoutContents.length) {
       return null;
     }
 
-    const newLocation = flyoutContents[resultIndex];
-    if (newLocation instanceof FlyoutButton) {
-      return ASTNode.createButtonNode(newLocation);
-    } else {
-      return ASTNode.createStackNode(newLocation);
-    }
+    return flyoutContents[resultIndex];
   }
 
   /**

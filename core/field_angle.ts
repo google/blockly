@@ -366,7 +366,7 @@ export class FieldAngle extends FieldInput<number> {
       // normal block change events, and instead report them as special
       // intermediate changes that do not get recorded in undo history.
       const oldValue = this.value_;
-      this.setEditorValue_(angle, false);
+      this.setEditorValue_(angle, /* fireChangeEvent= */ false);
       if (
         this.sourceBlock_ &&
         eventUtils.isEnabled() &&

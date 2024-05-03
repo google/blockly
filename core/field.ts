@@ -1086,14 +1086,22 @@ export abstract class Field<T = any>
     }
 
     const classValidation = this.doClassValidation_(newValue);
-    const classValue = this.processValidation_(newValue, classValidation);
+    const classValue = this.processValidation_(
+      newValue,
+      classValidation,
+      fireChangeEvent,
+    );
     if (classValue instanceof Error) {
       doLogging && console.log('invalid class validation, return');
       return;
     }
 
     const localValidation = this.getValidator()?.call(this, classValue);
-    const localValue = this.processValidation_(classValue, localValidation);
+    const localValue = this.processValidation_(
+      classValue,
+      localValidation,
+      fireChangeEvent,
+    );
     if (localValue instanceof Error) {
       doLogging && console.log('invalid local validation, return');
       return;
@@ -1135,14 +1143,16 @@ export abstract class Field<T = any>
    *
    * @param newValue New value.
    * @param validatedValue Validated value.
+   * @param fireChangeEvent Whether to fire a change event if the value changes.
    * @returns New value, or an Error object.
    */
   private processValidation_(
     newValue: AnyDuringMigration,
     validatedValue: T | null | undefined,
+    fireChangeEvent: boolean,
   ): T | Error {
     if (validatedValue === null) {
-      this.doValueInvalid_(newValue);
+      this.doValueInvalid_(newValue, fireChangeEvent);
       if (this.isDirty_) {
         this.forceRerender();
       }
@@ -1209,8 +1219,12 @@ export abstract class Field<T = any>
    * No-op by default.
    *
    * @param _invalidValue The input value that was determined to be invalid.
+   * @param _fireChangeEvent Whether to fire a change event if the value changes.
    */
-  protected doValueInvalid_(_invalidValue: AnyDuringMigration) {}
+  protected doValueInvalid_(
+    _invalidValue: AnyDuringMigration,
+    _fireChangeEvent: boolean = true,
+  ) {}
   // NOP
 
   /**

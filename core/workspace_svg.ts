@@ -794,7 +794,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         this.svgGroup_,
         'contextmenu',
         this,
-        this.onContextmenu_
+        this.onContextmenu_,
       );
       // This no-op works around https://bugs.webkit.org/show_bug.cgi?id=226683,
       // which otherwise prevents zoom/scroll events from being observed in
@@ -2505,7 +2505,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.clearGesture();
       gesture = null;
     }
-    const isStart = (e.type === 'pointerdown' || e.type === 'contextmenu');
+    const isStart = e.type === 'pointerdown' || e.type === 'contextmenu';
     if (gesture) {
       if (isStart && gesture.hasStarted()) {
         console.warn('Tried to start the same gesture twice.');

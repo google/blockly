@@ -492,7 +492,7 @@ export class Gesture {
     }
 
     if (browserEvents.isRightButton(e)) {
-      this.handleRightClick(e);
+      e.stopPropagation();
       return;
     }
 

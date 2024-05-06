@@ -787,8 +787,14 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         this.svgGroup_,
         'pointerdown',
         this,
-        this.onMouseDown_,
+        this.onPointerdown_,
         false,
+      );
+      browserEvents.conditionalBind(
+        this.svgGroup_,
+        'contextmenu',
+        this,
+        this.onContextmenu_
       );
       // This no-op works around https://bugs.webkit.org/show_bug.cgi?id=226683,
       // which otherwise prevents zoom/scroll events from being observed in
@@ -1604,10 +1610,23 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param e Pointer down event.
    */
-  private onMouseDown_(e: PointerEvent) {
+  private onPointerdown_(e: PointerEvent) {
     const gesture = this.getGesture(e);
     if (gesture) {
       gesture.handleWsStart(e, this);
+    }
+  }
+
+  /**
+   * Handle a contextMenu on SVG drawing surface.
+   *
+   * @param e Pointer contextmenu event.
+   */
+  private onContextmenu_(e: PointerEvent) {
+    const gesture = this.getGesture(e);
+    if (gesture) {
+      gesture.handleWsStart(e, this);
+      gesture.handleRightClick(e);
     }
   }
 
@@ -2478,9 +2497,15 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   getGesture(e: PointerEvent): Gesture | null {
-    const isStart = e.type === 'pointerdown';
-
-    const gesture = this.currentGesture_;
+    let gesture = this.currentGesture_;
+    if (gesture && e.type === 'contextmenu') {
+      // The contextmenu event arrives after the pointerdown event.
+      // Obliterate the pointer event.
+      gesture.cancel();
+      this.clearGesture();
+      gesture = null;
+    }
+    const isStart = (e.type === 'pointerdown' || e.type === 'contextmenu');
     if (gesture) {
       if (isStart && gesture.hasStarted()) {
         console.warn('Tried to start the same gesture twice.');

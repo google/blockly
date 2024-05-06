@@ -219,7 +219,13 @@ export class BlockSvg
         svg,
         'pointerdown',
         this,
-        this.onMouseDown_,
+        this.onPointerdown_,
+      );
+      browserEvents.conditionalBind(
+        svg,
+        'contextmenu',
+        this,
+        this.onContextmenu_,
       );
     }
     this.eventsInit_ = true;
@@ -603,10 +609,23 @@ export class BlockSvg
    *
    * @param e Pointer down event.
    */
-  private onMouseDown_(e: PointerEvent) {
+  private onPointerdown_(e: PointerEvent) {
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleBlockStart(e, this);
+    }
+  }
+
+  /**
+   * Handle a contextMenu on an SVG block.
+   *
+   * @param e Pointer contextmenu event.
+   */
+  private onContextmenu_(e: PointerEvent) {
+    const gesture = this.workspace.getGesture(e);
+    if (gesture) {
+      gesture.handleBlockStart(e, this);
+      gesture.handleRightClick(e);
     }
   }
 

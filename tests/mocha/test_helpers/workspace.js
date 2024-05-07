@@ -99,9 +99,8 @@ export function testAWorkspace() {
 
     test('deleteVariableById(id2) one usage', function () {
       // Deleting variable one usage should not trigger confirm dialog.
-      const stub = sinon
-        .stub(Blockly.dialog.TEST_ONLY, 'confirmInternal')
-        .callsArgWith(1, true);
+      const stub = sinon.stub().callsArgWith(1, true);
+      Blockly.dialog.setConfirm(stub);
       this.workspace.deleteVariableById('id2');
 
       sinon.assert.notCalled(stub);
@@ -113,9 +112,8 @@ export function testAWorkspace() {
 
     test('deleteVariableById(id1) multiple usages confirm', function () {
       // Deleting variable with multiple usages triggers confirm dialog.
-      const stub = sinon
-        .stub(Blockly.dialog.TEST_ONLY, 'confirmInternal')
-        .callsArgWith(1, true);
+      const stub = sinon.stub().callsArgWith(1, true);
+      Blockly.dialog.setConfirm(stub);
       this.workspace.deleteVariableById('id1');
 
       sinon.assert.calledOnce(stub);
@@ -127,9 +125,8 @@ export function testAWorkspace() {
 
     test('deleteVariableById(id1) multiple usages cancel', function () {
       // Deleting variable with multiple usages triggers confirm dialog.
-      const stub = sinon
-        .stub(Blockly.dialog.TEST_ONLY, 'confirmInternal')
-        .callsArgWith(1, false);
+      const stub = sinon.stub().callsArgWith(1, false);
+      Blockly.dialog.setConfirm(stub);
       this.workspace.deleteVariableById('id1');
 
       sinon.assert.calledOnce(stub);

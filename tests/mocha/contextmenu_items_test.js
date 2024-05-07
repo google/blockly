@@ -322,10 +322,12 @@ suite('Context Menu Items', function () {
       });
 
       test('Deletes all blocks after confirming', function () {
-        // Mocks the confirmation dialog and calls the callback with 'true' simulating ok.
+        // Mocks the confirmation dialog and calls the callback with 'true'
+        // simulating ok.
         const confirmStub = sinon
-          .stub(Blockly.dialog.TEST_ONLY, 'confirmInternal')
+          .stub()
           .callsArgWith(1, true);
+        Blockly.dialog.setConfirm(confirmStub);
 
         this.workspace.newBlock('text');
         this.workspace.newBlock('text');
@@ -338,8 +340,9 @@ suite('Context Menu Items', function () {
       test('Does not delete blocks if not confirmed', function () {
         // Mocks the confirmation dialog and calls the callback with 'false' simulating cancel.
         const confirmStub = sinon
-          .stub(Blockly.dialog.TEST_ONLY, 'confirmInternal')
+          .stub()
           .callsArgWith(1, false);
+        Blockly.dialog.setConfirm(confirmStub);
 
         this.workspace.newBlock('text');
         this.workspace.newBlock('text');
@@ -350,10 +353,9 @@ suite('Context Menu Items', function () {
       });
 
       test('No dialog for single block', function () {
-        const confirmStub = sinon.stub(
-          Blockly.dialog.TEST_ONLY,
-          'confirmInternal',
-        );
+        const confirmStub = sinon.stub();
+        Blockly.dialog.setConfirm(confirmStub);
+
         this.workspace.newBlock('text');
         this.deleteOption.callback(this.scope);
         this.clock.runAll();

@@ -16,13 +16,6 @@ let alertImplementation = function (
   }
 };
 
-let confirmImplementation = function (
-  message: string,
-  callback: (result: boolean) => void,
-) {
-  callback(window.confirm(message));
-};
-
 /**
  * Wrapper to window.alert() that app developers may override via setAlert to
  * provide alternatives to the modal browser window.
@@ -51,16 +44,12 @@ export function setAlert(alertFunction: (p1: string, p2?: () => void) => void) {
  * @param message The message to display to the user.
  * @param callback The callback for handling user response.
  */
-export function confirm(message: string, callback: (p1: boolean) => void) {
-  TEST_ONLY.confirmInternal(message, callback);
-}
-
-/**
- * Private version of confirm for stubbing in tests.
- */
-function confirmInternal(message: string, callback: (p1: boolean) => void) {
-  confirmImplementation(message, callback);
-}
+export let confirm = (
+  message: string,
+  callback: (confirmed: boolean) => void,
+) => {
+  callback(window.confirm(message));
+};
 
 /**
  * Sets the function to be run when Blockly.dialog.confirm() is called.
@@ -69,9 +58,12 @@ function confirmInternal(message: string, callback: (p1: boolean) => void) {
  * @see Blockly.dialog.confirm
  */
 export function setConfirm(
-  confirmFunction: (p1: string, p2: (p1: boolean) => void) => void,
+  confirmFunction: (
+    message: string,
+    callback: (confirmed: boolean) => void,
+  ) => void,
 ) {
-  confirmImplementation = confirmFunction;
+  confirm = confirmFunction;
 }
 
 /**
@@ -107,7 +99,3 @@ export function setPrompt(
 ) {
   prompt = promptFunction;
 }
-
-export const TEST_ONLY = {
-  confirmInternal,
-};

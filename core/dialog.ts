@@ -6,16 +6,6 @@
 
 // Former goog.module ID: Blockly.dialog
 
-let alertImplementation = function (
-  message: string,
-  opt_callback?: () => void,
-) {
-  window.alert(message);
-  if (opt_callback) {
-    opt_callback();
-  }
-};
-
 /**
  * Wrapper to window.alert() that app developers may override via setAlert to
  * provide alternatives to the modal browser window.
@@ -23,9 +13,12 @@ let alertImplementation = function (
  * @param message The message to display to the user.
  * @param opt_callback The callback when the alert is dismissed.
  */
-export function alert(message: string, opt_callback?: () => void) {
-  alertImplementation(message, opt_callback);
-}
+export let alert = (message: string, opt_callback?: () => void) => {
+  window.alert(message);
+  if (opt_callback) {
+    opt_callback();
+  }
+};
 
 /**
  * Sets the function to be run when Blockly.dialog.alert() is called.
@@ -33,8 +26,10 @@ export function alert(message: string, opt_callback?: () => void) {
  * @param alertFunction The function to be run.
  * @see Blockly.dialog.alert
  */
-export function setAlert(alertFunction: (p1: string, p2?: () => void) => void) {
-  alertImplementation = alertFunction;
+export function setAlert(
+  alertFunction: (message: string, callback?: () => void) => void,
+) {
+  alert = alertFunction;
 }
 
 /**

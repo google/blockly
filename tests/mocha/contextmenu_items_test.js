@@ -324,9 +324,7 @@ suite('Context Menu Items', function () {
       test('Deletes all blocks after confirming', function () {
         // Mocks the confirmation dialog and calls the callback with 'true'
         // simulating ok.
-        const confirmStub = sinon
-          .stub()
-          .callsArgWith(1, true);
+        const confirmStub = sinon.stub().callsArgWith(1, true);
         Blockly.dialog.setConfirm(confirmStub);
 
         this.workspace.newBlock('text');
@@ -339,9 +337,7 @@ suite('Context Menu Items', function () {
 
       test('Does not delete blocks if not confirmed', function () {
         // Mocks the confirmation dialog and calls the callback with 'false' simulating cancel.
-        const confirmStub = sinon
-          .stub()
-          .callsArgWith(1, false);
+        const confirmStub = sinon.stub().callsArgWith(1, false);
         Blockly.dialog.setConfirm(confirmStub);
 
         this.workspace.newBlock('text');

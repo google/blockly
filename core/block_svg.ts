@@ -421,18 +421,10 @@ export class BlockSvg
     if (this.isInFlyout) return;
     const grid = this.workspace.getGrid();
     if (!grid || !grid.shouldSnap()) return;
-
-    const spacing = grid.getSpacing();
-    const half = spacing / 2;
-    const xy = this.getRelativeToSurfaceXY();
-    const dx = Math.round(
-      Math.round((xy.x - half) / spacing) * spacing + half - xy.x,
-    );
-    const dy = Math.round(
-      Math.round((xy.y - half) / spacing) * spacing + half - xy.y,
-    );
-    if (dx || dy) {
-      this.moveBy(dx, dy, ['snap']);
+    const currentXY = this.getRelativeToSurfaceXY();
+    const alignedXY = grid.alignXY(currentXY);
+    if (alignedXY) {
+      this.moveTo(alignedXY, ['snap']);
     }
   }
 

@@ -138,6 +138,7 @@ export class RenderedWorkspaceComment
   override moveTo(location: Coordinate, reason?: string[] | undefined): void {
     super.moveTo(location, reason);
     this.view.moveTo(location);
+    this.snapToGrid();
   }
 
   /**
@@ -208,6 +209,7 @@ export class RenderedWorkspaceComment
 
   /** Ends the drag on the comment. */
   endDrag(): void {
+    this.snapToGrid();
     this.dragStrategy.endDrag();
   }
 
@@ -246,5 +248,17 @@ export class RenderedWorkspaceComment
       {comment: this},
     );
     contextMenu.show(e, menuOptions, this.workspace.RTL);
+  }
+
+  /** Snap this comment to the nearest grid point. */
+  snapToGrid(): void {
+    if (this.isDeadOrDying()) return;
+    const grid = this.workspace.getGrid();
+    if (!grid || !grid.shouldSnap()) return;
+    const currentXY = this.getRelativeToSurfaceXY();
+    const alignedXY = grid.alignXY(currentXY);
+    if (alignedXY) {
+      this.moveTo(alignedXY, ['snap']);
+    }
   }
 }

@@ -1426,6 +1426,9 @@ export abstract class Field<T = any>
    *
    * It is an error to attempt to register a field subclass in the
    * FieldRegistry if that subclass has not overridden this method.
+   *
+   * @param _options JSON configuration object with properties needed
+   *    to configure a specific field.
    */
   static fromJson(_options: FieldConfig): Field {
     throw new Error(

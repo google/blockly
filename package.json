@@ -63,30 +63,37 @@
     "./core": {
       "types": "./core.d.ts",
       "node": "./core-node.js",
+      "import": "./blockly.mjs",
       "default": "./blockly_compressed.js"
     },
     "./blocks": {
       "types": "./blocks.d.ts",
+      "import": "./blocks.mjs",
       "default": "./blocks_compressed.js"
     },
     "./dart": {
       "types": "./dart.d.ts",
+      "import": "./dart.mjs",
       "default": "./dart_compressed.js"
     },
     "./lua": {
       "types": "./lua.d.ts",
+      "import": "./lua.mjs",
       "default": "./lua_compressed.js"
     },
     "./javascript": {
       "types": "./javascript.d.ts",
+      "import": "./javascript.mjs",
       "default": "./javascript_compressed.js"
     },
     "./php": {
       "types": "./php.d.ts",
+      "import": "./php.mjs",
       "default": "./php_compressed.js"
     },
     "./python": {
       "types": "./python.d.ts",
+      "import": "./python.mjs",
       "default": "./python_compressed.js"
     },
     "./msg/*": {

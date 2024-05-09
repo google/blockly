@@ -565,7 +565,10 @@ function buildCompiled() {
 }
 
 /**
- * This task builds the shims used by the playgrounds and tests to
+ * This task builds the ESM wrappers used by the chunk "import"
+ * entrypoints declared in package.json.
+ *
+ * Also builds the shims used by the playgrounds and tests to
  * load Blockly in either compressed or uncompressed mode, creating
  * build/blockly.loader.mjs, blocks.loader.mjs, javascript.loader.mjs,
  * etc.
@@ -579,11 +582,27 @@ async function buildShims() {
   const TMP_PACKAGE_JSON = path.join(BUILD_DIR, 'package.json');
   await fsPromises.writeFile(TMP_PACKAGE_JSON, '{"type": "module"}');
 
-  // Import each entrypoint module, enumerate its exports, and write
-  // a shim to load the chunk either by importing the entrypoint
-  // module or by loading the compiled script.
   await Promise.all(chunks.map(async (chunk) => {
+    // Import chunk entrypoint to get names of exports for chunk.
     const entryPath = path.posix.join(TSC_OUTPUT_DIR_POSIX, chunk.entry);
+    const exportedNames = Object.keys(await import(`../../${entryPath}`));
+
+    // Write an ESM wrapper that imports the CJS module and re-exports
+    // its named exports.
+    const cjsPath = `./${chunk.name}${COMPILED_SUFFIX}.js`;
+    const wrapperPath = path.join(RELEASE_DIR, `${chunk.name}.mjs`);
+    const importName = chunk.scriptExport.replace(/.*\./, '');
+
+    await fsPromises.writeFile(wrapperPath,
+        `import ${importName} from '${cjsPath}';
+export const {
+${exportedNames.map((name) => `  ${name},`).join('\n')}
+} = ${importName};
+`);
+
+    // Write a loading shim that uses loadChunk to either import the
+    // chunk's entrypoint (e.g. build/src/core/blockly.js) or load the
+    // compressed chunk (e.g. dist/blockly_compressed.js) as a script.
     const scriptPath =
         path.posix.join(RELEASE_DIR, `${chunk.name}${COMPILED_SUFFIX}.js`);
     const shimPath = path.join(BUILD_DIR, `${chunk.name}.loader.mjs`);
@@ -591,14 +610,13 @@ async function buildShims() {
         chunk.parent ?
         `import ${quote(`./${chunk.parent.name}.loader.mjs`)};` :
         '';
-    const exports = await import(`../../${entryPath}`);
 
     await fsPromises.writeFile(shimPath,
         `import {loadChunk} from '../tests/scripts/load.mjs';
 ${parentImport}
 
 export const {
-${Object.keys(exports).map((name) => `  ${name},`).join('\n')}
+${exportedNames.map((name) => `  ${name},`).join('\n')}
 } = await loadChunk(
   ${quote(entryPath)},
   ${quote(scriptPath)},

@@ -641,7 +641,7 @@ export class FieldColour extends Field<string> {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FieldColourFromJsonConfig): FieldColour {
+  static override fromJson(options: FieldColourFromJsonConfig): FieldColour {
     // `this` might be a subclass of FieldColour if that class doesn't override
     // the static fromJson method.
     return new this(options.colour, undefined, options);

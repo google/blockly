@@ -600,6 +600,17 @@ ${exportedNames.map((name) => `  ${name},`).join('\n')}
 } = ${importName};
 `);
 
+    // For first chunk, write an additional ESM wrapper for 'blockly'
+    // entrypoint since it has the same exports as 'blockly/core'.
+    if (chunk.name === 'blockly') {
+      await fsPromises.writeFile(path.join(RELEASE_DIR, `index.mjs`),
+          `import Blockly from './index.js';
+export const {
+${exportedNames.map((name) => `  ${name},`).join('\n')}
+} = Blockly;
+`);
+    }
+
     // Write a loading shim that uses loadChunk to either import the
     // chunk's entrypoint (e.g. build/src/core/blockly.js) or load the
     // compressed chunk (e.g. dist/blockly_compressed.js) as a script.

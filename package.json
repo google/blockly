@@ -57,6 +57,7 @@
   "exports": {
     ".": {
       "types": "./index.d.ts",
+      "import": "./index.mjs",
       "umd": "./blockly.min.js",
       "default": "./index.js"
     },

@@ -99,6 +99,7 @@
     },
     "./msg/*": {
       "types": "./msg/*.d.ts",
+      "import": "./msg/*.mjs",
       "default": "./msg/*.js"
     }
   },

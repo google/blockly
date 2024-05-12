@@ -188,8 +188,9 @@ export class Grid {
   /**
    * Given a coordinate, return the nearest coordinate aligned to the grid.
    *
-   * @returns Object with .x and .y properties in workspace coordinates,
-   *   or null if no change.
+   * @param xy A workspace coordinate.
+   * @returns Workspace coordinate of nearest grid point, or null if
+   *     xy was already a grid point.
    */
   alignXY(xy: Coordinate): Coordinate | null {
     const spacing = this.getSpacing();

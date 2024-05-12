@@ -189,18 +189,19 @@ export class Grid {
    * Given a coordinate, return the nearest coordinate aligned to the grid.
    *
    * @param xy A workspace coordinate.
-   * @returns Workspace coordinate of nearest grid point, or null if
-   *     xy was already a grid point.
+   * @returns Workspace coordinate of nearest grid point.
+   *   If there's no change, return the same coordinate object.
    */
-  alignXY(xy: Coordinate): Coordinate | null {
+  alignXY(xy: Coordinate): Coordinate {
     const spacing = this.getSpacing();
     const half = spacing / 2;
     const x = Math.round(Math.round((xy.x - half) / spacing) * spacing + half);
     const y = Math.round(Math.round((xy.y - half) / spacing) * spacing + half);
-    if (x !== xy.x || y !== xy.y) {
-      return new Coordinate(x, y);
+    if (x === xy.x && y === xy.y) {
+      // No change.
+      return xy;
     }
-    return null;
+    return new Coordinate(x, y);
   }
 
   /**

@@ -254,10 +254,10 @@ export class RenderedWorkspaceComment
   snapToGrid(): void {
     if (this.isDeadOrDying()) return;
     const grid = this.workspace.getGrid();
-    if (!grid?.grid.shouldSnap()) return;
+    if (!grid?.shouldSnap()) return;
     const currentXY = this.getRelativeToSurfaceXY();
     const alignedXY = grid.alignXY(currentXY);
-    if (alignedXY) {
+    if (alignedXY !== currentXY) {
       this.moveTo(alignedXY, ['snap']);
     }
   }

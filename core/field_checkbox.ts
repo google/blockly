@@ -226,7 +226,9 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FieldCheckboxFromJsonConfig): FieldCheckbox {
+  static override fromJson(
+    options: FieldCheckboxFromJsonConfig,
+  ): FieldCheckbox {
     // `this` might be a subclass of FieldCheckbox if that class doesn't
     // 'override' the static fromJson method.
     return new this(options.checked, undefined, options);

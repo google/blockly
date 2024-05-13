@@ -117,7 +117,7 @@ export class FieldLabel extends Field<string> {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FieldLabelFromJsonConfig): FieldLabel {
+  static override fromJson(options: FieldLabelFromJsonConfig): FieldLabel {
     const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldLabel if that class doesn't override
     // the static fromJson method.

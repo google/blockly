@@ -74,9 +74,7 @@ suite('Comment Deserialization', function () {
       simulateClick(this.workspace.trashcan.svgGroup);
       // Place from trashcan.
       simulateClick(
-        this.workspace.trashcan.flyout.svgGroup_.querySelector(
-          '.blocklyDraggable',
-        ),
+        this.workspace.trashcan.flyout.svgGroup_.querySelector('.blocklyPath'),
       );
       chai.assert.equal(this.workspace.getAllBlocks().length, 1);
       // Check comment.
@@ -113,7 +111,7 @@ suite('Comment Deserialization', function () {
       const toolbox = this.workspace.getToolbox();
       simulateClick(toolbox.HtmlDiv.querySelector('.blocklyTreeRow'));
       simulateClick(
-        toolbox.getFlyout().svgGroup_.querySelector('.blocklyDraggable'),
+        toolbox.getFlyout().svgGroup_.querySelector('.blocklyPath'),
       );
       chai.assert.equal(this.workspace.getAllBlocks().length, 1);
       // Check comment.

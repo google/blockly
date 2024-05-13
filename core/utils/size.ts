@@ -43,4 +43,20 @@ export class Size {
     }
     return a.width === b.width && a.height === b.height;
   }
+
+  /**
+   * Returns a new size with the maximum width and height values out of both
+   * sizes.
+   */
+  static max(a: Size, b: Size): Size {
+    return new Size(Math.max(a.width, b.width), Math.max(a.height, b.height));
+  }
+
+  /**
+   * Returns a new size with the minimum width and height values out of both
+   * sizes.
+   */
+  static min(a: Size, b: Size): Size {
+    return new Size(Math.min(a.width, b.width), Math.min(a.height, b.height));
+  }
 }

@@ -314,6 +314,7 @@ export abstract class Field<T = any>
     this.setTooltip(this.tooltip_);
     this.bindEvents_();
     this.initModel();
+    this.applyColour();
   }
 
   /**
@@ -1062,7 +1063,6 @@ export abstract class Field<T = any>
     this.isDirty_ = true;
     if (this.sourceBlock_ && this.sourceBlock_.rendered) {
       (this.sourceBlock_ as BlockSvg).queueRender();
-      (this.sourceBlock_ as BlockSvg).bumpNeighbours();
     }
   }
 

@@ -19,6 +19,7 @@ import {
   createMockEvent,
 } from './test_helpers/events.js';
 import {MockIcon, MockBubbleIcon} from './test_helpers/icon_mocks.js';
+import {IconType} from '../../build/src/core/icons/icon_types.js';
 
 suite('Blocks', function () {
   setup(function () {
@@ -67,9 +68,9 @@ suite('Blocks', function () {
 
   function createTestBlocks(workspace, isRow) {
     const blockType = isRow ? 'row_block' : 'stack_block';
-    const blockA = workspace.newBlock(blockType);
-    const blockB = workspace.newBlock(blockType);
-    const blockC = workspace.newBlock(blockType);
+    const blockA = workspace.newBlock(blockType, 'a');
+    const blockB = workspace.newBlock(blockType, 'b');
+    const blockC = workspace.newBlock(blockType, 'c');
 
     if (isRow) {
       blockA.inputList[0].connection.connect(blockB.outputConnection);
@@ -386,8 +387,14 @@ suite('Blocks', function () {
 
         test('Child is shadow', function () {
           const blocks = this.blocks;
-          blocks.C.setShadow(true);
+          blocks.C.dispose();
+          blocks.B.inputList[0].connection.setShadowState({
+            'type': 'row_block',
+            'id': 'c',
+          });
+
           blocks.B.dispose(true);
+
           // Even though we're asking to heal, it will appear as if it has not
           // healed because shadows always get destroyed.
           assertDisposedNoheal(blocks);
@@ -423,8 +430,14 @@ suite('Blocks', function () {
 
         test('Child is shadow', function () {
           const blocks = this.blocks;
-          blocks.C.setShadow(true);
+          blocks.C.dispose();
+          blocks.B.nextConnection.setShadowState({
+            'type': 'stack_block',
+            'id': 'c',
+          });
+
           blocks.B.dispose(true);
+
           // Even though we're asking to heal, it will appear as if it has not
           // healed because shadows always get destroyed.
           assertDisposedNoheal(blocks);
@@ -1355,6 +1368,99 @@ suite('Blocks', function () {
         });
       });
     });
+
+    suite('Constructing registered comment classes', function () {
+      class MockComment extends MockIcon {
+        getType() {
+          return Blockly.icons.IconType.COMMENT;
+        }
+
+        setText() {}
+
+        getText() {
+          return '';
+        }
+
+        setBubbleSize() {}
+
+        getBubbleSize() {
+          return Blockly.utils.Size(0, 0);
+        }
+
+        bubbleIsVisible() {
+          return true;
+        }
+
+        setBubbleVisible() {}
+
+        saveState() {
+          return {};
+        }
+
+        loadState() {}
+      }
+
+      setup(function () {
+        this.workspace = Blockly.inject('blocklyDiv', {});
+
+        this.block = this.workspace.newBlock('stack_block');
+        this.block.initSvg();
+        this.block.render();
+      });
+
+      teardown(function () {
+        workspaceTeardown.call(this, this.workspace);
+
+        Blockly.icons.registry.unregister(
+          Blockly.icons.IconType.COMMENT.toString(),
+        );
+        Blockly.icons.registry.register(
+          Blockly.icons.IconType.COMMENT,
+          Blockly.icons.CommentIcon,
+        );
+      });
+
+      test('setCommentText constructs the registered comment icon', function () {
+        Blockly.icons.registry.unregister(
+          Blockly.icons.IconType.COMMENT.toString(),
+        );
+        Blockly.icons.registry.register(
+          Blockly.icons.IconType.COMMENT,
+          MockComment,
+        );
+
+        this.block.setCommentText('test text');
+
+        chai.assert.instanceOf(
+          this.block.getIcon(Blockly.icons.IconType.COMMENT),
+          MockComment,
+        );
+      });
+
+      test('setCommentText throws if no icon is registered', function () {
+        Blockly.icons.registry.unregister(
+          Blockly.icons.IconType.COMMENT.toString(),
+        );
+
+        chai.assert.throws(() => {
+          this.block.setCommentText('test text');
+        }, 'No comment icon class is registered, so a comment cannot be set');
+      });
+
+      test('setCommentText throws if the icon is not an ICommentIcon', function () {
+        Blockly.icons.registry.unregister(
+          Blockly.icons.IconType.COMMENT.toString(),
+        );
+        Blockly.icons.registry.register(
+          Blockly.icons.IconType.COMMENT,
+          MockIcon,
+        );
+
+        chai.assert.throws(() => {
+          this.block.setCommentText('test text');
+        }, 'The class registered as a comment icon does not conform to the ICommentIcon interface');
+      });
+    });
   });
 
   suite('Getting/Setting Field (Values)', function () {
@@ -2207,15 +2313,15 @@ suite('Blocks', function () {
           .getInput('STATEMENT')
           .connection.connect(blockB.previousConnection);
         // Disable the block and collapse it.
-        blockA.setEnabled(false);
+        blockA.setDisabledReason(true, 'test reason');
         blockA.setCollapsed(true);
 
         // Enable the block before expanding it.
-        blockA.setEnabled(true);
+        blockA.setDisabledReason(false, 'test reason');
         blockA.setCollapsed(false);
 
         // The child blocks should be enabled.
-        chai.assert.isFalse(blockB.disabled);
+        chai.assert.isTrue(blockB.isEnabled());
         chai.assert.isFalse(
           blockB.getSvgRoot().classList.contains('blocklyDisabled'),
         );
@@ -2228,18 +2334,18 @@ suite('Blocks', function () {
           .connection.connect(blockB.previousConnection);
 
         // Disable the child block.
-        blockB.setEnabled(false);
+        blockB.setDisabledReason(true, 'test reason');
 
         // Collapse and disable the parent block.
         blockA.setCollapsed(false);
-        blockA.setEnabled(false);
+        blockA.setDisabledReason(true, 'test reason');
 
         // Enable the parent block.
-        blockA.setEnabled(true);
+        blockA.setDisabledReason(false, 'test reason');
         blockA.setCollapsed(true);
 
         // Child blocks should stay disabled if they have been set.
-        chai.assert.isTrue(blockB.disabled);
+        chai.assert.isFalse(blockB.isEnabled());
       });
       test('Disabled blocks from JSON should have proper disabled status', function () {
         // Nested c-shaped blocks, inner block is disabled
@@ -2334,7 +2440,7 @@ suite('Blocks', function () {
           this.child4 = this.workspace.getBlockById('child4');
         });
         test('Disabling parent block visually disables all descendants', async function () {
-          this.parent.setEnabled(false);
+          this.parent.setDisabledReason(true, 'test reason');
           await Blockly.renderManagement.finishQueuedRenders();
           for (const child of this.parent.getDescendants(false)) {
             chai.assert.isTrue(
@@ -2344,9 +2450,9 @@ suite('Blocks', function () {
           }
         });
         test('Child blocks regain original status after parent is re-enabled', async function () {
-          this.parent.setEnabled(false);
+          this.parent.setDisabledReason(true, 'test reason');
           await Blockly.renderManagement.finishQueuedRenders();
-          this.parent.setEnabled(true);
+          this.parent.setDisabledReason(false, 'test reason');
           await Blockly.renderManagement.finishQueuedRenders();
 
           // child2 is disabled, rest should be enabled

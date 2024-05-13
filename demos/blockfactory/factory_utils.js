@@ -163,7 +163,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
   var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
   var lastInput = null;
   while (contentsBlock) {
-    if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
+    if (contentsBlock.isEnabled() && !contentsBlock.getInheritedDisabled()) {
       var fields = FactoryUtils.getFieldsJson_(
           contentsBlock.getInputTargetBlock('FIELDS'));
       for (var i = 0; i < fields.length; i++) {
@@ -247,7 +247,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
   }
   // Generate colour.
   var colourBlock = rootBlock.getInputTargetBlock('COLOUR');
-  if (colourBlock && !colourBlock.disabled) {
+  if (colourBlock && colourBlock.isEnabled()) {
     var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
     JS.colour = hue;
   }
@@ -277,7 +277,7 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
                'input_end_row': 'appendEndRowInput'};
   var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
   while (contentsBlock) {
-    if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
+    if (contentsBlock.isEnabled() && !contentsBlock.getInheritedDisabled()) {
       var name = '';
       // Dummy inputs don't have names.  Other inputs do.
       if (contentsBlock.type !== 'input_dummy' &&
@@ -333,7 +333,7 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
   }
   // Generate colour.
   var colourBlock = rootBlock.getInputTargetBlock('COLOUR');
-  if (colourBlock && !colourBlock.disabled) {
+  if (colourBlock && colourBlock.isEnabled()) {
     var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
     if (!isNaN(hue)) {
       code.push('    this.setColour(' + hue + ');');
@@ -377,7 +377,7 @@ FactoryUtils.connectionLineJs_ = function(functionName, typeName, workspace) {
 FactoryUtils.getFieldsJs_ = function(block) {
   var fields = [];
   while (block) {
-    if (!block.disabled && !block.getInheritedDisabled()) {
+    if (block.isEnabled() && !block.getInheritedDisabled()) {
       switch (block.type) {
         case 'field_static':
           // Result: 'hello'
@@ -484,7 +484,7 @@ FactoryUtils.getFieldsJs_ = function(block) {
 FactoryUtils.getFieldsJson_ = function(block) {
   var fields = [];
   while (block) {
-    if (!block.disabled && !block.getInheritedDisabled()) {
+    if (block.isEnabled() && !block.getInheritedDisabled()) {
       switch (block.type) {
         case 'field_static':
           // Result: 'hello'
@@ -614,7 +614,7 @@ FactoryUtils.getOptTypesFrom = function(block, name) {
 FactoryUtils.getTypesFrom_ = function(block, name) {
   var typeBlock = block.getInputTargetBlock(name);
   var types;
-  if (!typeBlock || typeBlock.disabled) {
+  if (!typeBlock || !typeBlock.isEnabled()) {
     types = [];
   } else if (typeBlock.type === 'type_other') {
     types = [JSON.stringify(typeBlock.getFieldValue('TYPE'))];
@@ -1015,7 +1015,7 @@ FactoryUtils.savedBlockChanges = function(blockLibraryController) {
  */
 FactoryUtils.getTooltipFromRootBlock_ = function(rootBlock) {
   var tooltipBlock = rootBlock.getInputTargetBlock('TOOLTIP');
-  if (tooltipBlock && !tooltipBlock.disabled) {
+  if (tooltipBlock && tooltipBlock.isEnabled()) {
     return tooltipBlock.getFieldValue('TEXT');
   }
   return '';
@@ -1029,7 +1029,7 @@ FactoryUtils.getTooltipFromRootBlock_ = function(rootBlock) {
  */
 FactoryUtils.getHelpUrlFromRootBlock_ = function(rootBlock) {
   var helpUrlBlock = rootBlock.getInputTargetBlock('HELPURL');
-  if (helpUrlBlock && !helpUrlBlock.disabled) {
+  if (helpUrlBlock && helpUrlBlock.isEnabled()) {
     return helpUrlBlock.getFieldValue('TEXT');
   }
   return '';

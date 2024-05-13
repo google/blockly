@@ -10,87 +10,75 @@ import type {ISerializer} from '../interfaces/i_serializer.js';
 import * as priorities from './priorities.js';
 import type {Workspace} from '../workspace.js';
 
-/**
- * Representation of a procedure data model.
- */
+/** Represents the state of a procedure model. */
 export interface State {
-  // TODO: This should also handle enabled.
   id: string;
   name: string;
   returnTypes: string[] | null;
   parameters?: ParameterState[];
+  [key: string]: unknown;
 }
 
-/**
- * Representation of a parameter data model.
- */
+/** Represents the state of a parameter model. */
 export interface ParameterState {
   id: string;
   name: string;
   types?: string[];
+  [key: string]: unknown;
 }
 
 /**
  * A newable signature for an IProcedureModel.
  *
  * Refer to
- * https://www.typescriptlang.org/docs/handbook/2/generics.html#using-class-types-in-generics
+ * https://www.typescriptlang.org/docs/handbook/interfaces.html#difference-between-the-static-and-instance-sides-of-classes
  * for what is going on with this.
  */
-type ProcedureModelConstructor<ProcedureModel extends IProcedureModel> = new (
-  workspace: Workspace,
-  name: string,
-  id: string,
-) => ProcedureModel;
+interface ProcedureModelConstructor<ProcedureModel extends IProcedureModel> {
+  new (workspace: Workspace, name: string, id: string): ProcedureModel;
+
+  /**
+   * Deserializes the JSON state and returns a procedure model.
+   *
+   * @param state The state to deserialize.
+   * @param workspace The workspace to load the procedure model into.
+   * @returns The constructed procedure model.
+   */
+  loadState(state: Object, workspace: Workspace): ProcedureModel;
+}
 
 /**
  * A newable signature for an IParameterModel.
  *
  * Refer to
- * https://www.typescriptlang.org/docs/handbook/2/generics.html#using-class-types-in-generics
+ * https://www.typescriptlang.org/docs/handbook/interfaces.html#difference-between-the-static-and-instance-sides-of-classes
  * for what is going on with this.
  */
-type ParameterModelConstructor<ParameterModel extends IParameterModel> = new (
-  workspace: Workspace,
-  name: string,
-  id: string,
-) => ParameterModel;
+interface ParameterModelConstructor<ParameterModel extends IParameterModel> {
+  new (workspace: Workspace, name: string, id: string): ParameterModel;
 
-/**
- * Serializes the given IProcedureModel to JSON.
- *
- * @internal
- */
-export function saveProcedure(proc: IProcedureModel): State {
-  const state: State = {
-    id: proc.getId(),
-    name: proc.getName(),
-    returnTypes: proc.getReturnTypes(),
-  };
-  if (!proc.getParameters().length) return state;
-  state.parameters = proc.getParameters().map((param) => saveParameter(param));
-  return state;
+  /**
+   * Deserializes the JSON state and returns a parameter model.
+   *
+   * @param state The state to deserialize.
+   * @param workspace The workspace to load the parameter model into.
+   * @returns The constructed parameter model.
+   */
+  loadState(state: Object, workspace: Workspace): ParameterModel;
 }
 
 /**
- * Serializes the given IParameterModel to JSON.
- *
- * @internal
+ * Serializes the given IProcedureModel to JSON.
  */
-export function saveParameter(param: IParameterModel): ParameterState {
-  const state: ParameterState = {
-    id: param.getId(),
-    name: param.getName(),
-  };
-  if (!param.getTypes().length) return state;
-  state.types = param.getTypes();
+export function saveProcedure(proc: IProcedureModel): State {
+  const state: State = proc.saveState();
+  if (!proc.getParameters().length) return state;
+  state.parameters = proc.getParameters().map((param) => param.saveState());
   return state;
 }
 
 /**
  * Deserializes the given procedure model State from JSON.
- *
- * @internal
  */
 export function loadProcedure<
   ProcedureModel extends IProcedureModel,
@@ -101,34 +89,15 @@ export function loadProcedure<
   state: State,
   workspace: Workspace,
 ): ProcedureModel {
-  const proc = new procedureModelClass(
-    workspace,
-    state.name,
-    state.id,
-  ).setReturnTypes(state.returnTypes);
+  const proc = procedureModelClass.loadState(state, workspace);
   if (!state.parameters) return proc;
   for (const [index, param] of state.parameters.entries()) {
     proc.insertParameter(
-      loadParameter(parameterModelClass, param, workspace),
+      parameterModelClass.loadState(param, workspace),
       index,
     );
   }
   return proc;
-}
-
-/**
- * Deserializes the given ParameterState from JSON.
- *
- * @internal
- */
-export function loadParameter<ParameterModel extends IParameterModel>(
-  parameterModelClass: ParameterModelConstructor<ParameterModel>,
-  state: ParameterState,
-  workspace: Workspace,
-): ParameterModel {
-  const model = new parameterModelClass(workspace, state.name, state.id);
-  if (state.types) model.setTypes(state.types);
-  return model;
 }
 
 /** Serializer for saving and loading procedure state. */

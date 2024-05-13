@@ -70,15 +70,16 @@ export class TextInputBubble extends Bubble {
    *     when automatically positioning.
    */
   constructor(
-    protected readonly workspace: WorkspaceSvg,
+    public readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
   ) {
     super(workspace, anchor, ownerRect);
+    dom.addClass(this.svgRoot, 'blocklyTextInputBubble');
     ({inputRoot: this.inputRoot, textArea: this.textArea} = this.createEditor(
       this.contentContainer,
     ));
-    this.resizeGroup = this.createResizeHandle(this.svgRoot);
+    this.resizeGroup = this.createResizeHandle(this.svgRoot, workspace);
     this.setSize(this.DEFAULT_SIZE, true);
   }
 
@@ -126,7 +127,7 @@ export class TextInputBubble extends Bubble {
       dom.HTML_NS,
       'textarea',
     ) as HTMLTextAreaElement;
-    textArea.className = 'blocklyCommentTextarea';
+    textArea.className = 'blocklyTextarea blocklyText';
     textArea.setAttribute('dir', this.workspace.RTL ? 'RTL' : 'LTR');
 
     body.appendChild(textArea);
@@ -158,51 +159,27 @@ export class TextInputBubble extends Bubble {
   }
 
   /** Creates the resize handler elements and binds events to them. */
-  private createResizeHandle(container: SVGGElement): SVGGElement {
-    const resizeGroup = dom.createSvgElement(
-      Svg.G,
+  private createResizeHandle(
+    container: SVGGElement,
+    workspace: WorkspaceSvg,
+  ): SVGGElement {
+    const resizeHandle = dom.createSvgElement(
+      Svg.IMAGE,
       {
-        'class': this.workspace.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE',
+        'class': 'blocklyResizeHandle',
+        'href': `${workspace.options.pathToMedia}resize-handle.svg`,
       },
       container,
     );
-    const size = 2 * Bubble.BORDER_WIDTH;
-    dom.createSvgElement(
-      Svg.POLYGON,
-      {'points': `0,${size} ${size},${size} ${size},0`},
-      resizeGroup,
-    );
-    dom.createSvgElement(
-      Svg.LINE,
-      {
-        'class': 'blocklyResizeLine',
-        'x1': size / 3,
-        'y1': size - 1,
-        'x2': size - 1,
-        'y2': size / 3,
-      },
-      resizeGroup,
-    );
-    dom.createSvgElement(
-      Svg.LINE,
-      {
-        'class': 'blocklyResizeLine',
-        'x1': (size * 2) / 3,
-        'y1': size - 1,
-        'x2': size - 1,
-        'y2': (size * 2) / 3,
-      },
-      resizeGroup,
-    );
 
     browserEvents.conditionalBind(
-      resizeGroup,
+      resizeHandle,
       'pointerdown',
       this,
       this.onResizePointerDown,
     );
 
-    return resizeGroup;
+    return resizeHandle;
   }
 
   /**
@@ -330,8 +307,8 @@ export class TextInputBubble extends Bubble {
 }
 
 Css.register(`
-.blocklyCommentTextarea {
-  background-color: #fef49c;
+.blocklyTextInputBubble .blocklyTextarea {
+  background-color: var(--commentFillColour);
   border: 0;
   display: block;
   margin: 0;

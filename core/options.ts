@@ -12,7 +12,6 @@
 // Former goog.module ID: Blockly.Options
 
 import type {BlocklyOptions} from './blockly_options.js';
-import * as deprecation from './utils/deprecation.js';
 import * as registry from './registry.js';
 import {Theme} from './theme.js';
 import {Classic} from './theme/classic.js';
@@ -38,6 +37,7 @@ export class Options {
   pathToMedia: string;
   hasCategories: boolean;
   moveOptions: MoveOptions;
+  /** @deprecated  January 2019 */
   hasScrollbars: boolean;
   hasTrashcan: boolean;
   maxTrashcanContents: number;
@@ -143,10 +143,6 @@ export class Options {
       pathToMedia = options['media'].endsWith('/')
         ? options['media']
         : options['media'] + '/';
-    } else if ('path' in options) {
-      // 'path' is a deprecated option which has been replaced by 'media'.
-      deprecation.warn('path', 'Nov 2014', 'Jul 2023', 'media');
-      pathToMedia = (options as any)['path'] + 'media/';
     }
     const rawOneBasedIndex = options['oneBasedIndex'];
     const oneBasedIndex =
@@ -172,7 +168,6 @@ export class Options {
     this.pathToMedia = pathToMedia;
     this.hasCategories = hasCategories;
     this.moveOptions = Options.parseMoveOptions_(options, hasCategories);
-    /** @deprecated  January 2019 */
     this.hasScrollbars = !!this.moveOptions.scrollbars;
     this.hasTrashcan = hasTrashcan;
     this.maxTrashcanContents = maxTrashcanContents;

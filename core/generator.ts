@@ -16,7 +16,6 @@ import type {Block} from './block.js';
 import * as common from './common.js';
 import {Names, NameType} from './names.js';
 import type {Workspace} from './workspace.js';
-import {warn} from './utils/deprecation.js';
 
 /**
  * Deprecated, no-longer used type declaration for per-block-type generator
@@ -255,16 +254,7 @@ export class CodeGenerator {
 
     // Look up block generator function in dictionary - but fall back
     // to looking up on this if not found, for backwards compatibility.
-    let func = this.forBlock[block.type];
-    if (!func && (this as any)[block.type]) {
-      warn(
-        'block generator functions on CodeGenerator objects',
-        '10.0',
-        '11.0',
-        'the .forBlock[blockType] dictionary',
-      );
-      func = (this as any)[block.type];
-    }
+    const func = this.forBlock[block.type];
     if (typeof func !== 'function') {
       throw Error(
         `${this.name_} generator does not know how to generate code ` +

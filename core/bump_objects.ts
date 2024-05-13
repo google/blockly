@@ -6,7 +6,7 @@
 
 // Former goog.module ID: Blockly.bumpObjects
 
-import type {BlockSvg} from './block_svg.js';
+import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BlockCreate} from './events/events_block_create.js';
 import type {BlockMove} from './events/events_block_move.js';
@@ -17,7 +17,6 @@ import * as eventUtils from './events/utils.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {ContainerRegion} from './metrics_manager.js';
 import * as mathUtils from './utils/math.js';
-import type {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
@@ -152,7 +151,7 @@ export function bumpIntoBoundsHandler(
 function extractObjectFromEvent(
   workspace: WorkspaceSvg,
   e: eventUtils.BumpEvent,
-): BlockSvg | null | WorkspaceCommentSvg {
+): IBoundedElement | null {
   let object = null;
   switch (e.type) {
     case eventUtils.BLOCK_CREATE:
@@ -166,7 +165,7 @@ function extractObjectFromEvent(
     case eventUtils.COMMENT_MOVE:
       object = workspace.getCommentById(
         (e as CommentCreate | CommentMove).commentId!,
-      ) as WorkspaceCommentSvg | null;
+      ) as RenderedWorkspaceComment;
       break;
   }
   return object;

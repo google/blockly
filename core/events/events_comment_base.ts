@@ -11,10 +11,8 @@
  */
 // Former goog.module ID: Blockly.Events.CommentBase
 
-import * as utilsXml from '../utils/xml.js';
-import type {WorkspaceComment} from '../workspace_comment.js';
-import * as Xml from '../xml.js';
-
+import type {WorkspaceComment} from '../comments/workspace_comment.js';
+import * as comments from '../serialization/workspace_comments.js';
 import {
   Abstract as AbstractEvent,
   AbstractEventJson,
@@ -102,12 +100,10 @@ export class CommentBase extends AbstractEvent {
   ) {
     const workspace = event.getEventWorkspace_();
     if (create) {
-      const xmlElement = utilsXml.createElement('xml');
-      if (!event.xml) {
-        throw new Error('Ecountered a comment event without proper xml');
+      if (!event.json) {
+        throw new Error('Encountered a comment event without proper json');
       }
-      xmlElement.appendChild(event.xml);
-      Xml.domToWorkspace(xmlElement, workspace);
+      comments.append(event.json, workspace);
     } else {
       if (!event.commentId) {
         throw new Error(
@@ -119,8 +115,7 @@ export class CommentBase extends AbstractEvent {
       if (comment) {
         comment.dispose();
       } else {
-        // Only complain about root-level block.
-        console.warn("Can't uncreate non-existent comment: " + event.commentId);
+        console.warn("Can't delete non-existent comment: " + event.commentId);
       }
     }
   }

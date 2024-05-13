@@ -17,14 +17,11 @@ import './events/events_var_create.js';
 
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
-import {BlockDragger} from './block_dragger.js';
 import {BlockSvg} from './block_svg.js';
 import {BlocklyOptions} from './blockly_options.js';
 import {Blocks} from './blocks.js';
 import * as browserEvents from './browser_events.js';
-import {Bubble} from './bubbles/bubble.js';
 import * as bubbles from './bubbles.js';
-import {BubbleDragger} from './bubble_dragger.js';
 import * as bumpObjects from './bump_objects.js';
 import * as clipboard from './clipboard.js';
 import * as common from './common.js';
@@ -37,9 +34,11 @@ import {ConnectionType} from './connection_type.js';
 import * as ContextMenu from './contextmenu.js';
 import * as ContextMenuItems from './contextmenu_items.js';
 import {ContextMenuRegistry} from './contextmenu_registry.js';
+import * as comments from './comments.js';
 import * as Css from './css.js';
 import {DeleteArea} from './delete_area.js';
 import * as dialog from './dialog.js';
+import * as dragging from './dragging.js';
 import {DragTarget} from './drag_target.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as Events from './events/events.js';
@@ -51,23 +50,11 @@ import {
   UnattachedFieldError,
 } from './field.js';
 import {
-  FieldAngle,
-  FieldAngleConfig,
-  FieldAngleFromJsonConfig,
-  FieldAngleValidator,
-} from './field_angle.js';
-import {
   FieldCheckbox,
   FieldCheckboxConfig,
   FieldCheckboxFromJsonConfig,
   FieldCheckboxValidator,
 } from './field_checkbox.js';
-import {
-  FieldColour,
-  FieldColourConfig,
-  FieldColourFromJsonConfig,
-  FieldColourValidator,
-} from './field_colour.js';
 import {
   FieldDropdown,
   FieldDropdownConfig,
@@ -88,12 +75,6 @@ import {
   FieldLabelFromJsonConfig,
 } from './field_label.js';
 import {FieldLabelSerializable} from './field_label_serializable.js';
-import {
-  FieldMultilineInput,
-  FieldMultilineInputConfig,
-  FieldMultilineInputFromJsonConfig,
-  FieldMultilineInputValidator,
-} from './field_multilineinput.js';
 import {
   FieldNumber,
   FieldNumberConfig,
@@ -123,9 +104,7 @@ import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import * as icons from './icons.js';
 import {inject} from './inject.js';
-import {Align} from './inputs/align.js';
 import {Input} from './inputs/input.js';
-import {inputTypes} from './inputs/input_types.js';
 import * as inputs from './inputs.js';
 import {InsertionMarkerManager} from './insertion_marker_manager.js';
 import {InsertionMarkerPreviewer} from './insertion_marker_previewer.js';
@@ -133,7 +112,6 @@ import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
-import {IBlockDragger} from './interfaces/i_block_dragger.js';
 import {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IBubble} from './interfaces/i_bubble.js';
 import {ICollapsibleToolboxItem} from './interfaces/i_collapsible_toolbox_item.js';
@@ -141,11 +119,16 @@ import {IComponent} from './interfaces/i_component.js';
 import {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import {IConnectionPreviewer} from './interfaces/i_connection_previewer.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
-import {ICopyable, isCopyable} from './interfaces/i_copyable.js';
-import {IDeletable} from './interfaces/i_deletable.js';
+import {ICopyable, isCopyable, ICopyData} from './interfaces/i_copyable.js';
+import {IDeletable, isDeletable} from './interfaces/i_deletable.js';
 import {IDeleteArea} from './interfaces/i_delete_area.js';
 import {IDragTarget} from './interfaces/i_drag_target.js';
-import {IDraggable} from './interfaces/i_draggable.js';
+import {IDragger} from './interfaces/i_dragger.js';
+import {
+  IDraggable,
+  isDraggable,
+  IDragStrategy,
+} from './interfaces/i_draggable.js';
 import {IFlyout} from './interfaces/i_flyout.js';
 import {IHasBubble, hasBubble} from './interfaces/i_has_bubble.js';
 import {IIcon, isIcon} from './interfaces/i_icon.js';
@@ -156,7 +139,11 @@ import {IObservable, isObservable} from './interfaces/i_observable.js';
 import {IPaster, isPaster} from './interfaces/i_paster.js';
 import {IPositionable} from './interfaces/i_positionable.js';
 import {IRegistrable} from './interfaces/i_registrable.js';
-import {ISelectable} from './interfaces/i_selectable.js';
+import {
+  IRenderedElement,
+  isRenderedElement,
+} from './interfaces/i_rendered_element.js';
+import {ISelectable, isSelectable} from './interfaces/i_selectable.js';
 import {ISelectableToolboxItem} from './interfaces/i_selectable_toolbox_item.js';
 import {ISerializable, isSerializable} from './interfaces/i_serializable.js';
 import {IStyleable} from './interfaces/i_styleable.js';
@@ -173,6 +160,7 @@ import {Cursor} from './keyboard_nav/cursor.js';
 import {Marker} from './keyboard_nav/marker.js';
 import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
 import {MarkerManager} from './marker_manager.js';
+import type {LayerManager} from './layer_manager.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
 import {MetricsManager} from './metrics_manager.js';
@@ -188,7 +176,6 @@ import * as renderManagement from './render_management.js';
 import * as blockRendering from './renderers/common/block_rendering.js';
 import * as constants from './constants.js';
 import * as geras from './renderers/geras/geras.js';
-import * as minimalist from './renderers/minimalist/minimalist.js';
 import * as thrasos from './renderers/thrasos/thrasos.js';
 import * as zelos from './renderers/zelos/zelos.js';
 import {Scrollbar} from './scrollbar.js';
@@ -216,8 +203,6 @@ import * as VariablesDynamic from './variables_dynamic.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
-import {WorkspaceComment} from './workspace_comment.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
@@ -244,27 +229,6 @@ export const VERSION = 'uncompiled';
  */
 
 /*
- * Aliases for input alignments used in block defintions.
- */
-
-/**
- * @see Blockly.Input.Align.LEFT
- * @deprecated Use `Blockly.inputs.Align.LEFT`. To be removed in v11.
- */
-export const ALIGN_LEFT = Align.LEFT;
-
-/**
- * @see Blockly.Input.Align.CENTRE
- * @deprecated Use `Blockly.inputs.Align.CENTER`. To be removed in v11.
- */
-export const ALIGN_CENTRE = Align.CENTRE;
-
-/**
- * @see Blockly.Input.Align.RIGHT
- * @deprecated Use `Blockly.inputs.Align.RIGHT`. To be removed in v11.
- */
-export const ALIGN_RIGHT = Align.RIGHT;
-/*
  * Aliases for constants used for connection and input types.
  */
 
@@ -287,12 +251,6 @@ export const NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
  * @see ConnectionType.PREVIOUS_STATEMENT
  */
 export const PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
-
-/**
- * @see inputTypes.DUMMY_INPUT
- * @deprecated Use `Blockly.inputs.inputTypes.DUMMY`. To be removed in v11.
- */
-export const DUMMY_INPUT = inputTypes.DUMMY;
 
 /** Aliases for toolbox positions. */
 
@@ -378,7 +336,6 @@ export const setParentContainer = common.setParentContainer;
 
 // Aliases to allow external code to access these values for legacy reasons.
 export const COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
-export const DRAG_STACK = internalConstants.DRAG_STACK;
 export const OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
 export const RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
 export const DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
@@ -424,25 +381,20 @@ WorkspaceSvg.prototype.newBlock = function (
   return new BlockSvg(this, prototypeName, opt_id);
 };
 
-WorkspaceSvg.newTrashcan = function (workspace: WorkspaceSvg): Trashcan {
-  return new Trashcan(workspace);
+Workspace.prototype.newComment = function (
+  id?: string,
+): comments.WorkspaceComment {
+  return new comments.WorkspaceComment(this, id);
 };
 
-WorkspaceCommentSvg.prototype.showContextMenu = function (
-  this: WorkspaceCommentSvg,
-  e: Event,
-) {
-  if (this.workspace.options.readOnly) {
-    return;
-  }
-  const menuOptions = [];
+WorkspaceSvg.prototype.newComment = function (
+  id?: string,
+): comments.RenderedWorkspaceComment {
+  return new comments.RenderedWorkspaceComment(this, id);
+};
 
-  if (this.isDeletable() && this.isMovable()) {
-    menuOptions.push(ContextMenu.commentDuplicateOption(this));
-    menuOptions.push(ContextMenu.commentDeleteOption(this));
-  }
-
-  ContextMenu.show(e, menuOptions, this.RTL);
+WorkspaceSvg.newTrashcan = function (workspace: WorkspaceSvg): Trashcan {
+  return new Trashcan(workspace);
 };
 
 MiniWorkspaceBubble.prototype.newWorkspaceSvg = function (
@@ -490,7 +442,6 @@ export {constants};
 export {dialog};
 export {fieldRegistry};
 export {geras};
-export {minimalist};
 export {registry};
 export {thrasos};
 export {uiPosition};
@@ -500,13 +451,9 @@ export {ASTNode};
 export {BasicCursor};
 export {Block};
 export {BlocklyOptions};
-export {BlockDragger};
 export {BlockSvg};
 export {Blocks};
 export {bubbles};
-/** @deprecated Use Blockly.bubbles.Bubble instead. To be removed in v11. */
-export {Bubble};
-export {BubbleDragger};
 export {CollapsibleToolboxCategory};
 export {ComponentManager};
 export {Connection};
@@ -514,28 +461,18 @@ export {ConnectionType};
 export {ConnectionChecker};
 export {ConnectionDB};
 export {ContextMenuRegistry};
+export {comments};
 export {Cursor};
 export {DeleteArea};
+export {dragging};
 export {DragTarget};
 export const DropDownDiv = dropDownDiv;
 export {Field, FieldConfig, FieldValidator, UnattachedFieldError};
-export {
-  FieldAngle,
-  FieldAngleConfig,
-  FieldAngleFromJsonConfig,
-  FieldAngleValidator,
-};
 export {
   FieldCheckbox,
   FieldCheckboxConfig,
   FieldCheckboxFromJsonConfig,
   FieldCheckboxValidator,
-};
-export {
-  FieldColour,
-  FieldColourConfig,
-  FieldColourFromJsonConfig,
-  FieldColourValidator,
 };
 export {
   FieldDropdown,
@@ -549,12 +486,6 @@ export {
 export {FieldImage, FieldImageConfig, FieldImageFromJsonConfig};
 export {FieldLabel, FieldLabelConfig, FieldLabelFromJsonConfig};
 export {FieldLabelSerializable};
-export {
-  FieldMultilineInput,
-  FieldMultilineInputConfig,
-  FieldMultilineInputFromJsonConfig,
-  FieldMultilineInputValidator,
-};
 export {
   FieldNumber,
   FieldNumberConfig,
@@ -585,7 +516,6 @@ export {IASTNodeLocation};
 export {IASTNodeLocationSvg};
 export {IASTNodeLocationWithBlock};
 export {IAutoHideable};
-export {IBlockDragger};
 export {IBoundedElement};
 export {IBubble};
 export {ICollapsibleToolboxItem};
@@ -594,11 +524,12 @@ export {IConnectionChecker};
 export {IConnectionPreviewer};
 export {IContextMenu};
 export {icons};
-export {ICopyable, isCopyable};
-export {IDeletable};
+export {ICopyable, isCopyable, ICopyData};
+export {IDeletable, isDeletable};
 export {IDeleteArea};
 export {IDragTarget};
-export {IDraggable};
+export {IDragger};
+export {IDraggable, isDraggable, IDragStrategy};
 export {IFlyout};
 export {IHasBubble, hasBubble};
 export {IIcon, isIcon};
@@ -613,7 +544,8 @@ export {IObservable, isObservable};
 export {IPaster, isPaster};
 export {IPositionable};
 export {IRegistrable};
-export {ISelectable};
+export {IRenderedElement, isRenderedElement};
+export {ISelectable, isSelectable};
 export {ISelectableToolboxItem};
 export {ISerializable, isSerializable};
 export {IStyleable};
@@ -622,6 +554,7 @@ export {IToolboxItem};
 export {IVariableBackedParameterModel, isVariableBackedParameterModel};
 export {Marker};
 export {MarkerManager};
+export {LayerManager};
 export {Menu};
 export {MenuItem};
 export {MetricsManager};
@@ -646,15 +579,9 @@ export {VariableModel};
 export {VerticalFlyout};
 export {Workspace};
 export {WorkspaceAudio};
-export {WorkspaceComment};
-export {WorkspaceCommentSvg};
 export {WorkspaceDragger};
 export {WorkspaceSvg};
 export {ZoomControls};
 export {config};
-/** @deprecated Use Blockly.ConnectionType instead. */
-export const connectionTypes = ConnectionType;
 export {inject};
-/** @deprecated Use Blockly.inputs.inputTypes instead. To be removed in v11. */
-export {inputTypes};
 export {serialization};

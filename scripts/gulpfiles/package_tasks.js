@@ -178,6 +178,12 @@ function packageJSON(done) {
   const json = JSON.parse(JSON.stringify(getPackageJson()));
   // Remove unwanted entries.
   delete json['scripts'];
+  // Set "type": "commonjs", since that's what .js files in the
+  // package root are.  This should be a no-op since that's the
+  // default, but by setting it explicitly we ensure that any chage to
+  // the repository top-level package.json to set "type": "module"
+  // won't break the published package accidentally.
+  json.type = 'commonjs';
   // Write resulting package.json file to release directory.
   if (!fs.existsSync(RELEASE_DIR)) {
     fs.mkdirSync(RELEASE_DIR, {recursive: true});

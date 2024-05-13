@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"AeyTaiNuea",
 			"咽頭べさ"
 		]
 	},
@@ -71,7 +72,7 @@
 	"LOGIC_COMPARE_TOOLTIP_GT": "ᥔᥒᥴᥝᥣᥲ ᥟᥢᥴᥚᥫᥛᥳᥔᥬᥱ ᥟᥩᥢᥴᥖᥣᥒᥰ ᥕᥬᥱᥘᥫᥴ ᥟᥢᥴᥚᥫᥛᥳᥔᥬᥱ ᥛᥣᥭᥴᥔᥩᥒᥴᥓᥪᥒᥴ ᥛᥦᥰᥑᥪᥢᥰ ᥞᥬᥲᥛᥣᥢᥱᥛᥦᥢᥲ.",
 	"LOGIC_COMPARE_TOOLTIP_GTE": "ᥔᥒᥴᥝᥣᥲ ᥟᥢᥴᥚᥫᥛᥳᥔᥬᥱ ᥟᥩᥢᥴᥖᥣᥒᥰ ᥕᥬᥱᥘᥫᥴ ᥟᥛᥱᥢᥢᥴ ᥚᥥᥒᥱᥙᥥᥒᥰ ᥟᥢᥴᥚᥫᥛᥳᥔᥬᥱ ᥛᥣᥭᥴᥔᥩᥒᥴᥓᥪᥒᥴ ᥛᥦᥰᥑᥪᥢᥰ ᥞᥬᥲᥛᥣᥢᥱᥛᥦᥢᥲ.",
 	"LOGIC_OPERATION_TOOLTIP_AND": "ᥔᥒᥴᥝᥣᥲ ᥟᥢᥴᥚᥫᥛᥳᥔᥬᥱ ᥖᥒᥰᥔᥩᥒᥴᥟᥢᥴ ᥛᥣᥢᥱᥛᥦᥢᥲᥓᥪᥒᥴᥓᥪᥒᥴ ᥛᥦᥰᥑᥪᥢᥰ ᥞᥬᥲᥛᥣᥢᥱᥛᥦᥢᥲ.",
-	"LOGIC_OPERATION_AND": "ᥘᥦᥲ",
+	"LOGIC_OPERATION_AND": "ᥘᥦᥰ",
 	"LOGIC_OPERATION_TOOLTIP_OR": "ᥔᥒᥴᥝᥣᥲ ᥟᥢᥴᥚᥫᥛᥳᥔᥬᥱ ᥐᥛᥰᥘᥪᥢᥰᥔᥧᥖᥰ ᥛᥣᥢᥱᥛᥦᥢᥲᥓᥪᥒᥴ ᥛᥦᥰᥑᥪᥢᥰ ᥞᥬᥲᥛᥣᥢᥱᥛᥦᥢᥲ.",
 	"LOGIC_OPERATION_OR": "ᥟᥛᥱᥢᥢᥴ",
 	"LOGIC_NEGATE_TITLE": "ᥟᥛᥱᥓᥬᥲ %1",

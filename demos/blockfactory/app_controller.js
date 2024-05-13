@@ -126,6 +126,16 @@ AppController.prototype.exportBlockLibraryToFile = function() {
   }
 };
 
+AppController.prototype.exportBlockLibraryAsJson = function() {
+  const blockJson = this.blockLibraryController.getBlockLibraryAsJson();
+  if (blockJson.length === 0) {
+    alert('No blocks in library to export');
+    return;
+  }
+  const filename = 'legacy_block_factory_export.txt';
+  FactoryUtils.createAndDownloadFile(JSON.stringify(blockJson), filename, 'plain');
+};
+
 /**
  * Converts an object mapping block type to XML to text file for output.
  * @param {!Object} blockXmlMap Object mapping block type to XML.
@@ -490,6 +500,10 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
       .addEventListener('click', function() {
         self.exportBlockLibraryToFile();
       });
+
+  document.getElementById('exportAsJson').addEventListener('click', function() {
+    self.exportBlockLibraryAsJson();
+  });
 
   document.getElementById('helpButton').addEventListener('click',
       function() {

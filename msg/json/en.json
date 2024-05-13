@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-03-08 22:38:32.330785",
+		"lastupdated": "2024-04-16 23:19:53.668551",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -291,10 +291,11 @@
 	"LISTS_ISEMPTY_TITLE": "%1 is empty",
 	"LISTS_ISEMPTY_TOOLTIP": "Returns true if the list is empty.",
 	"LISTS_INLIST": "in list",
-	"LISTS_INDEX_OF_HELPURL": "https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list",
+	"LISTS_INDEX_OF_HELPURL": "https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list",
 	"LISTS_INDEX_OF_FIRST": "find first occurrence of item",
 	"LISTS_INDEX_OF_LAST": "find last occurrence of item",
 	"LISTS_INDEX_OF_TOOLTIP": "Returns the index of the first/last occurrence of the item in the list. Returns %1 if item is not found.",
+	"LISTS_GET_INDEX_HELPURL": "https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list",
 	"LISTS_GET_INDEX_GET": "get",
 	"LISTS_GET_INDEX_GET_REMOVE": "get and remove",
 	"LISTS_GET_INDEX_REMOVE": "remove",

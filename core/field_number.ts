@@ -315,7 +315,7 @@ export class FieldNumber extends FieldInput<number> {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FieldNumberFromJsonConfig): FieldNumber {
+  static override fromJson(options: FieldNumberFromJsonConfig): FieldNumber {
     // `this` might be a subclass of FieldNumber if that class doesn't override
     // the static fromJson method.
     return new this(

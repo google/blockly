@@ -129,6 +129,7 @@ suite('Text Input Fields', function () {
   suite('Validators', function () {
     setup(function () {
       this.field = new Blockly.FieldTextInput('value');
+      this.field.valueWhenEditorWasOpened_ = this.field.getValue();
       this.field.htmlInput_ = document.createElement('input');
       this.field.htmlInput_.setAttribute('data-old-value', 'value');
       this.field.htmlInput_.setAttribute('data-untyped-default-value', 'value');

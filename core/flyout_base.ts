@@ -574,16 +574,7 @@ export abstract class Flyout
    * @param contents - The array of items for the flyout.
    */
   setContents(contents: FlyoutItem[]): void {
-    const blocksAndButtons = contents.map((item) => {
-      if (item.type === 'block' && item.block) {
-        return item.block as BlockSvg;
-      }
-      if (item.type === 'button' && item.button) {
-        return item.button as FlyoutButton;
-      }
-    });
-
-    this.contents = blocksAndButtons as FlyoutItem[];
+    this.contents = contents;
   }
   /**
    * Update the display property of the flyout based whether it thinks it should

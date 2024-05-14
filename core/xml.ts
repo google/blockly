@@ -1023,12 +1023,8 @@ function domToBlockHeadless(
   }
   const disabled = xmlBlock.getAttribute('disabled');
   if (disabled) {
-    deprecation.warn(
-      'disabled',
-      'v11',
-      'v12',
-      'disabled-reasons with the value "' + MANUALLY_DISABLED + '"',
-    );
+    // Before May 2024 we just used 'disabled', with no reasons.
+    // Contiune to support this syntax.
     block.setDisabledReason(
       disabled === 'true' || disabled === 'disabled',
       MANUALLY_DISABLED,

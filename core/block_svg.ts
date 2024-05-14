@@ -208,7 +208,7 @@ export class BlockSvg
       icon.updateEditable();
     }
     this.applyColour();
-    this.pathObject.updateMovable(this.isMovable());
+    this.pathObject.updateMovable(this.isMovable() || this.isInFlyout);
     const svg = this.getSvgRoot();
     if (!this.workspace.options.readOnly && svg) {
       browserEvents.conditionalBind(

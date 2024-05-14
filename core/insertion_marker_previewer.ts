@@ -154,6 +154,7 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     };
     const originalOffsetInBlock = markerConn.getOffsetInBlock().clone();
     renderManagement.finishQueuedRenders().then(() => {
+      if (marker.isDeadOrDying()) return;
       eventUtils.disable();
       try {
         // Position so that the existing block doesn't move.

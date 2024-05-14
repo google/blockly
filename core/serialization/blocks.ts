@@ -10,7 +10,6 @@ import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import {MANUALLY_DISABLED} from '../constants.js';
-import * as deprecation from '../utils/deprecation.js';
 import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../inputs/input_types.js';
 import {isSerializable} from '../interfaces/i_serializable.js';
@@ -523,12 +522,8 @@ function loadAttributes(block: Block, state: State) {
     block.setEditable(false);
   }
   if (state['enabled'] === false) {
-    deprecation.warn(
-      'enabled',
-      'v11',
-      'v12',
-      'disabledReasons with the value ["' + MANUALLY_DISABLED + '"]',
-    );
+    // Before May 2024 we just used 'enabled', with no reasons.
+    // Contiune to support this syntax.
     block.setDisabledReason(true, MANUALLY_DISABLED);
   }
   if (Array.isArray(state['disabledReasons'])) {

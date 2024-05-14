@@ -10,7 +10,6 @@ import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {Connection} from './connection.js';
 import {MANUALLY_DISABLED} from './constants.js';
-import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {IconType} from './icons/icon_types.js';

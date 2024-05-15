@@ -15,15 +15,6 @@ import * as registry from './registry.js';
 import {Renderer as ZelosRenderer} from './renderers/zelos/renderer.js';
 import {ConnectionType} from './connection_type.js';
 
-/**
- * An error message to throw if the block created by createMarkerBlock_ is
- * missing any components.
- */
-const DUPLICATE_BLOCK_ERROR =
-  'The insertion marker previewer tried to create a marker but the result ' +
-  'is missing a connection. If you are using a mutator, make sure your ' +
-  'domToMutation method is properly defined.';
-
 export class InsertionMarkerPreviewer implements IConnectionPreviewer {
   private readonly workspace: WorkspaceSvg;
 

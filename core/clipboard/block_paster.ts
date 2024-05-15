@@ -72,6 +72,10 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
 export function moveBlockToNotConflict(block: BlockSvg, coord: Coordinate) {
   const workspace = block.workspace;
   const snapRadius = config.snapRadius;
+  const bumpOffset = Coordinate.difference(
+    coord,
+    block.getRelativeToSurfaceXY(),
+  );
   const offset = new Coordinate(0, 0);
   // getRelativeToSurfaceXY is really expensive, so we want to cache this.
   const otherCoords = workspace
@@ -81,7 +85,7 @@ export function moveBlockToNotConflict(block: BlockSvg, coord: Coordinate) {
 
   while (
     blockOverlapsOtherExactly(Coordinate.sum(coord, offset), otherCoords) ||
-    blockIsInSnapRadius(block, offset, snapRadius)
+    blockIsInSnapRadius(block, Coordinate.sum(bumpOffset, offset), snapRadius)
   ) {
     if (workspace.RTL) {
       offset.translate(-snapRadius, snapRadius * 2);

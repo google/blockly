@@ -29,6 +29,7 @@ import {
 } from './exceptions.js';
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
+import * as Variables from '../../core/variables.js';
 
 // TODO(#5160): Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
@@ -417,6 +418,7 @@ export function appendInternal(
   }
   eventUtils.disable();
 
+  const variablesBeforeCreation = workspace.getAllVariables();
   let block;
   try {
     block = appendPrivate(state, workspace, {parentConnection, isShadow});
@@ -425,6 +427,19 @@ export function appendInternal(
   }
 
   if (eventUtils.isEnabled()) {
+    const newVariables = Variables.getAddedVariables(
+      workspace,
+      variablesBeforeCreation,
+    );
+    // Fire a VarCreate event for each (if any) new variable created.
+    for (let i = 0; i < newVariables.length; i++) {
+      const thisVariable = newVariables[i];
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable),
+      );
+    }
+    // Block events come after var events, in case they refer to newly created
+    // variables.
     eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
   }
   eventUtils.setGroup(existingGroup);

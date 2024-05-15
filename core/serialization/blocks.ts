@@ -29,6 +29,8 @@ import {
 } from './exceptions.js';
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
+import * as Variables from '../variables.js';
+import {VariableModel} from '../variable_model.js';
 
 // TODO(#5160): Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
@@ -417,6 +419,7 @@ export function appendInternal(
   }
   eventUtils.disable();
 
+  const variablesBeforeCreation = workspace.getAllVariables();
   let block;
   try {
     block = appendPrivate(state, workspace, {parentConnection, isShadow});
@@ -424,7 +427,12 @@ export function appendInternal(
     eventUtils.enable();
   }
 
+  // Fire a VarCreate event for each (if any) new variable created.
+  checkNewVariables(workspace, variablesBeforeCreation);
+
   if (eventUtils.isEnabled()) {
+    // Block events come after var events, in case they refer to newly created
+    // variables.
     eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
   }
   eventUtils.setGroup(existingGroup);
@@ -483,6 +491,33 @@ function appendPrivate(
   initBlock(block, workspace.rendered);
 
   return block;
+}
+
+/**
+ * Checks the workspace for any new variables that were created during the
+ * deserialization of a block and fires a VarCreate event for each.
+ *
+ * @param workspace The workspace where new variables are being created
+ * @param originalVariables The array of variables that existed in the workspace
+ *     before adding the new block.
+ */
+function checkNewVariables(
+  workspace: Workspace,
+  originalVariables: VariableModel[],
+) {
+  if (eventUtils.isEnabled()) {
+    const newVariables = Variables.getAddedVariables(
+      workspace,
+      originalVariables,
+    );
+    // Fire a VarCreate event for each (if any) new variable created.
+    for (let i = 0; i < newVariables.length; i++) {
+      const thisVariable = newVariables[i];
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable),
+      );
+    }
+  }
 }
 
 /**

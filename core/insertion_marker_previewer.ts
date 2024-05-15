@@ -88,16 +88,6 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     eventUtils.disable();
     try {
       this.hidePreview();
-      const dragged = draggedConn.getSourceBlock();
-      const marker = this.createInsertionMarker(dragged);
-      const markerConn = this.getMatchingConnection(
-        dragged,
-        marker,
-        draggedConn,
-      );
-      if (!markerConn) {
-        throw Error(DUPLICATE_BLOCK_ERROR);
-      }
 
       // TODO(7898): Instead of special casing, we should change the dragger to
       //   track the change in distance between the dragged connection and the

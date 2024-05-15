@@ -113,13 +113,11 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
   private previewMarker(
     draggedConn: RenderedConnection,
     staticConn: RenderedConnection,
-  ): RenderedConnection {
+  ): RenderedConnection | null {
     const dragged = draggedConn.getSourceBlock();
     const marker = this.createInsertionMarker(dragged);
     const markerConn = this.getMatchingConnection(dragged, marker, draggedConn);
-    if (!markerConn) {
-      throw Error('Could not create insertion marker to preview connection');
-    }
+    if (!markerConn) return null;
 
     // Render disconnected from everything else so that we have a valid
     // connection location.
@@ -192,7 +190,7 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     orig: BlockSvg,
     marker: BlockSvg,
     origConn: RenderedConnection,
-  ) {
+  ): RenderedConnection | null {
     const origConns = orig.getConnections_(true);
     const markerConns = marker.getConnections_(true);
     if (origConns.length !== markerConns.length) return null;

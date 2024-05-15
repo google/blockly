@@ -30,11 +30,21 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
       copyData.blockState['y'] = coordinate.y;
     }
 
+    // After appending the block to the workspace, it will be bumped from its neighbors
+    // However, the algorithm for deciding where to paste a block depends on
+    // the starting position of the copied block, so we'll pass those coordinates along
+    const initialCoordinates =
+      coordinate ||
+      new Coordinate(
+        copyData.blockState['x'] || 0,
+        copyData.blockState['y'] || 0,
+      );
+
     eventUtils.disable();
     let block;
     try {
       block = append(copyData.blockState, workspace) as BlockSvg;
-      moveBlockToNotConflict(block);
+      moveBlockToNotConflict(block, initialCoordinates);
     } finally {
       eventUtils.enable();
     }
@@ -56,12 +66,12 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
  * Exported for testing.
  *
  * @param block The block to move to an unambiguous location.
+ * @param coord The initial coordinate to start searching from.
  * @internal
  */
-export function moveBlockToNotConflict(block: BlockSvg) {
+export function moveBlockToNotConflict(block: BlockSvg, coord: Coordinate) {
   const workspace = block.workspace;
   const snapRadius = config.snapRadius;
-  const coord = block.getRelativeToSurfaceXY();
   const offset = new Coordinate(0, 0);
   // getRelativeToSurfaceXY is really expensive, so we want to cache this.
   const otherCoords = workspace

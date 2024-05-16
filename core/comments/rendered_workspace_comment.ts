@@ -138,7 +138,6 @@ export class RenderedWorkspaceComment
   override moveTo(location: Coordinate, reason?: string[] | undefined): void {
     super.moveTo(location, reason);
     this.view.moveTo(location);
-    this.snapToGrid();
   }
 
   /**
@@ -209,7 +208,6 @@ export class RenderedWorkspaceComment
 
   /** Ends the drag on the comment. */
   endDrag(): void {
-    this.snapToGrid();
     this.dragStrategy.endDrag();
   }
 

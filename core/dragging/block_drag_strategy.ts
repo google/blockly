@@ -55,24 +55,15 @@ export class BlockDragStrategy implements IDragStrategy {
 
   private dragging = false;
 
-  /**
-   * If this is a shadow block, the offset between this block and the parent
-   * block, to add to the drag location. In workspace units.
-   */
-  private dragOffset = new Coordinate(0, 0);
-
   constructor(private block: BlockSvg) {
     this.workspace = block.workspace;
   }
 
   /** Returns true if the block is currently movable. False otherwise. */
   isMovable(): boolean {
-    if (this.block.isShadow()) {
-      return this.block.getParent()?.isMovable() ?? false;
-    }
-
     return (
       this.block.isOwnMovable() &&
+      !this.block.isShadow() &&
       !this.block.isDeadOrDying() &&
       !this.workspace.options.readOnly &&
       // We never drag blocks in the flyout, only create new blocks that are
@@ -86,11 +77,6 @@ export class BlockDragStrategy implements IDragStrategy {
    * from any parent blocks.
    */
   startDrag(e?: PointerEvent): void {
-    if (this.block.isShadow()) {
-      this.startDraggingShadow(e);
-      return;
-    }
-
     this.dragging = true;
     if (!eventUtils.getGroup()) {
       eventUtils.setGroup(true);
@@ -118,22 +104,6 @@ export class BlockDragStrategy implements IDragStrategy {
     }
     this.block.setDragging(true);
     this.workspace.getLayerManager()?.moveToDragLayer(this.block);
-  }
-
-  /** Starts a drag on a shadow, recording the drag offset. */
-  private startDraggingShadow(e?: PointerEvent) {
-    const parent = this.block.getParent();
-    if (!parent) {
-      throw new Error(
-        'Tried to drag a shadow block with no parent. ' +
-          'Shadow blocks should always have parents.',
-      );
-    }
-    this.dragOffset = Coordinate.difference(
-      parent.getRelativeToSurfaceXY(),
-      this.block.getRelativeToSurfaceXY(),
-    );
-    parent.startDrag(e);
   }
 
   /**
@@ -204,11 +174,6 @@ export class BlockDragStrategy implements IDragStrategy {
 
   /** Moves the block and updates any connection previews. */
   drag(newLoc: Coordinate): void {
-    if (this.block.isShadow()) {
-      this.block.getParent()?.drag(Coordinate.sum(newLoc, this.dragOffset));
-      return;
-    }
-
     this.block.moveDuringDrag(newLoc);
     this.updateConnectionPreview(
       this.block,
@@ -352,12 +317,7 @@ export class BlockDragStrategy implements IDragStrategy {
    * Cleans up any state at the end of the drag. Applies any pending
    * connections.
    */
-  endDrag(e?: PointerEvent): void {
-    if (this.block.isShadow()) {
-      this.block.getParent()?.endDrag(e);
-      return;
-    }
-
+  endDrag(): void {
     this.fireDragEndEvent();
     this.fireMoveEvent();
 
@@ -413,11 +373,6 @@ export class BlockDragStrategy implements IDragStrategy {
    * including reconnecting connections.
    */
   revertDrag(): void {
-    if (this.block.isShadow()) {
-      this.block.getParent()?.revertDrag();
-      return;
-    }
-
     this.startChildConn?.connect(this.block.nextConnection);
     if (this.startParentConn) {
       switch (this.startParentConn.type) {

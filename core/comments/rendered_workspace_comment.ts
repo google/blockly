@@ -124,7 +124,16 @@ export class RenderedWorkspaceComment
   getBoundingRectangle(): Rect {
     const loc = this.getRelativeToSurfaceXY();
     const size = this.getSize();
-    return new Rect(loc.y, loc.y + size.height, loc.x, loc.x + size.width);
+    let left;
+    let right;
+    if (this.workspace.RTL) {
+      left = loc.x - size.width;
+      right = loc.x;
+    } else {
+      left = loc.x;
+      right = loc.x + size.width;
+    }
+    return new Rect(loc.y, loc.y + size.height, left, right);
   }
 
   /** Move the comment by the given amounts in workspace coordinates. */

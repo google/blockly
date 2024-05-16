@@ -20,6 +20,7 @@
 			"Revi",
 			"SeoJeongHo",
 			"Snddl3",
+			"Suleiman the Magnificent Television",
 			"Ykhwong",
 			"아라"
 		]
@@ -343,6 +344,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "함수 이름",
 	"PROCEDURES_BEFORE_PARAMS": "사용:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "사용:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "정의 블록이 비활성화되었기 때문에 사용자 정의 함수 '%1'를 실행할 수 없습니다.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "실행 후, 결과 값을 돌려주지 않는 함수를 만듭니다.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "이 함수를 설명하세요...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://ko.wikipedia.org/wiki/함수_(컴퓨터_과학)",

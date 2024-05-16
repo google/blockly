@@ -13,6 +13,7 @@ import {WorkspaceSvg} from '../workspace_svg.js';
 import {ComponentManager} from '../component_manager.js';
 import {IDeleteArea} from '../interfaces/i_delete_area.js';
 import * as registry from '../registry.js';
+import * as eventUtils from '../events/utils.js';
 
 export class Dragger implements IDragger {
   protected startLoc: Coordinate;
@@ -94,6 +95,7 @@ export class Dragger implements IDragger {
 
   /** Handles any drag cleanup. */
   onDragEnd(e: PointerEvent) {
+    const origGroup = eventUtils.getGroup();
     const dragTarget = this.workspace.getDragTarget(e);
     if (dragTarget) {
       this.dragTarget?.onDrop(this.draggable);
@@ -109,7 +111,12 @@ export class Dragger implements IDragger {
       isDeletable(this.draggable) &&
       this.wouldDeleteDraggable(e, this.draggable)
     ) {
+      // We want to make sure the delete gets grouped with any possible
+      // move event.
+      const newGroup = eventUtils.getGroup();
+      eventUtils.setGroup(origGroup);
       this.draggable.dispose();
+      eventUtils.setGroup(newGroup);
     }
   }
 

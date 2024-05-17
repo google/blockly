@@ -1,3 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="8" viewBox="0 0 8 8" width="8" fill="#041E49" stroke="#000">
-<g><line x1="2.6666666666666665" y1="7" x2="7" y2="2.6666666666666665"></line><line x1="5.333333333333333" y1="7" x2="7" y2="5.333333333333333"></line></g>
+<svg xmlns="http://www.w3.org/2000/svg" height="8" viewBox="0 0 8 8" width="8" fill="none" stroke="#515A5A" stroke-width="0.7">
+  <g>
+    <polygon points="0,8 8,8 8,0" fill="#aaa" stroke="none"></polygon>
+    <line x1="2.6" y1="7.4" x2="7.4" y2="2.6"></line>
+    <line x1="5.5" y1="7.4" x2="7.4" y2="5.5"></line>
+  </g>
 </svg>

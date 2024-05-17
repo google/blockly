@@ -121,7 +121,7 @@ export class TextInputBubble extends Bubble {
 
     const body = document.createElementNS(dom.HTML_NS, 'body');
     body.setAttribute('xmlns', dom.HTML_NS);
-    body.className = 'blocklyMinimalBody';
+    body.className = 'blocklyMinimalBody blocklyBubbleComment';
 
     const textArea = document.createElementNS(
       dom.HTML_NS,

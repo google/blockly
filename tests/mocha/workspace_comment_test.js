@@ -15,7 +15,7 @@ import {
 
 suite('Workspace comment', function () {
   setup(function () {
-    sharedTestSetup.call(this);
+    this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
     this.workspace = new Blockly.inject('blocklyDiv', {});
   });
 
@@ -30,6 +30,8 @@ suite('Workspace comment', function () {
       this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
         this.workspace,
       );
+
+      this.clock.runAll();
 
       assertEventFired(
         spy,
@@ -47,6 +49,8 @@ suite('Workspace comment', function () {
 
       this.renderedComment.dispose();
 
+      this.clock.runAll();
+
       assertEventFired(
         spy,
         Blockly.Events.CommentDelete,
@@ -62,6 +66,8 @@ suite('Workspace comment', function () {
       const spy = createChangeListenerSpy(this.workspace);
 
       this.renderedComment.moveTo(new Blockly.utils.Coordinate(42, 42));
+
+      this.clock.runAll();
 
       assertEventFired(
         spy,
@@ -83,6 +89,8 @@ suite('Workspace comment', function () {
 
       this.renderedComment.setText('test text');
 
+      this.clock.runAll();
+
       assertEventFired(
         spy,
         Blockly.Events.CommentChange,
@@ -103,6 +111,8 @@ suite('Workspace comment', function () {
 
       this.renderedComment.setCollapsed(true);
 
+      this.clock.runAll();
+
       assertEventFired(
         spy,
         Blockly.Events.CommentCollapse,
@@ -122,6 +132,8 @@ suite('Workspace comment', function () {
       const spy = createChangeListenerSpy(this.workspace);
 
       this.renderedComment.setCollapsed(false);
+
+      this.clock.runAll();
 
       assertEventFired(
         spy,

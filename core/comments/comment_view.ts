@@ -286,9 +286,12 @@ export class CommentView implements IRenderedElement {
     return this.svgRoot;
   }
 
-  /** Returns the current size of the comment in workspace units. */
+  /**
+   * Returns the current size of the comment in workspace units.
+   * Respects collapsing.
+   */
   getSize(): Size {
-    return this.size;
+    return this.collapsed ? this.topBarBackground.getBBox() : this.size;
   }
 
   /**

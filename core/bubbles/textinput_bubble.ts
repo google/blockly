@@ -201,16 +201,11 @@ export class TextInputBubble extends Bubble {
     this.textArea.style.width = `${widthMinusBorder - 4}px`;
     this.textArea.style.height = `${heightMinusBorder - 4}px`;
 
+    this.resizeGroup.setAttribute('y', `${heightMinusBorder}`);
     if (this.workspace.RTL) {
-      this.resizeGroup.setAttribute(
-        'transform',
-        `translate(${Bubble.DOUBLE_BORDER}, ${heightMinusBorder}) scale(-1 1)`,
-      );
+      this.resizeGroup.setAttribute('x', `${-Bubble.DOUBLE_BORDER}`);
     } else {
-      this.resizeGroup.setAttribute(
-        'transform',
-        `translate(${widthMinusBorder}, ${heightMinusBorder})`,
-      );
+      this.resizeGroup.setAttribute('x', `${widthMinusBorder}`);
     }
 
     super.setSize(size, relayout);

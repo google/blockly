@@ -20,3 +20,6 @@ export const PROCEDURES = 75;
  * The priority for deserializing blocks.
  */
 export const BLOCKS = 50;
+
+/** The priority for deserializing workspace comments. */
+export const WORKSPACE_COMMENTS = 25;

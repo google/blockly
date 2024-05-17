@@ -24,7 +24,6 @@ import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
-import {config} from './config.js';
 import {ConnectionDB} from './connection_db.js';
 import * as ContextMenu from './contextmenu.js';
 import {ContextMenuRegistry} from './contextmenu_registry.js';
@@ -35,7 +34,6 @@ import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
-import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
@@ -49,7 +47,6 @@ import * as registry from './registry.js';
 import * as blockRendering from './renderers/common/block_rendering.js';
 import type {Renderer} from './renderers/common/renderer.js';
 import type {ScrollbarPair} from './scrollbar_pair.js';
-import * as blocks from './serialization/blocks.js';
 import type {Theme} from './theme.js';
 import {Classic} from './theme/classic.js';
 import {ThemeManager} from './theme_manager.js';
@@ -71,14 +68,12 @@ import * as VariablesDynamic from './variables_dynamic.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
-import {WorkspaceComment} from './workspace_comment.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
-import * as Xml from './xml.js';
+import {WorkspaceComment} from './comments/workspace_comment.js';
 import {ZoomControls} from './zoom_controls.js';
 import {ContextMenuOption} from './contextmenu_registry.js';
 import * as renderManagement from './render_management.js';
-import * as deprecation from './utils/deprecation.js';
 import {LayerManager} from './layer_manager.js';
+import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -1094,8 +1089,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * @returns The layer manager for this workspace.
-   *
-   * @internal
    */
   getLayerManager(): LayerManager | null {
     return this.layerManager;
@@ -1269,12 +1262,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       blocks[i].queueRender();
     }
 
-    if (this.currentGesture_) {
-      const imList = this.currentGesture_.getInsertionMarkers();
-      for (let i = 0; i < imList.length; i++) {
-        imList[i].queueRender();
-      }
-    }
+    this.getTopBlocks()
+      .flatMap((block) => block.getDescendants(false))
+      .filter((block) => block.isInsertionMarker())
+      .forEach((block) => block.queueRender());
 
     renderManagement
       .finishQueuedRenders()
@@ -1311,183 +1302,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       }
       block.setHighlighted(state);
     }
-  }
-
-  /**
-   * Pastes the provided block or workspace comment onto the workspace.
-   * Does not check whether there is remaining capacity for the object, that
-   * should be done before calling this method.
-   *
-   * @param state The representation of the thing to paste.
-   * @returns The pasted thing, or null if the paste was not successful.
-   * @deprecated v10. Use `Blockly.clipboard.paste` instead. To be removed in
-   *     v11.
-   */
-  paste(
-    state: AnyDuringMigration | Element | DocumentFragment,
-  ): ICopyable<ICopyData> | null {
-    deprecation.warn(
-      'Blockly.WorkspaceSvg.prototype.paste',
-      'v10',
-      'v11',
-      'Blockly.clipboard.paste',
-    );
-    if (!this.rendered || (!state['type'] && !state['tagName'])) {
-      return null;
-    }
-    if (this.currentGesture_) {
-      // Dragging while pasting?  No.
-      this.currentGesture_.cancel();
-    }
-
-    const existingGroup = eventUtils.getGroup();
-    if (!existingGroup) {
-      eventUtils.setGroup(true);
-    }
-    let pastedThing;
-    try {
-      // Checks if this is JSON. JSON has a type property, while elements don't.
-      if (state['type']) {
-        pastedThing = this.pasteBlock_(null, state as blocks.State);
-      } else {
-        const xmlBlock = state as Element;
-        if (xmlBlock.tagName.toLowerCase() === 'comment') {
-          pastedThing = this.pasteWorkspaceComment_(xmlBlock);
-        } else {
-          pastedThing = this.pasteBlock_(xmlBlock, null);
-        }
-      }
-    } finally {
-      eventUtils.setGroup(existingGroup);
-    }
-    return pastedThing;
-  }
-
-  /**
-   * Paste the provided block onto the workspace.
-   *
-   * @param xmlBlock XML block element.
-   * @param jsonBlock JSON block representation.
-   * @returns The pasted block.
-   */
-  private pasteBlock_(
-    xmlBlock: Element | null,
-    jsonBlock: blocks.State | null,
-  ): BlockSvg {
-    eventUtils.disable();
-    let block: BlockSvg;
-    try {
-      let blockX = 0;
-      let blockY = 0;
-      if (xmlBlock) {
-        block = Xml.domToBlockInternal(xmlBlock, this) as BlockSvg;
-        blockX = parseInt(xmlBlock.getAttribute('x') ?? '0');
-        if (this.RTL) {
-          blockX = -blockX;
-        }
-        blockY = parseInt(xmlBlock.getAttribute('y') ?? '0');
-      } else if (jsonBlock) {
-        block = blocks.append(jsonBlock, this) as BlockSvg;
-        blockX = jsonBlock['x'] || 10;
-        if (this.RTL) {
-          blockX = this.getWidth() - blockX;
-        }
-        blockY = jsonBlock['y'] || 10;
-      }
-
-      // Move the duplicate to original position.
-      if (!isNaN(blockX) && !isNaN(blockY)) {
-        // Offset block until not clobbering another block and not in connection
-        // distance with neighbouring blocks.
-        let collide;
-        do {
-          collide = false;
-          const allBlocks = this.getAllBlocks(false);
-          for (let i = 0, otherBlock; (otherBlock = allBlocks[i]); i++) {
-            const otherXY = otherBlock.getRelativeToSurfaceXY();
-            if (
-              Math.abs(blockX - otherXY.x) <= 1 &&
-              Math.abs(blockY - otherXY.y) <= 1
-            ) {
-              collide = true;
-              break;
-            }
-          }
-          if (!collide) {
-            // Check for blocks in snap range to any of its connections.
-            const connections = block!.getConnections_(false);
-            for (let i = 0, connection; (connection = connections[i]); i++) {
-              const neighbour = connection.closest(
-                config.snapRadius,
-                // This code doesn't work because it's passing absolute coords
-                // instead of relative coords. But we're deprecating the `paste`
-                // function anyway so we're not going to fix it.
-                new Coordinate(blockX, blockY),
-              );
-              if (neighbour.connection) {
-                collide = true;
-                break;
-              }
-            }
-          }
-          if (collide) {
-            if (this.RTL) {
-              blockX -= config.snapRadius;
-            } else {
-              blockX += config.snapRadius;
-            }
-            blockY += config.snapRadius * 2;
-          }
-        } while (collide);
-        // No 'reason' provided since events are disabled.
-        block!.moveTo(new Coordinate(blockX, blockY));
-      }
-    } finally {
-      eventUtils.enable();
-    }
-    if (eventUtils.isEnabled() && !block!.isShadow()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block!));
-    }
-    block!.select();
-    return block!;
-  }
-
-  /**
-   * Paste the provided comment onto the workspace.
-   *
-   * @param xmlComment XML workspace comment element.
-   * @returns The pasted workspace comment.
-   */
-  private pasteWorkspaceComment_(xmlComment: Element): WorkspaceCommentSvg {
-    eventUtils.disable();
-    let comment: WorkspaceCommentSvg;
-    try {
-      comment = WorkspaceCommentSvg.fromXmlRendered(xmlComment, this);
-      // Move the duplicate to original position.
-      let commentX = parseInt(xmlComment.getAttribute('x') ?? '0');
-      let commentY = parseInt(xmlComment.getAttribute('y') ?? '0');
-      if (!isNaN(commentX) && !isNaN(commentY)) {
-        if (this.RTL) {
-          commentX = -commentX;
-        }
-        // Offset workspace comment.
-        // TODO (#1719): Properly offset comment such that it's not interfering
-        // with any blocks.
-        commentX += 50;
-        commentY += 50;
-        // This code doesn't work because it's passing absolute coords
-        // instead of relative coords. But we're deprecating the `paste`
-        // function anyway so we're not going to fix it.
-        comment.moveBy(commentX, commentY);
-      }
-    } finally {
-      eventUtils.enable();
-    }
-    if (eventUtils.isEnabled()) {
-      WorkspaceComment.fireCreateEvent(comment);
-    }
-    comment.select();
-    return comment;
   }
 
   /**
@@ -1578,6 +1392,20 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   override newBlock(prototypeName: string, opt_id?: string): BlockSvg {
     throw new Error(
       'The implementation of newBlock should be ' +
+        'monkey-patched in by blockly.ts',
+    );
+  }
+
+  /**
+   * Obtain a newly created comment.
+   *
+   * @param id Optional ID.  Use this ID if provided, otherwise create a new
+   *     ID.
+   * @returns The created comment.
+   */
+  newComment(id?: string): WorkspaceComment {
+    throw new Error(
+      'The implementation of newComment should be ' +
         'monkey-patched in by blockly.ts',
     );
   }
@@ -1844,7 +1672,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param e Mouse event.
    * @internal
    */
-  showContextMenu(e: Event) {
+  showContextMenu(e: PointerEvent) {
     if (this.options.readOnly || this.isFlyout) {
       return;
     }
@@ -2315,7 +2143,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param comment comment to add.
    */
   override addTopComment(comment: WorkspaceComment) {
-    this.addTopBoundedElement(comment as WorkspaceCommentSvg);
+    this.addTopBoundedElement(comment as RenderedWorkspaceComment);
     super.addTopComment(comment);
   }
 
@@ -2325,7 +2153,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param comment comment to remove.
    */
   override removeTopComment(comment: WorkspaceComment) {
-    this.removeTopBoundedElement(comment as WorkspaceCommentSvg);
+    this.removeTopBoundedElement(comment as RenderedWorkspaceComment);
     super.removeTopComment(comment);
   }
 

@@ -25,7 +25,9 @@ import {ConnectionType} from './connection_type.js';
 import * as constants from './constants.js';
 import {DuplicateIconType} from './icons/exceptions.js';
 import type {Abstract} from './events/events_abstract.js';
+import type {BlockChange} from './events/events_block_change.js';
 import type {BlockMove} from './events/events_block_move.js';
+import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
 import * as Extensions from './extensions.js';
 import type {Field} from './field.js';
@@ -33,9 +35,8 @@ import * as fieldRegistry from './field_registry.js';
 import {Input} from './inputs/input.js';
 import {Align} from './inputs/align.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
-import type {IDeletable} from './interfaces/i_deletable.js';
-import type {IIcon} from './interfaces/i_icon.js';
-import {CommentIcon} from './icons/comment_icon.js';
+import {type IIcon} from './interfaces/i_icon.js';
+import {isCommentIcon} from './interfaces/i_comment_icon.js';
 import type {MutatorIcon} from './icons/mutator_icon.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
@@ -56,7 +57,7 @@ import {IconType} from './icons/icon_types.js';
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
  */
-export class Block implements IASTNodeLocation, IDeletable {
+export class Block implements IASTNodeLocation {
   /**
    * An optional callback method to use whenever the block's parent workspace
    * changes. This is usually only called from the constructor, the block type
@@ -167,7 +168,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   inputList: Input[] = [];
   inputsInline?: boolean;
   icons: IIcon[] = [];
-  private disabled = false;
+  private disabledReasons = new Set<string>();
   tooltip: Tooltip.TipInfo = '';
   contextMenu = true;
 
@@ -189,7 +190,14 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Is the current block currently in the process of being disposed?
    */
-  private disposing = false;
+  protected disposing = false;
+
+  /**
+   * Has this block been fully initialized? E.g. all fields initailized.
+   *
+   * @internal
+   */
+  initialized = false;
 
   private readonly xy_: Coordinate;
   isInFlyout: boolean;
@@ -202,7 +210,8 @@ export class Block implements IASTNodeLocation, IDeletable {
   /** Name of the type of hat. */
   hat?: string;
 
-  rendered: boolean | null = null;
+  /** Is this block a BlockSVG? */
+  readonly rendered: boolean = false;
 
   /**
    * String for block help, or function that returns a URL. Null for no help.
@@ -310,8 +319,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    *     statement with the previous statement.  Otherwise, dispose of all
    *     children of this block.
    */
-  dispose(healStack: boolean) {
-    if (this.isDeadOrDying()) return;
+  dispose(healStack = false) {
+    this.disposing = true;
 
     // Dispose of this change listener before unplugging.
     // Technically not necessary due to the event firing delay.
@@ -334,15 +343,13 @@ export class Block implements IASTNodeLocation, IDeletable {
    * E.g. does not fire events, unplug the block, etc.
    */
   protected disposeInternal() {
-    if (this.isDeadOrDying()) return;
-
+    this.disposing = true;
     if (this.onchangeWrapper_) {
       this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
 
     this.workspace.removeTypedBlock(this);
     this.workspace.removeBlockById(this.id);
-    this.disposing = true;
 
     if (typeof this.destroy === 'function') this.destroy();
 
@@ -372,13 +379,11 @@ export class Block implements IASTNodeLocation, IDeletable {
    * change).
    */
   initModel() {
+    if (this.initialized) return;
     for (const input of this.inputList) {
-      for (const field of input.fieldRow) {
-        if (field.initModel) {
-          field.initModel();
-        }
-      }
+      input.initModel();
     }
+    this.initialized = true;
   }
 
   /**
@@ -559,7 +564,6 @@ export class Block implements IASTNodeLocation, IDeletable {
    * connected should not coincidentally line up on screen.
    */
   bumpNeighbours() {}
-  // noop.
 
   /**
    * Return the parent block or null if this block is at the top level. The
@@ -1388,32 +1392,89 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
-   * Get whether this block is enabled or not.
+   * Get whether this block is enabled or not. A block is considered enabled
+   * if there aren't any reasons why it would be disabled. A block may still
+   * be disabled for other reasons even if the user attempts to manually
+   * enable it, such as when the block is in an invalid location.
    *
    * @returns True if enabled.
    */
   isEnabled(): boolean {
-    return !this.disabled;
+    return this.disabledReasons.size === 0;
+  }
+
+  /** @deprecated v11 - Get whether the block is manually disabled. */
+  private get disabled(): boolean {
+    deprecation.warn(
+      'disabled',
+      'v11',
+      'v12',
+      'the isEnabled or hasDisabledReason methods of Block',
+    );
+    return this.hasDisabledReason(constants.MANUALLY_DISABLED);
+  }
+
+  /** @deprecated v11 - Set whether the block is manually disabled. */
+  private set disabled(value: boolean) {
+    deprecation.warn(
+      'disabled',
+      'v11',
+      'v12',
+      'the setDisabledReason method of Block',
+    );
+    this.setDisabledReason(value, constants.MANUALLY_DISABLED);
   }
 
   /**
-   * Set whether the block is enabled or not.
+   * @deprecated v11 - Set whether the block is manually enabled or disabled.
+   * The user can toggle whether a block is disabled from a context menu
+   * option. A block may still be disabled for other reasons even if the user
+   * attempts to manually enable it, such as when the block is in an invalid
+   * location. This method is deprecated and setDisabledReason should be used
+   * instead.
    *
    * @param enabled True if enabled.
    */
   setEnabled(enabled: boolean) {
-    if (this.isEnabled() !== enabled) {
-      const oldValue = this.disabled;
-      this.disabled = !enabled;
-      eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          this,
-          'disabled',
-          null,
-          oldValue,
-          !enabled,
-        ),
-      );
+    deprecation.warn(
+      'setEnabled',
+      'v11',
+      'v12',
+      'the setDisabledReason method of Block',
+    );
+    this.setDisabledReason(!enabled, constants.MANUALLY_DISABLED);
+  }
+
+  /**
+   * Add or remove a reason why the block might be disabled. If a block has
+   * any reasons to be disabled, then the block itself will be considered
+   * disabled. A block could be disabled for multiple independent reasons
+   * simultaneously, such as when the user manually disables it, or the block
+   * is invalid.
+   *
+   * @param disabled If true, then the block should be considered disabled for
+   *     at least the provided reason, otherwise the block is no longer disabled
+   *     for that reason.
+   * @param reason A language-neutral identifier for a reason why the block
+   *     could be disabled. Call this method again with the same identifier to
+   *     update whether the block is currently disabled for this reason.
+   */
+  setDisabledReason(disabled: boolean, reason: string): void {
+    if (this.disabledReasons.has(reason) !== disabled) {
+      if (disabled) {
+        this.disabledReasons.add(reason);
+      } else {
+        this.disabledReasons.delete(reason);
+      }
+      const blockChangeEvent = new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        this,
+        'disabled',
+        /* name= */ null,
+        /* oldValue= */ !disabled,
+        /* newValue= */ disabled,
+      ) as BlockChange;
+      blockChangeEvent.setDisabledReason(reason);
+      eventUtils.fire(blockChangeEvent);
     }
   }
 
@@ -1426,13 +1487,34 @@ export class Block implements IASTNodeLocation, IDeletable {
   getInheritedDisabled(): boolean {
     let ancestor = this.getSurroundParent();
     while (ancestor) {
-      if (ancestor.disabled) {
+      if (!ancestor.isEnabled()) {
         return true;
       }
       ancestor = ancestor.getSurroundParent();
     }
     // Ran off the top.
     return false;
+  }
+
+  /**
+   * Get whether the block is currently disabled for the provided reason.
+   *
+   * @param reason A language-neutral identifier for a reason why the block
+   *     could be disabled.
+   * @returns Whether the block is disabled for the provided reason.
+   */
+  hasDisabledReason(reason: string): boolean {
+    return this.disabledReasons.has(reason);
+  }
+
+  /**
+   * Get a set of reasons why the block is currently disabled, if any. If the
+   * block is enabled, this set will be empty.
+   *
+   * @returns The set of reasons why the block is disabled, if any.
+   */
+  getDisabledReasons(): ReadonlySet<string> {
+    return this.disabledReasons;
   }
 
   /**
@@ -2208,7 +2290,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns Block's comment.
    */
   getCommentText(): string | null {
-    const comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | null;
+    const comment = this.getIcon(IconType.COMMENT);
     return comment?.getText() ?? null;
   }
 
@@ -2218,19 +2300,36 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param text The text, or null to delete.
    */
   setCommentText(text: string | null) {
-    const comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | null;
+    const comment = this.getIcon(IconType.COMMENT);
     const oldText = comment?.getText() ?? null;
     if (oldText === text) return;
     if (text !== null) {
-      let comment = this.getIcon(CommentIcon.TYPE) as CommentIcon | undefined;
+      let comment = this.getIcon(IconType.COMMENT);
       if (!comment) {
-        comment = this.addIcon(new CommentIcon(this));
+        const commentConstructor = registry.getClass(
+          registry.Type.ICON,
+          IconType.COMMENT.toString(),
+          false,
+        );
+        if (!commentConstructor) {
+          throw new Error(
+            'No comment icon class is registered, so a comment cannot be set',
+          );
+        }
+        const icon = new commentConstructor(this);
+        if (!isCommentIcon(icon)) {
+          throw new Error(
+            'The class registered as a comment icon does not conform to the ' +
+              'ICommentIcon interface',
+          );
+        }
+        comment = this.addIcon(icon);
       }
       eventUtils.disable();
       comment.setText(text);
       eventUtils.enable();
     } else {
-      this.removeIcon(CommentIcon.TYPE);
+      this.removeIcon(IconType.COMMENT);
     }
 
     eventUtils.fire(

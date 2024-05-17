@@ -9,6 +9,7 @@
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {Connection} from './connection.js';
+import {MANUALLY_DISABLED} from './constants.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {IconType} from './icons/icon_types.js';
@@ -19,22 +20,21 @@ import * as utilsXml from './utils/xml.js';
 import type {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
-import {WorkspaceComment} from './workspace_comment.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 import * as renderManagement from './render_management.js';
+import {WorkspaceComment} from './comments/workspace_comment.js';
+import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
+import {Coordinate} from './utils/coordinate.js';
 
 /**
  * Encode a block tree as XML.
  *
  * @param workspace The workspace containing blocks.
- * @param opt_noId True if the encoder should skip the block IDs.
+ * @param skipId True if the encoder should skip the block IDs. False by
+ *     default.
  * @returns XML DOM element.
  */
-export function workspaceToDom(
-  workspace: Workspace,
-  opt_noId?: boolean,
-): Element {
+export function workspaceToDom(workspace: Workspace, skipId = false): Element {
   const treeXml = utilsXml.createElement('xml');
   const variablesElement = variablesToDom(
     Variables.allUsedVarModels(workspace),
@@ -42,17 +42,42 @@ export function workspaceToDom(
   if (variablesElement.hasChildNodes()) {
     treeXml.appendChild(variablesElement);
   }
-  const comments = workspace.getTopComments(true);
-  for (let i = 0; i < comments.length; i++) {
-    const comment = comments[i];
-    treeXml.appendChild(comment.toXmlWithXY(opt_noId));
+  for (const comment of workspace.getTopComments()) {
+    treeXml.appendChild(
+      saveWorkspaceComment(comment as AnyDuringMigration, skipId),
+    );
   }
   const blocks = workspace.getTopBlocks(true);
   for (let i = 0; i < blocks.length; i++) {
     const block = blocks[i];
-    treeXml.appendChild(blockToDomWithXY(block, opt_noId));
+    treeXml.appendChild(blockToDomWithXY(block, skipId));
   }
   return treeXml;
+}
+
+/** Serializes the given workspace comment to XML. */
+export function saveWorkspaceComment(
+  comment: WorkspaceComment,
+  skipId = false,
+): Element {
+  const elem = utilsXml.createElement('comment');
+  if (!skipId) elem.setAttribute('id', comment.id);
+
+  const workspace = comment.workspace;
+  const loc = comment.getRelativeToSurfaceXY();
+  loc.x = workspace.RTL ? workspace.getWidth() - loc.x : loc.x;
+  elem.setAttribute('x', `${loc.x}`);
+  elem.setAttribute('y', `${loc.y}`);
+  elem.setAttribute('w', `${comment.getSize().width}`);
+  elem.setAttribute('h', `${comment.getSize().height}`);
+
+  if (comment.getText()) elem.textContent = comment.getText();
+  if (comment.isCollapsed()) elem.setAttribute('collapsed', 'true');
+  if (!comment.isOwnEditable()) elem.setAttribute('editable', 'false');
+  if (!comment.isOwnMovable()) elem.setAttribute('movable', 'false');
+  if (!comment.isOwnDeletable()) elem.setAttribute('deletable', 'false');
+
+  return elem;
 }
 
 /**
@@ -248,15 +273,21 @@ export function blockToDom(
     element.setAttribute('collapsed', 'true');
   }
   if (!block.isEnabled()) {
-    element.setAttribute('disabled', 'true');
+    // Set the value of the attribute to a comma-separated list of reasons.
+    // Use encodeURIComponent to escape commas in the reasons so that they
+    // won't be confused with separator commas.
+    element.setAttribute(
+      'disabled-reasons',
+      Array.from(block.getDisabledReasons()).map(encodeURIComponent).join(','),
+    );
   }
-  if (!block.isDeletable() && !block.isShadow()) {
+  if (!block.isOwnDeletable()) {
     element.setAttribute('deletable', 'false');
   }
-  if (!block.isMovable() && !block.isShadow()) {
+  if (!block.isOwnMovable()) {
     element.setAttribute('movable', 'false');
   }
-  if (!block.isEditable()) {
+  if (!block.isOwnEditable()) {
     element.setAttribute('editable', 'false');
   }
 
@@ -443,15 +474,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
       } else if (name === 'shadow') {
         throw TypeError('Shadow block cannot be a top-level block.');
       } else if (name === 'comment') {
-        if (workspace.rendered) {
-          WorkspaceCommentSvg.fromXmlRendered(
-            xmlChildElement,
-            workspace as WorkspaceSvg,
-            width,
-          );
-        } else {
-          WorkspaceComment.fromXml(xmlChildElement, workspace);
-        }
+        loadWorkspaceComment(xmlChildElement, workspace);
       } else if (name === 'variables') {
         if (variablesFirst) {
           domToVariables(xmlChildElement, workspace);
@@ -476,6 +499,37 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
   // Re-enable workspace resizing.
   eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
   return newBlockIds;
+}
+
+/** Deserializes the given comment state into the given workspace. */
+export function loadWorkspaceComment(
+  elem: Element,
+  workspace: Workspace,
+): WorkspaceComment {
+  const id = elem.getAttribute('id') ?? undefined;
+  const comment = workspace.rendered
+    ? new RenderedWorkspaceComment(workspace as WorkspaceSvg, id)
+    : new WorkspaceComment(workspace, id);
+
+  comment.setText(elem.textContent ?? '');
+
+  let x = parseInt(elem.getAttribute('x') ?? '', 10);
+  const y = parseInt(elem.getAttribute('y') ?? '', 10);
+  if (!isNaN(x) && !isNaN(y)) {
+    x = workspace.RTL ? workspace.getWidth() - x : x;
+    comment.moveTo(new Coordinate(x, y));
+  }
+
+  const w = parseInt(elem.getAttribute('w') ?? '', 10);
+  const h = parseInt(elem.getAttribute('h') ?? '', 10);
+  if (!isNaN(w) && !isNaN(h)) comment.setSize(new Size(w, h));
+
+  if (elem.getAttribute('collapsed') === 'true') comment.setCollapsed(true);
+  if (elem.getAttribute('editable') === 'false') comment.setEditable(false);
+  if (elem.getAttribute('movable') === 'false') comment.setMovable(false);
+  if (elem.getAttribute('deletable') === 'false') comment.setDeletable(false);
+
+  return comment;
 }
 
 /**
@@ -968,7 +1022,20 @@ function domToBlockHeadless(
   }
   const disabled = xmlBlock.getAttribute('disabled');
   if (disabled) {
-    block.setEnabled(disabled !== 'true' && disabled !== 'disabled');
+    // Before May 2024 we just used 'disabled', with no reasons.
+    // Contiune to support this syntax.
+    block.setDisabledReason(
+      disabled === 'true' || disabled === 'disabled',
+      MANUALLY_DISABLED,
+    );
+  }
+  const disabledReasons = xmlBlock.getAttribute('disabled-reasons');
+  if (disabledReasons !== null) {
+    for (const reason of disabledReasons.split(',')) {
+      // Use decodeURIComponent to restore characters that were encoded in the
+      // value, such as commas.
+      block.setDisabledReason(true, decodeURIComponent(reason));
+    }
   }
   const deletable = xmlBlock.getAttribute('deletable');
   if (deletable) {

@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "10.4.3",
+  "version": "11.0.0-beta.10",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -54,14 +54,54 @@
     "test:compile:advanced": "gulp buildAdvancedCompilationTest --debug",
     "updateGithubPages": "npm ci && gulp gitUpdateGithubPages"
   },
-  "main": "./index.js",
-  "umd": "./blockly.min.js",
-  "unpkg": "./blockly.min.js",
-  "types": "./index.d.ts",
-  "browser": {
-    "./node.js": "./browser.js",
-    "./core.js": "./core-browser.js",
-    "./blockly-node.js": "./blockly.js"
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "umd": "./blockly.min.js",
+      "default": "./index.js"
+    },
+    "./core": {
+      "types": "./core.d.ts",
+      "node": "./core-node.js",
+      "import": "./blockly.mjs",
+      "default": "./blockly_compressed.js"
+    },
+    "./blocks": {
+      "types": "./blocks.d.ts",
+      "import": "./blocks.mjs",
+      "default": "./blocks_compressed.js"
+    },
+    "./dart": {
+      "types": "./dart.d.ts",
+      "import": "./dart.mjs",
+      "default": "./dart_compressed.js"
+    },
+    "./lua": {
+      "types": "./lua.d.ts",
+      "import": "./lua.mjs",
+      "default": "./lua_compressed.js"
+    },
+    "./javascript": {
+      "types": "./javascript.d.ts",
+      "import": "./javascript.mjs",
+      "default": "./javascript_compressed.js"
+    },
+    "./php": {
+      "types": "./php.d.ts",
+      "import": "./php.mjs",
+      "default": "./php_compressed.js"
+    },
+    "./python": {
+      "types": "./python.d.ts",
+      "import": "./python.mjs",
+      "default": "./python_compressed.js"
+    },
+    "./msg/*": {
+      "types": "./msg/*.d.ts",
+      "import": "./msg/*.mjs",
+      "default": "./msg/*.js"
+    }
   },
   "license": "Apache-2.0",
   "devDependencies": {
@@ -105,6 +145,9 @@
     "yargs": "^17.2.1"
   },
   "dependencies": {
-    "jsdom": "22.1.0"
+    "jsdom": "23.0.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

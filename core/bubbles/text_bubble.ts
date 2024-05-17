@@ -20,7 +20,7 @@ export class TextBubble extends Bubble {
 
   constructor(
     private text: string,
-    protected readonly workspace: WorkspaceSvg,
+    public readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
   ) {

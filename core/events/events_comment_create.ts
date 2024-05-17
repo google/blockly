@@ -12,10 +12,10 @@
 // Former goog.module ID: Blockly.Events.CommentCreate
 
 import * as registry from '../registry.js';
-import type {WorkspaceComment} from '../workspace_comment.js';
+import type {WorkspaceComment} from '../comments/workspace_comment.js';
+import * as comments from '../serialization/workspace_comments.js';
 import * as utilsXml from '../utils/xml.js';
 import * as Xml from '../xml.js';
-
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
@@ -29,6 +29,9 @@ export class CommentCreate extends CommentBase {
   /** The XML representation of the created workspace comment. */
   xml?: Element | DocumentFragment;
 
+  /** The JSON representation of the created workspace comment. */
+  json?: comments.State;
+
   /**
    * @param opt_comment The created comment.
    *     Undefined for a blank event.
@@ -37,10 +40,11 @@ export class CommentCreate extends CommentBase {
     super(opt_comment);
 
     if (!opt_comment) {
-      return;
+      return; // Blank event to be populated by fromJson.
     }
-    // Blank event to be populated by fromJson.
-    this.xml = opt_comment.toXmlWithXY();
+
+    this.xml = Xml.saveWorkspaceComment(opt_comment);
+    this.json = comments.save(opt_comment, {addCoordinates: true});
   }
 
   // TODO (#1266): "Full" and "minimal" serialization.
@@ -57,7 +61,14 @@ export class CommentCreate extends CommentBase {
           'the constructor, or call fromJson',
       );
     }
+    if (!this.json) {
+      throw new Error(
+        'The comment JSON is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson',
+      );
+    }
     json['xml'] = Xml.domToText(this.xml);
+    json['json'] = this.json;
     return json;
   }
 
@@ -81,6 +92,7 @@ export class CommentCreate extends CommentBase {
       event ?? new CommentCreate(),
     ) as CommentCreate;
     newEvent.xml = utilsXml.textToDom(json['xml']);
+    newEvent.json = json['json'];
     return newEvent;
   }
 
@@ -96,6 +108,7 @@ export class CommentCreate extends CommentBase {
 
 export interface CommentCreateJson extends CommentBaseJson {
   xml: string;
+  json: object;
 }
 
 registry.register(

@@ -28,4 +28,4 @@ testGenerator.forBlock['test_block'] = function (
   return ['a fake code string', Order.ADDITION];
 };
 
-phpGenerator.quote_();
+phpGenerator.quote_('a string');

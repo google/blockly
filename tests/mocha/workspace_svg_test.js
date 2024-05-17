@@ -21,7 +21,7 @@ import {testAWorkspace} from './test_helpers/workspace.js';
 
 suite('WorkspaceSvg', function () {
   setup(function () {
-    sharedTestSetup.call(this);
+    this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
     const toolbox = document.getElementById('toolbox-categories');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
     Blockly.defineBlocksWithJsonArray([
@@ -168,8 +168,7 @@ suite('WorkspaceSvg', function () {
   });
 
   suite('Viewport change events', function () {
-    function resetEventHistory(eventsFireStub, changeListenerSpy) {
-      eventsFireStub.resetHistory();
+    function resetEventHistory(changeListenerSpy) {
       changeListenerSpy.resetHistory();
     }
     function assertSpyFiredViewportEvent(spy, workspace, expectedProperties) {
@@ -187,7 +186,6 @@ suite('WorkspaceSvg', function () {
       );
     }
     function assertViewportEventFired(
-      eventsFireStub,
       changeListenerSpy,
       workspace,
       expectedEventCount = 1,
@@ -201,31 +199,24 @@ suite('WorkspaceSvg', function () {
         type: eventUtils.VIEWPORT_CHANGE,
       };
       assertSpyFiredViewportEvent(
-        eventsFireStub,
-        workspace,
-        expectedProperties,
-      );
-      assertSpyFiredViewportEvent(
         changeListenerSpy,
         workspace,
         expectedProperties,
       );
       sinon.assert.callCount(changeListenerSpy, expectedEventCount);
-      sinon.assert.callCount(eventsFireStub, expectedEventCount);
     }
     function runViewportEventTest(
       eventTriggerFunc,
-      eventsFireStub,
       changeListenerSpy,
       workspace,
       clock,
       expectedEventCount = 1,
     ) {
       clock.runAll();
-      resetEventHistory(eventsFireStub, changeListenerSpy);
+      resetEventHistory(changeListenerSpy);
       eventTriggerFunc();
+      clock.runAll();
       assertViewportEventFired(
-        eventsFireStub,
         changeListenerSpy,
         workspace,
         expectedEventCount,
@@ -243,7 +234,6 @@ suite('WorkspaceSvg', function () {
       test('setScale', function () {
         runViewportEventTest(
           () => this.workspace.setScale(2),
-          this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
           this.clock,
@@ -252,7 +242,6 @@ suite('WorkspaceSvg', function () {
       test('zoom(50, 50, 1)', function () {
         runViewportEventTest(
           () => this.workspace.zoom(50, 50, 1),
-          this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
           this.clock,
@@ -261,7 +250,6 @@ suite('WorkspaceSvg', function () {
       test('zoom(50, 50, -1)', function () {
         runViewportEventTest(
           () => this.workspace.zoom(50, 50, -1),
-          this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
           this.clock,
@@ -270,7 +258,6 @@ suite('WorkspaceSvg', function () {
       test('zoomCenter(1)', function () {
         runViewportEventTest(
           () => this.workspace.zoomCenter(1),
-          this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
           this.clock,
@@ -279,7 +266,6 @@ suite('WorkspaceSvg', function () {
       test('zoomCenter(-1)', function () {
         runViewportEventTest(
           () => this.workspace.zoomCenter(-1),
-          this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
           this.clock,
@@ -291,7 +277,6 @@ suite('WorkspaceSvg', function () {
         block.render();
         runViewportEventTest(
           () => this.workspace.zoomToFit(),
-          this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
           this.clock,
@@ -305,7 +290,6 @@ suite('WorkspaceSvg', function () {
         block.render();
         runViewportEventTest(
           () => this.workspace.centerOnBlock(block.id),
-          this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
           this.clock,
@@ -314,7 +298,6 @@ suite('WorkspaceSvg', function () {
       test('scroll', function () {
         runViewportEventTest(
           () => this.workspace.scroll(50, 50),
-          this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
           this.clock,
@@ -323,7 +306,6 @@ suite('WorkspaceSvg', function () {
       test('scrollCenter', function () {
         runViewportEventTest(
           () => this.workspace.scrollCenter(),
-          this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
           this.clock,
@@ -336,13 +318,12 @@ suite('WorkspaceSvg', function () {
         block.initSvg();
         block.render();
         this.clock.runAll();
-        resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
+        resetEventHistory(this.changeListenerSpy);
         // Expect 2 events, 1 move, 1 viewport
         runViewportEventTest(
           () => {
             block.moveBy(1000, 1000);
           },
-          this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
           this.clock,
@@ -366,7 +347,7 @@ suite('WorkspaceSvg', function () {
           '<block type="controls_if" x="188" y="163"></block>',
         );
         this.clock.runAll();
-        resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
+        resetEventHistory(this.changeListenerSpy);
         // Add block in center of other blocks, not triggering scroll.
         Blockly.Xml.domToWorkspace(
           Blockly.utils.xml.textToDom(
@@ -375,11 +356,6 @@ suite('WorkspaceSvg', function () {
           this.workspace,
         );
         this.clock.runAll();
-        assertEventNotFired(
-          this.eventsFireStub,
-          Blockly.Events.ViewportChange,
-          {type: eventUtils.VIEWPORT_CHANGE},
-        );
         assertEventNotFired(
           this.changeListenerSpy,
           Blockly.Events.ViewportChange,
@@ -403,15 +379,10 @@ suite('WorkspaceSvg', function () {
           '<block type="controls_if" x="0" y="0"></block>',
         );
         this.clock.runAll();
-        resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
+        resetEventHistory(this.changeListenerSpy);
         // Add block in center of other blocks, not triggering scroll.
         Blockly.Xml.domToWorkspace(xmlDom, this.workspace);
         this.clock.runAll();
-        assertEventNotFired(
-          this.eventsFireStub,
-          Blockly.Events.ViewportChange,
-          {type: eventUtils.VIEWPORT_CHANGE},
-        );
         assertEventNotFired(
           this.changeListenerSpy,
           Blockly.Events.ViewportChange,
@@ -436,7 +407,6 @@ suite('WorkspaceSvg', function () {
         // Expect 10 events, 4 create, 4 move, 1 viewport, 1 finished loading
         runViewportEventTest(
           addingMultipleBlocks,
-          this.eventsFireStub,
           this.changeListenerSpy,
           this.workspace,
           this.clock,

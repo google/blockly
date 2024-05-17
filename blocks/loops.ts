@@ -336,6 +336,11 @@ interface ControlFlowInLoopMixin extends ControlFlowInLoopMixinType {}
 type ControlFlowInLoopMixinType = typeof CONTROL_FLOW_IN_LOOP_CHECK_MIXIN;
 
 /**
+ * The language-neutral ID for when the reason why a block is disabled is
+ * because the block is only valid inside of a loop.
+ */
+const CONTROL_FLOW_NOT_IN_LOOP_DISABLED_REASON = 'CONTROL_FLOW_NOT_IN_LOOP';
+/**
  * This mixin adds a check to make sure the 'controls_flow_statements' block
  * is contained in a loop. Otherwise a warning is added to the block.
  */
@@ -366,7 +371,11 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     // Don't change state if:
     //   * It's at the start of a drag.
     //   * It's not a move event.
-    if (!ws.isDragging || ws.isDragging() || e.type !== Events.BLOCK_MOVE) {
+    if (
+      !ws.isDragging ||
+      ws.isDragging() ||
+      (e.type !== Events.BLOCK_MOVE && e.type !== Events.BLOCK_CREATE)
+    ) {
       return;
     }
     const enabled = !!this.getSurroundLoop();
@@ -379,7 +388,10 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
         // There is no need to record the enable/disable change on the undo/redo
         // list since the change will be automatically recreated when replayed.
         eventUtils.setRecordUndo(false);
-        this.setEnabled(enabled);
+        this.setDisabledReason(
+          !enabled,
+          CONTROL_FLOW_NOT_IN_LOOP_DISABLED_REASON,
+        );
       } finally {
         eventUtils.setRecordUndo(true);
       }

@@ -21,6 +21,7 @@ export interface BlockInfo {
   type?: string;
   gap?: string | number;
   disabled?: string | boolean;
+  disabledReasons?: string[];
   enabled?: boolean;
   id?: string;
   x?: number;

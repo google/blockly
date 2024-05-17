@@ -1491,6 +1491,12 @@ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = 'with:';
 /// function with parameters].
 Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = 'with:';
 /** @type {string} */
+/// warning - This appears if a block that runs a function can't run because the function
+/// definition block is disabled. See
+/// [https://blockly-demo.appspot.com/static/demos/code/index.html#q947d7 this sample of a
+/// disabled function definition and call block].
+Blockly.Msg.PROCEDURES_CALL_DISABLED_DEF_WARNING = 'Can\'t run the user-defined function "%1" because the definition block is disabled.';
+/** @type {string} */
 /// {{Optional|Supply translation only if your language requires it.  Most do not.}}
 /// block text - This appears next to the function's "body", the blocks that should be
 /// run when the function is called, as shown in

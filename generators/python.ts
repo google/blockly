@@ -13,7 +13,6 @@
 // Former goog.module ID: Blockly.Python.all
 
 import {PythonGenerator} from './python/python_generator.js';
-import * as colour from './python/colour.js';
 import * as lists from './python/lists.js';
 import * as logic from './python/logic.js';
 import * as loops from './python/loops.js';
@@ -38,7 +37,6 @@ pythonGenerator.addReservedWords('math,random,Number');
 // Install per-block-type generator functions:
 // Install per-block-type generator functions:
 const generators: typeof pythonGenerator.forBlock = {
-  ...colour,
   ...lists,
   ...logic,
   ...loops,

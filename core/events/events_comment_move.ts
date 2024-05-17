@@ -13,7 +13,7 @@
 
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
-import type {WorkspaceComment} from '../workspace_comment.js';
+import type {WorkspaceComment} from '../comments/workspace_comment.js';
 
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
@@ -34,6 +34,17 @@ export class CommentMove extends CommentBase {
 
   /** The location of the comment after the move, in workspace coordinates. */
   newCoordinate_?: Coordinate;
+
+  /**
+   * An explanation of what this move is for.  Known values include:
+   *  'drag' -- A drag operation completed.
+   *  'snap' -- Comment got shifted to line up with the grid.
+   *  'inbounds' -- Block got pushed back into a non-scrolling workspace.
+   *  'create' -- Block created via deserialization.
+   *  'cleanup' -- Workspace aligned top-level blocks.
+   * Event merging may create multiple reasons: ['drag', 'inbounds', 'snap'].
+   */
+  reason?: string[];
 
   /**
    * @param opt_comment The comment that is being moved.  Undefined for a blank
@@ -68,6 +79,15 @@ export class CommentMove extends CommentBase {
       );
     }
     this.newCoordinate_ = this.comment_.getRelativeToSurfaceXY();
+  }
+
+  /**
+   * Sets the reason for a move event.
+   *
+   * @param reason Why is this move happening?  'drag', 'bump', 'snap', ...
+   */
+  setReason(reason: string[]) {
+    this.reason = reason;
   }
 
   /**
@@ -158,7 +178,10 @@ export class CommentMove extends CommentBase {
           'the constructor, or call fromJson',
       );
     }
-    const comment = workspace.getCommentById(this.commentId);
+    // TODO: Remove cast when we update getCommentById.
+    const comment = workspace.getCommentById(
+      this.commentId,
+    ) as unknown as WorkspaceComment;
     if (!comment) {
       console.warn("Can't move non-existent comment: " + this.commentId);
       return;
@@ -172,9 +195,7 @@ export class CommentMove extends CommentBase {
           'or call fromJson',
       );
     }
-    // TODO: Check if the comment is being dragged, and give up if so.
-    const current = comment.getRelativeToSurfaceXY();
-    comment.moveBy(target.x - current.x, target.y - current.y);
+    comment.moveTo(target);
   }
 }
 

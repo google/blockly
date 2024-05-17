@@ -647,7 +647,9 @@ export class FieldDropdown extends Field<string> {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FieldDropdownFromJsonConfig): FieldDropdown {
+  static override fromJson(
+    options: FieldDropdownFromJsonConfig,
+  ): FieldDropdown {
     if (!options.options) {
       throw new Error(
         'options are required for the dropdown field. The ' +

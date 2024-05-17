@@ -1,6 +1,6 @@
 'use strict';
 
-var unittestResults, test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy;
+var unittestResults, test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list, proc_z, func_z, x, proc_w, func_c, if2, loglist, changing_list, list_copy;
 
 function unittest_report() {
   // Create test report.
@@ -920,20 +920,6 @@ function test_replace() {
   assertEquals(textReplace('', 'a', 'chicken'), '', 'empty source');
 }
 
-// Tests the "multiline" block.
-function test_multiline() {
-  assertEquals('', '', 'no text');
-  assertEquals('Google', 'Google', 'simple');
-  assertEquals('paragraph' + '\n' +
-  'with newlines' + '\n' +
-  'yup', 'paragraph' + '\n' +
-  'with newlines' + '\n' +
-  'yup', 'no compile error with newlines');
-  assertEquals(textCount('bark bark' + '\n' +
-  'bark bark bark' + '\n' +
-  'bark bark bark bark', 'bark'), 9, 'count with newlines');
-}
-
 // Checks that the number of calls is one in order
 // to confirm that a function was only called once.
 function check_number_of_calls2(test_name) {
@@ -1377,65 +1363,6 @@ function test_lists_reverse() {
 }
 
 // Describe this function...
-function test_colour_picker() {
-  assertEquals('#ff6600', '#ff6600', 'static colour');
-}
-
-function colourRgb(r, g, b) {
-  r = Math.max(Math.min(Number(r), 100), 0) * 2.55;
-  g = Math.max(Math.min(Number(g), 100), 0) * 2.55;
-  b = Math.max(Math.min(Number(b), 100), 0) * 2.55;
-  r = ('0' + (Math.round(r) || 0).toString(16)).slice(-2);
-  g = ('0' + (Math.round(g) || 0).toString(16)).slice(-2);
-  b = ('0' + (Math.round(b) || 0).toString(16)).slice(-2);
-  return '#' + r + g + b;
-}
-
-// Describe this function...
-function test_rgb() {
-  assertEquals(colourRgb(100, 40, 0), '#ff6600', 'from rgb');
-}
-
-function colourRandom() {
-  var num = Math.floor(Math.random() * Math.pow(2, 24));
-  return '#' + ('00000' + num.toString(16)).substr(-6);
-}
-
-// Describe this function...
-function test_colour_random() {
-  for (var count4 = 0; count4 < 100; count4++) {
-    item = colourRandom();
-    assertEquals(item.length, 7, 'length of random colour string: ' + String(item));
-    assertEquals(item.charAt(0), '#', 'format of random colour string: ' + String(item));
-    for (i = 1; i <= 6; i++) {
-      assertEquals(0 != 'abcdefABDEF0123456789'.indexOf(item.charAt(((i + 1) - 1))) + 1, true, ['contents of random colour string: ',item,' at index: ',i + 1].join(''));
-    }
-  }
-}
-
-function colourBlend(c1, c2, ratio) {
-  ratio = Math.max(Math.min(Number(ratio), 1), 0);
-  var r1 = parseInt(c1.substring(1, 3), 16);
-  var g1 = parseInt(c1.substring(3, 5), 16);
-  var b1 = parseInt(c1.substring(5, 7), 16);
-  var r2 = parseInt(c2.substring(1, 3), 16);
-  var g2 = parseInt(c2.substring(3, 5), 16);
-  var b2 = parseInt(c2.substring(5, 7), 16);
-  var r = Math.round(r1 * (1 - ratio) + r2 * ratio);
-  var g = Math.round(g1 * (1 - ratio) + g2 * ratio);
-  var b = Math.round(b1 * (1 - ratio) + b2 * ratio);
-  r = ('0' + (r || 0).toString(16)).slice(-2);
-  g = ('0' + (g || 0).toString(16)).slice(-2);
-  b = ('0' + (b || 0).toString(16)).slice(-2);
-  return '#' + r + g + b;
-}
-
-// Describe this function...
-function test_blend() {
-  assertEquals(colourBlend('#ff0000', colourRgb(100, 40, 0), 0.4), '#ff2900', 'blend');
-}
-
-// Describe this function...
 function test_procedure() {
   procedure_1(8, 2);
   assertEquals(proc_z, 4, 'procedure with global');
@@ -1576,7 +1503,6 @@ test_trim();
 test_count_text();
 test_text_reverse();
 test_replace();
-test_multiline();
 console.log(unittest_report());
 unittestResults = null;
 
@@ -1602,15 +1528,6 @@ test_sort_alphabetic();
 test_sort_ignoreCase();
 test_sort_numeric();
 test_lists_reverse();
-console.log(unittest_report());
-unittestResults = null;
-
-unittestResults = [];
-console.log('\n====================\n\nRunning suite: Colour')
-test_colour_picker();
-test_blend();
-test_rgb();
-test_colour_random();
 console.log(unittest_report());
 unittestResults = null;
 

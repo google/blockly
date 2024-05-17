@@ -7,11 +7,9 @@
 // Former goog.module ID: Blockly.Mutator
 
 import type {Abstract} from '../events/events_abstract.js';
-import type {Block} from '../block.js';
 import {BlockChange} from '../events/events_block_change.js';
 import type {BlocklyOptions} from '../blockly_options.js';
 import type {BlockSvg} from '../block_svg.js';
-import type {Connection} from '../connection.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import * as eventUtils from '../events/utils.js';
@@ -22,8 +20,8 @@ import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
-import * as deprecation from '../utils/deprecation.js';
 import {IconType} from './icon_types.js';
+import * as renderManagement from '../render_management.js';
 
 /** The size of the mutator icon in workspace-scale units. */
 const SIZE = 17;
@@ -165,8 +163,10 @@ export class MutatorIcon extends Icon implements IHasBubble {
     return !!this.miniWorkspaceBubble;
   }
 
-  setBubbleVisible(visible: boolean): void {
+  async setBubbleVisible(visible: boolean): Promise<void> {
     if (this.bubbleIsVisible() === visible) return;
+
+    await renderManagement.finishQueuedRenders();
 
     if (visible) {
       this.miniWorkspaceBubble = new MiniWorkspaceBubble(
@@ -350,41 +350,5 @@ export class MutatorIcon extends Icon implements IHasBubble {
    */
   getWorkspace(): WorkspaceSvg | undefined {
     return this.miniWorkspaceBubble?.getWorkspace();
-  }
-
-  /**
-   * Reconnects the given connection to the mutated input on the given block.
-   *
-   * @deprecated Use connection.reconnect instead. To be removed in v11.
-   */
-  static reconnect(
-    connectionChild: Connection | null,
-    block: Block,
-    inputName: string,
-  ): boolean {
-    deprecation.warn(
-      'MutatorIcon.reconnect',
-      'v10',
-      'v11',
-      'connection.reconnect',
-    );
-    if (!connectionChild) return false;
-    return connectionChild.reconnect(block, inputName);
-  }
-
-  /**
-   * Returns the parent workspace of a workspace that is inside a mini workspace
-   * bubble, taking into account whether the workspace is a flyout.
-   *
-   * @deprecated Use workspace.getRootWorkspace. To be removed in v11.
-   */
-  static findParentWs(workspace: WorkspaceSvg): WorkspaceSvg | null {
-    deprecation.warn(
-      'MutatorIcon.findParentWs',
-      'v10',
-      'v11',
-      'workspace.getRootWorkspace',
-    );
-    return workspace.getRootWorkspace();
   }
 }

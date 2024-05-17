@@ -15,6 +15,8 @@ import {Coordinate} from './utils/coordinate.js';
 export class LayerManager {
   /** The layer elements being dragged are appended to. */
   private dragLayer: SVGGElement | undefined;
+  /** The layer elements being animated are appended to. */
+  private animationLayer: SVGGElement | undefined;
   /** The layers elements not being dragged are appended to.  */
   private layers = new Map<number, SVGGElement>();
 
@@ -26,6 +28,7 @@ export class LayerManager {
     // been appended yet.
     if (injectionDiv) {
       this.dragLayer = this.createDragLayer(injectionDiv);
+      this.animationLayer = this.createAnimationLayer(injectionDiv);
     }
 
     // We construct these manually so we can add the css class for backwards
@@ -46,6 +49,35 @@ export class LayerManager {
     });
     injectionDiv.append(svg);
     return dom.createSvgElement(Svg.G, {}, svg);
+  }
+
+  private createAnimationLayer(injectionDiv: Element) {
+    const svg = dom.createSvgElement(Svg.SVG, {
+      'class': 'blocklyAnimationLayer',
+      'xmlns': dom.SVG_NS,
+      'xmlns:html': dom.HTML_NS,
+      'xmlns:xlink': dom.XLINK_NS,
+      'version': '1.1',
+    });
+    injectionDiv.append(svg);
+    return dom.createSvgElement(Svg.G, {}, svg);
+  }
+
+  /**
+   * Appends the element to the animation layer. The animation layer doesn't
+   * move when the workspace moves, so e.g. delete animations don't move
+   * when a block delete triggers a workspace resize.
+   * 
+   * @internal
+   */
+  appendToAnimationLayer(elem: IRenderedElement) {
+    const currentTransform = this.dragLayer?.getAttribute('transform');
+    // Only update the current transform when appending, so animations don't
+    // move if the workspace moves.
+    if (currentTransform) {
+      this.animationLayer?.setAttribute('transform', currentTransform);
+    }
+    this.animationLayer?.appendChild(elem.getSvgRoot());
   }
 
   /**

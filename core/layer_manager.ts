@@ -67,7 +67,7 @@ export class LayerManager {
    * Appends the element to the animation layer. The animation layer doesn't
    * move when the workspace moves, so e.g. delete animations don't move
    * when a block delete triggers a workspace resize.
-   * 
+   *
    * @internal
    */
   appendToAnimationLayer(elem: IRenderedElement) {

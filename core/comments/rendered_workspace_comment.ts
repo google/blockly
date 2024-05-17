@@ -254,7 +254,7 @@ export class RenderedWorkspaceComment
       ContextMenuRegistry.ScopeType.COMMENT,
       {comment: this},
     );
-    contextMenu.show(e, menuOptions, this.workspace.RTL);
+    contextMenu.show(e, menuOptions, this.workspace.RTL, this.workspace);
   }
 
   /** Snap this comment to the nearest grid point. */

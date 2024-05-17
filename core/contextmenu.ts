@@ -23,6 +23,7 @@ import {Rect} from './utils/rect.js';
 import * as serializationBlocks from './serialization/blocks.js';
 import * as svgMath from './utils/svg_math.js';
 import * as WidgetDiv from './widgetdiv.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 import * as common from './common.js';
 

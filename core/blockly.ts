@@ -442,7 +442,7 @@ WorkspaceCommentSvg.prototype.showContextMenu = function (
     menuOptions.push(ContextMenu.commentDeleteOption(this));
   }
 
-  ContextMenu.show(e, menuOptions, this.RTL);
+  ContextMenu.show(e, menuOptions, this.RTL, this.workspace);
 };
 
 MiniWorkspaceBubble.prototype.newWorkspaceSvg = function (

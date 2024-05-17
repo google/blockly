@@ -209,7 +209,7 @@ export class VerticalFlyout extends Flyout {
       this.workspace_.scrollbar?.setY(pos);
       // When the flyout moves from a wheel event, hide WidgetDiv and
       // dropDownDiv.
-      WidgetDiv.hide();
+      WidgetDiv.hideIfOwnerIsInWorkspace(this.workspace_);
       dropDownDiv.hideWithoutAnimation();
     }
     // Don't scroll the page.

@@ -657,7 +657,7 @@ export class BlockSvg
     const menuOptions = this.generateContextMenu();
 
     if (menuOptions && menuOptions.length) {
-      ContextMenu.show(e, menuOptions, this.RTL);
+      ContextMenu.show(e, menuOptions, this.RTL, this.workspace);
       ContextMenu.setCurrentBlock(this);
     }
   }

@@ -66,13 +66,15 @@ let menu_: Menu | null = null;
  * @param e Mouse event.
  * @param options Array of menu options.
  * @param rtl True if RTL, false if LTR.
+ * @param workspace The workspace associated with the context menu, if any.
  */
 export function show(
   e: Event,
   options: (ContextMenuOption | LegacyContextMenuOption)[],
   rtl: boolean,
+  workspace?: WorkspaceSvg,
 ) {
-  WidgetDiv.show(dummyOwner, rtl, dispose);
+  WidgetDiv.show(dummyOwner, rtl, dispose, workspace);
   if (!options.length) {
     hide();
     return;

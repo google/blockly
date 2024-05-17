@@ -312,7 +312,7 @@ export class FieldAngle extends FieldInput<number> {
   /** Hide the editor. */
   private hide() {
     dropDownDiv.hideIfOwner(this);
-    WidgetDiv.hide();
+    WidgetDiv.hideIfOwner(this);
   }
 
   /**

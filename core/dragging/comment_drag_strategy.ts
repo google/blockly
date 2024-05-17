@@ -42,13 +42,15 @@ export class CommentDragStrategy implements IDragStrategy {
   endDrag(): void {
     this.fireMoveEvent();
 
-    this.workspace.setResizesEnabled(true);
-    eventUtils.setGroup(false);
-
     this.workspace
       .getLayerManager()
       ?.moveOffDragLayer(this.comment, layers.BLOCK);
     this.comment.setDragging(false);
+
+    this.comment.snapToGrid();
+
+    this.workspace.setResizesEnabled(true);
+    eventUtils.setGroup(false);
   }
 
   private fireMoveEvent() {

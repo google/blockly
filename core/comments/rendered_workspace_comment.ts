@@ -134,7 +134,7 @@ export class RenderedWorkspaceComment
    */
   getBoundingRectangle(): Rect {
     const loc = this.getRelativeToSurfaceXY();
-    const size = this.view.getSize();
+    const size = this.view?.getSize() ?? this.getSize();
     let left;
     let right;
     if (this.workspace.RTL) {

@@ -810,6 +810,7 @@ css.register(`
 }
 
 .blocklyCommentTopbarBackground {
+  cursor: grab;
   fill: var(--commentBorderColour);
   height: 24px;
 }

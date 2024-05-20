@@ -164,12 +164,12 @@ export function hideIfOwner(oldOwner: unknown) {
 
 /**
  * Destroy the widget and hide the div if it is being used by an object in the
- * specified workspace.
+ * specified workspace, or if it is used by an unknown workspace.
  *
  * @param oldOwnerWorkspace The workspace that was using this container.
  */
 export function hideIfOwnerIsInWorkspace(oldOwnerWorkspace: WorkspaceSvg) {
-  if (ownerWorkspace === oldOwnerWorkspace) {
+  if (ownerWorkspace === null || ownerWorkspace === oldOwnerWorkspace) {
     hide();
   }
 }

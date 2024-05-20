@@ -111,7 +111,7 @@ export class Dragger implements IDragger {
       isDeletable(this.draggable) &&
       this.wouldDeleteDraggable(e, this.draggable);
 
-    // TODO(#8148): used a generalized API instead of an instanceof check.
+    // TODO(#8148): use a generalized API instead of an instanceof check.
     if (wouldDelete && this.draggable instanceof BlockSvg) {
       blockAnimations.disposeUiEffect(this.draggable);
     }

@@ -404,8 +404,6 @@ export class CommentView implements IRenderedElement {
     if (this.workspace.RTL) {
       this.foreignObject.setAttribute('x', `${-size.width}`);
     }
-    this.textArea.style.width = `${size.width}px`;
-    this.textArea.style.height = `${size.height}px`;
   }
 
   /**

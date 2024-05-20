@@ -70,11 +70,11 @@ export class RenderedWorkspaceComment
     browserEvents.conditionalBind(
       this.view.getSvgRoot(),
       'wheel',
-      this, (e: Event) => {
+      this,
+      (e: Event) => {
         e.stopPropagation();
-      }
+      },
     );
-
   }
 
   /**

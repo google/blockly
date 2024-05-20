@@ -66,6 +66,15 @@ export class RenderedWorkspaceComment
       this,
       this.startGesture,
     );
+    // Don't zoom with mousewheel; let it scroll instead.
+    browserEvents.conditionalBind(
+      this.view.getSvgRoot(),
+      'wheel',
+      this,
+      (e: Event) => {
+        e.stopPropagation();
+      },
+    );
   }
 
   /**
@@ -120,10 +129,21 @@ export class RenderedWorkspaceComment
     return this.view.getSvgRoot();
   }
 
-  /** Returns the bounding rectangle of this comment in workspace coordinates. */
+  /**
+   * Returns the comment's size in workspace units.
+   * Does not respect collapsing.
+   */
+  getSize(): Size {
+    return super.getSize();
+  }
+
+  /**
+   * Returns the bounding rectangle of this comment in workspace coordinates.
+   * Respects collapsing.
+   */
   getBoundingRectangle(): Rect {
     const loc = this.getRelativeToSurfaceXY();
-    const size = this.getSize();
+    const size = this.view?.getSize() ?? this.getSize();
     let left;
     let right;
     if (this.workspace.RTL) {

@@ -500,7 +500,7 @@ input[type=number] {
   margin-right: -24px;
 }
 
-.blocklyBlockDragSurface {
+.blocklyBlockDragSurface, .blocklyAnimationLayer {
   position: absolute;
   top: 0;
   left: 0;

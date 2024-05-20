@@ -286,9 +286,12 @@ export class CommentView implements IRenderedElement {
     return this.svgRoot;
   }
 
-  /** Returns the current size of the comment in workspace units. */
+  /**
+   * Returns the current size of the comment in workspace units.
+   * Respects collapsing.
+   */
   getSize(): Size {
-    return this.size;
+    return this.collapsed ? this.topBarBackground.getBBox() : this.size;
   }
 
   /**
@@ -401,8 +404,6 @@ export class CommentView implements IRenderedElement {
     if (this.workspace.RTL) {
       this.foreignObject.setAttribute('x', `${-size.width}`);
     }
-    this.textArea.style.width = `${size.width}px`;
-    this.textArea.style.height = `${size.height}px`;
   }
 
   /**
@@ -773,14 +774,13 @@ css.register(`
 .blocklyComment .blocklyTextarea {
   background-color: var(--commentFillColour);
   border: 1px solid var(--commentBorderColour);
-  outline: 0;
-  resize: none;
-  overflow: hidden;
   box-sizing: border-box;
-  padding: 8px;
+  display: block;
+  outline: 0;
+  padding: 5px;
+  resize: none;
   width: 100%;
   height: 100%;
-  display: block;
 }
 
 .blocklyReadonly.blocklyComment .blocklyTextarea {

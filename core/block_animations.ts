@@ -42,15 +42,11 @@ export function disposeUiEffect(block: BlockSvg) {
   // Deeply clone the current block.
   const clone: SVGGElement = svgGroup.cloneNode(true) as SVGGElement;
   clone.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
-  if (workspace.isDragging()) {
-    workspace.getLayerManager()?.moveToDragLayer({
-      getSvgRoot: () => {
-        return clone;
-      },
-    });
-  } else {
-    workspace.getLayerManager()?.getBlockLayer().appendChild(clone);
-  }
+  workspace.getLayerManager()?.appendToAnimationLayer({
+    getSvgRoot: () => {
+      return clone;
+    },
+  });
   const cloneRect = {
     'x': xy.x,
     'y': xy.y,

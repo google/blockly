@@ -405,7 +405,7 @@ export class CommentView implements IRenderedElement {
       this.foreignObject.setAttribute('x', `${-size.width}`);
     }
     this.textArea.style.width = `${size.width}px`;
-    this.textArea.style.height = `${size.height}px`;
+    this.textArea.style.height = '100%';
   }
 
   /**
@@ -778,7 +778,6 @@ css.register(`
   border: 1px solid var(--commentBorderColour);
   outline: 0;
   resize: none;
-  overflow: hidden;
   box-sizing: border-box;
   padding: 8px;
   width: 100%;

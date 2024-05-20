@@ -199,7 +199,7 @@ export class TextInputBubble extends Bubble {
     this.inputRoot.setAttribute('width', `${widthMinusBorder}`);
     this.inputRoot.setAttribute('height', `${heightMinusBorder}`);
     this.textArea.style.width = `${widthMinusBorder - 4}px`;
-    this.textArea.style.height = `${heightMinusBorder - 4}px`;
+    this.textArea.style.height = '100%';
 
     this.resizeGroup.setAttribute('y', `${heightMinusBorder}`);
     if (this.workspace.RTL) {
@@ -310,6 +310,5 @@ Css.register(`
   outline: 0;
   padding: 3px;
   resize: none;
-  text-overflow: hidden;
 }
 `);

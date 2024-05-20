@@ -66,6 +66,15 @@ export class RenderedWorkspaceComment
       this,
       this.startGesture,
     );
+    // Don't zoom with mousewheel.
+    browserEvents.conditionalBind(
+      this.view.getSvgRoot(),
+      'wheel',
+      this, (e: Event) => {
+        e.stopPropagation();
+      }
+    );
+
   }
 
   /**

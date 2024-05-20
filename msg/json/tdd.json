@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"AeyTaiNuea",
 			"咽頭べさ"
 		]
 	},
@@ -71,7 +72,7 @@
 	"LOGIC_COMPARE_TOOLTIP_GT": "ᥔᥒᥴᥝᥣᥲ ᥟᥢᥴᥚᥫᥛᥳᥔᥬᥱ ᥟᥩᥢᥴᥖᥣᥒᥰ ᥕᥬᥱᥘᥫᥴ ᥟᥢᥴᥚᥫᥛᥳᥔᥬᥱ ᥛᥣᥭᥴᥔᥩᥒᥴᥓᥪᥒᥴ ᥛᥦᥰᥑᥪᥢᥰ ᥞᥬᥲᥛᥣᥢᥱᥛᥦᥢᥲ.",
 	"LOGIC_COMPARE_TOOLTIP_GTE": "ᥔᥒᥴᥝᥣᥲ ᥟᥢᥴᥚᥫᥛᥳᥔᥬᥱ ᥟᥩᥢᥴᥖᥣᥒᥰ ᥕᥬᥱᥘᥫᥴ ᥟᥛᥱᥢᥢᥴ ᥚᥥᥒᥱᥙᥥᥒᥰ ᥟᥢᥴᥚᥫᥛᥳᥔᥬᥱ ᥛᥣᥭᥴᥔᥩᥒᥴᥓᥪᥒᥴ ᥛᥦᥰᥑᥪᥢᥰ ᥞᥬᥲᥛᥣᥢᥱᥛᥦᥢᥲ.",
 	"LOGIC_OPERATION_TOOLTIP_AND": "ᥔᥒᥴᥝᥣᥲ ᥟᥢᥴᥚᥫᥛᥳᥔᥬᥱ ᥖᥒᥰᥔᥩᥒᥴᥟᥢᥴ ᥛᥣᥢᥱᥛᥦᥢᥲᥓᥪᥒᥴᥓᥪᥒᥴ ᥛᥦᥰᥑᥪᥢᥰ ᥞᥬᥲᥛᥣᥢᥱᥛᥦᥢᥲ.",
-	"LOGIC_OPERATION_AND": "ᥘᥦᥲ",
+	"LOGIC_OPERATION_AND": "ᥘᥦᥰ",
 	"LOGIC_OPERATION_TOOLTIP_OR": "ᥔᥒᥴᥝᥣᥲ ᥟᥢᥴᥚᥫᥛᥳᥔᥬᥱ ᥐᥛᥰᥘᥪᥢᥰᥔᥧᥖᥰ ᥛᥣᥢᥱᥛᥦᥢᥲᥓᥪᥒᥴ ᥛᥦᥰᥑᥪᥢᥰ ᥞᥬᥲᥛᥣᥢᥱᥛᥦᥢᥲ.",
 	"LOGIC_OPERATION_OR": "ᥟᥛᥱᥢᥢᥴ",
 	"LOGIC_NEGATE_TITLE": "ᥟᥛᥱᥓᥬᥲ %1",
@@ -101,8 +102,8 @@
 	"MATH_SINGLE_TOOLTIP_NEG": "ᥘᥥᥝᥴᥑᥪᥢᥰ ᥟᥢᥴᥔᥣᥢᥴᥑᥖᥰ ᥢᥬᥰ ᥛᥣᥭᥴᥢᥙᥳ.",
 	"MATH_SINGLE_TOOLTIP_LN": "ᥘᥥᥝᥴᥑᥪᥢᥰ ᥘᥩᥐᥰᥘᥣᥭᥰᥢᥙᥳ ᥢᥬᥰᥛᥣᥭᥴᥢᥙᥳ.",
 	"MATH_SINGLE_TOOLTIP_LOG10": "ᥘᥥᥝᥴᥑᥪᥢᥰ ᥙᥪᥢᥳᥗᥣᥢᥴ 10 ᥘᥩᥐᥰᥘᥣᥭᥰᥢᥙᥳ ᥢᥬᥰᥛᥣᥭᥴᥢᥙᥳ.",
-	"MATH_SINGLE_TOOLTIP_EXP": "ᥘᥥᥝᥴᥑᥪᥢᥰ e ᥐᥣᥱᥖᥤᥲ ᥙᥣᥱᥝᥣᥱ ᥢᥬᥰᥛᥣᥭᥴᥢᥙᥳ.",
-	"MATH_SINGLE_TOOLTIP_POW10": "ᥘᥥᥝᥴᥑᥪᥢᥰ 10 ᥐᥣᥱᥖᥤᥲ ᥙᥣᥱᥝᥣᥱ ᥢᥬᥰᥛᥣᥭᥴᥢᥙᥳ.",
+	"MATH_SINGLE_TOOLTIP_EXP": "ᥘᥥᥝᥴ ᥑᥪᥢᥰ e ᥐᥣᥱ ᥖᥤ ᥙᥣᥱ ᥝᥣᥱ ᥘᥬᥰ ᥛᥣᥭᥴ ᥘᥙᥳ.",
+	"MATH_SINGLE_TOOLTIP_POW10": "ᥘᥥᥝᥴ ᥑᥪᥢᥰ 10 ᥐᥣᥱ ᥖᥤ ᥙᥣᥱ ᥝᥣᥱ ᥘᥬᥰ ᥛᥣᥭᥴ ᥘᥙᥳ.",
 	"MATH_IS_EVEN": "ᥙᥥᥢᥴᥐᥨᥙᥳ",
 	"MATH_IS_ODD": "ᥙᥥᥢᥴᥐᥤᥐᥲ"
 }

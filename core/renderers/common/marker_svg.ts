@@ -24,6 +24,7 @@ import * as svgPaths from '../../utils/svg_paths.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
 
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
+import {FlyoutButton} from '../../flyout_button.js';
 
 /** The name of the CSS class for a cursor. */
 const CURSOR_CLASS = 'blocklyCursor';
@@ -205,6 +206,8 @@ export class MarkerSvg {
       this.showWithCoordinates_(curNode);
     } else if (curNode.getType() === ASTNode.types.STACK) {
       this.showWithStack_(curNode);
+    } else if (curNode.getType() === ASTNode.types.BUTTON) {
+      this.showWithButton_(curNode);
     }
   }
 
@@ -375,6 +378,38 @@ export class MarkerSvg {
     }
     this.positionRect_(x, y, width, height);
     this.setParent_(block);
+    this.showCurrent_();
+  }
+
+  /**
+   * Position and display the marker for a flyout button.
+   * This is a box with extra padding around the button.
+   *
+   * @param curNode The node to draw the marker for.
+   */
+  protected showWithButton_(curNode: ASTNode) {
+    const button = curNode.getLocation() as FlyoutButton;
+
+    // Gets the height and width of entire stack.
+    const heightWidth = {height: button.height, width: button.width};
+
+    // Add padding so that being on a button looks similar to being on a stack.
+    const width = heightWidth.width + this.constants_.CURSOR_STACK_PADDING;
+    const height = heightWidth.height + this.constants_.CURSOR_STACK_PADDING;
+
+    // Shift the rectangle slightly to upper left so padding is equal on all
+    // sides.
+    const xPadding = -this.constants_.CURSOR_STACK_PADDING / 2;
+    const yPadding = -this.constants_.CURSOR_STACK_PADDING / 2;
+
+    let x = xPadding;
+    const y = yPadding;
+
+    if (this.workspace.RTL) {
+      x = -(width + xPadding);
+    }
+    this.positionRect_(x, y, width, height);
+    this.setParent_(button);
     this.showCurrent_();
   }
 

@@ -13,7 +13,7 @@
 
 import type {Abstract as AbstractEvent} from './events/events_abstract.js';
 import type {Block} from './block.js';
-import type {BlockSvg} from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
@@ -22,6 +22,7 @@ import * as eventUtils from './events/utils.js';
 import {FlyoutButton} from './flyout_button.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
+import {MANUALLY_DISABLED} from './constants.js';
 import type {Options} from './options.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
 import * as blocks from './serialization/blocks.js';
@@ -42,6 +43,13 @@ enum FlyoutItemType {
   BLOCK = 'block',
   BUTTON = 'button',
 }
+
+/**
+ * The language-neutral ID for when the reason why a block is disabled is
+ * because the workspace is at block capacity.
+ */
+const WORKSPACE_AT_BLOCK_CAPACITY_DISABLED_REASON =
+  'WORKSPACE_AT_BLOCK_CAPACITY';
 
 /**
  * Class for a flyout.
@@ -160,6 +168,11 @@ export abstract class Flyout
    * List of visible buttons.
    */
   protected buttons_: FlyoutButton[] = [];
+
+  /**
+   * List of visible buttons and blocks.
+   */
+  protected contents: FlyoutItem[] = [];
 
   /**
    * List of event listeners.
@@ -547,6 +560,23 @@ export abstract class Flyout
   }
 
   /**
+   * Get the list of buttons and blocks of the current flyout.
+   *
+   * @returns The array of flyout buttons and blocks.
+   */
+  getContents(): FlyoutItem[] {
+    return this.contents;
+  }
+
+  /**
+   * Store the list of buttons and blocks on the flyout.
+   *
+   * @param contents - The array of items for the flyout.
+   */
+  setContents(contents: FlyoutItem[]): void {
+    this.contents = contents;
+  }
+  /**
    * Update the display property of the flyout based whether it thinks it should
    * be visible and whether its containing workspace is visible.
    */
@@ -650,6 +680,8 @@ export abstract class Flyout
     const flyoutInfo = this.createFlyoutInfo(parsedContent);
 
     renderManagement.triggerQueuedRenders(this.workspace_);
+
+    this.setContents(flyoutInfo.contents);
 
     this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 
@@ -803,6 +835,12 @@ export abstract class Flyout
         if (blockInfo['enabled'] === undefined) {
           blockInfo['enabled'] =
             blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
+        }
+        if (
+          blockInfo['disabledReasons'] === undefined &&
+          blockInfo['enabled'] === false
+        ) {
+          blockInfo['disabledReasons'] = [MANUALLY_DISABLED];
         }
         block = blocks.appendInternal(
           blockInfo as blocks.State,
@@ -1201,12 +1239,15 @@ export abstract class Flyout
   private filterForCapacity() {
     const blocks = this.workspace_.getTopBlocks(false);
     for (let i = 0, block; (block = blocks[i]); i++) {
-      if (this.permanentlyDisabled.indexOf(block) === -1) {
+      if (!this.permanentlyDisabled.includes(block)) {
         const enable = this.targetWorkspace.isCapacityAvailable(
           common.getBlockTypeCounts(block),
         );
         while (block) {
-          block.setEnabled(enable);
+          block.setDisabledReason(
+            !enable,
+            WORKSPACE_AT_BLOCK_CAPACITY_DISABLED_REASON,
+          );
           block = block.getNextBlock();
         }
       }
@@ -1251,14 +1292,24 @@ export abstract class Flyout
     }
 
     // Clone the block.
-    const json = blocks.save(oldBlock) as blocks.State;
-    // Normallly this resizes leading to weird jumps. Save it for terminateDrag.
+    const json = this.serializeBlock(oldBlock);
+    // Normally this resizes leading to weird jumps. Save it for terminateDrag.
     targetWorkspace.setResizesEnabled(false);
     const block = blocks.append(json, targetWorkspace) as BlockSvg;
 
     this.positionNewBlock(oldBlock, block);
 
     return block;
+  }
+
+  /**
+   * Serialize a block to JSON.
+   *
+   * @param block The block to serialize.
+   * @returns A serialized representation of the block.
+   */
+  protected serializeBlock(block: BlockSvg): blocks.State {
+    return blocks.save(block) as blocks.State;
   }
 
   /**

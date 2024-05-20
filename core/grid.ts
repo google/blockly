@@ -13,6 +13,7 @@
 // Former goog.module ID: Blockly.Grid
 
 import * as dom from './utils/dom.js';
+import {Coordinate} from './utils/coordinate.js';
 import {Svg} from './utils/svg.js';
 import {GridOptions} from './options.js';
 
@@ -66,10 +67,24 @@ export class Grid {
     this.update(this.scale);
   }
 
+  /**
+   * Get the spacing of the grid points (in px).
+   *
+   * @returns The spacing of the grid points.
+   */
+  getSpacing(): number {
+    return this.spacing;
+  }
+
   /** Sets the length of the grid lines. */
   setLength(length: number) {
     this.length = length;
     this.update(this.scale);
+  }
+
+  /** Get the length of the grid lines (in px). */
+  getLength(): number {
+    return this.length;
   }
 
   /**
@@ -85,23 +100,12 @@ export class Grid {
   }
 
   /**
-   * Whether blocks should snap to the grid, based on the initial configuration.
+   * Whether blocks should snap to the grid.
    *
    * @returns True if blocks should snap, false otherwise.
-   * @internal
    */
   shouldSnap(): boolean {
     return this.snapToGrid;
-  }
-
-  /**
-   * Get the spacing of the grid points (in px).
-   *
-   * @returns The spacing of the grid points.
-   * @internal
-   */
-  getSpacing(): number {
-    return this.spacing;
   }
 
   /**
@@ -179,6 +183,25 @@ export class Grid {
   moveTo(x: number, y: number) {
     this.pattern.setAttribute('x', `${x}`);
     this.pattern.setAttribute('y', `${y}`);
+  }
+
+  /**
+   * Given a coordinate, return the nearest coordinate aligned to the grid.
+   *
+   * @param xy A workspace coordinate.
+   * @returns Workspace coordinate of nearest grid point.
+   *   If there's no change, return the same coordinate object.
+   */
+  alignXY(xy: Coordinate): Coordinate {
+    const spacing = this.getSpacing();
+    const half = spacing / 2;
+    const x = Math.round(Math.round((xy.x - half) / spacing) * spacing + half);
+    const y = Math.round(Math.round((xy.y - half) / spacing) * spacing + half);
+    if (x === xy.x && y === xy.y) {
+      // No change.
+      return xy;
+    }
+    return new Coordinate(x, y);
   }
 
   /**

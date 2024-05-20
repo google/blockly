@@ -617,7 +617,7 @@ export class ConstantProvider {
   getBlockStyle(blockStyleName: string | null): BlockStyle {
     return (
       this.blockStyles[blockStyleName || ''] ||
-      (blockStyleName && blockStyleName.indexOf('auto_') === 0
+      (blockStyleName && blockStyleName.startsWith('auto_')
         ? this.getBlockStyleForColour(blockStyleName.substring(5)).style
         : this.createBlockStyle_('#000000'))
     );

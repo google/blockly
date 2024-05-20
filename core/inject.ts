@@ -53,7 +53,10 @@ export function inject(
   }
   const options = new Options(opt_options || ({} as BlocklyOptions));
   const subContainer = document.createElement('div');
-  subContainer.className = 'injectionDiv';
+  dom.addClass(subContainer, 'injectionDiv');
+  if (opt_options?.rtl) {
+    dom.addClass(subContainer, 'blocklyRTL');
+  }
   subContainer.tabIndex = 0;
   aria.setState(subContainer, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
 

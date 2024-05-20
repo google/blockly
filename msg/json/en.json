@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-12-08 18:42:04.679586",
+		"lastupdated": "2024-04-16 23:19:53.668551",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -291,10 +291,11 @@
 	"LISTS_ISEMPTY_TITLE": "%1 is empty",
 	"LISTS_ISEMPTY_TOOLTIP": "Returns true if the list is empty.",
 	"LISTS_INLIST": "in list",
-	"LISTS_INDEX_OF_HELPURL": "https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list",
+	"LISTS_INDEX_OF_HELPURL": "https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list",
 	"LISTS_INDEX_OF_FIRST": "find first occurrence of item",
 	"LISTS_INDEX_OF_LAST": "find last occurrence of item",
 	"LISTS_INDEX_OF_TOOLTIP": "Returns the index of the first/last occurrence of the item in the list. Returns %1 if item is not found.",
+	"LISTS_GET_INDEX_HELPURL": "https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list",
 	"LISTS_GET_INDEX_GET": "get",
 	"LISTS_GET_INDEX_GET_REMOVE": "get and remove",
 	"LISTS_GET_INDEX_REMOVE": "remove",
@@ -369,6 +370,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "do something",
 	"PROCEDURES_BEFORE_PARAMS": "with:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "with:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Can't run the user-defined function '%1' because the definition block is disabled.",
 	"PROCEDURES_DEFNORETURN_DO": "",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Creates a function with no output.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Describe this function...",

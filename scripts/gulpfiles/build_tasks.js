@@ -23,7 +23,7 @@ const closureCompiler = require('google-closure-compiler').gulp();
 const argv = require('yargs').argv;
 const {rimraf} = require('rimraf');
 
-const {BUILD_DIR, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
+const {BUILD_DIR, LANG_BUILD_DIR, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 const {getPackageJson} = require('./helper_tasks');
 
 const {posixPath, quote} = require('../helpers');
@@ -344,28 +344,43 @@ this removal!
   done();
 }
 
+var languages = null;
+
+/**
+ * Get list of languages to build langfiles and/or shims for, based on .json
+ * files in msg/json/, skipping certain entries that do not correspond to an
+ * actual language).  Results are cached as this is called from both
+ * buildLangfiles and buildLangfileShims.
+ */
+function getLanguages() {
+  if (!languages) {
+    const skip = /^(keys|synonyms|qqq|constants)\.json$/;
+    languages = fs.readdirSync(path.join('msg', 'json'))
+        .filter(file => file.endsWith('json') && !skip.test(file))
+        .map(file => file.replace(/\.json$/, ''));
+  }
+  return languages;
+}
+
 /**
  * This task builds Blockly's lang files.
  *     msg/*.js
  */
 function buildLangfiles(done) {
   // Create output directory.
-  const outputDir = path.join(BUILD_DIR, 'msg');
-  fs.mkdirSync(outputDir, {recursive: true});
+  fs.mkdirSync(LANG_BUILD_DIR, {recursive: true});
 
   // Run create_messages.py.
-  let json_files = fs.readdirSync(path.join('msg', 'json'));
-  json_files = json_files.filter(file => file.endsWith('json') &&
-      !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
-  json_files = json_files.map(file => path.join('msg', 'json', file));
+  const inputFiles = getLanguages().map(
+      lang => path.join('msg', 'json', `${lang}.json`));
 
   const createMessagesCmd = `${PYTHON} ./scripts/i18n/create_messages.py \
   --source_lang_file ${path.join('msg', 'json', 'en.json')} \
   --source_synonym_file ${path.join('msg', 'json', 'synonyms.json')} \
   --source_constants_file ${path.join('msg', 'json', 'constants.json')} \
   --key_file ${path.join('msg', 'json', 'keys.json')} \
-  --output_dir ${outputDir} \
-  --quiet ${json_files.join(' ')}`;
+  --output_dir ${LANG_BUILD_DIR} \
+  --quiet ${inputFiles.join(' ')}`;
   execSync(createMessagesCmd, {stdio: 'inherit'});
 
   done();
@@ -566,7 +581,10 @@ function buildCompiled() {
 }
 
 /**
- * This task builds the shims used by the playgrounds and tests to
+ * This task builds the ESM wrappers used by the chunk "import"
+ * entrypoints declared in package.json.
+ *
+ * Also builds the shims used by the playgrounds and tests to
  * load Blockly in either compressed or uncompressed mode, creating
  * build/blockly.loader.mjs, blocks.loader.mjs, javascript.loader.mjs,
  * etc.
@@ -580,11 +598,38 @@ async function buildShims() {
   const TMP_PACKAGE_JSON = path.join(BUILD_DIR, 'package.json');
   await fsPromises.writeFile(TMP_PACKAGE_JSON, '{"type": "module"}');
 
-  // Import each entrypoint module, enumerate its exports, and write
-  // a shim to load the chunk either by importing the entrypoint
-  // module or by loading the compiled script.
   await Promise.all(chunks.map(async (chunk) => {
+    // Import chunk entrypoint to get names of exports for chunk.
     const entryPath = path.posix.join(TSC_OUTPUT_DIR_POSIX, chunk.entry);
+    const exportedNames = Object.keys(await import(`../../${entryPath}`));
+
+    // Write an ESM wrapper that imports the CJS module and re-exports
+    // its named exports.
+    const cjsPath = `./${chunk.name}${COMPILED_SUFFIX}.js`;
+    const wrapperPath = path.join(RELEASE_DIR, `${chunk.name}.mjs`);
+    const importName = chunk.scriptExport.replace(/.*\./, '');
+
+    await fsPromises.writeFile(wrapperPath,
+        `import ${importName} from '${cjsPath}';
+export const {
+${exportedNames.map((name) => `  ${name},`).join('\n')}
+} = ${importName};
+`);
+
+    // For first chunk, write an additional ESM wrapper for 'blockly'
+    // entrypoint since it has the same exports as 'blockly/core'.
+    if (chunk.name === 'blockly') {
+      await fsPromises.writeFile(path.join(RELEASE_DIR, `index.mjs`),
+          `import Blockly from './index.js';
+export const {
+${exportedNames.map((name) => `  ${name},`).join('\n')}
+} = Blockly;
+`);
+    }
+
+    // Write a loading shim that uses loadChunk to either import the
+    // chunk's entrypoint (e.g. build/src/core/blockly.js) or load the
+    // compressed chunk (e.g. dist/blockly_compressed.js) as a script.
     const scriptPath =
         path.posix.join(RELEASE_DIR, `${chunk.name}${COMPILED_SUFFIX}.js`);
     const shimPath = path.join(BUILD_DIR, `${chunk.name}.loader.mjs`);
@@ -592,14 +637,13 @@ async function buildShims() {
         chunk.parent ?
         `import ${quote(`./${chunk.parent.name}.loader.mjs`)};` :
         '';
-    const exports = await import(`../../${entryPath}`);
 
     await fsPromises.writeFile(shimPath,
         `import {loadChunk} from '../tests/scripts/load.mjs';
 ${parentImport}
 
 export const {
-${Object.keys(exports).map((name) => `  ${name},`).join('\n')}
+${exportedNames.map((name) => `  ${name},`).join('\n')}
 } = await loadChunk(
   ${quote(entryPath)},
   ${quote(scriptPath)},
@@ -611,7 +655,37 @@ ${Object.keys(exports).map((name) => `  ${name},`).join('\n')}
   await fsPromises.rm(TMP_PACKAGE_JSON);
 }
 
+/**
+ * This task builds the ESM wrappers used by the langfiles "import"
+ * entrypoints declared in package.json.
+ */
+async function buildLangfileShims() {
+  // Create output directory.
+  fs.mkdirSync(path.join(RELEASE_DIR, 'msg'), {recursive: true});
 
+  // Get the names of the exports from the langfile by require()ing
+  // msg/messages.js and letting it mutate the (global) Blockly.Msg.
+  // (We have to do it this way because messages.js is a script and
+  // not a CJS module with exports.)
+  globalThis.Blockly = {Msg: {}};
+  require('../../msg/messages.js');
+  const exportedNames = Object.keys(globalThis.Blockly.Msg);
+  delete globalThis.Blockly;
+
+  await Promise.all(getLanguages().map(async (lang) => {
+    // Write an ESM wrapper that imports the CJS module and re-exports
+    // its named exports.
+    const cjsPath = `./${lang}.js`;
+    const wrapperPath = path.join(RELEASE_DIR, 'msg', `${lang}.mjs`);
+
+    await fsPromises.writeFile(wrapperPath,
+        `import ${lang} from '${cjsPath}';
+export const {
+${exportedNames.map((name) => `  ${name},`).join('\n')}
+} = ${lang};
+`);
+  }));
+}
 
 /**
  * This task builds Blockly core, blocks and generators together and uses
@@ -663,7 +737,7 @@ function cleanBuildDir() {
 
 // Main sequence targets.  Each should invoke any immediate prerequisite(s).
 exports.cleanBuildDir = cleanBuildDir;
-exports.langfiles = buildLangfiles;  // Build build/msg/*.js from msg/json/*.
+exports.langfiles = gulp.parallel(buildLangfiles, buildLangfileShims);
 exports.tsc = buildJavaScript;
 exports.minify = gulp.series(exports.tsc, buildCompiled, buildShims);
 exports.build = gulp.parallel(exports.minify, exports.langfiles);

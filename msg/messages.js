@@ -1154,9 +1154,9 @@ Blockly.Msg.LISTS_ISEMPTY_TOOLTIP = 'Returns true if the list is empty.';
 Blockly.Msg.LISTS_INLIST = 'in list';
 
 /** @type {string} */
-/// {{Optional}} url - See [https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list
-/// https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list].
-Blockly.Msg.LISTS_INDEX_OF_HELPURL = 'https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list';
+/// {{Optional}} url - See [https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list
+/// https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list].
+Blockly.Msg.LISTS_INDEX_OF_HELPURL = 'https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list';
 /** @type {string} */
 Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 /** @type {string} */
@@ -1176,7 +1176,9 @@ Blockly.Msg.LISTS_INDEX_OF_LAST = 'find last occurrence of item';
 Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = 'Returns the index of the first/last occurrence of the item in the list. Returns %1 if item is not found.';
 
 /** @type {string} */
-Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
+/// {{Optional}} url - See [https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list
+/// https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list].
+Blockly.Msg.LISTS_GET_INDEX_HELPURL = 'https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list';
 /** @type {string} */
 /// dropdown - Indicates that the user wishes to
 /// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
@@ -1488,6 +1490,12 @@ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = 'with:';
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample
 /// function with parameters].
 Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = 'with:';
+/** @type {string} */
+/// warning - This appears if a block that runs a function can't run because the function
+/// definition block is disabled. See
+/// [https://blockly-demo.appspot.com/static/demos/code/index.html#q947d7 this sample of a
+/// disabled function definition and call block].
+Blockly.Msg.PROCEDURES_CALL_DISABLED_DEF_WARNING = 'Can\'t run the user-defined function "%1" because the definition block is disabled.';
 /** @type {string} */
 /// {{Optional|Supply translation only if your language requires it.  Most do not.}}
 /// block text - This appears next to the function's "body", the blocks that should be

@@ -37,7 +37,7 @@ let isMobile: boolean;
    * @returns True if name is present.
    */
   function has(name: string): boolean {
-    return rawUpper.indexOf(name.toUpperCase()) !== -1;
+    return rawUpper.includes(name.toUpperCase());
   }
 
   // Browsers.  Logic from:

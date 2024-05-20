@@ -62,7 +62,7 @@ export function getRelativeXY(element: Element): Coordinate {
 
   // Then check for style = transform: translate(...) or translate3d(...)
   const style = element.getAttribute('style');
-  if (style && style.indexOf('translate') > -1) {
+  if (style && style.includes('translate')) {
     const styleComponents = style.match(XY_STYLE_REGEX);
     if (styleComponents) {
       xy.x += Number(styleComponents[1]);
@@ -87,10 +87,10 @@ export function getInjectionDivXY(element: Element): Coordinate {
   let y = 0;
   while (element) {
     const xy = getRelativeXY(element);
-    x = x + xy.x;
-    y = y + xy.y;
+    x += xy.x;
+    y += xy.y;
     const classes = element.getAttribute('class') || '';
-    if ((' ' + classes + ' ').indexOf(' injectionDiv ') !== -1) {
+    if ((' ' + classes + ' ').includes(' injectionDiv ')) {
       break;
     }
     element = element.parentNode as Element;

@@ -20,6 +20,7 @@ import {
   createBlockDefinitionsFromJsonArray,
   defineBlocks,
 } from '../core/common.js';
+import * as eventUtils from '../core/events/utils.js';
 import '../core/field_dropdown.js';
 import '../core/field_label.js';
 import '../core/field_number.js';
@@ -335,6 +336,11 @@ interface ControlFlowInLoopMixin extends ControlFlowInLoopMixinType {}
 type ControlFlowInLoopMixinType = typeof CONTROL_FLOW_IN_LOOP_CHECK_MIXIN;
 
 /**
+ * The language-neutral ID for when the reason why a block is disabled is
+ * because the block is only valid inside of a loop.
+ */
+const CONTROL_FLOW_NOT_IN_LOOP_DISABLED_REASON = 'CONTROL_FLOW_NOT_IN_LOOP';
+/**
  * This mixin adds a check to make sure the 'controls_flow_statements' block
  * is contained in a loop. Otherwise a warning is added to the block.
  */
@@ -365,19 +371,30 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     // Don't change state if:
     //   * It's at the start of a drag.
     //   * It's not a move event.
-    if (!ws.isDragging || ws.isDragging() || e.type !== Events.BLOCK_MOVE) {
+    if (
+      !ws.isDragging ||
+      ws.isDragging() ||
+      (e.type !== Events.BLOCK_MOVE && e.type !== Events.BLOCK_CREATE)
+    ) {
       return;
     }
     const enabled = !!this.getSurroundLoop();
     this.setWarningText(
       enabled ? null : Msg['CONTROLS_FLOW_STATEMENTS_WARNING'],
     );
+
     if (!this.isInFlyout) {
-      const group = Events.getGroup();
-      // Makes it so the move and the disable event get undone together.
-      Events.setGroup(e.group);
-      this.setEnabled(enabled);
-      Events.setGroup(group);
+      try {
+        // There is no need to record the enable/disable change on the undo/redo
+        // list since the change will be automatically recreated when replayed.
+        eventUtils.setRecordUndo(false);
+        this.setDisabledReason(
+          !enabled,
+          CONTROL_FLOW_NOT_IN_LOOP_DISABLED_REASON,
+        );
+      } finally {
+        eventUtils.setRecordUndo(true);
+      }
     }
   },
 };

@@ -6,6 +6,7 @@
 
 import {BlockSvg} from './block_svg.js';
 import * as userAgent from './utils/useragent.js';
+import * as eventUtils from './events/utils.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /** The set of all blocks in need of rendering which don't have parents. */
@@ -13,6 +14,9 @@ const rootBlocks = new Set<BlockSvg>();
 
 /** The set of all blocks in need of rendering. */
 const dirtyBlocks = new WeakSet<BlockSvg>();
+
+/** A map from queued blocks to the event group from when they were queued. */
+const eventGroups = new WeakMap<BlockSvg, string>();
 
 /**
  * The promise which resolves after the current set of renders is completed. Or
@@ -103,6 +107,7 @@ function alwaysImmediatelyRender() {
  */
 function queueBlock(block: BlockSvg) {
   dirtyBlocks.add(block);
+  eventGroups.set(block, eventUtils.getGroup());
   const parent = block.getParent();
   if (parent) {
     queueBlock(parent);
@@ -133,6 +138,15 @@ function doRenders(workspace?: WorkspaceSvg) {
     const blockOrigin = block.getRelativeToSurfaceXY();
     block.updateComponentLocations(blockOrigin);
   }
+  for (const block of blocks) {
+    const oldGroup = eventUtils.getGroup();
+    const newGroup = eventGroups.get(block);
+    if (newGroup) eventUtils.setGroup(newGroup);
+
+    block.bumpNeighbours();
+
+    eventUtils.setGroup(oldGroup);
+  }
 
   for (const block of blocks) {
     dequeueBlock(block);
@@ -144,6 +158,7 @@ function doRenders(workspace?: WorkspaceSvg) {
 function dequeueBlock(block: BlockSvg) {
   rootBlocks.delete(block);
   dirtyBlocks.delete(block);
+  eventGroups.delete(block);
   for (const child of block.getChildren(false)) {
     dequeueBlock(child);
   }
@@ -155,7 +170,7 @@ function dequeueBlock(block: BlockSvg) {
  * No need to render dead blocks.
  *
  * No need to render blocks with parents. A render for the block may have been
- * queued, and the the block was connected to a parent, so it is no longer a
+ * queued, and the block was connected to a parent, so it is no longer a
  * root block. Rendering will be triggered through the real root block.
  */
 function shouldRenderRootBlock(block: BlockSvg): boolean {
@@ -170,6 +185,7 @@ function shouldRenderRootBlock(block: BlockSvg): boolean {
  */
 function renderBlock(block: BlockSvg) {
   if (!dirtyBlocks.has(block)) return;
+  if (!block.initialized) return;
   for (const child of block.getChildren(false)) {
     renderBlock(child);
   }

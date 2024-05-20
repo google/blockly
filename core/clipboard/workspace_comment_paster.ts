@@ -8,11 +8,14 @@ import {IPaster} from '../interfaces/i_paster.js';
 import {ICopyData} from '../interfaces/i_copyable.js';
 import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
-import {WorkspaceCommentSvg} from '../workspace_comment_svg.js';
 import * as registry from './registry.js';
+import * as commentSerialiation from '../serialization/workspace_comments.js';
+import * as eventUtils from '../events/utils.js';
+import * as common from '../common.js';
+import {RenderedWorkspaceComment} from '../comments/rendered_workspace_comment.js';
 
 export class WorkspaceCommentPaster
-  implements IPaster<WorkspaceCommentCopyData, WorkspaceCommentSvg>
+  implements IPaster<WorkspaceCommentCopyData, RenderedWorkspaceComment>
 {
   static TYPE = 'workspace-comment';
 
@@ -20,26 +23,72 @@ export class WorkspaceCommentPaster
     copyData: WorkspaceCommentCopyData,
     workspace: WorkspaceSvg,
     coordinate?: Coordinate,
-  ): WorkspaceCommentSvg {
+  ): RenderedWorkspaceComment | null {
     const state = copyData.commentState;
+
     if (coordinate) {
-      state.setAttribute('x', `${coordinate.x}`);
-      state.setAttribute('y', `${coordinate.y}`);
-    } else {
-      const x = parseInt(state.getAttribute('x') ?? '0') + 50;
-      const y = parseInt(state.getAttribute('y') ?? '0') + 50;
-      state.setAttribute('x', `${x}`);
-      state.setAttribute('y', `${y}`);
+      state['x'] = coordinate.x;
+      state['y'] = coordinate.y;
     }
-    return WorkspaceCommentSvg.fromXmlRendered(
-      copyData.commentState,
-      workspace,
-    );
+
+    eventUtils.disable();
+    let comment;
+    try {
+      comment = commentSerialiation.append(
+        state,
+        workspace,
+      ) as RenderedWorkspaceComment;
+      moveCommentToNotConflict(comment);
+    } finally {
+      eventUtils.enable();
+    }
+
+    if (!comment) return null;
+
+    if (eventUtils.isEnabled()) {
+      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CREATE))(comment));
+    }
+    common.setSelected(comment);
+    return comment;
   }
 }
 
+function moveCommentToNotConflict(comment: RenderedWorkspaceComment) {
+  const workspace = comment.workspace;
+  const translateDistance = 30;
+  const coord = comment.getRelativeToSurfaceXY();
+  const offset = new Coordinate(0, 0);
+  // getRelativeToSurfaceXY is really expensive, so we want to cache this.
+  const otherCoords = workspace
+    .getTopComments(false)
+    .filter((otherComment) => otherComment.id !== comment.id)
+    .map((c) => c.getRelativeToSurfaceXY());
+
+  while (
+    commentOverlapsOtherExactly(Coordinate.sum(coord, offset), otherCoords)
+  ) {
+    offset.translate(
+      workspace.RTL ? -translateDistance : translateDistance,
+      translateDistance,
+    );
+  }
+
+  comment.moveTo(Coordinate.sum(coord, offset));
+}
+
+function commentOverlapsOtherExactly(
+  coord: Coordinate,
+  otherCoords: Coordinate[],
+): boolean {
+  return otherCoords.some(
+    (otherCoord) =>
+      Math.abs(otherCoord.x - coord.x) <= 1 &&
+      Math.abs(otherCoord.y - coord.y) <= 1,
+  );
+}
+
 export interface WorkspaceCommentCopyData extends ICopyData {
-  commentState: Element;
+  commentState: commentSerialiation.State;
 }
 
 registry.register(WorkspaceCommentPaster.TYPE, new WorkspaceCommentPaster());

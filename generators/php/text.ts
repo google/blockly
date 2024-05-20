@@ -21,16 +21,6 @@ export function text(block: Block, generator: PhpGenerator): [string, Order] {
   return [code, Order.ATOMIC];
 }
 
-export function text_multiline(
-  block: Block,
-  generator: PhpGenerator,
-): [string, Order] {
-  // Text value.
-  const code = generator.multiline_quote_(block.getFieldValue('TEXT'));
-  const order = code.indexOf('.') !== -1 ? Order.STRING_CONCAT : Order.ATOMIC;
-  return [code, order];
-}
-
 export function text_join(
   block: Block,
   generator: PhpGenerator,

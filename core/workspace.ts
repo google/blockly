@@ -30,7 +30,7 @@ import * as math from './utils/math.js';
 import type * as toolbox from './utils/toolbox.js';
 import {VariableMap} from './variable_map.js';
 import type {VariableModel} from './variable_model.js';
-import type {WorkspaceComment} from './workspace_comment.js';
+import {WorkspaceComment} from './comments/workspace_comment.js';
 import {IProcedureMap} from './interfaces/i_procedure_map.js';
 import {ObservableProcedureMap} from './observable_procedure_map.js';
 
@@ -512,6 +512,20 @@ export class Workspace implements IASTNodeLocation {
   newBlock(prototypeName: string, opt_id?: string): Block {
     throw new Error(
       'The implementation of newBlock should be ' +
+        'monkey-patched in by blockly.ts',
+    );
+  }
+
+  /**
+   * Obtain a newly created comment.
+   *
+   * @param id Optional ID.  Use this ID if provided, otherwise create a new
+   *     ID.
+   * @returns The created comment.
+   */
+  newComment(id?: string): WorkspaceComment {
+    throw new Error(
+      'The implementation of newComment should be ' +
         'monkey-patched in by blockly.ts',
     );
   }

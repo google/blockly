@@ -45,7 +45,7 @@
         // The name that the export had before this version.
         // All of the properties on this object are optional.
         'oldExportName': {
-          // The new module that the export is in in this version.  If
+          // The new module that the export is in this version.  If
           // this is not provided, the newModule is assumed to be the
           // parent module's newPath.
           newModule: 'new.module.name',

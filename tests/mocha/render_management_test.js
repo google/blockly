@@ -32,6 +32,8 @@ suite('Render Management', function () {
         isDisposed: () => false,
         getRelativeToSurfaceXY: () => ({x: 0, y: 0}),
         updateComponentLocations: () => {},
+        bumpNeighbours: () => {},
+        initialized: true,
         workspace: {
           resizeContents: () => {},
         },
@@ -72,6 +74,8 @@ suite('Render Management', function () {
         isDisposed: () => false,
         getRelativeToSurfaceXY: () => ({x: 0, y: 0}),
         updateComponentLocations: () => {},
+        bumpNeighbours: () => {},
+        initialized: true,
         workspace: ws || createMockWorkspace(),
       };
     }

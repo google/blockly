@@ -16,7 +16,6 @@ import type {Block} from './block.js';
 import * as common from './common.js';
 import {Names, NameType} from './names.js';
 import type {Workspace} from './workspace.js';
-import {warn} from './utils/deprecation.js';
 
 /**
  * Deprecated, no-longer used type declaration for per-block-type generator
@@ -255,16 +254,7 @@ export class CodeGenerator {
 
     // Look up block generator function in dictionary - but fall back
     // to looking up on this if not found, for backwards compatibility.
-    let func = this.forBlock[block.type];
-    if (!func && (this as any)[block.type]) {
-      warn(
-        'block generator functions on CodeGenerator objects',
-        '10.0',
-        '11.0',
-        'the .forBlock[blockType] dictionary',
-      );
-      func = (this as any)[block.type];
-    }
+    const func = this.forBlock[block.type];
     if (typeof func !== 'function') {
       throw Error(
         `${this.name_} generator does not know how to generate code ` +
@@ -313,6 +303,9 @@ export class CodeGenerator {
       throw TypeError('Expecting valid order from block: ' + block.type);
     }
     const targetBlock = block.getInputTargetBlock(name);
+    if (!targetBlock && !block.getInput(name)) {
+      throw ReferenceError(`Input "${name}" doesn't exist on "${block.type}"`);
+    }
     if (!targetBlock) {
       return '';
     }
@@ -391,6 +384,9 @@ export class CodeGenerator {
    */
   statementToCode(block: Block, name: string): string {
     const targetBlock = block.getInputTargetBlock(name);
+    if (!targetBlock && !block.getInput(name)) {
+      throw ReferenceError(`Input "${name}" doesn't exist on "${block.type}"`);
+    }
     let code = this.blockToCode(targetBlock);
     // Value blocks must return code and order of operations info.
     // Statement blocks must only return code.
@@ -578,11 +574,7 @@ export class CodeGenerator {
    * @param _opt_thisOnly True to generate code for only this statement.
    * @returns Code with comments and subsequent blocks added.
    */
-  protected scrub_(
-    _block: Block,
-    code: string,
-    _opt_thisOnly?: boolean,
-  ): string {
+  scrub_(_block: Block, code: string, _opt_thisOnly?: boolean): string {
     // Optionally override
     return code;
   }

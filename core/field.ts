@@ -314,6 +314,7 @@ export abstract class Field<T = any>
     this.setTooltip(this.tooltip_);
     this.bindEvents_();
     this.initModel();
+    this.applyColour();
   }
 
   /**
@@ -1062,7 +1063,6 @@ export abstract class Field<T = any>
     this.isDirty_ = true;
     if (this.sourceBlock_ && this.sourceBlock_.rendered) {
       (this.sourceBlock_ as BlockSvg).queueRender();
-      (this.sourceBlock_ as BlockSvg).bumpNeighbours();
     }
   }
 
@@ -1086,14 +1086,22 @@ export abstract class Field<T = any>
     }
 
     const classValidation = this.doClassValidation_(newValue);
-    const classValue = this.processValidation_(newValue, classValidation);
+    const classValue = this.processValidation_(
+      newValue,
+      classValidation,
+      fireChangeEvent,
+    );
     if (classValue instanceof Error) {
       doLogging && console.log('invalid class validation, return');
       return;
     }
 
     const localValidation = this.getValidator()?.call(this, classValue);
-    const localValue = this.processValidation_(classValue, localValidation);
+    const localValue = this.processValidation_(
+      classValue,
+      localValidation,
+      fireChangeEvent,
+    );
     if (localValue instanceof Error) {
       doLogging && console.log('invalid local validation, return');
       return;
@@ -1135,14 +1143,16 @@ export abstract class Field<T = any>
    *
    * @param newValue New value.
    * @param validatedValue Validated value.
+   * @param fireChangeEvent Whether to fire a change event if the value changes.
    * @returns New value, or an Error object.
    */
   private processValidation_(
     newValue: AnyDuringMigration,
     validatedValue: T | null | undefined,
+    fireChangeEvent: boolean,
   ): T | Error {
     if (validatedValue === null) {
-      this.doValueInvalid_(newValue);
+      this.doValueInvalid_(newValue, fireChangeEvent);
       if (this.isDirty_) {
         this.forceRerender();
       }
@@ -1209,8 +1219,12 @@ export abstract class Field<T = any>
    * No-op by default.
    *
    * @param _invalidValue The input value that was determined to be invalid.
+   * @param _fireChangeEvent Whether to fire a change event if the value changes.
    */
-  protected doValueInvalid_(_invalidValue: AnyDuringMigration) {}
+  protected doValueInvalid_(
+    _invalidValue: AnyDuringMigration,
+    _fireChangeEvent: boolean = true,
+  ) {}
   // NOP
 
   /**
@@ -1419,6 +1433,22 @@ export abstract class Field<T = any>
       workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
     }
   }
+
+  /**
+   * Subclasses should reimplement this method to construct their Field
+   * subclass from a JSON arg object.
+   *
+   * It is an error to attempt to register a field subclass in the
+   * FieldRegistry if that subclass has not overridden this method.
+   *
+   * @param _options JSON configuration object with properties needed
+   *    to configure a specific field.
+   */
+  static fromJson(_options: FieldConfig): Field {
+    throw new Error(
+      `Attempted to instantiate a field from the registry that hasn't defined a 'fromJson' method.`,
+    );
+  }
 }
 
 /**
@@ -1429,12 +1459,14 @@ export interface FieldConfig {
 }
 
 /**
- * For use by Field and descendants of Field. Constructors can change
+ * Represents an object that has all the prototype properties of the `Field`
+ * class. This is necessary because constructors can change
  * in descendants, though they should contain all of Field's prototype methods.
  *
- * @internal
+ * This type should only be used in places where we directly access the prototype
+ * of a Field class or subclass.
  */
-export type FieldProto = Pick<typeof Field, 'prototype'>;
+type FieldProto = Pick<typeof Field, 'prototype'>;
 
 /**
  * Represents an error where the field is trying to access its block or

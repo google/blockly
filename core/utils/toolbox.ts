@@ -21,6 +21,7 @@ export interface BlockInfo {
   type?: string;
   gap?: string | number;
   disabled?: string | boolean;
+  disabledReasons?: string[];
   enabled?: boolean;
   id?: string;
   x?: number;
@@ -381,7 +382,7 @@ function addAttributes(node: Node, obj: AnyDuringMigration) {
     // AnyDuringMigration because:  Property 'attributes' does not exist on type
     // 'Node'.
     const attr = (node as AnyDuringMigration).attributes[j];
-    if (attr.nodeName.indexOf('css-') > -1) {
+    if (attr.nodeName.includes('css-')) {
       obj['cssconfig'] = obj['cssconfig'] || {};
       obj['cssconfig'][attr.nodeName.replace('css-', '')] = attr.value;
     } else {

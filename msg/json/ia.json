@@ -312,6 +312,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "facer qualcosa",
 	"PROCEDURES_BEFORE_PARAMS": "con:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "con:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Non es possibile executar le function definite per le usator ‘%1’ perque le bloco de definition es disactivate.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Crea un function que non retorna un valor.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Describe iste function...",
 	"PROCEDURES_DEFRETURN_RETURN": "retornar",

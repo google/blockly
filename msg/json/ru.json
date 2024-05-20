@@ -335,6 +335,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "выполнить что-то",
 	"PROCEDURES_BEFORE_PARAMS": "с:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "с:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Невозможно запустить пользовательскую функцию '%1', поскольку блок определения отключен.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Создаёт процедуру, не возвращающую значение.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Опишите эту функцию…",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://ru.wikipedia.org/wiki/Функция_(программирование)",

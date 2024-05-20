@@ -5,6 +5,7 @@
 			"Amire80",
 			"Codenstory",
 			"Delanoor",
+			"Dr1t jg",
 			"Gongsoonyee",
 			"Hym411",
 			"JeonHK",
@@ -19,6 +20,7 @@
 			"Revi",
 			"SeoJeongHo",
 			"Snddl3",
+			"Suleiman the Magnificent Television",
 			"Ykhwong",
 			"아라"
 		]
@@ -56,6 +58,7 @@
 	"NEW_VARIABLE_TITLE": "새 변수 이름:",
 	"VARIABLE_ALREADY_EXISTS": "'%1' 변수는 이미 존재합니다.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "'%1' 변수는 다른 유형에 대해 이미 존재합니다: '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "'%1' 변수가 이미 '%2' 프로시저의 변수로 존재합니다.",
 	"DELETE_VARIABLE_CONFIRMATION": "'%2' 변수에서 %1을(를) 삭제하시겠습니까?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "'%2' 함수 정의의 일부이기 때문에 '%1' 변수를 삭제할 수 없습니다",
 	"DELETE_VARIABLE": "'%1' 변수를 삭제합니다",
@@ -341,6 +344,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "함수 이름",
 	"PROCEDURES_BEFORE_PARAMS": "사용:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "사용:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "정의 블록이 비활성화되었기 때문에 사용자 정의 함수 '%1'를 실행할 수 없습니다.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "실행 후, 결과 값을 돌려주지 않는 함수를 만듭니다.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "이 함수를 설명하세요...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://ko.wikipedia.org/wiki/함수_(컴퓨터_과학)",

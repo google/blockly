@@ -275,7 +275,7 @@
         console.log(e);
       }
 
-      function airstrike(n) {
+      function scatter(n) {
         var prototypes = [];
         var toolbox = getToolboxElement();
         var blocks = toolbox.getElementsByTagName('block');
@@ -440,8 +440,8 @@
           .addEventListener('click', () => toCode('Dart'));
 
         document
-          .getElementById('airstrike')
-          .addEventListener('click', () => airstrike(100));
+          .getElementById('scatter')
+          .addEventListener('click', () => scatter(100));
         document
           .getElementById('spaghetti-xml')
           .addEventListener('click', () => spaghetti(8));
@@ -566,7 +566,7 @@
 
     <p>
       Stress test: &nbsp;
-      <input id="airstrike" type="button" value="Airstrike!" />
+      <input id="scatter" type="button" value="Scatter!" />
       <input id="spaghetti-xml" type="button" value="Spaghetti!" />
       <input id="spaghetti-js" type="button" value="JS Spaghetti!" />
     </p>

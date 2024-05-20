@@ -15,15 +15,6 @@ import * as registry from './registry.js';
 import {Renderer as ZelosRenderer} from './renderers/zelos/renderer.js';
 import {ConnectionType} from './connection_type.js';
 
-/**
- * An error message to throw if the block created by createMarkerBlock_ is
- * missing any components.
- */
-const DUPLICATE_BLOCK_ERROR =
-  'The insertion marker previewer tried to create a marker but the result ' +
-  'is missing a connection. If you are using a mutator, make sure your ' +
-  'domToMutation method is properly defined.';
-
 export class InsertionMarkerPreviewer implements IConnectionPreviewer {
   private readonly workspace: WorkspaceSvg;
 
@@ -88,16 +79,6 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     eventUtils.disable();
     try {
       this.hidePreview();
-      const dragged = draggedConn.getSourceBlock();
-      const marker = this.createInsertionMarker(dragged);
-      const markerConn = this.getMatchingConnection(
-        dragged,
-        marker,
-        draggedConn,
-      );
-      if (!markerConn) {
-        throw Error(DUPLICATE_BLOCK_ERROR);
-      }
 
       // TODO(7898): Instead of special casing, we should change the dragger to
       //   track the change in distance between the dragged connection and the
@@ -132,13 +113,11 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
   private previewMarker(
     draggedConn: RenderedConnection,
     staticConn: RenderedConnection,
-  ): RenderedConnection {
+  ): RenderedConnection | null {
     const dragged = draggedConn.getSourceBlock();
     const marker = this.createInsertionMarker(dragged);
     const markerConn = this.getMatchingConnection(dragged, marker, draggedConn);
-    if (!markerConn) {
-      throw Error('Could not create insertion marker to preview connection');
-    }
+    if (!markerConn) return null;
 
     // Render disconnected from everything else so that we have a valid
     // connection location.
@@ -154,6 +133,7 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     };
     const originalOffsetInBlock = markerConn.getOffsetInBlock().clone();
     renderManagement.finishQueuedRenders().then(() => {
+      if (marker.isDeadOrDying()) return;
       eventUtils.disable();
       try {
         // Position so that the existing block doesn't move.
@@ -210,7 +190,7 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     orig: BlockSvg,
     marker: BlockSvg,
     origConn: RenderedConnection,
-  ) {
+  ): RenderedConnection | null {
     const origConns = orig.getConnections_(true);
     const markerConns = marker.getConnections_(true);
     if (origConns.length !== markerConns.length) return null;

@@ -66,6 +66,15 @@ export class RenderedWorkspaceComment
       this,
       this.startGesture,
     );
+    // Don't zoom with mousewheel; let it scroll instead.
+    browserEvents.conditionalBind(
+      this.view.getSvgRoot(),
+      'wheel',
+      this,
+      (e: Event) => {
+        e.stopPropagation();
+      },
+    );
   }
 
   /**
@@ -120,11 +129,31 @@ export class RenderedWorkspaceComment
     return this.view.getSvgRoot();
   }
 
-  /** Returns the bounding rectangle of this comment in workspace coordinates. */
+  /**
+   * Returns the comment's size in workspace units.
+   * Does not respect collapsing.
+   */
+  getSize(): Size {
+    return super.getSize();
+  }
+
+  /**
+   * Returns the bounding rectangle of this comment in workspace coordinates.
+   * Respects collapsing.
+   */
   getBoundingRectangle(): Rect {
     const loc = this.getRelativeToSurfaceXY();
-    const size = this.getSize();
-    return new Rect(loc.y, loc.y + size.height, loc.x, loc.x + size.width);
+    const size = this.view?.getSize() ?? this.getSize();
+    let left;
+    let right;
+    if (this.workspace.RTL) {
+      left = loc.x - size.width;
+      right = loc.x;
+    } else {
+      left = loc.x;
+      right = loc.x + size.width;
+    }
+    return new Rect(loc.y, loc.y + size.height, left, right);
   }
 
   /** Move the comment by the given amounts in workspace coordinates. */
@@ -138,7 +167,6 @@ export class RenderedWorkspaceComment
   override moveTo(location: Coordinate, reason?: string[] | undefined): void {
     super.moveTo(location, reason);
     this.view.moveTo(location);
-    this.snapToGrid();
   }
 
   /**
@@ -209,7 +237,6 @@ export class RenderedWorkspaceComment
 
   /** Ends the drag on the comment. */
   endDrag(): void {
-    this.snapToGrid();
     this.dragStrategy.endDrag();
   }
 

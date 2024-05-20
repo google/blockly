@@ -676,6 +676,17 @@ export class Block implements IASTNodeLocation {
   }
 
   /**
+   * Returns this block if it is a shadow block, or the first non-shadow parent.
+   *
+   * @internal
+   */
+  getFirstNonShadowBlock(): this {
+    if (!this.isShadow()) return this;
+    // We can assert the parent is non-null because shadows must have parents.
+    return this.getParent()!.getFirstNonShadowBlock();
+  }
+
+  /**
    * Find all the blocks that are directly nested inside this one.
    * Includes value and statement inputs, as well as any following statement.
    * Excludes any connection on an output tab or any preceding statement.

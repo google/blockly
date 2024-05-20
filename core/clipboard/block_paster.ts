@@ -30,11 +30,21 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
       copyData.blockState['y'] = coordinate.y;
     }
 
+    // After appending the block to the workspace, it will be bumped from its neighbors
+    // However, the algorithm for deciding where to paste a block depends on
+    // the starting position of the copied block, so we'll pass those coordinates along
+    const initialCoordinates =
+      coordinate ||
+      new Coordinate(
+        copyData.blockState['x'] || 0,
+        copyData.blockState['y'] || 0,
+      );
+
     eventUtils.disable();
     let block;
     try {
       block = append(copyData.blockState, workspace) as BlockSvg;
-      moveBlockToNotConflict(block);
+      moveBlockToNotConflict(block, initialCoordinates);
     } finally {
       eventUtils.enable();
     }
@@ -56,12 +66,20 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
  * Exported for testing.
  *
  * @param block The block to move to an unambiguous location.
+ * @param originalPosition The initial coordinate to start searching from,
+ *    likely the position of the copied block.
  * @internal
  */
-export function moveBlockToNotConflict(block: BlockSvg) {
+export function moveBlockToNotConflict(
+  block: BlockSvg,
+  originalPosition: Coordinate,
+) {
   const workspace = block.workspace;
   const snapRadius = config.snapRadius;
-  const coord = block.getRelativeToSurfaceXY();
+  const bumpOffset = Coordinate.difference(
+    originalPosition,
+    block.getRelativeToSurfaceXY(),
+  );
   const offset = new Coordinate(0, 0);
   // getRelativeToSurfaceXY is really expensive, so we want to cache this.
   const otherCoords = workspace
@@ -70,8 +88,11 @@ export function moveBlockToNotConflict(block: BlockSvg) {
     .map((b) => b.getRelativeToSurfaceXY());
 
   while (
-    blockOverlapsOtherExactly(Coordinate.sum(coord, offset), otherCoords) ||
-    blockIsInSnapRadius(block, offset, snapRadius)
+    blockOverlapsOtherExactly(
+      Coordinate.sum(originalPosition, offset),
+      otherCoords,
+    ) ||
+    blockIsInSnapRadius(block, Coordinate.sum(bumpOffset, offset), snapRadius)
   ) {
     if (workspace.RTL) {
       offset.translate(-snapRadius, snapRadius * 2);
@@ -80,7 +101,7 @@ export function moveBlockToNotConflict(block: BlockSvg) {
     }
   }
 
-  block!.moveTo(Coordinate.sum(coord, offset));
+  block!.moveTo(Coordinate.sum(originalPosition, offset));
 }
 
 /**

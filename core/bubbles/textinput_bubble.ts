@@ -143,7 +143,7 @@ export class TextInputBubble extends Bubble {
 
   /** Binds events to the text area element. */
   private bindTextAreaEvents(textArea: HTMLTextAreaElement) {
-    // Don't zoom with mousewheel.
+    // Don't zoom with mousewheel; let it scroll instead.
     browserEvents.conditionalBind(textArea, 'wheel', this, (e: Event) => {
       e.stopPropagation();
     });

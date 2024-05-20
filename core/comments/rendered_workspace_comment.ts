@@ -66,7 +66,7 @@ export class RenderedWorkspaceComment
       this,
       this.startGesture,
     );
-    // Don't zoom with mousewheel.
+    // Don't zoom with mousewheel; let it scroll instead.
     browserEvents.conditionalBind(
       this.view.getSvgRoot(),
       'wheel',

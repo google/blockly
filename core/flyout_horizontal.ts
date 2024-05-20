@@ -240,7 +240,7 @@ export class HorizontalFlyout extends Flyout {
       this.workspace_.scrollbar?.setX(pos);
       // When the flyout moves from a wheel event, hide WidgetDiv and
       // dropDownDiv.
-      WidgetDiv.hide();
+      WidgetDiv.hideIfOwnerIsInWorkspace(this.workspace_);
       dropDownDiv.hideWithoutAnimation();
     }
     // Don't scroll the page.

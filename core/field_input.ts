@@ -372,7 +372,12 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     if (!block) {
       throw new UnattachedFieldError();
     }
-    WidgetDiv.show(this, block.RTL, this.widgetDispose_.bind(this));
+    WidgetDiv.show(
+      this,
+      block.RTL,
+      this.widgetDispose_.bind(this),
+      this.workspace_,
+    );
     this.htmlInput_ = this.widgetCreate_() as HTMLInputElement;
     this.isBeingEdited_ = true;
     this.valueWhenEditorWasOpened_ = this.value_;
@@ -546,17 +551,17 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   protected onHtmlInputKeyDown_(e: KeyboardEvent) {
     if (e.key === 'Enter') {
-      WidgetDiv.hide();
+      WidgetDiv.hideIfOwner(this);
       dropDownDiv.hideWithoutAnimation();
     } else if (e.key === 'Escape') {
       this.setValue(
         this.htmlInput_!.getAttribute('data-untyped-default-value'),
         false,
       );
-      WidgetDiv.hide();
+      WidgetDiv.hideIfOwner(this);
       dropDownDiv.hideWithoutAnimation();
     } else if (e.key === 'Tab') {
-      WidgetDiv.hide();
+      WidgetDiv.hideIfOwner(this);
       dropDownDiv.hideWithoutAnimation();
       (this.sourceBlock_ as BlockSvg).tab(this, !e.shiftKey);
       e.preventDefault();

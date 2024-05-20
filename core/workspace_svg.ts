@@ -1686,7 +1686,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.configureContextMenu(menuOptions, e);
     }
 
-    ContextMenu.show(e, menuOptions, this.RTL);
+    ContextMenu.show(e, menuOptions, this.RTL, this);
   }
 
   /**
@@ -2376,7 +2376,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   hideChaff(onlyClosePopups = false) {
     Tooltip.hide();
-    WidgetDiv.hide();
+    WidgetDiv.hideIfOwnerIsInWorkspace(this);
     dropDownDiv.hideWithoutAnimation();
 
     this.hideComponents(onlyClosePopups);

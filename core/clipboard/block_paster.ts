@@ -66,14 +66,18 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
  * Exported for testing.
  *
  * @param block The block to move to an unambiguous location.
- * @param coord The initial coordinate to start searching from.
+ * @param originalPosition The initial coordinate to start searching from,
+ *    likely the position of the copied block.
  * @internal
  */
-export function moveBlockToNotConflict(block: BlockSvg, coord: Coordinate) {
+export function moveBlockToNotConflict(
+  block: BlockSvg,
+  originalPosition: Coordinate,
+) {
   const workspace = block.workspace;
   const snapRadius = config.snapRadius;
   const bumpOffset = Coordinate.difference(
-    coord,
+    originalPosition,
     block.getRelativeToSurfaceXY(),
   );
   const offset = new Coordinate(0, 0);
@@ -84,7 +88,10 @@ export function moveBlockToNotConflict(block: BlockSvg, coord: Coordinate) {
     .map((b) => b.getRelativeToSurfaceXY());
 
   while (
-    blockOverlapsOtherExactly(Coordinate.sum(coord, offset), otherCoords) ||
+    blockOverlapsOtherExactly(
+      Coordinate.sum(originalPosition, offset),
+      otherCoords,
+    ) ||
     blockIsInSnapRadius(block, Coordinate.sum(bumpOffset, offset), snapRadius)
   ) {
     if (workspace.RTL) {
@@ -94,7 +101,7 @@ export function moveBlockToNotConflict(block: BlockSvg, coord: Coordinate) {
     }
   }
 
-  block!.moveTo(Coordinate.sum(coord, offset));
+  block!.moveTo(Coordinate.sum(originalPosition, offset));
 }
 
 /**

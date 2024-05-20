@@ -143,7 +143,7 @@ export class TextInputBubble extends Bubble {
 
   /** Binds events to the text area element. */
   private bindTextAreaEvents(textArea: HTMLTextAreaElement) {
-    // Don't zoom with mousewheel.
+    // Don't zoom with mousewheel; let it scroll instead.
     browserEvents.conditionalBind(textArea, 'wheel', this, (e: Event) => {
       e.stopPropagation();
     });
@@ -198,8 +198,6 @@ export class TextInputBubble extends Bubble {
     const heightMinusBorder = size.height - Bubble.DOUBLE_BORDER;
     this.inputRoot.setAttribute('width', `${widthMinusBorder}`);
     this.inputRoot.setAttribute('height', `${heightMinusBorder}`);
-    this.textArea.style.width = `${widthMinusBorder - 4}px`;
-    this.textArea.style.height = `${heightMinusBorder - 4}px`;
 
     this.resizeGroup.setAttribute('y', `${heightMinusBorder}`);
     if (this.workspace.RTL) {
@@ -310,6 +308,7 @@ Css.register(`
   outline: 0;
   padding: 3px;
   resize: none;
-  text-overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
 `);

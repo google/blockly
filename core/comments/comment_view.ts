@@ -776,7 +776,6 @@ css.register(`
   border: 1px solid var(--commentBorderColour);
   outline: 0;
   resize: none;
-  overflow: hidden;
   box-sizing: border-box;
   padding: 8px;
   width: 100%;

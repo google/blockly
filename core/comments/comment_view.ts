@@ -774,13 +774,13 @@ css.register(`
 .blocklyComment .blocklyTextarea {
   background-color: var(--commentFillColour);
   border: 1px solid var(--commentBorderColour);
-  outline: 0;
-  resize: none;
   box-sizing: border-box;
-  padding: 8px;
+  display: block;
+  outline: 0;
+  padding: 5px;
+  resize: none;
   width: 100%;
   height: 100%;
-  display: block;
 }
 
 .blocklyReadonly.blocklyComment .blocklyTextarea {

@@ -303,10 +303,10 @@ Css.register(`
 .blocklyTextInputBubble .blocklyTextarea {
   background-color: var(--commentFillColour);
   border: 0;
+  box-sizing: border-box;
   display: block;
-  margin: 0;
   outline: 0;
-  padding: 3px;
+  padding: 5px;
   resize: none;
   width: 100%;
   height: 100%;

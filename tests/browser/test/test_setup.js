@@ -199,6 +199,17 @@ async function clickBlock(browser, block, clickOptions) {
 }
 
 /**
+ * Clicks on the svg root of the main workspace.
+ * @param browser The active WebdriverIO Browser object.
+ * @return A Promise that resolves when the actions are completed.
+ */
+async function clickWorkspace(browser) {
+  const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
+  await workspace.click();
+  await browser.pause(PAUSE_TIME);
+}
+
+/**
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to find.
  * @return A Promise that resolves to the root element of the toolbox
@@ -549,6 +560,7 @@ module.exports = {
   getSelectedBlockId,
   getBlockElementById,
   clickBlock,
+  clickWorkspace,
   getCategory,
   getNthBlockOfCategory,
   getBlockTypeFromCategory,

@@ -220,7 +220,9 @@ async function clickMutatorWorkspace(browser) {
   if (!hasMutator) {
     throw new Error('No mutator workspace found');
   }
-  const workspace = await browser.$('.blocklyMutatorBackground').closest('g.blocklyWorkspace');
+  const workspace = await browser
+    .$('.blocklyMutatorBackground')
+    .closest('g.blocklyWorkspace');
   await workspace.click();
   await browser.pause(PAUSE_TIME);
 }

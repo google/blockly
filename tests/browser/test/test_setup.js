@@ -210,6 +210,22 @@ async function clickWorkspace(browser) {
 }
 
 /**
+ * Clicks on the svg root of the first mutator workspace found.
+ * @param browser The active WebdriverIO Browser object.
+ * @return A Promise that resolves when the actions are completed.
+ * @throws If the mutator workspace cannot be found.
+ */
+async function clickMutatorWorkspace(browser) {
+  const hasMutator = await browser.$('.blocklyMutatorBackground');
+  if (!hasMutator) {
+    throw new Error('No mutator workspace found');
+  }
+  const workspace = await browser.$('.blocklyMutatorBackground').closest('g.blocklyWorkspace');
+  await workspace.click();
+  await browser.pause(PAUSE_TIME);
+}
+
+/**
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to find.
  * @return A Promise that resolves to the root element of the toolbox
@@ -561,6 +577,7 @@ module.exports = {
   getBlockElementById,
   clickBlock,
   clickWorkspace,
+  clickMutatorWorkspace,
   getCategory,
   getNthBlockOfCategory,
   getBlockTypeFromCategory,

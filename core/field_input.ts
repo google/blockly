@@ -395,7 +395,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *
    * @returns The newly created text input editor.
    */
-  protected widgetCreate_(): HTMLElement {
+  protected widgetCreate_(): HTMLInputElement | HTMLTextAreaElement {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();

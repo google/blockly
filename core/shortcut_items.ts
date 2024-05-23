@@ -17,6 +17,8 @@ import {KeyCodes} from './utils/keycodes.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {isDraggable} from './interfaces/i_draggable.js';
 import * as eventUtils from './events/utils.js';
+import {Coordinate} from './utils/coordinate.js';
+import {Rect} from './utils/rect.js';
 
 /**
  * Object holding the names of the default shortcut items.
@@ -63,7 +65,8 @@ export function registerDelete() {
         !workspace.options.readOnly &&
         selected != null &&
         isDeletable(selected) &&
-        selected.isDeletable()
+        selected.isDeletable() &&
+        !Gesture.inProgress()
       );
     },
     callback(workspace, e) {
@@ -72,10 +75,6 @@ export function registerDelete() {
       // Do this first to prevent an error in the delete code from resulting in
       // data loss.
       e.preventDefault();
-      // Don't delete while dragging.  Jeez.
-      if (Gesture.inProgress()) {
-        return false;
-      }
       const selected = common.getSelected();
       if (selected instanceof BlockSvg) {
         selected.checkAndDelete();
@@ -93,6 +92,7 @@ export function registerDelete() {
 
 let copyData: ICopyData | null = null;
 let copyWorkspace: WorkspaceSvg | null = null;
+let copyCoords: Coordinate | null = null;
 
 /**
  * Keyboard shortcut to copy a block on ctrl+c, cmd+c, or alt+c.
@@ -132,6 +132,9 @@ export function registerCopy() {
       if (!selected || !isCopyable(selected)) return false;
       copyData = selected.toCopyData();
       copyWorkspace = workspace;
+      copyCoords = isDraggable(selected)
+        ? selected.getRelativeToSurfaceXY()
+        : null;
       return !!copyData;
     },
     keyCodes: [ctrlC, altC, metaC],
@@ -174,6 +177,7 @@ export function registerCut() {
       if (selected instanceof BlockSvg) {
         copyData = selected.toCopyData();
         copyWorkspace = workspace;
+        copyCoords = selected.getRelativeToSurfaceXY();
         selected.checkAndDelete();
         return true;
       } else if (
@@ -183,6 +187,9 @@ export function registerCut() {
       ) {
         copyData = selected.toCopyData();
         copyWorkspace = workspace;
+        copyCoords = isDraggable(selected)
+          ? selected.getRelativeToSurfaceXY()
+          : null;
         selected.dispose();
         return true;
       }
@@ -215,7 +222,26 @@ export function registerPaste() {
     },
     callback() {
       if (!copyData || !copyWorkspace) return false;
-      return !!clipboard.paste(copyData, copyWorkspace);
+      if (!copyCoords) {
+        // If we don't have location data about the original copyable, let the
+        // paster determine position.
+        return !!clipboard.paste(copyData, copyWorkspace);
+      }
+
+      const {left, top, width, height} = copyWorkspace
+        .getMetricsManager()
+        .getViewMetrics(true);
+      const viewportRect = new Rect(top, top + height, left, left + width);
+
+      if (viewportRect.contains(copyCoords.x, copyCoords.y)) {
+        // If the original copyable is inside the viewport, let the paster
+        // determine position.
+        return !!clipboard.paste(copyData, copyWorkspace);
+      }
+
+      // Otherwise, paste in the middle of the viewport.
+      const centerCoords = new Coordinate(left + width / 2, top + height / 2);
+      return !!clipboard.paste(copyData, copyWorkspace, centerCoords);
     },
     keyCodes: [ctrlV, altV, metaV],
   };

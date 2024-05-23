@@ -233,29 +233,32 @@ export class VerticalFlyout extends Flyout {
     for (let i = 0, item; (item = contents[i]); i++) {
       if (item.type === 'block') {
         const block = item.block;
-        const allBlocks = block!.getDescendants(false);
+        if (!block) {
+          continue;
+        }
+        const allBlocks = block.getDescendants(false);
         for (let j = 0, child; (child = allBlocks[j]); j++) {
           // Mark blocks as being inside a flyout.  This is used to detect and
           // prevent the closure of the flyout if the user right-clicks on such
           // a block.
           child.isInFlyout = true;
         }
-        const root = block!.getSvgRoot();
-        const blockHW = block!.getHeightWidth();
-        const moveX = block!.outputConnection
+        const root = block.getSvgRoot();
+        const blockHW = block.getHeightWidth();
+        const moveX = block.outputConnection
           ? cursorX - this.tabWidth_
           : cursorX;
-        block!.moveBy(moveX, cursorY);
+        block.moveBy(moveX, cursorY);
 
         const rect = this.createRect_(
-          block!,
+          block,
           this.RTL ? moveX - blockHW.width : moveX,
           cursorY,
           blockHW,
           i,
         );
 
-        this.addBlockListeners_(root, block!, rect);
+        this.addBlockListeners_(root, block, rect);
 
         cursorY += blockHW.height + gaps[i];
       } else if (item.type === 'button') {
@@ -274,7 +277,6 @@ export class VerticalFlyout extends Flyout {
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at mouse down, in pixel units.
    * @returns True if the drag is toward the workspace.
-   * @internal
    */
   override isDragTowardWorkspace(currentDragDeltaXY: Coordinate): boolean {
     const dx = currentDragDeltaXY.x;

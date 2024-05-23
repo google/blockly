@@ -514,6 +514,15 @@ export abstract class Flyout
       this.autoClose
     )
       this.hide();
+    }
+
+  /**
+   * Get the target workspace inside the flyout.
+   *
+   * @returns The target workspace inside the flyout.
+   */
+  getTargetWorkspace(): WorkspaceSvg {
+    return this.targetWorkspace;
   }
 
   /**

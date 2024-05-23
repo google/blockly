@@ -13,6 +13,8 @@ import {Gesture} from './gesture.js';
 import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
 import {isDeletable} from './interfaces/i_deletable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
+import {Rect} from './utils/rect.js';
+import {Coordinate} from './utils/coordinate.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import {isDraggable} from './interfaces/i_draggable.js';
@@ -63,7 +65,8 @@ export function registerDelete() {
         !workspace.options.readOnly &&
         selected != null &&
         isDeletable(selected) &&
-        selected.isDeletable()
+        selected.isDeletable() &&
+        !Gesture.inProgress()
       );
     },
     callback(workspace, e) {
@@ -72,10 +75,6 @@ export function registerDelete() {
       // Do this first to prevent an error in the delete code from resulting in
       // data loss.
       e.preventDefault();
-      // Don't delete while dragging.  Jeez.
-      if (Gesture.inProgress()) {
-        return false;
-      }
       const selected = common.getSelected();
       if (selected instanceof BlockSvg) {
         selected.checkAndDelete();
@@ -93,6 +92,7 @@ export function registerDelete() {
 
 let copyData: ICopyData | null = null;
 let copyWorkspace: WorkspaceSvg | null = null;
+let copyCoords: Coordinate | null = null;
 
 /**
  * Keyboard shortcut to copy a block on ctrl+c, cmd+c, or alt+c.
@@ -131,6 +131,7 @@ export function registerCopy() {
       const selected = common.getSelected();
       if (!selected || !isCopyable(selected)) return false;
       copyData = selected.toCopyData();
+      copyCoords = selected.getRelativeToSurfaceXY();
       copyWorkspace = workspace;
       return !!copyData;
     },
@@ -214,8 +215,20 @@ export function registerPaste() {
       return !workspace.options.readOnly && !Gesture.inProgress();
     },
     callback() {
-      if (!copyData || !copyWorkspace) return false;
-      return !!clipboard.paste(copyData, copyWorkspace);
+      if (!copyData || !copyCoords || !copyWorkspace) return false;
+      const {left, top, width, height} = copyWorkspace
+        .getMetricsManager()
+        .getViewMetrics(true);
+      const viewportRect = new Rect(top, top + height, left, left + width);
+
+      if (viewportRect.contains(copyCoords.x, copyCoords.y)) {
+        // Pass the default copy coordinates when they are inside the viewport.
+        return !!clipboard.paste(copyData, copyWorkspace, copyCoords);
+      } else {
+        // Otherwise paste in the middle of the viewport.
+        const centerCoords = new Coordinate(left + width / 2, top + height / 2);
+        return !!clipboard.paste(copyData, copyWorkspace, centerCoords);
+      }
     },
     keyCodes: [ctrlV, altV, metaV],
   };

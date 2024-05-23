@@ -64,7 +64,7 @@
 	"COLOUR_RGB_RED": "אדום",
 	"COLOUR_RGB_GREEN": "ירוק",
 	"COLOUR_RGB_BLUE": "כחול",
-	"COLOUR_RGB_TOOLTIP": "צור צבע עם הסכום המצוין של אדום, ירוק וכחול. כל הערכים חייבים להיות בין 0 ל100.",
+	"COLOUR_RGB_TOOLTIP": "צור צבע עם הסכום המצוין של אדום, ירוק וכחול. כל הערכים חייבים להיות בין 0 ל־100.",
 	"COLOUR_BLEND_TITLE": "ערבב",
 	"COLOUR_BLEND_COLOUR1": "צבע 1",
 	"COLOUR_BLEND_COLOUR2": "צבע 2",

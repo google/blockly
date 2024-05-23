@@ -514,7 +514,7 @@ export abstract class Flyout
       this.autoClose
     )
       this.hide();
-    }
+  }
 
   /**
    * Get the target workspace inside the flyout.

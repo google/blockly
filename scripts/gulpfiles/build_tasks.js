@@ -677,12 +677,13 @@ async function buildLangfileShims() {
     // its named exports.
     const cjsPath = `./${lang}.js`;
     const wrapperPath = path.join(RELEASE_DIR, 'msg', `${lang}.mjs`);
+    const safeLang = lang.replace(/-/g, '_');
 
     await fsPromises.writeFile(wrapperPath,
-        `import ${lang} from '${cjsPath}';
+        `import ${safeLang} from '${cjsPath}';
 export const {
 ${exportedNames.map((name) => `  ${name},`).join('\n')}
-} = ${lang};
+} = ${safeLang};
 `);
   }));
 }

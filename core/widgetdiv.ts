@@ -8,13 +8,16 @@
 
 import * as common from './common.js';
 import * as dom from './utils/dom.js';
-import type {Field} from './field.js';
+import {Field} from './field.js';
 import type {Rect} from './utils/rect.js';
 import type {Size} from './utils/size.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /** The object currently using this container. */
 let owner: unknown = null;
+
+/** The workspace associated with the owner currently using this container. */
+let ownerWorkspace: WorkspaceSvg | null = null;
 
 /** Optional cleanup function set by whichever object uses the widget. */
 let dispose: (() => void) | null = null;
@@ -76,8 +79,14 @@ export function createDom() {
  * @param rtl Right-to-left (true) or left-to-right (false).
  * @param newDispose Optional cleanup function to be run when the widget is
  *     closed.
+ * @param workspace The workspace associated with the widget owner.
  */
-export function show(newOwner: unknown, rtl: boolean, newDispose: () => void) {
+export function show(
+  newOwner: unknown,
+  rtl: boolean,
+  newDispose: () => void,
+  workspace?: WorkspaceSvg | null,
+) {
   hide();
   owner = newOwner;
   dispose = newDispose;
@@ -85,9 +94,16 @@ export function show(newOwner: unknown, rtl: boolean, newDispose: () => void) {
   if (!div) return;
   div.style.direction = rtl ? 'rtl' : 'ltr';
   div.style.display = 'block';
-  const mainWorkspace = common.getMainWorkspace() as WorkspaceSvg;
-  rendererClassName = mainWorkspace.getRenderer().getClassName();
-  themeClassName = mainWorkspace.getTheme().getClassName();
+  if (!workspace && newOwner instanceof Field) {
+    // For backward compatibility with plugin fields that do not provide a
+    // workspace to this function, attempt to derive it from the field.
+    workspace = (newOwner as Field).getSourceBlock()?.workspace as WorkspaceSvg;
+  }
+  ownerWorkspace = workspace ?? null;
+  const rendererWorkspace =
+    workspace ?? (common.getMainWorkspace() as WorkspaceSvg);
+  rendererClassName = rendererWorkspace.getRenderer().getClassName();
+  themeClassName = rendererWorkspace.getTheme().getClassName();
   if (rendererClassName) {
     dom.addClass(div, rendererClassName);
   }
@@ -145,6 +161,19 @@ export function hideIfOwner(oldOwner: unknown) {
     hide();
   }
 }
+
+/**
+ * Destroy the widget and hide the div if it is being used by an object in the
+ * specified workspace, or if it is used by an unknown workspace.
+ *
+ * @param oldOwnerWorkspace The workspace that was using this container.
+ */
+export function hideIfOwnerIsInWorkspace(oldOwnerWorkspace: WorkspaceSvg) {
+  if (ownerWorkspace === null || ownerWorkspace === oldOwnerWorkspace) {
+    hide();
+  }
+}
+
 /**
  * Set the widget div's position and height.  This function does nothing clever:
  * it will not ensure that your widget div ends up in the visible window.

@@ -42,13 +42,12 @@ export class Dragger implements IDragger {
    */
   onDrag(e: PointerEvent, totalDelta: Coordinate) {
     this.moveDraggable(e, totalDelta);
+    const root = this.getRoot(this.draggable);
 
     // Must check `wouldDelete` before calling other hooks on drag targets
     // since we have documented that we would do so.
-    if (isDeletable(this.draggable)) {
-      this.draggable.setDeleteStyle(
-        this.wouldDeleteDraggable(e, this.draggable),
-      );
+    if (isDeletable(root)) {
+      root.setDeleteStyle(this.wouldDeleteDraggable(e, root));
     }
     this.updateDragTarget(e);
   }
@@ -56,11 +55,12 @@ export class Dragger implements IDragger {
   /** Updates the drag target under the pointer (if there is one). */
   protected updateDragTarget(e: PointerEvent) {
     const newDragTarget = this.workspace.getDragTarget(e);
+    const root = this.getRoot(this.draggable);
     if (this.dragTarget !== newDragTarget) {
-      this.dragTarget?.onDragExit(this.draggable);
-      newDragTarget?.onDragEnter(this.draggable);
+      this.dragTarget?.onDragExit(root);
+      newDragTarget?.onDragEnter(root);
     }
-    newDragTarget?.onDragOver(this.draggable);
+    newDragTarget?.onDragOver(root);
     this.dragTarget = newDragTarget;
   }
 
@@ -80,7 +80,7 @@ export class Dragger implements IDragger {
    */
   protected wouldDeleteDraggable(
     e: PointerEvent,
-    draggable: IDraggable & IDeletable,
+    rootDraggable: IDraggable & IDeletable,
   ) {
     const dragTarget = this.workspace.getDragTarget(e);
     if (!dragTarget) return false;
@@ -92,50 +92,56 @@ export class Dragger implements IDragger {
     );
     if (!isDeleteArea) return false;
 
-    return (dragTarget as IDeleteArea).wouldDelete(draggable);
+    return (dragTarget as IDeleteArea).wouldDelete(rootDraggable);
   }
 
   /** Handles any drag cleanup. */
   onDragEnd(e: PointerEvent) {
     const origGroup = eventUtils.getGroup();
     const dragTarget = this.workspace.getDragTarget(e);
+    const root = this.getRoot(this.draggable);
+
     if (dragTarget) {
-      this.dragTarget?.onDrop(this.draggable);
+      this.dragTarget?.onDrop(root);
     }
 
-    if (this.shouldReturnToStart(e, this.draggable)) {
+    if (this.shouldReturnToStart(e, root)) {
       this.draggable.revertDrag();
     }
 
-    const wouldDelete =
-      isDeletable(this.draggable) &&
-      this.wouldDeleteDraggable(e, this.draggable);
+    const wouldDelete = isDeletable(root) && this.wouldDeleteDraggable(e, root);
 
     // TODO(#8148): use a generalized API instead of an instanceof check.
     if (wouldDelete && this.draggable instanceof BlockSvg) {
-      blockAnimations.disposeUiEffect(this.draggable);
+      blockAnimations.disposeUiEffect(this.draggable.getRootBlock());
     }
 
     this.draggable.endDrag(e);
 
-    if (wouldDelete && isDeletable(this.draggable)) {
+    if (wouldDelete && isDeletable(root)) {
       // We want to make sure the delete gets grouped with any possible
       // move event.
       const newGroup = eventUtils.getGroup();
       eventUtils.setGroup(origGroup);
-      this.draggable.dispose();
+      root.dispose();
       eventUtils.setGroup(newGroup);
     }
+  }
+
+  // We need to special case blocks for now so that we look at the root block
+  // instead of the one actually being dragged in most cases.
+  private getRoot(draggable: IDraggable): IDraggable {
+    return draggable instanceof BlockSvg ? draggable.getRootBlock() : draggable;
   }
 
   /**
    * Returns true if we should return the draggable to its original location
    * at the end of the drag.
    */
-  protected shouldReturnToStart(e: PointerEvent, draggable: IDraggable) {
+  protected shouldReturnToStart(e: PointerEvent, rootDraggable: IDraggable) {
     const dragTarget = this.workspace.getDragTarget(e);
     if (!dragTarget) return false;
-    return dragTarget.shouldPreventMove(draggable);
+    return dragTarget.shouldPreventMove(rootDraggable);
   }
 
   protected pixelsToWorkspaceUnits(pixelCoord: Coordinate): Coordinate {

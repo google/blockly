@@ -77,7 +77,8 @@ export function inject(
     common.setMainWorkspace(workspace);
   });
 
-  subContainer.addEventListener('keydown', onKeyDown);
+  browserEvents.conditionalBind(subContainer, 'keydown', null, onKeyDown);
+  // subContainer.addEventListener('keydown', onKeyDown);
 
   return workspace;
 }

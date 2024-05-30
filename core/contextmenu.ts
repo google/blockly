@@ -23,6 +23,7 @@ import {Rect} from './utils/rect.js';
 import * as serializationBlocks from './serialization/blocks.js';
 import * as svgMath from './utils/svg_math.js';
 import * as WidgetDiv from './widgetdiv.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 import * as common from './common.js';
 
@@ -62,13 +63,15 @@ let menu_: Menu | null = null;
  * @param e Mouse event.
  * @param options Array of menu options.
  * @param rtl True if RTL, false if LTR.
+ * @param workspace The workspace associated with the context menu, if any.
  */
 export function show(
   e: PointerEvent,
   options: (ContextMenuOption | LegacyContextMenuOption)[],
   rtl: boolean,
+  workspace?: WorkspaceSvg,
 ) {
-  WidgetDiv.show(dummyOwner, rtl, dispose);
+  WidgetDiv.show(dummyOwner, rtl, dispose, workspace);
   if (!options.length) {
     hide();
     return;

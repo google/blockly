@@ -517,6 +517,15 @@ export abstract class Flyout
   }
 
   /**
+   * Get the target workspace inside the flyout.
+   *
+   * @returns The target workspace inside the flyout.
+   */
+  getTargetWorkspace(): WorkspaceSvg {
+    return this.targetWorkspace;
+  }
+
+  /**
    * Is the flyout visible?
    *
    * @returns True if visible.

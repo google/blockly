@@ -16,6 +16,7 @@ suite('Key Down', function () {
   setup(function () {
     sharedTestSetup.call(this);
     this.workspace = Blockly.inject('blocklyDiv', {});
+    this.injectionDiv = this.workspace.getInjectionDiv();
   });
   teardown(function () {
     sharedTestTeardown.call(this);
@@ -42,7 +43,7 @@ suite('Key Down', function () {
     const name = opt_name ? opt_name : 'Not called when readOnly is true';
     test(name, function () {
       this.workspace.options.readOnly = true;
-      document.dispatchEvent(keyEvent);
+      this.injectionDiv.dispatchEvent(keyEvent);
       sinon.assert.notCalled(this.hideChaffSpy);
     });
   }
@@ -56,7 +57,7 @@ suite('Key Down', function () {
       );
     });
     test('Simple', function () {
-      document.dispatchEvent(this.event);
+      this.injectionDiv.dispatchEvent(this.event);
       sinon.assert.calledOnce(this.hideChaffSpy);
     });
     runReadOnlyTest(createKeyDownEvent(Blockly.utils.KeyCodes.ESC));
@@ -68,7 +69,7 @@ suite('Key Down', function () {
     });
     test('Not called on hidden workspaces', function () {
       this.workspace.isVisible_ = false;
-      document.dispatchEvent(this.event);
+      this.injectionDiv.dispatchEvent(this.event);
       sinon.assert.notCalled(this.hideChaffSpy);
     });
   });
@@ -92,7 +93,7 @@ suite('Key Down', function () {
         const testCaseName = testCase[0];
         const keyEvent = testCase[1];
         test(testCaseName, function () {
-          document.dispatchEvent(keyEvent);
+          this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.calledOnce(this.hideChaffSpy);
           sinon.assert.calledOnce(this.deleteSpy);
         });
@@ -143,7 +144,7 @@ suite('Key Down', function () {
         const testCaseName = testCase[0];
         const keyEvent = testCase[1];
         test(testCaseName, function () {
-          document.dispatchEvent(keyEvent);
+          this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.calledOnce(this.copySpy);
           sinon.assert.calledOnce(this.hideChaffSpy);
         });
@@ -164,7 +165,7 @@ suite('Key Down', function () {
         const keyEvent = testCase[1];
         test(testCaseName, function () {
           sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
-          document.dispatchEvent(keyEvent);
+          this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.copySpy);
           sinon.assert.notCalled(this.hideChaffSpy);
         });
@@ -179,7 +180,7 @@ suite('Key Down', function () {
           sinon
             .stub(Blockly.common.getSelected(), 'isDeletable')
             .returns(false);
-          document.dispatchEvent(keyEvent);
+          this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.copySpy);
           sinon.assert.notCalled(this.hideChaffSpy);
         });
@@ -192,7 +193,7 @@ suite('Key Down', function () {
         const keyEvent = testCase[1];
         test(testCaseName, function () {
           sinon.stub(Blockly.common.getSelected(), 'isMovable').returns(false);
-          document.dispatchEvent(keyEvent);
+          this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.copySpy);
           sinon.assert.notCalled(this.hideChaffSpy);
         });
@@ -234,7 +235,7 @@ suite('Key Down', function () {
         const testCaseName = testCase[0];
         const keyEvent = testCase[1];
         test(testCaseName, function () {
-          document.dispatchEvent(keyEvent);
+          this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.calledOnce(this.undoSpy);
           sinon.assert.calledWith(this.undoSpy, false);
           sinon.assert.calledOnce(this.hideChaffSpy);
@@ -248,7 +249,7 @@ suite('Key Down', function () {
         const keyEvent = testCase[1];
         test(testCaseName, function () {
           sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
-          document.dispatchEvent(keyEvent);
+          this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.undoSpy);
           sinon.assert.notCalled(this.hideChaffSpy);
         });
@@ -301,7 +302,7 @@ suite('Key Down', function () {
         const testCaseName = testCase[0];
         const keyEvent = testCase[1];
         test(testCaseName, function () {
-          document.dispatchEvent(keyEvent);
+          this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.calledOnce(this.redoSpy);
           sinon.assert.calledWith(this.redoSpy, true);
           sinon.assert.calledOnce(this.hideChaffSpy);
@@ -315,7 +316,7 @@ suite('Key Down', function () {
         const keyEvent = testCase[1];
         test(testCaseName, function () {
           sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
-          document.dispatchEvent(keyEvent);
+          this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.redoSpy);
           sinon.assert.notCalled(this.hideChaffSpy);
         });
@@ -343,14 +344,14 @@ suite('Key Down', function () {
       );
     });
     test('Simple', function () {
-      document.dispatchEvent(this.ctrlYEvent);
+      this.injectionDiv.dispatchEvent(this.ctrlYEvent);
       sinon.assert.calledOnce(this.undoSpy);
       sinon.assert.calledWith(this.undoSpy, true);
       sinon.assert.calledOnce(this.hideChaffSpy);
     });
     test('Not called when a gesture is in progress', function () {
       sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
-      document.dispatchEvent(this.ctrlYEvent);
+      this.injectionDiv.dispatchEvent(this.ctrlYEvent);
       sinon.assert.notCalled(this.undoSpy);
       sinon.assert.notCalled(this.hideChaffSpy);
     });

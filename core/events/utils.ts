@@ -116,7 +116,7 @@ export const VAR_RENAME = 'var_rename';
 export const UI = 'ui';
 
 /**
- * Name of event that record a block drags a block.
+ * Name of event that drags a block.
  */
 export const BLOCK_DRAG = 'drag';
 
@@ -180,7 +180,12 @@ export const COMMENT_CHANGE = 'comment_change';
  */
 export const COMMENT_MOVE = 'comment_move';
 
-/** Type of event that moves a comment. */
+/**
+ * Name of event that drags a comment.
+ */
+export const COMMENT_DRAG = 'comment_drag';
+
+/** Type of event that collapses a comment. */
 export const COMMENT_COLLAPSE = 'comment_collapse';
 
 /**

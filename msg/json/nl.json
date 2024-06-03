@@ -330,6 +330,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "doe iets",
 	"PROCEDURES_BEFORE_PARAMS": "met:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "met:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Kan de door de gebruiker gedefinieerde functie ‘%1’ niet uitvoeren omdat het definitieblok is uitgeschakeld.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Maakt een functie zonder uitvoer.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Deze functie beschrijven...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://nl.wikipedia.org/wiki/Subprogramma",

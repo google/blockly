@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Andoti",
 			"No Sleep till Krupki",
 			"Plaga med",
 			"SimondR",
@@ -8,6 +9,7 @@
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "элемент",
+	"UNNAMED_KEY": "неназваны",
 	"TODAY": "Сёння",
 	"DUPLICATE_BLOCK": "Дубляваць",
 	"ADD_COMMENT": "Дадаць каментарый",

@@ -322,6 +322,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "göra något",
 	"PROCEDURES_BEFORE_PARAMS": "med:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "med:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Kan inte att köra den användardefinierade funktionen \"%1\" eftersom definitionsblocket är inaktiverat.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Skapar en funktion utan output.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Beskriv denna funktion...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://sv.wikipedia.org/wiki/Funktion_(programmering)",

@@ -19,6 +19,10 @@ const requireRE =
 /** RegExp matching key: value pairs in destructuring assignments. */
 const keyValueRE = /([$\w]+)\s*:\s*([$\w]+)\s*(?=,|})/g;
 
+/** Prefix for RegExp matching a top-level declaration. */
+const declPrefix =
+    '(?:const|let|var|(?:async\\s+)?function(?:\\s+\\*)?|class)';
+
 for (const filename of filenames) {
   let contents = null;
   try {
@@ -27,7 +31,7 @@ for (const filename of filenames) {
     console.error(`error while reading ${filename}: ${e.message}`);
     continue;
   }
-  console.log(`Converting ${filename} from require to import...`);
+  console.log(`Converting ${filename} from CJS to ESM...`);
 
   // Remove "use strict".
   contents = contents.replace(/^\s*["']use strict["']\s*; *\n/m, '');
@@ -56,7 +60,9 @@ for (const filename of filenames) {
     },
   );
 
-  // Find and update or remove old-style export assignemnts.
+  // Find and update or remove old-style single-export assignemnts like
+  //
+  // exports.foo = foo;
   /** @type {!Array<{name: string, re: RegExp>}>} */
   const easyExports = [];
   contents = contents.replace(
@@ -76,7 +82,7 @@ for (const filename of filenames) {
       // we can delete the old export and later update the
       // declaration into an export.
       const declRE = new RegExp(
-        `^(\\s*)((?:const|let|var|function|class)\\s+${declName})\\b`,
+        `^(\\s*)(${declPrefix}\\s+${declName})\\b`,
         'gm',
       );
       if (contents.match(declRE)) {
@@ -87,6 +93,55 @@ for (const filename of filenames) {
       }
     },
   );
+
+  // Find and update or remove old-style modue.exports assignemnt like:
+  // module.exports = {foo, bar: baz, quux};
+  contents = contents.replace(
+    /^module\.exports\s*=\s*\{([^\}]+)\};?(\n?)/m,
+    function (
+      orig, // Whole statement to be replaced.
+      items, // List of items to be exported.
+    ) {
+      items = items.replace(
+        /( *)([$\w]+)\s*(?::\s*([$\w]+)\s*)?,?(\s*?\n?)/gm,
+        function (
+          origItem, // Whole item being replaced.
+          indent,  // Optional leading whitespace.
+          exportName, // Name to export item as.
+          declName, // Already-declared name being exported, if different.
+          newline,  // Optoinal trailing whitespace.
+        ) {
+          if (!declName) declName = exportName;
+          
+          // Renamed exports have to be transalted as-is.
+          if (exportName !== declName) {
+            return `${indent}${declName} as ${exportName},${newline}`;
+          }
+          // OK, this item has no rename.  Can we update the
+          // declaration?  We can't actualy modify it yet as we're in
+          // the middle of a search-and-replace on contents already,
+          // but we can delete the item and later update the
+          // declaration into an export.
+          const declRE = new RegExp(
+            `^(\\s*)(${declPrefix}\\s+${declName})\\b`,
+            'gm',
+          );
+          if (contents.match(declRE)) {
+            easyExports.push({exportName, declRE});
+            return ''; // Delete existing item.
+          } else {
+            return `${indent}${exportName},${newline}`; // Safe fallback.
+          }
+        },
+      );
+      if (/^\s*$/s.test(items)) {  // No items left?
+        return '';  // Delete entire module.export assignment.
+      } else {
+        return `export {${items}};\n`;
+      }
+    },
+  );
+
   // Add 'export' to existing declarations where appropriate.
   for (const {exportName, declRE} of easyExports) {
     contents = contents.replace(declRE, '$1export $2');

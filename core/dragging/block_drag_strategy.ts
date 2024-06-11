@@ -99,6 +99,7 @@ export class BlockDragStrategy implements IDragStrategy {
 
     this.startLoc = this.block.getRelativeToSurfaceXY();
 
+    this.connectionCandidate = null;
     const previewerConstructor = registry.getClassFromOptions(
       registry.Type.CONNECTION_PREVIEWER,
       this.workspace.options,

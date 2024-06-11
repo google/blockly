@@ -110,7 +110,7 @@
 	"LOGIC_COMPARE_TOOLTIP_GTE": "Ist wahr, falls der erste Wert größer als oder gleich groß wie der zweite Wert ist.",
 	"LOGIC_OPERATION_TOOLTIP_AND": "Ist wahr, falls beide Werte wahr sind.",
 	"LOGIC_OPERATION_AND": "und",
-	"LOGIC_OPERATION_TOOLTIP_OR": "Gibt true zurück, wenn mindestens eine der Eingaben true ist.",
+	"LOGIC_OPERATION_TOOLTIP_OR": "Gibt true zurück, wenn mindestens eine der Eingaben wahr ist.",
 	"LOGIC_OPERATION_OR": "oder",
 	"LOGIC_NEGATE_TITLE": "nicht %1",
 	"LOGIC_NEGATE_TOOLTIP": "Ist wahr, falls der Eingabewert unwahr ist. Ist unwahr, falls der Eingabewert wahr ist.",

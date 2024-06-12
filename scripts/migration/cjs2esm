@@ -20,8 +20,7 @@ const requireRE =
 const keyValueRE = /([$\w]+)\s*:\s*([$\w]+)\s*(?=,|})/g;
 
 /** Prefix for RegExp matching a top-level declaration. */
-const declPrefix =
-    '(?:const|let|var|(?:async\\s+)?function(?:\\s*\\*)?|class)';
+const declPrefix = '(?:const|let|var|(?:async\\s+)?function(?:\\s*\\*)?|class)';
 
 for (const filename of filenames) {
   let contents = null;
@@ -59,7 +58,6 @@ for (const filename of filenames) {
       }
     },
   );
-
 
   // Find and update or remove old-style single-export assignments
   // like:
@@ -115,13 +113,13 @@ for (const filename of filenames) {
         /( *)([$\w]+)\s*(?::\s*([$\w]+)\s*)?,?(\s*?\n?)/gm,
         function (
           origItem, // Whole item being replaced.
-          indent,  // Optional leading whitespace.
+          indent, // Optional leading whitespace.
           exportName, // Name to export item as.
           declName, // Already-declared name being exported, if different.
-          newline,  // Optional trailing whitespace.
+          newline, // Optional trailing whitespace.
         ) {
           if (!declName) declName = exportName;
-          
+
           // Renamed exports have to be translated as-is.
           if (exportName !== declName) {
             return `${indent}${declName} as ${exportName},${newline}`;
@@ -143,8 +141,9 @@ for (const filename of filenames) {
           }
         },
       );
-      if (/^\s*$/s.test(items)) {  // No items left?
-        return '';  // Delete entire module.export assignment.
+      if (/^\s*$/s.test(items)) {
+        // No items left?
+        return ''; // Delete entire module.export assignment.
       } else {
         return `export {${items}};\n`;
       }

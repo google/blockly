@@ -14,14 +14,14 @@ const repoPath = path.resolve(__dirname, '..', '..');
 
 /** RegExp matching require statements. */
 const requireRE =
-  /(?:const\s+(?:([$\w]+)|(\{[^}]*\}))\s+=\s+)?require\('([^']+)'\);/g;
+  /(?:const\s+(?:([$\w]+)|(\{[^}]*\}))\s*=\s*)?require\('([^']+)'\);/g;
 
 /** RegExp matching key: value pairs in destructuring assignments. */
 const keyValueRE = /([$\w]+)\s*:\s*([$\w]+)\s*(?=,|})/g;
 
 /** Prefix for RegExp matching a top-level declaration. */
 const declPrefix =
-    '(?:const|let|var|(?:async\\s+)?function(?:\\s+\\*)?|class)';
+    '(?:const|let|var|(?:async\\s+)?function(?:\\s*\\*)?|class)';
 
 for (const filename of filenames) {
   let contents = null;
@@ -60,9 +60,13 @@ for (const filename of filenames) {
     },
   );
 
-  // Find and update or remove old-style single-export assignemnts like
+
+  // Find and update or remove old-style single-export assignments
+  // like:
   //
-  // exports.foo = foo;
+  // exports.bar = foo;  // becomes export {foo as bar};
+  // exports.foo = foo;  // remove the export and export at declaration
+  //                     // instead, if possible.
   /** @type {!Array<{name: string, re: RegExp>}>} */
   const easyExports = [];
   contents = contents.replace(
@@ -72,7 +76,7 @@ for (const filename of filenames) {
       exportName, // Name to export item as.
       declName, // Already-declared name for item being exported.
     ) {
-      // Renamed exports have to be transalted as-is.
+      // Renamed exports have to be translated as-is.
       if (exportName !== declName) {
         return `export {${declName} as ${exportName}};\n`;
       }
@@ -94,8 +98,13 @@ for (const filename of filenames) {
     },
   );
 
-  // Find and update or remove old-style modue.exports assignemnt like:
+  // Find and update or remove old-style module.exports assignment
+  // like:
+  //
   // module.exports = {foo, bar: baz, quux};
+  //
+  // which becomes export {baz as bar}, with foo and quux exported at
+  // declaration instead, if possible.
   contents = contents.replace(
     /^module\.exports\s*=\s*\{([^\}]+)\};?(\n?)/m,
     function (
@@ -109,11 +118,11 @@ for (const filename of filenames) {
           indent,  // Optional leading whitespace.
           exportName, // Name to export item as.
           declName, // Already-declared name being exported, if different.
-          newline,  // Optoinal trailing whitespace.
+          newline,  // Optional trailing whitespace.
         ) {
           if (!declName) declName = exportName;
           
-          // Renamed exports have to be transalted as-is.
+          // Renamed exports have to be translated as-is.
           if (exportName !== declName) {
             return `${indent}${declName} as ${exportName},${newline}`;
           }

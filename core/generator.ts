@@ -295,7 +295,7 @@ export class CodeGenerator {
    * @param name The name of the input.
    * @param outerOrder The maximum binding strength (minimum order value) of any
    *     operators adjacent to "block".
-   * @returns Generated code or '' if no blocks are connected
+   * @returns Generated code or '' if no blocks are connected.
    * @throws ReferenceError if the specified input does not exist.
    */
   valueToCode(block: Block, name: string, outerOrder: number): string {

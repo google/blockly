@@ -310,6 +310,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "зрабіць што-небудзь",
 	"PROCEDURES_BEFORE_PARAMS": "з:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "з:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Немагчыма запусьціць карыстальніцкую функцыю '%1', бо адключаны блёк вызначэньня.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Стварае функцыю бяз выніку.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Апішыце гэтую функцыю…",
 	"PROCEDURES_DEFRETURN_RETURN": "вярнуць",

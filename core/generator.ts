@@ -295,8 +295,8 @@ export class CodeGenerator {
    * @param name The name of the input.
    * @param outerOrder The maximum binding strength (minimum order value) of any
    *     operators adjacent to "block".
-   * @returns Generated code or '' if no blocks are connected or the specified
-   *     input does not exist.
+   * @returns Generated code or '' if no blocks are connected
+   * @throws ReferenceError if the specified input does not exist.
    */
   valueToCode(block: Block, name: string, outerOrder: number): string {
     if (isNaN(outerOrder)) {
@@ -381,6 +381,7 @@ export class CodeGenerator {
    * @param block The block containing the input.
    * @param name The name of the input.
    * @returns Generated code or '' if no blocks are connected.
+   * @throws ReferenceError if the specified input does not exist.
    */
   statementToCode(block: Block, name: string): string {
     const targetBlock = block.getInputTargetBlock(name);

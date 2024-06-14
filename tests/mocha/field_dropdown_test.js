@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
 import {
   assertFieldValue,
@@ -252,7 +253,7 @@ suite('Dropdown Fields', function () {
         field.setValue(value);
         block.getInput('INPUT').appendField(field, 'DROPDOWN');
         const jso = Blockly.serialization.blocks.save(block);
-        chai.assert.deepEqual(jso['fields'], {'DROPDOWN': value});
+        assert.deepEqual(jso['fields'], {'DROPDOWN': value});
       };
     });
 

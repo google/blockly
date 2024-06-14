@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../../node_modules/chai/chai.js';
 import {runTestSuites} from './common.js';
 
 /**
@@ -84,14 +85,14 @@ const createCodeGenerationTestFn_ = (generator) => {
       }
       const assertFunc =
         typeof testCase.expectedCode === 'string'
-          ? chai.assert.equal
-          : chai.assert.match;
+          ? assert.equal
+          : assert.match;
       assertFunc(code, testCase.expectedCode);
       if (
         !testCase.useWorkspaceToCode &&
         testCase.expectedInnerOrder !== undefined
       ) {
-        chai.assert.equal(innerOrder, testCase.expectedInnerOrder);
+        assert.equal(innerOrder, testCase.expectedInnerOrder);
       }
     };
   };

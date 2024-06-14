@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
 import {
   assertFieldValue,
@@ -134,23 +135,23 @@ suite('Image Fields', function () {
       });
       test('JS Constructor', function () {
         const field = new Blockly.FieldImage('src', 10, 10, null, this.onClick);
-        chai.assert.equal(field.clickHandler, this.onClick);
+        assert.equal(field.clickHandler, this.onClick);
       });
       test('setOnClickHandler', function () {
         const field = new Blockly.FieldImage('src', 10, 10);
         field.setOnClickHandler(this.onClick);
-        chai.assert.equal(field.clickHandler, this.onClick);
+        assert.equal(field.clickHandler, this.onClick);
       });
       test('Remove Click Handler', function () {
         const field = new Blockly.FieldImage('src', 10, 10, null, this.onClick);
         field.setOnClickHandler(null);
-        chai.assert.isNull(field.clickHandler);
+        assert.isNull(field.clickHandler);
       });
     });
     suite('Alt', function () {
       test('JS Constructor', function () {
         const field = new Blockly.FieldImage('src', 10, 10, 'alt');
-        chai.assert.equal(field.getText(), 'alt');
+        assert.equal(field.getText(), 'alt');
       });
       test('JSON Definition', function () {
         const field = Blockly.FieldImage.fromJson({
@@ -159,7 +160,7 @@ suite('Image Fields', function () {
           height: 10,
           alt: 'alt',
         });
-        chai.assert.equal(field.getText(), 'alt');
+        assert.equal(field.getText(), 'alt');
       });
       suite('SetAlt', function () {
         setup(function () {
@@ -182,31 +183,31 @@ suite('Image Fields', function () {
         const field = new Blockly.FieldImage('src', 10, 10, null, null, null, {
           alt: 'alt',
         });
-        chai.assert.equal(field.getText(), 'alt');
+        assert.equal(field.getText(), 'alt');
       });
       test('JS Configuration - Ignore', function () {
         const field = new Blockly.FieldImage('src', 10, 10, 'alt', null, null, {
           alt: 'configAlt',
         });
-        chai.assert.equal(field.getText(), 'configAlt');
+        assert.equal(field.getText(), 'configAlt');
       });
       test("JS Configuration - Ignore - ''", function () {
         const field = new Blockly.FieldImage('src', 10, 10, '', null, null, {
           alt: 'configAlt',
         });
-        chai.assert.equal(field.getText(), 'configAlt');
+        assert.equal(field.getText(), 'configAlt');
       });
       test("JS Configuration - Ignore - Config ''", function () {
         const field = new Blockly.FieldImage('src', 10, 10, 'alt', null, null, {
           alt: '',
         });
-        chai.assert.equal(field.getText(), '');
+        assert.equal(field.getText(), '');
       });
     });
     suite('Flip RTL', function () {
       test('JS Constructor', function () {
         const field = new Blockly.FieldImage('src', 10, 10, null, null, true);
-        chai.assert.isTrue(field.getFlipRtl());
+        assert.isTrue(field.getFlipRtl());
       });
       test('JSON Definition', function () {
         const field = Blockly.FieldImage.fromJson({
@@ -215,25 +216,25 @@ suite('Image Fields', function () {
           height: 10,
           flipRtl: true,
         });
-        chai.assert.isTrue(field.getFlipRtl());
+        assert.isTrue(field.getFlipRtl());
       });
       test('JS Configuration - Simple', function () {
         const field = new Blockly.FieldImage('src', 10, 10, null, null, null, {
           flipRtl: true,
         });
-        chai.assert.isTrue(field.getFlipRtl());
+        assert.isTrue(field.getFlipRtl());
       });
       test('JS Configuration - Ignore - True', function () {
         const field = new Blockly.FieldImage('src', 10, 10, null, null, true, {
           flipRtl: false,
         });
-        chai.assert.isFalse(field.getFlipRtl());
+        assert.isFalse(field.getFlipRtl());
       });
       test('JS Configuration - Ignore - False', function () {
         const field = new Blockly.FieldImage('src', 10, 10, null, null, false, {
           flipRtl: true,
         });
-        chai.assert.isTrue(field.getFlipRtl());
+        assert.isTrue(field.getFlipRtl());
       });
     });
   });

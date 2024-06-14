@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -43,7 +44,7 @@ suite('Render Management', function () {
     test('the queueRender promise is properly resolved after rendering', function () {
       const block = createMockBlock();
       const promise = Blockly.renderManagement.queueRender(block).then(() => {
-        chai.assert.isTrue(block.hasRendered, 'Expected block to be rendered');
+        assert.isTrue(block.hasRendered, 'Expected block to be rendered');
       });
       this.clock.runAll();
       return promise;
@@ -53,7 +54,7 @@ suite('Render Management', function () {
       const block = createMockBlock();
       Blockly.renderManagement.queueRender(block);
       const promise = Blockly.renderManagement.finishQueuedRenders(() => {
-        chai.assert.isTrue(block.hasRendered, 'Expected block to be rendered');
+        assert.isTrue(block.hasRendered, 'Expected block to be rendered');
       });
       this.clock.runAll();
       return promise;
@@ -92,7 +93,7 @@ suite('Render Management', function () {
 
       Blockly.renderManagement.triggerQueuedRenders();
 
-      chai.assert.isTrue(block.hasRendered, 'Expected block to be rendered');
+      assert.isTrue(block.hasRendered, 'Expected block to be rendered');
     });
 
     test('triggering queued renders rerenders blocks in all workspaces', function () {
@@ -105,8 +106,8 @@ suite('Render Management', function () {
 
       Blockly.renderManagement.triggerQueuedRenders();
 
-      chai.assert.isTrue(block1.hasRendered, 'Expected block1 to be rendered');
-      chai.assert.isTrue(block2.hasRendered, 'Expected block2 to be rendered');
+      assert.isTrue(block1.hasRendered, 'Expected block1 to be rendered');
+      assert.isTrue(block2.hasRendered, 'Expected block2 to be rendered');
     });
 
     test('triggering queued renders in one workspace does not rerender blocks in another workspace', function () {
@@ -119,8 +120,8 @@ suite('Render Management', function () {
 
       Blockly.renderManagement.triggerQueuedRenders(workspace1);
 
-      chai.assert.isTrue(block1.hasRendered, 'Expected block1 to be rendered');
-      chai.assert.isFalse(
+      assert.isTrue(block1.hasRendered, 'Expected block1 to be rendered');
+      assert.isFalse(
         block2.hasRendered,
         'Expected block2 to not be rendered',
       );

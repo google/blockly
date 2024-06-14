@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../../node_modules/chai/chai.js';
+
 /**
  * Creates spy for workspace fireChangeListener
  * @param {!Blockly.Workspace} workspace The workspace to spy fireChangeListener
@@ -40,7 +42,7 @@ function assertXmlPropertyEqual_(xmlValue, expectedValue, message) {
   if (expectedValue instanceof Node) {
     expectedValue = Blockly.Xml.domToText(expectedValue);
   }
-  chai.assert.equal(value, expectedValue, message);
+  assert.equal(value, expectedValue, message);
 }
 
 /**
@@ -55,13 +57,13 @@ function assertXmlProperties_(obj, expectedXmlProperties) {
     const value = obj[key];
     const expectedValue = expectedXmlProperties[key];
     if (expectedValue === undefined) {
-      chai.assert.isUndefined(
+      assert.isUndefined(
         value,
         'Expected ' + key + ' property to be undefined',
       );
       return;
     }
-    chai.assert.exists(value, 'Expected ' + key + ' property to exist');
+    assert.exists(value, 'Expected ' + key + ' property to exist');
     assertXmlPropertyEqual_(value, expectedValue, 'Checking property ' + key);
   });
 }
@@ -98,13 +100,13 @@ export function assertEventEquals(
 ) {
   let prependMessage = message ? message + ' ' : '';
   prependMessage += 'Event fired ';
-  chai.assert.equal(event.type, expectedType, prependMessage + 'type');
-  chai.assert.equal(
+  assert.equal(event.type, expectedType, prependMessage + 'type');
+  assert.equal(
     event.workspaceId,
     expectedWorkspaceId,
     prependMessage + 'workspace id',
   );
-  chai.assert.equal(
+  assert.equal(
     event.blockId,
     expectedBlockId,
     prependMessage + 'block id',
@@ -113,20 +115,20 @@ export function assertEventEquals(
     const value = event[key];
     const expectedValue = expectedProperties[key];
     if (expectedValue === undefined) {
-      chai.assert.isUndefined(value, prependMessage + key);
+      assert.isUndefined(value, prependMessage + key);
       return;
     }
-    chai.assert.exists(value, prependMessage + key);
+    assert.exists(value, prependMessage + key);
     if (isXmlProperty_(key)) {
       assertXmlPropertyEqual_(value, expectedValue, prependMessage + key);
     } else {
-      chai.assert.equal(value, expectedValue, prependMessage + key);
+      assert.equal(value, expectedValue, prependMessage + key);
     }
   });
   if (isUiEvent) {
-    chai.assert.isTrue(event.isUiEvent);
+    assert.isTrue(event.isUiEvent);
   } else {
-    chai.assert.isFalse(event.isUiEvent);
+    assert.isFalse(event.isUiEvent);
   }
 }
 

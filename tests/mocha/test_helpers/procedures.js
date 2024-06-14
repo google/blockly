@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../../node_modules/chai/chai.js';
 import {ConnectionType} from '../../../build/src/core/connection_type.js';
 import {VariableModel} from '../../../build/src/core/variable_model.js';
 
@@ -19,7 +20,7 @@ function assertBlockVarModels(block, varIds) {
   for (let i = 0; i < varIds.length; i++) {
     expectedVarModels.push(block.workspace.getVariableById(varIds[i]));
   }
-  chai.assert.sameDeepOrderedMembers(block.getVarModels(), expectedVarModels);
+  assert.sameDeepOrderedMembers(block.getVarModels(), expectedVarModels);
 }
 
 /**
@@ -29,7 +30,7 @@ function assertBlockVarModels(block, varIds) {
  */
 function assertCallBlockArgsStructure(callBlock, args) {
   // inputList also contains "TOPROW"
-  chai.assert.equal(
+  assert.equal(
     callBlock.inputList.length - 1,
     args.length,
     'call block has the expected number of args',
@@ -38,15 +39,15 @@ function assertCallBlockArgsStructure(callBlock, args) {
   for (let i = 0; i < args.length; i++) {
     const expectedName = args[i];
     const callInput = callBlock.inputList[i + 1];
-    chai.assert.equal(callInput.type, ConnectionType.INPUT_VALUE);
-    chai.assert.equal(callInput.name, 'ARG' + i);
-    chai.assert.equal(
+    assert.equal(callInput.type, ConnectionType.INPUT_VALUE);
+    assert.equal(callInput.name, 'ARG' + i);
+    assert.equal(
       callInput.fieldRow[0].getValue(),
       expectedName,
       'Call block consts did not match expected.',
     );
   }
-  chai.assert.sameOrderedMembers(callBlock.getVars(), args);
+  assert.sameOrderedMembers(callBlock.getVars(), args);
 }
 
 /**
@@ -68,42 +69,42 @@ export function assertDefBlockStructure(
   hasStatements = true,
 ) {
   if (hasStatements) {
-    chai.assert.isNotNull(
+    assert.isNotNull(
       defBlock.getInput('STACK'),
       'Def block should have STACK input',
     );
   } else {
-    chai.assert.isNull(
+    assert.isNull(
       defBlock.getInput('STACK'),
       'Def block should not have STACK input',
     );
   }
   if (hasReturn) {
-    chai.assert.isNotNull(
+    assert.isNotNull(
       defBlock.getInput('RETURN'),
       'Def block should have RETURN input',
     );
   } else {
-    chai.assert.isNull(
+    assert.isNull(
       defBlock.getInput('RETURN'),
       'Def block should not have RETURN input',
     );
   }
   if (args.length) {
-    chai.assert.include(
+    assert.include(
       defBlock.toString(),
       'with',
       'Def block string should include "with"',
     );
   } else {
-    chai.assert.notInclude(
+    assert.notInclude(
       defBlock.toString(),
       'with',
       'Def block string should not include "with"',
     );
   }
 
-  chai.assert.sameOrderedMembers(defBlock.getVars(), args);
+  assert.sameOrderedMembers(defBlock.getVars(), args);
   assertBlockVarModels(defBlock, varIds);
 }
 
@@ -122,15 +123,15 @@ export function assertCallBlockStructure(
   name = undefined,
 ) {
   if (args.length) {
-    chai.assert.include(callBlock.toString(), 'with');
+    assert.include(callBlock.toString(), 'with');
   } else {
-    chai.assert.notInclude(callBlock.toString(), 'with');
+    assert.notInclude(callBlock.toString(), 'with');
   }
 
   assertCallBlockArgsStructure(callBlock, args);
   assertBlockVarModels(callBlock, varIds);
   if (name !== undefined) {
-    chai.assert.equal(callBlock.getFieldValue('NAME'), name);
+    assert.equal(callBlock.getFieldValue('NAME'), name);
   }
 }
 

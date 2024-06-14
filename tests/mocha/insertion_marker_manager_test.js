@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -47,7 +48,7 @@ suite('Insertion marker manager', function () {
       };
       const manager = createBlocksAndManager(this.workspace, state);
       const markers = manager.getInsertionMarkers();
-      chai.assert.equal(markers.length, 1);
+      assert.equal(markers.length, 1);
     });
 
     test('Two stack blocks create two markers', function () {
@@ -69,7 +70,7 @@ suite('Insertion marker manager', function () {
       };
       const manager = createBlocksAndManager(this.workspace, state);
       const markers = manager.getInsertionMarkers();
-      chai.assert.equal(markers.length, 2);
+      assert.equal(markers.length, 2);
     });
 
     test('Three stack blocks create two markers', function () {
@@ -97,7 +98,7 @@ suite('Insertion marker manager', function () {
       };
       const manager = createBlocksAndManager(this.workspace, state);
       const markers = manager.getInsertionMarkers();
-      chai.assert.equal(markers.length, 2);
+      assert.equal(markers.length, 2);
     });
 
     test('One value block creates one marker', function () {
@@ -113,7 +114,7 @@ suite('Insertion marker manager', function () {
       };
       const manager = createBlocksAndManager(this.workspace, state);
       const markers = manager.getInsertionMarkers();
-      chai.assert.equal(markers.length, 1);
+      assert.equal(markers.length, 1);
     });
 
     test('Two value blocks create one marker', function () {
@@ -137,7 +138,7 @@ suite('Insertion marker manager', function () {
       };
       const manager = createBlocksAndManager(this.workspace, state);
       const markers = manager.getInsertionMarkers();
-      chai.assert.equal(markers.length, 1);
+      assert.equal(markers.length, 1);
     });
 
     test('One row to stack block creates one marker', function () {
@@ -153,7 +154,7 @@ suite('Insertion marker manager', function () {
       };
       const manager = createBlocksAndManager(this.workspace, state);
       const markers = manager.getInsertionMarkers();
-      chai.assert.equal(markers.length, 1);
+      assert.equal(markers.length, 1);
     });
 
     test('Row to stack block with child creates two markers', function () {
@@ -175,7 +176,7 @@ suite('Insertion marker manager', function () {
       };
       const manager = createBlocksAndManager(this.workspace, state);
       const markers = manager.getInsertionMarkers();
-      chai.assert.equal(markers.length, 2);
+      assert.equal(markers.length, 2);
     });
 
     suite('children being set as insertion markers', function () {
@@ -225,7 +226,7 @@ suite('Insertion marker manager', function () {
         };
         const manager = createBlocksAndManager(this.workspace, state);
         const markers = manager.getInsertionMarkers();
-        chai.assert.isTrue(
+        assert.isTrue(
           markers[0].getChildren()[0].isInsertionMarker(),
           'Expected the shadow block to be an insertion maker',
         );
@@ -244,7 +245,7 @@ suite('Insertion marker manager', function () {
         };
         const manager = createBlocksAndManager(this.workspace, state);
         const markers = manager.getInsertionMarkers();
-        chai.assert.isTrue(
+        assert.isTrue(
           markers[0].getChildren()[0].isInsertionMarker(),
           'Expected the shadow block to be an insertion maker',
         );
@@ -285,7 +286,7 @@ suite('Insertion marker manager', function () {
         id: 'fakeDragTarget',
       };
       this.manager.update(this.dxy, fakeDragTarget);
-      chai.assert.isTrue(this.manager.wouldDeleteBlock);
+      assert.isTrue(this.manager.wouldDeleteBlock);
     });
 
     test('Over delete area and rejected would not delete', function () {
@@ -300,7 +301,7 @@ suite('Insertion marker manager', function () {
         id: 'fakeDragTarget',
       };
       this.manager.update(this.dxy, fakeDragTarget);
-      chai.assert.isFalse(this.manager.wouldDeleteBlock);
+      assert.isFalse(this.manager.wouldDeleteBlock);
     });
 
     test('Drag target is not a delete area would not delete', function () {
@@ -315,12 +316,12 @@ suite('Insertion marker manager', function () {
         id: 'fakeDragTarget',
       };
       this.manager.update(this.dxy, fakeDragTarget);
-      chai.assert.isFalse(this.manager.wouldDeleteBlock);
+      assert.isFalse(this.manager.wouldDeleteBlock);
     });
 
     test('Not over drag target would not delete', function () {
       this.manager.update(this.dxy, null);
-      chai.assert.isFalse(this.manager.wouldDeleteBlock);
+      assert.isFalse(this.manager.wouldDeleteBlock);
     });
   });
 
@@ -352,35 +353,35 @@ suite('Insertion marker manager', function () {
 
     test('No other blocks nearby would not connect', function () {
       this.manager.update(new Blockly.utils.Coordinate(0, 0), null);
-      chai.assert.isFalse(this.manager.wouldConnectBlock());
+      assert.isFalse(this.manager.wouldConnectBlock());
     });
 
     test('Near other block and above would connect before', function () {
       this.manager.update(new Blockly.utils.Coordinate(200, 190), null);
-      chai.assert.isTrue(this.manager.wouldConnectBlock());
+      assert.isTrue(this.manager.wouldConnectBlock());
       const markers = this.manager.getInsertionMarkers();
-      chai.assert.equal(markers.length, 1);
+      assert.equal(markers.length, 1);
       const marker = markers[0];
-      chai.assert.isTrue(marker.nextConnection.isConnected());
+      assert.isTrue(marker.nextConnection.isConnected());
     });
 
     test('Near other block and below would connect after', function () {
       this.manager.update(new Blockly.utils.Coordinate(200, 210), null);
-      chai.assert.isTrue(this.manager.wouldConnectBlock());
+      assert.isTrue(this.manager.wouldConnectBlock());
       const markers = this.manager.getInsertionMarkers();
-      chai.assert.equal(markers.length, 1);
+      assert.equal(markers.length, 1);
       const marker = markers[0];
-      chai.assert.isTrue(marker.previousConnection.isConnected());
+      assert.isTrue(marker.previousConnection.isConnected());
     });
 
     test('Near other block and left would connect', function () {
       this.manager.update(new Blockly.utils.Coordinate(190, 200), null);
-      chai.assert.isTrue(this.manager.wouldConnectBlock());
+      assert.isTrue(this.manager.wouldConnectBlock());
     });
 
     test('Near other block and right would connect', function () {
       this.manager.update(new Blockly.utils.Coordinate(210, 200), null);
-      chai.assert.isTrue(this.manager.wouldConnectBlock());
+      assert.isTrue(this.manager.wouldConnectBlock());
     });
   });
 
@@ -412,31 +413,31 @@ suite('Insertion marker manager', function () {
 
     test('No other blocks nearby would not connect', function () {
       this.manager.update(new Blockly.utils.Coordinate(0, 0), null);
-      chai.assert.isFalse(this.manager.wouldConnectBlock());
+      assert.isFalse(this.manager.wouldConnectBlock());
     });
 
     test('Near other block and above would connect', function () {
       this.manager.update(new Blockly.utils.Coordinate(200, 190), null);
-      chai.assert.isTrue(this.manager.wouldConnectBlock());
+      assert.isTrue(this.manager.wouldConnectBlock());
     });
 
     test('Near other block and below would connect', function () {
       this.manager.update(new Blockly.utils.Coordinate(200, 210), null);
-      chai.assert.isTrue(this.manager.wouldConnectBlock());
+      assert.isTrue(this.manager.wouldConnectBlock());
     });
 
     test('Near other block and left would connect before', function () {
       this.manager.update(new Blockly.utils.Coordinate(190, 200), null);
-      chai.assert.isTrue(this.manager.wouldConnectBlock());
+      assert.isTrue(this.manager.wouldConnectBlock());
       const markers = this.manager.getInsertionMarkers();
-      chai.assert.isTrue(markers[0].getInput('INPUT').connection.isConnected());
+      assert.isTrue(markers[0].getInput('INPUT').connection.isConnected());
     });
 
     test('Near other block and right would connect after', function () {
       this.manager.update(new Blockly.utils.Coordinate(210, 200), null);
-      chai.assert.isTrue(this.manager.wouldConnectBlock());
+      assert.isTrue(this.manager.wouldConnectBlock());
       const markers = this.manager.getInsertionMarkers();
-      chai.assert.isTrue(markers[0].outputConnection.isConnected());
+      assert.isTrue(markers[0].outputConnection.isConnected());
     });
   });
 });

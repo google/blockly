@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
 import {DartGenerator} from '../../build/src/generators/dart/dart_generator.js';
 import {JavascriptGenerator} from '../../build/src/generators/javascript/javascript_generator.js';
@@ -31,22 +32,22 @@ suite('Generator', function () {
     });
 
     test('Nothing', function () {
-      chai.assert.equal(this.generator.prefixLines('', ''), '');
+      assert.equal(this.generator.prefixLines('', ''), '');
     });
 
     test('One word', function () {
-      chai.assert.equal(this.generator.prefixLines('Hello', '@'), '@Hello');
+      assert.equal(this.generator.prefixLines('Hello', '@'), '@Hello');
     });
 
     test('One line', function () {
-      chai.assert.equal(
+      assert.equal(
         this.generator.prefixLines('Hello\n', '12'),
         '12Hello\n',
       );
     });
 
     test('Two lines', function () {
-      chai.assert.equal(
+      assert.equal(
         this.generator.prefixLines('Hello\nWorld\n', '***'),
         '***Hello\n***World\n',
       );
@@ -97,7 +98,7 @@ suite('Generator', function () {
         const code = generator.blockToCode(rowBlock, opt_thisOnly);
         delete generator.forBlock['stack_block'];
         delete generator.forBlock['row_block'];
-        chai.assert.equal(code, expectedCode, opt_message);
+        assert.equal(code, expectedCode, opt_message);
       };
     });
 
@@ -187,7 +188,7 @@ suite('Generator', function () {
           blockA.nextConnection.connect(blockC.previousConnection);
 
           const code = generator.blockToCode(blockA, opt_thisOnly);
-          chai.assert.equal(code, expectedCode, opt_message);
+          assert.equal(code, expectedCode, opt_message);
         };
       });
 
@@ -214,7 +215,7 @@ suite('Generator', function () {
         this.generator = new TestGenerator();
       });
       test('No nameDB_ initialized', function () {
-        chai.assert.throws(() => {
+        assert.throws(() => {
           this.generator.getVariableName('foo');
         });
       });
@@ -222,13 +223,13 @@ suite('Generator', function () {
       test('Get variable name', function () {
         this.generator.init();
 
-        chai.assert.equal(this.generator.getVariableName('foo'), 'foo');
+        assert.equal(this.generator.getVariableName('foo'), 'foo');
       });
 
       test('Get procedure name', function () {
         this.generator.init();
 
-        chai.assert.equal(this.generator.getProcedureName('foo'), 'foo');
+        assert.equal(this.generator.getProcedureName('foo'), 'foo');
       });
     });
   });

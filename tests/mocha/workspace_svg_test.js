@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   assertEventFired,
   assertEventNotFired,
@@ -60,35 +61,35 @@ suite('WorkspaceSvg', function () {
         '</xml>',
     );
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-    chai.assert.equal(
+    assert.equal(
       this.workspace.getAllBlocks(false).length,
       1,
       'Block count',
     );
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-    chai.assert.equal(
+    assert.equal(
       this.workspace.getAllBlocks(false).length,
       2,
       'Block count',
     );
     const blocks = this.workspace.getAllBlocks(false);
-    chai.assert.equal(
+    assert.equal(
       blocks[0].getRelativeToSurfaceXY().x,
       21,
       'Block 1 position x',
     );
-    chai.assert.equal(
+    assert.equal(
       blocks[0].getRelativeToSurfaceXY().y,
       23,
       'Block 1 position y',
     );
-    chai.assert.equal(
+    assert.equal(
       blocks[1].getRelativeToSurfaceXY().x,
       21,
       'Block 2 position x',
     );
     // Y separation value defined in appendDomToWorkspace as 10
-    chai.assert.equal(
+    assert.equal(
       blocks[1].getRelativeToSurfaceXY().y,
       23 + blocks[0].getHeightWidth().height + 10,
       'Block 2 position y',
@@ -108,9 +109,9 @@ suite('WorkspaceSvg', function () {
 
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
     const blocks = this.workspace.getAllBlocks(false);
-    chai.assert.equal(blocks.length, 2, 'Block count');
+    assert.equal(blocks.length, 2, 'Block count');
     const shadowBlock = blocks[1];
-    chai.assert.equal(false, shadowBlock.isDeadOrDying());
+    assert.equal(false, shadowBlock.isDeadOrDying());
 
     const block = this.workspace.newBlock('simple_test_block');
     block.initSvg();
@@ -119,13 +120,13 @@ suite('WorkspaceSvg', function () {
       .getTopBlocks()[0]
       .getInput('NAME').connection;
     inputConnection.connect(block.outputConnection);
-    chai.assert.equal(false, block.isDeadOrDying());
-    chai.assert.equal(true, shadowBlock.isDeadOrDying());
+    assert.equal(false, block.isDeadOrDying());
+    assert.equal(true, shadowBlock.isDeadOrDying());
   });
 
   suite('updateToolbox', function () {
     test('Passes in null when toolbox exists', function () {
-      chai.assert.throws(
+      assert.throws(
         function () {
           this.workspace.updateToolbox(null);
         }.bind(this),
@@ -134,7 +135,7 @@ suite('WorkspaceSvg', function () {
     });
     test('Passes in toolbox def when current toolbox is null', function () {
       this.workspace.options.languageTree = null;
-      chai.assert.throws(
+      assert.throws(
         function () {
           this.workspace.updateToolbox({'contents': []});
         }.bind(this),
@@ -146,7 +147,7 @@ suite('WorkspaceSvg', function () {
         .stub(Blockly.utils.toolbox.TEST_ONLY, 'hasCategoriesInternal')
         .returns(true);
       this.workspace.toolbox_ = null;
-      chai.assert.throws(
+      assert.throws(
         function () {
           this.workspace.updateToolbox({'contents': []});
         }.bind(this),
@@ -158,7 +159,7 @@ suite('WorkspaceSvg', function () {
         .stub(Blockly.utils.toolbox.TEST_ONLY, 'hasCategoriesInternal')
         .returns(false);
       this.workspace.flyout_ = null;
-      chai.assert.throws(
+      assert.throws(
         function () {
           this.workspace.updateToolbox({'contents': []});
         }.bind(this),

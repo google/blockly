@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -28,11 +29,11 @@ suite('Workspace comment', function () {
 
         this.commentView.setText('test');
 
-        chai.assert.isTrue(
+        assert.isTrue(
           spy.calledOnce,
           'Expected the spy to be called once',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           spy.calledWith('', 'test'),
           'Expected the spy to be called with the given args',
         );
@@ -50,15 +51,15 @@ suite('Workspace comment', function () {
 
         this.commentView.setText('test');
 
-        chai.assert.isTrue(
+        assert.isTrue(
           fake1.calledOnce,
           'Expected the first listener to be called',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           fake2.calledOnce,
           'Expected the second listener to be called',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           fake3.calledOnce,
           'Expected the third listener to be called',
         );
@@ -74,11 +75,11 @@ suite('Workspace comment', function () {
 
         this.commentView.setSize(newSize);
 
-        chai.assert.isTrue(
+        assert.isTrue(
           spy.calledOnce,
           'Expected the spy to be called once',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           spy.calledWith(originalSize, newSize),
           'Expected the spy to be called with the given args',
         );
@@ -97,15 +98,15 @@ suite('Workspace comment', function () {
 
         this.commentView.setSize(newSize);
 
-        chai.assert.isTrue(
+        assert.isTrue(
           fake1.calledOnce,
           'Expected the first listener to be called',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           fake2.calledOnce,
           'Expected the second listener to be called',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           fake3.calledOnce,
           'Expected the third listener to be called',
         );
@@ -119,11 +120,11 @@ suite('Workspace comment', function () {
 
         this.commentView.setCollapsed(true);
 
-        chai.assert.isTrue(
+        assert.isTrue(
           spy.calledOnce,
           'Expected the spy to be called once',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           spy.calledWith(true),
           'Expected the spy to be called with the given args',
         );
@@ -141,15 +142,15 @@ suite('Workspace comment', function () {
 
         this.commentView.setCollapsed(true);
 
-        chai.assert.isTrue(
+        assert.isTrue(
           fake1.calledOnce,
           'Expected the first listener to be called',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           fake2.calledOnce,
           'Expected the second listener to be called',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           fake3.calledOnce,
           'Expected the third listener to be called',
         );
@@ -163,7 +164,7 @@ suite('Workspace comment', function () {
 
         this.commentView.dispose();
 
-        chai.assert.isTrue(
+        assert.isTrue(
           spy.calledOnce,
           'Expected the spy to be called once',
         );
@@ -181,15 +182,15 @@ suite('Workspace comment', function () {
 
         this.commentView.dispose();
 
-        chai.assert.isTrue(
+        assert.isTrue(
           fake1.calledOnce,
           'Expected the first listener to be called',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           fake2.calledOnce,
           'Expected the second listener to be called',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           fake3.calledOnce,
           'Expected the third listener to be called',
         );

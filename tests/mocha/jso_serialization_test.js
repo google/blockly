@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
 import {
   createGenUidStubWithReturns,
@@ -41,7 +42,7 @@ suite('JSO Serialization', function () {
   });
 
   function assertProperty(obj, property, value) {
-    chai.assert.deepEqual(obj[property], value);
+    assert.deepEqual(obj[property], value);
   }
 
   function assertNoProperty(obj, property) {
@@ -53,7 +54,7 @@ suite('JSO Serialization', function () {
       const block = this.workspace.newBlock('row_block');
       block.setInsertionMarker(true);
       const jso = Blockly.serialization.blocks.save(block);
-      chai.assert.isNull(jso);
+      assert.isNull(jso);
     });
 
     test('Basic', function () {
@@ -384,7 +385,7 @@ suite('JSO Serialization', function () {
     suite('Connected blocks', function () {
       setup(function () {
         this.assertInput = function (jso, name, value) {
-          chai.assert.deepInclude(jso['inputs'][name], value);
+          assert.deepInclude(jso['inputs'][name], value);
         };
 
         this.createBlockWithChild = function (blockType, inputName) {
@@ -467,7 +468,7 @@ suite('JSO Serialization', function () {
           const jso = Blockly.serialization.blocks.save(block, {
             addInputBlocks: false,
           });
-          chai.assert.isUndefined(jso['inputs']);
+          assert.isUndefined(jso['inputs']);
         };
 
         this.assertNoShadow = function (blockType, inputName) {
@@ -475,7 +476,7 @@ suite('JSO Serialization', function () {
           const jso = Blockly.serialization.blocks.save(block, {
             addInputBlocks: false,
           });
-          chai.assert.isUndefined(jso['inputs']);
+          assert.isUndefined(jso['inputs']);
         };
 
         this.assertNoOverwrittenShadow = function (blockType, inputName) {
@@ -486,7 +487,7 @@ suite('JSO Serialization', function () {
           const jso = Blockly.serialization.blocks.save(block, {
             addInputBlocks: false,
           });
-          chai.assert.isUndefined(jso['inputs']);
+          assert.isUndefined(jso['inputs']);
         };
       });
 
@@ -662,7 +663,7 @@ suite('JSO Serialization', function () {
           test('Child', function () {
             const block = this.createNextWithChild();
             const jso = Blockly.serialization.blocks.save(block);
-            chai.assert.deepInclude(jso['next'], {
+            assert.deepInclude(jso['next'], {
               'block': {'type': 'stack_block', 'id': 'id2'},
             });
           });
@@ -670,7 +671,7 @@ suite('JSO Serialization', function () {
           test('Shadow', function () {
             const block = this.createNextWithShadow();
             const jso = Blockly.serialization.blocks.save(block);
-            chai.assert.deepInclude(jso['next'], {
+            assert.deepInclude(jso['next'], {
               'shadow': {'type': 'stack_block', 'id': 'test'},
             });
           });
@@ -678,7 +679,7 @@ suite('JSO Serialization', function () {
           test('Overwritten shadow', function () {
             const block = this.createNextWithShadowAndChild();
             const jso = Blockly.serialization.blocks.save(block);
-            chai.assert.deepInclude(jso['next'], {
+            assert.deepInclude(jso['next'], {
               'block': {
                 'type': 'stack_block',
                 'id': 'id2',
@@ -699,7 +700,7 @@ suite('JSO Serialization', function () {
               .getInput('NAME')
               .connection.connect(grandChildBlock.previousConnection);
             const jso = Blockly.serialization.blocks.save(block);
-            chai.assert.deepInclude(jso['next'], {
+            assert.deepInclude(jso['next'], {
               'block': {
                 'type': 'statement_block',
                 'id': 'id2',
@@ -722,7 +723,7 @@ suite('JSO Serialization', function () {
             const jso = Blockly.serialization.blocks.save(block, {
               addNextBlocks: false,
             });
-            chai.assert.isUndefined(jso['next']);
+            assert.isUndefined(jso['next']);
           });
 
           test('Shadow', function () {
@@ -730,7 +731,7 @@ suite('JSO Serialization', function () {
             const jso = Blockly.serialization.blocks.save(block, {
               addNextBlocks: false,
             });
-            chai.assert.isUndefined(jso['next']);
+            assert.isUndefined(jso['next']);
           });
 
           test('Overwritten shadow', function () {
@@ -738,7 +739,7 @@ suite('JSO Serialization', function () {
             const jso = Blockly.serialization.blocks.save(block, {
               addNextBlocks: false,
             });
-            chai.assert.isUndefined(jso['next']);
+            assert.isUndefined(jso['next']);
           });
         });
       });
@@ -749,7 +750,7 @@ suite('JSO Serialization', function () {
         test('Single block', function () {
           const block = this.workspace.newBlock('variables_get');
           const jso = Blockly.serialization.blocks.save(block);
-          chai.assert.deepEqual(jso['fields']['VAR'], {
+          assert.deepEqual(jso['fields']['VAR'], {
             'id': 'id2',
             'name': 'item',
             'type': '',
@@ -763,7 +764,7 @@ suite('JSO Serialization', function () {
             .getInput('INPUT')
             .connection.connect(childBlock.outputConnection);
           const jso = Blockly.serialization.blocks.save(block);
-          chai.assert.deepEqual(
+          assert.deepEqual(
             jso['inputs']['INPUT']['block']['fields']['VAR'],
             {'id': 'id4', 'name': 'item', 'type': ''},
           );
@@ -774,7 +775,7 @@ suite('JSO Serialization', function () {
           const childBlock = this.workspace.newBlock('variables_set');
           block.nextConnection.connect(childBlock.previousConnection);
           const jso = Blockly.serialization.blocks.save(block);
-          chai.assert.deepEqual(jso['next']['block']['fields']['VAR'], {
+          assert.deepEqual(jso['next']['block']['fields']['VAR'], {
             'id': 'id4',
             'name': 'item',
             'type': '',
@@ -788,9 +789,9 @@ suite('JSO Serialization', function () {
           const jso = Blockly.serialization.blocks.save(block, {
             doFullSerialization: false,
           });
-          chai.assert.deepEqual(jso['fields']['VAR'], {'id': 'id2'});
-          chai.assert.isUndefined(jso['fields']['VAR']['name']);
-          chai.assert.isUndefined(jso['fields']['VAR']['type']);
+          assert.deepEqual(jso['fields']['VAR'], {'id': 'id2'});
+          assert.isUndefined(jso['fields']['VAR']['name']);
+          assert.isUndefined(jso['fields']['VAR']['type']);
         });
 
         test('Input block', function () {
@@ -802,14 +803,14 @@ suite('JSO Serialization', function () {
           const jso = Blockly.serialization.blocks.save(block, {
             doFullSerialization: false,
           });
-          chai.assert.deepEqual(
+          assert.deepEqual(
             jso['inputs']['INPUT']['block']['fields']['VAR'],
             {'id': 'id4'},
           );
-          chai.assert.isUndefined(
+          assert.isUndefined(
             jso['inputs']['INPUT']['block']['fields']['VAR']['name'],
           );
-          chai.assert.isUndefined(
+          assert.isUndefined(
             jso['inputs']['INPUT']['block']['fields']['VAR']['type'],
           );
         });
@@ -821,13 +822,13 @@ suite('JSO Serialization', function () {
           const jso = Blockly.serialization.blocks.save(block, {
             doFullSerialization: false,
           });
-          chai.assert.deepEqual(jso['next']['block']['fields']['VAR'], {
+          assert.deepEqual(jso['next']['block']['fields']['VAR'], {
             'id': 'id4',
           });
-          chai.assert.isUndefined(
+          assert.isUndefined(
             jso['next']['block']['fields']['VAR']['name'],
           );
-          chai.assert.isUndefined(
+          assert.isUndefined(
             jso['next']['block']['fields']['VAR']['type'],
           );
         });
@@ -877,7 +878,7 @@ suite('JSO Serialization', function () {
 
       this.serializer.save(this.workspace);
 
-      chai.assert.isTrue(
+      assert.isTrue(
         spy.calledOnce,
         'Expected the saveState method to be called on the procedure model',
       );
@@ -895,11 +896,11 @@ suite('JSO Serialization', function () {
 
       this.serializer.save(this.workspace);
 
-      chai.assert.isTrue(
+      assert.isTrue(
         spy1.calledOnce,
         'Expected the saveState method to be called on the first parameter model',
       );
-      chai.assert.isTrue(
+      assert.isTrue(
         spy2.calledOnce,
         'Expected the saveState method to be called on the first parameter model',
       );

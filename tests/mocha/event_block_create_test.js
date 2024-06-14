@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {assertEventFired} from './test_helpers/events.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {
@@ -53,7 +54,7 @@ suite('Block Create Event', function () {
     );
     const calls = this.eventsFireStub.getCalls();
     const event = calls[calls.length - 1].args[0];
-    chai.assert.equal(event.xml.tagName, 'shadow');
+    assert.equal(event.xml.tagName, 'shadow');
   });
 
   test('Does not create extra shadow blocks', function () {
@@ -85,7 +86,7 @@ suite('Block Create Event', function () {
     event.run(true);
 
     const blocksAfter = this.workspace.getAllBlocks();
-    chai.assert.deepEqual(
+    assert.deepEqual(
       blocksAfter,
       blocksBefore,
       'No new blocks should be created from an event that only creates shadow blocks',
@@ -102,7 +103,7 @@ suite('Block Create Event', function () {
       delete origEvent.xml; // xml fails deep equals for some reason.
       delete newEvent.xml; // xml fails deep equals for some reason.
 
-      chai.assert.deepEqual(newEvent, origEvent);
+      assert.deepEqual(newEvent, origEvent);
     });
   });
 });

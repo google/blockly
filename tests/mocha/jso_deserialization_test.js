@@ -364,9 +364,7 @@ suite('JSO Deserialization', function () {
           Blockly.serialization.workspaces.load(state, this.workspace);
           const calls = this.eventsFireStub.getCalls();
           const group = calls[0].args[0].group;
-          assert.isTrue(
-            calls.every((call) => call.args[0].group == group),
-          );
+          assert.isTrue(calls.every((call) => call.args[0].group == group));
         });
 
         test('With children', function () {

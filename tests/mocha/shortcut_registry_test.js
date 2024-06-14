@@ -250,10 +250,7 @@ suite('Keyboard Shortcut Registry Test', function () {
     test('Sets the key map', function () {
       this.registry.setKeyMap({'keyCode': ['test_shortcut']});
       assert.equal(Object.keys(this.registry.getKeyMap()).length, 1);
-      assert.equal(
-        this.registry.getKeyMap()['keyCode'][0],
-        'test_shortcut',
-      );
+      assert.equal(this.registry.getKeyMap()['keyCode'][0], 'test_shortcut');
     });
     test('Gets a copy of the key map', function () {
       this.registry.setKeyMap({'keyCode': ['a']});

@@ -303,11 +303,7 @@ suite('Logic ternary', function () {
           null,
           string,
         );
-        assert.equal(
-          number.getRootBlock(),
-          number,
-          'Input THEN disconnected',
-        );
+        assert.equal(number.getRootBlock(), number, 'Input THEN disconnected');
       });
       test('Mismatch with else causes break with else', function () {
         const string = this.workspace.newBlock('text');
@@ -317,11 +313,7 @@ suite('Logic ternary', function () {
 
         const parent = this.workspace.newBlock('text_trim');
         connectParentAndCheckConnections(this.block, parent, 'TEXT', string);
-        assert.equal(
-          number.getRootBlock(),
-          number,
-          'Input ELSE disconnected',
-        );
+        assert.equal(number.getRootBlock(), number, 'Input ELSE disconnected');
       });
     });
   });

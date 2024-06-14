@@ -615,10 +615,7 @@ suite('ASTNode', function () {
         const coordinate = new Blockly.utils.Coordinate(100, 100);
         const node = ASTNode.createWorkspaceNode(this.workspace, coordinate);
         const inNode = node.in();
-        assert.equal(
-          inNode.getLocation(),
-          this.workspace.getTopBlocks()[0],
-        );
+        assert.equal(inNode.getLocation(), this.workspace.getTopBlocks()[0]);
         assert.equal(inNode.getType(), ASTNode.types.STACK);
       });
       test('fromWorkspaceToNull', function () {

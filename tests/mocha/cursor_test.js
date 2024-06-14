@@ -111,10 +111,7 @@ suite('Cursor', function () {
     this.cursor.setCurNode(outputNode);
     this.cursor.in();
     const curNode = this.cursor.getCurNode();
-    assert.equal(
-      curNode.getLocation(),
-      fieldBlock.inputList[0].fieldRow[0],
-    );
+    assert.equal(curNode.getLocation(), fieldBlock.inputList[0].fieldRow[0]);
   });
 
   test('Prev - From previous connection skip over next connection', function () {

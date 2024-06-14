@@ -86,11 +86,7 @@ suite('XML', function () {
     test('Basic', function () {
       const dom = Blockly.utils.xml.textToDom(this.complexXmlText);
       assertXmlDoc(dom);
-      assert.equal(
-        dom.getElementsByTagName('block').length,
-        6,
-        'Block tags',
-      );
+      assert.equal(dom.getElementsByTagName('block').length, 6, 'Block tags');
     });
 
     test(
@@ -765,11 +761,7 @@ suite('XML', function () {
           '</xml>',
       );
       Blockly.Xml.domToWorkspace(dom, this.workspace);
-      assert.equal(
-        this.workspace.getAllBlocks(false).length,
-        1,
-        'Block count',
-      );
+      assert.equal(this.workspace.getAllBlocks(false).length, 1, 'Block count');
       assertVariableValues(this.workspace, 'name1', '', '1');
     });
     test('Variables at top', function () {
@@ -786,11 +778,7 @@ suite('XML', function () {
           '</xml>',
       );
       Blockly.Xml.domToWorkspace(dom, this.workspace);
-      assert.equal(
-        this.workspace.getAllBlocks(false).length,
-        1,
-        'Block count',
-      );
+      assert.equal(this.workspace.getAllBlocks(false).length, 1, 'Block count');
       assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
       assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       assertVariableValues(this.workspace, 'name3', '', 'id3');
@@ -862,17 +850,9 @@ suite('XML', function () {
           '</xml>',
       );
       Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-      assert.equal(
-        this.workspace.getAllBlocks(false).length,
-        1,
-        'Block count',
-      );
+      assert.equal(this.workspace.getAllBlocks(false).length, 1, 'Block count');
       const newBlockIds = Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-      assert.equal(
-        this.workspace.getAllBlocks(false).length,
-        2,
-        'Block count',
-      );
+      assert.equal(this.workspace.getAllBlocks(false).length, 2, 'Block count');
       assert.equal(newBlockIds.length, 1, 'Number of new block ids');
     });
   });

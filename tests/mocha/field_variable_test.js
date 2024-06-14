@@ -204,15 +204,9 @@ suite('Variable Fields', function () {
       for (let i = 0, option; (option = expectedVarOptions[i]); i++) {
         assert.deepEqual(dropdownOptions[i], option);
       }
-      assert.include(
-        dropdownOptions[dropdownOptions.length - 2][0],
-        'Rename',
-      );
+      assert.include(dropdownOptions[dropdownOptions.length - 2][0], 'Rename');
 
-      assert.include(
-        dropdownOptions[dropdownOptions.length - 1][0],
-        'Delete',
-      );
+      assert.include(dropdownOptions[dropdownOptions.length - 1][0], 'Delete');
     };
     test('Contains variables created before field', function () {
       this.workspace.createVariable('name1', '', 'id1');

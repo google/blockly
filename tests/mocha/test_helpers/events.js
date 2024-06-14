@@ -106,11 +106,7 @@ export function assertEventEquals(
     expectedWorkspaceId,
     prependMessage + 'workspace id',
   );
-  assert.equal(
-    event.blockId,
-    expectedBlockId,
-    prependMessage + 'block id',
-  );
+  assert.equal(event.blockId, expectedBlockId, prependMessage + 'block id');
   Object.keys(expectedProperties).map((key) => {
     const value = event[key];
     const expectedValue = expectedProperties[key];

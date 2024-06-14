@@ -454,10 +454,7 @@ export function testAWorkspace() {
     test('At instance limit of 0 after clear', function () {
       this.workspace.clear();
       this.workspace.options.maxInstances['get_var_block'] = 0;
-      assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
-        0,
-      );
+      assert.equal(this.workspace.remainingCapacityOfType('get_var_block'), 0);
     });
 
     test('At instance limit with multiple block types', function () {
@@ -478,10 +475,7 @@ export function testAWorkspace() {
       this.workspace.newBlock('');
       this.workspace.options.maxInstances['get_var_block'] = 0;
       this.workspace.clear();
-      assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
-        0,
-      );
+      assert.equal(this.workspace.remainingCapacityOfType('get_var_block'), 0);
     });
 
     test('Over instance limit', function () {
@@ -672,14 +666,8 @@ export function testAWorkspace() {
     });
 
     test('Trivial', function () {
-      assert.equal(
-        this.workspace.getBlockById(this.blockA.id),
-        this.blockA,
-      );
-      assert.equal(
-        this.workspace.getBlockById(this.blockB.id),
-        this.blockB,
-      );
+      assert.equal(this.workspace.getBlockById(this.blockA.id), this.blockA);
+      assert.equal(this.workspace.getBlockById(this.blockB.id), this.blockB);
     });
 
     test('Null id', function () {
@@ -693,10 +681,7 @@ export function testAWorkspace() {
     test('After dispose', function () {
       this.blockA.dispose();
       assert.isNull(this.workspace.getBlockById(this.blockA.id));
-      assert.equal(
-        this.workspace.getBlockById(this.blockB.id),
-        this.blockB,
-      );
+      assert.equal(this.workspace.getBlockById(this.blockB.id), this.blockB);
     });
 
     test('After clear', function () {
@@ -1435,10 +1420,7 @@ export function testAWorkspace() {
           // Check the undoStack only recorded one delete event.
           const undoStack = this.workspace.undoStack_;
           assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');
-          assert.notEqual(
-            undoStack[undoStack.length - 2].type,
-            'var_delete',
-          );
+          assert.notEqual(undoStack[undoStack.length - 2].type, 'var_delete');
 
           // Undo delete
           this.workspace.undo();
@@ -1471,10 +1453,7 @@ export function testAWorkspace() {
           const undoStack = this.workspace.undoStack_;
           assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');
           assert.equal(undoStack[undoStack.length - 2].type, 'delete');
-          assert.notEqual(
-            undoStack[undoStack.length - 3].type,
-            'var_delete',
-          );
+          assert.notEqual(undoStack[undoStack.length - 3].type, 'var_delete');
 
           // Undo delete
           this.workspace.undo();

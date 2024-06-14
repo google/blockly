@@ -917,10 +917,7 @@ suite('Events', function () {
               const json = event.toJson();
               const event2 = Blockly.Events.fromJson(json, this.workspace);
 
-              assert.equal(
-                safeStringify(event2.toJson()),
-                safeStringify(json),
-              );
+              assert.equal(safeStringify(event2.toJson()), safeStringify(json));
             });
           });
         });
@@ -932,10 +929,7 @@ suite('Events', function () {
                 const json = event.toJson();
                 const expectedJson = testCase.getExpectedJson(this);
 
-                assert.equal(
-                  safeStringify(json),
-                  safeStringify(expectedJson),
-                );
+                assert.equal(safeStringify(json), safeStringify(expectedJson));
               });
             }
           });
@@ -1109,13 +1103,9 @@ suite('Events', function () {
       const filteredEvents = eventUtils.filter(events, true);
       assert.equal(filteredEvents.length, 4); // no event should have been removed.
       // test that the order hasn't changed
-      assert.isTrue(
-        filteredEvents[0] instanceof Blockly.Events.BlockCreate,
-      );
+      assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
       assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      assert.isTrue(
-        filteredEvents[2] instanceof Blockly.Events.BlockChange,
-      );
+      assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BlockChange);
       assert.isTrue(filteredEvents[3] instanceof Blockly.Events.Click);
     });
 
@@ -1141,9 +1131,7 @@ suite('Events', function () {
       const filteredEvents = eventUtils.filter(events, true);
       assert.equal(filteredEvents.length, 2); // duplicate moves should have been removed.
       // test that the order hasn't changed
-      assert.isTrue(
-        filteredEvents[0] instanceof Blockly.Events.BlockCreate,
-      );
+      assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
       assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
       assert.equal(filteredEvents[1].newCoordinate.x, 3);
       assert.equal(filteredEvents[1].newCoordinate.y, 3);
@@ -1158,9 +1146,7 @@ suite('Events', function () {
       const filteredEvents = eventUtils.filter(events, false);
       assert.equal(filteredEvents.length, 2); // duplicate event should have been removed.
       // test that the order hasn't changed
-      assert.isTrue(
-        filteredEvents[0] instanceof Blockly.Events.BlockCreate,
-      );
+      assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
       assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
       assert.equal(filteredEvents[1].newCoordinate.x, 1);
       assert.equal(filteredEvents[1].newCoordinate.y, 1);
@@ -1223,15 +1209,9 @@ suite('Events', function () {
       const filteredEvents = eventUtils.filter(events, true);
       // click event merged into corresponding *Open event
       assert.equal(filteredEvents.length, 3);
-      assert.isTrue(
-        filteredEvents[0] instanceof Blockly.Events.BubbleOpen,
-      );
-      assert.isTrue(
-        filteredEvents[1] instanceof Blockly.Events.BubbleOpen,
-      );
-      assert.isTrue(
-        filteredEvents[2] instanceof Blockly.Events.BubbleOpen,
-      );
+      assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BubbleOpen);
+      assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BubbleOpen);
+      assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BubbleOpen);
       assert.equal(filteredEvents[0].bubbleType, 'comment');
       assert.equal(filteredEvents[1].bubbleType, 'mutator');
       assert.equal(filteredEvents[2].bubbleType, 'warning');
@@ -1292,9 +1272,7 @@ suite('Events', function () {
       // test that the order hasn't changed
       assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockMove);
       assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      assert.isTrue(
-        filteredEvents[2] instanceof Blockly.Events.BlockDelete,
-      );
+      assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BlockDelete);
       assert.isTrue(filteredEvents[3] instanceof Blockly.Events.BlockMove);
     });
   });
@@ -1375,11 +1353,7 @@ suite('Events', function () {
       // Expect both events to trigger change listener.
       sinon.assert.calledTwice(this.changeListenerSpy);
       // Both events should be on undo stack
-      assert.equal(
-        this.workspace.undoStack_.length,
-        2,
-        'Undo stack length',
-      );
+      assert.equal(this.workspace.undoStack_.length, 2, 'Undo stack length');
 
       assertNthCallEventArgEquals(
         this.changeListenerSpy,
@@ -1433,11 +1407,7 @@ suite('Events', function () {
       // The first varCreate and move event should have been ignored.
       sinon.assert.callCount(this.changeListenerSpy, 3);
       // Expect two events on undo stack: varCreate and block create.
-      assert.equal(
-        this.workspace.undoStack_.length,
-        2,
-        'Undo stack length',
-      );
+      assert.equal(this.workspace.undoStack_.length, 2, 'Undo stack length');
 
       assertNthCallEventArgEquals(
         this.changeListenerSpy,

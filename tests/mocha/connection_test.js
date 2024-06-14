@@ -2998,9 +2998,7 @@ suite('Connection', function () {
         oldParent.getInput('INPUT').connection.connect(child.outputConnection);
         newParent.getInput('INPUT').connection.connect(child.outputConnection);
 
-        assert.isFalse(
-          oldParent.getInput('INPUT').connection.isConnected(),
-        );
+        assert.isFalse(oldParent.getInput('INPUT').connection.isConnected());
         this.assertBlockCount(3);
       });
 
@@ -3012,9 +3010,7 @@ suite('Connection', function () {
         oldParent.getInput('NAME').connection.connect(child.previousConnection);
         newParent.getInput('NAME').connection.connect(child.previousConnection);
 
-        assert.isFalse(
-          oldParent.getInput('NAME').connection.isConnected(),
-        );
+        assert.isFalse(oldParent.getInput('NAME').connection.isConnected());
         this.assertBlockCount(3);
       });
 
@@ -3137,9 +3133,7 @@ suite('Connection', function () {
               .getInput('INPUT')
               .connection.connect(newChild.outputConnection);
 
-            assert.isTrue(
-              parent.getInput('INPUT').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('INPUT').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
             assert.isFalse(oldChild.outputConnection.isConnected());
           });
@@ -3156,9 +3150,7 @@ suite('Connection', function () {
               .getInput('INPUT')
               .connection.connect(newChild.outputConnection);
 
-            assert.isTrue(
-              parent.getInput('INPUT').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('INPUT').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
             assert.isFalse(oldChild.outputConnection.isConnected());
           });
@@ -3175,9 +3167,7 @@ suite('Connection', function () {
               .getInput('INPUT')
               .connection.connect(newChild.outputConnection);
 
-            assert.isTrue(
-              parent.getInput('INPUT').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('INPUT').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
             assert.isFalse(oldChild.outputConnection.isConnected());
           });
@@ -3199,9 +3189,7 @@ suite('Connection', function () {
               .getInput('INPUT')
               .connection.connect(newChild.outputConnection);
 
-            assert.isTrue(
-              parent.getInput('INPUT').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('INPUT').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
             assert.isFalse(oldChild.outputConnection.isConnected());
           });
@@ -3224,9 +3212,7 @@ suite('Connection', function () {
                 .getInput('INPUT')
                 .connection.connect(newChild.outputConnection);
 
-              assert.isTrue(
-                parent.getInput('INPUT').connection.isConnected(),
-              );
+              assert.isTrue(parent.getInput('INPUT').connection.isConnected());
               assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
               assert.isFalse(oldChild.outputConnection.isConnected());
             });
@@ -3254,9 +3240,7 @@ suite('Connection', function () {
                 .getInput('INPUT')
                 .connection.connect(newChild.outputConnection);
 
-              assert.isTrue(
-                parent.getInput('INPUT').connection.isConnected(),
-              );
+              assert.isTrue(parent.getInput('INPUT').connection.isConnected());
               assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
               assert.isFalse(oldChild.outputConnection.isConnected());
             });
@@ -3280,9 +3264,7 @@ suite('Connection', function () {
                 .getInput('INPUT')
                 .connection.connect(newChild.outputConnection);
 
-              assert.isTrue(
-                parent.getInput('INPUT').connection.isConnected(),
-              );
+              assert.isTrue(parent.getInput('INPUT').connection.isConnected());
               assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
               assert.isFalse(oldChild.outputConnection.isConnected());
             });
@@ -3318,9 +3300,7 @@ suite('Connection', function () {
                 .getInput('INPUT')
                 .connection.connect(newChild.outputConnection);
 
-              assert.isTrue(
-                parent.getInput('INPUT').connection.isConnected(),
-              );
+              assert.isTrue(parent.getInput('INPUT').connection.isConnected());
               assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
               assert.isFalse(oldChild.outputConnection.isConnected());
             });
@@ -3362,9 +3342,7 @@ suite('Connection', function () {
                 .getInput('INPUT')
                 .connection.connect(newChild.outputConnection);
 
-              assert.isTrue(
-                parent.getInput('INPUT').connection.isConnected(),
-              );
+              assert.isTrue(parent.getInput('INPUT').connection.isConnected());
               assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
               assert.isFalse(oldChild.outputConnection.isConnected());
             });
@@ -3395,9 +3373,7 @@ suite('Connection', function () {
                 .getInput('INPUT')
                 .connection.connect(newChild.outputConnection);
 
-              assert.isTrue(
-                parent.getInput('INPUT').connection.isConnected(),
-              );
+              assert.isTrue(parent.getInput('INPUT').connection.isConnected());
               assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
               assert.isFalse(oldChild.outputConnection.isConnected());
             });
@@ -3418,13 +3394,9 @@ suite('Connection', function () {
               .getInput('INPUT')
               .connection.connect(newChild.outputConnection);
 
-            assert.isTrue(
-              parent.getInput('INPUT').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('INPUT').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
-            assert.isTrue(
-              newChild.getInput('INPUT').connection.isConnected(),
-            );
+            assert.isTrue(newChild.getInput('INPUT').connection.isConnected());
             assert.equal(newChild.getInputTargetBlock('INPUT'), oldChild);
           });
 
@@ -3448,13 +3420,9 @@ suite('Connection', function () {
               .getInput('INPUT')
               .connection.connect(newChild.outputConnection);
 
-            assert.isTrue(
-              parent.getInput('INPUT').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('INPUT').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('INPUT'), newChild);
-            assert.isTrue(
-              newChild.getInput('INPUT').connection.isConnected(),
-            );
+            assert.isTrue(newChild.getInput('INPUT').connection.isConnected());
             assert.equal(newChild.getInputTargetBlock('INPUT'), oldChild);
           });
         });
@@ -3474,9 +3442,7 @@ suite('Connection', function () {
               .getInput('NAME')
               .connection.connect(newChild.previousConnection);
 
-            assert.isTrue(
-              parent.getInput('NAME').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('NAME').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('NAME'), newChild);
             assert.isTrue(newChild.nextConnection.isConnected());
             assert.equal(newChild.getNextBlock(), oldChild);
@@ -3497,9 +3463,7 @@ suite('Connection', function () {
               .getInput('NAME')
               .connection.connect(newChild1.previousConnection);
 
-            assert.isTrue(
-              parent.getInput('NAME').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('NAME').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('NAME'), newChild1);
             assert.isTrue(newChild2.nextConnection.isConnected());
             assert.equal(newChild2.getNextBlock(), oldChild);
@@ -3522,9 +3486,7 @@ suite('Connection', function () {
               .getInput('NAME')
               .connection.connect(newChild.previousConnection);
 
-            assert.isTrue(
-              parent.getInput('NAME').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('NAME').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('NAME'), newChild);
             assert.isFalse(newChild.nextConnection.isConnected());
             assert.isTrue(spy.calledOnce);
@@ -3547,9 +3509,7 @@ suite('Connection', function () {
               .getInput('NAME')
               .connection.connect(newChild.previousConnection);
 
-            assert.isTrue(
-              parent.getInput('NAME').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('NAME').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('NAME'), newChild);
             assert.isTrue(spy.calledOnce);
             this.assertBlockCount(3);
@@ -3573,9 +3533,7 @@ suite('Connection', function () {
               .getInput('NAME')
               .connection.connect(newChild.previousConnection);
 
-            assert.isTrue(
-              parent.getInput('NAME').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('NAME').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('NAME'), newChild);
             assert.isTrue(newChild.nextConnection.isConnected());
             assert.equal(newChild.getNextBlock(), oldChild);
@@ -3600,9 +3558,7 @@ suite('Connection', function () {
               .getInput('NAME')
               .connection.connect(newChild1.previousConnection);
 
-            assert.isTrue(
-              parent.getInput('NAME').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('NAME').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('NAME'), newChild1);
             assert.isTrue(newChild2.nextConnection.isConnected());
             assert.equal(newChild2.getNextBlock(), oldChild);
@@ -3629,9 +3585,7 @@ suite('Connection', function () {
               .getInput('NAME')
               .connection.connect(newChild.previousConnection);
 
-            assert.isTrue(
-              parent.getInput('NAME').connection.isConnected(),
-            );
+            assert.isTrue(parent.getInput('NAME').connection.isConnected());
             assert.equal(parent.getInputTargetBlock('NAME'), newChild);
             assert.isTrue(newChild.nextConnection.isConnected());
             assert.isTrue(newChild.getNextBlock().isShadow());

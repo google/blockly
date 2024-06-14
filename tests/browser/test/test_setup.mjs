@@ -268,7 +268,11 @@ export async function getNthBlockOfCategory(browser, categoryName, n) {
  * @return A Promise that resolves to the root element of the first
  *     block with the given type in the given category.
  */
-export async function getBlockTypeFromCategory(browser, categoryName, blockType) {
+export async function getBlockTypeFromCategory(
+  browser,
+  categoryName,
+  blockType,
+) {
   if (categoryName) {
     const category = await getCategory(browser, categoryName);
     await category.click();
@@ -455,7 +459,13 @@ export async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
  * @return A Promise that resolves to the root element of the newly
  *     created block.
  */
-export async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
+export async function dragBlockTypeFromFlyout(
+  browser,
+  categoryName,
+  type,
+  x,
+  y,
+) {
   const flyoutBlock = await getBlockTypeFromCategory(
     browser,
     categoryName,
@@ -480,7 +490,13 @@ export async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y)
  * @return A Promise that resolves to the root element of the newly
  *     created block.
  */
-export async function dragBlockFromMutatorFlyout(browser, mutatorBlock, type, x, y) {
+export async function dragBlockFromMutatorFlyout(
+  browser,
+  mutatorBlock,
+  type,
+  x,
+  y,
+) {
   const id = await browser.execute(
     (mutatorBlockId, blockType) => {
       return Blockly.getMainWorkspace()

@@ -309,17 +309,11 @@ suite('Context Menu Items', function () {
 
       test('Enabled when blocks to delete', function () {
         this.workspace.newBlock('text');
-        assert.equal(
-          this.deleteOption.preconditionFn(this.scope),
-          'enabled',
-        );
+        assert.equal(this.deleteOption.preconditionFn(this.scope), 'enabled');
       });
 
       test('Disabled when no blocks to delete', function () {
-        assert.equal(
-          this.deleteOption.preconditionFn(this.scope),
-          'disabled',
-        );
+        assert.equal(this.deleteOption.preconditionFn(this.scope), 'disabled');
       });
 
       test('Deletes all blocks after confirming', function () {
@@ -375,10 +369,7 @@ suite('Context Menu Items', function () {
 
       test('Has correct label for single block', function () {
         this.workspace.newBlock('text');
-        assert.equal(
-          this.deleteOption.displayText(this.scope),
-          'Delete Block',
-        );
+        assert.equal(this.deleteOption.displayText(this.scope), 'Delete Block');
       });
     });
   });
@@ -412,10 +403,7 @@ suite('Context Menu Items', function () {
 
       test('Hidden when in flyout', function () {
         this.block.isInFlyout = true;
-        assert.equal(
-          this.duplicateOption.preconditionFn(this.scope),
-          'hidden',
-        );
+        assert.equal(this.duplicateOption.preconditionFn(this.scope), 'hidden');
       });
 
       test('the block is duplicated', function () {
@@ -438,10 +426,7 @@ suite('Context Menu Items', function () {
       });
 
       test('Enabled for normal block', function () {
-        assert.equal(
-          this.commentOption.preconditionFn(this.scope),
-          'enabled',
-        );
+        assert.equal(this.commentOption.preconditionFn(this.scope), 'enabled');
       });
 
       test('Hidden for collapsed block', function () {
@@ -450,10 +435,7 @@ suite('Context Menu Items', function () {
         this.block.render();
         this.block.setCollapsed(true);
 
-        assert.equal(
-          this.commentOption.preconditionFn(this.scope),
-          'hidden',
-        );
+        assert.equal(this.commentOption.preconditionFn(this.scope), 'hidden');
       });
 
       test('Creates comment if one did not exist', function () {
@@ -479,10 +461,7 @@ suite('Context Menu Items', function () {
       });
 
       test('Has correct label for add comment', function () {
-        assert.equal(
-          this.commentOption.displayText(this.scope),
-          'Add Comment',
-        );
+        assert.equal(this.commentOption.displayText(this.scope), 'Add Comment');
       });
 
       test('Has correct label for remove comment', function () {
@@ -502,10 +481,7 @@ suite('Context Menu Items', function () {
       test('Enabled when inputs to inline', function () {
         this.block.appendValueInput('test1');
         this.block.appendValueInput('test2');
-        assert.equal(
-          this.inlineOption.preconditionFn(this.scope),
-          'enabled',
-        );
+        assert.equal(this.inlineOption.preconditionFn(this.scope), 'enabled');
       });
     });
   });

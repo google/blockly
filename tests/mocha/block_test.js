@@ -1590,10 +1590,7 @@ suite('Blocks', function () {
 
       test('icons get added to the block', function () {
         this.block.addIcon(new MockIconA());
-        assert.isTrue(
-          this.block.hasIcon('A'),
-          'Expected the icon to be added',
-        );
+        assert.isTrue(this.block.hasIcon('A'), 'Expected the icon to be added');
       });
 
       test('adding two icons of the same type throws', function () {
@@ -2457,37 +2454,25 @@ suite('Blocks', function () {
           await Blockly.renderManagement.finishQueuedRenders();
 
           // child2 is disabled, rest should be enabled
-          assert.isTrue(
-            this.child1.isEnabled(),
-            'child1 should be enabled',
-          );
+          assert.isTrue(this.child1.isEnabled(), 'child1 should be enabled');
           assert.isFalse(
             this.child1.visuallyDisabled,
             'child1 should not be visually disabled',
           );
 
-          assert.isFalse(
-            this.child2.isEnabled(),
-            'child2 should be disabled',
-          );
+          assert.isFalse(this.child2.isEnabled(), 'child2 should be disabled');
           assert.isTrue(
             this.child2.visuallyDisabled,
             'child2 should be visually disabled',
           );
 
-          assert.isTrue(
-            this.child3.isEnabled(),
-            'child3 should be enabled',
-          );
+          assert.isTrue(this.child3.isEnabled(), 'child3 should be enabled');
           assert.isFalse(
             this.child3.visuallyDisabled,
             'child3 should not be visually disabled',
           );
 
-          assert.isTrue(
-            this.child4.isEnabled(),
-            'child34 should be enabled',
-          );
+          assert.isTrue(this.child4.isEnabled(), 'child34 should be enabled');
           assert.isFalse(
             this.child4.visuallyDisabled,
             'child4 should not be visually disabled',

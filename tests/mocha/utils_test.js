@@ -31,17 +31,13 @@ suite('Utils', function () {
   suite('tokenizeInterpolation', function () {
     suite('Basic', function () {
       test('Empty string', function () {
-        assert.deepEqual(
-          Blockly.utils.parsing.tokenizeInterpolation(''),
-          [],
-        );
+        assert.deepEqual(Blockly.utils.parsing.tokenizeInterpolation(''), []);
       });
 
       test('No interpolation', function () {
-        assert.deepEqual(
-          Blockly.utils.parsing.tokenizeInterpolation('Hello'),
-          ['Hello'],
-        );
+        assert.deepEqual(Blockly.utils.parsing.tokenizeInterpolation('Hello'), [
+          'Hello',
+        ]);
       });
 
       test('Unescaped %', function () {
@@ -167,10 +163,9 @@ suite('Utils', function () {
 
       test('Not prefixed, number', function () {
         Blockly.Msg['1'] = 'test string';
-        assert.deepEqual(
-          Blockly.utils.parsing.tokenizeInterpolation('%{1}'),
-          ['%{1}'],
-        );
+        assert.deepEqual(Blockly.utils.parsing.tokenizeInterpolation('%{1}'), [
+          '%{1}',
+        ]);
       });
 
       test('Space in ref', function () {
@@ -239,11 +234,7 @@ suite('Utils', function () {
 
     resultString =
       Blockly.utils.parsing.replaceMessageReferences('Hello\nWorld');
-    assert.equal(
-      resultString,
-      'Hello\nWorld',
-      'Newlines are not tokenized',
-    );
+    assert.equal(resultString, 'Hello\nWorld', 'Newlines are not tokenized');
 
     resultString = Blockly.utils.parsing.replaceMessageReferences('%1');
     assert.equal(resultString, '%1', 'Interpolation tokens ignored.');
@@ -330,11 +321,7 @@ suite('Utils', function () {
     assert.equal(m[3], '16', 'translate(15 16), y');
 
     m = 'translate(1.23456e+42 0.123456e-42)'.match(regex);
-    assert.equal(
-      m[1],
-      '1.23456e+42',
-      'translate(1.23456e+42 0.123456e-42), x',
-    );
+    assert.equal(m[1], '1.23456e+42', 'translate(1.23456e+42 0.123456e-42), x');
     assert.equal(
       m[3],
       '0.123456e-42',
@@ -426,10 +413,7 @@ suite('Utils', function () {
       assert.isTrue(Blockly.utils.dom.hasClass(p, 'one'), 'Has "one"');
       assert.isTrue(Blockly.utils.dom.hasClass(p, 'two'), 'Has "two"');
       assert.isTrue(Blockly.utils.dom.hasClass(p, 'three'), 'Has "three"');
-      assert.isFalse(
-        Blockly.utils.dom.hasClass(p, 'four'),
-        'Has no "four"',
-      );
+      assert.isFalse(Blockly.utils.dom.hasClass(p, 'four'), 'Has no "four"');
       assert.isFalse(Blockly.utils.dom.hasClass(p, 't'), 'Has no "t"');
     });
 
@@ -535,11 +519,7 @@ suite('Utils', function () {
       assert.equal(Blockly.utils.math.toRadians(180), 2 * quarter, '180');
       assert.equal(Blockly.utils.math.toRadians(270), 3 * quarter, '270');
       assert.equal(Blockly.utils.math.toRadians(360), 4 * quarter, '360');
-      assert.equal(
-        Blockly.utils.math.toRadians(360 + 90),
-        5 * quarter,
-        '450',
-      );
+      assert.equal(Blockly.utils.math.toRadians(360 + 90), 5 * quarter, '450');
     });
 
     test('toDegrees', function () {
@@ -550,11 +530,7 @@ suite('Utils', function () {
       assert.equal(Blockly.utils.math.toDegrees(2 * quarter), 180, '180');
       assert.equal(Blockly.utils.math.toDegrees(3 * quarter), 270, '270');
       assert.equal(Blockly.utils.math.toDegrees(4 * quarter), 360, '360');
-      assert.equal(
-        Blockly.utils.math.toDegrees(5 * quarter),
-        360 + 90,
-        '450',
-      );
+      assert.equal(Blockly.utils.math.toDegrees(5 * quarter), 360 + 90, '450');
     });
   });
 });

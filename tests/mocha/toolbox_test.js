@@ -361,10 +361,7 @@ suite('Toolbox', function () {
         this.toolbox.selectedItem_ = item;
         const handled = this.toolbox.selectNext_();
         assert.isTrue(handled);
-        assert.equal(
-          this.toolbox.selectedItem_,
-          this.toolbox.contents_[1],
-        );
+        assert.equal(this.toolbox.selectedItem_, this.toolbox.contents_[1]);
       });
       test('Selected item is last item -> Should not handle event', function () {
         const item = this.toolbox.contents_[this.toolbox.contents_.length - 1];
@@ -521,11 +518,7 @@ suite('Toolbox', function () {
     });
 
     function checkHorizontalToolbox(toolbox) {
-      assert.equal(
-        toolbox.HtmlDiv.style.left,
-        '0px',
-        'Check left position',
-      );
+      assert.equal(toolbox.HtmlDiv.style.left, '0px', 'Check left position');
       assert.equal(toolbox.HtmlDiv.style.height, 'auto', 'Check height');
       assert.equal(toolbox.HtmlDiv.style.width, '100%', 'Check width');
       assert.equal(
@@ -536,11 +529,7 @@ suite('Toolbox', function () {
     }
     function checkVerticalToolbox(toolbox) {
       assert.equal(toolbox.HtmlDiv.style.height, '100%', 'Check height');
-      assert.equal(
-        toolbox.width_,
-        toolbox.HtmlDiv.offsetWidth,
-        'Check width',
-      );
+      assert.equal(toolbox.width_, toolbox.HtmlDiv.offsetWidth, 'Check width');
     }
     test('HtmlDiv is not created -> Should not resize', function () {
       const toolbox = this.toolbox;

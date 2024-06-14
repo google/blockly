@@ -237,32 +237,20 @@ suite.skip('Workspace comment', function () {
 
     test('After creation', function () {
       assert.equal(this.comment.getContent(), 'comment text');
-      assert.equal(
-        this.workspace.undoStack_.length,
-        1,
-        'Workspace undo stack',
-      );
+      assert.equal(this.workspace.undoStack_.length, 1, 'Workspace undo stack');
     });
 
     test('Set to same value', function () {
       this.comment.setContent('comment text');
       assert.equal(this.comment.getContent(), 'comment text');
       // Setting the text to the old value does not fire an event.
-      assert.equal(
-        this.workspace.undoStack_.length,
-        1,
-        'Workspace undo stack',
-      );
+      assert.equal(this.workspace.undoStack_.length, 1, 'Workspace undo stack');
     });
 
     test('Set to different value', function () {
       this.comment.setContent('new comment text');
       assert.equal(this.comment.getContent(), 'new comment text');
-      assert.equal(
-        this.workspace.undoStack_.length,
-        2,
-        'Workspace undo stack',
-      );
+      assert.equal(this.workspace.undoStack_.length, 2, 'Workspace undo stack');
     });
   });
 });

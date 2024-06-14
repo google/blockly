@@ -285,11 +285,7 @@ suite('Flyout', function () {
           this.flyout.targetWorkspace.toolboxPosition =
             Blockly.utils.toolbox.Position.BOTTOM;
           this.flyout.toolboxPosition_ = Blockly.utils.toolbox.Position.TOP;
-          assert.equal(
-            this.flyout.getY(),
-            0,
-            'y should be aligned with top',
-          );
+          assert.equal(this.flyout.getY(), 0, 'y should be aligned with top');
         });
         test('trashcan on bottom covers bottom of workspace', function () {
           this.flyout.targetWorkspace.toolboxPosition =

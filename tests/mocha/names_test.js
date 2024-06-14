@@ -27,57 +27,21 @@ suite('Names', function () {
       'my_9lives',
       'SafeName number start.',
     );
-    assert.equal(
-      varDB.safeName('lives9'),
-      'lives9',
-      'SafeName number end.',
-    );
-    assert.equal(
-      varDB.safeName('!@#$'),
-      '____',
-      'SafeName special chars.',
-    );
+    assert.equal(varDB.safeName('lives9'), 'lives9', 'SafeName number end.');
+    assert.equal(varDB.safeName('!@#$'), '____', 'SafeName special chars.');
     assert.equal(varDB.safeName('door'), 'door', 'SafeName reserved.');
   });
 
   test('Get name', function () {
     const varDB = new Blockly.Names('window,door');
-    assert.equal(
-      varDB.getName('Foo.bar', 'var'),
-      'Foo_bar',
-      'Name add #1.',
-    );
-    assert.equal(
-      varDB.getName('Foo.bar', 'var'),
-      'Foo_bar',
-      'Name get #1.',
-    );
-    assert.equal(
-      varDB.getName('Foo bar', 'var'),
-      'Foo_bar2',
-      'Name add #2.',
-    );
-    assert.equal(
-      varDB.getName('foo BAR', 'var'),
-      'Foo_bar2',
-      'Name get #2.',
-    );
+    assert.equal(varDB.getName('Foo.bar', 'var'), 'Foo_bar', 'Name add #1.');
+    assert.equal(varDB.getName('Foo.bar', 'var'), 'Foo_bar', 'Name get #1.');
+    assert.equal(varDB.getName('Foo bar', 'var'), 'Foo_bar2', 'Name add #2.');
+    assert.equal(varDB.getName('foo BAR', 'var'), 'Foo_bar2', 'Name get #2.');
     assert.equal(varDB.getName('door', 'var'), 'door2', 'Name add #3.');
-    assert.equal(
-      varDB.getName('Foo.bar', 'proc'),
-      'Foo_bar3',
-      'Name add #4.',
-    );
-    assert.equal(
-      varDB.getName('Foo.bar', 'var'),
-      'Foo_bar',
-      'Name get #1b.',
-    );
-    assert.equal(
-      varDB.getName('Foo.bar', 'proc'),
-      'Foo_bar3',
-      'Name get #4.',
-    );
+    assert.equal(varDB.getName('Foo.bar', 'proc'), 'Foo_bar3', 'Name add #4.');
+    assert.equal(varDB.getName('Foo.bar', 'var'), 'Foo_bar', 'Name get #1b.');
+    assert.equal(varDB.getName('Foo.bar', 'proc'), 'Foo_bar3', 'Name get #4.');
 
     assert.equal(
       String(varDB.getUserNames('var')),

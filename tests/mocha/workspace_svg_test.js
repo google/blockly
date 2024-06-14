@@ -61,17 +61,9 @@ suite('WorkspaceSvg', function () {
         '</xml>',
     );
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-    assert.equal(
-      this.workspace.getAllBlocks(false).length,
-      1,
-      'Block count',
-    );
+    assert.equal(this.workspace.getAllBlocks(false).length, 1, 'Block count');
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-    assert.equal(
-      this.workspace.getAllBlocks(false).length,
-      2,
-      'Block count',
-    );
+    assert.equal(this.workspace.getAllBlocks(false).length, 2, 'Block count');
     const blocks = this.workspace.getAllBlocks(false);
     assert.equal(
       blocks[0].getRelativeToSurfaceXY().x,

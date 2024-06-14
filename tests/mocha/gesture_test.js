@@ -18,10 +18,7 @@ suite('Gesture', function () {
   function testGestureIsFieldClick(block, isFieldClick, eventsFireStub) {
     const field = block.getField('NAME');
     const eventTarget = field.getClickTarget_();
-    assert.exists(
-      eventTarget,
-      'Precondition: missing click target for field',
-    );
+    assert.exists(eventTarget, 'Precondition: missing click target for field');
 
     eventsFireStub.resetHistory();
     dispatchPointerEvent(eventTarget, 'pointerdown');

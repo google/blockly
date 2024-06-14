@@ -265,10 +265,7 @@ suite('Checkbox Fields', function () {
         });
         assertCharacter(field, '\u2661');
         field.setCheckCharacter(null);
-        assert(
-          field.textContent_.nodeValue,
-          Blockly.FieldCheckbox.CHECK_CHAR,
-        );
+        assert(field.textContent_.nodeValue, Blockly.FieldCheckbox.CHECK_CHAR);
       });
     });
   });

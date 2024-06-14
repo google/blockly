@@ -29,10 +29,7 @@ suite('Workspace comment', function () {
 
         this.commentView.setText('test');
 
-        assert.isTrue(
-          spy.calledOnce,
-          'Expected the spy to be called once',
-        );
+        assert.isTrue(spy.calledOnce, 'Expected the spy to be called once');
         assert.isTrue(
           spy.calledWith('', 'test'),
           'Expected the spy to be called with the given args',
@@ -75,10 +72,7 @@ suite('Workspace comment', function () {
 
         this.commentView.setSize(newSize);
 
-        assert.isTrue(
-          spy.calledOnce,
-          'Expected the spy to be called once',
-        );
+        assert.isTrue(spy.calledOnce, 'Expected the spy to be called once');
         assert.isTrue(
           spy.calledWith(originalSize, newSize),
           'Expected the spy to be called with the given args',
@@ -120,10 +114,7 @@ suite('Workspace comment', function () {
 
         this.commentView.setCollapsed(true);
 
-        assert.isTrue(
-          spy.calledOnce,
-          'Expected the spy to be called once',
-        );
+        assert.isTrue(spy.calledOnce, 'Expected the spy to be called once');
         assert.isTrue(
           spy.calledWith(true),
           'Expected the spy to be called with the given args',
@@ -164,10 +155,7 @@ suite('Workspace comment', function () {
 
         this.commentView.dispose();
 
-        assert.isTrue(
-          spy.calledOnce,
-          'Expected the spy to be called once',
-        );
+        assert.isTrue(spy.calledOnce, 'Expected the spy to be called once');
       });
 
       test('dispose listeners can remove themselves without skipping others', function () {

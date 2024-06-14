@@ -95,10 +95,7 @@ suite('Touch', function () {
         pointerId: 7,
         pointerType: 'mouse',
       });
-      assert.equal(
-        Blockly.Touch.getTouchIdentifierFromEvent(pointerdown),
-        7,
-      );
+      assert.equal(Blockly.Touch.getTouchIdentifierFromEvent(pointerdown), 7);
     });
 
     test('is pointerId for touch PointerEvents', function () {
@@ -106,10 +103,7 @@ suite('Touch', function () {
         pointerId: 42,
         pointerType: 'touch',
       });
-      assert.equal(
-        Blockly.Touch.getTouchIdentifierFromEvent(pointerdown),
-        42,
-      );
+      assert.equal(Blockly.Touch.getTouchIdentifierFromEvent(pointerdown), 42);
     });
   });
 });

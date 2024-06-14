@@ -69,12 +69,7 @@ suite('Connection Database', function () {
     assert.sameOrderedMembers(this.database.connections, [y1, y2, y4]);
 
     this.database.addConnection(y3a, 3);
-    assert.sameOrderedMembers(this.database.connections, [
-      y1,
-      y2,
-      y3a,
-      y4,
-    ]);
+    assert.sameOrderedMembers(this.database.connections, [y1, y2, y3a, y4]);
 
     this.database.addConnection(y3b, 3);
     assert.sameOrderedMembers(this.database.connections, [
@@ -119,12 +114,7 @@ suite('Connection Database', function () {
     ]);
 
     this.database.removeConnection(y4, 4);
-    assert.sameOrderedMembers(this.database.connections, [
-      y1,
-      y3a,
-      y3b,
-      y3c,
-    ]);
+    assert.sameOrderedMembers(this.database.connections, [y1, y3a, y3b, y3c]);
 
     this.database.removeConnection(y1, 1);
     assert.sameOrderedMembers(this.database.connections, [y3a, y3b, y3c]);
@@ -182,10 +172,7 @@ suite('Connection Database', function () {
         new Blockly.ConnectionDB(),
       );
       const neighbors = this.database.getNeighbours(checkConnection, 4);
-      assert.sameMembers(
-        neighbors,
-        this.database.connections.slice(5, 10),
-      );
+      assert.sameMembers(neighbors, this.database.connections.slice(5, 10));
     });
     test('Out of Range X', function () {
       this.createSimpleTestConnections();

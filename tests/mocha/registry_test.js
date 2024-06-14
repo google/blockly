@@ -110,9 +110,7 @@ suite('Registry', function () {
     suite('Does not have', function () {
       test('Type', function () {
         assertWarnings(() => {
-          assert.isNull(
-            Blockly.registry.getClass('bad_type', 'test_name'),
-          );
+          assert.isNull(Blockly.registry.getClass('bad_type', 'test_name'));
         }, /Unable to find/);
       });
 
@@ -152,9 +150,7 @@ suite('Registry', function () {
     suite('Does not have', function () {
       test('Type', function () {
         assertWarnings(() => {
-          assert.isNull(
-            Blockly.registry.getObject('bad_type', 'test_name'),
-          );
+          assert.isNull(Blockly.registry.getObject('bad_type', 'test_name'));
         }, /Unable to find/);
       });
 

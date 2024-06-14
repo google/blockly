@@ -40,10 +40,7 @@ suite('Generator', function () {
     });
 
     test('One line', function () {
-      assert.equal(
-        this.generator.prefixLines('Hello\n', '12'),
-        '12Hello\n',
-      );
+      assert.equal(this.generator.prefixLines('Hello\n', '12'), '12Hello\n');
     });
 
     test('Two lines', function () {

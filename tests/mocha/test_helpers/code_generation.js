@@ -84,9 +84,7 @@ const createCodeGenerationTestFn_ = (generator) => {
         }
       }
       const assertFunc =
-        typeof testCase.expectedCode === 'string'
-          ? assert.equal
-          : assert.match;
+        typeof testCase.expectedCode === 'string' ? assert.equal : assert.match;
       assertFunc(code, testCase.expectedCode);
       if (
         !testCase.useWorkspaceToCode &&

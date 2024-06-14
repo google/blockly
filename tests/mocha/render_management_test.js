@@ -121,10 +121,7 @@ suite('Render Management', function () {
       Blockly.renderManagement.triggerQueuedRenders(workspace1);
 
       assert.isTrue(block1.hasRendered, 'Expected block1 to be rendered');
-      assert.isFalse(
-        block2.hasRendered,
-        'Expected block2 to not be rendered',
-      );
+      assert.isFalse(block2.hasRendered, 'Expected block2 to not be rendered');
     });
   });
 });

@@ -1342,9 +1342,7 @@ suite('Procedures', function () {
 
     test('returns true if an associated block exists', function () {
       createProcDefBlock(this.workspace, false, [], 'proc name');
-      assert.isTrue(
-        Blockly.Procedures.isNameUsed('proc name', this.workspace),
-      );
+      assert.isTrue(Blockly.Procedures.isNameUsed('proc name', this.workspace));
     });
 
     test('return false if an associated block does not exist', function () {
@@ -1358,9 +1356,7 @@ suite('Procedures', function () {
       this.workspace
         .getProcedureMap()
         .add(new MockProcedureModel().setName('proc name'));
-      assert.isTrue(
-        Blockly.Procedures.isNameUsed('proc name', this.workspace),
-      );
+      assert.isTrue(Blockly.Procedures.isNameUsed('proc name', this.workspace));
     });
 
     test('returns false if an associated procedure model exists', function () {
@@ -1683,10 +1679,7 @@ suite('Procedures', function () {
           defInput.htmlInput_.value = 'proc name 2';
           defInput.onHtmlInputChange_(null);
           assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name 2');
-          assert.equal(
-            this.callBlock.getFieldValue('NAME'),
-            'proc name 2',
-          );
+          assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name 2');
         });
         test('Set Empty', function () {
           const defInput = this.defBlock.getField('NAME');

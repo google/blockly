@@ -21,4 +21,3 @@ export const mochaHooks = {
     return await driverTeardown();
   },
 };
-

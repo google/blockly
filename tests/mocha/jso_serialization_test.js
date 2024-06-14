@@ -764,10 +764,11 @@ suite('JSO Serialization', function () {
             .getInput('INPUT')
             .connection.connect(childBlock.outputConnection);
           const jso = Blockly.serialization.blocks.save(block);
-          assert.deepEqual(
-            jso['inputs']['INPUT']['block']['fields']['VAR'],
-            {'id': 'id4', 'name': 'item', 'type': ''},
-          );
+          assert.deepEqual(jso['inputs']['INPUT']['block']['fields']['VAR'], {
+            'id': 'id4',
+            'name': 'item',
+            'type': '',
+          });
         });
 
         test('Next block', function () {
@@ -803,10 +804,9 @@ suite('JSO Serialization', function () {
           const jso = Blockly.serialization.blocks.save(block, {
             doFullSerialization: false,
           });
-          assert.deepEqual(
-            jso['inputs']['INPUT']['block']['fields']['VAR'],
-            {'id': 'id4'},
-          );
+          assert.deepEqual(jso['inputs']['INPUT']['block']['fields']['VAR'], {
+            'id': 'id4',
+          });
           assert.isUndefined(
             jso['inputs']['INPUT']['block']['fields']['VAR']['name'],
           );
@@ -825,12 +825,8 @@ suite('JSO Serialization', function () {
           assert.deepEqual(jso['next']['block']['fields']['VAR'], {
             'id': 'id4',
           });
-          assert.isUndefined(
-            jso['next']['block']['fields']['VAR']['name'],
-          );
-          assert.isUndefined(
-            jso['next']['block']['fields']['VAR']['type'],
-          );
+          assert.isUndefined(jso['next']['block']['fields']['VAR']['name']);
+          assert.isUndefined(jso['next']['block']['fields']['VAR']['type']);
         });
       });
     });

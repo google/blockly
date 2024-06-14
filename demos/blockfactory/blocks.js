@@ -85,8 +85,8 @@ Blockly.Blocks['factory_base'] = {
     var type = this.workspace.newBlock('type_null');
     type.setShadow(true);
     type.outputConnection.connect(this.getInput(outputType).connection);
-    type.initSvg();
     if (this.rendered) {
+      type.initSvg();
       type.render();
     }
   },

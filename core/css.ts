@@ -8,6 +8,7 @@
 
 /** Has CSS already been injected? */
 let injected = false;
+let styleSheet: CSSStyleSheet;
 
 /**
  * Add some CSS to the blob that will be injected later.  Allows optional
@@ -33,27 +34,46 @@ export function register(cssContent: string) {
  *     document's responsibility).
  * @param pathToMedia Path from page to the Blockly media directory.
  */
-export function inject(hasCss: boolean, pathToMedia: string) {
-  // Only inject the CSS once.
-  if (injected) {
-    return;
-  }
-  injected = true;
+export function inject(hasCss: boolean, pathToMedia: string, container: Element) {
   if (!hasCss) {
+    injected = true;
     return;
   }
-  // Strip off any trailing slash (either Unix or Windows).
-  const mediaPath = pathToMedia.replace(/[\\/]$/, '');
-  const cssContent = content.replace(/<<<PATH>>>/g, mediaPath);
-  // Cleanup the collected css content after injecting it to the DOM.
-  content = '';
 
-  // Inject CSS tag at start of head.
-  const cssNode = document.createElement('style');
-  cssNode.id = 'blockly-common-style';
-  const cssTextNode = document.createTextNode(cssContent);
-  cssNode.appendChild(cssTextNode);
-  document.head.insertBefore(cssNode, document.head.firstChild);
+  const root = container?.getRootNode() ?? document;
+  if (root === document) {
+    // Only inject the CSS once.
+    if (injected) {
+      return;
+    }
+    injected = true;
+    
+    // Strip off any trailing slash (either Unix or Windows).
+    const mediaPath = pathToMedia.replace(/[\\/]$/, '');
+    const cssContent = content.replace(/<<<PATH>>>/g, mediaPath);
+    // Cleanup the collected css content after injecting it to the DOM.
+    content = '';
+
+    // Inject CSS tag at start of head.
+    const cssNode = document.createElement('style');
+    cssNode.id = 'blockly-common-style';
+    const cssTextNode = document.createTextNode(cssContent);
+    cssNode.appendChild(cssTextNode);
+    
+    document.head.insertBefore(cssNode, document.head.firstChild);
+  } else {
+    if (!styleSheet) {
+      // Strip off any trailing slash (either Unix or Windows).
+      const mediaPath = pathToMedia.replace(/[\\/]$/, '');
+      const cssContent = content.replace(/<<<PATH>>>/g, mediaPath);
+      // Cleanup the collected css content after injecting it to the DOM.
+      content = '';
+
+      styleSheet = new CSSStyleSheet();
+      styleSheet.replaceSync(cssContent);
+    }
+    (<ShadowRoot> root).adoptedStyleSheets =  [...(<ShadowRoot> root).adoptedStyleSheets, styleSheet];
+  }
 }
 
 /**

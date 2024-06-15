@@ -24,6 +24,7 @@ import {CommentChange, CommentChangeJson} from './events_comment_change.js';
 import {CommentCreate, CommentCreateJson} from './events_comment_create.js';
 import {CommentDelete} from './events_comment_delete.js';
 import {CommentMove, CommentMoveJson} from './events_comment_move.js';
+import {CommentResize, CommentResizeJson} from './events_comment_resize.js';
 import {CommentDrag, CommentDragJson} from './events_comment_drag.js';
 import {
   CommentCollapse,
@@ -78,6 +79,8 @@ export {CommentCreateJson};
 export {CommentDelete};
 export {CommentMove};
 export {CommentMoveJson};
+export {CommentResize};
+export {CommentResizeJson};
 export {CommentDrag};
 export {CommentDragJson};
 export {CommentCollapse};
@@ -122,6 +125,7 @@ export const COMMENT_CHANGE = eventUtils.COMMENT_CHANGE;
 export const COMMENT_CREATE = eventUtils.COMMENT_CREATE;
 export const COMMENT_DELETE = eventUtils.COMMENT_DELETE;
 export const COMMENT_MOVE = eventUtils.COMMENT_MOVE;
+export const COMMENT_RESIZE = eventUtils.COMMENT_RESIZE;
 export const COMMENT_DRAG = eventUtils.COMMENT_DRAG;
 export const CREATE = eventUtils.CREATE;
 export const DELETE = eventUtils.DELETE;

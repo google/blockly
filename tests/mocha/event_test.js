@@ -861,7 +861,6 @@ suite('Events', function () {
           },
         }),
       },
-      // TODO(#4577) Test serialization of move event coordinate properties.
       {
         title: 'Comment drag start',
         class: Blockly.Events.CommentDrag,
@@ -870,7 +869,7 @@ suite('Events', function () {
           type: 'comment_drag',
           group: '',
           isStart: true,
-          blockId: thisObj.block.id,
+          commentId: thisObj.comment.id,
         }),
       },
       {
@@ -881,9 +880,11 @@ suite('Events', function () {
           type: 'comment_drag',
           group: '',
           isStart: false,
-          blockId: thisObj.block.id,
+          commentId: thisObj.comment.id,
         }),
       },
+      // TODO(#4577) Test serialization of move event coordinate properties.
+      // TODO(#4577) Test serialization of comment resize event properties.
     ];
     const testSuites = [
       {

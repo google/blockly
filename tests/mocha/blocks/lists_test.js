@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../../node_modules/chai/chai.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {
   sharedTestSetup,
@@ -37,8 +38,8 @@ suite('Lists', function () {
           fields: {MODE: 'GET', WHERE: 'FIRST'},
         },
         assertBlockStructure: (block) => {
-          chai.assert.equal(block.type, 'lists_getIndex');
-          chai.assert.exists(block.outputConnection);
+          assert.equal(block.type, 'lists_getIndex');
+          assert.exists(block.outputConnection);
         },
       },
       {
@@ -50,9 +51,9 @@ suite('Lists', function () {
           fields: {MODE: 'REMOVE', WHERE: 'FROM_START'},
         },
         assertBlockStructure: (block) => {
-          chai.assert.equal(block.type, 'lists_getIndex');
-          chai.assert.isNotTrue(block.outputConnection);
-          chai.assert.isTrue(
+          assert.equal(block.type, 'lists_getIndex');
+          assert.isNotTrue(block.outputConnection);
+          assert.isTrue(
             block.getInput('AT').type === ConnectionType.INPUT_VALUE,
           );
         },
@@ -122,7 +123,7 @@ suite('Lists', function () {
         title: 'JSON not requiring mutations',
         json: serializedJson,
         assertBlockStructure: (block) => {
-          chai.assert.equal(block.type, serializedJson.type);
+          assert.equal(block.type, serializedJson.type);
         },
       },
       {

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const chai = require('chai');
-const {
+import * as chai from 'chai';
+import {
   testSetup,
   testFileLocations,
   connect,
@@ -15,7 +15,7 @@ const {
   getBlockElementById,
   dragBlockFromMutatorFlyout,
   openMutatorForBlock,
-} = require('./test_setup');
+} from './test_setup.mjs';
 
 suite('Mutating a block', function (done) {
   this.timeout(0);

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const chai = require('chai');
-const {
+import * as chai from 'chai';
+import {
   testSetup,
   testFileLocations,
   getAllBlocks,
@@ -13,8 +13,8 @@ const {
   clickBlock,
   contextMenuSelect,
   PAUSE_TIME,
-} = require('./test_setup');
-const {Key} = require('webdriverio');
+} from './test_setup.mjs';
+import {Key} from 'webdriverio';
 
 const firstBlockId = 'root_block';
 const startBlocks = {

@@ -8,15 +8,15 @@
  * @fileoverview Tests for the dragging out of the toolbox and flyout.
  */
 
-const chai = require('chai');
-const {
+import * as chai from 'chai';
+import {
   testSetup,
   testFileLocations,
   getCategory,
   scrollFlyout,
   screenDirection,
   PAUSE_TIME,
-} = require('./test_setup');
+} from './test_setup.mjs';
 
 // Categories in the basic toolbox.
 const basicCategories = [

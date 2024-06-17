@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -32,7 +33,7 @@ suite('Procedure Map', function () {
       const spy = sinon.spy(procedureModel, 'startPublishing');
       this.procedureMap.set(procedureModel.getId(), procedureModel);
 
-      chai.assert.isTrue(spy.called, 'Expected the model to start publishing');
+      assert.isTrue(spy.called, 'Expected the model to start publishing');
     });
 
     test('adding a procedure tells it to start publishing', function () {
@@ -40,7 +41,7 @@ suite('Procedure Map', function () {
       const spy = sinon.spy(procedureModel, 'startPublishing');
       this.procedureMap.add(procedureModel);
 
-      chai.assert.isTrue(spy.called, 'Expected the model to start publishing');
+      assert.isTrue(spy.called, 'Expected the model to start publishing');
     });
 
     test('deleting a procedure tells it to stop publishing', function () {
@@ -50,7 +51,7 @@ suite('Procedure Map', function () {
 
       this.procedureMap.delete(procedureModel.getId());
 
-      chai.assert.isTrue(spy.calledOnce, 'Expected the model stop publishing');
+      assert.isTrue(spy.calledOnce, 'Expected the model stop publishing');
     });
   });
 });

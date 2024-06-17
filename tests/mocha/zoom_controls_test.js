@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {
@@ -42,7 +43,7 @@ suite('Zoom Controls', function () {
         targetType: 'workspace',
         type: eventUtils.CLICK,
       });
-      chai.assert.closeTo(this.workspace.getScale(), 1.2, 0.05);
+      assert.closeTo(this.workspace.getScale(), 1.2, 0.05);
     });
     test('Zoom out', function () {
       simulateClick(this.zoomControls.zoomOutGroup);
@@ -58,7 +59,7 @@ suite('Zoom Controls', function () {
         targetType: 'workspace',
         type: eventUtils.CLICK,
       });
-      chai.assert.closeTo(this.workspace.getScale(), 0.8, 0.05);
+      assert.closeTo(this.workspace.getScale(), 0.8, 0.05);
     });
     test('Reset zoom', function () {
       simulateClick(this.zoomControls.zoomResetGroup);
@@ -74,7 +75,7 @@ suite('Zoom Controls', function () {
         targetType: 'workspace',
         type: eventUtils.CLICK,
       });
-      chai.assert.equal(this.workspace.getScale(), 1);
+      assert.equal(this.workspace.getScale(), 1);
     });
   });
 });

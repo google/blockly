@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {ConnectionType} from '../../build/src/core/connection_type.js';
 import {
   sharedTestSetup,
@@ -22,9 +23,9 @@ suite('Connection checker', function () {
   });
   suite('Safety checks', function () {
     function assertReasonHelper(checker, one, two, reason) {
-      chai.assert.equal(checker.canConnectWithReason(one, two), reason);
+      assert.equal(checker.canConnectWithReason(one, two), reason);
       // Order should not matter.
-      chai.assert.equal(checker.canConnectWithReason(two, one), reason);
+      assert.equal(checker.canConnectWithReason(two, one), reason);
     }
 
     test('Target Null', function () {
@@ -452,9 +453,9 @@ suite('Connection checker', function () {
       this.con2 = new Blockly.Connection({}, ConnectionType.NEXT_STATEMENT);
     });
     function assertCheckTypes(checker, one, two) {
-      chai.assert.isTrue(checker.doTypeChecks(one, two));
+      assert.isTrue(checker.doTypeChecks(one, two));
       // Order should not matter.
-      chai.assert.isTrue(checker.doTypeChecks(one, two));
+      assert.isTrue(checker.doTypeChecks(one, two));
     }
     test('No Types', function () {
       assertCheckTypes(this.checker, this.con1, this.con2);
@@ -481,7 +482,7 @@ suite('Connection checker', function () {
     test('No Compatible Types', function () {
       this.con1.setCheck('type1');
       this.con2.setCheck('type2');
-      chai.assert.isFalse(this.checker.doTypeChecks(this.con1, this.con2));
+      assert.isFalse(this.checker.doTypeChecks(this.con1, this.con2));
     });
   });
   suite('Dragging Checks', function () {
@@ -509,7 +510,7 @@ suite('Connection checker', function () {
 
       test('Connect a stack', function () {
         // block C is not connected to block A; both are movable.
-        chai.assert.isTrue(
+        assert.isTrue(
           this.checker.doDragChecks(
             this.blockC.nextConnection,
             this.blockA.previousConnection,
@@ -543,7 +544,7 @@ suite('Connection checker', function () {
         // Try to connect blockC into the input connection of blockA, replacing blockB.
         // This is allowed because shadow blocks can always be replaced, even though
         // they are unmovable.
-        chai.assert.isTrue(
+        assert.isTrue(
           this.checker.doDragChecks(
             this.blockC.previousConnection,
             this.blockA.nextConnection,
@@ -556,7 +557,7 @@ suite('Connection checker', function () {
       test('Do not splice into unmovable stack', function () {
         // Try to connect blockC above blockB. It shouldn't work because B is not movable
         // and is already connected to A's nextConnection.
-        chai.assert.isFalse(
+        assert.isFalse(
           this.checker.doDragChecks(
             this.blockC.previousConnection,
             this.blockA.nextConnection,
@@ -569,7 +570,7 @@ suite('Connection checker', function () {
       test('Connect to bottom of unmovable stack', function () {
         // Try to connect blockC below blockB.
         // This is allowed even though B is not movable because it is on B's nextConnection.
-        chai.assert.isTrue(
+        assert.isTrue(
           this.checker.doDragChecks(
             this.blockC.previousConnection,
             this.blockB.nextConnection,
@@ -585,7 +586,7 @@ suite('Connection checker', function () {
 
         // Try to connect blockC above blockB.
         // This is allowed because we're not splicing into a stack.
-        chai.assert.isTrue(
+        assert.isTrue(
           this.checker.doDragChecks(
             this.blockC.nextConnection,
             this.blockB.previousConnection,
@@ -620,7 +621,7 @@ suite('Connection checker', function () {
         // Try to connect C's output to A's input. Should fail because
         // A is already connected to B, which is unmovable.
         const inputConnection = this.blockA.inputList[0].connection;
-        chai.assert.isFalse(
+        assert.isFalse(
           this.checker.doDragChecks(
             this.blockC.outputConnection,
             inputConnection,
@@ -635,7 +636,7 @@ suite('Connection checker', function () {
         this.blockC.setMovable(false);
         // Try to connect A's output to C's input. This is allowed.
         const inputConnection = this.blockC.inputList[0].connection;
-        chai.assert.isTrue(
+        assert.isTrue(
           this.checker.doDragChecks(
             this.blockA.outputConnection,
             inputConnection,
@@ -651,7 +652,7 @@ suite('Connection checker', function () {
 
         // Try to connect C's input to B's output. Allowed because B is now unconnected.
         const inputConnection = this.blockC.inputList[0].connection;
-        chai.assert.isTrue(
+        assert.isTrue(
           this.checker.doDragChecks(
             inputConnection,
             this.blockB.outputConnection,

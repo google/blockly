@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
 import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
 import {
@@ -916,10 +917,7 @@ suite('Events', function () {
               const json = event.toJson();
               const event2 = Blockly.Events.fromJson(json, this.workspace);
 
-              chai.assert.equal(
-                safeStringify(event2.toJson()),
-                safeStringify(json),
-              );
+              assert.equal(safeStringify(event2.toJson()), safeStringify(json));
             });
           });
         });
@@ -931,10 +929,7 @@ suite('Events', function () {
                 const json = event.toJson();
                 const expectedJson = testCase.getExpectedJson(this);
 
-                chai.assert.equal(
-                  safeStringify(json),
-                  safeStringify(expectedJson),
-                );
+                assert.equal(safeStringify(json), safeStringify(expectedJson));
               });
             }
           });
@@ -958,10 +953,10 @@ suite('Events', function () {
      */
     function checkVariableValues(container, name, type, id) {
       const variable = container.getVariableById(id);
-      chai.assert.isDefined(variable);
-      chai.assert.equal(name, variable.name);
-      chai.assert.equal(type, variable.type);
-      chai.assert.equal(id, variable.getId());
+      assert.isDefined(variable);
+      assert.equal(name, variable.name);
+      assert.equal(type, variable.type);
+      assert.equal(id, variable.getId());
     }
 
     suite('Constructors', function () {
@@ -1036,29 +1031,29 @@ suite('Events', function () {
         };
         const event = eventUtils.fromJson(json, this.workspace);
         const x = this.workspace.getVariableById('id2');
-        chai.assert.isNull(x);
+        assert.isNull(x);
         event.run(true);
         assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       });
 
       test('Var delete', function () {
         const event = new Blockly.Events.VarDelete(this.variable);
-        chai.assert.isNotNull(this.workspace.getVariableById('id1'));
+        assert.isNotNull(this.workspace.getVariableById('id1'));
         event.run(true);
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
+        assert.isNull(this.workspace.getVariableById('id1'));
       });
 
       test('Var rename', function () {
         const event = new Blockly.Events.VarRename(this.variable, 'name2');
         event.run(true);
-        chai.assert.isNull(this.workspace.getVariable('name1'));
+        assert.isNull(this.workspace.getVariable('name1'));
         checkVariableValues(this.workspace, 'name2', 'type1', 'id1');
       });
     });
     suite('Run Backward', function () {
       test('Var create', function () {
         const event = new Blockly.Events.VarCreate(this.variable);
-        chai.assert.isNotNull(this.workspace.getVariableById('id1'));
+        assert.isNotNull(this.workspace.getVariableById('id1'));
         event.run(false);
       });
 
@@ -1070,7 +1065,7 @@ suite('Events', function () {
           varName: 'name2',
         };
         const event = eventUtils.fromJson(json, this.workspace);
-        chai.assert.isNull(this.workspace.getVariableById('id2'));
+        assert.isNull(this.workspace.getVariableById('id2'));
         event.run(false);
         assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       });
@@ -1078,7 +1073,7 @@ suite('Events', function () {
       test('Var rename', function () {
         const event = new Blockly.Events.VarRename(this.variable, 'name2');
         event.run(false);
-        chai.assert.isNull(this.workspace.getVariable('name2'));
+        assert.isNull(this.workspace.getVariable('name2'));
         checkVariableValues(this.workspace, 'name1', 'type1', 'id1');
       });
     });
@@ -1106,16 +1101,12 @@ suite('Events', function () {
         new Blockly.Events.Click(block),
       ];
       const filteredEvents = eventUtils.filter(events, true);
-      chai.assert.equal(filteredEvents.length, 4); // no event should have been removed.
+      assert.equal(filteredEvents.length, 4); // no event should have been removed.
       // test that the order hasn't changed
-      chai.assert.isTrue(
-        filteredEvents[0] instanceof Blockly.Events.BlockCreate,
-      );
-      chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      chai.assert.isTrue(
-        filteredEvents[2] instanceof Blockly.Events.BlockChange,
-      );
-      chai.assert.isTrue(filteredEvents[3] instanceof Blockly.Events.Click);
+      assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
+      assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
+      assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BlockChange);
+      assert.isTrue(filteredEvents[3] instanceof Blockly.Events.Click);
     });
 
     test('Different blocks no removed', function () {
@@ -1128,7 +1119,7 @@ suite('Events', function () {
         new Blockly.Events.BlockMove(block2),
       ];
       const filteredEvents = eventUtils.filter(events, true);
-      chai.assert.equal(filteredEvents.length, 4); // no event should have been removed.
+      assert.equal(filteredEvents.length, 4); // no event should have been removed.
     });
 
     test('Forward', function () {
@@ -1138,14 +1129,12 @@ suite('Events', function () {
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);
       const filteredEvents = eventUtils.filter(events, true);
-      chai.assert.equal(filteredEvents.length, 2); // duplicate moves should have been removed.
+      assert.equal(filteredEvents.length, 2); // duplicate moves should have been removed.
       // test that the order hasn't changed
-      chai.assert.isTrue(
-        filteredEvents[0] instanceof Blockly.Events.BlockCreate,
-      );
-      chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      chai.assert.equal(filteredEvents[1].newCoordinate.x, 3);
-      chai.assert.equal(filteredEvents[1].newCoordinate.y, 3);
+      assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
+      assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
+      assert.equal(filteredEvents[1].newCoordinate.x, 3);
+      assert.equal(filteredEvents[1].newCoordinate.y, 3);
     });
 
     test('Backward', function () {
@@ -1155,14 +1144,12 @@ suite('Events', function () {
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);
       const filteredEvents = eventUtils.filter(events, false);
-      chai.assert.equal(filteredEvents.length, 2); // duplicate event should have been removed.
+      assert.equal(filteredEvents.length, 2); // duplicate event should have been removed.
       // test that the order hasn't changed
-      chai.assert.isTrue(
-        filteredEvents[0] instanceof Blockly.Events.BlockCreate,
-      );
-      chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      chai.assert.equal(filteredEvents[1].newCoordinate.x, 1);
-      chai.assert.equal(filteredEvents[1].newCoordinate.y, 1);
+      assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
+      assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
+      assert.equal(filteredEvents[1].newCoordinate.x, 1);
+      assert.equal(filteredEvents[1].newCoordinate.y, 1);
     });
 
     test('Merge block move events', function () {
@@ -1171,9 +1158,9 @@ suite('Events', function () {
       addMoveEvent(events, block, 0, 0);
       addMoveEvent(events, block, 1, 1);
       const filteredEvents = eventUtils.filter(events, true);
-      chai.assert.equal(filteredEvents.length, 1); // second move event merged into first
-      chai.assert.equal(filteredEvents[0].newCoordinate.x, 1);
-      chai.assert.equal(filteredEvents[0].newCoordinate.y, 1);
+      assert.equal(filteredEvents.length, 1); // second move event merged into first
+      assert.equal(filteredEvents[0].newCoordinate.x, 1);
+      assert.equal(filteredEvents[0].newCoordinate.y, 1);
     });
 
     test('Merge block change events', function () {
@@ -1189,9 +1176,9 @@ suite('Events', function () {
         ),
       ];
       const filteredEvents = eventUtils.filter(events, true);
-      chai.assert.equal(filteredEvents.length, 1); // second change event merged into first
-      chai.assert.equal(filteredEvents[0].oldValue, 'item');
-      chai.assert.equal(filteredEvents[0].newValue, 'item2');
+      assert.equal(filteredEvents.length, 1); // second change event merged into first
+      assert.equal(filteredEvents[0].oldValue, 'item');
+      assert.equal(filteredEvents[0].newValue, 'item2');
     });
 
     test('Merge viewport change events', function () {
@@ -1200,11 +1187,11 @@ suite('Events', function () {
         new Blockly.Events.ViewportChange(5, 6, 7, this.workspace, 8),
       ];
       const filteredEvents = eventUtils.filter(events, true);
-      chai.assert.equal(filteredEvents.length, 1); // second change event merged into first
-      chai.assert.equal(filteredEvents[0].viewTop, 5);
-      chai.assert.equal(filteredEvents[0].viewLeft, 6);
-      chai.assert.equal(filteredEvents[0].scale, 7);
-      chai.assert.equal(filteredEvents[0].oldScale, 8);
+      assert.equal(filteredEvents.length, 1); // second change event merged into first
+      assert.equal(filteredEvents[0].viewTop, 5);
+      assert.equal(filteredEvents[0].viewLeft, 6);
+      assert.equal(filteredEvents[0].scale, 7);
+      assert.equal(filteredEvents[0].oldScale, 8);
     });
 
     test('Merge ui events', function () {
@@ -1221,19 +1208,13 @@ suite('Events', function () {
       ];
       const filteredEvents = eventUtils.filter(events, true);
       // click event merged into corresponding *Open event
-      chai.assert.equal(filteredEvents.length, 3);
-      chai.assert.isTrue(
-        filteredEvents[0] instanceof Blockly.Events.BubbleOpen,
-      );
-      chai.assert.isTrue(
-        filteredEvents[1] instanceof Blockly.Events.BubbleOpen,
-      );
-      chai.assert.isTrue(
-        filteredEvents[2] instanceof Blockly.Events.BubbleOpen,
-      );
-      chai.assert.equal(filteredEvents[0].bubbleType, 'comment');
-      chai.assert.equal(filteredEvents[1].bubbleType, 'mutator');
-      chai.assert.equal(filteredEvents[2].bubbleType, 'warning');
+      assert.equal(filteredEvents.length, 3);
+      assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BubbleOpen);
+      assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BubbleOpen);
+      assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BubbleOpen);
+      assert.equal(filteredEvents[0].bubbleType, 'comment');
+      assert.equal(filteredEvents[1].bubbleType, 'mutator');
+      assert.equal(filteredEvents[2].bubbleType, 'warning');
     });
 
     test('Colliding events not dropped', function () {
@@ -1246,9 +1227,9 @@ suite('Events', function () {
       ];
       const filteredEvents = eventUtils.filter(events, true);
       // click and stackclick should both exist
-      chai.assert.equal(filteredEvents.length, 2);
-      chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.Click);
-      chai.assert.equal(filteredEvents[1].isStart, true);
+      assert.equal(filteredEvents.length, 2);
+      assert.isTrue(filteredEvents[0] instanceof Blockly.Events.Click);
+      assert.equal(filteredEvents[1].isStart, true);
     });
 
     test('Merging null operations dropped', function () {
@@ -1267,7 +1248,7 @@ suite('Events', function () {
       const filteredEvents = eventUtils.filter(events, true);
       // The two events should be merged, but because nothing has changed
       // they will be filtered out.
-      chai.assert.equal(filteredEvents.length, 0);
+      assert.equal(filteredEvents.length, 0);
     });
 
     test('Move events different blocks not merged', function () {
@@ -1287,14 +1268,12 @@ suite('Events', function () {
 
       const filteredEvents = eventUtils.filter(events, true);
       // Nothing should have merged.
-      chai.assert.equal(filteredEvents.length, 4);
+      assert.equal(filteredEvents.length, 4);
       // test that the order hasn't changed
-      chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockMove);
-      chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      chai.assert.isTrue(
-        filteredEvents[2] instanceof Blockly.Events.BlockDelete,
-      );
-      chai.assert.isTrue(filteredEvents[3] instanceof Blockly.Events.BlockMove);
+      assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockMove);
+      assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
+      assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BlockDelete);
+      assert.isTrue(filteredEvents[3] instanceof Blockly.Events.BlockMove);
     });
   });
 
@@ -1344,7 +1323,7 @@ suite('Events', function () {
         );
 
         // Expect the workspace to not have a variable with ID 'test_block_id'.
-        chai.assert.isNull(this.workspace.getVariableById(TEST_BLOCK_ID));
+        assert.isNull(this.workspace.getVariableById(TEST_BLOCK_ID));
       } finally {
         workspaceTeardown.call(this, workspaceSvg);
       }
@@ -1374,11 +1353,7 @@ suite('Events', function () {
       // Expect both events to trigger change listener.
       sinon.assert.calledTwice(this.changeListenerSpy);
       // Both events should be on undo stack
-      chai.assert.equal(
-        this.workspace.undoStack_.length,
-        2,
-        'Undo stack length',
-      );
+      assert.equal(this.workspace.undoStack_.length, 2, 'Undo stack length');
 
       assertNthCallEventArgEquals(
         this.changeListenerSpy,
@@ -1398,7 +1373,7 @@ suite('Events', function () {
       );
 
       // Expect the workspace to have a variable with ID 'test_var_id'.
-      chai.assert.isNotNull(this.workspace.getVariableById(TEST_VAR_ID));
+      assert.isNotNull(this.workspace.getVariableById(TEST_VAR_ID));
     });
 
     test('New block new var xml', function () {
@@ -1432,11 +1407,7 @@ suite('Events', function () {
       // The first varCreate and move event should have been ignored.
       sinon.assert.callCount(this.changeListenerSpy, 3);
       // Expect two events on undo stack: varCreate and block create.
-      chai.assert.equal(
-        this.workspace.undoStack_.length,
-        2,
-        'Undo stack length',
-      );
+      assert.equal(this.workspace.undoStack_.length, 2, 'Undo stack length');
 
       assertNthCallEventArgEquals(
         this.changeListenerSpy,
@@ -1466,7 +1437,7 @@ suite('Events', function () {
       );
 
       // Expect the workspace to have a variable with ID 'test_var_id'.
-      chai.assert.isNotNull(this.workspace.getVariableById(TEST_VAR_ID));
+      assert.isNotNull(this.workspace.getVariableById(TEST_VAR_ID));
     });
   });
   suite('Disable orphans', function () {
@@ -1487,7 +1458,7 @@ suite('Events', function () {
       // Fire all events
       this.clock.runAll();
 
-      chai.assert.isFalse(
+      assert.isFalse(
         block.isEnabled(),
         'Expected orphan block to be disabled after creation',
       );
@@ -1503,7 +1474,7 @@ suite('Events', function () {
       // Fire all events
       this.clock.runAll();
 
-      chai.assert.isTrue(
+      assert.isTrue(
         functionBlock.isEnabled(),
         'Expected top-level procedure block to be enabled',
       );
@@ -1527,7 +1498,7 @@ suite('Events', function () {
       // Fire all events
       this.clock.runAll();
 
-      chai.assert.isFalse(
+      assert.isFalse(
         block.isEnabled(),
         'Expected disconnected block to be disabled',
       );
@@ -1548,7 +1519,7 @@ suite('Events', function () {
       // Fire all events
       this.clock.runAll();
 
-      chai.assert.isTrue(
+      assert.isTrue(
         block.isEnabled(),
         'Expected block to be enabled after connecting to parent',
       );
@@ -1575,7 +1546,7 @@ suite('Events', function () {
       const disabledEvents = this.workspace.getUndoStack().filter(function (e) {
         return e.element === 'disabled';
       });
-      chai.assert.isEmpty(
+      assert.isEmpty(
         disabledEvents,
         'Undo stack should not contain any disabled events',
       );

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -45,7 +46,7 @@ suite('Block Change Event', function () {
             '<mutation hasInput="true"/>',
           );
           blockChange.run(false);
-          chai.assert.isFalse(block.hasInput);
+          assert.isFalse(block.hasInput);
         });
 
         test('Redo', function () {
@@ -58,7 +59,7 @@ suite('Block Change Event', function () {
             '<mutation hasInput="true"/>',
           );
           blockChange.run(true);
-          chai.assert.isTrue(block.hasInput);
+          assert.isTrue(block.hasInput);
         });
       });
 
@@ -74,7 +75,7 @@ suite('Block Change Event', function () {
             '{"hasInput":true}',
           );
           blockChange.run(false);
-          chai.assert.isFalse(block.hasInput);
+          assert.isFalse(block.hasInput);
         });
 
         test('Redo', function () {
@@ -87,7 +88,7 @@ suite('Block Change Event', function () {
             '{"hasInput":true}',
           );
           blockChange.run(true);
-          chai.assert.isTrue(block.hasInput);
+          assert.isTrue(block.hasInput);
         });
       });
     });
@@ -119,7 +120,7 @@ suite('Block Change Event', function () {
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);
 
-      chai.assert.deepEqual(newEvent, origEvent);
+      assert.deepEqual(newEvent, origEvent);
     });
   });
 });

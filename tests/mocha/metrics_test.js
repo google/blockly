@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -13,10 +14,10 @@ suite('Metrics', function () {
   const SCROLL_X = 10;
   const SCROLL_Y = 10;
   function assertDimensionsMatch(toCheck, left, top, width, height) {
-    chai.assert.equal(top, toCheck.top, 'Top did not match.');
-    chai.assert.equal(left, toCheck.left, 'Left did not match.');
-    chai.assert.equal(width, toCheck.width, 'Width did not match.');
-    chai.assert.equal(height, toCheck.height, 'Height did not match.');
+    assert.equal(top, toCheck.top, 'Top did not match.');
+    assert.equal(left, toCheck.left, 'Left did not match.');
+    assert.equal(width, toCheck.width, 'Width did not match.');
+    assert.equal(height, toCheck.height, 'Height did not match.');
   }
 
   // Make a mock workspace object with two properties:

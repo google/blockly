@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const chai = require('chai');
-const sinon = require('sinon');
-const {Key} = require('webdriverio');
-const {testSetup, testFileLocations} = require('./test_setup');
+import * as chai from 'chai';
+import * as sinon from 'sinon';
+import {Key} from 'webdriverio';
+import {testSetup, testFileLocations} from './test_setup.mjs';
 
 suite('Workspace comments', function () {
   // Setting timeout to unlimited as the webdriver takes a longer time

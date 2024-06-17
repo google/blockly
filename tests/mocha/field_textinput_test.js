@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
 import {
   assertFieldValue,
@@ -228,7 +229,7 @@ suite('Text Input Fields', function () {
         this.assertSpellcheck = function (field, value) {
           this.prepField(field);
           field.showEditor_();
-          chai.assert.equal(
+          assert.equal(
             field.htmlInput_.getAttribute('spellcheck'),
             value.toString(),
           );
@@ -266,7 +267,7 @@ suite('Text Input Fields', function () {
         this.prepField(field);
         field.showEditor_();
         field.setSpellcheck(false);
-        chai.assert.equal(field.htmlInput_.getAttribute('spellcheck'), 'false');
+        assert.equal(field.htmlInput_.getAttribute('spellcheck'), 'false');
       });
     });
   });
@@ -281,7 +282,7 @@ suite('Text Input Fields', function () {
         const field = new Blockly.FieldTextInput(value);
         block.getInput('INPUT').appendField(field, 'TEXT');
         const jso = Blockly.serialization.blocks.save(block);
-        chai.assert.deepEqual(jso['fields'], {'TEXT': value});
+        assert.deepEqual(jso['fields'], {'TEXT': value});
       };
     });
 

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../../node_modules/chai/chai.js';
 import * as eventUtils from '../../../build/src/core/events/utils.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {
@@ -28,21 +29,21 @@ suite('Logic ternary', function () {
    *    inline.
    */
   function assertBlockStructure(block, inputsInline = false) {
-    chai.assert.equal(block.type, 'logic_ternary');
+    assert.equal(block.type, 'logic_ternary');
     const inputs = block.inputList;
-    chai.assert.exists(inputs, 'Has inputList');
-    chai.assert.lengthOf(inputs, 3);
+    assert.exists(inputs, 'Has inputList');
+    assert.lengthOf(inputs, 3);
     const ifInput = block.getInput('IF');
-    chai.assert.exists(ifInput, 'Has "IF" input');
+    assert.exists(ifInput, 'Has "IF" input');
     const checkList = ifInput.connection.getCheck();
-    chai.assert.equal(checkList.length, 1);
-    chai.assert.equal(checkList[0], 'Boolean');
-    chai.assert.exists(block.onchangeWrapper_, 'Has onchange handler');
+    assert.equal(checkList.length, 1);
+    assert.equal(checkList[0], 'Boolean');
+    assert.exists(block.onchangeWrapper_, 'Has onchange handler');
     if (inputsInline) {
-      chai.assert.isTrue(block.inputsInline);
+      assert.isTrue(block.inputsInline);
     } else {
       // inputsInline can be undefined
-      chai.assert.isNotTrue(block.inputsInline);
+      assert.isNotTrue(block.inputsInline);
     }
   }
 
@@ -90,20 +91,20 @@ suite('Logic ternary', function () {
         .getInput(parentInputName)
         .connection.connect(block.outputConnection);
       eventUtils.TEST_ONLY.fireNow(); // Force synchronous onchange() call.
-      chai.assert.equal(
+      assert.equal(
         block.getParent(),
         parent,
         'Successful connection to parent',
       );
       if (opt_thenInput) {
-        chai.assert.equal(
+        assert.equal(
           opt_thenInput.getParent(),
           block,
           'Input THEN still connected after connecting parent',
         );
       }
       if (opt_elseInput) {
-        chai.assert.equal(
+        assert.equal(
           opt_elseInput.getParent(),
           block,
           'Input ELSE still connected after connecting parent',
@@ -118,16 +119,16 @@ suite('Logic ternary', function () {
     ) {
       block.getInput('THEN').connection.connect(thenInput.outputConnection);
       eventUtils.TEST_ONLY.fireNow(); // Force synchronous onchange() call.
-      chai.assert.equal(thenInput.getParent(), block, 'THEN is connected');
+      assert.equal(thenInput.getParent(), block, 'THEN is connected');
       if (opt_parent) {
-        chai.assert.equal(
+        assert.equal(
           block.getParent(),
           opt_parent,
           'Still connected to parent after connecting THEN',
         );
       }
       if (opt_elseInput) {
-        chai.assert.equal(
+        assert.equal(
           opt_elseInput.getParent(),
           block,
           'Input ELSE still connected after connecting THEN',
@@ -142,16 +143,16 @@ suite('Logic ternary', function () {
     ) {
       block.getInput('ELSE').connection.connect(elseInput.outputConnection);
       eventUtils.TEST_ONLY.fireNow(); // Force synchronous onchange() call.
-      chai.assert.equal(elseInput.getParent(), block, 'ELSE is connected');
+      assert.equal(elseInput.getParent(), block, 'ELSE is connected');
       if (opt_parent) {
-        chai.assert.equal(
+        assert.equal(
           block.getParent(),
           opt_parent,
           'Still connected to parent after connecting ELSE',
         );
       }
       if (opt_thenInput) {
-        chai.assert.equal(
+        assert.equal(
           opt_thenInput.getParent(),
           block,
           'Input THEN still connected after connecting ELSE',
@@ -232,7 +233,7 @@ suite('Logic ternary', function () {
 
         // Adding mismatching number.
         connectThenInputAndCheckConnections(this.block, number, string);
-        chai.assert.equal(
+        assert.equal(
           this.block.getRootBlock(),
           this.block,
           'Disconnected from parent',
@@ -250,7 +251,7 @@ suite('Logic ternary', function () {
 
         // Adding mismatching number.
         connectElseInputAndCheckConnections(this.block, number, string);
-        chai.assert.equal(
+        assert.equal(
           this.block.getRootBlock(),
           this.block,
           'Disconnected from parent',
@@ -302,11 +303,7 @@ suite('Logic ternary', function () {
           null,
           string,
         );
-        chai.assert.equal(
-          number.getRootBlock(),
-          number,
-          'Input THEN disconnected',
-        );
+        assert.equal(number.getRootBlock(), number, 'Input THEN disconnected');
       });
       test('Mismatch with else causes break with else', function () {
         const string = this.workspace.newBlock('text');
@@ -316,11 +313,7 @@ suite('Logic ternary', function () {
 
         const parent = this.workspace.newBlock('text_trim');
         connectParentAndCheckConnections(this.block, parent, 'TEXT', string);
-        chai.assert.equal(
-          number.getRootBlock(),
-          number,
-          'Input ELSE disconnected',
-        );
+        assert.equal(number.getRootBlock(), number, 'Input ELSE disconnected');
       });
     });
   });

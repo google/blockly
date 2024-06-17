@@ -8,15 +8,15 @@
  * @fileoverview Node.js script to run Automated tests in Chrome, via webdriver.
  */
 
-const chai = require('chai');
-const {Key} = require('webdriverio');
-const {
+import * as chai from 'chai';
+import {Key} from 'webdriverio';
+import {
   testSetup,
   testFileLocations,
   dragBlockTypeFromFlyout,
   screenDirection,
   getAllBlocks,
-} = require('./test_setup');
+} from './test_setup.mjs';
 
 suite('Testing undo block movement', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
 import {
   assertFieldValue,
@@ -223,7 +224,7 @@ suite('Checkbox Fields', function () {
         };
         field.initView();
         field.render_();
-        chai.assert(field.textContent_.nodeValue, char);
+        assert(field.textContent_.nodeValue, char);
       }
       test('Constant', function () {
         const checkChar = Blockly.FieldCheckbox.CHECK_CHAR;
@@ -251,7 +252,7 @@ suite('Checkbox Fields', function () {
         assertCharacter(field, Blockly.FieldCheckbox.CHECK_CHAR);
         field.setCheckCharacter('\u2661');
         // Don't call assertCharacter b/c we don't want to re-initialize.
-        chai.assert.equal(field.textContent_.nodeValue, '\u2661');
+        assert.equal(field.textContent_.nodeValue, '\u2661');
       });
       test('setCheckCharacter Before Init', function () {
         const field = new Blockly.FieldCheckbox();
@@ -264,10 +265,7 @@ suite('Checkbox Fields', function () {
         });
         assertCharacter(field, '\u2661');
         field.setCheckCharacter(null);
-        chai.assert(
-          field.textContent_.nodeValue,
-          Blockly.FieldCheckbox.CHECK_CHAR,
-        );
+        assert(field.textContent_.nodeValue, Blockly.FieldCheckbox.CHECK_CHAR);
       });
     });
   });
@@ -282,7 +280,7 @@ suite('Checkbox Fields', function () {
         const field = new Blockly.FieldCheckbox(value);
         block.getInput('INPUT').appendField(field, 'CHECK');
         const jso = Blockly.serialization.blocks.save(block);
-        chai.assert.deepEqual(jso['fields'], {'CHECK': value});
+        assert.deepEqual(jso['fields'], {'CHECK': value});
       };
     });
 

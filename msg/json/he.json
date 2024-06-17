@@ -328,6 +328,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "לעשות משהו",
 	"PROCEDURES_BEFORE_PARAMS": "עם:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "עם:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "אי אפשר להריץ את הפונקציה ‚%1’ שהוגדרה על ידי המשתמש כיוון שמקטע ההגדרה מושבת.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "יצירת פונקציה ללא פלט.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "תאר את הפונקציה הזאת...",
 	"PROCEDURES_DEFRETURN_RETURN": "להחזיר",

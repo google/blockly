@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -64,7 +65,7 @@ suite('Variables', function () {
       createTestVarBlock(this.workspace, '3');
 
       const result = Blockly.Variables.allUsedVarModels(this.workspace);
-      chai.assert.equal(
+      assert.equal(
         result.length,
         3,
         'Expected three variables in the list of used variables',
@@ -75,12 +76,12 @@ suite('Variables', function () {
       createTestVarBlock(this.workspace, '2');
 
       const result = Blockly.Variables.allUsedVarModels(this.workspace);
-      chai.assert.equal(
+      assert.equal(
         result.length,
         1,
         'Expected one variable in the list of used variables',
       );
-      chai.assert.equal(
+      assert.equal(
         result[0].getId(),
         '2',
         'Expected variable with ID 2 in the list of used variables',
@@ -94,12 +95,12 @@ suite('Variables', function () {
       const result = Blockly.Variables.allUsedVarModels(this.workspace);
       // Using the same variable multiple times should not change the number of
       // elements in the list.
-      chai.assert.equal(
+      assert.equal(
         result.length,
         1,
         'Expected one variable in the list of used variables',
       );
-      chai.assert.equal(
+      assert.equal(
         result[0].getId(),
         '2',
         'Expected variable with ID 2 in the list of used variables',
@@ -108,7 +109,7 @@ suite('Variables', function () {
 
     test('All unused', function () {
       const result = Blockly.Variables.allUsedVarModels(this.workspace);
-      chai.assert.equal(
+      assert.equal(
         result.length,
         0,
         'Expected no variables in the list of used variables',
@@ -125,9 +126,9 @@ suite('Variables', function () {
       const result2 = Blockly.Variables.getVariable(this.workspace, 'id2');
       const result3 = Blockly.Variables.getVariable(this.workspace, 'id3');
 
-      chai.assert.equal(var1, result1);
-      chai.assert.equal(var2, result2);
-      chai.assert.equal(var3, result3);
+      assert.equal(var1, result1);
+      assert.equal(var2, result2);
+      assert.equal(var3, result3);
     });
 
     test('By name and type', function () {
@@ -154,9 +155,9 @@ suite('Variables', function () {
       );
 
       // Searching by name + type is correct.
-      chai.assert.equal(var1, result1);
-      chai.assert.equal(var2, result2);
-      chai.assert.equal(var3, result3);
+      assert.equal(var1, result1);
+      assert.equal(var2, result2);
+      assert.equal(var3, result3);
     });
 
     test('Bad ID with name and type fallback', function () {
@@ -183,9 +184,9 @@ suite('Variables', function () {
       );
 
       // Searching by ID failed, but falling back onto name + type is correct.
-      chai.assert.equal(var1, result1);
-      chai.assert.equal(var2, result2);
-      chai.assert.equal(var3, result3);
+      assert.equal(var1, result1);
+      assert.equal(var2, result2);
+      assert.equal(var3, result3);
     });
   });
 
@@ -214,7 +215,7 @@ suite('Variables', function () {
           this.workspace,
         );
 
-        chai.assert.equal(
+        assert.equal(
           'test name',
           nameUsedWithConflictingParam('x', 'y', this.workspace),
           'Expected the name of the procedure with the conflicting ' +
@@ -248,7 +249,7 @@ suite('Variables', function () {
             this.workspace,
           );
 
-          chai.assert.isNull(
+          assert.isNull(
             nameUsedWithConflictingParam('x', 'y', this.workspace),
             'Expected there to be no conflict',
           );
@@ -270,7 +271,7 @@ suite('Variables', function () {
               ),
           );
 
-        chai.assert.equal(
+        assert.equal(
           'test name',
           nameUsedWithConflictingParam('x', 'y', this.workspace),
           'Expected the name of the procedure with the conflicting ' +
@@ -299,7 +300,7 @@ suite('Variables', function () {
                 ),
             );
 
-          chai.assert.isNull(
+          assert.isNull(
             nameUsedWithConflictingParam('x', 'y', this.workspace),
             'Expected there to be no conflict',
           );

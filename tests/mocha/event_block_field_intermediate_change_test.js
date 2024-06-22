@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -32,7 +33,7 @@ suite('Field Intermediate Change Event', function () {
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);
 
-      chai.assert.deepEqual(newEvent, origEvent);
+      assert.deepEqual(newEvent, origEvent);
     });
   });
 
@@ -47,10 +48,7 @@ suite('Field Intermediate Change Event', function () {
       );
       origEvent.run(true);
 
-      chai.assert.deepEqual(
-        block.getField(origEvent.name).getValue(),
-        'new value',
-      );
+      assert.deepEqual(block.getField(origEvent.name).getValue(), 'new value');
     });
 
     test("running backward changes the block's value to old value", function () {
@@ -63,10 +61,7 @@ suite('Field Intermediate Change Event', function () {
       );
       origEvent.run(false);
 
-      chai.assert.deepEqual(
-        block.getField(origEvent.name).getValue(),
-        'old value',
-      );
+      assert.deepEqual(block.getField(origEvent.name).getValue(), 'old value');
     });
   });
 });

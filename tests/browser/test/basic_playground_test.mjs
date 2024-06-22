@@ -8,8 +8,8 @@
  * @fileoverview Node.js script to run Automated tests in Chrome, via webdriver.
  */
 
-const chai = require('chai');
-const {
+import * as chai from 'chai';
+import {
   testSetup,
   testFileLocations,
   dragNthBlockFromFlyout,
@@ -17,7 +17,7 @@ const {
   connect,
   contextMenuSelect,
   PAUSE_TIME,
-} = require('./test_setup');
+} from './test_setup.mjs';
 
 async function getIsCollapsed(browser, blockId) {
   return await browser.execute((blockId) => {

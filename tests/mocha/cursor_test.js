@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -90,7 +91,7 @@ suite('Cursor', function () {
     this.cursor.setCurNode(prevNode);
     this.cursor.next();
     const curNode = this.cursor.getCurNode();
-    chai.assert.equal(curNode.getLocation(), this.blocks.B.previousConnection);
+    assert.equal(curNode.getLocation(), this.blocks.B.previousConnection);
   });
   test('Next - From last block in a stack go to next connection', function () {
     const prevNode = ASTNode.createConnectionNode(
@@ -99,7 +100,7 @@ suite('Cursor', function () {
     this.cursor.setCurNode(prevNode);
     this.cursor.next();
     const curNode = this.cursor.getCurNode();
-    chai.assert.equal(curNode.getLocation(), this.blocks.B.nextConnection);
+    assert.equal(curNode.getLocation(), this.blocks.B.nextConnection);
   });
 
   test('In - From output connection', function () {
@@ -110,10 +111,7 @@ suite('Cursor', function () {
     this.cursor.setCurNode(outputNode);
     this.cursor.in();
     const curNode = this.cursor.getCurNode();
-    chai.assert.equal(
-      curNode.getLocation(),
-      fieldBlock.inputList[0].fieldRow[0],
-    );
+    assert.equal(curNode.getLocation(), fieldBlock.inputList[0].fieldRow[0]);
   });
 
   test('Prev - From previous connection skip over next connection', function () {
@@ -122,7 +120,7 @@ suite('Cursor', function () {
     this.cursor.setCurNode(prevConnectionNode);
     this.cursor.prev();
     const curNode = this.cursor.getCurNode();
-    chai.assert.equal(curNode.getLocation(), this.blocks.A.previousConnection);
+    assert.equal(curNode.getLocation(), this.blocks.A.previousConnection);
   });
 
   test('Out - From field skip over block node', function () {
@@ -131,6 +129,6 @@ suite('Cursor', function () {
     this.cursor.setCurNode(fieldNode);
     this.cursor.out();
     const curNode = this.cursor.getCurNode();
-    chai.assert.equal(curNode.getLocation(), this.blocks.E.outputConnection);
+    assert.equal(curNode.getLocation(), this.blocks.E.outputConnection);
   });
 });

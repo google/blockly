@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {assertEventFired} from './test_helpers/events.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {
@@ -75,7 +76,7 @@ suite('Theme', function () {
   function stringifyAndCompare(val1, val2) {
     const stringVal1 = JSON.stringify(val1);
     const stringVal2 = JSON.stringify(val2);
-    chai.assert.equal(stringVal1, stringVal2);
+    assert.equal(stringVal1, stringVal2);
   }
 
   test('Set All BlockStyles', function () {
@@ -144,7 +145,7 @@ suite('Theme', function () {
       stringifyAndCompare(workspace.getTheme(), theme);
 
       // Checks that the setTheme function was called on the block
-      chai.assert.equal(blockA.getStyleName(), 'styleTwo');
+      assert.equal(blockA.getStyleName(), 'styleTwo');
 
       // Checks that the toolbox refreshed method was called
       sinon.assert.calledOnce(refreshToolboxSelectionStub);
@@ -300,7 +301,7 @@ suite('Theme', function () {
   suite('defineTheme', function () {
     test('Normalizes to lowercase', function () {
       const theme = Blockly.Theme.defineTheme('TEST', {});
-      chai.assert.equal(theme.name, 'test');
+      assert.equal(theme.name, 'test');
     });
   });
 });

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -64,7 +65,7 @@ suite('Tooltip', function () {
       );
       this.clock.runAll();
 
-      chai.assert.isTrue(
+      assert.isTrue(
         wasCalled,
         'Expected custom tooltip function to have been called',
       );
@@ -75,7 +76,7 @@ suite('Tooltip', function () {
     const tooltipText = 'testTooltip';
 
     function assertTooltip(obj) {
-      chai.assert.equal(obj.getTooltip(), tooltipText);
+      assert.equal(obj.getTooltip(), tooltipText);
     }
 
     function setStringTooltip(obj) {
@@ -130,7 +131,7 @@ suite('Tooltip', function () {
 
       test('Function returning object', function () {
         setFunctionReturningObjectTooltip(this.block);
-        chai.assert.throws(
+        assert.throws(
           this.block.getTooltip.bind(this.block),
           'Tooltip function must return a string.',
         );
@@ -171,7 +172,7 @@ suite('Tooltip', function () {
 
       test('Function returning object', function () {
         setFunctionReturningObjectTooltip(this.block);
-        chai.assert.throws(
+        assert.throws(
           this.block.getTooltip.bind(this.block),
           'Tooltip function must return a string.',
         );
@@ -206,7 +207,7 @@ suite('Tooltip', function () {
 
       test('Function returning object', function () {
         setFunctionReturningObjectTooltip(this.field);
-        chai.assert.throws(
+        assert.throws(
           this.field.getTooltip.bind(this.field),
           'Tooltip function must return a string.',
         );
@@ -254,7 +255,7 @@ suite('Tooltip', function () {
 
       test('Function returning object', function () {
         setFunctionReturningObjectTooltip(this.field);
-        chai.assert.throws(
+        assert.throws(
           this.field.getTooltip.bind(this.field),
           'Tooltip function must return a string.',
         );

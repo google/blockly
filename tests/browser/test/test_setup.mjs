@@ -16,9 +16,10 @@
  * identifiers that Selenium can use to find those elements.
  */
 
-const webdriverio = require('webdriverio');
-const path = require('path');
-const {posixPath} = require('../../../scripts/helpers');
+import * as webdriverio from 'webdriverio';
+import * as path from 'path';
+import {fileURLToPath} from 'url';
+import {posixPath} from '../../../scripts/helpers.js';
 
 let driver = null;
 
@@ -26,14 +27,14 @@ let driver = null;
  * The default amount of time to wait during a test. Increase this to make
  * tests easier to watch; decrease it to make tests run faster.
  */
-const PAUSE_TIME = 50;
+export const PAUSE_TIME = 50;
 
 /**
  * Start up the test page. This should only be done once, to avoid
  * constantly popping browser windows open and closed.
  * @return A Promsie that resolves to a webdriverIO browser that tests can manipulate.
  */
-async function driverSetup() {
+export async function driverSetup() {
   const options = {
     capabilities: {
       'browserName': 'chrome',
@@ -67,7 +68,7 @@ async function driverSetup() {
  * End the webdriverIO session.
  * @return A Promise that resolves after the actions have been completed.
  */
-async function driverTeardown() {
+export async function driverTeardown() {
   await driver.deleteSession();
   driver = null;
   return;
@@ -79,7 +80,7 @@ async function driverTeardown() {
  *     a Blockly playground with a workspace.
  * @return A Promsie that resolves to a webdriverIO browser that tests can manipulate.
  */
-async function testSetup(playgroundUrl) {
+export async function testSetup(playgroundUrl) {
   if (!driver) {
     await driverSetup();
   }
@@ -91,7 +92,9 @@ async function testSetup(playgroundUrl) {
   return driver;
 }
 
-const testFileLocations = {
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+export const testFileLocations = {
   BLOCK_FACTORY:
     'file://' +
     posixPath(path.join(__dirname, '..', '..', '..', 'demos', 'blockfactory')) +
@@ -116,7 +119,7 @@ const testFileLocations = {
  * @readonly
  * @enum {number}
  */
-const screenDirection = {
+export const screenDirection = {
   RTL: -1,
   LTR: 1,
 };
@@ -125,7 +128,7 @@ const screenDirection = {
  * @param browser The active WebdriverIO Browser object.
  * @return A Promise that resolves to the ID of the currently selected block.
  */
-async function getSelectedBlockId(browser) {
+export async function getSelectedBlockId(browser) {
   return await browser.execute(() => {
     // Note: selected is an ICopyable and I am assuming that it is a BlockSvg.
     return Blockly.common.getSelected()?.id;
@@ -137,7 +140,7 @@ async function getSelectedBlockId(browser) {
  * @return A Promise that resolves to the selected block's root SVG element,
  *     as an interactable browser element.
  */
-async function getSelectedBlockElement(browser) {
+export async function getSelectedBlockElement(browser) {
   const id = await getSelectedBlockId(browser);
   return getBlockElementById(browser, id);
 }
@@ -148,7 +151,7 @@ async function getSelectedBlockElement(browser) {
  * @return A Promise that resolves to the root SVG element of the block with
  *     the given ID, as an interactable browser element.
  */
-async function getBlockElementById(browser, id) {
+export async function getBlockElementById(browser, id) {
   const elem = await browser.$(`[data-id="${id}"]`);
   elem['id'] = id;
   return elem;
@@ -165,7 +168,7 @@ async function getBlockElementById(browser, id) {
  * @param clickOptions The options to pass to webdriverio's element.click function.
  * @return A Promise that resolves when the actions are completed.
  */
-async function clickBlock(browser, block, clickOptions) {
+export async function clickBlock(browser, block, clickOptions) {
   const findableId = 'clickTargetElement';
   // In the browser context, find the element that we want and give it a findable ID.
   await browser.execute(
@@ -203,7 +206,7 @@ async function clickBlock(browser, block, clickOptions) {
  * @param browser The active WebdriverIO Browser object.
  * @return A Promise that resolves when the actions are completed.
  */
-async function clickWorkspace(browser) {
+export async function clickWorkspace(browser) {
   const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
   await workspace.click();
   await browser.pause(PAUSE_TIME);
@@ -215,7 +218,7 @@ async function clickWorkspace(browser) {
  * @return A Promise that resolves when the actions are completed.
  * @throws If the mutator workspace cannot be found.
  */
-async function clickMutatorWorkspace(browser) {
+export async function clickMutatorWorkspace(browser) {
   const hasMutator = await browser.$('.blocklyMutatorBackground');
   if (!hasMutator) {
     throw new Error('No mutator workspace found');
@@ -234,7 +237,7 @@ async function clickMutatorWorkspace(browser) {
  *     category with the given name, as an interactable browser element.
  * @throws If the category cannot be found.
  */
-async function getCategory(browser, categoryName) {
+export async function getCategory(browser, categoryName) {
   const category = browser.$(`.blocklyToolboxCategory*=${categoryName}`);
   category.waitForExist();
 
@@ -248,7 +251,7 @@ async function getCategory(browser, categoryName) {
  * @return A Promise that resolves to the root element of the nth
  *     block in the given category.
  */
-async function getNthBlockOfCategory(browser, categoryName, n) {
+export async function getNthBlockOfCategory(browser, categoryName, n) {
   const category = await getCategory(browser, categoryName);
   await category.click();
   const block = await browser.$(
@@ -265,7 +268,11 @@ async function getNthBlockOfCategory(browser, categoryName, n) {
  * @return A Promise that resolves to the root element of the first
  *     block with the given type in the given category.
  */
-async function getBlockTypeFromCategory(browser, categoryName, blockType) {
+export async function getBlockTypeFromCategory(
+  browser,
+  categoryName,
+  blockType,
+) {
   if (categoryName) {
     const category = await getCategory(browser, categoryName);
     await category.click();
@@ -287,7 +294,7 @@ async function getBlockTypeFromCategory(browser, categoryName, blockType) {
  * @return A Promise that resolves to the root element of the block with the
  *     given position and type on the workspace.
  */
-async function getBlockTypeFromWorkspace(browser, blockType, position) {
+export async function getBlockTypeFromWorkspace(browser, blockType, position) {
   const id = await browser.execute(
     (blockType, position) => {
       return Blockly.getMainWorkspace().getBlocksByType(blockType, true)[
@@ -372,7 +379,7 @@ async function getLocationOfBlockConnection(
  * @param dragBlockSelector The selector of the block to drag
  * @return A Promise that resolves when the actions are completed.
  */
-async function connect(
+export async function connect(
   browser,
   draggedBlock,
   draggedConnection,
@@ -411,7 +418,7 @@ async function connect(
  * @param browser The active WebdriverIO Browser object.
  * @return A Promise that resolves when the actions are completed.
  */
-async function switchRTL(browser) {
+export async function switchRTL(browser) {
   const ltrForm = await browser.$('#options > select:nth-child(1)');
   await ltrForm.selectByIndex(1);
   await browser.pause(PAUSE_TIME + 450);
@@ -431,7 +438,7 @@ async function switchRTL(browser) {
  * @return A Promise that resolves to the root element of the newly
  *     created block.
  */
-async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
+export async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
   const flyoutBlock = await getNthBlockOfCategory(browser, categoryName, n);
   await flyoutBlock.dragAndDrop({x: x, y: y});
   return await getSelectedBlockElement(browser);
@@ -452,7 +459,13 @@ async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
  * @return A Promise that resolves to the root element of the newly
  *     created block.
  */
-async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
+export async function dragBlockTypeFromFlyout(
+  browser,
+  categoryName,
+  type,
+  x,
+  y,
+) {
   const flyoutBlock = await getBlockTypeFromCategory(
     browser,
     categoryName,
@@ -477,7 +490,13 @@ async function dragBlockTypeFromFlyout(browser, categoryName, type, x, y) {
  * @return A Promise that resolves to the root element of the newly
  *     created block.
  */
-async function dragBlockFromMutatorFlyout(browser, mutatorBlock, type, x, y) {
+export async function dragBlockFromMutatorFlyout(
+  browser,
+  mutatorBlock,
+  type,
+  x,
+  y,
+) {
   const id = await browser.execute(
     (mutatorBlockId, blockType) => {
       return Blockly.getMainWorkspace()
@@ -505,7 +524,7 @@ async function dragBlockFromMutatorFlyout(browser, mutatorBlock, type, x, y) {
  * @param itemText The display text of the context menu item to click.
  * @return A Promise that resolves when the actions are completed.
  */
-async function contextMenuSelect(browser, block, itemText) {
+export async function contextMenuSelect(browser, block, itemText) {
   await clickBlock(browser, block, {button: 2});
 
   const item = await browser.$(`div=${itemText}`);
@@ -522,7 +541,7 @@ async function contextMenuSelect(browser, block, itemText) {
  * @param block The block to click, as an interactable element.
  * @return A Promise that resolves when the actions are complete.
  */
-async function openMutatorForBlock(browser, block) {
+export async function openMutatorForBlock(browser, block) {
   const icon = await browser.$(`[data-id="${block.id}"] > g.blocklyIconGroup`);
   await icon.click();
 }
@@ -535,7 +554,7 @@ async function openMutatorForBlock(browser, block) {
  * @param browser The active WebdriverIO Browser object.
  * @return A Promise that resolves to an array of blocks on the main workspace.
  */
-async function getAllBlocks(browser) {
+export async function getAllBlocks(browser) {
   return browser.execute(() => {
     return Blockly.getMainWorkspace()
       .getAllBlocks(false)
@@ -556,7 +575,7 @@ async function getAllBlocks(browser) {
  * @param yDelta How far to drag the flyout in the y direction. Positive is down.
  * @return A Promise that resolves when the actions are completed.
  */
-async function scrollFlyout(browser, xDelta, yDelta) {
+export async function scrollFlyout(browser, xDelta, yDelta) {
   // There are two flyouts on the playground workspace: one for the trash can
   // and one for the toolbox. We want the second one.
   // This assumes there is only one scrollbar handle in the flyout, but it could
@@ -568,31 +587,3 @@ async function scrollFlyout(browser, xDelta, yDelta) {
   await scrollbarHandle.dragAndDrop({x: xDelta, y: yDelta});
   await browser.pause(PAUSE_TIME);
 }
-
-module.exports = {
-  testSetup,
-  testFileLocations,
-  driverSetup,
-  driverTeardown,
-  getSelectedBlockElement,
-  getSelectedBlockId,
-  getBlockElementById,
-  clickBlock,
-  clickWorkspace,
-  clickMutatorWorkspace,
-  getCategory,
-  getNthBlockOfCategory,
-  getBlockTypeFromCategory,
-  dragNthBlockFromFlyout,
-  dragBlockTypeFromFlyout,
-  dragBlockFromMutatorFlyout,
-  connect,
-  switchRTL,
-  contextMenuSelect,
-  openMutatorForBlock,
-  screenDirection,
-  getBlockTypeFromWorkspace,
-  getAllBlocks,
-  scrollFlyout,
-  PAUSE_TIME,
-};

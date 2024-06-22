@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {Align} from '../../build/src/core/inputs/align.js';
 import {
   sharedTestSetup,
@@ -27,7 +28,7 @@ suite('Block JSON initialization', function () {
           type: 'test',
           validateTokens_: Blockly.Block.prototype.validateTokens_,
         };
-        chai.assert.throws(function () {
+        assert.throws(function () {
           block.validateTokens_(tokens, count);
         }, error);
       };
@@ -37,7 +38,7 @@ suite('Block JSON initialization', function () {
           type: 'test',
           validateTokens_: Blockly.Block.prototype.validateTokens_,
         };
-        chai.assert.doesNotThrow(function () {
+        assert.doesNotThrow(function () {
           block.validateTokens_(tokens, count);
         });
       };
@@ -105,7 +106,7 @@ suite('Block JSON initialization', function () {
           stringToFieldJson_: Blockly.Block.prototype.stringToFieldJson_,
           isInputKeyword_: Blockly.Block.prototype.isInputKeyword_,
         };
-        chai.assert.deepEqual(
+        assert.deepEqual(
           block.interpolateArguments_(tokens, args, lastAlign),
           elements,
         );
@@ -405,7 +406,7 @@ suite('Block JSON initialization', function () {
           fieldFromJson_: Blockly.Block.prototype.fieldFromJson_,
           stringToFieldJson_: Blockly.Block.prototype.stringToFieldJson_,
         };
-        chai.assert.strictEqual(block.fieldFromJson_(json), expectedType);
+        assert.strictEqual(block.fieldFromJson_(json), expectedType);
       };
     });
 
@@ -573,34 +574,34 @@ suite('Block JSON initialization', function () {
         const input = block.inputFromJson_(json);
         switch (type) {
           case 'input_dummy':
-            chai.assert.isTrue(
+            assert.isTrue(
               block.appendDummyInput.calledOnce,
               'Expected a dummy input to be created.',
             );
             break;
           case 'input_value':
-            chai.assert.isTrue(
+            assert.isTrue(
               block.appendValueInput.calledOnce,
               'Expected a value input to be created.',
             );
             break;
           case 'input_statement':
-            chai.assert.isTrue(
+            assert.isTrue(
               block.appendStatementInput.calledOnce,
               'Expected a statement input to be created.',
             );
             break;
           default:
-            chai.assert.isNull(input, 'Expected input to be null');
-            chai.assert.isTrue(
+            assert.isNull(input, 'Expected input to be null');
+            assert.isTrue(
               block.appendDummyInput.notCalled,
               'Expected no input to be created',
             );
-            chai.assert.isTrue(
+            assert.isTrue(
               block.appendValueInput.notCalled,
               'Expected no input to be created',
             );
-            chai.assert.isTrue(
+            assert.isTrue(
               block.appendStatementInput.notCalled,
               'Expected no input to be created',
             );
@@ -608,13 +609,13 @@ suite('Block JSON initialization', function () {
         }
         if (check) {
           if (Array.isArray(check)) {
-            chai.assert.deepEqual(check, input.connection.getCheck());
+            assert.deepEqual(check, input.connection.getCheck());
           } else {
-            chai.assert.deepEqual([check], input.connection.getCheck());
+            assert.deepEqual([check], input.connection.getCheck());
           }
         }
         if (align !== undefined) {
-          chai.assert.equal(align, input.align);
+          assert.equal(align, input.align);
         }
       };
     });
@@ -667,7 +668,7 @@ suite('Block JSON initialization', function () {
         );
         const block = this.workspace.newBlock('test_basic_empty');
         block.inputFromJson_({'type': 'custom'});
-        chai.assert.instanceOf(
+        assert.instanceOf(
           block.inputList[0],
           CustomInput,
           'Expected the registered input to be constructed',

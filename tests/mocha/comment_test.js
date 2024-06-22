@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {assertEventFired} from './test_helpers/events.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {
@@ -40,16 +41,16 @@ suite('Comments', function () {
     });
 
     function assertEditable(comment) {
-      chai.assert.isNotOk(comment.textBubble);
-      chai.assert.isOk(comment.textInputBubble);
+      assert.isNotOk(comment.textBubble);
+      assert.isOk(comment.textInputBubble);
     }
     function assertNotEditable(comment) {
-      chai.assert.isNotOk(comment.textInputBubble);
-      chai.assert.isOk(comment.textBubble);
+      assert.isNotOk(comment.textInputBubble);
+      assert.isOk(comment.textBubble);
     }
     test('Editable', async function () {
       await this.comment.setBubbleVisible(true);
-      chai.assert.isTrue(this.comment.bubbleIsVisible());
+      assert.isTrue(this.comment.bubbleIsVisible());
       assertEditable(this.comment);
       assertEventFired(
         this.eventsFireStub,
@@ -64,7 +65,7 @@ suite('Comments', function () {
 
       await this.comment.setBubbleVisible(true);
 
-      chai.assert.isTrue(this.comment.bubbleIsVisible());
+      assert.isTrue(this.comment.bubbleIsVisible());
       assertNotEditable(this.comment);
       assertEventFired(
         this.eventsFireStub,
@@ -80,7 +81,7 @@ suite('Comments', function () {
 
       await this.comment.updateEditable();
 
-      chai.assert.isTrue(this.comment.bubbleIsVisible());
+      assert.isTrue(this.comment.bubbleIsVisible());
       assertNotEditable(this.comment);
       assertEventFired(
         this.eventsFireStub,
@@ -98,7 +99,7 @@ suite('Comments', function () {
       editableStub.returns(true);
 
       await this.comment.updateEditable();
-      chai.assert.isTrue(this.comment.bubbleIsVisible());
+      assert.isTrue(this.comment.bubbleIsVisible());
       assertEditable(this.comment);
       assertEventFired(
         this.eventsFireStub,
@@ -115,8 +116,8 @@ suite('Comments', function () {
     });
     function assertBubbleSize(comment, height, width) {
       const size = comment.getBubbleSize();
-      chai.assert.equal(size.height, height);
-      chai.assert.equal(size.width, width);
+      assert.equal(size.height, height);
+      assert.equal(size.width, width);
     }
     function assertBubbleSizeDefault(comment) {
       assertBubbleSize(comment, 80, 160);

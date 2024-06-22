@@ -111,10 +111,8 @@ export class WorkspaceComment {
 
     this.size = size;
 
-    if (eventUtils.isEnabled()) {
-      event.recordNew();
-      eventUtils.fire(event);
-    }
+    event.recordCurrentSizeAsNewSize();
+    eventUtils.fire(event);
   }
 
   /** Returns the comment's size in workspace units. */

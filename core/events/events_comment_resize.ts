@@ -48,7 +48,7 @@ export class CommentResize extends CommentBase {
    * Record the comment's new size. Called after the resize. Can only be
    * called once.
    */
-  recordNew() {
+  recordCurrentSizeAsNewSize() {
     if (this.newSize) {
       throw Error(
         'Tried to record the new size of a comment on the ' +
@@ -87,14 +87,14 @@ export class CommentResize extends CommentBase {
     }
     if (!this.newSize) {
       throw new Error(
-        'The new comment size is undefined. Either call recordNew, or ' +
-          'call fromJson',
+        'The new comment size is undefined. Either call ' +
+          'recordCurrentSizeAsNewSize, or call fromJson',
       );
     }
-    json['oldSize'] =
-      `${Math.round(this.oldSize.width)}, ${Math.round(this.oldSize.height)}`;
-    json['newSize'] =
-      `${Math.round(this.newSize.width)}, ${Math.round(this.newSize.height)}`;
+    json['oldWidth'] = Math.round(this.oldSize.width);
+    json['oldHeight'] = Math.round(this.oldSize.height);
+    json['newWidth'] = Math.round(this.newSize.width);
+    json['newHeight'] = Math.round(this.newSize.height);
     return json;
   }
 
@@ -117,10 +117,8 @@ export class CommentResize extends CommentBase {
       workspace,
       event ?? new CommentResize(),
     ) as CommentResize;
-    let dimensions = json['oldSize'].split(',');
-    newEvent.oldSize = new Size(Number(dimensions[0]), Number(dimensions[1]));
-    dimensions = json['newSize'].split(',');
-    newEvent.newSize = new Size(Number(dimensions[0]), Number(dimensions[1]));
+    newEvent.oldSize = new Size(json['oldWidth'], json['oldHeight']);
+    newEvent.newSize = new Size(json['newWidth'], json['newHeight']);
     return newEvent;
   }
 
@@ -156,8 +154,8 @@ export class CommentResize extends CommentBase {
     if (!size) {
       throw new Error(
         'Either oldSize or newSize is undefined. ' +
-          'Either pass a comment to the constructor and call recordNew, ' +
-          'or call fromJson',
+          'Either pass a comment to the constructor and call ' +
+          'recordCurrentSizeAsNewSize, or call fromJson',
       );
     }
     comment.setSize(size);
@@ -165,8 +163,10 @@ export class CommentResize extends CommentBase {
 }
 
 export interface CommentResizeJson extends CommentBaseJson {
-  oldSize: string;
-  newSize: string;
+  oldWidth: number;
+  oldHeight: number;
+  newWidth: number;
+  newHeight: number;
 }
 
 registry.register(

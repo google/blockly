@@ -26,7 +26,7 @@ suite('Comment Resize Event', function () {
       comment.setSize(new Blockly.utils.Size(100, 100));
       const origEvent = new Blockly.Events.CommentResize(comment);
       comment.setSize(new Blockly.utils.Size(200, 200));
-      origEvent.recordNew();
+      origEvent.recordCurrentSizeAsNewSize();
 
       const json = origEvent.toJson();
       const newEvent = new Blockly.Events.fromJson(json, this.workspace);

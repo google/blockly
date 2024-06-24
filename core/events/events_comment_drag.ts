@@ -6,8 +6,6 @@
 
 /**
  * Events fired when a workspace comment is dragged.
- *
- * @class
  */
 
 import type {WorkspaceComment} from '../comments/workspace_comment.js';

@@ -6,8 +6,6 @@
 
 /**
  * Class for comment resize event.
- *
- * @class
  */
 
 import * as registry from '../registry.js';

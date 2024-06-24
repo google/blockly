@@ -204,7 +204,7 @@ export class WorkspaceComment {
     this.location = location;
 
     event.recordNew();
-    if (eventUtils.isEnabled()) eventUtils.fire(event);
+    eventUtils.fire(event);
   }
 
   /** Returns the position of the comment in workspace coordinates. */

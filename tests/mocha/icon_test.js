@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -62,7 +63,7 @@ suite('Icon', function () {
 
         block.addIcon(icon);
 
-        chai.assert.isFalse(
+        assert.isFalse(
           initViewSpy.called,
           'Expected initView to not be called',
         );
@@ -79,7 +80,7 @@ suite('Icon', function () {
           const initViewSpy = sinon.spy(icon, 'initView');
 
           block.addIcon(icon);
-          chai.assert.isTrue(
+          assert.isTrue(
             initViewSpy.calledOnce,
             'Expected initView to be called',
           );
@@ -96,7 +97,7 @@ suite('Icon', function () {
 
         block.addIcon(icon);
 
-        chai.assert.isFalse(
+        assert.isFalse(
           applyColourSpy.called,
           'Expected applyColour to not be called',
         );
@@ -112,7 +113,7 @@ suite('Icon', function () {
           const applyColourSpy = sinon.spy(icon, 'applyColour');
 
           block.addIcon(icon);
-          chai.assert.isTrue(
+          assert.isTrue(
             applyColourSpy.calledOnce,
             'Expected applyColour to be called',
           );
@@ -128,7 +129,7 @@ suite('Icon', function () {
         block.addIcon(icon);
         applyColourSpy.resetHistory();
         block.setColour('#cccccc');
-        chai.assert.isTrue(
+        assert.isTrue(
           applyColourSpy.calledOnce,
           'Expected applyColour to be called',
         );
@@ -143,7 +144,7 @@ suite('Icon', function () {
         block.addIcon(icon);
         applyColourSpy.resetHistory();
         block.setStyle('logic_block');
-        chai.assert.isTrue(
+        assert.isTrue(
           applyColourSpy.calledOnce,
           'Expected applyColour to be called',
         );
@@ -158,7 +159,7 @@ suite('Icon', function () {
         block.addIcon(icon);
         applyColourSpy.resetHistory();
         block.setDisabledReason(true, 'test reason');
-        chai.assert.isTrue(
+        assert.isTrue(
           applyColourSpy.calledOnce,
           'Expected applyColour to be called',
         );
@@ -173,7 +174,7 @@ suite('Icon', function () {
         block.addIcon(icon);
         applyColourSpy.resetHistory();
         block.setShadow(true);
-        chai.assert.isTrue(
+        assert.isTrue(
           applyColourSpy.calledOnce,
           'Expected applyColour to be called',
         );
@@ -189,7 +190,7 @@ suite('Icon', function () {
 
         block.addIcon(icon);
 
-        chai.assert.isFalse(
+        assert.isFalse(
           updateEditableSpy.called,
           'Expected updateEditable to not be called',
         );
@@ -205,7 +206,7 @@ suite('Icon', function () {
           const updateEditableSpy = sinon.spy(icon, 'updateEditable');
 
           block.addIcon(icon);
-          chai.assert.isTrue(
+          assert.isTrue(
             updateEditableSpy.calledOnce,
             'Expected updateEditable to be called',
           );
@@ -221,7 +222,7 @@ suite('Icon', function () {
         block.addIcon(icon);
         updateEditableSpy.resetHistory();
         block.setEditable(false);
-        chai.assert.isTrue(
+        assert.isTrue(
           updateEditableSpy.calledOnce,
           'Expected updateEditable to be called',
         );
@@ -237,7 +238,7 @@ suite('Icon', function () {
         block.setEditable(false);
         updateEditableSpy.resetHistory();
         block.setEditable(true);
-        chai.assert.isTrue(
+        assert.isTrue(
           updateEditableSpy.calledOnce,
           'Expected updateEditable to be called',
         );
@@ -255,7 +256,7 @@ suite('Icon', function () {
         block.setCollapsed(true);
         block.setCollapsed(false);
 
-        chai.assert.isFalse(
+        assert.isFalse(
           updateCollapsedSpy.called,
           'Expected updateCollapsed to not be called',
         );
@@ -272,7 +273,7 @@ suite('Icon', function () {
         block.setCollapsed(true);
         this.clock.runAll();
 
-        chai.assert.isTrue(
+        assert.isTrue(
           updateCollapsedSpy.called,
           'Expected updateCollapsed to be called',
         );
@@ -289,7 +290,7 @@ suite('Icon', function () {
         block.setCollapsed(false);
         this.clock.runAll();
 
-        chai.assert.isTrue(
+        assert.isTrue(
           updateCollapsedSpy.called,
           'Expected updateCollapsed to be called',
         );
@@ -302,7 +303,7 @@ suite('Icon', function () {
       const block = createHeadlessBlock(createHeadlessWorkspace());
       block.addIcon(new MockSerializableIcon());
       const json = Blockly.serialization.blocks.save(block);
-      chai.assert.deepNestedInclude(
+      assert.deepNestedInclude(
         json,
         {'icons': {'serializable icon': 'some state'}},
         'Expected the JSON to include the saved state of the ' +
@@ -314,7 +315,7 @@ suite('Icon', function () {
       const block = createHeadlessBlock(createHeadlessWorkspace());
       block.addIcon(new MockNonSerializableIcon());
       const json = Blockly.serialization.blocks.save(block);
-      chai.assert.notProperty(
+      assert.notProperty(
         json,
         'icons',
         'Expected the JSON to not include any saved state for icons',
@@ -337,7 +338,7 @@ suite('Icon', function () {
         },
       };
       const block = Blockly.serialization.blocks.append(json, workspace);
-      chai.assert.equal(
+      assert.equal(
         block.getIcon('serializable icon').state,
         'some state',
         'Expected the icon to have been properly instantiated and ' +
@@ -355,7 +356,7 @@ suite('Icon', function () {
           'serializable icon': 'some state',
         },
       };
-      chai.assert.throws(
+      assert.throws(
         () => {
           Blockly.serialization.blocks.append(json, workspace);
         },

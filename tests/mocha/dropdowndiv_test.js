@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -51,10 +52,10 @@ suite('DropDownDiv', function () {
         -10,
       );
       // "Above" in value actually means below in render.
-      chai.assert.isAtLeast(metrics.initialY, 0);
-      chai.assert.isAbove(metrics.finalY, 0);
-      chai.assert.isTrue(metrics.arrowVisible);
-      chai.assert.isTrue(metrics.arrowAtTop);
+      assert.isAtLeast(metrics.initialY, 0);
+      assert.isAbove(metrics.finalY, 0);
+      assert.isTrue(metrics.arrowVisible);
+      assert.isTrue(metrics.arrowAtTop);
     });
     test('Above, in Bounds', function () {
       const metrics = Blockly.DropDownDiv.TEST_ONLY.getPositionMetrics(
@@ -64,10 +65,10 @@ suite('DropDownDiv', function () {
         90,
       );
       // "Below" in value actually means above in render.
-      chai.assert.isAtMost(metrics.initialY, 100);
-      chai.assert.isBelow(metrics.finalY, 100);
-      chai.assert.isTrue(metrics.arrowVisible);
-      chai.assert.isFalse(metrics.arrowAtTop);
+      assert.isAtMost(metrics.initialY, 100);
+      assert.isBelow(metrics.finalY, 100);
+      assert.isTrue(metrics.arrowVisible);
+      assert.isFalse(metrics.arrowAtTop);
     });
     test('Below, out of Bounds', function () {
       const metrics = Blockly.DropDownDiv.TEST_ONLY.getPositionMetrics(
@@ -77,10 +78,10 @@ suite('DropDownDiv', function () {
         50,
       );
       // "Above" in value actually means below in render.
-      chai.assert.isAtLeast(metrics.initialY, 60);
-      chai.assert.isAbove(metrics.finalY, 60);
-      chai.assert.isTrue(metrics.arrowVisible);
-      chai.assert.isTrue(metrics.arrowAtTop);
+      assert.isAtLeast(metrics.initialY, 60);
+      assert.isAbove(metrics.finalY, 60);
+      assert.isTrue(metrics.arrowVisible);
+      assert.isTrue(metrics.arrowAtTop);
     });
     test('Above, in Bounds', function () {
       const metrics = Blockly.DropDownDiv.TEST_ONLY.getPositionMetrics(
@@ -90,10 +91,10 @@ suite('DropDownDiv', function () {
         90,
       );
       // "Below" in value actually means above in render.
-      chai.assert.isAtMost(metrics.initialY, 100);
-      chai.assert.isBelow(metrics.finalY, 100);
-      chai.assert.isTrue(metrics.arrowVisible);
-      chai.assert.isFalse(metrics.arrowAtTop);
+      assert.isAtMost(metrics.initialY, 100);
+      assert.isBelow(metrics.finalY, 100);
+      assert.isTrue(metrics.arrowVisible);
+      assert.isFalse(metrics.arrowAtTop);
     });
     test('No Solution, Render At Top', function () {
       this.clientHeightStub.get(function () {
@@ -106,10 +107,10 @@ suite('DropDownDiv', function () {
         50,
       );
       // "Above" in value actually means below in render.
-      chai.assert.equal(metrics.initialY, 0);
-      chai.assert.equal(metrics.finalY, 0);
-      chai.assert.isFalse(metrics.arrowVisible);
-      chai.assert.isNotOk(metrics.arrowAtTop);
+      assert.equal(metrics.initialY, 0);
+      assert.equal(metrics.finalY, 0);
+      assert.isFalse(metrics.arrowVisible);
+      assert.isNotOk(metrics.arrowAtTop);
     });
   });
 });

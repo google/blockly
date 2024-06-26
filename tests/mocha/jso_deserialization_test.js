@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -39,10 +40,10 @@ suite('JSO Deserialization', function () {
           ],
         },
       };
-      chai.assert.throws(() => {
+      assert.throws(() => {
         Blockly.serialization.workspaces.load(state, this.workspace);
       });
-      chai.assert.isTrue(
+      assert.isTrue(
         Blockly.Events.isEnabled(),
         'Expected events to be enabled',
       );
@@ -121,7 +122,7 @@ suite('JSO Deserialization', function () {
         Blockly.serialization.workspaces.load(state, this.workspace);
         const calls = this.eventsFireStub.getCalls();
         const group = calls[0].args[0].group;
-        chai.assert.isTrue(calls.every((call) => call.args[0].group == group));
+        assert.isTrue(calls.every((call) => call.args[0].group == group));
       });
     });
 
@@ -217,7 +218,7 @@ suite('JSO Deserialization', function () {
         Blockly.serialization.workspaces.load(state, this.workspace);
         const calls = this.eventsFireStub.getCalls();
         const group = calls[0].args[0].group;
-        chai.assert.isTrue(calls.every((call) => call.args[0].group == group));
+        assert.isTrue(calls.every((call) => call.args[0].group == group));
       });
 
       test('Var with block', function () {
@@ -252,7 +253,7 @@ suite('JSO Deserialization', function () {
           }
           return acc;
         }, 0);
-        chai.assert.equal(count, 1);
+        assert.equal(count, 1);
         assertEventFired(
           this.eventsFireStub,
           Blockly.Events.VarCreate,
@@ -363,9 +364,7 @@ suite('JSO Deserialization', function () {
           Blockly.serialization.workspaces.load(state, this.workspace);
           const calls = this.eventsFireStub.getCalls();
           const group = calls[0].args[0].group;
-          chai.assert.isTrue(
-            calls.every((call) => call.args[0].group == group),
-          );
+          assert.isTrue(calls.every((call) => call.args[0].group == group));
         });
 
         test('With children', function () {
@@ -467,7 +466,7 @@ suite('JSO Deserialization', function () {
   suite('Exceptions', function () {
     setup(function () {
       this.assertThrows = function (state, error) {
-        chai.assert.throws(() => {
+        assert.throws(() => {
           Blockly.serialization.workspaces.load(state, this.workspace);
         }, error);
       };
@@ -748,7 +747,7 @@ suite('JSO Deserialization', function () {
     Blockly.serialization.registry.register('blocks', blocksSerializer);
     Blockly.serialization.registry.register('variables', variablesSerializer);
 
-    chai.assert.deepEqual(calls, [
+    assert.deepEqual(calls, [
       'third-clear',
       'second-clear',
       'first-clear',
@@ -786,7 +785,7 @@ suite('JSO Deserialization', function () {
 
       delete Blockly.Blocks['test_block'];
 
-      chai.assert.equal(block.someProperty, 'some value');
+      assert.equal(block.someProperty, 'some value');
     });
   });
 
@@ -816,7 +815,7 @@ suite('JSO Deserialization', function () {
 
       this.procedureSerializer.load(state, this.workspace);
 
-      chai.assert.isTrue(
+      assert.isTrue(
         spy.calledOnce,
         'Expected the loadState method to be called',
       );
@@ -841,7 +840,7 @@ suite('JSO Deserialization', function () {
 
       this.procedureSerializer.load(state, this.workspace);
 
-      chai.assert.isTrue(
+      assert.isTrue(
         spy.calledTwice,
         'Expected the loadState method to be called once for each parameter',
       );

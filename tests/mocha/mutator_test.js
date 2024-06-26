@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -51,7 +52,7 @@ suite('Mutator', function () {
       mutatorWorkspace
         .getBlockById('check_block')
         .setFieldValue('TRUE', 'CHECK');
-      chai.assert.isTrue(
+      assert.isTrue(
         this.eventsFireStub
           .getCalls()
           .some(

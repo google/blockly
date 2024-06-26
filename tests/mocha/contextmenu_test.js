@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -42,9 +43,9 @@ suite('Context Menu', function () {
       const callback = callbackFactory(this.forLoopBlock, xmlBlock);
       const getVarBlock = callback();
 
-      chai.assert.equal(getVarBlock.type, 'variables_get');
-      chai.assert.equal(getVarBlock.workspace, this.forLoopBlock.workspace);
-      chai.assert.equal(
+      assert.equal(getVarBlock.type, 'variables_get');
+      assert.equal(getVarBlock.workspace, this.forLoopBlock.workspace);
+      assert.equal(
         getVarBlock.getField('VAR').getVariable().getId(),
         this.forLoopBlock.getField('VAR').getVariable().getId(),
       );
@@ -59,9 +60,9 @@ suite('Context Menu', function () {
       const callback = callbackFactory(this.forLoopBlock, jsonState);
       const getVarBlock = callback();
 
-      chai.assert.equal(getVarBlock.type, 'variables_get');
-      chai.assert.equal(getVarBlock.workspace, this.forLoopBlock.workspace);
-      chai.assert.equal(
+      assert.equal(getVarBlock.type, 'variables_get');
+      assert.equal(getVarBlock.workspace, this.forLoopBlock.workspace);
+      assert.equal(
         getVarBlock.getField('VAR').getVariable().getId(),
         this.forLoopBlock.getField('VAR').getVariable().getId(),
       );

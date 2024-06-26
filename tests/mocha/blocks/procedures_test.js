@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../../node_modules/chai/chai.js';
 import * as Blockly from '../../../build/src/core/blockly.js';
 import {
   assertCallBlockStructure,
@@ -45,7 +46,7 @@ suite('Procedures', function () {
 
       defBlock.setFieldValue('new name', 'NAME');
 
-      chai.assert.equal(
+      assert.equal(
         callBlock.getFieldValue('NAME'),
         'new name',
         'Expected the procedure block to be renamed',
@@ -71,12 +72,12 @@ suite('Procedures', function () {
 
         defBlockB.setFieldValue('procA', 'NAME');
 
-        chai.assert.notEqual(
+        assert.notEqual(
           defBlockB.getFieldValue('NAME'),
           'procA',
           'Expected the procedure def block to have a legal name',
         );
-        chai.assert.notEqual(
+        assert.notEqual(
           callBlockB.getFieldValue('NAME'),
           'procA',
           'Expected the procedure call block to have a legal name',
@@ -112,7 +113,7 @@ suite('Procedures', function () {
         .getWorkspace()
         .getTopBlocks(true)[0]
         .getFieldValue('NAME');
-      chai.assert.notEqual(
+      assert.notEqual(
         newFlyoutParamName,
         origFlyoutParamName,
         'Expected the flyout param to have updated to not conflict',
@@ -133,11 +134,11 @@ suite('Procedures', function () {
         .connection.connect(paramBlock.previousConnection);
       this.clock.runAll();
 
-      chai.assert.isNotNull(
+      assert.isNotNull(
         defBlock.getField('PARAMS'),
         'Expected the params field to exist',
       );
-      chai.assert.isTrue(
+      assert.isTrue(
         defBlock.getFieldValue('PARAMS').includes('param1'),
         'Expected the params field to contain the name of the new param',
       );
@@ -158,11 +159,11 @@ suite('Procedures', function () {
         .connection.connect(paramBlock.previousConnection);
       this.clock.runAll();
 
-      chai.assert.isNotNull(
+      assert.isNotNull(
         callBlock.getInput('ARG0'),
         'Expected the param input to exist',
       );
-      chai.assert.equal(
+      assert.equal(
         callBlock.getFieldValue('ARGNAME0'),
         'param1',
         'Expected the params field to match the name of the new param',
@@ -185,7 +186,7 @@ suite('Procedures', function () {
 
       this.workspace.undo();
 
-      chai.assert.isFalse(
+      assert.isFalse(
         defBlock.getFieldValue('PARAMS').includes('param1'),
         'Expected the params field to not contain the name of the new param',
       );
@@ -211,11 +212,11 @@ suite('Procedures', function () {
         this.workspace.undo();
         this.workspace.undo(/* redo= */ true);
 
-        chai.assert.isNotNull(
+        assert.isNotNull(
           defBlock.getField('PARAMS'),
           'Expected the params field to exist',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           defBlock.getFieldValue('PARAMS').includes('param1'),
           'Expected the params field to contain the name of the new param',
         );
@@ -241,7 +242,7 @@ suite('Procedures', function () {
       paramBlock.checkAndDelete();
       this.clock.runAll();
 
-      chai.assert.isFalse(
+      assert.isFalse(
         defBlock.getFieldValue('PARAMS').includes('param1'),
         'Expected the params field to not contain the name of the new param',
       );
@@ -265,7 +266,7 @@ suite('Procedures', function () {
       paramBlock.checkAndDelete();
       this.clock.runAll();
 
-      chai.assert.isNull(
+      assert.isNull(
         callBlock.getInput('ARG0'),
         'Expected the param input to not exist',
       );
@@ -289,7 +290,7 @@ suite('Procedures', function () {
 
       this.workspace.undo();
 
-      chai.assert.isTrue(
+      assert.isTrue(
         defBlock.getFieldValue('PARAMS').includes('param1'),
         'Expected the params field to contain the name of the new param',
       );
@@ -317,7 +318,7 @@ suite('Procedures', function () {
         this.workspace.undo();
         this.workspace.undo(/* redo= */ true);
 
-        chai.assert.isFalse(
+        assert.isFalse(
           defBlock.getFieldValue('PARAMS').includes('param1'),
           'Expected the params field to not contain the name of the new param',
         );
@@ -343,11 +344,11 @@ suite('Procedures', function () {
       paramBlock.setFieldValue('new name', 'NAME');
       this.clock.runAll();
 
-      chai.assert.isNotNull(
+      assert.isNotNull(
         defBlock.getField('PARAMS'),
         'Expected the params field to exist',
       );
-      chai.assert.isTrue(
+      assert.isTrue(
         defBlock.getFieldValue('PARAMS').includes('new name'),
         'Expected the params field to contain the new name of the param',
       );
@@ -373,11 +374,11 @@ suite('Procedures', function () {
       paramBlock1.setFieldValue('new name', 'NAME');
       this.clock.runAll();
 
-      chai.assert.isNotNull(
+      assert.isNotNull(
         defBlock.getField('PARAMS'),
         'Expected the params field to exist',
       );
-      chai.assert.isTrue(
+      assert.isTrue(
         defBlock.getFieldValue('PARAMS').includes('new name'),
         'Expected the params field to contain the new name of the param',
       );
@@ -401,11 +402,11 @@ suite('Procedures', function () {
       paramBlock.setFieldValue('new name', 'NAME');
       this.clock.runAll();
 
-      chai.assert.isNotNull(
+      assert.isNotNull(
         callBlock.getInput('ARG0'),
         'Expected the param input to exist',
       );
-      chai.assert.equal(
+      assert.equal(
         callBlock.getFieldValue('ARGNAME0'),
         'new name',
         'Expected the params field to match the name of the new param',
@@ -430,7 +431,7 @@ suite('Procedures', function () {
       paramBlock.setFieldValue('param2', 'NAME');
       this.clock.runAll();
 
-      chai.assert.isNotNull(
+      assert.isNotNull(
         this.workspace.getVariable('param1', ''),
         'Expected the old variable to continue to exist',
       );
@@ -454,11 +455,11 @@ suite('Procedures', function () {
       const variable = this.workspace.getVariable('param1', '');
       this.workspace.renameVariableById(variable.getId(), 'new name');
 
-      chai.assert.isNotNull(
+      assert.isNotNull(
         defBlock.getField('PARAMS'),
         'Expected the params field to exist',
       );
-      chai.assert.isTrue(
+      assert.isTrue(
         defBlock.getFieldValue('PARAMS').includes('new name'),
         'Expected the params field to contain the new name of the param',
       );
@@ -481,7 +482,7 @@ suite('Procedures', function () {
       const variable = this.workspace.getVariable('param1', '');
       this.workspace.renameVariableById(variable.getId(), 'new name');
 
-      chai.assert.equal(
+      assert.equal(
         paramBlock.getFieldValue('NAME'),
         'new name',
         'Expected the params field to contain the new name of the param',
@@ -507,11 +508,11 @@ suite('Procedures', function () {
       const variable = this.workspace.getVariable('param1', '');
       this.workspace.renameVariableById(variable.getId(), 'new name');
 
-      chai.assert.isNotNull(
+      assert.isNotNull(
         callBlock.getInput('ARG0'),
         'Expected the param input to exist',
       );
-      chai.assert.equal(
+      assert.equal(
         callBlock.getFieldValue('ARGNAME0'),
         'new name',
         'Expected the params field to match the name of the new param',
@@ -536,11 +537,11 @@ suite('Procedures', function () {
       const variable = this.workspace.getVariable('param1', '');
       this.workspace.renameVariableById(variable.getId(), 'preCreatedVar');
 
-      chai.assert.isNotNull(
+      assert.isNotNull(
         defBlock.getField('PARAMS'),
         'Expected the params field to exist',
       );
-      chai.assert.isTrue(
+      assert.isTrue(
         defBlock.getFieldValue('PARAMS').includes('preCreatedVar'),
         'Expected the params field to contain the new name of the param',
       );
@@ -563,7 +564,7 @@ suite('Procedures', function () {
       const variable = this.workspace.getVariable('param1', '');
       this.workspace.renameVariableById(variable.getId(), 'preCreatedVar');
 
-      chai.assert.equal(
+      assert.equal(
         paramBlock.getFieldValue('NAME'),
         'preCreatedVar',
         'Expected the params field to contain the new name of the param',
@@ -589,11 +590,11 @@ suite('Procedures', function () {
       const variable = this.workspace.getVariable('param1', '');
       this.workspace.renameVariableById(variable.getId(), 'preCreatedVar');
 
-      chai.assert.isNotNull(
+      assert.isNotNull(
         callBlock.getInput('ARG0'),
         'Expected the param input to exist',
       );
-      chai.assert.equal(
+      assert.equal(
         callBlock.getFieldValue('ARGNAME0'),
         'preCreatedVar',
         'Expected the params field to match the name of the new param',
@@ -631,7 +632,7 @@ suite('Procedures', function () {
       this.workspace.undo();
       this.clock.runAll();
 
-      chai.assert.isTrue(
+      assert.isTrue(
         defBlock.getFieldValue('PARAMS').includes('param1'),
         'Expected the params field to contain the old name of the param',
       );
@@ -662,7 +663,7 @@ suite('Procedures', function () {
       this.workspace.undo();
       this.workspace.undo(/* redo= */ true);
 
-      chai.assert.isTrue(
+      assert.isTrue(
         defBlock.getFieldValue('PARAMS').includes('new'),
         'Expected the params field to contain the new name of the param',
       );
@@ -696,11 +697,11 @@ suite('Procedures', function () {
       paramBlock2.nextConnection.connect(paramBlock1.previousConnection);
       this.clock.runAll();
 
-      chai.assert.isNotNull(
+      assert.isNotNull(
         defBlock.getField('PARAMS'),
         'Expected the params field to exist',
       );
-      chai.assert.isTrue(
+      assert.isTrue(
         defBlock.getFieldValue('PARAMS').includes('param2, param1'),
         'Expected the params field order to match the parameter order',
       );
@@ -733,20 +734,20 @@ suite('Procedures', function () {
       paramBlock2.nextConnection.connect(paramBlock1.previousConnection);
       this.clock.runAll();
 
-      chai.assert.isNotNull(
+      assert.isNotNull(
         callBlock.getInput('ARG0'),
         'Expected the param input to exist',
       );
-      chai.assert.equal(
+      assert.equal(
         callBlock.getFieldValue('ARGNAME0'),
         'param2',
         'Expected the params field to match the name of the second param',
       );
-      chai.assert.isNotNull(
+      assert.isNotNull(
         callBlock.getInput('ARG1'),
         'Expected the param input to exist',
       );
-      chai.assert.equal(
+      assert.equal(
         callBlock.getFieldValue('ARGNAME1'),
         'param1',
         'Expected the params field to match the name of the first param',
@@ -789,12 +790,12 @@ suite('Procedures', function () {
         paramBlock2.nextConnection.connect(paramBlock1.previousConnection);
         this.clock.runAll();
 
-        chai.assert.equal(
+        assert.equal(
           callBlock.getInputTargetBlock('ARG0'),
           block2,
           'Expected the second block to be in the first slot',
         );
-        chai.assert.equal(
+        assert.equal(
           callBlock.getInputTargetBlock('ARG1'),
           block1,
           'Expected the first block to be in the second slot',
@@ -814,7 +815,7 @@ suite('Procedures', function () {
         defBlock.setDisabledReason(true, 'MANUALLY_DISABLED');
         this.clock.runAll();
 
-        chai.assert.isFalse(
+        assert.isFalse(
           callBlock.isEnabled(),
           'Expected the caller block to be disabled',
         );
@@ -831,7 +832,7 @@ suite('Procedures', function () {
         defBlock.setDisabledReason(true, 'test reason');
         this.clock.runAll();
 
-        chai.assert.isFalse(
+        assert.isFalse(
           callBlock.isEnabled(),
           'Expected the caller block to be invalid',
         );
@@ -850,7 +851,7 @@ suite('Procedures', function () {
         defBlock.setDisabledReason(false, 'MANUALLY_DISABLED');
         this.clock.runAll();
 
-        chai.assert.isTrue(
+        assert.isTrue(
           callBlock.isEnabled(),
           'Expected the caller block to be enabled',
         );
@@ -872,7 +873,7 @@ suite('Procedures', function () {
         defBlock.setDisabledReason(false, 'MANUALLY_DISABLED');
         this.clock.runAll();
 
-        chai.assert.isFalse(
+        assert.isFalse(
           callBlock.isEnabled(),
           'Expected the caller block to continue to be disabled',
         );
@@ -887,7 +888,7 @@ suite('Procedures', function () {
         this.workspace,
       );
       this.clock.runAll();
-      chai.assert.isFalse(
+      assert.isFalse(
         ifreturnBlock.isEnabled(),
         'Expected the ifreturn block to be invalid',
       );
@@ -903,7 +904,7 @@ suite('Procedures', function () {
         .getInput('STACK')
         .connection.connect(ifreturnBlock.previousConnection);
       this.clock.runAll();
-      chai.assert.isTrue(
+      assert.isTrue(
         ifreturnBlock.isEnabled(),
         'Expected the ifreturn block to be valid',
       );
@@ -923,11 +924,11 @@ suite('Procedures', function () {
         defBlock.dispose();
         this.clock.runAll();
 
-        chai.assert.isTrue(
+        assert.isTrue(
           callBlock1.disposed,
           'Expected the first caller to be disposed',
         );
-        chai.assert.isTrue(
+        assert.isTrue(
           callBlock2.disposed,
           'Expected the second caller to be disposed',
         );
@@ -1233,7 +1234,7 @@ suite('Procedures', function () {
       const options = [];
       def.customContextMenu(options);
 
-      chai.assert.isTrue(
+      assert.isTrue(
         options[0].text.includes('test name'),
         'Expected the context menu to have an option to create the caller',
       );
@@ -1267,11 +1268,11 @@ suite('Procedures', function () {
       const options = [];
       def.customContextMenu(options);
 
-      chai.assert.isTrue(
+      assert.isTrue(
         options[1].text.includes('testParam1'),
         'Expected the context menu to have an option to create the first param',
       );
-      chai.assert.isTrue(
+      assert.isTrue(
         options[2].text.includes('testParam2'),
         'Expected the context menu to have an option to create the second param',
       );
@@ -1286,13 +1287,13 @@ suite('Procedures', function () {
       returnBlock.setFieldValue('return', 'NAME');
 
       const allProcedures = Blockly.Procedures.allProcedures(this.workspace);
-      chai.assert.lengthOf(allProcedures, 2);
+      assert.lengthOf(allProcedures, 2);
 
-      chai.assert.lengthOf(allProcedures[0], 1);
-      chai.assert.equal(allProcedures[0][0][0], 'no return');
+      assert.lengthOf(allProcedures[0], 1);
+      assert.equal(allProcedures[0][0][0], 'no return');
 
-      chai.assert.lengthOf(allProcedures[1], 1);
-      chai.assert.equal(allProcedures[1][0][0], 'return');
+      assert.lengthOf(allProcedures[1], 1);
+      assert.equal(allProcedures[1][0][0], 'return');
     });
 
     test('Multiple Blocks', function () {
@@ -1305,26 +1306,26 @@ suite('Procedures', function () {
       const _ = this.workspace.newBlock('controls_if');
 
       const allProcedures = Blockly.Procedures.allProcedures(this.workspace);
-      chai.assert.lengthOf(allProcedures, 2);
+      assert.lengthOf(allProcedures, 2);
 
-      chai.assert.lengthOf(allProcedures[0], 1);
-      chai.assert.equal(allProcedures[0][0][0], 'no return');
+      assert.lengthOf(allProcedures[0], 1);
+      assert.equal(allProcedures[0][0][0], 'no return');
 
-      chai.assert.lengthOf(allProcedures[1], 2);
-      chai.assert.equal(allProcedures[1][0][0], 'return');
-      chai.assert.equal(allProcedures[1][1][0], 'return2');
+      assert.lengthOf(allProcedures[1], 2);
+      assert.equal(allProcedures[1][0][0], 'return');
+      assert.equal(allProcedures[1][1][0], 'return2');
     });
 
     test('No Procedures', function () {
       const _ = this.workspace.newBlock('controls_if');
       const allProcedures = Blockly.Procedures.allProcedures(this.workspace);
-      chai.assert.lengthOf(allProcedures, 2);
-      chai.assert.lengthOf(
+      assert.lengthOf(allProcedures, 2);
+      assert.lengthOf(
         allProcedures[0],
         0,
         'No procedures_defnoreturn blocks expected',
       );
-      chai.assert.lengthOf(
+      assert.lengthOf(
         allProcedures[1],
         0,
         'No procedures_defreturn blocks expected',
@@ -1334,21 +1335,19 @@ suite('Procedures', function () {
 
   suite('isNameUsed', function () {
     test('returns false if no blocks or models exists', function () {
-      chai.assert.isFalse(
+      assert.isFalse(
         Blockly.Procedures.isNameUsed('proc name', this.workspace),
       );
     });
 
     test('returns true if an associated block exists', function () {
       createProcDefBlock(this.workspace, false, [], 'proc name');
-      chai.assert.isTrue(
-        Blockly.Procedures.isNameUsed('proc name', this.workspace),
-      );
+      assert.isTrue(Blockly.Procedures.isNameUsed('proc name', this.workspace));
     });
 
     test('return false if an associated block does not exist', function () {
       createProcDefBlock(this.workspace, false, [], 'proc name');
-      chai.assert.isFalse(
+      assert.isFalse(
         Blockly.Procedures.isNameUsed('other proc name', this.workspace),
       );
     });
@@ -1357,16 +1356,14 @@ suite('Procedures', function () {
       this.workspace
         .getProcedureMap()
         .add(new MockProcedureModel().setName('proc name'));
-      chai.assert.isTrue(
-        Blockly.Procedures.isNameUsed('proc name', this.workspace),
-      );
+      assert.isTrue(Blockly.Procedures.isNameUsed('proc name', this.workspace));
     });
 
     test('returns false if an associated procedure model exists', function () {
       this.workspace
         .getProcedureMap()
         .add(new MockProcedureModel().setName('proc name'));
-      chai.assert.isFalse(
+      assert.isFalse(
         Blockly.Procedures.isNameUsed('other proc name', this.workspace),
       );
     });
@@ -1381,20 +1378,20 @@ suite('Procedures', function () {
     ) {
       const allProcedures = Blockly.Procedures.allProcedures(workspace);
       const defNoReturnBlocks = allProcedures[0];
-      chai.assert.lengthOf(
+      assert.lengthOf(
         defNoReturnBlocks,
         noReturnNames.length,
         `Expected the number of no return blocks to be ${noReturnNames.length}`,
       );
       for (let i = 0; i < noReturnNames.length; i++) {
         const expectedName = noReturnNames[i];
-        chai.assert.equal(defNoReturnBlocks[i][0], expectedName);
+        assert.equal(defNoReturnBlocks[i][0], expectedName);
         if (hasCallers) {
           const callers = Blockly.Procedures.getCallers(
             expectedName,
             workspace,
           );
-          chai.assert.lengthOf(
+          assert.lengthOf(
             callers,
             1,
             `Expected there to be one caller of the ${expectedName} block`,
@@ -1402,20 +1399,20 @@ suite('Procedures', function () {
         }
       }
       const defReturnBlocks = allProcedures[1];
-      chai.assert.lengthOf(
+      assert.lengthOf(
         defReturnBlocks,
         returnNames.length,
         `Expected the number of return blocks to be ${returnNames.length}`,
       );
       for (let i = 0; i < returnNames.length; i++) {
         const expectedName = returnNames[i];
-        chai.assert.equal(defReturnBlocks[i][0], expectedName);
+        assert.equal(defReturnBlocks[i][0], expectedName);
         if (hasCallers) {
           const callers = Blockly.Procedures.getCallers(
             expectedName,
             workspace,
           );
-          chai.assert.lengthOf(
+          assert.lengthOf(
             callers,
             1,
             `Expected there to be one caller of the ${expectedName} block`,
@@ -1429,7 +1426,7 @@ suite('Procedures', function () {
         expectedCount *= 2;
       }
       const blocks = workspace.getAllBlocks(false);
-      chai.assert.lengthOf(blocks, expectedCount);
+      assert.lengthOf(blocks, expectedCount);
     }
 
     suite('no name renamed to unnamed', function () {
@@ -1532,7 +1529,7 @@ suite('Procedures', function () {
       // Do not require procedures to be the built-in procedures.
       const defBlock = this.workspace.newBlock('new_proc');
       const def = Blockly.Procedures.getDefinition('test', this.workspace);
-      chai.assert.equal(def, defBlock);
+      assert.equal(def, defBlock);
     });
 
     test('Stacked procedures', function () {
@@ -1542,7 +1539,7 @@ suite('Procedures', function () {
       blockB.name = 'b';
       blockA.nextConnection.connect(blockB.previousConnection);
       const def = Blockly.Procedures.getDefinition('b', this.workspace);
-      chai.assert.equal(def, blockB);
+      assert.equal(def, blockB);
     });
   });
 
@@ -1612,8 +1609,8 @@ suite('Procedures', function () {
             this.defBlock.getFieldValue('NAME') + '2',
             'NAME',
           );
-          chai.assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name2');
-          chai.assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name2');
+          assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name2');
+          assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name2');
         });
         test('Simple, Input', function () {
           const defInput = this.defBlock.getField('NAME');
@@ -1625,8 +1622,8 @@ suite('Procedures', function () {
 
           defInput.htmlInput_.value = 'proc name2';
           defInput.onHtmlInputChange_(null);
-          chai.assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name2');
-          chai.assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name2');
+          assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name2');
+          assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name2');
         });
         test('lower -> CAPS', function () {
           const defInput = this.defBlock.getField('NAME');
@@ -1638,8 +1635,8 @@ suite('Procedures', function () {
 
           defInput.htmlInput_.value = 'PROC NAME';
           defInput.onHtmlInputChange_(null);
-          chai.assert.equal(this.defBlock.getFieldValue('NAME'), 'PROC NAME');
-          chai.assert.equal(this.callBlock.getFieldValue('NAME'), 'PROC NAME');
+          assert.equal(this.defBlock.getFieldValue('NAME'), 'PROC NAME');
+          assert.equal(this.callBlock.getFieldValue('NAME'), 'PROC NAME');
         });
         test('CAPS -> lower', function () {
           this.defBlock.setFieldValue('PROC NAME', 'NAME');
@@ -1653,8 +1650,8 @@ suite('Procedures', function () {
 
           defInput.htmlInput_.value = 'proc name';
           defInput.onHtmlInputChange_(null);
-          chai.assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name');
-          chai.assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name');
+          assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name');
+          assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name');
         });
         test('Whitespace', function () {
           const defInput = this.defBlock.getField('NAME');
@@ -1666,8 +1663,8 @@ suite('Procedures', function () {
 
           defInput.htmlInput_.value = 'proc name ';
           defInput.onHtmlInputChange_(null);
-          chai.assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name');
-          chai.assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name');
+          assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name');
+          assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name');
         });
         test('Whitespace then Text', function () {
           const defInput = this.defBlock.getField('NAME');
@@ -1681,11 +1678,8 @@ suite('Procedures', function () {
           defInput.onHtmlInputChange_(null);
           defInput.htmlInput_.value = 'proc name 2';
           defInput.onHtmlInputChange_(null);
-          chai.assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name 2');
-          chai.assert.equal(
-            this.callBlock.getFieldValue('NAME'),
-            'proc name 2',
-          );
+          assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name 2');
+          assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name 2');
         });
         test('Set Empty', function () {
           const defInput = this.defBlock.getField('NAME');
@@ -1697,11 +1691,11 @@ suite('Procedures', function () {
 
           defInput.htmlInput_.value = '';
           defInput.onHtmlInputChange_(null);
-          chai.assert.equal(
+          assert.equal(
             this.defBlock.getFieldValue('NAME'),
             Blockly.Msg['UNNAMED_KEY'],
           );
-          chai.assert.equal(
+          assert.equal(
             this.callBlock.getFieldValue('NAME'),
             Blockly.Msg['UNNAMED_KEY'],
           );
@@ -1718,11 +1712,11 @@ suite('Procedures', function () {
           defInput.onHtmlInputChange_(null);
           const newDefBlock = this.workspace.newBlock(testSuite.defType);
           newDefBlock.setFieldValue('new name', 'NAME');
-          chai.assert.equal(
+          assert.equal(
             this.defBlock.getFieldValue('NAME'),
             Blockly.Msg['UNNAMED_KEY'],
           );
-          chai.assert.equal(
+          assert.equal(
             this.callBlock.getFieldValue('NAME'),
             Blockly.Msg['UNNAMED_KEY'],
           );
@@ -1754,8 +1748,8 @@ suite('Procedures', function () {
             'proc name',
             this.workspace,
           );
-          chai.assert.equal(callers.length, 1);
-          chai.assert.equal(callers[0], this.callBlock);
+          assert.equal(callers.length, 1);
+          assert.equal(callers[0], this.callBlock);
         });
         test('Multiple Callers', function () {
           const caller2 = this.workspace.newBlock(testSuite.callType);
@@ -1767,10 +1761,10 @@ suite('Procedures', function () {
             'proc name',
             this.workspace,
           );
-          chai.assert.equal(callers.length, 3);
-          chai.assert.equal(callers[0], this.callBlock);
-          chai.assert.equal(callers[1], caller2);
-          chai.assert.equal(callers[2], caller3);
+          assert.equal(callers.length, 3);
+          assert.equal(callers[0], this.callBlock);
+          assert.equal(callers[1], caller2);
+          assert.equal(callers[2], caller3);
         });
         test('Multiple Procedures', function () {
           const def2 = this.workspace.newBlock(testSuite.defType);
@@ -1782,8 +1776,8 @@ suite('Procedures', function () {
             'proc name',
             this.workspace,
           );
-          chai.assert.equal(callers.length, 1);
-          chai.assert.equal(callers[0], this.callBlock);
+          assert.equal(callers.length, 1);
+          assert.equal(callers[0], this.callBlock);
         });
         // This can occur if you:
         //  1) Create an uppercase definition and call block.
@@ -1799,8 +1793,8 @@ suite('Procedures', function () {
             'proc name',
             this.workspace,
           );
-          chai.assert.equal(callers.length, 1);
-          chai.assert.equal(callers[0], this.callBlock);
+          assert.equal(callers.length, 1);
+          assert.equal(callers[0], this.callBlock);
         });
         test('Multiple Workspaces', function () {
           const workspace = new Blockly.Workspace();
@@ -1814,12 +1808,12 @@ suite('Procedures', function () {
               'proc name',
               this.workspace,
             );
-            chai.assert.equal(callers.length, 1);
-            chai.assert.equal(callers[0], this.callBlock);
+            assert.equal(callers.length, 1);
+            assert.equal(callers[0], this.callBlock);
 
             callers = Blockly.Procedures.getCallers('proc name', workspace);
-            chai.assert.equal(callers.length, 1);
-            chai.assert.equal(callers[0], caller2);
+            assert.equal(callers.length, 1);
+            assert.equal(callers[0], caller2);
           } finally {
             workspaceTeardown.call(this, workspace);
           }
@@ -1851,7 +1845,7 @@ suite('Procedures', function () {
             'proc name',
             this.workspace,
           );
-          chai.assert.equal(def, this.defBlock);
+          assert.equal(def, this.defBlock);
         });
         test('Multiple Procedures', function () {
           const def2 = this.workspace.newBlock(testSuite.defType);
@@ -1863,7 +1857,7 @@ suite('Procedures', function () {
             'proc name',
             this.workspace,
           );
-          chai.assert.equal(def, this.defBlock);
+          assert.equal(def, this.defBlock);
         });
         test('Multiple Workspaces', function () {
           const workspace = new Blockly.Workspace();
@@ -1877,10 +1871,10 @@ suite('Procedures', function () {
               'proc name',
               this.workspace,
             );
-            chai.assert.equal(def, this.defBlock);
+            assert.equal(def, this.defBlock);
 
             def = Blockly.Procedures.getDefinition('proc name', workspace);
-            chai.assert.equal(def, def2);
+            assert.equal(def, def2);
           } finally {
             workspaceTeardown.call(this, workspace);
           }
@@ -1925,11 +1919,11 @@ suite('Procedures', function () {
             if (testSuite.defType === 'procedures_defreturn') {
               test('Has Statements', function () {
                 setStatementValue(this.workspace, this.defBlock, true);
-                chai.assert.isTrue(this.defBlock.hasStatements_);
+                assert.isTrue(this.defBlock.hasStatements_);
               });
               test('Has No Statements', function () {
                 setStatementValue(this.workspace, this.defBlock, false);
-                chai.assert.isFalse(this.defBlock.hasStatements_);
+                assert.isFalse(this.defBlock.hasStatements_);
               });
               test('Saving Statements', function () {
                 const blockXml = Blockly.utils.xml.textToDom(
@@ -1944,14 +1938,14 @@ suite('Procedures', function () {
                   this.workspace,
                 );
                 setStatementValue(this.workspace, defBlock, false);
-                chai.assert.isNull(defBlock.getInput('STACK'));
+                assert.isNull(defBlock.getInput('STACK'));
                 setStatementValue(this.workspace, defBlock, true);
-                chai.assert.isNotNull(defBlock.getInput('STACK'));
+                assert.isNotNull(defBlock.getInput('STACK'));
                 const statementBlocks = defBlock.getChildren();
-                chai.assert.equal(statementBlocks.length, 1);
+                assert.equal(statementBlocks.length, 1);
                 const block = statementBlocks[0];
-                chai.assert.equal(block.type, 'procedures_ifreturn');
-                chai.assert.equal(block.id, 'test');
+                assert.equal(block.type, 'procedures_ifreturn');
+                assert.equal(block.id, 'test');
               });
             }
           });
@@ -1976,21 +1970,21 @@ suite('Procedures', function () {
               this.clock.runAll();
             }
             function assertArgs(argArray) {
-              chai.assert.equal(
+              assert.equal(
                 this.defBlock.getVars().length,
                 argArray.length,
                 'Expected the def to have the right number of arguments',
               );
               for (let i = 0; i < argArray.length; i++) {
-                chai.assert.equal(this.defBlock.getVars()[i], argArray[i]);
+                assert.equal(this.defBlock.getVars()[i], argArray[i]);
               }
-              chai.assert.equal(
+              assert.equal(
                 this.callBlock.getVars().length,
                 argArray.length,
                 'Expected the call to have the right number of arguments',
               );
               for (let i = 0; i < argArray.length; i++) {
-                chai.assert.equal(this.callBlock.getVars()[i], argArray[i]);
+                assert.equal(this.callBlock.getVars()[i], argArray[i]);
               }
             }
             test('Simple Add Arg', async function () {
@@ -2062,7 +2056,7 @@ suite('Procedures', function () {
                 const statementInput = mutatorWorkspace
                   .getTopBlocks()[0]
                   .getInput('STATEMENT_INPUT');
-                chai.assert.isNotNull(statementInput);
+                assert.isNotNull(statementInput);
               });
               test('Has Statements', function () {
                 this.defBlock.hasStatements_ = true;
@@ -2076,7 +2070,7 @@ suite('Procedures', function () {
                   .getTopBlocks()[0]
                   .getField('STATEMENTS')
                   .getValueBoolean();
-                chai.assert.isTrue(statementValue);
+                assert.isTrue(statementValue);
               });
               test('No Has Statements', function () {
                 this.defBlock.hasStatements_ = false;
@@ -2090,7 +2084,7 @@ suite('Procedures', function () {
                   .getTopBlocks()[0]
                   .getField('STATEMENTS')
                   .getValueBoolean();
-                chai.assert.isFalse(statementValue);
+                assert.isFalse(statementValue);
               });
             } else {
               test('Has no Statement Input', function () {
@@ -2103,7 +2097,7 @@ suite('Procedures', function () {
                 const statementInput = mutatorWorkspace
                   .getTopBlocks()[0]
                   .getInput('STATEMENT_INPUT');
-                chai.assert.isNull(statementInput);
+                assert.isNull(statementInput);
               });
             }
           });

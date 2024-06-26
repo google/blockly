@@ -47,6 +47,9 @@ export class TextInputBubble extends Bubble {
   /** Functions listening for changes to the size of this bubble. */
   private sizeChangeListeners: (() => void)[] = [];
 
+  /** Functions listening for changes to the location of this bubble. */
+  private locationChangeListeners: (() => void)[] = [];
+
   /** The text of this bubble. */
   private text = '';
 
@@ -103,6 +106,11 @@ export class TextInputBubble extends Bubble {
   /** Adds a change listener to be notified when this bubble's size changes. */
   addSizeChangeListener(listener: () => void) {
     this.sizeChangeListeners.push(listener);
+  }
+
+  /** Adds a change listener to be notified when this bubble's location changes. */
+  addLocationChangeListener(listener: () => void) {
+    this.locationChangeListeners.push(listener);
   }
 
   /** Creates the editor UI for this bubble. */
@@ -212,8 +220,23 @@ export class TextInputBubble extends Bubble {
 
   /** @returns the size of this bubble. */
   getSize(): Size {
-    // Overriden to be public.
+    // Overridden to be public.
     return super.getSize();
+  }
+
+  override moveDuringDrag(newLoc: Coordinate) {
+    super.moveDuringDrag(newLoc);
+    this.onLocationChange();
+  }
+
+  override setPositionRelativeToAnchor(left: number, top: number) {
+    super.setPositionRelativeToAnchor(left, top);
+    this.onLocationChange();
+  }
+
+  protected override positionByRect(rect = new Rect(0, 0, 0, 0)) {
+    super.positionByRect(rect);
+    this.onLocationChange();
   }
 
   /** Handles mouse down events on the resize target. */
@@ -294,6 +317,13 @@ export class TextInputBubble extends Bubble {
   /** Handles a size change event for the text area. Calls event listeners. */
   private onSizeChange() {
     for (const listener of this.sizeChangeListeners) {
+      listener();
+    }
+  }
+
+  /** Handles a location change event for the text area. Calls event listeners. */
+  private onLocationChange() {
+    for (const listener of this.locationChangeListeners) {
       listener();
     }
   }

@@ -152,17 +152,17 @@ suite('Comments', function () {
     }
     test('Set Location While Visible', function () {
       this.comment.setBubbleVisible(true);
-  
+
       this.comment.setBubbleLocation(new Blockly.utils.Coordinate(100, 100));
       assertBubbleLocation(this.comment, 100, 100);
-  
+
       this.comment.setBubbleVisible(false);
       assertBubbleLocation(this.comment, 100, 100);
     });
     test('Set Location While Invisible', function () {
       this.comment.setBubbleLocation(new Blockly.utils.Coordinate(100, 100));
       assertBubbleLocation(this.comment, 100, 100);
-  
+
       this.comment.setBubbleVisible(true);
       assertBubbleLocation(this.comment, 100, 100);
     });

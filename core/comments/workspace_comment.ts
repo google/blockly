@@ -10,6 +10,7 @@ import {Coordinate} from '../utils/coordinate.js';
 import * as idGenerator from '../utils/idgenerator.js';
 import * as eventUtils from '../events/utils.js';
 import {CommentMove} from '../events/events_comment_move.js';
+import {CommentResize} from '../events/events_comment_resize.js';
 
 export class WorkspaceComment {
   /** The unique identifier for this comment. */
@@ -104,7 +105,14 @@ export class WorkspaceComment {
 
   /** Sets the comment's size in workspace units. */
   setSize(size: Size) {
+    const event = new (eventUtils.get(eventUtils.COMMENT_RESIZE))(
+      this,
+    ) as CommentResize;
+
     this.size = size;
+
+    event.recordCurrentSizeAsNewSize();
+    eventUtils.fire(event);
   }
 
   /** Returns the comment's size in workspace units. */
@@ -196,7 +204,7 @@ export class WorkspaceComment {
     this.location = location;
 
     event.recordNew();
-    if (eventUtils.isEnabled()) eventUtils.fire(event);
+    eventUtils.fire(event);
   }
 
   /** Returns the position of the comment in workspace coordinates. */

@@ -862,7 +862,30 @@ suite('Events', function () {
           },
         }),
       },
+      {
+        title: 'Comment drag start',
+        class: Blockly.Events.CommentDrag,
+        getArgs: (thisObj) => [thisObj.comment, true],
+        getExpectedJson: (thisObj) => ({
+          type: 'comment_drag',
+          group: '',
+          isStart: true,
+          commentId: thisObj.comment.id,
+        }),
+      },
+      {
+        title: 'Comment drag end',
+        class: Blockly.Events.CommentDrag,
+        getArgs: (thisObj) => [thisObj.comment, false],
+        getExpectedJson: (thisObj) => ({
+          type: 'comment_drag',
+          group: '',
+          isStart: false,
+          commentId: thisObj.comment.id,
+        }),
+      },
       // TODO(#4577) Test serialization of move event coordinate properties.
+      // TODO(#4577) Test serialization of comment resize event properties.
     ];
     const testSuites = [
       {

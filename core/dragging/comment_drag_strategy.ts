@@ -29,6 +29,7 @@ export class CommentDragStrategy implements IDragStrategy {
     if (!eventUtils.getGroup()) {
       eventUtils.setGroup(true);
     }
+    this.fireDragStartEvent();
     this.startLoc = this.comment.getRelativeToSurfaceXY();
     this.workspace.setResizesEnabled(false);
     this.workspace.getLayerManager()?.moveToDragLayer(this.comment);
@@ -40,6 +41,7 @@ export class CommentDragStrategy implements IDragStrategy {
   }
 
   endDrag(): void {
+    this.fireDragEndEvent();
     this.fireMoveEvent();
 
     this.workspace
@@ -53,6 +55,25 @@ export class CommentDragStrategy implements IDragStrategy {
     eventUtils.setGroup(false);
   }
 
+  /** Fire a UI event at the start of a comment drag. */
+  private fireDragStartEvent() {
+    const event = new (eventUtils.get(eventUtils.COMMENT_DRAG))(
+      this.comment,
+      true,
+    );
+    eventUtils.fire(event);
+  }
+
+  /** Fire a UI event at the end of a comment drag. */
+  private fireDragEndEvent() {
+    const event = new (eventUtils.get(eventUtils.COMMENT_DRAG))(
+      this.comment,
+      false,
+    );
+    eventUtils.fire(event);
+  }
+
+  /** Fire a move event at the end of a comment drag. */
   private fireMoveEvent() {
     if (this.comment.isDeadOrDying()) return;
     const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(

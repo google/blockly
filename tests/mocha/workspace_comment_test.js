@@ -81,6 +81,28 @@ suite('Workspace comment', function () {
       );
     });
 
+    test('resize events are fired when a comment is resized', function () {
+      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
+        this.workspace,
+      );
+      const spy = createChangeListenerSpy(this.workspace);
+
+      this.renderedComment.setSize(new Blockly.utils.Size(300, 200));
+
+      this.clock.runAll();
+
+      assertEventFired(
+        spy,
+        Blockly.Events.CommentResize,
+        {
+          commentId: this.renderedComment.id,
+          oldSize: {width: 120, height: 100},
+          newSize: {width: 300, height: 200},
+        },
+        this.workspace.id,
+      );
+    });
+
     test('change events are fired when a comments text is edited', function () {
       this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
         this.workspace,

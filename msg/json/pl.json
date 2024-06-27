@@ -331,6 +331,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "zrób coś",
 	"PROCEDURES_BEFORE_PARAMS": "z:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "z:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Nie można uruchomić funkcji zdefiniowanej przez użytkownika '%1', ponieważ blok definicji jest wyłączony.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Tworzy funkcję nie posiadającą wyjścia.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Opisz tę funkcję...",
 	"PROCEDURES_DEFRETURN_RETURN": "zwróć",

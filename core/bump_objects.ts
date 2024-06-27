@@ -12,6 +12,7 @@ import type {BlockCreate} from './events/events_block_create.js';
 import type {BlockMove} from './events/events_block_move.js';
 import type {CommentCreate} from './events/events_comment_create.js';
 import type {CommentMove} from './events/events_comment_move.js';
+import type {CommentResize} from './events/events_comment_resize.js';
 import type {ViewportChange} from './events/events_viewport.js';
 import * as eventUtils from './events/utils.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
@@ -163,8 +164,9 @@ function extractObjectFromEvent(
       break;
     case eventUtils.COMMENT_CREATE:
     case eventUtils.COMMENT_MOVE:
+    case eventUtils.COMMENT_RESIZE:
       object = workspace.getCommentById(
-        (e as CommentCreate | CommentMove).commentId!,
+        (e as CommentCreate | CommentMove | CommentResize).commentId!,
       ) as RenderedWorkspaceComment;
       break;
   }

@@ -19,6 +19,7 @@ import type {BlockCreate} from './events_block_create.js';
 import type {BlockMove} from './events_block_move.js';
 import type {CommentCreate} from './events_comment_create.js';
 import type {CommentMove} from './events_comment_move.js';
+import type {CommentResize} from './events_comment_resize.js';
 import type {ViewportChange} from './events_viewport.js';
 
 /** Group ID for new events.  Grouped events are indivisible. */
@@ -116,7 +117,7 @@ export const VAR_RENAME = 'var_rename';
 export const UI = 'ui';
 
 /**
- * Name of event that record a block drags a block.
+ * Name of event that drags a block.
  */
 export const BLOCK_DRAG = 'drag';
 
@@ -180,7 +181,13 @@ export const COMMENT_CHANGE = 'comment_change';
  */
 export const COMMENT_MOVE = 'comment_move';
 
-/** Type of event that moves a comment. */
+/** Name of event that resizes a comment. */
+export const COMMENT_RESIZE = 'comment_resize';
+
+/**  Name of event that drags a comment. */
+export const COMMENT_DRAG = 'comment_drag';
+
+/** Type of event that collapses a comment. */
 export const COMMENT_COLLAPSE = 'comment_collapse';
 
 /**
@@ -201,7 +208,12 @@ const ORPHANED_BLOCK_DISABLED_REASON = 'ORPHANED_BLOCK';
  * Not to be confused with bumping so that disconnected connections do not
  * appear connected.
  */
-export type BumpEvent = BlockCreate | BlockMove | CommentCreate | CommentMove;
+export type BumpEvent =
+  | BlockCreate
+  | BlockMove
+  | CommentCreate
+  | CommentMove
+  | CommentResize;
 
 /**
  * List of events that cause objects to be bumped back into the visible

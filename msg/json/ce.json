@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Исмаил Садуев",
 			"Саид Мисарбиев",
 			"Умар"
 		]
@@ -246,7 +247,7 @@
 	"LISTS_GET_INDEX_FROM_END": "№ тӀехьара",
 	"LISTS_GET_INDEX_FIRST": "хьалхара",
 	"LISTS_GET_INDEX_LAST": "тӀаьххьара",
-	"LISTS_GET_INDEX_RANDOM": "Нисделларг",
+	"LISTS_GET_INDEX_RANDOM": "ма-луъу",
 	"LISTS_INDEX_FROM_START_TOOLTIP": "%1 - хьалхара дакъалг",
 	"LISTS_INDEX_FROM_END_TOOLTIP": "%1 - тӀаьххьара дакъалг",
 	"LISTS_GET_INDEX_TOOLTIP_GET_FROM": "Йухайерзайо дакъалг испискан гайтинчу меттиге.",

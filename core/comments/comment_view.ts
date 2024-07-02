@@ -98,7 +98,7 @@ export class CommentView implements IRenderedElement {
 
   /** Whether this comment view has been disposed or not. */
   private disposed = false;
-  
+
   /** Size of this comment when the resize drag was initiated. */
   private preResizeSize?: Size;
 
@@ -525,7 +525,7 @@ export class CommentView implements IRenderedElement {
       e.stopPropagation();
       return;
     }
-    
+
     this.preResizeSize = this.getSize();
 
     // TODO(#7926): Move this into a utils file.

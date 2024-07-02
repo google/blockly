@@ -98,6 +98,9 @@ export class CommentView implements IRenderedElement {
 
   /** Whether this comment view has been disposed or not. */
   private disposed = false;
+  
+  /** Size of this comment when the resize drag was initiated. */
+  private preResizeSize?: Size;
 
   constructor(private readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
@@ -334,8 +337,12 @@ export class CommentView implements IRenderedElement {
    * elements to reflect the new size, and triggers size change listeners.
    */
   setSize(size: Size) {
-    const oldSize = this.size;
+    let oldSize = this.size;
     this.setSizeWithoutFiringEvents(size);
+    if (Size.equals(oldSize, this.size) && this.preResizeSize) {
+      oldSize = this.preResizeSize;
+      this.preResizeSize = undefined;
+    }
     this.onSizeChange(oldSize, this.size);
   }
 
@@ -518,6 +525,8 @@ export class CommentView implements IRenderedElement {
       e.stopPropagation();
       return;
     }
+    
+    this.preResizeSize = this.getSize();
 
     // TODO(#7926): Move this into a utils file.
     this.workspace.startDrag(

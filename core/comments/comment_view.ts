@@ -99,6 +99,9 @@ export class CommentView implements IRenderedElement {
   /** Whether this comment view has been disposed or not. */
   private disposed = false;
 
+  /** Size of this comment when the resize drag was initiated. */
+  private preResizeSize?: Size;
+
   constructor(private readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
       'class': 'blocklyComment blocklyEditable',
@@ -334,7 +337,7 @@ export class CommentView implements IRenderedElement {
    * elements to reflect the new size, and triggers size change listeners.
    */
   setSize(size: Size) {
-    const oldSize = this.size;
+    const oldSize = this.preResizeSize || this.size;
     this.setSizeWithoutFiringEvents(size);
     this.onSizeChange(oldSize, this.size);
   }
@@ -519,6 +522,8 @@ export class CommentView implements IRenderedElement {
       return;
     }
 
+    this.preResizeSize = this.getSize();
+
     // TODO(#7926): Move this into a utils file.
     this.workspace.startDrag(
       e,
@@ -559,6 +564,7 @@ export class CommentView implements IRenderedElement {
     }
     // When ending a resize drag, notify size change listeners to fire an event.
     this.setSize(this.size);
+    this.preResizeSize = undefined;
   }
 
   /** Resizes the comment in response to a drag on the resize handle. */

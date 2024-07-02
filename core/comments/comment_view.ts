@@ -337,12 +337,8 @@ export class CommentView implements IRenderedElement {
    * elements to reflect the new size, and triggers size change listeners.
    */
   setSize(size: Size) {
-    let oldSize = this.size;
+    const oldSize = this.preResizeSize || this.size;
     this.setSizeWithoutFiringEvents(size);
-    if (Size.equals(oldSize, this.size) && this.preResizeSize) {
-      oldSize = this.preResizeSize;
-      this.preResizeSize = undefined;
-    }
     this.onSizeChange(oldSize, this.size);
   }
 
@@ -568,6 +564,7 @@ export class CommentView implements IRenderedElement {
     }
     // When ending a resize drag, notify size change listeners to fire an event.
     this.setSize(this.size);
+    this.preResizeSize = undefined;
   }
 
   /** Resizes the comment in response to a drag on the resize handle. */

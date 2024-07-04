@@ -143,24 +143,31 @@ export class Block implements IASTNodeLocation {
   suppressPrefixSuffix: boolean | null = false;
 
   /**
-   * An optional property for declaring developer variables.  Return a list of
-   * variable names for use by generators.  Developer variables are never
-   * shown to the user, but are declared as global variables in the generated
-   * code.
+   * An optional method for declaring developer variables, to be used
+   * by generators.  Developer variables are never shown to the user,
+   * but are declared as global variables in the generated code.
+   *
+   * @returns a list of developer variable names.
    */
   getDeveloperVariables?: () => string[];
 
   /**
-   * An optional function that reconfigures the block based on the contents of
-   * the mutator dialog.
+   * An optional method that reconfigures the block based on the
+   * contents of the mutator dialog.
+   *
+   * @param rootBlock The root block in the mutator flyout.
    */
-  compose?: (p1: Block) => void;
+  compose?: (rootBlock: Block) => void;
 
   /**
-   * An optional function that populates the mutator's dialog with
-   * this block's components.
+   * An optional function that populates the mutator flyout with
+   * blocks representing this block's configuration.
+   *
+   * @param workspace The mutator flyout's workspace.
+   * @returns The root block created in the flyout's workspace.
    */
-  decompose?: (p1: Workspace) => Block;
+  decompose?: (workspace: Workspace) => Block;
+
   id: string;
   outputConnection: Connection | null = null;
   nextConnection: Connection | null = null;

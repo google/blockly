@@ -108,7 +108,6 @@ export abstract class Abstract {
    *
    * @returns The workspace the event belongs to.
    * @throws {Error} if workspace is null.
-   * @internal
    */
   getEventWorkspace_(): Workspace {
     let workspace;

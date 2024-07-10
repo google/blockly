@@ -108,6 +108,13 @@ export class BlockSvg
    * Width is in workspace units.
    */
   width = 0;
+  
+  /**
+   * Width of this block, not including any connected value blocks.
+   * Width is in workspace units.
+   * @internal
+   */
+  childlessWidth = 0;
 
   /**
    * Map from IDs for warnings text to PIDs of functions to apply them.
@@ -436,16 +443,31 @@ export class BlockSvg
    * @returns Object with coordinates of the bounding box.
    */
   getBoundingRectangle(): Rect {
+    return this.getBoundingRectangleWithWidth(this.getHeightWidth().width);
+  }
+  
+  /**
+   * Returns the coordinates of a bounding box describing the dimensions of this
+   * block alone.
+   * Coordinate system: workspace coordinates.
+   *
+   * @returns Object with coordinates of the bounding box.
+   */
+  getBoundingRectangleWithoutChildren(): Rect {
+    return this.getBoundingRectangleWithWidth(this.childlessWidth);
+  }
+  
+  private getBoundingRectangleWithWidth(blockWidth: number) {
     const blockXY = this.getRelativeToSurfaceXY();
     const blockBounds = this.getHeightWidth();
     let left;
     let right;
     if (this.RTL) {
-      left = blockXY.x - blockBounds.width;
+      left = blockXY.x - blockWidth;
       right = blockXY.x;
     } else {
       left = blockXY.x;
-      right = blockXY.x + blockBounds.width;
+      right = blockXY.x + blockWidth;
     }
     return new Rect(blockXY.y, blockXY.y + blockBounds.height, left, right);
   }

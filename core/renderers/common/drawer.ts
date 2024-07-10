@@ -80,6 +80,7 @@ export class Drawer {
     // The dark path adds to the size of the block in both X and Y.
     this.block_.height = this.info_.height;
     this.block_.width = this.info_.widthWithChildren;
+    this.block_.childlessWidth = this.info_.width;
   }
 
   /** Create the outline of the block.  This is a single continuous path. */

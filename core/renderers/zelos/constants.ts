@@ -825,9 +825,9 @@ export class ConstantProvider extends BaseConstantProvider {
 
       // Editable field hover.
       `${selector} .blocklyDraggable:not(.blocklyDisabled)`,
-      ` .blocklyEditableText:not(.editing):hover>rect,`,
+      ` .blocklyEditableText:not(.blocklyEditing):hover>rect,`,
       `${selector} .blocklyDraggable:not(.blocklyDisabled)`,
-      ` .blocklyEditableText:not(.editing):hover>.blocklyPath {`,
+      ` .blocklyEditableText:not(.blocklyEditing):hover>.blocklyPath {`,
       `stroke: #fff;`,
       `stroke-width: 2;`,
       `}`,

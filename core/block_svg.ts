@@ -407,6 +407,8 @@ export class BlockSvg
   moveTo(xy: Coordinate, reason?: string[]) {
     const curXY = this.getRelativeToSurfaceXY();
     this.moveBy(xy.x - curXY.x, xy.y - curXY.y, reason);
+    console.log(this.getBoundingRectangle());
+    console.log(this.getBoundingRectangleWithoutChildren());
   }
 
   /**
@@ -444,7 +446,7 @@ export class BlockSvg
    * @returns Object with coordinates of the bounding box.
    */
   getBoundingRectangle(): Rect {
-    return this.getBoundingRectangleWithWidth(this.getHeightWidth().width);
+    return this.getBoundingRectangleWithDimensions(this.getHeightWidth());
   }
 
   /**
@@ -455,20 +457,25 @@ export class BlockSvg
    * @returns Object with coordinates of the bounding box.
    */
   getBoundingRectangleWithoutChildren(): Rect {
-    return this.getBoundingRectangleWithWidth(this.childlessWidth);
+    return this.getBoundingRectangleWithDimensions({
+      height: this.height,
+      width: this.width,
+    });
   }
 
-  private getBoundingRectangleWithWidth(blockWidth: number) {
+  private getBoundingRectangleWithDimensions(blockBounds: {
+    height: number;
+    width: number;
+  }) {
     const blockXY = this.getRelativeToSurfaceXY();
-    const blockBounds = this.getHeightWidth();
     let left;
     let right;
     if (this.RTL) {
-      left = blockXY.x - blockWidth;
+      left = blockXY.x - blockBounds.width;
       right = blockXY.x;
     } else {
       left = blockXY.x;
-      right = blockXY.x + blockWidth;
+      right = blockXY.x + blockBounds.width;
     }
     return new Rect(blockXY.y, blockXY.y + blockBounds.height, left, right);
   }

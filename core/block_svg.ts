@@ -112,6 +112,7 @@ export class BlockSvg
   /**
    * Width of this block, not including any connected value blocks.
    * Width is in workspace units.
+   *
    * @internal
    */
   childlessWidth = 0;

@@ -407,8 +407,6 @@ export class BlockSvg
   moveTo(xy: Coordinate, reason?: string[]) {
     const curXY = this.getRelativeToSurfaceXY();
     this.moveBy(xy.x - curXY.x, xy.y - curXY.y, reason);
-    console.log(this.getBoundingRectangle());
-    console.log(this.getBoundingRectangleWithoutChildren());
   }
 
   /**

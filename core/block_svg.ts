@@ -1135,6 +1135,9 @@ export class BlockSvg
       .getBlockStyle(blockStyleName);
     this.styleName_ = blockStyleName;
 
+    dom.removeClass(this.svgGroup_, this.styleName_)
+    dom.addClass(this.svgGroup_, blockStyleName)
+
     if (blockStyle) {
       this.hat = blockStyle.hat;
       this.pathObject.setStyle(blockStyle);

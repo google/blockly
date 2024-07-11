@@ -84,6 +84,20 @@ export function getComputedStyle(element: Element, property: string): string {
   );
 }
 
+  /**
+   * Inject CSS into <style> tag at the top of the <head> node
+   *
+   * @param text The CSS to be injected
+   */
+  export function injectCSSToHead(this: any, text: string) {
+    this.cssNode = document.getElementsByTagName('head');
+    const cssNode = document.createElement('style');
+    const cssTextNode = document.createTextNode(text);
+    cssNode.appendChild(cssTextNode);
+    document.head.insertBefore(cssNode, document.head.firstChild);
+    this.cssNode = cssNode;
+  }
+
 /**
  * Returns a Coordinate object relative to the top-left of the HTML document.
  * Similar to Closure's goog.style.getPageOffset

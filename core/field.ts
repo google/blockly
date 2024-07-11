@@ -373,7 +373,7 @@ export abstract class Field<T = any>
     this.textElement_ = dom.createSvgElement(
       Svg.TEXT,
       {
-        'class': 'blocklyText',
+        'class': 'blocklyFieldText',
       },
       this.fieldGroup_,
     );

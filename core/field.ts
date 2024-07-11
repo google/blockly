@@ -832,11 +832,8 @@ export abstract class Field<T = any>
 
     let contentWidth = 0;
     if (this.textElement_) {
-      contentWidth = dom.getFastTextWidth(
-        this.textElement_,
-        constants!.FIELD_TEXT_FONTSIZE,
-        constants!.FIELD_TEXT_FONTWEIGHT,
-        constants!.FIELD_TEXT_FONTFAMILY,
+      contentWidth = dom.getTextWidth(
+        this.textElement_
       );
       totalWidth += contentWidth;
     }

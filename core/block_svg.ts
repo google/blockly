@@ -524,8 +524,11 @@ export class BlockSvg
     if (!collapsed) {
       this.updateDisabled();
       this.removeInput(collapsedInputName);
+      dom.removeClass(this.svgGroup_, 'blocklyCollapsed')
       return;
     }
+    
+    dom.addClass(this.svgGroup_, 'blocklyCollapsed')
 
     const text = this.toString(internalConstants.COLLAPSE_CHARS);
     const field = this.getField(collapsedFieldName);

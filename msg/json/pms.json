@@ -300,6 +300,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "fé cheicòs",
 	"PROCEDURES_BEFORE_PARAMS": "con:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "con:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Impossìbil fé marcé la fonsion definìa da l'utent '%1' përché ël blòch ëd definission a l'é disativà.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "A crea na fonsion sensa surtìa.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Descrive sa fonsion...",
 	"PROCEDURES_DEFRETURN_RETURN": "artorn",

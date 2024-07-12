@@ -89,7 +89,7 @@ export class WarningIcon extends Icon implements IHasBubble {
       },
       this.svgRoot,
     );
-    dom.addClass(this.svgRoot!, 'blockly-icon-warning');
+    dom.addClass(this.svgRoot!, 'blocklyWarningIcon');
   }
 
   override dispose() {

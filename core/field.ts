@@ -323,6 +323,9 @@ export abstract class Field<T = any>
   protected initView() {
     this.createBorderRect_();
     this.createTextElement_();
+    if (this.fieldGroup_) {
+      dom.addClass(this.fieldGroup_, 'blocklyField');
+    }
   }
 
   /**

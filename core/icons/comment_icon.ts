@@ -114,7 +114,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
       },
       this.svgRoot,
     );
-    dom.addClass(this.svgRoot!, 'blockly-icon-comment');
+    dom.addClass(this.svgRoot!, 'blocklyCommentIcon');
   }
 
   override dispose() {

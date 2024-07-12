@@ -702,10 +702,10 @@ export class BlockSvg
     this.dragging = adding;
     if (adding) {
       this.translation = '';
-      common.draggingConnections.push(...this.getConnections_(true));      
+      common.draggingConnections.push(...this.getConnections_(true));
       this.addClass('blocklyDragging');
     } else {
-      common.draggingConnections.length = 0;      
+      common.draggingConnections.length = 0;
       this.removeClass('blocklyDragging');
     }
     // Recurse through all blocks attached under this one.

@@ -712,9 +712,7 @@ function positionInternal(
       'px) rotate(45deg)';
     arrow.setAttribute(
       'class',
-      metrics.arrowAtTop
-        ? 'blocklyDropDownArrow blocklyArrowTop'
-        : 'blocklyDropDownArrow blocklyArrowBottom',
+      metrics.arrowAtTop ? 'blocklyDropDownArrow' : 'blocklyDropDownArrow',
     );
   } else {
     arrow.style.display = 'none';

@@ -672,6 +672,26 @@ export class BlockSvg
   }
 
   /**
+   * Add a class to the SVG group of this block.
+   *
+   * @param className
+   * @internal
+   */
+  addClass(className: string) {
+    dom.addClass(this.svgGroup_, className);
+  }
+
+  /**
+   * Remove a class from the SVG group of this block.
+   *
+   * @param className
+   * @internal
+   */
+  removeClass(className: string) {
+    dom.removeClass(this.svgGroup_, className);
+  }
+
+  /**
    * Recursively adds or removes the dragging class to this node and its
    * children.
    *
@@ -682,11 +702,11 @@ export class BlockSvg
     this.dragging = adding;
     if (adding) {
       this.translation = '';
-      common.draggingConnections.push(...this.getConnections_(true));
-      dom.addClass(this.svgGroup_, 'blocklyDragging');
+      common.draggingConnections.push(...this.getConnections_(true));      
+      this.addClass('blocklyDragging');
     } else {
-      common.draggingConnections.length = 0;
-      dom.removeClass(this.svgGroup_, 'blocklyDragging');
+      common.draggingConnections.length = 0;      
+      this.removeClass('blocklyDragging');
     }
     // Recurse through all blocks attached under this one.
     for (let i = 0; i < this.childBlocks_.length; i++) {

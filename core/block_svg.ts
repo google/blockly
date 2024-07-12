@@ -672,20 +672,18 @@ export class BlockSvg
   }
 
   /**
-   * Add a class to the SVG group of this block.
+   * Add a CSS class to the SVG group of this block.
    *
    * @param className
-   * @internal
    */
   addClass(className: string) {
     dom.addClass(this.svgGroup_, className);
   }
 
   /**
-   * Remove a class from the SVG group of this block.
+   * Remove a CSS class from the SVG group of this block.
    *
    * @param className
-   * @internal
    */
   removeClass(className: string) {
     dom.removeClass(this.svgGroup_, className);

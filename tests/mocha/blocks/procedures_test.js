@@ -25,7 +25,7 @@ import {defineRowBlock} from '../test_helpers/block_definitions.js';
 suite('Procedures', function () {
   setup(function () {
     sharedTestSetup.call(this, {fireEventsNow: false});
-    this.workspace = Blockly.inject('blocklyDiv', {});
+    this.workspace = Blockly.inject('blocklyDiv', {disable: true});
     this.workspace.createVariable('preCreatedVar', '', 'preCreatedVarId');
     this.workspace.createVariable(
       'preCreatedTypedVar',

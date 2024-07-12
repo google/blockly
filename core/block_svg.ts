@@ -849,7 +849,7 @@ export class BlockSvg
    * @internal
    */
   applyColour() {
-    this.pathObject.applyColour(this);
+    this.pathObject.applyColour?.(this);
 
     const icons = this.getIcons();
     for (let i = 0; i < icons.length; i++) {
@@ -1115,7 +1115,7 @@ export class BlockSvg
       .getConstants()
       .getBlockStyleForColour(this.colour_);
 
-    this.pathObject.setStyle(styleObj.style);
+    this.pathObject.setStyle?.(styleObj.style);
     this.style = styleObj.style;
     this.styleName_ = styleObj.name;
 
@@ -1137,7 +1137,7 @@ export class BlockSvg
 
     if (blockStyle) {
       this.hat = blockStyle.hat;
-      this.pathObject.setStyle(blockStyle);
+      this.pathObject.setStyle?.(blockStyle);
       // Set colour to match Block.
       this.colour_ = blockStyle.colourPrimary;
       this.style = blockStyle;

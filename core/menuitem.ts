@@ -70,7 +70,7 @@ export class MenuItem {
       (this.enabled ? '' : 'blocklyMenuItemDisabled goog-menuitem-disabled ') +
       (this.checked ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
       (this.highlight
-        ? 'blocklyMenuItemHighlight goog-menuitem-highlight '
+        ? 'goog-menuitem-highlight '
         : '') +
       (this.rightToLeft ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
 

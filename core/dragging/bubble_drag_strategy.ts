@@ -13,6 +13,9 @@ import * as layers from '../layers.js';
 export class BubbleDragStrategy implements IDragStrategy {
   private startLoc: Coordinate | null = null;
 
+  /** Was there already an event group in progress when the drag started? */
+  private inGroup: boolean = false;
+
   constructor(
     private bubble: IBubble,
     private workspace: WorkspaceSvg,
@@ -23,7 +26,8 @@ export class BubbleDragStrategy implements IDragStrategy {
   }
 
   startDrag(): void {
-    if (!eventUtils.getGroup()) {
+    this.inGroup = !!eventUtils.getGroup();
+    if (!this.inGroup) {
       eventUtils.setGroup(true);
     }
     this.startLoc = this.bubble.getRelativeToSurfaceXY();
@@ -38,7 +42,9 @@ export class BubbleDragStrategy implements IDragStrategy {
 
   endDrag(): void {
     this.workspace.setResizesEnabled(true);
-    eventUtils.setGroup(false);
+    if (!this.inGroup) {
+      eventUtils.setGroup(false);
+    }
 
     this.workspace
       .getLayerManager()

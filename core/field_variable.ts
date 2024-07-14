@@ -22,6 +22,7 @@ import {
   MenuGenerator,
   MenuOption,
 } from './field_dropdown.js';
+import * as dom from './utils/dom.js';
 import * as fieldRegistry from './field_registry.js';
 import * as internalConstants from './internal_constants.js';
 import type {Menu} from './menu.js';
@@ -146,6 +147,11 @@ export class FieldVariable extends FieldDropdown {
     );
     // Don't call setValue because we don't want to cause a rerender.
     this.doValueUpdate_(variable.getId());
+  }
+
+  override initView() {
+    super.initView();
+    dom.addClass(this.fieldGroup_!, 'blocklyVariableField');
   }
 
   override shouldAddBorderRect_() {

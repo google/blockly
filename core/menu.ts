@@ -156,7 +156,6 @@ export class Menu {
     const el = this.getElement();
     if (el) {
       el.focus({preventScroll: true});
-      dom.addClass(el, 'blocklyFocused');
     }
   }
 

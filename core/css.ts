@@ -5,7 +5,6 @@
  */
 
 // Former goog.module ID: Blockly.Css
-
 /** Has CSS already been injected? */
 let injected = false;
 
@@ -119,7 +118,7 @@ let content = `
   box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
 }
 
-.blocklyDropDownDiv.blocklyFocused {
+.blocklyDropDownDiv:focus {
   box-shadow: 0 0 6px 1px rgba(0,0,0,.3);
 }
 

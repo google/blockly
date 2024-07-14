@@ -201,7 +201,9 @@ suite('Toolbox', function () {
       sinon.assert.calledOnce(hideChaffStub);
     });
     test('Category clicked -> Should select category', function () {
-      const categoryXml = document.getElementsByClassName('blocklyTreeRow')[0];
+      const categoryXml = document.getElementsByClassName(
+        'blocklyToolboxCategory',
+      )[0];
       const evt = {
         'target': categoryXml,
       };

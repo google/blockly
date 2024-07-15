@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2024 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {IVariableModel} from './i_variable_model.js';
 import {State} from '../serialization/variables.js';
 

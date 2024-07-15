@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2024 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 /* Representation of a variable. */
 export interface IVariableModel {
   /* Returns the unique ID of this variable. */

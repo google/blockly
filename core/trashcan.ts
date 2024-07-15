@@ -239,8 +239,13 @@ export class Trashcan
   /** Initializes the trash can. */
   init() {
     if (this.workspace.options.maxTrashcanContents > 0) {
+      const flyoutDom = this.flyout!.createDom(Svg.SVG)!;
+      dom.addClass(
+        flyoutDom, 
+        'blocklyTrashcanFlyout'
+      );
       dom.insertAfter(
-        this.flyout!.createDom(Svg.SVG)!,
+        flyoutDom,
         this.workspace.getParentSvg(),
       );
       this.flyout!.init(this.workspace);

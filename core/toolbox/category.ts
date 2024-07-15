@@ -134,7 +134,7 @@ export class ToolboxCategory
       'container': 'blocklyToolboxCategory',
       'row': 'blocklyTreeRow',
       'rowcontentcontainer': 'blocklyTreeRowContentContainer',
-      'icon': 'blocklyTreeIcon',
+      'icon': 'blocklyToolboxCategoryIcon',
       'label': 'blocklyTreeLabel',
       'contents': 'blocklyToolboxContents',
       'selected': 'blocklyTreeSelected',
@@ -684,7 +684,7 @@ Css.register(`
   padding-right: 0;
 }
 
-.blocklyTreeIcon {
+.blocklyToolboxCategoryIcon {
   background-image: url(<<<PATH>>>/sprites.png);
   height: 16px;
   vertical-align: middle;

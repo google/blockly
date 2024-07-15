@@ -129,7 +129,7 @@ export class ToolboxCategory
    * @returns The configuration object holding all the CSS classes for a
    *     category.
    */
-  protected makeDefaultCssConfig_(): CssConfig {
+  protected makeDefaultCssConfig_(): CssConfig { 
     return {
       'container': 'blocklyToolboxCategory',
       'row': 'blocklyTreeRow',

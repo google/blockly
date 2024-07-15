@@ -149,6 +149,8 @@ import {ISerializable, isSerializable} from './interfaces/i_serializable.js';
 import {IStyleable} from './interfaces/i_styleable.js';
 import {IToolbox} from './interfaces/i_toolbox.js';
 import {IToolboxItem} from './interfaces/i_toolbox_item.js';
+import {IVariableMap} from './interfaces/i_variable_map.js';
+import {IVariableModel} from './interfaces/i_variable_model.js';
 import {
   IVariableBackedParameterModel,
   isVariableBackedParameterModel,
@@ -552,6 +554,8 @@ export {ISerializable, isSerializable};
 export {IStyleable};
 export {IToolbox};
 export {IToolboxItem};
+export {IVariableMap};
+export {IVariableModel};
 export {IVariableBackedParameterModel, isVariableBackedParameterModel};
 export {Marker};
 export {MarkerManager};

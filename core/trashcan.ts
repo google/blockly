@@ -240,14 +240,8 @@ export class Trashcan
   init() {
     if (this.workspace.options.maxTrashcanContents > 0) {
       const flyoutDom = this.flyout!.createDom(Svg.SVG)!;
-      dom.addClass(
-        flyoutDom, 
-        'blocklyTrashcanFlyout'
-      );
-      dom.insertAfter(
-        flyoutDom,
-        this.workspace.getParentSvg(),
-      );
+      dom.addClass(flyoutDom, 'blocklyTrashcanFlyout');
+      dom.insertAfter(flyoutDom, this.workspace.getParentSvg());
       this.flyout!.init(this.workspace);
     }
     this.workspace.getComponentManager().addComponent({

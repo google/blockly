@@ -116,7 +116,7 @@
     "eslint-plugin-jsdoc": "^48.0.2",
     "glob": "^10.3.4",
     "google-closure-compiler": "^20240317.0.0",
-    "gulp": "^5.0.0",
+    "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-gzip": "^1.4.2",
     "gulp-header": "^2.0.9",
@@ -125,7 +125,7 @@
     "gulp-replace": "^1.0.0",
     "gulp-series": "^1.0.2",
     "gulp-shell": "^0.8.0",
-    "gulp-sourcemaps": "^2.6.5",
+    "gulp-sourcemaps": "^3.0.0",
     "gulp-umd": "^2.0.0",
     "http-server": "^14.0.0",
     "json5": "^2.2.0",
@@ -136,7 +136,7 @@
     "readline-sync": "^1.4.10",
     "rimraf": "^5.0.0",
     "typescript": "^5.3.3",
-    "webdriverio": "^7.16.4",
+    "webdriverio": "^8.32.2",
     "yargs": "^17.2.1"
   },
   "dependencies": {

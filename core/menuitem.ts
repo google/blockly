@@ -67,18 +67,18 @@ export class MenuItem {
     element.className =
       'blocklyMenuItem ' +
       (this.enabled ? '' : 'blocklyMenuItemDisabled ') +
-      (this.checked ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
+      (this.checked ? 'blocklyMenuItemSelected ' : '') +
       (this.highlight
-        ? 'blocklyMenuItemHighlight goog-menuitem-highlight '
+        ? 'blocklyMenuItemHighlight '
         : '') +
-      (this.rightToLeft ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
+      (this.rightToLeft ? 'blocklyMenuItemRtl ' : '');
 
     const content = document.createElement('div');
-    content.className = 'blocklyMenuItemContent goog-menuitem-content';
+    content.className = 'blocklyMenuItemContent';
     // Add a checkbox for checkable menu items.
     if (this.checkable) {
       const checkbox = document.createElement('div');
-      checkbox.className = 'blocklyMenuItemCheckbox goog-menuitem-checkbox';
+      checkbox.className = 'blocklyMenuItemCheckbox ';
       content.appendChild(checkbox);
     }
 
@@ -187,19 +187,13 @@ export class MenuItem {
    */
   setHighlighted(highlight: boolean) {
     this.highlight = highlight;
-
     const el = this.getElement();
     if (el && this.isEnabled()) {
-      // goog-menuitem-highlight is deprecated, use blocklyMenuItemHighlight.
-      // May 2020.
       const name = 'blocklyMenuItemHighlight';
-      const nameDep = 'goog-menuitem-highlight';
       if (highlight) {
         dom.addClass(el, name);
-        dom.addClass(el, nameDep);
       } else {
         dom.removeClass(el, name);
-        dom.removeClass(el, nameDep);
       }
     }
   }

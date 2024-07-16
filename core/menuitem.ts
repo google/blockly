@@ -65,10 +65,11 @@ export class MenuItem {
 
     // Set class and style
     element.className =
-      'blocklyMenuItem ' +
-      (this.enabled ? '' : 'blocklyMenuItemDisabled ') +
-      (this.checked ? 'blocklyMenuItemSelected ' : '') +
-      (this.rightToLeft ? 'blocklyMenuItemRtl ' : '');
+      'blocklyMenuItem goog-menuitem ' +
+      (this.enabled ? '' : 'blocklyMenuItemDisabled goog-menuitem-disabled ') +
+      (this.checked ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
+      (this.highlight ? 'goog-menuitem-highlight ' : '') +
+      (this.rightToLeft ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
 
     const content = document.createElement('div');
     content.className = 'blocklyMenuItemContent';

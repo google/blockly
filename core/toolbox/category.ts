@@ -70,9 +70,6 @@ export class ToolboxCategory
   /** The HTML element for the category row. */
   protected rowDiv_: HTMLDivElement | null = null;
 
-  /** The HTML element that holds children elements of the category row. */
-  protected rowContents_: HTMLDivElement | null = null;
-
   /** The HTML element for the toolbox icon. */
   protected iconDom_: Element | null = null;
 
@@ -131,10 +128,6 @@ export class ToolboxCategory
    */
   protected makeDefaultCssConfig_(): CssConfig {
     return {
-      'container': 'blocklyToolboxCategoryContainer',
-      'row': 'blocklyToolboxCategory',
-      'rowcontentcontainer': 'blocklyTreeRowContentContainer',
-      'icon': 'blocklyToolboxCategoryIcon',
       'label': 'blocklyTreeLabel',
       'contents': 'blocklyToolboxCategoryGroup',
       'selected': 'blocklyTreeSelected',
@@ -195,19 +188,15 @@ export class ToolboxCategory
     aria.setState(this.htmlDiv_, aria.State.LEVEL, this.level_ + 1);
 
     this.rowDiv_ = this.createRowContainer_();
-    this.rowDiv_.style.pointerEvents = 'auto';
+    this.rowDiv_.style.pointerEvents = 'none';
     this.htmlDiv_.appendChild(this.rowDiv_);
-
-    this.rowContents_ = this.createRowContentsContainer_();
-    this.rowContents_.style.pointerEvents = 'none';
-    this.rowDiv_.appendChild(this.rowContents_);
 
     this.iconDom_ = this.createIconDom_();
     aria.setRole(this.iconDom_, aria.Role.PRESENTATION);
-    this.rowContents_.appendChild(this.iconDom_);
+    this.rowDiv_.appendChild(this.iconDom_);
 
     this.labelDom_ = this.createLabelDom_(this.name_);
-    this.rowContents_.appendChild(this.labelDom_);
+    this.rowDiv_.appendChild(this.labelDom_);
 
     const id = this.labelDom_.getAttribute('id');
     if (id) {
@@ -254,20 +243,6 @@ export class ToolboxCategory
     return rowDiv;
   }
 
-  /**
-   * Creates the container for the label and icon.
-   * This is necessary so we can set all subcategory pointer events to none.
-   *
-   * @returns The div that holds the icon and the label.
-   */
-  protected createRowContentsContainer_(): HTMLDivElement {
-    const contentsContainer = document.createElement('div');
-    const className = this.cssConfig_['rowcontentcontainer'];
-    if (className) {
-      dom.addClass(contentsContainer, className);
-    }
-    return contentsContainer;
-  }
 
   /**
    * Creates the span that holds the category icon.

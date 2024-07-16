@@ -85,7 +85,6 @@ export class Menu {
    */
   render(container: Element): HTMLDivElement {
     const element = document.createElement('div');
-    // Removed deprecated goog-menu, used blocklyMenu.  July 2024.
     element.className = 'blocklyMenu blocklyNonSelectable';
     element.tabIndex = 0;
     if (this.roleName) {

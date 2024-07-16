@@ -64,7 +64,6 @@ export class MenuItem {
     this.element = element;
 
     // Set class and style
-    // removed deprecated goog-menuitem & goog-menuitem-disabled , used blocklyMenuItem & blocklyMenuItemDisabled.  July 2024.
     element.className =
       'blocklyMenuItem ' +
       (this.enabled ? '' : 'blocklyMenuItemDisabled ') +

@@ -131,8 +131,8 @@ export class ToolboxCategory
    */
   protected makeDefaultCssConfig_(): CssConfig {
     return {
-      'container': 'blocklyToolboxCategory',
-      'row': 'blocklyTreeRow',
+      'container': 'blocklyToolboxCategoryContainer',
+      'row': 'blocklyToolboxCategory',
       'rowcontentcontainer': 'blocklyTreeRowContentContainer',
       'icon': 'blocklyTreeIcon',
       'label': 'blocklyTreeLabel',
@@ -659,19 +659,19 @@ export type CssConfig = ToolboxCategory.CssConfig;
 
 /** CSS for Toolbox.  See css.js for use. */
 Css.register(`
-.blocklyTreeRow:not(.blocklyTreeSelected):hover {
+.blocklyToolboxCategory:not(.blocklyTreeSelected):hover {
   background-color: rgba(255, 255, 255, .2);
 }
 
-.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {
+.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategoryContainer {
   margin: 1px 5px 1px 0;
 }
 
-.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {
+.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategoryContainer {
   margin: 1px 0 1px 5px;
 }
 
-.blocklyTreeRow {
+.blocklyToolboxCategory {
   height: 22px;
   line-height: 22px;
   margin-bottom: 3px;
@@ -679,7 +679,7 @@ Css.register(`
   white-space: nowrap;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {
+.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxCategory {
   margin-left: 8px;
   padding-right: 0;
 }

@@ -58,7 +58,7 @@ export class CollapsibleToolboxCategory
 
   override makeDefaultCssConfig_() {
     const cssConfig = super.makeDefaultCssConfig_();
-    cssConfig['contents'] = 'blocklyToolboxContents';
+    cssConfig['contents'] = 'blocklyToolboxCategoryGroup';
     return cssConfig;
   }
 

@@ -209,7 +209,7 @@ export class Toolbox
    */
   protected createContentsContainer_(): HTMLDivElement {
     const contentsContainer = document.createElement('div');
-    dom.addClass(contentsContainer, 'blocklyToolboxContents');
+    dom.addClass(contentsContainer, 'blocklyToolboxCategoryGroup');
     if (this.isHorizontal()) {
       contentsContainer.style.flexDirection = 'row';
     }
@@ -1111,13 +1111,13 @@ Css.register(`
   -webkit-tap-highlight-color: transparent;  /* issue #1345 */
 }
 
-.blocklyToolboxContents {
+.blocklyToolboxCategoryGroup {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
 }
 
-.blocklyToolboxContents:focus {
+.blocklyToolboxCategoryGroup:focus {
   outline: none;
 }
 `);

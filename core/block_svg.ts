@@ -1723,17 +1723,13 @@ export class BlockSvg
 
   override jsonInit(json: AnyDuringMigration): void {
     super.jsonInit(json);
-      
-    if (json['classes']) {
-      let classesToAdd = '';
 
-      if (Array.isArray(json['classes'])) {        
-        classesToAdd = json['classes'].join(' ');
-      } else {        
-        classesToAdd = json['classes'];
-      }
-      
-      this.addClass(classesToAdd);
+    if (json['classes']) {
+      this.addClass(
+        Array.isArray(json['classes'])
+          ? json['classes'].join(' ')
+          : json['classes'],
+      );
     }
   }
 }

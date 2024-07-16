@@ -49,7 +49,7 @@ suite('Toolbox', function () {
         .childNodes[0];
       assert.equal(
         toolboxDiv.className,
-        'blocklyToolboxDiv blocklyNonSelectable',
+        'blocklyToolbox blocklyNonSelectable',
       );
     });
     test('Init called -> Toolbox is subscribed to background and foreground colour', function () {

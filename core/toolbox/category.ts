@@ -131,7 +131,7 @@ export class ToolboxCategory
    */
   protected makeDefaultCssConfig_(): CssConfig {
     return {
-      'container': 'blocklyToolboxCategory',
+      'container': 'blocklyToolboxCategoryContainer',
       'row': 'blocklyToolboxCategory',
       'rowcontentcontainer': 'blocklyTreeRowContentContainer',
       'icon': 'blocklyTreeIcon',
@@ -663,11 +663,11 @@ Css.register(`
   background-color: rgba(255, 255, 255, .2);
 }
 
-.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {
+.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategoryContainer {
   margin: 1px 5px 1px 0;
 }
 
-.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {
+.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategoryContainer {
   margin: 1px 0 1px 5px;
 }
 

@@ -72,6 +72,7 @@ export class VariableModel implements IVariableModel {
 
   /**
    * Updates the user-visible name of this variable.
+   *
    * @returns The newly-updated variable.
    */
   setName(newName: string): this {
@@ -86,6 +87,7 @@ export class VariableModel implements IVariableModel {
 
   /**
    * Updates the type of this variable.
+   *
    * @returns The newly-updated variable.
    */
   setType(newType: string): this {

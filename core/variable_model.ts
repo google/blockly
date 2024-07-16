@@ -16,6 +16,7 @@ import './events/events_var_create.js';
 
 import * as idGenerator from './utils/idgenerator.js';
 import type {Workspace} from './workspace.js';
+import {IVariableModel} from './interfaces/i_variable_model.js';
 
 /**
  * Class for a variable model.
@@ -23,7 +24,7 @@ import type {Workspace} from './workspace.js';
  *
  * @see {Blockly.FieldVariable}
  */
-export class VariableModel {
+export class VariableModel implements IVariableModel {
   type: string;
   private readonly id_: string;
 
@@ -62,6 +63,36 @@ export class VariableModel {
   /** @returns The ID for the variable. */
   getId(): string {
     return this.id_;
+  }
+
+  /** @returns The name of this variable. */
+  getName(): string {
+    return this.name;
+  }
+
+  /**
+   * Updates the user-visible name of this variable.
+   *
+   * @returns The newly-updated variable.
+   */
+  setName(newName: string): this {
+    this.name = newName;
+    return this;
+  }
+
+  /** @returns The type of this variable. */
+  getType(): string {
+    return this.type;
+  }
+
+  /**
+   * Updates the type of this variable.
+   *
+   * @returns The newly-updated variable.
+   */
+  setType(newType: string): this {
+    this.type = newType;
+    return this;
   }
 
   /**

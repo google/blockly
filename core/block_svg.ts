@@ -1721,7 +1721,7 @@ export class BlockSvg
     return [json];
   }
 
-  override jsonInit(json: AnyDuringMigration): void {    
+  override jsonInit(json: AnyDuringMigration): void {
     super.jsonInit(json);
       
     if (json['classes']) {

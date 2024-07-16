@@ -1720,4 +1720,20 @@ export class BlockSvg
     traverseJson(json as unknown as {[key: string]: unknown});
     return [json];
   }
+
+  override jsonInit(json: AnyDuringMigration): void {    
+    super.jsonInit(json);
+      
+    if (json['classes']) {
+      let classesToAdd = '';
+
+      if (Array.isArray(json['classes'])) {        
+        classesToAdd = json['classes'].join(' ');
+      } else {        
+        classesToAdd = json['classes'];
+      }
+      
+      this.addClass(classesToAdd);
+    }
+  }
 }

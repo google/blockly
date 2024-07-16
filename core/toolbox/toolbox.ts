@@ -196,7 +196,7 @@ export class Toolbox
   protected createContainer_(): HTMLDivElement {
     const toolboxContainer = document.createElement('div');
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
-    dom.addClass(toolboxContainer, 'blocklyToolboxDiv');
+    dom.addClass(toolboxContainer, 'blocklyToolbox');
     dom.addClass(toolboxContainer, 'blocklyNonSelectable');
     toolboxContainer.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
     return toolboxContainer;
@@ -1101,7 +1101,7 @@ Css.register(`
 }
 
 /* Category tree in Toolbox. */
-.blocklyToolboxDiv {
+.blocklyToolbox {
   background-color: #ddd;
   overflow-x: visible;
   overflow-y: auto;

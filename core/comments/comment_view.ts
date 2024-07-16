@@ -104,7 +104,7 @@ export class CommentView implements IRenderedElement {
 
   constructor(private readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
-      'class': 'blocklyComment blocklyEditable',
+      'class': 'blocklyComment blocklyEditable blocklyDraggable',
     });
 
     this.highlightRect = this.createHighlightRect(this.svgRoot);

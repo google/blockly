@@ -663,11 +663,11 @@ Css.register(`
   background-color: rgba(255, 255, 255, .2);
 }
 
-.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {
+.blocklyToolbox[layout="h"] .blocklyToolboxCategory {
   margin: 1px 5px 1px 0;
 }
 
-.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {
+.blocklyToolbox[dir="RTL"][layout="h"] .blocklyToolboxCategory {
   margin: 1px 0 1px 5px;
 }
 
@@ -679,7 +679,7 @@ Css.register(`
   white-space: nowrap;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {
+.blocklyToolbox[dir="RTL"] .blocklyTreeRow {
   margin-left: 8px;
   padding-right: 0;
 }
@@ -696,7 +696,7 @@ Css.register(`
   background-position: -32px -1px;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyTreeIconClosed {
+.blocklyToolbox[dir="RTL"] .blocklyTreeIconClosed {
   background-position: 0 -1px;
 }
 
@@ -704,7 +704,7 @@ Css.register(`
   background-position: -32px -17px;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyTreeSelected>.blocklyTreeIconClosed {
+.blocklyToolbox[dir="RTL"] .blocklyTreeSelected>.blocklyTreeIconClosed {
   background-position: 0 -17px;
 }
 

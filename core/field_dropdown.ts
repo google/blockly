@@ -71,7 +71,7 @@ export class FieldDropdown extends Field<string> {
   override SERIALIZABLE = true;
 
   /** Mouse cursor style when over the hotspot that initiates the editor. */
-  override CURSOR = 'default';
+  CURSOR = 'default';
 
   protected menuGenerator_?: MenuGenerator;
 

@@ -257,6 +257,25 @@ let content = `
   pointer-events: none;
 }
 
+.blocklyFieldCursor {
+  cursor: pointer;
+}
+.blocklyFieldTextInputCursor {
+  cursor: text;
+}
+
+.blocklyFieldDropdownCursor {
+  cursor: pointer;
+}
+
+.blocklyFieldCheckboxCursor {
+  cursor: pointer;
+}
+
+.blocklyFieldColourCursor {
+  cursor: pointer;
+}
+  
 .blocklyFlyout {
   position: absolute;
   z-index: 20;

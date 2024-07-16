@@ -127,9 +127,11 @@ export class ToolboxCategory
    *     category.
    */
   protected makeDefaultCssConfig_(): CssConfig {
-    return {
+    return {'container': 'blocklyToolboxCategory',
+      'row': 'blocklyTreeRow',
+      'icon': 'blocklyTreeIcon',
       'label': 'blocklyTreeLabel',
-      'contents': 'blocklyToolboxCategoryGroup',
+      'contents': 'blocklyToolboxContents',
       'selected': 'blocklyTreeSelected',
       'openicon': 'blocklyTreeIconOpen',
       'closedicon': 'blocklyTreeIconClosed',

@@ -143,7 +143,9 @@ export class Toolbox
     this.flyout_ = this.createFlyout_();
 
     this.HtmlDiv = this.createDom_(this.workspace_);
-    dom.insertAfter(this.flyout_.createDom('svg'), svg);
+    const flyoutDom = this.flyout_.createDom('svg');
+    dom.addClass(flyoutDom, 'blocklyToolboxFlyout');
+    dom.insertAfter(flyoutDom, svg);
     this.setVisible(true);
     this.flyout_.init(workspace);
 

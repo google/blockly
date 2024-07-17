@@ -136,7 +136,7 @@ export class ToolboxCategory
       'rowcontentcontainer': 'blocklyTreeRowContentContainer',
       'icon': 'blocklyToolboxCategoryIcon',
       'label': 'blocklyTreeLabel',
-      'contents': 'blocklyToolboxContents',
+      'contents': 'blocklyToolboxCategoryGroup',
       'selected': 'blocklyTreeSelected',
       'openicon': 'blocklyTreeIconOpen',
       'closedicon': 'blocklyTreeIconClosed',

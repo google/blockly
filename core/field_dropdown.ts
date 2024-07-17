@@ -532,9 +532,7 @@ export class FieldDropdown extends Field<string> {
         height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2,
       );
     } else {
-      arrowWidth = dom.getTextWidth(
-        this.arrow as SVGTSpanElement
-      );
+      arrowWidth = dom.getTextWidth(this.arrow as SVGTSpanElement);
     }
     this.size_.width = imageWidth + arrowWidth + xPadding * 2;
     this.size_.height = height;
@@ -567,9 +565,7 @@ export class FieldDropdown extends Field<string> {
       hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
       this.getConstants()!.FIELD_TEXT_HEIGHT,
     );
-    const textWidth = dom.getTextWidth(
-      this.getTextElement()
-    );
+    const textWidth = dom.getTextWidth(this.getTextElement());
     const xPadding = hasBorder
       ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING
       : 0;

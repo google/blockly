@@ -832,9 +832,7 @@ export abstract class Field<T = any>
 
     let contentWidth = 0;
     if (this.textElement_) {
-      contentWidth = dom.getTextWidth(
-        this.textElement_
-      );
+      contentWidth = dom.getTextWidth(this.textElement_);
       totalWidth += contentWidth;
     }
     if (!this.isFullBlockField()) {

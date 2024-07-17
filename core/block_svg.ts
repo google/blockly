@@ -184,8 +184,6 @@ export class BlockSvg
     this.workspace = workspace;
     this.svgGroup_ = dom.createSvgElement(Svg.G, {});
 
-    dom.addClass(this.svgGroup_, prototypeName)
-
     /** A block style object. */
     this.style = workspace.getRenderer().getConstants().getBlockStyle(null);
 
@@ -200,6 +198,10 @@ export class BlockSvg
 
     // Expose this block's ID on its top-level SVG group.
     this.svgGroup_.setAttribute('data-id', this.id);
+
+    if(prototypeName) {
+      dom.addClass(this.svgGroup_, prototypeName)
+    }
 
     this.doInit_();
   }

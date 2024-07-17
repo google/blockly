@@ -1167,6 +1167,20 @@ export class BlockSvg
   }
 
   /**
+   * Add blocklyNotDeletable class when block is not deletable
+   * Or remove class when block is deletable
+   */
+  override setDeletable(deletable: boolean) {
+    super.setDeletable(deletable);
+
+    if(deletable) {
+      dom.removeClass(this.svgGroup_, 'blocklyNotDeletable');
+    } else {
+      dom.addClass(this.svgGroup_, 'blocklyNotDeletable');
+    }
+  }
+
+  /**
    * Move this block to the front of the visible workspace.
    * <g> tags do not respect z-index so SVG renders them in the
    * order that they are in the DOM.  By placing this block first within the

@@ -186,12 +186,11 @@ export class PathObject implements IPathObject {
    */
   protected updateShadow_(shadow: boolean) {
     if (shadow) {
-      this.setClass_('blocklyShadow', true);  
+      this.setClass_('blocklyShadow', true);
       this.svgPath.setAttribute('stroke', 'none');
       this.svgPath.setAttribute('fill', this.style.colourSecondary);
-    }
-    else{
-      this.setClass_('blocklyShadow', false);  
+    } else {
+      this.setClass_('blocklyShadow', false);
     }
   }
 

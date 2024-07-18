@@ -34,8 +34,10 @@ const output = await validate(SCHEMA_URL, renamings, BASIC);
 if (!output.valid) {
   console.error(`Renamings file is invalid.  First error occurs at:
     ${output.errors[0].instanceLocation}`);
-  console.info(`Here is the full validator output, in case that helps:\n`,
-               output);
+  console.info(
+    `Here is the full validator output, in case that helps:\n`,
+    output,
+  );
   process.exit(1);
 }
 

@@ -19,25 +19,27 @@ import './events/events_var_rename.js';
 import type {Block} from './block.js';
 import * as dialog from './dialog.js';
 import * as eventUtils from './events/utils.js';
+import * as registry from './registry.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
 import * as arrayUtils from './utils/array.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
+import type {IVariableMap} from './interfaces/i_variable_map.js';
 
 /**
  * Class for a variable map.  This contains a dictionary data structure with
  * variable types as keys and lists of variables as values.  The list of
  * variables are the type indicated by the key.
  */
-export class VariableMap {
+export class VariableMap implements IVariableMap<VariableModel> {
   /**
    * A map from variable type to list of variable names.  The lists contain
    * all of the named variables in the workspace, including variables that are
    * not currently in use.
    */
-  private variableMap = new Map<string, VariableModel[]>();
+  private variableMap = new Map<string, Map<string, VariableModel>>();
 
   /** @param workspace The workspace this map belongs to. */
   constructor(public workspace: Workspace) {}
@@ -45,8 +47,8 @@ export class VariableMap {
   /** Clear the variable map.  Fires events for every deletion. */
   clear() {
     for (const variables of this.variableMap.values()) {
-      while (variables.length > 0) {
-        this.deleteVariable(variables[0]);
+      for (const variable of variables.values()) {
+        this.deleteVariable(variable);
       }
     }
     if (this.variableMap.size !== 0) {
@@ -60,10 +62,10 @@ export class VariableMap {
    *
    * @param variable Variable to rename.
    * @param newName New variable name.
-   * @internal
+   * @returns The newly renamed variable.
    */
-  renameVariable(variable: VariableModel, newName: string) {
-    if (variable.name === newName) return;
+  renameVariable(variable: VariableModel, newName: string): VariableModel {
+    if (variable.name === newName) return variable;
     const type = variable.type;
     const conflictVar = this.getVariable(newName, type);
     const blocks = this.workspace.getAllBlocks(false);
@@ -87,6 +89,20 @@ export class VariableMap {
     } finally {
       eventUtils.setGroup(existingGroup);
     }
+    return variable;
+  }
+
+  changeVariableType(variable: VariableModel, newType: string): VariableModel {
+    this.variableMap.get(variable.getType())?.delete(variable.getId());
+    variable.setType(newType);
+    const newTypeVariables =
+      this.variableMap.get(newType) ?? new Map<string, VariableModel>();
+    newTypeVariables.set(variable.getId(), variable);
+    if (!this.variableMap.has(newType)) {
+      this.variableMap.set(newType, newTypeVariables);
+    }
+
+    return variable;
   }
 
   /**
@@ -159,8 +175,8 @@ export class VariableMap {
     }
     // Finally delete the original variable, which is now unreferenced.
     eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
-    // And remove it from the list.
-    arrayUtils.removeElem(this.variableMap.get(type)!, variable);
+    // And remove it from the map.
+    this.variableMap.get(type)?.delete(variable.getId());
   }
 
   /* End functions for renaming variables. */
@@ -177,8 +193,8 @@ export class VariableMap {
    */
   createVariable(
     name: string,
-    opt_type?: string | null,
-    opt_id?: string | null,
+    opt_type?: string,
+    opt_id?: string,
   ): VariableModel {
     let variable = this.getVariable(name, opt_type);
     if (variable) {
@@ -204,18 +220,23 @@ export class VariableMap {
     const type = opt_type || '';
     variable = new VariableModel(this.workspace, name, type, id);
 
-    const variables = this.variableMap.get(type) || [];
-    variables.push(variable);
-    // Delete the list of variables of this type, and re-add it so that
-    // the most recent addition is at the end.
-    // This is used so the toolbox's set block is set to the most recent
-    // variable.
-    this.variableMap.delete(type);
-    this.variableMap.set(type, variables);
-
+    const variables =
+      this.variableMap.get(type) ?? new Map<string, VariableModel>();
+    variables.set(variable.getId(), variable);
+    if (!this.variableMap.has(type)) {
+      this.variableMap.set(type, variables);
+    }
     eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(variable));
 
     return variable;
+  }
+
+  addVariable(variable: VariableModel) {
+    const type = variable.getType();
+    if (!this.variableMap.has(type)) {
+      this.variableMap.set(type, new Map<string, VariableModel>());
+    }
+    this.variableMap.get(type)?.set(variable.getId(), variable);
   }
 
   /* Begin functions for variable deletion. */
@@ -225,22 +246,12 @@ export class VariableMap {
    * @param variable Variable to delete.
    */
   deleteVariable(variable: VariableModel) {
-    const variableId = variable.getId();
-    const variableList = this.variableMap.get(variable.type);
-    if (variableList) {
-      for (let i = 0; i < variableList.length; i++) {
-        const tempVar = variableList[i];
-        if (tempVar.getId() === variableId) {
-          variableList.splice(i, 1);
-          eventUtils.fire(
-            new (eventUtils.get(eventUtils.VAR_DELETE))(variable),
-          );
-          if (variableList.length === 0) {
-            this.variableMap.delete(variable.type);
-          }
-          return;
-        }
-      }
+    const variables = this.variableMap.get(variable.type);
+    if (!variables || !variables.has(variable.getId())) return;
+    variables.delete(variable.getId());
+    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
+    if (variables.size === 0) {
+      this.variableMap.delete(variable.type);
     }
   }
 
@@ -321,17 +332,16 @@ export class VariableMap {
    *     the empty string, which is a specific type.
    * @returns The variable with the given name, or null if it was not found.
    */
-  getVariable(name: string, opt_type?: string | null): VariableModel | null {
+  getVariable(name: string, opt_type?: string): VariableModel | null {
     const type = opt_type || '';
-    const list = this.variableMap.get(type);
-    if (list) {
-      for (let j = 0, variable; (variable = list[j]); j++) {
-        if (Names.equals(variable.name, name)) {
-          return variable;
-        }
-      }
-    }
-    return null;
+    const variables = this.variableMap.get(type);
+    if (!variables) return null;
+
+    return (
+      [...variables.values()].find((variable) =>
+        Names.equals(variable.getName(), name),
+      ) ?? null
+    );
   }
 
   /**
@@ -342,10 +352,8 @@ export class VariableMap {
    */
   getVariableById(id: string): VariableModel | null {
     for (const variables of this.variableMap.values()) {
-      for (const variable of variables) {
-        if (variable.getId() === id) {
-          return variable;
-        }
+      if (variables.has(id)) {
+        return variables.get(id) ?? null;
       }
     }
     return null;
@@ -361,11 +369,14 @@ export class VariableMap {
    */
   getVariablesOfType(type: string | null): VariableModel[] {
     type = type || '';
-    const variableList = this.variableMap.get(type);
-    if (variableList) {
-      return variableList.slice();
-    }
-    return [];
+    const variables = this.variableMap.get(type);
+    if (!variables) return [];
+
+    return [...variables.values()];
+  }
+
+  getTypes(): string[] {
+    return [...this.variableMap.keys()];
   }
 
   /**
@@ -399,7 +410,7 @@ export class VariableMap {
   getAllVariables(): VariableModel[] {
     let allVariables: VariableModel[] = [];
     for (const variables of this.variableMap.values()) {
-      allVariables = allVariables.concat(variables);
+      allVariables = allVariables.concat(...variables.values());
     }
     return allVariables;
   }
@@ -410,9 +421,13 @@ export class VariableMap {
    * @returns All of the variable names of all types.
    */
   getAllVariableNames(): string[] {
-    return Array.from(this.variableMap.values())
-      .flat()
-      .map((variable) => variable.name);
+    const names: string[] = [];
+    for (const variables of this.variableMap.values()) {
+      for (const variable of variables.values()) {
+        names.push(variable.getName());
+      }
+    }
+    return names;
   }
 
   /**
@@ -438,3 +453,5 @@ export class VariableMap {
     return uses;
   }
 }
+
+registry.register(registry.Type.VARIABLE_MAP, registry.DEFAULT, VariableMap);

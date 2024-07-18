@@ -39,17 +39,17 @@ suite('Variable Map', function () {
       this.variableMap.createVariable('name1', 'type1', 'id1');
 
       // Assert there is only one variable in the this.variableMap.
-      let keys = Array.from(this.variableMap.variableMap.keys());
+      let keys = this.variableMap.getTypes();
       assert.equal(keys.length, 1);
-      let varMapLength = this.variableMap.variableMap.get(keys[0]).length;
+      let varMapLength = this.variableMap.getVariablesOfType(keys[0]).length;
       assert.equal(varMapLength, 1);
 
       this.variableMap.createVariable('name1', 'type1');
       assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
       // Check that the size of the variableMap did not change.
-      keys = Array.from(this.variableMap.variableMap.keys());
+      keys = this.variableMap.getTypes();
       assert.equal(keys.length, 1);
-      varMapLength = this.variableMap.variableMap.get(keys[0]).length;
+      varMapLength = this.variableMap.getVariablesOfType(keys[0]).length;
       assert.equal(varMapLength, 1);
     });
 
@@ -59,16 +59,16 @@ suite('Variable Map', function () {
       this.variableMap.createVariable('name1', 'type1', 'id1');
 
       // Assert there is only one variable in the this.variableMap.
-      let keys = Array.from(this.variableMap.variableMap.keys());
+      let keys = this.variableMap.getTypes();
       assert.equal(keys.length, 1);
-      const varMapLength = this.variableMap.variableMap.get(keys[0]).length;
+      const varMapLength = this.variableMap.getVariablesOfType(keys[0]).length;
       assert.equal(varMapLength, 1);
 
       this.variableMap.createVariable('name1', 'type2', 'id2');
       assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
       assertVariableValues(this.variableMap, 'name1', 'type2', 'id2');
       // Check that the size of the variableMap did change.
-      keys = Array.from(this.variableMap.variableMap.keys());
+      keys = this.variableMap.getTypes();
       assert.equal(keys.length, 2);
     });
 
@@ -243,6 +243,54 @@ suite('Variable Map', function () {
     test('Does not exist', function () {
       const resultArray = this.variableMap.getVariablesOfType('type1');
       assert.deepEqual(resultArray, []);
+    });
+  });
+
+  suite('changeVariableType', function () {
+    test('normally', function () {
+      const variable = this.variableMap.createVariable('name1', 'type1', 'id1');
+      this.variableMap.changeVariableType(variable, 'type2');
+      const oldTypeVariables = this.variableMap.getVariablesOfType('type1');
+      const newTypeVariables = this.variableMap.getVariablesOfType('type2');
+      assert.deepEqual(oldTypeVariables, []);
+      assert.deepEqual(newTypeVariables, [variable]);
+      assert.equal(variable.getType(), 'type2');
+    });
+
+    test('to empty string', function () {
+      const variable = this.variableMap.createVariable('name1', 'type1', 'id1');
+      this.variableMap.changeVariableType(variable, '');
+      const oldTypeVariables = this.variableMap.getVariablesOfType('type1');
+      const newTypeVariables = this.variableMap.getVariablesOfType('');
+      assert.deepEqual(oldTypeVariables, []);
+      assert.deepEqual(newTypeVariables, [variable]);
+      assert.equal(variable.getType(), '');
+    });
+  });
+
+  suite('addVariable', function () {
+    test('normally', function () {
+      const variable = new Blockly.VariableModel(this.workspace, 'foo', 'int');
+      assert.isNull(this.variableMap.getVariableById(variable.getId()));
+      this.variableMap.addVariable(variable);
+      assert.equal(
+        this.variableMap.getVariableById(variable.getId()),
+        variable,
+      );
+    });
+  });
+
+  suite('getTypes', function () {
+    test('when map is empty', function () {
+      const types = this.variableMap.getTypes();
+      assert.deepEqual(types, []);
+    });
+
+    test('with various types', function () {
+      this.variableMap.createVariable('name1', 'type1', 'id1');
+      this.variableMap.createVariable('name2', '', 'id2');
+      const types = this.variableMap.getTypes();
+      assert.deepEqual(types, ['type1', '']);
     });
   });
 

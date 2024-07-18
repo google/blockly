@@ -610,7 +610,11 @@ function createVariable(
   // Create a potential variable if in the flyout.
   let variable = null;
   if (potentialVariableMap) {
-    variable = potentialVariableMap.createVariable(opt_name, opt_type, id);
+    variable = potentialVariableMap.createVariable(
+      opt_name,
+      opt_type,
+      id ?? undefined,
+    );
   } else {
     // In the main workspace, create a real variable.
     variable = workspace.createVariable(opt_name, opt_type, id);

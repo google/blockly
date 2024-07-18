@@ -30,7 +30,10 @@ import {
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
 import * as Variables from '../variables.js';
-import {VariableModel} from '../variable_model.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from '../interfaces/i_variable_model.js';
 
 // TODO(#5160): Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
@@ -503,7 +506,7 @@ function appendPrivate(
  */
 function checkNewVariables(
   workspace: Workspace,
-  originalVariables: VariableModel[],
+  originalVariables: IVariableModel<IVariableState>[],
 ) {
   if (eventUtils.isEnabled()) {
     const newVariables = Variables.getAddedVariables(

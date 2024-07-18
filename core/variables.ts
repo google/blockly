@@ -12,7 +12,7 @@ import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_par
 import {Msg} from './msg.js';
 import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.js';
 import * as utilsXml from './utils/xml.js';
-import {VariableModel} from './variable_model.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -34,9 +34,11 @@ export const CATEGORY_NAME = 'VARIABLE';
  * @param ws The workspace to search for variables.
  * @returns Array of variable models.
  */
-export function allUsedVarModels(ws: Workspace): VariableModel[] {
+export function allUsedVarModels(
+  ws: Workspace,
+): IVariableModel<IVariableState>[] {
   const blocks = ws.getAllBlocks(false);
-  const variables = new Set<VariableModel>();
+  const variables = new Set<IVariableModel<IVariableState>>();
   // Iterate through every block and add each variable to the set.
   for (let i = 0; i < blocks.length; i++) {
     const blockVariables = blocks[i].getVarModels();
@@ -142,7 +144,7 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
     }
 
     if (Blocks['variables_get']) {
-      variableModelList.sort(VariableModel.compareByName);
+      variableModelList.sort(compareByName);
       for (let i = 0, variable; (variable = variableModelList[i]); i++) {
         const block = utilsXml.createElement('block');
         block.setAttribute('type', 'variables_get');
@@ -295,7 +297,7 @@ export function createVariableButtonHandler(
  */
 export function renameVariable(
   workspace: Workspace,
-  variable: VariableModel,
+  variable: IVariableModel<IVariableState>,
   opt_callback?: (p1?: string | null) => void,
 ) {
   // This function needs to be named so it can be called recursively.
@@ -386,7 +388,7 @@ function nameUsedWithOtherType(
   name: string,
   type: string,
   workspace: Workspace,
-): VariableModel | null {
+): IVariableModel<IVariableState> | null {
   const allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();
@@ -411,7 +413,7 @@ function nameUsedWithOtherType(
 export function nameUsedWithAnyType(
   name: string,
   workspace: Workspace,
-): VariableModel | null {
+): IVariableModel<IVariableState> | null {
   const allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();
@@ -502,7 +504,7 @@ function checkForConflictingParamWithLegacyProcedures(
  * @returns The generated DOM.
  */
 export function generateVariableFieldDom(
-  variableModel: VariableModel,
+  variableModel: IVariableModel<IVariableState>,
 ): Element {
   /* Generates the following XML:
    * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
@@ -533,7 +535,7 @@ export function getOrCreateVariablePackage(
   id: string | null,
   opt_name?: string,
   opt_type?: string,
-): VariableModel {
+): IVariableModel<IVariableState> {
   let variable = getVariable(workspace, id, opt_name, opt_type);
   if (!variable) {
     variable = createVariable(workspace, id, opt_name, opt_type);
@@ -561,7 +563,7 @@ export function getVariable(
   id: string | null,
   opt_name?: string,
   opt_type?: string,
-): VariableModel | null {
+): IVariableModel<IVariableState> | null {
   const potentialVariableMap = workspace.getPotentialVariableMap();
   let variable = null;
   // Try to just get the variable, by ID if possible.
@@ -606,7 +608,7 @@ function createVariable(
   id: string | null,
   opt_name?: string,
   opt_type?: string,
-): VariableModel {
+): IVariableModel<IVariableState> {
   const potentialVariableMap = workspace.getPotentialVariableMap();
   // Variables without names get uniquely named for this workspace.
   if (!opt_name) {
@@ -646,8 +648,8 @@ function createVariable(
  */
 export function getAddedVariables(
   workspace: Workspace,
-  originalVariables: VariableModel[],
-): VariableModel[] {
+  originalVariables: IVariableModel<IVariableState>[],
+): IVariableModel<IVariableState>[] {
   const allCurrentVariables = workspace.getAllVariables();
   const addedVariables = [];
   if (originalVariables.length !== allCurrentVariables.length) {
@@ -661,6 +663,24 @@ export function getAddedVariables(
     }
   }
   return addedVariables;
+}
+
+/**
+ * A custom compare function for the VariableModel objects.
+ *
+ * @param var1 First variable to compare.
+ * @param var2 Second variable to compare.
+ * @returns -1 if name of var1 is less than name of var2, 0 if equal, and 1 if
+ *     greater.
+ * @internal
+ */
+export function compareByName(
+  var1: IVariableModel<IVariableState>,
+  var2: IVariableModel<IVariableState>,
+): number {
+  return var1
+    .getName()
+    .localeCompare(var2.getName(), undefined, {sensitivity: 'base'});
 }
 
 export const TEST_ONLY = {

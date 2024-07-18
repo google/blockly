@@ -7,7 +7,10 @@
 // Former goog.module ID: Blockly.Events.VarDelete
 
 import * as registry from '../registry.js';
-import type {VariableModel} from '../variable_model.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from '../interfaces/i_variable_model.js';
 
 import {VarBase, VarBaseJson} from './events_var_base.js';
 import * as eventUtils from './utils.js';
@@ -28,7 +31,7 @@ export class VarDelete extends VarBase {
   /**
    * @param opt_variable The deleted variable. Undefined for a blank event.
    */
-  constructor(opt_variable?: VariableModel) {
+  constructor(opt_variable?: IVariableModel<IVariableState>) {
     super(opt_variable);
 
     if (!opt_variable) {

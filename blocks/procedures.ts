@@ -32,7 +32,10 @@ import {FieldTextInput} from '../core/field_textinput.js';
 import {Msg} from '../core/msg.js';
 import {MutatorIcon as Mutator} from '../core/icons/mutator_icon.js';
 import {Names} from '../core/names.js';
-import type {VariableModel} from '../core/variable_model.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from '../core/interfaces/i_variable_model.js';
 import type {Workspace} from '../core/workspace.js';
 import type {WorkspaceSvg} from '../core/workspace_svg.js';
 import {config} from '../core/config.js';
@@ -48,7 +51,7 @@ export const blocks: {[key: string]: BlockDefinition} = {};
 type ProcedureBlock = Block & ProcedureMixin;
 interface ProcedureMixin extends ProcedureMixinType {
   arguments_: string[];
-  argumentVarModels_: VariableModel[];
+  argumentVarModels_: IVariableModel<IVariableState>[];
   callType_: string;
   paramIds_: string[];
   hasStatements_: boolean;
@@ -352,7 +355,9 @@ const PROCEDURE_DEF_COMMON = {
    *
    * @returns List of variable models.
    */
-  getVarModels: function (this: ProcedureBlock): VariableModel[] {
+  getVarModels: function (
+    this: ProcedureBlock,
+  ): IVariableModel<IVariableState>[] {
     return this.argumentVarModels_;
   },
   /**
@@ -398,7 +403,7 @@ const PROCEDURE_DEF_COMMON = {
    */
   updateVarName: function (
     this: ProcedureBlock & BlockSvg,
-    variable: VariableModel,
+    variable: IVariableModel<IVariableState>,
   ) {
     const newName = variable.getName();
     let change = false;
@@ -627,7 +632,7 @@ type ArgumentMixinType = typeof PROCEDURES_MUTATORARGUMENT;
 // TODO(#6920): This is kludgy.
 type FieldTextInputForArgument = FieldTextInput & {
   oldShowEditorFn_(_e?: Event, quietInput?: boolean): void;
-  createdVariables_: VariableModel[];
+  createdVariables_: IVariableModel<IVariableState>[];
 };
 
 const PROCEDURES_MUTATORARGUMENT = {
@@ -754,7 +759,7 @@ blocks['procedures_mutatorarg'] = PROCEDURES_MUTATORARGUMENT;
 /** Type of a block using the PROCEDURE_CALL_COMMON mixin. */
 type CallBlock = Block & CallMixin;
 interface CallMixin extends CallMixinType {
-  argumentVarModels_: VariableModel[];
+  argumentVarModels_: IVariableModel<IVariableState>[];
   arguments_: string[];
   defType_: string;
   quarkIds_: string[] | null;
@@ -1033,7 +1038,7 @@ const PROCEDURE_CALL_COMMON = {
    *
    * @returns List of variable models.
    */
-  getVarModels: function (this: CallBlock): VariableModel[] {
+  getVarModels: function (this: CallBlock): IVariableModel<IVariableState>[] {
     return this.argumentVarModels_;
   },
   /**

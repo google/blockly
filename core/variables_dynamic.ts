@@ -9,7 +9,6 @@
 import {Blocks} from './blocks.js';
 import {Msg} from './msg.js';
 import * as xml from './utils/xml.js';
-import {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
@@ -129,7 +128,7 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
       xmlList.push(block);
     }
     if (Blocks['variables_get_dynamic']) {
-      variableModelList.sort(VariableModel.compareByName);
+      variableModelList.sort(Variables.compareByName);
       for (let i = 0, variable; (variable = variableModelList[i]); i++) {
         const block = xml.createElement('block');
         block.setAttribute('type', 'variables_get_dynamic');

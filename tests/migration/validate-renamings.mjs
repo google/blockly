@@ -32,9 +32,10 @@ const renamings = JSON5.parse(renamingsJson5);
 const output = await validate(SCHEMA_URL, renamings, BASIC);
 
 if (!output.valid) {
-  console.log('Renamings file is invalid.');
-  console.log('Maybe this validator output will help you find the problem:');
-  console.log(JSON5.stringify(output, undefined, '  '));
+  console.error(`Renamings file is invalid.  First error occurs at:
+    ${output.errors[0].instanceLocation}`);
+  console.info(`Here is the full validator output, in case that helps:\n`,
+               output);
   process.exit(1);
 }
 
@@ -45,7 +46,7 @@ Object.entries(renamings).forEach(([version, modules]) => {
   const seen = new Set();
   for (const {oldName} of modules) {
     if (seen.has(oldName)) {
-      console.log(
+      console.error(
         `Duplicate entry for module ${oldName} ` + `in version ${version}.`,
       );
       ok = false;
@@ -54,7 +55,7 @@ Object.entries(renamings).forEach(([version, modules]) => {
   }
 });
 if (!ok) {
-  console.log('Renamings file is invalid.');
+  console.error('Renamings file is invalid.');
   process.exit(1);
 }
 // Default is a successful exit 0.

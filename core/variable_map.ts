@@ -22,7 +22,6 @@ import * as eventUtils from './events/utils.js';
 import * as registry from './registry.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
-import * as arrayUtils from './utils/array.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';

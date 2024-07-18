@@ -266,11 +266,13 @@ export function createVariableButtonHandler(
       }
 
       let msg;
-      if (existing.type === type) {
-        msg = Msg['VARIABLE_ALREADY_EXISTS'].replace('%1', existing.name);
+      if (existing.getType() === type) {
+        msg = Msg['VARIABLE_ALREADY_EXISTS'].replace('%1', existing.getName());
       } else {
         msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
-        msg = msg.replace('%1', existing.name).replace('%2', existing.type);
+        msg = msg
+          .replace('%1', existing.getName())
+          .replace('%2', existing.getType());
       }
       dialog.alert(msg, function () {
         promptAndCheckWithAlert(text);
@@ -300,7 +302,7 @@ export function renameVariable(
   function promptAndCheckWithAlert(defaultName: string) {
     const promptText = Msg['RENAME_VARIABLE_TITLE'].replace(
       '%1',
-      variable.name,
+      variable.getName(),
     );
     promptName(promptText, defaultName, function (newName) {
       if (!newName) {
@@ -309,9 +311,13 @@ export function renameVariable(
         return;
       }
 
-      const existing = nameUsedWithOtherType(newName, variable.type, workspace);
+      const existing = nameUsedWithOtherType(
+        newName,
+        variable.getType(),
+        workspace,
+      );
       const procedure = nameUsedWithConflictingParam(
-        variable.name,
+        variable.getName(),
         newName,
         workspace,
       );
@@ -325,8 +331,8 @@ export function renameVariable(
       let msg = '';
       if (existing) {
         msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
-          .replace('%1', existing.name)
-          .replace('%2', existing.type);
+          .replace('%1', existing.getName())
+          .replace('%2', existing.getType());
       } else if (procedure) {
         msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER']
           .replace('%1', newName)
@@ -385,7 +391,10 @@ function nameUsedWithOtherType(
 
   name = name.toLowerCase();
   for (let i = 0, variable; (variable = allVariables[i]); i++) {
-    if (variable.name.toLowerCase() === name && variable.type !== type) {
+    if (
+      variable.getName().toLowerCase() === name &&
+      variable.getType() !== type
+    ) {
       return variable;
     }
   }
@@ -407,7 +416,7 @@ export function nameUsedWithAnyType(
 
   name = name.toLowerCase();
   for (let i = 0, variable; (variable = allVariables[i]); i++) {
-    if (variable.name.toLowerCase() === name) {
+    if (variable.getName().toLowerCase() === name) {
       return variable;
     }
   }
@@ -453,7 +462,7 @@ function checkForConflictingParamWithProcedureModels(
     const params = procedure
       .getParameters()
       .filter(isVariableBackedParameterModel)
-      .map((param) => param.getVariableModel().name);
+      .map((param) => param.getVariableModel().getName());
     if (!params) continue;
     const procHasOld = params.some((param) => param.toLowerCase() === oldName);
     const procHasNew = params.some((param) => param.toLowerCase() === newName);
@@ -501,8 +510,8 @@ export function generateVariableFieldDom(
   const field = utilsXml.createElement('field');
   field.setAttribute('name', 'VAR');
   field.setAttribute('id', variableModel.getId());
-  field.setAttribute('variabletype', variableModel.type);
-  const name = utilsXml.createTextNode(variableModel.name);
+  field.setAttribute('variabletype', variableModel.getType());
+  const name = utilsXml.createTextNode(variableModel.getName());
   field.appendChild(name);
   return field;
 }

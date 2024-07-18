@@ -91,9 +91,9 @@ export function variablesToDom(variableList: VariableModel[]): Element {
   for (let i = 0; i < variableList.length; i++) {
     const variable = variableList[i];
     const element = utilsXml.createElement('variable');
-    element.appendChild(utilsXml.createTextNode(variable.name));
-    if (variable.type) {
-      element.setAttribute('type', variable.type);
+    element.appendChild(utilsXml.createTextNode(variable.getName()));
+    if (variable.getType()) {
+      element.setAttribute('type', variable.getType());
     }
     element.id = variable.getId();
     variables.appendChild(element);

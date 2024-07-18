@@ -196,12 +196,12 @@ export class FieldVariable extends FieldDropdown {
     );
 
     // This should never happen :)
-    if (variableType !== null && variableType !== variable.type) {
+    if (variableType !== null && variableType !== variable.getType()) {
       throw Error(
         "Serialized variable type with id '" +
           variable.getId() +
           "' had type " +
-          variable.type +
+          variable.getType() +
           ', and ' +
           'does not match variable field that references it: ' +
           Xml.domToText(fieldElement) +
@@ -224,9 +224,9 @@ export class FieldVariable extends FieldDropdown {
     this.initModel();
 
     fieldElement.id = this.variable!.getId();
-    fieldElement.textContent = this.variable!.name;
-    if (this.variable!.type) {
-      fieldElement.setAttribute('variabletype', this.variable!.type);
+    fieldElement.textContent = this.variable!.getName();
+    if (this.variable!.getType()) {
+      fieldElement.setAttribute('variabletype', this.variable!.getType());
     }
     return fieldElement;
   }
@@ -249,8 +249,8 @@ export class FieldVariable extends FieldDropdown {
     this.initModel();
     const state = {'id': this.variable!.getId()};
     if (doFullSerialization) {
-      (state as AnyDuringMigration)['name'] = this.variable!.name;
-      (state as AnyDuringMigration)['type'] = this.variable!.type;
+      (state as AnyDuringMigration)['name'] = this.variable!.getName();
+      (state as AnyDuringMigration)['type'] = this.variable!.getType();
     }
     return state;
   }
@@ -307,7 +307,7 @@ export class FieldVariable extends FieldDropdown {
    *     is selected.
    */
   override getText(): string {
-    return this.variable ? this.variable.name : '';
+    return this.variable ? this.variable.getName() : '';
   }
 
   /**
@@ -365,7 +365,7 @@ export class FieldVariable extends FieldDropdown {
       return null;
     }
     // Type Checks.
-    const type = variable.type;
+    const type = variable.getType();
     if (!this.typeIsAllowed(type)) {
       console.warn("Variable type doesn't match this field!  Type was " + type);
       return null;
@@ -577,7 +577,10 @@ export class FieldVariable extends FieldDropdown {
     const options: [string, string][] = [];
     for (let i = 0; i < variableModelList.length; i++) {
       // Set the UUID as the internal representation of the variable.
-      options[i] = [variableModelList[i].name, variableModelList[i].getId()];
+      options[i] = [
+        variableModelList[i].getName(),
+        variableModelList[i].getId(),
+      ];
     }
     options.push([
       Msg['RENAME_VARIABLE'],

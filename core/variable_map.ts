@@ -64,8 +64,8 @@ export class VariableMap implements IVariableMap<VariableModel> {
    * @returns The newly renamed variable.
    */
   renameVariable(variable: VariableModel, newName: string): VariableModel {
-    if (variable.name === newName) return variable;
-    const type = variable.type;
+    if (variable.getName() === newName) return variable;
+    const type = variable.getType();
     const conflictVar = this.getVariable(newName, type);
     const blocks = this.workspace.getAllBlocks(false);
     const existingGroup = eventUtils.getGroup();
@@ -136,7 +136,7 @@ export class VariableMap implements IVariableMap<VariableModel> {
     eventUtils.fire(
       new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName),
     );
-    variable.name = newName;
+    variable.setName(newName);
     for (let i = 0; i < blocks.length; i++) {
       blocks[i].updateVarName(variable);
     }
@@ -159,8 +159,8 @@ export class VariableMap implements IVariableMap<VariableModel> {
     conflictVar: VariableModel,
     blocks: Block[],
   ) {
-    const type = variable.type;
-    const oldCase = conflictVar.name;
+    const type = variable.getType();
+    const oldCase = conflictVar.getName();
 
     if (newName !== oldCase) {
       // Simple rename to change the case and update references.
@@ -250,12 +250,12 @@ export class VariableMap implements IVariableMap<VariableModel> {
    * @param variable Variable to delete.
    */
   deleteVariable(variable: VariableModel) {
-    const variables = this.variableMap.get(variable.type);
+    const variables = this.variableMap.get(variable.getType());
     if (!variables || !variables.has(variable.getId())) return;
     variables.delete(variable.getId());
     eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
     if (variables.size === 0) {
-      this.variableMap.delete(variable.type);
+      this.variableMap.delete(variable.getType());
     }
   }
 
@@ -269,7 +269,7 @@ export class VariableMap implements IVariableMap<VariableModel> {
     const variable = this.getVariableById(id);
     if (variable) {
       // Check whether this variable is a function parameter before deleting.
-      const variableName = variable.name;
+      const variableName = variable.getName();
       const uses = this.getVariableUsesById(id);
       for (let i = 0, block; (block = uses[i]); i++) {
         if (

@@ -37,7 +37,7 @@ export class VarBase extends AbstractEvent {
     if (!opt_variable) return;
 
     this.varId = opt_variable.getId();
-    this.workspaceId = opt_variable.workspace.id;
+    this.workspaceId = opt_variable.getWorkspace().id;
   }
 
   /**

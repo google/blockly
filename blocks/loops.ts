@@ -269,7 +269,7 @@ const CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
     }
     const varField = this.getField('VAR') as FieldVariable;
     const variable = varField.getVariable()!;
-    const varName = variable.name;
+    const varName = variable.getName();
     if (!this.isCollapsed() && varName !== null) {
       const getVarBlockState = {
         type: 'variables_get',

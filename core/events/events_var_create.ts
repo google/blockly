@@ -39,8 +39,8 @@ export class VarCreate extends VarBase {
     if (!opt_variable) {
       return; // Blank event to be populated by fromJson.
     }
-    this.varType = opt_variable.type;
-    this.varName = opt_variable.name;
+    this.varType = opt_variable.getType();
+    this.varName = opt_variable.getName();
   }
 
   /**

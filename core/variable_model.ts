@@ -15,8 +15,9 @@
 import './events/events_var_create.js';
 
 import * as idGenerator from './utils/idgenerator.js';
+import * as registry from './registry.js';
 import type {Workspace} from './workspace.js';
-import {IVariableModel} from './interfaces/i_variable_model.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 
 /**
  * Class for a variable model.
@@ -24,7 +25,7 @@ import {IVariableModel} from './interfaces/i_variable_model.js';
  *
  * @see {Blockly.FieldVariable}
  */
-export class VariableModel implements IVariableModel {
+export class VariableModel implements IVariableModel<IVariableState> {
   type: string;
   private readonly id_: string;
 
@@ -95,6 +96,30 @@ export class VariableModel implements IVariableModel {
     return this;
   }
 
+  getWorkspace(): Workspace {
+    return this.workspace;
+  }
+
+  save(): IVariableState {
+    const state: IVariableState = {
+      'name': this.getName(),
+      'id': this.getId(),
+    };
+    const type = this.getType();
+    if (type) {
+      state['type'] = type;
+    }
+
+    return state;
+  }
+
+  static load(state: IVariableState, workspace: Workspace) {
+    // TODO(adodson): Once VariableMap implements IVariableMap, directly
+    // construct a variable, retrieve the variable map from the workspace,
+    // add the variable to that variable map, and fire a VAR_CREATE event.
+    workspace.createVariable(state['name'], state['type'], state['id']);
+  }
+
   /**
    * A custom compare function for the VariableModel objects.
    *
@@ -108,3 +133,9 @@ export class VariableModel implements IVariableModel {
     return var1.name.localeCompare(var2.name, undefined, {sensitivity: 'base'});
   }
 }
+
+registry.register(
+  registry.Type.VARIABLE_MODEL,
+  registry.DEFAULT,
+  VariableModel,
+);

@@ -103,6 +103,7 @@
     "@blockly/block-test": "^6.0.4",
     "@blockly/dev-tools": "^8.0.4",
     "@blockly/theme-modern": "^6.0.3",
+    "@hyperjump/browser": "^1.1.4",
     "@hyperjump/json-schema": "^1.5.0",
     "@microsoft/api-documenter": "^7.22.4",
     "@microsoft/api-extractor": "^7.29.5",

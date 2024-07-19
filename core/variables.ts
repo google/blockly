@@ -6,6 +6,7 @@
 
 // Former goog.module ID: Blockly.Variables
 
+import type {Block} from './block.js';
 import {Blocks} from './blocks.js';
 import * as dialog from './dialog.js';
 import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
@@ -681,6 +682,74 @@ export function compareByName(
   return var1
     .getName()
     .localeCompare(var2.getName(), undefined, {sensitivity: 'base'});
+}
+
+/**
+ * Find all the uses of a named variable.
+ *
+ * @param workspace The workspace to search for the variable.
+ * @param id ID of the variable to find.
+ * @returns Array of block usages.
+ */
+export function getVariableUsesById(workspace: Workspace, id: string): Block[] {
+  const uses = [];
+  const blocks = workspace.getAllBlocks(false);
+  // Iterate through every block and check the name.
+  for (let i = 0; i < blocks.length; i++) {
+    const blockVariables = blocks[i].getVarModels();
+    if (blockVariables) {
+      for (let j = 0; j < blockVariables.length; j++) {
+        if (blockVariables[j].getId() === id) {
+          uses.push(blocks[i]);
+        }
+      }
+    }
+  }
+  return uses;
+}
+
+/**
+ * Delete a variable and all of its uses from the given workspace. May prompt
+ * the user for confirmation.
+ *
+ * @param workspace The workspace from which to delete the variable.
+ * @param variable The variable to delete.
+ */
+export function deleteVariable(
+  workspace: Workspace,
+  variable: IVariableModel<IVariableState>,
+) {
+  // Check whether this variable is a function parameter before deleting.
+  const variableName = variable.getName();
+  const uses = getVariableUsesById(workspace, variable.getId());
+  for (let i = 0, block; (block = uses[i]); i++) {
+    if (
+      block.type === 'procedures_defnoreturn' ||
+      block.type === 'procedures_defreturn'
+    ) {
+      const procedureName = String(block.getFieldValue('NAME'));
+      const deleteText = Msg['CANNOT_DELETE_VARIABLE_PROCEDURE']
+        .replace('%1', variableName)
+        .replace('%2', procedureName);
+      dialog.alert(deleteText);
+      return;
+    }
+  }
+
+  if (uses.length > 1) {
+    // Confirm before deleting multiple blocks.
+    const confirmText = Msg['DELETE_VARIABLE_CONFIRMATION']
+      .replace('%1', String(uses.length))
+      .replace('%2', variableName);
+    dialog.confirm(confirmText, (ok) => {
+      if (ok && variable) {
+        workspace.getVariableMap().deleteVariable(variable);
+      }
+    });
+  } else {
+    // No confirmation necessary for a single block.
+    workspace.getVariableMap().deleteVariable(variable);
+  }
 }
 
 export const TEST_ONLY = {

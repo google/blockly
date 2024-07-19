@@ -28,6 +28,7 @@ import * as arrayUtils from './utils/array.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as math from './utils/math.js';
 import type * as toolbox from './utils/toolbox.js';
+import * as Variables from './variables.js';
 import type {IVariableMap} from './interfaces/i_variable_map.js';
 import type {
   IVariableModel,
@@ -422,20 +423,7 @@ export class Workspace implements IASTNodeLocation {
    * @returns Array of block usages.
    */
   getVariableUsesById(id: string): Block[] {
-    const uses = [];
-    const blocks = this.getAllBlocks(false);
-    // Iterate through every block and check the name.
-    for (let i = 0; i < blocks.length; i++) {
-      const blockVariables = blocks[i].getVarModels();
-      if (blockVariables) {
-        for (let j = 0; j < blockVariables.length; j++) {
-          if (blockVariables[j].getId() === id) {
-            uses.push(blocks[i]);
-          }
-        }
-      }
-    }
-    return uses;
+    return Variables.getVariableUsesById(this, id);
   }
 
   /**
@@ -446,8 +434,11 @@ export class Workspace implements IASTNodeLocation {
    */
   deleteVariableById(id: string) {
     const variable = this.variableMap.getVariableById(id);
-    if (!variable) return;
-    this.variableMap.deleteVariable(variable);
+    if (!variable) {
+      console.warn(`Can't delete non-existent variable: ${id}`);
+      return;
+    }
+    Variables.deleteVariable(this, variable);
   }
 
   /**

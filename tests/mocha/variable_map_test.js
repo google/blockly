@@ -21,7 +21,7 @@ suite('Variable Map', function () {
   setup(function () {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
-    this.variableMap = new Blockly.VariableMap(this.workspace);
+    this.variableMap = this.workspace.getVariableMap();
   });
 
   teardown(function () {

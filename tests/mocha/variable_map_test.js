@@ -246,27 +246,38 @@ suite('Variable Map', function () {
     });
   });
 
-  suite('changeVariableType', function () {
-    test('normally', function () {
-      const variable = this.variableMap.createVariable('name1', 'type1', 'id1');
-      this.variableMap.changeVariableType(variable, 'type2');
-      const oldTypeVariables = this.variableMap.getVariablesOfType('type1');
-      const newTypeVariables = this.variableMap.getVariablesOfType('type2');
-      assert.deepEqual(oldTypeVariables, []);
-      assert.deepEqual(newTypeVariables, [variable]);
-      assert.equal(variable.getType(), 'type2');
-    });
+  suite(
+    'Using changeVariableType to change the type of a variable',
+    function () {
+      test('updates it to a new non-empty value', function () {
+        const variable = this.variableMap.createVariable(
+          'name1',
+          'type1',
+          'id1',
+        );
+        this.variableMap.changeVariableType(variable, 'type2');
+        const oldTypeVariables = this.variableMap.getVariablesOfType('type1');
+        const newTypeVariables = this.variableMap.getVariablesOfType('type2');
+        assert.deepEqual(oldTypeVariables, []);
+        assert.deepEqual(newTypeVariables, [variable]);
+        assert.equal(variable.getType(), 'type2');
+      });
 
-    test('to empty string', function () {
-      const variable = this.variableMap.createVariable('name1', 'type1', 'id1');
-      this.variableMap.changeVariableType(variable, '');
-      const oldTypeVariables = this.variableMap.getVariablesOfType('type1');
-      const newTypeVariables = this.variableMap.getVariablesOfType('');
-      assert.deepEqual(oldTypeVariables, []);
-      assert.deepEqual(newTypeVariables, [variable]);
-      assert.equal(variable.getType(), '');
-    });
-  });
+      test('updates it to a new empty value', function () {
+        const variable = this.variableMap.createVariable(
+          'name1',
+          'type1',
+          'id1',
+        );
+        this.variableMap.changeVariableType(variable, '');
+        const oldTypeVariables = this.variableMap.getVariablesOfType('type1');
+        const newTypeVariables = this.variableMap.getVariablesOfType('');
+        assert.deepEqual(oldTypeVariables, []);
+        assert.deepEqual(newTypeVariables, [variable]);
+        assert.equal(variable.getType(), '');
+      });
+    },
+  );
 
   suite('addVariable', function () {
     test('normally', function () {

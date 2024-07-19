@@ -34,7 +34,7 @@ import type {IVariableMap} from './interfaces/i_variable_map.js';
  */
 export class VariableMap implements IVariableMap<VariableModel> {
   /**
-   * A map from variable type to list of variable names.  The lists contain
+   * A map from variable type to map of IDs to variables. The maps contain
    * all of the named variables in the workspace, including variables that are
    * not currently in use.
    */

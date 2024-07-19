@@ -11,7 +11,10 @@
  */
 // Former goog.module ID: Blockly.Events.VarBase
 
-import type {VariableModel} from '../variable_model.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from '../interfaces/i_variable_model.js';
 
 import {
   Abstract as AbstractEvent,
@@ -31,13 +34,13 @@ export class VarBase extends AbstractEvent {
    * @param opt_variable The variable this event corresponds to.  Undefined for
    *     a blank event.
    */
-  constructor(opt_variable?: VariableModel) {
+  constructor(opt_variable?: IVariableModel<IVariableState>) {
     super();
     this.isBlank = typeof opt_variable === 'undefined';
     if (!opt_variable) return;
 
     this.varId = opt_variable.getId();
-    this.workspaceId = opt_variable.workspace.id;
+    this.workspaceId = opt_variable.getWorkspace().id;
   }
 
   /**

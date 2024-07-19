@@ -26,7 +26,7 @@ import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
  * @see {Blockly.FieldVariable}
  */
 export class VariableModel implements IVariableModel<IVariableState> {
-  type: string;
+  private type: string;
   private readonly id_: string;
 
   /**
@@ -39,8 +39,8 @@ export class VariableModel implements IVariableModel<IVariableState> {
    * @param opt_id The unique ID of the variable. This will default to a UUID.
    */
   constructor(
-    public workspace: Workspace,
-    public name: string,
+    private workspace: Workspace,
+    private name: string,
     opt_type?: string,
     opt_id?: string,
   ) {
@@ -130,7 +130,9 @@ export class VariableModel implements IVariableModel<IVariableState> {
    * @internal
    */
   static compareByName(var1: VariableModel, var2: VariableModel): number {
-    return var1.name.localeCompare(var2.name, undefined, {sensitivity: 'base'});
+    return var1
+      .getName()
+      .localeCompare(var2.getName(), undefined, {sensitivity: 'base'});
   }
 }
 

@@ -23,7 +23,7 @@ import * as registry from './registry.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
 import * as idGenerator from './utils/idgenerator.js';
-import {VariableModel} from './variable_model.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import type {Workspace} from './workspace.js';
 import type {IVariableMap} from './interfaces/i_variable_map.js';
 
@@ -32,13 +32,18 @@ import type {IVariableMap} from './interfaces/i_variable_map.js';
  * variable types as keys and lists of variables as values.  The list of
  * variables are the type indicated by the key.
  */
-export class VariableMap implements IVariableMap<VariableModel> {
+export class VariableMap
+  implements IVariableMap<IVariableModel<IVariableState>>
+{
   /**
    * A map from variable type to map of IDs to variables. The maps contain
    * all of the named variables in the workspace, including variables that are
    * not currently in use.
    */
-  private variableMap = new Map<string, Map<string, VariableModel>>();
+  private variableMap = new Map<
+    string,
+    Map<string, IVariableModel<IVariableState>>
+  >();
 
   /** @param workspace The workspace this map belongs to. */
   constructor(public workspace: Workspace) {}
@@ -63,9 +68,12 @@ export class VariableMap implements IVariableMap<VariableModel> {
    * @param newName New variable name.
    * @returns The newly renamed variable.
    */
-  renameVariable(variable: VariableModel, newName: string): VariableModel {
-    if (variable.name === newName) return variable;
-    const type = variable.type;
+  renameVariable(
+    variable: IVariableModel<IVariableState>,
+    newName: string,
+  ): IVariableModel<IVariableState> {
+    if (variable.getName() === newName) return variable;
+    const type = variable.getType();
     const conflictVar = this.getVariable(newName, type);
     const blocks = this.workspace.getAllBlocks(false);
     const existingGroup = eventUtils.getGroup();
@@ -91,11 +99,15 @@ export class VariableMap implements IVariableMap<VariableModel> {
     return variable;
   }
 
-  changeVariableType(variable: VariableModel, newType: string): VariableModel {
+  changeVariableType(
+    variable: IVariableModel<IVariableState>,
+    newType: string,
+  ): IVariableModel<IVariableState> {
     this.variableMap.get(variable.getType())?.delete(variable.getId());
     variable.setType(newType);
     const newTypeVariables =
-      this.variableMap.get(newType) ?? new Map<string, VariableModel>();
+      this.variableMap.get(newType) ??
+      new Map<string, IVariableModel<IVariableState>>();
     newTypeVariables.set(variable.getId(), variable);
     if (!this.variableMap.has(newType)) {
       this.variableMap.set(newType, newTypeVariables);
@@ -129,14 +141,14 @@ export class VariableMap implements IVariableMap<VariableModel> {
    * @param blocks The list of all blocks in the workspace.
    */
   private renameVariableAndUses_(
-    variable: VariableModel,
+    variable: IVariableModel<IVariableState>,
     newName: string,
     blocks: Block[],
   ) {
     eventUtils.fire(
       new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName),
     );
-    variable.name = newName;
+    variable.setName(newName);
     for (let i = 0; i < blocks.length; i++) {
       blocks[i].updateVarName(variable);
     }
@@ -154,13 +166,13 @@ export class VariableMap implements IVariableMap<VariableModel> {
    * @param blocks The list of all blocks in the workspace.
    */
   private renameVariableWithConflict_(
-    variable: VariableModel,
+    variable: IVariableModel<IVariableState>,
     newName: string,
-    conflictVar: VariableModel,
+    conflictVar: IVariableModel<IVariableState>,
     blocks: Block[],
   ) {
-    const type = variable.type;
-    const oldCase = conflictVar.name;
+    const type = variable.getType();
+    const oldCase = conflictVar.getName();
 
     if (newName !== oldCase) {
       // Simple rename to change the case and update references.
@@ -194,7 +206,7 @@ export class VariableMap implements IVariableMap<VariableModel> {
     name: string,
     opt_type?: string,
     opt_id?: string,
-  ): VariableModel {
+  ): IVariableModel<IVariableState> {
     let variable = this.getVariable(name, opt_type);
     if (variable) {
       if (opt_id && variable.getId() !== opt_id) {
@@ -217,10 +229,19 @@ export class VariableMap implements IVariableMap<VariableModel> {
     }
     const id = opt_id || idGenerator.genUid();
     const type = opt_type || '';
+    const VariableModel = registry.getObject(
+      registry.Type.VARIABLE_MODEL,
+      registry.DEFAULT,
+      true,
+    );
+    if (!VariableModel) {
+      throw new Error('No variable model is registered.');
+    }
     variable = new VariableModel(this.workspace, name, type, id);
 
     const variables =
-      this.variableMap.get(type) ?? new Map<string, VariableModel>();
+      this.variableMap.get(type) ??
+      new Map<string, IVariableModel<IVariableState>>();
     variables.set(variable.getId(), variable);
     if (!this.variableMap.has(type)) {
       this.variableMap.set(type, variables);
@@ -235,10 +256,13 @@ export class VariableMap implements IVariableMap<VariableModel> {
    *
    * @param variable The variable to add.
    */
-  addVariable(variable: VariableModel) {
+  addVariable(variable: IVariableModel<IVariableState>) {
     const type = variable.getType();
     if (!this.variableMap.has(type)) {
-      this.variableMap.set(type, new Map<string, VariableModel>());
+      this.variableMap.set(
+        type,
+        new Map<string, IVariableModel<IVariableState>>(),
+      );
     }
     this.variableMap.get(type)?.set(variable.getId(), variable);
   }
@@ -249,13 +273,13 @@ export class VariableMap implements IVariableMap<VariableModel> {
    *
    * @param variable Variable to delete.
    */
-  deleteVariable(variable: VariableModel) {
-    const variables = this.variableMap.get(variable.type);
+  deleteVariable(variable: IVariableModel<IVariableState>) {
+    const variables = this.variableMap.get(variable.getType());
     if (!variables || !variables.has(variable.getId())) return;
     variables.delete(variable.getId());
     eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
     if (variables.size === 0) {
-      this.variableMap.delete(variable.type);
+      this.variableMap.delete(variable.getType());
     }
   }
 
@@ -269,7 +293,7 @@ export class VariableMap implements IVariableMap<VariableModel> {
     const variable = this.getVariableById(id);
     if (variable) {
       // Check whether this variable is a function parameter before deleting.
-      const variableName = variable.name;
+      const variableName = variable.getName();
       const uses = this.getVariableUsesById(id);
       for (let i = 0, block; (block = uses[i]); i++) {
         if (
@@ -312,7 +336,10 @@ export class VariableMap implements IVariableMap<VariableModel> {
    * @param uses An array of uses of the variable.
    * @internal
    */
-  deleteVariableInternal(variable: VariableModel, uses: Block[]) {
+  deleteVariableInternal(
+    variable: IVariableModel<IVariableState>,
+    uses: Block[],
+  ) {
     const existingGroup = eventUtils.getGroup();
     if (!existingGroup) {
       eventUtils.setGroup(true);
@@ -336,7 +363,10 @@ export class VariableMap implements IVariableMap<VariableModel> {
    *     the empty string, which is a specific type.
    * @returns The variable with the given name, or null if it was not found.
    */
-  getVariable(name: string, opt_type?: string): VariableModel | null {
+  getVariable(
+    name: string,
+    opt_type?: string,
+  ): IVariableModel<IVariableState> | null {
     const type = opt_type || '';
     const variables = this.variableMap.get(type);
     if (!variables) return null;
@@ -354,7 +384,7 @@ export class VariableMap implements IVariableMap<VariableModel> {
    * @param id The ID to check for.
    * @returns The variable with the given ID.
    */
-  getVariableById(id: string): VariableModel | null {
+  getVariableById(id: string): IVariableModel<IVariableState> | null {
     for (const variables of this.variableMap.values()) {
       if (variables.has(id)) {
         return variables.get(id) ?? null;
@@ -371,7 +401,7 @@ export class VariableMap implements IVariableMap<VariableModel> {
    * @returns The sought after variables of the passed in type. An empty array
    *     if none are found.
    */
-  getVariablesOfType(type: string | null): VariableModel[] {
+  getVariablesOfType(type: string | null): IVariableModel<IVariableState>[] {
     type = type || '';
     const variables = this.variableMap.get(type);
     if (!variables) return [];
@@ -416,8 +446,8 @@ export class VariableMap implements IVariableMap<VariableModel> {
    *
    * @returns List of variable models.
    */
-  getAllVariables(): VariableModel[] {
-    let allVariables: VariableModel[] = [];
+  getAllVariables(): IVariableModel<IVariableState>[] {
+    let allVariables: IVariableModel<IVariableState>[] = [];
     for (const variables of this.variableMap.values()) {
       allVariables = allVariables.concat(...variables.values());
     }

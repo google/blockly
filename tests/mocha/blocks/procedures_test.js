@@ -25,7 +25,7 @@ import {defineRowBlock} from '../test_helpers/block_definitions.js';
 suite('Procedures', function () {
   setup(function () {
     sharedTestSetup.call(this, {fireEventsNow: false});
-    this.workspace = Blockly.inject('blocklyDiv', {disable: true});
+    this.workspace = Blockly.inject('blocklyDiv', {});
     this.workspace.createVariable('preCreatedVar', '', 'preCreatedVarId');
     this.workspace.createVariable(
       'preCreatedTypedVar',
@@ -862,6 +862,7 @@ suite('Procedures', function () {
       'if a procedure caller block was already disabled before ' +
         'its definition was disabled, it is not reenabled',
       function () {
+        this.workspace.options.disable = true;
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
         this.clock.runAll();

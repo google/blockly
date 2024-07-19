@@ -230,6 +230,11 @@ export class VariableMap implements IVariableMap<VariableModel> {
     return variable;
   }
 
+  /**
+   * Adds the given variable to this variable map.
+   *
+   * @param variable The variable to add.
+   */
   addVariable(variable: VariableModel) {
     const type = variable.getType();
     if (!this.variableMap.has(type)) {
@@ -374,6 +379,11 @@ export class VariableMap implements IVariableMap<VariableModel> {
     return [...variables.values()];
   }
 
+  /**
+   * Returns a list of unique types of variables in this variable map.
+   *
+   * @returns A list of unique types of variables in this variable map.
+   */
   getTypes(): string[] {
     return [...this.variableMap.keys()];
   }

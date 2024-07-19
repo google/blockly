@@ -18,11 +18,9 @@ import './events/events_var_rename.js';
 
 import type {Block} from './block.js';
 import * as deprecation from './utils/deprecation.js';
-import * as dialog from './dialog.js';
 import * as eventUtils from './events/utils.js';
 import * as registry from './registry.js';
 import * as Variables from './variables.js';
-import {Msg} from './msg.js';
 import {Names} from './names.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';

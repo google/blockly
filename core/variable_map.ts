@@ -431,7 +431,7 @@ export class VariableMap
   getVariableTypes(ws: Workspace | null): string[] {
     const variableTypes = new Set<string>(this.variableMap.keys());
     if (ws && ws.getPotentialVariableMap()) {
-      for (const key of ws.getPotentialVariableMap()!.variableMap.keys()) {
+      for (const key of ws.getPotentialVariableMap()!.getTypes()) {
         variableTypes.add(key);
       }
     }

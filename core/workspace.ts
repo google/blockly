@@ -400,7 +400,11 @@ export class Workspace implements IASTNodeLocation {
     opt_type?: string | null,
     opt_id?: string | null,
   ): VariableModel {
-    return this.variableMap.createVariable(name, opt_type, opt_id);
+    return this.variableMap.createVariable(
+      name,
+      opt_type ?? undefined,
+      opt_id ?? undefined,
+    );
   }
 
   /**
@@ -456,7 +460,7 @@ export class Workspace implements IASTNodeLocation {
    *     if none are found.
    */
   getVariablesOfType(type: string | null): VariableModel[] {
-    return this.variableMap.getVariablesOfType(type);
+    return this.variableMap.getVariablesOfType(type ?? '');
   }
 
   /**

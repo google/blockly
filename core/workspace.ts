@@ -627,7 +627,7 @@ export class Workspace implements IASTNodeLocation {
    *
    * @param redo False if undo, true if redo.
    */
-  undo(redo: boolean) {
+  undo(redo: boolean = false):void {
     const inputStack = redo ? this.redoStack_ : this.undoStack_;
     const outputStack = redo ? this.undoStack_ : this.redoStack_;
     const inputEvent = inputStack.pop();
@@ -636,6 +636,8 @@ export class Workspace implements IASTNodeLocation {
     }
     let events = [inputEvent];
     // Do another undo/redo if the next one is of the same group.
+    
+
     while (
       inputStack.length &&
       inputEvent.group &&
@@ -660,7 +662,14 @@ export class Workspace implements IASTNodeLocation {
     } finally {
       eventUtils.setRecordUndo(true);
     }
+
+   
   }
+  
+  redo(): void {
+    this.undo(true);
+  }
+
 
   /** Clear the undo/redo stacks. */
   clearUndo() {

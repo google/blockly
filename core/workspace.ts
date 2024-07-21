@@ -29,7 +29,10 @@ import * as idGenerator from './utils/idgenerator.js';
 import * as math from './utils/math.js';
 import type * as toolbox from './utils/toolbox.js';
 import {VariableMap} from './variable_map.js';
-import type {VariableModel} from './variable_model.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
 import {WorkspaceComment} from './comments/workspace_comment.js';
 import {IProcedureMap} from './interfaces/i_procedure_map.js';
 import {ObservableProcedureMap} from './observable_procedure_map.js';
@@ -399,8 +402,12 @@ export class Workspace implements IASTNodeLocation {
     name: string,
     opt_type?: string | null,
     opt_id?: string | null,
-  ): VariableModel {
-    return this.variableMap.createVariable(name, opt_type, opt_id);
+  ): IVariableModel<IVariableState> {
+    return this.variableMap.createVariable(
+      name,
+      opt_type ?? undefined,
+      opt_id ?? undefined,
+    );
   }
 
   /**
@@ -432,7 +439,10 @@ export class Workspace implements IASTNodeLocation {
    *     the empty string, which is a specific type.
    * @returns The variable with the given name.
    */
-  getVariable(name: string, opt_type?: string): VariableModel | null {
+  getVariable(
+    name: string,
+    opt_type?: string,
+  ): IVariableModel<IVariableState> | null {
     // TODO (#1559): Possibly delete this function after resolving #1559.
     return this.variableMap.getVariable(name, opt_type);
   }
@@ -443,7 +453,7 @@ export class Workspace implements IASTNodeLocation {
    * @param id The ID to check for.
    * @returns The variable with the given ID.
    */
-  getVariableById(id: string): VariableModel | null {
+  getVariableById(id: string): IVariableModel<IVariableState> | null {
     return this.variableMap.getVariableById(id);
   }
 
@@ -455,8 +465,8 @@ export class Workspace implements IASTNodeLocation {
    * @returns The sought after variables of the passed in type. An empty array
    *     if none are found.
    */
-  getVariablesOfType(type: string | null): VariableModel[] {
-    return this.variableMap.getVariablesOfType(type);
+  getVariablesOfType(type: string | null): IVariableModel<IVariableState>[] {
+    return this.variableMap.getVariablesOfType(type ?? '');
   }
 
   /**
@@ -474,7 +484,7 @@ export class Workspace implements IASTNodeLocation {
    *
    * @returns List of variable models.
    */
-  getAllVariables(): VariableModel[] {
+  getAllVariables(): IVariableModel<IVariableState>[] {
     return this.variableMap.getAllVariables();
   }
 
@@ -748,7 +758,6 @@ export class Workspace implements IASTNodeLocation {
    *
    * @param id ID of comment to find.
    * @returns The sought after comment, or null if not found.
-   * @internal
    */
   getCommentById(id: string): WorkspaceComment | null {
     return this.commentDB.get(id) ?? null;

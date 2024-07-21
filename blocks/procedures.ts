@@ -32,7 +32,10 @@ import {FieldTextInput} from '../core/field_textinput.js';
 import {Msg} from '../core/msg.js';
 import {MutatorIcon as Mutator} from '../core/icons/mutator_icon.js';
 import {Names} from '../core/names.js';
-import type {VariableModel} from '../core/variable_model.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from '../core/interfaces/i_variable_model.js';
 import type {Workspace} from '../core/workspace.js';
 import type {WorkspaceSvg} from '../core/workspace_svg.js';
 import {config} from '../core/config.js';
@@ -48,7 +51,7 @@ export const blocks: {[key: string]: BlockDefinition} = {};
 type ProcedureBlock = Block & ProcedureMixin;
 interface ProcedureMixin extends ProcedureMixinType {
   arguments_: string[];
-  argumentVarModels_: VariableModel[];
+  argumentVarModels_: IVariableModel<IVariableState>[];
   callType_: string;
   paramIds_: string[];
   hasStatements_: boolean;
@@ -128,7 +131,7 @@ const PROCEDURE_DEF_COMMON = {
     for (let i = 0; i < this.argumentVarModels_.length; i++) {
       const parameter = xmlUtils.createElement('arg');
       const argModel = this.argumentVarModels_[i];
-      parameter.setAttribute('name', argModel.name);
+      parameter.setAttribute('name', argModel.getName());
       parameter.setAttribute('varid', argModel.getId());
       if (opt_paramIds && this.paramIds_) {
         parameter.setAttribute('paramId', this.paramIds_[i]);
@@ -196,7 +199,7 @@ const PROCEDURE_DEF_COMMON = {
         state['params'].push({
           // We don't need to serialize the name, but just in case we decide
           // to separate params from variables.
-          'name': this.argumentVarModels_[i].name,
+          'name': this.argumentVarModels_[i].getName(),
           'id': this.argumentVarModels_[i].getId(),
         });
       }
@@ -224,7 +227,7 @@ const PROCEDURE_DEF_COMMON = {
           param['name'],
           '',
         );
-        this.arguments_.push(variable.name);
+        this.arguments_.push(variable.getName());
         this.argumentVarModels_.push(variable);
       }
     }
@@ -352,7 +355,9 @@ const PROCEDURE_DEF_COMMON = {
    *
    * @returns List of variable models.
    */
-  getVarModels: function (this: ProcedureBlock): VariableModel[] {
+  getVarModels: function (
+    this: ProcedureBlock,
+  ): IVariableModel<IVariableState>[] {
     return this.argumentVarModels_;
   },
   /**
@@ -370,23 +375,23 @@ const PROCEDURE_DEF_COMMON = {
     newId: string,
   ) {
     const oldVariable = this.workspace.getVariableById(oldId)!;
-    if (oldVariable.type !== '') {
+    if (oldVariable.getType() !== '') {
       // Procedure arguments always have the empty type.
       return;
     }
-    const oldName = oldVariable.name;
+    const oldName = oldVariable.getName();
     const newVar = this.workspace.getVariableById(newId)!;
 
     let change = false;
     for (let i = 0; i < this.argumentVarModels_.length; i++) {
       if (this.argumentVarModels_[i].getId() === oldId) {
-        this.arguments_[i] = newVar.name;
+        this.arguments_[i] = newVar.getName();
         this.argumentVarModels_[i] = newVar;
         change = true;
       }
     }
     if (change) {
-      this.displayRenamedVar_(oldName, newVar.name);
+      this.displayRenamedVar_(oldName, newVar.getName());
       Procedures.mutateCallers(this);
     }
   },
@@ -398,9 +403,9 @@ const PROCEDURE_DEF_COMMON = {
    */
   updateVarName: function (
     this: ProcedureBlock & BlockSvg,
-    variable: VariableModel,
+    variable: IVariableModel<IVariableState>,
   ) {
-    const newName = variable.name;
+    const newName = variable.getName();
     let change = false;
     let oldName;
     for (let i = 0; i < this.argumentVarModels_.length; i++) {
@@ -473,12 +478,16 @@ const PROCEDURE_DEF_COMMON = {
         const getVarBlockState = {
           type: 'variables_get',
           fields: {
-            VAR: {name: argVar.name, id: argVar.getId(), type: argVar.type},
+            VAR: {
+              name: argVar.getName(),
+              id: argVar.getId(),
+              type: argVar.getType(),
+            },
           },
         };
         options.push({
           enabled: true,
-          text: Msg['VARIABLES_SET_CREATE_GET'].replace('%1', argVar.name),
+          text: Msg['VARIABLES_SET_CREATE_GET'].replace('%1', argVar.getName()),
           callback: ContextMenu.callbackFactory(this, getVarBlockState),
         });
       }
@@ -623,7 +632,7 @@ type ArgumentMixinType = typeof PROCEDURES_MUTATORARGUMENT;
 // TODO(#6920): This is kludgy.
 type FieldTextInputForArgument = FieldTextInput & {
   oldShowEditorFn_(_e?: Event, quietInput?: boolean): void;
-  createdVariables_: VariableModel[];
+  createdVariables_: IVariableModel<IVariableState>[];
 };
 
 const PROCEDURES_MUTATORARGUMENT = {
@@ -708,7 +717,7 @@ const PROCEDURES_MUTATORARGUMENT = {
     }
 
     let model = outerWs.getVariable(varName, '');
-    if (model && model.name !== varName) {
+    if (model && model.getName() !== varName) {
       // Rename the variable (case change)
       outerWs.renameVariableById(model.getId(), varName);
     }
@@ -739,7 +748,7 @@ const PROCEDURES_MUTATORARGUMENT = {
     }
     for (let i = 0; i < this.createdVariables_.length; i++) {
       const model = this.createdVariables_[i];
-      if (model.name !== newText) {
+      if (model.getName() !== newText) {
         outerWs.deleteVariableById(model.getId());
       }
     }
@@ -750,7 +759,7 @@ blocks['procedures_mutatorarg'] = PROCEDURES_MUTATORARGUMENT;
 /** Type of a block using the PROCEDURE_CALL_COMMON mixin. */
 type CallBlock = Block & CallMixin;
 interface CallMixin extends CallMixinType {
-  argumentVarModels_: VariableModel[];
+  argumentVarModels_: IVariableModel<IVariableState>[];
   arguments_: string[];
   defType_: string;
   quarkIds_: string[] | null;
@@ -1029,7 +1038,7 @@ const PROCEDURE_CALL_COMMON = {
    *
    * @returns List of variable models.
    */
-  getVarModels: function (this: CallBlock): VariableModel[] {
+  getVarModels: function (this: CallBlock): IVariableModel<IVariableState>[] {
     return this.argumentVarModels_;
   },
   /**

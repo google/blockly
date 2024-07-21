@@ -922,6 +922,12 @@ suite('XML', function () {
         getId: function () {
           return varId;
         },
+        getName: function () {
+          return name;
+        },
+        getType: function () {
+          return type;
+        },
       };
 
       const generatedXml = Blockly.Xml.domToText(

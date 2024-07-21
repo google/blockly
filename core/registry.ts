@@ -24,6 +24,12 @@ import type {IPaster} from './interfaces/i_paster.js';
 import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IConnectionPreviewer} from './interfaces/i_connection_previewer.js';
 import type {IDragger} from './interfaces/i_dragger.js';
+import type {
+  IVariableModel,
+  IVariableModelStatic,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
+import type {IVariableMap} from './interfaces/i_variable_map.js';
 
 /**
  * A map of maps. With the keys being the type and name of the class we are
@@ -109,6 +115,14 @@ export class Type<_T> {
 
   /** @internal */
   static PASTER = new Type<IPaster<ICopyData, ICopyable<ICopyData>>>('paster');
+
+  static VARIABLE_MODEL = new Type<IVariableModelStatic<IVariableState>>(
+    'variableModel',
+  );
+
+  static VARIABLE_MAP = new Type<IVariableMap<IVariableModel<IVariableState>>>(
+    'variableMap',
+  );
 }
 
 /**

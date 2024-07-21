@@ -95,7 +95,7 @@ export class Names {
     }
     const variable = this.variableMap.getVariableById(id);
     if (variable) {
-      return variable.name;
+      return variable.getName();
     }
     return null;
   }

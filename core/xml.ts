@@ -17,7 +17,10 @@ import {inputTypes} from './inputs/input_types.js';
 import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';
 import * as utilsXml from './utils/xml.js';
-import type {VariableModel} from './variable_model.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import {WorkspaceSvg} from './workspace_svg.js';
@@ -86,14 +89,16 @@ export function saveWorkspaceComment(
  * @param variableList List of all variable models.
  * @returns Tree of XML elements.
  */
-export function variablesToDom(variableList: VariableModel[]): Element {
+export function variablesToDom(
+  variableList: IVariableModel<IVariableState>[],
+): Element {
   const variables = utilsXml.createElement('variables');
   for (let i = 0; i < variableList.length; i++) {
     const variable = variableList[i];
     const element = utilsXml.createElement('variable');
-    element.appendChild(utilsXml.createTextNode(variable.name));
-    if (variable.type) {
-      element.setAttribute('type', variable.type);
+    element.appendChild(utilsXml.createTextNode(variable.getName()));
+    if (variable.getType()) {
+      element.setAttribute('type', variable.getType());
     }
     element.id = variable.getId();
     variables.appendChild(element);

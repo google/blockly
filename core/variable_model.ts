@@ -15,8 +15,9 @@
 import './events/events_var_create.js';
 
 import * as idGenerator from './utils/idgenerator.js';
+import * as registry from './registry.js';
 import type {Workspace} from './workspace.js';
-import {IVariableModel} from './interfaces/i_variable_model.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 
 /**
  * Class for a variable model.
@@ -24,8 +25,8 @@ import {IVariableModel} from './interfaces/i_variable_model.js';
  *
  * @see {Blockly.FieldVariable}
  */
-export class VariableModel implements IVariableModel {
-  type: string;
+export class VariableModel implements IVariableModel<IVariableState> {
+  private type: string;
   private readonly id_: string;
 
   /**
@@ -38,8 +39,8 @@ export class VariableModel implements IVariableModel {
    * @param opt_id The unique ID of the variable. This will default to a UUID.
    */
   constructor(
-    public workspace: Workspace,
-    public name: string,
+    private workspace: Workspace,
+    private name: string,
     opt_type?: string,
     opt_id?: string,
   ) {
@@ -95,6 +96,30 @@ export class VariableModel implements IVariableModel {
     return this;
   }
 
+  getWorkspace(): Workspace {
+    return this.workspace;
+  }
+
+  save(): IVariableState {
+    const state: IVariableState = {
+      'name': this.getName(),
+      'id': this.getId(),
+    };
+    const type = this.getType();
+    if (type) {
+      state['type'] = type;
+    }
+
+    return state;
+  }
+
+  static load(state: IVariableState, workspace: Workspace) {
+    // TODO(adodson): Once VariableMap implements IVariableMap, directly
+    // construct a variable, retrieve the variable map from the workspace,
+    // add the variable to that variable map, and fire a VAR_CREATE event.
+    workspace.createVariable(state['name'], state['type'], state['id']);
+  }
+
   /**
    * A custom compare function for the VariableModel objects.
    *
@@ -105,6 +130,14 @@ export class VariableModel implements IVariableModel {
    * @internal
    */
   static compareByName(var1: VariableModel, var2: VariableModel): number {
-    return var1.name.localeCompare(var2.name, undefined, {sensitivity: 'base'});
+    return var1
+      .getName()
+      .localeCompare(var2.getName(), undefined, {sensitivity: 'base'});
   }
 }
+
+registry.register(
+  registry.Type.VARIABLE_MODEL,
+  registry.DEFAULT,
+  VariableModel,
+);

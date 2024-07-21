@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IVariableModel} from './i_variable_model.js';
-import {State} from '../serialization/variables.js';
+import type {IVariableModel, IVariableState} from './i_variable_model.js';
 
 /**
  * Variable maps are container objects responsible for storing and managing the
@@ -14,7 +13,7 @@ import {State} from '../serialization/variables.js';
  * Any of these methods may define invariants about which names and types are
  * legal, and throw if they are not met.
  */
-export interface IVariableMap<T extends IVariableModel, U extends State> {
+export interface IVariableMap<T extends IVariableModel<IVariableState>> {
   /* Returns the variable corresponding to the given ID, or null if none. */
   getVariableById(id: string): T | null;
 
@@ -46,6 +45,9 @@ export interface IVariableMap<T extends IVariableModel, U extends State> {
    */
   createVariable(name: string, id?: string, type?: string | null): T;
 
+  /* Adds a variable to this variable map. */
+  addVariable(variable: T): void;
+
   /**
    * Changes the name of the given variable to the name provided and returns the
    * renamed variable.
@@ -60,13 +62,4 @@ export interface IVariableMap<T extends IVariableModel, U extends State> {
 
   /* Removes all variables from this variable map. */
   clear(): void;
-
-  /* Returns an object representing the serialized state of the variable. */
-  saveVariable(variable: T): U;
-
-  /**
-   * Creates a variable in this variable map corresponding to the given state
-   * (produced by a call to `saveVariable`).
-   */
-  loadVariable(state: U): T;
 }

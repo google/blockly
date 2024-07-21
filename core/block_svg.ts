@@ -1070,6 +1070,20 @@ export class BlockSvg
   }
 
   /**
+   * Add blocklyNotDeletable class when block is not deletable
+   * Or remove class when block is deletable
+   */
+  override setDeletable(deletable: boolean) {
+    super.setDeletable(deletable);
+
+    if(deletable) {
+      dom.removeClass(this.svgGroup_, 'blocklyNotDeletable');
+    } else {
+      dom.addClass(this.svgGroup_, 'blocklyNotDeletable');
+    }
+  }
+
+  /**
    * Set whether the block is highlighted or not.  Block highlighting is
    * often used to visually mark blocks currently being executed.
    *

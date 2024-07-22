@@ -115,6 +115,7 @@ export class VariableMap
    * Rename a variable by updating its name in the variable map. Identify the
    * variable to rename with the given ID.
    *
+   * @deprecated v12, use VariableMap.renameVariable.
    * @param id ID of the variable to rename.
    * @param newName New variable name.
    */
@@ -296,9 +297,10 @@ export class VariableMap
   }
 
   /**
-   * @deprecated v12 - Delete a variables by the passed in ID and all of its
-   * uses from this workspace. May prompt the user for confirmation.
+   * Delete a variables by the passed in ID and all of its uses from this
+   * workspace. May prompt the user for confirmation.
    *
+   * @deprecated v12, use Blockly.Variables.deleteVariable.
    * @param id ID of variable to delete.
    */
   deleteVariableById(id: string) {
@@ -395,6 +397,7 @@ export class VariableMap
   /**
    * Returns all of the variable names of all types.
    *
+   * @deprecated v12, use Blockly.Variables.getAllVariables.
    * @returns All of the variable names of all types.
    */
   getAllVariableNames(): string[] {
@@ -414,8 +417,9 @@ export class VariableMap
   }
 
   /**
-   * @deprecated v12 - Find all the uses of a named variable.
+   * Find all the uses of a named variable.
    *
+   * @deprecated v12, use Blockly.Variables.getVariableUsesById.
    * @param id ID of the variable to find.
    * @returns Array of block usages.
    */

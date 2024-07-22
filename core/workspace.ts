@@ -28,7 +28,8 @@ import * as arrayUtils from './utils/array.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as math from './utils/math.js';
 import type * as toolbox from './utils/toolbox.js';
-import {VariableMap} from './variable_map.js';
+import * as Variables from './variables.js';
+import type {IVariableMap} from './interfaces/i_variable_map.js';
 import type {
   IVariableModel,
   IVariableState,
@@ -110,7 +111,7 @@ export class Workspace implements IASTNodeLocation {
   protected redoStack_: Abstract[] = [];
   private readonly blockDB = new Map<string, Block>();
   private readonly typedBlocksDB = new Map<string, Block[]>();
-  private variableMap: VariableMap;
+  private variableMap: IVariableMap<IVariableModel<IVariableState>>;
   private procedureMap: IProcedureMap = new ObservableProcedureMap();
 
   /**
@@ -121,7 +122,9 @@ export class Workspace implements IASTNodeLocation {
    * these by tracking "potential" variables in the flyout.  These variables
    * become real when references to them are dragged into the main workspace.
    */
-  private potentialVariableMap: VariableMap | null = null;
+  private potentialVariableMap: IVariableMap<
+    IVariableModel<IVariableState>
+  > | null = null;
 
   /** @param opt_options Dictionary of options. */
   constructor(opt_options?: Options) {
@@ -147,6 +150,7 @@ export class Workspace implements IASTNodeLocation {
      * all of the named variables in the workspace, including variables that are
      * not currently in use.
      */
+    const VariableMap = this.getVariableMapClass();
     this.variableMap = new VariableMap(this);
   }
 
@@ -384,7 +388,9 @@ export class Workspace implements IASTNodeLocation {
    * @param newName New variable name.
    */
   renameVariableById(id: string, newName: string) {
-    this.variableMap.renameVariableById(id, newName);
+    const variable = this.variableMap.getVariableById(id);
+    if (!variable) return;
+    this.variableMap.renameVariable(variable, newName);
   }
 
   /**
@@ -417,7 +423,7 @@ export class Workspace implements IASTNodeLocation {
    * @returns Array of block usages.
    */
   getVariableUsesById(id: string): Block[] {
-    return this.variableMap.getVariableUsesById(id);
+    return Variables.getVariableUsesById(this, id);
   }
 
   /**
@@ -427,7 +433,12 @@ export class Workspace implements IASTNodeLocation {
    * @param id ID of variable to delete.
    */
   deleteVariableById(id: string) {
-    this.variableMap.deleteVariableById(id);
+    const variable = this.variableMap.getVariableById(id);
+    if (!variable) {
+      console.warn(`Can't delete non-existent variable: ${id}`);
+      return;
+    }
+    Variables.deleteVariable(this, variable);
   }
 
   /**
@@ -476,7 +487,12 @@ export class Workspace implements IASTNodeLocation {
    * @internal
    */
   getVariableTypes(): string[] {
-    return this.variableMap.getVariableTypes(this);
+    const variableTypes = new Set<string>(this.variableMap.getTypes());
+    (this.potentialVariableMap?.getTypes() ?? []).forEach((t) =>
+      variableTypes.add(t),
+    );
+    variableTypes.add('');
+    return Array.from(variableTypes.values());
   }
 
   /**
@@ -494,7 +510,7 @@ export class Workspace implements IASTNodeLocation {
    * @returns List of all variable names of all types.
    */
   getAllVariableNames(): string[] {
-    return this.variableMap.getAllVariableNames();
+    return this.variableMap.getAllVariables().map((v) => v.getName());
   }
   /* End functions that are just pass-throughs to the variable map. */
   /**
@@ -789,7 +805,9 @@ export class Workspace implements IASTNodeLocation {
    * @returns The potential variable map.
    * @internal
    */
-  getPotentialVariableMap(): VariableMap | null {
+  getPotentialVariableMap(): IVariableMap<
+    IVariableModel<IVariableState>
+  > | null {
     return this.potentialVariableMap;
   }
 
@@ -799,6 +817,7 @@ export class Workspace implements IASTNodeLocation {
    * @internal
    */
   createPotentialVariableMap() {
+    const VariableMap = this.getVariableMapClass();
     this.potentialVariableMap = new VariableMap(this);
   }
 
@@ -807,7 +826,7 @@ export class Workspace implements IASTNodeLocation {
    *
    * @returns The variable map.
    */
-  getVariableMap(): VariableMap {
+  getVariableMap(): IVariableMap<IVariableModel<IVariableState>> {
     return this.variableMap;
   }
 
@@ -817,7 +836,7 @@ export class Workspace implements IASTNodeLocation {
    * @param variableMap The variable map.
    * @internal
    */
-  setVariableMap(variableMap: VariableMap) {
+  setVariableMap(variableMap: IVariableMap<IVariableModel<IVariableState>>) {
     this.variableMap = variableMap;
   }
 
@@ -865,5 +884,19 @@ export class Workspace implements IASTNodeLocation {
    */
   static getAll(): Workspace[] {
     return common.getAllWorkspaces();
+  }
+
+  protected getVariableMapClass(): new (
+    ...p1: any[]
+  ) => IVariableMap<IVariableModel<IVariableState>> {
+    const VariableMap = registry.getClassFromOptions(
+      registry.Type.VARIABLE_MAP,
+      this.options,
+      true,
+    );
+    if (!VariableMap) {
+      throw new Error('No variable map is registered.');
+    }
+    return VariableMap;
   }
 }

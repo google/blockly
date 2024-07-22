@@ -17,10 +17,10 @@ import './events/events_var_delete.js';
 import './events/events_var_rename.js';
 
 import type {Block} from './block.js';
-import * as dialog from './dialog.js';
+import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
 import * as registry from './registry.js';
-import {Msg} from './msg.js';
+import * as Variables from './variables.js';
 import {Names} from './names.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
@@ -247,7 +247,6 @@ export class VariableMap
       this.variableMap.set(type, variables);
     }
     eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(variable));
-
     return variable;
   }
 
@@ -269,77 +268,12 @@ export class VariableMap
 
   /* Begin functions for variable deletion. */
   /**
-   * Delete a variable.
+   * Delete a variable and all of its uses without confirmation.
    *
    * @param variable Variable to delete.
    */
   deleteVariable(variable: IVariableModel<IVariableState>) {
-    const variables = this.variableMap.get(variable.getType());
-    if (!variables || !variables.has(variable.getId())) return;
-    variables.delete(variable.getId());
-    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
-    if (variables.size === 0) {
-      this.variableMap.delete(variable.getType());
-    }
-  }
-
-  /**
-   * Delete a variables by the passed in ID and all of its uses from this
-   * workspace. May prompt the user for confirmation.
-   *
-   * @param id ID of variable to delete.
-   */
-  deleteVariableById(id: string) {
-    const variable = this.getVariableById(id);
-    if (variable) {
-      // Check whether this variable is a function parameter before deleting.
-      const variableName = variable.getName();
-      const uses = this.getVariableUsesById(id);
-      for (let i = 0, block; (block = uses[i]); i++) {
-        if (
-          block.type === 'procedures_defnoreturn' ||
-          block.type === 'procedures_defreturn'
-        ) {
-          const procedureName = String(block.getFieldValue('NAME'));
-          const deleteText = Msg['CANNOT_DELETE_VARIABLE_PROCEDURE']
-            .replace('%1', variableName)
-            .replace('%2', procedureName);
-          dialog.alert(deleteText);
-          return;
-        }
-      }
-
-      if (uses.length > 1) {
-        // Confirm before deleting multiple blocks.
-        const confirmText = Msg['DELETE_VARIABLE_CONFIRMATION']
-          .replace('%1', String(uses.length))
-          .replace('%2', variableName);
-        dialog.confirm(confirmText, (ok) => {
-          if (ok && variable) {
-            this.deleteVariableInternal(variable, uses);
-          }
-        });
-      } else {
-        // No confirmation necessary for a single block.
-        this.deleteVariableInternal(variable, uses);
-      }
-    } else {
-      console.warn("Can't delete non-existent variable: " + id);
-    }
-  }
-
-  /**
-   * Deletes a variable and all of its uses from this workspace without asking
-   * the user for confirmation.
-   *
-   * @param variable Variable to delete.
-   * @param uses An array of uses of the variable.
-   * @internal
-   */
-  deleteVariableInternal(
-    variable: IVariableModel<IVariableState>,
-    uses: Block[],
-  ) {
+    const uses = this.getVariableUsesById(variable.getId());
     const existingGroup = eventUtils.getGroup();
     if (!existingGroup) {
       eventUtils.setGroup(true);
@@ -348,11 +282,37 @@ export class VariableMap
       for (let i = 0; i < uses.length; i++) {
         uses[i].dispose(true);
       }
-      this.deleteVariable(variable);
+      const variables = this.variableMap.get(variable.getType());
+      if (!variables || !variables.has(variable.getId())) return;
+      variables.delete(variable.getId());
+      eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
+      if (variables.size === 0) {
+        this.variableMap.delete(variable.getType());
+      }
     } finally {
       eventUtils.setGroup(existingGroup);
     }
   }
+
+  /**
+   * @deprecated v12 - Delete a variables by the passed in ID and all of its
+   * uses from this workspace. May prompt the user for confirmation.
+   *
+   * @param id ID of variable to delete.
+   */
+  deleteVariableById(id: string) {
+    deprecation.warn(
+      'VariableMap.deleteVariableById',
+      'v12',
+      'v13',
+      'Blockly.Variables.deleteVariable',
+    );
+    const variable = this.getVariableById(id);
+    if (variable) {
+      Variables.deleteVariable(this.workspace, variable);
+    }
+  }
+
   /* End functions for variable deletion. */
   /**
    * Find the variable by the given name and type and return it.  Return null if
@@ -431,7 +391,7 @@ export class VariableMap
   getVariableTypes(ws: Workspace | null): string[] {
     const variableTypes = new Set<string>(this.variableMap.keys());
     if (ws && ws.getPotentialVariableMap()) {
-      for (const key of ws.getPotentialVariableMap()!.variableMap.keys()) {
+      for (const key of ws.getPotentialVariableMap()!.getTypes()) {
         variableTypes.add(key);
       }
     }
@@ -470,26 +430,19 @@ export class VariableMap
   }
 
   /**
-   * Find all the uses of a named variable.
+   * @deprecated v12 - Find all the uses of a named variable.
    *
    * @param id ID of the variable to find.
    * @returns Array of block usages.
    */
   getVariableUsesById(id: string): Block[] {
-    const uses = [];
-    const blocks = this.workspace.getAllBlocks(false);
-    // Iterate through every block and check the name.
-    for (let i = 0; i < blocks.length; i++) {
-      const blockVariables = blocks[i].getVarModels();
-      if (blockVariables) {
-        for (let j = 0; j < blockVariables.length; j++) {
-          if (blockVariables[j].getId() === id) {
-            uses.push(blocks[i]);
-          }
-        }
-      }
-    }
-    return uses;
+    deprecation.warn(
+      'VariableMap.getVariableUsesById',
+      'v12',
+      'v13',
+      'Blockly.Variables.getVariableUsesById',
+    );
+    return Variables.getVariableUsesById(this.workspace, id);
   }
 }
 

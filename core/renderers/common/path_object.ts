@@ -66,6 +66,8 @@ export class PathObject implements IPathObject {
       {'class': 'blocklyPath'},
       this.svgRoot,
     );
+
+    this.setClass_('blocklyBlock', true);
   }
 
   /**

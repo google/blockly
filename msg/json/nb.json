@@ -306,6 +306,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "gjør noe",
 	"PROCEDURES_BEFORE_PARAMS": "med:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "med:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Kan ikke kjøre den brukerdefinerte funksjonen «%1» fordi definisjonsblokken er deaktivert.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Opprett en funksjon som ikke har noe resultat.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Beskriv denne funksjonen…",
 	"PROCEDURES_DEFRETURN_RETURN": "returner",

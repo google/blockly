@@ -862,6 +862,7 @@ suite('Procedures', function () {
       'if a procedure caller block was already disabled before ' +
         'its definition was disabled, it is not reenabled',
       function () {
+        this.workspace.options.disable = true;
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
         this.clock.runAll();

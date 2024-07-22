@@ -19,6 +19,7 @@ import {
   FieldInputValidator,
 } from './field_input.js';
 import * as aria from './utils/aria.js';
+import * as dom from './utils/dom.js';
 
 /**
  * Class for an editable number field.
@@ -305,6 +306,13 @@ export class FieldNumber extends FieldInput<number> {
       aria.setState(htmlInput, aria.State.VALUEMAX, this.max_);
     }
     return htmlInput;
+  }
+
+  public override initView() {
+    super.initView();
+    if (this.fieldGroup_) {
+      dom.addClass(this.fieldGroup_, 'blocklyNumberField');
+    }
   }
 
   /**

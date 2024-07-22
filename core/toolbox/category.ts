@@ -71,10 +71,10 @@ export class ToolboxCategory
   protected rowDiv_: HTMLDivElement | null = null;
 
   /** The HTML element for the toolbox icon. */
-  protected iconDom_: Element | null = null;
+  protected iconDom_: HTMLElement | null = null;
 
   /** The HTML element for the toolbox label. */
-  protected labelDom_: Element | null = null;
+  protected labelDom_: HTMLElement | null = null;
   protected cssConfig_: CssConfig;
 
   /** True if the category is meant to be hidden, false otherwise. */
@@ -190,17 +190,19 @@ export class ToolboxCategory
     aria.setState(this.htmlDiv_, aria.State.LEVEL, this.level_ + 1);
 
     this.rowDiv_ = this.createRowContainer_();
-    this.rowDiv_.style.pointerEvents = 'none';
+    this.rowDiv_.style.pointerEvents = 'auto';
     this.htmlDiv_.appendChild(this.rowDiv_);
 
     this.iconDom_ = this.createIconDom_();
-    aria.setRole(this.iconDom_, aria.Role.PRESENTATION);
-    this.rowDiv_.appendChild(this.iconDom_);
+    this.iconDom_.style.pointerEvents = 'none';
+    aria.setRole(this.iconDom_ as Element, aria.Role.PRESENTATION);
+    this.rowDiv_.appendChild(this.iconDom_ as Node);
 
     this.labelDom_ = this.createLabelDom_(this.name_);
-    this.rowDiv_.appendChild(this.labelDom_);
-
+    this.labelDom_.style.pointerEvents = 'none';
+    this.rowDiv_.appendChild(this.labelDom_ as Node);
     const id = this.labelDom_.getAttribute('id');
+
     if (id) {
       aria.setState(this.htmlDiv_, aria.State.LABELLEDBY, id);
     }
@@ -251,7 +253,7 @@ export class ToolboxCategory
    *
    * @returns The span that holds the category icon.
    */
-  protected createIconDom_(): Element {
+  protected createIconDom_(): HTMLElement {
     const toolboxIcon = document.createElement('span');
     if (!this.parentToolbox_.isHorizontal()) {
       const className = this.cssConfig_['icon'];
@@ -271,7 +273,7 @@ export class ToolboxCategory
    * @param name The name of the category.
    * @returns The span that holds the category label.
    */
-  protected createLabelDom_(name: string): Element {
+  protected createLabelDom_(name: string): HTMLElement {
     const toolboxLabel = document.createElement('span');
     toolboxLabel.setAttribute('id', this.getId() + '.label');
     toolboxLabel.textContent = name;

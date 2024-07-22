@@ -1460,6 +1460,25 @@ export class Block implements IASTNodeLocation {
    *     update whether the block is currently disabled for this reason.
    */
   setDisabledReason(disabled: boolean, reason: string): void {
+    // Workspaces that were serialized before the reason for being disabled
+    // could be specified may have blocks that are disabled without a known
+    // reason. On being loaded, these blocks will default to having the manually
+    // disabled reason. However, if the user isn't allowed to manually disable
+    // or enable blocks, then this manually disabled reason cannot be removed.
+    // For backward compatibility with these legacy workspaces, when removing
+    // any disabled reason and the workspace does not allow manually disabling
+    // but the block is manually disabled, then remove the manually disabled
+    // reason in addition to the more specific reason. For example, when an
+    // orphaned block is no longer orphaned, the block should be enabled again.
+    if (
+      !disabled &&
+      !this.workspace.options.disable &&
+      this.hasDisabledReason(constants.MANUALLY_DISABLED) &&
+      reason != constants.MANUALLY_DISABLED
+    ) {
+      this.setDisabledReason(false, constants.MANUALLY_DISABLED);
+    }
+
     if (this.disabledReasons.has(reason) !== disabled) {
       if (disabled) {
         this.disabledReasons.add(reason);

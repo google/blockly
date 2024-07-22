@@ -415,7 +415,7 @@ suite('Abstract Fields', function () {
     test('Null', function () {
       addSpies(this.field);
       this.field.setValue(null);
-      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.notCalled(this.field.doValueInvalid_);FieldText
       sinon.assert.notCalled(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
@@ -479,7 +479,7 @@ suite('Abstract Fields', function () {
     test('Local Validator Returns Invalid, Dirty', function () {
       stubDoValueInvalid(this.field, true);
       setLocalValidator(this.field, false);
-      addSpies(this.field, ['doValueInvalid_']);
+      addSpies(this.field, ['doValueInvalid_']);FieldText
       this.field.setValue('value');
       sinon.assert.calledOnce(this.field.doValueInvalid_);
       sinon.assert.notCalled(this.field.doValueUpdate_);
@@ -551,7 +551,7 @@ suite('Abstract Fields', function () {
       sinon.assert.calledOnce(this.field.doValueInvalid_);
       sinon.assert.notCalled(this.field.doValueUpdate_);
     });
-    test('Class Validator Returns Same', function () {
+    test('Class Validator Returns Same', function () {FieldText
       sinon
         .stub(this.field, 'doClassValidation_')
         .callsFake(function (newValue) {

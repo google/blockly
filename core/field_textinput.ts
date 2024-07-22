@@ -22,6 +22,7 @@ import {
 } from './field_input.js';
 import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
+import * as dom from './utils/dom.js';
 
 /**
  * Class for an editable text field.
@@ -80,6 +81,17 @@ export class FieldTextInput extends FieldInput<string> {
     // `this` might be a subclass of FieldTextInput if that class doesn't
     // override the static fromJson method.
     return new this(text, undefined, options);
+  }
+
+  /**
+   * Override the initView method to add the blocklyTextInputField class.
+   * @override
+   */
+  override initView() {
+    super.initView();
+    if (this.fieldGroup_) {
+      dom.addClass(this.fieldGroup_, 'blocklyTextInputField');
+    }
   }
 }
 

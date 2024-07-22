@@ -420,7 +420,7 @@ export class FieldVariable extends FieldDropdown {
     if (variableTypes === null) {
       // If variableTypes is null, return all variable types.
       if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
-        return this.sourceBlock_.workspace.getVariableTypes();
+        return this.sourceBlock_.workspace.getVariableMap().getTypes();
       }
     }
     variableTypes = variableTypes || [''];

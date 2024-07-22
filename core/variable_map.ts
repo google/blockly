@@ -84,14 +84,9 @@ export class VariableMap
       // The IDs may match if the rename is a simple case change (name1 ->
       // Name1).
       if (!conflictVar || conflictVar.getId() === variable.getId()) {
-        this.renameVariableAndUses_(variable, newName, blocks);
+        this.renameVariableAndUses(variable, newName, blocks);
       } else {
-        this.renameVariableWithConflict_(
-          variable,
-          newName,
-          conflictVar,
-          blocks,
-        );
+        this.renameVariableWithConflict(variable, newName, conflictVar, blocks);
       }
     } finally {
       eventUtils.setGroup(existingGroup);
@@ -124,6 +119,12 @@ export class VariableMap
    * @param newName New variable name.
    */
   renameVariableById(id: string, newName: string) {
+    deprecation.warn(
+      'VariableMap.renameVariableById',
+      'v12',
+      'v13',
+      'VariableMap.renameVariable',
+    );
     const variable = this.getVariableById(id);
     if (!variable) {
       throw Error("Tried to rename a variable that didn't exist. ID: " + id);
@@ -140,7 +141,7 @@ export class VariableMap
    * @param newName New variable name.
    * @param blocks The list of all blocks in the workspace.
    */
-  private renameVariableAndUses_(
+  private renameVariableAndUses(
     variable: IVariableModel<IVariableState>,
     newName: string,
     blocks: Block[],
@@ -165,7 +166,7 @@ export class VariableMap
    * @param conflictVar The variable that was already using newName.
    * @param blocks The list of all blocks in the workspace.
    */
-  private renameVariableWithConflict_(
+  private renameVariableWithConflict(
     variable: IVariableModel<IVariableState>,
     newName: string,
     conflictVar: IVariableModel<IVariableState>,
@@ -176,7 +177,7 @@ export class VariableMap
 
     if (newName !== oldCase) {
       // Simple rename to change the case and update references.
-      this.renameVariableAndUses_(conflictVar, newName, blocks);
+      this.renameVariableAndUses(conflictVar, newName, blocks);
     }
 
     // These blocks now refer to a different variable.
@@ -379,29 +380,6 @@ export class VariableMap
   }
 
   /**
-   * Return all variable and potential variable types.  This list always
-   * contains the empty string.
-   *
-   * @param ws The workspace used to look for potential variables. This can be
-   *     different than the workspace stored on this object if the passed in ws
-   *     is a flyout workspace.
-   * @returns List of variable types.
-   * @internal
-   */
-  getVariableTypes(ws: Workspace | null): string[] {
-    const variableTypes = new Set<string>(this.variableMap.keys());
-    if (ws && ws.getPotentialVariableMap()) {
-      for (const key of ws.getPotentialVariableMap()!.getTypes()) {
-        variableTypes.add(key);
-      }
-    }
-    if (!variableTypes.has('')) {
-      variableTypes.add('');
-    }
-    return Array.from(variableTypes.values());
-  }
-
-  /**
    * Return all variables of all types.
    *
    * @returns List of variable models.
@@ -420,6 +398,12 @@ export class VariableMap
    * @returns All of the variable names of all types.
    */
   getAllVariableNames(): string[] {
+    deprecation.warn(
+      'VariableMap.getAllVariableNames',
+      'v12',
+      'v13',
+      'Blockly.Variables.getAllVariables',
+    );
     const names: string[] = [];
     for (const variables of this.variableMap.values()) {
       for (const variable of variables.values()) {

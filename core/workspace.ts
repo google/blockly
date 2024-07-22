@@ -25,6 +25,7 @@ import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import {Options} from './options.js';
 import * as registry from './registry.js';
 import * as arrayUtils from './utils/array.js';
+import * as deprecation from './utils/deprecation.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as math from './utils/math.js';
 import type * as toolbox from './utils/toolbox.js';
@@ -388,6 +389,12 @@ export class Workspace implements IASTNodeLocation {
    * @param newName New variable name.
    */
   renameVariableById(id: string, newName: string) {
+    deprecation.warn(
+      'Blockly.Workspace.renameVariableById',
+      'v12',
+      'v13',
+      'Blockly.Workspace.getVariableMap().renameVariable',
+    );
     const variable = this.variableMap.getVariableById(id);
     if (!variable) return;
     this.variableMap.renameVariable(variable, newName);
@@ -409,6 +416,12 @@ export class Workspace implements IASTNodeLocation {
     opt_type?: string | null,
     opt_id?: string | null,
   ): IVariableModel<IVariableState> {
+    deprecation.warn(
+      'Blockly.Workspace.createVariable',
+      'v12',
+      'v13',
+      'Blockly.Workspace.getVariableMap().createVariable',
+    );
     return this.variableMap.createVariable(
       name,
       opt_type ?? undefined,
@@ -423,6 +436,12 @@ export class Workspace implements IASTNodeLocation {
    * @returns Array of block usages.
    */
   getVariableUsesById(id: string): Block[] {
+    deprecation.warn(
+      'Blockly.Workspace.getVariableUsesById',
+      'v12',
+      'v13',
+      'Blockly.Workspace.getVariableMap().getVariableUsesById',
+    );
     return Variables.getVariableUsesById(this, id);
   }
 
@@ -433,6 +452,12 @@ export class Workspace implements IASTNodeLocation {
    * @param id ID of variable to delete.
    */
   deleteVariableById(id: string) {
+    deprecation.warn(
+      'Blockly.Workspace.deleteVariableById',
+      'v12',
+      'v13',
+      'Blockly.Workspace.getVariableMap().deleteVariable',
+    );
     const variable = this.variableMap.getVariableById(id);
     if (!variable) {
       console.warn(`Can't delete non-existent variable: ${id}`);
@@ -454,6 +479,12 @@ export class Workspace implements IASTNodeLocation {
     name: string,
     opt_type?: string,
   ): IVariableModel<IVariableState> | null {
+    deprecation.warn(
+      'Blockly.Workspace.getVariable',
+      'v12',
+      'v13',
+      'Blockly.Workspace.getVariableMap().getVariable',
+    );
     // TODO (#1559): Possibly delete this function after resolving #1559.
     return this.variableMap.getVariable(name, opt_type);
   }
@@ -465,6 +496,12 @@ export class Workspace implements IASTNodeLocation {
    * @returns The variable with the given ID.
    */
   getVariableById(id: string): IVariableModel<IVariableState> | null {
+    deprecation.warn(
+      'Blockly.Workspace.getVariableById',
+      'v12',
+      'v13',
+      'Blockly.Workspace.getVariableMap().getVariableById',
+    );
     return this.variableMap.getVariableById(id);
   }
 
@@ -477,22 +514,13 @@ export class Workspace implements IASTNodeLocation {
    *     if none are found.
    */
   getVariablesOfType(type: string | null): IVariableModel<IVariableState>[] {
-    return this.variableMap.getVariablesOfType(type ?? '');
-  }
-
-  /**
-   * Return all variable types.
-   *
-   * @returns List of variable types.
-   * @internal
-   */
-  getVariableTypes(): string[] {
-    const variableTypes = new Set<string>(this.variableMap.getTypes());
-    (this.potentialVariableMap?.getTypes() ?? []).forEach((t) =>
-      variableTypes.add(t),
+    deprecation.warn(
+      'Blockly.Workspace.getVariablesOfType',
+      'v12',
+      'v13',
+      'Blockly.Workspace.getVariableMap().getVariablesOfType',
     );
-    variableTypes.add('');
-    return Array.from(variableTypes.values());
+    return this.variableMap.getVariablesOfType(type ?? '');
   }
 
   /**
@@ -501,6 +529,12 @@ export class Workspace implements IASTNodeLocation {
    * @returns List of variable models.
    */
   getAllVariables(): IVariableModel<IVariableState>[] {
+    deprecation.warn(
+      'Blockly.Workspace.getAllVariables',
+      'v12',
+      'v13',
+      'Blockly.Workspace.getVariableMap().getAllVariables',
+    );
     return this.variableMap.getAllVariables();
   }
 
@@ -510,6 +544,12 @@ export class Workspace implements IASTNodeLocation {
    * @returns List of all variable names of all types.
    */
   getAllVariableNames(): string[] {
+    deprecation.warn(
+      'Blockly.Workspace.getAllVariableNames',
+      'v12',
+      'v13',
+      'Blockly.Workspace.getVariableMap().getAllVariables',
+    );
     return this.variableMap.getAllVariables().map((v) => v.getName());
   }
   /* End functions that are just pass-throughs to the variable map. */

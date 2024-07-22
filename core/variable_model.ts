@@ -15,6 +15,7 @@
 import './events/events_var_create.js';
 
 import * as idGenerator from './utils/idgenerator.js';
+import * as eventUtils from './events/utils.js';
 import * as registry from './registry.js';
 import type {Workspace} from './workspace.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
@@ -27,7 +28,7 @@ import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
  */
 export class VariableModel implements IVariableModel<IVariableState> {
   private type: string;
-  private readonly id_: string;
+  private readonly id: string;
 
   /**
    * @param workspace The variable's workspace.
@@ -39,7 +40,7 @@ export class VariableModel implements IVariableModel<IVariableState> {
    * @param opt_id The unique ID of the variable. This will default to a UUID.
    */
   constructor(
-    private workspace: Workspace,
+    private readonly workspace: Workspace,
     private name: string,
     opt_type?: string,
     opt_id?: string,
@@ -58,12 +59,12 @@ export class VariableModel implements IVariableModel<IVariableState> {
      * not change, even if the name changes. In most cases this should be a
      * UUID.
      */
-    this.id_ = opt_id || idGenerator.genUid();
+    this.id = opt_id || idGenerator.genUid();
   }
 
   /** @returns The ID for the variable. */
   getId(): string {
-    return this.id_;
+    return this.id;
   }
 
   /** @returns The name of this variable. */
@@ -96,10 +97,20 @@ export class VariableModel implements IVariableModel<IVariableState> {
     return this;
   }
 
+  /**
+   * Returns the workspace this VariableModel belongs to.
+   *
+   * @returns The workspace this VariableModel belongs to.
+   */
   getWorkspace(): Workspace {
     return this.workspace;
   }
 
+  /**
+   * Serializes this VariableModel.
+   *
+   * @returns a JSON representation of this VariableModel.
+   */
   save(): IVariableState {
     const state: IVariableState = {
       'name': this.getName(),
@@ -113,11 +124,21 @@ export class VariableModel implements IVariableModel<IVariableState> {
     return state;
   }
 
+  /**
+   * Loads the persisted state into a new variable in the given workspace.
+   *
+   * @param state The serialized state of a variable model from save().
+   * @param workspace The workspace to create the new variable in.
+   */
   static load(state: IVariableState, workspace: Workspace) {
-    // TODO(adodson): Once VariableMap implements IVariableMap, directly
-    // construct a variable, retrieve the variable map from the workspace,
-    // add the variable to that variable map, and fire a VAR_CREATE event.
-    workspace.createVariable(state['name'], state['type'], state['id']);
+    const variable = new this(
+      workspace,
+      state['name'],
+      state['type'],
+      state['id'],
+    );
+    workspace.getVariableMap().addVariable(variable);
+    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(variable));
   }
 
   /**

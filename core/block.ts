@@ -723,7 +723,7 @@ export class Block implements IASTNodeLocation {
     }
 
     // Check that block is connected to new parent if new parent is not null and
-    //    that block is not connected to superior one if new parent is null.
+    // that block is not connected to superior one if new parent is null.
     const targetBlock =
       (this.previousConnection && this.previousConnection.targetBlock()) ||
       (this.outputConnection && this.outputConnection.targetBlock());
@@ -741,14 +741,13 @@ export class Block implements IASTNodeLocation {
     }
 
     // This block hasn't actually moved on-screen, so there's no need to
-    // update
-    //     its connection locations.
+    // update its connection locations.
     if (this.parentBlock_) {
       // Remove this block from the old parent's child list.
       arrayUtils.removeElem(this.parentBlock_.childBlocks_, this);
     } else {
-      // New parent must be non-null so remove this block from the workspace's
-      //     list of top-most blocks.
+      // New parent must be non-null so remove this block from the
+      // workspace's list of top-most blocks.
       this.workspace.removeTopBlock(this);
     }
 

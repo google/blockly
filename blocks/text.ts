@@ -438,6 +438,11 @@ const PROMPT_COMMON = {
   domToMutation: function (this: PromptCommonBlock, xmlElement: Element) {
     this.updateType_(xmlElement.getAttribute('type')!);
   },
+
+  // These blocks do not need JSO serialization hooks (saveExtraState
+  // and loadExtraState) because the state of this object is already
+  // encoded in the dropdown values.
+  // XML hooks are kept for backwards compatibility.
 };
 
 blocks['text_prompt_ext'] = {
@@ -468,11 +473,6 @@ blocks['text_prompt_ext'] = {
         : Msg['TEXT_PROMPT_TOOLTIP_NUMBER'];
     });
   },
-
-  // This block does not need JSO serialization hooks (saveExtraState and
-  // loadExtraState) because the state of this object is already encoded in the
-  // dropdown values.
-  // XML hooks are kept for backwards compatibility.
 };
 
 type PromptBlock = Block & PromptCommonMixin & QuoteImageMixin;
@@ -666,7 +666,7 @@ const QUOTE_IMAGE_MIXIN = {
    * closing double quote. The selected quote will be adapted for RTL blocks.
    *
    * @param open If the image should be open quote (“ in LTR).
-   *                       Otherwise, a closing quote is used (” in LTR).
+   *     Otherwise, a closing quote is used (” in LTR).
    * @returns The new field.
    */
   newQuote_: function (this: QuoteImageBlock, open: boolean): FieldImage {

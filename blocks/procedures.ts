@@ -1206,7 +1206,7 @@ blocks['procedures_callreturn'] = {
     this.appendDummyInput('TOPROW').appendField('', 'NAME');
     this.setOutput(true);
     this.setStyle('procedure_blocks');
-    // Tooltip is set in domToMutation.
+    // Tooltip is set in renameProcedure.
     this.setHelpUrl(Msg['PROCEDURES_CALLRETURN_HELPURL']);
     this.arguments_ = [];
     this.argumentVarModels_ = [];

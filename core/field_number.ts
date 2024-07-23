@@ -310,8 +310,10 @@ export class FieldNumber extends FieldInput<number> {
 
   /**
    * Initialize the field's DOM.
+   *
    * @override
    */
+
   public override initView() {
     super.initView();
     if (this.fieldGroup_) {

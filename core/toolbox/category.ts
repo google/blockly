@@ -247,7 +247,6 @@ export class ToolboxCategory
     return rowDiv;
   }
 
-
   /**
    * Creates the span that holds the category icon.
    *

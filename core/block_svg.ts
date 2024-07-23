@@ -732,6 +732,13 @@ export class BlockSvg
    */
   override setEditable(editable: boolean) {
     super.setEditable(editable);
+
+    if (editable) {
+      dom.removeClass(this.svgGroup_, 'blocklyNotEditable');
+    } else {
+      dom.addClass(this.svgGroup_, 'blocklyNotEditable');
+    }
+
     const icons = this.getIcons();
     for (let i = 0; i < icons.length; i++) {
       icons[i].updateEditable();

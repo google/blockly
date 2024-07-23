@@ -187,24 +187,6 @@ suite('Variable Map', function () {
     });
   });
 
-  suite('getVariableTypes', function () {
-    test('Trivial', function () {
-      this.variableMap.createVariable('name1', 'type1', 'id1');
-      this.variableMap.createVariable('name2', 'type1', 'id2');
-      this.variableMap.createVariable('name3', 'type2', 'id3');
-      this.variableMap.createVariable('name4', 'type3', 'id4');
-      const resultArray = this.variableMap.getVariableTypes();
-      // The empty string is always an option.
-      assert.deepEqual(resultArray, ['type1', 'type2', 'type3', '']);
-    });
-
-    test('None', function () {
-      // The empty string is always an option.
-      const resultArray = this.variableMap.getVariableTypes();
-      assert.deepEqual(resultArray, ['']);
-    });
-  });
-
   suite('getVariablesOfType', function () {
     test('Trivial', function () {
       const var1 = this.variableMap.createVariable('name1', 'type1', 'id1');

@@ -140,21 +140,6 @@ export class VariableModel implements IVariableModel<IVariableState> {
     workspace.getVariableMap().addVariable(variable);
     eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(variable));
   }
-
-  /**
-   * A custom compare function for the VariableModel objects.
-   *
-   * @param var1 First variable to compare.
-   * @param var2 Second variable to compare.
-   * @returns -1 if name of var1 is less than name of var2, 0 if equal, and 1 if
-   *     greater.
-   * @internal
-   */
-  static compareByName(var1: VariableModel, var2: VariableModel): number {
-    return var1
-      .getName()
-      .localeCompare(var2.getName(), undefined, {sensitivity: 'base'});
-  }
 }
 
 registry.register(

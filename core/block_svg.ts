@@ -730,7 +730,7 @@ export class BlockSvg
   override setEditable(editable: boolean) {
     super.setEditable(editable);
 
-    if(editable) {
+    if (editable) {
       dom.removeClass(this.svgGroup_, 'blocklyNotEditable');
     } else {
       dom.addClass(this.svgGroup_, 'blocklyNotEditable');

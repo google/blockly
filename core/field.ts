@@ -530,22 +530,22 @@ export abstract class Field<T = any>
   }
 
   /** Add or remove the UI indicating if this field is editable or not. */
-  updateEditable() {
-    const group = this.fieldGroup_;
-    const block = this.getSourceBlock();
-    if (!this.EDITABLE || !group || !block) {
-      return;
-    }
-    if (this.enabled_ && block.isEditable()) {
-      dom.addClass(group, 'blocklyEditableText');
-      dom.removeClass(group, 'blocklyNonEditableText');
-      group.style.cursor = this.CURSOR;
-    } else {
-      dom.addClass(group, 'blocklyNonEditableText');
-      dom.removeClass(group, 'blocklyEditableText');
-      group.style.cursor = '';
-    }
-  }
+  // updateEditable() {
+  //   const group = this.fieldGroup_;
+  //   const block = this.getSourceBlock();
+  //   if (!this.EDITABLE || !group || !block) {
+  //     return;
+  //   }
+  //   if (this.enabled_ && block.isEditable()) {
+  //     dom.addClass(group, 'blocklyEditableText');
+  //     dom.removeClass(group, 'blocklyNonEditableText');
+  //     group.style.cursor = this.CURSOR;
+  //   } else {
+  //     dom.addClass(group, 'blocklyNonEditableText');
+  //     dom.removeClass(group, 'blocklyEditableText');
+  //     group.style.cursor = '';
+  //   }
+  // }
 
   /**
    * Set whether this field's value can be changed using the editor when the
@@ -1382,18 +1382,18 @@ export abstract class Field<T = any>
    * @param cursorSvg The SVG root of the cursor to be added to the field group.
    * @internal
    */
-  setCursorSvg(cursorSvg: SVGElement) {
-    if (!cursorSvg) {
-      this.cursorSvg_ = null;
-      return;
-    }
+  // setCursorSvg(cursorSvg: SVGElement) {
+  //   if (!cursorSvg) {
+  //     this.cursorSvg_ = null;
+  //     return;
+  //   }
 
-    if (!this.fieldGroup_) {
-      throw new Error(`The field group is ${this.fieldGroup_}.`);
-    }
-    this.fieldGroup_.appendChild(cursorSvg);
-    this.cursorSvg_ = cursorSvg;
-  }
+  //   if (!this.fieldGroup_) {
+  //     throw new Error(`The field group is ${this.fieldGroup_}.`);
+  //   }
+  //   this.fieldGroup_.appendChild(cursorSvg);
+  //   this.cursorSvg_ = cursorSvg;
+  // }
 
   /**
    * Add the marker SVG to this fields SVG group.
@@ -1419,20 +1419,20 @@ export abstract class Field<T = any>
    *
    * @internal
    */
-  updateMarkers_() {
-    const block = this.getSourceBlock();
-    if (!block) {
-      throw new UnattachedFieldError();
-    }
-    const workspace = block.workspace as WorkspaceSvg;
-    if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
-      workspace.getCursor()!.draw();
-    }
-    if (workspace.keyboardAccessibilityMode && this.markerSvg_) {
-      // TODO(#4592): Update all markers on the field.
-      workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
-    }
-  }
+  // updateMarkers_() {
+  //   const block = this.getSourceBlock();
+  //   if (!block) {
+  //     throw new UnattachedFieldError();
+  //   }
+  //   const workspace = block.workspace as WorkspaceSvg;
+  //   if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
+  //     workspace.getCursor()!.draw();
+  //   }
+  //   if (workspace.keyboardAccessibilityMode && this.markerSvg_) {
+  //     // TODO(#4592): Update all markers on the field.
+  //     workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
+  //   }
+  // }
 
   /**
    * Subclasses should reimplement this method to construct their Field

@@ -56,6 +56,26 @@ export function inject(hasCss: boolean, pathToMedia: string) {
   document.head.insertBefore(cssNode, document.head.firstChild);
 }
 
+
+.blocklyFieldCursor {
+  cursor: pointer;
+}
+
+.blocklyFieldTextInputCursor {
+  cursor: text;
+}
+
+.blocklyFieldDropdownCursor {
+  cursor: pointer;
+}
+
+.blocklyFieldCheckboxCursor {
+  cursor: pointer;
+}
+
+.blocklyFieldColourCursor {
+  cursor: pointer;
+}
 /**
  * The CSS content for Blockly.
  */

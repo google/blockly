@@ -68,10 +68,10 @@ export class FieldDropdown extends Field<string> {
    * Serializable fields are saved by the serializer, non-serializable fields
    * are not. Editable fields should also be serializable.
    */
-  override SERIALIZABLE = true;
+  SERIALIZABLE = true;
 
   /** Mouse cursor style when over the hotspot that initiates the editor. */
-  override CURSOR = 'default';
+   CURSOR = 'default';
 
   protected menuGenerator_?: MenuGenerator;
 
@@ -83,17 +83,17 @@ export class FieldDropdown extends Field<string> {
    *
    * @internal
    */
-  override prefixField: string | null = null;
+  prefixField: string | null = null;
 
   /**
    * The suffix field label, of common words set after options are trimmed.
    *
    * @internal
    */
-  override suffixField: string | null = null;
+   suffixField: string | null = null;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   private selectedOption!: MenuOption;
-  override clickTarget_: SVGElement | null = null;
+ clickTarget_: SVGElement | null = null;
 
   /**
    * @param menuGenerator A non-empty array of options for a dropdown list, or a
@@ -159,7 +159,7 @@ export class FieldDropdown extends Field<string> {
    * @param fieldElement The element containing info about the field's state.
    * @internal
    */
-  override fromXml(fieldElement: Element) {
+  fromXml(fieldElement: Element) {
     if (this.isOptionListDynamic()) {
       this.getOptions(false);
     }
@@ -172,7 +172,7 @@ export class FieldDropdown extends Field<string> {
    * @param state The state to apply to the dropdown field.
    * @internal
    */
-  override loadState(state: AnyDuringMigration) {
+   loadState(state: AnyDuringMigration) {
     if (this.loadLegacyState(FieldDropdown, state)) {
       return;
     }
@@ -185,7 +185,7 @@ export class FieldDropdown extends Field<string> {
   /**
    * Create the block UI for this dropdown.
    */
-  override initView() {
+  initView() {
     if (this.shouldAddBorderRect_()) {
       this.createBorderRect_();
     } else {
@@ -262,7 +262,7 @@ export class FieldDropdown extends Field<string> {
    * @param e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    */
-  protected override showEditor_(e?: MouseEvent) {
+  protected showEditor_(e?: MouseEvent) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -411,11 +411,11 @@ export class FieldDropdown extends Field<string> {
    * @param newValue The input value.
    * @returns A valid language-neutral option, or null if invalid.
    */
-  protected override doClassValidation_(
+  protected  doClassValidation_(
     newValue: string,
   ): string | null | undefined;
-  protected override doClassValidation_(newValue?: string): string | null;
-  protected override doClassValidation_(
+  protected  doClassValidation_(newValue?: string): string | null;
+  protected  doClassValidation_(
     newValue?: string,
   ): string | null | undefined {
     const options = this.getOptions(true);
@@ -444,7 +444,7 @@ export class FieldDropdown extends Field<string> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is one of the valid dropdown options.
    */
-  protected override doValueUpdate_(newValue: string) {
+  protected doValueUpdate_(newValue: string) {
     super.doValueUpdate_(newValue);
     const options = this.getOptions(true);
     for (let i = 0, option; (option = options[i]); i++) {
@@ -457,7 +457,7 @@ export class FieldDropdown extends Field<string> {
   /**
    * Updates the dropdown arrow to match the colour/style of the block.
    */
-  override applyColour() {
+  applyColour() {
     const style = (this.sourceBlock_ as BlockSvg).style;
     if (this.borderRect_) {
       this.borderRect_.setAttribute('stroke', style.colourTertiary);
@@ -478,7 +478,7 @@ export class FieldDropdown extends Field<string> {
   }
 
   /** Draws the border with the correct width. */
-  protected override render_() {
+  protected  render_() {
     // Hide both elements.
     this.getTextContent().nodeValue = '';
     this.imageElement!.style.display = 'none';
@@ -628,7 +628,7 @@ export class FieldDropdown extends Field<string> {
    *
    * @returns Selected option text.
    */
-  protected override getText_(): string | null {
+  protected  getText_(): string | null {
     if (!this.selectedOption) {
       return null;
     }
@@ -647,7 +647,7 @@ export class FieldDropdown extends Field<string> {
    * @nocollapse
    * @internal
    */
-  static override fromJson(
+  static fromJson(
     options: FieldDropdownFromJsonConfig,
   ): FieldDropdown {
     if (!options.options) {

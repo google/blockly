@@ -97,10 +97,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * Serializable fields are saved by the serializer, non-serializable fields
    * are not. Editable fields should also be serializable.
    */
-  override SERIALIZABLE = true;
+   SERIALIZABLE = true;
 
   /** Mouse cursor style when over the hotspot that initiates the editor. */
-  override CURSOR = 'text';
+  CURSOR = 'text';
 
   /**
    * @param value The initial value of the field. Should cast to a string.
@@ -133,14 +133,14 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     }
   }
 
-  protected override configure_(config: FieldInputConfig) {
+  protected configure_(config: FieldInputConfig) {
     super.configure_(config);
     if (config.spellcheck !== undefined) {
       this.spellcheck_ = config.spellcheck;
     }
   }
 
-  override initView() {
+   initView() {
     const block = this.getSourceBlock();
     if (!block) throw new UnattachedFieldError();
     super.initView();
@@ -150,7 +150,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     }
   }
 
-  protected override isFullBlockField(): boolean {
+  protected  isFullBlockField(): boolean {
     const block = this.getSourceBlock();
     if (!block) throw new UnattachedFieldError();
 
@@ -170,7 +170,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *     on the htmlInput_.
    * @param fireChangeEvent Whether to fire a change event if the value changes.
    */
-  protected override doValueInvalid_(
+  protected  doValueInvalid_(
     _invalidValue: AnyDuringMigration,
     fireChangeEvent: boolean = true,
   ) {
@@ -207,7 +207,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
-  protected override doValueUpdate_(newValue: string | T) {
+  protected  doValueUpdate_(newValue: string | T) {
     this.isDirty_ = true;
     this.isTextValid_ = true;
     this.value_ = newValue;
@@ -216,7 +216,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
   /**
    * Updates text field to match the colour/style of the block.
    */
-  override applyColour() {
+   applyColour() {
     const block = this.getSourceBlock() as BlockSvg | null;
     if (!block) throw new UnattachedFieldError();
 
@@ -245,7 +245,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *
    * @returns Height and width.
    */
-  override getSize(): Size {
+   getSize(): Size {
     if (this.getConstants()?.FULL_BLOCK_FIELDS) {
       // In general, do *not* let fields control the color of blocks. Having the
       // field control the color is unexpected, and could have performance
@@ -274,7 +274,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * Also updates the colour of the block to reflect whether this is a full
    * block field or not.
    */
-  protected override render_() {
+  protected  render_() {
     super.render_();
     // This logic is done in render_ rather than doValueInvalid_ or
     // doValueUpdate_ so that the code is more centralized.
@@ -330,7 +330,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * @param quietInput True if editor should be created without focus.
    *     Defaults to false.
    */
-  protected override showEditor_(_e?: Event, quietInput = false) {
+  protected  showEditor_(_e?: Event, quietInput = false) {
     this.workspace_ = (this.sourceBlock_ as BlockSvg).workspace;
     if (
       !quietInput &&
@@ -655,7 +655,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * @returns True for rendered workspaces, as we never want to hide the widget
    *     div.
    */
-  override repositionForWindowResize(): boolean {
+   repositionForWindowResize(): boolean {
     const block = this.getSourceBlock();
     // This shouldn't be possible. We should never have a WidgetDiv if not using
     // rendered blocks.
@@ -677,7 +677,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *
    * @returns True if the field is tab navigable.
    */
-  override isTabNavigable(): boolean {
+   isTabNavigable(): boolean {
     return true;
   }
 
@@ -689,7 +689,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *
    * @returns The HTML value if we're editing, otherwise null.
    */
-  protected override getText_(): string | null {
+  protected  getText_(): string | null {
     if (this.isBeingEdited_ && this.htmlInput_) {
       // We are currently editing, return the HTML input value instead.
       return this.htmlInput_.value;

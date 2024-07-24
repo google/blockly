@@ -193,7 +193,17 @@ export class BlockSvg
 
     this.doInit_();
   }
-
+  
+  updateEditable() {
+    const isEditable = this.isEditable();
+    const root = this.getSvgRoot();
+    
+    if (isEditable) {
+      root.classList.add('blocklyFieldCursor');
+    } else {
+      root.classList.remove('blocklyFieldCursor');
+    }
+  }
   /**
    * Create and initialize the SVG representation of the block.
    * May be called more than once.

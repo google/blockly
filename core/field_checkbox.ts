@@ -33,18 +33,18 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    * Serializable fields are saved by the serializer, non-serializable fields
    * are not. Editable fields should also be serializable.
    */
-  override SERIALIZABLE = true;
+   SERIALIZABLE = true;
 
   /**
    * Mouse cursor style when over the hotspot that initiates editability.
    */
-  override CURSOR = 'default';
+   CURSOR = 'default';
 
   /**
    * NOTE: The default value is set in `Field`, so maintain that value instead
    * of overwriting it here or in the constructor.
    */
-  override value_: boolean | null = this.value_;
+   value_: boolean | null = this.value_;
 
   /**
    * @param value The initial value of the field. Should either be 'TRUE',
@@ -88,7 +88,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    *
    * @param config A map of options to configure the field based on.
    */
-  protected override configure_(config: FieldCheckboxConfig) {
+  protected  configure_(config: FieldCheckboxConfig) {
     super.configure_(config);
     if (config.checkCharacter) this.checkChar = config.checkCharacter;
   }
@@ -99,7 +99,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    * @returns The boolean value held by this field.
    * @internal
    */
-  override saveState(): AnyDuringMigration {
+   saveState(): AnyDuringMigration {
     const legacyState = this.saveLegacyState(FieldCheckbox);
     if (legacyState !== null) {
       return legacyState;
@@ -110,7 +110,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
   /**
    * Create the block UI for this checkbox.
    */
-  override initView() {
+   initView() {
     super.initView();
 
     const textElement = this.getTextElement();
@@ -118,14 +118,14 @@ export class FieldCheckbox extends Field<CheckboxBool> {
     textElement.style.display = this.value_ ? 'block' : 'none';
   }
 
-  override render_() {
+   render_() {
     if (this.textContent_) {
       this.textContent_.nodeValue = this.getDisplayText_();
     }
     this.updateSize_(this.getConstants()!.FIELD_CHECKBOX_X_OFFSET);
   }
 
-  override getDisplayText_() {
+   getDisplayText_() {
     return this.checkChar;
   }
 
@@ -141,7 +141,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
   }
 
   /** Toggle the state of the checkbox on click. */
-  protected override showEditor_() {
+  protected  showEditor_() {
     this.setValue(!this.value_);
   }
 
@@ -151,7 +151,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    * @param newValue The input value.
    * @returns A valid value ('TRUE' or 'FALSE), or null if invalid.
    */
-  protected override doClassValidation_(
+  protected  doClassValidation_(
     newValue?: AnyDuringMigration,
   ): BoolString | null {
     if (newValue === true || newValue === 'TRUE') {
@@ -169,7 +169,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a either 'TRUE' or 'FALSE'.
    */
-  protected override doValueUpdate_(newValue: BoolString) {
+  protected  doValueUpdate_(newValue: BoolString) {
     this.value_ = this.convertValueToBool_(newValue);
     // Update visual.
     if (this.textElement_) {
@@ -182,7 +182,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    *
    * @returns The value of this field.
    */
-  override getValue(): BoolString {
+   getValue(): BoolString {
     return this.value_ ? 'TRUE' : 'FALSE';
   }
 
@@ -200,7 +200,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    *
    * @returns Text representing the value of this field ('true' or 'false').
    */
-  override getText(): string {
+   getText(): string {
     return String(this.convertValueToBool_(this.value_));
   }
 
@@ -226,7 +226,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    * @nocollapse
    * @internal
    */
-  static override fromJson(
+  static  fromJson(
     options: FieldCheckboxFromJsonConfig,
   ): FieldCheckbox {
     // `this` might be a subclass of FieldCheckbox if that class doesn't

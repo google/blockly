@@ -457,7 +457,7 @@ export class BlockSvg
   getBoundingRectangleWithoutChildren(): Rect {
     return this.getBoundingRectangleWithDimensions({
       height: this.height,
-      width: this.childlessWidth,
+      width: this.width,
     });
   }
 

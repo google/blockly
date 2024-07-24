@@ -748,6 +748,7 @@ export class Workspace implements IASTNodeLocation {
    *
    * @param id ID of comment to find.
    * @returns The sought after comment, or null if not found.
+   * @internal
    */
   getCommentById(id: string): WorkspaceComment | null {
     return this.commentDB.get(id) ?? null;

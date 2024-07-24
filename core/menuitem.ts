@@ -68,7 +68,6 @@ export class MenuItem {
       'blocklyMenuItem ' +
       (this.enabled ? '' : 'blocklyMenuItemDisabled ') +
       (this.checked ? 'blocklyMenuItemSelected ' : '') +
-      (this.highlight ? 'blocklyMenuItemHighlight ' : '') +
       (this.rightToLeft ? 'blocklyMenuItemRtl ' : '');
 
     const content = document.createElement('div');

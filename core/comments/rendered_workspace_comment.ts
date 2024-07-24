@@ -57,7 +57,6 @@ export class RenderedWorkspaceComment
     // Set the size to the default size as defined in the superclass.
     this.view.setSize(this.getSize());
     this.view.setEditable(this.isEditable());
-    this.view.getSvgRoot().setAttribute('data-id', this.id);
 
     this.addModelUpdateBindings();
 

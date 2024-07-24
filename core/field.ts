@@ -408,7 +408,6 @@ export abstract class Field<T = any>
    * called by Blockly.Xml.
    *
    * @param fieldElement The element containing info about the field's state.
-   * @internal
    */
   fromXml(fieldElement: Element) {
     // Any because gremlins live here. No touchie!
@@ -421,7 +420,6 @@ export abstract class Field<T = any>
    * @param fieldElement The element to populate with info about the field's
    *     state.
    * @returns The element containing info about the field's state.
-   * @internal
    */
   toXml(fieldElement: Element): Element {
     // Any because gremlins live here. No touchie!
@@ -440,7 +438,6 @@ export abstract class Field<T = any>
    *     {@link https://developers.devsite.google.com/blockly/guides/create-custom-blocks/fields/customizing-fields/creating#full_serialization_and_backing_data | field serialization docs}
    *     for more information.
    * @returns JSON serializable state.
-   * @internal
    */
   saveState(_doFullSerialization?: boolean): AnyDuringMigration {
     const legacyState = this.saveLegacyState(Field);
@@ -455,7 +452,6 @@ export abstract class Field<T = any>
    * called by the serialization system.
    *
    * @param state The state we want to apply to the field.
-   * @internal
    */
   loadState(state: AnyDuringMigration) {
     if (this.loadLegacyState(Field, state)) {
@@ -518,8 +514,6 @@ export abstract class Field<T = any>
 
   /**
    * Dispose of all DOM objects and events belonging to this editable field.
-   *
-   * @internal
    */
   dispose() {
     dropDownDiv.hideIfOwner(this);
@@ -1303,7 +1297,6 @@ export abstract class Field<T = any>
    * Subclasses may override this.
    *
    * @returns True if this field has any variable references.
-   * @internal
    */
   referencesVariables(): boolean {
     return false;
@@ -1312,8 +1305,6 @@ export abstract class Field<T = any>
   /**
    * Refresh the variable name referenced by this field if this field references
    * variables.
-   *
-   * @internal
    */
   refreshVariableName() {}
   // NOP

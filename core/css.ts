@@ -444,6 +444,10 @@ input[type=number] {
   z-index: 20000;  /* Arbitrary, but some apps depend on it... */
 }
 
+.blocklyWidgetDiv .blocklyMenu:focus {
+  box-shadow: 0 0 6px 1px rgba(0,0,0,.3);
+}
+
 .blocklyDropDownDiv .blocklyMenu {
   background: inherit;  /* Compatibility with gapi, reset from goog-menu */
   border: inherit;  /* Compatibility with gapi, reset from goog-menu */

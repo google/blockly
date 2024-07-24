@@ -1048,8 +1048,6 @@ export abstract class Field<T = any>
    * rerender this field and adjust for any sizing changes.
    * Other fields on the same block will not rerender, because their sizes have
    * already been recorded.
-   *
-   * @internal
    */
   forceRerender() {
     this.isDirty_ = true;

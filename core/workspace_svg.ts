@@ -17,6 +17,7 @@ import './events/events_block_create.js';
 import './events/events_theme_change.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_viewport.js';
+import {initDrag, updateDrag, scalePoint} from './utils/dragUtils';
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
@@ -1446,16 +1447,15 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param xy Starting location of object.
    */
   startDrag(e: PointerEvent, xy: Coordinate) {
-    // Record the starting offset between the bubble's location and the mouse.
-    const point = browserEvents.mouseToSvg(
+    const domPoint = browserEvents.mouseToSvg(
       e,
       this.getParentSvg(),
       this.getInverseScreenCTM(),
     );
-    // Fix scale of mouse event.
-    point.x /= this.scale;
-    point.y /= this.scale;
-    this.dragDeltaXY = Coordinate.difference(xy, point);
+    const point = new Coordinate(domPoint.x, domPoint.y);
+    const scaledPoint = scalePoint(point);
+    const dragDeltaXY = Coordinate.difference(xy, scaledPoint);
+    initDrag(scaledPoint, dragDeltaXY, this.scale);
   }
 
   /**
@@ -1465,15 +1465,14 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns New location of object.
    */
   moveDrag(e: PointerEvent): Coordinate {
-    const point = browserEvents.mouseToSvg(
+    const domPoint = browserEvents.mouseToSvg(
       e,
       this.getParentSvg(),
       this.getInverseScreenCTM(),
     );
-    // Fix scale of mouse event.
-    point.x /= this.scale;
-    point.y /= this.scale;
-    return Coordinate.sum(this.dragDeltaXY!, point);
+    const point = new Coordinate(domPoint.x, domPoint.y);
+    const scaledPoint = scalePoint(point);
+    return updateDrag(scaledPoint);
   }
 
   /**

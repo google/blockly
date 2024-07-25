@@ -15,7 +15,6 @@ import * as browserEvents from './browser_events.js';
 import type {MenuItem} from './menuitem.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
 import type {Size} from './utils/size.js';
 import * as style from './utils/style.js';
 

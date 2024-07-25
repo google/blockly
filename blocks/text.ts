@@ -477,7 +477,7 @@ blocks['text_prompt_ext'] = {
 
 type PromptBlock = Block & PromptCommonMixin & QuoteImageMixin;
 
-const TEXT_PROMPT_BLOCK = {
+blocks['text_prompt'] = {
   ...PROMPT_COMMON,
   /**
    * Block for prompt function (internal message).
@@ -519,8 +519,6 @@ const TEXT_PROMPT_BLOCK = {
     });
   },
 };
-
-blocks['text_prompt'] = TEXT_PROMPT_BLOCK;
 
 blocks['text_count'] = {
   /**

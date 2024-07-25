@@ -92,7 +92,25 @@ export class BlockSvg
   static readonly COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
   override decompose?: (p1: Workspace) => BlockSvg;
   // override compose?: ((p1: BlockSvg) => void)|null;
-  saveConnections?: (p1: BlockSvg) => void;
+
+  /**
+   * An optional method which saves a record of blocks connected to
+   * this block so they can be later restored after this block is
+   * recoomposed (reconfigured).  Typically records the connected
+   * blocks on properties on blocks in the mutator flyout, so that
+   * rearranging those component blocks will automatically rearrange
+   * the corresponding connected blocks on this block after this block
+   * is recomposed.
+   *
+   * To keep the saved connection information up-to-date, MutatorIcon
+   * arranges for an event listener to call this method any time the
+   * mutator flyout is open and a change occurs on this block's
+   * workspace.
+   *
+   * @param rootBlock The root block in the mutator flyout.
+   */
+  saveConnections?: (rootBlock: BlockSvg) => void;
+
   customContextMenu?: (
     p1: Array<ContextMenuOption | LegacyContextMenuOption>,
   ) => void;

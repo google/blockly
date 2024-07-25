@@ -89,7 +89,6 @@ Css.register(`
 }
 
 .blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {
-  user-select: none;
   border-right: solid #e5e5e5 1px;
   border-bottom: none;
   height: auto;

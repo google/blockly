@@ -199,8 +199,6 @@ export class Toolbox
     const toolboxContainer = document.createElement('div');
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
     dom.addClass(toolboxContainer, 'blocklyToolboxDiv');
-    // blocklyNonSelectable was redundant, its functionality was transferred to more relevant classes
-    // dom.addClass(toolboxContainer, 'blocklyNonSelectable');
     toolboxContainer.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
     return toolboxContainer;
   }

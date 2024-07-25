@@ -17,6 +17,9 @@ export class CommentDragStrategy implements IDragStrategy {
 
   private workspace: WorkspaceSvg;
 
+  /** Was there already an event group in progress when the drag started? */
+  private inGroup: boolean = false;
+
   constructor(private comment: RenderedWorkspaceComment) {
     this.workspace = comment.workspace;
   }
@@ -26,7 +29,8 @@ export class CommentDragStrategy implements IDragStrategy {
   }
 
   startDrag(): void {
-    if (!eventUtils.getGroup()) {
+    this.inGroup = !!eventUtils.getGroup();
+    if (!this.inGroup) {
       eventUtils.setGroup(true);
     }
     this.fireDragStartEvent();
@@ -52,7 +56,9 @@ export class CommentDragStrategy implements IDragStrategy {
     this.comment.snapToGrid();
 
     this.workspace.setResizesEnabled(true);
-    eventUtils.setGroup(false);
+    if (!this.inGroup) {
+      eventUtils.setGroup(false);
+    }
   }
 
   /** Fire a UI event at the start of a comment drag. */

@@ -61,6 +61,9 @@ export class BlockDragStrategy implements IDragStrategy {
    */
   private dragOffset = new Coordinate(0, 0);
 
+  /** Was there already an event group in progress when the drag started? */
+  private inGroup: boolean = false;
+
   constructor(private block: BlockSvg) {
     this.workspace = block.workspace;
   }
@@ -92,7 +95,8 @@ export class BlockDragStrategy implements IDragStrategy {
     }
 
     this.dragging = true;
-    if (!eventUtils.getGroup()) {
+    this.inGroup = !!eventUtils.getGroup();
+    if (!this.inGroup) {
       eventUtils.setGroup(true);
     }
     this.fireDragStartEvent();
@@ -389,7 +393,9 @@ export class BlockDragStrategy implements IDragStrategy {
     this.connectionPreviewer!.dispose();
     this.workspace.setResizesEnabled(true);
 
-    eventUtils.setGroup(false);
+    if (!this.inGroup) {
+      eventUtils.setGroup(false);
+    }
   }
 
   /** Connects the given candidate connections. */

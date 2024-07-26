@@ -1076,7 +1076,7 @@ export class BlockSvg
   override setDeletable(deletable: boolean) {
     super.setDeletable(deletable);
 
-    if(deletable) {
+    if (deletable) {
       dom.removeClass(this.svgGroup_, 'blocklyNotDeletable');
     } else {
       dom.addClass(this.svgGroup_, 'blocklyNotDeletable');

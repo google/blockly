@@ -1165,6 +1165,11 @@ export class BlockSvg
       .getRenderer()
       .getConstants()
       .getBlockStyle(blockStyleName);
+
+    if (this.styleName_) {
+      dom.removeClass(this.svgGroup_, this.styleName_);
+    }
+
     this.styleName_ = blockStyleName;
 
     if (blockStyle) {
@@ -1175,6 +1180,8 @@ export class BlockSvg
       this.style = blockStyle;
 
       this.applyColour();
+
+      dom.addClass(this.svgGroup_, blockStyleName);
     } else {
       throw Error('Invalid style name: ' + blockStyleName);
     }

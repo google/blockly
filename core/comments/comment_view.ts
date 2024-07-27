@@ -826,11 +826,7 @@ css.register(`
   cursor: inherit;
 }
 
-.blocklyCommentTopbarBackground {
-  cursor: grab;
-  fill: var(--commentBorderColour);
-  height: 24px;
-}
+
 
 .blocklyComment .blocklyCommentPreview.blocklyText {
   fill: #000;

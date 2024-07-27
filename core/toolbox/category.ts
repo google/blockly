@@ -137,7 +137,7 @@ export class ToolboxCategory
       'icon': 'blocklyTreeIcon',
       'label': 'blocklyTreeLabel',
       'contents': 'blocklyToolboxContents',
-      'selected': 'blocklyTreeSelected',
+      'selected': 'blocklyToolboxSelected',
       'openicon': 'blocklyTreeIconOpen',
       'closedicon': 'blocklyTreeIconClosed',
     };
@@ -659,7 +659,7 @@ export type CssConfig = ToolboxCategory.CssConfig;
 
 /** CSS for Toolbox.  See css.js for use. */
 Css.register(`
-.blocklyTreeRow:not(.blocklyTreeSelected):hover {
+.blocklyTreeRow:not(.blocklyToolboxSelected):hover {
   background-color: rgba(255, 255, 255, .2);
 }
 
@@ -700,11 +700,11 @@ Css.register(`
   background-position: 0 -1px;
 }
 
-.blocklyTreeSelected>.blocklyTreeIconClosed {
+.blocklyToolboxSelected>.blocklyTreeIconClosed {
   background-position: -32px -17px;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyTreeSelected>.blocklyTreeIconClosed {
+.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxSelected>.blocklyTreeIconClosed {
   background-position: 0 -17px;
 }
 
@@ -712,7 +712,7 @@ Css.register(`
   background-position: -16px -1px;
 }
 
-.blocklyTreeSelected>.blocklyTreeIconOpen {
+.blocklyToolboxSelected>.blocklyTreeIconOpen {
   background-position: -16px -17px;
 }
 
@@ -727,7 +727,7 @@ Css.register(`
   cursor: url("<<<PATH>>>/handdelete.cur"), auto;
 }
 
-.blocklyTreeSelected .blocklyTreeLabel {
+.blocklyToolboxSelected .blocklyTreeLabel {
   color: #fff;
 }
 `);

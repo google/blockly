@@ -104,6 +104,7 @@ export class Menu {
       this,
       this.handleMouseOver,
       true,
+      
     );
     this.clickHandler = browserEvents.conditionalBind(
       element,

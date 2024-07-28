@@ -78,3 +78,26 @@ We typically triage all bugs within 1 week, which includes adding any appropriat
 
 - Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com)
 - We test browsers using [BrowserStack](https://browserstack.com)
+
+##  How to set max-height of dropdowns dynamically 
+
+Blockly sets the maximum height of dropdowns to 300px by default to prevent them from overflowing the workspace. However, this can sometimes force the user to scroll unnecessarily, especially when working with large bitmaps or other extensive content.
+
+You can override this default maximum height with your own CSS. Here's how:
+
+Add a Custom CSS Class:
+
+In your HTML file or stylesheet, define a custom CSS class to set the desired maximum height. For example:
+```css
+.custom-dropdown {
+  max-height: 500px !important;
+}
+```
+Apply the Custom CSS Class:
+
+In your Blockly code, apply the custom CSS class to the dropdown element. This might involve modifying the Blockly source code or using a Blockly event to add the class dynamically.
+Example:
+
+```javascript
+dropdownElement.classList.add('custom-dropdown');
+```

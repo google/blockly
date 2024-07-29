@@ -116,7 +116,7 @@ export class ZoomControls implements IPositionable {
   init() {
     this.workspace.getComponentManager().addComponent({
       component: this,
-      weight: 2,
+      weight: ComponentManager.ComponentWeight.ZOOM_CONTROLS_WEIGHT,
       capabilities: [ComponentManager.Capability.POSITIONABLE],
     });
     this.initialized = true;

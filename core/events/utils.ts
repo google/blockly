@@ -112,6 +112,11 @@ export const VAR_DELETE = 'var_delete';
 export const VAR_RENAME = 'var_rename';
 
 /**
+ * Name of event that changes a variable's type.
+ */
+export const VAR_TYPE_CHANGE = 'var_type_change';
+
+/**
  * Name of generic event that records a UI change.
  */
 export const UI = 'ui';

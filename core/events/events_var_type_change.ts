@@ -26,12 +26,6 @@ import type {Workspace} from '../workspace.js';
 export class VarTypeChange extends VarBase {
   override type = eventUtils.VAR_TYPE_CHANGE;
 
-  /** The variable's previous type. */
-  oldType?: string;
-
-  /** The variable's new type. */
-  newType?: string;
-
   /**
    * @param variable The variable whose type changed. Undefined for a blank event.
    * @param oldType The old type of the variable. Undefined for a blank event.
@@ -39,16 +33,10 @@ export class VarTypeChange extends VarBase {
    */
   constructor(
     variable?: IVariableModel<IVariableState>,
-    oldType?: string,
-    newType?: string,
+    public oldType?: string,
+    public newType?: string,
   ) {
     super(variable);
-
-    if (!oldType || !newType) {
-      return; // Blank event to be populated by fromJson.
-    }
-    this.oldType = oldType;
-    this.newType = newType;
   }
 
   /**

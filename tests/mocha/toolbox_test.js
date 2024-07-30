@@ -47,10 +47,7 @@ suite('Toolbox', function () {
     test('Init called -> HtmlDiv is inserted before parent node', function () {
       const toolboxDiv = Blockly.common.getMainWorkspace().getInjectionDiv()
         .childNodes[0];
-      assert.equal(
-        toolboxDiv.className,
-        'blocklyToolboxDiv blocklyNonSelectable',
-      );
+      assert.equal(toolboxDiv.className, 'blocklyToolboxDiv');
     });
     test('Init called -> Toolbox is subscribed to background and foreground colour', function () {
       const themeManager = this.toolbox.workspace_.getThemeManager();

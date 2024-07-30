@@ -82,9 +82,10 @@ export class Menu {
    * @param container Element upon which to append this menu.
    * @returns The menu's root DOM element.
    */
+
   render(container: Element): HTMLDivElement {
     const element = document.createElement('div');
-    element.className = 'blocklyMenu blocklyNonSelectable';
+    element.className = 'blocklyMenu';
     element.tabIndex = 0;
     if (this.roleName) {
       aria.setRole(element, this.roleName);

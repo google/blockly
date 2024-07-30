@@ -82,6 +82,7 @@ export class Menu {
    * @param container Element upon which to append this menu.
    * @returns The menu's root DOM element.
    */
+
   render(container: Element): HTMLDivElement {
     const element = document.createElement('div');
     element.className = 'blocklyMenu';
@@ -103,7 +104,6 @@ export class Menu {
       this,
       this.handleMouseOver,
       true,
-      
     );
     this.clickHandler = browserEvents.conditionalBind(
       element,

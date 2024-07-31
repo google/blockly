@@ -184,6 +184,9 @@ export class BlockSvg
     this.workspace = workspace;
     this.svgGroup_ = dom.createSvgElement(Svg.G, {});
 
+    if (prototypeName) {
+      dom.addClass(this.svgGroup_, prototypeName);
+    }
     /** A block style object. */
     this.style = workspace.getRenderer().getConstants().getBlockStyle(null);
 

@@ -138,7 +138,7 @@ export class ToolboxCategory
       'label': 'blocklyTreeLabel',
       'contents': 'blocklyToolboxCategoryGroup',
       'selected': 'blocklyTreeSelected',
-      'openicon': 'blocklyTreeIconOpen',
+      'openicon': 'blocklyToolboxCategoryIconOpen',
       'closedicon': 'blocklyTreeIconClosed',
     };
   }
@@ -708,11 +708,11 @@ Css.register(`
   background-position: 0 -17px;
 }
 
-.blocklyTreeIconOpen {
+.blocklyToolboxCategoryIconOpen {
   background-position: -16px -1px;
 }
 
-.blocklyTreeSelected>.blocklyTreeIconOpen {
+.blocklyTreeSelected>.blocklyToolboxCategoryIconOpen {
   background-position: -16px -17px;
 }
 

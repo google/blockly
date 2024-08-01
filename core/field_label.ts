@@ -74,6 +74,9 @@ export class FieldLabel extends Field<string> {
     if (this.class) {
       dom.addClass(this.getTextElement(), this.class);
     }
+    if (this.fieldGroup_) {
+      dom.addClass(this.fieldGroup_, 'blocklyLabelField');
+    }
   }
 
   /**

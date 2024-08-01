@@ -5,7 +5,6 @@
  */
 
 // Former goog.module ID: Blockly.Css
-
 /** Has CSS already been injected? */
 let injected = false;
 
@@ -81,12 +80,6 @@ let content = `
   touch-action: none;
 }
 
-.blocklyNonSelectable {
-  user-select: none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-}
-
 .blocklyBlockCanvas.blocklyCanvasTransitioning,
 .blocklyBubbleCanvas.blocklyCanvasTransitioning {
   transition: transform .5s;
@@ -119,7 +112,7 @@ let content = `
   box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
 }
 
-.blocklyDropDownDiv.blocklyFocused {
+.blocklyDropDownDiv:focus {
   box-shadow: 0 0 6px 1px rgba(0,0,0,.3);
 }
 
@@ -431,6 +424,9 @@ input[type=number] {
 }
 
 .blocklyWidgetDiv .blocklyMenu {
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
   background: #fff;
   border: 1px solid transparent;
   box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
@@ -445,11 +441,14 @@ input[type=number] {
   z-index: 20000;  /* Arbitrary, but some apps depend on it... */
 }
 
-.blocklyWidgetDiv .blocklyMenu.blocklyFocused {
+.blocklyWidgetDiv .blocklyMenu:focus {
   box-shadow: 0 0 6px 1px rgba(0,0,0,.3);
 }
 
 .blocklyDropDownDiv .blocklyMenu {
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
   background: inherit;  /* Compatibility with gapi, reset from goog-menu */
   border: inherit;  /* Compatibility with gapi, reset from goog-menu */
   font: normal 13px "Helvetica Neue", Helvetica, sans-serif;

@@ -184,6 +184,9 @@ export class BlockSvg
     this.workspace = workspace;
     this.svgGroup_ = dom.createSvgElement(Svg.G, {});
 
+    if (prototypeName) {
+      dom.addClass(this.svgGroup_, prototypeName);
+    }
     /** A block style object. */
     this.style = workspace.getRenderer().getConstants().getBlockStyle(null);
 
@@ -1076,6 +1079,20 @@ export class BlockSvg
     super.setDisabledReason(disabled, reason);
     if (this.isEnabled() !== wasEnabled && !this.getInheritedDisabled()) {
       this.updateDisabled();
+    }
+  }
+
+  /**
+   * Add blocklyNotDeletable class when block is not deletable
+   * Or remove class when block is deletable
+   */
+  override setDeletable(deletable: boolean) {
+    super.setDeletable(deletable);
+
+    if (deletable) {
+      dom.removeClass(this.svgGroup_, 'blocklyNotDeletable');
+    } else {
+      dom.addClass(this.svgGroup_, 'blocklyNotDeletable');
     }
   }
 

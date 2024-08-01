@@ -136,12 +136,6 @@ export function createDom() {
 
   // Handle focusin/out events to add a visual indicator when
   // a child is focused or blurred.
-  div.addEventListener('focusin', function () {
-    dom.addClass(div, 'blocklyFocused');
-  });
-  div.addEventListener('focusout', function () {
-    dom.removeClass(div, 'blocklyFocused');
-  });
 }
 
 /**

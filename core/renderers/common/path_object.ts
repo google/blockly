@@ -1,3 +1,11 @@
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Former goog.module ID: Blockly.blockRendering.PathObject
+
 import type {BlockSvg} from '../../block_svg.js';
 import type {Connection} from '../../connection.js';
 import {RenderedConnection} from '../../rendered_connection.js';

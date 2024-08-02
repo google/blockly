@@ -114,7 +114,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
     super.initView();
 
     const textElement = this.getTextElement();
-    dom.addClass(textElement, 'blocklyCheckbox');
+    dom.addClass(this.fieldGroup_!, 'blocklyCheckboxField');
     textElement.style.display = this.value_ ? 'block' : 'none';
   }
 

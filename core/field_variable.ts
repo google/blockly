@@ -22,6 +22,7 @@ import {
   MenuGenerator,
   MenuOption,
 } from './field_dropdown.js';
+import * as dom from './utils/dom.js';
 import * as fieldRegistry from './field_registry.js';
 import * as internalConstants from './internal_constants.js';
 import type {Menu} from './menu.js';
@@ -29,7 +30,7 @@ import type {MenuItem} from './menuitem.js';
 import {Msg} from './msg.js';
 import * as parsing from './utils/parsing.js';
 import {Size} from './utils/size.js';
-import {VariableModel} from './variable_model.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import * as Variables from './variables.js';
 import * as Xml from './xml.js';
 
@@ -51,7 +52,7 @@ export class FieldVariable extends FieldDropdown {
   protected override size_: Size;
 
   /** The variable model associated with this field. */
-  private variable: VariableModel | null = null;
+  private variable: IVariableModel<IVariableState> | null = null;
 
   /**
    * Serializable fields are saved by the serializer, non-serializable fields
@@ -148,6 +149,11 @@ export class FieldVariable extends FieldDropdown {
     this.doValueUpdate_(variable.getId());
   }
 
+  override initView() {
+    super.initView();
+    dom.addClass(this.fieldGroup_!, 'blocklyVariableField');
+  }
+
   override shouldAddBorderRect_() {
     const block = this.getSourceBlock();
     if (!block) {
@@ -190,12 +196,12 @@ export class FieldVariable extends FieldDropdown {
     );
 
     // This should never happen :)
-    if (variableType !== null && variableType !== variable.type) {
+    if (variableType !== null && variableType !== variable.getType()) {
       throw Error(
         "Serialized variable type with id '" +
           variable.getId() +
           "' had type " +
-          variable.type +
+          variable.getType() +
           ', and ' +
           'does not match variable field that references it: ' +
           Xml.domToText(fieldElement) +
@@ -218,9 +224,9 @@ export class FieldVariable extends FieldDropdown {
     this.initModel();
 
     fieldElement.id = this.variable!.getId();
-    fieldElement.textContent = this.variable!.name;
-    if (this.variable!.type) {
-      fieldElement.setAttribute('variabletype', this.variable!.type);
+    fieldElement.textContent = this.variable!.getName();
+    if (this.variable!.getType()) {
+      fieldElement.setAttribute('variabletype', this.variable!.getType());
     }
     return fieldElement;
   }
@@ -243,8 +249,8 @@ export class FieldVariable extends FieldDropdown {
     this.initModel();
     const state = {'id': this.variable!.getId()};
     if (doFullSerialization) {
-      (state as AnyDuringMigration)['name'] = this.variable!.name;
-      (state as AnyDuringMigration)['type'] = this.variable!.type;
+      (state as AnyDuringMigration)['name'] = this.variable!.getName();
+      (state as AnyDuringMigration)['type'] = this.variable!.getType();
     }
     return state;
   }
@@ -301,7 +307,7 @@ export class FieldVariable extends FieldDropdown {
    *     is selected.
    */
   override getText(): string {
-    return this.variable ? this.variable.name : '';
+    return this.variable ? this.variable.getName() : '';
   }
 
   /**
@@ -312,8 +318,17 @@ export class FieldVariable extends FieldDropdown {
    * @returns The selected variable, or null if none was selected.
    * @internal
    */
-  getVariable(): VariableModel | null {
+  getVariable(): IVariableModel<IVariableState> | null {
     return this.variable;
+  }
+
+  /**
+   * Gets the type of this field's default variable.
+   *
+   * @returns The default type for this variable field.
+   */
+  protected getDefaultType(): string {
+    return this.defaultType;
   }
 
   /**
@@ -359,7 +374,7 @@ export class FieldVariable extends FieldDropdown {
       return null;
     }
     // Type Checks.
-    const type = variable.type;
+    const type = variable.getType();
     if (!this.typeIsAllowed(type)) {
       console.warn("Variable type doesn't match this field!  Type was " + type);
       return null;
@@ -414,7 +429,7 @@ export class FieldVariable extends FieldDropdown {
     if (variableTypes === null) {
       // If variableTypes is null, return all variable types.
       if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
-        return this.sourceBlock_.workspace.getVariableTypes();
+        return this.sourceBlock_.workspace.getVariableMap().getTypes();
       }
     }
     variableTypes = variableTypes || [''];
@@ -493,16 +508,13 @@ export class FieldVariable extends FieldDropdown {
     const id = menuItem.getValue();
     // Handle special cases.
     if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
-      if (id === internalConstants.RENAME_VARIABLE_ID) {
+      if (id === internalConstants.RENAME_VARIABLE_ID && this.variable) {
         // Rename variable.
-        Variables.renameVariable(
-          this.sourceBlock_.workspace,
-          this.variable as VariableModel,
-        );
+        Variables.renameVariable(this.sourceBlock_.workspace, this.variable);
         return;
-      } else if (id === internalConstants.DELETE_VARIABLE_ID) {
+      } else if (id === internalConstants.DELETE_VARIABLE_ID && this.variable) {
         // Delete variable.
-        this.sourceBlock_.workspace.deleteVariableById(this.variable!.getId());
+        this.sourceBlock_.workspace.deleteVariableById(this.variable.getId());
         return;
       }
     }
@@ -554,7 +566,7 @@ export class FieldVariable extends FieldDropdown {
       );
     }
     const name = this.getText();
-    let variableModelList: VariableModel[] = [];
+    let variableModelList: IVariableModel<IVariableState>[] = [];
     if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
       const variableTypes = this.getVariableTypes();
       // Get a copy of the list, so that adding rename and new variable options
@@ -566,12 +578,15 @@ export class FieldVariable extends FieldDropdown {
         variableModelList = variableModelList.concat(variables);
       }
     }
-    variableModelList.sort(VariableModel.compareByName);
+    variableModelList.sort(Variables.compareByName);
 
     const options: [string, string][] = [];
     for (let i = 0; i < variableModelList.length; i++) {
       // Set the UUID as the internal representation of the variable.
-      options[i] = [variableModelList[i].name, variableModelList[i].getId()];
+      options[i] = [
+        variableModelList[i].getName(),
+        variableModelList[i].getId(),
+      ];
     }
     options.push([
       Msg['RENAME_VARIABLE'],

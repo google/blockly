@@ -45,7 +45,10 @@ import * as idGenerator from './utils/idgenerator.js';
 import * as parsing from './utils/parsing.js';
 import * as registry from './registry.js';
 import {Size} from './utils/size.js';
-import type {VariableModel} from './variable_model.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
 import type {Workspace} from './workspace.js';
 import {DummyInput} from './inputs/dummy_input.js';
 import {EndRowInput} from './inputs/end_row_input.js';
@@ -1139,7 +1142,7 @@ export class Block implements IASTNodeLocation {
    * @returns List of variable models.
    * @internal
    */
-  getVarModels(): VariableModel[] {
+  getVarModels(): IVariableModel<IVariableState>[] {
     const vars = [];
     for (let i = 0, input; (input = this.inputList[i]); i++) {
       for (let j = 0, field; (field = input.fieldRow[j]); j++) {
@@ -1165,7 +1168,7 @@ export class Block implements IASTNodeLocation {
    * @param variable The variable being renamed.
    * @internal
    */
-  updateVarName(variable: VariableModel) {
+  updateVarName(variable: IVariableModel<IVariableState>) {
     for (let i = 0, input; (input = this.inputList[i]); i++) {
       for (let j = 0, field; (field = input.fieldRow[j]); j++) {
         if (

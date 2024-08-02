@@ -131,14 +131,20 @@ export class ToolboxCategory
    */
   protected makeDefaultCssConfig_(): CssConfig {
     return {
-      'container': 'blocklyToolboxCategory',
-      'row': 'blocklyTreeRow',
+      'container': 'blocklyToolboxCategoryContainer',
+      'row': 'blocklyToolboxCategory',
       'rowcontentcontainer': 'blocklyTreeRowContentContainer',
-      'icon': 'blocklyTreeIcon',
+<<<<<<< HEAD
+      'icon': 'blocklyToolboxCategoryIcon',
       'label': 'blocklyTreeLabel',
+      'contents': 'blocklyToolboxCategoryGroup',
+=======
+      'icon': 'blocklyTreeIcon',
+      'label': 'blocklyToolboxCategoryLabel',
       'contents': 'blocklyToolboxContents',
+>>>>>>> 1d79c2639 (feat: rename blocklyTreeLabel to blocklyToolboxCategoryLabel)
       'selected': 'blocklyTreeSelected',
-      'openicon': 'blocklyTreeIconOpen',
+      'openicon': 'blocklyToolboxCategoryIconOpen',
       'closedicon': 'blocklyTreeIconClosed',
     };
   }
@@ -659,19 +665,19 @@ export type CssConfig = ToolboxCategory.CssConfig;
 
 /** CSS for Toolbox.  See css.js for use. */
 Css.register(`
-.blocklyTreeRow:not(.blocklyTreeSelected):hover {
+.blocklyToolboxCategory:not(.blocklyTreeSelected):hover {
   background-color: rgba(255, 255, 255, .2);
 }
 
-.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {
+.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategoryContainer {
   margin: 1px 5px 1px 0;
 }
 
-.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {
+.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategoryContainer {
   margin: 1px 0 1px 5px;
 }
 
-.blocklyTreeRow {
+.blocklyToolboxCategory {
   height: 22px;
   line-height: 22px;
   margin-bottom: 3px;
@@ -679,12 +685,12 @@ Css.register(`
   white-space: nowrap;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {
+.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxCategory {
   margin-left: 8px;
   padding-right: 0;
 }
 
-.blocklyTreeIcon {
+.blocklyToolboxCategoryIcon {
   background-image: url(<<<PATH>>>/sprites.png);
   height: 16px;
   vertical-align: middle;
@@ -708,26 +714,26 @@ Css.register(`
   background-position: 0 -17px;
 }
 
-.blocklyTreeIconOpen {
+.blocklyToolboxCategoryIconOpen {
   background-position: -16px -1px;
 }
 
-.blocklyTreeSelected>.blocklyTreeIconOpen {
+.blocklyTreeSelected>.blocklyToolboxCategoryIconOpen {
   background-position: -16px -17px;
 }
 
-.blocklyTreeLabel {
+.blocklyToolboxCategoryLabel {
   cursor: default;
   font: 16px sans-serif;
   padding: 0 3px;
   vertical-align: middle;
 }
 
-.blocklyToolboxDelete .blocklyTreeLabel {
+.blocklyToolboxDelete .blocklyToolboxCategoryLabel {
   cursor: url("<<<PATH>>>/handdelete.cur"), auto;
 }
 
-.blocklyTreeSelected .blocklyTreeLabel {
+.blocklyTreeSelected .blocklyToolboxCategoryLabel {
   color: #fff;
 }
 `);

@@ -6,13 +6,14 @@
 
 // Former goog.module ID: Blockly.Variables
 
+import type {Block} from './block.js';
 import {Blocks} from './blocks.js';
 import * as dialog from './dialog.js';
 import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
 import {Msg} from './msg.js';
 import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.js';
 import * as utilsXml from './utils/xml.js';
-import {VariableModel} from './variable_model.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -34,9 +35,11 @@ export const CATEGORY_NAME = 'VARIABLE';
  * @param ws The workspace to search for variables.
  * @returns Array of variable models.
  */
-export function allUsedVarModels(ws: Workspace): VariableModel[] {
+export function allUsedVarModels(
+  ws: Workspace,
+): IVariableModel<IVariableState>[] {
   const blocks = ws.getAllBlocks(false);
-  const variables = new Set<VariableModel>();
+  const variables = new Set<IVariableModel<IVariableState>>();
   // Iterate through every block and add each variable to the set.
   for (let i = 0; i < blocks.length; i++) {
     const blockVariables = blocks[i].getVarModels();
@@ -142,7 +145,7 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
     }
 
     if (Blocks['variables_get']) {
-      variableModelList.sort(VariableModel.compareByName);
+      variableModelList.sort(compareByName);
       for (let i = 0, variable; (variable = variableModelList[i]); i++) {
         const block = utilsXml.createElement('block');
         block.setAttribute('type', 'variables_get');
@@ -266,11 +269,13 @@ export function createVariableButtonHandler(
       }
 
       let msg;
-      if (existing.type === type) {
-        msg = Msg['VARIABLE_ALREADY_EXISTS'].replace('%1', existing.name);
+      if (existing.getType() === type) {
+        msg = Msg['VARIABLE_ALREADY_EXISTS'].replace('%1', existing.getName());
       } else {
         msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
-        msg = msg.replace('%1', existing.name).replace('%2', existing.type);
+        msg = msg
+          .replace('%1', existing.getName())
+          .replace('%2', existing.getType());
       }
       dialog.alert(msg, function () {
         promptAndCheckWithAlert(text);
@@ -293,14 +298,14 @@ export function createVariableButtonHandler(
  */
 export function renameVariable(
   workspace: Workspace,
-  variable: VariableModel,
+  variable: IVariableModel<IVariableState>,
   opt_callback?: (p1?: string | null) => void,
 ) {
   // This function needs to be named so it can be called recursively.
   function promptAndCheckWithAlert(defaultName: string) {
     const promptText = Msg['RENAME_VARIABLE_TITLE'].replace(
       '%1',
-      variable.name,
+      variable.getName(),
     );
     promptName(promptText, defaultName, function (newName) {
       if (!newName) {
@@ -309,9 +314,13 @@ export function renameVariable(
         return;
       }
 
-      const existing = nameUsedWithOtherType(newName, variable.type, workspace);
+      const existing = nameUsedWithOtherType(
+        newName,
+        variable.getType(),
+        workspace,
+      );
       const procedure = nameUsedWithConflictingParam(
-        variable.name,
+        variable.getName(),
         newName,
         workspace,
       );
@@ -325,8 +334,8 @@ export function renameVariable(
       let msg = '';
       if (existing) {
         msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
-          .replace('%1', existing.name)
-          .replace('%2', existing.type);
+          .replace('%1', existing.getName())
+          .replace('%2', existing.getType());
       } else if (procedure) {
         msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER']
           .replace('%1', newName)
@@ -380,12 +389,15 @@ function nameUsedWithOtherType(
   name: string,
   type: string,
   workspace: Workspace,
-): VariableModel | null {
+): IVariableModel<IVariableState> | null {
   const allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();
   for (let i = 0, variable; (variable = allVariables[i]); i++) {
-    if (variable.name.toLowerCase() === name && variable.type !== type) {
+    if (
+      variable.getName().toLowerCase() === name &&
+      variable.getType() !== type
+    ) {
       return variable;
     }
   }
@@ -402,12 +414,12 @@ function nameUsedWithOtherType(
 export function nameUsedWithAnyType(
   name: string,
   workspace: Workspace,
-): VariableModel | null {
+): IVariableModel<IVariableState> | null {
   const allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();
   for (let i = 0, variable; (variable = allVariables[i]); i++) {
-    if (variable.name.toLowerCase() === name) {
+    if (variable.getName().toLowerCase() === name) {
       return variable;
     }
   }
@@ -453,7 +465,7 @@ function checkForConflictingParamWithProcedureModels(
     const params = procedure
       .getParameters()
       .filter(isVariableBackedParameterModel)
-      .map((param) => param.getVariableModel().name);
+      .map((param) => param.getVariableModel().getName());
     if (!params) continue;
     const procHasOld = params.some((param) => param.toLowerCase() === oldName);
     const procHasNew = params.some((param) => param.toLowerCase() === newName);
@@ -493,7 +505,7 @@ function checkForConflictingParamWithLegacyProcedures(
  * @returns The generated DOM.
  */
 export function generateVariableFieldDom(
-  variableModel: VariableModel,
+  variableModel: IVariableModel<IVariableState>,
 ): Element {
   /* Generates the following XML:
    * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
@@ -501,8 +513,8 @@ export function generateVariableFieldDom(
   const field = utilsXml.createElement('field');
   field.setAttribute('name', 'VAR');
   field.setAttribute('id', variableModel.getId());
-  field.setAttribute('variabletype', variableModel.type);
-  const name = utilsXml.createTextNode(variableModel.name);
+  field.setAttribute('variabletype', variableModel.getType());
+  const name = utilsXml.createTextNode(variableModel.getName());
   field.appendChild(name);
   return field;
 }
@@ -524,7 +536,7 @@ export function getOrCreateVariablePackage(
   id: string | null,
   opt_name?: string,
   opt_type?: string,
-): VariableModel {
+): IVariableModel<IVariableState> {
   let variable = getVariable(workspace, id, opt_name, opt_type);
   if (!variable) {
     variable = createVariable(workspace, id, opt_name, opt_type);
@@ -552,7 +564,7 @@ export function getVariable(
   id: string | null,
   opt_name?: string,
   opt_type?: string,
-): VariableModel | null {
+): IVariableModel<IVariableState> | null {
   const potentialVariableMap = workspace.getPotentialVariableMap();
   let variable = null;
   // Try to just get the variable, by ID if possible.
@@ -597,7 +609,7 @@ function createVariable(
   id: string | null,
   opt_name?: string,
   opt_type?: string,
-): VariableModel {
+): IVariableModel<IVariableState> {
   const potentialVariableMap = workspace.getPotentialVariableMap();
   // Variables without names get uniquely named for this workspace.
   if (!opt_name) {
@@ -610,7 +622,11 @@ function createVariable(
   // Create a potential variable if in the flyout.
   let variable = null;
   if (potentialVariableMap) {
-    variable = potentialVariableMap.createVariable(opt_name, opt_type, id);
+    variable = potentialVariableMap.createVariable(
+      opt_name,
+      opt_type,
+      id ?? undefined,
+    );
   } else {
     // In the main workspace, create a real variable.
     variable = workspace.createVariable(opt_name, opt_type, id);
@@ -633,8 +649,8 @@ function createVariable(
  */
 export function getAddedVariables(
   workspace: Workspace,
-  originalVariables: VariableModel[],
-): VariableModel[] {
+  originalVariables: IVariableModel<IVariableState>[],
+): IVariableModel<IVariableState>[] {
   const allCurrentVariables = workspace.getAllVariables();
   const addedVariables = [];
   if (originalVariables.length !== allCurrentVariables.length) {
@@ -648,6 +664,92 @@ export function getAddedVariables(
     }
   }
   return addedVariables;
+}
+
+/**
+ * A custom compare function for the VariableModel objects.
+ *
+ * @param var1 First variable to compare.
+ * @param var2 Second variable to compare.
+ * @returns -1 if name of var1 is less than name of var2, 0 if equal, and 1 if
+ *     greater.
+ * @internal
+ */
+export function compareByName(
+  var1: IVariableModel<IVariableState>,
+  var2: IVariableModel<IVariableState>,
+): number {
+  return var1
+    .getName()
+    .localeCompare(var2.getName(), undefined, {sensitivity: 'base'});
+}
+
+/**
+ * Find all the uses of a named variable.
+ *
+ * @param workspace The workspace to search for the variable.
+ * @param id ID of the variable to find.
+ * @returns Array of block usages.
+ */
+export function getVariableUsesById(workspace: Workspace, id: string): Block[] {
+  const uses = [];
+  const blocks = workspace.getAllBlocks(false);
+  // Iterate through every block and check the name.
+  for (let i = 0; i < blocks.length; i++) {
+    const blockVariables = blocks[i].getVarModels();
+    if (blockVariables) {
+      for (let j = 0; j < blockVariables.length; j++) {
+        if (blockVariables[j].getId() === id) {
+          uses.push(blocks[i]);
+        }
+      }
+    }
+  }
+  return uses;
+}
+
+/**
+ * Delete a variable and all of its uses from the given workspace. May prompt
+ * the user for confirmation.
+ *
+ * @param workspace The workspace from which to delete the variable.
+ * @param variable The variable to delete.
+ */
+export function deleteVariable(
+  workspace: Workspace,
+  variable: IVariableModel<IVariableState>,
+) {
+  // Check whether this variable is a function parameter before deleting.
+  const variableName = variable.getName();
+  const uses = getVariableUsesById(workspace, variable.getId());
+  for (let i = 0, block; (block = uses[i]); i++) {
+    if (
+      block.type === 'procedures_defnoreturn' ||
+      block.type === 'procedures_defreturn'
+    ) {
+      const procedureName = String(block.getFieldValue('NAME'));
+      const deleteText = Msg['CANNOT_DELETE_VARIABLE_PROCEDURE']
+        .replace('%1', variableName)
+        .replace('%2', procedureName);
+      dialog.alert(deleteText);
+      return;
+    }
+  }
+
+  if (uses.length > 1) {
+    // Confirm before deleting multiple blocks.
+    const confirmText = Msg['DELETE_VARIABLE_CONFIRMATION']
+      .replace('%1', String(uses.length))
+      .replace('%2', variableName);
+    dialog.confirm(confirmText, (ok) => {
+      if (ok && variable) {
+        workspace.getVariableMap().deleteVariable(variable);
+      }
+    });
+  } else {
+    // No confirmation necessary for a single block.
+    workspace.getVariableMap().deleteVariable(variable);
+  }
 }
 
 export const TEST_ONLY = {

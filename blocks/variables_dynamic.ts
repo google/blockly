@@ -144,9 +144,9 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
     const id = this.getFieldValue('VAR');
     const variableModel = Variables.getVariable(this.workspace, id)!;
     if (this.type === 'variables_get_dynamic') {
-      this.outputConnection!.setCheck(variableModel.type);
+      this.outputConnection!.setCheck(variableModel.getType());
     } else {
-      this.getInput('VALUE')!.connection!.setCheck(variableModel.type);
+      this.getInput('VALUE')!.connection!.setCheck(variableModel.getType());
     }
   },
 };

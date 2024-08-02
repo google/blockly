@@ -17,27 +17,33 @@ import './events/events_var_delete.js';
 import './events/events_var_rename.js';
 
 import type {Block} from './block.js';
-import * as dialog from './dialog.js';
+import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
-import {Msg} from './msg.js';
+import * as registry from './registry.js';
+import * as Variables from './variables.js';
 import {Names} from './names.js';
-import * as arrayUtils from './utils/array.js';
 import * as idGenerator from './utils/idgenerator.js';
-import {VariableModel} from './variable_model.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import type {Workspace} from './workspace.js';
+import type {IVariableMap} from './interfaces/i_variable_map.js';
 
 /**
  * Class for a variable map.  This contains a dictionary data structure with
  * variable types as keys and lists of variables as values.  The list of
  * variables are the type indicated by the key.
  */
-export class VariableMap {
+export class VariableMap
+  implements IVariableMap<IVariableModel<IVariableState>>
+{
   /**
-   * A map from variable type to list of variable names.  The lists contain
+   * A map from variable type to map of IDs to variables. The maps contain
    * all of the named variables in the workspace, including variables that are
    * not currently in use.
    */
-  private variableMap = new Map<string, VariableModel[]>();
+  private variableMap = new Map<
+    string,
+    Map<string, IVariableModel<IVariableState>>
+  >();
 
   /** @param workspace The workspace this map belongs to. */
   constructor(public workspace: Workspace) {}
@@ -45,8 +51,8 @@ export class VariableMap {
   /** Clear the variable map.  Fires events for every deletion. */
   clear() {
     for (const variables of this.variableMap.values()) {
-      while (variables.length > 0) {
-        this.deleteVariable(variables[0]);
+      for (const variable of variables.values()) {
+        this.deleteVariable(variable);
       }
     }
     if (this.variableMap.size !== 0) {
@@ -60,11 +66,14 @@ export class VariableMap {
    *
    * @param variable Variable to rename.
    * @param newName New variable name.
-   * @internal
+   * @returns The newly renamed variable.
    */
-  renameVariable(variable: VariableModel, newName: string) {
-    if (variable.name === newName) return;
-    const type = variable.type;
+  renameVariable(
+    variable: IVariableModel<IVariableState>,
+    newName: string,
+  ): IVariableModel<IVariableState> {
+    if (variable.getName() === newName) return variable;
+    const type = variable.getType();
     const conflictVar = this.getVariable(newName, type);
     const blocks = this.workspace.getAllBlocks(false);
     const existingGroup = eventUtils.getGroup();
@@ -75,28 +84,48 @@ export class VariableMap {
       // The IDs may match if the rename is a simple case change (name1 ->
       // Name1).
       if (!conflictVar || conflictVar.getId() === variable.getId()) {
-        this.renameVariableAndUses_(variable, newName, blocks);
+        this.renameVariableAndUses(variable, newName, blocks);
       } else {
-        this.renameVariableWithConflict_(
-          variable,
-          newName,
-          conflictVar,
-          blocks,
-        );
+        this.renameVariableWithConflict(variable, newName, conflictVar, blocks);
       }
     } finally {
       eventUtils.setGroup(existingGroup);
     }
+    return variable;
+  }
+
+  changeVariableType(
+    variable: IVariableModel<IVariableState>,
+    newType: string,
+  ): IVariableModel<IVariableState> {
+    this.variableMap.get(variable.getType())?.delete(variable.getId());
+    variable.setType(newType);
+    const newTypeVariables =
+      this.variableMap.get(newType) ??
+      new Map<string, IVariableModel<IVariableState>>();
+    newTypeVariables.set(variable.getId(), variable);
+    if (!this.variableMap.has(newType)) {
+      this.variableMap.set(newType, newTypeVariables);
+    }
+
+    return variable;
   }
 
   /**
    * Rename a variable by updating its name in the variable map. Identify the
    * variable to rename with the given ID.
    *
+   * @deprecated v12, use VariableMap.renameVariable.
    * @param id ID of the variable to rename.
    * @param newName New variable name.
    */
   renameVariableById(id: string, newName: string) {
+    deprecation.warn(
+      'VariableMap.renameVariableById',
+      'v12',
+      'v13',
+      'VariableMap.renameVariable',
+    );
     const variable = this.getVariableById(id);
     if (!variable) {
       throw Error("Tried to rename a variable that didn't exist. ID: " + id);
@@ -113,15 +142,15 @@ export class VariableMap {
    * @param newName New variable name.
    * @param blocks The list of all blocks in the workspace.
    */
-  private renameVariableAndUses_(
-    variable: VariableModel,
+  private renameVariableAndUses(
+    variable: IVariableModel<IVariableState>,
     newName: string,
     blocks: Block[],
   ) {
     eventUtils.fire(
       new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName),
     );
-    variable.name = newName;
+    variable.setName(newName);
     for (let i = 0; i < blocks.length; i++) {
       blocks[i].updateVarName(variable);
     }
@@ -138,18 +167,18 @@ export class VariableMap {
    * @param conflictVar The variable that was already using newName.
    * @param blocks The list of all blocks in the workspace.
    */
-  private renameVariableWithConflict_(
-    variable: VariableModel,
+  private renameVariableWithConflict(
+    variable: IVariableModel<IVariableState>,
     newName: string,
-    conflictVar: VariableModel,
+    conflictVar: IVariableModel<IVariableState>,
     blocks: Block[],
   ) {
-    const type = variable.type;
-    const oldCase = conflictVar.name;
+    const type = variable.getType();
+    const oldCase = conflictVar.getName();
 
     if (newName !== oldCase) {
       // Simple rename to change the case and update references.
-      this.renameVariableAndUses_(conflictVar, newName, blocks);
+      this.renameVariableAndUses(conflictVar, newName, blocks);
     }
 
     // These blocks now refer to a different variable.
@@ -159,8 +188,8 @@ export class VariableMap {
     }
     // Finally delete the original variable, which is now unreferenced.
     eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
-    // And remove it from the list.
-    arrayUtils.removeElem(this.variableMap.get(type)!, variable);
+    // And remove it from the map.
+    this.variableMap.get(type)?.delete(variable.getId());
   }
 
   /* End functions for renaming variables. */
@@ -177,9 +206,9 @@ export class VariableMap {
    */
   createVariable(
     name: string,
-    opt_type?: string | null,
-    opt_id?: string | null,
-  ): VariableModel {
+    opt_type?: string,
+    opt_id?: string,
+  ): IVariableModel<IVariableState> {
     let variable = this.getVariable(name, opt_type);
     if (variable) {
       if (opt_id && variable.getId() !== opt_id) {
@@ -202,102 +231,51 @@ export class VariableMap {
     }
     const id = opt_id || idGenerator.genUid();
     const type = opt_type || '';
+    const VariableModel = registry.getObject(
+      registry.Type.VARIABLE_MODEL,
+      registry.DEFAULT,
+      true,
+    );
+    if (!VariableModel) {
+      throw new Error('No variable model is registered.');
+    }
     variable = new VariableModel(this.workspace, name, type, id);
 
-    const variables = this.variableMap.get(type) || [];
-    variables.push(variable);
-    // Delete the list of variables of this type, and re-add it so that
-    // the most recent addition is at the end.
-    // This is used so the toolbox's set block is set to the most recent
-    // variable.
-    this.variableMap.delete(type);
-    this.variableMap.set(type, variables);
-
+    const variables =
+      this.variableMap.get(type) ??
+      new Map<string, IVariableModel<IVariableState>>();
+    variables.set(variable.getId(), variable);
+    if (!this.variableMap.has(type)) {
+      this.variableMap.set(type, variables);
+    }
     eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(variable));
-
     return variable;
+  }
+
+  /**
+   * Adds the given variable to this variable map.
+   *
+   * @param variable The variable to add.
+   */
+  addVariable(variable: IVariableModel<IVariableState>) {
+    const type = variable.getType();
+    if (!this.variableMap.has(type)) {
+      this.variableMap.set(
+        type,
+        new Map<string, IVariableModel<IVariableState>>(),
+      );
+    }
+    this.variableMap.get(type)?.set(variable.getId(), variable);
   }
 
   /* Begin functions for variable deletion. */
   /**
-   * Delete a variable.
+   * Delete a variable and all of its uses without confirmation.
    *
    * @param variable Variable to delete.
    */
-  deleteVariable(variable: VariableModel) {
-    const variableId = variable.getId();
-    const variableList = this.variableMap.get(variable.type);
-    if (variableList) {
-      for (let i = 0; i < variableList.length; i++) {
-        const tempVar = variableList[i];
-        if (tempVar.getId() === variableId) {
-          variableList.splice(i, 1);
-          eventUtils.fire(
-            new (eventUtils.get(eventUtils.VAR_DELETE))(variable),
-          );
-          if (variableList.length === 0) {
-            this.variableMap.delete(variable.type);
-          }
-          return;
-        }
-      }
-    }
-  }
-
-  /**
-   * Delete a variables by the passed in ID and all of its uses from this
-   * workspace. May prompt the user for confirmation.
-   *
-   * @param id ID of variable to delete.
-   */
-  deleteVariableById(id: string) {
-    const variable = this.getVariableById(id);
-    if (variable) {
-      // Check whether this variable is a function parameter before deleting.
-      const variableName = variable.name;
-      const uses = this.getVariableUsesById(id);
-      for (let i = 0, block; (block = uses[i]); i++) {
-        if (
-          block.type === 'procedures_defnoreturn' ||
-          block.type === 'procedures_defreturn'
-        ) {
-          const procedureName = String(block.getFieldValue('NAME'));
-          const deleteText = Msg['CANNOT_DELETE_VARIABLE_PROCEDURE']
-            .replace('%1', variableName)
-            .replace('%2', procedureName);
-          dialog.alert(deleteText);
-          return;
-        }
-      }
-
-      if (uses.length > 1) {
-        // Confirm before deleting multiple blocks.
-        const confirmText = Msg['DELETE_VARIABLE_CONFIRMATION']
-          .replace('%1', String(uses.length))
-          .replace('%2', variableName);
-        dialog.confirm(confirmText, (ok) => {
-          if (ok && variable) {
-            this.deleteVariableInternal(variable, uses);
-          }
-        });
-      } else {
-        // No confirmation necessary for a single block.
-        this.deleteVariableInternal(variable, uses);
-      }
-    } else {
-      console.warn("Can't delete non-existent variable: " + id);
-    }
-  }
-
-  /**
-   * Deletes a variable and all of its uses from this workspace without asking
-   * the user for confirmation.
-   *
-   * @param variable Variable to delete.
-   * @param uses An array of uses of the variable.
-   * @internal
-   */
-  deleteVariableInternal(variable: VariableModel, uses: Block[]) {
+  deleteVariable(variable: IVariableModel<IVariableState>) {
+    const uses = this.getVariableUsesById(variable.getId());
     const existingGroup = eventUtils.getGroup();
     if (!existingGroup) {
       eventUtils.setGroup(true);
@@ -306,11 +284,38 @@ export class VariableMap {
       for (let i = 0; i < uses.length; i++) {
         uses[i].dispose(true);
       }
-      this.deleteVariable(variable);
+      const variables = this.variableMap.get(variable.getType());
+      if (!variables || !variables.has(variable.getId())) return;
+      variables.delete(variable.getId());
+      eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
+      if (variables.size === 0) {
+        this.variableMap.delete(variable.getType());
+      }
     } finally {
       eventUtils.setGroup(existingGroup);
     }
   }
+
+  /**
+   * Delete a variables by the passed in ID and all of its uses from this
+   * workspace. May prompt the user for confirmation.
+   *
+   * @deprecated v12, use Blockly.Variables.deleteVariable.
+   * @param id ID of variable to delete.
+   */
+  deleteVariableById(id: string) {
+    deprecation.warn(
+      'VariableMap.deleteVariableById',
+      'v12',
+      'v13',
+      'Blockly.Variables.deleteVariable',
+    );
+    const variable = this.getVariableById(id);
+    if (variable) {
+      Variables.deleteVariable(this.workspace, variable);
+    }
+  }
+
   /* End functions for variable deletion. */
   /**
    * Find the variable by the given name and type and return it.  Return null if
@@ -321,17 +326,19 @@ export class VariableMap {
    *     the empty string, which is a specific type.
    * @returns The variable with the given name, or null if it was not found.
    */
-  getVariable(name: string, opt_type?: string | null): VariableModel | null {
+  getVariable(
+    name: string,
+    opt_type?: string,
+  ): IVariableModel<IVariableState> | null {
     const type = opt_type || '';
-    const list = this.variableMap.get(type);
-    if (list) {
-      for (let j = 0, variable; (variable = list[j]); j++) {
-        if (Names.equals(variable.name, name)) {
-          return variable;
-        }
-      }
-    }
-    return null;
+    const variables = this.variableMap.get(type);
+    if (!variables) return null;
+
+    return (
+      [...variables.values()].find((variable) =>
+        Names.equals(variable.getName(), name),
+      ) ?? null
+    );
   }
 
   /**
@@ -340,12 +347,10 @@ export class VariableMap {
    * @param id The ID to check for.
    * @returns The variable with the given ID.
    */
-  getVariableById(id: string): VariableModel | null {
+  getVariableById(id: string): IVariableModel<IVariableState> | null {
     for (const variables of this.variableMap.values()) {
-      for (const variable of variables) {
-        if (variable.getId() === id) {
-          return variable;
-        }
+      if (variables.has(id)) {
+        return variables.get(id) ?? null;
       }
     }
     return null;
@@ -359,36 +364,21 @@ export class VariableMap {
    * @returns The sought after variables of the passed in type. An empty array
    *     if none are found.
    */
-  getVariablesOfType(type: string | null): VariableModel[] {
+  getVariablesOfType(type: string | null): IVariableModel<IVariableState>[] {
     type = type || '';
-    const variableList = this.variableMap.get(type);
-    if (variableList) {
-      return variableList.slice();
-    }
-    return [];
+    const variables = this.variableMap.get(type);
+    if (!variables) return [];
+
+    return [...variables.values()];
   }
 
   /**
-   * Return all variable and potential variable types.  This list always
-   * contains the empty string.
+   * Returns a list of unique types of variables in this variable map.
    *
-   * @param ws The workspace used to look for potential variables. This can be
-   *     different than the workspace stored on this object if the passed in ws
-   *     is a flyout workspace.
-   * @returns List of variable types.
-   * @internal
+   * @returns A list of unique types of variables in this variable map.
    */
-  getVariableTypes(ws: Workspace | null): string[] {
-    const variableTypes = new Set<string>(this.variableMap.keys());
-    if (ws && ws.getPotentialVariableMap()) {
-      for (const key of ws.getPotentialVariableMap()!.variableMap.keys()) {
-        variableTypes.add(key);
-      }
-    }
-    if (!variableTypes.has('')) {
-      variableTypes.add('');
-    }
-    return Array.from(variableTypes.values());
+  getTypes(): string[] {
+    return [...this.variableMap.keys()];
   }
 
   /**
@@ -396,10 +386,10 @@ export class VariableMap {
    *
    * @returns List of variable models.
    */
-  getAllVariables(): VariableModel[] {
-    let allVariables: VariableModel[] = [];
+  getAllVariables(): IVariableModel<IVariableState>[] {
+    let allVariables: IVariableModel<IVariableState>[] = [];
     for (const variables of this.variableMap.values()) {
-      allVariables = allVariables.concat(variables);
+      allVariables = allVariables.concat(...variables.values());
     }
     return allVariables;
   }
@@ -407,34 +397,41 @@ export class VariableMap {
   /**
    * Returns all of the variable names of all types.
    *
+   * @deprecated v12, use Blockly.Variables.getAllVariables.
    * @returns All of the variable names of all types.
    */
   getAllVariableNames(): string[] {
-    return Array.from(this.variableMap.values())
-      .flat()
-      .map((variable) => variable.name);
+    deprecation.warn(
+      'VariableMap.getAllVariableNames',
+      'v12',
+      'v13',
+      'Blockly.Variables.getAllVariables',
+    );
+    const names: string[] = [];
+    for (const variables of this.variableMap.values()) {
+      for (const variable of variables.values()) {
+        names.push(variable.getName());
+      }
+    }
+    return names;
   }
 
   /**
    * Find all the uses of a named variable.
    *
+   * @deprecated v12, use Blockly.Variables.getVariableUsesById.
    * @param id ID of the variable to find.
    * @returns Array of block usages.
    */
   getVariableUsesById(id: string): Block[] {
-    const uses = [];
-    const blocks = this.workspace.getAllBlocks(false);
-    // Iterate through every block and check the name.
-    for (let i = 0; i < blocks.length; i++) {
-      const blockVariables = blocks[i].getVarModels();
-      if (blockVariables) {
-        for (let j = 0; j < blockVariables.length; j++) {
-          if (blockVariables[j].getId() === id) {
-            uses.push(blocks[i]);
-          }
-        }
-      }
-    }
-    return uses;
+    deprecation.warn(
+      'VariableMap.getVariableUsesById',
+      'v12',
+      'v13',
+      'Blockly.Variables.getVariableUsesById',
+    );
+    return Variables.getVariableUsesById(this.workspace, id);
   }
 }
+
+registry.register(registry.Type.VARIABLE_MAP, registry.DEFAULT, VariableMap);

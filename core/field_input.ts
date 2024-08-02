@@ -405,7 +405,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
     const clickTarget = this.getClickTarget_();
     if (!clickTarget) throw new Error('A click target has not been set.');
-    dom.addClass(clickTarget, 'editing');
+    dom.addClass(clickTarget, 'blocklyEditing');
 
     const htmlInput = document.createElement('input');
     htmlInput.className = 'blocklyHtmlInput';
@@ -500,7 +500,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
     const clickTarget = this.getClickTarget_();
     if (!clickTarget) throw new Error('A click target has not been set.');
-    dom.removeClass(clickTarget, 'editing');
+    dom.removeClass(clickTarget, 'blocklyEditing');
   }
 
   /**

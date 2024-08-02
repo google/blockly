@@ -28,6 +28,7 @@ import {
 import {IContextMenu} from '../interfaces/i_contextmenu.js';
 import * as contextMenu from '../contextmenu.js';
 import {ContextMenuRegistry} from '../contextmenu_registry.js';
+import * as layers from '../layers.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
@@ -208,6 +209,7 @@ export class RenderedWorkspaceComment
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleCommentStart(e, this);
+      this.workspace.getLayerManager()?.append(this, layers.BLOCK);
       common.setSelected(this);
     }
   }

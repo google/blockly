@@ -323,6 +323,15 @@ export class FieldVariable extends FieldDropdown {
   }
 
   /**
+   * Gets the type of this field's default variable.
+   *
+   * @returns The default type for this variable field.
+   */
+  protected getDefaultType(): string {
+    return this.defaultType;
+  }
+
+  /**
    * Gets the validation function for this field, or null if not set.
    * Returns null if the variable is not set, because validators should not
    * run on the initial setValue call, because the field won't be attached to

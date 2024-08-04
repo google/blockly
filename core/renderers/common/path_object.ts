@@ -169,24 +169,16 @@ export class PathObject implements IPathObject {
    * @param enable True if highlighted.
    */
 
-  addClass(element: SVGElement, className:string) {
-    element.classList.add(className);
-  }
-
-  removeClass(element: SVGElement, className: string) {
-    element.classList.remove(className);
-  }
-
   updateHighlighted(enable: boolean) {
     if (enable) {
       this.svgPath.setAttribute(
         'filter',
         'url(#' + this.constants.embossFilterId + ')',
       );
-      this.addClass(this.svgRoot, 'blocklyHighlighted');
+      this.setClass_('blocklyHighlighted', true);
     } else {
       this.svgPath.setAttribute('filter', 'none');
-      this.removeClass(this.svgRoot, 'blocklyHighlighted');
+      this.setClass_('blocklyHighlighted', false);
     }
   }
 

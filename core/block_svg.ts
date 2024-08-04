@@ -1162,6 +1162,10 @@ export class BlockSvg
       .getConstants()
       .getBlockStyle(blockStyleName);
 
+    if (!this.svgGroup_) {
+      throw new Error('SVG group is not defined');
+    }
+
     if (this.styleName_) {
       dom.removeClass(this.svgGroup_, this.styleName_);
     }
@@ -1176,6 +1180,7 @@ export class BlockSvg
       this.applyColour();
 
       dom.addClass(this.svgGroup_, blockStyleName);
+      this.styleName_ = blockStyleName;
     } else {
       throw Error('Invalid style name: ' + blockStyleName);
     }

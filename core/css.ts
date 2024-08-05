@@ -134,18 +134,6 @@ let content = `
   border-color: inherit;
 }
 
-.blocklyDropDownButton {
-  display: inline-block;
-  float: left;
-  padding: 0;
-  margin: 4px;
-  border-radius: 4px;
-  outline: none;
-  border: 1px solid;
-  transition: box-shadow .1s;
-  cursor: pointer;
-}
-
 .blocklyArrowTop {
   border-top: 1px solid;
   border-left: 1px solid;
@@ -158,21 +146,6 @@ let content = `
   border-right: 1px solid;
   border-bottom-right-radius: 4px;
   border-color: inherit;
-}
-
-.blocklyResizeSE {
-  cursor: se-resize;
-  fill: #aaa;
-}
-
-.blocklyResizeSW {
-  cursor: sw-resize;
-  fill: #aaa;
-}
-
-.blocklyResizeLine {
-  stroke: #515A5A;
-  stroke-width: 1;
 }
 
 .blocklyHighlightedConnectionPath {
@@ -268,10 +241,6 @@ let content = `
   -ms-user-select: none;
   -webkit-user-select: none;
   cursor: inherit;
-}
-
-.blocklyHidden {
-  display: none;
 }
 
 .blocklyFieldDropdown:not(.blocklyHidden) {

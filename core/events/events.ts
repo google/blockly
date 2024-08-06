@@ -43,6 +43,7 @@ import {VarBase, VarBaseJson} from './events_var_base.js';
 import {VarCreate, VarCreateJson} from './events_var_create.js';
 import {VarDelete, VarDeleteJson} from './events_var_delete.js';
 import {VarRename, VarRenameJson} from './events_var_rename.js';
+import {VarTypeChange, VarTypeChangeJson} from './events_var_type_change.js';
 import {ViewportChange, ViewportChangeJson} from './events_viewport.js';
 import * as eventUtils from './utils.js';
 import {FinishedLoading} from './workspace_events.js';
@@ -105,6 +106,8 @@ export {VarDelete};
 export {VarDeleteJson};
 export {VarRename};
 export {VarRenameJson};
+export {VarTypeChange};
+export {VarTypeChangeJson};
 export {ViewportChange};
 export {ViewportChangeJson};
 
@@ -140,6 +143,7 @@ export const UI = eventUtils.UI;
 export const VAR_CREATE = eventUtils.VAR_CREATE;
 export const VAR_DELETE = eventUtils.VAR_DELETE;
 export const VAR_RENAME = eventUtils.VAR_RENAME;
+export const VAR_TYPE_CHAGE = eventUtils.VAR_TYPE_CHANGE;
 export const VIEWPORT_CHANGE = eventUtils.VIEWPORT_CHANGE;
 
 // Event utils.

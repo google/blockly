@@ -7,7 +7,10 @@
 // Former goog.module ID: Blockly.Events.VarRename
 
 import * as registry from '../registry.js';
-import type {VariableModel} from '../variable_model.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from '../interfaces/i_variable_model.js';
 
 import {VarBase, VarBaseJson} from './events_var_base.js';
 import * as eventUtils from './utils.js';
@@ -31,13 +34,13 @@ export class VarRename extends VarBase {
    * @param opt_variable The renamed variable. Undefined for a blank event.
    * @param newName The new name the variable will be changed to.
    */
-  constructor(opt_variable?: VariableModel, newName?: string) {
+  constructor(opt_variable?: IVariableModel<IVariableState>, newName?: string) {
     super(opt_variable);
 
     if (!opt_variable) {
       return; // Blank event to be populated by fromJson.
     }
-    this.oldName = opt_variable.name;
+    this.oldName = opt_variable.getName();
     this.newName = typeof newName === 'undefined' ? '' : newName;
   }
 

@@ -80,6 +80,7 @@ export class MiniWorkspaceBubble extends Bubble {
       flyout?.show(options.languageTree);
     }
 
+    dom.addClass(this.svgRoot, 'blocklyMiniWorkspaceBubble');
     this.miniWorkspace.addChangeListener(this.onWorkspaceChange.bind(this));
     this.miniWorkspace
       .getFlyout()

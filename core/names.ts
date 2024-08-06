@@ -12,8 +12,11 @@
 // Former goog.module ID: Blockly.Names
 
 import {Msg} from './msg.js';
-// import * as Procedures from './procedures.js';
-import type {VariableMap} from './variable_map.js';
+import type {IVariableMap} from './interfaces/i_variable_map.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 
@@ -39,7 +42,8 @@ export class Names {
   /**
    * The variable map from the workspace, containing Blockly variable models.
    */
-  private variableMap: VariableMap | null = null;
+  private variableMap: IVariableMap<IVariableModel<IVariableState>> | null =
+    null;
 
   /**
    * @param reservedWordsList A comma-separated string of words that are illegal
@@ -70,7 +74,7 @@ export class Names {
    *
    * @param map The map to track.
    */
-  setVariableMap(map: VariableMap) {
+  setVariableMap(map: IVariableMap<IVariableModel<IVariableState>>) {
     this.variableMap = map;
   }
 
@@ -95,7 +99,7 @@ export class Names {
     }
     const variable = this.variableMap.getVariableById(id);
     if (variable) {
-      return variable.name;
+      return variable.getName();
     }
     return null;
   }

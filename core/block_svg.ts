@@ -202,6 +202,9 @@ export class BlockSvg
     this.workspace = workspace;
     this.svgGroup_ = dom.createSvgElement(Svg.G, {});
 
+    if (prototypeName) {
+      dom.addClass(this.svgGroup_, prototypeName);
+    }
     /** A block style object. */
     this.style = workspace.getRenderer().getConstants().getBlockStyle(null);
 
@@ -542,8 +545,11 @@ export class BlockSvg
     if (!collapsed) {
       this.updateDisabled();
       this.removeInput(collapsedInputName);
+      dom.removeClass(this.svgGroup_, 'blocklyCollapsed');
       return;
     }
+
+    dom.addClass(this.svgGroup_, 'blocklyCollapsed');
 
     const text = this.toString(internalConstants.COLLAPSE_CHARS);
     const field = this.getField(collapsedFieldName);
@@ -690,6 +696,24 @@ export class BlockSvg
   }
 
   /**
+   * Add a CSS class to the SVG group of this block.
+   *
+   * @param className
+   */
+  addClass(className: string) {
+    dom.addClass(this.svgGroup_, className);
+  }
+
+  /**
+   * Remove a CSS class from the SVG group of this block.
+   *
+   * @param className
+   */
+  removeClass(className: string) {
+    dom.removeClass(this.svgGroup_, className);
+  }
+
+  /**
    * Recursively adds or removes the dragging class to this node and its
    * children.
    *
@@ -701,10 +725,10 @@ export class BlockSvg
     if (adding) {
       this.translation = '';
       common.draggingConnections.push(...this.getConnections_(true));
-      dom.addClass(this.svgGroup_, 'blocklyDragging');
+      this.addClass('blocklyDragging');
     } else {
       common.draggingConnections.length = 0;
-      dom.removeClass(this.svgGroup_, 'blocklyDragging');
+      this.removeClass('blocklyDragging');
     }
     // Recurse through all blocks attached under this one.
     for (let i = 0; i < this.childBlocks_.length; i++) {
@@ -729,6 +753,13 @@ export class BlockSvg
    */
   override setEditable(editable: boolean) {
     super.setEditable(editable);
+
+    if (editable) {
+      dom.removeClass(this.svgGroup_, 'blocklyNotEditable');
+    } else {
+      dom.addClass(this.svgGroup_, 'blocklyNotEditable');
+    }
+
     const icons = this.getIcons();
     for (let i = 0; i < icons.length; i++) {
       icons[i].updateEditable();
@@ -867,7 +898,7 @@ export class BlockSvg
    * @internal
    */
   applyColour() {
-    this.pathObject.applyColour(this);
+    this.pathObject.applyColour?.(this);
 
     const icons = this.getIcons();
     for (let i = 0; i < icons.length; i++) {
@@ -1070,6 +1101,20 @@ export class BlockSvg
   }
 
   /**
+   * Add blocklyNotDeletable class when block is not deletable
+   * Or remove class when block is deletable
+   */
+  override setDeletable(deletable: boolean) {
+    super.setDeletable(deletable);
+
+    if (deletable) {
+      dom.removeClass(this.svgGroup_, 'blocklyNotDeletable');
+    } else {
+      dom.addClass(this.svgGroup_, 'blocklyNotDeletable');
+    }
+  }
+
+  /**
    * Set whether the block is highlighted or not.  Block highlighting is
    * often used to visually mark blocks currently being executed.
    *
@@ -1133,7 +1178,7 @@ export class BlockSvg
       .getConstants()
       .getBlockStyleForColour(this.colour_);
 
-    this.pathObject.setStyle(styleObj.style);
+    this.pathObject.setStyle?.(styleObj.style);
     this.style = styleObj.style;
     this.styleName_ = styleObj.name;
 
@@ -1155,7 +1200,7 @@ export class BlockSvg
 
     if (blockStyle) {
       this.hat = blockStyle.hat;
-      this.pathObject.setStyle(blockStyle);
+      this.pathObject.setStyle?.(blockStyle);
       // Set colour to match Block.
       this.colour_ = blockStyle.colourPrimary;
       this.style = blockStyle;
@@ -1719,5 +1764,17 @@ export class BlockSvg
 
     traverseJson(json as unknown as {[key: string]: unknown});
     return [json];
+  }
+
+  override jsonInit(json: AnyDuringMigration): void {
+    super.jsonInit(json);
+
+    if (json['classes']) {
+      this.addClass(
+        Array.isArray(json['classes'])
+          ? json['classes'].join(' ')
+          : json['classes'],
+      );
+    }
   }
 }

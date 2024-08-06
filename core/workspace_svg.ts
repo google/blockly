@@ -62,7 +62,10 @@ import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 import * as toolbox from './utils/toolbox.js';
 import * as userAgent from './utils/useragent.js';
-import type {VariableModel} from './variable_model.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
 import * as Variables from './variables.js';
 import * as VariablesDynamic from './variables_dynamic.js';
 import * as WidgetDiv from './widgetdiv.js';
@@ -1354,7 +1357,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     name: string,
     opt_type?: string | null,
     opt_id?: string | null,
-  ): VariableModel {
+  ): IVariableModel<IVariableState> {
     const newVar = super.createVariable(name, opt_type, opt_id);
     this.refreshToolboxSelection();
     return newVar;

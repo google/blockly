@@ -143,7 +143,9 @@ export class Toolbox
     this.flyout_ = this.createFlyout_();
 
     this.HtmlDiv = this.createDom_(this.workspace_);
-    dom.insertAfter(this.flyout_.createDom('svg'), svg);
+    const flyoutDom = this.flyout_.createDom('svg');
+    dom.addClass(flyoutDom, 'blocklyToolboxFlyout');
+    dom.insertAfter(flyoutDom, svg);
     this.setVisible(true);
     this.flyout_.init(workspace);
 
@@ -197,7 +199,6 @@ export class Toolbox
     const toolboxContainer = document.createElement('div');
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
     dom.addClass(toolboxContainer, 'blocklyToolboxDiv');
-    dom.addClass(toolboxContainer, 'blocklyNonSelectable');
     toolboxContainer.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
     return toolboxContainer;
   }
@@ -209,7 +210,7 @@ export class Toolbox
    */
   protected createContentsContainer_(): HTMLDivElement {
     const contentsContainer = document.createElement('div');
-    dom.addClass(contentsContainer, 'blocklyToolboxContents');
+    dom.addClass(contentsContainer, 'blocklyToolboxCategoryGroup');
     if (this.isHorizontal()) {
       contentsContainer.style.flexDirection = 'row';
     }
@@ -1102,6 +1103,9 @@ Css.register(`
 
 /* Category tree in Toolbox. */
 .blocklyToolboxDiv {
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
   background-color: #ddd;
   overflow-x: visible;
   overflow-y: auto;
@@ -1111,13 +1115,13 @@ Css.register(`
   -webkit-tap-highlight-color: transparent;  /* issue #1345 */
 }
 
-.blocklyToolboxContents {
+.blocklyToolboxCategoryGroup {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
 }
 
-.blocklyToolboxContents:focus {
+.blocklyToolboxCategoryGroup:focus {
   outline: none;
 }
 `);

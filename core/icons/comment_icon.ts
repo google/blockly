@@ -58,6 +58,9 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   /** The size of this comment (which is applied to the editable bubble). */
   private bubbleSize = new Size(DEFAULT_BUBBLE_WIDTH, DEFAULT_BUBBLE_HEIGHT);
 
+  /** The location of the comment bubble in workspace coordinates. */
+  private bubbleLocation?: Coordinate;
+
   /**
    * The visibility of the bubble for this comment.
    *
@@ -111,7 +114,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
       },
       this.svgRoot,
     );
-    dom.addClass(this.svgRoot!, 'blockly-icon-comment');
+    dom.addClass(this.svgRoot!, 'blocklyCommentIcon');
   }
 
   override dispose() {
@@ -149,7 +152,13 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   }
 
   override onLocationChange(blockOrigin: Coordinate): void {
+    const oldLocation = this.workspaceLocation;
     super.onLocationChange(blockOrigin);
+    if (this.bubbleLocation) {
+      const newLocation = this.workspaceLocation;
+      const delta = Coordinate.difference(newLocation, oldLocation);
+      this.bubbleLocation = Coordinate.sum(this.bubbleLocation, delta);
+    }
     const anchorLocation = this.getAnchorLocation();
     this.textInputBubble?.setAnchorLocation(anchorLocation);
     this.textBubble?.setAnchorLocation(anchorLocation);
@@ -192,17 +201,42 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   }
 
   /**
+   * Sets the location of the comment bubble in the workspace.
+   */
+  setBubbleLocation(location: Coordinate) {
+    this.bubbleLocation = location;
+    this.textInputBubble?.moveDuringDrag(location);
+    this.textBubble?.moveDuringDrag(location);
+  }
+
+  /**
+   * @returns the location of the comment bubble in the workspace.
+   */
+  getBubbleLocation(): Coordinate | undefined {
+    return this.bubbleLocation;
+  }
+
+  /**
    * @returns the state of the comment as a JSON serializable value if the
    * comment has text. Otherwise returns null.
    */
   saveState(): CommentState | null {
     if (this.text) {
-      return {
+      const state: CommentState = {
         'text': this.text,
         'pinned': this.bubbleIsVisible(),
         'height': this.bubbleSize.height,
         'width': this.bubbleSize.width,
       };
+      const location = this.getBubbleLocation();
+      if (location) {
+        state['x'] = this.sourceBlock.workspace.RTL
+          ? this.sourceBlock.workspace.getWidth() -
+            (location.x + this.bubbleSize.width)
+          : location.x;
+        state['y'] = location.y;
+      }
+      return state;
     }
     return null;
   }
@@ -216,6 +250,16 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     );
     this.bubbleVisiblity = state['pinned'] ?? false;
     this.setBubbleVisible(this.bubbleVisiblity);
+    let x = state['x'];
+    const y = state['y'];
+    renderManagement.finishQueuedRenders().then(() => {
+      if (x && y) {
+        x = this.sourceBlock.workspace.RTL
+          ? this.sourceBlock.workspace.getWidth() - (x + this.bubbleSize.width)
+          : x;
+        this.setBubbleLocation(new Coordinate(x, y));
+      }
+    });
   }
 
   override onClick(): void {
@@ -256,6 +300,12 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   onSizeChange(): void {
     if (this.textInputBubble) {
       this.bubbleSize = this.textInputBubble.getSize();
+    }
+  }
+
+  onBubbleLocationChange(): void {
+    if (this.textInputBubble) {
+      this.bubbleLocation = this.textInputBubble.getRelativeToSurfaceXY();
     }
   }
 
@@ -308,8 +358,14 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     );
     this.textInputBubble.setText(this.getText());
     this.textInputBubble.setSize(this.bubbleSize, true);
+    if (this.bubbleLocation) {
+      this.textInputBubble.moveDuringDrag(this.bubbleLocation);
+    }
     this.textInputBubble.addTextChangeListener(() => this.onTextChange());
     this.textInputBubble.addSizeChangeListener(() => this.onSizeChange());
+    this.textInputBubble.addLocationChangeListener(() =>
+      this.onBubbleLocationChange(),
+    );
   }
 
   /** Shows the non editable text bubble for this comment. */
@@ -320,6 +376,9 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
       this.getAnchorLocation(),
       this.getBubbleOwnerRect(),
     );
+    if (this.bubbleLocation) {
+      this.textBubble.moveDuringDrag(this.bubbleLocation);
+    }
   }
 
   /** Hides any open bubbles owned by this comment. */
@@ -365,6 +424,12 @@ export interface CommentState {
 
   /** The width of the comment bubble. */
   width?: number;
+
+  /** The X coordinate of the comment bubble. */
+  x?: number;
+
+  /** The Y coordinate of the comment bubble. */
+  y?: number;
 }
 
 registry.register(CommentIcon.TYPE, CommentIcon);

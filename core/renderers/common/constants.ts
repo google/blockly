@@ -1154,7 +1154,7 @@ export class ConstantProvider {
       `}`,
 
       // Editable field hover.
-      `${selector} .blocklyEditableText:not(.editing):hover>rect {`,
+      `${selector} .blocklyEditableText:not(.blocklyEditing):hover>rect {`,
         `stroke: #fff;`,
         `stroke-width: 2;`,
       `}`,

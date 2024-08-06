@@ -8,6 +8,7 @@ import {IconType} from '../icons/icon_types.js';
 import {CommentState} from '../icons/comment_icon.js';
 import {IIcon, isIcon} from './i_icon.js';
 import {Size} from '../utils/size.js';
+import {Coordinate} from '../utils/coordinate.js';
 import {IHasBubble, hasBubble} from './i_has_bubble.js';
 import {ISerializable, isSerializable} from './i_serializable.js';
 
@@ -19,6 +20,10 @@ export interface ICommentIcon extends IIcon, IHasBubble, ISerializable {
   setBubbleSize(size: Size): void;
 
   getBubbleSize(): Size;
+
+  setBubbleLocation(location: Coordinate): void;
+
+  getBubbleLocation(): Coordinate | undefined;
 
   saveState(): CommentState;
 
@@ -35,6 +40,8 @@ export function isCommentIcon(obj: Object): obj is ICommentIcon {
     (obj as any)['getText'] !== undefined &&
     (obj as any)['setBubbleSize'] !== undefined &&
     (obj as any)['getBubbleSize'] !== undefined &&
+    (obj as any)['setBubbleLocation'] !== undefined &&
+    (obj as any)['getBubbleLocation'] !== undefined &&
     obj.getType() === IconType.COMMENT
   );
 }

@@ -1162,10 +1162,6 @@ export class BlockSvg
       .getConstants()
       .getBlockStyle(blockStyleName);
 
-    if (!this.svgGroup_) {
-      throw new Error('SVG group is not defined');
-    }
-
     if (this.styleName_) {
       dom.removeClass(this.svgGroup_, this.styleName_);
     }

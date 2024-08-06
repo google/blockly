@@ -242,6 +242,10 @@ let content = `
   display: none;
 }
 
+.blocklyDisabled > .blocklyOutlinePath {
+  fill: darkgray !important;
+}
+
 .blocklyInsertionMarker>.blocklyPath,
 .blocklyInsertionMarker>.blocklyPathLight,
 .blocklyInsertionMarker>.blocklyPathDark {

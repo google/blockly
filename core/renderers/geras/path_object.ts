@@ -108,9 +108,11 @@ export class PathObject extends BasePathObject {
         'filter',
         'url(#' + this.constants.embossFilterId + ')',
       );
+      this.svgRoot.classList.add('blocklyHighlighted');
       this.svgPathLight.style.display = 'none';
     } else {
       this.svgPath.setAttribute('filter', 'none');
+      this.svgRoot.classList.remove('blocklyHighlighted');
       this.svgPathLight.style.display = 'inline';
     }
   }

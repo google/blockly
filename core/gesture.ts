@@ -599,13 +599,20 @@ export class Gesture {
    */
   handleTouchMove(e: PointerEvent) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
-    // Update the cache
     this.cachedPoints.set(pointerId, this.getTouchPoint(e));
-
+  
     if (this.isPinchZoomEnabled && this.cachedPoints.size === 2) {
       this.handlePinch(e);
     } else {
-      this.handleMove(e);
+      // Handle the move directly instead of calling handleMove
+      this.updateFromEvent(e);
+      if (this.workspaceDragger) {
+        this.workspaceDragger.drag(this.currentDragDeltaXY);
+      } else if (this.dragger) {
+        this.dragger.onDrag(this.mostRecentEvent, this.currentDragDeltaXY);
+      }
+      e.preventDefault();
+      e.stopPropagation();
     }
   }
 

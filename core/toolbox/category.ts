@@ -139,7 +139,7 @@ export class ToolboxCategory
       'contents': 'blocklyToolboxCategoryGroup',
       'selected': 'blocklyTreeSelected',
       'openicon': 'blocklyTreeIconOpen',
-      'closedicon': 'blocklyTreeIconClosed',
+      'closedicon': 'blocklyToolboxCategoryIconClosed',
     };
   }
 

@@ -1174,7 +1174,6 @@ export class BlockSvg
    *
    * @param blockOnly: True to only move this block to the front without
    *     adjusting its parents.
-   * @internal
    */
   bringToFront(blockOnly = false) {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */

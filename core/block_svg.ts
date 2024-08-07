@@ -1174,7 +1174,7 @@ export class BlockSvg
    * Use sparingly, this method is expensive because it reorders the DOM
    * nodes.
    *
-   * @param blockOnly: True to only move this block to the front without
+   * @param blockOnly True to only move this block to the front without
    *     adjusting its parents.
    */
   bringToFront(blockOnly = false) {

@@ -1171,10 +1171,11 @@ export class BlockSvg
    * <g> tags do not respect z-index so SVG renders them in the
    * order that they are in the DOM.  By placing this block first within the
    * block group's <g>, it will render on top of any other blocks.
+   * Use sparingly, this method is expensive because it reorders the DOM
+   * nodes.
    *
-   * @param blockOnly: True to only move this block to the front without
+   * @param blockOnly True to only move this block to the front without
    *     adjusting its parents.
-   * @internal
    */
   bringToFront(blockOnly = false) {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */

@@ -1132,14 +1132,14 @@ export class ConstantProvider {
       `${selector} .blocklyText {`,
         `fill: #fff;`,
       `}`,
-      `${selector} .blocklyNonEditableText>rect,`,
-      `${selector} .blocklyEditableText>rect {`,
+      `${selector} .blocklyNonEditableField>rect,`,
+      `${selector} .blocklyEditableField>rect {`,
         `fill: ${this.FIELD_BORDER_RECT_COLOUR};`,
         `fill-opacity: .6;`,
         `stroke: none;`,
       `}`,
-      `${selector} .blocklyNonEditableText>text,`,
-      `${selector} .blocklyEditableText>text {`,
+      `${selector} .blocklyNonEditableField>text,`,
+      `${selector} .blocklyEditableField>text {`,
         `fill: #000;`,
       `}`,
 
@@ -1154,7 +1154,7 @@ export class ConstantProvider {
       `}`,
 
       // Editable field hover.
-      `${selector} .blocklyEditableText:not(.blocklyEditing):hover>rect {`,
+      `${selector} .blocklyEditableField:not(.blocklyEditing):hover>rect {`,
         `stroke: #fff;`,
         `stroke-width: 2;`,
       `}`,

@@ -2432,6 +2432,28 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // We could call scroll here, but that has extra checks we don't need to do.
     this.translate(x, y);
   }
+
+  /**
+   * Adds a class to the workspace.
+   *
+   * @param className Name of class to add.
+   */
+  addClass(className: string) {
+    if (this.injectionDiv) {
+      dom.addClass(this.injectionDiv, className);
+    }
+  }
+
+  /**
+   * Removes a class from the workspace.
+   *
+   * @param className Name of class to remove.
+   */
+  removeClass(className: string) {
+    if (this.injectionDiv) {
+      dom.removeClass(this.injectionDiv, className);
+    }
+  }
 }
 
 /**

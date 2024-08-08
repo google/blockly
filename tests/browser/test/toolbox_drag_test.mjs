@@ -25,7 +25,6 @@ const basicCategories = [
   'Math',
   'Text',
   'Lists',
-  'Colour',
   'Variables',
   'Functions',
 ];
@@ -44,7 +43,6 @@ const testCategories = [
   // 'Fields',
   'Defaults',
   'Numbers',
-  'Angles',
   'Drop-downs',
   // Note: images has a block that has a bad image source, but still builds and renders
   // just fine.

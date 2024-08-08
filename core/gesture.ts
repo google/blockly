@@ -600,7 +600,7 @@ export class Gesture {
   handleTouchMove(e: PointerEvent) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     this.cachedPoints.set(pointerId, this.getTouchPoint(e));
-  
+
     if (this.isPinchZoomEnabled && this.cachedPoints.size === 2) {
       this.handlePinch(e);
     } else {

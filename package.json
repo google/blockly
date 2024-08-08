@@ -118,7 +118,7 @@
     "eslint-plugin-jsdoc": "^48.0.2",
     "glob": "^10.3.4",
     "google-closure-compiler": "^20240317.0.0",
-    "gulp": "^4.0.2",
+    "gulp": "^5.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-gzip": "^1.4.2",
     "gulp-header": "^2.0.9",

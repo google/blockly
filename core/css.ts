@@ -219,7 +219,7 @@ let content = `
   font-family: monospace;
 }
 
-.blocklyNonEditableText>text {
+.blocklyNonEditableField>text {
   pointer-events: none;
 }
 

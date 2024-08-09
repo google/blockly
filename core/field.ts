@@ -534,12 +534,12 @@ export abstract class Field<T = any>
       return;
     }
     if (this.enabled_ && block.isEditable()) {
-      dom.addClass(group, 'blocklyEditableText');
-      dom.removeClass(group, 'blocklyNonEditableText');
+      dom.addClass(group, 'blocklyEditableField');
+      dom.removeClass(group, 'blocklyNonEditableField');
       group.style.cursor = this.CURSOR;
     } else {
-      dom.addClass(group, 'blocklyNonEditableText');
-      dom.removeClass(group, 'blocklyEditableText');
+      dom.addClass(group, 'blocklyNonEditableField');
+      dom.removeClass(group, 'blocklyEditableField');
       group.style.cursor = '';
     }
   }

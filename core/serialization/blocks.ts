@@ -866,3 +866,6 @@ export class BlockSerializer implements ISerializer {
 }
 
 serializationRegistry.register('blocks', new BlockSerializer());
+
+
+//Test comment

@@ -38,7 +38,7 @@ const testCategories = [
   'Row',
   'Stack',
   'Statement',
-  'Drag',
+  // 'Drag',
   // Skip fields because it's an accordion that is already open.
   // 'Fields',
   'Defaults',

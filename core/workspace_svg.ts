@@ -2445,7 +2445,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   }
 
   /**
-   * Removes a class from the workspace.
+   * Removes a CSS class from the workspace.
    *
    * @param className Name of class to remove.
    */

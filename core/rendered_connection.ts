@@ -146,7 +146,7 @@ export class RenderedConnection extends Connection {
     }
     // Raise it to the top for extra visibility.
     const selected = common.getSelected() == rootBlock;
-    selected || rootBlock.addSelect();
+    if (!selected) rootBlock.addSelect();
     let dx =
       staticConnection.x +
       config.snapRadius +
@@ -169,7 +169,7 @@ export class RenderedConnection extends Connection {
         this.x;
     }
     rootBlock.moveBy(dx, dy, ['bump']);
-    selected || rootBlock.removeSelect();
+    if (!selected) rootBlock.removeSelect();
   }
 
   /**
@@ -389,9 +389,10 @@ export class RenderedConnection extends Connection {
       if (block.isCollapsed()) {
         // This block should only be partially revealed since it is collapsed.
         connections = [];
-        block.outputConnection && connections.push(block.outputConnection);
-        block.nextConnection && connections.push(block.nextConnection);
-        block.previousConnection && connections.push(block.previousConnection);
+        if (block.outputConnection) connections.push(block.outputConnection);
+        if (block.nextConnection) connections.push(block.nextConnection);
+        if (block.previousConnection)
+          connections.push(block.previousConnection);
       } else {
         // Show all connections of this block.
         connections = block.getConnections_(true);

@@ -256,7 +256,7 @@ function fireInternal(event: Abstract) {
       requestAnimationFrame(() => {
         setTimeout(fireNow, 0);
       });
-    } catch (e) {
+    } catch {
       // Otherwise we just want to delay so events can be coallesced.
       // requestAnimationFrame will error triggering this.
       setTimeout(fireNow, 0);

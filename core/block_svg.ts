@@ -378,7 +378,9 @@ export class BlockSvg
     let event: BlockMove | null = null;
     if (eventsEnabled) {
       event = new (eventUtils.get(eventUtils.BLOCK_MOVE)!)(this) as BlockMove;
-      reason && event.setReason(reason);
+      if (reason) {
+        event.setReason(reason);
+      }
     }
 
     const delta = new Coordinate(dx, dy);

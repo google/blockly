@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/* eslint-disable */
+
 import * as Blockly from 'blockly-test/core';
 import {JavascriptGenerator} from 'blockly-test/javascript';
 import {PhpGenerator, phpGenerator, Order} from 'blockly-test/php';

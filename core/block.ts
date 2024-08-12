@@ -223,7 +223,7 @@ export class Block implements IASTNodeLocation {
   /**
    * String for block help, or function that returns a URL. Null for no help.
    */
-  helpUrl: string | Function | null = null;
+  helpUrl: string | (() => string) | null = null;
 
   /** A bound callback function to use when the parent workspace changes. */
   private onchangeWrapper_: ((p1: Abstract) => void) | null = null;
@@ -997,7 +997,7 @@ export class Block implements IASTNodeLocation {
    * @param url URL string for block help, or function that returns a URL.  Null
    *     for no help.
    */
-  setHelpUrl(url: string | Function) {
+  setHelpUrl(url: string | (() => string)) {
     this.helpUrl = url;
   }
 
@@ -1864,7 +1864,7 @@ export class Block implements IASTNodeLocation {
         const rawValue = json['colour'];
         try {
           this.setColour(rawValue);
-        } catch (e) {
+        } catch {
           console.warn(warningPrefix + 'Illegal colour value: ', rawValue);
         }
       }
@@ -1881,7 +1881,7 @@ export class Block implements IASTNodeLocation {
     const blockStyleName = json['style'];
     try {
       this.setStyle(blockStyleName);
-    } catch (styleError) {
+    } catch {
       console.warn(warningPrefix + 'Style does not exist: ', blockStyleName);
     }
   }
@@ -2461,7 +2461,9 @@ export class Block implements IASTNodeLocation {
     const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
       this,
     ) as BlockMove;
-    reason && event.setReason(reason);
+    if (reason) {
+      event.setReason(reason);
+    }
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);

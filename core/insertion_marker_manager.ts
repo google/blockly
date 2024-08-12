@@ -529,7 +529,7 @@ export class InsertionMarkerManager {
         local.getSourceBlock(),
         local,
       );
-    } catch (e) {
+    } catch {
       // It's possible that the number of connections on the local block has
       // changed since the insertion marker was originally created.  Let's
       // recreate the insertion marker and try again. In theory we could

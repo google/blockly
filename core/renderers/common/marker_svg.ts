@@ -176,9 +176,11 @@ export class MarkerSvg {
 
     // Ensures the marker will be visible immediately after the move.
     const animate = this.currentMarkerSvg!.childNodes[0];
-    if (animate !== undefined) {
-      (animate as SVGAnimationElement).beginElement &&
-        (animate as SVGAnimationElement).beginElement();
+    if (
+      animate !== undefined &&
+      (animate as SVGAnimationElement).beginElement
+    ) {
+      (animate as SVGAnimationElement).beginElement();
     }
   }
 

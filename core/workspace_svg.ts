@@ -2434,7 +2434,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   }
 
   /**
-   * Adds a class to the workspace.
+   * Adds a CSS class to the workspace.
    *
    * @param className Name of class to add.
    */

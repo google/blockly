@@ -135,7 +135,7 @@ export class ToolboxCategory
       'row': 'blocklyTreeRow',
       'rowcontentcontainer': 'blocklyTreeRowContentContainer',
       'icon': 'blocklyTreeIcon',
-      'label': 'blocklyTreeLabel',
+      'label': 'blocklyToolboxCategoryLabel',
       'contents': 'blocklyToolboxContents',
       'selected': 'blocklyTreeSelected',
       'openicon': 'blocklyTreeIconOpen',
@@ -716,18 +716,18 @@ Css.register(`
   background-position: -16px -17px;
 }
 
-.blocklyTreeLabel {
+.blocklyToolboxCategoryLabel {
   cursor: default;
   font: 16px sans-serif;
   padding: 0 3px;
   vertical-align: middle;
 }
 
-.blocklyToolboxDelete .blocklyTreeLabel {
+.blocklyToolboxDelete .blocklyToolboxCategoryLabel {
   cursor: url("<<<PATH>>>/handdelete.cur"), auto;
 }
 
-.blocklyTreeSelected .blocklyTreeLabel {
+.blocklyTreeSelected .blocklyToolboxCategoryLabel {
   color: #fff;
 }
 `);

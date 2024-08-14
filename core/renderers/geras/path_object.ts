@@ -103,14 +103,10 @@ export class PathObject extends BasePathObject {
   }
 
   override updateHighlighted(highlighted: boolean) {
+    super.updateHighlighted(highlighted);
     if (highlighted) {
-      this.svgPath.setAttribute(
-        'filter',
-        'url(#' + this.constants.embossFilterId + ')',
-      );
       this.svgPathLight.style.display = 'none';
     } else {
-      this.svgPath.setAttribute('filter', 'none');
       this.svgPathLight.style.display = 'inline';
     }
   }

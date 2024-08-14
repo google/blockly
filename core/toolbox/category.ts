@@ -133,13 +133,13 @@ export class ToolboxCategory
     return {
       'container': 'blocklyToolboxCategoryContainer',
       'row': 'blocklyToolboxCategory',
-      'rowcontentcontainer': 'blocklyToolboxRowContentContainer',
-      'icon': 'blocklyToolboxIcon',
+      'rowcontentcontainer': 'blocklyTreeRowContentContainer',
+      'icon': 'blocklyTreeIcon',
       'label': 'blocklyToolboxCategoryLabel',
       'contents': 'blocklyToolboxContents',
-      'selected': 'blocklyToolboxSelected',
-      'openicon': 'blocklyToolboxIconOpen',
-      'closedicon': 'blocklyToolboxIconClosed',
+      'selected': 'blocklyTreeSelected',
+      'openicon': 'blocklyTreeIconOpen',
+      'closedicon': 'blocklyTreeIconClosed',
     };
   }
 
@@ -692,19 +692,19 @@ Css.register(`
   width: 16px;
 }
 
-.blocklyToolboxIconClosed {
+.blocklyTreeIconClosed {
   background-position: -32px -1px;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxIconClosed {
+.blocklyToolboxDiv[dir="RTL"] .blocklyTreeIconClosed {
   background-position: 0 -1px;
 }
 
-.blocklyToolboxSelected>.blocklyToolboxIconClosed {
+.blocklyToolboxSelected>.blocklyTreeIconClosed {
   background-position: -32px -17px;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxSelected>.blocklyToolboxIconClosed {
+.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxSelected>.blocklyTreeIconClosed {
   background-position: 0 -17px;
 }
 
@@ -727,7 +727,7 @@ Css.register(`
   cursor: url("<<<PATH>>>/handdelete.cur"), auto;
 }
 
-.blocklyToolboxSelected .blocklyToolboxCategoryLabel{
+.blocklyTreeSelected .blocklyToolboxCategoryLabel {
   color: #fff;
 }
 `);

@@ -28,7 +28,7 @@ export class ToolboxSeparator extends ToolboxItem {
   static registrationName = 'sep';
 
   /** All the CSS class names that are used to create a separator. */
-  protected cssConfig_: CssConfig = {'container': 'blocklyTreeSeparator'};
+  protected cssConfig_: CssConfig = {'container': 'blocklyToolboxSeparator'};
 
   private htmlDiv_: HTMLDivElement | null = null;
 
@@ -82,13 +82,13 @@ export type CssConfig = ToolboxSeparator.CssConfig;
 
 /** CSS for Toolbox.  See css.js for use. */
 Css.register(`
-.blocklyTreeSeparator {
+.blocklyToolboxSeparator {
   border-bottom: solid #e5e5e5 1px;
   height: 0;
   margin: 5px 0;
 }
 
-.blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {
+.blocklyToolboxDiv[layout="h"] .blocklyToolboxSeparator {
   border-right: solid #e5e5e5 1px;
   border-bottom: none;
   height: auto;

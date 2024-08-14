@@ -13,7 +13,6 @@
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_trashcan_open.js';
-
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import {ComponentManager} from './component_manager.js';

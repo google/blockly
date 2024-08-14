@@ -9,7 +9,6 @@
 /* eslint-disable-next-line no-unused-vars */
 import type {Input} from '../../inputs/input.js';
 import type {ConstantProvider} from '../common/constants.js';
-
 import {InputConnection} from './input_connection.js';
 import {Types} from './types.js';
 

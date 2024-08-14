@@ -17,7 +17,6 @@ import {OutputConnection} from '../measurables/output_connection.js';
 import type {Row} from '../measurables/row.js';
 import type {SpacerRow} from '../measurables/spacer_row.js';
 import {Types} from '../measurables/types.js';
-
 import type {InsideCorners} from './constants.js';
 import type {RenderInfo} from './info.js';
 import type {StatementInput} from './measurables/inputs.js';

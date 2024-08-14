@@ -14,7 +14,6 @@
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 import type {WorkspaceComment} from '../comments/workspace_comment.js';
-
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';

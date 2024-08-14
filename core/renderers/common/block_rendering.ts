@@ -30,7 +30,6 @@ import {SquareCorner} from '../measurables/square_corner.js';
 import {StatementInput} from '../measurables/statement_input.js';
 import {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
-
 import {Drawer} from './drawer.js';
 import type {IPathObject} from './i_path_object.js';
 import {RenderInfo} from './info.js';

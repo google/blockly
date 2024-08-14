@@ -13,7 +13,6 @@
 
 import * as registry from '../registry.js';
 import {AbstractEventJson} from './events_abstract.js';
-
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';

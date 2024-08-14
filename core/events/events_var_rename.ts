@@ -8,7 +8,6 @@
 
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';
-
 import {VarBase, VarBaseJson} from './events_var_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';

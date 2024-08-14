@@ -30,7 +30,6 @@ import * as colourUtils from '../utils/colour.js';
 import * as dom from '../utils/dom.js';
 import * as parsing from '../utils/parsing.js';
 import * as toolbox from '../utils/toolbox.js';
-
 import {ToolboxItem} from './toolbox_item.js';
 
 /**

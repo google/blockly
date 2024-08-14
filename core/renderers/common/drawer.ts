@@ -17,7 +17,6 @@ import type {InlineInput} from '../measurables/inline_input.js';
 import type {PreviousConnection} from '../measurables/previous_connection.js';
 import type {Row} from '../measurables/row.js';
 import {Types} from '../measurables/types.js';
-
 import {isDynamicShape, isNotch, isPuzzleTab} from './constants.js';
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
 import type {RenderInfo} from './info.js';

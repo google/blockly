@@ -14,7 +14,6 @@
 
 /* eslint-disable-next-line no-unused-vars */
 import type {MarkerSvg} from '../renderers/common/marker_svg.js';
-
 import type {ASTNode} from './ast_node.js';
 
 /**

@@ -16,7 +16,6 @@ import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
 import * as utilsXml from '../utils/xml.js';
 import * as Xml from '../xml.js';
-
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 import {Workspace} from '../workspace.js';

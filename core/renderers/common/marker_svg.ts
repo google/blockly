@@ -22,7 +22,6 @@ import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
-
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
 import {FlyoutButton} from '../../flyout_button.js';
 

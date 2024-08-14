@@ -19,7 +19,6 @@ import * as utilsXml from '../utils/xml.js';
 import type {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
 import * as renderManagement from '../render_management.js';
-
 import {
   BadConnectionCheck,
   MissingBlockType,

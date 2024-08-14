@@ -12,7 +12,6 @@
 // Former goog.module ID: Blockly.Events.VarBase
 
 import type {VariableModel} from '../variable_model.js';
-
 import {
   Abstract as AbstractEvent,
   AbstractEventJson,

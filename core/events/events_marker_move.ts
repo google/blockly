@@ -16,7 +16,6 @@ import {ASTNode} from '../keyboard_nav/ast_node.js';
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
 import {AbstractEventJson} from './events_abstract.js';
-
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 

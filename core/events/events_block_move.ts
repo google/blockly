@@ -15,7 +15,6 @@ import type {Block} from '../block.js';
 import {ConnectionType} from '../connection_type.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
-
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';

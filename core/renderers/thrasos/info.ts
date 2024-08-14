@@ -15,7 +15,6 @@ import {InRowSpacer} from '../measurables/in_row_spacer.js';
 import type {Row} from '../measurables/row.js';
 import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
-
 import type {Renderer} from './renderer.js';
 
 /**

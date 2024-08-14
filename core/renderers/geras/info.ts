@@ -22,7 +22,6 @@ import {StatementInput} from '../../inputs/statement_input.js';
 import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 import {ValueInput} from '../../inputs/value_input.js';
-
 import type {ConstantProvider} from './constants.js';
 import {InlineInput} from './measurables/inline_input.js';
 import {StatementInput as StatementInputMeasurable} from './measurables/statement_input.js';

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Former goog.module ID: Blockly.IMetricsManager
+
 import type {
   ContainerRegion,
   ToolboxMetrics,
@@ -12,7 +14,6 @@ import type {
 } from '../metrics_manager.js';
 import type {Size} from '../utils/size.js';
 import type {Metrics} from '../utils/metrics.js';
-// Former goog.module ID: Blockly.IMetricsManager
 
 /**
  * Interface for a metrics manager.

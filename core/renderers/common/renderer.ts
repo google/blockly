@@ -19,7 +19,6 @@ import type {Marker} from '../../keyboard_nav/marker.js';
 import type {RenderedConnection} from '../../rendered_connection.js';
 import type {BlockStyle, Theme} from '../../theme.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
-
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';
 import type {IPathObject} from './i_path_object.js';

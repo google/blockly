@@ -9,7 +9,6 @@ import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
-
 import {callbackFactory} from '../../build/src/core/contextmenu.js';
 import * as xmlUtils from '../../build/src/core/utils/xml.js';
 import * as Variables from '../../build/src/core/variables.js';

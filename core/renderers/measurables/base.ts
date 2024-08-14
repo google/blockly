@@ -7,7 +7,6 @@
 // Former goog.module ID: Blockly.blockRendering.Measurable
 
 import type {ConstantProvider} from '../common/constants.js';
-
 import {Types} from './types.js';
 
 /**

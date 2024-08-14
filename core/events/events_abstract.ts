@@ -14,7 +14,6 @@
 
 import * as common from '../common.js';
 import type {Workspace} from '../workspace.js';
-
 import * as eventUtils from './utils.js';
 
 /**

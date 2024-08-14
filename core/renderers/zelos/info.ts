@@ -24,7 +24,6 @@ import type {Row} from '../measurables/row.js';
 import type {SpacerRow} from '../measurables/spacer_row.js';
 import {Types} from '../measurables/types.js';
 import {ValueInput} from '../../inputs/value_input.js';
-
 import type {ConstantProvider, InsideCorners} from './constants.js';
 import {BottomRow} from './measurables/bottom_row.js';
 import {StatementInput as StatementInputMeasurable} from './measurables/inputs.js';

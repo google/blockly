@@ -13,7 +13,6 @@
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../events/events_toolbox_item_select.js';
-
 import {BlockSvg} from '../block_svg.js';
 import type {BlocklyOptions} from '../blockly_options.js';
 import * as browserEvents from '../browser_events.js';

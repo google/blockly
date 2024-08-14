@@ -747,7 +747,7 @@ export function deleteVariable(
   if ((triggeringBlock && uses.length) || uses.length > 1) {
     // Confirm before deleting multiple blocks.
     const confirmText = Msg['DELETE_VARIABLE_CONFIRMATION']
-      .replace('%1', String(uses.length))
+      .replace('%1', String(uses.length + (triggeringBlock ? 1 : 0)))
       .replace('%2', variableName);
     dialog.confirm(confirmText, (ok) => {
       if (ok && variable) {

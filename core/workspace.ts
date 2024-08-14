@@ -102,7 +102,7 @@ export class Workspace implements IASTNodeLocation {
   private readonly topBlocks: Block[] = [];
   private readonly topComments: WorkspaceComment[] = [];
   private readonly commentDB = new Map<string, WorkspaceComment>();
-  private readonly listeners: Function[] = [];
+  private readonly listeners: ((e: Abstract) => void)[] = [];
   protected undoStack_: Abstract[] = [];
   protected redoStack_: Abstract[] = [];
   private readonly blockDB = new Map<string, Block>();
@@ -679,7 +679,7 @@ export class Workspace implements IASTNodeLocation {
    * @param func Function to call.
    * @returns Obsolete return value, ignore.
    */
-  addChangeListener(func: (e: Abstract) => void): Function {
+  addChangeListener(func: (e: Abstract) => void): (e: Abstract) => void {
     this.listeners.push(func);
     return func;
   }
@@ -689,7 +689,7 @@ export class Workspace implements IASTNodeLocation {
    *
    * @param func Function to stop calling.
    */
-  removeChangeListener(func: Function) {
+  removeChangeListener(func: (e: Abstract) => void) {
     arrayUtils.removeElem(this.listeners, func);
   }
 

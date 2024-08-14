@@ -19,7 +19,7 @@ import * as blocklyString from './utils/string.js';
 export type TipInfo =
   | string
   | {tooltip: AnyDuringMigration}
-  | (() => TipInfo | string | Function);
+  | (() => TipInfo | string);
 
 /**
  * A function that renders custom tooltip UI.

@@ -248,9 +248,11 @@ export class ToolboxCategory
     const nestedPadding = `${
       ToolboxCategory.nestedPadding * this.getLevel()
     }px`;
-    this.workspace_.RTL
-      ? (rowDiv.style.paddingRight = nestedPadding)
-      : (rowDiv.style.paddingLeft = nestedPadding);
+    if (this.workspace_.RTL) {
+      rowDiv.style.paddingRight = nestedPadding;
+    } else {
+      rowDiv.style.paddingLeft = nestedPadding;
+    }
     return rowDiv;
   }
 
@@ -564,9 +566,11 @@ export class ToolboxCategory
   setDisabled(isDisabled: boolean) {
     this.isDisabled_ = isDisabled;
     this.getDiv()!.setAttribute('disabled', `${isDisabled}`);
-    isDisabled
-      ? this.getDiv()!.setAttribute('disabled', 'true')
-      : this.getDiv()!.removeAttribute('disabled');
+    if (isDisabled) {
+      this.getDiv()!.setAttribute('disabled', 'true');
+    } else {
+      this.getDiv()!.removeAttribute('disabled');
+    }
   }
 
   /**

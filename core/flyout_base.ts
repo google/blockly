@@ -1070,7 +1070,7 @@ export abstract class Flyout
    * @param block The flyout block to copy.
    * @returns Function to call when block is clicked.
    */
-  private blockMouseDown(block: BlockSvg): Function {
+  private blockMouseDown(block: BlockSvg) {
     return (e: PointerEvent) => {
       const gesture = this.targetWorkspace.getGesture(e);
       if (gesture) {

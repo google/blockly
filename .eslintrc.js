@@ -101,6 +101,8 @@ function buildTSOverride({files, tsconfig}) {
       '@typescript-eslint/no-empty-function': ['off'],
       // Temporarily disable. 3 problems.
       '@typescript-eslint/no-empty-interface': ['off'],
+      // We use this pattern extensively for block (e.g. controls_if) interfaces.
+      '@typescript-eslint/no-empty-object-type': ['off'],
 
       // TsDoc rules (using JsDoc plugin)
       // Disable built-in jsdoc verifier.

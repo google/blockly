@@ -44,7 +44,7 @@ interface ProcedureModelConstructor<ProcedureModel extends IProcedureModel> {
    * @param workspace The workspace to load the procedure model into.
    * @returns The constructed procedure model.
    */
-  loadState(state: Object, workspace: Workspace): ProcedureModel;
+  loadState(state: object, workspace: Workspace): ProcedureModel;
 }
 
 /**
@@ -64,7 +64,7 @@ interface ParameterModelConstructor<ParameterModel extends IParameterModel> {
    * @param workspace The workspace to load the parameter model into.
    * @returns The constructed parameter model.
    */
-  loadState(state: Object, workspace: Workspace): ParameterModel;
+  loadState(state: object, workspace: Workspace): ParameterModel;
 }
 
 /**

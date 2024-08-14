@@ -45,7 +45,10 @@ import {Renderer} from './renderer.js';
  * @param rendererClass The new renderer class to register.
  * @throws {Error} if a renderer with the same name has already been registered.
  */
-export function register(name: string, rendererClass: Function) {
+export function register(
+  name: string,
+  rendererClass: new (name: string) => Renderer,
+) {
   registry.register(registry.Type.RENDERER, name, rendererClass);
 }
 

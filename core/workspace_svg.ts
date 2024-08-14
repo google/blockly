@@ -817,7 +817,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.options,
     );
 
-    CursorClass && this.markerManager.setCursor(new CursorClass());
+    if (CursorClass) this.markerManager.setCursor(new CursorClass());
 
     this.renderer.createDom(this.svgGroup_, this.getTheme());
     return this.svgGroup_;

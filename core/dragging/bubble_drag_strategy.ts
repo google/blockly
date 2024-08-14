@@ -33,7 +33,9 @@ export class BubbleDragStrategy implements IDragStrategy {
     this.startLoc = this.bubble.getRelativeToSurfaceXY();
     this.workspace.setResizesEnabled(false);
     this.workspace.getLayerManager()?.moveToDragLayer(this.bubble);
-    this.bubble.setDragging && this.bubble.setDragging(true);
+    if (this.bubble.setDragging) {
+      this.bubble.setDragging(true);
+    }
   }
 
   drag(newLoc: Coordinate): void {

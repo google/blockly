@@ -26,7 +26,7 @@ export interface ICommentIcon extends IIcon, IHasBubble, ISerializable {
 }
 
 /** Checks whether the given object is an ICommentIcon. */
-export function isCommentIcon(obj: Object): obj is ICommentIcon {
+export function isCommentIcon(obj: object): obj is ICommentIcon {
   return (
     isIcon(obj) &&
     hasBubble(obj) &&

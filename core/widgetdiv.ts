@@ -126,7 +126,7 @@ export function hide() {
   div.style.display = 'none';
   div.style.left = '';
   div.style.top = '';
-  dispose && dispose();
+  if (dispose) dispose();
   dispose = null;
   div.textContent = '';
 

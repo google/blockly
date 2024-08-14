@@ -27,7 +27,10 @@ export const TEST_ONLY = {allExtensions};
  * @throws {Error} if the extension name is empty, the extension is already
  *     registered, or extensionFn is not a function.
  */
-export function register(name: string, initFn: Function) {
+export function register<T extends Block>(
+  name: string,
+  initFn: (this: T) => void,
+) {
   if (typeof name !== 'string' || name.trim() === '') {
     throw Error('Error: Invalid extension name "' + name + '"');
   }

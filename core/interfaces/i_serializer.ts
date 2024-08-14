@@ -22,7 +22,6 @@ export interface ISerializer {
    */
   priority: number;
 
-  /* eslint-disable no-unused-vars, valid-jsdoc */
 
   /**
    * Saves the state of the plugin or system.
@@ -52,4 +51,3 @@ export interface ISerializer {
    */
   clear(workspace: Workspace): void;
 }
-/* eslint-enable no-unused-vars */

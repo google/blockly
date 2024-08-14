@@ -6,7 +6,6 @@
 
 // Former goog.module ID: Blockly.blockRendering.Icon
 
-/* eslint-disable-next-line no-unused-vars */
 import type {IIcon as BlocklyIcon} from '../../interfaces/i_icon.js';
 import type {ConstantProvider} from '../common/constants.js';
 import {Measurable} from './base.js';

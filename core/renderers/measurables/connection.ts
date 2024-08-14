@@ -6,7 +6,6 @@
 
 // Former goog.module ID: Blockly.blockRendering.Connection
 
-/* eslint-disable-next-line no-unused-vars */
 import type {RenderedConnection} from '../../rendered_connection.js';
 import type {ConstantProvider, Shape} from '../common/constants.js';
 import {Measurable} from './base.js';

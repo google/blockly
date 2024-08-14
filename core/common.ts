@@ -6,7 +6,6 @@
 
 // Former goog.module ID: Blockly.common
 
-/* eslint-disable-next-line no-unused-vars */
 import type {Block} from './block.js';
 import {ISelectable} from './blockly.js';
 import {BlockDefinition, Blocks} from './blocks.js';

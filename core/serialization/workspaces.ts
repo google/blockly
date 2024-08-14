@@ -10,7 +10,6 @@ import * as eventUtils from '../events/utils.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import * as registry from '../registry.js';
 import * as dom from '../utils/dom.js';
-// eslint-disable-next-line no-unused-vars
 import type {Workspace} from '../workspace.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 

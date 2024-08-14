@@ -40,7 +40,7 @@ const testCategories = [
   'Statement',
   // Disabled due to #8466
   // 'Drag',
-  
+
   // Skip fields because it's an accordion that is already open.
   // 'Fields',
   'Defaults',

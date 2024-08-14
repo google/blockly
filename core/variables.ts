@@ -744,7 +744,7 @@ export function deleteVariable(
     }
   }
 
-  if (uses.length) {
+  if ((triggeringBlock && uses.length) || uses.length > 1) {
     // Confirm before deleting multiple blocks.
     const confirmText = Msg['DELETE_VARIABLE_CONFIRMATION']
       .replace('%1', String(uses.length))
@@ -756,7 +756,8 @@ export function deleteVariable(
     });
   } else {
     // No confirmation necessary when the block that triggered the deletion is
-    // the only block referencing this variable.
+    // the only block referencing this variable or if only one block referencing
+    // this variable exists and the deletion was triggered programmatically.
     workspace.getVariableMap().deleteVariable(variable);
   }
 }

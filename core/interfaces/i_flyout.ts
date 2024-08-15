@@ -6,13 +6,13 @@
 
 // Former goog.module ID: Blockly.IFlyout
 
-import type {WorkspaceSvg} from '../workspace_svg.js';
 import type {BlockSvg} from '../block_svg.js';
-import type {Coordinate} from '../utils/coordinate.js';
-import type {FlyoutDefinition} from '../utils/toolbox.js';
-import type {Svg} from '../utils/svg.js';
-import type {IRegistrable} from './i_registrable.js';
 import {FlyoutItem} from '../flyout_base.js';
+import type {Coordinate} from '../utils/coordinate.js';
+import type {Svg} from '../utils/svg.js';
+import type {FlyoutDefinition} from '../utils/toolbox.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
+import type {IRegistrable} from './i_registrable.js';
 
 /**
  * Interface for a flyout.

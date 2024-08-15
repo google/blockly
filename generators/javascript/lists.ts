@@ -10,10 +10,10 @@
 
 // Former goog.module ID: Blockly.JavaScript.lists
 
-import type {Block} from '../../core/block.js';
 import type {CreateWithBlock} from '../../blocks/lists.js';
-import type {JavascriptGenerator} from './javascript_generator.js';
+import type {Block} from '../../core/block.js';
 import {NameType} from '../../core/names.js';
+import type {JavascriptGenerator} from './javascript_generator.js';
 import {Order} from './javascript_generator.js';
 
 export function lists_create_empty(

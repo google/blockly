@@ -7,11 +7,11 @@
 /* eslint-disable */
 
 import * as Blockly from 'blockly-test/core';
-import {JavascriptGenerator} from 'blockly-test/javascript';
-import {PhpGenerator, phpGenerator, Order} from 'blockly-test/php';
-import {LuaGenerator} from 'blockly-test/lua';
-import {PythonGenerator} from 'blockly-test/python';
 import {DartGenerator} from 'blockly-test/dart';
+import {JavascriptGenerator} from 'blockly-test/javascript';
+import {LuaGenerator} from 'blockly-test/lua';
+import {Order, PhpGenerator, phpGenerator} from 'blockly-test/php';
+import {PythonGenerator} from 'blockly-test/python';
 
 JavascriptGenerator;
 PhpGenerator;

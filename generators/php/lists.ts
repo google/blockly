@@ -21,12 +21,12 @@
 
 // Former goog.module ID: Blockly.generator.lists
 
-import * as stringUtils from '../../core/utils/string.js';
-import type {Block} from '../../core/block.js';
 import type {CreateWithBlock} from '../../blocks/lists.js';
+import type {Block} from '../../core/block.js';
 import {NameType} from '../../core/names.js';
-import {Order} from './php_generator.js';
+import * as stringUtils from '../../core/utils/string.js';
 import type {PhpGenerator} from './php_generator.js';
+import {Order} from './php_generator.js';
 
 export function lists_create_empty(
   block: Block,

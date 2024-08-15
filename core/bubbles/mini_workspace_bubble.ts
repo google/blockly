@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {Abstract as AbstractEvent} from '../events/events_abstract.js';
 import type {BlocklyOptions} from '../blockly_options.js';
-import {Bubble} from './bubble.js';
+import {Abstract as AbstractEvent} from '../events/events_abstract.js';
+import {Options} from '../options.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
-import {Options} from '../options.js';
-import {Svg} from '../utils/svg.js';
 import type {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
+import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
+import {Bubble} from './bubble.js';
 
 /**
  * A bubble that contains a mini-workspace which can hold arbitrary blocks.

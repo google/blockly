@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IconType} from '../icons/icon_types.js';
 import {CommentState} from '../icons/comment_icon.js';
-import {IIcon, isIcon} from './i_icon.js';
+import {IconType} from '../icons/icon_types.js';
 import {Size} from '../utils/size.js';
 import {IHasBubble, hasBubble} from './i_has_bubble.js';
+import {IIcon, isIcon} from './i_icon.js';
 import {ISerializable, isSerializable} from './i_serializable.js';
 
 export interface ICommentIcon extends IIcon, IHasBubble, ISerializable {

@@ -10,9 +10,9 @@
 
 // Former goog.module ID: Blockly.Dart.texts
 
+import type {JoinMutatorBlock} from '../../blocks/text.js';
 import type {Block} from '../../core/block.js';
 import type {DartGenerator} from './dart_generator.js';
-import type {JoinMutatorBlock} from '../../blocks/text.js';
 import {Order} from './dart_generator.js';
 
 // RESERVED WORDS: 'Html,Math'

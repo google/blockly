@@ -7,13 +7,16 @@
 // Former goog.module ID: Blockly.blockRendering.RenderInfo
 
 import type {BlockSvg} from '../../block_svg.js';
-import {Input} from '../../inputs/input.js';
 import {Align} from '../../inputs/align.js';
+import {DummyInput} from '../../inputs/dummy_input.js';
+import {EndRowInput} from '../../inputs/end_row_input.js';
+import {Input} from '../../inputs/input.js';
+import {StatementInput} from '../../inputs/statement_input.js';
+import {ValueInput} from '../../inputs/value_input.js';
 import type {RenderedConnection} from '../../rendered_connection.js';
 import type {Measurable} from '../measurables/base.js';
 import {BottomRow} from '../measurables/bottom_row.js';
-import {DummyInput} from '../../inputs/dummy_input.js';
-import {EndRowInput} from '../../inputs/end_row_input.js';
+import {Connection} from '../measurables/connection.js';
 import {ExternalValueInput} from '../measurables/external_value_input.js';
 import {Field} from '../measurables/field.js';
 import {Hat} from '../measurables/hat.js';
@@ -30,14 +33,10 @@ import type {Row} from '../measurables/row.js';
 import {SpacerRow} from '../measurables/spacer_row.js';
 import {SquareCorner} from '../measurables/square_corner.js';
 import {StatementInput as StatementInputMeasurable} from '../measurables/statement_input.js';
-import {StatementInput} from '../../inputs/statement_input.js';
 import {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
-import {ValueInput} from '../../inputs/value_input.js';
-
 import type {ConstantProvider} from './constants.js';
 import type {Renderer} from './renderer.js';
-import {Connection} from '../measurables/connection.js';
 
 /**
  * An object containing all sizing information needed to draw this block.

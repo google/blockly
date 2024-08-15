@@ -6,12 +6,12 @@
 
 // Former goog.module ID: Blockly.clipboard
 
-import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import {BlockPaster} from './clipboard/block_paster.js';
-import * as globalRegistry from './registry.js';
-import {WorkspaceSvg} from './workspace_svg.js';
 import * as registry from './clipboard/registry.js';
+import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
+import * as globalRegistry from './registry.js';
 import {Coordinate} from './utils/coordinate.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 /** Metadata about the object that is currently on the clipboard. */
 let stashedCopyData: ICopyData | null = null;

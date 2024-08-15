@@ -17,27 +17,27 @@ import type {Abstract} from './events/events_abstract.js';
 import type {BubbleOpen} from './events/events_bubble_open.js';
 import * as eventUtils from './events/utils.js';
 import {Field, UnattachedFieldError} from './field.js';
-import {Msg} from './msg.js';
-import {Names} from './names.js';
-import {IParameterModel} from './interfaces/i_parameter_model.js';
-import {IProcedureMap} from './interfaces/i_procedure_map.js';
-import {IProcedureModel} from './interfaces/i_procedure_model.js';
-import {
-  IProcedureBlock,
-  isProcedureBlock,
-} from './interfaces/i_procedure_block.js';
+import {MutatorIcon} from './icons.js';
 import {
   isLegacyProcedureCallBlock,
   isLegacyProcedureDefBlock,
   ProcedureBlock,
   ProcedureTuple,
 } from './interfaces/i_legacy_procedure_blocks.js';
+import {IParameterModel} from './interfaces/i_parameter_model.js';
+import {
+  IProcedureBlock,
+  isProcedureBlock,
+} from './interfaces/i_procedure_block.js';
+import {IProcedureMap} from './interfaces/i_procedure_map.js';
+import {IProcedureModel} from './interfaces/i_procedure_model.js';
+import {Msg} from './msg.js';
+import {Names} from './names.js';
 import {ObservableProcedureMap} from './observable_procedure_map.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import {MutatorIcon} from './icons.js';
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -500,11 +500,11 @@ export function getDefinition(
 }
 
 export {
-  ObservableProcedureMap,
   IParameterModel,
   IProcedureBlock,
-  isProcedureBlock,
   IProcedureMap,
   IProcedureModel,
+  isProcedureBlock,
+  ObservableProcedureMap,
   ProcedureTuple,
 };

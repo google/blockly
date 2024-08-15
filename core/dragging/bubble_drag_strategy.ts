@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IDragStrategy} from '../interfaces/i_draggable.js';
-import {Coordinate} from '../utils.js';
-import * as eventUtils from '../events/utils.js';
 import {IBubble, WorkspaceSvg} from '../blockly.js';
+import * as eventUtils from '../events/utils.js';
+import {IDragStrategy} from '../interfaces/i_draggable.js';
 import * as layers from '../layers.js';
+import {Coordinate} from '../utils.js';
 
 export class BubbleDragStrategy implements IDragStrategy {
   private startLoc: Coordinate | null = null;

@@ -6,25 +6,25 @@
 
 // Former goog.module ID: Blockly.libraryBlocks.texts
 
-import * as Extensions from '../core/extensions.js';
-import * as fieldRegistry from '../core/field_registry.js';
-import * as xmlUtils from '../core/utils/xml.js';
-import {Align} from '../core/inputs/align.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
-import {Connection} from '../core/connection.js';
-import {FieldImage} from '../core/field_image.js';
-import {FieldDropdown} from '../core/field_dropdown.js';
-import {FieldTextInput} from '../core/field_textinput.js';
-import {Msg} from '../core/msg.js';
-import {MutatorIcon} from '../core/icons/mutator_icon.js';
-import type {Workspace} from '../core/workspace.js';
 import {
   createBlockDefinitionsFromJsonArray,
   defineBlocks,
 } from '../core/common.js';
+import {Connection} from '../core/connection.js';
+import * as Extensions from '../core/extensions.js';
+import {FieldDropdown} from '../core/field_dropdown.js';
+import {FieldImage} from '../core/field_image.js';
+import * as fieldRegistry from '../core/field_registry.js';
+import {FieldTextInput} from '../core/field_textinput.js';
 import '../core/field_variable.js';
+import {MutatorIcon} from '../core/icons/mutator_icon.js';
+import {Align} from '../core/inputs/align.js';
 import {ValueInput} from '../core/inputs/value_input.js';
+import {Msg} from '../core/msg.js';
+import * as xmlUtils from '../core/utils/xml.js';
+import type {Workspace} from '../core/workspace.js';
 
 /**
  * A dictionary of the block definitions provided by this module.

@@ -14,6 +14,7 @@ import type {Connection} from '../../connection.js';
 import {ConnectionType} from '../../connection_type.js';
 import * as eventUtils from '../../events/utils.js';
 import type {Field} from '../../field.js';
+import {FlyoutButton} from '../../flyout_button.js';
 import type {IASTNodeLocationSvg} from '../../interfaces/i_ast_node_location_svg.js';
 import {ASTNode} from '../../keyboard_nav/ast_node.js';
 import type {Marker} from '../../keyboard_nav/marker.js';
@@ -22,9 +23,7 @@ import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
-
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
-import {FlyoutButton} from '../../flyout_button.js';
 
 /** The name of the CSS class for a cursor. */
 const CURSOR_CLASS = 'blocklyCursor';

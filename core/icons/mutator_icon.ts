@@ -6,22 +6,22 @@
 
 // Former goog.module ID: Blockly.Mutator
 
+import type {BlockSvg} from '../block_svg.js';
+import type {BlocklyOptions} from '../blockly_options.js';
+import {MiniWorkspaceBubble} from '../bubbles/mini_workspace_bubble.js';
 import type {Abstract} from '../events/events_abstract.js';
 import {BlockChange} from '../events/events_block_change.js';
-import type {BlocklyOptions} from '../blockly_options.js';
-import type {BlockSvg} from '../block_svg.js';
-import {Coordinate} from '../utils/coordinate.js';
-import * as dom from '../utils/dom.js';
 import * as eventUtils from '../events/utils.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
-import {Icon} from './icon.js';
-import {MiniWorkspaceBubble} from '../bubbles/mini_workspace_bubble.js';
+import * as renderManagement from '../render_management.js';
+import {Coordinate} from '../utils/coordinate.js';
+import * as dom from '../utils/dom.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
+import {Icon} from './icon.js';
 import {IconType} from './icon_types.js';
-import * as renderManagement from '../render_management.js';
 
 /** The size of the mutator icon in workspace-scale units. */
 const SIZE = 17;

@@ -8,9 +8,9 @@
 
 import {Blocks} from './blocks.js';
 import * as dialog from './dialog.js';
+import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.js';
 import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
 import {Msg} from './msg.js';
-import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.js';
 import * as utilsXml from './utils/xml.js';
 import {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';

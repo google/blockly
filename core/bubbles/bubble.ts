@@ -4,21 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {ISelectable} from '../blockly.js';
 import * as browserEvents from '../browser_events.js';
+import * as common from '../common.js';
 import {BubbleDragStrategy} from '../dragging/bubble_drag_strategy.js';
 import {IBubble} from '../interfaces/i_bubble.js';
 import {ContainerRegion} from '../metrics_manager.js';
 import {Scrollbar} from '../scrollbar.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
+import * as idGenerator from '../utils/idgenerator.js';
 import * as math from '../utils/math.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
-import * as common from '../common.js';
-import {ISelectable} from '../blockly.js';
-import * as idGenerator from '../utils/idgenerator.js';
 
 /**
  * The abstract pop-up bubble class. This creates a UI that looks like a speech

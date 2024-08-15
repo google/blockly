@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   addBlockTypeToCleanup,
   addMessageToCleanup,
@@ -13,7 +13,6 @@ import {
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
-import {createDeprecationWarningStub} from './test_helpers/warnings.js';
 
 suite('Abstract Fields', function () {
   setup(function () {

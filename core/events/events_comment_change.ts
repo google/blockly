@@ -11,12 +11,11 @@
  */
 // Former goog.module ID: Blockly.Events.CommentChange
 
-import * as registry from '../registry.js';
 import type {WorkspaceComment} from '../comments/workspace_comment.js';
-
+import * as registry from '../registry.js';
+import type {Workspace} from '../workspace.js';
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
-import type {Workspace} from '../workspace.js';
 
 /**
  * Notifies listeners that the contents of a workspace comment has changed.

@@ -6,14 +6,14 @@
 
 import {assert} from '../../node_modules/chai/chai.js';
 import {
-  sharedTestSetup,
-  sharedTestTeardown,
-} from './test_helpers/setup_teardown.js';
-import {
   defineRowBlock,
   defineRowToStackBlock,
   defineStackBlock,
 } from './test_helpers/block_definitions.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 
 suite('Insertion marker manager', function () {
   setup(function () {

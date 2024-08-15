@@ -11,12 +11,11 @@
 
 import * as chai from 'chai';
 import {
-  testSetup,
-  testFileLocations,
-  getAllBlocks,
   dragNthBlockFromFlyout,
+  getAllBlocks,
+  testFileLocations,
+  testSetup,
 } from './test_setup.mjs';
-import {Key} from 'webdriverio';
 
 suite('Basic block tests', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time

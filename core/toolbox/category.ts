@@ -16,6 +16,11 @@ import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_
 import type {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
 import type {IToolbox} from '../interfaces/i_toolbox.js';
 import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
+import * as registry from '../registry.js';
+import * as aria from '../utils/aria.js';
+import * as colourUtils from '../utils/colour.js';
+import * as dom from '../utils/dom.js';
+import * as parsing from '../utils/parsing.js';
 import type {
   CategoryInfo,
   DynamicCategoryInfo,
@@ -24,13 +29,7 @@ import type {
   FlyoutItemInfoArray,
   StaticCategoryInfo,
 } from '../utils/toolbox.js';
-import * as registry from '../registry.js';
-import * as aria from '../utils/aria.js';
-import * as colourUtils from '../utils/colour.js';
-import * as dom from '../utils/dom.js';
-import * as parsing from '../utils/parsing.js';
 import * as toolbox from '../utils/toolbox.js';
-
 import {ToolboxItem} from './toolbox_item.js';
 
 /**

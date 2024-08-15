@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../../node_modules/chai/chai.js';
 import * as Blockly from '../../../build/src/core/blockly.js';
+import {assert} from '../../../node_modules/chai/chai.js';
+import {defineRowBlock} from '../test_helpers/block_definitions.js';
 import {
   assertCallBlockStructure,
   assertDefBlockStructure,
-  createProcDefBlock,
   createProcCallBlock,
+  createProcDefBlock,
   MockProcedureModel,
 } from '../test_helpers/procedures.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
@@ -20,7 +21,6 @@ import {
   sharedTestTeardown,
   workspaceTeardown,
 } from '../test_helpers/setup_teardown.js';
-import {defineRowBlock} from '../test_helpers/block_definitions.js';
 
 suite('Procedures', function () {
   setup(function () {

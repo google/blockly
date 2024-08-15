@@ -11,11 +11,11 @@
 import * as chai from 'chai';
 import {Key} from 'webdriverio';
 import {
-  testSetup,
-  testFileLocations,
   dragBlockTypeFromFlyout,
-  screenDirection,
   getAllBlocks,
+  screenDirection,
+  testFileLocations,
+  testSetup,
 } from './test_setup.mjs';
 
 suite('Testing undo block movement', function (done) {

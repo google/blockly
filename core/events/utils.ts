@@ -12,7 +12,6 @@ import * as registry from '../registry.js';
 import * as idGenerator from '../utils/idgenerator.js';
 import type {Workspace} from '../workspace.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
-
 import type {Abstract} from './events_abstract.js';
 import type {BlockChange} from './events_block_change.js';
 import type {BlockCreate} from './events_block_create.js';

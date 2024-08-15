@@ -14,8 +14,8 @@
 
 import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
-import * as dom from './utils/dom.js';
 import type {Field} from './field.js';
+import * as dom from './utils/dom.js';
 import * as math from './utils/math.js';
 import {Rect} from './utils/rect.js';
 import type {Size} from './utils/size.js';

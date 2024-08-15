@@ -13,12 +13,12 @@
 
 // Former goog.module ID: Blockly.Lua
 
-import * as stringUtils from '../../core/utils/string.js';
 import type {Block} from '../../core/block.js';
 import {CodeGenerator} from '../../core/generator.js';
-import {Names} from '../../core/names.js';
-import type {Workspace} from '../../core/workspace.js';
 import {inputTypes} from '../../core/inputs/input_types.js';
+import {Names} from '../../core/names.js';
+import * as stringUtils from '../../core/utils/string.js';
+import type {Workspace} from '../../core/workspace.js';
 
 /**
  * Order of operation ENUMs.

@@ -4,18 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../node_modules/chai/chai.js';
-import {
-  sharedTestSetup,
-  sharedTestTeardown,
-  workspaceTeardown,
-} from './test_helpers/setup_teardown.js';
-import {assertEventFired} from './test_helpers/events.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
+import {assert} from '../../node_modules/chai/chai.js';
+import {assertEventFired} from './test_helpers/events.js';
 import {
   MockParameterModel,
   MockProcedureModel,
 } from './test_helpers/procedures.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 
 suite('JSO Deserialization', function () {
   setup(function () {

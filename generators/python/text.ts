@@ -10,12 +10,12 @@
 
 // Former goog.module ID: Blockly.Python.texts
 
-import * as stringUtils from '../../core/utils/string.js';
-import type {Block} from '../../core/block.js';
 import type {JoinMutatorBlock} from '../../blocks/text.js';
+import type {Block} from '../../core/block.js';
 import {NameType} from '../../core/names.js';
-import {Order} from './python_generator.js';
+import * as stringUtils from '../../core/utils/string.js';
 import type {PythonGenerator} from './python_generator.js';
+import {Order} from './python_generator.js';
 
 export function text(
   block: Block,

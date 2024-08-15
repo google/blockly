@@ -9,14 +9,14 @@
  */
 
 import * as chai from 'chai';
+import {Key} from 'webdriverio';
 import {
-  testSetup,
-  testFileLocations,
+  clickWorkspace,
   dragBlockTypeFromFlyout,
   screenDirection,
-  clickWorkspace,
+  testFileLocations,
+  testSetup,
 } from './test_setup.mjs';
-import {Key} from 'webdriverio';
 
 suite('Testing Field Edits', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test

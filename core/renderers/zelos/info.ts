@@ -7,23 +7,23 @@
 // Former goog.module ID: Blockly.zelos.RenderInfo
 
 import type {BlockSvg} from '../../block_svg.js';
-import {DummyInput} from '../../inputs/dummy_input.js';
-import {EndRowInput} from '../../inputs/end_row_input.js';
 import {FieldImage} from '../../field_image.js';
 import {FieldLabel} from '../../field_label.js';
 import {FieldTextInput} from '../../field_textinput.js';
-import {Input} from '../../inputs/input.js';
 import {Align} from '../../inputs/align.js';
+import {DummyInput} from '../../inputs/dummy_input.js';
+import {EndRowInput} from '../../inputs/end_row_input.js';
+import {Input} from '../../inputs/input.js';
+import {StatementInput} from '../../inputs/statement_input.js';
+import {ValueInput} from '../../inputs/value_input.js';
 import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 import type {Measurable} from '../measurables/base.js';
 import {Field} from '../measurables/field.js';
 import {InRowSpacer} from '../measurables/in_row_spacer.js';
 import {InputConnection} from '../measurables/input_connection.js';
-import {StatementInput} from '../../inputs/statement_input.js';
 import type {Row} from '../measurables/row.js';
 import type {SpacerRow} from '../measurables/spacer_row.js';
 import {Types} from '../measurables/types.js';
-import {ValueInput} from '../../inputs/value_input.js';
 import type {ConstantProvider, InsideCorners} from './constants.js';
 import {BottomRow} from './measurables/bottom_row.js';
 import {StatementInput as StatementInputMeasurable} from './measurables/inputs.js';

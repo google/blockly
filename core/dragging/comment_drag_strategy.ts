@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IDragStrategy} from '../interfaces/i_draggable.js';
-import {Coordinate} from '../utils.js';
-import * as eventUtils from '../events/utils.js';
-import * as layers from '../layers.js';
 import {RenderedWorkspaceComment} from '../comments.js';
-import {WorkspaceSvg} from '../workspace_svg.js';
 import {CommentMove} from '../events/events_comment_move.js';
+import * as eventUtils from '../events/utils.js';
+import {IDragStrategy} from '../interfaces/i_draggable.js';
+import * as layers from '../layers.js';
+import {Coordinate} from '../utils.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 export class CommentDragStrategy implements IDragStrategy {
   private startLoc: Coordinate | null = null;

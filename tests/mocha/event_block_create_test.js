@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../node_modules/chai/chai.js';
-import {assertEventFired} from './test_helpers/events.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
+import {assert} from '../../node_modules/chai/chai.js';
+import {defineRowBlock} from './test_helpers/block_definitions.js';
+import {assertEventFired} from './test_helpers/events.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
-import {defineRowBlock} from './test_helpers/block_definitions.js';
 
 suite('Block Create Event', function () {
   setup(function () {

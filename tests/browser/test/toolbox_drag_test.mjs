@@ -10,12 +10,12 @@
 
 import * as chai from 'chai';
 import {
-  testSetup,
-  testFileLocations,
   getCategory,
-  scrollFlyout,
-  screenDirection,
   PAUSE_TIME,
+  screenDirection,
+  scrollFlyout,
+  testFileLocations,
+  testSetup,
 } from './test_setup.mjs';
 
 // Categories in the basic toolbox.

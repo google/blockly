@@ -5,11 +5,11 @@
  */
 
 import {assert} from '../../node_modules/chai/chai.js';
-import {createKeyDownEvent} from './test_helpers/user_input.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
+import {createKeyDownEvent} from './test_helpers/user_input.js';
 
 suite('Keyboard Shortcut Registry Test', function () {
   setup(function () {

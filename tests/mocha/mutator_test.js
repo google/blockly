@@ -6,14 +6,14 @@
 
 import {assert} from '../../node_modules/chai/chai.js';
 import {
-  sharedTestSetup,
-  sharedTestTeardown,
-} from './test_helpers/setup_teardown.js';
-import {
   createRenderedBlock,
   defineMutatorBlocks,
 } from './test_helpers/block_definitions.js';
 import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 
 suite('Mutator', function () {
   setup(function () {

@@ -13,9 +13,9 @@
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
+import {MANUALLY_DISABLED} from '../constants.js';
 import {IconType} from '../icons/icon_types.js';
 import {hasBubble} from '../interfaces/i_has_bubble.js';
-import {MANUALLY_DISABLED} from '../constants.js';
 import * as registry from '../registry.js';
 import * as utilsXml from '../utils/xml.js';
 import {Workspace} from '../workspace.js';

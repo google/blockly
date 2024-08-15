@@ -22,11 +22,16 @@ import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
+import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
+import {WorkspaceComment} from './comments/workspace_comment.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
 import {ConnectionDB} from './connection_db.js';
 import * as ContextMenu from './contextmenu.js';
-import {ContextMenuRegistry} from './contextmenu_registry.js';
+import {
+  ContextMenuOption,
+  ContextMenuRegistry,
+} from './contextmenu_registry.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
 import type {FlyoutButton} from './flyout_button.js';
@@ -40,10 +45,12 @@ import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
 import type {Cursor} from './keyboard_nav/cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
+import {LayerManager} from './layer_manager.js';
 import {MarkerManager} from './marker_manager.js';
 import {Options} from './options.js';
 import * as Procedures from './procedures.js';
 import * as registry from './registry.js';
+import * as renderManagement from './render_management.js';
 import * as blockRendering from './renderers/common/block_rendering.js';
 import type {Renderer} from './renderers/common/renderer.js';
 import type {ScrollbarPair} from './scrollbar_pair.js';
@@ -68,12 +75,7 @@ import * as VariablesDynamic from './variables_dynamic.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
-import {WorkspaceComment} from './comments/workspace_comment.js';
 import {ZoomControls} from './zoom_controls.js';
-import {ContextMenuOption} from './contextmenu_registry.js';
-import * as renderManagement from './render_management.js';
-import {LayerManager} from './layer_manager.js';
-import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;

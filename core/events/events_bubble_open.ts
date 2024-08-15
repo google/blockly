@@ -11,12 +11,12 @@
  */
 // Former goog.module ID: Blockly.Events.BubbleOpen
 
-import type {AbstractEventJson} from './events_abstract.js';
 import type {BlockSvg} from '../block_svg.js';
 import * as registry from '../registry.js';
+import type {Workspace} from '../workspace.js';
+import type {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
-import type {Workspace} from '../workspace.js';
 
 /**
  * Class for a bubble open event.

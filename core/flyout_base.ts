@@ -11,19 +11,21 @@
  */
 // Former goog.module ID: Blockly.Flyout
 
-import type {Abstract as AbstractEvent} from './events/events_abstract.js';
 import type {Block} from './block.js';
 import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
+import {MANUALLY_DISABLED} from './constants.js';
 import {DeleteArea} from './delete_area.js';
+import type {Abstract as AbstractEvent} from './events/events_abstract.js';
 import * as eventUtils from './events/utils.js';
 import {FlyoutButton} from './flyout_button.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
+import {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
-import {MANUALLY_DISABLED} from './constants.js';
 import type {Options} from './options.js';
+import * as renderManagement from './render_management.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
 import * as blocks from './serialization/blocks.js';
 import * as Tooltip from './tooltip.js';
@@ -32,12 +34,10 @@ import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
+import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import {WorkspaceSvg} from './workspace_svg.js';
-import * as utilsXml from './utils/xml.js';
 import * as Xml from './xml.js';
-import * as renderManagement from './render_management.js';
-import {IAutoHideable} from './interfaces/i_autohideable.js';
 
 enum FlyoutItemType {
   BLOCK = 'block',

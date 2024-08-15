@@ -5,12 +5,12 @@
  */
 
 import {assert} from '../../node_modules/chai/chai.js';
+import {defineEmptyBlock} from './test_helpers/block_definitions.js';
+import {MockIcon, MockSerializableIcon} from './test_helpers/icon_mocks.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
-import {defineEmptyBlock} from './test_helpers/block_definitions.js';
-import {MockIcon, MockSerializableIcon} from './test_helpers/icon_mocks.js';
 
 suite('Icon', function () {
   setup(function () {

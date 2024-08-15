@@ -16,7 +16,9 @@ import './events/events_selected.js';
 
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
+import {IDeletable} from './blockly.js';
 import * as browserEvents from './browser_events.js';
+import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
 import * as common from './common.js';
 import {config} from './config.js';
 import type {Connection} from './connection.js';
@@ -28,11 +30,14 @@ import {
   ContextMenuRegistry,
   LegacyContextMenuOption,
 } from './contextmenu_registry.js';
+import {BlockDragStrategy} from './dragging/block_drag_strategy.js';
 import type {BlockMove} from './events/events_block_move.js';
-import * as deprecation from './utils/deprecation.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
+import {IconType} from './icons/icon_types.js';
+import {MutatorIcon} from './icons/mutator_icon.js';
+import {WarningIcon} from './icons/warning_icon.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
@@ -44,26 +49,21 @@ import {ASTNode} from './keyboard_nav/ast_node.js';
 import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
 import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
-import {MutatorIcon} from './icons/mutator_icon.js';
+import * as renderManagement from './render_management.js';
 import {RenderedConnection} from './rendered_connection.js';
 import type {IPathObject} from './renderers/common/i_path_object.js';
 import * as blocks from './serialization/blocks.js';
 import type {BlockStyle} from './theme.js';
 import * as Tooltip from './tooltip.js';
 import {Coordinate} from './utils/coordinate.js';
+import * as deprecation from './utils/deprecation.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
-import {WarningIcon} from './icons/warning_icon.js';
+import {FlyoutItemInfo} from './utils/toolbox.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import * as renderManagement from './render_management.js';
-import {IconType} from './icons/icon_types.js';
-import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
-import {BlockDragStrategy} from './dragging/block_drag_strategy.js';
-import {IDeletable} from './blockly.js';
-import {FlyoutItemInfo} from './utils/toolbox.js';
 
 /**
  * Class for a block's SVG representation.

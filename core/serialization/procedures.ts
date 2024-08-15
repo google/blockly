@@ -7,8 +7,8 @@
 import {IParameterModel} from '../interfaces/i_parameter_model.js';
 import {IProcedureModel} from '../interfaces/i_procedure_model.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
-import * as priorities from './priorities.js';
 import type {Workspace} from '../workspace.js';
+import * as priorities from './priorities.js';
 
 /** Represents the state of a procedure model. */
 export interface State {

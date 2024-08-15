@@ -15,10 +15,9 @@
 import './events/events_block_change.js';
 
 import {BlockSvg} from './block_svg.js';
-import * as bumpObjects from './bump_objects.js';
 import * as browserEvents from './browser_events.js';
+import * as bumpObjects from './bump_objects.js';
 import * as dialog from './dialog.js';
-import * as dom from './utils/dom.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
 import {
@@ -30,10 +29,11 @@ import {
 import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
+import * as dom from './utils/dom.js';
+import {Size} from './utils/size.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import {Size} from './utils/size.js';
 
 /**
  * Supported types for FieldInput subclasses.

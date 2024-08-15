@@ -10,9 +10,9 @@ import type {Block} from './block.js';
 import {ISelectable} from './blockly.js';
 import {BlockDefinition, Blocks} from './blocks.js';
 import type {Connection} from './connection.js';
+import * as eventUtils from './events/utils.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import * as eventUtils from './events/utils.js';
 
 /** Database of all workspaces. */
 const WorkspaceDB_ = Object.create(null);

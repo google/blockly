@@ -7,21 +7,21 @@
 // Former goog.module ID: Blockly.geras.RenderInfo
 
 import type {BlockSvg} from '../../block_svg.js';
+import {DummyInput} from '../../inputs/dummy_input.js';
+import {EndRowInput} from '../../inputs/end_row_input.js';
 import type {Input} from '../../inputs/input.js';
+import {StatementInput} from '../../inputs/statement_input.js';
+import {ValueInput} from '../../inputs/value_input.js';
 import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 import type {Measurable} from '../measurables/base.js';
 import type {BottomRow} from '../measurables/bottom_row.js';
-import {DummyInput} from '../../inputs/dummy_input.js';
-import {EndRowInput} from '../../inputs/end_row_input.js';
 import {ExternalValueInput} from '../measurables/external_value_input.js';
 import type {Field} from '../measurables/field.js';
 import {InRowSpacer} from '../measurables/in_row_spacer.js';
 import type {InputRow} from '../measurables/input_row.js';
 import type {Row} from '../measurables/row.js';
-import {StatementInput} from '../../inputs/statement_input.js';
 import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
-import {ValueInput} from '../../inputs/value_input.js';
 import type {ConstantProvider} from './constants.js';
 import {InlineInput} from './measurables/inline_input.js';
 import {StatementInput as StatementInputMeasurable} from './measurables/statement_input.js';

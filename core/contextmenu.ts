@@ -9,8 +9,8 @@
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
+import * as common from './common.js';
 import {config} from './config.js';
-import * as dom from './utils/dom.js';
 import type {
   ContextMenuOption,
   LegacyContextMenuOption,
@@ -18,14 +18,14 @@ import type {
 import * as eventUtils from './events/utils.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
-import * as aria from './utils/aria.js';
-import {Rect} from './utils/rect.js';
 import * as serializationBlocks from './serialization/blocks.js';
+import * as aria from './utils/aria.js';
+import * as dom from './utils/dom.js';
+import {Rect} from './utils/rect.js';
 import * as svgMath from './utils/svg_math.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
-import * as common from './common.js';
 
 /**
  * Which block is the context menu attached to?

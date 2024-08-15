@@ -12,10 +12,10 @@
 // Former goog.module ID: Blockly.Events.TrashcanOpen
 
 import * as registry from '../registry.js';
+import type {Workspace} from '../workspace.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
-import type {Workspace} from '../workspace.js';
 
 /**
  * Notifies listeners when the trashcan is opening or closing.

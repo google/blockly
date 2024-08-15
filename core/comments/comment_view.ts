@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IRenderedElement} from '../interfaces/i_rendered_element.js';
-import {WorkspaceSvg} from '../workspace_svg.js';
-import * as dom from '../utils/dom.js';
-import {Svg} from '../utils/svg.js';
-import * as layers from '../layers.js';
-import * as css from '../css.js';
-import {Coordinate} from '../utils/coordinate.js';
-import {Size} from '../utils/size.js';
 import * as browserEvents from '../browser_events.js';
+import * as css from '../css.js';
+import {IRenderedElement} from '../interfaces/i_rendered_element.js';
+import * as layers from '../layers.js';
 import * as touch from '../touch.js';
+import {Coordinate} from '../utils/coordinate.js';
+import * as dom from '../utils/dom.js';
+import {Size} from '../utils/size.js';
+import {Svg} from '../utils/svg.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 export class CommentView implements IRenderedElement {
   /** The root group element of the comment view. */

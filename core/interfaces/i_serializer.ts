@@ -22,7 +22,6 @@ export interface ISerializer {
    */
   priority: number;
 
-
   /**
    * Saves the state of the plugin or system.
    *

@@ -5,16 +5,16 @@
  */
 
 import * as chai from 'chai';
+import {Key} from 'webdriverio';
 import {
-  testSetup,
-  testFileLocations,
-  getAllBlocks,
-  getBlockElementById,
   clickBlock,
   contextMenuSelect,
+  getAllBlocks,
+  getBlockElementById,
   PAUSE_TIME,
+  testFileLocations,
+  testSetup,
 } from './test_setup.mjs';
-import {Key} from 'webdriverio';
 
 const firstBlockId = 'root_block';
 const startBlocks = {

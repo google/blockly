@@ -16,12 +16,15 @@ import './connection_checker.js';
 
 import type {Block} from './block.js';
 import type {BlocklyOptions} from './blockly_options.js';
+import {WorkspaceComment} from './comments/workspace_comment.js';
+import * as common from './common.js';
 import type {ConnectionDB} from './connection_db.js';
 import type {Abstract} from './events/events_abstract.js';
-import * as common from './common.js';
 import * as eventUtils from './events/utils.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import {IProcedureMap} from './interfaces/i_procedure_map.js';
+import {ObservableProcedureMap} from './observable_procedure_map.js';
 import {Options} from './options.js';
 import * as registry from './registry.js';
 import * as arrayUtils from './utils/array.js';
@@ -30,9 +33,6 @@ import * as math from './utils/math.js';
 import type * as toolbox from './utils/toolbox.js';
 import {VariableMap} from './variable_map.js';
 import type {VariableModel} from './variable_model.js';
-import {WorkspaceComment} from './comments/workspace_comment.js';
-import {IProcedureMap} from './interfaces/i_procedure_map.js';
-import {ObservableProcedureMap} from './observable_procedure_map.js';
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.

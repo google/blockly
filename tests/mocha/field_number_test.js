@@ -4,21 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
+import {defineRowBlock} from './test_helpers/block_definitions.js';
+import {runTestCases} from './test_helpers/common.js';
 import {
   assertFieldValue,
   runConstructorSuiteTests,
   runFromJsonSuiteTests,
   runSetValueTests,
 } from './test_helpers/fields.js';
-import {defineRowBlock} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
-import {runTestCases} from './test_helpers/common.js';
 
 suite('Number Fields', function () {
   setup(function () {

@@ -12,13 +12,13 @@
 // Former goog.module ID: Blockly.Trashcan
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_trashcan_open.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import {ComponentManager} from './component_manager.js';
 import {DeleteArea} from './delete_area.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BlockDelete} from './events/events_block_delete.js';
+import './events/events_trashcan_open.js';
 import * as eventUtils from './events/utils.js';
 import type {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
@@ -34,8 +34,8 @@ import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
-import {BlockInfo} from './utils/toolbox.js';
 import * as toolbox from './utils/toolbox.js';
+import {BlockInfo} from './utils/toolbox.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**

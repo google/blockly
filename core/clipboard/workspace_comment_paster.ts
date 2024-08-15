@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IPaster} from '../interfaces/i_paster.js';
+import {RenderedWorkspaceComment} from '../comments/rendered_workspace_comment.js';
+import * as common from '../common.js';
+import * as eventUtils from '../events/utils.js';
 import {ICopyData} from '../interfaces/i_copyable.js';
+import {IPaster} from '../interfaces/i_paster.js';
+import * as commentSerialiation from '../serialization/workspace_comments.js';
 import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import * as registry from './registry.js';
-import * as commentSerialiation from '../serialization/workspace_comments.js';
-import * as eventUtils from '../events/utils.js';
-import * as common from '../common.js';
-import {RenderedWorkspaceComment} from '../comments/rendered_workspace_comment.js';
 
 export class WorkspaceCommentPaster
   implements IPaster<WorkspaceCommentCopyData, RenderedWorkspaceComment>

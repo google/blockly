@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {ISerializer} from '../interfaces/i_serializer.js';
-import {Workspace} from '../workspace.js';
-import * as priorities from './priorities.js';
 import type {WorkspaceComment} from '../comments/workspace_comment.js';
 import * as eventUtils from '../events/utils.js';
+import {ISerializer} from '../interfaces/i_serializer.js';
 import {Coordinate} from '../utils/coordinate.js';
-import * as serializationRegistry from './registry.js';
 import {Size} from '../utils/size.js';
+import {Workspace} from '../workspace.js';
+import * as priorities from './priorities.js';
+import * as serializationRegistry from './registry.js';
 
 export interface State {
   id?: string;

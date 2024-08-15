@@ -22,9 +22,9 @@ console.log(process.cwd());
 // copied when packaged), resulting in require() looking for the
 // compressed bundles in the wrong place.
 
-import {assert} from 'chai';
 import * as Blockly from 'blockly-test';
 import {javascriptGenerator} from 'blockly-test/javascript';
+import {assert} from 'chai';
 
 const xmlText =
   '<xml xmlns="https://developers.google.com/blockly/xml">\n' +

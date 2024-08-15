@@ -6,16 +6,16 @@
 
 import {assert} from '../../node_modules/chai/chai.js';
 import {
+  defineRowBlock,
+  defineStackBlock,
+  defineStatementBlock,
+} from './test_helpers/block_definitions.js';
+import {
   createGenUidStubWithReturns,
   sharedTestSetup,
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
-import {
-  defineRowBlock,
-  defineStatementBlock,
-  defineStackBlock,
-} from './test_helpers/block_definitions.js';
 
 suite('Connection', function () {
   setup(function () {

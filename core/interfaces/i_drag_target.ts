@@ -7,8 +7,8 @@
 // Former goog.module ID: Blockly.IDragTarget
 
 import {Rect} from '../utils/rect.js';
-import {IDraggable} from './i_draggable.js';
 import type {IComponent} from './i_component.js';
+import {IDraggable} from './i_draggable.js';
 
 /**
  * Interface for a component with custom behaviour when a block or bubble is

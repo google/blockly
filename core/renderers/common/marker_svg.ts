@@ -12,6 +12,7 @@ import '../../events/events_marker_move.js';
 import type {BlockSvg} from '../../block_svg.js';
 import type {Connection} from '../../connection.js';
 import {ConnectionType} from '../../connection_type.js';
+import {EventType} from '../../events/type.js';
 import * as eventUtils from '../../events/utils.js';
 import type {Field} from '../../field.js';
 import {FlyoutButton} from '../../flyout_button.js';
@@ -621,7 +622,7 @@ export class MarkerSvg {
    */
   private fireMarkerEvent(oldNode: ASTNode, curNode: ASTNode) {
     const curBlock = curNode.getSourceBlock();
-    const event = new (eventUtils.get(eventUtils.MARKER_MOVE))(
+    const event = new (eventUtils.get(EventType.MARKER_MOVE))(
       curBlock,
       this.isCursor(),
       oldNode,

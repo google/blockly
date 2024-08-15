@@ -20,6 +20,7 @@ import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
@@ -1123,7 +1124,7 @@ export abstract class Field<T = any>
     this.doValueUpdate_(localValue);
     if (fireChangeEvent && source && eventUtils.isEnabled()) {
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_CHANGE))(
           source,
           'field',
           this.name || null,

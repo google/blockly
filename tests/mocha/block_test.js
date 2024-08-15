@@ -5,6 +5,7 @@
  */
 
 import {ConnectionType} from '../../build/src/core/connection_type.js';
+import {EventType} from '../../build/src/core/events/type.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {EndRowInput} from '../../build/src/core/inputs/end_row_input.js';
 import {assert} from '../../node_modules/chai/chai.js';
@@ -1251,7 +1252,7 @@ suite('Blocks', function () {
       function assertCommentEvent(eventSpy, oldValue, newValue) {
         const calls = eventSpy.getCalls();
         const event = calls[calls.length - 1].args[0];
-        assert.equal(event.type, eventUtils.BLOCK_CHANGE);
+        assert.equal(event.type, EventType.BLOCK_CHANGE);
         assert.equal(
           event.element,
           'comment',
@@ -1271,7 +1272,7 @@ suite('Blocks', function () {
       function assertNoCommentEvent(eventSpy) {
         const calls = eventSpy.getCalls();
         const event = calls[calls.length - 1].args[0];
-        assert.notEqual(event.type, eventUtils.BLOCK_CHANGE);
+        assert.notEqual(event.type, EventType.BLOCK_CHANGE);
       }
       setup(function () {
         this.eventsFireSpy = sinon.spy(eventUtils.TEST_ONLY, 'fireInternal');

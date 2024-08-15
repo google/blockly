@@ -33,6 +33,7 @@ import {
   ContextMenuRegistry,
 } from './contextmenu_registry.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {FlyoutButton} from './flyout_button.js';
 import {Gesture} from './gesture.js';
@@ -558,7 +559,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.setVisible(true);
     }
 
-    const event = new (eventUtils.get(eventUtils.THEME_CHANGE))(
+    const event = new (eventUtils.get(EventType.THEME_CHANGE))(
       this.getTheme().name,
       this.id,
     );
@@ -1181,7 +1182,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       // of negligible changes in viewport top/left.
       return;
     }
-    const event = new (eventUtils.get(eventUtils.VIEWPORT_CHANGE))(
+    const event = new (eventUtils.get(EventType.VIEWPORT_CHANGE))(
       top,
       left,
       scale,

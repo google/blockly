@@ -19,6 +19,7 @@ import {ComponentManager} from './component_manager.js';
 import {MANUALLY_DISABLED} from './constants.js';
 import {DeleteArea} from './delete_area.js';
 import type {Abstract as AbstractEvent} from './events/events_abstract.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {FlyoutButton} from './flyout_button.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
@@ -1138,13 +1139,13 @@ export abstract class Flyout
       for (let i = 0; i < newVariables.length; i++) {
         const thisVariable = newVariables[i];
         eventUtils.fire(
-          new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable),
+          new (eventUtils.get(EventType.VAR_CREATE))(thisVariable),
         );
       }
 
       // Block events come after var events, in case they refer to newly created
       // variables.
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(newBlock));
+      eventUtils.fire(new (eventUtils.get(EventType.BLOCK_CREATE))(newBlock));
     }
     if (this.autoClose) {
       this.hide();

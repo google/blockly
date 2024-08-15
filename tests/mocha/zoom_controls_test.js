@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as eventUtils from '../../build/src/core/events/utils.js';
+import {EventType} from '../../build/src/core/events/type.js';
 import {assert} from '../../node_modules/chai/chai.js';
 import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
 import {
@@ -35,13 +35,13 @@ suite('Zoom Controls', function () {
       assertEventFired(
         this.eventsFireStub,
         Blockly.Events.Click,
-        {targetType: 'zoom_controls', type: eventUtils.CLICK},
+        {targetType: 'zoom_controls', type: EventType.CLICK},
         this.workspace.id,
         undefined,
       );
       assertEventNotFired(this.eventsFireStub, Blockly.Events.Click, {
         targetType: 'workspace',
-        type: eventUtils.CLICK,
+        type: EventType.CLICK,
       });
       assert.closeTo(this.workspace.getScale(), 1.2, 0.05);
     });
@@ -51,13 +51,13 @@ suite('Zoom Controls', function () {
       assertEventFired(
         this.eventsFireStub,
         Blockly.Events.Click,
-        {targetType: 'zoom_controls', type: eventUtils.CLICK},
+        {targetType: 'zoom_controls', type: EventType.CLICK},
         this.workspace.id,
         undefined,
       );
       assertEventNotFired(this.eventsFireStub, Blockly.Events.Click, {
         targetType: 'workspace',
-        type: eventUtils.CLICK,
+        type: EventType.CLICK,
       });
       assert.closeTo(this.workspace.getScale(), 0.8, 0.05);
     });
@@ -67,13 +67,13 @@ suite('Zoom Controls', function () {
       assertEventFired(
         this.eventsFireStub,
         Blockly.Events.Click,
-        {targetType: 'zoom_controls', type: eventUtils.CLICK},
+        {targetType: 'zoom_controls', type: EventType.CLICK},
         this.workspace.id,
         undefined,
       );
       assertEventNotFired(this.eventsFireStub, Blockly.Events.Click, {
         targetType: 'workspace',
-        type: eventUtils.CLICK,
+        type: EventType.CLICK,
       });
       assert.equal(this.workspace.getScale(), 1);
     });

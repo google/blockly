@@ -19,6 +19,7 @@ import {DeleteArea} from './delete_area.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BlockDelete} from './events/events_block_delete.js';
 import './events/events_trashcan_open.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
@@ -556,7 +557,7 @@ export class Trashcan
    * @param trashcanOpen Whether the flyout is opening.
    */
   private fireUiEvent(trashcanOpen: boolean) {
-    const uiEvent = new (eventUtils.get(eventUtils.TRASHCAN_OPEN))(
+    const uiEvent = new (eventUtils.get(EventType.TRASHCAN_OPEN))(
       trashcanOpen,
       this.workspace.id,
     );
@@ -603,12 +604,12 @@ export class Trashcan
   private onDelete(event: Abstract) {
     if (
       this.workspace.options.maxTrashcanContents <= 0 ||
-      event.type !== eventUtils.BLOCK_DELETE
+      event.type !== EventType.BLOCK_DELETE
     ) {
       return;
     }
     const deleteEvent = event as BlockDelete;
-    if (event.type === eventUtils.BLOCK_DELETE && !deleteEvent.wasShadow) {
+    if (event.type === EventType.BLOCK_DELETE && !deleteEvent.wasShadow) {
       if (!deleteEvent.oldJson) {
         throw new Error('Encountered a delete event without proper oldJson');
       }

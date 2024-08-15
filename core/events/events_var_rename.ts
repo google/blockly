@@ -10,7 +10,7 @@ import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';
 import type {Workspace} from '../workspace.js';
 import {VarBase, VarBaseJson} from './events_var_base.js';
-import * as eventUtils from './utils.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners that a variable model was renamed.
@@ -18,7 +18,7 @@ import * as eventUtils from './utils.js';
  * @class
  */
 export class VarRename extends VarBase {
-  override type = eventUtils.VAR_RENAME;
+  override type = EventType.VAR_RENAME;
 
   /** The previous name of the variable. */
   oldName?: string;
@@ -126,4 +126,4 @@ export interface VarRenameJson extends VarBaseJson {
   newName: string;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.VAR_RENAME, VarRename);
+registry.register(registry.Type.EVENT, EventType.VAR_RENAME, VarRename);

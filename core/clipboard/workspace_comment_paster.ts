@@ -6,6 +6,7 @@
 
 import {RenderedWorkspaceComment} from '../comments/rendered_workspace_comment.js';
 import * as common from '../common.js';
+import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import {ICopyData} from '../interfaces/i_copyable.js';
 import {IPaster} from '../interfaces/i_paster.js';
@@ -46,7 +47,7 @@ export class WorkspaceCommentPaster
     if (!comment) return null;
 
     if (eventUtils.isEnabled()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CREATE))(comment));
+      eventUtils.fire(new (eventUtils.get(EventType.COMMENT_CREATE))(comment));
     }
     common.setSelected(comment);
     return comment;

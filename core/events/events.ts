@@ -6,7 +6,7 @@
 
 // Former goog.module ID: Blockly.Events
 
-import * as eventUtils from './utils.js';
+import {EventType} from './type.js';
 
 // Events.
 export {Abstract, AbstractEventJson} from './events_abstract.js';
@@ -52,37 +52,42 @@ export {FinishedLoading} from './workspace_events.js';
 export type {BumpEvent} from './utils.js';
 
 // Event types.
-export const BLOCK_CHANGE = eventUtils.BLOCK_CHANGE;
-export const BLOCK_CREATE = eventUtils.BLOCK_CREATE;
-export const BLOCK_DELETE = eventUtils.BLOCK_DELETE;
-export const BLOCK_DRAG = eventUtils.BLOCK_DRAG;
-export const BLOCK_MOVE = eventUtils.BLOCK_MOVE;
+export const BLOCK_CHANGE = EventType.BLOCK_CHANGE;
+export const BLOCK_CREATE = EventType.BLOCK_CREATE;
+export const BLOCK_DELETE = EventType.BLOCK_DELETE;
+export const BLOCK_DRAG = EventType.BLOCK_DRAG;
+export const BLOCK_MOVE = EventType.BLOCK_MOVE;
 export const BLOCK_FIELD_INTERMEDIATE_CHANGE =
-  eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE;
-export const BUBBLE_OPEN = eventUtils.BUBBLE_OPEN;
-export const BUMP_EVENTS = eventUtils.BUMP_EVENTS;
-export const CHANGE = eventUtils.CHANGE;
-export const CLICK = eventUtils.CLICK;
-export const COMMENT_CHANGE = eventUtils.COMMENT_CHANGE;
-export const COMMENT_CREATE = eventUtils.COMMENT_CREATE;
-export const COMMENT_DELETE = eventUtils.COMMENT_DELETE;
-export const COMMENT_MOVE = eventUtils.COMMENT_MOVE;
-export const COMMENT_RESIZE = eventUtils.COMMENT_RESIZE;
-export const COMMENT_DRAG = eventUtils.COMMENT_DRAG;
-export const CREATE = eventUtils.CREATE;
-export const DELETE = eventUtils.DELETE;
-export const FINISHED_LOADING = eventUtils.FINISHED_LOADING;
-export const MARKER_MOVE = eventUtils.MARKER_MOVE;
-export const MOVE = eventUtils.MOVE;
-export const SELECTED = eventUtils.SELECTED;
-export const THEME_CHANGE = eventUtils.THEME_CHANGE;
-export const TOOLBOX_ITEM_SELECT = eventUtils.TOOLBOX_ITEM_SELECT;
-export const TRASHCAN_OPEN = eventUtils.TRASHCAN_OPEN;
-export const UI = eventUtils.UI;
-export const VAR_CREATE = eventUtils.VAR_CREATE;
-export const VAR_DELETE = eventUtils.VAR_DELETE;
-export const VAR_RENAME = eventUtils.VAR_RENAME;
-export const VIEWPORT_CHANGE = eventUtils.VIEWPORT_CHANGE;
+  EventType.BLOCK_FIELD_INTERMEDIATE_CHANGE;
+export const BUBBLE_OPEN = EventType.BUBBLE_OPEN;
+/** @deprecated Use BLOCK_CHANGE instead */
+export const CHANGE = EventType.BLOCK_CHANGE;
+export const CLICK = EventType.CLICK;
+export const COMMENT_CHANGE = EventType.COMMENT_CHANGE;
+export const COMMENT_CREATE = EventType.COMMENT_CREATE;
+export const COMMENT_DELETE = EventType.COMMENT_DELETE;
+export const COMMENT_MOVE = EventType.COMMENT_MOVE;
+export const COMMENT_RESIZE = EventType.COMMENT_RESIZE;
+export const COMMENT_DRAG = EventType.COMMENT_DRAG;
+/** @deprecated Use BLOCK_CREATE instead */
+export const CREATE = EventType.BLOCK_CREATE;
+/** @deprecated Use BLOCK_DELETE instead */
+export const DELETE = EventType.BLOCK_DELETE;
+export const FINISHED_LOADING = EventType.FINISHED_LOADING;
+export const MARKER_MOVE = EventType.MARKER_MOVE;
+/** @deprecated Use BLOCK_MOVE instead */
+export const MOVE = EventType.BLOCK_MOVE;
+export const SELECTED = EventType.SELECTED;
+export const THEME_CHANGE = EventType.THEME_CHANGE;
+export const TOOLBOX_ITEM_SELECT = EventType.TOOLBOX_ITEM_SELECT;
+export const TRASHCAN_OPEN = EventType.TRASHCAN_OPEN;
+export const UI = EventType.UI;
+export const VAR_CREATE = EventType.VAR_CREATE;
+export const VAR_DELETE = EventType.VAR_DELETE;
+export const VAR_RENAME = EventType.VAR_RENAME;
+export const VIEWPORT_CHANGE = EventType.VIEWPORT_CHANGE;
+
+export {BUMP_EVENTS} from './type.js';
 
 // Event utils.
 export {

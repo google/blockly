@@ -6,6 +6,7 @@
 
 import {RenderedWorkspaceComment} from '../comments.js';
 import {CommentMove} from '../events/events_comment_move.js';
+import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import {IDragStrategy} from '../interfaces/i_draggable.js';
 import * as layers from '../layers.js';
@@ -63,7 +64,7 @@ export class CommentDragStrategy implements IDragStrategy {
 
   /** Fire a UI event at the start of a comment drag. */
   private fireDragStartEvent() {
-    const event = new (eventUtils.get(eventUtils.COMMENT_DRAG))(
+    const event = new (eventUtils.get(EventType.COMMENT_DRAG))(
       this.comment,
       true,
     );
@@ -72,7 +73,7 @@ export class CommentDragStrategy implements IDragStrategy {
 
   /** Fire a UI event at the end of a comment drag. */
   private fireDragEndEvent() {
-    const event = new (eventUtils.get(eventUtils.COMMENT_DRAG))(
+    const event = new (eventUtils.get(EventType.COMMENT_DRAG))(
       this.comment,
       false,
     );
@@ -82,7 +83,7 @@ export class CommentDragStrategy implements IDragStrategy {
   /** Fire a move event at the end of a comment drag. */
   private fireMoveEvent() {
     if (this.comment.isDeadOrDying()) return;
-    const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
+    const event = new (eventUtils.get(EventType.COMMENT_MOVE))(
       this.comment,
     ) as CommentMove;
     event.setReason(['drag']);

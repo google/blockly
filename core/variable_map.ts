@@ -18,6 +18,7 @@ import './events/events_var_rename.js';
 
 import type {Block} from './block.js';
 import * as dialog from './dialog.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
@@ -119,7 +120,7 @@ export class VariableMap {
     blocks: Block[],
   ) {
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName),
+      new (eventUtils.get(EventType.VAR_RENAME))(variable, newName),
     );
     variable.name = newName;
     for (let i = 0; i < blocks.length; i++) {
@@ -158,7 +159,7 @@ export class VariableMap {
       blocks[i].renameVarById(variable.getId(), conflictVar.getId());
     }
     // Finally delete the original variable, which is now unreferenced.
-    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
+    eventUtils.fire(new (eventUtils.get(EventType.VAR_DELETE))(variable));
     // And remove it from the list.
     arrayUtils.removeElem(this.variableMap.get(type)!, variable);
   }
@@ -213,7 +214,7 @@ export class VariableMap {
     this.variableMap.delete(type);
     this.variableMap.set(type, variables);
 
-    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(variable));
+    eventUtils.fire(new (eventUtils.get(EventType.VAR_CREATE))(variable));
 
     return variable;
   }
@@ -232,9 +233,7 @@ export class VariableMap {
         const tempVar = variableList[i];
         if (tempVar.getId() === variableId) {
           variableList.splice(i, 1);
-          eventUtils.fire(
-            new (eventUtils.get(eventUtils.VAR_DELETE))(variable),
-          );
+          eventUtils.fire(new (eventUtils.get(EventType.VAR_DELETE))(variable));
           if (variableList.length === 0) {
             this.variableMap.delete(variable.type);
           }

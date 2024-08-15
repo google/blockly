@@ -11,6 +11,7 @@ import type {BlocklyOptions} from '../blockly_options.js';
 import {MiniWorkspaceBubble} from '../bubbles/mini_workspace_bubble.js';
 import type {Abstract} from '../events/events_abstract.js';
 import {BlockChange} from '../events/events_block_change.js';
+import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import * as renderManagement from '../render_management.js';
@@ -193,7 +194,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
     }
 
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+      new (eventUtils.get(EventType.BUBBLE_OPEN))(
         this.sourceBlock,
         visible,
         'mutator',
@@ -307,8 +308,8 @@ export class MutatorIcon extends Icon implements IHasBubble {
   static isIgnorableMutatorEvent(e: Abstract) {
     return (
       e.isUiEvent ||
-      e.type === eventUtils.CREATE ||
-      (e.type === eventUtils.CHANGE &&
+      e.type === EventType.BLOCK_CREATE ||
+      (e.type === EventType.BLOCK_CHANGE &&
         (e as BlockChange).element === 'disabled')
     );
   }
@@ -331,7 +332,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
 
     if (oldExtraState !== newExtraState) {
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_CHANGE))(
           this.sourceBlock,
           'mutation',
           null,

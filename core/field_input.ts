@@ -19,6 +19,7 @@ import * as browserEvents from './browser_events.js';
 import * as bumpObjects from './bump_objects.js';
 import * as dialog from './dialog.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {
   Field,
@@ -187,7 +188,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
         fireChangeEvent
       ) {
         eventUtils.fire(
-          new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          new (eventUtils.get(EventType.BLOCK_CHANGE))(
             this.sourceBlock_,
             'field',
             this.name || null,
@@ -475,7 +476,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       // multiple times while the editor was open, but this will fire an event
       // containing the value when the editor was opened as well as the new one.
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_CHANGE))(
           this.sourceBlock_,
           'field',
           this.name || null,
@@ -592,7 +593,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       // Fire a special event indicating that the value changed but the change
       // isn't complete yet and normal field change listeners can wait.
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_FIELD_INTERMEDIATE_CHANGE))(
           this.sourceBlock_,
           this.name || null,
           oldValue,

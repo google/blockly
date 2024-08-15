@@ -22,6 +22,7 @@ import {RenderedWorkspaceComment} from './comments.js';
 import * as common from './common.js';
 import {config} from './config.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import type {IBubble} from './interfaces/i_bubble.js';
@@ -776,7 +777,7 @@ export class Gesture {
    */
   private fireWorkspaceClick(ws: WorkspaceSvg) {
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'),
+      new (eventUtils.get(EventType.CLICK))(null, ws.id, 'workspace'),
     );
   }
 
@@ -909,7 +910,7 @@ export class Gesture {
         );
       }
       // Clicks events are on the start block, even if it was a shadow.
-      const event = new (eventUtils.get(eventUtils.CLICK))(
+      const event = new (eventUtils.get(EventType.CLICK))(
         this.startBlock,
         this.startWorkspace_.id,
         'block',

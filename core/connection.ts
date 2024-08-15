@@ -14,6 +14,7 @@
 import type {Block} from './block.js';
 import {ConnectionType} from './connection_type.js';
 import type {BlockMove} from './events/events_block_move.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
@@ -114,7 +115,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     // Connect the new connection to the parent.
     let event;
     if (eventUtils.isEnabled()) {
-      event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
+      event = new (eventUtils.get(EventType.BLOCK_MOVE))(
         childBlock,
       ) as BlockMove;
       event.setReason(['connect']);
@@ -281,7 +282,7 @@ export class Connection implements IASTNodeLocationWithBlock {
 
     let event;
     if (eventUtils.isEnabled()) {
-      event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
+      event = new (eventUtils.get(EventType.BLOCK_MOVE))(
         childConnection.getSourceBlock(),
       ) as BlockMove;
       event.setReason(['disconnect']);

@@ -13,13 +13,13 @@ import * as registry from '../registry.js';
 import {Size} from '../utils/size.js';
 import type {Workspace} from '../workspace.js';
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
-import * as eventUtils from './utils.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners that a workspace comment has resized.
  */
 export class CommentResize extends CommentBase {
-  override type = eventUtils.COMMENT_RESIZE;
+  override type = EventType.COMMENT_RESIZE;
 
   /** The size of the comment before the resize. */
   oldSize?: Size;
@@ -166,8 +166,4 @@ export interface CommentResizeJson extends CommentBaseJson {
   newHeight: number;
 }
 
-registry.register(
-  registry.Type.EVENT,
-  eventUtils.COMMENT_RESIZE,
-  CommentResize,
-);
+registry.register(registry.Type.EVENT, EventType.COMMENT_RESIZE, CommentResize);

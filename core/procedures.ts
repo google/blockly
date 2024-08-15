@@ -15,6 +15,7 @@ import {Blocks} from './blocks.js';
 import * as common from './common.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BubbleOpen} from './events/events_bubble_open.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Field, UnattachedFieldError} from './field.js';
 import {MutatorIcon} from './icons.js';
@@ -354,7 +355,7 @@ function updateMutatorFlyout(workspace: WorkspaceSvg) {
  * @internal
  */
 export function mutatorOpenListener(e: Abstract) {
-  if (e.type !== eventUtils.BUBBLE_OPEN) {
+  if (e.type !== EventType.BUBBLE_OPEN) {
     return;
   }
   const bubbleEvent = e as BubbleOpen;
@@ -386,10 +387,10 @@ export function mutatorOpenListener(e: Abstract) {
  */
 function mutatorChangeListener(e: Abstract) {
   if (
-    e.type !== eventUtils.BLOCK_CREATE &&
-    e.type !== eventUtils.BLOCK_DELETE &&
-    e.type !== eventUtils.BLOCK_CHANGE &&
-    e.type !== eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE
+    e.type !== EventType.BLOCK_CREATE &&
+    e.type !== EventType.BLOCK_DELETE &&
+    e.type !== EventType.BLOCK_CHANGE &&
+    e.type !== EventType.BLOCK_FIELD_INTERMEDIATE_CHANGE
   ) {
     return;
   }
@@ -454,7 +455,7 @@ export function mutateCallers(defBlock: Block) {
       // definition mutation.
       eventUtils.setRecordUndo(false);
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_CHANGE))(
           caller,
           'mutation',
           null,

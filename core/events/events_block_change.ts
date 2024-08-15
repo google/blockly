@@ -21,6 +21,7 @@ import * as utilsXml from '../utils/xml.js';
 import {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
+import {EventType} from './type.js';
 import * as eventUtils from './utils.js';
 
 /**
@@ -28,7 +29,7 @@ import * as eventUtils from './utils.js';
  * field values, comments, etc).
  */
 export class BlockChange extends BlockBase {
-  override type = eventUtils.BLOCK_CHANGE;
+  override type = EventType.BLOCK_CHANGE;
   /**
    * The element that changed; one of 'field', 'comment', 'collapsed',
    * 'disabled', 'inline', or 'mutation'
@@ -255,4 +256,4 @@ export interface BlockChangeJson extends BlockBaseJson {
   disabledReason?: string;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.CHANGE, BlockChange);
+registry.register(registry.Type.EVENT, EventType.BLOCK_CHANGE, BlockChange);

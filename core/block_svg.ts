@@ -804,7 +804,7 @@ export class BlockSvg
     // doing so would delete a selected block and make sure that any associated
     // parent is updated.
     const selection = common.getSelected();
-    if (selection instanceof Block && selection.descendsFrom(this)) {
+    if (selection instanceof Block && this.contains(selection)) {
       selection.unselect();
     }
 

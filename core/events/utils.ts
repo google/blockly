@@ -119,7 +119,7 @@ function fireInternal(event: Abstract) {
       setTimeout(fireNow, 0);
     }
   }
-  FIRE_QUEUE.push(event);
+  enqueueEvent(event);
 }
 
 /** Dispatch all queued events. */
@@ -135,6 +135,46 @@ function fireNow() {
       eventWorkspace.fireChangeListener(event);
     }
   }
+}
+
+/**
+ * Enqueue an event on FIRE_QUEUE.
+ *
+ * Normally this is equivalent to FIRE_QUEUE.push(event), but if the
+ * enqueued event is a BlockChange event and the most recent event(s)
+ * on the queue are BlockMove events that (re)connect other blocks to
+ * the changed block (and belong to the same event group) then the
+ * enqueued event will be enqueued before those events rather than
+ * after.
+ *
+ * This is a workaround for a problem caused by the fact that
+ * MutatorIcon.prototype.recomposeSourceBlock can only fire a
+ * BlockChange event after the mutating block's compose method
+ * returns, meaning that if the compose method reconnects child blocks
+ * the corresponding BlockMove events are emitted _before_ the
+ * BlockChange event, causing issues with undo, mirroring, etc.; see
+ * https://github.com/google/blockly/issues/8225#issuecomment-2195751783
+ * (and following) for details.
+ */
+function enqueueEvent(event: Abstract) {
+  if (isBlockChange(event) && event.element === 'mutation') {
+    let i;
+    for (i = FIRE_QUEUE.length; i > 0; i--) {
+      const otherEvent = FIRE_QUEUE[i - 1];
+      if (
+        otherEvent.group !== event.group ||
+        otherEvent.workspaceId !== event.workspaceId ||
+        !isBlockMove(otherEvent) ||
+        otherEvent.newParentId !== event.blockId
+      ) {
+        break;
+      }
+    }
+    FIRE_QUEUE.splice(i, 0, event);
+    return;
+  }
+
+  FIRE_QUEUE.push(event);
 }
 
 /**
@@ -177,6 +217,12 @@ function fireNow() {
  * but added considerable additional complexity and made it difficlut
  * to reason about how events are processed for undo/redo, so both the
  * call from undo and the post-processing code was removed.
+ *
+ * At the same time, the buggy code to reorder BlockChange events was
+ * replaced by a less-buggy version of the same functionality in a new
+ * function, enqueueEvent, called from fireInternal, thus assuring
+ * that events will be in the correct order at the time filter is
+ * called.
  *
  * @param queueIn Array of events.
  * @param forward True if forward (redo), false if backward (undo).
@@ -253,18 +299,6 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
   if (!forward) {
     // Restore undo order.
     queue.reverse();
-  }
-  // Move mutation events to the top of the queue.
-  // Intentionally skip first event.
-  for (let i = 1, event; (event = queue[i]); i++) {
-    // AnyDuringMigration because:  Property 'element' does not exist on type
-    // 'Abstract'.
-    if (
-      event.type === EventType.BLOCK_CHANGE &&
-      (event as AnyDuringMigration).element === 'mutation'
-    ) {
-      queue.unshift(queue.splice(i, 1)[0]);
-    }
   }
   return queue;
 }
@@ -434,6 +468,7 @@ export function disableOrphans(event: Abstract) {
 
 export const TEST_ONLY = {
   FIRE_QUEUE,
+  enqueueEvent,
   fireNow,
   fireInternal,
   setGroupInternal,

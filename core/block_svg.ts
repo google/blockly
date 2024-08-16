@@ -278,7 +278,7 @@ export class BlockSvg
     this.addSelect();
   }
 
-  /** Unselects this block. Unhighlights the blockv visually.   */
+  /** Unselects this block. Unhighlights the block visually. */
   unselect() {
     if (this.isShadow()) {
       this.getParent()?.unselect();
@@ -796,6 +796,16 @@ export class BlockSvg
     if (animate) {
       this.unplug(healStack);
       blockAnimations.disposeUiEffect(this);
+    }
+
+    // Selecting a shadow block highlights an ancestor block, but that highlight
+    // should be removed if the shadow block will be deleted. So, before
+    // deleting blocks and severing the connections between them, check whether
+    // doing so would delete a selected block and make sure that any associated
+    // parent is updated.
+    const selection = common.getSelected();
+    if (selection instanceof Block && selection.descendsFrom(this)) {
+      selection.unselect();
     }
 
     super.dispose(!!healStack);

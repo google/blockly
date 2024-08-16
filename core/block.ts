@@ -319,6 +319,11 @@ export class Block implements IASTNodeLocation {
     }
   }
 
+  descendsFrom(other: Block): boolean {
+    if (this === other) return true;
+    return this.getParent()?.descendsFrom(other) ?? false;
+  }
+
   /**
    * Dispose of this block.
    *

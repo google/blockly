@@ -446,7 +446,7 @@ input[type=number] {
 }
 
 /* State: hover. */
-.blocklyMenuItemHighlight:hover {
+.blocklyMenuItem:hover {
   background-color: rgba(0,0,0,.1);
 }
 

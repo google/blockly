@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {WorkspaceSvg} from './workspace_svg.js';
-import * as dom from './utils/dom.js';
-import {Svg} from './utils/svg.js';
 import {IRenderedElement} from './interfaces/i_rendered_element.js';
 import * as layerNums from './layers.js';
 import {Coordinate} from './utils/coordinate.js';
+import * as dom from './utils/dom.js';
+import {Svg} from './utils/svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 /** @internal */
 export class LayerManager {

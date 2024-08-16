@@ -44,7 +44,7 @@ export class FlyoutMetricsManager extends MetricsManager {
     let blockBoundingBox;
     try {
       blockBoundingBox = this.workspace_.getCanvas().getBBox();
-    } catch (e) {
+    } catch {
       // Firefox has trouble with hidden elements (Bug 528969).
       // 2021 Update: It looks like this was fixed around Firefox 77 released in
       // 2020.

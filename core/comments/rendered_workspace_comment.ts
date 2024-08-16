@@ -4,30 +4,31 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {WorkspaceComment} from './workspace_comment.js';
-import {WorkspaceSvg} from '../workspace_svg.js';
-import {CommentView} from './comment_view.js';
-import {Coordinate} from '../utils/coordinate.js';
-import {Rect} from '../utils/rect.js';
-import {Size} from '../utils/size.js';
-import {IBoundedElement} from '../interfaces/i_bounded_element.js';
-import {IRenderedElement} from '../interfaces/i_rendered_element.js';
-import * as dom from '../utils/dom.js';
-import {IDraggable} from '../interfaces/i_draggable.js';
-import {CommentDragStrategy} from '../dragging/comment_drag_strategy.js';
 import * as browserEvents from '../browser_events.js';
-import * as common from '../common.js';
-import {ISelectable} from '../interfaces/i_selectable.js';
-import {IDeletable} from '../interfaces/i_deletable.js';
-import {ICopyable} from '../interfaces/i_copyable.js';
-import * as commentSerialization from '../serialization/workspace_comments.js';
 import {
-  WorkspaceCommentPaster,
   WorkspaceCommentCopyData,
+  WorkspaceCommentPaster,
 } from '../clipboard/workspace_comment_paster.js';
-import {IContextMenu} from '../interfaces/i_contextmenu.js';
+import * as common from '../common.js';
 import * as contextMenu from '../contextmenu.js';
 import {ContextMenuRegistry} from '../contextmenu_registry.js';
+import {CommentDragStrategy} from '../dragging/comment_drag_strategy.js';
+import {IBoundedElement} from '../interfaces/i_bounded_element.js';
+import {IContextMenu} from '../interfaces/i_contextmenu.js';
+import {ICopyable} from '../interfaces/i_copyable.js';
+import {IDeletable} from '../interfaces/i_deletable.js';
+import {IDraggable} from '../interfaces/i_draggable.js';
+import {IRenderedElement} from '../interfaces/i_rendered_element.js';
+import {ISelectable} from '../interfaces/i_selectable.js';
+import * as layers from '../layers.js';
+import * as commentSerialization from '../serialization/workspace_comments.js';
+import {Coordinate} from '../utils/coordinate.js';
+import * as dom from '../utils/dom.js';
+import {Rect} from '../utils/rect.js';
+import {Size} from '../utils/size.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
+import {CommentView} from './comment_view.js';
+import {WorkspaceComment} from './workspace_comment.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
@@ -208,6 +209,7 @@ export class RenderedWorkspaceComment
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleCommentStart(e, this);
+      this.workspace.getLayerManager()?.append(this, layers.BLOCK);
       common.setSelected(this);
     }
   }

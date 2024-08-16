@@ -10,9 +10,9 @@
 
 // Former goog.module ID: Blockly.JavaScript.texts
 
+import type {JoinMutatorBlock} from '../../blocks/text.js';
 import type {Block} from '../../core/block.js';
 import type {JavascriptGenerator} from './javascript_generator.js';
-import type {JoinMutatorBlock} from '../../blocks/text.js';
 import {Order} from './javascript_generator.js';
 
 /**

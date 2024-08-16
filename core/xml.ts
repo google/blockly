@@ -8,12 +8,16 @@
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
+import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
+import {WorkspaceComment} from './comments/workspace_comment.js';
 import type {Connection} from './connection.js';
 import {MANUALLY_DISABLED} from './constants.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {IconType} from './icons/icon_types.js';
 import {inputTypes} from './inputs/input_types.js';
+import * as renderManagement from './render_management.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';
 import * as utilsXml from './utils/xml.js';
@@ -21,10 +25,6 @@ import type {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import {WorkspaceSvg} from './workspace_svg.js';
-import * as renderManagement from './render_management.js';
-import {WorkspaceComment} from './comments/workspace_comment.js';
-import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
-import {Coordinate} from './utils/coordinate.js';
 
 /**
  * Encode a block tree as XML.

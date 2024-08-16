@@ -6,27 +6,27 @@
 
 // Former goog.module ID: Blockly.libraryBlocks.loops
 
-import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import type {Block} from '../core/block.js';
+import {
+  createBlockDefinitionsFromJsonArray,
+  defineBlocks,
+} from '../core/common.js';
 import * as ContextMenu from '../core/contextmenu.js';
 import type {
   ContextMenuOption,
   LegacyContextMenuOption,
 } from '../core/contextmenu_registry.js';
 import * as Events from '../core/events/events.js';
-import * as Extensions from '../core/extensions.js';
-import {Msg} from '../core/msg.js';
-import {
-  createBlockDefinitionsFromJsonArray,
-  defineBlocks,
-} from '../core/common.js';
+import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import * as eventUtils from '../core/events/utils.js';
+import * as Extensions from '../core/extensions.js';
 import '../core/field_dropdown.js';
 import '../core/field_label.js';
 import '../core/field_number.js';
 import '../core/field_variable.js';
-import '../core/icons/warning_icon.js';
 import {FieldVariable} from '../core/field_variable.js';
+import '../core/icons/warning_icon.js';
+import {Msg} from '../core/msg.js';
 import {WorkspaceSvg} from '../core/workspace_svg.js';
 
 /**

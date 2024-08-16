@@ -11,20 +11,20 @@
  */
 // Former goog.module ID: Blockly.InsertionMarkerManager
 
-import {finishQueuedRenders} from './render_management.js';
 import * as blockAnimations from './block_animations.js';
 import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
 import {config} from './config.js';
-import * as blocks from './serialization/blocks.js';
 import * as eventUtils from './events/utils.js';
 import type {IDeleteArea} from './interfaces/i_delete_area.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
+import * as renderManagement from './render_management.js';
+import {finishQueuedRenders} from './render_management.js';
 import type {RenderedConnection} from './rendered_connection.js';
+import * as blocks from './serialization/blocks.js';
 import type {Coordinate} from './utils/coordinate.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import * as renderManagement from './render_management.js';
 
 /** Represents a nearby valid connection. */
 interface CandidateConnection {
@@ -529,7 +529,7 @@ export class InsertionMarkerManager {
         local.getSourceBlock(),
         local,
       );
-    } catch (e) {
+    } catch {
       // It's possible that the number of connections on the local block has
       // changed since the insertion marker was originally created.  Let's
       // recreate the insertion marker and try again. In theory we could

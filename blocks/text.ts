@@ -6,25 +6,25 @@
 
 // Former goog.module ID: Blockly.libraryBlocks.texts
 
-import * as Extensions from '../core/extensions.js';
-import * as fieldRegistry from '../core/field_registry.js';
-import * as xmlUtils from '../core/utils/xml.js';
-import {Align} from '../core/inputs/align.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
-import {Connection} from '../core/connection.js';
-import {FieldImage} from '../core/field_image.js';
-import {FieldDropdown} from '../core/field_dropdown.js';
-import {FieldTextInput} from '../core/field_textinput.js';
-import {Msg} from '../core/msg.js';
-import {MutatorIcon} from '../core/icons/mutator_icon.js';
-import type {Workspace} from '../core/workspace.js';
 import {
   createBlockDefinitionsFromJsonArray,
   defineBlocks,
 } from '../core/common.js';
+import {Connection} from '../core/connection.js';
+import * as Extensions from '../core/extensions.js';
+import {FieldDropdown} from '../core/field_dropdown.js';
+import {FieldImage} from '../core/field_image.js';
+import * as fieldRegistry from '../core/field_registry.js';
+import {FieldTextInput} from '../core/field_textinput.js';
 import '../core/field_variable.js';
+import {MutatorIcon} from '../core/icons/mutator_icon.js';
+import {Align} from '../core/inputs/align.js';
 import {ValueInput} from '../core/inputs/value_input.js';
+import {Msg} from '../core/msg.js';
+import * as xmlUtils from '../core/utils/xml.js';
+import type {Workspace} from '../core/workspace.js';
 
 /**
  * A dictionary of the block definitions provided by this module.
@@ -438,6 +438,11 @@ const PROMPT_COMMON = {
   domToMutation: function (this: PromptCommonBlock, xmlElement: Element) {
     this.updateType_(xmlElement.getAttribute('type')!);
   },
+
+  // These blocks do not need JSO serialization hooks (saveExtraState
+  // and loadExtraState) because the state of this object is already
+  // encoded in the dropdown values.
+  // XML hooks are kept for backwards compatibility.
 };
 
 blocks['text_prompt_ext'] = {
@@ -468,16 +473,11 @@ blocks['text_prompt_ext'] = {
         : Msg['TEXT_PROMPT_TOOLTIP_NUMBER'];
     });
   },
-
-  // This block does not need JSO serialization hooks (saveExtraState and
-  // loadExtraState) because the state of this object is already encoded in the
-  // dropdown values.
-  // XML hooks are kept for backwards compatibility.
 };
 
 type PromptBlock = Block & PromptCommonMixin & QuoteImageMixin;
 
-const TEXT_PROMPT_BLOCK = {
+blocks['text_prompt'] = {
   ...PROMPT_COMMON,
   /**
    * Block for prompt function (internal message).
@@ -519,8 +519,6 @@ const TEXT_PROMPT_BLOCK = {
     });
   },
 };
-
-blocks['text_prompt'] = TEXT_PROMPT_BLOCK;
 
 blocks['text_count'] = {
   /**
@@ -666,7 +664,7 @@ const QUOTE_IMAGE_MIXIN = {
    * closing double quote. The selected quote will be adapted for RTL blocks.
    *
    * @param open If the image should be open quote (“ in LTR).
-   *                       Otherwise, a closing quote is used (” in LTR).
+   *     Otherwise, a closing quote is used (” in LTR).
    * @returns The new field.
    */
   newQuote_: function (this: QuoteImageBlock, open: boolean): FieldImage {

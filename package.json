@@ -100,13 +100,15 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@blockly/block-test": "^5.0.0",
-    "@blockly/dev-tools": "^7.0.2",
-    "@blockly/theme-modern": "^5.0.0",
+    "@blockly/block-test": "^6.0.4",
+    "@blockly/dev-tools": "^8.0.6",
+    "@blockly/theme-modern": "^6.0.3",
+    "@hyperjump/browser": "^1.1.4",
     "@hyperjump/json-schema": "^1.5.0",
     "@microsoft/api-documenter": "^7.22.4",
     "@microsoft/api-extractor": "^7.29.5",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/eslint-plugin": "^8.1.0",
+    "@typescript-eslint/parser": "^8.1.0",
     "async-done": "^2.0.0",
     "chai": "^5.1.1",
     "concurrently": "^8.0.1",
@@ -116,7 +118,7 @@
     "eslint-plugin-jsdoc": "^48.0.2",
     "glob": "^10.3.4",
     "google-closure-compiler": "^20240317.0.0",
-    "gulp": "^4.0.2",
+    "gulp": "^5.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-gzip": "^1.4.2",
     "gulp-header": "^2.0.9",
@@ -132,7 +134,8 @@
     "markdown-tables-to-json": "^0.1.7",
     "mocha": "^10.0.0",
     "patch-package": "^8.0.0",
-    "prettier": "3.3.2",
+    "prettier": "^3.3.3",
+    "prettier-plugin-organize-imports": "^4.0.0",
     "readline-sync": "^1.4.10",
     "rimraf": "^5.0.0",
     "typescript": "^5.3.3",
@@ -140,7 +143,7 @@
     "yargs": "^17.2.1"
   },
   "dependencies": {
-    "jsdom": "24.1.0"
+    "jsdom": "24.1.1"
   },
   "engines": {
     "node": ">=18"

@@ -8,11 +8,15 @@
 
 import type {Abstract} from './events/events_abstract.js';
 import type {Field} from './field.js';
-import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
-import type {IFlyout} from './interfaces/i_flyout.js';
-import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
-import type {IIcon} from './interfaces/i_icon.js';
 import type {Input} from './inputs/input.js';
+import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import type {IConnectionPreviewer} from './interfaces/i_connection_previewer.js';
+import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {IDragger} from './interfaces/i_dragger.js';
+import type {IFlyout} from './interfaces/i_flyout.js';
+import type {IIcon} from './interfaces/i_icon.js';
+import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
+import type {IPaster} from './interfaces/i_paster.js';
 import type {ISerializer} from './interfaces/i_serializer.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
 import type {Cursor} from './keyboard_nav/cursor.js';
@@ -20,10 +24,6 @@ import type {Options} from './options.js';
 import type {Renderer} from './renderers/common/renderer.js';
 import type {Theme} from './theme.js';
 import type {ToolboxItem} from './toolbox/toolbox_item.js';
-import type {IPaster} from './interfaces/i_paster.js';
-import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
-import type {IConnectionPreviewer} from './interfaces/i_connection_previewer.js';
-import type {IDragger} from './interfaces/i_dragger.js';
 
 /**
  * A map of maps. With the keys being the type and name of the class we are
@@ -193,7 +193,7 @@ export function register<T>(
  * @param registryItem A class or object that we are checking for the required
  *     properties.
  */
-function validate(type: string, registryItem: Function | AnyDuringMigration) {
+function validate(type: string, registryItem: AnyDuringMigration) {
   switch (type) {
     case String(Type.FIELD):
       if (typeof registryItem.fromJson !== 'function') {

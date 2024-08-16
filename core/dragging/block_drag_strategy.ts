@@ -4,24 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {WorkspaceSvg} from '../workspace_svg.js';
-import {IDragStrategy} from '../interfaces/i_draggable.js';
-import {Coordinate} from '../utils.js';
-import * as eventUtils from '../events/utils.js';
-import {BlockSvg} from '../block_svg.js';
-import {RenderedConnection} from '../rendered_connection.js';
-import * as dom from '../utils/dom.js';
-import * as blockAnimation from '../block_animations.js';
-import {ConnectionType} from '../connection_type.js';
-import * as bumpObjects from '../bump_objects.js';
-import * as registry from '../registry.js';
-import {IConnectionPreviewer} from '../interfaces/i_connection_previewer.js';
-import {Connection} from '../connection.js';
 import type {Block} from '../block.js';
+import * as blockAnimation from '../block_animations.js';
+import {BlockSvg} from '../block_svg.js';
+import * as bumpObjects from '../bump_objects.js';
 import {config} from '../config.js';
+import {Connection} from '../connection.js';
+import {ConnectionType} from '../connection_type.js';
 import type {BlockMove} from '../events/events_block_move.js';
-import {finishQueuedRenders} from '../render_management.js';
+import * as eventUtils from '../events/utils.js';
+import {IConnectionPreviewer} from '../interfaces/i_connection_previewer.js';
+import {IDragStrategy} from '../interfaces/i_draggable.js';
 import * as layers from '../layers.js';
+import * as registry from '../registry.js';
+import {finishQueuedRenders} from '../render_management.js';
+import {RenderedConnection} from '../rendered_connection.js';
+import {Coordinate} from '../utils.js';
+import * as dom from '../utils/dom.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 /** Represents a nearby valid connection. */
 interface ConnectionCandidate {
@@ -61,6 +61,9 @@ export class BlockDragStrategy implements IDragStrategy {
    */
   private dragOffset = new Coordinate(0, 0);
 
+  /** Was there already an event group in progress when the drag started? */
+  private inGroup: boolean = false;
+
   constructor(private block: BlockSvg) {
     this.workspace = block.workspace;
   }
@@ -92,7 +95,8 @@ export class BlockDragStrategy implements IDragStrategy {
     }
 
     this.dragging = true;
-    if (!eventUtils.getGroup()) {
+    this.inGroup = !!eventUtils.getGroup();
+    if (!this.inGroup) {
       eventUtils.setGroup(true);
     }
     this.fireDragStartEvent();
@@ -389,7 +393,9 @@ export class BlockDragStrategy implements IDragStrategy {
     this.connectionPreviewer!.dispose();
     this.workspace.setResizesEnabled(true);
 
-    eventUtils.setGroup(false);
+    if (!this.inGroup) {
+      eventUtils.setGroup(false);
+    }
   }
 
   /** Connects the given candidate connections. */

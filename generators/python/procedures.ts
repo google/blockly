@@ -10,12 +10,12 @@
 
 // Former goog.module ID: Blockly.Python.procedures
 
-import * as Variables from '../../core/variables.js';
-import type {Block} from '../../core/block.js';
 import type {IfReturnBlock} from '../../blocks/procedures.js';
+import type {Block} from '../../core/block.js';
 import {NameType} from '../../core/names.js';
-import {Order} from './python_generator.js';
+import * as Variables from '../../core/variables.js';
 import type {PythonGenerator} from './python_generator.js';
+import {Order} from './python_generator.js';
 
 export function procedures_defreturn(block: Block, generator: PythonGenerator) {
   // Define a procedure with a return value.

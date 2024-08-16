@@ -16,6 +16,11 @@ import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_
 import type {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
 import type {IToolbox} from '../interfaces/i_toolbox.js';
 import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
+import * as registry from '../registry.js';
+import * as aria from '../utils/aria.js';
+import * as colourUtils from '../utils/colour.js';
+import * as dom from '../utils/dom.js';
+import * as parsing from '../utils/parsing.js';
 import type {
   CategoryInfo,
   DynamicCategoryInfo,
@@ -24,13 +29,7 @@ import type {
   FlyoutItemInfoArray,
   StaticCategoryInfo,
 } from '../utils/toolbox.js';
-import * as registry from '../registry.js';
-import * as aria from '../utils/aria.js';
-import * as colourUtils from '../utils/colour.js';
-import * as dom from '../utils/dom.js';
-import * as parsing from '../utils/parsing.js';
 import * as toolbox from '../utils/toolbox.js';
-
 import {ToolboxItem} from './toolbox_item.js';
 
 /**
@@ -248,9 +247,11 @@ export class ToolboxCategory
     const nestedPadding = `${
       ToolboxCategory.nestedPadding * this.getLevel()
     }px`;
-    this.workspace_.RTL
-      ? (rowDiv.style.paddingRight = nestedPadding)
-      : (rowDiv.style.paddingLeft = nestedPadding);
+    if (this.workspace_.RTL) {
+      rowDiv.style.paddingRight = nestedPadding;
+    } else {
+      rowDiv.style.paddingLeft = nestedPadding;
+    }
     return rowDiv;
   }
 
@@ -564,9 +565,11 @@ export class ToolboxCategory
   setDisabled(isDisabled: boolean) {
     this.isDisabled_ = isDisabled;
     this.getDiv()!.setAttribute('disabled', `${isDisabled}`);
-    isDisabled
-      ? this.getDiv()!.setAttribute('disabled', 'true')
-      : this.getDiv()!.removeAttribute('disabled');
+    if (isDisabled) {
+      this.getDiv()!.setAttribute('disabled', 'true');
+    } else {
+      this.getDiv()!.removeAttribute('disabled');
+    }
   }
 
   /**

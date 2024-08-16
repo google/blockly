@@ -10,11 +10,11 @@
 
 // Former goog.module ID: Blockly.Python.loops
 
-import * as stringUtils from '../../core/utils/string.js';
-import type {Block} from '../../core/block.js';
 import type {ControlFlowInLoopBlock} from '../../blocks/loops.js';
-import type {PythonGenerator} from './python_generator.js';
+import type {Block} from '../../core/block.js';
 import {NameType} from '../../core/names.js';
+import * as stringUtils from '../../core/utils/string.js';
+import type {PythonGenerator} from './python_generator.js';
 import {Order} from './python_generator.js';
 
 export function controls_repeat_ext(block: Block, generator: PythonGenerator) {

@@ -21,15 +21,15 @@ import {BubbleOpen, BubbleOpenJson, BubbleType} from './events_bubble_open.js';
 import {Click, ClickJson, ClickTarget} from './events_click.js';
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import {CommentChange, CommentChangeJson} from './events_comment_change.js';
-import {CommentCreate, CommentCreateJson} from './events_comment_create.js';
-import {CommentDelete} from './events_comment_delete.js';
-import {CommentMove, CommentMoveJson} from './events_comment_move.js';
-import {CommentResize, CommentResizeJson} from './events_comment_resize.js';
-import {CommentDrag, CommentDragJson} from './events_comment_drag.js';
 import {
   CommentCollapse,
   CommentCollapseJson,
 } from './events_comment_collapse.js';
+import {CommentCreate, CommentCreateJson} from './events_comment_create.js';
+import {CommentDelete} from './events_comment_delete.js';
+import {CommentDrag, CommentDragJson} from './events_comment_drag.js';
+import {CommentMove, CommentMoveJson} from './events_comment_move.js';
+import {CommentResize, CommentResizeJson} from './events_comment_resize.js';
 import {MarkerMove, MarkerMoveJson} from './events_marker_move.js';
 import {Selected, SelectedJson} from './events_selected.js';
 import {ThemeChange, ThemeChangeJson} from './events_theme_change.js';
@@ -48,65 +48,67 @@ import * as eventUtils from './utils.js';
 import {FinishedLoading} from './workspace_events.js';
 
 // Events.
-export {Abstract};
-export {AbstractEventJson};
-export {BubbleOpen};
-export {BubbleOpenJson};
-export {BubbleType};
-export {BlockBase};
-export {BlockBaseJson};
-export {BlockChange};
-export {BlockChangeJson};
-export {BlockCreate};
-export {BlockCreateJson};
-export {BlockDelete};
-export {BlockDeleteJson};
-export {BlockDrag};
-export {BlockDragJson};
-export {BlockFieldIntermediateChange};
-export {BlockFieldIntermediateChangeJson};
-export {BlockMove};
-export {BlockMoveJson};
-export {Click};
-export {ClickJson};
-export {ClickTarget};
-export {CommentBase};
-export {CommentBaseJson};
-export {CommentChange};
-export {CommentChangeJson};
-export {CommentCreate};
-export {CommentCreateJson};
-export {CommentDelete};
-export {CommentMove};
-export {CommentMoveJson};
-export {CommentResize};
-export {CommentResizeJson};
-export {CommentDrag};
-export {CommentDragJson};
-export {CommentCollapse};
-export {CommentCollapseJson};
-export {FinishedLoading};
-export {MarkerMove};
-export {MarkerMoveJson};
-export {Selected};
-export {SelectedJson};
-export {ThemeChange};
-export {ThemeChangeJson};
-export {ToolboxItemSelect};
-export {ToolboxItemSelectJson};
-export {TrashcanOpen};
-export {TrashcanOpenJson};
-export {UiBase};
-export {VarBase};
-export {VarBaseJson};
-export {VarCreate};
-export {VarCreateJson};
-export {VarDelete};
-export {VarDeleteJson};
-export {VarRename};
-export {VarRenameJson};
-export {ViewportChange};
-export {ViewportChangeJson};
+export {
+  Abstract,
+  AbstractEventJson,
+  BlockBase,
+  BlockBaseJson,
+  BlockChange,
+  BlockChangeJson,
+  BlockCreate,
+  BlockCreateJson,
+  BlockDelete,
+  BlockDeleteJson,
+  BlockDrag,
+  BlockDragJson,
+  BlockFieldIntermediateChange,
+  BlockFieldIntermediateChangeJson,
+  BlockMove,
+  BlockMoveJson,
+  BubbleOpen,
+  BubbleOpenJson,
+  BubbleType,
+  Click,
+  ClickJson,
+  ClickTarget,
+  CommentBase,
+  CommentBaseJson,
+  CommentChange,
+  CommentChangeJson,
+  CommentCollapse,
+  CommentCollapseJson,
+  CommentCreate,
+  CommentCreateJson,
+  CommentDelete,
+  CommentDrag,
+  CommentDragJson,
+  CommentMove,
+  CommentMoveJson,
+  CommentResize,
+  CommentResizeJson,
+  FinishedLoading,
+  MarkerMove,
+  MarkerMoveJson,
+  Selected,
+  SelectedJson,
+  ThemeChange,
+  ThemeChangeJson,
+  ToolboxItemSelect,
+  ToolboxItemSelectJson,
+  TrashcanOpen,
+  TrashcanOpenJson,
+  UiBase,
+  VarBase,
+  VarBaseJson,
+  VarCreate,
+  VarCreateJson,
+  VarDelete,
+  VarDeleteJson,
+  VarRename,
+  VarRenameJson,
+  ViewportChange,
+  ViewportChangeJson,
+};
 
 // Event types.
 export const BLOCK_CHANGE = eventUtils.BLOCK_CHANGE;

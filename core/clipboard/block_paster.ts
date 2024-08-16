@@ -5,15 +5,15 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
-import * as registry from './registry.js';
+import * as common from '../common.js';
+import {config} from '../config.js';
+import * as eventUtils from '../events/utils.js';
 import {ICopyData} from '../interfaces/i_copyable.js';
 import {IPaster} from '../interfaces/i_paster.js';
 import {State, append} from '../serialization/blocks.js';
 import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
-import * as eventUtils from '../events/utils.js';
-import {config} from '../config.js';
-import * as common from '../common.js';
+import * as registry from './registry.js';
 
 export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
   static TYPE = 'block';

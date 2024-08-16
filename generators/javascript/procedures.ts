@@ -10,8 +10,8 @@
 
 // Former goog.module ID: Blockly.JavaScript.procedures
 
-import type {Block} from '../../core/block.js';
 import type {IfReturnBlock} from '../../blocks/procedures.js';
+import type {Block} from '../../core/block.js';
 import type {JavascriptGenerator} from './javascript_generator.js';
 import {Order} from './javascript_generator.js';
 

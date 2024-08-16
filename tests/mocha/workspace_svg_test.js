@@ -4,19 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as eventUtils from '../../build/src/core/events/utils.js';
 import {assert} from '../../node_modules/chai/chai.js';
+import {defineStackBlock} from './test_helpers/block_definitions.js';
 import {
   assertEventFired,
   assertEventNotFired,
   createChangeListenerSpy,
 } from './test_helpers/events.js';
-import {assertVariableValues} from './test_helpers/variables.js';
-import {defineStackBlock} from './test_helpers/block_definitions.js';
-import * as eventUtils from '../../build/src/core/events/utils.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
-  workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
 import {testAWorkspace} from './test_helpers/workspace.js';
 

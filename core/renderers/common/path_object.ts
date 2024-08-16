@@ -13,7 +13,6 @@ import type {BlockStyle} from '../../theme.js';
 import {Coordinate} from '../../utils/coordinate.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
-
 import type {ConstantProvider} from './constants.js';
 import type {IPathObject} from './i_path_object.js';
 

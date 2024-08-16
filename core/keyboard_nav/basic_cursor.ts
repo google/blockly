@@ -13,7 +13,6 @@
 // Former goog.module ID: Blockly.BasicCursor
 
 import * as registry from '../registry.js';
-
 import {ASTNode} from './ast_node.js';
 import {Cursor} from './cursor.js';
 

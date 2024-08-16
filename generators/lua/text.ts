@@ -10,8 +10,8 @@
 
 // Former goog.module ID: Blockly.Lua.texts
 
-import type {Block} from '../../core/block.js';
 import type {JoinMutatorBlock} from '../../blocks/text.js';
+import type {Block} from '../../core/block.js';
 import type {LuaGenerator} from './lua_generator.js';
 import {Order} from './lua_generator.js';
 

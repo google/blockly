@@ -7,7 +7,6 @@
 // Former goog.module ID: Blockly.blockRendering.SpacerRow
 
 import type {ConstantProvider} from '../common/constants.js';
-
 import {InRowSpacer} from './in_row_spacer.js';
 import {Row} from './row.js';
 import {Types} from './types.js';

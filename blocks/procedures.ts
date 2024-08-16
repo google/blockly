@@ -6,40 +6,40 @@
 
 // Former goog.module ID: Blockly.libraryBlocks.procedures
 
-import * as ContextMenu from '../core/contextmenu.js';
-import * as Events from '../core/events/events.js';
-import * as Procedures from '../core/procedures.js';
-import * as Variables from '../core/variables.js';
-import * as Xml from '../core/xml.js';
-import * as fieldRegistry from '../core/field_registry.js';
-import * as xmlUtils from '../core/utils/xml.js';
-import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
-import {Align} from '../core/inputs/align.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
-import type {BlockCreate} from '../core/events/events_block_create.js';
-import type {BlockChange} from '../core/events/events_block_change.js';
 import type {BlockDefinition} from '../core/blocks.js';
+import * as common from '../core/common.js';
+import {defineBlocks} from '../core/common.js';
+import {config} from '../core/config.js';
 import type {Connection} from '../core/connection.js';
+import * as ContextMenu from '../core/contextmenu.js';
 import type {
   ContextMenuOption,
   LegacyContextMenuOption,
 } from '../core/contextmenu_registry.js';
+import * as Events from '../core/events/events.js';
+import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
+import type {BlockChange} from '../core/events/events_block_change.js';
+import type {BlockCreate} from '../core/events/events_block_create.js';
 import * as eventUtils from '../core/events/utils.js';
 import {FieldCheckbox} from '../core/field_checkbox.js';
 import {FieldLabel} from '../core/field_label.js';
+import * as fieldRegistry from '../core/field_registry.js';
 import {FieldTextInput} from '../core/field_textinput.js';
-import {Msg} from '../core/msg.js';
+import '../core/icons/comment_icon.js';
 import {MutatorIcon as Mutator} from '../core/icons/mutator_icon.js';
+import '../core/icons/warning_icon.js';
+import {Align} from '../core/inputs/align.js';
+import {Msg} from '../core/msg.js';
 import {Names} from '../core/names.js';
+import * as Procedures from '../core/procedures.js';
+import * as xmlUtils from '../core/utils/xml.js';
 import type {VariableModel} from '../core/variable_model.js';
+import * as Variables from '../core/variables.js';
 import type {Workspace} from '../core/workspace.js';
 import type {WorkspaceSvg} from '../core/workspace_svg.js';
-import {config} from '../core/config.js';
-import {defineBlocks} from '../core/common.js';
-import '../core/icons/comment_icon.js';
-import '../core/icons/warning_icon.js';
-import * as common from '../core/common.js';
+import * as Xml from '../core/xml.js';
 
 /** A dictionary of the block definitions provided by this module. */
 export const blocks: {[key: string]: BlockDefinition} = {};
@@ -1206,7 +1206,7 @@ blocks['procedures_callreturn'] = {
     this.appendDummyInput('TOPROW').appendField('', 'NAME');
     this.setOutput(true);
     this.setStyle('procedure_blocks');
-    // Tooltip is set in domToMutation.
+    // Tooltip is set in renameProcedure.
     this.setHelpUrl(Msg['PROCEDURES_CALLRETURN_HELPURL']);
     this.arguments_ = [];
     this.argumentVarModels_ = [];

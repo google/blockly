@@ -10,10 +10,10 @@
 
 import type {WorkspaceComment} from '../comments/workspace_comment.js';
 import * as registry from '../registry.js';
+import {Workspace} from '../workspace.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
-import {Workspace} from '../workspace.js';
 
 /**
  * Notifies listeners when a comment is being manually dragged/dropped.

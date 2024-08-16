@@ -15,7 +15,6 @@
 import type {Block} from '../block.js';
 import * as registry from '../registry.js';
 import {Workspace} from '../workspace.js';
-
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 

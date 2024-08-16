@@ -79,9 +79,20 @@ export type BumpEvent =
 const FIRE_QUEUE: Abstract[] = [];
 
 /**
- * Create a custom event and fire it.
+ * Enqueue an event to be dispatched to change listeners.
  *
- * @param event Custom data for event.
+ * Notes:
+ *
+ * - Events are enqueued until a timeout, generally after rendering is
+ *   complete but or at the end of the current microtask, if not
+ *   running in a browser.
+ * - Queued events are subject to destructive modification by being
+ *   combined with later-enqueued events, but only until they are
+ *   fired.
+ * - Events are dispatched via the fireChangeListener method on the
+ *   affected workspace.
+ *
+ * @param event Any Blockly event.
  */
 export function fire(event: Abstract) {
   TEST_ONLY.fireInternal(event);
@@ -151,18 +162,21 @@ function fireNow() {
  * https://github.com/google/blockly/issues/2037#issuecomment-2209696351
  *
  * Later, in PR #1205 the original O(n^2) implementation was replaced
- * by a linear-time implementation, though addiitonal fixes were made
+ * by a linear-time implementation, though additonal fixes were made
  * subsequently.
  *
+ * In August 2024 a number of significant simplifications were made:
+ *
  * This function was previously called from Workspace.prototype.undo,
- * but this was the cause of issue #7026, the originally-chosen fix
- * for which was the addition (in PR #7069) of code to fireNow to
- * post-filter the .undoStack_ and .redoStack_ of any workspace that
- * had just been involved in dispatching events.  This apparently
- * resolved the issue but added considerable additional complexity and
- * made it difficlut to reason about how events are processed for
- * undo/redo, so both the call from undo and the post-processing code
- * was later removed.
+ * but the mutation of events by this function was the cause of issue
+ * #7026 (note that events would combine differently in reverse order
+ * vs. forward order).  The originally-chosen fix for this was the
+ * addition (in PR #7069) of code to fireNow to post-filter the
+ * .undoStack_ and .redoStack_ of any workspace that had just been
+ * involved in dispatching events; this apparently resolved the issue
+ * but added considerable additional complexity and made it difficlut
+ * to reason about how events are processed for undo/redo, so both the
+ * call from undo and the post-processing code was removed.
  *
  * @param queueIn Array of events.
  * @param forward True if forward (redo), false if backward (undo).

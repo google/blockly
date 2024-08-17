@@ -183,7 +183,11 @@ export class WorkspaceComment {
    * workspace is read-only.
    */
   isDeletable(): boolean {
-    return this.isOwnDeletable() && !this.isDeadOrDying() && !this.workspace.options.readOnly;
+    return (
+      this.isOwnDeletable() &&
+      !this.isDeadOrDying() &&
+      !this.workspace.options.readOnly
+    );
   }
 
   /**

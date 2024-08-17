@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as common from '../../build/src/core/common.js';
 import {ConnectionType} from '../../build/src/core/connection_type.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {EndRowInput} from '../../build/src/core/inputs/end_row_input.js';
@@ -205,6 +206,44 @@ suite('Blocks', function () {
         // healed because shadows always stay with the parent.
         assertUnpluggedNoheal(blocks);
       });
+    });
+  });
+
+  suite('Contains', function () {
+    setup(function () {
+      this.blocks = createTestBlocks(this.workspace, true);
+    });
+
+    test('contains parent is false', function () {
+      const blocks = this.blocks;
+      assert.isFalse(
+        blocks.B.contains(blocks.A),
+        'Expected child to not contain parent.',
+      );
+    });
+
+    test('contains self is true', function () {
+      const blocks = this.blocks;
+      assert.isTrue(
+        blocks.A.contains(blocks.A),
+        'Expected block to contain self.',
+      );
+    });
+
+    test('contains child is true', function () {
+      const blocks = this.blocks;
+      assert.isTrue(
+        blocks.A.contains(blocks.B),
+        'Expected block to contain child.',
+      );
+    });
+
+    test('contains grand child is true', function () {
+      const blocks = this.blocks;
+      assert.isTrue(
+        blocks.A.contains(blocks.C),
+        'Expected block to contain grandchild.',
+      );
     });
   });
 
@@ -441,6 +480,39 @@ suite('Blocks', function () {
           // healed because shadows always get destroyed.
           assertDisposedNoheal(blocks);
         });
+      });
+    });
+
+    suite('Disposing selected shadow block', function () {
+      setup(function () {
+        this.workspace = Blockly.inject('blocklyDiv');
+        this.parentBlock = this.workspace.newBlock('row_block');
+        this.parentBlock.initSvg();
+        this.parentBlock.render();
+        this.parentBlock.inputList[0].connection.setShadowState({
+          'type': 'row_block',
+          'id': 'shadow_child',
+        });
+        this.shadowChild =
+          this.parentBlock.inputList[0].connection.targetConnection.getSourceBlock();
+      });
+
+      teardown(function () {
+        workspaceTeardown.call(this, this.workspace);
+      });
+
+      test('Disposing selected shadow unhighlights parent', function () {
+        const parentBlock = this.parentBlock;
+        common.setSelected(this.shadowChild);
+        assert.isTrue(
+          parentBlock.pathObject.svgRoot.classList.contains('blocklySelected'),
+          'Expected parent to be highlighted after selecting shadow child',
+        );
+        this.shadowChild.dispose();
+        assert.isFalse(
+          parentBlock.pathObject.svgRoot.classList.contains('blocklySelected'),
+          'Expected parent to be unhighlighted after deleting shadow child',
+        );
       });
     });
   });

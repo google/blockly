@@ -27,6 +27,7 @@ import * as fieldRegistry from './field_registry.js';
 import * as internalConstants from './internal_constants.js';
 import type {Menu} from './menu.js';
 import type {MenuItem} from './menuitem.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 import {Msg} from './msg.js';
 import * as parsing from './utils/parsing.js';
 import {Size} from './utils/size.js';
@@ -514,7 +515,11 @@ export class FieldVariable extends FieldDropdown {
         return;
       } else if (id === internalConstants.DELETE_VARIABLE_ID && this.variable) {
         // Delete variable.
-        this.sourceBlock_.workspace.deleteVariableById(this.variable.getId());
+        const workspace = this.variable.getWorkspace();
+        Variables.deleteVariable(workspace, this.variable, this.sourceBlock_);
+        if (workspace instanceof WorkspaceSvg) {
+          workspace.refreshToolboxSelection();
+        }
         return;
       }
     }

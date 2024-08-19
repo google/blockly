@@ -714,15 +714,20 @@ export function getVariableUsesById(workspace: Workspace, id: string): Block[] {
  *
  * @param workspace The workspace from which to delete the variable.
  * @param variable The variable to delete.
+ * @param triggeringBlock The block from which this deletion was triggered, if
+ *     any. Used to exclude it from checking and warning about blocks
+ *     referencing the variable being deleted.
  */
 export function deleteVariable(
   workspace: Workspace,
   variable: IVariableModel<IVariableState>,
+  triggeringBlock?: Block,
 ) {
   // Check whether this variable is a function parameter before deleting.
   const variableName = variable.getName();
   const uses = getVariableUsesById(workspace, variable.getId());
-  for (let i = 0, block; (block = uses[i]); i++) {
+  for (let i = uses.length - 1; i >= 0; i--) {
+    const block = uses[i];
     if (
       block.type === 'procedures_defnoreturn' ||
       block.type === 'procedures_defreturn'
@@ -734,12 +739,15 @@ export function deleteVariable(
       dialog.alert(deleteText);
       return;
     }
+    if (block === triggeringBlock) {
+      uses.splice(i, 1);
+    }
   }
 
-  if (uses.length > 1) {
+  if ((triggeringBlock && uses.length) || uses.length > 1) {
     // Confirm before deleting multiple blocks.
     const confirmText = Msg['DELETE_VARIABLE_CONFIRMATION']
-      .replace('%1', String(uses.length))
+      .replace('%1', String(uses.length + (triggeringBlock ? 1 : 0)))
       .replace('%2', variableName);
     dialog.confirm(confirmText, (ok) => {
       if (ok && variable) {
@@ -747,7 +755,9 @@ export function deleteVariable(
       }
     });
   } else {
-    // No confirmation necessary for a single block.
+    // No confirmation necessary when the block that triggered the deletion is
+    // the only block referencing this variable or if only one block referencing
+    // this variable exists and the deletion was triggered programmatically.
     workspace.getVariableMap().deleteVariable(variable);
   }
 }

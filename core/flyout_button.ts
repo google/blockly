@@ -179,7 +179,7 @@ export class FlyoutButton implements IASTNodeLocationSvg {
       fontWeight,
       fontFamily,
     );
-    this.height = fontMetrics.height;
+    this.height = this.height || fontMetrics.height;
 
     if (!this.isFlyoutLabel) {
       this.width += 2 * FlyoutButton.TEXT_MARGIN_X;

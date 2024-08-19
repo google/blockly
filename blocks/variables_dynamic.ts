@@ -176,11 +176,12 @@ const renameOptionCallbackFactory = function (block: VariableBlock) {
  */
 const deleteOptionCallbackFactory = function (block: VariableBlock) {
   return function () {
-    const workspace = block.workspace;
     const variableField = block.getField('VAR') as FieldVariable;
-    const variable = variableField.getVariable()!;
-    workspace.deleteVariableById(variable.getId());
-    (workspace as WorkspaceSvg).refreshToolboxSelection();
+    const variable = variableField.getVariable();
+    if (variable) {
+      Variables.deleteVariable(variable.getWorkspace(), variable, block);
+    }
+    (block.workspace as WorkspaceSvg).refreshToolboxSelection();
   };
 };
 

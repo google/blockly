@@ -445,6 +445,10 @@ input[type=number] {
   cursor: inherit;
 }
 
+.blocklyMenuItem:hover {
+  background-color: rgba(0,0,0,.1);
+}
+
 /* State: hover. */
 .blocklyMenuItemHighlight {
   background-color: rgba(0,0,0,.1);

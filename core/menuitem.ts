@@ -12,7 +12,6 @@
 // Former goog.module ID: Blockly.MenuItem
 
 import * as aria from './utils/aria.js';
-import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
 
 /**
@@ -68,7 +67,6 @@ export class MenuItem {
       'blocklyMenuItem ' +
       (this.enabled ? '' : 'blocklyMenuItemDisabled ') +
       (this.checked ? 'blocklyMenuItemSelected ' : '') +
-      (this.highlight ? 'blocklyMenuItemHighlight ' : '') +
       (this.rightToLeft ? 'blocklyMenuItemRtl ' : '');
 
     const content = document.createElement('div');
@@ -185,15 +183,6 @@ export class MenuItem {
    */
   setHighlighted(highlight: boolean) {
     this.highlight = highlight;
-    const el = this.getElement();
-    if (el && this.isEnabled()) {
-      const name = 'blocklyMenuItemHighlight';
-      if (highlight) {
-        dom.addClass(el, name);
-      } else {
-        dom.removeClass(el, name);
-      }
-    }
   }
 
   /**

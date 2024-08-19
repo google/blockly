@@ -634,7 +634,7 @@ export class Workspace implements IASTNodeLocation {
     if (!inputEvent) {
       return;
     }
-    let events = [inputEvent];
+    const events = [inputEvent];
     // Do another undo/redo if the next one is of the same group.
     while (
       inputStack.length &&
@@ -650,7 +650,6 @@ export class Workspace implements IASTNodeLocation {
       const event = events[i];
       outputStack.push(event);
     }
-    events = eventUtils.filter(events, redo);
     eventUtils.setRecordUndo(false);
     try {
       for (let i = 0; i < events.length; i++) {

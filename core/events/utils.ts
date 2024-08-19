@@ -264,7 +264,7 @@ function fireInternal(event: Abstract) {
   FIRE_QUEUE.push(event);
 }
 
-/** Fire all queued events. */
+/** Dispatch all queued events. */
 function fireNow() {
   const queue = filter(FIRE_QUEUE, true);
   FIRE_QUEUE.length = 0;
@@ -277,50 +277,45 @@ function fireNow() {
       eventWorkspace.fireChangeListener(event);
     }
   }
-
-  // Post-filter the undo stack to squash and remove any events that result in
-  // a null event
-
-  // 1. Determine which workspaces will need to have their undo stacks validated
-  const workspaceIds = new Set(queue.map((e) => e.workspaceId));
-  for (const workspaceId of workspaceIds) {
-    // Only process valid workspaces
-    if (!workspaceId) {
-      continue;
-    }
-    const eventWorkspace = common.getWorkspaceById(workspaceId);
-    if (!eventWorkspace) {
-      continue;
-    }
-
-    // Find the last contiguous group of events on the stack
-    const undoStack = eventWorkspace.getUndoStack();
-    let i;
-    let group: string | undefined = undefined;
-    for (i = undoStack.length; i > 0; i--) {
-      const event = undoStack[i - 1];
-      if (event.group === '') {
-        break;
-      } else if (group === undefined) {
-        group = event.group;
-      } else if (event.group !== group) {
-        break;
-      }
-    }
-    if (!group || i == undoStack.length - 1) {
-      // Need a group of two or more events on the stack. Nothing to do here.
-      continue;
-    }
-
-    // Extract the event group, filter, and add back to the undo stack
-    let events = undoStack.splice(i, undoStack.length - i);
-    events = filter(events, true);
-    undoStack.push(...events);
-  }
 }
 
 /**
- * Filter the queued events and merge duplicates.
+ * Filter the queued events by merging duplicates, removing null
+ * events and reording BlockChange events.
+ *
+ * History of this function:
+ *
+ * This function was originally added in commit cf257ea5 with the
+ * intention of dramatically reduing the total number of dispatched
+ * events.  Initialy it affected only BlockMove events but others were
+ * added over time.
+ *
+ * Code was added to reorder BlockChange events added in commit
+ * 5578458, for uncertain reasons but most probably as part of an
+ * only-partially-successful attemp to fix problems with event
+ * ordering during block mutations.  This code should probably have
+ * been added to the top of the function, before merging and
+ * null-removal, but was added at the bottom for now-forgotten
+ * reasons.  See these bug investigations for a fuller discussion of
+ * the underlying issue and some of the failures that arose because of
+ * this incomplete/incorrect fix:
+ *
+ * https://github.com/google/blockly/issues/8225#issuecomment-2195751783
+ * https://github.com/google/blockly/issues/2037#issuecomment-2209696351
+ *
+ * Later, in PR #1205 the original O(n^2) implementation was replaced
+ * by a linear-time implementation, though addiitonal fixes were made
+ * subsequently.
+ *
+ * This function was previously called from Workspace.prototype.undo,
+ * but this was the cause of issue #7026, the originally-chosen fix
+ * for which was the addition (in PR #7069) of code to fireNow to
+ * post-filter the .undoStack_ and .redoStack_ of any workspace that
+ * had just been involved in dispatching events.  This apparently
+ * resolved the issue but added considerable additional complexity and
+ * made it difficlut to reason about how events are processed for
+ * undo/redo, so both the call from undo and the post-processing code
+ * was later removed.
  *
  * @param queueIn Array of events.
  * @param forward True if forward (redo), false if backward (undo).

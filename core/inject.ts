@@ -247,6 +247,11 @@ function init(mainWorkspace: WorkspaceSvg) {
     }
   }
 
+  // init module box
+  if (mainWorkspace.getModuleBar()) {
+    mainWorkspace.getModuleBar()!.init();
+  }
+
   if (options.hasTrashcan) {
     mainWorkspace.trashcan!.init();
   }

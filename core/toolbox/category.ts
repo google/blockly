@@ -135,6 +135,7 @@ export class ToolboxCategory
       'row': 'blocklyTreeRow',
       'rowcontentcontainer': 'blocklyTreeRowContentContainer',
       'icon': 'blocklyTreeIcon',
+      'customicon': 'blocklyTreeCustomIcon',
       'label': 'blocklyTreeLabel',
       'contents': 'blocklyToolboxContents',
       'selected': 'blocklyTreeSelected',
@@ -184,6 +185,22 @@ export class ToolboxCategory
   }
 
   /**
+   * Create image icon for category.
+   *
+   * @param {!string} path The path to image.
+   * @returns {!HTMLDivElement} The image element.
+   * @private
+   */
+  protected createIcon_(path: string) {
+    const img = new Image();
+    img.src = path;
+    img.style.width = '16px';
+    img.style.height = '16px';
+
+    return img;
+  }
+
+  /**
    * Creates the DOM for the category.
    *
    * @returns The parent element for the category.
@@ -203,6 +220,17 @@ export class ToolboxCategory
     this.rowDiv_.appendChild(this.rowContents_);
 
     this.iconDom_ = this.createIconDom_();
+
+    if (
+      this.toolboxItemDef_.icon &&
+      this.toolboxItemDef_.icon !== 'undefined'
+    ) {
+      const imgEl = this.createIcon_(this.toolboxItemDef_.icon);
+      dom.removeClasses(this.iconDom_, this.cssConfig_['icon']!);
+      dom.addClass(this.iconDom_, this.cssConfig_['customicon']!);
+      this.iconDom_.appendChild(imgEl);
+    }
+
     aria.setRole(this.iconDom_, aria.Role.PRESENTATION);
     this.rowContents_.appendChild(this.iconDom_);
 
@@ -647,6 +675,7 @@ export namespace ToolboxCategory {
     row?: string;
     rowcontentcontainer?: string;
     icon?: string;
+    customicon?: string;
     label?: string;
     contents?: string;
     selected?: string;
@@ -690,6 +719,13 @@ Css.register(`
   vertical-align: middle;
   visibility: hidden;
   width: 16px;
+  margin-right: 3px;
+}
+
+.blocklyTreeCustomIcon {
+  width: 16px;
+  height: 16px;
+  margin-right: 3px;
 }
 
 .blocklyTreeIconClosed {

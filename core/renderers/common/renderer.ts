@@ -35,7 +35,7 @@ export class Renderer implements IRegistrable {
   /** The renderer's constant provider. */
   protected constants_!: ConstantProvider;
 
-  protected name: string;
+  name: string;
 
   /**
    * Rendering constant overrides, passed in through options.

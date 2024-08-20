@@ -26,10 +26,15 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 export class MetricsManager implements IMetricsManager {
   /** The workspace to calculate metrics for. */
   protected readonly workspace_: WorkspaceSvg;
+  private flyoutWidthGap: number;
 
   /** @param workspace The workspace to calculate metrics for. */
   constructor(workspace: WorkspaceSvg) {
     this.workspace_ = workspace;
+    /**
+     * Flyout gap for better UI near of flyout's controls
+     */
+    this.flyoutWidthGap = 25;
   }
 
   /**
@@ -62,9 +67,14 @@ export class MetricsManager implements IMetricsManager {
    * @returns The width and height of the flyout.
    */
   getFlyoutMetrics(opt_own?: boolean): ToolboxMetrics {
-    const flyoutDimensions = this.getDimensionsPx_(
-      this.workspace_.getFlyout(opt_own),
-    );
+    const flyout = this.workspace_.getFlyout();
+    const providedFlyout = flyout && flyout.isVisible() ? flyout : null;
+    const flyoutDimensions = this.getDimensionsPx_(providedFlyout);
+
+    if (flyoutDimensions.width) {
+      flyoutDimensions.width += this.flyoutWidthGap;
+    }
+
     return {
       width: flyoutDimensions.width,
       height: flyoutDimensions.height,
@@ -116,7 +126,9 @@ export class MetricsManager implements IMetricsManager {
     const toolboxMetrics = this.getToolboxMetrics();
     const flyoutMetrics = this.getFlyoutMetrics();
     const respectToolbox = !!this.workspace_.getToolbox();
-    const respectFlyout = !this.workspace_.getFlyout()?.autoClose;
+    const flyout = this.workspace_.getFlyout();
+
+    const respectFlyout = !!flyout;
     const toolboxPosition = respectToolbox
       ? toolboxMetrics.position
       : flyoutMetrics.position;
@@ -124,8 +136,14 @@ export class MetricsManager implements IMetricsManager {
     const atLeft = toolboxPosition === toolboxUtils.Position.LEFT;
     const atTop = toolboxPosition === toolboxUtils.Position.TOP;
     if (atLeft) {
-      if (respectToolbox) absoluteLeft += toolboxMetrics.width;
-      if (respectFlyout) absoluteLeft += flyoutMetrics.width;
+      if (respectToolbox) {
+        absoluteLeft = toolboxMetrics.width;
+      }
+      if (respectFlyout && flyout) {
+        if (flyout.isVisible()) {
+          absoluteLeft += flyoutMetrics.width;
+        }
+      }
     }
     if (atTop) {
       if (respectToolbox) absoluteTop += toolboxMetrics.height;
@@ -153,6 +171,7 @@ export class MetricsManager implements IMetricsManager {
     const toolboxMetrics = this.getToolboxMetrics();
     const flyoutMetrics = this.getFlyoutMetrics();
     const respectToolbox = !!this.workspace_.getToolbox();
+    const flyout = this.workspace_.getFlyout();
     const respectFlyout = !this.workspace_.getFlyout()?.autoClose;
     const toolboxPosition = respectToolbox
       ? toolboxMetrics.position
@@ -166,11 +185,13 @@ export class MetricsManager implements IMetricsManager {
       toolboxPosition === toolboxUtils.Position.RIGHT;
     if (horizToolbox) {
       if (respectToolbox) svgMetrics.height -= toolboxMetrics.height;
-      if (respectFlyout) svgMetrics.height -= flyoutMetrics.height;
+      if (respectFlyout && flyout?.isVisible())
+        svgMetrics.height -= flyoutMetrics.height;
     }
     if (vertToolbox) {
       if (respectToolbox) svgMetrics.width -= toolboxMetrics.width;
-      if (respectFlyout) svgMetrics.width -= flyoutMetrics.width;
+      if (respectFlyout && flyout?.isVisible())
+        svgMetrics.width -= flyoutMetrics.width;
     }
     return {
       height: svgMetrics.height / scale,
@@ -309,7 +330,7 @@ export class MetricsManager implements IMetricsManager {
     opt_contentMetrics?: ContainerRegion,
   ): ContainerRegion {
     const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-    const viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
+    const viewMetrics = opt_viewMetrics || this.getViewMetrics();
     const contentMetrics = opt_contentMetrics || this.getContentMetrics();
     const fixedEdges = this.getComputedFixedEdges_(viewMetrics);
 
@@ -386,7 +407,7 @@ export class MetricsManager implements IMetricsManager {
    */
   getMetrics(): Metrics {
     const toolboxMetrics = this.getToolboxMetrics();
-    const flyoutMetrics = this.getFlyoutMetrics(true);
+    const flyoutMetrics = this.getFlyoutMetrics();
     const svgMetrics = this.getSvgMetrics();
     const absoluteMetrics = this.getAbsoluteMetrics();
     const viewMetrics = this.getViewMetrics();

@@ -19,7 +19,22 @@ const appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
 const releaseTasks = require('./scripts/gulpfiles/release_tasks');
 const docsTasks = require('./scripts/gulpfiles/docs_tasks');
 const testTasks = require('./scripts/gulpfiles/test_tasks');
+const path = require('path');
 
+function copyDist() {
+  const args = process.argv.slice(2);
+  let destPath = 'dist_copied';
+
+  args.forEach((arg, i) => {
+    if (arg.startsWith('--dest')) {
+      destPath = args[i + 1];
+    }
+  });
+
+  destPath = path.resolve(destPath);
+
+  return gulp.src('dist/**/*').pipe(gulp.dest(destPath));
+}
 module.exports = {
   // Default target if gulp invoked without specifying.
   default: buildTasks.build,
@@ -51,4 +66,6 @@ module.exports = {
   recompile: releaseTasks.recompile,
   gitSyncDevelop: gitTasks.syncDevelop,
   gitSyncMaster: gitTasks.syncMaster,
+
+  copyDist,
 };

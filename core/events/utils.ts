@@ -131,6 +131,14 @@ export const SELECTED = 'selected';
 export const CLICK = 'click';
 
 /**
+ * Name of event that records a ctrl+click.
+ *
+ * @constant
+ * @alias Blockly.Events.utils.CTRL_CLICK
+ */
+export const CTRL_CLICK = 'ctrl_click';
+
+/**
  * Name of event that records a marker move.
  */
 export const MARKER_MOVE = 'marker_move';
@@ -184,6 +192,57 @@ export const COMMENT_MOVE = 'comment_move';
  * Name of event that records a workspace load.
  */
 export const FINISHED_LOADING = 'finished_loading';
+
+/**
+ * Name of event that records a workspace loading error.
+ */
+export const LOADING_ERROR = 'loading_error';
+
+/**
+ * Name of event that fired after show flyout
+ */
+export const FLYOUT_SHOW = 'flyout_show';
+
+/**
+ * Name of event that fired after hide flyout
+ */
+export const FLYOUT_HIDE = 'flyout_hide';
+
+/**
+ * Name of event that fired after zoom flyout
+ */
+export const FLYOUT_ZOOM = 'flyout_zoom';
+
+/**
+ * Name of event that create new module.
+ */
+export const MODULE_CREATE = 'module_create';
+
+/**
+ * Name of event that delete module.
+ */
+export const MODULE_DELETE = 'module_delete';
+
+/**
+ * Name of event that activate module.
+ */
+export const MODULE_ACTIVATE = 'module_activate';
+
+/**
+ * Name of event that module rename.
+ */
+export const MODULE_RENAME = 'module_rename';
+
+/**
+ * Name of event that module rename.
+ */
+export const MODULE_MOVE = 'module_move';
+
+/**
+ * Name of event that module rename.
+ */
+export const MOVE_BLOCK_TO_MODULE = 'move_block_to_module';
+
 
 /**
  * Type of events that cause objects to be bumped back into the visible

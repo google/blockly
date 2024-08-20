@@ -50,10 +50,10 @@ export class FlyoutButton {
   height = 0;
 
   /** The root SVG group for the button or label. */
-  private svgGroup: SVGGElement | null = null;
+  svgGroup: SVGGElement | null = null;
 
   /** The SVG element with the text of the label or button. */
-  private svgText: SVGTextElement | null = null;
+  svgText: SVGTextElement | null = null;
 
   /**
    * @param workspace The workspace in which to place this button.

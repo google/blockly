@@ -1068,6 +1068,10 @@ export class WorkspaceCommentSvg
         info.w,
         info.id,
       );
+
+      // @ts-ignore:next-line
+      comment.moduleId_ = info.module;
+
       if (workspace.rendered) {
         comment.initSvg(true);
         comment.render();

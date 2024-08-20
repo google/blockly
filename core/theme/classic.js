@@ -1,4 +1,3 @@
-
 /**
  * @license
  * Copyright 2018 Google LLC

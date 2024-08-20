@@ -294,6 +294,15 @@ export class Drawer {
    * @param fieldInfo The rendering information for the field or icon.
    */
   protected layoutField_(fieldInfo: Icon | Field) {
+    const svgGroup = Types.isField(fieldInfo)
+      ? (fieldInfo as Field).field.getSvgRoot()!
+      : // @ts-ignore:next-line
+        (fieldInfo as Icon).icon!; // Never null in rendered case.
+
+    if (!svgGroup) {
+      return;
+    }
+
     const yPos = fieldInfo.centerline - fieldInfo.height / 2;
     let xPos = fieldInfo.xPos;
     let scale = '';

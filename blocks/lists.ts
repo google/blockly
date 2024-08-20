@@ -469,9 +469,10 @@ const LISTS_GETINDEX = {
           where === 'FROM_START'
             ? Msg['LISTS_INDEX_FROM_START_TOOLTIP']
             : Msg['LISTS_INDEX_FROM_END_TOOLTIP'];
+        const sign = Msg['LISTS_INDEX'];
         tooltip +=
           '  ' +
-          msg.replace('%1', this.workspace.options.oneBasedIndex ? '#1' : '#0');
+          msg.replace('%1', this.workspace.options.oneBasedIndex ? sign + '1' : sign + '0');
       }
       return tooltip;
     });
@@ -684,11 +685,12 @@ const LISTS_SETINDEX = {
           break;
       }
       if (where === 'FROM_START' || where === 'FROM_END') {
+        const sign = Msg['LISTS_INDEX'];
         tooltip +=
           '  ' +
           Msg['LISTS_INDEX_FROM_START_TOOLTIP'].replace(
             '%1',
-            this.workspace.options.oneBasedIndex ? '#1' : '#0',
+            this.workspace.options.oneBasedIndex ? sign + '1' : sign + '0',
           );
       }
       return tooltip;

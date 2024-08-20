@@ -44,6 +44,7 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 
 import type {ToolboxCategory} from './category.js';
 import {CollapsibleToolboxCategory} from './collapsible_category.js';
+import {FLYOUT_HIDE, FLYOUT_SHOW} from '../events/events.js';
 
 /**
  * Class for a Toolbox.
@@ -82,6 +83,10 @@ export class Toolbox
 
   /** The flyout for the toolbox. */
   private flyout_: IFlyout | null = null;
+
+  /** Listener fire event's on flyout. */
+  private listenerWrapper_: any = null;
+
   protected contentMap_: {[key: string]: IToolboxItem};
   toolboxPosition: toolbox.Position;
 
@@ -337,6 +342,9 @@ export class Toolbox
       'move': {
         'scrollbars': true,
       },
+      'zoom': {
+        'flyoutScale': workspace.options.zoomOptions.flyoutScale,
+      },
     } as BlocklyOptions);
     // Options takes in either 'end' or 'start'. This has already been parsed to
     // be either 0 or 1, so set it after.
@@ -355,7 +363,31 @@ export class Toolbox
         true,
       );
     }
-    return new FlyoutClass!(workspaceOptions);
+
+    const flyoutInstance = new FlyoutClass!(workspaceOptions);
+
+    if (!this.listenerWrapper_) {
+      this.listenerWrapper_ = this.flyoutEventsListener_.bind(this);
+      flyoutInstance.getWorkspace().addChangeListener(this.listenerWrapper_);
+    }
+
+    return flyoutInstance;
+  }
+
+  /**
+   * Function listener event on flyout workspace.
+   *
+   * @param {*} event
+   * @private
+   */
+  protected flyoutEventsListener_(event: any) {
+    if (event.type === FLYOUT_HIDE && event.isButtonClose) {
+      this.clearSelection();
+    }
+
+    if (event.type === FLYOUT_HIDE || event.type === FLYOUT_SHOW) {
+      eventUtils.fire(new (eventUtils.get(event.type))(this.getWorkspace().id));
+    }
   }
 
   /**

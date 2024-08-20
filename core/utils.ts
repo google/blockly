@@ -10,6 +10,7 @@ import * as browserEvents from './browser_events.js';
 import * as extensions from './extensions.js';
 import * as aria from './utils/aria.js';
 import * as arrayUtils from './utils/array.js';
+import * as argumentLocal from './utils/argument_local.js';
 import * as colour from './utils/colour.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as deprecation from './utils/deprecation.js';
@@ -34,6 +35,7 @@ import * as xml from './utils/xml.js';
 export {
   aria,
   arrayUtils as array,
+  argumentLocal,
   browserEvents,
   colour,
   Coordinate,

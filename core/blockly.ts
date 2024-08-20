@@ -87,6 +87,7 @@ import {
   FieldLabelConfig,
   FieldLabelFromJsonConfig,
 } from './field_label.js';
+import {FieldLabelHover} from './field_label_hover.js';
 import {FieldLabelSerializable} from './field_label_serializable.js';
 import {
   FieldMultilineInput,
@@ -182,6 +183,7 @@ import {Names} from './names.js';
 import {Options} from './options.js';
 import * as uiPosition from './positionable_helpers.js';
 import * as Procedures from './procedures.js';
+import * as ProceduresLocalArgument from './procedures_local_arguments.js';
 import * as registry from './registry.js';
 import {RenderedConnection} from './rendered_connection.js';
 import * as renderManagement from './render_management.js';
@@ -222,6 +224,7 @@ import {WorkspaceDragger} from './workspace_dragger.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
+import {ProcedureTuple} from './procedures.js';
 
 /**
  * Blockly core version.
@@ -406,6 +409,9 @@ export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
  */
 export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
 
+export const PROCEDURE_LOCAL_ARGUMENT_CATEGORY_NAME: string =
+  ProceduresLocalArgument.CATEGORY_NAME;
+
 // Context for why we need to monkey-patch in these functions (internal):
 //   https://docs.google.com/document/d/1MbO0LEA-pAyx1ErGLJnyUqTLrcYTo-5zga9qplnxeXo/edit?usp=sharing&resourcekey=0-5h_32-i-dHwHjf_9KYEVKg
 
@@ -413,15 +419,17 @@ export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
 Workspace.prototype.newBlock = function (
   prototypeName: string,
   opt_id?: string,
+  moduleId?: string,
 ): Block {
-  return new Block(this, prototypeName, opt_id);
+  return new Block(this, prototypeName, opt_id, moduleId);
 };
 
 WorkspaceSvg.prototype.newBlock = function (
   prototypeName: string,
   opt_id?: string,
+  moduleId?: string,
 ): BlockSvg {
-  return new BlockSvg(this, prototypeName, opt_id);
+  return new BlockSvg(this, prototypeName, opt_id, moduleId);
 };
 
 WorkspaceSvg.newTrashcan = function (workspace: WorkspaceSvg): Trashcan {
@@ -455,7 +463,14 @@ Names.prototype.populateProcedures = function (
   this: Names,
   workspace: Workspace,
 ) {
-  const procedures = Procedures.allProcedures(workspace);
+  let procedures: [ProcedureTuple[], ProcedureTuple[], ...any] =
+    Procedures.allProcedures(workspace);
+
+  const proceduresLocalArgument =
+    ProceduresLocalArgument.allProcedures(workspace);
+
+  procedures = [...procedures, ...proceduresLocalArgument];
+
   // Flatten the return vs no-return procedure lists.
   const flattenedProcedures = procedures[0].concat(procedures[1]);
   for (let i = 0; i < flattenedProcedures.length; i++) {
@@ -548,6 +563,7 @@ export {
 };
 export {FieldImage, FieldImageConfig, FieldImageFromJsonConfig};
 export {FieldLabel, FieldLabelConfig, FieldLabelFromJsonConfig};
+export {FieldLabelHover};
 export {FieldLabelSerializable};
 export {
   FieldMultilineInput,

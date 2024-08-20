@@ -98,8 +98,9 @@ export class ScrollbarPair {
   /**
    * Recalculate both of the scrollbars' locations and lengths.
    * Also reposition the corner rectangle.
+   * @param keepCenter Keep center of view after resize
    */
-  resize() {
+  resize(keepCenter: boolean = false) {
     // Look up the host metrics once, and use for both scrollbars.
     const hostMetrics = this.workspace.getMetrics();
     if (!hostMetrics) {
@@ -145,6 +146,7 @@ export class ScrollbarPair {
         eventUtils.disable();
         if (this.hScroll && resizeH) {
           this.hScroll.resize(hostMetrics);
+          // this.hScroll.resize(hostMetrics, keepCenter);
         }
         if (this.vScroll && resizeV) {
           this.vScroll.resize(hostMetrics);

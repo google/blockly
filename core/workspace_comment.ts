@@ -39,6 +39,7 @@ export class WorkspaceComment {
   protected disposed_ = false;
   /** @internal */
   isComment = true;
+  private moduleId_: string;
 
   /**
    * @param workspace The block's workspace.
@@ -59,6 +60,8 @@ export class WorkspaceComment {
       opt_id && !workspace.getCommentById(opt_id)
         ? opt_id
         : idGenerator.genUid();
+
+    this.moduleId_ = workspace.getModuleManager().getActiveModule().getId();
 
     workspace.addTopComment(this);
 
@@ -267,6 +270,46 @@ export class WorkspaceComment {
   }
 
   /**
+   * Returns module id for this comment.
+   * @return {string} moduleId_
+   * @package
+   */
+  getModuleId() {
+    return this.moduleId_;
+  }
+
+  /**
+   * Returns module order for this comment.
+   * @return {int} module order
+   * @package
+   */
+  getModuleOrder() {
+    return this.workspace.getModuleManager().getModuleOrder(this.moduleId_);
+  }
+
+  /**
+   * Returns is this comment in active module.
+   * @return {boolean} inActiveModule
+   * @package
+   */
+  inActiveModule() {
+    return (
+      this.moduleId_ ===
+      this.workspace.getModuleManager().getActiveModule().getId()
+    );
+  }
+
+  /**
+   * Set module module id for this comment.
+   * @param {string} moduleId module id.
+   * @return {string} moduleId
+   * @package
+   */
+  setModuleId(moduleId: string) {
+    return (this.moduleId_ = moduleId);
+  }
+
+  /**
    * Encode a comment subtree as XML with XY coordinates.
    *
    * @param opt_noId True if the encoder should skip the comment ID.
@@ -296,6 +339,9 @@ export class WorkspaceComment {
     if (!opt_noId) {
       commentElement.id = this.id;
     }
+
+    commentElement.setAttribute('module', this.getModuleId());
+
     commentElement.textContent = this.getContent();
     return commentElement;
   }
@@ -342,6 +388,8 @@ export class WorkspaceComment {
       info.id,
     );
 
+    comment.moduleId_ = info.module;
+
     const xmlX = xmlComment.getAttribute('x');
     const xmlY = xmlComment.getAttribute('y');
     const commentX = xmlX ? parseInt(xmlX, 10) : NaN;
@@ -368,6 +416,7 @@ export class WorkspaceComment {
     x: number;
     y: number;
     content: string;
+    module: string;
   } {
     const xmlH = xml.getAttribute('h');
     const xmlW = xml.getAttribute('w');
@@ -392,6 +441,7 @@ export class WorkspaceComment {
       // specified in the XML.
       y: xmlY ? parseInt(xmlY) : NaN,
       content: xml.textContent ?? '',
+      module: xml.getAttribute('module') ?? '',
     };
   }
 }

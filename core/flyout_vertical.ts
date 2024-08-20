@@ -33,6 +33,10 @@ export class VerticalFlyout extends Flyout {
   /** @param workspaceOptions Dictionary of options for the workspace. */
   constructor(workspaceOptions: Options) {
     super(workspaceOptions);
+
+    if (workspaceOptions.zoomOptions.flyoutScale) {
+      this.workspace_.setScale(workspaceOptions.zoomOptions.flyoutScale);
+    }
   }
 
   /**
@@ -60,6 +64,10 @@ export class VerticalFlyout extends Flyout {
       this.workspace_.scrollX + absoluteMetrics.left,
       this.workspace_.scrollY + absoluteMetrics.top,
     );
+
+    if (this.flyoutBookmarks_) {
+      this.flyoutBookmarks_.updatePosition(xyRatio.y);
+    }
   }
 
   /**
@@ -226,8 +234,8 @@ export class VerticalFlyout extends Flyout {
    */
   protected override layout_(contents: FlyoutItem[], gaps: number[]) {
     this.workspace_.scale = this.targetWorkspace!.scale;
-    const margin = this.MARGIN;
-    const cursorX = this.RTL ? margin : margin + this.tabWidth_;
+    const margin = this.RTL ? this.MARGIN : this.START_MARGIN;
+    const cursorX = this.RTL ? margin : this.MARGIN + this.tabWidth_;
     let cursorY = margin;
 
     for (let i = 0, item; (item = contents[i]); i++) {
@@ -240,6 +248,11 @@ export class VerticalFlyout extends Flyout {
           // a block.
           child.isInFlyout = true;
         }
+
+        if (block!.isObsolete() || block!.isRemoved()) {
+          continue;
+        }
+
         const root = block!.getSvgRoot();
         const blockHW = block!.getHeightWidth();
         const moveX = block!.outputConnection
@@ -330,22 +343,29 @@ export class VerticalFlyout extends Flyout {
    * For RTL: Lay out the blocks and buttons to be right-aligned.
    */
   protected override reflowInternal_() {
-    this.workspace_.scale = this.getFlyoutScale();
     let flyoutWidth = 0;
+
     const blocks = this.workspace_.getTopBlocks(false);
-    for (let i = 0, block; (block = blocks[i]); i++) {
-      let width = block.getHeightWidth().width;
-      if (block.outputConnection) {
-        width -= this.tabWidth_;
+
+    if (this.fixedWidth) {
+      flyoutWidth = this.width_;
+    } else {
+      for (let i = 0, block; (block = blocks[i]); i++) {
+        let width = block.getHeightWidth().width;
+        if (block.outputConnection) {
+          width -= this.tabWidth_;
+        }
+        flyoutWidth = Math.max(flyoutWidth, width);
       }
-      flyoutWidth = Math.max(flyoutWidth, width);
+
+      for (let i = 0, button; (button = this.buttons_[i]); i++) {
+        flyoutWidth = Math.max(flyoutWidth, button.width);
+      }
+
+      flyoutWidth += this.MARGIN * 1.5 + this.tabWidth_;
+      flyoutWidth *= this.workspace_.scale;
+      flyoutWidth += Scrollbar.scrollbarThickness;
     }
-    for (let i = 0, button; (button = this.buttons_[i]); i++) {
-      flyoutWidth = Math.max(flyoutWidth, button.width);
-    }
-    flyoutWidth += this.MARGIN * 1.5 + this.tabWidth_;
-    flyoutWidth *= this.workspace_.scale;
-    flyoutWidth += Scrollbar.scrollbarThickness;
 
     if (this.width_ !== flyoutWidth) {
       for (let i = 0, block; (block = blocks[i]); i++) {

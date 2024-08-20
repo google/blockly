@@ -67,7 +67,7 @@ exports.setCustomTooltip = setCustomTooltip;
 
 /**
  * Gets the custom tooltip function.
- * @returns {!CustomTooltip|undefined} The custom tooltip function, if defined.
+ * @return {!CustomTooltip|undefined} The custom tooltip function, if defined.
  */
 const getCustomTooltip = function() {
   return customTooltip;
@@ -82,7 +82,7 @@ let visible = false;
 
 /**
  * Returns whether or not a tooltip is showing
- * @returns {boolean} True if a tooltip is showing
+ * @return {boolean} True if a tooltip is showing
  * @alias Blockly.Tooltip.isVisible
  */
 const isVisible = function() {
@@ -198,7 +198,7 @@ let DIV = null;
 
 /**
  * Returns the HTML tooltip container.
- * @returns {?HTMLDivElement} The HTML tooltip container.
+ * @return {?HTMLDivElement} The HTML tooltip container.
  * @alias Blockly.Tooltip.getDiv
  */
 const getDiv = function() {
@@ -475,7 +475,7 @@ const renderDefaultContent = function() {
  * Gets the coordinates for the tooltip div, taking into account the edges of
  * the screen to prevent showing the tooltip offscreen.
  * @param {boolean} rtl True if the tooltip should be in right-to-left layout.
- * @returns {{x: number, y: number}} Coordinates at which the tooltip div should
+ * @return {{x: number, y: number}} Coordinates at which the tooltip div should
  *     be placed.
  */
 const getPosition = function(rtl) {

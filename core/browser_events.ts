@@ -196,6 +196,33 @@ export function isRightButton(e: MouseEvent): boolean {
 }
 
 /**
+ * Returns true this event is a left-click.
+ *
+ * @param {!Event} e Mouse event.
+ * @returns {boolean} True if left-click.
+ * @alias Blockly.browserEvents.isLeftButton
+ */
+export function isLeftButton(e: MouseEvent): boolean {
+  return e.button === 0;
+}
+
+/**
+ * Returns true this event is a middle-click (wheel button).
+ *
+ * @param {!Event} e Mouse event.
+ * @returns {boolean} True if middle-click.
+ * @alias Blockly.browserEvents.isMiddleButton
+ */
+export function isMiddleButton(e: MouseEvent) {
+  // if (e.ctrlKey && userAgent.MAC) {
+  //   // Control-clicking on Mac OS X is treated as a right-click.
+  //   // WebKit on Mac OS X fails to change button to 1 (but Gecko does).
+  //   return true;
+  // }
+  return e.button === 1 || e.buttons === 4;
+}
+
+/**
  * Returns the converted coordinates of the given mouse event.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
  *

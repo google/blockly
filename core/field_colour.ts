@@ -30,6 +30,7 @@ import * as aria from './utils/aria.js';
 import * as colour from './utils/colour.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {Size} from './utils/size.js';
+import {Svg} from './utils/svg.js';
 
 /**
  * Class for a colour input field.
@@ -166,6 +167,64 @@ export class FieldColour extends Field<string> {
   }
 
   /**
+   * Create chessboard substrate for color rect.
+   * @package
+   */
+
+  createSubstrate_() {
+    const width = 25;
+    const height =
+      width *
+      (this.getConstants()!.FIELD_COLOUR_DEFAULT_WIDTH /
+        this.getConstants()!.FIELD_COLOUR_DEFAULT_HEIGHT);
+
+    const defsBlock = dom.createSvgElement(Svg.DEFS, {}, this.fieldGroup_);
+
+    const patternBlock = dom.createSvgElement(
+      Svg.PATTERN,
+      {
+        'viewBox': '0,0,4,4',
+        'width': width + '%',
+        'height': height + '%',
+        'id': 'pattern',
+      },
+      defsBlock,
+    );
+
+    dom.createSvgElement(
+      Svg.POLYGON,
+      {
+        'points': '0,0 0,4 4,4 4,0',
+        'fill': 'white',
+      },
+      patternBlock,
+    );
+
+    dom.createSvgElement(
+      Svg.POLYGON,
+      {
+        'points': '2,2 0,2 0,0 2,0 2,4 4,4 4,2 2,2',
+        'fill': 'gray',
+      },
+      patternBlock,
+    );
+
+    dom.createSvgElement(
+      Svg.RECT,
+      {
+        'rx': this.getConstants()!.FIELD_BORDER_RECT_RADIUS,
+        'ry': this.getConstants()!.FIELD_BORDER_RECT_RADIUS,
+        'x': 0,
+        'y': 0,
+        'height': this.size_.height,
+        'width': this.size_.width,
+        'style': 'fill: url(#pattern)',
+      },
+      this.fieldGroup_,
+    );
+  }
+
+  /**
    * Create the block UI for this colour field.
    */
   override initView() {
@@ -173,6 +232,7 @@ export class FieldColour extends Field<string> {
       this.getConstants()!.FIELD_COLOUR_DEFAULT_WIDTH,
       this.getConstants()!.FIELD_COLOUR_DEFAULT_HEIGHT,
     );
+    this.createSubstrate_();
     this.createBorderRect_();
     this.getBorderRect().style['fillOpacity'] = '1';
     this.getBorderRect().setAttribute('stroke', '#fff');

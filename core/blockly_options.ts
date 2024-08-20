@@ -40,6 +40,7 @@ export interface BlocklyOptions {
   plugins?: {[key: string]: (new (...p1: any[]) => any) | string};
   zoom?: ZoomOptions;
   parentWorkspace?: WorkspaceSvg;
+  showModuleBar?: boolean;
 }
 
 export interface GridOptions {
@@ -68,4 +69,5 @@ export interface ZoomOptions {
   scaleSpeed?: number;
   startScale?: number;
   wheel?: boolean;
+  flyoutScale: number;
 }

@@ -62,6 +62,13 @@ import * as renderManagement from './render_management.js';
 import * as deprecation from './utils/deprecation.js';
 import {IconType} from './icons/icon_types.js';
 import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
+import {
+  removeNode,
+  startTextWidthCache,
+  stopTextWidthCache,
+} from './utils/dom.js';
+
+import {isShadowArgumentLocal} from './utils/argument_local.js';
 
 /**
  * Class for a block's SVG representation.
@@ -167,14 +174,80 @@ export class BlockSvg
   relativeCoords = new Coordinate(0, 0);
 
   /**
+   * Flag that the block is moved to a position before the Flyout to
+   * display it in full (if the flyout width is less than the block width.
+   *
+   * @type {boolean}
+   * @private
+   */
+  private isInFrontOfWorkspace: boolean;
+
+  /**
+   * Temporary div for place block svg on front of the Flyout
+   *
+   * @type {Element}
+   * @private
+   */
+  private tempRootDiv: Element | null;
+
+  /**
+   * Save the previous parent element to bring the block back when it becomes inactive
+   *
+   * @type {Element}
+   * @private
+   */
+  private previousParent: Element | null;
+
+  /**
+   * Save the previous next sibling element to bring the block back when it becomes inactive
+   *
+   * @type {Element}
+   * @private
+   */
+  private previousNextSibling: ChildNode | null;
+
+  /**
+   * Save the previous transform style
+   *
+   * @type {Element}
+   * @private
+   */
+  private previousSvgRootTransform: string | null;
+
+  /**
+   * while the Drag&Drop of the block is running, we block the block from moving to the position before the flyout
+   *
+   * @type {boolean}
+   * @private
+   */
+  private disableMovingToFront: boolean;
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  private selected_: boolean;
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  private selectedAsGroup_: boolean;
+
+  /**
    * @param workspace The block's workspace.
    * @param prototypeName Name of the language object containing type-specific
    *     functions for this block.
-   * @param opt_id Optional ID.  Use this ID if provided, otherwise create a new
-   *     ID.
+   * @param opt_id Optional ID.  Use this ID if provided, otherwise create a new ID.
+   * @param {string=} moduleId Optional module ID.  Use this ID if provided, otherwise use active module.
    */
-  constructor(workspace: WorkspaceSvg, prototypeName: string, opt_id?: string) {
-    super(workspace, prototypeName, opt_id);
+  constructor(
+    workspace: WorkspaceSvg,
+    prototypeName: string,
+    opt_id?: string,
+    moduleId?: string,
+  ) {
+    super(workspace, prototypeName, opt_id, moduleId);
     this.workspace = workspace;
     this.svgGroup_ = dom.createSvgElement(Svg.G, {});
 
@@ -192,6 +265,67 @@ export class BlockSvg
 
     // Expose this block's ID on its top-level SVG group.
     this.svgGroup_.setAttribute('data-id', this.id);
+
+    /**
+     * Flag that the block is moved to a position before the Flyout to
+     * display it in full (if the flyout width is less than the block width.
+     *
+     * @type {boolean}
+     * @private
+     */
+    this.isInFrontOfWorkspace = false;
+
+    /**
+     * Temporary div for place block svg on front of the Flyout
+     *
+     * @type {Element}
+     * @private
+     */
+    this.tempRootDiv = null;
+
+    /**
+     * Save the previous parent element to bring the block back when it becomes inactive
+     *
+     * @type {Element}
+     * @private
+     */
+    this.previousParent = null;
+
+    /**
+     * Save the previous next sibling element to bring the block back when it becomes inactive
+     *
+     * @type {Element}
+     * @private
+     */
+    this.previousNextSibling = null;
+
+    /**
+     * Save the previous transform style
+     *
+     * @type {Element}
+     * @private
+     */
+    this.previousSvgRootTransform = null;
+
+    /**
+     * while the Drag&Drop of the block is running, we block the block from moving to the position before the flyout
+     *
+     * @type {boolean}
+     * @private
+     */
+    this.disableMovingToFront = false;
+
+    /**
+     * @type {boolean}
+     * @private
+     */
+    this.selected_ = false;
+
+    /**
+     * @type {boolean}
+     * @private
+     */
+    this.selectedAsGroup_ = false;
 
     this.doInit_();
   }
@@ -221,6 +355,8 @@ export class BlockSvg
         this,
         this.onMouseDown_,
       );
+
+      browserEvents.conditionalBind(svg, 'pointerup', this, this.onMouseUp_);
     }
     this.eventsInit_ = true;
 
@@ -260,6 +396,9 @@ export class BlockSvg
     if (common.getSelected() === this) {
       return;
     }
+
+    if (!this.inActiveModule()) return;
+
     let oldId = null;
     if (common.getSelected()) {
       oldId = common.getSelected()!.id;
@@ -453,6 +592,32 @@ export class BlockSvg
     this.updateComponentLocations(newLoc);
   }
 
+  /**
+   * Clear the block of transform="..." attributes.
+   * Used when the block is switching from 3d to 2d transform or vice versa.
+   *
+   * @private
+   */
+  clearTransformAttributes_() {
+    this.getSvgRoot().removeAttribute('transform');
+  }
+
+  /**
+   * Replace the block of transform="..." attributes.
+   * Used when the block is switching from 3d to 2d transform or vice versa.
+   *
+   * @private
+   */
+  replaceTransformAttributes_(position: {
+    x: string | number;
+    y: string | number;
+  }) {
+    this.getSvgRoot().setAttribute(
+      'transform',
+      `translate(${position.x}, ${position.y})`,
+    );
+  }
+
   /** Snap this block to the nearest grid point. */
   snapToGrid() {
     if (this.isDeadOrDying()) {
@@ -604,10 +769,33 @@ export class BlockSvg
    * @param e Pointer down event.
    */
   private onMouseDown_(e: PointerEvent) {
+    if (this.isInFrontOfWorkspace && this.previousParent) {
+      this.previousParent.insertBefore(
+        this.getSvgRoot(),
+        this.previousNextSibling as Node,
+      );
+      this.getSvgRoot().style.transform = '';
+      this.getSvgRoot().setAttribute(
+        'transform',
+        this.previousSvgRootTransform || '',
+      );
+      this.tempRootDiv?.remove();
+      this.isInFrontOfWorkspace = false;
+    }
+
+    this.disableMovingToFront = true;
+
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleBlockStart(e, this);
     }
+  }
+
+  /**
+   * Handle a mouse-up on an SVG block.
+   */
+  private onMouseUp_() {
+    if (this.disableMovingToFront) this.disableMovingToFront = false;
   }
 
   /**
@@ -637,7 +825,26 @@ export class BlockSvg
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
       ContextMenuRegistry.ScopeType.BLOCK,
       {block: this},
-    );
+    ) as LegacyContextMenuOption[];
+
+    if (this.workspace.options.showModuleBar && this.isMovable()) {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const block = this;
+      menuOptions.push(ContextMenu.blockMoveToNewModuleOption(this));
+
+      if (this.workspace.getModuleManager().getAllModules().length > 1) {
+        this.workspace
+          .getModuleManager()
+          .getAllModules()
+          .forEach(function (module) {
+            if (block.getModuleId() !== module.getId()) {
+              menuOptions.push(
+                ContextMenu.blockMoveToModuleOption(block, module),
+              );
+            }
+          });
+      }
+    }
 
     // Allow the block to add or modify menuOptions.
     if (this.customContextMenu) {
@@ -654,6 +861,15 @@ export class BlockSvg
    * @internal
    */
   showContextMenu(e: Event) {
+    // display parent context menu for argument local
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const block = this;
+    // @ts-ignore:next-line
+    if (this.parentBlock_ && this.isShadow_ && !isShadowArgumentLocal(block)) {
+      this.parentBlock_.showContextMenu(e);
+      return;
+    }
+
     const menuOptions = this.generateContextMenu();
 
     if (menuOptions && menuOptions.length) {
@@ -867,7 +1083,7 @@ export class BlockSvg
    *
    * @returns Copy metadata, or null if the block is an insertion marker.
    */
-  toCopyData(): BlockCopyData | null {
+  toCopyData(addNextBlocks = false): BlockCopyData | null {
     if (this.isInsertionMarker_) {
       return null;
     }
@@ -875,7 +1091,7 @@ export class BlockSvg
       paster: BlockPaster.TYPE,
       blockState: blocks.save(this, {
         addCoordinates: true,
-        addNextBlocks: false,
+        addNextBlocks,
       }) as blocks.State,
       typeCounts: common.getBlockTypeCounts(this, true),
     };
@@ -1099,6 +1315,113 @@ export class BlockSvg
    */
   addSelect() {
     this.pathObject.updateSelected(true);
+    this.selected_ = true;
+    this.selectedAsGroup_ = false;
+
+    if (this.isInFlyout) {
+      this.disableMovingToFront = false;
+      this.placeToFront();
+    }
+  }
+
+  /**
+   * Create a temporary div and move the svg of the block in front of
+   * the entire flyout to display the block in its entirety
+   */
+  placeToFront() {
+    if (this.isInFrontOfWorkspace || this.disableMovingToFront) return;
+
+    setTimeout(() => {
+      if (
+        this.isInFrontOfWorkspace ||
+        this.disableMovingToFront ||
+        !this.selected_
+      )
+        return;
+
+      const flyoutSVG = this.workspace.getParentSvg();
+      let flyoutWidth = flyoutSVG.style.width;
+      if (!flyoutWidth) return;
+
+      flyoutWidth = parseInt(
+        flyoutWidth.slice(0, flyoutWidth.length - 2),
+      ).toString(); // '100px' -> 100
+      if (!flyoutWidth) return;
+
+      const blockWidth = this.svgGroup_.getBoundingClientRect().width;
+
+      if (blockWidth < Number(flyoutWidth)) return;
+
+      const blockClientRect = this.getSvgRoot().getBoundingClientRect();
+      const flyoutClientRect = flyoutSVG.getBoundingClientRect();
+      const workspaceClientRect = this.workspace
+        .getInjectionDiv()
+        .getBoundingClientRect();
+
+      this.tempRootDiv = document.createElement('div') as HTMLElement;
+      this.tempRootDiv.classList.add('blocklyTempBlockRoot');
+      // @ts-ignore:next-line
+      this.tempRootDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`;
+      // @ts-ignore:next-line
+      this.tempRootDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`;
+
+      const tempSVGRoot = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'svg',
+      );
+      tempSVGRoot.setAttribute('width', `${blockClientRect.width}px`);
+      tempSVGRoot.setAttribute('height', `${blockClientRect.height}px`);
+      this.tempRootDiv.appendChild(tempSVGRoot);
+
+      this.previousSvgRootTransform =
+        this.getSvgRoot().getAttribute('transform');
+      this.getSvgRoot().removeAttribute('transform');
+      this.getSvgRoot().style.transform = `scale(${this.workspace.scale})`;
+
+      this.previousParent = this.getSvgRoot().parentElement;
+      this.previousNextSibling = this.getSvgRoot().nextSibling;
+      tempSVGRoot.appendChild(this.getSvgRoot());
+
+      // @ts-ignore:next-line
+      this.tempRootDiv.onmouseleave = () => {
+        this.backToWorkspace();
+      };
+
+      // @ts-ignore:next-line
+      this.tempRootDiv.onwheel = () => {
+        this.backToWorkspace();
+      };
+
+      this.isInFrontOfWorkspace = true;
+      if (this.workspace && this.workspace.getParentSvg()) {
+        this.workspace
+          .getParentSvg()
+          .parentElement?.appendChild(this.tempRootDiv);
+      }
+    }, 800); // This is enough to eliminate glitches when scrolling.
+  }
+
+  /**
+   * backToWorkspace
+   */
+  backToWorkspace() {
+    this.previousParent?.insertBefore(
+      this.getSvgRoot(),
+      this.previousNextSibling as Node,
+    );
+    this.getSvgRoot().style.transform = '';
+    this.getSvgRoot().setAttribute(
+      'transform',
+      this.previousSvgRootTransform || '',
+    );
+
+    this.tempRootDiv?.remove();
+    this.tempRootDiv = null;
+    this.previousSvgRootTransform = null;
+    this.previousParent = null;
+    this.previousNextSibling = null;
+    this.isInFrontOfWorkspace = false;
+    this.removeSelect();
   }
 
   /**
@@ -1108,7 +1431,10 @@ export class BlockSvg
    * @see BlockSvg#unselect
    */
   removeSelect() {
+    if (this.isInFrontOfWorkspace) return;
     this.pathObject.updateSelected(false);
+    this.selectedAsGroup_ = false;
+    this.selected_ = false;
   }
 
   /**
@@ -1577,6 +1903,14 @@ export class BlockSvg
   }
 
   /**
+   * @returns The first statement connection or null.
+   * @internal
+   */
+  override getFirstStatementConnection(): RenderedConnection | null {
+    return super.getFirstStatementConnection() as RenderedConnection | null;
+  }
+
+  /**
    * Find all the blocks that are directly nested inside this one.
    * Includes value and statement inputs, as well as any following statement.
    * Excludes any connection on an output tab or any preceding statement.
@@ -1633,6 +1967,64 @@ export class BlockSvg
 
     dom.stopTextWidthCache();
     this.updateMarkers_();
+    this.applyColour();
+  }
+
+  /**
+   * Remove render of this block.
+   *
+   * @suppress {checkTypes}
+   */
+  removeRender() {
+    if (!this.rendered) {
+      return;
+    }
+
+    Tooltip.dispose();
+    // Tooltip.unbindMouseEvents(this.pathObject.svgPath);
+    startTextWidthCache();
+
+    // If this block is being dragged, unlink the mouse events.
+    if (common.getSelected() === this) {
+      this.unselect();
+      this.workspace.cancelCurrentGesture();
+    }
+    // If this block has a context menu open, close it.
+    if (ContextMenu.getCurrentBlock() === this) {
+      ContextMenu.hide();
+    }
+
+    const icons = this.getIcons();
+    for (let i = 0, icon; (icon = icons[i]); i++) {
+      // @ts-ignore:next-line
+      icon.setVisible(false);
+    }
+
+    // Stop rerendering.
+    this.rendered = false;
+
+    // Clear pending warnings.
+    if (this.warningTextDb) {
+      for (const n in this.warningTextDb) {
+        // @ts-ignore:next-line
+        clearTimeout(this.warningTextDb[n]);
+      }
+      this.warningTextDb = new Map<string, ReturnType<typeof setTimeout>>();
+    }
+
+    // Disable connections tracking and remove parent node from dom
+    if (!this.getParent()) {
+      this.setConnectionTracking(false);
+      removeNode(this.svgGroup_);
+      this.workspace.removeTopBoundedElement(this);
+    }
+
+    stopTextWidthCache();
+
+    // Remove render of all my children.
+    for (let i = this.childBlocks_.length - 1; i >= 0; i--) {
+      this.childBlocks_[i].removeRender();
+    }
   }
 
   /**

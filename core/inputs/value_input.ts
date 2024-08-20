@@ -23,7 +23,11 @@ export class ValueInput extends Input {
     block: Block,
   ) {
     // Errors are maintained for people not using typescript.
-    if (!name) throw new Error('Value inputs must have a non-empty name');
+    if (!name) {
+      // TODO: fix me
+      // throw new Error('Value inputs must have a non-empty name');
+      console.error('Value inputs must have a non-empty name');
+    }
     super(name, block);
     this.connection = this.makeConnection(ConnectionType.INPUT_VALUE);
   }

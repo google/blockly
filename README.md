@@ -34,7 +34,7 @@ Note that the path must be relative to the root of the Varwin Blockly repository
 Those.
 
 1. Making edits in Varwin Blockly
-2. Run ```npm run build && gulp buildCompiled --output "~/node_modules/blockly/"```
+2. Run ```npm run package:copy --  --dest /c/Users/USER/dev/rms/node_modules/blockly```
 3. Run the RMS build (or hot reload will pull up node_modules by itself)
 
 ## Frequent problems

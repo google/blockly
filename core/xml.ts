@@ -36,6 +36,12 @@ export function workspaceToDom(
   opt_noId?: boolean,
 ): Element {
   const treeXml = utilsXml.createElement('xml');
+
+  const modulesElement = modulesToDom(workspace);
+  if (modulesElement.hasChildNodes()) {
+    treeXml.appendChild(modulesElement);
+  }
+
   const variablesElement = variablesToDom(
     Variables.allUsedVarModels(workspace),
   );
@@ -74,6 +80,32 @@ export function variablesToDom(variableList: VariableModel[]): Element {
     variables.appendChild(element);
   }
   return variables;
+}
+
+/**
+ * Encode a list of modules as XML.
+ * @param {!Blockly.Workspace} workspace The workspace containing blocks.
+ * @return {!Element} Tree of XML elements.
+ */
+export function modulesToDom(workspace: Workspace) {
+  const modules = utilsXml.createElement('modules');
+
+  const moduleList = workspace.getModuleManager().getAllModules();
+  modules.setAttribute(
+    'active',
+    workspace.getModuleManager().getActiveModule().getId(),
+  );
+
+  for (let i = 0, module; (module = moduleList[i]); i++) {
+    const element = utilsXml.createElement('module');
+    element.appendChild(utilsXml.createTextNode(module.name));
+    element.id = module.getId();
+    element.setAttribute('scroll-x', module.scrollX.toString());
+    element.setAttribute('scroll-y', module.scrollY.toString());
+    element.setAttribute('scale', module.scale.toString());
+    modules.appendChild(element);
+  }
+  return modules;
 }
 
 /**
@@ -154,12 +186,14 @@ function allFieldsToDom(block: Block, element: Element) {
  *
  * @param block The root block to encode.
  * @param opt_noId True if the encoder should skip the block ID.
+ * @param opt_noModule True if the encoder should skip the block module.
  * @returns Tree of XML elements or an empty document fragment if the block was
  *     an insertion marker.
  */
 export function blockToDom(
   block: Block,
   opt_noId?: boolean,
+  opt_noModule?: boolean,
 ): Element | DocumentFragment {
   // Skip over insertion markers.
   if (block.isInsertionMarker()) {
@@ -176,6 +210,9 @@ export function blockToDom(
   element.setAttribute('type', block.type);
   if (!opt_noId) {
     element.id = block.id;
+  }
+  if (!opt_noModule) {
+    element.setAttribute('module', block.getModuleId());
   }
   if (block.mutationToDom) {
     // Custom data for an advanced block.
@@ -284,9 +321,14 @@ export function blockToDom(
  *
  * @param shadow A tree of XML elements.
  * @param opt_noId True if the encoder should skip the block ID.
+ * @param opt_noModule True if the encoder should skip the block module.
  * @returns A tree of XML elements.
  */
-function cloneShadow(shadow: Element, opt_noId?: boolean): Element {
+function cloneShadow(
+  shadow: Element,
+  opt_noId?: boolean,
+  opt_noModule?: boolean,
+): Element {
   shadow = shadow.cloneNode(true) as Element;
   // Walk the tree looking for whitespace.  Don't prune whitespace in a tag.
   let node: Node | null = shadow;
@@ -296,6 +338,9 @@ function cloneShadow(shadow: Element, opt_noId?: boolean): Element {
       // Strip off IDs from shadow blocks.  There should never be a 'block' as
       // a child of a 'shadow', so no need to check that.
       (node as Element).removeAttribute('id');
+    }
+    if (opt_noModule && node.nodeName === 'shadow') {
+      (node as Element).removeAttribute('module');
     }
     if (node.firstChild) {
       node = node.firstChild;
@@ -420,6 +465,15 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
   }
   let variablesFirst = true;
   try {
+    // first load modules
+    for (let i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
+      if (xmlChild.nodeName.toLowerCase() === 'modules') {
+        domToModules(xmlChild as Element, workspace);
+      }
+    }
+
+    workspace.getModuleManager().createDefaultModuleIfNeed();
+
     for (let i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
       const name = xmlChild.nodeName.toLowerCase();
       const xmlChildElement = xmlChild as Element;
@@ -473,6 +527,25 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
     if (workspace.rendered) renderManagement.triggerQueuedRenders();
     dom.stopTextWidthCache();
   }
+
+  if ((workspace as WorkspaceSvg).getModuleBar) {
+    if ((workspace as WorkspaceSvg).getModuleBar()) {
+      (workspace as WorkspaceSvg).getModuleBar()!.render();
+    }
+
+    const activeModule = workspace.getModuleManager().getActiveModule();
+    if (activeModule) {
+      // store scroll positions before scale
+      const scrollX = activeModule.scrollX;
+      const scrollY = activeModule.scrollY;
+      if ((workspace as WorkspaceSvg).scale !== activeModule.scale) {
+        (workspace as WorkspaceSvg).setScale(activeModule.scale);
+      }
+
+      (workspace as WorkspaceSvg).scroll(scrollX, scrollY);
+    }
+  }
+
   // Re-enable workspace resizing.
   eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
   return newBlockIds;
@@ -574,7 +647,11 @@ export function domToBlockInternal(
   try {
     topBlock = domToBlockHeadless(xmlBlock, workspace);
     // Generate list of all blocks.
-    if (workspace.rendered) {
+    if (
+      workspace.rendered &&
+      topBlock.inActiveModule() &&
+      (!workspace.isFlyout || (!topBlock.isObsolete() && !topBlock.isRemoved()))
+    ) {
       const topBlockSvg = topBlock as BlockSvg;
       const blocks = topBlock.getDescendants(false);
       topBlockSvg.setConnectionTracking(false);
@@ -638,6 +715,35 @@ export function domToVariables(xmlVariables: Element, workspace: Workspace) {
 
     if (!name) return;
     workspace.createVariable(name, type, id);
+  }
+}
+
+/**
+ * Decode an XML list of modules and add the module to the workspace.
+ * @param {!Element} xmlModules List of XML module elements.
+ * @param {!Blockly.Workspace} workspace The workspace to which the variable
+ *     should be added.
+ */
+export function domToModules(xmlModules: Element, workspace: Workspace) {
+  for (let i = 0, xmlChild; (xmlChild = xmlModules.childNodes[i]); i++) {
+    if (xmlChild.nodeType !== dom.NodeType.ELEMENT_NODE) {
+      continue; // Skip text nodes.
+    }
+
+    workspace
+      .getModuleManager()
+      .createModule(
+        xmlChild.textContent!,
+        (xmlChild as Element).getAttribute('id')!,
+        Number((xmlChild as Element).getAttribute('scroll-x')),
+        Number((xmlChild as Element).getAttribute('scroll-y')),
+        Number((xmlChild as Element).getAttribute('scale')),
+      );
+  }
+
+  const activeId = xmlModules.getAttribute('active');
+  if (activeId) {
+    workspace.getModuleManager().setActiveModuleId(activeId);
   }
 }
 
@@ -872,7 +978,9 @@ function applyNextTagNodes(
     const childBlockInfo = findChildBlocks(xmlChild);
     if (childBlockInfo.childBlockElement) {
       if (!block.nextConnection) {
-        throw TypeError('Next statement does not exist.');
+        // throw TypeError('Next statement does not exist.');
+        console.warn('Next statement does not exist.');
+        return;
       }
       // If there is more than one XML 'next' tag.
       if (block.nextConnection.isConnected()) {
@@ -917,7 +1025,13 @@ function domToBlockHeadless(
     throw TypeError('Block type unspecified: ' + xmlBlock.outerHTML);
   }
   const id = xmlBlock.getAttribute('id') ?? undefined;
-  block = workspace.newBlock(prototypeName, id);
+  let moduleId = '';
+
+  if (xmlBlock.hasAttribute('module')) {
+    moduleId = xmlBlock.getAttribute('module')!;
+  }
+
+  block = workspace.newBlock(prototypeName, id, moduleId);
 
   // Preprocess childNodes so tags can be processed in a consistent order.
   const xmlChildNameMap = mapSupportedXmlTags(xmlBlock);

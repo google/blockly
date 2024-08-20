@@ -142,6 +142,15 @@ function duplicateInternal<
   return paste(data, toDuplicate.workspace) as T;
 }
 
+/**
+ * Clear the clipboard
+ *
+ * @package
+ */
+export function clear() {
+  stashedCopyData = null
+}
+
 interface IHasWorkspace {
   workspace: WorkspaceSvg;
 }

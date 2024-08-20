@@ -147,7 +147,10 @@ export abstract class Field<T = any>
   disposed = false;
 
   /** Maximum characters of text to display before adding an ellipsis. */
-  maxDisplayLength = 50;
+  maxDisplayLength = 80;
+
+  /** Maximum characters of text can be field have. */
+  maxLength = 10000;
 
   /** Block this field is attached to.  Starts as null, then set in init. */
   protected sourceBlock_: Block | null = null;
@@ -195,6 +198,8 @@ export abstract class Field<T = any>
 
   /** Mouse cursor style when over the hotspot that initiates the editor. */
   CURSOR = '';
+
+  private outAffixDisabled: boolean = false;
 
   /**
    * @param value The initial value of the field.
@@ -245,9 +250,16 @@ export abstract class Field<T = any>
   protected configure_(config: FieldConfig) {
     // TODO (#2884): Possibly add CSS class config option.
     // TODO (#2885): Possibly add cursor config option.
+    if (config.disableOutAffix) {
+      this.outAffixDisabled = true;
+    }
     if (config.tooltip) {
       this.setTooltip(parsing.replaceMessageReferences(config.tooltip));
     }
+  }
+
+  isOutAffixDisabled() {
+    return this.outAffixDisabled;
   }
 
   /**
@@ -1067,6 +1079,15 @@ export abstract class Field<T = any>
   }
 
   /**
+   * newText
+   * @param newText New value.
+   */
+  setText(newText: Text) {
+    this.textContent_ = newText;
+    this.forceRerender();
+  }
+
+  /**
    * Used to change the value of the field. Handles validation and events.
    * Subclasses should override doClassValidation_ and doValueUpdate_ rather
    * than this method.
@@ -1426,6 +1447,7 @@ export abstract class Field<T = any>
  */
 export interface FieldConfig {
   tooltip?: string;
+  disableOutAffix?: boolean;
 }
 
 /**

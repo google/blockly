@@ -31,6 +31,8 @@ import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import * as utilsString from './utils/string.js';
 import {Svg} from './utils/svg.js';
+import * as internalConstants from './internal_constants.js';
+import {Msg} from './msg.js';
 
 /**
  * Class for an editable dropdown field.
@@ -129,7 +131,7 @@ export class FieldDropdown extends Field<string> {
 
     if (Array.isArray(menuGenerator)) {
       validateOptions(menuGenerator);
-      const trimmed = trimOptions(menuGenerator);
+      const trimmed = this.trimOptions(menuGenerator);
       this.menuGenerator_ = trimmed.options;
       this.prefixField = trimmed.prefix || null;
       this.suffixField = trimmed.suffix || null;
@@ -186,6 +188,18 @@ export class FieldDropdown extends Field<string> {
    * Create the block UI for this dropdown.
    */
   override initView() {
+    if ((this.menuGenerator_ as MenuOption[]).length === 1) {
+      this.createTextElement_();
+
+      this.imageElement = dom.createSvgElement(Svg.IMAGE, {}, this.fieldGroup_);
+      // @ts-ignore:next-line
+      this.fieldGroup_.style['pointer-events'] = 'none';
+      // @ts-ignore:next-line
+      this.textElement_.style['fill'] = '#fff';
+
+      return;
+    }
+
     if (this.shouldAddBorderRect_()) {
       this.createBorderRect_();
     } else {
@@ -314,15 +328,65 @@ export class FieldDropdown extends Field<string> {
 
     const options = this.getOptions(false);
     this.selectedMenuItem = null;
+
+    // Move to top rename variable and delete variable in list options.
+    options.sort((a: MenuOption, b: MenuOption) => {
+      if (
+        a[1] === internalConstants.DELETE_VARIABLE_ID &&
+        b[1] === internalConstants.RENAME_VARIABLE_ID
+      ) {
+        return 1;
+      }
+      if (
+        a[1] === internalConstants.RENAME_VARIABLE_ID ||
+        a[1] === internalConstants.DELETE_VARIABLE_ID
+      ) {
+        return -1;
+      }
+      // @ts-ignore:next-line
+      return a[0].localeCompare(b[0], undefined, {
+        numeric: true,
+        sensitivity: 'base',
+      });
+    });
+
     for (let i = 0; i < options.length; i++) {
       const [label, value] = options[i];
       const content = (() => {
         if (typeof label === 'object') {
+          const container = document.createElement('div');
+          container.classList.add('blocklyMenuItemValue');
           // Convert ImageProperties to an HTMLImageElement.
           const image = new Image(label['width'], label['height']);
           image.src = label['src'];
           image.alt = label['alt'] || '';
-          return image;
+
+          container.appendChild(image);
+          // @ts-ignore:next-line
+          if (label['text']) {
+            const span = document.createElement('span');
+            span.classList.add('blocklyMenuItemText');
+            // @ts-ignore:next-line
+            if (typeof label['text'] === 'string') {
+              // @ts-ignore:next-line
+              span.innerText = label['text'];
+            } else {
+              const bElement = document.createElement('b');
+              // @ts-ignore:next-line
+              bElement.innerText = label['text']['title'] + ': ';
+
+              const descriptionSpan = document.createElement('span');
+              // @ts-ignore:next-line
+              descriptionSpan.innerText = label['text']['description'];
+
+              span.appendChild(bElement);
+              span.appendChild(descriptionSpan);
+            }
+
+            container.appendChild(span);
+          }
+
+          return container;
         }
         return label;
       })();
@@ -403,6 +467,20 @@ export class FieldDropdown extends Field<string> {
   }
 
   /**
+   * Used to notify the field an invalid value was input. Can be overridden by
+   * subclasses, see FieldTextInput.
+   * No-op by default.
+   * @param {*} _invalidValue The input value that was determined to be invalid.
+   * @protected
+   */
+  doValueInvalid_(_invalidValue: any) {
+    if (this.getOptions(true).length > 1) {
+      this.selectedOption = [Msg.OPTION_VALUE_REMOVED, _invalidValue];
+      super.doValueUpdate_(_invalidValue);
+    }
+  }
+
+  /**
    * Ensure that the input value is a valid language-neutral option.
    *
    * @param newValue The input value.
@@ -414,6 +492,9 @@ export class FieldDropdown extends Field<string> {
 
     if (!isValueValid) {
       if (this.sourceBlock_) {
+        if (options.length > 1) {
+          this.sourceBlock_.setRemoved(true);
+        }
         console.warn(
           "Cannot set the dropdown's value to an unavailable option." +
             ' Block type: ' +
@@ -426,6 +507,14 @@ export class FieldDropdown extends Field<string> {
       }
       return null;
     }
+    if (
+      this.sourceBlock_ &&
+      this.selectedOption[0] === Msg.OPTION_VALUE_REMOVED &&
+      this.sourceBlock_.isRemoved()
+    ) {
+      this.sourceBlock_.setRemoved(false);
+    }
+
     return newValue as string;
   }
 
@@ -470,6 +559,10 @@ export class FieldDropdown extends Field<string> {
 
   /** Draws the border with the correct width. */
   protected override render_() {
+    if (!this.textContent_ || !this.imageElement) {
+      return;
+    }
+
     // Hide both elements.
     this.getTextContent().nodeValue = '';
     this.imageElement!.style.display = 'none';
@@ -650,6 +743,64 @@ export class FieldDropdown extends Field<string> {
     // override the static fromJson method.
     return new this(options.options, undefined, options);
   }
+
+  /**
+   * Factor out common words in statically defined options.
+   * Create prefix and/or suffix labels.
+   */
+  trimOptions(options: MenuOption[]): {
+    options: MenuOption[];
+    prefix?: string;
+    suffix?: string;
+  } {
+    let hasImages = false;
+    const trimmedOptions = options.map(([label, value]): MenuOption => {
+      if (typeof label === 'string') {
+        return [parsing.replaceMessageReferences(label), value];
+      }
+
+      hasImages = true;
+      // Copy the image properties so they're not influenced by the original.
+      // NOTE: No need to deep copy since image properties are only 1 level deep.
+      const imageLabel =
+        label.alt !== null
+          ? {...label, alt: parsing.replaceMessageReferences(label.alt)}
+          : {...label};
+      return [imageLabel, value];
+    });
+
+    if (hasImages || options.length < 2) return {options: trimmedOptions};
+
+    const stringOptions = trimmedOptions as [string, string][];
+    const stringLabels = stringOptions.map(([label]) => label);
+
+    if (this.isOutAffixDisabled()) {
+      return {options: stringOptions};
+    }
+
+    const shortest = utilsString.shortestStringLength(stringLabels);
+    const prefixLength = utilsString.commonWordPrefix(stringLabels, shortest);
+    const suffixLength = utilsString.commonWordSuffix(stringLabels, shortest);
+    if (!prefixLength && !suffixLength) {
+      return {options: stringOptions};
+    }
+    if (shortest <= prefixLength + suffixLength) {
+      // One or more strings will entirely vanish if we proceed.  Abort.
+      return {options: stringOptions};
+    }
+
+    const prefix = prefixLength
+      ? stringLabels[0].substring(0, prefixLength - 1)
+      : undefined;
+    const suffix = suffixLength
+      ? stringLabels[0].substr(1 - suffixLength)
+      : undefined;
+    return {
+      options: applyTrim(stringOptions, prefixLength, suffixLength),
+      prefix,
+      suffix,
+    };
+  }
 }
 
 /**
@@ -718,61 +869,6 @@ const IMAGE_Y_OFFSET = 5;
 
 /** The total vertical padding above and below an image. */
 const IMAGE_Y_PADDING: number = IMAGE_Y_OFFSET * 2;
-
-/**
- * Factor out common words in statically defined options.
- * Create prefix and/or suffix labels.
- */
-function trimOptions(options: MenuOption[]): {
-  options: MenuOption[];
-  prefix?: string;
-  suffix?: string;
-} {
-  let hasImages = false;
-  const trimmedOptions = options.map(([label, value]): MenuOption => {
-    if (typeof label === 'string') {
-      return [parsing.replaceMessageReferences(label), value];
-    }
-
-    hasImages = true;
-    // Copy the image properties so they're not influenced by the original.
-    // NOTE: No need to deep copy since image properties are only 1 level deep.
-    const imageLabel =
-      label.alt !== null
-        ? {...label, alt: parsing.replaceMessageReferences(label.alt)}
-        : {...label};
-    return [imageLabel, value];
-  });
-
-  if (hasImages || options.length < 2) return {options: trimmedOptions};
-
-  const stringOptions = trimmedOptions as [string, string][];
-  const stringLabels = stringOptions.map(([label]) => label);
-
-  const shortest = utilsString.shortestStringLength(stringLabels);
-  const prefixLength = utilsString.commonWordPrefix(stringLabels, shortest);
-  const suffixLength = utilsString.commonWordSuffix(stringLabels, shortest);
-
-  if (
-    (!prefixLength && !suffixLength) ||
-    shortest <= prefixLength + suffixLength
-  ) {
-    // One or more strings will entirely vanish if we proceed.  Abort.
-    return {options: stringOptions};
-  }
-
-  const prefix = prefixLength
-    ? stringLabels[0].substring(0, prefixLength - 1)
-    : undefined;
-  const suffix = suffixLength
-    ? stringLabels[0].substr(1 - suffixLength)
-    : undefined;
-  return {
-    options: applyTrim(stringOptions, prefixLength, suffixLength),
-    prefix,
-    suffix,
-  };
-}
 
 /**
  * Use the calculated prefix and suffix lengths to trim all of the options in

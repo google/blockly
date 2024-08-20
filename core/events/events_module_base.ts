@@ -16,28 +16,37 @@
  */
 
 /**
- * @fileoverview Abstract class for a module event.
+ * @file Abstract class for a module event.
  * @author dev@varwin.com (Varwin Developers)
  */
-'use strict';
+// Former goog.module ID: Blockly.Events.ModuleBase
 
-goog.module('Blockly.Events.ModuleBase');
-
-const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
+import {
+  Abstract as AbstractEvent,
+  AbstractEventJson,
+} from './events_abstract.js';
+import {ModuleModel} from '../module_model.js';
 
 /**
  * Abstract class for a module event.
- * @extends {Events.Abstract}
+ *
+ * @augments {Abstract}
  */
-class ModuleBase extends AbstractEvent {
+export class ModuleBase extends AbstractEvent {
+  override isBlank = true;
+
+  moduleId?: string = undefined;
+  workspaceId?: string = undefined;
+
   /**
    * @param {ModuleModel} module The module this event corresponds to.
    */
-  constructor(module) {
+  constructor(module: ModuleModel) {
     super();
 
     /**
      * The module id for the module this event pertains to.
+     *
      * @type {string}
      */
     this.moduleId = module.getId();
@@ -46,22 +55,31 @@ class ModuleBase extends AbstractEvent {
 
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   *
+   * @returns {!object} JSON representation.
    */
-  toJson() {
-    const json = super.toJson();
-    json['moduleId'] = this.moduleId;
+  override toJson() {
+    const json = super.toJson() as ModuleBaseJson;
+    json['moduleId'] = this.moduleId || '';
     return json;
   }
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   *
+   * @param {!object} json JSON representation.
+   * @param module
+   * @param event
    */
-  fromJson(json) {
-    super.fromJson(json);
-    this.moduleId = json['moduleId'];
+  static fromJson(json: ModuleBaseJson, module: any, event?: any) {
+    return super.fromJson(
+      json,
+      module,
+      event ?? new ModuleBase(module),
+    ) as ModuleBase;
   }
 }
 
-exports.ModuleBase = ModuleBase;
+export interface ModuleBaseJson extends AbstractEventJson {
+  moduleId: string;
+}

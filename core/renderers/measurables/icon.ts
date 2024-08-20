@@ -39,6 +39,7 @@ export class Icon extends Measurable {
   ) {
     super(constants);
 
+    this.icon = icon;
     this.isVisible = hasBubble(icon) && icon.bubbleIsVisible();
     this.type |= Types.ICON;
 

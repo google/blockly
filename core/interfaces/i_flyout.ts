@@ -29,6 +29,9 @@ export interface IFlyout extends IRegistrable {
   /** Margin around the edges of the blocks in the flyout. */
   readonly MARGIN: number;
 
+  /** Margin before first block or button in flyout */
+  readonly START_MARGIN: number;
+
   /** Does the flyout automatically close when a block is created? */
   autoClose: boolean;
 

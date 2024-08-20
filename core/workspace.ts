@@ -33,6 +33,8 @@ import type {VariableModel} from './variable_model.js';
 import type {WorkspaceComment} from './workspace_comment.js';
 import {IProcedureMap} from './interfaces/i_procedure_map.js';
 import {ObservableProcedureMap} from './observable_procedure_map.js';
+import {ModuleManager} from './module_manager.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
@@ -63,6 +65,7 @@ export class Workspace implements IASTNodeLocation {
    * @internal
    */
   internalIsFlyout = false;
+  private readonly moduleManager_: ModuleManager;
 
   /** Is this workspace the surface for a flyout? */
   get isFlyout(): boolean {
@@ -145,6 +148,13 @@ export class Workspace implements IASTNodeLocation {
      * not currently in use.
      */
     this.variableMap = new VariableMap(this);
+
+    /**
+     * A map from module type to list of module names.  The lists contain all
+     * the named modules in the workspace.
+     *
+     */
+    this.moduleManager_ = new ModuleManager(this as unknown as WorkspaceSvg);
   }
 
   /**
@@ -171,6 +181,17 @@ export class Workspace implements IASTNodeLocation {
     a: Block | WorkspaceComment,
     b: Block | WorkspaceComment,
   ): number {
+    // Order by module
+    // @ts-ignore:next-line
+    if (a.getModuleOrder && b.getModuleOrder) {
+      const aOrder = a.getModuleOrder();
+      const bOrder = b.getModuleOrder();
+
+      if (aOrder !== bOrder) {
+        return aOrder - bOrder;
+      }
+    }
+
     const offset =
       Math.sin(math.toRadians(Workspace.SCAN_ANGLE)) * (this.RTL ? -1 : 1);
     const aXY = a.getRelativeToSurfaceXY();
@@ -203,11 +224,22 @@ export class Workspace implements IASTNodeLocation {
    * by position; top to bottom (with slight LTR or RTL bias).
    *
    * @param ordered Sort the list if true.
+   * @param {boolean} [inActiveModule] filter blocks by active module if true.
    * @returns The top-level block objects.
    */
-  getTopBlocks(ordered = false): Block[] {
+  getTopBlocks(ordered = false, inActiveModule: boolean = false): Block[] {
     // Copy the topBlocks list.
-    const blocks = new Array<Block>().concat(this.topBlocks);
+    let blocks = [] as Block[];
+    if (inActiveModule) {
+      for (let i = 0, block; (block = this.topBlocks[i]); i++) {
+        if (block.inActiveModule()) {
+          blocks.push(block);
+        }
+      }
+    } else {
+      blocks = ([] as Block[]).concat(this.topBlocks);
+    }
+
     if (ordered && blocks.length > 1) {
       blocks.sort(this.sortObjects_.bind(this));
     }
@@ -320,20 +352,21 @@ export class Workspace implements IASTNodeLocation {
    * by position; top to bottom (with slight LTR or RTL bias).
    *
    * @param ordered Sort the list if true.
+   * @param {boolean} [inActiveModule] filter blocks by active module if true.
    * @returns Array of blocks.
    */
-  getAllBlocks(ordered = false): Block[] {
+  getAllBlocks(ordered = false, inActiveModule: boolean = false): Block[] {
     let blocks: Block[];
     if (ordered) {
       // Slow, but ordered.
-      const topBlocks = this.getTopBlocks(true);
+      const topBlocks = this.getTopBlocks(true, inActiveModule);
       blocks = [];
       for (let i = 0; i < topBlocks.length; i++) {
         blocks.push(...topBlocks[i].getDescendants(true));
       }
     } else {
       // Fast, but in no particular order.
-      blocks = this.getTopBlocks(false);
+      blocks = this.getTopBlocks(false, inActiveModule);
       for (let i = 0; i < blocks.length; i++) {
         blocks.push(...blocks[i].getChildren(false));
       }
@@ -367,6 +400,8 @@ export class Workspace implements IASTNodeLocation {
       if (this.potentialVariableMap) {
         this.potentialVariableMap.clear();
       }
+
+      this.getModuleManager().clear();
     } finally {
       this.isClearing = false;
     }
@@ -486,6 +521,16 @@ export class Workspace implements IASTNodeLocation {
   getAllVariableNames(): string[] {
     return this.variableMap.getAllVariableNames();
   }
+
+  /**
+   * Return module manager.
+   *
+   * @returns {ModuleManager} The module manager.
+   */
+  getModuleManager() {
+    return this.moduleManager_;
+  }
+
   /* End functions that are just pass-throughs to the variable map. */
   /**
    * Returns the horizontal offset of the workspace.
@@ -507,9 +552,10 @@ export class Workspace implements IASTNodeLocation {
    *     functions for this block.
    * @param opt_id Optional ID.  Use this ID if provided, otherwise create a new
    *     ID.
+   * @param {string=} moduleId Optional module ID.  Use this ID if provided, otherwise use active module.
    * @returns The created block.
    */
-  newBlock(prototypeName: string, opt_id?: string): Block {
+  newBlock(prototypeName: string, opt_id?: string, moduleId?: string): Block {
     throw new Error(
       'The implementation of newBlock should be ' +
         'monkey-patched in by blockly.ts',
@@ -528,7 +574,7 @@ export class Workspace implements IASTNodeLocation {
       return Infinity;
     }
 
-    return this.options.maxBlocks - this.getAllBlocks(false).length;
+    return this.options.maxBlocks - this.getAllBlocks(false, false).length;
   }
 
   /**
@@ -749,7 +795,7 @@ export class Workspace implements IASTNodeLocation {
    * @returns True if all inputs are filled, false otherwise.
    */
   allInputsFilled(opt_shadowBlocksAreFilled?: boolean): boolean {
-    const blocks = this.getTopBlocks(false);
+    const blocks = this.getTopBlocks(false, false);
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i];
       if (!block.allInputsFilled(opt_shadowBlocksAreFilled)) {

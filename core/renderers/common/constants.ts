@@ -251,7 +251,7 @@ export class ConstantProvider {
   /**
    * The backing colour of a field's border rect.
    */
-  FIELD_BORDER_RECT_COLOUR = '#fff';
+  FIELD_BORDER_RECT_COLOUR = 'rgba(255, 255, 255, 0.6)';
   FIELD_TEXT_BASELINE_CENTER: boolean;
   FIELD_DROPDOWN_BORDER_RECT_HEIGHT: number;
 
@@ -311,6 +311,30 @@ export class ConstantProvider {
    * The ID of the disabled pattern, or the empty string if no pattern is set.
    */
   disabledPatternId = '';
+
+  /**
+   * The ID of the removed pattern, or the empty string if no pattern is set.
+   *
+   * @type {string}
+   * @package
+   */
+  removedPatternId = '';
+
+  /**
+   * Name of the removed pattern, or the empty string if no pattern is set.
+   *
+   * @type {string}
+   * @package
+   */
+  removedPatternName = 'blocklyRemovedPattern';
+
+  /**
+   * The <pattern> element to use for removed blocks, or null if not set.
+   *
+   * @type {SVGElement}
+   * @private
+   */
+  removedPattern_: SVGElement | null = null;
 
   /**
    * The <pattern> element to use for disabled blocks, or null if not set.
@@ -696,6 +720,9 @@ export class ConstantProvider {
     if (this.debugFilter) {
       dom.removeNode(this.debugFilter);
     }
+    if (this.removedPattern_) {
+      dom.removeNode(this.removedPattern_);
+    }
     this.cssNode = null;
   }
 
@@ -1029,6 +1056,36 @@ export class ConstantProvider {
     );
     this.disabledPatternId = disabledPattern.id;
     this.disabledPattern = disabledPattern;
+
+    /*
+     <pattern id="blocklyRemovedPattern837493" patternUnits="userSpaceOnUse"
+              width="10" height="10">
+       <rect width="10" height="10" fill="#aaa" />
+       <path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0" />
+     </pattern>
+    */
+    const removedPattern = dom.createSvgElement(
+      'pattern',
+      {
+        'id': this.removedPatternName + this.randomIdentifier,
+        'patternUnits': 'userSpaceOnUse',
+        'width': 10,
+        'height': 10,
+      },
+      this.defs,
+    );
+    dom.createSvgElement(
+      'rect',
+      {'width': 10, 'height': 10, 'fill': '#aaaaaa', 'opacity': 0.5},
+      removedPattern,
+    );
+    dom.createSvgElement(
+      'path',
+      {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#ca0d29', 'opacity': 0.5},
+      removedPattern,
+    );
+    this.removedPatternId = removedPattern.id;
+    this.removedPattern_ = removedPattern;
 
     this.createDebugFilter();
   }

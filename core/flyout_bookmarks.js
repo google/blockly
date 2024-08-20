@@ -1,19 +1,18 @@
 /**
-  * @license
-  * Copyright 2011 Google LLC
-  * SPDX-License-Identifier: Apache-2.0
-  */
+ * @license
+ * Copyright 2011 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /**
-  * @fileoverview Flyout bookmarks for faster picking blocks category
-  */
-'use strict';
+ * @fileoverview Flyout bookmarks for faster picking blocks category
+ */
 
 /**
-  * Flyout bookmarks for faster picking blocks category
-  * @class
-  */
-goog.module('Blockly.FlyoutBookmarks');
+ * Flyout bookmarks for faster picking blocks category
+ * @class
+ */
+// goog.module('Blockly.FlyoutBookmarks');
 
 const FlyoutBookmarks = function(flyout) {
    this.flyout_ = flyout;
@@ -23,9 +22,9 @@ const FlyoutBookmarks = function(flyout) {
    this.currentActiveBookmark_ = null;
 };
 
-FlyoutBookmarks.prototype.show = function() {
+FlyoutBookmarks.prototype.show = function () {
   if (!this.flyout_.buttons_.length) return;
-  
+
   if (!this.inserted) {
     this.rootDiv_ = document.createElement('div');
     this.rootDiv_.classList.add('blocklyFlyoutBookmarks');
@@ -54,7 +53,7 @@ FlyoutBookmarks.prototype.show = function() {
   this.createBookmarks_();
 };
 
-FlyoutBookmarks.prototype.createBookmarks_ = function() {
+FlyoutBookmarks.prototype.createBookmarks_ = function () {
   this.flyout_.buttons_.forEach((button) => {
     if (button.isLabel()) {
       this.createBookmark_(button);
@@ -62,7 +61,7 @@ FlyoutBookmarks.prototype.createBookmarks_ = function() {
   });
 };
 
-FlyoutBookmarks.prototype.createBookmark_ = function(button) {
+FlyoutBookmarks.prototype.createBookmark_ = function (button) {
   const bookmarkDiv = document.createElement('div');
   bookmarkDiv.classList.add('blocklyFlyoutBookmark');
 
@@ -87,14 +86,15 @@ FlyoutBookmarks.prototype.createBookmark_ = function(button) {
       const buttonPosition = button.position_.y;
       const flyoutScale = this.flyout_.workspace_.scale;
       const buttonHeight = button.svgGroup_.getBBox().height;
-      const targetY = (buttonPosition * flyoutScale) - (buttonHeight * flyoutScale * 2);
+      const targetY =
+        buttonPosition * flyoutScale - buttonHeight * flyoutScale * 2;
 
       this.workspace_.scrollbar.setY(targetY);
     }
   };
 
   bookmarkDiv.addEventListener('click', callback.bind(this));
-  
+
   this.bookmarks_.push({
     button,
     div: bookmarkDiv,
@@ -103,7 +103,7 @@ FlyoutBookmarks.prototype.createBookmark_ = function(button) {
   });
 };
 
-FlyoutBookmarks.prototype.hide = function() {
+FlyoutBookmarks.prototype.hide = function () {
   if (this.rootDiv_) this.rootDiv_.style.display = 'none';
 
   this.bookmarks_.forEach((bookmark) => {
@@ -113,23 +113,26 @@ FlyoutBookmarks.prototype.hide = function() {
   this.bookmarks_ = [];
 };
 
-FlyoutBookmarks.prototype.removeDom_ = function() {
+FlyoutBookmarks.prototype.removeDom_ = function () {
   this.bookmarks_.forEach((b) => b.remove());
   this.bookmarks_ = [];
 
   if (this.rootDiv_) this.rootDiv_.remove();
 };
 
-FlyoutBookmarks.prototype.updatePosition = function(scrollPosition) {
+FlyoutBookmarks.prototype.updatePosition = function (scrollPosition) {
   if (!this.bookmarks_.length) return;
 
-  const scrollMetrics = this.flyout_.workspace_.getMetricsManager().getScrollMetrics();
+  const scrollMetrics = this.flyout_.workspace_
+    .getMetricsManager()
+    .getScrollMetrics();
   const scrollHeight = scrollMetrics.height;
   const scale = this.flyout_.workspace_.scale;
   let foundCurrentBookmark = false;
 
   this.bookmarks_.forEach((bookmark, i, bookmarks) => {
-    const bookMarkStartPosition = (bookmark.button.position_.y * scale) / scrollHeight;
+    const bookMarkStartPosition =
+      (bookmark.button.position_.y * scale) / scrollHeight;
 
     if (bookMarkStartPosition > scrollPosition) return;
 
@@ -139,26 +142,33 @@ FlyoutBookmarks.prototype.updatePosition = function(scrollPosition) {
       return;
     }
 
-    const nextBookmarkPosition = (bookmarks[i + 1].button.position_.y * scale) / scrollHeight;
-    if (bookMarkStartPosition < scrollPosition && scrollPosition < nextBookmarkPosition) {
+    const nextBookmarkPosition =
+      (bookmarks[i + 1].button.position_.y * scale) / scrollHeight;
+    if (
+      bookMarkStartPosition < scrollPosition &&
+      scrollPosition < nextBookmarkPosition
+    ) {
       foundCurrentBookmark = true;
       this.markAsCurrent_(bookmark);
     }
   });
 
   if (!foundCurrentBookmark && this.currentActiveBookmark_) {
-    this.currentActiveBookmark_.div.classList.remove('blocklyFlyoutBookmarkActive');
+    this.currentActiveBookmark_.div.classList.remove(
+      'blocklyFlyoutBookmarkActive',
+    );
   }
 };
 
-FlyoutBookmarks.prototype.markAsCurrent_ = function(bookmark) {
+FlyoutBookmarks.prototype.markAsCurrent_ = function (bookmark) {
   if (this.currentActiveBookmark_) {
-    this.currentActiveBookmark_.div.classList.remove('blocklyFlyoutBookmarkActive');
+    this.currentActiveBookmark_.div.classList.remove(
+      'blocklyFlyoutBookmarkActive',
+    );
   }
-  
+
   bookmark.div.classList.add('blocklyFlyoutBookmarkActive');
   this.currentActiveBookmark_ = bookmark;
 };
 
 exports.FlyoutBookmarks = FlyoutBookmarks;
- 

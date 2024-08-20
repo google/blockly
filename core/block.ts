@@ -51,6 +51,7 @@ import {EndRowInput} from './inputs/end_row_input.js';
 import {ValueInput} from './inputs/value_input.js';
 import {StatementInput} from './inputs/statement_input.js';
 import {IconType} from './icons/icon_types.js';
+import {Msg} from './msg.js';
 
 /**
  * Class for one block.
@@ -167,7 +168,9 @@ export class Block implements IASTNodeLocation, IDeletable {
   inputList: Input[] = [];
   inputsInline?: boolean;
   icons: IIcon[] = [];
-  private disabled = false;
+  disabled = false;
+  private obsolete = false;
+  private removed = false;
   tooltip: Tooltip.TipInfo = '';
   contextMenu = true;
 
@@ -181,7 +184,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   private editable_ = true;
 
-  private isShadow_ = false;
+  isShadow_ = false;
 
   protected collapsed_ = false;
   protected outputShape_: number | null = null;
@@ -223,6 +226,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   // Record initial inline state.
   inputsInlineDefault?: boolean;
   workspace: Workspace;
+  private moduleId_: string;
 
   /**
    * @param workspace The block's workspace.
@@ -230,14 +234,24 @@ export class Block implements IASTNodeLocation, IDeletable {
    *     functions for this block.
    * @param opt_id Optional ID.  Use this ID if provided, otherwise create a new
    *     ID.
+   * @param {string=} moduleId Optional module ID.  Use this ID if provided, otherwise use active module.
    * @throws When the prototypeName is not valid or not allowed.
    */
-  constructor(workspace: Workspace, prototypeName: string, opt_id?: string) {
+  constructor(
+    workspace: Workspace,
+    prototypeName: string,
+    opt_id?: string,
+    moduleId?: string,
+  ) {
     this.workspace = workspace;
 
     this.id =
       opt_id && !workspace.getBlockById(opt_id) ? opt_id : idGenerator.genUid();
     workspace.setBlockById(this.id, this);
+
+    this.moduleId_ = moduleId
+      ? moduleId
+      : workspace.getModuleManager().getActiveModule().getId();
 
     /**
      * The block's position in workspace units.  (0, 0) is at the workspace's
@@ -255,6 +269,15 @@ export class Block implements IASTNodeLocation, IDeletable {
       const prototype = Blocks[prototypeName];
       if (!prototype || typeof prototype !== 'object') {
         throw TypeError('Invalid block definition for type: ' + prototypeName);
+        // todo: add loading_error back
+        // const errorMessage = `${Msg['UNKNOWN_BLOCK_TYPE']}: "${prototypeName}"`;
+        // eventUtils.fire(
+        //   new (eventUtils.get(eventUtils.LOADING_ERROR))(
+        //     this.workspace,
+        //     errorMessage,
+        //   ),
+        // );
+        // throw TypeError('Unknown block type: ' + this.type);
       }
       Object.assign(this, prototype);
     }
@@ -507,6 +530,49 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
+   * Returns module id for this block.
+   *
+   * @returns string
+   * @package
+   */
+  getModuleId() {
+    return this.moduleId_;
+  }
+
+  /**
+   * Returns module order for this block.
+   *
+   * @returns int
+   * @package
+   */
+  getModuleOrder() {
+    return this.workspace.getModuleManager().getModuleOrder(this.getModuleId());
+  }
+
+  /**
+   * Returns is this block in active module.
+   *
+   * @returns string
+   * @package
+   */
+  inActiveModule() {
+    return (
+      this.moduleId_ ===
+      this.workspace.getModuleManager().getActiveModule().getId()
+    );
+  }
+
+  /**
+   * Set module module id for this block.
+   *
+   * @param {string} moduleId module id.
+   * @package
+   */
+  setModuleId(moduleId: string) {
+    return (this.moduleId_ = moduleId);
+  }
+
+  /**
    * Returns all connections originating from this block.
    *
    * @param _all If true, return all connections even hidden ones.
@@ -628,6 +694,25 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   getPreviousBlock(): Block | null {
     return this.previousConnection && this.previousConnection.targetBlock();
+  }
+
+  /**
+   * Return the connection on the first statement input on this block, or null
+   * if there are none.
+   *
+   * @returns The first statement connection or null.
+   * @internal
+   */
+  getFirstStatementConnection(): Connection | null {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
+      if (
+        input.connection &&
+        input.connection.type === ConnectionType.NEXT_STATEMENT
+      ) {
+        return input.connection;
+      }
+    }
+    return null;
   }
 
   /**
@@ -1215,6 +1300,34 @@ export class Block implements IASTNodeLocation, IDeletable {
   }
 
   /**
+   * Returns the language-neutral text of the given field.
+   *
+   * @param {string} name The name of the field.
+   * @returns {*} Text of the field or null if field does not exist.
+   */
+  getFieldText(name: string) {
+    const field = this.getField(name);
+    if (field) {
+      return field.getText();
+    }
+    return null;
+  }
+
+  /**
+   * Sets the text of the given field for this block.
+   *
+   * @param {*} newValue The text to set.
+   * @param {string} name The name of the field to set the value of.
+   */
+  setFieldText(newValue: any, name: string) {
+    const field = this.getField(name);
+    if (!field) {
+      throw Error('Field "' + name + '" not found.');
+    }
+    field.setText(newValue);
+  }
+
+  /**
    * Set whether this block can chain onto the bottom of another block.
    *
    * @param newBoolean True if there can be a previous statement.
@@ -1414,6 +1527,52 @@ export class Block implements IASTNodeLocation, IDeletable {
           !enabled,
         ),
       );
+    }
+  }
+
+  /**
+   * Get whether this block is obsolete or not.
+   *
+   * @returns {boolean} True if obsolete.
+   */
+  isObsolete() {
+    return this.obsolete;
+  }
+
+  /**
+   * Set whether the block is obsolete or not.
+   *
+   * @param {boolean} obsolete True if obsolete.
+   */
+  setObsolete(obsolete: boolean) {
+    this.obsolete = obsolete;
+    if (obsolete) {
+      this.setWarningText(Msg['OBSOLETE_WARNING']);
+    } else {
+      this.setWarningText(null);
+    }
+  }
+
+  /**
+   * Get whether this block is removed or not.
+   *
+   * @returns {boolean} True if removed.
+   */
+  isRemoved() {
+    return this.removed;
+  }
+
+  /**
+   * Set whether the block is removed or not.
+   *
+   * @param {boolean} removed True if removed.
+   */
+  setRemoved(removed: boolean) {
+    this.removed = removed;
+    if (removed) {
+      this.setWarningText(Msg['REMOVED_WARNING']);
+    } else {
+      this.setWarningText(null);
     }
   }
 
@@ -1703,6 +1862,12 @@ export class Block implements IASTNodeLocation, IDeletable {
     }
     if (json['nextStatement'] !== undefined) {
       this.setNextStatement(true, json['nextStatement']);
+    }
+    if (json['obsolete'] === true) {
+      this.setObsolete(true);
+    }
+    if (json['removed'] === true) {
+      this.setRemoved(true);
     }
     if (json['tooltip'] !== undefined) {
       const rawValue = json['tooltip'];

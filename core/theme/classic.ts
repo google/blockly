@@ -19,6 +19,7 @@ const defaultBlockStyles = {
   'variable_blocks': {'colourPrimary': '330'},
   'variable_dynamic_blocks': {'colourPrimary': '310'},
   'hat_blocks': {'colourPrimary': '330', 'hat': 'cap'},
+  'argument_local_blocks': {'colourPrimary': '#d37e0a'},
 };
 
 const categoryStyles = {

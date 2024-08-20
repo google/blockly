@@ -37,6 +37,7 @@ import * as utilsXml from './utils/xml.js';
 import * as Xml from './xml.js';
 import * as renderManagement from './render_management.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
+import {FlyoutBookmarks} from './flyout_bookmarks.js';
 
 enum FlyoutItemType {
   BLOCK = 'block',
@@ -50,6 +51,16 @@ export abstract class Flyout
   extends DeleteArea
   implements IAutoHideable, IFlyout
 {
+  protected flyoutBookmarks_: FlyoutBookmarks | null;
+  private closeButton_: SVGElement | null;
+  private closeButtonSVG_: SVGElement | null;
+  private WIDTH_CLOSE_BUTTON: number;
+  private onMouseDownCloseWrapper_: browserEvents.Data | null;
+  private flyoutEndShadowDiv_: Element | null;
+  private flyoutTopPanel_: Element | null;
+  private zoomButtonsGroup_: SVGElement | null;
+  private zoomInButtonSvg_: SVGElement | null;
+  private zoomOutButtonSvg_: SVGElement | null;
   /**
    * Position the flyout.
    */
@@ -120,7 +131,7 @@ export abstract class Flyout
    */
   static FlyoutItemType = FlyoutItemType;
 
-  protected workspace_: WorkspaceSvg;
+  workspace_: WorkspaceSvg;
   RTL: boolean;
   /**
    * Whether the flyout should be laid out horizontally or not.
@@ -159,7 +170,7 @@ export abstract class Flyout
   /**
    * List of visible buttons.
    */
-  protected buttons_: FlyoutButton[] = [];
+  buttons_: FlyoutButton[] = [];
 
   /**
    * List of event listeners.
@@ -206,6 +217,8 @@ export abstract class Flyout
    */
   readonly CORNER_RADIUS: number = 8;
   readonly MARGIN: number;
+  readonly START_MARGIN: number;
+
   readonly GAP_X: number;
   readonly GAP_Y: number;
 
@@ -217,7 +230,12 @@ export abstract class Flyout
   /**
    * Width of flyout.
    */
-  protected width_ = 0;
+  width_ = 0;
+
+  /**
+   * Enable(false) / disable(true) auto calculate flyout width.
+   */
+  fixedWidth = false;
 
   /**
    * Height of flyout.
@@ -246,6 +264,13 @@ export abstract class Flyout
    */
   // clang-format on
   protected dragAngleRange_ = 70;
+
+  /**
+   * Disable mouse events above flyout. It's needed for prevent bugs when user
+   * dragging resizer or move some block above flyout
+   * @type {boolean}
+   */
+  protected disableBlocksMouseEvents = false;
 
   /**
    * The path around the background of the flyout, which will be filled with a
@@ -308,6 +333,13 @@ export abstract class Flyout
      */
     this.MARGIN = this.CORNER_RADIUS;
 
+    /**
+     * Margin before first block or button in flyout
+     * @type {number}
+     * @const
+     */
+    this.START_MARGIN = 60;
+
     // TODO: Move GAP_X and GAP_Y to their appropriate files.
     /**
      * Gap between items in horizontal flyouts. Can be overridden with the "sep"
@@ -320,6 +352,37 @@ export abstract class Flyout
      * element.
      */
     this.GAP_Y = this.MARGIN * 3;
+
+    this.closeButton_ = null;
+
+    /**
+     * The SVG group containt close flyout button.
+     * @type {?SVGElement}
+     * @private
+     */
+    this.closeButtonSVG_ = null;
+
+    /**
+     * Width SVG group closeButtonSVG_.
+     * @type {number}
+     * @const
+     */
+    this.WIDTH_CLOSE_BUTTON = 40;
+
+    /**
+     * Mouse down on closeButtonSVG_ event data.
+     * @type {?browserEvents.Data}
+     * @private
+     */
+    this.onMouseDownCloseWrapper_ = null;
+
+    this.flyoutEndShadowDiv_ = null;
+
+    this.flyoutTopPanel_ = null;
+    this.zoomButtonsGroup_ = null;
+    this.zoomInButtonSvg_ = null;
+    this.zoomOutButtonSvg_ = null;
+    this.flyoutBookmarks_ = null;
   }
 
   /**
@@ -358,6 +421,9 @@ export abstract class Flyout
     this.workspace_
       .getThemeManager()
       .subscribe(this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
+
+    this.flyoutBookmarks_ = new FlyoutBookmarks(this);
+
     return this.svgGroup_;
   }
 
@@ -441,9 +507,14 @@ export abstract class Flyout
       this.workspace_.getThemeManager().unsubscribe(this.svgBackground_!);
       this.workspace_.dispose();
     }
+
+    this.removeZoomControls_();
+
     if (this.svgGroup_) {
       dom.removeNode(this.svgGroup_);
     }
+
+    this.svgBackground_ = null;
   }
 
   /**
@@ -566,6 +637,374 @@ export abstract class Flyout
   }
 
   /**
+   * The function to be called when close button is clicked.
+   * @private
+   */
+  onCloseHandler_() {
+    this.hide(true);
+  }
+
+  /**
+   * Create close button for flyout.
+   * @protected
+   */
+  createCloseButton_() {
+    this.removeCloseButton_();
+
+    this.closeButtonSVG_ = dom.createSvgElement(Svg.SVG, {
+      'stroke': 'grey',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+    });
+    this.closeButtonSVG_.classList.add('blocklyFlyoutCloseButton');
+
+    const flyoutSVG = this.workspace_.getParentSvg();
+    const flyoutParentEl = flyoutSVG.parentElement;
+    // @ts-ignore:next-line
+    const flyoutClientRect = flyoutSVG.getBoundingClientRect();
+    // @ts-ignore:next-line
+    const flyoutParentClientRect = flyoutParentEl?.getBoundingClientRect();
+
+    // @ts-ignore:next-line
+    const top = flyoutClientRect.top - flyoutParentClientRect?.top;
+    // @ts-ignore:next-line
+    const left = flyoutClientRect.right - flyoutParentClientRect?.left;
+
+    this.closeButtonSVG_.style.top = `${top}px`;
+    this.closeButtonSVG_.style.left = `${left}px`;
+
+    // insert close button after the flyout svg
+    flyoutParentEl?.insertBefore(this.closeButtonSVG_, flyoutSVG.nextSibling);
+
+    this.onMouseDownCloseWrapper_ = browserEvents.conditionalBind(
+      this.closeButtonSVG_,
+      'click',
+      this,
+      this.onCloseHandler_,
+    );
+
+    dom.createSvgElement(
+      Svg.PATH,
+      {
+        'class': 'blocklyFlyoutBackground',
+        'd': 'M 0 0 h 22 a 8 8 0 0 1 8 8 v 24 a 8 8 0 0 1 -8 8 h -22 z',
+        'stroke': 'none',
+      },
+      this.closeButtonSVG_,
+    );
+
+    // Create left arrow
+    dom.createSvgElement(
+      Svg.LINE,
+      {
+        'x1': 10,
+        'y1': 20,
+        'x2': 16,
+        'y2': 15,
+      },
+      this.closeButtonSVG_,
+    );
+
+    dom.createSvgElement(
+      Svg.LINE,
+      {
+        'x1': 10,
+        'y1': 20,
+        'x2': 16,
+        'y2': 25,
+      },
+      this.closeButtonSVG_,
+    );
+  }
+
+  /**
+   * CremoveCloseButton_
+   */
+  removeCloseButton_() {
+    if (this.onMouseDownCloseWrapper_) {
+      browserEvents.unbind(this.onMouseDownCloseWrapper_);
+      this.onMouseDownCloseWrapper_ = null;
+    }
+
+    if (this.closeButtonSVG_) {
+      dom.removeNode(this.closeButtonSVG_);
+      this.closeButtonSVG_ = null;
+    }
+  }
+
+  /**
+   * createFlyoutEndShadow_
+   */
+  createFlyoutEndShadow_() {
+    this.removeFlyoutEndShadow_();
+
+    this.flyoutEndShadowDiv_ = document.createElement('div');
+    this.flyoutEndShadowDiv_.classList.add('blocklyFlyoutEndShadow');
+
+    const flyoutSVG = this.workspace_.getParentSvg();
+    const flyoutParentEl = flyoutSVG.parentElement;
+
+    const flyoutClientRect = flyoutSVG.getBoundingClientRect();
+    const flyoutParentClientRect = flyoutParentEl?.getBoundingClientRect();
+    // @ts-ignore:next-line
+    const top = flyoutClientRect.top - flyoutParentClientRect?.top;
+    // @ts-ignore:next-line
+    const left = flyoutClientRect.right - flyoutParentClientRect?.left - 10; // 10px width of shadow, see css.js
+    // @ts-ignore:next-line
+    this.flyoutEndShadowDiv_.style.top = `${top}px`;
+    // @ts-ignore:next-line
+    this.flyoutEndShadowDiv_.style.left = `${left}px`;
+    // @ts-ignore:next-line
+    this.flyoutEndShadowDiv_.style.height = `${flyoutSVG.getBBox().height}px`;
+
+    // insert close button after the flyout svg
+    flyoutParentEl?.insertBefore(
+      this.flyoutEndShadowDiv_,
+      flyoutSVG.nextSibling,
+    );
+  }
+
+  /**
+   * removeFlyoutEndShadow_
+   */
+  removeFlyoutEndShadow_() {
+    if (this.flyoutEndShadowDiv_) {
+      this.flyoutEndShadowDiv_.remove();
+    }
+  }
+
+  /**
+   * createZoomControls_
+   */
+  createZoomControls_() {
+    if (this.flyoutTopPanel_) {
+      this.resizeZoomControls_();
+      return;
+    }
+
+    const flyoutSVG = this.workspace_.getParentSvg();
+    const flyoutParentEl = flyoutSVG.parentElement;
+
+    const flyoutClientRect = flyoutSVG.getBoundingClientRect();
+    const flyoutParentClientRect = flyoutParentEl?.getBoundingClientRect();
+
+    // @ts-ignore:next-line
+    const top = flyoutClientRect.top - flyoutParentClientRect.top;
+    // @ts-ignore:next-line
+    const left = flyoutClientRect.left - flyoutParentClientRect.left;
+
+    this.flyoutTopPanel_ = document.createElement('div');
+    this.flyoutTopPanel_.classList.add('blocklyFlyoutZoomControlContainer');
+    // @ts-ignore:next-line
+    this.flyoutTopPanel_.style.top = `${top}px`;
+    // @ts-ignore:next-line
+    this.flyoutTopPanel_.style.left = `${left}px`;
+    // @ts-ignore:next-line
+    this.flyoutTopPanel_.style.width = `${this.width_}px`;
+
+    // insert close button after the flyout svg
+    flyoutParentEl?.insertBefore(this.flyoutTopPanel_, flyoutSVG.nextSibling);
+
+    this.zoomButtonsGroup_ = dom.createSvgElement(
+      Svg.SVG,
+      {
+        'width': '42px',
+        'height': '18px',
+      },
+      this.flyoutTopPanel_,
+    );
+
+    this.zoomInButtonSvg_ = dom.createSvgElement(
+      Svg.SVG,
+      {
+        'class': 'blocklyFlyoutZoomControl',
+        'viewBox': '0 0 512 512',
+        'width': '18px',
+        'x': '24',
+      },
+      this.zoomButtonsGroup_,
+    );
+
+    dom.createSvgElement(
+      Svg.CIRCLE,
+      {
+        'stroke': '#000000',
+        'stroke-width': '20',
+        'fill-opacity': '0',
+        'ry': '245',
+        'rx': '245',
+        'cy': '256',
+        'cx': '256',
+        'fill': 'none',
+        'shape-rendering': 'geometricPrecision',
+      },
+      this.zoomInButtonSvg_,
+    );
+
+    dom.createSvgElement(
+      Svg.LINE,
+      {
+        'stroke': '#000000',
+        'y2': '256',
+        'x2': '383.90273',
+        'y1': '256',
+        'x1': '128.09724',
+        'fill-opacity': '0',
+        'stroke-width': '20',
+        'fill': 'none',
+      },
+      this.zoomInButtonSvg_,
+    );
+
+    dom.createSvgElement(
+      Svg.LINE,
+      {
+        'stroke': '#000000',
+        'x2': '256',
+        'y2': '383.90273',
+        'x1': '256',
+        'y1': '128.09724',
+        'fill-opacity': '0',
+        'stroke-width': '20',
+        'fill': 'none',
+      },
+      this.zoomInButtonSvg_,
+    );
+
+    dom.createSvgElement(
+      Svg.RECT,
+      {
+        'width': '512',
+        'height': '512',
+        'fill': 'transparent',
+      },
+      this.zoomInButtonSvg_,
+    );
+
+    this.zoomOutButtonSvg_ = dom.createSvgElement(
+      Svg.SVG,
+      {
+        'class': 'blocklyFlyoutZoomControl',
+        'viewBox': '0 0 512 512',
+        'width': '18px',
+      },
+      this.zoomButtonsGroup_,
+    );
+
+    dom.createSvgElement(
+      Svg.CIRCLE,
+      {
+        'stroke': '#000000',
+        'stroke-width': '20',
+        'fill-opacity': '0',
+        'ry': '245',
+        'rx': '245',
+        'cy': '256',
+        'cx': '256',
+        'fill': 'none',
+        'shape-rendering': 'geometricPrecision',
+      },
+      this.zoomOutButtonSvg_,
+    );
+
+    dom.createSvgElement(
+      Svg.LINE,
+      {
+        'stroke': '#000000',
+        'y2': '256',
+        'x2': '383.90273',
+        'y1': '256',
+        'x1': '128.09724',
+        'fill-opacity': '0',
+        'stroke-width': '20',
+        'fill': 'none',
+      },
+      this.zoomOutButtonSvg_,
+    );
+
+    dom.createSvgElement(
+      Svg.RECT,
+      {
+        'width': '512',
+        'height': '512',
+        'fill': 'transparent',
+      },
+      this.zoomOutButtonSvg_,
+    );
+
+    this.zoomInButtonSvg_.addEventListener('click', this.zoomIn_.bind(this));
+    this.zoomOutButtonSvg_.addEventListener('click', this.zoomOut_.bind(this));
+    this.zoomInButtonSvg_.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+    });
+    this.zoomOutButtonSvg_.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+    });
+  }
+
+  /**
+   * resizeZoomControls_
+   */
+  resizeZoomControls_() {
+    if (!this.flyoutTopPanel_) return;
+
+    // @ts-ignore:next-line
+    this.flyoutTopPanel_.style.width = `${this.width_}px`;
+  }
+
+  /**
+   * zoomIn_
+   * @param {Event} e event
+   */
+  zoomIn_(e: Event) {
+    e.stopPropagation();
+    e.preventDefault();
+    const scale = this.workspace_.scale + 0.1;
+
+    this.workspace_.setScale(scale);
+    this.position();
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.FLYOUT_ZOOM))(
+        this.getWorkspace().id,
+        scale,
+      ),
+    );
+  }
+
+  /**
+   * zoomOut_
+   * @param {Event} e event
+   */
+  zoomOut_(e: Event) {
+    e.stopPropagation();
+    e.preventDefault();
+    const scale = this.workspace_.scale - 0.1;
+
+    this.workspace_.setScale(scale);
+    this.position();
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.FLYOUT_ZOOM))(
+        this.getWorkspace().id,
+        scale,
+      ),
+    );
+  }
+
+  /**
+   * removeZoomControls_
+   */
+  removeZoomControls_() {
+    if (this.flyoutTopPanel_) {
+      this.zoomInButtonSvg_?.removeEventListener('click', this.zoomIn_);
+      this.zoomOutButtonSvg_?.removeEventListener('click', this.zoomOut_);
+      this.flyoutTopPanel_.remove();
+      this.flyoutTopPanel_ = null;
+    }
+  }
+
+  /**
    * Update the view based on coordinates calculated in position().
    *
    * @param width The computed width of the flyout's SVG group
@@ -581,6 +1020,13 @@ export abstract class Flyout
     if (this.svgGroup_) {
       const transform = 'translate(' + x + 'px,' + y + 'px)';
       dom.setCssTransform(this.svgGroup_, transform);
+    }
+
+    if (!this.workspace_.isVisible_) {
+      this.createCloseButton_();
+      this.createFlyoutEndShadow_();
+      this.createZoomControls_();
+      this.flyoutBookmarks_?.show();
     }
 
     // Update the scrollbar (if one exists).
@@ -609,11 +1055,24 @@ export abstract class Flyout
   /**
    * Hide and empty the flyout.
    */
-  hide() {
+  hide(isButton = false) {
     if (!this.isVisible()) {
       return;
     }
     this.setVisible(false);
+
+    this.removeCloseButton_();
+    this.removeFlyoutEndShadow_();
+    this.removeZoomControls_();
+    this.flyoutBookmarks_?.hide();
+
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.FLYOUT_HIDE))(
+        this.getWorkspace().id,
+        isButton,
+      ),
+    );
+
     // Delete all the event listeners.
     for (const listen of this.listeners) {
       browserEvents.unbind(listen);
@@ -645,6 +1104,10 @@ export abstract class Flyout
     }
     this.setVisible(true);
 
+    eventUtils.fire(
+      new (eventUtils.get(eventUtils.FLYOUT_SHOW))(this.getWorkspace().id),
+    );
+
     // Parse the Array, Node or NodeList into a a list of flyout items.
     const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
     const flyoutInfo = this.createFlyoutInfo(parsedContent);
@@ -654,10 +1117,11 @@ export abstract class Flyout
     this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 
     if (this.horizontalLayout) {
-      this.height_ = 0;
+      if (!this.height_) this.height_ = 0;
     } else {
-      this.width_ = 0;
+      if (!this.width_) this.width_ = 0;
     }
+
     this.workspace_.setResizesEnabled(true);
     this.reflow();
 
@@ -988,33 +1452,49 @@ export abstract class Flyout
       ),
     );
     this.listeners.push(
-      browserEvents.bind(root, 'pointerenter', block, () => {
-        if (!this.targetWorkspace.isDragging()) {
-          block.addSelect();
-        }
+      browserEvents.bind(root, 'pointerenter', block, (e: Event) => {
+        this.blockMouseEnter_(e, block);
       }),
     );
     this.listeners.push(
       browserEvents.bind(root, 'pointerleave', block, () => {
-        if (!this.targetWorkspace.isDragging()) {
-          block.removeSelect();
-        }
+        this.blockMouseLeave_(block);
       }),
     );
     this.listeners.push(
-      browserEvents.bind(rect, 'pointerenter', block, () => {
-        if (!this.targetWorkspace.isDragging()) {
-          block.addSelect();
-        }
+      browserEvents.bind(rect, 'pointerenter', block, (e: Event) => {
+        this.blockMouseEnter_(e, block);
       }),
     );
     this.listeners.push(
       browserEvents.bind(rect, 'pointerleave', block, () => {
-        if (!this.targetWorkspace.isDragging()) {
-          block.removeSelect();
-        }
+        this.blockMouseLeave_(block);
       }),
     );
+  }
+
+  /**
+   * blockMouseEnter_
+   * @param {!Event} e event
+   * @param {!BlockSvg} block The flyout block
+   */
+  blockMouseEnter_(e: Event, block: BlockSvg) {
+    if (this.disableBlocksMouseEvents) return;
+    if (this.targetWorkspace.isDragging()) return;
+    if ((e as MouseEvent)?.buttons) return;
+
+    block.addSelect();
+  }
+
+  /**
+   * blockMouseLeave_
+   * @param {!BlockSvg} block The flyout block
+   */
+  blockMouseLeave_(block: BlockSvg) {
+    if (this.disableBlocksMouseEvents) return;
+    if (this.targetWorkspace.isDragging()) return;
+
+    block.removeSelect();
   }
 
   /**

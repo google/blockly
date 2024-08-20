@@ -36,6 +36,12 @@ import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import type {IIcon} from './interfaces/i_icon.js';
+import {isShadowArgumentLocal} from './utils/argument_local.js';
+import {Block} from './block.js';
+import * as Events from '../core/events/events.js';
+import {FieldLabelHover} from './field_label_hover.js';
+import {Workspace} from './workspace.js';
+import * as Xml from './xml.js';
 
 /**
  * Note: In this file "start" refers to pointerdown
@@ -133,6 +139,12 @@ export class Gesture {
 
   /** Boolean for sanity-checking that some code is only called once. */
   private gestureHasStarted = false;
+
+  /**
+   * True if dragging from the target block should duplicate the target block
+   * and drag the duplicate instead.  This has a lot of side effects.
+   */
+  private shouldDuplicateOnDrag_ = false;
 
   /** Boolean used internally to break a cycle in disposal. */
   protected isEnding_ = false;
@@ -340,7 +352,7 @@ export class Gesture {
         this.startDraggingBlock();
         return true;
       }
-    } else if (this.targetBlock.isMovable()) {
+    } else if (this.targetBlock.isMovable() || this.shouldDuplicateOnDrag_) {
       this.startDraggingBlock();
       return true;
     }
@@ -402,6 +414,10 @@ export class Gesture {
 
   /** Create a block dragger and start dragging the selected block. */
   private startDraggingBlock() {
+    if (this.shouldDuplicateOnDrag_) {
+      this.duplicateOnDrag_();
+    }
+
     const BlockDraggerClass = registry.getClassFromOptions(
       registry.Type.BLOCK_DRAGGER,
       this.creatorWorkspace.options,
@@ -1074,6 +1090,12 @@ export class Gesture {
     // If the gesture already went through a bubble, don't set the start block.
     if (!this.startBlock && !this.startBubble) {
       this.startBlock = block;
+      this.shouldDuplicateOnDrag_ =
+        !(block as Block).disabled &&
+        !block.getInheritedDisabled() &&
+        !block.isInFlyout &&
+        isShadowArgumentLocal(block);
+
       if (block.isInFlyout && block !== block.getRootBlock()) {
         this.setTargetBlock(block.getRootBlock());
       } else {
@@ -1090,7 +1112,7 @@ export class Gesture {
    * @param block The block the gesture targets.
    */
   private setTargetBlock(block: BlockSvg) {
-    if (block.isShadow()) {
+    if (block.isShadow() && !this.shouldDuplicateOnDrag_) {
       // Non-null assertion is fine b/c it is an invariant that shadows always
       // have parents.
       this.setTargetBlock(block.getParent()!);
@@ -1245,6 +1267,60 @@ export class Gesture {
    */
   getCurrentDragger(): WorkspaceDragger | BubbleDragger | IBlockDragger | null {
     return this.blockDragger ?? this.workspaceDragger ?? this.bubbleDragger;
+  }
+
+  /**
+   * Duplicate the target block and start dragging the duplicated block.
+   * This should be done once we are sure that it is a block drag, and no earlier.
+   * Specifically for argument reporters in custom block defintions.
+   * @private
+   */
+  duplicateOnDrag_() {
+    if (!this.targetBlock) {
+      return;
+    }
+
+    let newBlock = null;
+    Events.disable();
+
+    try {
+      // Note: targetBlock_ should have no children.
+      this.startWorkspace_?.setResizesEnabled(false);
+
+      const xmlBlock = Xml.blockToDom(this.targetBlock);
+      if (
+        this.targetBlock.inputList[0] &&
+        this.targetBlock.inputList[0].fieldRow[0] &&
+        (this.targetBlock.inputList[0].fieldRow[0] as FieldLabelHover)
+          .clearHover
+      ) {
+        (
+          this.targetBlock.inputList[0].fieldRow[0] as FieldLabelHover
+        ).clearHover();
+      }
+      newBlock = Xml.domToBlock(
+        xmlBlock as Element,
+        this.startWorkspace_ as Workspace,
+      );
+
+      // Move the duplicate to original position.
+      const xy = this.targetBlock.getRelativeToSurfaceXY();
+      newBlock.moveBy(xy.x, xy.y);
+      newBlock.setShadow(false);
+      newBlock.setMovable(true);
+    } finally {
+      Events.enable();
+    }
+    if (!newBlock) {
+      // Something went wrong.
+      console.error('Something went wrong while duplicating a block.');
+      return;
+    }
+    if (Events.isEnabled()) {
+      Events.fire(new Events.BlockCreate(newBlock));
+    }
+    (newBlock as BlockSvg).select();
+    this.targetBlock = newBlock as BlockSvg;
   }
 
   /**

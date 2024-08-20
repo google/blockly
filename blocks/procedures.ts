@@ -510,6 +510,7 @@ blocks['procedures_defnoreturn'] = {
     ) {
       this.setCommentText(Msg['PROCEDURES_DEFNORETURN_COMMENT']);
     }
+    this.setObsolete(true);
     this.setStyle('procedure_blocks');
     this.setTooltip(Msg['PROCEDURES_DEFNORETURN_TOOLTIP']);
     this.setHelpUrl(Msg['PROCEDURES_DEFNORETURN_HELPURL']);
@@ -561,6 +562,7 @@ blocks['procedures_defreturn'] = {
     ) {
       this.setCommentText(Msg['PROCEDURES_DEFRETURN_COMMENT']);
     }
+    this.setObsolete(true);
     this.setStyle('procedure_blocks');
     this.setTooltip(Msg['PROCEDURES_DEFRETURN_TOOLTIP']);
     this.setHelpUrl(Msg['PROCEDURES_DEFRETURN_HELPURL']);
@@ -1156,9 +1158,18 @@ const PROCEDURE_CALL_COMMON = {
       enabled: true,
       text: Msg['PROCEDURES_HIGHLIGHT_DEF'],
       callback: function () {
-        const def = Procedures.getDefinition(name, workspace);
+        let def = Procedures.getDefinition(name, workspace);
         if (def) {
-          (workspace as WorkspaceSvg).centerOnBlock(def.id);
+          if (!def.inActiveModule()) {
+            const module = workspace
+              .getModuleManager()
+              .getModuleById(def.getModuleId());
+            if (module) {
+              workspace.getModuleManager().activateModule(module);
+              def = workspace.getBlockById(def.id);
+            }
+          }
+          (workspace as WorkspaceSvg).centerOnBlock(def?.id || null);
           (def as BlockSvg).select();
         }
       },
@@ -1296,14 +1307,19 @@ const PROCEDURES_IFRETURN = {
     } while (block);
     if (legal) {
       // If needed, toggle whether this block has a return value.
-      if (block.type === 'procedures_defnoreturn' && this.hasReturnValue_) {
+      if (
+        (block.type === 'procedures_defnoreturn' ||
+          block.type === 'procedures_with_argument_defnoreturn') &&
+        this.hasReturnValue_
+      ) {
         this.removeInput('VALUE');
         this.appendDummyInput('VALUE').appendField(
           Msg['PROCEDURES_DEFRETURN_RETURN'],
         );
         this.hasReturnValue_ = false;
       } else if (
-        block.type === 'procedures_defreturn' &&
+        (block.type === 'procedures_defreturn' ||
+          block.type === 'procedures_with_argument_defreturn') &&
         !this.hasReturnValue_
       ) {
         this.removeInput('VALUE');
@@ -1329,7 +1345,12 @@ const PROCEDURES_IFRETURN = {
    * To add a new function type add this to your code:
    * Blocks['procedures_ifreturn'].FUNCTION_TYPES.push('custom_func');
    */
-  FUNCTION_TYPES: ['procedures_defnoreturn', 'procedures_defreturn'],
+  FUNCTION_TYPES: [
+    'procedures_defnoreturn',
+    'procedures_defreturn',
+    'procedures_with_argument_defnoreturn',
+    'procedures_with_argument_defreturn',
+  ],
 };
 blocks['procedures_ifreturn'] = PROCEDURES_IFRETURN;
 

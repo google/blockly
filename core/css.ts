@@ -87,6 +87,31 @@ let content = `
   -webkit-user-select: none;
 }
 
+.blocklyWsDragSurface {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+  /* Added as a separate rule with multiple classes to make it more specific
+     than a bootstrap rule that selects svg:root. See issue #1275 for context.
+  */
+  .blocklyWsDragSurface.blocklyOverflowVisible {
+  overflow: visible;
+}
+
+.blocklyBlockDragSurface {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: visible !important;
+  z-index: 50;  /* Display below toolbox, but above everything else. */
+}
+
 .blocklyBlockCanvas.blocklyCanvasTransitioning,
 .blocklyBubbleCanvas.blocklyCanvasTransitioning {
   transition: transform .5s;
@@ -267,7 +292,8 @@ let content = `
   Don't allow users to select text.  It gets annoying when trying to
   drag a block and selected text moves instead.
 */
-.blocklySvg text {
+.blocklySvg text,
+.blocklyBlockDragSurface text {
   user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;
@@ -293,6 +319,12 @@ let content = `
 
 .blocklyIconShape {
   fill: #00f;
+  stroke: #fff;
+  stroke-width: 1px;
+}
+
+.blocklyWarningIconShape {
+  fill: #ff8100;
   stroke: #fff;
   stroke-width: 1px;
 }
@@ -342,12 +374,69 @@ input[type=number] {
 }
 
 .blocklyFlyoutBackground {
-  fill: #ddd;
-  fill-opacity: .8;
+  fill: #eee;
 }
 
 .blocklyMainWorkspaceScrollbar {
   z-index: 20;
+}
+
+.blocklyFlyoutCloseButton {
+  position: absolute;
+  z-index: 20;
+  width: 30px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.blocklyFlyoutEndShadow {
+  display: block;
+  position: absolute;
+  width: 10px;
+  background-color: #eee;
+  z-index: 21;
+  box-shadow: -2px 0 5px #eee;
+}
+
+.blocklyFlyoutBookmarks {
+  display: none;
+  color: white;
+  position: absolute;
+  width: 25px;
+  user-select: none;
+  z-index: 21;
+  overflow: visible;
+  flex-direction: column;
+}
+
+.blocklyFlyoutBookmark {
+  display: flex;
+  padding: 4px 6px;
+  background-color: #eee;
+  overflow: hidden;
+}
+
+.blocklyFlyoutBookmark:last-child {
+  border-radius: 0 0 5px 0;
+}
+
+.blocklyFlyoutBookmarkActive {
+  border-left: 3px solid #eee;
+}
+
+.blocklyFlyoutBookmarkFullText {
+  color: transparent;
+  white-space: nowrap;
+}
+
+.blocklyFlyoutBookmark:hover {
+  cursor: pointer;
+  width: max-content;
+  border-radius: 0 5px 5px 0;
+}
+
+.blocklyFlyoutBookmark:hover .blocklyFlyoutBookmarkFullText {
+  color: inherit;
 }
 
 .blocklyFlyoutScrollbar {
@@ -359,6 +448,40 @@ input[type=number] {
   position: absolute;
   outline: none;
 }
+
+.blocklyScrollbarBackground {
+  opacity: 0;
+}
+
+.blocklyFlyoutZoomControlContainer {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: flex-end;
+  user-select: none;
+  height: 28px;
+  padding: 4px;
+  padding-right: 22px;
+  background-color: #eee;
+  z-index: 21;
+  box-sizing: border-box;
+}
+
+.blocklyFlyoutZoomControl {
+  fill: lightgrey;
+  opacity: 0.45;
+}
+
+.blocklyFlyoutZoomControl:hover {
+  fill: grey;
+  cursor: pointer;
+  opacity: 1;
+}
+
+.blocklyScrollbarHandle {
+  fill: #ccc;
+}
+
 
 .blocklyScrollbarBackground {
   opacity: 0;
@@ -409,7 +532,18 @@ input[type=number] {
   max-height: 100%;
 }
 
+.blockly-dropdown-search-input input {
+  width: 100%;
+  padding: 0px 6px;
+  border: 2px solid #dddddd;
+  border-radius: 3px;
+  background-color: #f6f6f6;
+}
+
 .blocklyDropdownMenu {
+  max-height: 265px;
+  overflow-y: auto;
+  overflow-x: hidden;
   border-radius: 2px;
   padding: 0 !important;
 }
@@ -428,17 +562,23 @@ input[type=number] {
 
 .blocklyWidgetDiv .blocklyMenu {
   background: #fff;
-  border: 1px solid transparent;
-  box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
   font: normal 13px Arial, sans-serif;
   margin: 0;
   outline: none;
   padding: 4px 0;
-  position: absolute;
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: 100%;
+  max-height: 265px;
   z-index: 20000;  /* Arbitrary, but some apps depend on it... */
+}
+
+.blocklyWidgetDiv .blocklyMenuWrapper {
+  border: 1px solid;
+  border-color: #dadce0;
+  background-color: #fff;
+  border-radius: 2px;
+  padding: 4px;
+  box-shadow: 0 0 3px 1px rgb(0 0 0 / 30%);
 }
 
 .blocklyWidgetDiv .blocklyMenu.blocklyFocused {
@@ -447,11 +587,16 @@ input[type=number] {
 
 .blocklyDropDownDiv .blocklyMenu {
   background: inherit;  /* Compatibility with gapi, reset from goog-menu */
-  border: inherit;  /* Compatibility with gapi, reset from goog-menu */
+  border: none;  /* Compatibility with gapi, reset from goog-menu */
   font: normal 13px "Helvetica Neue", Helvetica, sans-serif;
   outline: none;
   position: relative;  /* Compatibility with gapi, reset from goog-menu */
   z-index: 20000;  /* Arbitrary, but some apps depend on it... */
+  margin-top: 5px;
+}
+
+.blocklyDropDownDiv .blocklyMenu:empty {
+  margin: 0;
 }
 
 /* State: resting. */
@@ -463,7 +608,8 @@ input[type=number] {
   margin: 0;
   /* 7em on the right for shortcut. */
   min-width: 7em;
-  padding: 6px 15px;
+  padding: 5px 15px;
+  margin-bottom: 2px;
   white-space: nowrap;
 }
 
@@ -492,19 +638,21 @@ input[type=number] {
   position: static;  /* Scroll with the menu. */
 }
 
+.blocklyMenuItemText {
+  margin-left: 5px;
+}
+
 .blocklyMenuItemRtl .blocklyMenuItemCheckbox {
   float: right;
   margin-right: -24px;
 }
 
-.blocklyBlockDragSurface {
+.blocklyTempBlockRoot {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: visible !important;
-  z-index: 80;
-  pointer-events: none;
+  background: #eee;
+  box-shadow: 0 0 5px #ccc;
+  transform-origin: 0 0;
+  user-select: none;
+  z-index: 31;
 }
 `;

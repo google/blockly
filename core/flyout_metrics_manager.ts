@@ -80,8 +80,16 @@ export class FlyoutMetricsManager extends MetricsManager {
     // The contentMetrics.left value is equivalent to the variable left padding.
     const leftPadding = contentMetrics.left;
 
+    let height;
+    if (this.flyout_.START_MARGIN === this.flyout_.MARGIN) {
+      height = (contentMetrics.height + 2 * margin) / scale;
+    } else {
+      const topMargin = this.flyout_.START_MARGIN * this.workspace_.scale;
+      height = (contentMetrics.height + topMargin + 2 * margin) / scale;
+    }
+
     return {
-      height: (contentMetrics.height + 2 * margin) / scale,
+      height,
       width: (contentMetrics.width + leftPadding + margin) / scale,
       top: 0,
       left: 0,

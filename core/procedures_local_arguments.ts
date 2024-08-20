@@ -1,0 +1,544 @@
+/**
+ * @license
+ * Copyright 2012 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * Utility functions for handling procedures with local arguments.
+ */
+// Former goog.module('Blockly.ProceduresLocalArgument');
+
+import type {Abstract} from './events/events_abstract.js';
+import type {BubbleOpen} from './events/events_bubble_open.js';
+import type {Block} from './block.js';
+import {Blocks} from './blocks.js';
+import * as eventUtils from './events/utils.js';
+import {Field, UnattachedFieldError} from './field.js';
+import {Msg} from './msg.js';
+import {Names, NameType} from './names.js';
+import * as utilsXml from './utils/xml.js';
+import * as Variables from './variables.js';
+import type {Workspace} from './workspace.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
+import {
+  isLegacyProcedureCallBlock,
+  isLegacyProcedureDefBlock,
+  ProcedureBlock,
+  ProcedureTuple,
+} from './interfaces/i_legacy_procedure_blocks.js';
+import {isProcedureBlock} from './interfaces/i_procedure_block.js';
+import * as common from './common.js';
+import {BlockSvg} from './block_svg.js';
+import {MutatorIcon} from './icons/mutator_icon.js';
+import {ISelectableToolboxItem} from './interfaces/i_selectable_toolbox_item.js';
+
+/**
+ * String for use in the "custom" attribute of a category in toolbox XML.
+ * This string indicates that the category should be dynamically populated with
+ * procedure blocks.
+ * See also Blockly.Variables.CATEGORY_NAME and
+ * Blockly.VariablesDynamic.CATEGORY_NAME.
+ *
+ * @constant {string}
+ * @alias Blockly.ProceduresLocalArgument.CATEGORY_NAME
+ */
+export const CATEGORY_NAME = 'PROCEDURE_LOCAL_ARGUMENT';
+
+/**
+ * The default argument for a procedures_local_mutatorarg block.
+ *
+ * @type {string}
+ * @alias Blockly.ProceduresLocalArgument.DEFAULT_ARG
+ */
+export const DEFAULT_ARG = 'x';
+
+// /**
+//  * Procedure block type.
+//  *
+//  * @typedef {{
+//  *    getProcedureCall: function():string,
+//  *    renameProcedure: function(string,string),
+//  *    getProcedureDef: function():!Array
+//  * }}
+//  * @alias Blockly.ProceduresLocalArgument.ProcedureBlock
+//  */
+//
+// export const ProcedureBlock;
+
+/**
+ * Find all user-created procedure definitions in a workspace.
+ *
+ * @param {!Workspace} root Root workspace.
+ * @returns {!Array<!Array<!Array>>} Pair of arrays, the
+ *     first contains procedures without return variables, the second with.
+ *     Each procedure is defined by a three-element list of name, parameter
+ *     list, and return value boolean.
+ * @alias Blockly.ProceduresLocalArgument.allProcedures
+ */
+export function allProcedures(
+  root: Workspace,
+): [ProcedureTuple[], ProcedureTuple[]] {
+  const proceduresLocalNoReturn = root
+    .getBlocksByType('procedures_with_argument_defnoreturn', false)
+    .map(function (block: Block) {
+      // @ts-ignore:next-line
+      return block.getProcedureDef();
+    });
+  const proceduresLocalReturn = root
+    .getBlocksByType('procedures_with_argument_defreturn', false)
+    .map(function (block: Block) {
+      // @ts-ignore:next-line
+      return block.getProcedureDef();
+    });
+  proceduresLocalNoReturn.sort(procTupleComparator);
+  proceduresLocalReturn.sort(procTupleComparator);
+  return [proceduresLocalNoReturn, proceduresLocalReturn];
+}
+
+/**
+ * Comparison function for case-insensitive sorting of the first element of
+ * a tuple.
+ *
+ * @param {!Array} ta First tuple.
+ * @param {!Array} tb Second tuple.
+ * @returns {number} -1, 0, or 1 to signify greater than, equality, or less than.
+ */
+function procTupleComparator(ta: ProcedureTuple, tb: ProcedureTuple): number {
+  let _;
+  return ta[0].localeCompare(tb[0], _, {sensitivity: 'base'});
+}
+
+/**
+ * Ensure two identically-named procedures don't exist.
+ * Take the proposed procedure name, and return a legal name i.e. one that
+ * is not empty and doesn't collide with other procedures.
+ *
+ * @param {string} name Proposed procedure name.
+ * @param {!Block} block Block to disambiguate.
+ * @returns {string} Non-colliding name.
+ * @alias Blockly.ProceduresLocalArgument.findLegalName
+ */
+export function findLegalName(name: string, block: Block) {
+  if (block.isInFlyout) {
+    // Flyouts can have multiple procedures called 'do something'.
+    return name;
+  }
+  name = name || Msg['UNNAMED_KEY'] || 'unnamed';
+  while (!isLegalName(name, block.workspace, block)) {
+    // Collision with another procedure.
+    const r = name.match(/^(.*?)(\d+)$/);
+    if (!r) {
+      name += '2';
+    } else {
+      name = r[1] + (parseInt(r[2], 10) + 1);
+    }
+  }
+  return name;
+}
+
+/**
+ * Does this procedure have a legal name?  Illegal names include names of
+ * procedures already defined.
+ *
+ * @param {string} name The questionable name.
+ * @param {!Workspace} workspace The workspace to scan for collisions.
+ * @param {Block=} opt_exclude Optional block to exclude from
+ *     comparisons (one doesn't want to collide with oneself).
+ * @returns {boolean} True if the name is legal.
+ */
+function isLegalName(
+  name: string,
+  workspace: Workspace,
+  opt_exclude?: Block,
+): boolean {
+  return !isNameUsed(name, workspace, opt_exclude);
+}
+
+/**
+ * Return if the given name is already a procedure name.
+ *
+ * @param {string} name The questionable name.
+ * @param {!Workspace} workspace The workspace to scan for collisions.
+ * @param {Block=} opt_exclude Optional block to exclude from
+ *     comparisons (one doesn't want to collide with oneself).
+ * @returns {boolean} True if the name is used, otherwise return false.
+ * @alias Blockly.ProceduresLocalArgument.isNameUsed
+ */
+export function isNameUsed(
+  name: string,
+  workspace: Workspace,
+  opt_exclude?: Block,
+): boolean {
+  for (const block of workspace.getAllBlocks(false)) {
+    if (block === opt_exclude) continue;
+
+    if (
+      isLegacyProcedureDefBlock(block) &&
+      Names.equals(block.getProcedureDef()[0], name)
+    ) {
+      return true;
+    }
+  }
+
+  const excludeModel =
+    opt_exclude && isProcedureBlock(opt_exclude)
+      ? opt_exclude?.getProcedureModel()
+      : undefined;
+  for (const model of workspace.getProcedureMap().getProcedures()) {
+    if (model === excludeModel) continue;
+    if (Names.equals(model.getName(), name)) return true;
+  }
+  return false;
+}
+
+/**
+ * Rename a procedure.  Called by the editable field.
+ *
+ * @param {string} name The proposed new name.
+ * @returns {string} The accepted name.
+ * @this {Field}
+ */
+export function rename(this: Field, name: string): string {
+  const block = this.getSourceBlock();
+  if (!block) {
+    throw new UnattachedFieldError();
+  }
+
+  // Strip leading and trailing whitespace.  Beyond this, all names are legal.
+  name = name.trim();
+
+  const legalName = findLegalName(name, block);
+  if (isProcedureBlock(block) && !block.isInsertionMarker()) {
+    block.getProcedureModel().setName(legalName);
+  }
+  const oldName = this.getValue();
+  if (oldName !== name && oldName !== legalName) {
+    // Rename any callers.
+    const blocks = block.workspace.getAllBlocks(false);
+    for (let i = 0; i < blocks.length; i++) {
+      // Assume it is a procedure so we can check.
+      const procedureBlock = blocks[i] as unknown as ProcedureBlock;
+      if (procedureBlock.renameProcedure) {
+        procedureBlock.renameProcedure(oldName as string, legalName);
+      }
+    }
+  }
+  return legalName;
+}
+
+/**
+ * Construct the blocks required by the flyout for the procedure category.
+ *
+ * @param {!WorkspaceSvg} workspace The workspace containing procedures.
+ * @returns {!Array<!Element>} Array of XML block elements.
+ */
+export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
+  const xmlList = [];
+  if (Blocks['procedures_with_argument_defnoreturn']) {
+    // <block type="procedures_with_argument_defnoreturn" gap="16">
+    //     <field name="NAME">do something</field>
+    // </block>
+    const block = utilsXml.createElement('block');
+    block.setAttribute('type', 'procedures_with_argument_defnoreturn');
+    block.setAttribute('gap', '16');
+    const nameField = utilsXml.createElement('field');
+    nameField.setAttribute('name', 'NAME');
+    nameField.appendChild(
+      utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']),
+    );
+    block.appendChild(nameField);
+    xmlList.push(block);
+  }
+  if (Blocks['procedures_with_argument_defreturn']) {
+    // <block type="procedures_with_argument_defreturn" gap="16">
+    //     <field name="NAME">do something</field>
+    // </block>
+    const block = utilsXml.createElement('block');
+    block.setAttribute('type', 'procedures_with_argument_defreturn');
+    block.setAttribute('gap', '16');
+    const nameField = utilsXml.createElement('field');
+    nameField.setAttribute('name', 'NAME');
+    nameField.appendChild(
+      utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']),
+    );
+    block.appendChild(nameField);
+    xmlList.push(block);
+  }
+  if (xmlList.length) {
+    // Add slightly larger gap between system blocks and user calls.
+    xmlList[xmlList.length - 1].setAttribute('gap', '24');
+  }
+
+  /**
+   * Add items to xmlList for each listed procedure.
+   *
+   * @param {!Array<!Array>} procedureList A list of procedures, each of which
+   *     is defined by a three-element list of name, parameter list, and return
+   *     value boolean.
+   * @param {string} templateName The type of the block to generate.
+   */
+  function populateProcedures(
+    procedureList: ProcedureTuple[],
+    templateName: string,
+  ) {
+    for (let i = 0; i < procedureList.length; i++) {
+      // @ts-ignore:next-line
+      const name = procedureList[i][0];
+      // @ts-ignore:next-line
+      const args = procedureList[i][1];
+      // <block type="procedures_callnoreturn" gap="16">
+      //   <mutation name="do something">
+      //     <arg name="x"></arg>
+      //   </mutation>
+      // </block>
+      const block = utilsXml.createElement('block');
+      block.setAttribute('type', templateName);
+      block.setAttribute('gap', '16');
+      const mutation = utilsXml.createElement('mutation');
+      mutation.setAttribute('name', name);
+      block.appendChild(mutation);
+      for (let j = 0; j < args.length; j++) {
+        const arg = utilsXml.createElement('arg');
+        if (args && args[j]) {
+          arg.setAttribute('name', args[j]);
+          mutation.appendChild(arg);
+        }
+      }
+      xmlList.push(block);
+    }
+  }
+
+  const tuple = allProcedures(workspace);
+  populateProcedures(tuple[0], 'procedures_with_argument_callnoreturn');
+  populateProcedures(tuple[1], 'procedures_with_argument_callreturn');
+  return xmlList;
+}
+
+/**
+ * Updates the procedure mutator's flyout so that the arg block is not a
+ * duplicate of another arg.
+ *
+ * @param workspace The procedure mutator's workspace. This
+ *     workspace's flyout is what is being updated.
+ */
+function updateMutatorFlyout(workspace: WorkspaceSvg) {
+  const usedNames = [];
+  const blocks = workspace.getBlocksByType(
+    'procedures_local_mutatorarg',
+    false,
+  );
+  for (let i = 0, block; (block = blocks[i]); i++) {
+    usedNames.push(block.getFieldValue('NAME'));
+  }
+
+  const xmlElement = utilsXml.createElement('xml');
+  const argBlock = utilsXml.createElement('block');
+  argBlock.setAttribute('type', 'procedures_local_mutatorarg');
+  const nameField = utilsXml.createElement('field');
+  nameField.setAttribute('name', 'NAME');
+  const argValue = Variables.generateUniqueNameFromOptions(
+    DEFAULT_ARG,
+    usedNames,
+  );
+  const fieldContent = utilsXml.createTextNode(argValue);
+
+  nameField.appendChild(fieldContent);
+  argBlock.appendChild(nameField);
+  xmlElement.appendChild(argBlock);
+
+  workspace.updateToolbox(xmlElement);
+}
+
+/**
+ * Listens for when a procedure mutator is opened. Then it triggers a flyout
+ * update and adds a mutator change listener to the mutator workspace.
+ *
+ * @param e The event that triggered this listener.
+ * @internal
+ */
+export function mutatorOpenListener(e: Abstract) {
+  if (e.type !== eventUtils.BUBBLE_OPEN) {
+    return;
+  }
+  const bubbleEvent = e as BubbleOpen;
+  if (
+    !(bubbleEvent.bubbleType === 'mutator' && bubbleEvent.isOpen) ||
+    !bubbleEvent.blockId
+  ) {
+    return;
+  }
+
+  const workspaceId = bubbleEvent.workspaceId;
+  const block = common
+    .getWorkspaceById(workspaceId)!
+    .getBlockById(bubbleEvent.blockId) as BlockSvg;
+  const type = block.type;
+  if (
+    type !== 'procedures_with_argument_defnoreturn' &&
+    type !== 'procedures_with_argument_defreturn'
+  ) {
+    return;
+  }
+  const workspace = (
+    block.getIcon(MutatorIcon.TYPE) as MutatorIcon
+  ).getWorkspace()!;
+  updateMutatorFlyout(workspace);
+  workspace.addChangeListener(mutatorChangeListener);
+}
+
+// eslint-disable-next-line jsdoc/require-jsdoc
+export function updateFlyout(e: Abstract) {
+  if (e.type === eventUtils.BUBBLE_OPEN) {
+    return;
+  }
+  if (
+    e.type !== eventUtils.BLOCK_DELETE &&
+    e.type !== eventUtils.BLOCK_CREATE &&
+    e.type !== eventUtils.BLOCK_CHANGE
+  ) {
+    return;
+  }
+
+  // @ts-ignore:next-line
+  const workspaceId = e.workspaceId;
+  // @ts-ignore:next-line
+  const workspace = common.getWorkspaceById(workspaceId)! as WorkspaceSvg;
+
+  if (!workspace || !workspace.getToolbox()) {
+    return;
+  }
+
+  const toolboxCategory: ISelectableToolboxItem = workspace
+    .getToolbox()
+    ?.getSelectedItem() as ISelectableToolboxItem;
+  if (!toolboxCategory) {
+    return;
+  }
+
+  const flyoutItems = toolboxCategory?.getContents();
+  if (flyoutItems === NameType.PROCEDURE) {
+    workspace.getToolbox()?.refreshSelection();
+  }
+}
+
+/**
+ * Listens for changes in a procedure mutator and triggers flyout updates when
+ * necessary.
+ *
+ * @param e The event that triggered this listener.
+ */
+function mutatorChangeListener(e: Abstract) {
+  if (
+    e.type !== eventUtils.BLOCK_CREATE &&
+    e.type !== eventUtils.BLOCK_DELETE &&
+    e.type !== eventUtils.BLOCK_CHANGE &&
+    e.type !== eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE
+  ) {
+    return;
+  }
+  const workspaceId = e.workspaceId as string;
+  const workspace = common.getWorkspaceById(workspaceId) as WorkspaceSvg;
+  updateMutatorFlyout(workspace);
+}
+
+/**
+ * Find all the callers of a named procedure.
+ *
+ * @param name Name of procedure.
+ * @param workspace The workspace to find callers in.
+ * @returns Array of caller blocks.
+ */
+export function getCallers(name: string, workspace: Workspace) {
+  return workspace.getAllBlocks(false).filter((block) => {
+    return (
+      blockIsModernCallerFor(block, name) ||
+      (isLegacyProcedureCallBlock(block) &&
+        Names.equals(block.getProcedureCall(), name))
+    );
+  });
+}
+
+/**
+ * @returns True if the given block is a modern-style caller block of the given
+ *     procedure name.
+ */
+function blockIsModernCallerFor(block: Block, procName: string): boolean {
+  return (
+    isProcedureBlock(block) &&
+    !block.isProcedureDef() &&
+    block.getProcedureModel() &&
+    Names.equals(block.getProcedureModel().getName(), procName)
+  );
+}
+
+/**
+ * When a procedure definition changes its parameters, find and edit all its
+ * callers.
+ *
+ * @param defBlock Procedure definition block.
+ */
+export function mutateCallers(defBlock: Block) {
+  const oldRecordUndo = eventUtils.getRecordUndo();
+  const procedureBlock = defBlock as unknown as ProcedureBlock;
+  const name = procedureBlock.getProcedureDef()[0];
+  const xmlElement = defBlock.mutationToDom!(true);
+  const callers = getCallers(name, defBlock.workspace);
+  for (let i = 0, caller; (caller = callers[i]); i++) {
+    const oldMutationDom = caller.mutationToDom!();
+    const oldMutation = oldMutationDom && utilsXml.domToText(oldMutationDom);
+    if (caller.domToMutation) {
+      caller.domToMutation(xmlElement);
+    }
+    const newMutationDom = caller.mutationToDom!();
+    const newMutation = newMutationDom && utilsXml.domToText(newMutationDom);
+    if (oldMutation !== newMutation) {
+      // Fire a mutation on every caller block.  But don't record this as an
+      // undo action since it is deterministically tied to the procedure's
+      // definition mutation.
+      eventUtils.setRecordUndo(false);
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          caller,
+          'mutation',
+          null,
+          oldMutation,
+          newMutation,
+        ),
+      );
+      eventUtils.setRecordUndo(oldRecordUndo);
+    }
+  }
+}
+
+/**
+ * Find the definition block for the named procedure.
+ *
+ * @param name Name of procedure.
+ * @param workspace The workspace to search.
+ * @returns The procedure definition block, or null not found.
+ */
+export function getDefinition(
+  name: string,
+  workspace: Workspace,
+): Block | null {
+  // Do not assume procedure is a top block. Some languages allow nested
+  // procedures. Also do not assume it is one of the built-in blocks. Only
+  // rely on getProcedureDef.
+  for (const block of workspace.getAllBlocks(false)) {
+    if (
+      isProcedureBlock(block) &&
+      block.isProcedureDef() &&
+      Names.equals(block.getProcedureModel().getName(), name)
+    ) {
+      return block;
+    }
+    if (
+      isLegacyProcedureDefBlock(block) &&
+      Names.equals(block.getProcedureDef()[0], name)
+    ) {
+      return block;
+    }
+  }
+  return null;
+}

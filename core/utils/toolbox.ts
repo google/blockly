@@ -81,6 +81,7 @@ export interface StaticCategoryInfo {
   cssconfig: CategoryCssConfig | undefined;
   hidden: string | undefined;
   expanded?: string | boolean;
+  icon?: string | undefined;
 }
 
 /**
@@ -95,6 +96,7 @@ export interface DynamicCategoryInfo {
   cssconfig: CategoryCssConfig | undefined;
   hidden: string | undefined;
   expanded?: string | boolean;
+  icon?: string | undefined;
 }
 
 /**

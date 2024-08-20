@@ -28,6 +28,7 @@ import {
 } from './exceptions.js';
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
+import {Coordinate} from '../utils/coordinate.js';
 
 // TODO(#5160): Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
@@ -60,6 +61,7 @@ export interface State {
   fields?: {[key: string]: AnyDuringMigration};
   inputs?: {[key: string]: ConnectionState};
   next?: ConnectionState;
+  pasteOffset?: Coordinate;
 }
 
 /**

@@ -152,11 +152,54 @@ export const blocks = createBlockDefinitionsFromJsonArray([
       },
     ],
     'inputsInline': true,
+    'obsolete': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'loop_blocks',
     'helpUrl': '%{BKY_CONTROLS_FOR_HELPURL}',
     'extensions': ['contextMenu_newGetVariableBlock', 'controls_for_tooltip'],
+  },
+  // Block for 'for' loop with argument local.
+  {
+    'type': 'controls_for_with_argument',
+    'message0': '%{BKY_CONTROLS_FOR_TITLE}',
+    'args0': [
+      {
+        'type': 'input_value',
+        'name': 'ARGUMENT',
+      },
+      {
+        'type': 'input_value',
+        'name': 'FROM',
+        'check': 'Number',
+        'align': 'RIGHT',
+      },
+      {
+        'type': 'input_value',
+        'name': 'TO',
+        'check': 'Number',
+        'align': 'RIGHT',
+      },
+      {
+        'type': 'input_value',
+        'name': 'BY',
+        'check': 'Number',
+        'align': 'RIGHT',
+      },
+    ],
+    'message1': '%{BKY_CONTROLS_REPEAT_INPUT_DO} %1',
+    'args1': [{
+      'type': 'input_statement',
+      'name': 'DO',
+    }],
+    'inputsInline': true,
+    'previousStatement': null,
+    'nextStatement': null,
+    'style': 'loop_blocks',
+    'helpUrl': '%{BKY_CONTROLS_FOR_HELPURL}',
+    'extensions': [
+      'controls_for_tooltip',
+    ],
   },
   // Block for 'for each' loop.
   {
@@ -183,10 +226,40 @@ export const blocks = createBlockDefinitionsFromJsonArray([
     ],
     'previousStatement': null,
     'nextStatement': null,
+    'obsolete': true,
     'style': 'loop_blocks',
     'helpUrl': '%{BKY_CONTROLS_FOREACH_HELPURL}',
     'extensions': [
       'contextMenu_newGetVariableBlock',
+      'controls_forEach_tooltip',
+    ],
+  },
+  // Block for 'for each' loop with argument local.
+  {
+    'type': 'controls_forEach_with_argument',
+    'message0': '%{BKY_CONTROLS_FOREACH_TITLE}',
+    'args0': [
+      {
+        'type': 'input_value',
+        'name': 'ARGUMENT',
+      },
+      {
+        'type': 'input_value',
+        'name': 'LIST',
+        'check': 'Array',
+      },
+    ],
+    'message1': '%{BKY_CONTROLS_REPEAT_INPUT_DO} %1',
+    'args1': [{
+      'type': 'input_statement',
+      'name': 'DO',
+    }],
+    'inputsInline': true,
+    'previousStatement': null,
+    'nextStatement': null,
+    'style': 'loop_blocks',
+    'helpUrl': '%{BKY_CONTROLS_FOREACH_HELPURL}',
+    'extensions': [
       'controls_forEach_tooltip',
     ],
   },
@@ -321,7 +394,9 @@ export const loopTypes: Set<string> = new Set([
   'controls_repeat',
   'controls_repeat_ext',
   'controls_forEach',
+  'controls_forEach_with_argument',
   'controls_for',
+  'controls_for_with_argument',
   'controls_whileUntil',
 ]);
 

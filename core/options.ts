@@ -38,6 +38,7 @@ export class Options {
   pathToMedia: string;
   hasCategories: boolean;
   moveOptions: MoveOptions;
+  showModuleBar: boolean;
   hasScrollbars: boolean;
   hasTrashcan: boolean;
   maxTrashcanContents: number;
@@ -88,6 +89,7 @@ export class Options {
     let hasComments = false;
     let hasDisable = false;
     let hasSounds = false;
+    let showModuleBar = false;
     const readOnly = !!options['readOnly'];
     if (!readOnly) {
       toolboxJsonDef = toolbox.convertToolboxDefToJson(
@@ -107,6 +109,8 @@ export class Options {
       hasDisable = rawHasDisable === undefined ? hasCategories : rawHasDisable;
       const rawHasSounds = options['sounds'];
       hasSounds = rawHasSounds === undefined ? true : rawHasSounds;
+      const rawShowModuleBar = options['showModuleBar'];
+      showModuleBar = rawShowModuleBar === undefined ? true : rawShowModuleBar;
     }
 
     let maxTrashcanContents = options['maxTrashcanContents'];
@@ -172,6 +176,7 @@ export class Options {
     this.pathToMedia = pathToMedia;
     this.hasCategories = hasCategories;
     this.moveOptions = Options.parseMoveOptions_(options, hasCategories);
+    this.showModuleBar = showModuleBar;
     /** @deprecated  January 2019 */
     this.hasScrollbars = !!this.moveOptions.scrollbars;
     this.hasTrashcan = hasTrashcan;
@@ -268,41 +273,63 @@ export class Options {
   private static parseZoomOptions_(options: BlocklyOptions): ZoomOptions {
     const zoom = options['zoom'] || {};
     const zoomOptions = {} as ZoomOptions;
+    // @ts-ignore:next-line
     if (zoom['controls'] === undefined) {
       zoomOptions.controls = false;
     } else {
+      // @ts-ignore:next-line
       zoomOptions.controls = !!zoom['controls'];
     }
+    // @ts-ignore:next-line
     if (zoom['wheel'] === undefined) {
       zoomOptions.wheel = false;
     } else {
+      // @ts-ignore:next-line
       zoomOptions.wheel = !!zoom['wheel'];
     }
+    // @ts-ignore:next-line
     if (zoom['startScale'] === undefined) {
       zoomOptions.startScale = 1;
     } else {
+      // @ts-ignore:next-line
       zoomOptions.startScale = Number(zoom['startScale']);
     }
+    // @ts-ignore:next-line
     if (zoom['maxScale'] === undefined) {
-      zoomOptions.maxScale = 3;
+      zoomOptions.maxScale = 2;
     } else {
+      // @ts-ignore:next-line
       zoomOptions.maxScale = Number(zoom['maxScale']);
     }
+    // @ts-ignore:next-line
     if (zoom['minScale'] === undefined) {
-      zoomOptions.minScale = 0.3;
+      zoomOptions.minScale = 0.5;
     } else {
+      // @ts-ignore:next-line
       zoomOptions.minScale = Number(zoom['minScale']);
     }
+    // @ts-ignore:next-line
     if (zoom['scaleSpeed'] === undefined) {
       zoomOptions.scaleSpeed = 1.2;
     } else {
+      // @ts-ignore:next-line
       zoomOptions.scaleSpeed = Number(zoom['scaleSpeed']);
     }
+    // @ts-ignore:next-line
     if (zoom['pinch'] === undefined) {
       zoomOptions.pinch = zoomOptions.wheel || zoomOptions.controls;
     } else {
+      // @ts-ignore:next-line
       zoomOptions.pinch = !!zoom['pinch'];
     }
+    // @ts-ignore:next-line
+    if (zoom['flyoutScale'] === undefined) {
+      zoomOptions.flyoutScale = 1;
+    } else {
+      // @ts-ignore:next-line
+      zoomOptions.flyoutScale = Number(zoom['flyoutScale']);
+    }
+
     return zoomOptions;
   }
 
@@ -373,6 +400,7 @@ export namespace Options {
     scaleSpeed: number;
     startScale: number;
     wheel: boolean;
+    flyoutScale: number;
   }
 }
 

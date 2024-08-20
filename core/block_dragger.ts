@@ -30,7 +30,11 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as deprecation from './utils/deprecation.js';
 import * as layers from './layers.js';
-import {ConnectionType, IConnectionPreviewer} from './blockly.js';
+import {
+  ConnectionType,
+  IConnectionPreviewer,
+  InsertionMarkerManager,
+} from './blockly.js';
 import {RenderedConnection} from './rendered_connection.js';
 import {config} from './config.js';
 import {ComponentManager} from './component_manager.js';
@@ -78,14 +82,36 @@ export class BlockDragger implements IBlockDragger {
    *     block's `moveDuringDrag` method.
    */
   protected dragIconData_: IconPositionData[] = [];
+  private _offConnectionManager: boolean;
+  private draggedConnectionManager_: InsertionMarkerManager | null;
 
   /**
    * @param block The block to drag.
    * @param workspace The workspace to drag on.
+   * @param {boolean} offConnectionManager need for avoid checking connection when dragging block
    */
-  constructor(block: BlockSvg, workspace: WorkspaceSvg) {
+  constructor(
+    block: BlockSvg,
+    workspace: WorkspaceSvg,
+    offConnectionManager = false,
+  ) {
     this.draggingBlock_ = block;
     this.workspace_ = workspace;
+    this._offConnectionManager = offConnectionManager;
+
+    /**
+     * Object that keeps track of connections on dragged blocks.
+     *
+     * @type {!InsertionMarkerManager}
+     * @protected
+     */
+    this.draggedConnectionManager_ = null;
+
+    if (!offConnectionManager) {
+      this.draggedConnectionManager_ = new InsertionMarkerManager(
+        this.draggingBlock_,
+      );
+    }
 
     const previewerConstructor = registry.getClassFromOptions(
       registry.Type.CONNECTION_PREVIEWER,
@@ -125,10 +151,13 @@ export class BlockDragger implements IBlockDragger {
     }
     this.fireDragStartEvent_();
 
-    // The z-order of blocks depends on their order in the SVG, so move the
-    // block being dragged to the front so that it will appear atop other blocks
-    // in the workspace.
-    this.draggingBlock_.bringToFront(true);
+    // Mutators don't have the same type of z-ordering as the normal workspace
+    // during a drag.  They have to rely on the order of the blocks in the SVG.
+    // For performance reasons that usually happens at the end of a drag,
+    // but do it at the beginning for mutators.
+    if (this.workspace_.isMutator) {
+      this.draggingBlock_.bringToFront();
+    }
 
     // During a drag there may be a lot of rerenders, but not field changes.
     // Turn the cache on so we don't do spurious remeasures during the drag.
@@ -139,8 +168,11 @@ export class BlockDragger implements IBlockDragger {
     if (this.shouldDisconnect_(healStack)) {
       this.disconnectBlock_(healStack, currentDragDeltaXY);
     }
+
     this.draggingBlock_.setDragging(true);
-    this.workspace_.getLayerManager()?.moveToDragLayer(this.draggingBlock_);
+    // For future consideration: we may be able to put moveToDragSurface inside
+    // the block dragger, which would also let the block not track the block drag
+    // surface.
   }
 
   /**
@@ -175,6 +207,8 @@ export class BlockDragger implements IBlockDragger {
 
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
     blockAnimation.disconnectUiEffect(this.draggingBlock_);
+    if (this.draggedConnectionManager_)
+      this.draggedConnectionManager_.updateAvailableConnections();
   }
 
   /** Fire a UI event at the start of a block drag. */
@@ -198,9 +232,17 @@ export class BlockDragger implements IBlockDragger {
   drag(e: PointerEvent, delta: Coordinate) {
     const block = this.draggingBlock_;
     this.moveBlock(block, delta);
+
+    if (!this.draggedConnectionManager_) return;
+
     this.updateDragTargets(e, block);
-    this.wouldDeleteBlock_ = this.wouldDeleteBlock(e, block, delta);
-    this.updateCursorDuringBlockDrag_();
+
+    const oldWouldDeleteBlock = this.wouldDeleteBlock_;
+    this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock;
+
+    if (oldWouldDeleteBlock !== this.wouldDeleteBlock_) {
+      this.updateCursorDuringBlockDrag_();
+    }
     this.updateConnectionPreview(block, delta);
   }
 
@@ -488,7 +530,7 @@ export class BlockDragger implements IBlockDragger {
    */
   protected updateBlockAfterMove_() {
     this.fireMoveEvent_();
-    if (this.connectionCandidate) {
+    if (this.draggedConnectionManager_ && this.connectionCandidate) {
       // Applying connections also rerenders the relevant blocks.
       this.applyConnections(this.connectionCandidate);
     } else {

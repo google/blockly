@@ -15,6 +15,8 @@ import * as procedures from './procedures.js';
 import * as texts from './text.js';
 import * as variables from './variables.js';
 import * as variablesDynamic from './variables_dynamic.js';
+import * as argumentLocal from './argument_local.js';
+import * as proceduresArgumentLocal from './procedures_local_argument.js';
 import type {BlockDefinition} from '../core/blocks.js';
 
 export {
@@ -26,6 +28,8 @@ export {
   texts,
   variables,
   variablesDynamic,
+  argumentLocal,
+  proceduresArgumentLocal,
 };
 
 /**
@@ -42,4 +46,6 @@ export const blocks: {[key: string]: BlockDefinition} = Object.assign(
   procedures.blocks,
   variables.blocks,
   variablesDynamic.blocks,
+  argumentLocal.blocks,
+  proceduresArgumentLocal.blocks,
 );

@@ -864,6 +864,12 @@ export class ConstantProvider extends BaseConstantProvider {
       `fill-opacity: ${this.INSERTION_MARKER_OPACITY};`,
       `stroke: none;`,
       `}`,
+
+      // Mass selection highlight.
+      `${selector} .blocklyMassSelected {`,
+      `outline: dashed 4px #ffcc33;`,
+      `outline-offset: 2px`,
+      `}`,
     ];
   }
 }

@@ -133,6 +133,7 @@ export class PathObject implements IPathObject {
 
     this.updateShadow_(block.isShadow());
     this.updateDisabled_(!block.isEnabled() || block.getInheritedDisabled());
+    this.updateRemoved_(block.isRemoved());
   }
 
   /**
@@ -203,6 +204,30 @@ export class PathObject implements IPathObject {
         'fill',
         'url(#' + this.constants.disabledPatternId + ')',
       );
+    }
+  }
+
+  /**
+   * Updates the look of the block to reflect a disabled state.
+   *
+   * @param {boolean} removed True if removed.
+   */
+  protected updateRemoved_(removed: boolean) {
+    this.setClass_('blocklyRemoved', removed);
+    if (removed) {
+      this.svgPath.setAttribute(
+        'fill',
+        'url(#' + this.constants.removedPatternId + ')',
+      );
+    }
+
+    const fillPattern = this.svgPath.getAttribute('fill');
+    if (
+      !removed &&
+      fillPattern &&
+      fillPattern.includes(this.constants.removedPatternName)
+    ) {
+      this.svgPath.setAttribute('fill', 'none');
     }
   }
 

@@ -37,6 +37,7 @@ const XY_STYLE_REGEX =
  * @returns Object with .x and .y properties.
  */
 export function getRelativeXY(element: Element): Coordinate {
+  console.log('getRelativeXY. element:', element);
   const xy = new Coordinate(0, 0);
   // First, check for x and y attributes.
   // Checking for the existence of x/y properties is faster than getAttribute.

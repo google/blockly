@@ -19,6 +19,7 @@ import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import * as internalConstants from './internal_constants.js';
 import * as registry from './registry.js';
 import type {RenderedConnection} from './rendered_connection.js';
+import {isShadowArgumentLocal} from './utils/argument_local.js';
 
 /**
  * Class for connection type checking logic.
@@ -265,6 +266,20 @@ export class ConnectionChecker implements IConnectionChecker {
         ) {
           return false;
         }
+
+        // don't allow connecting a block to an argument local
+        if (b && b.targetBlock()) {
+          const targetBlock = b.targetBlock();
+
+          if (!targetBlock) {
+            return false;
+          }
+
+          if (isShadowArgumentLocal(targetBlock)) {
+            return false;
+          }
+        }
+
         break;
       }
       case ConnectionType.NEXT_STATEMENT: {

@@ -395,6 +395,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
     const htmlInput = document.createElement('input');
     htmlInput.className = 'blocklyHtmlInput';
+    htmlInput.maxLength = this.maxLength;
     // AnyDuringMigration because:  Argument of type 'boolean' is not assignable
     // to parameter of type 'string'.
     htmlInput.setAttribute(

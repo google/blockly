@@ -6,6 +6,7 @@
 
 // Former goog.module ID: Blockly.serialization.workspaces
 
+import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import * as registry from '../registry.js';
@@ -86,7 +87,7 @@ export function load(
   }
   dom.stopTextWidthCache();
 
-  eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
+  eventUtils.fire(new (eventUtils.get(EventType.FINISHED_LOADING))(workspace));
 
   eventUtils.setGroup(existingGroup);
   eventUtils.setRecordUndo(prevRecordUndo);

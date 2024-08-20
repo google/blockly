@@ -26,6 +26,7 @@ import * as constants from './constants.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BlockChange} from './events/events_block_change.js';
 import type {BlockMove} from './events/events_block_move.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import * as Extensions from './extensions.js';
 import type {Field} from './field.js';
@@ -304,7 +305,7 @@ export class Block implements IASTNodeLocation {
 
       // Fire a create event.
       if (eventUtils.isEnabled()) {
-        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(this));
+        eventUtils.fire(new (eventUtils.get(EventType.BLOCK_CREATE))(this));
       }
     } finally {
       eventUtils.setGroup(existingGroup);
@@ -339,7 +340,7 @@ export class Block implements IASTNodeLocation {
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
       // Constructing the delete event is costly. Only perform if necessary.
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
+      eventUtils.fire(new (eventUtils.get(EventType.BLOCK_DELETE))(this));
     }
     this.workspace.removeTopBlock(this);
     this.disposeInternal();
@@ -1329,7 +1330,7 @@ export class Block implements IASTNodeLocation {
   setInputsInline(newBoolean: boolean) {
     if (this.inputsInline !== newBoolean) {
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_CHANGE))(
           this,
           'inline',
           null,
@@ -1491,7 +1492,7 @@ export class Block implements IASTNodeLocation {
       } else {
         this.disabledReasons.delete(reason);
       }
-      const blockChangeEvent = new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+      const blockChangeEvent = new (eventUtils.get(EventType.BLOCK_CHANGE))(
         this,
         'disabled',
         /* name= */ null,
@@ -1559,7 +1560,7 @@ export class Block implements IASTNodeLocation {
   setCollapsed(collapsed: boolean) {
     if (this.collapsed_ !== collapsed) {
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_CHANGE))(
           this,
           'collapsed',
           null,
@@ -2358,7 +2359,7 @@ export class Block implements IASTNodeLocation {
     }
 
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+      new (eventUtils.get(EventType.BLOCK_CHANGE))(
         this,
         'comment',
         null,
@@ -2458,12 +2459,8 @@ export class Block implements IASTNodeLocation {
     if (this.parentBlock_) {
       throw Error('Block has parent');
     }
-    const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
-      this,
-    ) as BlockMove;
-    if (reason) {
-      event.setReason(reason);
-    }
+    const event = new (eventUtils.get(EventType.BLOCK_MOVE))(this) as BlockMove;
+    if (reason) event.setReason(reason);
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);

@@ -15,6 +15,7 @@ import type {
   ContextMenuOption,
   LegacyContextMenuOption,
 } from './contextmenu_registry.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
@@ -260,7 +261,7 @@ export function callbackFactory(
       eventUtils.enable();
     }
     if (eventUtils.isEnabled() && !newBlock.isShadow()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(newBlock));
+      eventUtils.fire(new (eventUtils.get(EventType.BLOCK_CREATE))(newBlock));
     }
     common.setSelected(newBlock);
     return newBlock;

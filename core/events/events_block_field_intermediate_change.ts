@@ -16,7 +16,7 @@ import type {Block} from '../block.js';
 import * as registry from '../registry.js';
 import {Workspace} from '../workspace.js';
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
-import * as eventUtils from './utils.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners when the value of a block's field has changed but the
@@ -24,7 +24,7 @@ import * as eventUtils from './utils.js';
  * event.
  */
 export class BlockFieldIntermediateChange extends BlockBase {
-  override type = eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE;
+  override type = EventType.BLOCK_FIELD_INTERMEDIATE_CHANGE;
 
   // Intermediate events do not undo or redo. They may be fired frequently while
   // the field editor widget is open. A separate BLOCK_CHANGE event is fired
@@ -161,6 +161,6 @@ export interface BlockFieldIntermediateChangeJson extends BlockBaseJson {
 
 registry.register(
   registry.Type.EVENT,
-  eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE,
+  EventType.BLOCK_FIELD_INTERMEDIATE_CHANGE,
   BlockFieldIntermediateChange,
 );

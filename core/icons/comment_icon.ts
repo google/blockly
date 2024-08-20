@@ -10,6 +10,7 @@ import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import {TextBubble} from '../bubbles/text_bubble.js';
 import {TextInputBubble} from '../bubbles/textinput_bubble.js';
+import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import type {ISerializable} from '../interfaces/i_serializable.js';
@@ -159,7 +160,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   setText(text: string) {
     const oldText = this.text;
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+      new (eventUtils.get(EventType.BLOCK_CHANGE))(
         this.sourceBlock,
         'comment',
         null,
@@ -238,7 +239,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     if (this.text === newText) return;
 
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+      new (eventUtils.get(EventType.BLOCK_CHANGE))(
         this.sourceBlock,
         'comment',
         null,
@@ -288,7 +289,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     }
 
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+      new (eventUtils.get(EventType.BUBBLE_OPEN))(
         this.sourceBlock,
         visible,
         'comment',

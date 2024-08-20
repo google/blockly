@@ -13,7 +13,7 @@ import * as registry from '../registry.js';
 import {Workspace} from '../workspace.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
-import * as eventUtils from './utils.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners when a comment is being manually dragged/dropped.
@@ -25,7 +25,7 @@ export class CommentDrag extends UiBase {
   /** True if this is the start of a drag, false if this is the end of one. */
   isStart?: boolean;
 
-  override type = eventUtils.COMMENT_DRAG;
+  override type = EventType.COMMENT_DRAG;
 
   /**
    * @param opt_comment The comment that is being dragged.
@@ -96,4 +96,4 @@ export interface CommentDragJson extends AbstractEventJson {
   commentId: string;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.COMMENT_DRAG, CommentDrag);
+registry.register(registry.Type.EVENT, EventType.COMMENT_DRAG, CommentDrag);

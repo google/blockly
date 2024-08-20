@@ -32,6 +32,7 @@ import {
 } from './contextmenu_registry.js';
 import {BlockDragStrategy} from './dragging/block_drag_strategy.js';
 import type {BlockMove} from './events/events_block_move.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
@@ -377,10 +378,8 @@ export class BlockSvg
     const eventsEnabled = eventUtils.isEnabled();
     let event: BlockMove | null = null;
     if (eventsEnabled) {
-      event = new (eventUtils.get(eventUtils.BLOCK_MOVE)!)(this) as BlockMove;
-      if (reason) {
-        event.setReason(reason);
-      }
+      event = new (eventUtils.get(EventType.BLOCK_MOVE)!)(this) as BlockMove;
+      if (reason) event.setReason(reason);
     }
 
     const delta = new Coordinate(dx, dy);

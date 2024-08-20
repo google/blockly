@@ -16,13 +16,13 @@ import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 import type {Workspace} from '../workspace.js';
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
-import * as eventUtils from './utils.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners that a workspace comment has moved.
  */
 export class CommentMove extends CommentBase {
-  override type = eventUtils.COMMENT_MOVE;
+  override type = EventType.COMMENT_MOVE;
 
   /** The comment that is being moved. */
   comment_?: WorkspaceComment;
@@ -203,4 +203,4 @@ export interface CommentMoveJson extends CommentBaseJson {
   newCoordinate: string;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.COMMENT_MOVE, CommentMove);
+registry.register(registry.Type.EVENT, EventType.COMMENT_MOVE, CommentMove);

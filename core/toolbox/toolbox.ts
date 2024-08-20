@@ -20,6 +20,7 @@ import {ComponentManager} from '../component_manager.js';
 import * as Css from '../css.js';
 import {DeleteArea} from '../delete_area.js';
 import '../events/events_toolbox_item_select.js';
+import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import type {IAutoHideable} from '../interfaces/i_autohideable.js';
 import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
@@ -962,7 +963,7 @@ export class Toolbox
     if (oldItem === newItem) {
       newElement = null;
     }
-    const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))(
+    const event = new (eventUtils.get(EventType.TOOLBOX_ITEM_SELECT))(
       oldElement,
       newElement,
       this.workspace_.id,

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {EventType} from '../../build/src/core/events/type.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {assert} from '../../node_modules/chai/chai.js';
 import {
@@ -91,12 +92,12 @@ suite('Trashcan', function () {
       simulateClick(this.trashcan.svgGroup);
 
       assertEventNotFired(this.eventsFireStub, Blockly.Events.TrashcanOpen, {
-        type: eventUtils.CLICK,
+        type: EventType.CLICK,
       });
       assertEventFired(
         this.eventsFireStub,
         Blockly.Events.Click,
-        {targetType: 'workspace', type: eventUtils.CLICK},
+        {targetType: 'workspace', type: EventType.CLICK},
         this.workspace.id,
         undefined,
       );
@@ -114,11 +115,11 @@ suite('Trashcan', function () {
       assertEventFired(
         this.eventsFireStub,
         Blockly.Events.TrashcanOpen,
-        {isOpen: true, type: eventUtils.TRASHCAN_OPEN},
+        {isOpen: true, type: EventType.TRASHCAN_OPEN},
         this.workspace.id,
       );
       assertEventNotFired(this.eventsFireStub, Blockly.Events.Click, {
-        type: eventUtils.TRASHCAN_OPEN,
+        type: EventType.TRASHCAN_OPEN,
       });
     });
     test('Click outside trashcan - fires trashcanClose', function () {
@@ -133,13 +134,13 @@ suite('Trashcan', function () {
       assertEventFired(
         this.eventsFireStub,
         Blockly.Events.TrashcanOpen,
-        {isOpen: false, type: eventUtils.TRASHCAN_OPEN},
+        {isOpen: false, type: EventType.TRASHCAN_OPEN},
         this.workspace.id,
       );
       assertEventFired(
         this.eventsFireStub,
         Blockly.Events.Click,
-        {targetType: 'workspace', type: eventUtils.CLICK},
+        {targetType: 'workspace', type: EventType.CLICK},
         this.workspace.id,
         undefined,
       );

@@ -8,6 +8,7 @@
 
 import type {BlockSvg} from '../block_svg.js';
 import {TextBubble} from '../bubbles/text_bubble.js';
+import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import * as renderManagement from '../render_management.js';
@@ -188,7 +189,7 @@ export class WarningIcon extends Icon implements IHasBubble {
     }
 
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+      new (eventUtils.get(EventType.BUBBLE_OPEN))(
         this.sourceBlock,
         visible,
         'warning',

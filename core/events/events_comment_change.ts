@@ -15,13 +15,13 @@ import type {WorkspaceComment} from '../comments/workspace_comment.js';
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
-import * as eventUtils from './utils.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners that the contents of a workspace comment has changed.
  */
 export class CommentChange extends CommentBase {
-  override type = eventUtils.COMMENT_CHANGE;
+  override type = EventType.COMMENT_CHANGE;
 
   // TODO(#6774): We should remove underscores.
   /** The previous contents of the comment. */
@@ -153,8 +153,4 @@ export interface CommentChangeJson extends CommentBaseJson {
   newContents: string;
 }
 
-registry.register(
-  registry.Type.EVENT,
-  eventUtils.COMMENT_CHANGE,
-  CommentChange,
-);
+registry.register(registry.Type.EVENT, EventType.COMMENT_CHANGE, CommentChange);

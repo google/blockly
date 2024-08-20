@@ -15,7 +15,7 @@ import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
-import * as eventUtils from './utils.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners that the workspace theme has changed.
@@ -24,7 +24,7 @@ export class ThemeChange extends UiBase {
   /** The name of the new theme that has been set. */
   themeName?: string;
 
-  override type = eventUtils.THEME_CHANGE;
+  override type = EventType.THEME_CHANGE;
 
   /**
    * @param opt_themeName The theme name. Undefined for a blank event.
@@ -81,4 +81,4 @@ export interface ThemeChangeJson extends AbstractEventJson {
   themeName: string;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.THEME_CHANGE, ThemeChange);
+registry.register(registry.Type.EVENT, EventType.THEME_CHANGE, ThemeChange);

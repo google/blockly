@@ -9,6 +9,7 @@
  *
  * @class
  */
+
 // Former goog.module ID: Blockly.Events.BubbleOpen
 
 import type {BlockSvg} from '../block_svg.js';
@@ -16,7 +17,7 @@ import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
 import type {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
-import * as eventUtils from './utils.js';
+import {EventType} from './type.js';
 
 /**
  * Class for a bubble open event.
@@ -31,7 +32,7 @@ export class BubbleOpen extends UiBase {
   /** The type of bubble; one of 'mutator', 'comment', or 'warning'. */
   bubbleType?: BubbleType;
 
-  override type = eventUtils.BUBBLE_OPEN;
+  override type = EventType.BUBBLE_OPEN;
 
   /**
    * @param opt_block The associated block. Undefined for a blank event.
@@ -117,4 +118,4 @@ export interface BubbleOpenJson extends AbstractEventJson {
   blockId: string;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.BUBBLE_OPEN, BubbleOpen);
+registry.register(registry.Type.EVENT, EventType.BUBBLE_OPEN, BubbleOpen);

@@ -12,6 +12,7 @@ import {config} from '../config.js';
 import {Connection} from '../connection.js';
 import {ConnectionType} from '../connection_type.js';
 import type {BlockMove} from '../events/events_block_move.js';
+import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import {IConnectionPreviewer} from '../interfaces/i_connection_previewer.js';
 import {IDragStrategy} from '../interfaces/i_draggable.js';
@@ -177,7 +178,7 @@ export class BlockDragStrategy implements IDragStrategy {
 
   /** Fire a UI event at the start of a block drag. */
   private fireDragStartEvent() {
-    const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
+    const event = new (eventUtils.get(EventType.BLOCK_DRAG))(
       this.block,
       true,
       this.block.getDescendants(false),
@@ -187,7 +188,7 @@ export class BlockDragStrategy implements IDragStrategy {
 
   /** Fire a UI event at the end of a block drag. */
   private fireDragEndEvent() {
-    const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
+    const event = new (eventUtils.get(EventType.BLOCK_DRAG))(
       this.block,
       false,
       this.block.getDescendants(false),
@@ -198,7 +199,7 @@ export class BlockDragStrategy implements IDragStrategy {
   /** Fire a move event at the end of a block drag. */
   private fireMoveEvent() {
     if (this.block.isDeadOrDying()) return;
-    const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
+    const event = new (eventUtils.get(EventType.BLOCK_MOVE))(
       this.block,
     ) as BlockMove;
     event.setReason(['drag']);

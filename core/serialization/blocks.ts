@@ -10,6 +10,7 @@ import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import {MANUALLY_DISABLED} from '../constants.js';
+import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../inputs/input_types.js';
 import {isSerializable} from '../interfaces/i_serializable.js';
@@ -432,7 +433,7 @@ export function appendInternal(
   if (eventUtils.isEnabled()) {
     // Block events come after var events, in case they refer to newly created
     // variables.
-    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
+    eventUtils.fire(new (eventUtils.get(EventType.BLOCK_CREATE))(block));
   }
   eventUtils.setGroup(existingGroup);
   eventUtils.setRecordUndo(prevRecordUndo);
@@ -512,9 +513,7 @@ function checkNewVariables(
     // Fire a VarCreate event for each (if any) new variable created.
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
-      eventUtils.fire(
-        new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable),
-      );
+      eventUtils.fire(new (eventUtils.get(EventType.VAR_CREATE))(thisVariable));
     }
   }
 }

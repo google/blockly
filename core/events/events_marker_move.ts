@@ -17,7 +17,7 @@ import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
-import * as eventUtils from './utils.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners that a marker (used for keyboard navigation) has
@@ -40,7 +40,7 @@ export class MarkerMove extends UiBase {
    */
   isCursor?: boolean;
 
-  override type = eventUtils.MARKER_MOVE;
+  override type = EventType.MARKER_MOVE;
 
   /**
    * @param opt_block The affected block. Null if current node is of type
@@ -130,4 +130,4 @@ export interface MarkerMoveJson extends AbstractEventJson {
   newNode: ASTNode;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.MARKER_MOVE, MarkerMove);
+registry.register(registry.Type.EVENT, EventType.MARKER_MOVE, MarkerMove);

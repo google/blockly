@@ -15,7 +15,7 @@ import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
 import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
-import * as eventUtils from './utils.js';
+import {EventType} from './type.js';
 
 /**
  * Class for a selected event.
@@ -31,7 +31,7 @@ export class Selected extends UiBase {
    */
   newElementId?: string;
 
-  override type = eventUtils.SELECTED;
+  override type = EventType.SELECTED;
 
   /**
    * @param opt_oldElementId The ID of the previously selected element. Null if
@@ -94,4 +94,4 @@ export interface SelectedJson extends AbstractEventJson {
   newElementId?: string;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.SELECTED, Selected);
+registry.register(registry.Type.EVENT, EventType.SELECTED, Selected);

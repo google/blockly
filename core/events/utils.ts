@@ -20,6 +20,7 @@ import type {CommentCreate} from './events_comment_create.js';
 import type {CommentMove} from './events_comment_move.js';
 import type {CommentResize} from './events_comment_resize.js';
 import type {ViewportChange} from './events_viewport.js';
+import {EventType} from './type.js';
 
 /** Group ID for new events.  Grouped events are indivisible. */
 let group = '';
@@ -49,152 +50,6 @@ export function getRecordUndo(): boolean {
 let disabled = 0;
 
 /**
- * Name of event that creates a block. Will be deprecated for BLOCK_CREATE.
- */
-export const CREATE = 'create';
-
-/**
- * Name of event that creates a block.
- */
-export const BLOCK_CREATE = CREATE;
-
-/**
- * Name of event that deletes a block. Will be deprecated for BLOCK_DELETE.
- */
-export const DELETE = 'delete';
-
-/**
- * Name of event that deletes a block.
- */
-export const BLOCK_DELETE = DELETE;
-
-/**
- * Name of event that changes a block. Will be deprecated for BLOCK_CHANGE.
- */
-export const CHANGE = 'change';
-
-/**
- * Name of event that changes a block.
- */
-export const BLOCK_CHANGE = CHANGE;
-
-/**
- * Name of event representing an in-progress change to a field of a block, which
- * is expected to be followed by a block change event.
- */
-export const BLOCK_FIELD_INTERMEDIATE_CHANGE =
-  'block_field_intermediate_change';
-
-/**
- * Name of event that moves a block. Will be deprecated for BLOCK_MOVE.
- */
-export const MOVE = 'move';
-
-/**
- * Name of event that moves a block.
- */
-export const BLOCK_MOVE = MOVE;
-
-/**
- * Name of event that creates a variable.
- */
-export const VAR_CREATE = 'var_create';
-
-/**
- * Name of event that deletes a variable.
- */
-export const VAR_DELETE = 'var_delete';
-
-/**
- * Name of event that renames a variable.
- */
-export const VAR_RENAME = 'var_rename';
-
-/**
- * Name of generic event that records a UI change.
- */
-export const UI = 'ui';
-
-/**
- * Name of event that drags a block.
- */
-export const BLOCK_DRAG = 'drag';
-
-/**
- * Name of event that records a change in selected element.
- */
-export const SELECTED = 'selected';
-
-/**
- * Name of event that records a click.
- */
-export const CLICK = 'click';
-
-/**
- * Name of event that records a marker move.
- */
-export const MARKER_MOVE = 'marker_move';
-
-/**
- * Name of event that records a bubble open.
- */
-export const BUBBLE_OPEN = 'bubble_open';
-
-/**
- * Name of event that records a trashcan open.
- */
-export const TRASHCAN_OPEN = 'trashcan_open';
-
-/**
- * Name of event that records a toolbox item select.
- */
-export const TOOLBOX_ITEM_SELECT = 'toolbox_item_select';
-
-/**
- * Name of event that records a theme change.
- */
-export const THEME_CHANGE = 'theme_change';
-
-/**
- * Name of event that records a viewport change.
- */
-export const VIEWPORT_CHANGE = 'viewport_change';
-
-/**
- * Name of event that creates a comment.
- */
-export const COMMENT_CREATE = 'comment_create';
-
-/**
- * Name of event that deletes a comment.
- */
-export const COMMENT_DELETE = 'comment_delete';
-
-/**
- * Name of event that changes a comment.
- */
-export const COMMENT_CHANGE = 'comment_change';
-
-/**
- * Name of event that moves a comment.
- */
-export const COMMENT_MOVE = 'comment_move';
-
-/** Name of event that resizes a comment. */
-export const COMMENT_RESIZE = 'comment_resize';
-
-/**  Name of event that drags a comment. */
-export const COMMENT_DRAG = 'comment_drag';
-
-/** Type of event that collapses a comment. */
-export const COMMENT_COLLAPSE = 'comment_collapse';
-
-/**
- * Name of event that records a workspace load.
- */
-export const FINISHED_LOADING = 'finished_loading';
-
-/**
  * The language-neutral ID for when the reason why a block is disabled is
  * because the block is not descended from a root block.
  */
@@ -213,20 +68,6 @@ export type BumpEvent =
   | CommentCreate
   | CommentMove
   | CommentResize;
-
-/**
- * List of events that cause objects to be bumped back into the visible
- * portion of the workspace.
- *
- * Not to be confused with bumping so that disconnected connections do not
- * appear connected.
- */
-export const BUMP_EVENTS: string[] = [
-  BLOCK_CREATE,
-  BLOCK_MOVE,
-  COMMENT_CREATE,
-  COMMENT_MOVE,
-];
 
 /** List of events queued for firing. */
 const FIRE_QUEUE: Abstract[] = [];
@@ -339,7 +180,7 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
   for (let i = 0, event; (event = queue[i]); i++) {
     if (!event.isNull()) {
       // Treat all UI events as the same type in hash table.
-      const eventType = event.isUiEvent ? UI : event.type;
+      const eventType = event.isUiEvent ? EventType.UI : event.type;
       // TODO(#5927): Check whether `blockId` exists before accessing it.
       const blockId = (event as AnyDuringMigration).blockId;
       const key = [eventType, blockId, event.workspaceId].join(' ');
@@ -352,7 +193,10 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         // move events.
         hash[key] = {event, index: i};
         mergedQueue.push(event);
-      } else if (event.type === MOVE && lastEntry.index === i - 1) {
+      } else if (
+        event.type === EventType.BLOCK_MOVE &&
+        lastEntry.index === i - 1
+      ) {
         const moveEvent = event as BlockMove;
         // Merge move events.
         lastEvent.newParentId = moveEvent.newParentId;
@@ -371,21 +215,24 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         }
         lastEntry.index = i;
       } else if (
-        event.type === CHANGE &&
+        event.type === EventType.BLOCK_CHANGE &&
         (event as BlockChange).element === lastEvent.element &&
         (event as BlockChange).name === lastEvent.name
       ) {
         const changeEvent = event as BlockChange;
         // Merge change events.
         lastEvent.newValue = changeEvent.newValue;
-      } else if (event.type === VIEWPORT_CHANGE) {
+      } else if (event.type === EventType.VIEWPORT_CHANGE) {
         const viewportEvent = event as ViewportChange;
         // Merge viewport change events.
         lastEvent.viewTop = viewportEvent.viewTop;
         lastEvent.viewLeft = viewportEvent.viewLeft;
         lastEvent.scale = viewportEvent.scale;
         lastEvent.oldScale = viewportEvent.oldScale;
-      } else if (event.type === CLICK && lastEvent.type === BUBBLE_OPEN) {
+      } else if (
+        event.type === EventType.CLICK &&
+        lastEvent.type === EventType.BUBBLE_OPEN
+      ) {
         // Drop click events caused by opening/closing bubbles.
       } else {
         // Collision: newer events should merge into this event to maintain
@@ -409,7 +256,7 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
     // AnyDuringMigration because:  Property 'element' does not exist on type
     // 'Abstract'.
     if (
-      event.type === CHANGE &&
+      event.type === EventType.BLOCK_CHANGE &&
       (event as AnyDuringMigration).element === 'mutation'
     ) {
       queue.unshift(queue.splice(i, 1)[0]);
@@ -539,7 +386,10 @@ export function get(
  * @param event Custom data for event.
  */
 export function disableOrphans(event: Abstract) {
-  if (event.type === MOVE || event.type === CREATE) {
+  if (
+    event.type === EventType.BLOCK_MOVE ||
+    event.type === EventType.BLOCK_CREATE
+  ) {
     const blockEvent = event as BlockMove | BlockCreate;
     if (!blockEvent.workspaceId) {
       return;

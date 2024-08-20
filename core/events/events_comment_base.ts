@@ -20,7 +20,7 @@ import {
 } from './events_abstract.js';
 import type {CommentCreate} from './events_comment_create.js';
 import type {CommentDelete} from './events_comment_delete.js';
-import * as eventUtils from './utils.js';
+import {getGroup, getRecordUndo} from './utils.js';
 
 /**
  * Abstract class for a comment event.
@@ -44,8 +44,8 @@ export class CommentBase extends AbstractEvent {
 
     this.commentId = opt_comment.id;
     this.workspaceId = opt_comment.workspace.id;
-    this.group = eventUtils.getGroup();
-    this.recordUndo = eventUtils.getRecordUndo();
+    this.group = getGroup();
+    this.recordUndo = getRecordUndo();
   }
 
   /**

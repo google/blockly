@@ -126,7 +126,7 @@ function fireInternal(event: Abstract) {
 function fireNow() {
   const queue = filter(FIRE_QUEUE, true);
   FIRE_QUEUE.length = 0;
-  for (let i = 0, event; (event = queue[i]); i++) {
+  for (const event of queue) {
     if (!event.workspaceId) {
       continue;
     }
@@ -265,14 +265,11 @@ export function filter(queue: Abstract[], forward = true): Abstract[] {
       lastEvent.newParentId = event.newParentId;
       lastEvent.newInputName = event.newInputName;
       lastEvent.newCoordinate = event.newCoordinate;
-      if (event.reason) {
-        if (lastEvent.reason) {
-          // Concatenate reasons without duplicates.
-          const reasonSet = new Set(event.reason.concat(lastEvent.reason));
-          lastEvent.reason = Array.from(reasonSet);
-        } else {
-          lastEvent.reason = event.reason;
-        }
+      // Concatenate reasons without duplicates.
+      if (lastEvent.reason || event.reason) {
+        lastEvent.reason = Array.from(
+          new Set((lastEvent.reason ?? []).concat(event.reason ?? [])),
+        );
       }
     } else if (
       isBlockChange(event) &&
@@ -296,9 +293,7 @@ export function filter(queue: Abstract[], forward = true): Abstract[] {
     }
   }
   // Filter out any events that have become null due to merging.
-  queue = mergedQueue.filter(function (e) {
-    return !e.isNull();
-  });
+  queue = mergedQueue.filter((e) => !e.isNull());
   if (!forward) {
     // Restore undo order.
     queue.reverse();

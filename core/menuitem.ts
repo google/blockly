@@ -176,16 +176,6 @@ export class MenuItem {
   }
 
   /**
-   * Highlights or unhighlights the component.
-   *
-   * @param highlight Whether to highlight or unhighlight the component.
-   * @internal
-   */
-  setHighlighted(highlight: boolean) {
-    this.highlight = highlight;
-  }
-
-  /**
    * Returns true if the menu item is enabled, false otherwise.
    *
    * @returns Whether the menu item is enabled.

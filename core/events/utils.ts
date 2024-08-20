@@ -9,6 +9,7 @@
 import type {Block} from '../block.js';
 import * as common from '../common.js';
 import * as registry from '../registry.js';
+import * as deprecation from '../utils/deprecation.js';
 import * as idGenerator from '../utils/idgenerator.js';
 import type {Workspace} from '../workspace.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
@@ -216,7 +217,9 @@ function enqueueEvent(event: Abstract) {
  * involved in dispatching events; this apparently resolved the issue
  * but added considerable additional complexity and made it difficlut
  * to reason about how events are processed for undo/redo, so both the
- * call from undo and the post-processing code was removed.
+ * call from undo and the post-processing code was removed, and
+ * forward=true was made the default while calling the function with
+ * forward=false was deprecated.
  *
  * At the same time, the buggy code to reorder BlockChange events was
  * replaced by a less-buggy version of the same functionality in a new
@@ -226,14 +229,17 @@ function enqueueEvent(event: Abstract) {
  *
  * @param queueIn Array of events.
  * @param forward True if forward (redo), false if backward (undo).
+ *     This parameter is deprecated: true is now the default and
+ *     calling filter with it false will in future not be supported.
  * @returns Array of filtered events.
  */
-export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
+export function filter(queueIn: Abstract[], forward = true): Abstract[] {
   let queue = queueIn.slice();
   // Shallow copy of queue.
   if (!forward) {
-    // Undo is merged in reverse order.
-    queue.reverse();
+    deprecation.warn('filter(queue, /*forward=*/false)', 'v11.2', 'v12');
+    // Undo was merged in reverse order.
+    queue = queue.slice().reverse(); // Copy before reversing in place.
   }
   const mergedQueue = [];
   const hash = Object.create(null);

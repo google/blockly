@@ -27,7 +27,6 @@ import {
   isClick,
   isViewportChange,
 } from './predicates.js';
-import {EventType} from './type.js';
 
 /** Group ID for new events.  Grouped events are indivisible. */
 let group = '';
@@ -227,75 +226,73 @@ function enqueueEvent(event: Abstract) {
  * that events will be in the correct order at the time filter is
  * called.
  *
- * @param queueIn Array of events.
+ * Additionally, the event merging code was modified so that only
+ * immediately adjacent events would be merged.  This simplified the
+ * implementation while ensuring that the merging of events cannot
+ * cause them to be reordered.
+ *
+ * @param queue Array of events.
  * @param forward True if forward (redo), false if backward (undo).
  *     This parameter is deprecated: true is now the default and
  *     calling filter with it false will in future not be supported.
  * @returns Array of filtered events.
  */
-export function filter(queueIn: Abstract[], forward = true): Abstract[] {
-  let queue = queueIn.slice();
-  // Shallow copy of queue.
+export function filter(queue: Abstract[], forward = true): Abstract[] {
   if (!forward) {
     deprecation.warn('filter(queue, /*forward=*/false)', 'v11.2', 'v12');
     // Undo was merged in reverse order.
     queue = queue.slice().reverse(); // Copy before reversing in place.
   }
-  const mergedQueue = [];
-  const hash = Object.create(null);
+  const mergedQueue: Abstract[] = [];
   // Merge duplicates.
-  for (let i = 0, event; (event = queue[i]); i++) {
-    if (!event.isNull()) {
-      // Treat all UI events as the same type in hash table.
-      const eventType = event.isUiEvent ? EventType.UI : event.type;
-      // TODO(#5927): Check whether `blockId` exists before accessing it.
-      const blockId = (event as AnyDuringMigration).blockId;
-      const key = [eventType, blockId, event.workspaceId].join(' ');
-
-      const lastEntry = hash[key];
-      const lastEvent = lastEntry ? lastEntry.event : null;
-      if (!lastEntry) {
-        // Each item in the hash table has the event and the index of that event
-        // in the input array.  This lets us make sure we only merge adjacent
-        // move events.
-        hash[key] = {event, index: i};
-        mergedQueue.push(event);
-      } else if (isBlockMove(event) && lastEntry.index === i - 1) {
-        // Merge move events.
-        lastEvent.newParentId = event.newParentId;
-        lastEvent.newInputName = event.newInputName;
-        lastEvent.newCoordinate = event.newCoordinate;
-        if (event.reason) {
-          if (lastEvent.reason) {
-            // Concatenate reasons without duplicates.
-            const reasonSet = new Set(event.reason.concat(lastEvent.reason));
-            lastEvent.reason = Array.from(reasonSet);
-          } else {
-            lastEvent.reason = event.reason;
-          }
+  for (const event of queue) {
+    const lastEvent = mergedQueue[mergedQueue.length - 1];
+    if (event.isNull()) continue;
+    if (
+      !lastEvent ||
+      lastEvent.workspaceId !== event.workspaceId ||
+      lastEvent.group !== event.group
+    ) {
+      mergedQueue.push(event);
+      continue;
+    }
+    if (
+      isBlockMove(event) &&
+      isBlockMove(lastEvent) &&
+      event.blockId === lastEvent.blockId
+    ) {
+      // Merge move events.
+      lastEvent.newParentId = event.newParentId;
+      lastEvent.newInputName = event.newInputName;
+      lastEvent.newCoordinate = event.newCoordinate;
+      if (event.reason) {
+        if (lastEvent.reason) {
+          // Concatenate reasons without duplicates.
+          const reasonSet = new Set(event.reason.concat(lastEvent.reason));
+          lastEvent.reason = Array.from(reasonSet);
+        } else {
+          lastEvent.reason = event.reason;
         }
-        lastEntry.index = i;
-      } else if (
-        isBlockChange(event) &&
-        event.element === lastEvent.element &&
-        event.name === lastEvent.name
-      ) {
-        // Merge change events.
-        lastEvent.newValue = event.newValue;
-      } else if (isViewportChange(event)) {
-        // Merge viewport change events.
-        lastEvent.viewTop = event.viewTop;
-        lastEvent.viewLeft = event.viewLeft;
-        lastEvent.scale = event.scale;
-        lastEvent.oldScale = event.oldScale;
-      } else if (isClick(event) && isBubbleOpen(lastEvent)) {
-        // Drop click events caused by opening/closing bubbles.
-      } else {
-        // Collision: newer events should merge into this event to maintain
-        // order.
-        hash[key] = {event, index: i};
-        mergedQueue.push(event);
       }
+    } else if (
+      isBlockChange(event) &&
+      isBlockChange(lastEvent) &&
+      event.blockId === lastEvent.blockId &&
+      event.element === lastEvent.element &&
+      event.name === lastEvent.name
+    ) {
+      // Merge change events.
+      lastEvent.newValue = event.newValue;
+    } else if (isViewportChange(event) && isViewportChange(lastEvent)) {
+      // Merge viewport change events.
+      lastEvent.viewTop = event.viewTop;
+      lastEvent.viewLeft = event.viewLeft;
+      lastEvent.scale = event.scale;
+      lastEvent.oldScale = event.oldScale;
+    } else if (isClick(event) && isBubbleOpen(lastEvent)) {
+      // Drop click events caused by opening/closing bubbles.
+    } else {
+      mergedQueue.push(event);
     }
   }
   // Filter out any events that have become null due to merging.

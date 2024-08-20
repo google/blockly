@@ -13,7 +13,7 @@ import type {BlockMove} from './events/events_block_move.js';
 import type {CommentCreate} from './events/events_comment_create.js';
 import type {CommentMove} from './events/events_comment_move.js';
 import type {CommentResize} from './events/events_comment_resize.js';
-import type {ViewportChange} from './events/events_viewport.js';
+import {isViewportChange} from './events/predicates.js';
 import {BUMP_EVENTS, EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
@@ -128,13 +128,8 @@ export function bumpIntoBoundsHandler(
         );
       }
       eventUtils.setGroup(existingGroup);
-    } else if (e.type === EventType.VIEWPORT_CHANGE) {
-      const viewportEvent = e as ViewportChange;
-      if (
-        viewportEvent.scale &&
-        viewportEvent.oldScale &&
-        viewportEvent.scale > viewportEvent.oldScale
-      ) {
+    } else if (isViewportChange(e)) {
+      if (e.scale && e.oldScale && e.scale > e.oldScale) {
         bumpTopObjectsIntoBounds(workspace);
       }
     }

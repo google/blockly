@@ -15,6 +15,13 @@ import {Blocks} from './blocks.js';
 import * as common from './common.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BubbleOpen} from './events/events_bubble_open.js';
+import {
+  isBlockChange,
+  isBlockCreate,
+  isBlockDelete,
+  isBlockFieldIntermediateChange,
+  isBubbleOpen,
+} from './events/predicates.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Field, UnattachedFieldError} from './field.js';
@@ -355,9 +362,8 @@ function updateMutatorFlyout(workspace: WorkspaceSvg) {
  * @internal
  */
 export function mutatorOpenListener(e: Abstract) {
-  if (e.type !== EventType.BUBBLE_OPEN) {
-    return;
-  }
+  if (!isBubbleOpen(e)) return;
+
   const bubbleEvent = e as BubbleOpen;
   if (
     !(bubbleEvent.bubbleType === 'mutator' && bubbleEvent.isOpen) ||
@@ -387,10 +393,10 @@ export function mutatorOpenListener(e: Abstract) {
  */
 function mutatorChangeListener(e: Abstract) {
   if (
-    e.type !== EventType.BLOCK_CREATE &&
-    e.type !== EventType.BLOCK_DELETE &&
-    e.type !== EventType.BLOCK_CHANGE &&
-    e.type !== EventType.BLOCK_FIELD_INTERMEDIATE_CHANGE
+    !isBlockCreate(e) &&
+    !isBlockDelete(e) &&
+    !isBlockChange(e) &&
+    !isBlockFieldIntermediateChange(e)
   ) {
     return;
   }

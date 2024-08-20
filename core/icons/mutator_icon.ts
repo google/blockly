@@ -11,6 +11,7 @@ import type {BlocklyOptions} from '../blockly_options.js';
 import {MiniWorkspaceBubble} from '../bubbles/mini_workspace_bubble.js';
 import type {Abstract} from '../events/events_abstract.js';
 import {BlockChange} from '../events/events_block_change.js';
+import {isBlockChange, isBlockCreate} from '../events/predicates.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
@@ -308,9 +309,8 @@ export class MutatorIcon extends Icon implements IHasBubble {
   static isIgnorableMutatorEvent(e: Abstract) {
     return (
       e.isUiEvent ||
-      e.type === EventType.BLOCK_CREATE ||
-      (e.type === EventType.BLOCK_CHANGE &&
-        (e as BlockChange).element === 'disabled')
+      isBlockCreate(e) ||
+      (isBlockChange(e) && e.element === 'disabled')
     );
   }
 

@@ -17,8 +17,8 @@ import * as browserEvents from './browser_events.js';
 import {ComponentManager} from './component_manager.js';
 import {DeleteArea} from './delete_area.js';
 import type {Abstract} from './events/events_abstract.js';
-import type {BlockDelete} from './events/events_block_delete.js';
 import './events/events_trashcan_open.js';
+import {isBlockDelete} from './events/predicates.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {IAutoHideable} from './interfaces/i_autohideable.js';
@@ -604,30 +604,22 @@ export class Trashcan
   private onDelete(event: Abstract) {
     if (
       this.workspace.options.maxTrashcanContents <= 0 ||
-      event.type !== EventType.BLOCK_DELETE
+      !isBlockDelete(event) ||
+      event.wasShadow
     ) {
       return;
     }
-    const deleteEvent = event as BlockDelete;
-    if (event.type === EventType.BLOCK_DELETE && !deleteEvent.wasShadow) {
-      if (!deleteEvent.oldJson) {
-        throw new Error('Encountered a delete event without proper oldJson');
-      }
-      const cleanedJson = JSON.stringify(
-        this.cleanBlockJson(deleteEvent.oldJson),
-      );
-      if (this.contents.includes(cleanedJson)) {
-        return;
-      }
-      this.contents.unshift(cleanedJson);
-      while (
-        this.contents.length > this.workspace.options.maxTrashcanContents
-      ) {
-        this.contents.pop();
-      }
-
-      this.setMinOpenness(HAS_BLOCKS_LID_ANGLE);
+    if (!event.oldJson) {
+      throw new Error('Encountered a delete event without proper oldJson');
     }
+    const cleanedJson = JSON.stringify(this.cleanBlockJson(event.oldJson));
+    if (this.contents.includes(cleanedJson)) return;
+    this.contents.unshift(cleanedJson);
+    while (this.contents.length > this.workspace.options.maxTrashcanContents) {
+      this.contents.pop();
+    }
+
+    this.setMinOpenness(HAS_BLOCKS_LID_ANGLE);
   }
 
   /**

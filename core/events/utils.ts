@@ -13,13 +13,19 @@ import * as idGenerator from '../utils/idgenerator.js';
 import type {Workspace} from '../workspace.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import type {Abstract} from './events_abstract.js';
-import type {BlockChange} from './events_block_change.js';
 import type {BlockCreate} from './events_block_create.js';
 import type {BlockMove} from './events_block_move.js';
 import type {CommentCreate} from './events_comment_create.js';
 import type {CommentMove} from './events_comment_move.js';
 import type {CommentResize} from './events_comment_resize.js';
-import type {ViewportChange} from './events_viewport.js';
+import {
+  isBlockChange,
+  isBlockCreate,
+  isBlockMove,
+  isBubbleOpen,
+  isClick,
+  isViewportChange,
+} from './predicates.js';
 import {EventType} from './type.js';
 
 /** Group ID for new events.  Grouped events are indivisible. */
@@ -188,46 +194,35 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         // move events.
         hash[key] = {event, index: i};
         mergedQueue.push(event);
-      } else if (
-        event.type === EventType.BLOCK_MOVE &&
-        lastEntry.index === i - 1
-      ) {
-        const moveEvent = event as BlockMove;
+      } else if (isBlockMove(event) && lastEntry.index === i - 1) {
         // Merge move events.
-        lastEvent.newParentId = moveEvent.newParentId;
-        lastEvent.newInputName = moveEvent.newInputName;
-        lastEvent.newCoordinate = moveEvent.newCoordinate;
-        if (moveEvent.reason) {
+        lastEvent.newParentId = event.newParentId;
+        lastEvent.newInputName = event.newInputName;
+        lastEvent.newCoordinate = event.newCoordinate;
+        if (event.reason) {
           if (lastEvent.reason) {
             // Concatenate reasons without duplicates.
-            const reasonSet = new Set(
-              moveEvent.reason.concat(lastEvent.reason),
-            );
+            const reasonSet = new Set(event.reason.concat(lastEvent.reason));
             lastEvent.reason = Array.from(reasonSet);
           } else {
-            lastEvent.reason = moveEvent.reason;
+            lastEvent.reason = event.reason;
           }
         }
         lastEntry.index = i;
       } else if (
-        event.type === EventType.BLOCK_CHANGE &&
-        (event as BlockChange).element === lastEvent.element &&
-        (event as BlockChange).name === lastEvent.name
+        isBlockChange(event) &&
+        event.element === lastEvent.element &&
+        event.name === lastEvent.name
       ) {
-        const changeEvent = event as BlockChange;
         // Merge change events.
-        lastEvent.newValue = changeEvent.newValue;
-      } else if (event.type === EventType.VIEWPORT_CHANGE) {
-        const viewportEvent = event as ViewportChange;
+        lastEvent.newValue = event.newValue;
+      } else if (isViewportChange(event)) {
         // Merge viewport change events.
-        lastEvent.viewTop = viewportEvent.viewTop;
-        lastEvent.viewLeft = viewportEvent.viewLeft;
-        lastEvent.scale = viewportEvent.scale;
-        lastEvent.oldScale = viewportEvent.oldScale;
-      } else if (
-        event.type === EventType.CLICK &&
-        lastEvent.type === EventType.BUBBLE_OPEN
-      ) {
+        lastEvent.viewTop = event.viewTop;
+        lastEvent.viewLeft = event.viewLeft;
+        lastEvent.scale = event.scale;
+        lastEvent.oldScale = event.oldScale;
+      } else if (isClick(event) && isBubbleOpen(lastEvent)) {
         // Drop click events caused by opening/closing bubbles.
       } else {
         // Collision: newer events should merge into this event to maintain
@@ -381,10 +376,7 @@ export function get(
  * @param event Custom data for event.
  */
 export function disableOrphans(event: Abstract) {
-  if (
-    event.type === EventType.BLOCK_MOVE ||
-    event.type === EventType.BLOCK_CREATE
-  ) {
+  if (isBlockMove(event) || isBlockCreate(event)) {
     const blockEvent = event as BlockMove | BlockCreate;
     if (!blockEvent.workspaceId) {
       return;

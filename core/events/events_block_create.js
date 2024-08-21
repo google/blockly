@@ -54,6 +54,15 @@ class BlockCreate extends BlockBase {
     this.xml = Xml.blockToDomWithXY(opt_block);
     this.ids = eventUtils.getDescendantIds(opt_block);
 
+    const typesSet = new Set()
+    const descendants = opt_block.getDescendants(false);
+    for (let i = 0, descendant; (descendant = descendants[i]); i++) {
+      this.ids[i] = descendant.id;
+      typesSet.add(descendant.type)
+    }
+
+    this.types = Array.from(typesSet.values())
+
     /**
      * JSON representation of the block that was just created.
      * @type {!blocks.State}

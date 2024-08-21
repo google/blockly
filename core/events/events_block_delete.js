@@ -55,7 +55,16 @@ class BlockDelete extends BlockBase {
     }
 
     this.oldXml = Xml.blockToDomWithXY(opt_block);
-    this.ids = eventUtils.getDescendantIds(opt_block);
+    this.ids = [];
+
+    const typesSet = new Set()
+    const descendants = opt_block.getDescendants(false);
+    for (let i = 0, descendant; (descendant = descendants[i]); i++) {
+      this.ids[i] = descendant.id;
+      typesSet.add(descendant.type)
+    }
+
+    this.types = Array.from(typesSet.values())
 
     /**
      * Was the block that was just deleted a shadow?

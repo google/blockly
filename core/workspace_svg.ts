@@ -1656,9 +1656,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const movableBlocks = topBlocks.filter((block) => block.isMovable());
     const immovableBlocks = topBlocks.filter((block) => !block.isMovable());
 
-    const immovableBlockBounds = immovableBlocks.map((block) => block.getBoundingRectangle());
+    const immovableBlockBounds = immovableBlocks.map((block) =>
+      block.getBoundingRectangle(),
+    );
 
-    const getNextIntersectingImmovableBlock = function(rect: Rect): Rect|null {
+    const getNextIntersectingImmovableBlock = function (
+      rect: Rect,
+    ): Rect | null {
       for (const immovableRect of immovableBlockBounds) {
         if (rect.intersects(immovableRect)) {
           return immovableRect;
@@ -1679,7 +1683,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       let conflictingRect = getNextIntersectingImmovableBlock(boundingRect);
       while (conflictingRect != null) {
         // If the block intersects with an immovable block, move it down past that immovable block.
-        cursorY = conflictingRect.top + conflictingRect.getHeight() + minBlockHeight;
+        cursorY =
+          conflictingRect.top + conflictingRect.getHeight() + minBlockHeight;
         block.moveBy(0, cursorY - boundingRect.top, ['cleanup']);
         block.snapToGrid();
         boundingRect = block.getBoundingRectangle();
@@ -1688,7 +1693,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
       // Ensure all next blocks start past the most recent (which will also put them past all
       // previously intersecting immovable blocks).
-      cursorY = block.getRelativeToSurfaceXY().y + block.getHeightWidth().height + minBlockHeight;
+      cursorY =
+        block.getRelativeToSurfaceXY().y +
+        block.getHeightWidth().height +
+        minBlockHeight;
     }
     eventUtils.setGroup(false);
     this.setResizesEnabled(true);

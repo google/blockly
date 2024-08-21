@@ -77,10 +77,12 @@ export class Rect {
     // the border's line segment is contained within the other rectangle. The simplified version
     // used here can be logically interpreted as ensuring that each line segment of 'this' rectangle
     // is not outside the bounds of the 'other' rectangle (proving there's an intersection).
-    return (this.left <= other.right)
-      && (this.right >= other.left)
-      && (this.bottom >= other.top)
-      && (this.top <= other.bottom);
+    return (
+      this.left <= other.right &&
+      this.right >= other.left &&
+      this.bottom >= other.top &&
+      this.top <= other.bottom
+    );
   }
 
   /**
@@ -97,7 +99,12 @@ export class Rect {
     if (!a || !b) {
       return false;
     }
-    return a.top === b.top && a.bottom === b.bottom && a.left === b.left && a.right === b.right;
+    return (
+      a.top === b.top &&
+      a.bottom === b.bottom &&
+      a.left === b.left &&
+      a.right === b.right
+    );
   }
 
   /**
@@ -108,7 +115,11 @@ export class Rect {
    * @param height The height of the rectangle, in pixels.
    * @returns A newly created Rect using the provided Coordinate and dimensions.
    */
-  static createFromPoint(position: Coordinate, width: number, height: number): Rect {
+  static createFromPoint(
+    position: Coordinate,
+    width: number,
+    height: number,
+  ): Rect {
     const left = position.x;
     const top = position.y;
     return new Rect(top, top + height, left, left + width);

@@ -53,7 +53,8 @@
     "test:mocha:interactive": "npm run build && concurrently -n tsc,server \"tsc --watch --preserveWatchOutput --outDir \"build/src\" --declarationDir \"build/declarations\"\" \"http-server ./ -o /tests/mocha/index.html -c-1\"",
     "test:compile:advanced": "gulp buildAdvancedCompilationTest --debug",
     "updateGithubPages": "npm ci && gulp gitUpdateGithubPages",
-    "package:copy": "npm run package && gulp copyDist"
+    "package:copy": "npm run package && gulp copyDist",
+    "build:copy": "npm run build && gulp copyDist"
   },
   "main": "./index.js",
   "umd": "./blockly.min.js",

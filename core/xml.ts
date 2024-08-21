@@ -300,7 +300,7 @@ export function blockToDom(
   const nextBlock = block.getNextBlock();
   let container: Element;
   if (nextBlock) {
-    const nextElem = blockToDom(nextBlock, opt_noId);
+    const nextElem = blockToDom(nextBlock, opt_noId, opt_noModule);
     if (nextElem.nodeType === dom.NodeType.ELEMENT_NODE) {
       container = utilsXml.createElement('next');
       container.appendChild(nextElem);
@@ -310,7 +310,7 @@ export function blockToDom(
   const nextShadow =
     block.nextConnection && block.nextConnection.getShadowDom();
   if (nextShadow && (!nextBlock || !nextBlock.isShadow())) {
-    container!.appendChild(cloneShadow(nextShadow, opt_noId));
+    container!.appendChild(cloneShadow(nextShadow, opt_noId, opt_noModule));
   }
 
   return element;

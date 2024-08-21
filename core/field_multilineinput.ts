@@ -25,6 +25,7 @@ import * as parsing from './utils/parsing.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
+import {BlockSvg} from './block_svg';
 
 /**
  * Class for an editable text area field.
@@ -180,32 +181,32 @@ export class FieldMultilineInput extends FieldTextInput {
       return Field.NBSP;
     }
     const lines = textLines.split('\n');
-    textLines = '';
-    const displayLinesNumber = this.isOverflowedY_
-      ? this.maxLines_
-      : lines.length;
-    for (let i = 0; i < displayLinesNumber; i++) {
-      let text = lines[i];
-      if (text.length > this.maxDisplayLength) {
-        // Truncate displayed string and add an ellipsis ('...').
-        text = text.substring(0, this.maxDisplayLength - 4) + '...';
-      } else if (this.isOverflowedY_ && i === displayLinesNumber - 1) {
-        text = text.substring(0, text.length - 3) + '...';
-      }
-      // Replace whitespace with non-breaking spaces so the text doesn't
-      // collapse.
-      text = text.replace(/\s/g, Field.NBSP);
+    let formatText = '';
 
-      textLines += text;
-      if (i !== displayLinesNumber - 1) {
-        textLines += '\n';
+    lines.forEach((line: string) => {
+      if (line.length === 0) {
+        formatText += '\n';
+        return;
       }
-    }
-    if (block.RTL) {
+
+      if (line.length < this.maxDisplayLength) {
+        formatText += line;
+        return;
+      }
+
+      // reg cut long string by new line witch more maxDisplayLength
+      const regCutString = new RegExp(
+        `S{${this.maxDisplayLength}}|[\\s\\S]{1,${this.maxDisplayLength}}(?!\\S)`,
+        'g',
+      );
+      formatText += line.replace(regCutString, '$&\n');
+    });
+
+    if ((this.sourceBlock_ as BlockSvg).RTL) {
       // The SVG is LTR, force value to be RTL.
-      textLines += '\u200F';
+      formatText += '\u200F';
     }
-    return textLines;
+    return formatText;
   }
 
   /**

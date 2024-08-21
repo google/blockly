@@ -69,6 +69,7 @@ import {
 } from './utils/dom.js';
 
 import {isShadowArgumentLocal} from './utils/argument_local.js';
+import {IHasBubble} from './interfaces/i_has_bubble';
 
 /**
  * Class for a block's SVG representation.
@@ -1996,8 +1997,7 @@ export class BlockSvg
 
     const icons = this.getIcons();
     for (let i = 0, icon; (icon = icons[i]); i++) {
-      // @ts-ignore:next-line
-      icon.setVisible(false);
+      (icon as unknown as IHasBubble).setBubbleVisible(false);
     }
 
     // Stop rerendering.

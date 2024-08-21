@@ -32,6 +32,7 @@ import {FieldLabel} from './field_label.js';
 import * as utilsXml from './utils/xml.js';
 import {browserEvents} from './utils.js';
 import {WorkspaceSvg} from './workspace_svg';
+import {BlockSvg} from './block_svg';
 
 /**
  * Non-editable, serializable text field. Behaves like a
@@ -42,9 +43,9 @@ import {WorkspaceSvg} from './workspace_svg';
  */
 export class FieldLabelHover extends FieldLabel {
   private arrowWidth_: number;
-
   private mouseOverWrapper_: browserEvents.Data | null;
   private mouseOutWrapper_: browserEvents.Data | null;
+  name_?: string;
 
   /**
    * Class for a variable getter field.
@@ -53,6 +54,8 @@ export class FieldLabelHover extends FieldLabel {
    */
   constructor(text: string, opt_class: string) {
     super(text, opt_class);
+
+    this.name_ = undefined;
 
     // Used in base field rendering, but we don't need it.
     this.arrowWidth_ = 0;
@@ -125,24 +128,33 @@ export class FieldLabelHover extends FieldLabel {
    * @param {!Event} e Clear hover effect
    */
   clearHover() {
-    // @ts-ignore:next-line
-    if (this.sourceBlock_.pathObject.svgPath) {
-      // @ts-ignore:next-line
-      dom.removeClass(this.sourceBlock_.pathObject.svgPath, 'editing');
-      // @ts-ignore:next-line
-      this.sourceBlock_.pathObject.svgPath.style.strokeDasharray = '';
+    if ((this.sourceBlock_ as BlockSvg).pathObject.svgPath) {
+      dom.removeClass(
+        (this.sourceBlock_ as BlockSvg).pathObject.svgPath,
+        'editing',
+      );
+      (this.sourceBlock_ as BlockSvg).pathObject.svgPath.style.strokeDasharray =
+        '';
     }
+  }
+
+  /**
+   * Get the text from this field, which is the selected name.
+   * @return {string} The selected name, or value.
+   */
+  getText(): string {
+    return this.name_ || this.getValue() || ' ';
   }
 
   /**
    * Set the new text on field, which is the selected name.
    * @param {string} text New text.
    */
-  override setText(text: Text) {
+  setText(text: Text) {
     if (typeof text !== 'string') {
       return;
     }
-    this.name = text;
+    this.name_ = text;
     this.render_();
   }
 
@@ -153,8 +165,9 @@ export class FieldLabelHover extends FieldLabel {
    */
   onMouseOut_(e: Event) {
     if (this.sourceBlock_?.isInFlyout || !this.sourceBlock_?.isShadow()) return;
-    // @ts-ignore:next-line
-    const gesture = this.sourceBlock_.workspace.getGesture(e);
+    const gesture = (this.sourceBlock_ as BlockSvg).workspace.getGesture(
+      e as PointerEvent,
+    );
     if (gesture && gesture.isDragging()) return;
     this.clearHover();
   }
@@ -166,12 +179,8 @@ export class FieldLabelHover extends FieldLabel {
    * @return {!Element} The element containing info about the field's state.
    */
   toXml(fieldElement: Element) {
-    const name = fieldElement.getAttribute('name');
-    const value = this.getValue();
-    if (name === value) {
-      fieldElement.setAttribute('name', 'VALUE');
-    }
-    fieldElement.setAttribute('value', value || '???');
+    const value = this.getValue() || '';
+    fieldElement.setAttribute('value', value);
     fieldElement.textContent = this.getText();
     return fieldElement;
   }
@@ -183,7 +192,7 @@ export class FieldLabelHover extends FieldLabel {
    */
   fromXml(fieldElement: Element) {
     const value = fieldElement.getAttribute('value');
-    const name = fieldElement.textContent || '??';
+    const name = fieldElement.textContent || undefined;
 
     // This should never happen :)
     if (!value) {
@@ -192,8 +201,8 @@ export class FieldLabelHover extends FieldLabel {
       );
     }
 
-    this.name = name;
-    this.setValue(value);
+    this.name_ = name;
+    this.doValueUpdate_(value);
   }
 
   /**
@@ -209,7 +218,6 @@ export class FieldLabelHover extends FieldLabel {
       browserEvents.unbind(this.mouseOutWrapper_);
       this.mouseOutWrapper_ = null;
     }
-
     super.dispose();
   }
 
@@ -223,8 +231,7 @@ export class FieldLabelHover extends FieldLabel {
       this.sourceBlock_.workspace as WorkspaceSvg
     ).getRenderer();
 
-    // @ts-ignore:next-line
-    this.sourceBlock_.pathObject.svgPath.setAttribute(
+    (this.sourceBlock_ as BlockSvg).pathObject.svgPath.setAttribute(
       'fill',
       // @ts-ignore:next-line
       this.sourceBlock_?.style.colourPrimary,

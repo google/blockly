@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {EventType} from '../../build/src/core/events/type.js';
 import {assert} from '../../node_modules/chai/chai.js';
-import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
 import {defineBasicBlockWithField} from './test_helpers/block_definitions.js';
-import {dispatchPointerEvent} from './test_helpers/user_input.js';
-import * as eventUtils from '../../build/src/core/events/utils.js';
+import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
+import {dispatchPointerEvent} from './test_helpers/user_input.js';
 
 suite('Gesture', function () {
   function testGestureIsFieldClick(block, isFieldClick, eventsFireStub) {
@@ -39,11 +39,11 @@ suite('Gesture', function () {
     assertEventFired(
       eventsFireStub,
       Blockly.Events.Selected,
-      {newElementId: block.id, type: eventUtils.SELECTED},
+      {newElementId: block.id, type: EventType.SELECTED},
       fieldWorkspace.id,
     );
     assertEventNotFired(eventsFireStub, Blockly.Events.Click, {
-      type: eventUtils.CLICK,
+      type: EventType.CLICK,
     });
   }
 

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {FlyoutItemInfoArray} from '../utils/toolbox';
 // Former goog.module ID: Blockly.ISelectableToolboxItem
 
+import type {FlyoutItemInfoArray} from '../utils/toolbox';
 import type {IToolboxItem} from './i_toolbox_item.js';
 
 /**

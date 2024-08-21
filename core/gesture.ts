@@ -18,23 +18,24 @@ import './events/events_click.js';
 import * as blockAnimations from './block_animations.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
+import {RenderedWorkspaceComment} from './comments.js';
 import * as common from './common.js';
 import {config} from './config.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import type {IBubble} from './interfaces/i_bubble.js';
+import {IDraggable, isDraggable} from './interfaces/i_draggable.js';
+import {IDragger} from './interfaces/i_dragger.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
+import type {IIcon} from './interfaces/i_icon.js';
+import * as registry from './registry.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import type {IIcon} from './interfaces/i_icon.js';
-import {IDragger} from './interfaces/i_dragger.js';
-import * as registry from './registry.js';
-import {IDraggable, isDraggable} from './interfaces/i_draggable.js';
-import {RenderedWorkspaceComment} from './comments.js';
 
 /**
  * Note: In this file "start" refers to pointerdown
@@ -599,13 +600,20 @@ export class Gesture {
    */
   handleTouchMove(e: PointerEvent) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
-    // Update the cache
     this.cachedPoints.set(pointerId, this.getTouchPoint(e));
 
     if (this.isPinchZoomEnabled && this.cachedPoints.size === 2) {
       this.handlePinch(e);
     } else {
-      this.handleMove(e);
+      // Handle the move directly instead of calling handleMove
+      this.updateFromEvent(e);
+      if (this.workspaceDragger) {
+        this.workspaceDragger.drag(this.currentDragDeltaXY);
+      } else if (this.dragger) {
+        this.dragger.onDrag(this.mostRecentEvent, this.currentDragDeltaXY);
+      }
+      e.preventDefault();
+      e.stopPropagation();
     }
   }
 
@@ -769,7 +777,7 @@ export class Gesture {
    */
   private fireWorkspaceClick(ws: WorkspaceSvg) {
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'),
+      new (eventUtils.get(EventType.CLICK))(null, ws.id, 'workspace'),
     );
   }
 
@@ -902,7 +910,7 @@ export class Gesture {
         );
       }
       // Clicks events are on the start block, even if it was a shadow.
-      const event = new (eventUtils.get(eventUtils.CLICK))(
+      const event = new (eventUtils.get(EventType.CLICK))(
         this.startBlock,
         this.startWorkspace_.id,
         'block',

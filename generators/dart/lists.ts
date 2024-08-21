@@ -10,10 +10,10 @@
 
 // Former goog.module ID: Blockly.Dart.lists
 
-import type {Block} from '../../core/block.js';
 import type {CreateWithBlock} from '../../blocks/lists.js';
-import type {DartGenerator} from './dart_generator.js';
+import type {Block} from '../../core/block.js';
 import {NameType} from '../../core/names.js';
+import type {DartGenerator} from './dart_generator.js';
 import {Order} from './dart_generator.js';
 
 // RESERVED WORDS: 'Math'

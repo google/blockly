@@ -5,17 +5,17 @@
  */
 
 import {assert} from '../../node_modules/chai/chai.js';
-import {assertVariableValues} from './test_helpers/variables.js';
-import {
-  createGenUidStubWithReturns,
-  sharedTestSetup,
-  sharedTestTeardown,
-} from './test_helpers/setup_teardown.js';
 import {
   assertEventFired,
   assertEventNotFired,
   createChangeListenerSpy,
 } from './test_helpers/events.js';
+import {
+  createGenUidStubWithReturns,
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
+import {assertVariableValues} from './test_helpers/variables.js';
 
 suite('Variable Map', function () {
   setup(function () {

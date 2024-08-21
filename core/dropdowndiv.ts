@@ -14,8 +14,8 @@
 
 import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
-import * as dom from './utils/dom.js';
 import type {Field} from './field.js';
+import * as dom from './utils/dom.js';
 import * as math from './utils/math.js';
 import {Rect} from './utils/rect.js';
 import type {Size} from './utils/size.js';
@@ -53,7 +53,7 @@ export const ANIMATION_TIME = 0.25;
 let animateOutTimer: ReturnType<typeof setTimeout> | null = null;
 
 /** Callback for when the drop-down is hidden. */
-let onHide: Function | null = null;
+let onHide: (() => void) | null = null;
 
 /** A class name representing the current owner's workspace renderer. */
 let renderedClassName = '';
@@ -202,7 +202,7 @@ export function setColour(backgroundColour: string, borderColour: string) {
 export function showPositionedByBlock<T>(
   field: Field<T>,
   block: BlockSvg,
-  opt_onHide?: Function,
+  opt_onHide?: () => void,
   opt_secondaryYOffset?: number,
 ): boolean {
   return showPositionedByRect(
@@ -226,7 +226,7 @@ export function showPositionedByBlock<T>(
  */
 export function showPositionedByField<T>(
   field: Field<T>,
-  opt_onHide?: Function,
+  opt_onHide?: () => void,
   opt_secondaryYOffset?: number,
 ): boolean {
   positionToField = true;
@@ -278,7 +278,7 @@ function getScaledBboxOfField(field: Field): Rect {
 function showPositionedByRect(
   bBox: Rect,
   field: Field,
-  opt_onHide?: Function,
+  opt_onHide?: () => void,
   opt_secondaryYOffset?: number,
 ): boolean {
   // If we can fit it, render below the block.
@@ -334,7 +334,7 @@ export function show<T>(
   primaryY: number,
   secondaryX: number,
   secondaryY: number,
-  opt_onHide?: Function,
+  opt_onHide?: () => void,
 ): boolean {
   owner = newOwner as Field;
   onHide = opt_onHide || null;

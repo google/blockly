@@ -64,7 +64,7 @@ export class WorkspaceAudio {
     let audioTest;
     try {
       audioTest = new globalThis['Audio']();
-    } catch (e) {
+    } catch {
       // No browser support for Audio.
       // IE can throw an error even if the Audio object exists.
       return;

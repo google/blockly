@@ -12,12 +12,12 @@
 
 // Former goog.module ID: Blockly.Python.all
 
-import {PythonGenerator} from './python/python_generator.js';
 import * as lists from './python/lists.js';
 import * as logic from './python/logic.js';
 import * as loops from './python/loops.js';
 import * as math from './python/math.js';
 import * as procedures from './python/procedures.js';
+import {PythonGenerator} from './python/python_generator.js';
 import * as text from './python/text.js';
 import * as variables from './python/variables.js';
 import * as variablesDynamic from './python/variables_dynamic.js';

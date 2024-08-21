@@ -12,15 +12,21 @@ import * as registry from '../registry.js';
 import * as idGenerator from '../utils/idgenerator.js';
 import type {Workspace} from '../workspace.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
-
 import type {Abstract} from './events_abstract.js';
-import type {BlockChange} from './events_block_change.js';
 import type {BlockCreate} from './events_block_create.js';
 import type {BlockMove} from './events_block_move.js';
 import type {CommentCreate} from './events_comment_create.js';
 import type {CommentMove} from './events_comment_move.js';
 import type {CommentResize} from './events_comment_resize.js';
-import type {ViewportChange} from './events_viewport.js';
+import {
+  isBlockChange,
+  isBlockCreate,
+  isBlockMove,
+  isBubbleOpen,
+  isClick,
+  isViewportChange,
+} from './predicates.js';
+import {EventType} from './type.js';
 
 /** Group ID for new events.  Grouped events are indivisible. */
 let group = '';
@@ -50,152 +56,6 @@ export function getRecordUndo(): boolean {
 let disabled = 0;
 
 /**
- * Name of event that creates a block. Will be deprecated for BLOCK_CREATE.
- */
-export const CREATE = 'create';
-
-/**
- * Name of event that creates a block.
- */
-export const BLOCK_CREATE = CREATE;
-
-/**
- * Name of event that deletes a block. Will be deprecated for BLOCK_DELETE.
- */
-export const DELETE = 'delete';
-
-/**
- * Name of event that deletes a block.
- */
-export const BLOCK_DELETE = DELETE;
-
-/**
- * Name of event that changes a block. Will be deprecated for BLOCK_CHANGE.
- */
-export const CHANGE = 'change';
-
-/**
- * Name of event that changes a block.
- */
-export const BLOCK_CHANGE = CHANGE;
-
-/**
- * Name of event representing an in-progress change to a field of a block, which
- * is expected to be followed by a block change event.
- */
-export const BLOCK_FIELD_INTERMEDIATE_CHANGE =
-  'block_field_intermediate_change';
-
-/**
- * Name of event that moves a block. Will be deprecated for BLOCK_MOVE.
- */
-export const MOVE = 'move';
-
-/**
- * Name of event that moves a block.
- */
-export const BLOCK_MOVE = MOVE;
-
-/**
- * Name of event that creates a variable.
- */
-export const VAR_CREATE = 'var_create';
-
-/**
- * Name of event that deletes a variable.
- */
-export const VAR_DELETE = 'var_delete';
-
-/**
- * Name of event that renames a variable.
- */
-export const VAR_RENAME = 'var_rename';
-
-/**
- * Name of generic event that records a UI change.
- */
-export const UI = 'ui';
-
-/**
- * Name of event that drags a block.
- */
-export const BLOCK_DRAG = 'drag';
-
-/**
- * Name of event that records a change in selected element.
- */
-export const SELECTED = 'selected';
-
-/**
- * Name of event that records a click.
- */
-export const CLICK = 'click';
-
-/**
- * Name of event that records a marker move.
- */
-export const MARKER_MOVE = 'marker_move';
-
-/**
- * Name of event that records a bubble open.
- */
-export const BUBBLE_OPEN = 'bubble_open';
-
-/**
- * Name of event that records a trashcan open.
- */
-export const TRASHCAN_OPEN = 'trashcan_open';
-
-/**
- * Name of event that records a toolbox item select.
- */
-export const TOOLBOX_ITEM_SELECT = 'toolbox_item_select';
-
-/**
- * Name of event that records a theme change.
- */
-export const THEME_CHANGE = 'theme_change';
-
-/**
- * Name of event that records a viewport change.
- */
-export const VIEWPORT_CHANGE = 'viewport_change';
-
-/**
- * Name of event that creates a comment.
- */
-export const COMMENT_CREATE = 'comment_create';
-
-/**
- * Name of event that deletes a comment.
- */
-export const COMMENT_DELETE = 'comment_delete';
-
-/**
- * Name of event that changes a comment.
- */
-export const COMMENT_CHANGE = 'comment_change';
-
-/**
- * Name of event that moves a comment.
- */
-export const COMMENT_MOVE = 'comment_move';
-
-/** Name of event that resizes a comment. */
-export const COMMENT_RESIZE = 'comment_resize';
-
-/**  Name of event that drags a comment. */
-export const COMMENT_DRAG = 'comment_drag';
-
-/** Type of event that collapses a comment. */
-export const COMMENT_COLLAPSE = 'comment_collapse';
-
-/**
- * Name of event that records a workspace load.
- */
-export const FINISHED_LOADING = 'finished_loading';
-
-/**
  * The language-neutral ID for when the reason why a block is disabled is
  * because the block is not descended from a root block.
  */
@@ -214,20 +74,6 @@ export type BumpEvent =
   | CommentCreate
   | CommentMove
   | CommentResize;
-
-/**
- * List of events that cause objects to be bumped back into the visible
- * portion of the workspace.
- *
- * Not to be confused with bumping so that disconnected connections do not
- * appear connected.
- */
-export const BUMP_EVENTS: string[] = [
-  BLOCK_CREATE,
-  BLOCK_MOVE,
-  COMMENT_CREATE,
-  COMMENT_MOVE,
-];
 
 /** List of events queued for firing. */
 const FIRE_QUEUE: Abstract[] = [];
@@ -256,7 +102,7 @@ function fireInternal(event: Abstract) {
       requestAnimationFrame(() => {
         setTimeout(fireNow, 0);
       });
-    } catch (e) {
+    } catch {
       // Otherwise we just want to delay so events can be coallesced.
       // requestAnimationFrame will error triggering this.
       setTimeout(fireNow, 0);
@@ -265,7 +111,7 @@ function fireInternal(event: Abstract) {
   FIRE_QUEUE.push(event);
 }
 
-/** Fire all queued events. */
+/** Dispatch all queued events. */
 function fireNow() {
   const queue = filter(FIRE_QUEUE, true);
   FIRE_QUEUE.length = 0;
@@ -278,50 +124,45 @@ function fireNow() {
       eventWorkspace.fireChangeListener(event);
     }
   }
-
-  // Post-filter the undo stack to squash and remove any events that result in
-  // a null event
-
-  // 1. Determine which workspaces will need to have their undo stacks validated
-  const workspaceIds = new Set(queue.map((e) => e.workspaceId));
-  for (const workspaceId of workspaceIds) {
-    // Only process valid workspaces
-    if (!workspaceId) {
-      continue;
-    }
-    const eventWorkspace = common.getWorkspaceById(workspaceId);
-    if (!eventWorkspace) {
-      continue;
-    }
-
-    // Find the last contiguous group of events on the stack
-    const undoStack = eventWorkspace.getUndoStack();
-    let i;
-    let group: string | undefined = undefined;
-    for (i = undoStack.length; i > 0; i--) {
-      const event = undoStack[i - 1];
-      if (event.group === '') {
-        break;
-      } else if (group === undefined) {
-        group = event.group;
-      } else if (event.group !== group) {
-        break;
-      }
-    }
-    if (!group || i == undoStack.length - 1) {
-      // Need a group of two or more events on the stack. Nothing to do here.
-      continue;
-    }
-
-    // Extract the event group, filter, and add back to the undo stack
-    let events = undoStack.splice(i, undoStack.length - i);
-    events = filter(events, true);
-    undoStack.push(...events);
-  }
 }
 
 /**
- * Filter the queued events and merge duplicates.
+ * Filter the queued events by merging duplicates, removing null
+ * events and reording BlockChange events.
+ *
+ * History of this function:
+ *
+ * This function was originally added in commit cf257ea5 with the
+ * intention of dramatically reduing the total number of dispatched
+ * events.  Initialy it affected only BlockMove events but others were
+ * added over time.
+ *
+ * Code was added to reorder BlockChange events added in commit
+ * 5578458, for uncertain reasons but most probably as part of an
+ * only-partially-successful attemp to fix problems with event
+ * ordering during block mutations.  This code should probably have
+ * been added to the top of the function, before merging and
+ * null-removal, but was added at the bottom for now-forgotten
+ * reasons.  See these bug investigations for a fuller discussion of
+ * the underlying issue and some of the failures that arose because of
+ * this incomplete/incorrect fix:
+ *
+ * https://github.com/google/blockly/issues/8225#issuecomment-2195751783
+ * https://github.com/google/blockly/issues/2037#issuecomment-2209696351
+ *
+ * Later, in PR #1205 the original O(n^2) implementation was replaced
+ * by a linear-time implementation, though addiitonal fixes were made
+ * subsequently.
+ *
+ * This function was previously called from Workspace.prototype.undo,
+ * but this was the cause of issue #7026, the originally-chosen fix
+ * for which was the addition (in PR #7069) of code to fireNow to
+ * post-filter the .undoStack_ and .redoStack_ of any workspace that
+ * had just been involved in dispatching events.  This apparently
+ * resolved the issue but added considerable additional complexity and
+ * made it difficlut to reason about how events are processed for
+ * undo/redo, so both the call from undo and the post-processing code
+ * was later removed.
  *
  * @param queueIn Array of events.
  * @param forward True if forward (redo), false if backward (undo).
@@ -340,7 +181,7 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
   for (let i = 0, event; (event = queue[i]); i++) {
     if (!event.isNull()) {
       // Treat all UI events as the same type in hash table.
-      const eventType = event.isUiEvent ? UI : event.type;
+      const eventType = event.isUiEvent ? EventType.UI : event.type;
       // TODO(#5927): Check whether `blockId` exists before accessing it.
       const blockId = (event as AnyDuringMigration).blockId;
       const key = [eventType, blockId, event.workspaceId].join(' ');
@@ -353,40 +194,35 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         // move events.
         hash[key] = {event, index: i};
         mergedQueue.push(event);
-      } else if (event.type === MOVE && lastEntry.index === i - 1) {
-        const moveEvent = event as BlockMove;
+      } else if (isBlockMove(event) && lastEntry.index === i - 1) {
         // Merge move events.
-        lastEvent.newParentId = moveEvent.newParentId;
-        lastEvent.newInputName = moveEvent.newInputName;
-        lastEvent.newCoordinate = moveEvent.newCoordinate;
-        if (moveEvent.reason) {
+        lastEvent.newParentId = event.newParentId;
+        lastEvent.newInputName = event.newInputName;
+        lastEvent.newCoordinate = event.newCoordinate;
+        if (event.reason) {
           if (lastEvent.reason) {
             // Concatenate reasons without duplicates.
-            const reasonSet = new Set(
-              moveEvent.reason.concat(lastEvent.reason),
-            );
+            const reasonSet = new Set(event.reason.concat(lastEvent.reason));
             lastEvent.reason = Array.from(reasonSet);
           } else {
-            lastEvent.reason = moveEvent.reason;
+            lastEvent.reason = event.reason;
           }
         }
         lastEntry.index = i;
       } else if (
-        event.type === CHANGE &&
-        (event as BlockChange).element === lastEvent.element &&
-        (event as BlockChange).name === lastEvent.name
+        isBlockChange(event) &&
+        event.element === lastEvent.element &&
+        event.name === lastEvent.name
       ) {
-        const changeEvent = event as BlockChange;
         // Merge change events.
-        lastEvent.newValue = changeEvent.newValue;
-      } else if (event.type === VIEWPORT_CHANGE) {
-        const viewportEvent = event as ViewportChange;
+        lastEvent.newValue = event.newValue;
+      } else if (isViewportChange(event)) {
         // Merge viewport change events.
-        lastEvent.viewTop = viewportEvent.viewTop;
-        lastEvent.viewLeft = viewportEvent.viewLeft;
-        lastEvent.scale = viewportEvent.scale;
-        lastEvent.oldScale = viewportEvent.oldScale;
-      } else if (event.type === CLICK && lastEvent.type === BUBBLE_OPEN) {
+        lastEvent.viewTop = event.viewTop;
+        lastEvent.viewLeft = event.viewLeft;
+        lastEvent.scale = event.scale;
+        lastEvent.oldScale = event.oldScale;
+      } else if (isClick(event) && isBubbleOpen(lastEvent)) {
         // Drop click events caused by opening/closing bubbles.
       } else {
         // Collision: newer events should merge into this event to maintain
@@ -410,7 +246,7 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
     // AnyDuringMigration because:  Property 'element' does not exist on type
     // 'Abstract'.
     if (
-      event.type === CHANGE &&
+      event.type === EventType.BLOCK_CHANGE &&
       (event as AnyDuringMigration).element === 'mutation'
     ) {
       queue.unshift(queue.splice(i, 1)[0]);
@@ -540,7 +376,7 @@ export function get(
  * @param event Custom data for event.
  */
 export function disableOrphans(event: Abstract) {
-  if (event.type === MOVE || event.type === CREATE) {
+  if (isBlockMove(event) || isBlockCreate(event)) {
     const blockEvent = event as BlockMove | BlockCreate;
     if (!blockEvent.workspaceId) {
       return;

@@ -8,7 +8,6 @@
 
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import type {Workspace} from '../workspace.js';
-
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
 

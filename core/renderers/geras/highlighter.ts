@@ -13,7 +13,6 @@ import type {Row} from '../measurables/row.js';
 import {SpacerRow} from '../measurables/spacer_row.js';
 import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
-
 import type {
   HighlightConstantProvider,
   InsideCorner,

@@ -5,16 +5,11 @@
  */
 
 import {assert} from '../../node_modules/chai/chai.js';
+import {MockProcedureModel} from './test_helpers/procedures.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
-import {
-  assertEventFiredShallow,
-  assertEventNotFired,
-  createChangeListenerSpy,
-} from './test_helpers/events.js';
-import {MockProcedureModel} from './test_helpers/procedures.js';
 
 suite('Procedure Map', function () {
   setup(function () {

@@ -5,11 +5,11 @@
  */
 
 import {assert} from '../../node_modules/chai/chai.js';
-import {assertWarnings} from './test_helpers/warnings.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
+import {assertWarnings} from './test_helpers/warnings.js';
 
 suite('Registry', function () {
   const TestClass = function () {};

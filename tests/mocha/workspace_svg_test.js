@@ -4,15 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {EventType} from '../../build/src/core/events/type.js';
 import {assert} from '../../node_modules/chai/chai.js';
+import {defineStackBlock} from './test_helpers/block_definitions.js';
 import {
   assertEventFired,
   assertEventNotFired,
   createChangeListenerSpy,
 } from './test_helpers/events.js';
-import {assertVariableValues} from './test_helpers/variables.js';
-import {defineStackBlock} from './test_helpers/block_definitions.js';
-import * as eventUtils from '../../build/src/core/events/utils.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -188,7 +187,7 @@ suite('WorkspaceSvg', function () {
         oldScale: 1,
         viewTop: metrics.viewTop,
         viewLeft: metrics.viewLeft,
-        type: eventUtils.VIEWPORT_CHANGE,
+        type: EventType.VIEWPORT_CHANGE,
       };
       assertSpyFiredViewportEvent(
         changeListenerSpy,
@@ -351,7 +350,7 @@ suite('WorkspaceSvg', function () {
         assertEventNotFired(
           this.changeListenerSpy,
           Blockly.Events.ViewportChange,
-          {type: eventUtils.VIEWPORT_CHANGE},
+          {type: EventType.VIEWPORT_CHANGE},
         );
       });
       test("domToWorkspace at 0,0 that doesn't trigger scroll", function () {
@@ -378,7 +377,7 @@ suite('WorkspaceSvg', function () {
         assertEventNotFired(
           this.changeListenerSpy,
           Blockly.Events.ViewportChange,
-          {type: eventUtils.VIEWPORT_CHANGE},
+          {type: EventType.VIEWPORT_CHANGE},
         );
       });
       test.skip('domToWorkspace multiple blocks triggers one viewport event', function () {

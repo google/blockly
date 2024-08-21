@@ -12,8 +12,6 @@
 // Former goog.module ID: Blockly.Toolbox
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../events/events_toolbox_item_select.js';
-
 import {BlockSvg} from '../block_svg.js';
 import type {BlocklyOptions} from '../blockly_options.js';
 import * as browserEvents from '../browser_events.js';
@@ -21,9 +19,12 @@ import * as common from '../common.js';
 import {ComponentManager} from '../component_manager.js';
 import * as Css from '../css.js';
 import {DeleteArea} from '../delete_area.js';
+import '../events/events_toolbox_item_select.js';
+import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import type {IAutoHideable} from '../interfaces/i_autohideable.js';
 import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
+import {isDeletable} from '../interfaces/i_deletable.js';
 import type {IDraggable} from '../interfaces/i_draggable.js';
 import type {IFlyout} from '../interfaces/i_flyout.js';
 import type {IKeyboardAccessible} from '../interfaces/i_keyboard_accessible.js';
@@ -43,7 +44,6 @@ import * as toolbox from '../utils/toolbox.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import type {ToolboxCategory} from './category.js';
 import {CollapsibleToolboxCategory} from './collapsible_category.js';
-import {isDeletable} from '../interfaces/i_deletable.js';
 
 /**
  * Class for a Toolbox.
@@ -157,7 +157,7 @@ export class Toolbox
     themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
     this.workspace_.getComponentManager().addComponent({
       component: this,
-      weight: 1,
+      weight: ComponentManager.ComponentWeight.TOOLBOX_WEIGHT,
       capabilities: [
         ComponentManager.Capability.AUTOHIDEABLE,
         ComponentManager.Capability.DELETE_AREA,
@@ -963,7 +963,7 @@ export class Toolbox
     if (oldItem === newItem) {
       newElement = null;
     }
-    const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))(
+    const event = new (eventUtils.get(EventType.TOOLBOX_ITEM_SELECT))(
       oldElement,
       newElement,
       this.workspace_.id,

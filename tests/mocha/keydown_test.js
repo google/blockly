@@ -5,12 +5,12 @@
  */
 
 import * as Blockly from '../../build/src/core/blockly.js';
-import {createKeyDownEvent} from './test_helpers/user_input.js';
 import {defineStackBlock} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
+import {createKeyDownEvent} from './test_helpers/user_input.js';
 
 suite('Key Down', function () {
   setup(function () {

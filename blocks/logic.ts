@@ -6,22 +6,22 @@
 
 // Former goog.module ID: Blockly.libraryBlocks.logic
 
-import * as Events from '../core/events/events.js';
-import * as Extensions from '../core/extensions.js';
-import * as xmlUtils from '../core/utils/xml.js';
-import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
-import type {Connection} from '../core/connection.js';
-import {Msg} from '../core/msg.js';
-import type {Workspace} from '../core/workspace.js';
 import {
   createBlockDefinitionsFromJsonArray,
   defineBlocks,
 } from '../core/common.js';
+import type {Connection} from '../core/connection.js';
+import * as Events from '../core/events/events.js';
+import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
+import * as Extensions from '../core/extensions.js';
 import '../core/field_dropdown.js';
 import '../core/field_label.js';
 import '../core/icons/mutator_icon.js';
+import {Msg} from '../core/msg.js';
+import * as xmlUtils from '../core/utils/xml.js';
+import type {Workspace} from '../core/workspace.js';
 
 /**
  * A dictionary of the block definitions provided by this module.

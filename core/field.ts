@@ -20,12 +20,14 @@ import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
 import type {IRegistrable} from './interfaces/i_registrable.js';
+import {ISerializable} from './interfaces/i_serializable.js';
 import {MarkerManager} from './marker_manager.js';
 import type {ConstantProvider} from './renderers/common/constants.js';
 import type {KeyboardShortcut} from './shortcut_registry.js';
@@ -41,7 +43,6 @@ import * as userAgent from './utils/useragent.js';
 import * as utilsXml from './utils/xml.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import {ISerializable} from './interfaces/i_serializable.js';
 
 /**
  * A function that is called to validate changes to the field's value before
@@ -1080,7 +1081,7 @@ export abstract class Field<T = any>
   setValue(newValue: AnyDuringMigration, fireChangeEvent = true) {
     const doLogging = false;
     if (newValue === null) {
-      doLogging && console.log('null, return');
+      if (doLogging) console.log('null, return');
       // Not a valid value to check.
       return;
     }
@@ -1092,7 +1093,7 @@ export abstract class Field<T = any>
       fireChangeEvent,
     );
     if (classValue instanceof Error) {
-      doLogging && console.log('invalid class validation, return');
+      if (doLogging) console.log('invalid class validation, return');
       return;
     }
 
@@ -1103,19 +1104,19 @@ export abstract class Field<T = any>
       fireChangeEvent,
     );
     if (localValue instanceof Error) {
-      doLogging && console.log('invalid local validation, return');
+      if (doLogging) console.log('invalid local validation, return');
       return;
     }
 
     const source = this.sourceBlock_;
     if (source && source.disposed) {
-      doLogging && console.log('source disposed, return');
+      if (doLogging) console.log('source disposed, return');
       return;
     }
 
     const oldValue = this.getValue();
     if (oldValue === localValue) {
-      doLogging && console.log('same, doValueUpdate_, return');
+      if (doLogging) console.log('same, doValueUpdate_, return');
       this.doValueUpdate_(localValue);
       return;
     }
@@ -1123,7 +1124,7 @@ export abstract class Field<T = any>
     this.doValueUpdate_(localValue);
     if (fireChangeEvent && source && eventUtils.isEnabled()) {
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_CHANGE))(
           source,
           'field',
           this.name || null,
@@ -1135,7 +1136,7 @@ export abstract class Field<T = any>
     if (this.isDirty_) {
       this.forceRerender();
     }
-    doLogging && console.log(this.value_);
+    if (doLogging) console.log(this.value_);
   }
 
   /**

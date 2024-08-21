@@ -4,18 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IDragTarget} from '../interfaces/i_drag_target.js';
-import {IDeletable, isDeletable} from '../interfaces/i_deletable.js';
-import {IDragger} from '../interfaces/i_dragger.js';
-import {IDraggable} from '../interfaces/i_draggable.js';
-import {Coordinate} from '../utils/coordinate.js';
-import {WorkspaceSvg} from '../workspace_svg.js';
-import {ComponentManager} from '../component_manager.js';
-import {IDeleteArea} from '../interfaces/i_delete_area.js';
-import * as registry from '../registry.js';
-import * as eventUtils from '../events/utils.js';
 import * as blockAnimations from '../block_animations.js';
 import {BlockSvg} from '../block_svg.js';
+import {ComponentManager} from '../component_manager.js';
+import * as eventUtils from '../events/utils.js';
+import {IDeletable, isDeletable} from '../interfaces/i_deletable.js';
+import {IDeleteArea} from '../interfaces/i_delete_area.js';
+import {IDragTarget} from '../interfaces/i_drag_target.js';
+import {IDraggable} from '../interfaces/i_draggable.js';
+import {IDragger} from '../interfaces/i_dragger.js';
+import * as registry from '../registry.js';
+import {Coordinate} from '../utils/coordinate.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 export class Dragger implements IDragger {
   protected startLoc: Coordinate;

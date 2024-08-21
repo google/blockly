@@ -13,7 +13,6 @@
 // Former goog.module ID: Blockly.TabNavigateCursor
 
 import type {Field} from '../field.js';
-
 import {ASTNode} from './ast_node.js';
 import {BasicCursor} from './basic_cursor.js';
 

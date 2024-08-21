@@ -6,18 +6,18 @@
 
 // Former goog.module ID: Blockly.libraryBlocks.math
 
-import * as Extensions from '../core/extensions.js';
-import type {FieldDropdown} from '../core/field_dropdown.js';
-import * as xmlUtils from '../core/utils/xml.js';
 import type {Block} from '../core/block.js';
 import {
   createBlockDefinitionsFromJsonArray,
   defineBlocks,
 } from '../core/common.js';
+import * as Extensions from '../core/extensions.js';
 import '../core/field_dropdown.js';
+import type {FieldDropdown} from '../core/field_dropdown.js';
 import '../core/field_label.js';
 import '../core/field_number.js';
 import '../core/field_variable.js';
+import * as xmlUtils from '../core/utils/xml.js';
 
 /**
  * A dictionary of the block definitions provided by this module.

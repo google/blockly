@@ -4,22 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
 import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   assertEventEquals,
   assertNthCallEventArgEquals,
   createChangeListenerSpy,
 } from './test_helpers/events.js';
-import {assertVariableValues} from './test_helpers/variables.js';
 import {
   createGenUidStubWithReturns,
   sharedTestSetup,
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
-import * as eventUtils from '../../build/src/core/events/utils.js';
+import {assertVariableValues} from './test_helpers/variables.js';
 
 suite('Events', function () {
   setup(function () {

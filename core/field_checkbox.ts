@@ -14,9 +14,9 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
 
-import * as dom from './utils/dom.js';
 import {Field, FieldConfig, FieldValidator} from './field.js';
 import * as fieldRegistry from './field_registry.js';
+import * as dom from './utils/dom.js';
 
 type BoolString = 'TRUE' | 'FALSE';
 type CheckboxBool = BoolString | boolean;

@@ -5,13 +5,13 @@
  */
 
 import {
+  assertEventFired,
+  createChangeListenerSpy,
+} from './test_helpers/events.js';
+import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
-import {
-  createChangeListenerSpy,
-  assertEventFired,
-} from './test_helpers/events.js';
 
 suite('Workspace comment', function () {
   setup(function () {

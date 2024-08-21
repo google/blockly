@@ -22,8 +22,6 @@ export interface ISerializer {
    */
   priority: number;
 
-  /* eslint-disable no-unused-vars, valid-jsdoc */
-
   /**
    * Saves the state of the plugin or system.
    *
@@ -31,7 +29,7 @@ export interface ISerializer {
    * @returns A JS object containing the system's state, or null if there is no
    *     state to record.
    */
-  save(workspace: Workspace): Object | null;
+  save(workspace: Workspace): object | null;
   /* eslint-enable valid-jsdoc */
 
   /**
@@ -42,7 +40,7 @@ export interface ISerializer {
    * @param workspace The workspace the system to deserialize is associated
    *     with.
    */
-  load(state: Object, workspace: Workspace): void;
+  load(state: object, workspace: Workspace): void;
 
   /**
    * Clears the state of the plugin or system.
@@ -52,4 +50,3 @@ export interface ISerializer {
    */
   clear(workspace: Workspace): void;
 }
-/* eslint-enable no-unused-vars */

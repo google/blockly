@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {Bubble} from './bubble.js';
-import {Coordinate} from '../utils/coordinate.js';
 import * as Css from '../css.js';
+import * as touch from '../touch.js';
+import {browserEvents} from '../utils.js';
+import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
-import * as touch from '../touch.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
-import {browserEvents} from '../utils.js';
+import {Bubble} from './bubble.js';
 
 /**
  * A bubble that displays editable text. It can also be resized by the user.

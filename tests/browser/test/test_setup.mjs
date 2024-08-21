@@ -16,9 +16,9 @@
  * identifiers that Selenium can use to find those elements.
  */
 
-import * as webdriverio from 'webdriverio';
 import * as path from 'path';
 import {fileURLToPath} from 'url';
+import * as webdriverio from 'webdriverio';
 import {posixPath} from '../../../scripts/helpers.js';
 
 let driver = null;

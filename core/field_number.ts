@@ -12,12 +12,12 @@
 // Former goog.module ID: Blockly.FieldNumber
 
 import {Field} from './field.js';
-import * as fieldRegistry from './field_registry.js';
 import {
   FieldInput,
   FieldInputConfig,
   FieldInputValidator,
 } from './field_input.js';
+import * as fieldRegistry from './field_registry.js';
 import * as aria from './utils/aria.js';
 
 /**

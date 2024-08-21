@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Former goog.module ID: Blockly.procedures.IProcedureBlock
+
 import type {Block} from '../block.js';
 import {IProcedureModel} from './i_procedure_model.js';
-// Former goog.module ID: Blockly.procedures.IProcedureBlock
 
 /** The interface for a block which models a procedure. */
 export interface IProcedureBlock {

@@ -13,8 +13,8 @@ import * as utilsColour from '../../utils/colour.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
-import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 import type {Shape} from '../common/constants.js';
+import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 
 /** An object containing sizing and path information about inside corners. */
 export interface InsideCorners {

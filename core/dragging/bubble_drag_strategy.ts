@@ -4,14 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IDragStrategy} from '../interfaces/i_draggable.js';
-import {Coordinate} from '../utils.js';
-import * as eventUtils from '../events/utils.js';
 import {IBubble, WorkspaceSvg} from '../blockly.js';
+import * as eventUtils from '../events/utils.js';
+import {IDragStrategy} from '../interfaces/i_draggable.js';
 import * as layers from '../layers.js';
+import {Coordinate} from '../utils.js';
 
 export class BubbleDragStrategy implements IDragStrategy {
   private startLoc: Coordinate | null = null;
+
+  /** Was there already an event group in progress when the drag started? */
+  private inGroup: boolean = false;
 
   constructor(
     private bubble: IBubble,
@@ -23,13 +26,16 @@ export class BubbleDragStrategy implements IDragStrategy {
   }
 
   startDrag(): void {
-    if (!eventUtils.getGroup()) {
+    this.inGroup = !!eventUtils.getGroup();
+    if (!this.inGroup) {
       eventUtils.setGroup(true);
     }
     this.startLoc = this.bubble.getRelativeToSurfaceXY();
     this.workspace.setResizesEnabled(false);
     this.workspace.getLayerManager()?.moveToDragLayer(this.bubble);
-    this.bubble.setDragging && this.bubble.setDragging(true);
+    if (this.bubble.setDragging) {
+      this.bubble.setDragging(true);
+    }
   }
 
   drag(newLoc: Coordinate): void {
@@ -38,7 +44,9 @@ export class BubbleDragStrategy implements IDragStrategy {
 
   endDrag(): void {
     this.workspace.setResizesEnabled(true);
-    eventUtils.setGroup(false);
+    if (!this.inGroup) {
+      eventUtils.setGroup(false);
+    }
 
     this.workspace
       .getLayerManager()

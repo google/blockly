@@ -24,12 +24,12 @@ import {
 import * as fieldRegistry from './field_registry.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
-import * as style from './utils/style.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import * as utilsString from './utils/string.js';
+import * as style from './utils/style.js';
 import {Svg} from './utils/svg.js';
 
 /**

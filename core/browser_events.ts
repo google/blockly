@@ -6,6 +6,10 @@
 
 // Former goog.module ID: Blockly.browserEvents
 
+// Theoretically we could figure out a way to type the event params correctly,
+// but it's not high priority.
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+
 import * as Touch from './touch.js';
 import * as userAgent from './utils/useragent.js';
 
@@ -47,7 +51,7 @@ const PAGE_MODE_MULTIPLIER = 125;
 export function conditionalBind(
   node: EventTarget,
   name: string,
-  thisObject: Object | null,
+  thisObject: object | null,
   func: Function,
   opt_noCaptureIdentifier?: boolean,
 ): Data {
@@ -96,7 +100,7 @@ export function conditionalBind(
 export function bind(
   node: EventTarget,
   name: string,
-  thisObject: Object | null,
+  thisObject: object | null,
   func: Function,
 ): Data {
   /**

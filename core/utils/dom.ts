@@ -211,7 +211,7 @@ export function getTextWidth(textElement: SVGTextElement): number {
   // Attempt to compute fetch the width of the SVG text element.
   try {
     width = textElement.getComputedTextLength();
-  } catch (e) {
+  } catch {
     // In other cases where we fail to get the computed text. Instead, use an
     // approximation and do not cache the result. At some later point in time
     // when the block is inserted into the visible DOM, this method will be

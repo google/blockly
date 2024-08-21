@@ -4,23 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../node_modules/chai/chai.js';
 import {ConnectionType} from '../../build/src/core/connection_type.js';
-import {createDeprecationWarningStub} from './test_helpers/warnings.js';
-import {createRenderedBlock} from './test_helpers/block_definitions.js';
+import {EventType} from '../../build/src/core/events/type.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {EndRowInput} from '../../build/src/core/inputs/end_row_input.js';
+import {assert} from '../../node_modules/chai/chai.js';
+import {createRenderedBlock} from './test_helpers/block_definitions.js';
+import {
+  createChangeListenerSpy,
+  createMockEvent,
+} from './test_helpers/events.js';
+import {MockBubbleIcon, MockIcon} from './test_helpers/icon_mocks.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
-import {
-  createChangeListenerSpy,
-  createMockEvent,
-} from './test_helpers/events.js';
-import {MockIcon, MockBubbleIcon} from './test_helpers/icon_mocks.js';
-import {IconType} from '../../build/src/core/icons/icon_types.js';
 
 suite('Blocks', function () {
   setup(function () {
@@ -1253,7 +1252,7 @@ suite('Blocks', function () {
       function assertCommentEvent(eventSpy, oldValue, newValue) {
         const calls = eventSpy.getCalls();
         const event = calls[calls.length - 1].args[0];
-        assert.equal(event.type, eventUtils.BLOCK_CHANGE);
+        assert.equal(event.type, EventType.BLOCK_CHANGE);
         assert.equal(
           event.element,
           'comment',
@@ -1273,7 +1272,7 @@ suite('Blocks', function () {
       function assertNoCommentEvent(eventSpy) {
         const calls = eventSpy.getCalls();
         const event = calls[calls.length - 1].args[0];
-        assert.notEqual(event.type, eventUtils.BLOCK_CHANGE);
+        assert.notEqual(event.type, EventType.BLOCK_CHANGE);
       }
       setup(function () {
         this.eventsFireSpy = sinon.spy(eventUtils.TEST_ONLY, 'fireInternal');

@@ -449,11 +449,6 @@ input[type=number] {
   background-color: rgba(0,0,0,.1);
 }
 
-/* State: hover. */
-.blocklyMenuItemHighlight {
-  background-color: rgba(0,0,0,.1);
-}
-
 /* State: selected/checked. */
 .blocklyMenuItemCheckbox {
   height: 16px;

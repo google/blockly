@@ -13,6 +13,8 @@
  */
 // Former goog.module ID: Blockly.utils.Rect
 
+import {Coordinate} from './coordinate.js';
+
 /**
  * Class for representing rectangular regions.
  */
@@ -30,10 +32,21 @@ export class Rect {
     public right: number,
   ) {}
 
+  /**
+   * Creates a new copy of this rectangle.
+   *
+   * @returns A copy of this Rect.
+   */
+  clone(): Rect {
+    return new Rect(this.top, this.bottom, this.left, this.right);
+  }
+
+  /** Returns the height of this rectangle. */
   getHeight(): number {
     return this.bottom - this.top;
   }
 
+  /** Returns the width of this rectangle. */
   getWidth(): number {
     return this.right - this.left;
   }
@@ -59,11 +72,45 @@ export class Rect {
    * @returns Whether this rectangle intersects the provided rectangle.
    */
   intersects(other: Rect): boolean {
-    return !(
-      this.left > other.right ||
-      this.right < other.left ||
-      this.top > other.bottom ||
-      this.bottom < other.top
-    );
+    // The following logic can be derived and then simplified from a longer form symmetrical check
+    // of verifying each rectangle's borders with the other rectangle by checking if either end of
+    // the border's line segment is contained within the other rectangle. The simplified version
+    // used here can be logically interpreted as ensuring that each line segment of 'this' rectangle
+    // is not outside the bounds of the 'other' rectangle (proving there's an intersection).
+    return (this.left <= other.right)
+      && (this.right >= other.left)
+      && (this.bottom >= other.top)
+      && (this.top <= other.bottom);
+  }
+
+  /**
+   * Compares bounding rectangles for equality.
+   *
+   * @param a A Rect.
+   * @param b A Rect.
+   * @returns True iff the bounding rectangles are equal, or if both are null.
+   */
+  static equals(a?: Rect | null, b?: Rect | null): boolean {
+    if (a === b) {
+      return true;
+    }
+    if (!a || !b) {
+      return false;
+    }
+    return a.top === b.top && a.bottom === b.bottom && a.left === b.left && a.right === b.right;
+  }
+
+  /**
+   * Creates a new Rect using a position and supplied dimensions.
+   *
+   * @param position The upper left coordinate of the new rectangle.
+   * @param width The width of the rectangle, in pixels.
+   * @param height The height of the rectangle, in pixels.
+   * @returns A newly created Rect using the provided Coordinate and dimensions.
+   */
+  static createFromPoint(position: Coordinate, width: number, height: number): Rect {
+    const left = position.x;
+    const top = position.y;
+    return new Rect(top, top + height, left, left + width);
   }
 }

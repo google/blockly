@@ -278,7 +278,7 @@ WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
     this.view.setCategoryTabSelection(id, true);
 
     // Order blocks as shown in flyout.
-    this.toolboxWorkspace.cleanUp();
+    this.toolboxWorkspace.tidyUp();
 
     // Update category editing buttons.
     this.view.updateState(this.model.getIndexByElementId
@@ -774,7 +774,7 @@ WorkspaceFactoryController.prototype.importToolboxFromTree_ = function(tree) {
     // No categories present.
     // Load all the blocks into a single category evenly spaced.
     Blockly.Xml.domToWorkspace(tree, this.toolboxWorkspace);
-    this.toolboxWorkspace.cleanUp();
+    this.toolboxWorkspace.tidyUp();
 
     // Convert actual shadow blocks to user-generated shadow blocks.
     this.convertShadowBlocks();
@@ -799,7 +799,7 @@ WorkspaceFactoryController.prototype.importToolboxFromTree_ = function(tree) {
         }
 
         // Evenly space the blocks.
-        this.toolboxWorkspace.cleanUp();
+        this.toolboxWorkspace.tidyUp();
 
         // Convert actual shadow blocks to user-generated shadow blocks.
         this.convertShadowBlocks();

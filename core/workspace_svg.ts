@@ -1644,23 +1644,48 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     return boundary;
   }
 
-  /** Clean up the workspace by ordering all the blocks in a column. */
-  cleanUp() {
+  /** Tidy up the workspace by ordering all the blocks in a column such that none overlap. */
+  tidyUp() {
     this.setResizesEnabled(false);
     eventUtils.setGroup(true);
+
     const topBlocks = this.getTopBlocks(true);
-    let cursorY = 0;
-    for (let i = 0, block; (block = topBlocks[i]); i++) {
-      if (!block.isMovable()) {
-        continue;
+    const movableBlocks = topBlocks.filter((block) => block.isMovable());
+    const immovableBlocks = topBlocks.filter((block) => !block.isMovable());
+
+    const immovableBlockBounds = immovableBlocks.map((block) => block.getBoundingRectangle());
+
+    const getNextIntersectingImmovableBlock = function(rect: Rect): Rect|null {
+      for (const immovableRect of immovableBlockBounds) {
+        if (rect.intersects(immovableRect)) {
+          return immovableRect;
+        }
       }
-      const xy = block.getRelativeToSurfaceXY();
-      block.moveBy(-xy.x, cursorY - xy.y, ['cleanup']);
+      return null;
+    };
+
+    let cursorY = 0;
+    const minBlockHeight = this.renderer.getConstants().MIN_BLOCK_HEIGHT;
+    for (const block of movableBlocks) {
+      // Make the initial movement of shifting the block to its best possible position.
+      let boundingRect = block.getBoundingRectangle();
+      block.moveBy(-boundingRect.left, cursorY - boundingRect.top, ['cleanup']);
       block.snapToGrid();
-      cursorY =
-        block.getRelativeToSurfaceXY().y +
-        block.getHeightWidth().height +
-        this.renderer.getConstants().MIN_BLOCK_HEIGHT;
+
+      boundingRect = block.getBoundingRectangle();
+      let conflictingRect = getNextIntersectingImmovableBlock(boundingRect);
+      while (conflictingRect != null) {
+        // If the block intersects with an immovable block, move it down past that immovable block.
+        cursorY = conflictingRect.top + conflictingRect.getHeight() + minBlockHeight;
+        block.moveBy(0, cursorY - boundingRect.top, ['cleanup']);
+        block.snapToGrid();
+        boundingRect = block.getBoundingRectangle();
+        conflictingRect = getNextIntersectingImmovableBlock(boundingRect);
+      }
+
+      // Ensure all next blocks start past the most recent (which will also put them past all
+      // previously intersecting immovable blocks).
+      cursorY = block.getRelativeToSurfaceXY().y + block.getHeightWidth().height + minBlockHeight;
     }
     eventUtils.setGroup(false);
     this.setResizesEnabled(true);

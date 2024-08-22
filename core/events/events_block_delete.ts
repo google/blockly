@@ -35,6 +35,9 @@ export class BlockDelete extends BlockBase {
   /** All of the IDs of deleted blocks. */
   ids?: string[];
 
+  /** All of the types of deleted blocks. */
+  types?: string[];
+
   /** True if the deleted block was a shadow block, false otherwise. */
   wasShadow?: boolean;
 
@@ -57,7 +60,17 @@ export class BlockDelete extends BlockBase {
     }
 
     this.oldXml = Xml.blockToDomWithXY(opt_block);
-    this.ids = eventUtils.getDescendantIds(opt_block);
+    this.ids = [];
+
+    const typesSet = new Set();
+    const descendants: Block[] = opt_block.getDescendants(false);
+    for (let i = 0, descendant: Block; (descendant = descendants[i]); i++) {
+      this.ids[i] = descendant.id;
+      typesSet.add(descendant.type);
+    }
+
+    this.types = Array.from(typesSet.values() as unknown as string[]);
+
     this.wasShadow = opt_block.isShadow();
     this.oldJson = blocks.save(opt_block, {
       addCoordinates: true,

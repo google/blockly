@@ -37,6 +37,9 @@ export class BlockCreate extends BlockBase {
   /** All of the IDs of created blocks. */
   ids?: string[];
 
+  /** All of the types of created blocks. */
+  types?: string[];
+
   /** @param opt_block The created block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
     super(opt_block);
@@ -51,7 +54,16 @@ export class BlockCreate extends BlockBase {
     }
 
     this.xml = Xml.blockToDomWithXY(opt_block);
-    this.ids = eventUtils.getDescendantIds(opt_block);
+    this.ids = [];
+
+    const typesSet = new Set();
+    const descendants: Block[] = opt_block.getDescendants(false);
+    for (let i = 0, descendant: Block; (descendant = descendants[i]); i++) {
+      this.ids[i] = descendant.id;
+      typesSet.add(descendant.type);
+    }
+
+    this.types = Array.from(typesSet.values() as unknown as string[]);
 
     this.json = blocks.save(opt_block, {addCoordinates: true}) as blocks.State;
   }

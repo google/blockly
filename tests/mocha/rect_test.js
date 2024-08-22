@@ -119,7 +119,7 @@ suite('Rect', function () {
       assert.isTrue(areEqual, 'an instance and its clone should be equal');
     });
 
-    test('object should equal its clone', function () {
+    test('object should equal an exact explicit copy', function () {
       const rect1 = Blockly.utils.Rect.createFromPoint(
         this.createCoord(1, 2),
         23,

@@ -804,8 +804,17 @@ export class BlockSvg
     // doing so would delete a selected block and make sure that any associated
     // parent is updated.
     const selection = common.getSelected();
-    if (selection instanceof Block && this.contains(selection)) {
-      selection.unselect();
+    if (selection instanceof Block) {
+      let selectionAncestor: Block | null = selection;
+      while (selectionAncestor !== null) {
+        if (selectionAncestor === this) {
+          // The block to be deleted contains the selected block, so remove any
+          // selection highlight associated with the selected block before
+          // deleting them.
+          selection.unselect();
+        }
+        selectionAncestor = selectionAncestor.getParent();
+      }
     }
 
     super.dispose(!!healStack);

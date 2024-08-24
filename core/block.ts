@@ -320,20 +320,6 @@ export class Block implements IASTNodeLocation {
   }
 
   /**
-   * Returns true if this block is the same block as the given block or contains
-   * the provided block as a descendent.
-   *
-   * @param other the other block to compare to.
-   */
-  contains(other: Block | null): boolean {
-    while (other !== null) {
-      if (other === this) return true;
-      other = other.parentBlock_;
-    }
-    return false;
-  }
-
-  /**
    * Dispose of this block.
    *
    * @param healStack If true, then try to heal any gap by connecting the next

@@ -209,44 +209,6 @@ suite('Blocks', function () {
     });
   });
 
-  suite('Contains', function () {
-    setup(function () {
-      this.blocks = createTestBlocks(this.workspace, true);
-    });
-
-    test('contains parent is false', function () {
-      const blocks = this.blocks;
-      assert.isFalse(
-        blocks.B.contains(blocks.A),
-        'Expected child to not contain parent.',
-      );
-    });
-
-    test('contains self is true', function () {
-      const blocks = this.blocks;
-      assert.isTrue(
-        blocks.A.contains(blocks.A),
-        'Expected block to contain self.',
-      );
-    });
-
-    test('contains child is true', function () {
-      const blocks = this.blocks;
-      assert.isTrue(
-        blocks.A.contains(blocks.B),
-        'Expected block to contain child.',
-      );
-    });
-
-    test('contains grand child is true', function () {
-      const blocks = this.blocks;
-      assert.isTrue(
-        blocks.A.contains(blocks.C),
-        'Expected block to contain grandchild.',
-      );
-    });
-  });
-
   suite('Disposal', function () {
     suite('calling destroy', function () {
       setup(function () {

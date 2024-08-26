@@ -303,6 +303,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "кхочушдан цхьа хӀума",
 	"PROCEDURES_BEFORE_PARAMS": "дуьйна:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "дуьйна:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Декъашхочун '%1' функци дӀайахьа йиш йац, хӀунда аьлча билгалйаьккхина блок дӀайаьккхина йу.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Кхуллу маьӀна йуха ца дерзош йолу процедура",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Гайта и функци",
 	"PROCEDURES_DEFRETURN_RETURN": "йухадерзо",

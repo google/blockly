@@ -84,8 +84,8 @@ const FIRE_QUEUE: Abstract[] = [];
  * Notes:
  *
  * - Events are enqueued until a timeout, generally after rendering is
- *   complete but or at the end of the current microtask, if not
- *   running in a browser.
+ *   complete or at the end of the current microtask, if not running
+ *   in a browser.
  * - Queued events are subject to destructive modification by being
  *   combined with later-enqueued events, but only until they are
  *   fired.
@@ -214,7 +214,7 @@ function enqueueEvent(event: Abstract) {
  * addition (in PR #7069) of code to fireNow to post-filter the
  * .undoStack_ and .redoStack_ of any workspace that had just been
  * involved in dispatching events; this apparently resolved the issue
- * but added considerable additional complexity and made it difficlut
+ * but added considerable additional complexity and made it difficult
  * to reason about how events are processed for undo/redo, so both the
  * call from undo and the post-processing code was removed, and
  * forward=true was made the default while calling the function with
@@ -234,7 +234,8 @@ function enqueueEvent(event: Abstract) {
  * @param queue Array of events.
  * @param forward True if forward (redo), false if backward (undo).
  *     This parameter is deprecated: true is now the default and
- *     calling filter with it false will in future not be supported.
+ *     calling filter with it set to false will in future not be
+ *     supported.
  * @returns Array of filtered events.
  */
 export function filter(queue: Abstract[], forward = true): Abstract[] {

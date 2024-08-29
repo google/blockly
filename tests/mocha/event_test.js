@@ -1142,7 +1142,7 @@ suite('Events', function () {
       event.workspaceId = workspaceId;
       event.oldParentId = undefined;
       event.oldInputName = undefined;
-      event.oleCoordinate = new Blockly.utils.Coordinate(0, 0);
+      event.oldCoordinate = new Blockly.utils.Coordinate(0, 0);
       event.newParentId = parent.id;
       event.newInputName = inputName;
       event.newCoordinate = undefined;

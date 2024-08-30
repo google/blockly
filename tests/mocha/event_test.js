@@ -1745,9 +1745,9 @@ suite('Events', function () {
       // Fire all events
       this.clock.runAll();
 
-      const disabledEvents = this.workspace.getUndoStack().filter(function (e) {
-        return e.element === 'disabled';
-      });
+      const disabledEvents = this.workspace
+        .getUndoStack()
+        .filter((e) => e.element === 'disabled');
       assert.isEmpty(
         disabledEvents,
         'Undo stack should not contain any disabled events',

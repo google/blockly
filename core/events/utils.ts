@@ -127,13 +127,8 @@ function fireNow() {
   const queue = filter(FIRE_QUEUE, true);
   FIRE_QUEUE.length = 0;
   for (const event of queue) {
-    if (!event.workspaceId) {
-      continue;
-    }
-    const eventWorkspace = common.getWorkspaceById(event.workspaceId);
-    if (eventWorkspace) {
-      eventWorkspace.fireChangeListener(event);
-    }
+    if (!event.workspaceId) continue;
+    common.getWorkspaceById(event.workspaceId)?.fireChangeListener(event);
   }
 }
 

@@ -255,9 +255,7 @@ export class Workspace implements IASTNodeLocation {
       blocks.sort(this.sortObjects_.bind(this));
     }
 
-    return blocks.filter(function (block: Block) {
-      return !block.isInsertionMarker();
-    });
+    return blocks.filter((block) => !block.isInsertionMarker());
   }
 
   /**
@@ -341,11 +339,7 @@ export class Workspace implements IASTNodeLocation {
 
     // Insertion markers exist on the workspace for rendering reasons, but
     // aren't "real" blocks from a developer perspective.
-    const filtered = blocks.filter(function (block) {
-      return !block.isInsertionMarker();
-    });
-
-    return filtered;
+    return blocks.filter((block) => !block.isInsertionMarker());
   }
 
   /** Dispose of all blocks and comments in workspace. */

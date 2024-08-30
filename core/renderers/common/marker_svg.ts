@@ -47,7 +47,7 @@ export class MarkerSvg {
    * The workspace, field, or block that the marker SVG element should be
    * attached to.
    */
-  private parent: IASTNodeLocationSvg | null = null;
+  protected parent: IASTNodeLocationSvg | null = null;
 
   /** The current SVG element for the marker. */
   currentMarkerSvg: SVGElement | null = null;
@@ -73,9 +73,9 @@ export class MarkerSvg {
    * @param marker The marker to draw.
    */
   constructor(
-    private readonly workspace: WorkspaceSvg,
+    protected readonly workspace: WorkspaceSvg,
     constants: ConstantProvider,
-    private readonly marker: Marker,
+    protected readonly marker: Marker,
   ) {
     this.constants_ = constants;
 
@@ -223,7 +223,7 @@ export class MarkerSvg {
    *
    * @param curNode The node to draw the marker for.
    */
-  private showWithBlockPrevOutput(curNode: ASTNode) {
+  protected showWithBlockPrevOutput(curNode: ASTNode) {
     const block = curNode.getSourceBlock() as BlockSvg;
     const width = block.width;
     const height = block.height;
@@ -620,7 +620,7 @@ export class MarkerSvg {
    * @param oldNode The old node the marker used to be on.
    * @param curNode The new node the marker is currently on.
    */
-  private fireMarkerEvent(oldNode: ASTNode, curNode: ASTNode) {
+  protected fireMarkerEvent(oldNode: ASTNode, curNode: ASTNode) {
     const curBlock = curNode.getSourceBlock();
     const event = new (eventUtils.get(EventType.MARKER_MOVE))(
       curBlock,

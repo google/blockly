@@ -123,7 +123,7 @@ suite('Context Menu Items', function () {
     suite('Cleanup', function () {
       setup(function () {
         this.cleanupOption = this.registry.getItem('cleanWorkspace');
-        this.tidyUpStub = sinon.stub(this.workspace, 'tidyUp');
+        this.cleanUpStub = sinon.stub(this.workspace, 'cleanUp');
       });
 
       test('Enabled when multiple blocks', function () {
@@ -153,9 +153,9 @@ suite('Context Menu Items', function () {
         );
       });
 
-      test('Calls workspace tidyUp', function () {
+      test('Calls workspace cleanUp', function () {
         this.cleanupOption.callback(this.scope);
-        sinon.assert.calledOnce(this.tidyUpStub);
+        sinon.assert.calledOnce(this.cleanUpStub);
       });
 
       test('Has correct label', function () {

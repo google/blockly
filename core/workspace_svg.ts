@@ -1645,8 +1645,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     return boundary;
   }
 
-  /** Tidy up the workspace by ordering all the blocks in a column such that none overlap. */
-  tidyUp() {
+  /** Clean up the workspace by ordering all the blocks in a column such that none overlap. */
+  cleanUp() {
     this.setResizesEnabled(false);
     eventUtils.setGroup(true);
 

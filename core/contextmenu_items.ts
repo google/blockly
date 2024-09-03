@@ -91,7 +91,7 @@ export function registerCleanup() {
       return 'hidden';
     },
     callback(scope: Scope) {
-      scope.workspace!.tidyUp();
+      scope.workspace!.cleanUp();
     },
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'cleanWorkspace',

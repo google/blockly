@@ -407,9 +407,9 @@ suite('WorkspaceSvg', function () {
     });
   });
 
-  suite('tidyUp', function () {
+  suite('cleanUp', function () {
     test('empty workspace does not change', function () {
-      this.workspace.tidyUp();
+      this.workspace.cleanUp();
 
       const blocks = this.workspace.getTopBlocks(true);
       assert.equal(blocks.length, 0, 'workspace is empty');
@@ -426,7 +426,7 @@ suite('WorkspaceSvg', function () {
       };
       Blockly.serialization.blocks.append(blockJson, this.workspace);
 
-      this.workspace.tidyUp();
+      this.workspace.cleanUp();
 
       const blocks = this.workspace.getTopBlocks(true);
       const origin = new Blockly.utils.Coordinate(0, 0);
@@ -449,7 +449,7 @@ suite('WorkspaceSvg', function () {
       };
       Blockly.serialization.blocks.append(blockJson, this.workspace);
 
-      this.workspace.tidyUp();
+      this.workspace.cleanUp();
 
       const topBlocks = this.workspace.getTopBlocks(true);
       const allBlocks = this.workspace.getAllBlocks(false);
@@ -483,7 +483,7 @@ suite('WorkspaceSvg', function () {
       };
       Blockly.serialization.blocks.append(blockJson, this.workspace);
 
-      this.workspace.tidyUp();
+      this.workspace.cleanUp();
 
       const topBlocks = this.workspace.getTopBlocks(true);
       const allBlocks = this.workspace.getAllBlocks(false);
@@ -516,7 +516,7 @@ suite('WorkspaceSvg', function () {
       Blockly.serialization.blocks.append(blockJson1, this.workspace);
       Blockly.serialization.blocks.append(blockJson2, this.workspace);
 
-      this.workspace.tidyUp();
+      this.workspace.cleanUp();
 
       // block1 and block2 do not switch places since blocks are pre-sorted by their position before
       // being tidied up, so the order they were added to the workspace doesn't matter.
@@ -557,7 +557,7 @@ suite('WorkspaceSvg', function () {
       Blockly.serialization.blocks.append(blockJson1, this.workspace);
       Blockly.serialization.blocks.append(blockJson2, this.workspace);
 
-      this.workspace.tidyUp();
+      this.workspace.cleanUp();
 
       const topBlocks = this.workspace.getTopBlocks(true);
       const block1 = this.workspace.getBlockById('block1');
@@ -598,7 +598,7 @@ suite('WorkspaceSvg', function () {
       this.workspace.getGrid().setSpacing(20);
       this.workspace.getGrid().setSnapToGrid(true);
 
-      this.workspace.tidyUp();
+      this.workspace.cleanUp();
 
       const topBlocks = this.workspace.getTopBlocks(true);
       const block1 = this.workspace.getBlockById('block1');
@@ -644,7 +644,7 @@ suite('WorkspaceSvg', function () {
       Blockly.serialization.blocks.append(blockJson1, this.workspace);
       Blockly.serialization.blocks.append(blockJson2, this.workspace);
 
-      this.workspace.tidyUp();
+      this.workspace.cleanUp();
 
       const topBlocks = this.workspace.getTopBlocks(true);
       const allBlocks = this.workspace.getAllBlocks(false);
@@ -733,7 +733,7 @@ suite('WorkspaceSvg', function () {
       Blockly.serialization.blocks.append(blockJson1, this.workspace);
       Blockly.serialization.blocks.append(blockJson2, this.workspace);
 
-      this.workspace.tidyUp();
+      this.workspace.cleanUp();
 
       const topBlocks = this.workspace.getTopBlocks(true);
       const block1 = this.workspace.getBlockById('block1');
@@ -773,7 +773,7 @@ suite('WorkspaceSvg', function () {
       Blockly.serialization.blocks.append(blockJson4, this.workspace);
       Blockly.serialization.blocks.append(blockJson5, this.workspace);
 
-      this.workspace.tidyUp();
+      this.workspace.cleanUp();
 
       const topBlocks = this.workspace.getTopBlocks(true);
       const block1Pos = this.workspace
@@ -816,7 +816,7 @@ suite('WorkspaceSvg', function () {
       };
       Blockly.serialization.blocks.append(blockJson, this.workspace);
 
-      this.workspace.tidyUp();
+      this.workspace.cleanUp();
 
       const topBlocks = this.workspace.getTopBlocks(true);
       const allBlocks = this.workspace.getAllBlocks(false);
@@ -907,7 +907,7 @@ suite('WorkspaceSvg', function () {
       Blockly.serialization.blocks.append(blockJson4, this.workspace);
       Blockly.serialization.blocks.append(blockJson5, this.workspace);
 
-      this.workspace.tidyUp();
+      this.workspace.cleanUp();
 
       const topBlocks = this.workspace.getTopBlocks(true);
       const block1Rect = this.workspace

@@ -543,9 +543,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     // Update all blocks in workspace that have a style name.
     this.updateBlockStyles_(
-      this.getAllBlocks(false).filter(function (block) {
-        return !!block.getStyleName();
-      }),
+      this.getAllBlocks(false).filter((block) => !!block.getStyleName()),
     );
 
     // Update current toolbox selection.

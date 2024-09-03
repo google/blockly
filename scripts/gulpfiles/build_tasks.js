@@ -699,7 +699,7 @@ function buildAdvancedCompilationTest() {
   // a later browser-based test won't check it should the compile fail.
   try {
     fs.unlinkSync('./tests/compile/main_compressed.js');
-  } catch (_e) {
+  } catch {
     // Probably it didn't exist.
   }
 

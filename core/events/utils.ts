@@ -9,6 +9,7 @@
 import type {Block} from '../block.js';
 import * as common from '../common.js';
 import * as registry from '../registry.js';
+import * as deprecation from '../utils/deprecation.js';
 import * as idGenerator from '../utils/idgenerator.js';
 import type {Workspace} from '../workspace.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
@@ -26,7 +27,6 @@ import {
   isClick,
   isViewportChange,
 } from './predicates.js';
-import {EventType} from './type.js';
 
 /** Group ID for new events.  Grouped events are indivisible. */
 let group = '';
@@ -79,9 +79,20 @@ export type BumpEvent =
 const FIRE_QUEUE: Abstract[] = [];
 
 /**
- * Create a custom event and fire it.
+ * Enqueue an event to be dispatched to change listeners.
  *
- * @param event Custom data for event.
+ * Notes:
+ *
+ * - Events are enqueued until a timeout, generally after rendering is
+ *   complete or at the end of the current microtask, if not running
+ *   in a browser.
+ * - Queued events are subject to destructive modification by being
+ *   combined with later-enqueued events, but only until they are
+ *   fired.
+ * - Events are dispatched via the fireChangeListener method on the
+ *   affected workspace.
+ *
+ * @param event Any Blockly event.
  */
 export function fire(event: Abstract) {
   TEST_ONLY.fireInternal(event);
@@ -108,22 +119,57 @@ function fireInternal(event: Abstract) {
       setTimeout(fireNow, 0);
     }
   }
-  FIRE_QUEUE.push(event);
+  enqueueEvent(event);
 }
 
 /** Dispatch all queued events. */
 function fireNow() {
   const queue = filter(FIRE_QUEUE, true);
   FIRE_QUEUE.length = 0;
-  for (let i = 0, event; (event = queue[i]); i++) {
-    if (!event.workspaceId) {
-      continue;
-    }
-    const eventWorkspace = common.getWorkspaceById(event.workspaceId);
-    if (eventWorkspace) {
-      eventWorkspace.fireChangeListener(event);
-    }
+  for (const event of queue) {
+    if (!event.workspaceId) continue;
+    common.getWorkspaceById(event.workspaceId)?.fireChangeListener(event);
   }
+}
+
+/**
+ * Enqueue an event on FIRE_QUEUE.
+ *
+ * Normally this is equivalent to FIRE_QUEUE.push(event), but if the
+ * enqueued event is a BlockChange event and the most recent event(s)
+ * on the queue are BlockMove events that (re)connect other blocks to
+ * the changed block (and belong to the same event group) then the
+ * enqueued event will be enqueued before those events rather than
+ * after.
+ *
+ * This is a workaround for a problem caused by the fact that
+ * MutatorIcon.prototype.recomposeSourceBlock can only fire a
+ * BlockChange event after the mutating block's compose method
+ * returns, meaning that if the compose method reconnects child blocks
+ * the corresponding BlockMove events are emitted _before_ the
+ * BlockChange event, causing issues with undo, mirroring, etc.; see
+ * https://github.com/google/blockly/issues/8225#issuecomment-2195751783
+ * (and following) for details.
+ */
+function enqueueEvent(event: Abstract) {
+  if (isBlockChange(event) && event.element === 'mutation') {
+    let i;
+    for (i = FIRE_QUEUE.length; i > 0; i--) {
+      const otherEvent = FIRE_QUEUE[i - 1];
+      if (
+        otherEvent.group !== event.group ||
+        otherEvent.workspaceId !== event.workspaceId ||
+        !isBlockMove(otherEvent) ||
+        otherEvent.newParentId !== event.blockId
+      ) {
+        break;
+      }
+    }
+    FIRE_QUEUE.splice(i, 0, event);
+    return;
+  }
+
+  FIRE_QUEUE.push(event);
 }
 
 /**
@@ -151,106 +197,102 @@ function fireNow() {
  * https://github.com/google/blockly/issues/2037#issuecomment-2209696351
  *
  * Later, in PR #1205 the original O(n^2) implementation was replaced
- * by a linear-time implementation, though addiitonal fixes were made
+ * by a linear-time implementation, though additonal fixes were made
  * subsequently.
  *
- * This function was previously called from Workspace.prototype.undo,
- * but this was the cause of issue #7026, the originally-chosen fix
- * for which was the addition (in PR #7069) of code to fireNow to
- * post-filter the .undoStack_ and .redoStack_ of any workspace that
- * had just been involved in dispatching events.  This apparently
- * resolved the issue but added considerable additional complexity and
- * made it difficlut to reason about how events are processed for
- * undo/redo, so both the call from undo and the post-processing code
- * was later removed.
+ * In August 2024 a number of significant simplifications were made:
  *
- * @param queueIn Array of events.
+ * This function was previously called from Workspace.prototype.undo,
+ * but the mutation of events by this function was the cause of issue
+ * #7026 (note that events would combine differently in reverse order
+ * vs. forward order).  The originally-chosen fix for this was the
+ * addition (in PR #7069) of code to fireNow to post-filter the
+ * .undoStack_ and .redoStack_ of any workspace that had just been
+ * involved in dispatching events; this apparently resolved the issue
+ * but added considerable additional complexity and made it difficult
+ * to reason about how events are processed for undo/redo, so both the
+ * call from undo and the post-processing code was removed, and
+ * forward=true was made the default while calling the function with
+ * forward=false was deprecated.
+ *
+ * At the same time, the buggy code to reorder BlockChange events was
+ * replaced by a less-buggy version of the same functionality in a new
+ * function, enqueueEvent, called from fireInternal, thus assuring
+ * that events will be in the correct order at the time filter is
+ * called.
+ *
+ * Additionally, the event merging code was modified so that only
+ * immediately adjacent events would be merged.  This simplified the
+ * implementation while ensuring that the merging of events cannot
+ * cause them to be reordered.
+ *
+ * @param queue Array of events.
  * @param forward True if forward (redo), false if backward (undo).
+ *     This parameter is deprecated: true is now the default and
+ *     calling filter with it set to false will in future not be
+ *     supported.
  * @returns Array of filtered events.
  */
-export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
-  let queue = queueIn.slice();
-  // Shallow copy of queue.
+export function filter(queue: Abstract[], forward = true): Abstract[] {
   if (!forward) {
-    // Undo is merged in reverse order.
-    queue.reverse();
+    deprecation.warn('filter(queue, /*forward=*/false)', 'v11.2', 'v12');
+    // Undo was merged in reverse order.
+    queue = queue.slice().reverse(); // Copy before reversing in place.
   }
-  const mergedQueue = [];
-  const hash = Object.create(null);
+  const mergedQueue: Abstract[] = [];
   // Merge duplicates.
-  for (let i = 0, event; (event = queue[i]); i++) {
-    if (!event.isNull()) {
-      // Treat all UI events as the same type in hash table.
-      const eventType = event.isUiEvent ? EventType.UI : event.type;
-      // TODO(#5927): Check whether `blockId` exists before accessing it.
-      const blockId = (event as AnyDuringMigration).blockId;
-      const key = [eventType, blockId, event.workspaceId].join(' ');
-
-      const lastEntry = hash[key];
-      const lastEvent = lastEntry ? lastEntry.event : null;
-      if (!lastEntry) {
-        // Each item in the hash table has the event and the index of that event
-        // in the input array.  This lets us make sure we only merge adjacent
-        // move events.
-        hash[key] = {event, index: i};
-        mergedQueue.push(event);
-      } else if (isBlockMove(event) && lastEntry.index === i - 1) {
-        // Merge move events.
-        lastEvent.newParentId = event.newParentId;
-        lastEvent.newInputName = event.newInputName;
-        lastEvent.newCoordinate = event.newCoordinate;
-        if (event.reason) {
-          if (lastEvent.reason) {
-            // Concatenate reasons without duplicates.
-            const reasonSet = new Set(event.reason.concat(lastEvent.reason));
-            lastEvent.reason = Array.from(reasonSet);
-          } else {
-            lastEvent.reason = event.reason;
-          }
-        }
-        lastEntry.index = i;
-      } else if (
-        isBlockChange(event) &&
-        event.element === lastEvent.element &&
-        event.name === lastEvent.name
-      ) {
-        // Merge change events.
-        lastEvent.newValue = event.newValue;
-      } else if (isViewportChange(event)) {
-        // Merge viewport change events.
-        lastEvent.viewTop = event.viewTop;
-        lastEvent.viewLeft = event.viewLeft;
-        lastEvent.scale = event.scale;
-        lastEvent.oldScale = event.oldScale;
-      } else if (isClick(event) && isBubbleOpen(lastEvent)) {
-        // Drop click events caused by opening/closing bubbles.
-      } else {
-        // Collision: newer events should merge into this event to maintain
-        // order.
-        hash[key] = {event, index: i};
-        mergedQueue.push(event);
+  for (const event of queue) {
+    const lastEvent = mergedQueue[mergedQueue.length - 1];
+    if (event.isNull()) continue;
+    if (
+      !lastEvent ||
+      lastEvent.workspaceId !== event.workspaceId ||
+      lastEvent.group !== event.group
+    ) {
+      mergedQueue.push(event);
+      continue;
+    }
+    if (
+      isBlockMove(event) &&
+      isBlockMove(lastEvent) &&
+      event.blockId === lastEvent.blockId
+    ) {
+      // Merge move events.
+      lastEvent.newParentId = event.newParentId;
+      lastEvent.newInputName = event.newInputName;
+      lastEvent.newCoordinate = event.newCoordinate;
+      // Concatenate reasons without duplicates.
+      if (lastEvent.reason || event.reason) {
+        lastEvent.reason = Array.from(
+          new Set((lastEvent.reason ?? []).concat(event.reason ?? [])),
+        );
       }
+    } else if (
+      isBlockChange(event) &&
+      isBlockChange(lastEvent) &&
+      event.blockId === lastEvent.blockId &&
+      event.element === lastEvent.element &&
+      event.name === lastEvent.name
+    ) {
+      // Merge change events.
+      lastEvent.newValue = event.newValue;
+    } else if (isViewportChange(event) && isViewportChange(lastEvent)) {
+      // Merge viewport change events.
+      lastEvent.viewTop = event.viewTop;
+      lastEvent.viewLeft = event.viewLeft;
+      lastEvent.scale = event.scale;
+      lastEvent.oldScale = event.oldScale;
+    } else if (isClick(event) && isBubbleOpen(lastEvent)) {
+      // Drop click events caused by opening/closing bubbles.
+    } else {
+      mergedQueue.push(event);
     }
   }
   // Filter out any events that have become null due to merging.
-  queue = mergedQueue.filter(function (e) {
-    return !e.isNull();
-  });
+  queue = mergedQueue.filter((e) => !e.isNull());
   if (!forward) {
     // Restore undo order.
     queue.reverse();
-  }
-  // Move mutation events to the top of the queue.
-  // Intentionally skip first event.
-  for (let i = 1, event; (event = queue[i]); i++) {
-    // AnyDuringMigration because:  Property 'element' does not exist on type
-    // 'Abstract'.
-    if (
-      event.type === EventType.BLOCK_CHANGE &&
-      (event as AnyDuringMigration).element === 'mutation'
-    ) {
-      queue.unshift(queue.splice(i, 1)[0]);
-    }
   }
   return queue;
 }
@@ -420,6 +462,7 @@ export function disableOrphans(event: Abstract) {
 
 export const TEST_ONLY = {
   FIRE_QUEUE,
+  enqueueEvent,
   fireNow,
   fireInternal,
   setGroupInternal,

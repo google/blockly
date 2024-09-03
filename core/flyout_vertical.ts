@@ -86,7 +86,7 @@ export class VerticalFlyout extends Flyout {
         if (this.toolboxPosition_ === toolbox.Position.LEFT) {
           x = toolboxMetrics.width;
         } else {
-          x = viewMetrics.width - this.width_;
+          x = viewMetrics.width - this.getWidth();
         }
       } else {
         if (this.toolboxPosition_ === toolbox.Position.LEFT) {
@@ -104,7 +104,7 @@ export class VerticalFlyout extends Flyout {
         // to align the right edge of the flyout with the right edge of the
         // blocklyDiv, we calculate the full width of the div minus the width
         // of the flyout.
-        x = viewMetrics.width + absoluteMetrics.left - this.width_;
+        x = viewMetrics.width + absoluteMetrics.left - this.getWidth();
       }
     }
 
@@ -130,7 +130,7 @@ export class VerticalFlyout extends Flyout {
     const targetWorkspaceViewMetrics = metricsManager.getViewMetrics();
     this.height_ = targetWorkspaceViewMetrics.height;
 
-    const edgeWidth = this.width_ - this.CORNER_RADIUS;
+    const edgeWidth = this.getWidth() - this.CORNER_RADIUS;
     const edgeHeight =
       targetWorkspaceViewMetrics.height - 2 * this.CORNER_RADIUS;
     this.setBackgroundPath(edgeWidth, edgeHeight);
@@ -138,7 +138,7 @@ export class VerticalFlyout extends Flyout {
     const x = this.getX();
     const y = this.getY();
 
-    this.positionAt_(this.width_, this.height_, x, y);
+    this.positionAt_(this.getWidth(), this.getHeight(), x, y);
   }
 
   /**
@@ -349,7 +349,7 @@ export class VerticalFlyout extends Flyout {
     flyoutWidth *= this.workspace_.scale;
     flyoutWidth += Scrollbar.scrollbarThickness;
 
-    if (this.width_ !== flyoutWidth) {
+    if (this.getWidth() !== flyoutWidth) {
       for (let i = 0, block; (block = blocks[i]); i++) {
         if (this.RTL) {
           // With the flyoutWidth known, right-align the blocks.

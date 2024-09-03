@@ -98,7 +98,7 @@ export class HorizontalFlyout extends Flyout {
         if (atTop) {
           y = toolboxMetrics.height;
         } else {
-          y = viewMetrics.height - this.height_;
+          y = viewMetrics.height - this.getHeight();
         }
       } else {
         if (atTop) {
@@ -116,7 +116,7 @@ export class HorizontalFlyout extends Flyout {
         // to align the bottom edge of the flyout with the bottom edge of the
         // blocklyDiv, we calculate the full height of the div minus the height
         // of the flyout.
-        y = viewMetrics.height + absoluteMetrics.top - this.height_;
+        y = viewMetrics.height + absoluteMetrics.top - this.getHeight();
       }
     }
 
@@ -133,13 +133,13 @@ export class HorizontalFlyout extends Flyout {
     this.width_ = targetWorkspaceViewMetrics.width;
 
     const edgeWidth = targetWorkspaceViewMetrics.width - 2 * this.CORNER_RADIUS;
-    const edgeHeight = this.height_ - this.CORNER_RADIUS;
+    const edgeHeight = this.getHeight() - this.CORNER_RADIUS;
     this.setBackgroundPath(edgeWidth, edgeHeight);
 
     const x = this.getX();
     const y = this.getY();
 
-    this.positionAt_(this.width_, this.height_, x, y);
+    this.positionAt_(this.getWidth(), this.getHeight(), x, y);
   }
 
   /**
@@ -380,7 +380,7 @@ export class HorizontalFlyout extends Flyout {
     flyoutHeight *= this.workspace_.scale;
     flyoutHeight += Scrollbar.scrollbarThickness;
 
-    if (this.height_ !== flyoutHeight) {
+    if (this.getHeight() !== flyoutHeight) {
       for (let i = 0, block; (block = blocks[i]); i++) {
         if (this.rectMap_.has(block)) {
           this.moveRectToBlock_(this.rectMap_.get(block)!, block);

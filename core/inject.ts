@@ -77,6 +77,8 @@ export function inject(
     common.setMainWorkspace(workspace);
   });
 
+  browserEvents.conditionalBind(subContainer, 'keydown', null, onKeyDown);
+
   return workspace;
 }
 
@@ -320,8 +322,6 @@ let documentEventsBound = false;
  * Most of these events should be bound to the SVG's surface.
  * However, 'mouseup' has to be on the whole document so that a block dragged
  * out of bounds and released will know that it has been released.
- * Also, 'keydown' has to be on the whole document since the browser doesn't
- * understand a concept of focus on the SVG image.
  */
 function bindDocumentEvents() {
   if (!documentEventsBound) {
@@ -333,7 +333,6 @@ function bindDocumentEvents() {
         }
       }
     });
-    browserEvents.conditionalBind(document, 'keydown', null, onKeyDown);
     // longStop needs to run to stop the context menu from showing up.  It
     // should run regardless of what other touch event handlers have run.
     browserEvents.bind(document, 'touchend', null, Touch.longStop);

@@ -5,19 +5,20 @@
  */
 
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
+import {defineRowBlock} from './test_helpers/block_definitions.js';
+import {runTestCases} from './test_helpers/common.js';
 import {
   assertFieldValue,
   runConstructorSuiteTests,
   runFromJsonSuiteTests,
   runSetValueTests,
 } from './test_helpers/fields.js';
-import {defineRowBlock} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
-import {runTestCases} from './test_helpers/common.js';
 
 suite('Number Fields', function () {
   setup(function () {
@@ -87,9 +88,9 @@ suite('Number Fields', function () {
     expectedValue,
   ) {
     assertFieldValue(field, expectedValue);
-    chai.assert.equal(field.getMin(), expectedMin, 'Min');
-    chai.assert.equal(field.getMax(), expectedMax, 'Max');
-    chai.assert.equal(field.getPrecision(), expectedPrecision, 'Precision');
+    assert.equal(field.getMin(), expectedMin, 'Min');
+    assert.equal(field.getMax(), expectedMax, 'Max');
+    assert.equal(field.getPrecision(), expectedPrecision, 'Precision');
   }
   /**
    * Asserts that the field property values are set to default.
@@ -190,7 +191,7 @@ suite('Number Fields', function () {
         });
         test('Null', function () {
           const field = Blockly.FieldNumber.fromJson({precision: null});
-          chai.assert.equal(field.getPrecision(), 0);
+          assert.equal(field.getPrecision(), 0);
         });
       });
       const setValueBoundsTestFn = function (testCase) {
@@ -226,7 +227,7 @@ suite('Number Fields', function () {
         runTestCases(testCases, setValueBoundsTestFn);
         test('Null', function () {
           const field = Blockly.FieldNumber.fromJson({min: null});
-          chai.assert.equal(field.getMin(), -Infinity);
+          assert.equal(field.getMin(), -Infinity);
         });
       });
       suite('Max', function () {
@@ -253,7 +254,7 @@ suite('Number Fields', function () {
         runTestCases(testCases, setValueBoundsTestFn);
         test('Null', function () {
           const field = Blockly.FieldNumber.fromJson({max: null});
-          chai.assert.equal(field.getMax(), Infinity);
+          assert.equal(field.getMax(), Infinity);
         });
       });
     });
@@ -473,7 +474,7 @@ suite('Number Fields', function () {
         const field = new Blockly.FieldNumber(value);
         block.getInput('INPUT').appendField(field, 'NUMBER');
         const jso = Blockly.serialization.blocks.save(block);
-        chai.assert.deepEqual(jso['fields'], {'NUMBER': value});
+        assert.deepEqual(jso['fields'], {'NUMBER': value});
       };
     });
 

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -31,7 +32,7 @@ suite('Comment Delete Event', function () {
       delete origEvent.xml; // xml fails deep equals for some reason.
       delete newEvent.xml; // xml fails deep equals for some reason.
 
-      chai.assert.deepEqual(newEvent, origEvent);
+      assert.deepEqual(newEvent, origEvent);
     });
   });
 });

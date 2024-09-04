@@ -9,14 +9,13 @@
  * webdriver, of basic Blockly block functionality.
  */
 
-const chai = require('chai');
-const {
-  testSetup,
-  testFileLocations,
-  getAllBlocks,
+import * as chai from 'chai';
+import {
   dragNthBlockFromFlyout,
-} = require('./test_setup');
-const {Key} = require('webdriverio');
+  getAllBlocks,
+  testFileLocations,
+  testSetup,
+} from './test_setup.mjs';
 
 suite('Basic block tests', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time

@@ -8,15 +8,15 @@
  * @fileoverview Tests for the dragging out of the toolbox and flyout.
  */
 
-const chai = require('chai');
-const {
-  testSetup,
-  testFileLocations,
+import * as chai from 'chai';
+import {
   getCategory,
-  scrollFlyout,
-  screenDirection,
   PAUSE_TIME,
-} = require('./test_setup');
+  screenDirection,
+  scrollFlyout,
+  testFileLocations,
+  testSetup,
+} from './test_setup.mjs';
 
 // Categories in the basic toolbox.
 const basicCategories = [
@@ -25,7 +25,6 @@ const basicCategories = [
   'Math',
   'Text',
   'Lists',
-  'Colour',
   'Variables',
   'Functions',
 ];
@@ -39,12 +38,13 @@ const testCategories = [
   'Row',
   'Stack',
   'Statement',
-  'Drag',
+  // Disabled due to #8466
+  // 'Drag',
+
   // Skip fields because it's an accordion that is already open.
   // 'Fields',
   'Defaults',
   'Numbers',
-  'Angles',
   'Drop-downs',
   // Note: images has a block that has a bad image source, but still builds and renders
   // just fine.

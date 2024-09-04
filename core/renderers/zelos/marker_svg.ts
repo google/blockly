@@ -15,7 +15,6 @@ import {Svg} from '../../utils/svg.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
 import type {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 import {MarkerSvg as BaseMarkerSvg} from '../common/marker_svg.js';
-
 import type {ConstantProvider as ZelosConstantProvider} from './constants.js';
 
 /**

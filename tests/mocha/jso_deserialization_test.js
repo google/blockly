@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  sharedTestSetup,
-  sharedTestTeardown,
-  workspaceTeardown,
-} from './test_helpers/setup_teardown.js';
+import {EventType} from '../../build/src/core/events/type.js';
+import {assert} from '../../node_modules/chai/chai.js';
 import {assertEventFired} from './test_helpers/events.js';
-import * as eventUtils from '../../build/src/core/events/utils.js';
 import {
   MockParameterModel,
   MockProcedureModel,
 } from './test_helpers/procedures.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 
 suite('JSO Deserialization', function () {
   setup(function () {
@@ -39,10 +39,10 @@ suite('JSO Deserialization', function () {
           ],
         },
       };
-      chai.assert.throws(() => {
+      assert.throws(() => {
         Blockly.serialization.workspaces.load(state, this.workspace);
       });
-      chai.assert.isTrue(
+      assert.isTrue(
         Blockly.Events.isEnabled(),
         'Expected events to be enabled',
       );
@@ -66,7 +66,7 @@ suite('JSO Deserialization', function () {
         assertEventFired(
           this.eventsFireStub,
           Blockly.Events.FinishedLoading,
-          {type: eventUtils.FINISHED_LOADING},
+          {type: EventType.FINISHED_LOADING},
           this.workspace.id,
         );
       });
@@ -89,7 +89,7 @@ suite('JSO Deserialization', function () {
         assertEventFired(
           this.eventsFireStub,
           Blockly.Events.FinishedLoading,
-          {'group': 'my group', 'type': eventUtils.FINISHED_LOADING},
+          {'group': 'my group', 'type': EventType.FINISHED_LOADING},
           this.workspace.id,
         );
       });
@@ -121,7 +121,7 @@ suite('JSO Deserialization', function () {
         Blockly.serialization.workspaces.load(state, this.workspace);
         const calls = this.eventsFireStub.getCalls();
         const group = calls[0].args[0].group;
-        chai.assert.isTrue(calls.every((call) => call.args[0].group == group));
+        assert.isTrue(calls.every((call) => call.args[0].group == group));
       });
     });
 
@@ -144,7 +144,7 @@ suite('JSO Deserialization', function () {
             'varId': 'testId',
             'varType': '',
             'recordUndo': false,
-            'type': eventUtils.VAR_CREATE,
+            'type': EventType.VAR_CREATE,
           },
           this.workspace.id,
         );
@@ -170,7 +170,7 @@ suite('JSO Deserialization', function () {
             'varId': 'testId',
             'varType': '',
             'recordUndo': true,
-            'type': eventUtils.VAR_CREATE,
+            'type': EventType.VAR_CREATE,
           },
           this.workspace.id,
         );
@@ -195,7 +195,7 @@ suite('JSO Deserialization', function () {
             'varId': 'testId',
             'varType': '',
             'group': 'my group',
-            'type': eventUtils.VAR_CREATE,
+            'type': EventType.VAR_CREATE,
           },
           this.workspace.id,
         );
@@ -217,7 +217,7 @@ suite('JSO Deserialization', function () {
         Blockly.serialization.workspaces.load(state, this.workspace);
         const calls = this.eventsFireStub.getCalls();
         const group = calls[0].args[0].group;
-        chai.assert.isTrue(calls.every((call) => call.args[0].group == group));
+        assert.isTrue(calls.every((call) => call.args[0].group == group));
       });
 
       test('Var with block', function () {
@@ -252,7 +252,7 @@ suite('JSO Deserialization', function () {
           }
           return acc;
         }, 0);
-        chai.assert.equal(count, 1);
+        assert.equal(count, 1);
         assertEventFired(
           this.eventsFireStub,
           Blockly.Events.VarCreate,
@@ -260,7 +260,7 @@ suite('JSO Deserialization', function () {
             'varName': 'test',
             'varId': 'testId',
             'varType': '',
-            'type': eventUtils.VAR_CREATE,
+            'type': EventType.VAR_CREATE,
           },
           this.workspace.id,
         );
@@ -286,7 +286,7 @@ suite('JSO Deserialization', function () {
           assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {'recordUndo': false, 'type': eventUtils.BLOCK_CREATE},
+            {'recordUndo': false, 'type': EventType.BLOCK_CREATE},
             this.workspace.id,
             'testId',
           );
@@ -311,7 +311,7 @@ suite('JSO Deserialization', function () {
           assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {'recordUndo': true, 'type': eventUtils.BLOCK_CREATE},
+            {'recordUndo': true, 'type': EventType.BLOCK_CREATE},
             this.workspace.id,
             'testId',
           );
@@ -335,7 +335,7 @@ suite('JSO Deserialization', function () {
           assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {'group': 'my group', 'type': eventUtils.BLOCK_CREATE},
+            {'group': 'my group', 'type': EventType.BLOCK_CREATE},
             this.workspace.id,
             'testId',
           );
@@ -363,9 +363,7 @@ suite('JSO Deserialization', function () {
           Blockly.serialization.workspaces.load(state, this.workspace);
           const calls = this.eventsFireStub.getCalls();
           const group = calls[0].args[0].group;
-          chai.assert.isTrue(
-            calls.every((call) => call.args[0].group == group),
-          );
+          assert.isTrue(calls.every((call) => call.args[0].group == group));
         });
 
         test('With children', function () {
@@ -399,7 +397,7 @@ suite('JSO Deserialization', function () {
           assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {type: eventUtils.BLOCK_CREATE},
+            {type: EventType.BLOCK_CREATE},
             this.workspace.id,
             'id1',
           );
@@ -437,7 +435,7 @@ suite('JSO Deserialization', function () {
           assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {'recordUndo': true, 'type': eventUtils.BLOCK_CREATE},
+            {'recordUndo': true, 'type': EventType.BLOCK_CREATE},
             this.workspace.id,
             'testId',
           );
@@ -455,7 +453,7 @@ suite('JSO Deserialization', function () {
           assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {'group': 'my group', 'type': eventUtils.BLOCK_CREATE},
+            {'group': 'my group', 'type': EventType.BLOCK_CREATE},
             this.workspace.id,
             'testId',
           );
@@ -467,7 +465,7 @@ suite('JSO Deserialization', function () {
   suite('Exceptions', function () {
     setup(function () {
       this.assertThrows = function (state, error) {
-        chai.assert.throws(() => {
+        assert.throws(() => {
           Blockly.serialization.workspaces.load(state, this.workspace);
         }, error);
       };
@@ -748,7 +746,7 @@ suite('JSO Deserialization', function () {
     Blockly.serialization.registry.register('blocks', blocksSerializer);
     Blockly.serialization.registry.register('variables', variablesSerializer);
 
-    chai.assert.deepEqual(calls, [
+    assert.deepEqual(calls, [
       'third-clear',
       'second-clear',
       'first-clear',
@@ -786,7 +784,7 @@ suite('JSO Deserialization', function () {
 
       delete Blockly.Blocks['test_block'];
 
-      chai.assert.equal(block.someProperty, 'some value');
+      assert.equal(block.someProperty, 'some value');
     });
   });
 
@@ -816,7 +814,7 @@ suite('JSO Deserialization', function () {
 
       this.procedureSerializer.load(state, this.workspace);
 
-      chai.assert.isTrue(
+      assert.isTrue(
         spy.calledOnce,
         'Expected the loadState method to be called',
       );
@@ -841,7 +839,7 @@ suite('JSO Deserialization', function () {
 
       this.procedureSerializer.load(state, this.workspace);
 
-      chai.assert.isTrue(
+      assert.isTrue(
         spy.calledTwice,
         'Expected the loadState method to be called once for each parameter',
       );

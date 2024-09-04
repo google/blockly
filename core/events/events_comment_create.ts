@@ -11,20 +11,20 @@
  */
 // Former goog.module ID: Blockly.Events.CommentCreate
 
-import * as registry from '../registry.js';
 import type {WorkspaceComment} from '../comments/workspace_comment.js';
+import * as registry from '../registry.js';
 import * as comments from '../serialization/workspace_comments.js';
 import * as utilsXml from '../utils/xml.js';
+import type {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
-import * as eventUtils from './utils.js';
-import type {Workspace} from '../workspace.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners that a workspace comment was created.
  */
 export class CommentCreate extends CommentBase {
-  override type = eventUtils.COMMENT_CREATE;
+  override type = EventType.COMMENT_CREATE;
 
   /** The XML representation of the created workspace comment. */
   xml?: Element | DocumentFragment;
@@ -111,8 +111,4 @@ export interface CommentCreateJson extends CommentBaseJson {
   json: object;
 }
 
-registry.register(
-  registry.Type.EVENT,
-  eventUtils.COMMENT_CREATE,
-  CommentCreate,
-);
+registry.register(registry.Type.EVENT, EventType.COMMENT_CREATE, CommentCreate);

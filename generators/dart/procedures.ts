@@ -10,8 +10,8 @@
 
 // Former goog.module ID: Blockly.Dart.procedures
 
-import type {Block} from '../../core/block.js';
 import type {IfReturnBlock} from '../../blocks/procedures.js';
+import type {Block} from '../../core/block.js';
 import type {DartGenerator} from './dart_generator.js';
 import {Order} from './dart_generator.js';
 

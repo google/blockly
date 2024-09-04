@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IRenderedElement} from '../interfaces/i_rendered_element.js';
-import {WorkspaceSvg} from '../workspace_svg.js';
-import * as dom from '../utils/dom.js';
-import {Svg} from '../utils/svg.js';
-import * as layers from '../layers.js';
-import * as css from '../css.js';
-import {Coordinate} from '../utils/coordinate.js';
-import {Size} from '../utils/size.js';
 import * as browserEvents from '../browser_events.js';
+import * as css from '../css.js';
+import {IRenderedElement} from '../interfaces/i_rendered_element.js';
+import * as layers from '../layers.js';
 import * as touch from '../touch.js';
+import {Coordinate} from '../utils/coordinate.js';
+import * as dom from '../utils/dom.js';
+import {Size} from '../utils/size.js';
+import {Svg} from '../utils/svg.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 export class CommentView implements IRenderedElement {
   /** The root group element of the comment view. */
@@ -99,9 +99,12 @@ export class CommentView implements IRenderedElement {
   /** Whether this comment view has been disposed or not. */
   private disposed = false;
 
+  /** Size of this comment when the resize drag was initiated. */
+  private preResizeSize?: Size;
+
   constructor(private readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
-      'class': 'blocklyComment blocklyEditable',
+      'class': 'blocklyComment blocklyEditable blocklyDraggable',
     });
 
     this.highlightRect = this.createHighlightRect(this.svgRoot);
@@ -125,7 +128,7 @@ export class CommentView implements IRenderedElement {
     workspace.getLayerManager()?.append(this, layers.BLOCK);
 
     // Set size to the default size.
-    this.setSize(this.size);
+    this.setSizeWithoutFiringEvents(this.size);
 
     // Set default transform (including inverted scale for RTL).
     this.moveTo(new Coordinate(0, 0));
@@ -298,7 +301,7 @@ export class CommentView implements IRenderedElement {
    * Sets the size of the comment in workspace units, and updates the view
    * elements to reflect the new size.
    */
-  setSize(size: Size) {
+  setSizeWithoutFiringEvents(size: Size) {
     const topBarSize = this.topBarBackground.getBBox();
     const deleteSize = this.deleteIcon.getBBox();
     const foldoutSize = this.foldoutIcon.getBBox();
@@ -309,7 +312,6 @@ export class CommentView implements IRenderedElement {
       size,
       this.calcMinSize(topBarSize, foldoutSize, deleteSize),
     );
-    const oldSize = this.size;
     this.size = size;
 
     this.svgRoot.setAttribute('height', `${size.height}`);
@@ -328,7 +330,15 @@ export class CommentView implements IRenderedElement {
       resizeSize,
     );
     this.updateResizeHandlePosition(size, resizeSize);
+  }
 
+  /**
+   * Sets the size of the comment in workspace units, updates the view
+   * elements to reflect the new size, and triggers size change listeners.
+   */
+  setSize(size: Size) {
+    const oldSize = this.preResizeSize || this.size;
+    this.setSizeWithoutFiringEvents(size);
     this.onSizeChange(oldSize, this.size);
   }
 
@@ -472,7 +482,7 @@ export class CommentView implements IRenderedElement {
 
   /**
    * Triggers listeners when the size of the comment changes, either
-   * progrmatically or manually by the user.
+   * programmatically or manually by the user.
    */
   private onSizeChange(oldSize: Size, newSize: Size) {
     // Loop through listeners backwards in case they remove themselves.
@@ -512,6 +522,8 @@ export class CommentView implements IRenderedElement {
       return;
     }
 
+    this.preResizeSize = this.getSize();
+
     // TODO(#7926): Move this into a utils file.
     this.workspace.startDrag(
       e,
@@ -550,13 +562,18 @@ export class CommentView implements IRenderedElement {
       browserEvents.unbind(this.resizePointerMoveListener);
       this.resizePointerMoveListener = null;
     }
+    // When ending a resize drag, notify size change listeners to fire an event.
+    this.setSize(this.size);
+    this.preResizeSize = undefined;
   }
 
   /** Resizes the comment in response to a drag on the resize handle. */
   private onResizePointerMove(e: PointerEvent) {
     // TODO(#7926): Move this into a utils file.
-    const delta = this.workspace.moveDrag(e);
-    this.setSize(new Size(this.workspace.RTL ? -delta.x : delta.x, delta.y));
+    const size = this.workspace.moveDrag(e);
+    this.setSizeWithoutFiringEvents(
+      new Size(this.workspace.RTL ? -size.x : size.x, size.y),
+    );
   }
 
   /** Returns true if the comment is currently collapsed. */
@@ -573,7 +590,7 @@ export class CommentView implements IRenderedElement {
       dom.removeClass(this.svgRoot, 'blocklyCollapsed');
     }
     // Repositions resize handle and such.
-    this.setSize(this.size);
+    this.setSizeWithoutFiringEvents(this.size);
     this.onCollapse();
   }
 
@@ -682,7 +699,7 @@ export class CommentView implements IRenderedElement {
 
   /**
    * Triggers listeners when the text of the comment changes, either
-   * progrmatically or manually by the user.
+   * programmatically or manually by the user.
    */
   private onTextChange() {
     const oldText = this.text;
@@ -810,7 +827,6 @@ css.register(`
 }
 
 .blocklyCommentTopbarBackground {
-  cursor: grab;
   fill: var(--commentBorderColour);
   height: 24px;
 }

@@ -9,16 +9,16 @@
 import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import * as common from './common.js';
+import * as eventUtils from './events/utils.js';
 import {Gesture} from './gesture.js';
 import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
 import {isDeletable} from './interfaces/i_deletable.js';
-import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
-import {KeyCodes} from './utils/keycodes.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
 import {isDraggable} from './interfaces/i_draggable.js';
-import * as eventUtils from './events/utils.js';
+import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {Coordinate} from './utils/coordinate.js';
+import {KeyCodes} from './utils/keycodes.js';
 import {Rect} from './utils/rect.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Object holding the names of the default shortcut items.

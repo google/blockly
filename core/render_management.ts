@@ -5,8 +5,8 @@
  */
 
 import {BlockSvg} from './block_svg.js';
-import * as userAgent from './utils/useragent.js';
 import * as eventUtils from './events/utils.js';
+import * as userAgent from './utils/useragent.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /** The set of all blocks in need of rendering which don't have parents. */

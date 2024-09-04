@@ -12,14 +12,14 @@
 // Former goog.module ID: Blockly.Trashcan
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_trashcan_open.js';
-
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import {ComponentManager} from './component_manager.js';
 import {DeleteArea} from './delete_area.js';
 import type {Abstract} from './events/events_abstract.js';
-import type {BlockDelete} from './events/events_block_delete.js';
+import './events/events_trashcan_open.js';
+import {isBlockDelete} from './events/predicates.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
@@ -35,8 +35,8 @@ import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
-import {BlockInfo} from './utils/toolbox.js';
 import * as toolbox from './utils/toolbox.js';
+import {BlockInfo} from './utils/toolbox.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
@@ -247,7 +247,7 @@ export class Trashcan
     }
     this.workspace.getComponentManager().addComponent({
       component: this,
-      weight: 1,
+      weight: ComponentManager.ComponentWeight.TRASHCAN_WEIGHT,
       capabilities: [
         ComponentManager.Capability.AUTOHIDEABLE,
         ComponentManager.Capability.DELETE_AREA,
@@ -557,7 +557,7 @@ export class Trashcan
    * @param trashcanOpen Whether the flyout is opening.
    */
   private fireUiEvent(trashcanOpen: boolean) {
-    const uiEvent = new (eventUtils.get(eventUtils.TRASHCAN_OPEN))(
+    const uiEvent = new (eventUtils.get(EventType.TRASHCAN_OPEN))(
       trashcanOpen,
       this.workspace.id,
     );
@@ -604,30 +604,22 @@ export class Trashcan
   private onDelete(event: Abstract) {
     if (
       this.workspace.options.maxTrashcanContents <= 0 ||
-      event.type !== eventUtils.BLOCK_DELETE
+      !isBlockDelete(event) ||
+      event.wasShadow
     ) {
       return;
     }
-    const deleteEvent = event as BlockDelete;
-    if (event.type === eventUtils.BLOCK_DELETE && !deleteEvent.wasShadow) {
-      if (!deleteEvent.oldJson) {
-        throw new Error('Encountered a delete event without proper oldJson');
-      }
-      const cleanedJson = JSON.stringify(
-        this.cleanBlockJson(deleteEvent.oldJson),
-      );
-      if (this.contents.includes(cleanedJson)) {
-        return;
-      }
-      this.contents.unshift(cleanedJson);
-      while (
-        this.contents.length > this.workspace.options.maxTrashcanContents
-      ) {
-        this.contents.pop();
-      }
-
-      this.setMinOpenness(HAS_BLOCKS_LID_ANGLE);
+    if (!event.oldJson) {
+      throw new Error('Encountered a delete event without proper oldJson');
     }
+    const cleanedJson = JSON.stringify(this.cleanBlockJson(event.oldJson));
+    if (this.contents.includes(cleanedJson)) return;
+    this.contents.unshift(cleanedJson);
+    while (this.contents.length > this.workspace.options.maxTrashcanContents) {
+      this.contents.pop();
+    }
+
+    this.setMinOpenness(HAS_BLOCKS_LID_ANGLE);
   }
 
   /**

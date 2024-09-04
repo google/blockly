@@ -507,7 +507,7 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
 
   document.getElementById('helpButton').addEventListener('click',
       function() {
-        open('https://developers.google.com/blockly/custom-blocks/block-factory',
+        open('https://developers.google.com/blockly/guides/create-custom-blocks/legacy-blockly-developer-tools',
              'BlockFactoryHelp');
       });
 

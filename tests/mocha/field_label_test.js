@@ -5,6 +5,8 @@
  */
 
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
+import {createTestBlock} from './test_helpers/block_definitions.js';
 import {
   assertFieldValue,
   runConstructorSuiteTests,
@@ -15,7 +17,6 @@ import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
-import {createTestBlock} from './test_helpers/block_definitions.js';
 
 suite('Label Fields', function () {
   setup(function () {
@@ -133,7 +134,7 @@ suite('Label Fields', function () {
         FIELD_TEXT_BASELINE_Y: 13,
       };
       labelField.initView();
-      chai.assert.isTrue(
+      assert.isTrue(
         Blockly.utils.dom.hasClass(labelField.textElement_, cssClass),
       );
     }
@@ -147,7 +148,7 @@ suite('Label Fields', function () {
         FIELD_TEXT_BASELINE_Y: 13,
       };
       labelField.initView();
-      chai.assert.isFalse(
+      assert.isFalse(
         Blockly.utils.dom.hasClass(labelField.textElement_, cssClass),
       );
     }
@@ -201,7 +202,7 @@ suite('Label Fields', function () {
         field.initView();
         field.setClass('testClass');
         // Don't call assertHasClass b/c we don't want to re-initialize.
-        chai.assert.isTrue(
+        assert.isTrue(
           Blockly.utils.dom.hasClass(field.textElement_, 'testClass'),
         );
       });
@@ -216,7 +217,7 @@ suite('Label Fields', function () {
         });
         assertHasClass(field, 'testClass');
         field.setClass(null);
-        chai.assert.isFalse(
+        assert.isFalse(
           Blockly.utils.dom.hasClass(field.textElement_, 'testClass'),
         );
       });

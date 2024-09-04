@@ -5,6 +5,7 @@
  */
 
 import * as Blockly from '../../../build/src/core/blockly.js';
+import {assert} from '../../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -27,7 +28,7 @@ suite('Loops', function () {
         this.workspace,
       );
       this.clock.runAll();
-      chai.assert.isFalse(
+      assert.isFalse(
         breakBlock.isEnabled(),
         'Expected the break block to be disabled',
       );
@@ -46,7 +47,7 @@ suite('Loops', function () {
         .getInput('DO')
         .connection.connect(breakBlock.previousConnection);
       this.clock.runAll();
-      chai.assert.isTrue(
+      assert.isTrue(
         breakBlock.isEnabled(),
         'Expected the break block to be enabled',
       );

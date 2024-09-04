@@ -10,16 +10,18 @@ import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import {MANUALLY_DISABLED} from '../constants.js';
+import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../inputs/input_types.js';
 import {isSerializable} from '../interfaces/i_serializable.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import * as registry from '../registry.js';
+import * as renderManagement from '../render_management.js';
 import * as utilsXml from '../utils/xml.js';
+import {VariableModel} from '../variable_model.js';
+import * as Variables from '../variables.js';
 import type {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
-import * as renderManagement from '../render_management.js';
-
 import {
   BadConnectionCheck,
   MissingBlockType,
@@ -29,8 +31,6 @@ import {
 } from './exceptions.js';
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
-import * as Variables from '../variables.js';
-import {VariableModel} from '../variable_model.js';
 
 // TODO(#5160): Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
@@ -433,7 +433,7 @@ export function appendInternal(
   if (eventUtils.isEnabled()) {
     // Block events come after var events, in case they refer to newly created
     // variables.
-    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
+    eventUtils.fire(new (eventUtils.get(EventType.BLOCK_CREATE))(block));
   }
   eventUtils.setGroup(existingGroup);
   eventUtils.setRecordUndo(prevRecordUndo);
@@ -513,9 +513,7 @@ function checkNewVariables(
     // Fire a VarCreate event for each (if any) new variable created.
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
-      eventUtils.fire(
-        new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable),
-      );
+      eventUtils.fire(new (eventUtils.get(EventType.VAR_CREATE))(thisVariable));
     }
   }
 }

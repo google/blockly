@@ -5,16 +5,17 @@
  */
 
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
+import {
+  createTestBlock,
+  defineRowBlock,
+} from './test_helpers/block_definitions.js';
 import {
   assertFieldValue,
   runConstructorSuiteTests,
   runFromJsonSuiteTests,
   runSetValueTests,
 } from './test_helpers/fields.js';
-import {
-  createTestBlock,
-  defineRowBlock,
-} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -228,7 +229,7 @@ suite('Text Input Fields', function () {
         this.assertSpellcheck = function (field, value) {
           this.prepField(field);
           field.showEditor_();
-          chai.assert.equal(
+          assert.equal(
             field.htmlInput_.getAttribute('spellcheck'),
             value.toString(),
           );
@@ -266,7 +267,7 @@ suite('Text Input Fields', function () {
         this.prepField(field);
         field.showEditor_();
         field.setSpellcheck(false);
-        chai.assert.equal(field.htmlInput_.getAttribute('spellcheck'), 'false');
+        assert.equal(field.htmlInput_.getAttribute('spellcheck'), 'false');
       });
     });
   });
@@ -281,7 +282,7 @@ suite('Text Input Fields', function () {
         const field = new Blockly.FieldTextInput(value);
         block.getInput('INPUT').appendField(field, 'TEXT');
         const jso = Blockly.serialization.blocks.save(block);
-        chai.assert.deepEqual(jso['fields'], {'TEXT': value});
+        assert.deepEqual(jso['fields'], {'TEXT': value});
       };
     });
 

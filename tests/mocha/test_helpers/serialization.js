@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../../node_modules/chai/chai.js';
 import {runTestCases} from './common.js';
 
 /**
@@ -89,7 +90,7 @@ export const runSerializationTestSuite = (testCases) => {
         this.clock.runAll();
         const generatedJson = Blockly.serialization.blocks.save(block);
         const expectedJson = testCase.expectedJson || testCase.json;
-        chai.assert.deepEqual(generatedJson, expectedJson);
+        assert.deepEqual(generatedJson, expectedJson);
       } else {
         const block = Blockly.Xml.domToBlock(
           Blockly.utils.xml.textToDom(testCase.xml),
@@ -100,7 +101,7 @@ export const runSerializationTestSuite = (testCases) => {
           Blockly.Xml.blockToDom(block),
         );
         const expectedXml = testCase.expectedXml || testCase.xml;
-        chai.assert.equal(generatedXml, expectedXml);
+        assert.equal(generatedXml, expectedXml);
       }
     };
   };

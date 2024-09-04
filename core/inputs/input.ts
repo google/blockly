@@ -21,8 +21,8 @@ import type {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
 import * as fieldRegistry from '../field_registry.js';
 import type {RenderedConnection} from '../rendered_connection.js';
-import {inputTypes} from './input_types.js';
 import {Align} from './align.js';
+import {inputTypes} from './input_types.js';
 
 /** Class for an input with optional fields. */
 export class Input {

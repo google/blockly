@@ -5,13 +5,13 @@
  */
 
 import {
+  assertEventFired,
+  createChangeListenerSpy,
+} from './test_helpers/events.js';
+import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
-import {
-  createChangeListenerSpy,
-  assertEventFired,
-} from './test_helpers/events.js';
 
 suite('Workspace comment', function () {
   setup(function () {
@@ -76,6 +76,28 @@ suite('Workspace comment', function () {
           commentId: this.renderedComment.id,
           oldCoordinate_: {x: 0, y: 0},
           newCoordinate_: {x: 42, y: 42},
+        },
+        this.workspace.id,
+      );
+    });
+
+    test('resize events are fired when a comment is resized', function () {
+      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
+        this.workspace,
+      );
+      const spy = createChangeListenerSpy(this.workspace);
+
+      this.renderedComment.setSize(new Blockly.utils.Size(300, 200));
+
+      this.clock.runAll();
+
+      assertEventFired(
+        spy,
+        Blockly.Events.CommentResize,
+        {
+          commentId: this.renderedComment.id,
+          oldSize: {width: 120, height: 100},
+          newSize: {width: 300, height: 200},
         },
         this.workspace.id,
       );

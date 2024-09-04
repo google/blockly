@@ -12,17 +12,16 @@ import {InsertionMarkerManager} from '../../insertion_marker_manager.js';
 import type {Marker} from '../../keyboard_nav/marker.js';
 import type {RenderedConnection} from '../../rendered_connection.js';
 import type {BlockStyle} from '../../theme.js';
+import * as deprecation from '../../utils/deprecation.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
 import * as blockRendering from '../common/block_rendering.js';
 import type {RenderInfo as BaseRenderInfo} from '../common/info.js';
 import {Renderer as BaseRenderer} from '../common/renderer.js';
-
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';
 import {RenderInfo} from './info.js';
 import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
-import * as deprecation from '../../utils/deprecation.js';
 
 /**
  * The zelos renderer. This renderer emulates Scratch-style and MakeCode-style

@@ -23,35 +23,36 @@ import * as common from './common.js';
 import {Connection} from './connection.js';
 import {ConnectionType} from './connection_type.js';
 import * as constants from './constants.js';
-import {DuplicateIconType} from './icons/exceptions.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BlockChange} from './events/events_block_change.js';
 import type {BlockMove} from './events/events_block_move.js';
-import * as deprecation from './utils/deprecation.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import * as Extensions from './extensions.js';
 import type {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {Input} from './inputs/input.js';
-import {Align} from './inputs/align.js';
-import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
-import {type IIcon} from './interfaces/i_icon.js';
-import {isCommentIcon} from './interfaces/i_comment_icon.js';
+import {DuplicateIconType} from './icons/exceptions.js';
+import {IconType} from './icons/icon_types.js';
 import type {MutatorIcon} from './icons/mutator_icon.js';
+import {Align} from './inputs/align.js';
+import {DummyInput} from './inputs/dummy_input.js';
+import {EndRowInput} from './inputs/end_row_input.js';
+import {Input} from './inputs/input.js';
+import {StatementInput} from './inputs/statement_input.js';
+import {ValueInput} from './inputs/value_input.js';
+import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
+import {isCommentIcon} from './interfaces/i_comment_icon.js';
+import {type IIcon} from './interfaces/i_icon.js';
+import * as registry from './registry.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
+import * as deprecation from './utils/deprecation.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as parsing from './utils/parsing.js';
-import * as registry from './registry.js';
 import {Size} from './utils/size.js';
 import type {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
-import {DummyInput} from './inputs/dummy_input.js';
-import {EndRowInput} from './inputs/end_row_input.js';
-import {ValueInput} from './inputs/value_input.js';
-import {StatementInput} from './inputs/statement_input.js';
-import {IconType} from './icons/icon_types.js';
 
 /**
  * Class for one block.
@@ -143,24 +144,31 @@ export class Block implements IASTNodeLocation {
   suppressPrefixSuffix: boolean | null = false;
 
   /**
-   * An optional property for declaring developer variables.  Return a list of
-   * variable names for use by generators.  Developer variables are never
-   * shown to the user, but are declared as global variables in the generated
-   * code.
+   * An optional method for declaring developer variables, to be used
+   * by generators.  Developer variables are never shown to the user,
+   * but are declared as global variables in the generated code.
+   *
+   * @returns a list of developer variable names.
    */
   getDeveloperVariables?: () => string[];
 
   /**
-   * An optional function that reconfigures the block based on the contents of
-   * the mutator dialog.
+   * An optional method that reconfigures the block based on the
+   * contents of the mutator dialog.
+   *
+   * @param rootBlock The root block in the mutator flyout.
    */
-  compose?: (p1: Block) => void;
+  compose?: (rootBlock: Block) => void;
 
   /**
-   * An optional function that populates the mutator's dialog with
-   * this block's components.
+   * An optional function that populates the mutator flyout with
+   * blocks representing this block's configuration.
+   *
+   * @param workspace The mutator flyout's workspace.
+   * @returns The root block created in the flyout's workspace.
    */
-  decompose?: (p1: Workspace) => Block;
+  decompose?: (workspace: Workspace) => Block;
+
   id: string;
   outputConnection: Connection | null = null;
   nextConnection: Connection | null = null;
@@ -216,7 +224,7 @@ export class Block implements IASTNodeLocation {
   /**
    * String for block help, or function that returns a URL. Null for no help.
    */
-  helpUrl: string | Function | null = null;
+  helpUrl: string | (() => string) | null = null;
 
   /** A bound callback function to use when the parent workspace changes. */
   private onchangeWrapper_: ((p1: Abstract) => void) | null = null;
@@ -297,7 +305,7 @@ export class Block implements IASTNodeLocation {
 
       // Fire a create event.
       if (eventUtils.isEnabled()) {
-        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(this));
+        eventUtils.fire(new (eventUtils.get(EventType.BLOCK_CREATE))(this));
       }
     } finally {
       eventUtils.setGroup(existingGroup);
@@ -332,7 +340,7 @@ export class Block implements IASTNodeLocation {
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
       // Constructing the delete event is costly. Only perform if necessary.
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
+      eventUtils.fire(new (eventUtils.get(EventType.BLOCK_DELETE))(this));
     }
     this.workspace.removeTopBlock(this);
     this.disposeInternal();
@@ -716,7 +724,7 @@ export class Block implements IASTNodeLocation {
     }
 
     // Check that block is connected to new parent if new parent is not null and
-    //    that block is not connected to superior one if new parent is null.
+    // that block is not connected to superior one if new parent is null.
     const targetBlock =
       (this.previousConnection && this.previousConnection.targetBlock()) ||
       (this.outputConnection && this.outputConnection.targetBlock());
@@ -734,14 +742,13 @@ export class Block implements IASTNodeLocation {
     }
 
     // This block hasn't actually moved on-screen, so there's no need to
-    // update
-    //     its connection locations.
+    // update its connection locations.
     if (this.parentBlock_) {
       // Remove this block from the old parent's child list.
       arrayUtils.removeElem(this.parentBlock_.childBlocks_, this);
     } else {
-      // New parent must be non-null so remove this block from the workspace's
-      //     list of top-most blocks.
+      // New parent must be non-null so remove this block from the
+      // workspace's list of top-most blocks.
       this.workspace.removeTopBlock(this);
     }
 
@@ -991,7 +998,7 @@ export class Block implements IASTNodeLocation {
    * @param url URL string for block help, or function that returns a URL.  Null
    *     for no help.
    */
-  setHelpUrl(url: string | Function) {
+  setHelpUrl(url: string | (() => string)) {
     this.helpUrl = url;
   }
 
@@ -1323,7 +1330,7 @@ export class Block implements IASTNodeLocation {
   setInputsInline(newBoolean: boolean) {
     if (this.inputsInline !== newBoolean) {
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_CHANGE))(
           this,
           'inline',
           null,
@@ -1460,13 +1467,32 @@ export class Block implements IASTNodeLocation {
    *     update whether the block is currently disabled for this reason.
    */
   setDisabledReason(disabled: boolean, reason: string): void {
+    // Workspaces that were serialized before the reason for being disabled
+    // could be specified may have blocks that are disabled without a known
+    // reason. On being loaded, these blocks will default to having the manually
+    // disabled reason. However, if the user isn't allowed to manually disable
+    // or enable blocks, then this manually disabled reason cannot be removed.
+    // For backward compatibility with these legacy workspaces, when removing
+    // any disabled reason and the workspace does not allow manually disabling
+    // but the block is manually disabled, then remove the manually disabled
+    // reason in addition to the more specific reason. For example, when an
+    // orphaned block is no longer orphaned, the block should be enabled again.
+    if (
+      !disabled &&
+      !this.workspace.options.disable &&
+      this.hasDisabledReason(constants.MANUALLY_DISABLED) &&
+      reason != constants.MANUALLY_DISABLED
+    ) {
+      this.setDisabledReason(false, constants.MANUALLY_DISABLED);
+    }
+
     if (this.disabledReasons.has(reason) !== disabled) {
       if (disabled) {
         this.disabledReasons.add(reason);
       } else {
         this.disabledReasons.delete(reason);
       }
-      const blockChangeEvent = new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+      const blockChangeEvent = new (eventUtils.get(EventType.BLOCK_CHANGE))(
         this,
         'disabled',
         /* name= */ null,
@@ -1534,7 +1560,7 @@ export class Block implements IASTNodeLocation {
   setCollapsed(collapsed: boolean) {
     if (this.collapsed_ !== collapsed) {
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_CHANGE))(
           this,
           'collapsed',
           null,
@@ -1839,7 +1865,7 @@ export class Block implements IASTNodeLocation {
         const rawValue = json['colour'];
         try {
           this.setColour(rawValue);
-        } catch (e) {
+        } catch {
           console.warn(warningPrefix + 'Illegal colour value: ', rawValue);
         }
       }
@@ -1856,7 +1882,7 @@ export class Block implements IASTNodeLocation {
     const blockStyleName = json['style'];
     try {
       this.setStyle(blockStyleName);
-    } catch (styleError) {
+    } catch {
       console.warn(warningPrefix + 'Style does not exist: ', blockStyleName);
     }
   }
@@ -2333,7 +2359,7 @@ export class Block implements IASTNodeLocation {
     }
 
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+      new (eventUtils.get(EventType.BLOCK_CHANGE))(
         this,
         'comment',
         null,
@@ -2433,10 +2459,8 @@ export class Block implements IASTNodeLocation {
     if (this.parentBlock_) {
       throw Error('Block has parent');
     }
-    const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
-      this,
-    ) as BlockMove;
-    reason && event.setReason(reason);
+    const event = new (eventUtils.get(EventType.BLOCK_MOVE))(this) as BlockMove;
+    if (reason) event.setReason(reason);
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);

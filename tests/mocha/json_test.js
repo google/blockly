@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   addMessageToCleanup,
   sharedTestSetup,
@@ -35,16 +36,16 @@ suite('JSON Block Definitions', function () {
         block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       });
 
-      chai.assert.isNotNull(block);
-      chai.assert.equal(BLOCK_TYPE, block.type);
+      assert.isNotNull(block);
+      assert.equal(BLOCK_TYPE, block.type);
     });
 
     test('Null or undefined type id', function () {
       const BLOCK_TYPE1 = 'test_json_before_bad_blocks';
       const BLOCK_TYPE2 = 'test_json_after_bad_blocks';
 
-      chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
-      chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
+      assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
+      assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
       const blockTypeCount = Object.keys(Blockly.Blocks).length;
 
       assertWarnings(() => {
@@ -55,23 +56,23 @@ suite('JSON Block Definitions', function () {
           {'type': BLOCK_TYPE2},
         ]);
       }, [/missing a type attribute/, /missing a type attribute/]);
-      chai.assert.isNotNull(
+      assert.isNotNull(
         Blockly.Blocks[BLOCK_TYPE1],
         'Block before bad blocks should be defined.',
       );
-      chai.assert.isNotNull(
+      assert.isNotNull(
         Blockly.Blocks[BLOCK_TYPE2],
         'Block after bad blocks should be defined.',
       );
-      chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
+      assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
     });
 
     test('Null item', function () {
       const BLOCK_TYPE1 = 'test_block_before_null';
       const BLOCK_TYPE2 = 'test_block_after_null';
 
-      chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
-      chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
+      assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
+      assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
       const blockTypeCount = Object.keys(Blockly.Blocks).length;
 
       assertWarnings(() => {
@@ -87,23 +88,23 @@ suite('JSON Block Definitions', function () {
           },
         ]);
       }, /is null/);
-      chai.assert.isNotNull(
+      assert.isNotNull(
         Blockly.Blocks[BLOCK_TYPE1],
         'Block before null in array should be defined.',
       );
-      chai.assert.isNotNull(
+      assert.isNotNull(
         Blockly.Blocks[BLOCK_TYPE2],
         'Block after null in array should be defined.',
       );
-      chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
+      assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
     });
 
     test('Undefined item', function () {
       const BLOCK_TYPE1 = 'test_block_before_undefined';
       const BLOCK_TYPE2 = 'test_block_after_undefined';
 
-      chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
-      chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
+      assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
+      assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
       const blockTypeCount = Object.keys(Blockly.Blocks).length;
       assertWarnings(() => {
         Blockly.defineBlocksWithJsonArray([
@@ -118,15 +119,15 @@ suite('JSON Block Definitions', function () {
           },
         ]);
       }, /is undefined/);
-      chai.assert.isNotNull(
+      assert.isNotNull(
         Blockly.Blocks[BLOCK_TYPE1],
         'Block before undefined in array should be defined.',
       );
-      chai.assert.isNotNull(
+      assert.isNotNull(
         Blockly.Blocks[BLOCK_TYPE2],
         'Block after undefined in array should be defined.',
       );
-      chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
+      assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
     });
 
     test('message0 creates input', function () {
@@ -140,11 +141,11 @@ suite('JSON Block Definitions', function () {
       ]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
-      chai.assert.equal(block.inputList.length, 1);
-      chai.assert.equal(block.inputList[0].fieldRow.length, 1);
+      assert.equal(block.inputList.length, 1);
+      assert.equal(block.inputList[0].fieldRow.length, 1);
       const textField = block.inputList[0].fieldRow[0];
-      chai.assert.equal(Blockly.FieldLabel, textField.constructor);
-      chai.assert.equal(MESSAGE0, textField.getText());
+      assert.equal(Blockly.FieldLabel, textField.constructor);
+      assert.equal(MESSAGE0, textField.getText());
     });
 
     test('message1 and message0 creates two inputs', function () {
@@ -161,17 +162,17 @@ suite('JSON Block Definitions', function () {
       ]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
-      chai.assert.equal(block.inputList.length, 2);
+      assert.equal(block.inputList.length, 2);
 
-      chai.assert.equal(block.inputList[0].fieldRow.length, 1);
+      assert.equal(block.inputList[0].fieldRow.length, 1);
       const firstTextField = block.inputList[0].fieldRow[0];
-      chai.assert.equal(Blockly.FieldLabel, firstTextField.constructor);
-      chai.assert.equal(MESSAGE0, firstTextField.getText());
+      assert.equal(Blockly.FieldLabel, firstTextField.constructor);
+      assert.equal(MESSAGE0, firstTextField.getText());
 
-      chai.assert.equal(block.inputList[1].fieldRow.length, 1);
+      assert.equal(block.inputList[1].fieldRow.length, 1);
       const secondTextField = block.inputList[1].fieldRow[0];
-      chai.assert.equal(Blockly.FieldLabel, secondTextField.constructor);
-      chai.assert.equal(MESSAGE1, secondTextField.getText());
+      assert.equal(Blockly.FieldLabel, secondTextField.constructor);
+      assert.equal(MESSAGE1, secondTextField.getText());
     });
 
     test('Message string is dereferenced', function () {
@@ -189,11 +190,11 @@ suite('JSON Block Definitions', function () {
       ]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
-      chai.assert.equal(block.inputList.length, 1);
-      chai.assert.equal(block.inputList[0].fieldRow.length, 1);
+      assert.equal(block.inputList.length, 1);
+      assert.equal(block.inputList[0].fieldRow.length, 1);
       const textField = block.inputList[0].fieldRow[0];
-      chai.assert.equal(Blockly.FieldLabel, textField.constructor);
-      chai.assert.equal(MESSAGE, textField.getText());
+      assert.equal(Blockly.FieldLabel, textField.constructor);
+      assert.equal(MESSAGE, textField.getText());
     });
 
     test('Dropdown', function () {
@@ -221,18 +222,18 @@ suite('JSON Block Definitions', function () {
       ]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
-      chai.assert.equal(block.inputList.length, 1);
-      chai.assert.equal(block.inputList[0].fieldRow.length, 1);
+      assert.equal(block.inputList.length, 1);
+      assert.equal(block.inputList[0].fieldRow.length, 1);
       const dropdown = block.inputList[0].fieldRow[0];
-      chai.assert.equal(dropdown, block.getField(FIELD_NAME));
-      chai.assert.equal(Blockly.FieldDropdown, dropdown.constructor);
-      chai.assert.equal(VALUE0, dropdown.getValue());
+      assert.equal(dropdown, block.getField(FIELD_NAME));
+      assert.equal(Blockly.FieldDropdown, dropdown.constructor);
+      assert.equal(VALUE0, dropdown.getValue());
 
       const options = dropdown.getOptions();
-      chai.assert.equal(LABEL0, options[0][0]);
-      chai.assert.equal(VALUE0, options[0][1]);
-      chai.assert.equal(LABEL1, options[1][0]);
-      chai.assert.equal(VALUE1, options[1][1]);
+      assert.equal(LABEL0, options[0][0]);
+      assert.equal(VALUE0, options[0][1]);
+      assert.equal(LABEL1, options[1][0]);
+      assert.equal(VALUE1, options[1][1]);
     });
 
     test('Dropdown with images', function () {
@@ -281,34 +282,34 @@ suite('JSON Block Definitions', function () {
       ]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
-      chai.assert.equal(block.inputList.length, 1);
-      chai.assert.equal(block.inputList[0].fieldRow.length, 1);
+      assert.equal(block.inputList.length, 1);
+      assert.equal(block.inputList[0].fieldRow.length, 1);
       const dropdown = block.inputList[0].fieldRow[0];
-      chai.assert.equal(dropdown, block.getField(FIELD_NAME));
-      chai.assert.equal(Blockly.FieldDropdown, dropdown.constructor);
-      chai.assert.equal(VALUE0, dropdown.getValue());
+      assert.equal(dropdown, block.getField(FIELD_NAME));
+      assert.equal(Blockly.FieldDropdown, dropdown.constructor);
+      assert.equal(VALUE0, dropdown.getValue());
 
       function assertImageEquals(actualImage, expectedImage) {
-        chai.assert.equal(actualImage.width, expectedImage.width);
-        chai.assert.equal(actualImage.height, expectedImage.height);
-        chai.assert.equal(actualImage.src, expectedImage.src);
+        assert.equal(actualImage.width, expectedImage.width);
+        assert.equal(actualImage.height, expectedImage.height);
+        assert.equal(actualImage.src, expectedImage.src);
       }
 
       const options = dropdown.getOptions();
       const image0 = options[0][0];
       assertImageEquals(IMAGE0, image0);
-      chai.assert.equal(IMAGE0.alt, image0.alt);
-      chai.assert.equal(options[0][1], VALUE0);
+      assert.equal(IMAGE0.alt, image0.alt);
+      assert.equal(options[0][1], VALUE0);
 
       const image1 = options[1][0];
       assertImageEquals(IMAGE1, image1);
-      chai.assert.equal(image1.alt, IMAGE1_ALT_TEXT); // Via Msg reference
-      chai.assert.equal(VALUE1, options[1][1]);
+      assert.equal(image1.alt, IMAGE1_ALT_TEXT); // Via Msg reference
+      assert.equal(VALUE1, options[1][1]);
 
       const image2 = options[2][0];
       assertImageEquals(IMAGE1, image1);
-      chai.assert.notExists(image2.alt); // No alt specified.
-      chai.assert.equal(VALUE2, options[2][1]);
+      assert.notExists(image2.alt); // No alt specified.
+      assert.equal(VALUE2, options[2][1]);
     });
   });
 });

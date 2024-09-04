@@ -7,7 +7,6 @@
 // Former goog.module ID: Blockly.blockRendering.InputRow
 
 import type {ConstantProvider} from '../common/constants.js';
-
 import {ExternalValueInput} from './external_value_input.js';
 import {InputConnection} from './input_connection.js';
 import {Row} from './row.js';

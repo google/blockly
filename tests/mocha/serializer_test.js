@@ -5,6 +5,7 @@
  */
 
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   TestCase,
   TestSuite,
@@ -2067,7 +2068,7 @@ const runSerializerTestSuite = (serializer, deserializer, testSuite) => {
         workspaces.load(deserializer(save), this.workspace);
       }
       const newXml = Blockly.Xml.workspaceToDom(this.workspace);
-      chai.assert.equal(Blockly.Xml.domToText(newXml), test.xml);
+      assert.equal(Blockly.Xml.domToText(newXml), test.xml);
     };
   };
 

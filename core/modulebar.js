@@ -145,6 +145,8 @@ ModuleBar.prototype.init = function() {
   this.ulContainer_ = document.createElement("ul");
   this.ulContainer_.className = "blocklyModuleBarUl";
 
+  this.ulContainer_.addEventListener("scroll", this.needShowShadow_.bind(this));
+
   this.ulWrapper_ = document.createElement("div");
   this.ulWrapper_.className = "blocklyModuleBarUlWrapper";
   this.ulWrapper_.appendChild(this.ulContainer_);
@@ -734,6 +736,8 @@ ModuleBar.prototype.getUlWrapElement = function() {
  */
 ModuleBar.prototype.dispose = function() {
   this.detachEvents_();
+
+  this.ulContainer_.removeEventListener("scroll", this.needShowShadow_);
 
   this.workspace_.getThemeManager().unsubscribe(this.htmlContainer_);
   utilsDom.removeNode(this.htmlContainer_);

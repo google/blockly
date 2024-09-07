@@ -11,6 +11,7 @@ import * as layers from '../layers.js';
 import * as touch from '../touch.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
+import * as drag from '../utils/drag.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
@@ -524,8 +525,8 @@ export class CommentView implements IRenderedElement {
 
     this.preResizeSize = this.getSize();
 
-    // TODO(#7926): Move this into a utils file.
-    this.workspace.startDrag(
+    drag.start(
+      this.workspace,
       e,
       new Coordinate(
         this.workspace.RTL ? -this.getSize().width : this.getSize().width,
@@ -569,8 +570,7 @@ export class CommentView implements IRenderedElement {
 
   /** Resizes the comment in response to a drag on the resize handle. */
   private onResizePointerMove(e: PointerEvent) {
-    // TODO(#7926): Move this into a utils file.
-    const size = this.workspace.moveDrag(e);
+    const size = drag.move(this.workspace, e);
     this.setSizeWithoutFiringEvents(
       new Size(this.workspace.RTL ? -size.x : size.x, size.y),
     );

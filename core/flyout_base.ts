@@ -711,9 +711,6 @@ export abstract class Flyout
 
     this.filterForCapacity();
 
-    // Correctly position the flyout's scrollbar when it opens.
-    this.position();
-
     // Listen for block change events, and reflow the flyout in response. This
     // accommodates e.g. resizing a non-autoclosing flyout in response to the
     // user typing long strings into fields on the blocks in the flyout.

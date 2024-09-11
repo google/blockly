@@ -402,7 +402,14 @@ export abstract class Flyout
         this.wheel_,
       ),
     );
-    this.filterWrapper = this.filterForCapacity.bind(this);
+    this.filterWrapper = (event) => {
+      if (
+        event.type === eventUtils.BLOCK_CREATE ||
+        event.type === eventUtils.BLOCK_DELETE
+      ) {
+        this.filterForCapacity();
+      }
+    };
     this.targetWorkspace.addChangeListener(this.filterWrapper);
 
     // Dragging the flyout up and down.
@@ -704,10 +711,17 @@ export abstract class Flyout
 
     this.filterForCapacity();
 
-    // Correctly position the flyout's scrollbar when it opens.
-    this.position();
-
-    this.reflowWrapper = this.reflow.bind(this);
+    // Listen for block change events, and reflow the flyout in response. This
+    // accommodates e.g. resizing a non-autoclosing flyout in response to the
+    // user typing long strings into fields on the blocks in the flyout.
+    this.reflowWrapper = (event) => {
+      if (
+        event.type === eventUtils.BLOCK_CHANGE ||
+        event.type === eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE
+      ) {
+        this.reflow();
+      }
+    };
     this.workspace_.addChangeListener(this.reflowWrapper);
     this.emptyRecycledBlocks();
   }

@@ -210,7 +210,13 @@ export function getTextWidth(textElement: SVGTextElement): number {
 
   // Attempt to compute fetch the width of the SVG text element.
   try {
-    width = textElement.getComputedTextLength();
+    const style = window.getComputedStyle(textElement);
+    width = getFastTextWidthWithSizeString(
+      textElement,
+      style.fontSize,
+      style.fontWeight,
+      style.fontFamily,
+    );
   } catch (e) {
     // In other cases where we fail to get the computed text. Instead, use an
     // approximation and do not cache the result. At some later point in time

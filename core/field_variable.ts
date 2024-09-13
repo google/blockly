@@ -572,15 +572,23 @@ export class FieldVariable extends FieldDropdown {
     }
     const name = this.getText();
     let variableModelList: IVariableModel<IVariableState>[] = [];
-    if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
+    const sourceBlock = this.getSourceBlock();
+    if (sourceBlock && !sourceBlock.isDeadOrDying()) {
+      const workspace = sourceBlock.workspace;
       const variableTypes = this.getVariableTypes();
       // Get a copy of the list, so that adding rename and new variable options
       // doesn't modify the workspace's list.
       for (let i = 0; i < variableTypes.length; i++) {
         const variableType = variableTypes[i];
-        const variables =
-          this.sourceBlock_.workspace.getVariablesOfType(variableType);
+        const variables = workspace.getVariablesOfType(variableType);
         variableModelList = variableModelList.concat(variables);
+        if (workspace.isFlyout) {
+          variableModelList = variableModelList.concat(
+            workspace
+              .getPotentialVariableMap()
+              ?.getVariablesOfType(variableType) ?? [],
+          );
+        }
       }
     }
     variableModelList.sort(Variables.compareByName);

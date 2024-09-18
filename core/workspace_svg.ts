@@ -1049,8 +1049,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   resize() {
     if (this.toolbox_) {
       this.toolbox_.position();
-    }
-    if (this.flyout) {
+    } else if (this.flyout) {
       this.flyout.position();
     }
 

@@ -27,5 +27,5 @@ export interface IFlyoutInflater {
    *
    * @param element The flyout element to dispose of.
    */
-  disposeElement(element: IBoundedElement);
+  disposeElement(element: IBoundedElement): void;
 }

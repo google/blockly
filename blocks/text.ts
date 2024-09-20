@@ -216,7 +216,30 @@ const GET_SUBSTRING_BLOCK = {
     this.appendValueInput('STRING')
       .setCheck('String')
       .appendField(Msg['TEXT_GET_SUBSTRING_INPUT_IN_TEXT']);
+    const createMenu = (n: 1 | 2): FieldDropdown => {
+      const menu = fieldRegistry.fromJson({
+        type: 'field_dropdown',
+        options:
+          this[('WHERE_OPTIONS_' + n) as 'WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2'],
+      }) as FieldDropdown;
+      menu.setValidator(
+        /** @param value The input value. */
+        function (this: FieldDropdown, value: any): null | undefined {
+          const oldValue: string | null = this.getValue();
+          const oldAt = oldValue === 'FROM_START' || oldValue === 'FROM_END';
+          const newAt = value === 'FROM_START' || value === 'FROM_END';
+          if (newAt !== oldAt) {
+            const block = this.getSourceBlock() as GetSubstringBlock;
+            block.updateAt_(n, newAt);
+          }
+          return undefined;
+        },
+      );
+      return menu;
+    };
+    this.appendDummyInput('WHERE1_INPUT').appendField(createMenu(1), 'WHERE1');
     this.appendDummyInput('AT1');
+    this.appendDummyInput('WHERE2_INPUT').appendField(createMenu(2), 'WHERE2');
     this.appendDummyInput('AT2');
     if (Msg['TEXT_GET_SUBSTRING_TAIL']) {
       this.appendDummyInput('TAIL').appendField(Msg['TEXT_GET_SUBSTRING_TAIL']);
@@ -288,37 +311,10 @@ const GET_SUBSTRING_BLOCK = {
       this.removeInput('TAIL', true);
       this.appendDummyInput('TAIL').appendField(Msg['TEXT_GET_SUBSTRING_TAIL']);
     }
-    const menu = fieldRegistry.fromJson({
-      type: 'field_dropdown',
-      options:
-        this[('WHERE_OPTIONS_' + n) as 'WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2'],
-    }) as FieldDropdown;
-    menu.setValidator(
-      /**
-       * @param value The input value.
-       * @returns Null if the field has been replaced; otherwise undefined.
-       */
-      function (this: FieldDropdown, value: any): null | undefined {
-        const newAt = value === 'FROM_START' || value === 'FROM_END';
-        // The 'isAt' variable is available due to this function being a
-        // closure.
-        if (newAt !== isAt) {
-          const block = this.getSourceBlock() as GetSubstringBlock;
-          block.updateAt_(n, newAt);
-          // This menu has been destroyed and replaced.
-          // Update the replacement.
-          block.setFieldValue(value, 'WHERE' + n);
-          return null;
-        }
-        return undefined;
-      },
-    );
-
-    this.getInput('AT' + n)!.appendField(menu, 'WHERE' + n);
     if (n === 1) {
-      this.moveInputBefore('AT1', 'AT2');
+      this.moveInputBefore('AT1', 'WHERE2_INPUT');
       if (this.getInput('ORDINAL1')) {
-        this.moveInputBefore('ORDINAL1', 'AT2');
+        this.moveInputBefore('ORDINAL1', 'WHERE2_INPUT');
       }
     }
   },

@@ -417,10 +417,7 @@ const LISTS_GETINDEX = {
       options: this.WHERE_OPTIONS,
     }) as FieldDropdown;
     menu.setValidator(
-      /**
-       * @param value The input value.
-       * @returns Null if the field has been replaced; otherwise undefined.
-       */
+      /** @param value The input value. */
       function (this: FieldDropdown, value: string) {
         const oldValue: string | null = this.getValue();
         const oldAt = oldValue === 'FROM_START' || oldValue === 'FROM_END';
@@ -645,10 +642,7 @@ const LISTS_SETINDEX = {
       options: this.WHERE_OPTIONS,
     }) as FieldDropdown;
     menu.setValidator(
-      /**
-       * @param value The input value.
-       * @returns Null if the field has been replaced; otherwise undefined.
-       */
+      /** @param value The input value. */
       function (this: FieldDropdown, value: string) {
         const oldValue: string | null = this.getValue();
         const oldAt = oldValue === 'FROM_START' || oldValue === 'FROM_END';
@@ -816,10 +810,7 @@ const LISTS_GETSUBLIST = {
           this[('WHERE_OPTIONS_' + n) as 'WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2'],
       }) as FieldDropdown;
       menu.setValidator(
-        /**
-         * @param value The input value.
-         * @returns Null if the field has been replaced; otherwise undefined.
-         */
+        /** @param value The input value. */
         function (this: FieldDropdown, value: string) {
           const oldValue: string | null = this.getValue();
           const oldAt = oldValue === 'FROM_START' || oldValue === 'FROM_END';

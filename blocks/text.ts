@@ -223,10 +223,7 @@ const GET_SUBSTRING_BLOCK = {
           this[('WHERE_OPTIONS_' + n) as 'WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2'],
       }) as FieldDropdown;
       menu.setValidator(
-        /**
-         * @param value The input value.
-         * @returns Null if the field has been replaced; otherwise undefined.
-         */
+        /** @param value The input value. */
         function (this: FieldDropdown, value: any): null | undefined {
           const oldValue: string | null = this.getValue();
           const oldAt = oldValue === 'FROM_START' || oldValue === 'FROM_END';

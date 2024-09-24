@@ -1086,57 +1086,68 @@ export abstract class Field<T = any>
       return;
     }
 
-    const classValidation = this.doClassValidation_(newValue);
-    const classValue = this.processValidation_(
-      newValue,
-      classValidation,
-      fireChangeEvent,
-    );
-    if (classValue instanceof Error) {
-      if (doLogging) console.log('invalid class validation, return');
-      return;
+    // Field validators are allowed to make changes to the workspace, which
+    // should get grouped with the field value change event.
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) {
+      eventUtils.setGroup(true);
     }
 
-    const localValidation = this.getValidator()?.call(this, classValue);
-    const localValue = this.processValidation_(
-      classValue,
-      localValidation,
-      fireChangeEvent,
-    );
-    if (localValue instanceof Error) {
-      if (doLogging) console.log('invalid local validation, return');
-      return;
-    }
-
-    const source = this.sourceBlock_;
-    if (source && source.disposed) {
-      if (doLogging) console.log('source disposed, return');
-      return;
-    }
-
-    const oldValue = this.getValue();
-    if (oldValue === localValue) {
-      if (doLogging) console.log('same, doValueUpdate_, return');
-      this.doValueUpdate_(localValue);
-      return;
-    }
-
-    this.doValueUpdate_(localValue);
-    if (fireChangeEvent && source && eventUtils.isEnabled()) {
-      eventUtils.fire(
-        new (eventUtils.get(EventType.BLOCK_CHANGE))(
-          source,
-          'field',
-          this.name || null,
-          oldValue,
-          localValue,
-        ),
+    try {
+      const classValidation = this.doClassValidation_(newValue);
+      const classValue = this.processValidation_(
+        newValue,
+        classValidation,
+        fireChangeEvent,
       );
+      if (classValue instanceof Error) {
+        if (doLogging) console.log('invalid class validation, return');
+        return;
+      }
+
+      const localValidation = this.getValidator()?.call(this, classValue);
+      const localValue = this.processValidation_(
+        classValue,
+        localValidation,
+        fireChangeEvent,
+      );
+      if (localValue instanceof Error) {
+        if (doLogging) console.log('invalid local validation, return');
+        return;
+      }
+
+      const source = this.sourceBlock_;
+      if (source && source.disposed) {
+        if (doLogging) console.log('source disposed, return');
+        return;
+      }
+
+      const oldValue = this.getValue();
+      if (oldValue === localValue) {
+        if (doLogging) console.log('same, doValueUpdate_, return');
+        this.doValueUpdate_(localValue);
+        return;
+      }
+
+      this.doValueUpdate_(localValue);
+      if (fireChangeEvent && source && eventUtils.isEnabled()) {
+        eventUtils.fire(
+          new (eventUtils.get(EventType.BLOCK_CHANGE))(
+            source,
+            'field',
+            this.name || null,
+            oldValue,
+            localValue,
+          ),
+        );
+      }
+      if (this.isDirty_) {
+        this.forceRerender();
+      }
+      if (doLogging) console.log(this.value_);
+    } finally {
+      eventUtils.setGroup(existingGroup);
     }
-    if (this.isDirty_) {
-      this.forceRerender();
-    }
-    if (doLogging) console.log(this.value_);
   }
 
   /**

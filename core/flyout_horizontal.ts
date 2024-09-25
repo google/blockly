@@ -14,7 +14,6 @@
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {Flyout, FlyoutItem} from './flyout_base.js';
-import type {FlyoutButton} from './flyout_button.js';
 import type {Options} from './options.js';
 import * as registry from './registry.js';
 import {Scrollbar} from './scrollbar.js';
@@ -252,10 +251,9 @@ export class HorizontalFlyout extends Flyout {
   /**
    * Lay out the blocks in the flyout.
    *
-   * @param contents The blocks and buttons to lay out.
-   * @param gaps The visible gaps between blocks.
+   * @param contents The flyout items to lay out.
    */
-  protected override layout_(contents: FlyoutItem[], gaps: number[]) {
+  protected override layout_(contents: FlyoutItem[]) {
     this.workspace_.scale = this.targetWorkspace!.scale;
     const margin = this.MARGIN;
     let cursorX = margin + this.tabWidth_;
@@ -264,43 +262,11 @@ export class HorizontalFlyout extends Flyout {
       contents = contents.reverse();
     }
 
-    for (let i = 0, item; (item = contents[i]); i++) {
-      if (item.type === 'block') {
-        const block = item.block;
-
-        if (block === undefined || block === null) {
-          continue;
-        }
-
-        const allBlocks = block.getDescendants(false);
-
-        for (let j = 0, child; (child = allBlocks[j]); j++) {
-          // Mark blocks as being inside a flyout.  This is used to detect and
-          // prevent the closure of the flyout if the user right-clicks on such
-          // a block.
-          child.isInFlyout = true;
-        }
-        const root = block.getSvgRoot();
-        const blockHW = block.getHeightWidth();
-        // Figure out where to place the block.
-        const tab = block.outputConnection ? this.tabWidth_ : 0;
-        let moveX;
-        if (this.RTL) {
-          moveX = cursorX + blockHW.width;
-        } else {
-          moveX = cursorX - tab;
-        }
-        block.moveBy(moveX, cursorY);
-
-        const rect = this.createRect_(block, moveX, cursorY, blockHW, i);
-        cursorX += blockHW.width + gaps[i];
-
-        this.addBlockListeners_(root, block, rect);
-      } else if (item.type === 'button') {
-        const button = item.button as FlyoutButton;
-        this.initFlyoutButton_(button, cursorX, cursorY);
-        cursorX += button.width + gaps[i];
-      }
+    for (const item of contents) {
+      const rect = item.element.getBoundingRectangle();
+      const moveX = this.RTL ? cursorX + rect.getWidth() : cursorX;
+      item.element.moveBy(moveX, cursorY);
+      cursorX += item.element.getBoundingRectangle().getWidth();
     }
   }
 
@@ -367,26 +333,17 @@ export class HorizontalFlyout extends Flyout {
    */
   protected override reflowInternal_() {
     this.workspace_.scale = this.getFlyoutScale();
-    let flyoutHeight = 0;
-    const blocks = this.workspace_.getTopBlocks(false);
-    for (let i = 0, block; (block = blocks[i]); i++) {
-      flyoutHeight = Math.max(flyoutHeight, block.getHeightWidth().height);
-    }
-    const buttons = this.buttons_;
-    for (let i = 0, button; (button = buttons[i]); i++) {
-      flyoutHeight = Math.max(flyoutHeight, button.height);
-    }
+    let flyoutHeight = this.getContents().reduce((maxHeightSoFar, item) => {
+      return Math.max(
+        maxHeightSoFar,
+        item.element.getBoundingRectangle().getHeight(),
+      );
+    }, 0);
     flyoutHeight += this.MARGIN * 1.5;
     flyoutHeight *= this.workspace_.scale;
     flyoutHeight += Scrollbar.scrollbarThickness;
 
     if (this.getHeight() !== flyoutHeight) {
-      for (let i = 0, block; (block = blocks[i]); i++) {
-        if (this.rectMap_.has(block)) {
-          this.moveRectToBlock_(this.rectMap_.get(block)!, block);
-        }
-      }
-
       // TODO(#7689): Remove this.
       // Workspace with no scrollbars where this is permanently open on the top.
       // If scrollbars exist they properly update the metrics.

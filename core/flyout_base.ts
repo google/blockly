@@ -12,21 +12,18 @@
 // Former goog.module ID: Blockly.Flyout
 
 import type {Abstract as AbstractEvent} from './events/events_abstract.js';
-import type {Block} from './block.js';
 import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
-import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
 import {DeleteArea} from './delete_area.js';
 import * as eventUtils from './events/utils.js';
-import {FlyoutButton} from './flyout_button.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
-import {MANUALLY_DISABLED} from './constants.js';
+import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
+import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {Options} from './options.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
 import * as blocks from './serialization/blocks.js';
-import * as Tooltip from './tooltip.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
@@ -34,22 +31,11 @@ import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
 import * as Variables from './variables.js';
 import {WorkspaceSvg} from './workspace_svg.js';
-import * as utilsXml from './utils/xml.js';
-import * as Xml from './xml.js';
+import * as registry from './registry.js';
 import * as renderManagement from './render_management.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
-
-enum FlyoutItemType {
-  BLOCK = 'block',
-  BUTTON = 'button',
-}
-
-/**
- * The language-neutral ID for when the reason why a block is disabled is
- * because the workspace is at block capacity.
- */
-const WORKSPACE_AT_BLOCK_CAPACITY_DISABLED_REASON =
-  'WORKSPACE_AT_BLOCK_CAPACITY';
+import {FlyoutSeparator} from './flyout_separator.js';
+import {isRenderedElement} from './interfaces/i_rendered_element.js';
 
 /**
  * Class for a flyout.
@@ -84,12 +70,11 @@ export abstract class Flyout
   protected abstract setMetrics_(xyRatio: {x?: number; y?: number}): void;
 
   /**
-   * Lay out the blocks in the flyout.
+   * Lay out the elements in the flyout.
    *
-   * @param contents The blocks and buttons to lay out.
-   * @param gaps The visible gaps between blocks.
+   * @param contents The flyout elements to lay out.
    */
-  protected abstract layout_(contents: FlyoutItem[], gaps: number[]): void;
+  protected abstract layout_(contents: FlyoutItem[]): void;
 
   /**
    * Scroll the flyout.
@@ -99,8 +84,8 @@ export abstract class Flyout
   protected abstract wheel_(e: WheelEvent): void;
 
   /**
-   * Compute height of flyout.  Position mat under each block.
-   * For RTL: Lay out the blocks right-aligned.
+   * Compute bounds of flyout.
+   * For RTL: Lay out the elements right-aligned.
    */
   protected abstract reflowInternal_(): void;
 
@@ -123,11 +108,6 @@ export abstract class Flyout
    */
   abstract scrollToStart(): void;
 
-  /**
-   * The type of a flyout content item.
-   */
-  static FlyoutItemType = FlyoutItemType;
-
   protected workspace_: WorkspaceSvg;
   RTL: boolean;
   /**
@@ -147,42 +127,14 @@ export abstract class Flyout
 
   /**
    * Function that will be registered as a change listener on the workspace
-   * to reflow when blocks in the flyout workspace change.
+   * to reflow when elements in the flyout workspace change.
    */
   private reflowWrapper: ((e: AbstractEvent) => void) | null = null;
 
   /**
-   * Function that disables blocks in the flyout based on max block counts
-   * allowed in the target workspace. Registered as a change listener on the
-   * target workspace.
-   */
-  private filterWrapper: ((e: AbstractEvent) => void) | null = null;
-
-  /**
-   * List of background mats that lurk behind each block to catch clicks
-   * landing in the blocks' lakes and bays.
-   */
-  private mats: SVGElement[] = [];
-
-  /**
-   * List of visible buttons.
-   */
-  protected buttons_: FlyoutButton[] = [];
-
-  /**
-   * List of visible buttons and blocks.
+   * List of flyout elements.
    */
   protected contents: FlyoutItem[] = [];
-
-  /**
-   * List of event listeners.
-   */
-  private listeners: browserEvents.Data[] = [];
-
-  /**
-   * List of blocks that should always be disabled.
-   */
-  private permanentlyDisabled: Block[] = [];
 
   protected readonly tabWidth_: number;
 
@@ -192,11 +144,6 @@ export abstract class Flyout
    * @internal
    */
   targetWorkspace!: WorkspaceSvg;
-
-  /**
-   * A list of blocks that can be reused.
-   */
-  private recycledBlocks: BlockSvg[] = [];
 
   /**
    * Does the flyout automatically close when a block is created?
@@ -212,7 +159,6 @@ export abstract class Flyout
    * Whether the workspace containing this flyout is visible.
    */
   private containerVisible = true;
-  protected rectMap_: WeakMap<BlockSvg, SVGElement>;
 
   /**
    * Corner radius of the flyout background.
@@ -270,6 +216,9 @@ export abstract class Flyout
    * The root SVG group for the button or label.
    */
   protected svgGroup_: SVGGElement | null = null;
+
+  protected inflaters = new Map<string, IFlyoutInflater>();
+
   /**
    * @param workspaceOptions Dictionary of options for the
    *     workspace.
@@ -309,15 +258,7 @@ export abstract class Flyout
     this.tabWidth_ = this.workspace_.getRenderer().getConstants().TAB_WIDTH;
 
     /**
-     * A map from blocks to the rects which are beneath them to act as input
-     * targets.
-     *
-     * @internal
-     */
-    this.rectMap_ = new WeakMap();
-
-    /**
-     * Margin around the edges of the blocks in the flyout.
+     * Margin around the edges of the elements in the flyout.
      */
     this.MARGIN = this.CORNER_RADIUS;
 
@@ -402,15 +343,6 @@ export abstract class Flyout
         this.wheel_,
       ),
     );
-    this.filterWrapper = (event) => {
-      if (
-        event.type === eventUtils.BLOCK_CREATE ||
-        event.type === eventUtils.BLOCK_DELETE
-      ) {
-        this.filterForCapacity();
-      }
-    };
-    this.targetWorkspace.addChangeListener(this.filterWrapper);
 
     // Dragging the flyout up and down.
     this.boundEvents.push(
@@ -454,9 +386,6 @@ export abstract class Flyout
       browserEvents.unbind(event);
     }
     this.boundEvents.length = 0;
-    if (this.filterWrapper) {
-      this.targetWorkspace.removeChangeListener(this.filterWrapper);
-    }
     if (this.workspace_) {
       this.workspace_.getThemeManager().unsubscribe(this.svgBackground_!);
       this.workspace_.dispose();
@@ -576,16 +505,16 @@ export abstract class Flyout
   }
 
   /**
-   * Get the list of buttons and blocks of the current flyout.
+   * Get the list of elements of the current flyout.
    *
-   * @returns The array of flyout buttons and blocks.
+   * @returns The array of flyout elements.
    */
   getContents(): FlyoutItem[] {
     return this.contents;
   }
 
   /**
-   * Store the list of buttons and blocks on the flyout.
+   * Store the list of elements on the flyout.
    *
    * @param contents - The array of items for the flyout.
    */
@@ -660,16 +589,11 @@ export abstract class Flyout
       return;
     }
     this.setVisible(false);
-    // Delete all the event listeners.
-    for (const listen of this.listeners) {
-      browserEvents.unbind(listen);
-    }
-    this.listeners.length = 0;
     if (this.reflowWrapper) {
       this.workspace_.removeChangeListener(this.reflowWrapper);
       this.reflowWrapper = null;
     }
-    // Do NOT delete the blocks here.  Wait until Flyout.show.
+    // Do NOT delete the flyout contents here.  Wait until Flyout.show.
     // https://neil.fraser.name/news/2014/08/09/
   }
 
@@ -697,9 +621,9 @@ export abstract class Flyout
 
     renderManagement.triggerQueuedRenders(this.workspace_);
 
-    this.setContents(flyoutInfo.contents);
+    this.setContents(flyoutInfo);
 
-    this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
+    this.layout_(flyoutInfo);
 
     if (this.horizontalLayout) {
       this.height_ = 0;
@@ -708,8 +632,6 @@ export abstract class Flyout
     }
     this.workspace_.setResizesEnabled(true);
     this.reflow();
-
-    this.filterForCapacity();
 
     // Listen for block change events, and reflow the flyout in response. This
     // accommodates e.g. resizing a non-autoclosing flyout in response to the
@@ -723,7 +645,6 @@ export abstract class Flyout
       }
     };
     this.workspace_.addChangeListener(this.reflowWrapper);
-    this.emptyRecycledBlocks();
   }
 
   /**
@@ -734,13 +655,10 @@ export abstract class Flyout
    *     of objects to show in the flyout.
    * @returns The list of contents and gaps needed to lay out the flyout.
    */
-  private createFlyoutInfo(parsedContent: toolbox.FlyoutItemInfoArray): {
-    contents: FlyoutItem[];
-    gaps: number[];
-  } {
+  private createFlyoutInfo(
+    parsedContent: toolbox.FlyoutItemInfoArray,
+  ): FlyoutItem[] {
     const contents: FlyoutItem[] = [];
-    const gaps: number[] = [];
-    this.permanentlyDisabled.length = 0;
     const defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
     for (const info of parsedContent) {
       if ('custom' in info) {
@@ -749,44 +667,47 @@ export abstract class Flyout
         const flyoutDef = this.getDynamicCategoryContents(categoryName);
         const parsedDynamicContent =
           toolbox.convertFlyoutDefToJsonArray(flyoutDef);
-        const {contents: dynamicContents, gaps: dynamicGaps} =
-          this.createFlyoutInfo(parsedDynamicContent);
-        contents.push(...dynamicContents);
-        gaps.push(...dynamicGaps);
+        contents.push(...this.createFlyoutInfo(parsedDynamicContent));
       }
 
-      switch (info['kind'].toUpperCase()) {
-        case 'BLOCK': {
-          const blockInfo = info as toolbox.BlockInfo;
-          const block = this.createFlyoutBlock(blockInfo);
-          contents.push({type: FlyoutItemType.BLOCK, block: block});
-          this.addBlockGap(blockInfo, gaps, defaultGap);
-          break;
-        }
-        case 'SEP': {
-          const sepInfo = info as toolbox.SeparatorInfo;
-          this.addSeparatorGap(sepInfo, gaps, defaultGap);
-          break;
-        }
-        case 'LABEL': {
-          const labelInfo = info as toolbox.LabelInfo;
-          // A label is a button with different styling.
-          const label = this.createButton(labelInfo, /** isLabel */ true);
-          contents.push({type: FlyoutItemType.BUTTON, button: label});
-          gaps.push(defaultGap);
-          break;
-        }
-        case 'BUTTON': {
-          const buttonInfo = info as toolbox.ButtonInfo;
-          const button = this.createButton(buttonInfo, /** isLabel */ false);
-          contents.push({type: FlyoutItemType.BUTTON, button: button});
-          gaps.push(defaultGap);
-          break;
+      const type = info['kind'].toLowerCase();
+      const inflater = this.getInflaterForType(type);
+      if (inflater) {
+        const element = inflater.load(info, this.getWorkspace());
+        contents.push({
+          type,
+          element,
+        });
+        const gap = inflater.gapForElement(info, defaultGap);
+        if (gap) {
+          contents.push({
+            type: 'sep',
+            element: new FlyoutSeparator(gap),
+          });
         }
       }
     }
 
-    return {contents: contents, gaps: gaps};
+    return this.normalizeSeparators(contents);
+  }
+
+  protected normalizeSeparators(contents: FlyoutItem[]): FlyoutItem[] {
+    for (let i = contents.length - 1; i > 0; i--) {
+      const element = contents[i];
+      const previousElement = contents[i - 1];
+      if (
+        element.type.toLowerCase() === 'sep' &&
+        previousElement.type.toLowerCase() === 'sep'
+      ) {
+        // Remove previousElement from the array, shifting the current element
+        // forward as a result. This preserves the behavior where explicit
+        // separator elements override the value of prior implicit (or explicit)
+        // separator elements.
+        contents.splice(i - 1, 1);
+      }
+    }
+
+    return contents;
   }
 
   /**
@@ -813,285 +734,16 @@ export abstract class Flyout
   }
 
   /**
-   * Creates a flyout button or a flyout label.
-   *
-   * @param btnInfo The object holding information about a button or a label.
-   * @param isLabel True if the button is a label, false otherwise.
-   * @returns The object used to display the button in the
-   *    flyout.
-   */
-  private createButton(
-    btnInfo: toolbox.ButtonOrLabelInfo,
-    isLabel: boolean,
-  ): FlyoutButton {
-    const curButton = new FlyoutButton(
-      this.workspace_,
-      this.targetWorkspace as WorkspaceSvg,
-      btnInfo,
-      isLabel,
-    );
-    return curButton;
-  }
-
-  /**
-   * Create a block from the xml and permanently disable any blocks that were
-   * defined as disabled.
-   *
-   * @param blockInfo The info of the block.
-   * @returns The block created from the blockInfo.
-   */
-  private createFlyoutBlock(blockInfo: toolbox.BlockInfo): BlockSvg {
-    let block;
-    if (blockInfo['blockxml']) {
-      const xml = (
-        typeof blockInfo['blockxml'] === 'string'
-          ? utilsXml.textToDom(blockInfo['blockxml'])
-          : blockInfo['blockxml']
-      ) as Element;
-      block = this.getRecycledBlock(xml.getAttribute('type')!);
-      if (!block) {
-        block = Xml.domToBlockInternal(xml, this.workspace_);
-      }
-    } else {
-      block = this.getRecycledBlock(blockInfo['type']!);
-      if (!block) {
-        if (blockInfo['enabled'] === undefined) {
-          blockInfo['enabled'] =
-            blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
-        }
-        if (
-          blockInfo['disabledReasons'] === undefined &&
-          blockInfo['enabled'] === false
-        ) {
-          blockInfo['disabledReasons'] = [MANUALLY_DISABLED];
-        }
-        block = blocks.appendInternal(
-          blockInfo as blocks.State,
-          this.workspace_,
-        );
-      }
-    }
-
-    if (!block.isEnabled()) {
-      // Record blocks that were initially disabled.
-      // Do not enable these blocks as a result of capacity filtering.
-      this.permanentlyDisabled.push(block);
-    }
-    return block as BlockSvg;
-  }
-
-  /**
-   * Returns a block from the array of recycled blocks with the given type, or
-   * undefined if one cannot be found.
-   *
-   * @param blockType The type of the block to try to recycle.
-   * @returns The recycled block, or undefined if
-   *     one could not be recycled.
-   */
-  private getRecycledBlock(blockType: string): BlockSvg | undefined {
-    let index = -1;
-    for (let i = 0; i < this.recycledBlocks.length; i++) {
-      if (this.recycledBlocks[i].type === blockType) {
-        index = i;
-        break;
-      }
-    }
-    return index === -1 ? undefined : this.recycledBlocks.splice(index, 1)[0];
-  }
-
-  /**
-   * Adds a gap in the flyout based on block info.
-   *
-   * @param blockInfo Information about a block.
-   * @param gaps The list of gaps between items in the flyout.
-   * @param defaultGap The default gap between one element and the
-   *     next.
-   */
-  private addBlockGap(
-    blockInfo: toolbox.BlockInfo,
-    gaps: number[],
-    defaultGap: number,
-  ) {
-    let gap;
-    if (blockInfo['gap']) {
-      gap = parseInt(String(blockInfo['gap']));
-    } else if (blockInfo['blockxml']) {
-      const xml = (
-        typeof blockInfo['blockxml'] === 'string'
-          ? utilsXml.textToDom(blockInfo['blockxml'])
-          : blockInfo['blockxml']
-      ) as Element;
-      gap = parseInt(xml.getAttribute('gap')!);
-    }
-    gaps.push(!gap || isNaN(gap) ? defaultGap : gap);
-  }
-
-  /**
-   * Add the necessary gap in the flyout for a separator.
-   *
-   * @param sepInfo The object holding
-   *    information about a separator.
-   * @param gaps The list gaps between items in the flyout.
-   * @param defaultGap The default gap between the button and next
-   *     element.
-   */
-  private addSeparatorGap(
-    sepInfo: toolbox.SeparatorInfo,
-    gaps: number[],
-    defaultGap: number,
-  ) {
-    // Change the gap between two toolbox elements.
-    // <sep gap="36"></sep>
-    // The default gap is 24, can be set larger or smaller.
-    // This overwrites the gap attribute on the previous element.
-    const newGap = parseInt(String(sepInfo['gap']));
-    // Ignore gaps before the first block.
-    if (!isNaN(newGap) && gaps.length > 0) {
-      gaps[gaps.length - 1] = newGap;
-    } else {
-      gaps.push(defaultGap);
-    }
-  }
-
-  /**
-   * Delete blocks, mats and buttons from a previous showing of the flyout.
+   * Delete elements from a previous showing of the flyout.
    */
   private clearOldBlocks() {
-    // Delete any blocks from a previous showing.
-    const oldBlocks = this.workspace_.getTopBlocks(false);
-    for (let i = 0, block; (block = oldBlocks[i]); i++) {
-      if (this.blockIsRecyclable_(block)) {
-        this.recycleBlock(block);
-      } else {
-        block.dispose(false, false);
-      }
-    }
-    // Delete any mats from a previous showing.
-    for (let j = 0; j < this.mats.length; j++) {
-      const rect = this.mats[j];
-      if (rect) {
-        Tooltip.unbindMouseEvents(rect);
-        dom.removeNode(rect);
-      }
-    }
-    this.mats.length = 0;
-    // Delete any buttons from a previous showing.
-    for (let i = 0, button; (button = this.buttons_[i]); i++) {
-      button.dispose();
-    }
-    this.buttons_.length = 0;
+    this.getContents().forEach((element) => {
+      const inflater = this.getInflaterForType(element.type);
+      inflater?.disposeElement(element.element);
+    });
 
     // Clear potential variables from the previous showing.
     this.workspace_.getPotentialVariableMap()?.clear();
-  }
-
-  /**
-   * Empties all of the recycled blocks, properly disposing of them.
-   */
-  private emptyRecycledBlocks() {
-    for (let i = 0; i < this.recycledBlocks.length; i++) {
-      this.recycledBlocks[i].dispose();
-    }
-    this.recycledBlocks = [];
-  }
-
-  /**
-   * Returns whether the given block can be recycled or not.
-   *
-   * @param _block The block to check for recyclability.
-   * @returns True if the block can be recycled. False otherwise.
-   */
-  protected blockIsRecyclable_(_block: BlockSvg): boolean {
-    // By default, recycling is disabled.
-    return false;
-  }
-
-  /**
-   * Puts a previously created block into the recycle bin and moves it to the
-   * top of the workspace. Used during large workspace swaps to limit the number
-   * of new DOM elements we need to create.
-   *
-   * @param block The block to recycle.
-   */
-  private recycleBlock(block: BlockSvg) {
-    const xy = block.getRelativeToSurfaceXY();
-    block.moveBy(-xy.x, -xy.y);
-    this.recycledBlocks.push(block);
-  }
-
-  /**
-   * Add listeners to a block that has been added to the flyout.
-   *
-   * @param root The root node of the SVG group the block is in.
-   * @param block The block to add listeners for.
-   * @param rect The invisible rectangle under the block that acts
-   *     as a mat for that block.
-   */
-  protected addBlockListeners_(
-    root: SVGElement,
-    block: BlockSvg,
-    rect: SVGElement,
-  ) {
-    this.listeners.push(
-      browserEvents.conditionalBind(
-        root,
-        'pointerdown',
-        null,
-        this.blockMouseDown(block),
-      ),
-    );
-    this.listeners.push(
-      browserEvents.conditionalBind(
-        rect,
-        'pointerdown',
-        null,
-        this.blockMouseDown(block),
-      ),
-    );
-    this.listeners.push(
-      browserEvents.bind(root, 'pointerenter', block, () => {
-        if (!this.targetWorkspace.isDragging()) {
-          block.addSelect();
-        }
-      }),
-    );
-    this.listeners.push(
-      browserEvents.bind(root, 'pointerleave', block, () => {
-        if (!this.targetWorkspace.isDragging()) {
-          block.removeSelect();
-        }
-      }),
-    );
-    this.listeners.push(
-      browserEvents.bind(rect, 'pointerenter', block, () => {
-        if (!this.targetWorkspace.isDragging()) {
-          block.addSelect();
-        }
-      }),
-    );
-    this.listeners.push(
-      browserEvents.bind(rect, 'pointerleave', block, () => {
-        if (!this.targetWorkspace.isDragging()) {
-          block.removeSelect();
-        }
-      }),
-    );
-  }
-
-  /**
-   * Handle a pointerdown on an SVG block in a non-closing flyout.
-   *
-   * @param block The flyout block to copy.
-   * @returns Function to call when block is clicked.
-   */
-  private blockMouseDown(block: BlockSvg): Function {
-    return (e: PointerEvent) => {
-      const gesture = this.targetWorkspace.getGesture(e);
-      if (gesture) {
-        gesture.setStartBlock(block);
-        gesture.handleFlyoutStart(e, this);
-      }
-    };
   }
 
   /**
@@ -1162,123 +814,12 @@ export abstract class Flyout
     }
     if (this.autoClose) {
       this.hide();
-    } else {
-      this.filterForCapacity();
     }
     return newBlock;
   }
 
   /**
-   * Initialize the given button: move it to the correct location,
-   * add listeners, etc.
-   *
-   * @param button The button to initialize and place.
-   * @param x The x position of the cursor during this layout pass.
-   * @param y The y position of the cursor during this layout pass.
-   */
-  protected initFlyoutButton_(button: FlyoutButton, x: number, y: number) {
-    const buttonSvg = button.createDom();
-    button.moveTo(x, y);
-    button.show();
-    // Clicking on a flyout button or label is a lot like clicking on the
-    // flyout background.
-    this.listeners.push(
-      browserEvents.conditionalBind(
-        buttonSvg,
-        'pointerdown',
-        this,
-        this.onMouseDown,
-      ),
-    );
-
-    this.buttons_.push(button);
-  }
-
-  /**
-   * Create and place a rectangle corresponding to the given block.
-   *
-   * @param block The block to associate the rect to.
-   * @param x The x position of the cursor during this layout pass.
-   * @param y The y position of the cursor during this layout pass.
-   * @param blockHW The height and width of
-   *     the block.
-   * @param index The index into the mats list where this rect should
-   *     be placed.
-   * @returns Newly created SVG element for the rectangle behind
-   *     the block.
-   */
-  protected createRect_(
-    block: BlockSvg,
-    x: number,
-    y: number,
-    blockHW: {height: number; width: number},
-    index: number,
-  ): SVGElement {
-    // Create an invisible rectangle under the block to act as a button.  Just
-    // using the block as a button is poor, since blocks have holes in them.
-    const rect = dom.createSvgElement(Svg.RECT, {
-      'fill-opacity': 0,
-      'x': x,
-      'y': y,
-      'height': blockHW.height,
-      'width': blockHW.width,
-    });
-    (rect as AnyDuringMigration).tooltip = block;
-    Tooltip.bindMouseEvents(rect);
-    // Add the rectangles under the blocks, so that the blocks' tooltips work.
-    this.workspace_.getCanvas().insertBefore(rect, block.getSvgRoot());
-
-    this.rectMap_.set(block, rect);
-    this.mats[index] = rect;
-    return rect;
-  }
-
-  /**
-   * Move a rectangle to sit exactly behind a block, taking into account tabs,
-   * hats, and any other protrusions we invent.
-   *
-   * @param rect The rectangle to move directly behind the block.
-   * @param block The block the rectangle should be behind.
-   */
-  protected moveRectToBlock_(rect: SVGElement, block: BlockSvg) {
-    const blockHW = block.getHeightWidth();
-    rect.setAttribute('width', String(blockHW.width));
-    rect.setAttribute('height', String(blockHW.height));
-
-    const blockXY = block.getRelativeToSurfaceXY();
-    rect.setAttribute('y', String(blockXY.y));
-    rect.setAttribute(
-      'x',
-      String(this.RTL ? blockXY.x - blockHW.width : blockXY.x),
-    );
-  }
-
-  /**
-   * Filter the blocks on the flyout to disable the ones that are above the
-   * capacity limit.  For instance, if the user may only place two more blocks
-   * on the workspace, an "a + b" block that has two shadow blocks would be
-   * disabled.
-   */
-  private filterForCapacity() {
-    const blocks = this.workspace_.getTopBlocks(false);
-    for (let i = 0, block; (block = blocks[i]); i++) {
-      if (!this.permanentlyDisabled.includes(block)) {
-        const enable = this.targetWorkspace.isCapacityAvailable(
-          common.getBlockTypeCounts(block),
-        );
-        while (block) {
-          block.setDisabledReason(
-            !enable,
-            WORKSPACE_AT_BLOCK_CAPACITY_DISABLED_REASON,
-          );
-          block = block.getNextBlock();
-        }
-      }
-    }
-  }
-
-  /**
-   * Reflow blocks and their mats.
+   * Reflow flyout contents.
    */
   reflow() {
     if (this.reflowWrapper) {
@@ -1377,13 +918,28 @@ export abstract class Flyout
     // No 'reason' provided since events are disabled.
     block.moveTo(new Coordinate(finalOffset.x, finalOffset.y));
   }
+
+  protected getInflaterForType(type: string): IFlyoutInflater | undefined {
+    if (this.inflaters.has(type)) {
+      return this.inflaters.get(type);
+    }
+
+    const InflaterClass = registry.getClass(
+      registry.Type.FLYOUT_INFLATER,
+      type,
+    );
+    if (InflaterClass) {
+      const inflater = new InflaterClass();
+      this.inflaters.set(type, inflater);
+      return inflater;
+    }
+  }
 }
 
 /**
  * A flyout content item.
  */
 export interface FlyoutItem {
-  type: FlyoutItemType;
-  button?: FlyoutButton | undefined;
-  block?: BlockSvg | undefined;
+  type: string;
+  element: IBoundedElement;
 }

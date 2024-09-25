@@ -247,7 +247,7 @@ export class FlyoutButton
    *
    * @param dx Horizontal offset in workspace units.
    * @param dy Vertical offset in workspace units.
-   * @param reason Why is this move happening?  'user', 'bump', 'snap'...
+   * @param _reason Why is this move happening?  'user', 'bump', 'snap'...
    */
   moveBy(dx: number, dy: number, _reason?: string[]) {
     this.moveTo(this.position.x + dx, this.position.y + dy);

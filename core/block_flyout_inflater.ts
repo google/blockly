@@ -29,7 +29,7 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
   private capacityFilter: (e: AbstractEvent) => void;
 
   constructor() {
-    this.capacityFilter = (e: AbstractEvent) => {
+    this.capacityFilter = (event: AbstractEvent) => {
       if (
         !this.flyoutWorkspace ||
         (event &&

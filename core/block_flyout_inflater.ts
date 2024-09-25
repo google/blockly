@@ -157,10 +157,7 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
   /**
    * Add listeners to a block that has been added to the flyout.
    *
-   * @param root The root node of the SVG group the block is in.
    * @param block The block to add listeners for.
-   * @param rect The invisible rectangle under the block that acts
-   *     as a mat for that block.
    */
   protected addBlockListeners(block: BlockSvg) {
     const blockListeners = [];

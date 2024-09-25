@@ -10,6 +10,7 @@ import type {Abstract} from './events/events_abstract.js';
 import type {Field} from './field.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
+import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {IIcon} from './interfaces/i_icon.js';
 import type {Input} from './inputs/input.js';
@@ -98,6 +99,8 @@ export class Type<_T> {
   static FLYOUTS_HORIZONTAL_TOOLBOX = new Type<IFlyout>(
     'flyoutsHorizontalToolbox',
   );
+
+  static FLYOUT_INFLATER = new Type<IFlyoutInflater>('flyoutInflater');
 
   static METRICS_MANAGER = new Type<IMetricsManager>('metricsManager');
 

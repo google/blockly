@@ -210,6 +210,12 @@ export class FlyoutButton
     );
   }
 
+  createDom(): SVGElement {
+    // No-op, now handled in constructor. Will be removed in followup refactor
+    // PR that updates the flyout classes to use inflaters.
+    return this.svgGroup;
+  }
+
   /** Correctly position the flyout button and make it visible. */
   show() {
     this.updateTransform();

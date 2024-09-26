@@ -328,6 +328,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "القيام بشيء ما",
 	"PROCEDURES_BEFORE_PARAMS": "مع:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "مع:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "لا يمكن تشغيل الوظيفة المحددة من قبل المستخدم '%1' لأن كتلة التعريف معطلة.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "انشئ دالة بدون مخرجات .",
 	"PROCEDURES_DEFNORETURN_COMMENT": "صف هذه الوظيفة...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://tr.wikipedia.org/wiki/دالة_(برمجة)",

@@ -35,30 +35,6 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
   protected listeners = new Map<string, browserEvents.Data[]>();
   protected flyoutWorkspace?: WorkspaceSvg;
   protected flyout?: IFlyout;
-  private capacityFilter: (e: AbstractEvent) => void;
-
-  /**
-   * Creates a new BlockFlyoutInflater instance.
-   */
-  constructor() {
-    this.capacityFilter = (event: AbstractEvent) => {
-      if (
-        !this.flyoutWorkspace ||
-        (event &&
-          !(
-            event.type === eventUtils.BLOCK_CREATE ||
-            event.type === eventUtils.BLOCK_DELETE
-          ))
-      )
-        return;
-
-      this.flyoutWorkspace.getTopBlocks(false).forEach((block) => {
-        if (!this.permanentlyDisabledBlocks.has(block)) {
-          this.updateStateBasedOnCapacity(block);
-        }
-      });
-    };
-  }
 
   /**
    * Inflates a flyout block from the given state and adds it to the flyout.
@@ -179,12 +155,12 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
 
     if (this.flyoutWorkspace) {
       this.flyoutWorkspace.targetWorkspace?.removeChangeListener(
-        this.capacityFilter,
+        this.updateBlockStateBasedOnCapacity,
       );
     }
     this.flyoutWorkspace = workspace;
     this.flyoutWorkspace.targetWorkspace?.addChangeListener(
-      this.capacityFilter,
+      this.updateBlockStateBasedOnCapacity,
     );
   }
 
@@ -248,6 +224,24 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
     );
 
     this.listeners.set(block.id, blockListeners);
+  }
+
+  private updateBlockStateBasedOnCapacity(event: AbstractEvent) {
+    if (
+      !this.flyoutWorkspace ||
+      (event &&
+        !(
+          event.type === eventUtils.BLOCK_CREATE ||
+          event.type === eventUtils.BLOCK_DELETE
+        ))
+    )
+      return;
+
+    this.flyoutWorkspace.getTopBlocks(false).forEach((block) => {
+      if (!this.permanentlyDisabledBlocks.has(block)) {
+        this.updateStateBasedOnCapacity(block);
+      }
+    });
   }
 }
 

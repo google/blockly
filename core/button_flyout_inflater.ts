@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2024 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {WorkspaceSvg} from './workspace_svg.js';

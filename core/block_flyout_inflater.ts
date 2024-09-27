@@ -35,6 +35,14 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
   protected listeners = new Map<string, browserEvents.Data[]>();
   protected flyoutWorkspace?: WorkspaceSvg;
   protected flyout?: IFlyout;
+  private capacityWrapper: (event: AbstractEvent) => void;
+
+  /**
+   * Creates a new BlockFlyoutInflater instance.
+   */
+  constructor() {
+    this.capacityWrapper = this.filterFlyoutBasedOnCapacity.bind(this);
+  }
 
   /**
    * Inflates a flyout block from the given state and adds it to the flyout.
@@ -155,12 +163,12 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
 
     if (this.flyoutWorkspace) {
       this.flyoutWorkspace.targetWorkspace?.removeChangeListener(
-        this.updateBlockStateBasedOnCapacity,
+        this.capacityWrapper,
       );
     }
     this.flyoutWorkspace = workspace;
     this.flyoutWorkspace.targetWorkspace?.addChangeListener(
-      this.updateBlockStateBasedOnCapacity,
+      this.capacityWrapper,
     );
   }
 
@@ -226,7 +234,13 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
     this.listeners.set(block.id, blockListeners);
   }
 
-  private updateBlockStateBasedOnCapacity(event: AbstractEvent) {
+  /**
+   * Updates the state of blocks in our owning flyout to be disabled/enabled
+   * based on the capacity of the workspace for more blocks of that type.
+   *
+   * @param event The event that triggered this update.
+   */
+  private filterFlyoutBasedOnCapacity(event: AbstractEvent) {
     if (
       !this.flyoutWorkspace ||
       (event &&

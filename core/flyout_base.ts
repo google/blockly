@@ -34,7 +34,7 @@ import {WorkspaceSvg} from './workspace_svg.js';
 import * as registry from './registry.js';
 import * as renderManagement from './render_management.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
-import {FlyoutSeparator} from './flyout_separator.js';
+import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
 import {isRenderedElement} from './interfaces/i_rendered_element.js';
 
 /**
@@ -682,7 +682,10 @@ export abstract class Flyout
         if (gap) {
           contents.push({
             type: 'sep',
-            element: new FlyoutSeparator(gap),
+            element: new FlyoutSeparator(
+              gap,
+              this.horizontalLayout ? SeparatorAxis.X : SeparatorAxis.Y,
+            ),
           });
         }
       }

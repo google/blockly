@@ -317,16 +317,12 @@ suite('Flyout', function () {
 
     function checkFlyoutInfo(flyoutSpy) {
       const flyoutInfo = flyoutSpy.returnValues[0];
-      const contents = flyoutInfo.contents;
-      const gaps = flyoutInfo.gaps;
+      const contents = flyoutInfo;
 
-      const expectedGaps = [20, 24, 24];
-      assert.deepEqual(gaps, expectedGaps);
-
-      assert.equal(contents.length, 3, 'Contents');
+      assert.equal(contents.length, 6, 'Contents');
 
       assert.equal(contents[0].type, 'block', 'Contents');
-      const block = contents[0]['block'];
+      const block = contents[0]['element'];
       assert.instanceOf(block, Blockly.BlockSvg);
       assert.equal(block.getFieldValue('OP'), 'NEQ');
       const childA = block.getInputTargetBlock('A');
@@ -336,11 +332,20 @@ suite('Flyout', function () {
       assert.equal(childA.getFieldValue('NUM'), 1);
       assert.equal(childB.getFieldValue('NUM'), 2);
 
-      assert.equal(contents[1].type, 'button', 'Contents');
-      assert.instanceOf(contents[1]['button'], Blockly.FlyoutButton);
+      assert.equal(contents[1].type, 'sep');
+      assert.equal(contents[1].element.getBoundingRectangle().getHeight(), 20);
 
       assert.equal(contents[2].type, 'button', 'Contents');
-      assert.instanceOf(contents[2]['button'], Blockly.FlyoutButton);
+      assert.instanceOf(contents[2]['element'], Blockly.FlyoutButton);
+
+      assert.equal(contents[3].type, 'sep');
+      assert.equal(contents[3].element.getBoundingRectangle().getHeight(), 24);
+
+      assert.equal(contents[4].type, 'label', 'Contents');
+      assert.instanceOf(contents[4]['element'], Blockly.FlyoutButton);
+
+      assert.equal(contents[5].type, 'sep');
+      assert.equal(contents[5].element.getBoundingRectangle().getHeight(), 24);
     }
 
     suite('Direct show', function () {
@@ -628,36 +633,6 @@ suite('Flyout', function () {
       });
       const block = this.flyout.workspace_.getAllBlocks()[0];
       assert.equal(block.getFieldValue('NUM'), 321);
-    });
-
-    test('Recycling enabled', function () {
-      this.flyout.blockIsRecyclable_ = function () {
-        return true;
-      };
-      this.flyout.show({
-        'contents': [
-          {
-            'kind': 'BLOCK',
-            'type': 'math_number',
-            'fields': {
-              'NUM': 123,
-            },
-          },
-        ],
-      });
-      this.flyout.show({
-        'contents': [
-          {
-            'kind': 'BLOCK',
-            'type': 'math_number',
-            'fields': {
-              'NUM': 321,
-            },
-          },
-        ],
-      });
-      const block = this.flyout.workspace_.getAllBlocks()[0];
-      assert.equal(block.getFieldValue('NUM'), 123);
     });
   });
 });

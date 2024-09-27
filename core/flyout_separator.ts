@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2024 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {Rect} from './utils/rect.js';
 

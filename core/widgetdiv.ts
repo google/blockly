@@ -169,7 +169,7 @@ export function hideIfOwner(oldOwner: unknown) {
  * @param workspace The workspace that was using this container.
  */
 export function hideIfOwnerIsInWorkspace(workspace: WorkspaceSvg) {
-  let ownerIsInWorkspace = workspace === null;
+  let ownerIsInWorkspace = this.ownerWorkspace === null;
   // Check if the given workspace is a parent workspace of the one containing
   // our owner.
   let currentWorkspace: WorkspaceSvg | null = workspace;

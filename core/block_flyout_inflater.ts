@@ -27,6 +27,9 @@ import * as browserEvents from './browser_events.js';
 const WORKSPACE_AT_BLOCK_CAPACITY_DISABLED_REASON =
   'WORKSPACE_AT_BLOCK_CAPACITY';
 
+/**
+ * Class responsible for creating blocks for flyouts.
+ */
 export class BlockFlyoutInflater implements IFlyoutInflater {
   protected permanentlyDisabledBlocks = new Set<BlockSvg>();
   protected listeners = new Map<string, browserEvents.Data[]>();
@@ -34,6 +37,9 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
   protected flyout?: IFlyout;
   private capacityFilter: (e: AbstractEvent) => void;
 
+  /**
+   * Creates a new BlockFlyoutInflater instance.
+   */
   constructor() {
     this.capacityFilter = (event: AbstractEvent) => {
       if (
@@ -54,6 +60,13 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
     };
   }
 
+  /**
+   * Inflates a flyout block from the given state and adds it to the flyout.
+   *
+   * @param state A JSON representation of a flyout block.
+   * @param flyoutWorkspace The workspace to create the block on.
+   * @returns A newly created block.
+   */
   load(state: Object, flyoutWorkspace: WorkspaceSvg): IBoundedElement {
     this.setFlyoutWorkspace(flyoutWorkspace);
     this.flyout = flyoutWorkspace.targetWorkspace?.getFlyout() ?? undefined;
@@ -76,6 +89,13 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
     return block;
   }
 
+  /**
+   * Creates a block on the given workspace.
+   *
+   * @param blockDefinition A JSON representation of the block to create.
+   * @param workspace The workspace to create the block on.
+   * @returns The newly created block.
+   */
   createBlock(blockDefinition: BlockInfo, workspace: WorkspaceSvg): BlockSvg {
     let block;
     if (blockDefinition['blockxml']) {
@@ -103,6 +123,13 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
     return block as BlockSvg;
   }
 
+  /**
+   * Returns the amount of space that should follow this block.
+   *
+   * @param state A JSON representation of a flyout block.
+   * @param defaultGap The default spacing for flyout items.
+   * @returns The amount of space that should follow this block.
+   */
   gapForElement(state: Object, defaultGap: number): number {
     const blockState = state as BlockInfo;
     let gap;
@@ -120,18 +147,33 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
     return !gap || isNaN(gap) ? defaultGap : gap;
   }
 
+  /**
+   * Disposes of the given block.
+   *
+   * @param element The flyout block to dispose of.
+   */
   disposeElement(element: IBoundedElement): void {
     if (!(element instanceof BlockSvg)) return;
     this.removeListeners(element.id);
     element.dispose(false, false);
   }
 
+  /**
+   * Removes event listeners for the block with the given ID.
+   *
+   * @param blockId The ID of the block to remove event listeners from.
+   */
   protected removeListeners(blockId: string) {
     const blockListeners = this.listeners.get(blockId) ?? [];
     blockListeners.forEach((l) => browserEvents.unbind(l));
     this.listeners.delete(blockId);
   }
 
+  /**
+   * Updates this inflater's flyout workspace.
+   *
+   * @param workspace The workspace of the flyout that owns this inflater.
+   */
   protected setFlyoutWorkspace(workspace: WorkspaceSvg) {
     if (this.flyoutWorkspace === workspace) return;
 
@@ -146,6 +188,12 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
     );
   }
 
+  /**
+   * Updates the enabled state of the given block based on the capacity of the
+   * workspace.
+   *
+   * @param block The block to update the enabled/disabled state of.
+   */
   private updateStateBasedOnCapacity(block: BlockSvg) {
     const enable = this.flyoutWorkspace?.targetWorkspace?.isCapacityAvailable(
       common.getBlockTypeCounts(block),

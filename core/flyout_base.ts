@@ -35,7 +35,6 @@ import * as registry from './registry.js';
 import * as renderManagement from './render_management.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
 import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
-import {isRenderedElement} from './interfaces/i_rendered_element.js';
 
 /**
  * Class for a flyout.

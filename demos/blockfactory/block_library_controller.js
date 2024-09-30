@@ -109,9 +109,9 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
 BlockLibraryController.prototype.saveToBlockLibrary = function() {
   var blockType = this.getCurrentBlockType();
   // If user has not changed the name of the starter block.
-  if (blockType === 'block_type') {
+  if (reservedBlockFactoryBlocks.has(blockType) || blockType === 'block_type') {
     // Do not save block if it has the default type, 'block_type'.
-    var msg = 'You cannot save a block under the name "block_type". Try ' +
+    var msg = `You cannot save a block under the name "${blockType}". Try ` +
         'changing the name before saving. Then, click on the "Block Library"' +
         ' button to view your saved blocks.';
     alert(msg);

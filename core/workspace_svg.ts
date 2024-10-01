@@ -29,6 +29,7 @@ import * as ContextMenu from './contextmenu.js';
 import {ContextMenuRegistry} from './contextmenu_registry.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
+import {Flyout} from './flyout_base.js';
 import type {FlyoutButton} from './flyout_button.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
@@ -2022,16 +2023,68 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   }
 
   /**
-   * Get the workspace's zoom factor.  If the workspace has a parent, we call
-   * into the parent to get the workspace scale.
+   * Get the workspace's zoom factor.
    *
    * @returns The workspace zoom factor. Units: (pixels / workspaceUnit).
    */
   getScale(): number {
-    if (this.options.parentWorkspace) {
-      return this.options.parentWorkspace.getScale();
-    }
     return this.scale;
+  }
+
+  /**
+   * Returns the absolute scale of the workspace.
+   *
+   * Workspace scaling is multiplicative; if a workspace B (e.g. a mutator editor)
+   * with scale Y is nested within a root workspace A with scale X, workspace B's
+   * effective scale is X * Y, because, as a child of A, it is already transformed
+   * by A's scaling factor, and then further transforms itself by its own scaling
+   * factor. Normally this Just Works, but for global elements (e.g. field
+   * editors) that are visually associated with a particular workspace but live at
+   * the top level of the DOM rather than being a child of their associated
+   * workspace, the absolute/effective scale may be needed to render
+   * appropriately.
+   *
+   * @param workspace The workspace to determine the absolute/effective scale of.
+   * @returns The absolute/effective scale of the given workspace.
+   */
+  getAbsoluteScale() {
+    // Returns a workspace's own scale, without regard to multiplicative scaling.
+    const getLocalScale = (workspace: WorkspaceSvg): number => {
+      // Workspaces in flyouts may have a distinct scale; use this if relevant.
+      if (workspace.isFlyout) {
+        const flyout = workspace.targetWorkspace?.getFlyout();
+        if (flyout instanceof Flyout) {
+          return flyout.getFlyoutScale();
+        }
+      }
+
+      return workspace.getScale();
+    };
+
+    const computeScale = (workspace: WorkspaceSvg, scale: number): number => {
+      // If the workspace has no parent, or it does have a parent but is not
+      // actually a child of its parent workspace in the DOM (this is the case for
+      // flyouts in the main workspace), we're done; just return the scale so far
+      // multiplied by the workspace's own scale.
+      if (
+        !workspace.options.parentWorkspace ||
+        !workspace.options.parentWorkspace
+          .getSvgGroup()
+          .contains(workspace.getSvgGroup())
+      ) {
+        return scale * getLocalScale(workspace);
+      }
+
+      // If there is a parent workspace, and this workspace is a child of it in
+      // the DOM, scales are multiplicative, so recurse up the workspace
+      // hierarchy.
+      return computeScale(
+        workspace.options.parentWorkspace,
+        scale * getLocalScale(workspace),
+      );
+    };
+
+    return computeScale(this, 1);
   }
 
   /**

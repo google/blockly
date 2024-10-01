@@ -88,9 +88,12 @@ export class ShortcutRegistry {
   /**
    * Adds a mapping between a keycode and a keyboard shortcut.
    *
-   * If allowCollisions is used to mapped a single keycode to multiple
-   * shortcuts, they will be processed in last-registered,
-   * first-activated order by onKeyDown.
+   * Normally only one shortcut can be mapped to any given keycode,
+   * but setting allowCollisions to true allows a keyboard to be
+   * mapped to multiple shortcuts.  In that case, when onKeyDown is
+   * called with the given keystroke, it will process the mapped
+   * shortcuts in reverse order, from the most- to least-recently
+   * mapped).
    *
    * @param keyCode The key code for the keyboard shortcut. If registering a key
    *     code with a modifier (ex: ctrl+c) use
@@ -219,18 +222,19 @@ export class ShortcutRegistry {
   /**
    * Handles key down events.
    *
-   * - Any `KeyboardShortcut`(s) mapped to the keyscode that cause
+   * - Any `KeyboardShortcut`(s) mapped to the keycodes that cause
    *   event `e` to be fired will be processed, in order from least-
    *   to most-recently registered.
-   * - If the shortcut's `preconditionFn` exists it will be called,
-   *   and if it returns false the shortcut will otherwise be ignored
-   *   and processing will continue with the next shortcut, if any.
-   * - The shortcut's `callback` function will the be called.  If it
-   *   returns true, processing will terminate and onKeyDown will
+   * - If the shortcut's `preconditionFn` exists it will be called.
+   *   If `preconditionFn` returns false the shortcut's `callback`
+   *   function will be skipped.  Processing will continue with the
+   *   next shortcut, if any.
+   * - The shortcut's `callback` function will then be called.  If it
+   *   returns true, processing will terminate and `onKeyDown` will
    *   return true.  If it returns false, processing will continue
    *   with with the next shortcut, if any.
    * - If all registered shortcuts for the given keycode have been
-   *   processed without any having returnd true, onKeyDown will
+   *   processed without any having returned true, `onKeyDown` will
    *   return false.
    *
    * @param workspace The main workspace where the event was captured.
@@ -325,7 +329,7 @@ export class ShortcutRegistry {
    *
    * @param keyCode Number code representing the key.
    * @param modifiers List of modifier key codes to be used with the key. All
-   *     valid modifiers can be found in the ShortcutRegistry.modifierKeys.
+   *     valid modifiers can be found in the `ShortcutRegistry.modifierKeys`.
    * @returns The serialized key code for the given modifiers and key.
    */
   createSerializedKey(keyCode: number, modifiers: KeyCodes[] | null): string {
@@ -361,12 +365,13 @@ export namespace ShortcutRegistry {
     /**
      * The function to be called when the shorctut is invoked.
      *
-     * @param workspace The WorkspaceSvg when the shortcut was invoked.
+     * @param workspace The `WorkspaceSvg` when the shortcut was
+     *     invoked.
      * @param e The event that caused the shortcut to be activated.
-     * @param shortcut the KeyboardShortcut that was activated (i.e.,
-     *     the one this callback is attached to).
+     * @param shortcut The `KeyboardShortcut` that was activated
+     *     (i.e., the one this callback is attached to).
      * @returns Returning true ends processing of the invoked keycode.
-     *     Returning false causes processing to coninue with the
+     *     Returning false causes processing to continue with the
      *     next-most-recently registered shortcut for the invoked
      *     keycode.
      */
@@ -381,11 +386,12 @@ export namespace ShortcutRegistry {
 
     /**
      * A function to be called when the shortcut is invoked, before
-     * calling callback, to decide if this shortcut is applicable in
+     * calling `callback`, to decide if this shortcut is applicable in
      * the current situation.
      *
-     * @param workspace The WorkspaceSvg where the shortcut was invoked.
-     * @returns True iff callback function should be called.
+     * @param workspace The `WorkspaceSvg` where the shortcut was
+     *     invoked.
+     * @returns True iff `callback` function should be called.
      */
     preconditionFn?: (workspace: WorkspaceSvg) => boolean;
 
@@ -399,12 +405,12 @@ export namespace ShortcutRegistry {
     keyCodes?: (number | string)[];
 
     /** 
-     * Value of allowClollision to pass to addKeyMapping when binding
-     * this shortcut's .keyCodes (if any).
+     * Value of `allowCollision` to pass to `addKeyMapping` when
+     * binding this shortcut's `.keyCodes` (if any).
      *
      * N.B.: this is only used for binding keycodes at the time this
      * shortcut is initially registered, not for any subsequent
-     * addKeyMapping calls that happen to reference this shortcut's
+     * `addKeyMapping` calls that happen to reference this shortcut's
      * name.
      */
     allowCollision?: boolean;

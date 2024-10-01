@@ -216,6 +216,10 @@ export abstract class Flyout
    */
   protected svgGroup_: SVGGElement | null = null;
 
+  /**
+   * Map from flyout content type to the corresponding inflater class
+   * responsible for creating concrete instances of the content type.
+   */
   protected inflaters = new Map<string, IFlyoutInflater>();
 
   /**
@@ -652,7 +656,7 @@ export abstract class Flyout
    *
    * @param parsedContent The array
    *     of objects to show in the flyout.
-   * @returns The list of contents and gaps needed to lay out the flyout.
+   * @returns The list of contents needed to lay out the flyout.
    */
   private createFlyoutInfo(
     parsedContent: toolbox.FlyoutItemInfoArray,
@@ -693,6 +697,17 @@ export abstract class Flyout
     return this.normalizeSeparators(contents);
   }
 
+  /**
+   * Updates and returns the provided list of flyout contents to flatten
+   * separators as needed.
+   *
+   * When multiple separators occur one after another, the value of the last one
+   * takes precedence and the earlier separators in the group are removed.
+   *
+   * @param contents The list of flyout contents to flatten separators in.
+   * @returns An updated list of flyout contents with only one separator between
+   *     each non-separator item.
+   */
   protected normalizeSeparators(contents: FlyoutItem[]): FlyoutItem[] {
     for (let i = contents.length - 1; i > 0; i--) {
       const element = contents[i];
@@ -921,6 +936,13 @@ export abstract class Flyout
     block.moveTo(new Coordinate(finalOffset.x, finalOffset.y));
   }
 
+  /**
+   * Returns the inflater responsible for constructing items of the given type.
+   *
+   * @param type The type of flyout content item to provide an inflater for.
+   * @returns An inflater object for the given type, or undefined if no inflater
+   *     is registered for that type.
+   */
   protected getInflaterForType(type: string): IFlyoutInflater | undefined {
     if (this.inflaters.has(type)) {
       return this.inflaters.get(type);

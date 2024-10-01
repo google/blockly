@@ -684,6 +684,11 @@ export class CommentView implements IRenderedElement {
     this.onTextChange();
   }
 
+  /** Sets the placeholder text displayed for an empty comment. */
+  setPlaceholderText(text: string) {
+    this.textArea.placeholder = text;
+  }
+
   /** Registers a callback that listens for text changes. */
   addTextChangeListener(listener: (oldText: string, newText: string) => void) {
     this.textChangeListeners.push(listener);

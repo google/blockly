@@ -104,6 +104,11 @@ export class RenderedWorkspaceComment
     this.view.setText(text);
   }
 
+  /** Sets the placeholder text displayed if the comment is empty. */
+  setPlaceholderText(text: string): void {
+    this.view.setPlaceholderText(text);
+  }
+
   /** Sets the size of the comment. */
   override setSize(size: Size) {
     // setSize will trigger the change listener that updates

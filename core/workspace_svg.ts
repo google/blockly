@@ -2044,7 +2044,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * workspace, the absolute/effective scale may be needed to render
    * appropriately.
    *
-   * @param workspace The workspace to determine the absolute/effective scale of.
    * @returns The absolute/effective scale of the given workspace.
    */
   getAbsoluteScale() {

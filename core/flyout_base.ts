@@ -710,12 +710,9 @@ export abstract class Flyout
    */
   protected normalizeSeparators(contents: FlyoutItem[]): FlyoutItem[] {
     for (let i = contents.length - 1; i > 0; i--) {
-      const element = contents[i];
-      const previousElement = contents[i - 1];
-      if (
-        element.type.toLowerCase() === 'sep' &&
-        previousElement.type.toLowerCase() === 'sep'
-      ) {
+      const elementType = contents[i].type.toLowerCase();
+      const previousElementType = contents[i - 1].type.toLowerCase();
+      if (elementType === 'sep' && previousElementType === 'sep') {
         // Remove previousElement from the array, shifting the current element
         // forward as a result. This preserves the behavior where explicit
         // separator elements override the value of prior implicit (or explicit)
@@ -957,6 +954,8 @@ export abstract class Flyout
       this.inflaters.set(type, inflater);
       return inflater;
     }
+
+    return undefined;
   }
 }
 

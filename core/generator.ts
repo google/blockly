@@ -252,8 +252,7 @@ export class CodeGenerator {
       return opt_thisOnly ? '' : this.blockToCode(block.getChildren(false)[0]);
     }
 
-    // Look up block generator function in dictionary - but fall back
-    // to looking up on this if not found, for backwards compatibility.
+    // Look up block generator function in dictionary.
     const func = this.forBlock[block.type];
     if (typeof func !== 'function') {
       throw Error(

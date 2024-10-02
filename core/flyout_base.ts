@@ -937,12 +937,12 @@ export abstract class Flyout
    * Returns the inflater responsible for constructing items of the given type.
    *
    * @param type The type of flyout content item to provide an inflater for.
-   * @returns An inflater object for the given type, or undefined if no inflater
+   * @returns An inflater object for the given type, or null if no inflater
    *     is registered for that type.
    */
-  protected getInflaterForType(type: string): IFlyoutInflater | undefined {
+  protected getInflaterForType(type: string): IFlyoutInflater | null {
     if (this.inflaters.has(type)) {
-      return this.inflaters.get(type);
+      return this.inflaters.get(type) ?? null;
     }
 
     const InflaterClass = registry.getClass(
@@ -955,7 +955,7 @@ export abstract class Flyout
       return inflater;
     }
 
-    return undefined;
+    return null;
   }
 }
 

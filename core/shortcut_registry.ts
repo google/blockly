@@ -247,8 +247,10 @@ export class ShortcutRegistry {
     if (!shortcutNames) return false;
     for (const shortcutName of shortcutNames) {
       const shortcut = this.shortcuts.get(shortcutName);
-      if (!shortcut ||
-          (shortcut.preconditionFn && !shortcut.preconditionFn(workspace))) {
+      if (
+        !shortcut ||
+        (shortcut.preconditionFn && !shortcut.preconditionFn(workspace))
+      ) {
         continue;
       }
       // If the key has been handled, stop processing shortcuts.
@@ -404,7 +406,7 @@ export namespace ShortcutRegistry {
      */
     keyCodes?: (number | string)[];
 
-    /** 
+    /**
      * Value of `allowCollision` to pass to `addKeyMapping` when
      * binding this shortcut's `.keyCodes` (if any).
      *

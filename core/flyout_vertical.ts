@@ -14,7 +14,6 @@
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {Flyout, FlyoutItem} from './flyout_base.js';
-import type {FlyoutButton} from './flyout_button.js';
 import type {Options} from './options.js';
 import * as registry from './registry.js';
 import {Scrollbar} from './scrollbar.js';
@@ -221,51 +220,17 @@ export class VerticalFlyout extends Flyout {
   /**
    * Lay out the blocks in the flyout.
    *
-   * @param contents The blocks and buttons to lay out.
-   * @param gaps The visible gaps between blocks.
+   * @param contents The flyout items to lay out.
    */
-  protected override layout_(contents: FlyoutItem[], gaps: number[]) {
+  protected override layout_(contents: FlyoutItem[]) {
     this.workspace_.scale = this.targetWorkspace!.scale;
     const margin = this.MARGIN;
     const cursorX = this.RTL ? margin : margin + this.tabWidth_;
     let cursorY = margin;
 
-    for (let i = 0, item; (item = contents[i]); i++) {
-      if (item.type === 'block') {
-        const block = item.block;
-        if (!block) {
-          continue;
-        }
-        const allBlocks = block.getDescendants(false);
-        for (let j = 0, child; (child = allBlocks[j]); j++) {
-          // Mark blocks as being inside a flyout.  This is used to detect and
-          // prevent the closure of the flyout if the user right-clicks on such
-          // a block.
-          child.isInFlyout = true;
-        }
-        const root = block.getSvgRoot();
-        const blockHW = block.getHeightWidth();
-        const moveX = block.outputConnection
-          ? cursorX - this.tabWidth_
-          : cursorX;
-        block.moveBy(moveX, cursorY);
-
-        const rect = this.createRect_(
-          block,
-          this.RTL ? moveX - blockHW.width : moveX,
-          cursorY,
-          blockHW,
-          i,
-        );
-
-        this.addBlockListeners_(root, block, rect);
-
-        cursorY += blockHW.height + gaps[i];
-      } else if (item.type === 'button') {
-        const button = item.button as FlyoutButton;
-        this.initFlyoutButton_(button, cursorX, cursorY);
-        cursorY += button.height + gaps[i];
-      }
+    for (const item of contents) {
+      item.element.moveBy(cursorX, cursorY);
+      cursorY += item.element.getBoundingRectangle().getHeight();
     }
   }
 
@@ -328,52 +293,32 @@ export class VerticalFlyout extends Flyout {
   }
 
   /**
-   * Compute width of flyout.  toolbox.Position mat under each block.
+   * Compute width of flyout.
    * For RTL: Lay out the blocks and buttons to be right-aligned.
    */
   protected override reflowInternal_() {
     this.workspace_.scale = this.getFlyoutScale();
-    let flyoutWidth = 0;
-    const blocks = this.workspace_.getTopBlocks(false);
-    for (let i = 0, block; (block = blocks[i]); i++) {
-      let width = block.getHeightWidth().width;
-      if (block.outputConnection) {
-        width -= this.tabWidth_;
-      }
-      flyoutWidth = Math.max(flyoutWidth, width);
-    }
-    for (let i = 0, button; (button = this.buttons_[i]); i++) {
-      flyoutWidth = Math.max(flyoutWidth, button.width);
-    }
+    let flyoutWidth = this.getContents().reduce((maxWidthSoFar, item) => {
+      return Math.max(
+        maxWidthSoFar,
+        item.element.getBoundingRectangle().getWidth(),
+      );
+    }, 0);
     flyoutWidth += this.MARGIN * 1.5 + this.tabWidth_;
     flyoutWidth *= this.workspace_.scale;
     flyoutWidth += Scrollbar.scrollbarThickness;
 
     if (this.getWidth() !== flyoutWidth) {
-      for (let i = 0, block; (block = blocks[i]); i++) {
-        if (this.RTL) {
-          // With the flyoutWidth known, right-align the blocks.
-          const oldX = block.getRelativeToSurfaceXY().x;
-          let newX = flyoutWidth / this.workspace_.scale - this.MARGIN;
-          if (!block.outputConnection) {
-            newX -= this.tabWidth_;
-          }
-          block.moveBy(newX - oldX, 0);
-        }
-        if (this.rectMap_.has(block)) {
-          this.moveRectToBlock_(this.rectMap_.get(block)!, block);
-        }
-      }
       if (this.RTL) {
-        // With the flyoutWidth known, right-align the buttons.
-        for (let i = 0, button; (button = this.buttons_[i]); i++) {
-          const y = button.getPosition().y;
-          const x =
+        // With the flyoutWidth known, right-align the flyout contents.
+        for (const item of this.getContents()) {
+          const oldX = item.element.getBoundingRectangle().left;
+          const newX =
             flyoutWidth / this.workspace_.scale -
-            button.width -
+            item.element.getBoundingRectangle().getWidth() -
             this.MARGIN -
             this.tabWidth_;
-          button.moveTo(x, y);
+          item.element.moveBy(newX - oldX, 0);
         }
       }
 

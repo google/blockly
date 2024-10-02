@@ -96,6 +96,12 @@ import {
 } from './field_variable.js';
 import {Flyout} from './flyout_base.js';
 import {FlyoutButton} from './flyout_button.js';
+import {FlyoutSeparator} from './flyout_separator.js';
+import {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
+import {BlockFlyoutInflater} from './block_flyout_inflater.js';
+import {ButtonFlyoutInflater} from './button_flyout_inflater.js';
+import {LabelFlyoutInflater} from './label_flyout_inflater.js';
+import {SeparatorFlyoutInflater} from './separator_flyout_inflater.js';
 import {HorizontalFlyout} from './flyout_horizontal.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {VerticalFlyout} from './flyout_vertical.js';
@@ -510,6 +516,12 @@ export {
 export {Flyout};
 export {FlyoutButton};
 export {FlyoutMetricsManager};
+export {FlyoutSeparator};
+export {IFlyoutInflater};
+export {BlockFlyoutInflater};
+export {ButtonFlyoutInflater};
+export {LabelFlyoutInflater};
+export {SeparatorFlyoutInflater};
 export {CodeGenerator};
 export {CodeGenerator as Generator}; // Deprecated name, October 2022.
 export {Gesture};

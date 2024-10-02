@@ -13,6 +13,7 @@
 // Former goog.module ID: Blockly.ASTNode
 
 import {Block} from '../block.js';
+import {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
@@ -347,10 +348,10 @@ export class ASTNode {
     );
     if (!nextItem) return null;
 
-    if (nextItem.type === 'button' && nextItem.button) {
-      return ASTNode.createButtonNode(nextItem.button);
-    } else if (nextItem.type === 'block' && nextItem.block) {
-      return ASTNode.createStackNode(nextItem.block);
+    if (nextItem.element instanceof FlyoutButton) {
+      return ASTNode.createButtonNode(nextItem.element);
+    } else if (nextItem.element instanceof BlockSvg) {
+      return ASTNode.createStackNode(nextItem.element);
     }
 
     return null;
@@ -370,12 +371,15 @@ export class ASTNode {
     forward: boolean,
   ): FlyoutItem | null {
     const currentIndex = flyoutContents.findIndex((item: FlyoutItem) => {
-      if (currentLocation instanceof Block && item.block === currentLocation) {
+      if (
+        currentLocation instanceof BlockSvg &&
+        item.element === currentLocation
+      ) {
         return true;
       }
       if (
         currentLocation instanceof FlyoutButton &&
-        item.button === currentLocation
+        item.element === currentLocation
       ) {
         return true;
       }

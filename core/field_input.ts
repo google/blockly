@@ -415,7 +415,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       'spellcheck',
       this.spellcheck_ as AnyDuringMigration,
     );
-    const scale = this.workspace_!.getScale();
+    const scale = this.workspace_!.getAbsoluteScale();
     const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE * scale + 'pt';
     div!.style.fontSize = fontSize;
     htmlInput.style.fontSize = fontSize;

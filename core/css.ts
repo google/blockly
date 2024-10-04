@@ -87,20 +87,6 @@ let content = `
   -webkit-user-select: none;
 }
 
-.blocklyWsDragSurface {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-  /* Added as a separate rule with multiple classes to make it more specific
-     than a bootstrap rule that selects svg:root. See issue #1275 for context.
-  */
-  .blocklyWsDragSurface.blocklyOverflowVisible {
-  overflow: visible;
-}
-
 .blocklyBlockCanvas.blocklyCanvasTransitioning,
 .blocklyBubbleCanvas.blocklyCanvasTransitioning {
   transition: transform .5s;
@@ -367,14 +353,14 @@ input[type=number] {
 }
 
 .blocklyFlyoutBackground {
-  fill: #eee;
+  fill: #ddd;
+  fill-opacity: .8;
 }
 
 .blocklyMainWorkspaceScrollbar {
   z-index: 20;
 }
-
-.blocklyFlyoutCloseButton {
+  .blocklyFlyoutCloseButton {
   position: absolute;
   z-index: 20;
   width: 30px;
@@ -442,7 +428,7 @@ input[type=number] {
   outline: none;
 }
 
-.blocklyScrollbarBackground {
+  .blocklyScrollbarBackground {
   opacity: 0;
 }
 
@@ -585,7 +571,7 @@ input[type=number] {
   outline: none;
   position: relative;  /* Compatibility with gapi, reset from goog-menu */
   z-index: 20000;  /* Arbitrary, but some apps depend on it... */
-  margin-top: 5px;
+    margin-top: 5px;
 }
 
 .blocklyDropDownDiv .blocklyMenu:empty {
@@ -624,15 +610,16 @@ input[type=number] {
   width: 16px;
 }
 
+
+.blocklyMenuItemText {
+  margin-left: 5px;
+}
+
 .blocklyMenuItemSelected .blocklyMenuItemCheckbox {
   background: url(<<<PATH>>>/sprites.png) no-repeat -48px -16px;
   float: left;
   margin-left: -24px;
   position: static;  /* Scroll with the menu. */
-}
-
-.blocklyMenuItemText {
-  margin-left: 5px;
 }
 
 .blocklyMenuItemRtl .blocklyMenuItemCheckbox {

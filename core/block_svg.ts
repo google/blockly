@@ -1879,9 +1879,6 @@ export class BlockSvg
       (icon as unknown as IHasBubble).setBubbleVisible(false);
     }
 
-    // Stop rerendering.
-    this.rendered = false;
-
     // Clear pending warnings.
     if (this.warningTextDb) {
       for (const n in this.warningTextDb) {

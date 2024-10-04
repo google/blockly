@@ -42,6 +42,8 @@ export class WorkspaceComment {
   /** Whether this comment is being disposed or not. */
   protected disposing = false;
 
+  private moduleId_: string;
+
   /**
    * Constructs the comment.
    *
@@ -54,6 +56,8 @@ export class WorkspaceComment {
     id?: string,
   ) {
     this.id = id && !workspace.getCommentById(id) ? id : idGenerator.genUid();
+
+    this.moduleId_ = workspace.getModuleManager().getActiveModule().getId();
 
     workspace.addTopComment(this);
 
@@ -147,6 +151,29 @@ export class WorkspaceComment {
   /** Sets whether the comment is movable or not. */
   setMovable(movable: boolean) {
     this.movable = movable;
+  }
+
+  /** Returns module id for this comment. */
+  getModuleId() {
+    return this.moduleId_;
+  }
+
+  /** Returns module order for this comment. */
+  getModuleOrder() {
+    return this.workspace.getModuleManager().getModuleOrder(this.moduleId_);
+  }
+
+  /** Returns is this comment in active module. */
+  inActiveModule() {
+    return (
+      this.moduleId_ ===
+      this.workspace.getModuleManager().getActiveModule().getId()
+    );
+  }
+
+  /**  Set module module id for this comment. */
+  setModuleId(moduleId: string) {
+    return (this.moduleId_ = moduleId);
   }
 
   /**

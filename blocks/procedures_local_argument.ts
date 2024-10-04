@@ -21,7 +21,8 @@ import * as ProceduresLocalArgument from '../core/procedures_local_arguments.js'
 import * as Variables from '../core/variables.js';
 import * as Xml from '../core/xml.js';
 import * as xmlUtils from '../core/utils/xml.js';
-import {Align, Input} from '../core/inputs/input.js';
+import {Input} from '../core/inputs/input.js';
+import {Align} from '../core/inputs/align.js';
 import type {BlockDefinition} from '../core/blocks.js';
 import {FieldCheckbox} from '../core/field_checkbox.js';
 import {FieldLabel} from '../core/field_label.js';
@@ -546,7 +547,7 @@ const PROCEDURES_WITH_ARGUMENT = {
         if (hasStatements) {
           this.setStatements_(true);
           // Restore the stack, if one was saved.
-          Mutator.reconnect(this.statementConnection_, this, 'STACK');
+          this.statementConnection_?.reconnect(this, 'STACK');
           this.statementConnection_ = null;
         } else {
           // Save the stack, then disconnect it.
@@ -921,8 +922,7 @@ const PROCEDURE_CALL_COMMON = {
       this.quarkIds_ = [];
     }
     // Switch off rendering while the block is rebuilt.
-    const savedRendered = this.rendered;
-    this.rendered = false;
+    this.dispose(false);
     // Update the quarkConnections_ with existing connections.
     for (let i = 0; i < this.arguments_.length; i++) {
       const input = this.getInput('ARG' + i);

@@ -368,10 +368,10 @@ export class ModuleBar {
   /**
    * Mouse click handler.
    *
-   * @param {!Event} e The browser event.
+   * @param {!PointerEvent} e The browser event.
    * @private
    */
-  onMouseClick_(e: Event) {
+  onMouseClick_(e: PointerEvent) {
     if (!this.isFinishedLoading_) {
       return;
     }
@@ -576,10 +576,10 @@ export class ModuleBar {
   /**
    * Activate module control handler.
    *
-   * @param {!Event} e The browser event.
+   * @param {!PointerEvent} e The browser event.
    * @private
    */
-  handleShowModuleMenu_(e: Event) {
+  handleShowModuleMenu_(e: PointerEvent) {
     const menuOptions = [
       {
         text: Msg['RENAME_MODULE'],

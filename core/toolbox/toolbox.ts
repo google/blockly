@@ -41,10 +41,10 @@ import * as dom from '../utils/dom.js';
 import {Rect} from '../utils/rect.js';
 import * as toolbox from '../utils/toolbox.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
-
 import type {ToolboxCategory} from './category.js';
 import {CollapsibleToolboxCategory} from './collapsible_category.js';
 import {FLYOUT_HIDE, FLYOUT_SHOW} from '../events/events.js';
+import {isDeletable} from '../interfaces/i_deletable.js';
 
 /**
  * Class for a Toolbox.
@@ -564,17 +564,15 @@ export class Toolbox
    * before onDragEnter/onDragOver/onDragExit.
    *
    * @param element The block or bubble currently being dragged.
-   * @param _couldConnect Whether the element could could connect to another.
    * @returns Whether the element provided would be deleted if dropped on this
    *     area.
    */
-  override wouldDelete(element: IDraggable, _couldConnect: boolean): boolean {
+  override wouldDelete(element: IDraggable): boolean {
     if (element instanceof BlockSvg) {
       const block = element;
-      // Prefer dragging to the toolbox over connecting to other blocks.
       this.updateWouldDelete_(!block.getParent() && block.isDeletable());
     } else {
-      this.updateWouldDelete_(element.isDeletable());
+      this.updateWouldDelete_(isDeletable(element) && element.isDeletable());
     }
     return this.wouldDelete_;
   }

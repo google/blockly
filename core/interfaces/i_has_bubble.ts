@@ -9,7 +9,7 @@ export interface IHasBubble {
   bubbleIsVisible(): boolean;
 
   /** Sets whether the bubble is open or not. */
-  setBubbleVisible(visible: boolean): void;
+  setBubbleVisible(visible: boolean): Promise<void>;
 }
 
 /** Type guard that checks whether the given object is a IHasBubble. */

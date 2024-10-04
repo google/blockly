@@ -12,7 +12,6 @@
 // Former goog.module ID: Blockly.Lua.all
 
 import {LuaGenerator} from './lua/lua_generator.js';
-import * as colour from './lua/colour.js';
 import * as lists from './lua/lists.js';
 import * as logic from './lua/logic.js';
 import * as loops from './lua/loops.js';
@@ -31,7 +30,6 @@ export const luaGenerator = new LuaGenerator();
 
 // Install per-block-type generator functions:
 const generators: typeof luaGenerator.forBlock = {
-  ...colour,
   ...lists,
   ...logic,
   ...loops,

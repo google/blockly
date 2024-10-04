@@ -22,6 +22,7 @@ import type {Field} from '../field.js';
 import * as fieldRegistry from '../field_registry.js';
 import type {RenderedConnection} from '../rendered_connection.js';
 import {inputTypes} from './input_types.js';
+import {Align} from './align.js';
 
 /** Class for an input with optional fields. */
 export class Input {
@@ -102,10 +103,7 @@ export class Input {
     }
 
     field.setSourceBlock(this.sourceBlock);
-    if (this.sourceBlock.rendered) {
-      field.init();
-      field.applyColour();
-    }
+    if (this.sourceBlock.initialized) this.initField(field);
     field.name = opt_name;
     field.setVisible(this.isVisible());
 
@@ -123,8 +121,6 @@ export class Input {
 
     if (this.sourceBlock.rendered) {
       (this.sourceBlock as BlockSvg).queueRender();
-      // Adding a field will cause the block to change shape.
-      this.sourceBlock.bumpNeighbours();
     }
     return index;
   }
@@ -145,8 +141,6 @@ export class Input {
         this.fieldRow.splice(i, 1);
         if (this.sourceBlock.rendered) {
           (this.sourceBlock as BlockSvg).queueRender();
-          // Removing a field will cause the block to change shape.
-          this.sourceBlock.bumpNeighbours();
         }
         return true;
       }
@@ -273,11 +267,28 @@ export class Input {
 
   /** Initialize the fields on this input. */
   init() {
-    if (!this.sourceBlock.workspace.rendered) {
-      return; // Headless blocks don't need fields initialized.
+    for (const field of this.fieldRow) {
+      field.init();
     }
-    for (let i = 0; i < this.fieldRow.length; i++) {
-      this.fieldRow[i].init();
+  }
+
+  /**
+   * Initializes the fields on this input for a headless block.
+   *
+   * @internal
+   */
+  public initModel() {
+    for (const field of this.fieldRow) {
+      field.initModel();
+    }
+  }
+
+  /** Initializes the given field. */
+  private initField(field: Field) {
+    if (this.sourceBlock.rendered) {
+      field.init();
+    } else {
+      field.initModel();
     }
   }
 
@@ -305,25 +316,3 @@ export class Input {
     return this.sourceBlock.makeConnection_(type);
   }
 }
-
-export namespace Input {
-  // TODO(v11): When this is removed in v11, also re-enable errors on access
-  //     of deprecated things (in build_tasks.js).
-  /**
-   * Enum for alignment of inputs.
-   *
-   * @deprecated Use Blockly.inputs.Align. To be removed in v11.
-   */
-  export enum Align {
-    LEFT = -1,
-    CENTRE = 0,
-    RIGHT = 1,
-  }
-}
-
-/** @deprecated Use Blockly.inputs.Align. To be removed in v11. */
-/** @suppress {deprecated} */
-export type Align = Input.Align;
-/** @deprecated Use Blockly.inputs.Align. To be removed in v11. */
-/** @suppress {deprecated} */
-export const Align = Input.Align;

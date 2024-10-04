@@ -172,7 +172,7 @@ export class ComponentManager {
     capability = `${capability}`.toLowerCase();
     return (
       this.componentData.has(id) &&
-      this.componentData.get(id)!.capabilities.indexOf(capability) !== -1
+      this.componentData.get(id)!.capabilities.includes(capability)
     );
   }
 

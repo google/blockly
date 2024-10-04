@@ -41,10 +41,10 @@ export function createKeyDownEvent(keyCode, modifiers) {
     keyCode: keyCode,
   };
   if (modifiers && modifiers.length > 0) {
-    event.altKey = modifiers.indexOf(KeyCodes.ALT) > -1;
-    event.ctrlKey = modifiers.indexOf(KeyCodes.CTRL) > -1;
-    event.metaKey = modifiers.indexOf(KeyCodes.META) > -1;
-    event.shiftKey = modifiers.indexOf(KeyCodes.SHIFT) > -1;
+    event.altKey = modifiers.includes(KeyCodes.ALT);
+    event.ctrlKey = modifiers.includes(KeyCodes.CTRL);
+    event.metaKey = modifiers.includes(KeyCodes.META);
+    event.shiftKey = modifiers.includes(KeyCodes.SHIFT);
   }
   return new KeyboardEvent('keydown', event);
 }

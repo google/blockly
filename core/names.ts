@@ -218,7 +218,7 @@ export class Names {
       // https://github.com/google/blockly/issues/1654
       name = encodeURI(name.replace(/ /g, '_')).replace(/[^\w]/g, '_');
       // Most languages don't allow names with leading numbers.
-      if ('0123456789'.indexOf(name[0]) !== -1) {
+      if ('0123456789'.includes(name[0])) {
         name = 'my_' + name;
       }
     }

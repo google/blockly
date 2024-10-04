@@ -21,7 +21,6 @@ import {Types} from '../measurables/types.js';
 import {isDynamicShape, isNotch, isPuzzleTab} from './constants.js';
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
 import type {RenderInfo} from './info.js';
-import * as deprecation from '../../utils/deprecation.js';
 import {ConnectionType} from '../../connection_type.js';
 
 /**
@@ -68,16 +67,6 @@ export class Drawer {
       this.block_.pathObject.flipRTL();
     }
     this.recordSizeOnBlock_();
-  }
-
-  /**
-   * Hide icons that were marked as hidden.
-   *
-   * @deprecated Manually hiding icons is no longer necessary. To be removed
-   *     in v11.
-   */
-  protected hideHiddenIcons_() {
-    deprecation.warn('hideHiddenIcons_', 'v10', 'v11');
   }
 
   /**

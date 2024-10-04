@@ -444,7 +444,6 @@ export class FieldVariable extends FieldDropdown {
     // #1499.
     // Set the allowable variable types.  Null means all types on the workspace.
     if (Array.isArray(variableTypes)) {
-      variableTypes = variableTypes;
       // Make sure the default type is valid.
       let isInArray = false;
       for (let i = 0; i < variableTypes.length; i++) {

@@ -12,8 +12,8 @@
 // Former goog.module ID: Blockly.Events.CommentDelete
 
 import * as registry from '../registry.js';
-import type {WorkspaceComment} from '../workspace_comment.js';
-
+import type {WorkspaceComment} from '../comments/workspace_comment.js';
+import * as comments from '../serialization/workspace_comments.js';
 import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
 import * as utilsXml from '../utils/xml.js';
@@ -29,6 +29,9 @@ export class CommentDelete extends CommentBase {
   /** The XML representation of the deleted workspace comment. */
   xml?: Element;
 
+  /** The JSON representation of the created workspace comment. */
+  json?: comments.State;
+
   /**
    * @param opt_comment The deleted comment.
    *     Undefined for a blank event.
@@ -40,7 +43,8 @@ export class CommentDelete extends CommentBase {
       return; // Blank event to be populated by fromJson.
     }
 
-    this.xml = opt_comment.toXmlWithXY();
+    this.xml = Xml.saveWorkspaceComment(opt_comment);
+    this.json = comments.save(opt_comment, {addCoordinates: true});
   }
 
   /**
@@ -65,7 +69,14 @@ export class CommentDelete extends CommentBase {
           'the constructor, or call fromJson',
       );
     }
+    if (!this.json) {
+      throw new Error(
+        'The comment JSON is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson',
+      );
+    }
     json['xml'] = Xml.domToText(this.xml);
+    json['json'] = this.json;
     return json;
   }
 
@@ -89,12 +100,14 @@ export class CommentDelete extends CommentBase {
       event ?? new CommentDelete(),
     ) as CommentDelete;
     newEvent.xml = utilsXml.textToDom(json['xml']);
+    newEvent.json = json['json'];
     return newEvent;
   }
 }
 
 export interface CommentDeleteJson extends CommentBaseJson {
   xml: string;
+  json: object;
 }
 
 registry.register(

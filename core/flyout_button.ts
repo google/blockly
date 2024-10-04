@@ -20,11 +20,12 @@ import * as style from './utils/style.js';
 import {Svg} from './utils/svg.js';
 import type * as toolbox from './utils/toolbox.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import type {IASTNodeLocationSvg} from './blockly.js';
 
 /**
  * Class for a button or label in the flyout.
  */
-export class FlyoutButton {
+export class FlyoutButton implements IASTNodeLocationSvg {
   /** The horizontal margin around the text in the button. */
   static TEXT_MARGIN_X = 5;
 
@@ -56,17 +57,23 @@ export class FlyoutButton {
   svgText: SVGTextElement | null = null;
 
   /**
+   * Holds the cursors svg element when the cursor is attached to the button.
+   * This is null if there is no cursor on the button.
+   */
+  cursorSvg: SVGElement | null = null;
+
+  /**
    * @param workspace The workspace in which to place this button.
    * @param targetWorkspace The flyout's target workspace.
    * @param json The JSON specifying the label/button.
-   * @param isLabel_ Whether this button should be styled as a label.
+   * @param isFlyoutLabel Whether this button should be styled as a label.
    * @internal
    */
   constructor(
     private readonly workspace: WorkspaceSvg,
     private readonly targetWorkspace: WorkspaceSvg,
     json: toolbox.ButtonOrLabelInfo,
-    private readonly isLabel_: boolean,
+    private readonly isFlyoutLabel: boolean,
   ) {
     this.text = json['text'];
 
@@ -93,7 +100,9 @@ export class FlyoutButton {
    * @returns The button's SVG group.
    */
   createDom(): SVGElement {
-    let cssClass = this.isLabel_ ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton';
+    let cssClass = this.isFlyoutLabel
+      ? 'blocklyFlyoutLabel'
+      : 'blocklyFlyoutButton';
     if (this.cssClass) {
       cssClass += ' ' + this.cssClass;
     }
@@ -105,7 +114,7 @@ export class FlyoutButton {
     );
 
     let shadow;
-    if (!this.isLabel_) {
+    if (!this.isFlyoutLabel) {
       // Shadow rectangle (light source does not mirror in RTL).
       shadow = dom.createSvgElement(
         Svg.RECT,
@@ -123,7 +132,7 @@ export class FlyoutButton {
     const rect = dom.createSvgElement(
       Svg.RECT,
       {
-        'class': this.isLabel_
+        'class': this.isFlyoutLabel
           ? 'blocklyFlyoutLabelBackground'
           : 'blocklyFlyoutButtonBackground',
         'rx': FlyoutButton.BORDER_RADIUS,
@@ -135,7 +144,7 @@ export class FlyoutButton {
     const svgText = dom.createSvgElement(
       Svg.TEXT,
       {
-        'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
+        'class': this.isFlyoutLabel ? 'blocklyFlyoutLabelText' : 'blocklyText',
         'x': 0,
         'y': 0,
         'text-anchor': 'middle',
@@ -148,7 +157,7 @@ export class FlyoutButton {
       text += '\u200F';
     }
     svgText.textContent = text;
-    if (this.isLabel_) {
+    if (this.isFlyoutLabel) {
       this.svgText = svgText;
       this.workspace
         .getThemeManager()
@@ -172,7 +181,7 @@ export class FlyoutButton {
     );
     this.height = fontMetrics.height;
 
-    if (!this.isLabel_) {
+    if (!this.isFlyoutLabel) {
       this.width += 2 * FlyoutButton.TEXT_MARGIN_X;
       this.height += 2 * FlyoutButton.TEXT_MARGIN_Y;
       shadow?.setAttribute('width', String(this.width));
@@ -228,7 +237,7 @@ export class FlyoutButton {
 
   /** @returns Whether or not the button is a label. */
   isLabel(): boolean {
-    return this.isLabel_;
+    return this.isFlyoutLabel;
   }
 
   /**
@@ -255,6 +264,15 @@ export class FlyoutButton {
     return this.targetWorkspace;
   }
 
+  /**
+   * Get the button's workspace.
+   *
+   * @returns The workspace in which to place this button.
+   */
+  getWorkspace(): WorkspaceSvg {
+    return this.workspace;
+  }
+
   /** Dispose of this button. */
   dispose() {
     if (this.onMouseUpWrapper) {
@@ -269,6 +287,32 @@ export class FlyoutButton {
   }
 
   /**
+   * Add the cursor SVG to this buttons's SVG group.
+   *
+   * @param cursorSvg The SVG root of the cursor to be added to the button SVG
+   *     group.
+   */
+  setCursorSvg(cursorSvg: SVGElement) {
+    if (!cursorSvg) {
+      this.cursorSvg = null;
+      return;
+    }
+    if (this.svgGroup) {
+      this.svgGroup.appendChild(cursorSvg);
+      this.cursorSvg = cursorSvg;
+    }
+  }
+
+  /**
+   * Required by IASTNodeLocationSvg, but not used. A marker cannot be set on a
+   * button. If the 'mark' shortcut is used on a button, its associated callback
+   * function is triggered.
+   */
+  setMarkerSvg() {
+    throw new Error('Attempted to set a marker on a button.');
+  }
+
+  /**
    * Do something when the button is clicked.
    *
    * @param e Pointer up event.
@@ -279,19 +323,19 @@ export class FlyoutButton {
       gesture.cancel();
     }
 
-    if (this.isLabel_ && this.callbackKey) {
+    if (this.isFlyoutLabel && this.callbackKey) {
       console.warn(
         'Labels should not have callbacks. Label text: ' + this.text,
       );
     } else if (
-      !this.isLabel_ &&
+      !this.isFlyoutLabel &&
       !(
         this.callbackKey &&
         this.targetWorkspace.getButtonCallback(this.callbackKey)
       )
     ) {
       console.warn('Buttons should have callbacks. Button text: ' + this.text);
-    } else if (!this.isLabel_) {
+    } else if (!this.isFlyoutLabel) {
       const callback = this.targetWorkspace.getButtonCallback(this.callbackKey);
       if (callback) {
         callback(this);

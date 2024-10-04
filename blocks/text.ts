@@ -23,7 +23,6 @@ import {
   createBlockDefinitionsFromJsonArray,
   defineBlocks,
 } from '../core/common.js';
-import '../core/field_multilineinput.js';
 import '../core/field_variable.js';
 import {ValueInput} from '../core/inputs/value_input.js';
 
@@ -47,38 +46,6 @@ export const blocks = createBlockDefinitionsFromJsonArray([
     'helpUrl': '%{BKY_TEXT_TEXT_HELPURL}',
     'tooltip': '%{BKY_TEXT_TEXT_TOOLTIP}',
     'extensions': ['text_quotes', 'parent_tooltip_when_inline'],
-  },
-  {
-    'type': 'text_multiline',
-    'message0': '%1 %2',
-    'args0': [
-      {
-        'type': 'field_image',
-        'src':
-          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAARCAYAAADpP' +
-          'U2iAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAdhgAAHYYBXaITgQAAABh0RVh0' +
-          'U29mdHdhcmUAcGFpbnQubmV0IDQuMS42/U4J6AAAAP1JREFUOE+Vks0KQUEYhjm' +
-          'RIja4ABtZ2dm5A3t3Ia6AUm7CylYuQRaUhZSlLZJiQbFAyRnPN33y01HOW08z88' +
-          '73zpwzM4F3GWOCruvGIE4/rLaV+Nq1hVGMBqzhqlxgCys4wJA65xnogMHsQ5luj' +
-          'nYHTejBBCK2mE4abjCgMGhNxHgDFWjDSG07kdfVa2pZMf4ZyMAdWmpZMfYOsLiD' +
-          'MYMjlMB+K613QISRhTnITnsYg5yUd0DETmEoMlkFOeIT/A58iyK5E18BuTBfgYX' +
-          'fwNJv4P9/oEBerLylOnRhygmGdPpTTBZAPkde61lbQe4moWUvYUZYLfUNftIY4z' +
-          'wA5X2Z9AYnQrEAAAAASUVORK5CYII=',
-        'width': 12,
-        'height': 17,
-        'alt': '\u00B6',
-      },
-      {
-        'type': 'field_multilinetext',
-        'name': 'TEXT',
-        'text': '',
-      },
-    ],
-    'output': 'String',
-    'style': 'text_blocks',
-    'helpUrl': '%{BKY_TEXT_TEXT_HELPURL}',
-    'tooltip': '%{BKY_TEXT_TEXT_TOOLTIP}',
-    'extensions': ['parent_tooltip_when_inline'],
   },
   {
     'type': 'text_join',
@@ -829,7 +796,7 @@ const JOIN_MUTATOR_MIXIN = {
     // Disconnect any children that don't belong.
     for (let i = 0; i < this.itemCount_; i++) {
       const connection = this.getInput('ADD' + i)!.connection!.targetConnection;
-      if (connection && connections.indexOf(connection) === -1) {
+      if (connection && !connections.includes(connection)) {
         connection.disconnect();
       }
     }

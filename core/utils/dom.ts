@@ -6,7 +6,6 @@
 
 // Former goog.module ID: Blockly.utils.dom
 
-import * as deprecation from './deprecation.js';
 import type {Svg} from './svg.js';
 
 /**
@@ -152,24 +151,6 @@ export function insertAfter(newNode: Element, refNode: Element) {
   } else {
     parentNode.appendChild(newNode);
   }
-}
-
-/**
- * Whether a node contains another node.
- *
- * @param parent The node that should contain the other node.
- * @param descendant The node to test presence of.
- * @returns Whether the parent node contains the descendant node.
- * @deprecated Use native 'contains' DOM method.
- */
-export function containsNode(parent: Node, descendant: Node): boolean {
-  deprecation.warn(
-    'Blockly.utils.dom.containsNode',
-    'version 10',
-    'version 11',
-    'Use native "contains" DOM method',
-  );
-  return parent.contains(descendant);
 }
 
 /**

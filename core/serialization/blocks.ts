@@ -9,6 +9,7 @@
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
+import {MANUALLY_DISABLED} from '../constants.js';
 import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../inputs/input_types.js';
 import {isSerializable} from '../interfaces/i_serializable.js';
@@ -29,6 +30,8 @@ import {
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
 import {Coordinate} from '../utils/coordinate.js';
+import * as Variables from '../variables.js';
+import {VariableModel} from '../variable_model.js';
 
 // TODO(#5160): Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
@@ -54,6 +57,7 @@ export interface State {
   movable?: boolean;
   editable?: boolean;
   enabled?: boolean;
+  disabledReasons?: string[];
   inline?: boolean;
   data?: string;
   extraState?: AnyDuringMigration;
@@ -160,7 +164,7 @@ function saveAttributes(block: Block, state: State) {
     state['collapsed'] = true;
   }
   if (!block.isEnabled()) {
-    state['enabled'] = false;
+    state['disabledReasons'] = Array.from(block.getDisabledReasons());
   }
   if (!block.isOwnDeletable()) {
     state['deletable'] = false;
@@ -417,6 +421,7 @@ export function appendInternal(
   }
   eventUtils.disable();
 
+  const variablesBeforeCreation = workspace.getAllVariables();
   let block;
   try {
     block = appendPrivate(state, workspace, {parentConnection, isShadow});
@@ -424,7 +429,12 @@ export function appendInternal(
     eventUtils.enable();
   }
 
+  // Fire a VarCreate event for each (if any) new variable created.
+  checkNewVariables(workspace, variablesBeforeCreation);
+
   if (eventUtils.isEnabled()) {
+    // Block events come after var events, in case they refer to newly created
+    // variables.
     eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
   }
   eventUtils.setGroup(existingGroup);
@@ -486,6 +496,33 @@ function appendPrivate(
 }
 
 /**
+ * Checks the workspace for any new variables that were created during the
+ * deserialization of a block and fires a VarCreate event for each.
+ *
+ * @param workspace The workspace where new variables are being created
+ * @param originalVariables The array of variables that existed in the workspace
+ *     before adding the new block.
+ */
+function checkNewVariables(
+  workspace: Workspace,
+  originalVariables: VariableModel[],
+) {
+  if (eventUtils.isEnabled()) {
+    const newVariables = Variables.getAddedVariables(
+      workspace,
+      originalVariables,
+    );
+    // Fire a VarCreate event for each (if any) new variable created.
+    for (let i = 0; i < newVariables.length; i++) {
+      const thisVariable = newVariables[i];
+      eventUtils.fire(
+        new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable),
+      );
+    }
+  }
+}
+
+/**
  * Applies any coordinate information available on the state object to the
  * block.
  *
@@ -522,7 +559,14 @@ function loadAttributes(block: Block, state: State) {
     block.setEditable(false);
   }
   if (state['enabled'] === false) {
-    block.setEnabled(false);
+    // Before May 2024 we just used 'enabled', with no reasons.
+    // Contiune to support this syntax.
+    block.setDisabledReason(true, MANUALLY_DISABLED);
+  }
+  if (Array.isArray(state['disabledReasons'])) {
+    for (const reason of state['disabledReasons']) {
+      block.setDisabledReason(true, reason);
+    }
   }
   if (state['inline'] !== undefined) {
     block.setInputsInline(state['inline']);

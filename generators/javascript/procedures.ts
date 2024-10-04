@@ -38,8 +38,17 @@ export function procedures_defreturn(
       generator.INDENT,
     );
   }
-  const branch = generator.statementToCode(block, 'STACK');
-  let returnValue = generator.valueToCode(block, 'RETURN', Order.NONE) || '';
+  let branch = '';
+  if (block.getInput('STACK')) {
+    // The 'procedures_defreturn' block might not have a STACK input.
+    branch = generator.statementToCode(block, 'STACK');
+  }
+  let returnValue = '';
+  if (block.getInput('RETURN')) {
+    // The 'procedures_defnoreturn' block (which shares this code)
+    // does not have a RETURN input.
+    returnValue = generator.valueToCode(block, 'RETURN', Order.NONE) || '';
+  }
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.

@@ -445,19 +445,20 @@ export class RenderedConnection extends Connection {
     const {parentConnection, childConnection} =
       this.getParentAndChildConnections();
     if (!parentConnection || !childConnection) return;
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) eventUtils.setGroup(true);
+
     const parent = parentConnection.getSourceBlock() as BlockSvg;
     const child = childConnection.getSourceBlock() as BlockSvg;
     super.disconnectInternal(setParent);
-    // Rerender the parent so that it may reflow.
-    if (parent.rendered) {
-      parent.queueRender();
-    }
-    if (child.rendered) {
-      child.updateDisabled();
-      child.queueRender();
-      // Reset visibility, since the child is now a top block.
-      child.getSvgRoot().style.display = 'block';
-    }
+
+    parent.queueRender();
+    child.updateDisabled();
+    child.queueRender();
+    // Reset visibility, since the child is now a top block.
+    child.getSvgRoot().style.display = 'block';
+
+    eventUtils.setGroup(existingGroup);
   }
 
   /**
@@ -500,29 +501,10 @@ export class RenderedConnection extends Connection {
 
     const parentBlock = this.getSourceBlock();
     const childBlock = renderedChildConnection.getSourceBlock();
-    const parentRendered = parentBlock.rendered;
-    const childRendered = childBlock.rendered;
 
-    if (parentRendered) {
-      parentBlock.updateDisabled();
-    }
-    if (childRendered) {
-      childBlock.updateDisabled();
-    }
-    if (parentRendered && childRendered) {
-      if (
-        this.type === ConnectionType.NEXT_STATEMENT ||
-        this.type === ConnectionType.PREVIOUS_STATEMENT
-      ) {
-        // Child block may need to square off its corners if it is in a stack.
-        // Rendering a child will render its parent.
-        childBlock.queueRender();
-      } else {
-        // Child block does not change shape.  Rendering the parent node will
-        // move its connected children into position.
-        parentBlock.queueRender();
-      }
-    }
+    parentBlock.updateDisabled();
+    childBlock.updateDisabled();
+    childBlock.queueRender();
 
     // The input the child block is connected to (if any).
     const parentInput = parentBlock.getInputWithBlock(childBlock);
@@ -548,8 +530,6 @@ export class RenderedConnection extends Connection {
     ) {
       const child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
       child!.unplug();
-      // Bump away.
-      this.sourceBlock_.bumpNeighbours();
     }
   }
 
@@ -563,9 +543,7 @@ export class RenderedConnection extends Connection {
    */
   override setCheck(check: string | string[] | null): RenderedConnection {
     super.setCheck(check);
-    if (this.sourceBlock_.rendered) {
-      this.sourceBlock_.queueRender();
-    }
+    this.sourceBlock_.queueRender();
     return this;
   }
 }

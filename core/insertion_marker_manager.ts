@@ -17,7 +17,7 @@ import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
 import {config} from './config.js';
-import * as constants from './constants.js';
+import * as blocks from './serialization/blocks.js';
 import * as eventUtils from './events/utils.js';
 import type {IDeleteArea} from './interfaces/i_delete_area.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
@@ -41,16 +41,6 @@ interface CandidateConnection {
   local: RenderedConnection;
   radius: number;
 }
-
-/**
- * An error message to throw if the block created by createMarkerBlock_ is
- * missing any components.
- */
-const DUPLICATE_BLOCK_ERROR =
-  'The insertion marker ' +
-  'manager tried to create a marker but the result is missing %1. If ' +
-  'you are using a mutator, make sure your domToMutation method is ' +
-  'properly defined.';
 
 /**
  * Class that controls updates to connections during drags.  It is primarily
@@ -188,18 +178,16 @@ export class InsertionMarkerManager {
     eventUtils.enable();
     const {local, closest} = this.activeCandidate;
     local.connect(closest);
-    if (this.topBlock.rendered) {
-      const inferiorConnection = local.isSuperior() ? closest : local;
-      const rootBlock = this.topBlock.getRootBlock();
+    const inferiorConnection = local.isSuperior() ? closest : local;
+    const rootBlock = this.topBlock.getRootBlock();
 
-      finishQueuedRenders().then(() => {
-        blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
-        // bringToFront is incredibly expensive. Delay until the next frame.
-        setTimeout(() => {
-          rootBlock.bringToFront();
-        }, 0);
-      });
-    }
+    finishQueuedRenders().then(() => {
+      blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
+      // bringToFront is incredibly expensive. Delay until the next frame.
+      setTimeout(() => {
+        rootBlock.bringToFront();
+      }, 0);
+    });
   }
 
   /**
@@ -233,52 +221,29 @@ export class InsertionMarkerManager {
    * @returns The insertion marker that represents the given block.
    */
   private createMarkerBlock(sourceBlock: BlockSvg): BlockSvg {
-    const imType = sourceBlock.type;
-
     eventUtils.disable();
     let result: BlockSvg;
     try {
-      result = this.workspace.newBlock(imType);
-      result.setInsertionMarker(true);
-      if (sourceBlock.saveExtraState) {
-        const state = sourceBlock.saveExtraState(true);
-        if (state && result.loadExtraState) {
-          result.loadExtraState(state);
-        }
-      } else if (sourceBlock.mutationToDom) {
-        const oldMutationDom = sourceBlock.mutationToDom();
-        if (oldMutationDom && result.domToMutation) {
-          result.domToMutation(oldMutationDom);
-        }
-      }
-      // Copy field values from the other block.  These values may impact the
-      // rendered size of the insertion marker.  Note that we do not care about
-      // child blocks here.
-      for (let i = 0; i < sourceBlock.inputList.length; i++) {
-        const sourceInput = sourceBlock.inputList[i];
-        if (sourceInput.name === constants.COLLAPSED_INPUT_NAME) {
-          continue; // Ignore the collapsed input.
-        }
-        const resultInput = result.inputList[i];
-        if (!resultInput) {
-          throw new Error(DUPLICATE_BLOCK_ERROR.replace('%1', 'an input'));
-        }
-        for (let j = 0; j < sourceInput.fieldRow.length; j++) {
-          const sourceField = sourceInput.fieldRow[j];
-          const resultField = resultInput.fieldRow[j];
-          if (!resultField) {
-            throw new Error(DUPLICATE_BLOCK_ERROR.replace('%1', 'a field'));
-          }
-          resultField.setValue(sourceField.getValue());
-        }
+      const blockJson = blocks.save(sourceBlock, {
+        addCoordinates: false,
+        addInputBlocks: false,
+        addNextBlocks: false,
+        doFullSerialization: false,
+      });
+
+      if (!blockJson) {
+        throw new Error(
+          `Failed to serialize source block. ${sourceBlock.toDevString()}`,
+        );
       }
 
+      result = blocks.append(blockJson, this.workspace) as BlockSvg;
+
+      // Turn shadow blocks that are created programmatically during
+      // initalization to insertion markers too.
       for (const block of result.getDescendants(false)) {
         block.setInsertionMarker(true);
       }
-
-      result.setCollapsed(sourceBlock.isCollapsed());
-      result.setInputsInline(sourceBlock.getInputsInline());
 
       result.initSvg();
       result.getSvgRoot().setAttribute('visibility', 'hidden');
@@ -419,10 +384,7 @@ export class InsertionMarkerManager {
         ComponentManager.Capability.DELETE_AREA,
       );
       if (isDeleteArea) {
-        return (dragTarget as IDeleteArea).wouldDelete(
-          this.topBlock,
-          newCandidate,
-        );
+        return (dragTarget as IDeleteArea).wouldDelete(this.topBlock);
       }
     }
     return false;

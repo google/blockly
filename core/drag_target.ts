@@ -39,8 +39,9 @@ export class DragTarget implements IDragTarget {
    *
    * @param _dragElement The block or bubble currently being dragged.
    */
-  onDragEnter(_dragElement: IDraggable) {}
-  // no-op
+  onDragEnter(_dragElement: IDraggable) {
+    // no-op
+  }
 
   /**
    * Handles when a cursor with a block or bubble is dragged over this drag
@@ -48,24 +49,27 @@ export class DragTarget implements IDragTarget {
    *
    * @param _dragElement The block or bubble currently being dragged.
    */
-  onDragOver(_dragElement: IDraggable) {}
-  // no-op
+  onDragOver(_dragElement: IDraggable) {
+    // no-op
+  }
 
   /**
    * Handles when a cursor with a block or bubble exits this drag target.
    *
    * @param _dragElement The block or bubble currently being dragged.
    */
-  onDragExit(_dragElement: IDraggable) {}
-  // no-op
+  onDragExit(_dragElement: IDraggable) {
+    // no-op
+  }
   /**
    * Handles when a block or bubble is dropped on this component.
    * Should not handle delete here.
    *
    * @param _dragElement The block or bubble currently being dragged.
    */
-  onDrop(_dragElement: IDraggable) {}
-  // no-op
+  onDrop(_dragElement: IDraggable) {
+    // no-op
+  }
 
   /**
    * Returns the bounding rectangle of the drag target area in pixel units

@@ -536,13 +536,13 @@ export class ConstantProvider extends BaseConstantProvider {
           }
         }
         // Includes doesn't work in IE.
-        if (checks && checks.indexOf('Boolean') !== -1) {
+        if (checks && checks.includes('Boolean')) {
           return this.HEXAGONAL!;
         }
-        if (checks && checks.indexOf('Number') !== -1) {
+        if (checks && checks.includes('Number')) {
           return this.ROUNDED!;
         }
-        if (checks && checks.indexOf('String') !== -1) {
+        if (checks && checks.includes('String')) {
           return this.ROUNDED!;
         }
         return this.ROUNDED!;
@@ -792,6 +792,10 @@ export class ConstantProvider extends BaseConstantProvider {
       `${selector} .blocklyFlyoutLabelText {`,
       `font: ${this.FIELD_TEXT_FONTWEIGHT} ${this.FIELD_TEXT_FONTSIZE}` +
         `pt ${this.FIELD_TEXT_FONTFAMILY};`,
+      `}`,
+
+      `${selector} .blocklyTextInputBubble textarea {`,
+      `font-weight: normal;`,
       `}`,
 
       // Fields.

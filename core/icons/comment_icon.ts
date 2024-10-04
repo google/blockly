@@ -22,6 +22,7 @@ import {Svg} from '../utils/svg.js';
 import {TextBubble} from '../bubbles/text_bubble.js';
 import {TextInputBubble} from '../bubbles/textinput_bubble.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
+import * as renderManagement from '../render_management.js';
 
 /** The size of the comment icon in workspace-scale units. */
 const SIZE = 17;
@@ -138,12 +139,12 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
    * Updates the state of the bubble (editable / noneditable) to reflect the
    * state of the bubble if the bubble is currently shown.
    */
-  override updateEditable(): void {
+  override async updateEditable(): Promise<void> {
     super.updateEditable();
     if (this.bubbleIsVisible()) {
       // Close and reopen the bubble to display the correct UI.
-      this.setBubbleVisible(false);
-      this.setBubbleVisible(true);
+      await this.setBubbleVisible(false);
+      await this.setBubbleVisible(true);
     }
   }
 
@@ -214,8 +215,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
       state['height'] ?? DEFAULT_BUBBLE_HEIGHT,
     );
     this.bubbleVisiblity = state['pinned'] ?? false;
-    // Give the block a chance to be positioned and rendered before showing.
-    setTimeout(() => this.setBubbleVisible(this.bubbleVisiblity), 1);
+    this.setBubbleVisible(this.bubbleVisiblity);
   }
 
   override onClick(): void {
@@ -263,13 +263,18 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     return this.bubbleVisiblity;
   }
 
-  setBubbleVisible(visible: boolean): void {
-    if (visible && (this.textBubble || this.textInputBubble)) return;
-    if (!visible && !(this.textBubble || this.textInputBubble)) return;
-
+  async setBubbleVisible(visible: boolean): Promise<void> {
+    if (this.bubbleVisiblity === visible) return;
     this.bubbleVisiblity = visible;
 
-    if (!this.sourceBlock.rendered || this.sourceBlock.isInFlyout) return;
+    await renderManagement.finishQueuedRenders();
+
+    if (
+      !this.sourceBlock.rendered ||
+      this.sourceBlock.isInFlyout ||
+      this.sourceBlock.isInsertionMarker()
+    )
+      return;
 
     if (visible) {
       if (this.sourceBlock.isEditable()) {
@@ -347,10 +352,18 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   }
 }
 
+/** The save state format for a comment icon. */
 export interface CommentState {
+  /** The text of the comment. */
   text?: string;
+
+  /** True if the comment is open, false otherwise. */
   pinned?: boolean;
+
+  /** The height of the comment bubble. */
   height?: number;
+
+  /** The width of the comment bubble. */
   width?: number;
 }
 

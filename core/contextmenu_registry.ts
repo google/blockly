@@ -12,6 +12,7 @@
 // Former goog.module ID: Blockly.ContextMenuRegistry
 
 import type {BlockSvg} from './block_svg.js';
+import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
@@ -119,6 +120,7 @@ export namespace ContextMenuRegistry {
   export enum ScopeType {
     BLOCK = 'block',
     WORKSPACE = 'workspace',
+    COMMENT = 'comment',
   }
 
   /**
@@ -128,13 +130,20 @@ export namespace ContextMenuRegistry {
   export interface Scope {
     block?: BlockSvg;
     workspace?: WorkspaceSvg;
+    comment?: RenderedWorkspaceComment;
   }
 
   /**
    * A menu item as entered in the registry.
    */
   export interface RegistryItem {
-    callback: (p1: Scope) => void;
+    /**
+     * @param scope Object that provides a reference to the thing that had its
+     *     context menu opened.
+     * @param e The original event that triggered the context menu to open. Not
+     *     the event that triggered the click on the option.
+     */
+    callback: (scope: Scope, e: PointerEvent) => void;
     scopeType: ScopeType;
     displayText: ((p1: Scope) => string | HTMLElement) | string | HTMLElement;
     preconditionFn: (p1: Scope) => string;
@@ -148,7 +157,13 @@ export namespace ContextMenuRegistry {
   export interface ContextMenuOption {
     text: string | HTMLElement;
     enabled: boolean;
-    callback: (p1: Scope) => void;
+    /**
+     * @param scope Object that provides a reference to the thing that had its
+     *     context menu opened.
+     * @param e The original event that triggered the context menu to open. Not
+     *     the event that triggered the click on the option.
+     */
+    callback: (scope: Scope, e: PointerEvent) => void;
     scope: Scope;
     weight: number;
   }

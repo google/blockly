@@ -243,8 +243,8 @@ export class PythonGenerator extends CodeGenerator {
 
     // Follow the CPython behaviour of repr() for a non-byte string.
     let quote = "'";
-    if (string.indexOf("'") !== -1) {
-      if (string.indexOf('"') === -1) {
+    if (string.includes("'")) {
+      if (!string.includes('"')) {
         quote = '"';
       } else {
         string = string.replace(/'/g, "\\'");
@@ -276,7 +276,6 @@ export class PythonGenerator extends CodeGenerator {
    * @param code The Python code created for this block.
    * @param thisOnly True to generate code for only this statement.
    * @returns Python code with comments and subsequent blocks added.
-
    */
   scrub_(block: Block, code: string, thisOnly = false): string {
     let commentCode = '';

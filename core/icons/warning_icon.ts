@@ -17,6 +17,7 @@ import {Size} from '../utils.js';
 import {Svg} from '../utils/svg.js';
 import {TextBubble} from '../bubbles/text_bubble.js';
 import {IconType} from './icon_types.js';
+import * as renderManagement from '../render_management.js';
 
 /** The size of the warning icon in workspace-scale units. */
 const SIZE = 17;
@@ -168,8 +169,10 @@ export class WarningIcon extends Icon implements IHasBubble {
     return !!this.textBubble;
   }
 
-  setBubbleVisible(visible: boolean): void {
+  async setBubbleVisible(visible: boolean): Promise<void> {
     if (this.bubbleIsVisible() === visible) return;
+
+    await renderManagement.finishQueuedRenders();
 
     if (visible) {
       this.textBubble = new TextBubble(

@@ -68,7 +68,7 @@ export const COMPRESSED = compressed();
  *
  * When loading in uncompressed mode, if scriptExports is a simple
  * variable name (e.g. 'Blockly') then globalThis[scriptExports] will
- * be set to the the chunk's Module object.  This attempts to provide
+ * be set to the chunk's Module object.  This attempts to provide
  * backward compatibility with loading the compressed chunk as a
  * script, where this is done by the compressed chunk's UMD wrapper.
  * The compatibility is not complete, however: since Module objects

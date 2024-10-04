@@ -15,6 +15,7 @@ import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import {IconType} from '../icons/icon_types.js';
 import {hasBubble} from '../interfaces/i_has_bubble.js';
+import {MANUALLY_DISABLED} from '../constants.js';
 import * as registry from '../registry.js';
 import * as utilsXml from '../utils/xml.js';
 import {Workspace} from '../workspace.js';
@@ -43,6 +44,12 @@ export class BlockChange extends BlockBase {
 
   /** The new value of the element. */
   newValue: unknown;
+
+  /**
+   * If element is 'disabled', this is the language-neutral identifier of the
+   * reason why the block was or was not disabled.
+   */
+  private disabledReason?: string;
 
   /**
    * @param opt_block The changed block.  Undefined for a blank event.
@@ -86,6 +93,9 @@ export class BlockChange extends BlockBase {
     json['name'] = this.name;
     json['oldValue'] = this.oldValue;
     json['newValue'] = this.newValue;
+    if (this.disabledReason) {
+      json['disabledReason'] = this.disabledReason;
+    }
     return json;
   }
 
@@ -112,7 +122,28 @@ export class BlockChange extends BlockBase {
     newEvent.name = json['name'];
     newEvent.oldValue = json['oldValue'];
     newEvent.newValue = json['newValue'];
+    if (json['disabledReason'] !== undefined) {
+      newEvent.disabledReason = json['disabledReason'];
+    }
     return newEvent;
+  }
+
+  /**
+   * Set the language-neutral identifier for the reason why the block was or was
+   * not disabled. This is only valid for events where element is 'disabled'.
+   * Defaults to 'MANUALLY_DISABLED'.
+   *
+   * @param disabledReason The identifier of the reason why the block was or was
+   *     not disabled.
+   */
+  setDisabledReason(disabledReason: string) {
+    if (this.element !== 'disabled') {
+      throw new Error(
+        'Cannot set the disabled reason for a BlockChange event if the ' +
+          'element is not "disabled".',
+      );
+    }
+    this.disabledReason = disabledReason;
   }
 
   /**
@@ -168,7 +199,10 @@ export class BlockChange extends BlockBase {
         block.setCollapsed(!!value);
         break;
       case 'disabled':
-        block.setEnabled(!value);
+        block.setDisabledReason(
+          !!value,
+          this.disabledReason ?? MANUALLY_DISABLED,
+        );
         break;
       case 'inline':
         block.setInputsInline(!!value);
@@ -219,6 +253,7 @@ export interface BlockChangeJson extends BlockBaseJson {
   name?: string;
   newValue: unknown;
   oldValue: unknown;
+  disabledReason?: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.CHANGE, BlockChange);

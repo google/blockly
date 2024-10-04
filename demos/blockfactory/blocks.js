@@ -682,7 +682,7 @@ Blockly.Blocks['type_group'] = {
     // Disconnect any children that don't belong.
     for (var i = 0; i < this.typeCount_; i++) {
       var connection = this.getInput('TYPE' + i).connection.targetConnection;
-      if (connection && connections.indexOf(connection) === -1) {
+      if (connection && !connections.includes(connection)) {
         connection.disconnect();
       }
     }
@@ -880,7 +880,7 @@ function fieldNameCheck(referenceBlock) {
   var blocks = referenceBlock.workspace.getAllBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     var otherName = block.getFieldValue('FIELDNAME');
-    if (!block.disabled && !block.getInheritedDisabled() &&
+    if (block.isEnabled() && !block.getInheritedDisabled() &&
         otherName && otherName.toLowerCase() === name) {
       count++;
     }
@@ -905,7 +905,7 @@ function inputNameCheck(referenceBlock) {
   var blocks = referenceBlock.workspace.getAllBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     var otherName = block.getFieldValue('INPUTNAME');
-    if (!block.disabled && !block.getInheritedDisabled() &&
+    if (block.isEnabled() && !block.getInheritedDisabled() &&
         otherName && otherName.toLowerCase() === name) {
       count++;
     }

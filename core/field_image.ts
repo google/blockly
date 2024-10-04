@@ -250,7 +250,7 @@ export class FieldImage extends Field<string> {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FieldImageFromJsonConfig): FieldImage {
+  static override fromJson(options: FieldImageFromJsonConfig): FieldImage {
     if (!options.src || !options.width || !options.height) {
       throw new Error(
         'src, width, and height values for an image field are' +
@@ -284,7 +284,7 @@ export interface FieldImageConfig extends FieldConfig {
 }
 
 /**
- * fromJson config options for the colour field.
+ * fromJson config options for the image field.
  */
 export interface FieldImageFromJsonConfig extends FieldImageConfig {
   src?: string;

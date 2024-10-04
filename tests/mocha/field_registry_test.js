@@ -42,12 +42,10 @@ suite('Field Registry', function () {
       }, 'Invalid name');
     });
     test('No fromJson', function () {
-      const fromJson = CustomFieldType.fromJson;
-      delete CustomFieldType.fromJson;
+      class IncorrectField {}
       chai.assert.throws(function () {
-        Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
+        Blockly.fieldRegistry.register('field_custom_test', IncorrectField);
       }, 'must have a fromJson function');
-      CustomFieldType.fromJson = fromJson;
     });
     test('fromJson not a function', function () {
       const fromJson = CustomFieldType.fromJson;
@@ -96,6 +94,22 @@ suite('Field Registry', function () {
 
       chai.assert.isNotNull(field);
       chai.assert.equal(field.getValue(), 'ok');
+    });
+    test('Did not override fromJson', function () {
+      // This class will have a fromJson method, so it can be registered
+      // but it doesn't override the abstract class's method so it throws
+      class IncorrectField extends Blockly.Field {}
+
+      Blockly.fieldRegistry.register('field_custom_test', IncorrectField);
+
+      const json = {
+        type: 'field_custom_test',
+        value: 'ok',
+      };
+
+      chai.assert.throws(function () {
+        Blockly.fieldRegistry.fromJson(json);
+      }, 'Attempted to instantiate a field from the registry');
     });
   });
 });

@@ -16,4 +16,19 @@ export interface IDeletable {
    * @returns True if deletable.
    */
   isDeletable(): boolean;
+
+  /** Disposes of this object, cleaning up any references or DOM elements. */
+  dispose(): void;
+
+  /** Visually indicates that the object is pending deletion. */
+  setDeleteStyle(wouldDelete: boolean): void;
+}
+
+/** Returns whether the given object is an IDeletable. */
+export function isDeletable(obj: any): obj is IDeletable {
+  return (
+    obj['isDeletable'] !== undefined &&
+    obj['dispose'] !== undefined &&
+    obj['setDeleteStyle'] !== undefined
+  );
 }

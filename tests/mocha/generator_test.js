@@ -92,7 +92,7 @@ suite('Generator', function () {
           return 'stack_block';
         };
         rowBlock.nextConnection.connect(stackBlock.previousConnection);
-        rowBlock.disabled = blockDisabled;
+        rowBlock.setDisabledReason(blockDisabled, 'test reason');
 
         const code = generator.blockToCode(rowBlock, opt_thisOnly);
         delete generator.forBlock['stack_block'];
@@ -115,11 +115,16 @@ suite('Generator', function () {
         const name = testCase[1];
         test(name, function () {
           generator.init(this.workspace);
-          this.blockToCodeTest(generator, false, true, 'row_block');
           this.blockToCodeTest(
             generator,
-            false,
-            false,
+            /* blockDisabled = */ false,
+            /* opt_thisOnly = */ true,
+            'row_block',
+          );
+          this.blockToCodeTest(
+            generator,
+            /* blockDisabled = */ false,
+            /* opt_thisOnly = */ false,
             'row_blockstack_block',
             'thisOnly=false',
           );
@@ -132,11 +137,16 @@ suite('Generator', function () {
         const generator = testCase[0];
         const name = testCase[1];
         test(name, function () {
-          this.blockToCodeTest(generator, true, true, '');
           this.blockToCodeTest(
             generator,
-            true,
-            false,
+            /* blockDisabled = */ true,
+            /* opt_thisOnly = */ true,
+            '',
+          );
+          this.blockToCodeTest(
+            generator,
+            /* blockDisabled = */ true,
+            /* opt_thisOnly = */ false,
             'stack_block',
             'thisOnly=false',
           );

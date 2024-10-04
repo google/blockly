@@ -114,7 +114,8 @@ suite('Clipboard', function () {
   });
 
   suite('pasting comments', function () {
-    test('pasted comments are bumped to not overlap', function () {
+    // TODO: Reenable test when we readd copy-paste.
+    test.skip('pasted comments are bumped to not overlap', function () {
       Blockly.Xml.domToWorkspace(
         Blockly.utils.xml.textToDom(
           '<xml><comment id="test" x=10 y=10/></xml>',

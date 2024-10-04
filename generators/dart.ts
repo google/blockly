@@ -13,7 +13,6 @@
 // Former goog.module ID: Blockly.Dart.all
 
 import {DartGenerator} from './dart/dart_generator.js';
-import * as colour from './dart/colour.js';
 import * as lists from './dart/lists.js';
 import * as logic from './dart/logic.js';
 import * as loops from './dart/loops.js';
@@ -37,7 +36,6 @@ dartGenerator.addReservedWords('Html,Math');
 
 // Install per-block-type generator functions:
 const generators: typeof dartGenerator.forBlock = {
-  ...colour,
   ...lists,
   ...logic,
   ...loops,

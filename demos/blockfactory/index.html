@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Blockly Demo: Blockly Developer Tools</title>
-  <script src="../../dist/blockly_compressed.js"></script>
-  <script src="../../dist/blocks_compressed.js"></script>
-  <script src="../../dist/javascript_compressed.js"></script>
-  <script src="../../build/msg/en.js"></script>
+  <script src="https://unpkg.com/blockly@10.4.3/blockly_compressed.js"></script>
+  <script src="https://unpkg.com/blockly@10.4.3/blocks_compressed.js"></script>
+  <script src="https://unpkg.com/blockly@10.4.3/javascript_compressed.js"></script>
+  <script src="https://unpkg.com/blockly@10.4.3/msg/en.js"></script>
   <script src="analytics.js"></script>
   <script src="block_definition_extractor.js"></script>
   <script src="factory_utils.js"></script>
@@ -339,6 +339,9 @@
               <button id="localSaveButton" title="Save block library XML to a local file.">
                 <span>Download Block Library</span>
               </button>
+              <button id="exportAsJson" title="Export block library for import into the new Block Factory.">
+                <span>Export Block Library</span>
+              </button>
             </td>
           </tr>
         </table>
@@ -369,7 +372,7 @@
                     // Manual JavaScript works but requires use of eval().
                     // TODO(#1269): Replace eval() with JS-Interpreter before
                     //              re-enabling "Manual JavaScript" mode.
-                    if (document.location.href.indexOf('file://') === 0) {
+                    if (document.location.href.startsWith('file://')) {
                       document.write(
                           '<option value="Manual-JS">Manual JavaScript&hellip;</option>');
                     }

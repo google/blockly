@@ -16,14 +16,6 @@ import {ConnectionType} from './connection_type.js';
 export const COLLAPSE_CHARS = 30;
 
 /**
- * When dragging a block out of a stack, split the stack in two (true), or drag
- * out the block healing the stack (false).
- *
- * @internal
- */
-export const DRAG_STACK = true;
-
-/**
  * Lookup table for determining the opposite type of a connection.
  *
  * @internal

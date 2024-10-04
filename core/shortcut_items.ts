@@ -11,9 +11,14 @@ import * as clipboard from './clipboard.js';
 import * as common from './common.js';
 import {Gesture} from './gesture.js';
 import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
+import {isDeletable} from './interfaces/i_deletable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import {isDraggable} from './interfaces/i_draggable.js';
+import * as eventUtils from './events/utils.js';
+import {Coordinate} from './utils/coordinate.js';
+import {Rect} from './utils/rect.js';
 
 /**
  * Object holding the names of the default shortcut items.
@@ -59,7 +64,9 @@ export function registerDelete() {
       return (
         !workspace.options.readOnly &&
         selected != null &&
-        selected.isDeletable()
+        isDeletable(selected) &&
+        selected.isDeletable() &&
+        !Gesture.inProgress()
       );
     },
     callback(workspace, e) {
@@ -68,11 +75,14 @@ export function registerDelete() {
       // Do this first to prevent an error in the delete code from resulting in
       // data loss.
       e.preventDefault();
-      // Don't delete while dragging.  Jeez.
-      if (Gesture.inProgress()) {
-        return false;
+      const selected = common.getSelected();
+      if (selected instanceof BlockSvg) {
+        selected.checkAndDelete();
+      } else if (isDeletable(selected) && selected.isDeletable()) {
+        eventUtils.setGroup(true);
+        selected.dispose();
+        eventUtils.setGroup(false);
       }
-      (common.getSelected() as BlockSvg).checkAndDelete();
       return true;
     },
     keyCodes: [KeyCodes.DELETE, KeyCodes.BACKSPACE],
@@ -82,6 +92,7 @@ export function registerDelete() {
 
 let copyData: ICopyData | null = null;
 let copyWorkspace: WorkspaceSvg | null = null;
+let copyCoords: Coordinate | null = null;
 
 /**
  * Keyboard shortcut to copy a block on ctrl+c, cmd+c, or alt+c.
@@ -105,7 +116,9 @@ export function registerCopy() {
         !workspace.options.readOnly &&
         !Gesture.inProgress() &&
         selected != null &&
+        isDeletable(selected) &&
         selected.isDeletable() &&
+        isDraggable(selected) &&
         selected.isMovable() &&
         isCopyable(selected)
       );
@@ -119,6 +132,9 @@ export function registerCopy() {
       if (!selected || !isCopyable(selected)) return false;
       copyData = selected.toCopyData();
       copyWorkspace = workspace;
+      copyCoords = isDraggable(selected)
+        ? selected.getRelativeToSurfaceXY()
+        : null;
       return !!copyData;
     },
     keyCodes: [ctrlC, altC, metaC],
@@ -148,19 +164,36 @@ export function registerCut() {
         !workspace.options.readOnly &&
         !Gesture.inProgress() &&
         selected != null &&
-        selected instanceof BlockSvg &&
+        isDeletable(selected) &&
         selected.isDeletable() &&
+        isDraggable(selected) &&
         selected.isMovable() &&
         !selected.workspace!.isFlyout
       );
     },
     callback(workspace) {
       const selected = common.getSelected();
-      if (!selected || !isCopyable(selected)) return false;
-      copyData = selected.toCopyData();
-      copyWorkspace = workspace;
-      (selected as BlockSvg).checkAndDelete();
-      return true;
+
+      if (selected instanceof BlockSvg) {
+        copyData = selected.toCopyData();
+        copyWorkspace = workspace;
+        copyCoords = selected.getRelativeToSurfaceXY();
+        selected.checkAndDelete();
+        return true;
+      } else if (
+        isDeletable(selected) &&
+        selected.isDeletable() &&
+        isCopyable(selected)
+      ) {
+        copyData = selected.toCopyData();
+        copyWorkspace = workspace;
+        copyCoords = isDraggable(selected)
+          ? selected.getRelativeToSurfaceXY()
+          : null;
+        selected.dispose();
+        return true;
+      }
+      return false;
     },
     keyCodes: [ctrlX, altX, metaX],
   };
@@ -189,7 +222,26 @@ export function registerPaste() {
     },
     callback() {
       if (!copyData || !copyWorkspace) return false;
-      return !!clipboard.paste(copyData, copyWorkspace);
+      if (!copyCoords) {
+        // If we don't have location data about the original copyable, let the
+        // paster determine position.
+        return !!clipboard.paste(copyData, copyWorkspace);
+      }
+
+      const {left, top, width, height} = copyWorkspace
+        .getMetricsManager()
+        .getViewMetrics(true);
+      const viewportRect = new Rect(top, top + height, left, left + width);
+
+      if (viewportRect.contains(copyCoords.x, copyCoords.y)) {
+        // If the original copyable is inside the viewport, let the paster
+        // determine position.
+        return !!clipboard.paste(copyData, copyWorkspace);
+      }
+
+      // Otherwise, paste in the middle of the viewport.
+      const centerCoords = new Coordinate(left + width / 2, top + height / 2);
+      return !!clipboard.paste(copyData, copyWorkspace, centerCoords);
     },
     keyCodes: [ctrlV, altV, metaV],
   };
@@ -216,10 +268,11 @@ export function registerUndo() {
     preconditionFn(workspace) {
       return !workspace.options.readOnly && !Gesture.inProgress();
     },
-    callback(workspace) {
+    callback(workspace, e) {
       // 'z' for undo 'Z' is for redo.
       (workspace as WorkspaceSvg).hideChaff();
       workspace.undo(false);
+      e.preventDefault();
       return true;
     },
     keyCodes: [ctrlZ, altZ, metaZ],
@@ -254,10 +307,11 @@ export function registerRedo() {
     preconditionFn(workspace) {
       return !Gesture.inProgress() && !workspace.options.readOnly;
     },
-    callback(workspace) {
+    callback(workspace, e) {
       // 'z' for undo 'Z' is for redo.
       (workspace as WorkspaceSvg).hideChaff();
       workspace.undo(true);
+      e.preventDefault();
       return true;
     },
     keyCodes: [ctrlShiftZ, altShiftZ, metaShiftZ, ctrlY],

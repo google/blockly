@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {ICommentIcon} from '../interfaces/i_comment_icon.js';
 import {IIcon} from '../interfaces/i_icon.js';
-import {CommentIcon} from './comment_icon.js';
 import {MutatorIcon} from './mutator_icon.js';
 import {WarningIcon} from './warning_icon.js';
 
@@ -28,5 +28,5 @@ export class IconType<_T extends IIcon> {
 
   static MUTATOR = new IconType<MutatorIcon>('mutator');
   static WARNING = new IconType<WarningIcon>('warning');
-  static COMMENT = new IconType<CommentIcon>('comment');
+  static COMMENT = new IconType<ICommentIcon>('comment');
 }

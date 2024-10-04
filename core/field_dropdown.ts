@@ -243,6 +243,9 @@ export class FieldDropdown extends Field<string> {
           : ' ' + FieldDropdown.ARROW_CHAR,
       ),
     );
+    if (this.getConstants()!.FIELD_TEXT_BASELINE_CENTER) {
+      this.arrow.setAttribute('dominant-baseline', 'central');
+    }
     if (this.getSourceBlock()?.RTL) {
       this.getTextElement().insertBefore(this.arrow, this.textContent_);
     } else {
@@ -486,7 +489,13 @@ export class FieldDropdown extends Field<string> {
    * @param newValue The input value.
    * @returns A valid language-neutral option, or null if invalid.
    */
-  protected override doClassValidation_(newValue?: string): string | null {
+  protected override doClassValidation_(
+    newValue: string,
+  ): string | null | undefined;
+  protected override doClassValidation_(newValue?: string): string | null;
+  protected override doClassValidation_(
+    newValue?: string,
+  ): string | null | undefined {
     const options = this.getOptions(true);
     const isValueValid = options.some((option) => option[1] === newValue);
 
@@ -507,6 +516,7 @@ export class FieldDropdown extends Field<string> {
       }
       return null;
     }
+
     if (
       this.sourceBlock_ &&
       this.selectedOption[0] === Msg.OPTION_VALUE_REMOVED &&
@@ -515,7 +525,7 @@ export class FieldDropdown extends Field<string> {
       this.sourceBlock_.setRemoved(false);
     }
 
-    return newValue as string;
+    return newValue;
   }
 
   /**
@@ -731,7 +741,9 @@ export class FieldDropdown extends Field<string> {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FieldDropdownFromJsonConfig): FieldDropdown {
+  static override fromJson(
+    options: FieldDropdownFromJsonConfig,
+  ): FieldDropdown {
     if (!options.options) {
       throw new Error(
         'options are required for the dropdown field. The ' +

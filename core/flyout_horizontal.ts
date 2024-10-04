@@ -240,7 +240,7 @@ export class HorizontalFlyout extends Flyout {
       this.workspace_.scrollbar?.setX(pos);
       // When the flyout moves from a wheel event, hide WidgetDiv and
       // dropDownDiv.
-      WidgetDiv.hide();
+      WidgetDiv.hideIfOwnerIsInWorkspace(this.workspace_);
       dropDownDiv.hideWithoutAnimation();
     }
     // Don't scroll the page.
@@ -267,29 +267,35 @@ export class HorizontalFlyout extends Flyout {
     for (let i = 0, item; (item = contents[i]); i++) {
       if (item.type === 'block') {
         const block = item.block;
-        const allBlocks = block!.getDescendants(false);
+
+        if (block === undefined || block === null) {
+          continue;
+        }
+
+        const allBlocks = block.getDescendants(false);
+
         for (let j = 0, child; (child = allBlocks[j]); j++) {
           // Mark blocks as being inside a flyout.  This is used to detect and
           // prevent the closure of the flyout if the user right-clicks on such
           // a block.
           child.isInFlyout = true;
         }
-        const root = block!.getSvgRoot();
-        const blockHW = block!.getHeightWidth();
+        const root = block.getSvgRoot();
+        const blockHW = block.getHeightWidth();
         // Figure out where to place the block.
-        const tab = block!.outputConnection ? this.tabWidth_ : 0;
+        const tab = block.outputConnection ? this.tabWidth_ : 0;
         let moveX;
         if (this.RTL) {
           moveX = cursorX + blockHW.width;
         } else {
           moveX = cursorX - tab;
         }
-        block!.moveBy(moveX, cursorY);
+        block.moveBy(moveX, cursorY);
 
-        const rect = this.createRect_(block!, moveX, cursorY, blockHW, i);
+        const rect = this.createRect_(block, moveX, cursorY, blockHW, i);
         cursorX += blockHW.width + gaps[i];
 
-        this.addBlockListeners_(root, block!, rect);
+        this.addBlockListeners_(root, block, rect);
       } else if (item.type === 'button') {
         const button = item.button as FlyoutButton;
         this.initFlyoutButton_(button, cursorX, cursorY);
@@ -306,7 +312,6 @@ export class HorizontalFlyout extends Flyout {
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at mouse down, in pixel units.
    * @returns True if the drag is toward the workspace.
-   * @internal
    */
   override isDragTowardWorkspace(currentDragDeltaXY: Coordinate): boolean {
     const dx = currentDragDeltaXY.x;

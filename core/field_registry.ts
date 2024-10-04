@@ -6,12 +6,46 @@
 
 // Former goog.module ID: Blockly.fieldRegistry
 
-import type {Field, FieldProto} from './field.js';
+import type {Field, FieldConfig} from './field.js';
 import * as registry from './registry.js';
 
-interface RegistryOptions {
+/**
+ * When constructing a field from JSON using the registry, the
+ * `fromJson` method in this file is called with an options parameter
+ * object consisting of the "type" which is the name of the field, and
+ * other options that are part of the field's config object.
+ *
+ * These options are then passed to the field's static `fromJson`
+ * method. That method accepts an options parameter with a type that usually
+ * extends from FieldConfig, and may or may not have a "type" attribute (in
+ * fact, it shouldn't, because we'd overwrite it as described above!)
+ *
+ * Unfortunately the registry has no way of knowing the actual Field subclass
+ * that will be returned from passing in the name of the field. Therefore it
+ * also has no way of knowing that the options object not only implements
+ * `FieldConfig`, but it also should satisfy the Config that belongs to that
+ * specific class's `fromJson` method.
+ *
+ * Because of this uncertainty, we just give up on type checking the properties
+ * passed to the `fromJson` method, and allow arbitrary string keys with
+ * unknown types.
+ */
+type RegistryOptions = FieldConfig & {
+  // The name of the field, e.g. field_dropdown
   type: string;
   [key: string]: unknown;
+};
+
+/**
+ * Represents the static methods that must be defined on any
+ * field that is registered, i.e. the constructor and fromJson methods.
+ *
+ * Because we don't know which Field subclass will be registered, we
+ * are unable to typecheck the parameters of the constructor.
+ */
+export interface RegistrableField {
+  new (...args: any[]): Field;
+  fromJson(options: FieldConfig): Field;
 }
 
 /**
@@ -25,7 +59,7 @@ interface RegistryOptions {
  * @throws {Error} if the type name is empty, the field is already registered,
  *     or the fieldClass is not an object containing a fromJson function.
  */
-export function register(type: string, fieldClass: FieldProto) {
+export function register(type: string, fieldClass: RegistrableField) {
   registry.register(registry.Type.FIELD, type, fieldClass);
 }
 
@@ -59,7 +93,10 @@ export function fromJson<T>(options: RegistryOptions): Field<T> | null {
  * @param options
  */
 function fromJsonInternal<T>(options: RegistryOptions): Field<T> | null {
-  const fieldObject = registry.getObject(registry.Type.FIELD, options.type);
+  const fieldObject = registry.getObject(
+    registry.Type.FIELD,
+    options.type,
+  ) as unknown as RegistrableField;
   if (!fieldObject) {
     console.warn(
       'Blockly could not create a field of type ' +
@@ -69,12 +106,8 @@ function fromJsonInternal<T>(options: RegistryOptions): Field<T> | null {
         ' #1584), or the registration is not being reached.',
     );
     return null;
-  } else if (typeof (fieldObject as any).fromJson !== 'function') {
-    throw new TypeError('returned Field was not a IRegistrableField');
-  } else {
-    type fromJson = (options: {}) => Field<T>;
-    return (fieldObject as unknown as {fromJson: fromJson}).fromJson(options);
   }
+  return fieldObject.fromJson(options);
 }
 
 export const TEST_ONLY = {

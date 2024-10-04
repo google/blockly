@@ -238,7 +238,7 @@ BlockFactory.updatePreview = function() {
     // Warn user only if their block type is already exists in Blockly's
     // standard library.
     var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
-    if (StandardCategories.coreBlockTypes.indexOf(blockType) !== -1) {
+    if (StandardCategories.coreBlockTypes.includes(blockType)) {
       rootBlock.setWarningText('A core Blockly block already exists ' +
           'under this name.');
 

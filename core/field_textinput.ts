@@ -73,7 +73,9 @@ export class FieldTextInput extends FieldInput<string> {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FieldTextInputFromJsonConfig): FieldTextInput {
+  static override fromJson(
+    options: FieldTextInputFromJsonConfig,
+  ): FieldTextInput {
     const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldTextInput if that class doesn't
     // override the static fromJson method.

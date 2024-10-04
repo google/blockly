@@ -12,29 +12,11 @@ import * as globalRegistry from './registry.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 import * as registry from './clipboard/registry.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as deprecation from './utils/deprecation.js';
 
 /** Metadata about the object that is currently on the clipboard. */
 let stashedCopyData: ICopyData | null = null;
 
 let stashedWorkspace: WorkspaceSvg | null = null;
-
-/**
- * Copy a copyable element onto the local clipboard.
- *
- * @param toCopy The copyable element to be copied.
- * @deprecated v11. Use `myCopyable.toCopyData()` instead. To be removed v12.
- * @internal
- */
-export function copy<T extends ICopyData>(toCopy: ICopyable<T>): T | null {
-  deprecation.warn(
-    'Blockly.clipboard.copy',
-    'v11',
-    'v12',
-    'myCopyable.toCopyData()',
-  );
-  return TEST_ONLY.copyInternal(toCopy);
-}
 
 /**
  * Private version of copy for stubbing in tests.
@@ -105,29 +87,6 @@ function pasteFromData<T extends ICopyData>(
   return (globalRegistry
     .getObject(globalRegistry.Type.PASTER, copyData.paster, false)
     ?.paste(copyData, workspace, coordinate) ?? null) as ICopyable<T> | null;
-}
-
-/**
- * Duplicate this copy-paste-able element.
- *
- * @param toDuplicate The element to be duplicated.
- * @returns The element that was duplicated, or null if the duplication failed.
- * @deprecated v11. Use
- *     `Blockly.clipboard.paste(myCopyable.toCopyData(), myWorkspace)` instead.
- *     To be removed v12.
- * @internal
- */
-export function duplicate<
-  U extends ICopyData,
-  T extends ICopyable<U> & IHasWorkspace,
->(toDuplicate: T): T | null {
-  deprecation.warn(
-    'Blockly.clipboard.duplicate',
-    'v11',
-    'v12',
-    'Blockly.clipboard.paste(myCopyable.toCopyData(), myWorkspace)',
-  );
-  return TEST_ONLY.duplicateInternal(toDuplicate);
 }
 
 /**

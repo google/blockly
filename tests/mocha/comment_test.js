@@ -47,8 +47,8 @@ suite('Comments', function () {
       chai.assert.isNotOk(comment.textInputBubble);
       chai.assert.isOk(comment.textBubble);
     }
-    test('Editable', function () {
-      this.comment.setBubbleVisible(true);
+    test('Editable', async function () {
+      await this.comment.setBubbleVisible(true);
       chai.assert.isTrue(this.comment.bubbleIsVisible());
       assertEditable(this.comment);
       assertEventFired(
@@ -59,10 +59,10 @@ suite('Comments', function () {
         this.block.id,
       );
     });
-    test('Not Editable', function () {
+    test('Not Editable', async function () {
       sinon.stub(this.block, 'isEditable').returns(false);
 
-      this.comment.setBubbleVisible(true);
+      await this.comment.setBubbleVisible(true);
 
       chai.assert.isTrue(this.comment.bubbleIsVisible());
       assertNotEditable(this.comment);
@@ -74,11 +74,11 @@ suite('Comments', function () {
         this.block.id,
       );
     });
-    test('Editable -> Not Editable', function () {
-      this.comment.setBubbleVisible(true);
+    test('Editable -> Not Editable', async function () {
+      await this.comment.setBubbleVisible(true);
       sinon.stub(this.block, 'isEditable').returns(false);
 
-      this.comment.updateEditable();
+      await this.comment.updateEditable();
 
       chai.assert.isTrue(this.comment.bubbleIsVisible());
       assertNotEditable(this.comment);
@@ -90,14 +90,14 @@ suite('Comments', function () {
         this.block.id,
       );
     });
-    test('Not Editable -> Editable', function () {
+    test('Not Editable -> Editable', async function () {
       const editableStub = sinon.stub(this.block, 'isEditable').returns(false);
 
-      this.comment.setBubbleVisible(true);
+      await this.comment.setBubbleVisible(true);
 
       editableStub.returns(true);
 
-      this.comment.updateEditable();
+      await this.comment.updateEditable();
       chai.assert.isTrue(this.comment.bubbleIsVisible());
       assertEditable(this.comment);
       assertEventFired(

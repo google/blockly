@@ -154,7 +154,7 @@ dartGenerator.forBlock['unittest_adjustindex'] = function(block) {
       return [Number(index) + 1, dartGenerator.ORDER_ATOMIC];
     } else {
       // If the index is dynamic, adjust it in code.
-      index = index + ' + 1';
+      index += ' + 1';
     }
   } else if (Blockly.utils.string.isNumber(index)) {
     return [index, dartGenerator.ORDER_ATOMIC];

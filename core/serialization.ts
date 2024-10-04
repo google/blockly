@@ -16,6 +16,7 @@ import * as procedures from './serialization/procedures.js';
 import * as registry from './serialization/registry.js';
 import * as variables from './serialization/variables.js';
 import * as workspaces from './serialization/workspaces.js';
+import * as workspaceComments from './serialization/workspace_comments.js';
 import {ISerializer} from './interfaces/i_serializer.js';
 
 export {
@@ -26,5 +27,6 @@ export {
   registry,
   variables,
   workspaces,
+  workspaceComments,
   ISerializer,
 };
